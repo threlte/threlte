@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte'
 	import { Camera, MOUSE, Object3D, TOUCH } from 'three'
-	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+	import { OrbitControls } from 'three-stdlib'
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import { getParent } from '../internal/HierarchicalObject.svelte'
 	import type { PositionProp } from '../lib/types'

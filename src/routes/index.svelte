@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { useRaf } from '$lib/hooks/useRaf'
+
 	import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
-	import { degToRad } from 'three/src/math/MathUtils'
+
 	import {
 		AmbientLight,
 		Canvas,
@@ -9,12 +11,11 @@
 		OrbitControls,
 		PerspectiveCamera,
 		PointLight,
-		Text
+		Text,
+		DirectionalLight
 	} from 'threlte'
-	import { useRaf } from 'threlte/hooks/useRaf'
-	import DirectionalLight from 'threlte/lights/DirectionalLight.svelte'
 
-	let rotationY = degToRad(45)
+	let rotationY = (45 * Math.PI) / 180
 
 	useRaf(() => {
 		rotationY -= 0.003
@@ -54,7 +55,7 @@
 		<Mesh
 			receiveShadow
 			position={{ y: -1.5 }}
-			rotation={{ x: degToRad(-90) }}
+			rotation={{ x: (-90 * Math.PI) / 180 }}
 			geometry={new CircleBufferGeometry(4, 72)}
 			material={new MeshStandardMaterial({ color: 'white' })}
 		/>

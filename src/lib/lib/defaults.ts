@@ -5,7 +5,7 @@ export const defaults = {
 	scale: new Vector3(1, 1, 1),
 	rotation: new Euler(),
 	mesh: {
-		material: () => new MeshBasicMaterial(),
+		material: (): MeshBasicMaterial => new MeshBasicMaterial(),
 		castShadow: false,
 		receiveShadow: false,
 		frustumCulled: true,

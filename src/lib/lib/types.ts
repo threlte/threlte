@@ -12,7 +12,7 @@ import type {
 	Color,
 	Mesh
 } from 'three'
-import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+import type { EffectComposer, Pass } from 'three-stdlib'
 import type { UseResizeOptions } from '../hooks/useResize'
 
 export type ThrelteRootContext = {

@@ -1,6 +1,6 @@
 import { getContext } from 'svelte'
 import type { ThrelteRootContext } from './types'
 
-export const useThrelteRoot = () => {
+export const useThrelteRoot = (): ThrelteRootContext => {
 	return getContext<ThrelteRootContext>('threlte-root')
 }

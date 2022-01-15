@@ -1,6 +1,6 @@
 {
 	"name": "threlte",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
 	"license": "MIT",
 	"scripts": {
@@ -29,10 +29,12 @@
 		"svelte-preprocess": "^4.9.4",
 		"svelte2tsx": "^0.4.14",
 		"three": "^0.136.0",
-		"three-stdlib": "^2.6.4",
-		"troika-three-text": "^0.45.0",
 		"tslib": "^2.3.1",
 		"typescript": "^4.4.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"three-stdlib": "^2.6.4",
+		"troika-three-text": "^0.45.0"
+	}
 }
