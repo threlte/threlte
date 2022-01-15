@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte'
 	import type { Object3D } from 'three'
-	import { useThrelteRoot } from 'threlte/lib/useThrelteRoot'
+	import { useThrelteRoot } from '../lib/useThrelteRoot'
 
 	export let object: Object3D
 

@@ -2,8 +2,8 @@
 	import { createEventDispatcher, tick } from 'svelte'
 	import type { Object3D } from 'three'
 	import { Frustum, Matrix4 } from 'three'
-	import { useFrame } from 'threlte/lib/useFrame'
-	import { useThrelte } from 'threlte/lib/useThrelte'
+	import { useFrame } from '../lib/useFrame'
+	import { useThrelte } from '../lib/useThrelte'
 
 	export let object: Object3D
 

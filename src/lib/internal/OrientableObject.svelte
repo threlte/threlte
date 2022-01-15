@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Object3D, Vector3 } from 'three'
-	import { useThrelte } from 'threlte/lib/useThrelte'
+	import { useThrelte } from '../lib/useThrelte'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp } from '../lib/types'
 
