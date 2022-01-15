@@ -15,7 +15,8 @@
 		Vector2,
 		WebGLRenderer
 	} from 'three'
-	import { EffectComposer, Pass, RenderPass } from 'three-stdlib'
+	import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 	import { useRaf } from './hooks/useRaf'
 	import { useResize, UseResizeOptions } from './hooks/useResize'
 	import HierarchicalObject from './internal/HierarchicalObject.svelte'

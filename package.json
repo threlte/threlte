@@ -1,6 +1,6 @@
 {
 	"name": "threlte",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
 	"license": "MIT",
 	"scripts": {
@@ -34,7 +34,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"three-stdlib": "^2.6.4",
 		"troika-three-text": "^0.45.0"
 	}
 }
