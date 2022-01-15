@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint",
+		"svelte.svelte-vscode",
+		"ardenivanov.svelte-intellisense",
+		"fivethree.vscode-svelte-snippets"
+	]
+}
