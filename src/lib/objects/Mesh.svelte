@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BufferGeometry, Material, Mesh } from 'three'
-	import RaycastableObject from 'threlte/internal/RaycastableObject.svelte'
+	import RaycastableObject from '../internal/RaycastableObject.svelte'
 	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
 	import InteractiveObject from '../internal/InteractiveObject.svelte'
 	import TransformableObject from '../internal/TransformableObject.svelte'
