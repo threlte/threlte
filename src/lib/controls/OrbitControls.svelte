@@ -8,17 +8,6 @@
 	import { useThrelte } from '../lib/useThrelte'
 	import { useFrame } from '../lib/useFrame'
 
-	const parent = getParent()
-	const { renderer, render } = useThrelte()
-
-	if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
-
-	if (!(parent instanceof Camera)) {
-		throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
-	}
-
-	export const controls = new OrbitControls(parent, renderer.domElement)
-
 	export let autoRotate = false
 	export let autoRotateSpeed = 2
 	export let dampingFactor = 0.05
@@ -48,6 +37,17 @@
 	export let touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
 	export let zoomSpeed = 1
 	export let target: PositionProp | undefined = undefined
+
+	const parent = getParent()
+	const { renderer, render } = useThrelte()
+
+	if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
+
+	if (!(parent instanceof Camera)) {
+		throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
+	}
+
+	export const controls = new OrbitControls(parent, renderer.domElement)
 
 	$: {
 		controls.autoRotate = autoRotate

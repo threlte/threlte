@@ -10,15 +10,21 @@
 	import { useThrelte } from '../lib/useThrelte'
 
 	export let object: Object3D
+
+	// TransformableObject
 	export let position: PositionProp = undefined
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
+
+	// ViewportAwareObject
+	export let viewportAware: boolean = false
+	export let inViewport: boolean | undefined = undefined
+
+	// self
 	export let castShadow = defaults.mesh.castShadow
 	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
 
 	const { render } = useThrelte()
 

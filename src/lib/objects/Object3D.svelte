@@ -2,15 +2,16 @@
 	import Object3DInstance from '../instanced/Object3DInstance.svelte'
 	import { Object3D } from 'three'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, ScaleProp, RotationProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 
+	// Object3DInstance
 	export let position: PositionProp = undefined
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
-
 	export let viewportAware: boolean = false
 	export let inViewport: boolean | undefined = undefined
-
+	export let castShadow = defaults.mesh.castShadow
+	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
 
@@ -18,21 +19,18 @@
 </script>
 
 <Object3DInstance
-	on:click
-	on:contextmenu
-	on:pointerup
-	on:pointerdown
-	on:pointerenter
-	on:pointerleave
-	on:pointermove
 	{object}
 	{position}
 	{scale}
 	{rotation}
 	{frustumCulled}
 	{renderOrder}
+	{castShadow}
+	{receiveShadow}
 	{viewportAware}
 	bind:inViewport
+	on:viewportenter
+	on:viewportleave
 >
 	<slot />
 </Object3DInstance>

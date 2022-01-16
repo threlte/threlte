@@ -7,19 +7,23 @@
 	import { useThrelte } from '../lib/useThrelte'
 	import { useThrelteRoot } from '../lib/useThrelteRoot'
 
+	// CameraInstance
 	export let position: PositionProp = undefined
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
-
 	export let viewportAware: boolean = false
 	export let inViewport: boolean | undefined = undefined
-
+	export let castShadow = defaults.mesh.castShadow
+	export let receiveShadow = defaults.mesh.receiveShadow
+	export let frustumCulled = defaults.mesh.frustumCulled
+	export let renderOrder = defaults.mesh.renderOrder
 	export let lookAt: PositionProp | undefined = undefined
+	export let useCamera = true
 
+	// self
 	export let near = defaults.camera.near
 	export let far = defaults.camera.far
 	export let zoom = defaults.camera.zoom
-	export let useCamera = true
 
 	const { size, render } = useThrelte()
 	const { setCamera, resizeOpts } = useThrelteRoot()
@@ -61,6 +65,12 @@
 	{lookAt}
 	{useCamera}
 	{viewportAware}
+	{castShadow}
+	{receiveShadow}
+	{frustumCulled}
+	{renderOrder}
+	on:viewportenter
+	on:viewportleave
 	bind:inViewport
 >
 	<slot />

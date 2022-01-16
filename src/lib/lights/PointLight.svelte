@@ -6,16 +6,20 @@
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
 
+	// LightInstance
 	export let position: PositionProp = undefined
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
-
 	export let viewportAware: boolean = false
 	export let inViewport: boolean | undefined = undefined
+	export let castShadow = defaults.mesh.castShadow
+	export let receiveShadow = defaults.mesh.receiveShadow
+	export let frustumCulled = defaults.mesh.frustumCulled
+	export let renderOrder = defaults.mesh.renderOrder
+	export let color: ColorRepresentation = defaults.lights.ambientLight.color
+	export let intensity = defaults.lights.ambientLight.intensity
 
-	export let color: ColorRepresentation = defaults.lights.directionalLight.color
-	export let intensity = defaults.lights.directionalLight.intensity
-
+	// self
 	export let distance = defaults.lights.pointLight.distance
 	export let decay = defaults.lights.pointLight.decay
 	export let power: number | undefined = undefined
@@ -65,10 +69,16 @@
 	{position}
 	{scale}
 	{rotation}
-	{viewportAware}
+	{castShadow}
+	{receiveShadow}
+	{frustumCulled}
+	{renderOrder}
 	{color}
 	{intensity}
+	{viewportAware}
 	bind:inViewport
+	on:viewportenter
+	on:viewportleave
 >
 	<slot />
 </LightInstance>

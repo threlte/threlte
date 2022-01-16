@@ -6,7 +6,20 @@
 	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
 
-	// troika-three-text options
+	// MeshInstance
+	export let position: PositionProp = undefined
+	export let scale: ScaleProp = undefined
+	export let rotation: RotationProp = undefined
+	export let viewportAware: boolean = false
+	export let inViewport: boolean | undefined = undefined
+	export let castShadow = defaults.mesh.castShadow
+	export let receiveShadow = defaults.mesh.receiveShadow
+	export let frustumCulled = defaults.mesh.frustumCulled
+	export let renderOrder = defaults.mesh.renderOrder
+	export let interactive: boolean = false
+	export let ignorePointerEvents: boolean = false
+
+	// self
 	export let text: TextType['text'] = ''
 	export let anchorX: TextType['anchorX'] = 0
 	export let anchorY: TextType['anchorY'] = 0
@@ -36,21 +49,6 @@
 	export let strokeColor: TextType['strokeColor'] = 0x808080
 	export let strokeOpacity: TextType['strokeOpacity'] = 1
 	export let fillOpacity: TextType['fillOpacity'] = 1
-
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
-
-	export let interactive: boolean = false
-	export let ignorePointerEvents: boolean = false
-
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
 
 	export const textObject = new Text() as TextType
 
@@ -103,6 +101,16 @@
 </script>
 
 <MeshInstance
+	mesh={textObject}
+	{position}
+	{scale}
+	{rotation}
+	{castShadow}
+	{receiveShadow}
+	{frustumCulled}
+	{renderOrder}
+	{interactive}
+	{ignorePointerEvents}
 	on:click
 	on:contextmenu
 	on:pointerup
@@ -110,16 +118,10 @@
 	on:pointerenter
 	on:pointerleave
 	on:pointermove
-	mesh={textObject}
-	{position}
-	{scale}
-	{rotation}
-	{interactive}
-	{ignorePointerEvents}
 	{viewportAware}
-	{castShadow}
-	{receiveShadow}
-	{frustumCulled}
-	{renderOrder}
 	bind:inViewport
-/>
+	on:viewportenter
+	on:viewportleave
+>
+	<slot /></MeshInstance
+>

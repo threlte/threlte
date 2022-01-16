@@ -17,7 +17,7 @@
 
 	const ctx = useThrelte()
 
-	const checkVisibility = (): boolean => {
+	const checkInViewport = (): boolean => {
 		if (!ctx.camera) return true
 		projScreenMatrix.multiplyMatrices(ctx.camera.projectionMatrix, ctx.camera.matrixWorldInverse)
 		frustum.setFromProjectionMatrix(projScreenMatrix)
@@ -41,9 +41,9 @@
 	ctx.render()
 
 	useFrame(() => {
-		const v = checkVisibility()
+		const v = checkInViewport()
 		if (inViewport === undefined) {
-			inViewport = checkVisibility()
+			inViewport = checkInViewport()
 			dispatchEvent(inViewport)
 		} else if (v !== inViewport) {
 			dispatchEvent(v)
