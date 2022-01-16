@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Camera } from 'three'
-	import OrientableObject from '../internal/OrientableObject.svelte'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
+	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let camera: Camera
@@ -32,7 +31,6 @@
 	}
 </script>
 
-<OrientableObject object={camera} {lookAt} listen={[position, rotation, scale]} />
 <Object3DInstance
 	object={camera}
 	{lookAt}
