@@ -8,26 +8,26 @@ export { default as PerspectiveCamera } from './cameras/PerspectiveCamera.svelte
 // controls
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
 
-// objects
-export { default as Mesh } from './objects/Mesh.svelte'
-export { default as Group } from './objects/Group.svelte'
-export { default as Object3D } from './instances/Object3DInstance.svelte'
-
-// misc
-export { default as Fog } from './misc/Fog.svelte'
-export { default as FogExp2 } from './misc/FogExp2.svelte'
-export { default as Layer } from './misc/Layer.svelte'
-
-// text
-export { default as Text } from './text/Text.svelte'
+// effects
+export { default as Pass } from './effects/Pass.svelte'
 
 // lights
 export { default as AmbientLight } from './lights/AmbientLight.svelte'
 export { default as DirectionalLight } from './lights/DirectionalLight.svelte'
 export { default as PointLight } from './lights/PointLight.svelte'
 
-// effects
-export { default as Pass } from './effects/Pass.svelte'
+// misc
+export { default as Fog } from './misc/Fog.svelte'
+export { default as FogExp2 } from './misc/FogExp2.svelte'
+export { default as Layer } from './misc/Layer.svelte'
+
+// objects
+export { default as Mesh } from './objects/Mesh.svelte'
+export { default as Group } from './objects/Group.svelte'
+export { default as Object3D } from './objects/Object3D.svelte'
+
+// text
+export { default as Text } from './text/Text.svelte'
 
 // utils
 export { useFrame } from './hooks/useFrame'
@@ -39,5 +39,6 @@ export type {
 	ScaleProp,
 	RotationProp,
 	ThrelteContext,
-	ThrelteRootContext
+	ThrelteRootContext,
+	LayerThrelte
 } from './lib/types'
