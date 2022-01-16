@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { useRaf } from '$lib/hooks/useRaf'
 	import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
+	import { degToRad } from 'three/src/math/MathUtils'
 	import {
 		AmbientLight,
 		Canvas,
 		DirectionalLight,
 		Group,
+		HemisphereLight,
 		Mesh,
 		OrbitControls,
 		PerspectiveCamera,
 		PointLight,
+		SpotLight,
 		Text
 	} from 'threlte'
 
@@ -40,7 +43,9 @@
 
 		<DirectionalLight color={'#EDBD9C'} shadow position={{ x: -15, y: 45, z: 20 }} />
 		<AmbientLight color={'#9cceed'} intensity={0.15} />
-		<PointLight intensity={0.12} position={{ x: 15, y: -15, z: -20 }} />
+		<PointLight intensity={0.12} position={{ x: 15, y: -45, z: -20 }} />
+		<HemisphereLight skyColor={0x4c8eac} groundColor={0xac844c} intensity={1} />
+		<SpotLight position={{ x: -10, y: 30, z: 10 }} angle={degToRad(3)} penumbra={0.6} />
 
 		<!-- Sphere -->
 		<Mesh

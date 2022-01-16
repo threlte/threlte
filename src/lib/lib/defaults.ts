@@ -1,4 +1,4 @@
-import { Euler, MeshBasicMaterial, Vector3 } from 'three'
+import { Euler, MeshBasicMaterial, Object3D, Vector3 } from 'three'
 
 export const defaults = {
 	position: new Vector3(),
@@ -24,24 +24,39 @@ export const defaults = {
 		density: 0.00025,
 		near: 1,
 		far: 1000,
-		color: 'white'
+		color: 0xffffff
 	},
 	lights: {
 		ambientLight: {
-			color: 'white',
+			color: 0xffffff,
 			intensity: 1
 		},
 		directionalLight: {
-			color: 'white',
+			color: 0xffffff,
 			intensity: 1,
 			castShadow: false
 		},
 		pointLight: {
-			color: 'white',
+			color: 0xffffff,
 			intensity: 1,
 			distance: 0,
 			decay: 1,
 			castShadow: false
+		},
+		hemisphereLight: {
+			skyColor: 0xffffff,
+			groundColor: 0xffffff,
+			position: Object3D.DefaultUp,
+			intensity: 1
+		},
+		spotLight: {
+			position: Object3D.DefaultUp,
+			color: 0xffffff,
+			intensity: 1,
+			angle: Math.PI / 3,
+			decay: 1,
+			distance: 0,
+			penumbra: 0
 		}
 	}
 }
