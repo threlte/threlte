@@ -20,6 +20,7 @@
 
 <LightInstance
 	{light}
+	lookAt={undefined}
 	{position}
 	{scale}
 	{rotation}

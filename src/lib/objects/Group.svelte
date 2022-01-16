@@ -12,12 +12,14 @@
 	export let inViewport = defaults.object3d.inViewport
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
+	export let lookAt: PositionProp = undefined
 
 	export const group = new Group()
 </script>
 
 <Object3DInstance
 	object={group}
+	{lookAt}
 	{position}
 	{scale}
 	{rotation}

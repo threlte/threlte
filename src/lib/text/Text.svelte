@@ -18,6 +18,7 @@
 	export let renderOrder = defaults.mesh.renderOrder
 	export let interactive: boolean = false
 	export let ignorePointerEvents: boolean = false
+	export let lookAt: PositionProp = undefined
 
 	// self
 	export let text: TextType['text'] = ''
@@ -102,6 +103,7 @@
 
 <MeshInstance
 	mesh={textObject}
+	{lookAt}
 	{position}
 	{scale}
 	{rotation}

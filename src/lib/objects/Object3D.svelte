@@ -12,11 +12,13 @@
 	export let inViewport = defaults.object3d.inViewport
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
+	export let lookAt: PositionProp = undefined
 
 	export const object = new Object3D()
 </script>
 
 <Object3DInstance
+	{lookAt}
 	{object}
 	{position}
 	{scale}

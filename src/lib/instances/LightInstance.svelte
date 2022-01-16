@@ -18,6 +18,7 @@
 	export let receiveShadow: boolean
 	export let frustumCulled: boolean
 	export let renderOrder: number
+	export let lookAt: PositionProp
 
 	// self
 	export let color: ColorRepresentation
@@ -35,6 +36,7 @@
 
 <Object3DInstance
 	object={light}
+	{lookAt}
 	{castShadow}
 	{receiveShadow}
 	{frustumCulled}

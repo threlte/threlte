@@ -17,6 +17,7 @@
 	export let renderOrder = defaults.mesh.renderOrder
 	export let interactive: boolean = false
 	export let ignorePointerEvents: boolean = false
+	export let lookAt: PositionProp = undefined
 
 	// self
 	export let geometry: BufferGeometry
@@ -26,6 +27,7 @@
 </script>
 
 <MeshInstance
+	{lookAt}
 	{mesh}
 	{position}
 	{scale}

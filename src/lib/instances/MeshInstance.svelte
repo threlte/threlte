@@ -17,6 +17,7 @@
 	export let receiveShadow: boolean
 	export let frustumCulled: boolean
 	export let renderOrder: number
+	export let lookAt: PositionProp
 
 	// self
 	export let interactive: boolean
@@ -33,6 +34,7 @@
 
 <Object3DInstance
 	object={mesh}
+	{lookAt}
 	{position}
 	{scale}
 	{rotation}

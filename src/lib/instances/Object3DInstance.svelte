@@ -6,6 +6,7 @@
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../hooks/useThrelte'
+	import OrientableObject from '../internal/OrientableObject.svelte'
 
 	export let object: Object3D
 
@@ -17,6 +18,8 @@
 	// ViewportAwareObject
 	export let viewportAware: boolean
 	export let inViewport: boolean
+
+	export let lookAt: PositionProp
 
 	// self
 	export let castShadow: boolean
@@ -35,8 +38,12 @@
 	}
 </script>
 
+<OrientableObject {object} {lookAt} listen={[position, rotation, scale]} />
+
 <LayerableObject {object} />
+
 <TransformableObject {object} {position} {rotation} {scale} />
+
 <HierarchicalObject {object}>
 	<slot />
 </HierarchicalObject>

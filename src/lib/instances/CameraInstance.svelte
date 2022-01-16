@@ -18,9 +18,9 @@
 	export let receiveShadow: boolean
 	export let frustumCulled: boolean
 	export let renderOrder: number
+	export let lookAt: PositionProp
 
 	// self
-	export let lookAt: PositionProp
 	export let useCamera: boolean
 
 	const { setCamera } = useThrelteRoot()
@@ -35,6 +35,7 @@
 <OrientableObject object={camera} {lookAt} listen={[position, rotation, scale]} />
 <Object3DInstance
 	object={camera}
+	{lookAt}
 	{castShadow}
 	{receiveShadow}
 	{frustumCulled}
