@@ -1,6 +1,6 @@
 {
 	"name": "threlte",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
 	"license": "MIT",
 	"scripts": {
