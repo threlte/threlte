@@ -2,7 +2,7 @@
 	import { createEventDispatcher, onDestroy } from 'svelte'
 	import type { Object3D } from 'three'
 	import type { ThrelteEvent } from '../lib/interactivity'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 
 	export let object: Object3D
 

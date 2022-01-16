@@ -38,7 +38,7 @@
 			/>
 		</Group>
 
-		<DirectionalLight color={'#EDBD9C'} shadow position={{ x: -15, y: 15, z: 20 }} />
+		<DirectionalLight color={'#EDBD9C'} shadow position={{ x: -15, y: 45, z: 20 }} />
 		<AmbientLight color={'#9cceed'} intensity={0.15} />
 		<PointLight intensity={0.12} position={{ x: 15, y: -15, z: -20 }} />
 
@@ -62,11 +62,6 @@
 </div>
 
 <style>
-	button {
-		position: fixed;
-		z-index: 1;
-	}
-
 	div {
 		position: fixed;
 		top: 0;

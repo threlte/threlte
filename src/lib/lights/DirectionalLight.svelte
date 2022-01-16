@@ -4,7 +4,7 @@
 	import { DirectionalLight } from 'three'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
+	import { useThrelte } from '../hooks/useThrelte'
 
 	// LightInstance
 	export let position: PositionProp = undefined
@@ -12,8 +12,6 @@
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
 	export let inViewport = defaults.object3d.inViewport
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
 	export let color: ColorRepresentation = defaults.lights.ambientLight.color
@@ -57,9 +55,6 @@
 			light.shadow.camera.far = far
 			light.shadow.bias = bias
 			light.shadow.radius = radius
-			light.castShadow = true
-		} else {
-			light.castShadow = false
 		}
 		render()
 	}
@@ -70,8 +65,8 @@
 	{position}
 	{scale}
 	{rotation}
-	{castShadow}
-	{receiveShadow}
+	castShadow={!!shadow}
+	receiveShadow={false}
 	{frustumCulled}
 	{renderOrder}
 	{viewportAware}

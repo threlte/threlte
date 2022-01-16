@@ -4,7 +4,7 @@
 	import { Text } from 'troika-three-text'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
+	import { useThrelte } from '../hooks/useThrelte'
 
 	// MeshInstance
 	export let position: PositionProp = undefined

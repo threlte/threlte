@@ -2,8 +2,8 @@
 	import type { ColorRepresentation, Light } from 'three'
 	import { convertColorRepresentationToColor } from '../lib/colors'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelte } from '../hooks/useThrelte'
+	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let light: Light

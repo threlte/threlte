@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { LayerContext } from '../lib/types'
+	import type { ThrelteLayerContext } from '../lib/types'
 
 	import { getContext } from 'svelte'
 	import type { Object3D } from 'three'
 	export let object: Object3D
-	const layer = getContext<LayerContext>('threlte-layer')
+	const layer = getContext<ThrelteLayerContext>('threlte-layer')
 
 	$: {
 		if ($layer === 'all') {

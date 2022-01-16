@@ -2,7 +2,7 @@
 	import type { Object3D } from 'three'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
+	import { useThrelte } from '../hooks/useThrelte'
 
 	export let object: Object3D
 	export let position: PositionProp = undefined

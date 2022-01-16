@@ -117,7 +117,7 @@ export type LayerThrelte =
 	| 'all'
 	| 'none'
 
-export type LayerContext = Writable<LayerThrelte | undefined>
+export type ThrelteLayerContext = Writable<LayerThrelte | undefined>
 
 export interface Text extends Mesh {
 	/**

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LayerThrelte, LayerContext } from '../lib/types'
+	import type { LayerThrelte, ThrelteLayerContext } from '../lib/types'
 	import { setContext } from 'svelte'
 	import { writable } from 'svelte/store'
 
@@ -8,7 +8,7 @@
 	const layerStore = writable<LayerThrelte | undefined>(layer)
 	$: layerStore.set(layer)
 
-	setContext<LayerContext>('threlte-layer', layerStore)
+	setContext<ThrelteLayerContext>('threlte-layer', layerStore)
 </script>
 
 <slot />

@@ -1,7 +1,7 @@
 import { browser } from '$app/env'
 import { onDestroy } from 'svelte'
-import type { ThrelteContext } from './types'
-import { useThrelte } from './useThrelte'
+import type { ThrelteContext } from '../lib/types'
+import { useThrelte } from '../hooks/useThrelte'
 
 type UseFrame = {
 	stop: () => void

@@ -12,7 +12,7 @@ export type UseResizeOptions = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useResize = (fn: () => void, options: UseResizeOptions = {}) => {
+export const useResize = (fn: () => void, options: UseResizeOptions = {}): void => {
 	if (!browser) return
 
 	if (options.runOnInit) fn()

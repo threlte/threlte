@@ -10,8 +10,6 @@
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
 	export let inViewport = defaults.object3d.inViewport
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
 	export let color: ColorRepresentation = defaults.lights.ambientLight.color
@@ -25,8 +23,8 @@
 	{position}
 	{scale}
 	{rotation}
-	{castShadow}
-	{receiveShadow}
+	castShadow={false}
+	receiveShadow={false}
 	{frustumCulled}
 	{renderOrder}
 	{viewportAware}

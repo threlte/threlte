@@ -2,7 +2,7 @@
 	import { onDestroy } from 'svelte'
 
 	import type { Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 
 	export let pass: Pass
 

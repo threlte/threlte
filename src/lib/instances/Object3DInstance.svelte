@@ -5,7 +5,7 @@
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
+	import { useThrelte } from '../hooks/useThrelte'
 
 	export let object: Object3D
 

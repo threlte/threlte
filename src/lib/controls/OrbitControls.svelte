@@ -5,8 +5,8 @@
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import { getParent } from '../internal/HierarchicalObject.svelte'
 	import type { PositionProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
-	import { useFrame } from '../lib/useFrame'
+	import { useThrelte } from '../hooks/useThrelte'
+	import { useFrame } from '../hooks/useFrame'
 
 	export let autoRotate = false
 	export let autoRotateSpeed = 2

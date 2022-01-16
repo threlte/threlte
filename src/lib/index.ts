@@ -30,10 +30,10 @@ export { default as PointLight } from './lights/PointLight.svelte'
 export { default as Pass } from './effects/Pass.svelte'
 
 // utils
-export { useFrame } from './lib/useFrame'
-export { useThrelte } from './lib/useThrelte'
-export { useThrelteRoot } from './lib/useThrelteRoot'
-export { useTexture } from './lib/useTexture'
+export { useFrame } from './hooks/useFrame'
+export { useThrelte } from './hooks/useThrelte'
+export { useThrelteRoot } from './hooks/useThrelteRoot'
+export { useTexture } from './hooks/useTexture'
 export type {
 	PositionProp,
 	ScaleProp,

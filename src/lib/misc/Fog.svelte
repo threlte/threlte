@@ -4,8 +4,8 @@
 	import { Fog } from 'three'
 	import { convertColorRepresentationToColor } from '../lib/colors'
 	import { defaults } from '../lib/defaults'
-	import { useThrelte } from '../lib/useThrelte'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelte } from '../hooks/useThrelte'
+	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 
 	export let color: ColorRepresentation = defaults.fog.color
 	export let near = defaults.fog.near

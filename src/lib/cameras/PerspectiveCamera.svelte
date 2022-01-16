@@ -4,8 +4,8 @@
 	import { useResize } from '../hooks/useResize'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelte } from '../hooks/useThrelte'
+	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 
 	// CameraInstance
 	export let position: PositionProp = undefined
@@ -13,8 +13,6 @@
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
 	export let inViewport = defaults.object3d.inViewport
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
 	export let lookAt: PositionProp = undefined
@@ -49,8 +47,8 @@
 	{position}
 	{scale}
 	{rotation}
-	{castShadow}
-	{receiveShadow}
+	castShadow={false}
+	receiveShadow={false}
 	{frustumCulled}
 	{renderOrder}
 	{viewportAware}
