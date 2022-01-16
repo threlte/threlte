@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Camera } from 'three'
 	import OrientableObject from '../internal/OrientableObject.svelte'
-	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
 	import { useThrelteRoot } from '../lib/useThrelteRoot'
@@ -10,19 +9,19 @@
 	export let camera: Camera
 
 	// Object3DInstance
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
+	export let position: PositionProp
+	export let scale: ScaleProp
+	export let rotation: RotationProp
+	export let viewportAware: boolean
+	export let inViewport: boolean
+	export let castShadow: boolean
+	export let receiveShadow: boolean
+	export let frustumCulled: boolean
+	export let renderOrder: number
 
 	// self
-	export let lookAt: PositionProp | undefined = undefined
-	export let useCamera = true
+	export let lookAt: PositionProp
+	export let useCamera: boolean
 
 	const { setCamera } = useThrelteRoot()
 	const { render } = useThrelte()

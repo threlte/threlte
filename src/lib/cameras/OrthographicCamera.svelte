@@ -12,12 +12,12 @@
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
+	export let inViewport = defaults.object3d.inViewport
 	export let castShadow = defaults.mesh.castShadow
 	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
-	export let lookAt: PositionProp | undefined = undefined
+	export let lookAt: PositionProp = undefined
 	export let useCamera = true
 
 	// self

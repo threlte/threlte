@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { defaults } from '../lib/defaults'
 	import type { ColorRepresentation, Light } from 'three'
 	import { convertColorRepresentationToColor } from '../lib/colors'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
@@ -10,19 +9,19 @@
 	export let light: Light
 
 	// Object3DInstance
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
+	export let position: PositionProp
+	export let scale: ScaleProp
+	export let rotation: RotationProp
+	export let viewportAware: boolean
+	export let inViewport: boolean
+	export let castShadow: boolean
+	export let receiveShadow: boolean
+	export let frustumCulled: boolean
+	export let renderOrder: number
 
 	// self
-	export let color: ColorRepresentation = defaults.lights.ambientLight.color
-	export let intensity = defaults.lights.ambientLight.intensity
+	export let color: ColorRepresentation
+	export let intensity: number
 
 	const { render } = useThrelte()
 	const { linear } = useThrelteRoot()

@@ -9,7 +9,7 @@
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
+	export let inViewport: boolean = false
 	export let castShadow = defaults.mesh.castShadow
 	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled

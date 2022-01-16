@@ -1,30 +1,28 @@
 <script lang="ts">
-	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-
 	import type { Object3D } from 'three'
 	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
 	import LayerableObject from '../internal/LayerableObject.svelte'
 	import TransformableObject from '../internal/TransformableObject.svelte'
-	import { defaults } from '../lib/defaults'
+	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
 
 	export let object: Object3D
 
 	// TransformableObject
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
+	export let position: PositionProp
+	export let scale: ScaleProp
+	export let rotation: RotationProp
 
 	// ViewportAwareObject
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
+	export let viewportAware: boolean
+	export let inViewport: boolean
 
 	// self
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
+	export let castShadow: boolean
+	export let receiveShadow: boolean
+	export let frustumCulled: boolean
+	export let renderOrder: number
 
 	const { render } = useThrelte()
 

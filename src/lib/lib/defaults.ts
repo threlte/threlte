@@ -4,6 +4,9 @@ export const defaults = {
 	position: new Vector3(),
 	scale: new Vector3(1, 1, 1),
 	rotation: new Euler(),
+	object3d: {
+		inViewport: false
+	},
 	mesh: {
 		material: (): MeshBasicMaterial => new MeshBasicMaterial(),
 		castShadow: false,

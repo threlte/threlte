@@ -2,26 +2,25 @@
 	import type { Mesh } from 'three'
 	import InteractiveObject from '../internal/InteractiveObject.svelte'
 	import RaycastableObject from '../internal/RaycastableObject.svelte'
-	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let mesh: Mesh
 
 	// Object3DInstance
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-	export let viewportAware: boolean = false
-	export let inViewport: boolean | undefined = undefined
-	export let castShadow = defaults.mesh.castShadow
-	export let receiveShadow = defaults.mesh.receiveShadow
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
+	export let position: PositionProp
+	export let scale: ScaleProp
+	export let rotation: RotationProp
+	export let viewportAware: boolean
+	export let inViewport: boolean
+	export let castShadow: boolean
+	export let receiveShadow: boolean
+	export let frustumCulled: boolean
+	export let renderOrder: number
 
 	// self
-	export let interactive: boolean = false
-	export let ignorePointerEvents: boolean = false
+	export let interactive: boolean
+	export let ignorePointerEvents: boolean
 
 	$: {
 		if (interactive && ignorePointerEvents) {

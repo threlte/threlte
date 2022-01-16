@@ -26,7 +26,7 @@
 
 	let ticked = false
 
-	export let inViewport: boolean | undefined = undefined
+	export let inViewport: boolean = checkInViewport()
 
 	const dispatchEvent = async (isInViewport: boolean) => {
 		if (isInViewport) {
