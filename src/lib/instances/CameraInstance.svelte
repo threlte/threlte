@@ -23,11 +23,9 @@
 	export let useCamera: boolean
 
 	const { setCamera } = useThrelteRoot()
-	const { render } = useThrelte()
 
 	$: if (useCamera) {
 		setCamera(camera)
-		render()
 	}
 </script>
 

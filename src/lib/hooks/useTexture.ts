@@ -6,7 +6,7 @@ import { useThrelteRoot } from './useThrelteRoot'
 const loader = new TextureLoader()
 
 const loadTexture = (path: string) => {
-	return loader.load(path, () => requestRender())
+	return loader.load(path, () => requestRender('useTexture'))
 }
 
 const pathsIsString = <T extends string>(

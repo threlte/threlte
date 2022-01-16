@@ -3,8 +3,11 @@
 
 	import { getContext } from 'svelte'
 	import type { Object3D } from 'three'
+	import { useThrelte } from '../hooks/useThrelte'
 	export let object: Object3D
 	const layer = getContext<ThrelteLayerContext>('threlte-layer')
+
+	const { render } = useThrelte()
 
 	$: {
 		if ($layer === 'all') {
@@ -14,5 +17,6 @@
 		} else {
 			object.layers.set($layer ?? 0)
 		}
+		render('LayerableObject')
 	}
 </script>

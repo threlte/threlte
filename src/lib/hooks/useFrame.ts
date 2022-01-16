@@ -35,7 +35,7 @@ const tick = (ctx: ThrelteContext) => {
 	} else {
 		handlers.forEach((h) => h.fn(ctx, delta))
 	}
-	ctx.render()
+	ctx.render('useFrame')
 	requestAnimationFrame(tick.bind(this, ctx))
 }
 

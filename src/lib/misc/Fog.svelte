@@ -21,14 +21,14 @@
 		fog.color = convertedColor
 		fog.near = near
 		fog.far = far
-		render()
+		render('Fog: props changed')
 	}
 
 	scene.fog = fog
-	render()
+	render('Fog: added')
 
 	onDestroy(() => {
 		scene.fog = null
-		render()
+		render('Fog: removed')
 	})
 </script>

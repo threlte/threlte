@@ -21,11 +21,11 @@
 	import { useResize, UseResizeOptions } from './hooks/useResize'
 	import HierarchicalObject from './internal/HierarchicalObject.svelte'
 	import { animationFrameRaycast, eventRaycast, transformEvent } from './lib/interactivity'
-	import type { ThrelteContext, ThrelteRootContext } from './lib/types'
+	import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './lib/types'
 
-	const requestRenderInstances: Set<() => void> = new Set()
-	export const requestRender = () => {
-		requestRenderInstances.forEach((fn) => fn())
+	const requestRenderInstances: Set<(requestedBy?: string) => void> = new Set()
+	export const requestRender = (requestedBy?: string) => {
+		requestRenderInstances.forEach((fn) => fn(requestedBy))
 	}
 </script>
 
@@ -34,18 +34,38 @@
 	export let flat: boolean = false
 	export let linear: boolean = false
 	export let frameloop: 'always' | 'demand' = 'demand'
+	export let debugFrameloop = false
 	export let shadows = true
 	export let shadowMapType: ShadowMapType = PCFSoftShadowMap
 	export let resizeOpts: UseResizeOptions | undefined = undefined
 
 	let canvas: HTMLCanvasElement | undefined
 	let mounted = false
-	let renderRequested = true
 	let pointerOverCanvas = false
 
-	const render = () => {
-		renderRequested = true
+	const renderCtx: ThrelteRenderContext = {
+		renderRequested: true,
+		requests: {},
+		frame: 0
 	}
+	const render = (requestedBy?: string) => {
+		renderCtx.renderRequested = true
+		if (debugFrameloop && requestedBy) {
+			renderCtx.requests[requestedBy] = renderCtx.requests[requestedBy]
+				? renderCtx.requests[requestedBy] + 1
+				: 1
+		}
+	}
+
+	const debugRenderFrame = () => {
+		if (!debugFrameloop) return
+		renderCtx.frame += 1
+		if (Object.keys(renderCtx.requests).length === 0) return
+		console.log(`frame: ${renderCtx.frame}, requested by ↴`)
+		console.table(renderCtx.requests)
+		renderCtx.requests = {}
+	}
+
 	requestRenderInstances.add(render)
 	onDestroy(() => {
 		requestRenderInstances.delete(render)
@@ -64,13 +84,13 @@
 	const addPass = (pass: Pass) => {
 		if (!rootCtx.composer) return
 		rootCtx.composer.addPass(pass)
-		render()
+		render('Canvas: adding pass')
 	}
 
 	const removePass = (pass: Pass) => {
 		if (!rootCtx.composer) return
 		rootCtx.composer.removePass(pass)
-		render()
+		render('Canvas: removing pass')
 	}
 
 	const setCamera = (camera: Camera) => {
@@ -81,7 +101,7 @@
 				pass.camera = camera
 			}
 		})
-		render()
+		render('Canvas: setting camera')
 	}
 
 	export const rootCtx: ThrelteRootContext = {
@@ -151,7 +171,13 @@
 	}
 
 	useRaf(() => {
-		if (rootCtx.interactiveObjects.size === 0 && frameloop === 'demand' && !renderRequested) return
+		if (
+			rootCtx.interactiveObjects.size === 0 &&
+			frameloop === 'demand' &&
+			!renderCtx.renderRequested
+		) {
+			return
+		}
 		if (!ctx.camera || !rootCtx.composer || !ctx.renderer) return
 
 		animationFrameRaycast(ctx, rootCtx, pointerOverCanvas)
@@ -162,7 +188,9 @@
 			ctx.renderer.render(ctx.scene, ctx.camera)
 		}
 
-		renderRequested = false
+		debugRenderFrame()
+
+		renderCtx.renderRequested = false
 	})
 </script>
 

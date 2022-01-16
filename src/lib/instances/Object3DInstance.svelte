@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { Object3D } from 'three'
+	import { useThrelte } from '../hooks/useThrelte'
 	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
 	import LayerableObject from '../internal/LayerableObject.svelte'
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelte } from '../hooks/useThrelte'
-	import OrientableObject from '../internal/OrientableObject.svelte'
 
 	export let object: Object3D
 
@@ -34,15 +33,13 @@
 		object.receiveShadow = receiveShadow
 		object.frustumCulled = frustumCulled
 		object.renderOrder = renderOrder
-		render()
+		render('Object3DInstance: props changed')
 	}
 </script>
 
-<OrientableObject {object} {lookAt} listen={[position, rotation, scale]} />
-
 <LayerableObject {object} />
 
-<TransformableObject {object} {position} {rotation} {scale} />
+<TransformableObject {object} {position} {rotation} {scale} {lookAt} />
 
 <HierarchicalObject {object}>
 	<slot />

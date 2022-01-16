@@ -3,6 +3,7 @@
 	import type { Object3D } from 'three'
 	import type { ThrelteEvent } from '../lib/interactivity'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
+	import { useThrelte } from '../hooks/useThrelte'
 
 	export let object: Object3D
 
@@ -19,10 +20,13 @@
 	object.userData.eventDispatcher = eventDispatcher
 
 	const rootCtx = useThrelteRoot()
+	const { render } = useThrelte()
 
 	rootCtx.addInteractiveObject(object)
+	render('InteractiveObject: added')
 
 	onDestroy(() => {
 		rootCtx.removeInteractiveObject(object)
+		render('InteractiveObject: removed')
 	})
 </script>

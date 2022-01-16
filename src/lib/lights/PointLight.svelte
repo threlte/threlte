@@ -38,7 +38,7 @@
 		light.distance = distance
 		light.decay = decay
 		if (power) light.power = power
-		render()
+		render('PointLight: props changed')
 	}
 
 	$: {
@@ -55,7 +55,7 @@
 			light.shadow.bias = bias
 			light.shadow.radius = radius
 		}
-		render()
+		render('PointLight: shadow changed')
 	}
 </script>
 

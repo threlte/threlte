@@ -30,7 +30,7 @@
 	$: {
 		light.intensity = intensity
 		light.color = convertColorRepresentationToColor(color, linear)
-		render()
+		render('LightInstance: props changed')
 	}
 </script>
 

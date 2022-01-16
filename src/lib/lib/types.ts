@@ -31,6 +31,12 @@ export type ThrelteRootContext = {
 	resizeOpts?: UseResizeOptions
 }
 
+export type ThrelteRenderContext = {
+	renderRequested: boolean
+	requests: Record<string, number>
+	frame: number
+}
+
 export type ThrelteContext = {
 	/**
 	 * Size of the canvas element
@@ -47,7 +53,7 @@ export type ThrelteContext = {
 	/**
 	 * Call render to trigger a rerender on the next frame if frameloop is set to "demand" (default)
 	 */
-	render: () => void
+	render: (requestedBy?: string) => void
 }
 
 export type ThrelteParentContext = Object3D | undefined

@@ -91,7 +91,7 @@
 		textObject.fillOpacity = fillOpacity
 
 		textObject.sync(() => {
-			render()
+			render('Text: sync finished')
 			dispatch('sync')
 		})
 	}

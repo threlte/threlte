@@ -38,7 +38,7 @@
 		}
 	}
 
-	ctx.render()
+	ctx.render('ViewportAwareObject')
 
 	useFrame(() => {
 		const v = checkInViewport()

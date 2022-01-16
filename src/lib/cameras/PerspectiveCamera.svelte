@@ -1,11 +1,11 @@
 <script lang="ts">
-	import CameraInstance from '../instances/CameraInstance.svelte'
 	import { PerspectiveCamera } from 'three'
 	import { useResize } from '../hooks/useResize'
-	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
+	import CameraInstance from '../instances/CameraInstance.svelte'
+	import { defaults } from '../lib/defaults'
+	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 
 	// CameraInstance
 	export let position: PositionProp = undefined
@@ -38,7 +38,7 @@
 		camera.near = near
 		camera.far = far
 		camera.updateProjectionMatrix()
-		render()
+		render('PerspectiveCamera: props changed')
 	}
 </script>
 

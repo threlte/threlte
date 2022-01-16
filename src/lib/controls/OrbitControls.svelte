@@ -75,12 +75,11 @@
 		controls.touches = touches
 		controls.zoomSpeed = zoomSpeed
 		controls.update()
-		render()
+		render('OrbitControls: props changed')
 	}
 
 	useFrame(() => {
 		controls.update()
-		render()
 	})
 
 	const targetObject = new Object3D()
@@ -88,13 +87,21 @@
 	$: if (target) {
 		controls.target = targetObject.position
 		controls.update()
+		render('OrbitControls: target changed')
 	}
 
 	onDestroy(() => {
 		controls.dispose()
+		render('OrbitControls: onDestroy')
 	})
 </script>
 
 {#if target}
-	<TransformableObject object={targetObject} position={target} />
+	<TransformableObject
+		object={targetObject}
+		position={target}
+		rotation={undefined}
+		scale={undefined}
+		lookAt={undefined}
+	/>
 {/if}

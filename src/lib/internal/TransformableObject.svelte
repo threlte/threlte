@@ -5,9 +5,10 @@
 	import { useThrelte } from '../hooks/useThrelte'
 
 	export let object: Object3D
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
+	export let position: PositionProp
+	export let scale: ScaleProp
+	export let rotation: RotationProp
+	export let lookAt: PositionProp
 
 	const { render } = useThrelte()
 
@@ -17,7 +18,7 @@
 			position.y ?? defaults.position.y,
 			position.z ?? defaults.position.z
 		)
-		render()
+		render('TransformableObject: position')
 	}
 	$: if (scale) {
 		if (typeof scale === 'number') {
@@ -29,7 +30,7 @@
 				scale.z ?? defaults.scale.z
 			)
 		}
-		render()
+		render('TransformableObject: scale')
 	}
 	$: if (rotation) {
 		object.rotation.set(
@@ -38,6 +39,14 @@
 			rotation.z ?? defaults.rotation.z,
 			rotation.order ?? defaults.rotation.order
 		)
-		render()
+		render('TransformableObject: rotation')
+	}
+	$: if (lookAt) {
+		object.lookAt(
+			lookAt.x ?? defaults.position.x,
+			lookAt.y ?? defaults.position.y,
+			lookAt.z ?? defaults.position.z
+		)
+		render('TransformableObject: lookAt')
 	}
 </script>

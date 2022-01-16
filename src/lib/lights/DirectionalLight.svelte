@@ -56,7 +56,7 @@
 			light.shadow.bias = bias
 			light.shadow.radius = radius
 		}
-		render()
+		render('DirectionalLight: shadow changed')
 	}
 </script>
 

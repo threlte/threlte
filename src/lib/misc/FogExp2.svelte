@@ -19,14 +19,14 @@
 	$: {
 		fog.color = convertColorRepresentationToColor(color, linear)
 		fog.density = density
-		render()
+		render('FogExp2: props changed')
 	}
 
 	scene.fog = fog
-	render()
+	render('FogExp2: added')
 
 	onDestroy(() => {
 		scene.fog = null
-		render()
+		render('FogExp2: removed')
 	})
 </script>

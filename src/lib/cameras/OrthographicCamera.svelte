@@ -43,7 +43,7 @@
 		camera.top = size.height / 2
 		camera.bottom = size.height / -2
 		camera.updateProjectionMatrix()
-		render()
+		render('OrthographicCamera: onResize')
 	}, resizeOpts)
 
 	$: {
@@ -51,7 +51,7 @@
 		camera.far = far
 		camera.zoom = zoom
 		camera.updateProjectionMatrix()
-		render()
+		render('OrthographicCamera: props changed')
 	}
 </script>
 
