@@ -2,7 +2,7 @@
 	import type { Mesh } from 'three'
 	import InteractiveObject from '../internal/InteractiveObject.svelte'
 	import RaycastableObject from '../internal/RaycastableObject.svelte'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let mesh: Mesh

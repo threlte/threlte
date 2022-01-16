@@ -4,7 +4,7 @@
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import { getParent } from '../internal/HierarchicalObject.svelte'
-	import type { PositionProp } from '../lib/types'
+	import type { PositionProp } from '../types/types'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useFrame } from '../hooks/useFrame'
 

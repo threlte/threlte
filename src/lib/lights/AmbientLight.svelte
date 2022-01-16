@@ -2,7 +2,7 @@
 	import { AmbientLight, ColorRepresentation } from 'three'
 	import LightInstance from '../instances/LightInstance.svelte'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// LightInstance
 	export let position: PositionProp = undefined

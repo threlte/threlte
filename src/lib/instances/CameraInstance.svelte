@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Camera } from 'three'
-	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let camera: Camera

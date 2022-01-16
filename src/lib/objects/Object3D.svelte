@@ -2,7 +2,7 @@
 	import Object3DInstance from '../instances/Object3DInstance.svelte'
 	import { Object3D } from 'three'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// Object3DInstance
 	export let position: PositionProp = undefined

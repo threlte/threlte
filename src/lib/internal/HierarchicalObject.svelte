@@ -2,7 +2,7 @@
 	import { getContext, onDestroy, setContext } from 'svelte'
 	import type { Object3D } from 'three'
 	import { useThrelte } from '../hooks/useThrelte'
-	import type { ThrelteParentContext } from '../lib/types'
+	import type { ThrelteParentContext } from '../types/types'
 
 	export const setParent = (obj: Object3D) => {
 		setContext<ThrelteParentContext>('threlte-parent', obj)

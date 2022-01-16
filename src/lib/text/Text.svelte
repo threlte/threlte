@@ -3,7 +3,7 @@
 	import { createEventDispatcher, onDestroy } from 'svelte'
 	import { Text } from 'troika-three-text'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../types/types'
 	import { useThrelte } from '../hooks/useThrelte'
 
 	// MeshInstance

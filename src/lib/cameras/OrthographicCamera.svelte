@@ -3,7 +3,7 @@
 	import { OrthographicCamera } from 'three'
 	import { useResize } from '../hooks/useResize'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 

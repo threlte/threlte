@@ -21,7 +21,7 @@
 	import { useResize, UseResizeOptions } from './hooks/useResize'
 	import HierarchicalObject from './internal/HierarchicalObject.svelte'
 	import { animationFrameRaycast, eventRaycast, transformEvent } from './lib/interactivity'
-	import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './lib/types'
+	import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './types/types'
 
 	const requestRenderInstances: Set<(requestedBy?: string) => void> = new Set()
 	export const requestRender = (requestedBy?: string) => {

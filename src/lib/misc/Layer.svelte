@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LayerThrelte, ThrelteLayerContext } from '../lib/types'
+	import type { LayerThrelte, ThrelteLayerContext } from '../types/types'
 	import { setContext } from 'svelte'
 	import { writable } from 'svelte/store'
 

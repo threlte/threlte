@@ -1,7 +1,7 @@
 import { createEventDispatcher } from 'svelte'
 import type { Camera, Event, Intersection, Object3D } from 'three'
 import { Raycaster, Vector2 } from 'three'
-import type { ThrelteContext, ThrelteRootContext } from './types'
+import type { ThrelteContext, ThrelteRootContext } from '../types/types'
 
 export type ThrelteEventMap = {
 	click: ThrelteEvent

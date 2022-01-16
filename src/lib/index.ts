@@ -41,4 +41,4 @@ export type {
 	ThrelteContext,
 	ThrelteRootContext,
 	LayerThrelte
-} from './lib/types'
+} from './types/types'

@@ -5,7 +5,7 @@
 	import LayerableObject from '../internal/LayerableObject.svelte'
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
+	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	export let object: Object3D
 
