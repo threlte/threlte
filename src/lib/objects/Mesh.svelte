@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MeshInstance from '../instanced/MeshInstance.svelte'
+	import MeshInstance from '../instances/MeshInstance.svelte'
 	import type { BufferGeometry } from 'three'
 	import { Material, Mesh } from 'three'
 	import { defaults } from '../lib/defaults'

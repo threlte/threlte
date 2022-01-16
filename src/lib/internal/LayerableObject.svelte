@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LayerContext } from '$lib/lib/types'
+	import type { LayerContext } from '../lib/types'
 
 	import { getContext } from 'svelte'
 	import type { Object3D } from 'three'

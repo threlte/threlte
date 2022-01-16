@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CameraInstance from '$lib/instanced/CameraInstance.svelte'
+	import CameraInstance from '../instances/CameraInstance.svelte'
 	import { OrthographicCamera } from 'three'
 	import { useResize } from '../hooks/useResize'
 	import { defaults } from '../lib/defaults'
@@ -62,16 +62,16 @@
 	{position}
 	{scale}
 	{rotation}
-	{lookAt}
-	{useCamera}
-	{viewportAware}
 	{castShadow}
 	{receiveShadow}
 	{frustumCulled}
 	{renderOrder}
+	{viewportAware}
+	bind:inViewport
 	on:viewportenter
 	on:viewportleave
-	bind:inViewport
+	{lookAt}
+	{useCamera}
 >
 	<slot />
 </CameraInstance>

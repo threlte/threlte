@@ -11,7 +11,7 @@ export { default as OrbitControls } from './controls/OrbitControls.svelte'
 // objects
 export { default as Mesh } from './objects/Mesh.svelte'
 export { default as Group } from './objects/Group.svelte'
-export { default as Object3D } from './instanced/Object3DInstance.svelte'
+export { default as Object3D } from './instances/Object3DInstance.svelte'
 
 // misc
 export { default as Fog } from './misc/Fog.svelte'

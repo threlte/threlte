@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Object3DInstance from '../instanced/Object3DInstance.svelte'
+	import Object3DInstance from '../instances/Object3DInstance.svelte'
 	import { Group } from 'three'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
@@ -25,9 +25,9 @@
 	{rotation}
 	{frustumCulled}
 	{renderOrder}
-	{viewportAware}
 	{castShadow}
 	{receiveShadow}
+	{viewportAware}
 	bind:inViewport
 	on:viewportenter
 	on:viewportleave

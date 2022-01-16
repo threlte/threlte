@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AmbientLight, ColorRepresentation } from 'three'
-	import LightInstance from '../instanced/LightInstance.svelte'
+	import LightInstance from '../instances/LightInstance.svelte'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 
@@ -9,7 +9,7 @@
 	export let scale: ScaleProp = undefined
 	export let rotation: RotationProp = undefined
 	export let viewportAware: boolean = false
-	export let inViewport: boolean = false
+	export let inViewport = defaults.object3d.inViewport
 	export let castShadow = defaults.mesh.castShadow
 	export let receiveShadow = defaults.mesh.receiveShadow
 	export let frustumCulled = defaults.mesh.frustumCulled
@@ -29,12 +29,12 @@
 	{receiveShadow}
 	{frustumCulled}
 	{renderOrder}
-	{color}
-	{intensity}
 	{viewportAware}
 	bind:inViewport
 	on:viewportenter
 	on:viewportleave
+	{color}
+	{intensity}
 >
 	<slot />
 </LightInstance>

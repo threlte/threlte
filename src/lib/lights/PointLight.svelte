@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ColorRepresentation } from 'three'
 	import { PointLight } from 'three'
-	import LightInstance from '../instanced/LightInstance.svelte'
+	import LightInstance from '../instances/LightInstance.svelte'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
@@ -73,12 +73,12 @@
 	{receiveShadow}
 	{frustumCulled}
 	{renderOrder}
-	{color}
-	{intensity}
 	{viewportAware}
 	bind:inViewport
 	on:viewportenter
 	on:viewportleave
+	{color}
+	{intensity}
 >
 	<slot />
 </LightInstance>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LightInstance from '$lib/instanced/LightInstance.svelte'
+	import LightInstance from '../instances/LightInstance.svelte'
 	import type { ColorRepresentation } from 'three'
 	import { DirectionalLight } from 'three'
 	import { defaults } from '../lib/defaults'
@@ -74,12 +74,12 @@
 	{receiveShadow}
 	{frustumCulled}
 	{renderOrder}
-	{color}
-	{intensity}
 	{viewportAware}
 	bind:inViewport
 	on:viewportenter
 	on:viewportleave
+	{color}
+	{intensity}
 >
 	<slot />
 </LightInstance>

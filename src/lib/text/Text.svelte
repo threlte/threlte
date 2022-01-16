@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MeshInstance from '$lib/instanced/MeshInstance.svelte'
+	import MeshInstance from '../instances/MeshInstance.svelte'
 	import { createEventDispatcher, onDestroy } from 'svelte'
 	import { Text } from 'troika-three-text'
 	import { defaults } from '../lib/defaults'
@@ -123,5 +123,5 @@
 	on:viewportenter
 	on:viewportleave
 >
-	<slot /></MeshInstance
->
+	<slot />
+</MeshInstance>
