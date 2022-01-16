@@ -1,10 +1,10 @@
 <script lang="ts">
+	import MeshInstance from '$lib/instanced/MeshInstance.svelte'
 	import { createEventDispatcher, onDestroy } from 'svelte'
-	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../lib/types'
-	import { useThrelte } from '../lib/useThrelte'
-	import Primitive from '../objects/Primitive.svelte'
 	import { Text } from 'troika-three-text'
 	import { defaults } from '../lib/defaults'
+	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../lib/types'
+	import { useThrelte } from '../lib/useThrelte'
 
 	// troika-three-text options
 	export let text: TextType['text'] = ''
@@ -97,22 +97,12 @@
 		})
 	}
 
-	$: {
-		textObject.castShadow = castShadow
-		textObject.receiveShadow = receiveShadow
-		textObject.frustumCulled = frustumCulled
-		textObject.renderOrder = renderOrder
-		render()
-	}
-
 	onDestroy(() => {
 		textObject.dispose()
 	})
 </script>
 
-<Primitive
-	on:viewportenter
-	on:viewportleave
+<MeshInstance
 	on:click
 	on:contextmenu
 	on:pointerup
@@ -120,12 +110,16 @@
 	on:pointerenter
 	on:pointerleave
 	on:pointermove
-	object={textObject}
+	mesh={textObject}
 	{position}
 	{scale}
 	{rotation}
 	{interactive}
 	{ignorePointerEvents}
 	{viewportAware}
-	{inViewport}
+	{castShadow}
+	{receiveShadow}
+	{frustumCulled}
+	{renderOrder}
+	bind:inViewport
 />

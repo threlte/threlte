@@ -1,24 +1,28 @@
 <script lang="ts">
+	import CameraInstance from '$lib/instanced/CameraInstance.svelte'
 	import { OrthographicCamera } from 'three'
-	import OrientableObject from '../internal/OrientableObject.svelte'
-	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
-	import TransformableObject from '../internal/TransformableObject.svelte'
+	import { useResize } from '../hooks/useResize'
 	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
 	import { useThrelteRoot } from '../lib/useThrelteRoot'
-	import { useResize } from '../hooks/useResize'
 
-	const { size, render } = useThrelte()
+	export let position: PositionProp = undefined
+	export let scale: ScaleProp = undefined
+	export let rotation: RotationProp = undefined
+
+	export let viewportAware: boolean = false
+	export let inViewport: boolean | undefined = undefined
+
+	export let lookAt: PositionProp | undefined = undefined
 
 	export let near = defaults.camera.near
 	export let far = defaults.camera.far
 	export let zoom = defaults.camera.zoom
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
 	export let useCamera = true
-	export let lookAt: PositionProp | undefined = undefined
+
+	const { size, render } = useThrelte()
+	const { setCamera, resizeOpts } = useThrelteRoot()
 
 	export const camera = new OrthographicCamera(
 		size.width / -2,
@@ -29,9 +33,7 @@
 		1000
 	)
 
-	const rootCtx = useThrelteRoot()
-
-	$: if (useCamera) rootCtx.setCamera(camera)
+	$: if (useCamera) setCamera(camera)
 
 	useResize(() => {
 		camera.left = size.width / -2
@@ -40,7 +42,7 @@
 		camera.bottom = size.height / -2
 		camera.updateProjectionMatrix()
 		render()
-	}, rootCtx.resizeOpts)
+	}, resizeOpts)
 
 	$: {
 		camera.near = near
@@ -51,8 +53,15 @@
 	}
 </script>
 
-<TransformableObject object={camera} {position} {rotation} {scale} />
-<OrientableObject object={camera} {lookAt} listen={[position, rotation, scale]} />
-<HierarchicalObject object={camera}>
+<CameraInstance
+	{camera}
+	{position}
+	{scale}
+	{rotation}
+	{lookAt}
+	{useCamera}
+	{viewportAware}
+	bind:inViewport
+>
 	<slot />
-</HierarchicalObject>
+</CameraInstance>

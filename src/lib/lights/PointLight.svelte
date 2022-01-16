@@ -1,16 +1,21 @@
 <script lang="ts">
 	import type { ColorRepresentation } from 'three'
 	import { PointLight } from 'three'
+	import LightInstance from '../instanced/LightInstance.svelte'
 	import { defaults } from '../lib/defaults'
-	import { useThrelte } from '../lib/useThrelte'
-	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
-	import TransformableObject from '../internal/TransformableObject.svelte'
-	import { convertColorRepresentationToColor } from '../lib/colors'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+	import { useThrelte } from '../lib/useThrelte'
 
-	export let color: ColorRepresentation = defaults.lights.pointLight.color
-	export let intensity = defaults.lights.pointLight.intensity
+	export let position: PositionProp = undefined
+	export let scale: ScaleProp = undefined
+	export let rotation: RotationProp = undefined
+
+	export let viewportAware: boolean = false
+	export let inViewport: boolean | undefined = undefined
+
+	export let color: ColorRepresentation = defaults.lights.directionalLight.color
+	export let intensity = defaults.lights.directionalLight.intensity
+
 	export let distance = defaults.lights.pointLight.distance
 	export let decay = defaults.lights.pointLight.decay
 	export let power: number | undefined = undefined
@@ -23,18 +28,11 @@
 				radius?: number
 		  } = false
 
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-
 	export const light = new PointLight(color, intensity, distance, decay)
 
 	const { render } = useThrelte()
-	const { linear } = useThrelteRoot()
 
 	$: {
-		light.color = convertColorRepresentationToColor(color, linear)
-		light.intensity = intensity
 		light.distance = distance
 		light.decay = decay
 		if (power) light.power = power
@@ -62,7 +60,15 @@
 	}
 </script>
 
-<TransformableObject object={light} {position} {rotation} {scale} />
-<HierarchicalObject object={light}>
+<LightInstance
+	{light}
+	{position}
+	{scale}
+	{rotation}
+	{viewportAware}
+	{color}
+	{intensity}
+	bind:inViewport
+>
 	<slot />
-</HierarchicalObject>
+</LightInstance>

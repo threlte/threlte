@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type { Object3D } from 'three'
-	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
+	import type { Mesh } from 'three'
 	import InteractiveObject from '../internal/InteractiveObject.svelte'
 	import RaycastableObject from '../internal/RaycastableObject.svelte'
-	import TransformableObject from '../internal/TransformableObject.svelte'
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
+	import { defaults } from '../lib/defaults'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
-
-	export let object: Object3D
+	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let position: PositionProp = undefined
 	export let scale: ScaleProp = undefined
@@ -18,19 +16,44 @@
 
 	export let viewportAware: boolean = false
 	export let inViewport: boolean | undefined = undefined
+
+	export let castShadow = defaults.mesh.castShadow
+	export let receiveShadow = defaults.mesh.receiveShadow
+	export let frustumCulled = defaults.mesh.frustumCulled
+	export let renderOrder = defaults.mesh.renderOrder
+
+	export let mesh: Mesh
+
+	$: {
+		if (interactive && ignorePointerEvents) {
+			console.warn(
+				'An Object cannot ignore pointer events and be interactive at the same time. Interactivity will be dismissed.'
+			)
+		}
+	}
 </script>
 
-<TransformableObject {object} {position} {rotation} {scale} />
-<HierarchicalObject {object}>
+<Object3DInstance
+	object={mesh}
+	{position}
+	{scale}
+	{rotation}
+	{castShadow}
+	{receiveShadow}
+	{frustumCulled}
+	{renderOrder}
+	{viewportAware}
+	bind:inViewport
+>
 	<slot />
-</HierarchicalObject>
+</Object3DInstance>
 
 {#if !ignorePointerEvents}
-	<RaycastableObject {object} />
+	<RaycastableObject object={mesh} />
 
 	{#if interactive}
 		<InteractiveObject
-			{object}
+			object={mesh}
 			on:click
 			on:contextmenu
 			on:pointerup
@@ -40,8 +63,4 @@
 			on:pointermove
 		/>
 	{/if}
-{/if}
-
-{#if viewportAware}
-	<ViewportAwareObject bind:inViewport {object} on:viewportenter on:viewportleave />
 {/if}

@@ -1,16 +1,21 @@
 <script lang="ts">
+	import LightInstance from '$lib/instanced/LightInstance.svelte'
 	import type { ColorRepresentation } from 'three'
 	import { DirectionalLight } from 'three'
 	import { defaults } from '../lib/defaults'
-	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
-	import TransformableObject from '../internal/TransformableObject.svelte'
-	import { convertColorRepresentationToColor } from '../lib/colors'
 	import type { PositionProp, RotationProp, ScaleProp } from '../lib/types'
 	import { useThrelte } from '../lib/useThrelte'
-	import { useThrelteRoot } from '../lib/useThrelteRoot'
+
+	export let position: PositionProp = undefined
+	export let scale: ScaleProp = undefined
+	export let rotation: RotationProp = undefined
+
+	export let viewportAware: boolean = false
+	export let inViewport: boolean | undefined = undefined
 
 	export let color: ColorRepresentation = defaults.lights.directionalLight.color
 	export let intensity = defaults.lights.directionalLight.intensity
+
 	export let shadow:
 		| boolean
 		| {
@@ -27,20 +32,9 @@
 				radius?: number
 		  } = false
 
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-
 	export const light = new DirectionalLight(color, intensity)
 
 	const { render } = useThrelte()
-	const { linear } = useThrelteRoot()
-
-	$: {
-		light.color = convertColorRepresentationToColor(color, linear)
-		light.intensity = intensity
-		render()
-	}
 
 	$: {
 		if (shadow) {
@@ -67,7 +61,15 @@
 	}
 </script>
 
-<TransformableObject object={light} {position} {rotation} {scale} />
-<HierarchicalObject object={light}>
+<LightInstance
+	{light}
+	{position}
+	{scale}
+	{rotation}
+	{viewportAware}
+	{color}
+	{intensity}
+	bind:inViewport
+>
 	<slot />
-</HierarchicalObject>
+</LightInstance>

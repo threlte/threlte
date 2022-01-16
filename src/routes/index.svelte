@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { useRaf } from '$lib/hooks/useRaf'
-
 	import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
-
 	import {
 		AmbientLight,
 		Canvas,
+		DirectionalLight,
 		Group,
 		Mesh,
 		OrbitControls,
 		PerspectiveCamera,
 		PointLight,
-		Text,
-		DirectionalLight
+		Text
 	} from 'threlte'
 
 	let rotationY = (45 * Math.PI) / 180
@@ -40,15 +38,16 @@
 			/>
 		</Group>
 
-		<DirectionalLight color={'0xEDBD9C'} shadow position={{ x: -15, y: 15, z: 20 }} />
-		<AmbientLight color={0x9cceed} intensity={0.15} />
+		<DirectionalLight color={'#EDBD9C'} shadow position={{ x: -15, y: 15, z: 20 }} />
+		<AmbientLight color={'#9cceed'} intensity={0.15} />
 		<PointLight intensity={0.12} position={{ x: 15, y: -15, z: -20 }} />
 
 		<!-- Sphere -->
 		<Mesh
 			castShadow
+			interactive
 			geometry={new SphereBufferGeometry(1, 40, 40)}
-			material={new MeshStandardMaterial({ color: '0xdddddd' })}
+			material={new MeshStandardMaterial({ color: '#dddddd' })}
 		/>
 
 		<!-- Disc -->
@@ -63,6 +62,11 @@
 </div>
 
 <style>
+	button {
+		position: fixed;
+		z-index: 1;
+	}
+
 	div {
 		position: fixed;
 		top: 0;
