@@ -1,21 +1,30 @@
 <script lang="ts">
-  import type { ThrelteLayerContext } from '../types/types'
-
   import { getContext } from 'svelte'
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
+  import type { ThrelteLayersContext } from '../types/types'
   export let object: Object3D
-  const layer = getContext<ThrelteLayerContext>('threlte-layer')
+  const layers = getContext<ThrelteLayersContext>('threlte-layers')
 
   const { render } = useThrelte()
 
   $: {
-    if ($layer === 'all') {
+    if ($layers === 'all') {
       object.layers.enableAll()
-    } else if ($layer === 'none') {
+    } else if ($layers === 'none') {
       object.layers.disableAll()
+    } else if (Array.isArray($layers)) {
+      for (let index = 0; index < 32; index += 1) {
+        const layerIndex = index as typeof $layers[number]
+        const enabled = $layers.includes(layerIndex)
+        if (enabled) {
+          object.layers.enable(index)
+        } else {
+          object.layers.disable(index)
+        }
+      }
     } else {
-      object.layers.set($layer ?? 0)
+      object.layers.set($layers)
     }
     render('LayerableObject')
   }

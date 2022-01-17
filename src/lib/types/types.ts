@@ -1,4 +1,4 @@
-import type { Writable } from 'svelte/store'
+import type { Readable, Writable } from 'svelte/store'
 import type {
   Camera,
   Clock,
@@ -34,6 +34,7 @@ export type ThrelteRootContext = {
 export type ThrelteUseFrame = {
   stop: () => void
   start: () => void
+  started: Readable<boolean>
 }
 
 export type ThrelteUseFrameOptions = {
@@ -102,7 +103,7 @@ export type Rotation =
 
 export type LookAt = Position | Object3D
 
-export type LayerThrelte =
+export type ThrelteLayers =
   | 0
   | 1
   | 2
@@ -135,10 +136,44 @@ export type LayerThrelte =
   | 29
   | 30
   | 31
+  | (
+      | 0
+      | 1
+      | 2
+      | 3
+      | 4
+      | 5
+      | 6
+      | 7
+      | 8
+      | 9
+      | 10
+      | 11
+      | 12
+      | 13
+      | 14
+      | 15
+      | 16
+      | 17
+      | 18
+      | 19
+      | 20
+      | 21
+      | 22
+      | 23
+      | 24
+      | 25
+      | 26
+      | 27
+      | 28
+      | 29
+      | 30
+      | 31
+    )[]
   | 'all'
   | 'none'
 
-export type ThrelteLayerContext = Writable<LayerThrelte | undefined>
+export type ThrelteLayersContext = Writable<ThrelteLayers>
 
 export interface Text extends Mesh {
   /**

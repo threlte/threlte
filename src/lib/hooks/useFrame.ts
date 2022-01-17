@@ -1,3 +1,6 @@
+import { getContext, onDestroy } from 'svelte'
+import { readable, writable } from 'svelte/store'
+import { browser } from '../lib/browser'
 import type {
   ThrelteContext,
   ThrelteFrameHandler,
@@ -5,8 +8,6 @@ import type {
   ThrelteUseFrame,
   ThrelteUseFrameOptions
 } from '../types/types'
-import { getContext, onDestroy } from 'svelte'
-import { browser } from '../lib/browser'
 
 export const useFrame = (
   fn: (ctx: ThrelteContext, delta: number) => void,
@@ -15,7 +16,8 @@ export const useFrame = (
   if (!browser) {
     return {
       start: () => undefined,
-      stop: () => undefined
+      stop: () => undefined,
+      started: readable(false)
     }
   }
 
@@ -26,12 +28,16 @@ export const useFrame = (
     order: options?.order
   }
 
+  const started = writable(false)
+
   const stop = () => {
     renderCtx.frameHandlers.delete(handler)
+    started.set(false)
   }
 
   const start = () => {
     renderCtx.frameHandlers.add(handler)
+    started.set(true)
   }
 
   if (options?.autostart ?? true) {
@@ -39,11 +45,14 @@ export const useFrame = (
   }
 
   onDestroy(() => {
-    renderCtx.frameHandlers.delete(handler)
+    stop()
   })
 
   return {
     start,
-    stop
+    stop,
+    started: {
+      subscribe: started.subscribe
+    }
   }
 }

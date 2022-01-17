@@ -9,27 +9,15 @@ A three.js component library for svelte.
 - [Reference](#reference)
   - [Types](#types)
   - [Canvas](#canvas)
-      - [Properties](#properties)
-      - [Bindings](#bindings)
   - [Objects](#objects)
     - [Mesh](#mesh)
-      - [Properties](#properties-1)
-      - [Bindings](#bindings-1)
     - [Group](#group)
-      - [Properties](#properties-2)
-      - [Bindings](#bindings-2)
     - [Object3D](#object3d)
-      - [Properties](#properties-3)
-      - [Bindings](#bindings-3)
   - [Misc](#misc)
     - [Fog](#fog)
-      - [Properties](#properties-4)
-      - [Bindings](#bindings-4)
     - [FogExp2](#fogexp2)
-      - [Properties](#properties-5)
-      - [Bindings](#bindings-5)
     - [Text](#text)
-    - [Layer](#layer)
+    - [Layers](#layers)
   - [Lights](#lights)
     - [AmbientLight](#ambientlight)
     - [DirectionalLight](#directionallight)
@@ -239,7 +227,7 @@ const rootCtx = useThrelteRoot()
 
 The `<Canvas>` component is the root of your three.js scene. It's responsible for managing the frame loop as well as providing the three.js `Scene`.
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
@@ -252,7 +240,7 @@ shadowMapType: ShadowMapType = PCFSoftShadowMap
 resizeOpts: UseResizeOptions | undefined = undefined
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 ctx: ThrelteContext
@@ -263,7 +251,7 @@ rootCtx: ThrelteRootContext
 
 #### Mesh
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 geometry: THREE.BufferGeometry
@@ -282,7 +270,7 @@ ignorePointerEvents: boolean = false
 lookAt: LookAtProp | undefined = undefined
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
@@ -291,7 +279,7 @@ mesh: THREE.Mesh
 
 #### Group
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 position: Position = defaults.position
@@ -303,7 +291,7 @@ renderOrder = defaults.mesh.renderOrder
 lookAt: LookAt | undefined = undefined
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
@@ -312,7 +300,7 @@ group: THREE.Group
 
 #### Object3D
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 position: Position = defaults.position
@@ -324,7 +312,7 @@ renderOrder = defaults.mesh.renderOrder
 lookAt: LookAt | undefined = undefined
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
@@ -335,7 +323,7 @@ group: THREE.Object3D
 
 #### Fog
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 color: THREE.ColorRepresentation = defaults.fog.color
@@ -343,7 +331,7 @@ near = defaults.fog.near
 far = defaults.fog.far
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 fog: THREE.Fog
@@ -351,14 +339,14 @@ fog: THREE.Fog
 
 #### FogExp2
 
-##### Properties
+##### Properties <!-- omit in toc -->
 
 ```ts
 color: THREE.ColorRepresentation = defaults.fog.color
 density = defaults.fog.density
 ```
 
-##### Bindings
+##### Bindings <!-- omit in toc -->
 
 ```ts
 fog: THREE.FogExp2
@@ -366,73 +354,473 @@ fog: THREE.FogExp2
 
 #### Text
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
 
-#### Layer
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+castShadow = defaults.mesh.castShadow
+receiveShadow = defaults.mesh.receiveShadow
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+interactive: boolean = false
+ignorePointerEvents: boolean = false
+lookAt: LookAt | undefined = undefined
 
-<!-- TODO -->
+text: TextType['text'] = ''
+anchorX: TextType['anchorX'] = 0
+anchorY: TextType['anchorY'] = 0
+curveRadius: TextType['curveRadius'] = 0
+font: TextType['font'] = null
+fontSize: TextType['fontSize'] = 0.1
+letterSpacing: TextType['letterSpacing'] = 0
+lineHeight: TextType['lineHeight'] = 'normal'
+maxWidth: TextType['maxWidth'] = Infinity
+overflowWrap: TextType['overflowWrap'] = 'normal'
+textAlign: TextType['textAlign'] = 'left'
+textIndent: TextType['textIndent'] = 0
+whiteSpace: TextType['whiteSpace'] = 'normal'
+material: TextType['material'] | null = null
+color: TextType['color'] | null = null
+depthOffset: TextType['depthOffset'] = 0
+clipRect: TextType['clipRect'] | null = null
+glyphGeometryDetail: TextType['glyphGeometryDetail'] = 0
+sdfGlyphSize: TextType['sdfGlyphSize'] = 64
+outlineWidth: TextType['outlineWidth'] = 0
+outlineColor: TextType['outlineColor'] = 'black'
+outlineOpacity: TextType['outlineOpacity'] = 1
+outlineBlur: TextType['outlineBlur'] = 0
+outlineOffsetX: TextType['outlineOffsetX'] = 0
+outlineOffsetY: TextType['outlineOffsetY'] = 0
+strokeWidth: TextType['strokeWidth'] = 0
+strokeColor: TextType['strokeColor'] = 0x808080
+strokeOpacity: TextType['strokeOpacity'] = 1
+fillOpacity: TextType['fillOpacity'] = 1
+```
 
+##### Bindings <!-- omit in toc -->
+
+```ts
+inViewport: boolean
+text: Text
+```
+
+#### Layers
+
+[Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
+The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<!-- Remember to also assign a layer to your camera -->
+<Layers layers={1}>
+  <PerspectiveCamera />
+</Layers>
+
+<!-- visible if camera is on any layer -->
+<Layers layers={'all'}>
+  <Mesh />
+</Layers>
+
+<!-- visible if camera is on layer 1 -->
+<Layers layers={1}>
+  <Mesh />
+</Layers>
+
+<!-- invisible -->
+<Layers layers={'none'}>
+  <Mesh />
+</Layers>
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+layers: ThrelteLayers = 0
+```
+
+Property `layers` can be:
+- any integer from 0 to 31
+- an array of any integer from 0 to 31
+- `'all'`
+- `'none'`
+
+> TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
+  
 ### Lights
 
 #### AmbientLight
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+color: ColorRepresentation = defaults.lights.ambientLight.color
+intensity = defaults.lights.ambientLight.intensity
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+light = new AmbientLight(color, intensity)
+```
 
 #### DirectionalLight
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+color: ColorRepresentation = defaults.lights.ambientLight.color
+intensity = defaults.lights.ambientLight.intensity
+shadow:
+  | boolean
+  | {
+      mapSize?: [number, number]
+      camera?: {
+        left?: number
+        right?: number
+        top?: number
+        bottom?: number
+        near?: number
+        far?: number
+      }
+      bias?: number
+      radius?: number
+    } = false
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+light = new DirectionalLight(color, intensity)
+```
 
 #### HemisphereLight
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.lights.hemisphereLight.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+intensity = defaults.lights.hemisphereLight.intensity
+skyColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.skyColor
+groundColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.groundColor
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+light: THREE.HemisphereLight
+```
 
 #### PointLight
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+color: ColorRepresentation = defaults.lights.ambientLight.color
+intensity = defaults.lights.ambientLight.intensity
+distance = defaults.lights.pointLight.distance
+decay = defaults.lights.pointLight.decay
+power: number | undefined = undefined
+shadow:
+  | boolean
+  | {
+      mapSize?: [number, number]
+      camera?: { near?: number; far?: number }
+      bias?: number
+      radius?: number
+    } = false
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+light: THREE.PointLight
+```
 
 #### SpotLight
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.lights.spotLight.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+color: ColorRepresentation = defaults.lights.spotLight.color
+intensity = defaults.lights.spotLight.intensity
+angle: number = defaults.lights.spotLight.angle
+decay: number = defaults.lights.spotLight.decay
+distance: number = defaults.lights.spotLight.distance
+penumbra: number = defaults.lights.spotLight.penumbra
+power: number | undefined = undefined
+target: LookAt = defaults.lookAt
+shadow:
+  | boolean
+  | {
+      mapSize?: [number, number]
+      camera?: { near?: number; far?: number }
+      bias?: number
+      radius?: number
+    } = false
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+light: THREE.SpotLight
+```
 
 ### Cameras
 
 #### OrthographicCamera
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+lookAt: LookAt | undefined = undefined
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+useCamera = true
+near = defaults.camera.near
+far = defaults.camera.far
+zoom = defaults.camera.zoom
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+camera: THREE.OrthographicCamera
+```
 
 #### PerspectiveCamera
 
-<!-- TODO -->
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+lookAt: LookAt | undefined = undefined
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+useCamera = true
+near = defaults.camera.near
+far = defaults.camera.far
+fov = defaults.camera.fov
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+camera: THREE.PerspectiveCamera
+```
 
 ### Controls
 
 #### OrbitControls
 
-<!-- TODO -->
+The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera. As soon as the OrbitControls are mounted, the frame loop will continously run.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<PerspectiveCamera fov={50}>
+  <OrbitControls enableDamping />
+</PerspectiveCamera>
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+autoRotate = false
+autoRotateSpeed = 2
+dampingFactor = 0.05
+enableDamping = false
+enabled = true
+enablePan = true
+enableRotate = true
+enableZoom = true
+keyPanSpeed = 7
+keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
+maxAzimuthAngle = Infinity
+maxDistance = Infinity
+maxPolarAngle = Math.PI
+maxZoom = Infinity
+minAzimuthAngle = Infinity
+minDistance = 0
+minPolarAngle = 0
+minZoom = 0
+mouseButtons = {
+  LEFT: MOUSE.ROTATE,
+  MIDDLE: MOUSE.DOLLY,
+  RIGHT: MOUSE.PAN
+}
+panSpeed = 1
+rotateSpeed = 1
+screenSpacePanning = true
+touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
+zoomSpeed = 1
+target: Position | undefined = undefined
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+controls: THREE.OrbitControls
+```
 
 ### Effects
 
 #### Pass
 
-<!-- TODO -->
+By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
+  …
+</script>
+
+<Canvas>
+  <Pass pass={new GlitchPass()}>
+</Canvas>
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+pass: THREE.Pass
+```
 
 ### hooks
 
+> Hooks can only be used inside the `<Canvas>` component because they rely on context.
+
 #### useThrelte
 
-<!-- TODO -->
+This hook lets you consume the state of the `<Canvas>` component which contains the renderer, camera, scene and so on.
+
+```ts
+const {
+  size: { width: number; height: number }
+  pointer?: Vector2
+  clock: Clock
+  camera?: Camera
+  scene: Scene
+  renderer?: WebGLRenderer
+  render: (requestedBy?: string) => void
+} = useThrelte()
+```
+
+> This context is also available as the first argument of the callback of the [useFrame hook](#useframe)!
 
 #### useThrelteRoot
 
-<!-- TODO -->
+This hook lets you consume the root context. Although it can be useful, this is mostly used internally. 
+
+```ts
+const {
+  setCamera: (camera: Camera) => void
+  addRaycastableObject: (obj: Object3D) => void
+  removeRaycastableObject: (obj: Object3D) => void
+  addInteractiveObject: (obj: Object3D) => void
+  removeInteractiveObject: (obj: Object3D) => void
+  addPass: (pass: Pass) => void
+  removePass: (pass: Pass) => void
+  linear: boolean
+  interactiveObjects: Set<Object3D>
+  raycastableObjects: Set<Object3D>
+  composer?: EffectComposer
+  resizeOpts?: UseResizeOptions
+} = useThrelteRoot()
+```
 
 #### useFrame
 
-<!-- TODO -->
+This hook allows you to execute code on every frame.  
+You receive the state (the same as `useThrelte`) and a clock delta in seconds. Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop. You may pass additional options to this hook. Also, `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
+
+##### Example <!-- omit in toc -->
+
+```ts
+const { start, stop, started } = useFrame(() => {
+  console.log('rendering…')
+})
+
+const toggleUseFrame = () => {
+  if ($started) {
+    stop()
+  } else {
+    start()
+  }
+}
+```
 
 #### useTexture
 
-<!-- TODO -->
+`useTexture` allows you to easily load textures and automatically convert your textures in the correct color space based on your [settings on the `<Canvas>` component](#canvas).
+This hook can be called outside of the `<Canvas>` component, but with limitations: To make sure that textures are converted to the correct color space, `useTexture` needs to consume the `<Canvas>` context. If there's no context, it will fall back to keeping your textures untouched.
+
+##### Examples <!-- omit in toc -->
+
+```ts
+const tex = useTexture('tex.jpg') // -> THREE.Texture
+
+const [texA, texB] = useTexture(['texA.jpg', 'texB.jpg']) // -> THREE.Texture[]
+```
+
+You can also use objects:
+
+```ts
+const textures = useTexture({
+  metalnessMap: 'metalness.jpg',
+  map: 'color.jpg',
+})
+const material = new MeshStandardMaterial({ ...textures })
+```
 
 ## Concepts
 
@@ -440,7 +828,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
 
 - **Sensible defaults**  
   Much like [react-three-fiber](https://github.com/pmndrs/react-three-fiber), threlte will set sensible defaults to three.js `WebGLRenderer`, all colors and textures and more. This makes it easy for you to follow best practices in terms of color reception and accuracy.  
-  threlte also makes visibility management a breeze with its `<Layer>` component.
+  threlte also makes visibility management a breeze with its `<Layers>` component.
 - **Unified frame loop**  
   By default, threlte only renders the scene if there's need for it: If a prop changes that makes rendering the scene necessary, if there are any interactive objects in the scene or if threlte or you use `useFrame` in any of your components.
 - **Interactivity**  
@@ -452,7 +840,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
   All threlte components are written in TypeScript, so type support is a first-class citizen.
 - **EffectComposer support**  
   Add a Pass with  
-   `<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the initial `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
+   `<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the default `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
 - **Text rendering**  
   Render text using the fantastic [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) library with:
   `<Text text="Hello World" />`
@@ -551,8 +939,8 @@ By using props instead of manipulating three.js objects directly, the unified re
 
 ## Credits
 
-- [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
 - [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed)
+- [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
 - [drei](https://github.com/pmndrs/drei)
 
 ## License
