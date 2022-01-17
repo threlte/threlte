@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-	import { browser } from '$app/env'
 	import { onDestroy, onMount, setContext } from 'svelte'
 	import {
 		ACESFilmicToneMapping,
@@ -20,6 +19,7 @@
 	import { useRaf } from './hooks/useRaf'
 	import { useResize, UseResizeOptions } from './hooks/useResize'
 	import HierarchicalObject from './internal/HierarchicalObject.svelte'
+	import { browser } from './lib/browser'
 	import { handleFrameloop } from './lib/frameloop'
 	import { animationFrameRaycast, eventRaycast, transformEvent } from './lib/interactivity'
 	import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './types/types'

@@ -1,4 +1,4 @@
-import { browser } from '$app/env'
+import { browser } from '../lib/browser'
 import { sRGBEncoding, Texture, TextureLoader } from 'three'
 import { requestRender } from '../Canvas.svelte'
 import { useThrelteRoot } from './useThrelteRoot'

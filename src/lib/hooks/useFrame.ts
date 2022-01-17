@@ -1,4 +1,3 @@
-import { browser } from '$app/env'
 import type {
 	ThrelteContext,
 	ThrelteFrameHandler,
@@ -7,6 +6,7 @@ import type {
 	ThrelteUseFrameOptions
 } from '../types/types'
 import { getContext, onDestroy } from 'svelte'
+import { browser } from '../lib/browser'
 
 export const useFrame = (
 	fn: (ctx: ThrelteContext, delta: number) => void,

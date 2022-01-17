@@ -8,8 +8,8 @@
 	export let object: Object3D
 
 	const dispatch = createEventDispatcher<{
-		viewportenter: undefined
-		viewportleave: undefined
+		viewportenter: Object3D
+		viewportleave: Object3D
 	}>()
 
 	const frustum = new Frustum()
@@ -31,10 +31,10 @@
 	const dispatchEvent = async (isInViewport: boolean) => {
 		if (isInViewport) {
 			if (!ticked) await tick()
-			dispatch('viewportenter')
+			dispatch('viewportenter', object)
 		} else {
 			if (!ticked) await tick()
-			dispatch('viewportleave')
+			dispatch('viewportleave', object)
 		}
 	}
 

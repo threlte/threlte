@@ -1,4 +1,4 @@
-import { browser } from '$app/env'
+import { browser } from '../lib/browser'
 import { onDestroy } from 'svelte'
 
 export const useRaf = (cb: () => void): void => {

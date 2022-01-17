@@ -31,6 +31,12 @@ export { default as Object3D } from './objects/Object3D.svelte'
 // text
 export { default as Text } from './text/Text.svelte'
 
+// instances
+export { default as MeshInstance } from './instances/MeshInstance.svelte'
+export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
+export { default as LightInstance } from './instances/LightInstance.svelte'
+export { default as CameraInstance } from './instances/CameraInstance.svelte'
+
 // utils
 export { useFrame } from './hooks/useFrame'
 export { useThrelte } from './hooks/useThrelte'
