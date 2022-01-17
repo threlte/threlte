@@ -31,10 +31,26 @@ export type ThrelteRootContext = {
 	resizeOpts?: UseResizeOptions
 }
 
+export type ThrelteUseFrame = {
+	stop: () => void
+	start: () => void
+}
+
+export type ThrelteUseFrameOptions = {
+	autostart?: boolean
+	order?: number
+}
+
+export type ThrelteFrameHandler = {
+	fn: (ctx: ThrelteContext, delta: number) => void
+	order?: number
+}
+
 export type ThrelteRenderContext = {
 	renderRequested: boolean
-	requests: Record<string, number>
 	frame: number
+	requests: Record<string, number>
+	frameHandlers: Set<ThrelteFrameHandler>
 }
 
 export type ThrelteContext = {
@@ -58,9 +74,8 @@ export type ThrelteContext = {
 
 export type ThrelteParentContext = Object3D | undefined
 
-export type ScaleProp =
+export type PositionProp =
 	| Vector3
-	| number
 	| {
 			x?: number
 			y?: number
@@ -68,8 +83,9 @@ export type ScaleProp =
 	  }
 	| undefined
 
-export type PositionProp =
+export type ScaleProp =
 	| Vector3
+	| number
 	| {
 			x?: number
 			y?: number
@@ -86,6 +102,8 @@ export type RotationProp =
 			order?: Euler['order']
 	  }
 	| undefined
+
+export type LookAtProp = Exclude<PositionProp, undefined> | Object3D | undefined
 
 export type LayerThrelte =
 	| 0

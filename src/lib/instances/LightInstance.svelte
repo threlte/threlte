@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { ColorRepresentation, Light } from 'three'
-	import { convertColorRepresentationToColor } from '../lib/colors'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
+	import { convertColorRepresentationToColor } from '../lib/colors'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let light: Light
@@ -18,7 +18,7 @@
 	export let receiveShadow: boolean
 	export let frustumCulled: boolean
 	export let renderOrder: number
-	export let lookAt: PositionProp
+	export let lookAt: LookAtProp
 
 	// self
 	export let color: ColorRepresentation

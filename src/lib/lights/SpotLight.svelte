@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { ColorRepresentation, SpotLight } from 'three'
+	import { useFrame } from '../hooks/useFrame'
+	import Object3DInstance from '../instances/Object3DInstance.svelte'
+	import { ColorRepresentation, Object3D, SpotLight, Vector3 } from 'three'
 	import { useThrelte } from '../hooks/useThrelte'
 	import LightInstance from '../instances/LightInstance.svelte'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// LightInstance
 	export let position: PositionProp = defaults.lights.spotLight.position
@@ -23,7 +25,7 @@
 	export let distance: number = defaults.lights.spotLight.distance
 	export let penumbra: number = defaults.lights.spotLight.penumbra
 	export let power: number | undefined = undefined
-	export let target: PositionProp = undefined
+	export let target: LookAtProp = undefined
 
 	// self
 	export let shadow:
@@ -36,8 +38,37 @@
 		  } = false
 
 	export const light = new SpotLight(color, intensity)
+	const originalLightTarget = light.target
 
 	const { render } = useThrelte()
+
+	const tmpV3 = new Vector3()
+
+	const targetIsObject3D = (t: typeof target): t is Object3D => {
+		return !!target && target instanceof Object3D
+	}
+
+	const { start: startLightTracking, stop: stopLightTracking } = useFrame(
+		() => {
+			if (targetIsObject3D(target)) {
+				target.getWorldPosition(tmpV3)
+				light.target.position.copy(tmpV3)
+			}
+		},
+		{
+			autostart: false
+		}
+	)
+
+	$: {
+		if (targetIsObject3D(target)) {
+			light.target = target
+			startLightTracking()
+		} else if (!!target) {
+			stopLightTracking()
+			light.target = originalLightTarget
+		}
+	}
 
 	$: {
 		light.distance = distance
@@ -66,9 +97,29 @@
 	}
 </script>
 
+{#if !targetIsObject3D(target)}
+	<Object3DInstance
+		object={originalLightTarget}
+		position={target}
+		lookAt={undefined}
+		scale={undefined}
+		rotation={undefined}
+		castShadow={false}
+		receiveShadow={false}
+		frustumCulled={true}
+		renderOrder={0}
+		viewportAware={false}
+		on:viewportenter
+		on:viewportleave
+		inViewport={false}
+	>
+		<slot />
+	</Object3DInstance>
+{/if}
+
 <LightInstance
 	{light}
-	lookAt={target}
+	lookAt={undefined}
 	{position}
 	{scale}
 	{rotation}

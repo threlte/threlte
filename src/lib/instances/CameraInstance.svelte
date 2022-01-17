@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Camera } from 'three'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 	import Object3DInstance from './Object3DInstance.svelte'
 
 	export let camera: Camera
@@ -16,7 +16,7 @@
 	export let receiveShadow: boolean
 	export let frustumCulled: boolean
 	export let renderOrder: number
-	export let lookAt: PositionProp
+	export let lookAt: LookAtProp
 
 	// self
 	export let useCamera: boolean

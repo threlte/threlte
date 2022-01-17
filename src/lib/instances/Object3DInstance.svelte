@@ -5,7 +5,7 @@
 	import LayerableObject from '../internal/LayerableObject.svelte'
 	import TransformableObject from '../internal/TransformableObject.svelte'
 	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	export let object: Object3D
 
@@ -18,7 +18,7 @@
 	export let viewportAware: boolean
 	export let inViewport: boolean
 
-	export let lookAt: PositionProp
+	export let lookAt: LookAtProp
 
 	// self
 	export let castShadow: boolean

@@ -5,7 +5,7 @@
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'
 	import CameraInstance from '../instances/CameraInstance.svelte'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// CameraInstance
 	export let position: PositionProp = undefined
@@ -15,7 +15,7 @@
 	export let inViewport = defaults.object3d.inViewport
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
-	export let lookAt: PositionProp = undefined
+	export let lookAt: LookAtProp = undefined
 	export let useCamera = true
 
 	// self

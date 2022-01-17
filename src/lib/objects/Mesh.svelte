@@ -3,7 +3,7 @@
 	import type { BufferGeometry } from 'three'
 	import { Material, Mesh } from 'three'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// MeshInstance
 	export let position: PositionProp = undefined
@@ -17,7 +17,7 @@
 	export let renderOrder = defaults.mesh.renderOrder
 	export let interactive: boolean = false
 	export let ignorePointerEvents: boolean = false
-	export let lookAt: PositionProp = undefined
+	export let lookAt: LookAtProp = undefined
 
 	// self
 	export let geometry: BufferGeometry

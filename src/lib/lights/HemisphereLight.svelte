@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { convertColorRepresentationToColor } from '$lib/lib/colors'
+	import { convertColorRepresentationToColor } from '../lib/colors'
 	import { ColorRepresentation, HemisphereLight } from 'three'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { useThrelteRoot } from '../hooks/useThrelteRoot'

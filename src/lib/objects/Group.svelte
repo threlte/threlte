@@ -2,7 +2,7 @@
 	import Object3DInstance from '../instances/Object3DInstance.svelte'
 	import { Group } from 'three'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	// Object3DInstance
 	export let position: PositionProp = undefined
@@ -12,7 +12,7 @@
 	export let inViewport = defaults.object3d.inViewport
 	export let frustumCulled = defaults.mesh.frustumCulled
 	export let renderOrder = defaults.mesh.renderOrder
-	export let lookAt: PositionProp = undefined
+	export let lookAt: LookAtProp = undefined
 
 	export const group = new Group()
 </script>

@@ -3,7 +3,13 @@
 	import { createEventDispatcher, onDestroy } from 'svelte'
 	import { Text } from 'troika-three-text'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp, Text as TextType } from '../types/types'
+	import type {
+		LookAtProp,
+		PositionProp,
+		RotationProp,
+		ScaleProp,
+		Text as TextType
+	} from '../types/types'
 	import { useThrelte } from '../hooks/useThrelte'
 
 	// MeshInstance
@@ -18,7 +24,7 @@
 	export let renderOrder = defaults.mesh.renderOrder
 	export let interactive: boolean = false
 	export let ignorePointerEvents: boolean = false
-	export let lookAt: PositionProp = undefined
+	export let lookAt: LookAtProp = undefined
 
 	// self
 	export let text: TextType['text'] = ''

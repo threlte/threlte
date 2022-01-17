@@ -1,16 +1,32 @@
 <script lang="ts">
-	import type { Object3D } from 'three'
+	import { Object3D, Vector3 } from 'three'
+	import { useFrame } from '../hooks/useFrame'
 	import { useThrelte } from '../hooks/useThrelte'
 	import { defaults } from '../lib/defaults'
-	import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
 	export let object: Object3D
 	export let position: PositionProp
 	export let scale: ScaleProp
 	export let rotation: RotationProp
-	export let lookAt: PositionProp
+	export let lookAt: LookAtProp
+
+	const targetWorldPos = new Vector3()
 
 	const { render } = useThrelte()
+
+	const { start: startLookingAt, stop: stopLookingAt } = useFrame(
+		() => {
+			if (lookAt && !rotation && lookAt instanceof Object3D) {
+				lookAt.getWorldPosition(targetWorldPos)
+				object.lookAt(targetWorldPos)
+			}
+		},
+		{
+			autostart: false
+		}
+	)
+
 	$: {
 		if (position) {
 			object.position.set(
@@ -21,12 +37,20 @@
 			render('TransformableObject: position')
 		}
 		if (lookAt && !rotation) {
-			object.lookAt(
-				lookAt.x ?? defaults.position.x,
-				lookAt.y ?? defaults.position.y,
-				lookAt.z ?? defaults.position.z
-			)
-			render('TransformableObject: lookAt')
+			if (lookAt instanceof Object3D) {
+				startLookingAt()
+			} else {
+				stopLookingAt()
+				object.lookAt(
+					lookAt.x ?? defaults.position.x,
+					lookAt.y ?? defaults.position.y,
+					lookAt.z ?? defaults.position.z
+				)
+				render('TransformableObject: lookAt')
+			}
+		}
+		if (!lookAt) {
+			stopLookingAt()
 		}
 	}
 	$: {
