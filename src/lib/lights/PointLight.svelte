@@ -3,13 +3,13 @@
   import { PointLight } from 'three'
   import LightInstance from '../instances/LightInstance.svelte'
   import { defaults } from '../lib/defaults'
-  import type { PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { Position, Rotation, Scale } from '../types/types'
   import { useThrelte } from '../hooks/useThrelte'
 
   // LightInstance
-  export let position: PositionProp | undefined = undefined
-  export let scale: ScaleProp | undefined = undefined
-  export let rotation: RotationProp | undefined = undefined
+  export let position: Position = defaults.position
+  export let scale: Scale = defaults.scale
+  export let rotation: Rotation = defaults.rotation
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled

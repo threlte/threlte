@@ -2,22 +2,22 @@
   import type { Mesh } from 'three'
   import InteractiveObject from '../internal/InteractiveObject.svelte'
   import RaycastableObject from '../internal/RaycastableObject.svelte'
-  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { LookAt, Position, Rotation, Scale } from '../types/types'
   import Object3DInstance from './Object3DInstance.svelte'
 
   export let mesh: Mesh
 
   // Object3DInstance
-  export let position: PositionProp | undefined
-  export let scale: ScaleProp | undefined
-  export let rotation: RotationProp | undefined
+  export let position: Position
+  export let scale: Scale
+  export let rotation: Rotation
   export let viewportAware: boolean
   export let inViewport: boolean
   export let castShadow: boolean
   export let receiveShadow: boolean
   export let frustumCulled: boolean
   export let renderOrder: number
-  export let lookAt: LookAtProp | undefined
+  export let lookAt: LookAt | undefined
 
   // self
   export let interactive: boolean

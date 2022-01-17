@@ -43,9 +43,9 @@ export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
 export { useTexture } from './hooks/useTexture'
 export type {
-  PositionProp,
-  ScaleProp,
-  RotationProp,
+  Position,
+  Scale,
+  Rotation,
   ThrelteContext,
   ThrelteRootContext,
   LayerThrelte

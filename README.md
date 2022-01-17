@@ -8,6 +8,46 @@ A three.js component library for svelte.
 - [Getting started](#getting-started)
 - [Reference](#reference)
   - [Types](#types)
+  - [Canvas](#canvas)
+      - [Properties](#properties)
+      - [Bindings](#bindings)
+  - [Objects](#objects)
+    - [Mesh](#mesh)
+      - [Properties](#properties-1)
+      - [Bindings](#bindings-1)
+    - [Group](#group)
+      - [Properties](#properties-2)
+      - [Bindings](#bindings-2)
+    - [Object3D](#object3d)
+      - [Properties](#properties-3)
+      - [Bindings](#bindings-3)
+  - [Misc](#misc)
+    - [Fog](#fog)
+      - [Properties](#properties-4)
+      - [Bindings](#bindings-4)
+    - [FogExp2](#fogexp2)
+      - [Properties](#properties-5)
+      - [Bindings](#bindings-5)
+    - [Text](#text)
+    - [Layer](#layer)
+  - [Lights](#lights)
+    - [AmbientLight](#ambientlight)
+    - [DirectionalLight](#directionallight)
+    - [HemisphereLight](#hemispherelight)
+    - [PointLight](#pointlight)
+    - [SpotLight](#spotlight)
+  - [Cameras](#cameras)
+    - [OrthographicCamera](#orthographiccamera)
+    - [PerspectiveCamera](#perspectivecamera)
+  - [Controls](#controls)
+    - [OrbitControls](#orbitcontrols)
+  - [Effects](#effects)
+    - [Pass](#pass)
+  - [hooks](#hooks)
+    - [useThrelte](#usethrelte)
+    - [useThrelteRoot](#usethrelteroot)
+    - [useFrame](#useframe)
+    - [useTexture](#usetexture)
 - [Concepts](#concepts)
   - [Interactivity](#interactivity)
   - [Viewport Awareness](#viewport-awareness)
@@ -98,7 +138,7 @@ Build your first scene:
 To make working with component props easier, threlte includes special types for position, scale and rotation:
 
 ```ts
-type PositionProp = 
+type Position = 
   | Vector3 
   |  { 
       x?: number
@@ -110,7 +150,7 @@ type PositionProp =
 const positionA = new Vector3()
 const positionB = { x: 0, z: 0 }
 
-type ScaleProp =
+type Scale =
   | Vector3
   | number
   | {
@@ -124,7 +164,7 @@ const scaleA = new Vector3()
 const scaleB = 2
 const scaleC = { x: 1.5, z: 1 }
 
-type RotationProp =
+type Rotation =
   | Euler
   | {
       x?: number
@@ -137,6 +177,262 @@ type RotationProp =
 const rotationA = new Euler()
 const rotationB = { x: 1.5, z: 1 }
 ```
+
+The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and `ThrelteRootContext`
+
+```ts
+type ThrelteContext = {
+  /**
+   * Size of the canvas element
+   */
+  size: { width: number; height: number }
+  /**
+   * Contains updated, normalized, centric pointer coordinates, useful for raycasting
+   */
+  pointer?: Vector2
+  /**
+   * Central THREE.Clock
+   */ 
+  clock: Clock
+  /**
+   * The camera that is currently in use
+   */ 
+  camera?: Camera
+  /**
+   * The scene that is currently being rendered
+   */ 
+  scene: Scene
+  /**
+   * The renderer that is rendering the scene
+   */ 
+  renderer?: WebGLRenderer
+  /**
+   * Call render to trigger a rerender on the next frame if frameloop is set to "demand" (default)
+   */
+  render: (requestedBy?: string) => void
+}
+  
+type ThrelteRootContext = {
+  setCamera: (camera: Camera) => void
+  addRaycastableObject: (obj: Object3D) => void
+  removeRaycastableObject: (obj: Object3D) => void
+  addInteractiveObject: (obj: Object3D) => void
+  removeInteractiveObject: (obj: Object3D) => void
+  addPass: (pass: Pass) => void
+  removePass: (pass: Pass) => void
+  linear: boolean
+  interactiveObjects: Set<Object3D>
+  raycastableObjects: Set<Object3D>
+  composer?: EffectComposer
+  resizeOpts?: UseResizeOptions
+}
+```
+
+Use them like this in any component that is a child of `<Canvas>`:
+
+```ts
+const ctx = useThrelte()
+const rootCtx = useThrelteRoot()
+```
+
+### Canvas
+
+The `<Canvas>` component is the root of your three.js scene. It's responsible for managing the frame loop as well as providing the three.js `Scene`.
+
+##### Properties
+
+```ts
+dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
+flat: boolean = false
+linear: boolean = false
+frameloop: 'always' | 'demand' = 'demand'
+debugFrameloop: boolean = false
+shadows: boolean = true
+shadowMapType: ShadowMapType = PCFSoftShadowMap
+resizeOpts: UseResizeOptions | undefined = undefined
+```
+
+##### Bindings
+
+```ts
+ctx: ThrelteContext
+rootCtx: ThrelteRootContext
+```
+
+### Objects
+
+#### Mesh
+
+##### Properties
+
+```ts
+geometry: THREE.BufferGeometry
+material: THREE.Material | THREE.Material[] = defaults.mesh.material()
+
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+castShadow: boolean = defaults.mesh.castShadow
+receiveShadow: boolean = defaults.mesh.receiveShadow
+frustumCulled: boolean = defaults.mesh.frustumCulled
+renderOrder: number = defaults.mesh.renderOrder
+interactive: boolean = false
+ignorePointerEvents: boolean = false
+lookAt: LookAtProp | undefined = undefined
+```
+
+##### Bindings
+
+```ts
+inViewport: boolean
+mesh: THREE.Mesh
+```
+
+#### Group
+
+##### Properties
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+lookAt: LookAt | undefined = undefined
+```
+
+##### Bindings
+
+```ts
+inViewport: boolean
+group: THREE.Group
+```
+
+#### Object3D
+
+##### Properties
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+lookAt: LookAt | undefined = undefined
+```
+
+##### Bindings
+
+```ts
+inViewport: boolean
+group: THREE.Object3D
+```
+
+### Misc
+
+#### Fog
+
+##### Properties
+
+```ts
+color: THREE.ColorRepresentation = defaults.fog.color
+near = defaults.fog.near
+far = defaults.fog.far
+```
+
+##### Bindings
+
+```ts
+fog: THREE.Fog
+```
+
+#### FogExp2
+
+##### Properties
+
+```ts
+color: THREE.ColorRepresentation = defaults.fog.color
+density = defaults.fog.density
+```
+
+##### Bindings
+
+```ts
+fog: THREE.FogExp2
+```
+
+#### Text
+
+<!-- TODO -->
+
+#### Layer
+
+<!-- TODO -->
+
+### Lights
+
+#### AmbientLight
+
+<!-- TODO -->
+
+#### DirectionalLight
+
+<!-- TODO -->
+
+#### HemisphereLight
+
+<!-- TODO -->
+
+#### PointLight
+
+<!-- TODO -->
+
+#### SpotLight
+
+<!-- TODO -->
+
+### Cameras
+
+#### OrthographicCamera
+
+<!-- TODO -->
+
+#### PerspectiveCamera
+
+<!-- TODO -->
+
+### Controls
+
+#### OrbitControls
+
+<!-- TODO -->
+
+### Effects
+
+#### Pass
+
+<!-- TODO -->
+
+### hooks
+
+#### useThrelte
+
+<!-- TODO -->
+
+#### useThrelteRoot
+
+<!-- TODO -->
+
+#### useFrame
+
+<!-- TODO -->
+
+#### useTexture
+
+<!-- TODO -->
 
 ## Concepts
 

@@ -3,13 +3,13 @@
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import { defaults } from '../lib/defaults'
-  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   export let object: Object3D
-  export let position: PositionProp | undefined
-  export let scale: ScaleProp | undefined
-  export let rotation: RotationProp | undefined
-  export let lookAt: LookAtProp | undefined
+  export let position: Position
+  export let scale: Scale
+  export let rotation: Rotation
+  export let lookAt: LookAt | undefined
 
   const targetWorldPos = new Vector3()
 

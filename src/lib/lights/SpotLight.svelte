@@ -5,12 +5,12 @@
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
   import { defaults } from '../lib/defaults'
-  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   // LightInstance
-  export let position: PositionProp | undefined = defaults.lights.spotLight.position
-  export let scale: ScaleProp | undefined = undefined
-  export let rotation: RotationProp | undefined = undefined
+  export let position: Position = defaults.lights.spotLight.position
+  export let scale: Scale = defaults.scale
+  export let rotation: Rotation = defaults.rotation
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled
@@ -25,7 +25,7 @@
   export let distance: number = defaults.lights.spotLight.distance
   export let penumbra: number = defaults.lights.spotLight.penumbra
   export let power: number | undefined = undefined
-  export let target: LookAtProp | undefined = undefined
+  export let target: LookAt = defaults.lookAt
 
   // self
   export let shadow:
@@ -45,7 +45,7 @@
   const tmpV3 = new Vector3()
 
   const targetIsObject3D = (t: typeof target): t is Object3D => {
-    return !!target && target instanceof Object3D
+    return !!t && t instanceof Object3D
   }
 
   const { start: startLightTracking, stop: stopLightTracking } = useFrame(
@@ -102,8 +102,8 @@
     object={originalLightTarget}
     position={target}
     lookAt={undefined}
-    scale={undefined}
-    rotation={undefined}
+    scale={defaults.scale}
+    rotation={defaults.rotation}
     castShadow={false}
     receiveShadow={false}
     frustumCulled={true}

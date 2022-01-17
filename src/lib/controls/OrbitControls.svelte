@@ -4,9 +4,10 @@
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
-  import type { PositionProp } from '../types/types'
+  import type { Position } from '../types/types'
   import { useThrelte } from '../hooks/useThrelte'
   import { useFrame } from '../hooks/useFrame'
+  import { defaults } from '../lib/defaults'
 
   export let autoRotate = false
   export let autoRotateSpeed = 2
@@ -36,7 +37,7 @@
   export let screenSpacePanning = true
   export let touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
   export let zoomSpeed = 1
-  export let target: PositionProp | undefined = undefined
+  export let target: Position | undefined = undefined
 
   const parent = getParent()
   const { renderer, render } = useThrelte()
@@ -100,8 +101,8 @@
   <TransformableObject
     object={targetObject}
     position={target}
-    rotation={undefined}
-    scale={undefined}
+    rotation={defaults.rotation}
+    scale={defaults.scale}
     lookAt={undefined}
   />
 {/if}

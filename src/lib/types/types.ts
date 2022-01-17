@@ -74,7 +74,7 @@ export type ThrelteContext = {
 
 export type ThrelteParentContext = Object3D | undefined
 
-export type PositionProp =
+export type Position =
   | Vector3
   | {
       x?: number
@@ -82,7 +82,7 @@ export type PositionProp =
       z?: number
     }
 
-export type ScaleProp =
+export type Scale =
   | Vector3
   | number
   | {
@@ -91,7 +91,7 @@ export type ScaleProp =
       z?: number
     }
 
-export type RotationProp =
+export type Rotation =
   | Euler
   | {
       x?: number
@@ -100,7 +100,7 @@ export type RotationProp =
       order?: Euler['order']
     }
 
-export type LookAtProp = PositionProp | Object3D
+export type LookAt = Position | Object3D
 
 export type LayerThrelte =
   | 0

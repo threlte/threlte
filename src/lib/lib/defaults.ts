@@ -4,6 +4,7 @@ export const defaults = {
   position: new Vector3(),
   scale: new Vector3(1, 1, 1),
   rotation: new Euler(),
+  lookAt: new Vector3(),
   object3d: {
     inViewport: false
   },

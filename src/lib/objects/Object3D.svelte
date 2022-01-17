@@ -2,17 +2,17 @@
   import Object3DInstance from '../instances/Object3DInstance.svelte'
   import { Object3D } from 'three'
   import { defaults } from '../lib/defaults'
-  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   // Object3DInstance
-  export let position: PositionProp | undefined = undefined
-  export let scale: ScaleProp | undefined = undefined
-  export let rotation: RotationProp | undefined = undefined
+  export let position: Position = defaults.position
+  export let scale: Scale = defaults.scale
+  export let rotation: Rotation = defaults.rotation
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled
   export let renderOrder = defaults.mesh.renderOrder
-  export let lookAt: LookAtProp | undefined = undefined
+  export let lookAt: LookAt | undefined = undefined
 
   export const object = new Object3D()
 </script>

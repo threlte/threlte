@@ -3,25 +3,25 @@
   import type { BufferGeometry } from 'three'
   import { Material, Mesh } from 'three'
   import { defaults } from '../lib/defaults'
-  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   // MeshInstance
-  export let position: PositionProp | undefined = undefined
-  export let scale: ScaleProp | undefined = undefined
-  export let rotation: RotationProp | undefined = undefined
+  export let position: Position = defaults.position
+  export let scale: Scale = defaults.scale
+  export let rotation: Rotation = defaults.rotation
   export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let castShadow = defaults.mesh.castShadow
-  export let receiveShadow = defaults.mesh.receiveShadow
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
+  export let inViewport: boolean = defaults.object3d.inViewport
+  export let castShadow: boolean = defaults.mesh.castShadow
+  export let receiveShadow: boolean = defaults.mesh.receiveShadow
+  export let frustumCulled: boolean = defaults.mesh.frustumCulled
+  export let renderOrder: number = defaults.mesh.renderOrder
   export let interactive: boolean = false
   export let ignorePointerEvents: boolean = false
-  export let lookAt: LookAtProp | undefined = undefined
+  export let lookAt: LookAt | undefined = undefined
 
   // self
   export let geometry: BufferGeometry
-  export let material: Material = defaults.mesh.material()
+  export let material: Material | Material[] = defaults.mesh.material()
 
   export const mesh = new Mesh(geometry, material)
 </script>
