@@ -672,37 +672,34 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 
 ##### Properties <!-- omit in toc -->
 
-```ts
-autoRotate = false
-autoRotateSpeed = 2
-dampingFactor = 0.05
-enableDamping = false
-enabled = true
-enablePan = true
-enableRotate = true
-enableZoom = true
-keyPanSpeed = 7
-keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
-maxAzimuthAngle = Infinity
-maxDistance = Infinity
-maxPolarAngle = Math.PI
-maxZoom = Infinity
-minAzimuthAngle = Infinity
-minDistance = 0
-minPolarAngle = 0
-minZoom = 0
-mouseButtons = {
-  LEFT: MOUSE.ROTATE,
-  MIDDLE: MOUSE.DOLLY,
-  RIGHT: MOUSE.PAN
-}
-panSpeed = 1
-rotateSpeed = 1
-screenSpacePanning = true
-touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
-zoomSpeed = 1
-target: Position | undefined = undefined
-```
+| Property | Type | Default |
+| --- | --- | --- |
+| autoRotate | boolean | false
+| autoRotateSpeed | number | 2
+| dampingFactor | number | 0.05
+| enableDamping | boolean | false
+| enabled | boolean | true
+| enablePan | boolean | true
+| enableRotate | boolean | true
+| enableZoom | boolean | true
+| keyPanSpeed | number | 7
+| keys | {<br>LEFT: string,<br>UP: string,<br>RIGHT: string,<br>BOTTOM: string<br>} | {<br>LEFT: 'ArrowLeft',<br>UP: 'ArrowUp',<br>RIGHT: 'ArrowRight',<br>BOTTOM: 'ArrowDown'<br>}
+| maxAzimuthAngle | number | Infinity
+| maxDistance | number | Infinity
+| maxPolarAngle | number | Math.PI
+| maxZoom | number | Infinity
+| minAzimuthAngle | number | Infinity
+| minDistance | number | 0
+| minPolarAngle | number | 0
+| minZoom | number | 0
+| mouseButtons | {<br>LEFT: THREE.MOUSE,<br>MIDDLE: THREE.MOUSE,<br>RIGHT: THREE.MOUSE<br>} | {<br>LEFT: THREE.MOUSE.ROTATE,<br>MIDDLE: THREE.MOUSE.DOLLY,<br>RIGHT: THREE.MOUSE.PAN<br>}
+| panSpeed | number | 1
+| rotateSpeed | number | 1
+| screenSpacePanning | boolean | true
+| touches |{<br>ONE: THREE.TOUCH,<br>TWO: THREE.TOUCH<br>} | {<br>ONE: THREE.TOUCH.ROTATE,<br>TWO: THREE.TOUCH.DOLLY_PAN<br>}
+| zoomSpeed | number | 1
+| target | Position \| undefined | undefined
+
 
 ##### Bindings <!-- omit in toc -->
 

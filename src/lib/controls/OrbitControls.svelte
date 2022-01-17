@@ -9,34 +9,39 @@
   import { useFrame } from '../hooks/useFrame'
   import { defaults } from '../lib/defaults'
 
-  export let autoRotate = false
-  export let autoRotateSpeed = 2
-  export let dampingFactor = 0.05
-  export let enableDamping = false
-  export let enabled = true
-  export let enablePan = true
-  export let enableRotate = true
-  export let enableZoom = true
-  export let keyPanSpeed = 7
-  export let keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
-  export let maxAzimuthAngle = Infinity
-  export let maxDistance = Infinity
-  export let maxPolarAngle = Math.PI
-  export let maxZoom = Infinity
-  export let minAzimuthAngle = Infinity
-  export let minDistance = 0
-  export let minPolarAngle = 0
-  export let minZoom = 0
-  export let mouseButtons = {
+  export let autoRotate: boolean = false
+  export let autoRotateSpeed: number = 2
+  export let dampingFactor: number = 0.05
+  export let enableDamping: boolean = false
+  export let enabled: boolean = true
+  export let enablePan: boolean = true
+  export let enableRotate: boolean = true
+  export let enableZoom: boolean = true
+  export let keyPanSpeed: number = 7
+  export let keys: OrbitControls['keys'] = {
+    LEFT: 'ArrowLeft',
+    UP: 'ArrowUp',
+    RIGHT: 'ArrowRight',
+    BOTTOM: 'ArrowDown'
+  }
+  export let maxAzimuthAngle: number = Infinity
+  export let maxDistance: number = Infinity
+  export let maxPolarAngle: number = Math.PI
+  export let maxZoom: number = Infinity
+  export let minAzimuthAngle: number = Infinity
+  export let minDistance: number = 0
+  export let minPolarAngle: number = 0
+  export let minZoom: number = 0
+  export let mouseButtons: OrbitControls['mouseButtons'] = {
     LEFT: MOUSE.ROTATE,
     MIDDLE: MOUSE.DOLLY,
     RIGHT: MOUSE.PAN
   }
-  export let panSpeed = 1
-  export let rotateSpeed = 1
-  export let screenSpacePanning = true
-  export let touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
-  export let zoomSpeed = 1
+  export let panSpeed: number = 1
+  export let rotateSpeed: number = 1
+  export let screenSpacePanning: boolean = true
+  export let touches: OrbitControls['touches'] = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
+  export let zoomSpeed: number = 1
   export let target: Position | undefined = undefined
 
   const parent = getParent()
