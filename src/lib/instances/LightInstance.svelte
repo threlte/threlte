@@ -9,16 +9,16 @@
   export let light: Light
 
   // Object3DInstance
-  export let position: PositionProp
-  export let scale: ScaleProp
-  export let rotation: RotationProp
+  export let position: PositionProp | undefined
+  export let scale: ScaleProp | undefined
+  export let rotation: RotationProp | undefined
   export let viewportAware: boolean
   export let inViewport: boolean
   export let castShadow: boolean
   export let receiveShadow: boolean
   export let frustumCulled: boolean
   export let renderOrder: number
-  export let lookAt: LookAtProp
+  export let lookAt: LookAtProp | undefined
 
   // self
   export let color: ColorRepresentation

@@ -10,15 +10,15 @@
   export let object: Object3D
 
   // TransformableObject
-  export let position: PositionProp
-  export let scale: ScaleProp
-  export let rotation: RotationProp
+  export let position: PositionProp | undefined
+  export let scale: ScaleProp | undefined
+  export let rotation: RotationProp | undefined
 
   // ViewportAwareObject
   export let viewportAware: boolean
   export let inViewport: boolean
 
-  export let lookAt: LookAtProp
+  export let lookAt: LookAtProp | undefined
 
   // self
   export let castShadow: boolean

@@ -8,9 +8,9 @@
   import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
   // LightInstance
-  export let position: PositionProp = defaults.lights.spotLight.position
-  export let scale: ScaleProp = undefined
-  export let rotation: RotationProp = undefined
+  export let position: PositionProp | undefined = defaults.lights.spotLight.position
+  export let scale: ScaleProp | undefined = undefined
+  export let rotation: RotationProp | undefined = undefined
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled
@@ -25,7 +25,7 @@
   export let distance: number = defaults.lights.spotLight.distance
   export let penumbra: number = defaults.lights.spotLight.penumbra
   export let power: number | undefined = undefined
-  export let target: LookAtProp = undefined
+  export let target: LookAtProp | undefined = undefined
 
   // self
   export let shadow:

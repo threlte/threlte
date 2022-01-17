@@ -81,7 +81,6 @@ export type PositionProp =
       y?: number
       z?: number
     }
-  | undefined
 
 export type ScaleProp =
   | Vector3
@@ -91,7 +90,6 @@ export type ScaleProp =
       y?: number
       z?: number
     }
-  | undefined
 
 export type RotationProp =
   | Euler
@@ -101,9 +99,8 @@ export type RotationProp =
       z?: number
       order?: Euler['order']
     }
-  | undefined
 
-export type LookAtProp = Exclude<PositionProp, undefined> | Object3D | undefined
+export type LookAtProp = PositionProp | Object3D
 
 export type LayerThrelte =
   | 0

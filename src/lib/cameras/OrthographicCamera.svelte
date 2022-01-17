@@ -8,14 +8,14 @@
   import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
   // CameraInstance
-  export let position: PositionProp = undefined
-  export let scale: ScaleProp = undefined
-  export let rotation: RotationProp = undefined
+  export let position: PositionProp | undefined = undefined
+  export let scale: ScaleProp | undefined = undefined
+  export let rotation: RotationProp | undefined = undefined
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled
   export let renderOrder = defaults.mesh.renderOrder
-  export let lookAt: LookAtProp = undefined
+  export let lookAt: LookAtProp | undefined = undefined
   export let useCamera = true
 
   // self

@@ -6,10 +6,10 @@
   import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
   export let object: Object3D
-  export let position: PositionProp
-  export let scale: ScaleProp
-  export let rotation: RotationProp
-  export let lookAt: LookAtProp
+  export let position: PositionProp | undefined
+  export let scale: ScaleProp | undefined
+  export let rotation: RotationProp | undefined
+  export let lookAt: LookAtProp | undefined
 
   const targetWorldPos = new Vector3()
 
