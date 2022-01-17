@@ -8,8 +8,12 @@ A three.js component library for svelte.
 - [Getting started](#getting-started)
 - [Reference](#reference)
   - [Types](#types)
+  - [Conventions](#conventions)
+    - [Additions](#additions)
+      - [lookAt](#lookat)
   - [Canvas](#canvas)
   - [Objects](#objects)
+      - [lookAt](#lookat-1)
     - [Mesh](#mesh)
     - [Group](#group)
     - [Object3D](#object3d)
@@ -31,7 +35,7 @@ A three.js component library for svelte.
     - [OrbitControls](#orbitcontrols)
   - [Effects](#effects)
     - [Pass](#pass)
-  - [hooks](#hooks)
+  - [Hooks](#hooks)
     - [useThrelte](#usethrelte)
     - [useThrelteRoot](#usethrelteroot)
     - [useFrame](#useframe)
@@ -123,83 +127,48 @@ Build your first scene:
 
 ### Types
 
-To make working with component props easier, threlte includes special types for position, scale and rotation:
+To make working with component props easier, threlte includes special types for position, scale, rotation and lookAt:
 
 ```ts
-type Position = 
-  | Vector3 
-  |  { 
-      x?: number
-      y?: number
-      z?: number
-    }
+type Position = THREE.Vector3 | { x?: number, y?: number, z?: number }
 
-// Examples
 const positionA = new Vector3()
-const positionB = { x: 0, z: 0 }
+const positionB = { x: 1, z: 1 }
 
-type Scale =
-  | Vector3
-  | number
-  | {
-      x?: number
-      y?: number
-      z?: number
-    }
 
-// Examples
+type Scale = THREE.Vector3 | number | { x?: number, y?: number, z?: number }
+
 const scaleA = new Vector3()
 const scaleB = 2
 const scaleC = { x: 1.5, z: 1 }
 
-type Rotation =
-  | Euler
-  | {
-      x?: number
-      y?: number
-      z?: number
-      order?: Euler['order']
-    }
 
-// Examples
+type Rotation = THREE.Euler | { x?: number, y?: number, z?: number, order?: THREE.Euler['order'] }
+
 const rotationA = new Euler()
 const rotationB = { x: 1.5, z: 1 }
+
+
+type LookAt = THREE.Vector3 | { x?: number, y?: number, z?: number } | THREE.Object3D
+
+const lookAtA = new Vector3()
+const lookAtB = { x: 2, y: 3 }
+const lookAtC = someMesh
 ```
 
 The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and `ThrelteRootContext`
 
 ```ts
 type ThrelteContext = {
-  /**
-   * Size of the canvas element
-   */
   size: { width: number; height: number }
-  /**
-   * Contains updated, normalized, centric pointer coordinates, useful for raycasting
-   */
   pointer?: Vector2
-  /**
-   * Central THREE.Clock
-   */ 
   clock: Clock
-  /**
-   * The camera that is currently in use
-   */ 
   camera?: Camera
-  /**
-   * The scene that is currently being rendered
-   */ 
   scene: Scene
-  /**
-   * The renderer that is rendering the scene
-   */ 
   renderer?: WebGLRenderer
-  /**
-   * Call render to trigger a rerender on the next frame if frameloop is set to "demand" (default)
-   */
   render: (requestedBy?: string) => void
 }
-  
+
 type ThrelteRootContext = {
   setCamera: (camera: Camera) => void
   addRaycastableObject: (obj: Object3D) => void
@@ -216,12 +185,38 @@ type ThrelteRootContext = {
 }
 ```
 
-Use them like this in any component that is a child of `<Canvas>`:
+See `useThrelte` and `useThrelteRoot` on how to use these.
+
+---
+
+### Conventions
+
+Threltes components tightly follow the principles of three.js in terms of available properties and their naming. This means that if a THREE.PointLight extends THREE.Light which in turn extends THREE.Object3D, the properties of the component `<PointLight>` will reflect that inheritance tree.
+
+#### Additions
+
+##### lookAt
+
+Three.js makes it easy to orient an object towards another one:
 
 ```ts
-const ctx = useThrelte()
-const rootCtx = useThrelteRoot()
+mesh.lookAt(anotherMesh)
 ```
+
+Use the property `lookAt` on nearly every Object to reactively orient an Object towards another one:
+
+```svelte
+<script>
+  let mesh
+</script>
+
+<PerspectiveCamera lookAt={mesh} />
+<Mesh bind:mesh … />
+```
+
+The camera will now follow the Mesh.
+
+---
 
 ### Canvas
 
@@ -247,7 +242,30 @@ ctx: ThrelteContext
 rootCtx: ThrelteRootContext
 ```
 
+---
+
 ### Objects
+
+##### lookAt
+
+Three.js makes it easy to orient an object towards another one:
+
+```ts
+mesh.lookAt(anotherMesh)
+```
+
+Use the property `lookAt` on an Object to reactively orient an Object towards another one:
+
+```svelte
+<script>
+  let mesh
+</script>
+
+<PerspectiveCamera lookAt={mesh} />
+<Mesh bind:mesh … />
+```
+
+The camera will now follow the Mesh.
 
 #### Mesh
 
@@ -319,9 +337,13 @@ inViewport: boolean
 group: THREE.Object3D
 ```
 
+---
+
 ### Misc
 
 #### Fog
+
+A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
 ##### Properties <!-- omit in toc -->
 
@@ -339,6 +361,8 @@ fog: THREE.Fog
 
 #### FogExp2
 
+A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -353,6 +377,8 @@ fog: THREE.FogExp2
 ```
 
 #### Text
+
+The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
 
 ##### Properties <!-- omit in toc -->
 
@@ -450,7 +476,9 @@ Property `layers` can be:
 - `'none'`
 
 > TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
-  
+
+---
+
 ### Lights
 
 #### AmbientLight
@@ -604,6 +632,8 @@ shadow:
 light: THREE.SpotLight
 ```
 
+---
+
 ### Cameras
 
 #### OrthographicCamera
@@ -656,6 +686,8 @@ fov = defaults.camera.fov
 camera: THREE.PerspectiveCamera
 ```
 
+---
+
 ### Controls
 
 #### OrbitControls
@@ -673,39 +705,40 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 ##### Properties <!-- omit in toc -->
 
 | Property | Type | Default |
-| --- | --- | --- |
-| autoRotate | boolean | false
-| autoRotateSpeed | number | 2
-| dampingFactor | number | 0.05
-| enableDamping | boolean | false
-| enabled | boolean | true
-| enablePan | boolean | true
-| enableRotate | boolean | true
-| enableZoom | boolean | true
-| keyPanSpeed | number | 7
-| keys | {<br>LEFT: string,<br>UP: string,<br>RIGHT: string,<br>BOTTOM: string<br>} | {<br>LEFT: 'ArrowLeft',<br>UP: 'ArrowUp',<br>RIGHT: 'ArrowRight',<br>BOTTOM: 'ArrowDown'<br>}
-| maxAzimuthAngle | number | Infinity
-| maxDistance | number | Infinity
-| maxPolarAngle | number | Math.PI
-| maxZoom | number | Infinity
-| minAzimuthAngle | number | Infinity
-| minDistance | number | 0
-| minPolarAngle | number | 0
-| minZoom | number | 0
-| mouseButtons | {<br>LEFT: THREE.MOUSE,<br>MIDDLE: THREE.MOUSE,<br>RIGHT: THREE.MOUSE<br>} | {<br>LEFT: THREE.MOUSE.ROTATE,<br>MIDDLE: THREE.MOUSE.DOLLY,<br>RIGHT: THREE.MOUSE.PAN<br>}
-| panSpeed | number | 1
-| rotateSpeed | number | 1
-| screenSpacePanning | boolean | true
-| touches |{<br>ONE: THREE.TOUCH,<br>TWO: THREE.TOUCH<br>} | {<br>ONE: THREE.TOUCH.ROTATE,<br>TWO: THREE.TOUCH.DOLLY_PAN<br>}
-| zoomSpeed | number | 1
-| target | Position \| undefined | undefined
-
+|---|---|---|
+| autoRotate | boolean | false |
+| autoRotateSpeed | number | 2 |
+| dampingFactor | number | 0.05 |
+| enableDamping | boolean | false |
+| enabled | boolean | true |
+| enablePan | boolean | true |
+| enableRotate | boolean | true |
+| enableZoom | boolean | true |
+| keyPanSpeed | number | 7 |
+| keys | {<br>LEFT: string,<br>UP: string,<br>RIGHT: string,<br>BOTTOM: string<br>} | {<br>LEFT: 'ArrowLeft',<br>UP: 'ArrowUp',<br>RIGHT: 'ArrowRight',<br>BOTTOM: 'ArrowDown'<br>} |
+| maxAzimuthAngle | number | Infinity |
+| maxDistance | number | Infinity |
+| maxPolarAngle | number | Math.PI |
+| maxZoom | number | Infinity |
+| minAzimuthAngle | number | Infinity |
+| minDistance | number | 0 |
+| minPolarAngle | number | 0 |
+| minZoom | number | 0 |
+| mouseButtons | {<br>LEFT: THREE.MOUSE,<br>MIDDLE: THREE.MOUSE,<br>RIGHT: THREE.MOUSE<br>} | {<br>LEFT: THREE.MOUSE.ROTATE,<br>MIDDLE: THREE.MOUSE.DOLLY,<br>RIGHT: THREE.MOUSE.PAN<br>} |
+| panSpeed | number | 1 |
+| rotateSpeed | number | 1 |
+| screenSpacePanning | boolean | true |
+| touches | {<br>ONE: THREE.TOUCH,<br>TWO: THREE.TOUCH<br>} | {<br>ONE: THREE.TOUCH.ROTATE,<br>TWO: THREE.TOUCH.DOLLY_PAN<br>} |
+| zoomSpeed | number | 1 |
+| target | Position \| undefined | undefined |
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
 controls: THREE.OrbitControls
 ```
+
+---
 
 ### Effects
 
@@ -732,9 +765,11 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 pass: THREE.Pass
 ```
 
-### hooks
+---
 
-> Hooks can only be used inside the `<Canvas>` component because they rely on context.
+### Hooks
+
+> ⚠️ Hooks can only be used inside the `<Canvas>` component because they rely on context ⚠️
 
 #### useThrelte
 
@@ -818,6 +853,8 @@ const textures = useTexture({
 })
 const material = new MeshStandardMaterial({ ...textures })
 ```
+
+---
 
 ## Concepts
 
