@@ -1,75 +1,75 @@
 <script lang="ts">
-	import { OrthographicCamera } from 'three'
-	import { useResize } from '../hooks/useResize'
-	import { useThrelte } from '../hooks/useThrelte'
-	import { useThrelteRoot } from '../hooks/useThrelteRoot'
-	import CameraInstance from '../instances/CameraInstance.svelte'
-	import { defaults } from '../lib/defaults'
-	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import { OrthographicCamera } from 'three'
+  import { useResize } from '../hooks/useResize'
+  import { useThrelte } from '../hooks/useThrelte'
+  import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import CameraInstance from '../instances/CameraInstance.svelte'
+  import { defaults } from '../lib/defaults'
+  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
-	// CameraInstance
-	export let position: PositionProp = undefined
-	export let scale: ScaleProp = undefined
-	export let rotation: RotationProp = undefined
-	export let viewportAware: boolean = false
-	export let inViewport = defaults.object3d.inViewport
-	export let frustumCulled = defaults.mesh.frustumCulled
-	export let renderOrder = defaults.mesh.renderOrder
-	export let lookAt: LookAtProp = undefined
-	export let useCamera = true
+  // CameraInstance
+  export let position: PositionProp = undefined
+  export let scale: ScaleProp = undefined
+  export let rotation: RotationProp = undefined
+  export let viewportAware: boolean = false
+  export let inViewport = defaults.object3d.inViewport
+  export let frustumCulled = defaults.mesh.frustumCulled
+  export let renderOrder = defaults.mesh.renderOrder
+  export let lookAt: LookAtProp = undefined
+  export let useCamera = true
 
-	// self
-	export let near = defaults.camera.near
-	export let far = defaults.camera.far
-	export let zoom = defaults.camera.zoom
+  // self
+  export let near = defaults.camera.near
+  export let far = defaults.camera.far
+  export let zoom = defaults.camera.zoom
 
-	const { size, render } = useThrelte()
-	const { setCamera, resizeOpts } = useThrelteRoot()
+  const { size, render } = useThrelte()
+  const { setCamera, resizeOpts } = useThrelteRoot()
 
-	export const camera = new OrthographicCamera(
-		size.width / -2,
-		size.width / 2,
-		size.height / 2,
-		size.height / -2,
-		1,
-		1000
-	)
+  export const camera = new OrthographicCamera(
+    size.width / -2,
+    size.width / 2,
+    size.height / 2,
+    size.height / -2,
+    1,
+    1000
+  )
 
-	$: if (useCamera) setCamera(camera)
+  $: if (useCamera) setCamera(camera)
 
-	useResize(() => {
-		camera.left = size.width / -2
-		camera.right = size.width / 2
-		camera.top = size.height / 2
-		camera.bottom = size.height / -2
-		camera.updateProjectionMatrix()
-		render('OrthographicCamera: onResize')
-	}, resizeOpts)
+  useResize(() => {
+    camera.left = size.width / -2
+    camera.right = size.width / 2
+    camera.top = size.height / 2
+    camera.bottom = size.height / -2
+    camera.updateProjectionMatrix()
+    render('OrthographicCamera: onResize')
+  }, resizeOpts)
 
-	$: {
-		camera.near = near
-		camera.far = far
-		camera.zoom = zoom
-		camera.updateProjectionMatrix()
-		render('OrthographicCamera: props changed')
-	}
+  $: {
+    camera.near = near
+    camera.far = far
+    camera.zoom = zoom
+    camera.updateProjectionMatrix()
+    render('OrthographicCamera: props changed')
+  }
 </script>
 
 <CameraInstance
-	{camera}
-	{position}
-	{scale}
-	{rotation}
-	castShadow={false}
-	receiveShadow={false}
-	{frustumCulled}
-	{renderOrder}
-	{viewportAware}
-	bind:inViewport
-	on:viewportenter
-	on:viewportleave
-	{lookAt}
-	{useCamera}
+  {camera}
+  {position}
+  {scale}
+  {rotation}
+  castShadow={false}
+  receiveShadow={false}
+  {frustumCulled}
+  {renderOrder}
+  {viewportAware}
+  bind:inViewport
+  on:viewportenter
+  on:viewportleave
+  {lookAt}
+  {useCamera}
 >
-	<slot />
+  <slot />
 </CameraInstance>

@@ -2,18 +2,18 @@ import { browser } from '../lib/browser'
 import { onDestroy } from 'svelte'
 
 export const useRaf = (cb: () => void): void => {
-	if (!browser) return
-	let handle: ReturnType<typeof requestAnimationFrame> | undefined
+  if (!browser) return
+  let handle: ReturnType<typeof requestAnimationFrame> | undefined
 
-	const tick = () => {
-		cb()
-		handle = requestAnimationFrame(tick)
-	}
+  const tick = () => {
+    cb()
+    handle = requestAnimationFrame(tick)
+  }
 
-	tick()
+  tick()
 
-	onDestroy(() => {
-		if (!handle) return
-		cancelAnimationFrame(handle)
-	})
+  onDestroy(() => {
+    if (!handle) return
+    cancelAnimationFrame(handle)
+  })
 }

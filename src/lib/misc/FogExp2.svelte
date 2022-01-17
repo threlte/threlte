@@ -1,32 +1,32 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
-	import type { ColorRepresentation } from 'three'
-	import { FogExp2 } from 'three'
-	import { convertColorRepresentationToColor } from '../lib/colors'
-	import { defaults } from '../lib/defaults'
-	import { useThrelte } from '../hooks/useThrelte'
-	import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import { onDestroy } from 'svelte'
+  import type { ColorRepresentation } from 'three'
+  import { FogExp2 } from 'three'
+  import { convertColorRepresentationToColor } from '../lib/colors'
+  import { defaults } from '../lib/defaults'
+  import { useThrelte } from '../hooks/useThrelte'
+  import { useThrelteRoot } from '../hooks/useThrelteRoot'
 
-	export let color: ColorRepresentation = defaults.fog.color
-	export let density = defaults.fog.density
+  export let color: ColorRepresentation = defaults.fog.color
+  export let density = defaults.fog.density
 
-	const { linear } = useThrelteRoot()
-	const { scene, render } = useThrelte()
+  const { linear } = useThrelteRoot()
+  const { scene, render } = useThrelte()
 
-	// @ts-ignore Bad types
-	export const fog = new FogExp2(convertColorRepresentationToColor(color, linear), density)
+  // @ts-ignore Bad types
+  export const fog = new FogExp2(convertColorRepresentationToColor(color, linear), density)
 
-	$: {
-		fog.color = convertColorRepresentationToColor(color, linear)
-		fog.density = density
-		render('FogExp2: props changed')
-	}
+  $: {
+    fog.color = convertColorRepresentationToColor(color, linear)
+    fog.density = density
+    render('FogExp2: props changed')
+  }
 
-	scene.fog = fog
-	render('FogExp2: added')
+  scene.fog = fog
+  render('FogExp2: added')
 
-	onDestroy(() => {
-		scene.fog = null
-		render('FogExp2: removed')
-	})
+  onDestroy(() => {
+    scene.fog = null
+    render('FogExp2: removed')
+  })
 </script>

@@ -4,35 +4,35 @@ import { resolve } from 'path'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: preprocess(),
+  preprocess: preprocess(),
 
-	kit: {
-		adapter: adapter(),
+  kit: {
+    adapter: adapter(),
 
-		target: '#svelte',
+    target: '#svelte',
 
-		package: {
-			emitTypes: true,
-			// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-			exports: (file) => file === 'index.ts'
-		},
+    package: {
+      emitTypes: true,
+      // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+      exports: (file) => file === 'index.ts'
+    },
 
-		vite: {
-			resolve: {
-				alias: {
-					threlte: resolve('src/lib'),
-					$components: resolve('src/components'),
-					$examples: resolve('src/examples')
-				}
-			},
-			optimizeDeps: {
-				exclude: ['three']
-			},
-			ssr: {
-				noExternal: ['three']
-			}
-		}
-	}
+    vite: {
+      resolve: {
+        alias: {
+          threlte: resolve('src/lib'),
+          $components: resolve('src/components'),
+          $examples: resolve('src/examples')
+        }
+      },
+      optimizeDeps: {
+        exclude: ['three']
+      },
+      ssr: {
+        noExternal: ['three']
+      }
+    }
+  }
 }
 
 export default config

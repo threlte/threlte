@@ -1,6 +1,6 @@
 # threlte <!-- omit in toc -->
 
-A three.js component library for svelte.  
+A three.js component library for svelte.
 
 ## Index <!-- omit in toc -->
 
@@ -18,7 +18,7 @@ A three.js component library for svelte.
 
 `threlte` is a component library for svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
-It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed).  
+It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed).
 
 It provides strictly typed components to quickly and easily build three.js scenes with deep reactivity and interactivity out-of-the-box.
 
@@ -42,11 +42,7 @@ Build your first scene:
 
 ```svelte
 <script>
-  import {
-    CircleBufferGeometry,
-    MeshStandardMaterial,
-    SphereBufferGeometry
-  } from 'three'
+  import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
   import {
     Canvas,
     DirectionalLight,
@@ -63,17 +59,9 @@ Build your first scene:
       <OrbitControls enableDamping />
     </PerspectiveCamera>
 
-    <DirectionalLight
-      shadow
-      color={'#EDBD9C'}
-      position={{ x: -15, y: 45, z: 20 }}
-    />
+    <DirectionalLight shadow color={'#EDBD9C'} position={{ x: -15, y: 45, z: 20 }} />
 
-    <HemisphereLight
-      skyColor={0x4c8eac}
-      groundColor={0xac844c}
-      intensity={0.6}
-    />
+    <HemisphereLight skyColor={0x4c8eac} groundColor={0xac844c} intensity={0.6} />
 
     <Mesh
       castShadow
@@ -164,21 +152,22 @@ Additionally, most Objects (Lights, Cameras, Meshes, …) can be made viewport a
   }
 </script>
 
-<PointLight 
+<PointLight
   viewportAware
-  bind:inViewport 
+  bind:inViewport
   on:viewportenter={onViewportEnter}
   on:viewportleave={onViewportLeave}
 />
 ```
 
 These events are supported:
+
 - `viewportenter`
 - `viewportleave`
 
 Bind `inViewport` if you wish to not use events.
 
-To make an Object viewport aware, you must add `viewportAware` to your Object.  
+To make an Object viewport aware, you must add `viewportAware` to your Object.
 
 ## Reactivity
 
@@ -215,11 +204,11 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
   - Access the renderer  
     `const { renderer, render } = useThrelte()`
 - **Easily extendable**  
-  Build objects that didn't yet make it to threlte yourself by plugging together *functional components*.
+  Build objects that didn't yet make it to threlte yourself by plugging together _functional components_.
 - **Tree-shakeble**  
   react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.  
-  threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides *functional components* to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
-  
+  threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
+
 ## Credits
 
 - [react-three-fiber](https://github.com/pmndrs/react-three-fiber)

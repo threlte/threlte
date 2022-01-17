@@ -1,68 +1,68 @@
 <script lang="ts">
-	import type { Mesh } from 'three'
-	import InteractiveObject from '../internal/InteractiveObject.svelte'
-	import RaycastableObject from '../internal/RaycastableObject.svelte'
-	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
-	import Object3DInstance from './Object3DInstance.svelte'
+  import type { Mesh } from 'three'
+  import InteractiveObject from '../internal/InteractiveObject.svelte'
+  import RaycastableObject from '../internal/RaycastableObject.svelte'
+  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import Object3DInstance from './Object3DInstance.svelte'
 
-	export let mesh: Mesh
+  export let mesh: Mesh
 
-	// Object3DInstance
-	export let position: PositionProp
-	export let scale: ScaleProp
-	export let rotation: RotationProp
-	export let viewportAware: boolean
-	export let inViewport: boolean
-	export let castShadow: boolean
-	export let receiveShadow: boolean
-	export let frustumCulled: boolean
-	export let renderOrder: number
-	export let lookAt: LookAtProp
+  // Object3DInstance
+  export let position: PositionProp
+  export let scale: ScaleProp
+  export let rotation: RotationProp
+  export let viewportAware: boolean
+  export let inViewport: boolean
+  export let castShadow: boolean
+  export let receiveShadow: boolean
+  export let frustumCulled: boolean
+  export let renderOrder: number
+  export let lookAt: LookAtProp
 
-	// self
-	export let interactive: boolean
-	export let ignorePointerEvents: boolean
+  // self
+  export let interactive: boolean
+  export let ignorePointerEvents: boolean
 
-	$: {
-		if (interactive && ignorePointerEvents) {
-			console.warn(
-				'An Object cannot ignore pointer events and be interactive at the same time. Interactivity will be dismissed.'
-			)
-		}
-	}
+  $: {
+    if (interactive && ignorePointerEvents) {
+      console.warn(
+        'An Object cannot ignore pointer events and be interactive at the same time. Interactivity will be dismissed.'
+      )
+    }
+  }
 </script>
 
 <Object3DInstance
-	object={mesh}
-	{lookAt}
-	{position}
-	{scale}
-	{rotation}
-	{castShadow}
-	{receiveShadow}
-	{frustumCulled}
-	{renderOrder}
-	{viewportAware}
-	on:viewportenter
-	on:viewportleave
-	bind:inViewport
+  object={mesh}
+  {lookAt}
+  {position}
+  {scale}
+  {rotation}
+  {castShadow}
+  {receiveShadow}
+  {frustumCulled}
+  {renderOrder}
+  {viewportAware}
+  on:viewportenter
+  on:viewportleave
+  bind:inViewport
 >
-	<slot />
+  <slot />
 </Object3DInstance>
 
 {#if !ignorePointerEvents}
-	<RaycastableObject object={mesh} />
+  <RaycastableObject object={mesh} />
 
-	{#if interactive}
-		<InteractiveObject
-			object={mesh}
-			on:click
-			on:contextmenu
-			on:pointerup
-			on:pointerdown
-			on:pointerenter
-			on:pointerleave
-			on:pointermove
-		/>
-	{/if}
+  {#if interactive}
+    <InteractiveObject
+      object={mesh}
+      on:click
+      on:contextmenu
+      on:pointerup
+      on:pointerdown
+      on:pointerenter
+      on:pointerleave
+      on:pointermove
+    />
+  {/if}
 {/if}

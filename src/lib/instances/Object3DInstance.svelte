@@ -1,40 +1,40 @@
 <script lang="ts">
-	import type { Object3D } from 'three'
-	import { useThrelte } from '../hooks/useThrelte'
-	import HierarchicalObject from '../internal/HierarchicalObject.svelte'
-	import LayerableObject from '../internal/LayerableObject.svelte'
-	import TransformableObject from '../internal/TransformableObject.svelte'
-	import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-	import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
+  import type { Object3D } from 'three'
+  import { useThrelte } from '../hooks/useThrelte'
+  import HierarchicalObject from '../internal/HierarchicalObject.svelte'
+  import LayerableObject from '../internal/LayerableObject.svelte'
+  import TransformableObject from '../internal/TransformableObject.svelte'
+  import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
+  import type { LookAtProp, PositionProp, RotationProp, ScaleProp } from '../types/types'
 
-	export let object: Object3D
+  export let object: Object3D
 
-	// TransformableObject
-	export let position: PositionProp
-	export let scale: ScaleProp
-	export let rotation: RotationProp
+  // TransformableObject
+  export let position: PositionProp
+  export let scale: ScaleProp
+  export let rotation: RotationProp
 
-	// ViewportAwareObject
-	export let viewportAware: boolean
-	export let inViewport: boolean
+  // ViewportAwareObject
+  export let viewportAware: boolean
+  export let inViewport: boolean
 
-	export let lookAt: LookAtProp
+  export let lookAt: LookAtProp
 
-	// self
-	export let castShadow: boolean
-	export let receiveShadow: boolean
-	export let frustumCulled: boolean
-	export let renderOrder: number
+  // self
+  export let castShadow: boolean
+  export let receiveShadow: boolean
+  export let frustumCulled: boolean
+  export let renderOrder: number
 
-	const { render } = useThrelte()
+  const { render } = useThrelte()
 
-	$: {
-		object.castShadow = castShadow
-		object.receiveShadow = receiveShadow
-		object.frustumCulled = frustumCulled
-		object.renderOrder = renderOrder
-		render('Object3DInstance: props changed')
-	}
+  $: {
+    object.castShadow = castShadow
+    object.receiveShadow = receiveShadow
+    object.frustumCulled = frustumCulled
+    object.renderOrder = renderOrder
+    render('Object3DInstance: props changed')
+  }
 </script>
 
 <LayerableObject {object} />
@@ -42,9 +42,9 @@
 <TransformableObject {object} {position} {rotation} {scale} {lookAt} />
 
 <HierarchicalObject {object}>
-	<slot />
+  <slot />
 </HierarchicalObject>
 
 {#if viewportAware}
-	<ViewportAwareObject bind:inViewport {object} on:viewportenter on:viewportleave />
+  <ViewportAwareObject bind:inViewport {object} on:viewportenter on:viewportleave />
 {/if}
