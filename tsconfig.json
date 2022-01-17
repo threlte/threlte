@@ -19,7 +19,11 @@
 			"$lib": ["src/lib"],
 			"$lib/*": ["src/lib/*"],
 			"threlte": ["src/lib/index.ts"],
-			"threlte/*": ["src/lib/*"]
+			"threlte/*": ["src/lib/*"],
+			"$components": ["src/components"],
+			"$components/*": ["src/components/*"],
+			"$examples": ["src/examples"],
+			"$examples/*": ["src/examples/*"]
 		}
 	},
 	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]

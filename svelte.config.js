@@ -20,7 +20,9 @@ const config = {
 		vite: {
 			resolve: {
 				alias: {
-					threlte: resolve('src/lib')
+					threlte: resolve('src/lib'),
+					$components: resolve('src/components'),
+					$examples: resolve('src/examples')
 				}
 			},
 			optimizeDeps: {
