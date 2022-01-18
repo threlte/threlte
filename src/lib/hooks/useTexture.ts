@@ -2,9 +2,9 @@ import { browser } from '../lib/browser'
 import { sRGBEncoding, Texture, TextureLoader } from 'three'
 import { requestRender } from '../Canvas.svelte'
 import { useThrelteRoot } from './useThrelteRoot'
-import { memoizeLoader } from '$lib/lib/loaders'
+import { useLoader } from './useLoader'
 
-const loader = memoizeLoader(TextureLoader, () => new TextureLoader())
+const loader = useLoader(TextureLoader, () => new TextureLoader())
 
 const loadTexture = (path: string) => {
   return loader.load(path, () => requestRender('useTexture'))

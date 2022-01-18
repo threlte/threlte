@@ -45,6 +45,7 @@ A three.js component library for svelte.
     - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
     - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
     - [:leftwards_arrow_with_hook: useFrame](#leftwards_arrow_with_hook-useframe)
+    - [:leftwards_arrow_with_hook: useLoader](#leftwards_arrow_with_hook-useloader)
     - [:leftwards_arrow_with_hook: useTexture](#leftwards_arrow_with_hook-usetexture)
 - [Credits](#credits)
 - [Thank you](#thank-you)
@@ -1083,13 +1084,13 @@ This hook lets you consume the state of the `<Canvas>` component which contains 
 
 ```ts
 const {
-  size: { width: number; height: number }
-  pointer?: THREE.Vector2
-  clock: THREE.Clock
-  camera?: THREE.Camera
-  scene: THREE.Scene
-  renderer?: THREE.WebGLRenderer
-  render: (requestedBy?: string) => void
+  size,           // { width: number; height: number }
+  pointer,        // THREE.Vector2 | undefined
+  clock,          // THREE.Clock
+  camera,         // THREE.Camera
+  scene,          // THREE.Scene
+  renderer,       // THREE.WebGLRenderer
+  render,         // (requestedBy?: string) => void
 } = useThrelte()
 ```
 
@@ -1101,18 +1102,18 @@ This hook lets you consume the root context. Although it can be useful, this is 
 
 ```ts
 const {
-  setCamera: (camera: THREE.Camera) => void
-  addRaycastableObject: (obj: THREE.Object3D) => void
-  removeRaycastableObject: (obj: THREE.Object3D) => void
-  addInteractiveObject: (obj: THREE.Object3D) => void
-  removeInteractiveObject: (obj: THREE.Object3D) => void
-  addPass: (pass: THREE.Pass) => void
-  removePass: (pass: THREE.Pass) => void
-  linear: boolean
-  interactiveObjects: Set<THREE.Object3D>
-  raycastableObjects: Set<THREE.Object3D>
-  composer?: THREE.EffectComposer
-  resizeOpts?: UseResizeOptions
+  setCamera,                   // (camera: THREE.Camera) => void
+  addRaycastableObject,        // (obj: THREE.Object3D) => void
+  removeRaycastableObject,     // (obj: THREE.Object3D) => void
+  addInteractiveObject,        // (obj: THREE.Object3D) => void
+  removeInteractiveObject,     // (obj: THREE.Object3D) => void
+  addPass,                     // (pass: THREE.Pass) => void
+  removePass,                  // (pass: THREE.Pass) => void
+  linear,                      // boolean
+  interactiveObjects,          // Set<THREE.Object3D>
+  raycastableObjects,          // Set<THREE.Object3D>
+  composer,                    // THREE.EffectComposer
+  resizeOpts,                  // UseResizeOptions
 } = useThrelteRoot()
 ```
 
@@ -1137,6 +1138,32 @@ const toggleUseFrame = () => {
 }
 ```
 
+#### :leftwards_arrow_with_hook: useLoader
+
+`useLoader` memoizes Loaders to reuse them at any time.
+
+##### Example <!-- omit in toc -->
+
+```ts
+import { useLoader } from 'threlte'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+
+let object
+
+comst o = new OBJLoader()
+
+const loader = useLoader(OBJLoader, () => new OBJLoader())
+loader.load('models/model.obj', (obj) => {
+  object = obj
+})
+```
+
+##### Types <!-- omit in toc -->
+
+```ts
+type UseLoader = <T extends typeof Loader>(loader: T, memoizeFn: () => InstanceType<T>) => InstanceType<T>
+```
+
 #### :leftwards_arrow_with_hook: useTexture
 
 `useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](#canvas).
@@ -1145,18 +1172,15 @@ This hook can be called outside of the `<Canvas>` component, but with limitation
 ##### Examples <!-- omit in toc -->
 
 ```ts
-const tex = useTexture('tex.jpg') // -> THREE.Texture
+const tex = useTexture('tex.jpg')
+// THREE.Texture
 
-const [texA, texB] = useTexture(['texA.jpg', 'texB.jpg']) // -> THREE.Texture[]
-```
+const [texA, texB] = useTexture(['texA.jpg', 'texB.jpg'])
+// THREE.Texture[]
 
-You can also use objects:
+const textures = useTexture({ bumpMap: 'bump.jpg', map: 'map.jpg' })
+// { bumpMap: THREE.Texture, map: THREE.Texture }
 
-```ts
-const textures = useTexture({
-  metalnessMap: 'metalness.jpg',
-  map: 'color.jpg',
-})
 const material = new MeshStandardMaterial({ ...textures })
 ```
 

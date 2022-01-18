@@ -11,7 +11,8 @@ import type {
   ColorRepresentation,
   Material,
   Color,
-  Mesh
+  Mesh,
+  Loader
 } from 'three'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
 import type { UseResizeOptions } from '../hooks/useResize'
@@ -397,3 +398,8 @@ export interface Text extends Mesh {
 
   dispose: () => void
 }
+
+export type ThrelteUseLoader = <T extends typeof Loader>(
+  loader: T,
+  memoizeFn: () => InstanceType<T>
+) => InstanceType<T>
