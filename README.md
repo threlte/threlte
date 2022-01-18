@@ -47,7 +47,7 @@ A three.js component library for svelte.
     - [useFrame](#useframe)
     - [useTexture](#usetexture)
 - [Credits](#credits)
-- [Thanks](#thanks)
+- [Thank you](#thank-you)
 - [License](#license)
 
 ## What is threlte?
@@ -371,6 +371,21 @@ rootCtx: ThrelteRootContext
 
 #### Mesh
 
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Mesh } from 'threlte'
+  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+</script>
+
+<Mesh 
+  position={{ y: 1 }}
+  geometry={new BoxBufferGeometry(1, 2, 1)} 
+  material={new MeshBasicMaterial({ wireframe: true })}
+/>
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -399,6 +414,19 @@ mesh: THREE.Mesh
 
 #### Group
 
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Group, GLTF } from 'threlte'
+</script>
+
+<Group position={{ x: 5 }}>
+  <GLTF url={"/models/modelA.glb"} />
+  <GLTF url={"/models/modelB.glb"} />
+</Group>
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -420,6 +448,21 @@ group: THREE.Group
 
 #### Object3D
 
+##### Example <!-- omit in toc -->
+
+You might want to use this component to pass as a reference to other components:
+
+```svelte
+<script>
+  import { Object3D, PerspectiveCamera } from 'threlte'
+
+  let target
+</script>
+
+<PerspectiveCamera lookAt={target} />
+<Object3D bind:object={target} />
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -436,7 +479,7 @@ lookAt: LookAt | undefined = undefined
 
 ```ts
 inViewport: boolean
-group: THREE.Object3D
+object: THREE.Object3D
 ```
 
 #### GLTF
@@ -488,6 +531,16 @@ scene: THREE.Group
 
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Fog } from 'threlte'
+</script>
+
+<Fog color={"#dddddd"} />
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -506,6 +559,17 @@ fog: THREE.Fog
 
 A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { FogExp2 } from 'threlte'
+</script>
+
+<FogExp2 color={"#dddddd"} density={0.3} />
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -522,6 +586,18 @@ fog: THREE.FogExp2
 #### Text
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Text } from 'threlte'
+  let value = ''
+</script>
+
+<input type="text" bind:value />
+<Text text={value} />
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -585,6 +661,10 @@ The `<Layers>` component assigns all child components the layer memberships you 
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { Layers, PerspectiveCamera, Mesh } from 'threlte'
+</script>
+
 <!-- Remember to also assign a layer to your camera -->
 <Layers layers={1}>
   <PerspectiveCamera />
@@ -592,17 +672,22 @@ The `<Layers>` component assigns all child components the layer memberships you 
 
 <!-- visible if camera is on any layer -->
 <Layers layers={'all'}>
-  <Mesh />
+  <Mesh … />
 </Layers>
 
 <!-- visible if camera is on layer 1 -->
 <Layers layers={1}>
-  <Mesh />
+  <Mesh … />
+</Layers>
+
+<!-- visible if camera is on layer 0 or 1 -->
+<Layers layers={[0, 1]}>
+  <Mesh … />
 </Layers>
 
 <!-- invisible -->
 <Layers layers={'none'}>
-  <Mesh />
+  <Mesh … />
 </Layers>
 ```
 
@@ -623,6 +708,16 @@ Property `layers` can be:
 ### Lights
 
 #### AmbientLight
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { AmbientLight } from 'threlte'
+</script>
+
+<AmbientLight color={0xd7681c} intensity={0.3} />
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -645,6 +740,20 @@ light = new AmbientLight(color, intensity)
 ```
 
 #### DirectionalLight
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { DirectionalLight } from 'threlte'
+</script>
+
+<DirectionalLight 
+  shadow 
+  intensity={0.6}
+  position={{ x: 3, y: 10, z: 3 }}
+/>
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -683,6 +792,19 @@ light = new DirectionalLight(color, intensity)
 
 #### HemisphereLight
 
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { HemisphereLight } from 'threlte'
+</script>
+
+<HemisphereLight 
+  skyColor={0xFB9796}
+  groundColor={0xC1B8A5}
+/>
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -705,6 +827,16 @@ light: THREE.HemisphereLight
 ```
 
 #### PointLight
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { PointLight } from 'threlte'
+</script>
+
+<PointLight position={{ x: 3, y: 3 }} />
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -738,6 +870,18 @@ light: THREE.PointLight
 ```
 
 #### SpotLight
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { SpotLight, Mesh } from 'threlte'
+  let mesh
+</script>
+
+<Mesh … bind:mesh />
+<SpotLight position={{ x: 3, y: 3 }} target={mesh} />
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -777,6 +921,19 @@ light: THREE.SpotLight
 
 #### OrthographicCamera
 
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { OrthographicCamera } from 'threlte'
+</script>
+
+<OrthographicCamera 
+  position={{ x: 3, y: 3, z: 3 }} 
+  lookAt={{ x: 0, y: 0, z: 0 }}
+/>
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
@@ -801,6 +958,20 @@ camera: THREE.OrthographicCamera
 ```
 
 #### PerspectiveCamera
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { PerspectiveCamera } from 'threlte'
+</script>
+
+<PerspectiveCamera
+  fov={60}
+  position={{ x: 3, y: 3, z: 3 }} 
+  lookAt={{ x: 0, y: 0, z: 0 }}
+/>
+```
 
 ##### Properties <!-- omit in toc -->
 
@@ -834,6 +1005,10 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { PerspectiveCamera, OrbitControls } from 'threlte'
+</script>
+
 <PerspectiveCamera fov={50}>
   <OrbitControls enableDamping />
 </PerspectiveCamera>
@@ -885,13 +1060,11 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 
 ```svelte
 <script>
+  import { Pass } from 'threlte'
   import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
-  …
 </scrip>
 
-<Canvas>
-  <Pass pass={new GlitchPass()}>
-</Canvas>
+<Pass pass={new GlitchPass()}>
 ```
 
 ##### Properties <!-- omit in toc -->
@@ -995,9 +1168,9 @@ const material = new MeshStandardMaterial({ ...textures })
 - [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
 - [drei](https://github.com/pmndrs/drei)
 
-## Thanks
+## Thank you
 
-- [Rich Harris](https://github.com/Rich-Harris) for his incredible work on Svelte, SvelteKit and Svelte Cubed,
+- [Rich Harris](https://github.com/Rich-Harris) for the incredible work on Svelte, SvelteKit and Svelte Cubed
 - [@larissamantel](https://www.instagram.com/larissamantel_illu/) for the logo
 
 ---
