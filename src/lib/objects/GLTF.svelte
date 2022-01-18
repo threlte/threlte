@@ -1,7 +1,8 @@
 <script lang="ts">
   import Object3DInstance from '$lib/instances/Object3DInstance.svelte'
+  import { createEventDispatcher } from 'svelte'
   import type { Group, Mesh, Object3D } from 'three'
-  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+  import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { defaults } from '../lib/defaults'
   import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
@@ -22,19 +23,35 @@
 
   const loader = new GLTFLoader()
 
-  export let gltf: Group | undefined = undefined
+  const dispatch = createEventDispatcher<{
+    load: undefined
+    error: undefined
+  }>()
 
-  loader.load(url, (g) => {
-    gltf = g.scene
-  })
+  export let gltf: GLTF | undefined = undefined
+
+  export let scene: Group | undefined = undefined
+  $: if (gltf && !scene) scene = gltf.scene
+
+  loader.load(
+    url,
+    (g) => {
+      gltf = g
+      dispatch('load')
+    },
+    undefined,
+    () => {
+      dispatch('error')
+    }
+  )
 
   const objIsMesh = (obj: Object3D | Mesh): obj is Mesh => {
     return 'isMesh' in obj && obj.isMesh
   }
 
   $: {
-    if (gltf) {
-      gltf.traverse((obj) => {
+    if (scene) {
+      scene.traverse((obj) => {
         const objOrMesh = obj as Object3D | Mesh
         if (objIsMesh(objOrMesh)) {
           obj.castShadow = castShadow
@@ -47,9 +64,9 @@
   }
 </script>
 
-{#if gltf}
+{#if scene}
   <Object3DInstance
-    object={gltf}
+    object={scene}
     {position}
     {scale}
     {rotation}

@@ -17,6 +17,7 @@ A three.js component library for svelte.
     - [Mesh](#mesh)
     - [Group](#group)
     - [Object3D](#object3d)
+    - [GLTF](#gltf)
   - [Misc](#misc)
     - [Fog](#fog)
     - [FogExp2](#fogexp2)
@@ -335,6 +336,31 @@ lookAt: LookAt | undefined = undefined
 ```ts
 inViewport: boolean
 group: THREE.Object3D
+```
+
+#### GLTF
+
+##### Properties <!-- omit in toc -->
+
+```ts
+url: string
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport: boolean = defaults.object3d.inViewport
+castShadow: boolean = defaults.mesh.castShadow
+receiveShadow: boolean = defaults.mesh.receiveShadow
+frustumCulled: boolean = defaults.mesh.frustumCulled
+renderOrder: number = defaults.mesh.renderOrder
+lookAt: LookAt | undefined = undefined
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+gltf: GLTF
+scene: THREE.Group
 ```
 
 ---
