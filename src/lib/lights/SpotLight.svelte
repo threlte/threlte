@@ -1,41 +1,62 @@
+<script lang="ts" context="module">
+  export type SpotLightProps = {
+    position: LightInstanceProps['position']
+    scale: LightInstanceProps['scale']
+    rotation: LightInstanceProps['rotation']
+    viewportAware: LightInstanceProps['viewportAware']
+    inViewport: LightInstanceProps['inViewport']
+    receiveShadow: LightInstanceProps['receiveShadow']
+    frustumCulled: LightInstanceProps['frustumCulled']
+    renderOrder: LightInstanceProps['renderOrder']
+    color: LightInstanceProps['color']
+    intensity: LightInstanceProps['intensity']
+    angle: number | undefined
+    decay: number | undefined
+    distance: number | undefined
+    penumbra: number | undefined
+    power: number | undefined
+    target: LookAt | undefined
+    shadow:
+      | boolean
+      | {
+          mapSize?: [number, number]
+          camera?: { near?: number; far?: number }
+          bias?: number
+          radius?: number
+        }
+      | undefined
+  }
+</script>
+
 <script lang="ts">
+  import { Object3D, SpotLight, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import { ColorRepresentation, Object3D, SpotLight, Vector3 } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
+  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
+  import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import type { LookAt } from '../types/types'
 
   // LightInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let color: ColorRepresentation = defaults.lights.spotLight.color
-  export let intensity = defaults.lights.spotLight.intensity
-  // prop lookAt replaced with prop target
+  export let position: SpotLightProps['position'] = undefined
+  export let scale: SpotLightProps['scale'] = undefined
+  export let rotation: SpotLightProps['rotation'] = undefined
+  export let viewportAware: SpotLightProps['viewportAware'] = false
+  export let inViewport: SpotLightProps['inViewport'] = false
+  export let frustumCulled: SpotLightProps['frustumCulled'] = undefined
+  export let receiveShadow: SpotLightProps['receiveShadow'] = undefined
+  export let renderOrder: SpotLightProps['renderOrder'] = undefined
+  export let color: SpotLightProps['color'] = undefined
+  export let intensity: SpotLightProps['intensity'] = undefined
 
   // self
-  export let angle: number = defaults.lights.spotLight.angle
-  export let decay: number = defaults.lights.spotLight.decay
-  export let distance: number = defaults.lights.spotLight.distance
-  export let penumbra: number = defaults.lights.spotLight.penumbra
-  export let power: number | undefined = undefined
-  export let target: LookAt = defaults.lookAt
-
-  // self
-  export let shadow:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      } = false
+  export let angle: SpotLightProps['angle'] = undefined
+  export let decay: SpotLightProps['decay'] = undefined
+  export let distance: SpotLightProps['distance'] = undefined
+  export let penumbra: SpotLightProps['penumbra'] = undefined
+  export let power: SpotLightProps['power'] = undefined
+  export let target: SpotLightProps['target'] = undefined
+  export let shadow: SpotLightProps['shadow'] = undefined
 
   export const light = new SpotLight(color, intensity)
   const originalLightTarget = light.target
@@ -71,11 +92,11 @@
   }
 
   $: {
-    light.distance = distance
-    light.decay = decay
-    light.angle = angle
-    light.penumbra = penumbra
-    if (power) light.power = power
+    if (distance !== undefined) light.distance = distance
+    if (decay !== undefined) light.decay = decay
+    if (angle !== undefined) light.angle = angle
+    if (penumbra !== undefined) light.penumbra = penumbra
+    if (power !== undefined) light.power = power
     render('SpotLight: props changed')
   }
 
@@ -104,13 +125,11 @@
     lookAt={undefined}
     scale={undefined}
     rotation={undefined}
-    castShadow={false}
-    receiveShadow={false}
-    frustumCulled={true}
-    renderOrder={0}
+    castShadow={undefined}
+    receiveShadow={undefined}
+    frustumCulled={undefined}
+    renderOrder={undefined}
     viewportAware={false}
-    on:viewportenter
-    on:viewportleave
     inViewport={false}
   >
     <slot />
@@ -123,8 +142,8 @@
   {position}
   {scale}
   {rotation}
-  castShadow={!!shadow}
-  receiveShadow={false}
+  castShadow={shadow ? true : undefined}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}

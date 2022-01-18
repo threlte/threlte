@@ -1,32 +1,55 @@
+<script context="module" lang="ts">
+  export type ViewportAwareObjectProps = {
+    object: Object3D
+    viewportAware: boolean
+    /**
+     * Use as a binding.
+     */
+    inViewport: boolean
+  }
+</script>
+
 <script lang="ts">
+  import { Mesh, Object3D, Vector3 } from 'three'
   import { createEventDispatcher, tick } from 'svelte'
-  import type { Object3D } from 'three'
   import { Frustum, Matrix4 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
 
-  export let object: Object3D
+  export let object: ViewportAwareObjectProps['object']
+  export let viewportAware: ViewportAwareObjectProps['viewportAware']
 
   const dispatch = createEventDispatcher<{
     viewportenter: Object3D
     viewportleave: Object3D
   }>()
 
+  const ctx = useThrelte()
+
   const frustum = new Frustum()
   const projScreenMatrix = new Matrix4()
 
-  const ctx = useThrelte()
+  const objectIsMesh = (objOrMesh: Object3D | Mesh): objOrMesh is Mesh => {
+    return objOrMesh.type === 'Mesh'
+  }
+
+  const v3World = new Vector3()
 
   const checkInViewport = (): boolean => {
     if (!ctx.camera) return true
     projScreenMatrix.multiplyMatrices(ctx.camera.projectionMatrix, ctx.camera.matrixWorldInverse)
     frustum.setFromProjectionMatrix(projScreenMatrix)
-    return frustum.intersectsObject(object)
+    if (objectIsMesh(object)) {
+      return frustum.intersectsObject(object)
+    } else {
+      object.getWorldPosition(v3World)
+      return frustum.containsPoint(v3World)
+    }
   }
 
   let ticked = false
 
-  export let inViewport: boolean = checkInViewport()
+  export let inViewport: ViewportAwareObjectProps['inViewport'] = checkInViewport()
 
   const dispatchEvent = async (isInViewport: boolean) => {
     if (isInViewport) {
@@ -38,9 +61,7 @@
     }
   }
 
-  ctx.render('ViewportAwareObject')
-
-  useFrame(() => {
+  const { start, stop } = useFrame(() => {
     const v = checkInViewport()
     if (inViewport === undefined) {
       inViewport = checkInViewport()
@@ -57,4 +78,12 @@
   }
 
   init()
+
+  $: if (viewportAware) {
+    start()
+  } else {
+    stop()
+  }
+
+  ctx.render('ViewportAwareObject')
 </script>

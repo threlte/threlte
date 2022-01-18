@@ -1,37 +1,54 @@
+<script lang="ts" context="module">
+  export type Object3DInstanceProps = {
+    object: Object3D
+    position: TransformableObjectProps['position']
+    scale: TransformableObjectProps['scale']
+    rotation: TransformableObjectProps['rotation']
+    lookAt: TransformableObjectProps['lookAt']
+    viewportAware: ViewportAwareObjectProps['viewportAware']
+    inViewport: ViewportAwareObjectProps['inViewport']
+    castShadow: boolean | undefined
+    receiveShadow: boolean | undefined
+    frustumCulled: boolean | undefined
+    renderOrder: number | undefined
+  }
+</script>
+
 <script lang="ts">
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import HierarchicalObject from '../internal/HierarchicalObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
+  import type { TransformableObjectProps } from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
+  import type { ViewportAwareObjectProps } from '../internal/ViewportAwareObject.svelte'
 
-  export let object: Object3D
+  export let object: Object3DInstanceProps['object']
 
   // TransformableObject
-  export let position: Position | undefined
-  export let scale: Scale | undefined
-  export let rotation: Rotation | undefined
-  export let lookAt: LookAt | undefined
+  export let position: Object3DInstanceProps['position']
+  export let scale: Object3DInstanceProps['scale']
+  export let rotation: Object3DInstanceProps['rotation']
+  export let lookAt: Object3DInstanceProps['lookAt']
 
   // ViewportAwareObject
-  export let viewportAware: boolean
-  export let inViewport: boolean
+  export let viewportAware: Object3DInstanceProps['viewportAware']
+  export let inViewport: Object3DInstanceProps['inViewport']
 
   // self
-  export let castShadow: boolean
-  export let receiveShadow: boolean
-  export let frustumCulled: boolean
-  export let renderOrder: number
+  export let castShadow: Object3DInstanceProps['castShadow']
+  export let receiveShadow: Object3DInstanceProps['receiveShadow']
+  export let frustumCulled: Object3DInstanceProps['frustumCulled']
+  export let renderOrder: Object3DInstanceProps['renderOrder']
 
   const { render } = useThrelte()
 
   $: {
-    object.castShadow = castShadow
-    object.receiveShadow = receiveShadow
-    object.frustumCulled = frustumCulled
-    object.renderOrder = renderOrder
+    if (castShadow !== undefined) object.castShadow = castShadow
+    if (receiveShadow !== undefined) object.receiveShadow = receiveShadow
+    if (frustumCulled !== undefined) object.frustumCulled = frustumCulled
+    if (renderOrder !== undefined) object.renderOrder = renderOrder
     render('Object3DInstance: props changed')
   }
 </script>
@@ -44,6 +61,4 @@
   <slot />
 </HierarchicalObject>
 
-{#if viewportAware}
-  <ViewportAwareObject bind:inViewport {object} on:viewportenter on:viewportleave />
-{/if}
+<ViewportAwareObject bind:inViewport {object} {viewportAware} on:viewportenter on:viewportleave />

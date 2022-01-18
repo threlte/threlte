@@ -1,35 +1,50 @@
+<script lang="ts" context="module">
+  export type LightInstanceProps = {
+    light: Light
+    color: ColorRepresentation | undefined
+    intensity: number | undefined
+    position: Object3DInstanceProps['position']
+    scale: Object3DInstanceProps['scale']
+    rotation: Object3DInstanceProps['rotation']
+    viewportAware: Object3DInstanceProps['viewportAware']
+    inViewport: Object3DInstanceProps['inViewport']
+    castShadow: Object3DInstanceProps['castShadow']
+    receiveShadow: Object3DInstanceProps['receiveShadow']
+    frustumCulled: Object3DInstanceProps['frustumCulled']
+    renderOrder: Object3DInstanceProps['renderOrder']
+    lookAt: Object3DInstanceProps['lookAt']
+  }
+</script>
+
 <script lang="ts">
   import type { ColorRepresentation, Light } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
+  import type { Object3DInstanceProps } from './Object3DInstance.svelte'
   import Object3DInstance from './Object3DInstance.svelte'
 
-  export let light: Light
+  export let position: LightInstanceProps['position']
+  export let scale: LightInstanceProps['scale']
+  export let rotation: LightInstanceProps['rotation']
+  export let viewportAware: LightInstanceProps['viewportAware']
+  export let inViewport: LightInstanceProps['inViewport']
+  export let castShadow: LightInstanceProps['castShadow']
+  export let receiveShadow: LightInstanceProps['receiveShadow']
+  export let frustumCulled: LightInstanceProps['frustumCulled']
+  export let renderOrder: LightInstanceProps['renderOrder']
+  export let lookAt: LightInstanceProps['lookAt']
 
-  // Object3DInstance
-  export let position: Position | undefined
-  export let scale: Scale | undefined
-  export let rotation: Rotation | undefined
-  export let viewportAware: boolean
-  export let inViewport: boolean
-  export let castShadow: boolean
-  export let receiveShadow: boolean
-  export let frustumCulled: boolean
-  export let renderOrder: number
-  export let lookAt: LookAt | undefined
-
-  // self
-  export let color: ColorRepresentation
-  export let intensity: number
+  export let light: LightInstanceProps['light']
+  export let color: LightInstanceProps['color']
+  export let intensity: LightInstanceProps['intensity']
 
   const { render } = useThrelte()
   const { linear } = useThrelteRoot()
 
   $: {
-    light.intensity = intensity
-    light.color = convertColorRepresentationToColor(color, linear)
+    if (intensity !== undefined) light.intensity = intensity
+    if (color !== undefined) light.color = convertColorRepresentationToColor(color, linear)
     render('LightInstance: props changed')
   }
 </script>

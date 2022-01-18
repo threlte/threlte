@@ -1,3 +1,13 @@
+<script context="module" lang="ts">
+  export type TransformableObjectProps = {
+    object: Object3D
+    position: Position | undefined
+    scale: Scale | undefined
+    rotation: Rotation | undefined
+    lookAt: LookAt | undefined
+  }
+</script>
+
 <script lang="ts">
   import { Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
@@ -5,11 +15,11 @@
   import { defaults } from '../lib/defaults'
   import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
-  export let object: Object3D
-  export let position: Position | undefined
-  export let scale: Scale | undefined
-  export let rotation: Rotation | undefined
-  export let lookAt: LookAt | undefined
+  export let object: TransformableObjectProps['object']
+  export let position: TransformableObjectProps['position']
+  export let scale: TransformableObjectProps['scale']
+  export let rotation: TransformableObjectProps['rotation']
+  export let lookAt: TransformableObjectProps['lookAt']
 
   const targetWorldPos = new Vector3()
 

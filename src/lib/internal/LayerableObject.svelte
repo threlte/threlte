@@ -1,9 +1,17 @@
+<script context="module" lang="ts">
+  export type LayerableObjectProps = {
+    object: Object3D
+  }
+</script>
+
 <script lang="ts">
   import { getContext } from 'svelte'
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import type { ThrelteLayersContext } from '../types/types'
+
   export let object: Object3D
+
   const layers = getContext<ThrelteLayersContext>('threlte-layers')
 
   const { render } = useThrelte()

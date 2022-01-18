@@ -13,8 +13,8 @@
 
 <div>
   <Canvas>
-    <PerspectiveCamera position={{ x: 10, y: 10, z: 10 }}>
-      <OrbitControls enableDamping />
+    <PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} lookAt={{ x: 0, y: 0, z: 0 }}>
+      <OrbitControls />
     </PerspectiveCamera>
 
     <DirectionalLight shadow color={'#EDBD9C'} position={{ x: -15, y: 45, z: 20 }} />

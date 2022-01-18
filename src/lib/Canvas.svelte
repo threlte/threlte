@@ -65,9 +65,12 @@
   const debugRenderFrame = () => {
     if (!debugFrameloop) return
     renderCtx.frame += 1
-    if (Object.keys(renderCtx.requests).length === 0) return
-    console.log(`frame: ${renderCtx.frame}, requested by ↴`)
-    console.table(renderCtx.requests)
+    console.log(
+      `frame: ${renderCtx.frame}${
+        Object.keys(renderCtx.requests).length > 0 ? ', requested by ↴' : ''
+      }`
+    )
+    if (Object.keys(renderCtx.requests).length > 0) console.table(renderCtx.requests)
     renderCtx.requests = {}
   }
 

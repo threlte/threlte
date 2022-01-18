@@ -1,47 +1,68 @@
+<script lang="ts" context="module">
+  export type OrbitControlsProps = {
+    autoRotate: boolean | undefined
+    autoRotateSpeed: number | undefined
+    dampingFactor: number | undefined
+    enableDamping: boolean | undefined
+    enabled: boolean | undefined
+    enablePan: boolean | undefined
+    enableRotate: boolean | undefined
+    enableZoom: boolean | undefined
+    keyPanSpeed: number | undefined
+    keys: OrbitControls['keys'] | undefined
+    maxAzimuthAngle: number | undefined
+    maxDistance: number | undefined
+    maxPolarAngle: number | undefined
+    maxZoom: number | undefined
+    minAzimuthAngle: number | undefined
+    minDistance: number | undefined
+    minPolarAngle: number | undefined
+    minZoom: number | undefined
+    mouseButtons: OrbitControls['mouseButtons'] | undefined
+    panSpeed: number | undefined
+    rotateSpeed: number | undefined
+    screenSpacePanning: boolean | undefined
+    touches: OrbitControls['touches'] | undefined
+    zoomSpeed: number | undefined
+    target: TransformableObjectProps['position'] | undefined
+  }
+</script>
+
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { Camera, MOUSE, Object3D, TOUCH } from 'three'
+  import { Camera, Object3D } from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
+  import type { TransformableObjectProps } from '../internal/TransformableObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
-  import type { Position } from '../types/types'
 
-  export let autoRotate: boolean = false
-  export let autoRotateSpeed: number = 2
-  export let dampingFactor: number = 0.05
-  export let enableDamping: boolean = false
-  export let enabled: boolean = true
-  export let enablePan: boolean = true
-  export let enableRotate: boolean = true
-  export let enableZoom: boolean = true
-  export let keyPanSpeed: number = 7
-  export let keys: OrbitControls['keys'] = {
-    LEFT: 'ArrowLeft',
-    UP: 'ArrowUp',
-    RIGHT: 'ArrowRight',
-    BOTTOM: 'ArrowDown'
-  }
-  export let maxAzimuthAngle: number = Infinity
-  export let maxDistance: number = Infinity
-  export let maxPolarAngle: number = Math.PI
-  export let maxZoom: number = Infinity
-  export let minAzimuthAngle: number = Infinity
-  export let minDistance: number = 0
-  export let minPolarAngle: number = 0
-  export let minZoom: number = 0
-  export let mouseButtons: OrbitControls['mouseButtons'] = {
-    LEFT: MOUSE.ROTATE,
-    MIDDLE: MOUSE.DOLLY,
-    RIGHT: MOUSE.PAN
-  }
-  export let panSpeed: number = 1
-  export let rotateSpeed: number = 1
-  export let screenSpacePanning: boolean = true
-  export let touches: OrbitControls['touches'] = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
-  export let zoomSpeed: number = 1
-  export let target: Position | undefined = undefined
+  export let autoRotate: OrbitControlsProps['autoRotate'] = undefined
+  export let autoRotateSpeed: OrbitControlsProps['autoRotateSpeed'] = undefined
+  export let dampingFactor: OrbitControlsProps['dampingFactor'] = undefined
+  export let enableDamping: OrbitControlsProps['enableDamping'] = undefined
+  export let enabled: OrbitControlsProps['enabled'] = undefined
+  export let enablePan: OrbitControlsProps['enablePan'] = undefined
+  export let enableRotate: OrbitControlsProps['enableRotate'] = undefined
+  export let enableZoom: OrbitControlsProps['enableZoom'] = undefined
+  export let keyPanSpeed: OrbitControlsProps['keyPanSpeed'] = undefined
+  export let keys: OrbitControlsProps['keys'] = undefined
+  export let maxAzimuthAngle: OrbitControlsProps['maxAzimuthAngle'] = undefined
+  export let maxDistance: OrbitControlsProps['maxDistance'] = undefined
+  export let maxPolarAngle: OrbitControlsProps['maxPolarAngle'] = undefined
+  export let maxZoom: OrbitControlsProps['maxZoom'] = undefined
+  export let minAzimuthAngle: OrbitControlsProps['minAzimuthAngle'] = undefined
+  export let minDistance: OrbitControlsProps['minDistance'] = undefined
+  export let minPolarAngle: OrbitControlsProps['minPolarAngle'] = undefined
+  export let minZoom: OrbitControlsProps['minZoom'] = undefined
+  export let mouseButtons: OrbitControlsProps['mouseButtons'] = undefined
+  export let panSpeed: OrbitControlsProps['panSpeed'] = undefined
+  export let rotateSpeed: OrbitControlsProps['rotateSpeed'] = undefined
+  export let screenSpacePanning: OrbitControlsProps['screenSpacePanning'] = undefined
+  export let touches: OrbitControlsProps['touches'] = undefined
+  export let zoomSpeed: OrbitControlsProps['zoomSpeed'] = undefined
+  export let target: OrbitControlsProps['target'] = undefined
 
   const parent = getParent()
   const { renderer, render } = useThrelte()
@@ -55,30 +76,30 @@
   export const controls = new OrbitControls(parent, renderer.domElement)
 
   $: {
-    controls.autoRotate = autoRotate
-    controls.autoRotateSpeed = autoRotateSpeed
-    controls.dampingFactor = dampingFactor
-    controls.enableDamping = enableDamping
-    controls.enabled = enabled
-    controls.enablePan = enablePan
-    controls.enableRotate = enableRotate
-    controls.enableZoom = enableZoom
-    controls.keyPanSpeed = keyPanSpeed
-    controls.keys = keys
-    controls.maxAzimuthAngle = maxAzimuthAngle
-    controls.maxDistance = maxDistance
-    controls.maxPolarAngle = maxPolarAngle
-    controls.maxZoom = maxZoom
-    controls.minAzimuthAngle = minAzimuthAngle
-    controls.minDistance = minDistance
-    controls.minPolarAngle = minPolarAngle
-    controls.minZoom = minZoom
-    controls.mouseButtons = mouseButtons
-    controls.panSpeed = panSpeed
-    controls.rotateSpeed = rotateSpeed
-    controls.screenSpacePanning = screenSpacePanning
-    controls.touches = touches
-    controls.zoomSpeed = zoomSpeed
+    if (autoRotate !== undefined) controls.autoRotate = autoRotate
+    if (autoRotateSpeed !== undefined) controls.autoRotateSpeed = autoRotateSpeed
+    if (dampingFactor !== undefined) controls.dampingFactor = dampingFactor
+    if (enableDamping !== undefined) controls.enableDamping = enableDamping
+    if (enabled !== undefined) controls.enabled = enabled
+    if (enablePan !== undefined) controls.enablePan = enablePan
+    if (enableRotate !== undefined) controls.enableRotate = enableRotate
+    if (enableZoom !== undefined) controls.enableZoom = enableZoom
+    if (keyPanSpeed !== undefined) controls.keyPanSpeed = keyPanSpeed
+    if (keys !== undefined) controls.keys = keys
+    if (maxAzimuthAngle !== undefined) controls.maxAzimuthAngle = maxAzimuthAngle
+    if (maxDistance !== undefined) controls.maxDistance = maxDistance
+    if (maxPolarAngle !== undefined) controls.maxPolarAngle = maxPolarAngle
+    if (maxZoom !== undefined) controls.maxZoom = maxZoom
+    if (minAzimuthAngle !== undefined) controls.minAzimuthAngle = minAzimuthAngle
+    if (minDistance !== undefined) controls.minDistance = minDistance
+    if (minPolarAngle !== undefined) controls.minPolarAngle = minPolarAngle
+    if (minZoom !== undefined) controls.minZoom = minZoom
+    if (mouseButtons !== undefined) controls.mouseButtons = mouseButtons
+    if (panSpeed !== undefined) controls.panSpeed = panSpeed
+    if (rotateSpeed !== undefined) controls.rotateSpeed = rotateSpeed
+    if (screenSpacePanning !== undefined) controls.screenSpacePanning = screenSpacePanning
+    if (touches !== undefined) controls.touches = touches
+    if (zoomSpeed !== undefined) controls.zoomSpeed = zoomSpeed
     controls.update()
     render('OrbitControls: props changed')
   }
@@ -101,12 +122,10 @@
   })
 </script>
 
-{#if target}
-  <TransformableObject
-    object={targetObject}
-    position={target}
-    rotation={undefined}
-    scale={undefined}
-    lookAt={undefined}
-  />
-{/if}
+<TransformableObject
+  object={targetObject}
+  position={target}
+  rotation={undefined}
+  scale={undefined}
+  lookAt={undefined}
+/>

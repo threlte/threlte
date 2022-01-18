@@ -1,27 +1,47 @@
+<script lang="ts" context="module">
+  export type PerspectiveCameraProps = {
+    position: CameraInstanceProps['position']
+    scale: CameraInstanceProps['scale']
+    rotation: CameraInstanceProps['rotation']
+    lookAt: CameraInstanceProps['lookAt']
+    viewportAware: CameraInstanceProps['viewportAware']
+    inViewport: CameraInstanceProps['inViewport']
+    castShadow: CameraInstanceProps['castShadow']
+    receiveShadow: CameraInstanceProps['receiveShadow']
+    frustumCulled: CameraInstanceProps['frustumCulled']
+    renderOrder: CameraInstanceProps['renderOrder']
+    useCamera: CameraInstanceProps['useCamera']
+    near: number
+    far: number
+    fov: number
+  }
+</script>
+
 <script lang="ts">
   import { PerspectiveCamera } from 'three'
   import { useResize } from '../hooks/useResize'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import type { CameraInstanceProps } from '../instances/CameraInstance.svelte'
   import CameraInstance from '../instances/CameraInstance.svelte'
-  import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   // CameraInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let lookAt: LookAt | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let useCamera = true
+  export let position: PerspectiveCameraProps['position'] = undefined
+  export let scale: PerspectiveCameraProps['scale'] = undefined
+  export let rotation: PerspectiveCameraProps['rotation'] = undefined
+  export let lookAt: PerspectiveCameraProps['lookAt'] = undefined
+  export let castShadow: PerspectiveCameraProps['castShadow'] = undefined
+  export let receiveShadow: PerspectiveCameraProps['receiveShadow'] = undefined
+  export let frustumCulled: PerspectiveCameraProps['frustumCulled'] = undefined
+  export let renderOrder: PerspectiveCameraProps['renderOrder'] = undefined
+  export let viewportAware: PerspectiveCameraProps['viewportAware'] = false
+  export let inViewport: PerspectiveCameraProps['inViewport'] = false
+  export let useCamera: PerspectiveCameraProps['useCamera'] = true
 
   // self
-  export let near = defaults.camera.near
-  export let far = defaults.camera.far
-  export let fov = defaults.camera.fov
+  export let near: PerspectiveCameraProps['near'] = 0.1
+  export let far: PerspectiveCameraProps['far'] = 1000
+  export let fov: PerspectiveCameraProps['fov'] = 30
 
   const { size, render } = useThrelte()
   const { resizeOpts } = useThrelteRoot()
@@ -34,9 +54,9 @@
   }, resizeOpts)
 
   $: {
-    camera.fov = fov
-    camera.near = near
-    camera.far = far
+    if (near !== undefined) camera.near = near
+    if (far !== undefined) camera.far = far
+    if (fov !== undefined) camera.fov = fov
     camera.updateProjectionMatrix()
     render('PerspectiveCamera: props changed')
   }
@@ -47,8 +67,8 @@
   {position}
   {scale}
   {rotation}
-  castShadow={false}
-  receiveShadow={false}
+  {castShadow}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}

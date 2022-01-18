@@ -1,31 +1,49 @@
-<script lang="ts">
-  import { AmbientLight, ColorRepresentation } from 'three'
-  import LightInstance from '../instances/LightInstance.svelte'
-  import { defaults } from '../lib/defaults'
-  import type { Position, Rotation, Scale } from '../types/types'
+<script lang="ts" context="module">
+  export type AmbientLightProps = {
+    position: LightInstanceProps['position']
+    scale: LightInstanceProps['scale']
+    rotation: LightInstanceProps['rotation']
+    lookAt: LightInstanceProps['lookAt']
+    castShadow: LightInstanceProps['castShadow']
+    receiveShadow: LightInstanceProps['receiveShadow']
+    viewportAware: LightInstanceProps['viewportAware']
+    inViewport: LightInstanceProps['inViewport']
+    frustumCulled: LightInstanceProps['frustumCulled']
+    renderOrder: LightInstanceProps['renderOrder']
+    color: LightInstanceProps['color']
+    intensity: LightInstanceProps['intensity']
+  }
+</script>
 
-  // LightInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let color: ColorRepresentation = defaults.lights.ambientLight.color
-  export let intensity = defaults.lights.ambientLight.intensity
+<script lang="ts">
+  import { AmbientLight } from 'three'
+  import LightInstance from '../instances/LightInstance.svelte'
+  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
+
+  export let position: AmbientLightProps['position'] = undefined
+  export let scale: AmbientLightProps['scale'] = undefined
+  export let rotation: AmbientLightProps['rotation'] = undefined
+  export let lookAt: AmbientLightProps['lookAt'] = undefined
+  export let castShadow: AmbientLightProps['castShadow'] = undefined
+  export let receiveShadow: AmbientLightProps['receiveShadow'] = undefined
+  export let frustumCulled: AmbientLightProps['frustumCulled'] = undefined
+  export let renderOrder: AmbientLightProps['renderOrder'] = undefined
+  export let viewportAware: AmbientLightProps['viewportAware'] = false
+  export let inViewport: AmbientLightProps['inViewport'] = false
+  export let color: AmbientLightProps['color'] = undefined
+  export let intensity: AmbientLightProps['intensity'] = undefined
 
   export const light = new AmbientLight(color, intensity)
 </script>
 
 <LightInstance
   {light}
-  lookAt={undefined}
+  {lookAt}
   {position}
   {scale}
   {rotation}
-  castShadow={false}
-  receiveShadow={false}
+  {castShadow}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}

@@ -1,43 +1,60 @@
+<script lang="ts" context="module">
+  export type MeshProps = {
+    position: MeshInstanceProps['position']
+    scale: MeshInstanceProps['scale']
+    rotation: MeshInstanceProps['rotation']
+    viewportAware: MeshInstanceProps['viewportAware']
+    inViewport: MeshInstanceProps['inViewport']
+    castShadow: MeshInstanceProps['castShadow']
+    receiveShadow: MeshInstanceProps['receiveShadow']
+    frustumCulled: MeshInstanceProps['frustumCulled']
+    renderOrder: MeshInstanceProps['renderOrder']
+    interactive: MeshInstanceProps['interactive']
+    ignorePointer: MeshInstanceProps['ignorePointer']
+    lookAt: MeshInstanceProps['lookAt']
+    geometry: BufferGeometry
+    material: Material | Material[]
+  }
+</script>
+
 <script lang="ts">
+  import { BufferGeometry, Material, Mesh } from 'three'
+  import type { MeshInstanceProps } from '../instances/MeshInstance.svelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
-  import type { BufferGeometry } from 'three'
-  import { Material, Mesh } from 'three'
-  import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   // MeshInstance
-  export let position: Position = defaults.position
-  export let scale: Scale = defaults.scale
-  export let rotation: Rotation = defaults.rotation
-  export let viewportAware: boolean = false
-  export let inViewport: boolean = defaults.object3d.inViewport
-  export let castShadow: boolean = defaults.mesh.castShadow
-  export let receiveShadow: boolean = defaults.mesh.receiveShadow
-  export let frustumCulled: boolean = defaults.mesh.frustumCulled
-  export let renderOrder: number = defaults.mesh.renderOrder
-  export let interactive: boolean = false
-  export let ignorePointerEvents: boolean = false
-  export let lookAt: LookAt | undefined = undefined
+  export let position: MeshProps['position'] = undefined
+  export let scale: MeshProps['scale'] = undefined
+  export let rotation: MeshProps['rotation'] = undefined
+  export let viewportAware: MeshProps['viewportAware'] = false
+  export let inViewport: MeshProps['inViewport'] = false
+  export let castShadow: MeshProps['castShadow'] = undefined
+  export let receiveShadow: MeshProps['receiveShadow'] = undefined
+  export let frustumCulled: MeshProps['frustumCulled'] = undefined
+  export let renderOrder: MeshProps['renderOrder'] = undefined
+  export let interactive: MeshProps['interactive'] = false
+  export let ignorePointer: MeshProps['ignorePointer'] = false
+  export let lookAt: MeshProps['lookAt'] = undefined
 
   // self
-  export let geometry: BufferGeometry
-  export let material: Material | Material[] = defaults.mesh.material()
+  export let geometry: MeshProps['geometry']
+  export let material: MeshProps['material']
 
   export const mesh = new Mesh(geometry, material)
 </script>
 
 <MeshInstance
-  {lookAt}
   {mesh}
   {position}
   {scale}
   {rotation}
+  {lookAt}
   {castShadow}
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {interactive}
-  {ignorePointerEvents}
+  {ignorePointer}
   on:click
   on:contextmenu
   on:pointerup

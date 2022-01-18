@@ -1,43 +1,61 @@
+<script lang="ts" context="module">
+  export type PointLightProps = {
+    position: LightInstanceProps['position']
+    scale: LightInstanceProps['scale']
+    rotation: LightInstanceProps['rotation']
+    lookAt: LightInstanceProps['lookAt']
+    receiveShadow: LightInstanceProps['receiveShadow']
+    viewportAware: LightInstanceProps['viewportAware']
+    inViewport: LightInstanceProps['inViewport']
+    frustumCulled: LightInstanceProps['frustumCulled']
+    renderOrder: LightInstanceProps['renderOrder']
+    intensity: LightInstanceProps['intensity']
+    color: LightInstanceProps['color']
+    distance: number | undefined
+    decay: number | undefined
+    power: number | undefined
+    shadow:
+      | boolean
+      | {
+          mapSize?: [number, number]
+          camera?: { near?: number; far?: number }
+          bias?: number
+          radius?: number
+        }
+      | undefined
+  }
+</script>
+
 <script lang="ts">
-  import type { ColorRepresentation } from 'three'
   import { PointLight } from 'three'
-  import LightInstance from '../instances/LightInstance.svelte'
-  import { defaults } from '../lib/defaults'
-  import type { Position, Rotation, Scale } from '../types/types'
   import { useThrelte } from '../hooks/useThrelte'
+  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
+  import LightInstance from '../instances/LightInstance.svelte'
 
-  // LightInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let color: ColorRepresentation = defaults.lights.ambientLight.color
-  export let intensity = defaults.lights.ambientLight.intensity
-
-  // self
-  export let distance = defaults.lights.pointLight.distance
-  export let decay = defaults.lights.pointLight.decay
-  export let power: number | undefined = undefined
-  export let shadow:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      } = false
+  export let position: PointLightProps['position']
+  export let scale: PointLightProps['scale']
+  export let rotation: PointLightProps['rotation']
+  export let lookAt: PointLightProps['lookAt']
+  export let receiveShadow: PointLightProps['receiveShadow']
+  export let viewportAware: PointLightProps['viewportAware']
+  export let inViewport: PointLightProps['inViewport']
+  export let frustumCulled: PointLightProps['frustumCulled']
+  export let renderOrder: PointLightProps['renderOrder']
+  export let intensity: PointLightProps['intensity']
+  export let color: PointLightProps['color']
+  export let distance: PointLightProps['distance']
+  export let decay: PointLightProps['decay']
+  export let power: PointLightProps['power']
+  export let shadow: PointLightProps['shadow']
 
   export const light = new PointLight(color, intensity, distance, decay)
 
   const { render } = useThrelte()
 
   $: {
-    light.distance = distance
-    light.decay = decay
-    if (power) light.power = power
+    if (distance !== undefined) light.distance = distance
+    if (decay !== undefined) light.decay = decay
+    if (power !== undefined) light.power = power
     render('PointLight: props changed')
   }
 
@@ -61,12 +79,12 @@
 
 <LightInstance
   {light}
-  lookAt={undefined}
+  {lookAt}
   {position}
   {scale}
   {rotation}
-  castShadow={!!shadow}
-  receiveShadow={false}
+  castShadow={shadow ? true : undefined}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}

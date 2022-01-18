@@ -1,26 +1,42 @@
+<script lang="ts" context="module">
+  export type HemisphereLightProps = {
+    position: LightInstanceProps['position']
+    scale: LightInstanceProps['scale']
+    rotation: LightInstanceProps['rotation']
+    lookAt: LightInstanceProps['lookAt']
+    castShadow: LightInstanceProps['castShadow']
+    receiveShadow: LightInstanceProps['receiveShadow']
+    viewportAware: LightInstanceProps['viewportAware']
+    inViewport: LightInstanceProps['inViewport']
+    frustumCulled: LightInstanceProps['frustumCulled']
+    renderOrder: LightInstanceProps['renderOrder']
+    intensity: LightInstanceProps['intensity']
+    skyColor: LightInstanceProps['color']
+    groundColor: ColorRepresentation | undefined
+  }
+</script>
+
 <script lang="ts">
-  import { convertColorRepresentationToColor } from '../lib/colors'
   import { ColorRepresentation, HemisphereLight } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import { defaults } from '../lib/defaults'
-  import type { Position, Rotation, Scale } from '../types/types'
+  import { convertColorRepresentationToColor } from '../lib/colors'
 
-  // LightInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let intensity = defaults.lights.hemisphereLight.intensity
-  // prop color is replaced by prop skyColor
-
-  // self
-  export let skyColor: ColorRepresentation = defaults.lights.hemisphereLight.skyColor
-  export let groundColor: ColorRepresentation = defaults.lights.hemisphereLight.groundColor
+  export let position: HemisphereLightProps['position'] = undefined
+  export let scale: HemisphereLightProps['scale'] = undefined
+  export let rotation: HemisphereLightProps['rotation'] = undefined
+  export let lookAt: HemisphereLightProps['lookAt'] = undefined
+  export let castShadow: HemisphereLightProps['castShadow'] = undefined
+  export let receiveShadow: HemisphereLightProps['receiveShadow'] = undefined
+  export let viewportAware: HemisphereLightProps['viewportAware'] = false
+  export let inViewport: HemisphereLightProps['inViewport'] = false
+  export let frustumCulled: HemisphereLightProps['frustumCulled'] = undefined
+  export let renderOrder: HemisphereLightProps['renderOrder'] = undefined
+  export let intensity: HemisphereLightProps['intensity'] = undefined
+  export let skyColor: HemisphereLightProps['skyColor'] = undefined
+  export let groundColor: HemisphereLightProps['groundColor'] = undefined
 
   export const light = new HemisphereLight(skyColor, groundColor, intensity)
 
@@ -28,19 +44,21 @@
   const { linear } = useThrelteRoot()
 
   $: {
-    light.groundColor = convertColorRepresentationToColor(groundColor, linear)
-    render('HemisphereLight: props changed')
+    if (groundColor !== undefined) {
+      light.groundColor = convertColorRepresentationToColor(groundColor, linear)
+      render('HemisphereLight: props changed')
+    }
   }
 </script>
 
 <LightInstance
   {light}
-  lookAt={undefined}
+  {lookAt}
   {position}
   {scale}
   {rotation}
-  castShadow={false}
-  receiveShadow={false}
+  {castShadow}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}

@@ -1,14 +1,20 @@
+<script lang="ts" context="module">
+  export type FogExp2Props = {
+    color: ColorRepresentation
+    density: number | undefined
+  }
+</script>
+
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import type { ColorRepresentation } from 'three'
   import { FogExp2 } from 'three'
-  import { convertColorRepresentationToColor } from '../lib/colors'
-  import { defaults } from '../lib/defaults'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import { convertColorRepresentationToColor } from '../lib/colors'
 
-  export let color: ColorRepresentation = defaults.fog.color
-  export let density = defaults.fog.density
+  export let color: FogExp2Props['color'] = 0xffffff
+  export let density: FogExp2Props['density'] = undefined
 
   const { linear } = useThrelteRoot()
   const { scene, render } = useThrelte()
@@ -18,7 +24,7 @@
 
   $: {
     fog.color = convertColorRepresentationToColor(color, linear)
-    fog.density = density
+    if (density !== undefined) fog.density = density
     render('FogExp2: props changed')
   }
 

@@ -1,5 +1,22 @@
+<script lang="ts" context="module">
+  export type GLTFProps = {
+    position: Object3DInstanceProps['position']
+    scale: Object3DInstanceProps['scale']
+    rotation: Object3DInstanceProps['rotation']
+    viewportAware: Object3DInstanceProps['viewportAware']
+    inViewport: Object3DInstanceProps['inViewport']
+    castShadow: Object3DInstanceProps['castShadow']
+    receiveShadow: Object3DInstanceProps['receiveShadow']
+    frustumCulled: Object3DInstanceProps['frustumCulled']
+    renderOrder: Object3DInstanceProps['renderOrder']
+    lookAt: Object3DInstanceProps['lookAt']
+    url: string
+    dracoDecoderPath: string | undefined
+    ktxTranscoderPath: string | undefined
+  }
+</script>
+
 <script lang="ts">
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
   import { createEventDispatcher } from 'svelte'
   import type { Group, Mesh, Object3D } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
@@ -8,25 +25,25 @@
   import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
   import { useLoader } from '../hooks/useLoader'
   import { useThrelte } from '../hooks/useThrelte'
-  import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
+  import type { Object3DInstanceProps } from '../instances/Object3DInstance.svelte'
+  import Object3DInstance from '../instances/Object3DInstance.svelte'
 
   // MeshInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport: boolean = defaults.object3d.inViewport
-  export let castShadow: boolean = defaults.mesh.castShadow
-  export let receiveShadow: boolean = defaults.mesh.receiveShadow
-  export let frustumCulled: boolean = defaults.mesh.frustumCulled
-  export let renderOrder: number = defaults.mesh.renderOrder
-  export let lookAt: LookAt | undefined = undefined
+  export let position: GLTFProps['position'] = undefined
+  export let scale: GLTFProps['scale'] = undefined
+  export let rotation: GLTFProps['rotation'] = undefined
+  export let viewportAware: GLTFProps['viewportAware'] = false
+  export let inViewport: GLTFProps['inViewport'] = false
+  export let castShadow: GLTFProps['castShadow'] = undefined
+  export let receiveShadow: GLTFProps['receiveShadow'] = undefined
+  export let frustumCulled: GLTFProps['frustumCulled'] = undefined
+  export let renderOrder: GLTFProps['renderOrder'] = undefined
+  export let lookAt: GLTFProps['lookAt'] = undefined
 
   // self
-  export let url: string
-  export let dracoDecoderPath: string | undefined = undefined
-  export let ktxTranscoderPath: string | undefined = undefined
+  export let url: GLTFProps['url']
+  export let dracoDecoderPath: GLTFProps['dracoDecoderPath'] = undefined
+  export let ktxTranscoderPath: GLTFProps['ktxTranscoderPath'] = undefined
 
   const dispatch = createEventDispatcher<{
     load: undefined
@@ -76,10 +93,10 @@
       scene.traverse((obj) => {
         const objOrMesh = obj as Object3D | Mesh
         if (objIsMesh(objOrMesh)) {
-          obj.castShadow = castShadow
-          obj.receiveShadow = receiveShadow
-          obj.frustumCulled = frustumCulled
-          obj.renderOrder = renderOrder
+          if (castShadow !== undefined) obj.castShadow = castShadow
+          if (receiveShadow !== undefined) obj.receiveShadow = receiveShadow
+          if (frustumCulled !== undefined) obj.frustumCulled = frustumCulled
+          if (renderOrder !== undefined) obj.renderOrder = renderOrder
         }
       })
     }

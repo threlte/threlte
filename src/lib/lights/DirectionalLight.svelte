@@ -1,38 +1,54 @@
+<script lang="ts" context="module">
+  export type DirectionalLightProps = {
+    position: LightInstanceProps['position']
+    scale: LightInstanceProps['scale']
+    rotation: LightInstanceProps['rotation']
+    lookAt: LightInstanceProps['lookAt']
+    receiveShadow: LightInstanceProps['receiveShadow']
+    viewportAware: LightInstanceProps['viewportAware']
+    inViewport: LightInstanceProps['inViewport']
+    frustumCulled: LightInstanceProps['frustumCulled']
+    renderOrder: LightInstanceProps['renderOrder']
+    color: LightInstanceProps['color']
+    intensity: LightInstanceProps['intensity']
+    shadow:
+      | boolean
+      | {
+          mapSize?: [number, number]
+          camera?: {
+            left?: number
+            right?: number
+            top?: number
+            bottom?: number
+            near?: number
+            far?: number
+          }
+          bias?: number
+          radius?: number
+        }
+      | undefined
+  }
+</script>
+
 <script lang="ts">
-  import LightInstance from '../instances/LightInstance.svelte'
-  import type { ColorRepresentation } from 'three'
   import { DirectionalLight } from 'three'
-  import { defaults } from '../lib/defaults'
-  import type { Position, Rotation, Scale } from '../types/types'
   import { useThrelte } from '../hooks/useThrelte'
+  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
+  import LightInstance from '../instances/LightInstance.svelte'
 
   // LightInstance
-  export let position: Position | undefined = undefined
-  export let scale: Scale | undefined = undefined
-  export let rotation: Rotation | undefined = undefined
-  export let viewportAware: boolean = false
-  export let inViewport = defaults.object3d.inViewport
-  export let frustumCulled = defaults.mesh.frustumCulled
-  export let renderOrder = defaults.mesh.renderOrder
-  export let color: ColorRepresentation = defaults.lights.ambientLight.color
-  export let intensity = defaults.lights.ambientLight.intensity
-
-  // self
-  export let shadow:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: {
-          left?: number
-          right?: number
-          top?: number
-          bottom?: number
-          near?: number
-          far?: number
-        }
-        bias?: number
-        radius?: number
-      } = false
+  export let position: DirectionalLightProps['position'] = undefined
+  export let scale: DirectionalLightProps['scale'] = undefined
+  export let rotation: DirectionalLightProps['rotation'] = undefined
+  export let lookAt: DirectionalLightProps['lookAt'] = undefined
+  export let receiveShadow: DirectionalLightProps['receiveShadow'] = undefined
+  export let frustumCulled: DirectionalLightProps['frustumCulled'] = undefined
+  export let renderOrder: DirectionalLightProps['renderOrder'] = undefined
+  export let viewportAware: DirectionalLightProps['viewportAware'] = false
+  export let inViewport: DirectionalLightProps['inViewport'] = false
+  export let color: DirectionalLightProps['color'] = undefined
+  export let intensity: DirectionalLightProps['intensity'] = undefined
+  export let shadow: DirectionalLightProps['shadow'] = undefined
 
   export const light = new DirectionalLight(color, intensity)
 
@@ -62,12 +78,12 @@
 
 <LightInstance
   {light}
-  lookAt={undefined}
+  {lookAt}
   {position}
   {scale}
   {rotation}
-  castShadow={!!shadow}
-  receiveShadow={false}
+  castShadow={shadow ? true : undefined}
+  {receiveShadow}
   {frustumCulled}
   {renderOrder}
   {viewportAware}
