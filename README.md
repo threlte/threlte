@@ -1,5 +1,8 @@
 # threlte <!-- omit in toc -->
 
+![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
+![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
+
 A three.js component library for svelte.
 
 ## Index <!-- omit in toc -->
@@ -9,11 +12,8 @@ A three.js component library for svelte.
 - [Reference](#reference)
   - [Types](#types)
   - [Conventions](#conventions)
-    - [Additions](#additions)
-      - [lookAt](#lookat)
   - [Canvas](#canvas)
   - [Objects](#objects)
-      - [lookAt](#lookat-1)
     - [Mesh](#mesh)
     - [Group](#group)
     - [Object3D](#object3d)
@@ -52,7 +52,7 @@ A three.js component library for svelte.
 
 `threlte` is a component library for svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
-It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed).
+It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed).
 
 It provides strictly typed components to quickly and easily build three.js scenes with deep reactivity and interactivity out-of-the-box.
 
@@ -200,20 +200,17 @@ type UseResizeOptions = {
 
 ### Conventions
 
-Threltes components tightly follow the principles of three.js in terms of available properties and their naming. This means that if a THREE.PointLight extends THREE.Light which in turn extends THREE.Object3D, the properties of the component `<PointLight>` will reflect that inheritance tree.
+Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and their respective naming.
 
-#### Additions
+#### Additions <!-- omit in toc -->
 
-##### lookAt
+On top of that, threlte adds some functionality to make objects truly reactive.
 
-Three.js makes it easy to orient an object towards another one:
+##### lookAt <!-- omit in toc -->
 
-```ts
-mesh.lookAt(anotherMesh)
-```
+Use the property `lookAt` on an Object to
 
-Use the property `lookAt` on nearly every Object to reactively orient an Object towards another one:
-
+- reactively orient an Object3D towards another Object3D
 ```svelte
 <script>
   let mesh
@@ -222,8 +219,10 @@ Use the property `lookAt` on nearly every Object to reactively orient an Object 
 <PerspectiveCamera lookAt={mesh} />
 <Mesh bind:mesh … />
 ```
-
-The camera will now follow the Mesh.
+- to reactively orient an Object towards a Position
+```svelte
+<PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
+```
 
 ---
 
@@ -254,27 +253,6 @@ rootCtx: ThrelteRootContext
 ---
 
 ### Objects
-
-##### lookAt
-
-Three.js makes it easy to orient an object towards another one:
-
-```ts
-mesh.lookAt(anotherMesh)
-```
-
-Use the property `lookAt` on an Object to reactively orient an Object towards another one:
-
-```svelte
-<script>
-  let mesh
-</script>
-
-<PerspectiveCamera lookAt={mesh} />
-<Mesh bind:mesh … />
-```
-
-The camera will now follow the Mesh.
 
 #### Mesh
 
@@ -804,7 +782,7 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 <script>
   import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
   …
-</script>
+</scrip>
 
 <Canvas>
   <Pass pass={new GlitchPass()}>
@@ -1020,12 +998,14 @@ To make an Object viewport aware, you must add `viewportAware` to your Object.
 
 [Open the reactivity example in CodeSandbox](https://codesandbox.io/s/threlte-reactivity-example-vttvo?file=/App.svelte)
 
-Just like [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
+Just like [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
 By using props instead of manipulating three.js objects directly, the unified render loop is able to tell that your scene needs rerendering and svelte can make use of component optimizations.
 
 ## Credits
 
-- [svelte-cubed](https://github.com/Rich-Harris/svelte-cubed)
+- [Svelte](https://github.com/sveltejs/svelte)
+- [SvelteKit](https://github.com/sveltejs/kit)
+- [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed)
 - [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
 - [drei](https://github.com/pmndrs/drei)
 
