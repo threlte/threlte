@@ -23,11 +23,6 @@ A three.js component library for svelte.
     - [:globe_with_meridians: Group](#globe_with_meridians-group)
     - [:globe_with_meridians: Object3D](#globe_with_meridians-object3d)
     - [:globe_with_meridians: GLTF](#globe_with_meridians-gltf)
-  - [:speech_balloon: Misc](#speech_balloon-misc)
-    - [:speech_balloon: Fog](#speech_balloon-fog)
-    - [:speech_balloon: FogExp2](#speech_balloon-fogexp2)
-    - [:speech_balloon: Text](#speech_balloon-text)
-    - [:speech_balloon: Layers](#speech_balloon-layers)
   - [:high_brightness: Lights](#high_brightness-lights)
     - [:high_brightness: AmbientLight](#high_brightness-ambientlight)
     - [:high_brightness: DirectionalLight](#high_brightness-directionallight)
@@ -41,6 +36,11 @@ A three.js component library for svelte.
     - [:repeat: OrbitControls](#repeat-orbitcontrols)
   - [:lipstick: Post Processing](#lipstick-post-processing)
     - [:lipstick: Pass](#lipstick-pass)
+  - [Misc](#misc)
+    - [:thought_balloon: Fog](#thought_balloon-fog)
+    - [:thought_balloon: FogExp2](#thought_balloon-fogexp2)
+    - [:abc: Text](#abc-text)
+    - [:black_square_button: Layers](#black_square_button-layers)
   - [:leftwards_arrow_with_hook: Hooks](#leftwards_arrow_with_hook-hooks)
     - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
     - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
@@ -525,186 +525,6 @@ gltf: GLTF
 scene: THREE.Group
 ```
 
-### :speech_balloon: Misc
-
-#### :speech_balloon: Fog
-
-A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
-
-##### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Fog } from 'threlte'
-</script>
-
-<Fog color={"#dddddd"} />
-```
-
-##### Properties <!-- omit in toc -->
-
-```ts
-color: THREE.ColorRepresentation = defaults.fog.color
-near = defaults.fog.near
-far = defaults.fog.far
-```
-
-##### Bindings <!-- omit in toc -->
-
-```ts
-fog: THREE.Fog
-```
-
-#### :speech_balloon: FogExp2
-
-A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
-
-
-##### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { FogExp2 } from 'threlte'
-</script>
-
-<FogExp2 color={"#dddddd"} density={0.3} />
-```
-
-##### Properties <!-- omit in toc -->
-
-```ts
-color: THREE.ColorRepresentation = defaults.fog.color
-density = defaults.fog.density
-```
-
-##### Bindings <!-- omit in toc -->
-
-```ts
-fog: THREE.FogExp2
-```
-
-#### :speech_balloon: Text
-
-The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
-
-##### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Text } from 'threlte'
-  let value = ''
-</script>
-
-<input type="text" bind:value />
-<Text text={value} />
-```
-
-##### Properties <!-- omit in toc -->
-
-```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
-viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-castShadow = defaults.mesh.castShadow
-receiveShadow = defaults.mesh.receiveShadow
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-interactive: boolean = false
-ignorePointerEvents: boolean = false
-lookAt: LookAt | undefined = undefined
-
-text: TextType['text'] = ''
-anchorX: TextType['anchorX'] = 0
-anchorY: TextType['anchorY'] = 0
-curveRadius: TextType['curveRadius'] = 0
-font: TextType['font'] = null
-fontSize: TextType['fontSize'] = 0.1
-letterSpacing: TextType['letterSpacing'] = 0
-lineHeight: TextType['lineHeight'] = 'normal'
-maxWidth: TextType['maxWidth'] = Infinity
-overflowWrap: TextType['overflowWrap'] = 'normal'
-textAlign: TextType['textAlign'] = 'left'
-textIndent: TextType['textIndent'] = 0
-whiteSpace: TextType['whiteSpace'] = 'normal'
-material: TextType['material'] | null = null
-color: TextType['color'] | null = null
-depthOffset: TextType['depthOffset'] = 0
-clipRect: TextType['clipRect'] | null = null
-glyphGeometryDetail: TextType['glyphGeometryDetail'] = 0
-sdfGlyphSize: TextType['sdfGlyphSize'] = 64
-outlineWidth: TextType['outlineWidth'] = 0
-outlineColor: TextType['outlineColor'] = 'black'
-outlineOpacity: TextType['outlineOpacity'] = 1
-outlineBlur: TextType['outlineBlur'] = 0
-outlineOffsetX: TextType['outlineOffsetX'] = 0
-outlineOffsetY: TextType['outlineOffsetY'] = 0
-strokeWidth: TextType['strokeWidth'] = 0
-strokeColor: TextType['strokeColor'] = 0x808080
-strokeOpacity: TextType['strokeOpacity'] = 1
-fillOpacity: TextType['fillOpacity'] = 1
-```
-
-##### Bindings <!-- omit in toc -->
-
-```ts
-inViewport: boolean
-text: Text
-```
-
-#### :speech_balloon: Layers
-
-[Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
-The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
-
-##### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Layers, PerspectiveCamera, Mesh } from 'threlte'
-</script>
-
-<!-- Remember to also assign a layer to your camera -->
-<Layers layers={1}>
-  <PerspectiveCamera />
-</Layers>
-
-<!-- visible if camera is on any layer -->
-<Layers layers={'all'}>
-  <Mesh … />
-</Layers>
-
-<!-- visible if camera is on layer 1 -->
-<Layers layers={1}>
-  <Mesh … />
-</Layers>
-
-<!-- visible if camera is on layer 0 or 1 -->
-<Layers layers={[0, 1]}>
-  <Mesh … />
-</Layers>
-
-<!-- invisible -->
-<Layers layers={'none'}>
-  <Mesh … />
-</Layers>
-```
-
-##### Properties <!-- omit in toc -->
-
-```ts
-layers: ThrelteLayers = 0
-```
-
-Property `layers` can be:
-- any integer from 0 to 31
-- an array of any integer from 0 to 31
-- `'all'`
-- `'none'`
-
-> TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
-
 ### :high_brightness: Lights
 
 #### :high_brightness: AmbientLight
@@ -1072,6 +892,186 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 ```ts
 pass: THREE.Pass
 ```
+
+### Misc
+
+#### :thought_balloon: Fog
+
+A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Fog } from 'threlte'
+</script>
+
+<Fog color={"#dddddd"} />
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+color: THREE.ColorRepresentation = defaults.fog.color
+near = defaults.fog.near
+far = defaults.fog.far
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+fog: THREE.Fog
+```
+
+#### :thought_balloon: FogExp2
+
+A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
+
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { FogExp2 } from 'threlte'
+</script>
+
+<FogExp2 color={"#dddddd"} density={0.3} />
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+color: THREE.ColorRepresentation = defaults.fog.color
+density = defaults.fog.density
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+fog: THREE.FogExp2
+```
+
+#### :abc: Text
+
+The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Text } from 'threlte'
+  let value = ''
+</script>
+
+<input type="text" bind:value />
+<Text text={value} />
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+position: Position = defaults.position
+scale: Scale = defaults.scale
+rotation: Rotation = defaults.rotation
+viewportAware: boolean = false
+inViewport = defaults.object3d.inViewport
+castShadow = defaults.mesh.castShadow
+receiveShadow = defaults.mesh.receiveShadow
+frustumCulled = defaults.mesh.frustumCulled
+renderOrder = defaults.mesh.renderOrder
+interactive: boolean = false
+ignorePointerEvents: boolean = false
+lookAt: LookAt | undefined = undefined
+
+text: TextType['text'] = ''
+anchorX: TextType['anchorX'] = 0
+anchorY: TextType['anchorY'] = 0
+curveRadius: TextType['curveRadius'] = 0
+font: TextType['font'] = null
+fontSize: TextType['fontSize'] = 0.1
+letterSpacing: TextType['letterSpacing'] = 0
+lineHeight: TextType['lineHeight'] = 'normal'
+maxWidth: TextType['maxWidth'] = Infinity
+overflowWrap: TextType['overflowWrap'] = 'normal'
+textAlign: TextType['textAlign'] = 'left'
+textIndent: TextType['textIndent'] = 0
+whiteSpace: TextType['whiteSpace'] = 'normal'
+material: TextType['material'] | null = null
+color: TextType['color'] | null = null
+depthOffset: TextType['depthOffset'] = 0
+clipRect: TextType['clipRect'] | null = null
+glyphGeometryDetail: TextType['glyphGeometryDetail'] = 0
+sdfGlyphSize: TextType['sdfGlyphSize'] = 64
+outlineWidth: TextType['outlineWidth'] = 0
+outlineColor: TextType['outlineColor'] = 'black'
+outlineOpacity: TextType['outlineOpacity'] = 1
+outlineBlur: TextType['outlineBlur'] = 0
+outlineOffsetX: TextType['outlineOffsetX'] = 0
+outlineOffsetY: TextType['outlineOffsetY'] = 0
+strokeWidth: TextType['strokeWidth'] = 0
+strokeColor: TextType['strokeColor'] = 0x808080
+strokeOpacity: TextType['strokeOpacity'] = 1
+fillOpacity: TextType['fillOpacity'] = 1
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+inViewport: boolean
+text: Text
+```
+
+#### :black_square_button: Layers
+
+[Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
+The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Layers, PerspectiveCamera, Mesh } from 'threlte'
+</script>
+
+<!-- Remember to also assign a layer to your camera -->
+<Layers layers={1}>
+  <PerspectiveCamera />
+</Layers>
+
+<!-- visible if camera is on any layer -->
+<Layers layers={'all'}>
+  <Mesh … />
+</Layers>
+
+<!-- visible if camera is on layer 1 -->
+<Layers layers={1}>
+  <Mesh … />
+</Layers>
+
+<!-- visible if camera is on layer 0 or 1 -->
+<Layers layers={[0, 1]}>
+  <Mesh … />
+</Layers>
+
+<!-- invisible -->
+<Layers layers={'none'}>
+  <Mesh … />
+</Layers>
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+layers: ThrelteLayers = 0
+```
+
+Property `layers` can be:
+- any integer from 0 to 31
+- an array of any integer from 0 to 31
+- `'all'`
+- `'none'`
+
+> TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
 
 ### :leftwards_arrow_with_hook: Hooks
 
