@@ -10,6 +10,10 @@ A three.js component library for svelte.
 
 - [What is threlte?](#what-is-threlte)
 - [Getting started](#getting-started)
+- [Concepts](#concepts)
+  - [Interactivity](#interactivity)
+  - [Viewport Awareness](#viewport-awareness)
+  - [Reactivity](#reactivity)
 - [Reference](#reference)
   - [Types](#types)
   - [Conventions](#conventions)
@@ -42,21 +46,19 @@ A three.js component library for svelte.
     - [useThrelteRoot](#usethrelteroot)
     - [useFrame](#useframe)
     - [useTexture](#usetexture)
-- [Concepts](#concepts)
-  - [Interactivity](#interactivity)
-  - [Viewport Awareness](#viewport-awareness)
-  - [Reactivity](#reactivity)
 - [Credits](#credits)
 - [Thanks](#thanks)
 - [License](#license)
 
 ## What is threlte?
 
-`threlte` is a component library for svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
+Threlte is a component library for svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
 It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed).
 
 It provides strictly typed components to quickly and easily build three.js scenes with deep reactivity and interactivity out-of-the-box.
+
+It also aims to provide the building blocks to quickly extend threlte when it's needed.
 
 ## Getting started
 
@@ -125,6 +127,121 @@ Build your first scene:
   }
 </style>
 ```
+
+## Concepts
+
+Yes, there are already three.js component libraries for svelte, threlte is different in some ways:
+
+- **Sensible defaults**  
+  Much like [react-three-fiber](https://github.com/pmndrs/react-three-fiber), threlte will set sensible defaults to three.js `WebGLRenderer`, all colors and textures and more. This makes it easy for you to follow best practices in terms of color reception and accuracy.  
+  threlte also makes visibility management a breeze with its `<Layers>` component.
+- **Unified frame loop**  
+  By default, threlte only renders the scene if there's need for it: If a prop changes that makes rendering the scene necessary, if there are any interactive objects in the scene or if threlte or you use `useFrame` in any of your components.
+- **Interactivity**  
+  threlte makes it possible to use events on three.js objects as if they were regular DOM elements:  
+   `<Mesh … interactive on:click={onClick}>`  
+   You can also listen to your object leaving or entering the viewport:  
+   `<Mesh … viewportAware on:viewportenter={onViewportEnter}>`
+- **TypeScript**  
+  All threlte components are written in TypeScript, so type support is a first-class citizen.
+- **EffectComposer support**  
+  Add a Pass with  
+   `<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the default `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
+- **Text rendering**  
+  Render text using the fantastic [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) library with:
+  `<Text text="Hello World" />`
+- **Access All Areas**
+  - Bind to three.js object instances  
+    `<Mesh … bind:mesh>`
+  - Access the renderer  
+    `const { renderer, render } = useThrelte()`
+- **Easily extendable**  
+  Build objects that didn't yet make it to threlte yourself by plugging together _functional components_.
+- **Tree-shakeble**  
+  react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.  
+  threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
+
+### Interactivity
+
+[Open the interactivity example in CodeSandbox](https://codesandbox.io/s/threlte-interactivity-example-t9hej?file=/App.svelte)
+
+Listen to events of a `<Mesh>` and a `<MeshInstance>` as if it would be a regular DOM element:
+
+```jsx
+<Mesh … interactive on:click={onClick}>
+```
+
+These events are supported:
+
+- `click`
+- `contextmenu`
+- `pointerup`
+- `pointerdown`
+- `pointerenter`
+- `pointerleave`
+- `pointermove`
+
+All events include the raycast Intersection object:
+
+```svelte
+<script lang="ts">
+  import { Mesh, ThrelteEvent } from 'threlte'
+
+  const onClick = (e: CustomEvent<ThrelteEvent>) => {
+    const distanceToMesh = e.detail.distance
+  }
+</script>
+
+<Mesh … interactive on:click={onClick}>
+```
+
+You must add `interactive` to your Mesh to indicate adding the Mesh to the central event raycaster.  
+Be aware that this will make the frameloop render on every frame.
+
+### Viewport Awareness
+
+[Open the viewport awareness example in CodeSandbox](https://codesandbox.io/s/threlte-viewport-awareness-example-i7hwy?file=/App.svelte)
+
+Additionally, most Objects (Lights, Cameras, Meshes, …) can be made viewport aware. That means you can listen to events or bind a variable to check whether an object is in the viewport or not:
+
+```svelte
+<script lang="ts">
+  import { PointLight } from 'threlte'
+  import type { Object3D } from 'three'
+
+  let inViewport
+
+  const onViewportEnter = (e: CustomEvent<Object3D>) => {
+    console.log('PointLight entered the viewport.')
+  }
+  const onViewportLeave = (e: CustomEvent<Object3D>) => {
+    console.log('PointLight left the viewport.')
+  }
+</script>
+
+<PointLight
+  viewportAware
+  bind:inViewport
+  on:viewportenter={onViewportEnter}
+  on:viewportleave={onViewportLeave}
+/>
+```
+
+These events are supported:
+
+- `viewportenter`
+- `viewportleave`
+
+Bind `inViewport` if you wish to not use events.
+
+To make an Object viewport aware, you must add `viewportAware` to your Object.
+
+### Reactivity
+
+[Open the reactivity example in CodeSandbox](https://codesandbox.io/s/threlte-reactivity-example-vttvo?file=/App.svelte)
+
+Just like [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
+By using props instead of manipulating three.js objects directly, the unified render loop is able to tell that your scene needs rerendering and svelte can make use of component optimizations.
 
 ## Reference
 
@@ -869,121 +986,6 @@ const textures = useTexture({
 })
 const material = new MeshStandardMaterial({ ...textures })
 ```
-
-## Concepts
-
-Yes, there are already three.js component libraries for svelte, threlte is different in some ways:
-
-- **Sensible defaults**  
-  Much like [react-three-fiber](https://github.com/pmndrs/react-three-fiber), threlte will set sensible defaults to three.js `WebGLRenderer`, all colors and textures and more. This makes it easy for you to follow best practices in terms of color reception and accuracy.  
-  threlte also makes visibility management a breeze with its `<Layers>` component.
-- **Unified frame loop**  
-  By default, threlte only renders the scene if there's need for it: If a prop changes that makes rendering the scene necessary, if there are any interactive objects in the scene or if threlte or you use `useFrame` in any of your components.
-- **Interactivity**  
-  threlte makes it possible to use events on three.js objects like they are regular DOM elements:  
-   `<Mesh … interactive on:click={onClick}>`  
-   You can even listen to your object leaving or entering the viewport:  
-   `<Mesh … viewportAware on:viewportenter={onViewportEnter}>`
-- **TypeScript**  
-  All threlte components are written in TypeScript, so type support is a first-class citizen.
-- **EffectComposer support**  
-  Add a Pass with  
-   `<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the default `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
-- **Text rendering**  
-  Render text using the fantastic [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) library with:
-  `<Text text="Hello World" />`
-- **Access All Areas**
-  - Bind to three.js object instances  
-    `<Mesh … bind:mesh>`
-  - Access the renderer  
-    `const { renderer, render } = useThrelte()`
-- **Easily extendable**  
-  Build objects that didn't yet make it to threlte yourself by plugging together _functional components_.
-- **Tree-shakeble**  
-  react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.  
-  threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
-
-### Interactivity
-
-[Open the interactivity example in CodeSandbox](https://codesandbox.io/s/threlte-interactivity-example-t9hej?file=/App.svelte)
-
-Listen to events of a `<Mesh>` and a `<MeshInstance>` as if it would be a regular DOM element:
-
-```jsx
-<Mesh … interactive on:click={onClick}>
-```
-
-These events are supported:
-
-- `click`
-- `contextmenu`
-- `pointerup`
-- `pointerdown`
-- `pointerenter`
-- `pointerleave`
-- `pointermove`
-
-All events include the raycast Intersection object:
-
-```svelte
-<script lang="ts">
-  import { Mesh, ThrelteEvent } from 'threlte'
-
-  const onClick = (e: CustomEvent<ThrelteEvent>) => {
-    const distanceToMesh = e.detail.distance
-  }
-</script>
-
-<Mesh … interactive on:click={onClick}>
-```
-
-You must add `interactive` to your Mesh to indicate adding the Mesh to the central event raycaster.  
-Be aware that this will make the frameloop render on every frame.
-
-### Viewport Awareness
-
-[Open the viewport awareness example in CodeSandbox](https://codesandbox.io/s/threlte-viewport-awareness-example-i7hwy?file=/App.svelte)
-
-Additionally, most Objects (Lights, Cameras, Meshes, …) can be made viewport aware. That means you can listen to events or bind a variable to check whether an object is in the viewport or not:
-
-```svelte
-<script lang="ts">
-  import { PointLight } from 'threlte'
-  import type { Object3D } from 'three'
-
-  let inViewport
-
-  const onViewportEnter = (e: CustomEvent<Object3D>) => {
-    console.log('PointLight entered the viewport.')
-  }
-  const onViewportLeave = (e: CustomEvent<Object3D>) => {
-    console.log('PointLight left the viewport.')
-  }
-</script>
-
-<PointLight
-  viewportAware
-  bind:inViewport
-  on:viewportenter={onViewportEnter}
-  on:viewportleave={onViewportLeave}
-/>
-```
-
-These events are supported:
-
-- `viewportenter`
-- `viewportleave`
-
-Bind `inViewport` if you wish to not use events.
-
-To make an Object viewport aware, you must add `viewportAware` to your Object.
-
-### Reactivity
-
-[Open the reactivity example in CodeSandbox](https://codesandbox.io/s/threlte-reactivity-example-vttvo?file=/App.svelte)
-
-Just like [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
-By using props instead of manipulating three.js objects directly, the unified render loop is able to tell that your scene needs rerendering and svelte can make use of component optimizations.
 
 ## Credits
 
