@@ -1,8 +1,13 @@
 <script lang="ts">
+  import { useThrelte } from '$lib/hooks/useThrelte'
   import Object3DInstance from '$lib/instances/Object3DInstance.svelte'
+  import { memoizeLoader } from '$lib/lib/loaders'
   import { createEventDispatcher } from 'svelte'
   import type { Group, Mesh, Object3D } from 'three'
-  import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+  import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+  import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+  import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
   import { defaults } from '../lib/defaults'
   import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
@@ -20,8 +25,8 @@
 
   // self
   export let url: string
-
-  const loader = new GLTFLoader()
+  export let dracoDecoderPath: string | undefined = undefined
+  export let ktxTranscoderPath: string | undefined = undefined
 
   const dispatch = createEventDispatcher<{
     load: undefined
@@ -32,6 +37,23 @@
 
   export let scene: Group | undefined = undefined
   $: if (gltf && !scene) scene = gltf.scene
+
+  const loader = memoizeLoader(GLTFLoader, () => new GLTFLoader())
+
+  if (dracoDecoderPath) {
+    const dracoLoader = memoizeLoader(DRACOLoader, () =>
+      new DRACOLoader().setDecoderPath(dracoDecoderPath as string)
+    )
+    loader.setDRACOLoader(dracoLoader)
+  }
+
+  const { renderer } = useThrelte()
+  if (renderer && ktxTranscoderPath) {
+    const ktx2Loader = memoizeLoader(KTX2Loader, () =>
+      new KTX2Loader().setTranscoderPath('/loaders/basis/').detectSupport(renderer)
+    )
+    loader.setKTX2Loader(ktx2Loader)
+  }
 
   loader.load(
     url,

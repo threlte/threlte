@@ -340,10 +340,24 @@ group: THREE.Object3D
 
 #### GLTF
 
+To use DRACO compression, provide a path to the DRACO decoder.  
+To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
+
+##### Example <!-- omit in toc -->
+
+```svelte
+<GLTF 
+  castShadow 
+  receiveShadow 
+  url={'/models/flower.glb'} 
+  position={{ y: 1 }} 
+  scale={3}
+/>
+```
+
 ##### Properties <!-- omit in toc -->
 
 ```ts
-url: string
 position: Position = defaults.position
 scale: Scale = defaults.scale
 rotation: Rotation = defaults.rotation
@@ -354,6 +368,10 @@ receiveShadow: boolean = defaults.mesh.receiveShadow
 frustumCulled: boolean = defaults.mesh.frustumCulled
 renderOrder: number = defaults.mesh.renderOrder
 lookAt: LookAt | undefined = undefined
+
+url: string
+dracoDecoderPath: string | undefined = undefined
+ktxTranscoderPath: string | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
