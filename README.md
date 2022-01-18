@@ -162,31 +162,39 @@ The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and
 ```ts
 type ThrelteContext = {
   size: { width: number; height: number }
-  pointer?: Vector2
-  clock: Clock
-  camera?: Camera
-  scene: Scene
-  renderer?: WebGLRenderer
+  pointer?: THREE.Vector2
+  clock: THREE.Clock
+  camera?: THREE.Camera
+  scene: THREE.Scene
+  renderer?: THREE.WebGLRenderer
   render: (requestedBy?: string) => void
 }
 
 type ThrelteRootContext = {
-  setCamera: (camera: Camera) => void
-  addRaycastableObject: (obj: Object3D) => void
-  removeRaycastableObject: (obj: Object3D) => void
-  addInteractiveObject: (obj: Object3D) => void
-  removeInteractiveObject: (obj: Object3D) => void
-  addPass: (pass: Pass) => void
-  removePass: (pass: Pass) => void
+  setCamera: (camera: THREE.Camera) => void
+  addRaycastableObject: (obj: THREE.Object3D) => void
+  removeRaycastableObject: (obj: THREE.Object3D) => void
+  addInteractiveObject: (obj: THREE.Object3D) => void
+  removeInteractiveObject: (obj: THREE.Object3D) => void
+  addPass: (pass: THREE.Pass) => void
+  removePass: (pass: THREE.Pass) => void
   linear: boolean
-  interactiveObjects: Set<Object3D>
-  raycastableObjects: Set<Object3D>
+  interactiveObjects: Set<THREE.Object3D>
+  raycastableObjects: Set<THREE.Object3D>
   composer?: EffectComposer
   resizeOpts?: UseResizeOptions
 }
 ```
 
 See `useThrelte` and `useThrelteRoot` on how to use these.
+
+```ts
+type UseResizeOptions = {
+  axis?: 'horizontal' | 'vertical' | 'both'
+  runOnInit?: boolean
+  debounce?: number
+}
+```
 
 ---
 
@@ -232,7 +240,7 @@ linear: boolean = false
 frameloop: 'always' | 'demand' = 'demand'
 debugFrameloop: boolean = false
 shadows: boolean = true
-shadowMapType: ShadowMapType = PCFSoftShadowMap
+shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
 resizeOpts: UseResizeOptions | undefined = undefined
 ```
 
@@ -537,7 +545,7 @@ viewportAware: boolean = false
 inViewport = defaults.object3d.inViewport
 frustumCulled = defaults.mesh.frustumCulled
 renderOrder = defaults.mesh.renderOrder
-color: ColorRepresentation = defaults.lights.ambientLight.color
+color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
 intensity = defaults.lights.ambientLight.intensity
 ```
 
@@ -559,7 +567,7 @@ viewportAware: boolean = false
 inViewport = defaults.object3d.inViewport
 frustumCulled = defaults.mesh.frustumCulled
 renderOrder = defaults.mesh.renderOrder
-color: ColorRepresentation = defaults.lights.ambientLight.color
+color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
 intensity = defaults.lights.ambientLight.intensity
 shadow:
   | boolean
@@ -619,7 +627,7 @@ viewportAware: boolean = false
 inViewport = defaults.object3d.inViewport
 frustumCulled = defaults.mesh.frustumCulled
 renderOrder = defaults.mesh.renderOrder
-color: ColorRepresentation = defaults.lights.ambientLight.color
+color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
 intensity = defaults.lights.ambientLight.intensity
 distance = defaults.lights.pointLight.distance
 decay = defaults.lights.pointLight.decay
@@ -652,7 +660,7 @@ viewportAware: boolean = false
 inViewport = defaults.object3d.inViewport
 frustumCulled = defaults.mesh.frustumCulled
 renderOrder = defaults.mesh.renderOrder
-color: ColorRepresentation = defaults.lights.spotLight.color
+color: THREE.ColorRepresentation = defaults.lights.spotLight.color
 intensity = defaults.lights.spotLight.intensity
 angle: number = defaults.lights.spotLight.angle
 decay: number = defaults.lights.spotLight.decay
@@ -748,33 +756,33 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 
 ##### Properties <!-- omit in toc -->
 
-| Property | Type | Default |
-|---|---|---|
-| autoRotate | boolean | false |
-| autoRotateSpeed | number | 2 |
-| dampingFactor | number | 0.05 |
-| enableDamping | boolean | false |
-| enabled | boolean | true |
-| enablePan | boolean | true |
-| enableRotate | boolean | true |
-| enableZoom | boolean | true |
-| keyPanSpeed | number | 7 |
-| keys | {<br>LEFT: string,<br>UP: string,<br>RIGHT: string,<br>BOTTOM: string<br>} | {<br>LEFT: 'ArrowLeft',<br>UP: 'ArrowUp',<br>RIGHT: 'ArrowRight',<br>BOTTOM: 'ArrowDown'<br>} |
-| maxAzimuthAngle | number | Infinity |
-| maxDistance | number | Infinity |
-| maxPolarAngle | number | Math.PI |
-| maxZoom | number | Infinity |
-| minAzimuthAngle | number | Infinity |
-| minDistance | number | 0 |
-| minPolarAngle | number | 0 |
-| minZoom | number | 0 |
-| mouseButtons | {<br>LEFT: THREE.MOUSE,<br>MIDDLE: THREE.MOUSE,<br>RIGHT: THREE.MOUSE<br>} | {<br>LEFT: THREE.MOUSE.ROTATE,<br>MIDDLE: THREE.MOUSE.DOLLY,<br>RIGHT: THREE.MOUSE.PAN<br>} |
-| panSpeed | number | 1 |
-| rotateSpeed | number | 1 |
-| screenSpacePanning | boolean | true |
-| touches | {<br>ONE: THREE.TOUCH,<br>TWO: THREE.TOUCH<br>} | {<br>ONE: THREE.TOUCH.ROTATE,<br>TWO: THREE.TOUCH.DOLLY_PAN<br>} |
-| zoomSpeed | number | 1 |
-| target | Position \| undefined | undefined |
+```ts
+autoRotate: boolean = false
+autoRotateSpeed: number = 2
+dampingFactor: number = 0.05
+enableDamping: boolean = false
+enabled: boolean = true
+enablePan: boolean = true
+enableRotate: boolean = true
+enableZoom: boolean = true
+keyPanSpeed: number = 7
+keys: { LEFT: string, UP: string, RIGHT: string, BOTTOM: string } = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
+maxAzimuthAngle: number = Infinity
+maxDistance: number = Infinity
+maxPolarAngle: number = Math.PI
+maxZoom: number = Infinity
+minAzimuthAngle: number = Infinity
+minDistance: number = 0
+minPolarAngle: number = 0
+minZoom: number = 0
+mouseButtons: { LEFT: THREE.MOUSE, MIDDLE: THREE.MOUSE, RIGHT: THREE.MOUSE } = { LEFT: MOUSE.ROTATE, MIDDLE: MOUSE.DOLLY, RIGHT: MOUSE.PAN }
+panSpeed: number = 1
+rotateSpeed: number = 1
+screenSpacePanning: boolean = true
+touches: { ONE: THREE.TOUCH, TWO: THREE.TOUCH } = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
+zoomSpeed: number = 1
+target: Position | undefined = undefined
+```
 
 ##### Bindings <!-- omit in toc -->
 
@@ -822,11 +830,11 @@ This hook lets you consume the state of the `<Canvas>` component which contains 
 ```ts
 const {
   size: { width: number; height: number }
-  pointer?: Vector2
-  clock: Clock
-  camera?: Camera
-  scene: Scene
-  renderer?: WebGLRenderer
+  pointer?: THREE.Vector2
+  clock: THREE.Clock
+  camera?: THREE.Camera
+  scene: THREE.Scene
+  renderer?: THREE.WebGLRenderer
   render: (requestedBy?: string) => void
 } = useThrelte()
 ```
@@ -839,17 +847,17 @@ This hook lets you consume the root context. Although it can be useful, this is 
 
 ```ts
 const {
-  setCamera: (camera: Camera) => void
-  addRaycastableObject: (obj: Object3D) => void
-  removeRaycastableObject: (obj: Object3D) => void
-  addInteractiveObject: (obj: Object3D) => void
-  removeInteractiveObject: (obj: Object3D) => void
-  addPass: (pass: Pass) => void
-  removePass: (pass: Pass) => void
+  setCamera: (camera: THREE.Camera) => void
+  addRaycastableObject: (obj: THREE.Object3D) => void
+  removeRaycastableObject: (obj: THREE.Object3D) => void
+  addInteractiveObject: (obj: THREE.Object3D) => void
+  removeInteractiveObject: (obj: THREE.Object3D) => void
+  addPass: (pass: THREE.Pass) => void
+  removePass: (pass: THREE.Pass) => void
   linear: boolean
-  interactiveObjects: Set<Object3D>
-  raycastableObjects: Set<Object3D>
-  composer?: EffectComposer
+  interactiveObjects: Set<THREE.Object3D>
+  raycastableObjects: Set<THREE.Object3D>
+  composer?: THREE.EffectComposer
   resizeOpts?: UseResizeOptions
 } = useThrelteRoot()
 ```
@@ -877,7 +885,7 @@ const toggleUseFrame = () => {
 
 #### useTexture
 
-`useTexture` allows you to easily load textures and automatically convert your textures in the correct color space based on your [settings on the `<Canvas>` component](#canvas).
+`useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](#canvas).
 This hook can be called outside of the `<Canvas>` component, but with limitations: To make sure that textures are converted to the correct color space, `useTexture` needs to consume the `<Canvas>` context. If there's no context, it will fall back to keeping your textures untouched.
 
 ##### Examples <!-- omit in toc -->
