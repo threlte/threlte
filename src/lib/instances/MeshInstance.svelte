@@ -8,9 +8,9 @@
   export let mesh: Mesh
 
   // Object3DInstance
-  export let position: Position
-  export let scale: Scale
-  export let rotation: Rotation
+  export let position: Position | undefined
+  export let scale: Scale | undefined
+  export let rotation: Rotation | undefined
   export let viewportAware: boolean
   export let inViewport: boolean
   export let castShadow: boolean

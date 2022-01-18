@@ -6,9 +6,9 @@
   import type { LookAt, Position, Rotation, Scale } from '../types/types'
 
   export let object: Object3D
-  export let position: Position
-  export let scale: Scale
-  export let rotation: Rotation
+  export let position: Position | undefined
+  export let scale: Scale | undefined
+  export let rotation: Rotation | undefined
   export let lookAt: LookAt | undefined
 
   const targetWorldPos = new Vector3()
@@ -64,8 +64,8 @@
           scale.z ?? defaults.scale.z
         )
       }
+      render('TransformableObject: scale')
     }
-    render('TransformableObject: scale')
   }
   $: {
     if (rotation) {
@@ -75,7 +75,7 @@
         rotation.z ?? defaults.rotation.z,
         rotation.order ?? defaults.rotation.order
       )
+      render('TransformableObject: rotation')
     }
-    render('TransformableObject: rotation')
   }
 </script>

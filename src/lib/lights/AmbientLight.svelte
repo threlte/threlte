@@ -5,9 +5,9 @@
   import type { Position, Rotation, Scale } from '../types/types'
 
   // LightInstance
-  export let position: Position = defaults.position
-  export let scale: Scale = defaults.scale
-  export let rotation: Rotation = defaults.rotation
+  export let position: Position | undefined = undefined
+  export let scale: Scale | undefined = undefined
+  export let rotation: Rotation | undefined = undefined
   export let viewportAware: boolean = false
   export let inViewport = defaults.object3d.inViewport
   export let frustumCulled = defaults.mesh.frustumCulled

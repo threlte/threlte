@@ -2,12 +2,11 @@
   import { onDestroy } from 'svelte'
   import { Camera, MOUSE, Object3D, TOUCH } from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-  import TransformableObject from '../internal/TransformableObject.svelte'
-  import { getParent } from '../internal/HierarchicalObject.svelte'
-  import type { Position } from '../types/types'
-  import { useThrelte } from '../hooks/useThrelte'
   import { useFrame } from '../hooks/useFrame'
-  import { defaults } from '../lib/defaults'
+  import { useThrelte } from '../hooks/useThrelte'
+  import { getParent } from '../internal/HierarchicalObject.svelte'
+  import TransformableObject from '../internal/TransformableObject.svelte'
+  import type { Position } from '../types/types'
 
   export let autoRotate: boolean = false
   export let autoRotateSpeed: number = 2
@@ -106,8 +105,8 @@
   <TransformableObject
     object={targetObject}
     position={target}
-    rotation={defaults.rotation}
-    scale={defaults.scale}
+    rotation={undefined}
+    scale={undefined}
     lookAt={undefined}
   />
 {/if}

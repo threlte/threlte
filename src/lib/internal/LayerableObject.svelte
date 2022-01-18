@@ -23,7 +23,7 @@
           object.layers.disable(index)
         }
       }
-    } else {
+    } else if ($layers !== undefined) {
       object.layers.set($layers)
     }
     render('LayerableObject')

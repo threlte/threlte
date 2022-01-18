@@ -23,6 +23,11 @@ A three.js component library for svelte.
     - [:globe_with_meridians: \<Group>](#globe_with_meridians-group)
     - [:globe_with_meridians: \<Object3D>](#globe_with_meridians-object3d)
     - [:globe_with_meridians: \<GLTF>](#globe_with_meridians-gltf)
+  - [:recycle: Instanced Objects](#recycle-instanced-objects)
+    - [:recycle: \<Object3DInstance>](#recycle-object3dinstance)
+    - [:recycle: \<MeshInstance>](#recycle-meshinstance)
+    - [:recycle: \<CameraInstance>](#recycle-camerainstance)
+    - [:recycle: \<LightInstance>](#recycle-lightinstance)
   - [:high_brightness: Lights](#high_brightness-lights)
     - [:high_brightness: \<AmbientLight>](#high_brightness-ambientlight)
     - [:high_brightness: \<DirectionalLight>](#high_brightness-directionallight)
@@ -524,6 +529,80 @@ ktxTranscoderPath: string | undefined = undefined
 ```ts
 gltf: GLTF
 scene: THREE.Group
+```
+
+### :recycle: Instanced Objects
+
+#### :recycle: \<Object3DInstance>
+
+##### Example <!-- omit in toc -->
+
+```svelte
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+object: THREE.Object3D
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+```
+
+#### :recycle: \<MeshInstance>
+
+##### Example <!-- omit in toc -->
+
+```svelte
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+mesh: THREE.Mesh
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+```
+
+#### :recycle: \<CameraInstance>
+
+##### Example <!-- omit in toc -->
+
+```svelte
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+camera: THREE.Camera
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
+```
+
+#### :recycle: \<LightInstance>
+
+##### Example <!-- omit in toc -->
+
+```svelte
+```
+
+##### Properties <!-- omit in toc -->
+
+```ts
+light: THREE.Light
+```
+
+##### Bindings <!-- omit in toc -->
+
+```ts
 ```
 
 ### :high_brightness: Lights
@@ -1148,13 +1227,9 @@ const toggleUseFrame = () => {
 import { useLoader } from 'threlte'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
-let object
-
-comst o = new OBJLoader()
-
 const loader = useLoader(OBJLoader, () => new OBJLoader())
 loader.load('models/model.obj', (obj) => {
-  object = obj
+  console.log(object)
 })
 ```
 
