@@ -1,9 +1,10 @@
-# threlte <!-- omit in toc -->
+![Threlte Logo](https://raw.githubusercontent.com/grischaerbe/threlte/main/static/logo/threlte_logo_github.png)
+
+A three.js component library for svelte.
 
 ![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
 ![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
 
-A three.js component library for svelte.
 
 ## Index <!-- omit in toc -->
 
@@ -46,6 +47,7 @@ A three.js component library for svelte.
   - [Viewport Awareness](#viewport-awareness)
   - [Reactivity](#reactivity)
 - [Credits](#credits)
+- [Thanks](#thanks)
 - [License](#license)
 
 ## What is threlte?
@@ -196,8 +198,6 @@ type UseResizeOptions = {
 }
 ```
 
----
-
 ### Conventions
 
 Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and their respective naming.
@@ -224,8 +224,6 @@ Use the property `lookAt` on an Object to
 <PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
 ```
 
----
-
 ### Canvas
 
 The `<Canvas>` component is the root of your three.js scene.
@@ -251,8 +249,6 @@ resizeOpts: UseResizeOptions | undefined = undefined
 ctx: ThrelteContext
 rootCtx: ThrelteRootContext
 ```
-
----
 
 ### Objects
 
@@ -368,8 +364,6 @@ ktxTranscoderPath: string | undefined = undefined
 gltf: GLTF
 scene: THREE.Group
 ```
-
----
 
 ### Misc
 
@@ -508,8 +502,6 @@ Property `layers` can be:
 - `'none'`
 
 > TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
-
----
 
 ### Lights
 
@@ -664,8 +656,6 @@ shadow:
 light: THREE.SpotLight
 ```
 
----
-
 ### Cameras
 
 #### OrthographicCamera
@@ -718,8 +708,6 @@ fov = defaults.camera.fov
 camera: THREE.PerspectiveCamera
 ```
 
----
-
 ### Controls
 
 #### OrbitControls
@@ -770,8 +758,6 @@ target: Position | undefined = undefined
 controls: THREE.OrbitControls
 ```
 
----
-
 ### Effects
 
 #### Pass
@@ -796,8 +782,6 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 ```ts
 pass: THREE.Pass
 ```
-
----
 
 ### Hooks
 
@@ -885,8 +869,6 @@ const textures = useTexture({
 })
 const material = new MeshStandardMaterial({ ...textures })
 ```
-
----
 
 ## Concepts
 
@@ -1010,6 +992,13 @@ By using props instead of manipulating three.js objects directly, the unified re
 - [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed)
 - [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
 - [drei](https://github.com/pmndrs/drei)
+
+## Thanks
+
+- [Rich Harris](https://github.com/Rich-Harris) for his incredible work on Svelte, SvelteKit and Svelte Cubed,
+- [@larissamantel](https://www.instagram.com/larissamantel_illu/) for the logo
+
+---
 
 ## License
 
