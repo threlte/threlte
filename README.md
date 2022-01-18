@@ -17,35 +17,35 @@ A three.js component library for svelte.
 - [Reference](#reference)
   - [Types](#types)
   - [Conventions](#conventions)
-  - [Canvas](#canvas)
-  - [Objects](#objects)
-    - [Mesh](#mesh)
-    - [Group](#group)
-    - [Object3D](#object3d)
-    - [GLTF](#gltf)
-  - [Misc](#misc)
-    - [Fog](#fog)
-    - [FogExp2](#fogexp2)
-    - [Text](#text)
-    - [Layers](#layers)
-  - [Lights](#lights)
-    - [AmbientLight](#ambientlight)
-    - [DirectionalLight](#directionallight)
-    - [HemisphereLight](#hemispherelight)
-    - [PointLight](#pointlight)
-    - [SpotLight](#spotlight)
-  - [Cameras](#cameras)
-    - [OrthographicCamera](#orthographiccamera)
-    - [PerspectiveCamera](#perspectivecamera)
-  - [Controls](#controls)
-    - [OrbitControls](#orbitcontrols)
-  - [Effects](#effects)
-    - [Pass](#pass)
-  - [Hooks](#hooks)
-    - [useThrelte](#usethrelte)
-    - [useThrelteRoot](#usethrelteroot)
-    - [useFrame](#useframe)
-    - [useTexture](#usetexture)
+  - [:clipboard: Canvas](#clipboard-canvas)
+  - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
+    - [:globe_with_meridians: Mesh](#globe_with_meridians-mesh)
+    - [:globe_with_meridians: Group](#globe_with_meridians-group)
+    - [:globe_with_meridians: Object3D](#globe_with_meridians-object3d)
+    - [:globe_with_meridians: GLTF](#globe_with_meridians-gltf)
+  - [:speech_balloon: Misc](#speech_balloon-misc)
+    - [:speech_balloon: Fog](#speech_balloon-fog)
+    - [:speech_balloon: FogExp2](#speech_balloon-fogexp2)
+    - [:speech_balloon: Text](#speech_balloon-text)
+    - [:speech_balloon: Layers](#speech_balloon-layers)
+  - [:high_brightness: Lights](#high_brightness-lights)
+    - [:high_brightness: AmbientLight](#high_brightness-ambientlight)
+    - [:high_brightness: DirectionalLight](#high_brightness-directionallight)
+    - [:high_brightness: HemisphereLight](#high_brightness-hemispherelight)
+    - [:high_brightness: PointLight](#high_brightness-pointlight)
+    - [:high_brightness: SpotLight](#high_brightness-spotlight)
+  - [:movie_camera: Cameras](#movie_camera-cameras)
+    - [:movie_camera: OrthographicCamera](#movie_camera-orthographiccamera)
+    - [:movie_camera: PerspectiveCamera](#movie_camera-perspectivecamera)
+  - [:repeat: Controls](#repeat-controls)
+    - [:repeat: OrbitControls](#repeat-orbitcontrols)
+  - [:lipstick: Post Processing](#lipstick-post-processing)
+    - [:lipstick: Pass](#lipstick-pass)
+  - [:leftwards_arrow_with_hook: Hooks](#leftwards_arrow_with_hook-hooks)
+    - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
+    - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
+    - [:leftwards_arrow_with_hook: useFrame](#leftwards_arrow_with_hook-useframe)
+    - [:leftwards_arrow_with_hook: useTexture](#leftwards_arrow_with_hook-usetexture)
 - [Credits](#credits)
 - [Thank you](#thank-you)
 - [License](#license)
@@ -341,7 +341,7 @@ Use the property `lookAt` on an Object to
 <PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
 ```
 
-### Canvas
+### :clipboard: Canvas
 
 The `<Canvas>` component is the root of your three.js scene.
 
@@ -367,9 +367,9 @@ ctx: ThrelteContext
 rootCtx: ThrelteRootContext
 ```
 
-### Objects
+### :globe_with_meridians: Objects
 
-#### Mesh
+#### :globe_with_meridians: Mesh
 
 ##### Example <!-- omit in toc -->
 
@@ -412,7 +412,7 @@ inViewport: boolean
 mesh: THREE.Mesh
 ```
 
-#### Group
+#### :globe_with_meridians: Group
 
 ##### Example <!-- omit in toc -->
 
@@ -446,7 +446,7 @@ inViewport: boolean
 group: THREE.Group
 ```
 
-#### Object3D
+#### :globe_with_meridians: Object3D
 
 ##### Example <!-- omit in toc -->
 
@@ -482,7 +482,7 @@ inViewport: boolean
 object: THREE.Object3D
 ```
 
-#### GLTF
+#### :globe_with_meridians: GLTF
 
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
@@ -525,9 +525,9 @@ gltf: GLTF
 scene: THREE.Group
 ```
 
-### Misc
+### :speech_balloon: Misc
 
-#### Fog
+#### :speech_balloon: Fog
 
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
@@ -555,7 +555,7 @@ far = defaults.fog.far
 fog: THREE.Fog
 ```
 
-#### FogExp2
+#### :speech_balloon: FogExp2
 
 A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
@@ -583,7 +583,7 @@ density = defaults.fog.density
 fog: THREE.FogExp2
 ```
 
-#### Text
+#### :speech_balloon: Text
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
 
@@ -653,7 +653,7 @@ inViewport: boolean
 text: Text
 ```
 
-#### Layers
+#### :speech_balloon: Layers
 
 [Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
 The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
@@ -705,9 +705,9 @@ Property `layers` can be:
 
 > TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
 
-### Lights
+### :high_brightness: Lights
 
-#### AmbientLight
+#### :high_brightness: AmbientLight
 
 ##### Example <!-- omit in toc -->
 
@@ -739,7 +739,7 @@ intensity = defaults.lights.ambientLight.intensity
 light = new AmbientLight(color, intensity)
 ```
 
-#### DirectionalLight
+#### :high_brightness: DirectionalLight
 
 ##### Example <!-- omit in toc -->
 
@@ -790,7 +790,7 @@ shadow:
 light = new DirectionalLight(color, intensity)
 ```
 
-#### HemisphereLight
+#### :high_brightness: HemisphereLight
 
 ##### Example <!-- omit in toc -->
 
@@ -826,7 +826,7 @@ groundColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.groundC
 light: THREE.HemisphereLight
 ```
 
-#### PointLight
+#### :high_brightness: PointLight
 
 ##### Example <!-- omit in toc -->
 
@@ -869,7 +869,7 @@ shadow:
 light: THREE.PointLight
 ```
 
-#### SpotLight
+#### :high_brightness: SpotLight
 
 ##### Example <!-- omit in toc -->
 
@@ -917,9 +917,9 @@ shadow:
 light: THREE.SpotLight
 ```
 
-### Cameras
+### :movie_camera: Cameras
 
-#### OrthographicCamera
+#### :movie_camera: OrthographicCamera
 
 ##### Example <!-- omit in toc -->
 
@@ -957,7 +957,7 @@ zoom = defaults.camera.zoom
 camera: THREE.OrthographicCamera
 ```
 
-#### PerspectiveCamera
+#### :movie_camera: PerspectiveCamera
 
 ##### Example <!-- omit in toc -->
 
@@ -996,9 +996,9 @@ fov = defaults.camera.fov
 camera: THREE.PerspectiveCamera
 ```
 
-### Controls
+### :repeat: Controls
 
-#### OrbitControls
+#### :repeat: OrbitControls
 
 The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera. As soon as the OrbitControls are mounted, the frame loop will continously run.
 
@@ -1050,9 +1050,9 @@ target: Position | undefined = undefined
 controls: THREE.OrbitControls
 ```
 
-### Effects
+### :lipstick: Post Processing
 
-#### Pass
+#### :lipstick: Pass
 
 By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
 
@@ -1073,11 +1073,11 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 pass: THREE.Pass
 ```
 
-### Hooks
+### :leftwards_arrow_with_hook: Hooks
 
 > ⚠️ Hooks can only be used inside the `<Canvas>` component because they rely on context ⚠️
 
-#### useThrelte
+#### :leftwards_arrow_with_hook: useThrelte
 
 This hook lets you consume the state of the `<Canvas>` component which contains the renderer, camera, scene and so on.
 
@@ -1095,7 +1095,7 @@ const {
 
 > This context is also available as the first argument of the callback of the [useFrame hook](#useframe)!
 
-#### useThrelteRoot
+#### :leftwards_arrow_with_hook: useThrelteRoot
 
 This hook lets you consume the root context. Although it can be useful, this is mostly used internally. 
 
@@ -1116,7 +1116,7 @@ const {
 } = useThrelteRoot()
 ```
 
-#### useFrame
+#### :leftwards_arrow_with_hook: useFrame
 
 This hook allows you to execute code on every frame.  
 You receive the state (the same as `useThrelte`) and a clock delta in seconds. Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop. You may pass additional options to this hook. Also, `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
@@ -1137,7 +1137,7 @@ const toggleUseFrame = () => {
 }
 ```
 
-#### useTexture
+#### :leftwards_arrow_with_hook: useTexture
 
 `useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](#canvas).
 This hook can be called outside of the `<Canvas>` component, but with limitations: To make sure that textures are converted to the correct color space, `useTexture` needs to consume the `<Canvas>` context. If there's no context, it will fall back to keeping your textures untouched.
