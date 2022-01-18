@@ -27,6 +27,7 @@ export { default as Layers } from './misc/Layers.svelte'
 export { default as Mesh } from './objects/Mesh.svelte'
 export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
+export { default as Gltf } from './objects/Gltf.svelte'
 
 // text
 export { default as Text } from './text/Text.svelte'
