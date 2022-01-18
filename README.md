@@ -17,30 +17,30 @@ A three.js component library for svelte.
 - [Reference](#reference)
   - [Types](#types)
   - [Conventions](#conventions)
-  - [:clipboard: Canvas](#clipboard-canvas)
+  - [:clipboard: <Canvas>](#clipboard-canvas)
   - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
-    - [:globe_with_meridians: Mesh](#globe_with_meridians-mesh)
-    - [:globe_with_meridians: Group](#globe_with_meridians-group)
-    - [:globe_with_meridians: Object3D](#globe_with_meridians-object3d)
-    - [:globe_with_meridians: GLTF](#globe_with_meridians-gltf)
+    - [:globe_with_meridians: <Mesh>](#globe_with_meridians-mesh)
+    - [:globe_with_meridians: <Group>](#globe_with_meridians-group)
+    - [:globe_with_meridians: <Object3D>](#globe_with_meridians-object3d)
+    - [:globe_with_meridians: <GLTF>](#globe_with_meridians-gltf)
   - [:high_brightness: Lights](#high_brightness-lights)
-    - [:high_brightness: AmbientLight](#high_brightness-ambientlight)
-    - [:high_brightness: DirectionalLight](#high_brightness-directionallight)
-    - [:high_brightness: HemisphereLight](#high_brightness-hemispherelight)
-    - [:high_brightness: PointLight](#high_brightness-pointlight)
-    - [:high_brightness: SpotLight](#high_brightness-spotlight)
+    - [:high_brightness: <AmbientLight>](#high_brightness-ambientlight)
+    - [:high_brightness: <DirectionalLight>](#high_brightness-directionallight)
+    - [:high_brightness: <HemisphereLight>](#high_brightness-hemispherelight)
+    - [:high_brightness: <PointLight>](#high_brightness-pointlight)
+    - [:high_brightness: <SpotLight>](#high_brightness-spotlight)
   - [:movie_camera: Cameras](#movie_camera-cameras)
-    - [:movie_camera: OrthographicCamera](#movie_camera-orthographiccamera)
-    - [:movie_camera: PerspectiveCamera](#movie_camera-perspectivecamera)
+    - [:movie_camera: <OrthographicCamera>](#movie_camera-orthographiccamera)
+    - [:movie_camera: <PerspectiveCamera>](#movie_camera-perspectivecamera)
   - [:repeat: Controls](#repeat-controls)
-    - [:repeat: OrbitControls](#repeat-orbitcontrols)
+    - [:repeat: <OrbitControls>](#repeat-orbitcontrols)
   - [:lipstick: Post Processing](#lipstick-post-processing)
-    - [:lipstick: Pass](#lipstick-pass)
+    - [:lipstick: <Pass>](#lipstick-pass)
   - [Misc](#misc)
-    - [:thought_balloon: Fog](#thought_balloon-fog)
-    - [:thought_balloon: FogExp2](#thought_balloon-fogexp2)
-    - [:abc: Text](#abc-text)
-    - [:black_square_button: Layers](#black_square_button-layers)
+    - [:thought_balloon: <Fog>](#thought_balloon-fog)
+    - [:thought_balloon: <FogExp2>](#thought_balloon-fogexp2)
+    - [:abc: <Text>](#abc-text)
+    - [:black_square_button: <Layers>](#black_square_button-layers)
   - [:leftwards_arrow_with_hook: Hooks](#leftwards_arrow_with_hook-hooks)
     - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
     - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
@@ -168,7 +168,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
 Listen to events of a `<Mesh>` and a `<MeshInstance>` as if it would be a regular DOM element:
 
 ```jsx
-<Mesh … interactive on:click={onClick}>
+<Mesh … interactive on:click={onClick} />
 ```
 
 These events are supported:
@@ -341,7 +341,7 @@ Use the property `lookAt` on an Object to
 <PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
 ```
 
-### :clipboard: Canvas
+### :clipboard: <Canvas>
 
 The `<Canvas>` component is the root of your three.js scene.
 
@@ -369,7 +369,7 @@ rootCtx: ThrelteRootContext
 
 ### :globe_with_meridians: Objects
 
-#### :globe_with_meridians: Mesh
+#### :globe_with_meridians: <Mesh>
 
 ##### Example <!-- omit in toc -->
 
@@ -412,7 +412,7 @@ inViewport: boolean
 mesh: THREE.Mesh
 ```
 
-#### :globe_with_meridians: Group
+#### :globe_with_meridians: <Group>
 
 ##### Example <!-- omit in toc -->
 
@@ -446,7 +446,7 @@ inViewport: boolean
 group: THREE.Group
 ```
 
-#### :globe_with_meridians: Object3D
+#### :globe_with_meridians: <Object3D>
 
 ##### Example <!-- omit in toc -->
 
@@ -482,7 +482,7 @@ inViewport: boolean
 object: THREE.Object3D
 ```
 
-#### :globe_with_meridians: GLTF
+#### :globe_with_meridians: <GLTF>
 
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
@@ -527,7 +527,7 @@ scene: THREE.Group
 
 ### :high_brightness: Lights
 
-#### :high_brightness: AmbientLight
+#### :high_brightness: <AmbientLight>
 
 ##### Example <!-- omit in toc -->
 
@@ -559,7 +559,7 @@ intensity = defaults.lights.ambientLight.intensity
 light = new AmbientLight(color, intensity)
 ```
 
-#### :high_brightness: DirectionalLight
+#### :high_brightness: <DirectionalLight>
 
 ##### Example <!-- omit in toc -->
 
@@ -610,7 +610,7 @@ shadow:
 light = new DirectionalLight(color, intensity)
 ```
 
-#### :high_brightness: HemisphereLight
+#### :high_brightness: <HemisphereLight>
 
 ##### Example <!-- omit in toc -->
 
@@ -646,7 +646,7 @@ groundColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.groundC
 light: THREE.HemisphereLight
 ```
 
-#### :high_brightness: PointLight
+#### :high_brightness: <PointLight>
 
 ##### Example <!-- omit in toc -->
 
@@ -689,7 +689,7 @@ shadow:
 light: THREE.PointLight
 ```
 
-#### :high_brightness: SpotLight
+#### :high_brightness: <SpotLight>
 
 ##### Example <!-- omit in toc -->
 
@@ -739,7 +739,7 @@ light: THREE.SpotLight
 
 ### :movie_camera: Cameras
 
-#### :movie_camera: OrthographicCamera
+#### :movie_camera: <OrthographicCamera>
 
 ##### Example <!-- omit in toc -->
 
@@ -777,7 +777,7 @@ zoom = defaults.camera.zoom
 camera: THREE.OrthographicCamera
 ```
 
-#### :movie_camera: PerspectiveCamera
+#### :movie_camera: <PerspectiveCamera>
 
 ##### Example <!-- omit in toc -->
 
@@ -818,7 +818,7 @@ camera: THREE.PerspectiveCamera
 
 ### :repeat: Controls
 
-#### :repeat: OrbitControls
+#### :repeat: <OrbitControls>
 
 The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera. As soon as the OrbitControls are mounted, the frame loop will continously run.
 
@@ -872,7 +872,7 @@ controls: THREE.OrbitControls
 
 ### :lipstick: Post Processing
 
-#### :lipstick: Pass
+#### :lipstick: <Pass>
 
 By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
 
@@ -895,7 +895,7 @@ pass: THREE.Pass
 
 ### Misc
 
-#### :thought_balloon: Fog
+#### :thought_balloon: <Fog>
 
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
@@ -923,7 +923,7 @@ far = defaults.fog.far
 fog: THREE.Fog
 ```
 
-#### :thought_balloon: FogExp2
+#### :thought_balloon: <FogExp2>
 
 A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
@@ -951,7 +951,7 @@ density = defaults.fog.density
 fog: THREE.FogExp2
 ```
 
-#### :abc: Text
+#### :abc: <Text>
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
 
@@ -1021,7 +1021,7 @@ inViewport: boolean
 text: Text
 ```
 
-#### :black_square_button: Layers
+#### :black_square_button: <Layers>
 
 [Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
 The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
