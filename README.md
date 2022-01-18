@@ -228,7 +228,9 @@ Use the property `lookAt` on an Object to
 
 ### Canvas
 
-The `<Canvas>` component is the root of your three.js scene. It's responsible for managing the frame loop as well as providing the three.js `Scene`.
+The `<Canvas>` component is the root of your three.js scene.
+
+By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes.
 
 ##### Properties <!-- omit in toc -->
 
@@ -236,7 +238,7 @@ The `<Canvas>` component is the root of your three.js scene. It's responsible fo
 dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
 flat: boolean = false
 linear: boolean = false
-frameloop: 'always' | 'demand' = 'demand'
+frameloop: 'always' | 'on-demand' = 'on-demand'
 debugFrameloop: boolean = false
 shadows: boolean = true
 shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
