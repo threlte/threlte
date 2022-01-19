@@ -2,7 +2,7 @@
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { ThrelteEvent } from '../lib/interactivity'
+  import type { ThreltePointerEvent } from '../lib/interactivity'
   import type { InteractiveObjectProperties } from '../types/components'
 
   export let object: InteractiveObjectProperties['object']
@@ -10,13 +10,13 @@
   export let ignorePointer: InteractiveObjectProperties['ignorePointer']
 
   const eventDispatcher = createEventDispatcher<{
-    click: ThrelteEvent
-    contextmenu: ThrelteEvent
-    pointerup: ThrelteEvent
-    pointerdown: ThrelteEvent
-    pointerenter: ThrelteEvent
-    pointerleave: ThrelteEvent
-    pointermove: ThrelteEvent
+    click: ThreltePointerEvent
+    contextmenu: ThreltePointerEvent
+    pointerup: ThreltePointerEvent
+    pointerdown: ThreltePointerEvent
+    pointerenter: ThreltePointerEvent
+    pointerleave: ThreltePointerEvent
+    pointermove: ThreltePointerEvent
   }>()
 
   object.userData.eventDispatcher = eventDispatcher

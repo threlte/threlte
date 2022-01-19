@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
+  import { createEventDispatcher, onDestroy } from 'svelte'
   import { Camera, Object3D } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useFrame } from '../hooks/useFrame'
@@ -43,7 +43,27 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
+  const dispatch = createEventDispatcher<{
+    change: undefined
+    start: undefined
+    end: undefined
+  }>()
+
+  const onChange = () => dispatch('change')
+  const onStart = () => dispatch('start')
+  const onEnd = () => dispatch('start')
+
   export const controls = new ThreeOrbitControls(parent, renderer.domElement)
+
+  controls.addEventListener('change', onChange)
+  controls.addEventListener('start', onStart)
+  controls.addEventListener('end', onEnd)
+
+  onDestroy(() => {
+    controls.removeEventListener('change', onChange)
+    controls.removeEventListener('start', onStart)
+    controls.removeEventListener('end', onEnd)
+  })
 
   $: {
     if (autoRotate !== undefined) controls.autoRotate = autoRotate

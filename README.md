@@ -195,9 +195,9 @@ All events include the raycast Intersection object:
 
 ```svelte
 <script lang="ts">
-  import { Mesh, ThrelteEvent } from 'threlte'
+  import { Mesh, ThreltePointerEvent } from 'threlte'
 
-  const onClick = (e: CustomEvent<ThrelteEvent>) => {
+  const onClick = (e: CustomEvent<ThreltePointerEvent>) => {
     const distanceToMesh = e.detail.distance
   }
 </script>
@@ -436,6 +436,20 @@ inViewport: boolean
 mesh: THREE.Mesh
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+click: CustomEvent<ThreltePointerEvent>
+contextmenu: CustomEvent<ThreltePointerEvent>
+pointerup: CustomEvent<ThreltePointerEvent>
+pointerdown: CustomEvent<ThreltePointerEvent>
+pointerenter: CustomEvent<ThreltePointerEvent>
+pointerleave: CustomEvent<ThreltePointerEvent>
+pointermove: CustomEvent<ThreltePointerEvent>
+```
+
 #### :globe_with_meridians: \<Group>
 
 ##### Example <!-- omit in toc -->
@@ -471,6 +485,13 @@ renderOrder: number | undefined = undefined
 ```ts
 inViewport: boolean
 group: THREE.Group
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :globe_with_meridians: \<Object3D>
@@ -510,6 +531,13 @@ renderOrder: number | undefined = undefined
 ```ts
 inViewport: boolean
 object: THREE.Object3D
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :globe_with_meridians: \<GLTF>
@@ -554,6 +582,13 @@ ktxTranscoderPath: string | undefined = undefined
 ```ts
 gltf: GLTF
 scene: THREE.Group
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 ### :recycle: Object Instances
@@ -619,6 +654,13 @@ renderOrder: number | undefined
 inViewport: boolean
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+```
+
 #### :recycle: \<MeshInstance>
 
 ##### Example <!-- omit in toc -->
@@ -665,6 +707,20 @@ renderOrder: number | undefined
 inViewport: boolean
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+click: CustomEvent<ThreltePointerEvent>
+contextmenu: CustomEvent<ThreltePointerEvent>
+pointerup: CustomEvent<ThreltePointerEvent>
+pointerdown: CustomEvent<ThreltePointerEvent>
+pointerenter: CustomEvent<ThreltePointerEvent>
+pointerleave: CustomEvent<ThreltePointerEvent>
+pointermove: CustomEvent<ThreltePointerEvent>
+```
+
 #### :recycle: \<CameraInstance>
 
 ##### Example <!-- omit in toc -->
@@ -703,6 +759,13 @@ renderOrder: number | undefined
 
 ```ts
 inViewport: boolean
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :recycle: \<LightInstance>
@@ -751,6 +814,13 @@ intensity: number | undefined
 inViewport: boolean
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+```
+
 ### :high_brightness: Lights
 
 #### :high_brightness: \<AmbientLight>
@@ -787,6 +857,13 @@ intensity: number | undefined = undefined
 ```ts
 inViewport: boolean
 light: THREE.AmbientLight
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :high_brightness: \<DirectionalLight>
@@ -846,6 +923,13 @@ inViewport: boolean
 light: THREE.DirectionalLight
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+```
+
 #### :high_brightness: \<HemisphereLight>
 
 ##### Example <!-- omit in toc -->
@@ -884,6 +968,13 @@ groundColor: THREE.ColorRepresentation | undefined = undefined
 ```ts
 inViewport: boolean
 light: THREE.HemisphereLight
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :high_brightness: \<PointLight>
@@ -931,6 +1022,13 @@ shadow:
 ```ts
 inViewport: boolean
 light: THREE.PointLight
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 #### :high_brightness: \<SpotLight>
@@ -985,6 +1083,13 @@ inViewport: boolean
 light: THREE.SpotLight
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+```
+
 ### :movie_camera: Cameras
 
 #### :movie_camera: \<OrthographicCamera>
@@ -1028,6 +1133,13 @@ inViewport: boolean
 camera: THREE.OrthographicCamera
 ```
 
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+```
+
 #### :movie_camera: \<PerspectiveCamera>
 
 ##### Example <!-- omit in toc -->
@@ -1068,6 +1180,13 @@ fov: number = undefined
 ```ts
 inViewport: boolean
 camera: THREE.PerspectiveCamera
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
 ```
 
 ### :repeat: Controls
@@ -1141,6 +1260,14 @@ target: Position | undefined = undefined
 
 ```ts
 controls: THREE.OrbitControls
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+change: CustomEvent<undefined>
+start: CustomEvent<undefined>
+end: CustomEvent<undefined>
 ```
 
 ### :lipstick: Post Processing
@@ -1295,6 +1422,20 @@ fillOpacity: number | undefined = undefined
 ```ts
 inViewport: boolean
 text: Text
+```
+
+##### Events <!-- omit in toc -->
+
+```ts
+viewportenter: CustomEvent<undefined>
+viewportleave: CustomEvent<undefined>
+click: CustomEvent<ThreltePointerEvent>
+contextmenu: CustomEvent<ThreltePointerEvent>
+pointerup: CustomEvent<ThreltePointerEvent>
+pointerdown: CustomEvent<ThreltePointerEvent>
+pointerenter: CustomEvent<ThreltePointerEvent>
+pointerleave: CustomEvent<ThreltePointerEvent>
+pointermove: CustomEvent<ThreltePointerEvent>
 ```
 
 #### :black_square_button: \<Layers>

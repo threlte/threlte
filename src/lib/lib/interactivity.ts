@@ -3,24 +3,24 @@ import type { Camera, Event, Intersection, Object3D } from 'three'
 import { Raycaster, Vector2 } from 'three'
 import type { ThrelteContext, ThrelteRootContext } from '../types/types'
 
-export type ThrelteEventMap = {
-  click: ThrelteEvent
-  contextmenu: ThrelteEvent
-  pointerup: ThrelteEvent
-  pointerdown: ThrelteEvent
-  pointerenter: ThrelteEvent
-  pointerleave: ThrelteEvent
-  pointermove: ThrelteEvent
+export type ThreltePointerEventMap = {
+  click: ThreltePointerEvent
+  contextmenu: ThreltePointerEvent
+  pointerup: ThreltePointerEvent
+  pointerdown: ThreltePointerEvent
+  pointerenter: ThreltePointerEvent
+  pointerleave: ThreltePointerEvent
+  pointermove: ThreltePointerEvent
 }
 
-const createEventDispatcherType = () => createEventDispatcher<ThrelteEventMap>()
+const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
 type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
 
 type InteractiveMeshUserData = {
   eventDispatcher: InteractiveObjectEventDispatcher
 }
 
-export type ThrelteEvent = Intersection<Object3D<Event>>
+export type ThreltePointerEvent = Intersection<Object3D<Event>>
 
 const raycaster = new Raycaster()
 
@@ -54,7 +54,7 @@ export const eventRaycast = (
   const intersects = runRaycaster(ctx.pointer, ctx.camera, Array.from(rootCtx.raycastableObjects))
   if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
     const userData = intersects[0].object.userData as InteractiveMeshUserData
-    userData.eventDispatcher(e.type as keyof ThrelteEventMap, intersects[0])
+    userData.eventDispatcher(e.type as keyof ThreltePointerEventMap, intersects[0])
   }
 }
 
