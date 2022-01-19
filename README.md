@@ -23,7 +23,8 @@ A three.js component library for svelte.
     - [:globe_with_meridians: \<Group>](#globe_with_meridians-group)
     - [:globe_with_meridians: \<Object3D>](#globe_with_meridians-object3d)
     - [:globe_with_meridians: \<GLTF>](#globe_with_meridians-gltf)
-  - [:recycle: Instanced Objects](#recycle-instanced-objects)
+  - [:recycle: Object Instances](#recycle-object-instances)
+      - [Example](#example)
     - [:recycle: \<Object3DInstance>](#recycle-object3dinstance)
     - [:recycle: \<MeshInstance>](#recycle-meshinstance)
     - [:recycle: \<CameraInstance>](#recycle-camerainstance)
@@ -531,13 +532,41 @@ gltf: GLTF
 scene: THREE.Group
 ```
 
-### :recycle: Instanced Objects
+### :recycle: Object Instances
+
+While object components like `<Mesh>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component takes an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually, imported models or objects that did not yet make it into threlte.
+
+##### Example
+
+```svelte
+<script>
+  import { Object3D } from 'three'
+  import { Object3DInstance, useFrame } from 'threlte'
+
+  const object = new Object3D()
+  let position = { x: 1, y: 1, z: 1 }
+
+  useFrame(() => {
+    position.x += 0.1
+  })
+</script>
+
+<Object3DInstance {object} {position} />
+```
 
 #### :recycle: \<Object3DInstance>
 
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { Object3D } from 'three'
+  import { Object3DInstance } from 'threlte'
+
+  const object = new Object3D()
+</script>
+
+<Object3DInstance {object} position={{ y: 1 }} />
 ```
 
 ##### Properties <!-- omit in toc -->
@@ -556,6 +585,19 @@ object: THREE.Object3D
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { Mesh, MeshStandardMaterial, BoxBufferGeometry } from 'three'
+  import { MeshInstance } from 'threlte'
+
+  const material = new MeshStandardMaterial({
+    wireframe: true,
+    color: 'black'
+  })
+  const geometry = new BoxBufferGeometry(1, 1, 1)
+  const mesh = new Mesh(geometry, material)
+</script>
+
+<MeshInstance {mesh} rotation={{ x: 90 * (Math.PI / 180) }} />
 ```
 
 ##### Properties <!-- omit in toc -->
@@ -574,6 +616,14 @@ mesh: THREE.Mesh
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { PerspectiveCamera } from 'three'
+  import { CameraInstance } from 'threlte'
+  
+  const camera = new PerspectiveCamera(45, 1, 1, 1000)
+</script>
+
+<CameraInstance useCamera={false} {camera} />
 ```
 
 ##### Properties <!-- omit in toc -->
@@ -592,6 +642,19 @@ camera: THREE.Camera
 ##### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { RectAreaLight } from 'three'
+  import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib'
+  import { LightInstance } from 'threlte'
+
+  RectAreaLightUniformsLib.init()
+
+  export let intensity
+
+  const light = new RectAreaLight(0xffffff, intensity,  10, 10)
+</script>
+
+<LightInstance {light} {intensity} position={{ x: 5, y: 5 }} />
 ```
 
 ##### Properties <!-- omit in toc -->
