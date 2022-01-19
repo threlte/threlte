@@ -19,36 +19,36 @@ A three.js component library for svelte.
   - [Types](#types)
     - [Property Types](#property-types)
     - [Context Types](#context-types)
-    - [Component Types](#component-types)
-  - [:clipboard: \<Canvas>](#clipboard-canvas)
-  - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
-    - [:globe_with_meridians: \<Mesh>](#globe_with_meridians-mesh)
-    - [:globe_with_meridians: \<Group>](#globe_with_meridians-group)
-    - [:globe_with_meridians: \<Object3D>](#globe_with_meridians-object3d)
-    - [:globe_with_meridians: \<GLTF>](#globe_with_meridians-gltf)
-  - [:recycle: Object Instances](#recycle-object-instances)
-    - [:recycle: \<Object3DInstance>](#recycle-object3dinstance)
-    - [:recycle: \<MeshInstance>](#recycle-meshinstance)
-    - [:recycle: \<CameraInstance>](#recycle-camerainstance)
-    - [:recycle: \<LightInstance>](#recycle-lightinstance)
-  - [:high_brightness: Lights](#high_brightness-lights)
-    - [:high_brightness: \<AmbientLight>](#high_brightness-ambientlight)
-    - [:high_brightness: \<DirectionalLight>](#high_brightness-directionallight)
-    - [:high_brightness: \<HemisphereLight>](#high_brightness-hemispherelight)
-    - [:high_brightness: \<PointLight>](#high_brightness-pointlight)
-    - [:high_brightness: \<SpotLight>](#high_brightness-spotlight)
-  - [:movie_camera: Cameras](#movie_camera-cameras)
-    - [:movie_camera: \<OrthographicCamera>](#movie_camera-orthographiccamera)
-    - [:movie_camera: \<PerspectiveCamera>](#movie_camera-perspectivecamera)
-  - [:repeat: Controls](#repeat-controls)
-    - [:repeat: \<OrbitControls>](#repeat-orbitcontrols)
-  - [:lipstick: Post Processing](#lipstick-post-processing)
-    - [:lipstick: \<Pass>](#lipstick-pass)
-  - [Misc](#misc)
-    - [:thought_balloon: \<Fog>](#thought_balloon-fog)
-    - [:thought_balloon: \<FogExp2>](#thought_balloon-fogexp2)
-    - [:abc: \<Text>](#abc-text)
-    - [:black_square_button: \<Layers>](#black_square_button-layers)
+  - [Components](#components)
+    - [:clipboard: \<Canvas>](#clipboard-canvas)
+    - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
+      - [:globe_with_meridians: \<Mesh>](#globe_with_meridians-mesh)
+      - [:globe_with_meridians: \<Group>](#globe_with_meridians-group)
+      - [:globe_with_meridians: \<Object3D>](#globe_with_meridians-object3d)
+      - [:globe_with_meridians: \<GLTF>](#globe_with_meridians-gltf)
+    - [:recycle: Object Instances](#recycle-object-instances)
+      - [:recycle: \<Object3DInstance>](#recycle-object3dinstance)
+      - [:recycle: \<MeshInstance>](#recycle-meshinstance)
+      - [:recycle: \<CameraInstance>](#recycle-camerainstance)
+      - [:recycle: \<LightInstance>](#recycle-lightinstance)
+    - [:high_brightness: Lights](#high_brightness-lights)
+      - [:high_brightness: \<AmbientLight>](#high_brightness-ambientlight)
+      - [:high_brightness: \<DirectionalLight>](#high_brightness-directionallight)
+      - [:high_brightness: \<HemisphereLight>](#high_brightness-hemispherelight)
+      - [:high_brightness: \<PointLight>](#high_brightness-pointlight)
+      - [:high_brightness: \<SpotLight>](#high_brightness-spotlight)
+    - [:movie_camera: Cameras](#movie_camera-cameras)
+      - [:movie_camera: \<OrthographicCamera>](#movie_camera-orthographiccamera)
+      - [:movie_camera: \<PerspectiveCamera>](#movie_camera-perspectivecamera)
+    - [:repeat: Controls](#repeat-controls)
+      - [:repeat: \<OrbitControls>](#repeat-orbitcontrols)
+    - [:lipstick: Post Processing](#lipstick-post-processing)
+      - [:lipstick: \<Pass>](#lipstick-pass)
+    - [Misc](#misc)
+      - [:thought_balloon: \<Fog>](#thought_balloon-fog)
+      - [:thought_balloon: \<FogExp2>](#thought_balloon-fogexp2)
+      - [:abc: \<Text>](#abc-text)
+      - [:black_square_button: \<Layers>](#black_square_button-layers)
   - [:leftwards_arrow_with_hook: Hooks](#leftwards_arrow_with_hook-hooks)
     - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
     - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
@@ -286,6 +286,12 @@ Use the property `lookAt` on an Object to
 
 ### Types
 
+TypeScript users should install @types/three in order to get type support for three.js.
+
+```bash
+npm install -D @types/three
+```
+
 #### Property Types
 
 To make working with component props easier, threlte includes special types for position, scale, rotation and lookAt:
@@ -358,8 +364,7 @@ type UseResizeOptions = {
 }
 ```
 
-#### Component Types
-
+### Components
 
 Type information for threlte component properties, bindings and events are detailed below in the following form:
 
@@ -371,13 +376,13 @@ name: type = default
 name: type
 ```
 
-### :clipboard: \<Canvas>
+#### :clipboard: \<Canvas>
 
 The `<Canvas>` component is the root of your three.js scene.
 
 By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes.
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -395,7 +400,7 @@ resizeOptions: {
 } | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 
 ```ts
@@ -405,11 +410,11 @@ rootCtx: ThrelteRootContext
 
 > See [Context Types](#context-types) for details
 
-### :globe_with_meridians: Objects
+#### :globe_with_meridians: Objects
 
-#### :globe_with_meridians: \<Mesh>
+##### :globe_with_meridians: \<Mesh>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -424,7 +429,7 @@ rootCtx: ThrelteRootContext
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -445,14 +450,14 @@ interactive: boolean = false
 ignorePointerEvents: boolean = false
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 mesh: THREE.Mesh
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
@@ -466,9 +471,9 @@ pointerleave: CustomEvent<ThreltePointerEvent>
 pointermove: CustomEvent<ThreltePointerEvent>
 ```
 
-#### :globe_with_meridians: \<Group>
+##### :globe_with_meridians: \<Group>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -481,7 +486,7 @@ pointermove: CustomEvent<ThreltePointerEvent>
 </Group>
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -496,23 +501,23 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 group: THREE.Group
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :globe_with_meridians: \<Object3D>
+##### :globe_with_meridians: \<Object3D>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 You might want to use this component to pass as a reference to other components:
 
@@ -527,7 +532,7 @@ You might want to use this component to pass as a reference to other components:
 <Object3D bind:object={target} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -542,26 +547,26 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 object: THREE.Object3D
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :globe_with_meridians: \<GLTF>
+##### :globe_with_meridians: \<GLTF>
 
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <GLTF 
@@ -573,7 +578,7 @@ To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -593,27 +598,27 @@ dracoDecoderPath: string | undefined = undefined
 ktxTranscoderPath: string | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 gltf: GLTF
 scene: THREE.Group
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-### :recycle: Object Instances
+#### :recycle: Object Instances
 
 While object components like `<Mesh>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component takes an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually, imported models or objects that did not yet make it into threlte.
 
 Object instance components intentionally have no default values on properties even if they can be `undefined`. That way, your IDE will tell you what properties need to be implemented to properly set them up.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -631,9 +636,9 @@ Object instance components intentionally have no default values on properties ev
 <Object3DInstance {object} {position} />
 ```
 
-#### :recycle: \<Object3DInstance>
+##### :recycle: \<Object3DInstance>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -646,7 +651,7 @@ Object instance components intentionally have no default values on properties ev
 <Object3DInstance {object} position={{ y: 1 }} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -664,22 +669,22 @@ frustumCulled: boolean | undefined
 renderOrder: number | undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :recycle: \<MeshInstance>
+##### :recycle: \<MeshInstance>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -697,7 +702,7 @@ viewportleave: CustomEvent<undefined>
 <MeshInstance {mesh} rotation={{ x: 90 * (Math.PI / 180) }} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -717,13 +722,13 @@ frustumCulled: boolean | undefined
 renderOrder: number | undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
@@ -737,9 +742,9 @@ pointerleave: CustomEvent<ThreltePointerEvent>
 pointermove: CustomEvent<ThreltePointerEvent>
 ```
 
-#### :recycle: \<CameraInstance>
+##### :recycle: \<CameraInstance>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -752,7 +757,7 @@ pointermove: CustomEvent<ThreltePointerEvent>
 <CameraInstance useCamera={false} {camera} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -771,22 +776,22 @@ frustumCulled: boolean | undefined
 renderOrder: number | undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :recycle: \<LightInstance>
+##### :recycle: \<LightInstance>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -804,7 +809,7 @@ viewportleave: CustomEvent<undefined>
 <LightInstance {light} {intensity} position={{ x: 5, y: 5 }} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
@@ -824,24 +829,24 @@ color: THREE.ColorRepresentation | undefined
 intensity: number | undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-### :high_brightness: Lights
+#### :high_brightness: Lights
 
-#### :high_brightness: \<AmbientLight>
+##### :high_brightness: \<AmbientLight>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -851,7 +856,7 @@ viewportleave: CustomEvent<undefined>
 <AmbientLight color={0xd7681c} intensity={0.3} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -868,23 +873,23 @@ color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 light: THREE.AmbientLight
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :high_brightness: \<DirectionalLight>
+##### :high_brightness: \<DirectionalLight>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -898,7 +903,7 @@ viewportleave: CustomEvent<undefined>
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -932,23 +937,23 @@ shadow:
   | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 light: THREE.DirectionalLight
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :high_brightness: \<HemisphereLight>
+##### :high_brightness: \<HemisphereLight>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -961,7 +966,7 @@ viewportleave: CustomEvent<undefined>
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -979,23 +984,23 @@ skyColor: THREE.ColorRepresentation | undefined = undefined
 groundColor: THREE.ColorRepresentation | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 light: THREE.HemisphereLight
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :high_brightness: \<PointLight>
+##### :high_brightness: \<PointLight>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1005,7 +1010,7 @@ viewportleave: CustomEvent<undefined>
 <PointLight position={{ x: 3, y: 3 }} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1033,23 +1038,23 @@ shadow:
   | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 light: THREE.PointLight
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :high_brightness: \<SpotLight>
+##### :high_brightness: \<SpotLight>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1061,7 +1066,7 @@ viewportleave: CustomEvent<undefined>
 <SpotLight position={{ x: 3, y: 3 }} target={mesh} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1092,25 +1097,25 @@ shadow:
   | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 light: THREE.SpotLight
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-### :movie_camera: Cameras
+#### :movie_camera: Cameras
 
-#### :movie_camera: \<OrthographicCamera>
+##### :movie_camera: \<OrthographicCamera>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1123,7 +1128,7 @@ viewportleave: CustomEvent<undefined>
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1142,23 +1147,23 @@ far: number = undefined
 zoom: number = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 camera: THREE.OrthographicCamera
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-#### :movie_camera: \<PerspectiveCamera>
+##### :movie_camera: \<PerspectiveCamera>
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1172,7 +1177,7 @@ viewportleave: CustomEvent<undefined>
 />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1191,27 +1196,27 @@ far: number = undefined
 fov: number = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 camera: THREE.PerspectiveCamera
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
 viewportleave: CustomEvent<undefined>
 ```
 
-### :repeat: Controls
+#### :repeat: Controls
 
-#### :repeat: \<OrbitControls>
+##### :repeat: \<OrbitControls>
 
 The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera. As soon as the OrbitControls are mounted, the frame loop will continously run.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1223,7 +1228,7 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 </PerspectiveCamera>
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1272,13 +1277,13 @@ zoomSpeed: number | undefined = undefined
 target: Position | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 controls: THREE.OrbitControls
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 change: CustomEvent<undefined>
@@ -1286,13 +1291,13 @@ start: CustomEvent<undefined>
 end: CustomEvent<undefined>
 ```
 
-### :lipstick: Post Processing
+#### :lipstick: Post Processing
 
-#### :lipstick: \<Pass>
+##### :lipstick: \<Pass>
 
 By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1303,20 +1308,20 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 <Pass pass={new GlitchPass()}>
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
 pass: THREE.Pass
 ```
 
-### Misc
+#### Misc
 
-#### :thought_balloon: \<Fog>
+##### :thought_balloon: \<Fog>
 
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1326,7 +1331,7 @@ A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is t
 <Fog color={"#dddddd"} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1335,18 +1340,18 @@ near: number | undefined = undefined
 far: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 fog: THREE.Fog
 ```
 
-#### :thought_balloon: \<FogExp2>
+##### :thought_balloon: \<FogExp2>
 
 A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1356,7 +1361,7 @@ A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy 
 <FogExp2 color={"#dddddd"} density={0.3} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1364,17 +1369,17 @@ color: THREE.ColorRepresentation = 0xffffff
 density: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 fog: THREE.FogExp2
 ```
 
-#### :abc: \<Text>
+##### :abc: \<Text>
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1386,7 +1391,7 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 <Text text={value} />
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -1433,14 +1438,14 @@ strokeOpacity: number | undefined = undefined
 fillOpacity: number | undefined = undefined
 ```
 
-##### Bindings <!-- omit in toc -->
+###### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 text: Text
 ```
 
-##### Events <!-- omit in toc -->
+###### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: CustomEvent<undefined>
@@ -1454,12 +1459,12 @@ pointerleave: CustomEvent<ThreltePointerEvent>
 pointermove: CustomEvent<ThreltePointerEvent>
 ```
 
-#### :black_square_button: \<Layers>
+##### :black_square_button: \<Layers>
 
 [Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
 The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
 
-##### Example <!-- omit in toc -->
+###### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -1492,7 +1497,7 @@ The `<Layers>` component assigns all child components the layer memberships you 
 </Layers>
 ```
 
-##### Properties <!-- omit in toc -->
+###### Properties <!-- omit in toc -->
 
 ```ts
 // required
