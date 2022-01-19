@@ -4,21 +4,21 @@
   import LightInstance from '../instances/LightInstance.svelte'
   import type { PointLightProperties } from '../types/components'
 
-  export let position: PointLightProperties['position']
-  export let scale: PointLightProperties['scale']
-  export let rotation: PointLightProperties['rotation']
-  export let lookAt: PointLightProperties['lookAt']
-  export let receiveShadow: PointLightProperties['receiveShadow']
-  export let viewportAware: PointLightProperties['viewportAware']
-  export let inViewport: PointLightProperties['inViewport']
-  export let frustumCulled: PointLightProperties['frustumCulled']
-  export let renderOrder: PointLightProperties['renderOrder']
-  export let intensity: PointLightProperties['intensity']
-  export let color: PointLightProperties['color']
-  export let distance: PointLightProperties['distance']
-  export let decay: PointLightProperties['decay']
-  export let power: PointLightProperties['power']
-  export let shadow: PointLightProperties['shadow']
+  export let position: PointLightProperties['position'] = undefined
+  export let scale: PointLightProperties['scale'] = undefined
+  export let rotation: PointLightProperties['rotation'] = undefined
+  export let lookAt: PointLightProperties['lookAt'] = undefined
+  export let receiveShadow: PointLightProperties['receiveShadow'] = undefined
+  export let viewportAware: PointLightProperties['viewportAware'] = false
+  export let inViewport: PointLightProperties['inViewport'] = false
+  export let frustumCulled: PointLightProperties['frustumCulled'] = undefined
+  export let renderOrder: PointLightProperties['renderOrder'] = undefined
+  export let intensity: PointLightProperties['intensity'] = undefined
+  export let color: PointLightProperties['color'] = undefined
+  export let distance: PointLightProperties['distance'] = undefined
+  export let decay: PointLightProperties['decay'] = undefined
+  export let power: PointLightProperties['power'] = undefined
+  export let shadow: PointLightProperties['shadow'] = undefined
 
   export const light = new ThreePointLight(color, intensity, distance, decay)
 

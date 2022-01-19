@@ -16,6 +16,8 @@ A three.js component library for svelte.
   - [Reactivity](#reactivity)
 - [Reference](#reference)
   - [Types](#types)
+    - [Property Types](#property-types)
+    - [Context Types](#context-types)
   - [Conventions](#conventions)
   - [:clipboard: \<Canvas>](#clipboard-canvas)
   - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
@@ -24,7 +26,6 @@ A three.js component library for svelte.
     - [:globe_with_meridians: \<Object3D>](#globe_with_meridians-object3d)
     - [:globe_with_meridians: \<GLTF>](#globe_with_meridians-gltf)
   - [:recycle: Object Instances](#recycle-object-instances)
-      - [Example](#example)
     - [:recycle: \<Object3DInstance>](#recycle-object3dinstance)
     - [:recycle: \<MeshInstance>](#recycle-meshinstance)
     - [:recycle: \<CameraInstance>](#recycle-camerainstance)
@@ -254,6 +255,8 @@ By using props instead of manipulating three.js objects directly, the unified re
 
 ### Types
 
+#### Property Types
+
 To make working with component props easier, threlte includes special types for position, scale, rotation and lookAt:
 
 ```ts
@@ -283,6 +286,8 @@ const lookAtB = { x: 2, y: 3 }
 const lookAtC = someMesh
 ```
 
+#### Context Types
+
 The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and `ThrelteRootContext`
 
 ```ts
@@ -308,7 +313,7 @@ type ThrelteRootContext = {
   interactiveObjects: Set<THREE.Object3D>
   raycastableObjects: Set<THREE.Object3D>
   composer?: EffectComposer
-  resizeOpts?: UseResizeOptions
+  resizeOptions?: UseResizeOptions
 }
 ```
 
@@ -357,22 +362,29 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 ##### Properties <!-- omit in toc -->
 
 ```ts
-dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
+dpr: number = browser ? window.devicePixelRatio : 1
 flat: boolean = false
 linear: boolean = false
 frameloop: 'always' | 'on-demand' = 'on-demand'
 debugFrameloop: boolean = false
 shadows: boolean = true
 shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
-resizeOpts: UseResizeOptions | undefined = undefined
+resizeOptions: {
+  axis?: 'horizontal' | 'vertical' | 'both'
+  runOnInit?: boolean
+  debounce?: number
+} | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
+
 
 ```ts
 ctx: ThrelteContext
 rootCtx: ThrelteRootContext
 ```
+
+> See [Context Types](#context-types) for details
 
 ### :globe_with_meridians: Objects
 
@@ -397,19 +409,18 @@ rootCtx: ThrelteRootContext
 
 ```ts
 geometry: THREE.BufferGeometry
-material: THREE.Material | THREE.Material[] = defaults.mesh.material()
-
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+material: THREE.Material | THREE.Material[]
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-castShadow: boolean = defaults.mesh.castShadow
-receiveShadow: boolean = defaults.mesh.receiveShadow
-frustumCulled: boolean = defaults.mesh.frustumCulled
-renderOrder: number = defaults.mesh.renderOrder
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 interactive: boolean = false
 ignorePointerEvents: boolean = false
-lookAt: LookAtProp | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -437,13 +448,15 @@ mesh: THREE.Mesh
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
-viewportAware: boolean = false
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
+viewportAware: boolean = false
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -473,13 +486,15 @@ You might want to use this component to pass as a reference to other components:
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
-viewportAware: boolean = false
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
+viewportAware: boolean = false
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -509,17 +524,15 @@ To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
-viewportAware: boolean = false
-inViewport: boolean = defaults.object3d.inViewport
-castShadow: boolean = defaults.mesh.castShadow
-receiveShadow: boolean = defaults.mesh.receiveShadow
-frustumCulled: boolean = defaults.mesh.frustumCulled
-renderOrder: number = defaults.mesh.renderOrder
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
-
+viewportAware: boolean = false
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 url: string
 dracoDecoderPath: string | undefined = undefined
 ktxTranscoderPath: string | undefined = undefined
@@ -536,7 +549,7 @@ scene: THREE.Group
 
 While object components like `<Mesh>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component takes an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually, imported models or objects that did not yet make it into threlte.
 
-##### Example
+##### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -573,11 +586,21 @@ While object components like `<Mesh>` create a new object for you (in the case o
 
 ```ts
 object: THREE.Object3D
+position: Position | undefined
+scale: Scale | undefined
+rotation: Rotation | undefined
+lookAt: LookAt | undefined
+viewportAware: boolean
+castShadow: boolean | undefined
+receiveShadow: boolean | undefined
+frustumCulled: boolean | undefined
+renderOrder: number | undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 ```
 
 #### :recycle: \<MeshInstance>
@@ -604,11 +627,23 @@ object: THREE.Object3D
 
 ```ts
 mesh: THREE.Mesh
+position: Position | undefined
+scale: Scale | undefined
+rotation: Rotation | undefined
+lookAt: LookAt | undefined
+viewportAware: boolean
+castShadow: boolean | undefined
+receiveShadow: boolean | undefined
+frustumCulled: boolean | undefined
+renderOrder: number | undefined
+interactive: boolean
+ignorePointerEvents: boolean
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 ```
 
 #### :recycle: \<CameraInstance>
@@ -630,11 +665,22 @@ mesh: THREE.Mesh
 
 ```ts
 camera: THREE.Camera
+position: Position | undefined
+scale: Scale | undefined
+rotation: Rotation | undefined
+lookAt: LookAt | undefined
+viewportAware: boolean
+castShadow: boolean | undefined
+receiveShadow: boolean | undefined
+frustumCulled: boolean | undefined
+renderOrder: number | undefined
+useCamera: boolean
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 ```
 
 #### :recycle: \<LightInstance>
@@ -660,12 +706,24 @@ camera: THREE.Camera
 ##### Properties <!-- omit in toc -->
 
 ```ts
+position: Position | undefined
+scale: Scale | undefined
+rotation: Rotation | undefined
+lookAt: LookAt | undefined
+viewportAware: boolean
+castShadow: boolean | undefined
+receiveShadow: boolean | undefined
+frustumCulled: boolean | undefined
+renderOrder: number | undefined
 light: THREE.Light
+color: THREE.ColorRepresentation | undefined
+intensity: number | undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 ```
 
 ### :high_brightness: Lights
@@ -685,21 +743,24 @@ light: THREE.Light
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
-intensity = defaults.lights.ambientLight.intensity
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+color: THREE.ColorRepresentation | undefined = undefined
+intensity: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
-light = new AmbientLight(color, intensity)
+inViewport: boolean
+light: THREE.AmbientLight
 ```
 
 #### :high_brightness: \<DirectionalLight>
@@ -721,36 +782,41 @@ light = new AmbientLight(color, intensity)
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
-intensity = defaults.lights.ambientLight.intensity
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+color: THREE.ColorRepresentation | undefined = undefined
+intensity: number | undefined = undefined
 shadow:
   | boolean
   | {
-      mapSize?: [number, number]
-      camera?: {
-        left?: number
-        right?: number
-        top?: number
-        bottom?: number
-        near?: number
-        far?: number
-      }
-      bias?: number
-      radius?: number
-    } = false
+      mapSize?: [number, number] | undefined
+      camera?:
+        | {
+            left?: number | undefined
+            right?: number | undefined
+            top?: number | undefined
+            bottom?: number | undefined
+            near?: number | undefined
+            far?: number | undefined
+          }
+        | undefined
+      bias?: number | undefined
+      radius?: number | undefined
+    }
+  | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
-light = new DirectionalLight(color, intensity)
+inViewport: boolean
+light: THREE.DirectionalLight
 ```
 
 #### :high_brightness: \<HemisphereLight>
@@ -771,16 +837,18 @@ light = new DirectionalLight(color, intensity)
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.lights.hemisphereLight.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-intensity = defaults.lights.hemisphereLight.intensity
-skyColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.skyColor
-groundColor: THREE.ColorRepresentation = defaults.lights.hemisphereLight.groundColor
+receiveShadow: boolean | undefined = undefined
+castShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+intensity: number | undefined = undefined
+skyColor: THREE.ColorRepresentation | undefined = undefined
+groundColor: THREE.ColorRepresentation | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -804,17 +872,18 @@ light: THREE.HemisphereLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-color: THREE.ColorRepresentation = defaults.lights.ambientLight.color
-intensity = defaults.lights.ambientLight.intensity
-distance = defaults.lights.pointLight.distance
-decay = defaults.lights.pointLight.decay
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+color: THREE.ColorRepresentation | undefined = undefined
+intensity: number | undefined = undefined
+distance: number | undefined = undefined
+decay: number | undefined = undefined
 power: number | undefined = undefined
 shadow:
   | boolean
@@ -823,12 +892,14 @@ shadow:
       camera?: { near?: number; far?: number }
       bias?: number
       radius?: number
-    } = false
+    }
+  | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 light: THREE.PointLight
 ```
 
@@ -849,21 +920,22 @@ light: THREE.PointLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.lights.spotLight.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-color: THREE.ColorRepresentation = defaults.lights.spotLight.color
-intensity = defaults.lights.spotLight.intensity
-angle: number = defaults.lights.spotLight.angle
-decay: number = defaults.lights.spotLight.decay
-distance: number = defaults.lights.spotLight.distance
-penumbra: number = defaults.lights.spotLight.penumbra
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+color: THREE.ColorRepresentation | undefined = undefined
+intensity: number | undefined = undefined
+angle: number | undefined = undefined
+decay: number | undefined = undefined
+distance: number | undefined = undefined
+penumbra: number | undefined = undefined
 power: number | undefined = undefined
-target: LookAt = defaults.lookAt
+target: LookAt | undefined = undefined
 shadow:
   | boolean
   | {
@@ -871,12 +943,14 @@ shadow:
       camera?: { near?: number; far?: number }
       bias?: number
       radius?: number
-    } = false
+    }
+  | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 light: THREE.SpotLight
 ```
 
@@ -900,23 +974,25 @@ light: THREE.SpotLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-useCamera = true
-near = defaults.camera.near
-far = defaults.camera.far
-zoom = defaults.camera.zoom
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+useCamera: boolean = true
+near: number = undefined
+far: number = undefined
+zoom: number = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 camera: THREE.OrthographicCamera
 ```
 
@@ -939,23 +1015,25 @@ camera: THREE.OrthographicCamera
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
-useCamera = true
-near = defaults.camera.near
-far = defaults.camera.far
-fov = defaults.camera.fov
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+useCamera: boolean = true
+near: number = undefined
+far: number = undefined
+fov: number = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 camera: THREE.PerspectiveCamera
 ```
 
@@ -980,30 +1058,48 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 ##### Properties <!-- omit in toc -->
 
 ```ts
-autoRotate: boolean = false
-autoRotateSpeed: number = 2
-dampingFactor: number = 0.05
-enableDamping: boolean = false
-enabled: boolean = true
-enablePan: boolean = true
-enableRotate: boolean = true
-enableZoom: boolean = true
-keyPanSpeed: number = 7
-keys: { LEFT: string, UP: string, RIGHT: string, BOTTOM: string } = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' }
-maxAzimuthAngle: number = Infinity
-maxDistance: number = Infinity
-maxPolarAngle: number = Math.PI
-maxZoom: number = Infinity
-minAzimuthAngle: number = Infinity
-minDistance: number = 0
-minPolarAngle: number = 0
-minZoom: number = 0
-mouseButtons: { LEFT: THREE.MOUSE, MIDDLE: THREE.MOUSE, RIGHT: THREE.MOUSE } = { LEFT: MOUSE.ROTATE, MIDDLE: MOUSE.DOLLY, RIGHT: MOUSE.PAN }
-panSpeed: number = 1
-rotateSpeed: number = 1
-screenSpacePanning: boolean = true
-touches: { ONE: THREE.TOUCH, TWO: THREE.TOUCH } = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }
-zoomSpeed: number = 1
+autoRotate: boolean | undefined = undefined
+autoRotateSpeed: number | undefined = undefined
+dampingFactor: number | undefined = undefined
+enableDamping: boolean | undefined = undefined
+enabled: boolean | undefined = undefined
+enablePan: boolean | undefined = undefined
+enableRotate: boolean | undefined = undefined
+enableZoom: boolean | undefined = undefined
+keyPanSpeed: number | undefined = undefined
+keys:
+  | {
+      LEFT: string
+      UP: string
+      RIGHT: string
+      BOTTOM: string
+    }
+  | undefined = undefined
+maxAzimuthAngle: number | undefined = undefined
+maxDistance: number | undefined = undefined
+maxPolarAngle: number | undefined = undefined
+maxZoom: number | undefined = undefined
+minAzimuthAngle: number | undefined = undefined
+minDistance: number | undefined = undefined
+minPolarAngle: number | undefined = undefined
+minZoom: number | undefined = undefined
+mouseButtons:
+  | {
+        LEFT: MOUSE
+        MIDDLE: MOUSE
+        RIGHT: MOUSE
+    }
+  | undefined = undefined
+panSpeed: number | undefined = undefined
+rotateSpeed: number | undefined = undefined
+screenSpacePanning: boolean | undefined = undefined
+touches: 
+  | {
+        ONE: TOUCH
+        TWO: TOUCH
+    }
+  | undefined = undefined
+zoomSpeed: number | undefined = undefined
 target: Position | undefined = undefined
 ```
 
@@ -1055,9 +1151,9 @@ A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is t
 ##### Properties <!-- omit in toc -->
 
 ```ts
-color: THREE.ColorRepresentation = defaults.fog.color
-near = defaults.fog.near
-far = defaults.fog.far
+color: THREE.ColorRepresentation = 0xffffff
+near: number | undefined = undefined
+far: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -1084,8 +1180,8 @@ A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy 
 ##### Properties <!-- omit in toc -->
 
 ```ts
-color: THREE.ColorRepresentation = defaults.fog.color
-density = defaults.fog.density
+color: THREE.ColorRepresentation = 0xffffff
+density: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -1113,48 +1209,47 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 ##### Properties <!-- omit in toc -->
 
 ```ts
-position: Position = defaults.position
-scale: Scale = defaults.scale
-rotation: Rotation = defaults.rotation
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
 viewportAware: boolean = false
-inViewport = defaults.object3d.inViewport
-castShadow = defaults.mesh.castShadow
-receiveShadow = defaults.mesh.receiveShadow
-frustumCulled = defaults.mesh.frustumCulled
-renderOrder = defaults.mesh.renderOrder
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 interactive: boolean = false
 ignorePointerEvents: boolean = false
-lookAt: LookAt | undefined = undefined
 
-text: TextType['text'] = ''
-anchorX: TextType['anchorX'] = 0
-anchorY: TextType['anchorY'] = 0
-curveRadius: TextType['curveRadius'] = 0
-font: TextType['font'] = null
-fontSize: TextType['fontSize'] = 0.1
-letterSpacing: TextType['letterSpacing'] = 0
-lineHeight: TextType['lineHeight'] = 'normal'
-maxWidth: TextType['maxWidth'] = Infinity
-overflowWrap: TextType['overflowWrap'] = 'normal'
-textAlign: TextType['textAlign'] = 'left'
-textIndent: TextType['textIndent'] = 0
-whiteSpace: TextType['whiteSpace'] = 'normal'
-material: TextType['material'] | null = null
-color: TextType['color'] | null = null
-depthOffset: TextType['depthOffset'] = 0
-clipRect: TextType['clipRect'] | null = null
-glyphGeometryDetail: TextType['glyphGeometryDetail'] = 0
-sdfGlyphSize: TextType['sdfGlyphSize'] = 64
-outlineWidth: TextType['outlineWidth'] = 0
-outlineColor: TextType['outlineColor'] = 'black'
-outlineOpacity: TextType['outlineOpacity'] = 1
-outlineBlur: TextType['outlineBlur'] = 0
-outlineOffsetX: TextType['outlineOffsetX'] = 0
-outlineOffsetY: TextType['outlineOffsetY'] = 0
-strokeWidth: TextType['strokeWidth'] = 0
-strokeColor: TextType['strokeColor'] = 0x808080
-strokeOpacity: TextType['strokeOpacity'] = 1
-fillOpacity: TextType['fillOpacity'] = 1
+text: string | undefined = undefined
+anchorX: number | 'left' | 'center' | 'right' | string | undefined = undefined
+anchorY: number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string | undefined = undefined
+curveRadius: number | undefined = undefined
+font: null | string | undefined = undefined
+fontSize: number | undefined = undefined
+letterSpacing: number | undefined = undefined
+lineHeight: number | string | undefined = undefined
+maxWidth: number | undefined = undefined
+overflowWrap: 'normal' | 'break-word' | 'normal' | undefined = undefined
+textAlign: 'left' | 'right' | 'center' | 'justify' | undefined = undefined
+textIndent: number | undefined = undefined
+whiteSpace: 'normal' | 'nowrap' | 'pre-wrap' | undefined = undefined
+material: THREE.Material | THREE.Material[] | null | undefined = undefined
+color: string | number | THREE.Color | null | undefined = undefined
+depthOffset: number | undefined = undefined
+clipRect: [number, number, number, number] | null | undefined = undefined
+glyphGeometryDetail: number | undefined = undefined
+sdfGlyphSize: number | null | undefined = undefined
+outlineWidth: number | string | undefined = undefined
+outlineColor: THREE.ColorRepresentation | undefined = undefined
+outlineOpacity: number | undefined = undefined
+outlineBlur: number | string | undefined = undefined
+outlineOffsetX: number | string | undefined = undefined
+outlineOffsetY: number | string | undefined = undefined
+strokeWidth: number | string | undefined = undefined
+strokeColor: THREE.ColorRepresentation | THREE.Color | undefined = undefined
+strokeOpacity: number | undefined = undefined
+fillOpacity: number | undefined = undefined
 ```
 
 ##### Bindings <!-- omit in toc -->
@@ -1255,7 +1350,7 @@ const {
   interactiveObjects,          // Set<THREE.Object3D>
   raycastableObjects,          // Set<THREE.Object3D>
   composer,                    // THREE.EffectComposer
-  resizeOpts,                  // UseResizeOptions
+  resizeOptions,               // UseResizeOptions
 } = useThrelteRoot()
 ```
 
@@ -1282,7 +1377,7 @@ const toggleUseFrame = () => {
 
 #### :leftwards_arrow_with_hook: useLoader
 
-`useLoader` memoizes Loaders to reuse them at any time.
+`useLoader` memoizes Loaders to reuse them at any time. Pass in the Loaders class and a function to instantiate the loader.
 
 ##### Example <!-- omit in toc -->
 
@@ -1294,12 +1389,6 @@ const loader = useLoader(OBJLoader, () => new OBJLoader())
 loader.load('models/model.obj', (obj) => {
   console.log(object)
 })
-```
-
-##### Types <!-- omit in toc -->
-
-```ts
-type UseLoader = <T extends typeof Loader>(loader: T, memoizeFn: () => InstanceType<T>) => InstanceType<T>
 ```
 
 #### :leftwards_arrow_with_hook: useTexture

@@ -38,7 +38,7 @@
   export let debugFrameloop: boolean = false
   export let shadows: boolean = true
   export let shadowMapType: ShadowMapType = PCFSoftShadowMap
-  export let resizeOpts: UseResizeOptions | undefined = undefined
+  export let resizeOptions: UseResizeOptions | undefined = undefined
 
   let canvas: HTMLCanvasElement | undefined
   let mounted = false
@@ -124,7 +124,7 @@
     composer: undefined,
     interactiveObjects: new Set(),
     raycastableObjects: new Set(),
-    resizeOpts
+    resizeOptions
   }
 
   $: if (ctx.renderer) ctx.renderer.setPixelRatio(dpr)
@@ -147,7 +147,7 @@
     }
   }
 
-  useResize(resizeCanvas, resizeOpts)
+  useResize(resizeCanvas, resizeOptions)
 
   onMount(() => {
     if (!canvas) return

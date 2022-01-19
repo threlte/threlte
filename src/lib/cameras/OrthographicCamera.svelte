@@ -20,12 +20,12 @@
   export let useCamera: OrthographicCameraProperties['useCamera'] = true
 
   // OrthographicCamera
-  export let near: OrthographicCameraProperties['near'] = 0.1
-  export let far: OrthographicCameraProperties['far'] = 1000
-  export let zoom: OrthographicCameraProperties['zoom'] = 1
+  export let near: OrthographicCameraProperties['near'] = undefined
+  export let far: OrthographicCameraProperties['far'] = undefined
+  export let zoom: OrthographicCameraProperties['zoom'] = undefined
 
   const { size, render } = useThrelte()
-  const { setCamera, resizeOpts } = useThrelteRoot()
+  const { setCamera, resizeOptions } = useThrelteRoot()
 
   export const camera = new ThreeOrthographicCamera(
     size.width / -2,
@@ -45,7 +45,7 @@
     camera.bottom = size.height / -2
     camera.updateProjectionMatrix()
     render('OrthographicCamera: onResize')
-  }, resizeOpts)
+  }, resizeOptions)
 
   $: {
     if (near !== undefined) camera.near = near

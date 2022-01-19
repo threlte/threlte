@@ -69,15 +69,15 @@ export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'
 }
 
 export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near: number
-  far: number
-  zoom: number
+  near: number | undefined
+  far: number | undefined
+  zoom: number | undefined
 }
 
 export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near: number
-  far: number
-  fov: number
+  near: number | undefined
+  far: number | undefined
+  fov: number | undefined
 }
 
 export type OrbitControlsProperties = {

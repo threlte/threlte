@@ -29,7 +29,7 @@ export type ThrelteRootContext = {
   interactiveObjects: Set<Object3D>
   raycastableObjects: Set<Object3D>
   composer?: EffectComposer
-  resizeOpts?: UseResizeOptions
+  resizeOptions?: UseResizeOptions
 }
 
 export type ThrelteUseFrame = {

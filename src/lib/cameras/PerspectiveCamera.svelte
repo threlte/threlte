@@ -20,19 +20,19 @@
   export let useCamera: PerspectiveCameraProperties['useCamera'] = true
 
   // self
-  export let near: PerspectiveCameraProperties['near'] = 0.1
-  export let far: PerspectiveCameraProperties['far'] = 1000
-  export let fov: PerspectiveCameraProperties['fov'] = 30
+  export let near: PerspectiveCameraProperties['near'] = undefined
+  export let far: PerspectiveCameraProperties['far'] = undefined
+  export let fov: PerspectiveCameraProperties['fov'] = undefined
 
   const { size, render } = useThrelte()
-  const { resizeOpts } = useThrelteRoot()
+  const { resizeOptions } = useThrelteRoot()
 
   export const camera = new ThreePerspectiveCamera(fov, size.width / size.height, near, far)
 
   useResize(() => {
     camera.aspect = size.width / size.height
     camera.updateProjectionMatrix()
-  }, resizeOpts)
+  }, resizeOptions)
 
   $: {
     if (near !== undefined) camera.near = near
