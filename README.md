@@ -14,11 +14,12 @@ A three.js component library for svelte.
   - [Interactivity](#interactivity)
   - [Viewport Awareness](#viewport-awareness)
   - [Reactivity](#reactivity)
+- [Conventions](#conventions)
 - [Reference](#reference)
   - [Types](#types)
     - [Property Types](#property-types)
     - [Context Types](#context-types)
-  - [Conventions](#conventions)
+    - [Component Types](#component-types)
   - [:clipboard: \<Canvas>](#clipboard-canvas)
   - [:globe_with_meridians: Objects](#globe_with_meridians-objects)
     - [:globe_with_meridians: \<Mesh>](#globe_with_meridians-mesh)
@@ -254,6 +255,33 @@ Bind `inViewport` if you wish to not use events.
 Just like [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
 By using props instead of manipulating three.js objects directly, the unified render loop is able to tell that your scene needs rerendering and svelte can make use of component optimizations.
 
+
+## Conventions
+
+Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and events and their respective naming.
+
+Most component properties are `undefined` by default. Therefore, new three.js objects are instantiated without any optional default values. This way, three.js will provide the defaults and threltes reactivity will *not* kick in, allowing you to take complete control over objects.
+
+On top of that, threlte adds some functionality to make objects even more reactive.
+
+#### lookAt <!-- omit in toc -->
+
+Use the property `lookAt` on an Object to
+
+- reactively orient an Object3D towards another Object3D
+```svelte
+<script>
+  let mesh
+</script>
+
+<PerspectiveCamera lookAt={mesh} />
+<Mesh bind:mesh … />
+```
+- to reactively orient an Object towards a Position
+```svelte
+<PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
+```
+
 ## Reference
 
 ### Types
@@ -330,29 +358,17 @@ type UseResizeOptions = {
 }
 ```
 
-### Conventions
+#### Component Types
 
-Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and events and their respective naming.  
-Most component properties are `undefined` by default. Therefore, new three.js objects are instantiated without any optional default values. This way, three.js will provide the defaults and threltes reactivity will *not* kick in, allowing you to take complete control over objects.
 
-On top of that, threlte adds some functionality to make objects even more reactive.
+Type information for threlte component properties, bindings and events are detailed below in the following form:
 
-##### lookAt <!-- omit in toc -->
+```ts
+// optional
+name: type = default
 
-Use the property `lookAt` on an Object to
-
-- reactively orient an Object3D towards another Object3D
-```svelte
-<script>
-  let mesh
-</script>
-
-<PerspectiveCamera lookAt={mesh} />
-<Mesh bind:mesh … />
-```
-- to reactively orient an Object towards a Position
-```svelte
-<PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
+// required
+name: type
 ```
 
 ### :clipboard: \<Canvas>
