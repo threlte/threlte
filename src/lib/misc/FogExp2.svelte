@@ -4,10 +4,10 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
-  import type { FogExp2Props } from '../types/components'
+  import type { FogExp2Properties } from '../types/components'
 
-  export let color: FogExp2Props['color'] = 0xffffff
-  export let density: FogExp2Props['density'] = undefined
+  export let color: FogExp2Properties['color'] = 0xffffff
+  export let density: FogExp2Properties['density'] = undefined
 
   const { linear } = useThrelteRoot()
   const { scene, render } = useThrelte()

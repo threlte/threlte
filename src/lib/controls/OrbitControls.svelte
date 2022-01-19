@@ -6,33 +6,33 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
-  import type { OrbitControlsProps } from '../types/components'
+  import type { OrbitControlsProperties } from '../types/components'
 
-  export let autoRotate: OrbitControlsProps['autoRotate'] = undefined
-  export let autoRotateSpeed: OrbitControlsProps['autoRotateSpeed'] = undefined
-  export let dampingFactor: OrbitControlsProps['dampingFactor'] = undefined
-  export let enableDamping: OrbitControlsProps['enableDamping'] = undefined
-  export let enabled: OrbitControlsProps['enabled'] = undefined
-  export let enablePan: OrbitControlsProps['enablePan'] = undefined
-  export let enableRotate: OrbitControlsProps['enableRotate'] = undefined
-  export let enableZoom: OrbitControlsProps['enableZoom'] = undefined
-  export let keyPanSpeed: OrbitControlsProps['keyPanSpeed'] = undefined
-  export let keys: OrbitControlsProps['keys'] = undefined
-  export let maxAzimuthAngle: OrbitControlsProps['maxAzimuthAngle'] = undefined
-  export let maxDistance: OrbitControlsProps['maxDistance'] = undefined
-  export let maxPolarAngle: OrbitControlsProps['maxPolarAngle'] = undefined
-  export let maxZoom: OrbitControlsProps['maxZoom'] = undefined
-  export let minAzimuthAngle: OrbitControlsProps['minAzimuthAngle'] = undefined
-  export let minDistance: OrbitControlsProps['minDistance'] = undefined
-  export let minPolarAngle: OrbitControlsProps['minPolarAngle'] = undefined
-  export let minZoom: OrbitControlsProps['minZoom'] = undefined
-  export let mouseButtons: OrbitControlsProps['mouseButtons'] = undefined
-  export let panSpeed: OrbitControlsProps['panSpeed'] = undefined
-  export let rotateSpeed: OrbitControlsProps['rotateSpeed'] = undefined
-  export let screenSpacePanning: OrbitControlsProps['screenSpacePanning'] = undefined
-  export let touches: OrbitControlsProps['touches'] = undefined
-  export let zoomSpeed: OrbitControlsProps['zoomSpeed'] = undefined
-  export let target: OrbitControlsProps['target'] = undefined
+  export let autoRotate: OrbitControlsProperties['autoRotate'] = undefined
+  export let autoRotateSpeed: OrbitControlsProperties['autoRotateSpeed'] = undefined
+  export let dampingFactor: OrbitControlsProperties['dampingFactor'] = undefined
+  export let enableDamping: OrbitControlsProperties['enableDamping'] = undefined
+  export let enabled: OrbitControlsProperties['enabled'] = undefined
+  export let enablePan: OrbitControlsProperties['enablePan'] = undefined
+  export let enableRotate: OrbitControlsProperties['enableRotate'] = undefined
+  export let enableZoom: OrbitControlsProperties['enableZoom'] = undefined
+  export let keyPanSpeed: OrbitControlsProperties['keyPanSpeed'] = undefined
+  export let keys: OrbitControlsProperties['keys'] = undefined
+  export let maxAzimuthAngle: OrbitControlsProperties['maxAzimuthAngle'] = undefined
+  export let maxDistance: OrbitControlsProperties['maxDistance'] = undefined
+  export let maxPolarAngle: OrbitControlsProperties['maxPolarAngle'] = undefined
+  export let maxZoom: OrbitControlsProperties['maxZoom'] = undefined
+  export let minAzimuthAngle: OrbitControlsProperties['minAzimuthAngle'] = undefined
+  export let minDistance: OrbitControlsProperties['minDistance'] = undefined
+  export let minPolarAngle: OrbitControlsProperties['minPolarAngle'] = undefined
+  export let minZoom: OrbitControlsProperties['minZoom'] = undefined
+  export let mouseButtons: OrbitControlsProperties['mouseButtons'] = undefined
+  export let panSpeed: OrbitControlsProperties['panSpeed'] = undefined
+  export let rotateSpeed: OrbitControlsProperties['rotateSpeed'] = undefined
+  export let screenSpacePanning: OrbitControlsProperties['screenSpacePanning'] = undefined
+  export let touches: OrbitControlsProperties['touches'] = undefined
+  export let zoomSpeed: OrbitControlsProperties['zoomSpeed'] = undefined
+  export let target: OrbitControlsProperties['target'] = undefined
 
   const parent = getParent()
   const { renderer, render } = useThrelte()

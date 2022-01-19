@@ -1,18 +1,18 @@
 <script lang="ts">
   import { Group as ThreeGroup } from 'three'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { GroupProps } from '../types/components'
+  import type { GroupProperties } from '../types/components'
 
-  export let position: GroupProps['position'] = undefined
-  export let scale: GroupProps['scale'] = undefined
-  export let rotation: GroupProps['rotation'] = undefined
-  export let lookAt: GroupProps['lookAt'] = undefined
-  export let viewportAware: GroupProps['viewportAware'] = false
-  export let inViewport: GroupProps['inViewport'] = false
-  export let castShadow: GroupProps['castShadow'] = undefined
-  export let receiveShadow: GroupProps['receiveShadow'] = undefined
-  export let frustumCulled: GroupProps['frustumCulled'] = undefined
-  export let renderOrder: GroupProps['renderOrder'] = undefined
+  export let position: GroupProperties['position'] = undefined
+  export let scale: GroupProperties['scale'] = undefined
+  export let rotation: GroupProperties['rotation'] = undefined
+  export let lookAt: GroupProperties['lookAt'] = undefined
+  export let viewportAware: GroupProperties['viewportAware'] = false
+  export let inViewport: GroupProperties['inViewport'] = false
+  export let castShadow: GroupProperties['castShadow'] = undefined
+  export let receiveShadow: GroupProperties['receiveShadow'] = undefined
+  export let frustumCulled: GroupProperties['frustumCulled'] = undefined
+  export let renderOrder: GroupProperties['renderOrder'] = undefined
 
   export const group = new ThreeGroup()
 </script>

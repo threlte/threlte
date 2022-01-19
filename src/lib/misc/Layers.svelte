@@ -1,10 +1,10 @@
 <script lang="ts">
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { LayersProps } from '../types/components'
+  import type { LayersProperties } from '../types/components'
   import type { ThrelteLayers, ThrelteLayersContext } from '../types/types'
 
-  export let layers: LayersProps['layers']
+  export let layers: LayersProperties['layers']
 
   const layerStore = writable<ThrelteLayers | undefined>(layers)
   $: layerStore.set(layers)

@@ -4,11 +4,11 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
-  import type { FogProps } from '../types/components'
+  import type { FogProperties } from '../types/components'
 
-  export let color: FogProps['color'] = 0xffffff
-  export let near: FogProps['near'] = undefined
-  export let far: FogProps['far'] = undefined
+  export let color: FogProperties['color'] = 0xffffff
+  export let near: FogProperties['near'] = undefined
+  export let far: FogProperties['far'] = undefined
 
   const { linear } = useThrelteRoot()
   const { scene, render } = useThrelte()

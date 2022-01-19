@@ -4,10 +4,10 @@
   import { Frustum, Matrix4 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { ViewportAwareObjectProps } from '../types/components'
+  import type { ViewportAwareObjectProperties } from '../types/components'
 
-  export let object: ViewportAwareObjectProps['object']
-  export let viewportAware: ViewportAwareObjectProps['viewportAware']
+  export let object: ViewportAwareObjectProperties['object']
+  export let viewportAware: ViewportAwareObjectProperties['viewportAware']
 
   const dispatch = createEventDispatcher<{
     viewportenter: Object3D
@@ -39,7 +39,7 @@
 
   let ticked = false
 
-  export let inViewport: ViewportAwareObjectProps['inViewport'] = checkInViewport()
+  export let inViewport: ViewportAwareObjectProperties['inViewport'] = checkInViewport()
 
   const dispatchEvent = async (isInViewport: boolean) => {
     if (isInViewport) {

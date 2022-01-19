@@ -1,20 +1,20 @@
 <script lang="ts">
   import { AmbientLight as ThreeAmbientLight } from 'three'
   import LightInstance from '../instances/LightInstance.svelte'
-  import type { AmbientLightProps } from '../types/components'
+  import type { AmbientLightProperties } from '../types/components'
 
-  export let position: AmbientLightProps['position'] = undefined
-  export let scale: AmbientLightProps['scale'] = undefined
-  export let rotation: AmbientLightProps['rotation'] = undefined
-  export let lookAt: AmbientLightProps['lookAt'] = undefined
-  export let castShadow: AmbientLightProps['castShadow'] = undefined
-  export let receiveShadow: AmbientLightProps['receiveShadow'] = undefined
-  export let frustumCulled: AmbientLightProps['frustumCulled'] = undefined
-  export let renderOrder: AmbientLightProps['renderOrder'] = undefined
-  export let viewportAware: AmbientLightProps['viewportAware'] = false
-  export let inViewport: AmbientLightProps['inViewport'] = false
-  export let color: AmbientLightProps['color'] = undefined
-  export let intensity: AmbientLightProps['intensity'] = undefined
+  export let position: AmbientLightProperties['position'] = undefined
+  export let scale: AmbientLightProperties['scale'] = undefined
+  export let rotation: AmbientLightProperties['rotation'] = undefined
+  export let lookAt: AmbientLightProperties['lookAt'] = undefined
+  export let castShadow: AmbientLightProperties['castShadow'] = undefined
+  export let receiveShadow: AmbientLightProperties['receiveShadow'] = undefined
+  export let frustumCulled: AmbientLightProperties['frustumCulled'] = undefined
+  export let renderOrder: AmbientLightProperties['renderOrder'] = undefined
+  export let viewportAware: AmbientLightProperties['viewportAware'] = false
+  export let inViewport: AmbientLightProperties['inViewport'] = false
+  export let color: AmbientLightProperties['color'] = undefined
+  export let intensity: AmbientLightProperties['intensity'] = undefined
 
   export const light = new ThreeAmbientLight(color, intensity)
 </script>

@@ -2,23 +2,23 @@
   import { PointLight as ThreePointLight } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import type { PointLightProps } from '../types/components'
+  import type { PointLightProperties } from '../types/components'
 
-  export let position: PointLightProps['position']
-  export let scale: PointLightProps['scale']
-  export let rotation: PointLightProps['rotation']
-  export let lookAt: PointLightProps['lookAt']
-  export let receiveShadow: PointLightProps['receiveShadow']
-  export let viewportAware: PointLightProps['viewportAware']
-  export let inViewport: PointLightProps['inViewport']
-  export let frustumCulled: PointLightProps['frustumCulled']
-  export let renderOrder: PointLightProps['renderOrder']
-  export let intensity: PointLightProps['intensity']
-  export let color: PointLightProps['color']
-  export let distance: PointLightProps['distance']
-  export let decay: PointLightProps['decay']
-  export let power: PointLightProps['power']
-  export let shadow: PointLightProps['shadow']
+  export let position: PointLightProperties['position']
+  export let scale: PointLightProperties['scale']
+  export let rotation: PointLightProperties['rotation']
+  export let lookAt: PointLightProperties['lookAt']
+  export let receiveShadow: PointLightProperties['receiveShadow']
+  export let viewportAware: PointLightProperties['viewportAware']
+  export let inViewport: PointLightProperties['inViewport']
+  export let frustumCulled: PointLightProperties['frustumCulled']
+  export let renderOrder: PointLightProperties['renderOrder']
+  export let intensity: PointLightProperties['intensity']
+  export let color: PointLightProperties['color']
+  export let distance: PointLightProperties['distance']
+  export let decay: PointLightProperties['decay']
+  export let power: PointLightProperties['power']
+  export let shadow: PointLightProperties['shadow']
 
   export const light = new ThreePointLight(color, intensity, distance, decay)
 

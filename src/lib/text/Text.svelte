@@ -3,53 +3,53 @@
   import { Text as ThreeText } from 'troika-three-text'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
-  import type { TextProps } from '../types/components'
+  import type { TextProperties } from '../types/components'
   import type { Text as TextType } from '../types/types'
 
   // MeshInstance
-  export let position: TextProps['position'] = undefined
-  export let scale: TextProps['scale'] = undefined
-  export let rotation: TextProps['rotation'] = undefined
-  export let viewportAware: TextProps['viewportAware'] = false
-  export let inViewport: TextProps['inViewport'] = false
-  export let castShadow: TextProps['castShadow'] = undefined
-  export let receiveShadow: TextProps['receiveShadow'] = undefined
-  export let frustumCulled: TextProps['frustumCulled'] = undefined
-  export let renderOrder: TextProps['renderOrder'] = undefined
-  export let interactive: TextProps['interactive'] = false
-  export let ignorePointer: TextProps['ignorePointer'] = false
-  export let lookAt: TextProps['lookAt'] = undefined
+  export let position: TextProperties['position'] = undefined
+  export let scale: TextProperties['scale'] = undefined
+  export let rotation: TextProperties['rotation'] = undefined
+  export let viewportAware: TextProperties['viewportAware'] = false
+  export let inViewport: TextProperties['inViewport'] = false
+  export let castShadow: TextProperties['castShadow'] = undefined
+  export let receiveShadow: TextProperties['receiveShadow'] = undefined
+  export let frustumCulled: TextProperties['frustumCulled'] = undefined
+  export let renderOrder: TextProperties['renderOrder'] = undefined
+  export let interactive: TextProperties['interactive'] = false
+  export let ignorePointer: TextProperties['ignorePointer'] = false
+  export let lookAt: TextProperties['lookAt'] = undefined
 
   // self
-  export let text: TextProps['text'] = undefined
-  export let anchorX: TextProps['anchorX'] = undefined
-  export let anchorY: TextProps['anchorY'] = undefined
-  export let curveRadius: TextProps['curveRadius'] = undefined
-  export let font: TextProps['font'] = undefined
-  export let fontSize: TextProps['fontSize'] = undefined
-  export let letterSpacing: TextProps['letterSpacing'] = undefined
-  export let lineHeight: TextProps['lineHeight'] = undefined
-  export let maxWidth: TextProps['maxWidth'] = undefined
-  export let overflowWrap: TextProps['overflowWrap'] = undefined
-  export let textAlign: TextProps['textAlign'] = undefined
-  export let textIndent: TextProps['textIndent'] = undefined
-  export let whiteSpace: TextProps['whiteSpace'] = undefined
-  export let material: TextProps['material'] | null = undefined
-  export let color: TextProps['color'] | null = undefined
-  export let depthOffset: TextProps['depthOffset'] = undefined
-  export let clipRect: TextProps['clipRect'] | null = undefined
-  export let glyphGeometryDetail: TextProps['glyphGeometryDetail'] = undefined
-  export let sdfGlyphSize: TextProps['sdfGlyphSize'] = undefined
-  export let outlineWidth: TextProps['outlineWidth'] = undefined
-  export let outlineColor: TextProps['outlineColor'] = undefined
-  export let outlineOpacity: TextProps['outlineOpacity'] = undefined
-  export let outlineBlur: TextProps['outlineBlur'] = undefined
-  export let outlineOffsetX: TextProps['outlineOffsetX'] = undefined
-  export let outlineOffsetY: TextProps['outlineOffsetY'] = undefined
-  export let strokeWidth: TextProps['strokeWidth'] = undefined
-  export let strokeColor: TextProps['strokeColor'] = undefined
-  export let strokeOpacity: TextProps['strokeOpacity'] = undefined
-  export let fillOpacity: TextProps['fillOpacity'] = undefined
+  export let text: TextProperties['text'] = undefined
+  export let anchorX: TextProperties['anchorX'] = undefined
+  export let anchorY: TextProperties['anchorY'] = undefined
+  export let curveRadius: TextProperties['curveRadius'] = undefined
+  export let font: TextProperties['font'] = undefined
+  export let fontSize: TextProperties['fontSize'] = undefined
+  export let letterSpacing: TextProperties['letterSpacing'] = undefined
+  export let lineHeight: TextProperties['lineHeight'] = undefined
+  export let maxWidth: TextProperties['maxWidth'] = undefined
+  export let overflowWrap: TextProperties['overflowWrap'] = undefined
+  export let textAlign: TextProperties['textAlign'] = undefined
+  export let textIndent: TextProperties['textIndent'] = undefined
+  export let whiteSpace: TextProperties['whiteSpace'] = undefined
+  export let material: TextProperties['material'] | null = undefined
+  export let color: TextProperties['color'] | null = undefined
+  export let depthOffset: TextProperties['depthOffset'] = undefined
+  export let clipRect: TextProperties['clipRect'] | null = undefined
+  export let glyphGeometryDetail: TextProperties['glyphGeometryDetail'] = undefined
+  export let sdfGlyphSize: TextProperties['sdfGlyphSize'] = undefined
+  export let outlineWidth: TextProperties['outlineWidth'] = undefined
+  export let outlineColor: TextProperties['outlineColor'] = undefined
+  export let outlineOpacity: TextProperties['outlineOpacity'] = undefined
+  export let outlineBlur: TextProperties['outlineBlur'] = undefined
+  export let outlineOffsetX: TextProperties['outlineOffsetX'] = undefined
+  export let outlineOffsetY: TextProperties['outlineOffsetY'] = undefined
+  export let strokeWidth: TextProperties['strokeWidth'] = undefined
+  export let strokeColor: TextProperties['strokeColor'] = undefined
+  export let strokeOpacity: TextProperties['strokeOpacity'] = undefined
+  export let fillOpacity: TextProperties['fillOpacity'] = undefined
 
   export const textObject = new ThreeText() as TextType
 

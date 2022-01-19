@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { PassProps } from '../types/components'
+  import type { PassProperties } from '../types/components'
 
-  export let pass: PassProps['pass']
+  export let pass: PassProperties['pass']
 
   const { addPass, removePass } = useThrelteRoot()
 

@@ -11,21 +11,21 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import type { LookAt, Position, Rotation, Scale, Text as TextType, ThrelteLayers } from './types'
 
-export type HierarchicalObjectProps = {
+export type HierarchicalObjectProperties = {
   object: Object3D
 }
 
-export type InteractiveObjectProps = {
+export type InteractiveObjectProperties = {
   object: Object3D
   interactive: boolean
   ignorePointer: boolean
 }
 
-export type LayerableObjectProps = {
+export type LayerableObjectProperties = {
   object: Object3D
 }
 
-export type TransformableObjectProps = {
+export type TransformableObjectProperties = {
   object: Object3D
   position: Position | undefined
   scale: Scale | undefined
@@ -33,7 +33,7 @@ export type TransformableObjectProps = {
   lookAt: LookAt | undefined
 }
 
-export type ViewportAwareObjectProps = {
+export type ViewportAwareObjectProperties = {
   object: Object3D
   viewportAware: boolean
   /**
@@ -42,45 +42,45 @@ export type ViewportAwareObjectProps = {
   inViewport: boolean
 }
 
-export type Object3DInstanceProps = HierarchicalObjectProps &
-  LayerableObjectProps &
-  TransformableObjectProps &
-  ViewportAwareObjectProps & {
+export type Object3DInstanceProperties = HierarchicalObjectProperties &
+  LayerableObjectProperties &
+  TransformableObjectProperties &
+  ViewportAwareObjectProperties & {
     castShadow: boolean | undefined
     receiveShadow: boolean | undefined
     frustumCulled: boolean | undefined
     renderOrder: number | undefined
   }
 
-export type MeshInstanceProps = Omit<Object3DInstanceProps, 'object'> &
-  Omit<InteractiveObjectProps, 'object'> & {
+export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
+  Omit<InteractiveObjectProperties, 'object'> & {
     mesh: Mesh
   }
 
-export type LightInstanceProps = Omit<Object3DInstanceProps, 'object'> & {
+export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   light: Light
   color: ColorRepresentation | undefined
   intensity: number | undefined
 }
 
-export type CameraInstanceProps = Omit<Object3DInstanceProps, 'object'> & {
+export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   camera: Camera
   useCamera: boolean
 }
 
-export type OrthographicCameraProps = Omit<CameraInstanceProps, 'camera'> & {
+export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
   near: number
   far: number
   zoom: number
 }
 
-export type PerspectiveCameraProps = Omit<CameraInstanceProps, 'camera'> & {
+export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
   near: number
   far: number
   fov: number
 }
 
-export type OrbitControlsProps = {
+export type OrbitControlsProperties = {
   autoRotate: boolean | undefined
   autoRotateSpeed: number | undefined
   dampingFactor: number | undefined
@@ -105,16 +105,16 @@ export type OrbitControlsProps = {
   screenSpacePanning: boolean | undefined
   touches: OrbitControls['touches'] | undefined
   zoomSpeed: number | undefined
-  target: TransformableObjectProps['position'] | undefined
+  target: TransformableObjectProperties['position'] | undefined
 }
 
-export type PassProps = {
+export type PassProperties = {
   pass: Pass
 }
 
-export type AmbientLightProps = Omit<LightInstanceProps, 'light'>
+export type AmbientLightProperties = Omit<LightInstanceProperties, 'light'>
 
-export type DirectionalLightProps = Omit<LightInstanceProps, 'light' | 'castShadow'> & {
+export type DirectionalLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
   shadow:
     | boolean
     | {
@@ -133,12 +133,12 @@ export type DirectionalLightProps = Omit<LightInstanceProps, 'light' | 'castShad
     | undefined
 }
 
-export type HemisphereLightProps = Omit<LightInstanceProps, 'color' | 'light'> & {
-  skyColor: LightInstanceProps['color']
+export type HemisphereLightProperties = Omit<LightInstanceProperties, 'color' | 'light'> & {
+  skyColor: LightInstanceProperties['color']
   groundColor: ColorRepresentation | undefined
 }
 
-export type PointLightProps = Omit<LightInstanceProps, 'light' | 'castShadow'> & {
+export type PointLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
   distance: number | undefined
   decay: number | undefined
   power: number | undefined
@@ -153,7 +153,10 @@ export type PointLightProps = Omit<LightInstanceProps, 'light' | 'castShadow'> &
     | undefined
 }
 
-export type SpotLightProps = Omit<LightInstanceProps, 'lookAt' | 'light' | 'castShadow'> & {
+export type SpotLightProperties = Omit<
+  LightInstanceProperties,
+  'lookAt' | 'light' | 'castShadow'
+> & {
   angle: number | undefined
   decay: number | undefined
   distance: number | undefined
@@ -171,37 +174,37 @@ export type SpotLightProps = Omit<LightInstanceProps, 'lookAt' | 'light' | 'cast
     | undefined
 }
 
-export type FogProps = {
+export type FogProperties = {
   color: ColorRepresentation
   near: number | undefined
   far: number | undefined
 }
 
-export type FogExp2Props = {
+export type FogExp2Properties = {
   color: ColorRepresentation
   density: number | undefined
 }
 
-export type LayersProps = {
+export type LayersProperties = {
   layers: ThrelteLayers | undefined
 }
 
-export type GLTFProps = Omit<Object3DInstanceProps, 'object'> & {
+export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   url: string
   dracoDecoderPath: string | undefined
   ktxTranscoderPath: string | undefined
 }
 
-export type GroupProps = Omit<Object3DInstanceProps, 'object'>
+export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
-export type MeshProps = Omit<MeshInstanceProps, 'mesh'> & {
+export type MeshProps = Omit<MeshInstanceProperties, 'mesh'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }
 
-export type Object3DProps = Omit<Object3DInstanceProps, 'object'>
+export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
 
-export type TextProps = Omit<MeshInstanceProps, 'mesh'> & {
+export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   text: TextType['text'] | undefined
   anchorX: TextType['anchorX'] | undefined
   anchorY: TextType['anchorY'] | undefined

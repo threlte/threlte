@@ -1,23 +1,23 @@
 <script lang="ts">
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { CameraInstanceProps } from '../types/components'
+  import type { CameraInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
-  export let camera: CameraInstanceProps['camera']
+  export let camera: CameraInstanceProperties['camera']
 
-  export let position: CameraInstanceProps['position']
-  export let scale: CameraInstanceProps['scale']
-  export let rotation: CameraInstanceProps['rotation']
-  export let viewportAware: CameraInstanceProps['viewportAware']
-  export let inViewport: CameraInstanceProps['inViewport']
-  export let castShadow: CameraInstanceProps['castShadow']
-  export let receiveShadow: CameraInstanceProps['receiveShadow']
-  export let frustumCulled: CameraInstanceProps['frustumCulled']
-  export let renderOrder: CameraInstanceProps['renderOrder']
-  export let lookAt: CameraInstanceProps['lookAt']
+  export let position: CameraInstanceProperties['position']
+  export let scale: CameraInstanceProperties['scale']
+  export let rotation: CameraInstanceProperties['rotation']
+  export let viewportAware: CameraInstanceProperties['viewportAware']
+  export let inViewport: CameraInstanceProperties['inViewport']
+  export let castShadow: CameraInstanceProperties['castShadow']
+  export let receiveShadow: CameraInstanceProperties['receiveShadow']
+  export let frustumCulled: CameraInstanceProperties['frustumCulled']
+  export let renderOrder: CameraInstanceProperties['renderOrder']
+  export let lookAt: CameraInstanceProperties['lookAt']
 
   // self
-  export let useCamera: CameraInstanceProps['useCamera']
+  export let useCamera: CameraInstanceProperties['useCamera']
 
   const { setCamera } = useThrelteRoot()
 

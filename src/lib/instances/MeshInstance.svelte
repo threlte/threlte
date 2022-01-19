@@ -1,21 +1,21 @@
 <script lang="ts">
   import InteractiveObject from '../internal/InteractiveObject.svelte'
-  import type { MeshInstanceProps } from '../types/components'
+  import type { MeshInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
-  export let mesh: MeshInstanceProps['mesh']
-  export let position: MeshInstanceProps['position']
-  export let scale: MeshInstanceProps['scale']
-  export let rotation: MeshInstanceProps['rotation']
-  export let viewportAware: MeshInstanceProps['viewportAware']
-  export let inViewport: MeshInstanceProps['inViewport']
-  export let castShadow: MeshInstanceProps['castShadow']
-  export let receiveShadow: MeshInstanceProps['receiveShadow']
-  export let frustumCulled: MeshInstanceProps['frustumCulled']
-  export let renderOrder: MeshInstanceProps['renderOrder']
-  export let lookAt: MeshInstanceProps['lookAt']
-  export let interactive: MeshInstanceProps['interactive']
-  export let ignorePointer: MeshInstanceProps['ignorePointer']
+  export let mesh: MeshInstanceProperties['mesh']
+  export let position: MeshInstanceProperties['position']
+  export let scale: MeshInstanceProperties['scale']
+  export let rotation: MeshInstanceProperties['rotation']
+  export let viewportAware: MeshInstanceProperties['viewportAware']
+  export let inViewport: MeshInstanceProperties['inViewport']
+  export let castShadow: MeshInstanceProperties['castShadow']
+  export let receiveShadow: MeshInstanceProperties['receiveShadow']
+  export let frustumCulled: MeshInstanceProperties['frustumCulled']
+  export let renderOrder: MeshInstanceProperties['renderOrder']
+  export let lookAt: MeshInstanceProperties['lookAt']
+  export let interactive: MeshInstanceProperties['interactive']
+  export let ignorePointer: MeshInstanceProperties['ignorePointer']
 </script>
 
 <Object3DInstance

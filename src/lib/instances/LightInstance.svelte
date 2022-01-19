@@ -2,23 +2,23 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
-  import type { LightInstanceProps } from '../types/components'
+  import type { LightInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
-  export let position: LightInstanceProps['position']
-  export let scale: LightInstanceProps['scale']
-  export let rotation: LightInstanceProps['rotation']
-  export let viewportAware: LightInstanceProps['viewportAware']
-  export let inViewport: LightInstanceProps['inViewport']
-  export let castShadow: LightInstanceProps['castShadow']
-  export let receiveShadow: LightInstanceProps['receiveShadow']
-  export let frustumCulled: LightInstanceProps['frustumCulled']
-  export let renderOrder: LightInstanceProps['renderOrder']
-  export let lookAt: LightInstanceProps['lookAt']
+  export let position: LightInstanceProperties['position']
+  export let scale: LightInstanceProperties['scale']
+  export let rotation: LightInstanceProperties['rotation']
+  export let viewportAware: LightInstanceProperties['viewportAware']
+  export let inViewport: LightInstanceProperties['inViewport']
+  export let castShadow: LightInstanceProperties['castShadow']
+  export let receiveShadow: LightInstanceProperties['receiveShadow']
+  export let frustumCulled: LightInstanceProperties['frustumCulled']
+  export let renderOrder: LightInstanceProperties['renderOrder']
+  export let lookAt: LightInstanceProperties['lookAt']
 
-  export let light: LightInstanceProps['light']
-  export let color: LightInstanceProps['color']
-  export let intensity: LightInstanceProps['intensity']
+  export let light: LightInstanceProperties['light']
+  export let color: LightInstanceProperties['color']
+  export let intensity: LightInstanceProperties['intensity']
 
   const { render } = useThrelte()
   const { linear } = useThrelteRoot()

@@ -4,28 +4,28 @@
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { SpotLightProps } from '../types/components'
+  import type { SpotLightProperties } from '../types/components'
 
   // LightInstance
-  export let position: SpotLightProps['position'] = undefined
-  export let scale: SpotLightProps['scale'] = undefined
-  export let rotation: SpotLightProps['rotation'] = undefined
-  export let viewportAware: SpotLightProps['viewportAware'] = false
-  export let inViewport: SpotLightProps['inViewport'] = false
-  export let frustumCulled: SpotLightProps['frustumCulled'] = undefined
-  export let receiveShadow: SpotLightProps['receiveShadow'] = undefined
-  export let renderOrder: SpotLightProps['renderOrder'] = undefined
-  export let color: SpotLightProps['color'] = undefined
-  export let intensity: SpotLightProps['intensity'] = undefined
+  export let position: SpotLightProperties['position'] = undefined
+  export let scale: SpotLightProperties['scale'] = undefined
+  export let rotation: SpotLightProperties['rotation'] = undefined
+  export let viewportAware: SpotLightProperties['viewportAware'] = false
+  export let inViewport: SpotLightProperties['inViewport'] = false
+  export let frustumCulled: SpotLightProperties['frustumCulled'] = undefined
+  export let receiveShadow: SpotLightProperties['receiveShadow'] = undefined
+  export let renderOrder: SpotLightProperties['renderOrder'] = undefined
+  export let color: SpotLightProperties['color'] = undefined
+  export let intensity: SpotLightProperties['intensity'] = undefined
 
   // self
-  export let angle: SpotLightProps['angle'] = undefined
-  export let decay: SpotLightProps['decay'] = undefined
-  export let distance: SpotLightProps['distance'] = undefined
-  export let penumbra: SpotLightProps['penumbra'] = undefined
-  export let power: SpotLightProps['power'] = undefined
-  export let target: SpotLightProps['target'] = undefined
-  export let shadow: SpotLightProps['shadow'] = undefined
+  export let angle: SpotLightProperties['angle'] = undefined
+  export let decay: SpotLightProperties['decay'] = undefined
+  export let distance: SpotLightProperties['distance'] = undefined
+  export let penumbra: SpotLightProperties['penumbra'] = undefined
+  export let power: SpotLightProperties['power'] = undefined
+  export let target: SpotLightProperties['target'] = undefined
+  export let shadow: SpotLightProperties['shadow'] = undefined
 
   export const light = new ThreeSpotLight(color, intensity)
   const originalLightTarget = light.target

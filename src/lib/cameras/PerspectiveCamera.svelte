@@ -4,25 +4,25 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import CameraInstance from '../instances/CameraInstance.svelte'
-  import type { PerspectiveCameraProps } from '../types/components'
+  import type { PerspectiveCameraProperties } from '../types/components'
 
   // CameraInstance
-  export let position: PerspectiveCameraProps['position'] = undefined
-  export let scale: PerspectiveCameraProps['scale'] = undefined
-  export let rotation: PerspectiveCameraProps['rotation'] = undefined
-  export let lookAt: PerspectiveCameraProps['lookAt'] = undefined
-  export let castShadow: PerspectiveCameraProps['castShadow'] = undefined
-  export let receiveShadow: PerspectiveCameraProps['receiveShadow'] = undefined
-  export let frustumCulled: PerspectiveCameraProps['frustumCulled'] = undefined
-  export let renderOrder: PerspectiveCameraProps['renderOrder'] = undefined
-  export let viewportAware: PerspectiveCameraProps['viewportAware'] = false
-  export let inViewport: PerspectiveCameraProps['inViewport'] = false
-  export let useCamera: PerspectiveCameraProps['useCamera'] = true
+  export let position: PerspectiveCameraProperties['position'] = undefined
+  export let scale: PerspectiveCameraProperties['scale'] = undefined
+  export let rotation: PerspectiveCameraProperties['rotation'] = undefined
+  export let lookAt: PerspectiveCameraProperties['lookAt'] = undefined
+  export let castShadow: PerspectiveCameraProperties['castShadow'] = undefined
+  export let receiveShadow: PerspectiveCameraProperties['receiveShadow'] = undefined
+  export let frustumCulled: PerspectiveCameraProperties['frustumCulled'] = undefined
+  export let renderOrder: PerspectiveCameraProperties['renderOrder'] = undefined
+  export let viewportAware: PerspectiveCameraProperties['viewportAware'] = false
+  export let inViewport: PerspectiveCameraProperties['inViewport'] = false
+  export let useCamera: PerspectiveCameraProperties['useCamera'] = true
 
   // self
-  export let near: PerspectiveCameraProps['near'] = 0.1
-  export let far: PerspectiveCameraProps['far'] = 1000
-  export let fov: PerspectiveCameraProps['fov'] = 30
+  export let near: PerspectiveCameraProperties['near'] = 0.1
+  export let far: PerspectiveCameraProperties['far'] = 1000
+  export let fov: PerspectiveCameraProperties['fov'] = 30
 
   const { size, render } = useThrelte()
   const { resizeOpts } = useThrelteRoot()

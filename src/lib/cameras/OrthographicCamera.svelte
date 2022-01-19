@@ -4,25 +4,25 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import CameraInstance from '../instances/CameraInstance.svelte'
-  import type { OrthographicCameraProps } from '../types/components'
+  import type { OrthographicCameraProperties } from '../types/components'
 
   // CameraInstance
-  export let position: OrthographicCameraProps['position'] = undefined
-  export let scale: OrthographicCameraProps['scale'] = undefined
-  export let rotation: OrthographicCameraProps['rotation'] = undefined
-  export let lookAt: OrthographicCameraProps['lookAt'] = undefined
-  export let viewportAware: OrthographicCameraProps['viewportAware'] = false
-  export let inViewport: OrthographicCameraProps['inViewport'] = false
-  export let castShadow: OrthographicCameraProps['castShadow'] = undefined
-  export let receiveShadow: OrthographicCameraProps['receiveShadow'] = undefined
-  export let frustumCulled: OrthographicCameraProps['frustumCulled'] = undefined
-  export let renderOrder: OrthographicCameraProps['renderOrder'] = undefined
-  export let useCamera: OrthographicCameraProps['useCamera'] = true
+  export let position: OrthographicCameraProperties['position'] = undefined
+  export let scale: OrthographicCameraProperties['scale'] = undefined
+  export let rotation: OrthographicCameraProperties['rotation'] = undefined
+  export let lookAt: OrthographicCameraProperties['lookAt'] = undefined
+  export let viewportAware: OrthographicCameraProperties['viewportAware'] = false
+  export let inViewport: OrthographicCameraProperties['inViewport'] = false
+  export let castShadow: OrthographicCameraProperties['castShadow'] = undefined
+  export let receiveShadow: OrthographicCameraProperties['receiveShadow'] = undefined
+  export let frustumCulled: OrthographicCameraProperties['frustumCulled'] = undefined
+  export let renderOrder: OrthographicCameraProperties['renderOrder'] = undefined
+  export let useCamera: OrthographicCameraProperties['useCamera'] = true
 
   // OrthographicCamera
-  export let near: OrthographicCameraProps['near'] = 0.1
-  export let far: OrthographicCameraProps['far'] = 1000
-  export let zoom: OrthographicCameraProps['zoom'] = 1
+  export let near: OrthographicCameraProperties['near'] = 0.1
+  export let far: OrthographicCameraProperties['far'] = 1000
+  export let zoom: OrthographicCameraProperties['zoom'] = 1
 
   const { size, render } = useThrelte()
   const { setCamera, resizeOpts } = useThrelteRoot()

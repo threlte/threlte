@@ -8,24 +8,24 @@
   import { useLoader } from '../hooks/useLoader'
   import { useThrelte } from '../hooks/useThrelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { GLTFProps } from '../types/components'
+  import type { GLTFProperties } from '../types/components'
 
   // MeshInstance
-  export let position: GLTFProps['position'] = undefined
-  export let scale: GLTFProps['scale'] = undefined
-  export let rotation: GLTFProps['rotation'] = undefined
-  export let viewportAware: GLTFProps['viewportAware'] = false
-  export let inViewport: GLTFProps['inViewport'] = false
-  export let castShadow: GLTFProps['castShadow'] = undefined
-  export let receiveShadow: GLTFProps['receiveShadow'] = undefined
-  export let frustumCulled: GLTFProps['frustumCulled'] = undefined
-  export let renderOrder: GLTFProps['renderOrder'] = undefined
-  export let lookAt: GLTFProps['lookAt'] = undefined
+  export let position: GLTFProperties['position'] = undefined
+  export let scale: GLTFProperties['scale'] = undefined
+  export let rotation: GLTFProperties['rotation'] = undefined
+  export let viewportAware: GLTFProperties['viewportAware'] = false
+  export let inViewport: GLTFProperties['inViewport'] = false
+  export let castShadow: GLTFProperties['castShadow'] = undefined
+  export let receiveShadow: GLTFProperties['receiveShadow'] = undefined
+  export let frustumCulled: GLTFProperties['frustumCulled'] = undefined
+  export let renderOrder: GLTFProperties['renderOrder'] = undefined
+  export let lookAt: GLTFProperties['lookAt'] = undefined
 
   // self
-  export let url: GLTFProps['url']
-  export let dracoDecoderPath: GLTFProps['dracoDecoderPath'] = undefined
-  export let ktxTranscoderPath: GLTFProps['ktxTranscoderPath'] = undefined
+  export let url: GLTFProperties['url']
+  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
+  export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   const dispatch = createEventDispatcher<{
     load: undefined

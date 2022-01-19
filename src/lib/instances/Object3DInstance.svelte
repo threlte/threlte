@@ -4,25 +4,25 @@
   import LayerableObject from '../internal/LayerableObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-  import type { Object3DInstanceProps } from '../types/components'
+  import type { Object3DInstanceProperties } from '../types/components'
 
-  export let object: Object3DInstanceProps['object']
+  export let object: Object3DInstanceProperties['object']
 
   // TransformableObject
-  export let position: Object3DInstanceProps['position']
-  export let scale: Object3DInstanceProps['scale']
-  export let rotation: Object3DInstanceProps['rotation']
-  export let lookAt: Object3DInstanceProps['lookAt']
+  export let position: Object3DInstanceProperties['position']
+  export let scale: Object3DInstanceProperties['scale']
+  export let rotation: Object3DInstanceProperties['rotation']
+  export let lookAt: Object3DInstanceProperties['lookAt']
 
   // ViewportAwareObject
-  export let viewportAware: Object3DInstanceProps['viewportAware']
-  export let inViewport: Object3DInstanceProps['inViewport']
+  export let viewportAware: Object3DInstanceProperties['viewportAware']
+  export let inViewport: Object3DInstanceProperties['inViewport']
 
   // self
-  export let castShadow: Object3DInstanceProps['castShadow']
-  export let receiveShadow: Object3DInstanceProps['receiveShadow']
-  export let frustumCulled: Object3DInstanceProps['frustumCulled']
-  export let renderOrder: Object3DInstanceProps['renderOrder']
+  export let castShadow: Object3DInstanceProperties['castShadow']
+  export let receiveShadow: Object3DInstanceProperties['receiveShadow']
+  export let frustumCulled: Object3DInstanceProperties['frustumCulled']
+  export let renderOrder: Object3DInstanceProperties['renderOrder']
 
   const { render } = useThrelte()
 

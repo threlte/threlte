@@ -3,11 +3,11 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import type { ThrelteEvent } from '../lib/interactivity'
-  import type { InteractiveObjectProps } from '../types/components'
+  import type { InteractiveObjectProperties } from '../types/components'
 
-  export let object: InteractiveObjectProps['object']
-  export let interactive: InteractiveObjectProps['interactive']
-  export let ignorePointer: InteractiveObjectProps['ignorePointer']
+  export let object: InteractiveObjectProperties['object']
+  export let interactive: InteractiveObjectProperties['interactive']
+  export let ignorePointer: InteractiveObjectProperties['ignorePointer']
 
   const eventDispatcher = createEventDispatcher<{
     click: ThrelteEvent

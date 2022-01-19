@@ -2,21 +2,21 @@
   import { DirectionalLight as ThreeDirectionalLight } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import type { DirectionalLightProps } from '../types/components'
+  import type { DirectionalLightProperties } from '../types/components'
 
   // LightInstance
-  export let position: DirectionalLightProps['position'] = undefined
-  export let scale: DirectionalLightProps['scale'] = undefined
-  export let rotation: DirectionalLightProps['rotation'] = undefined
-  export let lookAt: DirectionalLightProps['lookAt'] = undefined
-  export let receiveShadow: DirectionalLightProps['receiveShadow'] = undefined
-  export let frustumCulled: DirectionalLightProps['frustumCulled'] = undefined
-  export let renderOrder: DirectionalLightProps['renderOrder'] = undefined
-  export let viewportAware: DirectionalLightProps['viewportAware'] = false
-  export let inViewport: DirectionalLightProps['inViewport'] = false
-  export let color: DirectionalLightProps['color'] = undefined
-  export let intensity: DirectionalLightProps['intensity'] = undefined
-  export let shadow: DirectionalLightProps['shadow'] = undefined
+  export let position: DirectionalLightProperties['position'] = undefined
+  export let scale: DirectionalLightProperties['scale'] = undefined
+  export let rotation: DirectionalLightProperties['rotation'] = undefined
+  export let lookAt: DirectionalLightProperties['lookAt'] = undefined
+  export let receiveShadow: DirectionalLightProperties['receiveShadow'] = undefined
+  export let frustumCulled: DirectionalLightProperties['frustumCulled'] = undefined
+  export let renderOrder: DirectionalLightProperties['renderOrder'] = undefined
+  export let viewportAware: DirectionalLightProperties['viewportAware'] = false
+  export let inViewport: DirectionalLightProperties['inViewport'] = false
+  export let color: DirectionalLightProperties['color'] = undefined
+  export let intensity: DirectionalLightProperties['intensity'] = undefined
+  export let shadow: DirectionalLightProperties['shadow'] = undefined
 
   export const light = new ThreeDirectionalLight(color, intensity)
 

@@ -4,21 +4,21 @@
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import LightInstance from '../instances/LightInstance.svelte'
   import { convertColorRepresentationToColor } from '../lib/colors'
-  import type { HemisphereLightProps } from '../types/components'
+  import type { HemisphereLightProperties } from '../types/components'
 
-  export let position: HemisphereLightProps['position'] = undefined
-  export let scale: HemisphereLightProps['scale'] = undefined
-  export let rotation: HemisphereLightProps['rotation'] = undefined
-  export let lookAt: HemisphereLightProps['lookAt'] = undefined
-  export let castShadow: HemisphereLightProps['castShadow'] = undefined
-  export let receiveShadow: HemisphereLightProps['receiveShadow'] = undefined
-  export let viewportAware: HemisphereLightProps['viewportAware'] = false
-  export let inViewport: HemisphereLightProps['inViewport'] = false
-  export let frustumCulled: HemisphereLightProps['frustumCulled'] = undefined
-  export let renderOrder: HemisphereLightProps['renderOrder'] = undefined
-  export let intensity: HemisphereLightProps['intensity'] = undefined
-  export let skyColor: HemisphereLightProps['skyColor'] = undefined
-  export let groundColor: HemisphereLightProps['groundColor'] = undefined
+  export let position: HemisphereLightProperties['position'] = undefined
+  export let scale: HemisphereLightProperties['scale'] = undefined
+  export let rotation: HemisphereLightProperties['rotation'] = undefined
+  export let lookAt: HemisphereLightProperties['lookAt'] = undefined
+  export let castShadow: HemisphereLightProperties['castShadow'] = undefined
+  export let receiveShadow: HemisphereLightProperties['receiveShadow'] = undefined
+  export let viewportAware: HemisphereLightProperties['viewportAware'] = false
+  export let inViewport: HemisphereLightProperties['inViewport'] = false
+  export let frustumCulled: HemisphereLightProperties['frustumCulled'] = undefined
+  export let renderOrder: HemisphereLightProperties['renderOrder'] = undefined
+  export let intensity: HemisphereLightProperties['intensity'] = undefined
+  export let skyColor: HemisphereLightProperties['skyColor'] = undefined
+  export let groundColor: HemisphereLightProperties['groundColor'] = undefined
 
   export const light = new ThreeHemisphereLight(skyColor, groundColor, intensity)
 

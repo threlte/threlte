@@ -3,13 +3,13 @@
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import { defaults } from '../lib/defaults'
-  import type { TransformableObjectProps } from '../types/components'
+  import type { TransformableObjectProperties } from '../types/components'
 
-  export let object: TransformableObjectProps['object']
-  export let position: TransformableObjectProps['position']
-  export let scale: TransformableObjectProps['scale']
-  export let rotation: TransformableObjectProps['rotation']
-  export let lookAt: TransformableObjectProps['lookAt']
+  export let object: TransformableObjectProperties['object']
+  export let position: TransformableObjectProperties['position']
+  export let scale: TransformableObjectProperties['scale']
+  export let rotation: TransformableObjectProperties['rotation']
+  export let lookAt: TransformableObjectProperties['lookAt']
 
   const targetWorldPos = new Vector3()
 
