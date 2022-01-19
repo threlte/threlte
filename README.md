@@ -169,7 +169,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
   react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.  
   threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
 - **Does not get in your way**  
-  Everything is accessible. objects are instantiated without any default values, so that threlte will not get in your way of setting up or altering objects manually while also relying on the defaults set by three.js.
+  Everything is accessible. Objects are instantiated without any default values, so that threlte will not get in your way of setting up or altering objects manually while also relying on the defaults set by three.js.
 
 ### Interactivity
 
@@ -331,11 +331,10 @@ type UseResizeOptions = {
 
 ### Conventions
 
-Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and their respective naming.
+Threlte components follow the principles of three.js whereever possible and useful in terms of available properties and events and their respective naming.  
+Most component properties are `undefined` by default. Therefore, new three.js objects are instantiated without any optional default values. This way, three.js will provide the defaults and threltes reactivity will *not* kick in, allowing you to take complete control over objects.
 
-#### Additions <!-- omit in toc -->
-
-On top of that, threlte adds some functionality to make objects truly reactive.
+On top of that, threlte adds some functionality to make objects even more reactive.
 
 ##### lookAt <!-- omit in toc -->
 
