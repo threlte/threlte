@@ -89,7 +89,12 @@ Build your first scene:
 
 ```svelte
 <script>
-  import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
+  import {
+    CircleBufferGeometry,
+    MeshStandardMaterial,
+    BoxBufferGeometry,
+    DoubleSide
+  } from "three";
   import {
     Canvas,
     DirectionalLight,
@@ -97,31 +102,30 @@ Build your first scene:
     Mesh,
     OrbitControls,
     PerspectiveCamera
-  } from 'threlte'
+  } from "threlte";
 </script>
 
 <div>
   <Canvas>
     <PerspectiveCamera position={{ x: 10, y: 10, z: 10 }}>
-      <OrbitControls enableDamping />
+      <OrbitControls autoRotate />
     </PerspectiveCamera>
 
-    <DirectionalLight shadow color={'#EDBD9C'} position={{ x: -15, y: 45, z: 20 }} />
-
-    <HemisphereLight skyColor={0x4c8eac} groundColor={0xac844c} intensity={0.6} />
+    <DirectionalLight shadow color={'white'} position={{ x: -15, y: 45, z: 20 }} />
+    <HemisphereLight skyColor={'white'} groundColor={'#ac844c'} intensity={0.4} />
 
     <Mesh
       castShadow
-      geometry={new SphereBufferGeometry(1, 40, 40)}
-      material={new MeshStandardMaterial({ color: '#dddddd' })}
+      geometry={new BoxBufferGeometry(1, 1, 1)}
+      material={new MeshStandardMaterial({ color: '#ff3e00' })}
     />
 
     <Mesh
       receiveShadow
-      position={{ y: -1.5 }}
+      position={{ y: -0.5 }}
       rotation={{ x: -90 * (Math.PI / 180) }}
       geometry={new CircleBufferGeometry(3, 72)}
-      material={new MeshStandardMaterial({ color: 'white' })}
+      material={new MeshStandardMaterial({ side: DoubleSide, color: 'white' })}
     />
   </Canvas>
 </div>
