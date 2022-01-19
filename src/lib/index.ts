@@ -80,7 +80,7 @@ export type {
   LayersProperties,
   GLTFProperties,
   GroupProperties,
-  MeshProps,
+  MeshProperties,
   Object3DProperties,
   TextProperties
 } from './types/components'

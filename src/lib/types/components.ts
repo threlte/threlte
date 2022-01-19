@@ -197,7 +197,7 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
 
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
-export type MeshProps = Omit<MeshInstanceProperties, 'mesh'> & {
+export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }
