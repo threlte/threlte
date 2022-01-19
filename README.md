@@ -1548,7 +1548,7 @@ const {
 } = useThrelte()
 ```
 
-If your frame loop is set to `'demand'` and you are manually editing objects or materials, be sure to request a rerender:
+If your [frame loop is set to `'demand'`]((#clipboard-canvas)) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()
