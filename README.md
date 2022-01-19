@@ -362,9 +362,7 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 dpr: number = browser ? window.devicePixelRatio : 1
 flat: boolean = false
 linear: boolean = false
@@ -412,13 +410,10 @@ rootCtx: ThrelteRootContext
 
 ```ts
 // required
-
 geometry: THREE.BufferGeometry
 material: THREE.Material | THREE.Material[]
 
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -457,9 +452,7 @@ mesh: THREE.Mesh
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -498,9 +491,7 @@ You might want to use this component to pass as a reference to other components:
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -540,12 +531,9 @@ To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
 ```ts
 // required
-
 url: string
 
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -569,6 +557,8 @@ scene: THREE.Group
 ### :recycle: Object Instances
 
 While object components like `<Mesh>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component takes an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually, imported models or objects that did not yet make it into threlte.
+
+Object instance components intentionally have no default values on properties even if they can be `undefined`. That way, your IDE will tell you what properties need to be implemented to properly set them up.
 
 ##### Example <!-- omit in toc -->
 
@@ -607,13 +597,10 @@ While object components like `<Mesh>` create a new object for you (in the case o
 
 ```ts
 // required
-
 object: THREE.Object3D
 viewportAware: boolean
 
-
 // optional
-
 position: Position | undefined
 scale: Scale | undefined
 rotation: Rotation | undefined
@@ -654,15 +641,12 @@ inViewport: boolean
 
 ```ts
 // required
-
 mesh: THREE.Mesh
 interactive: boolean
 ignorePointerEvents: boolean
 viewportAware: boolean
 
-
 // optional
-
 position: Position | undefined
 scale: Scale | undefined
 rotation: Rotation | undefined
@@ -698,14 +682,11 @@ inViewport: boolean
 
 ```ts
 // required
-
 camera: THREE.Camera
 viewportAware: boolean
 useCamera: boolean
 
-
 // optional
-
 position: Position | undefined
 scale: Scale | undefined
 rotation: Rotation | undefined
@@ -746,13 +727,10 @@ inViewport: boolean
 
 ```ts
 // required
-
 light: THREE.Light
 viewportAware: boolean
 
-
 // optional
-
 position: Position | undefined
 scale: Scale | undefined
 rotation: Rotation | undefined
@@ -788,9 +766,7 @@ inViewport: boolean
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -830,9 +806,7 @@ light: THREE.AmbientLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -888,9 +862,7 @@ light: THREE.DirectionalLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -926,9 +898,7 @@ light: THREE.HemisphereLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -977,9 +947,7 @@ light: THREE.PointLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -1034,9 +1002,7 @@ light: THREE.SpotLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -1078,9 +1044,7 @@ camera: THREE.OrthographicCamera
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -1124,9 +1088,7 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 autoRotate: boolean | undefined = undefined
 autoRotateSpeed: number | undefined = undefined
 dampingFactor: number | undefined = undefined
@@ -1199,7 +1161,6 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 
 ```ts
 // required
-
 pass: THREE.Pass
 ```
 
@@ -1222,9 +1183,7 @@ A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is t
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 color: THREE.ColorRepresentation = 0xffffff
 near: number | undefined = undefined
 far: number | undefined = undefined
@@ -1254,9 +1213,7 @@ A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy 
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 color: THREE.ColorRepresentation = 0xffffff
 density: number | undefined = undefined
 ```
@@ -1286,9 +1243,7 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 ##### Properties <!-- omit in toc -->
 
 ```ts
-
 // optional
-
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -1381,7 +1336,6 @@ The `<Layers>` component assigns all child components the layer memberships you 
 
 ```ts
 // required
-
 layers: ThrelteLayers
 ```
 
