@@ -1545,6 +1545,14 @@ const {
 } = useThrelte()
 ```
 
+If your frame loop is set to `'on-demand'` and you are manually editing objects or materials, be sure to request a rerender:
+
+```ts
+const { render } = useThrelte()
+
+render()
+```
+
 > This context is also available as the first argument of the callback of the [useFrame hook](#useframe)!
 
 #### :leftwards_arrow_with_hook: useThrelteRoot
