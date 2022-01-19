@@ -24,7 +24,7 @@
   export let far: OrthographicCameraProperties['far'] = undefined
   export let zoom: OrthographicCameraProperties['zoom'] = undefined
 
-  const { size, render } = useThrelte()
+  const { size, invalidate } = useThrelte()
   const { setCamera, resizeOptions } = useThrelteRoot()
 
   export const camera = new ThreeOrthographicCamera(
@@ -44,7 +44,7 @@
     camera.top = size.height / 2
     camera.bottom = size.height / -2
     camera.updateProjectionMatrix()
-    render('OrthographicCamera: onResize')
+    invalidate('OrthographicCamera: onResize')
   }, resizeOptions)
 
   $: {
@@ -52,7 +52,7 @@
     if (far !== undefined) camera.far = far
     if (zoom !== undefined) camera.zoom = zoom
     camera.updateProjectionMatrix()
-    render('OrthographicCamera: props changed')
+    invalidate('OrthographicCamera: props changed')
   }
 </script>
 

@@ -24,7 +24,7 @@
   export let far: PerspectiveCameraProperties['far'] = undefined
   export let fov: PerspectiveCameraProperties['fov'] = undefined
 
-  const { size, render } = useThrelte()
+  const { size, invalidate } = useThrelte()
   const { resizeOptions } = useThrelteRoot()
 
   export const camera = new ThreePerspectiveCamera(fov, size.width / size.height, near, far)
@@ -39,7 +39,7 @@
     if (far !== undefined) camera.far = far
     if (fov !== undefined) camera.fov = fov
     camera.updateProjectionMatrix()
-    render('PerspectiveCamera: props changed')
+    invalidate('PerspectiveCamera: props changed')
   }
 </script>
 

@@ -22,13 +22,13 @@
 
   export const light = new ThreePointLight(color, intensity, distance, decay)
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   $: {
     if (distance !== undefined) light.distance = distance
     if (decay !== undefined) light.decay = decay
     if (power !== undefined) light.power = power
-    render('PointLight: props changed')
+    invalidate('PointLight: props changed')
   }
 
   $: {
@@ -45,7 +45,7 @@
       light.shadow.bias = bias
       light.shadow.radius = radius
     }
-    render('PointLight: shadow changed')
+    invalidate('PointLight: shadow changed')
   }
 </script>
 

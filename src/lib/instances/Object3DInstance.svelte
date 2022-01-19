@@ -24,14 +24,14 @@
   export let frustumCulled: Object3DInstanceProperties['frustumCulled']
   export let renderOrder: Object3DInstanceProperties['renderOrder']
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   $: {
     if (castShadow !== undefined) object.castShadow = castShadow
     if (receiveShadow !== undefined) object.receiveShadow = receiveShadow
     if (frustumCulled !== undefined) object.frustumCulled = frustumCulled
     if (renderOrder !== undefined) object.renderOrder = renderOrder
-    render('Object3DInstance: props changed')
+    invalidate('Object3DInstance: props changed')
   }
 </script>
 

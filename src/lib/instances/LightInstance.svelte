@@ -20,13 +20,13 @@
   export let color: LightInstanceProperties['color']
   export let intensity: LightInstanceProperties['intensity']
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
   const { linear } = useThrelteRoot()
 
   $: {
     if (intensity !== undefined) light.intensity = intensity
     if (color !== undefined) light.color = convertColorRepresentationToColor(color, linear)
-    render('LightInstance: props changed')
+    invalidate('LightInstance: props changed')
   }
 </script>
 

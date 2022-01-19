@@ -8,7 +8,7 @@
 
   const layers = getContext<ThrelteLayersContext>('threlte-layers')
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   $: {
     if ($layers === 'all') {
@@ -28,6 +28,6 @@
     } else if ($layers !== undefined) {
       object.layers.set($layers)
     }
-    render('LayerableObject')
+    invalidate('LayerableObject')
   }
 </script>

@@ -20,7 +20,7 @@
 
   export const light = new ThreeDirectionalLight(color, intensity)
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   $: {
     if (shadow) {
@@ -40,7 +40,7 @@
       light.shadow.bias = bias
       light.shadow.radius = radius
     }
-    render('DirectionalLight: shadow changed')
+    invalidate('DirectionalLight: shadow changed')
   }
 </script>
 

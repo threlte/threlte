@@ -75,5 +75,5 @@
     stop()
   }
 
-  ctx.render('ViewportAwareObject')
+  ctx.invalidate('ViewportAwareObject')
 </script>

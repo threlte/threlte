@@ -53,7 +53,7 @@
 
   export const textObject = new ThreeText() as TextType
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   const dispatch = createEventDispatcher<{
     sync: undefined
@@ -91,7 +91,7 @@
     if (fillOpacity !== undefined) textObject.fillOpacity = fillOpacity
 
     textObject.sync(() => {
-      render('Text: sync finished')
+      invalidate('Text: sync finished')
       dispatch('sync')
     })
   }

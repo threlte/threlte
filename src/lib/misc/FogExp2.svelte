@@ -10,7 +10,7 @@
   export let density: FogExp2Properties['density'] = undefined
 
   const { linear } = useThrelteRoot()
-  const { scene, render } = useThrelte()
+  const { scene, invalidate } = useThrelte()
 
   // @ts-ignore Bad types
   export const fog = new ThreeFogExp2(convertColorRepresentationToColor(color, linear), density)
@@ -18,14 +18,14 @@
   $: {
     fog.color = convertColorRepresentationToColor(color, linear)
     if (density !== undefined) fog.density = density
-    render('FogExp2: props changed')
+    invalidate('FogExp2: props changed')
   }
 
   scene.fog = fog
-  render('FogExp2: added')
+  invalidate('FogExp2: added')
 
   onDestroy(() => {
     scene.fog = null
-    render('FogExp2: removed')
+    invalidate('FogExp2: removed')
   })
 </script>

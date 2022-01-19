@@ -13,7 +13,7 @@
 
   const targetWorldPos = new Vector3()
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   const { start: startLookingAt, stop: stopLookingAt } = useFrame(
     () => {
@@ -34,7 +34,7 @@
         position.y ?? defaults.position.y,
         position.z ?? defaults.position.z
       )
-      render('TransformableObject: position')
+      invalidate('TransformableObject: position')
     }
     if (lookAt && !rotation) {
       if (lookAt instanceof Object3D) {
@@ -46,7 +46,7 @@
           lookAt.y ?? defaults.position.y,
           lookAt.z ?? defaults.position.z
         )
-        render('TransformableObject: lookAt')
+        invalidate('TransformableObject: lookAt')
       }
     }
     if (!lookAt) {
@@ -64,7 +64,7 @@
           scale.z ?? defaults.scale.z
         )
       }
-      render('TransformableObject: scale')
+      invalidate('TransformableObject: scale')
     }
   }
   $: {
@@ -75,7 +75,7 @@
         rotation.z ?? defaults.rotation.z,
         rotation.order ?? defaults.rotation.order
       )
-      render('TransformableObject: rotation')
+      invalidate('TransformableObject: rotation')
     }
   }
 </script>

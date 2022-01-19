@@ -30,7 +30,7 @@
   export const light = new ThreeSpotLight(color, intensity)
   const originalLightTarget = light.target
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   const tmpV3 = new Vector3()
 
@@ -66,7 +66,7 @@
     if (angle !== undefined) light.angle = angle
     if (penumbra !== undefined) light.penumbra = penumbra
     if (power !== undefined) light.power = power
-    render('SpotLight: props changed')
+    invalidate('SpotLight: props changed')
   }
 
   $: {
@@ -83,7 +83,7 @@
       light.shadow.bias = bias
       light.shadow.radius = radius
     }
-    render('SpotLight: shadow changed')
+    invalidate('SpotLight: shadow changed')
   }
 </script>
 

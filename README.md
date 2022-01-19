@@ -176,7 +176,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
   - Bind to three.js object instances  
     `<Mesh … bind:mesh>`
   - Access the renderer  
-    `const { renderer, render } = useThrelte()`
+    `const { renderer, invalidate } = useThrelte()`
 - **Easily extendable**  
   Build objects that didn't yet make it to threlte yourself by plugging together _functional components_.
 - **Tree-shakeble**  
@@ -343,27 +343,29 @@ The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and
 ```ts
 type ThrelteContext = {
   size: { width: number; height: number }
-  pointer?: THREE.Vector2
-  clock: THREE.Clock
-  camera?: THREE.Camera
-  scene: THREE.Scene
-  renderer?: THREE.WebGLRenderer
-  render: (requestedBy?: string) => void
+  pointer?: Vector2
+  clock: Clock
+  camera?: Camera
+  scene: Scene
+  renderer?: WebGLRenderer
+  composer?: EffectComposer
+  invalidate: (reason?: string) => void
 }
 
 type ThrelteRootContext = {
-  setCamera: (camera: THREE.Camera) => void
-  addRaycastableObject: (obj: THREE.Object3D) => void
-  removeRaycastableObject: (obj: THREE.Object3D) => void
-  addInteractiveObject: (obj: THREE.Object3D) => void
-  removeInteractiveObject: (obj: THREE.Object3D) => void
-  addPass: (pass: THREE.Pass) => void
-  removePass: (pass: THREE.Pass) => void
+  setCamera: (camera: Camera) => void
   linear: boolean
-  interactiveObjects: Set<THREE.Object3D>
-  raycastableObjects: Set<THREE.Object3D>
-  composer?: EffectComposer
   resizeOptions?: UseResizeOptions
+  addPass: (pass: Pass) => void
+  removePass: (pass: Pass) => void
+  addRaycastableObject: (obj: Object3D) => void
+  removeRaycastableObject: (obj: Object3D) => void
+  addInteractiveObject: (obj: Object3D) => void
+  removeInteractiveObject: (obj: Object3D) => void
+  interactiveObjects: Set<Object3D>
+  raycastableObjects: Set<Object3D>
+  raycaster: Raycaster
+  lastIntersection: Intersection<Object3D<Event>> | null
 }
 ```
 
@@ -1535,22 +1537,26 @@ This hook lets you consume the state of the `<Canvas>` component which contains 
 
 ```ts
 const {
-  size,           // { width: number; height: number }
-  pointer,        // THREE.Vector2 | undefined
-  clock,          // THREE.Clock
-  camera,         // THREE.Camera
-  scene,          // THREE.Scene
-  renderer,       // THREE.WebGLRenderer
-  render,         // (requestedBy?: string) => void
+  size,              // { width: number; height: number }
+  pointer,           // Vector2 | undefined
+  clock,             // Clock
+  camera,            // Camera | undefined
+  scene,             // Scene
+  renderer,          // WebGLRenderer | undefined
+  composer,          // EffectComposer | undefined
+  invalidate,        // (reason?: string) => void
 } = useThrelte()
 ```
 
 If your frame loop is set to `'on-demand'` and you are manually editing objects or materials, be sure to request a rerender:
 
 ```ts
-const { render } = useThrelte()
+const { invalidate } = useThrelte()
 
-render()
+invalidate()
+
+// Optionally provide a reason to debug the frame loop
+invalidate('changed material color')
 ```
 
 > This context is also available as the first argument of the callback of the [useFrame hook](#useframe)!
@@ -1561,18 +1567,19 @@ This hook lets you consume the root context. Although it can be useful, this is 
 
 ```ts
 const {
-  setCamera,                   // (camera: THREE.Camera) => void
-  addRaycastableObject,        // (obj: THREE.Object3D) => void
-  removeRaycastableObject,     // (obj: THREE.Object3D) => void
-  addInteractiveObject,        // (obj: THREE.Object3D) => void
-  removeInteractiveObject,     // (obj: THREE.Object3D) => void
-  addPass,                     // (pass: THREE.Pass) => void
-  removePass,                  // (pass: THREE.Pass) => void
-  linear,                      // boolean
-  interactiveObjects,          // Set<THREE.Object3D>
-  raycastableObjects,          // Set<THREE.Object3D>
-  composer,                    // THREE.EffectComposer
-  resizeOptions,               // UseResizeOptions
+  setCamera,                   // : (camera: Camera) => void
+  linear,                      // : boolean
+  resizeOptions,               // ?: UseResizeOptions
+  addPass,                     // : (pass: Pass) => void
+  removePass,                  // : (pass: Pass) => void
+  addRaycastableObject,        // : (obj: Object3D) => void
+  removeRaycastableObject,     // : (obj: Object3D) => void
+  addInteractiveObject,        // : (obj: Object3D) => void
+  removeInteractiveObject,     // : (obj: Object3D) => void
+  interactiveObjects,          // : Set<Object3D>
+  raycastableObjects,          // : Set<Object3D>
+  raycaster,                   // : Raycaster
+  lastIntersection,            // : Intersection<Object3D<Event>> | null
 } = useThrelteRoot()
 ```
 

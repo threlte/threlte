@@ -22,13 +22,13 @@
 
   export const light = new ThreeHemisphereLight(skyColor, groundColor, intensity)
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
   const { linear } = useThrelteRoot()
 
   $: {
     if (groundColor !== undefined) {
       light.groundColor = convertColorRepresentationToColor(groundColor, linear)
-      render('HemisphereLight: props changed')
+      invalidate('HemisphereLight: props changed')
     }
   }
 </script>

@@ -28,7 +28,7 @@
     removeRaycastableObject
   } = useThrelteRoot()
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   $: {
     if (ignorePointer) {
@@ -40,12 +40,12 @@
         addInteractiveObject(object)
       }
     }
-    render('InteractiveObject: props changed')
+    invalidate('InteractiveObject: props changed')
   }
 
   onDestroy(() => {
     removeInteractiveObject(object)
     removeRaycastableObject(object)
-    render('InteractiveObject: removed')
+    invalidate('InteractiveObject: removed')
   })
 </script>

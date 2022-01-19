@@ -1,13 +1,13 @@
 import { browser } from '../lib/browser'
 import { sRGBEncoding, Texture, TextureLoader } from 'three'
-import { requestRender } from '../Canvas.svelte'
+import { invalidateGlobally } from '../Canvas.svelte'
 import { useThrelteRoot } from './useThrelteRoot'
 import { useLoader } from './useLoader'
 
 const loader = useLoader(TextureLoader, () => new TextureLoader())
 
 const loadTexture = (path: string) => {
-  return loader.load(path, () => requestRender('useTexture'))
+  return loader.load(path, () => invalidateGlobally('useTexture'))
 }
 
 const pathsIsString = <T extends string>(

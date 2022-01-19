@@ -17,17 +17,17 @@
 <script lang="ts">
   export let object: HierarchicalObjectProperties['object']
 
-  const { render } = useThrelte()
+  const { invalidate } = useThrelte()
 
   const parent = getParent()
   if (parent) parent.add(object)
   setParent(object)
-  render('HierarchicalObject: added to parent')
+  invalidate('HierarchicalObject: added to parent')
 
   onDestroy(() => {
     if (!parent) return
     parent.remove(object)
-    render('HierarchicalObject: removed from parent')
+    invalidate('HierarchicalObject: removed from parent')
   })
 </script>
 

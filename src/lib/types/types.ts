@@ -2,34 +2,56 @@ import type { Readable, Writable } from 'svelte/store'
 import type {
   Camera,
   Clock,
+  Color,
+  ColorRepresentation,
   Euler,
+  Intersection,
+  Loader,
+  Material,
+  Mesh,
   Object3D,
+  Raycaster,
   Scene,
   Vector2,
   Vector3,
   WebGLRenderer,
-  ColorRepresentation,
-  Material,
-  Color,
-  Mesh,
-  Loader
+  Event
 } from 'three'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
 import type { UseResizeOptions } from '../hooks/useResize'
 
 export type ThrelteRootContext = {
   setCamera: (camera: Camera) => void
+  linear: boolean
+  resizeOptions?: UseResizeOptions
+  addPass: (pass: Pass) => void
+  removePass: (pass: Pass) => void
   addRaycastableObject: (obj: Object3D) => void
   removeRaycastableObject: (obj: Object3D) => void
   addInteractiveObject: (obj: Object3D) => void
   removeInteractiveObject: (obj: Object3D) => void
-  addPass: (pass: Pass) => void
-  removePass: (pass: Pass) => void
-  linear: boolean
   interactiveObjects: Set<Object3D>
   raycastableObjects: Set<Object3D>
+  raycaster: Raycaster
+  lastIntersection: Intersection<Object3D<Event>> | null
+}
+
+export type ThrelteContext = {
+  size: { width: number; height: number }
+  pointer?: Vector2
+  clock: Clock
+  camera?: Camera
+  scene: Scene
+  renderer?: WebGLRenderer
   composer?: EffectComposer
-  resizeOptions?: UseResizeOptions
+  invalidate: (reason?: string) => void
+}
+
+export type ThrelteRenderContext = {
+  frameInvalidated: boolean
+  frame: number
+  invalidations: Record<string, number>
+  frameHandlers: Set<ThrelteFrameHandler>
 }
 
 export type ThrelteUseFrame = {
@@ -46,32 +68,6 @@ export type ThrelteUseFrameOptions = {
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
-}
-
-export type ThrelteRenderContext = {
-  renderRequested: boolean
-  frame: number
-  requests: Record<string, number>
-  frameHandlers: Set<ThrelteFrameHandler>
-}
-
-export type ThrelteContext = {
-  /**
-   * Size of the canvas element
-   */
-  size: { width: number; height: number }
-  /**
-   * Contains updated, normalized, centric pointer coordinates, useful for raycasting
-   */
-  pointer?: Vector2
-  clock: Clock
-  camera?: Camera
-  scene: Scene
-  renderer?: WebGLRenderer
-  /**
-   * Call render to trigger a rerender on the next frame if frameloop is set to "demand" (default)
-   */
-  render: (requestedBy?: string) => void
 }
 
 export type ThrelteParentContext = Object3D | undefined

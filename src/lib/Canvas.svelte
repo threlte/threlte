@@ -8,6 +8,7 @@
     NoToneMapping,
     Object3D,
     PCFSoftShadowMap,
+    Raycaster,
     Scene,
     ShadowMapType,
     sRGBEncoding,
@@ -24,9 +25,9 @@
   import { animationFrameRaycast, eventRaycast, transformEvent } from './lib/interactivity'
   import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './types/types'
 
-  const requestRenderInstances: Set<(requestedBy?: string) => void> = new Set()
-  export const requestRender = (requestedBy?: string) => {
-    requestRenderInstances.forEach((fn) => fn(requestedBy))
+  const invalidationHandlers: Set<(reason?: string) => void> = new Set()
+  export const invalidateGlobally = (reason?: string) => {
+    invalidationHandlers.forEach((fn) => fn(reason))
   }
 </script>
 
@@ -45,19 +46,19 @@
   let pointerOverCanvas = false
 
   const renderCtx: ThrelteRenderContext = {
-    renderRequested: true,
-    requests: {},
+    frameInvalidated: true,
+    invalidations: {},
     frame: 0,
     frameHandlers: new Set()
   }
 
   setContext('threlte-render-context', renderCtx)
 
-  const render = (requestedBy?: string) => {
-    renderCtx.renderRequested = true
-    if (debugFrameloop && requestedBy) {
-      renderCtx.requests[requestedBy] = renderCtx.requests[requestedBy]
-        ? renderCtx.requests[requestedBy] + 1
+  const invalidate = (reason?: string) => {
+    renderCtx.frameInvalidated = true
+    if (debugFrameloop && reason) {
+      renderCtx.invalidations[reason] = renderCtx.invalidations[reason]
+        ? renderCtx.invalidations[reason] + 1
         : 1
     }
   }
@@ -67,64 +68,74 @@
     renderCtx.frame += 1
     console.log(
       `frame: ${renderCtx.frame}${
-        Object.keys(renderCtx.requests).length > 0 ? ', requested by ↴' : ''
+        Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''
       }`
     )
-    if (Object.keys(renderCtx.requests).length > 0) console.table(renderCtx.requests)
-    renderCtx.requests = {}
+    if (Object.keys(renderCtx.invalidations).length > 0) console.table(renderCtx.invalidations)
+    renderCtx.invalidations = {}
   }
 
-  requestRenderInstances.add(render)
+  invalidationHandlers.add(invalidate)
   onDestroy(() => {
-    requestRenderInstances.delete(render)
+    invalidationHandlers.delete(invalidate)
   })
 
   export const ctx: ThrelteContext = {
     size: { width: 0, height: 0 },
     pointer: undefined,
     clock: new Clock(),
-    renderer: undefined,
     camera: undefined,
     scene: new Scene(),
-    render
+    renderer: undefined,
+    composer: undefined,
+    invalidate
   }
 
   const addPass = (pass: Pass) => {
-    if (!rootCtx.composer) return
-    rootCtx.composer.addPass(pass)
-    render('Canvas: adding pass')
+    if (!ctx.composer) return
+    ctx.composer.addPass(pass)
+    invalidate('Canvas: adding pass')
   }
 
   const removePass = (pass: Pass) => {
-    if (!rootCtx.composer) return
-    rootCtx.composer.removePass(pass)
-    render('Canvas: removing pass')
+    if (!ctx.composer) return
+    ctx.composer.removePass(pass)
+    invalidate('Canvas: removing pass')
   }
 
   const setCamera = (camera: Camera) => {
-    if (!rootCtx.composer) return
+    if (!ctx.composer) return
     ctx.camera = camera
-    rootCtx.composer.passes.forEach((pass) => {
+    ctx.composer.passes.forEach((pass) => {
       if (pass instanceof RenderPass) {
         pass.camera = camera
       }
     })
-    render('Canvas: setting camera')
+    invalidate('Canvas: setting camera')
   }
 
   export const rootCtx: ThrelteRootContext = {
     setCamera,
-    addRaycastableObject: (object: Object3D) => rootCtx.raycastableObjects.add(object),
-    removeRaycastableObject: (object: Object3D) => rootCtx.raycastableObjects.delete(object),
-    addInteractiveObject: (object: Object3D) => rootCtx.interactiveObjects.add(object),
-    removeInteractiveObject: (object: Object3D) => rootCtx.interactiveObjects.delete(object),
-    addPass,
-    removePass,
     linear,
-    composer: undefined,
-    interactiveObjects: new Set(),
+    resizeOptions,
+    addRaycastableObject: (object: Object3D) => {
+      rootCtx.raycastableObjects.add(object)
+    },
+    removeRaycastableObject: (object: Object3D) => {
+      rootCtx.raycastableObjects.delete(object)
+    },
+    addInteractiveObject: (object: Object3D) => {
+      rootCtx.interactiveObjects.add(object)
+    },
+    removeInteractiveObject: (object: Object3D) => {
+      rootCtx.interactiveObjects.delete(object)
+    },
     raycastableObjects: new Set(),
-    resizeOptions
+    interactiveObjects: new Set(),
+    raycaster: new Raycaster(),
+    lastIntersection: null,
+    addPass,
+    removePass
   }
 
   $: if (ctx.renderer) ctx.renderer.setPixelRatio(dpr)
@@ -137,13 +148,13 @@
   setContext<ThrelteRootContext>('threlte-root', rootCtx)
 
   const resizeCanvas = () => {
-    if (!canvas || !ctx.renderer || !rootCtx.composer) return
+    if (!canvas || !ctx.renderer || !ctx.composer) return
     const parentEl = ctx.renderer.domElement.parentElement
     if (parentEl) {
       ctx.size.width = parentEl.clientWidth
       ctx.size.height = parentEl.clientHeight
       ctx.renderer.setSize(ctx.size.width, ctx.size.height)
-      rootCtx.composer.setSize(ctx.size.width, ctx.size.height)
+      ctx.composer.setSize(ctx.size.width, ctx.size.height)
     }
   }
 
@@ -162,12 +173,12 @@
     ctx.renderer.shadowMap.enabled = shadows
     ctx.renderer.shadowMap.type = shadowMapType
 
-    rootCtx.composer = new EffectComposer(ctx.renderer)
-    rootCtx.composer.addPass(new RenderPass(ctx.scene, ctx.camera ?? new Camera()))
+    ctx.composer = new EffectComposer(ctx.renderer)
+    ctx.composer.addPass(new RenderPass(ctx.scene, ctx.camera ?? new Camera()))
 
     resizeCanvas()
     ctx.renderer.setPixelRatio(dpr)
-    rootCtx.composer.setPixelRatio(dpr)
+    ctx.composer.setPixelRatio(dpr)
     mounted = true
   })
 
@@ -181,27 +192,27 @@
   useRaf(() => {
     if (
       frameloop === 'on-demand' &&
-      !renderCtx.renderRequested &&
+      !renderCtx.frameInvalidated &&
       rootCtx.interactiveObjects.size === 0 &&
       renderCtx.frameHandlers.size === 0
     ) {
       return
     }
-    if (!ctx.camera || !rootCtx.composer || !ctx.renderer) return
+    if (!ctx.camera || !ctx.composer || !ctx.renderer) return
 
     animationFrameRaycast(ctx, rootCtx, pointerOverCanvas)
 
     handleFrameloop(renderCtx, ctx)
 
-    if (rootCtx.composer.passes.length > 1) {
-      rootCtx.composer.render()
+    if (ctx.composer.passes.length > 1) {
+      ctx.composer.render()
     } else {
       ctx.renderer.render(ctx.scene, ctx.camera)
     }
 
     debugRenderFrame()
 
-    renderCtx.renderRequested = false
+    renderCtx.frameInvalidated = false
   })
 </script>
 

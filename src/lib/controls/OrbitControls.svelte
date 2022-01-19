@@ -35,7 +35,7 @@
   export let target: OrbitControlsProperties['target'] = undefined
 
   const parent = getParent()
-  const { renderer, render } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
   if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
 
@@ -91,7 +91,7 @@
     if (touches !== undefined) controls.touches = touches
     if (zoomSpeed !== undefined) controls.zoomSpeed = zoomSpeed
     controls.update()
-    render('OrbitControls: props changed')
+    invalidate('OrbitControls: props changed')
   }
 
   useFrame(() => {
@@ -103,12 +103,12 @@
   $: if (target) {
     controls.target = targetObject.position
     controls.update()
-    render('OrbitControls: target changed')
+    invalidate('OrbitControls: target changed')
   }
 
   onDestroy(() => {
     controls.dispose()
-    render('OrbitControls: onDestroy')
+    invalidate('OrbitControls: onDestroy')
   })
 </script>
 

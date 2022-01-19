@@ -2,7 +2,7 @@ import type { ThrelteRenderContext, ThrelteContext } from '../types/types'
 
 export const handleFrameloop = (renderCtx: ThrelteRenderContext, ctx: ThrelteContext): void => {
   if (renderCtx.frameHandlers.size === 0) return
-  renderCtx.requests['frameHandlers'] = renderCtx.frameHandlers.size
+  renderCtx.invalidations['frameHandlers'] = renderCtx.frameHandlers.size
   const anyHasOrder = Array.from(renderCtx.frameHandlers).reduce(
     (acc, h) => (h.order ? true : acc),
     false
