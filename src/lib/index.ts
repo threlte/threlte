@@ -20,7 +20,7 @@ export { default as SpotLight } from './lights/SpotLight.svelte'
 
 // misc components
 export { default as Fog } from './misc/Fog.svelte'
-export { default as FogExp } from './misc/FogExp2.svelte'
+export { default as FogExp2 } from './misc/FogExp2.svelte'
 export { default as Layers } from './misc/Layers.svelte'
 
 // object components
