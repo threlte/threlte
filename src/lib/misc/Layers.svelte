@@ -6,7 +6,7 @@
 
   export let layers: LayersProperties['layers']
 
-  const layerStore = writable<ThrelteLayers | undefined>(layers)
+  const layerStore = writable<ThrelteLayers>(layers)
   $: layerStore.set(layers)
 
   setContext<ThrelteLayersContext>('threlte-layers', layerStore)

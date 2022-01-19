@@ -186,7 +186,7 @@ export type FogExp2Properties = {
 }
 
 export type LayersProperties = {
-  layers: ThrelteLayers | undefined
+  layers: ThrelteLayers
 }
 
 export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
