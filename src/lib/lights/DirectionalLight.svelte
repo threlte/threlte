@@ -1,40 +1,8 @@
-<script lang="ts" context="module">
-  export type DirectionalLightProps = {
-    position: LightInstanceProps['position']
-    scale: LightInstanceProps['scale']
-    rotation: LightInstanceProps['rotation']
-    lookAt: LightInstanceProps['lookAt']
-    receiveShadow: LightInstanceProps['receiveShadow']
-    viewportAware: LightInstanceProps['viewportAware']
-    inViewport: LightInstanceProps['inViewport']
-    frustumCulled: LightInstanceProps['frustumCulled']
-    renderOrder: LightInstanceProps['renderOrder']
-    color: LightInstanceProps['color']
-    intensity: LightInstanceProps['intensity']
-    shadow:
-      | boolean
-      | {
-          mapSize?: [number, number]
-          camera?: {
-            left?: number
-            right?: number
-            top?: number
-            bottom?: number
-            near?: number
-            far?: number
-          }
-          bias?: number
-          radius?: number
-        }
-      | undefined
-  }
-</script>
-
 <script lang="ts">
-  import { DirectionalLight } from 'three'
+  import { DirectionalLight as ThreeDirectionalLight } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
   import LightInstance from '../instances/LightInstance.svelte'
+  import type { DirectionalLightProps } from '../types/components'
 
   // LightInstance
   export let position: DirectionalLightProps['position'] = undefined
@@ -50,7 +18,7 @@
   export let intensity: DirectionalLightProps['intensity'] = undefined
   export let shadow: DirectionalLightProps['shadow'] = undefined
 
-  export const light = new DirectionalLight(color, intensity)
+  export const light = new ThreeDirectionalLight(color, intensity)
 
   const { render } = useThrelte()
 

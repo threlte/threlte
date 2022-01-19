@@ -1,18 +1,10 @@
-<script lang="ts" context="module">
-  export type FogProps = {
-    color: ColorRepresentation
-    near: number | undefined
-    far: number | undefined
-  }
-</script>
-
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import type { ColorRepresentation } from 'three'
-  import { Fog } from 'three'
+  import { Fog as ThreeFog } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
+  import type { FogProps } from '../types/components'
 
   export let color: FogProps['color'] = 0xffffff
   export let near: FogProps['near'] = undefined
@@ -21,7 +13,7 @@
   const { linear } = useThrelteRoot()
   const { scene, render } = useThrelte()
 
-  export const fog = new Fog(convertColorRepresentationToColor(color, linear), near, far)
+  export const fog = new ThreeFog(convertColorRepresentationToColor(color, linear), near, far)
 
   $: {
     if (color !== undefined) fog.color = convertColorRepresentationToColor(color, linear)

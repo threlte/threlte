@@ -1,32 +1,14 @@
-<script lang="ts" context="module">
-  export type GLTFProps = {
-    position: Object3DInstanceProps['position']
-    scale: Object3DInstanceProps['scale']
-    rotation: Object3DInstanceProps['rotation']
-    viewportAware: Object3DInstanceProps['viewportAware']
-    inViewport: Object3DInstanceProps['inViewport']
-    castShadow: Object3DInstanceProps['castShadow']
-    receiveShadow: Object3DInstanceProps['receiveShadow']
-    frustumCulled: Object3DInstanceProps['frustumCulled']
-    renderOrder: Object3DInstanceProps['renderOrder']
-    lookAt: Object3DInstanceProps['lookAt']
-    url: string
-    dracoDecoderPath: string | undefined
-    ktxTranscoderPath: string | undefined
-  }
-</script>
-
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import type { Group, Mesh, Object3D } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-  import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
   import { useLoader } from '../hooks/useLoader'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { Object3DInstanceProps } from '../instances/Object3DInstance.svelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import type { GLTFProps } from '../types/components'
 
   // MeshInstance
   export let position: GLTFProps['position'] = undefined
@@ -50,7 +32,7 @@
     error: undefined
   }>()
 
-  export let gltf: GLTF | undefined = undefined
+  export let gltf: ThreeGLTF | undefined = undefined
 
   export let scene: Group | undefined = undefined
   $: if (gltf && !scene) scene = gltf.scene

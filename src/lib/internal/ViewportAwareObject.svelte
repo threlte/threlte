@@ -1,20 +1,10 @@
-<script context="module" lang="ts">
-  export type ViewportAwareObjectProps = {
-    object: Object3D
-    viewportAware: boolean
-    /**
-     * Use as a binding.
-     */
-    inViewport: boolean
-  }
-</script>
-
 <script lang="ts">
   import { Mesh, Object3D, Vector3 } from 'three'
   import { createEventDispatcher, tick } from 'svelte'
   import { Frustum, Matrix4 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
+  import type { ViewportAwareObjectProps } from '../types/components'
 
   export let object: ViewportAwareObjectProps['object']
   export let viewportAware: ViewportAwareObjectProps['viewportAware']

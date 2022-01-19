@@ -1,9 +1,3 @@
-<script context="module" lang="ts">
-  export type LayerableObjectProps = {
-    object: Object3D
-  }
-</script>
-
 <script lang="ts">
   import { getContext } from 'svelte'
   import type { Object3D } from 'three'

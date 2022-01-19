@@ -1,29 +1,10 @@
-<script lang="ts" context="module">
-  export type OrthographicCameraProps = {
-    position: CameraInstanceProps['position']
-    scale: CameraInstanceProps['scale']
-    rotation: CameraInstanceProps['rotation']
-    lookAt: CameraInstanceProps['lookAt']
-    viewportAware: CameraInstanceProps['viewportAware']
-    inViewport: CameraInstanceProps['inViewport']
-    castShadow: CameraInstanceProps['castShadow']
-    receiveShadow: CameraInstanceProps['receiveShadow']
-    frustumCulled: CameraInstanceProps['frustumCulled']
-    renderOrder: CameraInstanceProps['renderOrder']
-    useCamera: CameraInstanceProps['useCamera']
-    near: number
-    far: number
-    zoom: number
-  }
-</script>
-
 <script lang="ts">
-  import { OrthographicCamera } from 'three'
+  import { OrthographicCamera as ThreeOrthographicCamera } from 'three'
   import { useResize } from '../hooks/useResize'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { CameraInstanceProps } from '../instances/CameraInstance.svelte'
   import CameraInstance from '../instances/CameraInstance.svelte'
+  import type { OrthographicCameraProps } from '../types/components'
 
   // CameraInstance
   export let position: OrthographicCameraProps['position'] = undefined
@@ -46,7 +27,7 @@
   const { size, render } = useThrelte()
   const { setCamera, resizeOpts } = useThrelteRoot()
 
-  export const camera = new OrthographicCamera(
+  export const camera = new ThreeOrthographicCamera(
     size.width / -2,
     size.width / 2,
     size.height / 2,

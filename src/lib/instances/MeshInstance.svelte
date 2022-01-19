@@ -1,26 +1,6 @@
-<script lang="ts" context="module">
-  export type MeshInstanceProps = {
-    mesh: Mesh
-    position: Object3DInstanceProps['position']
-    scale: Object3DInstanceProps['scale']
-    rotation: Object3DInstanceProps['rotation']
-    viewportAware: Object3DInstanceProps['viewportAware']
-    inViewport: Object3DInstanceProps['inViewport']
-    castShadow: Object3DInstanceProps['castShadow']
-    receiveShadow: Object3DInstanceProps['receiveShadow']
-    frustumCulled: Object3DInstanceProps['frustumCulled']
-    renderOrder: Object3DInstanceProps['renderOrder']
-    lookAt: Object3DInstanceProps['lookAt']
-    interactive: InteractiveObjectProps['interactive']
-    ignorePointer: InteractiveObjectProps['ignorePointer']
-  }
-</script>
-
 <script lang="ts">
-  import type { Mesh } from 'three'
   import InteractiveObject from '../internal/InteractiveObject.svelte'
-  import type { InteractiveObjectProps } from '../internal/InteractiveObject.svelte'
-  import type { Object3DInstanceProps } from './Object3DInstance.svelte'
+  import type { MeshInstanceProps } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
   export let mesh: MeshInstanceProps['mesh']

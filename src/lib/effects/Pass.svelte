@@ -1,14 +1,7 @@
-<script lang="ts" context="module">
-  export type PassProps = {
-    pass: Pass
-  }
-</script>
-
 <script lang="ts">
   import { onDestroy } from 'svelte'
-
-  import type { Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import type { PassProps } from '../types/components'
 
   export let pass: PassProps['pass']
 

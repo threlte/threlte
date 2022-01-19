@@ -1,26 +1,7 @@
-<script lang="ts" context="module">
-  export type MeshProps = {
-    position: MeshInstanceProps['position']
-    scale: MeshInstanceProps['scale']
-    rotation: MeshInstanceProps['rotation']
-    viewportAware: MeshInstanceProps['viewportAware']
-    inViewport: MeshInstanceProps['inViewport']
-    castShadow: MeshInstanceProps['castShadow']
-    receiveShadow: MeshInstanceProps['receiveShadow']
-    frustumCulled: MeshInstanceProps['frustumCulled']
-    renderOrder: MeshInstanceProps['renderOrder']
-    interactive: MeshInstanceProps['interactive']
-    ignorePointer: MeshInstanceProps['ignorePointer']
-    lookAt: MeshInstanceProps['lookAt']
-    geometry: BufferGeometry
-    material: Material | Material[]
-  }
-</script>
-
 <script lang="ts">
-  import { BufferGeometry, Material, Mesh } from 'three'
-  import type { MeshInstanceProps } from '../instances/MeshInstance.svelte'
+  import { Mesh as ThreeMesh } from 'three'
   import MeshInstance from '../instances/MeshInstance.svelte'
+  import type { MeshProps } from '../types/components'
 
   // MeshInstance
   export let position: MeshProps['position'] = undefined
@@ -40,7 +21,7 @@
   export let geometry: MeshProps['geometry']
   export let material: MeshProps['material']
 
-  export const mesh = new Mesh(geometry, material)
+  export const mesh = new ThreeMesh(geometry, material)
 </script>
 
 <MeshInstance

@@ -1,17 +1,10 @@
-<script lang="ts" context="module">
-  export type FogExp2Props = {
-    color: ColorRepresentation
-    density: number | undefined
-  }
-</script>
-
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import type { ColorRepresentation } from 'three'
-  import { FogExp2 } from 'three'
+  import { FogExp2 as ThreeFogExp2 } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { convertColorRepresentationToColor } from '../lib/colors'
+  import type { FogExp2Props } from '../types/components'
 
   export let color: FogExp2Props['color'] = 0xffffff
   export let density: FogExp2Props['density'] = undefined
@@ -20,7 +13,7 @@
   const { scene, render } = useThrelte()
 
   // @ts-ignore Bad types
-  export const fog = new FogExp2(convertColorRepresentationToColor(color, linear), density)
+  export const fog = new ThreeFogExp2(convertColorRepresentationToColor(color, linear), density)
 
   $: {
     fog.color = convertColorRepresentationToColor(color, linear)

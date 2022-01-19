@@ -11,10 +11,6 @@
   export const getParent = () => {
     return getContext<ThrelteParentContext>('threlte-parent')
   }
-
-  export type HierarchicalObjectProps = {
-    object: Object3D
-  }
 </script>
 
 <script lang="ts">

@@ -1,28 +1,10 @@
-<script lang="ts" context="module">
-  export type Object3DInstanceProps = {
-    object: Object3D
-    position: TransformableObjectProps['position']
-    scale: TransformableObjectProps['scale']
-    rotation: TransformableObjectProps['rotation']
-    lookAt: TransformableObjectProps['lookAt']
-    viewportAware: ViewportAwareObjectProps['viewportAware']
-    inViewport: ViewportAwareObjectProps['inViewport']
-    castShadow: boolean | undefined
-    receiveShadow: boolean | undefined
-    frustumCulled: boolean | undefined
-    renderOrder: number | undefined
-  }
-</script>
-
 <script lang="ts">
-  import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import HierarchicalObject from '../internal/HierarchicalObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
-  import type { TransformableObjectProps } from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
-  import type { ViewportAwareObjectProps } from '../internal/ViewportAwareObject.svelte'
+  import type { Object3DInstanceProps } from '../types/components'
 
   export let object: Object3DInstanceProps['object']
 

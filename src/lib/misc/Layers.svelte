@@ -1,13 +1,8 @@
-<script lang="ts" context="module">
-  export type LayersProps = {
-    layers: ThrelteLayers | undefined
-  }
-</script>
-
 <script lang="ts">
-  import type { ThrelteLayers, ThrelteLayersContext } from '../types/types'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
+  import type { LayersProps } from '../types/components'
+  import type { ThrelteLayers, ThrelteLayersContext } from '../types/types'
 
   export let layers: LayersProps['layers']
 

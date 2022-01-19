@@ -1,19 +1,9 @@
-<script context="module" lang="ts">
-  export type TransformableObjectProps = {
-    object: Object3D
-    position: Position | undefined
-    scale: Scale | undefined
-    rotation: Rotation | undefined
-    lookAt: LookAt | undefined
-  }
-</script>
-
 <script lang="ts">
   import { Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale } from '../types/types'
+  import type { TransformableObjectProps } from '../types/components'
 
   export let object: TransformableObjectProps['object']
   export let position: TransformableObjectProps['position']

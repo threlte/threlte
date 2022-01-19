@@ -1,29 +1,10 @@
-<script lang="ts" context="module">
-  export type PerspectiveCameraProps = {
-    position: CameraInstanceProps['position']
-    scale: CameraInstanceProps['scale']
-    rotation: CameraInstanceProps['rotation']
-    lookAt: CameraInstanceProps['lookAt']
-    viewportAware: CameraInstanceProps['viewportAware']
-    inViewport: CameraInstanceProps['inViewport']
-    castShadow: CameraInstanceProps['castShadow']
-    receiveShadow: CameraInstanceProps['receiveShadow']
-    frustumCulled: CameraInstanceProps['frustumCulled']
-    renderOrder: CameraInstanceProps['renderOrder']
-    useCamera: CameraInstanceProps['useCamera']
-    near: number
-    far: number
-    fov: number
-  }
-</script>
-
 <script lang="ts">
-  import { PerspectiveCamera } from 'three'
+  import { PerspectiveCamera as ThreePerspectiveCamera } from 'three'
   import { useResize } from '../hooks/useResize'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { CameraInstanceProps } from '../instances/CameraInstance.svelte'
   import CameraInstance from '../instances/CameraInstance.svelte'
+  import type { PerspectiveCameraProps } from '../types/components'
 
   // CameraInstance
   export let position: PerspectiveCameraProps['position'] = undefined
@@ -46,7 +27,7 @@
   const { size, render } = useThrelte()
   const { resizeOpts } = useThrelteRoot()
 
-  export const camera = new PerspectiveCamera(fov, size.width / size.height, near, far)
+  export const camera = new ThreePerspectiveCamera(fov, size.width / size.height, near, far)
 
   useResize(() => {
     camera.aspect = size.width / size.height

@@ -1,24 +1,6 @@
-<script lang="ts" context="module">
-  export type CameraInstanceProps = {
-    camera: Camera
-    useCamera: boolean
-    position: Object3DInstanceProps['position']
-    scale: Object3DInstanceProps['scale']
-    rotation: Object3DInstanceProps['rotation']
-    viewportAware: Object3DInstanceProps['viewportAware']
-    inViewport: Object3DInstanceProps['inViewport']
-    castShadow: Object3DInstanceProps['castShadow']
-    receiveShadow: Object3DInstanceProps['receiveShadow']
-    frustumCulled: Object3DInstanceProps['frustumCulled']
-    renderOrder: Object3DInstanceProps['renderOrder']
-    lookAt: Object3DInstanceProps['lookAt']
-  }
-</script>
-
 <script lang="ts">
-  import type { Camera } from 'three'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { Object3DInstanceProps } from './Object3DInstance.svelte'
+  import type { CameraInstanceProps } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
   export let camera: CameraInstanceProps['camera']

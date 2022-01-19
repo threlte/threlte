@@ -1,17 +1,9 @@
-<script context="module" lang="ts">
-  export type InteractiveObjectProps = {
-    object: Object3D
-    interactive: boolean
-    ignorePointer: boolean
-  }
-</script>
-
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import type { Object3D } from 'three'
-  import type { ThrelteEvent } from '../lib/interactivity'
-  import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { useThrelte } from '../hooks/useThrelte'
+  import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import type { ThrelteEvent } from '../lib/interactivity'
+  import type { InteractiveObjectProps } from '../types/components'
 
   export let object: InteractiveObjectProps['object']
   export let interactive: InteractiveObjectProps['interactive']

@@ -1,24 +1,7 @@
-<script lang="ts" context="module">
-  export type AmbientLightProps = {
-    position: LightInstanceProps['position']
-    scale: LightInstanceProps['scale']
-    rotation: LightInstanceProps['rotation']
-    lookAt: LightInstanceProps['lookAt']
-    castShadow: LightInstanceProps['castShadow']
-    receiveShadow: LightInstanceProps['receiveShadow']
-    viewportAware: LightInstanceProps['viewportAware']
-    inViewport: LightInstanceProps['inViewport']
-    frustumCulled: LightInstanceProps['frustumCulled']
-    renderOrder: LightInstanceProps['renderOrder']
-    color: LightInstanceProps['color']
-    intensity: LightInstanceProps['intensity']
-  }
-</script>
-
 <script lang="ts">
-  import { AmbientLight } from 'three'
+  import { AmbientLight as ThreeAmbientLight } from 'three'
   import LightInstance from '../instances/LightInstance.svelte'
-  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
+  import type { AmbientLightProps } from '../types/components'
 
   export let position: AmbientLightProps['position'] = undefined
   export let scale: AmbientLightProps['scale'] = undefined
@@ -33,7 +16,7 @@
   export let color: AmbientLightProps['color'] = undefined
   export let intensity: AmbientLightProps['intensity'] = undefined
 
-  export const light = new AmbientLight(color, intensity)
+  export const light = new ThreeAmbientLight(color, intensity)
 </script>
 
 <LightInstance

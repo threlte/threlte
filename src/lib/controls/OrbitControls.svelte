@@ -1,42 +1,12 @@
-<script lang="ts" context="module">
-  export type OrbitControlsProps = {
-    autoRotate: boolean | undefined
-    autoRotateSpeed: number | undefined
-    dampingFactor: number | undefined
-    enableDamping: boolean | undefined
-    enabled: boolean | undefined
-    enablePan: boolean | undefined
-    enableRotate: boolean | undefined
-    enableZoom: boolean | undefined
-    keyPanSpeed: number | undefined
-    keys: OrbitControls['keys'] | undefined
-    maxAzimuthAngle: number | undefined
-    maxDistance: number | undefined
-    maxPolarAngle: number | undefined
-    maxZoom: number | undefined
-    minAzimuthAngle: number | undefined
-    minDistance: number | undefined
-    minPolarAngle: number | undefined
-    minZoom: number | undefined
-    mouseButtons: OrbitControls['mouseButtons'] | undefined
-    panSpeed: number | undefined
-    rotateSpeed: number | undefined
-    screenSpacePanning: boolean | undefined
-    touches: OrbitControls['touches'] | undefined
-    zoomSpeed: number | undefined
-    target: TransformableObjectProps['position'] | undefined
-  }
-</script>
-
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import { Camera, Object3D } from 'three'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
-  import type { TransformableObjectProps } from '../internal/TransformableObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
+  import type { OrbitControlsProps } from '../types/components'
 
   export let autoRotate: OrbitControlsProps['autoRotate'] = undefined
   export let autoRotateSpeed: OrbitControlsProps['autoRotateSpeed'] = undefined
@@ -73,7 +43,7 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  export const controls = new OrbitControls(parent, renderer.domElement)
+  export const controls = new ThreeOrbitControls(parent, renderer.domElement)
 
   $: {
     if (autoRotate !== undefined) controls.autoRotate = autoRotate

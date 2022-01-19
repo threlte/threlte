@@ -1,36 +1,8 @@
-<script lang="ts" context="module">
-  export type PointLightProps = {
-    position: LightInstanceProps['position']
-    scale: LightInstanceProps['scale']
-    rotation: LightInstanceProps['rotation']
-    lookAt: LightInstanceProps['lookAt']
-    receiveShadow: LightInstanceProps['receiveShadow']
-    viewportAware: LightInstanceProps['viewportAware']
-    inViewport: LightInstanceProps['inViewport']
-    frustumCulled: LightInstanceProps['frustumCulled']
-    renderOrder: LightInstanceProps['renderOrder']
-    intensity: LightInstanceProps['intensity']
-    color: LightInstanceProps['color']
-    distance: number | undefined
-    decay: number | undefined
-    power: number | undefined
-    shadow:
-      | boolean
-      | {
-          mapSize?: [number, number]
-          camera?: { near?: number; far?: number }
-          bias?: number
-          radius?: number
-        }
-      | undefined
-  }
-</script>
-
 <script lang="ts">
-  import { PointLight } from 'three'
+  import { PointLight as ThreePointLight } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
   import LightInstance from '../instances/LightInstance.svelte'
+  import type { PointLightProps } from '../types/components'
 
   export let position: PointLightProps['position']
   export let scale: PointLightProps['scale']
@@ -48,7 +20,7 @@
   export let power: PointLightProps['power']
   export let shadow: PointLightProps['shadow']
 
-  export const light = new PointLight(color, intensity, distance, decay)
+  export const light = new ThreePointLight(color, intensity, distance, decay)
 
   const { render } = useThrelte()
 

@@ -1,22 +1,7 @@
-<script lang="ts" context="module">
-  export type Object3DProps = {
-    position: Object3DInstanceProps['position']
-    scale: Object3DInstanceProps['scale']
-    rotation: Object3DInstanceProps['rotation']
-    lookAt: Object3DInstanceProps['lookAt']
-    viewportAware: Object3DInstanceProps['viewportAware']
-    inViewport: Object3DInstanceProps['inViewport']
-    castShadow: Object3DInstanceProps['castShadow']
-    receiveShadow: Object3DInstanceProps['receiveShadow']
-    frustumCulled: Object3DInstanceProps['frustumCulled']
-    renderOrder: Object3DInstanceProps['renderOrder']
-  }
-</script>
-
 <script lang="ts">
-  import { Object3D } from 'three'
-  import type { Object3DInstanceProps } from '../instances/Object3DInstance.svelte'
+  import { Object3D as ThreeObject3D } from 'three'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import type { Object3DProps } from '../types/components'
 
   // Object3DInstance
   export let position: Object3DProps['position'] = undefined
@@ -30,7 +15,7 @@
   export let frustumCulled: Object3DProps['frustumCulled'] = undefined
   export let renderOrder: Object3DProps['renderOrder'] = undefined
 
-  export const object = new Object3D()
+  export const object = new ThreeObject3D()
 </script>
 
 <Object3DInstance

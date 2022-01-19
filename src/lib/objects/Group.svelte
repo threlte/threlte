@@ -1,24 +1,8 @@
-<script lang="ts" context="module">
-  export type GroupProps = {
-    position: Object3DInstanceProps['position']
-    scale: Object3DInstanceProps['scale']
-    rotation: Object3DInstanceProps['rotation']
-    lookAt: Object3DInstanceProps['lookAt']
-    viewportAware: Object3DInstanceProps['viewportAware']
-    inViewport: Object3DInstanceProps['inViewport']
-    castShadow: Object3DInstanceProps['castShadow']
-    receiveShadow: Object3DInstanceProps['receiveShadow']
-    frustumCulled: Object3DInstanceProps['frustumCulled']
-    renderOrder: Object3DInstanceProps['renderOrder']
-  }
-</script>
-
 <script lang="ts">
-  import { Group } from 'three'
+  import { Group as ThreeGroup } from 'three'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { Object3DInstanceProps } from '../instances/Object3DInstance.svelte'
+  import type { GroupProps } from '../types/components'
 
-  // Object3DInstance
   export let position: GroupProps['position'] = undefined
   export let scale: GroupProps['scale'] = undefined
   export let rotation: GroupProps['rotation'] = undefined
@@ -30,7 +14,7 @@
   export let frustumCulled: GroupProps['frustumCulled'] = undefined
   export let renderOrder: GroupProps['renderOrder'] = undefined
 
-  export const group = new Group()
+  export const group = new ThreeGroup()
 </script>
 
 <Object3DInstance

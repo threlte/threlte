@@ -1,41 +1,10 @@
-<script lang="ts" context="module">
-  export type SpotLightProps = {
-    position: LightInstanceProps['position']
-    scale: LightInstanceProps['scale']
-    rotation: LightInstanceProps['rotation']
-    viewportAware: LightInstanceProps['viewportAware']
-    inViewport: LightInstanceProps['inViewport']
-    receiveShadow: LightInstanceProps['receiveShadow']
-    frustumCulled: LightInstanceProps['frustumCulled']
-    renderOrder: LightInstanceProps['renderOrder']
-    color: LightInstanceProps['color']
-    intensity: LightInstanceProps['intensity']
-    angle: number | undefined
-    decay: number | undefined
-    distance: number | undefined
-    penumbra: number | undefined
-    power: number | undefined
-    target: LookAt | undefined
-    shadow:
-      | boolean
-      | {
-          mapSize?: [number, number]
-          camera?: { near?: number; far?: number }
-          bias?: number
-          radius?: number
-        }
-      | undefined
-  }
-</script>
-
 <script lang="ts">
-  import { Object3D, SpotLight, Vector3 } from 'three'
+  import { Object3D, SpotLight as ThreeSpotLight, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { LightInstanceProps } from '../instances/LightInstance.svelte'
   import LightInstance from '../instances/LightInstance.svelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { LookAt } from '../types/types'
+  import type { SpotLightProps } from '../types/components'
 
   // LightInstance
   export let position: SpotLightProps['position'] = undefined
@@ -58,7 +27,7 @@
   export let target: SpotLightProps['target'] = undefined
   export let shadow: SpotLightProps['shadow'] = undefined
 
-  export const light = new SpotLight(color, intensity)
+  export const light = new ThreeSpotLight(color, intensity)
   const originalLightTarget = light.target
 
   const { render } = useThrelte()

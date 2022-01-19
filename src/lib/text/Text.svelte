@@ -1,57 +1,10 @@
-<script lang="ts" context="module">
-  export type TextProps = {
-    position: MeshInstanceProps['position']
-    scale: MeshInstanceProps['scale']
-    rotation: MeshInstanceProps['rotation']
-    viewportAware: MeshInstanceProps['viewportAware']
-    inViewport: MeshInstanceProps['inViewport']
-    castShadow: MeshInstanceProps['castShadow']
-    receiveShadow: MeshInstanceProps['receiveShadow']
-    frustumCulled: MeshInstanceProps['frustumCulled']
-    renderOrder: MeshInstanceProps['renderOrder']
-    interactive: MeshInstanceProps['interactive']
-    ignorePointer: MeshInstanceProps['ignorePointer']
-    lookAt: MeshInstanceProps['lookAt']
-
-    text: TextType['text'] | undefined
-    anchorX: TextType['anchorX'] | undefined
-    anchorY: TextType['anchorY'] | undefined
-    curveRadius: TextType['curveRadius'] | undefined
-    font: TextType['font'] | undefined
-    fontSize: TextType['fontSize'] | undefined
-    letterSpacing: TextType['letterSpacing'] | undefined
-    lineHeight: TextType['lineHeight'] | undefined
-    maxWidth: TextType['maxWidth'] | undefined
-    overflowWrap: TextType['overflowWrap'] | undefined
-    textAlign: TextType['textAlign'] | undefined
-    textIndent: TextType['textIndent'] | undefined
-    whiteSpace: TextType['whiteSpace'] | undefined
-    material: TextType['material'] | undefined
-    color: TextType['color'] | undefined
-    depthOffset: TextType['depthOffset'] | undefined
-    clipRect: TextType['clipRect'] | undefined
-    glyphGeometryDetail: TextType['glyphGeometryDetail'] | undefined
-    sdfGlyphSize: TextType['sdfGlyphSize'] | undefined
-    outlineWidth: TextType['outlineWidth'] | undefined
-    outlineColor: TextType['outlineColor'] | undefined
-    outlineOpacity: TextType['outlineOpacity'] | undefined
-    outlineBlur: TextType['outlineBlur'] | undefined
-    outlineOffsetX: TextType['outlineOffsetX'] | undefined
-    outlineOffsetY: TextType['outlineOffsetY'] | undefined
-    strokeWidth: TextType['strokeWidth'] | undefined
-    strokeColor: TextType['strokeColor'] | undefined
-    strokeOpacity: TextType['strokeOpacity'] | undefined
-    fillOpacity: TextType['fillOpacity'] | undefined
-  }
-</script>
-
 <script lang="ts">
-  import MeshInstance, { MeshInstanceProps } from '../instances/MeshInstance.svelte'
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import { Text } from 'troika-three-text'
-  import { defaults } from '../lib/defaults'
-  import type { LookAt, Position, Rotation, Scale, Text as TextType } from '../types/types'
+  import { Text as ThreeText } from 'troika-three-text'
   import { useThrelte } from '../hooks/useThrelte'
+  import MeshInstance from '../instances/MeshInstance.svelte'
+  import type { TextProps } from '../types/components'
+  import type { Text as TextType } from '../types/types'
 
   // MeshInstance
   export let position: TextProps['position'] = undefined
@@ -98,7 +51,7 @@
   export let strokeOpacity: TextProps['strokeOpacity'] = undefined
   export let fillOpacity: TextProps['fillOpacity'] = undefined
 
-  export const textObject = new Text() as TextType
+  export const textObject = new ThreeText() as TextType
 
   const { render } = useThrelte()
 
