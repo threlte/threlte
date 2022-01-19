@@ -404,7 +404,7 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 dpr: number = browser ? window.devicePixelRatio : 1
 flat: boolean = false
 linear: boolean = false
-frameloop: 'always' | 'on-demand' = 'on-demand'
+frameloop: 'always' | 'demand' = 'demand'
 debugFrameloop: boolean = false
 shadows: boolean = true
 shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
@@ -1548,7 +1548,7 @@ const {
 } = useThrelte()
 ```
 
-If your frame loop is set to `'on-demand'` and you are manually editing objects or materials, be sure to request a rerender:
+If your frame loop is set to `'demand'` and you are manually editing objects or materials, be sure to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()

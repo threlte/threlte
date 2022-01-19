@@ -35,7 +35,7 @@
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
   export let flat: boolean = false
   export let linear: boolean = false
-  export let frameloop: 'always' | 'on-demand' = 'on-demand'
+  export let frameloop: 'always' | 'demand' = 'demand'
   export let debugFrameloop: boolean = false
   export let shadows: boolean = true
   export let shadowMapType: ShadowMapType = PCFSoftShadowMap
@@ -191,7 +191,7 @@
 
   useRaf(() => {
     if (
-      frameloop === 'on-demand' &&
+      frameloop === 'demand' &&
       !renderCtx.frameInvalidated &&
       rootCtx.interactiveObjects.size === 0 &&
       renderCtx.frameHandlers.size === 0
