@@ -362,6 +362,7 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 dpr: number = browser ? window.devicePixelRatio : 1
@@ -415,6 +416,7 @@ rootCtx: ThrelteRootContext
 geometry: THREE.BufferGeometry
 material: THREE.Material | THREE.Material[]
 
+
 // optional
 
 position: Position | undefined = undefined
@@ -455,6 +457,7 @@ mesh: THREE.Mesh
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -495,6 +498,7 @@ You might want to use this component to pass as a reference to other components:
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -538,6 +542,7 @@ To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 // required
 
 url: string
+
 
 // optional
 
@@ -606,6 +611,7 @@ While object components like `<Mesh>` create a new object for you (in the case o
 object: THREE.Object3D
 viewportAware: boolean
 
+
 // optional
 
 position: Position | undefined
@@ -654,6 +660,7 @@ interactive: boolean
 ignorePointerEvents: boolean
 viewportAware: boolean
 
+
 // optional
 
 position: Position | undefined
@@ -695,6 +702,7 @@ inViewport: boolean
 camera: THREE.Camera
 viewportAware: boolean
 useCamera: boolean
+
 
 // optional
 
@@ -742,6 +750,7 @@ inViewport: boolean
 light: THREE.Light
 viewportAware: boolean
 
+
 // optional
 
 position: Position | undefined
@@ -779,6 +788,7 @@ inViewport: boolean
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -820,6 +830,7 @@ light: THREE.AmbientLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -877,6 +888,7 @@ light: THREE.DirectionalLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -914,6 +926,7 @@ light: THREE.HemisphereLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -964,6 +977,7 @@ light: THREE.PointLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -1020,6 +1034,7 @@ light: THREE.SpotLight
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -1063,6 +1078,7 @@ camera: THREE.OrthographicCamera
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
@@ -1108,6 +1124,7 @@ The component `<OrbitControls>` must be a direct child of a camera component and
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 autoRotate: boolean | undefined = undefined
@@ -1205,6 +1222,7 @@ A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is t
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 color: THREE.ColorRepresentation = 0xffffff
@@ -1236,6 +1254,7 @@ A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy 
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 color: THREE.ColorRepresentation = 0xffffff
@@ -1267,6 +1286,7 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 ##### Properties <!-- omit in toc -->
 
 ```ts
+
 // optional
 
 position: Position | undefined = undefined
