@@ -141,6 +141,15 @@ Build your first scene:
 </style>
 ```
 
+It should look something like this:
+
+![getting-started-screenshot](https://raw.githubusercontent.com/grischaerbe/threlte/main/static/new-getting-started-screenshot.png)
+
+Congratulations :tada:  
+Orbit around the cube and have fun using threlte.
+
+Check out the slightly advanced example scene including interactivity on [CodeSandbox](https://codesandbox.io/s/threlte-getting-started-elaborate-fm0d4?file=/App.svelte).
+
 ## Concepts
 
 Yes, there are already three.js component libraries for svelte, threlte is different in some ways:
