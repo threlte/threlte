@@ -168,6 +168,8 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
 - **Tree-shakeble**  
   react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.  
   threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and limit what parts of three.js get shipped.
+- **Does not get in your way**  
+  Everything is accessible. objects are instantiated without any default values, so that threlte will not get in your way of setting up or altering objects manually while also relying on the defaults set by three.js.
 
 ### Interactivity
 
@@ -880,6 +882,7 @@ groundColor: THREE.ColorRepresentation | undefined = undefined
 ##### Bindings <!-- omit in toc -->
 
 ```ts
+inViewport: boolean
 light: THREE.HemisphereLight
 ```
 
