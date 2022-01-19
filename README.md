@@ -205,14 +205,15 @@ All events include the raycast Intersection object:
 <Mesh … interactive on:click={onClick}>
 ```
 
-You must add `interactive` to your Mesh to indicate adding the Mesh to the central event raycaster.  
+> :warning: **You must add `interactive` to your component to be able to listen to pointer events**
+
 Be aware that this will make the frameloop render on every frame.
 
 ### Viewport Awareness
 
 [Open the viewport awareness example in CodeSandbox](https://codesandbox.io/s/threlte-viewport-awareness-example-i7hwy?file=/App.svelte)
 
-Additionally, most Objects (Lights, Cameras, Meshes, …) can be made viewport aware. That means you can listen to events or bind a variable to check whether an object is in the viewport or not:
+Additionally, most Objects (Lights, Cameras, Meshes, …) can be made *viewport aware*. Use it to lazily load textures, models and more.
 
 ```svelte
 <script lang="ts">
@@ -244,7 +245,7 @@ These events are supported:
 
 Bind `inViewport` if you wish to not use events.
 
-To make an Object viewport aware, you must add `viewportAware` to your Object.
+> :warning: **You must add `viewportAware` to your component to make it viewport aware**
 
 ### Reactivity
 
