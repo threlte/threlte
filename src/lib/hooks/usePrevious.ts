@@ -30,7 +30,7 @@ export const usePrevious = <T>(
   onDestroy(unsubCurrent)
 
   return {
-    previous,
-    current
+    current,
+    previous
   }
 }
