@@ -3,6 +3,7 @@ import { sRGBEncoding, Texture, TextureLoader } from 'three'
 import { invalidateGlobally } from '../Canvas.svelte'
 import { useThrelteRoot } from './useThrelteRoot'
 import { useLoader } from './useLoader'
+import { get } from 'svelte/store'
 
 const loader = useLoader(TextureLoader, () => new TextureLoader())
 
@@ -26,7 +27,7 @@ const convertTextureColor = (texture: Texture) => {
   try {
     const rootCtx = useThrelteRoot()
     if (!rootCtx) return texture
-    if (!rootCtx.linear) texture.encoding = sRGBEncoding
+    if (!get(rootCtx.linear)) texture.encoding = sRGBEncoding
   } catch (error) {
     console.warn(
       'Calling useTexture outside component initialization does not support color correction.'
