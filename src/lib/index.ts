@@ -56,7 +56,9 @@ export type {
   ThrelteContext,
   ThrelteRootContext,
   ThrelteLayers,
-  ThrelteUseLoader
+  ThrelteUseLoader,
+  ThreltePointerEvent,
+  Size
 } from './types/types'
 
 export type {

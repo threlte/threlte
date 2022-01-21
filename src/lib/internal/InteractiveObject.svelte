@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
+  import { usePrevious } from '../hooks/usePrevious'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import type { InteractiveObjectProperties } from '../types/components'
@@ -8,6 +9,12 @@
   export let object: InteractiveObjectProperties['object']
   export let interactive: InteractiveObjectProperties['interactive']
   export let ignorePointer: InteractiveObjectProperties['ignorePointer']
+
+  const { current: currentObject, previous: previousObject } = usePrevious(
+    object,
+    (a, b) => a.uuid === b.uuid
+  )
+  $: $currentObject = object
 
   const eventDispatcher = createEventDispatcher<{
     click: ThreltePointerEvent
@@ -19,8 +26,6 @@
     pointermove: ThreltePointerEvent
   }>()
 
-  object.userData.eventDispatcher = eventDispatcher
-
   const {
     addInteractiveObject,
     removeInteractiveObject,
@@ -31,21 +36,28 @@
   const { invalidate } = useThrelte()
 
   $: {
+    if ($previousObject) {
+      removeRaycastableObject($previousObject)
+      removeInteractiveObject($previousObject)
+    }
+    if (!('eventDispatcher' in $currentObject.userData)) {
+      $currentObject.userData.eventDispatcher = eventDispatcher
+    }
     if (ignorePointer) {
-      removeRaycastableObject(object)
-      removeInteractiveObject(object)
+      removeRaycastableObject($currentObject)
+      removeInteractiveObject($currentObject)
     } else {
-      addRaycastableObject(object)
+      addRaycastableObject($currentObject)
       if (interactive) {
-        addInteractiveObject(object)
+        addInteractiveObject($currentObject)
       }
     }
     invalidate('InteractiveObject: props changed')
   }
 
   onDestroy(() => {
-    removeInteractiveObject(object)
-    removeRaycastableObject(object)
+    removeInteractiveObject($currentObject)
+    removeRaycastableObject($currentObject)
     invalidate('InteractiveObject: removed')
   })
 </script>

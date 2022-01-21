@@ -5,6 +5,7 @@ import type {
   Color,
   ColorRepresentation,
   Euler,
+  Event,
   Intersection,
   Loader,
   Material,
@@ -14,16 +15,16 @@ import type {
   Scene,
   Vector2,
   Vector3,
-  WebGLRenderer,
-  Event
+  WebGLRenderer
 } from 'three'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
-import type { UseResizeOptions } from '../hooks/useResize'
+import type { UsePreviousResult } from '../hooks/usePrevious'
 
 export type ThrelteRootContext = {
   setCamera: (camera: Camera) => void
-  linear: boolean
-  resizeOptions?: UseResizeOptions
+  linear: Writable<boolean>
+  flat: Writable<boolean>
+  dpr: Writable<number>
   addPass: (pass: Pass) => void
   removePass: (pass: Pass) => void
   addRaycastableObject: (obj: Object3D) => void
@@ -37,10 +38,11 @@ export type ThrelteRootContext = {
 }
 
 export type ThrelteContext = {
-  size: { width: number; height: number }
-  pointer?: Vector2
+  size: Readable<Size>
+  pointer: Writable<Vector2>
+  pointerOverCanvas: Writable<boolean>
   clock: Clock
-  camera?: Camera
+  camera: Writable<Camera>
   scene: Scene
   renderer?: WebGLRenderer
   composer?: EffectComposer
@@ -48,6 +50,8 @@ export type ThrelteContext = {
 }
 
 export type ThrelteRenderContext = {
+  frameloop: 'always' | 'demand'
+  debugFrameloop: boolean
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>
@@ -70,7 +74,7 @@ export type ThrelteFrameHandler = {
   order?: number
 }
 
-export type ThrelteParentContext = Object3D | undefined
+export type ThrelteParentContext = UsePreviousResult<Object3D>
 
 export type Position =
   | Vector3
@@ -399,6 +403,11 @@ export type ThrelteUseLoader = <T extends typeof Loader>(
   loader: T,
   memoizeFn: () => InstanceType<T>
 ) => InstanceType<T>
+
+export type Size = {
+  width: number
+  height: number
+}
 
 export type ThreltePointerEvent = Intersection<Object3D<Event>> & {
   event?: MouseEvent | PointerEvent

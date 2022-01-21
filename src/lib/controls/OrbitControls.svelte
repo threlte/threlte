@@ -34,12 +34,12 @@
   export let zoomSpeed: OrbitControlsProperties['zoomSpeed'] = undefined
   export let target: OrbitControlsProperties['target'] = undefined
 
-  const parent = getParent()
+  const { current: currentParent } = getParent()
   const { renderer, invalidate } = useThrelte()
 
   if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
 
-  if (!(parent instanceof Camera)) {
+  if (!($currentParent instanceof Camera)) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
@@ -49,11 +49,14 @@
     end: undefined
   }>()
 
-  const onChange = () => dispatch('change')
+  const onChange = () => {
+    invalidate('Orbitcontrols: change event')
+    dispatch('change')
+  }
   const onStart = () => dispatch('start')
   const onEnd = () => dispatch('start')
 
-  export const controls = new ThreeOrbitControls(parent, renderer.domElement)
+  export const controls = new ThreeOrbitControls($currentParent, renderer.domElement)
 
   controls.addEventListener('change', onChange)
   controls.addEventListener('start', onStart)
@@ -94,9 +97,12 @@
     invalidate('OrbitControls: props changed')
   }
 
-  useFrame(() => {
-    controls.update()
-  })
+  const { start, stop } = useFrame(() => controls.update(), { autostart: false })
+
+  $: {
+    if (autoRotate || enableDamping) start()
+    else stop()
+  }
 
   const targetObject = new Object3D()
 

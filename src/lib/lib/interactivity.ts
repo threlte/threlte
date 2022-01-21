@@ -1,7 +1,7 @@
 import { createEventDispatcher } from 'svelte'
-import type { Camera, Event, Intersection, Object3D } from 'three'
-import type { Vector2 } from 'three'
-import type { ThrelteContext, ThrelteRootContext } from '../types/types'
+import { get } from 'svelte/store'
+import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
+import type { ThrelteContext, ThreltePointerEvent, ThrelteRootContext } from '../types/types'
 
 export type ThreltePointerEventMap = {
   click: ThreltePointerEvent
@@ -20,14 +20,14 @@ type InteractiveMeshUserData = {
   eventDispatcher: InteractiveObjectEventDispatcher
 }
 
-export const transformEvent = (
-  v2: Vector2,
-  e: MouseEvent | PointerEvent,
-  ctx: ThrelteContext
-): void => {
-  if (!ctx.renderer) return
-  v2.x = (e.clientX / ctx.renderer.domElement.clientWidth) * 2 - 1
-  v2.y = -(e.clientY / ctx.renderer.domElement.clientHeight) * 2 + 1
+const setPointerFromEvent = (ctx: ThrelteContext, e: MouseEvent | PointerEvent): void => {
+  ctx.pointer.update((v2) => {
+    if (!ctx.renderer) return v2
+    return v2.set(
+      (e.clientX / ctx.renderer.domElement.clientWidth) * 2 - 1,
+      -(e.clientY / ctx.renderer.domElement.clientHeight) * 2 + 1
+    )
+  })
 }
 
 const runRaycaster = (
@@ -40,22 +40,30 @@ const runRaycaster = (
   return rootCtx.raycaster.intersectObjects(objects)
 }
 
-export const eventRaycast = (
+/**
+ * This handler dispatches these events on three.js objects:
+ * ```
+ * click: ThreltePointerEvent;
+ * contextmenu: ThreltePointerEvent;
+ * pointerup: ThreltePointerEvent;
+ * pointerdown: ThreltePointerEvent;
+ * pointermove: ThreltePointerEvent;
+ * ```
+ * @param {ThrelteContext} ctx
+ * @param {ThrelteRootContext} rootCtx
+ * @param {PointerEvent | MouseEvent} e
+ * @returns {void}
+ */
+const eventRaycast = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
   e: PointerEvent | MouseEvent
 ): void => {
-  if (
-    !ctx.pointer ||
-    !ctx.camera ||
-    rootCtx.interactiveObjects.size === 0 ||
-    rootCtx.raycastableObjects.size === 0
-  )
-    return
+  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
   const intersects = runRaycaster(
     rootCtx,
-    ctx.pointer,
-    ctx.camera,
+    get(ctx.pointer),
+    get(ctx.camera),
     Array.from(rootCtx.raycastableObjects)
   )
   if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
@@ -67,20 +75,43 @@ export const eventRaycast = (
   }
 }
 
-export const animationFrameRaycast = (
+const onEvent = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
-  pointerOverCanvas: boolean
+  e: MouseEvent | PointerEvent
+): void => {
+  ctx.pointerOverCanvas.set(true)
+  setPointerFromEvent(ctx, e)
+  eventRaycast(ctx, rootCtx, e)
+}
+
+export const onClick = onEvent
+export const onContextMenu = onEvent
+export const onPointerUp = onEvent
+export const onPointerDown = onEvent
+export const onPointerMove = onEvent
+
+/**
+ * Some events can't be captured on Mouse- or PointerEvents.
+ * Specifically pointerleave and pointerenter are hard to capture
+ * as these events fire, when the pointer/cursor leaves the canvas
+ * element.
+ * @param ctx
+ * @param rootCtx
+ * @returns
+ */
+export const animationFrameRaycast = (
+  ctx: ThrelteContext,
+  rootCtx: ThrelteRootContext
 ): Intersection<Object3D<Event>> | undefined => {
-  if (
-    !ctx.pointer ||
-    !ctx.camera ||
-    rootCtx.interactiveObjects.size === 0 ||
-    rootCtx.raycastableObjects.size === 0
-  )
-    return
-  const intersects = pointerOverCanvas
-    ? runRaycaster(rootCtx, ctx.pointer, ctx.camera, Array.from(rootCtx.raycastableObjects))
+  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
+  const intersects = ctx.pointerOverCanvas
+    ? runRaycaster(
+        rootCtx,
+        get(ctx.pointer),
+        get(ctx.camera),
+        Array.from(rootCtx.raycastableObjects)
+      )
     : []
 
   const intersection =

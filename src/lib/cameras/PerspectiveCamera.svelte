@@ -1,8 +1,6 @@
 <script lang="ts">
   import { PerspectiveCamera as ThreePerspectiveCamera } from 'three'
-  import { useResize } from '../hooks/useResize'
   import { useThrelte } from '../hooks/useThrelte'
-  import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import CameraInstance from '../instances/CameraInstance.svelte'
   import type { PerspectiveCameraProperties } from '../types/components'
 
@@ -25,14 +23,14 @@
   export let fov: PerspectiveCameraProperties['fov'] = undefined
 
   const { size, invalidate } = useThrelte()
-  const { resizeOptions } = useThrelteRoot()
 
-  export const camera = new ThreePerspectiveCamera(fov, size.width / size.height, near, far)
+  export const camera = new ThreePerspectiveCamera(fov, $size.width / $size.height, near, far)
 
-  useResize(() => {
-    camera.aspect = size.width / size.height
+  $: {
+    camera.aspect = $size.width / $size.height
     camera.updateProjectionMatrix()
-  }, resizeOptions)
+    invalidate('PerspectiveCamera: aspect changed')
+  }
 
   $: {
     if (near !== undefined) camera.near = near

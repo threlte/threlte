@@ -70,6 +70,8 @@ It provides strictly typed components to quickly and easily build three.js scene
 
 It also aims to provide the building blocks to quickly extend threlte when it's needed.
 
+> :warning: threlte is still in development and you should expect breaking changes. Check the release notes before updating. If you want to be in the safe side, install threlte with `npm i threlte three --save-exact` to lock the version.
+
 ## Getting started
 
 Install threlte and three.js:
@@ -357,10 +359,11 @@ The `<Canvas>` component provides two very useful contexts: `ThrelteContext` and
 
 ```ts
 type ThrelteContext = {
-  size: { width: number; height: number }
-  pointer?: Vector2
+  size: Readable<Size>
+  pointer: Writable<Vector2>
+  pointerOverCanvas: Writable<boolean>
   clock: Clock
-  camera?: Camera
+  camera: Writable<Camera>
   scene: Scene
   renderer?: WebGLRenderer
   composer?: EffectComposer
@@ -369,8 +372,9 @@ type ThrelteContext = {
 
 type ThrelteRootContext = {
   setCamera: (camera: Camera) => void
-  linear: boolean
-  resizeOptions?: UseResizeOptions
+  linear: Writable<boolean>
+  flat: Writable<boolean>
+  dpr: Writable<number>
   addPass: (pass: Pass) => void
   removePass: (pass: Pass) => void
   addRaycastableObject: (obj: Object3D) => void
@@ -384,15 +388,7 @@ type ThrelteRootContext = {
 }
 ```
 
-See `useThrelte` and `useThrelteRoot` on how to use these.
-
-```ts
-type UseResizeOptions = {
-  axis?: 'horizontal' | 'vertical' | 'both'
-  runOnInit?: boolean
-  debounce?: number
-}
-```
+See [`useThrelte`](#leftwards_arrow_with_hook-usethrelte) and [`useThrelteRoot`]((#leftwards_arrow_with_hook-usethrelteroot)) on how to use these.
 
 ### Components
 
@@ -410,7 +406,9 @@ name: type
 
 The `<Canvas>` component is the root of your three.js scene.
 
-By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes.
+By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes. Provide the property `size` to set a fixed `<canvas>` size.
+
+`<Canvas>` also provides a default camera, located at `{ z: 5 }`.
 
 ###### Properties <!-- omit in toc -->
 
@@ -423,11 +421,8 @@ frameloop: 'always' | 'demand' = 'demand'
 debugFrameloop: boolean = false
 shadows: boolean = true
 shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
-resizeOptions: {
-  axis?: 'horizontal' | 'vertical' | 'both'
-  runOnInit?: boolean
-  debounce?: number
-} | undefined = undefined
+size: { width: number, height: number } | undefined = undefined
+rendererParameters: THREE.WebGLRendererParameters | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -490,8 +485,8 @@ mesh: THREE.Mesh
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 click: CustomEvent<ThreltePointerEvent>
 contextmenu: CustomEvent<ThreltePointerEvent>
 pointerup: CustomEvent<ThreltePointerEvent>
@@ -541,8 +536,8 @@ group: THREE.Group
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :globe_with_meridians: \<Object3D>
@@ -587,14 +582,16 @@ object: THREE.Object3D
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :globe_with_meridians: \<GLTF>
 
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
+
+You are able to change the property `url` to load new 3D content. New content will be swapped as soon as loading is finished.
 
 ###### Example <!-- omit in toc -->
 
@@ -638,8 +635,11 @@ scene: THREE.Group
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+load: GLTF                 // The content finished loading
+unload: undefined          // New content finished loading and the old content is unloaded and disposed
+error: string              // An error occured while loading and parsing
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 #### :recycle: Object Instances
@@ -708,8 +708,8 @@ inViewport: boolean
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :recycle: \<MeshInstance>
@@ -761,8 +761,8 @@ inViewport: boolean
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 click: CustomEvent<ThreltePointerEvent>
 contextmenu: CustomEvent<ThreltePointerEvent>
 pointerup: CustomEvent<ThreltePointerEvent>
@@ -815,8 +815,8 @@ inViewport: boolean
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :recycle: \<LightInstance>
@@ -868,8 +868,8 @@ inViewport: boolean
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 #### :high_brightness: Lights
@@ -913,8 +913,8 @@ light: THREE.AmbientLight
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :high_brightness: \<DirectionalLight>
@@ -977,8 +977,8 @@ light: THREE.DirectionalLight
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :high_brightness: \<HemisphereLight>
@@ -1024,8 +1024,8 @@ light: THREE.HemisphereLight
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :high_brightness: \<PointLight>
@@ -1078,8 +1078,8 @@ light: THREE.PointLight
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :high_brightness: \<SpotLight>
@@ -1137,8 +1137,8 @@ light: THREE.SpotLight
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 #### :movie_camera: Cameras
@@ -1187,8 +1187,8 @@ camera: THREE.OrthographicCamera
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 ##### :movie_camera: \<PerspectiveCamera>
@@ -1236,15 +1236,16 @@ camera: THREE.PerspectiveCamera
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 ```
 
 #### :repeat: Controls
 
 ##### :repeat: \<OrbitControls>
 
-The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera. As soon as the OrbitControls are mounted, the frame loop will continously run.
+The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera.  
+If the properties `autoRotate` or `enableDamping` are set to true, the frame loop will run continously.
 
 ###### Example <!-- omit in toc -->
 
@@ -1316,9 +1317,9 @@ controls: THREE.OrbitControls
 ###### Events <!-- omit in toc -->
 
 ```ts
-change: CustomEvent<undefined>
-start: CustomEvent<undefined>
-end: CustomEvent<undefined>
+change: undefined
+start: undefined
+end: undefined
 ```
 
 #### :lipstick: Post Processing
@@ -1478,8 +1479,8 @@ text: Text
 ###### Events <!-- omit in toc -->
 
 ```ts
-viewportenter: CustomEvent<undefined>
-viewportleave: CustomEvent<undefined>
+viewportenter: undefined
+viewportleave: undefined
 click: CustomEvent<ThreltePointerEvent>
 contextmenu: CustomEvent<ThreltePointerEvent>
 pointerup: CustomEvent<ThreltePointerEvent>
@@ -1574,18 +1575,20 @@ rootCtx: ThrelteRootContext
 
 #### :leftwards_arrow_with_hook: useThrelte
 
-This hook lets you consume the state of the `<Canvas>` component which contains the renderer, camera, scene and so on.
+This hook lets you consume the state of the `<Canvas>` component which contains the renderer, camera, scene and so on.  
+It is recommended to set the camera via the property `setCamera` of the [root context]((#leftwards_arrow_with_hook-usethrelteroot)).
 
 ```ts
 const {
-  size,              // { width: number; height: number }
-  pointer,           // Vector2 | undefined
-  clock,             // Clock
-  camera,            // Camera | undefined
-  scene,             // Scene
-  renderer,          // WebGLRenderer | undefined
-  composer,          // EffectComposer | undefined
-  invalidate,        // (reason?: string) => void
+  size,                   // Readable<Size>
+  pointer,                // Writable<Vector2>
+  pointerOverCanvas,      // Writable<boolean>
+  clock,                  // Clock
+  camera,                 // Writable<Camera>
+  scene,                  // Scene
+  renderer,               // WebGLRenderer
+  composer,               // EffectComposer
+  invalidate,             // (reason?: string) => void
 } = useThrelte()
 ```
 
@@ -1604,23 +1607,25 @@ invalidate('changed material color')
 
 #### :leftwards_arrow_with_hook: useThrelteRoot
 
-This hook lets you consume the root context. Although it can be useful, this is mostly used internally. 
+This hook lets you consume the root context. Although it can be useful, this is mostly used internally.  
+The properties `linear`, `flat` and `dpr` are reactive and can also be set.
 
 ```ts
 const {
-  setCamera,                   // : (camera: Camera) => void
-  linear,                      // : boolean
-  resizeOptions,               // ?: UseResizeOptions
-  addPass,                     // : (pass: Pass) => void
-  removePass,                  // : (pass: Pass) => void
-  addRaycastableObject,        // : (obj: Object3D) => void
-  removeRaycastableObject,     // : (obj: Object3D) => void
-  addInteractiveObject,        // : (obj: Object3D) => void
-  removeInteractiveObject,     // : (obj: Object3D) => void
-  interactiveObjects,          // : Set<Object3D>
-  raycastableObjects,          // : Set<Object3D>
-  raycaster,                   // : Raycaster
-  lastIntersection,            // : Intersection<Object3D<Event>> | null
+  setCamera,                   // (camera: Camera) => void
+  linear,                      // Writable<boolean>
+  flat,                        // Writable<boolean>
+  dpr,                         // Writable<number>
+  addPass,                     // (pass: Pass) => void
+  removePass,                  // (pass: Pass) => void
+  addRaycastableObject,        // (obj: Object3D) => void
+  removeRaycastableObject,     // (obj: Object3D) => void
+  addInteractiveObject,        // (obj: Object3D) => void
+  removeInteractiveObject,     // (obj: Object3D) => void
+  interactiveObjects,          // Set<Object3D>
+  raycastableObjects,          // Set<Object3D>
+  raycaster,                   // Raycaster
+  lastIntersection,            // Intersection<Object3D<Event>> | null
 } = useThrelteRoot()
 ```
 

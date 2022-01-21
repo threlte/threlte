@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import type { Group, Mesh, Object3D } from 'three'
+  import type { Group, Material, Mesh, Object3D } from 'three'
+  import { Texture } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -10,7 +11,6 @@
   import Object3DInstance from '../instances/Object3DInstance.svelte'
   import type { GLTFProperties } from '../types/components'
 
-  // MeshInstance
   export let position: GLTFProperties['position'] = undefined
   export let scale: GLTFProperties['scale'] = undefined
   export let rotation: GLTFProperties['rotation'] = undefined
@@ -22,20 +22,19 @@
   export let renderOrder: GLTFProperties['renderOrder'] = undefined
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
-  // self
   export let url: GLTFProperties['url']
   export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   const dispatch = createEventDispatcher<{
-    load: undefined
-    error: undefined
+    load: ThreeGLTF
+    unload: undefined
+    error: string
   }>()
 
   export let gltf: ThreeGLTF | undefined = undefined
 
   export let scene: Group | undefined = undefined
-  $: if (gltf && !scene) scene = gltf.scene
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
 
@@ -49,22 +48,62 @@
   const { renderer } = useThrelte()
   if (renderer && ktxTranscoderPath) {
     const ktx2Loader = useLoader(KTX2Loader, () =>
-      new KTX2Loader().setTranscoderPath('/loaders/basis/').detectSupport(renderer)
+      new KTX2Loader().setTranscoderPath(ktxTranscoderPath as string).detectSupport(renderer)
     )
     loader.setKTX2Loader(ktx2Loader)
   }
 
-  loader.load(
-    url,
-    (g) => {
-      gltf = g
-      dispatch('load')
-    },
-    undefined,
-    () => {
-      dispatch('error')
+  const disposeGltf = () => {
+    if (gltf) {
+      gltf.scene.traverse((object) => {
+        if (object.type !== 'Mesh') return
+        const m = object as Mesh
+
+        m.geometry.dispose()
+
+        if (Array.isArray(m.material)) {
+          m.material.forEach((mm) => {
+            if (mm.isMaterial) {
+              disposeMaterial(mm)
+            }
+          })
+        } else if (m.material.isMaterial) {
+          disposeMaterial(m.material)
+        }
+      })
+      gltf = undefined
+      scene = undefined
+      dispatch('unload')
     }
-  )
+  }
+
+  const disposeMaterial = (material: Material) => {
+    material.dispose()
+    Object.values(material).forEach((value) => {
+      try {
+        if (value instanceof Texture) {
+          value.dispose()
+        }
+      } catch (error) {
+        console.warn('<GLTF>: Unable to dispose texture.')
+      }
+    })
+  }
+
+  const onLoad = (g: ThreeGLTF) => {
+    disposeGltf()
+    gltf = g
+    scene = gltf.scene
+    dispatch('load', gltf)
+  }
+
+  const onError = (e: ErrorEvent) => {
+    console.error(`Error loading GLTF: ${e.message}`)
+    disposeGltf()
+    dispatch('error', e.message)
+  }
+
+  $: loader.load(url, onLoad, undefined, onError)
 
   const objIsMesh = (obj: Object3D | Mesh): obj is Mesh => {
     return 'isMesh' in obj && obj.isMesh
