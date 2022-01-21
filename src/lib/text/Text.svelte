@@ -52,6 +52,7 @@
   export let fillOpacity: TextProperties['fillOpacity'] = undefined
 
   export const textObject = new ThreeText() as TextType
+  const getTextObject = () => textObject
 
   const { invalidate } = useThrelte()
 
@@ -60,37 +61,38 @@
   }>()
 
   $: {
-    if (text !== undefined) textObject.text = text
-    if (anchorX !== undefined) textObject.anchorX = anchorX
-    if (anchorY !== undefined) textObject.anchorY = anchorY
-    if (curveRadius !== undefined) textObject.curveRadius = curveRadius
-    if (font !== undefined) textObject.font = font
-    if (fontSize !== undefined) textObject.fontSize = fontSize
-    if (letterSpacing !== undefined) textObject.letterSpacing = letterSpacing
-    if (lineHeight !== undefined) textObject.lineHeight = lineHeight
-    if (maxWidth !== undefined) textObject.maxWidth = maxWidth
-    if (overflowWrap !== undefined) textObject.overflowWrap = overflowWrap
-    if (textAlign !== undefined) textObject.textAlign = textAlign
-    if (textIndent !== undefined) textObject.textIndent = textIndent
-    if (whiteSpace !== undefined) textObject.whiteSpace = whiteSpace
-    if (material) textObject.material = material
-    if (color !== undefined) textObject.color = color
-    if (depthOffset !== undefined) textObject.depthOffset = depthOffset
-    if (clipRect !== undefined) textObject.clipRect = clipRect
-    if (glyphGeometryDetail !== undefined) textObject.glyphGeometryDetail = glyphGeometryDetail
-    if (sdfGlyphSize !== undefined) textObject.sdfGlyphSize = sdfGlyphSize
-    if (outlineWidth !== undefined) textObject.outlineWidth = outlineWidth
-    if (outlineColor !== undefined) textObject.outlineColor = outlineColor
-    if (outlineOpacity !== undefined) textObject.outlineOpacity = outlineOpacity
-    if (outlineBlur !== undefined) textObject.outlineBlur = outlineBlur
-    if (outlineOffsetX !== undefined) textObject.outlineOffsetX = outlineOffsetX
-    if (outlineOffsetY !== undefined) textObject.outlineOffsetY = outlineOffsetY
-    if (strokeWidth !== undefined) textObject.strokeWidth = strokeWidth
-    if (strokeColor !== undefined) textObject.strokeColor = strokeColor
-    if (strokeOpacity !== undefined) textObject.strokeOpacity = strokeOpacity
-    if (fillOpacity !== undefined) textObject.fillOpacity = fillOpacity
+    const to = getTextObject()
+    if (text !== undefined) to.text = text
+    if (anchorX !== undefined) to.anchorX = anchorX
+    if (anchorY !== undefined) to.anchorY = anchorY
+    if (curveRadius !== undefined) to.curveRadius = curveRadius
+    if (font !== undefined) to.font = font
+    if (fontSize !== undefined) to.fontSize = fontSize
+    if (letterSpacing !== undefined) to.letterSpacing = letterSpacing
+    if (lineHeight !== undefined) to.lineHeight = lineHeight
+    if (maxWidth !== undefined) to.maxWidth = maxWidth
+    if (overflowWrap !== undefined) to.overflowWrap = overflowWrap
+    if (textAlign !== undefined) to.textAlign = textAlign
+    if (textIndent !== undefined) to.textIndent = textIndent
+    if (whiteSpace !== undefined) to.whiteSpace = whiteSpace
+    if (material) to.material = material
+    if (color !== undefined) to.color = color
+    if (depthOffset !== undefined) to.depthOffset = depthOffset
+    if (clipRect !== undefined) to.clipRect = clipRect
+    if (glyphGeometryDetail !== undefined) to.glyphGeometryDetail = glyphGeometryDetail
+    if (sdfGlyphSize !== undefined) to.sdfGlyphSize = sdfGlyphSize
+    if (outlineWidth !== undefined) to.outlineWidth = outlineWidth
+    if (outlineColor !== undefined) to.outlineColor = outlineColor
+    if (outlineOpacity !== undefined) to.outlineOpacity = outlineOpacity
+    if (outlineBlur !== undefined) to.outlineBlur = outlineBlur
+    if (outlineOffsetX !== undefined) to.outlineOffsetX = outlineOffsetX
+    if (outlineOffsetY !== undefined) to.outlineOffsetY = outlineOffsetY
+    if (strokeWidth !== undefined) to.strokeWidth = strokeWidth
+    if (strokeColor !== undefined) to.strokeColor = strokeColor
+    if (strokeOpacity !== undefined) to.strokeOpacity = strokeOpacity
+    if (fillOpacity !== undefined) to.fillOpacity = fillOpacity
 
-    textObject.sync(() => {
+    to.sync(() => {
       invalidate('Text: sync finished')
       dispatch('sync')
     })

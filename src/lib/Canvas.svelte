@@ -3,7 +3,6 @@
   import { writable } from 'svelte/store'
   import { PCFSoftShadowMap, ShadowMapType, WebGLRendererParameters } from 'three'
   import { useParentSize } from './hooks/useParentSize'
-  import { usePrevious } from './hooks/usePrevious'
   import { browser } from './lib/browser'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
@@ -78,10 +77,7 @@
   const { size: derivedSize, scene } = ctx
   const { flat: flatStore, linear: linearStore, dpr: dprStore } = rootCtx
 
-  setContext<ThrelteParentContext>(
-    'threlte-parent',
-    usePrevious(scene, (a, b) => a.uuid === b.uuid)
-  )
+  setContext<ThrelteParentContext>('threlte-parent', writable(scene))
 
   $: $linearStore = linear
   $: $flatStore = flat

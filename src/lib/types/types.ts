@@ -18,7 +18,6 @@ import type {
   WebGLRenderer
 } from 'three'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
-import type { UsePreviousResult } from '../hooks/usePrevious'
 
 export type ThrelteRootContext = {
   setCamera: (camera: Camera) => void
@@ -74,7 +73,7 @@ export type ThrelteFrameHandler = {
   order?: number
 }
 
-export type ThrelteParentContext = UsePreviousResult<Object3D>
+export type ThrelteParentContext = Writable<Object3D>
 
 export type Position =
   | Vector3

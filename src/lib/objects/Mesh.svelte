@@ -22,19 +22,32 @@
   export let geometry: MeshProperties['geometry']
   export let material: MeshProperties['material']
 
+  let previousMaterial = material
+  let previousGeometry = geometry
+
   const { invalidate } = useThrelte()
 
   export const mesh = new ThreeMesh(geometry, material)
+  const getMesh = () => mesh
 
   $: {
-    if (material) {
-      mesh.material = material
-      invalidate('Mesh: material updated')
+    if (material !== previousMaterial) {
+      getMesh().material = material
+      invalidate('Mesh: material changed')
+    } else {
+      invalidate('Mesh: material props changed')
     }
-    if (geometry) {
-      mesh.geometry = geometry
-      invalidate('Mesh: geometry updated')
+    previousMaterial = material
+  }
+
+  $: {
+    if (geometry !== previousGeometry) {
+      getMesh().geometry = geometry
+      invalidate('Mesh: geometry changed')
+    } else {
+      invalidate('Mesh: geometry props changed')
     }
+    previousGeometry = geometry
   }
 </script>
 

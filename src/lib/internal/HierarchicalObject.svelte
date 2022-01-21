@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
+  import { writable, Writable } from 'svelte/store'
   import type { Object3D } from 'three'
-  import { usePrevious, UsePreviousResult } from '../hooks/usePrevious'
   import { useThrelte } from '../hooks/useThrelte'
   import type { HierarchicalObjectProperties } from '../types/components'
   import type { ThrelteParentContext } from '../types/types'
 
-  export const setParent = (objectStore: UsePreviousResult<Object3D>) => {
+  export const setParent = (objectStore: Writable<Object3D>) => {
     setContext<ThrelteParentContext>('threlte-parent', objectStore)
   }
 
@@ -16,37 +16,46 @@
 </script>
 
 <script lang="ts">
+  // IMPORTANT: get the parent as soon as possible.
+  // svelte contexts are also available inside components that
+  // declare the context.
+  const currentParent = getParent()
+  let previousParent: Object3D
+
+  // object property …
   export let object: HierarchicalObjectProperties['object']
 
-  const { current: currentParent, previous: previousParent } = getParent()
+  // … but we only work with this store to stay consistent
+  const currentObject = writable(object)
+  $: $currentObject = object
+
+  let previousObject: Object3D
+
+  setParent(currentObject)
 
   const { invalidate } = useThrelte()
 
-  const objectStore = usePrevious(object, (a, b) => {
-    return a.uuid === b.uuid
-  })
-  const { current: currentObject, previous: previousObject } = objectStore
-  $: currentObject.set(object)
-  setParent(objectStore)
-
-  const onObjectChange = () => {
-    if ($previousObject) {
-      $currentParent.remove($previousObject)
+  $: {
+    // on object change
+    if (previousObject && $currentObject !== previousObject) {
+      if (previousObject) {
+        $currentParent.remove(previousObject)
+      }
+      $currentParent.add($currentObject)
+      invalidate(`HierarchicalObject: object changed`)
     }
-    $currentParent.add($currentObject)
-    invalidate(`HierarchicalObject: object changed`)
+    previousObject = $currentObject
   }
 
-  const onParentChange = () => {
-    if ($previousParent) {
-      $previousParent.remove($currentObject)
+  $: {
+    // on parent change
+    if (previousParent && $currentParent !== previousParent) {
+      previousParent.remove($currentObject)
+      $currentParent.add($currentObject)
+      invalidate(`HierarchicalObject: parent changed`)
     }
-    $currentParent.add($currentObject)
-    invalidate(`HierarchicalObject: parent changed`)
+    previousParent = $currentParent
   }
-
-  $: $currentObject && $previousObject && onObjectChange()
-  $: $currentParent && $previousParent && onParentChange()
 
   $currentParent.add($currentObject)
   invalidate('HierarchicalObject: object added')
