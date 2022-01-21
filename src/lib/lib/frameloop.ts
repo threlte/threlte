@@ -10,7 +10,7 @@ export const handleFrameloop = (renderCtx: ThrelteRenderContext, ctx: ThrelteCon
   const delta = ctx.clock.getDelta()
   if (anyHasOrder) {
     Array.from(renderCtx.frameHandlers)
-      .sort((a, b) => ((a.order ?? 0) < (b.order ?? 0) ? 1 : -1))
+      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
       .forEach((h) => h.fn(ctx, delta))
   } else {
     renderCtx.frameHandlers.forEach((h) => h.fn(ctx, delta))
