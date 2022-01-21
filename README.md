@@ -1636,13 +1636,27 @@ const {
 #### :leftwards_arrow_with_hook: useFrame
 
 This hook allows you to execute code on every frame.  
-You receive the state (the same as `useThrelte`) and a clock delta in seconds. Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop. You may pass additional options to this hook. Also, `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
+You receive the state (the same as `useThrelte`) and a clock delta in seconds.  
+Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
+
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree.
+
+```ts
+type ThrelteUseFrameOptions = {
+  autostart?: boolean
+  order?: number
+}
+```
+
+`useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
 
 ##### Example <!-- omit in toc -->
 
 ```ts
 const { start, stop, started } = useFrame(() => {
   console.log('rendering…')
+}, {
+  autostart: false
 })
 
 const toggleUseFrame = () => {
