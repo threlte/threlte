@@ -596,6 +596,10 @@ You are able to change the property `url` to load new 3D content. New content wi
 ###### Example <!-- omit in toc -->
 
 ```svelte
+<script>
+  import { GLTF } from 'threlte'
+</script>
+
 <GLTF 
   castShadow 
   receiveShadow 
