@@ -49,6 +49,7 @@ A three.js component library for svelte.
       - [:thought_balloon: \<FogExp2>](#thought_balloon-fogexp2)
       - [:abc: \<Text>](#abc-text)
       - [:black_square_button: \<Layers>](#black_square_button-layers)
+      - [:link: \<ContextBridge>](#link-contextbridge)
   - [:leftwards_arrow_with_hook: Hooks](#leftwards_arrow_with_hook-hooks)
     - [:leftwards_arrow_with_hook: useThrelte](#leftwards_arrow_with_hook-usethrelte)
     - [:leftwards_arrow_with_hook: useThrelteRoot](#leftwards_arrow_with_hook-usethrelteroot)
@@ -1526,6 +1527,32 @@ Property `layers` can be:
 - `'none'`
 
 > TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
+
+##### :link: \<ContextBridge>
+
+This component is used to consume the context and rootContext provided by the `<Canvas>` component outside of it.
+
+###### Example <!-- omit in toc -->
+
+```svelte
+<script>
+  import { Canvas, ContextBridge } from 'threlte'
+
+  let ctx
+  $: console.log(ctx)
+</script>
+
+<Canvas>
+  <ContextBridge bind:ctx />
+</Canvas>
+```
+
+###### Bindings <!-- omit in toc -->
+
+```ts
+ctx: ThrelteContext
+rootCtx: ThrelteRootContext
+```
 
 ### :leftwards_arrow_with_hook: Hooks
 

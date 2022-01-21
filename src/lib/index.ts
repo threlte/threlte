@@ -22,6 +22,7 @@ export { default as SpotLight } from './lights/SpotLight.svelte'
 export { default as Fog } from './misc/Fog.svelte'
 export { default as FogExp2 } from './misc/FogExp2.svelte'
 export { default as Layers } from './misc/Layers.svelte'
+export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
 // object components
 export { default as Mesh } from './objects/Mesh.svelte'
