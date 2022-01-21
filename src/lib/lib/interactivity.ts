@@ -20,8 +20,6 @@ type InteractiveMeshUserData = {
   eventDispatcher: InteractiveObjectEventDispatcher
 }
 
-export type ThreltePointerEvent = Intersection<Object3D<Event>>
-
 export const transformEvent = (
   v2: Vector2,
   e: MouseEvent | PointerEvent,
@@ -62,7 +60,10 @@ export const eventRaycast = (
   )
   if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
     const userData = intersects[0].object.userData as InteractiveMeshUserData
-    userData.eventDispatcher(e.type as keyof ThreltePointerEventMap, intersects[0])
+    userData.eventDispatcher(e.type as keyof ThreltePointerEventMap, {
+      ...intersects[0],
+      event: e
+    })
   }
 }
 

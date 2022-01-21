@@ -220,6 +220,20 @@ All events include the raycast Intersection object:
 <Mesh … interactive on:click={onClick}>
 ```
 
+All events but `pointerleave` and `pointerenter` also include the underlying `PointerEvent` or `MouseEvent`:
+
+```svelte
+<script>
+  import { Mesh, ThreltePointerEvent } from 'threlte'
+
+  const onPointerMove = (e) => {
+    console.log(e.detail.event.clientX, e.detail.event.clientY)
+  }
+</script>
+
+<Mesh … interactive on:pointermove={onPointerMove}>
+```
+
 > :warning: **You must add `interactive` to your component to be able to listen to pointer events**
 
 Be aware that this will make the frameloop render on every frame.

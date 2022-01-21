@@ -399,3 +399,7 @@ export type ThrelteUseLoader = <T extends typeof Loader>(
   loader: T,
   memoizeFn: () => InstanceType<T>
 ) => InstanceType<T>
+
+export type ThreltePointerEvent = Intersection<Object3D<Event>> & {
+  event?: MouseEvent | PointerEvent
+}

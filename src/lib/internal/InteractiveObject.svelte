@@ -2,8 +2,8 @@
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import type { ThreltePointerEvent } from '../lib/interactivity'
   import type { InteractiveObjectProperties } from '../types/components'
+  import type { ThreltePointerEvent } from '../types/types'
 
   export let object: InteractiveObjectProperties['object']
   export let interactive: InteractiveObjectProperties['interactive']
