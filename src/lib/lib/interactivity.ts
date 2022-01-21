@@ -24,8 +24,8 @@ const setPointerFromEvent = (ctx: ThrelteContext, e: MouseEvent | PointerEvent):
   ctx.pointer.update((v2) => {
     if (!ctx.renderer) return v2
     return v2.set(
-      (e.clientX / ctx.renderer.domElement.clientWidth) * 2 - 1,
-      -(e.clientY / ctx.renderer.domElement.clientHeight) * 2 + 1
+      (e.offsetX / ctx.renderer.domElement.clientWidth) * 2 - 1,
+      -(e.offsetY / ctx.renderer.domElement.clientHeight) * 2 + 1
     )
   })
 }
@@ -80,6 +80,7 @@ const onEvent = (
   rootCtx: ThrelteRootContext,
   e: MouseEvent | PointerEvent
 ): void => {
+  e.preventDefault()
   ctx.pointerOverCanvas.set(true)
   setPointerFromEvent(ctx, e)
   eventRaycast(ctx, rootCtx, e)
