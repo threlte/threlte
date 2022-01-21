@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Mesh as ThreeMesh } from 'three'
+  import { Material, Mesh as ThreeMesh } from 'three'
+  import { usePrevious } from '../hooks/usePrevious'
+  import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
   import type { MeshProperties } from '../types/components'
 
@@ -21,7 +23,20 @@
   export let geometry: MeshProperties['geometry']
   export let material: MeshProperties['material']
 
+  const { invalidate } = useThrelte()
+
   export const mesh = new ThreeMesh(geometry, material)
+
+  $: {
+    if (material) {
+      mesh.material = material
+      invalidate('Mesh: material updated')
+    }
+    if (geometry) {
+      mesh.geometry = geometry
+      invalidate('Mesh: geometry updated')
+    }
+  }
 </script>
 
 <MeshInstance
