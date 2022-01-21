@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { Material, Mesh as ThreeMesh } from 'three'
-  import { usePrevious } from '../hooks/usePrevious'
+  import { Mesh as ThreeMesh } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
   import type { MeshProperties } from '../types/components'
