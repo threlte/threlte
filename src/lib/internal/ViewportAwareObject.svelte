@@ -14,7 +14,7 @@
     viewportleave: Object3D
   }>()
 
-  const ctx = useThrelte()
+  const { camera, invalidate } = useThrelte()
 
   const frustum = new Frustum()
   const projScreenMatrix = new Matrix4()
@@ -26,8 +26,8 @@
   const v3World = new Vector3()
 
   const checkInViewport = (): boolean => {
-    if (!ctx.camera) return true
-    projScreenMatrix.multiplyMatrices(ctx.camera.projectionMatrix, ctx.camera.matrixWorldInverse)
+    if (!$camera) return true
+    projScreenMatrix.multiplyMatrices($camera.projectionMatrix, $camera.matrixWorldInverse)
     frustum.setFromProjectionMatrix(projScreenMatrix)
     if (objectIsMesh(object)) {
       return frustum.intersectsObject(object)
@@ -75,5 +75,5 @@
     stop()
   }
 
-  ctx.invalidate('ViewportAwareObject')
+  invalidate('ViewportAwareObject')
 </script>

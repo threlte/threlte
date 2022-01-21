@@ -27,7 +27,7 @@
 
   $: {
     if (groundColor !== undefined) {
-      light.groundColor = convertColorRepresentationToColor(groundColor, linear)
+      light.groundColor = convertColorRepresentationToColor(groundColor, $linear)
       invalidate('HemisphereLight: props changed')
     }
   }

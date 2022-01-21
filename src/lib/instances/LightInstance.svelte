@@ -25,7 +25,7 @@
 
   $: {
     if (intensity !== undefined) light.intensity = intensity
-    if (color !== undefined) light.color = convertColorRepresentationToColor(color, linear)
+    if (color !== undefined) light.color = convertColorRepresentationToColor(color, $linear)
     invalidate('LightInstance: props changed')
   }
 </script>

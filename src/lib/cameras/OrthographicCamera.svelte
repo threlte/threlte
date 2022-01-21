@@ -1,6 +1,5 @@
 <script lang="ts">
   import { OrthographicCamera as ThreeOrthographicCamera } from 'three'
-  import { useResize } from '../hooks/useResize'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import CameraInstance from '../instances/CameraInstance.svelte'
@@ -25,27 +24,27 @@
   export let zoom: OrthographicCameraProperties['zoom'] = undefined
 
   const { size, invalidate } = useThrelte()
-  const { setCamera, resizeOptions } = useThrelteRoot()
+  const { setCamera } = useThrelteRoot()
 
   export const camera = new ThreeOrthographicCamera(
-    size.width / -2,
-    size.width / 2,
-    size.height / 2,
-    size.height / -2,
-    1,
-    1000
+    $size.width / -2,
+    $size.width / 2,
+    $size.height / 2,
+    $size.height / -2,
+    near,
+    far
   )
 
   $: if (useCamera) setCamera(camera)
 
-  useResize(() => {
-    camera.left = size.width / -2
-    camera.right = size.width / 2
-    camera.top = size.height / 2
-    camera.bottom = size.height / -2
+  $: {
+    camera.left = $size.width / -2
+    camera.right = $size.width / 2
+    camera.top = $size.height / 2
+    camera.bottom = $size.height / -2
     camera.updateProjectionMatrix()
     invalidate('OrthographicCamera: onResize')
-  }, resizeOptions)
+  }
 
   $: {
     if (near !== undefined) camera.near = near

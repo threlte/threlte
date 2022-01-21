@@ -13,10 +13,10 @@
   const { scene, invalidate } = useThrelte()
 
   // @ts-ignore Bad types
-  export const fog = new ThreeFogExp2(convertColorRepresentationToColor(color, linear), density)
+  export const fog = new ThreeFogExp2(convertColorRepresentationToColor(color, $linear), density)
 
   $: {
-    fog.color = convertColorRepresentationToColor(color, linear)
+    fog.color = convertColorRepresentationToColor(color, $linear)
     if (density !== undefined) fog.density = density
     invalidate('FogExp2: props changed')
   }

@@ -2,7 +2,6 @@
   import { Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
-  import { defaults } from '../lib/defaults'
   import type { TransformableObjectProperties } from '../types/components'
 
   export let object: TransformableObjectProperties['object']
@@ -29,11 +28,7 @@
 
   $: {
     if (position) {
-      object.position.set(
-        position.x ?? defaults.position.x,
-        position.y ?? defaults.position.y,
-        position.z ?? defaults.position.z
-      )
+      object.position.set(position.x ?? 0, position.y ?? 0, position.z ?? 0)
       invalidate('TransformableObject: position')
     }
     if (lookAt && !rotation) {
@@ -41,11 +36,7 @@
         startLookingAt()
       } else {
         stopLookingAt()
-        object.lookAt(
-          lookAt.x ?? defaults.position.x,
-          lookAt.y ?? defaults.position.y,
-          lookAt.z ?? defaults.position.z
-        )
+        object.lookAt(lookAt.x ?? 0, lookAt.y ?? 0, lookAt.z ?? 0)
         invalidate('TransformableObject: lookAt')
       }
     }
@@ -58,11 +49,7 @@
       if (typeof scale === 'number') {
         object.scale.set(scale, scale, scale)
       } else {
-        object.scale.set(
-          scale.x ?? defaults.scale.x,
-          scale.y ?? defaults.scale.y,
-          scale.z ?? defaults.scale.z
-        )
+        object.scale.set(scale.x ?? 1, scale.y ?? 1, scale.z ?? 1)
       }
       invalidate('TransformableObject: scale')
     }
@@ -70,10 +57,10 @@
   $: {
     if (rotation) {
       object.rotation.set(
-        rotation.x ?? defaults.rotation.x,
-        rotation.y ?? defaults.rotation.y,
-        rotation.z ?? defaults.rotation.z,
-        rotation.order ?? defaults.rotation.order
+        rotation.x ?? 0,
+        rotation.y ?? 0,
+        rotation.z ?? 0,
+        rotation.order ?? 'XYZ'
       )
       invalidate('TransformableObject: rotation')
     }

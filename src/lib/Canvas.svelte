@@ -1,29 +1,27 @@
 <script context="module" lang="ts">
   import { onDestroy, onMount, setContext } from 'svelte'
-  import {
-    ACESFilmicToneMapping,
-    Camera,
-    Clock,
-    LinearEncoding,
-    NoToneMapping,
-    Object3D,
-    PCFSoftShadowMap,
-    Raycaster,
-    Scene,
-    ShadowMapType,
-    sRGBEncoding,
-    Vector2,
-    WebGLRenderer
-  } from 'three'
-  import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
-  import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
-  import { useRaf } from './hooks/useRaf'
-  import { useResize, UseResizeOptions } from './hooks/useResize'
-  import HierarchicalObject from './internal/HierarchicalObject.svelte'
+  import { writable } from 'svelte/store'
+  import { PCFSoftShadowMap, ShadowMapType, WebGLRendererParameters } from 'three'
+  import { useParentSize } from './hooks/useParentSize'
+  import { usePrevious } from './hooks/usePrevious'
   import { browser } from './lib/browser'
-  import { handleFrameloop } from './lib/frameloop'
-  import { animationFrameRaycast, eventRaycast, transformEvent } from './lib/interactivity'
-  import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from './types/types'
+  import { createContexts } from './lib/contexts'
+  import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
+  import { useFrameloop } from './lib/frameloop'
+  import {
+    onClick,
+    onContextMenu,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp
+  } from './lib/interactivity'
+  import {
+    createRendererAndComposer,
+    setRendererAndComposerSize,
+    setRendererColorOutput,
+    setRendererShadows
+  } from './lib/renderer'
+  import type { Size, ThrelteParentContext } from './types/types'
 
   const invalidationHandlers: Set<(reason?: string) => void> = new Set()
   export const invalidateGlobally = (reason?: string) => {
@@ -39,197 +37,84 @@
   export let debugFrameloop: boolean = false
   export let shadows: boolean = true
   export let shadowMapType: ShadowMapType = PCFSoftShadowMap
-  export let resizeOptions: UseResizeOptions | undefined = undefined
+  export let size: Size | undefined = undefined
+  export let rendererParameters: WebGLRendererParameters | undefined = undefined
 
   let canvas: HTMLCanvasElement | undefined
-  let mounted = false
-  let pointerOverCanvas = false
+  let initialized = false
 
-  const renderCtx: ThrelteRenderContext = {
-    frameInvalidated: true,
-    invalidations: {},
-    frame: 0,
-    frameHandlers: new Set()
-  }
+  // user size as a store
+  const userSize = writable<Size | undefined>(size)
+  $: userSize.set(size)
 
-  setContext('threlte-render-context', renderCtx)
+  // in case the user didn't define a fixed size, use the parent elements size
+  const { parentSize, parentSizeAction } = useParentSize()
 
-  const invalidate = (reason?: string) => {
-    renderCtx.frameInvalidated = true
-    if (debugFrameloop && reason) {
-      renderCtx.invalidations[reason] = renderCtx.invalidations[reason]
-        ? renderCtx.invalidations[reason] + 1
-        : 1
-    }
-  }
+  // creating and setting the contexts
+  const contexts = createContexts(
+    linear,
+    flat,
+    dpr,
+    userSize,
+    parentSize,
+    debugFrameloop,
+    frameloop
+  )
 
-  const debugRenderFrame = () => {
-    if (!debugFrameloop) return
-    renderCtx.frame += 1
-    console.log(
-      `frame: ${renderCtx.frame}${
-        Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''
-      }`
-    )
-    if (Object.keys(renderCtx.invalidations).length > 0) console.table(renderCtx.invalidations)
-    renderCtx.invalidations = {}
-  }
+  const { renderCtx, getCtx, getRootCtx } = contexts
 
-  invalidationHandlers.add(invalidate)
+  // context bindings
+  export const { ctx, rootCtx } = contexts
+
+  setDefaultCameraAspectOnSizeChange(ctx)
+
+  // add invalidation handler to global invalidation handler set
+  invalidationHandlers.add(ctx.invalidate)
   onDestroy(() => {
-    invalidationHandlers.delete(invalidate)
+    invalidationHandlers.delete(ctx.invalidate)
   })
 
-  export const ctx: ThrelteContext = {
-    size: { width: 0, height: 0 },
-    pointer: undefined,
-    clock: new Clock(),
-    camera: undefined,
-    scene: new Scene(),
-    renderer: undefined,
-    composer: undefined,
-    invalidate
-  }
+  // destructure stores on top level
+  const { size: derivedSize, scene } = ctx
+  const { flat: flatStore, linear: linearStore, dpr: dprStore } = rootCtx
 
-  const addPass = (pass: Pass) => {
-    if (!ctx.composer) return
-    ctx.composer.addPass(pass)
-    invalidate('Canvas: adding pass')
-  }
+  setContext<ThrelteParentContext>(
+    'threlte-parent',
+    usePrevious(scene, (a, b) => a.uuid === b.uuid)
+  )
 
-  const removePass = (pass: Pass) => {
-    if (!ctx.composer) return
-    ctx.composer.removePass(pass)
-    invalidate('Canvas: removing pass')
-  }
-
-  const setCamera = (camera: Camera) => {
-    if (!ctx.composer) return
-    ctx.camera = camera
-    ctx.composer.passes.forEach((pass) => {
-      if (pass instanceof RenderPass) {
-        pass.camera = camera
-      }
-    })
-    invalidate('Canvas: setting camera')
-  }
-
-  export const rootCtx: ThrelteRootContext = {
-    setCamera,
-    linear,
-    resizeOptions,
-    addRaycastableObject: (object: Object3D) => {
-      rootCtx.raycastableObjects.add(object)
-    },
-    removeRaycastableObject: (object: Object3D) => {
-      rootCtx.raycastableObjects.delete(object)
-    },
-    addInteractiveObject: (object: Object3D) => {
-      rootCtx.interactiveObjects.add(object)
-    },
-    removeInteractiveObject: (object: Object3D) => {
-      rootCtx.interactiveObjects.delete(object)
-    },
-    raycastableObjects: new Set(),
-    interactiveObjects: new Set(),
-    raycaster: new Raycaster(),
-    lastIntersection: null,
-    addPass,
-    removePass
-  }
-
-  $: if (ctx.renderer) ctx.renderer.setPixelRatio(dpr)
-  $: if (ctx.renderer) ctx.renderer.toneMapping = flat ? NoToneMapping : ACESFilmicToneMapping
-  $: if (ctx.renderer) ctx.renderer.outputEncoding = linear ? LinearEncoding : sRGBEncoding
-  $: rootCtx.linear = linear
-
-  setContext<ThrelteContext>('threlte', ctx)
-
-  setContext<ThrelteRootContext>('threlte-root', rootCtx)
-
-  const resizeCanvas = () => {
-    if (!canvas || !ctx.renderer || !ctx.composer) return
-    const parentEl = ctx.renderer.domElement.parentElement
-    if (parentEl) {
-      ctx.size.width = parentEl.clientWidth
-      ctx.size.height = parentEl.clientHeight
-      ctx.renderer.setSize(ctx.size.width, ctx.size.height)
-      ctx.composer.setSize(ctx.size.width, ctx.size.height)
-    }
-  }
-
-  useResize(resizeCanvas, resizeOptions)
+  $: $linearStore = linear
+  $: $flatStore = flat
+  $: $dprStore = dpr
+  $: setRendererColorOutput(getCtx(), $linearStore, $flatStore)
+  $: setRendererAndComposerSize(getCtx(), $derivedSize, $dprStore)
+  $: setRendererShadows(getCtx(), shadows, shadowMapType)
 
   onMount(() => {
     if (!canvas) return
-    ctx.renderer = new WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance'
-    })
-    ctx.renderer.toneMapping = flat ? NoToneMapping : ACESFilmicToneMapping
-    ctx.renderer.outputEncoding = linear ? LinearEncoding : sRGBEncoding
-    ctx.renderer.shadowMap.enabled = shadows
-    ctx.renderer.shadowMap.type = shadowMapType
-
-    ctx.composer = new EffectComposer(ctx.renderer)
-    ctx.composer.addPass(new RenderPass(ctx.scene, ctx.camera ?? new Camera()))
-
-    resizeCanvas()
-    ctx.renderer.setPixelRatio(dpr)
-    ctx.composer.setPixelRatio(dpr)
-    mounted = true
+    createRendererAndComposer(ctx, canvas, rendererParameters)
+    setRendererColorOutput(ctx, $linearStore, $flatStore)
+    setRendererAndComposerSize(ctx, $derivedSize, $dprStore)
+    setRendererShadows(ctx, shadows, shadowMapType)
+    initialized = true
   })
 
-  const onEvent = (e: MouseEvent | PointerEvent) => {
-    pointerOverCanvas = true
-    if (!ctx.pointer) ctx.pointer = new Vector2()
-    transformEvent(ctx.pointer, e, ctx)
-    eventRaycast(ctx, rootCtx, e)
-  }
-
-  useRaf(() => {
-    if (
-      frameloop === 'demand' &&
-      !renderCtx.frameInvalidated &&
-      rootCtx.interactiveObjects.size === 0 &&
-      renderCtx.frameHandlers.size === 0
-    ) {
-      return
-    }
-    if (!ctx.camera || !ctx.composer || !ctx.renderer) return
-
-    animationFrameRaycast(ctx, rootCtx, pointerOverCanvas)
-
-    handleFrameloop(renderCtx, ctx)
-
-    if (ctx.composer.passes.length > 1) {
-      ctx.composer.render()
-    } else {
-      ctx.renderer.render(ctx.scene, ctx.camera)
-    }
-
-    debugRenderFrame()
-
-    renderCtx.frameInvalidated = false
-  })
+  useFrameloop(ctx, rootCtx, renderCtx)
 </script>
 
 <canvas
+  use:parentSizeAction
   bind:this={canvas}
-  on:click={onEvent}
-  on:contextmenu={onEvent}
-  on:pointerup={onEvent}
-  on:pointerdown={onEvent}
-  on:pointermove={onEvent}
-  on:pointerenter={() => (pointerOverCanvas = true)}
-  on:pointerleave={() => (pointerOverCanvas = false)}
+  on:click={(e) => onClick(getCtx(), getRootCtx(), e)}
+  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), e)}
+  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), e)}
+  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), e)}
+  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), e)}
+  on:pointerenter={() => getCtx().pointerOverCanvas.set(true)}
+  on:pointerleave={() => getCtx().pointerOverCanvas.set(false)}
 >
-  {#if mounted}
-    <HierarchicalObject object={ctx.scene}>
-      <slot />
-    </HierarchicalObject>
+  {#if initialized}
+    <slot />
   {/if}
 </canvas>
 

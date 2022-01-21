@@ -13,10 +13,10 @@
   const { linear } = useThrelteRoot()
   const { scene, invalidate } = useThrelte()
 
-  export const fog = new ThreeFog(convertColorRepresentationToColor(color, linear), near, far)
+  export const fog = new ThreeFog(convertColorRepresentationToColor(color, $linear), near, far)
 
   $: {
-    if (color !== undefined) fog.color = convertColorRepresentationToColor(color, linear)
+    if (color !== undefined) fog.color = convertColorRepresentationToColor(color, $linear)
     if (near !== undefined) fog.near = near
     if (far !== undefined) fog.far = far
     invalidate('Fog: props changed')
