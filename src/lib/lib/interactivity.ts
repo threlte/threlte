@@ -105,8 +105,10 @@ export const animationFrameRaycast = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext
 ): Intersection<Object3D<Event>> | undefined => {
-  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
-  const intersects = ctx.pointerOverCanvas
+  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) {
+    return
+  }
+  const intersects = get(ctx.pointerOverCanvas)
     ? runRaycaster(
         rootCtx,
         get(ctx.pointer),
