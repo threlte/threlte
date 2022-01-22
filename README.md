@@ -88,7 +88,7 @@ npm install -D @types/three
 
 Build your first scene:
 
-[Open in CodeSandbox](https://codesandbox.io/s/threlte-getting-started-vjlk4?file=/App.svelte)
+[Open in a Svelte REPL](https://svelte.dev/repl/14f38c03710945b797d0c421f55e4373?version=3.46.2)
 
 ```svelte
 <script>
@@ -151,7 +151,7 @@ It should look something like this:
 Congratulations :tada:  
 Orbit around the cube and have fun using threlte.
 
-Check out the slightly advanced example scene including interactivity on [CodeSandbox](https://codesandbox.io/s/threlte-getting-started-elaborate-fm0d4?file=/App.svelte).
+Have a look at the slightly more elaborate example including interactivity in a [Svelte REPL](https://svelte.dev/repl/bcb9474112ca440cb3c1f67e74250bcf?version=3.46.2).
 
 ## Concepts
 
@@ -190,7 +190,7 @@ Yes, there are already three.js component libraries for svelte, threlte is diffe
 
 ### Interactivity
 
-[Open the interactivity example in CodeSandbox](https://codesandbox.io/s/threlte-interactivity-example-t9hej?file=/App.svelte)
+[Open the interactivity example in a Svelte REPL](https://svelte.dev/repl/c2b74dcf88ec4b4681b664e202c54274?version=3.46.2)
 
 Listen to events of a `<Mesh>` and a `<MeshInstance>` as if it would be a regular DOM element:
 
@@ -242,7 +242,7 @@ Be aware that this will make the frameloop render on every frame.
 
 ### Viewport Awareness
 
-[Open the viewport awareness example in CodeSandbox](https://codesandbox.io/s/threlte-viewport-awareness-example-i7hwy?file=/App.svelte)
+[Open the viewport awareness example in a Svelte REPL](https://svelte.dev/repl/549eb76e8f994a34b9dd1c0b65540c79?version=3.46.2)
 
 Additionally, most Objects (Lights, Cameras, Meshes, …) can be made *viewport aware*. Use it to lazily load textures, models and more.
 
@@ -280,7 +280,7 @@ Bind `inViewport` if you wish to not use events.
 
 ### Reactivity
 
-[Open the reactivity example in CodeSandbox](https://codesandbox.io/s/threlte-reactivity-example-vttvo?file=/App.svelte)
+[Open the reactivity example in a Svelte REPL](https://svelte.dev/repl/117298a99a5546e18b08b43c3a121274?version=3.46.2)
 
 Just like [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed) and much unlike [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls) it is encouraged to use your component state to drive your three.js scene.
 By using props instead of manipulating three.js objects directly, the unified render loop is able to tell that your scene needs rerendering and svelte can make use of component optimizations.
