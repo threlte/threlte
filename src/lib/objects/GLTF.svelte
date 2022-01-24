@@ -33,8 +33,13 @@
   }>()
 
   export let gltf: ThreeGLTF | undefined = undefined
-
-  export let scene: Group | undefined = undefined
+  export let scene: ThreeGLTF['scene'] | undefined = undefined
+  export let animations: ThreeGLTF['animations'] | undefined = undefined
+  export let asset: ThreeGLTF['asset'] | undefined = undefined
+  export let cameras: ThreeGLTF['cameras'] | undefined = undefined
+  export let scenes: ThreeGLTF['scenes'] | undefined = undefined
+  export let userData: ThreeGLTF['userData'] | undefined = undefined
+  export let parser: ThreeGLTF['parser'] | undefined = undefined
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
 
@@ -73,6 +78,12 @@
       })
       gltf = undefined
       scene = undefined
+      animations = undefined
+      asset = undefined
+      cameras = undefined
+      scenes = undefined
+      userData = undefined
+      parser = undefined
       dispatch('unload')
     }
   }
@@ -94,6 +105,12 @@
     disposeGltf()
     gltf = g
     scene = gltf.scene
+    animations = gltf.animations
+    asset = gltf.asset
+    cameras = gltf.cameras
+    scenes = gltf.scenes
+    userData = gltf.userData
+    parser = gltf.parser
     dispatch('load', gltf)
   }
 

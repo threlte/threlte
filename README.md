@@ -632,8 +632,23 @@ ktxTranscoderPath: string | undefined = undefined
 ###### Bindings <!-- omit in toc -->
 
 ```ts
-gltf: GLTF
-scene: THREE.Group
+gltf: GLTF | undefined
+scene: THREE.Group | undefined
+animations: AnimationClip[] | undefined
+asset: 
+  | {
+      copyright?: string | undefined;
+      generator?: string | undefined;
+      version?: string | undefined;
+      minVersion?: string | undefined;
+      extensions?: any;
+      extras?: any;
+    }
+  | undefined
+cameras: Camera[] | undefined
+scenes: Group[] | undefined
+userData: any
+parser: GLTFParser | undefined
 ```
 
 ###### Events <!-- omit in toc -->
