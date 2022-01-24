@@ -1702,7 +1702,16 @@ loader.load('models/model.obj', (obj) => {
 #### :leftwards_arrow_with_hook: useTexture
 
 `useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](#canvas).
-This hook can be called outside of the `<Canvas>` component, but with limitations: To make sure that textures are converted to the correct color space, `useTexture` needs to consume the `<Canvas>` context. If there's no context, it will fall back to keeping your textures untouched.
+This hook can be called outside of the `<Canvas>` component, but with limitations: To make sure that textures are converted to the correct color space, `useTexture` needs to consume the `<Canvas>` context. If there's no context, it will fall back to keeping your textures untouched.  
+`useTexture` also exposes the native `THREE.TextureLoader` events `onLoad`, `onProgress` and `onError`:
+
+```ts
+const texture = useTexture('tex.jpg', {
+  onError: (error) => {
+    console.warn(`An error occured loading the texture: ${error.message}`)
+  }
+})
+```
 
 ##### Examples <!-- omit in toc -->
 
@@ -1715,7 +1724,6 @@ const [texA, texB] = useTexture(['texA.jpg', 'texB.jpg'])
 
 const textures = useTexture({ bumpMap: 'bump.jpg', map: 'map.jpg' })
 // { bumpMap: THREE.Texture, map: THREE.Texture }
-
 const material = new MeshStandardMaterial({ ...textures })
 ```
 
