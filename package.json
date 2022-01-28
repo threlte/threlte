@@ -1,6 +1,6 @@
 {
   "name": "threlte",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
-    "@types/three": "^0.136.1",
+    "@types/three": "^0.137.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "eslint": "^7.32.0",
@@ -28,7 +28,7 @@
     "svelte-check": "^2.2.6",
     "svelte-preprocess": "^4.9.4",
     "svelte2tsx": "^0.4.14",
-    "three": "^0.136.0",
+    "three": "^0.137.0",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },

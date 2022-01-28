@@ -85,6 +85,27 @@ For TypeScript users, install three.js types:
 ```bash
 npm install -D @types/three
 ```
+<br />
+
+If you are using threlte with SvelteKit, you need to adapt your `svelte.config.js` to prevent three.js from being externalized for SSR by [vites externalization step](https://vitejs.dev/guide/ssr.html#ssr-externals):
+
+```js
+const config = {
+  // …
+  kit: {
+    // …
+    vite: {
+      ssr: {
+        noExternal: ['three']
+      }
+    }
+  }
+}
+
+export default config
+```
+
+> :zap: [See this issue](https://github.com/grischaerbe/threlte/issues/8#issuecomment-1024085864) for tips on how to reduce bundle size when working with vite and three.js.
 
 Build your first scene:
 
@@ -143,6 +164,7 @@ Build your first scene:
   }
 </style>
 ```
+<br />
 
 It should look something like this:
 
