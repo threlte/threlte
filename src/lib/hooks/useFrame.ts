@@ -37,7 +37,8 @@ export const useFrame = (
 
   const handler: ThrelteFrameHandler = {
     fn,
-    order: options?.order
+    order: options?.order,
+    debugFrameloopMessage: options?.debugFrameloopMessage
   }
 
   const started = writable(false)

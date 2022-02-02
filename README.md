@@ -389,7 +389,7 @@ type ThrelteContext = {
   scene: Scene
   renderer?: WebGLRenderer
   composer?: EffectComposer
-  invalidate: (reason?: string) => void
+  invalidate: (debugFrameloopMessage?: string) => void
 }
 
 type ThrelteRootContext = {
@@ -1629,7 +1629,7 @@ const {
   scene,                  // Scene
   renderer,               // WebGLRenderer
   composer,               // EffectComposer
-  invalidate,             // (reason?: string) => void
+  invalidate,             // (debugFrameloopMessage?: string) => void
 } = useThrelte()
 ```
 
@@ -1640,7 +1640,7 @@ const { invalidate } = useThrelte()
 
 invalidate()
 
-// Optionally provide a reason to debug the frame loop
+// Optionally provide a debugFrameloopMessage to debug the frame loop
 invalidate('changed material color')
 ```
 
@@ -1676,12 +1676,13 @@ This hook allows you to execute code on every frame.
 You receive the state (the same as `useThrelte`) and a clock delta in seconds.  
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
 
-You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree.
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your `<Canvas>` component.
 
 ```ts
 type ThrelteUseFrameOptions = {
   autostart?: boolean
   order?: number
+  debugFrameloopMessage?: string
 }
 ```
 
