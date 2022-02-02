@@ -22,9 +22,9 @@
   } from './lib/renderer'
   import type { Size, ThrelteParentContext } from './types/types'
 
-  const invalidationHandlers: Set<(reason?: string) => void> = new Set()
-  export const invalidateGlobally = (reason?: string) => {
-    invalidationHandlers.forEach((fn) => fn(reason))
+  const invalidationHandlers: Set<(debugFrameloopMessage?: string) => void> = new Set()
+  export const invalidateGlobally = (debugFrameloopMessage?: string) => {
+    invalidationHandlers.forEach((fn) => fn(debugFrameloopMessage))
   }
 </script>
 

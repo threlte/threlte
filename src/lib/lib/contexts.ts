@@ -43,11 +43,13 @@ export const createContexts = (
     scene: new Scene(),
     renderer: undefined,
     composer: undefined,
-    invalidate: (reason?: string) => {
+    invalidate: (debugFrameloopMessage?: string) => {
       renderCtx.frameInvalidated = true
-      if (renderCtx.debugFrameloop && reason) {
-        renderCtx.invalidations[reason] = renderCtx.invalidations[reason]
-          ? renderCtx.invalidations[reason] + 1
+      if (renderCtx.debugFrameloop && debugFrameloopMessage) {
+        renderCtx.invalidations[debugFrameloopMessage] = renderCtx.invalidations[
+          debugFrameloopMessage
+        ]
+          ? renderCtx.invalidations[debugFrameloopMessage] + 1
           : 1
       }
     }

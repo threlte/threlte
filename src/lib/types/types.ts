@@ -45,7 +45,7 @@ export type ThrelteContext = {
   scene: Scene
   renderer?: WebGLRenderer
   composer?: EffectComposer
-  invalidate: (reason?: string) => void
+  invalidate: (debugFrameloopMessage?: string) => void
 }
 
 export type ThrelteRenderContext = {
@@ -66,11 +66,17 @@ export type ThrelteUseFrame = {
 export type ThrelteUseFrameOptions = {
   autostart?: boolean
   order?: number
+  /**
+   * Optionally provide a message to use with the property
+   * `debugFrameloop` of the `<Canvas>` component.
+   */
+  debugFrameloopMessage?: string
 }
 
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
+  debugFrameloopMessage?: string
 }
 
 export type ThrelteParentContext = Writable<Object3D>
@@ -233,7 +239,7 @@ export interface Text extends Mesh {
 
   /**
    * Sets the height of each line of text, as a multiple of the `fontSize`. Defaults to 'normal'
-   * which chooses a reasonable height based on the chosen font's ascender/descender metrics.
+   * which chooses a debugFrameloopMessageable height based on the chosen font's ascender/descender metrics.
    */
   lineHeight: number | string
 
