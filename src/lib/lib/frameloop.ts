@@ -5,7 +5,22 @@ import { animationFrameRaycast } from './interactivity'
 
 const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderContext): void => {
   if (renderCtx.frameHandlers.size === 0) return
-  renderCtx.invalidations['frameHandlers'] = renderCtx.frameHandlers.size
+
+  if (renderCtx.debugFrameloop) {
+    let genericFrameHandlers = 0
+    renderCtx.frameHandlers.forEach((h) => {
+      if (h.debugFrameloopMessage) {
+        renderCtx.invalidations[h.debugFrameloopMessage] =
+          h.debugFrameloopMessage in renderCtx.invalidations
+            ? renderCtx.invalidations[h.debugFrameloopMessage] + 1
+            : 1
+      } else {
+        ++genericFrameHandlers
+      }
+    })
+    if (genericFrameHandlers > 0) renderCtx.invalidations['onFrame'] = renderCtx.frameHandlers.size
+  }
+
   const anyHasOrder = Array.from(renderCtx.frameHandlers).reduce(
     (acc, h) => (h.order ? true : acc),
     false
