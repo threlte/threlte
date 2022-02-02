@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
 import { resolve } from 'path'
+import { threeMinifier } from "@yushijinhun/three-minifier-rollup"
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -18,15 +19,15 @@ const config = {
     },
 
     vite: {
+      plugins: [
+        { ...threeMinifier(), enforce: "pre" }
+      ],
       resolve: {
         alias: {
           threlte: resolve('src/lib'),
           $components: resolve('src/components'),
           $examples: resolve('src/examples')
         }
-      },
-      optimizeDeps: {
-        exclude: ['three']
       },
       ssr: {
         noExternal: ['three']
