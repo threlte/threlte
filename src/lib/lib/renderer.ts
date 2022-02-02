@@ -1,3 +1,4 @@
+import { get } from 'svelte/store'
 import type { ShadowMapType, WebGLRendererParameters } from 'three'
 import {
   ACESFilmicToneMapping,
@@ -7,6 +8,7 @@ import {
   WebGLRenderer
 } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import type { Size, ThrelteContext } from '../types/types'
 
 export const createRendererAndComposer = (
@@ -22,6 +24,7 @@ export const createRendererAndComposer = (
     ...rendererParameters
   })
   ctx.composer = new EffectComposer(ctx.renderer)
+  ctx.composer.addPass(new RenderPass(ctx.scene, get(ctx.camera)))
 }
 
 export const setRendererColorOutput = (
