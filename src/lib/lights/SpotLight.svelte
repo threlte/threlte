@@ -46,7 +46,8 @@
       }
     },
     {
-      autostart: false
+      autostart: false,
+      debugFrameloopMessage: 'SpotLight: tracking object'
     }
   )
 
