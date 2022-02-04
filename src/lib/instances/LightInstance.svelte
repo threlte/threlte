@@ -17,6 +17,7 @@
   export let receiveShadow: LightInstanceProperties['receiveShadow'] = undefined
   export let frustumCulled: LightInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: LightInstanceProperties['renderOrder'] = undefined
+  export let visible: LightInstanceProperties['visible'] = undefined
 
   export let color: LightInstanceProperties['color'] = undefined
   export let intensity: LightInstanceProperties['intensity'] = undefined
@@ -42,6 +43,7 @@
   {scale}
   {rotation}
   {viewportAware}
+  {visible}
   on:viewportenter
   on:viewportleave
   bind:inViewport

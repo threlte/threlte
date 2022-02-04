@@ -14,6 +14,7 @@
   export let receiveShadow: MeshProperties['receiveShadow'] = undefined
   export let frustumCulled: MeshProperties['frustumCulled'] = undefined
   export let renderOrder: MeshProperties['renderOrder'] = undefined
+  export let visible: MeshProperties['visible'] = undefined
   export let interactive: MeshProperties['interactive'] = false
   export let ignorePointer: MeshProperties['ignorePointer'] = false
   export let lookAt: MeshProperties['lookAt'] = undefined
@@ -61,6 +62,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {interactive}
   {ignorePointer}
   on:click

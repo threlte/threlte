@@ -13,6 +13,7 @@
   export let receiveShadow: PerspectiveCameraProperties['receiveShadow'] = undefined
   export let frustumCulled: PerspectiveCameraProperties['frustumCulled'] = undefined
   export let renderOrder: PerspectiveCameraProperties['renderOrder'] = undefined
+  export let visible: PerspectiveCameraProperties['visible'] = undefined
   export let viewportAware: PerspectiveCameraProperties['viewportAware'] = false
   export let inViewport: PerspectiveCameraProperties['inViewport'] = false
   export let useCamera: PerspectiveCameraProperties['useCamera'] = true
@@ -50,6 +51,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter

@@ -16,6 +16,7 @@
   export let receiveShadow: TextProperties['receiveShadow'] = undefined
   export let frustumCulled: TextProperties['frustumCulled'] = undefined
   export let renderOrder: TextProperties['renderOrder'] = undefined
+  export let visible: TextProperties['visible'] = undefined
   export let interactive: TextProperties['interactive'] = false
   export let ignorePointer: TextProperties['ignorePointer'] = false
   export let lookAt: TextProperties['lookAt'] = undefined
@@ -113,6 +114,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {interactive}
   {ignorePointer}
   on:click

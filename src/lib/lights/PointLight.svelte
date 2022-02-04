@@ -13,6 +13,7 @@
   export let inViewport: PointLightProperties['inViewport'] = false
   export let frustumCulled: PointLightProperties['frustumCulled'] = undefined
   export let renderOrder: PointLightProperties['renderOrder'] = undefined
+  export let visible: PointLightProperties['visible'] = undefined
   export let intensity: PointLightProperties['intensity'] = undefined
   export let color: PointLightProperties['color'] = undefined
   export let distance: PointLightProperties['distance'] = undefined
@@ -59,6 +60,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter

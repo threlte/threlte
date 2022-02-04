@@ -14,6 +14,7 @@
   export let receiveShadow: Object3DProperties['receiveShadow'] = undefined
   export let frustumCulled: Object3DProperties['frustumCulled'] = undefined
   export let renderOrder: Object3DProperties['renderOrder'] = undefined
+  export let visible: Object3DProperties['visible'] = undefined
 
   export const object = new ThreeObject3D()
 </script>
@@ -26,6 +27,7 @@
   {lookAt}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {castShadow}
   {receiveShadow}
   {viewportAware}

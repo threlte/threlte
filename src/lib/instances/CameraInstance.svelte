@@ -15,6 +15,7 @@
   export let receiveShadow: CameraInstanceProperties['receiveShadow'] = undefined
   export let frustumCulled: CameraInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: CameraInstanceProperties['renderOrder'] = undefined
+  export let visible: CameraInstanceProperties['visible'] = undefined
 
   export let useCamera: CameraInstanceProperties['useCamera'] = false
 
@@ -36,6 +37,7 @@
   {scale}
   {rotation}
   {viewportAware}
+  {visible}
   on:viewportenter
   on:viewportleave
   bind:inViewport
