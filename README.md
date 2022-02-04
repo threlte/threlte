@@ -493,6 +493,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 interactive: boolean = false
 ignorePointerEvents: boolean = false
 ```
@@ -546,6 +547,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -592,6 +594,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -647,6 +650,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 dracoDecoderPath: string | undefined = undefined
 ktxTranscoderPath: string | undefined = undefined
 ```
@@ -736,6 +740,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -789,6 +794,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -843,6 +849,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -894,6 +901,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 ```
@@ -938,6 +946,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 ```
@@ -988,6 +997,7 @@ viewportAware: boolean = false
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 target: Position | THREE.Object3D | undefined = undefined
@@ -1053,6 +1063,7 @@ receiveShadow: boolean | undefined = undefined
 castShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 intensity: number | undefined = undefined
 skyColor: THREE.ColorRepresentation | undefined = undefined
 groundColor: THREE.ColorRepresentation | undefined = undefined
@@ -1096,6 +1107,7 @@ viewportAware: boolean = false
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 distance: number | undefined = undefined
@@ -1152,6 +1164,7 @@ viewportAware: boolean = false
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 angle: number | undefined = undefined
@@ -1215,6 +1228,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 useCamera: boolean = true
 near: number = undefined
 far: number = undefined
@@ -1264,6 +1278,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 useCamera: boolean = true
 near: number = undefined
 far: number = undefined
@@ -1479,6 +1494,7 @@ castShadow: boolean | undefined = undefined
 receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 interactive: boolean = false
 ignorePointerEvents: boolean = false
 
@@ -1517,7 +1533,7 @@ fillOpacity: number | undefined = undefined
 
 ```ts
 inViewport: boolean
-text: Text
+textObject: Text
 ```
 
 ###### Events <!-- omit in toc -->
