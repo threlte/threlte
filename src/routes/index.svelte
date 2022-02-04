@@ -1,41 +1,63 @@
 <script lang="ts">
   import GLTF from '$lib/objects/GLTF.svelte'
-  import { CircleBufferGeometry, MeshStandardMaterial, SphereBufferGeometry } from 'three'
+  import {
+    CircleBufferGeometry,
+    MeshStandardMaterial,
+    SphereBufferGeometry,
+    Mesh as ThreeMesh
+  } from 'three'
   import { Canvas, DirectionalLight, HemisphereLight, Mesh } from 'threlte'
   import OrthographicCamera from '../lib/cameras/OrthographicCamera.svelte'
   import { useRaf } from '../lib/hooks/useRaf'
   import Group from '../lib/objects/Group.svelte'
 
   let url = 'models/flower.glb'
-  let size = 500
 
-  setTimeout(() => {
-    url = '/models/helmet/DamagedHelmet.gltf'
-  }, 3e3)
+  let spherePosX = 0
+  let showSphere = true
+  let shadow = true
 
-  const pos = {
-    x: 0
-  }
+  let sphere: ThreeMesh | undefined
 
   useRaf(() => {
-    pos.x = Math.sin(Date.now() / 1000) * 1
-    size = 500 + Math.sin(Date.now() / 1000) * 100
+    spherePosX = Math.sin(Date.now() / 1000) * 5
   })
+
+  setTimeout(() => {
+    showSphere = false
+    shadow = false
+  }, 0.5e3)
 </script>
 
 <div>
-  <Canvas size={{ width: size, height: size }}>
+  <Canvas size={{ width: 600, height: 600 }}>
     <OrthographicCamera
       position={{ z: 50, x: 50, y: 50 }}
       lookAt={{ x: 0, y: 0, z: 0 }}
       zoom={100}
     />
 
-    <DirectionalLight shadow color={'#EDBD9C'} position={{ x: -15, y: 45, z: 20 }} />
+    <DirectionalLight
+      {shadow}
+      color={'#EDBD9C'}
+      position={{ y: 4.5 }}
+      target={showSphere ? sphere : { z: spherePosX }}
+    />
 
     <HemisphereLight skyColor={0x4c8eac} groundColor={0xac844c} intensity={0.9} />
 
     <Group>
+      {#if showSphere}
+        <Mesh
+          receiveShadow
+          castShadow
+          bind:mesh={sphere}
+          position={{ x: spherePosX }}
+          geometry={new SphereBufferGeometry(1, 40, 40)}
+          material={new MeshStandardMaterial({ color: '#dddddd' })}
+        />
+      {/if}
+
       <Mesh
         receiveShadow
         castShadow

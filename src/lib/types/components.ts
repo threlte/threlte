@@ -114,7 +114,11 @@ export type PassProperties = {
 
 export type AmbientLightProperties = Omit<LightInstanceProperties, 'light'>
 
-export type DirectionalLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
+export type DirectionalLightProperties = Omit<
+  LightInstanceProperties,
+  'light' | 'castShadow' | 'lookAt'
+> & {
+  target: Position | Object3D | undefined
   shadow:
     | boolean
     | {
