@@ -685,9 +685,7 @@ viewportleave: undefined
 
 #### :recycle: Object Instances
 
-While object components like `<Mesh>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component takes an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually, imported models or objects that did not yet make it into threlte.
-
-Object instance components intentionally have no default values on properties even if they can be `undefined`. That way, your IDE will tell you what properties need to be implemented to properly set them up.
+While components like `<Mesh>` and `<Group>` create a new object for you (in the case of `<Mesh>` it's a `THREE.Mesh`), an object instance component accepts an existing object instance (`THREE.Mesh`, `THREE.Object3D`, `THREE.Light` or `THREE.Camera`) as a property and applies reactivity to it. It's used internally but can also be used to introduce reactivity to objects that need to be instanced manually as well as imported models or objects that did not yet make it into threlte.
 
 ###### Example <!-- omit in toc -->
 
@@ -727,17 +725,17 @@ Object instance components intentionally have no default values on properties ev
 ```ts
 // required
 object: THREE.Object3D
-viewportAware: boolean
 
 // optional
-position: Position | undefined
-scale: Scale | undefined
-rotation: Rotation | undefined
-lookAt: LookAt | undefined
-castShadow: boolean | undefined
-receiveShadow: boolean | undefined
-frustumCulled: boolean | undefined
-renderOrder: number | undefined
+viewportAware: boolean = false
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -778,19 +776,19 @@ viewportleave: undefined
 ```ts
 // required
 mesh: THREE.Mesh
-interactive: boolean
-ignorePointerEvents: boolean
-viewportAware: boolean
 
 // optional
-position: Position | undefined
-scale: Scale | undefined
-rotation: Rotation | undefined
-lookAt: LookAt | undefined
-castShadow: boolean | undefined
-receiveShadow: boolean | undefined
-frustumCulled: boolean | undefined
-renderOrder: number | undefined
+interactive: boolean = false
+ignorePointerEvents: boolean = false
+viewportAware: boolean = false
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -833,18 +831,18 @@ pointermove: CustomEvent<ThreltePointerEvent>
 ```ts
 // required
 camera: THREE.Camera
-viewportAware: boolean
-useCamera: boolean
 
 // optional
-position: Position | undefined
-scale: Scale | undefined
-rotation: Rotation | undefined
-lookAt: LookAt | undefined
-castShadow: boolean | undefined
-receiveShadow: boolean | undefined
-frustumCulled: boolean | undefined
-renderOrder: number | undefined
+viewportAware: boolean = false
+useCamera: boolean = false
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -885,19 +883,19 @@ viewportleave: undefined
 ```ts
 // required
 light: THREE.Light
-viewportAware: boolean
 
 // optional
-position: Position | undefined
-scale: Scale | undefined
-rotation: Rotation | undefined
-lookAt: LookAt | undefined
-castShadow: boolean | undefined
-receiveShadow: boolean | undefined
-frustumCulled: boolean | undefined
-renderOrder: number | undefined
-color: THREE.ColorRepresentation | undefined
-intensity: number | undefined
+viewportAware: boolean = false
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+color: THREE.ColorRepresentation | undefined = undefined
+intensity: number | undefined = undefined
 ```
 
 ###### Bindings <!-- omit in toc -->

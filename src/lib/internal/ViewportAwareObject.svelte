@@ -7,7 +7,7 @@
   import type { ViewportAwareObjectProperties } from '../types/components'
 
   export let object: ViewportAwareObjectProperties['object']
-  export let viewportAware: ViewportAwareObjectProperties['viewportAware']
+  export let viewportAware: ViewportAwareObjectProperties['viewportAware'] = false
 
   const dispatch = createEventDispatcher<{
     viewportenter: Object3D

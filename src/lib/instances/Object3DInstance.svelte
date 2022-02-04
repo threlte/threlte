@@ -8,21 +8,18 @@
 
   export let object: Object3DInstanceProperties['object']
 
-  // TransformableObject
-  export let position: Object3DInstanceProperties['position']
-  export let scale: Object3DInstanceProperties['scale']
-  export let rotation: Object3DInstanceProperties['rotation']
-  export let lookAt: Object3DInstanceProperties['lookAt']
+  export let position: Object3DInstanceProperties['position'] = undefined
+  export let scale: Object3DInstanceProperties['scale'] = undefined
+  export let rotation: Object3DInstanceProperties['rotation'] = undefined
+  export let lookAt: Object3DInstanceProperties['lookAt'] = undefined
 
-  // ViewportAwareObject
-  export let viewportAware: Object3DInstanceProperties['viewportAware']
-  export let inViewport: Object3DInstanceProperties['inViewport']
+  export let viewportAware: Object3DInstanceProperties['viewportAware'] = false
+  export let inViewport: Object3DInstanceProperties['inViewport'] = false
 
-  // self
-  export let castShadow: Object3DInstanceProperties['castShadow']
-  export let receiveShadow: Object3DInstanceProperties['receiveShadow']
-  export let frustumCulled: Object3DInstanceProperties['frustumCulled']
-  export let renderOrder: Object3DInstanceProperties['renderOrder']
+  export let castShadow: Object3DInstanceProperties['castShadow'] = undefined
+  export let receiveShadow: Object3DInstanceProperties['receiveShadow'] = undefined
+  export let frustumCulled: Object3DInstanceProperties['frustumCulled'] = undefined
+  export let renderOrder: Object3DInstanceProperties['renderOrder'] = undefined
 
   const { invalidate } = useThrelte()
   const getObject = () => object

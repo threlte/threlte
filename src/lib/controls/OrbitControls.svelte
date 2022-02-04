@@ -121,10 +121,4 @@
   })
 </script>
 
-<TransformableObject
-  object={targetObject}
-  position={target}
-  rotation={undefined}
-  scale={undefined}
-  lookAt={undefined}
-/>
+<TransformableObject object={targetObject} position={target} />

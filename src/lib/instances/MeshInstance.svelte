@@ -4,18 +4,18 @@
   import Object3DInstance from './Object3DInstance.svelte'
 
   export let mesh: MeshInstanceProperties['mesh']
-  export let position: MeshInstanceProperties['position']
-  export let scale: MeshInstanceProperties['scale']
-  export let rotation: MeshInstanceProperties['rotation']
-  export let viewportAware: MeshInstanceProperties['viewportAware']
-  export let inViewport: MeshInstanceProperties['inViewport']
-  export let castShadow: MeshInstanceProperties['castShadow']
-  export let receiveShadow: MeshInstanceProperties['receiveShadow']
-  export let frustumCulled: MeshInstanceProperties['frustumCulled']
-  export let renderOrder: MeshInstanceProperties['renderOrder']
-  export let lookAt: MeshInstanceProperties['lookAt']
-  export let interactive: MeshInstanceProperties['interactive']
-  export let ignorePointer: MeshInstanceProperties['ignorePointer']
+  export let position: MeshInstanceProperties['position'] = undefined
+  export let scale: MeshInstanceProperties['scale'] = undefined
+  export let rotation: MeshInstanceProperties['rotation'] = undefined
+  export let lookAt: MeshInstanceProperties['lookAt'] = undefined
+  export let viewportAware: MeshInstanceProperties['viewportAware'] = false
+  export let inViewport: MeshInstanceProperties['inViewport'] = false
+  export let castShadow: MeshInstanceProperties['castShadow'] = undefined
+  export let receiveShadow: MeshInstanceProperties['receiveShadow'] = undefined
+  export let frustumCulled: MeshInstanceProperties['frustumCulled'] = undefined
+  export let renderOrder: MeshInstanceProperties['renderOrder'] = undefined
+  export let interactive: MeshInstanceProperties['interactive'] = false
+  export let ignorePointer: MeshInstanceProperties['ignorePointer'] = false
 </script>
 
 <Object3DInstance
