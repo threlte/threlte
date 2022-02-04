@@ -5,20 +5,21 @@
   import type { LightInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
-  export let position: LightInstanceProperties['position']
-  export let scale: LightInstanceProperties['scale']
-  export let rotation: LightInstanceProperties['rotation']
-  export let viewportAware: LightInstanceProperties['viewportAware']
-  export let inViewport: LightInstanceProperties['inViewport']
-  export let castShadow: LightInstanceProperties['castShadow']
-  export let receiveShadow: LightInstanceProperties['receiveShadow']
-  export let frustumCulled: LightInstanceProperties['frustumCulled']
-  export let renderOrder: LightInstanceProperties['renderOrder']
-  export let lookAt: LightInstanceProperties['lookAt']
-
   export let light: LightInstanceProperties['light']
-  export let color: LightInstanceProperties['color']
-  export let intensity: LightInstanceProperties['intensity']
+
+  export let position: LightInstanceProperties['position'] = undefined
+  export let scale: LightInstanceProperties['scale'] = undefined
+  export let rotation: LightInstanceProperties['rotation'] = undefined
+  export let lookAt: LightInstanceProperties['lookAt'] = undefined
+  export let viewportAware: LightInstanceProperties['viewportAware'] = false
+  export let inViewport: LightInstanceProperties['inViewport'] = false
+  export let castShadow: LightInstanceProperties['castShadow'] = undefined
+  export let receiveShadow: LightInstanceProperties['receiveShadow'] = undefined
+  export let frustumCulled: LightInstanceProperties['frustumCulled'] = undefined
+  export let renderOrder: LightInstanceProperties['renderOrder'] = undefined
+
+  export let color: LightInstanceProperties['color'] = undefined
+  export let intensity: LightInstanceProperties['intensity'] = undefined
 
   const { invalidate } = useThrelte()
   const { linear } = useThrelteRoot()

@@ -71,19 +71,11 @@
 
 {#if target && !(target instanceof Object3D)}
   <HierarchicalObject object={originalTarget} />
-
-  <TransformableObject
-    object={originalTarget}
-    position={target}
-    scale={undefined}
-    rotation={undefined}
-    lookAt={undefined}
-  />
+  <TransformableObject object={originalTarget} position={target} />
 {/if}
 
 <LightInstance
   {light}
-  lookAt={undefined}
   {position}
   {scale}
   {rotation}

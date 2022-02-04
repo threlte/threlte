@@ -9,8 +9,8 @@
   export let object: InteractiveObjectProperties['object']
   let previousObject: InteractiveObjectProperties['object'] | undefined
 
-  export let interactive: InteractiveObjectProperties['interactive']
-  export let ignorePointer: InteractiveObjectProperties['ignorePointer']
+  export let interactive: InteractiveObjectProperties['interactive'] = false
+  export let ignorePointer: InteractiveObjectProperties['ignorePointer'] = false
 
   const eventDispatcher = createEventDispatcher<{
     click: ThreltePointerEvent

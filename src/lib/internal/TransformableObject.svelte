@@ -5,10 +5,10 @@
   import type { TransformableObjectProperties } from '../types/components'
 
   export let object: TransformableObjectProperties['object']
-  export let position: TransformableObjectProperties['position']
-  export let scale: TransformableObjectProperties['scale']
-  export let rotation: TransformableObjectProperties['rotation']
-  export let lookAt: TransformableObjectProperties['lookAt']
+  export let position: TransformableObjectProperties['position'] = undefined
+  export let scale: TransformableObjectProperties['scale'] = undefined
+  export let rotation: TransformableObjectProperties['rotation'] = undefined
+  export let lookAt: TransformableObjectProperties['lookAt'] = undefined
 
   const targetWorldPos = new Vector3()
 
