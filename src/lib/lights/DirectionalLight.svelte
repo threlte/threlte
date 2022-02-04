@@ -1,11 +1,11 @@
 <script lang="ts">
-  import HierarchicalObject from '../internal/HierarchicalObject.svelte'
+  import { useFrame } from '../hooks/useFrame'
   import { DirectionalLight as ThreeDirectionalLight, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import type { DirectionalLightProperties } from '../types/components'
+  import HierarchicalObject from '../internal/HierarchicalObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
-  import { useFrame } from '$lib/hooks/useFrame'
+  import type { DirectionalLightProperties } from '../types/components'
 
   export let position: DirectionalLightProperties['position'] = undefined
   export let scale: DirectionalLightProperties['scale'] = undefined
@@ -13,6 +13,7 @@
   export let receiveShadow: DirectionalLightProperties['receiveShadow'] = undefined
   export let frustumCulled: DirectionalLightProperties['frustumCulled'] = undefined
   export let renderOrder: DirectionalLightProperties['renderOrder'] = undefined
+  export let visible: DirectionalLightProperties['visible'] = undefined
   export let viewportAware: DirectionalLightProperties['viewportAware'] = false
   export let inViewport: DirectionalLightProperties['inViewport'] = false
   export let color: DirectionalLightProperties['color'] = undefined
@@ -83,6 +84,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter
