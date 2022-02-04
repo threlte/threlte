@@ -97,7 +97,10 @@
     invalidate('OrbitControls: props changed')
   }
 
-  const { start, stop } = useFrame(() => controls.update(), { autostart: false })
+  const { start, stop } = useFrame(() => controls.update(), {
+    autostart: false,
+    debugFrameloopMessage: 'OrbitControlts: updating controls'
+  })
 
   $: {
     if (autoRotate || enableDamping) start()

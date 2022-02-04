@@ -51,16 +51,21 @@
     }
   }
 
-  const { start, stop } = useFrame(() => {
-    const v = checkInViewport()
-    if (inViewport === undefined) {
-      inViewport = checkInViewport()
-      dispatchEvent(inViewport)
-    } else if (v !== inViewport) {
-      dispatchEvent(v)
-      inViewport = v
+  const { start, stop } = useFrame(
+    () => {
+      const v = checkInViewport()
+      if (inViewport === undefined) {
+        inViewport = checkInViewport()
+        dispatchEvent(inViewport)
+      } else if (v !== inViewport) {
+        dispatchEvent(v)
+        inViewport = v
+      }
+    },
+    {
+      debugFrameloopMessage: 'ViewportAwareObject: tracking viewport visibility'
     }
-  })
+  )
 
   const init = async () => {
     await tick()
