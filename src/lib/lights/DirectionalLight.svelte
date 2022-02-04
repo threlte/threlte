@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { DirectionalLight as ThreeDirectionalLight } from 'three'
+  import HierarchicalObject from '../internal/HierarchicalObject.svelte'
+  import { DirectionalLight as ThreeDirectionalLight, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
   import type { DirectionalLightProperties } from '../types/components'
+  import TransformableObject from '../internal/TransformableObject.svelte'
+  import { useFrame } from '$lib/hooks/useFrame'
 
-  // LightInstance
   export let position: DirectionalLightProperties['position'] = undefined
   export let scale: DirectionalLightProperties['scale'] = undefined
   export let rotation: DirectionalLightProperties['rotation'] = undefined
-  export let lookAt: DirectionalLightProperties['lookAt'] = undefined
   export let receiveShadow: DirectionalLightProperties['receiveShadow'] = undefined
   export let frustumCulled: DirectionalLightProperties['frustumCulled'] = undefined
   export let renderOrder: DirectionalLightProperties['renderOrder'] = undefined
@@ -17,12 +18,34 @@
   export let color: DirectionalLightProperties['color'] = undefined
   export let intensity: DirectionalLightProperties['intensity'] = undefined
   export let shadow: DirectionalLightProperties['shadow'] = undefined
+  export let target: DirectionalLightProperties['target'] = undefined
 
   export const light = new ThreeDirectionalLight(color, intensity)
 
   const { invalidate } = useThrelte()
 
-  $: {
+  const originalTarget = light.target
+
+  const { start, stop, started } = useFrame(() => {}, {
+    autostart: false,
+    debugFrameloopMessage: 'DirectionalLight: tracking target'
+  })
+
+  const updateLightTarget = (target: DirectionalLightProperties['target']) => {
+    if (target && target instanceof Object3D && !$started) {
+      light.target = target
+      start()
+      invalidate('DirectionalLight: target changed')
+    } else if ((!target || !(target instanceof Object3D)) && $started) {
+      light.target = originalTarget
+      stop()
+      invalidate('DirectionalLight: target changed')
+    }
+  }
+
+  $: updateLightTarget(target)
+
+  const updateLightShadow = (shadow: DirectionalLightProperties['shadow']) => {
     if (shadow) {
       const {
         mapSize = [512, 512],
@@ -42,15 +65,29 @@
     }
     invalidate('DirectionalLight: shadow changed')
   }
+
+  $: updateLightShadow(shadow)
 </script>
+
+{#if target && !(target instanceof Object3D)}
+  <HierarchicalObject object={originalTarget} />
+
+  <TransformableObject
+    object={originalTarget}
+    position={target}
+    scale={undefined}
+    rotation={undefined}
+    lookAt={undefined}
+  />
+{/if}
 
 <LightInstance
   {light}
-  {lookAt}
+  lookAt={undefined}
   {position}
   {scale}
   {rotation}
-  castShadow={shadow ? true : undefined}
+  castShadow={shadow ? true : false}
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
