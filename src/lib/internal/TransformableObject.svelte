@@ -22,7 +22,8 @@
       }
     },
     {
-      autostart: false
+      autostart: false,
+      debugFrameloopMessage: 'TransformableObject: tracking object'
     }
   )
 

@@ -51,16 +51,22 @@
     }
   }
 
-  const { start, stop } = useFrame(() => {
-    const v = checkInViewport()
-    if (inViewport === undefined) {
-      inViewport = checkInViewport()
-      dispatchEvent(inViewport)
-    } else if (v !== inViewport) {
-      dispatchEvent(v)
-      inViewport = v
+  const { start, stop, started } = useFrame(
+    () => {
+      const v = checkInViewport()
+      if (inViewport === undefined) {
+        inViewport = checkInViewport()
+        dispatchEvent(inViewport)
+      } else if (v !== inViewport) {
+        dispatchEvent(v)
+        inViewport = v
+      }
+    },
+    {
+      autostart: viewportAware,
+      debugFrameloopMessage: 'ViewportAwareObject: tracking viewport visibility'
     }
-  })
+  )
 
   const init = async () => {
     await tick()
@@ -69,9 +75,9 @@
 
   init()
 
-  $: if (viewportAware) {
+  $: if (viewportAware && !$started) {
     start()
-  } else {
+  } else if (!viewportAware && $started) {
     stop()
   }
 

@@ -46,7 +46,8 @@
       }
     },
     {
-      autostart: false
+      autostart: false,
+      debugFrameloopMessage: 'SpotLight: tracking object'
     }
   )
 
@@ -111,7 +112,7 @@
   {position}
   {scale}
   {rotation}
-  castShadow={shadow ? true : undefined}
+  castShadow={shadow ? true : false}
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
