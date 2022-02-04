@@ -51,7 +51,7 @@
     }
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop, started } = useFrame(
     () => {
       const v = checkInViewport()
       if (inViewport === undefined) {
@@ -63,6 +63,7 @@
       }
     },
     {
+      autostart: viewportAware,
       debugFrameloopMessage: 'ViewportAwareObject: tracking viewport visibility'
     }
   )
@@ -74,9 +75,9 @@
 
   init()
 
-  $: if (viewportAware) {
+  $: if (viewportAware && !$started) {
     start()
-  } else {
+  } else if (!viewportAware && $started) {
     stop()
   }
 
