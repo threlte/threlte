@@ -5,19 +5,18 @@
 
   export let camera: CameraInstanceProperties['camera']
 
-  export let position: CameraInstanceProperties['position']
-  export let scale: CameraInstanceProperties['scale']
-  export let rotation: CameraInstanceProperties['rotation']
-  export let viewportAware: CameraInstanceProperties['viewportAware']
-  export let inViewport: CameraInstanceProperties['inViewport']
-  export let castShadow: CameraInstanceProperties['castShadow']
-  export let receiveShadow: CameraInstanceProperties['receiveShadow']
-  export let frustumCulled: CameraInstanceProperties['frustumCulled']
-  export let renderOrder: CameraInstanceProperties['renderOrder']
-  export let lookAt: CameraInstanceProperties['lookAt']
+  export let position: CameraInstanceProperties['position'] = undefined
+  export let scale: CameraInstanceProperties['scale'] = undefined
+  export let rotation: CameraInstanceProperties['rotation'] = undefined
+  export let lookAt: CameraInstanceProperties['lookAt'] = undefined
+  export let viewportAware: CameraInstanceProperties['viewportAware'] = false
+  export let inViewport: CameraInstanceProperties['inViewport'] = false
+  export let castShadow: CameraInstanceProperties['castShadow'] = undefined
+  export let receiveShadow: CameraInstanceProperties['receiveShadow'] = undefined
+  export let frustumCulled: CameraInstanceProperties['frustumCulled'] = undefined
+  export let renderOrder: CameraInstanceProperties['renderOrder'] = undefined
 
-  // self
-  export let useCamera: CameraInstanceProperties['useCamera']
+  export let useCamera: CameraInstanceProperties['useCamera'] = false
 
   const { setCamera } = useThrelteRoot()
 
