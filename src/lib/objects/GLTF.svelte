@@ -20,6 +20,7 @@
   export let receiveShadow: GLTFProperties['receiveShadow'] = undefined
   export let frustumCulled: GLTFProperties['frustumCulled'] = undefined
   export let renderOrder: GLTFProperties['renderOrder'] = undefined
+  export let visible: GLTFProperties['visible'] = undefined
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
   export let url: GLTFProperties['url']
@@ -150,6 +151,7 @@
     {lookAt}
     {frustumCulled}
     {renderOrder}
+    {visible}
     {castShadow}
     {receiveShadow}
     {viewportAware}

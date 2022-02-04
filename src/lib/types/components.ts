@@ -27,10 +27,10 @@ export type LayerableObjectProperties = {
 
 export type TransformableObjectProperties = {
   object: Object3D
-  position: Position | undefined
-  scale: Scale | undefined
-  rotation: Rotation | undefined
-  lookAt: LookAt | undefined
+  position?: Position
+  scale?: Scale
+  rotation?: Rotation
+  lookAt?: LookAt
 }
 
 export type ViewportAwareObjectProperties = {
@@ -46,10 +46,11 @@ export type Object3DInstanceProperties = HierarchicalObjectProperties &
   LayerableObjectProperties &
   TransformableObjectProperties &
   ViewportAwareObjectProperties & {
-    castShadow: boolean | undefined
-    receiveShadow: boolean | undefined
-    frustumCulled: boolean | undefined
-    renderOrder: number | undefined
+    castShadow?: boolean
+    receiveShadow?: boolean
+    frustumCulled?: boolean
+    renderOrder?: number
+    visible?: boolean
   }
 
 export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
@@ -59,8 +60,8 @@ export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> 
 
 export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   light: Light
-  color: ColorRepresentation | undefined
-  intensity: number | undefined
+  color?: ColorRepresentation
+  intensity?: number
 }
 
 export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
@@ -69,43 +70,43 @@ export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'
 }
 
 export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near: number | undefined
-  far: number | undefined
-  zoom: number | undefined
+  near?: number
+  far?: number
+  zoom?: number
 }
 
 export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near: number | undefined
-  far: number | undefined
-  fov: number | undefined
+  near?: number
+  far?: number
+  fov?: number
 }
 
 export type OrbitControlsProperties = {
-  autoRotate: boolean | undefined
-  autoRotateSpeed: number | undefined
-  dampingFactor: number | undefined
-  enableDamping: boolean | undefined
-  enabled: boolean | undefined
-  enablePan: boolean | undefined
-  enableRotate: boolean | undefined
-  enableZoom: boolean | undefined
-  keyPanSpeed: number | undefined
-  keys: OrbitControls['keys'] | undefined
-  maxAzimuthAngle: number | undefined
-  maxDistance: number | undefined
-  maxPolarAngle: number | undefined
-  maxZoom: number | undefined
-  minAzimuthAngle: number | undefined
-  minDistance: number | undefined
-  minPolarAngle: number | undefined
-  minZoom: number | undefined
-  mouseButtons: OrbitControls['mouseButtons'] | undefined
-  panSpeed: number | undefined
-  rotateSpeed: number | undefined
-  screenSpacePanning: boolean | undefined
-  touches: OrbitControls['touches'] | undefined
-  zoomSpeed: number | undefined
-  target: TransformableObjectProperties['position'] | undefined
+  autoRotate?: boolean
+  autoRotateSpeed?: number
+  dampingFactor?: number
+  enableDamping?: boolean
+  enabled?: boolean
+  enablePan?: boolean
+  enableRotate?: boolean
+  enableZoom?: boolean
+  keyPanSpeed?: number
+  keys?: OrbitControls['keys']
+  maxAzimuthAngle?: number
+  maxDistance?: number
+  maxPolarAngle?: number
+  maxZoom?: number
+  minAzimuthAngle?: number
+  minDistance?: number
+  minPolarAngle?: number
+  minZoom?: number
+  mouseButtons?: OrbitControls['mouseButtons']
+  panSpeed?: number
+  rotateSpeed?: number
+  screenSpacePanning?: boolean
+  touches?: OrbitControls['touches']
+  zoomSpeed?: number
+  target?: TransformableObjectProperties['position']
 }
 
 export type PassProperties = {
@@ -118,8 +119,8 @@ export type DirectionalLightProperties = Omit<
   LightInstanceProperties,
   'light' | 'castShadow' | 'lookAt'
 > & {
-  target: Position | Object3D | undefined
-  shadow:
+  target?: Position | Object3D
+  shadow?:
     | boolean
     | {
         mapSize?: [number, number]
@@ -134,19 +135,18 @@ export type DirectionalLightProperties = Omit<
         bias?: number
         radius?: number
       }
-    | undefined
 }
 
 export type HemisphereLightProperties = Omit<LightInstanceProperties, 'color' | 'light'> & {
   skyColor: LightInstanceProperties['color']
-  groundColor: ColorRepresentation | undefined
+  groundColor?: ColorRepresentation
 }
 
 export type PointLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
-  distance: number | undefined
-  decay: number | undefined
-  power: number | undefined
-  shadow:
+  distance?: number
+  decay?: number
+  power?: number
+  shadow?:
     | boolean
     | {
         mapSize?: [number, number]
@@ -154,20 +154,19 @@ export type PointLightProperties = Omit<LightInstanceProperties, 'light' | 'cast
         bias?: number
         radius?: number
       }
-    | undefined
 }
 
 export type SpotLightProperties = Omit<
   LightInstanceProperties,
   'lookAt' | 'light' | 'castShadow'
 > & {
-  angle: number | undefined
-  decay: number | undefined
-  distance: number | undefined
-  penumbra: number | undefined
-  power: number | undefined
-  target: Position | Object3D | undefined
-  shadow:
+  angle?: number
+  decay?: number
+  distance?: number
+  penumbra?: number
+  power?: number
+  target?: Position | Object3D
+  shadow?:
     | boolean
     | {
         mapSize?: [number, number]
@@ -175,18 +174,17 @@ export type SpotLightProperties = Omit<
         bias?: number
         radius?: number
       }
-    | undefined
 }
 
 export type FogProperties = {
   color: ColorRepresentation
-  near: number | undefined
-  far: number | undefined
+  near?: number
+  far?: number
 }
 
 export type FogExp2Properties = {
   color: ColorRepresentation
-  density: number | undefined
+  density?: number
 }
 
 export type LayersProperties = {
@@ -195,8 +193,8 @@ export type LayersProperties = {
 
 export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   url: string
-  dracoDecoderPath: string | undefined
-  ktxTranscoderPath: string | undefined
+  dracoDecoderPath?: string
+  ktxTranscoderPath?: string
 }
 
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
@@ -209,33 +207,33 @@ export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
 export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  text: TextType['text'] | undefined
-  anchorX: TextType['anchorX'] | undefined
-  anchorY: TextType['anchorY'] | undefined
-  curveRadius: TextType['curveRadius'] | undefined
-  font: TextType['font'] | undefined
-  fontSize: TextType['fontSize'] | undefined
-  letterSpacing: TextType['letterSpacing'] | undefined
-  lineHeight: TextType['lineHeight'] | undefined
-  maxWidth: TextType['maxWidth'] | undefined
-  overflowWrap: TextType['overflowWrap'] | undefined
-  textAlign: TextType['textAlign'] | undefined
-  textIndent: TextType['textIndent'] | undefined
-  whiteSpace: TextType['whiteSpace'] | undefined
-  material: TextType['material'] | undefined | null
-  color: TextType['color'] | undefined
-  depthOffset: TextType['depthOffset'] | undefined
-  clipRect: TextType['clipRect'] | undefined
-  glyphGeometryDetail: TextType['glyphGeometryDetail'] | undefined
-  sdfGlyphSize: TextType['sdfGlyphSize'] | undefined
-  outlineWidth: TextType['outlineWidth'] | undefined
-  outlineColor: TextType['outlineColor'] | undefined
-  outlineOpacity: TextType['outlineOpacity'] | undefined
-  outlineBlur: TextType['outlineBlur'] | undefined
-  outlineOffsetX: TextType['outlineOffsetX'] | undefined
-  outlineOffsetY: TextType['outlineOffsetY'] | undefined
-  strokeWidth: TextType['strokeWidth'] | undefined
-  strokeColor: TextType['strokeColor'] | undefined
-  strokeOpacity: TextType['strokeOpacity'] | undefined
-  fillOpacity: TextType['fillOpacity'] | undefined
+  text?: TextType['text']
+  anchorX?: TextType['anchorX']
+  anchorY?: TextType['anchorY']
+  curveRadius?: TextType['curveRadius']
+  font?: TextType['font']
+  fontSize?: TextType['fontSize']
+  letterSpacing?: TextType['letterSpacing']
+  lineHeight?: TextType['lineHeight']
+  maxWidth?: TextType['maxWidth']
+  overflowWrap?: TextType['overflowWrap']
+  textAlign?: TextType['textAlign']
+  textIndent?: TextType['textIndent']
+  whiteSpace?: TextType['whiteSpace']
+  material?: TextType['material'] | null
+  color?: TextType['color']
+  depthOffset?: TextType['depthOffset']
+  clipRect?: TextType['clipRect']
+  glyphGeometryDetail?: TextType['glyphGeometryDetail']
+  sdfGlyphSize?: TextType['sdfGlyphSize']
+  outlineWidth?: TextType['outlineWidth']
+  outlineColor?: TextType['outlineColor']
+  outlineOpacity?: TextType['outlineOpacity']
+  outlineBlur?: TextType['outlineBlur']
+  outlineOffsetX?: TextType['outlineOffsetX']
+  outlineOffsetY?: TextType['outlineOffsetY']
+  strokeWidth?: TextType['strokeWidth']
+  strokeColor?: TextType['strokeColor']
+  strokeOpacity?: TextType['strokeOpacity']
+  fillOpacity?: TextType['fillOpacity']
 }

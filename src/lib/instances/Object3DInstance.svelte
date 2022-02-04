@@ -20,11 +20,13 @@
   export let receiveShadow: Object3DInstanceProperties['receiveShadow'] = undefined
   export let frustumCulled: Object3DInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: Object3DInstanceProperties['renderOrder'] = undefined
+  export let visible: Object3DInstanceProperties['visible'] = undefined
 
   const { invalidate } = useThrelte()
   const getObject = () => object
 
   $: {
+    if (visible !== undefined) getObject().visible = visible
     if (castShadow !== undefined) getObject().castShadow = castShadow
     if (receiveShadow !== undefined) getObject().receiveShadow = receiveShadow
     if (frustumCulled !== undefined) getObject().frustumCulled = frustumCulled

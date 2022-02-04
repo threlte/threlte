@@ -13,6 +13,7 @@
   export let receiveShadow: GroupProperties['receiveShadow'] = undefined
   export let frustumCulled: GroupProperties['frustumCulled'] = undefined
   export let renderOrder: GroupProperties['renderOrder'] = undefined
+  export let visible: GroupProperties['visible'] = undefined
 
   export const group = new ThreeGroup()
 </script>
@@ -25,6 +26,7 @@
   {lookAt}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {castShadow}
   {receiveShadow}
   {viewportAware}

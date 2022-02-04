@@ -16,6 +16,7 @@
   export let receiveShadow: OrthographicCameraProperties['receiveShadow'] = undefined
   export let frustumCulled: OrthographicCameraProperties['frustumCulled'] = undefined
   export let renderOrder: OrthographicCameraProperties['renderOrder'] = undefined
+  export let visible: OrthographicCameraProperties['visible'] = undefined
   export let useCamera: OrthographicCameraProperties['useCamera'] = true
 
   // OrthographicCamera
@@ -64,6 +65,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter

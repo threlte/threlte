@@ -16,6 +16,7 @@
   export let frustumCulled: SpotLightProperties['frustumCulled'] = undefined
   export let receiveShadow: SpotLightProperties['receiveShadow'] = undefined
   export let renderOrder: SpotLightProperties['renderOrder'] = undefined
+  export let visible: SpotLightProperties['visible'] = undefined
   export let color: SpotLightProperties['color'] = undefined
   export let intensity: SpotLightProperties['intensity'] = undefined
 
@@ -27,6 +28,7 @@
   export let power: SpotLightProperties['power'] = undefined
   export let target: SpotLightProperties['target'] = undefined
   export let shadow: SpotLightProperties['shadow'] = undefined
+
   const { invalidate } = useThrelte()
 
   export const light = new ThreeSpotLight(color, intensity)
@@ -95,6 +97,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter

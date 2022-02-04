@@ -11,6 +11,7 @@
   export let receiveShadow: AmbientLightProperties['receiveShadow'] = undefined
   export let frustumCulled: AmbientLightProperties['frustumCulled'] = undefined
   export let renderOrder: AmbientLightProperties['renderOrder'] = undefined
+  export let visible: AmbientLightProperties['visible'] = undefined
   export let viewportAware: AmbientLightProperties['viewportAware'] = false
   export let inViewport: AmbientLightProperties['inViewport'] = false
   export let color: AmbientLightProperties['color'] = undefined
@@ -29,6 +30,7 @@
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
+  {visible}
   {viewportAware}
   bind:inViewport
   on:viewportenter
