@@ -112,7 +112,7 @@
   {position}
   {scale}
   {rotation}
-  castShadow={shadow ? true : undefined}
+  castShadow={shadow ? true : false}
   {receiveShadow}
   {frustumCulled}
   {renderOrder}
