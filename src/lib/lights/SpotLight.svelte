@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { Object3D, SpotLight as ThreeSpotLight, Vector3 } from 'three'
+  import { Object3D, SpotLight as ThreeSpotLight } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import LightInstance from '../instances/LightInstance.svelte'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import HierarchicalObject from '../internal/HierarchicalObject.svelte'
+  import TransformableObject from '../internal/TransformableObject.svelte'
   import type { SpotLightProperties } from '../types/components'
 
   // LightInstance
@@ -26,51 +27,32 @@
   export let power: SpotLightProperties['power'] = undefined
   export let target: SpotLightProperties['target'] = undefined
   export let shadow: SpotLightProperties['shadow'] = undefined
-
-  export const light = new ThreeSpotLight(color, intensity)
-  const originalLightTarget = light.target
-
   const { invalidate } = useThrelte()
 
-  const tmpV3 = new Vector3()
+  export const light = new ThreeSpotLight(color, intensity)
 
-  const targetIsObject3D = (t: typeof target): t is Object3D => {
-    return !!t && t instanceof Object3D
-  }
+  const originalTarget = light.target
 
-  const { start: startLightTracking, stop: stopLightTracking } = useFrame(
-    () => {
-      if (targetIsObject3D(target)) {
-        target.getWorldPosition(tmpV3)
-        light.target.position.copy(tmpV3)
-      }
-    },
-    {
-      autostart: false,
-      debugFrameloopMessage: 'SpotLight: tracking object'
-    }
-  )
+  const { start, stop, started } = useFrame(() => {}, {
+    autostart: false,
+    debugFrameloopMessage: 'SpotLight: tracking target'
+  })
 
-  $: {
-    if (targetIsObject3D(target)) {
+  const updateLightTarget = (target: SpotLightProperties['target']) => {
+    if (target && target instanceof Object3D && !$started) {
       light.target = target
-      startLightTracking()
-    } else if (!!target) {
-      stopLightTracking()
-      light.target = originalLightTarget
+      start()
+      invalidate('SpotLight: target changed')
+    } else if ((!target || !(target instanceof Object3D)) && $started) {
+      light.target = originalTarget
+      stop()
+      invalidate('SpotLight: target changed')
     }
   }
 
-  $: {
-    if (distance !== undefined) light.distance = distance
-    if (decay !== undefined) light.decay = decay
-    if (angle !== undefined) light.angle = angle
-    if (penumbra !== undefined) light.penumbra = penumbra
-    if (power !== undefined) light.power = power
-    invalidate('SpotLight: props changed')
-  }
+  $: updateLightTarget(target)
 
-  $: {
+  const updateLightShadow = (shadow: SpotLightProperties['shadow']) => {
     if (shadow) {
       const {
         mapSize = [512, 512],
@@ -86,29 +68,26 @@
     }
     invalidate('SpotLight: shadow changed')
   }
+
+  $: updateLightShadow(shadow)
+
+  $: {
+    if (distance !== undefined) light.distance = distance
+    if (decay !== undefined) light.decay = decay
+    if (angle !== undefined) light.angle = angle
+    if (penumbra !== undefined) light.penumbra = penumbra
+    if (power !== undefined) light.power = power
+    invalidate('SpotLight: props changed')
+  }
 </script>
 
-{#if !targetIsObject3D(target)}
-  <Object3DInstance
-    object={originalLightTarget}
-    position={target}
-    lookAt={undefined}
-    scale={undefined}
-    rotation={undefined}
-    castShadow={undefined}
-    receiveShadow={undefined}
-    frustumCulled={undefined}
-    renderOrder={undefined}
-    viewportAware={false}
-    inViewport={false}
-  >
-    <slot />
-  </Object3DInstance>
+{#if target && !(target instanceof Object3D)}
+  <HierarchicalObject object={originalTarget} />
+  <TransformableObject object={originalTarget} position={target} />
 {/if}
 
 <LightInstance
   {light}
-  lookAt={undefined}
   {position}
   {scale}
   {rotation}

@@ -166,7 +166,7 @@ export type SpotLightProperties = Omit<
   distance: number | undefined
   penumbra: number | undefined
   power: number | undefined
-  target: LookAt | undefined
+  target: Position | Object3D | undefined
   shadow:
     | boolean
     | {
