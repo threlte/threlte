@@ -495,7 +495,7 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 interactive: boolean = false
-ignorePointerEvents: boolean = false
+ignorePointer: boolean = false
 ```
 
 ###### Bindings <!-- omit in toc -->
@@ -784,7 +784,7 @@ mesh: THREE.Mesh
 
 // optional
 interactive: boolean = false
-ignorePointerEvents: boolean = false
+ignorePointer: boolean = false
 viewportAware: boolean = false
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
@@ -1496,7 +1496,7 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 interactive: boolean = false
-ignorePointerEvents: boolean = false
+ignorePointer: boolean = false
 
 text: string | undefined = undefined
 anchorX: number | 'left' | 'center' | 'right' | string | undefined = undefined
