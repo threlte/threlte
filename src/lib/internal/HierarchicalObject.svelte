@@ -16,11 +16,13 @@
 </script>
 
 <script lang="ts">
-  // IMPORTANT: get the parent as soon as possible.
-  // svelte contexts are also available inside components that
-  // declare the context.
+  /**
+   * GGE 2022: IMPORTANT: get the parent as soon as possible.
+   * because svelte contexts are also available inside
+   * components that declare the context.
+   */
   const currentParent = getParent()
-  let previousParent: Object3D
+  let previousParent: Object3D = $currentParent
 
   // object property …
   export let object: HierarchicalObjectProperties['object']
@@ -28,33 +30,36 @@
   // … but we only work with this store to stay consistent
   const currentObject = writable(object)
   $: $currentObject = object
+  let previousObject = object
 
-  let previousObject: Object3D
-
+  /**
+   * GE 2022: after getting the parent from the context,
+   * it's safe to set it to the current object.
+   */
   setParent(currentObject)
 
   const { invalidate } = useThrelte()
 
   $: {
     // on object change
-    if (previousObject && $currentObject !== previousObject) {
+    if ($currentObject !== previousObject) {
       if (previousObject) {
         $currentParent.remove(previousObject)
       }
       $currentParent.add($currentObject)
       invalidate(`HierarchicalObject: object changed`)
+      previousObject = $currentObject
     }
-    previousObject = $currentObject
   }
 
   $: {
     // on parent change
-    if (previousParent && $currentParent !== previousParent) {
+    if ($currentParent !== previousParent) {
       previousParent.remove($currentObject)
       $currentParent.add($currentObject)
       invalidate(`HierarchicalObject: parent changed`)
+      previousParent = $currentParent
     }
-    previousParent = $currentParent
   }
 
   $currentParent.add($currentObject)

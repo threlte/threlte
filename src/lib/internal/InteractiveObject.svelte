@@ -7,7 +7,7 @@
   import type { ThreltePointerEvent } from '../types/types'
 
   export let object: InteractiveObjectProperties['object']
-  let previousObject: InteractiveObjectProperties['object'] | undefined
+  let previousObject: InteractiveObjectProperties['object'] = object
 
   export let interactive: InteractiveObjectProperties['interactive'] = false
   export let ignorePointer: InteractiveObjectProperties['ignorePointer'] = false
@@ -57,19 +57,16 @@
   }
 
   $: {
-    if (previousObject && object !== previousObject) {
+    if (object !== previousObject) {
       removeObjectInteractivity(previousObject)
       setupObjectInteractivity(object, ignorePointer, interactive)
       invalidate('InteractiveObject: object changed')
+      previousObject = object
     } else if (object === previousObject) {
       setupObjectInteractivity(object, ignorePointer, interactive)
       invalidate('InteractiveObject: props changed')
     }
-    previousObject = object
   }
-
-  setupObjectInteractivity(object, ignorePointer, interactive)
-  invalidate('InteractiveObject: object added')
 
   onDestroy(() => {
     removeObjectInteractivity(object)

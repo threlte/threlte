@@ -17,7 +17,7 @@ const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEven
 type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
 
 type InteractiveMeshUserData = {
-  eventDispatcher: InteractiveObjectEventDispatcher
+  eventDispatcher?: InteractiveObjectEventDispatcher
 }
 
 const setPointerFromEvent = (ctx: ThrelteContext, e: MouseEvent | PointerEvent): void => {
@@ -67,11 +67,13 @@ const eventRaycast = (
     Array.from(rootCtx.raycastableObjects)
   )
   if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
-    const userData = intersects[0].object.userData as InteractiveMeshUserData
-    userData.eventDispatcher(e.type as keyof ThreltePointerEventMap, {
-      ...intersects[0],
-      event: e
-    })
+    getInteractiveObjectUserData(intersects[0].object).eventDispatcher?.(
+      e.type as keyof ThreltePointerEventMap,
+      {
+        ...intersects[0],
+        event: e
+      }
+    )
   }
 }
 
@@ -122,14 +124,14 @@ export const animationFrameRaycast = (
 
   if (!intersection) {
     if (rootCtx.lastIntersection) {
-      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher(
+      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
       )
     }
   } else {
     if (!rootCtx.lastIntersection) {
-      getInteractiveObjectUserData(intersection.object).eventDispatcher(
+      getInteractiveObjectUserData(intersection.object).eventDispatcher?.(
         'pointerenter',
         intersection
       )
@@ -137,11 +139,11 @@ export const animationFrameRaycast = (
       rootCtx.lastIntersection &&
       rootCtx.lastIntersection.object !== intersection.object
     ) {
-      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher(
+      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
       )
-      getInteractiveObjectUserData(intersection.object).eventDispatcher(
+      getInteractiveObjectUserData(intersection.object).eventDispatcher?.(
         'pointerenter',
         intersection
       )
