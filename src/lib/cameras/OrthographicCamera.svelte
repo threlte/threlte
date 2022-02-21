@@ -43,10 +43,10 @@
   $: if (useCamera) setCamera(camera)
 
   $: {
-    camera.left = $size.width / -2
-    camera.right = $size.width / 2
-    camera.top = $size.height / 2
-    camera.bottom = $size.height / -2
+    camera.left = left || $size.width / -2
+    camera.right = right || $size.width / 2
+    camera.top = top || $size.height / 2
+    camera.bottom = bottom || $size.height / -2
     camera.updateProjectionMatrix()
     invalidate('OrthographicCamera: onResize')
   }
@@ -55,10 +55,6 @@
     if (near !== undefined) camera.near = near
     if (far !== undefined) camera.far = far
     if (zoom !== undefined) camera.zoom = zoom
-    if (left !== undefined) camera.left = left
-    if (right !== undefined) camera.right = right
-    if (bottom !== undefined) camera.bottom = bottom
-    if (top !== undefined) camera.top = top
     camera.updateProjectionMatrix()
     invalidate('OrthographicCamera: props changed')
   }
