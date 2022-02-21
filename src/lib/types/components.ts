@@ -73,6 +73,10 @@ export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camer
   near?: number
   far?: number
   zoom?: number
+  left?: number
+  right?: number
+  top?: number
+  bottom?: number
 }
 
 export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
