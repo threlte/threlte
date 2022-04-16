@@ -1,16 +1,24 @@
-import adapter from '@sveltejs/adapter-auto'
+import adapter from '@sveltejs/adapter-static'
 import preprocess from 'svelte-preprocess'
 import { resolve } from 'path'
-import { threeMinifier } from "@yushijinhun/three-minifier-rollup"
+import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
+import { kitDocsPlugin } from '@svelteness/kit-docs/node'
+import Icons from 'unplugin-icons/vite'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: preprocess(),
+  extensions: ['.svelte', '.md'],
+
+  preprocess: [
+    preprocess()
+  ],
 
   kit: {
-    adapter: adapter(),
+    prerender: {
+      default: true
+    },
 
-    target: '#svelte',
+    adapter: adapter(),
 
     package: {
       emitTypes: true,
@@ -20,7 +28,13 @@ const config = {
 
     vite: {
       plugins: [
-        { ...threeMinifier(), enforce: "pre" }
+        { ...threeMinifier(), enforce: 'pre' },
+        Icons({ compiler: 'svelte' }),
+        kitDocsPlugin({
+          shiki: {
+            theme: 'material-ocean'
+          }
+        })
       ],
       resolve: {
         alias: {

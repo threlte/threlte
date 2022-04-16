@@ -14,8 +14,12 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
+    "@docsearch/js": "^3.0.0",
+    "@iconify-json/ri": "^1.1.1",
     "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-static": "^1.0.0-next.29",
     "@sveltejs/kit": "next",
+    "@svelteness/kit-docs": "^0.5.0",
     "@types/three": "^0.137.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
@@ -23,16 +27,17 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
-    "prettier": "^2.4.1",
+    "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.4.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.6",
-    "svelte-preprocess": "^4.9.4",
+    "svelte-preprocess": "^4.10.5",
     "svelte2tsx": "^0.4.14",
     "three": "^0.137.0",
     "tsafe": "^0.9.0",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "unplugin-icons": "^0.13.4"
   },
   "type": "module",
   "dependencies": {
