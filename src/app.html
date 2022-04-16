@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="description" content="" />
-    <link rel="icon" href="%svelte.assets%/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    %svelte.head%
-  </head>
-  <body>
-    <div id="svelte">%svelte.body%</div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="" />
+  <link rel="icon" href="%svelte.assets%/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    const key = 'svelteness::color-scheme';
+    const scheme = localStorage[key];
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (scheme === 'dark' || (scheme !== 'light' && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  %svelte.head%
+</head>
+
+<body>
+  %svelte.body%
+</body>
+
 </html>
