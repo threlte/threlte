@@ -5,7 +5,7 @@
   export function load() {
     return {
       status: 307,
-      redirect: '/docs'
+      redirect: '/docs/introduction'
     }
   }
 </script>

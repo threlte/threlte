@@ -1,13 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="description" content="" />
-    <link rel="icon" href="%svelte.assets%/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    %svelte.head%
-  </head>
-  <body>
-    <div id="svelte">%svelte.body%</div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+  <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#fe3d00">
+  <link rel="shortcut icon" href="/icons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-config" content="/icons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    const key = 'svelteness::color-scheme';
+    const scheme = localStorage[key];
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (scheme === 'dark' || (scheme !== 'light' && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  %svelte.head%
+</head>
+
+<body>
+  %svelte.body%
+</body>
+
 </html>
