@@ -1,7 +1,8 @@
 <script context="module" lang="ts">
   import { onDestroy, onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import { PCFSoftShadowMap, ShadowMapType, WebGLRendererParameters } from 'three'
+  import type { ShadowMapType, WebGLRendererParameters } from 'three'
+  import { PCFSoftShadowMap } from 'three'
   import { useParentSize } from './hooks/useParentSize'
   import { browser } from './lib/browser'
   import { createContexts } from './lib/contexts'
