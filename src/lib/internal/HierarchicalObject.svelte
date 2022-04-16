@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
-  import { writable, Writable } from 'svelte/store'
+  import { writable } from 'svelte/store'
+  import type { Writable } from 'svelte/store'
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import type { HierarchicalObjectProperties } from '../types/components'
