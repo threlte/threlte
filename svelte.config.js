@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto'
+import adapter from '@sveltejs/adapter-static'
 import preprocess from 'svelte-preprocess'
 import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
@@ -14,6 +14,10 @@ const config = {
   ],
 
   kit: {
+    prerender: {
+      default: true
+    },
+
     adapter: adapter(),
 
     package: {

@@ -13,7 +13,7 @@
 <div>
   <Canvas>
     <PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} fov={24}>
-      <OrbitControls autoRotate />
+      <OrbitControls autoRotate enableZoom={false} />
     </PerspectiveCamera>
 
     <DirectionalLight shadow color={'white'} position={{ x: -15, y: 45, z: 20 }} />
@@ -37,6 +37,7 @@
 
 <style>
   div {
-    height: 600px;
+    height: 100%;
+    width: 100%;
   }
 </style>
