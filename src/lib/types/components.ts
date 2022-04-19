@@ -204,6 +204,16 @@ export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   material: Material | Material[]
 }
 
+export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
+  geometry: BufferGeometry
+  material: Material | Material[]
+  count: number | undefined
+}
+
+export type InstancedMeshInstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
+  color?: ColorRepresentation
+}
+
 export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {

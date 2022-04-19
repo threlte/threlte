@@ -1,22 +1,36 @@
 <script context="module" lang="ts">
-  import MeshInstance from '$lib/instances/MeshInstance.svelte'
-  import { getContext, setContext } from 'svelte'
-  import { Color, InstancedMesh, Matrix4, Object3D } from 'three'
-  import type { MeshInstanceProperties, MeshProperties } from '../types/components'
+  import { useThrelte } from '../hooks/useThrelte'
+  import MeshInstance from '../instances/MeshInstance.svelte'
+  import { createEventDispatcher, getContext, setContext, tick } from 'svelte'
+  import { Color, InstancedMesh, Matrix4, Object3D, type ColorRepresentation } from 'three'
+  import type { InstancedMeshProperties } from '../types/components'
+  import { usePropChange } from '$lib/lib/usePropChange'
+  import type { ThreltePointerEvent } from '$lib/types/types'
+  import type {
+    InteractiveObjectEventDispatcher,
+    ThreltePointerEventMap
+  } from '../lib/interactivity'
 
   export type Instance = {
     object3d: Object3D
     color: null | Color
+    pointerEventDispatcher?: InteractiveObjectEventDispatcher
   }
+
+  const placeholderObject3D = new Object3D()
+  placeholderObject3D.scale.set(0, 0, 0)
+  const placeholderInstance: Instance = {
+    object3d: placeholderObject3D,
+    color: null
+  }
+
+  const emptyM4 = new Matrix4().fromArray(new Array(16).fill(0))
 
   type InstancedMeshContext = {
     registerInstance: (instance: Instance) => void
     removeInstance: (instance: Instance) => void
-    updateInstanceMatrix: (instance: Instance) => void
-    updateInstanceColor: (
-      instance: Instance,
-      updateFn: (currentColor: Color | null) => Color | null
-    ) => void
+    setInstanceMatrix: (instance: Instance) => void
+    setInstanceColor: (instance: Instance) => void
   }
 
   const instancedMeshContextName = 'threlte-instanced-mesh-context'
@@ -27,130 +41,201 @@
 </script>
 
 <script lang="ts">
-  import { useThrelte } from '$lib/hooks/useThrelte'
+  // MeshInstance
+  export let position: InstancedMeshProperties['position'] = undefined
+  export let scale: InstancedMeshProperties['scale'] = undefined
+  export let rotation: InstancedMeshProperties['rotation'] = undefined
+  export let viewportAware: InstancedMeshProperties['viewportAware'] = false
+  export let inViewport: InstancedMeshProperties['inViewport'] = false
+  export let castShadow: InstancedMeshProperties['castShadow'] = undefined
+  export let receiveShadow: InstancedMeshProperties['receiveShadow'] = undefined
+  export let renderOrder: InstancedMeshProperties['renderOrder'] = undefined
+  export let visible: InstancedMeshProperties['visible'] = undefined
+  export let interactive: InstancedMeshProperties['interactive'] = false
+  export let ignorePointer: InstancedMeshProperties['ignorePointer'] = false
+  export let lookAt: InstancedMeshProperties['lookAt'] = undefined
 
-  export let position: MeshInstanceProperties['position'] = undefined
+  // self
+  export let geometry: InstancedMeshProperties['geometry']
+  export let material: InstancedMeshProperties['material']
+  export let count: InstancedMeshProperties['count'] = undefined
 
-  export let geometry: MeshProperties['geometry']
-  export let material: MeshProperties['material']
+  const getDefaultColor = (material: InstancedMeshProperties['material']): Color | undefined => {
+    if (Array.isArray(material) || !material['color']) return
+    const defaultColor = material['color'] as ColorRepresentation | undefined
+    if (!defaultColor) return
+    return new Color(defaultColor)
+  }
 
-  export let count: number | undefined = undefined
+  let defaultColor = getDefaultColor(material)
+  const { onChange } = usePropChange(material)
+  $: onChange(material, (newMaterial) => {
+    defaultColor = getDefaultColor(newMaterial)
+    updateBufferAttributes()
+  })
 
-  let instancedMesh: InstancedMesh = new InstancedMesh(geometry, material, count ?? 0)
+  let autoCount = count === undefined
+  $: autoCount = count === undefined
 
-  let instances: Instance[] = []
-  let instancesCount = instances.length
-  $: instancesCount = instances.length
+  let instancedMesh: InstancedMesh = new InstancedMesh(geometry, material, autoCount ? 0 : count)
 
-  const workingColor = new Color()
+  const instances: Instance[] = []
 
   const { invalidate } = useThrelte()
 
+  const useInstanceIndex = (instance: Instance, callback: (index: number) => void) => {
+    const index = instances.findIndex((i) => i === instance)
+    if (index === -1) {
+      console.warn('Instanced Mesh: Instance not found')
+      return
+    }
+    callback(index)
+  }
+
   const registerInstance = (instance: Instance) => {
-    instances.push(instance)
-    instances = instances
+    if (autoCount) {
+      instances.push(instance)
+      handleAutoCountChange()
+    } else {
+      const firstPlaceholderInstanceIndex = instances.findIndex((i) => i === placeholderInstance)
+      if (firstPlaceholderInstanceIndex !== -1) {
+        instances[firstPlaceholderInstanceIndex] = instance
+      } else {
+        instances.push(instance)
+      }
+      if (instances.length > count) {
+        console.warn('Instanced Mesh: More instances requested than allocated, increase count on <')
+      }
+    }
+    setDefaultInstanceColor(instance)
+    invalidate('Instanced Mesh: Instance added')
   }
 
   const removeInstance = (instance: Instance) => {
-    const index = instances.findIndex((i) => i === instance)
-    instances.splice(index, 1)
-    instances = instances
+    if (autoCount) {
+      const index = instances.findIndex((i) => i === instance)
+      instances.splice(index, 1)
+      handleAutoCountChange()
+    } else {
+      resetInstanceMatrix(instance)
+      const index = instances.findIndex((i) => i === instance)
+      if (index >= count) {
+        // remove the instance entirely if it's out of bounds of the InstancedMesh BufferAttribute Array
+        instances.splice(index, 1)
+      } else {
+        // otherwise replace it with a placeholder instance to keep the indices in sync
+        instances.splice(index, 1, placeholderInstance)
+      }
+    }
+    invalidate('Instanced Mesh: Instance removed')
   }
 
-  const updateInstanceMatrix = (instance: Instance) => {
-    if (!instancedMesh) {
-      console.warn('Instanced Mesh: No InstancedMesh yet.')
-      return
-    }
-    const index = instances.findIndex((i) => i === instance)
-    if (index === -1) {
-      console.warn('Instanced Mesh: Instance not found')
-      return
-    }
-    instance.object3d.updateMatrix()
-    instancedMesh.setMatrixAt(index, instance.object3d.matrix)
-    instancedMesh.instanceMatrix.needsUpdate = true
-    invalidate('Instanced Mesh: instance matrix updated')
+  const setDefaultInstanceColor = (instance: Instance) => {
+    if (instance.color || !defaultColor) return
+    useInstanceIndex(instance, (index) => {
+      instancedMesh.setColorAt(index, defaultColor)
+      if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
+    })
   }
 
-  const updateInstanceColor = (
-    instance: Instance,
-    updateFn: (currentColor: Color | null) => Color | null
-  ) => {
-    if (!instancedMesh) {
-      console.warn('Instanced Mesh: No InstancedMesh yet.')
-      return
-    }
-    const index = instances.findIndex((i) => i === instance)
-    if (index === -1) {
-      console.warn('Instanced Mesh: Instance not found')
-      return
-    }
-    instancedMesh.getColorAt(index, workingColor)
-    instancedMesh.setColorAt(index, updateFn(workingColor))
-    instancedMesh.instanceColor.needsUpdate = true
-    invalidate('Instanced Mesh: instance color updated')
+  const resetInstanceMatrix = (instance: Instance) => {
+    useInstanceIndex(instance, (index) => {
+      instancedMesh.setMatrixAt(index, emptyM4)
+      instancedMesh.instanceMatrix.needsUpdate = true
+      invalidate('Instanced Mesh: instance matrix resetted')
+    })
+  }
+
+  const setInstanceMatrix = (instance: Instance) => {
+    useInstanceIndex(instance, (index) => {
+      instance.object3d.updateMatrix()
+      instancedMesh.setMatrixAt(index, instance.object3d.matrix)
+      instancedMesh.instanceMatrix.needsUpdate = true
+      invalidate('Instanced Mesh: instance matrix set')
+    })
+  }
+
+  const setInstanceColor = (instance: Instance) => {
+    useInstanceIndex(instance, (index) => {
+      instancedMesh.setColorAt(index, instance.color ?? defaultColor)
+      instancedMesh.instanceColor.needsUpdate = true
+      invalidate('Instanced Mesh: instance color set')
+    })
   }
 
   setContext<InstancedMeshContext>(instancedMeshContextName, {
     registerInstance,
     removeInstance,
-    updateInstanceMatrix,
-    updateInstanceColor
+    setInstanceMatrix,
+    setInstanceColor
   })
 
-  const handleCountChange = () => {
+  const updateBufferAttributes = () => {
+    instances.forEach((instance, index) => {
+      instancedMesh.setMatrixAt(index, instance.object3d.matrix)
+      if (instance.color) {
+        instancedMesh.setColorAt(index, instance.color)
+      } else if (defaultColor) {
+        instancedMesh.setColorAt(index, defaultColor)
+      }
+    })
+    instancedMesh.instanceMatrix.needsUpdate = true
+    if (instancedMesh.instanceColor) {
+      instancedMesh.instanceColor.needsUpdate = true
+    }
+    invalidate('Instanced Mesh: Buffer Attributes updated')
+  }
+
+  const handleAutoCountChange = () => {
     instancedMesh.dispose()
-    instancedMesh = new InstancedMesh(geometry, material, instancesCount)
-    updateAllMatrices()
+    instancedMesh = new InstancedMesh(geometry, material, instances.length)
+    updateBufferAttributes()
     invalidate('Instanced Mesh: instance count updated')
   }
 
-  const updateAllMatrices = () => {
-    instances.forEach((instance, index) => {
-      instancedMesh.setMatrixAt(index, instance.object3d.matrix)
-      instancedMesh.instanceMatrix.needsUpdate = true
-    })
-  }
-
-  let previousInstancesCount = instancesCount
-  $: if (instancesCount !== previousInstancesCount && count === undefined) {
-    console.log('count change!')
-
-    handleCountChange()
-    previousInstancesCount = instancesCount
+  /**
+   * The <InstancedMesh> component itself will not dispatch events.
+   * Instances are however able to dispatch events. For now it's an
+   * all-or-nothing approach where the props "interactive" and
+   * "ignorePointer" are set on the <InstancedMesh> component and the
+   * events are triggered on the instances.
+   */
+  const onEvent = (e: CustomEvent<ThreltePointerEvent>) => {
+    const instance = instances[e.detail.instanceId]
+    if (instance && instance.pointerEventDispatcher) {
+      instance.pointerEventDispatcher(e.type as keyof ThreltePointerEventMap, e.detail)
+    }
   }
 </script>
 
 {#key instancedMesh.uuid}
-  {#if instancedMesh && instancedMesh.count > 0}
-    <MeshInstance
-      mesh={instancedMesh}
-      {position}
-      scale={undefined}
-      rotation={undefined}
-      lookAt={undefined}
-      castShadow={undefined}
-      receiveShadow={undefined}
-      frustumCulled={undefined}
-      renderOrder={undefined}
-      visible={undefined}
-      interactive={false}
-      ignorePointer={false}
-      on:click
-      on:contextmenu
-      on:pointerup
-      on:pointerdown
-      on:pointerenter
-      on:pointerleave
-      on:pointermove
-      viewportAware={false}
-      on:viewportenter
-      on:viewportleave
-    >
-      <slot />
-    </MeshInstance>
-  {/if}
+  <MeshInstance
+    mesh={instancedMesh}
+    {position}
+    {scale}
+    {rotation}
+    {lookAt}
+    {castShadow}
+    {receiveShadow}
+    frustumCulled={undefined}
+    {renderOrder}
+    {visible}
+    {interactive}
+    {ignorePointer}
+    on:click={onEvent}
+    on:contextmenu={onEvent}
+    on:pointerup={onEvent}
+    on:pointerdown={onEvent}
+    on:pointerenter={onEvent}
+    on:pointerleave={onEvent}
+    on:pointermove={onEvent}
+    {viewportAware}
+    bind:inViewport
+    on:viewportenter
+    on:viewportleave
+  >
+    <slot />
+  </MeshInstance>
 {/key}
 
 <slot name="instances" />

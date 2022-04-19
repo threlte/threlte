@@ -1,39 +1,43 @@
 <script lang="ts">
+  import OrbitControls from '$lib/controls/OrbitControls.svelte'
   import InstancedMeshInstance from '$lib/internal/InstancedMeshInstance.svelte'
   import InstancedMesh from '$lib/objects/InstancedMesh.svelte'
   import Mesh from '$lib/objects/Mesh.svelte'
   import { BoxBufferGeometry, MeshBasicMaterial, SphereBufferGeometry } from 'three'
   import { PerspectiveCamera, useFrame } from 'threlte'
 
-  const geometry = new BoxBufferGeometry(1, 1, 1)
-  const material = new MeshBasicMaterial({
-    color: 'black',
+  const geometry = new SphereBufferGeometry(1, 20, 20)
+  const materialA = new MeshBasicMaterial({
+    color: 'pink',
     wireframe: true
   })
-
-  let posY = 1
-  useFrame(() => {
-    posY = Math.sin(Date.now() / 1000)
+  const materialB = new MeshBasicMaterial({
+    color: 'blue',
+    wireframe: true
   })
+  let currentMaterial = materialA
 
-  let showA = false
-  let showB = false
+  let showA = true
+  let showB = true
 
   window.addEventListener('keypress', (e) => {
     const key = e.key
     if (key === 'a') showA = !showA
     if (key === 'b') showB = !showB
+    if (key === 'm') currentMaterial = currentMaterial === materialA ? materialB : materialA
   })
 </script>
 
-<PerspectiveCamera position={{ z: 5 }} />
+<PerspectiveCamera position={{ z: 10 }}>
+  <OrbitControls />
+</PerspectiveCamera>
 
-<InstancedMesh {geometry} {material}>
+<InstancedMesh {geometry} material={currentMaterial}>
   <svelte:fragment slot="instances">
     {#if showA}
-      <InstancedMeshInstance position={{ y: -1 }} />
+      <InstancedMeshInstance color="red" position={{ y: -1 }} />
     {/if}
-    {#each new Array(3).fill(0) as item, index}
+    {#each new Array(5).fill(0) as item, index}
       <InstancedMeshInstance position={{ x: index }} />
     {/each}
     {#if showB}
@@ -41,3 +45,5 @@
     {/if}
   </svelte:fragment>
 </InstancedMesh>
+
+<Mesh position={{ x: -2 }} {geometry} material={currentMaterial} />

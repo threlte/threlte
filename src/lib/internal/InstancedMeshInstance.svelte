@@ -1,33 +1,65 @@
 <script lang="ts">
-  import { useFrame } from '$lib/hooks/useFrame'
-
   import { useInstancedMesh, type Instance } from '$lib/objects/InstancedMesh.svelte'
-  import type { Object3DInstanceProperties } from '$lib/types/components'
-  import { onDestroy, onMount } from 'svelte'
-  import { Object3D } from 'three'
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
+  import { Color, Object3D } from 'three'
+  import type { InstancedMeshInstanceProperties } from '../types/components'
   import TransformableObject from './TransformableObject.svelte'
+  import type { ThreltePointerEvent } from '../types/types'
 
-  export let position: Object3DInstanceProperties['position'] = undefined
-  export let scale: Object3DInstanceProperties['scale'] = undefined
-  export let rotation: Object3DInstanceProperties['rotation'] = undefined
-  export let lookAt: Object3DInstanceProperties['lookAt'] = undefined
+  export let position: InstancedMeshInstanceProperties['position'] = undefined
+  export let scale: InstancedMeshInstanceProperties['scale'] = undefined
+  export let rotation: InstancedMeshInstanceProperties['rotation'] = undefined
+  export let lookAt: InstancedMeshInstanceProperties['lookAt'] = undefined
+  export let color: InstancedMeshInstanceProperties['color'] = undefined
 
   const object3d = new Object3D()
-  const instance: Instance = {
-    color: null,
-    object3d
+
+  const pointerEventDispatcher = createEventDispatcher<{
+    click: ThreltePointerEvent
+    contextmenu: ThreltePointerEvent
+    pointerup: ThreltePointerEvent
+    pointerdown: ThreltePointerEvent
+    pointerenter: ThreltePointerEvent
+    pointerleave: ThreltePointerEvent
+    pointermove: ThreltePointerEvent
+  }>()
+
+  const parseColor = (color: InstancedMeshInstanceProperties['color']): Color | null => {
+    return color !== undefined ? (color instanceof Color ? color : new Color(color)) : null
   }
 
-  const { registerInstance, updateInstanceMatrix, removeInstance } = useInstancedMesh()
+  const instance: Instance = {
+    color: parseColor(color),
+    object3d,
+    pointerEventDispatcher
+  }
 
-  $: if (position) updateInstanceMatrix(instance)
-  $: if (rotation) updateInstanceMatrix(instance)
-  $: if (scale) updateInstanceMatrix(instance)
-  $: if (lookAt) updateInstanceMatrix(instance)
+  const { registerInstance, setInstanceMatrix, removeInstance, setInstanceColor } =
+    useInstancedMesh()
+
+  const setTransforms = (
+    _position: InstancedMeshInstanceProperties['position'],
+    _scale: InstancedMeshInstanceProperties['scale'],
+    _rotation: InstancedMeshInstanceProperties['rotation'],
+    _lookAt: InstancedMeshInstanceProperties['lookAt']
+  ) => {
+    setInstanceMatrix(instance)
+  }
+
+  const setColor = (color: InstancedMeshInstanceProperties['color']) => {
+    instance.color = parseColor(color)
+    setInstanceColor(instance)
+  }
+
+  $: setTransforms(position, scale, rotation, lookAt)
+  $: setColor(color)
 
   registerInstance(instance)
 
-  onMount(() => updateInstanceMatrix(instance))
+  onMount(() => {
+    setTransforms(position, scale, rotation, lookAt)
+    setColor(color)
+  })
 
   onDestroy(() => {
     removeInstance(instance)

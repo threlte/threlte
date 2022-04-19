@@ -14,7 +14,7 @@ export type ThreltePointerEventMap = {
 }
 
 const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
-type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
+export type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
 
 type InteractiveMeshUserData = {
   eventDispatcher?: InteractiveObjectEventDispatcher
@@ -88,6 +88,12 @@ const onEvent = (
   eventRaycast(ctx, rootCtx, e)
 }
 
+const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3D<Event>>) => {
+  if (a.object.uuid !== b.object.uuid) return true
+  if (a.instanceId !== b.instanceId) return true
+  return false
+}
+
 export const onClick = onEvent
 export const onContextMenu = onEvent
 export const onPointerUp = onEvent
@@ -135,10 +141,7 @@ export const animationFrameRaycast = (
         'pointerenter',
         intersection
       )
-    } else if (
-      rootCtx.lastIntersection &&
-      rootCtx.lastIntersection.object !== intersection.object
-    ) {
+    } else if (rootCtx.lastIntersection && targetChanged(rootCtx.lastIntersection, intersection)) {
       getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
