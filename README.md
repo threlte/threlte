@@ -5,8 +5,6 @@ A three.js component library for svelte.
 ![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
 ![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
 
----
-
 ## Official Documentation
 
 [threlte.xyz](https://threlte.xyz)
