@@ -207,7 +207,7 @@ export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
 export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
   geometry: BufferGeometry
   material: Material | Material[]
-  count: number | undefined
+  count?: number
 }
 
 export type InstancedMeshInstanceProperties = Omit<TransformableObjectProperties, 'object'> & {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useInstancedMesh, type Instance } from '$lib/objects/InstancedMesh.svelte'
+  import { useInstancedMesh, type Instance } from '../objects/InstancedMesh.svelte'
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Color, Object3D } from 'three'
   import type { InstancedMeshInstanceProperties } from '../types/components'

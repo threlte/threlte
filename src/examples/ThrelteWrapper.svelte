@@ -2,6 +2,6 @@
   import { Canvas } from 'threlte'
 </script>
 
-<Canvas debugFrameloop>
+<Canvas>
   <slot />
 </Canvas>

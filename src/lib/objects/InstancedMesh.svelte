@@ -1,15 +1,15 @@
 <script context="module" lang="ts">
+  import { usePropChange } from '../lib/usePropChange'
+  import type { ThreltePointerEvent } from '../types/types'
+  import { getContext, setContext } from 'svelte'
+  import { Color, InstancedMesh, Matrix4, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
-  import { createEventDispatcher, getContext, setContext, tick } from 'svelte'
-  import { Color, InstancedMesh, Matrix4, Object3D, type ColorRepresentation } from 'three'
-  import type { InstancedMeshProperties } from '../types/components'
-  import { usePropChange } from '$lib/lib/usePropChange'
-  import type { ThreltePointerEvent } from '$lib/types/types'
   import type {
     InteractiveObjectEventDispatcher,
     ThreltePointerEventMap
   } from '../lib/interactivity'
+  import type { InstancedMeshProperties } from '../types/components'
 
   export type Instance = {
     object3d: Object3D
@@ -26,6 +26,8 @@
 
   const emptyM4 = new Matrix4().fromArray(new Array(16).fill(0))
 
+  const defaultColor = new Color(0xffffff)
+
   type InstancedMeshContext = {
     registerInstance: (instance: Instance) => void
     removeInstance: (instance: Instance) => void
@@ -33,7 +35,7 @@
     setInstanceColor: (instance: Instance) => void
   }
 
-  const instancedMeshContextName = 'threlte-instanced-mesh-context'
+  const instancedMeshContextName = 'threlte-instanced-mesh-context' as const
 
   export const useInstancedMesh = () => {
     return getContext<InstancedMeshContext>(instancedMeshContextName)
@@ -60,18 +62,9 @@
   export let material: InstancedMeshProperties['material']
   export let count: InstancedMeshProperties['count'] = undefined
 
-  const getDefaultColor = (material: InstancedMeshProperties['material']): Color | undefined => {
-    if (Array.isArray(material) || !material['color']) return
-    const defaultColor = material['color'] as ColorRepresentation | undefined
-    if (!defaultColor) return
-    return new Color(defaultColor)
-  }
-
-  let defaultColor = getDefaultColor(material)
   const { onChange } = usePropChange(material)
   $: onChange(material, (newMaterial) => {
-    defaultColor = getDefaultColor(newMaterial)
-    updateBufferAttributes()
+    instancedMesh.material = newMaterial
   })
 
   let autoCount = count === undefined
@@ -131,7 +124,7 @@
   }
 
   const setDefaultInstanceColor = (instance: Instance) => {
-    if (instance.color || !defaultColor) return
+    if (instance.color) return
     useInstanceIndex(instance, (index) => {
       instancedMesh.setColorAt(index, defaultColor)
       if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
@@ -175,7 +168,7 @@
       instancedMesh.setMatrixAt(index, instance.object3d.matrix)
       if (instance.color) {
         instancedMesh.setColorAt(index, instance.color)
-      } else if (defaultColor) {
+      } else {
         instancedMesh.setColorAt(index, defaultColor)
       }
     })

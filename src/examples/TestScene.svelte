@@ -8,17 +8,24 @@
 
   const geometry = new SphereBufferGeometry(1, 20, 20)
   const materialA = new MeshBasicMaterial({
-    color: 'pink',
-    wireframe: true
+    color: 'rgb(40, 40, 40)',
+    wireframe: false
   })
   const materialB = new MeshBasicMaterial({
-    color: 'blue',
-    wireframe: true
+    color: 'rgb(120, 120, 120)',
+    wireframe: false
   })
   let currentMaterial = materialA
 
   let showA = true
   let showB = true
+
+  let x = 0
+  let y = 0
+  useFrame(() => {
+    x = Math.sin(Date.now() / 1000)
+    y = Math.cos(Date.now() / 1000)
+  })
 
   window.addEventListener('keypress', (e) => {
     const key = e.key
@@ -35,13 +42,13 @@
 <InstancedMesh {geometry} material={currentMaterial}>
   <svelte:fragment slot="instances">
     {#if showA}
-      <InstancedMeshInstance color="red" position={{ y: -1 }} />
+      <InstancedMeshInstance color="rgb(240, 54, 18)" position={{ x, y }} />
     {/if}
     {#each new Array(5).fill(0) as item, index}
-      <InstancedMeshInstance position={{ x: index }} />
+      <InstancedMeshInstance color="white" position={{ x: index }} />
     {/each}
     {#if showB}
-      <InstancedMeshInstance position={{ y: 1 }} />
+      <InstancedMeshInstance color="rgb(0, 54, 18)" position={{ y: 1, x: 1.5 }} />
     {/if}
   </svelte:fragment>
 </InstancedMesh>
