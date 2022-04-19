@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { useInstancedMesh, type Instance } from '../objects/InstancedMesh.svelte'
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Color, Object3D } from 'three'
-  import type { InstancedMeshInstanceProperties } from '../types/components'
-  import TransformableObject from './TransformableObject.svelte'
-  import type { ThreltePointerEvent } from '../types/types'
+  import TransformableObject from '../internal/TransformableObject.svelte'
+  import { useInstancedMesh } from '../objects/InstancedMesh.svelte'
+  import type { InstanceProperties } from '../types/components'
+  import type { ThrelteInstance, ThreltePointerEvent } from '../types/types'
 
-  export let position: InstancedMeshInstanceProperties['position'] = undefined
-  export let scale: InstancedMeshInstanceProperties['scale'] = undefined
-  export let rotation: InstancedMeshInstanceProperties['rotation'] = undefined
-  export let lookAt: InstancedMeshInstanceProperties['lookAt'] = undefined
-  export let color: InstancedMeshInstanceProperties['color'] = undefined
+  export let position: InstanceProperties['position'] = undefined
+  export let scale: InstanceProperties['scale'] = undefined
+  export let rotation: InstanceProperties['rotation'] = undefined
+  export let lookAt: InstanceProperties['lookAt'] = undefined
+  export let color: InstanceProperties['color'] = undefined
 
   const object3d = new Object3D()
 
@@ -24,11 +24,11 @@
     pointermove: ThreltePointerEvent
   }>()
 
-  const parseColor = (color: InstancedMeshInstanceProperties['color']): Color | null => {
+  const parseColor = (color: InstanceProperties['color']): Color | null => {
     return color !== undefined ? (color instanceof Color ? color : new Color(color)) : null
   }
 
-  const instance: Instance = {
+  const instance: ThrelteInstance = {
     color: parseColor(color),
     object3d,
     pointerEventDispatcher
@@ -38,15 +38,15 @@
     useInstancedMesh()
 
   const setTransforms = (
-    _position: InstancedMeshInstanceProperties['position'],
-    _scale: InstancedMeshInstanceProperties['scale'],
-    _rotation: InstancedMeshInstanceProperties['rotation'],
-    _lookAt: InstancedMeshInstanceProperties['lookAt']
+    _position: InstanceProperties['position'],
+    _scale: InstanceProperties['scale'],
+    _rotation: InstanceProperties['rotation'],
+    _lookAt: InstanceProperties['lookAt']
   ) => {
     setInstanceMatrix(instance)
   }
 
-  const setColor = (color: InstancedMeshInstanceProperties['color']) => {
+  const setColor = (color: InstanceProperties['color']) => {
     instance.color = parseColor(color)
     setInstanceColor(instance)
   }

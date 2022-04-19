@@ -210,7 +210,7 @@ export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'fru
   count?: number
 }
 
-export type InstancedMeshInstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
+export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
   color?: ColorRepresentation
 }
 

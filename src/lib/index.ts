@@ -26,6 +26,8 @@ export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
 // object components
 export { default as Mesh } from './objects/Mesh.svelte'
+export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
+export { default as Instance } from './objects/Instance.svelte'
 export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
 export { default as GLTF } from './objects/GLTF.svelte'
@@ -58,6 +60,7 @@ export type {
   ThrelteLayers,
   ThrelteUseLoader,
   ThreltePointerEvent,
+  ThrelteInstance,
   Size
 } from './types/types'
 
@@ -69,6 +72,8 @@ export type {
   ViewportAwareObjectProperties,
   Object3DInstanceProperties,
   MeshInstanceProperties,
+  InstancedMeshProperties,
+  InstanceProperties,
   LightInstanceProperties,
   CameraInstanceProperties,
   OrthographicCameraProperties,

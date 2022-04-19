@@ -1,3 +1,4 @@
+import { createEventDispatcher } from 'svelte'
 import type { Readable, Writable } from 'svelte/store'
 import type {
   Camera,
@@ -18,6 +19,25 @@ import type {
   WebGLRenderer
 } from 'three'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+
+export type ThreltePointerEventMap = {
+  click: ThreltePointerEvent
+  contextmenu: ThreltePointerEvent
+  pointerup: ThreltePointerEvent
+  pointerdown: ThreltePointerEvent
+  pointerenter: ThreltePointerEvent
+  pointerleave: ThreltePointerEvent
+  pointermove: ThreltePointerEvent
+}
+
+const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
+export type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
+
+export type ThrelteInstance = {
+  object3d: Object3D
+  color: null | Color
+  pointerEventDispatcher?: InteractiveObjectEventDispatcher
+}
 
 export type ThrelteRootContext = {
   setCamera: (camera: Camera) => void

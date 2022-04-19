@@ -1,25 +1,15 @@
 <script context="module" lang="ts">
-  import { usePropChange } from '../lib/usePropChange'
-  import type { ThreltePointerEvent } from '../types/types'
   import { getContext, setContext } from 'svelte'
   import { Color, InstancedMesh, Matrix4, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
-  import type {
-    InteractiveObjectEventDispatcher,
-    ThreltePointerEventMap
-  } from '../lib/interactivity'
+  import { usePropChange } from '../lib/usePropChange'
   import type { InstancedMeshProperties } from '../types/components'
-
-  export type Instance = {
-    object3d: Object3D
-    color: null | Color
-    pointerEventDispatcher?: InteractiveObjectEventDispatcher
-  }
+  import type { ThrelteInstance, ThreltePointerEvent, ThreltePointerEventMap } from '../types/types'
 
   const placeholderObject3D = new Object3D()
   placeholderObject3D.scale.set(0, 0, 0)
-  const placeholderInstance: Instance = {
+  const placeholderInstance: ThrelteInstance = {
     object3d: placeholderObject3D,
     color: null
   }
@@ -29,10 +19,10 @@
   const defaultColor = new Color(0xffffff)
 
   type InstancedMeshContext = {
-    registerInstance: (instance: Instance) => void
-    removeInstance: (instance: Instance) => void
-    setInstanceMatrix: (instance: Instance) => void
-    setInstanceColor: (instance: Instance) => void
+    registerInstance: (instance: ThrelteInstance) => void
+    removeInstance: (instance: ThrelteInstance) => void
+    setInstanceMatrix: (instance: ThrelteInstance) => void
+    setInstanceColor: (instance: ThrelteInstance) => void
   }
 
   const instancedMeshContextName = 'threlte-instanced-mesh-context' as const
@@ -72,11 +62,11 @@
 
   let instancedMesh: InstancedMesh = new InstancedMesh(geometry, material, autoCount ? 0 : count)
 
-  const instances: Instance[] = []
+  const instances: ThrelteInstance[] = []
 
   const { invalidate } = useThrelte()
 
-  const useInstanceIndex = (instance: Instance, callback: (index: number) => void) => {
+  const useInstanceIndex = (instance: ThrelteInstance, callback: (index: number) => void) => {
     const index = instances.findIndex((i) => i === instance)
     if (index === -1) {
       console.warn('Instanced Mesh: Instance not found')
@@ -85,7 +75,7 @@
     callback(index)
   }
 
-  const registerInstance = (instance: Instance) => {
+  const registerInstance = (instance: ThrelteInstance) => {
     if (autoCount) {
       instances.push(instance)
       handleAutoCountChange()
@@ -104,7 +94,7 @@
     invalidate('Instanced Mesh: Instance added')
   }
 
-  const removeInstance = (instance: Instance) => {
+  const removeInstance = (instance: ThrelteInstance) => {
     if (autoCount) {
       const index = instances.findIndex((i) => i === instance)
       instances.splice(index, 1)
@@ -123,7 +113,7 @@
     invalidate('Instanced Mesh: Instance removed')
   }
 
-  const setDefaultInstanceColor = (instance: Instance) => {
+  const setDefaultInstanceColor = (instance: ThrelteInstance) => {
     if (instance.color) return
     useInstanceIndex(instance, (index) => {
       instancedMesh.setColorAt(index, defaultColor)
@@ -131,7 +121,7 @@
     })
   }
 
-  const resetInstanceMatrix = (instance: Instance) => {
+  const resetInstanceMatrix = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
       instancedMesh.setMatrixAt(index, emptyM4)
       instancedMesh.instanceMatrix.needsUpdate = true
@@ -139,7 +129,7 @@
     })
   }
 
-  const setInstanceMatrix = (instance: Instance) => {
+  const setInstanceMatrix = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
       instance.object3d.updateMatrix()
       instancedMesh.setMatrixAt(index, instance.object3d.matrix)
@@ -148,10 +138,10 @@
     })
   }
 
-  const setInstanceColor = (instance: Instance) => {
+  const setInstanceColor = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
       instancedMesh.setColorAt(index, instance.color ?? defaultColor)
-      instancedMesh.instanceColor.needsUpdate = true
+      if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
       invalidate('Instanced Mesh: instance color set')
     })
   }

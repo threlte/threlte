@@ -1,20 +1,11 @@
-import { createEventDispatcher } from 'svelte'
 import { get } from 'svelte/store'
 import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
-import type { ThrelteContext, ThreltePointerEvent, ThrelteRootContext } from '../types/types'
-
-export type ThreltePointerEventMap = {
-  click: ThreltePointerEvent
-  contextmenu: ThreltePointerEvent
-  pointerup: ThreltePointerEvent
-  pointerdown: ThreltePointerEvent
-  pointerenter: ThreltePointerEvent
-  pointerleave: ThreltePointerEvent
-  pointermove: ThreltePointerEvent
-}
-
-const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
-export type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
+import type {
+  InteractiveObjectEventDispatcher,
+  ThrelteContext,
+  ThreltePointerEventMap,
+  ThrelteRootContext
+} from '../types/types'
 
 type InteractiveMeshUserData = {
   eventDispatcher?: InteractiveObjectEventDispatcher
