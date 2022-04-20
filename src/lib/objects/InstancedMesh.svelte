@@ -2,6 +2,7 @@
   import { getContext, setContext } from 'svelte'
   import { Color, InstancedMesh, Matrix4, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
+  import { useFrame } from '../hooks/useFrame'
   import MeshInstance from '../instances/MeshInstance.svelte'
   import { usePropChange } from '../lib/usePropChange'
   import type { InstancedMeshProperties } from '../types/components'
@@ -75,10 +76,40 @@
     callback(index)
   }
 
+  const {
+    start: queueHandleInstanceCountChange,
+    stop,
+    started: instanceCountChangeHandlerQueued
+  } = useFrame(
+    () => {
+      instancedMesh.dispose()
+      instancedMesh = new InstancedMesh(geometry, material, instances.length)
+
+      instances.forEach((instance, index) => {
+        instancedMesh.setMatrixAt(index, instance.object3d.matrix)
+        if (instance.color) {
+          instancedMesh.setColorAt(index, instance.color)
+        } else {
+          instancedMesh.setColorAt(index, defaultColor)
+        }
+      })
+      instancedMesh.instanceMatrix.needsUpdate = true
+      if (instancedMesh.instanceColor) {
+        instancedMesh.instanceColor.needsUpdate = true
+      }
+
+      stop()
+    },
+    {
+      autostart: false,
+      debugFrameloopMessage: 'Instanced Mesh: auto instance count change queued'
+    }
+  )
+
   const registerInstance = (instance: ThrelteInstance) => {
     if (autoCount) {
       instances.push(instance)
-      handleAutoCountChange()
+      if (!$instanceCountChangeHandlerQueued) queueHandleInstanceCountChange()
     } else {
       const firstPlaceholderInstanceIndex = instances.findIndex((i) => i === placeholderInstance)
       if (firstPlaceholderInstanceIndex !== -1) {
@@ -98,7 +129,7 @@
     if (autoCount) {
       const index = instances.findIndex((i) => i === instance)
       instances.splice(index, 1)
-      handleAutoCountChange()
+      if (!$instanceCountChangeHandlerQueued) queueHandleInstanceCountChange()
     } else {
       resetInstanceMatrix(instance)
       const index = instances.findIndex((i) => i === instance)
@@ -152,29 +183,6 @@
     setInstanceMatrix,
     setInstanceColor
   })
-
-  const updateBufferAttributes = () => {
-    instances.forEach((instance, index) => {
-      instancedMesh.setMatrixAt(index, instance.object3d.matrix)
-      if (instance.color) {
-        instancedMesh.setColorAt(index, instance.color)
-      } else {
-        instancedMesh.setColorAt(index, defaultColor)
-      }
-    })
-    instancedMesh.instanceMatrix.needsUpdate = true
-    if (instancedMesh.instanceColor) {
-      instancedMesh.instanceColor.needsUpdate = true
-    }
-    invalidate('Instanced Mesh: Buffer Attributes updated')
-  }
-
-  const handleAutoCountChange = () => {
-    instancedMesh.dispose()
-    instancedMesh = new InstancedMesh(geometry, material, instances.length)
-    updateBufferAttributes()
-    invalidate('Instanced Mesh: instance count updated')
-  }
 
   /**
    * The <InstancedMesh> component itself will not dispatch events.
