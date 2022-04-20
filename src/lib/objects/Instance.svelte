@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Color, Object3D } from 'three'
+  import { useFrame } from '../hooks/useFrame'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import { useInstancedMesh } from '../objects/InstancedMesh.svelte'
   import type { InstanceProperties } from '../types/components'
@@ -37,27 +38,45 @@
   const { registerInstance, setInstanceMatrix, removeInstance, setInstanceColor } =
     useInstancedMesh()
 
-  const setTransforms = (
-    _position: InstanceProperties['position'],
-    _scale: InstanceProperties['scale'],
-    _rotation: InstanceProperties['rotation'],
-    _lookAt: InstanceProperties['lookAt']
-  ) => {
-    setInstanceMatrix(instance)
+  const { start: startLookingAt, stop: stopLookingAt } = useFrame(
+    () => {
+      setInstanceMatrix(instance)
+    },
+    {
+      autostart: false,
+      debugFrameloopMessage: 'Instance: tracking object'
+    }
+  )
+
+  $: {
+    if (position) setInstanceMatrix(instance)
+    if (scale) setInstanceMatrix(instance)
+    if (rotation) setInstanceMatrix(instance)
+
+    if (lookAt && !rotation) {
+      if (lookAt instanceof Object3D) {
+        startLookingAt()
+      } else {
+        stopLookingAt()
+        setInstanceMatrix(instance)
+      }
+    }
+    if (!lookAt) {
+      stopLookingAt()
+    }
   }
+
+  $: setColor(color)
 
   const setColor = (color: InstanceProperties['color']) => {
     instance.color = parseColor(color)
     setInstanceColor(instance)
   }
 
-  $: setTransforms(position, scale, rotation, lookAt)
-  $: setColor(color)
-
   registerInstance(instance)
 
   onMount(() => {
-    setTransforms(position, scale, rotation, lookAt)
+    setInstanceMatrix(instance)
     setColor(color)
   })
 
