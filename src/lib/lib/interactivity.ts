@@ -75,6 +75,7 @@ const onEvent = (
 ): void => {
   e.preventDefault()
   ctx.pointerOverCanvas.set(true)
+  ctx.pointerInvalidated = true
   setPointerFromEvent(ctx, e)
   eventRaycast(ctx, rootCtx, e)
 }
@@ -90,6 +91,12 @@ export const onContextMenu = onEvent
 export const onPointerUp = onEvent
 export const onPointerDown = onEvent
 export const onPointerMove = onEvent
+
+export const onScroll = (ctx: ThrelteContext,
+  rootCtx: ThrelteRootContext,
+  e: Event) => {
+  ctx.pointerInvalidated = true
+}
 
 /**
  * Some events can't be captured on Mouse- or PointerEvents.
@@ -109,11 +116,11 @@ export const animationFrameRaycast = (
   }
   const intersects = get(ctx.pointerOverCanvas)
     ? runRaycaster(
-        rootCtx,
-        get(ctx.pointer),
-        get(ctx.camera),
-        Array.from(rootCtx.raycastableObjects)
-      )
+      rootCtx,
+      get(ctx.pointer),
+      get(ctx.camera),
+      Array.from(rootCtx.raycastableObjects)
+    )
     : []
 
   const intersection =

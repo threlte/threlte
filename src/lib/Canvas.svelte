@@ -13,7 +13,8 @@
     onContextMenu,
     onPointerDown,
     onPointerMove,
-    onPointerUp
+    onPointerUp,
+    onScroll
   } from './lib/interactivity'
   import {
     createRendererAndComposer,
@@ -95,7 +96,6 @@
     setRendererShadows(ctx, shadows, shadowMapType)
     initialized = true
   })
-
   useFrameloop(ctx, rootCtx, renderCtx)
 </script>
 
@@ -114,6 +114,7 @@
     <slot />
   {/if}
 </canvas>
+<svelte:window on:scroll={(e) => onScroll(getCtx(), getRootCtx(), e)} />
 
 <style>
   canvas {

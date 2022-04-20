@@ -21,7 +21,7 @@
     <PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} fov={24}>
       <OrbitControls
         maxPolarAngle={DEG2RAD * 80}
-        autoRotate
+        autoRotate={false}
         enableZoom={false}
         target={{ y: 0.5 }}
       />
