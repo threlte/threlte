@@ -1,20 +1,11 @@
-import { createEventDispatcher } from 'svelte'
 import { get } from 'svelte/store'
 import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
-import type { ThrelteContext, ThreltePointerEvent, ThrelteRootContext } from '../types/types'
-
-export type ThreltePointerEventMap = {
-  click: ThreltePointerEvent
-  contextmenu: ThreltePointerEvent
-  pointerup: ThreltePointerEvent
-  pointerdown: ThreltePointerEvent
-  pointerenter: ThreltePointerEvent
-  pointerleave: ThreltePointerEvent
-  pointermove: ThreltePointerEvent
-}
-
-const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
-type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
+import type {
+  InteractiveObjectEventDispatcher,
+  ThrelteContext,
+  ThreltePointerEventMap,
+  ThrelteRootContext
+} from '../types/types'
 
 type InteractiveMeshUserData = {
   eventDispatcher?: InteractiveObjectEventDispatcher
@@ -88,6 +79,12 @@ const onEvent = (
   eventRaycast(ctx, rootCtx, e)
 }
 
+const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3D<Event>>) => {
+  if (a.object.uuid !== b.object.uuid) return true
+  if (a.instanceId !== b.instanceId) return true
+  return false
+}
+
 export const onClick = onEvent
 export const onContextMenu = onEvent
 export const onPointerUp = onEvent
@@ -135,10 +132,7 @@ export const animationFrameRaycast = (
         'pointerenter',
         intersection
       )
-    } else if (
-      rootCtx.lastIntersection &&
-      rootCtx.lastIntersection.object !== intersection.object
-    ) {
+    } else if (rootCtx.lastIntersection && targetChanged(rootCtx.lastIntersection, intersection)) {
       getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
