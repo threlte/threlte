@@ -5,6 +5,8 @@ A three.js component library for svelte.
 ![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
 ![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
 
+Build three.js scenes declaratively with threlte components that are reactive to the core, readily interactive and can participate in Svelte's ecosystem.
+
 # Official Documentation
 
 Visit [threlte.xyz](https://threlte.xyz)
