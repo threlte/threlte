@@ -4,13 +4,10 @@
 
   import {
     AmbientLight,
-    Canvas,
     DirectionalLight,
     GLTF,
     Group,
-    HemisphereLight,
     Mesh,
-    OrbitControls,
     OrthographicCamera,
     useFrame
   } from 'threlte'
