@@ -10,6 +10,7 @@ import type {
   Intersection,
   Loader,
   Material,
+  Matrix4,
   Mesh,
   Object3D,
   Raycaster,
@@ -34,7 +35,7 @@ const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEven
 export type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
 
 export type ThrelteInstance = {
-  object3d: Object3D
+  matrix: Matrix4
   color: null | Color
   pointerEventDispatcher?: InteractiveObjectEventDispatcher
 }
