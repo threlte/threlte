@@ -10,13 +10,11 @@
 </script>
 
 <InstancedMesh {geometry} {material}>
-  <svelte:fragment slot="instances">
-    <Instance position={{ x: -2, y: Math.sin(dn / 1000 + 40) }} />
-    <Instance position={{ x: -1, y: Math.sin(dn / 1000 + 10) }} />
-    <Instance position={{ x: 0, y: Math.sin(dn / 1000 + 5) }} />
-    <Instance position={{ x: 1, y: Math.sin(dn / 1000 + 200) }} />
-    <Instance position={{ x: 2, y: Math.sin(dn / 1000 + 550) }} />
-  </svelte:fragment>
+  <Instance position={{ x: -2, y: Math.sin(dn / 1000 + 40) }} />
+  <Instance position={{ x: -1, y: Math.sin(dn / 1000 + 10) }} />
+  <Instance position={{ x: 0, y: Math.sin(dn / 1000 + 5) }} />
+  <Instance position={{ x: 1, y: Math.sin(dn / 1000 + 200) }} />
+  <Instance position={{ x: 2, y: Math.sin(dn / 1000 + 550) }} />
 </InstancedMesh>
 
 <DirectionalLight position={{ y: 10, z: 5 }} />
