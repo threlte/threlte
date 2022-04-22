@@ -7,11 +7,13 @@
   import { usePropChange } from '../lib/usePropChange'
   import type { InstancedMeshProperties } from '../types/components'
   import type { ThrelteInstance, ThreltePointerEvent, ThreltePointerEventMap } from '../types/types'
+  import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import { writable, type Writable } from 'svelte/store'
 
   const placeholderObject3D = new Object3D()
   placeholderObject3D.scale.set(0, 0, 0)
   const placeholderInstance: ThrelteInstance = {
-    object3d: placeholderObject3D,
+    matrix: placeholderObject3D.matrix,
     color: null
   }
 
@@ -24,6 +26,7 @@
     removeInstance: (instance: ThrelteInstance) => void
     setInstanceMatrix: (instance: ThrelteInstance) => void
     setInstanceColor: (instance: ThrelteInstance) => void
+    parentObject: Object3D
   }
 
   const instancedMeshContextName = 'threlte-instanced-mesh-context' as const
@@ -55,13 +58,16 @@
 
   const { onChange } = usePropChange(material)
   $: onChange(material, (newMaterial) => {
-    instancedMesh.material = newMaterial
+    $instancedMesh.material = newMaterial
   })
 
   let autoCount = count === undefined
   $: autoCount = count === undefined
 
-  let instancedMesh: InstancedMesh = new InstancedMesh(geometry, material, autoCount ? 0 : count)
+  export const instancedMesh: Writable<InstancedMesh> = writable(
+    new InstancedMesh(geometry, material, autoCount ? 0 : count)
+  )
+  const parentObject = new Object3D()
 
   const instances: ThrelteInstance[] = []
 
@@ -82,20 +88,20 @@
     started: instanceCountChangeHandlerQueued
   } = useFrame(
     () => {
-      instancedMesh.dispose()
-      instancedMesh = new InstancedMesh(geometry, material, instances.length)
+      $instancedMesh.dispose()
+      $instancedMesh = new InstancedMesh(geometry, material, instances.length)
 
       instances.forEach((instance, index) => {
-        instancedMesh.setMatrixAt(index, instance.object3d.matrix)
+        setInstanceMatrixByIndex(instance, index)
         if (instance.color) {
-          instancedMesh.setColorAt(index, instance.color)
+          $instancedMesh.setColorAt(index, instance.color)
         } else {
-          instancedMesh.setColorAt(index, defaultColor)
+          $instancedMesh.setColorAt(index, defaultColor)
         }
       })
-      instancedMesh.instanceMatrix.needsUpdate = true
-      if (instancedMesh.instanceColor) {
-        instancedMesh.instanceColor.needsUpdate = true
+      $instancedMesh.instanceMatrix.needsUpdate = true
+      if ($instancedMesh.instanceColor) {
+        $instancedMesh.instanceColor.needsUpdate = true
       }
 
       stop()
@@ -147,32 +153,35 @@
   const setDefaultInstanceColor = (instance: ThrelteInstance) => {
     if (instance.color) return
     useInstanceIndex(instance, (index) => {
-      instancedMesh.setColorAt(index, defaultColor)
-      if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
+      $instancedMesh.setColorAt(index, defaultColor)
+      if ($instancedMesh.instanceColor) $instancedMesh.instanceColor.needsUpdate = true
     })
   }
 
   const resetInstanceMatrix = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
-      instancedMesh.setMatrixAt(index, emptyM4)
-      instancedMesh.instanceMatrix.needsUpdate = true
+      $instancedMesh.setMatrixAt(index, emptyM4)
+      $instancedMesh.instanceMatrix.needsUpdate = true
       invalidate('Instanced Mesh: instance matrix resetted')
     })
   }
 
+  const setInstanceMatrixByIndex = (instance: ThrelteInstance, index: number) => {
+    $instancedMesh.setMatrixAt(index, instance.matrix)
+    $instancedMesh.instanceMatrix.needsUpdate = true
+    invalidate('Instanced Mesh: instance matrix set')
+  }
+
   const setInstanceMatrix = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
-      instance.object3d.updateMatrix()
-      instancedMesh.setMatrixAt(index, instance.object3d.matrix)
-      instancedMesh.instanceMatrix.needsUpdate = true
-      invalidate('Instanced Mesh: instance matrix set')
+      setInstanceMatrixByIndex(instance, index)
     })
   }
 
   const setInstanceColor = (instance: ThrelteInstance) => {
     useInstanceIndex(instance, (index) => {
-      instancedMesh.setColorAt(index, instance.color ?? defaultColor)
-      if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
+      $instancedMesh.setColorAt(index, instance.color ?? defaultColor)
+      if ($instancedMesh.instanceColor) $instancedMesh.instanceColor.needsUpdate = true
       invalidate('Instanced Mesh: instance color set')
     })
   }
@@ -181,7 +190,8 @@
     registerInstance,
     removeInstance,
     setInstanceMatrix,
-    setInstanceColor
+    setInstanceColor,
+    parentObject
   })
 
   /**
@@ -199,34 +209,29 @@
   }
 </script>
 
-{#key instancedMesh.uuid}
-  <MeshInstance
-    mesh={instancedMesh}
-    {position}
-    {scale}
-    {rotation}
-    {lookAt}
-    {castShadow}
-    {receiveShadow}
-    frustumCulled={undefined}
-    {renderOrder}
-    {visible}
-    {interactive}
-    {ignorePointer}
-    on:click={onEvent}
-    on:contextmenu={onEvent}
-    on:pointerup={onEvent}
-    on:pointerdown={onEvent}
-    on:pointerenter={onEvent}
-    on:pointerleave={onEvent}
-    on:pointermove={onEvent}
-    {viewportAware}
-    bind:inViewport
-    on:viewportenter
-    on:viewportleave
-  >
-    <slot />
-  </MeshInstance>
-{/key}
-
-<slot name="instances" />
+<Object3DInstance object={parentObject} {position} {scale} {rotation} {lookAt}>
+  {#key $instancedMesh.uuid}
+    <MeshInstance
+      mesh={$instancedMesh}
+      {castShadow}
+      {receiveShadow}
+      frustumCulled={undefined}
+      {renderOrder}
+      {visible}
+      {interactive}
+      {ignorePointer}
+      on:click={onEvent}
+      on:contextmenu={onEvent}
+      on:pointerup={onEvent}
+      on:pointerdown={onEvent}
+      on:pointerenter={onEvent}
+      on:pointerleave={onEvent}
+      on:pointermove={onEvent}
+      {viewportAware}
+      bind:inViewport
+      on:viewportenter
+      on:viewportleave
+    />
+  {/key}
+  <slot />
+</Object3DInstance>
