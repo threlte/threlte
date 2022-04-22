@@ -4,6 +4,7 @@ import type {
   InteractiveObjectEventDispatcher,
   ThrelteContext,
   ThreltePointerEventMap,
+  ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
 
@@ -71,11 +72,12 @@ const eventRaycast = (
 const onEvent = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
+  renderCtx: ThrelteRenderContext,
   e: MouseEvent | PointerEvent
 ): void => {
   e.preventDefault()
   ctx.pointerOverCanvas.set(true)
-  ctx.pointerInvalidated = true
+  renderCtx.pointerInvalidated = true
   setPointerFromEvent(ctx, e)
   eventRaycast(ctx, rootCtx, e)
 }
@@ -91,12 +93,6 @@ export const onContextMenu = onEvent
 export const onPointerUp = onEvent
 export const onPointerDown = onEvent
 export const onPointerMove = onEvent
-
-export const onScroll = (ctx: ThrelteContext,
-  rootCtx: ThrelteRootContext,
-  e: Event) => {
-  ctx.pointerInvalidated = true
-}
 
 /**
  * Some events can't be captured on Mouse- or PointerEvents.

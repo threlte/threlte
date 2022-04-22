@@ -60,7 +60,6 @@ export type ThrelteContext = {
   size: Readable<Size>
   pointer: Writable<Vector2>
   pointerOverCanvas: Writable<boolean>
-  pointerInvalidated: boolean
   clock: Clock
   camera: Writable<Camera>
   scene: Scene
@@ -72,6 +71,7 @@ export type ThrelteContext = {
 export type ThrelteRenderContext = {
   frameloop: 'always' | 'demand'
   debugFrameloop: boolean
+  pointerInvalidated: boolean
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>

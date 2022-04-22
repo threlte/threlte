@@ -13,8 +13,7 @@
     onContextMenu,
     onPointerDown,
     onPointerMove,
-    onPointerUp,
-    onScroll
+    onPointerUp
   } from './lib/interactivity'
   import {
     createRendererAndComposer,
@@ -102,11 +101,11 @@
 <canvas
   use:parentSizeAction
   bind:this={canvas}
-  on:click={(e) => onClick(getCtx(), getRootCtx(), e)}
-  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), e)}
-  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), e)}
-  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), e)}
-  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), e)}
+  on:click={(e) => onClick(getCtx(), getRootCtx(), renderCtx, e)}
+  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), renderCtx, e)}
+  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), renderCtx, e)}
+  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), renderCtx, e)}
+  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), renderCtx, e)}
   on:pointerenter={() => getCtx().pointerOverCanvas.set(true)}
   on:pointerleave={() => getCtx().pointerOverCanvas.set(false)}
 >
@@ -114,7 +113,6 @@
     <slot />
   {/if}
 </canvas>
-<svelte:window on:scroll={(e) => onScroll(getCtx(), getRootCtx(), e)} />
 
 <style>
   canvas {

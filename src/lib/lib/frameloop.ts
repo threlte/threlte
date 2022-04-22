@@ -51,28 +51,30 @@ export const useFrameloop = (
   renderCtx: ThrelteRenderContext
 ): void => {
   useRaf(() => {
-    if (renderCtx.frameInvalidated || ctx.pointerInvalidated) {
-      console.log("raycast")
+    const shouldRender =
+      renderCtx.frameloop === 'always' ||
+      renderCtx.frameInvalidated ||
+      renderCtx.frameHandlers.size > 0
+
+    const shouldRaycast = shouldRender || renderCtx.pointerInvalidated
+
+    if (shouldRaycast) {
       animationFrameRaycast(ctx, rootCtx)
-      ctx.pointerInvalidated = false
+      renderCtx.pointerInvalidated = false
     }
-    if (
-      renderCtx.frameloop === 'demand' &&
-      !renderCtx.frameInvalidated &&
-      renderCtx.frameHandlers.size === 0
-    ) {
-      return
+
+    if (shouldRender) {
+      const camera = get(ctx.camera)
+      if (!camera || !ctx.composer || !ctx.renderer) return
+      runFrameloopCallbacks(ctx, renderCtx)
+      if (ctx.composer.passes.length > 1) {
+        ctx.composer.render()
+      } else {
+        ctx.renderer.render(ctx.scene, camera)
+      }
+      debugFrame(renderCtx)
+      renderCtx.frameInvalidated = false
     }
-    const camera = get(ctx.camera)
-    if (!camera || !ctx.composer || !ctx.renderer) return
-    console.log("render")
-    runFrameloopCallbacks(ctx, renderCtx)
-    if (ctx.composer.passes.length > 1) {
-      ctx.composer.render()
-    } else {
-      ctx.renderer.render(ctx.scene, camera)
-    }
-    debugFrame(renderCtx)
-    renderCtx.frameInvalidated = false
+
   })
 }
