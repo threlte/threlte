@@ -9,6 +9,9 @@
   import '@svelteness/kit-docs/client/styles/normalize.css'
   import '@svelteness/kit-docs/client/styles/theme.css'
   import '@svelteness/kit-docs/client/styles/vars.css'
+  import '@docsearch/css'
+  import '@svelteness/kit-docs/client/styles/docsearch.css'
+  import { Algolia } from '@svelteness/kit-docs/client/algolia'
 
   import {
     KitDocs,
@@ -42,7 +45,14 @@
 </svelte:head>
 
 <KitDocs {meta}>
-  <KitDocsLayout {navbar} {sidebar}>
+  <KitDocsLayout {navbar} {sidebar} search>
+    <Algolia
+      apiKey="933f0fd01c55969aa6201c2ea114809e"
+      appId="ZEJ3L4CHC0"
+      indexName="threlte"
+      placeholder="Search documentation"
+      slot="search"
+    />
     <div slot="navbar-left">
       <a href="/" alt="Threlte Logo"
         ><img class="header-logo" src="/logo/threlte-logo.png" alt="" /></a
