@@ -112,11 +112,11 @@ export const animationFrameRaycast = (
   }
   const intersects = get(ctx.pointerOverCanvas)
     ? runRaycaster(
-      rootCtx,
-      get(ctx.pointer),
-      get(ctx.camera),
-      Array.from(rootCtx.raycastableObjects)
-    )
+        rootCtx,
+        get(ctx.pointer),
+        get(ctx.camera),
+        Array.from(rootCtx.raycastableObjects)
+      )
     : []
 
   const intersection =
