@@ -28,6 +28,7 @@ export const createContexts = (
     frameloop,
     frame: 0,
     frameInvalidated: true,
+    pointerInvalidated: true,
     invalidations: {},
     frameHandlers: new Set()
   }

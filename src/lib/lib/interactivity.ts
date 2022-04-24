@@ -4,6 +4,7 @@ import type {
   InteractiveObjectEventDispatcher,
   ThrelteContext,
   ThreltePointerEventMap,
+  ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
 
@@ -71,10 +72,12 @@ const eventRaycast = (
 const onEvent = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
+  renderCtx: ThrelteRenderContext,
   e: MouseEvent | PointerEvent
 ): void => {
   e.preventDefault()
   ctx.pointerOverCanvas.set(true)
+  renderCtx.pointerInvalidated = true
   setPointerFromEvent(ctx, e)
   eventRaycast(ctx, rootCtx, e)
 }

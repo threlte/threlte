@@ -72,6 +72,7 @@ export type ThrelteContext = {
 export type ThrelteRenderContext = {
   frameloop: 'always' | 'demand'
   debugFrameloop: boolean
+  pointerInvalidated: boolean
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>

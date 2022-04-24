@@ -61,7 +61,7 @@
     frameloop
   )
 
-  const { renderCtx, getCtx, getRootCtx } = contexts
+  const { getCtx, getRootCtx, getRenderCtx, renderCtx } = contexts
 
   // context bindings
   export const { ctx, rootCtx } = contexts
@@ -95,18 +95,17 @@
     setRendererShadows(ctx, shadows, shadowMapType)
     initialized = true
   })
-
   useFrameloop(ctx, rootCtx, renderCtx)
 </script>
 
 <canvas
   use:parentSizeAction
   bind:this={canvas}
-  on:click={(e) => onClick(getCtx(), getRootCtx(), e)}
-  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), e)}
-  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), e)}
-  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), e)}
-  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), e)}
+  on:click={(e) => onClick(getCtx(), getRootCtx(), getRenderCtx(), e)}
+  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), getRenderCtx(), e)}
+  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), getRenderCtx(), e)}
+  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), getRenderCtx(), e)}
+  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), getRenderCtx(), e)}
   on:pointerenter={() => getCtx().pointerOverCanvas.set(true)}
   on:pointerleave={() => getCtx().pointerOverCanvas.set(false)}
 >
