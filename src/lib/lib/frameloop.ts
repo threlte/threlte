@@ -38,9 +38,8 @@ const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderCont
 const debugFrame = (renderCtx: ThrelteRenderContext): void => {
   if (!renderCtx.debugFrameloop) return
   renderCtx.frame += 1
-  console.log(
-    `frame: ${renderCtx.frame}${Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`
-  )
+  // prettier-ignore
+  console.log(`frame: ${renderCtx.frame}${Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`)
   if (Object.keys(renderCtx.invalidations).length > 0) console.table(renderCtx.invalidations)
   renderCtx.invalidations = {}
 }
@@ -63,18 +62,17 @@ export const useFrameloop = (
       renderCtx.pointerInvalidated = false
     }
 
-    if (shouldRender) {
-      const camera = get(ctx.camera)
-      if (!camera || !ctx.composer || !ctx.renderer) return
-      runFrameloopCallbacks(ctx, renderCtx)
-      if (ctx.composer.passes.length > 1) {
-        ctx.composer.render()
-      } else {
-        ctx.renderer.render(ctx.scene, camera)
-      }
-      debugFrame(renderCtx)
-      renderCtx.frameInvalidated = false
-    }
+    if (!shouldRender) return
 
+    const camera = get(ctx.camera)
+    if (!camera || !ctx.composer || !ctx.renderer) return
+    runFrameloopCallbacks(ctx, renderCtx)
+    if (ctx.composer.passes.length > 1) {
+      ctx.composer.render()
+    } else {
+      ctx.renderer.render(ctx.scene, camera)
+    }
+    debugFrame(renderCtx)
+    renderCtx.frameInvalidated = false
   })
 }
