@@ -38,11 +38,8 @@ const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderCont
 const debugFrame = (renderCtx: ThrelteRenderContext): void => {
   if (!renderCtx.debugFrameloop) return
   renderCtx.frame += 1
-  console.log(
-    `frame: ${renderCtx.frame}${
-      Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''
-    }`
-  )
+  // prettier-ignore
+  console.log(`frame: ${renderCtx.frame}${Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`)
   if (Object.keys(renderCtx.invalidations).length > 0) console.table(renderCtx.invalidations)
   renderCtx.invalidations = {}
 }
@@ -53,17 +50,22 @@ export const useFrameloop = (
   renderCtx: ThrelteRenderContext
 ): void => {
   useRaf(() => {
-    if (
-      renderCtx.frameloop === 'demand' &&
-      !renderCtx.frameInvalidated &&
-      rootCtx.interactiveObjects.size === 0 &&
-      renderCtx.frameHandlers.size === 0
-    ) {
-      return
+    const shouldRender =
+      renderCtx.frameloop === 'always' ||
+      renderCtx.frameInvalidated ||
+      renderCtx.frameHandlers.size > 0
+
+    const shouldRaycast = shouldRender || renderCtx.pointerInvalidated
+
+    if (shouldRaycast) {
+      animationFrameRaycast(ctx, rootCtx)
+      renderCtx.pointerInvalidated = false
     }
+
+    if (!shouldRender) return
+
     const camera = get(ctx.camera)
     if (!camera || !ctx.composer || !ctx.renderer) return
-    animationFrameRaycast(ctx, rootCtx)
     runFrameloopCallbacks(ctx, renderCtx)
     if (ctx.composer.passes.length > 1) {
       ctx.composer.render()
