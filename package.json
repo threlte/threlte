@@ -38,7 +38,7 @@
     "svelte-check": "^2.7.0",
     "svelte-preprocess": "^4.10.6",
     "svelte2tsx": "^0.5.9",
-    "three": "^0.139.2",
+    "three": "^0.140.0",
     "tsafe": "^0.9.0",
     "tslib": "^2.3.1",
     "typescript": "^4.6.3",
