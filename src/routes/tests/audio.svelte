@@ -30,7 +30,7 @@
       <PositionalAudio url={'/audio/recording.mp3'} bind:play bind:pause bind:stop />
     </Mesh>
 
-    <DirectionalLight position={{ x: 10, y: 20, z: -10 }} />
+    <DirectionalLight position={{ x: 10, y: 20, z: 10 }} />
   </Canvas>
 
   <div class="audio-buttons">

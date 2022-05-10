@@ -34,9 +34,10 @@
 
   export const audio = new PositionalAudio(listener)
 
-  export const play = () => audio.play()
-  export const pause = () => audio.pause()
-  export const stop = () => audio.stop()
+  export const play = (delay?: number): PositionalAudio =>
+    delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
+  export const pause = (): PositionalAudio => audio.pause()
+  export const stop = (): PositionalAudio => audio.stop()
 </script>
 
 <AudioInstance

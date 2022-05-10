@@ -34,9 +34,10 @@
 
   export const audio = new Audio(listener)
 
-  export const play = () => audio.play()
-  export const pause = () => audio.pause()
-  export const stop = () => audio.stop()
+  export const play = (delay?: number): Audio<GainNode> =>
+    delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
+  export const pause = (): Audio<GainNode> => audio.pause()
+  export const stop = (): Audio<GainNode> => audio.stop()
 </script>
 
 <AudioInstance
