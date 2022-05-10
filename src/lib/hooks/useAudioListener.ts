@@ -2,11 +2,11 @@ import type { AudioListener } from 'three'
 import { useThrelteAudio } from './useThrelteAudio'
 
 export function useAudioListener(id?: string): { listener: AudioListener; context: AudioContext }
-export function useAudioListener<T extends any>(
+export function useAudioListener<T extends unknown>(
   callback: (args: { listener: AudioListener; context: AudioContext }) => T,
   id?: string
 ): T
-export function useAudioListener<T extends any>(
+export function useAudioListener<T extends unknown>(
   callbackOrId: ((args: { listener: AudioListener; context: AudioContext }) => T) | string,
   id?: string
 ): T | { listener: AudioListener; context: AudioContext } {
