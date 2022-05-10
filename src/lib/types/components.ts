@@ -266,7 +266,7 @@ export type AudioInstanceProperties<T extends Audio<GainNode> | PositionalAudio>
   url?: string
   volume?: number
   loop?: boolean
-  filters?: BiquadFilterNode[]
+  filters?: BiquadFilterNode[] | BiquadFilterNode
   playbackRate?: number
   // TODO unknown is used here to be able to directly use
   // the function in a svelte event handler: on:click={play}

@@ -62,7 +62,8 @@
   $: setDetune(detune)
   $: if (volume !== undefined) audio.setVolume(volume)
   $: if (loop !== undefined) audio.setLoop(loop)
-  $: if (filters !== undefined) audio.setFilters(filters)
+  $: if (filters !== undefined)
+    Array.isArray(filters) ? audio.setFilters(filters) : audio.setFilter(filters)
   $: if (playbackRate !== undefined) audio.setPlaybackRate(playbackRate)
 
   const dispatch = createEventDispatcher<{
