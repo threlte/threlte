@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { useThrelteAudio } from '$lib/hooks/useThrelteAudio'
-  import AudioInstance from '$lib/instances/AudioInstance.svelte'
-  import type { PositionalAudioProperties } from '$lib/types/components'
   import { PositionalAudio } from 'three'
+  import { useThrelteAudio } from '../hooks/useThrelteAudio'
+  import AudioInstance from '../instances/AudioInstance.svelte'
+  import type { PositionalAudioProperties } from '../types/components'
 
   export let position: PositionalAudioProperties['position'] = undefined
   export let scale: PositionalAudioProperties['scale'] = undefined
@@ -22,7 +22,19 @@
   export let url: PositionalAudioProperties['url'] = undefined
   export let volume: PositionalAudioProperties['volume'] = undefined
   export let loop: PositionalAudioProperties['loop'] = undefined
+  export let filters: PositionalAudioProperties['filters'] = undefined
+  export let playbackRate: PositionalAudioProperties['playbackRate'] = undefined
+
+  export let play: PositionalAudioProperties['play'] = undefined
+  export let pause: PositionalAudioProperties['pause'] = undefined
+  export let stop: PositionalAudioProperties['stop'] = undefined
+
   export let id: PositionalAudioProperties['id'] = undefined
+  export let directionalCone: PositionalAudioProperties['directionalCone'] = undefined
+  export let refDistance: PositionalAudioProperties['refDistance'] = undefined
+  export let rolloffFactor: PositionalAudioProperties['rolloffFactor'] = undefined
+  export let distanceModel: PositionalAudioProperties['distanceModel'] = undefined
+  export let maxDistance: PositionalAudioProperties['maxDistance'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -34,15 +46,26 @@
 
   export const audio = new PositionalAudio(listener)
 
-  export const play = (delay?: number): PositionalAudio =>
-    delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
-  export const pause = (): PositionalAudio => audio.pause()
-  export const stop = (): PositionalAudio => audio.stop()
+  $: {
+    if (refDistance !== undefined) audio.setRefDistance(refDistance)
+    if (rolloffFactor !== undefined) audio.setRolloffFactor(rolloffFactor)
+    if (distanceModel !== undefined) audio.setDistanceModel(distanceModel)
+    if (maxDistance !== undefined) audio.setMaxDistance(maxDistance)
+    if (directionalCone !== undefined) {
+      audio.setDirectionalCone(
+        directionalCone.coneInnerAngle,
+        directionalCone.coneOuterAngle,
+        directionalCone.coneOuterGain
+      )
+    }
+  }
 </script>
 
 <AudioInstance
   {audio}
   {position}
+  {filters}
+  {playbackRate}
   {scale}
   {rotation}
   {lookAt}
@@ -61,6 +84,12 @@
   bind:inViewport
   on:viewportenter
   on:viewportleave
+  on:load
+  on:progress
+  on:error
+  bind:play
+  bind:pause
+  bind:stop
 >
   <slot />
 </AudioInstance>

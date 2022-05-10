@@ -1,51 +1,110 @@
 <script lang="ts">
-  import { useLoader } from '$lib/hooks/useLoader'
-  import type { AudioInstanceProperties } from '$lib/types/components'
-  import { onDestroy } from 'svelte'
-  import { AudioLoader } from 'three'
+  import { createEventDispatcher, onDestroy } from 'svelte'
+  import { Audio, AudioLoader, PositionalAudio } from 'three'
+  import { useLoader } from '../hooks/useLoader'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import type { AudioInstanceProperties } from '../types/components'
 
-  export let position: AudioInstanceProperties['position'] = undefined
-  export let scale: AudioInstanceProperties['scale'] = undefined
-  export let rotation: AudioInstanceProperties['rotation'] = undefined
-  export let lookAt: AudioInstanceProperties['lookAt'] = undefined
-  export let viewportAware: AudioInstanceProperties['viewportAware'] = false
-  export let inViewport: AudioInstanceProperties['inViewport'] = false
-  export let castShadow: AudioInstanceProperties['castShadow'] = undefined
-  export let receiveShadow: AudioInstanceProperties['receiveShadow'] = undefined
-  export let frustumCulled: AudioInstanceProperties['frustumCulled'] = undefined
-  export let renderOrder: AudioInstanceProperties['renderOrder'] = undefined
-  export let visible: AudioInstanceProperties['visible'] = undefined
+  type T = Audio<GainNode> | PositionalAudio
+  type Props = AudioInstanceProperties<T>
 
-  export let autoplay: AudioInstanceProperties['autoplay'] = undefined
-  export let detune: AudioInstanceProperties['detune'] = undefined
-  export let buffer: AudioInstanceProperties['buffer'] = undefined
-  export let url: AudioInstanceProperties['url'] = undefined
-  export let volume: AudioInstanceProperties['volume'] = undefined
-  export let loop: AudioInstanceProperties['loop'] = undefined
+  export let position: Props['position'] = undefined
+  export let scale: Props['scale'] = undefined
+  export let rotation: Props['rotation'] = undefined
+  export let lookAt: Props['lookAt'] = undefined
+  export let viewportAware: Props['viewportAware'] = false
+  export let inViewport: Props['inViewport'] = false
+  export let castShadow: Props['castShadow'] = undefined
+  export let receiveShadow: Props['receiveShadow'] = undefined
+  export let frustumCulled: Props['frustumCulled'] = undefined
+  export let renderOrder: Props['renderOrder'] = undefined
+  export let visible: Props['visible'] = undefined
 
-  export let audio: AudioInstanceProperties['audio']
+  export let autoplay: Props['autoplay'] = undefined
+  export let detune: Props['detune'] = undefined
+  export let buffer: Props['buffer'] = undefined
+  export let url: Props['url'] = undefined
+  export let volume: Props['volume'] = undefined
+  export let loop: Props['loop'] = undefined
+  export let filters: Props['filters'] = undefined
+  export let playbackRate: Props['playbackRate'] = undefined
+
+  export let audio: T
+
+  let playAfterLoad = false
+  let loaded = false
+
+  export const play: Props['play'] = (delay) => {
+    if (!loaded) {
+      playAfterLoad = true
+      return audio
+    }
+    audio.context.resume()
+    const node = delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
+    setDetune(detune)
+    return node
+  }
+  export const pause: Props['pause'] = () => audio.pause()
+  export const stop: Props['stop'] = () => {
+    if (!audio.source) return audio
+    audio.stop()
+  }
 
   const loader = useLoader(AudioLoader, () => new AudioLoader())
 
-  $: {
-    if (autoplay !== undefined) audio.autoplay = autoplay
-    if (detune !== undefined) audio.detune = detune
-    if (volume !== undefined) audio.setVolume(volume)
-    if (loop !== undefined) audio.setLoop(loop)
+  const setDetune = (detune?: number) => {
+    if (detune !== undefined && audio.source && audio.source.detune) {
+      audio.setDetune(detune)
+    }
+  }
+
+  $: if (autoplay !== undefined) audio.autoplay = autoplay
+  $: setDetune(detune)
+  $: if (volume !== undefined) audio.setVolume(volume)
+  $: if (loop !== undefined) audio.setLoop(loop)
+  $: if (filters !== undefined) audio.setFilters(filters)
+  $: if (playbackRate !== undefined) audio.setPlaybackRate(playbackRate)
+
+  const dispatch = createEventDispatcher<{
+    load: AudioBuffer
+    progress: ProgressEvent<EventTarget>
+    error: ErrorEvent
+  }>()
+
+  const onSourceChange = (url?: string, buffer?: AudioBuffer) => {
+    const isPlaying = audio.isPlaying
+    loaded = false
+    stop()
 
     if (url !== undefined && buffer !== undefined) {
       console.warn('Both properties "url" and "buffer" have been set, using property "url"')
     }
 
     if (url !== undefined) {
-      loader.load(url, (buffer) => {
-        audio.setBuffer(buffer)
-      })
+      loader.load(
+        url,
+        (buffer) => {
+          audio.setBuffer(buffer)
+          dispatch('load', buffer)
+          loaded = true
+          if (playAfterLoad || isPlaying) {
+            play()
+            playAfterLoad = false
+          }
+        },
+        (e) => {
+          dispatch('progress', e)
+        },
+        (e) => {
+          dispatch('error', e)
+        }
+      )
     } else if (buffer !== undefined) {
       audio.setBuffer(buffer)
     }
   }
+
+  $: onSourceChange(url, buffer)
 
   onDestroy(() => {
     audio.stop()

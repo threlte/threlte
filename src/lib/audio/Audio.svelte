@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { useThrelteAudio } from '$lib/hooks/useThrelteAudio'
-  import AudioInstance from '$lib/instances/AudioInstance.svelte'
-  import type { AudioProperties } from '$lib/types/components'
   import { Audio } from 'three'
+  import { useThrelteAudio } from '../hooks/useThrelteAudio'
+  import AudioInstance from '../instances/AudioInstance.svelte'
+  import type { AudioProperties } from '../types/components'
 
   export let position: AudioProperties['position'] = undefined
   export let scale: AudioProperties['scale'] = undefined
@@ -22,6 +22,13 @@
   export let url: AudioProperties['url'] = undefined
   export let volume: AudioProperties['volume'] = undefined
   export let loop: AudioProperties['loop'] = undefined
+  export let filters: AudioProperties['filters'] = undefined
+  export let playbackRate: AudioProperties['playbackRate'] = undefined
+
+  export let play: AudioProperties['play'] = undefined
+  export let pause: AudioProperties['pause'] = undefined
+  export let stop: AudioProperties['stop'] = undefined
+
   export let id: AudioProperties['id'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
@@ -33,11 +40,6 @@
   }
 
   export const audio = new Audio(listener)
-
-  export const play = (delay?: number): Audio<GainNode> =>
-    delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
-  export const pause = (): Audio<GainNode> => audio.pause()
-  export const stop = (): Audio<GainNode> => audio.stop()
 </script>
 
 <AudioInstance
@@ -57,10 +59,18 @@
   {detune}
   {loop}
   {url}
+  {filters}
+  {playbackRate}
   {volume}
   bind:inViewport
   on:viewportenter
   on:viewportleave
+  on:load
+  on:progress
+  on:error
+  bind:play
+  bind:pause
+  bind:stop
 >
   <slot />
 </AudioInstance>

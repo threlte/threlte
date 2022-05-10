@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { useThrelteAudio } from '$lib/hooks/useThrelteAudio'
-  import type { AudioListenerProperties } from '$lib/types/components'
   import { onDestroy } from 'svelte'
   import { AudioListener } from 'three'
+  import { useThrelteAudio } from '../hooks/useThrelteAudio'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import type { AudioListenerProperties } from '../types/components'
 
   export let position: AudioListenerProperties['position'] = undefined
   export let scale: AudioListenerProperties['scale'] = undefined
@@ -18,10 +18,14 @@
   export let visible: AudioListenerProperties['visible'] = undefined
 
   export let id: AudioListenerProperties['id'] = undefined
+  export let masterVolume: AudioListenerProperties['masterVolume'] = undefined
 
   export const listener = new AudioListener()
 
-  export const resumeContext = () => listener.context.resume()
+  export const context = listener.context
+  export const resumeContext = async () => await listener.context.resume()
+
+  $: if (masterVolume !== undefined) listener.setMasterVolume(masterVolume)
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
