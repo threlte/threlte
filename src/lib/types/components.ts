@@ -1,11 +1,13 @@
 import type {
+  Audio,
   BufferGeometry,
   Camera,
   ColorRepresentation,
   Light,
   Material,
   Mesh,
-  Object3D
+  Object3D,
+  PositionalAudio
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
@@ -246,4 +248,26 @@ export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   strokeColor?: TextType['strokeColor']
   strokeOpacity?: TextType['strokeOpacity']
   fillOpacity?: TextType['fillOpacity']
+}
+
+export type AudioListenerProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  id?: string
+}
+
+export type AudioInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  audio: Audio | PositionalAudio
+  autoplay?: boolean
+  detune?: number
+  buffer?: AudioBuffer
+  url?: string
+  volume?: number
+  loop?: boolean
+}
+
+export type AudioProperties = Omit<AudioInstanceProperties, 'audio'> & {
+  id?: string
+}
+
+export type PositionalAudioProperties = Omit<AudioInstanceProperties, 'audio'> & {
+  id?: string
 }
