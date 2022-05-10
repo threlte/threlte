@@ -47,7 +47,7 @@
   export const pause: Props['pause'] = () => audio.pause()
   export const stop: Props['stop'] = () => {
     if (!audio.source) return audio
-    audio.stop()
+    return audio.stop()
   }
 
   const loader = useLoader(AudioLoader, () => new AudioLoader())
@@ -108,7 +108,7 @@
   $: onSourceChange(url, buffer)
 
   onDestroy(() => {
-    audio.stop()
+    stop()
   })
 </script>
 
