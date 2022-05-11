@@ -64,7 +64,7 @@
   const { getCtx, getRootCtx, getRenderCtx, renderCtx } = contexts
 
   // context bindings
-  export const { ctx, rootCtx } = contexts
+  export const { ctx, rootCtx, audioCtx } = contexts
 
   setDefaultCameraAspectOnSizeChange(ctx)
 
