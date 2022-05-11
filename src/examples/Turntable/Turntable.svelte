@@ -36,8 +36,9 @@
   let started = false
   export let isPlaying = false
 
-  export const toggle = (delay?: any) => {
+  export const toggle = async () => {
     if (!started) {
+      await context.resume()
       started = true
     }
     if (isPlaying) {
