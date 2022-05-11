@@ -1,6 +1,7 @@
 import { createEventDispatcher } from 'svelte'
 import type { Readable, Writable } from 'svelte/store'
 import type {
+  AudioListener,
   Camera,
   Clock,
   Color,
@@ -77,6 +78,13 @@ export type ThrelteRenderContext = {
   frame: number
   invalidations: Record<string, number>
   frameHandlers: Set<ThrelteFrameHandler>
+}
+
+export type ThrelteAudioContext = {
+  audioListeners: Map<string, AudioListener>
+  getAudioListener: (id?: string) => AudioListener | undefined
+  addAudioListener: (listener: AudioListener, id?: string) => void
+  removeAudioListener: (id?: string) => void
 }
 
 export type ThrelteUseFrame = {

@@ -4,7 +4,13 @@ import { derived, writable } from 'svelte/store'
 import { Camera, Clock, Object3D, Raycaster, Scene, Vector2 } from 'three'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
-import type { Size, ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from '../types/types'
+import type {
+  Size,
+  ThrelteAudioContext,
+  ThrelteContext,
+  ThrelteRenderContext,
+  ThrelteRootContext
+} from '../types/types'
 import { getDefaultCamera } from './defaultCamera'
 
 export const createContexts = (
@@ -19,10 +25,40 @@ export const createContexts = (
   ctx: ThrelteContext
   rootCtx: ThrelteRootContext
   renderCtx: ThrelteRenderContext
+  audioCtx: ThrelteAudioContext
   getCtx: () => ThrelteContext
   getRootCtx: () => ThrelteRootContext
   getRenderCtx: () => ThrelteRenderContext
+  getAudioCtx: () => ThrelteAudioContext
 } => {
+  const audioCtx: ThrelteAudioContext = {
+    audioListeners: new Map(),
+    addAudioListener: (listener, id?: string) => {
+      id = id ?? 'default'
+      if (audioCtx.audioListeners.has(id)) {
+        console.warn(`An AudioListener with the id "${id}" has already been added, aborting.`)
+        return
+      }
+      audioCtx.audioListeners.set(id, listener)
+    },
+    removeAudioListener: (id?: string) => {
+      id = id ?? 'default'
+      if (!audioCtx.audioListeners.has(id)) {
+        console.warn(`No AudioListener with the id "${id}" found, aborting.`)
+        return
+      }
+      audioCtx.audioListeners.delete(id)
+    },
+    getAudioListener: (id?: string) => {
+      id = id ?? 'default'
+      if (!audioCtx.audioListeners.has(id)) {
+        console.warn(`No AudioListener with the id "${id}" found, aborting.`)
+        return
+      }
+      return audioCtx.audioListeners.get(id)
+    }
+  }
+
   const renderCtx: ThrelteRenderContext = {
     debugFrameloop,
     frameloop,
@@ -101,17 +137,21 @@ export const createContexts = (
   setContext<ThrelteContext>('threlte', ctx)
   setContext<ThrelteRootContext>('threlte-root', rootCtx)
   setContext<ThrelteRenderContext>('threlte-render-context', renderCtx)
+  setContext<ThrelteAudioContext>('threlte-audio-context', audioCtx)
 
   const getCtx = (): ThrelteContext => ctx
   const getRootCtx = (): ThrelteRootContext => rootCtx
   const getRenderCtx = (): ThrelteRenderContext => renderCtx
+  const getAudioCtx = (): ThrelteAudioContext => audioCtx
 
   return {
     ctx,
     rootCtx,
     renderCtx,
+    audioCtx,
     getCtx,
     getRootCtx,
-    getRenderCtx
+    getRenderCtx,
+    getAudioCtx
   }
 }
