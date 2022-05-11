@@ -1,24 +1,22 @@
 <script lang="ts">
-  import {
-    useFrame,
-    type Position,
-    type Rotation,
-    type Scale,
-    PositionalAudio,
-    useAudioListener,
-    Group,
-    Mesh,
-    Text
-  } from 'threlte'
   import { spring, tweened } from 'svelte/motion'
   import {
     BoxBufferGeometry,
-    Color,
     CylinderBufferGeometry,
     MeshStandardMaterial,
     PositionalAudio as ThreePositionalAudio
   } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
+  import {
+    Group,
+    Mesh,
+    PositionalAudio,
+    useAudioListener,
+    useFrame,
+    type Position,
+    type Rotation,
+    type Scale
+  } from 'threlte'
   import Button from './Button.svelte'
 
   export let position: Position | undefined = undefined

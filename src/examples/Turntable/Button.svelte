@@ -2,7 +2,7 @@
   import { spring } from 'svelte/motion'
   import { BoxBufferGeometry, Color, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
-  import { Mesh, Group, Text, type Position, type Rotation, type Scale } from 'threlte'
+  import { Group, Mesh, Text, type Position, type Rotation, type Scale } from 'threlte'
 
   export let position: Position | undefined = undefined
   export let rotation: Rotation | undefined = undefined
@@ -42,7 +42,7 @@
     {text}
     rotation={{ x: DEG2RAD * -90 }}
     position={{ y: 0.105 + $buttonOffsetY }}
-    fontSize={0.2}
+    fontSize={0.3}
     anchorX="50%"
     anchorY="50%"
   />

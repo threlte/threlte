@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cubicIn, cubicOut } from 'svelte/easing'
-  import { spring, tweened } from 'svelte/motion'
+  import { tweened } from 'svelte/motion'
   import { BoxBufferGeometry, ConeBufferGeometry, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import type { Position, Rotation, Scale } from 'threlte'
