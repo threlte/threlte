@@ -54,8 +54,6 @@
     }
   }
 
-  const buttonOffsetY = spring(0)
-
   let audio: ThreePositionalAudio
   const { context } = useAudioListener()
   const analyser = context.createAnalyser()
@@ -72,15 +70,11 @@
     volume = Math.sqrt(sumSquares / pcmData.length)
   })
 
-  const buttonMaterial = new MeshStandardMaterial({
-    color: 0x222222
-  })
-
-  let sampleA = '/audio/side_a_2.mp3'
-  let sampleB = '/audio/side_a.mp3'
-  let sample = sampleA
-  const changeSample = () => {
-    sample = sample === sampleA ? sampleB : sampleA
+  let sideA = '/audio/side_a_2.mp3'
+  let sideB = '/audio/side_a.mp3'
+  let source = sideA
+  const changeSide = () => {
+    source = source === sideA ? sideB : sideA
   }
 </script>
 
@@ -112,8 +106,8 @@
   <!-- SIDE BUTTON -->
   <Button
     position={{ y: 1, z: 0.3, x: -2.3 }}
-    on:click={changeSample}
-    text={sample === sampleA ? 'Side B' : 'Side A'}
+    on:click={changeSide}
+    text={source === sideA ? 'Side B' : 'Side A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
@@ -146,7 +140,7 @@
       refDistance={10}
       loop
       playbackRate={$discSpeed}
-      source={sample}
+      {source}
       directionalCone={{
         coneInnerAngle: 90,
         coneOuterAngle: 220,
