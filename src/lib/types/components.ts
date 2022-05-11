@@ -273,7 +273,7 @@ export type AudioInstanceProperties<T extends Audio<GainNode> | PositionalAudio>
   // the function in a svelte event handler: on:click={play}
   // as otherwise TypeScript will complain about the type
   // of the argument 'delay'. It's not a perfect solution though.
-  play: (delay?: number | any) => T
+  play: (delay?: number | any) => Promise<T>
   pause: () => T
   stop: () => T
 }

@@ -30,8 +30,10 @@
 
   export let audio: T
 
-  export const play: Props['play'] = (delay) => {
-    audio.context.resume()
+  export const play: Props['play'] = async (delay) => {
+    if (audio.context.state !== 'running') {
+      await audio.context.resume()
+    }
     delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
     setDetune(detune)
     return audio
