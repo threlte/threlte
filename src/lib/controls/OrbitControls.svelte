@@ -109,7 +109,7 @@
 
   const targetObject = new Object3D()
 
-  $: if (target) {
+  const updateControls = () => {
     controls.target = targetObject.position
     controls.update()
     invalidate('OrbitControls: target changed')
@@ -121,4 +121,4 @@
   })
 </script>
 
-<TransformableObject object={targetObject} position={target} />
+<TransformableObject on:transform={updateControls} object={targetObject} position={target} />
