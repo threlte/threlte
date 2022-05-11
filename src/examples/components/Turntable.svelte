@@ -76,8 +76,8 @@
     color: 0x222222
   })
 
-  let sampleA = '/audio/side_a.mp3'
-  let sampleB = '/audio/side_a_2.mp3'
+  let sampleA = '/audio/side_a_2.mp3'
+  let sampleB = '/audio/side_a.mp3'
   let sample = sampleA
   const changeSample = () => {
     sample = sample === sampleA ? sampleB : sampleA
@@ -109,11 +109,14 @@
     position={{ y: 0.5 }}
   />
 
+  <!-- SIDE BUTTON -->
   <Button
     position={{ y: 1, z: 0.3, x: -2.3 }}
     on:click={changeSample}
     text={sample === sampleA ? 'Side B' : 'Side A'}
   />
+
+  <!-- PLAY/PAUSE BUTTON -->
   <Button
     position={{ y: 1, z: 1.5, x: -2.3 }}
     on:click={toggle}

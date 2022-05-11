@@ -30,16 +30,7 @@
 
   export let audio: T
 
-  let playAfterLoad = false
-  let playAfterLoadDelay = 0
-  let loaded = false
-
   export const play: Props['play'] = (delay) => {
-    if (typeof source === 'string' && !loaded) {
-      playAfterLoad = true
-      playAfterLoadDelay = delay
-      return audio
-    }
     audio.context.resume()
     delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
     setDetune(detune)
@@ -116,33 +107,27 @@
     }
     signal.addEventListener('abort', onAbort, { once: true })
 
-    playAfterLoad = (audio.isPlaying || playAfterLoad) && !audio.autoplay
-    stop()
-
     if (typeof newSource === 'string') {
-      loaded = false
       const buffer = await loadBufferFromUrl(newSource)
-      if (!aborted) {
-        audio.setBuffer(buffer)
-        loaded = true
-      }
+      if (aborted) return
+      stop()
+      audio.setBuffer(buffer)
     } else if (newSource instanceof AudioBuffer) {
       if (aborted) return
+      stop()
       audio.setBuffer(newSource)
     } else if (newSource instanceof HTMLMediaElement) {
       if (aborted) return
+      stop()
       audio.setMediaElementSource(newSource)
     } else if (newSource instanceof MediaStream) {
       if (aborted) return
+      stop()
       audio.setMediaStreamSource(newSource)
     } else if (newSource instanceof AudioBufferSourceNode) {
       if (aborted) return
+      stop()
       audio.setNodeSource(newSource)
-    }
-
-    if (playAfterLoad && !aborted) {
-      play(playAfterLoadDelay)
-      playAfterLoad = false
     }
 
     signal.removeEventListener('abort', onAbort)
