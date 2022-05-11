@@ -18,8 +18,7 @@
 
   export let autoplay: AudioProperties['autoplay'] = undefined
   export let detune: AudioProperties['detune'] = undefined
-  export let buffer: AudioProperties['buffer'] = undefined
-  export let url: AudioProperties['url'] = undefined
+  export let source: AudioProperties['source'] = undefined
   export let volume: AudioProperties['volume'] = undefined
   export let loop: AudioProperties['loop'] = undefined
   export let filters: AudioProperties['filters'] = undefined
@@ -55,10 +54,9 @@
   {receiveShadow}
   {viewportAware}
   {autoplay}
-  {buffer}
+  {source}
   {detune}
   {loop}
-  {url}
   {filters}
   {playbackRate}
   {volume}

@@ -255,6 +255,8 @@ export type AudioListenerProperties = Omit<Object3DInstanceProperties, 'object'>
   masterVolume?: number
 }
 
+type AudioSource = string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream
+
 export type AudioInstanceProperties<T extends Audio<GainNode> | PositionalAudio> = Omit<
   Object3DInstanceProperties,
   'object'
@@ -262,8 +264,7 @@ export type AudioInstanceProperties<T extends Audio<GainNode> | PositionalAudio>
   audio: T
   autoplay?: boolean
   detune?: number
-  buffer?: AudioBuffer
-  url?: string
+  source?: AudioSource
   volume?: number
   loop?: boolean
   filters?: BiquadFilterNode[] | BiquadFilterNode

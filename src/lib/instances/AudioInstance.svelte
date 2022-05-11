@@ -22,8 +22,7 @@
 
   export let autoplay: Props['autoplay'] = undefined
   export let detune: Props['detune'] = undefined
-  export let buffer: Props['buffer'] = undefined
-  export let url: Props['url'] = undefined
+  export let source: Props['source'] = undefined
   export let volume: Props['volume'] = undefined
   export let loop: Props['loop'] = undefined
   export let filters: Props['filters'] = undefined
@@ -32,25 +31,27 @@
   export let audio: T
 
   let playAfterLoad = false
+  let playAfterLoadDelay = 0
   let loaded = false
 
   export const play: Props['play'] = (delay) => {
-    if (!loaded) {
+    if (typeof source === 'string' && !loaded) {
       playAfterLoad = true
+      playAfterLoadDelay = delay
       return audio
     }
     audio.context.resume()
-    const node = delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
+    delay && typeof delay === 'number' ? audio.play(delay) : audio.play()
     setDetune(detune)
-    return node
+    return audio
   }
+
   export const pause: Props['pause'] = () => audio.pause()
+
   export const stop: Props['stop'] = () => {
     if (!audio.source) return audio
     return audio.stop()
   }
-
-  const loader = useLoader(AudioLoader, () => new AudioLoader())
 
   const setDetune = (detune?: number) => {
     if (detune !== undefined && audio.source && audio.source.detune) {
@@ -72,43 +73,101 @@
     error: ErrorEvent
   }>()
 
-  const onSourceChange = (url?: string, buffer?: AudioBuffer) => {
-    const isPlaying = audio.isPlaying
-    loaded = false
-    stop()
-
-    if (url !== undefined && buffer !== undefined) {
-      console.warn('Both properties "url" and "buffer" have been set, using property "url"')
-    }
-
-    if (url !== undefined) {
+  const loader = useLoader(AudioLoader, () => new AudioLoader())
+  const loadBufferFromUrl = (url: string): Promise<AudioBuffer> => {
+    return new Promise((resolve, reject) => {
       loader.load(
         url,
         (buffer) => {
-          audio.setBuffer(buffer)
           dispatch('load', buffer)
-          loaded = true
-          if (playAfterLoad || isPlaying) {
-            play()
-            playAfterLoad = false
-          }
+          resolve(buffer)
         },
         (e) => {
           dispatch('progress', e)
         },
         (e) => {
           dispatch('error', e)
+          reject(e)
         }
       )
-    } else if (buffer !== undefined) {
-      audio.setBuffer(buffer)
-    }
+    })
   }
 
-  $: onSourceChange(url, buffer)
+  let previousSource: Props['source']
+  const onSourceChange = async (newSource: Props['source'], signal: AbortSignal) => {
+    // stop and return if the source is undefined or an empty string is provided
+    if (!newSource) {
+      previousSource = newSource
+      stop()
+      return
+    }
+
+    // stop and return if the source did not actually change
+    if (!newSource || newSource === previousSource) {
+      stop()
+      return
+    }
+
+    previousSource = newSource
+
+    let aborted = false
+    const onAbort = () => {
+      aborted = true
+    }
+    signal.addEventListener('abort', onAbort, { once: true })
+
+    playAfterLoad = (audio.isPlaying || playAfterLoad) && !audio.autoplay
+    stop()
+
+    if (typeof newSource === 'string') {
+      loaded = false
+      const buffer = await loadBufferFromUrl(newSource)
+      if (!aborted) {
+        audio.setBuffer(buffer)
+        loaded = true
+      }
+    } else if (newSource instanceof AudioBuffer) {
+      if (aborted) return
+      audio.setBuffer(newSource)
+    } else if (newSource instanceof HTMLMediaElement) {
+      if (aborted) return
+      audio.setMediaElementSource(newSource)
+    } else if (newSource instanceof MediaStream) {
+      if (aborted) return
+      audio.setMediaStreamSource(newSource)
+    } else if (newSource instanceof AudioBufferSourceNode) {
+      if (aborted) return
+      audio.setNodeSource(newSource)
+    }
+
+    if (playAfterLoad && !aborted) {
+      play(playAfterLoadDelay)
+      playAfterLoad = false
+    }
+
+    signal.removeEventListener('abort', onAbort)
+  }
+
+  // It's possible that the source changes too quickly
+  // therefore an AbortController is needed in order to
+  // load the correct source after loading
+  let ac: AbortController | undefined
+
+  $: {
+    if (ac) ac.abort()
+    ac = new AbortController()
+    onSourceChange(source, ac.signal)
+  }
 
   onDestroy(() => {
-    stop()
+    try {
+      stop()
+      if (ac) ac.abort
+      if (audio.source) audio.disconnect()
+    } catch (error) {
+      console.warn('Error unmounting <AudioInstance>')
+      console.error(error)
+    }
   })
 </script>
 

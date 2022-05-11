@@ -18,8 +18,7 @@
 
   export let autoplay: PositionalAudioProperties['autoplay'] = undefined
   export let detune: PositionalAudioProperties['detune'] = undefined
-  export let buffer: PositionalAudioProperties['buffer'] = undefined
-  export let url: PositionalAudioProperties['url'] = undefined
+  export let source: PositionalAudioProperties['source'] = undefined
   export let volume: PositionalAudioProperties['volume'] = undefined
   export let loop: PositionalAudioProperties['loop'] = undefined
   export let filters: PositionalAudioProperties['filters'] = undefined
@@ -76,10 +75,9 @@
   {receiveShadow}
   {viewportAware}
   {autoplay}
-  {buffer}
+  {source}
   {detune}
   {loop}
-  {url}
   {volume}
   bind:inViewport
   on:viewportenter
