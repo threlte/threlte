@@ -53,10 +53,10 @@ export { default as CameraInstance } from './instances/CameraInstance.svelte'
 export { useFrame } from './hooks/useFrame'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
+export { useThrelteAudio } from './hooks/useThrelteAudio'
 export { useLoader } from './hooks/useLoader'
 export { useTexture } from './hooks/useTexture'
 export { useAudioListener } from './hooks/useAudioListener'
-export { useThrelteAudio } from './hooks/useThrelteAudio'
 
 // types
 export type {
