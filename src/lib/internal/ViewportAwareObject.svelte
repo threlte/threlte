@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Mesh, Object3D, Vector3 } from 'three'
+  import { useTicked } from '../lib/useTicked'
   import { createEventDispatcher, tick } from 'svelte'
-  import { Frustum, Matrix4 } from 'three'
+  import { Frustum, Matrix4, Mesh, Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import type { ViewportAwareObjectProperties } from '../types/components'
@@ -37,16 +37,16 @@
     }
   }
 
-  let ticked = false
+  const ticked = useTicked()
 
   export let inViewport: ViewportAwareObjectProperties['inViewport'] = checkInViewport()
 
   const dispatchEvent = async (isInViewport: boolean) => {
     if (isInViewport) {
-      if (!ticked) await tick()
+      if (!$ticked) await tick()
       dispatch('viewportenter', object)
     } else {
-      if (!ticked) await tick()
+      if (!$ticked) await tick()
       dispatch('viewportleave', object)
     }
   }
@@ -67,13 +67,6 @@
       debugFrameloopMessage: 'ViewportAwareObject: tracking viewport visibility'
     }
   )
-
-  const init = async () => {
-    await tick()
-    ticked = true
-  }
-
-  init()
 
   $: if (viewportAware && !$started) {
     start()
