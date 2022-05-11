@@ -55,7 +55,6 @@ export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
 export { useLoader } from './hooks/useLoader'
 export { useTexture } from './hooks/useTexture'
-export { useAudio } from './hooks/useAudio'
 export { useAudioListener } from './hooks/useAudioListener'
 export { useThrelteAudio } from './hooks/useThrelteAudio'
 

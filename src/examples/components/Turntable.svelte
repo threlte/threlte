@@ -5,7 +5,6 @@
     type Rotation,
     type Scale,
     PositionalAudio,
-    useAudio,
     useAudioListener,
     Group,
     Mesh,
