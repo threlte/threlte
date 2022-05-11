@@ -1,21 +1,71 @@
 <script lang="ts">
-  import { Group, Mesh } from 'threlte'
-  import type { Position, Rotation, Scale } from 'threlte'
-  import { spring } from 'svelte/motion'
+  import { cubicIn, cubicOut } from 'svelte/easing'
+  import { spring, tweened } from 'svelte/motion'
   import { BoxBufferGeometry, ConeBufferGeometry, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
+  import type { Position, Rotation, Scale } from 'threlte'
+  import { Group, Mesh } from 'threlte'
 
   export let volume: number = 0
-
-  const smoothVolume = spring(volume)
 
   export let position: Position | undefined = undefined
   export let rotation: Rotation | undefined = undefined
   export let scale: Scale | undefined = undefined
+
+  let jumpOffsetY = tweened(0)
+  let jumpRotationX = tweened(0)
+  let jumpRotationZ = tweened(0)
+  let isJumping = false
+
+  const randomSign = () => Math.round(Math.random()) * 2 - 1
+
+  const jump = () => {
+    isJumping = true
+    const upDuration = 10 + Math.random() * 50
+
+    jumpOffsetY.set(0.2, {
+      duration: upDuration,
+      easing: cubicOut
+    })
+    jumpRotationX.set(Math.random() * 4 * randomSign(), {
+      duration: upDuration,
+      easing: cubicOut
+    })
+    jumpRotationZ.set(Math.random() * 4 * randomSign(), {
+      duration: upDuration,
+      easing: cubicOut
+    })
+
+    setTimeout(() => {
+      const downDuration = 40 + Math.random() * 70
+
+      jumpOffsetY.set(0, {
+        duration: downDuration,
+        easing: cubicIn
+      })
+      jumpRotationX.set(0, {
+        duration: downDuration,
+        easing: cubicIn
+      })
+      jumpRotationZ.set(0, {
+        duration: downDuration,
+        easing: cubicIn
+      })
+
+      setTimeout(() => {
+        isJumping = false
+      }, downDuration * 1.5)
+    }, upDuration)
+  }
+
+  $: if (volume > 0.25 && !isJumping) jump()
 </script>
 
 <Group {position} {rotation} {scale}>
-  <Group>
+  <Group
+    position={{ y: $jumpOffsetY }}
+    rotation={{ z: DEG2RAD * $jumpRotationZ, x: DEG2RAD * $jumpRotationX }}
+  >
     <!-- CASE -->
     <Mesh
       castShadow
