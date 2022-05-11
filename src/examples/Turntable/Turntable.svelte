@@ -67,8 +67,8 @@
     volume = Math.sqrt(sumSquares / pcmData.length)
   })
 
-  let sideA = '/audio/side_a_2.mp3'
-  let sideB = '/audio/side_a.mp3'
+  let sideA = '/audio/side_a.mp3'
+  let sideB = '/audio/side_b.mp3'
   let source = sideA
   const changeSide = () => {
     source = source === sideA ? sideB : sideA
