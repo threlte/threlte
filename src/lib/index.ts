@@ -5,6 +5,14 @@ export { default as Canvas } from './Canvas.svelte'
 export { default as OrthographicCamera } from './cameras/OrthographicCamera.svelte'
 export { default as PerspectiveCamera } from './cameras/PerspectiveCamera.svelte'
 
+// audio components
+export { default as AudioListener } from './audio/AudioListener.svelte'
+export { default as Audio } from './audio/Audio.svelte'
+export { default as PositionalAudio } from './audio/PositionalAudio.svelte'
+
+// helper components
+export { default as PositionalAudioHelper } from './helpers/PositionalAudioHelper.svelte'
+
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
 
@@ -45,8 +53,10 @@ export { default as CameraInstance } from './instances/CameraInstance.svelte'
 export { useFrame } from './hooks/useFrame'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
+export { useThrelteAudio } from './hooks/useThrelteAudio'
 export { useLoader } from './hooks/useLoader'
 export { useTexture } from './hooks/useTexture'
+export { useAudioListener } from './hooks/useAudioListener'
 
 // types
 export type {
