@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Audio } from 'three'
+  import { Audio as ThreeAudio } from 'three'
   import { useThrelteAudio } from '../hooks/useThrelteAudio'
   import AudioInstance from '../instances/AudioInstance.svelte'
   import type { AudioProperties } from '../types/components'
@@ -38,7 +38,7 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const audio = new Audio(listener)
+  export const audio = new ThreeAudio(listener)
 </script>
 
 <AudioInstance

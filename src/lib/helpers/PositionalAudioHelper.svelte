@@ -1,17 +1,17 @@
 <script lang="ts">
   import { PositionalAudio } from 'three'
-  import { PositionalAudioHelper } from 'three/examples/jsm/helpers/PositionalAudioHelper.js'
+  import { PositionalAudioHelper as ThreePositionalAudioHelper } from 'three/examples/jsm/helpers/PositionalAudioHelper.js'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
 
   const parent = getParent()
 
-  let helper: PositionalAudioHelper
+  let helper: ThreePositionalAudioHelper
 
   if (!($parent instanceof PositionalAudio)) {
     console.warn('<PositionalAudioHelper> can only be used as a direct child of <PositionalAudio>')
   } else {
-    helper = new PositionalAudioHelper($parent)
+    helper = new ThreePositionalAudioHelper($parent)
   }
 </script>
 

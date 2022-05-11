@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { AudioListener } from 'three'
+  import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../hooks/useThrelteAudio'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
   import type { AudioListenerProperties } from '../types/components'
@@ -20,7 +20,7 @@
   export let id: AudioListenerProperties['id'] = undefined
   export let masterVolume: AudioListenerProperties['masterVolume'] = undefined
 
-  export const listener = new AudioListener()
+  export const listener = new ThreeAudioListener()
 
   export const context = listener.context
   export const resumeContext = async () => await listener.context.resume()

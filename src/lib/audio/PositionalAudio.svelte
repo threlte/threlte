@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PositionalAudio } from 'three'
+  import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useThrelteAudio } from '../hooks/useThrelteAudio'
   import AudioInstance from '../instances/AudioInstance.svelte'
   import type { PositionalAudioProperties } from '../types/components'
@@ -43,7 +43,7 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const audio = new PositionalAudio(listener)
+  export const audio = new ThreePositionalAudio(listener)
 
   $: {
     if (refDistance !== undefined) audio.setRefDistance(refDistance)
