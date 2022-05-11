@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { Mesh, Object3D, Vector3 } from 'three'
+  import { useTicked } from '../lib/useTicked'
   import { createEventDispatcher, tick } from 'svelte'
-  import { Frustum, Matrix4 } from 'three'
+  import { Frustum, Matrix4, Mesh, Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
   import type { ViewportAwareObjectProperties } from '../types/components'
-  import { useTicked } from '$lib/lib/useTicked'
 
   export let object: ViewportAwareObjectProperties['object']
   export let viewportAware: ViewportAwareObjectProperties['viewportAware'] = false
