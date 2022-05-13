@@ -27,6 +27,8 @@
   export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
+  const { invalidate } = useThrelte()
+
   const dispatch = createEventDispatcher<{
     load: ThreeGLTF
     unload: undefined
@@ -85,6 +87,8 @@
       scenes = undefined
       userData = undefined
       parser = undefined
+
+      invalidate('GLTF: model disposed')
       dispatch('unload')
     }
   }
@@ -112,6 +116,8 @@
     scenes = gltf.scenes
     userData = gltf.userData
     parser = gltf.parser
+
+    invalidate('GLTF: model loaded')
     dispatch('load', gltf)
   }
 
