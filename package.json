@@ -52,5 +52,10 @@
   "type": "module",
   "dependencies": {
     "troika-three-text": "^0.46.4"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./index.js",
+    "./extras": "./extras/index.js"
   }
 }
