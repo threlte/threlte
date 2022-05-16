@@ -7,7 +7,8 @@ import type {
   Material,
   Mesh,
   Object3D,
-  PositionalAudio
+  PositionalAudio,
+  Vector3
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
@@ -293,4 +294,12 @@ export type PositionalAudioProperties = Omit<AudioInstanceProperties<PositionalA
     coneOuterAngle: number
     coneOuterGain: number
   }
+}
+export type ArrowHelperProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  dir?: Vector3,
+  origin?: Vector3,
+  length?:number,
+  color?:ColorRepresentation,
+  headLength?:number,
+  headWidth?:number
 }
