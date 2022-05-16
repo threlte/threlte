@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ArrowHelperProperties, Object3DProperties } from '$lib/types/components';
-  import { ArrowHelper as ThreeArrowHelper, type ColorRepresentation, Vector3 } from 'three'
+  import { ArrowHelper as ThreeArrowHelper } from 'three'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
 
   // Object3DInstance
