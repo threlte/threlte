@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import { getContext, setContext } from 'svelte'
-  import { Color, InstancedMesh, Matrix4, Object3D } from 'three'
+  import { Color, InstancedMesh as ThreeInstancedMesh, Matrix4, Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useFrame } from '../hooks/useFrame'
   import MeshInstance from '../instances/MeshInstance.svelte'
@@ -31,8 +31,8 @@
 
   const instancedMeshContextName = 'threlte-instanced-mesh-context' as const
 
-  export const useInstancedMesh = () => {
-    return getContext<InstancedMeshContext>(instancedMeshContextName)
+  export const useInstancedMesh = (id: string) => {
+    return getContext<InstancedMeshContext>(instancedMeshContextName + id)
   }
 </script>
 
@@ -55,6 +55,7 @@
   export let geometry: InstancedMeshProperties['geometry']
   export let material: InstancedMeshProperties['material']
   export let count: InstancedMeshProperties['count'] = undefined
+  export let id: InstancedMeshProperties['id'] = ''
 
   const { onChange } = usePropChange(material)
   $: onChange(material, (newMaterial) => {
@@ -64,8 +65,8 @@
   let autoCount = count === undefined
   $: autoCount = count === undefined
 
-  export const instancedMesh: Writable<InstancedMesh> = writable(
-    new InstancedMesh(geometry, material, autoCount ? 0 : count)
+  export const instancedMesh: Writable<ThreeInstancedMesh> = writable(
+    new ThreeInstancedMesh(geometry, material, autoCount ? 0 : count)
   )
   const parentObject = new Object3D()
 
@@ -89,7 +90,7 @@
   } = useFrame(
     () => {
       $instancedMesh.dispose()
-      $instancedMesh = new InstancedMesh(geometry, material, instances.length)
+      $instancedMesh = new ThreeInstancedMesh(geometry, material, instances.length)
 
       instances.forEach((instance, index) => {
         setInstanceMatrixByIndex(instance, index)
@@ -186,7 +187,7 @@
     })
   }
 
-  setContext<InstancedMeshContext>(instancedMeshContextName, {
+  setContext<InstancedMeshContext>(instancedMeshContextName + id, {
     registerInstance,
     removeInstance,
     setInstanceMatrix,
