@@ -52,8 +52,9 @@ export const useFrameloop = (
   useRaf(() => {
     const shouldRender =
       renderCtx.frameloop === 'always' ||
-      renderCtx.frameInvalidated ||
-      renderCtx.frameHandlers.size > 0
+      (renderCtx.frameloop === 'demand' &&
+        (renderCtx.frameInvalidated || renderCtx.frameHandlers.size > 0)) ||
+      (renderCtx.frameloop === 'never' && renderCtx.advance)
 
     const shouldRaycast = shouldRender || renderCtx.pointerInvalidated
 
@@ -74,5 +75,6 @@ export const useFrameloop = (
     }
     debugFrame(renderCtx)
     renderCtx.frameInvalidated = false
+    renderCtx.advance = false
   })
 }

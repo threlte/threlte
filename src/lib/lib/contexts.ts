@@ -20,7 +20,7 @@ export const createContexts = (
   userSize: Writable<Size | undefined>,
   parentSize: Writable<Size>,
   debugFrameloop: boolean,
-  frameloop: 'always' | 'demand'
+  frameloop: 'always' | 'demand' | 'never'
 ): {
   ctx: ThrelteContext
   rootCtx: ThrelteRootContext
@@ -66,7 +66,8 @@ export const createContexts = (
     frameInvalidated: true,
     pointerInvalidated: true,
     invalidations: {},
-    frameHandlers: new Set()
+    frameHandlers: new Set(),
+    advance: false
   }
 
   const ctx: ThrelteContext = {
@@ -89,6 +90,9 @@ export const createContexts = (
           ? renderCtx.invalidations[debugFrameloopMessage] + 1
           : 1
       }
+    },
+    advance: () => {
+      renderCtx.advance = true
     }
   }
 
