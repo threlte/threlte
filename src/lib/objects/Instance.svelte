@@ -13,9 +13,10 @@
   export let rotation: InstanceProperties['rotation'] = undefined
   export let lookAt: InstanceProperties['lookAt'] = undefined
   export let color: InstanceProperties['color'] = undefined
+  export let id: InstanceProperties['id'] = ''
 
   const { registerInstance, setInstanceMatrix, removeInstance, setInstanceColor, parentObject } =
-    useInstancedMesh()
+    useInstancedMesh(id)
 
   const object3d = new Object3D()
   const m4 = new Matrix4()

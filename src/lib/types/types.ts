@@ -67,17 +67,25 @@ export type ThrelteContext = {
   scene: Scene
   renderer?: WebGLRenderer
   composer?: EffectComposer
+  /**
+   * Invalidates the current frame when frameloop === 'demand'
+   */
   invalidate: (debugFrameloopMessage?: string) => void
+  /**
+   * Advance one frame when frameloop === 'never'
+   */
+  advance: () => void
 }
 
 export type ThrelteRenderContext = {
-  frameloop: 'always' | 'demand'
+  frameloop: 'always' | 'demand' | 'never'
   debugFrameloop: boolean
   pointerInvalidated: boolean
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>
   frameHandlers: Set<ThrelteFrameHandler>
+  advance: boolean
 }
 
 export type ThrelteAudioContext = {

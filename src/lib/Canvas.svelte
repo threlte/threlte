@@ -33,7 +33,7 @@
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
   export let flat: boolean = false
   export let linear: boolean = false
-  export let frameloop: 'always' | 'demand' = 'demand'
+  export let frameloop: 'always' | 'demand' | 'never' = 'demand'
   export let debugFrameloop: boolean = false
   export let shadows: boolean = true
   export let shadowMapType: ShadowMapType = PCFSoftShadowMap
