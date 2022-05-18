@@ -210,12 +210,12 @@ export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'fru
   geometry: BufferGeometry
   material: Material | Material[]
   count?: number
-  id: string
+  id?: string
 }
 
 export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
   color?: ColorRepresentation
-  id: string
+  id?: string
 }
 
 export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
