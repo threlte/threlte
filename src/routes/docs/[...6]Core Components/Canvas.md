@@ -1,5 +1,5 @@
 ---
-title: Canvas
+title: <Canvas>
 ---
 
 # \<Canvas>

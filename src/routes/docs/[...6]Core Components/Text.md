@@ -1,71 +1,12 @@
 ---
-title: Misc
+title: <Text>
 ---
 
-# Misc
-
-## \<Fog>
-
-A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
-
-#### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Fog } from 'threlte'
-</script>
-
-<Fog color={'#dddddd'} />
-```
-
-#### Properties <!-- omit in toc -->
-
-```ts
-// optional
-color: THREE.ColorRepresentation = 0xffffff
-near: number | undefined = undefined
-far: number | undefined = undefined
-```
-
-#### Bindings <!-- omit in toc -->
-
-```ts
-fog: THREE.Fog
-```
-
-## \<FogExp2>
-
-A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
-
-#### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { FogExp2 } from 'threlte'
-</script>
-
-<FogExp2 color={'#dddddd'} density={0.3} />
-```
-
-#### Properties <!-- omit in toc -->
-
-```ts
-// optional
-color: THREE.ColorRepresentation = 0xffffff
-density: number | undefined = undefined
-```
-
-#### Bindings <!-- omit in toc -->
-
-```ts
-fog: THREE.FogExp2
-```
-
-## \<Text>
+# \<Text>
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
 
-#### Example <!-- omit in toc -->
+### Example <!-- omit in toc -->
 
 ```svelte
 <script>
@@ -77,7 +18,7 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 <Text text={value} />
 ```
 
-#### Properties <!-- omit in toc -->
+### Properties <!-- omit in toc -->
 
 ```ts
 // optional
@@ -125,14 +66,14 @@ strokeOpacity: number | undefined = undefined
 fillOpacity: number | undefined = undefined
 ```
 
-#### Bindings <!-- omit in toc -->
+### Bindings <!-- omit in toc -->
 
 ```ts
 inViewport: boolean
 textObject: Text
 ```
 
-#### Events <!-- omit in toc -->
+### Events <!-- omit in toc -->
 
 ```ts
 viewportenter: undefined
@@ -144,84 +85,4 @@ pointerdown: CustomEvent<ThreltePointerEvent>
 pointerenter: CustomEvent<ThreltePointerEvent>
 pointerleave: CustomEvent<ThreltePointerEvent>
 pointermove: CustomEvent<ThreltePointerEvent>
-```
-
-## \<Layers>
-
-[Layers](https://threejs.org/docs/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.  
-The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
-
-#### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Layers, PerspectiveCamera, Mesh } from 'threlte'
-</script>
-
-<!-- Remember to also assign a layer to your camera -->
-<Layers layers={1}>
-  <PerspectiveCamera />
-</Layers>
-
-<!-- visible if camera is on any layer -->
-<Layers layers={'all'}>
-  <Mesh … />
-</Layers>
-
-<!-- visible if camera is on layer 1 -->
-<Layers layers={1}>
-  <Mesh … />
-</Layers>
-
-<!-- visible if camera is on layer 0 or 1 -->
-<Layers layers={[0, 1]}>
-  <Mesh … />
-</Layers>
-
-<!-- invisible -->
-<Layers layers={'none'}>
-  <Mesh … />
-</Layers>
-```
-
-#### Properties <!-- omit in toc -->
-
-```ts
-// required
-layers: ThrelteLayers
-```
-
-Property `layers` can be:
-
-- any integer from 0 to 31
-- an array of any integer from 0 to 31
-- `'all'`
-- `'none'`
-
-> TypeScript users will benefit from strong types, JavaScript users should be aware that there is no runtime validation happening.
-
-## \<ContextBridge>
-
-This component is used to consume the context and rootContext provided by the `<Canvas>` component outside of it.
-
-#### Example <!-- omit in toc -->
-
-```svelte
-<script>
-  import { Canvas, ContextBridge } from 'threlte'
-
-  let ctx
-  $: console.log(ctx)
-</script>
-
-<Canvas>
-  <ContextBridge bind:ctx />
-</Canvas>
-```
-
-#### Bindings <!-- omit in toc -->
-
-```ts
-ctx: ThrelteContext
-rootCtx: ThrelteRootContext
 ```

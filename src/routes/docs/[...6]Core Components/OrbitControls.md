@@ -1,11 +1,13 @@
-# Controls
+---
+title: <OrbitControls>
+---
 
-## \<OrbitControls>
+# \<OrbitControls>
 
 The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera.  
 If the properties `autoRotate` or `enableDamping` are set to true, the frame loop will run continously.
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -17,7 +19,7 @@ If the properties `autoRotate` or `enableDamping` are set to true, the frame loo
 </PerspectiveCamera>
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // optional
@@ -66,13 +68,13 @@ zoomSpeed: number | undefined = undefined
 target: Position | undefined = undefined
 ```
 
-#### Bindings
+### Bindings
 
 ```ts
 controls: THREE.OrbitControls
 ```
 
-#### Events
+### Events
 
 ```ts
 change: undefined

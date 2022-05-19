@@ -46,6 +46,11 @@
 
 <KitDocs {meta}>
   <KitDocsLayout {navbar} {sidebar} search>
+    <div slot="sidebar-top">
+      <a href="/" alt="Threlte Logo">
+        <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
+      </a>
+    </div>
     <Algolia
       apiKey="933f0fd01c55969aa6201c2ea114809e"
       appId="ZEJ3L4CHC0"
@@ -76,5 +81,10 @@
 
   .header-logo {
     height: 40px;
+  }
+
+  :global(nav ul > li > ul > li) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 </style>

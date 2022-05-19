@@ -1,14 +1,12 @@
 ---
-title: Post Processing
+title: <Pass>
 ---
 
-# Post Processing
-
-## \<Pass>
+# \<Pass>
 
 By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -19,7 +17,7 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 <Pass pass={new GlitchPass()}>
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // required

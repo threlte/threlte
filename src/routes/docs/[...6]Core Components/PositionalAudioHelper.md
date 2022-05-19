@@ -1,14 +1,12 @@
 ---
-title: Helpers
+title: <PositionalAudioHelper>
 ---
 
-# Helpers
-
-## \<PositionalAudioHelper>
+# \<PositionalAudioHelper>
 
 Helps in visualizing the Audio Cone from a `THREE.PositionalAudio` entity. This component needs to be a direct child of a `<PositionalAudio>` component!
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -27,7 +25,7 @@ Helps in visualizing the Audio Cone from a `THREE.PositionalAudio` entity. This 
 </PositionalAudio>
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // required
