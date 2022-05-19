@@ -1,4 +1,5 @@
 <script lang="ts">
+  import InteractiveObject from '$lib/internal/InteractiveObject.svelte'
   import { createEventDispatcher } from 'svelte'
   import type { Material, Mesh, Object3D } from 'three'
   import { Texture } from 'three'
@@ -27,6 +28,10 @@
   export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
+  // <InteractiveObject> properties
+  export let ignorePointer: GLTFProperties['ignorePointer'] = false
+  export let interactive: GLTFProperties['interactive'] = false
+
   const { invalidate } = useThrelte()
 
   const dispatch = createEventDispatcher<{
@@ -34,6 +39,8 @@
     unload: undefined
     error: string
   }>()
+
+  let interactiveMeshes: Mesh[] = []
 
   export let gltf: ThreeGLTF | undefined = undefined
   export let scene: ThreeGLTF['scene'] | undefined = undefined
@@ -88,6 +95,9 @@
       userData = undefined
       parser = undefined
 
+      interactiveMeshes.splice(0, interactiveMeshes.length)
+      interactiveMeshes = interactiveMeshes
+
       invalidate('GLTF: model disposed')
       dispatch('unload')
     }
@@ -116,6 +126,14 @@
     scenes = gltf.scenes
     userData = gltf.userData
     parser = gltf.parser
+
+    scene.traverse((object) => {
+      if (object.type === 'Mesh') {
+        const mesh = object as Mesh
+        interactiveMeshes.push(mesh)
+      }
+      interactiveMeshes = interactiveMeshes
+    })
 
     invalidate('GLTF: model loaded')
     dispatch('load', gltf)
@@ -167,4 +185,21 @@
   >
     <slot />
   </Object3DInstance>
+
+  {#each interactiveMeshes as mesh}
+    {#key mesh.uuid}
+      <InteractiveObject
+        object={mesh}
+        {interactive}
+        {ignorePointer}
+        on:click
+        on:contextmenu
+        on:pointerup
+        on:pointerdown
+        on:pointerenter
+        on:pointerleave
+        on:pointermove
+      />
+    {/key}
+  {/each}
 {/if}
