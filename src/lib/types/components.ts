@@ -197,7 +197,7 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   url: string
   dracoDecoderPath?: string
   ktxTranscoderPath?: string
-}
+} & Omit<InteractiveObjectProperties, 'object'>
 
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
