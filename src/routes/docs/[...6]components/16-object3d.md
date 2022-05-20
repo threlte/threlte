@@ -5,7 +5,7 @@ title: Object3D
 !!!module_summary title=Object3D|sourcePath=objects/Object3D.svelte|name=Object3D|from=threlte|type=component
 !!!
 
-#### Example
+### Example
 
 You might want to use this component to pass as a reference to other components:
 
@@ -20,7 +20,7 @@ You might want to use this component to pass as a reference to other components:
 <Object3D bind:object={target} />
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // optional
@@ -36,14 +36,14 @@ renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 ```
 
-#### Bindings
+### Bindings
 
 ```ts
 inViewport: boolean
 object: THREE.Object3D
 ```
 
-#### Events
+### Events
 
 ```ts
 viewportenter: undefined
