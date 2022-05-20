@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply min-h-screen w-screen;
+}
+
+.js-focus-visible :focus:not([data-focus-visible-added]) {
+  @apply outline-none;
+}
+
+.js-focus-visible [data-focus-visible-added] {
+  @apply outline-none ring-2;
+  --tw-ring-color: var(--kd-color-focus);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.svg-responsive > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.kit-docs pre {
+  tab-size: 2;
+  -o-tab-size: 2;
+  -moz-tab-size: 2;
+}
+
+.kit-docs p + .admonition,
+.kit-docs p + .steps {
+  margin-top: 2.5rem;
+}
+
+.kit-docs .steps + p {
+  margin-top: 4rem;
+}
+
+.kit-docs .admonition + .steps {
+  margin-top: 3.5rem;
+}
+
+.kit-docs .admonition + table {
+  margin-top: 4rem;
+}
+
+.kit-docs .code-fence .code pre {
+  margin: 0;
+}
+
+.kit-docs .code-fence.lang-bash pre span {
+  color: #fafafa !important;
+}
+
+.kit-docs .code-fence.lang-bash pre .line:not(:empty)::before {
+  content: '> ';
+  font-weight: bold;
+  color: var(--kd-terminal-line-pointer);
+}
+
+.kit-docs .step .description > code {
+  color: var(--kd-color-gray-inverse);
+}
+
+.kit-docs .step .code-fence {
+  margin: 0;
+  padding: 0;
+}
+
+.kit-docs .code-fence + .code-fence {
+  margin-top: 0.5rem;
+}
+
+.kit-docs h1 + .steps,
+.kit-docs h2 + .steps,
+.kit-docs h3 + .steps {
+  margin-top: 2.5rem;
+}
+
+.kit-docs .header-anchor {
+  margin-left: -1.25em;
+  padding: 0 0.23em;
+  font-size: 0.9em;
+  opacity: 0;
+  border: 0;
+  background-color: none;
+}
+
+.kit-docs h1:focus,
+.kit-docs h2:focus,
+.kit-docs h3:focus,
+.kit-docs h4:focus,
+.kit-docs h5:focus,
+.kit-docs h6:focus {
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kit-docs h1:hover .header-anchor,
+  .kit-docs h2:hover .header-anchor,
+  .kit-docs h3:hover .header-anchor,
+  .kit-docs h4:hover .header-anchor,
+  .kit-docs h5:hover .header-anchor,
+  .kit-docs h6:hover .header-anchor {
+    opacity: 1;
+  }
+}
+
+@media (pointer: coarse) {
+  .kit-docs h1:focus .header-anchor,
+  .kit-docs h2:focus .header-anchor,
+  .kit-docs h3:focus .header-anchor,
+  .kit-docs h4:focus .header-anchor,
+  .kit-docs h5:focus .header-anchor,
+  .kit-docs h6:focus .header-anchor {
+    opacity: 1;
+  }
+}
+
+.kit-docs .header-anchor:focus {
+  opacity: 1;
+}
+
+:root {
+  font-size: 16px;
+  scroll-padding-top: 12rem;
+}
+
+:root {
+  --kd-color-brand-rgb: 255, 62, 0;
+
+  --kd-font-family-sans: Inter VF, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --kd-font-family-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation, Mono,
+    Fira Code VF, monospace;
+
+  --kd-color-brand: rgb(var(--kd-color-brand-rgb));
+
+  --kd-color-gray-soft: rgb(112, 112, 112);
+  --kd-color-gray-inverse: rgb(0, 0, 0);
+  --kd-color-gray-current: rgb(255, 255, 255);
+  --kd-color-gray-divider: rgb(234, 234, 234);
+  --kd-color-gray-hover: rgb(245, 245, 245);
+  --kd-color-gray-hover-inverse: rgb(53, 53, 53);
+  --kd-color-gray-elevate: rgb(255, 255, 255);
+  --kd-color-gray-body: rgb(255, 255, 255);
+
+  --kd-color-focus: rgba(var(--kd-color-brand-rgb), 0.7);
+
+  --kd-code-fence-bg: var(--kd-prose-pre-bg, rgb(31, 41, 55));
+  --kd-code-fence-top-bar-bg: rgba(31, 41, 55, 0.3);
+  --kd-code-copied-bg-color: rgba(var(--kd-color-brand-rgb), 0.8);
+  --kd-terminal-line-pointer: var(--kd-color-brand);
+  --kd-code-highlight-border: var(--kd-color-brand);
+  --kd-code-highlight-color: rgba(var(--kd-color-brand-rgb), 0.05);
+  /* Deprecated => --kd-prose-pre-bg: rgb(31, 41, 55); */
+
+  /* --kd-navbar-height: 5rem; */
+  --kd-navbar-padding: 1rem 1.25rem;
+  --kd-navbar-max-width: 1440px;
+  --kd-navbar-border-bottom: 1px solid var(--kd-color-gray-divider);
+  --kd-breadcrumbs-height: 5rem;
+
+  --kd-sidebar-min-width: 90vw;
+  --kd-sidebar-max-width: screen;
+  --kd-sidebar-padding: 0 1.5rem 2rem;
+  --kd-sidebar-border-active: var(--kd-color-brand);
+
+  --kd-content-max-width: 1440px;
+  /* --kd-main-max-width: unset; */
+  --kd-article-max-width: 85ch;
+}
+
+body {
+  --mobile-breakpoint: 600px;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --kd-color-gray-soft: rgb(140, 140, 140);
+  --kd-color-gray-inverse: rgb(255, 255, 255);
+  --kd-color-gray-current: rgb(0, 0, 0);
+  --kd-color-gray-divider: rgb(49, 49, 49);
+  --kd-color-gray-hover: rgb(54, 54, 54);
+  --kd-color-gray-hover-inverse: rgb(245, 245, 245);
+  --kd-color-gray-elevate: rgb(45, 45, 45);
+  --kd-color-gray-body: rgb(26, 26, 26);
+}
+
+@media screen and (min-width: 768px) {
+  :root {
+    --kd-sidebar-min-width: 70vw;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  :root {
+    scroll-padding-top: 8rem;
+
+    --kd-breadcrumbs-height: 0px;
+
+    --kd-sidebar-min-width: 17rem;
+    --kd-sidebar-max-width: 17rem;
+    --kd-sidebar-padding: 0 1rem 3rem 1rem;
+  }
+
+  body > div.kit-docs > div {
+    @apply first:hidden;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --kd-navbar-padding: 1.25rem 1.25rem;
+  }
+}
+
+@media screen and (min-width: 1460px) {
+  :root {
+    --kd-navbar-padding: 1.25rem 0;
+    --kd-sidebar-padding: 0 1rem 2rem 0.5rem;
+  }
+}
+
+/* CUSTOM STYLES */
+div.code-fence code {
+  @apply text-sm;
+}
+
+div.code-fence .code:nth-child(2) > * {
+  @apply !text-sm;
+}
+
+@media (max-width: 991px) {
+  :root {
+    --kd-navbar-height: 5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --kd-navbar-height: 0px;
+  }
+}
+
+div.admonition > * {
+  @apply !text-sm;
+}
+
+div.admonition > div:nth-child(2) > * {
+  @apply first:!mt-3 last:!mb-1;
+}
+
+nav > div:first-child {
+  @apply z-10;
+}
+
+nav > ul > li > ul {
+  @apply ml-4;
+}
+
+nav a[href=''] {
+  @apply text-sm !border-0 !-ml-4 bg-gray-body pt-8 pb-3 font-bold text-inherit pointer-events-none cursor-default;
+}
+
+summary {
+  @apply cursor-pointer;
+}
