@@ -8,7 +8,7 @@ This component represents triangular polygon mesh based objects.
 
 # \<Mesh>
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -23,7 +23,7 @@ This component represents triangular polygon mesh based objects.
 />
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // required
@@ -45,14 +45,14 @@ interactive: boolean = false
 ignorePointer: boolean = false
 ```
 
-#### Bindings
+### Bindings
 
 ```ts
 inViewport: boolean
 mesh: THREE.Mesh
 ```
 
-#### Events
+### Events
 
 ```ts
 viewportenter: undefined
