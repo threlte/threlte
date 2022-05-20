@@ -1,16 +1,12 @@
 import { get } from 'svelte/store'
 import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
 import type {
-  InteractiveObjectEventDispatcher,
   ThrelteContext,
   ThreltePointerEventMap,
   ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
-
-type InteractiveMeshUserData = {
-  eventDispatcher?: InteractiveObjectEventDispatcher
-}
+import { getThrelteUserData } from './getThrelteUserData'
 
 const setPointerFromEvent = (ctx: ThrelteContext, e: MouseEvent | PointerEvent): void => {
   ctx.pointer.update((v2) => {
@@ -59,7 +55,7 @@ const eventRaycast = (
     Array.from(rootCtx.raycastableObjects)
   )
   if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
-    getInteractiveObjectUserData(intersects[0].object).eventDispatcher?.(
+    getThrelteUserData(intersects[0].object).eventDispatcher?.(
       e.type as keyof ThreltePointerEventMap,
       {
         ...intersects[0],
@@ -124,32 +120,22 @@ export const animationFrameRaycast = (
 
   if (!intersection) {
     if (rootCtx.lastIntersection) {
-      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
+      getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
       )
     }
   } else {
     if (!rootCtx.lastIntersection) {
-      getInteractiveObjectUserData(intersection.object).eventDispatcher?.(
-        'pointerenter',
-        intersection
-      )
+      getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
     } else if (rootCtx.lastIntersection && targetChanged(rootCtx.lastIntersection, intersection)) {
-      getInteractiveObjectUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
+      getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
         'pointerleave',
         rootCtx.lastIntersection
       )
-      getInteractiveObjectUserData(intersection.object).eventDispatcher?.(
-        'pointerenter',
-        intersection
-      )
+      getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
     }
   }
 
   rootCtx.lastIntersection = intersection
-}
-
-const getInteractiveObjectUserData = (obj: Object3D) => {
-  return obj.userData as InteractiveMeshUserData
 }

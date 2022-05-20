@@ -111,6 +111,22 @@ export type OrbitControlsProperties = {
   target?: TransformableObjectProperties['position']
 }
 
+export type TransformControlsProperties = {
+  autoPauseOrbitControls?: boolean
+  mode?: 'translate' | 'rotate' | 'scale' | undefined
+  axis?: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null
+  dragging?: boolean
+  enabled?: boolean
+  translationSnap?: number
+  scaleSnap?: number
+  rotationSnap?: number
+  showX?: boolean
+  showY?: boolean
+  showZ?: boolean
+  size?: number
+  space?: 'world' | 'local' | undefined
+}
+
 export type PassProperties = {
   pass: Pass
 }

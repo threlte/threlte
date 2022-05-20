@@ -6,6 +6,7 @@
   import { useThrelte } from '../hooks/useThrelte'
   import { getParent } from '../internal/HierarchicalObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
+  import { getThrelteUserData } from '../lib/getThrelteUserData'
   import type { OrbitControlsProperties } from '../types/components'
 
   export let autoRotate: OrbitControlsProperties['autoRotate'] = undefined
@@ -57,12 +58,14 @@
   const onEnd = () => dispatch('start')
 
   export const controls = new ThreeOrbitControls($parent, renderer.domElement)
+  getThrelteUserData($parent).orbitControls = controls
 
   controls.addEventListener('change', onChange)
   controls.addEventListener('start', onStart)
   controls.addEventListener('end', onEnd)
 
   onDestroy(() => {
+    delete getThrelteUserData($parent).orbitControls
     controls.removeEventListener('change', onChange)
     controls.removeEventListener('start', onStart)
     controls.removeEventListener('end', onEnd)

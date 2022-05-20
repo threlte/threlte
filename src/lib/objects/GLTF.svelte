@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InteractiveObject from '$lib/internal/InteractiveObject.svelte'
   import { createEventDispatcher } from 'svelte'
   import type { Material, Mesh, Object3D } from 'three'
   import { Texture } from 'three'
@@ -10,6 +9,7 @@
   import { useLoader } from '../hooks/useLoader'
   import { useThrelte } from '../hooks/useThrelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
+  import InteractiveObject from '../internal/InteractiveObject.svelte'
   import type { GLTFProperties } from '../types/components'
 
   export let position: GLTFProperties['position'] = undefined
