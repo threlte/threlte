@@ -27,7 +27,7 @@ The `<GLTF>` component supports interaction:
 />
 ```
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -37,7 +37,7 @@ The `<GLTF>` component supports interaction:
 <GLTF castShadow receiveShadow url={'/models/flower.glb'} position={{ y: 1 }} scale={3} />
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // required
@@ -60,7 +60,7 @@ ignorePointer: boolean = false
 interactive: boolean = false
 ```
 
-#### Bindings
+### Bindings
 
 ```ts
 gltf: GLTF | undefined
@@ -82,7 +82,7 @@ userData: any
 parser: GLTFParser | undefined
 ```
 
-#### Events
+### Events
 
 ```ts
 load: GLTF // The content finished loading

@@ -6,7 +6,7 @@ title: Group
 This is almost identical to an [`<Object3D>`](/docs/components/16-object3d). Its purpose is to make working with groups of objects syntactically clearer.
 !!!
 
-#### Example
+### Example
 
 ```svelte
 <script>
@@ -19,7 +19,7 @@ This is almost identical to an [`<Object3D>`](/docs/components/16-object3d). Its
 </Group>
 ```
 
-#### Properties
+### Properties
 
 ```ts
 // optional
@@ -35,14 +35,14 @@ renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 ```
 
-#### Bindings
+### Bindings
 
 ```ts
 inViewport: boolean
 group: THREE.Group
 ```
 
-#### Events
+### Events
 
 ```ts
 viewportenter: undefined
