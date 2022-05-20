@@ -5,28 +5,24 @@
 </script>
 
 <script lang="ts">
-  import '@svelteness/kit-docs/client/polyfills/index.js'
-  import '@svelteness/kit-docs/client/styles/normalize.css'
-  import '@svelteness/kit-docs/client/styles/theme.css'
-  import '@svelteness/kit-docs/client/styles/vars.css'
   import '@docsearch/css'
-  import '@svelteness/kit-docs/client/styles/docsearch.css'
-  import { Algolia } from '@svelteness/kit-docs/client/algolia'
-
   import {
-    KitDocs,
+    ColorSchemeMenu,
     createKitDocsLoader,
     createSidebarContext,
+    KitDocs,
     KitDocsLayout,
-    type NavbarConfig,
-    type ResolvedSidebarConfig,
+    SocialLink,
     type MarkdownMeta,
-    SocialLink
+    type NavbarConfig
   } from '@svelteness/kit-docs'
+  import { Algolia } from '@svelteness/kit-docs/client/algolia'
+  import '@svelteness/kit-docs/client/polyfills/index.js'
+  import '@svelteness/kit-docs/client/styles/docsearch.css'
+  import '../../styles/kit-docs.css'
+  import { sidebar } from './navigation'
 
   export let meta: MarkdownMeta
-
-  export let sidebar: ResolvedSidebarConfig
 
   const { activeCategory } = createSidebarContext(sidebar)
 
@@ -46,6 +42,17 @@
 
 <KitDocs {meta}>
   <KitDocsLayout {navbar} {sidebar} search>
+    <div slot="sidebar-top">
+      <a href="/" alt="Threlte Logo">
+        <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
+      </a>
+      <div class="flex flex-row justify-between items-center mt-8 -mb-3">
+        <SocialLink class="!p-0 " type="gitHub" href="https://github.com/grischaerbe/threlte">
+          GitHub
+        </SocialLink>
+        <ColorSchemeMenu />
+      </div>
+    </div>
     <Algolia
       apiKey="933f0fd01c55969aa6201c2ea114809e"
       appId="ZEJ3L4CHC0"
@@ -66,15 +73,12 @@
 </KitDocs>
 
 <style>
-  :global(:root) {
-    --kd-color-brand-rgb: 255, 62, 0;
-  }
-
-  :global(:root.dark) {
-    --kd-color-brand-rgb: 255, 62, 0;
-  }
-
   .header-logo {
     height: 40px;
+  }
+
+  :global(nav ul > li > ul > li) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 </style>
