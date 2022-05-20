@@ -2,7 +2,7 @@
 title: useAudioListener
 ---
 
-!!!module_summary title=useAudioListener|sourcePath=hooks/useAudioListener.svelte|name=useAudioListener|from=threlte|type=hook
+!!!module_summary title=useAudioListener|sourcePath=hooks/useAudioListener.svelte|name=useAudioListener|from=threlte|type=hook|needsContext=true
 Components like `<Audio>` and `<PositionalAudio>` use the Web Audio API and therefore you may find yourself in situations where the `AudioContext` is important to create e.g. a `BiquadFilterNode`.
 !!!
 
