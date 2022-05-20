@@ -35,3 +35,27 @@ Provide an `id` to use multiple `<InstancedMesh>` components:
   </InstancedMesh>
 </InstancedMesh>
 ```
+
+### Properties
+
+```ts
+// optional
+id: string = ''
+color: THREE.ColorRepresentation | undefined = undefined
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+```
+
+### Events
+
+```ts
+click: CustomEvent<ThreltePointerEvent>
+contextmenu: CustomEvent<ThreltePointerEvent>
+pointerup: CustomEvent<ThreltePointerEvent>
+pointerdown: CustomEvent<ThreltePointerEvent>
+pointerenter: CustomEvent<ThreltePointerEvent>
+pointerleave: CustomEvent<ThreltePointerEvent>
+pointermove: CustomEvent<ThreltePointerEvent>
+```

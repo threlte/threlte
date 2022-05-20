@@ -23,7 +23,6 @@ This is almost identical to an [`<Object3D>`](/docs/components/16-object3d). Its
 
 ```ts
 // optional
-id: string = ''
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
