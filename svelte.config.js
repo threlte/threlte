@@ -10,7 +10,9 @@ const config = {
   extensions: ['.svelte', '.md'],
 
   preprocess: [
-    preprocess()
+    preprocess({
+      postcss: true
+    })
   ],
 
   kit: {
@@ -33,7 +35,12 @@ const config = {
         kitDocsPlugin({
           shiki: {
             theme: 'material-ocean'
-          }
+          },
+          markdown: {
+            components: [
+              { name: 'ModuleSummary', type: 'custom', container: { marker: '!' } },
+            ],
+          },
         })
       ],
       resolve: {

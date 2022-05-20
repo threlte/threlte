@@ -6,9 +6,7 @@
 
 <script lang="ts">
   import '@svelteness/kit-docs/client/polyfills/index.js'
-  import '@svelteness/kit-docs/client/styles/normalize.css'
-  import '@svelteness/kit-docs/client/styles/theme.css'
-  import '@svelteness/kit-docs/client/styles/vars.css'
+  import '../../styles/kit-docs.css'
   import '@docsearch/css'
   import '@svelteness/kit-docs/client/styles/docsearch.css'
   import { Algolia } from '@svelteness/kit-docs/client/algolia'
@@ -50,6 +48,13 @@
       <a href="/" alt="Threlte Logo">
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
+      <SocialLink
+        class="p-0 mt-8 -mb-3"
+        type="gitHub"
+        href="https://github.com/grischaerbe/threlte"
+      >
+        GitHub
+      </SocialLink>
     </div>
     <Algolia
       apiKey="933f0fd01c55969aa6201c2ea114809e"
@@ -71,14 +76,6 @@
 </KitDocs>
 
 <style>
-  :global(:root) {
-    --kd-color-brand-rgb: 255, 62, 0;
-  }
-
-  :global(:root.dark) {
-    --kd-color-brand-rgb: 255, 62, 0;
-  }
-
   .header-logo {
     height: 40px;
   }
