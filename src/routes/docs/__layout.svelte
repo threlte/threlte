@@ -49,7 +49,7 @@
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
       <SocialLink
-        class="p-0 mt-8 -mb-3"
+        class="!p-0 !mt-8 !-mb-3"
         type="gitHub"
         href="https://github.com/grischaerbe/threlte"
       >
