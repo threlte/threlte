@@ -7,6 +7,7 @@
   export let sourcePath: string
   export let type: string
   export let needsContext: boolean = false
+  export let divider: 'true' | 'false' = 'true'
 
   let importStatement = `import { ${name} } from '${from}'`
 
@@ -60,7 +61,9 @@
   </div>
 {/if}
 
-<hr />
+{#if divider === 'true'}
+  <hr />
+{/if}
 
 <style lang="postcss">
   #description :global(> *) {

@@ -2,15 +2,28 @@
 title: InstancedMesh
 ---
 
-!!!module_summary title=InstancedMesh|sourcePath=objects/InstancedMesh.svelte|name=InstancedMesh|from=threlte|type=component
+<script lang="ts">
+import Wrapper from '$examples/instanced-mesh/Wrapper.svelte'
+</script>
+
+!!!module_summary title=InstancedMesh|sourcePath=objects/InstancedMesh.svelte|name=InstancedMesh|from=threlte|type=component|divider=false
 The `<InstancedMesh>` is a special version of [`<Mesh>`](/docs/components/11-mesh) with instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
 !!!
 
-<!-- TODO -- >
-<!-- <script lang="ts">
-import InstancedMeshSimple from '$examples/InstancedMeshSimple.svelte'
-import ThrelteWrapper from '$examples/ThrelteWrapper.svelte'
-</script> -->
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
+
+<details>
+  <summary>Show code</summary>
+
+@[code svelte|title=Wrapper.svelte](../../../examples/instanced-mesh/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../examples/instanced-mesh/Scene.svelte)
+@[code svelte|title=Sphere.svelte](../../../examples/instanced-mesh/Sphere.svelte)
+
+</details>
+
+---
 
 ### Usage
 
@@ -99,11 +112,16 @@ Nesting instances might have a slight performance hit, the frameloop will run co
 
 ### Example
 
-@[code](../../../examples/InstancedMeshSimple.svelte)
+<script lang="ts">
+import WrapperSimple from '$examples/instanced-mesh-simple/Wrapper.svelte'
+</script>
 
-<!-- <ThrelteWrapper>
-  <InstancedMeshSimple />
-</ThrelteWrapper> -->
+<ExampleWrapper>
+  <WrapperSimple />
+</ExampleWrapper>
+
+@[code svelte|title=Wrapper.svelte](../../../examples/instanced-mesh-simple/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../examples/instanced-mesh-simple/Scene.svelte)
 
 ### Properties
 

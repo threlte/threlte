@@ -33,7 +33,7 @@
       buttonOffsetY.set(0)
     }}
     material={buttonMaterial}
-    geometry={new BoxBufferGeometry(1, 0.2, 1)}
+    geometry={new BoxBufferGeometry(1.2, 0.2, 0.8)}
     position={{ y: $buttonOffsetY }}
   />
   <Text
@@ -42,7 +42,7 @@
     {text}
     rotation={{ x: DEG2RAD * -90 }}
     position={{ y: 0.105 + $buttonOffsetY }}
-    fontSize={0.3}
+    fontSize={0.35}
     anchorX="50%"
     anchorY="50%"
   />

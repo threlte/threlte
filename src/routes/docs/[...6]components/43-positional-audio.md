@@ -2,7 +2,7 @@
 title: PositionalAudio
 ---
 
-!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component
+!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component|divider=false
 Creates a positional audio entity.  
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
 
@@ -11,18 +11,30 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 :::
 !!!
 
-<!-- TODO -->
-<!-- <script lang="ts">
-import TurntableScene from '$examples/Turntable/Scene.svelte'
-import ThrelteWrapper from '$examples/ThrelteWrapper.svelte'
+<script lang="ts">
+import Wrapper from '$examples/audio/Wrapper.svelte'
 </script>
 
-<ThrelteWrapper>
-  <TurntableScene />
-</ThrelteWrapper>
+<ExampleWrapper>
+  <Wrapper /> 
+</ExampleWrapper>
 
-<small>Music by [le grisch](https://legrisch.com)</small>
-[Source](https://github.com/grischaerbe/threlte/tree/main/src/examples/Turntable) -->
+<p class="!mb-0">
+  <small>Music by <a href="https://legrisch.com" target="_blank">legrisch</a></small>
+</p>
+
+<details>
+  <summary>Show code</summary>
+
+@[code svelte|title=Wrapper.svelte](../../../examples/audio/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../examples/audio/Scene.svelte)
+@[code svelte|title=Turntable.svelte](../../../examples/audio/Turntable.svelte)
+@[code svelte|title=Button.svelte](../../../examples/audio/Button.svelte)
+@[code svelte|title=Speaker.svelte](../../../examples/audio/Speaker.svelte)
+
+</details>
+
+---
 
 ### Example
 

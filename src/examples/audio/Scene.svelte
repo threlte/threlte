@@ -26,7 +26,7 @@
   $: zoom = $size.width / 18
 </script>
 
-<OrthographicCamera {zoom} position={{ z: 9, y: 5, x: 6 }}>
+<OrthographicCamera {zoom} position={{ z: 9, y: 9, x: 6 }}>
   <OrbitControls
     autoRotate={isPlaying}
     autoRotateSpeed={0.5}

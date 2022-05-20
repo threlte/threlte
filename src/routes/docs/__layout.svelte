@@ -5,26 +5,24 @@
 </script>
 
 <script lang="ts">
-  import '@svelteness/kit-docs/client/polyfills/index.js'
-  import '../../styles/kit-docs.css'
   import '@docsearch/css'
-  import '@svelteness/kit-docs/client/styles/docsearch.css'
-  import { Algolia } from '@svelteness/kit-docs/client/algolia'
-
   import {
-    KitDocs,
+    ColorSchemeMenu,
     createKitDocsLoader,
     createSidebarContext,
+    KitDocs,
     KitDocsLayout,
-    type NavbarConfig,
-    type ResolvedSidebarConfig,
+    SocialLink,
     type MarkdownMeta,
-    SocialLink
+    type NavbarConfig
   } from '@svelteness/kit-docs'
+  import { Algolia } from '@svelteness/kit-docs/client/algolia'
+  import '@svelteness/kit-docs/client/polyfills/index.js'
+  import '@svelteness/kit-docs/client/styles/docsearch.css'
+  import '../../styles/kit-docs.css'
+  import { sidebar } from './navigation'
 
   export let meta: MarkdownMeta
-
-  export let sidebar: ResolvedSidebarConfig
 
   const { activeCategory } = createSidebarContext(sidebar)
 
@@ -48,13 +46,12 @@
       <a href="/" alt="Threlte Logo">
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
-      <SocialLink
-        class="!p-0 !mt-8 !-mb-3"
-        type="gitHub"
-        href="https://github.com/grischaerbe/threlte"
-      >
-        GitHub
-      </SocialLink>
+      <div class="flex flex-row justify-between items-center mt-8 -mb-3">
+        <SocialLink class="!p-0 " type="gitHub" href="https://github.com/grischaerbe/threlte">
+          GitHub
+        </SocialLink>
+        <ColorSchemeMenu />
+      </div>
     </div>
     <Algolia
       apiKey="933f0fd01c55969aa6201c2ea114809e"

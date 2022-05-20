@@ -268,3 +268,15 @@ div.admonition > div:nth-child(2) > * {
 nav > div:first-child {
   @apply z-10;
 }
+
+nav > ul > li > ul {
+  @apply ml-4;
+}
+
+nav a[href=''] {
+  @apply text-sm !border-0 !-ml-4 bg-gray-body pt-8 pb-3 font-bold text-inherit pointer-events-none cursor-default;
+}
+
+summary {
+  @apply cursor-pointer;
+}

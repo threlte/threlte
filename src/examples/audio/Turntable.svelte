@@ -103,16 +103,16 @@
 
   <!-- SIDE BUTTON -->
   <Button
-    position={{ y: 1, z: 0.3, x: -2.3 }}
+    position={{ y: 1, z: 0.8, x: -2.3 }}
     on:click={changeSide}
-    text={source === sideA ? 'Side B' : 'Side A'}
+    text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
-    position={{ y: 1, z: 1.5, x: -2.3 }}
+    position={{ y: 1, z: 1.7, x: -2.3 }}
     on:click={toggle}
-    text={isPlaying ? 'Pause' : 'Play'}
+    text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
 
   <!-- ARM -->
@@ -135,7 +135,7 @@
     <PositionalAudio
       autoplay
       bind:audio
-      refDistance={10}
+      refDistance={15}
       loop
       playbackRate={$discSpeed}
       {source}
