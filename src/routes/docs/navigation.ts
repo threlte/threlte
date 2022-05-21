@@ -130,6 +130,10 @@ export const sidebar = {
         slug: '/docs/components/51-orbit-controls'
       },
       {
+        title: 'TransformControls',
+        slug: '/docs/components/52-transform-controls'
+      },
+      {
         title: 'Post Processing',
         slug: ''
       },

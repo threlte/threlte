@@ -3,6 +3,7 @@
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import { getThrelteUserData } from '../lib/getThrelteUserData'
   import type { InteractiveObjectProperties } from '../types/components'
   import type { ThreltePointerEvent } from '../types/types'
 
@@ -34,7 +35,7 @@
   const removeObjectInteractivity = (object: Object3D) => {
     removeRaycastableObject(object)
     removeInteractiveObject(object)
-    delete object.userData.eventDispatcher
+    delete getThrelteUserData(object).eventDispatcher
   }
 
   const setupObjectInteractivity = (
@@ -42,7 +43,7 @@
     ignorePointer: boolean,
     interactive: boolean
   ) => {
-    object.userData.eventDispatcher = eventDispatcher
+    getThrelteUserData(object).eventDispatcher = eventDispatcher
     if (ignorePointer) {
       removeRaycastableObject(object)
       removeInteractiveObject(object)
