@@ -4,6 +4,7 @@
   import { Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
+  import { createObjectStore } from '../lib/createObjectStore'
   import { getThrelteUserData } from '../lib/getThrelteUserData'
   import { useTicked } from '../lib/useTicked'
   import type { TransformableObjectProperties } from '../types/components'
@@ -55,9 +56,12 @@
     }
   )
 
+  const objectStore = createObjectStore(object)
+  $: objectStore.set(object)
+
   $: {
     if (position) {
-      object.position.set(position.x ?? 0, position.y ?? 0, position.z ?? 0)
+      $objectStore.position.set(position.x ?? 0, position.y ?? 0, position.z ?? 0)
       onTransform()
     }
     if (lookAt && !rotation) {
@@ -65,7 +69,7 @@
         startLookingAt()
       } else {
         stopLookingAt()
-        object.lookAt(lookAt.x ?? 0, lookAt.y ?? 0, lookAt.z ?? 0)
+        $objectStore.lookAt(lookAt.x ?? 0, lookAt.y ?? 0, lookAt.z ?? 0)
         onTransform()
       }
     }
@@ -76,16 +80,16 @@
   $: {
     if (scale) {
       if (typeof scale === 'number') {
-        object.scale.set(scale, scale, scale)
+        $objectStore.scale.set(scale, scale, scale)
       } else {
-        object.scale.set(scale.x ?? 1, scale.y ?? 1, scale.z ?? 1)
+        $objectStore.scale.set(scale.x ?? 1, scale.y ?? 1, scale.z ?? 1)
       }
       onTransform()
     }
   }
   $: {
     if (rotation) {
-      object.rotation.set(
+      $objectStore.rotation.set(
         rotation.x ?? 0,
         rotation.y ?? 0,
         rotation.z ?? 0,

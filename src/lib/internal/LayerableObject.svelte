@@ -2,9 +2,13 @@
   import { getContext } from 'svelte'
   import type { Object3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
+  import { createObjectStore } from '../lib/createObjectStore'
   import type { ThrelteLayersContext } from '../types/types'
 
   export let object: Object3D
+
+  const objectStore = createObjectStore(object)
+  $: objectStore.set(object)
 
   const layers = getContext<ThrelteLayersContext>('threlte-layers')
 
@@ -12,21 +16,21 @@
 
   $: {
     if ($layers === 'all') {
-      object.layers.enableAll()
+      $objectStore.layers.enableAll()
     } else if ($layers === 'none') {
-      object.layers.disableAll()
+      $objectStore.layers.disableAll()
     } else if (Array.isArray($layers)) {
       for (let index = 0; index < 32; index += 1) {
         const layerIndex = index as typeof $layers[number]
         const enabled = $layers.includes(layerIndex)
         if (enabled) {
-          object.layers.enable(index)
+          $objectStore.layers.enable(index)
         } else {
-          object.layers.disable(index)
+          $objectStore.layers.disable(index)
         }
       }
     } else if ($layers !== undefined) {
-      object.layers.set($layers)
+      $objectStore.layers.set($layers)
     }
     invalidate('LayerableObject')
   }
