@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import { createObjectStore } from '../lib/createObjectStore'
   import type { CameraInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
@@ -19,10 +20,13 @@
 
   export let useCamera: CameraInstanceProperties['useCamera'] = false
 
+  const cam = createObjectStore(camera)
+  $: cam.set(camera)
+
   const { setCamera } = useThrelteRoot()
 
   $: if (useCamera) {
-    setCamera(camera)
+    setCamera($cam)
   }
 </script>
 

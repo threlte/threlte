@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import { writable } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 import type { Writable } from 'svelte/store'
 import type { Size } from '../types/types'
 import { browser } from '../lib/browser'
@@ -13,13 +13,16 @@ export const useParentSize = (): {
   let el: HTMLElement | undefined
 
   const proxy = () => {
-    parentSize.update((s) => {
-      if (!el) return s
-      if (!el.parentElement) return s
-      s.width = el.parentElement.clientWidth
-      s.height = el.parentElement.clientHeight
-      return s
-    })
+    const currentParentSize = get(parentSize)
+    if (!el) return
+    if (!el.parentElement) return
+    const { clientWidth, clientHeight } = el.parentElement
+    if (clientWidth !== currentParentSize.width || clientHeight !== currentParentSize.height) {
+      parentSize.set({
+        width: clientWidth,
+        height: clientHeight
+      })
+    }
   }
 
   const parentSizeAction = (node: HTMLElement) => {
