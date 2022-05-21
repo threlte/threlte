@@ -2,7 +2,7 @@
 title: useThrelteRoot
 ---
 
-!!!module_summary title=useThrelteRoot|sourcePath=hooks/useThrelteRoot.svelte|name=useThrelteRoot|from=threlte|type=hook|needsContext=true
+!!!module_summary title=useThrelteRoot|sourcePath=hooks/useThrelteRoot.ts|name=useThrelteRoot|from=threlte|type=hook|needsContext=true
 This hook lets you consume the root context. Although it can be useful, this is mostly used internally.  
 The properties `linear`, `flat` and `dpr` are reactive and can also be set.
 !!!
