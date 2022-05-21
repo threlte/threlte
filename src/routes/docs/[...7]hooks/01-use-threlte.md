@@ -2,7 +2,7 @@
 title: useThrelte
 ---
 
-!!!module_summary title=useThrelte|sourcePath=hooks/useThrelte.svelte|name=useThrelte|from=threlte|type=hook|needsContext=true
+!!!module_summary title=useThrelte|sourcePath=hooks/useThrelte.ts|name=useThrelte|from=threlte|type=hook|needsContext=true
 This hook lets you consume the main context of the `<Canvas>` component which contains the renderer, camera, scene and other properties.
 
 Use this hook to manually invalidate the current frame …
