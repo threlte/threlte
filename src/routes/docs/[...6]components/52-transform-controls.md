@@ -6,6 +6,8 @@ title: TransformControls
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
 
 The component `<TransformControls>` needs to be a direct child of the component to be transformed.
+
+To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
 !!!
 
 <script lang="ts">
@@ -26,17 +28,29 @@ import Wrapper from '$examples/transform-controls/Wrapper.svelte'
 
 ---
 
-### Example
+### Examples
 
 ```svelte
 <script>
-  import { TransformControls, Mesh } from 'threlte'
+  import { TransformControls, Mesh, TransformControls } from 'threlte'
   import { MeshStandardMaterial, BoxBufferGeometry } from 'three'
 </script>
 
 <Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshStandardMaterial()}>
   <TransformControls />
 </Mesh>
+```
+
+The `<TransformControls>` component can also be used to transform [`<Instance>`](/docs/components/13-instance) components:
+
+```svelte
+<script>
+  import { Instance, TransformControls } from 'threlte'
+</script>
+
+<Instance>
+  <TransformControls />
+</Instance>
 ```
 
 ### Properties
