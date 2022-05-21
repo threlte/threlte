@@ -4,6 +4,7 @@
   import { Object3D, Vector3 } from 'three'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
+  import { getThrelteUserData } from '../lib/getThrelteUserData'
   import { useTicked } from '../lib/useTicked'
   import type { TransformableObjectProperties } from '../types/components'
 
@@ -28,12 +29,24 @@
     dispatch('transform')
   }
 
+  const onTransform = async () => {
+    invalidate('TransformableObject: transformed')
+    await dispatchTransform()
+  }
+
+  /**
+   * Trigger the onTransform invalidation and
+   * event chain with object.userData.onTransform().
+   * Important for `<Instance>` components.
+   */
+  getThrelteUserData(object).onTransform = onTransform
+
   const { start: startLookingAt, stop: stopLookingAt } = useFrame(
-    () => {
+    async () => {
       if (lookAt && !rotation && lookAt instanceof Object3D) {
         lookAt.getWorldPosition(targetWorldPos)
         object.lookAt(targetWorldPos)
-        dispatchTransform()
+        await dispatchTransform()
       }
     },
     {
@@ -45,8 +58,7 @@
   $: {
     if (position) {
       object.position.set(position.x ?? 0, position.y ?? 0, position.z ?? 0)
-      invalidate('TransformableObject: position')
-      dispatchTransform()
+      onTransform()
     }
     if (lookAt && !rotation) {
       if (lookAt instanceof Object3D) {
@@ -54,8 +66,7 @@
       } else {
         stopLookingAt()
         object.lookAt(lookAt.x ?? 0, lookAt.y ?? 0, lookAt.z ?? 0)
-        invalidate('TransformableObject: lookAt')
-        dispatchTransform()
+        onTransform()
       }
     }
     if (!lookAt) {
@@ -69,8 +80,7 @@
       } else {
         object.scale.set(scale.x ?? 1, scale.y ?? 1, scale.z ?? 1)
       }
-      invalidate('TransformableObject: scale')
-      dispatchTransform()
+      onTransform()
     }
   }
   $: {
@@ -81,8 +91,7 @@
         rotation.z ?? 0,
         rotation.order ?? 'XYZ'
       )
-      invalidate('TransformableObject: rotation')
-      dispatchTransform()
+      onTransform()
     }
   }
 </script>

@@ -20,6 +20,7 @@ import type {
   Vector3,
   WebGLRenderer
 } from 'three'
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
 
 export type ThreltePointerEventMap = {
@@ -454,4 +455,11 @@ export type Size = {
 
 export type ThreltePointerEvent = Intersection<Object3D<Event>> & {
   event?: MouseEvent | PointerEvent
+}
+
+export type ThrelteUserData = {
+  orbitControls?: OrbitControls
+  eventDispatcher?: InteractiveObjectEventDispatcher
+  onTransform?: () => Promise<void>
+  threlteDefaultCamera?: boolean
 }

@@ -15,6 +15,7 @@ export { default as PositionalAudioHelper } from './helpers/PositionalAudioHelpe
 
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
+export { default as TransformControls } from './controls/TransformControls.svelte'
 
 // effect components
 export { default as Pass } from './effects/Pass.svelte'
