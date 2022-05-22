@@ -20,6 +20,8 @@ See the hook [`useGltfAnimations`](/docs/extras/01-use-gltf-animations) on how t
   <Wrapper />
 </ExampleWrapper>
 
+Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+
 <details>
   <summary>Show code</summary>
 
