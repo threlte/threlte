@@ -2,7 +2,7 @@ import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction } from 'three'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useFrame } from 'threlte'
+import { useFrame } from '../../hooks/useFrame'
 
 /**
  * Convenience hook to use animations loaded with a <GLTF> threlte component.
@@ -14,15 +14,18 @@ import { useFrame } from 'threlte'
  *   import { GLTF } from 'threlte'
  *   import { useGltfAnimations } from '../lib/useAnimations'
  *
- *   const { gltf, mixer, actions } = useGltfAnimations<'action-a' | 'action-b'>((a) => {
- *     a['action-a']?.play()
+ *   const { gltf, actions } = useGltfAnimations<'All Animations'>(({ actions }) => {
+ *     // Either play your animations as soon as they are loaded
+ *     actions['All Animations']?.play()
  *   })
  *
- *   $: if ($mixer) $mixer.timeScale = 10
- *   $: $actions['action-a']?.play()
+ *   // Or play them whenever you need
+ *   export const triggerAnimation = () => {
+ *     $actions['All Animations']?.play()
+ *   }
  * </script>
  *
- * <GLTF url={'/model.glb'} bind:gltf={$gltf} />
+ * <GLTF url={'/Bengal.glb'} bind:gltf={$gltf} />
  * ```
  * @param callback
  * @returns
@@ -41,7 +44,7 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
   const actions = writable<Actions>({} as Actions)
 
   const unsubscribe = gltf.subscribe((gltf) => {
-    if (!gltf?.scene || !gltf.animations.length) return
+    if (!gltf || !gltf.scene || !gltf.animations.length) return
     const newMixer = new AnimationMixer(gltf.scene)
     const newActions = gltf.animations.reduce((acc, clip) => {
       const action = newMixer.clipAction(clip, newMixer.getRoot())

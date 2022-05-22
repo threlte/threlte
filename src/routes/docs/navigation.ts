@@ -36,7 +36,7 @@ export const sidebar = {
         slug: '/docs/concepts/03-miscellaneous'
       }
     ],
-    Components: [
+    'Core Components': [
       {
         title: 'Canvas',
         slug: '/docs/components/01-canvas'
@@ -198,7 +198,7 @@ export const sidebar = {
         slug: '/docs/components/95-audio-instance'
       }
     ],
-    Hooks: [
+    'Core Hooks': [
       {
         title: 'useThrelte',
         slug: '/docs/hooks/01-use-threlte'
@@ -226,6 +226,16 @@ export const sidebar = {
       {
         title: 'useAudioListener',
         slug: '/docs/hooks/07-use-audio-listener'
+      }
+    ],
+    Extras: [
+      {
+        title: 'Hooks',
+        slug: ''
+      },
+      {
+        title: 'useGltfAnimations',
+        slug: '/docs/extras/01-use-gltf-animations'
       }
     ]
   }
