@@ -20,7 +20,7 @@ import Wrapper from '$examples/audio/Wrapper.svelte'
 </ExampleWrapper>
 
 <p class="!mb-0">
-  <small>Music by <a href="https://legrisch.com" target="_blank">legrisch</a></small>
+  <small>Music: <a href="https://legrisch.com" target="_blank">legrisch</a></small>
 </p>
 
 <details>
