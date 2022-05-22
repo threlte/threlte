@@ -2,16 +2,34 @@
 title: GLTF
 ---
 
-!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=threlte|type=component
+<script lang="ts">
+import Wrapper from '$examples/gltf/Wrapper.svelte'
+</script>
+
+!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=threlte|type=component|divider=false
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
 Change the property `url` to load new 3D content. The new content will be swapped as soon as loading is finished.
 
 :::admonition type="tip"
-See [this discussion](https://github.com/grischaerbe/threlte/discussions/60#discussioncomment-2746125) on how to use animations of glTF Files.
+See the hook [`useGltfAnimations`](/docs/extras/01-use-gltf-animations) on how to use animations of glTF Files.
 :::
+
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
+
+<details>
+  <summary>Show code</summary>
+
+@[code svelte|title=Wrapper.svelte](../../../examples/gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../examples/gltf/Scene.svelte)
+
+</details>
 !!!
+
+---
 
 ### Interaction
 

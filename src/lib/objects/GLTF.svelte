@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import type { Material, Mesh, Object3D } from 'three'
-  import { Texture } from 'three'
+  import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -40,7 +39,7 @@
     error: string
   }>()
 
-  let interactiveMeshes: Mesh[] = []
+  let interactiveMeshes: (Mesh | SkinnedMesh)[] = []
 
   export let gltf: ThreeGLTF | undefined = undefined
   export let scene: ThreeGLTF['scene'] | undefined = undefined
@@ -128,7 +127,7 @@
     parser = gltf.parser
 
     scene.traverse((object) => {
-      if (object.type === 'Mesh') {
+      if (object.type === 'Mesh' || object.type === 'SkinnedMesh') {
         const mesh = object as Mesh
         interactiveMeshes.push(mesh)
       }

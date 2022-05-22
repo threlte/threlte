@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="my-8 rounded-md shadow-lg mx-auto border border-gray-divider">
+<div class="my-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden">
   <slot />
 </div>
 
