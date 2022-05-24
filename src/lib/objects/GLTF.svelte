@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerableObject from '$lib/internal/LayerableObject.svelte'
   import { createEventDispatcher } from 'svelte'
   import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
@@ -40,6 +41,7 @@
   }>()
 
   let interactiveMeshes: (Mesh | SkinnedMesh)[] = []
+  let layerableObjects: Object3D[] = []
 
   export let gltf: ThreeGLTF | undefined = undefined
   export let scene: ThreeGLTF['scene'] | undefined = undefined
@@ -96,6 +98,8 @@
 
       interactiveMeshes.splice(0, interactiveMeshes.length)
       interactiveMeshes = interactiveMeshes
+      layerableObjects.splice(0, layerableObjects.length)
+      layerableObjects = layerableObjects
 
       invalidate('GLTF: model disposed')
       dispatch('unload')
@@ -127,12 +131,14 @@
     parser = gltf.parser
 
     scene.traverse((object) => {
+      layerableObjects.push(object)
       if (object.type === 'Mesh' || object.type === 'SkinnedMesh') {
         const mesh = object as Mesh
         interactiveMeshes.push(mesh)
       }
-      interactiveMeshes = interactiveMeshes
     })
+    interactiveMeshes = interactiveMeshes
+    layerableObjects = layerableObjects
 
     invalidate('GLTF: model loaded')
     dispatch('load', gltf)
@@ -199,6 +205,12 @@
         on:pointerleave
         on:pointermove
       />
+    {/key}
+  {/each}
+
+  {#each layerableObjects as object}
+    {#key object.uuid}
+      <LayerableObject {object} />
     {/key}
   {/each}
 {/if}
