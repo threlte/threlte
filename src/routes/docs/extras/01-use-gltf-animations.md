@@ -30,7 +30,7 @@ Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by
 ```svelte
 <script lang="ts">
   import { GLTF } from 'threlte'
-  import { useGltfAnimations } from '../lib/useAnimations'
+  import { useGltfAnimations } from 'threlte/extras'
 
   // `useGltfAnimations` returns stores that populate
   // when the `<GLTF>` component finished loading.
