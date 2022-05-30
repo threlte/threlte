@@ -55,7 +55,7 @@
     dispatch('change')
   }
   const onStart = () => dispatch('start')
-  const onEnd = () => dispatch('start')
+  const onEnd = () => dispatch('end')
 
   export const controls = new ThreeOrbitControls($parent, renderer.domElement)
   getThrelteUserData($parent).orbitControls = controls
