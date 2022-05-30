@@ -1,3 +1,4 @@
+import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
 import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
 import type {
@@ -28,8 +29,14 @@ const runRaycaster = (
   return rootCtx.raycaster.intersectObjects(objects)
 }
 
+const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3D<Event>>) => {
+  if (a.object.uuid !== b.object.uuid) return true
+  if (a.instanceId !== b.instanceId) return true
+  return false
+}
+
 /**
- * This handler dispatches these events on three.js objects:
+ * Mouse and Pointer Events dispatch events on Threlte components:
  * ```
  * click: ThreltePointerEvent;
  * contextmenu: ThreltePointerEvent;
@@ -37,105 +44,126 @@ const runRaycaster = (
  * pointerdown: ThreltePointerEvent;
  * pointermove: ThreltePointerEvent;
  * ```
- * @param {ThrelteContext} ctx
- * @param {ThrelteRootContext} rootCtx
- * @param {PointerEvent | MouseEvent} e
- * @returns {void}
+ * @param ctx
+ * @param rootCtx
+ * @param renderCtx
+ * @returns
  */
-const eventRaycast = (
+export const useEventRaycast = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
-  e: PointerEvent | MouseEvent
-): void => {
-  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
-  const intersects = runRaycaster(
-    rootCtx,
-    get(ctx.pointer),
-    get(ctx.camera),
-    Array.from(rootCtx.raycastableObjects)
-  )
-  if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
-    getThrelteUserData(intersects[0].object).eventDispatcher?.(
-      e.type as keyof ThreltePointerEventMap,
-      {
-        ...intersects[0],
-        event: e
-      }
+  renderCtx: ThrelteRenderContext
+): {
+  onClick: (e: MouseEvent | PointerEvent) => void
+  onContextMenu: (e: MouseEvent | PointerEvent) => void
+  onPointerUp: (e: MouseEvent | PointerEvent) => void
+  onPointerDown: (e: MouseEvent | PointerEvent) => void
+  onPointerMove: (e: MouseEvent | PointerEvent) => void
+} => {
+  let camera
+  const unsubscribeCamera = ctx.camera.subscribe((value) => (camera = value))
+  onDestroy(unsubscribeCamera)
+  let pointer
+  const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
+  onDestroy(unsubscribePointer)
+
+  const onEvent = (e: MouseEvent | PointerEvent) => {
+    e.preventDefault()
+    ctx.pointerOverCanvas.set(true)
+    renderCtx.pointerInvalidated = true
+    setPointerFromEvent(ctx, e)
+
+    if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
+    const intersects = runRaycaster(
+      rootCtx,
+      pointer,
+      camera,
+      Array.from(rootCtx.raycastableObjects)
     )
+    if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
+      getThrelteUserData(intersects[0].object).eventDispatcher?.(
+        e.type as keyof ThreltePointerEventMap,
+        {
+          ...intersects[0],
+          event: e
+        }
+      )
+    }
+  }
+
+  return {
+    onClick: onEvent,
+    onContextMenu: onEvent,
+    onPointerUp: onEvent,
+    onPointerDown: onEvent,
+    onPointerMove: onEvent
   }
 }
-
-const onEvent = (
-  ctx: ThrelteContext,
-  rootCtx: ThrelteRootContext,
-  renderCtx: ThrelteRenderContext,
-  e: MouseEvent | PointerEvent
-): void => {
-  e.preventDefault()
-  ctx.pointerOverCanvas.set(true)
-  renderCtx.pointerInvalidated = true
-  setPointerFromEvent(ctx, e)
-  eventRaycast(ctx, rootCtx, e)
-}
-
-const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3D<Event>>) => {
-  if (a.object.uuid !== b.object.uuid) return true
-  if (a.instanceId !== b.instanceId) return true
-  return false
-}
-
-export const onClick = onEvent
-export const onContextMenu = onEvent
-export const onPointerUp = onEvent
-export const onPointerDown = onEvent
-export const onPointerMove = onEvent
 
 /**
  * Some events can't be captured on Mouse- or PointerEvents.
  * Specifically pointerleave and pointerenter are hard to capture
  * as these events fire, when the pointer/cursor leaves the canvas
  * element.
- * @param ctx
- * @param rootCtx
- * @returns
  */
-export const animationFrameRaycast = (
+export const useFrameloopRaycast = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext
-): Intersection<Object3D<Event>> | undefined => {
-  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) {
-    return
-  }
-  const intersects = get(ctx.pointerOverCanvas)
-    ? runRaycaster(
-        rootCtx,
-        get(ctx.pointer),
-        get(ctx.camera),
-        Array.from(rootCtx.raycastableObjects)
-      )
-    : []
+): {
+  raycast: () => void
+} => {
+  // unwrapping stores
+  let pointerOverCanvas = get(ctx.pointerOverCanvas)
+  const unsubscribePointerOverCanvas = ctx.pointerOverCanvas.subscribe(
+    (value) => (pointerOverCanvas = value)
+  )
+  onDestroy(unsubscribePointerOverCanvas)
+  let camera
+  const unsubscribeCamera = ctx.camera.subscribe((value) => (camera = value))
+  onDestroy(unsubscribeCamera)
+  let pointer
+  const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
+  onDestroy(unsubscribePointer)
 
-  const intersection =
-    intersects.length && rootCtx.interactiveObjects.has(intersects[0].object) ? intersects[0] : null
-
-  if (!intersection) {
-    if (rootCtx.lastIntersection) {
-      getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
-        'pointerleave',
-        rootCtx.lastIntersection
-      )
+  const raycast = () => {
+    if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) {
+      return
     }
-  } else {
-    if (!rootCtx.lastIntersection) {
-      getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
-    } else if (rootCtx.lastIntersection && targetChanged(rootCtx.lastIntersection, intersection)) {
-      getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
-        'pointerleave',
-        rootCtx.lastIntersection
-      )
-      getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
+    const intersects = pointerOverCanvas
+      ? runRaycaster(rootCtx, pointer, camera, Array.from(rootCtx.raycastableObjects))
+      : []
+
+    const intersection =
+      intersects.length && rootCtx.interactiveObjects.has(intersects[0].object)
+        ? intersects[0]
+        : null
+
+    if (!intersection) {
+      if (rootCtx.lastIntersection) {
+        getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
+          'pointerleave',
+          rootCtx.lastIntersection
+        )
+      }
+    } else {
+      if (!rootCtx.lastIntersection) {
+        getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
+      } else if (
+        rootCtx.lastIntersection &&
+        targetChanged(rootCtx.lastIntersection, intersection)
+      ) {
+        getThrelteUserData(rootCtx.lastIntersection.object).eventDispatcher?.(
+          'pointerleave',
+          rootCtx.lastIntersection
+        )
+        getThrelteUserData(intersection.object).eventDispatcher?.('pointerenter', intersection)
+      }
     }
+
+    rootCtx.lastIntersection = intersection
   }
 
-  rootCtx.lastIntersection = intersection
+  return {
+    raycast
+  }
 }

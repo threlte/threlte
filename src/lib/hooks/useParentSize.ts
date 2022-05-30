@@ -8,17 +8,20 @@ export const useParentSize = (): {
   parentSizeAction: (node: HTMLElement) => void
   parentSize: Writable<Size>
 } => {
-  const parentSize = writable({ width: 0, height: 0 })
+  const parentSizeStore = writable({ width: 0, height: 0 })
+  let parentSize = { width: 0, height: 0 }
+  const unsubscribeParentSize = parentSizeStore.subscribe((s) => (parentSize = s))
+  onDestroy(unsubscribeParentSize)
 
   let el: HTMLElement | undefined
 
   const proxy = () => {
-    const currentParentSize = get(parentSize)
+    const currentParentSize = parentSize
     if (!el) return
     if (!el.parentElement) return
     const { clientWidth, clientHeight } = el.parentElement
     if (clientWidth !== currentParentSize.width || clientHeight !== currentParentSize.height) {
-      parentSize.set({
+      parentSizeStore.set({
         width: clientWidth,
         height: clientHeight
       })
@@ -33,7 +36,7 @@ export const useParentSize = (): {
 
   if (!browser) {
     return {
-      parentSize,
+      parentSize: parentSizeStore,
       parentSizeAction
     }
   }
@@ -44,6 +47,6 @@ export const useParentSize = (): {
 
   return {
     parentSizeAction,
-    parentSize
+    parentSize: parentSizeStore
   }
 }

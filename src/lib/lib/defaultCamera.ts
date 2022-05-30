@@ -13,11 +13,10 @@ export const getDefaultCamera = (): PerspectiveCamera => {
 }
 
 export const setDefaultCameraAspectOnSizeChange = (ctx: ThrelteContext): void => {
-  const unsubscribe = ctx.size.subscribe(() => {
+  const unsubscribe = ctx.size.subscribe((size) => {
     if (getThrelteUserData(get(ctx.camera)).threlteDefaultCamera) {
       ctx.camera.update((c) => {
         const cam = c as PerspectiveCamera
-        const size = get(ctx.size)
         cam.aspect = size.width / size.height
         cam.updateProjectionMatrix()
         ctx.invalidate('Default camera: aspect ratio changed')

@@ -8,13 +8,7 @@
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { useFrameloop } from './lib/frameloop'
-  import {
-    onClick,
-    onContextMenu,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp
-  } from './lib/interactivity'
+  import { useEventRaycast } from './lib/interactivity'
   import {
     createRendererAndComposer,
     setRendererAndComposerSize,
@@ -95,17 +89,24 @@
     setRendererShadows(ctx, shadows, shadowMapType)
     initialized = true
   })
+
   useFrameloop(ctx, rootCtx, renderCtx)
+
+  const { onClick, onContextMenu, onPointerDown, onPointerMove, onPointerUp } = useEventRaycast(
+    ctx,
+    rootCtx,
+    renderCtx
+  )
 </script>
 
 <canvas
   use:parentSizeAction
   bind:this={canvas}
-  on:click={(e) => onClick(getCtx(), getRootCtx(), getRenderCtx(), e)}
-  on:contextmenu={(e) => onContextMenu(getCtx(), getRootCtx(), getRenderCtx(), e)}
-  on:pointerup={(e) => onPointerUp(getCtx(), getRootCtx(), getRenderCtx(), e)}
-  on:pointerdown={(e) => onPointerDown(getCtx(), getRootCtx(), getRenderCtx(), e)}
-  on:pointermove={(e) => onPointerMove(getCtx(), getRootCtx(), getRenderCtx(), e)}
+  on:click={onClick}
+  on:contextmenu={onContextMenu}
+  on:pointerup={onPointerUp}
+  on:pointerdown={onPointerDown}
+  on:pointermove={onPointerMove}
   on:pointerenter={() => getCtx().pointerOverCanvas.set(true)}
   on:pointerleave={() => getCtx().pointerOverCanvas.set(false)}
 >

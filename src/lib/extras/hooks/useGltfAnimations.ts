@@ -40,7 +40,7 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
 } => {
   const gltf = writable<GLTF | undefined>(undefined)
 
-  const mixer = writable<AnimationMixer | undefined>(undefined)
+  const mixerStore = writable<AnimationMixer | undefined>(undefined)
   const actions = writable<Actions>({} as Actions)
 
   const unsubscribe = gltf.subscribe((gltf) => {
@@ -53,7 +53,7 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
         [clip.name as T]: action
       }
     }, {} as Actions)
-    mixer.set(newMixer)
+    mixerStore.set(newMixer)
     actions.set(newActions)
     callback?.({
       actions: newActions,
@@ -62,11 +62,14 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
   })
   onDestroy(unsubscribe)
 
+  let mixer: AnimationMixer | undefined = undefined
+  const unsubscribeMixer = mixerStore.subscribe((m) => (mixer = m))
+  onDestroy(unsubscribeMixer)
+
   useFrame(
     (_, delta) => {
-      const mx = get(mixer)
-      if (!mx) return
-      mx.update(delta)
+      if (!mixer) return
+      mixer.update(delta)
     },
     {
       debugFrameloopMessage: 'useGltfAnimations: AnimationMixer updated'
@@ -75,7 +78,7 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
 
   return {
     gltf,
-    mixer,
+    mixer: mixerStore,
     actions
   }
 }

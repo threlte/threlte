@@ -1,7 +1,8 @@
+import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
 import { useRaf } from '../hooks/useRaf'
 import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from '../types/types'
-import { animationFrameRaycast } from './interactivity'
+import { useFrameloopRaycast } from './interactivity'
 
 const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderContext): void => {
   if (renderCtx.frameHandlers.size === 0) return
@@ -49,6 +50,12 @@ export const useFrameloop = (
   rootCtx: ThrelteRootContext,
   renderCtx: ThrelteRenderContext
 ): void => {
+  let camera = get(ctx.camera)
+  const unsubscribeCamera = ctx.camera.subscribe((c) => (camera = c))
+  onDestroy(unsubscribeCamera)
+
+  const { raycast } = useFrameloopRaycast(ctx, rootCtx)
+
   useRaf(() => {
     const shouldRender =
       renderCtx.frameloop === 'always' ||
@@ -59,13 +66,12 @@ export const useFrameloop = (
     const shouldRaycast = shouldRender || renderCtx.pointerInvalidated
 
     if (shouldRaycast) {
-      animationFrameRaycast(ctx, rootCtx)
+      raycast()
       renderCtx.pointerInvalidated = false
     }
 
     if (!shouldRender) return
 
-    const camera = get(ctx.camera)
     if (!camera || !ctx.composer || !ctx.renderer) return
     runFrameloopCallbacks(ctx, renderCtx)
     if (ctx.composer.passes.length > 1) {

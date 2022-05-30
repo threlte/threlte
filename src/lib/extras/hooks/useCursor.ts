@@ -50,18 +50,20 @@ export const useCursor = (
   onPointerLeave: () => void
   hovering: Writable<boolean>
 } => {
-  const hovering = writable(false)
+  let hovering = false
+  const hoveringStore = writable(false)
+
   const onPointerEnter = () => {
-    hovering.set(true)
+    hoveringStore.set(true)
   }
   const onPointerLeave = () => {
-    hovering.set(false)
+    hoveringStore.set(false)
   }
 
   // Account for SSR use
   if (typeof window === 'undefined') {
     return {
-      hovering,
+      hovering: hoveringStore,
       onPointerEnter,
       onPointerLeave
     }
@@ -71,40 +73,45 @@ export const useCursor = (
   const rootCtx = useThrelte()
   if (rootCtx && rootCtx.renderer) el = rootCtx.renderer.domElement
 
-  const unsubscribeHovering = hovering.subscribe((isHovering) => {
-    if (isHovering) {
-      el.style.cursor = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
-    } else {
-      el.style.cursor = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
-    }
-  })
-  onDestroy(unsubscribeHovering)
-
+  let onPointerOverValue = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
   if (typeof onPointerOver !== 'string') {
-    const unsubscribeOnPointerOver = onPointerOver.subscribe((onPointerOver) => {
-      if (get(hovering)) {
-        el.style.cursor = onPointerOver
+    const unsubscribeOnPointerOver = onPointerOver.subscribe((cursorStyle) => {
+      onPointerOverValue = cursorStyle
+      if (hovering) {
+        el.style.cursor = cursorStyle
       }
     })
     onDestroy(unsubscribeOnPointerOver)
   }
 
+  let onPointerOutValue = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
   if (typeof onPointerOut !== 'string') {
-    const unsubscribeOnPointerOut = onPointerOut.subscribe((onPointerOut) => {
-      if (get(hovering)) {
-        el.style.cursor = onPointerOut
+    const unsubscribeOnPointerOut = onPointerOut.subscribe((cursorStyle) => {
+      onPointerOutValue = cursorStyle
+      if (!hovering) {
+        el.style.cursor = cursorStyle
       }
     })
     onDestroy(unsubscribeOnPointerOut)
   }
 
+  const unsubscribeHovering = hoveringStore.subscribe((isHovering) => {
+    hovering = isHovering
+    if (isHovering) {
+      el.style.cursor = onPointerOverValue
+    } else {
+      el.style.cursor = onPointerOutValue
+    }
+  })
+  onDestroy(unsubscribeHovering)
+
   // onDestroy: Reset the cursor style
   onDestroy(() => {
-    el.style.cursor = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
+    el.style.cursor = onPointerOutValue
   })
 
   return {
-    hovering,
+    hovering: hoveringStore,
     onPointerEnter,
     onPointerLeave
   }
