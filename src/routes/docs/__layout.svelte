@@ -12,10 +12,10 @@
     createSidebarContext,
     KitDocs,
     KitDocsLayout,
-    SocialLink as Icon,
     type MarkdownMeta,
     type NavbarConfig
   } from '@svelteness/kit-docs'
+  import Icon from '@svelteness/kit-docs/client/components/social/SocialLink.svelte'
   import { Algolia } from '@svelteness/kit-docs/client/algolia'
   import '@svelteness/kit-docs/client/polyfills/index.js'
   import '@svelteness/kit-docs/client/styles/docsearch.css'
