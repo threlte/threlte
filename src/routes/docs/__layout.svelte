@@ -15,7 +15,7 @@
     type MarkdownMeta,
     type NavbarConfig
   } from '@svelteness/kit-docs'
-  import Icon from '@svelteness/kit-docs/client/components/social/SocialLink.svelte'
+  import GithubIcon from '../../kit-docs/GithubIcon.svelte'
   import { Algolia } from '@svelteness/kit-docs/client/algolia'
   import '@svelteness/kit-docs/client/polyfills/index.js'
   import '@svelteness/kit-docs/client/styles/docsearch.css'
@@ -47,9 +47,7 @@
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
       <div class="flex flex-row justify-between items-center mt-8 -mb-3">
-        <Icon class="!p-0 " type="gitHub" href="https://github.com/grischaerbe/threlte">
-          GitHub
-        </Icon>
+        <GithubIcon class="!p-0" href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
         <ColorSchemeMenu />
       </div>
     </div>
@@ -66,7 +64,7 @@
       >
     </div>
     <div slot="navbar-right-alt">
-      <Icon type="gitHub" href="https://github.com/grischaerbe/threlte" />
+      <GithubIcon href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
     </div>
     <slot />
   </KitDocsLayout>
