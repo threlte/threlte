@@ -12,7 +12,7 @@
     createSidebarContext,
     KitDocs,
     KitDocsLayout,
-    SocialLink,
+    SocialLink as Icon,
     type MarkdownMeta,
     type NavbarConfig
   } from '@svelteness/kit-docs'
@@ -47,9 +47,9 @@
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
       <div class="flex flex-row justify-between items-center mt-8 -mb-3">
-        <SocialLink class="!p-0 " type="gitHub" href="https://github.com/grischaerbe/threlte">
+        <Icon class="!p-0 " type="gitHub" href="https://github.com/grischaerbe/threlte">
           GitHub
-        </SocialLink>
+        </Icon>
         <ColorSchemeMenu />
       </div>
     </div>
@@ -66,7 +66,7 @@
       >
     </div>
     <div slot="navbar-right-alt">
-      <SocialLink type="gitHub" href="https://github.com/grischaerbe/threlte" />
+      <Icon type="gitHub" href="https://github.com/grischaerbe/threlte" />
     </div>
     <slot />
   </KitDocsLayout>
