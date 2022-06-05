@@ -136,9 +136,8 @@
   }>()
 
   const maybeGetCameraOrbitControls = (): OrbitControls | undefined => {
-    const cam = get(camera)
-    if (!cam) return
-    return getThrelteUserData(cam).orbitControls as OrbitControls | undefined
+    if (!$camera) return
+    return getThrelteUserData($camera).orbitControls as OrbitControls | undefined
   }
 
   let enabledStateBeforeAutoPause: boolean | undefined

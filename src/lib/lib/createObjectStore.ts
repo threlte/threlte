@@ -1,3 +1,4 @@
+import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import type { Object3D } from 'three'
 
@@ -15,9 +16,12 @@ import type { Object3D } from 'three'
  */
 export const createObjectStore = <T extends Object3D>(object: T): Writable<T> => {
   const objectStore = writable(object)
+  let unwrappedObject = object
+  const unsubscribeObjectStore = objectStore.subscribe((o) => (unwrappedObject = o))
+  onDestroy(unsubscribeObjectStore)
 
   const set = (newObject: T) => {
-    if (newObject.uuid === get(objectStore).uuid) return
+    if (newObject.uuid === unwrappedObject.uuid) return
     objectStore.set(newObject)
   }
 
