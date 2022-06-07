@@ -4,6 +4,7 @@ import type {
   Camera,
   ColorRepresentation,
   Light,
+  Line,
   Material,
   Mesh,
   Object3D,
@@ -58,6 +59,11 @@ export type Object3DInstanceProperties = HierarchicalObjectProperties &
 export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
   Omit<InteractiveObjectProperties, 'object'> & {
     mesh: Mesh
+  }
+
+export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'> &
+  Omit<Object3DInstanceProperties, 'object'> & {
+    line: Line
   }
 
 export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
@@ -218,6 +224,16 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
+  geometry: BufferGeometry
+  material: Material | Material[]
+}
+
+export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
+  geometry: BufferGeometry
+  material: Material | Material[]
+}
+
+export type LineSegmentsProperties = Omit<LineInstanceProperties, 'line'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }

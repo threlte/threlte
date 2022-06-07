@@ -6,8 +6,6 @@ title: Mesh
 This component represents triangular polygon mesh based objects.
 !!!
 
-# \<Mesh>
-
 ### Example
 
 ```svelte

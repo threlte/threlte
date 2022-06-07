@@ -40,6 +40,8 @@ export { default as Instance } from './objects/Instance.svelte'
 export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
 export { default as GLTF } from './objects/GLTF.svelte'
+export { default as Line } from './objects/Line.svelte'
+export { default as LineSegments } from './objects/LineSegments.svelte'
 
 // text component
 export { default as Text } from './text/Text.svelte'
@@ -49,6 +51,7 @@ export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
 export { default as LightInstance } from './instances/LightInstance.svelte'
 export { default as CameraInstance } from './instances/CameraInstance.svelte'
+export { default as LineInstance } from './instances/LineInstance.svelte'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
