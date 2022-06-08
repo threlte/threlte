@@ -35,6 +35,7 @@
   rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
     texture.mapping = EquirectangularReflectionMapping
     scene.environment = texture
+    scene.environment.rotation = 180
     invalidate('texture loaded')
   })
   scene.background = new Color('white')

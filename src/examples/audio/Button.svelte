@@ -49,6 +49,7 @@
       <Edges color="black" ignorePointer />
     </Mesh>
     <Text
+      renderOrder={-100}
       ignorePointer
       color={textColor}
       {text}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BufferGeometry, DoubleSide, Mesh as ThreeMesh, MeshBasicMaterial } from 'three'
+  import { BufferGeometry, Color, DoubleSide, Mesh as ThreeMesh, MeshBasicMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import { Group, Mesh, PerspectiveCamera, useFrame } from 'threlte'
   import { Edges, useGltf } from 'threlte/extras'
@@ -30,8 +30,8 @@
       }}
       geometry={helmetGeometry}
       material={new MeshBasicMaterial({
-        color: 0xff3e00,
-        side: DoubleSide
+        color: new Color(0xff3e00).convertSRGBToLinear(),
+        toneMapped: false
       })}
     >
       <Edges threshold={20} color="white" scale={1.01} />
