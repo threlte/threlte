@@ -115,6 +115,21 @@
     <Edges threshold={50} ignorePointer scale={1} color="black" />
   </Mesh>
 
+  <Mesh
+    receiveShadow
+    castShadow
+    material={new MeshStandardMaterial({
+      color: 0x111111,
+      flatShading: true
+    })}
+    geometry={new CylinderBufferGeometry(0.8, 0.8, 0.2, 6)}
+    rotation={{ y: -discRotation }}
+    position={{ x: 0.5, y: 1.15 }}
+    ignorePointer
+  >
+    <Edges threshold={50} ignorePointer scale={1} color="black" />
+  </Mesh>
+
   <!-- CASE -->
   <Mesh
     receiveShadow

@@ -1,8 +1,6 @@
 <script lang="ts">
   import { useThrelte } from '$lib/hooks/useThrelte'
-
   import { onDestroy } from 'svelte'
-
   import { Color, EdgesGeometry, LineBasicMaterial, Mesh } from 'three'
   import { getParent } from '../../../internal/HierarchicalObject.svelte'
   import LineSegments from '../../../objects/LineSegments.svelte'
