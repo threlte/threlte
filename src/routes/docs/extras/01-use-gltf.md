@@ -7,7 +7,7 @@ import Wrapper from '$examples/use-gltf/Wrapper.svelte'
 </script>
 
 !!!module_summary title=useGltf|sourcePath=extras/hooks/useGltf.ts|name=useGltf|from=threlte/extras|type=hook
-Convenience hook to load glTF files and use separate object nodes and materials of it.
+A Hook to load glTF files and use separate object nodes and materials of it.
 
 Use the component [`<GLTF>`](/docs/components/14-gltf) if you want to use a model in its entirety.
 
@@ -26,25 +26,33 @@ Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/t
 </details>
 !!!
 
-### Examples <!-- omit in toc -->
+## Examples <!-- omit in toc -->
 
-#### Basic Example
+### Basic Example
 
 `gltf` is a store which gets populated as soon as the model loaded.
 
 ```svelte
 <script lang="ts">
+  import { Object3DInstance, Mesh } from 'threlte'
   import { useGltf } from 'threlte/extras'
+  import { MeshBasicMaterial } from 'three'
 
   const { gltf } = useGltf('/path/to/model.glb')
 </script>
 
+<!-- Use an object node entirely -->
 {#if $gltf}
   <Object3DInstance object={$gltf.nodes['node-name']} />
 {/if}
+
+<!-- or only the geometry -->
+{#if $gltf}
+  <Mesh geometry={$gltf.nodes['node-name'].geometry} material={new MeshBasicMaterial()} />
+{/if}
 ```
 
-#### DRACO decoding
+### DRACO decoding
 
 Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO binaries.
 
@@ -78,7 +86,7 @@ You can also provide custom DRACO decoder binaries.
 {/if}
 ```
 
-#### Nodes and Materials
+### Nodes and Materials
 
 The hook provides a map of all objects and materials in the loaded glTF.
 
