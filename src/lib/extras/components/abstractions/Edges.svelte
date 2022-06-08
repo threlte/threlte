@@ -26,11 +26,12 @@
   export let lookAt: EdgesProperties['lookAt'] = undefined
 
   const parent = getParent()
-  if (!($parent instanceof Mesh)) {
-    throw new Error('Edges component must be a child of a Mesh')
-  }
+  if ($parent.type !== 'Mesh') throw new Error('Edges component must be a child of a Mesh')
 
-  const geometry = 'clone' in $parent.geometry ? $parent.geometry.clone() : $parent.geometry
+  const parentMesh = $parent as Mesh
+
+  const geometry =
+    'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
 
   export const edgesGeometry = new EdgesGeometry(geometry, threshold)
 
