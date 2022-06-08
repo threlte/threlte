@@ -1,16 +1,35 @@
 <script lang="ts">
-  import { BoxBufferGeometry, EdgesGeometry, LineBasicMaterial } from 'three'
-  import { LineSegments, OrbitControls, PerspectiveCamera } from 'threlte'
+  import {
+    BoxBufferGeometry,
+    EdgesGeometry,
+    LineBasicMaterial,
+    MeshStandardMaterial,
+    OctahedronBufferGeometry
+  } from 'three'
+  import { DirectionalLight, LineSegments, Mesh, OrbitControls, PerspectiveCamera } from 'threlte'
 
   const material = new LineBasicMaterial({
     color: 0x0000ff
   })
 
-  const linesGeometry = new EdgesGeometry(new BoxBufferGeometry(1, 1, 1), 15)
+  const geometry = new OctahedronBufferGeometry(1, 1)
+
+  const linesGeometry = new EdgesGeometry(geometry, 30)
 </script>
 
-<PerspectiveCamera position={{ y: 10, x: 10, z: 10 }}>
-  <OrbitControls />
+<PerspectiveCamera position={{ y: 3, x: 3, z: 3 }}>
+  <OrbitControls autoRotate enableZoom={false} />
 </PerspectiveCamera>
 
-<LineSegments geometry={linesGeometry} {material} />
+<DirectionalLight position={{ y: 10 }} />
+
+<Mesh
+  {geometry}
+  material={new MeshStandardMaterial({
+    transparent: true,
+    opacity: 0.5,
+    flatShading: true
+  })}
+/>
+
+<LineSegments scale={1.1} geometry={linesGeometry} {material} />
