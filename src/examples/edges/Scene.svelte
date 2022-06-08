@@ -30,13 +30,11 @@
       }}
       geometry={helmetGeometry}
       material={new MeshBasicMaterial({
-        transparent: true,
-        opacity: 0.45,
         color: 0xff3e00,
         side: DoubleSide
       })}
     >
-      <Edges threshold={20} color="white" />
+      <Edges threshold={20} color="white" scale={1.01} />
     </Mesh>
   {/if}
 </Group>
