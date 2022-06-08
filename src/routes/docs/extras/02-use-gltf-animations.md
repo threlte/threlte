@@ -6,7 +6,7 @@ title: useGltfAnimations
 import Wrapper from '$examples/use-gltf-animations/Wrapper.svelte'
 </script>
 
-!!!module_summary title=useGltfAnimations|sourcePath=hooks/useGltfAnimations.ts|name=useGltfAnimations|from=threlte/extras|type=hook|needsContext=true
+!!!module_summary title=useGltfAnimations|sourcePath=extras/hooks/useGltfAnimations.ts|name=useGltfAnimations|from=threlte/extras|type=hook|needsContext=true
 Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 <ExampleWrapper>

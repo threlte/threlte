@@ -234,12 +234,16 @@ export const sidebar = {
         slug: ''
       },
       {
+        title: 'useGltf',
+        slug: '/docs/extras/01-use-gltf'
+      },
+      {
         title: 'useGltfAnimations',
-        slug: '/docs/extras/01-use-gltf-animations'
+        slug: '/docs/extras/02-use-gltf-animations'
       },
       {
         title: 'useCursor',
-        slug: '/docs/extras/02-use-cursor'
+        slug: '/docs/extras/03-use-cursor'
       }
     ]
   }
