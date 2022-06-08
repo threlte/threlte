@@ -10,6 +10,8 @@ import Wrapper from '$examples/edges/Wrapper.svelte'
 
 Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.
 
+Edges are displayed when the angle between two faces exceeds the angle defined by the property `threshold`.
+
 <ExampleWrapper>
   <Wrapper />
 </ExampleWrapper>
