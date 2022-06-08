@@ -74,8 +74,12 @@ export const sidebar = {
         slug: '/docs/components/17-line'
       },
       {
+        title: 'Line2',
+        slug: '/docs/components/18-line-2'
+      },
+      {
         title: 'LineSegments',
-        slug: '/docs/components/18-line-segments'
+        slug: '/docs/components/19-line-segments'
       },
       {
         title: 'Cameras',

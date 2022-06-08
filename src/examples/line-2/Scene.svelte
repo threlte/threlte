@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { LineBasicMaterial, type Vector3Tuple } from 'three'
-  import { Line, OrbitControls, PerspectiveCamera } from 'threlte'
+  import type { Vector3Tuple } from 'three'
+  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
+  import { DirectionalLight, Line2, OrbitControls, PerspectiveCamera } from 'threlte'
 
   const lines: Vector3Tuple[][] = []
   for (let index = 0; index < 10; index++) {
@@ -22,14 +23,19 @@
 </script>
 
 <PerspectiveCamera position={{ y: 80, x: 80, z: 80 }}>
-  <OrbitControls enableZoom={false} autoRotate />
+  <OrbitControls autoRotate enableZoom={false} />
 </PerspectiveCamera>
 
+<DirectionalLight position={{ y: 10 }} />
+
 {#each lines as line}
-  <Line
-    points={line}
-    material={new LineBasicMaterial({
+  <Line2
+    material={new LineMaterial({
+      worldUnits: true,
+      linewidth: 1,
+      // @ts-ignore Bad types :/
       color: getRandomColor()
     })}
+    points={line}
   />
 {/each}

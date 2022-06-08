@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { useCursor, useGltf, Edges } from 'threlte/extras'
   import { spring, tweened } from 'svelte/motion'
   import {
     BoxBufferGeometry,
+    BufferGeometry,
     Color,
     CylinderBufferGeometry,
     DoubleSide,
+    Mesh as ThreeMesh,
     MeshPhysicalMaterial,
     MeshStandardMaterial,
     PositionalAudio as ThreePositionalAudio
@@ -21,6 +22,7 @@
     type Rotation,
     type Scale
   } from 'threlte'
+  import { Edges, useCursor, useGltf } from 'threlte/extras'
   import Button from './Button.svelte'
 
   export let position: Position | undefined = undefined
@@ -89,6 +91,11 @@
   const { onPointerEnter, onPointerLeave } = useCursor()
 
   const { gltf } = useGltf<'Cover'>('/models/turntable/cover.glb')
+  let coverGeometry: BufferGeometry | undefined
+  $: if ($gltf) {
+    const coverMesh = $gltf.nodes.Cover as ThreeMesh
+    coverGeometry = coverMesh.geometry
+  }
 </script>
 
 <Group {position} {rotation} {scale}>
@@ -124,9 +131,9 @@
 
   <!-- COVER -->
   <Group position={{ z: -2.2, y: 1 }} rotation={{ x: -$coverAngle * DEG2RAD }}>
-    {#if $gltf}
+    {#if coverGeometry}
       <Mesh
-        geometry={$gltf.nodes.Cover.geometry}
+        geometry={coverGeometry}
         scale={{ x: 3, z: 2.2, y: 0.5 }}
         position={{ y: 0.5, z: 2.2 }}
         material={new MeshPhysicalMaterial({

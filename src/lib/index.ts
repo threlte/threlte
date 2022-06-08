@@ -41,6 +41,7 @@ export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
 export { default as GLTF } from './objects/GLTF.svelte'
 export { default as Line } from './objects/Line.svelte'
+export { default as Line2 } from './objects/Line2.svelte'
 export { default as LineSegments } from './objects/LineSegments.svelte'
 
 // text component

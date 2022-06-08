@@ -8,8 +8,11 @@ import type {
   Material,
   Mesh,
   Object3D,
-  PositionalAudio
+  PositionalAudio,
+  Vector3,
+  Vector3Tuple
 } from 'three'
+import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import type { LookAt, Position, Rotation, Scale, Text as TextType, ThrelteLayers } from './types'
@@ -229,8 +232,14 @@ export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
 }
 
 export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
-  geometry: BufferGeometry
+  geometry?: BufferGeometry
+  points?: Vector3[] | Vector3Tuple[]
   material: Material | Material[]
+}
+
+export type Line2Properties = Omit<MeshInstanceProperties, 'mesh'> & {
+  points?: Vector3[] | Vector3Tuple[]
+  material: LineMaterial
 }
 
 export type LineSegmentsProperties = Omit<LineInstanceProperties, 'line'> & {
