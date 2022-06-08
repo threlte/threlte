@@ -6,6 +6,7 @@
     DirectionalLight,
     Group,
     Object3DInstance,
+    PerspectiveCamera,
     useFrame,
     useLoader,
     useThrelte
@@ -32,6 +33,8 @@
     '/models/helmet/DamagedHelmet.gltf'
   )
 </script>
+
+<PerspectiveCamera position={{ z: 10 }} fov={20} />
 
 <DirectionalLight position={{ y: 10, z: 10 }} />
 

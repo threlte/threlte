@@ -1,23 +1,49 @@
 ---
-title: Mesh
+title: Line2
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=threlte|type=component
-This component represents triangular polygon mesh based objects.
+<script lang="ts">
+import Wrapper from '$examples/line-2/Wrapper.svelte'
+</script>
+
+!!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=threlte|type=component|divider=false
+
+Draw Lines using `THREE.Line2`.
+
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
+
+<details>
+  <summary>Show code</summary>
+
+@[code svelte|title=Wrapper.svelte](../../../examples/line-2/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../examples/line-2/Scene.svelte)
+
+</details>
+
 !!!
+
+---
 
 ### Example
 
 ```svelte
 <script>
-  import { Mesh } from 'threlte'
-  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+  import { Line2 } from 'threlte'
+  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 </script>
 
-<Mesh
-  position={{ y: 1 }}
-  geometry={new BoxBufferGeometry(1, 2, 1)}
-  material={new MeshBasicMaterial({ wireframe: true })}
+<Line2
+  points={[
+    [0, 1, 0],
+    [0, 2, 1],
+    [-1, 1, 4]
+  ]}
+  material={new LineMaterial({
+    worldUnits: true,
+    lineWidth: 0.2
+  })}
 />
 ```
 
@@ -25,8 +51,8 @@ This component represents triangular polygon mesh based objects.
 
 ```ts
 // required
-geometry: THREE.BufferGeometry
-material: THREE.Material | THREE.Material[]
+material: THREE.LineMaterial
+points: (THREE.Vector3 | THREE.Vector3Tuple)[] = []
 
 // optional
 position: Position | undefined = undefined
@@ -47,7 +73,7 @@ ignorePointer: boolean = false
 
 ```ts
 inViewport: boolean
-mesh: THREE.Mesh
+line2: THREE.Line2
 ```
 
 ### Events

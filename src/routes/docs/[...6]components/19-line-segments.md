@@ -1,32 +1,41 @@
 ---
-title: Mesh
+title: LineSegments
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=threlte|type=component
-This component represents triangular polygon mesh based objects.
+<script lang="ts">
+import Wrapper from '$examples/line-segments/Wrapper.svelte'
+</script>
+
+!!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=threlte|type=component|divider=false
+
+Draw lines using `THREE.LineSegments`.
+
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
 !!!
+
+---
 
 ### Example
 
 ```svelte
-<script>
-  import { Mesh } from 'threlte'
-  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+<script lang="ts">
+  import { EdgesGeometry, LineBasicMaterial, OctahedronBufferGeometry } from 'three'
+  import { LineSegments } from 'threlte'
+
+  const geometry = new EdgesGeometry(new OctahedronBufferGeometry(1, 1), 30)
 </script>
 
-<Mesh
-  position={{ y: 1 }}
-  geometry={new BoxBufferGeometry(1, 2, 1)}
-  material={new MeshBasicMaterial({ wireframe: true })}
-/>
+<LineSegments {geometry} material={new LineBasicMaterial()} />
 ```
 
 ### Properties
 
 ```ts
 // required
-geometry: THREE.BufferGeometry
 material: THREE.Material | THREE.Material[]
+geometry: THREE.BufferGeometry
 
 // optional
 position: Position | undefined = undefined
@@ -47,7 +56,7 @@ ignorePointer: boolean = false
 
 ```ts
 inViewport: boolean
-mesh: THREE.Mesh
+lineSegments: THREE.LineSegments
 ```
 
 ### Events

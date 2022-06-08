@@ -19,8 +19,8 @@ Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by
 <details>
   <summary>Show code</summary>
 
-@[code svelte|title=Wrapper.svelte](../../../examples/use-gltf-animations/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/use-gltf-animations/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf-animations/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../../examples/use-gltf-animations/Scene.svelte)
 
 </details>
 !!!

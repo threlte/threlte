@@ -20,8 +20,8 @@ Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/t
 <details>
   <summary>Show code</summary>
 
-@[code svelte|title=Wrapper.svelte](../../../examples/use-gltf/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/use-gltf/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../../examples/use-gltf/Scene.svelte)
 
 </details>
 !!!

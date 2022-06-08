@@ -70,6 +70,18 @@ export const sidebar = {
         slug: '/docs/components/16-object3d'
       },
       {
+        title: 'Line',
+        slug: '/docs/components/17-line'
+      },
+      {
+        title: 'Line2',
+        slug: '/docs/components/18-line-2'
+      },
+      {
+        title: 'LineSegments',
+        slug: '/docs/components/19-line-segments'
+      },
+      {
         title: 'Cameras',
         slug: ''
       },
@@ -196,6 +208,10 @@ export const sidebar = {
       {
         title: 'AudioInstance',
         slug: '/docs/components/95-audio-instance'
+      },
+      {
+        title: 'LineInstance',
+        slug: '/docs/components/96-line-instance'
       }
     ],
     'Core Hooks': [
@@ -235,15 +251,23 @@ export const sidebar = {
       },
       {
         title: 'useGltf',
-        slug: '/docs/extras/01-use-gltf'
+        slug: '/docs/extras/hooks/01-use-gltf'
       },
       {
         title: 'useGltfAnimations',
-        slug: '/docs/extras/02-use-gltf-animations'
+        slug: '/docs/extras/hooks/02-use-gltf-animations'
       },
       {
         title: 'useCursor',
-        slug: '/docs/extras/03-use-cursor'
+        slug: '/docs/extras/hooks/03-use-cursor'
+      },
+      {
+        title: 'Components',
+        slug: ''
+      },
+      {
+        title: 'Edges',
+        slug: '/docs/extras/components/01-edges'
       }
     ]
   }
