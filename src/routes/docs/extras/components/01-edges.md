@@ -40,7 +40,7 @@ Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/t
 </script>
 
 <Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshBasicMaterial()}>
-  <Edges color: black />
+  <Edges color="black" />
 </Mesh>
 ```
 
