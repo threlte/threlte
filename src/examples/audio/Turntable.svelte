@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { useCursor, useGltf, Edges } from 'threlte/extras'
   import { spring, tweened } from 'svelte/motion'
   import {
     BoxBufferGeometry,
+    Color,
     CylinderBufferGeometry,
+    DoubleSide,
+    MeshPhysicalMaterial,
     MeshStandardMaterial,
     PositionalAudio as ThreePositionalAudio
   } from 'three'
@@ -74,6 +78,17 @@
   const changeSide = () => {
     source = source === sideA ? sideB : sideA
   }
+
+  let coverOpen = false
+  const coverAngle = spring(0)
+  $: {
+    if (coverOpen) coverAngle.set(80)
+    else coverAngle.set(0)
+  }
+
+  const { onPointerEnter, onPointerLeave } = useCursor()
+
+  const { gltf } = useGltf<'Cover'>('/models/turntable/cover.glb')
 </script>
 
 <Group {position} {rotation} {scale}>
@@ -85,10 +100,13 @@
       color: 0xc62004,
       flatShading: true
     })}
-    geometry={new CylinderBufferGeometry(2, 2, 0.1, 10)}
+    geometry={new CylinderBufferGeometry(2, 2, 0.1, 64)}
     rotation={{ y: -discRotation }}
     position={{ x: 0.5, y: 1.15 }}
-  />
+    ignorePointer
+  >
+    <Edges threshold={50} ignorePointer scale={1} color="black" />
+  </Mesh>
 
   <!-- CASE -->
   <Mesh
@@ -99,18 +117,47 @@
       color: 0xeedbcb
     })}
     position={{ y: 0.5 }}
-  />
+    ignorePointer
+  >
+    <Edges position={{ y: 0 }} ignorePointer scale={1.001} color="black" />
+  </Mesh>
 
+  <!-- COVER -->
+  <Group position={{ z: -2.2, y: 1 }} rotation={{ x: -$coverAngle * DEG2RAD }}>
+    {#if $gltf}
+      <Mesh
+        geometry={$gltf.nodes.Cover.geometry}
+        scale={{ x: 3, z: 2.2, y: 0.5 }}
+        position={{ y: 0.5, z: 2.2 }}
+        material={new MeshPhysicalMaterial({
+          color: new Color('#ffa500'),
+          transmission: 1,
+          clearcoat: 1,
+          roughness: 0.08,
+          envMapIntensity: 1,
+          reflectivity: 0.5,
+          ior: 2,
+          side: DoubleSide
+        })}
+        interactive
+        on:click={() => (coverOpen = !coverOpen)}
+        on:pointerenter={onPointerEnter}
+        on:pointerleave={onPointerLeave}
+      >
+        <Edges color="white" ignorePointer />
+      </Mesh>
+    {/if}
+  </Group>
   <!-- SIDE BUTTON -->
   <Button
-    position={{ y: 1, z: 0.8, x: -2.3 }}
+    position={{ y: 1.01, z: 0.8, x: -2.3 }}
     on:click={changeSide}
     text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
-    position={{ y: 1, z: 1.7, x: -2.3 }}
+    position={{ y: 1.01, z: 1.7, x: -2.3 }}
     on:click={toggle}
     text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
@@ -128,7 +175,9 @@
       })}
       geometry={new CylinderBufferGeometry(0.1, 0.1, 3, 6)}
       position={{ y: 1.5 }}
-    />
+    >
+      <Edges ignorePointer color="black" threshold={80} />
+    </Mesh>
   </Group>
 
   {#if started}

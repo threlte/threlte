@@ -1,6 +1,11 @@
 <script lang="ts">
   import { spring } from 'svelte/motion'
-  import { CircleBufferGeometry, MeshStandardMaterial } from 'three'
+  import {
+    CircleBufferGeometry,
+    EquirectangularReflectionMapping,
+    MeshStandardMaterial
+  } from 'three'
+  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import {
     AudioListener,
@@ -9,7 +14,9 @@
     Mesh,
     OrbitControls,
     OrthographicCamera,
-    useThrelte
+    useLoader,
+    useThrelte,
+    useThrelteRoot
   } from 'threlte'
   import Speaker from './Speaker.svelte'
   import Turntable from './Turntable.svelte'
@@ -21,6 +28,14 @@
   $: smoothVolume.set(volume)
 
   const { size } = useThrelte()
+
+  const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
+  const { scene, invalidate } = useThrelte()
+  rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
+    texture.mapping = EquirectangularReflectionMapping
+    scene.environment = texture
+    invalidate('texture loaded')
+  })
 
   let zoom = $size.width / 18
   $: zoom = $size.width / 18
@@ -40,7 +55,7 @@
 <!-- FLOOR -->
 <Mesh
   receiveShadow
-  geometry={new CircleBufferGeometry(10, 10)}
+  geometry={new CircleBufferGeometry(10, 64)}
   material={new MeshStandardMaterial({
     color: 0x333333
   })}
@@ -63,5 +78,6 @@
     }
   }}
   position={{ x: 10, y: 20, z: 8 }}
+  intensity={0.3}
 />
-<HemisphereLight intensity={0.3} skyColor={0xffbd08} groundColor={0x323973} />
+<HemisphereLight intensity={0} skyColor={0xffbd08} groundColor={0x323973} />
