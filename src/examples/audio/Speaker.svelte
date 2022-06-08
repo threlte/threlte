@@ -91,7 +91,7 @@
         color: 0x111111
       })}
     >
-      <Edges ignorePointer color="black" scale={1.001} />
+      <Edges ignorePointer color="black" scale={1.001} threshold={20} />
     </Mesh>
   </Group>
 </Group>

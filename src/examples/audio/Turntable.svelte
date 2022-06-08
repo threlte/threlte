@@ -1,6 +1,7 @@
 <script lang="ts">
   import { spring, tweened } from 'svelte/motion'
   import {
+    AdditiveBlending,
     BoxBufferGeometry,
     BufferGeometry,
     Color,
@@ -24,6 +25,7 @@
   } from 'threlte'
   import { Edges, useCursor, useGltf } from 'threlte/extras'
   import Button from './Button.svelte'
+  import Disc from './Disc.svelte'
 
   export let position: Position | undefined = undefined
   export let rotation: Rotation | undefined = undefined
@@ -31,10 +33,6 @@
 
   let discSpeed = tweened(0, {
     duration: 1e3
-  })
-  let discRotation = 0
-  useFrame(() => {
-    discRotation += 0.02 * $discSpeed
   })
 
   let armPos = spring(0)
@@ -100,35 +98,7 @@
 
 <Group {position} {rotation} {scale}>
   <!-- DISC -->
-  <Mesh
-    receiveShadow
-    castShadow
-    material={new MeshStandardMaterial({
-      color: 0xc62004,
-      flatShading: true
-    })}
-    geometry={new CylinderBufferGeometry(2, 2, 0.1, 64)}
-    rotation={{ y: -discRotation }}
-    position={{ x: 0.5, y: 1.15 }}
-    ignorePointer
-  >
-    <Edges threshold={50} ignorePointer scale={1} color="black" />
-  </Mesh>
-
-  <Mesh
-    receiveShadow
-    castShadow
-    material={new MeshStandardMaterial({
-      color: 0x111111,
-      flatShading: true
-    })}
-    geometry={new CylinderBufferGeometry(0.8, 0.8, 0.2, 6)}
-    rotation={{ y: -discRotation }}
-    position={{ x: 0.5, y: 1.15 }}
-    ignorePointer
-  >
-    <Edges threshold={50} ignorePointer scale={1} color="black" />
-  </Mesh>
+  <Disc position={{ x: 0.5, y: 1.01 }} discSpeed={$discSpeed} />
 
   <!-- CASE -->
   <Mesh
@@ -151,15 +121,14 @@
         geometry={coverGeometry}
         scale={{ x: 3, z: 2.2, y: 0.5 }}
         position={{ y: 0.5, z: 2.2 }}
-        material={new MeshPhysicalMaterial({
-          color: new Color('#ffa500'),
-          transmission: 1,
-          clearcoat: 1,
+        material={new MeshStandardMaterial({
+          color: new Color('#ffffff'),
           roughness: 0.08,
+          metalness: 0.8,
           envMapIntensity: 1,
-          reflectivity: 0.5,
-          ior: 2,
-          side: DoubleSide
+          side: DoubleSide,
+          transparent: true,
+          opacity: 0.65
         })}
         interactive
         on:click={() => (coverOpen = !coverOpen)}
@@ -170,6 +139,7 @@
       </Mesh>
     {/if}
   </Group>
+
   <!-- SIDE BUTTON -->
   <Button
     position={{ y: 1.01, z: 0.8, x: -2.3 }}
@@ -186,16 +156,15 @@
 
   <!-- ARM -->
   <Group
-    position={{ x: 2.5, y: 1.45, z: -1.8 }}
+    position={{ x: 2.5, y: 1.55, z: -1.8 }}
     rotation={{ z: DEG2RAD * 90, y: DEG2RAD * 90 - $armPos * 0.3 }}
   >
     <Mesh
       castShadow
       material={new MeshStandardMaterial({
-        color: 0xffffff,
-        flatShading: true
+        color: 0xffffff
       })}
-      geometry={new CylinderBufferGeometry(0.1, 0.1, 3, 6)}
+      geometry={new CylinderBufferGeometry(0.1, 0.1, 3, 12)}
       position={{ y: 1.5 }}
     >
       <Edges ignorePointer color="black" threshold={80} />

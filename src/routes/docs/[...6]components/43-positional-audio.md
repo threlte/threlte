@@ -29,6 +29,7 @@ import Wrapper from '$examples/audio/Wrapper.svelte'
 @[code svelte|title=Wrapper.svelte](../../../examples/audio/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../examples/audio/Scene.svelte)
 @[code svelte|title=Turntable.svelte](../../../examples/audio/Turntable.svelte)
+@[code svelte|title=Disc.svelte](../../../examples/audio/Disc.svelte)
 @[code svelte|title=Button.svelte](../../../examples/audio/Button.svelte)
 @[code svelte|title=Speaker.svelte](../../../examples/audio/Speaker.svelte)
 
