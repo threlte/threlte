@@ -5,6 +5,7 @@
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import type { Position, Rotation, Scale } from 'threlte'
   import { Group, Mesh } from 'threlte'
+  import { Edges } from 'threlte/extras'
 
   export let volume: number = 0
 
@@ -75,11 +76,13 @@
       material={new MeshStandardMaterial({
         color: 0xeedbcb
       })}
-    />
+    >
+      <Edges ignorePointer color={'black'} scale={1.001} />
+    </Mesh>
 
     <!-- CONE -->
     <Mesh
-      geometry={new ConeBufferGeometry(1, 1, 10)}
+      geometry={new ConeBufferGeometry(1, 1, 64)}
       position={{ z: 1.1, y: 3.5 }}
       scale={1 + volume}
       rotation={{ x: DEG2RAD * -90 }}
@@ -87,6 +90,8 @@
         flatShading: true,
         color: 0x111111
       })}
-    />
+    >
+      <Edges ignorePointer color="black" scale={1.001} />
+    </Mesh>
   </Group>
 </Group>

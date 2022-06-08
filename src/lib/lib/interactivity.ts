@@ -26,7 +26,7 @@ const runRaycaster = (
   objects: Object3D[]
 ) => {
   rootCtx.raycaster.setFromCamera(pointer, camera)
-  return rootCtx.raycaster.intersectObjects(objects)
+  return rootCtx.raycaster.intersectObjects(objects, false)
 }
 
 const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3D<Event>>) => {

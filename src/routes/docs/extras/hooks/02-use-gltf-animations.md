@@ -6,7 +6,7 @@ title: useGltfAnimations
 import Wrapper from '$examples/use-gltf-animations/Wrapper.svelte'
 </script>
 
-!!!module_summary title=useGltfAnimations|sourcePath=hooks/useGltfAnimations.ts|name=useGltfAnimations|from=threlte/extras|type=hook|needsContext=true
+!!!module_summary title=useGltfAnimations|sourcePath=extras/hooks/useGltfAnimations.ts|name=useGltfAnimations|from=threlte/extras|type=hook|needsContext=true
 Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 <ExampleWrapper>
@@ -19,8 +19,8 @@ Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by
 <details>
   <summary>Show code</summary>
 
-@[code svelte|title=Wrapper.svelte](../../../examples/use-gltf-animations/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/use-gltf-animations/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf-animations/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../../../examples/use-gltf-animations/Scene.svelte)
 
 </details>
 !!!

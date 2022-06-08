@@ -1,23 +1,39 @@
 ---
-title: Mesh
+title: Line
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=threlte|type=component
-This component represents triangular polygon mesh based objects.
+<script lang="ts">
+import Wrapper from '$examples/line/Wrapper.svelte'
+</script>
+
+!!!module_summary title=Line|sourcePath=objects/Line.svelte|name=Line|from=threlte|type=component|divider=false
+
+Draw Lines using `THREE.Line`. Due to limitations of the OpenGL Core Profile with the `THREE.WebGLRenderer` on most platforms the line width will always be `1` regardless of the value `lineWidth` of the used Material.
+
+Provide either `points` or a `geometry` to draw lines.
+
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
 !!!
+
+---
 
 ### Example
 
 ```svelte
 <script>
-  import { Mesh } from 'threlte'
-  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+  import { Line } from 'threlte'
+  import { LineBasicMaterial } from 'three'
 </script>
 
-<Mesh
-  position={{ y: 1 }}
-  geometry={new BoxBufferGeometry(1, 2, 1)}
-  material={new MeshBasicMaterial({ wireframe: true })}
+<Line
+  points={[
+    [0, 1, 0],
+    [0, 2, 1],
+    [-1, 1, 4]
+  ]}
+  material={new LineBasicMaterial()}
 />
 ```
 
@@ -25,10 +41,12 @@ This component represents triangular polygon mesh based objects.
 
 ```ts
 // required
-geometry: THREE.BufferGeometry
 material: THREE.Material | THREE.Material[]
 
 // optional
+geometry: THREE.BufferGeometry | undefined = undefined
+points: (THREE.Vector3 | THREE.Vector3Tuple)[] = []
+
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -47,7 +65,7 @@ ignorePointer: boolean = false
 
 ```ts
 inViewport: boolean
-mesh: THREE.Mesh
+line: THREE.Line
 ```
 
 ### Events

@@ -12,8 +12,10 @@ To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
 Change the property `url` to load new 3D content. The new content will be swapped as soon as loading is finished.
 
+Use the hook [`useGltf`](/docs/extras/hooks/01-use-gltf) to reuse a glTF model or to use parts of it.
+
 :::admonition type="tip"
-See the hook [`useGltfAnimations`](/docs/extras/01-use-gltf-animations) on how to use animations of glTF Files.
+See the hook [`useGltfAnimations`](/docs/extras/hooks/02-use-gltf-animations) on how to use animations of glTF Files.
 :::
 
 <ExampleWrapper>

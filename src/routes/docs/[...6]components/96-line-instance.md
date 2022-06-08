@@ -1,32 +1,38 @@
 ---
-title: Mesh
+title: LineInstance
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=threlte|type=component
-This component represents triangular polygon mesh based objects.
+!!!module_summary title=LineInstance|sourcePath=instances/LineInstance.svelte|name=LineInstance|from=threlte|type=component
+This component lets you use any manually instantiated object that extends `THREE.Line` in threlte.
 !!!
 
-### Example
+### Example <!-- omit in toc -->
 
 ```svelte
-<script>
-  import { Mesh } from 'threlte'
-  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+<script lang="ts">
+  import { LineInstance } from 'threlte'
+  import { LineBasicMaterial, Line, Vector3, BufferGeometry } from 'three'
+
+  const points: Vector3[] = [
+    new Vector3(-10, 0, 0),
+    new Vector3(0, 10, 0),
+    new Vector3(10, 0, 0),
+    new Vector3(0, 20, 0)
+  ]
+
+  const geometry = new BufferGeometry().setFromPoints(points)
+  const material = new LineBasicMaterial()
+  const line = new Line(geometry, material)
 </script>
 
-<Mesh
-  position={{ y: 1 }}
-  geometry={new BoxBufferGeometry(1, 2, 1)}
-  material={new MeshBasicMaterial({ wireframe: true })}
-/>
+<LineInstance {line} />
 ```
 
 ### Properties
 
 ```ts
 // required
-geometry: THREE.BufferGeometry
-material: THREE.Material | THREE.Material[]
+line: THREE.Line
 
 // optional
 position: Position | undefined = undefined
@@ -47,7 +53,6 @@ ignorePointer: boolean = false
 
 ```ts
 inViewport: boolean
-mesh: THREE.Mesh
 ```
 
 ### Events

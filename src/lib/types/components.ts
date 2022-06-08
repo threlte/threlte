@@ -4,11 +4,15 @@ import type {
   Camera,
   ColorRepresentation,
   Light,
+  Line,
   Material,
   Mesh,
   Object3D,
-  PositionalAudio
+  PositionalAudio,
+  Vector3,
+  Vector3Tuple
 } from 'three'
+import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import type { LookAt, Position, Rotation, Scale, Text as TextType, ThrelteLayers } from './types'
@@ -58,6 +62,11 @@ export type Object3DInstanceProperties = HierarchicalObjectProperties &
 export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
   Omit<InteractiveObjectProperties, 'object'> & {
     mesh: Mesh
+  }
+
+export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'> &
+  Omit<Object3DInstanceProperties, 'object'> & {
+    line: Line
   }
 
 export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
@@ -218,6 +227,22 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
+  geometry: BufferGeometry
+  material: Material | Material[]
+}
+
+export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
+  geometry?: BufferGeometry
+  points?: Vector3[] | Vector3Tuple[]
+  material: Material | Material[]
+}
+
+export type Line2Properties = Omit<MeshInstanceProperties, 'mesh'> & {
+  points: Vector3[] | Vector3Tuple[]
+  material: LineMaterial
+}
+
+export type LineSegmentsProperties = Omit<LineInstanceProperties, 'line'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }
