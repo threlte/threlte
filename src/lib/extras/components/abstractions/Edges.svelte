@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useThrelte } from '$lib/hooks/useThrelte'
+  import { useThrelte } from '../../../hooks/useThrelte'
   import { onDestroy } from 'svelte'
   import { Color, EdgesGeometry, LineBasicMaterial, Mesh } from 'three'
   import { getParent } from '../../../internal/HierarchicalObject.svelte'
@@ -33,15 +33,17 @@
   const geometry =
     'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
 
-  export const edgesGeometry = new EdgesGeometry(geometry, threshold)
+  const edgesGeometry = new EdgesGeometry(geometry, threshold)
 
   const { invalidate } = useThrelte()
 
   let activeMaterial = !!material
     ? material
-    : new LineBasicMaterial({
-        color: color ?? 'white'
+    : color
+    ? new LineBasicMaterial({
+        color
       })
+    : new LineBasicMaterial()
 
   let previousMaterial = material
   $: {

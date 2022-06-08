@@ -238,7 +238,7 @@ export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
 }
 
 export type Line2Properties = Omit<MeshInstanceProperties, 'mesh'> & {
-  points?: Vector3[] | Vector3Tuple[]
+  points: Vector3[] | Vector3Tuple[]
   material: LineMaterial
 }
 

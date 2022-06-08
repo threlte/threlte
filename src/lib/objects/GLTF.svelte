@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LayerableObject from '$lib/internal/LayerableObject.svelte'
+  import LayerableObject from '../internal/LayerableObject.svelte'
   import { createEventDispatcher } from 'svelte'
   import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'

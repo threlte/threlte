@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Edges from '$lib/extras/components/abstractions/Edges.svelte'
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import { BoxBufferGeometry, ConeBufferGeometry, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import type { Position, Rotation, Scale } from 'threlte'
   import { Group, Mesh } from 'threlte'
+  import { Edges } from 'threlte/extras'
 
   export let volume: number = 0
 

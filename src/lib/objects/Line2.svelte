@@ -23,7 +23,7 @@
   export let lookAt: Line2Properties['lookAt'] = undefined
 
   // self
-  export let points: Line2Properties['points']
+  export let points: Line2Properties['points'] = []
   export let material: Line2Properties['material']
 
   const geometry = new LineGeometry()

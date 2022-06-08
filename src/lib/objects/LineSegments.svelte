@@ -28,12 +28,12 @@
 
   const { invalidate } = useThrelte()
 
-  export const line = new ThreeLineSegments(geometry, material)
-  const getLine = () => line
+  export const lineSegments = new ThreeLineSegments(geometry, material)
+  const getLineSegments = () => lineSegments
 
   $: {
     if (material !== previousMaterial) {
-      getLine().material = material
+      getLineSegments().material = material
       invalidate('LineSegments: material changed')
     } else {
       invalidate('LineSegments: material props changed')
@@ -43,7 +43,7 @@
 
   $: {
     if (geometry !== previousGeometry) {
-      getLine().geometry = geometry
+      getLineSegments().geometry = geometry
       invalidate('LineSegments: geometry changed')
     } else {
       invalidate('LineSegments: geometry props changed')
@@ -53,7 +53,7 @@
 </script>
 
 <LineInstance
-  {line}
+  line={lineSegments}
   {position}
   {scale}
   {rotation}

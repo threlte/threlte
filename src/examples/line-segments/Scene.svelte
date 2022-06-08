@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    BoxBufferGeometry,
     EdgesGeometry,
     LineBasicMaterial,
     MeshStandardMaterial,

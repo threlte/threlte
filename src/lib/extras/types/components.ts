@@ -8,7 +8,7 @@ export type EdgesProperties = Omit<LineSegmentsProperties, 'geometry' | 'materia
         material: never
       }
     | {
-        material?: Material
+        material?: Material | Material[]
         color: never
       }
   ) & {
