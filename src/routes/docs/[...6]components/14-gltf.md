@@ -6,7 +6,7 @@ title: GLTF
 import Wrapper from '$examples/gltf/Wrapper.svelte'
 </script>
 
-!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=threlte|type=component|divider=false
+!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=threlte|type=component
 To use DRACO compression, provide a path to the DRACO decoder.  
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
@@ -22,18 +22,14 @@ See the hook [`useGltfAnimations`](/docs/extras/hooks/02-use-gltf-animations) on
   <Wrapper />
 </ExampleWrapper>
 
-Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
-
-<details>
-  <summary>Show code</summary>
-
+&&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../../examples/gltf/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../examples/gltf/Scene.svelte)
+&&&
 
-</details>
+<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
+
 !!!
-
----
 
 ### Interaction
 

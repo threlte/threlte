@@ -38,7 +38,6 @@
     scene.environment.rotation = 180
     invalidate('texture loaded')
   })
-  scene.background = new Color('white')
 
   let zoom = $size.width / 18
   $: zoom = $size.width / 18

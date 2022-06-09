@@ -2,31 +2,29 @@
 title: TransformControls
 ---
 
-!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=threlte|type=component|divider=false
+<script lang="ts">
+import Wrapper from '$examples/transform-controls/Wrapper.svelte'
+</script>
+
+!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=threlte|type=component
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
 
 The component `<TransformControls>` needs to be a direct child of the component to be transformed.
 
 To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
-!!!
-
-<script lang="ts">
-import Wrapper from '$examples/transform-controls/Wrapper.svelte'
-</script>
 
 <ExampleWrapper>
   <Wrapper /> 
 </ExampleWrapper>
 
-<details>
-  <summary>Show code</summary>
+&&&code_wrapper
 
 @[code svelte|title=Wrapper.svelte](../../../examples/transform-controls/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../examples/transform-controls/Scene.svelte)
 
-</details>
+&&&
 
----
+!!!
 
 ### Examples
 

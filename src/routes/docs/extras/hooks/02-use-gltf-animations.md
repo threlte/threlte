@@ -13,16 +13,13 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
   <Wrapper />
 </ExampleWrapper>
 
-Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by
-[Glen Fox](https://artstation.com/glenatron), CC Attribution.
-
-<details>
-  <summary>Show code</summary>
-
+&&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf-animations/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../../examples/use-gltf-animations/Scene.svelte)
+&&&
 
-</details>
+<small>Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen Fox](https://artstation.com/glenatron), CC Attribution.</small>
+
 !!!
 
 ### Examples <!-- omit in toc -->

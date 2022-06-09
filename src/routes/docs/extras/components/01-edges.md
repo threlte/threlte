@@ -6,7 +6,7 @@ title: Edges
 import Wrapper from '$examples/edges/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Edges|sourcePath=extras/components/abstractions/Edges.svelte|name=Edges|from=threlte/extras|type=component|divider=false
+!!!module_summary title=Edges|sourcePath=extras/components/abstractions/Edges.svelte|name=Edges|from=threlte/extras|type=component
 
 Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.
 
@@ -16,19 +16,14 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
   <Wrapper />
 </ExampleWrapper>
 
-Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
-
-<details>
-  <summary>Show code</summary>
-
+&&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../../../examples/edges/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../../examples/edges/Scene.svelte)
+&&&
 
-</details>
+<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
 !!!
-
----
 
 ### Example
 

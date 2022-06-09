@@ -15,15 +15,15 @@ Use the component [`<GLTF>`](/docs/components/14-gltf) if you want to use a mode
   <Wrapper />
 </ExampleWrapper>
 
-Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
-
-<details>
-  <summary>Show code</summary>
+&&&code_wrapper
 
 @[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../../examples/use-gltf/Scene.svelte)
 
-</details>
+&&&
+
+<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
+
 !!!
 
 ## Examples <!-- omit in toc -->
