@@ -2,30 +2,23 @@
 title: PositionalAudio
 ---
 
-!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component|divider=false
+<script lang="ts">
+import Wrapper from '$examples/audio/Wrapper.svelte'
+</script>
+
+!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component
 Creates a positional audio entity.  
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
 
 :::admonition type="tip"
 You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
 :::
-!!!
-
-<script lang="ts">
-import Wrapper from '$examples/audio/Wrapper.svelte'
-</script>
 
 <ExampleWrapper>
   <Wrapper /> 
 </ExampleWrapper>
 
-<p class="!mb-0">
-  <small>Music: <a href="https://legrisch.com" target="_blank">legrisch</a></small>
-</p>
-
-<details>
-  <summary>Show code</summary>
-
+&&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../../examples/audio/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../examples/audio/Scene.svelte)
 @[code svelte|title=Turntable.svelte](../../../examples/audio/Turntable.svelte)
@@ -33,9 +26,11 @@ import Wrapper from '$examples/audio/Wrapper.svelte'
 @[code svelte|title=Button.svelte](../../../examples/audio/Button.svelte)
 @[code svelte|title=Speaker.svelte](../../../examples/audio/Speaker.svelte)
 
-</details>
+&&&
 
----
+<small>Music: <a href="https://legrisch.com" target="_blank">legrisch</a></small>
+
+!!!
 
 ### Example
 
