@@ -7,6 +7,7 @@
 <script lang="ts">
   import '@docsearch/css'
   import {
+    ColorSchemeMenu,
     createKitDocsLoader,
     createSidebarContext,
     KitDocs,
@@ -20,6 +21,7 @@
   import '@svelteness/kit-docs/client/styles/docsearch.css'
   import DiscordIcon from '../../kit-docs/DiscordIcon.svelte'
   import GithubIcon from '../../kit-docs/GithubIcon.svelte'
+  import { colorScheme } from '@svelteness/kit-docs'
   import '../../styles/kit-docs.css'
   import { sidebar } from './navigation'
 
@@ -30,6 +32,8 @@
   const navbar: NavbarConfig = {
     links: []
   }
+
+  colorScheme.set('light')
 </script>
 
 <svelte:head>
