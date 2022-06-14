@@ -1,7 +1,7 @@
 const config = {
   content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/@svelteness/kit-docs/client/**/*.svelte'],
 
-  darkMode: 'media',
+  darkMode: false,
   theme: {
     screens: {
       420: '420px',
