@@ -11,6 +11,10 @@ Build three.js scenes declaratively with threlte components that are reactive to
 
 Visit [threlte.xyz](https://threlte.xyz)
 
+# Support
+
+Join the [Discord server](https://discord.gg/EqUBCfCaGm)
+
 ---
 
 ### Credits
