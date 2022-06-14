@@ -7,18 +7,19 @@
 <script lang="ts">
   import '@docsearch/css'
   import {
-    ColorSchemeMenu,
     createKitDocsLoader,
     createSidebarContext,
     KitDocs,
     KitDocsLayout,
+    SocialLink,
     type MarkdownMeta,
     type NavbarConfig
   } from '@svelteness/kit-docs'
-  import GithubIcon from '../../kit-docs/GithubIcon.svelte'
   import { Algolia } from '@svelteness/kit-docs/client/algolia'
   import '@svelteness/kit-docs/client/polyfills/index.js'
   import '@svelteness/kit-docs/client/styles/docsearch.css'
+  import DiscordIcon from '../../kit-docs/DiscordIcon.svelte'
+  import GithubIcon from '../../kit-docs/GithubIcon.svelte'
   import '../../styles/kit-docs.css'
   import { sidebar } from './navigation'
 
@@ -46,9 +47,9 @@
       <a href="/" alt="Threlte Logo">
         <img class="header-logo" src="/logo/threlte-logo.png" alt="" />
       </a>
-      <div class="flex flex-row justify-between items-center mt-8 -mb-3">
+      <div class="flex flex-col gap-3 mt-8">
         <GithubIcon class="!p-0" href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
-        <ColorSchemeMenu />
+        <DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
       </div>
     </div>
     <Algolia
@@ -65,6 +66,7 @@
     </div>
     <div slot="navbar-right-alt">
       <GithubIcon href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
+      <SocialLink type="discord" href="#" />
     </div>
     <slot />
   </KitDocsLayout>

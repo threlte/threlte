@@ -1,12 +1,8 @@
 const config = {
   content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/@svelteness/kit-docs/client/**/*.svelte'],
 
-  darkMode: 'class',
+  darkMode: 'media',
   theme: {
-    // fontFamily: {
-    //   sans: ['var(--kd-font-family-sans)'],
-    //   mono: ['var(--kd-font-family-mono)'],
-    // },
     screens: {
       420: '420px',
       576: '576px',
