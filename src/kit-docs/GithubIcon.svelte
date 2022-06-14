@@ -1,5 +1,4 @@
 <script lang="ts">
-  import clsx from 'clsx'
   export let href: string
   export let iconWidth = 28
   export let iconHeight = 28
@@ -18,7 +17,7 @@
   <svg
     width={iconWidth}
     height={iconHeight}
-    class={[$$slots.default && 'mr-2.5'].join(' ')}
+    class={[$$slots.default && 'mr-2'].join(' ')}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
   >
