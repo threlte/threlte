@@ -81,9 +81,9 @@ interactive: boolean = false
 ### Bindings
 
 ```ts
-gltf: GLTF | undefined
+gltf: ThrelteGltf | undefined
 scene: THREE.Group | undefined
-animations: AnimationClip[] | undefined
+animations: THREE.AnimationClip[] | undefined
 asset:
   | {
       copyright?: string | undefined;
@@ -94,10 +94,12 @@ asset:
       extras?: any;
     }
   | undefined
-cameras: Camera[] | undefined
-scenes: Group[] | undefined
+cameras: THREE.Camera[] | undefined
+scenes: THREE.Group[] | undefined
 userData: any
-parser: GLTFParser | undefined
+parser: THREE.GLTFParser | undefined
+materials: THREE.Material[]
+nodes: THREE.Object3D[]
 ```
 
 ### Events
