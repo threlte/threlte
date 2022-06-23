@@ -37,7 +37,7 @@
   const { invalidate } = useThrelte()
 
   const dispatch = createEventDispatcher<{
-    load: ThrelteGltf
+    load: ThreeGLTF
     unload: undefined
     error: string
   }>()
@@ -45,14 +45,14 @@
   let interactiveMeshes: (Mesh | SkinnedMesh)[] = []
   let layerableObjects: Object3D[] = []
 
-  export let gltf: ThrelteGltf | undefined = undefined
-  export let scene: ThrelteGltf['scene'] | undefined = undefined
-  export let animations: ThrelteGltf['animations'] | undefined = undefined
-  export let asset: ThrelteGltf['asset'] | undefined = undefined
-  export let cameras: ThrelteGltf['cameras'] | undefined = undefined
-  export let scenes: ThrelteGltf['scenes'] | undefined = undefined
-  export let userData: ThrelteGltf['userData'] | undefined = undefined
-  export let parser: ThrelteGltf['parser'] | undefined = undefined
+  export let gltf: ThreeGLTF | undefined = undefined
+  export let scene: ThreeGLTF['scene'] | undefined = undefined
+  export let animations: ThreeGLTF['animations'] | undefined = undefined
+  export let asset: ThreeGLTF['asset'] | undefined = undefined
+  export let cameras: ThreeGLTF['cameras'] | undefined = undefined
+  export let scenes: ThreeGLTF['scenes'] | undefined = undefined
+  export let userData: ThreeGLTF['userData'] | undefined = undefined
+  export let parser: ThreeGLTF['parser'] | undefined = undefined
   export let materials: ThrelteGltf['materials'] | undefined = undefined
   export let nodes: ThrelteGltf['nodes'] | undefined = undefined
 
@@ -126,13 +126,8 @@
   }
 
   const onLoad = (data: ThreeGLTF) => {
-    const extendedGltf = {
-      ...data,
-      ...buildSceneGraph(data.scene)
-    }
-
     disposeGltf()
-    gltf = extendedGltf
+    gltf = data
     scene = gltf.scene
     animations = gltf.animations
     asset = gltf.asset
@@ -140,8 +135,10 @@
     scenes = gltf.scenes
     userData = gltf.userData
     parser = gltf.parser
-    nodes = gltf.nodes
-    materials = gltf.materials
+
+    const { materials: m, nodes: n } = buildSceneGraph(data.scene)
+    materials = m
+    nodes = n
 
     scene.traverse((object) => {
       layerableObjects.push(object)
