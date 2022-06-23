@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LayerableObject from '../internal/LayerableObject.svelte'
   import { createEventDispatcher } from 'svelte'
   import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
@@ -10,7 +9,10 @@
   import { useThrelte } from '../hooks/useThrelte'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
   import InteractiveObject from '../internal/InteractiveObject.svelte'
+  import LayerableObject from '../internal/LayerableObject.svelte'
+  import { buildSceneGraph } from '../lib/buildSceneGraph'
   import type { GLTFProperties } from '../types/components'
+  import type { ThrelteGltf } from '../types/types'
 
   export let position: GLTFProperties['position'] = undefined
   export let scale: GLTFProperties['scale'] = undefined
@@ -35,7 +37,7 @@
   const { invalidate } = useThrelte()
 
   const dispatch = createEventDispatcher<{
-    load: ThreeGLTF
+    load: ThrelteGltf
     unload: undefined
     error: string
   }>()
@@ -43,14 +45,16 @@
   let interactiveMeshes: (Mesh | SkinnedMesh)[] = []
   let layerableObjects: Object3D[] = []
 
-  export let gltf: ThreeGLTF | undefined = undefined
-  export let scene: ThreeGLTF['scene'] | undefined = undefined
-  export let animations: ThreeGLTF['animations'] | undefined = undefined
-  export let asset: ThreeGLTF['asset'] | undefined = undefined
-  export let cameras: ThreeGLTF['cameras'] | undefined = undefined
-  export let scenes: ThreeGLTF['scenes'] | undefined = undefined
-  export let userData: ThreeGLTF['userData'] | undefined = undefined
-  export let parser: ThreeGLTF['parser'] | undefined = undefined
+  export let gltf: ThrelteGltf | undefined = undefined
+  export let scene: ThrelteGltf['scene'] | undefined = undefined
+  export let animations: ThrelteGltf['animations'] | undefined = undefined
+  export let asset: ThrelteGltf['asset'] | undefined = undefined
+  export let cameras: ThrelteGltf['cameras'] | undefined = undefined
+  export let scenes: ThrelteGltf['scenes'] | undefined = undefined
+  export let userData: ThrelteGltf['userData'] | undefined = undefined
+  export let parser: ThrelteGltf['parser'] | undefined = undefined
+  export let materials: ThrelteGltf['materials'] | undefined = undefined
+  export let nodes: ThrelteGltf['nodes'] | undefined = undefined
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
 
@@ -95,6 +99,8 @@
       scenes = undefined
       userData = undefined
       parser = undefined
+      nodes = undefined
+      materials = undefined
 
       interactiveMeshes.splice(0, interactiveMeshes.length)
       interactiveMeshes = interactiveMeshes
@@ -119,9 +125,14 @@
     })
   }
 
-  const onLoad = (g: ThreeGLTF) => {
+  const onLoad = (data: ThreeGLTF) => {
+    const extendedGltf = {
+      ...data,
+      ...buildSceneGraph(data.scene)
+    }
+
     disposeGltf()
-    gltf = g
+    gltf = extendedGltf
     scene = gltf.scene
     animations = gltf.animations
     asset = gltf.asset
@@ -129,6 +140,8 @@
     scenes = gltf.scenes
     userData = gltf.userData
     parser = gltf.parser
+    nodes = gltf.nodes
+    materials = gltf.materials
 
     scene.traverse((object) => {
       layerableObjects.push(object)
@@ -159,13 +172,10 @@
   $: {
     if (scene) {
       scene.traverse((obj) => {
-        const objOrMesh = obj as Object3D | Mesh
-        if (objIsMesh(objOrMesh)) {
-          if (castShadow !== undefined) obj.castShadow = castShadow
-          if (receiveShadow !== undefined) obj.receiveShadow = receiveShadow
-          if (frustumCulled !== undefined) obj.frustumCulled = frustumCulled
-          if (renderOrder !== undefined) obj.renderOrder = renderOrder
-        }
+        if (castShadow !== undefined) obj.castShadow = castShadow
+        if (receiveShadow !== undefined) obj.receiveShadow = receiveShadow
+        if (frustumCulled !== undefined) obj.frustumCulled = frustumCulled
+        if (renderOrder !== undefined) obj.renderOrder = renderOrder
       })
     }
   }

@@ -21,7 +21,9 @@ import type {
   WebGLRenderer
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+import type { SceneGraph } from '../lib/buildSceneGraph'
 
 export type ThreltePointerEventMap = {
   click: ThreltePointerEvent
@@ -463,3 +465,9 @@ export type ThrelteUserData = {
   onTransform?: () => Promise<void>
   threlteDefaultCamera?: boolean
 }
+
+/**
+ * Extends THREE.GLTF by materials and nodes properties
+ */
+export type ThrelteGltf<Nodes extends string = any, Materials extends string = any> = GLTF &
+  SceneGraph<Nodes, Materials>
