@@ -81,7 +81,7 @@ interactive: boolean = false
 ### Bindings
 
 ```ts
-gltf: ThrelteGltf | undefined
+gltf: THREE.GLTF | undefined
 scene: THREE.Group | undefined
 animations: THREE.AnimationClip[] | undefined
 asset:
