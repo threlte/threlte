@@ -98,8 +98,8 @@ cameras: THREE.Camera[] | undefined
 scenes: THREE.Group[] | undefined
 userData: any
 parser: THREE.GLTFParser | undefined
-materials: THREE.Material[]
-nodes: THREE.Object3D[]
+materials: Record<string, THREE.Material>
+nodes: Record<string, THREE.Object3D>
 ```
 
 ### Events

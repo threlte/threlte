@@ -1,8 +1,9 @@
 import { onDestroy } from 'svelte'
-import { get, writable, type Writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction } from 'three'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
 import { useFrame } from '../../hooks/useFrame'
+import type { ThrelteGltf } from '../../types/types'
 
 /**
  * Convenience hook to use animations loaded with a <GLTF> threlte component.
@@ -34,11 +35,11 @@ import { useFrame } from '../../hooks/useFrame'
 export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, AnimationAction>>>(
   callback?: (args: { actions: Actions; mixer: AnimationMixer }) => void
 ): {
-  gltf: Writable<GLTF | undefined>
+  gltf: Writable<GLTF | ThrelteGltf | undefined>
   mixer: Writable<AnimationMixer | undefined>
   actions: Writable<Actions>
 } => {
-  const gltf = writable<GLTF | undefined>(undefined)
+  const gltf = writable<GLTF | ThrelteGltf | undefined>(undefined)
 
   const mixerStore = writable<AnimationMixer | undefined>(undefined)
   const actions = writable<Actions>({} as Actions)
