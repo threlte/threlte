@@ -268,6 +268,10 @@ export const sidebar = {
       {
         title: 'Edges',
         slug: '/docs/extras/components/01-edges'
+      },
+      {
+        title: 'HTML',
+        slug: '/docs/extras/components/02-html'
       }
     ]
   }
