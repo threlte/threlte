@@ -10,6 +10,10 @@ import Wrapper from '$examples/extras/html/Wrapper.svelte'
 
 This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie HTML content to any object of your scene. It will be projected to the objects whereabouts automatically.
 
+:::admonition type="tip"
+The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
+:::
+
 <ExampleWrapper>
   <Wrapper />
 </ExampleWrapper>
@@ -109,6 +113,21 @@ Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
 </script>
 
 <HTML center>
+  <h1>Hello World</h1>
+</HTML>
+```
+
+#### Portal
+
+Use the property `portal` to mount the contents of the `<HTML>` component on another `HTMLElement`.  
+By default the contents are mounted as a sibling to the rendering `<canvas>`.
+
+```svelte
+<script lang="ts">
+  import { HTML } from 'threlte/extras'
+</script>
+
+<HTML portal={document.body}>
   <h1>Hello World</h1>
 </HTML>
 ```
