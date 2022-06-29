@@ -31,14 +31,37 @@ import { useFrame } from '../../hooks/useFrame'
  * @returns
  */
 
-export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, AnimationAction>>>(
+export function useGltfAnimations<T extends string, Actions = Partial<Record<T, AnimationAction>>>(
   callback?: (args: { actions: Actions; mixer: AnimationMixer }) => void
 ): {
   gltf: Writable<GLTF | undefined>
   mixer: Writable<AnimationMixer | undefined>
   actions: Writable<Actions>
-} => {
-  const gltf = writable<GLTF | undefined>(undefined)
+}
+export function useGltfAnimations<T extends string, Actions = Partial<Record<T, AnimationAction>>>(
+  gltf: Writable<GLTF | undefined>,
+  callback?: (args: { actions: Actions; mixer: AnimationMixer }) => void
+): {
+  gltf: Writable<GLTF | undefined>
+  mixer: Writable<AnimationMixer | undefined>
+  actions: Writable<Actions>
+}
+export function useGltfAnimations<T extends string, Actions = Partial<Record<T, AnimationAction>>>(
+  gltfOrCallback?:
+    | Writable<GLTF | undefined>
+    | ((args: { actions: Actions; mixer: AnimationMixer }) => void),
+  callback?: (args: { actions: Actions; mixer: AnimationMixer }) => void
+): {
+  gltf: Writable<GLTF | undefined>
+  mixer: Writable<AnimationMixer | undefined>
+  actions: Writable<Actions>
+} {
+  const gltf =
+    gltfOrCallback && typeof gltfOrCallback !== 'function'
+      ? gltfOrCallback
+      : writable<GLTF | undefined>(undefined)
+
+  const cb = gltfOrCallback && typeof gltfOrCallback === 'function' ? gltfOrCallback : callback
 
   const mixerStore = writable<AnimationMixer | undefined>(undefined)
   const actions = writable<Actions>({} as Actions)
@@ -55,7 +78,7 @@ export const useGltfAnimations = <T extends string, Actions = Partial<Record<T, 
     }, {} as Actions)
     mixerStore.set(newMixer)
     actions.set(newActions)
-    callback?.({
+    cb?.({
       actions: newActions,
       mixer: newMixer
     })

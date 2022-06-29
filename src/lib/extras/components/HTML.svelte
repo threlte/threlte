@@ -188,77 +188,83 @@
   const widthHalf = derived(size, (size) => size.width / 2)
   const heightHalf = derived(size, (size) => size.height / 2)
 
-  useFrame(() => {
-    if (!group || !el) return
+  useFrame(
+    () => {
+      if (!group || !el) return
 
-    const camera = getCamera()
+      const camera = getCamera()
 
-    camera.updateMatrixWorld()
-    group.updateWorldMatrix(true, false)
+      camera.updateMatrixWorld()
+      group.updateWorldMatrix(true, false)
 
-    const vec = transform ? oldPosition : calculatePosition(group, camera, $size)
+      const vec = transform ? oldPosition : calculatePosition(group, camera, $size)
 
-    if (
-      transform ||
-      Math.abs(oldZoom - camera.zoom) > eps ||
-      Math.abs(oldPosition[0] - vec[0]) > eps ||
-      Math.abs(oldPosition[1] - vec[1]) > eps
-    ) {
-      const isBehindCamera = isObjectBehindCamera(group, camera)
+      if (
+        transform ||
+        Math.abs(oldZoom - camera.zoom) > eps ||
+        Math.abs(oldPosition[0] - vec[0]) > eps ||
+        Math.abs(oldPosition[1] - vec[1]) > eps
+      ) {
+        const isBehindCamera = isObjectBehindCamera(group, camera)
 
-      const previouslyVisible = visible
-      if (raytraceTarget) {
-        const isvisible = isObjectVisible(group, camera, raycaster, raytraceTarget)
-        visible = isvisible && !isBehindCamera
-      } else {
-        visible = !isBehindCamera
-      }
-
-      if (previouslyVisible !== visible) {
-        if (hasEventListeners('visibilitychange')) dispatch('visibilitychange', visible)
-        else el.style.display = visible ? 'block' : 'none'
-      }
-
-      el.style.zIndex = `${objectZIndex(group, camera, zIndexRange)}`
-      if (transform) {
-        const fov = camera.projectionMatrix.elements[5] * $heightHalf
-        const { isOrthographicCamera, top, left, bottom, right } = camera as OrthographicCamera
-
-        let matrix = group.matrixWorld
-        if (sprite) {
-          matrix = camera.matrixWorldInverse
-            .clone()
-            .transpose()
-            .copyPosition(matrix)
-            .scale(group.scale)
-          matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0
-          matrix.elements[15] = 1
+        const previouslyVisible = visible
+        if (raytraceTarget) {
+          const isvisible = isObjectVisible(group, camera, raycaster, raytraceTarget)
+          visible = isvisible && !isBehindCamera
+        } else {
+          visible = !isBehindCamera
         }
-        el.style.width = $size.width + 'px'
-        el.style.height = $size.height + 'px'
-        el.style.perspective = isOrthographicCamera ? '' : `${fov}px`
-        if (transformOuterRef && transformInnerRef) {
-          // prettier-ignore
-          const cameraTransform = isOrthographicCamera
+
+        if (previouslyVisible !== visible) {
+          if (hasEventListeners('visibilitychange')) dispatch('visibilitychange', visible)
+          else el.style.display = visible ? 'block' : 'none'
+        }
+
+        el.style.zIndex = `${objectZIndex(group, camera, zIndexRange)}`
+        if (transform) {
+          const fov = camera.projectionMatrix.elements[5] * $heightHalf
+          const { isOrthographicCamera, top, left, bottom, right } = camera as OrthographicCamera
+
+          let matrix = group.matrixWorld
+          if (sprite) {
+            matrix = camera.matrixWorldInverse
+              .clone()
+              .transpose()
+              .copyPosition(matrix)
+              .scale(group.scale)
+            matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0
+            matrix.elements[15] = 1
+          }
+          el.style.width = $size.width + 'px'
+          el.style.height = $size.height + 'px'
+          el.style.perspective = isOrthographicCamera ? '' : `${fov}px`
+          if (transformOuterRef && transformInnerRef) {
+            // prettier-ignore
+            const cameraTransform = isOrthographicCamera
             ? `scale(${fov}) translate(${epsilon(-(right + left) / 2)}px,${epsilon((top + bottom) / 2)}px)`
             : `translateZ(${fov}px)`
 
-          const cameraMatrix = getCameraCSSMatrix(camera.matrixWorldInverse)
+            const cameraMatrix = getCameraCSSMatrix(camera.matrixWorldInverse)
 
-          transformOuterRef.style.transform = `${cameraTransform}${cameraMatrix}translate(${$widthHalf}px, ${$heightHalf}px)`
-          transformInnerRef.style.transform = getObjectCSSMatrix(
-            matrix,
-            1 / ((distanceFactor || 10) / 400)
-          )
+            transformOuterRef.style.transform = `${cameraTransform}${cameraMatrix}translate(${$widthHalf}px, ${$heightHalf}px)`
+            transformInnerRef.style.transform = getObjectCSSMatrix(
+              matrix,
+              1 / ((distanceFactor || 10) / 400)
+            )
+          }
+        } else {
+          const scale =
+            distanceFactor === undefined ? 1 : objectScale(group, camera) * distanceFactor
+          el.style.transform = `translate3d(${vec[0]}px, ${vec[1]}px, 0) scale(${scale})`
         }
-      } else {
-        const scale = distanceFactor === undefined ? 1 : objectScale(group, camera) * distanceFactor
-        el.style.transform = `translate3d(${vec[0]}px, ${vec[1]}px, 0) scale(${scale})`
+        oldPosition = vec
+        oldZoom = camera.zoom
       }
-      oldPosition = vec
-      oldZoom = camera.zoom
+    },
+    {
+      debugFrameloopMessage: 'HTML: tracking parent'
     }
-  })
+  )
 
   onMount(() => {
     if (!group || transform || !el) return
