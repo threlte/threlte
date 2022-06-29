@@ -24,6 +24,8 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 ### Examples <!-- omit in toc -->
 
+#### Basic Example
+
 ```svelte
 <script lang="ts">
   import { GLTF } from 'threlte'
@@ -46,4 +48,27 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 <!-- Bind the store `gltf` -->
 <GLTF url={'/Bengal.glb'} bind:gltf={$gltf} />
+```
+
+#### Using the `useGltf` Hook
+
+Sometimes you might want to use the hook [`useGltf`](/docs/extras/hooks/01-use-gltf) to reuse parts of a model or use the embedded camera. In this case, the hook `useGltf` returns an object with a property `gltf` which you can pass as the first argument to the hook `useGltfAnimations`.
+
+```svelte
+<script lang="ts">
+  import { Object3DInstance } from 'threlte'
+  import { useGltfAnimations, useGltf } from 'threlte/extras'
+
+  // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
+  const { gltf } = useGltf('/path/to/model.glb')
+
+  // Provide that store to the hook useGltfAnimations
+  useGltfAnimations<'All Animations'>(gltf, ({ actions }) => {
+    actions['All Animations']?.play()
+  })
+</script>
+
+{#if $gltf}
+  <Object3DInstance object={$gltf.scene} />
+{/if}
 ```
