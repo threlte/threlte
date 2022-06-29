@@ -44,3 +44,10 @@ export type HTMLProperties = GroupProperties & {
   as?: keyof HTMLElementTagNameMap
   portal?: HTMLElement
 }
+
+export type FloatProperties = GroupProperties & {
+  speed?: number
+  rotationIntensity?: number
+  floatIntensity?: number
+  floatingRange?: [number?, number?]
+}

@@ -272,6 +272,10 @@ export const sidebar = {
       {
         title: 'HTML',
         slug: '/docs/extras/components/02-html'
+      },
+      {
+        title: 'Float',
+        slug: '/docs/extras/components/03-float'
       }
     ]
   }
