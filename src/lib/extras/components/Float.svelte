@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MathUtils, Group as ThreeGroup } from 'three'
+  import { Group as ThreeGroup, MathUtils } from 'three'
   import { useFrame } from '../../hooks/useFrame'
   import Group from '../../objects/Group.svelte'
   import type { FloatProperties } from '../types/components'
@@ -43,22 +43,27 @@
       0 + map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
   }
 
-  useFrame((_, delta) => {
-    t += delta
+  useFrame(
+    (_, delta) => {
+      t += delta
 
-    combinedRotation = {
-      x: rotation?.x ?? 0 + (Math.cos((t / 4) * speed) / 8) * rotationIntensity,
-      y: rotation?.y ?? 0 + (Math.sin((t / 4) * speed) / 8) * rotationIntensity,
-      z: rotation?.z ?? 0 + (Math.sin((t / 4) * speed) / 20) * rotationIntensity
-    }
+      combinedRotation = {
+        x: rotation?.x ?? 0 + (Math.cos((t / 4) * speed) / 8) * rotationIntensity,
+        y: rotation?.y ?? 0 + (Math.sin((t / 4) * speed) / 8) * rotationIntensity,
+        z: rotation?.z ?? 0 + (Math.sin((t / 4) * speed) / 20) * rotationIntensity
+      }
 
-    combinedPosition = {
-      ...position,
-      y:
-        position?.y ??
-        0 + map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
+      combinedPosition = {
+        ...position,
+        y:
+          position?.y ??
+          0 + map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
+      }
+    },
+    {
+      debugFrameloopMessage: 'Float: framehandler'
     }
-  })
+  )
 </script>
 
 <Group

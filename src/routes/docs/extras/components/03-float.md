@@ -8,11 +8,7 @@ import Wrapper from '$examples/extras/float/Wrapper.svelte'
 
 !!!module_summary title=Float|sourcePath=extras/components/abstractions/Float.svelte|name=Float|from=threlte/extras|type=component
 
-This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie Float content to any object of your scene. It will be projected to the objects whereabouts automatically.
-
-:::admonition type="tip"
-The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
-:::
+This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
 <ExampleWrapper>
   <Wrapper />
@@ -21,6 +17,7 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 &&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../../../examples/extras/float/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../../../examples/extras/float/Scene.svelte)
+@[code svelte|title=Blob.svelte](../../../../examples/extras/float/Blob.svelte)
 &&&
 
 !!!
@@ -31,104 +28,13 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 ```svelte
 <script lang="ts">
+  import { Mesh } from 'threlte'
+  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
   import { Float } from 'threlte/extras'
 </script>
 
-<Float>
-  <h1>Hello World</h1>
-</Float>
-```
-
-#### Transform
-
-`transform` applies matrix3d transformations.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-</script>
-
-<Float transform>
-  <h1>Hello World</h1>
-</Float>
-```
-
-#### Occlude
-
-`<Html>` can be occluded behind geometry using the occlude `occlude` property.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-</script>
-
-<Float transform occlude>
-  <h1>Hello World</h1>
-</Float>
-```
-
-#### Visibility Change Event
-
-Use the property `occlude` and bind to the event `visibilitychange` to implement a custom hide/show behaviour.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-
-  const onVisibilityChange = (isVisible: boolean) => {
-    console.log(isVisible)
-  }
-</script>
-
-<Float transform occlude on:visibilitychange={onVisibilityChange}>
-  <h1>Hello World</h1>
-</Float>
-```
-
-:::admonition type="info"
-When binding to the event `visibilitychange` the contents of `<Float>` is _not_ automatically hidden when it's occluded.
-:::
-
-#### Sprite Rendering
-
-Use the property `sprite` in `transform` mode to render the contents of `<Float>` as a sprite.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-</script>
-
-<Float transform sprite>
-  <h1>Hello World</h1>
-</Float>
-```
-
-#### Center
-
-Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-</script>
-
-<Float center>
-  <h1>Hello World</h1>
-</Float>
-```
-
-#### Portal
-
-Use the property `portal` to mount the contents of the `<Float>` component on another `FloatElement`.  
-By default the contents are mounted as a sibling to the rendering `<canvas>`.
-
-```svelte
-<script lang="ts">
-  import { Float } from 'threlte/extras'
-</script>
-
-<Float portal={document.body}>
-  <h1>Hello World</h1>
+<Float speed={2}>
+  <Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshBasicMaterial()} />
 </Float>
 ```
 
@@ -136,50 +42,32 @@ By default the contents are mounted as a sibling to the rendering `<canvas>`.
 
 ```ts
 // optional
+speed: number = 1
+rotationIntensity: number = 1
+floatIntensity: number = 1
+floatingRange: [number?, number?] = [-0.1, 0.1]
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
+castShadow: boolean | undefined = undefined
+receiveShadow: boolean | undefined = undefined
+frustumCulled: boolean | undefined = undefined
+renderOrder: number | undefined = undefined
+visible: boolean | undefined = undefined
 viewportAware: boolean = false
-transform: boolean = false
-calculatePosition: (
-  obj: Object3D,
-  camera: Camera,
-  size: { width: number; height: number }
-) => [number, number] = defaultCalculatePosition
-eps: number = 0.001
-occlude: boolean | Object3D[] | undefined = undefined
-zIndexRange: [number, number] = [16777271, 0]
-sprite: boolean = false
-pointerEvents:
-  | 'auto'
-  | 'none'
-  | 'visiblePainted'
-  | 'visibleFill'
-  | 'visibleStroke'
-  | 'visible'
-  | 'painted'
-  | 'fill'
-  | 'stroke'
-  | 'all'
-  | 'inherit' = 'auto'
-center: boolean = false
-fullscreen: boolean = false
-distanceFactor: number | undefined = undefined
-as: keyof FloatElementTagNameMap = 'div'
-portal: FloatElement | undefined = undefined
 ```
 
-### Bindings
+### Bindings <!-- omit in toc -->
 
 ```ts
+group: THREE.Group
 inViewport: boolean
 ```
 
-### Events
+### Events <!-- omit in toc -->
 
 ```ts
-visibilitychange: CustomEvent<boolean>
 viewportenter: undefined
 viewportleave: undefined
 ```

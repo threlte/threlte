@@ -1,22 +1,15 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import { derived } from 'svelte/store'
-
-  import {
-    EquirectangularReflectionMapping,
-    GridHelper,
-    Mesh as ThreeMesh,
-    MeshBasicMaterial
-  } from 'three'
+  import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
   import {
     AmbientLight,
     DirectionalLight,
+    OrbitControls,
     PerspectiveCamera,
     useLoader,
-    useThrelte,
-    Mesh,
-    OrbitControls
+    useThrelte
   } from 'threlte'
   import { useGltf } from 'threlte/extras'
   import Blob from './Blob.svelte'

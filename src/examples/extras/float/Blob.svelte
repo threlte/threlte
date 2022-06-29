@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-
   import { spring } from 'svelte/motion'
-
   import { Color, MeshPhysicalMaterial, type BufferGeometry } from 'three'
   import { Mesh } from 'threlte'
   import { Float } from 'threlte/extras'
