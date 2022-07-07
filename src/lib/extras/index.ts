@@ -5,5 +5,5 @@ export { useGltf } from './hooks/useGltf'
 
 // abstractions
 export { default as Edges } from './components/abstractions/Edges.svelte'
-export { default as HTML } from './components/HTML.svelte'
+export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as Float } from './components/Float.svelte'

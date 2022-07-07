@@ -43,8 +43,6 @@
 <PerspectiveCamera position={{ z: 10, y: 5, x: 10 }} fov={30}>
   <OrbitControls
     target={{ y: 0.75 }}
-    autoRotate
-    autoRotateSpeed={0.3}
     maxPolarAngle={85 * DEG2RAD}
     minPolarAngle={20 * DEG2RAD}
     maxAzimuthAngle={45 * DEG2RAD}
