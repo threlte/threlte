@@ -7,7 +7,7 @@ import Icons from 'unplugin-icons/vite'
 /** @type {import('vite').UserConfig} */
 const config = {
 	ssr: {
-		noExternal: ['three', 'troika-three-text']
+		noExternal: ['three']
 	},
 	plugins: [
 		{ ...threeMinifier(), enforce: 'pre' },
