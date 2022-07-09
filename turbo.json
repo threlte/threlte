@@ -16,7 +16,7 @@
 		},
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["build/**"]
     },
     "preview": {
       "cache": false
