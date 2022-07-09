@@ -27,7 +27,7 @@ const config = {
 	],
 	resolve: {
 		alias: {
-			$examples: resolve('src/examples')
+			$examples: resolve('./src/examples')
 		}
 	}
 }
