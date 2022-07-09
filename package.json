@@ -11,7 +11,7 @@
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "version": "changeset version",
-    "publish": "changeset publish"
+    "release": "changeset publish"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
