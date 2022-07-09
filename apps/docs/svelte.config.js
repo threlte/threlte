@@ -16,7 +16,12 @@ const config = {
 			default: true
 		},
 
-		adapter: adapter()
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: null,
+			precompress: false
+		})
 	}
 }
 
