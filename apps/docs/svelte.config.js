@@ -13,15 +13,11 @@ const config = {
 
 	kit: {
 		prerender: {
-			default: true
+			default: true,
+			entries: ['*']
 		},
 
-		adapter: adapter({
-			pages: './build',
-			assets: './build',
-			fallback: null,
-			precompress: false
-		})
+		adapter: adapter()
 	}
 }
 
