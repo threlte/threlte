@@ -28,6 +28,9 @@ jobs:
           node-version: 16.x
           cache: pnpm
 
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run package
+
       - name: Creating .npmrc
         run: |
           cat << EOF > "$HOME/.npmrc"
@@ -41,7 +44,7 @@ jobs:
         uses: changesets/action@v1
         with:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm install --frozen-lockfile && pnpm run package && changeset publish
+          publish: changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
