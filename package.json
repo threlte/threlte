@@ -10,6 +10,7 @@
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "version": "changeset version",
     "release": "changeset publish"
   },
   "devDependencies": {

@@ -50,5 +50,6 @@
 		"unplugin-icons": "^0.13.4",
 		"vite": "^2.9.14"
 	},
+	"private": true,
 	"type": "module"
 }
