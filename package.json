@@ -13,6 +13,7 @@
     "release": "changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.23.1",
     "eslint-config-custom": "*",
     "prettier": "latest",
     "turbo": "latest"
@@ -22,8 +23,5 @@
     "node": ">=16.0.0"
   },
   "type": "module",
-  "dependencies": {
-    "@changesets/cli": "^2.23.1"
-  },
   "packageManager": "pnpm@7.5.0"
 }

@@ -1,4 +1,4 @@
-name: Release
+name: Changesets
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 env:
   CI: true
-  HUSKY: 0
+  PNPM_CACHE_FOLDER: .pnpm-store
 
 jobs:
   release:
@@ -23,30 +23,20 @@ jobs:
         with:
           node-version: 16
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
+      - name: install pnpm
+        run: npm i pnpm@latest -g
 
-      - uses: pnpm/action-setup@v2.2.2
-        id: install_pnpm
-        with:
-          version: 7.4.1
-
-      - name: echo npm dest
-        run: echo "pnpm installed in ${{steps.install_pnpm.outputs.dest}}"
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: install dependencies
         run: pnpm install
 
-      - name: Create PR or Publish release
-        id: changesets
+      - name: create and publish versions
         uses: changesets/action@v1
         with:
-          publish: pnpm release
+          version: pnpm ci:version
+          publish: pnpm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
