@@ -23,17 +23,10 @@ const config = {
 				]
 			}
 		}),
-		// Icons({ compiler: 'svelte' }),
-		// kitDocsPlugin({
-		// 	shiki: {
-		// 		theme: 'material-ocean',
-		// 	},
-		// }),
 		sveltekit()
 	],
 	resolve: {
 		alias: {
-			$components: resolve('src/components'),
 			$examples: resolve('src/examples')
 		}
 	}
