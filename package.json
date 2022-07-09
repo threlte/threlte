@@ -2,14 +2,13 @@
   "name": "threlte-mono",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
+    "scripts": {
     "build": "turbo run build",
+    "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "package": "turbo run package --parallel",
+    "pack": "turbo run pack",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -18,9 +17,10 @@
     "turbo": "latest"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "pnpm": "^7.0.0",
+    "node": ">=16.0.0"
   },
+  "type": "module",
   "dependencies": {},
-  "packageManager": "npm@8.5.5"
+  "packageManager": "pnpm@7.5.0"
 }

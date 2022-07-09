@@ -1,0 +1,16 @@
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "threlte": ["src/lib/index.ts"],
+      "threlte/*": ["src/lib/*"],
+      "$components": ["src/components"],
+      "$components/*": ["src/components/*"],
+      "$examples": ["src/examples"],
+      "$examples/*": ["src/examples/*"]
+    }
+  }
+}
