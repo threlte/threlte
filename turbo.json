@@ -9,6 +9,9 @@
       "dependsOn": ["package"],
 			"cache": false
 		},
+		"prepare": {
+			"cache": false
+		},
     "publish": {
 			"dependsOn": ["^package"],
 			"outputs": [],

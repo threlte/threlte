@@ -6,6 +6,7 @@
   "scripts": {
     "package": "svelte-kit package",
     "package:watch": "svelte-kit package --watch",
+		"prepare": "svelte-kit sync",
     "pack": "cd package && pnpm pack && cd ..",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
