@@ -2,14 +2,15 @@
   "name": "threlte-mono",
   "version": "0.0.0",
   "private": true,
-    "scripts": {
+  "scripts": {
     "build": "turbo run build",
     "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "package": "turbo run package --parallel",
-    "pack": "turbo run pack",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "package": "turbo run package --filter='./packages/*'",
+    "package:graph": "turbo run package --filter='./packages/*' --graph",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
@@ -21,6 +22,8 @@
     "node": ">=16.0.0"
   },
   "type": "module",
-  "dependencies": {},
+  "dependencies": {
+    "@changesets/cli": "^2.23.1"
+  },
   "packageManager": "pnpm@7.5.0"
 }

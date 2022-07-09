@@ -1,5 +1,5 @@
 {
-	"name": "docs",
+	"name": "@threlte/docs",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
@@ -9,8 +9,7 @@
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
-		"format": "prettier --write --plugin-search-dir=. .",
-		"publish": "pnpm run package && pnpm publish ./package"
+		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
 		"@algolia/client-search": "^4.13.1",

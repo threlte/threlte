@@ -5,14 +5,12 @@
   "license": "MIT",
   "scripts": {
     "package": "svelte-kit package",
-    "package:watch": "svelte-kit package --watch",
-		"prepare": "svelte-kit sync",
-    "pack": "cd package && pnpm pack && cd ..",
+    "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
-    "publish": "npm publish package/"
+    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "format": "prettier --write --plugin-search-dir=. .",
+    "publish": "pnpm publish package/ --dry-run"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
