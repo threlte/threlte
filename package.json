@@ -9,7 +9,9 @@
     "lint": "turbo run lint",
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "version": "changeset version",
+    "publish": "changeset publish"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
