@@ -3,8 +3,8 @@ title: Audio
 ---
 
 !!!module_summary title=Audio|sourcePath=audio/Audio.svelte|name=Audio|from=threlte|type=component
-Create a non-positional (global) audio object.  
-This uses the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+Create a non-positional (global) audio object.
+This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
 :::admonition type="tip"
 You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.

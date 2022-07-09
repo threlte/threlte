@@ -7,15 +7,15 @@ import Wrapper from '$examples/audio/Wrapper.svelte'
 </script>
 
 !!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component
-Creates a positional audio entity.  
-This uses the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+Creates a positional audio entity.
+This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
 :::admonition type="tip"
 You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
 :::
 
 <ExampleWrapper>
-  <Wrapper /> 
+  <Wrapper />
 </ExampleWrapper>
 
 &&&code_wrapper

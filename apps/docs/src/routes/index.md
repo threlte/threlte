@@ -19,7 +19,7 @@ Threlte is a component library for Svelte to build and render three.js scenes de
 @[code svelte|title=Scene.svelte](../../examples/Introduction/Scene.svelte)
 
 :::admonition type="info"
-Hooks that make use of the context (as does [useFrame](/docs/hooks/04-use-frame) in this example) need to be nested in a child component to `<Canvas>`.
+Hooks that make use of the context (as does [useFrame](/hooks/04-use-frame) in this example) need to be nested in a child component to `<Canvas>`.
 :::
 
 &&&

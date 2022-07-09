@@ -17,9 +17,9 @@ importers:
       '@algolia/client-search': ^4.13.1
       '@docsearch/css': ^3.1.1
       '@docsearch/js': ^3.1.1
-      '@iconify-json/ri': ^1.1.1
+      '@iconify-json/ri': ^1.1.3
       '@sveltejs/adapter-auto': next
-      '@sveltejs/adapter-static': ^1.0.0-next.29
+      '@sveltejs/adapter-static': ^1.0.0-next.35
       '@sveltejs/kit': next
       '@svelteness/kit-docs': ^0.22.12
       '@tailwindcss/typography': ^0.5.3
@@ -27,32 +27,32 @@ importers:
       '@threlte/extras': workspace:*
       '@types/react': ^18.0.15
       '@types/three': ^0.140.0
-      '@typescript-eslint/eslint-plugin': ^5.27.0
-      '@typescript-eslint/parser': ^5.27.0
+      '@typescript-eslint/eslint-plugin': ^5.30.5
+      '@typescript-eslint/parser': ^5.30.5
       '@yushijinhun/three-minifier-rollup': ^0.3.1
       autoprefixer: ^10.4.7
-      clsx: ^1.1.1
-      eslint: ^8.16.0
-      eslint-config-prettier: ^8.3.0
+      clsx: ^1.2.1
+      eslint: ^8.19.0
+      eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
       postcss: ^8.4.14
       postcss-load-config: ^4.0.1
-      prettier: ^2.6.2
+      prettier: ^2.7.1
       prettier-plugin-svelte: ^2.7.0
       react: ^18.2.0
       react-dom: ^18.2.0
       shiki: ^0.10.1
-      svelte: ^3.44.0
-      svelte-check: ^2.7.1
+      svelte: ^3.49.0
+      svelte-check: ^2.8.0
       svelte-preprocess: ^4.10.7
       tailwindcss: ^3.1.5
       three: ^0.140.2
-      tslib: ^2.3.1
-      typescript: ^4.7.2
+      tslib: ^2.4.0
+      typescript: ^4.7.4
       unplugin-icons: ^0.13.4
-      vite: ^2.9.13
+      vite: ^2.9.14
     dependencies:
-      '@sveltejs/adapter-static': 1.0.0-next.34
+      '@sveltejs/adapter-static': 1.0.0-next.35
       '@yushijinhun/three-minifier-rollup': 0.3.1
     devDependencies:
       '@algolia/client-search': 4.13.1
@@ -575,6 +575,13 @@ packages:
     resolution: {integrity: sha512-XjuMhemme5z0L/B2nTZpA6k+RJjF+b6L96ts6gIQ6ixiCzJQSbBqJhrrBYBCaeLAKvdUMoGEmX8m862JhKjRFg==}
     dependencies:
       tiny-glob: 0.2.9
+    dev: true
+
+  /@sveltejs/adapter-static/1.0.0-next.35:
+    resolution: {integrity: sha512-iIg5nCMJF2/s/Y7zmy9pzp+U3YDBL6OQKmwfJm2H3Afde/XlhOuNlSO6K//hxmLmvrd7Oh6Kb0MLhwVKp0cuUA==}
+    dependencies:
+      tiny-glob: 0.2.9
+    dev: false
 
   /@sveltejs/adapter-vercel/1.0.0-next.60:
     resolution: {integrity: sha512-Xq+gaxQ2iKvP9G+7C8+r4xScMOUEhBouDEFyLCOzKrwmd+JWBzCl1N0qKeKm71MbR7l4YJn8J+e7105j8x+RXA==}
@@ -668,7 +675,7 @@ packages:
     resolution: {integrity: sha512-nEpVRPWW9EBmx2SCfNn3ClYxPL7IktPX12HhIoSc/H5mMjdeW3+YsXIpseLQ2xF35+OcpwKQbEUw5VtqE4PDNA==}
     deprecated: This is a stub types definition. lru-cache provides its own type definitions, so you do not need this installed.
     dependencies:
-      lru-cache: 6.0.0
+      lru-cache: 7.12.0
     dev: true
 
   /@types/markdown-it/12.2.3:
@@ -1290,8 +1297,8 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001363
-      electron-to-chromium: 1.4.184
-      node-releases: 2.0.5
+      electron-to-chromium: 1.4.185
+      node-releases: 2.0.6
       update-browserslist-db: 1.0.4_browserslist@4.21.1
     dev: true
 
@@ -1539,8 +1546,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /electron-to-chromium/1.4.184:
-    resolution: {integrity: sha512-IADi390FRdvxWfVX3hjzfTDNVHiTqVo9ar53/7em/SfhUG9YcjVhyQecY/XwmBHRKden/wFud7RWOUH7+7LFng==}
+  /electron-to-chromium/1.4.185:
+    resolution: {integrity: sha512-9kV/isoOGpKkBt04yYNaSWIBn3187Q5VZRtoReq8oz5NY/A4XmU6cAoqgQlDp7kKJCZMRjWZ8nsQyxfpFHvfyw==}
     dev: true
 
   /emoji-regex/8.0.0:
@@ -2876,6 +2883,11 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /lru-cache/7.12.0:
+    resolution: {integrity: sha512-OIP3DwzRZDfLg9B9VP/huWBlpvbkmbfiBy8xmsXp4RPmE4A3MhwNozc5ZJ3fWnSg8fDcdlE/neRTPG2ycEKliw==}
+    engines: {node: '>=12'}
+    dev: true
+
   /magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
     dependencies:
@@ -3016,8 +3028,8 @@ packages:
     hasBin: true
     dev: true
 
-  /node-releases/2.0.5:
-    resolution: {integrity: sha512-U9h1NLROZTq9uE1SNffn6WuPDg8icmi3ns4rEl/oTfIle4iLjTliCzgTsbaIFMq/Xn078/lfY/BL0GWZ+psK4Q==}
+  /node-releases/2.0.6:
+    resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
 
   /nopt/5.0.0:

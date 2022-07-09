@@ -52,7 +52,7 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 #### Using the `useGltf` Hook
 
-Sometimes you might want to use the hook [`useGltf`](/docs/extras/hooks/01-use-gltf) to reuse parts of a model or use the embedded camera. In this case, the hook `useGltf` returns an object with a property `gltf` which you can pass as the first argument to the hook `useGltfAnimations`.
+Sometimes you might want to use the hook [`useGltf`](/hooks/08-use-gltf) to reuse parts of a model or use the embedded camera. In this case, the hook `useGltf` returns an object with a property `gltf` which you can pass as the first argument to the hook `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">

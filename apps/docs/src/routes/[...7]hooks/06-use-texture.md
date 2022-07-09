@@ -3,7 +3,7 @@ title: useTexture
 ---
 
 !!!module_summary title=useTexture|sourcePath=hooks/useTexture.ts|name=useTexture|from=threlte|type=hook
-`useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](/docs/components/01-canvas).
+`useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](/components/01-canvas).
 !!!
 
 ### Usage Without Context
@@ -16,9 +16,9 @@ This hook can be called outside of the `<Canvas>` component, but with limitation
 
 ```ts
 const texture = useTexture('tex.jpg', {
-  onError: (error) => {
-    console.warn(`An error occured loading the texture: ${error.message}`)
-  }
+	onError: (error) => {
+		console.warn(`An error occured loading the texture: ${error.message}`)
+	}
 })
 ```
 
