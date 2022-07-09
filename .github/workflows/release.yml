@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   release:
     name: Release
@@ -18,7 +20,7 @@ jobs:
         with:
           node-version: 16
 
-      - name: install pnpm
+			- name: install pnpm
         run: npm i pnpm@latest -g
 
       - name: Install Dependencies
@@ -29,7 +31,7 @@ jobs:
         uses: changesets/action@v1
         with:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm release
+          publish: npm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
