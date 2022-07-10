@@ -22,11 +22,11 @@ jobs:
         with:
           version: 7.5.0
 
-			- name: Install deps
-				run: pnpm install
+      - name: Install deps
+        run: pnpm install
 
-			- name: Build packages
-				run: pnpm run package
+      - name: Build packages
+        run: pnpm run package
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
