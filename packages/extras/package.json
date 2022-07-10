@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@threlte/extras",
   "version": "3.13.3",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
