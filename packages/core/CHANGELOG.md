@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 3.13.5
+
+### Patch Changes
+
+- 11aa5eb: yes
+
 ## 3.13.4
 
 ### Patch Changes
