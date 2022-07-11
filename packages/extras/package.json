@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@threlte/extras",
-  "version": "3.13.3",
+  "version": "3.13.4",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
