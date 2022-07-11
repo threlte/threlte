@@ -1,5 +1,11 @@
 # @threlte/docs
 
+## 0.0.4
+
+### Patch Changes
+
+- trying to delete
+
 ## 0.0.3
 
 ### Patch Changes

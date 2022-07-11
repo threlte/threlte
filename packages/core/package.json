@@ -1,10 +1,10 @@
 {
   "name": "@threlte/core",
-  "version": "3.13.5",
+  "version": "3.13.7",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
-    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts",
+    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts && rm ./dist/package.json",
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -40,17 +40,15 @@
   "dependencies": {
     "troika-three-text": "^0.46.4"
   },
-  "main": "./src/lib/index.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/lib/index.ts"
   },
   "publishConfig": {
-    "directory": "package",
-    "main": "./index.js",
     "exports": {
       "./package.json": "./package.json",
-      ".": "./index.js"
-    }
+      ".": "./dist/index.js"
+    },
+    "types": "./dist/index.d.ts"
   }
 }
