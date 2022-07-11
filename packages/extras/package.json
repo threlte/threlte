@@ -4,7 +4,7 @@
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
-    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts",
+    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts && rm ./dist/package.json",
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
