@@ -45,6 +45,9 @@
     ".": "./src/lib/index.ts"
   },
   "publishConfig": {
+    "files": [
+      "dist"
+    ],
     "exports": {
       "./package.json": "./package.json",
       ".": "./dist/index.js"

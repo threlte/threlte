@@ -41,17 +41,18 @@
   "dependencies": {
     "troika-three-text": "^0.46.4"
   },
-  "main": "./src/lib/index.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/lib/index.ts"
   },
   "publishConfig": {
-    "directory": "package",
-    "main": "./index.js",
+    "files": [
+      "dist"
+    ],
     "exports": {
       "./package.json": "./package.json",
-      ".": "./index.js"
-    }
+      ".": "./dist/index.js"
+    },
+    "types": "./dist/index.d.ts"
   }
 }
