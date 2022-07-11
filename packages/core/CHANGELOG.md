@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 3.13.10
+
+### Patch Changes
+
+- 4de7371: added svelte identifier
+
 ## 3.13.9
 
 ### Patch Changes
