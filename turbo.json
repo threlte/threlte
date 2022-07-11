@@ -2,18 +2,13 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "package": {
-			"dependsOn": ["^package"],
-			"outputs": ["package/*"],
-			"cache": false
-		},
-		"prepare": {
-			"cache": false
-		},
-    "publish": {
-			"dependsOn": ["^package"],
-			"outputs": [],
-			"cache": false
-		},
+      "dependsOn": ["^package"],
+      "outputs": ["package/*"],
+      "cache": false
+    },
+    "prepare": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["build/**"]
