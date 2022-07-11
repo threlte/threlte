@@ -44,8 +44,8 @@
     "./package.json": "./package.json",
     ".": "./src/lib/index.ts"
   },
-  "svelte": "./dist/index.js",
   "publishConfig": {
+    "svelte": "./dist/index.js",
     "files": [
       "dist"
     ],
