@@ -5,7 +5,7 @@
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
-    "package": "svelte-kit package",
+    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts",
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -30,6 +30,7 @@
     "svelte-preprocess": "^4.10.5",
     "svelte2tsx": "^0.5.9",
     "three": "^0.140.2",
+    "ts-node": "^10.8.2",
     "tsafe": "^0.9.0",
     "tslib": "^2.3.1",
     "type-fest": "^2.13.0",
