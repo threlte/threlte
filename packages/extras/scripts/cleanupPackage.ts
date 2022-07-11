@@ -5,14 +5,16 @@ import { readFileSync, writeFileSync } from 'fs'
  * a .publishConfig property and to set the proper exports
  */
 const cleanPackage = () => {
-  const packageJson = JSON.parse(
+  let packageJson = JSON.parse(
     readFileSync('./package.json', {
       encoding: 'utf-8'
     })
   )
 
-  packageJson.exports = packageJson.publishConfig.exports
-  packageJson.types = packageJson.publishConfig.types
+  packageJson = {
+    ...packageJson,
+    ...packageJson.publishConfig
+  }
 
   delete packageJson.publishConfig
 
