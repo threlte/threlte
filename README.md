@@ -1,77 +1,35 @@
-# Turborepo starter with npm
+![Threlte Logo](https://raw.githubusercontent.com/grischaerbe/threlte/main/static/logo/threlte_logo_github.png)
 
-This is an official starter turborepo.
+A three.js component library for svelte.
 
-## What's inside?
+![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
+![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
 
-This turborepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
+Build three.js scenes declaratively with threlte components that are reactive to the core, readily interactive and can participate in Svelte's ecosystem.
 
-### Apps and Packages
+## Official Documentation
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+Visit [threlte.xyz](https://threlte.xyz)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Packages
 
-### Utilities
+**[`@threlte/core`](https://github.com/threlte/threlte/tree/main/packages/core)** - core components library with components that closely follow three.js and accompanying hooks
 
-This turborepo has some additional tools already setup for you:
+**[`@threlte/extras`](https://github.com/threlte/threlte/tree/main/packages/extras)** - components, helpers, hooks and more that extend the core functionality
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Getting help
 
-## Setup
+We want to build a friendly community that is happy to help those who need it. Feel free to join our [Discord server](https://discord.gg/EqUBCfCaGm).
 
-This repository is used in the `npx create-turbo@latest` command, and selected when choosing which package manager you wish to use with your monorepo (npm).
+## Contributing
 
-### Build
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-To build all apps and packages, run the following command:
+- If you have a suggestion that would make this project better, submit an issue
+- If you would like to directly contribute, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) then submit a PR
 
-```
-cd my-turborepo
-npm run build
-```
+---
 
-### Develop
+### License
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-npm run dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+The MIT License (MIT). Please see the [License File](LICENSE.md) for more information.
