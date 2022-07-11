@@ -49,6 +49,7 @@
     "files": [
       "dist"
     ],
+    "svelte": "./dist/index.js",
     "exports": {
       "./package.json": "./package.json",
       ".": "./dist/index.js"
