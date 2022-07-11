@@ -17,6 +17,7 @@ const cleanPackage = () => {
   )
 
   delete packagedJson.publishConfig
+  delete packagedJson.main
   packagedJson.exports = originalJson.publishConfig.exports
 
   writeFileSync('./package/package.json', JSON.stringify(packagedJson, null, 2), {
