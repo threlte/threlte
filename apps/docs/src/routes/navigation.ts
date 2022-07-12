@@ -36,10 +36,10 @@ export const sidebar = {
 				slug: '/concepts/03-miscellaneous'
 			}
 		],
-		'Core Components': [
+		Core: [
 			{
 				title: 'Canvas',
-				slug: '/components/01-canvas'
+				slug: '/core/canvas'
 			},
 			{
 				title: 'Objects',
@@ -47,39 +47,35 @@ export const sidebar = {
 			},
 			{
 				title: 'Mesh',
-				slug: '/components/11-mesh'
+				slug: '/core/mesh'
 			},
 			{
 				title: 'InstancedMesh',
-				slug: '/components/12-instanced-mesh'
+				slug: '/core/instanced-mesh'
 			},
 			{
 				title: 'Instance',
-				slug: '/components/13-instance'
-			},
-			{
-				title: 'GLTF',
-				slug: '/components/14-gltf'
+				slug: '/core/instance'
 			},
 			{
 				title: 'Group',
-				slug: '/components/15-group'
+				slug: '/core/group'
 			},
 			{
 				title: 'Object3D',
-				slug: '/components/16-object3d'
+				slug: '/core/object3d'
 			},
 			{
 				title: 'Line',
-				slug: '/components/17-line'
+				slug: '/core/line'
 			},
 			{
 				title: 'Line2',
-				slug: '/components/18-line-2'
+				slug: '/core/line-2'
 			},
 			{
 				title: 'LineSegments',
-				slug: '/components/19-line-segments'
+				slug: '/core/line-segments'
 			},
 			{
 				title: 'Cameras',
@@ -87,11 +83,11 @@ export const sidebar = {
 			},
 			{
 				title: 'PerspectiveCamera',
-				slug: '/components/21-perspective-camera'
+				slug: '/core/perspective-camera'
 			},
 			{
 				title: 'OrthographicCamera',
-				slug: '/components/22-orthographic-camera'
+				slug: '/core/orthographic-camera'
 			},
 			{
 				title: 'Lights',
@@ -99,23 +95,23 @@ export const sidebar = {
 			},
 			{
 				title: 'AmbientLight',
-				slug: '/components/31-ambient-light'
+				slug: '/core/ambient-light'
 			},
 			{
 				title: 'DirectionalLight',
-				slug: '/components/32-directional-light'
+				slug: '/core/directional-light'
 			},
 			{
 				title: 'HemisphereLight',
-				slug: '/components/33-hemisphere-light'
+				slug: '/core/hemisphere-light'
 			},
 			{
 				title: 'PointLight',
-				slug: '/components/34-point-light'
+				slug: '/core/point-light'
 			},
 			{
 				title: 'SpotLight',
-				slug: '/components/35-spotlight'
+				slug: '/core/spot-light'
 			},
 			{
 				title: 'Audio',
@@ -123,15 +119,15 @@ export const sidebar = {
 			},
 			{
 				title: 'AudioListener',
-				slug: '/components/41-audio-listener'
+				slug: '/core/audio-listener'
 			},
 			{
 				title: 'Audio',
-				slug: '/components/42-audio'
+				slug: '/core/audio'
 			},
 			{
 				title: 'PositionalAudio',
-				slug: '/components/43-positional-audio'
+				slug: '/core/positional-audio'
 			},
 			{
 				title: 'Controls',
@@ -139,11 +135,11 @@ export const sidebar = {
 			},
 			{
 				title: 'OrbitControls',
-				slug: '/components/51-orbit-controls'
+				slug: '/core/orbit-controls'
 			},
 			{
 				title: 'TransformControls',
-				slug: '/components/52-transform-controls'
+				slug: '/core/transform-controls'
 			},
 			{
 				title: 'Post Processing',
@@ -151,7 +147,7 @@ export const sidebar = {
 			},
 			{
 				title: 'Pass',
-				slug: '/components/61-pass'
+				slug: '/core/pass'
 			},
 			{
 				title: 'Misc',
@@ -159,23 +155,19 @@ export const sidebar = {
 			},
 			{
 				title: 'Fog',
-				slug: '/components/71-fog'
+				slug: '/core/fog'
 			},
 			{
 				title: 'FogExp2',
-				slug: '/components/72-fog-exp-2'
-			},
-			{
-				title: 'Text',
-				slug: '/components/73-text'
+				slug: '/core/fog-exp-2'
 			},
 			{
 				title: 'Layers',
-				slug: '/components/74-layers'
+				slug: '/core/layers'
 			},
 			{
 				title: 'ContextBridge',
-				slug: '/components/75-context-bridge'
+				slug: '/core/context-bridge'
 			},
 			{
 				title: 'Helpers',
@@ -183,7 +175,7 @@ export const sidebar = {
 			},
 			{
 				title: 'PositionalAudioHelper',
-				slug: '/components/81-positional-audio-helper'
+				slug: '/core/positional-audio-helper'
 			},
 			{
 				title: 'Instances',
@@ -191,65 +183,59 @@ export const sidebar = {
 			},
 			{
 				title: 'Object3DInstance',
-				slug: '/components/91-object3d-instance'
+				slug: '/core/object3d-instance'
 			},
 			{
 				title: 'MeshInstance',
-				slug: '/components/92-mesh-instance'
+				slug: '/core/mesh-instance'
 			},
 			{
 				title: 'CameraInstance',
-				slug: '/components/93-camera-instance'
+				slug: '/core/camera-instance'
 			},
 			{
 				title: 'LightInstance',
-				slug: '/components/94-light-instance'
+				slug: '/core/light-instance'
 			},
 			{
 				title: 'AudioInstance',
-				slug: '/components/95-audio-instance'
+				slug: '/core/audio-instance'
 			},
 			{
 				title: 'LineInstance',
-				slug: '/components/96-line-instance'
-			}
-		],
-		'Core Hooks': [
+				slug: '/core/line-instance'
+			},
+			{
+				title: 'Hooks',
+				slug: ''
+			},
 			{
 				title: 'useThrelte',
-				slug: '/hooks/01-use-threlte'
+				slug: '/core/use-threlte'
 			},
 			{
 				title: 'useThrelteRoot',
-				slug: '/hooks/02-use-threlte-root'
+				slug: '/core/use-threlte-root'
 			},
 			{
 				title: 'useThrelteAudio',
-				slug: '/hooks/03-use-threlte-audio'
+				slug: '/core/use-threlte-audio'
 			},
 			{
 				title: 'useFrame',
-				slug: '/hooks/04-use-frame'
+				slug: '/core/use-frame'
 			},
 			{
 				title: 'useLoader',
-				slug: '/hooks/05-use-loader'
+				slug: '/core/use-loader'
 			},
 			{
 				title: 'useTexture',
-				slug: '/hooks/06-use-texture'
+				slug: '/core/use-texture'
 			},
 			{
 				title: 'useAudioListener',
-				slug: '/hooks/07-use-audio-listener'
-			},
-			{
-				title: 'useGltf',
-				slug: '/hooks/08-use-gltf'
-			},
-			{
-				title: 'useGltfAnimations',
-				slug: '/hooks/09-use-gltf-animations'
+				slug: '/core/use-audio-listener'
 			}
 		],
 		Extras: [
@@ -258,24 +244,40 @@ export const sidebar = {
 				slug: ''
 			},
 			{
+				title: 'useGltf',
+				slug: '/extras/usegltf'
+			},
+			{
+				title: 'useGltfAnimations',
+				slug: '/extras/usegltfanimations'
+			},
+			{
 				title: 'useCursor',
-				slug: '/extras/hooks/03-use-cursor'
+				slug: '/extras/usecursor'
 			},
 			{
 				title: 'Components',
 				slug: ''
 			},
 			{
+				title: 'GLTF',
+				slug: '/extras/gltf'
+			},
+			{
+				title: 'Text',
+				slug: '/extras/text'
+			},
+			{
 				title: 'Edges',
-				slug: '/extras/components/01-edges'
+				slug: '/extras/edges'
 			},
 			{
 				title: 'HTML',
-				slug: '/extras/components/02-html'
+				slug: '/extras/html'
 			},
 			{
 				title: 'Float',
-				slug: '/extras/components/03-float'
+				slug: '/extras/float'
 			}
 		]
 	}

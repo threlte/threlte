@@ -1,9 +1,5 @@
 <script context="module">
-	export const load = createKitDocsLoader({
-		sidebar: {
-			'/docs': '/docs'
-		}
-	})
+	export const load = createKitDocsLoader()
 </script>
 
 <script>
@@ -33,8 +29,24 @@
 	/** @type {import('@svelteness/kit-docs').MarkdownMeta | null} */
 	export let meta = null
 
-	/** @type {import('@svelteness/kit-docs').ResolvedSidebarConfig | null} */
-	// export let sidebar = null
+	let mergedMeta = meta ?? {
+		description: '',
+		excerpt: '',
+		frontmatter: {},
+		headers: [],
+		lastUpdated: 0,
+		slug: '',
+		title: ''
+	}
+	$: mergedMeta = meta ?? {
+		description: '',
+		excerpt: '',
+		frontmatter: {},
+		headers: [],
+		lastUpdated: 0,
+		slug: '',
+		title: ''
+	}
 
 	/** @type {import('@svelteness/kit-docs').NavbarConfig} */
 	const navbar = {
@@ -59,7 +71,7 @@
 	{/key}
 </svelte:head>
 
-<KitDocs {meta}>
+<KitDocs meta={mergedMeta}>
 	<KitDocsLayout {navbar} {sidebar} search>
 		<div slot="sidebar-top">
 			<a href="/" alt="Threlte Logo">
