@@ -15,7 +15,7 @@ import type {
 import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import type { LookAt, Position, Rotation, Scale, Text as TextType, ThrelteLayers } from './types'
+import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 import type { SetOptional } from 'type-fest'
 
 export type HierarchicalObjectProperties = {
@@ -267,38 +267,6 @@ export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> &
 }
 
 export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
-
-export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  text?: TextType['text']
-  anchorX?: TextType['anchorX']
-  anchorY?: TextType['anchorY']
-  curveRadius?: TextType['curveRadius']
-  font?: TextType['font']
-  fontSize?: TextType['fontSize']
-  letterSpacing?: TextType['letterSpacing']
-  lineHeight?: TextType['lineHeight']
-  maxWidth?: TextType['maxWidth']
-  overflowWrap?: TextType['overflowWrap']
-  textAlign?: TextType['textAlign']
-  textIndent?: TextType['textIndent']
-  whiteSpace?: TextType['whiteSpace']
-  material?: TextType['material'] | null
-  color?: TextType['color']
-  depthOffset?: TextType['depthOffset']
-  clipRect?: TextType['clipRect']
-  glyphGeometryDetail?: TextType['glyphGeometryDetail']
-  sdfGlyphSize?: TextType['sdfGlyphSize']
-  outlineWidth?: TextType['outlineWidth']
-  outlineColor?: TextType['outlineColor']
-  outlineOpacity?: TextType['outlineOpacity']
-  outlineBlur?: TextType['outlineBlur']
-  outlineOffsetX?: TextType['outlineOffsetX']
-  outlineOffsetY?: TextType['outlineOffsetY']
-  strokeWidth?: TextType['strokeWidth']
-  strokeColor?: TextType['strokeColor']
-  strokeOpacity?: TextType['strokeOpacity']
-  fillOpacity?: TextType['fillOpacity']
-}
 
 export type AudioListenerProperties = Omit<Object3DInstanceProperties, 'object'> & {
   id?: string

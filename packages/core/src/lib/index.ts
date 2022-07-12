@@ -44,9 +44,6 @@ export { default as Line } from './objects/Line.svelte'
 export { default as Line2 } from './objects/Line2.svelte'
 export { default as LineSegments } from './objects/LineSegments.svelte'
 
-// text component
-export { default as Text } from './text/Text.svelte'
-
 // object instance components
 export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'

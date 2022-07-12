@@ -112,18 +112,15 @@ importers:
       svelte-preprocess: ^4.10.5
       svelte2tsx: ^0.5.9
       three: ^0.140.2
-      troika-three-text: ^0.46.4
       ts-node: ^10.8.2
       tsafe: ^0.9.0
       tslib: ^2.3.1
       type-fest: ^2.13.0
       typescript: ^4.6.3
-    dependencies:
-      troika-three-text: 0.46.4_three@0.140.2
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.55
       '@sveltejs/adapter-static': 1.0.0-next.34
-      '@sveltejs/kit': 1.0.0-next.367_svelte@3.49.0+vite@2.9.14
+      '@sveltejs/kit': 1.0.0-next.370_svelte@3.49.0+vite@2.9.14
       '@types/node': 18.0.3
       '@types/three': 0.140.0
       '@typescript-eslint/eslint-plugin': 4.33.0_3ekaj7j3owlolnuhj3ykrb7u7i
@@ -177,7 +174,7 @@ importers:
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.55
       '@sveltejs/adapter-static': 1.0.0-next.34
-      '@sveltejs/kit': 1.0.0-next.367_svelte@3.49.0+vite@2.9.14
+      '@sveltejs/kit': 1.0.0-next.370_svelte@3.49.0+vite@2.9.14
       '@threlte/core': link:../core
       '@types/node': 18.0.3
       '@types/three': 0.140.0
@@ -821,6 +818,24 @@ packages:
 
   /@sveltejs/kit/1.0.0-next.367_svelte@3.49.0+vite@2.9.14:
     resolution: {integrity: sha512-glilWol6iJEf8esQpH0HOzdI4n/xgZtoLa9U9sbg+BZelQXFRRglaGyw+ahjEreBH5MH3/bpIYAPPObQN8Pgbg==}
+    engines: {node: '>=16.9'}
+    hasBin: true
+    peerDependencies:
+      svelte: ^3.44.0
+      vite: ^2.9.10
+    dependencies:
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.49_svelte@3.49.0+vite@2.9.14
+      chokidar: 3.5.3
+      sade: 1.8.1
+      svelte: 3.49.0
+      vite: 2.9.14
+    transitivePeerDependencies:
+      - diff-match-patch
+      - supports-color
+    dev: true
+
+  /@sveltejs/kit/1.0.0-next.370_svelte@3.49.0+vite@2.9.14:
+    resolution: {integrity: sha512-HAQtw8IjXs9yOPWKpuwpGgDT8x6Dgqm14NmFx0emF52vo5wn3tQzu0cBx299Po2RdRgfSDFKrNqVSlL1hVTHcA==}
     engines: {node: '>=16.9'}
     hasBin: true
     peerDependencies:
