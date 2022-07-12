@@ -14,6 +14,6 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 const loader = useLoader(OBJLoader, () => new OBJLoader())
 loader.load('models/model.obj', (obj) => {
-  console.log(object)
+	console.log(object)
 })
 ```

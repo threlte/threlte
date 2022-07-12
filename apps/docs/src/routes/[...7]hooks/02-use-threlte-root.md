@@ -11,19 +11,19 @@ The properties `linear`, `flat` and `dpr` are reactive and can also be set.
 
 ```ts
 const {
-  setCamera, // (camera: Camera) => void
-  linear, // Writable<boolean>
-  flat, // Writable<boolean>
-  dpr, // Writable<number>
-  addPass, // (pass: Pass) => void
-  removePass, // (pass: Pass) => void
-  addRaycastableObject, // (obj: Object3D) => void
-  removeRaycastableObject, // (obj: Object3D) => void
-  addInteractiveObject, // (obj: Object3D) => void
-  removeInteractiveObject, // (obj: Object3D) => void
-  interactiveObjects, // Set<Object3D>
-  raycastableObjects, // Set<Object3D>
-  raycaster, // Raycaster
-  lastIntersection // Intersection<Object3D<Event>> | null
+	setCamera, // (camera: Camera) => void
+	linear, // Writable<boolean>
+	flat, // Writable<boolean>
+	dpr, // Writable<number>
+	addPass, // (pass: Pass) => void
+	removePass, // (pass: Pass) => void
+	addRaycastableObject, // (obj: Object3D) => void
+	removeRaycastableObject, // (obj: Object3D) => void
+	addInteractiveObject, // (obj: Object3D) => void
+	removeInteractiveObject, // (obj: Object3D) => void
+	interactiveObjects, // Set<Object3D>
+	raycastableObjects, // Set<Object3D>
+	raycaster, // Raycaster
+	lastIntersection // Intersection<Object3D<Event>> | null
 } = useThrelteRoot()
 ```

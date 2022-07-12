@@ -39,20 +39,20 @@ them in your plugin like so:
 
 ```js title=svelte.config.js
 kitDocsPlugin({
-  markdown: {
-    components: [
-      // Override inline rule.
-      // `Image.svelte` must be a global component.
-      { name: 'Image', type: 'inline', rule: 'image' },
-      // Override block rule.
-      // `Blockquote.svelte` must be a global component.
-      { name: 'Blockquote', type: 'block', rule: 'blockquote' },
-      // Create custom container.
-      // `Button.svelte` must be a global component.
-      { name: 'Button', type: 'custom', container: { marker: '!' } },
-    ],
-  },
-});
+	markdown: {
+		components: [
+			// Override inline rule.
+			// `Image.svelte` must be a global component.
+			{ name: 'Image', type: 'inline', rule: 'image' },
+			// Override block rule.
+			// `Blockquote.svelte` must be a global component.
+			{ name: 'Blockquote', type: 'block', rule: 'blockquote' },
+			// Create custom container.
+			// `Button.svelte` must be a global component.
+			{ name: 'Button', type: 'custom', container: { marker: '!' } }
+		]
+	}
+})
 ```
 
 The configuration above will transform the following Markdown like so:

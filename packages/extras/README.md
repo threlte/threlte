@@ -1,34 +1,16 @@
-![Threlte Logo](https://raw.githubusercontent.com/grischaerbe/threlte/main/static/logo/threlte_logo_github.png)
+![Threlte Logo](https://user-images.githubusercontent.com/46897060/178455971-434f4c5d-6c26-4d34-acdc-b4b50e2a8a2c.png)
 
-A three.js component library for svelte.
+<h1 align="center">@threlte/extras</h1>
 
-![npm-license](https://img.shields.io/npm/l/threlte?style=flat-square)
-![npm-version](https://img.shields.io/npm/v/threlte?style=flat-square)
+Provides useful abstractions and utilities over existing `three.js` objects.
 
-Build three.js scenes declaratively with threlte components that are reactive to the core, readily interactive and can participate in Svelte's ecosystem.
-
-# Official Documentation
+## Official Documentation
 
 Visit [threlte.xyz](https://threlte.xyz)
 
-# Support
+## Support
 
 Join the [Discord server](https://discord.gg/EqUBCfCaGm)
-
----
-
-### Credits
-
-- [Svelte](https://github.com/sveltejs/svelte)
-- [SvelteKit](https://github.com/sveltejs/kit)
-- [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed)
-- [react-three-fiber](https://github.com/pmndrs/react-three-fiber)
-- [drei](https://github.com/pmndrs/drei)
-
-### Thank you
-
-- [Rich Harris](https://github.com/Rich-Harris) for the incredible work on Svelte, SvelteKit and Svelte Cubed
-- [@larissamantel](https://www.instagram.com/larissamantel_illu/) for the logo
 
 ---
 

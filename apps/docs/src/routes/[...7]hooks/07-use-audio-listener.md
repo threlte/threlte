@@ -23,7 +23,7 @@ const { context, listener } = useAudioListener('left-ear')
 // AudioContext to construct e.g. a filter. You
 // may also pass a listener id as the second argument.
 const filter = useAudioListener(({ context }) => {
-  return context.createBiquadFilter()
+	return context.createBiquadFilter()
 })
 // -> BiquadFilterNode
 ```

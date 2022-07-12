@@ -10,9 +10,9 @@ This hook lets you consume the audio context. Although it can be useful, this is
 
 ```ts
 const {
-  audioListeners, // Map<string, AudioListener>
-  getAudioListener, // (id?: string) => AudioListener | undefined
-  addAudioListener, // (listener: AudioListener, id?: string) => void
-  removeAudioListener // (id?: string) => void
+	audioListeners, // Map<string, AudioListener>
+	getAudioListener, // (id?: string) => AudioListener | undefined
+	addAudioListener, // (listener: AudioListener, id?: string) => void
+	removeAudioListener // (id?: string) => void
 } = useThrelteAudio()
 ```

@@ -1,5 +1,5 @@
-import { tick } from "svelte"
-import { writable, type Writable } from "svelte/store"
+import { tick } from 'svelte'
+import { writable, type Writable } from 'svelte/store'
 
 export const useTicked = (): Writable<boolean> => {
   const ticked = writable(false)
