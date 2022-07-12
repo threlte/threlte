@@ -83,4 +83,5 @@ export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   strokeColor?: TextType['strokeColor']
   strokeOpacity?: TextType['strokeOpacity']
   fillOpacity?: TextType['fillOpacity']
+  direction?: TextType['direction']
 }

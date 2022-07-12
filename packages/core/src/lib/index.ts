@@ -108,7 +108,6 @@ export type {
   GroupProperties,
   MeshProperties,
   Object3DProperties,
-  TextProperties,
   AudioInstanceProperties,
   AudioListenerProperties,
   AudioProperties,

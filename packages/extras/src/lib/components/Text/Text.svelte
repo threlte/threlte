@@ -1,10 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { Text as ThreeText } from 'troika-three-text'
-  import { useThrelte } from '@threlte/core'
-  import MeshInstance from '../../../core/src/lib/instances/MeshInstance.svelte'
-  import type { TextProperties } from '../../../core/src/lib/types/components'
-  import type { Text as TextType } from '../../../core/src/lib/types/types'
+  import { useThrelte, MeshInstance } from '@threlte/core'
+  import type { Text as TextType } from '../../types/types'
+  import type { TextProperties } from '../../types/components'
 
   // MeshInstance
   export let position: TextProperties['position'] = undefined
@@ -51,6 +50,7 @@
   export let strokeColor: TextProperties['strokeColor'] = undefined
   export let strokeOpacity: TextProperties['strokeOpacity'] = undefined
   export let fillOpacity: TextProperties['fillOpacity'] = undefined
+  export let direction: TextProperties['direction'] = undefined
 
   export const textObject = new ThreeText() as TextType
   const getTextObject = () => textObject

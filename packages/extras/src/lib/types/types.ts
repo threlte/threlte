@@ -33,6 +33,7 @@ export interface Text extends Mesh {
    * Sets the base direction for the text. The default value of "auto" will choose a direction based
    * on the text's content according to the bidi spec. A value of "ltr" or "rtl" will force the direction.
    */
+  direction: 'auto' | 'ltr' | 'rtl'
   /**
    * URL of a custom font to be used. Font files can be any of the formats supported by
    * OpenType (see https://github.com/opentypejs/opentype.js).
