@@ -24,7 +24,7 @@ npm install -D @types/three
 
 !!!
 
-!!!step title="Adapt SvelteKit config"|description="If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent three.js and troika-three-text from being externalized for SSR by vites externalization step"|orientation="vertical"
+!!!step title="Adapt Vite Configuration"|description="If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent three.js and troika-three-text from being externalized for SSR by vites externalization step"|orientation="vertical"
 
 ```js copyHighlight{3-5}|title=vite.config.js
 const config = {

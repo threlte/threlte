@@ -208,6 +208,34 @@ export const sidebar = {
 				slug: '/core/line-instance'
 			},
 			{
+				title: 'Traits',
+				slug: ''
+			},
+			{
+				title: 'HierarchicalObject',
+				slug: '/core/hierarchical-object'
+			},
+			{
+				title: 'SceneGraphObject',
+				slug: '/core/scene-graph-object'
+			},
+			{
+				title: 'TransformableObject',
+				slug: '/core/transformable-object'
+			},
+			{
+				title: 'ViewportAwareObject',
+				slug: '/core/viewport-aware-object'
+			},
+			{
+				title: 'InteractiveObject',
+				slug: '/core/interactive-object'
+			},
+			{
+				title: 'LayerableObject',
+				slug: '/core/layerable-object'
+			},
+			{
 				title: 'Hooks',
 				slug: ''
 			},

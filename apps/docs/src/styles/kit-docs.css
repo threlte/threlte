@@ -308,3 +308,7 @@ nav ul > li > h5 + ul > li:first-child > a {
 nav ul > li > h5 + ul > li:first-child > a[href=''] {
 	@apply !pt-2;
 }
+
+.prose :where(li):not(:where([class~='not-prose'] *)) {
+	@apply !my-0;
+}
