@@ -42,45 +42,45 @@ The `<Canvas>` component provides three useful contexts: `ThrelteContext`, `Thre
 See [`useThrelte`](/hooks/01-use-threlte), [`useThrelteRoot`](/hooks/02-use-threlte-root) and [`useThrelteAudio`](/hooks/03-use-threlte-audio) on how to easily consume these from within child components of `<Canvas>`.
 
 ```ts
-// useThrelte()
-type ThrelteContext = {
-	size: Readable<Size>
-	pointer: Writable<Vector2>
-	pointerOverCanvas: Writable<boolean>
-	clock: Clock
-	camera: Writable<Camera>
-	scene: Scene
-	renderer?: WebGLRenderer
-	composer?: EffectComposer
-	invalidate: (debugFrameloopMessage?: string) => void
-	advance: () => void
-}
+// type ThrelteContext
+const {
+	size, // Readable<Size>
+	pointer, // Writable<Vector2>
+	pointerOverCanvas, // Writable<boolean>
+	clock, // Clock
+	camera, // Writable<Camera>
+	scene, // Scene
+	renderer, // WebGLRenderer | undefined
+	composer, // EffectComposer | undefined
+	invalidate, // (debugFrameloopMessage?: string) => void
+	advance // () => void
+} = useThrelte()
 
-// useThrelteRoot()
-type ThrelteRootContext = {
-	setCamera: (camera: Camera) => void
-	linear: Writable<boolean>
-	flat: Writable<boolean>
-	dpr: Writable<number>
-	addPass: (pass: Pass) => void
-	removePass: (pass: Pass) => void
-	addRaycastableObject: (obj: Object3D) => void
-	removeRaycastableObject: (obj: Object3D) => void
-	addInteractiveObject: (obj: Object3D) => void
-	removeInteractiveObject: (obj: Object3D) => void
-	interactiveObjects: Set<Object3D>
-	raycastableObjects: Set<Object3D>
-	raycaster: Raycaster
-	lastIntersection: Intersection<Object3D<Event>> | null
-}
+// type ThrelteRootContext
+const {
+	setCamera, // (camera: Camera) => void
+	linear, // Writable<boolean>
+	flat, // Writable<boolean>
+	dpr, // Writable<number>
+	addPass, // (pass: Pass) => void
+	removePass, // (pass: Pass) => void
+	addRaycastableObject, // (obj: Object3D) => void
+	removeRaycastableObject, // (obj: Object3D) => void
+	addInteractiveObject, // (obj: Object3D) => void
+	removeInteractiveObject, // (obj: Object3D) => void
+	interactiveObjects, // Set<Object3D>
+	raycastableObjects, // Set<Object3D>
+	raycaster, // Raycaster
+	lastIntersection // Intersection<Object3D<Event>> | null
+} = useThrelteRoot()
 
-// useThrelteAudio()
-type ThrelteAudioContext = {
-	audioListeners: Map<string, AudioListener>
-	getAudioListener: (id?: string) => AudioListener | undefined
-	addAudioListener: (listener: AudioListener, id?: string) => void
-	removeAudioListener: (id?: string) => void
-}
+// type ThrelteAudioContext
+const {
+	audioListeners, // Map<string, AudioListener>
+	getAudioListener, // (id?: string) => AudioListener | undefined
+	addAudioListener, // (listener: AudioListener, id?: string) => void
+	removeAudioListener // (id?: string) => void
+} = useThrelteAudio()
 ```
 
 ### Type Notation
