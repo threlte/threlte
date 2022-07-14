@@ -2,7 +2,7 @@
 title: Group
 ---
 
-!!!module_summary title=Group|sourcePath=objects/Group.svelte|name=Group|from=threlte|type=component
+!!!module_summary title=Group|sourcePath=objects/Group.svelte|name=Group|from=core|type=component
 This is almost identical to an [`<Object3D>`](/components/16-object3d). Its purpose is to make working with groups of objects syntactically clearer.
 !!!
 

@@ -2,7 +2,7 @@
 title: Layers
 ---
 
-!!!module_summary title=Layers|sourcePath=misc/Layers.svelte|name=Layers|from=threlte|type=component
+!!!module_summary title=Layers|sourcePath=misc/Layers.svelte|name=Layers|from=core|type=component
 [Layers](https://threejs.org/#api/en/core/Layers) are one of many ways to manage the visibility of objects in three.js.
 The `<Layers>` component assigns all child components the layer memberships you pass to it. Any object that is a member of the same layers the camera is on, is visible.
 !!!

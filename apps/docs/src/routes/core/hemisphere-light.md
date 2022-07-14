@@ -2,8 +2,8 @@
 title: HemisphereLight
 ---
 
-!!!module_summary title=HemisphereLight|sourcePath=lights/HemisphereLight.svelte|name=HemisphereLight|from=threlte|type=component
-A light source positioned directly above the scene, with color fading from the sky color to the ground color.  
+!!!module_summary title=HemisphereLight|sourcePath=lights/HemisphereLight.svelte|name=HemisphereLight|from=core|type=component
+A light source positioned directly above the scene, with color fading from the sky color to the ground color.
 This light cannot be used to cast shadows.
 !!!
 

@@ -2,7 +2,7 @@
 title: Object3DInstance
 ---
 
-!!!module_summary title=Object3DInstance|sourcePath=instances/Object3DInstance.svelte|name=Object3DInstance|from=threlte|type=component
+!!!module_summary title=Object3DInstance|sourcePath=instances/Object3DInstance.svelte|name=Object3DInstance|from=core|type=component
 This component lets you use any manually instantiated object that extends `THREE.Object3D` in threlte.
 !!!
 

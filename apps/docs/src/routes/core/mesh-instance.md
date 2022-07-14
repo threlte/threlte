@@ -2,7 +2,7 @@
 title: MeshInstance
 ---
 
-!!!module_summary title=MeshInstance|sourcePath=instances/MeshInstance.svelte|name=MeshInstance|from=threlte|type=component
+!!!module_summary title=MeshInstance|sourcePath=instances/MeshInstance.svelte|name=MeshInstance|from=core|type=component
 This component lets you use any manually instantiated object that extends `THREE.Mesh` in threlte.
 !!!
 

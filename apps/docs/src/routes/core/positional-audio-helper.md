@@ -2,7 +2,7 @@
 title: PositionalAudioHelper
 ---
 
-!!!module_summary title=PositionalAudioHelper|sourcePath=helpers/PositionalAudioHelper.svelte|name=PositionalAudioHelper|from=threlte|type=component
+!!!module_summary title=PositionalAudioHelper|sourcePath=helpers/PositionalAudioHelper.svelte|name=PositionalAudioHelper|from=core|type=component
 This helper displays the directional cone of a [`<PositionalAudio>`](/components/43-positional-audio) component and needs to be a direct child it.
 !!!
 

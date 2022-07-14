@@ -2,7 +2,7 @@
 title: Object3D
 ---
 
-!!!module_summary title=Object3D|sourcePath=objects/Object3D.svelte|name=Object3D|from=threlte|type=component
+!!!module_summary title=Object3D|sourcePath=objects/Object3D.svelte|name=Object3D|from=core|type=component
 !!!
 
 ### Example

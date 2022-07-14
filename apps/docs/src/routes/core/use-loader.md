@@ -2,7 +2,7 @@
 title: useLoader
 ---
 
-!!!module_summary title=useLoader|sourcePath=hooks/useLoader.ts|name=useLoader|from=threlte|type=hook
+!!!module_summary title=useLoader|sourcePath=hooks/useLoader.ts|name=useLoader|from=core|type=hook
 `useLoader` memoizes Loaders to reuse them at any time. Pass in the Loaders class and a function to instantiate the loader.
 !!!
 

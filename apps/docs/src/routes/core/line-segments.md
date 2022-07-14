@@ -6,7 +6,7 @@ title: LineSegments
 import Wrapper from '$examples/line-segments/Wrapper.svelte'
 </script>
 
-!!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=threlte|type=component
+!!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=core|type=component
 
 Draw lines using `THREE.LineSegments`.
 

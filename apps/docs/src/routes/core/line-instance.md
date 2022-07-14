@@ -2,7 +2,7 @@
 title: LineInstance
 ---
 
-!!!module_summary title=LineInstance|sourcePath=instances/LineInstance.svelte|name=LineInstance|from=threlte|type=component
+!!!module_summary title=LineInstance|sourcePath=instances/LineInstance.svelte|name=LineInstance|from=core|type=component
 This component lets you use any manually instantiated object that extends `THREE.Line` in threlte.
 !!!
 

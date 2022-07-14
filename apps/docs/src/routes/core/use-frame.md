@@ -2,7 +2,7 @@
 title: useFrame
 ---
 
-!!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=threlte|type=hook|needsContext=true|divider=false
+!!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=core|type=hook|needsContext=true|divider=false
 This hook allows you to execute code on every frame inside the unified frameloop.
 You receive the state (the same as [`useThrelte`](/hooks/01-use-threlte)) and a clock delta in seconds.
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.

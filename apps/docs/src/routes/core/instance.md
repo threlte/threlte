@@ -2,7 +2,7 @@
 title: Instance
 ---
 
-!!!module_summary title=Instance|sourcePath=objects/Instance.svelte|name=Instance|from=threlte|type=component
+!!!module_summary title=Instance|sourcePath=objects/Instance.svelte|name=Instance|from=core|type=component
 Every `<Instance>` component nested in an [`<InstancedMesh>`](/components/12-instanced-mesh) component resembles one instance. An `<Instance>` can therefore only be used as a child component to a `<InstancedMesh>` component. The `<Instance>` component can be transformed and colorized individually:
 
 ```svelte

@@ -6,7 +6,7 @@ title: PositionalAudio
 import Wrapper from '$examples/audio/Wrapper.svelte'
 </script>
 
-!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=threlte|type=component
+!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=core|type=component
 Creates a positional audio entity.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 

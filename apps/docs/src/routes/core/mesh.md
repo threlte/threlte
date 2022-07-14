@@ -2,7 +2,7 @@
 title: Mesh
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=threlte|type=component
+!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=core|type=component
 This component represents triangular polygon mesh based objects.
 !!!
 

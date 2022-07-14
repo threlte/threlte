@@ -6,7 +6,7 @@ title: TransformControls
 import Wrapper from '$examples/transform-controls/Wrapper.svelte'
 </script>
 
-!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=threlte|type=component
+!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=core|type=component
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
 
 The component `<TransformControls>` needs to be a direct child of the component to be transformed.

@@ -2,7 +2,7 @@
 title: Pass
 ---
 
-!!!module_summary title=Pass|sourcePath=effects/Pass.svelte|name=Pass|from=threlte|type=component
+!!!module_summary title=Pass|sourcePath=effects/Pass.svelte|name=Pass|from=core|type=component
 By default, threlte will render using the regular WebGLRenderer. If any Pass is added to the scene, the `EffectComposer` will take over the rendering. A default `RenderPass` is added automatically and rendered before any `<Pass>`.
 !!!
 

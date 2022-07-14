@@ -2,8 +2,8 @@
 title: AmbientLight
 ---
 
-!!!module_summary title=AmbientLight|name=AmbientLight|sourcePath=lights/AmbientLight.svelte|from=threlte|type=component
-This light globally illuminates all objects in the scene equally.  
+!!!module_summary title=AmbientLight|name=AmbientLight|sourcePath=lights/AmbientLight.svelte|from=core|type=component
+This light globally illuminates all objects in the scene equally.
 This light cannot be used to cast shadows as it does not have a direction.
 !!!
 

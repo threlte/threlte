@@ -2,7 +2,7 @@
 title: Canvas
 ---
 
-!!!module_summary title=Canvas|sourcePath=Canvas.svelte|name=Canvas|from=threlte|type=component
+!!!module_summary title=Canvas|sourcePath=Canvas.svelte|name=Canvas|from=core|type=component
 The `<Canvas>` component is the root of your threlte scene. It provides the context that all other components and many hooks are depending on. This means they need to be **child components** to the `<Canvas>` component.
 
 By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes. Provide the property `size` to set a fixed `<canvas>` size.

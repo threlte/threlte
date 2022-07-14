@@ -2,7 +2,7 @@
 title: AudioInstance
 ---
 
-!!!module_summary title=AudioInstance|sourcePath=instances/AudioInstance.svelte|name=AudioInstance|from=threlte|type=component
+!!!module_summary title=AudioInstance|sourcePath=instances/AudioInstance.svelte|name=AudioInstance|from=core|type=component
 This component lets you use any manually instantiated object that extends `THREE.Audio` in threlte.
 !!!
 

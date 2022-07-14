@@ -2,7 +2,7 @@
 title: Audio
 ---
 
-!!!module_summary title=Audio|sourcePath=audio/Audio.svelte|name=Audio|from=threlte|type=component
+!!!module_summary title=Audio|sourcePath=audio/Audio.svelte|name=Audio|from=core|type=component
 Create a non-positional (global) audio object.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 

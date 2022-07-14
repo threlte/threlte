@@ -6,7 +6,7 @@ title: Line
 import Wrapper from '$examples/line/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Line|sourcePath=objects/Line.svelte|name=Line|from=threlte|type=component
+!!!module_summary title=Line|sourcePath=objects/Line.svelte|name=Line|from=core|type=component
 
 Draw Lines using `THREE.Line`. Due to limitations of the OpenGL Core Profile with the `THREE.WebGLRenderer` on most platforms the line width will always be `1` regardless of the value `lineWidth` of the used Material.
 

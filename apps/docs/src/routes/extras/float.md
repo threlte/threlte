@@ -6,7 +6,7 @@ title: Float
 import Wrapper from '$examples/extras/float/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Float|sourcePath=extras/components/abstractions/Float.svelte|name=Float|from=threlte/extras|type=component
+!!!module_summary title=Float|sourcePath=extras/components/abstractions/Float.svelte|name=Float|from=extras|type=component
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 

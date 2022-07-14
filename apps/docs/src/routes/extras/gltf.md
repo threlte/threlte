@@ -6,7 +6,7 @@ title: GLTF
 import Wrapper from '$examples/gltf/Wrapper.svelte'
 </script>
 
-!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=threlte|type=component
+!!!module_summary title=GLTF|sourcePath=objects/GLTF.svelte|name=GLTF|from=extras|type=component
 To use DRACO compression, provide a path to the DRACO decoder.
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 

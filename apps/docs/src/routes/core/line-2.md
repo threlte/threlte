@@ -6,7 +6,7 @@ title: Line2
 import Wrapper from '$examples/line-2/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=threlte|type=component
+!!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=core|type=component
 
 Draw Lines using `THREE.Line2`.
 

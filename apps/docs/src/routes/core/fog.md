@@ -2,7 +2,7 @@
 title: Fog
 ---
 
-!!!module_summary title=Fog|sourcePath=misc/Fog.svelte|name=Fog|from=threlte|type=component
+!!!module_summary title=Fog|sourcePath=misc/Fog.svelte|name=Fog|from=core|type=component
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 !!!
 

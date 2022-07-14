@@ -2,7 +2,7 @@
 title: ContextBridge
 ---
 
-!!!module_summary title=ContextBridge|sourcePath=misc/ContextBridge.svelte|name=ContextBridge|from=threlte|type=component
+!!!module_summary title=ContextBridge|sourcePath=misc/ContextBridge.svelte|name=ContextBridge|from=core|type=component
 This component is used to consume the context and rootContext provided by the `<Canvas>` component outside of it.
 !!!
 

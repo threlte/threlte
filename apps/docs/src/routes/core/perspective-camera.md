@@ -2,7 +2,7 @@
 title: PerspectiveCamera
 ---
 
-!!!module_summary title=PerspectiveCamera|sourcePath=cameras/PerspectiveCamera.svelte|name=PerspectiveCamera|from=threlte|type=component
+!!!module_summary title=PerspectiveCamera|sourcePath=cameras/PerspectiveCamera.svelte|name=PerspectiveCamera|from=core|type=component
 A camera that uses perspective projection.
 
 This projection mode is designed to mimic the way the human eye sees. It is the most common projection mode used for rendering a 3D scene.
