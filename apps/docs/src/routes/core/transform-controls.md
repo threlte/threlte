@@ -39,7 +39,7 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 </Mesh>
 ```
 
-The `<TransformControls>` component can also be used to transform [`<Instance>`](/components/13-instance) components:
+The `<TransformControls>` component can also be used to transform [`<Instance>`](/core/instance) components:
 
 ```svelte
 <script>

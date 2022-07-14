@@ -4,10 +4,10 @@ title: useFrame
 
 !!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=core|type=hook|needsContext=true|divider=false
 This hook allows you to execute code on every frame inside the unified frameloop.
-You receive the state (the same as [`useThrelte`](/hooks/01-use-threlte)) and a clock delta in seconds.
+You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
 
-You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/components/01-canvas) component.
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/core/canvas) component.
 
 ```ts
 type ThrelteUseFrameOptions = {

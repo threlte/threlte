@@ -3,7 +3,7 @@ title: useTexture
 ---
 
 !!!module_summary title=useTexture|sourcePath=hooks/useTexture.ts|name=useTexture|from=core|type=hook
-`useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](/components/01-canvas).
+`useTexture` allows you to easily load textures and automatically convert your textures to the correct color space based on your [settings on the `<Canvas>` component](/core/canvas).
 !!!
 
 ### Usage Without Context

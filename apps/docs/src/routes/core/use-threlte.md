@@ -47,7 +47,7 @@ const {
 
 ### Frameloop
 
-If the [frameloop is set to `'demand'`](/components/01-canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+If the [frameloop is set to `'demand'`](/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()
@@ -58,7 +58,7 @@ invalidate()
 invalidate('changed material color')
 ```
 
-If the [frameloop is set to `'never'`](/components/01-canvas) you must manually advance the frameloop to request a new render:
+If the [frameloop is set to `'never'`](/core/canvas) you must manually advance the frameloop to request a new render:
 
 ```ts
 const { advance } = useThrelte()
