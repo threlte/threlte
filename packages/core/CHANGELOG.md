@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.1.0
+
+### Minor Changes
+
+- e310ff5: Added export of trait components, see docs
+
 ## 4.0.0
 
 ### Major Changes
