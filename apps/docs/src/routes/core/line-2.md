@@ -15,8 +15,8 @@ Draw Lines using `THREE.Line2`.
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../examples/line-2/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/line-2/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/line-2/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/line-2/Scene.svelte)
 &&&
 
 !!!

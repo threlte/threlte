@@ -31,8 +31,8 @@ import Wrapper from '$examples/use-frame/Wrapper.svelte'
 <details>
   <summary>Show code</summary>
 
-@[code svelte|title=Wrapper.svelte](../../../examples/use-frame/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/use-frame/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/use-frame/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-frame/Scene.svelte)
 
 </details>
 

@@ -16,8 +16,8 @@ If a context is present, the cursor property will be set on the DOM element of t
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../../examples/extras/use-cursor/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../../examples/extras/use-cursor/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/use-cursor/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/use-cursor/Scene.svelte)
 &&&
 
 !!!

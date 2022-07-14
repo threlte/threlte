@@ -19,8 +19,8 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 
 &&&code_wrapper
 
-@[code svelte|title=Wrapper.svelte](../../../examples/transform-controls/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/transform-controls/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/transform-controls/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/transform-controls/Scene.svelte)
 
 &&&
 

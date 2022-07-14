@@ -11,16 +11,9 @@
 		duration: 800
 	})
 	$: tweenedProgress.set($progress)
-
-	// as this example loads sounds when play is pressed
-	// we have to cut of the loading screen once the actual
-	// loading is done.
-	let loadedOnce = false
-
-	$: if ($tweenedProgress === 1) loadedOnce = true
 </script>
 
-{#if $tweenedProgress < 1 && !loadedOnce}
+{#if $tweenedProgress < 1}
 	<div
 		transition:fade|local={{
 			duration: 200

@@ -23,8 +23,8 @@ See the hook [`useGltfAnimations`](/hooks/09-use-gltf-animations) on how to use 
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../examples/gltf/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/gltf/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/gltf/Scene.svelte)
 &&&
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>

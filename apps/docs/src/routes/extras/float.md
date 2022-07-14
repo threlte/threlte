@@ -15,9 +15,9 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../../examples/extras/float/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../../examples/extras/float/Scene.svelte)
-@[code svelte|title=Blob.svelte](../../../../examples/extras/float/Blob.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/float/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/float/Scene.svelte)
+@[code svelte|title=Blob.svelte](../../examples/extras/float/Blob.svelte)
 &&&
 
 !!!

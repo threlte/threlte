@@ -2,6 +2,7 @@
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
+export { useProgress } from './hooks/useProgress'
 
 // abstractions
 export { default as Edges } from './components/Edges/Edges.svelte'

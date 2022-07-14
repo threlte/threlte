@@ -14,8 +14,8 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf-animations/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../../examples/use-gltf-animations/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/use-gltf-animations/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-gltf-animations/Scene.svelte)
 &&&
 
 <small>Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen Fox](https://artstation.com/glenatron), CC Attribution.</small>

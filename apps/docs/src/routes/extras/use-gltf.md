@@ -17,8 +17,8 @@ Use the component [`<GLTF>`](/components/14-gltf) if you want to use a model in 
 
 &&&code_wrapper
 
-@[code svelte|title=Wrapper.svelte](../../../../examples/use-gltf/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../../examples/use-gltf/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/use-gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-gltf/Scene.svelte)
 
 &&&
 

@@ -17,8 +17,8 @@ Provide either `points` or a `geometry` to draw lines.
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../examples/line/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/line/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/line/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/line/Scene.svelte)
 &&&
 
 !!!

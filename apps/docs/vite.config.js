@@ -14,7 +14,7 @@ const config = {
 		Icons({ compiler: 'svelte' }),
 		kitDocsPlugin({
 			shiki: {
-				theme: 'material-ocean'
+				theme: 'github-dark'
 			},
 			markdown: {
 				components: [

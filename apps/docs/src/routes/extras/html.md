@@ -19,8 +19,8 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../../examples/extras/html/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../../examples/extras/html/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/html/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/html/Scene.svelte)
 &&&
 
 !!!

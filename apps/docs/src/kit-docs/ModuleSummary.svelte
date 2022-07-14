@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { SocialLink, Admonition } from '@svelteness/kit-docs'
+	import GithubIcon from './GithubIcon.svelte'
+	import NpmIcon from './NpmIcon.svelte'
 
 	export let title: string
 	export let name: string
@@ -16,6 +18,8 @@
 	}
 
 	let fullSourceUrl = 'https://github.com/grischaerbe/threlte/blob/main/src/lib/' + sourcePath
+
+	let packageUrl = 'https://www.npmjs.com/package/threlte/' + from
 </script>
 
 <div>
@@ -44,9 +48,15 @@
 		>
 			<span>Source</span>
 		</p>
-		<SocialLink class="col-span-12 992:col-span-10 !p-0" href={fullSourceUrl} type="gitHub">
+		<GithubIcon class="col-span-12 992:col-span-10 !p-0" href={fullSourceUrl}>
 			View Source Code
-		</SocialLink>
+		</GithubIcon>
+		<p
+			class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+		>
+			<span>Package</span>
+		</p>
+		<NpmIcon class="col-span-12 992:col-span-10 !p-0" href={packageUrl}>View Package</NpmIcon>
 	</div>
 </div>
 

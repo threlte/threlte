@@ -16,27 +16,29 @@ export const sidebar = {
 			{
 				title: 'Types',
 				slug: '/types'
-			}
-		],
-		Concepts: [
+			},
+			{
+				title: 'Concepts',
+				slug: ''
+			},
 			{
 				title: 'Interactivity',
-				slug: '/concepts/00-interactivity'
+				slug: '/concepts/interactivity'
 			},
 			{
 				title: 'Viewport Awareness',
-				slug: '/concepts/01-viewport-awareness'
+				slug: '/concepts/viewport-awareness'
 			},
 			{
 				title: 'Reactivity',
-				slug: '/concepts/02-reactivity'
+				slug: '/concepts/reactivity'
 			},
 			{
 				title: 'Miscellaneous',
-				slug: '/concepts/03-miscellaneous'
+				slug: '/concepts/miscellaneous'
 			}
 		],
-		Core: [
+		'@threlte/core': [
 			{
 				title: 'Canvas',
 				slug: '/core/canvas'
@@ -238,22 +240,26 @@ export const sidebar = {
 				slug: '/core/use-audio-listener'
 			}
 		],
-		Extras: [
+		'@threlte/extras': [
 			{
 				title: 'Hooks',
 				slug: ''
 			},
 			{
 				title: 'useGltf',
-				slug: '/extras/usegltf'
+				slug: '/extras/use-gltf'
 			},
 			{
 				title: 'useGltfAnimations',
-				slug: '/extras/usegltfanimations'
+				slug: '/extras/use-gltf-animations'
 			},
 			{
 				title: 'useCursor',
-				slug: '/extras/usecursor'
+				slug: '/extras/use-cursor'
+			},
+			{
+				title: 'useProgress',
+				slug: '/extras/use-progress'
 			},
 			{
 				title: 'Components',

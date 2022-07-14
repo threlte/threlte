@@ -161,7 +161,9 @@ body {
 	--kd-color-focus: rgba(var(--kd-color-brand-rgb), 0.7);
 
 	--kd-code-fence-bg: var(--kd-prose-pre-bg, rgb(31, 41, 55));
+	/* --kd-code-fence-bg: #ffffff; */
 	--kd-code-fence-top-bar-bg: rgba(31, 41, 55, 0.3);
+	/* --kd-code-fence-top-bar-bg: #ffffff; */
 	--kd-code-copied-bg-color: rgba(var(--kd-color-brand-rgb), 0.8);
 	--kd-terminal-line-pointer: var(--kd-color-brand);
 	--kd-code-highlight-border: var(--kd-color-brand);
@@ -274,7 +276,7 @@ nav > ul > li > ul {
 }
 
 nav a[href=''] {
-	@apply text-sm !border-0 !-ml-4 bg-gray-body pt-8 pb-3 font-bold text-inherit pointer-events-none cursor-default;
+	@apply text-sm !border-0 !-ml-4 bg-gray-body pt-6 pb-3 font-bold text-inherit pointer-events-none cursor-default;
 }
 
 summary {
@@ -292,4 +294,17 @@ nav ul > li > ul > li {
 
 #popover-button-1 {
 	display: none;
+}
+
+nav ul > li > h5 {
+	@apply text-brand;
+	/* @apply border-b border-black; */
+}
+
+nav ul > li > h5 + ul > li:first-child > a {
+	@apply !mt-4;
+}
+
+nav ul > li > h5 + ul > li:first-child > a[href=''] {
+	@apply !pt-2;
 }

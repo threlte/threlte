@@ -14,9 +14,9 @@ The `<InstancedMesh>` is a special version of [`<Mesh>`](/components/11-mesh) wi
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../examples/instanced-mesh/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/instanced-mesh/Scene.svelte)
-@[code svelte|title=Sphere.svelte](../../../examples/instanced-mesh/Sphere.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/instanced-mesh/Scene.svelte)
+@[code svelte|title=Sphere.svelte](../../examples/instanced-mesh/Sphere.svelte)
 &&&
 !!!
 
@@ -118,8 +118,8 @@ import WrapperSimple from '$examples/instanced-mesh-simple/Wrapper.svelte'
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../../examples/instanced-mesh-simple/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../../examples/instanced-mesh-simple/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh-simple/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/instanced-mesh-simple/Scene.svelte)
 &&&
 
 ### Properties
