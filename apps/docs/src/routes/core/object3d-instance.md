@@ -11,7 +11,7 @@ This component lets you use any manually instantiated object that extends `THREE
 ```svelte
 <script>
   import { Object3D } from 'three'
-  import { Object3DInstance } from 'threlte'
+  import { Object3DInstance } from '@threlte/core'
 
   const object = new Object3D()
 </script>

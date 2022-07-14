@@ -30,7 +30,7 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 
 ```svelte
 <script>
-  import { TransformControls, Mesh, TransformControls } from 'threlte'
+  import { TransformControls, Mesh, TransformControls } from '@threlte/core'
   import { MeshStandardMaterial, BoxBufferGeometry } from 'three'
 </script>
 
@@ -43,7 +43,7 @@ The `<TransformControls>` component can also be used to transform [`<Instance>`]
 
 ```svelte
 <script>
-  import { Instance, TransformControls } from 'threlte'
+  import { Instance, TransformControls } from '@threlte/core'
 </script>
 
 <Instance>

@@ -12,7 +12,7 @@ This light can cast shadows.
 
 ```svelte
 <script>
-  import { SpotLight, Mesh } from 'threlte'
+  import { SpotLight, Mesh } from '@threlte/core'
   let mesh
 </script>
 

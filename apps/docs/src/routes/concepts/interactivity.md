@@ -26,7 +26,7 @@ All events include the raycast Intersection object:
 
 ```svelte
 <script lang="ts">
-  import { Mesh, ThreltePointerEvent } from 'threlte'
+  import { Mesh, ThreltePointerEvent } from '@threlte/core'
 
   const onClick = (e: CustomEvent<ThreltePointerEvent>) => {
     const distanceToMesh = e.detail.distance
@@ -40,7 +40,7 @@ All events but `pointerleave` and `pointerenter` also include the underlying `Po
 
 ```svelte
 <script>
-  import { Mesh, ThreltePointerEvent } from 'threlte'
+  import { Mesh, ThreltePointerEvent } from '@threlte/core'
 
   const onPointerMove = (e) => {
     console.log(e.detail.event.clientX, e.detail.event.clientY)

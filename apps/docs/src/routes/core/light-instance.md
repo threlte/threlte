@@ -12,7 +12,7 @@ This component lets you use any manually instantiated object that extends `THREE
 <script>
   import { RectAreaLight } from 'three'
   import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib'
-  import { LightInstance } from 'threlte'
+  import { LightInstance } from '@threlte/core'
 
   RectAreaLightUniformsLib.init()
 

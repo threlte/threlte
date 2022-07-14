@@ -14,7 +14,7 @@ This can be useful for rendering 2D scenes and UI elements, amongst other things
 
 ```svelte
 <script>
-  import { OrthographicCamera } from 'threlte'
+  import { OrthographicCamera } from '@threlte/core'
 </script>
 
 <OrthographicCamera position={{ x: 3, y: 3, z: 3 }} lookAt={{ x: 0, y: 0, z: 0 }} />

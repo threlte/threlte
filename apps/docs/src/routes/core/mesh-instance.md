@@ -11,7 +11,7 @@ This component lets you use any manually instantiated object that extends `THREE
 ```svelte
 <script>
   import { Mesh, MeshStandardMaterial, BoxBufferGeometry } from 'three'
-  import { MeshInstance } from 'threlte'
+  import { MeshInstance } from '@threlte/core'
 
   const material = new MeshStandardMaterial({
     wireframe: true,

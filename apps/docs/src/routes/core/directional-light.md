@@ -12,7 +12,7 @@ See the three.js [DirectionalLight documentation](https://threejs.org/index.html
 
 ```svelte
 <script>
-  import { DirectionalLight } from 'threlte'
+  import { DirectionalLight } from '@threlte/core'
 </script>
 
 <DirectionalLight shadow intensity={0.6} position={{ x: 3, y: 10, z: 3 }} target={{ x: 1 }} />

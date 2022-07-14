@@ -10,7 +10,7 @@ By default, threlte will render using the regular WebGLRenderer. If any Pass is 
 
 ```svelte
 <script>
-  import { Pass } from 'threlte'
+  import { Pass } from '@threlte/core'
   import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
 </script>
 

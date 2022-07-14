@@ -10,7 +10,7 @@ A `<FogExp2>` adds itself to the scene directly. The placement in the hierarchy 
 
 ```svelte
 <script>
-  import { FogExp2 } from 'threlte'
+  import { FogExp2 } from '@threlte/core'
 </script>
 
 <FogExp2 color={'#dddddd'} density={0.3} />

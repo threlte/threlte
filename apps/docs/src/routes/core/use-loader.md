@@ -9,7 +9,7 @@ title: useLoader
 ### Example <!-- omit in toc -->
 
 ```ts
-import { useLoader } from 'threlte'
+import { useLoader } from '@threlte/core'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 const loader = useLoader(OBJLoader, () => new OBJLoader())

@@ -12,7 +12,7 @@ This projection mode is designed to mimic the way the human eye sees. It is the 
 
 ```svelte
 <script>
-  import { PerspectiveCamera } from 'threlte'
+  import { PerspectiveCamera } from '@threlte/core'
 </script>
 
 <PerspectiveCamera fov={60} position={{ x: 3, y: 3, z: 3 }} lookAt={{ x: 0, y: 0, z: 0 }} />

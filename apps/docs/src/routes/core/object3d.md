@@ -11,7 +11,7 @@ You might want to use this component to pass as a reference to other components:
 
 ```svelte
 <script>
-  import { Object3D, PerspectiveCamera } from 'threlte'
+  import { Object3D, PerspectiveCamera } from '@threlte/core'
 
   let target
 </script>

@@ -10,7 +10,7 @@ This helper displays the directional cone of a [`<PositionalAudio>`](/core/posit
 
 ```svelte
 <script>
-  import { PositionalAudio, PositionalAudioHelper } from 'threlte'
+  import { PositionalAudio, PositionalAudioHelper } from '@threlte/core'
 </script>
 
 <PositionalAudio

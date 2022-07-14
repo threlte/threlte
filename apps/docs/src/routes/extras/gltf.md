@@ -49,7 +49,7 @@ The `<GLTF>` component supports interaction:
 
 ```svelte
 <script>
-  import { GLTF } from 'threlte'
+  import { GLTF } from '@threlte/extras'
 </script>
 
 <GLTF castShadow receiveShadow url={'/models/flower.glb'} position={{ y: 1 }} scale={3} />

@@ -10,7 +10,7 @@ A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is t
 
 ```svelte
 <script>
-  import { Fog } from 'threlte'
+  import { Fog } from '@threlte/core'
 </script>
 
 <Fog color={'#dddddd'} />

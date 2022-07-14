@@ -8,10 +8,10 @@ title: Getting Started
 
 :::steps
 
-!!!step title="Install Threlte and three.js"|orientation="vertical"
+!!!step title="Install @threlte/core, @threlte/extras and three.js"|orientation="vertical"
 
 ```bash copy
-npm install threlte three
+npm install @threlte/core @threlte/extras three
 ```
 
 !!!

@@ -11,7 +11,7 @@ This light cannot be used to cast shadows as it does not have a direction.
 
 ```svelte
 <script>
-  import { AmbientLight } from 'threlte'
+  import { AmbientLight } from '@threlte/core'
 </script>
 
 <AmbientLight color={0xd7681c} intensity={0.3} />

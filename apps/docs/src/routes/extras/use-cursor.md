@@ -30,7 +30,7 @@ Provide arguments to determine the cursor style. The defaults are`'pointer'` for
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from 'threlte'
+  import { Mesh } from '@threlte/extras'
   import { useCursor } from 'threlte/extras'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
 
@@ -54,7 +54,7 @@ You can rename the event handlers to resolve naming conflicts. Additionally Svel
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from 'threlte'
+  import { Mesh } from '@threlte/extras'
   import { useCursor } from 'threlte/extras'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
 
@@ -83,7 +83,7 @@ If you want to implement custom logic, you can use the returned svelte store to 
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from 'threlte'
+  import { Mesh } from '@threlte/extras'
   import { useCursor } from 'threlte/extras'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
 
@@ -105,7 +105,7 @@ Provide svelte stores to change the cursor style also while hovering:
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from 'threlte'
+  import { Mesh } from '@threlte/extras'
   import { useCursor } from 'threlte/extras'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
   import { writable } from 'svelte/store'

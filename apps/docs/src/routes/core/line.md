@@ -27,7 +27,7 @@ Provide either `points` or a `geometry` to draw lines.
 
 ```svelte
 <script>
-  import { Line } from 'threlte'
+  import { Line } from '@threlte/core'
   import { LineBasicMaterial } from 'three'
 </script>
 

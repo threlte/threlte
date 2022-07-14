@@ -11,7 +11,7 @@ The `<Layers>` component assigns all child components the layer memberships you 
 
 ```svelte
 <script>
-  import { Layers, PerspectiveCamera, Mesh } from 'threlte'
+  import { Layers, PerspectiveCamera, Mesh } from '@threlte/core'
 </script>
 
 <!-- Remember to also assign a layer to your camera -->

@@ -25,7 +25,7 @@ Draw Lines using `THREE.Line2`.
 
 ```svelte
 <script>
-  import { Line2 } from 'threlte'
+  import { Line2 } from '@threlte/core'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 </script>
 

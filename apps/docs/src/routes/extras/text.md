@@ -10,7 +10,7 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
 
 ```svelte
 <script>
-  import { Text } from 'threlte'
+  import { Text } from '@threlte/extras'
   let value = ''
 </script>
 

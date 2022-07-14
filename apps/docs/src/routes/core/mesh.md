@@ -10,7 +10,7 @@ This component represents triangular polygon mesh based objects.
 
 ```svelte
 <script>
-  import { Mesh } from 'threlte'
+  import { Mesh } from '@threlte/core'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
 </script>
 

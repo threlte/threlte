@@ -11,7 +11,7 @@ This component lets you use any manually instantiated object that extends `THREE
 ```svelte
 <script>
   import { PerspectiveCamera } from 'three'
-  import { CameraInstance } from 'threlte'
+  import { CameraInstance } from '@threlte/core'
 
   const camera = new PerspectiveCamera(45, 1, 1, 1000)
 </script>

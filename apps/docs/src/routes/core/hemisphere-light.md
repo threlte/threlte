@@ -11,7 +11,7 @@ This light cannot be used to cast shadows.
 
 ```svelte
 <script>
-  import { HemisphereLight } from 'threlte'
+  import { HemisphereLight } from '@threlte/core'
 </script>
 
 <HemisphereLight skyColor={0xfb9796} groundColor={0xc1b8a5} />

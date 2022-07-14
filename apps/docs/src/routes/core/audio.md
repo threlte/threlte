@@ -15,7 +15,7 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 
 ```svelte
 <script>
-  import { Canvas, PerspectiveCamera, AudioListener, Audio } from 'threlte'
+  import { Canvas, PerspectiveCamera, AudioListener, Audio } from '@threlte/core'
 </script>
 
 <Canvas>

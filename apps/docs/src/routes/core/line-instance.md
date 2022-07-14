@@ -10,7 +10,7 @@ This component lets you use any manually instantiated object that extends `THREE
 
 ```svelte
 <script lang="ts">
-  import { LineInstance } from 'threlte'
+  import { LineInstance } from '@threlte/core'
   import { LineBasicMaterial, Line, Vector3, BufferGeometry } from 'three'
 
   const points: Vector3[] = [

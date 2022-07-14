@@ -10,7 +10,7 @@ This component lets you use any manually instantiated object that extends `THREE
 
 ```svelte
 <script>
-  import { AudioInstance, useAudioListener } from 'threlte'
+  import { AudioInstance, useAudioListener } from '@threlte/core'
   import { Audio } from 'three'
 
   export let buffer: AudioBuffer

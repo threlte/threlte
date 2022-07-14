@@ -10,7 +10,7 @@ This component is used to consume the context and rootContext provided by the `<
 
 ```svelte
 <script>
-  import { Canvas, ContextBridge } from 'threlte'
+  import { Canvas, ContextBridge } from '@threlte/core'
 
   let ctx
   $: console.log(ctx)

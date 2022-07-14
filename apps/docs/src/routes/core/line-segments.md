@@ -26,7 +26,7 @@ Draw lines using `THREE.LineSegments`.
 ```svelte
 <script lang="ts">
   import { EdgesGeometry, LineBasicMaterial, OctahedronBufferGeometry } from 'three'
-  import { LineSegments } from 'threlte'
+  import { LineSegments } from '@threlte/core'
 
   const geometry = new EdgesGeometry(new OctahedronBufferGeometry(1, 1), 30)
 </script>

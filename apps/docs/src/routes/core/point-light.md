@@ -12,7 +12,7 @@ This light can cast shadows.
 
 ```svelte
 <script>
-  import { PointLight } from 'threlte'
+  import { PointLight } from '@threlte/core'
 </script>
 
 <PointLight position={{ x: 3, y: 3 }} />
