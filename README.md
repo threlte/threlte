@@ -1,4 +1,4 @@
-![Threlte Logo](https://raw.githubusercontent.com/grischaerbe/threlte/main/static/logo/threlte_logo_github.png)
+![Threlte Logo](./assets/threlte/logo/threlte_logo_github.png)
 
 A three.js component library for svelte.
 
