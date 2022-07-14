@@ -13,8 +13,10 @@ Provides the official documentation of `threlte`.
 
 Join the [Discord server](https://discord.gg/EqUBCfCaGm)
 
----
+## Sponsors
 
-### License
+[![Powered by Vercel](./static/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
+
+## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
