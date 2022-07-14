@@ -92,6 +92,7 @@
     if (strokeColor !== undefined) to.strokeColor = strokeColor
     if (strokeOpacity !== undefined) to.strokeOpacity = strokeOpacity
     if (fillOpacity !== undefined) to.fillOpacity = fillOpacity
+    if (direction !== undefined) to.direction = direction
 
     to.sync(() => {
       invalidate('Text: sync finished')
