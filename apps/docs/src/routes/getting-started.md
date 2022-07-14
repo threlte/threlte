@@ -8,7 +8,7 @@ title: Getting Started
 
 :::steps
 
-!!!step title="Install threlte and three.js"|orientation="vertical"
+!!!step title="Install threlte and three.js"|description="threlte consists of several packages but @threlte/core is required"|orientation="vertical"
 
 ```bash copy
 npm install @threlte/core @threlte/extras three
