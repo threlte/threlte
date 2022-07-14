@@ -17,7 +17,8 @@
 		await navigator.clipboard.writeText(importStatement)
 	}
 
-	let fullSourceUrl = 'https://github.com/grischaerbe/threlte/blob/main/src/lib/' + sourcePath
+	let fullSourceUrl =
+		`https://github.com/threlte/threlte/tree/main/packages/${from}/src/lib/` + sourcePath
 
 	let packageUrl = 'https://www.npmjs.com/package/threlte/' + from
 </script>

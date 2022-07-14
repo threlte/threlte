@@ -6,7 +6,7 @@ title: HTML
 import Wrapper from '$examples/extras/html/Wrapper.svelte'
 </script>
 
-!!!module_summary title=HTML|sourcePath=extras/components/abstractions/HTML.svelte|name=HTML|from=extras|type=component
+!!!module_summary title=HTML|sourcePath=/components/HTML/HTML.svelte|name=HTML|from=extras|type=component
 
 This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie HTML content to any object of your scene. It will be projected to the objects whereabouts automatically.
 

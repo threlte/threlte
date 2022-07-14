@@ -6,7 +6,7 @@ title: useGltf
 import Wrapper from '$examples/use-gltf/Wrapper.svelte'
 </script>
 
-!!!module_summary title=useGltf|sourcePath=extras/hooks/useGltf.ts|name=useGltf|from=extras|type=hook
+!!!module_summary title=useGltf|sourcePath=/hooks/useGltf.ts|name=useGltf|from=extras|type=hook
 A Hook to load glTF files and use separate object nodes and materials of it.
 
 Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its entirety.
