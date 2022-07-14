@@ -30,6 +30,10 @@ Contributions are what make the open source community such an amazing place to l
 - If you have a suggestion that would make this project better, submit an issue
 - If you would like to directly contribute, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) then submit a PR
 
+## Sponsors
+
+[![Powered by Vercel](./static/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
+
 ---
 
 ### License
