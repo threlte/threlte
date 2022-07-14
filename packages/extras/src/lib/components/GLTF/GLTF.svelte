@@ -1,18 +1,20 @@
 <script lang="ts">
+  import {
+    InteractiveObject,
+    LayerableObject,
+    Object3DInstance,
+    useLoader,
+    useThrelte
+  } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
-  import { useLoader } from '../hooks/useLoader'
-  import { useThrelte } from '../hooks/useThrelte'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import InteractiveObject from '../internal/InteractiveObject.svelte'
-  import LayerableObject from '../internal/LayerableObject.svelte'
-  import { buildSceneGraph } from '../lib/buildSceneGraph'
-  import type { GLTFProperties } from '../types/components'
-  import type { ThrelteGltf } from '../types/types'
+  import { buildSceneGraph } from '../../lib/buildSceneGraph'
+  import type { GLTFProperties } from '../../types/components'
+  import type { ThrelteGltf } from '../../types/types'
 
   export let position: GLTFProperties['position'] = undefined
   export let scale: GLTFProperties['scale'] = undefined

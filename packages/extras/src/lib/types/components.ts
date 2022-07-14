@@ -1,4 +1,10 @@
-import type { GroupProperties, LineSegmentsProperties, MeshInstanceProperties } from '@threlte/core'
+import type {
+  GroupProperties,
+  InteractiveObjectProperties,
+  LineSegmentsProperties,
+  MeshInstanceProperties,
+  Object3DInstanceProperties
+} from '@threlte/core'
 import type { Camera, ColorRepresentation, Material, Object3D } from 'three'
 import type { Text as TextType } from './types'
 
@@ -85,3 +91,9 @@ export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
   fillOpacity?: TextType['fillOpacity']
   direction?: TextType['direction']
 }
+
+export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  url: string
+  dracoDecoderPath?: string
+  ktxTranscoderPath?: string
+} & Omit<InteractiveObjectProperties, 'object'>

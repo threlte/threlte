@@ -2,7 +2,7 @@ import { onDestroy } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction } from 'three'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useFrame } from '../../hooks/useFrame'
+import { useFrame } from '@threlte/core'
 
 /**
  * Convenience hook to use animations loaded with a <GLTF> threlte component.

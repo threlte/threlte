@@ -39,7 +39,6 @@ export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
 export { default as Instance } from './objects/Instance.svelte'
 export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
-export { default as GLTF } from './objects/GLTF.svelte'
 export { default as Line } from './objects/Line.svelte'
 export { default as Line2 } from './objects/Line2.svelte'
 export { default as LineSegments } from './objects/LineSegments.svelte'
@@ -51,6 +50,14 @@ export { default as LightInstance } from './instances/LightInstance.svelte'
 export { default as CameraInstance } from './instances/CameraInstance.svelte'
 export { default as LineInstance } from './instances/LineInstance.svelte'
 
+// trait components
+export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
+export { default as InteractiveObject } from './internal/InteractiveObject.svelte'
+export { default as LayerableObject } from './internal/LayerableObject.svelte'
+export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
+export { default as TransformableObject } from './internal/TransformableObject.svelte'
+export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
+
 // hooks
 export { useFrame } from './hooks/useFrame'
 export { useThrelte } from './hooks/useThrelte'
@@ -60,8 +67,6 @@ export { useLoader } from './hooks/useLoader'
 export { useTexture } from './hooks/useTexture'
 export { useAudioListener } from './hooks/useAudioListener'
 export { useParent } from './internal/HierarchicalObject.svelte'
-export { useGltf } from './hooks/useGltf'
-export { useGltfAnimations } from './hooks/useGltfAnimations'
 
 // types
 export type {
@@ -76,7 +81,6 @@ export type {
   ThrelteUseLoader,
   ThreltePointerEvent,
   ThrelteInstance,
-  ThrelteGltf,
   Size
 } from './types/types'
 
@@ -104,7 +108,6 @@ export type {
   FogProperties,
   FogExp2Properties,
   LayersProperties,
-  GLTFProperties,
   GroupProperties,
   MeshProperties,
   Object3DProperties,

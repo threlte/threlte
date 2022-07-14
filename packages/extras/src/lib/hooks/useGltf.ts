@@ -2,7 +2,7 @@ import { createEventDispatcher } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useLoader } from './useLoader'
+import { useLoader } from '@threlte/core'
 import type { ThrelteGltf } from '../types/types'
 import { buildSceneGraph } from '../lib/buildSceneGraph'
 

@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import { get, writable, type Writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 import type { Object3D } from 'three'
 
 /**

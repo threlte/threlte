@@ -1,14 +1,6 @@
 <script lang="ts">
-	import {
-		Group,
-		Mesh,
-		useFrame,
-		useGltf,
-		type Position,
-		type Rotation,
-		type Scale
-	} from '@threlte/core'
-	import { Edges } from '@threlte/extras'
+	import { Group, Mesh, useFrame, type Position, type Rotation, type Scale } from '@threlte/core'
+	import { Edges, useGltf } from '@threlte/extras'
 	import { derived } from 'svelte/store'
 	import {
 		Color,
