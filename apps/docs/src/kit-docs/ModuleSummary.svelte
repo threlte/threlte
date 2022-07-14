@@ -20,7 +20,7 @@
 	let fullSourceUrl =
 		`https://github.com/threlte/threlte/tree/main/packages/${from}/src/lib/` + sourcePath
 
-	let packageUrl = 'https://www.npmjs.com/package/threlte/' + from
+	let packageUrl = 'https://www.npmjs.com/package/@threlte/' + from
 </script>
 
 <div>
