@@ -56,7 +56,7 @@
     frameloop
   )
 
-  const { getCtx, getRootCtx, getRenderCtx, renderCtx } = contexts
+  const { getCtx, renderCtx } = contexts
 
   // context bindings
   export const { ctx, rootCtx, audioCtx } = contexts

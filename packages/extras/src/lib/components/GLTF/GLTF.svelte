@@ -164,10 +164,6 @@
 
   $: loader.load(url, onLoad, undefined, onError)
 
-  const objIsMesh = (obj: Object3D | Mesh): obj is Mesh => {
-    return 'isMesh' in obj && obj.isMesh
-  }
-
   $: {
     if (scene) {
       scene.traverse((obj) => {

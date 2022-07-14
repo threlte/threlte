@@ -1,10 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import { get } from 'svelte/store'
   import type { Camera, Object3D, Quaternion, Vector3 } from 'three'
   import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
-  import { useOnStoreChange } from '../hooks/useOnStoreChange'
   import { useThrelte } from '../hooks/useThrelte'
   import { useParent } from '../internal/HierarchicalObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
