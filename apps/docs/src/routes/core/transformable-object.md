@@ -7,7 +7,7 @@ title: TransformableObject
 Provides reactive access to the basic transforms (`position`, `rotation`, `scale`) of a `THREE.Object3D`. Use the property `lookAt` to orient the object towards another object or a position.
 
 :::admonition type="info"
-This is a **trait component**. They are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with threlte systems.
+This is a **trait component**. Trait components are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with Threlte systems.
 :::
 
 !!!

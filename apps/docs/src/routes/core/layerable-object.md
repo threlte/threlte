@@ -7,7 +7,7 @@ title: LayerableObject
 Assignes the layers provided by a parent [`<Layers>`](/core/layers) component to a `THREE.Object3D`.
 
 :::admonition type="info"
-This is a **trait component**. They are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with threlte systems.
+This is a **trait component**. Trait components are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with Threlte systems.
 :::
 
 !!!

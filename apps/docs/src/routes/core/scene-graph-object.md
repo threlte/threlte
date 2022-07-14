@@ -7,7 +7,7 @@ title: SceneGraphObject
 This component is extending the component [`<HierarchicalObject>`](/core/hierarchical-object) and conveniently provides methods to add and remove children to the scene graph.
 
 :::admonition type="info"
-This is a **trait component**. They are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with threlte systems.
+This is a **trait component**. Trait components are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with Threlte systems.
 :::
 
 !!!

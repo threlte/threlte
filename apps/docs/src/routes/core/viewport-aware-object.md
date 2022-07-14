@@ -7,7 +7,7 @@ title: ViewportAwareObject
 Provides information on the visibility of the object relative to the viewport through the means of the events `viewportenter` and `viewportleave` or the binding `inViewport`.
 
 :::admonition type="info"
-This is a **trait component**. They are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with threlte systems.
+This is a **trait component**. Trait components are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with Threlte systems.
 :::
 
 !!!

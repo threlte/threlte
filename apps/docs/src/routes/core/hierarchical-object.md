@@ -9,7 +9,7 @@ On initialization, the component `<HierarchicalObject>` forwards a provided `THR
 The component [`<SceneGraphObject>`](/core/scene-graph-object) in turn uses this component to add and remove objects to and from the scene graph.
 
 :::admonition type="info"
-This is a **trait component**. They are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with threlte systems.
+This is a **trait component**. Trait components are mostly used internally and make certain aspects of three.js objects accessible and reactive and interact with Threlte systems.
 :::
 
 !!!
