@@ -64,6 +64,7 @@ strokeWidth: number | string | undefined = undefined
 strokeColor: THREE.ColorRepresentation | THREE.Color | undefined = undefined
 strokeOpacity: number | undefined = undefined
 fillOpacity: number | undefined = undefined
+direction: 'auto' | 'ltr' | 'rtl' | undefined = undefined
 ```
 
 ### Bindings <!-- omit in toc -->
