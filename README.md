@@ -32,7 +32,7 @@ Contributions are what make the open source community such an amazing place to l
 
 ## Sponsors
 
-[![Powered by Vercel](./static/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
+[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
 
 ---
 
