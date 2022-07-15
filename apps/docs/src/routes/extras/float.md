@@ -28,9 +28,9 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from '@threlte/extras'
+  import { Mesh } from '@threlte/core'
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
-  import { Float } from 'threlte/extras'
+  import { Float } from '@threlte/extras'
 </script>
 
 <Float speed={2}>

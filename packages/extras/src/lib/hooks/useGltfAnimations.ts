@@ -11,8 +11,7 @@ import { useFrame } from '@threlte/core'
  *
  * ```svelte
  * <script lang="ts">
- *   import { GLTF } from 'threlte'
- *   import { useGltfAnimations } from '../lib/useAnimations'
+ *   import { GLTF, useGltfAnimations } from '@threlte/extras'
  *
  *   const { gltf, actions } = useGltfAnimations<'All Animations'>(({ actions }) => {
  *     // Either play your animations as soon as they are loaded

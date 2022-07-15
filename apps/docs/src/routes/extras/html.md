@@ -31,7 +31,7 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML>
@@ -45,7 +45,7 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML transform>
@@ -59,7 +59,7 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML transform occlude>
@@ -73,7 +73,7 @@ Use the property `occlude` and bind to the event `visibilitychange` to implement
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 
   const onVisibilityChange = (isVisible: boolean) => {
     console.log(isVisible)
@@ -95,7 +95,7 @@ Use the property `sprite` in `transform` mode to render the contents of `<HTML>`
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML transform sprite>
@@ -109,7 +109,7 @@ Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML center>
@@ -124,7 +124,7 @@ By default the contents are mounted as a sibling to the rendering `<canvas>`.
 
 ```svelte
 <script lang="ts">
-  import { HTML } from 'threlte/extras'
+  import { HTML } from '@threlte/extras'
 </script>
 
 <HTML portal={document.body}>

@@ -10,7 +10,8 @@ This is almost identical to an [`<Object3D>`](/core/object3d). Its purpose is to
 
 ```svelte
 <script>
-  import { Group, GLTF } from '@threlte/core'
+  import { Group } from '@threlte/core'
+  import { GLTF } from '@threlte/extras'
 </script>
 
 <Group position={{ x: 5 }}>

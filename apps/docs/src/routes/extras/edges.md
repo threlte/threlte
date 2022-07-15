@@ -30,8 +30,8 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
 ```svelte
 <script lang="ts">
   import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
-  import { Mesh } from '@threlte/extras'
-  import { Edges } from 'threlte/extras'
+  import { Mesh } from '@threlte/core'
+  import { Edges } from '@threlte/extras'
 </script>
 
 <Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshBasicMaterial()}>
