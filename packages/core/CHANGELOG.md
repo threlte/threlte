@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 287e8eb: Fixed broken interactivity on MeshInstance at element 0
+- 287e8eb: Fixed broken interactivity on MeshInstance at element 0 (@Klowes)
 
 ## 4.1.0
 
