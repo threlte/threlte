@@ -54,6 +54,7 @@ export type ThrelteRootContext = {
   raycastableObjects: Set<Object3D>
   raycaster: Raycaster
   lastIntersection: Intersection<Object3D<Event>> | null
+  lastPressIntersection: Intersection<Object3D<Event>> | null
 }
 
 export type ThrelteContext = {

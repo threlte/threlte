@@ -1,6 +1,13 @@
 import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
-import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
+import {
+  MOUSE,
+  type Camera,
+  type Event,
+  type Intersection,
+  type Object3D,
+  type Vector2
+} from 'three'
 import type {
   ThrelteContext,
   ThreltePointerEventMap,
@@ -68,27 +75,23 @@ export const useEventRaycast = (
   onDestroy(unsubscribePointer)
 
   const onEvent = (e: MouseEvent | PointerEvent) => {
+    const eventType = e.type as keyof ThreltePointerEventMap
     e.preventDefault()
     ctx.pointerOverCanvas.set(true)
     renderCtx.pointerInvalidated = true
     setPointerFromEvent(ctx, e)
 
-    if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return
-    const intersects = runRaycaster(
-      rootCtx,
-      pointer,
-      camera,
-      Array.from(rootCtx.raycastableObjects)
-    )
-    if (intersects.length > 0 && rootCtx.interactiveObjects.has(intersects[0].object)) {
-      getThrelteUserData(intersects[0].object).eventDispatcher?.(
-        e.type as keyof ThreltePointerEventMap,
-        {
-          ...intersects[0],
-          event: e
-        }
-      )
+    const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
+    if (eventType === 'pointerdown' && e.button === MOUSE.LEFT) {
+      rootCtx.lastPressIntersection = closestIntersection
     }
+
+    if (!closestIntersection) return
+    if (eventType === 'click' && !isValidClickEvent(closestIntersection, rootCtx)) return
+    getThrelteUserData(closestIntersection.object).eventDispatcher?.(eventType, {
+      ...closestIntersection,
+      event: e
+    })
   }
 
   return {
@@ -98,6 +101,32 @@ export const useEventRaycast = (
     onPointerDown: onEvent,
     onPointerMove: onEvent
   }
+}
+
+function getClosestIntersection(
+  rootCtx: ThrelteRootContext,
+  pointer: Vector2,
+  camera: Camera
+): Intersection<Object3D<Event>> | null {
+  if (rootCtx.interactiveObjects.size === 0 || rootCtx.raycastableObjects.size === 0) return null
+  const intersects = runRaycaster(rootCtx, pointer, camera, Array.from(rootCtx.raycastableObjects))
+
+  if (intersects.length === 0 || !rootCtx.interactiveObjects.has(intersects[0].object)) return null
+  return intersects[0]
+}
+
+/**
+ * Validates a click event to make sure the last pointerdown event
+ * hit the same instance as the click event did. This heuristic
+ * resembles how the DOM works and prevents accidental clicks while e.g.
+ * using OrbitControls.
+ */
+function isValidClickEvent(
+  intersection: Intersection<Object3D<Event>>,
+  rootCtx: ThrelteRootContext
+): boolean {
+  if (!rootCtx.lastPressIntersection) return false
+  return !targetChanged(intersection, rootCtx.lastPressIntersection)
 }
 
 /**
