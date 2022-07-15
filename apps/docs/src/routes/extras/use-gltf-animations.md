@@ -29,7 +29,7 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 ```svelte
 <script lang="ts">
   import { GLTF } from '@threlte/extras'
-  import { useGltfAnimations } from 'threlte/extras'
+  import { useGltfAnimations } from '@threlte/extras'
 
   // `useGltfAnimations` returns stores that populate
   // when the `<GLTF>` component finished loading.
@@ -57,7 +57,7 @@ Sometimes you might want to use the hook [`useGltf`](/extras/use-gltf) to reuse 
 ```svelte
 <script lang="ts">
   import { Object3DInstance } from '@threlte/extras'
-  import { useGltfAnimations, useGltf } from 'threlte/extras'
+  import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
   const { gltf } = useGltf('/path/to/model.glb')

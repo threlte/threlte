@@ -35,7 +35,7 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
 ```svelte
 <script lang="ts">
   import { Object3DInstance, Mesh } from '@threlte/extras'
-  import { useGltf } from 'threlte/extras'
+  import { useGltf } from '@threlte/extras'
   import { MeshBasicMaterial } from 'three'
 
   const { gltf } = useGltf('/path/to/model.glb')
@@ -58,7 +58,7 @@ Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO bina
 
 ```svelte
 <script lang="ts">
-  import { useGltf } from 'threlte/extras'
+  import { useGltf } from '@threlte/extras'
 
   const { gltf } = useGltf('/path/to/model.glb', {
     useDraco: true
@@ -74,7 +74,7 @@ You can also provide custom DRACO decoder binaries.
 
 ```svelte
 <script lang="ts">
-  import { useGltf } from 'threlte/extras'
+  import { useGltf } from '@threlte/extras'
 
   const { gltf } = useGltf('/path/to/model.glb', {
     useDraco: '/custom/draco/decoders/path'
@@ -92,7 +92,7 @@ The hook provides a map of all objects and materials in the loaded glTF.
 
 ```svelte
 <script lang="ts">
-  import { useGltf } from 'threlte/extras'
+  import { useGltf } from '@threlte/extras'
 
   const { gltf } = useGltf('/path/to/model.glb')
   $: if ($gltf) console.log('Nodes', $gltf.nodes)
@@ -103,7 +103,7 @@ Provide types to use your IDEs autocompletion.
 
 ```svelte
 <script lang="ts">
-  import { useGltf } from 'threlte/extras'
+  import { useGltf } from '@threlte/extras'
 
   const { gltf } = useGltf<'Object-A' | 'Object-B', 'Material-A' | 'Material-B'>(
     '/path/to/model.glb'
