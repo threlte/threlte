@@ -34,7 +34,7 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
 
 ```svelte
 <script lang="ts">
-  import { Object3DInstance, Mesh } from '@threlte/extras'
+  import { Object3DInstance, Mesh } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { MeshBasicMaterial } from 'three'
 

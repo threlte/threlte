@@ -56,7 +56,7 @@ Sometimes you might want to use the hook [`useGltf`](/extras/use-gltf) to reuse 
 
 ```svelte
 <script lang="ts">
-  import { Object3DInstance } from '@threlte/extras'
+  import { Object3DInstance } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
