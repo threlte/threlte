@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.1.1
+
+### Patch Changes
+
+- 287e8eb: Fixed broken interactivity on MeshInstance at element 0
+
 ## 4.1.0
 
 ### Minor Changes
