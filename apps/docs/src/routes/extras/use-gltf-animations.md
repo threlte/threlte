@@ -28,9 +28,7 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 ```svelte
 <script lang="ts">
-  import { GLTF } from '@threlte/extras'
-  import { useGltfAnimations } from '@threlte/extras'
-
+  import { GLTF, useGltfAnimations } from '@threlte/extras'
   // `useGltfAnimations` returns stores that populate
   // when the `<GLTF>` component finished loading.
   const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>(({ actions, mixer }) => {
