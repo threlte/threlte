@@ -4,7 +4,7 @@ title: Interactivity
 
 # Interactivity
 
-[Open the interactivity example in a Svelte REPL](https://svelte.dev/repl/c2b74dcf88ec4b4681b664e202c54274?version=3.46.2)
+[Open the interactivity example in a Svelte REPL](https://svelte.dev/repl/612bfb61f8f84e299fe5083e4767b1e1?version=3.46.2)
 
 Listen to events of a `<Mesh>` and a `<MeshInstance>` as if it would be a regular DOM element:
 
