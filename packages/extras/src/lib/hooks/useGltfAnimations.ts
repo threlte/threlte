@@ -11,7 +11,7 @@ import { useFrame } from '@threlte/core'
  *
  * ```svelte
  * <script lang="ts">
- *   import { GLTF } from '@threlte/core'
+ *   import { GLTF } from '@threlte/extras'
  *   import { useGltfAnimations } from '@threlte/extras'
  *
  *   const { gltf, actions } = useGltfAnimations<'All Animations'>(({ actions }) => {
