@@ -205,7 +205,7 @@
    * events are triggered on the instances.
    */
   const onEvent = (e: CustomEvent<ThreltePointerEvent>) => {
-    if (!e.detail.instanceId) return
+    if (e.detail.instanceId === undefined) return
     const instance = instances[e.detail.instanceId]
     if (instance && instance.pointerEventDispatcher) {
       instance.pointerEventDispatcher(e.type as keyof ThreltePointerEventMap, e.detail)
