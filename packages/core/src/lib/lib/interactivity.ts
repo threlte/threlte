@@ -76,10 +76,13 @@ export const useEventRaycast = (
     setPointerFromEvent(ctx, e)
 
     const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
-    if (eventType === 'pointerdown') {
-      pointerDownOn = closestIntersection
-        ? { object: closestIntersection.object, instanceId: closestIntersection.instanceId }
-        : null
+    if (eventType === 'pointerdown' && closestIntersection) {
+      // Remember which object was pressed in order to validate the next click event
+      const { object, instanceId } = closestIntersection
+      pointerDownOn = { object, instanceId }
+    } else if (['click', 'pointerup', 'pointerdown'].includes(eventType)) {
+      // Clear pointerDownOn when pointer is released or when pointerdown hits nothing
+      pointerDownOn = null
     }
 
     if (!closestIntersection) return
