@@ -1,5 +1,13 @@
 # @threlte/core
 
+## 4.1.2
+
+### Patch Changes
+
+- cd07968: Validate click events to make sure the last pointerdown event hit the same instance as the click
+  event did. This heuristic more closely resembles how the DOM works, and prevents accidental clicks
+  while e.g. using OrbitControls or otherwise dragging on the canvas.
+
 ## 4.1.1
 
 ### Patch Changes
