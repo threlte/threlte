@@ -76,17 +76,19 @@ export const useEventRaycast = (
     setPointerFromEvent(ctx, e)
 
     const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
-    if (eventType === 'pointerdown' && closestIntersection) {
+    if (eventType === 'pointerdown') {
       // Remember which object was pressed in order to validate the next click event
-      const { object, instanceId } = closestIntersection
-      pointerDownOn = { object, instanceId }
-    } else if (['click', 'pointerup', 'pointerdown'].includes(eventType)) {
-      // Clear pointerDownOn when pointer is released or when pointerdown hits nothing
+      pointerDownOn = closestIntersection
+        ? { object: closestIntersection.object, instanceId: closestIntersection.instanceId }
+        : null
+    }
+
+    if (eventType === 'click' && !isValidClickEvent(closestIntersection, pointerDownOn)) return
+    if (eventType === 'click') {
       pointerDownOn = null
     }
 
     if (!closestIntersection) return
-    if (eventType === 'click' && !isValidClickEvent(closestIntersection, pointerDownOn)) return
     getThrelteUserData(closestIntersection.object).eventDispatcher?.(eventType, {
       ...closestIntersection,
       event: e
@@ -121,10 +123,10 @@ function getClosestIntersection(
  * using OrbitControls.
  */
 function isValidClickEvent(
-  intersection: Intersection<Object3D<Event>>,
+  intersection: Intersection<Object3D<Event>> | null,
   pointerDownOn: { object: Object3D; instanceId: number | undefined } | null
 ): boolean {
-  if (!pointerDownOn) return false
+  if (!intersection || !pointerDownOn) return false
   return (
     intersection.object.uuid === pointerDownOn.object.uuid &&
     intersection.instanceId === pointerDownOn.instanceId
