@@ -99,3 +99,17 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
 	useDraco?: string | boolean
 	ktxTranscoderPath?: string
 } & Omit<InteractiveObjectProperties, 'object'>
+
+export type ContactShadowProperties = Omit<GroupProperties, 'scale'> & {
+  opacity?: number
+  width?: number
+  height?: number
+  blur?: number
+  far?: number
+  smooth?: boolean
+  resolution?: number
+  frames?: number
+  scale?: number | [x: number, y: number]
+  color?: THREE.ColorRepresentation
+  depthWrite?: boolean
+}

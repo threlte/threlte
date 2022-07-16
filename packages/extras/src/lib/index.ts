@@ -20,7 +20,8 @@ export type {
   FloatProperties,
   HTMLProperties,
   TextProperties,
-  GLTFProperties
+  GLTFProperties,
+  ContactShadowProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'
