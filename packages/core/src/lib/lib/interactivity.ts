@@ -73,6 +73,7 @@ export const useEventRaycast = (
   let pointer = get(ctx.pointer)
   const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
   onDestroy(unsubscribePointer)
+  let pointerDownOn: { object: Object3D; instanceId: number | undefined } | null
 
   const onEvent = (e: MouseEvent | PointerEvent) => {
     const eventType = e.type as keyof ThreltePointerEventMap
@@ -83,11 +84,13 @@ export const useEventRaycast = (
 
     const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
     if (eventType === 'pointerdown' && e.button === MOUSE.LEFT) {
-      rootCtx.lastPressIntersection = closestIntersection
+      pointerDownOn = closestIntersection
+        ? { object: closestIntersection.object, instanceId: closestIntersection.instanceId }
+        : null
     }
 
     if (!closestIntersection) return
-    if (eventType === 'click' && !isValidClickEvent(closestIntersection, rootCtx)) return
+    if (eventType === 'click' && !isValidClickEvent(closestIntersection, pointerDownOn)) return
     getThrelteUserData(closestIntersection.object).eventDispatcher?.(eventType, {
       ...closestIntersection,
       event: e
@@ -123,10 +126,13 @@ function getClosestIntersection(
  */
 function isValidClickEvent(
   intersection: Intersection<Object3D<Event>>,
-  rootCtx: ThrelteRootContext
+  pointerDownOn: { object: Object3D; instanceId: number | undefined } | null
 ): boolean {
-  if (!rootCtx.lastPressIntersection) return false
-  return !targetChanged(intersection, rootCtx.lastPressIntersection)
+  if (!pointerDownOn) return false
+  return (
+    intersection.object.uuid === pointerDownOn.object.uuid &&
+    intersection.instanceId === pointerDownOn.instanceId
+  )
 }
 
 /**
