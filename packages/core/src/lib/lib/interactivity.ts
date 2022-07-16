@@ -1,13 +1,6 @@
 import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
-import {
-  MOUSE,
-  type Camera,
-  type Event,
-  type Intersection,
-  type Object3D,
-  type Vector2
-} from 'three'
+import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
 import type {
   ThrelteContext,
   ThreltePointerEventMap,
@@ -83,7 +76,7 @@ export const useEventRaycast = (
     setPointerFromEvent(ctx, e)
 
     const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
-    if (eventType === 'pointerdown' && e.button === MOUSE.LEFT) {
+    if (eventType === 'pointerdown') {
       pointerDownOn = closestIntersection
         ? { object: closestIntersection.object, instanceId: closestIntersection.instanceId }
         : null
