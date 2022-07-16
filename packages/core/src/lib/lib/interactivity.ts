@@ -44,6 +44,7 @@ const targetChanged = (a: Intersection<Object3D<Event>>, b: Intersection<Object3
  * pointerdown: ThreltePointerEvent;
  * pointermove: ThreltePointerEvent;
  * ```
+ *
  * @param ctx
  * @param rootCtx
  * @param renderCtx
@@ -66,31 +67,40 @@ export const useEventRaycast = (
   let pointer = get(ctx.pointer)
   const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
   onDestroy(unsubscribePointer)
+
+  // to validate the click event, the click
+  // event must intersect the same object as
+  // the preceding pointerdown event
   let pointerDownOn: { object: Object3D; instanceId: number | undefined } | null
 
   const onEvent = (e: MouseEvent | PointerEvent) => {
-    const eventType = e.type as keyof ThreltePointerEventMap
     e.preventDefault()
+    const eventType = e.type as keyof ThreltePointerEventMap
     ctx.pointerOverCanvas.set(true)
     renderCtx.pointerInvalidated = true
     setPointerFromEvent(ctx, e)
 
-    const closestIntersection = getClosestIntersection(rootCtx, pointer, camera)
+    // maybe get an intersection with an object
+    const intersection = getFirstIntersection(rootCtx, pointer, camera)
+
     if (eventType === 'pointerdown') {
       // Remember which object was pressed in order to validate the next click event
-      pointerDownOn = closestIntersection
-        ? { object: closestIntersection.object, instanceId: closestIntersection.instanceId }
+      pointerDownOn = intersection
+        ? { object: intersection.object, instanceId: intersection.instanceId }
         : null
     }
 
-    if (eventType === 'click' && !isValidClickEvent(closestIntersection, pointerDownOn)) return
     if (eventType === 'click') {
+      if (!isValidClickEvent(intersection, pointerDownOn)) {
+        pointerDownOn = null
+        return
+      }
       pointerDownOn = null
     }
 
-    if (!closestIntersection) return
-    getThrelteUserData(closestIntersection.object).eventDispatcher?.(eventType, {
-      ...closestIntersection,
+    if (!intersection) return
+    getThrelteUserData(intersection.object).eventDispatcher?.(eventType, {
+      ...intersection,
       event: e
     })
   }
@@ -104,7 +114,7 @@ export const useEventRaycast = (
   }
 }
 
-function getClosestIntersection(
+function getFirstIntersection(
   rootCtx: ThrelteRootContext,
   pointer: Vector2,
   camera: Camera
