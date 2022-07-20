@@ -1,0 +1,60 @@
+{
+  "name": "@threlte/rapier",
+  "version": "0.0.1",
+  "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "package": "svelte-kit package && ts-node --esm ./scripts/cleanupPackage.ts && rm ./dist/package.json",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "format": "prettier --write --plugin-search-dir=. ."
+  },
+  "devDependencies": {
+    "@dimforge/rapier3d-compat": "^0.9.0",
+    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-static": "^1.0.0-next.29",
+    "@sveltejs/kit": "next",
+    "@threlte/core": "workspace:*",
+    "@types/node": "^18.0.3",
+    "@types/three": "^0.140.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "@yushijinhun/three-minifier-rollup": "^0.3.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-svelte3": "^3.2.1",
+    "prettier": "^2.6.2",
+    "prettier-plugin-svelte": "^2.4.0",
+    "svelte": "^3.47.0",
+    "svelte-check": "^2.7.0",
+    "svelte-preprocess": "^4.10.5",
+    "svelte2tsx": "^0.5.9",
+    "three": "^0.140.2",
+    "ts-node": "^10.8.2",
+    "tsafe": "^0.9.0",
+    "tslib": "^2.3.1",
+    "type-fest": "^2.13.0",
+    "typescript": "^4.6.3"
+  },
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/lib/index.ts"
+  },
+  "types": "./src/lib/index.ts",
+  "svelte": "./src/lib/index.ts",
+  "publishConfig": {
+    "files": [
+      "dist"
+    ],
+    "svelte": "./dist/index.js",
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./dist/index.js"
+    },
+    "types": "./dist/index.d.ts"
+  }
+}

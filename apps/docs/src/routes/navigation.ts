@@ -313,6 +313,20 @@ export const sidebar = {
 				title: 'Float',
 				slug: '/extras/float'
 			}
+		],
+		'@threlte/rapier': [
+			{
+				title: 'Components',
+				slug: ''
+			},
+			{
+				title: 'World',
+				slug: '/rapier/world'
+			},
+			{
+				title: 'RigidBody',
+				slug: '/rapier/rigid-body'
+			}
 		]
 	}
 }
