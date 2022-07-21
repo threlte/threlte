@@ -1,62 +1,40 @@
 <script lang="ts">
-  import { Group, useFrame } from '@threlte/core'
-  import type { Material } from 'three'
-  import { MeshBasicMaterial } from 'three'
+  import { LineSegments, useFrame } from '@threlte/core'
+  import { onDestroy, onMount } from 'svelte'
+  import { BufferAttribute, BufferGeometry, LineBasicMaterial, AlwaysDepth } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import ColliderDebugShape from './ColliderDebugShape.svelte'
+
+  const material = new LineBasicMaterial({
+    color: 0xffffff,
+    vertexColors: true,
+    depthTest: false,
+    depthWrite: false
+  })
 
   const { world } = useRapier()
 
-  let sensors: number[] = []
-  let colliders: number[] = []
-  let rigidBodies: number[] = []
+  const buffers = world.debugRender()
+  const vertices = new BufferAttribute(buffers.vertices, 3)
+  const colors = new BufferAttribute(buffers.colors, 4)
 
-  export let sensorMaterial: Material = new MeshBasicMaterial({
-    wireframe: true,
-    color: 'green'
-  })
-  export let colliderMaterial: Material = new MeshBasicMaterial({
-    wireframe: true,
-    color: 'blue'
-  })
-  export let rigidBodyMaterial: Material = new MeshBasicMaterial({
-    wireframe: true,
-    color: 'red'
-  })
+  const geometry = new BufferGeometry()
+  geometry.setAttribute('position', vertices)
+  geometry.setAttribute('color', colors)
 
   useFrame(() => {
-    const newSensors: number[] = []
-    const newColliders: number[] = []
-    const newRigidBodies: number[] = []
+    const buffers = world.debugRender()
 
-    world.forEachCollider((collider) => {
-      if (collider.isSensor()) newSensors.push(collider.handle)
-      else if (collider.parent()) newRigidBodies.push(collider.handle)
-      else newColliders.push(collider.handle)
-    })
+    const vertices = new BufferAttribute(buffers.vertices, 3)
+    const colors = new BufferAttribute(buffers.colors, 4)
 
-    sensors = newSensors
-    colliders = newColliders
-    rigidBodies = newRigidBodies
+    geometry.setAttribute('position', vertices)
+    geometry.setAttribute('color', colors)
+  })
+
+  onDestroy(() => {
+    geometry.dispose()
+    material.dispose()
   })
 </script>
 
-<Group>
-  {#each colliders as collider}
-    {#key collider}
-      <ColliderDebugShape material={colliderMaterial} colliderHandle={collider} />
-    {/key}
-  {/each}
-
-  {#each sensors as sensor}
-    {#key sensor}
-      <ColliderDebugShape material={sensorMaterial} colliderHandle={sensor} />
-    {/key}
-  {/each}
-
-  {#each rigidBodies as rigidBody}
-    {#key rigidBody}
-      <ColliderDebugShape material={rigidBodyMaterial} colliderHandle={rigidBody} />
-    {/key}
-  {/each}
-</Group>
+<LineSegments renderOrder={Infinity} {geometry} {material} />
