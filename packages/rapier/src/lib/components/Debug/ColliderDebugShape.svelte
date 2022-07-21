@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
   import {
     Ball,
+    Capsule,
     Collider,
     ConvexPolyhedron,
     Cuboid,
@@ -54,6 +55,13 @@
         const g = new CylinderBufferGeometry(r, r, h)
         return g
       }
+
+      case ShapeType.Capsule: {
+        const r = (collider.shape as Capsule).radius
+        const halfHeight = (collider.shape as Capsule).halfHeight
+        const g = new CapsuleBufferGeometry(r, halfHeight * 2)
+        return g
+      }
     }
 
     return new BoxBufferGeometry(1, 1, 1)
@@ -67,6 +75,7 @@
   import { MeshBasicMaterial } from 'three'
   import type { Material } from 'three'
   import { useRapier } from '../../hooks/useRapier'
+  import { CapsuleBufferGeometry } from 'three'
 
   export let colliderHandle: number
   export let material: Material | undefined = undefined

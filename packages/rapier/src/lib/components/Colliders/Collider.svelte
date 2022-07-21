@@ -124,7 +124,7 @@
 
     // Trimesh and convex scale the vertices
     if (shape === 'trimesh' || shape === 'convexHull') {
-      newArgs[0] = scaleVertices(newArgs[0] as ArrayLike<number>, scale)
+      newArgs[0] = new Float32Array(scaleVertices(newArgs[0] as ArrayLike<number>, scale))
       return newArgs
     }
 
