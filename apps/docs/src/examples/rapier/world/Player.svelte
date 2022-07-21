@@ -2,11 +2,12 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Mesh, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
 	import { RigidBody } from '@threlte/rapier'
+	import { onDestroy } from 'svelte'
 	import { CircleBufferGeometry } from 'three'
 	import { MeshBasicMaterial } from 'three'
 	import { Vector3, Mesh as ThreeMesh } from 'three'
 	import { MeshStandardMaterial, SphereBufferGeometry } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { clamp, DEG2RAD } from 'three/src/math/MathUtils'
 
 	let rigidBody: RapierRigidBody
 
@@ -26,6 +27,7 @@
 	}
 
 	const target = new Vector3()
+	let force = 0
 
 	useFrame(() => {
 		if (!$pointerOverCanvas || !rigidBody) return
@@ -50,10 +52,24 @@
 			const diff = point.sub(t3).divideScalar(1000)
 			const f = diff.clamp(min, max)
 
+			force = clamp(f.manhattanLength() * 300, 1, 4)
+
 			rigidBody.applyImpulse(f, true)
 		}
 
 		raycaster.layers.enableAll()
+	})
+	const onClick = (e: MouseEvent) => {
+		e.preventDefault()
+		if (rigidBody.translation().y > 0.26) return
+		rigidBody.applyImpulse({ x: 0, y: 0.3, z: 0 }, true)
+	}
+
+	const { renderer } = useThrelte()
+	if (!renderer) throw new Error()
+	renderer.domElement.addEventListener('click', onClick)
+	onDestroy(() => {
+		renderer.domElement.removeEventListener('click', onClick)
 	})
 </script>
 
@@ -69,13 +85,14 @@
 	</Mesh>
 </RigidBody>
 
-<Mesh
-	rotation={{ x: -90 * DEG2RAD }}
-	position={target}
-	geometry={new CircleBufferGeometry(0.15, 20)}
-	material={new MeshBasicMaterial({
-		color: 0x0000ff
-	})}
->
-	<slot />
-</Mesh>
+{#if $pointerOverCanvas}
+	<Mesh
+		rotation={{ x: -90 * DEG2RAD }}
+		position={target}
+		scale={force}
+		geometry={new CircleBufferGeometry(0.15, 20)}
+		material={new MeshBasicMaterial({
+			color: 0x0000ff
+		})}
+	/>
+{/if}

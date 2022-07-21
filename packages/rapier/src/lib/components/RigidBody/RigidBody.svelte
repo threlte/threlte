@@ -13,6 +13,7 @@
   } from '@threlte/core'
   import { createEventDispatcher, getContext, onDestroy, onMount, setContext } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
+  import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useRapier } from '../../hooks/useRapier'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { parseRigidBodyType } from '../../lib/parseBodyType'
@@ -85,6 +86,8 @@
   const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
   rigidBodyEventDispatchers.set(rigidBody.handle, dispatcher)
 
+  const { registerColliders, removeColliders } = useCollisionGroups()
+
   /**
    * A RigidBody is set up as soon as the first transform happened
    */
@@ -124,6 +127,7 @@
         restitution,
         colliders
       )
+      registerColliders(autoColliders)
     }
   }
 
@@ -131,6 +135,7 @@
     rigidBodyEventDispatchers.delete(rigidBody.handle)
     world.removeRigidBody(rigidBody)
     autoColliders.forEach((collider) => world.removeCollider(collider, false))
+    removeColliders(autoColliders)
     autoColliders = []
     rigidBodyMeshes.delete(rigidBody.handle)
   }

@@ -141,6 +141,7 @@
   import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
   import type { ThrelteRapierEventMap } from '../../types/types'
   import { useRigidBody } from '../RigidBody/RigidBody.svelte'
+  import { useCollisionGroups } from '../../hooks/useCollisionGroups'
 
   const object = new Object3D()
 
@@ -180,6 +181,8 @@
   const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
 
   let collider: Collider | undefined = undefined
+
+  const { registerColliders, removeColliders } = useCollisionGroups()
 
   onMount(() => {
     const objectWorldPosition = object.getWorldPosition(new Vector3())
@@ -229,12 +232,13 @@
     }
 
     collider = world.createCollider(colliderDesc, attachToRigidBody ? rigidBody : undefined)
-
+    registerColliders([collider])
     colliderEventDispatchers.set(collider.handle, dispatcher)
   })
 
   onDestroy(() => {
     if (!collider) return
+    removeColliders([collider])
     colliderEventDispatchers.delete(collider.handle)
     world.removeCollider(collider, false)
   })
