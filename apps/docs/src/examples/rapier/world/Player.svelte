@@ -3,10 +3,14 @@
 	import { Mesh, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
 	import { RigidBody } from '@threlte/rapier'
 	import { onDestroy } from 'svelte'
-	import { CircleBufferGeometry } from 'three'
-	import { MeshBasicMaterial } from 'three'
-	import { Vector3, Mesh as ThreeMesh } from 'three'
-	import { MeshStandardMaterial, SphereBufferGeometry } from 'three'
+	import {
+		CircleBufferGeometry,
+		Mesh as ThreeMesh,
+		MeshBasicMaterial,
+		MeshStandardMaterial,
+		SphereBufferGeometry,
+		Vector3
+	} from 'three'
 	import { clamp, DEG2RAD } from 'three/src/math/MathUtils'
 
 	let rigidBody: RapierRigidBody
