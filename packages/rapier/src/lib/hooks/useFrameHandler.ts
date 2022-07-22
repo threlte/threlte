@@ -25,10 +25,14 @@ export const useFrameHandler = (ctx: RapierContext) => {
     world.step(eventQueue)
 
     // Update meshes
-    ctx.rigidBodyMeshes.forEach((mesh, handle) => {
+    ctx.rigidBodyObjects.forEach((mesh, handle) => {
       const rigidBody = world.getRigidBody(handle)
+      if (!rigidBody) return
 
       const dispatcher = ctx.rigidBodyEventDispatchers.get(handle)
+
+      if (!rigidBody || !rigidBody.isValid()) return
+
       if (dispatcher) {
         if (rigidBody.isSleeping() && !mesh.userData.isSleeping) {
           dispatcher('sleep')

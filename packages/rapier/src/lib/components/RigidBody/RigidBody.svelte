@@ -15,7 +15,7 @@
   import type { RigidBodyProperties } from '../../types/components'
   import type { RigidBodyContext, ThrelteRapierEventMap } from '../../types/types'
 
-  const { world, rapier, rigidBodyMeshes, rigidBodyEventDispatchers } = useRapier()
+  const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
   export let type: NonNullable<RigidBodyProperties['type']> = 'dynamic'
   export let canSleep: NonNullable<RigidBodyProperties['canSleep']> = true
@@ -44,6 +44,12 @@
     true
   ]
   export let dominance: NonNullable<RigidBodyProperties['dominance']> = 0
+
+  /**
+   * Every RigidBody receives and forwards collision-related events
+   */
+  type $$Events = ThrelteRapierEventMap
+  const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
 
   const object = new Object3D()
 
@@ -117,22 +123,14 @@
   /**
    * Add the mesh to the context
    */
-  rigidBodyMeshes.set(rigidBody.handle, object)
-
-  /**
-   * Every RigidBody receives and forwards collision-related events
-   */
-  type $$Events = ThrelteRapierEventMap
-  const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
-  rigidBodyEventDispatchers.set(rigidBody.handle, dispatcher)
+  addRigidBodyToContext(rigidBody, object, dispatcher)
 
   /**
    * cleanup
    */
   onDestroy(() => {
-    rigidBodyEventDispatchers.delete(rigidBody.handle)
+    removeRigidBodyFromContext(rigidBody)
     world.removeRigidBody(rigidBody)
-    rigidBodyMeshes.delete(rigidBody.handle)
   })
 </script>
 

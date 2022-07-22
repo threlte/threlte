@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    ActiveCollisionTypes,
     ActiveEvents,
     CoefficientCombineRule,
     type Collider,
@@ -43,11 +44,11 @@
 
   const rigidBody = useRigidBody() as RigidBody | undefined
 
-  const { world, colliderEventDispatchers } = useRapier()
+  const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
   export let colliders: Collider[] = []
 
-  const { registerColliders, removeColliders } = useCollisionGroups()
+  const collisionGroups = useCollisionGroups()
 
   /**
    * Events setup
@@ -57,14 +58,15 @@
 
   onMount(() => {
     colliders = createCollidersFromChildren(object, shape, world, rigidBody)
-    colliders.forEach((c) => colliderEventDispatchers.set(c.handle, dispatcher))
-    registerColliders(colliders)
+    colliders.forEach((c) => addColliderToContext(c, object, dispatcher))
+    collisionGroups.registerColliders(colliders)
   })
 
   $: {
     if (colliders.length > 0) {
       colliders.forEach((collider) => {
         collider.setActiveEvents(ActiveEvents.COLLISION_EVENTS)
+        collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
         collider.setRestitution(restitution ?? 0)
         collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
         collider.setFriction(friction ?? 0.7)
@@ -96,9 +98,9 @@
    * Cleanup
    */
   onDestroy(() => {
-    removeColliders(colliders)
-    colliders.forEach((c) => colliderEventDispatchers.delete(c.handle))
+    collisionGroups.removeColliders(colliders)
     colliders.forEach((c) => {
+      removeColliderFromContext(c)
       world.removeCollider(c, true)
     })
   })

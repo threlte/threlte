@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    ActiveCollisionTypes,
     ActiveEvents,
     CoefficientCombineRule,
     Collider,
@@ -76,11 +77,12 @@
   const rigidBody = useRigidBody() as RigidBody | undefined
   const isAttached = !!rigidBody
 
-  const { world, colliderEventDispatchers } = useRapier()
+  const rapierContext = useRapier()
+  const { world } = rapierContext
 
   let collider: Collider
 
-  const { registerColliders, removeColliders } = useCollisionGroups()
+  const collisionGroups = useCollisionGroups()
 
   /**
    * Events setup
@@ -101,12 +103,15 @@
 
     collider = world.createCollider(colliderDesc, rigidBody)
 
-    colliderEventDispatchers.set(collider.handle, dispatcher)
+    /**
+     * Add collider to context
+     */
+    rapierContext.addColliderToContext(collider, object, dispatcher)
 
     /**
      * For use in conjunction with component <CollisionGroups>
      */
-    registerColliders([collider])
+    collisionGroups.registerColliders([collider])
 
     if (isAttached) {
       const rigidBodyWorldPos = new Vector3()
@@ -133,6 +138,7 @@
   $: {
     if (collider) {
       collider.setActiveEvents(ActiveEvents.COLLISION_EVENTS)
+      collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
       collider.setFriction(friction ?? 0.7)
@@ -174,8 +180,8 @@
    */
   onDestroy(() => {
     if (!collider) return
-    removeColliders([collider])
-    colliderEventDispatchers.delete(collider.handle)
+    rapierContext.removeColliderFromContext(collider)
+    collisionGroups.removeColliders([collider])
     world.removeCollider(collider, true)
   })
 </script>

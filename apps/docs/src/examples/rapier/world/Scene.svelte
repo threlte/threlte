@@ -75,15 +75,6 @@
 <Player bind:playerMesh position={{ z: -3, y: 2 }} />
 
 <CollisionGroups groups={[0, 15]}>
-	<AutoColliders shape={'cuboid'} position={{ z: 5, y: -2 }} rotation={{ x: -30 * DEG2RAD }}>
-		<Mesh
-			receiveShadow
-			castShadow
-			geometry={new BoxBufferGeometry(6, 6, 6)}
-			material={new MeshStandardMaterial()}
-		/>
-	</AutoColliders>
-
 	<Ground />
 </CollisionGroups>
 

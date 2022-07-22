@@ -2,7 +2,13 @@
   import RAPIER from '@dimforge/rapier3d-compat'
   import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
+  import { writable } from 'svelte/store'
   import type { WorldProperties } from '../../types/components'
+
+  /**
+   * RAPIER.init() should only be called once
+   */
+  let initialized = writable(false)
 </script>
 
 <script lang="ts">
@@ -23,24 +29,22 @@
   export let rawSerializationPipeline: WorldProperties['rawSerializationPipeline'] = undefined
   export let rawDebugRenderPipeline: WorldProperties['rawDebugRenderPipeline'] = undefined
 
-  let initialized = false
   let error = false
 
   const init = async () => {
+    if ($initialized) return
     try {
       await RAPIER.init()
-      initialized = true
+      $initialized = true
     } catch (e) {
       error = true
     }
   }
 
-  const { renderer } = useThrelte()
-
   onMount(init)
 </script>
 
-{#if initialized}
+{#if $initialized}
   <InnerWorld
     {gravity}
     {rawIntegrationParameters}

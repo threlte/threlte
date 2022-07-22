@@ -1,28 +1,15 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Object3DInstance,
-		OrbitControls,
-		PerspectiveCamera,
-		useFrame,
-		type Position,
-		type Rotation
-	} from '@threlte/core'
-	import { HTML } from '@threlte/extras'
-	import { Debug, RigidBody } from '@threlte/rapier'
+	import { useFrame } from '@threlte/core'
 	import { Euler } from 'three'
 	import { Vector3 } from 'three'
-	import { GridHelper } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import Ground from './Ground.svelte'
-	import TestBody from './TestBody.svelte'
+	import Particle from './Particle.svelte'
 
 	const getId = () => {
 		return Math.random().toString(16).slice(2)
 	}
 
 	const getRandomPosition = () => {
-		return new Vector3(Math.random() * 1, Math.random() * 1 + 10, Math.random() * 1)
+		return new Vector3(0.5 - Math.random() * 1, 5 - Math.random() * 1 + 10, 0.5 - Math.random() * 1)
 	}
 
 	const getRandomRotation = () => {
@@ -39,7 +26,7 @@
 	let bodies: Body[] = []
 
 	let lastBodyMounted: number = 0
-	let bodyEveryMilliseconds = 50
+	let bodyEveryMilliseconds = 100
 	let longevityMilliseconds = 8000
 
 	useFrame(() => {
@@ -71,18 +58,6 @@
 	})
 </script>
 
-<PerspectiveCamera position={{ y: 10, z: 10, x: 10 }}>
-	<OrbitControls />
-</PerspectiveCamera>
-
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
-
-<Object3DInstance object={new GridHelper(50)} />
-
-<Ground />
-
-<Debug />
-
 {#each bodies as body (body.id)}
-	<TestBody position={body.position} rotation={body.rotation} />
+	<Particle position={body.position} rotation={body.rotation} />
 {/each}
