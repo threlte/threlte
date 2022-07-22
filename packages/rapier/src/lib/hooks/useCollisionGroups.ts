@@ -13,7 +13,7 @@ type ColliderMap = Map<
 
 const applyBitMask = (collidersMap: ColliderMap, bitMask: number) => {
   collidersMap.forEach((c) => {
-    if (c.collider.isValid()) {
+    if (c && c.collider && c.collider.isValid()) {
       c.collider.setCollisionGroups(bitMask)
     }
   })
@@ -61,7 +61,7 @@ export const useCollisionGroups = (colliders?: Collider[]) => {
     colliders.forEach((c) => {
       const mapItem = collidersMap.get(c.handle)
       if (mapItem) {
-        if (c.isValid()) {
+        if (c && c.isValid()) {
           c.setCollisionGroups(mapItem.initialCollisionGroup)
         }
       }
