@@ -9,6 +9,28 @@ import type {
 import type { createRapierContext } from '../lib/createRapierContext'
 import type { Writable } from 'svelte/store'
 
+export type ColliderShapes =
+  | 'ball'
+  | 'capsule'
+  | 'segment'
+  | 'triangle'
+  | 'roundTriangle'
+  | 'polyline'
+  | 'trimesh'
+  | 'cuboid'
+  | 'roundCuboid'
+  | 'heightfield'
+  | 'cylinder'
+  | 'roundCylinder'
+  | 'cone'
+  | 'roundCone'
+  | 'convexHull'
+  | 'convexMesh'
+  | 'roundConvexHull'
+  | 'roundConvexMesh'
+
+export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
+
 export type ThrelteRapierEventMap = {
   sleep: void
   wake: void
@@ -44,6 +66,8 @@ export type ColliderEventDispatchers = Map<ColliderHandle, ColliderEventDispatch
 export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
+
+export type RigidBodyContext = RigidBody
 
 export type CollisionGroupsBitMask = (
   | 0

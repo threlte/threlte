@@ -1,25 +1,10 @@
+import type { ColliderHandle, RigidBodyHandle } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import type {
-  RigidBodyEventDispatchers,
-  RapierContext,
-  ColliderEventDispatchers
-} from '../types/types'
-import type {
-  Collider,
-  ColliderDesc,
-  ImpulseJoint,
-  JointData,
-  RigidBody,
-  RigidBodyDesc,
-  ColliderHandle,
-  RigidBodyHandle
-} from '@dimforge/rapier3d-compat'
 import type { Object3D } from 'three'
-import type { Position } from '@threlte/core'
-import { positionToVector3 } from './positionToVector3'
+import type { ColliderEventDispatchers, RigidBodyEventDispatchers } from '../types/types'
 
-export const createRapierContext = (gravity: Position) => {
-  const world = new RAPIER.World(positionToVector3(gravity))
+export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
+  const world = new RAPIER.World(...args)
 
   return {
     rapier: RAPIER,

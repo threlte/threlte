@@ -1,6 +1,6 @@
 import type { Collider, ColliderHandle } from '@dimforge/rapier3d-compat'
 import { getContext, onDestroy } from 'svelte'
-import { get, writable } from 'svelte/store'
+import { get } from 'svelte/store'
 import type { CollisionGroupsContext } from '../types/types'
 
 type ColliderMap = Map<

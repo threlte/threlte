@@ -1,32 +1,61 @@
+import { ActiveEvents, Collider, ColliderDesc, World, RigidBody } from '@dimforge/rapier3d-compat'
 import { Mesh, Quaternion, Vector3, type Object3D } from 'three'
-import {
-  ActiveEvents,
-  CoefficientCombineRule,
-  Collider,
-  ColliderDesc,
-  RigidBody,
-  World
-} from '@dimforge/rapier3d-compat'
-import type { RigidBodyProperties } from '../types/components'
+import type { AutoCollidersShapes } from '../types/types'
 
+/**
+ *
+ * Creates collider descriptions including default translations
+ *
+ * @param object
+ * @param world
+ * @param friction
+ * @param restitution
+ * @param collidersType
+ * @param rigidBody
+ * @returns
+ */
 export const createCollidersFromChildren = (
   object: Object3D,
-  rigidBody: RigidBody,
+  collidersType: AutoCollidersShapes,
   world: World,
-  friction: RigidBodyProperties['friction'],
-  restitution: RigidBodyProperties['restitution'],
-  collidersType: RigidBodyProperties['colliders']
-) => {
+  rigidBody?: RigidBody
+): Collider[] => {
   const colliders: Collider[] = []
 
-  let desc: ColliderDesc
+  let description: ColliderDesc
+
   const offset = new Vector3()
+
+  /**
+   * Trying to find the parent RigidBody.
+   * If we find something, good. If not,
+   * the Colliders are created on the world positions
+   * of the meshes they resemble.
+   */
+  const rigidBodyWorldPos = new Vector3()
+  const rigidBodyWorldQuatInversed = new Quaternion()
+  object.traverseAncestors((child: Object3D) => {
+    if (child.userData.isRigidBody) {
+      child.getWorldPosition(rigidBodyWorldPos)
+      child.getWorldQuaternion(rigidBodyWorldQuatInversed)
+      rigidBodyWorldQuatInversed.invert()
+    }
+  })
 
   object.traverse((child: Object3D | Mesh) => {
     if ('isMesh' in child) {
       const { geometry } = child
-      const { x, y, z } = child.position
-      const { x: rx, y: ry, z: rz, w: rw } = new Quaternion().setFromEuler(child.rotation)
+      const worldPos = child.getWorldPosition(new Vector3())
+      const { x, y, z } = worldPos.sub(rigidBodyWorldPos)
+
+      const worldQuat = child.getWorldQuaternion(new Quaternion())
+      const {
+        x: rx,
+        y: ry,
+        z: rz,
+        w: rw
+      } = worldQuat.clone().premultiply(rigidBodyWorldQuatInversed)
+
       const scale = child.getWorldScale(new Vector3())
 
       switch (collidersType) {
@@ -38,7 +67,7 @@ export const createCollidersFromChildren = (
             const size = boundingBox!.getSize(new Vector3())
             boundingBox!.getCenter(offset)
 
-            desc = ColliderDesc.cuboid(
+            description = ColliderDesc.cuboid(
               (size.x / 2) * scale.x,
               (size.y / 2) * scale.y,
               (size.z / 2) * scale.z
@@ -54,7 +83,7 @@ export const createCollidersFromChildren = (
             const radius = boundingSphere!.radius * scale.x
             offset.copy(boundingSphere!.center)
 
-            desc = ColliderDesc.ball(radius)
+            description = ColliderDesc.ball(radius)
           }
           break
 
@@ -62,44 +91,45 @@ export const createCollidersFromChildren = (
           {
             const g = geometry.clone().scale(scale.x, scale.y, scale.z)
 
-            desc = ColliderDesc.trimesh(
+            description = ColliderDesc.trimesh(
               g.attributes.position.array as Float32Array,
               g.index?.array as Uint32Array
             )
           }
           break
 
-        case 'hull':
+        case 'capsule':
+          {
+            geometry.computeBoundingBox()
+            const { boundingBox } = geometry
+
+            const size = boundingBox!.getSize(new Vector3())
+            boundingBox!.getCenter(offset)
+
+            const radius = Math.max((size.x / 2) * scale.x, (size.z / 2) * scale.z)
+
+            description = ColliderDesc.capsule((size.y / 2) * scale.y - radius, radius)
+          }
+          break
+
+        case 'convexHull':
           // eslint-disable-next-line no-case-declarations
           const g = geometry.clone().scale(scale.x, scale.y, scale.z)
           {
-            desc = ColliderDesc.convexHull(
+            description = ColliderDesc.convexHull(
               g.attributes.position.array as Float32Array
             ) as ColliderDesc
           }
           break
       }
 
-      // We translate the colliders based on the parent's world scale
-      let parentWorldScale = new Vector3(1, 1, 1)
-      if (child.parent) {
-        parentWorldScale = child.parent.getWorldScale(new Vector3())
-      }
-
-      desc
-        .setTranslation(
-          (x + offset.x) * parentWorldScale.x,
-          (y + offset.y) * parentWorldScale.y,
-          (z + offset.z) * parentWorldScale.z
-        )
+      description
+        .setTranslation(x + offset.x, y + offset.y, z + offset.z)
         .setRotation({ x: rx, y: ry, z: rz, w: rw })
+        .setActiveEvents(ActiveEvents.COLLISION_EVENTS)
 
-      desc.setActiveEvents(ActiveEvents.COLLISION_EVENTS)
+      const collider = world.createCollider(description, rigidBody)
 
-      if (Number.isFinite(friction)) desc.setFriction(friction as number)
-      if (Number.isFinite(restitution)) desc.setRestitution(restitution as number)
-
-      const collider = world.createCollider(desc, rigidBody)
       colliders.push(collider)
     }
   })

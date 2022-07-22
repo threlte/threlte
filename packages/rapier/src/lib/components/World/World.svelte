@@ -1,25 +1,66 @@
 <script context="module" lang="ts">
   import RAPIER from '@dimforge/rapier3d-compat'
-  import type { Position } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
+  import type { WorldProperties } from '../../types/components'
 </script>
 
 <script lang="ts">
   import InnerWorld from './InnerWorld.svelte'
 
-  export let gravity: Position = { y: -9.81 }
+  export let gravity: WorldProperties['gravity'] = undefined
+  export let rawIntegrationParameters: WorldProperties['rawIntegrationParameters'] = undefined
+  export let rawIslands: WorldProperties['rawIslands'] = undefined
+  export let rawBroadPhase: WorldProperties['rawBroadPhase'] = undefined
+  export let rawNarrowPhase: WorldProperties['rawNarrowPhase'] = undefined
+  export let rawBodies: WorldProperties['rawBodies'] = undefined
+  export let rawColliders: WorldProperties['rawColliders'] = undefined
+  export let rawImpulseJoints: WorldProperties['rawImpulseJoints'] = undefined
+  export let rawMultibodyJoints: WorldProperties['rawMultibodyJoints'] = undefined
+  export let rawCCDSolver: WorldProperties['rawCCDSolver'] = undefined
+  export let rawQueryPipeline: WorldProperties['rawQueryPipeline'] = undefined
+  export let rawPhysicsPipeline: WorldProperties['rawPhysicsPipeline'] = undefined
+  export let rawSerializationPipeline: WorldProperties['rawSerializationPipeline'] = undefined
+  export let rawDebugRenderPipeline: WorldProperties['rawDebugRenderPipeline'] = undefined
 
   let initialized = false
+  let error = false
+
   const init = async () => {
-    await RAPIER.init()
-    initialized = true
+    try {
+      await RAPIER.init()
+      initialized = true
+    } catch (e) {
+      error = true
+    }
   }
+
+  const { renderer } = useThrelte()
 
   onMount(init)
 </script>
 
 {#if initialized}
-  <InnerWorld {gravity}>
+  <InnerWorld
+    {gravity}
+    {rawIntegrationParameters}
+    {rawIslands}
+    {rawBroadPhase}
+    {rawNarrowPhase}
+    {rawBodies}
+    {rawColliders}
+    {rawImpulseJoints}
+    {rawMultibodyJoints}
+    {rawCCDSolver}
+    {rawQueryPipeline}
+    {rawPhysicsPipeline}
+    {rawSerializationPipeline}
+    {rawDebugRenderPipeline}
+  >
     <slot />
   </InnerWorld>
+{/if}
+
+{#if error}
+  <slot name="fallback" />
 {/if}

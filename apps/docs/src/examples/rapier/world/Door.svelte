@@ -2,7 +2,7 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Group, Mesh, type Position, type Rotation } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { Collider, RigidBody } from '@threlte/rapier'
+	import { RigidBody, Collider, AutoColliders } from '@threlte/rapier'
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import { blur, fade, fly } from 'svelte/transition'
@@ -46,7 +46,7 @@
 
 <Group bind:group {position} {rotation}>
 	<!-- FRAME -->
-	<RigidBody type={'fixed'} colliders={'cuboid'}>
+	<AutoColliders shape={'cuboid'}>
 		<!-- SIDE FRAME A -->
 		<Mesh
 			receiveShadow
@@ -73,7 +73,7 @@
 			geometry={new BoxBufferGeometry(1.4 + 0.3, 0.3, 0.3)}
 			material={new MeshStandardMaterial()}
 		/>
-	</RigidBody>
+	</AutoColliders>
 
 	<HTML transform position={{ y: 3 }} pointerEvents={'none'}>
 		{#key open}
@@ -100,15 +100,16 @@
 		position={{ y: 1.125, x: -0.5 }}
 		bind:rigidBody={doorRigidBody}
 		type={'kinematicPosition'}
-		colliders={'cuboid'}
 	>
-		<Mesh
-			receiveShadow
-			castShadow
-			position={{ x: 0.5 }}
-			geometry={new BoxBufferGeometry(1, 2.25, 0.1)}
-			material={new MeshStandardMaterial()}
-		/>
+		<AutoColliders shape={'cuboid'}>
+			<Mesh
+				receiveShadow
+				castShadow
+				position={{ x: 0.5 }}
+				geometry={new BoxBufferGeometry(1, 2.25, 0.1)}
+				material={new MeshStandardMaterial()}
+			/>
+		</AutoColliders>
 	</RigidBody>
 
 	<Collider

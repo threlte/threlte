@@ -323,9 +323,42 @@ export const sidebar = {
 				title: 'World',
 				slug: '/rapier/world'
 			},
+
 			{
 				title: 'RigidBody',
 				slug: '/rapier/rigid-body'
+			},
+			{
+				title: 'Collider',
+				slug: '/rapier/collider'
+			},
+			{
+				title: 'AutoColliders',
+				slug: '/rapier/auto-colliders'
+			},
+			{
+				title: 'CollisionGroups',
+				slug: '/rapier/collision-groups'
+			},
+			{
+				title: 'Debug',
+				slug: '/rapier/debug'
+			},
+			{
+				title: 'Hooks',
+				slug: ''
+			},
+			{
+				title: 'useRapier',
+				slug: '/rapier/use-rapier'
+			},
+			{
+				title: 'Recipes',
+				slug: ''
+			},
+			{
+				title: 'BasicPlayerController',
+				slug: '/rapier/basic-player-controller'
 			}
 		]
 	}

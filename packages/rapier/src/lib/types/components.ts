@@ -1,5 +1,22 @@
-import type { RigidBody, TempContactManifold } from '@dimforge/rapier3d-compat'
-import type { RigidBodyTypeString } from '../lib/parseBodyType'
+import type { CoefficientCombineRule, ColliderDesc } from '@dimforge/rapier3d-compat'
+import type {
+  RawBroadPhase,
+  RawCCDSolver,
+  RawColliderSet,
+  RawDebugRenderPipeline,
+  RawImpulseJointSet,
+  RawIntegrationParameters,
+  RawIslandManager,
+  RawMultibodyJointSet,
+  RawNarrowPhase,
+  RawPhysicsPipeline,
+  RawQueryPipeline,
+  RawRigidBodySet,
+  RawSerializationPipeline
+} from '@dimforge/rapier3d-compat/raw'
+import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
+import type { RigidBodyTypeString } from '../lib/parseRigidBodyType'
+import type { AutoCollidersShapes, ColliderShapes } from './types'
 
 export type RigidBodyAutoCollider = 'ball' | 'cuboid' | 'hull' | 'trimesh' | false
 
@@ -21,12 +38,12 @@ export type RigidBodyProperties = {
   /** The linear velocity of this body.
    * default: zero velocity
    */
-  linearVelocity?: Vector3Array
+  linearVelocity?: Position
 
   /** The angular velocity of this body.
    * Default: zero velocity.
    */
-  angularVelocity?: Vector3Array
+  angularVelocity?: Rotation
 
   /**
    * The scaling factor applied to the gravity affecting the rigid-body.
@@ -42,27 +59,6 @@ export type RigidBodyProperties = {
   ccd?: boolean
 
   /**
-   * Initial position of the RigidBody
-   */
-  position?: Vector3Array
-
-  /**
-   * Initial rotation of the RigidBody
-   */
-  rotation?: Vector3Array
-
-  /**
-   * Automatically generate colliders based on meshes inside this
-   * rigid body.
-   *
-   * You can change the default setting globally by setting the colliders
-   * prop on the <Physics /> component.
-   *
-   * Setting this to false will disable automatic colliders.
-   */
-  colliders?: RigidBodyAutoCollider | false
-
-  /**
    * Set the friction of auto-generated colliders.
    * This does not affect any non-automatic child collider-components.
    */
@@ -73,26 +69,6 @@ export type RigidBodyProperties = {
    * This does not affect any non-automatic child collider-components.
    */
   restitution?: number
-
-  /**
-   * Callback when this rigidbody collides with another rigidbody
-   */
-  // eslint-disable-next-line no-empty-pattern
-  onCollisionEnter?({}: {
-    target: RigidBody
-    manifold: TempContactManifold
-    flipped: boolean
-  }): void
-
-  /**
-   * Callback when this rigidbody stops colliding with another rigidbody
-   */
-  // eslint-disable-next-line no-empty-pattern
-  onCollisionExit?({}: { target: RigidBody }): void
-
-  onSleep?(): void
-
-  onWake?(): void
 
   /**
    * Locks all rotations that would have resulted from forces on the created rigid-body.
@@ -113,4 +89,94 @@ export type RigidBodyProperties = {
    * Allow rotation of this rigid-body only along specific axes.
    */
   enabledTranslations?: Boolean3Array
+
+  /**
+   * Dominance is a non-realistic, but sometimes useful, feature.
+   * It can be used to make one rigid-body immune to forces
+   * originating from contacts with some other bodies.
+   *
+   * Number in the range -127 to 127, default is 0
+   */
+  dominance?: number
 }
+
+export type ColliderProperties<Shape extends ColliderShapes> = Omit<
+  TransformableObjectProperties,
+  'object'
+> & {
+  shape: Shape
+
+  /**
+   * Arguments to pass to the collider specific to shape
+   */
+  args: Parameters<typeof ColliderDesc[Shape]>
+
+  /**
+   * The mass of this rigid body.
+   * The mass and density is automatically calculated based on the shape of the collider.
+   * Generally, it's not recommended to adjust the mass properties as it could lead to
+   * unexpected behaviors.
+   * More info https://rapier.rs/docs/user_guides/javascript/colliders#mass-properties
+   */
+  mass?: number
+
+  /**
+   * The center of mass of this rigid body
+   */
+  centerOfMass?: Position
+
+  /**
+   * Principal angular inertia of this rigid body
+   */
+  principalAngularInertia?: Position
+
+  /**
+   * Restitution controls how elastic (aka. bouncy) a contact is. Le elasticity of a contact is controlled by the restitution coefficient
+   */
+  restitution?: number
+
+  /**
+   * What happens when two bodies meet. See https://rapier.rs/docs/user_guides/javascript/colliders#friction.
+   */
+  restitutionCombineRule?: CoefficientCombineRule
+
+  /**
+   * Friction is a force that opposes the relative tangential motion between two rigid-bodies with colliders in contact.
+   * A friction coefficient of 0 implies no friction at all (completely sliding contact) and a coefficient
+   * greater or equal to 1 implies a very strong friction. Values greater than 1 are allowed.
+   */
+  friction?: number
+
+  /**
+   * What happens when two bodies meet. See https://rapier.rs/docs/user_guides/javascript/colliders#friction.
+   */
+  frictionCombineRule?: CoefficientCombineRule
+
+  /**
+   * A sensor does not participate in  physics simulation and is
+   * used as a trigger e.g. to check whether another RigidBody
+   * entered an area.
+   */
+  sensor?: boolean
+}
+
+export type AutoCollidersProperties = Omit<ColliderProperties<AutoCollidersShapes>, 'args'>
+
+export type InnerWorldProperties = {
+  gravity?: Position
+  rawIntegrationParameters?: RawIntegrationParameters
+  rawIslands?: RawIslandManager
+  rawBroadPhase?: RawBroadPhase
+  rawNarrowPhase?: RawNarrowPhase
+  rawBodies?: RawRigidBodySet
+  rawColliders?: RawColliderSet
+  rawImpulseJoints?: RawImpulseJointSet
+  rawMultibodyJoints?: RawMultibodyJointSet
+  rawCCDSolver?: RawCCDSolver
+  rawQueryPipeline?: RawQueryPipeline
+  rawPhysicsPipeline?: RawPhysicsPipeline
+  rawSerializationPipeline?: RawSerializationPipeline
+  rawDebugRenderPipeline?: RawDebugRenderPipeline
+}
+
+export type WorldProperties = InnerWorldProperties

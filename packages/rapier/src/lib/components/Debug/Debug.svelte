@@ -1,7 +1,7 @@
 <script lang="ts">
   import { LineSegments, useFrame } from '@threlte/core'
-  import { onDestroy, onMount } from 'svelte'
-  import { BufferAttribute, BufferGeometry, LineBasicMaterial, AlwaysDepth } from 'three'
+  import { onDestroy } from 'svelte'
+  import { BufferAttribute, BufferGeometry, LineBasicMaterial } from 'three'
   import { useRapier } from '../../hooks/useRapier'
 
   const material = new LineBasicMaterial({

@@ -1,102 +1,64 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Mesh, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
-	import { RigidBody } from '@threlte/rapier'
-	import { onDestroy } from 'svelte'
+	import { Mesh, useFrame, type Position } from '@threlte/core'
+	import { AutoColliders, BasicPlayerController, RigidBody } from '@threlte/rapier'
 	import {
-		CircleBufferGeometry,
+		CapsuleBufferGeometry,
 		Mesh as ThreeMesh,
-		MeshBasicMaterial,
 		MeshStandardMaterial,
 		SphereBufferGeometry,
 		Vector3
 	} from 'three'
-	import { clamp, DEG2RAD } from 'three/src/math/MathUtils'
+
+	export let position: Position | undefined = undefined
+
+	export let playerMesh: ThreeMesh
+	let ballMesh: ThreeMesh
 
 	let rigidBody: RapierRigidBody
 
-	export let playerMesh: ThreeMesh | undefined = undefined
-
-	const { pointer, camera, scene, pointerOverCanvas } = useThrelte()
-	const { raycaster } = useThrelteRoot()
-
-	const t3 = new Vector3()
+	const playerPos = new Vector3()
+	const ballPos = new Vector3()
 	const maxF = 0.05
 	const min = new Vector3(-maxF, 0, -maxF)
 	const max = new Vector3(maxF, 0, maxF)
 
-	$: if (rigidBody) {
-		rigidBody.setLinearDamping(2)
-		rigidBody.setAngularDamping(2)
-	}
-
-	const target = new Vector3()
-	let force = 0
-
 	useFrame(() => {
-		if (!$pointerOverCanvas || !rigidBody) return
-		raycaster.setFromCamera($pointer, $camera)
-		raycaster.layers.disableAll()
-		raycaster.layers.enable(2)
-		const intersections = raycaster.intersectObject(scene, true)
+		if (!playerMesh || !ballMesh || !rigidBody) return
 
-		if (intersections.length) {
-			const intersection = intersections[0]
+		playerMesh.getWorldPosition(playerPos)
+		ballMesh.getWorldPosition(ballPos)
 
-			const rbTranslation = rigidBody.translation()
-			// The ground is on y = 0, we'll assume the sphere to be too
-			t3.set(rbTranslation.x, 0, rbTranslation.z)
+		const diff = playerPos.sub(ballPos).divideScalar(2000)
+		diff.y = 0
 
-			const point = intersection.point
-			point.y = 0
+		const f = diff.clamp(min, max)
 
-			target.copy(point)
-			target.y = 0.01
-
-			const diff = point.sub(t3).divideScalar(1000)
-			const f = diff.clamp(min, max)
-
-			force = clamp(f.manhattanLength() * 300, 1, 4)
-
-			rigidBody.applyImpulse(f, true)
-		}
-
-		raycaster.layers.enableAll()
-	})
-	const onClick = (e: MouseEvent) => {
-		e.preventDefault()
-		if (rigidBody.translation().y > 0.26) return
-		rigidBody.applyImpulse({ x: 0, y: 0.3, z: 0 }, true)
-	}
-
-	const { renderer } = useThrelte()
-	if (!renderer) throw new Error()
-	renderer.domElement.addEventListener('click', onClick)
-	onDestroy(() => {
-		renderer.domElement.removeEventListener('click', onClick)
+		rigidBody.applyImpulse(f, true)
 	})
 </script>
 
-<RigidBody bind:rigidBody colliders={'ball'} position={{ y: 1, z: -2 }}>
+<BasicPlayerController {position} speed={3} radius={0.3} height={1.8} jumpStrength={2}>
 	<Mesh
+		bind:mesh={playerMesh}
+		position={{ y: 0.9 }}
 		receiveShadow
 		castShadow
-		bind:mesh={playerMesh}
-		geometry={new SphereBufferGeometry(0.25)}
+		geometry={new CapsuleBufferGeometry(0.3, 1.8 - 0.3 * 2)}
 		material={new MeshStandardMaterial()}
-	>
-		<slot />
-	</Mesh>
-</RigidBody>
-
-{#if $pointerOverCanvas}
-	<Mesh
-		rotation={{ x: -90 * DEG2RAD }}
-		position={target}
-		scale={force}
-		geometry={new CircleBufferGeometry(0.15, 20)}
-		material={new MeshBasicMaterial({
-			color: 0x0000ff
-		})}
 	/>
-{/if}
+</BasicPlayerController>
+
+<RigidBody bind:rigidBody position={{ y: 1, z: 2 }}>
+	<AutoColliders shape={'ball'}>
+		<Mesh
+			bind:mesh={ballMesh}
+			receiveShadow
+			castShadow
+			geometry={new SphereBufferGeometry(0.25)}
+			material={new MeshStandardMaterial()}
+		>
+			<slot />
+		</Mesh>
+	</AutoColliders>
+</RigidBody>

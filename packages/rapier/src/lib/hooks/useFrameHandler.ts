@@ -3,6 +3,10 @@ import { useFrame } from '@threlte/core'
 import { Object3D, Quaternion, Vector3 } from 'three'
 import type { RapierContext } from '../types/types'
 
+const tempObject = new Object3D()
+const tempVector3 = new Vector3()
+const tempQuaternion = new Quaternion()
+
 export const useFrameHandler = (ctx: RapierContext) => {
   const eventQueue = new EventQueue(false)
 
@@ -39,21 +43,25 @@ export const useFrameHandler = (ctx: RapierContext) => {
         return
       }
 
+      // Position
       const { x, y, z } = rigidBody.translation()
-      const { x: rx, y: ry, z: rz, w: rw } = rigidBody.rotation()
-      const scale = mesh.getWorldScale(new Vector3())
+      tempObject.position.set(x, y, z)
 
-      const o = new Object3D()
-      o.position.set(x, y, z)
-      o.rotation.setFromQuaternion(new Quaternion(rx, ry, rz, rw))
-      o.scale.set(scale.x, scale.y, scale.z)
-      o.updateMatrix()
+      // Rotation
+      const rotation = rigidBody.rotation()
+      tempQuaternion.set(rotation.x, rotation.y, rotation.z, rotation.w)
+      tempObject.rotation.setFromQuaternion(tempQuaternion)
 
-      o.applyMatrix4(mesh.parent.matrixWorld.clone().invert())
-      o.updateMatrix()
+      // Scale
+      mesh.getWorldScale(tempVector3)
+      tempObject.scale.copy(tempVector3)
 
-      mesh.position.setFromMatrixPosition(o.matrix)
-      mesh.rotation.setFromRotationMatrix(o.matrix)
+      tempObject.updateMatrix()
+      tempObject.applyMatrix4(mesh.parent.matrixWorld.clone().invert())
+      tempObject.updateMatrix()
+
+      mesh.position.setFromMatrixPosition(tempObject.matrix)
+      mesh.rotation.setFromRotationMatrix(tempObject.matrix)
     })
 
     // Collision events
