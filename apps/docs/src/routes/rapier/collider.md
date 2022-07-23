@@ -34,7 +34,6 @@ If a `<Collider>` component is not a child of a `<RigidBody>` component, the tra
 
 ### Properties
 
-
 `ColliderDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
 
 ```ts
