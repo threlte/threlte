@@ -25,3 +25,60 @@ Note that rigid-bodies are only responsible for the dynamics and kinematics of t
 &&&
 
 !!!
+
+### Properties
+
+```ts
+// optional
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+type: 'fixed' | 'dynamic' | 'kinematicPosition' | 'kinematicVelocity' = 'dynamic'
+canSleep: boolean = true
+linearVelocity: Position = {}
+angularVelocity: Rotation = {}
+gravityScale: number = 1
+ccd: boolean = false
+lockRotations: boolean = false
+lockTranslations: boolean = false
+enabledRotations: Boolean3Array = [true, true, true]
+enabledTranslations: Boolean3Array = [true, true, true]
+dominance: number = 0
+```
+
+### Bindings
+
+`RigidBody` is a type imported from `'@dimforge/rapier3d-compat'`
+
+```ts
+
+rigidBody: RigidBody
+```
+
+### Events
+
+`RigidBody`, `Collider` and `TempContactManifold` are types imported from `'@dimforge/rapier3d-compat'`
+
+```ts
+sleep: void
+wake: void
+collisionenter: CustomEvent<{
+	targetCollider: Collider
+	targetRigidBody: RigidBody | null
+	manifold: TempContactManifold
+	flipped: boolean
+}>
+collisionexit: CustomEvent<{
+	targetCollider: Collider
+	targetRigidBody: RigidBody | null
+}>
+sensorenter: CustomEvent<{
+	targetCollider: Collider
+	targetRigidBody: RigidBody | null
+}>
+sensorexit: CustomEvent<{
+	targetCollider: Collider
+	targetRigidBody: RigidBody | null
+}>
+```

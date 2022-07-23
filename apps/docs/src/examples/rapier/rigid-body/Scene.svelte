@@ -12,7 +12,7 @@
 </script>
 
 <PerspectiveCamera position={{ y: 10, z: 10, x: 10 }}>
-	<OrbitControls />
+	<OrbitControls enableZoom={false} />
 </PerspectiveCamera>
 
 <DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />

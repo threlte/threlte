@@ -1,0 +1,103 @@
+---
+title: AutoColliders
+---
+
+<script lang="ts">
+import Wrapper from '$examples/rapier/auto-colliders/Wrapper.svelte'
+</script>
+
+!!!module_summary title=AutoColliders|sourcePath=/components/AutoColliders/AutoColliders.svelte|name=AutoColliders|from=rapier|type=component
+
+The `<AutoColliders>` component generates colliders based on its children. Currently these shapes are available:
+
+1. `cuboid` – uses each child mesh bounding box and generates a cuboid collider
+2. `ball` – uses each child mesh bounding box and generates a ball collider
+3. `capsule` – uses each child mesh bounding box and generates a capsule collider
+4. `trimesh` – uses each child mesh geometry and generates a polygonal collider which resembles the geometry
+5. `convexHull` – uses each child mesh geometry and generates a collider which resembles a convex hull around the geometry
+
+The resulting colliders can be transformed (i.e. positioned, rotated and scaled) as well as given regular collider properties such as `mass` or `centerOfMass`.
+
+<ExampleWrapper>
+  <Wrapper />
+</ExampleWrapper>
+
+&&&code_wrapper
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/AutoColliders/Wrapper.svelte)
+@[code svelte|title=Button.svelte](../../examples/rapier/AutoColliders/Button.svelte)
+@[code svelte|title=Scene.svelte](../../examples/rapier/AutoColliders/Scene.svelte)
+@[code svelte|title=TestBed.svelte](../../examples/rapier/AutoColliders/TestBed.svelte)
+@[code svelte|title=Emitter.svelte](../../examples/rapier/AutoColliders/Emitter.svelte)
+@[code svelte|title=Particle.svelte](../../examples/rapier/AutoColliders/Particle.svelte)
+@[code svelte|title=AttachedAutoColliders.svelte](../../examples/rapier/AutoColliders/AttachedAutoColliders.svelte)
+@[code svelte|title=StandaloneAutoColliders.svelte](../../examples/rapier/AutoColliders/StandaloneAutoColliders.svelte)
+@[code svelte|title=Sensor.svelte](../../examples/rapier/AutoColliders/Sensor.svelte)
+&&&
+
+<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
+
+!!!
+
+### Transform Properties
+
+If a `<AutoColliders>` component is not a child of a `<RigidBody>` component, the transform properties are reactive.
+
+### Properties
+
+
+`AutoCollidersDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
+
+```ts
+// optional
+shape:
+	| 'cuboid'
+	| 'ball'
+	| 'capsule'
+	| 'trimesh'
+	| 'convexHull' = 'convexHull'
+position: Position | undefined = undefined
+scale: Scale | undefined = undefined
+rotation: Rotation | undefined = undefined
+lookAt: LookAt | undefined = undefined
+mass: number | undefined = undefined
+centerOfMass: Position | undefined = undefined
+principalAngularInertia: Position | undefined = undefined
+restitution: number | undefined = undefined
+restitutionCombineRule: CoefficientCombineRule | undefined = undefined
+friction: number | undefined = undefined
+frictionCombineRule: CoefficientCombineRule | undefined = undefined
+sensor: boolean | undefined = undefined
+```
+
+### Bindings
+
+`AutoColliders` is a type imported from `'@dimforge/rapier3d-compat'`.
+
+```ts
+colliders: Colliders[]
+```
+
+### Events
+
+`RigidBody`, `AutoColliders` and `TempContactManifold` are types imported from `'@dimforge/rapier3d-compat'`
+
+```ts
+collisionenter: CustomEvent<{
+	targetAutoColliders: AutoColliders
+	targetRigidBody: RigidBody | null
+	manifold: TempContactManifold
+	flipped: boolean
+}>
+collisionexit: CustomEvent<{
+	targetAutoColliders: AutoColliders
+	targetRigidBody: RigidBody | null
+}>
+sensorenter: CustomEvent<{
+	targetAutoColliders: AutoColliders
+	targetRigidBody: RigidBody | null
+}>
+sensorexit: CustomEvent<{
+	targetAutoColliders: AutoColliders
+	targetRigidBody: RigidBody | null
+}>
+```

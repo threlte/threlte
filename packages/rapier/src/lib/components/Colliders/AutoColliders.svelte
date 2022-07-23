@@ -16,7 +16,7 @@
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { positionToVector3 } from '../../lib/positionToVector3'
   import type { AutoCollidersProperties } from '../../types/components'
-  import type { ThrelteRapierEventMap } from '../../types/types'
+  import type { ColliderEventMap, RigidBodyEventMap } from '../../types/types'
 
   export let shape: AutoCollidersProperties['shape'] = 'convexHull'
 
@@ -53,8 +53,8 @@
   /**
    * Events setup
    */
-  type $$Events = ThrelteRapierEventMap
-  const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
+  type $$Events = ColliderEventMap
+  const dispatcher = createEventDispatcher<ColliderEventMap>()
 
   onMount(() => {
     colliders = createCollidersFromChildren(object, shape, world, rigidBody)

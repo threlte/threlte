@@ -1,11 +1,7 @@
 <script lang="ts">
-  import {
-    LayerableObject,
-    SceneGraphObject,
-    type TransformableObjectProperties
-  } from '@threlte/core'
+  import { LayerableObject, SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, setContext } from 'svelte'
-  import { Object3D, Quaternion, Vector3 } from 'three'
+  import { Object3D, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import { applyTransforms } from '../../lib/applyTransforms'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
@@ -13,7 +9,7 @@
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToEuler } from '../../lib/rotationToEuler'
   import type { RigidBodyProperties } from '../../types/components'
-  import type { RigidBodyContext, ThrelteRapierEventMap } from '../../types/types'
+  import type { RigidBodyContext, RigidBodyEventMap } from '../../types/types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -24,13 +20,11 @@
   export let gravityScale: NonNullable<RigidBodyProperties['gravityScale']> = 1
   export let ccd: NonNullable<RigidBodyProperties['ccd']> = false
 
-  export let position: TransformableObjectProperties['position'] = undefined
-  export let rotation: TransformableObjectProperties['rotation'] = undefined
-  export let scale: TransformableObjectProperties['scale'] = undefined
-  export let lookAt: TransformableObjectProperties['lookAt'] = undefined
+  export let position: RigidBodyProperties['position'] = undefined
+  export let rotation: RigidBodyProperties['rotation'] = undefined
+  export let scale: RigidBodyProperties['scale'] = undefined
+  export let lookAt: RigidBodyProperties['lookAt'] = undefined
 
-  export let friction: NonNullable<RigidBodyProperties['friction']> = 0.7
-  export let restitution: NonNullable<RigidBodyProperties['restitution']> = 0
   export let lockRotations: NonNullable<RigidBodyProperties['lockRotations']> = false
   export let lockTranslations: NonNullable<RigidBodyProperties['lockTranslations']> = false
   export let enabledRotations: NonNullable<RigidBodyProperties['enabledRotations']> = [
@@ -48,8 +42,8 @@
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = ThrelteRapierEventMap
-  const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
+  type $$Events = RigidBodyEventMap
+  const dispatcher = createEventDispatcher<RigidBodyEventMap>()
 
   const object = new Object3D()
 

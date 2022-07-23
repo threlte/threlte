@@ -24,7 +24,7 @@ export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
 export type Vector3Array = [x: number, y: number, z: number]
 
-export type RigidBodyProperties = {
+export type RigidBodyProperties = Omit<TransformableObjectProperties, 'object'> & {
   /**
    * Specify the type of this rigid body
    */
@@ -57,18 +57,6 @@ export type RigidBodyProperties = {
    * @default false
    */
   ccd?: boolean
-
-  /**
-   * Set the friction of auto-generated colliders.
-   * This does not affect any non-automatic child collider-components.
-   */
-  friction?: number
-
-  /**
-   * Set the restitution (bounciness) of auto-generated colliders.
-   * This does not affect any non-automatic child collider-components.
-   */
-  restitution?: number
 
   /**
    * Locks all rotations that would have resulted from forces on the created rigid-body.

@@ -7,12 +7,7 @@
     ColliderDesc,
     type RigidBody
   } from '@dimforge/rapier3d-compat'
-  import {
-    SceneGraphObject,
-    TransformableObject,
-    useFrame,
-    type TransformableObjectProperties
-  } from '@threlte/core'
+  import { SceneGraphObject, TransformableObject, useFrame } from '@threlte/core'
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
@@ -23,7 +18,7 @@
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
   import type { ColliderProperties } from '../../types/components'
-  import type { ThrelteRapierEventMap } from '../../types/types'
+  import type { ColliderEventMap } from '../../types/types'
 
   type Shape = $$Generic<
     | 'ball'
@@ -80,15 +75,15 @@
   const rapierContext = useRapier()
   const { world } = rapierContext
 
-  let collider: Collider
+  export let collider: Collider | undefined = undefined
 
   const collisionGroups = useCollisionGroups()
 
   /**
    * Events setup
    */
-  type $$Events = ThrelteRapierEventMap
-  const dispatcher = createEventDispatcher<ThrelteRapierEventMap>()
+  type $$Events = ColliderEventMap
+  const dispatcher = createEventDispatcher<ColliderEventMap>()
 
   /**
    * Actual collider setup happens onMount as only then
@@ -167,6 +162,7 @@
 
   useFrame(
     () => {
+      if (!collider) return
       collider.setTranslation(getWorldPosition(object))
       collider.setRotation(getWorldQuaternion(object))
     },

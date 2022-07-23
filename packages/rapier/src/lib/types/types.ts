@@ -1,4 +1,4 @@
-import { createEventDispatcher } from 'svelte'
+import type { createEventDispatcher } from 'svelte'
 import type {
   RigidBody,
   RigidBodyHandle,
@@ -31,9 +31,7 @@ export type ColliderShapes =
 
 export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
 
-export type ThrelteRapierEventMap = {
-  sleep: void
-  wake: void
+export type ColliderEventMap = {
   collisionenter: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
@@ -54,13 +52,15 @@ export type ThrelteRapierEventMap = {
   }
 }
 
-const createEventDispatcherType = () => createEventDispatcher<ThrelteRapierEventMap>()
+export type RigidBodyEventMap = ColliderEventMap & {
+  sleep: void
+  wake: void
+}
 
-export type ColliderEventDispatcher = ReturnType<typeof createEventDispatcherType>
-export type RigidBodyEventDispatcher = ReturnType<typeof createEventDispatcherType>
+export type RigidBodyEventDispatcher = ReturnType<typeof createEventDispatcher<RigidBodyEventMap>>
+export type ColliderEventDispatcher = ReturnType<typeof createEventDispatcher<ColliderEventMap>>
 
 export type RigidBodyEventDispatchers = Map<RigidBodyHandle, RigidBodyEventDispatcher>
-
 export type ColliderEventDispatchers = Map<ColliderHandle, ColliderEventDispatcher>
 
 export type RapierContext = ReturnType<typeof createRapierContext>
