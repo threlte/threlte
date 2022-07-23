@@ -8,16 +8,20 @@ import Wrapper from '$examples/rapier/rigid-body/Wrapper.svelte'
 
 !!!module_summary title=RigidBody|sourcePath=/components/RigidBody/RigidBody.svelte|name=RigidBody|from=rapier|type=component
 
-This component provides the basic physics context and loads [rapier](https://rapier.rs/). All components that rely on physics (e.g. `<RigidBody>` or `<Collider>`) must be a child of `<RigidBody>`.
+The real-time simulation of rigid bodies subjected to forces and contacts is the main feature of a physics engine for videogames, robotics, or animation. Rigid bodies are typically used to simulate the dynamics of non-deformable solids as well as to integrate the trajectory of solids which velocities are controlled by the user (e.g. moving platforms).
+
+Note that rigid-bodies are only responsible for the dynamics and kinematics of the solid. Colliders can be attached to a rigid-body to specify its shape and enable collision-detection. A rigid-body without collider attached to it will not be affected by contacts (because there is no shape to compute contact against).
 
 <ExampleWrapper>
   <Wrapper />
 </ExampleWrapper>
-<!--
+
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/RigidBody/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/rapier/RigidBody/Scene.svelte)
-@[code svelte|title=Door.svelte](../../examples/rapier/RigidBody/Door.svelte)
-@[code svelte|title=Player.svelte](../../examples/rapier/RigidBody/Player.svelte)
-@[code svelte|title=Ground.svelte](../../examples/rapier/RigidBody/Ground.svelte)
-&&& -->
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/rigid-body/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/rapier/rigid-body/Scene.svelte)
+@[code svelte|title=Ground.svelte](../../examples/rapier/rigid-body/Ground.svelte)
+@[code svelte|title=Emitter.svelte](../../examples/rapier/rigid-body/Emitter.svelte)
+@[code svelte|title=Particle.svelte](../../examples/rapier/rigid-body/Particle.svelte)
+&&&
+
+!!!
