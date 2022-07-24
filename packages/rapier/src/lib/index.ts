@@ -13,7 +13,7 @@ export { default as CollisionGroups } from './components/CollisionGroups/Collisi
 
 // recipes
 // recipes -> controllers
-export { default as BasicPlayerController } from './recipes/Controllers/BasicPlayerController.svelte'
+export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
 
 export type {
   AutoCollidersProperties,

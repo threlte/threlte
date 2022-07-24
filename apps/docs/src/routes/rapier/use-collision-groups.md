@@ -2,10 +2,6 @@
 title: useCollisionGroups
 ---
 
-<script lang="ts">
-import Wrapper from '$examples/rapier/collision-groups/Wrapper.svelte'
-</script>
-
 !!!module_summary title=useCollisionGroups|sourcePath=/hooks/useCollisionGroups.svelte|name=useCollisionGroups|from=rapier|type=component
 
 This hook can be used in conjunction with the component [`<CollisionGroups>`](/rapier/collision-groups). It uses the collision groups provided by a parent `<CollisionGroups>` component and lets you easily apply them to colliders.

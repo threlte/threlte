@@ -23,15 +23,10 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/AutoColliders/Wrapper.svelte)
-@[code svelte|title=Button.svelte](../../examples/rapier/AutoColliders/Button.svelte)
-@[code svelte|title=Scene.svelte](../../examples/rapier/AutoColliders/Scene.svelte)
-@[code svelte|title=TestBed.svelte](../../examples/rapier/AutoColliders/TestBed.svelte)
-@[code svelte|title=Emitter.svelte](../../examples/rapier/AutoColliders/Emitter.svelte)
-@[code svelte|title=Particle.svelte](../../examples/rapier/AutoColliders/Particle.svelte)
-@[code svelte|title=AttachedAutoColliders.svelte](../../examples/rapier/AutoColliders/AttachedAutoColliders.svelte)
-@[code svelte|title=StandaloneAutoColliders.svelte](../../examples/rapier/AutoColliders/StandaloneAutoColliders.svelte)
-@[code svelte|title=Sensor.svelte](../../examples/rapier/AutoColliders/Sensor.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/auto-colliders/Wrapper.svelte)
+@[code svelte|title=Button.svelte](../../examples/rapier/auto-colliders/Button.svelte)
+@[code svelte|title=Scene.svelte](../../examples/rapier/auto-colliders/Scene.svelte)
+@[code svelte|title=Ground.svelte](../../examples/rapier/auto-colliders/Ground.svelte)
 &&&
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>

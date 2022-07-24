@@ -2,10 +2,6 @@
 title: Debug
 ---
 
-<script lang="ts">
-import Wrapper from '$examples/rapier/collision-groups/Wrapper.svelte'
-</script>
-
 !!!module_summary title=Debug|sourcePath=/components/Debug/Debug.svelte|name=Debug|from=rapier|type=component
 
 Use the Debug component to see live representations of all colliders in a scene.

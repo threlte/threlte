@@ -2,10 +2,6 @@
 title: useRapier
 ---
 
-<script lang="ts">
-import Wrapper from '$examples/rapier/collision-groups/Wrapper.svelte'
-</script>
-
 !!!module_summary title=useRapier|sourcePath=/hooks/useRapier.svelte|name=useRapier|from=rapier|type=component
 
 This hook provides access to the underlying `RAPIER.World` as well as the means to add and remove colliders and rigid bodies from the events system.
