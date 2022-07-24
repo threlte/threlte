@@ -10,6 +10,7 @@
 	export let type: string
 	export let needsContext: boolean = false
 	export let divider: 'true' | 'false' = 'true'
+	export let relatedDocs: { name: string; url: string }[] = []
 
 	let importStatement = `import { ${name} } from '@threlte/${from}'`
 
@@ -58,6 +59,18 @@
 			<span>Package</span>
 		</p>
 		<NpmIcon class="col-span-12 992:col-span-10 !p-0" href={packageUrl}>View Package</NpmIcon>
+		{#if relatedDocs.length > 0}
+			<p
+				class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+			>
+				<span>Related Docs</span>
+			</p>
+			<div class="col-span-12 992:col-span-10 !p-0">
+				{#each relatedDocs as link}
+					<a href={link.url}>{link.name}</a>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>
 

@@ -2,7 +2,7 @@
 title: SpotLight
 ---
 
-!!!module_summary title=SpotLight|sourcePath=lights/SpotLight.svelte|name=SpotLight|from=core|type=component
+!!!module_summary title=SpotLight|sourcePath=lights/SpotLight.svelte|name=SpotLight|from=core|type=component|relatedDocs={[{name:"three.js SpotLight reference",url:"https://threejs.org/docs/#api/en/lights/SpotLight"}]}
 This light gets emitted from a single point in one direction, along a cone that increases in size the further from the light it gets.
 
 This light can cast shadows.

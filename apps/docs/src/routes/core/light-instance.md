@@ -2,7 +2,7 @@
 title: LightInstance
 ---
 
-!!!module_summary title=LightInstance|sourcePath=instances/LightInstance.svelte|name=LightInstance|from=core|type=component
+!!!module_summary title=LightInstance|sourcePath=instances/LightInstance.svelte|name=LightInstance|from=core|type=component|relatedDocs={[{name:"three.js Light reference",url:"https://threejs.org/docs/#api/en/lights/Light"}]}
 This component lets you use any manually instantiated object that extends `THREE.Light` in threlte.
 !!!
 

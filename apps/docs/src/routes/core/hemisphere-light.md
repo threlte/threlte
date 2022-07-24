@@ -2,7 +2,7 @@
 title: HemisphereLight
 ---
 
-!!!module_summary title=HemisphereLight|sourcePath=lights/HemisphereLight.svelte|name=HemisphereLight|from=core|type=component
+!!!module_summary title=HemisphereLight|sourcePath=lights/HemisphereLight.svelte|name=HemisphereLight|from=core|type=component|relatedDocs={[{name:"three.js HemisphereLight reference",url:"https://threejs.org/docs/#api/en/lights/HemisphereLight"}]}
 A light source positioned directly above the scene, with color fading from the sky color to the ground color.
 This light cannot be used to cast shadows.
 !!!

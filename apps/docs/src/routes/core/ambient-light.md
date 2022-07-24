@@ -2,7 +2,7 @@
 title: AmbientLight
 ---
 
-!!!module_summary title=AmbientLight|name=AmbientLight|sourcePath=lights/AmbientLight.svelte|from=core|type=component
+!!!module_summary title=AmbientLight|name=AmbientLight|sourcePath=lights/AmbientLight.svelte|from=core|type=component|relatedDocs={[{name:"three.js AmbientLight reference",url:"https://threejs.org/docs/#api/en/lights/AmbientLight"}]}
 This light globally illuminates all objects in the scene equally.
 This light cannot be used to cast shadows as it does not have a direction.
 !!!
