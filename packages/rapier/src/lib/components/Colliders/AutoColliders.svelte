@@ -16,7 +16,7 @@
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { positionToVector3 } from '../../lib/positionToVector3'
   import type { AutoCollidersProperties } from '../../types/components'
-  import type { ColliderEventMap, RigidBodyEventMap } from '../../types/types'
+  import type { ColliderEventMap } from '../../types/types'
 
   export let shape: AutoCollidersProperties['shape'] = 'convexHull'
 

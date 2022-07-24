@@ -1,4 +1,7 @@
+// hooks
 export { useRapier } from './hooks/useRapier'
+export { useCollisionGroups } from './hooks/useCollisionGroups'
+export { useRigidBody } from './hooks/useRigidBody'
 
 // components
 export { default as World } from './components/World/World.svelte'
@@ -10,7 +13,7 @@ export { default as CollisionGroups } from './components/CollisionGroups/Collisi
 
 // recipes
 // recipes -> controllers
-export { default as BasicPlayerController } from './recipes/controllers/BasicPlayerController.svelte'
+export { default as BasicPlayerController } from './recipes/Controllers/BasicPlayerController.svelte'
 
 export type {
   AutoCollidersProperties,

@@ -19,14 +19,8 @@ const applyBitMask = (collidersMap: ColliderMap, bitMask: number) => {
   })
 }
 
-export const useCollisionGroups = (colliders?: Collider[]) => {
+export const useCollisionGroups = () => {
   const collidersMap: ColliderMap = new Map()
-  colliders?.forEach((c) => {
-    collidersMap.set(c.handle, {
-      collider: c,
-      initialCollisionGroup: c.collisionGroups()
-    })
-  })
 
   const bitMaskStore = getContext<CollisionGroupsContext>('threlte-rapier-collision-group')
   if (!bitMaskStore)
@@ -38,7 +32,6 @@ export const useCollisionGroups = (colliders?: Collider[]) => {
     }
 
   let bitMask = get(bitMaskStore)
-
   const unsubscribe = bitMaskStore.subscribe((newBitMask) => {
     bitMask = newBitMask
     applyBitMask(collidersMap, newBitMask)

@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
   import RAPIER from '@dimforge/rapier3d-compat'
-  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import { writable } from 'svelte/store'
   import type { WorldProperties } from '../../types/components'

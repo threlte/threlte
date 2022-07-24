@@ -316,6 +316,10 @@ export const sidebar = {
 		],
 		'@threlte/rapier': [
 			{
+				title: 'Getting Started',
+				slug: '/rapier/getting-started'
+			},
+			{
 				title: 'Components',
 				slug: ''
 			},
@@ -351,6 +355,18 @@ export const sidebar = {
 			{
 				title: 'useRapier',
 				slug: '/rapier/use-rapier'
+			},
+			{
+				title: 'useCollisionGroups',
+				slug: '/rapier/use-collision.groups'
+			},
+			{
+				title: 'useRigidBody',
+				slug: '/rapier/use-collision-groups'
+			},
+			{
+				title: 'useRigidBody',
+				slug: '/rapier/use-rigid-body'
 			}
 		]
 	}

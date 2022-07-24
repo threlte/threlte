@@ -93,6 +93,11 @@
   export const rigidBody = world.createRigidBody(desc)
 
   /**
+   * Will come in handy in the future for joints
+   */
+  object.userData.rigidBody = rigidBody
+
+  /**
    * Reactive RigidBody properties
    */
   $: {

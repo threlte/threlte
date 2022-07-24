@@ -8,7 +8,9 @@ import Wrapper from '$examples/rapier/world/Wrapper.svelte'
 
 !!!module_summary title=World|sourcePath=/components/World/World.svelte|name=World|from=rapier|type=component
 
-This component provides the basic physics context and loads [rapier](https://rapier.rs/). All components that rely on physics (e.g. `<RigidBody>` or `<Collider>`) must be a child of `<World>`.
+This component provides the basic physics context and loads [rapier](https://rapier.rs/).
+
+**All components that rely on physics** (e.g. `<RigidBody>` or `<Collider>`) **must be a child of `<World>`**.
 
 <ExampleWrapper>
   <Wrapper />
@@ -36,7 +38,7 @@ A typical structure of a physics-enabled wrapper component might look like this:
 
 <Canvas>
 	<World>
-		<Scene />
+		<Scene /> <!-- Everything is happening inside this component -->
 	</World>
 </Canvas>
 ```
