@@ -26,6 +26,6 @@
 
 <Object3DInstance object={new GridHelper(50)} />
 
-<Debug />
+<Debug depthTest={false} depthWrite={false} />
 
 <svelte:component this={tests[testIndex]} />

@@ -46,9 +46,11 @@
 </RigidBody>
 
 <TestBed title={'Sensor Collider'}>
-	<p slot="text">
-		This collider is marked as a sensor and as such does<br />
-		not participate in contacts and collisions and can be<br />
-		useful to detect presence in areas.
-	</p>
+	<div slot="text">
+		<p>
+			This collider is marked as a sensor and as such does<br />
+			not participate in contacts and collisions and can be<br />
+			useful to detect presence in areas.
+		</p>
+	</div>
 </TestBed>

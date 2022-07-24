@@ -4,9 +4,9 @@
   import { createEventDispatcher } from 'svelte'
   import { Vector2, Vector3 } from 'three'
   import type { CollisionGroupsBitMask } from '../../types/types'
-  import Collider from '../Colliders/Collider.svelte'
-  import CollisionGroups from '../CollisionGroups/CollisionGroups.svelte'
-  import RigidBody from '../RigidBody/RigidBody.svelte'
+  import RigidBody from '../../components/RigidBody/RigidBody.svelte'
+  import CollisionGroups from '../../components/CollisionGroups/CollisionGroups.svelte'
+  import Collider from '../../components/Colliders/Collider.svelte'
 
   export let position: Position | undefined = undefined
   export let height: number = 1.7

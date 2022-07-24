@@ -58,59 +58,15 @@ For general usage instructions, see the relevant documentation [here](https://ra
 
 ### Properties
 
-`CollisionGroupsDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
+Provide either the shorthand property `groups` to set both `memberships` and `filter` to the same value or set them up individually.
 
 ```ts
-// optional
-shape:
-	| 'cuboid'
-	| 'ball'
-	| 'capsule'
-	| 'trimesh'
-	| 'convexHull' = 'convexHull'
-position: Position | undefined = undefined
-scale: Scale | undefined = undefined
-rotation: Rotation | undefined = undefined
-lookAt: LookAt | undefined = undefined
-mass: number | undefined = undefined
-centerOfMass: Position | undefined = undefined
-principalAngularInertia: Position | undefined = undefined
-restitution: number | undefined = undefined
-restitutionCombineRule: CoefficientCombineRule | undefined = undefined
-friction: number | undefined = undefined
-frictionCombineRule: CoefficientCombineRule | undefined = undefined
-sensor: boolean | undefined = undefined
-```
+// required
 
-### Bindings
+// Provide either …
+groups: CollisionGroupsBitMask
 
-`CollisionGroups` is a type imported from `'@dimforge/rapier3d-compat'`.
-
-```ts
-colliders: Colliders[]
-```
-
-### Events
-
-`RigidBody`, `CollisionGroups` and `TempContactManifold` are types imported from `'@dimforge/rapier3d-compat'`
-
-```ts
-collisionenter: CustomEvent<{
-	targetCollisionGroups: CollisionGroups
-	targetRigidBody: RigidBody | null
-	manifold: TempContactManifold
-	flipped: boolean
-}>
-collisionexit: CustomEvent<{
-	targetCollisionGroups: CollisionGroups
-	targetRigidBody: RigidBody | null
-}>
-sensorenter: CustomEvent<{
-	targetCollisionGroups: CollisionGroups
-	targetRigidBody: RigidBody | null
-}>
-sensorexit: CustomEvent<{
-	targetCollisionGroups: CollisionGroups
-	targetRigidBody: RigidBody | null
-}>
+// … or …
+filter: CollisionGroupsBitMask
+memberships: CollisionGroupsBitMask
 ```

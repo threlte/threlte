@@ -2,7 +2,6 @@
 	import {
 		DirectionalLight,
 		Mesh,
-		MeshInstance,
 		Object3DInstance,
 		OrbitControls,
 		PerspectiveCamera,
@@ -10,7 +9,7 @@
 		useThrelte
 	} from '@threlte/core'
 	import { useGltf } from '@threlte/extras'
-	import { AutoColliders, Debug, RigidBody } from '@threlte/rapier'
+	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
 	import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'

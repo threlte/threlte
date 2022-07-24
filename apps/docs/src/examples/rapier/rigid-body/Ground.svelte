@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Mesh } from '@threlte/core'
-	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxBufferGeometry } from 'three'
+	import { AutoColliders } from '@threlte/rapier'
+	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
 </script>
 
 <AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>

@@ -2,10 +2,10 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Group, Mesh, type Position, type Rotation } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { RigidBody, Collider, AutoColliders } from '@threlte/rapier'
+	import { AutoColliders, Collider, CollisionGroups, RigidBody } from '@threlte/rapier'
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
-	import { blur, fade, fly } from 'svelte/transition'
+	import { blur } from 'svelte/transition'
 	import {
 		BoxBufferGeometry,
 		Euler,
@@ -19,6 +19,9 @@
 	export let rotation: Rotation | undefined = undefined
 
 	let open = false
+	let objectsInSensor = 0
+	$: open = objectsInSensor > 0
+
 	let group: ThreeGroup
 	let doorRigidBody: RapierRigidBody
 
@@ -112,12 +115,14 @@
 		</AutoColliders>
 	</RigidBody>
 
-	<Collider
-		position={{ y: 1.5 }}
-		shape={'cuboid'}
-		args={[1, 1.35, 1.5]}
-		sensor
-		on:sensorenter={() => (open = true)}
-		on:sensorexit={() => (open = false)}
-	/>
+	<CollisionGroups groups={[15]}>
+		<Collider
+			position={{ y: 1.5 }}
+			shape={'cuboid'}
+			args={[1, 1.35, 1.5]}
+			sensor
+			on:sensorenter={() => (objectsInSensor += 1)}
+			on:sensorexit={() => (objectsInSensor -= 1)}
+		/>
+	</CollisionGroups>
 </Group>

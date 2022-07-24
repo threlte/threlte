@@ -15,13 +15,12 @@
 		BoxBufferGeometry,
 		EquirectangularReflectionMapping,
 		GridHelper,
+		Group as ThreeGroup,
 		Mesh as ThreeMesh,
 		MeshStandardMaterial,
-		Vector3,
-		Group as ThreeGroup
+		Vector3
 	} from 'three'
 	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Door from './Door.svelte'
 	import Ground from './Ground.svelte'
 	import Player from './Player.svelte'
@@ -70,15 +69,24 @@
 
 <Object3DInstance object={new GridHelper(50)} />
 
-<Debug />
+<Debug depthTest={false} depthWrite={false} />
 
-<Player bind:playerMesh position={{ z: -3, y: 2 }} />
-
+<!--
+	The ground needs to be on both group 15 which is the group
+	to detect the groundedness of the player as well as on group
+	0 which is the group that the player is actually physically
+	interacting with.
+ -->
 <CollisionGroups groups={[0, 15]}>
 	<Ground />
 </CollisionGroups>
 
+<!--
+	All physically interactive stuff should be on group 0
+-->
 <CollisionGroups groups={[0]}>
+	<Player bind:playerMesh position={{ z: -3, y: 2 }} />
+
 	<Door />
 
 	<!-- WALLS -->
@@ -94,7 +102,6 @@
 				color: 0x333333
 			})}
 		/>
-
 		<Mesh
 			receiveShadow
 			castShadow

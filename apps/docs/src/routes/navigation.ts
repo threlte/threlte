@@ -351,14 +351,6 @@ export const sidebar = {
 			{
 				title: 'useRapier',
 				slug: '/rapier/use-rapier'
-			},
-			{
-				title: 'Recipes',
-				slug: ''
-			},
-			{
-				title: 'BasicPlayerController',
-				slug: '/rapier/basic-player-controller'
 			}
 		]
 	}

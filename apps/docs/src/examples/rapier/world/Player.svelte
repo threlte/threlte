@@ -38,7 +38,16 @@
 	})
 </script>
 
-<BasicPlayerController {position} speed={3} radius={0.3} height={1.8} jumpStrength={2}>
+<!-- To detect the groundedness of the player, a collider on group 15 is used -->
+<BasicPlayerController
+	{position}
+	speed={3}
+	radius={0.3}
+	height={1.8}
+	jumpStrength={2}
+	groundCollisionGroups={[15]}
+	playerCollisionGroups={[0]}
+>
 	<Mesh
 		bind:mesh={playerMesh}
 		position={{ y: 0.9 }}
@@ -49,7 +58,7 @@
 	/>
 </BasicPlayerController>
 
-<RigidBody bind:rigidBody position={{ y: 1, z: 2 }}>
+<RigidBody bind:rigidBody position={{ y: 1, z: -5 }}>
 	<AutoColliders shape={'ball'}>
 		<Mesh
 			bind:mesh={ballMesh}

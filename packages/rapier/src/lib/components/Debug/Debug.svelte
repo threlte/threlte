@@ -1,14 +1,17 @@
 <script lang="ts">
   import { LineSegments, useFrame } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import type { LineBasicMaterialParameters } from 'three'
   import { BufferAttribute, BufferGeometry, LineBasicMaterial } from 'three'
   import { useRapier } from '../../hooks/useRapier'
 
+  type $$Props = LineBasicMaterialParameters
+
+  export let vertexColors: $$Props['vertexColors'] = true
+
   const material = new LineBasicMaterial({
-    color: 0xffffff,
-    vertexColors: true,
-    depthTest: false,
-    depthWrite: false
+    vertexColors,
+    ...($$props as $$Props)
   })
 
   const { world } = useRapier()

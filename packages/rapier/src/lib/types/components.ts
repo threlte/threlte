@@ -16,9 +16,7 @@ import type {
 } from '@dimforge/rapier3d-compat/raw'
 import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
 import type { RigidBodyTypeString } from '../lib/parseRigidBodyType'
-import type { AutoCollidersShapes, ColliderShapes } from './types'
-
-export type RigidBodyAutoCollider = 'ball' | 'cuboid' | 'hull' | 'trimesh' | false
+import type { AutoCollidersShapes, ColliderShapes, CollisionGroupsBitMask } from './types'
 
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
@@ -168,3 +166,12 @@ export type InnerWorldProperties = {
 }
 
 export type WorldProperties = InnerWorldProperties
+
+export type CollisionGroupsProperties =
+  | {
+      groups: CollisionGroupsBitMask
+    }
+  | {
+      filter: CollisionGroupsBitMask
+      memberships: CollisionGroupsBitMask
+    }
