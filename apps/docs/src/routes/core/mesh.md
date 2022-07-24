@@ -2,7 +2,7 @@
 title: Mesh
 ---
 
-!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=core|type=component
+!!!module_summary title=Mesh|sourcePath=objects/Mesh.svelte|name=Mesh|from=core|type=component|relatedDocs={[{name:"three.js Mesh reference",url:"https://threejs.org/docs/#api/en/objects/Mesh"}]}
 This component represents triangular polygon mesh based objects.
 !!!
 

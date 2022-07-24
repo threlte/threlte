@@ -2,7 +2,7 @@
 title: Group
 ---
 
-!!!module_summary title=Group|sourcePath=objects/Group.svelte|name=Group|from=core|type=component
+!!!module_summary title=Group|sourcePath=objects/Group.svelte|name=Group|from=core|type=component|relatedDocs={[{name:"three.js Group reference",url:"https://threejs.org/docs/#api/en/objects/Group"}]}
 This is almost identical to an [`<Object3D>`](/core/object3d). Its purpose is to make working with groups of objects syntactically clearer.
 !!!
 
