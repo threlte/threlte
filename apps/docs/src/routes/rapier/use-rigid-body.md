@@ -10,7 +10,7 @@ import Wrapper from '$examples/rapier/collision-groups/Wrapper.svelte'
 
 This hook provides access to the `RAPIER.RigidBody` from a parent [`<RigidBody>`](/rapier/rigid-body) component.
 
-Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a component.
+Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a parent `<RigidBody>` component.
 
 ```svelte
 <script>

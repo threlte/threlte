@@ -358,10 +358,6 @@ export const sidebar = {
 			},
 			{
 				title: 'useCollisionGroups',
-				slug: '/rapier/use-collision.groups'
-			},
-			{
-				title: 'useRigidBody',
 				slug: '/rapier/use-collision-groups'
 			},
 			{
