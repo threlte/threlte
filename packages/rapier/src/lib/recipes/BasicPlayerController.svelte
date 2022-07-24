@@ -3,10 +3,10 @@
   import { Group, useFrame, useThrelte, type Position } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { Vector2, Vector3 } from 'three'
-  import type { CollisionGroupsBitMask } from '../../types/types'
-  import RigidBody from '../../components/RigidBody/RigidBody.svelte'
-  import CollisionGroups from '../../components/CollisionGroups/CollisionGroups.svelte'
-  import Collider from '../../components/Colliders/Collider.svelte'
+  import Collider from '../components/Colliders/Collider.svelte'
+  import CollisionGroups from '../components/CollisionGroups/CollisionGroups.svelte'
+  import RigidBody from '../components/RigidBody/RigidBody.svelte'
+  import type { CollisionGroupsBitMask } from '../types/types'
 
   export let position: Position | undefined = undefined
   export let height: number = 1.7
