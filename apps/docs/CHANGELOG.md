@@ -1,5 +1,11 @@
 # @threlte/docs
 
+## 0.0.6
+
+### Patch Changes
+
+- e3c5d60: Add links to related external docs
+
 ## 0.0.5
 
 ### Patch Changes
