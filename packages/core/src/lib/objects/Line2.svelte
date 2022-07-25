@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { Vector3 } from 'three'
+  import { Line2 as ThreeLine2 } from 'three/examples/jsm/lines/Line2'
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
   import type { Line2Properties } from '../types/components'
-  import { Line2 as ThreeLine2 } from 'three/examples/jsm/lines/Line2'
-  import { Vector3 } from 'three'
 
   // LineInstance
   export let position: Line2Properties['position'] = undefined
@@ -26,20 +26,33 @@
   export let points: Line2Properties['points'] = []
   export let material: Line2Properties['material']
 
-  const geometry = new LineGeometry()
-  const pointTuples = points.map((p) => (p instanceof Vector3 ? p.toArray() : p))
-  geometry.setPositions(pointTuples.flat())
+  let fallbackGeometry = new LineGeometry()
+  fallbackGeometry.setPositions([0, 0, 0])
 
-  export const line2 = new ThreeLine2(geometry, material)
+  let geometry: LineGeometry | undefined = undefined
+  export const line2 = new ThreeLine2(undefined, material)
 
-  line2.computeLineDistances()
   onDestroy(() => {
-    geometry.dispose()
+    fallbackGeometry.dispose()
+    geometry?.dispose()
   })
 
   const getLine = () => line2
 
   const { invalidate } = useThrelte()
+
+  $: {
+    geometry?.dispose()
+    if (points.length) {
+      geometry = new LineGeometry()
+      geometry.setPositions(points.map((p) => (p instanceof Vector3 ? p.toArray() : p)).flat())
+      line2.geometry = geometry
+    } else {
+      line2.geometry = fallbackGeometry
+    }
+    line2.computeLineDistances()
+    invalidate('Line2: points changed')
+  }
 
   let previousMaterial = material
   $: {
@@ -50,17 +63,6 @@
       invalidate('Line2: material props changed')
     }
     previousMaterial = material
-  }
-
-  let previousPoints = points
-  $: {
-    if (points !== previousPoints) {
-      const pointTuples = points.map((p) => (p instanceof Vector3 ? p.toArray() : p))
-      geometry.setPositions(pointTuples.flat())
-      line2.computeLineDistances()
-      invalidate('Line2: points changed')
-      previousPoints = points
-    }
   }
 </script>
 
