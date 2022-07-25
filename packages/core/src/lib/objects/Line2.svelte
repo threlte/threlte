@@ -68,10 +68,7 @@
 </script>
 
 <DisposableObject object={fallbackGeometry} />
-
-{#if geometry}
-  <DisposableObject object={geometry} />
-{/if}
+<DisposableObject object={geometry} />
 
 <MeshInstance
   mesh={line2}
