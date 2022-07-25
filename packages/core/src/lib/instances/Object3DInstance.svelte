@@ -1,7 +1,8 @@
 <script lang="ts">
   import { useThrelte } from '../hooks/useThrelte'
-  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
+  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
   import type { Object3DInstanceProperties } from '../types/components'
@@ -34,6 +35,8 @@
     invalidate('Object3DInstance: props changed')
   }
 </script>
+
+<DisposableObject {object} />
 
 <LayerableObject {object} />
 

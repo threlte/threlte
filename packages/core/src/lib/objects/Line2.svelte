@@ -5,6 +5,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import type { Line2Properties } from '../types/components'
 
   // LineInstance
@@ -65,6 +66,12 @@
     previousMaterial = material
   }
 </script>
+
+<DisposableObject object={fallbackGeometry} />
+
+{#if geometry}
+  <DisposableObject object={geometry} />
+{/if}
 
 <MeshInstance
   mesh={line2}
