@@ -9,7 +9,10 @@
     obj?: Obj
   ) => {
     if (!obj) return
-    if (obj?.dispose && typeof obj.dispose === 'function' && obj.type !== 'Scene') obj.dispose()
+    // Scenes can't be disposed
+    if (obj?.dispose && typeof obj.dispose === 'function' && obj.type !== 'Scene') {
+      obj.dispose()
+    }
     // iterate over properties of obj
     Object.entries(obj).forEach(([propKey, propValue]) => {
       // we don't want to dispose the parent
