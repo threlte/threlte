@@ -1,6 +1,10 @@
 <script lang="ts" context="module">
-  // Recursively disposes an object
-  // This function needs to be bombproof
+  /**
+   * Recursively disposes an object.
+   * This function needs to be bulletproof.
+   *
+   * @param obj
+   */
   const dispose = <Obj extends { dispose?: () => void; type?: string; [key: string]: any }>(
     obj?: Obj
   ) => {
