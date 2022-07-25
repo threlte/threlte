@@ -19,6 +19,8 @@ Visit [threlte.xyz](https://threlte.xyz)
 
 **[`@threlte/extras`](https://github.com/threlte/threlte/tree/main/packages/extras)** - components, helpers, hooks and more that extend the core functionality
 
+**[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the Rapier physics engine in Threlte
+
 ## Getting help
 
 We want to build a friendly community that is happy to help those who need it. Feel free to join our [Discord server](https://discord.gg/EqUBCfCaGm).
