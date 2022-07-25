@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { LineSegments,useParent,useThrelte } from '@threlte/core'
+  import { DisposableObject, LineSegments, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Color,EdgesGeometry,LineBasicMaterial,Mesh } from 'three'
+  import { Color, EdgesGeometry, LineBasicMaterial, Mesh } from 'three'
   import type { EdgesProperties } from '../../types/components'
 
   export let color: EdgesProperties['color'] = undefined
@@ -73,6 +73,10 @@
     edgesGeometry.dispose()
   })
 </script>
+
+<DisposableObject object={edgesGeometry} />
+<DisposableObject object={geometry} />
+<DisposableObject object={activeMaterial} />
 
 {#if edgesGeometry}
   <LineSegments
