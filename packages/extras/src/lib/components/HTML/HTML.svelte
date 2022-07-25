@@ -1,8 +1,14 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
+  import { Group, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
+  import { createEventDispatcher } from 'svelte'
   import { derived, writable, type Writable } from 'svelte/store'
-  import { Group as ThreeGroup, OrthographicCamera, PerspectiveCamera } from 'three'
-  import { useFrame, useThrelte, useThrelteRoot, Group } from '@threlte/core'
+  import {
+    Group as ThreeGroup,
+    Object3D as ThreeeObject3D,
+    OrthographicCamera,
+    PerspectiveCamera
+  } from 'three'
+  import { useHasEventListeners } from '../../hooks/useHasEventListeners'
   import type { HTMLProperties } from '../../types/components'
   import {
     compileStyles,
@@ -16,7 +22,6 @@
     objectZIndex,
     updateStyles
   } from './utils'
-import { useHasEventListeners } from '../../hooks/useHasEventListeners';
 
   // Group Properties
   export let position: HTMLProperties['position'] = undefined
@@ -168,9 +173,30 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
   const noTransformElStyles = derived(styles.noTransform.el, (v) => v)
   const noTransformDivStyles = derived(styles.noTransform.div, (v) => v)
 
+  /**
+   * Check ancestor visibility
+   */
+  const getAncestorVisibility = (): boolean => {
+    if (!group) return true
+    let ancestorsAreVisible = true
+    let parent: ThreeeObject3D | null = group.parent
+    traverse: while (parent) {
+      if ('visible' in parent && !parent.visible) {
+        ancestorsAreVisible = false
+        break traverse
+      }
+      parent = parent.parent
+    }
+    return ancestorsAreVisible
+  }
+
+  let showEl = getAncestorVisibility()
+
   useFrame(
-    () => {
-      if (!group || !el) return
+    async () => {
+      if (!group) return
+
+      showEl = getAncestorVisibility()
 
       const camera = getCamera()
 
@@ -204,7 +230,6 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
           }
         }
 
-        el.style.zIndex = `${objectZIndex(group, camera, zIndexRange)}`
         updateStyles(styles.common.el, {
           zIndex: `${objectZIndex(group, camera, zIndexRange)}`
         })
@@ -256,7 +281,7 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
     }
   )
 
-  onMount(() => {
+  const buildDefaultNonTransformStyles = (_: HTMLElement) => {
     if (!group || transform) return
     scene.updateMatrixWorld()
     const vec = calculatePosition(group, $camera, $size)
@@ -267,7 +292,7 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
       transform: `translate3d(${vec[0]}px, ${vec[1]}px, 0)`,
       transformOrigin: '0 0'
     })
-  })
+  }
 
   const portalAction = (el: HTMLElement) => {
     if (!renderer) {
@@ -312,7 +337,9 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
   >
     <div bind:this={transformOuterRef} style={compileStyles($transformOuterRefStyles)}>
       <div bind:this={transformInnerRef} style={compileStyles($transformInnerRefStyles)}>
-        <slot />
+        {#if showEl}
+          <slot />
+        {/if}
       </div>
     </div>
   </svelte:element>
@@ -321,10 +348,13 @@ import { useHasEventListeners } from '../../hooks/useHasEventListeners';
     this={as}
     bind:this={el}
     use:portalAction
+    use:buildDefaultNonTransformStyles
     style={compileStyles($noTransformElStyles)}
   >
     <div style={compileStyles($noTransformDivStyles)}>
-      <slot />
+      {#if showEl}
+        <slot />
+      {/if}
     </div>
   </svelte:element>
 {/if}
