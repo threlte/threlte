@@ -6,7 +6,7 @@ title: World
 import Wrapper from '$examples/rapier/world/Wrapper.svelte'
 </script>
 
-!!!module_summary title=World|sourcePath=/components/World/World.svelte|name=World|from=rapier|type=component
+!!!module_summary title=World|sourcePath=/components/World/World.svelte|name=World|from=rapier|type=component|relatedDocs={[{name:"Rapier World reference",url:"https://rapier.rs/javascript3d/classes/World.html"}]}
 
 This component provides the basic physics context and loads [rapier](https://rapier.rs/).
 

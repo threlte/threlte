@@ -6,7 +6,7 @@ title: CollisionGroups
 import Wrapper from '$examples/rapier/collision-groups/Wrapper.svelte'
 </script>
 
-!!!module_summary title=CollisionGroups|sourcePath=/components/CollisionGroups/CollisionGroups.svelte|name=CollisionGroups|from=rapier|type=component
+!!!module_summary title=CollisionGroups|sourcePath=/components/CollisionGroups/CollisionGroups.svelte|name=CollisionGroups|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider Guide – Collision Groups",url:"https://rapier.rs/docs/user_guides/javascript/colliders#collision-groups-and-solver-groups"}]}
 
 The most efficient way of preventing some pairs of colliders from interacting with each other is to use a `<CollisionGroups>` component.
 

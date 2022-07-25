@@ -6,7 +6,7 @@ title: RigidBody
 import Wrapper from '$examples/rapier/rigid-body/Wrapper.svelte'
 </script>
 
-!!!module_summary title=RigidBody|sourcePath=/components/RigidBody/RigidBody.svelte|name=RigidBody|from=rapier|type=component
+!!!module_summary title=RigidBody|sourcePath=/components/RigidBody/RigidBody.svelte|name=RigidBody|from=rapier|type=component|relatedDocs={[{name:"Rapier RigidBody reference",url:"https://rapier.rs/javascript3d/classes/RigidBody.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/rigid_bodies"}]}
 
 The real-time simulation of rigid bodies subjected to forces and contacts is the main feature of a physics engine for videogames, robotics, or animation. Rigid bodies are typically used to simulate the dynamics of non-deformable solids as well as to integrate the trajectory of solids which velocities are controlled by the user (e.g. moving platforms).
 

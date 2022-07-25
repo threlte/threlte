@@ -67,9 +67,9 @@
 			>
 				<span>Related Docs</span>
 			</p>
-			<div class="col-span-10 992:col-span-8 !p-0 !mb-4 992:!mb-0">
+			<div class="col-span-10 992:col-span-8 !p-0 !mb-4 992:!mb-0 flex flex-col gap-1 items-start">
 				{#each relatedDocs as link}
-					<a href={link.url}>{link.name}</a>
+					<a target="_blank" href={link.url}>{link.name}</a>
 				{/each}
 			</div>
 		{/if}
