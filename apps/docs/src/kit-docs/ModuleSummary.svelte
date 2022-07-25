@@ -31,13 +31,13 @@
 	<div id="description" class="!mt-6 !mb-12">
 		<slot />
 	</div>
-	<div class="grid grid-cols-12 gap-y-0 992:gap-y-2">
+	<div class="grid grid-cols-10 gap-y-0 992:gap-y-2">
 		<p
-			class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+			class="col-span-10 992:col-span-2 !my-0 text-sm 992:text-base !mb-0 992:!mb-0 flex items-center"
 		>
 			<span> Import </span>
 		</p>
-		<div class="col-span-12 992:col-span-10 !mb-4 992:!mb-0 flex flex-row">
+		<div class="col-span-10 992:col-span-8 !mb-4 992:!mb-0 flex flex-row">
 			<button on:click={copy} class="text-left">
 				<code>
 					{importStatement}
@@ -46,26 +46,28 @@
 		</div>
 
 		<p
-			class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+			class="col-span-10 992:col-span-2 !my-0 text-sm 992:text-base !mb-0 992:!mb-0 flex items-center"
 		>
 			<span>Source</span>
 		</p>
-		<GithubIcon class="col-span-12 992:col-span-10 !p-0" href={fullSourceUrl}>
+		<GithubIcon class="col-span-10 992:col-span-8 !p-0 !mb-4 992:!mb-0" href={fullSourceUrl}>
 			View Source Code
 		</GithubIcon>
 		<p
-			class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+			class="col-span-10 992:col-span-2 !my-0 text-sm 992:text-base !mb-0 992:!mb-0 flex items-center"
 		>
 			<span>Package</span>
 		</p>
-		<NpmIcon class="col-span-12 992:col-span-10 !p-0" href={packageUrl}>View Package</NpmIcon>
+		<NpmIcon class="col-span-10 992:col-span-8 !p-0 !mb-4 992:!mb-0" href={packageUrl}
+			>View Package</NpmIcon
+		>
 		{#if relatedDocs.length > 0}
 			<p
-				class="col-span-12 992:col-span-2 !my-0 text-sm 992:text-base !mb-2 992:!mb-0 flex items-center"
+				class="col-span-10 992:col-span-2 !my-0 text-sm 992:text-base !mb-0 992:!mb-0 flex items-center"
 			>
 				<span>Related Docs</span>
 			</p>
-			<div class="col-span-12 992:col-span-10 !p-0">
+			<div class="col-span-10 992:col-span-8 !p-0 !mb-4 992:!mb-0">
 				{#each relatedDocs as link}
 					<a href={link.url}>{link.name}</a>
 				{/each}
