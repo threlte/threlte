@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.1.3
+
+### Patch Changes
+
+- f7abfad: Line2 now accepts an empty points array as well as points length changes
+
 ## 4.1.2
 
 ### Patch Changes

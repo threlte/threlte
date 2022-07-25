@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.0.1
+
+### Patch Changes
+
+- 1c4d78f: <HTML> component checks for visibility of ancestors.
+
 ## 4.0.0
 
 ### Major Changes
