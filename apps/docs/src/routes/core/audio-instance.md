@@ -41,6 +41,7 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 dispose: boolean | undefined = undefined
+userData: Record<string, any> | undefined = undefined
 autoplay: boolean | undefined = undefined
 detune: number | undefined = undefined
 source: string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream | undefined = undefined
