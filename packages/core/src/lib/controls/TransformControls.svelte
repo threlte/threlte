@@ -23,6 +23,7 @@
   export let showZ: TransformControlsProperties['showZ'] = undefined
   export let size: TransformControlsProperties['size'] = undefined
   export let space: TransformControlsProperties['space'] = undefined
+  export let dispose: TransformControlsProperties['dispose'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
   const parent = useParent()
@@ -253,7 +254,6 @@
   })
 </script>
 
-<!-- Force disposal -->
-<DisposableObject dispose object={transformControls} />
+<DisposableObject {dispose} object={transformControls} />
 
 <LayerableObject object={transformControls} />

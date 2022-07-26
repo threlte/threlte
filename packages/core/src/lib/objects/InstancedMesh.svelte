@@ -217,8 +217,8 @@
   }
 </script>
 
-<DisposableObject object={geometry} />
-<DisposableObject object={material} />
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
 
 <Object3DInstance object={parentObject} {position} {scale} {rotation} {lookAt}>
   {#key $instancedMesh.uuid}

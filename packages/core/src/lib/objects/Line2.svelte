@@ -69,8 +69,10 @@
   }
 </script>
 
-<DisposableObject object={fallbackGeometry} />
-<DisposableObject object={geometry} />
+<DisposableObject {dispose} object={geometry} />
+
+<!-- Force disposal: not user-provided -->
+<DisposableObject dispose object={fallbackGeometry} />
 
 <MeshInstance
   mesh={line2}

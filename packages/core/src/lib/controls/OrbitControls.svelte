@@ -35,6 +35,7 @@
   export let touches: OrbitControlsProperties['touches'] = undefined
   export let zoomSpeed: OrbitControlsProperties['zoomSpeed'] = undefined
   export let target: OrbitControlsProperties['target'] = undefined
+  export let dispose: OrbitControlsProperties['dispose'] = undefined
 
   const parent = useParent()
 
@@ -123,7 +124,6 @@
   }
 </script>
 
-<!-- Force disposal -->
-<DisposableObject dispose object={controls} />
+<DisposableObject {dispose} object={controls} />
 
 <TransformableObject on:transform={updateControls} object={targetObject} position={target} />

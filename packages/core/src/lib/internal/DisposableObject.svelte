@@ -45,12 +45,12 @@
   setContext<ThrelteDisposeContext>('threlte-dispose-context', mergedDispose)
 
   $: {
-    if (object !== previousObject) disposeObject(object)
+    if (object !== previousObject && $mergedDispose) disposeObject(object)
     previousObject = object
   }
 
   onDestroy(() => {
-    disposeObject(object)
+    if ($mergedDispose) disposeObject(object)
   })
 </script>
 

@@ -110,6 +110,7 @@ export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera
 }
 
 export type OrbitControlsProperties = {
+  dispose?: boolean
   autoRotate?: boolean
   autoRotateSpeed?: number
   dampingFactor?: number
@@ -151,6 +152,7 @@ export type TransformControlsProperties = {
   showZ?: boolean
   size?: number
   space?: 'world' | 'local' | undefined
+  dispose?: boolean
 }
 
 export type PassProperties = {

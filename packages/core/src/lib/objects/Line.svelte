@@ -87,10 +87,10 @@
   }
 </script>
 
-<DisposableObject object={geometry} />
-<DisposableObject object={material} />
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
 
-<!-- Force disposal, not user-provided -->
+<!-- Force disposal: not user-provided -->
 <DisposableObject dispose object={tempGeometry} />
 
 <LineInstance

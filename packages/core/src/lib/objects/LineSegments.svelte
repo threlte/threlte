@@ -55,8 +55,8 @@
   }
 </script>
 
-<DisposableObject object={geometry} />
-<DisposableObject object={material} />
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
 
 <LineInstance
   line={lineSegments}
