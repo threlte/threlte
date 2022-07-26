@@ -14,5 +14,5 @@
 
 <RigidBody type={'dynamic'} {position} {rotation}>
 	<Collider shape={'cuboid'} args={[0.125, 0.125, 0.125]} />
-	<Mesh castShadow receiveShadow {geometry} {material} />
+	<Mesh dispose={false} castShadow receiveShadow {geometry} {material} />
 </RigidBody>
