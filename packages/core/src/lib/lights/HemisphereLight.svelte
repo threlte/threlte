@@ -17,6 +17,8 @@
   export let frustumCulled: HemisphereLightProperties['frustumCulled'] = undefined
   export let renderOrder: HemisphereLightProperties['renderOrder'] = undefined
   export let visible: HemisphereLightProperties['visible'] = undefined
+  export let userData: HemisphereLightProperties['userData'] = undefined
+  export let dispose: HemisphereLightProperties['dispose'] = undefined
   export let intensity: HemisphereLightProperties['intensity'] = undefined
   export let skyColor: HemisphereLightProperties['skyColor'] = undefined
   export let groundColor: HemisphereLightProperties['groundColor'] = undefined
@@ -45,6 +47,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

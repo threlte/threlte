@@ -253,6 +253,7 @@
   })
 </script>
 
-<DisposableObject object={transformControls} />
+<!-- Force disposal -->
+<DisposableObject dispose object={transformControls} />
 
 <LayerableObject object={transformControls} />

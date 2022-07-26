@@ -14,6 +14,8 @@
   export let frustumCulled: PerspectiveCameraProperties['frustumCulled'] = undefined
   export let renderOrder: PerspectiveCameraProperties['renderOrder'] = undefined
   export let visible: PerspectiveCameraProperties['visible'] = undefined
+  export let userData: PerspectiveCameraProperties['userData'] = undefined
+  export let dispose: PerspectiveCameraProperties['dispose'] = undefined
   export let viewportAware: PerspectiveCameraProperties['viewportAware'] = false
   export let inViewport: PerspectiveCameraProperties['inViewport'] = false
   export let useCamera: PerspectiveCameraProperties['useCamera'] = true
@@ -52,6 +54,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

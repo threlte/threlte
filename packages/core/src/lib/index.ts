@@ -57,6 +57,7 @@ export { default as LayerableObject } from './internal/LayerableObject.svelte'
 export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
 export { default as TransformableObject } from './internal/TransformableObject.svelte'
 export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
+export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
@@ -89,6 +90,7 @@ export type {
   InteractiveObjectProperties,
   LayerableObjectProperties,
   TransformableObjectProperties,
+  DisposableObjectProperties,
   ViewportAwareObjectProperties,
   Object3DInstanceProperties,
   MeshInstanceProperties,

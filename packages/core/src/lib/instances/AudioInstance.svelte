@@ -19,6 +19,8 @@
   export let frustumCulled: Props['frustumCulled'] = undefined
   export let renderOrder: Props['renderOrder'] = undefined
   export let visible: Props['visible'] = undefined
+  export let userData: Props['userData'] = undefined
+  export let dispose: Props['dispose'] = undefined
 
   export let autoplay: Props['autoplay'] = undefined
   export let detune: Props['detune'] = undefined
@@ -167,6 +169,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {castShadow}
   {receiveShadow}
   {viewportAware}

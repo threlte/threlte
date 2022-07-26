@@ -12,6 +12,8 @@
   export let frustumCulled: AmbientLightProperties['frustumCulled'] = undefined
   export let renderOrder: AmbientLightProperties['renderOrder'] = undefined
   export let visible: AmbientLightProperties['visible'] = undefined
+  export let userData: AmbientLightProperties['userData'] = undefined
+  export let dispose: AmbientLightProperties['dispose'] = undefined
   export let viewportAware: AmbientLightProperties['viewportAware'] = false
   export let inViewport: AmbientLightProperties['inViewport'] = false
   export let color: AmbientLightProperties['color'] = undefined
@@ -31,6 +33,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

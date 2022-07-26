@@ -93,6 +93,8 @@ export type ThrelteAudioContext = {
   removeAudioListener: (id?: string) => void
 }
 
+export type ThrelteDisposeContext = Writable<boolean>
+
 export type ThrelteUseFrame = {
   stop: () => void
   start: () => void

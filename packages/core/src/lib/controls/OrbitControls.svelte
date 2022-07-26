@@ -123,6 +123,7 @@
   }
 </script>
 
-<DisposableObject object={controls} />
+<!-- Force disposal -->
+<DisposableObject dispose object={controls} />
 
 <TransformableObject on:transform={updateControls} object={targetObject} position={target} />

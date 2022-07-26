@@ -16,6 +16,8 @@
   export let frustumCulled: AudioListenerProperties['frustumCulled'] = undefined
   export let renderOrder: AudioListenerProperties['renderOrder'] = undefined
   export let visible: AudioListenerProperties['visible'] = undefined
+  export let userData: AudioListenerProperties['userData'] = undefined
+  export let dispose: AudioListenerProperties['dispose'] = undefined
 
   export let id: AudioListenerProperties['id'] = undefined
   export let masterVolume: AudioListenerProperties['masterVolume'] = undefined
@@ -45,6 +47,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {castShadow}
   {receiveShadow}
   {viewportAware}

@@ -15,6 +15,8 @@
   export let frustumCulled: LineInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: LineInstanceProperties['renderOrder'] = undefined
   export let visible: LineInstanceProperties['visible'] = undefined
+  export let userData: LineInstanceProperties['userData'] = undefined
+  export let dispose: LineInstanceProperties['dispose'] = undefined
   export let interactive: LineInstanceProperties['interactive'] = false
   export let ignorePointer: LineInstanceProperties['ignorePointer'] = false
 </script>
@@ -30,6 +32,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   on:viewportenter
   on:viewportleave

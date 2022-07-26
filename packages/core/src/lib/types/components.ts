@@ -24,6 +24,14 @@ export type HierarchicalObjectProperties = {
   onChildDestroy?: (child: Object3D) => void
 }
 
+export type DisposableObjectProperties = {
+  object?: {
+    dispose?: () => void
+    type?: string
+  } & Record<string, any>
+  dispose?: boolean
+}
+
 export type SceneGraphObjectProperties = {
   object: Object3D
 }
@@ -58,12 +66,14 @@ export type ViewportAwareObjectProperties = {
 export type Object3DInstanceProperties = HierarchicalObjectProperties &
   LayerableObjectProperties &
   TransformableObjectProperties &
-  ViewportAwareObjectProperties & {
+  ViewportAwareObjectProperties &
+  DisposableObjectProperties & {
     castShadow?: boolean
     receiveShadow?: boolean
     frustumCulled?: boolean
     renderOrder?: number
     visible?: boolean
+    userData?: Record<string, any>
   }
 
 export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &

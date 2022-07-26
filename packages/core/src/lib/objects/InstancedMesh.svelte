@@ -37,6 +37,8 @@
 </script>
 
 <script lang="ts">
+  import DisposableObject from '../internal/DisposableObject.svelte'
+
   // MeshInstance
   export let position: InstancedMeshProperties['position'] = undefined
   export let scale: InstancedMeshProperties['scale'] = undefined
@@ -47,6 +49,8 @@
   export let receiveShadow: InstancedMeshProperties['receiveShadow'] = undefined
   export let renderOrder: InstancedMeshProperties['renderOrder'] = undefined
   export let visible: InstancedMeshProperties['visible'] = undefined
+  export let userData: InstancedMeshProperties['userData'] = undefined
+  export let dispose: InstancedMeshProperties['dispose'] = undefined
   export let interactive: InstancedMeshProperties['interactive'] = false
   export let ignorePointer: InstancedMeshProperties['ignorePointer'] = false
   export let lookAt: InstancedMeshProperties['lookAt'] = undefined
@@ -213,6 +217,9 @@
   }
 </script>
 
+<DisposableObject object={geometry} />
+<DisposableObject object={material} />
+
 <Object3DInstance object={parentObject} {position} {scale} {rotation} {lookAt}>
   {#key $instancedMesh.uuid}
     <MeshInstance
@@ -222,6 +229,8 @@
       frustumCulled={undefined}
       {renderOrder}
       {visible}
+      {userData}
+      {dispose}
       {interactive}
       {ignorePointer}
       on:click={onEvent}

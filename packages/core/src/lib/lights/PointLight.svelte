@@ -14,6 +14,8 @@
   export let frustumCulled: PointLightProperties['frustumCulled'] = undefined
   export let renderOrder: PointLightProperties['renderOrder'] = undefined
   export let visible: PointLightProperties['visible'] = undefined
+  export let userData: PointLightProperties['userData'] = undefined
+  export let dispose: PointLightProperties['dispose'] = undefined
   export let intensity: PointLightProperties['intensity'] = undefined
   export let color: PointLightProperties['color'] = undefined
   export let distance: PointLightProperties['distance'] = undefined
@@ -61,6 +63,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

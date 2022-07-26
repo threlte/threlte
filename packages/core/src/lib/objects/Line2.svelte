@@ -19,6 +19,8 @@
   export let frustumCulled: Line2Properties['frustumCulled'] = undefined
   export let renderOrder: Line2Properties['renderOrder'] = undefined
   export let visible: Line2Properties['visible'] = undefined
+  export let userData: Line2Properties['userData'] = undefined
+  export let dispose: Line2Properties['dispose'] = undefined
   export let interactive: Line2Properties['interactive'] = false
   export let ignorePointer: Line2Properties['ignorePointer'] = false
   export let lookAt: Line2Properties['lookAt'] = undefined
@@ -81,6 +83,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {interactive}
   {ignorePointer}
   on:click
