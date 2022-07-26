@@ -19,6 +19,8 @@
   export let frustumCulled: EdgesProperties['frustumCulled'] = undefined
   export let renderOrder: EdgesProperties['renderOrder'] = undefined
   export let visible: EdgesProperties['visible'] = undefined
+  export let userData: EdgesProperties['userData'] = undefined
+  export let dispose: EdgesProperties['dispose'] = undefined
   export let interactive: EdgesProperties['interactive'] = false
   export let ignorePointer: EdgesProperties['ignorePointer'] = false
   export let lookAt: EdgesProperties['lookAt'] = undefined
@@ -74,9 +76,10 @@
   })
 </script>
 
-<DisposableObject object={edgesGeometry} />
-<DisposableObject object={geometry} />
-<DisposableObject object={activeMaterial} />
+<!-- Force disposal: not user-provided -->
+<DisposableObject dispose object={edgesGeometry} />
+
+<DisposableObject {dispose} object={activeMaterial} />
 
 {#if edgesGeometry}
   <LineSegments
@@ -91,6 +94,8 @@
     {frustumCulled}
     {renderOrder}
     {visible}
+    {userData}
+    {dispose}
     {interactive}
     {ignorePointer}
     on:click

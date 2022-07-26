@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    DisposableObject,
     InteractiveObject,
     LayerableObject,
     Object3DInstance,
@@ -7,7 +8,6 @@
     useThrelte
   } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
-  import { Mesh, Texture, type Material, type Object3D, type SkinnedMesh } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -26,13 +26,13 @@
   export let frustumCulled: GLTFProperties['frustumCulled'] = undefined
   export let renderOrder: GLTFProperties['renderOrder'] = undefined
   export let visible: GLTFProperties['visible'] = undefined
+  export let dispose: GLTFProperties['dispose'] = undefined
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
   export let url: GLTFProperties['url']
   export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
-  // <InteractiveObject> properties
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
   export let interactive: GLTFProperties['interactive'] = false
 
@@ -43,9 +43,6 @@
     unload: undefined
     error: string
   }>()
-
-  let interactiveMeshes: (Mesh | SkinnedMesh)[] = []
-  let layerableObjects: Object3D[] = []
 
   export let gltf: ThreeGLTF | undefined = undefined
   export let scene: ThreeGLTF['scene'] | undefined = undefined
@@ -75,60 +72,10 @@
     loader.setKTX2Loader(ktx2Loader)
   }
 
-  const disposeGltf = () => {
-    if (gltf) {
-      gltf.scene.traverse((object) => {
-        if (object.type !== 'Mesh') return
-        const m = object as Mesh
-
-        m.geometry.dispose()
-
-        if (Array.isArray(m.material)) {
-          m.material.forEach((mm) => {
-            if (mm.isMaterial) {
-              disposeMaterial(mm)
-            }
-          })
-        } else if (m.material.isMaterial) {
-          disposeMaterial(m.material)
-        }
-      })
-      gltf = undefined
-      scene = undefined
-      animations = undefined
-      asset = undefined
-      cameras = undefined
-      scenes = undefined
-      userData = undefined
-      parser = undefined
-      nodes = undefined
-      materials = undefined
-
-      interactiveMeshes.splice(0, interactiveMeshes.length)
-      interactiveMeshes = interactiveMeshes
-      layerableObjects.splice(0, layerableObjects.length)
-      layerableObjects = layerableObjects
-
-      invalidate('GLTF: model disposed')
-      dispatch('unload')
-    }
-  }
-
-  const disposeMaterial = (material: Material) => {
-    material.dispose()
-    Object.values(material).forEach((value) => {
-      try {
-        if (value instanceof Texture) {
-          value.dispose()
-        }
-      } catch (error) {
-        console.warn('<GLTF>: Unable to dispose texture.')
-      }
-    })
-  }
-
   const onLoad = (data: ThreeGLTF) => {
-    disposeGltf()
+    // unload is not in use anymore
+    if (gltf) dispatch('unload')
+
     gltf = data
     scene = gltf.scene
     animations = gltf.animations
@@ -142,23 +89,22 @@
     materials = m
     nodes = n
 
-    scene.traverse((object) => {
-      layerableObjects.push(object)
-      if (object.type === 'Mesh' || object.type === 'SkinnedMesh') {
-        const mesh = object as Mesh
-        interactiveMeshes.push(mesh)
-      }
-    })
-    interactiveMeshes = interactiveMeshes
-    layerableObjects = layerableObjects
-
     invalidate('GLTF: model loaded')
     dispatch('load', gltf)
   }
 
   const onError = (e: ErrorEvent) => {
     console.error(`Error loading GLTF: ${e.message}`)
-    disposeGltf()
+    gltf = undefined
+    scene = undefined
+    animations = undefined
+    asset = undefined
+    cameras = undefined
+    scenes = undefined
+    userData = undefined
+    parser = undefined
+    nodes = undefined
+    materials = undefined
     dispatch('error', e.message)
   }
 
@@ -176,6 +122,41 @@
   }
 </script>
 
+{#if nodes}
+  {#each Object.values(nodes) as node}
+    {#if node}
+      {#key node.uuid}
+        <!-- dispose all nodes, i.e. meshes, skinnedMeshs -->
+        <DisposableObject {dispose} object={node} />
+
+        <LayerableObject object={node} />
+
+        {#if node.type === 'Mesh' || node.type === 'SkinnedMesh'}
+          <InteractiveObject
+            object={node}
+            {interactive}
+            {ignorePointer}
+            on:click
+            on:contextmenu
+            on:pointerup
+            on:pointerdown
+            on:pointerenter
+            on:pointerleave
+            on:pointermove
+          />
+        {/if}
+      {/key}
+    {/if}
+  {/each}
+{/if}
+
+<!-- dispose all materials -->
+{#if materials}
+  {#each Object.values(materials) as material}
+    <DisposableObject {dispose} object={material} />
+  {/each}
+{/if}
+
 {#if scene}
   <Object3DInstance
     object={scene}
@@ -186,6 +167,7 @@
     {frustumCulled}
     {renderOrder}
     {visible}
+    {dispose}
     {castShadow}
     {receiveShadow}
     {viewportAware}
@@ -195,27 +177,4 @@
   >
     <slot />
   </Object3DInstance>
-
-  {#each interactiveMeshes as mesh}
-    {#key mesh.uuid}
-      <InteractiveObject
-        object={mesh}
-        {interactive}
-        {ignorePointer}
-        on:click
-        on:contextmenu
-        on:pointerup
-        on:pointerdown
-        on:pointerenter
-        on:pointerleave
-        on:pointermove
-      />
-    {/key}
-  {/each}
-
-  {#each layerableObjects as object}
-    {#key object.uuid}
-      <LayerableObject {object} />
-    {/key}
-  {/each}
 {/if}

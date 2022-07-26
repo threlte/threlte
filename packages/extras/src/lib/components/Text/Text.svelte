@@ -16,6 +16,8 @@
   export let frustumCulled: TextProperties['frustumCulled'] = undefined
   export let renderOrder: TextProperties['renderOrder'] = undefined
   export let visible: TextProperties['visible'] = undefined
+  export let userData: TextProperties['userData'] = undefined
+  export let dispose: TextProperties['dispose'] = undefined
   export let interactive: TextProperties['interactive'] = false
   export let ignorePointer: TextProperties['ignorePointer'] = false
   export let lookAt: TextProperties['lookAt'] = undefined
@@ -99,10 +101,6 @@
       dispatch('sync')
     })
   }
-
-  onDestroy(() => {
-    textObject.dispose()
-  })
 </script>
 
 <MeshInstance
@@ -116,6 +114,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {interactive}
   {ignorePointer}
   on:click
