@@ -36,6 +36,10 @@ export const sidebar = {
 			{
 				title: 'Miscellaneous',
 				slug: '/concepts/miscellaneous'
+			},
+			{
+				title: 'Disposal',
+				slug: '/concepts/disposal'
 			}
 		],
 		'@threlte/core': [
@@ -236,6 +240,10 @@ export const sidebar = {
 				slug: '/core/layerable-object'
 			},
 			{
+				title: 'DisposableObject',
+				slug: '/core/disposable-object'
+			},
+			{
 				title: 'Hooks',
 				slug: ''
 			},
@@ -312,6 +320,10 @@ export const sidebar = {
 			{
 				title: 'Float',
 				slug: '/extras/float'
+			},
+			{
+				title: 'Disposables',
+				slug: '/extras/disposables'
 			}
 		],
 		'@threlte/rapier': [
