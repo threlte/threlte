@@ -19,6 +19,7 @@ import type {
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+import type { DisposableThreeObject } from './components'
 
 export type ThreltePointerEventMap = {
   click: ThreltePointerEvent
@@ -84,6 +85,11 @@ export type ThrelteRenderContext = {
   invalidations: Record<string, number>
   frameHandlers: Set<ThrelteFrameHandler>
   advance: boolean
+}
+
+export type ThrelteDisposalContext = {
+  disposableObjects: Set<DisposableThreeObject>
+  addDisposableObject: (object?: DisposableThreeObject) => void
 }
 
 export type ThrelteAudioContext = {

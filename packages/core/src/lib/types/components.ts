@@ -24,11 +24,13 @@ export type HierarchicalObjectProperties = {
   onChildDestroy?: (child: Object3D) => void
 }
 
+export type DisposableThreeObject = {
+  dispose?: () => void
+  type?: string
+} & Record<string, any>
+
 export type DisposableObjectProperties = {
-  object?: {
-    dispose?: () => void
-    type?: string
-  } & Record<string, any>
+  object?: DisposableThreeObject
   dispose?: boolean
 }
 
