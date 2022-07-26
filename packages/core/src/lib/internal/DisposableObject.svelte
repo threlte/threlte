@@ -1,13 +1,14 @@
 <script lang="ts" context="module">
   /**
-   * Recursively disposes an object.
+   * Recursively disposes an object including all properties that hold a function "dispose".
+   * Does not dispose children.
    * This function needs to be bulletproof.
+   *
+   * TODO: Implement a list of returnable keys for performance reasons
    *
    * @param obj
    */
-  const dispose = <Obj extends { dispose?: () => void; type?: string; [key: string]: any }>(
-    obj?: Obj
-  ) => {
+  const disposeObject = <Obj extends DisposableObjectProperties['object']>(obj?: Obj) => {
     if (!obj) return
     // Scenes can't be disposed
     if (obj?.dispose && typeof obj.dispose === 'function' && obj.type !== 'Scene') {
@@ -16,31 +17,41 @@
     // iterate over properties of obj
     Object.entries(obj).forEach(([propKey, propValue]) => {
       // we don't want to dispose the parent
-      if (propKey === 'parent') return
-      // dispose all children
-      if (propKey === 'children' && Array.isArray(propValue)) {
-        const children = propValue as Object3D[]
-        children.forEach((child) => {
-          dispose(child)
-        })
-      }
+      if (propKey === 'parent' || propKey === 'children') return
+      // children don't need to be disposed as they manage their own disposal
       const value = propValue as any
       if (value?.dispose) {
-        dispose(value)
+        disposeObject(value)
       }
     })
   }
 </script>
 
 <script lang="ts">
-  import { onDestroy } from 'svelte'
-  import type { Object3D } from 'three'
+  import { getContext, onDestroy, setContext } from 'svelte'
+  import { writable } from 'svelte/store'
+  import type { DisposableObjectProperties } from '../types/components'
+  import type { ThrelteDisposeContext } from '../types/types'
 
-  type Object = $$Generic<{ dispose?: () => void; type?: string; [key: string]: any } | undefined>
+  export let object: DisposableObjectProperties['object'] = undefined
+  let previousObject = object
+  export let dispose: DisposableObjectProperties['dispose'] = undefined
 
-  export let object: Object
+  const parentDispose = getContext<ThrelteDisposeContext | undefined>('threlte-dispose-context')
+
+  let mergedDispose = writable(dispose ?? $parentDispose ?? true)
+  $: mergedDispose.set(dispose ?? $parentDispose ?? true)
+
+  setContext<ThrelteDisposeContext>('threlte-dispose-context', mergedDispose)
+
+  $: {
+    if (object !== previousObject) disposeObject(object)
+    previousObject = object
+  }
 
   onDestroy(() => {
-    dispose(object)
+    disposeObject(object)
   })
 </script>
+
+<slot />
