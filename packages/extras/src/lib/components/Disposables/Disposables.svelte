@@ -6,7 +6,7 @@
 
 <!-- Manually dispose objects -->
 {#each disposables as disposable}
-  <DisposableObject object={disposable} />
+  <DisposableObject dispose object={disposable} />
 {/each}
 
 <!-- Tell the tree to stop disposing from here on -->
