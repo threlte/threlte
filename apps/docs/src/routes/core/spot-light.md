@@ -33,6 +33,7 @@ receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
+dispose: boolean | undefined = undefined
 color: THREE.ColorRepresentation | undefined = undefined
 intensity: number | undefined = undefined
 angle: number | undefined = undefined

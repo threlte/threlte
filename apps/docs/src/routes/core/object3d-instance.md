@@ -36,6 +36,7 @@ receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
+dispose: boolean | undefined = undefined
 ```
 
 ### Bindings <!-- omit in toc -->
