@@ -6,6 +6,8 @@ title: Disposal
 
 Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects), but Svelte is aware of component lifecycles, hence Threlte will attempt to free resources for you by calling `dispose`, if present, on all unmounted objects and recursively on all properties that can be disposed.
 
+### Automatic Disposal
+
 ```svelte
 <script>
 	import { Mesh, useTexture } from '@threlte/core'
@@ -28,6 +30,8 @@ Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index
 :::admonition type="info"
 Be aware that calling `dispose` on a three.js buffer, material or geometry is merely deallocating it from the GPU memory. If an object is used after it's disposed it will be allocated again, resulting in a performance drop for a single frame. It will **not produce a runtime error**.
 :::
+
+### Manual Disposal
 
 You can switch off automatic disposal by placing `dispose={false}` onto components, it is now valid for the entire tree.
 
@@ -61,7 +65,11 @@ You can switch off automatic disposal by placing `dispose={false}` onto componen
 </Mesh>
 ```
 
-Sometimes it's useful to manage the disposal of objects yourself. This is especially true of objects are shared across separately mounted component trees. Use the component [`<Disposables>`](/extras/disposables) to automatically opt-out of automatic disposal and provide objects that should be disposed on unmounting of the component.
+### Disposables
+
+Sometimes it's useful to manage the disposal of objects yourself. This is especially true if objects are shared across separately mounted component trees.
+
+The component [`<Disposables>`](/extras/disposables) switches off automatic disposal for all child components and disposes the objects provided to the property `disposables` on unmounting.
 
 ```svelte
 <script>
@@ -69,16 +77,31 @@ Sometimes it's useful to manage the disposal of objects yourself. This is especi
 	import { Disposables } from '@threlte/extras'
 	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
 
+	export let showA
+
 	const map = useTexture('/some/texture')
 	const material = new MeshStandardMaterial({	map })
 	const geometry = new BoxBufferGeometry(1, 1, 1)
 </script>
 
+<!-- No automatic disposal for all child components -->
 <Disposables disposables={[map, geometry, material]}>
-	<Mesh {geometry} {material} position={{ x: 2 }}>
-		<Mesh {geometry} {material} position={{ y: 2 }}>
-			<Mesh {geometry} {material} position={{ x: 2 }} />
+	{#if showA}
+		<Mesh {geometry} {material} position={{ x: 2 }}>
+			<Mesh {geometry} {material} position={{ y: 2 }}>
+				<Mesh {geometry} {material} position={{ x: 2 }} />
+
+				<!-- Will be disposed automatically -->
+				<Mesh
+					dispose
+					geometry={new BoxBufferGeometry(2, 2, 2)}
+					material={new MeshStandardMaterial()}
+					position={{ x: 2 }}
+				/>
+			</Mesh>
 		</Mesh>
-	</Mesh>
+	{:else}
+		<Mesh {geometry} {material} position={{ x: 3 }}>
+	{/if}
 <Disposables/>
 ```
