@@ -63,13 +63,7 @@ export const useFrameloop = (
   const { raycast } = useFrameloopRaycast(ctx, rootCtx)
 
   useRaf(() => {
-    /**
-     * Dispose all objects that are marked as disposable
-     */
-    disposalCtx.disposableObjects.forEach((object) => {
-      object.dispose?.()
-    })
-    disposalCtx.disposableObjects.clear()
+    disposalCtx.dispose()
 
     const shouldRender =
       renderCtx.frameloop === 'always' ||

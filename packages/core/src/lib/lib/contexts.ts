@@ -144,18 +144,7 @@ export const createContexts = (
   }
 
   const disposalCtx: ThrelteDisposalContext = {
-    /**
-     * These objects will be disposed on the next frame.
-     */
     disposableObjects: new Set(),
-    /**
-     * Adds a disposable object and all its disposable properties
-     * to disposalCtx.disposableObjects which will be disposed on
-     * the next frame.
-     *
-     * @param object
-     * @returns
-     */
     addDisposableObject: (object) => {
       if (!object) return
       // Scenes can't be disposed
@@ -172,6 +161,12 @@ export const createContexts = (
           disposalCtx.addDisposableObject(value)
         }
       })
+    },
+    dispose: () => {
+      disposalCtx.disposableObjects.forEach((object) => {
+        object.dispose?.()
+      })
+      disposalCtx.disposableObjects.clear()
     }
   }
 

@@ -88,8 +88,23 @@ export type ThrelteRenderContext = {
 }
 
 export type ThrelteDisposalContext = {
+  /**
+   * These objects will be disposed on the next frame.
+   */
   disposableObjects: Set<DisposableThreeObject>
+  /**
+   * Adds a disposable object and all its disposable properties
+   * to disposalCtx.disposableObjects which will be disposed on
+   * the next frame.
+   *
+   * @param object
+   * @returns
+   */
   addDisposableObject: (object?: DisposableThreeObject) => void
+  /**
+   * Disposes all disposable objects and clears the Set
+   */
+  dispose: () => void
 }
 
 export type ThrelteAudioContext = {
