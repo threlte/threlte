@@ -72,6 +72,7 @@ receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
+dispose: boolean | undefined = undefined
 dracoDecoderPath: string | undefined = undefined
 ktxTranscoderPath: string | undefined = undefined
 ignorePointer: boolean = false

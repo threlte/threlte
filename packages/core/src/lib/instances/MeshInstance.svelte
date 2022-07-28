@@ -15,6 +15,8 @@
   export let frustumCulled: MeshInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: MeshInstanceProperties['renderOrder'] = undefined
   export let visible: MeshInstanceProperties['visible'] = undefined
+  export let userData: MeshInstanceProperties['userData'] = undefined
+  export let dispose: MeshInstanceProperties['dispose'] = undefined
   export let interactive: MeshInstanceProperties['interactive'] = false
   export let ignorePointer: MeshInstanceProperties['ignorePointer'] = false
 </script>
@@ -30,6 +32,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   on:viewportenter
   on:viewportleave

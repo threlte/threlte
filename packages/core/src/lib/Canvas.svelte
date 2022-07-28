@@ -59,7 +59,7 @@
   const { getCtx, renderCtx } = contexts
 
   // context bindings
-  export const { ctx, rootCtx, audioCtx } = contexts
+  export const { ctx, rootCtx, audioCtx, disposalCtx } = contexts
 
   setDefaultCameraAspectOnSizeChange(ctx)
 
@@ -91,7 +91,7 @@
     initialized = true
   })
 
-  useFrameloop(ctx, rootCtx, renderCtx)
+  useFrameloop(ctx, rootCtx, renderCtx, disposalCtx)
 
   const { onClick, onContextMenu, onPointerDown, onPointerMove, onPointerUp } = useEventRaycast(
     ctx,

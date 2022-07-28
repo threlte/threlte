@@ -4,15 +4,15 @@
   This component is the backbone of the scene graph hierarchy system.
   Child objects that also house this component register themselves onto
   this component and let the parent decide on what to do with it.
-  
+
 -->
 <script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Writable } from 'svelte/store'
   import type { Object3D, Object3D as ThreeObject3D } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
-  import type { HierarchicalObjectProperties } from '../types/components'
   import { createObjectStore } from '../lib/createObjectStore'
+  import type { HierarchicalObjectProperties } from '../types/components'
 
   const useHierarchicalObject = () => {
     return {
@@ -34,8 +34,6 @@
 
 <script lang="ts">
   export let object: HierarchicalObjectProperties['object'] = undefined
-  const objectStore = createObjectStore(object)
-  $: objectStore.set(object)
 
   export let children: Object3D[] = []
 
@@ -67,14 +65,29 @@
   $: parent = $parentStore
 
   /**
-   * Call parent methods first, …
+   * Get the parent methods …
    */
   const parentCallbacks = useHierarchicalObject()
-  invalidate('HierarchicalObject: object added')
-  if (object) parentCallbacks.onChildMount?.(object)
+  if (object) {
+    parentCallbacks.onChildMount?.(object)
+    invalidate('HierarchicalObject: object added')
+  }
+  const objectStore = createObjectStore(object, (newObject, oldObject) => {
+    if (oldObject) {
+      parentCallbacks.onChildDestroy?.(oldObject)
+      invalidate('HierarchicalObject: object added')
+    }
+    if (newObject) {
+      parentCallbacks.onChildMount?.(newObject)
+      invalidate('HierarchicalObject: object removed')
+    }
+  })
+  $: objectStore.set(object)
   onDestroy(() => {
-    if (object) parentCallbacks.onChildDestroy?.(object)
-    invalidate('HierarchicalObject: object removed')
+    if (object) {
+      parentCallbacks.onChildDestroy?.(object)
+      invalidate('HierarchicalObject: object removed')
+    }
   })
 
   /**

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { LineSegments,useParent,useThrelte } from '@threlte/core'
+  import { DisposableObject, LineSegments, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Color,EdgesGeometry,LineBasicMaterial,Mesh } from 'three'
+  import { Color, EdgesGeometry, LineBasicMaterial, Mesh } from 'three'
   import type { EdgesProperties } from '../../types/components'
 
   export let color: EdgesProperties['color'] = undefined
@@ -19,6 +19,8 @@
   export let frustumCulled: EdgesProperties['frustumCulled'] = undefined
   export let renderOrder: EdgesProperties['renderOrder'] = undefined
   export let visible: EdgesProperties['visible'] = undefined
+  export let userData: EdgesProperties['userData'] = undefined
+  export let dispose: EdgesProperties['dispose'] = undefined
   export let interactive: EdgesProperties['interactive'] = false
   export let ignorePointer: EdgesProperties['ignorePointer'] = false
   export let lookAt: EdgesProperties['lookAt'] = undefined
@@ -74,6 +76,11 @@
   })
 </script>
 
+<!-- Force disposal: not user-provided -->
+<DisposableObject dispose object={edgesGeometry} />
+
+<DisposableObject {dispose} object={activeMaterial} />
+
 {#if edgesGeometry}
   <LineSegments
     geometry={edgesGeometry}
@@ -87,6 +94,8 @@
     {frustumCulled}
     {renderOrder}
     {visible}
+    {userData}
+    {dispose}
     {interactive}
     {ignorePointer}
     on:click

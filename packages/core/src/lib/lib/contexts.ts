@@ -8,6 +8,7 @@ import type {
   Size,
   ThrelteAudioContext,
   ThrelteContext,
+  ThrelteDisposalContext,
   ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
@@ -20,16 +21,19 @@ export const createContexts = (
   userSize: Writable<Size | undefined>,
   parentSize: Writable<Size>,
   debugFrameloop: boolean,
-  frameloop: 'always' | 'demand' | 'never'
+  frameloop: 'always' | 'demand' | 'never',
+  debugInfo: boolean
 ): {
   ctx: ThrelteContext
   rootCtx: ThrelteRootContext
   renderCtx: ThrelteRenderContext
   audioCtx: ThrelteAudioContext
+  disposalCtx: ThrelteDisposalContext
   getCtx: () => ThrelteContext
   getRootCtx: () => ThrelteRootContext
   getRenderCtx: () => ThrelteRenderContext
   getAudioCtx: () => ThrelteAudioContext
+  getDisposalCtx: () => ThrelteDisposalContext
 } => {
   const audioCtx: ThrelteAudioContext = {
     audioListeners: new Map(),
@@ -60,6 +64,7 @@ export const createContexts = (
   }
 
   const renderCtx: ThrelteRenderContext = {
+    debugInfo,
     debugFrameloop,
     frameloop,
     frame: 0,
@@ -138,24 +143,55 @@ export const createContexts = (
     }
   }
 
+  const disposalCtx: ThrelteDisposalContext = {
+    disposableObjects: new Set(),
+    addDisposableObject: (object) => {
+      if (!object) return
+      // Scenes can't be disposed
+      if (object?.dispose && typeof object.dispose === 'function' && object.type !== 'Scene') {
+        disposalCtx.disposableObjects.add(object)
+      }
+      // iterate over properties of obj
+      Object.entries(object).forEach(([propKey, propValue]) => {
+        // we don't want to dispose the parent
+        if (propKey === 'parent' || propKey === 'children') return
+        // children don't need to be disposed as they manage their own disposal
+        const value = propValue as any
+        if (value?.dispose) {
+          disposalCtx.addDisposableObject(value)
+        }
+      })
+    },
+    dispose: () => {
+      disposalCtx.disposableObjects.forEach((object) => {
+        object.dispose?.()
+      })
+      disposalCtx.disposableObjects.clear()
+    }
+  }
+
   setContext<ThrelteContext>('threlte', ctx)
   setContext<ThrelteRootContext>('threlte-root', rootCtx)
   setContext<ThrelteRenderContext>('threlte-render-context', renderCtx)
   setContext<ThrelteAudioContext>('threlte-audio-context', audioCtx)
+  setContext<ThrelteDisposalContext>('threlte-disposal-context', disposalCtx)
 
   const getCtx = (): ThrelteContext => ctx
   const getRootCtx = (): ThrelteRootContext => rootCtx
   const getRenderCtx = (): ThrelteRenderContext => renderCtx
   const getAudioCtx = (): ThrelteAudioContext => audioCtx
+  const getDisposalCtx = (): ThrelteDisposalContext => disposalCtx
 
   return {
     ctx,
     rootCtx,
     renderCtx,
     audioCtx,
+    disposalCtx,
     getCtx,
     getRootCtx,
     getRenderCtx,
-    getAudioCtx
+    getAudioCtx,
+    getDisposalCtx
   }
 }

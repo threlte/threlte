@@ -17,6 +17,8 @@
   export let frustumCulled: OrthographicCameraProperties['frustumCulled'] = undefined
   export let renderOrder: OrthographicCameraProperties['renderOrder'] = undefined
   export let visible: OrthographicCameraProperties['visible'] = undefined
+  export let userData: OrthographicCameraProperties['userData'] = undefined
+  export let dispose: OrthographicCameraProperties['dispose'] = undefined
   export let useCamera: OrthographicCameraProperties['useCamera'] = true
 
   // OrthographicCamera
@@ -66,6 +68,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

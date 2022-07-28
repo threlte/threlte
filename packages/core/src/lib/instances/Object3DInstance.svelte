@@ -1,7 +1,8 @@
 <script lang="ts">
   import { useThrelte } from '../hooks/useThrelte'
-  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
+  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
   import type { Object3DInstanceProperties } from '../types/components'
@@ -21,6 +22,8 @@
   export let frustumCulled: Object3DInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: Object3DInstanceProperties['renderOrder'] = undefined
   export let visible: Object3DInstanceProperties['visible'] = undefined
+  export let dispose: Object3DInstanceProperties['dispose'] = undefined
+  export let userData: Object3DInstanceProperties['userData'] = undefined
 
   const { invalidate } = useThrelte()
   const getObject = () => object
@@ -31,6 +34,12 @@
     if (receiveShadow !== undefined) getObject().receiveShadow = receiveShadow
     if (frustumCulled !== undefined) getObject().frustumCulled = frustumCulled
     if (renderOrder !== undefined) getObject().renderOrder = renderOrder
+    if (userData !== undefined) {
+      getObject().userData = {
+        ...getObject().userData,
+        ...userData
+      }
+    }
     invalidate('Object3DInstance: props changed')
   }
 </script>
@@ -39,8 +48,10 @@
 
 <TransformableObject {object} {position} {rotation} {scale} {lookAt} />
 
-<SceneGraphObject {object}>
-  <slot />
-</SceneGraphObject>
+<DisposableObject {object} {dispose}>
+  <SceneGraphObject {object}>
+    <slot />
+  </SceneGraphObject>
+</DisposableObject>
 
 <ViewportAwareObject bind:inViewport {object} {viewportAware} on:viewportenter on:viewportleave />

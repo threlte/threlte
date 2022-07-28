@@ -17,6 +17,8 @@
   export let receiveShadow: SpotLightProperties['receiveShadow'] = undefined
   export let renderOrder: SpotLightProperties['renderOrder'] = undefined
   export let visible: SpotLightProperties['visible'] = undefined
+  export let userData: SpotLightProperties['userData'] = undefined
+  export let dispose: SpotLightProperties['dispose'] = undefined
   export let color: SpotLightProperties['color'] = undefined
   export let intensity: SpotLightProperties['intensity'] = undefined
 
@@ -98,6 +100,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

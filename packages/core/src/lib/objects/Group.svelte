@@ -14,6 +14,8 @@
   export let frustumCulled: GroupProperties['frustumCulled'] = undefined
   export let renderOrder: GroupProperties['renderOrder'] = undefined
   export let visible: GroupProperties['visible'] = undefined
+  export let userData: GroupProperties['userData'] = undefined
+  export let dispose: GroupProperties['dispose'] = undefined
 
   export const group = new ThreeGroup()
 </script>
@@ -27,6 +29,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {castShadow}
   {receiveShadow}
   {viewportAware}

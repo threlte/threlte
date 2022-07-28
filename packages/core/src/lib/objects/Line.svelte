@@ -2,6 +2,7 @@
   import { BufferGeometry, Line as ThreeLine, Vector3 } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LineInstance from '../instances/LineInstance.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import type { LineProperties } from '../types/components'
 
   // LineInstance
@@ -15,6 +16,8 @@
   export let frustumCulled: LineProperties['frustumCulled'] = undefined
   export let renderOrder: LineProperties['renderOrder'] = undefined
   export let visible: LineProperties['visible'] = undefined
+  export let userData: LineProperties['userData'] = undefined
+  export let dispose: LineProperties['dispose'] = undefined
   export let interactive: LineProperties['interactive'] = false
   export let ignorePointer: LineProperties['ignorePointer'] = false
   export let lookAt: LineProperties['lookAt'] = undefined
@@ -84,6 +87,12 @@
   }
 </script>
 
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
+
+<!-- Force disposal: not user-provided -->
+<DisposableObject dispose object={tempGeometry} />
+
 <LineInstance
   {line}
   {position}
@@ -95,6 +104,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {interactive}
   {ignorePointer}
   on:click

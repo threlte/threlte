@@ -4,6 +4,7 @@
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useFrame } from '../hooks/useFrame'
   import { useThrelte } from '../hooks/useThrelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import { useParent } from '../internal/HierarchicalObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import { getThrelteUserData } from '../lib/getThrelteUserData'
@@ -34,6 +35,7 @@
   export let touches: OrbitControlsProperties['touches'] = undefined
   export let zoomSpeed: OrbitControlsProperties['zoomSpeed'] = undefined
   export let target: OrbitControlsProperties['target'] = undefined
+  export let dispose: OrbitControlsProperties['dispose'] = undefined
 
   const parent = useParent()
 
@@ -120,11 +122,8 @@
     controls.update()
     invalidate('OrbitControls: target changed')
   }
-
-  onDestroy(() => {
-    controls.dispose()
-    invalidate('OrbitControls: onDestroy')
-  })
 </script>
+
+<DisposableObject {dispose} object={controls} />
 
 <TransformableObject on:transform={updateControls} object={targetObject} position={target} />

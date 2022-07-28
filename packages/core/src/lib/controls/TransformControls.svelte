@@ -4,6 +4,7 @@
   import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
   import { useThrelte } from '../hooks/useThrelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import { useParent } from '../internal/HierarchicalObject.svelte'
   import LayerableObject from '../internal/LayerableObject.svelte'
   import { getThrelteUserData } from '../lib/getThrelteUserData'
@@ -22,6 +23,7 @@
   export let showZ: TransformControlsProperties['showZ'] = undefined
   export let size: TransformControlsProperties['size'] = undefined
   export let space: TransformControlsProperties['space'] = undefined
+  export let dispose: TransformControlsProperties['dispose'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
   const parent = useParent()
@@ -249,8 +251,9 @@
     transformControls.detach()
     scene.remove(transformControls)
     removeListeners()
-    transformControls.dispose()
   })
 </script>
+
+<DisposableObject {dispose} object={transformControls} />
 
 <LayerableObject object={transformControls} />

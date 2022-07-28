@@ -6,6 +6,7 @@
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import type { DirectionalLightProperties } from '../types/components'
+  import DisposableObject from '../internal/DisposableObject.svelte'
 
   export let position: DirectionalLightProperties['position'] = undefined
   export let scale: DirectionalLightProperties['scale'] = undefined
@@ -14,6 +15,8 @@
   export let frustumCulled: DirectionalLightProperties['frustumCulled'] = undefined
   export let renderOrder: DirectionalLightProperties['renderOrder'] = undefined
   export let visible: DirectionalLightProperties['visible'] = undefined
+  export let userData: DirectionalLightProperties['userData'] = undefined
+  export let dispose: DirectionalLightProperties['dispose'] = undefined
   export let viewportAware: DirectionalLightProperties['viewportAware'] = false
   export let inViewport: DirectionalLightProperties['inViewport'] = false
   export let color: DirectionalLightProperties['color'] = undefined
@@ -73,6 +76,7 @@
 {#if target && !(target instanceof Object3D)}
   <SceneGraphObject object={originalTarget} />
   <TransformableObject object={originalTarget} position={target} />
+  <DisposableObject {dispose} object={target} />
 {/if}
 
 <LightInstance
@@ -85,6 +89,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

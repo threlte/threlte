@@ -54,6 +54,8 @@ receiveShadow: boolean | undefined = undefined
 frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
+dispose: boolean | undefined = undefined
+userData: Record<string, any> | undefined = undefined
 id: string | undefined = undefined
 masterVolume: number | undefined = undefined
 ```

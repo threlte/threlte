@@ -15,6 +15,8 @@
   export let frustumCulled: Object3DProperties['frustumCulled'] = undefined
   export let renderOrder: Object3DProperties['renderOrder'] = undefined
   export let visible: Object3DProperties['visible'] = undefined
+  export let userData: Object3DProperties['userData'] = undefined
+  export let dispose: Object3DProperties['dispose'] = undefined
 
   export const object = new ThreeObject3D()
 </script>
@@ -28,6 +30,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {castShadow}
   {receiveShadow}
   {viewportAware}

@@ -2,6 +2,7 @@
   import { LineSegments as ThreeLineSegments } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import LineInstance from '../instances/LineInstance.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import type { LineSegmentsProperties } from '../types/components'
 
   // LineInstance
@@ -15,6 +16,8 @@
   export let frustumCulled: LineSegmentsProperties['frustumCulled'] = undefined
   export let renderOrder: LineSegmentsProperties['renderOrder'] = undefined
   export let visible: LineSegmentsProperties['visible'] = undefined
+  export let userData: LineSegmentsProperties['userData'] = undefined
+  export let dispose: LineSegmentsProperties['dispose'] = undefined
   export let interactive: LineSegmentsProperties['interactive'] = false
   export let ignorePointer: LineSegmentsProperties['ignorePointer'] = false
   export let lookAt: LineSegmentsProperties['lookAt'] = undefined
@@ -52,6 +55,9 @@
   }
 </script>
 
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
+
 <LineInstance
   line={lineSegments}
   {position}
@@ -63,6 +69,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {interactive}
   {ignorePointer}
   on:click

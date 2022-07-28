@@ -19,6 +19,7 @@ import type {
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
+import type { DisposableThreeObject } from './components'
 
 export type ThreltePointerEventMap = {
   click: ThreltePointerEvent
@@ -86,12 +87,34 @@ export type ThrelteRenderContext = {
   advance: boolean
 }
 
+export type ThrelteDisposalContext = {
+  /**
+   * These objects will be disposed on the next frame.
+   */
+  disposableObjects: Set<DisposableThreeObject>
+  /**
+   * Adds a disposable object and all its disposable properties
+   * to disposalCtx.disposableObjects which will be disposed on
+   * the next frame.
+   *
+   * @param object
+   * @returns
+   */
+  addDisposableObject: (object?: DisposableThreeObject) => void
+  /**
+   * Disposes all disposable objects and clears the Set
+   */
+  dispose: () => void
+}
+
 export type ThrelteAudioContext = {
   audioListeners: Map<string, AudioListener>
   getAudioListener: (id?: string) => AudioListener | undefined
   addAudioListener: (listener: AudioListener, id?: string) => void
   removeAudioListener: (id?: string) => void
 }
+
+export type ThrelteDisposeContext = Writable<boolean>
 
 export type ThrelteUseFrame = {
   stop: () => void

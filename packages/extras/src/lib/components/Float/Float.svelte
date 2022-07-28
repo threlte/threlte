@@ -15,6 +15,8 @@
   export let frustumCulled: FloatProperties['frustumCulled'] = undefined
   export let renderOrder: FloatProperties['renderOrder'] = undefined
   export let visible: FloatProperties['visible'] = undefined
+  export let userData: FloatProperties['userData'] = undefined
+  export let dispose: FloatProperties['dispose'] = undefined
 
   // Float Properties
   export let speed: FloatProperties['speed'] = 1
@@ -76,6 +78,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {viewportAware}
   bind:inViewport
   on:viewportenter

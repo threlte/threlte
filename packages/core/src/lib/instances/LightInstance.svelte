@@ -18,6 +18,8 @@
   export let frustumCulled: LightInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: LightInstanceProperties['renderOrder'] = undefined
   export let visible: LightInstanceProperties['visible'] = undefined
+  export let userData: LightInstanceProperties['userData'] = undefined
+  export let dispose: LightInstanceProperties['dispose'] = undefined
 
   export let color: LightInstanceProperties['color'] = undefined
   export let intensity: LightInstanceProperties['intensity'] = undefined
@@ -44,6 +46,8 @@
   {rotation}
   {viewportAware}
   {visible}
+  {userData}
+  {dispose}
   on:viewportenter
   on:viewportleave
   bind:inViewport

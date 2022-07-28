@@ -1,7 +1,12 @@
 import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
 import { useRaf } from '../hooks/useRaf'
-import type { ThrelteContext, ThrelteRenderContext, ThrelteRootContext } from '../types/types'
+import type {
+  ThrelteContext,
+  ThrelteDisposalContext,
+  ThrelteRenderContext,
+  ThrelteRootContext
+} from '../types/types'
 import { useFrameloopRaycast } from './interactivity'
 
 const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderContext): void => {
@@ -48,7 +53,8 @@ const debugFrame = (renderCtx: ThrelteRenderContext): void => {
 export const useFrameloop = (
   ctx: ThrelteContext,
   rootCtx: ThrelteRootContext,
-  renderCtx: ThrelteRenderContext
+  renderCtx: ThrelteRenderContext,
+  disposalCtx: ThrelteDisposalContext
 ): void => {
   let camera = get(ctx.camera)
   const unsubscribeCamera = ctx.camera.subscribe((c) => (camera = c))
@@ -57,6 +63,8 @@ export const useFrameloop = (
   const { raycast } = useFrameloopRaycast(ctx, rootCtx)
 
   useRaf(() => {
+    disposalCtx.dispose()
+
     const shouldRender =
       renderCtx.frameloop === 'always' ||
       (renderCtx.frameloop === 'demand' &&

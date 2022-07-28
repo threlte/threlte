@@ -16,5 +16,6 @@
 </script>
 
 {#if helper}
-  <Object3DInstance object={helper} />
+  <!-- Force disposal as helper is not user-provided -->
+  <Object3DInstance dispose object={helper} />
 {/if}

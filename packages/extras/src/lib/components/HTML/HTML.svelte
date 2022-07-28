@@ -30,6 +30,7 @@
   export let lookAt: HTMLProperties['lookAt'] = undefined
   export let viewportAware: HTMLProperties['viewportAware'] = false
   export let inViewport: HTMLProperties['inViewport'] = false
+  export let dispose: HTMLProperties['dispose'] = false
 
   export let transform: HTMLProperties['transform'] = false
   export let calculatePosition: HTMLProperties['calculatePosition'] = defaultCalculatePosition
@@ -320,6 +321,7 @@
   {rotation}
   {lookAt}
   {viewportAware}
+  {dispose}
   bind:group
   bind:inViewport
   on:viewportenter

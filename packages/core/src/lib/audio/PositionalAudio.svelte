@@ -15,6 +15,8 @@
   export let frustumCulled: PositionalAudioProperties['frustumCulled'] = undefined
   export let renderOrder: PositionalAudioProperties['renderOrder'] = undefined
   export let visible: PositionalAudioProperties['visible'] = undefined
+  export let userData: PositionalAudioProperties['userData'] = undefined
+  export let dispose: PositionalAudioProperties['dispose'] = undefined
 
   export let autoplay: PositionalAudioProperties['autoplay'] = undefined
   export let detune: PositionalAudioProperties['detune'] = undefined
@@ -71,6 +73,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {castShadow}
   {receiveShadow}
   {viewportAware}

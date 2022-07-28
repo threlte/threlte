@@ -2,6 +2,7 @@
   import { Mesh as ThreeMesh } from 'three'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import type { MeshProperties } from '../types/components'
 
   // MeshInstance
@@ -15,6 +16,8 @@
   export let frustumCulled: MeshProperties['frustumCulled'] = undefined
   export let renderOrder: MeshProperties['renderOrder'] = undefined
   export let visible: MeshProperties['visible'] = undefined
+  export let userData: MeshProperties['userData'] = undefined
+  export let dispose: MeshProperties['dispose'] = undefined
   export let interactive: MeshProperties['interactive'] = false
   export let ignorePointer: MeshProperties['ignorePointer'] = false
   export let lookAt: MeshProperties['lookAt'] = undefined
@@ -52,6 +55,9 @@
   }
 </script>
 
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
+
 <MeshInstance
   {mesh}
   {position}
@@ -65,6 +71,8 @@
   {visible}
   {interactive}
   {ignorePointer}
+  {userData}
+  {dispose}
   on:click
   on:contextmenu
   on:pointerup

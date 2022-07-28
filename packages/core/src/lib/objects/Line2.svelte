@@ -5,6 +5,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { useThrelte } from '../hooks/useThrelte'
   import MeshInstance from '../instances/MeshInstance.svelte'
+  import DisposableObject from '../internal/DisposableObject.svelte'
   import type { Line2Properties } from '../types/components'
 
   // LineInstance
@@ -18,6 +19,8 @@
   export let frustumCulled: Line2Properties['frustumCulled'] = undefined
   export let renderOrder: Line2Properties['renderOrder'] = undefined
   export let visible: Line2Properties['visible'] = undefined
+  export let userData: Line2Properties['userData'] = undefined
+  export let dispose: Line2Properties['dispose'] = undefined
   export let interactive: Line2Properties['interactive'] = false
   export let ignorePointer: Line2Properties['ignorePointer'] = false
   export let lookAt: Line2Properties['lookAt'] = undefined
@@ -66,6 +69,11 @@
   }
 </script>
 
+<DisposableObject {dispose} object={geometry} />
+
+<!-- Force disposal: not user-provided -->
+<DisposableObject dispose object={fallbackGeometry} />
+
 <MeshInstance
   mesh={line2}
   {position}
@@ -77,6 +85,8 @@
   {frustumCulled}
   {renderOrder}
   {visible}
+  {userData}
+  {dispose}
   {interactive}
   {ignorePointer}
   on:click

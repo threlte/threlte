@@ -17,6 +17,8 @@
   export let frustumCulled: CameraInstanceProperties['frustumCulled'] = undefined
   export let renderOrder: CameraInstanceProperties['renderOrder'] = undefined
   export let visible: CameraInstanceProperties['visible'] = undefined
+  export let userData: CameraInstanceProperties['userData'] = undefined
+  export let dispose: CameraInstanceProperties['dispose'] = undefined
 
   export let useCamera: CameraInstanceProperties['useCamera'] = false
 
@@ -42,6 +44,8 @@
   {rotation}
   {viewportAware}
   {visible}
+  {userData}
+  {dispose}
   on:viewportenter
   on:viewportleave
   bind:inViewport
