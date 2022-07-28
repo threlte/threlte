@@ -65,7 +65,7 @@ export type ViewportAwareObjectProperties = {
   inViewport: boolean
 }
 
-export type Object3DInstanceProperties = HierarchicalObjectProperties &
+export type Object3DInstanceProperties = SceneGraphObjectProperties &
   LayerableObjectProperties &
   TransformableObjectProperties &
   ViewportAwareObjectProperties &
