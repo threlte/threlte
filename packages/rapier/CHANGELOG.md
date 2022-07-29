@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.0.2
+
+### Patch Changes
+
+- 62d2c5c: fixed `<RigidBody>` initial transforms
+
 ## 0.0.1
 
 ### Patch Changes
