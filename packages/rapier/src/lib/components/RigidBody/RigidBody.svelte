@@ -1,10 +1,10 @@
 <script lang="ts">
   import { LayerableObject, SceneGraphObject } from '@threlte/core'
-  import { createEventDispatcher, onDestroy, setContext } from 'svelte'
+  import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import { applyTransforms } from '../../lib/applyTransforms'
-  import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
+  import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToEuler } from '../../lib/rotationToEuler'
@@ -78,19 +78,29 @@
   /**
    * RigidBody Description
    */
-  const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type))
-    .setCanSleep(canSleep)
-    .setTranslation(
-      worldPosition.x * parentWorldScale.x,
-      worldPosition.y * parentWorldScale.y,
-      worldPosition.z * parentWorldScale.z
-    )
-    .setRotation({ x: worldRotation.x, y: worldRotation.y, z: worldRotation.z, w: worldRotation.w })
+  const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
 
   /**
    * RigidBody init
    */
   export const rigidBody = world.createRigidBody(desc)
+
+  /**
+   * Apply transforms after the parent component added "object" to itself
+   */
+  const initPosition = async () => {
+    await tick()
+    applyTransforms(object, position, rotation, scale, lookAt)
+    object.updateMatrix()
+    object.updateWorldMatrix(true, false)
+    const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
+    const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
+    const worldQuaternion = getWorldQuaternion(object)
+
+    rigidBody.setTranslation(worldPosition, true)
+    rigidBody.setRotation(worldQuaternion, true)
+  }
+  initPosition()
 
   /**
    * Will come in handy in the future for joints
