@@ -9,7 +9,7 @@
 
 ### Patch Changes
 
-- 458c49b: proper prop types on <Object3DInstance>
+- 458c49b: proper prop types on `<Object3DInstance>`
 
 ## 4.1.3
 
