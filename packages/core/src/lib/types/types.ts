@@ -89,22 +89,43 @@ export type ThrelteRenderContext = {
 
 export type ThrelteDisposalContext = {
   /**
-   * These objects will be disposed on the next frame.
-   */
-  disposableObjects: Set<DisposableThreeObject>
-  /**
-   * Adds a disposable object and all its disposable properties
-   * to disposalCtx.disposableObjects which will be disposed on
-   * the next frame.
-   *
-   * @param object
-   * @returns
-   */
-  addDisposableObject: (object?: DisposableThreeObject) => void
-  /**
-   * Disposes all disposable objects and clears the Set
+   * Disposes all disposable objects from disposableObjects
+   * that are not mounted anymore and clears the Map entry.
    */
   dispose: () => void
+
+  /**
+   * Returns an array of disposable objects.
+   * Recursively checks disposable objects for properties
+   * that again hold disposable objects and returns
+   * them as well.
+   */
+  collectDisposableObjects: (
+    object?: DisposableThreeObject,
+    arr?: DisposableThreeObject[]
+  ) => DisposableThreeObject[]
+
+  /**
+   * Add disposable objects that will be disposed on unmounting.
+   */
+  addDisposableObjects: (objects: DisposableThreeObject[]) => void
+
+  /**
+   * Remove disposable objects and possibly dispose them
+   * in the next frame if they are not mounted anywhere else.
+   */
+  removeDisposableObjects: (objects: DisposableThreeObject[]) => void
+
+  /**
+   * A map of currently mounted disposable objects.
+   */
+  disposableObjects: Map<DisposableThreeObject, number>
+
+  /**
+   * A flag that is used to check whether the dispose method
+   * should actually run.
+   */
+  shouldDispose: boolean
 }
 
 export type ThrelteAudioContext = {

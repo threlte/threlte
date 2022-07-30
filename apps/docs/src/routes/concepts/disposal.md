@@ -4,7 +4,7 @@ title: Disposal
 
 # Disposal
 
-Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects), but Svelte is aware of component lifecycles, hence Threlte will attempt to free resources for you by calling `dispose`, if present, on all unmounted objects and recursively on all properties that can be disposed.
+Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects), but Svelte is aware of component lifecycles, hence Threlte will attempt to free resources for you by calling `dispose`, if present, on all unmounted objects and recursively on all properties that are not being used anywhere else in your scene.
 
 ### Automatic Disposal
 
@@ -67,7 +67,7 @@ You can switch off automatic disposal by placing `dispose={false}` onto componen
 
 ### Disposables
 
-Sometimes it's useful to manage the disposal of objects yourself. This is especially true if objects are shared across separately mounted component trees.
+Sometimes it's useful to manage the disposal of objects yourself.
 
 The component [`<Disposables>`](/extras/disposables) switches off automatic disposal for all child components and disposes the objects provided to the property `disposables` on unmounting.
 
