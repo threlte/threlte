@@ -1,5 +1,16 @@
 # @threlte/core
 
+## 4.2.0
+
+### Minor Changes
+
+- 834f333: Added a new property "userData" which is useful to debug, add custom properties and filter objects
+- a066d3b: Added automatic disposal of three.js objects. See documentation for more info.
+
+### Patch Changes
+
+- 458c49b: proper prop types on `<Object3DInstance>`
+
 ## 4.1.3
 
 ### Patch Changes

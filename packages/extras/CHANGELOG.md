@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 4.1.0
+
+### Minor Changes
+
+- 834f333: Added a new property "userData" which is useful to debug, add custom properties and filter objects
+- 7e36568: Added component <Disposables> to easily create a disposal strategy
+
 ## 4.0.1
 
 ### Patch Changes
