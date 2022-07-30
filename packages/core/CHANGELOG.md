@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.3.1
+
+### Patch Changes
+
+- 6d81f56: force disposing resources on Canvas unmounting
+
 ## 4.3.0
 
 ### Minor Changes
