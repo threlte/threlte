@@ -99,7 +99,9 @@
     renderCtx
   )
 
-  onDestroy(disposalCtx.dispose)
+  onDestroy(() => {
+    disposalCtx.dispose(true)
+  })
 </script>
 
 <canvas

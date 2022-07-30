@@ -143,11 +143,11 @@ export const createContexts = (
   }
 
   const disposalCtx: ThrelteDisposalContext = {
-    dispose: async () => {
+    dispose: async (force = false) => {
       await tick()
-      if (!disposalCtx.shouldDispose) return
+      if (!disposalCtx.shouldDispose && !force) return
       disposalCtx.disposableObjects.forEach((mounted, object) => {
-        if (mounted === 0) {
+        if (mounted === 0 || force) {
           object?.dispose?.()
           disposalCtx.disposableObjects.delete(object)
         }

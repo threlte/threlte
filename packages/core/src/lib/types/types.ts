@@ -92,7 +92,7 @@ export type ThrelteDisposalContext = {
    * Disposes all disposable objects from disposableObjects
    * that are not mounted anymore and clears the Map entry.
    */
-  dispose: () => void
+  dispose: (force?: boolean) => void
 
   /**
    * Returns an array of disposable objects.
