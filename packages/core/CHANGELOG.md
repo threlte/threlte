@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.3.0
+
+### Minor Changes
+
+- 36cb173: Advanced automatic disposal: a resource is not disposed when it's still present somewhere in the scene graph
+
 ## 4.2.0
 
 ### Minor Changes
