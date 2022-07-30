@@ -39,6 +39,8 @@ The meshes can be mounted and unmounted *without* the map, material and geometry
 
 ### Properties
 
+`disposables` accepts an array of three.js objects that have a `dispose` method.
+
 ```ts
 // required
 disposables: ({
