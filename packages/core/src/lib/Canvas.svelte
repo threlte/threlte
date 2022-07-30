@@ -56,10 +56,10 @@
     frameloop
   )
 
-  const { getCtx, renderCtx } = contexts
+  const { getCtx, renderCtx, disposalCtx } = contexts
 
   // context bindings
-  export const { ctx, rootCtx, audioCtx, disposalCtx } = contexts
+  export const { ctx, rootCtx, audioCtx } = contexts
 
   setDefaultCameraAspectOnSizeChange(ctx)
 
@@ -98,6 +98,8 @@
     rootCtx,
     renderCtx
   )
+
+  onDestroy(disposalCtx.dispose)
 </script>
 
 <canvas

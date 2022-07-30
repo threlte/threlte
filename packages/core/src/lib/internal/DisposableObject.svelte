@@ -5,7 +5,8 @@
   import type { DisposableObjectProperties } from '../types/components'
   import type { ThrelteDisposeContext } from '../types/types'
 
-  const { addDisposableObject } = useThrelteDisposal()
+  const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
+    useThrelteDisposal()
 
   export let object: DisposableObjectProperties['object'] = undefined
   let previousObject = object
@@ -14,18 +15,25 @@
   const contextName = 'threlte-disposable-object-context'
   const parentDispose = getContext<ThrelteDisposeContext | undefined>(contextName)
 
-  let mergedDispose = writable(dispose ?? $parentDispose ?? true)
+  const mergedDispose = writable(dispose ?? $parentDispose ?? true)
   $: mergedDispose.set(dispose ?? $parentDispose ?? true)
 
   setContext<ThrelteDisposeContext>(contextName, mergedDispose)
 
+  let disposables = $mergedDispose ? collectDisposableObjects(object) : []
+  addDisposableObjects(disposables)
+
   $: {
-    if (object !== previousObject && $mergedDispose) addDisposableObject(object)
-    previousObject = object
+    if (object !== previousObject) {
+      removeDisposableObjects(disposables)
+      disposables = $mergedDispose ? collectDisposableObjects(object) : []
+      addDisposableObjects(disposables)
+      previousObject = object
+    }
   }
 
   onDestroy(() => {
-    if ($mergedDispose) addDisposableObject(object)
+    removeDisposableObjects(disposables)
   })
 </script>
 

@@ -1,9 +1,10 @@
-import { setContext } from 'svelte'
+import { setContext, tick } from 'svelte'
 import type { Writable } from 'svelte/store'
 import { derived, writable } from 'svelte/store'
 import { Camera, Clock, Object3D, Raycaster, Scene, Vector2 } from 'three'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import type { DisposableThreeObject } from '../types/components'
 import type {
   Size,
   ThrelteAudioContext,
@@ -21,8 +22,7 @@ export const createContexts = (
   userSize: Writable<Size | undefined>,
   parentSize: Writable<Size>,
   debugFrameloop: boolean,
-  frameloop: 'always' | 'demand' | 'never',
-  debugInfo: boolean
+  frameloop: 'always' | 'demand' | 'never'
 ): {
   ctx: ThrelteContext
   rootCtx: ThrelteRootContext
@@ -64,7 +64,6 @@ export const createContexts = (
   }
 
   const renderCtx: ThrelteRenderContext = {
-    debugInfo,
     debugFrameloop,
     frameloop,
     frame: 0,
@@ -144,30 +143,57 @@ export const createContexts = (
   }
 
   const disposalCtx: ThrelteDisposalContext = {
-    disposableObjects: new Set(),
-    addDisposableObject: (object) => {
-      if (!object) return
+    dispose: async () => {
+      await tick()
+      if (!disposalCtx.shouldDispose) return
+      disposalCtx.disposableObjects.forEach((mounted, object) => {
+        if (mounted === 0) {
+          object?.dispose?.()
+          disposalCtx.disposableObjects.delete(object)
+        }
+      })
+      disposalCtx.shouldDispose = false
+    },
+    collectDisposableObjects: (object, objects) => {
+      const disposables: DisposableThreeObject[] = objects ?? []
+      if (!object) return disposables
       // Scenes can't be disposed
       if (object?.dispose && typeof object.dispose === 'function' && object.type !== 'Scene') {
-        disposalCtx.disposableObjects.add(object)
+        disposables.push(object)
       }
-      // iterate over properties of obj
+      // iterate over properties of object
       Object.entries(object).forEach(([propKey, propValue]) => {
-        // we don't want to dispose the parent
-        if (propKey === 'parent' || propKey === 'children') return
-        // children don't need to be disposed as they manage their own disposal
+        // we don't want to dispose the parent, we can skip "children"
+        if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
         const value = propValue as any
         if (value?.dispose) {
-          disposalCtx.addDisposableObject(value)
+          disposalCtx.collectDisposableObjects(value, disposables)
+        }
+      })
+      return disposables
+    },
+    addDisposableObjects: (objects) => {
+      objects.forEach((obj) => {
+        const currentValue = disposalCtx.disposableObjects.get(obj)
+        if (currentValue) {
+          disposalCtx.disposableObjects.set(obj, currentValue + 1)
+        } else {
+          disposalCtx.disposableObjects.set(obj, 1)
         }
       })
     },
-    dispose: () => {
-      disposalCtx.disposableObjects.forEach((object) => {
-        object.dispose?.()
+    removeDisposableObjects: (objects) => {
+      if (objects.length === 0) return
+      objects.forEach((obj) => {
+        const currentValue = disposalCtx.disposableObjects.get(obj)
+        if (currentValue && currentValue > 0) {
+          disposalCtx.disposableObjects.set(obj, currentValue - 1)
+        }
       })
-      disposalCtx.disposableObjects.clear()
-    }
+      disposalCtx.shouldDispose = true
+    },
+    disposableObjects: new Map(),
+    shouldDispose: false
   }
 
   setContext<ThrelteContext>('threlte', ctx)
