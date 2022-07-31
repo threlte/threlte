@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.0.3
+
+### Patch Changes
+
+- cd6dac6: cleaned up dead code in RigidBody component
+
 ## 0.0.2
 
 ### Patch Changes
