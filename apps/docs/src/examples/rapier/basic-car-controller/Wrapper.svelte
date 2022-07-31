@@ -1,0 +1,24 @@
+<script lang="ts">
+	import { Canvas } from '@threlte/core'
+	import { HTML } from '@threlte/extras'
+	import { Debug, World } from '@threlte/rapier'
+	import Scene from './Scene.svelte'
+</script>
+
+<div class="relative w-full h-full">
+	<Canvas>
+		<World>
+			<Debug depthTest={false} depthWrite={false} />
+
+			<Scene />
+
+			<HTML slot="fallback" transform>
+				<p class="text-xs">
+					It seems your browser<br />
+					doesn't support WASM.<br />
+					I'm sorry.
+				</p>
+			</HTML>
+		</World>
+	</Canvas>
+</div>

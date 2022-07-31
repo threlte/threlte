@@ -3,6 +3,10 @@ export { useRapier } from './hooks/useRapier'
 export { useCollisionGroups } from './hooks/useCollisionGroups'
 export { useRigidBody } from './hooks/useRigidBody'
 
+// Joints
+export { useRevoluteJoint } from './hooks/useRevoluteJoint'
+export { usePrismaticJoint } from './hooks/usePrismaticJoint'
+
 // components
 export { default as World } from './components/World/World.svelte'
 export { default as RigidBody } from './components/RigidBody/RigidBody.svelte'

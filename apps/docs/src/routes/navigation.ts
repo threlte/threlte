@@ -375,6 +375,14 @@ export const sidebar = {
 			{
 				title: 'useRigidBody',
 				slug: '/rapier/use-rigid-body'
+			},
+			{
+				title: 'Recipes',
+				slug: ''
+			},
+			{
+				title: 'BasicCarController',
+				slug: '/rapier/basic-car-controller'
 			}
 		]
 	}
