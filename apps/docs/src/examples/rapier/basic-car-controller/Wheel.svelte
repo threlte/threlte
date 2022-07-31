@@ -1,40 +1,30 @@
 <script lang="ts">
-	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
+	import { MotorModel, type RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Mesh, type Position } from '@threlte/core'
 	import { Collider, RigidBody, useRevoluteJoint } from '@threlte/rapier'
-	import { onDestroy } from 'svelte'
 	import { spring } from 'svelte/motion'
 	import { CylinderBufferGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	export let position: Position | undefined = undefined
-	export let frameRigidBody: RapierRigidBody | undefined = undefined
-	export let frameAnchor: Position | undefined = undefined
+	export let parentRigidBody: RapierRigidBody | undefined = undefined
+	export let anchor: Position | undefined = undefined
 	export let hasMotor: boolean = false
 
 	let wheelRigidBody: RapierRigidBody
 
-	const { joint, rigidBodyA, rigidBodyB } = useRevoluteJoint(frameAnchor, {}, { z: 1 })
-	$: if (frameRigidBody) rigidBodyA.set(frameRigidBody)
-	$: if (wheelRigidBody) rigidBodyB.set(wheelRigidBody)
-
 	const velocity = spring(0)
 
-	$: if ($joint) $joint.setContactsEnabled(false)
-	$: if ($joint && hasMotor) $joint.configureMotorVelocity($velocity, 1)
-
 	const onKeyDown = (e: KeyboardEvent) => {
-		e.preventDefault()
 		if (e.key === 'ArrowUp') {
-			velocity.set(1000)
+			velocity.set(10000)
 		}
 		if (e.key === 'ArrowDown') {
-			velocity.set(-1000)
+			velocity.set(-10000)
 		}
 	}
 
 	const onKeyUp = (e: KeyboardEvent) => {
-		e.preventDefault()
 		if (e.key === 'ArrowUp') {
 			velocity.set(0)
 		}
@@ -43,18 +33,21 @@
 		}
 	}
 
-	window.addEventListener('keydown', onKeyDown)
-	window.addEventListener('keyup', onKeyUp)
-	onDestroy(() => {
-		window.removeEventListener('keydown', onKeyDown)
-		window.removeEventListener('keyup', onKeyUp)
-	})
+	const { joint, rigidBodyA, rigidBodyB } = useRevoluteJoint(anchor, {}, { z: 1 }, undefined)
+	$: if (parentRigidBody) rigidBodyA.set(parentRigidBody)
+	$: if (wheelRigidBody) rigidBodyB.set(wheelRigidBody)
+	$: if ($joint) $joint.setContactsEnabled(false)
+	$: if ($joint && hasMotor) $joint.configureMotorVelocity($velocity, 1)
+	$: if ($joint && hasMotor) $joint.configureMotorModel(MotorModel.ForceBased)
 </script>
+
+<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup|preventDefault={onKeyUp} />
 
 <RigidBody bind:rigidBody={wheelRigidBody} {position}>
 	<Collider
 		rotation={{ x: 90 * DEG2RAD, y: 30 * DEG2RAD }}
 		friction={10}
+		mass={0.1}
 		shape={'cylinder'}
 		args={[0.1, 0.4]}
 	/>

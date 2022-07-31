@@ -10,7 +10,8 @@
 		useThrelte
 	} from '@threlte/core'
 	import { useGltf } from '@threlte/extras'
-	import { AutoColliders, RigidBody } from '@threlte/rapier'
+	import { AutoColliders, RigidBody, useRapier } from '@threlte/rapier'
+	import { onMount } from 'svelte'
 	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
 	import { BoxBufferGeometry } from 'three'
@@ -52,4 +53,4 @@
 
 <Ground />
 
-<Car position={{ y: 3 }} />
+<Car position={{ y: 5 }} />

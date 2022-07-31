@@ -2,8 +2,10 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 
 	import { Group, Mesh, type Position, type Rotation } from '@threlte/core'
-	import { AutoColliders, RigidBody } from '@threlte/rapier'
+	import { AutoColliders, RigidBody, useRapier } from '@threlte/rapier'
+	import { onMount } from 'svelte'
 	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+	import Axle from './Axle.svelte'
 	import Wheel from './Wheel.svelte'
 
 	export let position: Position | undefined = undefined
@@ -14,23 +16,12 @@
 
 <Group {position} {rotation}>
 	<RigidBody bind:rigidBody={frameRigidBody}>
-		<AutoColliders shape={'cuboid'} friction={0}>
-			<Mesh geometry={new BoxBufferGeometry(4, 0.2, 2)} material={new MeshStandardMaterial()} />
+		<AutoColliders shape={'cuboid'}>
+			<Mesh geometry={new BoxBufferGeometry(4, 0.005, 2)} material={new MeshStandardMaterial()} />
 		</AutoColliders>
 	</RigidBody>
 
-	<!-- Back Wheels -->
-	<Wheel hasMotor {frameRigidBody} frameAnchor={{ z: 1.2, x: 1.4 }} position={{ z: 1.2, x: 1.4 }} />
-	<Wheel
-		hasMotor
-		{frameRigidBody}
-		frameAnchor={{ z: -1.2, x: 1.4 }}
-		position={{ z: -1.2, x: 1.4 }}
-	/>
+	<Axle anchor={{ x: 1, z: -1.1 }} position={{ x: 1, z: -1.1 }} parentRigidBody={frameRigidBody} />
 
-	<!-- Front Wheels -->
-	<Wheel {frameRigidBody} frameAnchor={{ z: 1.2, x: -1.4 }} position={{ z: 1.2, x: -1.4 }} />
-	<Wheel {frameRigidBody} frameAnchor={{ z: -1.2, x: -1.4 }} position={{ z: -1.2, x: -1.4 }} />
-
-	<!-- <Axle frameAnchor={{ x: 1 }} {frameRigidBody} /> -->
+	<!-- <Axle anchor={{ x: 1, z: 1.1 }} position={{ x: 1, z: 1.1 }} parentRigidBody={frameRigidBody} /> -->
 </Group>
