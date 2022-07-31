@@ -1,8 +1,6 @@
 <script lang="ts">
 	import {
 		DirectionalLight,
-		Group,
-		Mesh,
 		Object3DInstance,
 		OrbitControls,
 		PerspectiveCamera,
@@ -10,16 +8,10 @@
 		useThrelte
 	} from '@threlte/core'
 	import { useGltf } from '@threlte/extras'
-	import { AutoColliders, RigidBody, useRapier } from '@threlte/rapier'
-	import { onMount } from 'svelte'
 	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
-	import { BoxBufferGeometry } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { SphereBufferGeometry } from 'three'
 	import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'
 	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Car from './Car.svelte'
 	import Ground from './Ground.svelte'
 
@@ -32,14 +24,6 @@
 	scene.environment = texture
 	onDestroy(() => {
 		texture.dispose()
-	})
-
-	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
-		'/models/helmet/DamagedHelmet.gltf'
-	)
-	const helmet = derived(gltf, (gltf) => {
-		if (!gltf || !gltf.nodes['node_damagedHelmet_-6514']) return
-		return gltf.nodes['node_damagedHelmet_-6514'] as ThreeMesh
 	})
 </script>
 
