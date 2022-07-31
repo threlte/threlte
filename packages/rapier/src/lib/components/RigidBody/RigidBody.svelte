@@ -71,10 +71,6 @@
    */
   object.updateWorldMatrix(true, false)
 
-  const worldPosition = getWorldPosition(object)
-  const worldRotation = getWorldQuaternion(object)
-  const parentWorldScale = object.parent?.getWorldScale(new Vector3()) || new Vector3(1, 1, 1)
-
   /**
    * RigidBody Description
    */
@@ -96,7 +92,6 @@
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
     const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
     const worldQuaternion = getWorldQuaternion(object)
-
     rigidBody.setTranslation(worldPosition, true)
     rigidBody.setRotation(worldQuaternion, true)
   }
