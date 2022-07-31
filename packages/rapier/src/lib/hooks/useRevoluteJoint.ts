@@ -8,7 +8,8 @@ import { useRapier } from './useRapier'
 export const useRevoluteJoint = (
   localAnchorA?: Position,
   localAnchorB?: Position,
-  axis?: Position
+  axis?: Position,
+  limits?: [min: number, max: number]
 ) => {
   const rigidBodyA = writable<RigidBody | undefined>(undefined)
   const rigidBodyB = writable<RigidBody | undefined>(undefined)
@@ -23,6 +24,10 @@ export const useRevoluteJoint = (
         positionToVector3(localAnchorB),
         a
       )
+      if (limits) {
+        params.limitsEnabled = true
+        params.limits = limits
+      }
       const joint = world.createImpulseJoint(params, rbA, rbB, true)
       return joint as RevoluteImpulseJoint
     }
@@ -30,9 +35,8 @@ export const useRevoluteJoint = (
 
   onDestroy(() => {
     const j = get(joint)
-    if (j) {
-      world.removeImpulseJoint(j, true)
-    }
+    if (!j) return
+    world.removeImpulseJoint(j, true)
   })
 
   return {
