@@ -9,7 +9,6 @@
 	import { Collider, RigidBody, useRevoluteJoint } from '@threlte/rapier'
 	import { CylinderBufferGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { useCar } from './Car.svelte'
 	import { useWasd } from './useWasd'
 
 	export let position: Position | undefined = undefined
@@ -20,12 +19,33 @@
 
 	const wasd = useWasd()
 
+	let isSpaceDown = false
+
 	const { rigidBodyA, rigidBodyB, joint } = useRevoluteJoint(anchor, {}, { z: 1 })
 	$: if (parentRigidBody) rigidBodyA.set(parentRigidBody)
 	$: $joint?.configureMotorModel(MotorModel.AccelerationBased)
-	$: if (isDriven) $joint?.configureMotorVelocity($wasd.y * 1000, 10)
+	$: $joint?.configureMotorModel(
+		isDriven && isSpaceDown ? MotorModel.ForceBased : MotorModel.AccelerationBased
+	)
+	$: if (isDriven) $joint?.configureMotorVelocity(isSpaceDown ? 0 : $wasd.y * 1000, 10)
 	$: $joint?.setContactsEnabled(false)
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		if (e.key === ' ') {
+			e.preventDefault()
+			isSpaceDown = true
+		}
+	}
+
+	const onKeyUp = (e: KeyboardEvent) => {
+		if (e.key === ' ') {
+			e.preventDefault()
+			isSpaceDown = false
+		}
+	}
 </script>
+
+<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
 <RigidBody canSleep={false} {position} bind:rigidBody={$rigidBodyB}>
 	<Collider

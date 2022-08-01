@@ -16,7 +16,7 @@ Each wheel is attached to an axle with a `RevoluteImpulseJoint` and the back whe
 
 To increase the decoupling of joint rigid bodies, the solver iterations are increased by a factor of 100.
 
-The car can be controlled with the WASD keys.
+The car can be controlled with the WASD keys. The spacebar activates the handbreak.
 
 The property `dominance` on `<RigidBody>` components can be used to make objects more or less vulnerable to impacts of the car.
 
