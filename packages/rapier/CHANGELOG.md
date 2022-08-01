@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.1.0
+
+### Minor Changes
+
+- c272617: Hooks added to add Joints, Collider and AutoColliders now accepts density, mass or massProperties, documentation for joints hooks added, "Basic Vehicle Controller" Recipe added.
+
 ## 0.0.3
 
 ### Patch Changes
