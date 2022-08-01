@@ -43,15 +43,13 @@
 
 <Group {position}>
 	<RigidBody bind:rigidBody={axleRigidBody}>
-		<Collider mass={2} shape={'cuboid'} args={[0.03, 0.03, 0.03]} />
+		<Collider mass={1} shape={'cuboid'} args={[0.03, 0.03, 0.03]} />
 	</RigidBody>
 
-	{#if $joint}
-		<Wheel
-			{isDriven}
-			anchor={{ z: side === 'left' ? 0.2 : -0.2 }}
-			position={{ z: side === 'left' ? 0.2 : -0.2 }}
-			parentRigidBody={axleRigidBody}
-		/>
-	{/if}
+	<Wheel
+		{isDriven}
+		anchor={{ z: side === 'left' ? 0.2 : -0.2 }}
+		position={{ z: side === 'left' ? 0.2 : -0.2 }}
+		parentRigidBody={axleRigidBody}
+	/>
 </Group>

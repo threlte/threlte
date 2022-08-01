@@ -7,6 +7,7 @@ export { useRigidBody } from './hooks/useRigidBody'
 export { useRevoluteJoint } from './hooks/useRevoluteJoint'
 export { usePrismaticJoint } from './hooks/usePrismaticJoint'
 export { useFixedJoint } from './hooks/useFixedJoint'
+export { useSphericalJoint } from './hooks/useSphericalJoint'
 
 // components
 export { default as World } from './components/World/World.svelte'
@@ -21,7 +22,6 @@ export { default as BasicPlayerController } from './recipes/BasicPlayerControlle
 
 export type {
   AutoCollidersProperties,
-  ColliderProperties,
   Boolean3Array,
   RigidBodyProperties,
   WorldProperties

@@ -7,11 +7,9 @@
 	import type { Position } from '@threlte/core'
 	import { Mesh } from '@threlte/core'
 	import { Collider, RigidBody, useRevoluteJoint } from '@threlte/rapier'
-	import { MeshStandardMaterial } from 'three'
-	import { CylinderBufferGeometry } from 'three'
-	import { clamp, DEG2RAD } from 'three/src/math/MathUtils'
+	import { CylinderBufferGeometry, MeshStandardMaterial } from 'three'
+	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { useCar } from './Car.svelte'
-	import { interpolatePower } from './interpolants'
 	import { useWasd } from './useWasd'
 
 	export let position: Position | undefined = undefined
@@ -21,10 +19,6 @@
 	export let isDriven = false
 
 	const wasd = useWasd()
-	const { speed } = useCar()
-
-	// Use for force-based MotorModel
-	// $: power = interpolatePower(clamp($speed / 10, 0.1, 1)) * $wasd.y * 80
 
 	const { rigidBodyA, rigidBodyB, joint } = useRevoluteJoint(anchor, {}, { z: 1 })
 	$: if (parentRigidBody) rigidBodyA.set(parentRigidBody)
@@ -42,6 +36,8 @@
 		bind:collider
 		rotation={{ x: 90 * DEG2RAD }}
 	/>
+
+	<!-- WHEEL MESH -->
 	<Mesh
 		castShadow
 		rotation={{ x: 90 * DEG2RAD }}

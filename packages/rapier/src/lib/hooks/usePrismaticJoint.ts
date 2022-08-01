@@ -10,7 +10,7 @@ export const usePrismaticJoint = (
   axis: Position,
   limits?: [min: number, max: number]
 ) => {
-  return useJoint(([rbA, rbB], { world, rapier }) => {
+  return useJoint((rbA, rbB, { world, rapier }) => {
     const params = rapier.JointData.prismatic(
       positionToVector3(anchorA),
       positionToVector3(anchorB),

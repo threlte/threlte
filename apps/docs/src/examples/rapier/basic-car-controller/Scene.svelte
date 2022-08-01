@@ -7,12 +7,10 @@
 		useLoader,
 		useThrelte
 	} from '@threlte/core'
-	import { GLTF, useGltf } from '@threlte/extras'
+	import { HTML, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { onDestroy } from 'svelte'
-	import { BoxBufferGeometry } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { EquirectangularReflectionMapping, GridHelper } from 'three'
+	import { BoxBufferGeometry, EquirectangularReflectionMapping, MeshStandardMaterial } from 'three'
 	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Car from './Car.svelte'
@@ -32,26 +30,38 @@
 	const { gltf } = useGltf('/models/loop/loop.glb')
 </script>
 
-<!-- <PerspectiveCamera position={{ y: 13, x: 12 }} fov={40}>
-	<OrbitControls target={{ x: 2.5 }} />
-</PerspectiveCamera> -->
-
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
-
-<Object3DInstance object={new GridHelper(100, 100)} position={{ y: 0.001 }} />
+<DirectionalLight position={{ y: 20, x: 8, z: -3 }} />
 
 <Ground />
 
-<RigidBody position={{ y: 3, x: -10, z: -12 }}>
+<RigidBody dominance={1} position={{ y: 3, x: -10, z: -12 }}>
+	<HTML transform sprite pointerEvents={'none'} position={{ y: 1 }}>
+		<p>Dominance: 1</p>
+	</HTML>
 	<AutoColliders shape={'cuboid'}>
 		<Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
+<RigidBody dominance={-1} position={{ y: 3, x: -15, z: -14 }}>
+	<HTML transform sprite pointerEvents={'none'} position={{ y: 3 }}>
+		<p>Dominance: -1</p>
+	</HTML>
+	<AutoColliders shape={'cuboid'}>
+		<Mesh geometry={new BoxBufferGeometry(3, 3, 3)} material={new MeshStandardMaterial()} />
+	</AutoColliders>
+</RigidBody>
+
+<RigidBody dominance={0} position={{ y: 3, x: -13, z: -10 }}>
+	<HTML transform sprite pointerEvents={'none'} position={{ y: 2 }}>
+		<p>Dominance: 0</p>
+	</HTML>
+	<AutoColliders shape={'cuboid'}>
+		<Mesh geometry={new BoxBufferGeometry(2, 2, 2)} material={new MeshStandardMaterial()} />
+	</AutoColliders>
+</RigidBody>
+
 {#if $gltf}
-	<!-- <AutoColliders shape={'trimesh'}>
-		<Object3DInstance object={$gltf.scene} position={{ y: -0.05, x: -70, z: -3 }} />
-	</AutoColliders> -->
 	<AutoColliders shape={'trimesh'}>
 		<Object3DInstance
 			rotation={{ y: 90 * DEG2RAD }}

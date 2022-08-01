@@ -5,15 +5,15 @@ import { useJoint } from './useJoint'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useRevoluteJoint = (
-  localAnchorA: Position,
-  localAnchorB: Position,
+  anchorA: Position,
+  anchorB: Position,
   axis: Position,
   limits?: [min: number, max: number]
 ) => {
-  return useJoint(([rbA, rbB], { world, rapier }) => {
+  return useJoint((rbA, rbB, { world, rapier }) => {
     const params = rapier.JointData.revolute(
-      positionToVector3(localAnchorA),
-      positionToVector3(localAnchorB),
+      positionToVector3(anchorA),
+      positionToVector3(anchorB),
       positionToVector3(axis).normalize()
     )
     if (limits) {

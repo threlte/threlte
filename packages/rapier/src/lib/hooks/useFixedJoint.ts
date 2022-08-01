@@ -11,7 +11,7 @@ export const useFixedJoint = (
   anchorB: Position,
   frameB: Rotation
 ) => {
-  return useJoint(([rbA, rbB], { world, rapier }) => {
+  return useJoint((rbA, rbB, { world, rapier }) => {
     const params = rapier.JointData.fixed(
       positionToVector3(anchorA),
       rotationToQuaternion(frameA),

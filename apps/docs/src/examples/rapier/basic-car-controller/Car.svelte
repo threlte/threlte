@@ -16,8 +16,9 @@
 	import { Collider, RigidBody, useRapier } from '@threlte/rapier'
 	import { getContext, setContext } from 'svelte'
 	import { BoxBufferGeometry, MeshStandardMaterial, Vector3 } from 'three'
-	import Axle from './Axle.svelte'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import Axle from './Axle.svelte'
+	import { onDestroy } from 'svelte'
 
 	export let position: Position | undefined = undefined
 	export let rotation: Rotation | undefined = undefined
@@ -41,14 +42,28 @@
 		carContext.speed.set(v3.length())
 	})
 
+	const initialIterations = {
+		maxStabilizationIterations: world.maxStabilizationIterations,
+		maxVelocityFrictionIterations: world.maxVelocityFrictionIterations,
+		maxVelocityIterations: world.maxVelocityIterations
+	}
+
 	world.maxStabilizationIterations *= 100
 	world.maxVelocityFrictionIterations *= 100
 	world.maxVelocityIterations *= 100
+
+	onDestroy(() => {
+		world.maxStabilizationIterations = initialIterations.maxStabilizationIterations
+		world.maxVelocityFrictionIterations = initialIterations.maxVelocityFrictionIterations
+		world.maxVelocityIterations = initialIterations.maxVelocityIterations
+	})
 </script>
 
 <Group {position} {rotation}>
 	<RigidBody bind:rigidBody={parentRigidBody} canSleep={false}>
-		<Collider mass={2} shape={'cuboid'} args={[1.25, 0.15, 0.5]} />
+		<Collider mass={1} shape={'cuboid'} args={[1.25, 0.15, 0.5]} />
+
+		<!-- CAR BODY MESH -->
 		<Mesh
 			castShadow
 			geometry={new BoxBufferGeometry(2.5, 0.3, 1)}
@@ -56,11 +71,14 @@
 		/>
 
 		<slot />
-		<HTML rotation={{ y: 90 * DEG2RAD }} transform position={{ y: 1 }}>
-			{($speed * 3.6).toFixed(0)} km/h
+		<HTML rotation={{ y: 90 * DEG2RAD }} transform position={{ x: 2 }}>
+			<p class="text-xs text-black">
+				{($speed * 3.6).toFixed(0)} km/h
+			</p>
 		</HTML>
 	</RigidBody>
 
+	<!-- FRONT AXLES -->
 	<Axle
 		side={'left'}
 		isSteered
@@ -76,6 +94,7 @@
 		anchor={{ x: -1.2, z: -0.8, y: -0.1 }}
 	/>
 
+	<!-- BACK AXLES -->
 	<Axle
 		isDriven
 		side={'left'}
