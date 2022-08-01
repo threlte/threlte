@@ -43,3 +43,4 @@ Tips:
 - Change the motor model from `AccelerationBased` to `ForceBased` (you will need to adapt the power output)
 - Experiment with different wheel collider shapes
 - Increase or decrease the scale of the car
+- Move the axles and observe the maneuverability

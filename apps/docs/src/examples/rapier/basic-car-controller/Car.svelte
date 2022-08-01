@@ -99,7 +99,7 @@
 		isDriven
 		side={'left'}
 		{parentRigidBody}
-		position={{ x: 1.2, z: 0, y: -0.4 }}
+		position={{ x: 1.2, z: 0.8, y: -0.4 }}
 		anchor={{ x: 1.2, z: 0.8, y: -0.4 }}
 	/>
 	<Axle
