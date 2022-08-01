@@ -7,7 +7,7 @@
 <AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>
 	<Mesh
 		receiveShadow
-		geometry={new BoxBufferGeometry(100, 1, 100)}
+		geometry={new BoxBufferGeometry(150, 1, 150)}
 		material={new MeshStandardMaterial()}
 	/>
 </AutoColliders>

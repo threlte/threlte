@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { RigidBody } from '@dimforge/rapier3d-compat'
+
   import { LayerableObject, SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
@@ -12,6 +14,8 @@
   import type { RigidBodyContext, RigidBodyEventMap } from '../../types/types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
+
+  export let debug = false
 
   export let type: NonNullable<RigidBodyProperties['type']> = 'dynamic'
   export let canSleep: NonNullable<RigidBodyProperties['canSleep']> = true
@@ -76,10 +80,12 @@
    */
   const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
 
+  export let rigidBody: RigidBody | undefined = undefined
+
   /**
    * RigidBody init
    */
-  export const rigidBody = world.createRigidBody(desc)
+  export const rigidBodyTemp = world.createRigidBody(desc)
 
   /**
    * Apply transforms after the parent component added "object" to itself
@@ -92,49 +98,55 @@
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
     const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
     const worldQuaternion = getWorldQuaternion(object)
-    rigidBody.setTranslation(worldPosition, true)
-    rigidBody.setRotation(worldQuaternion, true)
+    rigidBodyTemp.setTranslation(worldPosition, true)
+    rigidBodyTemp.setRotation(worldQuaternion, true)
+    if (debug) {
+      console.log('worldPosition', worldPosition)
+      console.log('worldQuaternion', worldQuaternion)
+    }
+    if (debug) console.log(JSON.stringify(desc, null, 2))
+    rigidBody = rigidBodyTemp
   }
   initPosition()
 
   /**
    * Will come in handy in the future for joints
    */
-  object.userData.rigidBody = rigidBody
+  object.userData.rigidBody = rigidBodyTemp
 
   /**
    * Reactive RigidBody properties
    */
   $: {
-    rigidBody.setBodyType(parseRigidBodyType(type))
-    rigidBody.setLinvel(positionToVector3(linearVelocity), true)
-    rigidBody.setAngvel(rotationToEuler(angularVelocity), true)
-    rigidBody.setGravityScale(gravityScale, true)
-    rigidBody.enableCcd(ccd)
-    rigidBody.setDominanceGroup(dominance)
-    rigidBody.lockRotations(lockRotations, true)
-    rigidBody.lockTranslations(lockTranslations, true)
-    rigidBody.setEnabledRotations(...enabledRotations, true)
-    rigidBody.setEnabledTranslations(...enabledTranslations, true)
+    rigidBodyTemp.setBodyType(parseRigidBodyType(type))
+    rigidBodyTemp.setLinvel(positionToVector3(linearVelocity), true)
+    rigidBodyTemp.setAngvel(rotationToEuler(angularVelocity), true)
+    rigidBodyTemp.setGravityScale(gravityScale, true)
+    rigidBodyTemp.enableCcd(ccd)
+    rigidBodyTemp.setDominanceGroup(dominance)
+    rigidBodyTemp.lockRotations(lockRotations, true)
+    rigidBodyTemp.lockTranslations(lockTranslations, true)
+    rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
+    rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
   }
 
   /**
    * Setting the RigidBody context so that colliders can
    * hook onto.
    */
-  setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBody)
+  setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBodyTemp)
 
   /**
    * Add the mesh to the context
    */
-  addRigidBodyToContext(rigidBody, object, dispatcher)
+  addRigidBodyToContext(rigidBodyTemp, object, dispatcher)
 
   /**
    * cleanup
    */
   onDestroy(() => {
-    removeRigidBodyFromContext(rigidBody)
-    world.removeRigidBody(rigidBody)
+    removeRigidBodyFromContext(rigidBodyTemp)
+    world.removeRigidBody(rigidBodyTemp)
   })
 </script>
 

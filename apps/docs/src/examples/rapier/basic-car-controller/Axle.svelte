@@ -1,33 +1,57 @@
 <script lang="ts">
-	import { MotorModel, type RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
+	import type {
+		RevoluteImpulseJoint,
+		RigidBody as RapierRigidBody
+	} from '@dimforge/rapier3d-compat'
 	import { Group, type Position } from '@threlte/core'
-	import { Collider, RigidBody, usePrismaticJoint, useRevoluteJoint } from '@threlte/rapier'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { Collider, RigidBody, useFixedJoint, useRevoluteJoint } from '@threlte/rapier'
+	import { spring } from 'svelte/motion'
+	import { clamp, DEG2RAD, mapLinear } from 'three/src/math/MathUtils'
+	import { useCar } from './Car.svelte'
 	import { useWasd } from './useWasd'
 	import Wheel from './Wheel.svelte'
 
 	export let position: Position | undefined = undefined
 	export let parentRigidBody: RapierRigidBody | undefined = undefined
-	export let anchor: Position | undefined = undefined
+	export let anchor: Position
+	export let isSteered: boolean = false
+	export let isDriven: boolean = false
+	export let side: 'left' | 'right'
 
 	let axleRigidBody: RapierRigidBody
 
 	const wasd = useWasd()
+	const { speed } = useCar()
 
-	const { joint, rigidBodyA, rigidBodyB } = useRevoluteJoint(anchor, {}, { y: 1 })
+	const steeringAngle = spring(mapLinear(clamp($speed / 12, 0, 1), 0, 1, 1, 0.5) * $wasd.x * 15)
+	$: steeringAngle.set(mapLinear(clamp($speed / 12, 0, 1), 0, 1, 1, 0.5) * $wasd.x * 15)
+
+	const { joint, rigidBodyA, rigidBodyB } = isSteered
+		? useRevoluteJoint(anchor, {}, { y: 1 })
+		: useFixedJoint(anchor, {}, {}, {})
 	$: if (parentRigidBody) rigidBodyA.set(parentRigidBody)
 	$: if (axleRigidBody) rigidBodyB.set(axleRigidBody)
 	$: $joint?.setContactsEnabled(false)
-	$: $joint?.configureMotorModel(MotorModel.ForceBased)
-	$: $joint?.configureMotorPosition((($wasd.x * 45) / 4) * DEG2RAD, 10000, 1000)
+	$: if (isSteered) {
+		;($joint as RevoluteImpulseJoint)?.configureMotorPosition(
+			$steeringAngle * -1 * DEG2RAD,
+			1000000,
+			0
+		)
+	}
 </script>
 
 <Group {position}>
 	<RigidBody bind:rigidBody={axleRigidBody}>
-		<!-- <Collider mass={0} shape={'cuboid'} args={[0.03, 0.03, 0.03]} /> -->
+		<Collider mass={2} shape={'cuboid'} args={[0.03, 0.03, 0.03]} />
 	</RigidBody>
 
 	{#if $joint}
-		<Wheel anchor={{ z: 0.2 }} position={{ z: 0.2 }} parentRigidBody={axleRigidBody} />
+		<Wheel
+			{isDriven}
+			anchor={{ z: side === 'left' ? 0.2 : -0.2 }}
+			position={{ z: side === 'left' ? 0.2 : -0.2 }}
+			parentRigidBody={axleRigidBody}
+		/>
 	{/if}
 </Group>

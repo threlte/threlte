@@ -8,7 +8,7 @@
     type RigidBody
   } from '@dimforge/rapier3d-compat'
   import { SceneGraphObject, TransformableObject, useFrame } from '@threlte/core'
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
+  import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useRapier } from '../../hooks/useRapier'
@@ -46,11 +46,14 @@
   export let shape: Shape
   export let args: Args
 
+  export let debug = false
+
   export let position: ColliderProperties<Shape>['position'] = undefined
   export let rotation: ColliderProperties<Shape>['rotation'] = undefined
   export let scale: ColliderProperties<Shape>['scale'] = undefined
   export let lookAt: ColliderProperties<Shape>['lookAt'] = undefined
 
+  export let density: ColliderProperties<Shape>['density'] = undefined
   export let mass: ColliderProperties<Shape>['mass'] = undefined
   export let centerOfMass: ColliderProperties<Shape>['centerOfMass'] = undefined
   export let principalAngularInertia: ColliderProperties<Shape>['principalAngularInertia'] =
@@ -89,12 +92,15 @@
    * Actual collider setup happens onMount as only then
    * the transforms are finished.
    */
-  onMount(() => {
+  onMount(async () => {
+    await tick()
     const scale = object.getWorldScale(new Vector3())
     const scaledArgs = scaleColliderArgs(shape, args, scale)
 
     // @ts-ignore
     const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
+
+    if (debug) console.log(JSON.stringify(colliderDesc, null, 2))
 
     collider = world.createCollider(colliderDesc, rigidBody)
 
@@ -118,12 +124,14 @@
           rigidBodyWorldQuatInversed.invert()
         }
       })
-      collider.setTranslationWrtParent(
-        object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
-      )
-      collider.setRotationWrtParent(
-        object.getWorldQuaternion(new Quaternion()).premultiply(rigidBodyWorldQuatInversed)
-      )
+      const worldPosition = object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
+      const worldRotation = object
+        .getWorldQuaternion(new Quaternion())
+        .premultiply(rigidBodyWorldQuatInversed)
+      collider.setTranslationWrtParent(worldPosition)
+      collider.setRotationWrtParent(worldRotation)
+      if (debug) console.log('worldPosition', worldPosition)
+      if (debug) console.log('worldRotation', worldRotation)
     } else {
       collider.setTranslation(object.getWorldPosition(new Vector3()))
       collider.setRotation(object.getWorldQuaternion(new Quaternion()))
@@ -139,6 +147,8 @@
       collider.setFriction(friction ?? 0.7)
       collider.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
       collider.setSensor(sensor ?? false)
+      if (density) collider.setDensity(density)
+      if (mass) collider.setMass(mass)
 
       const { x: cmx, y: cmy, z: cmz } = positionToVector3(centerOfMass) || new Vector3()
       const {
@@ -148,15 +158,15 @@
       } = positionToVector3(principalAngularInertia) ||
       new Vector3(mass ?? 1 * 0.2, mass ?? 1 * 0.2, mass ?? 1 * 0.2)
 
-      if (mass || centerOfMass || principalAngularInertia) {
-        collider.setDensity(0)
-        collider.setMassProperties(
-          mass ?? 1,
-          { x: cmx, y: cmy, z: cmz },
-          { x: pix, y: piy, z: piz },
-          { x: 0, y: 0, z: 0, w: 1 }
-        )
-      }
+      // if (mass || centerOfMass || principalAngularInertia) {
+      //   collider.setDensity(0)
+      //   collider.setMassProperties(
+      //     mass ?? 1,
+      //     { x: cmx, y: cmy, z: cmz },
+      //     { x: pix, y: piy, z: piz },
+      //     { x: 0, y: 0, z: 0, w: 1 }
+      //   )
+      // }
     }
   }
 

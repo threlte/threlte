@@ -6,6 +6,7 @@ export { useRigidBody } from './hooks/useRigidBody'
 // Joints
 export { useRevoluteJoint } from './hooks/useRevoluteJoint'
 export { usePrismaticJoint } from './hooks/usePrismaticJoint'
+export { useFixedJoint } from './hooks/useFixedJoint'
 
 // components
 export { default as World } from './components/World/World.svelte'
