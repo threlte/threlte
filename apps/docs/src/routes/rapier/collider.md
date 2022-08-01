@@ -36,10 +36,14 @@ If a `<Collider>` component is not a child of a `<RigidBody>` component, the tra
 
 `ColliderDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
 
+If you don't provide any of the properties `density`, `mass` or `massProperties`, Rapier will figure that out for you.
+
+You can provide either a property `density`, `mass` **or** `massProperties`.
+
 ```ts
 // required
 shape:
-		| 'ball'
+    | 'ball'
     | 'capsule'
     | 'segment'
     | 'triangle'
@@ -64,9 +68,15 @@ position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
+density: number | undefined = undefined
 mass: number | undefined = undefined
-centerOfMass: Position | undefined = undefined
-principalAngularInertia: Position | undefined = undefined
+massProperties:
+  | {
+    mass: number
+    centerOfMass: Position
+    principalAngularInertia: Position
+    angularInertiaLocalFrame: Rotation
+  } | undefined = undefined
 restitution: number | undefined = undefined
 restitutionCombineRule: CoefficientCombineRule | undefined = undefined
 friction: number | undefined = undefined
@@ -88,21 +98,21 @@ collider: Collider | undefined
 
 ```ts
 collisionenter: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
-	manifold: TempContactManifold
-	flipped: boolean
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
+  manifold: TempContactManifold
+  flipped: boolean
 }>
 collisionexit: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
 }>
 sensorenter: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
 }>
 sensorexit: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
 }>
 ```

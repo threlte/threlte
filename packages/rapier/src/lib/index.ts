@@ -3,6 +3,12 @@ export { useRapier } from './hooks/useRapier'
 export { useCollisionGroups } from './hooks/useCollisionGroups'
 export { useRigidBody } from './hooks/useRigidBody'
 
+// Joints
+export { useRevoluteJoint } from './hooks/useRevoluteJoint'
+export { usePrismaticJoint } from './hooks/usePrismaticJoint'
+export { useFixedJoint } from './hooks/useFixedJoint'
+export { useSphericalJoint } from './hooks/useSphericalJoint'
+
 // components
 export { default as World } from './components/World/World.svelte'
 export { default as RigidBody } from './components/RigidBody/RigidBody.svelte'
@@ -16,7 +22,6 @@ export { default as BasicPlayerController } from './recipes/BasicPlayerControlle
 
 export type {
   AutoCollidersProperties,
-  ColliderProperties,
   Boolean3Array,
   RigidBodyProperties,
   WorldProperties

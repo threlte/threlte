@@ -42,6 +42,10 @@ If a `<AutoColliders>` component is not a child of a `<RigidBody>` component, th
 
 `AutoCollidersDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
 
+If you don't provide any of the properties `density`, `mass` or `massProperties`, Rapier will figure that out for you.
+
+You can provide either a property `density`, `mass` **or** `massProperties`.
+
 ```ts
 // optional
 shape:
@@ -54,9 +58,15 @@ position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
 lookAt: LookAt | undefined = undefined
+density: number | undefined = undefined
 mass: number | undefined = undefined
-centerOfMass: Position | undefined = undefined
-principalAngularInertia: Position | undefined = undefined
+massProperties:
+  | {
+    mass: number
+    centerOfMass: Position
+    principalAngularInertia: Position
+    angularInertiaLocalFrame: Rotation
+  } | undefined = undefined
 restitution: number | undefined = undefined
 restitutionCombineRule: CoefficientCombineRule | undefined = undefined
 friction: number | undefined = undefined

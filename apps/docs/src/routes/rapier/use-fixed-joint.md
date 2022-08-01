@@ -1,0 +1,40 @@
+---
+title: useFixedJoint
+---
+
+!!!module_summary title=useFixedJoint|sourcePath=/hooks/useFixedJoint.svelte|name=useFixedJoint|from=rapier|type=component
+
+Use this hook to initialize a [`FixedImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint).
+
+```svelte
+<script>
+	import { useFixedJoint, RigidBody, Collider } from '@threlte/rapier'
+
+	const { joint, rigidBodyA, rigidBodyB } = useFixedJoint({ x: 1 }, {}, {x: -1}, {})
+</script>
+
+<RigidBody bind:rigidBody={$rigidBodyA}>
+	<Collider shape="cuboid" args={[1, 1, 1]} />
+</RigidBody>
+
+<RigidBody bind:rigidBody={$rigidBodyB}>
+	<Collider shape="cuboid" args={[1, 1, 1]} />
+</RigidBody>
+```
+
+!!!
+
+### Signature
+
+```ts
+const {
+	joint: Writable<FixedImpulseJoint>
+	rigidBodyA: Writable<RAPIER.RigidBody>
+	rigidBodyB: Writable<RAPIER.RigidBody>
+} = useFixedJoint(
+	anchorA,  // Position
+  frameA,   // Rotation
+  anchorB,  // Position
+  frameB    // Rotation
+)
+```

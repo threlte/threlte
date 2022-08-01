@@ -7,8 +7,15 @@
     ColliderDesc,
     type RigidBody
   } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject, TransformableObject, useFrame } from '@threlte/core'
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
+  import {
+    SceneGraphObject,
+    TransformableObject,
+    useFrame,
+    type Position,
+    type Rotation,
+    type TransformableObjectProperties
+  } from '@threlte/core'
+  import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useRapier } from '../../hooks/useRapier'
@@ -16,8 +23,8 @@
   import { applyTransforms } from '../../lib/applyTransforms'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
   import { positionToVector3 } from '../../lib/positionToVector3'
+  import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
-  import type { ColliderProperties } from '../../types/components'
   import type { ColliderEventMap } from '../../types/types'
 
   type Shape = $$Generic<
@@ -43,23 +50,65 @@
 
   type Args = $$Generic<Parameters<typeof ColliderDesc[Shape]>>
 
-  export let shape: Shape
-  export let args: Args
+  interface Props {
+    shape: Shape
+    args: Args
+    position?: NonNullable<TransformableObjectProperties['position']>
+    rotation?: TransformableObjectProperties['rotation']
+    scale?: NonNullable<TransformableObjectProperties['scale']>
+    lookAt?: NonNullable<TransformableObjectProperties['lookAt']>
+    restitution?: number
+    restitutionCombineRule?: CoefficientCombineRule
+    friction?: number
+    frictionCombineRule?: CoefficientCombineRule
+    sensor?: boolean
+    collider?: Collider
+  }
 
-  export let position: ColliderProperties<Shape>['position'] = undefined
-  export let rotation: ColliderProperties<Shape>['rotation'] = undefined
-  export let scale: ColliderProperties<Shape>['scale'] = undefined
-  export let lookAt: ColliderProperties<Shape>['lookAt'] = undefined
+  type Density = $$Generic<number | undefined>
+  type Mass = $$Generic<Density extends undefined ? number | undefined : undefined>
+  type MassProperties = $$Generic<
+    Density extends undefined
+      ? Mass extends undefined
+        ? {
+            mass: number
+            centerOfMass: Position
+            principalAngularInertia: Position
+            angularInertiaLocalFrame: Rotation
+          }
+        : undefined
+      : undefined
+  >
 
-  export let mass: ColliderProperties<Shape>['mass'] = undefined
-  export let centerOfMass: ColliderProperties<Shape>['centerOfMass'] = undefined
-  export let principalAngularInertia: ColliderProperties<Shape>['principalAngularInertia'] =
-    undefined
-  export let restitution: ColliderProperties<Shape>['restitution'] = undefined
-  export let restitutionCombineRule: ColliderProperties<Shape>['restitutionCombineRule'] = undefined
-  export let friction: ColliderProperties<Shape>['friction'] = undefined
-  export let frictionCombineRule: ColliderProperties<Shape>['frictionCombineRule'] = undefined
-  export let sensor: ColliderProperties<Shape>['sensor'] = undefined
+  interface WithDensity extends Props {
+    density?: Density
+  }
+
+  interface WithMass extends Props {
+    mass?: Mass
+  }
+
+  interface WithMassProperties extends WithMass {
+    massProperties?: MassProperties
+  }
+
+  type $$Props = WithDensity | WithMass | WithMassProperties
+
+  export let shape: $$Props['shape']
+  export let args: $$Props['args']
+  export let position: $$Props['position'] = undefined
+  export let rotation: $$Props['rotation'] = undefined
+  export let scale: $$Props['scale'] = undefined
+  export let lookAt: $$Props['lookAt'] = undefined
+  export let restitution: $$Props['restitution'] = undefined
+  export let restitutionCombineRule: $$Props['restitutionCombineRule'] = undefined
+  export let friction: $$Props['friction'] = undefined
+  export let frictionCombineRule: $$Props['frictionCombineRule'] = undefined
+  export let sensor: $$Props['sensor'] = undefined
+
+  export let density = undefined as Density
+  export let mass = undefined as Mass
+  export let massProperties = undefined as MassProperties
 
   const object = new Object3D()
 
@@ -89,7 +138,8 @@
    * Actual collider setup happens onMount as only then
    * the transforms are finished.
    */
-  onMount(() => {
+  onMount(async () => {
+    await tick()
     const scale = object.getWorldScale(new Vector3())
     const scaledArgs = scaleColliderArgs(shape, args, scale)
 
@@ -118,12 +168,12 @@
           rigidBodyWorldQuatInversed.invert()
         }
       })
-      collider.setTranslationWrtParent(
-        object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
-      )
-      collider.setRotationWrtParent(
-        object.getWorldQuaternion(new Quaternion()).premultiply(rigidBodyWorldQuatInversed)
-      )
+      const worldPosition = object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
+      const worldRotation = object
+        .getWorldQuaternion(new Quaternion())
+        .premultiply(rigidBodyWorldQuatInversed)
+      collider.setTranslationWrtParent(worldPosition)
+      collider.setRotationWrtParent(worldRotation)
     } else {
       collider.setTranslation(object.getWorldPosition(new Vector3()))
       collider.setRotation(object.getWorldQuaternion(new Quaternion()))
@@ -139,24 +189,15 @@
       collider.setFriction(friction ?? 0.7)
       collider.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
       collider.setSensor(sensor ?? false)
-
-      const { x: cmx, y: cmy, z: cmz } = positionToVector3(centerOfMass) || new Vector3()
-      const {
-        x: pix,
-        y: piy,
-        z: piz
-      } = positionToVector3(principalAngularInertia) ||
-      new Vector3(mass ?? 1 * 0.2, mass ?? 1 * 0.2, mass ?? 1 * 0.2)
-
-      if (mass || centerOfMass || principalAngularInertia) {
-        collider.setDensity(0)
+      if (density) collider.setDensity(density)
+      if (mass) collider.setMass(mass)
+      if (massProperties)
         collider.setMassProperties(
-          mass ?? 1,
-          { x: cmx, y: cmy, z: cmz },
-          { x: pix, y: piy, z: piz },
-          { x: 0, y: 0, z: 0, w: 1 }
+          massProperties.mass,
+          positionToVector3(massProperties.centerOfMass),
+          positionToVector3(massProperties.principalAngularInertia),
+          rotationToQuaternion(massProperties.angularInertiaLocalFrame)
         )
-      }
     }
   }
 

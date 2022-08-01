@@ -375,6 +375,42 @@ export const sidebar = {
 			{
 				title: 'useRigidBody',
 				slug: '/rapier/use-rigid-body'
+			},
+			{
+				title: 'Joints',
+				slug: ''
+			},
+			{
+				title: 'About Joints',
+				slug: '/rapier/about-joints'
+			},
+			{
+				title: 'useJoint',
+				slug: '/rapier/use-joint'
+			},
+			{
+				title: 'useFixedJoint',
+				slug: '/rapier/use-fixed-joint'
+			},
+			{
+				title: 'useRevoluteJoint',
+				slug: '/rapier/use-revolute-joint'
+			},
+			{
+				title: 'useSphericalJoint',
+				slug: '/rapier/use-spherical-joint'
+			},
+			{
+				title: 'usePrismaticJoint',
+				slug: '/rapier/use-prismatic-joint'
+			},
+			{
+				title: 'Recipes',
+				slug: ''
+			},
+			{
+				title: 'Basic Vehicle Controller',
+				slug: '/rapier/basic-vehicle-controller'
 			}
 		]
 	}

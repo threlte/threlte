@@ -106,6 +106,8 @@ export type ColliderProperties<Shape extends ColliderShapes> = Omit<
    */
   mass?: number
 
+  density?: number
+
   /**
    * The center of mass of this rigid body
    */
