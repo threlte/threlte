@@ -13,7 +13,7 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Group, Mesh, useFrame, type Position, type Rotation } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { Collider, RigidBody, useRapier } from '@threlte/rapier'
+	import { AutoColliders, Collider, RigidBody, useRapier } from '@threlte/rapier'
 	import { getContext, setContext } from 'svelte'
 	import { BoxBufferGeometry, MeshStandardMaterial, Vector3 } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -61,17 +61,17 @@
 
 <Group {position} {rotation}>
 	<RigidBody bind:rigidBody={parentRigidBody} canSleep={false}>
-		<Collider mass={1} shape={'cuboid'} args={[1.25, 0.15, 0.5]} />
+		<Collider mass={1} shape={'cuboid'} args={[1.25, 0.4, 0.5]} />
 
 		<!-- CAR BODY MESH -->
 		<Mesh
 			castShadow
-			geometry={new BoxBufferGeometry(2.5, 0.3, 1)}
+			geometry={new BoxBufferGeometry(2.5, 0.8, 1)}
 			material={new MeshStandardMaterial()}
 		/>
 
 		<slot />
-		<HTML rotation={{ y: 90 * DEG2RAD }} transform position={{ x: 2 }}>
+		<HTML rotation={{ y: 90 * DEG2RAD }} transform position={{ x: 3 }}>
 			<p class="text-xs text-black">
 				{($speed * 3.6).toFixed(0)} km/h
 			</p>
@@ -83,15 +83,15 @@
 		side={'left'}
 		isSteered
 		{parentRigidBody}
-		position={{ x: -1.2, z: 0.8, y: -0.1 }}
-		anchor={{ x: -1.2, z: 0.8, y: -0.1 }}
+		position={{ x: -1.2, z: 0.8, y: -0.4 }}
+		anchor={{ x: -1.2, z: 0.8, y: -0.4 }}
 	/>
 	<Axle
 		side={'right'}
 		isSteered
 		{parentRigidBody}
-		position={{ x: -1.2, z: -0.8, y: -0.1 }}
-		anchor={{ x: -1.2, z: -0.8, y: -0.1 }}
+		position={{ x: -1.2, z: -0.8, y: -0.4 }}
+		anchor={{ x: -1.2, z: -0.8, y: -0.4 }}
 	/>
 
 	<!-- BACK AXLES -->
@@ -99,14 +99,14 @@
 		isDriven
 		side={'left'}
 		{parentRigidBody}
-		position={{ x: 1.2, z: 0.8 }}
-		anchor={{ x: 1.2, z: 0.8 }}
+		position={{ x: 1.2, z: 0, y: -0.4 }}
+		anchor={{ x: 1.2, z: 0.8, y: -0.4 }}
 	/>
 	<Axle
 		isDriven
 		side={'right'}
 		{parentRigidBody}
-		position={{ x: 1.2, z: -0.8 }}
-		anchor={{ x: 1.2, z: -0.8 }}
+		position={{ x: 1.2, z: -0.8, y: -0.4 }}
+		anchor={{ x: 1.2, z: -0.8, y: -0.4 }}
 	/>
 </Group>

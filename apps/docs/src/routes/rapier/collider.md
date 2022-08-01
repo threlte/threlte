@@ -77,8 +77,6 @@ massProperties:
     principalAngularInertia: Position
     angularInertiaLocalFrame: Rotation
   } | undefined = undefined
-centerOfMass: Position | undefined = undefined
-principalAngularInertia: Position | undefined = undefined
 restitution: number | undefined = undefined
 restitutionCombineRule: CoefficientCombineRule | undefined = undefined
 friction: number | undefined = undefined
