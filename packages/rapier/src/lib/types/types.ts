@@ -55,8 +55,6 @@ export type ColliderEventMap = {
   contact: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
-    manifold: TempContactManifold
-    flipped: boolean
     maxForceDirection: Vector
     maxForceMagnitude: number
     totalForce: Vector
