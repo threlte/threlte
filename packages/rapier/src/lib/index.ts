@@ -33,5 +33,10 @@ export type {
   ColliderEventDispatcher,
   ColliderShapes,
   RapierContext,
-  RigidBodyEventDispatcher
+  RigidBodyEventDispatcher,
+  CollisionEnterEvent,
+  CollisionExitEvent,
+  SensorEnterEvent,
+  SensorExitEvent,
+  ContactEvent
 } from './types/types'
