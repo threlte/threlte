@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.3.2
+
+### Patch Changes
+
+- 45d018d: OrthographicCamera component now accepts all frustum props
+
 ## 4.3.1
 
 ### Patch Changes
