@@ -16,7 +16,11 @@ export const applyColliderActiveEvents = (
     colliderHasEventListeners('collisionenter') ||
     colliderHasEventListeners('collisionexit') ||
     rigidBodyHasEventListeners?.('collisionenter') ||
-    rigidBodyHasEventListeners?.('collisionexit')
+    rigidBodyHasEventListeners?.('collisionexit') ||
+    colliderHasEventListeners('sensorenter') ||
+    colliderHasEventListeners('sensorexit') ||
+    rigidBodyHasEventListeners?.('sensorenter') ||
+    rigidBodyHasEventListeners?.('sensorexit')
   ) {
     events = events | ActiveEvents.COLLISION_EVENTS
   }
