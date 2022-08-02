@@ -109,50 +109,40 @@ export const useFrameHandler = (ctx: RapierContext) => {
       const rigidBody1 = collider1.parent()
       const rigidBody2 = collider2.parent()
 
-      world.contactPair(collider1, collider2, (manifold, flipped) => {
-        // Collider events
-        colliderDispatcher1?.('contact', {
-          flipped,
-          manifold,
-          targetCollider: collider2,
-          targetRigidBody: rigidBody2,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
-        })
-        colliderDispatcher2?.('contact', {
-          flipped,
-          manifold,
-          targetCollider: collider1,
-          targetRigidBody: rigidBody1,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
-        })
+      // Collider events
+      colliderDispatcher1?.('contact', {
+        targetCollider: collider2,
+        targetRigidBody: rigidBody2,
+        maxForceDirection: e.maxForceDirection(),
+        maxForceMagnitude: e.maxForceMagnitude(),
+        totalForce: e.totalForce(),
+        totalForceMagnitude: e.totalForceMagnitude()
+      })
+      colliderDispatcher2?.('contact', {
+        targetCollider: collider1,
+        targetRigidBody: rigidBody1,
+        maxForceDirection: e.maxForceDirection(),
+        maxForceMagnitude: e.maxForceMagnitude(),
+        totalForce: e.totalForce(),
+        totalForceMagnitude: e.totalForceMagnitude()
+      })
 
-        // RigidBody Events
-        rigidBodyDispatcher1?.('contact', {
-          flipped,
-          manifold,
-          targetCollider: collider2,
-          targetRigidBody: rigidBody2,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
-        })
-        rigidBodyDispatcher2?.('contact', {
-          flipped,
-          manifold,
-          targetCollider: collider1,
-          targetRigidBody: rigidBody1,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
-        })
+      // RigidBody Events
+      rigidBodyDispatcher1?.('contact', {
+        targetCollider: collider2,
+        targetRigidBody: rigidBody2,
+        maxForceDirection: e.maxForceDirection(),
+        maxForceMagnitude: e.maxForceMagnitude(),
+        totalForce: e.totalForce(),
+        totalForceMagnitude: e.totalForceMagnitude()
+      })
+      rigidBodyDispatcher2?.('contact', {
+        targetCollider: collider1,
+        targetRigidBody: rigidBody1,
+        maxForceDirection: e.maxForceDirection(),
+        maxForceMagnitude: e.maxForceMagnitude(),
+        totalForce: e.totalForce(),
+        totalForceMagnitude: e.totalForceMagnitude()
       })
     })
 

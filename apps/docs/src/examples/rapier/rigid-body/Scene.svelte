@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {
+		AudioListener,
 		DirectionalLight,
 		Object3DInstance,
 		OrbitControls,
@@ -13,6 +14,7 @@
 
 <PerspectiveCamera position={{ y: 10, z: 10, x: 10 }}>
 	<OrbitControls enableZoom={false} />
+	<AudioListener />
 </PerspectiveCamera>
 
 <DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />

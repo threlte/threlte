@@ -26,7 +26,7 @@
 	let bodies: Body[] = []
 
 	let lastBodyMounted: number = 0
-	let bodyEveryMilliseconds = 50
+	let bodyEveryMilliseconds = 2000
 	let longevityMilliseconds = 8000
 
 	useFrame(() => {

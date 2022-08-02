@@ -10,6 +10,7 @@ To start off, it's best to get yourself comfortable with the [basic concepts of 
 
 :::admonition type="experimental"
 This package is under heavy development and its API is subject to change.
+Also be aware that currently only one Rapier-enabled Threlte instance is possible.
 :::
 
 ### Installation
