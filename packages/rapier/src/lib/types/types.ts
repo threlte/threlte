@@ -4,10 +4,12 @@ import type {
   RigidBodyHandle,
   TempContactManifold,
   ColliderHandle,
-  Collider
+  Collider,
+  Vector
 } from '@dimforge/rapier3d-compat'
 import type { createRapierContext } from '../lib/createRapierContext'
 import type { Writable } from 'svelte/store'
+import type { useHasEventListeners } from '../hooks/useHasEventListener'
 
 export type ColliderShapes =
   | 'ball'
@@ -50,6 +52,16 @@ export type ColliderEventMap = {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
   }
+  contact: {
+    targetCollider: Collider
+    targetRigidBody: RigidBody | null
+    manifold: TempContactManifold
+    flipped: boolean
+    maxForceDirection: Vector
+    maxForceMagnitude: number
+    totalForce: Vector
+    totalForceMagnitude: number
+  }
 }
 
 export type RigidBodyEventMap = ColliderEventMap & {
@@ -67,7 +79,17 @@ export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
 
-export type RigidBodyContext = RigidBody
+export type RigidBodyUserData = {
+  hasEventListeners?: ReturnType<
+    typeof useHasEventListeners<RigidBodyEventDispatcher>
+  >['hasEventListeners']
+}
+
+export type ThrelteRigidBody = RigidBody & {
+  userData?: RigidBodyUserData
+}
+
+export type RigidBodyContext = ThrelteRigidBody
 
 export type CollisionGroupsBitMask = (
   | 0

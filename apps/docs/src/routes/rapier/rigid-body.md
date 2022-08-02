@@ -64,21 +64,31 @@ rigidBody: RigidBody
 sleep: void
 wake: void
 collisionenter: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
-	manifold: TempContactManifold
-	flipped: boolean
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
+  manifold: TempContactManifold
+  flipped: boolean
 }>
 collisionexit: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
 }>
 sensorenter: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
 }>
 sensorexit: CustomEvent<{
-	targetCollider: Collider
-	targetRigidBody: RigidBody | null
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
+}>
+contact: CustomEvent<{
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
+  manifold: TempContactManifold
+  flipped: boolean
+  maxForceDirection: Vector
+  maxForceMagnitude: number
+  totalForce: Vector
+  totalForceMagnitude: number
 }>
 ```

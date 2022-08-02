@@ -49,11 +49,11 @@ You can provide either a property `density`, `mass` **or** `massProperties`.
 ```ts
 // optional
 shape:
-	| 'cuboid'
-	| 'ball'
-	| 'capsule'
-	| 'trimesh'
-	| 'convexHull' = 'convexHull'
+  | 'cuboid'
+  | 'ball'
+  | 'capsule'
+  | 'trimesh'
+  | 'convexHull' = 'convexHull'
 position: Position | undefined = undefined
 scale: Scale | undefined = undefined
 rotation: Rotation | undefined = undefined
@@ -72,6 +72,7 @@ restitutionCombineRule: CoefficientCombineRule | undefined = undefined
 friction: number | undefined = undefined
 frictionCombineRule: CoefficientCombineRule | undefined = undefined
 sensor: boolean | undefined = undefined
+contactForceEventThreshold: number | undefined = undefined
 ```
 
 ### Bindings
@@ -88,21 +89,31 @@ colliders: Colliders[]
 
 ```ts
 collisionenter: CustomEvent<{
-	targetAutoColliders: AutoColliders
-	targetRigidBody: RigidBody | null
-	manifold: TempContactManifold
-	flipped: boolean
+  targetAutoColliders: AutoColliders
+  targetRigidBody: RigidBody | null
+  manifold: TempContactManifold
+  flipped: boolean
 }>
 collisionexit: CustomEvent<{
-	targetAutoColliders: AutoColliders
-	targetRigidBody: RigidBody | null
+  targetAutoColliders: AutoColliders
+  targetRigidBody: RigidBody | null
 }>
 sensorenter: CustomEvent<{
-	targetAutoColliders: AutoColliders
-	targetRigidBody: RigidBody | null
+  targetAutoColliders: AutoColliders
+  targetRigidBody: RigidBody | null
 }>
 sensorexit: CustomEvent<{
-	targetAutoColliders: AutoColliders
-	targetRigidBody: RigidBody | null
+  targetAutoColliders: AutoColliders
+  targetRigidBody: RigidBody | null
+}>
+contact: CustomEvent<{
+  targetCollider: Collider
+  targetRigidBody: RigidBody | null
+  manifold: TempContactManifold
+  flipped: boolean
+  maxForceDirection: Vector
+  maxForceMagnitude: number
+  totalForce: Vector
+  totalForceMagnitude: number
 }>
 ```
