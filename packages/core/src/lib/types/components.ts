@@ -102,6 +102,10 @@ export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'
 export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
   near?: number
   far?: number
+  left?: number
+  right?: number
+  top?: number
+  bottom?: number
   zoom?: number
 }
 
