@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 0.2.0
+
+### Minor Changes
+
+- 73b533d: Added contact force events and streamlined event management
+
+### Patch Changes
+
+- 7d46de2: sensors need events too!
+
 ## 0.1.0
 
 ### Minor Changes
