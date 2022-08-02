@@ -4,6 +4,7 @@
   import { LayerableObject, SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
+  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { applyTransforms } from '../../lib/applyTransforms'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
@@ -11,7 +12,12 @@
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToEuler } from '../../lib/rotationToEuler'
   import type { RigidBodyProperties } from '../../types/components'
-  import type { RigidBodyContext, RigidBodyEventMap } from '../../types/types'
+  import type {
+    RigidBodyContext,
+    RigidBodyEventMap,
+    RigidBodyUserData,
+    ThrelteRigidBody
+  } from '../../types/types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -46,7 +52,9 @@
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = RigidBodyEventMap
+  type $$Events = {
+    [key in keyof RigidBodyEventMap]: CustomEvent<RigidBodyEventMap[key]>
+  }
   const dispatcher = createEventDispatcher<RigidBodyEventMap>()
 
   const object = new Object3D()
@@ -80,12 +88,15 @@
    */
   const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
 
+  /**
+   * Export the rigidBody only after positional initialization
+   */
   export let rigidBody: RigidBody | undefined = undefined
 
   /**
-   * RigidBody init
+   * Temporary RigidBody init
    */
-  export const rigidBodyTemp = world.createRigidBody(desc)
+  const rigidBodyTemp = world.createRigidBody(desc) as ThrelteRigidBody
 
   /**
    * Apply transforms after the parent component added "object" to itself
@@ -128,6 +139,14 @@
     rigidBodyTemp.lockTranslations(lockTranslations, true)
     rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
     rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
+  }
+
+  /**
+   * Add userData to the rigidBody
+   */
+  const { hasEventListeners } = useHasEventListeners<typeof dispatcher>()
+  rigidBodyTemp.userData = {
+    hasEventListeners
   }
 
   /**

@@ -82,6 +82,7 @@ restitutionCombineRule: CoefficientCombineRule | undefined = undefined
 friction: number | undefined = undefined
 frictionCombineRule: CoefficientCombineRule | undefined = undefined
 sensor: boolean | undefined = undefined
+contactForceEventThreshold: number | undefined = undefined
 ```
 
 ### Bindings
@@ -114,5 +115,15 @@ sensorenter: CustomEvent<{
 sensorexit: CustomEvent<{
   targetCollider: Collider
   targetRigidBody: RigidBody | null
+}>
+contact: CustomEvent<{
+	targetCollider: Collider
+	targetRigidBody: RigidBody | null
+	manifold: TempContactManifold
+	flipped: boolean
+	maxForceDirection: Vector
+	maxForceMagnitude: number
+	totalForce: Vector
+	totalForceMagnitude: number
 }>
 ```

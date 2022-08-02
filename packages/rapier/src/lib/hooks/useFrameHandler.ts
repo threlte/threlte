@@ -1,4 +1,4 @@
-import { EventQueue } from '@dimforge/rapier3d-compat'
+import { Collider, EventQueue } from '@dimforge/rapier3d-compat'
 import { useFrame } from '@threlte/core'
 import { Object3D, Quaternion, Vector3 } from 'three'
 import type { RapierContext } from '../types/types'
@@ -6,6 +6,28 @@ import type { RapierContext } from '../types/types'
 const tempObject = new Object3D()
 const tempVector3 = new Vector3()
 const tempQuaternion = new Quaternion()
+
+const getEventDispatchers = (ctx: RapierContext, collider1: Collider, collider2: Collider) => {
+  const colliderDispatcher1 = ctx.colliderEventDispatchers.get(collider1.handle)
+  const colliderDispatcher2 = ctx.colliderEventDispatchers.get(collider2.handle)
+
+  const rigidBody1 = collider1.parent()
+  const rigidBody2 = collider2.parent()
+
+  const rigidBodyDispatcher1 = rigidBody1
+    ? ctx.rigidBodyEventDispatchers.get(rigidBody1.handle)
+    : undefined
+  const rigidBodyDispatcher2 = rigidBody2
+    ? ctx.rigidBodyEventDispatchers.get(rigidBody2.handle)
+    : undefined
+
+  return {
+    colliderDispatcher1,
+    colliderDispatcher2,
+    rigidBodyDispatcher1,
+    rigidBodyDispatcher2
+  }
+}
 
 export const useFrameHandler = (ctx: RapierContext) => {
   const eventQueue = new EventQueue(false)
@@ -68,6 +90,72 @@ export const useFrameHandler = (ctx: RapierContext) => {
       mesh.rotation.setFromRotationMatrix(tempObject.matrix)
     })
 
+    eventQueue.drainContactForceEvents((e) => {
+      const collider1 = world.getCollider(e.collider1())
+      const collider2 = world.getCollider(e.collider2())
+
+      // Sanity check
+      if (!collider1 || !collider2) {
+        return
+      }
+
+      const {
+        colliderDispatcher1,
+        colliderDispatcher2,
+        rigidBodyDispatcher1,
+        rigidBodyDispatcher2
+      } = getEventDispatchers(ctx, collider1, collider2)
+
+      const rigidBody1 = collider1.parent()
+      const rigidBody2 = collider2.parent()
+
+      world.contactPair(collider1, collider2, (manifold, flipped) => {
+        // Collider events
+        colliderDispatcher1?.('contact', {
+          flipped,
+          manifold,
+          targetCollider: collider2,
+          targetRigidBody: rigidBody2,
+          maxForceDirection: e.maxForceDirection(),
+          maxForceMagnitude: e.maxForceMagnitude(),
+          totalForce: e.totalForce(),
+          totalForceMagnitude: e.totalForceMagnitude()
+        })
+        colliderDispatcher2?.('contact', {
+          flipped,
+          manifold,
+          targetCollider: collider1,
+          targetRigidBody: rigidBody1,
+          maxForceDirection: e.maxForceDirection(),
+          maxForceMagnitude: e.maxForceMagnitude(),
+          totalForce: e.totalForce(),
+          totalForceMagnitude: e.totalForceMagnitude()
+        })
+
+        // RigidBody Events
+        rigidBodyDispatcher1?.('contact', {
+          flipped,
+          manifold,
+          targetCollider: collider2,
+          targetRigidBody: rigidBody2,
+          maxForceDirection: e.maxForceDirection(),
+          maxForceMagnitude: e.maxForceMagnitude(),
+          totalForce: e.totalForce(),
+          totalForceMagnitude: e.totalForceMagnitude()
+        })
+        rigidBodyDispatcher2?.('contact', {
+          flipped,
+          manifold,
+          targetCollider: collider1,
+          targetRigidBody: rigidBody1,
+          maxForceDirection: e.maxForceDirection(),
+          maxForceMagnitude: e.maxForceMagnitude(),
+          totalForce: e.totalForce(),
+          totalForceMagnitude: e.totalForceMagnitude()
+        })
+      })
+    })
+
     // Collision events
     eventQueue.drainCollisionEvents((handle1, handle2, started) => {
       const collider1 = world.getCollider(handle1)
@@ -78,18 +166,15 @@ export const useFrameHandler = (ctx: RapierContext) => {
         return
       }
 
-      const colliderDispatcher1 = ctx.colliderEventDispatchers.get(collider1.handle)
-      const colliderDispatcher2 = ctx.colliderEventDispatchers.get(collider2.handle)
+      const {
+        colliderDispatcher1,
+        colliderDispatcher2,
+        rigidBodyDispatcher1,
+        rigidBodyDispatcher2
+      } = getEventDispatchers(ctx, collider1, collider2)
 
       const rigidBody1 = collider1.parent()
       const rigidBody2 = collider2.parent()
-
-      const rigidBodyDispatcher1 = rigidBody1
-        ? ctx.rigidBodyEventDispatchers.get(rigidBody1.handle)
-        : undefined
-      const rigidBodyDispatcher2 = rigidBody2
-        ? ctx.rigidBodyEventDispatchers.get(rigidBody2.handle)
-        : undefined
 
       if (started) {
         // intersections are triggered by sensors

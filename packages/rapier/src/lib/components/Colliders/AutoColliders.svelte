@@ -10,8 +10,10 @@
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Object3D } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
+  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
+  import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { applyTransforms } from '../../lib/applyTransforms'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { positionToVector3 } from '../../lib/positionToVector3'
@@ -30,6 +32,7 @@
     frictionCombineRule?: CoefficientCombineRule
     sensor?: boolean
     colliders?: Collider[]
+    contactForceEventThreshold?: number
   }
 
   type Density = $$Generic<number | undefined>
@@ -72,6 +75,7 @@
   export let friction: $$Props['friction'] = undefined
   export let frictionCombineRule: $$Props['frictionCombineRule'] = undefined
   export let sensor: $$Props['sensor'] = undefined
+  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] = undefined
 
   export let density = undefined as Density
   export let mass = undefined as Mass
@@ -85,7 +89,7 @@
   applyTransforms(object, position, rotation, scale, lookAt)
   object.updateWorldMatrix(true, false)
 
-  const rigidBody = useRigidBody() as RigidBody | undefined
+  const rigidBody = useRigidBody()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
@@ -96,8 +100,12 @@
   /**
    * Events setup
    */
-  type $$Events = ColliderEventMap
+  type $$Events = {
+    [key in keyof ColliderEventMap]: CustomEvent<ColliderEventMap[key]>
+  }
   const dispatcher = createEventDispatcher<ColliderEventMap>()
+
+  const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
   onMount(() => {
     colliders = createCollidersFromChildren(object, shape ?? 'convexHull', world, rigidBody)
@@ -108,13 +116,18 @@
   $: {
     if (colliders.length > 0) {
       colliders.forEach((collider) => {
-        collider.setActiveEvents(ActiveEvents.COLLISION_EVENTS)
+        applyColliderActiveEvents(
+          collider,
+          colliderHasEventListeners,
+          rigidBody?.userData?.hasEventListeners
+        )
         collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
         collider.setRestitution(restitution ?? 0)
         collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
         collider.setFriction(friction ?? 0.7)
         collider.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
         collider.setSensor(sensor ?? false)
+        collider.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
         if (density) collider.setDensity(density)
         if (mass) collider.setMass(mass)
         if (massProperties)
