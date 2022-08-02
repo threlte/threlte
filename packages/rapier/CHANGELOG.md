@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 0.3.0
+
+### Minor Changes
+
+- 1a0f305: removed properties "manifold" and "flipped" from contact force event
+
+### Patch Changes
+
+- 291af9b: Exporting rapier event types for easier method typing
+
 ## 0.2.0
 
 ### Minor Changes
