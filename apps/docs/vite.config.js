@@ -9,7 +9,6 @@ const config = {
 	legacy: { buildSsrCjsExternalHeuristics: true },
 	optimizeDeps: {
 		include: [
-			'detype',
 			'codemirror',
 			'codemirror/mode/javascript/javascript.js',
 			'codemirror/mode/handlebars/handlebars.js',
