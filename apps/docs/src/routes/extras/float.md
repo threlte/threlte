@@ -20,6 +20,8 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 @[code svelte|title=Blob.svelte](../../examples/extras/float/Blob.svelte)
 &&&
 
+
+[Open In Playground](/playground/extras/float)
 !!!
 
 ### Examples

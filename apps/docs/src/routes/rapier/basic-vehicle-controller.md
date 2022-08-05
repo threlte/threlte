@@ -34,6 +34,9 @@ The property `dominance` on `<RigidBody>` components can be used to make objects
 @[code svelte|title=Wrapper.svelte](../../examples/rapier/basic-car-controller/Wrapper.svelte)
 &&&
 
+[Open In Playground](/playground/rapier/basic-car-controller)
+
+
 Tips:
 
 - Experiment with front wheel drive or all wheel drive (property `isDriven` on `<Axle>` component)

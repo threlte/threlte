@@ -24,6 +24,8 @@ This component provides the basic physics context and loads [rapier](https://rap
 @[code svelte|title=Ground.svelte](../../examples/rapier/world/Ground.svelte)
 &&&
 
+[Open In Playground](/playground/rapier/world)
+
 !!!
 
 ### Structure

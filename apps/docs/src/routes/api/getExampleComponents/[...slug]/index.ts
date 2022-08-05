@@ -8,6 +8,7 @@ export async function get({ params }: { params: Record<string, string> }) {
 	const dir = `./src/examples/${slug}`
 
 	const filePaths = fs.readdirSync(dir)
+	console.log(filePaths)
 
 	const componentsPromises = filePaths.map(async (filePath) => {
 		let componentContent = fs.readFileSync(`./src/examples/${slug}/${filePath}`, {

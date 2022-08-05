@@ -24,6 +24,8 @@ Note that rigid-bodies are only responsible for the dynamics and kinematics of t
 @[code svelte|title=Particle.svelte](../../examples/rapier/rigid-body/Particle.svelte)
 &&&
 
+[Open In Playground](/playground/rapier/rigid-body)
+
 !!!
 
 ### Properties

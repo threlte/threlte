@@ -18,11 +18,11 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 </ExampleWrapper>
 
 &&&code_wrapper
-
 @[code svelte|title=Wrapper.svelte](../../examples/transform-controls/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../examples/transform-controls/Scene.svelte)
-
 &&&
+
+[Open In Playground](/playground/transform-controls)
 
 !!!
 

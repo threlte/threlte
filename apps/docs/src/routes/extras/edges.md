@@ -23,6 +23,8 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
+[Open In Playground](/playground/edges)
+
 !!!
 
 ### Example

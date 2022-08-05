@@ -26,6 +26,8 @@ Colliders represent the geometric shapes that generate contacts and collision ev
 @[code svelte|title=Sensor.svelte](../../examples/rapier/collider/Sensor.svelte)
 &&&
 
+[Open In Playground](/playground/rapier/collider)
+
 !!!
 
 ### Transform Properties
