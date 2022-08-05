@@ -2,6 +2,19 @@
 	import type { Load } from '@sveltejs/kit'
 
 	export const load: Load = async ({ params, fetch }) => {
+		if (!params.slug) {
+			return {
+				props: {
+					components: [
+						{
+							name: 'App',
+							type: 'svelte',
+							source: 'Hello World'
+						}
+					]
+				}
+			}
+		}
 		const a = await fetch(`/api/getExampleComponents/${params.slug}`, {})
 		const props = await a.json()
 		return {
