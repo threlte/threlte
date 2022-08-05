@@ -19,6 +19,8 @@ Draw Lines using `THREE.Line2`.
 @[code svelte|title=Scene.svelte](../../examples/line-2/Scene.svelte)
 &&&
 
+[Open In Playground](/playground/line-2)
+
 !!!
 
 ### Example

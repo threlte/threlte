@@ -21,6 +21,8 @@ Provide either `points` or a `geometry` to draw lines.
 @[code svelte|title=Scene.svelte](../../examples/line/Scene.svelte)
 &&&
 
+[Open In Playground](/playground/line)
+
 !!!
 
 ### Example

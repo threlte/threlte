@@ -29,6 +29,8 @@ See the hook [`useGltfAnimations`](/extras/use-gltf-animations) on how to use an
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
+[Open In Playground](/playground/gltf)
+
 !!!
 
 ### Interaction

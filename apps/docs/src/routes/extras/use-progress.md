@@ -20,6 +20,8 @@ Convenience hook that wraps `THREE.DefaultLoadingManager`.
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
+[Open In Playground](/playground/use-progress)
+
 !!!
 
 ### Examples <!-- omit in toc -->

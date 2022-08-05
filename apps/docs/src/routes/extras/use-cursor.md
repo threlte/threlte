@@ -20,6 +20,8 @@ If a context is present, the cursor property will be set on the DOM element of t
 @[code svelte|title=Scene.svelte](../../examples/extras/use-cursor/Scene.svelte)
 &&&
 
+[Open In Playground](/playground/extras/use-cursor)
+
 !!!
 
 ## Examples <!-- omit in toc -->

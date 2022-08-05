@@ -28,6 +28,8 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 @[code svelte|title=Scene.svelte](../../examples/extras/html/Scene.svelte)
 &&&
 
+[Open In Playground](/playground/extras/html)
+
 !!!
 
 ### Examples

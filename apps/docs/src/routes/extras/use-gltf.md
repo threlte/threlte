@@ -16,13 +16,13 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
 </ExampleWrapper>
 
 &&&code_wrapper
-
 @[code svelte|title=Wrapper.svelte](../../examples/use-gltf/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../examples/use-gltf/Scene.svelte)
-
 &&&
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
+
+[Open In Playground](/playground/use-gltf)
 
 !!!
 

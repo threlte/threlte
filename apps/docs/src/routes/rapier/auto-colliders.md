@@ -31,6 +31,8 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
+[Open In Playground](/playground/rapier/auto-colliders)
+
 !!!
 
 ### Transform Properties

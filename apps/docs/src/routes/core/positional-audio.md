@@ -18,8 +18,6 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
   <Wrapper />
 </ExampleWrapper>
 
-[Open In Playground](/playground/audio)
-
 &&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../examples/audio/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../examples/audio/Scene.svelte)
@@ -27,10 +25,11 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 @[code svelte|title=Disc.svelte](../../examples/audio/Disc.svelte)
 @[code svelte|title=Button.svelte](../../examples/audio/Button.svelte)
 @[code svelte|title=Speaker.svelte](../../examples/audio/Speaker.svelte)
-
 &&&
 
 <small>Music: <a href="https://legrisch.com" target="_blank">legrisch</a></small>
+
+[Open In Playground](/playground/audio)
 
 !!!
 

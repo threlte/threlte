@@ -20,6 +20,8 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 <small>Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen Fox](https://artstation.com/glenatron), CC Attribution.</small>
 
+[Open In Playground](/playground/use-gltf-animations)
+
 !!!
 
 ### Examples <!-- omit in toc -->
