@@ -1,4 +1,3 @@
-import { navigating } from '$app/stores'
 import type { SphericalImpulseJoint } from '@dimforge/rapier3d-compat'
 import type { Position } from '@threlte/core'
 import { positionToVector3 } from '../lib/positionToVector3'
@@ -14,4 +13,3 @@ export const useSphericalJoint = (anchorA: Position, anchorB: Position) => {
     return world.createImpulseJoint(params, rbA, rbB, true) as SphericalImpulseJoint
   })
 }
-navigating
