@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { extname, parse } from 'path'
-import { transformer } from 'svelte-preprocess/dist/transformers/typescript'
+import { transformer } from 'svelte-preprocess/dist/transformers/typescript.js'
 
 export async function get({ params }: { params: Record<string, string> }) {
 	const { slug } = params
