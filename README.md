@@ -19,7 +19,7 @@ Visit [threlte.xyz](https://threlte.xyz)
 
 **[`@threlte/extras`](https://github.com/threlte/threlte/tree/main/packages/extras)** - components, helpers, hooks and more that extend the core functionality
 
-**[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the Rapier physics engine in Threlte
+**[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the [Rapier physics engine](https://rapier.rs/) in Threlte
 
 ## Getting help
 
