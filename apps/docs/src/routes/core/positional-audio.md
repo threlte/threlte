@@ -18,6 +18,8 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
   <Wrapper />
 </ExampleWrapper>
 
+[Open In Playground](/playground/audio)
+
 &&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../examples/audio/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../examples/audio/Scene.svelte)
