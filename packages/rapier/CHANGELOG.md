@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.3.1
+
+### Patch Changes
+
+- 9d29fc0: removed unused variable
+
 ## 0.3.0
 
 ### Minor Changes
