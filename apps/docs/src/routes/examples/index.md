@@ -6,25 +6,18 @@ title: Examples
 
 🛠️ Help wanted! We'd love your help to make, add to and edit our examples. Read through the [contributing guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) to get started.
 
-## Input
-
-- [Mouse & Keyboard](./examples/template) (WIP)
-- [Mobile](./examples/template) (WIP)
-- [Controllers](./examples/template) (WIP)
-
 ## Animation
 
-- [Transitions between animations](./examples/template) (WIP)
+- [Transitions between animations](./animationTransitions.md) (WIP)
 
 ## Camera
 
-- [Following an object](./examples/template) (WIP)
-- [Making a 1st person controller](./examples/template) (WIP)
-- [Top-down views](./examples/template) (WIP)
+- [Following an object](./template.md) (WIP)
+- [Top-down views a set distance from terrain](./template.md) (WIP)
 
 ## Geometry
 
-- [Terrain with 3D noise](./examples/template) (WIP)
+- [Terrain with 3D noise](./template.md) (WIP)
 - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example)
 
 ## Interactivity
