@@ -9,7 +9,34 @@
 						{
 							name: 'App',
 							type: 'svelte',
-							source: 'Hello World'
+							source:
+								'<sc' +
+								'ript>\n' +
+								"  import Scene from './Scene.svelte'\n" +
+								"  import { Canvas } from '@threlte/core'\n</sc" +
+								'ript>\n\n' +
+								'<Canvas>\n' +
+								'  <Scene />\n' +
+								'</Canvas>'
+						},
+						{
+							name: 'Scene',
+							type: 'svelte',
+							source:
+								'<sc' +
+								'ript>\n' +
+								"  import { Mesh } from '@threlte/core'\n" +
+								"  import { BoxBufferGeometry, MeshBasicMaterial, Color } from 'three'\n" +
+								'</sc' +
+								'ript>\n\n' +
+								'<Mesh \n' +
+								'  rotation={{ x: 20 * Math.PI / 180, y: 30 * Math.PI / 180 }}\n' +
+								'  geometry={new BoxBufferGeometry(1, 1, 1)}\n' +
+								'  material={new MeshBasicMaterial({\n' +
+								"    color: new Color('#FF3E00').convertSRGBToLinear(),\n" +
+								'    wireframe: true\n' +
+								'  })}\n' +
+								'/>'
 						}
 					]
 				}
@@ -26,9 +53,9 @@
 </script>
 
 <script lang="ts">
-	import '../styles/fonts.css'
-	import '../styles/editor.css'
 	import Repl from '@sveltejs/svelte-repl'
+	import '../styles/editor.css'
+	import '../styles/fonts.css'
 
 	import { browser } from '$app/env'
 	import { onMount } from 'svelte'
@@ -49,11 +76,10 @@
 		})
 	})
 
+	let fileInputEl: HTMLInputElement | undefined = undefined
 	let blobUrl: string | undefined = undefined
-
 	let title = 'Hello World'
-
-	let files: any
+	let files: HTMLInputElement['files']
 
 	const onChange = async (
 		e: CustomEvent<{
@@ -116,7 +142,6 @@
 		const string = new TextDecoder().decode(decompressed)
 		const data = JSON.parse(string)
 		title = data.title
-		console.log(data)
 
 		repl.set({
 			css: `body, html { margin: 0; }`,
@@ -127,25 +152,45 @@
 	$: if (files && files[0]) importFile()
 </script>
 
-<h1>
-	Threlte Playground –
-	<span contenteditable bind:innerHTML={title} />
-</h1>
+<div class="w-full h-screen flex flex-col">
+	<div
+		class="p-4 flex flex-col 992:flex-row items-start gap-4 992:gap-0 992:items-center 992:justify-between prose"
+	>
+		<div class="flex flex-row items-center gap-4">
+			<img class="h-8 block !m-0" src="/logo/threlte-logo-icon-only.png" alt="logo" />
+			<h2 class="block !m-0 !p-0">
+				Playground –
+				<span contenteditable bind:innerHTML={title} />
+			</h2>
+		</div>
 
-<input type="file" bind:files />
-
-<button on:click={exportFile}> Download Scene </button>
-
-{#if browser}
-	<div class="h-screen h-[100lvh] w-screen absolute border-t border-gray-300 mt-8">
-		<Repl
-			on:change={onChange}
-			workersUrl="/workers"
-			embedded
-			relaxed
-			injectedCSS={`body, html { margin: 0; }`}
-			orientation="columns"
-			bind:this={repl}
-		/>
+		<div class="flex flex-row items-center gap-4 justify-end">
+			<input bind:this={fileInputEl} class="hidden" type="file" bind:files />
+			<button
+				class="text-sm rounded-md shadow-md border border-gray-divider px-4 bg-gray-body hover:bg-gray-hover pointer-events-auto"
+				on:click={() => {
+					if (!fileInputEl) return
+					fileInputEl.click()
+				}}>Import Scene</button
+			>
+			<button
+				class="text-sm rounded-md shadow-md border border-gray-divider px-4 bg-gray-body hover:bg-gray-hover pointer-events-auto"
+				on:click={exportFile}>Export Scene</button
+			>
+		</div>
 	</div>
-{/if}
+
+	{#if browser}
+		<div class="w-full border-t border-gray-300 flex-1">
+			<Repl
+				on:change={onChange}
+				workersUrl="/workers"
+				embedded
+				relaxed
+				injectedCSS={`body, html { margin: 0; }`}
+				orientation="columns"
+				bind:this={repl}
+			/>
+		</div>
+	{/if}
+</div>
