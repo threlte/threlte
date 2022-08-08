@@ -150,18 +150,23 @@
 	}
 
 	$: if (files && files[0]) importFile()
+	const rootUrl = browser ? window.location.origin : undefined
 </script>
 
 <div class="w-full h-screen flex flex-col">
 	<div
-		class="p-4 flex flex-col 992:flex-row items-start gap-4 992:gap-0 992:items-center 992:justify-between prose"
+		class="p-4 flex flex-col 992:flex-row items-start gap-4 992:gap-0 992:items-center 992:justify-between"
 	>
 		<div class="flex flex-row items-center gap-4">
-			<img class="h-8 block !m-0" src="/logo/threlte-logo-icon-only.png" alt="logo" />
-			<h2 class="block !m-0 !p-0">
-				Playground –
-				<span contenteditable bind:innerHTML={title} />
-			</h2>
+			<a href={rootUrl}>
+				<img class="h-8 block !m-0" src="/logo/threlte-logo-icon-only.png" alt="logo" />
+			</a>
+			<div class="prose">
+				<h2 class="block !m-0 !p-0">
+					Playground –
+					<span contenteditable bind:innerHTML={title} />
+				</h2>
+			</div>
 		</div>
 
 		<div class="flex flex-row items-center gap-4 justify-end">
