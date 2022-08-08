@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { extname, parse } from 'path'
-import { transformer } from 'svelte-preprocess/dist/transformers/typescript.js'
+import processor from 'svelte-preprocess'
+import { preprocess } from 'svelte/compiler'
 
 export async function get({ params }: { params: Record<string, string> }) {
 	const { slug } = params
@@ -8,41 +9,45 @@ export async function get({ params }: { params: Record<string, string> }) {
 	const dir = `./src/examples/${slug}`
 
 	const filePaths = fs.readdirSync(dir)
-	console.log(filePaths)
 
 	const componentsPromises = filePaths.map(async (filePath) => {
-		let componentContent = fs.readFileSync(`./src/examples/${slug}/${filePath}`, {
+		const componentContent = fs.readFileSync(`./src/examples/${slug}/${filePath}`, {
 			encoding: 'utf-8'
 		})
 
-		const regex = /(?<=<script lang="ts">)(.*)(?=<\/script>)/gms
-
-		const scriptContent = componentContent.match(regex)
-		if (scriptContent && scriptContent.length) {
-			const transformed = await transformer({
-				content: scriptContent[0],
-				filename: 'filepath',
-				options: {
-					compilerOptions: {
-						sourceMap: false
-					},
-					stripIndent: false
+		const result = await preprocess(
+			componentContent,
+			[
+				processor({
+					typescript: {
+						compilerOptions: {
+							target: 'es2020',
+							module: 'es2020',
+							strict: false,
+							esModuleInterop: true,
+							jsx: 'preserve',
+							moduleResolution: 'node'
+						}
+					}
+				}),
+				{
+					script: ({ content }) => {
+						const c = '\n    ' + content.replaceAll('\n', '\n    ').trim() + '\n'
+						return {
+							code: c
+						}
+					}
 				}
-			})
-
-			const transpiledCode = transformed.code
-				.replaceAll(/(\r\n|\r|\n)/g, '\n  ')
-				.replace(/^.*sourceMappingURL.*$/gm, '')
-				.trim()
-
-			componentContent = componentContent.replace(regex, '\n  ' + transpiledCode + '\n')
-			componentContent = componentContent.replace('<script lang="ts">', '<script>')
-		}
+			],
+			{
+				filename: filePath
+			}
+		)
 
 		return {
 			name: parse(filePath).name === 'Wrapper' ? 'App' : parse(filePath).name,
 			type: extname(filePath).substring(1),
-			source: componentContent
+			source: result.code
 		}
 	})
 
