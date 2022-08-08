@@ -23,20 +23,24 @@
 							name: 'Scene',
 							type: 'svelte',
 							source:
-								'<sc' +
-								'ript>\n' +
-								"  import { Mesh } from '@threlte/core'\n" +
-								"  import { BoxBufferGeometry, MeshBasicMaterial, Color } from 'three'\n" +
-								'</sc' +
-								'ript>\n\n' +
-								'<Mesh \n' +
-								'  rotation={{ x: 20 * Math.PI / 180, y: 30 * Math.PI / 180 }}\n' +
-								'  geometry={new BoxBufferGeometry(1, 1, 1)}\n' +
-								'  material={new MeshBasicMaterial({\n' +
-								"    color: new Color('#FF3E00').convertSRGBToLinear(),\n" +
-								'    wireframe: true\n' +
-								'  })}\n' +
-								'/>'
+								`<scr` +
+								`ipt>
+	import { Mesh, OrbitControls, PerspectiveCamera } from '@threlte/core'
+	import { BoxBufferGeometry, MeshBasicMaterial, Color } from 'three'
+</scr` +
+								`ipt>
+
+<PerspectiveCamera position={{ x: 5, y: 5 }}>
+	<OrbitControls autoRotate />
+</PerspectiveCamera>
+
+<Mesh
+	geometry={new BoxBufferGeometry(1, 1, 1)}
+	material={new MeshBasicMaterial({
+		color: new Color('#FF3E00').convertSRGBToLinear(),
+		wireframe: true
+	})}
+/>`
 						}
 					]
 				}
