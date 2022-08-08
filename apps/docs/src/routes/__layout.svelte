@@ -21,6 +21,7 @@
 		KitDocs,
 		KitDocsLayout
 	} from '@svelteness/kit-docs'
+	// @ts-ignore no types available
 	import { Algolia } from '@svelteness/kit-docs/client/algolia'
 	import DiscordIcon from '../kit-docs/DiscordIcon.svelte'
 	import GithubIcon from '../kit-docs/GithubIcon.svelte'

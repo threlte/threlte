@@ -79,6 +79,7 @@
 	let fileInputEl: HTMLInputElement | undefined = undefined
 	let blobUrl: string | undefined = undefined
 	let title = 'Hello World'
+	let titleEl: HTMLElement | undefined = undefined
 	let files: HTMLInputElement['files']
 
 	const onChange = async (
@@ -99,6 +100,7 @@
 			components
 		})
 		const byteArray = new TextEncoder().encode(json)
+		// @ts-ignore Not sure where that type should come from
 		const cs = new CompressionStream('gzip')
 		const writableStream = cs.writable as WritableStream
 		const writer = writableStream.getWriter()
@@ -133,6 +135,7 @@
 		if (!files || !files[0]) return
 		if (!repl) return
 		const arrayBuffer = await new Blob([files[0]]).arrayBuffer()
+		// @ts-ignore Not sure where that type should come from
 		const cs = new DecompressionStream('gzip')
 		const writableStream = cs.writable as WritableStream
 		const writer = writableStream.getWriter()
@@ -151,7 +154,24 @@
 
 	$: if (files && files[0]) importFile()
 	const rootUrl = browser ? window.location.origin : undefined
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		// ctrl+s or command+s
+		if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+			exportFile()
+			e.preventDefault()
+			return false
+		}
+		if ((e.metaKey || e.ctrlKey) && e.key === 'o') {
+			if (!fileInputEl) return
+			e.preventDefault()
+			fileInputEl.click()
+			return false
+		}
+	}
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <div class="w-full h-screen flex flex-col">
 	<div
@@ -159,13 +179,34 @@
 	>
 		<div class="flex flex-row items-center gap-4">
 			<a href={rootUrl}>
-				<img class="h-8 block !m-0" src="/logo/threlte-logo-icon-only.png" alt="logo" />
+				<img class="w-8 block !m-0" src="/logo/threlte-logo-icon-only.png" alt="logo" />
 			</a>
-			<div class="prose">
+			<div class="prose flex flex-row items-center gap-2">
 				<h2 class="block !m-0 !p-0">
 					Playground –
-					<span contenteditable bind:innerHTML={title} />
+					<span bind:this={titleEl} contenteditable bind:innerHTML={title} />
 				</h2>
+				<button
+					on:click={() => {
+						if (!titleEl) return
+						titleEl.focus()
+						// deprecated, but still works just fine
+						document.execCommand('selectAll', false, undefined)
+					}}
+				>
+					<svg
+						class="fill-[#111827]"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						width="24"
+						height="24"
+					>
+						<path fill="none" d="M0 0h24v24H0z" />
+						<path
+							d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"
+						/>
+					</svg>
+				</button>
 			</div>
 		</div>
 
@@ -176,11 +217,11 @@
 				on:click={() => {
 					if (!fileInputEl) return
 					fileInputEl.click()
-				}}>Import Scene</button
+				}}><span class="underline">O</span>pen Playground</button
 			>
 			<button
 				class="text-sm rounded-md shadow-md border border-gray-divider px-4 bg-gray-body hover:bg-gray-hover pointer-events-auto"
-				on:click={exportFile}>Export Scene</button
+				on:click={exportFile}><span class="underline">S</span>ave Playground</button
 			>
 		</div>
 	</div>
