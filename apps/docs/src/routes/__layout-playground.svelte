@@ -179,7 +179,7 @@
 
 <div class="w-full h-screen flex flex-col">
 	<div
-		class="p-4 flex flex-col 992:flex-row items-start gap-4 992:gap-0 992:items-center 992:justify-between"
+		class="px-4 mt-4 flex flex-col 992:flex-row items-start gap-4 992:gap-0 992:items-center 992:justify-between"
 	>
 		<div class="flex flex-row items-center gap-4">
 			<a href={rootUrl}>
@@ -230,8 +230,12 @@
 		</div>
 	</div>
 
+	<div class="prose px-4 max-w-[90ch] mt-4 empty:hidden">
+		<slot />
+	</div>
+
 	{#if browser}
-		<div class="w-full border-t border-gray-300 flex-1">
+		<div class="w-full border-t border-gray-300 flex-1 mt-4">
 			<Repl
 				on:change={onChange}
 				workersUrl="/workers"
