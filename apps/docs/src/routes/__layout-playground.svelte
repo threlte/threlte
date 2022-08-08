@@ -75,7 +75,7 @@
 	onMount(() => {
 		if (!repl) return
 		repl.set({
-			css: `body, html { margin: 0; }`,
+			css: `body, html { padding: 0; }`,
 			components
 		})
 	})
@@ -151,7 +151,7 @@
 		title = data.title
 
 		repl.set({
-			css: `body, html { margin: 0; }`,
+			css: `body, html { padding: 0; }`,
 			components: data.components
 		})
 	}
