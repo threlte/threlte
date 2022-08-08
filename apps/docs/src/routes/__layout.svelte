@@ -11,7 +11,6 @@
 
 	import '@svelteness/kit-docs/client/polyfills/index.js'
 	import '@svelteness/kit-docs/client/styles/fonts.css'
-	// import '@svelteness/kit-docs/client/styles/vars.css'
 	import { sidebar } from './navigation'
 
 	import { page } from '$app/stores'
@@ -25,6 +24,7 @@
 	import { Algolia } from '@svelteness/kit-docs/client/algolia'
 	import DiscordIcon from '../kit-docs/DiscordIcon.svelte'
 	import GithubIcon from '../kit-docs/GithubIcon.svelte'
+	import PlaygroundIcon from '../kit-docs/PlaygroundIcon.svelte'
 
 	/** @type {import('@svelteness/kit-docs').MarkdownMeta | null} */
 	export let meta = null
@@ -80,6 +80,7 @@
 			<div class="flex flex-col gap-3 mt-8">
 				<GithubIcon class="!p-0" href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
 				<DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
+				<PlaygroundIcon class="!p-0" href="/playground">Playground</PlaygroundIcon>
 			</div>
 		</div>
 		<Algolia
