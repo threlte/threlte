@@ -1,11 +1,11 @@
-import type { ImpulseJoint, RigidBody } from '@dimforge/rapier3d-compat'
+import { MultibodyJoint, type ImpulseJoint, type RigidBody } from '@dimforge/rapier3d-compat'
 import { onDestroy } from 'svelte'
 import { derived, get, writable } from 'svelte/store'
 import type { RapierContext } from '../types/types'
 import { useRapier } from './useRapier'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useJoint = <T extends ImpulseJoint>(
+export const useJoint = <T extends ImpulseJoint | MultibodyJoint>(
   initializeJoint: (rigidBodyA: RigidBody, rigidBodyB: RigidBody, ctx: RapierContext) => T
 ) => {
   const rigidBodyA = writable<RigidBody | undefined>(undefined)
@@ -29,7 +29,11 @@ export const useJoint = <T extends ImpulseJoint>(
     unsubscribeBodies()
     const j = get(joint)
     if (!j) return
-    ctx.world.removeImpulseJoint(j, true)
+    if (j instanceof MultibodyJoint) {
+      ctx.world.removeMultibodyJoint(j, true)
+    } else {
+      ctx.world.removeImpulseJoint(j, true)
+    }
   })
 
   return {
