@@ -44,7 +44,7 @@ const {
 	joint: Writable<T>
 	rigidBodyA: Writable<RAPIER.RigidBody>
 	rigidBodyB: Writable<RAPIER.RigidBody>
-} = useJoint<T extends RAPIER.ImpulseJoint>(
+} = useJoint<T extends RAPIER.ImpulseJoint | RAPIER.MultiBodyJoint>(
 	initializeJoint: (rigidBodyA: RAPIER.RigidBody, rigidBodyB: RAPIER.RigidBody, RapierContext) => T
 )
 ```
