@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.3.2
+
+### Patch Changes
+
+- c7e226f: useJoint is now exported and its types are fixed
+
 ## 0.3.1
 
 ### Patch Changes
