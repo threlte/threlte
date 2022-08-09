@@ -10,6 +10,10 @@ export const sidebar = {
 				slug: '/getting-started'
 			},
 			{
+				title: 'Examples',
+				slug: '/examples/'
+			},
+			{
 				title: 'Features',
 				slug: '/features'
 			},
@@ -40,10 +44,6 @@ export const sidebar = {
 			{
 				title: 'Disposal',
 				slug: '/concepts/disposal'
-			},
-			{
-				title: 'Examples',
-				slug: '/examples/'
 			}
 		],
 		'@threlte/core': [
