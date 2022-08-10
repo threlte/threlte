@@ -32,6 +32,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.30.5",
 		"@typescript-eslint/parser": "^5.30.5",
 		"@yushijinhun/three-minifier-rollup": "^0.3.1",
+		"@zip.js/zip.js": "^2.6.12",
 		"autoprefixer": "^10.4.7",
 		"clsx": "^1.2.1",
 		"codemirror": "5.65.1",
