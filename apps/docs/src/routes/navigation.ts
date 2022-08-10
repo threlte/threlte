@@ -1,3 +1,9 @@
+import InteractivityIcon from '~icons/ri/cursor-fill'
+import ViewportAwarenessIcon from '~icons/ri/fullscreen-line'
+import ReactivityIcon from '~icons/ri/swap-box-fill'
+import DisposalIcon from '~icons/ri/delete-bin-fill'
+import MiscellaneousIcon from '~icons/ri/menu-4-line'
+
 export const sidebar = {
 	links: {
 		'.': [
@@ -27,23 +33,38 @@ export const sidebar = {
 			},
 			{
 				title: 'Interactivity',
-				slug: '/concepts/interactivity'
+				slug: '/concepts/interactivity',
+				icon: {
+					before: InteractivityIcon
+				}
 			},
 			{
 				title: 'Viewport Awareness',
-				slug: '/concepts/viewport-awareness'
+				slug: '/concepts/viewport-awareness',
+				icon: {
+					before: ViewportAwarenessIcon
+				}
 			},
 			{
 				title: 'Reactivity',
-				slug: '/concepts/reactivity'
-			},
-			{
-				title: 'Miscellaneous',
-				slug: '/concepts/miscellaneous'
+				slug: '/concepts/reactivity',
+				icon: {
+					before: ReactivityIcon
+				}
 			},
 			{
 				title: 'Disposal',
-				slug: '/concepts/disposal'
+				slug: '/concepts/disposal',
+				icon: {
+					before: DisposalIcon
+				}
+			},
+			{
+				title: 'Miscellaneous',
+				slug: '/concepts/miscellaneous',
+				icon: {
+					before: MiscellaneousIcon
+				}
 			}
 		],
 		'@threlte/core': [
