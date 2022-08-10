@@ -36,6 +36,7 @@
 		"autoprefixer": "^10.4.7",
 		"clsx": "^1.2.1",
 		"codemirror": "5.65.1",
+		"daisyui": "^2.22.0",
 		"eslint": "^8.19.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",

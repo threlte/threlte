@@ -43,7 +43,7 @@ const config = {
       typography: kitDocsTypography,
     },
   },
-  plugins: [require('@tailwindcss/typography'), kitDocsVariants],
+  plugins: [require('@tailwindcss/typography'), require("daisyui"), kitDocsVariants],
 };
 
 function kitDocsVariants({ addVariant }) {
