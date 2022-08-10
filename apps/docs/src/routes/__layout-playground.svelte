@@ -60,6 +60,7 @@
 	import Repl from '@sveltejs/svelte-repl'
 	import '../styles/editor.css'
 	import '../styles/fonts.css'
+	import * as zip from '@zip.js/zip.js'
 
 	import { browser } from '$app/env'
 	import { onMount } from 'svelte'
@@ -99,20 +100,24 @@
 	}
 
 	const exportFile = async () => {
-		const json = JSON.stringify({
-			title,
-			components
+		const meta = JSON.stringify(
+			{
+				title
+			},
+			undefined,
+			2
+		)
+
+		const writer = new zip.ZipWriter(new zip.BlobWriter('application/zip'))
+		writer.add('meta.json', new zip.TextReader(meta))
+
+		const promises = components.map(async (c) => {
+			await writer.add(`${c.name}.svelte`, new zip.TextReader(c.source))
 		})
-		const byteArray = new TextEncoder().encode(json)
-		// @ts-ignore Not sure where that type should come from
-		const cs = new CompressionStream('gzip')
-		const writableStream = cs.writable as WritableStream
-		const writer = writableStream.getWriter()
-		writer.write(byteArray)
-		writer.close()
-		const buffer = await new Response(cs.readable as ReadableStream).arrayBuffer()
-		const blob = new Blob([buffer], { type: 'application/gzip' })
-		blobUrl = URL.createObjectURL(blob)
+
+		await Promise.all(promises)
+
+		blobUrl = URL.createObjectURL(await writer.close())
 		const a = document.createElement('a')
 		document.body.appendChild(a)
 		a.style.display = 'none'
@@ -127,6 +132,7 @@
 				view: window
 			})
 		)
+
 		// For Firefox it is necessary to delay revoking the ObjectURL
 		setTimeout(() => {
 			if (!blobUrl || !a) return
@@ -138,21 +144,34 @@
 	const importFile = async () => {
 		if (!files || !files[0]) return
 		if (!repl) return
-		const arrayBuffer = await new Blob([files[0]]).arrayBuffer()
-		// @ts-ignore Not sure where that type should come from
-		const cs = new DecompressionStream('gzip')
-		const writableStream = cs.writable as WritableStream
-		const writer = writableStream.getWriter()
-		writer.write(arrayBuffer)
-		writer.close()
-		const decompressed = await new Response(cs.readable).arrayBuffer()
-		const string = new TextDecoder().decode(decompressed)
-		const data = JSON.parse(string)
-		title = data.title
+		const blob = new Blob([files[0]])
+		const entries = await new zip.ZipReader(new zip.BlobReader(blob)).getEntries()
+
+		const metaEntry = entries.find((e) => e.filename === 'meta.json')
+		const metaString = await metaEntry?.getData?.(new zip.TextWriter('utf-8'))
+		if (metaString) {
+			const meta = JSON.parse(metaString)
+			title = meta.title
+		}
+
+		const components = entries.filter((e) => e.filename.includes('.svelte'))
+
+		const componentsDataPromises = components.map(async (entry) => {
+			const source = await entry.getData?.(new zip.TextWriter('utf-8'))
+			const name = entry.filename.replace('.svelte', '')
+			const type = 'svelte'
+			return {
+				source,
+				name,
+				type
+			}
+		})
+
+		const componentsData = await Promise.all(componentsDataPromises)
 
 		repl.set({
 			css: `body, html { padding: 0; }`,
-			components: data.components
+			components: componentsData
 		})
 	}
 
