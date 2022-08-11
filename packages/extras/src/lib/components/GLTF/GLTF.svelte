@@ -30,7 +30,7 @@
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
   export let url: GLTFProperties['url']
-  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
+  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = 'https://www.gstatic.com/draco/v1/decoders/';
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
