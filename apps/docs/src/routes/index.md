@@ -31,5 +31,5 @@ It provides strictly typed components to quickly and easily build three.js scene
 It also aims to provide the building blocks to quickly extend Threlte when it's needed.
 
 :::admonition type="note"
-Threlte is still in active development and you should expect breaking changes. Check the release notes before updating. If you want to be on the safe side, install Threlte with `npm i threlte three --save-exact` to lock the versions.
+Threlte is still in active development and you should expect breaking changes. Check the release notes before updating. If you want to be on the safe side, install Threlte with `npm i @threlte/core --save-exact` to lock the versions, same goes for `@threlte/extras` and `@threlte/rapier`
 :::
