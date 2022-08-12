@@ -6,7 +6,7 @@
 import { ShaderMaterial, Vector2, Vector3, Color } from "three";
 
 
-export default class SpotLightMaterial extends ShaderMaterial {
+export default class VolumetricSpotlightMaterial extends ShaderMaterial {
 	constructor() {
 		super({
 			uniforms: {

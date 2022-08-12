@@ -98,7 +98,7 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
 	ktxTranscoderPath?: string
 } & Omit<InteractiveObjectProperties, 'object'>
 
-export type SpotlightProperties = Omit<MeshInstanceProperties, 'mesh'> & {
+export type VolumetricSpotlightProperties = Omit<MeshInstanceProperties, 'mesh'> & {
 	// Material properties
 	depthBuffer?: DepthTexture;
 	opacity?: number;

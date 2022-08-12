@@ -1,21 +1,21 @@
 ---
-title: Spotlight
+title: VolumetricSpotlight
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/spotlight/Wrapper.svelte'
+import Wrapper from '$examples/extras/volumetric-spotlight/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Spotlight|sourcePath=/components/Spotlight/Spotlight.svelte|name=Spotlight|from=extras|type=component
-The `<Spotlight>` component is ported from [drei's Spotlight](https://drei.pmnd.rs/?path=%2Fstory%2Fstaging-spotlight--spotlight-st).
+!!!module_summary title=Spotlight|sourcePath=/components/VolumetricSpotlight/VolumetricSpotlight.svelte|name=VolumetricSpotlight|from=extras|type=component
+The `<VolumetricSpotlight>` component is ported from [drei's Spotlight](https://drei.pmnd.rs/?path=%2Fstory%2Fstaging-spotlight--spotlight-st).
 
 <ExampleWrapper>
   <Wrapper />
 </ExampleWrapper>
 
 &&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/spotlight/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/spotlight/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/volumetric-spotlight/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/volumetric-spotlight/Scene.svelte)
 &&&
 
 !!!
@@ -25,7 +25,7 @@ The `<Spotlight>` component is ported from [drei's Spotlight](https://drei.pmnd.
 
 ```svelte
 <script>
-  import { Spotlight } from '@threlte/extras'
+  import { VolumetricSpotlight } from '@threlte/extras'
 </script>
 
 <Spotlight />
