@@ -322,6 +322,10 @@ export const sidebar = {
 				slug: '/extras/float'
 			},
 			{
+				title: 'Spotlight',
+				slug: '/extras/spotlight'
+			},
+			{
 				title: 'Disposables',
 				slug: '/extras/disposables'
 			}
