@@ -94,6 +94,6 @@ export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
 
 export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   url: string
-  dracoDecoderPath?: string
+  dracoDecoderPath?: string | boolean
   ktxTranscoderPath?: string
 } & Omit<InteractiveObjectProperties, 'object'>

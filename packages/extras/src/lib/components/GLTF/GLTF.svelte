@@ -30,7 +30,7 @@
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
   export let url: GLTFProperties['url']
-  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = 'https://www.gstatic.com/draco/v1/decoders/';
+  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = false
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
@@ -59,7 +59,11 @@
 
   if (dracoDecoderPath) {
     const dracoLoader = useLoader(DRACOLoader, () =>
-      new DRACOLoader().setDecoderPath(dracoDecoderPath as string)
+      new DRACOLoader().setDecoderPath(
+        dracoDecoderPath === true
+          ? 'https://www.gstatic.com/draco/v1/decoders/'
+          : (dracoDecoderPath as string)
+      )
     )
     loader.setDRACOLoader(dracoLoader)
   }
