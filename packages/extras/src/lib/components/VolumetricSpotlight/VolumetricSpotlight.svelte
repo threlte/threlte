@@ -7,7 +7,7 @@
   import { CylinderBufferGeometry, Matrix4 } from 'three'
   import VolumetricSpotlightMaterial from './VolumetricSpotlightMaterial'
   import { Color } from 'three'
-  import { SpotLight } from '@threlte/core'
+  import { SpotLight, type SpotLightProperties } from '@threlte/core'
 
   const { size } = useThrelte()
   const { dpr } = useThrelteRoot()
@@ -49,6 +49,14 @@
   export let radiusTop: VolumetricSpotlightProperties['radiusTop'] = 0.1
   export let radiusBottom: VolumetricSpotlightProperties['radiusBottom'] = angle ? angle * 7 : 1
 
+  // Light
+  export let intensity: SpotLightProperties['intensity'] = 1
+  export let decay: SpotLightProperties['decay'] = undefined
+  export let penumbra: SpotLightProperties['penumbra'] = 1
+  export let power: SpotLightProperties['power'] = undefined
+  export let target: SpotLightProperties['target'] = undefined
+  export let shadow: SpotLightProperties['shadow'] = undefined
+
   const material = new VolumetricSpotlightMaterial()
 
   material.uniforms.depth.value = depthBuffer
@@ -56,7 +64,7 @@
   material.uniforms.attenuation.value = attenuation
   material.uniforms.anglePower.value = anglePower
 
-  // material.uniforms.spotPosition.value = position // Need help with this
+  material.uniforms.spotPosition.value = position
 
   material.uniforms.lightColor.value = new Color(color)
   material.uniforms.cameraNear.value = cameraNear
@@ -96,5 +104,15 @@
   on:viewportenter
   on:viewportleave
 >
-  <!-- <SpotLight /> -->
+  <SpotLight
+    {color}
+    shadow
+    {intensity}
+    {angle}
+    {decay}
+    distance={distance * 2}
+    {penumbra}
+    {power}
+    {target}
+  />
 </Mesh>

@@ -10,7 +10,7 @@
 		useThrelte
 	} from '@threlte/core'
 
-	const { scene } = useThrelte()
+	const { scene, pointer } = useThrelte()
 
 	scene.background = new Color(0x141414)
 
@@ -24,11 +24,15 @@
 	depthTexture.type = UnsignedShortType
 </script>
 
+<!-- <PerspectiveCamera position={{ z: 10, y: 5, x: 10 }} fov={30}> -->
 <PerspectiveCamera position={{ z: 10, y: 5, x: 10 }} fov={30}>
 	<OrbitControls
+		enableDamping={false}
+		enablePan={false}
+		enableRotate={false}
 		target={{ y: 3 }}
-		maxPolarAngle={85 * DEG2RAD}
 		minPolarAngle={85 * DEG2RAD}
+		maxPolarAngle={85 * DEG2RAD}
 		maxAzimuthAngle={45 * DEG2RAD}
 		minAzimuthAngle={44 * DEG2RAD}
 		enableZoom={false}
@@ -53,16 +57,16 @@
 	material={new MeshStandardMaterial({
 		color: 0xff3e00
 	})}
-	position={{ y: 0.75 }}
+	position={{ y: 1 }}
 	castShadow
 	receiveShadow
 />
 
 <VolumetricSpotlight
 	position={{ x: 3, y: 5, z: -2 }}
-	distance={15}
+	distance={20}
 	anglePower={15}
-	rotation={{ x: -40 * DEG2RAD, z: -40 * DEG2RAD }}
 	radiusTop={0.01}
 	cameraFar={20}
+	intensity={0.4}
 />

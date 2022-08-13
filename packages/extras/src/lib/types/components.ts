@@ -113,4 +113,6 @@ export type VolumetricSpotlightProperties = Omit<MeshInstanceProperties, 'mesh'>
 	radiusBottom?: number;
 	distance: number;
 	angle?: number;
+	// Light properties
+	intensity?: number;
 }
