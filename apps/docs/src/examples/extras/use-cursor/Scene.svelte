@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { writable } from 'svelte/store'
 	import { BoxBufferGeometry, Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import {
@@ -22,8 +21,6 @@
 	} else {
 		material.color = new Color(0xc62004)
 	}
-
-	writable
 
 	const { size } = useThrelte()
 
