@@ -30,7 +30,12 @@
   export let lookAt: GLTFProperties['lookAt'] = undefined
 
   export let url: GLTFProperties['url']
-  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = false
+
+  /**
+   * @deprecated Use `useDraco` instead
+   */
+  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
+  export let useDraco: GLTFProperties['useDraco'] = false
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
@@ -57,14 +62,21 @@
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
 
-  if (dracoDecoderPath) {
-    const dracoLoader = useLoader(DRACOLoader, () =>
-      new DRACOLoader().setDecoderPath(
-        dracoDecoderPath === true
-          ? 'https://www.gstatic.com/draco/v1/decoders/'
-          : (dracoDecoderPath as string)
-      )
-    )
+  if (useDraco) {
+    // This has a priority over the deprecated `dracoDecoderPath` property
+    if (useDraco === true) {
+      setDracoPath('https://www.gstatic.com/draco/v1/decoders/')
+    } else if (typeof useDraco === 'string') {
+      setDracoPath(useDraco)
+    }
+  } else if (dracoDecoderPath) {
+    // This is discarded if `useDraco` is used
+    console.warn('⚠️ dracoDecoderPath is deprecated, use useDraco instead')
+    setDracoPath(dracoDecoderPath)
+  }
+
+  function setDracoPath(path: string) {
+    const dracoLoader = useLoader(DRACOLoader, () => new DRACOLoader().setDecoderPath(path))
     loader.setDRACOLoader(dracoLoader)
   }
 
