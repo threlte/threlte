@@ -15,7 +15,6 @@
 
 	const { scene } = useThrelte()
 	scene.background = new Color(0xeae8e2)
-	// TODO: Use `useDraco` instead of `dracoDecoderPath` after #137 is merged
 </script>
 
 <PerspectiveCamera position={{ x: 600, y: 200, z: 600 }} near={10} far={10000}>
@@ -28,5 +27,5 @@
 <GLTF
 	bind:gltf={$gltf}
 	url="/models/LittlestTokyo.glb"
-	dracoDecoderPath="https://www.gstatic.com/draco/v1/decoders/"
+	useDraco="https://www.gstatic.com/draco/v1/decoders/"
 />
