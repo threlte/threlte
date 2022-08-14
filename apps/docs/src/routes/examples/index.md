@@ -24,7 +24,7 @@ title: Examples
 
 ## Geometry
 
-- [Terrain with 3D noise](./examples/template) (WIP)
+- [Terrain with 3D noise](./terrain.md) (WIP)
 - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example)
 
 ## Interactivity
