@@ -1,5 +1,11 @@
 # @threlte/docs
 
+## 0.0.7
+
+### Patch Changes
+
+- 4a94f6c: Added `useDraco` to GLTF component, and deprecated `dracoDecoderPath`
+
 ## 0.0.6
 
 ### Patch Changes
