@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.3.0
+
+### Minor Changes
+
+- 8f1a904: Added a port of dreis `<ContactShadows>` component
+
 ## 4.2.0
 
 ### Minor Changes
