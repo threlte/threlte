@@ -14,7 +14,7 @@ title: Examples
 
 ## Animation
 
-- [Transitions between animations](./examples/template) (WIP)
+- [Transitions between animations](./animation-blending.md)
 
 ## Camera
 
