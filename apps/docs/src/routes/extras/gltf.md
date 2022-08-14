@@ -54,6 +54,11 @@ The `<GLTF>` component supports interaction:
 
 <GLTF castShadow receiveShadow url={'/models/flower.glb'} position={{ y: 1 }} scale={3} />
 ```
+:::admonition type="tip"
+You can set `useDraco` to `true` to use DRACO compression and Threlte will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
+
+Or you can set `useDraco` to your own DRACO decoder path as a `string`.
+:::
 
 ### Properties
 
@@ -73,7 +78,8 @@ frustumCulled: boolean | undefined = undefined
 renderOrder: number | undefined = undefined
 visible: boolean | undefined = undefined
 dispose: boolean | undefined = undefined
-dracoDecoderPath: string | undefined = undefined
+d̶r̶a̶c̶o̶D̶e̶c̶o̶d̶e̶r̶P̶a̶t̶h̶: string | undefined = undefined // Deprecated - use `useDraco` instead
+useDraco: string | boolean = false
 ktxTranscoderPath: string | undefined = undefined
 ignorePointer: boolean = false
 interactive: boolean = false
