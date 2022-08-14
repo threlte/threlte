@@ -322,6 +322,10 @@ export const sidebar = {
 				slug: '/extras/float'
 			},
 			{
+				title: 'ContactShadows',
+				slug: '/extras/contact-shadows'
+			},
+			{
 				title: 'Disposables',
 				slug: '/extras/disposables'
 			}
