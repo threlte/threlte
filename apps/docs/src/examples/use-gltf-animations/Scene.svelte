@@ -27,5 +27,5 @@
 <GLTF
 	bind:gltf={$gltf}
 	url="/models/LittlestTokyo.glb"
-	dracoDecoderPath="https://www.gstatic.com/draco/v1/decoders/"
+	useDraco="https://www.gstatic.com/draco/v1/decoders/"
 />

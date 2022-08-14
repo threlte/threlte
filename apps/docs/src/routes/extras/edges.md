@@ -6,7 +6,7 @@ title: Edges
 import Wrapper from '$examples/edges/Wrapper.svelte'
 </script>
 
-!!!module_summary title=Edges|sourcePath=/components/Edges/Edges.svelte|name=Edges|from=extras|type=component|relatedDocs={[{name:"three.js EdgesGeometry reference",url:"https://threejs.org/docs/api/en/geometries/EdgesGeometry.html"}]}
+!!!module_summary title=Edges|sourcePath=components/Edges/Edges.svelte|name=Edges|from=extras|type=component|relatedDocs={[{name:"three.js EdgesGeometry reference",url:"https://threejs.org/docs/api/en/geometries/EdgesGeometry.html"}]}
 
 Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.
 

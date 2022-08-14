@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.2.0
+
+### Minor Changes
+
+- 4a94f6c: Added `useDraco` to GLTF component, and deprecated `dracoDecoderPath`
+
 ## 4.1.0
 
 ### Minor Changes

@@ -2,7 +2,7 @@
 title: useSphericalJoint
 ---
 
-!!!module_summary title=useSphericalJoint|sourcePath=/hooks/useSphericalJoint.svelte|name=useSphericalJoint|from=rapier|type=component
+!!!module_summary title=useSphericalJoint|sourcePath=hooks/useSphericalJoint.svelte|name=useSphericalJoint|from=rapier|type=component
 
 Use this hook to initialize a [`SphericalImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint).
 

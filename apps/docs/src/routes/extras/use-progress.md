@@ -6,7 +6,7 @@ title: useProgress
 import Wrapper from '$examples/use-progress/Wrapper.svelte'
 </script>
 
-!!!module_summary title=useProgress|sourcePath=/hooks/useProgress.ts|name=useProgress|from=extras|type=hook|relatedDocs={[{name:"three.js DefaultLoadingManager reference",url:"https://threejs.org/docs/api/en/loaders/managers/DefaultLoadingManager.html"}]}
+!!!module_summary title=useProgress|sourcePath=hooks/useProgress.ts|name=useProgress|from=extras|type=hook|relatedDocs={[{name:"three.js DefaultLoadingManager reference",url:"https://threejs.org/docs/api/en/loaders/managers/DefaultLoadingManager.html"}]}
 Convenience hook that wraps `THREE.DefaultLoadingManager`.
 
 <ExampleWrapper>
