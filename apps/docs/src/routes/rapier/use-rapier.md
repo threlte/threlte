@@ -2,7 +2,7 @@
 title: useRapier
 ---
 
-!!!module_summary title=useRapier|sourcePath=/hooks/useRapier.svelte|name=useRapier|from=rapier|type=component
+!!!module_summary title=useRapier|sourcePath=hooks/useRapier.svelte|name=useRapier|from=rapier|type=component
 
 This hook provides access to the underlying `RAPIER.World` as well as the means to add and remove colliders and rigid bodies from the events system.
 

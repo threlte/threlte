@@ -2,7 +2,7 @@
 title: useRevoluteJoint
 ---
 
-!!!module_summary title=useRevoluteJoint|sourcePath=/hooks/useRevoluteJoint.svelte|name=useRevoluteJoint|from=rapier|type=component
+!!!module_summary title=useRevoluteJoint|sourcePath=hooks/useRevoluteJoint.svelte|name=useRevoluteJoint|from=rapier|type=component
 
 Use this hook to initialize a [`RevoluteImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint).
 

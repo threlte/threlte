@@ -2,7 +2,7 @@
 title: useJoint
 ---
 
-!!!module_summary title=useJoint|sourcePath=/hooks/useJoint.svelte|name=useJoint|from=rapier|type=component
+!!!module_summary title=useJoint|sourcePath=hooks/useJoint.svelte|name=useJoint|from=rapier|type=component
 
 Use this hook to initialize any [Rapier joint](https://rapier.rs/docs/user_guides/javascript/joints).
 
