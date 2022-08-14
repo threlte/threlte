@@ -94,15 +94,18 @@
           value: new Color(color).convertSRGBToLinear()
         }
       }
-      shader.fragmentShader = shader.fragmentShader.replace(
-        `void main() {`, //
-        `uniform vec3 uColor;
-           void main() {
-          `
-      )
+
+      shader.fragmentShader = 'uniform vec3 uColor;\n' + shader.fragmentShader
+
       shader.fragmentShader = shader.fragmentShader.replace(
         'vec4( vec3( 1.0 - fragCoordZ ), opacity );',
         'vec4( uColor, ( 1.0 - fragCoordZ ) * 1.0 );'
+      )
+
+      // minified replace, https://github.com/yushijinhun/three-minifier also minifies GLSL files
+      shader.fragmentShader = shader.fragmentShader.replace(
+        'vec4(vec3(1.0-fragCoordZ),opacity);',
+        'vec4(uColor,(1.0-fragCoordZ)*1.0);'
       )
     }
     return dm
