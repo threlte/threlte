@@ -95,8 +95,6 @@
         }
       }
 
-      console.log(shader.fragmentShader)
-
       shader.fragmentShader = 'uniform vec3 uColor;\n' + shader.fragmentShader
 
       shader.fragmentShader = shader.fragmentShader.replace(
@@ -109,8 +107,6 @@
         'vec4(vec3(1.0-fragCoordZ),opacity);',
         'vec4(uColor,(1.0-fragCoordZ)*1.0);'
       )
-
-      console.log(shader.fragmentShader)
     }
     return dm
   })
