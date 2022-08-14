@@ -2,7 +2,7 @@
 title: useFixedJoint
 ---
 
-!!!module_summary title=useFixedJoint|sourcePath=/hooks/useFixedJoint.svelte|name=useFixedJoint|from=rapier|type=component
+!!!module_summary title=useFixedJoint|sourcePath=hooks/useFixedJoint.svelte|name=useFixedJoint|from=rapier|type=component
 
 Use this hook to initialize a [`FixedImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint).
 

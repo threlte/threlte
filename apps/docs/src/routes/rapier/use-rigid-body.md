@@ -2,7 +2,7 @@
 title: useRigidBody
 ---
 
-!!!module_summary title=useRigidBody|sourcePath=/hooks/useRigidBody.svelte|name=useRigidBody|from=rapier|type=component
+!!!module_summary title=useRigidBody|sourcePath=hooks/useRigidBody.svelte|name=useRigidBody|from=rapier|type=component
 
 This hook provides access to the `RAPIER.RigidBody` from a parent [`<RigidBody>`](/rapier/rigid-body) component.
 

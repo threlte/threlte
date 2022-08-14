@@ -2,7 +2,7 @@
 title: Disposables
 ---
 
-!!!module_summary title=Disposables|sourcePath=/components/Disposables/Disposables.svelte|name=Disposables|from=extras|type=component
+!!!module_summary title=Disposables|sourcePath=components/Disposables/Disposables.svelte|name=Disposables|from=extras|type=component
 
 This component switches of the automatic disposal of three.js objects for all child components (direct or indirect). The property `disposables` accepts three.js objects like meshes, material, textures and geometries that upon unmounting of the component will be **deeply disposed**.
 

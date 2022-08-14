@@ -2,7 +2,7 @@
 title: Debug
 ---
 
-!!!module_summary title=Debug|sourcePath=/components/Debug/Debug.svelte|name=Debug|from=rapier|type=component|relatedDocs={[{name:"Rapier DebugRenderBuffers Reference",url:"https://rapier.rs/javascript3d/classes/DebugRenderBuffers.html"}]}
+!!!module_summary title=Debug|sourcePath=components/Debug/Debug.svelte|name=Debug|from=rapier|type=component|relatedDocs={[{name:"Rapier DebugRenderBuffers Reference",url:"https://rapier.rs/javascript3d/classes/DebugRenderBuffers.html"}]}
 
 Use the Debug component to see live representations of all colliders in a scene.
 

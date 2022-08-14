@@ -6,7 +6,7 @@ title: AutoColliders
 import Wrapper from '$examples/rapier/auto-colliders/Wrapper.svelte'
 </script>
 
-!!!module_summary title=AutoColliders|sourcePath=/components/AutoColliders/AutoColliders.svelte|name=AutoColliders|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
+!!!module_summary title=AutoColliders|sourcePath=components/AutoColliders/AutoColliders.svelte|name=AutoColliders|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
 
 The `<AutoColliders>` component generates colliders based on its children. Currently these shapes are available:
 
