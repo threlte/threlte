@@ -4,7 +4,7 @@ title: Examples
 
 # Examples
 
-🛠️ Help wanted! We'd love your help to make, add to and edit our examples. Read through the [contributing guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) to get started.
+🛠️ Help wanted! We'd love your help to make, add to and edit our examples. Read through the [contributing guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) to get started. There lots of examples from [three.js](https://threejs.org/examples/#webgl_animation_keyframes) and [r3f](https://docs.pmnd.rs/react-three-fiber/getting-started/examples) that could serve as inspiration.
 
 ## Input
 
