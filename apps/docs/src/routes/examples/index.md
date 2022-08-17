@@ -14,12 +14,12 @@ title: Examples
 
 - [Following an object](./examples/template) (WIP)
 - [Making a 1st person controller](./examples/template) (WIP)
-- [Top-down views](./examples/template) (WIP)
+- [Top-down views](./examples/template) (WIP) -->
 
 ## Geometry
 
-- [Terrain with 3D noise](./terrain.md) (WIP)
-- [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example) -->
+- [Terrain with 3D noise](./terrain.md)
+<!-- - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example) -->
 
 ## Interactivity
 
