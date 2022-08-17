@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
-	import { buttonIdle, buttonWalk, buttonRun } from './State.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
 
 	let currentActionKey = 'idle'
 

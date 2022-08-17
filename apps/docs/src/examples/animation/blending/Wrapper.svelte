@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core'
 	import Scene from './Scene.svelte'
-	import { buttonIdle, buttonWalk, buttonRun } from './State.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
 </script>
 
 <div class="relative h-full">
