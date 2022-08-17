@@ -23,6 +23,8 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 
 You're recommended to implement a connection from gui/keyboard to components that works for you.
 
-A simplier setup is to export the `transitionTo` function and calling it directly. Check out this [REPL](https://svelte.dev/repl/8c88a5994afc4c8993d3f600d0ef8ff7?version=3.49.0) as an example.
+A simple setup is to export the `transitionTo` function and calling it directly. Check out this [REPL](https://svelte.dev/repl/8c88a5994afc4c8993d3f600d0ef8ff7?version=3.49.0) as an example.
 
-Within this example above there's some svelte store's within a separate module, assignments triggered by `on:click` events and subscribe + unsubscribing within the component. Doing this means you don't need to worry where things are within your component hierarchy.
+The example above has a bit more setup. There's some svelte store's within a separate module, assignments triggered by `on:click` events and subscribe + unsubscribing within the component. If you don't want to worry about where things are within your component hierarchy, this is a guide for that direction.
+
+Do the thing that works for your use case.
