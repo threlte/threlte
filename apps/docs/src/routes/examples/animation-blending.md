@@ -8,31 +8,21 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 
 # Animation Blending
 
-## Steps
-
-1. Load our model
-2. Triggering change
-   1. from the UI
-      1. Svelte stores?
-   2. from keyboard input
-3. jump between to animations
-   1. on button click
-4. transition between two animantions
-   1. svelte tween and spring
-   2. other curves
-
 <ExampleWrapper>
 	<Wrapper />
 </ExampleWrapper>
 
 &&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../examples/animation/blending/Wrapper.svelte)
+@[code svelte|title=State.svelte](../../examples/animation/blending/State.svelte)
 @[code svelte|title=Scene.svelte](../../examples/animation/blending/Scene.svelte)
-
+@[code svelte|title=Character.svelte](../../examples/animation/blending/Character.svelte)
 &&&
 
-:::admonition type="info"
-Donec tincidunt orci a interdum vulputate. In suscipit cursus nulla, semper laoreet nibh tincidunt in.
-:::
+## Handling complexity
 
-Aliquam fringilla eros a arcu porta maximus. Aenean velit elit, rutrum ut cursus in, ultricies non ligula. Proin tristique id massa eu ultricies. Curabitur scelerisque consequat bibendum.
+You're recommended to implement a connection from gui/keyboard to components that works for you.
+
+A simplier setup is to export the `transitionTo` function and calling it directly.
+
+Within this example above there's some svelte store's within a separate module, assignments triggered by `on:click` events and subscribe + unsubscribing within the component. Doing this means you don't need to worry where things are within your component hierarchy.
