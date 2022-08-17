@@ -49,9 +49,9 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       shiki: ^0.10.1
+      simplex-noise: ^4.0.0
       svelte: ^3.49.0
       svelte-check: ^2.8.0
-      svelte-knobby: ^0.3.4
       svelte-preprocess: ^4.10.7
       tailwindcss: ^3.1.5
       three: ^0.140.2
@@ -93,9 +93,9 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       shiki: 0.10.1
+      simplex-noise: 4.0.0
       svelte: 3.49.0
       svelte-check: 2.8.0_blrkfmplrezk6jx3arz7bdc3pa
-      svelte-knobby: 0.3.4_svelte@3.49.0
       svelte-preprocess: 4.10.7_6avtyouqcdws46kxwsvk4vhxre
       tailwindcss: 3.1.5
       three: 0.140.2
@@ -1769,10 +1769,6 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       is-windows: 1.0.2
-    dev: true
-
-  /bezier-easing/2.1.0:
-    resolution: {integrity: sha512-gbIqZ/eslnUFC1tjEvtz0sgx+xTK20wDnYMIA27VA04R7w6xxXQPZDbibjA9DTWZRA2CXtwHykkVzlCaAJAZig==}
     dev: true
 
   /bidi-js/1.0.2:
@@ -4608,6 +4604,10 @@ packages:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: true
 
+  /simplex-noise/4.0.0:
+    resolution: {integrity: sha512-ciRAxJnRdQhFhZ7+yZKxk8bQJoIq2J2UPO2pbzy1vcrWFq70P4hNCCmcCTkBKDCIeXZVd/yKjL8Fmh8Aeu5+6g==}
+    dev: true
+
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -4866,17 +4866,6 @@ packages:
     resolution: {integrity: sha512-kTcOVlsldI2neszYNQAfFCt+u62OWWAZgpeoW9RN3hjtJCWI5bkVj0gtljZWUlyEWTfgpmag5L5AHDKg8w8ZmQ==}
     dev: true
 
-  /svelte-knobby/0.3.4_svelte@3.49.0:
-    resolution: {integrity: sha512-JK8BkZfktZs4tPtgpvagCu80kwL0C4LMtYCBWH1Ki5ZCFDAY2K84qLJdWr6i23HgvJYqzYYTBQ1LsM82kh9mxA==}
-    peerDependencies:
-      svelte: ^3.34.0
-    dependencies:
-      bezier-easing: 2.1.0
-      svelte: 3.49.0
-      svelte-undo: 1.0.2_svelte@3.49.0
-      yootils: 0.3.1
-    dev: true
-
   /svelte-preprocess/4.10.7_6avtyouqcdws46kxwsvk4vhxre:
     resolution: {integrity: sha512-sNPBnqYD6FnmdBrUmBCaqS00RyCsCpj2BG58A1JBswNF7b0OKviwxqVrOL/CKyJrLSClrSeqQv5BXNg2RUbPOw==}
     engines: {node: '>= 9.11.2'}
@@ -4979,14 +4968,6 @@ packages:
       strip-indent: 3.0.0
       svelte: 3.49.0
       typescript: 4.7.4
-    dev: true
-
-  /svelte-undo/1.0.2_svelte@3.49.0:
-    resolution: {integrity: sha512-k8W2RYKJM/kpA0bfSk0bjX/vhC705/2V1T/ew7U8c8wMkVS2f0wajCGokLH/zfZC5/N84bwPdAQvGte6LWBr7Q==}
-    peerDependencies:
-      svelte: ^3
-    dependencies:
-      svelte: 3.49.0
     dev: true
 
   /svelte/3.49.0:
@@ -5728,8 +5709,4 @@ packages:
 
   /yootils/0.0.16:
     resolution: {integrity: sha512-aIVecm5ucOzwhtKbl0zkfg0ZSOUR9c2da0k8cIc9umjjzkvVCWUUX/UHZ1CLPsv4wmJLqt0aWeLB7p9n9JDwYQ==}
-    dev: true
-
-  /yootils/0.3.1:
-    resolution: {integrity: sha512-A7AMeJfGefk317I/3tBoUYRcDcNavKEkpiPN/nQsBz/viI2GvT7BtrqdPD6rGqBFN8Ax7v4obf+Cl32JF9DDVw==}
     dev: true
