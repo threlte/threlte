@@ -1,43 +1,76 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
-	import { buttonIdle, buttonRun } from './state.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
 
-	let action: string
+	let currentActionKey = 'idle'
 
-	const { gltf, actions, mixer } = useGltfAnimations(({ actions, mixer }) => {
+	const { gltf, actions } = useGltfAnimations(({ actions }) => {
+		// Uncomment to see all the different possible action keys
+		// console.log(actions);
 		// set the initial animation
-		action = 'idle'
-		actions[action].play()
-
-		// idle
-		delete actions['walk']
-		// run
-
-		delete actions['agree']
-		delete actions['headShake']
-		delete actions['sad_pose']
-		delete actions['sneak_pose']
+		actions[currentActionKey].play()
 	})
 
-	const changeAnimation = (newAction: string, duration: number) => {
-		console.log('changing animation to', newAction)
-		for (const key in $actions) {
-			const action = $actions[key]!
-			console.log(key, action.getEffectiveWeight(), action.isRunning())
+	const unsub1 = buttonIdle.subscribe(() => {
+		console.log("transition to idle");
+		transitionTo('idle', 1)
+	})
+
+	const unsub2 = buttonWalk.subscribe(() => {
+		console.log("transition to run");
+		transitionTo('walk', 1)
+	})
+
+	const unsub3 = buttonRun.subscribe(() => {
+		console.log("transition to run");
+		transitionTo('run', 1)
+	})
+
+	function transitionTo(nextActionKey:string, duration = 1) {
+		const currentAction = $actions[currentActionKey]
+		const nextAction = $actions[nextActionKey]
+		if (currentAction === nextAction) return
+		// Function inspired by: https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_skinning_blending.html
+		nextAction.enabled = true
+
+		if (currentAction) {
+			currentAction.crossFadeTo(nextAction, duration, true)
 		}
-		$actions[action].fadeOut(duration) //($actions[newAction], duration, true)
-		$actions[newAction].fadeIn(duration)
-		// $actions[newAction].play()
-		// action = newAction
+
+		// Not sure why I need this but the source code does not
+		nextAction.play()
+		currentActionKey = nextActionKey
 	}
 
-	buttonIdle.add(() => {
-		changeAnimation('idle', 1)
-	})
+	function handleKeyDown(event:KeyboardEvent) {
+		switch (event.key) {
+			case "a":
+				transitionTo('idle', 0.2)
+				break;
+			case "s":
+				transitionTo('walk', 0.2)
+				break;
+			case "d":
+				transitionTo('run', 0.2)
+				break;
+			default:
+				break;
+		}
+	}
 
-	buttonRun.add(() => {
-		changeAnimation('run', 1)
+	function handleKeyUp() {
+		transitionTo('idle', 0.2)
+	}
+
+	onDestroy(() => {
+		// We unsubscribe otherwise we'd have old subscriptions still active
+		unsub1()
+		unsub2()
+		unsub3()
 	})
 </script>
+
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp}/>
 
 <GLTF bind:gltf={$gltf} url="https://threejs.org/examples/models/gltf/Xbot.glb" />
