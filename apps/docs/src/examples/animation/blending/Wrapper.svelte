@@ -9,7 +9,7 @@
 		<Scene />
 	</Canvas>
 	<div class="pointer-events-none h-full w-full absolute top-0">
-		<div class="flex">
+		<div class="flex flex-col">
 			<div class="pointer-events-auto">
 				<button
 					class="button"
@@ -33,6 +33,7 @@
 					}}>run</button
 				>
 			</div>
+			<span>Try pressing the s and d keys too</span>
 		</div>
 	</div>
 </div>

@@ -45,9 +45,6 @@
 
 	function handleKeyDown(event:KeyboardEvent) {
 		switch (event.key) {
-			case "a":
-				transitionTo('idle', 0.2)
-				break;
 			case "s":
 				transitionTo('walk', 0.2)
 				break;
