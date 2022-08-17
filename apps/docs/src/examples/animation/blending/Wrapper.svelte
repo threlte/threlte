@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core'
 	import Scene from './Scene.svelte'
-	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './State.svelte'
 </script>
 
 <div class="relative h-full">
@@ -14,21 +14,21 @@
 				<button
 					class="button"
 					on:click={() => {
-						console.log("idle button clicked");
+						console.log('idle button clicked')
 						$buttonIdle = !$buttonIdle
 					}}>idle</button
 				>
 				<button
 					class="button"
 					on:click={() => {
-						console.log("walk button clicked");
+						console.log('walk button clicked')
 						$buttonWalk = !$buttonWalk
 					}}>walk</button
 				>
 				<button
 					class="button"
 					on:click={() => {
-						console.log("run button clicked");
+						console.log('run button clicked')
 						$buttonRun = !$buttonRun
 					}}>run</button
 				>
