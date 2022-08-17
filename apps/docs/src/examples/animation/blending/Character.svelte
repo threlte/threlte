@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
-	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './State.svelte'
 
 	let currentActionKey = 'idle'
 
@@ -13,21 +13,21 @@
 	})
 
 	const unsub1 = buttonIdle.subscribe(() => {
-		console.log("transition to idle");
+		console.log('transition to idle')
 		transitionTo('idle', 1)
 	})
 
 	const unsub2 = buttonWalk.subscribe(() => {
-		console.log("transition to run");
+		console.log('transition to run')
 		transitionTo('walk', 1)
 	})
 
 	const unsub3 = buttonRun.subscribe(() => {
-		console.log("transition to run");
+		console.log('transition to run')
 		transitionTo('run', 1)
 	})
 
-	function transitionTo(nextActionKey:string, duration = 1) {
+	function transitionTo(nextActionKey: string, duration = 1) {
 		const currentAction = $actions[currentActionKey]
 		const nextAction = $actions[nextActionKey]
 		if (currentAction === nextAction) return
@@ -43,16 +43,16 @@
 		currentActionKey = nextActionKey
 	}
 
-	function handleKeyDown(event:KeyboardEvent) {
+	function handleKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
-			case "s":
+			case 's':
 				transitionTo('walk', 0.2)
-				break;
-			case "d":
+				break
+			case 'd':
 				transitionTo('run', 0.2)
-				break;
+				break
 			default:
-				break;
+				break
 		}
 	}
 
@@ -68,6 +68,6 @@
 	})
 </script>
 
-<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp}/>
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <GLTF bind:gltf={$gltf} url="https://threejs.org/examples/models/gltf/Xbot.glb" />

@@ -12,7 +12,12 @@
 </script>
 
 <PerspectiveCamera position={{ x: -0.6, y: 1.7, z: 2.1 }} near={0.1} far={100}>
-	<OrbitControls maxPolarAngle={DEG2RAD * 80} target={{ y: 0.9 }} />
+	<OrbitControls
+		maxPolarAngle={DEG2RAD * 80}
+		enableRotate={false}
+		enableZoom={false}
+		target={{ y: 0.9 }}
+	/>
 </PerspectiveCamera>
 
 <AmbientLight />
