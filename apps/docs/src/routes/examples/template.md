@@ -19,7 +19,6 @@ Nullam vel urna lorem. Suspendisse quis eros ut orci facilisis mollis nec non tu
 &&&code_wrapper
 @[code svelte|title=Wrapper.svelte](../../examples/Introduction/Wrapper.svelte)
 @[code svelte|title=Scene.svelte](../../examples/Introduction/Scene.svelte)
-
 &&&
 
 :::admonition type="info"
