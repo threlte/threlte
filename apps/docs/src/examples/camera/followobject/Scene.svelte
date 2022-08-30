@@ -1,10 +1,10 @@
 <script>
-	import { AmbientLight, DirectionalLight, Mesh } from '@threlte/core';
-	import { AutoColliders, CollisionGroups } from '@threlte/rapier';
+	import { AmbientLight, DirectionalLight, Mesh } from '@threlte/core'
+	import { AutoColliders, CollisionGroups } from '@threlte/rapier'
 	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
-	import Door from '../../rapier/world/Door.svelte';
+	import Door from '../../rapier/world/Door.svelte'
 
-	import Player from './Character.svelte';
+	import Player from './Character.svelte'
 </script>
 
 <DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
@@ -12,12 +12,12 @@
 
 <CollisionGroups groups={[0, 15]}>
 	<AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>
-    <Mesh
-      receiveShadow
-      geometry={new BoxBufferGeometry(100, 1, 100)}
-      material={new MeshStandardMaterial()}
-    />
-  </AutoColliders>
+		<Mesh
+			receiveShadow
+			geometry={new BoxBufferGeometry(100, 1, 100)}
+			material={new MeshStandardMaterial()}
+		/>
+	</AutoColliders>
 </CollisionGroups>
 
 <CollisionGroups groups={[0]}>
