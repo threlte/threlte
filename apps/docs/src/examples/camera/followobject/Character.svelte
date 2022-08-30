@@ -81,10 +81,6 @@
 			case 'd':
 				right = 1
 				break
-			case ' ':
-				if (!rigidBody || !grounded) break
-				rigidBody.applyImpulse({ x: 0, y: jumpStrength, z: 0 }, true)
-				break
 			default:
 				break
 		}
@@ -135,7 +131,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup={onKeyUp} />
 
 <PerspectiveCamera {position} fov={90}>
 	<Controller bind:position bind:object={scene} />

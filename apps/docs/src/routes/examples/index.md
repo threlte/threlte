@@ -10,11 +10,10 @@ title: Examples
 
 - [Transitions between animations](./animation-blending.md)
 
-<!-- ## Camera
+## Camera
 
-- [Following an object](./examples/template) (WIP)
-- [Making a 1st person controller](./examples/template) (WIP)
-- [Top-down views](./examples/template) (WIP) -->
+- [Following an object](./camera-followobject.md)
+- [Making a 1st person controller](./camera-pointerlock.md)
 
 ## Geometry
 
