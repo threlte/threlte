@@ -4,7 +4,7 @@
 	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
 </script>
 
-<div class="relative h-full">
+<div class="relative h-full w-full">
 	<Canvas>
 		<Scene />
 	</Canvas>
