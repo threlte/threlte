@@ -12,7 +12,6 @@
 	export let radius = 0.3
 	export let height = 1.7
 	export let speed = 6
-	export let jumpStrength = 4
 
 	const name = 'Xbot'
 	const url = 'https://threejs.org/examples/models/gltf/Xbot.glb'
