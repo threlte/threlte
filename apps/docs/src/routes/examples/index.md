@@ -8,12 +8,12 @@ title: Examples
 
 ## Animation
 
-- [Transitions between animations](./animation-blending.md)
+<!-- - [Transitions between animations](./animation-blending.md) -->
 
 ## Camera
 
-- [Following an object](./camera-followobject.md)
-- [Making a 1st person controller](./camera-pointerlock.md)
+<!-- - [Following an object](./camera-followobject.md)
+- [Making a 1st person controller](./camera-pointerlock.md) -->
 
 ## Geometry
 
