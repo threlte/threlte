@@ -3,7 +3,7 @@ title: Follow Object
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/camera/followobject/wrapper.svelte'
+import Wrapper from '$examples/camera/followobject/Wrapper.svelte'
 </script>
 
 # Follow Object
