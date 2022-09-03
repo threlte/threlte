@@ -19,6 +19,8 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 @[code svelte|title=Character.svelte](../../examples/animation/blending/Character.svelte)
 &&&
 
+[Open In Playground](/playground/animation/blending)
+
 ## Handling complexity
 
 You're recommended to implement a connection from gui/keyboard to components that works for you.

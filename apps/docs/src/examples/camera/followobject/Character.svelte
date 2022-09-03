@@ -1,5 +1,6 @@
 <script>
 	import { Euler, Vector3, SphereBufferGeometry, MeshStandardMaterial } from 'three'
+	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { useFrame, useThrelte, PerspectiveCamera, Group, Mesh } from '@threlte/core'
 	import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
@@ -153,7 +154,14 @@
 	</CollisionGroups>
 
 	<Group position={{ y: -height / 2 }}>
-		<GLTF {url} receiveShadow castShadow bind:scene bind:gltf={$gltf}>
+		<GLTF
+			{url}
+			receiveShadow
+			castShadow
+			bind:scene
+			rotation={{ y: DEG2RAD * 180 }}
+			bind:gltf={$gltf}
+		>
 			<Mesh
 				geometry={new SphereBufferGeometry(0.1, 10, 10)}
 				material={new MeshStandardMaterial({ color: 'red' })}
