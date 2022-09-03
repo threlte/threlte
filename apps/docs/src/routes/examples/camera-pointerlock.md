@@ -19,6 +19,8 @@ import Wrapper from '$examples/camera/pointerlock/Wrapper.svelte'
 @[code svelte|title=PointerLockControls.svelte](../../examples/camera/pointerlock/PointerLockControls.svelte)
 &&&
 
+[Open In Playground](/playground/camera/pointerlock)
+
 This implementation of PointerLockControls is a remix of three.js's pointerlock controls but more svelte'y 🚀
 
 Remember remixing three.js more for your purpose is an option.
