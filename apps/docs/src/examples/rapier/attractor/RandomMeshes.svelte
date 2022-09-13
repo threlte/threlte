@@ -34,7 +34,6 @@
 		return Array(c)
 			.fill('x')
 			.map((_) => {
-				console.log('new bodies')
 				return {
 					id: getId(),
 					position: getRandomPosition()
