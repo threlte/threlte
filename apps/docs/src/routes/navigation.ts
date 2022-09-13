@@ -361,6 +361,10 @@ export const sidebar = {
 				slug: '/rapier/collision-groups'
 			},
 			{
+				title: 'Attractor',
+				slug: '/rapier/attractor'
+			},
+			{
 				title: 'Debug',
 				slug: '/rapier/debug'
 			},

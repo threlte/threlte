@@ -177,3 +177,24 @@ export type CollisionGroupsProperties =
       filter: CollisionGroupsBitMask
       memberships: CollisionGroupsBitMask
     }
+
+
+    export type AttractorProperties = Omit<TransformableObjectProperties, 'object'> & {
+      /**
+       * The radius for the Attractor's sphere of influence within which rigid-bodies will be affected.
+       * Default: 10.0
+       */
+      range?: number
+      /**
+       * The strength factor applied to the impulse affecting rigid-bodies within range.
+       * Default: 1.0
+       */
+      strength?: number
+      
+      /**
+       * A helper to visualize the location and range of the attractor.
+       * Default: false
+       */
+      showHelper?: boolean;
+    }
+    
