@@ -8,7 +8,7 @@ import Wrapper from '$examples/rapier/attractor/Wrapper.svelte'
 
 !!!module_summary title=Attractor|sourcePath=components/Attractor/Attractor.svelte|name=Attractor|from=rapier|type=component
 
-An Attractor simulates a source of gravity. Any RigidBody within range will be "pulled" toward the Attractor at the specified strength.
+An attractor simulates a source of gravity. Any rigid-body within range will be "pulled" toward the attractor at the specified strength.
 
 <ExampleWrapper>
   <Wrapper />

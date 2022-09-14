@@ -8,6 +8,7 @@
 	import { Debug, Attractor } from '@threlte/rapier'
 	import { GridHelper } from 'three'
 	import RandomMeshes from './RandomMeshes.svelte'
+
 	let count: number = 50
 	export let showHelper: boolean
 	export let strengthLeft: number
@@ -32,5 +33,5 @@
 <RandomMeshes {count} rangeX={[-30, 30]} rangeY={[0, 100]} rangeZ={[-10, 10]} />
 
 <Attractor range={20} strength={strengthLeft} {showHelper} position={{ x: -25, y: 10 }} />
-<Attractor range={20} strength={strengthCenter} {showHelper} position={{ y: 10 }} />
+<Attractor range={15} strength={strengthCenter} {showHelper} position={{ y: 20 }} />
 <Attractor range={20} strength={strengthRight} {showHelper} position={{ x: 25, y: 10 }} />

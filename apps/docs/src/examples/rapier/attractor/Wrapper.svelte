@@ -23,17 +23,38 @@
 			}}>Reset</Button
 		>
 		<Button on:click={() => (showHelper = !showHelper)}>Toggle Helper</Button>
-		<label
+		<label class="text-sm mt-1"
 			>Strength Left: {strengthLeft}
-			<input type="range" min="-20" max="20" step="1" bind:value={strengthLeft} />
+			<input
+				type="range"
+				min="-20"
+				max="20"
+				step="1"
+				bind:value={strengthLeft}
+				style:display="block"
+			/>
 		</label>
-		<label
+		<label class="text-sm mt-1"
 			>Strength Center: {strengthCenter}
-			<input type="range" min="-20" max="20" step="1" bind:value={strengthCenter} />
+			<input
+				type="range"
+				min="-20"
+				max="20"
+				step="1"
+				bind:value={strengthCenter}
+				style:display="block"
+			/>
 		</label>
-		<label
+		<label class="text-sm mt-1"
 			>Strength Right: {strengthRight}
-			<input type="range" min="-20" max="20" step="1" bind:value={strengthRight} />
+			<input
+				type="range"
+				min="-20"
+				max="20"
+				step="1"
+				bind:value={strengthRight}
+				style:display="block"
+			/>
 		</label>
 	</div>
 	<Canvas>

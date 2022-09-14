@@ -46,7 +46,7 @@
 
 {#each bodies as body (body.id)}
 	<RigidBody position={body.position}>
-		<Collider shape="ball" args={[0.75]} />
+		<Collider shape="ball" args={[0.75]} mass={Math.random() * 10} />
 		<Mesh {geometry} {material} />
 	</RigidBody>
 {/each}
