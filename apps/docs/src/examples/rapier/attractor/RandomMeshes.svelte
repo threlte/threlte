@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	const geometry = new SphereBufferGeometry(0.75)
+	const geometry = new SphereBufferGeometry(1)
 	const material = new MeshBasicMaterial({ color: 'red' })
 </script>
 

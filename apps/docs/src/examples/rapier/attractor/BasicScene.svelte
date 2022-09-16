@@ -3,10 +3,11 @@
 		DirectionalLight,
 		Object3DInstance,
 		OrbitControls,
-		PerspectiveCamera
+		PerspectiveCamera,
+		Mesh
 	} from '@threlte/core'
 	import { Debug, Attractor } from '@threlte/rapier'
-	import { GridHelper } from 'three'
+	import { GridHelper, SphereBufferGeometry, MeshBasicMaterial } from 'three'
 	import RandomMeshes from './RandomMeshes.svelte'
 
 	let count: number = 50
@@ -20,7 +21,7 @@
 	}
 </script>
 
-<PerspectiveCamera position={{ y: 50, z: 100 }} fov={70}>
+<PerspectiveCamera position={{ y: 50, z: 100 }} fov={70} far={10000}>
 	<OrbitControls enableZoom={true} target={{ y: 20 }} />
 </PerspectiveCamera>
 
@@ -30,7 +31,7 @@
 
 <Debug />
 
-<RandomMeshes {count} rangeX={[-30, 30]} rangeY={[0, 100]} rangeZ={[-10, 10]} />
+<RandomMeshes {count} rangeX={[-30, 30]} rangeY={[0, 75]} rangeZ={[-10, 10]} />
 
 <Attractor range={20} strength={strengthLeft} {showHelper} position={{ x: -25, y: 10 }} />
 <Attractor range={15} strength={strengthCenter} {showHelper} position={{ y: 20 }} />
