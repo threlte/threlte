@@ -43,7 +43,7 @@ const config = {
 <br>
 
 :::admonition type="tip"
-[See this comment](https://github.com/grischaerbe/threlte/issues/8#issuecomment-1024085864) for tips on how to reduce bundle size when working with bundlers like vite and three.js.
+[See this comment](https://github.com/threlte/threlte/issues/8#issuecomment-1024085864) for tips on how to reduce bundle size when working with bundlers like vite and three.js.
 :::
 
 ## First Scene
