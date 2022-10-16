@@ -12,12 +12,7 @@
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToEuler } from '../../lib/rotationToEuler'
   import type { RigidBodyProperties } from '../../types/components'
-  import type {
-    RigidBodyContext,
-    RigidBodyEventMap,
-    RigidBodyUserData,
-    ThrelteRigidBody
-  } from '../../types/types'
+  import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -29,12 +24,8 @@
   export let angularVelocity: NonNullable<RigidBodyProperties['angularVelocity']> = {}
   export let gravityScale: NonNullable<RigidBodyProperties['gravityScale']> = 1
   export let ccd: NonNullable<RigidBodyProperties['ccd']> = false
-
-  export let position: RigidBodyProperties['position'] = undefined
-  export let rotation: RigidBodyProperties['rotation'] = undefined
-  export let scale: RigidBodyProperties['scale'] = undefined
-  export let lookAt: RigidBodyProperties['lookAt'] = undefined
-
+  export let angularDamping: NonNullable<RigidBodyProperties['angularDamping']> = 0
+  export let linearDamping: NonNullable<RigidBodyProperties['linearDamping']> = 0
   export let lockRotations: NonNullable<RigidBodyProperties['lockRotations']> = false
   export let lockTranslations: NonNullable<RigidBodyProperties['lockTranslations']> = false
   export let enabledRotations: NonNullable<RigidBodyProperties['enabledRotations']> = [
@@ -48,6 +39,11 @@
     true
   ]
   export let dominance: NonNullable<RigidBodyProperties['dominance']> = 0
+
+  export let position: RigidBodyProperties['position'] = undefined
+  export let rotation: RigidBodyProperties['rotation'] = undefined
+  export let scale: RigidBodyProperties['scale'] = undefined
+  export let lookAt: RigidBodyProperties['lookAt'] = undefined
 
   /**
    * Every RigidBody receives and forwards collision-related events
@@ -139,6 +135,8 @@
     rigidBodyTemp.lockTranslations(lockTranslations, true)
     rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
     rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
+    rigidBodyTemp.setAngularDamping(angularDamping)
+    rigidBodyTemp.setLinearDamping(linearDamping)
   }
 
   /**
