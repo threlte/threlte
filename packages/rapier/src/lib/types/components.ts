@@ -84,6 +84,22 @@ export type RigidBodyProperties = Omit<TransformableObjectProperties, 'object'> 
    * Number in the range -127 to 127, default is 0
    */
   dominance?: number
+
+  /**
+   * Damping lets you slow down a rigid-body automatically. This can be used to
+   * achieve a wide variety of effects like fake air friction. Larger values of
+   * damping coefficients lead to a stronger slow-downs. Their default
+   * values are 0.0 (no damping at all).
+   */
+  linearDamping?: number
+
+  /**
+   * Damping lets you slow down a rigid-body automatically. This can be used to
+   * achieve a wide variety of effects like fake air friction. Larger values of
+   * damping coefficients lead to a stronger slow-downs. Their default
+   * values are 0.0 (no damping at all).
+   */
+  angularDamping?: number
 }
 
 export type ColliderProperties<Shape extends ColliderShapes> = Omit<

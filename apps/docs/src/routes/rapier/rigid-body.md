@@ -45,6 +45,8 @@ lockTranslations: boolean = false
 enabledRotations: Boolean3Array = [true, true, true]
 enabledTranslations: Boolean3Array = [true, true, true]
 dominance: number = 0
+linearDamping: number = 0
+angularDamping: number = 0
 ```
 
 ### Bindings
@@ -52,7 +54,6 @@ dominance: number = 0
 `RigidBody` is a type imported from `'@dimforge/rapier3d-compat'`
 
 ```ts
-
 rigidBody: RigidBody
 ```
 
