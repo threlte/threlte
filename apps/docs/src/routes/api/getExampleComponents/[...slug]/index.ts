@@ -2,14 +2,10 @@ import fs from 'fs'
 import { extname, parse } from 'path'
 import processor from 'svelte-preprocess'
 import { preprocess } from 'svelte/compiler'
-import {
-	type CompilerOptions,
-	transpile,
-	ScriptTarget,
-	ModuleKind,
-	JsxEmit,
-	ModuleResolutionKind
-} from 'typescript'
+import * as ts from 'typescript'
+import type { CompilerOptions } from 'typescript'
+
+const { transpile, ScriptTarget, ModuleKind, JsxEmit, ModuleResolutionKind } = ts
 
 const compilerOptions: CompilerOptions = {
 	target: ScriptTarget.ES2020,
