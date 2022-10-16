@@ -12,18 +12,11 @@ Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry
 
 Edges are displayed when the angle between two faces exceeds the angle defined by the property `threshold`.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/edges">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/edges/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/edges/Scene.svelte)
-&&&
-
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
-
-[Open In Playground](/playground/edges)
 
 !!!
 

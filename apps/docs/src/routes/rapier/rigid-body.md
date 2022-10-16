@@ -12,19 +12,9 @@ The real-time simulation of rigid bodies subjected to forces and contacts is the
 
 Note that rigid-bodies are only responsible for the dynamics and kinematics of the solid. Colliders can be attached to a rigid-body to specify its shape and enable collision-detection. A rigid-body without collider attached to it will not be affected by contacts (because there is no shape to compute contact against).
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/rigid-body">
   <Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/rigid-body/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/rapier/rigid-body/Scene.svelte)
-@[code svelte|title=Ground.svelte](../../examples/rapier/rigid-body/Ground.svelte)
-@[code svelte|title=Emitter.svelte](../../examples/rapier/rigid-body/Emitter.svelte)
-@[code svelte|title=Particle.svelte](../../examples/rapier/rigid-body/Particle.svelte)
-&&&
-
-[Open In Playground](/playground/rapier/rigid-body)
 
 !!!
 

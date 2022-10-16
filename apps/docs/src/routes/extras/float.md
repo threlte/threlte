@@ -10,18 +10,10 @@ import Wrapper from '$examples/extras/float/Wrapper.svelte'
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/float">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/float/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/float/Scene.svelte)
-@[code svelte|title=Blob.svelte](../../examples/extras/float/Blob.svelte)
-&&&
-
-
-[Open In Playground](/playground/extras/float)
 !!!
 
 ### Examples

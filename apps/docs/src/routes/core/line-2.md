@@ -10,16 +10,9 @@ import Wrapper from '$examples/line-2/Wrapper.svelte'
 
 Draw Lines using `THREE.Line2`.
 
-<ExampleWrapper>
-  <Wrapper />
+<ExampleWrapper playgroundHref="/line-2">
+<Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/line-2/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/line-2/Scene.svelte)
-&&&
-
-[Open In Playground](/playground/line-2)
 
 !!!
 

@@ -8,18 +8,9 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 
 # Animation Blending
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/animation">
 	<Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/animation/blending/Wrapper.svelte)
-@[code svelte|title=state.svelte](../../examples/animation/blending/state.svelte)
-@[code svelte|title=Scene.svelte](../../examples/animation/blending/Scene.svelte)
-@[code svelte|title=Character.svelte](../../examples/animation/blending/Character.svelte)
-&&&
-
-[Open In Playground](/playground/animation/blending)
 
 ## Handling complexity
 

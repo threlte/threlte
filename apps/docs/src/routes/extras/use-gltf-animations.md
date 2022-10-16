@@ -9,18 +9,11 @@ import Wrapper from '$examples/use-gltf-animations/Wrapper.svelte'
 !!!module_summary title=useGltfAnimations|sourcePath=hooks/useGltfAnimations.ts|name=useGltfAnimations|from=extras|type=hook|needsContext=true
 Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/use-gltf-animations">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/use-gltf-animations/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-gltf-animations/Scene.svelte)
-&&&
-
 <small>Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen Fox](https://artstation.com/glenatron), CC Attribution.</small>
-
-[Open In Playground](/playground/use-gltf-animations)
 
 !!!
 

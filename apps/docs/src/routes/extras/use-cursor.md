@@ -11,16 +11,9 @@ A hook that sets the css cursor property according to the hover state of a mesh,
 
 If a context is present, the cursor property will be set on the DOM element of the renderer, otherwise it will be set on the body element.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/use-cursor">
   <Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/use-cursor/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/use-cursor/Scene.svelte)
-&&&
-
-[Open In Playground](/playground/extras/use-cursor)
 
 !!!
 

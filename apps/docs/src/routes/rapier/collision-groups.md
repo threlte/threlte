@@ -14,7 +14,6 @@ Each collider that is a child (direct or indirect) of the component `<CollisionG
 
 For general usage instructions, see the relevant documentation [here](https://rapier.rs/docs/user_guides/javascript/colliders#collision-groups-and-solver-groups).
 
-
 !!!
 
 ### Example
@@ -23,7 +22,7 @@ For general usage instructions, see the relevant documentation [here](https://ra
 - <span style="color: limegreen">Collider B</span> is affected by <span style="color: red">Collider A</span> and <span style="color: blue">Collider C</span>
 - <span style="color: blue">Collider C</span> is affected by <span style="color: limegreen">Collider B</span> and not by <span style="color: red">Collider A</span>
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/collision-groups">
   <Wrapper />
 </ExampleWrapper>
 

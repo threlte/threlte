@@ -10,14 +10,9 @@ import Wrapper from '$examples/line-segments/Wrapper.svelte'
 
 Draw lines using `THREE.LineSegments`.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/line-segments">
   <Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/line-segments/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/line-segments/Scene.svelte)
-&&&
 
 !!!
 

@@ -18,20 +18,11 @@ The `<AutoColliders>` component generates colliders based on its children. Curre
 
 The resulting colliders can be transformed (i.e. positioned, rotated and scaled) as well as given regular collider properties such as `mass` or `centerOfMass`.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/auto-colliders">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/auto-colliders/Wrapper.svelte)
-@[code svelte|title=Button.svelte](../../examples/rapier/auto-colliders/Button.svelte)
-@[code svelte|title=Scene.svelte](../../examples/rapier/auto-colliders/Scene.svelte)
-@[code svelte|title=Ground.svelte](../../examples/rapier/auto-colliders/Ground.svelte)
-&&&
-
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
-
-[Open In Playground](/playground/rapier/auto-colliders)
 
 !!!
 
@@ -40,7 +31,6 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 If a `<AutoColliders>` component is not a child of a `<RigidBody>` component, the transform properties are reactive.
 
 ### Properties
-
 
 `AutoCollidersDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
 

@@ -13,16 +13,9 @@ The component `<TransformControls>` needs to be a direct child of the component 
 
 To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/transform-controls">
   <Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/transform-controls/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/transform-controls/Scene.svelte)
-&&&
-
-[Open In Playground](/playground/transform-controls)
 
 !!!
 

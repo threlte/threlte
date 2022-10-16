@@ -45,16 +45,9 @@ Use the binding `refresh` to manually refresh the shadows:
 
 Currently it has the same limitations of drei's version: It yields unexpected results if moved on the x or the z axis.
 
-
-
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/contact-shadows">
   <Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/contact-shadows/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/contact-shadows/Scene.svelte)
-&&&
 
 !!!
 

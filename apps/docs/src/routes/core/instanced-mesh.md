@@ -9,15 +9,10 @@ import Wrapper from '$examples/instanced-mesh/Wrapper.svelte'
 !!!module_summary title=InstancedMesh|sourcePath=objects/InstancedMesh.svelte|name=InstancedMesh|from=core|type=component|divider=false|relatedDocs={[{name:"three.js InstancedMesh reference",url:"https://threejs.org/docs/#api/en/objects/InstancedMesh"}]}
 The `<InstancedMesh>` is a special version of [`<Mesh>`](/core/mesh) with instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/instanced-mesh">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/instanced-mesh/Scene.svelte)
-@[code svelte|title=Sphere.svelte](../../examples/instanced-mesh/Sphere.svelte)
-&&&
 !!!
 
 ---
@@ -113,14 +108,9 @@ Nesting instances might have a slight performance hit, the frameloop will run co
 import WrapperSimple from '$examples/instanced-mesh-simple/Wrapper.svelte'
 </script>
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/instanced-mesh-simple">
   <WrapperSimple />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh-simple/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/instanced-mesh-simple/Scene.svelte)
-&&&
 
 ### Properties
 

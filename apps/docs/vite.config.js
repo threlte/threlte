@@ -42,7 +42,8 @@ const config = {
 			markdown: {
 				components: [
 					{ name: 'ModuleSummary', type: 'custom', container: { marker: '!' } },
-					{ name: 'CodeWrapper', type: 'custom', container: { marker: '&' } }
+					{ name: 'CodeWrapper', type: 'custom', container: { marker: '&' } },
+					{ name: 'OpenInPlayground', type: 'custom', container: { marker: ':' } }
 				]
 			}
 		}),

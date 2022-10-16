@@ -11,18 +11,11 @@ A Hook to load glTF files and use separate object nodes and materials of it.
 
 Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its entirety.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/use-gltf">
   <Wrapper />
 </ExampleWrapper>
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/use-gltf/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-gltf/Scene.svelte)
-&&&
-
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
-
-[Open In Playground](/playground/use-gltf)
 
 !!!
 

@@ -15,20 +15,13 @@ This component is a port of [drei's `<Html>` component](https://github.com/pmndr
 The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
 :::
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/html">
   <Wrapper />
 </ExampleWrapper>
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/html">
   <Wrapper2 />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/html/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/html/Scene.svelte)
-&&&
-
-[Open In Playground](/playground/extras/html)
 
 !!!
 

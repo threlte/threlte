@@ -2,6 +2,10 @@
 title: useFrame
 ---
 
+<script lang="ts">
+import Wrapper from '$examples/use-frame/Wrapper.svelte'
+</script>
+
 !!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=core|type=hook|needsContext=true|divider=false
 This hook allows you to execute code on every frame inside the unified frameloop.
 You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
@@ -18,25 +22,12 @@ type ThrelteUseFrameOptions = {
 ```
 
 `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
-!!!
 
-<script lang="ts">
-import Wrapper from '$examples/use-frame/Wrapper.svelte'
-</script>
-
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/use-frame">
   <Wrapper />
 </ExampleWrapper>
 
-<details>
-  <summary>Show code</summary>
-
-@[code svelte|title=Wrapper.svelte](../../examples/use-frame/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-frame/Scene.svelte)
-
-</details>
-
----
+!!!
 
 ### Example <!-- omit in toc -->
 

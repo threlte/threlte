@@ -10,19 +10,13 @@ import Wrapper from '$examples/Introduction/Wrapper.svelte'
 
 Threlte is a component library for Svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
-<ExampleWrapper>
+<ExampleWrapper playgroundHref="/Introduction">
 	<Wrapper />
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../examples/Introduction/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../examples/Introduction/Scene.svelte)
 
 :::admonition type="info"
 Hooks that make use of the context (as does [useFrame](/core/use-frame) in this example) need to be nested in a child component to `<Canvas>`.
 :::
-
-&&&
 
 It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed).
 
