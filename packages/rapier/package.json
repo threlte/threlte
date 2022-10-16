@@ -1,6 +1,6 @@
 {
   "name": "@threlte/rapier",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.4.0
+
+### Minor Changes
+
+- 4b4d7be: Added rapiers damping properties to the component <RigidBody>
+
 ## 0.3.2
 
 ### Patch Changes
