@@ -8,7 +8,7 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 
 # Animation Blending
 
-<ExampleWrapper playgroundHref="/animation">
+<ExampleWrapper playgroundHref="/animation/blending">
 	<Wrapper />
 </ExampleWrapper>
 
