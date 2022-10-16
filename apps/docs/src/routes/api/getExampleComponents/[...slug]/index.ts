@@ -2,7 +2,7 @@ import fs from 'fs'
 import { extname, parse } from 'path'
 import processor from 'svelte-preprocess'
 import { preprocess } from 'svelte/compiler'
-import * as ts from 'typescript'
+import ts from 'typescript'
 import type { CompilerOptions } from 'typescript'
 
 const { transpile, ScriptTarget, ModuleKind, JsxEmit, ModuleResolutionKind } = ts
