@@ -21,23 +21,13 @@ The car can be controlled with the WASD keys. The spacebar activates the handbre
 The property `dominance` on `<RigidBody>` components can be used to make objects more or less vulnerable to impacts of the car.
 
 <!-- TODO: Fix .ts output for playgroung -->
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
-
-<!-- <ExampleWrapper playgroundHref="/rapier/basic-car-controller">
+<!-- <ExampleWrapper>
   <Wrapper />
 </ExampleWrapper> -->
 
-&&&code_wrapper
-@[code svelte|title=Car.svelte](../../examples/rapier/basic-car-controller/Car.svelte)
-@[code svelte|title=Axle.svelte](../../examples/rapier/basic-car-controller/Axle.svelte)
-@[code svelte|title=Wheel.svelte](../../examples/rapier/basic-car-controller/Wheel.svelte)
-@[code svelte|title=Ground.svelte](../../examples/rapier/basic-car-controller/Ground.svelte)
-@[code svelte|title=Scene.svelte](../../examples/rapier/basic-car-controller/Scene.svelte)
-@[code svelte|title=useWasd.ts](../../examples/rapier/basic-car-controller/useWasd.ts)
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/basic-car-controller/Wrapper.svelte)
-&&&
+<ExampleWrapper playgroundHref="/rapier/basic-car-controller">
+  <Wrapper />
+</ExampleWrapper>
 
 Tips:
 
