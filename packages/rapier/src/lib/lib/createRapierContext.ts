@@ -5,6 +5,7 @@ import type {
   RigidBodyHandle
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
+import { writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type {
   ColliderEventDispatcher,
@@ -79,6 +80,7 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     addColliderToContext,
     removeColliderFromContext,
     addRigidBodyToContext,
-    removeRigidBodyFromContext
+    removeRigidBodyFromContext,
+    debug: writable(false),
   }
 }

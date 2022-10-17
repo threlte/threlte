@@ -113,7 +113,3 @@ export type CollisionGroupsBitMask = (
   | 14
   | 15
 )[]
-
-export type ThrelteRapierWorldProperties = {
-  threlteRapierWorldDebugging: Writable<boolean>;
-}

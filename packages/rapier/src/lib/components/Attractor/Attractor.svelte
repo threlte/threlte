@@ -1,16 +1,9 @@
 <script lang="ts">
-  import type { ThrelteRapierWorldProperties } from '$lib/types/types'
   import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { Mesh, useFrame, Object3DInstance } from '@threlte/core'
-  import { getContext } from 'svelte'
-  import type { Writable } from 'svelte/store'
   import { SphereBufferGeometry, MeshBasicMaterial, Vector3, Object3D } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import type { AttractorProperties } from '../../types/components'
-
-  const { threlteRapierWorldDebugging } = getContext<ThrelteRapierWorldProperties>(
-    'threlte-rapier-world-debugging'
-  )
 
   export let position: AttractorProperties['position'] = undefined
   export let strength: NonNullable<AttractorProperties['strength']> = 1
@@ -19,7 +12,8 @@
   export let gravitationalConstant: NonNullable<
     AttractorProperties['gravitationalConstant']
   > = 6.673e-11
-  const { world } = useRapier()
+  
+  const { world, debug } = useRapier()
   const gravitySource = new Vector3()
   let obj = new Object3D()
 
@@ -65,7 +59,7 @@
 >
   <slot />
 
-  {#if $threlteRapierWorldDebugging}
+  {#if $debug}
     <Mesh
       geometry={new SphereBufferGeometry(range)}
       material={new MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.25 })}

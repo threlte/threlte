@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
-  import type { ThrelteRapierWorldProperties } from '$lib/types/types'
   import RAPIER from '@dimforge/rapier3d-compat'
-  import { onMount, setContext, } from 'svelte'
+  import { onMount, } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
   import type { WorldProperties } from '../../types/components'
 
@@ -42,13 +41,6 @@
   }
 
   onMount(init)
-
-  setContext<ThrelteRapierWorldProperties>('threlte-rapier-world-debugging', {
-    /**
-     * Triggers debugging in custom threte/rapier components
-    */
-    threlteRapierWorldDebugging: writable(false),
-  })
 
 </script>
 
