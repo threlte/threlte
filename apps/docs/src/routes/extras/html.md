@@ -16,11 +16,18 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 :::
 
 <ExampleWrapper playgroundHref="/extras/html">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/extras/html/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/html/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 <ExampleWrapper playgroundHref="/html">
-  <Wrapper2 />
+<Wrapper2 />
 </ExampleWrapper>
 
 !!!

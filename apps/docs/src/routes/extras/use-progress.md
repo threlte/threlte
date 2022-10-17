@@ -10,7 +10,14 @@ import Wrapper from '$examples/use-progress/Wrapper.svelte'
 Convenience hook that wraps `THREE.DefaultLoadingManager`.
 
 <ExampleWrapper playgroundHref="/use-progress">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/use-progress/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-progress/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>

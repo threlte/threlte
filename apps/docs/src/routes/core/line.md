@@ -13,7 +13,14 @@ Draw Lines using `THREE.Line`. Due to limitations of the OpenGL Core Profile wit
 Provide either `points` or a `geometry` to draw lines.
 
 <ExampleWrapper playgroundHref="/line">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/line/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/line/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 !!!

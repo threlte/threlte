@@ -13,7 +13,17 @@ This component provides the basic physics context and loads [rapier](https://rap
 **All components that rely on physics** (e.g. `<RigidBody>` or `<Collider>`) **must be a child of `<World>`**.
 
 <ExampleWrapper playgroundHref="/rapier/world">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/world/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/rapier/world/Scene.svelte)
+@[code svelte|title=Door.svelte](../../examples/rapier/world/Door.svelte)
+@[code svelte|title=Player.svelte](../../examples/rapier/world/Player.svelte)
+@[code svelte|title=Ground.svelte](../../examples/rapier/world/Ground.svelte)
+
+</div>
 </ExampleWrapper>
 
 !!!

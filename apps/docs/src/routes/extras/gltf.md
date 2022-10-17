@@ -19,7 +19,14 @@ See the hook [`useGltfAnimations`](/extras/use-gltf-animations) on how to use an
 :::
 
 <ExampleWrapper playgroundHref="/gltf">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/gltf/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>

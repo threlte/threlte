@@ -11,7 +11,7 @@
 }
 
 .container {
-	@apply !max-w-none;
+	@apply !max-w-none text-sm;
 }
 
 .container .overlay {

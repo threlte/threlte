@@ -1,17 +1,51 @@
 <script lang="ts">
-	import OpenInPlayground from './OpenInPlayground.svelte'
+	import CaretIcon from './CaretIcon.svelte'
+	import { slide } from 'svelte/transition'
+	import PlaygroundIcon from './PlaygroundIcon.svelte'
 
 	export let playgroundHref: string | undefined = undefined
 	$: href = `/playground/${
 		playgroundHref?.startsWith('/') ? playgroundHref.slice(1) : playgroundHref
 	}`
+
+	$: hasPlayground = !!playgroundHref
+	$: hasCode = !!$$slots.code
+
+	let expanded = false
 </script>
 
 <div
-	class="my-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-[600px] relative"
+	class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-[600px] relative"
 >
-	{#if playgroundHref}
-		<OpenInPlayground class="absolute bottom-6 left-6 !shadow-none z-50" {href} />
-	{/if}
+	<div class="flex flex-row absolute bottom-6 left-6 z-50 font-semibold">
+		<button
+			on:click={() => (expanded = !expanded)}
+			class:hidden={!hasCode}
+			class:rounded-r-none={hasPlayground}
+			class="flex flex-row items-center gap-2 !border-2 border-brand text-brand rounded-md px-2 py-0.5 shadow-lg bg-white hover:bg-brand hover:text-white"
+		>
+			<div class:rotate-180={expanded} class="transition-transform">
+				<CaretIcon iconWidth={14} class="!text-inherit !p-0 !m-0" />
+			</div>
+			Code
+		</button>
+		{#if playgroundHref}
+			<a
+				{href}
+				class:!border-l-0={hasCode}
+				class:rounded-l-none={hasCode}
+				class="flex flex-row items-center gap-2 !no-underline !border-2 border-brand text-brand rounded-md px-2 py-0.5 bg-white hover:bg-brand hover:text-white"
+			>
+				<PlaygroundIcon class="!text-inherit !p-0 !m-0" {href} />
+				Playground
+			</a>
+		{/if}
+	</div>
 	<slot />
 </div>
+
+{#if expanded}
+	<div transition:slide|local>
+		<slot name="code" />
+	</div>
+{/if}

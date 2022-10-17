@@ -9,7 +9,16 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 # Animation Blending
 
 <ExampleWrapper playgroundHref="/animation/blending">
-	<Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/animation/blending/Wrapper.svelte)
+@[code svelte|title=state.svelte](../../examples/animation/blending/state.svelte)
+@[code svelte|title=Scene.svelte](../../examples/animation/blending/Scene.svelte)
+@[code svelte|title=Character.svelte](../../examples/animation/blending/Character.svelte)
+
+</div>
 </ExampleWrapper>
 
 ## Handling complexity

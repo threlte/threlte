@@ -23,7 +23,16 @@ For general usage instructions, see the relevant documentation [here](https://ra
 - <span style="color: blue">Collider C</span> is affected by <span style="color: limegreen">Collider B</span> and not by <span style="color: red">Collider A</span>
 
 <ExampleWrapper playgroundHref="/rapier/collision-groups">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/collision-groups/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/rapier/collision-groups/Scene.svelte)
+@[code svelte|title=Button.svelte](../../examples/rapier/collision-groups/Button.svelte)
+@[code svelte|title=Ground.svelte](../../examples/rapier/collision-groups/Ground.svelte)
+
+</div>
 </ExampleWrapper>
 
 ```svelte

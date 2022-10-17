@@ -24,7 +24,14 @@ type ThrelteUseFrameOptions = {
 `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
 
 <ExampleWrapper playgroundHref="/use-frame">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/use-frame/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-frame/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 !!!

@@ -12,6 +12,13 @@ Draw Lines using `THREE.Line2`.
 
 <ExampleWrapper playgroundHref="/line-2">
 <Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/line-2/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/line-2/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 !!!

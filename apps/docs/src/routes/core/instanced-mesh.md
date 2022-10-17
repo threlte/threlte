@@ -10,7 +10,15 @@ import Wrapper from '$examples/instanced-mesh/Wrapper.svelte'
 The `<InstancedMesh>` is a special version of [`<Mesh>`](/core/mesh) with instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
 
 <ExampleWrapper playgroundHref="/instanced-mesh">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/instanced-mesh/Scene.svelte)
+@[code svelte|title=Sphere.svelte](../../examples/instanced-mesh/Sphere.svelte)
+
+</div>
 </ExampleWrapper>
 
 !!!
@@ -109,7 +117,14 @@ import WrapperSimple from '$examples/instanced-mesh-simple/Wrapper.svelte'
 </script>
 
 <ExampleWrapper playgroundHref="/instanced-mesh-simple">
-  <WrapperSimple />
+<WrapperSimple />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh-simple/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/instanced-mesh-simple/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 ### Properties

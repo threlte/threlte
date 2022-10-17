@@ -10,7 +10,14 @@ import Wrapper from '$examples/use-gltf-animations/Wrapper.svelte'
 Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
 <ExampleWrapper playgroundHref="/use-gltf-animations">
-  <Wrapper />
+<Wrapper />
+
+<div slot="code">
+
+@[code svelte|title=Wrapper.svelte](../../examples/use-gltf-animations/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/use-gltf-animations/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
 <small>Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen Fox](https://artstation.com/glenatron), CC Attribution.</small>

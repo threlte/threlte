@@ -254,7 +254,7 @@
 	</div>
 
 	{#if browser}
-		<div class="w-full border-t border-gray-300 flex-1 mt-4">
+		<div class="w-full border-t border-gray-300 flex-1 mt-4 repl">
 			<Repl
 				on:change={onChange}
 				workersUrl="/workers"
@@ -267,4 +267,3 @@
 		</div>
 	{/if}
 </div>
-
