@@ -42,4 +42,5 @@ export type {
   SensorEnterEvent,
   SensorExitEvent,
   ContactEvent,
+  ThrelteRapierWorldProperties,
 } from './types/types'

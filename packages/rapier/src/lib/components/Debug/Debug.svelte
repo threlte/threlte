@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { ThrelteRapierWorldProperties } from '$lib/types/types'
   import { LineSegments, useFrame } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, getContext } from 'svelte'
+  import type { Writable } from 'svelte/store'
   import type { LineBasicMaterialParameters } from 'three'
   import { BufferAttribute, BufferGeometry, LineBasicMaterial } from 'three'
   import { useRapier } from '../../hooks/useRapier'
@@ -24,6 +26,9 @@
   geometry.setAttribute('position', vertices)
   geometry.setAttribute('color', colors)
 
+  const { threlteRapierWorldDebugging } = getContext<ThrelteRapierWorldProperties>('threlte-rapier-world-debugging')
+  threlteRapierWorldDebugging.set(true)
+
   useFrame(() => {
     const buffers = world.debugRender()
 
@@ -37,6 +42,7 @@
   onDestroy(() => {
     geometry.dispose()
     material.dispose()
+    threlteRapierWorldDebugging.set(false)
   })
 </script>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { World } from '@threlte/rapier'
+	import { World, Debug } from '@threlte/rapier'
 	import Button from './Button.svelte'
 	import BasicScene from './BasicScene.svelte'
 	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
@@ -84,10 +84,13 @@
 	</div>
 	<Canvas>
 		<World gravity={{ y: showAdvanced ? 0 : -3 }}>
+			{#if showHelper}
+			<Debug />
+			{/if}
 			{#if showAdvanced}
-				<AdvancedScene {showHelper} type={gType} bind:reset />
+				<AdvancedScene type={gType} bind:reset />
 			{:else}
-				<BasicScene {showHelper} bind:reset {strengthLeft} {strengthCenter} {strengthRight} />
+				<BasicScene bind:reset {strengthLeft} {strengthCenter} {strengthRight} />
 			{/if}
 			<HTML slot="fallback" transform>
 				<p class="text-xs">

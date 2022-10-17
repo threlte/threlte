@@ -15,7 +15,6 @@
 	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
 	import { GridHelper, SphereBufferGeometry, MeshBasicMaterial } from 'three'
 
-	export let showHelper: boolean
 	export let type: GravityType = 'static'
 	let hide = false
 	export const reset = () => {
@@ -53,8 +52,6 @@
 
 <Object3DInstance object={new GridHelper(100)} />
 
-<Debug />
-
 {#if !hide}
 	<RigidBody position={{ x: -50 }} linearVelocity={{ x: 5, z: -5 }}>
 		<Collider shape="ball" args={[1]} mass={config[type].strength} />
@@ -64,7 +61,6 @@
 			gravitationalConstant={config[type].gravitationalConstant}
 			strength={config[type].strength}
 			gravityType={type}
-			{showHelper}
 		/>
 	</RigidBody>
 	<RigidBody linearVelocity={{ y: 5 }}>
@@ -75,7 +71,6 @@
 			gravitationalConstant={config[type].gravitationalConstant}
 			strength={config[type].strength}
 			gravityType={type}
-			{showHelper}
 		/>
 	</RigidBody>
 	<RigidBody position={{ x: 50 }} linearVelocity={{ x: -5, z: 5 }}>
@@ -86,7 +81,6 @@
 			gravitationalConstant={config[type].gravitationalConstant}
 			strength={config[type].strength}
 			gravityType={type}
-			{showHelper}
 		/>
 	</RigidBody>
 {/if}
