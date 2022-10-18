@@ -2,7 +2,7 @@
 	import { AmbientLight, DirectionalLight, Mesh } from '@threlte/core'
 	import { AutoColliders, CollisionGroups } from '@threlte/rapier'
 	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
-	import Door from '../../rapier/world/Door.svelte'
+	import Door from './Door.svelte'
 	import Player from './Character.svelte'
 </script>
 
