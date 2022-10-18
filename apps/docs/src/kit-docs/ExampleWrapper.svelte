@@ -2,6 +2,7 @@
 	import CaretIcon from './CaretIcon.svelte'
 	import { slide } from 'svelte/transition'
 	import PlaygroundIcon from './PlaygroundIcon.svelte'
+	import { onMount } from 'svelte'
 
 	export let playgroundHref: string | undefined = undefined
 	$: href = `/playground/${
@@ -12,6 +13,11 @@
 	$: hasCode = !!$$slots.code
 
 	let expanded = false
+
+	let mounted = false
+	onMount(() => {
+		mounted = true
+	})
 </script>
 
 <div
@@ -41,7 +47,9 @@
 			</a>
 		{/if}
 	</div>
-	<slot />
+	{#if mounted}
+		<slot />
+	{/if}
 </div>
 
 {#if expanded}
