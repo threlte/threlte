@@ -3,7 +3,7 @@ title: useFrame
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/use-frame/Wrapper.svelte'
+import Wrapper from '$examples/core/use-frame/Wrapper.svelte'
 </script>
 
 !!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=core|type=hook|needsContext=true|divider=false
@@ -23,13 +23,13 @@ type ThrelteUseFrameOptions = {
 
 `useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
 
-<ExampleWrapper playgroundHref="/use-frame">
+<ExampleWrapper playgroundHref="/core/use-frame">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/use-frame/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-frame/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/use-frame/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/use-frame/Scene.svelte)
 
 </div>
 </ExampleWrapper>
