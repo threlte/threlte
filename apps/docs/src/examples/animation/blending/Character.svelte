@@ -14,17 +14,17 @@
 
 	const unsub1 = buttonIdle.subscribe(() => {
 		console.log('transition to idle')
-		transitionTo('idle', 1)
+		transitionTo('idle', 0.3)
 	})
 
 	const unsub2 = buttonWalk.subscribe(() => {
 		console.log('transition to run')
-		transitionTo('walk', 1)
+		transitionTo('walk', 0.3)
 	})
 
 	const unsub3 = buttonRun.subscribe(() => {
 		console.log('transition to run')
-		transitionTo('run', 1)
+		transitionTo('run', 0.3)
 	})
 
 	function transitionTo(nextActionKey: string, duration = 1) {
@@ -43,23 +43,6 @@
 		currentActionKey = nextActionKey
 	}
 
-	function handleKeyDown(event: KeyboardEvent) {
-		switch (event.key) {
-			case 's':
-				transitionTo('walk', 0.2)
-				break
-			case 'd':
-				transitionTo('run', 0.2)
-				break
-			default:
-				break
-		}
-	}
-
-	function handleKeyUp() {
-		transitionTo('idle', 0.2)
-	}
-
 	onDestroy(() => {
 		// We unsubscribe otherwise we'd have old subscriptions still active
 		unsub1()
@@ -67,7 +50,5 @@
 		unsub3()
 	})
 </script>
-
-<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <GLTF bind:gltf={$gltf} url="https://threejs.org/examples/models/gltf/Xbot.glb" />
