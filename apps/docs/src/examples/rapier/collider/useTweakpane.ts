@@ -3,13 +3,98 @@ import { get, writable } from 'svelte/store'
 import type { FolderApi, TabPageApi, InputParams } from 'tweakpane'
 import * as tweakpaneDefault from 'tweakpane'
 import type { PaneConfig } from 'tweakpane/dist/types/pane/pane-config'
+import type { View } from '@tweakpane/core'
+import * as tweakpaneCore from '@tweakpane/core'
 
 const tp = (tweakpaneDefault as any).default ?? tweakpaneDefault
+const tpC = ((tweakpaneCore as any).default ?? tweakpaneCore) as any
+
+const className = tpC.ClassName('ph')
+
+class TextView implements View {
+	element: HTMLElement
+	constructor(doc: any, config: any) {
+		this.element = doc.createElement('div')
+		this.element.classList.add(className())
+		config.viewProps.bindClassModifiers(this.element)
+
+		const textElement = doc.createElement('div')
+		textElement.classList.add(className('t'))
+		textElement.textContent = config.text
+		this.element.appendChild(textElement)
+	}
+}
+
+// prettier-ignore
+class TextController extends (tpC.BladeController) {
+	constructor(doc: any, config: any) {
+		super({
+			blade: tpC.createBlade(),
+			view: new TextView(doc, config),
+			viewProps: config.viewProps
+		})
+	}
+}
+
+export const TextPlugin = {
+	id: 'text',
+	type: 'blade',
+	css: `.tp-phv {
+	align-items: center;
+	display: flex;
+	height: var(--bld-us);
+	position: relative;
+}
+.tp-phv::before {
+	border: var(--tw-prose-body) dashed 1px;
+	border-radius: var(--elm-br);
+	bottom: 0;
+	content: '';
+	left: var(--cnt-v-p);
+	opacity: 0.3;
+	position: absolute;
+	right: var(--cnt-v-p);
+	top: 0;
+}
+.tp-phv_t {
+	box-sizing: border-box;
+	color: var(--mo-fg);
+	flex: 1;
+	padding: 4px;
+	text-align: center;
+}
+`,
+	accept(params: any) {
+		const p = tpC.ParamsParsers
+		const r = tpC.parseParams(params, {
+			lineCount: p.optional.number,
+			text: p.required.string,
+			view: p.required.constant('text')
+		})
+		return r ? { params: r } : null
+	},
+	controller(args: any) {
+		return new TextController(args.document, {
+			lineCount: args.params.lineCount ?? 1,
+			text: args.params.text,
+			viewProps: args.viewProps
+		})
+	},
+	api(args: any) {
+		if (!(args.controller instanceof TextController)) {
+			return null
+		}
+		return new tpC.BladeApi(args.controller)
+	}
+}
 
 export const useTweakpane = (config?: Omit<PaneConfig, 'container' | 'document'>) => {
 	let disposed = false
 
 	const pane = new tp.Pane(config)
+	pane.registerPlugin({
+		plugin: TextPlugin
+	})
 	const unsubscriptions = new Set<() => void>()
 
 	const action = (node: HTMLElement) => {
@@ -42,7 +127,7 @@ export const useTweakpane = (config?: Omit<PaneConfig, 'container' | 'document'>
 		node.style.setProperty('--tp-input-foreground-color', 'hsla(230, 0%, 30%, 1.00')
 		node.style.setProperty('--tp-label-foreground-color', 'hsla(230, 0%, 30%, 0.70')
 		node.style.setProperty('--tp-monitor-background-color', 'hsla(230, 0%, 30%, 0.10')
-		node.style.setProperty('--tp-monitor-foreground-color', 'hsla(230, 0%, 30%, 0.50')
+		node.style.setProperty('--tp-monitor-foreground-color', 'hsla(230, 0%, 30%, 1')
 
 		return {
 			destroy() {
