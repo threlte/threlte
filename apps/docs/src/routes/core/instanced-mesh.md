@@ -3,20 +3,20 @@ title: InstancedMesh
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/instanced-mesh/Wrapper.svelte'
+import Wrapper from '$examples/core/instanced-mesh/Wrapper.svelte'
 </script>
 
 !!!module_summary title=InstancedMesh|sourcePath=objects/InstancedMesh.svelte|name=InstancedMesh|from=core|type=component|divider=false|relatedDocs={[{name:"three.js InstancedMesh reference",url:"https://threejs.org/docs/#api/en/objects/InstancedMesh"}]}
 The `<InstancedMesh>` is a special version of [`<Mesh>`](/core/mesh) with instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
 
-<ExampleWrapper playgroundHref="/instanced-mesh">
+<ExampleWrapper playgroundHref="/core/instanced-mesh">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/instanced-mesh/Scene.svelte)
-@[code svelte|title=Sphere.svelte](../../examples/instanced-mesh/Sphere.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/instanced-mesh/Scene.svelte)
+@[code svelte|title=Sphere.svelte](../../examples/core/instanced-mesh/Sphere.svelte)
 
 </div>
 </ExampleWrapper>
@@ -113,16 +113,16 @@ Nesting instances might have a slight performance hit, the frameloop will run co
 ### Example
 
 <script lang="ts">
-import WrapperSimple from '$examples/instanced-mesh-simple/Wrapper.svelte'
+import WrapperSimple from '$examples/core/instanced-mesh-simple/Wrapper.svelte'
 </script>
 
-<ExampleWrapper playgroundHref="/instanced-mesh-simple">
+<ExampleWrapper playgroundHref="/core/instanced-mesh-simple">
 <WrapperSimple />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/instanced-mesh-simple/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/instanced-mesh-simple/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh-simple/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/instanced-mesh-simple/Scene.svelte)
 
 </div>
 </ExampleWrapper>
