@@ -13,6 +13,7 @@
 	} from 'three'
 	import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
 	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+	
 	// import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
 
 	export let path: EnvironmentProperties['path'] = undefined
