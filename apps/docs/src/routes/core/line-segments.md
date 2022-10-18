@@ -3,20 +3,20 @@ title: LineSegments
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/line-segments/Wrapper.svelte'
+import Wrapper from '$examples/core/line-segments/Wrapper.svelte'
 </script>
 
 !!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=core|type=component|relatedDocs={[{name:"three.js LineSegments reference",url:"https://threejs.org/docs/#api/en/objects/LineSegments"}]}
 
 Draw lines using `THREE.LineSegments`.
 
-<ExampleWrapper playgroundHref="/line-segments">
+<ExampleWrapper playgroundHref="/core/line-segments">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/line-segments/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/line-segments/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/line-segments/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/line-segments/Scene.svelte)
 
 </div>
 </ExampleWrapper>
