@@ -37,7 +37,7 @@ The component decides whether to use **cubic** or **equirectangular** map based 
   files= {['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']}
   isBackground={true}
   format="ldr"
-  groundProjection={{ radius: 200, height: 5, scalar: 100 }}
+  groundProjection={{ radius: 200, height: 5, scale: {x: 100, y: 100, z: 100}}}
 />
 
 <!-- Equirectangular jpg envmap -->
@@ -54,7 +54,7 @@ The component decides whether to use **cubic** or **equirectangular** map based 
   files={[['px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr']]}
   isBackground={true}
   format="hdr"
-  groundProjection={{ radius: 200, height: 5, scalar: 100 }}
+  groundProjection={{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100} }}
 />
 
 <!-- Equirectangular hdr envmap -->
@@ -63,7 +63,7 @@ The component decides whether to use **cubic** or **equirectangular** map based 
   files='shanghai_riverside_1k.hdr'
   isBackground={true}
   format="hdr"
-  groundProjection={{ radius: 200, height: 5, scalar: 100 }}
+  groundProjection={{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100} }}
 />
 ```
 
@@ -81,7 +81,7 @@ isBackground: boolean = undefined
 groundProjection: {
 	radius: number
 	height: number
-	scalar: number
+	scale: Scale
 } = undefined
 encoding: THREE.TextureEncoding = undefined
 ```
