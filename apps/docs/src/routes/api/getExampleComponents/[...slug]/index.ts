@@ -13,7 +13,8 @@ const compilerOptions: CompilerOptions = {
 	strict: false,
 	esModuleInterop: true,
 	jsx: JsxEmit.Preserve,
-	moduleResolution: ModuleResolutionKind.NodeJs
+	moduleResolution: ModuleResolutionKind.NodeJs,
+	sourceMap: false
 }
 
 const moduleExtensions = ['.svelte', '.ts'] as const

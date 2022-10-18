@@ -30,6 +30,7 @@ importers:
       '@threlte/core': workspace:*
       '@threlte/extras': workspace:*
       '@threlte/rapier': workspace:*
+      '@tweakpane/core': ^1.1.0
       '@types/react': ^18.0.15
       '@types/three': ^0.140.0
       '@typescript-eslint/eslint-plugin': ^5.30.5
@@ -56,6 +57,7 @@ importers:
       tailwindcss: ^3.1.5
       three: ^0.140.2
       tslib: ^2.4.0
+      tweakpane: ^3.1.0
       typescript: ^4.7.4
       unplugin-icons: ^0.13.4
       vite: ^2.9.14
@@ -74,6 +76,7 @@ importers:
       '@threlte/core': link:../../packages/core
       '@threlte/extras': link:../../packages/extras
       '@threlte/rapier': link:../../packages/rapier
+      '@tweakpane/core': 1.1.0
       '@types/react': 18.0.15
       '@types/three': 0.140.0
       '@typescript-eslint/eslint-plugin': 5.30.5_6zdoc3rn4mpiddqwhppni2mnnm
@@ -100,6 +103,7 @@ importers:
       tailwindcss: 3.1.5_postcss@8.4.14
       three: 0.140.2
       tslib: 2.4.0
+      tweakpane: 3.1.0
       typescript: 4.7.4
       unplugin-icons: 0.13.4_vite@2.9.14
       vite: 2.9.14
@@ -1107,6 +1111,10 @@ packages:
 
   /@tsconfig/node16/1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+    dev: true
+
+  /@tweakpane/core/1.1.0:
+    resolution: {integrity: sha512-vbbiQb+aoFI13lIbE7DJvhHZVE1YlUpGoaAamSpU6wLp2jA3VowS1wfRJBBB8IBCYm7nF6ULl7zfJKxl1XdyfA==}
     dev: true
 
   /@types/is-ci/3.0.0:
@@ -5584,6 +5592,10 @@ packages:
       turbo-windows-32: 1.3.1
       turbo-windows-64: 1.3.1
       turbo-windows-arm64: 1.3.1
+    dev: true
+
+  /tweakpane/3.1.0:
+    resolution: {integrity: sha512-PGAp/LPQdHwzL7/iAW4lV1p9iPQTti7YMjMWO48CoYjvZRS59RmgQnhEGzKzqST1JnmOYmQUjTe8bdhlZRJs5A==}
     dev: true
 
   /type-check/0.4.0:

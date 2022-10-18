@@ -73,10 +73,12 @@
 		type: string
 	}[]
 
+	const injectedCSS = `body, html { padding: 0; }`
+
 	onMount(() => {
 		if (!repl) return
 		repl.set({
-			css: `body, html { padding: 0; }`,
+			css: injectedCSS,
 			components
 		})
 	})
@@ -170,7 +172,7 @@
 		const componentsData = await Promise.all(componentsDataPromises)
 
 		repl.set({
-			css: `body, html { padding: 0; }`,
+			css: injectedCSS,
 			components: componentsData
 		})
 	}
@@ -260,7 +262,7 @@
 				workersUrl="/workers"
 				embedded
 				relaxed
-				injectedCSS={`body, html { margin: 0; }`}
+				{injectedCSS}
 				orientation="columns"
 				bind:this={repl}
 			/>
