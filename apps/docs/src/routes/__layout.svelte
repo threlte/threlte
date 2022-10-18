@@ -79,7 +79,7 @@
 				<img class="header-logo" src="/logo/threlte-logo.png" alt="" />
 			</a>
 			<div class="flex flex-col gap-3 mt-8">
-				<GithubIcon class="!p-0" href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
+				<GithubIcon class="!p-0" href="https://github.com/threlte/threlte">GitHub</GithubIcon>
 				<DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
 				<PlaygroundIcon class="!p-0" href="/playground">Playground</PlaygroundIcon>
 			</div>
@@ -97,7 +97,7 @@
 			</a>
 		</div>
 		<div slot="navbar-right-alt">
-			<GithubIcon href="https://github.com/grischaerbe/threlte">GitHub</GithubIcon>
+			<GithubIcon href="https://github.com/threlte/threlte">GitHub</GithubIcon>
 			<DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
 		</div>
 		<slot />

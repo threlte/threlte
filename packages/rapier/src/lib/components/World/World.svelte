@@ -41,6 +41,7 @@
   }
 
   onMount(init)
+
 </script>
 
 {#if $initialized}
