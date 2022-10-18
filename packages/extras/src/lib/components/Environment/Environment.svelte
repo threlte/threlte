@@ -13,8 +13,8 @@
 	} from 'three'
 	import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
 	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-	
-	// import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
+
+	import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
 
 	export let path: EnvironmentProperties['path'] = undefined
 	export let files: EnvironmentProperties['files']
@@ -76,32 +76,32 @@
 		invalidate()
 	}
 
-	// const toggleGroundEnv = (
-	// 	groundEnv: GroundProjectedEnv | undefined,
-	// 	groundEnvProps: EnvironmentProperties['groundProjection'],
-	// 	envMap: Texture
-	// ) => {
-	// 	if (groundEnv && !groundEnvProps) {
-	// 		scene.remove(currentGroundEnv)
-	// 		currentGroundEnv = undefined
-	// 		invalidate('Removing ground projected environment')
-	// 	}
-	// 	if (!groundEnv && groundEnvProps && envMap) {
-	// 		currentGroundEnv = new GroundProjectedEnv(envMap)
-	// 		currentGroundEnv.scale.setScalar(groundEnvProps.scalar)
-	// 		currentGroundEnv.radius = groundEnvProps.radius
-	// 		currentGroundEnv.height = groundEnvProps.height
-	// 		scene.add(currentGroundEnv)
-	// 		invalidate('Enabling ground projected environment')
-	// 	}
-	// 	if (groundEnv && groundEnvProps) {
-	// 		currentGroundEnv.radius = groundEnvProps.radius
-	// 		currentGroundEnv.height = groundEnvProps.height
-	// 		invalidate('Updating ground projected environment properties')
-	// 	}
-	// }
+	const toggleGroundEnv = (
+		groundEnv: GroundProjectedEnv | undefined,
+		groundEnvProps: EnvironmentProperties['groundProjection'],
+		envMap: Texture
+	) => {
+		if (groundEnv && !groundEnvProps) {
+			scene.remove(currentGroundEnv)
+			currentGroundEnv = undefined
+			invalidate('Removing ground projected environment')
+		}
+		if (!groundEnv && groundEnvProps && envMap) {
+			currentGroundEnv = new GroundProjectedEnv(envMap)
+			currentGroundEnv.scale.setScalar(groundEnvProps.scalar)
+			currentGroundEnv.radius = groundEnvProps.radius
+			currentGroundEnv.height = groundEnvProps.height
+			scene.add(currentGroundEnv)
+			invalidate('Enabling ground projected environment')
+		}
+		if (groundEnv && groundEnvProps) {
+			currentGroundEnv.radius = groundEnvProps.radius
+			currentGroundEnv.height = groundEnvProps.height
+			invalidate('Updating ground projected environment properties')
+		}
+	}
 
-	// $: toggleGroundEnv(currentGroundEnv, groundProjection, currentEnvMap)
+	$: toggleGroundEnv(currentGroundEnv, groundProjection, currentEnvMap)
 
 	$: {
 		// Reload environment on path change
