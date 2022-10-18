@@ -42,7 +42,10 @@
   }
 
   const loadEnvironment = () => {
-    if (!renderer) throw new Error('Threlte renderer undefined')
+    if (!renderer)
+      throw new Error(
+        'Threlte renderer undefined. Component <Environment/> must be a descendant of <Canvas/>.'
+      )
     const pmremGenerator = new PMREMGenerator(renderer)
     DefaultLoadingManager.onLoad = function () {
       pmremGenerator.dispose()
