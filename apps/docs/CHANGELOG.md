@@ -1,5 +1,11 @@
 # @threlte/docs
 
+## 0.1.0
+
+### Minor Changes
+
+- d69391a: Add Attractor component and documentation
+
 ## 0.0.7
 
 ### Patch Changes
