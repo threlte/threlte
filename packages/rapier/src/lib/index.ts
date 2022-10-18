@@ -41,5 +41,5 @@ export type {
   CollisionExitEvent,
   SensorEnterEvent,
   SensorExitEvent,
-  ContactEvent,
+  ContactEvent
 } from './types/types'

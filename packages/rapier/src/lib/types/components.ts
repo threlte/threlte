@@ -17,7 +17,7 @@ import type {
 import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
 import type { RigidBodyTypeString } from '../lib/parseRigidBodyType'
 import type { AutoCollidersShapes, ColliderShapes, CollisionGroupsBitMask } from './types'
-import type { Writable } from 'svelte/store'
+
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
 export type Vector3Array = [x: number, y: number, z: number]
