@@ -17,6 +17,7 @@ export { default as Debug } from './components/Debug/Debug.svelte'
 export { default as Collider } from './components/Colliders/Collider.svelte'
 export { default as AutoColliders } from './components/Colliders/AutoColliders.svelte'
 export { default as CollisionGroups } from './components/CollisionGroups/CollisionGroups.svelte'
+export { default as Attractor } from './components/Attractor/Attractor.svelte'
 
 // recipes
 export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
@@ -25,7 +26,8 @@ export type {
   AutoCollidersProperties,
   Boolean3Array,
   RigidBodyProperties,
-  WorldProperties
+  WorldProperties,
+  AttractorProperties
 } from './types/components'
 
 export type {
