@@ -14,16 +14,19 @@ The force applied to rigid-bodies within range is calculated differently, depend
 
 ## Basic Example
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/attractor">
+<Wrapper />
 
-&&&code_wrapper
+<div slot="code">
+
 @[code svelte|title=Wrapper.svelte](../../examples/rapier/attractor/Wrapper.svelte)
 @[code svelte|title=BasicScene.svelte](../../examples/rapier/attractor/BasicScene.svelte)
 @[code svelte|title=AdvancedScene.svelte](../../examples/rapier/attractor/AdvancedScene.svelte)
 @[code svelte|title=RandomMeshes.svelte](../../examples/rapier/attractor/RandomMeshes.svelte)
-&&&
+
+</div>
+
+</ExampleWrapper>
 
 !!!
 
@@ -47,6 +50,7 @@ Newtonian gravity uses the traditional method of calculating gravitational force
 - `distance` is the distance between the attractor and rigid-body at the time of calculation
 
 ## Debugging
+
 The `<Debug />` component will activate a wireframe helper to visualize the attractor's range.
 
 ### Properties
