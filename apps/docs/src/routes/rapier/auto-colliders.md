@@ -3,7 +3,7 @@ title: AutoColliders
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/auto-colliders/Wrapper.svelte'
+import Wrapper from '$examples/rapier/auto-colliders/App.svelte'
 </script>
 
 !!!module_summary title=AutoColliders|sourcePath=components/AutoColliders/AutoColliders.svelte|name=AutoColliders|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
@@ -23,7 +23,7 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/auto-colliders/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/auto-colliders/App.svelte)
 @[code svelte|title=Button.svelte](../../examples/rapier/auto-colliders/Button.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/auto-colliders/Scene.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/auto-colliders/Ground.svelte)

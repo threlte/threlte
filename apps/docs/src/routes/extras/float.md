@@ -3,7 +3,7 @@ title: Float
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/float/Wrapper.svelte'
+import Wrapper from '$examples/extras/float/App.svelte'
 </script>
 
 !!!module_summary title=Float|sourcePath=components/Float/Float.svelte|name=Float|from=extras|type=component
@@ -15,7 +15,7 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/float/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/float/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/float/Scene.svelte)
 @[code svelte|title=Blob.svelte](../../examples/extras/float/Blob.svelte)
 

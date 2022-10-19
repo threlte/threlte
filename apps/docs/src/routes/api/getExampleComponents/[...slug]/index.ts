@@ -81,7 +81,7 @@ export async function get({ params }: { params: Record<string, string> }) {
 		const parsed = await parsers[extension as ModuleExtensions](moduleContent)
 
 		return {
-			name: parse(filePath).name === 'Wrapper' ? 'App' : parse(filePath).name,
+			name: parse(filePath).name,
 			type: replModuleTypes[extension as ModuleExtensions],
 			source: parsed
 		}

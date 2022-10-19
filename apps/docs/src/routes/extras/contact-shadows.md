@@ -3,7 +3,7 @@ title: ContactShadows
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/contact-shadows/Wrapper.svelte'
+import Wrapper from '$examples/extras/contact-shadows/App.svelte'
 </script>
 
 !!!module_summary title=ContactShadows|sourcePath=/components/ContactShadows/ContactShadows.svelte|name=ContactShadows|from=extras|type=component
@@ -50,7 +50,7 @@ Currently it has the same limitations of drei's version: It yields unexpected re
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/contact-shadows/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/contact-shadows/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/contact-shadows/Scene.svelte)
 
 </div>

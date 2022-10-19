@@ -3,7 +3,7 @@ title: RigidBody
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/rigid-body/Wrapper.svelte'
+import Wrapper from '$examples/rapier/rigid-body/App.svelte'
 </script>
 
 !!!module_summary title=RigidBody|sourcePath=components/RigidBody/RigidBody.svelte|name=RigidBody|from=rapier|type=component|relatedDocs={[{name:"Rapier RigidBody reference",url:"https://rapier.rs/javascript3d/classes/RigidBody.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/rigid_bodies"}]}
@@ -17,7 +17,7 @@ Note that rigid-bodies are only responsible for the dynamics and kinematics of t
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/rigid-body/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/rigid-body/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/rigid-body/Scene.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/rigid-body/Ground.svelte)
 @[code svelte|title=Emitter.svelte](../../examples/rapier/rigid-body/Emitter.svelte)

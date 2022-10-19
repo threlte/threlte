@@ -3,7 +3,7 @@ title: TransformControls
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/transform-controls/Wrapper.svelte'
+import Wrapper from '$examples/core/transform-controls/App.svelte'
 </script>
 
 !!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=core|type=component|relatedDocs={[{name:"three.js TransformControls reference",url:"https://threejs.org/docs/#examples/en/controls/TransformControls"}]}
@@ -18,7 +18,7 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/transform-controls/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/transform-controls/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/transform-controls/Scene.svelte)
 
 </div>

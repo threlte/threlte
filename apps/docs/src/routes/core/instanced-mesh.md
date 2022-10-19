@@ -3,7 +3,7 @@ title: InstancedMesh
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/instanced-mesh/Wrapper.svelte'
+import Wrapper from '$examples/core/instanced-mesh/App.svelte'
 </script>
 
 !!!module_summary title=InstancedMesh|sourcePath=objects/InstancedMesh.svelte|name=InstancedMesh|from=core|type=component|divider=false|relatedDocs={[{name:"three.js InstancedMesh reference",url:"https://threejs.org/docs/#api/en/objects/InstancedMesh"}]}
@@ -14,7 +14,7 @@ The `<InstancedMesh>` is a special version of [`<Mesh>`](/core/mesh) with instan
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/instanced-mesh/Scene.svelte)
 @[code svelte|title=Sphere.svelte](../../examples/core/instanced-mesh/Sphere.svelte)
 
@@ -113,7 +113,7 @@ Nesting instances might have a slight performance hit, the frameloop will run co
 ### Example
 
 <script lang="ts">
-import WrapperSimple from '$examples/core/instanced-mesh-simple/Wrapper.svelte'
+import WrapperSimple from '$examples/core/instanced-mesh-simple/App.svelte'
 </script>
 
 <ExampleWrapper playgroundHref="/core/instanced-mesh-simple">
@@ -121,7 +121,7 @@ import WrapperSimple from '$examples/core/instanced-mesh-simple/Wrapper.svelte'
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh-simple/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/core/instanced-mesh-simple/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/instanced-mesh-simple/Scene.svelte)
 
 </div>

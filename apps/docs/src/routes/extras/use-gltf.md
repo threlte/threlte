@@ -3,7 +3,7 @@ title: useGltf
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/use-gltf/Wrapper.svelte'
+import Wrapper from '$examples/extras/use-gltf/App.svelte'
 </script>
 
 !!!module_summary title=useGltf|sourcePath=hooks/useGltf.ts|name=useGltf|from=extras|type=hook|relatedDocs={[{name:"three.js GLTFLoader reference",url:"https://threejs.org/docs/examples/en/loaders/GLTFLoader.html"}]}
@@ -16,7 +16,7 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/use-gltf/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/use-gltf/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/use-gltf/Scene.svelte)
 
 </div>

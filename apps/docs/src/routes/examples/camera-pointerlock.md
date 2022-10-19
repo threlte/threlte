@@ -3,7 +3,7 @@ title: Pointer Locking
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/camera/pointerlock/Wrapper.svelte'
+import Wrapper from '$examples/camera/pointerlock/App.svelte'
 </script>
 
 # Pointer Locking
@@ -13,7 +13,7 @@ import Wrapper from '$examples/camera/pointerlock/Wrapper.svelte'
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/camera/pointerlock/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/camera/pointerlock/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/camera/pointerlock/Scene.svelte)
 @[code svelte|title=Character.svelte](../../examples/camera/pointerlock/Character.svelte)
 @[code svelte|title=PointerLockControls.svelte](../../examples/camera/pointerlock/PointerLockControls.svelte)

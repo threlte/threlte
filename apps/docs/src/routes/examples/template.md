@@ -3,7 +3,7 @@ title: Example Name
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/introduction/Wrapper.svelte'
+import Wrapper from '$examples/introduction/App.svelte'
 </script>
 
 # Example Name

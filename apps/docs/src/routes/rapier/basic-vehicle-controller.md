@@ -3,7 +3,7 @@ title: Basic Vehicle Controller
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/basic-car-controller/Wrapper.svelte'
+import Wrapper from '$examples/rapier/basic-car-controller/App.svelte'
 </script>
 
 # Basic Vehicle Controller
@@ -31,7 +31,7 @@ The property `dominance` on `<RigidBody>` components can be used to make objects
 @[code svelte|title=Ground.svelte](../../examples/rapier/basic-car-controller/Ground.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/basic-car-controller/Scene.svelte)
 @[code svelte|title=useWasd.ts](../../examples/rapier/basic-car-controller/useWasd.ts)
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/basic-car-controller/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/rapier/basic-car-controller/App.svelte)
 
 </div>
 </ExampleWrapper>

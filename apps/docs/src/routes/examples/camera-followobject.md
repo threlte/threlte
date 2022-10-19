@@ -3,7 +3,7 @@ title: Follow Object
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/camera/followobject/Wrapper.svelte'
+import Wrapper from '$examples/camera/followobject/App.svelte'
 </script>
 
 # Follow Object
@@ -13,7 +13,7 @@ import Wrapper from '$examples/camera/followobject/Wrapper.svelte'
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/camera/followobject/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/camera/followobject/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/camera/followobject/Scene.svelte)
 @[code svelte|title=Character.svelte](../../examples/camera/followobject/Character.svelte)
 @[code svelte|title=ThirdPersonControls.svelte](../../examples/camera/followobject/ThirdPersonControls.svelte)

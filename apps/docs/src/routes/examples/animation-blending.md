@@ -3,7 +3,7 @@ title: Animation Blending
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/animation/blending/Wrapper.svelte'
+import Wrapper from '$examples/animation/blending/App.svelte'
 </script>
 
 # Animation Blending
@@ -13,7 +13,7 @@ import Wrapper from '$examples/animation/blending/Wrapper.svelte'
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/animation/blending/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/animation/blending/App.svelte)
 @[code svelte|title=state.svelte](../../examples/animation/blending/state.svelte)
 @[code svelte|title=Scene.svelte](../../examples/animation/blending/Scene.svelte)
 @[code svelte|title=Character.svelte](../../examples/animation/blending/Character.svelte)

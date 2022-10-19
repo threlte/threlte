@@ -3,7 +3,7 @@ title: Terrain
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/terrain/Wrapper.svelte'
+import Wrapper from '$examples/terrain/App.svelte'
 </script>
 
 # Terrain
@@ -13,7 +13,7 @@ import Wrapper from '$examples/terrain/Wrapper.svelte'
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/terrain/Wrapper.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/terrain/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/terrain/Scene.svelte)
 
 </div>
