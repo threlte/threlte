@@ -86,7 +86,6 @@
 
 	let fileInputEl: HTMLInputElement | undefined = undefined
 	let blobUrl: string | undefined = undefined
-	console.log($page)
 
 	let title =
 		$page.url.pathname
