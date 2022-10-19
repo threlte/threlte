@@ -1,6 +1,6 @@
 import { onDestroy } from 'svelte'
 import { get, writable } from 'svelte/store'
-import type { FolderApi, TabPageApi, InputParams } from 'tweakpane'
+import type { FolderApi, TabPageApi, InputParams, Pane, TpPlugin } from 'tweakpane'
 import * as tweakpaneDefault from 'tweakpane'
 import type { PaneConfig } from 'tweakpane/dist/types/pane/pane-config'
 import type { View } from '@tweakpane/core'
@@ -91,9 +91,9 @@ export const TextPlugin = {
 export const useTweakpane = (config?: Omit<PaneConfig, 'container' | 'document'>) => {
 	let disposed = false
 
-	const pane = new tp.Pane(config)
+	const pane = new tp.Pane(config) as Pane
 	pane.registerPlugin({
-		plugin: TextPlugin
+		plugin: TextPlugin as TpPlugin
 	})
 	const unsubscriptions = new Set<() => void>()
 
@@ -139,8 +139,13 @@ export const useTweakpane = (config?: Omit<PaneConfig, 'container' | 'document'>
 		}
 	}
 
-	const addButton = (options: { title: string; label?: string; onClick: () => void }) => {
-		const button = pane.addButton({
+	const addButton = (options: {
+		title: string
+		label?: string
+		onClick: () => void
+		parent?: FolderApi | TabPageApi
+	}) => {
+		const button = (options.parent ? options.parent : pane).addButton({
 			title: options.title,
 			label: options.label
 		})
