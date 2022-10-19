@@ -1,9 +1,20 @@
 <script lang="ts">
+	import { useTweakpane } from './useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { World } from '@threlte/rapier'
 	import Scene from './Scene.svelte'
+
+	const { pane, action } = useTweakpane()
+
+	pane.addBlade({
+		view: 'text',
+		text: 'Use the arrow keys to move around',
+		lineCount: 3
+	})
 </script>
+
+<div use:action />
 
 <Canvas>
 	<World>
