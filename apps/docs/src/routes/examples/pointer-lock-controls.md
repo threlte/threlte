@@ -1,12 +1,12 @@
 ---
-title: PointerLockingControls
+title: PointerLockControls
 ---
 
 <script lang="ts">
 import Example from '$examples/camera/pointer-lock-controls/App.svelte'
 </script>
 
-# Pointer Locking
+# PointerLockControls
 
 <ExampleWrapper playgroundHref="/camera/pointer-lock-controls">
 <Example />

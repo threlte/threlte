@@ -64,6 +64,7 @@
 
 	import { browser } from '$app/env'
 	import { onMount } from 'svelte'
+	import { page } from '$app/stores'
 
 	let repl: Repl | undefined
 
@@ -85,7 +86,24 @@
 
 	let fileInputEl: HTMLInputElement | undefined = undefined
 	let blobUrl: string | undefined = undefined
-	let title = 'Hello World'
+	console.log($page)
+
+	let title =
+		$page.url.pathname
+			.replace('/playground', '')
+			.trim()
+			.split('')
+			.filter((char, index, arr) => {
+				if (index === 0 && char === '/') return false
+				if (index === arr.length - 1 && char === '/') return false
+				return true
+			})
+			.join('')
+			.replaceAll('/', ' – ')
+			.replaceAll('-', ' ')
+			.split(' ')
+			.map((word) => (word = word.charAt(0).toUpperCase() + word.slice(1)))
+			.join(' ') || 'Hello World'
 	let titleEl: HTMLElement | undefined = undefined
 	let files: HTMLInputElement['files']
 
