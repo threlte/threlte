@@ -13,12 +13,11 @@
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 	import { Group, Mesh, useFrame, type Position, type Rotation } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { AutoColliders, Collider, RigidBody, useRapier } from '@threlte/rapier'
-	import { getContext, setContext } from 'svelte'
+	import { Collider, RigidBody, useRapier } from '@threlte/rapier'
+	import { getContext, onDestroy, setContext } from 'svelte'
 	import { BoxBufferGeometry, MeshStandardMaterial, Vector3 } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Axle from './Axle.svelte'
-	import { onDestroy } from 'svelte'
 
 	export let position: Position | undefined = undefined
 	export let rotation: Rotation | undefined = undefined

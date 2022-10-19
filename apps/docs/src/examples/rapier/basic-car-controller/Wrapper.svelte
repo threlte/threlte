@@ -1,9 +1,20 @@
 <script lang="ts">
+	import { useTweakpane } from './useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'
 	import Scene from './Scene.svelte'
+
+	const { action, pane } = useTweakpane()
+
+	pane.addBlade({
+		view: 'text',
+		text: "Use the 'wasd' keys to drive",
+		lineCount: 3
+	})
 </script>
+
+<div use:action />
 
 <Canvas>
 	<World>
@@ -24,6 +35,6 @@
 <style>
 	p {
 		font-size: 0.75rem;
-  	line-height: 1rem;
+		line-height: 1rem;
 	}
 </style>
