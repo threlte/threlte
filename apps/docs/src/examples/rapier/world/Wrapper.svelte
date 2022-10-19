@@ -5,18 +5,23 @@
 	import Scene from './Scene.svelte'
 </script>
 
-<div class="relative w-full h-full">
-	<Canvas>
-		<World>
-			<Scene />
+<Canvas>
+	<World>
+		<Scene />
 
-			<HTML slot="fallback" transform>
-				<p class="text-xs">
-					It seems your browser<br />
-					doesn't support WASM.<br />
-					I'm sorry.
-				</p>
-			</HTML>
-		</World>
-	</Canvas>
-</div>
+		<HTML slot="fallback" transform>
+			<p>
+				It seems your browser<br />
+				doesn't support WASM.<br />
+				I'm sorry.
+			</p>
+		</HTML>
+	</World>
+</Canvas>
+
+<style>
+	p {
+		font-size: 0.75rem;
+		line-height: 1rem;
+	}
+</style>
