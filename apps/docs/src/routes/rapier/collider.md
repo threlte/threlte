@@ -3,7 +3,7 @@ title: Collider
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/collider/App.svelte'
+import Example from '$examples/rapier/collider/App.svelte'
 </script>
 
 !!!module_summary title=Collider|sourcePath=components/Collider/Collider.svelte|name=Collider|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
@@ -11,11 +11,11 @@ import Wrapper from '$examples/rapier/collider/App.svelte'
 Colliders represent the geometric shapes that generate contacts and collision events when they touch. Attaching one or multiple colliders to a rigid body allow the rigid-body to be affected by contact forces.
 
 <ExampleWrapper playgroundHref="/rapier/collider">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/collider/App.svelte)
+@[code svelte|title=App.svelte](../../examples/rapier/collider/App.svelte)
 @[code svelte|title=Button.svelte](../../examples/rapier/collider/Button.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/collider/Scene.svelte)
 @[code svelte|title=TestBed.svelte](../../examples/rapier/collider/TestBed.svelte)

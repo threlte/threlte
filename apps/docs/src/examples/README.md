@@ -34,7 +34,7 @@ To place an example in the docs, navigate to the `.md` file and import your "App
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/new-example/App.svelte)
+@[code svelte|title=App.svelte](../../examples/new-example/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/new-example/Scene.svelte)
 
 </div>

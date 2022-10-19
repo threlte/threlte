@@ -3,7 +3,7 @@ title: Line2
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/line-2/App.svelte'
+import Example from '$examples/core/line-2/App.svelte'
 </script>
 
 !!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=core|type=component
@@ -11,11 +11,11 @@ import Wrapper from '$examples/core/line-2/App.svelte'
 Draw Lines using `THREE.Line2`.
 
 <ExampleWrapper playgroundHref="/core/line-2">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/line-2/App.svelte)
+@[code svelte|title=App.svelte](../../examples/core/line-2/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/line-2/Scene.svelte)
 
 </div>

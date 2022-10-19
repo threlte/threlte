@@ -3,7 +3,7 @@ title: PositionalAudio
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/positional-audio/App.svelte'
+import Example from '$examples/core/positional-audio/App.svelte'
 </script>
 
 !!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=core|type=component|relatedDocs={[{name:"three.js PositionalAudio reference",url:"https://threejs.org/docs/#api/en/audio/PositionalAudio"}]}
@@ -15,11 +15,11 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 :::
 
 <ExampleWrapper playgroundHref="/core/positional-audio">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/positional-audio/App.svelte)
+@[code svelte|title=App.svelte](../../examples/core/positional-audio/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/positional-audio/Scene.svelte)
 @[code svelte|title=Turntable.svelte](../../examples/core/positional-audio/Turntable.svelte)
 @[code svelte|title=Disc.svelte](../../examples/core/positional-audio/Disc.svelte)

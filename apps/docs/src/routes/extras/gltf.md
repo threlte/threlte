@@ -3,7 +3,7 @@ title: GLTF
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/gltf/App.svelte'
+import Example from '$examples/extras/gltf/App.svelte'
 </script>
 
 !!!module_summary title=GLTF|sourcePath=components/GLTF/GLTF.svelte|name=GLTF|from=extras|type=component|relatedDocs={[{name:"three.js GLTFLoader reference",url:"https://threejs.org/docs/examples/en/loaders/GLTFLoader.html"}]}
@@ -19,11 +19,11 @@ See the hook [`useGltfAnimations`](/extras/use-gltf-animations) on how to use an
 :::
 
 <ExampleWrapper playgroundHref="/extras/gltf">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/gltf/App.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/gltf/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/gltf/Scene.svelte)
 
 </div>

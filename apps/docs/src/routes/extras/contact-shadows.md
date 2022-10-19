@@ -3,7 +3,7 @@ title: ContactShadows
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/contact-shadows/App.svelte'
+import Example from '$examples/extras/contact-shadows/App.svelte'
 </script>
 
 !!!module_summary title=ContactShadows|sourcePath=/components/ContactShadows/ContactShadows.svelte|name=ContactShadows|from=extras|type=component
@@ -46,11 +46,11 @@ Use the binding `refresh` to manually refresh the shadows:
 Currently it has the same limitations of drei's version: It yields unexpected results if moved on the x or the z axis.
 
 <ExampleWrapper playgroundHref="/extras/contact-shadows">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/contact-shadows/App.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/contact-shadows/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/contact-shadows/Scene.svelte)
 
 </div>

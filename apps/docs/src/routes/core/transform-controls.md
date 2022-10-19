@@ -3,7 +3,7 @@ title: TransformControls
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/transform-controls/App.svelte'
+import Example from '$examples/core/transform-controls/App.svelte'
 </script>
 
 !!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=core|type=component|relatedDocs={[{name:"three.js TransformControls reference",url:"https://threejs.org/docs/#examples/en/controls/TransformControls"}]}
@@ -14,11 +14,11 @@ The component `<TransformControls>` needs to be a direct child of the component 
 To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
 
 <ExampleWrapper playgroundHref="/core/transform-controls">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/transform-controls/App.svelte)
+@[code svelte|title=App.svelte](../../examples/core/transform-controls/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/transform-controls/Scene.svelte)
 
 </div>

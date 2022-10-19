@@ -3,8 +3,8 @@ title: HTML
 ---
 
 <script lang="ts">
-import BasicWrapper from '$examples/extras/html/basic/App.svelte'
-import PhoneWrapper from '$examples/extras/html/phone/App.svelte'
+import ExampleBasic from '$examples/extras/html/basic/App.svelte'
+import ExamplePhone from '$examples/extras/html/phone/App.svelte'
 </script>
 
 !!!module_summary title=HTML|sourcePath=components/HTML/HTML.svelte|name=HTML|from=extras|type=component
@@ -16,22 +16,22 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 :::
 
 <ExampleWrapper playgroundHref="/extras/html/basic">
-<BasicWrapper />
+<ExampleBasic />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/html/basic/App.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/html/basic/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/html/basic/Scene.svelte)
 
 </div>
 </ExampleWrapper>
 
 <ExampleWrapper playgroundHref="/extras/html/phone">
-<PhoneWrapper />
+<ExamplePhone />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/html/phone/App.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/html/phone/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/html/phone/Scene.svelte)
 
 </div>

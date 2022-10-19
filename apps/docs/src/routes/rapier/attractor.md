@@ -3,7 +3,7 @@ title: Attractor
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/attractor/App.svelte'
+import Example from '$examples/rapier/attractor/App.svelte'
 </script>
 
 !!!module_summary title=Attractor|sourcePath=components/Attractor/Attractor.svelte|name=Attractor|from=rapier|type=component
@@ -15,11 +15,11 @@ The force applied to rigid-bodies within range is calculated differently, depend
 ## Basic Example
 
 <ExampleWrapper playgroundHref="/rapier/attractor">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/attractor/App.svelte)
+@[code svelte|title=App.svelte](../../examples/rapier/attractor/App.svelte)
 @[code svelte|title=BasicScene.svelte](../../examples/rapier/attractor/BasicScene.svelte)
 @[code svelte|title=AdvancedScene.svelte](../../examples/rapier/attractor/AdvancedScene.svelte)
 @[code svelte|title=RandomMeshes.svelte](../../examples/rapier/attractor/RandomMeshes.svelte)

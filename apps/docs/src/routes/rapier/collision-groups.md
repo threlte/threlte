@@ -3,7 +3,7 @@ title: CollisionGroups
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/collision-groups/App.svelte'
+import Example from '$examples/rapier/collision-groups/App.svelte'
 </script>
 
 !!!module_summary title=CollisionGroups|sourcePath=components/CollisionGroups/CollisionGroups.svelte|name=CollisionGroups|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider Guide – Collision Groups",url:"https://rapier.rs/docs/user_guides/javascript/colliders#collision-groups-and-solver-groups"}]}
@@ -23,11 +23,11 @@ For general usage instructions, see the relevant documentation [here](https://ra
 - <span style="color: blue">Collider C</span> is affected by <span style="color: limegreen">Collider B</span> and not by <span style="color: red">Collider A</span>
 
 <ExampleWrapper playgroundHref="/rapier/collision-groups">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/collision-groups/App.svelte)
+@[code svelte|title=App.svelte](../../examples/rapier/collision-groups/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/collision-groups/Scene.svelte)
 @[code svelte|title=Button.svelte](../../examples/rapier/collision-groups/Button.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/collision-groups/Ground.svelte)

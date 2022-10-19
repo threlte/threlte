@@ -3,7 +3,7 @@ title: World
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/world/App.svelte'
+import Example from '$examples/rapier/world/App.svelte'
 </script>
 
 !!!module_summary title=World|sourcePath=components/World/World.svelte|name=World|from=rapier|type=component|relatedDocs={[{name:"Rapier World reference",url:"https://rapier.rs/javascript3d/classes/World.html"}]}
@@ -13,11 +13,11 @@ This component provides the basic physics context and loads [rapier](https://rap
 **All components that rely on physics** (e.g. `<RigidBody>` or `<Collider>`) **must be a child of `<World>`**.
 
 <ExampleWrapper playgroundHref="/rapier/world">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/world/App.svelte)
+@[code svelte|title=App.svelte](../../examples/rapier/world/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/world/Scene.svelte)
 @[code svelte|title=Door.svelte](../../examples/rapier/world/Door.svelte)
 @[code svelte|title=Player.svelte](../../examples/rapier/world/Player.svelte)

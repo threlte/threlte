@@ -3,7 +3,7 @@ title: LineSegments
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/core/line-segments/App.svelte'
+import Example from '$examples/core/line-segments/App.svelte'
 </script>
 
 !!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=core|type=component|relatedDocs={[{name:"three.js LineSegments reference",url:"https://threejs.org/docs/#api/en/objects/LineSegments"}]}
@@ -11,11 +11,11 @@ import Wrapper from '$examples/core/line-segments/App.svelte'
 Draw lines using `THREE.LineSegments`.
 
 <ExampleWrapper playgroundHref="/core/line-segments">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/core/line-segments/App.svelte)
+@[code svelte|title=App.svelte](../../examples/core/line-segments/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/core/line-segments/Scene.svelte)
 
 </div>

@@ -3,7 +3,7 @@ title: Example Name
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/introduction/App.svelte'
+import Example from '$examples/introduction/App.svelte'
 </script>
 
 # Example Name
@@ -13,7 +13,7 @@ import Wrapper from '$examples/introduction/App.svelte'
 Nullam vel urna lorem. Suspendisse quis eros ut orci facilisis mollis nec non turpis. Donec orci ante, ultricies at interdum vitae, aliquam eu turpis. Pellentesque eu lacus interdum, lacinia nunc sit amet, finibus tortor. Sed dignissim sagittis diam, ut cursus elit mollis ut.
 
 <ExampleWrapper playgroundHref="/introduction">
-	<Wrapper />
+	<Example />
 </ExampleWrapper>
 
 :::admonition type="info"

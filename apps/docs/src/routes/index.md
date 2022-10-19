@@ -3,7 +3,7 @@ title: Introduction
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/introduction/App.svelte'
+import Example from '$examples/introduction/App.svelte'
 </script>
 
 # Introduction
@@ -11,11 +11,11 @@ import Wrapper from '$examples/introduction/App.svelte'
 Threlte is a component library for Svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
 <ExampleWrapper playgroundHref="/introduction">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../examples/introduction/App.svelte)
+@[code svelte|title=App.svelte](../examples/introduction/App.svelte)
 @[code svelte|title=Scene.svelte](../examples/introduction/Scene.svelte)
 
 </div>
