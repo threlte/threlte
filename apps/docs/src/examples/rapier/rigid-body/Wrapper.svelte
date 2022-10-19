@@ -4,20 +4,17 @@
 	import { World } from '@threlte/rapier'
 	import { muted } from './Particle.svelte'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from "./useTweakpane";
+	import { useTweakpane } from './useTweakpane'
 
-	const { addButton, action} = useTweakpane()
+	const { addButton, action } = useTweakpane()
 
 	addButton({
 		title: 'toggle sound',
-		onClick: () => (
-			$muted = !$muted
-		)
+		onClick: () => ($muted = !$muted)
 	})
-
 </script>
 
-<div use:action/>
+<div use:action />
 
 <Canvas>
 	<World>
