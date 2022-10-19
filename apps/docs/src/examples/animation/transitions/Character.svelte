@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
-	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './state'
 
 	let currentActionKey = 'idle'
 
@@ -9,7 +9,7 @@
 		// Uncomment to see all the different possible action keys
 		// console.log(actions);
 		// set the initial animation
-		actions[currentActionKey].play()
+		actions[currentActionKey]?.play()
 	})
 
 	const unsub1 = buttonIdle.subscribe(() => {
@@ -30,14 +30,12 @@
 	function transitionTo(nextActionKey: string, duration = 1) {
 		const currentAction = $actions[currentActionKey]
 		const nextAction = $actions[nextActionKey]
-		if (currentAction === nextAction) return
+		if (!nextAction || currentAction === nextAction) return
 		// Function inspired by: https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_skinning_blending.html
 		nextAction.enabled = true
-
 		if (currentAction) {
 			currentAction.crossFadeTo(nextAction, duration, true)
 		}
-
 		// Not sure why I need this but the source code does not
 		nextAction.play()
 		currentActionKey = nextActionKey

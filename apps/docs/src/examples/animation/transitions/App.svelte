@@ -2,7 +2,7 @@
 	import { useTweakpane } from './useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import Scene from './Scene.svelte'
-	import { buttonIdle, buttonWalk, buttonRun } from './state.svelte'
+	import { buttonIdle, buttonWalk, buttonRun } from './state'
 
 	const { addButton, action } = useTweakpane()
 
