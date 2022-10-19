@@ -42,7 +42,7 @@
 				class:rounded-l-none={hasCode}
 				class="flex flex-row items-center gap-2 !no-underline !border-2 border-brand text-brand rounded-md px-2 py-0.5 bg-white hover:bg-brand hover:text-white"
 			>
-				<PlaygroundIcon class="!text-inherit !p-0 !m-0" {href} />
+				<PlaygroundIcon size={26} />
 				Playground
 			</a>
 		{/if}

@@ -81,7 +81,12 @@
 			<div class="flex flex-col gap-3 mt-8">
 				<GithubIcon class="!p-0" href="https://github.com/threlte/threlte">GitHub</GithubIcon>
 				<DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
-				<PlaygroundIcon class="!p-0" href="/playground">Playground</PlaygroundIcon>
+				<a
+					href="/playground"
+					class="!p-0 relative flex items-center text-gray-soft hover:text-gray-inverse border-0 rounded-md fill-current gap-2"
+				>
+					<PlaygroundIcon /> Playground
+				</a>
 			</div>
 		</div>
 		<Algolia
