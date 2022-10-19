@@ -3,7 +3,7 @@ title: useGltf
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/use-gltf/Wrapper.svelte'
+import Wrapper from '$examples/extras/use-gltf/Wrapper.svelte'
 </script>
 
 !!!module_summary title=useGltf|sourcePath=hooks/useGltf.ts|name=useGltf|from=extras|type=hook|relatedDocs={[{name:"three.js GLTFLoader reference",url:"https://threejs.org/docs/examples/en/loaders/GLTFLoader.html"}]}
@@ -11,13 +11,13 @@ A Hook to load glTF files and use separate object nodes and materials of it.
 
 Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its entirety.
 
-<ExampleWrapper playgroundHref="/use-gltf">
+<ExampleWrapper playgroundHref="/extras/use-gltf">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/use-gltf/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-gltf/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/use-gltf/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/use-gltf/Scene.svelte)
 
 </div>
 </ExampleWrapper>

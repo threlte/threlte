@@ -3,19 +3,19 @@ title: useGltfAnimations
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/use-gltf-animations/Wrapper.svelte'
+import Wrapper from '$examples/extras/use-gltf-animations/Wrapper.svelte'
 </script>
 
 !!!module_summary title=useGltfAnimations|sourcePath=hooks/useGltfAnimations.ts|name=useGltfAnimations|from=extras|type=hook|needsContext=true
 Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 
-<ExampleWrapper playgroundHref="/use-gltf-animations">
+<ExampleWrapper playgroundHref="/extras/use-gltf-animations">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/use-gltf-animations/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-gltf-animations/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/use-gltf-animations/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/use-gltf-animations/Scene.svelte)
 
 </div>
 </ExampleWrapper>

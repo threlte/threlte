@@ -37,6 +37,8 @@
 		if (!gltf) return
 		return (gltf.nodes.phone as ThreeMesh).geometry
 	})
+
+	const url = window.origin
 </script>
 
 <PerspectiveCamera position={{ z: $offsetX, x: 50, y: -$offsetY }} fov={20} lookAt={{}} />
@@ -45,8 +47,8 @@
 
 <Float scale={0.7}>
 	<HTML rotation={{ y: DEG2RAD * 90 }} position={{ x: 1.2 }} transform>
-		<div class="h-[848px] w-[420px] rounded-[63px] overflow-hidden border border-black/10">
-			<iframe title="" src="http://localhost:3000" width="100%" height="100%" frameborder="0" />
+		<div class="phone-wrapper">
+			<iframe title="" src={url} width="100%" height="100%" frameborder="0" />
 		</div>
 	</HTML>
 
@@ -59,6 +61,14 @@
 			})}
 		/>
 	{/if}
-
-	<!-- <GLTF scale={5.65} url="/models/phone/phone.glb" /> -->
 </Float>
+
+<style>
+	.phone-wrapper {
+		height: 848px;
+		width: 420px;
+		border-radius: 63px;
+		overflow: hidden;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+	}
+</style>

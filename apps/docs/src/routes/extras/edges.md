@@ -3,7 +3,7 @@ title: Edges
 ---
 
 <script lang="ts">
-	import Wrapper from '$examples/edges/Wrapper.svelte'
+	import Wrapper from '$examples/extras/edges/Wrapper.svelte'
 </script>
 
 !!!module_summary title=Edges|sourcePath=components/Edges/Edges.svelte|name=Edges|from=extras|type=component|relatedDocs={[{name:"three.js EdgesGeometry reference",url:"https://threejs.org/docs/api/en/geometries/EdgesGeometry.html"}]}
@@ -12,13 +12,13 @@ Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry
 
 Edges are displayed when the angle between two faces exceeds the angle defined by the property `threshold`.
 
-<ExampleWrapper playgroundHref="/edges">
+<ExampleWrapper playgroundHref="/extras/edges">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/edges/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/edges/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/edges/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/edges/Scene.svelte)
 
 </div>
 </ExampleWrapper>

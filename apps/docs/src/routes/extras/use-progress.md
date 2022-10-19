@@ -3,19 +3,19 @@ title: useProgress
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/use-progress/Wrapper.svelte'
+import Wrapper from '$examples/extras/use-progress/Wrapper.svelte'
 </script>
 
 !!!module_summary title=useProgress|sourcePath=hooks/useProgress.ts|name=useProgress|from=extras|type=hook|relatedDocs={[{name:"three.js DefaultLoadingManager reference",url:"https://threejs.org/docs/api/en/loaders/managers/DefaultLoadingManager.html"}]}
 Convenience hook that wraps `THREE.DefaultLoadingManager`.
 
-<ExampleWrapper playgroundHref="/use-progress">
+<ExampleWrapper playgroundHref="/extras/use-progress">
 <Wrapper />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/use-progress/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-progress/Scene.svelte)
+@[code svelte|title=Wrapper.svelte](../../examples/extras/use-progress/Wrapper.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/use-progress/Scene.svelte)
 
 </div>
 </ExampleWrapper>
