@@ -2,29 +2,41 @@
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'
-	import Button from './Button.svelte'
 	import Scene from './Scene.svelte'
+	import { useTweakpane } from './useTweakpane'
 
-	let reset: () => void
+	let reset: (() => void) | undefined
+
+	const { action, addButton } = useTweakpane()
+
+	addButton({
+		title: 'Reset',
+		onClick: () => {
+			reset?.()
+		}
+	})
 </script>
 
-<div class="relative w-full h-full">
-	<div class="flex flex-col gap-2 pointer-events-none items-start m-4 absolute">
-		<Button on:click={reset}>Reset</Button>
-	</div>
+<div use:action />
 
-	<Canvas>
-		<World>
-			<Debug />
-			<Scene bind:reset />
+<Canvas>
+	<World>
+		<Debug />
+		<Scene bind:reset />
 
-			<HTML slot="fallback" transform>
-				<p class="text-xs">
-					It seems your browser<br />
-					doesn't support WASM.<br />
-					I'm sorry.
-				</p>
-			</HTML>
-		</World>
-	</Canvas>
-</div>
+		<HTML slot="fallback" transform>
+			<p>
+				It seems your browser<br />
+				doesn't support WASM.<br />
+				I'm sorry.
+			</p>
+		</HTML>
+	</World>
+</Canvas>
+
+<style>
+	p {
+		font-size: 0.75rem;
+		line-height: 1rem;
+	}
+</style>
