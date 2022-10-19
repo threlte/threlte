@@ -3,7 +3,7 @@ title: RigidBody
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/rigid-body/Wrapper.svelte'
+import Example from '$examples/rapier/rigid-body/App.svelte'
 </script>
 
 !!!module_summary title=RigidBody|sourcePath=components/RigidBody/RigidBody.svelte|name=RigidBody|from=rapier|type=component|relatedDocs={[{name:"Rapier RigidBody reference",url:"https://rapier.rs/javascript3d/classes/RigidBody.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/rigid_bodies"}]}
@@ -12,17 +12,19 @@ The real-time simulation of rigid bodies subjected to forces and contacts is the
 
 Note that rigid-bodies are only responsible for the dynamics and kinematics of the solid. Colliders can be attached to a rigid-body to specify its shape and enable collision-detection. A rigid-body without collider attached to it will not be affected by contacts (because there is no shape to compute contact against).
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/rigid-body">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/rigid-body/Wrapper.svelte)
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/rapier/rigid-body/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/rigid-body/Scene.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/rigid-body/Ground.svelte)
 @[code svelte|title=Emitter.svelte](../../examples/rapier/rigid-body/Emitter.svelte)
 @[code svelte|title=Particle.svelte](../../examples/rapier/rigid-body/Particle.svelte)
-&&&
+
+</div>
+</ExampleWrapper>
 
 !!!
 

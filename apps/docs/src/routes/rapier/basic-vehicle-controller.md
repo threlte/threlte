@@ -3,7 +3,7 @@ title: Basic Vehicle Controller
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/basic-car-controller/Wrapper.svelte'
+import Example from '$examples/rapier/basic-car-controller/App.svelte'
 </script>
 
 # Basic Vehicle Controller
@@ -20,19 +20,21 @@ The car can be controlled with the WASD keys. The spacebar activates the handbre
 
 The property `dominance` on `<RigidBody>` components can be used to make objects more or less vulnerable to impacts of the car.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/basic-car-controller">
+<Example />
 
-&&&code_wrapper
+<div slot="code">
+
 @[code svelte|title=Car.svelte](../../examples/rapier/basic-car-controller/Car.svelte)
 @[code svelte|title=Axle.svelte](../../examples/rapier/basic-car-controller/Axle.svelte)
 @[code svelte|title=Wheel.svelte](../../examples/rapier/basic-car-controller/Wheel.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/basic-car-controller/Ground.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/basic-car-controller/Scene.svelte)
 @[code svelte|title=useWasd.ts](../../examples/rapier/basic-car-controller/useWasd.ts)
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/basic-car-controller/Wrapper.svelte)
-&&&
+@[code svelte|title=App.svelte](../../examples/rapier/basic-car-controller/App.svelte)
+
+</div>
+</ExampleWrapper>
 
 Tips:
 

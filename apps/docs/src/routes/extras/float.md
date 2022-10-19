@@ -3,22 +3,24 @@ title: Float
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/float/Wrapper.svelte'
+import Example from '$examples/extras/float/App.svelte'
 </script>
 
 !!!module_summary title=Float|sourcePath=components/Float/Float.svelte|name=Float|from=extras|type=component
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/float">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/float/Wrapper.svelte)
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/extras/float/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/float/Scene.svelte)
 @[code svelte|title=Blob.svelte](../../examples/extras/float/Blob.svelte)
-&&&
+
+</div>
+</ExampleWrapper>
 
 !!!
 

@@ -312,3 +312,9 @@ nav ul > li > h5 + ul > li:first-child > a[href=''] {
 .prose :where(li):not(:where([class~='not-prose'] *)) {
 	@apply !my-0;
 }
+
+nav ul > li > a > svg {
+	width: 18px;
+	height: 18px;
+	margin-right: 10px !important;
+}

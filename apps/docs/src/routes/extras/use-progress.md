@@ -3,20 +3,22 @@ title: useProgress
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/use-progress/Wrapper.svelte'
+import Example from '$examples/extras/use-progress/App.svelte'
 </script>
 
 !!!module_summary title=useProgress|sourcePath=hooks/useProgress.ts|name=useProgress|from=extras|type=hook|relatedDocs={[{name:"three.js DefaultLoadingManager reference",url:"https://threejs.org/docs/api/en/loaders/managers/DefaultLoadingManager.html"}]}
 Convenience hook that wraps `THREE.DefaultLoadingManager`.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/use-progress">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/use-progress/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/use-progress/Scene.svelte)
-&&&
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/extras/use-progress/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/use-progress/Scene.svelte)
+
+</div>
+</ExampleWrapper>
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 

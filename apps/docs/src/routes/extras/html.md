@@ -3,8 +3,8 @@ title: HTML
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/html/Wrapper.svelte'
-import Wrapper2 from '$examples/html/Wrapper.svelte'
+import ExampleBasic from '$examples/extras/html/basic/App.svelte'
+import ExamplePhone from '$examples/extras/html/phone/App.svelte'
 </script>
 
 !!!module_summary title=HTML|sourcePath=components/HTML/HTML.svelte|name=HTML|from=extras|type=component
@@ -15,18 +15,27 @@ This component is a port of [drei's `<Html>` component](https://github.com/pmndr
 The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
 :::
 
-<ExampleWrapper>
-  <Wrapper />
+<ExampleWrapper playgroundHref="/extras/html/basic">
+<ExampleBasic />
+
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/extras/html/basic/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/html/basic/Scene.svelte)
+
+</div>
 </ExampleWrapper>
 
-<ExampleWrapper>
-  <Wrapper2 />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/extras/html/phone">
+<ExamplePhone />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/extras/html/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/html/Scene.svelte)
-&&&
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/extras/html/phone/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/html/phone/Scene.svelte)
+
+</div>
+</ExampleWrapper>
 
 !!!
 

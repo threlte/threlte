@@ -3,7 +3,7 @@ title: Line
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/line/Wrapper.svelte'
+import Example from '$examples/core/line/App.svelte'
 </script>
 
 !!!module_summary title=Line|sourcePath=objects/Line.svelte|name=Line|from=core|type=component|relatedDocs={[{name:"three.js Line reference",url:"https://threejs.org/docs/#api/en/objects/Line"}]}
@@ -12,14 +12,16 @@ Draw Lines using `THREE.Line`. Due to limitations of the OpenGL Core Profile wit
 
 Provide either `points` or a `geometry` to draw lines.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/core/line">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/line/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/line/Scene.svelte)
-&&&
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/core/line/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/line/Scene.svelte)
+
+</div>
+</ExampleWrapper>
 
 !!!
 

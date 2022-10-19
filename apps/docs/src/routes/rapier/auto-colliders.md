@@ -3,7 +3,7 @@ title: AutoColliders
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/auto-colliders/Wrapper.svelte'
+import Example from '$examples/rapier/auto-colliders/App.svelte'
 </script>
 
 !!!module_summary title=AutoColliders|sourcePath=components/AutoColliders/AutoColliders.svelte|name=AutoColliders|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
@@ -18,16 +18,18 @@ The `<AutoColliders>` component generates colliders based on its children. Curre
 
 The resulting colliders can be transformed (i.e. positioned, rotated and scaled) as well as given regular collider properties such as `mass` or `centerOfMass`.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/auto-colliders">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/auto-colliders/Wrapper.svelte)
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/rapier/auto-colliders/App.svelte)
 @[code svelte|title=Button.svelte](../../examples/rapier/auto-colliders/Button.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/auto-colliders/Scene.svelte)
 @[code svelte|title=Ground.svelte](../../examples/rapier/auto-colliders/Ground.svelte)
-&&&
+
+</div>
+</ExampleWrapper>
 
 <small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
 
@@ -38,7 +40,6 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 If a `<AutoColliders>` component is not a child of a `<RigidBody>` component, the transform properties are reactive.
 
 ### Properties
-
 
 `AutoCollidersDesc`, `CoefficientCombineRule` are types imported from `'@dimforge/rapier3d-compat'`.
 

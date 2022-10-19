@@ -3,7 +3,7 @@ title: PositionalAudio
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/audio/Wrapper.svelte'
+import Example from '$examples/core/positional-audio/App.svelte'
 </script>
 
 !!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=core|type=component|relatedDocs={[{name:"three.js PositionalAudio reference",url:"https://threejs.org/docs/#api/en/audio/PositionalAudio"}]}
@@ -14,19 +14,20 @@ This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Au
 You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
 :::
 
-<ExampleWrapper>
-  <Wrapper />
+<ExampleWrapper playgroundHref="/core/positional-audio">
+<Example />
+
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/core/positional-audio/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/positional-audio/Scene.svelte)
+@[code svelte|title=Turntable.svelte](../../examples/core/positional-audio/Turntable.svelte)
+@[code svelte|title=Disc.svelte](../../examples/core/positional-audio/Disc.svelte)
+@[code svelte|title=Button.svelte](../../examples/core/positional-audio/Button.svelte)
+@[code svelte|title=Speaker.svelte](../../examples/core/positional-audio/Speaker.svelte)
+
+</div>
 </ExampleWrapper>
-
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/audio/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/audio/Scene.svelte)
-@[code svelte|title=Turntable.svelte](../../examples/audio/Turntable.svelte)
-@[code svelte|title=Disc.svelte](../../examples/audio/Disc.svelte)
-@[code svelte|title=Button.svelte](../../examples/audio/Button.svelte)
-@[code svelte|title=Speaker.svelte](../../examples/audio/Speaker.svelte)
-
-&&&
 
 <small>Music: <a href="https://legrisch.com" target="_blank">legrisch</a></small>
 

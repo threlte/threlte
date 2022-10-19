@@ -3,19 +3,19 @@ title: Collider
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/rapier/collider/Wrapper.svelte'
+import Example from '$examples/rapier/collider/App.svelte'
 </script>
 
 !!!module_summary title=Collider|sourcePath=components/Collider/Collider.svelte|name=Collider|from=rapier|type=component|relatedDocs={[{name:"Rapier Collider reference",url:"https://rapier.rs/javascript3d/classes/Collider.html"}, {name:"Rapier Collider Guide",url:"https://rapier.rs/docs/user_guides/javascript/colliders"}]}
 
 Colliders represent the geometric shapes that generate contacts and collision events when they touch. Attaching one or multiple colliders to a rigid body allow the rigid-body to be affected by contact forces.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/rapier/collider">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/rapier/collider/Wrapper.svelte)
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/rapier/collider/App.svelte)
 @[code svelte|title=Button.svelte](../../examples/rapier/collider/Button.svelte)
 @[code svelte|title=Scene.svelte](../../examples/rapier/collider/Scene.svelte)
 @[code svelte|title=TestBed.svelte](../../examples/rapier/collider/TestBed.svelte)
@@ -24,7 +24,9 @@ Colliders represent the geometric shapes that generate contacts and collision ev
 @[code svelte|title=AttachedCollider.svelte](../../examples/rapier/collider/AttachedCollider.svelte)
 @[code svelte|title=StandaloneCollider.svelte](../../examples/rapier/collider/StandaloneCollider.svelte)
 @[code svelte|title=Sensor.svelte](../../examples/rapier/collider/Sensor.svelte)
-&&&
+
+</div>
+</ExampleWrapper>
 
 !!!
 
@@ -90,7 +92,7 @@ contactForceEventThreshold: number | undefined = undefined
 `Collider` is a type imported from `'@dimforge/rapier3d-compat'`.
 
 ```ts
-collider: Collider | undefined
+collider: Collider | undefined
 ```
 
 ### Events

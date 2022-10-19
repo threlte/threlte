@@ -1,0 +1,19 @@
+.editor-wrapper {
+	@apply !bg-gray-100;
+}
+
+.horizontal.divider::after {
+	@apply !bg-gray-300;
+}
+
+.pane .view-toggle button {
+	@apply bg-transparent;
+}
+
+.container {
+	@apply !max-w-none text-sm;
+}
+
+.container .overlay {
+	@apply bg-brand;
+}

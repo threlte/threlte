@@ -3,21 +3,23 @@ title: Line2
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/line-2/Wrapper.svelte'
+import Example from '$examples/core/line-2/App.svelte'
 </script>
 
 !!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=core|type=component
 
 Draw Lines using `THREE.Line2`.
 
-<ExampleWrapper>
-  <Wrapper />
-</ExampleWrapper>
+<ExampleWrapper playgroundHref="/core/line-2">
+<Example />
 
-&&&code_wrapper
-@[code svelte|title=Wrapper.svelte](../../examples/line-2/Wrapper.svelte)
-@[code svelte|title=Scene.svelte](../../examples/line-2/Scene.svelte)
-&&&
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/core/line-2/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/line-2/Scene.svelte)
+
+</div>
+</ExampleWrapper>
 
 !!!
 

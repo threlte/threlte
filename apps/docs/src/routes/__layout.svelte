@@ -11,7 +11,6 @@
 
 	import '@svelteness/kit-docs/client/polyfills/index.js'
 	import '@svelteness/kit-docs/client/styles/fonts.css'
-	// import '@svelteness/kit-docs/client/styles/vars.css'
 	import { sidebar } from './navigation'
 
 	import { page } from '$app/stores'
@@ -22,9 +21,11 @@
 		KitDocs,
 		KitDocsLayout
 	} from '@svelteness/kit-docs'
+	// @ts-ignore no types available
 	import { Algolia } from '@svelteness/kit-docs/client/algolia'
 	import DiscordIcon from '../kit-docs/DiscordIcon.svelte'
 	import GithubIcon from '../kit-docs/GithubIcon.svelte'
+	import PlaygroundIcon from '../kit-docs/PlaygroundIcon.svelte'
 
 	/** @type {import('@svelteness/kit-docs').MarkdownMeta | null} */
 	export let meta = null
@@ -80,6 +81,12 @@
 			<div class="flex flex-col gap-3 mt-8">
 				<GithubIcon class="!p-0" href="https://github.com/threlte/threlte">GitHub</GithubIcon>
 				<DiscordIcon class="!p-0" href="https://discord.gg/EqUBCfCaGm">Discord</DiscordIcon>
+				<a
+					href="/playground"
+					class="!p-0 relative flex items-center text-gray-soft hover:text-gray-inverse border-0 rounded-md fill-current gap-2"
+				>
+					<PlaygroundIcon /> Playground
+				</a>
 			</div>
 		</div>
 		<Algolia
