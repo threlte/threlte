@@ -139,7 +139,7 @@ export type EnvironmentProperties = {
   /**
    * Use `ldr` for .png, .jpg and `hdr` for .hdr file formats
    */
-  format: 'ldr' | 'hdr'
+  format?: 'ldr' | 'hdr'
   /**
    * Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular
    */
