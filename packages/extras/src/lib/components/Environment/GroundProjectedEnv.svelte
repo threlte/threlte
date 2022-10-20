@@ -36,6 +36,17 @@
     if (groundEnv && groundEnvProps) {
       currentGroundEnv.radius = groundEnvProps.radius
       currentGroundEnv.height = groundEnvProps.height
+
+      if (typeof groundEnvProps.scale === 'number') {
+        currentGroundEnv.scale.set(groundEnvProps.scale, groundEnvProps.scale, groundEnvProps.scale)
+      } else {
+        currentGroundEnv.scale.set(
+          groundEnvProps.scale.x ?? 1,
+          groundEnvProps.scale.y ?? 1,
+          groundEnvProps.scale.z ?? 1
+        )
+      }
+
       invalidate('Updating ground projected environment properties')
     }
   }
