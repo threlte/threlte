@@ -10,43 +10,45 @@
 
   const { scene, invalidate } = useThrelte()
 
+  let previousEnvMap: Texture | undefined
+
   let currentGroundEnv: any
+
+  const applyGroundParams = () => {
+    if (groundProjection && currentGroundEnv) {
+      if (typeof groundProjection.scale === 'number') {
+        currentGroundEnv.scale.set(
+          groundProjection.scale,
+          groundProjection.scale,
+          groundProjection.scale
+        )
+      } else {
+        currentGroundEnv.scale.set(
+          groundProjection.scale.x ?? 1,
+          groundProjection.scale.y ?? 1,
+          groundProjection.scale.z ?? 1
+        )
+      }
+      currentGroundEnv.radius = groundProjection.radius
+      currentGroundEnv.height = groundProjection.height
+    }
+  }
 
   const toggleGroundEnv = (
     groundEnv: GroundProjectedEnv | undefined,
     groundEnvProps: EnvironmentProperties['groundProjection'],
     envMap: Texture
   ) => {
-    if (!groundEnv && groundEnvProps && envMap) {
+    if ((!groundEnv || previousEnvMap != envMap) && groundEnvProps && envMap) {
       currentGroundEnv = new GroundProjectedEnv(envMap)
-      if (typeof groundEnvProps.scale === 'number') {
-        currentGroundEnv.scale.set(groundEnvProps.scale, groundEnvProps.scale, groundEnvProps.scale)
-      } else {
-        currentGroundEnv.scale.set(
-          groundEnvProps.scale.x ?? 1,
-          groundEnvProps.scale.y ?? 1,
-          groundEnvProps.scale.z ?? 1
-        )
-      }
-      currentGroundEnv.radius = groundEnvProps.radius
-      currentGroundEnv.height = groundEnvProps.height
+
       scene.add(currentGroundEnv)
+      previousEnvMap = envMap
+      applyGroundParams()
       invalidate('Enabling ground projected environment')
     }
     if (groundEnv && groundEnvProps) {
-      currentGroundEnv.radius = groundEnvProps.radius
-      currentGroundEnv.height = groundEnvProps.height
-
-      if (typeof groundEnvProps.scale === 'number') {
-        currentGroundEnv.scale.set(groundEnvProps.scale, groundEnvProps.scale, groundEnvProps.scale)
-      } else {
-        currentGroundEnv.scale.set(
-          groundEnvProps.scale.x ?? 1,
-          groundEnvProps.scale.y ?? 1,
-          groundEnvProps.scale.z ?? 1
-        )
-      }
-
+      applyGroundParams()
       invalidate('Updating ground projected environment properties')
     }
   }

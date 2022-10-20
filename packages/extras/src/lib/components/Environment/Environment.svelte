@@ -37,13 +37,13 @@
   let previousFormat: string | undefined
 
   const pickLoader = () => {
-    if (!format)
-      format = (Array.isArray(files) ? files[0] : files).split('.').pop() == 'hdr' ? 'hdr' : 'ldr'
+    const inferredFormat =
+      format || (Array.isArray(files) ? files[0] : files).split('.').pop() == 'hdr' ? 'hdr' : 'ldr'
 
-    if (isCubeMap && format == 'ldr') return new CubeTextureLoader()
-    if (!isCubeMap && format == 'ldr') return new TextureLoader()
-    if (isCubeMap && format == 'hdr') return new HDRCubeTextureLoader()
-    if (!isCubeMap && format == 'hdr') return new RGBELoader()
+    if (isCubeMap && inferredFormat == 'ldr') return new CubeTextureLoader()
+    if (!isCubeMap && inferredFormat == 'ldr') return new TextureLoader()
+    if (isCubeMap && inferredFormat == 'hdr') return new HDRCubeTextureLoader()
+    if (!isCubeMap && inferredFormat == 'hdr') return new RGBELoader()
     return new TextureLoader()
   }
 
@@ -64,6 +64,7 @@
       invalidate()
     })
     previousFormat = format || undefined
+    previousEnvPath = envPath
   }
 
   $: {
@@ -72,7 +73,7 @@
         currentEnvMap.dispose()
       }
       loadEnvironment()
-      previousEnvPath = envPath
+      groundProjection = groundProjection
     }
 
     if (!isBackground && scene.background) {
