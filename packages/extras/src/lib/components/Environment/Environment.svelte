@@ -32,8 +32,8 @@
   $: isCubeMap = Array.isArray(files)
   $: envPath = `${path || ''}${files}`
 
-  let previousEnvPath: string = ''
-  let currentEnvMap: Texture
+  let previousEnvPath: string = envPath
+  let previousEnvMap: Texture
   let previousFormat: string | undefined
 
   const pickLoader = () => {
@@ -58,9 +58,9 @@
     loader.setPath(path || '').load(files, (texture: any) => {
       texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
       texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
-      currentEnvMap = texture
-      scene.environment = currentEnvMap
-      if (isBackground) scene.background = currentEnvMap
+      previousEnvMap = texture
+      scene.environment = previousEnvMap
+      if (isBackground) scene.background = previousEnvMap
       invalidate()
     })
     previousFormat = format || undefined
@@ -69,8 +69,8 @@
 
   $: {
     if (envPath != previousEnvPath || format != previousFormat) {
-      if (currentEnvMap) {
-        currentEnvMap.dispose()
+      if (previousEnvMap) {
+        previousEnvMap.dispose()
       }
       loadEnvironment()
       groundProjection = groundProjection
@@ -81,8 +81,8 @@
       invalidate('Removing Environment as scene.background')
     }
 
-    if (isBackground && !scene.background && currentEnvMap) {
-      scene.background = currentEnvMap
+    if (isBackground && !scene.background && previousEnvMap) {
+      scene.background = previousEnvMap
       invalidate('Adding Environment as scene.background')
     }
   }
@@ -90,7 +90,7 @@
   onDestroy(() => {
     scene.environment = previousSceneEnvironment
     scene.background = previousSceneBackground
-    if (currentEnvMap) currentEnvMap.dispose()
+    if (previousEnvMap) previousEnvMap.dispose()
     groundProjection = undefined
     invalidate('Environment destroyed')
   })
@@ -99,6 +99,6 @@
 {#if groundProjection}
   <GroundProjectedEnv
     {groundProjection}
-    {currentEnvMap}
+    currentEnvMap={previousEnvMap}
   />
 {/if}
