@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.4.1
+
+### Patch Changes
+
+- e91ce33: Environment - GroundProjection reactivity bugfix & docs update
+
 ## 4.4.0
 
 ### Minor Changes
