@@ -3,32 +3,23 @@ title: Environment
 ---
 
 <script lang="ts">
-import Wrapper from '$examples/extras/environment/Wrapper.svelte'
+import Example from '$examples/extras/environment/App.svelte'
 </script>
-
-
 
 !!!module_summary title=Environment|sourcePath=components/Environment/Environment.svelte|name=Environment|from=extras|type=component|relatedDocs={[{name:"three.js Scene environment reference",url:"https://threejs.org/docs/#api/en/scenes/Scene.environment"}]}
 
 Scene environment map implementation with included loaders and ground projected environment.
 
-
-
 <ExampleWrapper playgroundHref="/extras/environment">
-<Wrapper />
+<Example />
 
 <div slot="code">
 
-@[code svelte|title=Wrapper.svelte](../../examples/extras/environment/Wrapper.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/environment/App.svelte)
 @[code svelte|title=Scene.svelte](../../examples/extras/environment/Scene.svelte)
 
 </div>
 </ExampleWrapper>
-
-
-
-
-
 
 !!!
 
@@ -39,8 +30,6 @@ Pass absolute path to `path`. For example, if you are using sveltekit and you pu
 The component decides whether to use **cubic** or **equirectangular** map based on the `files` prop. Provide a string array for cubic or a string for equirectangular.
 
 Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format is inferred based on file extension but it can be provided in `format` prop.
-
-
 
 ```svelte
 <!-- Cubic jpg envmap -->
@@ -76,7 +65,6 @@ Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format 
   groundProjection={{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100} }}
 />
 ```
-
 
 ### Properties
 
