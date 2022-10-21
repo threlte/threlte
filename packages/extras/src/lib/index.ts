@@ -11,17 +11,19 @@ export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
 export { default as Disposables } from './components/Disposables/Disposables.svelte'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
+export { default as Environment } from './components/Environment/Environment.svelte'
 
 // text component
 export { default as Text } from './components/Text/Text.svelte'
 
 export type {
-  EdgesProperties,
-  FloatProperties,
-  HTMLProperties,
-  TextProperties,
-  GLTFProperties,
-  ContactShadowProperties
+	EdgesProperties,
+	FloatProperties,
+	HTMLProperties,
+	TextProperties,
+	GLTFProperties,
+	ContactShadowProperties,
+	EnvironmentProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'

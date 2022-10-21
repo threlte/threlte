@@ -353,6 +353,10 @@ export const sidebar = {
 			{
 				title: 'Disposables',
 				slug: '/extras/disposables'
+			},
+			{
+				title: 'Environment',
+				slug: '/extras/environment'
 			}
 		],
 		'@threlte/rapier': [
