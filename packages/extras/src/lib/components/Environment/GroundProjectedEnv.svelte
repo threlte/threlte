@@ -34,15 +34,17 @@
     }
   }
 
+  const removeGroundEnv = () => {
+    scene.remove(currentGroundEnv)
+    currentGroundEnv = undefined
+  }
+
   const toggleGroundEnv = (
     groundEnv: GroundProjectedEnv | undefined,
     groundEnvProps: EnvironmentProperties['groundProjection'],
     envMap: Texture
   ) => {
-    if (groundEnv && previousEnvMap != envMap) {
-      scene.remove(currentGroundEnv)
-      currentGroundEnv = undefined
-    }
+    if (groundEnv && previousEnvMap != envMap) removeGroundEnv()
     if ((!groundEnv || previousEnvMap != envMap) && groundEnvProps && envMap) {
       currentGroundEnv = new GroundProjectedEnv(envMap)
 
@@ -60,10 +62,7 @@
   $: toggleGroundEnv(currentGroundEnv, groundProjection, currentEnvMap)
 
   onDestroy(() => {
-    if (currentGroundEnv) {
-      scene.remove(currentGroundEnv)
-      currentGroundEnv = undefined
-    }
+    if (currentGroundEnv) removeGroundEnv()
     invalidate('Removing ground projected environment')
   })
 </script>
