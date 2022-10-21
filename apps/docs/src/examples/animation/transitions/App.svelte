@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../../utils/useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import Scene from './Scene.svelte'
 	import { buttonIdle, buttonWalk, buttonRun } from './state'

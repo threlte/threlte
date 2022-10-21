@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../../utils/useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'

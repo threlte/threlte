@@ -5,7 +5,7 @@
 	import BasicScene from './BasicScene.svelte'
 	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
 	import AdvancedScene from './AdvancedScene.svelte'
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../../utils/useTweakpane'
 
 	let reset: (() => void) | undefined
 
