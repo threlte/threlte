@@ -1,5 +1,11 @@
 # @threlte/docs
 
+## 0.1.1
+
+### Patch Changes
+
+- e91ce33: Environment - GroundProjection reactivity bugfix & docs update
+
 ## 0.1.0
 
 ### Minor Changes
