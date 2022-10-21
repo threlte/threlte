@@ -1,29 +1,18 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
-	import { derived } from 'svelte/store'
-	import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 	import {
 		AmbientLight,
 		DirectionalLight,
 		OrbitControls,
 		PerspectiveCamera,
-		useLoader,
 		useThrelte
 	} from '@threlte/core'
-	import { useGltf } from '@threlte/extras'
+	import { Environment, useGltf } from '@threlte/extras'
+	import { onDestroy } from 'svelte'
+	import { derived } from 'svelte/store'
+	import { GridHelper, Mesh as ThreeMesh } from 'three'
 	import Blob from './Blob.svelte'
 
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', () => {
-		invalidate('texture loaded')
-	})
-	texture.mapping = EquirectangularReflectionMapping
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
-	})
+	const { scene } = useThrelte()
 
 	type Nodes = 'ball-1' | 'ball-2' | 'ball-3' | 'ball-4' | 'ball-5'
 	const { gltf } = useGltf<Nodes>('/models/blobs/blobs.glb', {
@@ -42,6 +31,8 @@
 		scene.remove(gridHelper)
 	})
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ z: 20 }} fov={50}>
 	<OrbitControls target={{ y: -2 }} enableDamping />

@@ -1,29 +1,11 @@
 <script lang="ts">
-	import { AmbientLight, PerspectiveCamera, useLoader, useThrelte } from '@threlte/core'
-	import { Mesh } from '@threlte/core'
-	import { Float, GLTF, HTML, useGltf } from '@threlte/extras'
-	import { onDestroy } from 'svelte'
+	import { AmbientLight, Mesh, PerspectiveCamera, useThrelte } from '@threlte/core'
+	import { Environment, Float, HTML, useGltf } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import { derived } from 'svelte/store'
 	import type { Mesh as ThreeMesh } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { Color } from 'three'
-	import { EquirectangularReflectionMapping } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+	import { Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', () => {
-		invalidate('texture loaded')
-	})
-	texture.mapping = EquirectangularReflectionMapping
-	scene.environment = texture
-
-	onDestroy(() => {
-		texture.dispose()
-	})
 
 	const { pointer } = useThrelte()
 
@@ -40,6 +22,8 @@
 
 	const url = window.origin
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ z: $offsetX, x: 50, y: -$offsetY }} fov={20} lookAt={{}} />
 

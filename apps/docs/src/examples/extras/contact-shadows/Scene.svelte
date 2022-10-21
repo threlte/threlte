@@ -6,21 +6,18 @@
 		OrbitControls,
 		PerspectiveCamera,
 		useFrame,
-		useLoader,
 		useThrelte
 	} from '@threlte/core'
-	import { ContactShadows, Float } from '@threlte/extras'
+	import { ContactShadows, Environment, Float } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
-	import { EquirectangularReflectionMapping } from 'three'
 	import {
-		BoxBufferGeometry,
+		BoxGeometry,
 		Color,
 		GridHelper,
-		IcosahedronBufferGeometry,
+		IcosahedronGeometry,
 		MeshStandardMaterial,
-		TorusKnotBufferGeometry
+		TorusKnotGeometry
 	} from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 
 	const material = new MeshStandardMaterial({
 		color: 0x0000ff
@@ -35,16 +32,6 @@
 		scene.remove(gridHelper)
 	})
 
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
-		texture.mapping = EquirectangularReflectionMapping
-		invalidate('texture loaded')
-	})
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
-	})
-
 	let pos = {
 		x: 0
 	}
@@ -52,6 +39,8 @@
 		pos.x = Math.sin(Date.now() / 2000)
 	})
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ y: 10, x: -10, z: 10 }} fov={25}>
 	<OrbitControls enabled={false} autoRotate autoRotateSpeed={0.5} target={{ y: 1 }} />
@@ -65,7 +54,7 @@
 <Float floatIntensity={1} floatingRange={[0, 1]}>
 	<Mesh
 		position={{ y: 1.2, z: -0.75 }}
-		geometry={new BoxBufferGeometry(1, 1, 1)}
+		geometry={new BoxGeometry(1, 1, 1)}
 		material={new MeshStandardMaterial({
 			color: new Color('#0059BA').convertSRGBToLinear()
 		})}
@@ -76,7 +65,7 @@
 	<Mesh
 		position={{ y: 1.5, x: 1.2, z: 0.75 }}
 		rotation={{ x: 5, y: 71 }}
-		geometry={new TorusKnotBufferGeometry(0.5, 0.15, 100, 12, 2, 3)}
+		geometry={new TorusKnotGeometry(0.5, 0.15, 100, 12, 2, 3)}
 		material={new MeshStandardMaterial({
 			color: new Color('#F85122').convertSRGBToLinear()
 		})}
@@ -87,7 +76,7 @@
 	<Mesh
 		position={{ y: 1.5, x: -1.4, z: 0.75 }}
 		rotation={{ x: -5, y: 128, z: 10 }}
-		geometry={new IcosahedronBufferGeometry(1, 0)}
+		geometry={new IcosahedronGeometry(1, 0)}
 		material={new MeshStandardMaterial({
 			color: new Color('#F8EBCE').convertSRGBToLinear()
 		})}

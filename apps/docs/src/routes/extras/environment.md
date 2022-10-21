@@ -31,6 +31,8 @@ The component decides whether to use **cubic** or **equirectangular** map based 
 
 Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format is inferred based on file extension but it can be provided in `format` prop.
 
+`isBackground` prop controls if environment is set as the background of `scene`. This is not related to GroundProjection which produces a faux background effect by creating a spherical object textured by the provided environment.
+
 ```svelte
 <!-- Cubic jpg envmap -->
 <Environment
