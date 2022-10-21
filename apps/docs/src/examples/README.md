@@ -4,17 +4,21 @@ This directory houses all examples that are part of the threlte docs and the pla
 
 ## Structure
 
-- **An example must be contained in itself**, meaning there cannot be any import from modules outside the example directory (exempt from this rule are npm packages).
+- **An example can only import relative modules or npm modules**, meaning there must not be any imports with path aliases (e.g. `$examples/Component.svelte`) or other path qualifiers.
 
 - Allowed file extensions are:
 	- .svelte
+		- Must be imported as a fully qualified path `import Component from './Component.svelte'`
 	- .ts
+		- Must be imported without an extension `import moduleName from './moduleName'`
+
+- All relative imports are allowed (e.g. `import moduleName from '../utils/moduleName'` or `import moduleName from './directory/moduleName'`)
 
 - Svelte components can have TypeScript `<script>` blocks. These will be preprocessed and transpiled before being loaded into a playground.
 
 - TypeScript files will be transpiled before being loaded into a playground.
 
-- The entry point to an example must be **"App.svelte"**
+- The entry point to an example must be **"App.svelte"** as all relative imports will be resolved from there.
 
 ## Example
 

@@ -4,7 +4,7 @@
 	import { World } from '@threlte/rapier'
 	import { muted } from './Particle.svelte'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../../utils/useTweakpane'
 
 	const { addButton, action } = useTweakpane()
 

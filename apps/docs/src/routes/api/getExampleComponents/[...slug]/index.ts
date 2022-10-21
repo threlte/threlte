@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { extname, parse } from 'path'
+import { extname, parse, basename } from 'path'
 import processor from 'svelte-preprocess'
 import { preprocess } from 'svelte/compiler'
 import ts from 'typescript'
@@ -18,9 +18,9 @@ const compilerOptions: CompilerOptions = {
 }
 
 const moduleExtensions = ['.svelte', '.ts'] as const
-type ModuleExtensions = typeof moduleExtensions[number]
+type ModuleExtension = typeof moduleExtensions[number]
 
-const parsers: Record<ModuleExtensions, (content: string) => Promise<string>> = {
+const parsers: Record<ModuleExtension, (content: string) => Promise<string>> = {
 	'.svelte': async (content) => {
 		const result = await preprocess(
 			content,
@@ -54,9 +54,103 @@ const parsers: Record<ModuleExtensions, (content: string) => Promise<string>> = 
 	}
 }
 
-const replModuleTypes: Record<ModuleExtensions, string> = {
+const replModuleTypes: Record<ModuleExtension, string> = {
 	'.svelte': 'svelte',
 	'.ts': 'js'
+}
+
+const replModuleImportExtensions: Record<ModuleExtension, string> = {
+	'.svelte': '.svelte',
+	'.ts': ''
+}
+
+type ModuleImport = {
+	path: string
+}
+
+/**
+ * Fully qualify an import path
+ * @param relativePath
+ * @param dir
+ * @returns
+ */
+const parseImportPath = (relativePath: string, dir: string) => {
+	const extension = moduleExtensions.find((ext) => relativePath.endsWith(ext))
+	if (extension) return `${dir}/${relativePath}`
+	return `${dir}/${relativePath}.ts`
+}
+
+/**
+ * Find all relative imports in a module
+ * @param module
+ * @param moduleDir
+ * @returns
+ */
+const findRelativeModuleImports = (module: string, moduleDir: string): ModuleImport[] => {
+	const regex = /import\s+(.*)\s+from\s+['"](\.{1,2}\/.*)['"]/g
+	// skip type imports
+	const matches = Array.from(module.matchAll(regex)).filter((m) => !m[1].startsWith('type'))
+	return matches
+		.map((m) => m[2])
+		.map((path) => {
+			return {
+				path: parseImportPath(path, moduleDir)
+			}
+		})
+}
+
+/**
+ * Rewrite relative imports to top level relative imports and replace extension
+ * @param module
+ * @returns
+ */
+const rewriteRelativeImports = (module: string) => {
+	const regex = /(import\s+.*\s+from\s+['"])(\.{1,2}\/.*)(['"])/g
+	const matches = Array.from(module.matchAll(regex))
+	matches.forEach((m) => {
+		const moduleName =
+			parse(m[2]).name + replModuleImportExtensions[(parse(m[2]).ext || '.ts') as ModuleExtension]
+		module = module.replace(m[0], `${m[1]}./${moduleName}${m[3]}`)
+	})
+	return module
+}
+
+type RelativeModule = {
+	module: string
+	path: string
+	extension: ModuleExtension
+}
+
+/**
+ * Collect and read all relative modules in a module
+ * @param moduleImports
+ * @param collectedModules
+ * @returns
+ */
+const collectRelativeModules = (
+	moduleImports: ModuleImport[],
+	collectedModules: RelativeModule[]
+) => {
+	for (const moduleImport of moduleImports) {
+		const { path } = moduleImport
+		const module = fs.readFileSync(`${path}`, 'utf-8')
+		const relativeModuleImports = findRelativeModuleImports(module, parse(path).dir)
+		const filterDuplicateImports = relativeModuleImports.filter((moduleImport) => {
+			const importBasename = basename(moduleImport.path)
+			const collectedModulesBasenames = collectedModules.map((m) => basename(m.path))
+			return !collectedModulesBasenames.includes(importBasename)
+		})
+
+		collectedModules.push({
+			module: rewriteRelativeImports(module),
+			path,
+			extension: extname(path) as ModuleExtension
+		})
+
+		collectRelativeModules(filterDuplicateImports, collectedModules)
+	}
+
+	return collectedModules
 }
 
 export async function get({ params }: { params: Record<string, string> }) {
@@ -64,32 +158,27 @@ export async function get({ params }: { params: Record<string, string> }) {
 
 	const dir = `./src/examples/${slug}`
 
-	const filePaths = fs.readdirSync(dir)
+	const entryModule: ModuleImport = {
+		path: `${dir}/App.svelte`
+	}
 
-	const componentsPromises = filePaths.map(async (filePath) => {
-		const extension = extname(filePath)
+	const collectedModules: RelativeModule[] = []
 
-		// Unsupported module, throw!
-		if (!moduleExtensions.includes(extension as ModuleExtensions)) {
-			throw new Error(`Unsupported module extension: ${extension}`)
-		}
+	const modules = collectRelativeModules([entryModule], collectedModules)
 
-		const moduleContent = fs.readFileSync(`./src/examples/${slug}/${filePath}`, {
-			encoding: 'utf-8'
-		})
-
-		const parsed = await parsers[extension as ModuleExtensions](moduleContent)
+	const parsedModulePromises = modules.map(async (module) => {
+		const parsed = await parsers[module.extension as ModuleExtension](module.module)
 
 		return {
-			name: parse(filePath).name,
-			type: replModuleTypes[extension as ModuleExtensions],
+			name: parse(module.path).name,
+			type: replModuleTypes[module.extension as ModuleExtension],
 			source: parsed
 		}
 	})
 
-	const components = await Promise.all(componentsPromises)
+	const parsedModules = await Promise.all(parsedModulePromises)
 
-	components.sort((d) => {
+	parsedModules.sort((d) => {
 		if (!d || d.name !== 'App') return 1
 		return -1
 	})
@@ -97,7 +186,7 @@ export async function get({ params }: { params: Record<string, string> }) {
 	return {
 		status: 200,
 		body: {
-			components
+			components: parsedModules
 		}
 	}
 }

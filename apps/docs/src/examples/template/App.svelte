@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../utils/useTweakpane'
 	const { action, addInput } = useTweakpane()
 
 	const showScene = addInput({

@@ -3,7 +3,7 @@
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from './useTweakpane'
+	import { useTweakpane } from '../../utils/useTweakpane'
 
 	let reset: (() => void) | undefined
 
