@@ -39,6 +39,10 @@
     groundEnvProps: EnvironmentProperties['groundProjection'],
     envMap: Texture
   ) => {
+    if (groundEnv && previousEnvMap != envMap) {
+      scene.remove(currentGroundEnv)
+      currentGroundEnv = undefined
+    }
     if ((!groundEnv || previousEnvMap != envMap) && groundEnvProps && envMap) {
       currentGroundEnv = new GroundProjectedEnv(envMap)
 
