@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.4.0
+
+### Minor Changes
+
+- 3a0d3c6: Environment component
+
 ## 4.3.0
 
 ### Minor Changes
