@@ -1,34 +1,16 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Mesh,
-		Object3DInstance,
-		PerspectiveCamera,
-		useLoader,
-		useThrelte
-	} from '@threlte/core'
-	import { HTML, useGltf } from '@threlte/extras'
+	import { DirectionalLight, Mesh, Object3DInstance, PerspectiveCamera } from '@threlte/core'
+	import { Environment, HTML, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
-	import { onDestroy } from 'svelte'
-	import { BoxBufferGeometry, EquirectangularReflectionMapping, MeshStandardMaterial } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Car from './Car.svelte'
 	import Ground from './Ground.svelte'
 
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
-		texture.mapping = EquirectangularReflectionMapping
-		invalidate('texture loaded')
-	})
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
-	})
-
 	const { gltf } = useGltf('/models/loop/loop.glb')
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <DirectionalLight position={{ y: 20, x: 8, z: -3 }} />
 
@@ -39,7 +21,7 @@
 		<p>Dominance: 1</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshStandardMaterial()} />
+		<Mesh geometry={new BoxGeometry(1, 1, 1)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
@@ -48,7 +30,7 @@
 		<p>Dominance: -1</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxBufferGeometry(3, 3, 3)} material={new MeshStandardMaterial()} />
+		<Mesh geometry={new BoxGeometry(3, 3, 3)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
@@ -57,7 +39,7 @@
 		<p>Dominance: 0</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxBufferGeometry(2, 2, 2)} material={new MeshStandardMaterial()} />
+		<Mesh geometry={new BoxGeometry(2, 2, 2)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 

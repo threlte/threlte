@@ -4,29 +4,14 @@
 		Mesh,
 		Object3DInstance,
 		OrbitControls,
-		PerspectiveCamera,
-		useLoader,
-		useThrelte
+		PerspectiveCamera
 	} from '@threlte/core'
-	import { useGltf } from '@threlte/extras'
+	import { Environment, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
-	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
-	import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+	import { GridHelper, Mesh as ThreeMesh } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Ground from './Ground.svelte'
-
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
-		texture.mapping = EquirectangularReflectionMapping
-		invalidate('texture loaded')
-	})
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
-	})
 
 	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
 		'/models/helmet/DamagedHelmet.gltf'
@@ -36,6 +21,8 @@
 		return gltf.nodes['node_damagedHelmet_-6514'] as ThreeMesh
 	})
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ y: 13, x: 12 }} fov={40}>
 	<OrbitControls target={{ x: 2.5 }} />

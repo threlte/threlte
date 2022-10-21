@@ -6,36 +6,24 @@
 		Object3DInstance,
 		OrthographicCamera,
 		useFrame,
-		useLoader,
 		useThrelte
 	} from '@threlte/core'
+	import { Environment } from '@threlte/extras'
 	import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
 	import { spring } from 'svelte/motion'
 	import {
-		BoxBufferGeometry,
-		EquirectangularReflectionMapping,
+		BoxGeometry,
 		GridHelper,
 		Group as ThreeGroup,
 		Mesh as ThreeMesh,
 		MeshStandardMaterial,
 		Vector3
 	} from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 	import Door from './Door.svelte'
 	import Ground from './Ground.svelte'
 	import Player from './Player.svelte'
 
-	const { scene, invalidate } = useThrelte()
-
 	let targetGroup: ThreeGroup
-
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
-		texture.mapping = EquirectangularReflectionMapping
-		scene.environment = texture
-		scene.environment.rotation = 180
-		invalidate('texture loaded')
-	})
 
 	let playerMesh: ThreeMesh
 	let positionHasBeenSet = false
@@ -58,6 +46,8 @@
 	const { size } = useThrelte()
 	$: zoom = $size.width / 8
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <Group position={{ x: $smoothPlayerPosX, z: $smoothPlayerPosZ }}>
 	<Group position={{ y: 0.9 }} bind:group={targetGroup}>
@@ -95,7 +85,7 @@
 			receiveShadow
 			castShadow
 			position={{ y: 1.275, x: 30 + 0.7 + 0.15 }}
-			geometry={new BoxBufferGeometry(60, 2.55, 0.15)}
+			geometry={new BoxGeometry(60, 2.55, 0.15)}
 			material={new MeshStandardMaterial({
 				transparent: true,
 				opacity: 0.5,
@@ -106,7 +96,7 @@
 			receiveShadow
 			castShadow
 			position={{ y: 1.275, x: -30 - 0.7 - 0.15 }}
-			geometry={new BoxBufferGeometry(60, 2.55, 0.15)}
+			geometry={new BoxGeometry(60, 2.55, 0.15)}
 			material={new MeshStandardMaterial({
 				transparent: true,
 				opacity: 0.5,

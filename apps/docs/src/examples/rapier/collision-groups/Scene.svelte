@@ -2,42 +2,24 @@
 	import {
 		DirectionalLight,
 		Mesh,
-		MeshInstance,
 		Object3DInstance,
 		OrbitControls,
-		PerspectiveCamera,
-		useLoader,
-		useThrelte
+		PerspectiveCamera
 	} from '@threlte/core'
-	import { useGltf } from '@threlte/extras'
-	import { AutoColliders, Debug, RigidBody, CollisionGroups } from '@threlte/rapier'
-	import { onDestroy } from 'svelte'
-	import { derived } from 'svelte/store'
-	import { BoxBufferGeometry } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { EquirectangularReflectionMapping, GridHelper, Mesh as ThreeMesh } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { Environment } from '@threlte/extras'
+	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
+	import { BoxGeometry, GridHelper, MeshStandardMaterial } from 'three'
 	import Ground from './Ground.svelte'
 
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', (texture) => {
-		texture.mapping = EquirectangularReflectionMapping
-		invalidate('texture loaded')
-	})
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
-	})
-
-	const geometry = new BoxBufferGeometry(1, 1, 1)
+	const geometry = new BoxGeometry(1, 1, 1)
 
 	let resetCounter = 0
 	export const reset = () => {
 		resetCounter += 1
 	}
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ y: 13, x: 12 }} fov={40}>
 	<OrbitControls target={{ x: 2.5 }} />

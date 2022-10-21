@@ -4,30 +4,14 @@
 		Group,
 		Object3DInstance,
 		PerspectiveCamera,
-		useFrame,
-		useLoader,
-		useThrelte
+		useFrame
 	} from '@threlte/core'
-	import { useGltf } from '@threlte/extras'
-	import { onDestroy } from 'svelte'
+	import { Environment, useGltf } from '@threlte/extras'
 	import { derived } from 'svelte/store'
-	import { EquirectangularReflectionMapping } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 
 	let rotation = 0
 	useFrame(() => {
 		rotation += 0.01
-	})
-
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-	const texture = rgbeLoader.load('/hdr/shanghai_riverside_1k.hdr', () => {
-		invalidate('texture loaded')
-	})
-	texture.mapping = EquirectangularReflectionMapping
-	scene.environment = texture
-	onDestroy(() => {
-		texture.dispose()
 	})
 
 	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
@@ -39,6 +23,8 @@
 		return gltf.nodes['node_damagedHelmet_-6514']
 	})
 </script>
+
+<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <PerspectiveCamera position={{ z: 10 }} fov={20} />
 
