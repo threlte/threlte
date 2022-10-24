@@ -323,6 +323,10 @@ export const sidebar = {
 				slug: '/extras/use-progress'
 			},
 			{
+				title: 'useTrail',
+				slug: '/extras/use-trail'
+			},
+			{
 				title: 'Components',
 				slug: ''
 			},

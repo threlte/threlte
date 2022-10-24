@@ -3,6 +3,7 @@ export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
 export { useProgress } from './hooks/useProgress'
+export { useTrail } from './hooks/useTrail'
 
 // abstractions
 export { default as Edges } from './components/Edges/Edges.svelte'
@@ -17,13 +18,13 @@ export { default as Environment } from './components/Environment/Environment.sve
 export { default as Text } from './components/Text/Text.svelte'
 
 export type {
-	EdgesProperties,
-	FloatProperties,
-	HTMLProperties,
-	TextProperties,
-	GLTFProperties,
-	ContactShadowProperties,
-	EnvironmentProperties
+  EdgesProperties,
+  FloatProperties,
+  HTMLProperties,
+  TextProperties,
+  GLTFProperties,
+  ContactShadowProperties,
+  EnvironmentProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'
