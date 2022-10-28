@@ -6,7 +6,7 @@
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
   import { createObjectStore } from '../lib/createObjectStore'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
-  import type { isArray } from 'util'
+  import DisposableObject from '../internal/DisposableObject.svelte'
 
   type ThrelteThreeParentContext = Writable<any | undefined>
 
@@ -14,19 +14,19 @@
   let parent: Object3D | undefined = $parentStore
   $: parent = $parentStore
 
-  const cl = useExtensions()
+  const extended = useExtensions()
 
-  type T = $$Generic<keyof typeof cl>
+  type T = $$Generic<keyof typeof extended>
 
   export let js: T
 
   type Class = new (...args: any) => any
-  type ThreeClass = typeof cl[typeof js] extends new (...args: any) => any
-    ? typeof cl[typeof js]
+  type ThreeClass = typeof extended[typeof js] extends new (...args: any) => any
+    ? typeof extended[typeof js]
     : never
-  type Object = typeof cl[typeof js] extends new (...args: any) => any
-    ? InstanceType<typeof cl[typeof js]>
-    : typeof cl[typeof js]
+  type Object = typeof extended[typeof js] extends new (...args: any) => any
+    ? InstanceType<typeof extended[typeof js]>
+    : typeof extended[typeof js]
   type Args = ThreeClass extends Class ? ConstructorParameters<ThreeClass> : never
 
   export let args: Args | any[] | undefined = undefined
@@ -61,11 +61,11 @@
     }
 
   const makeObject = (args: any): Object => {
-    return (args ? new (cl[js] as any)(...args) : new (cl[js] as any)()) as Object
+    return (args ? new (extended[js] as any)(...args) : new (extended[js] as any)()) as Object
   }
 
-  if (typeof cl[js] !== 'function') {
-    throw new Error(`cl[${js}] is not a constructor`)
+  if (typeof extended[js] !== 'function') {
+    throw new Error(`extended[${js}] is not a constructor`)
   }
   export const object = makeObject(args)
 
@@ -120,14 +120,12 @@
 
   const isMaterial = js.endsWith('Material')
   $: if (isMaterial && !attach) {
-    // @ts-ignore
-    parent.material = object
+    ;(parent as any).material = object
   }
 
   const isGeometry = js.endsWith('Geometry')
   $: if (isGeometry && !attach) {
-    // @ts-ignore
-    parent.geometry = object
+    ;(parent as any).geometry = object
   }
 
   const { setCamera } = useThrelteRoot()
@@ -166,6 +164,8 @@
     return (object as any) instanceof Object3D
   }
 </script>
+
+<DisposableObject {object} />
 
 {#if extendsObject3D(object)}
   <SceneGraphObject {object}>
