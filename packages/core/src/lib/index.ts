@@ -60,8 +60,8 @@ export { default as ViewportAwareObject } from './internal/ViewportAwareObject.s
 export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // <Three> component
-export { default as Three } from './Three/Three.svelte'
-export { extend } from './Three/extend'
+export { default as Three } from './three/Three.svelte'
+export { extend } from './three/extend'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
