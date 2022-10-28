@@ -39,14 +39,7 @@
 </script>
 
 <Three js="Mesh" let:object scale.z={4}>
-	<Three
-		js="MeshStandardMaterial"
-		flatShading
-		opacity={0.7}
-		transparent
-		side={DoubleSide}
-		color="hotpink"
-	/>
+	<Three js="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide} color="hotpink" />
 	<Three js="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
 </Three>
 
