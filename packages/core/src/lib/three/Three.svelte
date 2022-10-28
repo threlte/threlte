@@ -45,13 +45,13 @@
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
   const isMaterial = js.endsWith('Material')
-  $: if (isMaterial) {
+  $: if (isMaterial && !attach) {
     // @ts-ignore
     parent.material = object
   }
 
   const isGeometry = js.endsWith('Geometry')
-  $: if (isGeometry) {
+  $: if (isGeometry && !attach) {
     // @ts-ignore
     parent.geometry = object
   }
@@ -88,12 +88,12 @@
     attachRemoveFn?.()
   })
 
-  const isObject3D = (object: any): object is Object3D => {
+  const extendsObject3D = (object: any): object is Object3D => {
     return (object as any) instanceof Object3D
   }
 </script>
 
-{#if isObject3D(object)}
+{#if extendsObject3D(object)}
   <SceneGraphObject {object}>
     <slot {object} />
   </SceneGraphObject>

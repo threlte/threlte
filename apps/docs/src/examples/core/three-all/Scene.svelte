@@ -41,22 +41,9 @@
 
 <Three js="Mesh" let:object>
 	<Transform position={{ x: posX, y: posY }} {object} />
-	<Interaction
-		{object}
-		interactive
-		on:click={() => {
-			console.log('click')
-		}}
-	/>
-	<Three
-		js="MeshStandardMaterial"
-		args={[
-			{
-				flatShading: true
-			}
-		]}
-	>
-		<Three js="Color" args={['orange']} attach="color" />
+	<Interaction {object} interactive on:click={() => console.log('click')} />
+	<Three js="MeshStandardMaterial" args={[{ flatShading: true }]}>
+		<Three js="Color" args={['orange']} attach="emissive" />
 	</Three>
 	<Three js="TorusGeometry" args={[1.2]} />
 </Three>
@@ -85,7 +72,6 @@
 <Three js="WebGLCubeRenderTarget" let:object={renderTarget} args={[256]}>
 	<Three js="Group" let:object>
 		<Transform position={{ z: posX }} {object} />
-
 		<Three js="CubeCamera" args={[0.1, 1000, renderTarget]} bind:object={cc} />
 		<Three js="Mesh" let:object>
 			<Transform position={{ x: 0, y: 0, z: 0 }} {object} />
