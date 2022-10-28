@@ -7,6 +7,7 @@
   import { createObjectStore } from '../lib/createObjectStore'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
+  import type { DisposableThreeObject } from '../types/components'
 
   type ThrelteThreeParentContext = Writable<any | undefined>
 
@@ -163,9 +164,15 @@
   const extendsObject3D = (object: any): object is Object3D => {
     return (object as any) instanceof Object3D
   }
+
+  const isDisposableObject = (object: any): object is DisposableThreeObject => {
+    return (object as any).dispose !== undefined
+  }
 </script>
 
-<DisposableObject {object} />
+{#if isDisposableObject(object)}
+  <DisposableObject {object} />
+{/if}
 
 {#if extendsObject3D(object)}
   <SceneGraphObject {object}>
