@@ -1,12 +1,11 @@
 <script lang="ts">
 	import {
 		InteractiveObject as Interaction,
-		OrbitControls,
+		Three,
 		TransformableObject as Transform,
 		useFrame,
 		useThrelte
 	} from '@threlte/core'
-	import { Three } from '@threlte/core'
 	import type { CubeCamera } from 'three'
 	import { DoubleSide } from 'three'
 
@@ -39,33 +38,21 @@
 	})
 </script>
 
-<Three js="Mesh" let:object>
-	<Transform position={{ x: posX, y: posY }} {object} />
-	<Interaction {object} interactive on:click={() => console.log('click')} />
-	<Three js="MeshStandardMaterial" args={[{ flatShading: true }]}>
-		<Three js="Color" args={['orange']} attach="emissive" />
-	</Three>
-	<Three js="TorusGeometry" args={[1.2]} />
+<Three js="Mesh" let:object scale.z={4}>
+	<Three
+		js="MeshStandardMaterial"
+		flatShading
+		opacity={0.7}
+		transparent
+		side={DoubleSide}
+		color="hotpink"
+	/>
+	<Three js="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
 </Three>
 
 <Three js="Mesh" let:object>
 	<Transform position={{ y: -1.25, z: 2 }} {object} />
-	<Interaction
-		{object}
-		interactive
-		on:click={() => {
-			console.log('click')
-		}}
-	/>
-	<Three js="MeshStandardMaterial">
-		<Three
-			js="Color"
-			args={['orange']}
-			attach={(material, color) => {
-				material.color = color
-			}}
-		/>
-	</Three>
+	<Three js="MeshStandardMaterial" color="orange" />
 	<Three js="BoxGeometry" args={[4, 0.5, 1]} />
 </Three>
 
@@ -77,18 +64,20 @@
 			<Transform position={{ x: 0, y: 0, z: 0 }} {object} />
 			<Three
 				js="MeshStandardMaterial"
-				args={[
-					{
-						envMap: renderTarget.texture,
-						roughness: 0.4,
-						metalness: 1
-					}
-				]}
+				roughness={0.3}
+				metalness={1}
+				envMap={renderTarget.texture}
 			/>
 			<Three js="SphereGeometry" args={[0.3]} />
 		</Three>
 	</Three>
 </Three>
+
+<!-- <Three js="Mesh">
+	<Three js="BufferGeometry">
+			<Three js="BufferAttribute" attach="attributes.position" count={v.length / 3} array={v} itemSize={3} />
+	</Three>
+</Three> -->
 
 <Three js="PerspectiveCamera" args={[30]} let:object>
 	<Transform {object} position={{ z: 14, y: 5 }} />
