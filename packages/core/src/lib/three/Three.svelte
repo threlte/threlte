@@ -1,10 +1,11 @@
 <script lang="ts">
   import { useExtensions } from './extend'
-  import { SceneGraphObject, useThrelteRoot } from '@threlte/core'
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Writable } from 'svelte/store'
   import { Object3D } from 'three'
-  import { createObjectStore } from '../../lib/createObjectStore'
+  import { useThrelteRoot } from '../hooks/useThrelteRoot'
+  import { createObjectStore } from '../lib/createObjectStore'
+  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
 
   type ThrelteThreeParentContext = Writable<any | undefined>
 
