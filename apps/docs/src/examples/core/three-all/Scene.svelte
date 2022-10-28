@@ -8,26 +8,21 @@
 	} from '@threlte/core'
 	import type { CubeCamera } from 'three'
 	import { DoubleSide } from 'three'
-
-	let rotation = {
-		x: 0,
-		y: 0,
-		z: 0
-	}
+	import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 	let posX = 0
-	let posY = 0
 
 	useFrame(() => {
 		posX = Math.sin(Date.now() / 1000) * 2.5
-		posY = 2.5 - Math.abs(Math.sin(Date.now() / 1000) * 2.5)
-
-		rotation.x += 0.01
-		rotation.y += 0.01
-		rotation.z += 0.01
 	})
 
 	const { renderer, camera } = useThrelte()
+
+	let controls: OrbitControls | undefined = undefined
+	useFrame(() => {
+		if (!controls) return
+		controls.update()
+	})
 
 	let cc: CubeCamera
 	useFrame(({ renderer, scene }) => {
@@ -38,15 +33,14 @@
 	})
 </script>
 
-<Three js="Mesh" let:object scale.z={4}>
+<Three js="Mesh" scale.z={4}>
 	<Three js="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide} color="hotpink" />
 	<Three js="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
 </Three>
 
-<Three js="Mesh" let:object>
-	<Transform position={{ y: -1.25, z: 2 }} {object} />
+<Three js="Mesh" position.y={-2}>
 	<Three js="MeshStandardMaterial" color="orange" />
-	<Three js="BoxGeometry" args={[4, 0.5, 1]} />
+	<Three js="CylinderGeometry" args={[4, 4, 0.3, 64, 1]} />
 </Three>
 
 <Three js="WebGLCubeRenderTarget" let:object={renderTarget} args={[256]}>
@@ -66,19 +60,20 @@
 	</Three>
 </Three>
 
-<!-- <Three js="Mesh">
-	<Three js="BufferGeometry">
-			<Three js="BufferAttribute" attach="attributes.position" count={v.length / 3} array={v} itemSize={3} />
-	</Three>
-</Three> -->
-
 <Three js="PerspectiveCamera" args={[30]} let:object>
 	<Transform {object} position={{ z: 14, y: 5 }} />
 
-	<Three js="OrbitControls" args={[$camera, renderer?.domElement]} />
+	<Three
+		js="OrbitControls"
+		autoRotate={true}
+		autoRotateSpeed={0.2}
+		enableDamping
+		args={[$camera, renderer?.domElement]}
+		bind:object={controls}
+	/>
 </Three>
 
-<Three js="GridHelper" args={[10, 10]}>
+<Three js="GridHelper" args={[10, 10]} position.y={-2.15}>
 	<Three js="Color" args={['yellow']} attach="material.color" />
 </Three>
 
