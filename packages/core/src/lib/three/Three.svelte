@@ -30,7 +30,7 @@
   type Args = ThreeClass extends Class ? ConstructorParameters<ThreeClass> : never
 
   export let args: Args | any[] | undefined = undefined
-  export let attach: string | ((parent: any, self: any) => (() => void) | void) | undefined =
+  export let attach: string | ((parent: any, self: Object) => (() => void) | void) | undefined =
     undefined
 
   type $$Props = {
