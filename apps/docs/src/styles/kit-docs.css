@@ -318,3 +318,7 @@ nav ul > li > a > svg {
 	height: 18px;
 	margin-right: 10px !important;
 }
+
+[aria-current="page"] {
+	pointer-events: none !important;
+}

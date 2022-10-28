@@ -2,7 +2,7 @@
 	export const load = createKitDocsLoader()
 </script>
 
-<script>
+<script lang="ts">
 	import '@docsearch/css'
 	import '@svelteness/kit-docs/client/styles/docsearch.css'
 	import '../app.css'
@@ -26,9 +26,10 @@
 	import DiscordIcon from '../kit-docs/DiscordIcon.svelte'
 	import GithubIcon from '../kit-docs/GithubIcon.svelte'
 	import PlaygroundIcon from '../kit-docs/PlaygroundIcon.svelte'
+  import { onMount } from 'svelte'
 
 	/** @type {import('@svelteness/kit-docs').MarkdownMeta | null} */
-	export let meta = null
+	export let meta : any = null
 
 	let mergedMeta = meta ?? {
 		description: '',
@@ -59,6 +60,70 @@
 	$: category = $activeCategory ? `${$activeCategory}: ` : ''
 	$: title = meta ? `${category}${meta.title} | Threlte` : null
 	$: description = meta?.description
+
+	// Hack to insert collapsibles to navbar on mount.
+	// KitDocs doesn't seem to have exposed any interface to modify each navbar item's template,
+	// so we have to do things this way.
+	onMount(() => {
+		const categories = Array.from(document.querySelectorAll("nav ul > li > ul > li"));
+		// Here we collect each category group (which is flattened by kitdocs and has to be reconstructed)
+		// Each group is put under workingGroup array, and they belong to the groupHead element.
+		let workingGroup : Element[] = [];
+		let i = 0;
+		while(i < categories.length){
+			if(categories[i].querySelector("a")?.getAttribute("href")){
+				i++;
+				continue;
+			}
+			const groupHead = categories[i++];
+			if(i >= categories.length) {
+				// Last category on last element.
+				break;
+			}
+			else {
+				let selectedElement : Element | null = null;
+				while(i < categories.length
+				&& categories[i].parentNode === groupHead.parentNode
+				&& categories[i].querySelector("a")?.getAttribute("href")){
+					if(categories[i].querySelector("a")?.getAttribute("href") === window.location.pathname) {
+						selectedElement = categories[i].querySelector("a");
+					}
+					workingGroup.push(categories[i++]);
+				}
+				if(workingGroup.length === 0) continue;
+				// Here we convert the workingGroup and the groupHead into a details + summary block.
+				// (Basically provides collapsible functionalities)
+				const details = document.createElement("details");
+				const summary = document.createElement("summary");
+				const parent = groupHead.parentNode;
+				details.append(summary);
+				workingGroup.forEach(element => details.append(element));
+				parent?.replaceChild(details, groupHead);
+				summary.append(groupHead);
+
+				// We set list style to none here, because with list items it will look weird.
+				summary.style.listStyleType = "none";
+				const a = groupHead.querySelector("a");
+				if(a !== null) {
+					// We set this attribute so we can use CSS to suppress the href on this element.
+					// Without this, clicking any collapsible group will refresh the page.
+					a.setAttribute("aria-current", "page");
+				}
+				if(selectedElement) {
+					// Open the collapsible for the current category.
+					details.setAttribute("open", "true");
+					// And also scroll it into view.
+					selectedElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+        	});
+				}
+				// Wipe the working group clean, and move on to the next group.
+				workingGroup = [];
+			}
+		}
+	});
 </script>
 
 <svelte:head>
