@@ -31,10 +31,23 @@
 		cc.update(renderer, scene)
 		cc.parent.visible = true
 	})
+
+	let changeColor = false
 </script>
 
-<Three js="Mesh" scale.z={4}>
-	<Three js="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide} color="hotpink" />
+<Three js="Mesh" scale.z={4} let:object>
+	<Interaction
+		interactive
+		on:click={() => {
+			changeColor = !changeColor
+		}}
+		{object}
+	/>
+	<Three js="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide}>
+		{#if changeColor}
+			<Three js="Color" args={['hotpink']} attach="color" />
+		{/if}
+	</Three>
 	<Three js="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
 </Three>
 
@@ -65,9 +78,7 @@
 
 	<Three
 		js="OrbitControls"
-		autoRotate={true}
 		autoRotateSpeed={0.2}
-		enableDamping
 		args={[$camera, renderer?.domElement]}
 		bind:object={controls}
 	/>

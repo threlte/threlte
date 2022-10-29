@@ -8,6 +8,9 @@
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
   import type { DisposableThreeObject } from '../types/components'
+  import { useAttach } from './utils/useAttach'
+  import { applyProps } from './utils/props'
+  import { prepareInstance } from './utils/prepare'
 
   type ThrelteThreeParentContext = Writable<any | undefined>
 
@@ -61,105 +64,30 @@
         : Object[K]
     }
 
-  const makeObject = (args: any): Object => {
+  const makeBaseInstance = (args: any): Object => {
     return (args ? new (extended[js] as any)(...args) : new (extended[js] as any)()) as Object
   }
 
   if (typeof extended[js] !== 'function') {
     throw new Error(`extended[${js}] is not a constructor`)
   }
-  export const object = makeObject(args)
+  const instance = prepareInstance(makeBaseInstance(args), js)
+  export const object = instance as Object
 
-  $: {
-    Object.entries($$props).forEach(([key, value]) => {
-      let k = key
-      if (key === '$$scope') return
-      if (key === '$$slots') return
-      if (key === 'js') return
-      if (key === 'args') return
-      if (key === 'attach') return
-      if (key === 'object') return
+  $: applyProps(instance, $$props)
 
-      let obj = object as any
-
-      const path = key.split('.')
-      if (path.length > 1) {
-        for (let i = 0; i < path.length - 1; i++) {
-          obj = obj[path[i]]
-        }
-        k = path[path.length - 1]
-      }
-
-      // edge case of setScalar setters
-      if (
-        !Array.isArray(value) &&
-        typeof value === 'number' &&
-        typeof obj[k]?.setScalar === 'function'
-      ) {
-        obj[k].setScalar(value)
-        return
-      }
-
-      if (typeof obj[k]?.set === 'function') {
-        // if the property has a "set" function, we can use it
-        if (Array.isArray(value)) {
-          obj[k].set(...value)
-        } else {
-          obj[k].set(value)
-        }
-      } else {
-        // otherwise, we just set the value
-        obj[k] = value
-      }
-    })
-  }
-
-  const objectStore = createObjectStore(object as any)
-  $: $objectStore = object
+  const objectStore = createObjectStore(instance as any)
+  $: $objectStore = instance
 
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
-
-  const isMaterial = js.endsWith('Material')
-  $: if (isMaterial && !attach) {
-    ;(parent as any).material = object
-  }
-
-  const isGeometry = js.endsWith('Geometry')
-  $: if (isGeometry && !attach) {
-    ;(parent as any).geometry = object
-  }
 
   const { setCamera } = useThrelteRoot()
   const isCamera = js.endsWith('Camera')
   $: if (isCamera) {
-    setCamera(object as any)
+    setCamera(instance as any)
   }
 
-  let attachRemoveFn: (() => void) | undefined = undefined
-  $: if (attach && parent) {
-    if (typeof attach === 'string') {
-      const route = attach.split('.')
-      if (route.length === 1) {
-        // @ts-ignore
-        parent[attach] = object
-      } else {
-        // @ts-ignore
-        let obj = parent as any
-        route.forEach((key, index, arr) => {
-          if (index === arr.length - 1) {
-            obj[key] = object
-          } else {
-            obj = obj[key]
-          }
-        })
-      }
-    } else {
-      attachRemoveFn = attach(parent, object) ?? undefined
-    }
-  }
-  onDestroy(() => {
-    attachRemoveFn?.()
-  })
+  useAttach(parent, instance, attach)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return (object as any) instanceof Object3D
