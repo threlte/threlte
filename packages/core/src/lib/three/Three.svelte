@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { useExtensions } from './extend'
-  import { getContext, onDestroy, setContext } from 'svelte'
+  import { getContext, setContext } from 'svelte'
   import type { Writable } from 'svelte/store'
   import { Object3D } from 'three'
   import { useThrelteRoot } from '../hooks/useThrelteRoot'
-  import { createObjectStore } from '../lib/createObjectStore'
-  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
+  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
+  import { createObjectStore } from '../lib/createObjectStore'
   import type { DisposableThreeObject } from '../types/components'
-  import { useAttach } from './utils/useAttach'
-  import { applyProps } from './utils/props'
+  import { useExtensions } from './extend'
   import { prepareInstance } from './utils/prepare'
+  import { applyProps } from './utils/props'
+  import { useAttach } from './utils/useAttach'
 
   type ThrelteThreeParentContext = Writable<any | undefined>
 
