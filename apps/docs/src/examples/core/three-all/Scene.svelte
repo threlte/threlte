@@ -35,7 +35,7 @@
 	let changeColor = false
 </script>
 
-<Three js="Mesh" scale.z={4} let:object>
+<Three type="Mesh" scale.z={4} let:object>
 	<Interaction
 		interactive
 		on:click={() => {
@@ -43,53 +43,53 @@
 		}}
 		{object}
 	/>
-	<Three js="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide}>
+	<Three type="MeshStandardMaterial" opacity={0.7} transparent side={DoubleSide}>
 		{#if changeColor}
-			<Three js="Color" args={['hotpink']} attach="color" />
+			<Three type="Color" args={['hotpink']} attach="color" />
 		{/if}
 	</Three>
-	<Three js="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
+	<Three type="TorusGeometry" args={[1.2, 0.3, 70, 36]} />
 </Three>
 
-<Three js="Mesh" position.y={-2}>
-	<Three js="MeshStandardMaterial" color="orange" />
-	<Three js="CylinderGeometry" args={[4, 4, 0.3, 64, 1]} />
+<Three type="Mesh" position.y={-2}>
+	<Three type="MeshStandardMaterial" color="orange" />
+	<Three type="CylinderGeometry" args={[4, 4, 0.3, 64, 1]} />
 </Three>
 
-<Three js="WebGLCubeRenderTarget" let:object={renderTarget} args={[256]}>
-	<Three js="Group" let:object>
+<Three type="WebGLCubeRenderTarget" let:object={renderTarget} args={[256]}>
+	<Three type="Group" let:object>
 		<Transform position={{ z: posX }} {object} />
-		<Three js="CubeCamera" args={[0.1, 1000, renderTarget]} bind:object={cc} />
-		<Three js="Mesh" let:object>
+		<Three type="CubeCamera" args={[0.1, 1000, renderTarget]} bind:object={cc} />
+		<Three type="Mesh" let:object>
 			<Transform position={{ x: 0, y: 0, z: 0 }} {object} />
 			<Three
-				js="MeshStandardMaterial"
+				type="MeshStandardMaterial"
 				roughness={0.3}
 				metalness={1}
 				envMap={renderTarget.texture}
 			/>
-			<Three js="SphereGeometry" args={[0.3]} />
+			<Three type="SphereGeometry" args={[0.3]} />
 		</Three>
 	</Three>
 </Three>
 
-<Three js="PerspectiveCamera" args={[30]} let:object>
+<Three type="PerspectiveCamera" args={[30]} let:object>
 	<Transform {object} position={{ z: 14, y: 5 }} />
 
 	<Three
-		js="OrbitControls"
+		type="OrbitControls"
 		autoRotateSpeed={0.2}
 		args={[$camera, renderer?.domElement]}
 		bind:object={controls}
 	/>
 </Three>
 
-<Three js="GridHelper" args={[10, 10]} position.y={-2.15}>
-	<Three js="Color" args={['yellow']} attach="material.color" />
+<Three type="GridHelper" args={[10, 10]} position.y={-2.15}>
+	<Three type="Color" args={['yellow']} attach="material.color" />
 </Three>
 
-<Three js="PointLight" let:object>
+<Three type="PointLight" let:object>
 	<Transform position={{ x: 10, y: 10 }} {object} />
 </Three>
 
-<Three js="AmbientLight" args={['#ffffff', 0.5]} />
+<Three type="AmbientLight" args={['#ffffff', 0.5]} />

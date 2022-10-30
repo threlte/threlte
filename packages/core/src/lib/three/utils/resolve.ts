@@ -1,17 +1,19 @@
-export const resolve = (on: any, propertyPath: string) => {
+import type { Instance } from './types'
+
+export const resolve = (instance: Instance, propertyPath: string) => {
+  let target = instance._threlte_three.parent
   const route = propertyPath.split('.')
   if (route.length === 1) {
     return {
-      parent: on,
+      target,
       key: route[0]
     }
   } else {
-    let obj = on
     for (let index = 0; index < route.length - 1; index++) {
-      obj = obj[route[index]]
+      target = target[route[index]]
     }
     return {
-      parent: obj,
+      target: target,
       key: route[route.length - 1]
     }
   }

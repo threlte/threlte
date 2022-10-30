@@ -3,11 +3,12 @@ export type Attach = string | ((parent: any, self: any) => (() => void) | void)
 export type PropSetter = (value: any) => void
 
 export type InstanceData = {
+  parent?: any
   isCamera: boolean
   isGeometry: boolean
   isMaterial: boolean
   type: string
-  previousAttach: Record<string, any>
+  valueBeforeAttach: null | any
   memoizedPropSetters: Record<
     string,
     {
