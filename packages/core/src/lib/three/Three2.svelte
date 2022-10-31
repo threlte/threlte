@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Object3D } from 'three'
-  import type { ConditionalKeys, Primitive } from 'type-fest'
+  import type { ConditionalKeys, Primitive, Class } from 'type-fest'
   import DisposableObject from '../internal/DisposableObject.svelte'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import type { DisposableThreeObject } from '../types/components'
@@ -16,13 +16,15 @@
   type AnyFn = (...args: any) => any
 
   /**
-   * We hold a list of prop keys that should be ommited
+   * We hold a list of prop keys that should be ommited from the instance props
+   * that are infered by the provided type.
    */
   type OmittedPropKeys =
     | 'type'
     | 'args'
     | 'attach'
     | 'manual'
+    | 'makeDefault'
     | 'id'
     | 'children'
     | `is${string}` // isMesh, isObject3D, etc
@@ -34,31 +36,39 @@
   type Instance = Type extends AnyClass ? InstanceType<Type> : Type
   type Manual = Instance extends { isCamera: true } ? boolean : never
   type MakeDefault = Instance extends { isCamera: true } ? boolean : never
-
   type Args = Type extends AnyClass ? ConstructorParameters<Type> : undefined
 
-  // Allow the use of any prop as they could be pierced
-  // props ("position.x") which are not picked up by the types.
-  type Props = Record<string, any> &
-    Omit<
-      Instance extends Primitive
-        ? {}
-        : {
-            [K in keyof Instance]?: Instance[K] extends { set: (...args: any[]) => any }
-              ? Parameters<Instance[K]['set']> | Parameters<Instance[K]['set']>[0]
-              : Instance[K] extends AnyFn
-              ? never
-              : Instance[K]
-          },
-      ConditionalKeys<Instance, AnyFn> | OmittedPropKeys
-    > & {
-      type: Type
-      args?: Args | any[]
-      attach?: Attach<Type>
-      manual?: Manual
-      makeDefault?: MakeDefault
-    }
-  type $$Props = Props
+  /**
+   * Record<string, any> allows the use of any prop as there could be pierced
+   * props ("position.x") which are not picked up by the following types.
+   */
+  type AnyProps = Record<string, any>
+  type BaseProps = {
+    type: Type
+    args?: Args | any[]
+    attach?: Attach<Type>
+  }
+  type CameraProps = Instance extends { isCamera: true }
+    ? {
+        manual?: Manual
+        makeDefault?: MakeDefault
+      }
+    : {}
+  type InstanceProps = Omit<
+    Instance extends Primitive
+      ? {}
+      : {
+          [K in keyof Instance]?: Instance[K] extends { set: (...args: any[]) => any }
+            ? Parameters<Instance[K]['set']> | Parameters<Instance[K]['set']>[0]
+            : Instance[K] extends AnyFn
+            ? never
+            : Instance[K]
+        },
+    ConditionalKeys<Instance, AnyFn> | OmittedPropKeys
+  >
+
+  type AllProps = AnyProps & BaseProps & CameraProps & InstanceProps
+  type $$Props = AllProps
 
   export let type: Type
   export let args: Args = undefined as Args
