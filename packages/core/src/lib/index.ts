@@ -61,6 +61,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // <Three> component
 export { default as Three } from './three/Three.svelte'
+export { default as Three2 } from './three/Three2.svelte'
 export { extend } from './three/extend'
 
 // hooks
