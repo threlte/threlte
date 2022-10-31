@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { InteractiveObject as Interaction, Three2, useFrame, useThrelte } from '@threlte/core'
+	import { CameraHelper } from 'three'
 	import { OrthographicCamera } from 'three'
 	import {
 		AmbientLight,
@@ -18,6 +19,7 @@
 		WebGLCubeRenderTarget
 	} from 'three'
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	let pos = [0, 0, 0] as [number, number, number]
 
@@ -42,12 +44,14 @@
 	})
 
 	let highlighted = false
+
+	let camera: PerspectiveCamera
 </script>
 
-<Three2 type={Mesh} scale.z={4} let:instance>
+<Three2 type={Mesh} scale.z={4} let:ref>
 	<Interaction
 		interactive
-		object={instance}
+		object={ref}
 		on:pointerenter={() => (highlighted = true)}
 		on:pointerleave={() => (highlighted = false)}
 	/>
@@ -67,8 +71,8 @@
 </Three2>
 
 <Three2 type={Group} position={pos}>
-	<Three2 type={WebGLCubeRenderTarget} let:instance={renderTarget} args={[256]}>
-		<Three2 type={CubeCamera} args={[0.1, 1000, renderTarget]} bind:instance={cc} />
+	<Three2 type={WebGLCubeRenderTarget} let:ref={renderTarget} args={[256]}>
+		<Three2 type={CubeCamera} args={[0.1, 1000, renderTarget]} bind:ref={cc} />
 		<Three2 type={Mesh}>
 			<Three2
 				type={MeshStandardMaterial}
@@ -82,21 +86,24 @@
 </Three2>
 
 <Three2
-	makeDefault
 	type={PerspectiveCamera}
+	far={10}
+	near={5}
 	args={[30]}
-	let:instance
-	position.y={5}
-	position.z={14}
->
+	bind:ref={camera}
+	position.z={3}
+	rotation.y={pos[2]}
+/>
+{#if camera}
+	<Three2 type={CameraHelper} />
+{/if}
+
+<Three2 makeDefault type={PerspectiveCamera} args={[30]} let:ref position.y={5} position.z={14}>
 	<Three2
 		type={OrbitControls}
 		enableDamping
-		autoRotate
-		autoRotateSpeed={0.2}
-		enableZoom={false}
-		args={[instance, renderer?.domElement]}
-		bind:instance={controls}
+		bind:ref={controls}
+		args={[ref, renderer?.domElement]}
 	/>
 </Three2>
 

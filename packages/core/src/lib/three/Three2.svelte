@@ -16,7 +16,7 @@
   type AnyFn = (...args: any) => any
 
   /**
-   * We hold a list of prop keys that should be ommited from the instance props
+   * We hold a list of prop keys that should be ommited from the object props
    * that are infered by the provided type.
    */
   type OmittedPropKeys =
@@ -32,20 +32,25 @@
     | 'uuid'
     | 'name'
 
+  // Basic Prop Types
   type Type = $$Generic
   type Instance = Type extends AnyClass ? InstanceType<Type> : Type
   type Manual = Instance extends { isCamera: true } ? boolean : never
   type MakeDefault = Instance extends { isCamera: true } ? boolean : never
-  type Args = Type extends AnyClass ? ConstructorParameters<Type> : undefined
+  type Args = Type extends AnyClass ? ConstructorParameters<Type> : never
 
   /**
    * Record<string, any> allows the use of any prop as there could be pierced
    * props ("position.x") which are not picked up by the following types.
    */
   type AnyProps = Record<string, any>
+  type ClassProps = Type extends AnyClass
+    ? {
+        args?: Args | any[]
+      }
+    : {}
   type BaseProps = {
     type: Type
-    args?: Args | any[]
     attach?: Attach<Type>
   }
   type CameraProps = Instance extends { isCamera: true }
@@ -67,7 +72,7 @@
     ConditionalKeys<Instance, AnyFn> | OmittedPropKeys
   >
 
-  type AllProps = AnyProps & BaseProps & CameraProps & InstanceProps
+  type AllProps = AnyProps & BaseProps & CameraProps & InstanceProps & ClassProps
   type $$Props = AllProps
 
   export let type: Type
@@ -87,8 +92,8 @@
     return Array.isArray(args)
   }
 
-  // We can't create the instance in a reactive statement due to providing context
-  export let instance = (
+  // We can't create the object in a reactive statement due to providing context
+  export let ref = (
     isClass(type) && argsIsConstructorParameters(args)
       ? new type(...(args as any)) // TODO: fix this any
       : isClass(type)
@@ -97,7 +102,7 @@
   ) as Instance
   let initialized = false
   $: if (initialized) {
-    instance = (
+    ref = (
       isClass(type) && argsIsConstructorParameters(args)
         ? new type(...(args as any)) // TODO: fix this any
         : isClass(type)
@@ -107,23 +112,23 @@
   } else {
     initialized = true
   }
-  const instanceStore = writable(instance)
-  $: instanceStore.set(instance)
-  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', instanceStore)
+  const objectStore = writable(ref)
+  $: objectStore.set(ref)
+  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
   // Props
   $: props = useProps()
-  $: props.updateProps(instance, $$restProps)
+  $: props.updateProps(ref, $$restProps)
 
   // Camera
   const { size } = useThrelte()
   $: camera = useCamera()
-  $: camera.update(instance, $size, manual)
-  $: camera.makeDefaultCamera(instance, makeDefault)
+  $: camera.update(ref, $size, manual)
+  $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment
-  $: attachment = useAttach(instance, attach)
-  $: attachment.update(instance, $parent, attach)
+  $: attachment = useAttach(ref, attach)
+  $: attachment.update(ref, $parent, attach)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return (object as any) instanceof Object3D
@@ -134,14 +139,14 @@
   }
 </script>
 
-{#if isDisposableObject(instance)}
-  <DisposableObject object={instance} />
+{#if isDisposableObject(ref)}
+  <DisposableObject object={ref} />
 {/if}
 
-{#if extendsObject3D(instance)}
-  <SceneGraphObject object={instance}>
-    <slot {instance} />
+{#if extendsObject3D(ref)}
+  <SceneGraphObject object={ref}>
+    <slot {ref} />
   </SceneGraphObject>
 {:else}
-  <slot {instance} />
+  <slot {ref} />
 {/if}
