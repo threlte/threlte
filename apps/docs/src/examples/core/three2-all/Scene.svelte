@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { InteractiveObject as Interaction, Three2, useFrame, useThrelte } from '@threlte/core'
+	import { OrthographicCamera } from 'three'
 	import {
 		AmbientLight,
 		Color,
@@ -18,10 +19,10 @@
 	} from 'three'
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-	let posX = 0
+	let pos = [0, 0, 0] as [number, number, number]
 
 	useFrame(() => {
-		posX = Math.sin(Date.now() / 1000) * 2.5
+		pos[2] = Math.sin(Date.now() / 1000) * 2.5
 	})
 
 	const { renderer } = useThrelte()
@@ -65,8 +66,8 @@
 	<Three2 type={CylinderGeometry} args={[4, 4, 0.3, 64, 1]} />
 </Three2>
 
-<Three2 type={WebGLCubeRenderTarget} let:instance={renderTarget} args={[256]}>
-	<Three2 type={Group} let:instance position.z={posX}>
+<Three2 type={Group} position={pos}>
+	<Three2 type={WebGLCubeRenderTarget} let:instance={renderTarget} args={[256]}>
 		<Three2 type={CubeCamera} args={[0.1, 1000, renderTarget]} bind:instance={cc} />
 		<Three2 type={Mesh}>
 			<Three2

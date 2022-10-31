@@ -3,9 +3,39 @@ import { resolve } from './resolve'
 
 const ignoredProps = ['$$scope', '$$slots', 'type', 'args', 'attach', 'instance']
 
+/**
+ * Only scalar values are memoized, objects and arrays are considered
+ * non-equa by default, to ensure reactivity works as you would
+ * expect in svelte.
+ * @param value
+ * @returns
+ */
+export const memoizeProp = (value: unknown): boolean => {
+  // scalar values are memoized
+  if (typeof value === 'string') return true
+  if (typeof value === 'number') return true
+  if (typeof value === 'boolean') return true
+  if (typeof value === 'undefined') return true
+  if (value === null) return true
+
+  // objects and arrays cannot be reliably memoized
+  return false
+}
+
 export const useProps = () => {
   const { invalidate } = useThrelte()
+
+  const previousValues = new Map<string, any>()
+
   const setProp = <T>(instance: T, propertyPath: string, value: any) => {
+    if (memoizeProp(value)) {
+      const previousValue = previousValues.get(propertyPath)
+      if (previousValue === value) {
+        return
+      }
+      previousValues.set(propertyPath, value)
+    }
+
     const { key, target } = resolve(instance, propertyPath)
 
     if (
