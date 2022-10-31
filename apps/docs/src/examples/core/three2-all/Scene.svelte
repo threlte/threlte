@@ -95,7 +95,7 @@
 	rotation.y={pos[2]}
 />
 {#if camera}
-	<Three2 type={CameraHelper} />
+	<Three2 type={CameraHelper} args={[camera]} />
 {/if}
 
 <Three2 makeDefault type={PerspectiveCamera} args={[30]} let:ref position.y={5} position.z={14}>
