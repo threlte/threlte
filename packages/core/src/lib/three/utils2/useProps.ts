@@ -1,8 +1,10 @@
+import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
 
 const ignoredProps = ['$$scope', '$$slots', 'type', 'args', 'attach', 'instance']
 
 export const useProps = () => {
+  const { invalidate } = useThrelte()
   const setProp = <T>(instance: T, propertyPath: string, value: any) => {
     const { key, target } = resolve(instance, propertyPath)
 
@@ -33,6 +35,7 @@ export const useProps = () => {
       if (!ignoredProps.includes(key)) {
         setProp(instance, key, props[key])
       }
+      invalidate()
     }
   }
 

@@ -1,4 +1,5 @@
 import type { OrthographicCamera, Camera, PerspectiveCamera } from 'three'
+import { useThrelte } from '../../hooks/useThrelte'
 import { useThrelteRoot } from '../../hooks/useThrelteRoot'
 import type { Size } from '../../types/types'
 
@@ -15,6 +16,8 @@ const isPerspectiveCamera = (value: any): value is PerspectiveCamera => {
 }
 
 export const useCamera = () => {
+  const { invalidate } = useThrelte()
+
   const update = <T>(instance: T, size: Size, manual: boolean) => {
     if (manual) return
     if (isOrthographicCamera(instance)) {
@@ -24,10 +27,12 @@ export const useCamera = () => {
       instance.bottom = size.height / -2
       instance.updateProjectionMatrix()
       instance.updateMatrixWorld()
+      invalidate()
     } else if (isPerspectiveCamera(instance)) {
       instance.aspect = size.width / size.height
       instance.updateProjectionMatrix()
       instance.updateMatrixWorld()
+      invalidate()
     }
   }
 
@@ -36,6 +41,7 @@ export const useCamera = () => {
   const makeDefaultCamera = <T>(instance: T, makeDefault: boolean) => {
     if (!isCamera(instance) || !makeDefault) return
     setCamera(instance)
+    invalidate()
   }
 
   return {

@@ -37,6 +37,8 @@
 
   type Args = Type extends AnyClass ? ConstructorParameters<Type> : undefined
 
+  // Allow the use of any prop as they could be pierced
+  // props ("position.x") which are not picked up by the types.
   type Props = Record<string, any> &
     Omit<
       Instance extends Primitive

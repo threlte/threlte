@@ -1,8 +1,11 @@
 import { onDestroy } from 'svelte'
+import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
 import type { Attach } from './types'
 
 export const useAttach = <T>(instance: T, parent: any, attach?: Attach<T>) => {
+  const { invalidate } = useThrelte()
+
   let isAttached = false
   let valueBeforeAttach: any
   let detachFn: (() => void) | undefined | void
@@ -29,14 +32,13 @@ export const useAttach = <T>(instance: T, parent: any, attach?: Attach<T>) => {
 
     if (typeof attach === 'function') {
       detachFn = attach(parent, instance)
-      return
     } else {
       const { target, key } = resolve(parent, attach)
-
       valueBeforeAttach = target[key]
       target[key] = instance
     }
     isAttached = true
+    invalidate()
   }
 
   const detach = () => {
@@ -51,6 +53,7 @@ export const useAttach = <T>(instance: T, parent: any, attach?: Attach<T>) => {
         }
       }
       isAttached = false
+      invalidate()
     }
   }
 
