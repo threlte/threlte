@@ -46,6 +46,9 @@
   type AnyProps = Record<string, any>
   type ClassProps = Type extends AnyClass
     ? {
+        /**
+         * Constructor Args passed to the constructor if a class is passed to "type"
+         */
         args?: Args | any[]
       }
     : {}
@@ -55,7 +58,17 @@
   }
   type CameraProps = Instance extends { isCamera: true }
     ? {
+        /**
+         * By default, threlte will update the cameras aspect ratio or frustum
+         * when the canvas is resized. If you want to manually control the
+         * camera, set this to true.
+         * @default true
+         */
         manual?: Manual
+        /**
+         * Sets the camera as the default camera for the scene.
+         * @default false
+         */
         makeDefault?: MakeDefault
       }
     : {}
