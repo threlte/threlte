@@ -271,7 +271,7 @@ nav > div:first-child {
 	@apply z-10;
 }
 
-nav > ul > li > ul {
+nav > ul > li > details > ul {
 	@apply ml-4;
 }
 
@@ -287,7 +287,7 @@ summary {
 	height: 40px;
 }
 
-nav ul > li > ul > li {
+nav ul > li > details > ul > li {
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 }
@@ -296,16 +296,16 @@ nav ul > li > ul > li {
 	display: none;
 }
 
-nav ul > li > h5 {
+nav ul > li > details > summary > h5 {
 	@apply text-brand;
 	/* @apply border-b border-black; */
 }
 
-nav ul > li > h5 + ul > li:first-child > a {
+nav ul > li > details > h5 + ul > li:first-child > a {
 	@apply !mt-4;
 }
 
-nav ul > li > h5 + ul > li:first-child > a[href=''] {
+nav ul > li > details > h5 + ul > li:first-child > a[href=''] {
 	@apply !pt-2;
 }
 
@@ -321,4 +321,8 @@ nav ul > li > a > svg {
 
 [aria-current="page"] {
 	pointer-events: none !important;
+}
+
+nav details > summary > li{
+	margin-top: 0 !important;
 }

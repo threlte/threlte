@@ -123,6 +123,24 @@
 				workingGroup = [];
 			}
 		}
+
+		// Here we convert each package into details-summary blocks.
+		const packages = Array.from(document.querySelectorAll("nav > ul > li"));
+		for(let p of packages){
+			const packageName = p.children[0];
+			const packageContent = p.children[1];
+			const details = document.createElement("details");
+			const summary = document.createElement("summary");
+			p.replaceChild(details, packageName);
+			summary.appendChild(packageName);
+			details.appendChild(summary);
+			details.appendChild(packageContent);
+
+			// Again, we set list style to none here, because with list items it will look weird.
+			summary.style.listStyleType = "none";
+		}
+
+
 	});
 </script>
 
