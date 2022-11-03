@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { InteractiveObject as Interaction, Three2, useFrame, useThrelte } from '@threlte/core'
-	import { CameraHelper } from 'three'
-	import { OrthographicCamera } from 'three'
 	import {
 		AmbientLight,
+		CameraHelper,
 		Color,
 		CubeCamera,
 		CylinderGeometry,
@@ -19,7 +18,6 @@
 		WebGLCubeRenderTarget
 	} from 'three'
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	let pos = [0, 0, 0] as [number, number, number]
 

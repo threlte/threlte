@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Object3D } from 'three'
-  import type { ConditionalKeys, Primitive, Class } from 'type-fest'
+  import { getContext, setContext } from 'svelte'
+  import { writable, type Writable } from 'svelte/store'
+  import type { Object3D } from 'three'
+  import type { ConditionalKeys, Primitive } from 'type-fest'
+  import { useThrelte } from '../hooks/useThrelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import type { DisposableThreeObject } from '../types/components'
-  import { useAttach } from './utils2/useAttach'
   import type { Attach } from './utils2/types'
-  import { useProps } from './utils2/useProps'
-  import { getContext, setContext } from 'svelte'
-  import { writable, type Writable } from 'svelte/store'
+  import { useAttach } from './utils2/useAttach'
   import { useCamera } from './utils2/useCamera'
-  import { useThrelte } from '../hooks/useThrelte'
+  import { useProps } from './utils2/useProps'
 
   type AnyClass = new (...args: any) => any
   type AnyFn = (...args: any) => any
@@ -144,7 +144,7 @@
   $: attachment.update(ref, $parent, attach)
 
   const extendsObject3D = (object: any): object is Object3D => {
-    return (object as any) instanceof Object3D
+    return !!(object as any).isObject3D
   }
 
   const isDisposableObject = (object: any): object is DisposableThreeObject => {
