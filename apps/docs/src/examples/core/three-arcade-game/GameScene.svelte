@@ -1,28 +1,24 @@
 <script lang="ts">
-	import { Three2, useFrame, useTexture } from '@threlte/core'
-	import { GridHelper } from 'three'
-	import type { Texture } from 'three'
-	import { NearestFilter } from 'three'
-	import { Color } from 'three'
+	import { Three2, useFrame } from '@threlte/core'
 	import {
 		AmbientLight,
+		Color,
 		DirectionalLight,
-		Mesh,
-		MeshBasicMaterial,
+		GridHelper,
+		LineBasicMaterial,
+		NearestFilter,
 		PerspectiveCamera,
-		PlaneGeometry,
 		Scene,
 		WebGLRenderTarget
 	} from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Arena from './Arena.svelte'
+	import { arenaWidth } from './config'
+	import { averageScreenColor } from './game/state'
 	import Level1 from './levels/Level1.svelte'
 	import Player from './Player.svelte'
 	import PlayingBall from './PlayingBall.svelte'
 	import { arcadeMachineScene, gameScene, gameTexture } from './stores'
-	import { arenaWidth } from './config'
-	import { LineBasicMaterial } from 'three'
-	import { averageScreenColor } from './game/state'
 
 	let ballsInGame = 0
 

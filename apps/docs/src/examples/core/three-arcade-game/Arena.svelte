@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { Three2 } from '@threlte/core'
-	import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-	import { createEventDispatcher } from 'svelte'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxGeometry } from 'three'
-	import { Mesh } from 'three'
+	import { AutoColliders, Collider } from '@threlte/rapier'
+	import { BoxGeometry, Mesh, MeshStandardMaterial } from 'three'
 	import {
 		arenaBorderWidth,
 		arenaDepth,

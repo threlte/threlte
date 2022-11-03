@@ -1,18 +1,15 @@
 <script lang="ts">
-	import { Three2, useFrame, useThrelte } from '@threlte/core'
-	import { Edges, useGltf } from '@threlte/extras'
 	import type { Collider } from '@dimforge/rapier3d-compat'
+	import { Three2, useFrame } from '@threlte/core'
+	import { Edges, useGltf } from '@threlte/extras'
 	import { AutoColliders } from '@threlte/rapier'
 	import { spring } from 'svelte/motion'
-	import { writable } from 'svelte/store'
-	import { Group } from 'three'
-	import { BoxGeometry, Mesh, MeshStandardMaterial } from 'three'
+	import { Group, Mesh, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import {
 		arenaBorderWidth,
 		arenaHeight,
 		arenaWidth,
-		playerDepth,
 		playerHeight,
 		playerSpeed,
 		playerToBorderDistance,

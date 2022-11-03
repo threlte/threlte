@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { Three2 } from '@threlte/core'
 	import { Edges } from '@threlte/extras'
-	import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
+	import { Collider, RigidBody } from '@threlte/rapier'
 	import { createEventDispatcher } from 'svelte'
 	import { spring } from 'svelte/motion'
-	import { Group } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxGeometry } from 'three'
-	import { Mesh } from 'three'
+	import { BoxGeometry, Group, Mesh, MeshStandardMaterial } from 'three'
 
 	export let position: { x: number; z: number }
 	export let size: number
