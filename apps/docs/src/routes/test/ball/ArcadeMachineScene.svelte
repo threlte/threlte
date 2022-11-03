@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		OrbitControls,
-		// PointLight,
-		Three2,
-		useFrame,
-		useTexture,
-		useThrelte
-	} from '@threlte/core'
+	import { OrbitControls, Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { onMount } from 'svelte'
 	import { tweened } from 'svelte/motion'
