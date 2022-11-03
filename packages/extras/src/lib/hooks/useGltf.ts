@@ -1,10 +1,10 @@
+import { useLoader } from '@threlte/core'
 import { createEventDispatcher } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useLoader } from '@threlte/core'
+import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
 import type { ThrelteGltf } from '../types/types'
-import { buildSceneGraph } from '../lib/buildSceneGraph'
 
 type UseGltfOptions = {
   useDraco?: boolean | string
@@ -12,13 +12,18 @@ type UseGltfOptions = {
 
 createEventDispatcher
 
-export const useGltf = <Nodes extends string = any, Materials extends string = any>(
+export const useGltf = <
+  Graph extends SceneGraph = {
+    nodes: Record<string, any>
+    materials: Record<string, any>
+  }
+>(
   url: string,
   options?: UseGltfOptions
 ): {
-  gltf: Writable<ThrelteGltf<Nodes, Materials> | undefined>
+  gltf: Writable<ThrelteGltf<Graph> | undefined>
 } => {
-  const gltf = writable<ThrelteGltf<Nodes, Materials> | undefined>(undefined)
+  const gltf = writable<ThrelteGltf<Graph> | undefined>(undefined)
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
   if (options?.useDraco) {
@@ -33,8 +38,8 @@ export const useGltf = <Nodes extends string = any, Materials extends string = a
   }
 
   loader.load(url, (data: GLTF) => {
-    if (data.scene) Object.assign(data, buildSceneGraph(data.scene))
-    gltf.set(data as ThrelteGltf<Nodes, Materials>)
+    if (data.scene) Object.assign(data, buildSceneGraph<Graph>(data.scene))
+    gltf.set(data as ThrelteGltf<Graph>)
   })
 
   return {

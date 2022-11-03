@@ -7,21 +7,24 @@
 		useFrame
 	} from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
-	import { derived } from 'svelte/store'
+	import type { Material, Object3D } from 'three'
 
 	let rotation = 0
 	useFrame(() => {
 		rotation += 0.01
 	})
 
-	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
-		'/models/helmet/DamagedHelmet.gltf'
-	)
+	// 'node_damagedHelmet_-6514', 'Material_MR'
 
-	const helmet = derived(gltf, (gltf) => {
-		if (!gltf || !gltf.nodes['node_damagedHelmet_-6514']) return
-		return gltf.nodes['node_damagedHelmet_-6514']
-	})
+	const { gltf } = useGltf<{
+		nodes: {
+			'node_damagedHelmet_-6514': Object3D
+		}
+		materials: {
+			Material_MR: Material
+		}
+	}>('/models/helmet/DamagedHelmet.gltf')
+	$: helmet = $gltf?.nodes['node_damagedHelmet_-6514']
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
@@ -31,7 +34,7 @@
 <DirectionalLight position={{ y: 10, z: 10 }} />
 
 <Group rotation={{ y: rotation }}>
-	{#if $helmet}
-		<Object3DInstance object={$helmet} />
+	{#if helmet}
+		<Object3DInstance object={helmet} />
 	{/if}
 </Group>

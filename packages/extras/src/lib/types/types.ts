@@ -229,5 +229,4 @@ export interface Text extends Mesh {
 /**
  * Extends THREE.GLTF by materials and nodes properties
  */
-export type ThrelteGltf<Nodes extends string = any, Materials extends string = any> = GLTF &
-  SceneGraph<Nodes, Materials>
+export type ThrelteGltf<Graph extends SceneGraph> = GLTF & Graph
