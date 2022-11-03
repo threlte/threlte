@@ -14,8 +14,6 @@
 		rotation += 0.01
 	})
 
-	// 'node_damagedHelmet_-6514', 'Material_MR'
-
 	const { gltf } = useGltf<{
 		nodes: {
 			'node_damagedHelmet_-6514': Object3D

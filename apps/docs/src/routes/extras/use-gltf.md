@@ -95,22 +95,32 @@ The hook provides a map of all objects and materials in the loaded glTF.
   import { useGltf } from '@threlte/extras'
 
   const { gltf } = useGltf('/path/to/model.glb')
-  $: if ($gltf) console.log('Nodes', $gltf.nodes)
+  $: nodes: $gltf?.nodes
+	$: materials: $gltf?.materials
 </script>
 ```
 
-Provide types to use your IDEs autocompletion.
+Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/pmndrs/gltfjsx) to extract types from glTF files.
 
 ```svelte
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf<'Object-A' | 'Object-B', 'Material-A' | 'Material-B'>(
-    '/path/to/model.glb'
-  )
+  const { gltf } = useGltf<{
+		nodes: {
+			MeshA: THREE.Mesh
+			MeshB: THREE.Mesh
+			Object3DA: THREE.Object3D
+		}
+		materials: {
+			MaterialA: THREE.MeshStandardMaterial
+			MaterialB: THREE.MeshBasicMaterial
+		}
+	}>('/path/to/model.glb')
+
   $: if ($gltf) {
-    const objectA = $gltf.nodes['Object-A']
-    const materialA = $gltf.materials['Material-A']
+    const objectA = $gltf.nodes['MeshA'] // -> THREE.Mesh
+    const materialA = $gltf.materials['MaterialA'] // -> THREE.MeshStandardMaterial
   }
 </script>
 ```
