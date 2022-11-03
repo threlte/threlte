@@ -17,13 +17,13 @@ export { default as Environment } from './components/Environment/Environment.sve
 export { default as Text } from './components/Text/Text.svelte'
 
 export type {
-	EdgesProperties,
-	FloatProperties,
-	HTMLProperties,
-	TextProperties,
-	GLTFProperties,
-	ContactShadowProperties,
-	EnvironmentProperties
+  EdgesProperties,
+  FloatProperties,
+  HTMLProperties,
+  TextProperties,
+  GLTFProperties,
+  ContactShadowProperties,
+  EnvironmentProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'

@@ -57,8 +57,18 @@
   export let scenes: ThreeGLTF['scenes'] | undefined = undefined
   export let userData: ThreeGLTF['userData'] | undefined = undefined
   export let parser: ThreeGLTF['parser'] | undefined = undefined
-  export let materials: ThrelteGltf['materials'] | undefined = undefined
-  export let nodes: ThrelteGltf['nodes'] | undefined = undefined
+  export let materials:
+    | ThrelteGltf<{
+        nodes: Record<string, any>
+        materials: Record<string, any>
+      }>['materials']
+    | undefined = undefined
+  export let nodes:
+    | ThrelteGltf<{
+        nodes: Record<string, any>
+        materials: Record<string, any>
+      }>['nodes']
+    | undefined = undefined
 
   const loader = useLoader(GLTFLoader, () => new GLTFLoader())
 
@@ -143,7 +153,10 @@
     {#if node}
       {#key node.uuid}
         <!-- dispose all nodes, i.e. meshes, skinnedMeshs -->
-        <DisposableObject {dispose} object={node} />
+        <DisposableObject
+          {dispose}
+          object={node}
+        />
 
         <LayerableObject object={node} />
 
@@ -169,7 +182,10 @@
 <!-- dispose all materials -->
 {#if materials}
   {#each Object.values(materials) as material}
-    <DisposableObject {dispose} object={material} />
+    <DisposableObject
+      {dispose}
+      object={material}
+    />
   {/each}
 {/if}
 

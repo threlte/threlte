@@ -1,20 +1,21 @@
-import type { Material, Object3D } from 'three'
+import type { Object3D } from 'three'
 
-export type SceneGraph<Nodes extends string = any, Materials extends string = any> = {
-  nodes: { [name in Nodes]?: Object3D }
-  materials: { [name in Materials]?: Material }
+export type Nodes = Record<string, any>
+export type Materials = Record<string, any>
+
+export type SceneGraph = {
+  nodes: Nodes
+  materials: Materials
 }
 
-export const buildSceneGraph = <Nodes extends string, Materials extends string>(
-  object: THREE.Object3D
-): SceneGraph<Nodes, Materials> => {
-  const data: SceneGraph = { nodes: {}, materials: {} }
+export const buildSceneGraph = <Graph extends SceneGraph = any>(object: Object3D): Graph => {
+  const data: Graph = { nodes: {}, materials: {} } as Graph
   if (object) {
     object.traverse((obj: any) => {
-      if (obj.name) data.nodes[obj.name] = obj
+      if (obj.name) data.nodes[obj.name as any] = obj
       if (obj.material && !data.materials[obj.material.name])
-        data.materials[obj.material.name] = obj.material
+        data.materials[obj.material.name as any] = obj.material
     })
   }
-  return data as SceneGraph<Nodes, Materials>
+  return data as Graph
 }
