@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { arenaWidth, blockGap, arenaBorderWidth, arenaHeight } from '../config'
+	import { gameState } from '../state'
 	import Block from './Block.svelte'
 
 	const rows = 3
@@ -15,6 +16,7 @@
 		}
 		hit: boolean
 		size: number
+		entered: boolean
 	}
 
 	let blocks: Block[] = []
@@ -30,14 +32,38 @@
 					z: startAtZ + i * blockGap + i * blockSize
 				},
 				hit: false,
-				size: blockSize
+				size: blockSize,
+				entered: false
 			})
+		}
+	}
+
+	const { state, score } = gameState
+
+	const onHit = (block: Block) => {
+		score.update((score) => score + 1)
+		block.hit = true
+		blocks = blocks
+		if (blocks.every((block) => block.hit)) {
+			state.set('level-complete')
+		}
+	}
+
+	const onEntered = (block: Block) => {
+		block.entered = true
+		blocks = blocks
+		if (blocks.every((block) => block.entered)) {
+			state.set('playing')
 		}
 	}
 </script>
 
 {#each blocks as block, index (index)}
-	<!-- {#if !block.hit} -->
-	<Block {...block} on:hit={() => (block.hit = true)} {index} />
-	<!-- {/if} -->
+	<Block
+		{...block}
+		freeze={$state === 'game-over' || $state === 'level-complete'}
+		on:hit={() => onHit(block)}
+		on:entered={() => onEntered(block)}
+		{index}
+	/>
 {/each}

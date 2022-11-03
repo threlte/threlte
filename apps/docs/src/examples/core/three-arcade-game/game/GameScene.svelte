@@ -12,15 +12,14 @@
 		WebGLRenderTarget
 	} from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { arcadeMachineScene, gameScene, gameTexture } from '../stores'
 	import Arena from './Arena.svelte'
 	import { arenaWidth } from './config'
-	import { averageScreenColor } from './game/state'
 	import Level1 from './levels/Level1.svelte'
 	import Player from './Player.svelte'
 	import PlayingBall from './PlayingBall.svelte'
-	import { arcadeMachineScene, gameScene, gameTexture } from './stores'
-
-	let ballsInGame = 0
+	import { averageScreenColor, gameState, reset, startGame } from './state'
+	import Ui from './UI.svelte'
 
 	let camera: PerspectiveCamera
 	let rt: WebGLRenderTarget
@@ -32,6 +31,7 @@
 	}
 
 	const textureWidth = 200
+	// const textureWidth = 600
 	const textureHeight = Math.round((textureWidth * 3) / 4)
 
 	var pixels = new Uint8Array(textureWidth * textureHeight * 4)
@@ -82,11 +82,25 @@
 		$arcadeMachineScene.visible = true
 	})
 
+	const { state } = gameState
 	const onKeyPress = (e: KeyboardEvent) => {
-		if (e.key === ' ') {
-			ballsInGame++
+		if (e.key !== ' ' || $state === 'level-loading') return
+		e.preventDefault()
+
+		if ($state === 'game-over') {
+			reset()
+		} else if ($state === 'menu') {
+			startGame()
+		} else if ($state === 'level-complete') {
+			reset()
 		}
 	}
+
+	$: showLevel =
+		$state === 'level-loading' ||
+		$state === 'level-complete' ||
+		$state === 'playing' ||
+		$state === 'game-over'
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
@@ -113,17 +127,15 @@
 
 	<Three2 type={DirectionalLight} position={[4, 10, 2]} />
 
-	{#each new Array(ballsInGame) as _, i}
-		<PlayingBall
-			on:ballOut={() => {
-				ballsInGame -= 1
-			}}
-		/>
-	{/each}
+	<PlayingBall />
 
 	<Arena />
 
 	<Player />
 
-	<Level1 />
+	{#if showLevel}
+		<Level1 />
+	{/if}
+
+	<Ui />
 </Three2>

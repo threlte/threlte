@@ -9,21 +9,24 @@
 	export let position: { x: number; z: number }
 	export let size: number
 	export let hit: boolean
+	export let freeze: boolean
 	export let index: number
 
 	const dispatch = createEventDispatcher<{
 		hit: void
+		entered: void
 	}>()
 
 	const scale = spring(0)
-	setTimeout(() => {
-		scale.set(1)
-	}, index * 100)
+	setTimeout(async () => {
+		await scale.set(1)
+		dispatch('entered')
+	}, index * 20)
 </script>
 
 <Three2 type={Group} position.x={position.x} position.z={position.z}>
 	<RigidBody
-		type={hit ? 'dynamic' : 'fixed'}
+		type={!hit || freeze ? 'fixed' : 'dynamic'}
 		canSleep={false}
 		dominance={hit ? -1 : 1}
 		enabledTranslations={[true, false, true]}

@@ -15,6 +15,7 @@
 		playerToBorderDistance,
 		playerWidth
 	} from './config'
+	import { gameState } from './state'
 
 	$: positionZ = arenaHeight / 2 - playerHeight - playerToBorderDistance
 	const positionX = spring(0)
@@ -23,8 +24,22 @@
 	let rightPressed = false
 
 	let posXMax = arenaWidth / 2 - playerWidth / 2 - arenaBorderWidth / 2
-
+	const { state } = gameState
+	$: playerCanMove = $state === 'playing' || $state === 'level-loading'
+	$: centerPlayer = $state === 'menu' || $state === 'level-loading'
 	useFrame(() => {
+		if (!playerCanMove) {
+			if (centerPlayer) {
+				positionX.set(0, {
+					hard: true
+				})
+			} else {
+				positionX.set($positionX, {
+					hard: true
+				})
+			}
+			return
+		}
 		if (!leftPressed && !rightPressed) return
 		if (leftPressed && rightPressed) return
 		if (leftPressed) {
@@ -56,11 +71,8 @@
 	}
 
 	let colliders: Collider[] = []
-
 	const { gltf } = useGltf<{
-		nodes: {
-			Player: Mesh
-		}
+		nodes: { Player: Mesh }
 		materials: {}
 	}>('/models/ball-game/player/player-simple.glb')
 	$: player = $gltf?.nodes.Player as Mesh
