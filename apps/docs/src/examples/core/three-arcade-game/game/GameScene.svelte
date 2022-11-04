@@ -104,7 +104,12 @@
 		} else if ($state === 'menu') {
 			startGame()
 		} else if ($state === 'level-complete') {
-			level.update((l) => l + 1)
+			if ($level === 8) {
+				// Game finished
+				reset()
+			} else {
+				level.update((l) => l + 1)
+			}
 		}
 	}
 
