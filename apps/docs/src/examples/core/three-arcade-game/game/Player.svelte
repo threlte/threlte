@@ -24,8 +24,9 @@
 	let rightPressed = false
 
 	let posXMax = arenaWidth / 2 - playerWidth / 2 - arenaBorderWidth / 2
-	const { state } = gameState
-	$: playerCanMove = $state === 'playing' || $state === 'level-loading'
+	const { state, playerPosition } = gameState
+	$: playerCanMove =
+		$state === 'playing' || $state === 'await-ball-spawn' || $state === 'level-loading'
 	$: centerPlayer = $state === 'menu' || $state === 'level-loading'
 	useFrame(() => {
 		if (!playerCanMove) {
@@ -49,6 +50,8 @@
 			positionX.update((x) => Math.min(x + playerSpeed / 2, posXMax))
 		}
 	})
+
+	$: playerPosition.set($positionX)
 
 	const onKeyUp = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft') {

@@ -14,6 +14,7 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { arcadeMachineScene, gameScene, gameTexture } from '../stores'
 	import Arena from './Arena.svelte'
+	import Ball from './Ball/Ball.svelte'
 	import { arenaWidth } from './config'
 	import Level from './levels/Level.svelte'
 	import Player from './Player.svelte'
@@ -110,6 +111,8 @@
 			} else {
 				level.update((l) => l + 1)
 			}
+		} else if ($state === 'await-ball-spawn') {
+			$state = 'playing'
 		}
 	}
 
@@ -117,6 +120,7 @@
 		$state === 'level-loading' ||
 		$state === 'level-complete' ||
 		$state === 'playing' ||
+		$state === 'await-ball-spawn' ||
 		$state === 'game-over'
 </script>
 
@@ -145,7 +149,9 @@
 
 	<Three2 type={DirectionalLight} position={[4, 10, 2]} />
 
-	<PlayingBall />
+	<Ball />
+
+	<!-- <PlayingBall /> -->
 
 	<Arena />
 

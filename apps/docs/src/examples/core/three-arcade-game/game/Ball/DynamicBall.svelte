@@ -5,17 +5,15 @@
 	} from '@dimforge/rapier3d-compat'
 	import { Three2, useFrame } from '@threlte/core'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
+	import { onMount } from 'svelte'
 	import { derived } from 'svelte/store'
 	import { Mesh, MeshStandardMaterial, SphereGeometry } from 'three'
-	import { arenaHeight, playerHeight, playerToBorderDistance } from './config'
-	import { useGameStateChanged } from './hooks/useGameStateChanged'
-	import { gameState } from './state'
+	import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
+	import { gameState } from '../state'
 
 	let rigidBody: RapierRigidBody | undefined = undefined
-	let ballCanBeSpawned = false
-	let ballIsSpawned = false
 
-	const { state, level, playerPosition } = gameState
+	const { state, level, playerPosition, ballPosition } = gameState
 
 	const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
 		return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
@@ -25,6 +23,7 @@
 		return map(level, 1, 8, 5, 10)
 	})
 
+	let ballIsSpawned = false
 	const spawnBall = () => {
 		if (!rigidBody) return
 		ballIsSpawned = true
@@ -41,53 +40,28 @@
 		}
 	}
 
-	const ballIsVisible = derived(state, (state) => {
-		return state === 'playing' || state === 'level-loading' || state === 'level-complete'
-	})
-
 	useFrame(() => {
-		if (
-			($state === 'playing' || $state === 'level-loading' || $state === 'menu') &&
-			!ballIsSpawned &&
-			rigidBody
-		) {
-			rigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true)
-			rigidBody.setTranslation({ x: $playerPosition, y: 0, z: startAtPosZ }, true)
-			// rigidBody.setTranslation({ x: $playerPosition, y: 0, z: startAtPosZ }, true)
-		}
-	})
-
-	const ballIsFixed = derived(state, (state) => {
-		return state !== 'playing'
-	})
-
-	$: if ($state === 'playing') {
-		ballCanBeSpawned = true
-	} else {
-		ballCanBeSpawned = false
-		ballIsSpawned = false
-	}
-
-	const onKeyPress = (e: KeyboardEvent) => {
-		if (e.key !== ' ') return
-		if ($state === 'game-over') return
-		if ($state === 'level-complete') return
-		if ($state === 'level-loading') return
-		if ($state === 'menu') return
-
-		if (!ballIsSpawned) {
+		if (!ballIsSpawned && rigidBody) {
 			spawnBall()
+			stop()
 		}
-	}
+		const rbTranslation = rigidBody?.translation()
+		ballPosition.set({
+			x: rbTranslation?.x ?? 0,
+			z: rbTranslation?.z ?? 0
+		})
+	})
 </script>
-
-<svelte:window on:keypress={onKeyPress} />
 
 <RigidBody
 	bind:rigidBody
-	type={$ballIsFixed ? 'kinematicPosition' : 'dynamic'}
+	type={'dynamic'}
 	on:sensorenter={onSensorEnter}
 	enabledTranslations={[true, false, true]}
+	position={{
+		z: startAtPosZ,
+		x: $playerPosition
+	}}
 >
 	<AutoColliders
 		shape="ball"

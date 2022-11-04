@@ -1,4 +1,5 @@
 import { writable, type Writable } from 'svelte/store'
+import { blinkClock } from '../state'
 
 export type BlockColors = {
 	queue: (callback: () => void, ms: number) => void

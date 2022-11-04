@@ -78,7 +78,7 @@
 			}
 		}
 		levelStarted = true
-		state.set('playing')
+		state.set('await-ball-spawn')
 	}
 
 	buildBlocks()

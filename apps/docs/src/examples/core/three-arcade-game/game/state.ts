@@ -1,13 +1,25 @@
-import { writable } from 'svelte/store'
+import { onDestroy } from 'svelte'
+import { get, writable } from 'svelte/store'
 import { Color } from 'three'
 
-export type GameState = 'menu' | 'game-over' | 'playing' | 'level-loading' | 'level-complete'
+export type GameState =
+	| 'menu'
+	| 'game-over'
+	| 'await-ball-spawn'
+	| 'playing'
+	| 'level-loading'
+	| 'level-complete'
 
 export const gameState = {
 	state: writable<GameState>('menu'),
 	level: writable<number>(1),
 	score: writable(0),
 	gameOver: writable(false),
+	playerPosition: writable(0),
+	ballPosition: writable({
+		x: 0,
+		z: 0
+	}),
 	ballCanBeSpawned: writable(false)
 }
 
@@ -23,8 +35,10 @@ export const reset = () => {
  * Optionally resets the game and starts it again
  */
 export const startGame = () => {
-	gameState.state.set('level-loading')
+	gameState.state.set('await-ball-spawn')
 }
+
+export const blinkClock = writable<0 | 1>(0)
 
 /**
  * Used for the light that emits the screen color and luminosity
