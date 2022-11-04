@@ -29,6 +29,8 @@
 			joystick_stick_application: THREE.Mesh
 			joystick_stick: THREE.Mesh
 			joystick_cap: THREE.Mesh
+			Main_Button_Enclosure: THREE.Mesh
+			Main_Button: THREE.Mesh
 			Screen: THREE.Mesh
 		}
 		materials: {
@@ -81,6 +83,7 @@
 
 	let leftPressed = false
 	let rightPressed = false
+	let spacePressed = false
 
 	const onKeyUp = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft') {
@@ -89,6 +92,9 @@
 		} else if (e.key === 'ArrowRight') {
 			e.preventDefault()
 			rightPressed = false
+		} else if (e.key === ' ') {
+			e.preventDefault()
+			spacePressed = false
 		}
 	}
 
@@ -99,6 +105,9 @@
 		} else if (e.key === 'ArrowRight') {
 			e.preventDefault()
 			rightPressed = true
+		} else if (e.key === ' ') {
+			e.preventDefault()
+			spacePressed = true
 		}
 	}
 
@@ -204,6 +213,24 @@
 						receiveShadow
 					/>
 				</Three2>
+			</Three2>
+
+			<Three2
+				type={Mesh}
+				geometry={nodes.Main_Button_Enclosure.geometry}
+				material={materials['joystick base']}
+				position={[-0.1143, 0.9795, -0.0933]}
+				rotation={[-0.1801, 0, 0]}
+				scale={0.9409}
+			>
+				<Three2
+					type={Mesh}
+					geometry={nodes.Main_Button.geometry}
+					material={materials['joystick cap']}
+					position={[0.0001, 0.007 + (spacePressed ? -0.003 : 0), -0.0003]}
+					rotation={[0.192, 0, 0]}
+					scale={0.724}
+				/>
 			</Three2>
 
 			<!-- The screen itself gets a special treatment -->

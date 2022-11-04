@@ -4,8 +4,6 @@
 		AmbientLight,
 		Color,
 		DirectionalLight,
-		GridHelper,
-		LineBasicMaterial,
 		NearestFilter,
 		PerspectiveCamera,
 		Scene,
@@ -15,7 +13,6 @@
 	import { arcadeMachineScene, gameScene, gameTexture } from '../stores'
 	import Arena from './Arena.svelte'
 	import Ball from './Ball/Ball.svelte'
-	import { arenaWidth } from './config'
 	import Intro from './Intro.svelte'
 	import Level from './levels/Level.svelte'
 	import Outro from './Outro.svelte'
