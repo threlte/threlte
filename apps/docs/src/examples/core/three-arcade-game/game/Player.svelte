@@ -4,6 +4,7 @@
 	import { Edges, useGltf } from '@threlte/extras'
 	import { AutoColliders } from '@threlte/rapier'
 	import { spring } from 'svelte/motion'
+	import { writable } from 'svelte/store'
 	import { Group, Mesh, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import {
@@ -18,7 +19,7 @@
 	import { gameState } from './state'
 
 	$: positionZ = arenaHeight / 2 - playerHeight - playerToBorderDistance
-	const positionX = spring(0)
+	const positionX = writable(0)
 
 	let leftPressed = false
 	let rightPressed = false
@@ -31,13 +32,9 @@
 	useFrame(() => {
 		if (!playerCanMove) {
 			if (centerPlayer) {
-				positionX.set(0, {
-					hard: true
-				})
+				positionX.set(0)
 			} else {
-				positionX.set($positionX, {
-					hard: true
-				})
+				positionX.set($positionX)
 			}
 			return
 		}
