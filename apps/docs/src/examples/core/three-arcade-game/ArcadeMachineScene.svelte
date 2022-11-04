@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
-	import { Environment, useGltf } from '@threlte/extras'
+	import { Environment, Text, useGltf } from '@threlte/extras'
 	import { onMount } from 'svelte'
-	import { cubicInOut, cubicOut } from 'svelte/easing'
+	import { cubicInOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import {
 		AmbientLight,
@@ -88,6 +88,10 @@
 	let rightPressed = false
 	let spacePressed = false
 
+	const tipsOpacity = tweened(1, {
+		duration: 200
+	})
+
 	const onKeyUp = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft') {
 			e.preventDefault()
@@ -101,6 +105,8 @@
 	}
 
 	const onKeyDown = (e: KeyboardEvent) => {
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== ' ') return
+		tipsOpacity.set(0)
 		if (e.key === 'ArrowLeft') {
 			e.preventDefault()
 			leftPressed = true
@@ -141,7 +147,7 @@
 	let controls: OrbitControls
 	const { renderer } = useThrelte()
 	useFrame(() => {
-		if (controls) controls.update()
+		if (controls && !controlsEnabled) controls.update()
 	})
 </script>
 
@@ -201,42 +207,46 @@
 				castShadow
 				receiveShadow
 			/>
+
+			<!-- Joystick -->
+
 			<Three2
 				type={Mesh}
 				geometry={nodes.joystick_base.geometry}
 				material={materials['joystick base']}
 				position={[0.1336, 0.9611, -0.1976]}
 				rotation={[-0.1939, 0, 0]}
-				scale={[-8.3542, -0.0936, -8.3542]}
-				castShadow
-				receiveShadow
-			/>
+			>
+				{#if $tipsOpacity > 0}
+					<Three2 type={Group} position.y={0.16} rotation.y={180 * DEG2RAD} rotation.x={0.1939}>
+						<Text
+							fillOpacity={$tipsOpacity}
+							fontSize={0.02}
+							text="Arrow Keys"
+							anchorX="50%"
+							anchorY="50%"
+						/>
+					</Three2>
+				{/if}
+			</Three2>
 			<Three2
 				type={Mesh}
 				geometry={nodes.joystick_stick_application.geometry}
 				material={materials['joystick base']}
 				position={[0.1336, 0.9668, -0.1987]}
 				rotation={[-0.1939, 0, $rotationStick]}
-				scale={[-1.5153, -0.1359, -1.5153]}
-				castShadow
-				receiveShadow
 			>
 				<Three2
 					type={Mesh}
 					geometry={nodes.joystick_stick.geometry}
 					material={materials['joystick stick']}
-					position={[0, 0.1066, -0.0001]}
-					scale={[-0.6599, -7.3598, -0.6599]}
-					castShadow
-					receiveShadow
+					position={[0, -0.0145, 0.0001]}
 				>
 					<Three2
 						type={Mesh}
 						geometry={nodes.joystick_cap.geometry}
 						material={materials['joystick cap']}
 						position={[-0.0001, 0.1126, -0.0005]}
-						castShadow
-						receiveShadow
 					/>
 				</Three2>
 			</Three2>
@@ -249,6 +259,17 @@
 				rotation={[-0.1801, 0, 0]}
 				scale={0.9409}
 			>
+				{#if $tipsOpacity > 0}
+					<Three2 type={Group} position.y={0.05} rotation.y={180 * DEG2RAD} rotation.x={0.1801}>
+						<Text
+							fillOpacity={$tipsOpacity}
+							fontSize={0.02}
+							text="Space"
+							anchorX="50%"
+							anchorY="50%"
+						/>
+					</Three2>
+				{/if}
 				<Three2
 					type={Mesh}
 					geometry={nodes.Main_Button.geometry}

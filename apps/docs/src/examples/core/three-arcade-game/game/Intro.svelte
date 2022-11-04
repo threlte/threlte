@@ -17,20 +17,20 @@
 	timeout(() => {
 		logoScale.set(1)
 		$state = 'await-intro-skip'
-	}, 1.5e3)
+	}, 2.5e3)
 
 	const textScale = tweened(0)
 	const textRotation = tweened(10)
 	timeout(() => {
 		textScale.set(1)
 		textRotation.set(0)
-	}, 2e3)
+	}, 3e3)
 
 	let showPressSpaceToStart = false
 	let blinkClock: 0 | 1 = 0
 	timeout(() => {
 		showPressSpaceToStart = true
-	}, 5e3)
+	}, 6e3)
 
 	let intervalHandler = setInterval(() => {
 		if (!showPressSpaceToStart) return
