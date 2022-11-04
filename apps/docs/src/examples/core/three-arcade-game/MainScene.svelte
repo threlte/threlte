@@ -5,6 +5,7 @@
 	import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 	import ArcadeMachineScene from './ArcadeMachineScene.svelte'
 	import GameScene from './game/GameScene.svelte'
+	import Intro from './game/Intro.svelte'
 	import { blinkClock } from './game/state'
 
 	const unrealBloomPass = new UnrealBloomPass(new Vector2(512, 512), 0.7, 1, 0.25)

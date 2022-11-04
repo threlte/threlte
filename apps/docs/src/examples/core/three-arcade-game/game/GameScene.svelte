@@ -16,10 +16,10 @@
 	import Arena from './Arena.svelte'
 	import Ball from './Ball/Ball.svelte'
 	import { arenaWidth } from './config'
+	import Intro from './Intro.svelte'
 	import Level from './levels/Level.svelte'
 	import Player from './Player.svelte'
-	import PlayingBall from './PlayingBall.svelte'
-	import { averageScreenColor, gameState, reset, startGame } from './state'
+	import { averageScreenColor, gameState, nextLevel, reset, startGame } from './state'
 	import Ui from './UI.svelte'
 
 	let camera: PerspectiveCamera
@@ -95,24 +95,23 @@
 		$arcadeMachineScene.visible = true
 	})
 
-	const { state, level } = gameState
+	const { state, levelIndex, baseColor } = gameState
 	const onKeyPress = (e: KeyboardEvent) => {
 		if (e.key !== ' ' || $state === 'level-loading') return
 		e.preventDefault()
 
-		if ($state === 'game-over') {
+		if ($state === 'await-intro-skip') {
+			startGame()
+		} else if ($state === 'game-over') {
 			reset()
 		} else if ($state === 'menu') {
 			startGame()
 		} else if ($state === 'level-complete') {
-			if ($level === 8) {
-				// Game finished
-				reset()
-			} else {
-				level.update((l) => l + 1)
-			}
+			nextLevel()
 		} else if ($state === 'await-ball-spawn') {
 			$state = 'playing'
+		} else if ($state === 'game-complete') {
+			reset()
 		}
 	}
 
@@ -122,16 +121,14 @@
 		$state === 'playing' ||
 		$state === 'await-ball-spawn' ||
 		$state === 'game-over'
+
+	$: showIntro = $state === 'intro' || $state === 'await-intro-skip'
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
 
 <Three2 type={Scene} bind:ref={$gameScene}>
 	<Three2 type={Color} args={['#060508']} attach="background" />
-
-	<Three2 type={GridHelper} args={[arenaWidth, 8]} position.y={-0.5}>
-		<Three2 type={LineBasicMaterial} color="red" transparent opacity={0.1} />
-	</Three2>
 
 	<Three2 type={WebGLRenderTarget} bind:ref={rt} args={[textureWidth, textureHeight]} />
 	<Three2 type={WebGLRenderTarget} bind:ref={rt2} args={[textureWidth, textureHeight]} />
@@ -149,19 +146,17 @@
 
 	<Three2 type={DirectionalLight} position={[4, 10, 2]} />
 
-	<Ball />
-
-	<!-- <PlayingBall /> -->
-
-	<Arena />
-
-	<Player />
-
-	{#if showLevel}
-		{#key $level}
-			<Level />
-		{/key}
+	{#if showIntro}
+		<Intro />
+	{:else}
+		<Ball />
+		<Arena />
+		<Player />
+		{#if showLevel}
+			{#key $levelIndex}
+				<Level />
+			{/key}
+		{/if}
+		<Ui />
 	{/if}
-
-	<Ui />
 </Three2>

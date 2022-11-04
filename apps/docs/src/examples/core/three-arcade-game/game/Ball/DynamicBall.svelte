@@ -13,14 +13,14 @@
 
 	let rigidBody: RapierRigidBody | undefined = undefined
 
-	const { state, level, playerPosition, ballPosition } = gameState
+	const { state, levelIndex, playerPosition, ballPosition } = gameState
 
 	const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
 		return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
 	}
 
-	const ballSpeed = derived(level, (level) => {
-		return map(level, 1, 8, 5, 10)
+	const ballSpeed = derived(levelIndex, (levelIndex) => {
+		return map(levelIndex, 0, 9, 5, 10)
 	})
 
 	let ballIsSpawned = false

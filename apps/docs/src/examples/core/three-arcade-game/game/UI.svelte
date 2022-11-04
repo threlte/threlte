@@ -8,12 +8,52 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { gameState } from './state'
 
-	const { state, score, level } = gameState
-	const mainUiTexts = derived([state, score], ([state, score]) => {
-		if (state === 'game-over') return `Game Over\nScore: ${score}`
-		if (state === 'menu') return 'Press Space\nto Start'
-		if (state === 'level-complete') return `Level ${$level} Complete\nScore: ${score}`
-	})
+	const { state, score, levelIndex, baseColor } = gameState
+	const mainUiTexts = derived(
+		[state, score],
+		([state, score]):
+			| {
+					text: string
+					size: {
+						width: number
+						height: number
+					}
+			  }
+			| undefined => {
+			if (state === 'game-over')
+				return {
+					text: `Game Over\nScore: ${score}`,
+					size: {
+						width: 5,
+						height: 2.5
+					}
+				}
+			if (state === 'menu')
+				return {
+					text: 'Press Space\nto Start',
+					size: {
+						width: 6.5,
+						height: 2.5
+					}
+				}
+			if (state === 'level-complete')
+				return {
+					text: `Level ${$levelIndex + 1} Complete\nScore: ${score}`,
+					size: {
+						width: 6.5,
+						height: 2.5
+					}
+				}
+			if (state === 'game-complete')
+				return {
+					text: `Final Score: ${score}\nPress Space to Restart`,
+					size: {
+						width: 8.5,
+						height: 2.5
+					}
+				}
+		}
+	)
 
 	const scoreNewLines = derived(score, (score) => {
 		return score.toString().split('').join('\n')
@@ -29,32 +69,40 @@
 </script>
 
 <Three2 type={Group} scale={$scale} position.y={2}>
-	<Three2 type={Mesh} rotation.x={-90 * DEG2RAD} position.y={0.8}>
-		<Three2 type={PlaneGeometry} args={[6.5, 2.5]} />
-		<Three2 type={MeshBasicMaterial} color="#0c090f" />
+	<!-- Centered UI background -->
+	{#key `${[($mainUiTexts?.size.width ?? 6.5).toString(), ($mainUiTexts?.size.height ?? 2.5).toString()].join('')}`}
+		<Three2 type={Mesh} rotation.x={-90 * DEG2RAD} position.y={0.8}>
+			<Three2
+				type={PlaneGeometry}
+				args={[$mainUiTexts?.size.width ?? 6.5, $mainUiTexts?.size.height ?? 2.5]}
+			/>
+			<Three2 type={MeshBasicMaterial} color="#0c090f" />
 
-		<Edges color="red" scale={1.01} />
-	</Three2>
+			<Edges color={$baseColor} scale={1.01} />
+		</Three2>
+	{/key}
+
+	<!-- Centered UI Text -->
 	<Text
 		rotation={{ x: DEG2RAD * -90 }}
 		anchorX="50%"
 		anchorY="50%"
 		textAlign="center"
 		fontSize={0.7}
-		color="red"
+		color={$baseColor}
 		position={{ y: 1 }}
-		text={$mainUiTexts}
+		text={$mainUiTexts?.text}
 	/>
 </Three2>
 
-<!-- LEVEL -->
+<!-- LEVEL (left column) -->
 <Text
 	rotation={{ x: -90 * DEG2RAD }}
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
 	fontSize={0.5}
-	color="red"
+	color={$baseColor}
 	position={{ y: 1, x: -4.65, z: -3.4 }}
 	text="LVL"
 />
@@ -64,19 +112,19 @@
 	anchorY="0%"
 	textAlign="center"
 	fontSize={1.2}
-	color="red"
+	color={$baseColor}
 	position={{ y: 1, x: -4.65, z: -3.1 }}
-	text={`${$level}`}
+	text={`${$levelIndex + 1}`}
 />
 
-<!-- SCORE -->
+<!-- SCORE (right column) -->
 <Text
 	rotation={{ x: -90 * DEG2RAD }}
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
 	fontSize={0.5}
-	color="red"
+	color={$baseColor}
 	position={{ y: 1, x: 4.65, z: -3.4 }}
 	text="SCR"
 />
@@ -87,7 +135,7 @@
 	lineHeight={1}
 	textAlign="center"
 	fontSize={0.8}
-	color="red"
+	color={$baseColor}
 	position={{ y: 1, x: 4.65, z: -3 }}
 	text={$scoreNewLines}
 />

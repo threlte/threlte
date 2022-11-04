@@ -24,7 +24,7 @@
 	let rightPressed = false
 
 	let posXMax = arenaWidth / 2 - playerWidth / 2 - arenaBorderWidth / 2
-	const { state, playerPosition } = gameState
+	const { state, playerPosition, baseColor } = gameState
 	$: playerCanMove =
 		$state === 'playing' || $state === 'await-ball-spawn' || $state === 'level-loading'
 	$: centerPlayer = $state === 'menu' || $state === 'level-loading'
@@ -105,7 +105,7 @@
 				<Three2 type={player.geometry} />
 				<Three2 type={MeshStandardMaterial} color="blue" />
 
-				<Edges scale={1.1} threshold={10} color="red" />
+				<Edges scale={1.1} threshold={10} color={$baseColor} />
 			</Three2>
 		</AutoColliders>
 	</Three2>
