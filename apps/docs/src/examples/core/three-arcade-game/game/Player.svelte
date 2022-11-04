@@ -29,7 +29,7 @@
 	$: playerCanMove =
 		$state === 'playing' || $state === 'await-ball-spawn' || $state === 'level-loading'
 	$: centerPlayer = $state === 'menu' || $state === 'level-loading'
-	useFrame(() => {
+	useFrame((_, delta) => {
 		if (!playerCanMove) {
 			if (centerPlayer) {
 				positionX.set(0)
@@ -41,10 +41,10 @@
 		if (!leftPressed && !rightPressed) return
 		if (leftPressed && rightPressed) return
 		if (leftPressed) {
-			positionX.update((x) => Math.max(x - playerSpeed / 2, -posXMax))
+			positionX.update((x) => Math.max(x - (playerSpeed * delta * 60) / 2, -posXMax))
 		}
 		if (rightPressed) {
-			positionX.update((x) => Math.min(x + playerSpeed / 2, posXMax))
+			positionX.update((x) => Math.min(x + (playerSpeed * delta * 60) / 2, posXMax))
 		}
 	})
 
