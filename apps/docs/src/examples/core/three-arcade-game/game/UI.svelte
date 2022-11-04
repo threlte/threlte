@@ -24,7 +24,7 @@
 				return {
 					text: `Game Over\nScore: ${score}`,
 					size: {
-						width: 5,
+						width: 7,
 						height: 2.5
 					}
 				}
@@ -32,7 +32,7 @@
 				return {
 					text: 'Press Space\nto Start',
 					size: {
-						width: 6.5,
+						width: 7.5,
 						height: 2.5
 					}
 				}
@@ -40,15 +40,7 @@
 				return {
 					text: `Level ${$levelIndex + 1} Complete\nScore: ${score}`,
 					size: {
-						width: 6.5,
-						height: 2.5
-					}
-				}
-			if (state === 'game-complete')
-				return {
-					text: `Final Score: ${score}\nPress Space to Restart`,
-					size: {
-						width: 8.5,
+						width: 10,
 						height: 2.5
 					}
 				}
@@ -57,6 +49,10 @@
 
 	const scoreNewLines = derived(score, (score) => {
 		return score.toString().split('').join('\n')
+	})
+
+	const levelIndexNewLines = derived(levelIndex, (levelIndex) => {
+		return (levelIndex + 1).toString().split('').join('\n')
 	})
 
 	const scale = tweened(0)
@@ -84,11 +80,13 @@
 
 	<!-- Centered UI Text -->
 	<Text
+		font="/fonts/beefd.ttf"
 		rotation={{ x: DEG2RAD * -90 }}
 		anchorX="50%"
 		anchorY="50%"
 		textAlign="center"
-		fontSize={0.7}
+		fontSize={0.4}
+		lineHeight={2}
 		color={$baseColor}
 		position={{ y: 1 }}
 		text={$mainUiTexts?.text}
@@ -97,11 +95,12 @@
 
 <!-- LEVEL (left column) -->
 <Text
+	font="/fonts/beefd.ttf"
 	rotation={{ x: -90 * DEG2RAD }}
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
-	fontSize={0.5}
+	fontSize={0.3}
 	color={$baseColor}
 	position={{ y: 1, x: -4.65, z: -3.4 }}
 	text="LVL"
@@ -111,10 +110,12 @@
 	anchorX="50%"
 	anchorY="0%"
 	textAlign="center"
-	fontSize={1.2}
+	font="/fonts/beefd.ttf"
+	lineHeight={1.4}
+	fontSize={0.7}
 	color={$baseColor}
-	position={{ y: 1, x: -4.65, z: -3.1 }}
-	text={`${$levelIndex + 1}`}
+	position={{ y: 1, x: -4.65, z: -3 }}
+	text={$levelIndexNewLines}
 />
 
 <!-- SCORE (right column) -->
@@ -123,7 +124,8 @@
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
-	fontSize={0.5}
+	fontSize={0.3}
+	font="/fonts/beefd.ttf"
 	color={$baseColor}
 	position={{ y: 1, x: 4.65, z: -3.4 }}
 	text="SCR"
@@ -132,9 +134,10 @@
 	rotation={{ x: -90 * DEG2RAD }}
 	anchorX="50%"
 	anchorY="0%"
-	lineHeight={1}
+	lineHeight={1.4}
+	font="/fonts/beefd.ttf"
 	textAlign="center"
-	fontSize={0.8}
+	fontSize={0.7}
 	color={$baseColor}
 	position={{ y: 1, x: 4.65, z: -3 }}
 	text={$scoreNewLines}

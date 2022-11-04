@@ -14,6 +14,7 @@
 
 	let levelStarted = false
 	const buildBlocks = async () => {
+		if ($state !== 'level-loading') return
 		const { rows, columns } = levels[get(levelIndex)]
 
 		const blockSize =

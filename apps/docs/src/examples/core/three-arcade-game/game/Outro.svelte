@@ -1,22 +1,31 @@
 <script lang="ts">
 	import { Three2, useFrame } from '@threlte/core'
-	import { Edges, Text, useProgress } from '@threlte/extras'
+	import { Edges, Text } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
+	import { cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
-	import { Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
+	import { PlaneGeometry } from 'three'
+	import { Group } from 'three'
+	import { MeshBasicMaterial } from 'three'
+	import { BoxGeometry } from 'three'
+	import { Mesh } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { useTimeout } from './hooks/useTimeout'
 	import { gameState } from './state'
 	import ThrelteLogo from './ThrelteLogo.svelte'
 
-	const { baseColor, state } = gameState
+	const { baseColor, state, score } = gameState
 
+	const geometry = new BoxGeometry(1, 1, 1)
+	const material = new MeshBasicMaterial({
+		transparent: true,
+		opacity: 0
+	})
 	const { timeout } = useTimeout()
 
 	const logoScale = tweened(0)
 	timeout(() => {
 		logoScale.set(1)
-		$state = 'await-intro-skip'
 	}, 1.5e3)
 
 	const textScale = tweened(0)
@@ -24,7 +33,7 @@
 	timeout(() => {
 		textScale.set(1)
 		textRotation.set(0)
-	}, 2e3)
+	}, 200)
 
 	let showPressSpaceToStart = false
 	let blinkClock: 0 | 1 = 0
@@ -58,7 +67,7 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <Three2 type={Group} position.z={-0.35}>
-	<ThrelteLogo positionZ={-1.2} scale={$logoScale} />
+	<ThrelteLogo positionZ={-1.2} />
 
 	<Three2
 		type={Group}
@@ -68,7 +77,7 @@
 		rotation.z={$textRotation}
 	>
 		<Three2 type={Mesh} position.y={-0.05}>
-			<Three2 type={PlaneGeometry} args={[5.3, 1.8]} />
+			<Three2 type={PlaneGeometry} args={[8, 1.8]} />
 			<Three2 type={MeshBasicMaterial} transparent opacity={0} />
 			<Edges color={$baseColor} />
 		</Three2>
@@ -79,7 +88,7 @@
 			textAlign="center"
 			fontSize={0.5}
 			color={$baseColor}
-			text={`THRELTE\nMASTER`}
+			text={`FINAL SCORE\n${$score}`}
 		/>
 	</Three2>
 </Three2>
@@ -99,7 +108,7 @@
 			textAlign="center"
 			fontSize={0.35}
 			color={$baseColor}
-			text={`PRESS SPACE TO START`}
+			text={`PRESS SPACE TO RESTART`}
 		/>
 	</Three2>
 {/if}

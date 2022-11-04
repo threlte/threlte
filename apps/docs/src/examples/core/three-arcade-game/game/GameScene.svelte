@@ -18,8 +18,9 @@
 	import { arenaWidth } from './config'
 	import Intro from './Intro.svelte'
 	import Level from './levels/Level.svelte'
+	import Outro from './Outro.svelte'
 	import Player from './Player.svelte'
-	import { averageScreenColor, gameState, nextLevel, reset, startGame } from './state'
+	import { averageScreenColor, gameState, nextLevel, reset, restart, startGame } from './state'
 	import Ui from './UI.svelte'
 
 	let camera: PerspectiveCamera
@@ -103,14 +104,14 @@
 		if ($state === 'await-intro-skip') {
 			startGame()
 		} else if ($state === 'game-over') {
-			reset()
+			restart()
 		} else if ($state === 'menu') {
 			startGame()
 		} else if ($state === 'level-complete') {
 			nextLevel()
 		} else if ($state === 'await-ball-spawn') {
 			$state = 'playing'
-		} else if ($state === 'game-complete') {
+		} else if ($state === 'outro') {
 			reset()
 		}
 	}
@@ -123,6 +124,8 @@
 		$state === 'game-over'
 
 	$: showIntro = $state === 'intro' || $state === 'await-intro-skip'
+
+	$: showOutro = $state === 'outro'
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
@@ -148,6 +151,8 @@
 
 	{#if showIntro}
 		<Intro />
+	{:else if showOutro}
+		<Outro />
 	{:else}
 		<Ball />
 		<Arena />

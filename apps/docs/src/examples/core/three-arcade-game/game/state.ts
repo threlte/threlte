@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store'
+import { derived, get, writable } from 'svelte/store'
 import { Color } from 'three'
 import { levels } from './levels'
 
@@ -11,27 +11,43 @@ export type GameState =
 	| 'playing'
 	| 'level-loading'
 	| 'level-complete'
-	| 'game-complete'
+	| 'outro'
+
+const state = writable<GameState>('intro')
+const levelIndex = writable<number>(0)
+const score = writable(0)
+const gameOver = writable(false)
+const playerPosition = writable(0)
+const ballPosition = writable({
+	x: 0,
+	z: 0
+})
+const baseColor = derived(state, (state) => {
+	if (state === 'outro') return 'green'
+	return 'red'
+})
 
 export const gameState = {
-	state: writable<GameState>('intro'),
-	levelIndex: writable<number>(0),
-	score: writable(0),
-	gameOver: writable(false),
-	playerPosition: writable(0),
-	ballPosition: writable({
-		x: 0,
-		z: 0
-	}),
-	baseColor: writable('red')
+	state,
+	levelIndex,
+	score,
+	gameOver,
+	playerPosition,
+	ballPosition,
+	baseColor
 }
 
 gameState.state.subscribe((state) => {
 	console.log('STAATE', state)
 })
 
-export const reset = () => {
+export const restart = () => {
+	reset()
 	gameState.state.set('menu')
+}
+
+export const reset = () => {
+	gameState.state.set('intro')
 	gameState.levelIndex.set(0)
 	gameState.gameOver.set(false)
 	gameState.score.set(0)
@@ -40,7 +56,6 @@ export const reset = () => {
 		x: 0,
 		z: 0
 	})
-	gameState.baseColor.set('red')
 }
 
 export const nextLevel = () => {
@@ -48,8 +63,7 @@ export const nextLevel = () => {
 		gameState.levelIndex.update((levelIndex) => levelIndex + 1)
 		gameState.state.set('level-loading')
 	} else {
-		gameState.state.set('game-complete')
-		gameState.baseColor.set('green')
+		gameState.state.set('outro')
 	}
 }
 
