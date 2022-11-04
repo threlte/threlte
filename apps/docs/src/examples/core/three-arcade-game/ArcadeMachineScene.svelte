@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { OrbitControls, Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
+	import { Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { onMount } from 'svelte'
+	import { cubicInOut, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import {
 		AmbientLight,
@@ -15,7 +16,9 @@
 		PointLight,
 		Scene
 	} from 'three'
+	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { useTimeout } from './game/hooks/useTimeout'
 	import { averageScreenColor } from './game/state'
 	import { arcadeMachineScene, gameTexture } from './stores'
 
@@ -93,7 +96,6 @@
 			e.preventDefault()
 			rightPressed = false
 		} else if (e.key === ' ') {
-			e.preventDefault()
 			spacePressed = false
 		}
 	}
@@ -106,7 +108,6 @@
 			e.preventDefault()
 			rightPressed = true
 		} else if (e.key === ' ') {
-			e.preventDefault()
 			spacePressed = true
 		}
 	}
@@ -124,6 +125,24 @@
 	$: if (leftPressed === rightPressed) {
 		rotationStick.set(0)
 	}
+
+	const positionZ = tweened(4, {
+		duration: 3e3,
+		easing: cubicInOut
+	})
+
+	let controlsEnabled = false
+	const { timeout } = useTimeout()
+	timeout(async () => {
+		await positionZ.set(1.4)
+		controlsEnabled = true
+	}, 1e3)
+
+	let controls: OrbitControls
+	const { renderer } = useThrelte()
+	useFrame(() => {
+		if (controls) controls.update()
+	})
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
@@ -133,13 +152,20 @@
 
 	<Three2
 		type={PerspectiveCamera}
-		position.z={1.4}
+		position.z={$positionZ}
 		rotation.x={DEG2RAD * -11}
 		position.y={1.5}
 		fov={30}
 		makeDefault
+		let:ref={camera}
 	>
-		<OrbitControls target={{ y: 1.24 }} />
+		<Three2
+			enabled={controlsEnabled}
+			bind:ref={controls}
+			type={OrbitControls}
+			args={[camera, renderer?.domElement]}
+			target.y={1.24}
+		/>
 	</Three2>
 
 	{#if nodes && materials}

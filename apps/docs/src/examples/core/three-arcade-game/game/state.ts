@@ -37,10 +37,6 @@ export const gameState = {
 	baseColor
 }
 
-gameState.state.subscribe((state) => {
-	console.log('STAATE', state)
-})
-
 export const restart = () => {
 	reset()
 	gameState.state.set('menu')
