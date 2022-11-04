@@ -5,9 +5,9 @@ export type GameState = 'menu' | 'game-over' | 'playing' | 'level-loading' | 'le
 
 export const gameState = {
 	state: writable<GameState>('menu'),
+	level: writable<number>(1),
 	score: writable(0),
 	gameOver: writable(false),
-	level: writable(1),
 	ballCanBeSpawned: writable(false)
 }
 

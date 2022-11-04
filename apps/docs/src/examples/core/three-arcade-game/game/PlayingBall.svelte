@@ -5,26 +5,34 @@
 	} from '@dimforge/rapier3d-compat'
 	import { Three2 } from '@threlte/core'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
-	import { createEventDispatcher } from 'svelte'
+	import { derived } from 'svelte/store'
 	import { Mesh, MeshStandardMaterial, SphereGeometry } from 'three'
-	import { arenaHeight, ballSpeed, playerHeight, playerToBorderDistance } from './config'
+	import { arenaHeight, playerHeight, playerToBorderDistance } from './config'
 	import { gameState } from './state'
 
 	let rigidBody: RapierRigidBody | undefined = undefined
 	let ballCanBeSpawned = false
 	let ballIsSpawned = false
 
+	const { state, level } = gameState
+
+	const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
+		return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+	}
+
+	const ballSpeed = derived(level, (level) => {
+		return map(level, 1, 8, 5, 10)
+	})
+
 	const spawnBall = () => {
 		if (!rigidBody) return
 		ballIsSpawned = true
 		const randomSign = Math.random() > 0.5 ? 1 : -1
-		const randomX = (randomSign * Math.random() * ballSpeed) / 2
-		rigidBody.applyImpulse({ x: randomX, y: 0, z: -ballSpeed }, true)
+		const randomX = (randomSign * Math.random() * $ballSpeed) / 2
+		rigidBody.applyImpulse({ x: randomX, y: 0, z: -$ballSpeed }, true)
 	}
 
 	const startAtPosZ = arenaHeight / 2 - playerHeight - playerToBorderDistance * 2
-
-	const { state } = gameState
 
 	const onSensorEnter = () => {
 		$state = 'game-over'

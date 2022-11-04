@@ -15,7 +15,7 @@
 	import { arcadeMachineScene, gameScene, gameTexture } from '../stores'
 	import Arena from './Arena.svelte'
 	import { arenaWidth } from './config'
-	import Level1 from './levels/Level1.svelte'
+	import Level from './levels/Level.svelte'
 	import Player from './Player.svelte'
 	import PlayingBall from './PlayingBall.svelte'
 	import { averageScreenColor, gameState, reset, startGame } from './state'
@@ -23,6 +23,7 @@
 
 	let camera: PerspectiveCamera
 	let rt: WebGLRenderTarget
+	let rt2: WebGLRenderTarget
 
 	$: if (rt) {
 		$gameTexture = rt.texture
@@ -31,7 +32,6 @@
 	}
 
 	const textureWidth = 200
-	// const textureWidth = 600
 	const textureHeight = Math.round((textureWidth * 3) / 4)
 
 	var pixels = new Uint8Array(textureWidth * textureHeight * 4)
@@ -57,32 +57,44 @@
 		})
 	}
 
+	let frame = 0
+	let renderEvery = 2
 	useFrame(({ renderer }) => {
 		if (!camera || !rt || !renderer || !$gameScene || !$arcadeMachineScene) return
 
+		frame += 1
+
 		$arcadeMachineScene.visible = false
 		$gameScene.visible = true
-		renderer.setRenderTarget(rt)
+
+		if (frame % renderEvery === 0) {
+			renderer.setRenderTarget(rt)
+		} else {
+			renderer.setRenderTarget(rt2)
+		}
+
 		renderer.render($gameScene, camera)
 
-		const context = renderer.getContext()
-		context.readPixels(
-			0,
-			0,
-			textureWidth,
-			textureHeight,
-			context.RGBA,
-			context.UNSIGNED_BYTE,
-			pixels
-		)
-		samplePixels()
+		if (frame % renderEvery === 0) {
+			const context = renderer.getContext()
+			context.readPixels(
+				0,
+				0,
+				textureWidth,
+				textureHeight,
+				context.RGBA,
+				context.UNSIGNED_BYTE,
+				pixels
+			)
+			samplePixels()
+		}
 
 		renderer.setRenderTarget(null)
 		$gameScene.visible = false
 		$arcadeMachineScene.visible = true
 	})
 
-	const { state } = gameState
+	const { state, level } = gameState
 	const onKeyPress = (e: KeyboardEvent) => {
 		if (e.key !== ' ' || $state === 'level-loading') return
 		e.preventDefault()
@@ -92,7 +104,7 @@
 		} else if ($state === 'menu') {
 			startGame()
 		} else if ($state === 'level-complete') {
-			reset()
+			level.update((l) => l + 1)
 		}
 	}
 
@@ -113,6 +125,7 @@
 	</Three2>
 
 	<Three2 type={WebGLRenderTarget} bind:ref={rt} args={[textureWidth, textureHeight]} />
+	<Three2 type={WebGLRenderTarget} bind:ref={rt2} args={[textureWidth, textureHeight]} />
 
 	<Three2
 		bind:ref={camera}
@@ -134,7 +147,9 @@
 	<Player />
 
 	{#if showLevel}
-		<Level1 />
+		{#key $level}
+			<Level />
+		{/key}
 	{/if}
 
 	<Ui />

@@ -6,6 +6,7 @@
 	import {
 		AmbientLight,
 		Color,
+		CylinderGeometry,
 		DirectionalLight,
 		Group,
 		Mesh,
@@ -269,4 +270,11 @@
 		position.x={1}
 		position.z={3}
 	/>
+</Three2>
+
+<!-- Floor -->
+
+<Three2 type={Mesh}>
+	<Three2 type={CylinderGeometry} args={[1, 1, 0.04, 64]} />
+	<Three2 type={MeshStandardMaterial} color={'#0f0f0f'} />
 </Three2>

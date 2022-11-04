@@ -11,6 +11,4 @@ export const playerDepth = 1
 
 export const playerSpeed = 0.4
 
-export const ballSpeed = 10
-
 export const blockGap = 0.1
