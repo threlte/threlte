@@ -42,6 +42,7 @@
 		"eslint-plugin-svelte3": "^4.0.0",
 		"postcss": "^8.4.14",
 		"postcss-load-config": "^4.0.1",
+		"postprocessing": "^6.29.1",
 		"prettier": "^2.7.1",
 		"prettier-plugin-svelte": "^2.7.0",
 		"react": "^18.2.0",

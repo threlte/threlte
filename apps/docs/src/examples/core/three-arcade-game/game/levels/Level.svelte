@@ -1,5 +1,11 @@
+<script lang="ts" context="module">
+	const backgroundAudio = writable<ArcadeAudio | undefined>(undefined)
+</script>
+
 <script lang="ts">
+	import { onDestroy } from 'svelte'
 	import { get, writable } from 'svelte/store'
+	import { play, type ArcadeAudio } from '../../sound'
 	import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
 	import { useTimeout } from '../hooks/useTimeout'
 	import { levels } from '../levels'
@@ -10,7 +16,32 @@
 
 	const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+	let bgVolume = 0.6
+
 	const { state, score, levelIndex } = gameState
+
+	let levelBackgroundAudio: ArcadeAudio | undefined = undefined
+
+	const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
+		return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+	}
+
+	const playLevelSound = () => {
+		levelBackgroundAudio = play('levelSlow', {
+			loop: true,
+			volume: bgVolume,
+			playbackRate: map($levelIndex, 0, levels.length - 1, 1.0, 2)
+		})
+	}
+
+	playLevelSound()
+
+	onDestroy(() => {
+		if (levelBackgroundAudio) {
+			console.log('stopping audio')
+			levelBackgroundAudio.source.stop()
+		}
+	})
 
 	let levelStarted = false
 	const buildBlocks = async () => {
@@ -42,6 +73,7 @@
 				await wait(16)
 			}
 		}
+
 		levelStarted = true
 		state.set('await-ball-spawn')
 	}
@@ -50,8 +82,8 @@
 
 	buildBlocks()
 
-	$: if ($state === 'game-over') {
-		if (!levelStarted) break $
+	const onGameOver = async () => {
+		if (!levelStarted) return
 		blocks.forEach((block) => {
 			block.freeze.set(true)
 			if (!get(block.hit)) {
@@ -85,8 +117,13 @@
 				}
 			})
 		}, 1e3)
-	} else if ($state === 'level-complete') {
-		if (!levelStarted) break $
+		if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 100)
+		await play('gameOver2', { volume: 0.5 })?.onEnded()
+		if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
+	}
+
+	const onLevelComplete = async () => {
+		if (!levelStarted) return
 		blocks.forEach((block) => {
 			block.freeze.set(true)
 			block.blinkingColors.set({
@@ -105,7 +142,13 @@
 				block.blinkingColors.set(undefined)
 			})
 		}, 1e3)
+		if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 200)
+		await play('levelComplete')?.onEnded()
+		if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
 	}
+
+	$: if ($state === 'game-over') onGameOver()
+	$: if ($state === 'level-complete') onLevelComplete()
 
 	const onHit = (block: BlockData) => {
 		if ($state === 'game-over' || $state === 'level-complete') return

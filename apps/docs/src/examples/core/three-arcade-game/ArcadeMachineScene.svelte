@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
-	import { Environment, Text, useGltf } from '@threlte/extras'
+	import { InteractiveObject, Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
+	import { Environment, Text, useCursor } from '@threlte/extras'
 	import { onMount } from 'svelte'
 	import { cubicInOut } from 'svelte/easing'
-	import { tweened } from 'svelte/motion'
+	import { spring, tweened } from 'svelte/motion'
 	import {
 		AmbientLight,
 		Color,
@@ -12,40 +12,17 @@
 		Group,
 		Mesh,
 		MeshStandardMaterial,
+		Object3D,
 		PerspectiveCamera,
 		PointLight,
 		Scene
 	} from 'three'
-	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { useTimeout } from './game/hooks/useTimeout'
-	import { averageScreenColor } from './game/state'
+	import { arcadeMachineAsset } from './assets'
+	import { averageScreenColor, gameState } from './game/state'
 	import { arcadeMachineScene, gameTexture } from './stores'
 
-	const { gltf } = useGltf<{
-		nodes: {
-			BodyMesh: THREE.Mesh
-			LeftCover: THREE.Mesh
-			RightCover: THREE.Mesh
-			ScreenFrame: THREE.Mesh
-			joystick_base: THREE.Mesh
-			joystick_stick_application: THREE.Mesh
-			joystick_stick: THREE.Mesh
-			joystick_cap: THREE.Mesh
-			Main_Button_Enclosure: THREE.Mesh
-			Main_Button: THREE.Mesh
-			Screen: THREE.Mesh
-		}
-		materials: {
-			['machine body main']: THREE.MeshStandardMaterial
-			['machine body outer']: THREE.MeshStandardMaterial
-			['screen frame']: THREE.MeshStandardMaterial
-			['joystick base']: THREE.MeshStandardMaterial
-			['joystick stick']: THREE.MeshStandardMaterial
-			['joystick cap']: THREE.MeshStandardMaterial
-			Screen: THREE.MeshStandardMaterial
-		}
-	}>('/models/ball-game/archade-machine/arcade_machine_own.glb')
+	const { gltf } = arcadeMachineAsset
 
 	$: nodes = $gltf?.nodes
 	$: materials = $gltf?.materials
@@ -62,10 +39,6 @@
 
 	let basePointLightIntensity = tweened(0)
 
-	const { scene } = useThrelte()
-
-	scene.background = new Color('#080200')
-
 	onMount(() => {
 		setTimeout(() => {
 			basePointLightIntensity.set(1, {
@@ -74,12 +47,18 @@
 		}, 1000)
 	})
 
+	const { state } = gameState
+
 	let pointlight: PointLight
 	let pointLightIntensity = $basePointLightIntensity
 	useFrame(() => {
-		const randomSign = Math.random() > 0.5 ? 1 : -1
-		const random = -0.01 + Math.random() * 0.02 * randomSign
-		pointLightIntensity = $basePointLightIntensity + random
+		if ($state === 'off') {
+			pointLightIntensity = 1
+		} else {
+			const randomSign = Math.random() > 0.5 ? 1 : -1
+			const random = -0.01 + Math.random() * 0.02 * randomSign
+			pointLightIntensity = $basePointLightIntensity + random
+		}
 	})
 
 	const scanLinesTexture = useTexture('/models/ball-game/archade-machine/textures/scanlines.png')
@@ -132,23 +111,96 @@
 		rotationStick.set(0)
 	}
 
-	const positionZ = tweened(4, {
+	const cameraTweenZ = tweened(4, {
 		duration: 3e3,
 		easing: cubicInOut
 	})
 
-	let controlsEnabled = false
-	const { timeout } = useTimeout()
-	timeout(async () => {
-		await positionZ.set(1.4)
-		controlsEnabled = true
-	}, 1e3)
+	$: cameraTweenZ.set($state === 'off' ? 4 : 1.4)
 
-	let controls: OrbitControls
-	const { renderer } = useThrelte()
+	const { pointer } = useThrelte()
+
+	let screenFocused = false
+
+	const screenPos = {
+		x: 0,
+		y: 1.3774,
+		z: 0.1447
+	}
+
+	const cameraTargetPos = spring(
+		{
+			x: $pointer.x * 0.1,
+			y: 1.25,
+			z: 0
+		},
+		{
+			precision: 0.000001
+		}
+	)
+	$: cameraTargetPos.set(
+		screenFocused
+			? {
+					...screenPos,
+					z: -screenPos.z
+			  }
+			: {
+					x: $pointer.x * 0.1,
+					y: 1.25,
+					z: 0
+			  }
+	)
+
+	const cameraPos = spring(
+		{
+			x: $pointer.x * ($state === 'off' ? 2 : 0.1),
+			y: 1.5,
+			z: $cameraTweenZ
+		},
+		{
+			stiffness: 0.05,
+			damping: 0.9,
+			precision: 0.00001
+		}
+	)
+	$: cameraPos.set(
+		screenFocused
+			? {
+					x: screenPos.x,
+					y: screenPos.y + 0.15,
+					z: screenPos.z + 0.5
+			  }
+			: {
+					x: $pointer.x * ($state === 'off' ? 2 : 0.1),
+					y: 1.5,
+					z: $cameraTweenZ
+			  }
+	)
+
+	let cameraTarget: Object3D | undefined = undefined
+	let camera: PerspectiveCamera | undefined = undefined
 	useFrame(() => {
-		if (controls && !controlsEnabled) controls.update()
+		if (!camera || !cameraTarget) return
+		camera.lookAt(cameraTarget.position)
 	})
+
+	const { onPointerEnter, onPointerLeave } = useCursor('pointer')
+
+	const onScreenClick = () => {
+		screenFocused = !screenFocused
+	}
+
+	const backgroundColor = tweened(new Color('#570b0b'), {
+		duration: 2.5e3
+	})
+	$: if ($state === 'off') {
+		backgroundColor.set(new Color('#570b0b'))
+	} else {
+		backgroundColor.set(new Color('#020203'))
+	}
+
+	const { scene } = useThrelte()
+	$: scene.background = new Color($backgroundColor)
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
@@ -157,22 +209,24 @@
 	<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 	<Three2
+		position.x={$cameraTargetPos.x}
+		position.y={$cameraTargetPos.y}
+		position.z={$cameraTargetPos.z}
+		bind:ref={cameraTarget}
+		type={Object3D}
+		let:ref
+	/>
+
+	<Three2
 		type={PerspectiveCamera}
-		position.z={$positionZ}
-		rotation.x={DEG2RAD * -11}
-		position.y={1.5}
+		position.x={$cameraPos.x}
+		position.y={$cameraPos.y}
+		position.z={$cameraPos.z}
 		fov={30}
 		makeDefault
+		bind:ref={camera}
 		let:ref={camera}
-	>
-		<Three2
-			enabled={controlsEnabled}
-			bind:ref={controls}
-			type={OrbitControls}
-			args={[camera, renderer?.domElement]}
-			target.y={1.24}
-		/>
-	</Three2>
+	/>
 
 	{#if nodes && materials}
 		<!-- Generated by gltfjsx -->
@@ -247,6 +301,7 @@
 						geometry={nodes.joystick_cap.geometry}
 						material={materials['joystick cap']}
 						position={[-0.0001, 0.1126, -0.0005]}
+						material.envMapIntensity={0.5}
 					/>
 				</Three2>
 			</Three2>
@@ -286,7 +341,15 @@
 				geometry={nodes.Screen.geometry}
 				position={[0, 1.3774, 0.1447]}
 				scale={1.0055}
+				let:ref={screen}
 			>
+				<InteractiveObject
+					object={screen}
+					on:pointerenter={onPointerEnter}
+					on:pointerleave={onPointerLeave}
+					interactive
+					on:click={onScreenClick}
+				/>
 				<Three2
 					type={MeshStandardMaterial}
 					metalness={0.9}
@@ -296,6 +359,7 @@
 					color={'#141414'}
 					emissiveMap={$gameTexture}
 					emissive={pointLightIntensity}
+					emissiveIntensity={1}
 					envMapIntensity={0.2}
 				/>
 			</Three2>
@@ -306,13 +370,13 @@
 	{#if nodes}
 		<Three2
 			type={PointLight}
+			args={['black']}
 			position.y={1.376583185239323}
 			position.z={-0.12185962320246482}
 			intensity={200 * pointLightIntensity}
 			distance={1.2}
 			decay={2}
 			color={$averageScreenColor}
-			let:ref
 			bind:ref={pointlight}
 			castShadow
 			shadow.camera.near={0.1}

@@ -3,6 +3,7 @@ import { Color } from 'three'
 import { levels } from './levels'
 
 export type GameState =
+	| 'off'
 	| 'intro'
 	| 'await-intro-skip'
 	| 'menu'
@@ -13,7 +14,7 @@ export type GameState =
 	| 'level-complete'
 	| 'outro'
 
-const state = writable<GameState>('intro')
+const state = writable<GameState>('off')
 const levelIndex = writable<number>(0)
 const score = writable(0)
 const gameOver = writable(false)
@@ -26,6 +27,7 @@ const baseColor = derived(state, (state) => {
 	if (state === 'outro') return 'green'
 	return 'red'
 })
+const muted = writable(true)
 
 export const gameState = {
 	state,
@@ -34,7 +36,8 @@ export const gameState = {
 	gameOver,
 	playerPosition,
 	ballPosition,
-	baseColor
+	baseColor,
+	muted
 }
 
 export const restart = () => {
@@ -54,6 +57,10 @@ export const reset = () => {
 	})
 }
 
+state.subscribe((state) => {
+	console.log('state', state)
+})
+
 export const nextLevel = () => {
 	if (get(gameState.levelIndex) < levels.length - 1) {
 		gameState.levelIndex.update((levelIndex) => levelIndex + 1)
@@ -61,6 +68,11 @@ export const nextLevel = () => {
 	} else {
 		gameState.state.set('outro')
 	}
+}
+
+export const switchOff = () => {
+	reset()
+	state.set('off')
 }
 
 /**
@@ -75,4 +87,4 @@ export const blinkClock = writable<0 | 1>(0)
 /**
  * Used for the light that emits the screen color and luminosity
  */
-export const averageScreenColor = writable<Color>(new Color())
+export const averageScreenColor = writable<Color>(new Color('black'))

@@ -2,14 +2,10 @@
 	import { Three2, useFrame } from '@threlte/core'
 	import { Edges, Text } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
-	import { cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
-	import { PlaneGeometry } from 'three'
-	import { Group } from 'three'
-	import { MeshBasicMaterial } from 'three'
-	import { BoxGeometry } from 'three'
-	import { Mesh } from 'three'
+	import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { play, type ArcadeAudio } from '../sound'
 	import { useTimeout } from './hooks/useTimeout'
 	import { gameState } from './state'
 	import ThrelteLogo from './ThrelteLogo.svelte'
@@ -49,6 +45,15 @@
 		clearInterval(intervalHandler)
 	})
 
+	let audio: ArcadeAudio | undefined = undefined
+	audio = play('intro', {
+		loop: true,
+		volume: 1
+	})
+	onDestroy(() => {
+		audio?.source.stop()
+	})
+
 	const onKeyDown = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft') {
 			dir = -1
@@ -77,7 +82,7 @@
 		rotation.z={$textRotation}
 	>
 		<Three2 type={Mesh} position.y={-0.05}>
-			<Three2 type={PlaneGeometry} args={[8, 1.8]} />
+			<Three2 type={PlaneGeometry} args={[11, 2]} />
 			<Three2 type={MeshBasicMaterial} transparent opacity={0} />
 			<Edges color={$baseColor} />
 		</Three2>
@@ -88,7 +93,7 @@
 			textAlign="center"
 			fontSize={0.5}
 			color={$baseColor}
-			text={`FINAL SCORE\n${$score}`}
+			text={`THRELTE MASTER\nSCORE ${$score}`}
 		/>
 	</Three2>
 </Three2>

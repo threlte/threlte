@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { Collider } from '@dimforge/rapier3d-compat'
 	import { Three2, useFrame } from '@threlte/core'
-	import { Edges, useGltf } from '@threlte/extras'
+	import { Edges } from '@threlte/extras'
 	import { AutoColliders } from '@threlte/rapier'
-	import { spring } from 'svelte/motion'
 	import { writable } from 'svelte/store'
 	import { Group, Mesh, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { playerAsset } from '../assets'
 	import {
 		arenaBorderWidth,
 		arenaHeight,
@@ -70,12 +70,9 @@
 		}
 	}
 
+	const { gltf } = playerAsset
+
 	let colliders: Collider[] = []
-	const { gltf } = useGltf<{
-		nodes: { Player: Mesh }
-		materials: {}
-	}>('/models/ball-game/player/player-simple.glb')
-	$: player = $gltf?.nodes.Player as Mesh
 
 	useFrame(() => {
 		if (colliders.length) {
@@ -87,7 +84,7 @@
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
-{#if player && player.geometry}
+{#if $gltf?.nodes.Player}
 	<Three2 type={Group}>
 		<AutoColliders shape="convexHull" bind:colliders>
 			<Three2
@@ -99,7 +96,7 @@
 				scale.x={0.5}
 				scale.y={0.3}
 			>
-				<Three2 type={player.geometry} />
+				<Three2 type={$gltf.nodes.Player.geometry} />
 				<Three2 type={MeshStandardMaterial} color="blue" />
 
 				<Edges scale={1.1} threshold={10} color={$baseColor} />

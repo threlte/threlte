@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Three2, useFrame } from '@threlte/core'
-	import { Edges, Text, useProgress } from '@threlte/extras'
+	import { Edges, Text } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
 	import { tweened } from 'svelte/motion'
 	import { Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { play, type ArcadeAudio } from '../sound'
 	import { useTimeout } from './hooks/useTimeout'
 	import { gameState } from './state'
 	import ThrelteLogo from './ThrelteLogo.svelte'
@@ -12,25 +13,31 @@
 	const { baseColor, state } = gameState
 
 	const { timeout } = useTimeout()
+	let audio: ArcadeAudio | undefined = undefined
 
 	const logoScale = tweened(0)
+
 	timeout(() => {
+		audio = play('levelSlow', {
+			loop: true,
+			volume: 1
+		})
 		logoScale.set(1)
 		$state = 'await-intro-skip'
-	}, 2.5e3)
+	}, 0.5e3)
 
 	const textScale = tweened(0)
 	const textRotation = tweened(10)
 	timeout(() => {
 		textScale.set(1)
 		textRotation.set(0)
-	}, 3e3)
+	}, 1e3)
 
 	let showPressSpaceToStart = false
 	let blinkClock: 0 | 1 = 0
 	timeout(() => {
 		showPressSpaceToStart = true
-	}, 6e3)
+	}, 4e3)
 
 	let intervalHandler = setInterval(() => {
 		if (!showPressSpaceToStart) return
@@ -52,6 +59,10 @@
 	let dir = 1
 	useFrame(() => {
 		rotationY += 0.01 * dir
+	})
+
+	onDestroy(() => {
+		audio?.source.stop()
 	})
 </script>
 

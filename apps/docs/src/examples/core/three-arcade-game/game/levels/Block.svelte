@@ -1,12 +1,14 @@
 <script lang="ts" context="module">
 	import { Three2 } from '@threlte/core'
 	import { Edges } from '@threlte/extras'
-	import { Collider, RigidBody } from '@threlte/rapier'
+	import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
 	import { createEventDispatcher } from 'svelte'
 	import { cubicIn } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import type { Writable } from 'svelte/store'
 	import { BoxGeometry, Group, Mesh, MeshStandardMaterial } from 'three'
+	import { clamp } from 'three/src/math/MathUtils'
+	import { playFromGroup } from '../../sound'
 	import { blinkClock } from '../state'
 
 	export type BlockData = {
@@ -61,6 +63,14 @@
 			? $blinkingColors.outerA
 			: $blinkingColors.outerB
 		: $staticColors.outer
+
+	const onContact = (e: ContactEvent) => {
+		if (e.detail.totalForceMagnitude > 2000 || e.detail.totalForceMagnitude < 300) return
+		const volume = clamp(Math.max(e.detail.totalForceMagnitude, 0) / 2000, 0, 1)
+		playFromGroup('bounce', {
+			volume
+		})
+	}
 </script>
 
 <Three2 type={Group} position.x={position.x} position.z={position.z}>
@@ -73,6 +83,7 @@
 		<Collider
 			shape="cuboid"
 			args={[size / 2, 1 / 2, size / 2]}
+			on:contact={onContact}
 			on:collisionexit={() => dispatch('hit')}
 			mass={1}
 		>

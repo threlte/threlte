@@ -2,11 +2,15 @@
 	import { Three2, useFrame } from '@threlte/core'
 	import {
 		AmbientLight,
-		Color,
+		BackSide,
 		DirectionalLight,
+		HalfFloatType,
+		Mesh,
+		MeshBasicMaterial,
 		NearestFilter,
 		PerspectiveCamera,
 		Scene,
+		SphereGeometry,
 		WebGLRenderTarget
 	} from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -58,6 +62,7 @@
 
 	let frame = 0
 	let renderEvery = 2
+
 	useFrame(({ renderer }) => {
 		if (!camera || !rt || !renderer || !$gameScene || !$arcadeMachineScene) return
 
@@ -72,6 +77,8 @@
 			renderer.setRenderTarget(rt2)
 		}
 
+		// We need to render on every frame, otherwise it flickers
+		renderer.clear()
 		renderer.render($gameScene, camera)
 
 		if (frame % renderEvery === 0) {
@@ -121,14 +128,18 @@
 		$state === 'game-over'
 
 	$: showIntro = $state === 'intro' || $state === 'await-intro-skip'
-
 	$: showOutro = $state === 'outro'
+
+	$: backgroundColor = $state === 'off' ? 'black' : '#0a080d'
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
 
 <Three2 type={Scene} bind:ref={$gameScene}>
-	<Three2 type={Color} args={['#060508']} attach="background" />
+	<Three2 type={Mesh}>
+		<Three2 type={SphereGeometry} args={[50, 32, 32]} />
+		<Three2 type={MeshBasicMaterial} side={BackSide} color={backgroundColor} />
+	</Three2>
 
 	<Three2 type={WebGLRenderTarget} bind:ref={rt} args={[textureWidth, textureHeight]} />
 	<Three2 type={WebGLRenderTarget} bind:ref={rt2} args={[textureWidth, textureHeight]} />
@@ -150,7 +161,7 @@
 		<Intro />
 	{:else if showOutro}
 		<Outro />
-	{:else}
+	{:else if $state !== 'off'}
 		<Ball />
 		<Arena />
 		<Player />
