@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { EnvironmentProperties } from '$lib/types/components'
-  import { useThrelte } from '@threlte/core'
+  import { useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import type { Scene } from 'three'
   import {
     CubeReflectionMapping,
     CubeTextureLoader,
@@ -24,7 +25,12 @@
   export let format: EnvironmentProperties['format'] = undefined
   export let encoding: EnvironmentProperties['encoding'] = undefined
 
-  const { scene, invalidate, renderer } = useThrelte()
+  const isScene = (obj: any): obj is Scene => !!obj.isScene
+
+  const { scene: globalScene, invalidate, renderer } = useThrelte()
+  const parent = useParent()
+  let scene = globalScene
+  if (isScene($parent)) scene = $parent
 
   let previousSceneEnvironment = scene.environment
   let previousSceneBackground = scene.background
