@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
+  import { DefaultLoadingManager } from 'three'
   import { Audio, AudioLoader, PositionalAudio } from 'three'
   import { useLoader } from '../hooks/useLoader'
   import Object3DInstance from '../instances/Object3DInstance.svelte'
@@ -68,7 +69,7 @@
     error: ErrorEvent
   }>()
 
-  const loader = useLoader(AudioLoader, () => new AudioLoader())
+  const loader = useLoader(AudioLoader, () => new AudioLoader(DefaultLoadingManager))
   const loadBufferFromUrl = (url: string): Promise<AudioBuffer> => {
     return new Promise((resolve, reject) => {
       loader.load(

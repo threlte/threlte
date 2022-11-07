@@ -1,10 +1,16 @@
-import { useLoader } from '@threlte/core'
 import { createEventDispatcher } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
+import { useLoader } from '@threlte/core'
 import type { ThrelteGltf } from '../types/types'
+import {
+  buildSceneGraph,
+  type Nodes,
+  type Materials,
+  type SceneGraph
+} from '../lib/buildSceneGraph'
+import { DefaultLoadingManager } from 'three'
 
 type UseGltfOptions = {
   useDraco?: boolean | string
@@ -25,14 +31,14 @@ export const useGltf = <
 } => {
   const gltf = writable<ThrelteGltf<Graph> | undefined>(undefined)
 
-  const loader = useLoader(GLTFLoader, () => new GLTFLoader())
+  const loader = useLoader(GLTFLoader, () => new GLTFLoader(DefaultLoadingManager))
   if (options?.useDraco) {
     const dracoDecoderPath =
       typeof options.useDraco === 'string'
         ? options.useDraco
         : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
     const dracoLoader = useLoader(DRACOLoader, () =>
-      new DRACOLoader().setDecoderPath(dracoDecoderPath)
+      new DRACOLoader(DefaultLoadingManager).setDecoderPath(dracoDecoderPath)
     )
     loader.setDRACOLoader(dracoLoader)
   }
