@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'
-import { sRGBEncoding, Texture, TextureLoader } from 'three'
+import { DefaultLoadingManager, sRGBEncoding, Texture, TextureLoader } from 'three'
 import { invalidateGlobally } from '../Canvas.svelte'
 import { browser } from '../lib/browser'
 import { useLoader } from './useLoader'
@@ -11,7 +11,7 @@ type UseTextureOptions = {
   onError?: (event: ErrorEvent) => void
 }
 
-const loader = useLoader(TextureLoader, () => new TextureLoader())
+const loader = useLoader(TextureLoader, () => new TextureLoader(DefaultLoadingManager))
 
 const loadTexture = (path: string, options?: UseTextureOptions) => {
   return loader.load(

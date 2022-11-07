@@ -8,6 +8,7 @@
     useThrelte
   } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
+  import { DefaultLoadingManager } from 'three'
   import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -70,7 +71,7 @@
       }>['nodes']
     | undefined = undefined
 
-  const loader = useLoader(GLTFLoader, () => new GLTFLoader())
+  const loader = useLoader(GLTFLoader, () => new GLTFLoader(DefaultLoadingManager))
 
   if (useDraco) {
     // This has a priority over the deprecated `dracoDecoderPath` property
@@ -86,14 +87,18 @@
   }
 
   function setDracoPath(path: string) {
-    const dracoLoader = useLoader(DRACOLoader, () => new DRACOLoader().setDecoderPath(path))
+    const dracoLoader = useLoader(DRACOLoader, () =>
+      new DRACOLoader(DefaultLoadingManager).setDecoderPath(path)
+    )
     loader.setDRACOLoader(dracoLoader)
   }
 
   const { renderer } = useThrelte()
   if (renderer && ktxTranscoderPath) {
     const ktx2Loader = useLoader(KTX2Loader, () =>
-      new KTX2Loader().setTranscoderPath(ktxTranscoderPath as string).detectSupport(renderer)
+      new KTX2Loader(DefaultLoadingManager)
+        .setTranscoderPath(ktxTranscoderPath as string)
+        .detectSupport(renderer)
     )
     loader.setKTX2Loader(ktx2Loader)
   }
