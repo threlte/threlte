@@ -47,10 +47,10 @@ export const setRendererColorOutput = (
 
 export const setRendererAndComposerSize = (ctx: ThrelteContext, size: Size, dpr: number): void => {
   if (!ctx.renderer || !ctx.composer) return
-  ctx.renderer.setSize(size.width, size.height)
-  ctx.renderer.setPixelRatio(dpr)
-  ctx.composer.setSize(size.width, size.height)
-  ctx.composer.setPixelRatio(dpr)
+  ctx.renderer.setSize?.(size.width, size.height)
+  ctx.renderer.setPixelRatio?.(dpr)
+  ctx.composer.setSize?.(size.width, size.height)
+  ctx.composer.setPixelRatio?.(dpr)
 }
 
 export const setRendererShadows = (
