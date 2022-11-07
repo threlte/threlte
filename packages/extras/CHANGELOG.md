@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 4.5.1
+
+### Patch Changes
+
+- f0449df: Pass the default THREE.DefaultLoadingManager to all relevant loaders
+- b0bea2e: The component `<Environment>` can attach to the immediate parent if the parent is a `THREE.Scene`
+
 ## 4.5.0
 
 ### Minor Changes

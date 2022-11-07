@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 4.3.3
+
+### Patch Changes
+
+- f0449df: Pass the default THREE.DefaultLoadingManager to all relevant loaders
+
 ## 4.3.2
 
 ### Patch Changes
