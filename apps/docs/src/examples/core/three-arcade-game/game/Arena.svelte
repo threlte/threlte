@@ -4,7 +4,7 @@
 	import { LineBasicMaterial, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { arenaDepth, arenaHeight, arenaWidth } from './config'
-	import { CustomGridHelper } from './CustomGridHelper.js'
+	import { CustomGridHelper } from './CustomGridHelper'
 	import { useArenaCollisionEnterEvent } from './hooks/useArenaCollider'
 
 	const colliderWidth = 10
