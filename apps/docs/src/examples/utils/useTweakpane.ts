@@ -89,6 +89,7 @@ export const TextPlugin = {
 }
 
 export const useTweakpane = (config?: Omit<PaneConfig, 'container' | 'document'>) => {
+	if (typeof window === 'undefined') return
 	let disposed = false
 
 	const pane = new tp.Pane(config) as Pane

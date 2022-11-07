@@ -1,107 +1,44 @@
 <script lang="ts">
-	import { Three2, useFrame } from '@threlte/core'
+	import { Three2 } from '@threlte/core'
+	import { tweened } from 'svelte/motion'
+	import { derived } from 'svelte/store'
 	import {
 		AmbientLight,
 		BackSide,
+		Color,
 		DirectionalLight,
-		HalfFloatType,
 		Mesh,
 		MeshBasicMaterial,
-		NearestFilter,
 		PerspectiveCamera,
 		Scene,
 		SphereGeometry,
 		WebGLRenderTarget
 	} from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { arcadeMachineScene, gameScene, gameTexture } from '../stores'
 	import Arena from './Arena.svelte'
 	import Ball from './Ball/Ball.svelte'
+	import GameSceneRendering from './GameSceneRendering.svelte'
 	import Intro from './Intro.svelte'
 	import Level from './levels/Level.svelte'
 	import Outro from './Outro.svelte'
 	import Player from './Player.svelte'
-	import { averageScreenColor, gameState, nextLevel, reset, restart, startGame } from './state'
+	import { gameState, nextLevel, reset, restart, startGame } from './state'
 	import Ui from './UI.svelte'
 
+	const { state, levelIndex, gameScene, gameCamera, debug, orbitControls } = gameState
+
 	let camera: PerspectiveCamera
+	$: gameCamera.set(camera)
 	let rt: WebGLRenderTarget
 	let rt2: WebGLRenderTarget
 
-	$: if (rt) {
-		$gameTexture = rt.texture
-		rt.texture.minFilter = NearestFilter
-		rt.texture.magFilter = NearestFilter
-	}
-
-	const textureWidth = 200
-	const textureHeight = Math.round((textureWidth * 3) / 4)
-
-	var pixels = new Uint8Array(textureWidth * textureHeight * 4)
-
-	const samplePixels = () => {
-		let r = 0
-		let g = 0
-		let b = 0
-
-		for (let index = 0; index < pixels.length; index += 8) {
-			r += pixels[index]
-			g += pixels[index + 1]
-			b += pixels[index + 2]
-		}
-
-		r = r / pixels.length
-		g = g / pixels.length
-		b = b / pixels.length
-
-		averageScreenColor.update((c) => {
-			c.setRGB(r / 255, g / 255, b / 255)
-			return c
-		})
-	}
-
-	let frame = 0
-	let renderEvery = 2
-
-	useFrame(({ renderer }) => {
-		if (!camera || !rt || !renderer || !$gameScene || !$arcadeMachineScene) return
-
-		frame += 1
-
-		$arcadeMachineScene.visible = false
-		$gameScene.visible = true
-
-		if (frame % renderEvery === 0) {
-			renderer.setRenderTarget(rt)
-		} else {
-			renderer.setRenderTarget(rt2)
-		}
-
-		// We need to render on every frame, otherwise it flickers
-		renderer.clear()
-		renderer.render($gameScene, camera)
-
-		if (frame % renderEvery === 0) {
-			const context = renderer.getContext()
-			context.readPixels(
-				0,
-				0,
-				textureWidth,
-				textureHeight,
-				context.RGBA,
-				context.UNSIGNED_BYTE,
-				pixels
-			)
-			samplePixels()
-		}
-
-		renderer.setRenderTarget(null)
-		$gameScene.visible = false
-		$arcadeMachineScene.visible = true
-	})
-
-	const { state, levelIndex, baseColor } = gameState
 	const onKeyPress = (e: KeyboardEvent) => {
+		if (e.key === 'd') {
+			$debug = !$debug
+		}
+		if (e.key === 'o') {
+			$orbitControls = !$orbitControls
+		}
 		if (e.key !== ' ' || $state === 'level-loading') return
 		e.preventDefault()
 
@@ -130,19 +67,25 @@
 	$: showIntro = $state === 'intro' || $state === 'await-intro-skip'
 	$: showOutro = $state === 'outro'
 
-	$: backgroundColor = $state === 'off' ? 'black' : '#0a080d'
+	const machineIsOff = derived(state, (state) => state === 'off')
+
+	$: backgroundColor = $machineIsOff ? 'black' : '#08060a'
+
+	const tweenedBackgroundColor = tweened(new Color('black'), {
+		duration: 1e3
+	})
+	$: tweenedBackgroundColor.set(new Color(backgroundColor))
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
 
+<GameSceneRendering />
+
 <Three2 type={Scene} bind:ref={$gameScene}>
 	<Three2 type={Mesh}>
 		<Three2 type={SphereGeometry} args={[50, 32, 32]} />
-		<Three2 type={MeshBasicMaterial} side={BackSide} color={backgroundColor} />
+		<Three2 type={MeshBasicMaterial} side={BackSide} color={$tweenedBackgroundColor} />
 	</Three2>
-
-	<Three2 type={WebGLRenderTarget} bind:ref={rt} args={[textureWidth, textureHeight]} />
-	<Three2 type={WebGLRenderTarget} bind:ref={rt2} args={[textureWidth, textureHeight]} />
 
 	<Three2
 		bind:ref={camera}

@@ -22,12 +22,16 @@ export const memoizeProp = (value: unknown): boolean => {
   return false
 }
 
+type PropOptions = {
+  manualCamera?: boolean
+}
+
 export const useProps = () => {
   const { invalidate } = useThrelte()
 
   const previousValues = new Map<string, any>()
 
-  const setProp = <T>(instance: T, propertyPath: string, value: any) => {
+  const setProp = <T>(instance: T, propertyPath: string, value: any, options: PropOptions) => {
     if (memoizeProp(value)) {
       const previousValue = previousValues.get(propertyPath)
       if (previousValue === value) {
@@ -56,14 +60,18 @@ export const useProps = () => {
       } else {
         // otherwise, we just set the value
         target[key] = value
+        if (key === 'fov' && target.isPerspectiveCamera && !options.manualCamera) {
+          // this is most likely a PerspectiveCamera, so we need to update the aspect ratio
+          target.updateProjectionMatrix()
+        }
       }
     }
   }
 
-  const updateProps = <T>(instance: T, props: Record<string, any>) => {
+  const updateProps = <T>(instance: T, props: Record<string, any>, options: PropOptions) => {
     for (const key in props) {
       if (!ignoredProps.includes(key)) {
-        setProp(instance, key, props[key])
+        setProp(instance, key, props[key], options)
       }
       invalidate()
     }

@@ -1,4 +1,5 @@
 import { AudioLoader } from 'three'
+import { gameState } from './game/state'
 
 const sounds = {
 	bounce1: '/audio/ball_bounce_1.mp3',
@@ -37,6 +38,7 @@ const groups: Record<Groups, Sound[]> = {
 }
 
 let context: AudioContext | undefined = undefined
+let globalGainNode: GainNode | undefined = undefined
 const audioBuffers: Record<Sound, AudioBuffer> = {} as Record<Sound, AudioBuffer>
 const debounceInMs = 150
 const randomLimits: [min: number, max: number] = [-20, 150]
@@ -62,6 +64,8 @@ const loadAudioBuffer = (url: string): Promise<AudioBuffer> => {
 
 const init = async () => {
 	context = new AudioContext()
+	globalGainNode = context.createGain()
+	globalGainNode.connect(context.destination)
 	const promises = Object.entries(sounds).map(async ([sound, url]) => {
 		if (!context) return
 		const audioBuffer = await loadAudioBuffer(url)
@@ -104,8 +108,22 @@ export type ArcadeAudio = {
 	onEnded: () => Promise<void>
 }
 
+const handleMuted = (muted: boolean) => {
+	console.log('muted', muted)
+
+	if (!globalGainNode) return
+	if (muted) {
+		globalGainNode.gain.value = 0
+	} else {
+		resumeContext()
+		globalGainNode.gain.value = 1
+	}
+}
+const { muted } = gameState
+muted.subscribe(handleMuted)
+
 export const play = (sound: Sound, options?: PlayOptions): ArcadeAudio | undefined => {
-	if (!context) return
+	if (!context || !globalGainNode) return
 	const now = Date.now()
 	const groupsOfSound = Object.entries(groups).filter(([, sounds]) => sounds.includes(sound))
 
@@ -125,7 +143,7 @@ export const play = (sound: Sound, options?: PlayOptions): ArcadeAudio | undefin
 	source.buffer = buffer
 	const gainNode = context.createGain()
 	source.connect(gainNode)
-	gainNode.connect(context.destination)
+	gainNode.connect(globalGainNode)
 	let volume = options?.volume ?? 1
 	volume = volume === 0 ? 0.000000001 : volume
 	gainNode.gain.value = volume
@@ -181,7 +199,6 @@ export const play = (sound: Sound, options?: PlayOptions): ArcadeAudio | undefin
 }
 export const playFromGroup = (group: Groups, options?: PlayOptions) => {
 	const sound = groups[group][Math.floor(Math.random() * groups[group].length)]
-	if (!context) return
 	const source = play(sound, options)
 	return source
 }

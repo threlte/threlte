@@ -1,6 +1,7 @@
 import { derived, get, writable } from 'svelte/store'
-import { Color } from 'three'
+import { Color, PerspectiveCamera, Scene, Texture } from 'three'
 import { levels } from './levels'
+import type { RigidBody } from '@dimforge/rapier3d-compat'
 
 export type GameState =
 	| 'off'
@@ -27,7 +28,16 @@ const baseColor = derived(state, (state) => {
 	if (state === 'outro') return 'green'
 	return 'red'
 })
-const muted = writable(true)
+const muted = writable(false)
+export const blinkClock = writable<0 | 1>(0)
+const arcadeMachineScene = writable<Scene | undefined>(undefined)
+const averageScreenColor = writable<Color>(new Color('black'))
+const gameScene = writable<Scene | undefined>(undefined)
+const gameCamera = writable<PerspectiveCamera | undefined>(undefined)
+const gameTexture = writable<Texture | undefined>(undefined)
+const ballRigidBody = writable<RigidBody | undefined>(undefined)
+const debug = writable(false)
+const orbitControls = writable(false)
 
 export const gameState = {
 	state,
@@ -37,9 +47,18 @@ export const gameState = {
 	playerPosition,
 	ballPosition,
 	baseColor,
-	muted
+	muted,
+	gameScene,
+	gameCamera,
+	averageScreenColor,
+	arcadeMachineScene,
+	gameTexture,
+	ballRigidBody,
+	debug,
+	orbitControls
 }
 
+// ------------- METHODS -------------
 export const restart = () => {
 	reset()
 	gameState.state.set('menu')
@@ -82,9 +101,4 @@ export const startGame = () => {
 	gameState.state.set('level-loading')
 }
 
-export const blinkClock = writable<0 | 1>(0)
-
-/**
- * Used for the light that emits the screen color and luminosity
- */
-export const averageScreenColor = writable<Color>(new Color('black'))
+export const debugValue = writable(0.5)

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Three2, useFrame } from '@threlte/core'
-	import { Edges, Text } from '@threlte/extras'
-	import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
+	import { Edges } from '@threlte/extras'
+	import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { gameState } from './state'
 

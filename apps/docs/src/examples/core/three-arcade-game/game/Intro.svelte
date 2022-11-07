@@ -17,6 +17,10 @@
 
 	const logoScale = tweened(0)
 
+	const showLogoAfter = 2e3
+	const showThrelteAfter = showLogoAfter + 1e3
+	const showPressSpaceToStartAfter = showThrelteAfter + 2e3
+
 	timeout(() => {
 		audio = play('levelSlow', {
 			loop: true,
@@ -24,20 +28,20 @@
 		})
 		logoScale.set(1)
 		$state = 'await-intro-skip'
-	}, 0.5e3)
+	}, showLogoAfter)
 
 	const textScale = tweened(0)
 	const textRotation = tweened(10)
 	timeout(() => {
 		textScale.set(1)
 		textRotation.set(0)
-	}, 1e3)
+	}, showThrelteAfter)
 
 	let showPressSpaceToStart = false
 	let blinkClock: 0 | 1 = 0
 	timeout(() => {
 		showPressSpaceToStart = true
-	}, 4e3)
+	}, showPressSpaceToStartAfter)
 
 	let intervalHandler = setInterval(() => {
 		if (!showPressSpaceToStart) return

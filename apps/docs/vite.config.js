@@ -9,6 +9,7 @@ const config = {
 	legacy: { buildSsrCjsExternalHeuristics: true },
 	optimizeDeps: {
 		include: [
+			'postprocessing',
 			'codemirror',
 			'codemirror/mode/javascript/javascript.js',
 			'codemirror/mode/handlebars/handlebars.js',
@@ -30,7 +31,7 @@ const config = {
 		]
 	},
 	ssr: {
-		noExternal: ['three', 'troika-three-text']
+		noExternal: ['three', 'troika-three-text', 'postprocessing']
 	},
 	plugins: [
 		{ ...threeMinifier(), enforce: 'pre' },

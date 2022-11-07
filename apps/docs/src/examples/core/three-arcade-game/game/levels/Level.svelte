@@ -117,9 +117,8 @@
 				}
 			})
 		}, 1e3)
-		if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 100)
-		await play('gameOver2', { volume: 0.5 })?.onEnded()
-		if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
+		if (levelBackgroundAudio) levelBackgroundAudio.fade(0, 300)
+		play('gameOver2', { volume: 0.5 })?.onEnded()
 	}
 
 	const onLevelComplete = async () => {
@@ -127,8 +126,8 @@
 		blocks.forEach((block) => {
 			block.freeze.set(true)
 			block.blinkingColors.set({
-				innerA: 'green',
-				innerB: 'black',
+				innerA: 'black',
+				innerB: 'green',
 				outerA: 'white',
 				outerB: 'white'
 			})

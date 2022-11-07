@@ -4,6 +4,7 @@ import { DefaultLoadingManager } from 'three'
 let previousTotalLoaded = 0
 
 export const useProgress = (): {
+  finishedOnce: Readable<boolean>
   active: Readable<boolean>
   item: Readable<string | undefined>
   loaded: Readable<number>
@@ -11,6 +12,7 @@ export const useProgress = (): {
   errors: Readable<string[]>
   progress: Readable<number>
 } => {
+  const finishedOnce = writable(false)
   const activeStore = writable(false)
   const itemStore = writable<string | undefined>(undefined)
   const loadedStore = writable<number>(0)
@@ -23,7 +25,9 @@ export const useProgress = (): {
     itemStore.set(item)
     loadedStore.set(loaded)
     totalStore.set(total)
-    progressStore.set((loaded - previousTotalLoaded) / (total - previousTotalLoaded))
+    const progress = (loaded - previousTotalLoaded) / (total - previousTotalLoaded)
+    progressStore.set(progress)
+    if (progress === 1) finishedOnce.set(true)
   }
   DefaultLoadingManager.onLoad = () => {
     activeStore.set(false)
@@ -41,7 +45,9 @@ export const useProgress = (): {
     itemStore.set(item)
     loadedStore.set(loaded)
     totalStore.set(total)
-    progressStore.set((loaded - previousTotalLoaded) / (total - previousTotalLoaded) || 1)
+    const progress = (loaded - previousTotalLoaded) / (total - previousTotalLoaded) || 1
+    progressStore.set(progress)
+    if (progress === 1) finishedOnce.set(true)
   }
 
   return {
@@ -50,6 +56,7 @@ export const useProgress = (): {
     loaded: { subscribe: loadedStore.subscribe },
     total: { subscribe: totalStore.subscribe },
     errors: { subscribe: errorsStore.subscribe },
-    progress: { subscribe: progressStore.subscribe }
+    progress: { subscribe: progressStore.subscribe },
+    finishedOnce: { subscribe: finishedOnce.subscribe }
   }
 }

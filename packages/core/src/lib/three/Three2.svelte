@@ -131,7 +131,9 @@
 
   // Props
   $: props = useProps()
-  $: props.updateProps(ref, $$restProps)
+  $: props.updateProps(ref, $$restProps, {
+    manualCamera: manual
+  })
 
   // Camera
   const { size } = useThrelte()

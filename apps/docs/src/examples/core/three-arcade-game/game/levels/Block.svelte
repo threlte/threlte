@@ -89,7 +89,7 @@
 		>
 			<Three2 type={Mesh} scale={$scale} let:ref={mesh}>
 				<Three2 type={BoxGeometry} args={[size, 1, size]} />
-				<Three2 type={MeshStandardMaterial} color={innerColor} transparent opacity={0.5} />
+				<Three2 type={MeshStandardMaterial} color={innerColor} transparent opacity={0.6} />
 				<Edges color={outerColor} scale={1.01} />
 			</Three2>
 		</Collider>

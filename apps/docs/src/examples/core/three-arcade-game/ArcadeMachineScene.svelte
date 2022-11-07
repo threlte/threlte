@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { InteractiveObject, Three2, useFrame, useTexture, useThrelte } from '@threlte/core'
-	import { Environment, Text, useCursor } from '@threlte/extras'
+	import { Environment, useCursor, useGltf } from '@threlte/extras'
 	import { onMount } from 'svelte'
 	import { cubicInOut } from 'svelte/easing'
 	import { spring, tweened } from 'svelte/motion'
+	import { derived } from 'svelte/store'
 	import {
 		AmbientLight,
 		Color,
@@ -17,12 +18,34 @@
 		PointLight,
 		Scene
 	} from 'three'
+	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { arcadeMachineAsset } from './assets'
-	import { averageScreenColor, gameState } from './game/state'
-	import { arcadeMachineScene, gameTexture } from './stores'
+	import { gameState } from './game/state'
 
-	const { gltf } = arcadeMachineAsset
+	const { gltf } = useGltf<{
+		nodes: {
+			BodyMesh: THREE.Mesh
+			LeftCover: THREE.Mesh
+			RightCover: THREE.Mesh
+			ScreenFrame: THREE.Mesh
+			joystick_base: THREE.Mesh
+			joystick_stick_application: THREE.Mesh
+			joystick_stick: THREE.Mesh
+			joystick_cap: THREE.Mesh
+			Main_Button_Enclosure: THREE.Mesh
+			Main_Button: THREE.Mesh
+			Screen: THREE.Mesh
+		}
+		materials: {
+			['machine body main']: THREE.MeshStandardMaterial
+			['machine body outer']: THREE.MeshStandardMaterial
+			['screen frame']: THREE.MeshStandardMaterial
+			['joystick base']: THREE.MeshStandardMaterial
+			['joystick stick']: THREE.MeshStandardMaterial
+			['joystick cap']: THREE.MeshStandardMaterial
+			Screen: THREE.MeshStandardMaterial
+		}
+	}>('/models/ball-game/archade-machine/arcade_machine_own.glb')
 
 	$: nodes = $gltf?.nodes
 	$: materials = $gltf?.materials
@@ -47,7 +70,7 @@
 		}, 1000)
 	})
 
-	const { state } = gameState
+	const { state, gameTexture, averageScreenColor, arcadeMachineScene, orbitControls } = gameState
 
 	let pointlight: PointLight
 	let pointLightIntensity = $basePointLightIntensity
@@ -57,7 +80,7 @@
 		} else {
 			const randomSign = Math.random() > 0.5 ? 1 : -1
 			const random = -0.01 + Math.random() * 0.02 * randomSign
-			pointLightIntensity = $basePointLightIntensity + random
+			pointLightIntensity = $basePointLightIntensity
 		}
 	})
 
@@ -111,12 +134,19 @@
 		rotationStick.set(0)
 	}
 
-	const cameraTweenZ = tweened(4, {
+	const machineIsOff = derived(state, (state, set) => {
+		if (state === 'off') {
+			set(true)
+		} else {
+			set(false)
+		}
+	})
+
+	const cameraTweenZ = tweened(2.1, {
 		duration: 3e3,
 		easing: cubicInOut
 	})
-
-	$: cameraTweenZ.set($state === 'off' ? 4 : 1.4)
+	$: cameraTweenZ.set($machineIsOff ? 2.1 : 1.4)
 
 	const { pointer } = useThrelte()
 
@@ -131,7 +161,7 @@
 	const cameraTargetPos = spring(
 		{
 			x: $pointer.x * 0.1,
-			y: 1.25,
+			y: 1.23,
 			z: 0
 		},
 		{
@@ -146,7 +176,7 @@
 			  }
 			: {
 					x: $pointer.x * 0.1,
-					y: 1.25,
+					y: 1.23,
 					z: 0
 			  }
 	)
@@ -154,7 +184,7 @@
 	const cameraPos = spring(
 		{
 			x: $pointer.x * ($state === 'off' ? 2 : 0.1),
-			y: 1.5,
+			y: 1.48,
 			z: $cameraTweenZ
 		},
 		{
@@ -171,8 +201,8 @@
 					z: screenPos.z + 0.5
 			  }
 			: {
-					x: $pointer.x * ($state === 'off' ? 2 : 0.1),
-					y: 1.5,
+					x: $pointer.x * ($state === 'off' ? 0.1 : 0.1),
+					y: 1.48,
 					z: $cameraTweenZ
 			  }
 	)
@@ -190,22 +220,39 @@
 		screenFocused = !screenFocused
 	}
 
-	const backgroundColor = tweened(new Color('#570b0b'), {
+	const backgroundColor = tweened(new Color('#020203'), {
 		duration: 2.5e3
 	})
-	$: if ($state === 'off') {
-		backgroundColor.set(new Color('#570b0b'))
-	} else {
-		backgroundColor.set(new Color('#020203'))
-	}
+	$: backgroundColor.set($machineIsOff ? new Color('#020203') : new Color('#020203'))
 
-	const { scene } = useThrelte()
+	const { scene, renderer } = useThrelte()
+	if (renderer) renderer.physicallyCorrectLights = true
 	$: scene.background = new Color($backgroundColor)
+
+	const blueLightIntensity = tweened(2, {
+		duration: 3e3
+	})
+	$: blueLightIntensity.set($machineIsOff ? 2 : 2)
+
+	const redLightIntensity = tweened(1, {
+		duration: 3e3
+	})
+	$: redLightIntensity.set($machineIsOff ? 2 : 2)
+
+	const whiteLightIntensity = tweened(0, {
+		duration: 3e3
+	})
+	$: whiteLightIntensity.set($machineIsOff ? 0 : 0)
+
+	const whiteAmbientLightIntensity = tweened(1, {
+		duration: 3e3
+	})
+	$: whiteAmbientLightIntensity.set($machineIsOff ? 1 : 0)
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
-<Three2 type={Scene} bind:ref={$arcadeMachineScene}>
+<Three2 type={Scene} bind:ref={$arcadeMachineScene} background={new Color(0x020203)}>
 	<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 	<Three2
@@ -217,16 +264,30 @@
 		let:ref
 	/>
 
-	<Three2
-		type={PerspectiveCamera}
-		position.x={$cameraPos.x}
-		position.y={$cameraPos.y}
-		position.z={$cameraPos.z}
-		fov={30}
-		makeDefault
-		bind:ref={camera}
-		let:ref={camera}
-	/>
+	{#if $orbitControls}
+		<Three2
+			type={PerspectiveCamera}
+			position.x={20}
+			position.y={20}
+			position.z={20}
+			fov={60}
+			makeDefault
+			let:ref={camera}
+		>
+			<Three2 type={OrbitControls} args={[camera, renderer?.domElement]} />
+		</Three2>
+	{:else}
+		<Three2
+			type={PerspectiveCamera}
+			position.x={$cameraPos.x}
+			position.y={$cameraPos.y}
+			position.z={$cameraPos.z}
+			fov={30}
+			makeDefault
+			bind:ref={camera}
+			let:ref={camera}
+		/>
+	{/if}
 
 	{#if nodes && materials}
 		<!-- Generated by gltfjsx -->
@@ -236,30 +297,25 @@
 				geometry={nodes.BodyMesh.geometry}
 				material={materials['machine body main']}
 				position={[0.2755, 0, 0]}
-				castShadow
-				receiveShadow
 			/>
 			<Three2
 				type={Mesh}
 				geometry={nodes.LeftCover.geometry}
 				material={materials['machine body outer']}
 				position={[0.3, 1.2099, -0.1307]}
-				castShadow
-				receiveShadow
 			/>
 			<Three2
 				type={Mesh}
 				geometry={nodes.RightCover.geometry}
 				material={materials['machine body outer']}
 				position={[-0.3, 1.2099, -0.1307]}
+				scale={[-1, 1, 1]}
 			/>
 			<Three2
 				type={Mesh}
 				geometry={nodes.ScreenFrame.geometry}
 				material={materials['screen frame']}
 				position={[0.2755, 0.0633, 0.0346]}
-				castShadow
-				receiveShadow
 			/>
 
 			<!-- Joystick -->
@@ -270,24 +326,12 @@
 				material={materials['joystick base']}
 				position={[0.1336, 0.9611, -0.1976]}
 				rotation={[-0.1939, 0, 0]}
-			>
-				{#if $tipsOpacity > 0}
-					<Three2 type={Group} position.y={0.16} rotation.y={180 * DEG2RAD} rotation.x={0.1939}>
-						<Text
-							fillOpacity={$tipsOpacity}
-							fontSize={0.02}
-							text="Arrow Keys"
-							anchorX="50%"
-							anchorY="50%"
-						/>
-					</Three2>
-				{/if}
-			</Three2>
+			/>
 			<Three2
 				type={Mesh}
 				geometry={nodes.joystick_stick_application.geometry}
 				material={materials['joystick base']}
-				position={[0.1336, 0.9668, -0.1987]}
+				position={[0.1336, 0.9653, -0.1984]}
 				rotation={[-0.1939, 0, $rotationStick]}
 			>
 				<Three2
@@ -314,17 +358,6 @@
 				rotation={[-0.1801, 0, 0]}
 				scale={0.9409}
 			>
-				{#if $tipsOpacity > 0}
-					<Three2 type={Group} position.y={0.05} rotation.y={180 * DEG2RAD} rotation.x={0.1801}>
-						<Text
-							fillOpacity={$tipsOpacity}
-							fontSize={0.02}
-							text="Space"
-							anchorX="50%"
-							anchorY="50%"
-						/>
-					</Three2>
-				{/if}
 				<Three2
 					type={Mesh}
 					geometry={nodes.Main_Button.geometry}
@@ -354,13 +387,13 @@
 					type={MeshStandardMaterial}
 					metalness={0.9}
 					roughness={0.2}
+					color={'#141414'}
 					map={scanLinesTexture}
 					metalnessMap={scanLinesTexture}
-					color={'#141414'}
 					emissiveMap={$gameTexture}
 					emissive={pointLightIntensity}
-					emissiveIntensity={1}
-					envMapIntensity={0.2}
+					emissiveIntensity={1.2}
+					envMapIntensity={0}
 				/>
 			</Three2>
 		</Three2>
@@ -373,46 +406,50 @@
 			args={['black']}
 			position.y={1.376583185239323}
 			position.z={-0.12185962320246482}
-			intensity={200 * pointLightIntensity}
+			intensity={25 * pointLightIntensity}
 			distance={1.2}
 			decay={2}
 			color={$averageScreenColor}
 			bind:ref={pointlight}
-			castShadow
-			shadow.camera.near={0.1}
-			shadow.camera.far={3}
-			shadow.mapSize.height={512}
-			shadow.mapSize.width={512}
 		/>
 	{/if}
 
-	<Three2 type={AmbientLight} intensity={3} color={$averageScreenColor} />
-	<Three2 type={AmbientLight} intensity={0.05} color={'white'} />
+	<Three2 type={AmbientLight} intensity={8} color={$averageScreenColor} />
+	<Three2 type={AmbientLight} intensity={$whiteAmbientLightIntensity} color={'white'} />
 
 	<!-- Red light -->
 	<Three2
 		type={DirectionalLight}
-		intensity={0.3}
+		intensity={$redLightIntensity}
 		color="#F67F55"
-		position.x={-1}
-		position.y={3}
-		position.z={3}
+		position.x={-2.2}
+		position.y={3.5}
+		position.z={2.6}
 	/>
 
 	<!-- Blue light -->
 	<Three2
 		type={DirectionalLight}
-		intensity={0.4}
-		position.y={3}
+		intensity={$blueLightIntensity}
+		position.x={2.2}
+		position.y={3.4}
+		position.z={2.6}
 		color="#2722F3"
-		position.x={1}
-		position.z={3}
 	/>
-</Three2>
 
-<!-- Floor -->
+	<!-- White light -->
+	<Three2
+		type={DirectionalLight}
+		intensity={$whiteLightIntensity}
+		position.x={-1}
+		position.y={2.5}
+		position.z={1}
+		color="white"
+	/>
 
-<Three2 type={Mesh}>
-	<Three2 type={CylinderGeometry} args={[1, 1, 0.04, 64]} />
-	<Three2 type={MeshStandardMaterial} color={'#0f0f0f'} />
+	<!-- Floor -->
+	<Three2 type={Mesh}>
+		<Three2 type={CylinderGeometry} args={[1, 1, 0.04, 64]} />
+		<Three2 type={MeshStandardMaterial} color={'#0f0f0f'} />
+	</Three2>
 </Three2>

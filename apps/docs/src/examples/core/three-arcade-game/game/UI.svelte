@@ -72,7 +72,7 @@
 				type={PlaneGeometry}
 				args={[$mainUiTexts?.size.width ?? 6.5, $mainUiTexts?.size.height ?? 2.5]}
 			/>
-			<Three2 type={MeshBasicMaterial} color="#0c090f" />
+			<Three2 type={MeshBasicMaterial} color="#08060a" />
 
 			<Edges color={$baseColor} scale={1.01} />
 		</Three2>

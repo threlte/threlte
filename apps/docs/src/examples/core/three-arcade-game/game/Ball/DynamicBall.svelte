@@ -5,15 +5,16 @@
 	} from '@dimforge/rapier3d-compat'
 	import { Three2, useFrame } from '@threlte/core'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
-	import { onMount } from 'svelte'
 	import { derived } from 'svelte/store'
-	import { Mesh, MeshStandardMaterial, SphereGeometry } from 'three'
+	import { Mesh } from 'three'
 	import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
 	import { gameState } from '../state'
+	import { ballGeometry, ballMaterial } from './common'
+
+	const { state, levelIndex, playerPosition, ballPosition, ballRigidBody } = gameState
 
 	let rigidBody: RapierRigidBody | undefined = undefined
-
-	const { state, levelIndex, playerPosition, ballPosition } = gameState
+	$: if (rigidBody) ballRigidBody.set(rigidBody)
 
 	const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
 		return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
@@ -71,9 +72,9 @@
 		restitutionCombineRule={CoefficientCombineRule.Max}
 		frictionCombineRule={CoefficientCombineRule.Min}
 	>
-		<Three2 type={Mesh} renderOrder={1000}>
-			<Three2 type={SphereGeometry} args={[0.2]} />
-			<Three2 type={MeshStandardMaterial} depthTest={false} depthWrite={false} color="blue" />
+		<Three2 type={Mesh}>
+			<Three2 type={ballGeometry} />
+			<Three2 type={ballMaterial} />
 		</Three2>
 	</AutoColliders>
 </RigidBody>
