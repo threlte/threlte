@@ -114,15 +114,13 @@ export type TransformOptions = {
 }
 
 /**
- * This preprocessor will transform <t.BoxGeometry> into <Three type={BoxGeometry} />
+ * This preprocessor will transform <{prefix}.BoxGeometry> into <Three type={BoxGeometry} /> + imports
  * @param options
  * @returns
  */
 export const preprocessThrelte = (options?: TransformOptions): Parameters<typeof preprocess>[1] => {
   return {
-    markup: ({ content, filename }) => {
-      if (!filename) return { code: content }
-
+    markup: ({ content }) => {
       const { markup } = preprocessMarkup(content, options)
 
       return {
