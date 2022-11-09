@@ -7,6 +7,7 @@
     "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "install-dependencies": " pnpm install --ignore-scripts && pnpm run build --filter='@threlte/preprocess' --force && pnpm install",
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

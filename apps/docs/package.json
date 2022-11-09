@@ -28,6 +28,7 @@
 		"@threlte/core": "workspace:*",
 		"@threlte/extras": "workspace:*",
 		"@threlte/rapier": "workspace:*",
+		"@threlte/preprocess": "workspace:*",
 		"@tweakpane/core": "^1.1.0",
 		"@types/react": "^18.0.15",
 		"@types/three": "^0.144.0",
