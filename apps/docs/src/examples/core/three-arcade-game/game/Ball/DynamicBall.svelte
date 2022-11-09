@@ -3,7 +3,7 @@
 		CoefficientCombineRule,
 		type RigidBody as RapierRigidBody
 	} from '@dimforge/rapier3d-compat'
-	import { Three2, useFrame } from '@threlte/core'
+	import { Three, useFrame } from '@threlte/core'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { derived } from 'svelte/store'
 	import { Mesh } from 'three'
@@ -72,9 +72,9 @@
 		restitutionCombineRule={CoefficientCombineRule.Max}
 		frictionCombineRule={CoefficientCombineRule.Min}
 	>
-		<Three2 type={Mesh}>
-			<Three2 type={ballGeometry} />
-			<Three2 type={ballMaterial} />
-		</Three2>
+		<Three type={Mesh}>
+			<Three type={ballGeometry} />
+			<Three type={ballMaterial} />
+		</Three>
 	</AutoColliders>
 </RigidBody>

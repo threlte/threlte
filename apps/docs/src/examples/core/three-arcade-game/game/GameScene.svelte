@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three2 } from '@threlte/core'
+	import { Three } from '@threlte/core'
 	import { tweened } from 'svelte/motion'
 	import { derived } from 'svelte/store'
 	import {
@@ -81,13 +81,13 @@
 
 <GameSceneRendering />
 
-<Three2 type={Scene} bind:ref={$gameScene}>
-	<Three2 type={Mesh}>
-		<Three2 type={SphereGeometry} args={[50, 32, 32]} />
-		<Three2 type={MeshBasicMaterial} side={BackSide} color={$tweenedBackgroundColor} />
-	</Three2>
+<Three type={Scene} bind:ref={$gameScene}>
+	<Three type={Mesh}>
+		<Three type={SphereGeometry} args={[50, 32, 32]} />
+		<Three type={MeshBasicMaterial} side={BackSide} color={$tweenedBackgroundColor} />
+	</Three>
 
-	<Three2
+	<Three
 		bind:ref={camera}
 		manual
 		args={[50, 4 / 3, 0.1, 100]}
@@ -96,9 +96,9 @@
 		rotation.x={-90 * DEG2RAD}
 	/>
 
-	<Three2 type={AmbientLight} intensity={0.3} />
+	<Three type={AmbientLight} intensity={0.3} />
 
-	<Three2 type={DirectionalLight} position={[4, 10, 2]} />
+	<Three type={DirectionalLight} position={[4, 10, 2]} />
 
 	{#if showIntro}
 		<Intro />
@@ -115,4 +115,4 @@
 		{/if}
 		<Ui />
 	{/if}
-</Three2>
+</Three>

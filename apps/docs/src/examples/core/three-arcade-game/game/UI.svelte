@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three2 } from '@threlte/core'
+	import { Three } from '@threlte/core'
 	import { Edges, Text } from '@threlte/extras'
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
@@ -64,18 +64,18 @@
 	}
 </script>
 
-<Three2 type={Group} scale={$scale} position.y={2}>
+<Three type={Group} scale={$scale} position.y={2}>
 	<!-- Centered UI background -->
 	{#key `${[($mainUiTexts?.size.width ?? 6.5).toString(), ($mainUiTexts?.size.height ?? 2.5).toString()].join('')}`}
-		<Three2 type={Mesh} rotation.x={-90 * DEG2RAD} position.y={0.8}>
-			<Three2
+		<Three type={Mesh} rotation.x={-90 * DEG2RAD} position.y={0.8}>
+			<Three
 				type={PlaneGeometry}
 				args={[$mainUiTexts?.size.width ?? 6.5, $mainUiTexts?.size.height ?? 2.5]}
 			/>
-			<Three2 type={MeshBasicMaterial} color="#08060a" />
+			<Three type={MeshBasicMaterial} color="#08060a" />
 
 			<Edges color={$baseColor} scale={1.01} />
-		</Three2>
+		</Three>
 	{/key}
 
 	<!-- Centered UI Text -->
@@ -91,7 +91,7 @@
 		position={{ y: 1 }}
 		text={$mainUiTexts?.text}
 	/>
-</Three2>
+</Three>
 
 <!-- LEVEL (left column) -->
 <Text

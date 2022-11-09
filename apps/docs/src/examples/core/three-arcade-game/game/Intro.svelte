@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three2, useFrame } from '@threlte/core'
+	import { Three, useFrame } from '@threlte/core'
 	import { Edges, Text } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
 	import { tweened } from 'svelte/motion'
@@ -72,21 +72,21 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<Three2 type={Group} position.z={-0.35}>
+<Three type={Group} position.z={-0.35}>
 	<ThrelteLogo positionZ={-1.2} scale={$logoScale} />
 
-	<Three2
+	<Three
 		type={Group}
 		scale={$textScale}
 		position.z={1.3}
 		rotation.x={-90 * DEG2RAD}
 		rotation.z={$textRotation}
 	>
-		<Three2 type={Mesh} position.y={-0.05}>
-			<Three2 type={PlaneGeometry} args={[5.3, 1.8]} />
-			<Three2 type={MeshBasicMaterial} transparent opacity={0} />
+		<Three type={Mesh} position.y={-0.05}>
+			<Three type={PlaneGeometry} args={[5.3, 1.8]} />
+			<Three type={MeshBasicMaterial} transparent opacity={0} />
 			<Edges color={$baseColor} />
-		</Three2>
+		</Three>
 		<Text
 			font="/fonts/beefd.ttf"
 			anchorX="50%"
@@ -96,11 +96,11 @@
 			color={$baseColor}
 			text={`THRELTE\nMASTER`}
 		/>
-	</Three2>
-</Three2>
+	</Three>
+</Three>
 
 {#if showPressSpaceToStart}
-	<Three2
+	<Three
 		type={Group}
 		scale={$textScale}
 		position.z={3.3}
@@ -116,5 +116,5 @@
 			color={$baseColor}
 			text={`PRESS SPACE TO START`}
 		/>
-	</Three2>
+	</Three>
 {/if}

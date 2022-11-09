@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three2 } from '@threlte/core'
+	import { Three } from '@threlte/core'
 	import { derived } from 'svelte/store'
 	import { Mesh } from 'three'
 	import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
@@ -17,7 +17,7 @@
 	$: combinedPosX = $usePreviousBallPosition ? $ballPosition.x : $playerPosition
 </script>
 
-<Three2 type={Mesh} position.z={combinedPosZ} position.x={combinedPosX}>
-	<Three2 type={ballGeometry} />
-	<Three2 type={ballMaterial} />
-</Three2>
+<Three type={Mesh} position.z={combinedPosZ} position.x={combinedPosX}>
+	<Three type={ballGeometry} />
+	<Three type={ballMaterial} />
+</Three>

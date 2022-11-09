@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import { Three2 } from '@threlte/core'
+	import { Three } from '@threlte/core'
 	import { Edges } from '@threlte/extras'
 	import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
 	import { createEventDispatcher } from 'svelte'
@@ -73,7 +73,7 @@
 	}
 </script>
 
-<Three2 type={Group} position.x={position.x} position.z={position.z}>
+<Three type={Group} position.x={position.x} position.z={position.z}>
 	<RigidBody
 		type={!$hit || $freeze ? 'fixed' : 'dynamic'}
 		canSleep={false}
@@ -87,11 +87,11 @@
 			on:collisionexit={() => dispatch('hit')}
 			mass={1}
 		>
-			<Three2 type={Mesh} scale={$scale} let:ref={mesh}>
-				<Three2 type={BoxGeometry} args={[size, 1, size]} />
-				<Three2 type={MeshStandardMaterial} color={innerColor} transparent opacity={0.6} />
+			<Three type={Mesh} scale={$scale} let:ref={mesh}>
+				<Three type={BoxGeometry} args={[size, 1, size]} />
+				<Three type={MeshStandardMaterial} color={innerColor} transparent opacity={0.6} />
 				<Edges color={outerColor} scale={1.01} />
-			</Three2>
+			</Three>
 		</Collider>
 	</RigidBody>
-</Three2>
+</Three>

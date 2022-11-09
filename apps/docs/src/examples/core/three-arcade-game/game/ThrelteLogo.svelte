@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three2, useFrame } from '@threlte/core'
+	import { Three, useFrame } from '@threlte/core'
 	import { Edges } from '@threlte/extras'
 	import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -33,46 +33,46 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<Three2
+<Three
 	type={Group}
 	rotation.x={-65 * DEG2RAD}
 	rotation.y={rotationY}
 	position.z={positionZ}
 	{scale}
 >
-	<Three2 type={Mesh}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
+	</Three>
 
-	<Three2 type={Mesh} position.x={1}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh} position.x={1}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
+	</Three>
 
-	<Three2 type={Mesh} position.x={-1}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh} position.x={-1}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
+	</Three>
 
-	<Three2 type={Mesh} position.z={1}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh} position.z={1}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
+	</Three>
 
-	<Three2 type={Mesh} position.z={-1}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh} position.z={-1}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
+	</Three>
 
-	<Three2 type={Mesh} position.y={1}>
-		<Three2 type={geometry} />
-		<Three2 type={material} />
+	<Three type={Mesh} position.y={1}>
+		<Three type={geometry} />
+		<Three type={material} />
 		<Edges visible color={$baseColor} />
-	</Three2>
-</Three2>
+	</Three>
+</Three>

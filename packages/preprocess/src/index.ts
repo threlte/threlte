@@ -71,12 +71,12 @@ const preprocessMarkup = (
           // change start of node
           const length = name.length
           markup.remove(node.start + 1, node.start + 1 + length)
-          markup.appendRight(node.start + 1, `Three2 type={${maybeImport}}`)
+          markup.appendRight(node.start + 1, `Three type={${maybeImport}}`)
 
-          // change end of node: </boxGeometry> -> </Three2>
+          // change end of node: </boxGeometry> -> </Three>
           const selfClosing = content.slice(node.end - 2, node.end) === '/>'
           if (!selfClosing) {
-            markup.update(node.end - length - 1, node.end - 1, 'Three2')
+            markup.update(node.end - length - 1, node.end - 1, 'Three')
           }
         }
       }
@@ -84,7 +84,7 @@ const preprocessMarkup = (
   })
 
   if (Object.keys(dependencies).length > 0) {
-    addDependency('@threlte/core', 'Three2')
+    addDependency('@threlte/core', 'Three')
   }
 
   // Filter out existing dependencies
@@ -95,7 +95,7 @@ const preprocessMarkup = (
   })
 
   if (Object.keys(dependencies).length > 0) {
-    dependencies['@threlte/core'] = ['Three2']
+    dependencies['@threlte/core'] = ['Three']
     const imports = dependenciesToImports(dependencies)
     if (scriptContentNode) {
       markup.appendLeft(scriptContentNode.start, imports)
@@ -114,7 +114,7 @@ export type TransformOptions = {
 }
 
 /**
- * This preprocessor will transform <t.BoxGeometry> into <Three2 type={BoxGeometry} />
+ * This preprocessor will transform <t.BoxGeometry> into <Three type={BoxGeometry} />
  * @param options
  * @returns
  */
