@@ -1,15 +1,15 @@
 import adapter from '@sveltejs/adapter-static'
 import preprocess from 'svelte-preprocess'
-import { preprocessThrelte } from '@threlte/preprocess'
+// import { preprocessThrelte } from '@threlte/preprocess'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
 
 	preprocess: [
-		preprocessThrelte({
-			prefix: 't.'
-		}),
+		// preprocessThrelte({
+		// 	prefix: 't.'
+		// }),
 		preprocess({
 			postcss: true
 		})

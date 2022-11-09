@@ -15,7 +15,7 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.9.0",
     "@sveltejs/adapter-auto": "1.0.0-next.61",
-    "@sveltejs/adapter-static": "1.0.0-next.34",
+    "@sveltejs/adapter-static": "1.0.0-next.35",
     "@sveltejs/kit": "1.0.0-next.377",
     "@threlte/core": "workspace:*",
     "@types/node": "^18.0.3",
