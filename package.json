@@ -10,7 +10,8 @@
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "cleanup": "turbo run cleanup && rm -rf node_modules"
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.1",

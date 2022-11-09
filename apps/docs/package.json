@@ -10,7 +10,8 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
 		"format": "prettier --write --plugin-search-dir=. .",
-		"copy-workers": "rm -rf static/workers && cp -r node_modules/@sveltejs/svelte-repl/workers static"
+		"copy-workers": "rm -rf static/workers && cp -r node_modules/@sveltejs/svelte-repl/workers static",
+		"cleanup": "rm -rf node_modules && rm -rf .svelte-kit && rm -rf build"
 	},
 	"devDependencies": {
 		"@algolia/client-search": "^4.13.1",

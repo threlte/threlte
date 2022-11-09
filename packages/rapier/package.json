@@ -9,7 +9,8 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "format": "prettier --write --plugin-search-dir=. .",
+    "cleanup": "rm -rf node_modules && rm -rf .svelte-kit"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.9.0",

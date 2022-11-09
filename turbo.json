@@ -6,6 +6,10 @@
       "outputs": ["package/*"],
       "cache": false
     },
+    "cleanup": {
+      "cache": false,
+      "outputs": []
+    },
     "prepare": {
       "cache": false
     },
