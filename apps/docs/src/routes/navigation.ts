@@ -77,10 +77,6 @@ export const sidebar = {
 				slug: '/core/three'
 			},
 			{
-				title: 'Three2',
-				slug: '/core/three2'
-			},
-			{
 				title: 'Objects',
 				slug: ''
 			},
