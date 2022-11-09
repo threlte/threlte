@@ -57,11 +57,13 @@ const preprocessMarkup = (
       if (node.type === 'ImportDeclaration') {
         addExistingDependencies(
           node.source.value,
-          node.specifiers.map((specifier: any) => specifier.imported.name)
+          node.specifiers
+            .filter((s: any) => s.type === 'ImportSpecifier')
+            .map((specifier: any) => specifier.imported.name)
         )
       }
 
-      if (node.type === 'Element') {
+      if (node.type === 'Element' || node.type === 'InlineComponent') {
         const { name } = node as { name: string }
         if (!name.startsWith(prefix)) return
         const maybeImport = name.replace(prefix, '')
