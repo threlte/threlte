@@ -2,9 +2,9 @@ import { preprocess, parse, walk } from 'svelte/compiler'
 import MagicString from 'magic-string'
 import * as THREE from 'three'
 
-type Dependencies = Record<string, string[]>
+type ImportMap = Record<string, string[]>
 
-const dependenciesToImports = (dependencies: Dependencies) => {
+const parseImportMap = (dependencies: ImportMap) => {
   return Object.entries(dependencies)
     .filter(([_from, modules]) => modules.length > 0)
     .map(([from, modules]) => {
@@ -27,26 +27,26 @@ const preprocessMarkup = (
     }
   }
 
-  const dependencies: Dependencies = {}
+  const importMap: ImportMap = {}
   const ast = parse(content)
   const markup = new MagicString(content)
 
   let scriptContentNode: { start: number; end: number } | undefined
-  const existingDependencies: Dependencies = {}
+  const documentImportMap: ImportMap = {}
 
-  const addDependency = (from: string, module: string) => {
-    if (dependencies[from]) {
-      dependencies[from].push(module)
+  const addImport = (from: string, module: string) => {
+    if (importMap[from]) {
+      importMap[from].push(module)
     } else {
-      dependencies[from] = [module]
+      importMap[from] = [module]
     }
   }
 
-  const addExistingDependencies = (from: string, modules: string[]) => {
-    if (existingDependencies[from]) {
-      existingDependencies[from].push(...modules)
+  const addDocumentImport = (from: string, modules: string[]) => {
+    if (documentImportMap[from]) {
+      documentImportMap[from].push(...modules)
     } else {
-      existingDependencies[from] = modules
+      documentImportMap[from] = modules
     }
   }
 
@@ -56,7 +56,7 @@ const preprocessMarkup = (
         scriptContentNode = node.content as { start: number; end: number }
       }
       if (node.type === 'ImportDeclaration') {
-        addExistingDependencies(
+        addDocumentImport(
           node.source.value,
           node.specifiers
             .filter((s: any) => s.type === 'ImportSpecifier')
@@ -69,7 +69,7 @@ const preprocessMarkup = (
         if (!name.startsWith(prefix)) return
         const maybeImport = name.replace(prefix, '')
         if (maybeImport in THREE) {
-          addDependency('three', maybeImport)
+          addImport('three', maybeImport)
 
           // change start of node
           const length = name.length
@@ -86,19 +86,19 @@ const preprocessMarkup = (
     }
   })
 
-  if (Object.keys(dependencies).length > 0) {
-    addDependency('@threlte/core', 'Three')
+  if (Object.keys(importMap).length > 0) {
+    addImport('@threlte/core', 'Three')
   }
 
   // Filter out existing dependencies
-  Object.entries(existingDependencies).forEach(([from, modules]) => {
-    if (dependencies[from]) {
-      dependencies[from] = dependencies[from].filter((module) => !modules.includes(module))
+  Object.entries(documentImportMap).forEach(([from, modules]) => {
+    if (importMap[from]) {
+      importMap[from] = importMap[from].filter((module) => !modules.includes(module))
     }
   })
 
-  if (Object.keys(dependencies).length > 0) {
-    const imports = dependenciesToImports(dependencies)
+  if (Object.keys(importMap).length > 0) {
+    const imports = parseImportMap(importMap)
     if (scriptContentNode) {
       markup.appendLeft(scriptContentNode.start, '\n' + imports)
     } else {
