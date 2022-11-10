@@ -6,6 +6,7 @@ type Dependencies = Record<string, string[]>
 
 const dependenciesToImports = (dependencies: Dependencies) => {
   return Object.entries(dependencies)
+    .filter(([_from, modules]) => modules.length > 0)
     .map(([from, modules]) => {
       return `import { ${[...new Set(modules)].join(', ')} } from '${from}'`
     })
@@ -97,10 +98,9 @@ const preprocessMarkup = (
   })
 
   if (Object.keys(dependencies).length > 0) {
-    dependencies['@threlte/core'] = ['Three']
     const imports = dependenciesToImports(dependencies)
     if (scriptContentNode) {
-      markup.appendLeft(scriptContentNode.start, imports)
+      markup.appendLeft(scriptContentNode.start, '\n' + imports)
     } else {
       markup.prepend('<script>\n' + imports + '\n</script>\n')
     }
