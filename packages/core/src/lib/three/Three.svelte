@@ -8,6 +8,7 @@
   import type { DisposableThreeObject } from '../types/components'
   import { useAttach } from './lib/useAttach'
   import { useCamera } from './lib/useCamera'
+  import { useEvents } from './lib/useEvents'
   import { useProps } from './lib/useProps'
   import type { MaybeInstance, Props } from './types'
 
@@ -85,6 +86,9 @@
   const isDisposableObject = (object: any): object is DisposableThreeObject => {
     return (object as any).dispose !== undefined
   }
+
+  const { updateRef } = useEvents()
+  $: updateRef(ref)
 </script>
 
 {#if isDisposableObject(ref)}

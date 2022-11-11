@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { T, useFrame, useThrelte } from '@threlte/core'
+	import { T, useThrelte } from '@threlte/core'
 
-	const { renderer } = useThrelte()
-
-	useFrame(() => {})
+	const { renderer, invalidate } = useThrelte()
 </script>
 
 <T.Mesh>
@@ -16,10 +14,5 @@
 <T.DirectionalLight position.y={5} position.x={3} />
 
 <T.PerspectiveCamera manual makeDefault let:ref={camera} position.y={10} position.x={10}>
-	<T.OrbitControls
-		args={[camera, renderer?.domElement]}
-		on:change={() => {
-			console.log('change!')
-		}}
-	/>
+	<T.OrbitControls args={[camera, renderer?.domElement]} on:change={invalidate} />
 </T.PerspectiveCamera>
