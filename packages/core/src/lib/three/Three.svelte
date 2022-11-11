@@ -2,97 +2,30 @@
   import { getContext, setContext } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
   import type { Object3D } from 'three'
-  import type { ConditionalKeys, Primitive } from 'type-fest'
   import { useThrelte } from '../hooks/useThrelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import type { DisposableThreeObject } from '../types/components'
-  import type { Attach } from './lib/types'
   import { useAttach } from './lib/useAttach'
   import { useCamera } from './lib/useCamera'
   import { useProps } from './lib/useProps'
+  import type { MaybeInstance, Props } from './types'
 
   type AnyClass = new (...args: any) => any
-  type AnyFn = (...args: any) => any
-
-  /**
-   * We hold a list of prop keys that should be ommited from the object props
-   * that are infered by the provided type.
-   */
-  type OmittedPropKeys =
-    | 'type'
-    | 'args'
-    | 'attach'
-    | 'manual'
-    | 'makeDefault'
-    | 'id'
-    | 'children'
-    | `is${string}` // isMesh, isObject3D, etc
-    | 'parent'
-    | 'uuid'
-    | 'name'
 
   // Basic Prop Types
   type Type = $$Generic
-  type Instance = Type extends AnyClass ? InstanceType<Type> : Type
-  type Manual = Instance extends { isCamera: true } ? boolean : never
-  type MakeDefault = Instance extends { isCamera: true } ? boolean : never
-  type Args = Type extends AnyClass ? ConstructorParameters<Type> : never
 
-  /**
-   * Record<string, any> allows the use of any prop as there could be pierced
-   * props ("position.x") which are not picked up by the following types.
-   */
-  type AnyProps = Record<string, any>
-  type ClassProps = Type extends AnyClass
-    ? {
-        /**
-         * Constructor Args passed to the constructor if a class is passed to "type"
-         */
-        args?: Args | any[]
-      }
-    : {}
-  type BaseProps = {
+  type AllProps = {
     type: Type
-    attach?: Attach<Type>
-  }
-  type CameraProps = Instance extends { isCamera: true }
-    ? {
-        /**
-         * By default, threlte will update the cameras aspect ratio or frustum
-         * when the canvas is resized. If you want to manually control the
-         * camera, set this to true.
-         * @default true
-         */
-        manual?: Manual
-        /**
-         * Sets the camera as the default camera for the scene.
-         * @default false
-         */
-        makeDefault?: MakeDefault
-      }
-    : {}
-  type InstanceProps = Omit<
-    Instance extends Primitive
-      ? {}
-      : {
-          [K in keyof Instance]?: Instance[K] extends { set: (...args: any[]) => any }
-            ? Parameters<Instance[K]['set']> | Parameters<Instance[K]['set']>[0]
-            : Instance[K] extends AnyFn
-            ? never
-            : Instance[K]
-        },
-    ConditionalKeys<Instance, AnyFn> | OmittedPropKeys
-  >
-
-  type AllProps = AnyProps & BaseProps & CameraProps & InstanceProps & ClassProps
+  } & Props<Type>
   type $$Props = AllProps
 
   export let type: Type
-  export let args: Args = undefined as Args
-  export let attach: Attach<Type> = undefined as Attach<Type>
-  export let manual: Manual = undefined as unknown as Manual
-  export let makeDefault: MakeDefault = undefined as unknown as MakeDefault
+  export let args: AllProps['args'] = undefined as AllProps['args']
+  export let attach: AllProps['attach'] = undefined as AllProps['attach']
+  export let manual: AllProps['manual'] = undefined as unknown as AllProps['manual']
+  export let makeDefault: AllProps['makeDefault'] = undefined as unknown as AllProps['makeDefault']
 
   type ThrelteThreeParentContext = Writable<any | undefined>
   const parent = getContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context')
@@ -112,7 +45,7 @@
       : isClass(type)
       ? new type()
       : type
-  ) as Instance
+  ) as MaybeInstance<Type>
   let initialized = false
   $: if (initialized) {
     ref = (
@@ -121,7 +54,7 @@
         : isClass(type)
         ? new type()
         : type
-    ) as Instance
+    ) as MaybeInstance<Type>
   } else {
     initialized = true
   }

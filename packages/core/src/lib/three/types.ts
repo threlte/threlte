@@ -20,6 +20,10 @@ type OmittedPropKeys =
 type AnyClass = new (...args: any) => any
 type AnyFn = (...args: any) => any
 
+/**
+ * This type returns an InstanceType if the provided type is a class, otherwise
+ * it returns the type itself.
+ */
 export type MaybeInstance<Type extends any> = Type extends AnyClass ? InstanceType<Type> : Type
 
 // -------------------- PROPS --------------------
