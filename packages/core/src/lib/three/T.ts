@@ -19,4 +19,4 @@ export const T = new Proxy(PreprocessFallbackComponent, {
     Events<typeof THREE[Key]>,
     Slots<typeof THREE[Key]>
   >
-}
+} & Record<string, typeof SvelteComponentTyped>

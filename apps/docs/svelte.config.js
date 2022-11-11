@@ -8,7 +8,10 @@ const config = {
 
 	preprocess: [
 		preprocessThrelte({
-			prefix: 'T.'
+			prefix: 'T.',
+			extensions: {
+				OrbitControls: 'three/examples/jsm/controls/OrbitControls'
+			}
 		}),
 		preprocess({
 			postcss: true

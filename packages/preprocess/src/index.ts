@@ -68,8 +68,24 @@ const preprocessMarkup = (
         const { name } = node as { name: string }
         if (!name.startsWith(prefix)) return
         const maybeImport = name.replace(prefix, '')
-        if (maybeImport in THREE) {
-          addImport('three', maybeImport)
+
+        const isInThree = maybeImport in THREE
+        const isInExtensions =
+          transformOptions?.extensions && maybeImport in transformOptions?.extensions
+
+        if (isInThree || isInExtensions) {
+          if (isInThree) {
+            addImport('three', maybeImport)
+          } else if (
+            transformOptions &&
+            transformOptions.extensions &&
+            transformOptions.extensions[maybeImport]
+          ) {
+            addImport(transformOptions.extensions[maybeImport], maybeImport)
+          } else {
+            // this should never happen, sanity check
+            return
+          }
 
           // change start of node
           const length = name.length
@@ -113,6 +129,7 @@ const preprocessMarkup = (
 
 export type TransformOptions = {
   prefix?: string
+  extensions: Record<string, string>
 }
 
 /**
