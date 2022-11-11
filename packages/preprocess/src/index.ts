@@ -4,8 +4,8 @@ import * as THREE from 'three'
 
 type ImportMap = Record<string, string[]>
 
-const parseImportMap = (dependencies: ImportMap) => {
-  return Object.entries(dependencies)
+const parseImportMap = (importMap: ImportMap) => {
+  return Object.entries(importMap)
     .filter(([_from, modules]) => modules.length > 0)
     .map(([from, modules]) => {
       return `import { ${[...new Set(modules)].join(', ')} } from '${from}';`
@@ -19,7 +19,7 @@ const preprocessMarkup = (
 ): {
   markup: string
 } => {
-  const prefix = transformOptions?.prefix ?? 'T.'
+  const prefix = transformOptions?.prefix ? `${transformOptions?.prefix}.` : 'T.'
 
   if (!content.includes(`<${prefix}`)) {
     return {
