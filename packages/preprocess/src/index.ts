@@ -8,7 +8,7 @@ const parseImportMap = (dependencies: ImportMap) => {
   return Object.entries(dependencies)
     .filter(([_from, modules]) => modules.length > 0)
     .map(([from, modules]) => {
-      return `import { ${[...new Set(modules)].join(', ')} } from '${from}'`
+      return `\timport { ${[...new Set(modules)].join(', ')} } from '${from}'`
     })
     .join('\n')
 }
@@ -56,6 +56,38 @@ const preprocessMarkup = (
         scriptContentNode = node.content as { start: number; end: number }
       }
       if (node.type === 'ImportDeclaration') {
+        // remove import of <T> component
+
+        if (node.source.value === '@threlte/core') {
+          if (node.specifiers.find((s: any) => s.imported.name === 'T')) {
+            // remove import of <T> component
+            const isMultiImport = node.specifiers.length > 1
+            if (!isMultiImport) {
+              // remove the whole import statement
+              markup.remove(node.start, node.end)
+            } else {
+              // cut out the T import
+              const specifierIndex = node.specifiers.findIndex((s: any) => s.imported.name === 'T')
+              const specifier = node.specifiers[specifierIndex]
+
+              const isLastImport = specifierIndex === node.specifiers.length - 1
+              const isFirstImport = specifierIndex === 0
+
+              if (isLastImport) {
+                const specifierBefore = node.specifiers[specifierIndex - 1]
+                markup.remove(specifierBefore.end, specifier.end)
+              } else if (isFirstImport) {
+                const specifierAfter = node.specifiers[specifierIndex + 1]
+                markup.remove(specifier.start, specifierAfter.start)
+              } else {
+                const specifierBefore = node.specifiers[specifierIndex - 1]
+                const specifierAfter = node.specifiers[specifierIndex + 1]
+                markup.update(specifierBefore.end, specifierAfter.start, ', ')
+              }
+            }
+          }
+        }
+
         addDocumentImport(
           node.source.value,
           node.specifiers
