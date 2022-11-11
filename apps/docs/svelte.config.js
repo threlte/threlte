@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-static'
+import seqPreprocessor from 'svelte-sequential-preprocessor'
 import preprocess from 'svelte-preprocess'
 import { preprocessThrelte } from '@threlte/preprocess'
 
@@ -6,17 +7,16 @@ import { preprocessThrelte } from '@threlte/preprocess'
 const config = {
 	extensions: ['.svelte', '.md'],
 
-	preprocess: [
+	preprocess: seqPreprocessor([
+		preprocess({
+			postcss: true
+		}),
 		preprocessThrelte({
-			prefix: 'T.',
 			extensions: {
 				OrbitControls: 'three/examples/jsm/controls/OrbitControls'
 			}
-		}),
-		preprocess({
-			postcss: true
 		})
-	],
+	]),
 
 	kit: {
 		prerender: {

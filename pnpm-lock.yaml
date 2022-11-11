@@ -56,6 +56,7 @@ importers:
       svelte: ^3.49.0
       svelte-check: ^2.8.0
       svelte-preprocess: ^4.10.7
+      svelte-sequential-preprocessor: ^0.0.7
       tailwindcss: ^3.1.5
       three: ^0.145.0
       tslib: ^2.4.0
@@ -104,6 +105,7 @@ importers:
       svelte: 3.49.0
       svelte-check: 2.8.0_blrkfmplrezk6jx3arz7bdc3pa
       svelte-preprocess: 4.10.7_6avtyouqcdws46kxwsvk4vhxre
+      svelte-sequential-preprocessor: 0.0.7
       tailwindcss: 3.1.5_postcss@8.4.14
       three: 0.145.0
       tslib: 2.4.0
@@ -5311,6 +5313,14 @@ packages:
       typescript: 4.7.4
     dev: true
 
+  /svelte-sequential-preprocessor/0.0.7:
+    resolution: {integrity: sha512-xk974Ny77eiC8xpFPCVNopCfCW4ElWWlvWIv+c7psbjjb4UVRyhR8IJfwOuwnY5S3nduBOYoalY4eigB9YyqHA==}
+    engines: {node: '>=10'}
+    dependencies:
+      svelte: 3.53.0
+      tslib: 2.3.1
+    dev: true
+
   /svelte/3.49.0:
     resolution: {integrity: sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==}
     engines: {node: '>= 8'}
@@ -5508,6 +5518,10 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
+
+  /tslib/2.3.1:
+    resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
     dev: true
 
   /tslib/2.4.0:

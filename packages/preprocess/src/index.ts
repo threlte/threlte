@@ -8,7 +8,7 @@ const parseImportMap = (dependencies: ImportMap) => {
   return Object.entries(dependencies)
     .filter(([_from, modules]) => modules.length > 0)
     .map(([from, modules]) => {
-      return `\timport { ${[...new Set(modules)].join(', ')} } from '${from}'`
+      return `import { ${[...new Set(modules)].join(', ')} } from '${from}';`
     })
     .join('\n')
 }
@@ -19,7 +19,7 @@ const preprocessMarkup = (
 ): {
   markup: string
 } => {
-  const prefix = transformOptions?.prefix ?? 't.'
+  const prefix = transformOptions?.prefix ?? 'T.'
 
   if (!content.includes(`<${prefix}`)) {
     return {
@@ -148,7 +148,7 @@ const preprocessMarkup = (
   if (Object.keys(importMap).length > 0) {
     const imports = parseImportMap(importMap)
     if (scriptContentNode) {
-      markup.appendLeft(scriptContentNode.start, '\n' + imports)
+      markup.appendLeft(scriptContentNode.start, '\n' + imports + '\n')
     } else {
       markup.prepend('<script>\n' + imports + '\n</script>\n')
     }
