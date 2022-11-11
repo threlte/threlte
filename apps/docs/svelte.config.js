@@ -8,7 +8,7 @@ const config = {
 
 	preprocess: [
 		preprocessThrelte({
-			prefix: 't.'
+			prefix: 'T.'
 		}),
 		preprocess({
 			postcss: true
