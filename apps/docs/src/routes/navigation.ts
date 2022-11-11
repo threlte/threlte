@@ -305,6 +305,12 @@ export const sidebar = {
 				slug: '/core/use-audio-listener'
 			}
 		],
+		'@threlte/preprocess': [
+			{
+				title: 'Preprocess',
+				slug: '/preprocess/introduction'
+			}
+		],
 		'@threlte/extras': [
 			{
 				title: 'Hooks',
