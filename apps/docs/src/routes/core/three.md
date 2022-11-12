@@ -24,7 +24,7 @@ The component `<Three />` provides the means to use **any** three.js module as a
 
 ## Preprocess
 
-This component can be used with [threlte's preprocess package](/preprocess/introduction).
+This component can be used with [threlte's preprocess package](/preprocess).
 
 ## Usage
 

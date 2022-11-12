@@ -77,6 +77,10 @@ export const sidebar = {
 				slug: '/core/three'
 			},
 			{
+				title: 'T',
+				slug: '/core/t'
+			},
+			{
 				title: 'Objects',
 				slug: ''
 			},
@@ -307,8 +311,8 @@ export const sidebar = {
 		],
 		'@threlte/preprocess': [
 			{
-				title: 'Preprocess',
-				slug: '/preprocess/introduction'
+				title: 'Introduction',
+				slug: '/preprocess'
 			}
 		],
 		'@threlte/extras': [
