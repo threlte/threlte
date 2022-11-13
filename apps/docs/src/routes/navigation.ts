@@ -17,7 +17,7 @@ export const sidebar = {
 			},
 			{
 				title: 'Examples',
-				slug: '/examples/'
+				slug: '/examples'
 			},
 			{
 				title: 'Features',
