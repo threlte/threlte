@@ -340,3 +340,15 @@ nav ul > li > a > svg {
 .prose {
 	color: rgb(39, 39, 39);
 }
+
+.prose :where(tbody td):not(:where([class~='not-prose'] *)) {
+	@apply whitespace-normal;
+}
+
+.prose :where(tbody td ul):not(:where([class~='not-prose'] *)) {
+	@apply !mt-0 !mb-0;
+}
+
+.prose :where(tbody td ul li):not(:where([class~='not-prose'] *)) {
+	@apply leading-snug;
+}

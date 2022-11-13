@@ -22,13 +22,24 @@ The component `<Three />` provides the means to use **any** three.js module as a
 
 !!!
 
-## Preprocess
-
-This component can be used with [threlte's preprocess package](/preprocess).
-
 ## Usage
 
 In contrast to other threlte components, the component `<Three />` does not wrap a single three.js class or acts in a single domain but rather tries to render any value that is passed to the property `type` in the context of a threlte application.
+
+### Usage with preprocessor
+
+There are two ways to use the component: With or without the [preprocessor](/preprocess).
+
+<!-- prettier-ignore-start -->
+
+|  | With Preprocessor | Without Preprocessor |
+|---|---|---|
+| Use a module from 'three' | `<T.Mesh>` | `import { Mesh } from 'three'` `<Three type={Mesh}>` |
+| Use any module | extend preprocessor and `<T.AnyModule>` | `import { Module } from 'package'` `<Three type={Module}>` |
+| Type autocompletion | On 'three' exports only | On anything |
+| Setup | Install and implement preprocessor | – |
+
+<!-- prettier-ignore-end -->
 
 ### type
 
