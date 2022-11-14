@@ -267,10 +267,14 @@ Threlte's way of composing functionality with _trait components_ works very well
 </T.Mesh>
 ```
 
-These components might be slightly renamed in the future to fit this use-case a bit better.
+:::admonition type="info"
+
+The trait components might be slightly renamed in the future to fit this use-case a bit better.
+
+:::
 
 ## Wrapping it up
 
-`@threlte/core` is changing. And I'm sorry for that. I know that some people might not like it in the beginning. I know that some educational content (that just came out) is at least _a bit_ deprecated. But I would not do that if I wouldn't think that this is the way forward. All of a sudden so much more is possible with just compositing Svelte components while still **benefitting from tree-shaking, extensibility, type-safety and reactivity**. I'm honestly excited and looking forward to what you build with it.
+`@threlte/core` is changing. And I'm sorry for that. I know that some people might not like it in the beginning. I know that some educational content (that just came out) is at least _a bit_ deprecated. But I would not do that if I wouldn't think that this is the way forward. All of a sudden so much more is possible with just compositing Svelte components while still **benefitting from tree-shaking, extensibility, type-safety and reactivity**. I'm truly excited and looking forward to what you build with it.
 
 Don't forget to leave your comments and feedback at our [Discord server](https://discord.gg/EqUBCfCaGm)!
