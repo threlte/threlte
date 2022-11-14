@@ -3,7 +3,12 @@ title: AudioInstance
 ---
 
 !!!module_summary title=AudioInstance|sourcePath=instances/AudioInstance.svelte|name=AudioInstance|from=core|type=component|relatedDocs={[{name:"three.js Audio reference",url:"https://threejs.org/docs/#api/en/audio/Audio"}]}
+
+:::deprecated
+:::
+
 This component lets you use any manually instantiated object that extends `THREE.Audio` in threlte.
+
 !!!
 
 ### Example <!-- omit in toc -->

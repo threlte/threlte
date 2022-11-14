@@ -3,6 +3,10 @@ title: DirectionalLight
 ---
 
 !!!module_summary title=DirectionalLight|sourcePath=lights/DirectionalLight.svelte|name=DirectionalLight|from=core|type=component|relatedDocs={[{name:"three.js DirectionalLight reference",url:"https://threejs.org/docs/#api/en/lights/DirectionalLight"}]}
+
+:::deprecated
+:::
+
 The `<DirectionalLight>` component accepts a property `target` which acts like the property `lookAt`: Provide either a `Position` (`{ x: 5, z: 3 }`) or another Object3D instance. In the latter case the `DirectionalLight` will track the provided object. This is especially useful if you want to move the area that the shadow is applied to.
 
 See the three.js [DirectionalLight documentation](https://threejs.org/index.html?q=direct#api/en/lights/DirectionalLight) for details.

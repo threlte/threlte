@@ -1,9 +1,9 @@
 import { onDestroy } from 'svelte'
 import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
-import type { Attach } from './types'
+import type { Props } from '../types'
 
-export const useAttach = <T>(instance: T, parent: any, attach?: Attach<T>) => {
+export const useAttach = <T>(instance: T, parent: any, attach?: Props<T>['attach']) => {
   const { invalidate } = useThrelte()
 
   let isAttached = false
@@ -12,7 +12,7 @@ export const useAttach = <T>(instance: T, parent: any, attach?: Attach<T>) => {
   let attachedTo: any
   let attachedKey: string | undefined
 
-  const update = (instance: T, parent: any, attach?: Attach<T>) => {
+  const update = (instance: T, parent: any, attach?: Props<T>['attach']) => {
     if (isAttached) {
       detach()
     }

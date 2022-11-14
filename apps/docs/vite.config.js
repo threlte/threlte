@@ -44,7 +44,8 @@ const config = {
 				components: [
 					{ name: 'ModuleSummary', type: 'custom', container: { marker: '!' } },
 					{ name: 'CodeWrapper', type: 'custom', container: { marker: '&' } },
-					{ name: 'OpenInPlayground', type: 'custom', container: { marker: ':' } }
+					{ name: 'OpenInPlayground', type: 'custom', container: { marker: ':' } },
+					{ name: 'Depcrecated', type: 'custom', container: { marker: ':' } }
 				]
 			}
 		}),

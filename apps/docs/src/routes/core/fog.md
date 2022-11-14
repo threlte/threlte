@@ -3,6 +3,10 @@ title: Fog
 ---
 
 !!!module_summary title=Fog|sourcePath=misc/Fog.svelte|name=Fog|from=core|type=component|relatedDocs={[{name:"three.js Fog reference",url:"https://threejs.org/docs/api/en/scenes/Fog.html"}]}
+
+:::deprecated moveToExtras=true
+:::
+
 A `<Fog>` adds itself to the scene directly. The placement in the hierarchy is therefore unimportant as long as it's inside the `<Canvas>` component.
 !!!
 

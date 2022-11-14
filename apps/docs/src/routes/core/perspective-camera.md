@@ -3,6 +3,10 @@ title: PerspectiveCamera
 ---
 
 !!!module_summary title=PerspectiveCamera|sourcePath=cameras/PerspectiveCamera.svelte|name=PerspectiveCamera|from=core|type=component|relatedDocs={[{name:"three.js PerspectiveCamera reference",url:"https://threejs.org/docs/#api/en/cameras/PerspectiveCamera"}]}
+
+:::deprecated
+:::
+
 A camera that uses perspective projection.
 
 This projection mode is designed to mimic the way the human eye sees. It is the most common projection mode used for rendering a 3D scene.

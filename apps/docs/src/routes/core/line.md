@@ -8,6 +8,9 @@ import Example from '$examples/core/line/App.svelte'
 
 !!!module_summary title=Line|sourcePath=objects/Line.svelte|name=Line|from=core|type=component|relatedDocs={[{name:"three.js Line reference",url:"https://threejs.org/docs/#api/en/objects/Line"}]}
 
+:::deprecated
+:::
+
 Draw Lines using `THREE.Line`. Due to limitations of the OpenGL Core Profile with the `THREE.WebGLRenderer` on most platforms the line width will always be `1` regardless of the value `lineWidth` of the used Material.
 
 Provide either `points` or a `geometry` to draw lines.

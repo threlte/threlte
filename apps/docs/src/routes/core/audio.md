@@ -3,6 +3,10 @@ title: Audio
 ---
 
 !!!module_summary title=Audio|sourcePath=audio/Audio.svelte|name=Audio|from=core|type=component|relatedDocs={[{name:"three.js Audio reference",url:"https://threejs.org/docs/#api/en/audio/Audio"}]}
+
+:::deprecated moveToExtras=true
+:::
+
 Create a non-positional (global) audio object.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 

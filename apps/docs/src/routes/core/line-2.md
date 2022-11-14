@@ -8,6 +8,9 @@ import Example from '$examples/core/line-2/App.svelte'
 
 !!!module_summary title=Line2|sourcePath=objects/Line2.svelte|name=Line2|from=core|type=component
 
+:::deprecated
+:::
+
 Draw Lines using `THREE.Line2`.
 
 <ExampleWrapper playgroundHref="/core/line-2">

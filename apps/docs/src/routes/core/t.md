@@ -2,6 +2,16 @@
 title: T
 ---
 
+<script lang="ts">
+import Example from '$examples/preprocess/basic/App.svelte'
+</script>
+
+<ExampleWrapper>
+
+<Example />
+
+</ExampleWrapper>
+
 !!!module_summary title=T|sourcePath=T.svelte|name=T|from=core|type=component
 
 :::admonition type="experimental"

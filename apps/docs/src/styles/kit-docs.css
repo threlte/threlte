@@ -329,7 +329,7 @@ nav ul > li > a > svg {
 
 .prose :where(code):not(:where([class~='not-prose'] *)) {
 	background-color: #f0f0f0;
-	@apply rounded-sm px-1 py-0.5 text-sm whitespace-nowrap;
+	@apply rounded-sm px-1 py-0.5 text-[0.8em] whitespace-nowrap;
 }
 
 .prose div.code-fence div.code pre code {
