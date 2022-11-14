@@ -2,26 +2,33 @@
 
 <small>November 2022, by Grischa Erbe</small>
 
-Hi. If you're reading this, you are probably looking for answers to why a component or another module from `@threlte/core` is on deprecation notice. The simple answer is that threlte as a wrapper for [three.js](https://threejs.org/) can't keep up with three.js's development speed and will always be one step behind.
+Hi. If you're reading this, you are probably looking for answers to why a component, hook or module from `@threlte/core` is on deprecation notice. The simple answer is that threlte as a wrapper component library for [three.js](https://threejs.org/) can't keep up with three.js's development speed and as such will always be one step behind.
 
 That is why `@threlte/core` is transitioning towards acting more like a renderer which is able to work with everything that you throw at it. But let's dive a bit deeper.
 
-## Threlte was a wrapper
+## The history of `@threlte/core`
 
-Threlte has been such a wrapper library for three.js for all of its time. It wrapped the most basic building blocks like meshes, lines, lights and cameras by reflecting three.js's class system in nested Svelte components. This worked for a number of components and provided great DX with good type support. The types it provided were from threlte authors as well as from three.js's type authors. One of the three.js classes that is the basis of all objects that end up in the scene graph is the [Object3D](https://threejs.org/docs/index.html?q=obje#api/en/core/Object3D). It manages transforms, visibility, scene graph stuff, matrix calculations, and other very important things.
+`@threlte/core` wrapped the most basic building blocks like meshes, lines, lights and cameras by mimicing the class system of three.js as nested Svelte components. This worked for a number of components and provided great DX and type-safety. One of the very basic three.js classes is the [Object3D](https://threejs.org/docs/index.html?q=obje#api/en/core/Object3D). It manages transformations, visibility, scene hierarchy, matrix calculations, and other fundamental things.
 
-So naturally, there has been a component called `<Object3DInstance>` which uses an instance of a `THREE.Object3D` and with the help of some props, you can reactively manage an object instance that is part of your scene graph, convenient! Now we already established that a large part of three.js's classes base on this class, so threlte did that as well. Which meant there's for example a `<MeshInstance>` component that forwards all props belonging to the domain of a `THREE.Object3D` to its child `<Object3DInstance>` component. It sounds like a sane and future-proof approach, no? Right from the start I gave using `$$props` and `restProps` a try but the performance drop was drastic. There's no way to tell which property changed and changing a prop on e.g. `<Mesh … position={{ x: posX }}>` meant that all child components somehow have to magically infer if they should update or not. So I resided with individual props and a strong type system.
+So naturally, there has been a component called `<Object3DInstance>` which uses an instance of a `THREE.Object3D` and with the help of some props, you can reactively manage an object instance that is part of your scene graph, convenient! Now we already established that a large part of three.js's classes base on this class, so threlte did that as well. Which meant there's for example a `<MeshInstance>` component that forwards all props belonging to the domain of a `THREE.Object3D` to its child `<Object3DInstance>` component and adds features that are part of a `THREE.Mesh`. It sounds like a sane and future-proof approach, no? But it also means hard-wiring and typing all props, events and bindings. Right from the start I gave using `$$props` and `restProps` a try but the performance drop was drastic. The architecture of nested components proved to be the natural enemy of the catch-all `$$props` property. So I resided with individually typed and declared props and a strong type system. Every new component meant extending and adding types, fleshing out the component itself and adding some bits and pieces that would make it feel a little bit magic. At some point I wanted to add a property `userData` to `<Object3DInstance>` which meant adding it to every single `@threlte/core` component by hand. It was at that point that I was worried this architecture of nested components wouldn't hold up for long.
 
 ## Svelte does not have custom renderers
 
-In the meantime Paul Henschel – the person behind `react-three-fiber` – [criticised threlte for being a wrapper](https://twitter.com/0xca0a/status/1561789151996952577) instead of a renderer (or in react terms a _reconciler_) and while he was totally right I was still busy _wrapping_ stuff instead of finding a way to make a renderer happen in Svelteland. Svelte does not have something like custom renderers, a functionality that `react-three-fiber` extensively uses to dynamically use jsx elements as three.js classes: `<mesh>` is resolved to a new instance of `THREE.Mesh` in the root context of a `react-three-fiber` `<Canvas>` component. But what Svelte does have is the superpower of an AOT compiler and a parsing pipeline that let's you register custom preprocessors which can parse the markup, script and style blocks of a component and inject everything that you can think of. So here's the new _threlte_ way of rendering three.js classes:
+In the meantime Paul Henschel – the person behind `react-three-fiber` – [criticised threlte for being a wrapper](https://twitter.com/0xca0a/status/1561789151996952577) instead of a renderer (or in react terms a _reconciler_) and while he was totally right I was still busy _wrapping_ stuff instead of finding a way to make a renderer happen in Svelteland. Svelte does not have something like custom renderers, a functionality that `react-three-fiber` extensively uses to dynamically use jsx elements as three.js classes: With `react-three-fiber`, `<mesh>` is dynamically transformed to a new instance of `THREE.Mesh` in the root context of a `<Canvas>` component. But what Svelte does have is the superpower of an AOT compiler and preprocessors that can parse the markup, script and style blocks of a component and inject everything that you can think of.
+
+## The new `@threlte/core` at a glance
+
+So here's the new threlte way of rendering three.js classes with the new preprocessor:
 
 ```svelte
 <script>
 	import { T } from '@threlte/core'
 </script>
 
-<T.Mesh />
+<T.Mesh>
+	<T.BoxGeometry />
+	<T.MeshStandardMaterial />
+</T.Mesh>
 ```
 
 ## A quick FAQ at this point
@@ -158,6 +165,24 @@ This shows that objects which cannot be part of the scene graph (`THREE.MeshStan
 :::admonition type="tip"
 All three.js modules ending with "Material" receive `attach="material"`, and all modules ending with "Geometry" receive `attach="geometry"` automatically. You do not strictly have to type it out!
 :::
+
+#### Attaching to nested properties
+
+Just like with props, you can also attach the `ref` of a `<T>`/`<Three>` component to a nested property of its parent:
+
+```svelte
+<T.DirectionalLight>
+	<T.OrthographicCamera
+		attach="shadow.camera"
+		left={-10}
+		right={10}
+		top={10}
+		bottom={-10}
+		near={1}
+		far={1000}
+	/>
+</T.DirectionalLight>
+```
 
 ## What about event handling?
 
