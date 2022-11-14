@@ -27,6 +27,7 @@
   export let attach: AllProps['attach'] = undefined as AllProps['attach']
   export let manual: AllProps['manual'] = undefined as unknown as AllProps['manual']
   export let makeDefault: AllProps['makeDefault'] = undefined as unknown as AllProps['makeDefault']
+  export let dispose: AllProps['dispose'] = undefined as unknown as AllProps['dispose']
 
   type ThrelteThreeParentContext = Writable<any | undefined>
   const parent = getContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context')
@@ -92,7 +93,10 @@
 </script>
 
 {#if isDisposableObject(ref)}
-  <DisposableObject object={ref} />
+  <DisposableObject
+    object={ref}
+    {dispose}
+  />
 {/if}
 
 {#if extendsObject3D(ref)}

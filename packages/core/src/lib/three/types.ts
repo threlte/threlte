@@ -1,4 +1,5 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
+import type { DisposableThreeObject } from '../types/components'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
@@ -35,6 +36,15 @@ type AnyProps = Record<string, any>
 type BaseProps<Type extends any> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
 }
+
+type DisposableProps<Type extends any> = MaybeInstance<Type> extends DisposableThreeObject
+  ? {
+      /**
+       * If true, the object will be deeply disposed when the component unmounts.
+       */
+      dispose?: boolean
+    }
+  : Record<string, unknown>
 
 // Class Props
 type ClassProps<Type extends any> = Type extends AnyClass
@@ -84,6 +94,7 @@ type InstanceProps<Type extends any> = Omit<
 
 // Props
 export type Props<Type extends any> = AnyProps &
+  DisposableProps<Type> &
   RefProps<Type> &
   BaseProps<Type> &
   ClassProps<Type> &
