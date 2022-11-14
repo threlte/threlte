@@ -37,14 +37,12 @@ type BaseProps<Type extends any> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
 }
 
-type DisposableProps<Type extends any> = MaybeInstance<Type> extends DisposableThreeObject
-  ? {
-      /**
-       * If true, the object will be deeply disposed when the component unmounts.
-       */
-      dispose?: boolean
-    }
-  : Record<string, unknown>
+type DisposableProps = {
+  /**
+   * If true, the object will be deeply disposed when the component unmounts.
+   */
+  dispose?: boolean
+}
 
 // Class Props
 type ClassProps<Type extends any> = Type extends AnyClass
@@ -94,7 +92,7 @@ type InstanceProps<Type extends any> = Omit<
 
 // Props
 export type Props<Type extends any> = AnyProps &
-  DisposableProps<Type> &
+  DisposableProps &
   RefProps<Type> &
   BaseProps<Type> &
   ClassProps<Type> &
