@@ -15,13 +15,13 @@ import Example from '$examples/introduction/App.svelte'
 Hundreds of new components
 </li>
 <li>
-<code style="background-color: #DE3700">react-three-fiber</code> compatibility
+Better <code style="background-color: #DE3700">react-three-fiber</code> ecosystem compatibility
 </li>
 <li>
- New prop syntax
+New prop syntax
 </li>
 <li>
- A custom preprocessor
+A custom preprocessor
 </li>
 </ul>
 </a>
