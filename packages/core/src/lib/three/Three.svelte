@@ -77,7 +77,7 @@
   $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment
-  $: attachment = useAttach(ref, attach)
+  $: attachment = useAttach()
   $: attachment.update(ref, $parent, attach)
 
   const extendsObject3D = (object: any): object is Object3D => {

@@ -114,14 +114,14 @@ They can now be used in your components:
 
 ## Do I need to use the preprocessor?
 
-Strictly speaking, no. You can go ahead and use the component `<Three>` from `@threlte/core` directly. It provides the same functionality and the same (shared) types but the output looks odd and is less accessible to some because of the ever repeating `<Three>` component. The preprocessor is _just_ syntactic sugar on top of `<Three>` and brings threlte's syntax closer to `react-three-fiber` to be able to use its ecosystem and tooling like [gltfjsx](https://github.com/pmndrs/gltfjsx) more easily.
+Strictly speaking, no. You can go ahead and use the component `<Three>` from `@threlte/core` directly. It provides the same functionality and the same (shared) types but the output looks odd and is less accessible to some because of the ever repeating `<Three>` component. The preprocessor is just syntactic sugar on top of `<Three>` and brings threlte's syntax closer to `react-three-fiber` to be able to use its ecosystem and tooling like [gltfjsx](https://github.com/pmndrs/gltfjsx) more easily. In fact, there is an intention from both sides to bring `react-three-fiber` tooling to threlte. I'm super excited about that!
 
 ## Props FAQ
 
 - **What props are allowed?**
 
-  - **Primitive properties** like numbers, strings and boolean values accept just that: `mesh.visible = false` translates to `<T.Mesh visible={false}>`.
-  - **Object properties** like `THREE.Vector3` or `THREE.Color` which have a `set` function accept any value that you can pass to that function. This translates `mesh.position.set(1, 2, 3)` to `<T.Mesh position={[1, 2, 3]} >` or `color.set('hotpink')` to `<T.MeshStandardMaterial color="hotpink" />`.
+  - **Primitive properties** like numbers, strings and boolean values accept just that: `<T.Mesh visible={false}>` is equal to `mesh.visible = false`.
+  - **Object properties** like `THREE.Vector3` or `THREE.Color` which have a `set` function accept any value that you can pass to that function. So `<T.Mesh position={[1, 2, 3]} >` is equal to `mesh.position.set(1, 2, 3)` and `<T.MeshStandardMaterial color="hotpink" />` is equal to `color.set('hotpink')`.
 
 This means that every property available on a three.js class is available (and fully typed!) on `<T>`/`<Three>`.
 On top of that there are props to handle the disposal of objects (`dispose`) and camera-specific props (`manual` & `makeDefault`).
@@ -129,6 +129,10 @@ On top of that there are props to handle the disposal of objects (`dispose`) and
 - **How would I set the x-axis of the position?**
 
 Props can be used with dot-notation to pierce into objects. `mesh.position.x = 5` translates to `<T.Mesh position.x={5} />`
+
+- **What is `args`?**
+
+In three.js objects are classes that are instantiated. These classes can receive one-time constructor arguments, e.g. `new THREE.SphereGeometry(1, 32)`. With threlte, constructor arguments are always passed as an array via `args`. If `args` change later on, the object must naturally get reconstructed from scratch. This is an expensive operation and should be avoided.
 
 ## Attaching things
 

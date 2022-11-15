@@ -3,19 +3,21 @@ import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
 import type { Props } from '../types'
 
-export const useAttach = <T>(instance: T, parent: any, attach?: Props<T>['attach']) => {
+export const useAttach = <T>() => {
   const { invalidate } = useThrelte()
 
   let isAttached = false
   let valueBeforeAttach: any
   let detachFn: (() => void) | undefined | void
+  // the target that the object is attached to
   let attachedTo: any
+  // the property name that the object is attached to
   let attachedKey: string | undefined
 
   const update = (instance: T, parent: any, attach?: Props<T>['attach']) => {
-    if (isAttached) {
-      detach()
-    }
+    detach()
+
+    // maybe assign 'material' or 'geometry' automatically if not specified
     if (!attach) {
       const i = instance as any
       const isMaterial = i?.isMaterial || false
@@ -36,25 +38,27 @@ export const useAttach = <T>(instance: T, parent: any, attach?: Props<T>['attach
       const { target, key } = resolve(parent, attach)
       valueBeforeAttach = target[key]
       target[key] = instance
+      attachedTo = target
+      attachedKey = key
     }
     isAttached = true
     invalidate()
   }
 
   const detach = () => {
-    if (isAttached) {
-      if (detachFn) {
-        detachFn()
-      } else if (attachedTo && attachedKey) {
-        if (valueBeforeAttach) {
-          attachedTo[attachedKey] = valueBeforeAttach
-        } else {
-          delete attachedTo[attachedKey]
-        }
-      }
-      isAttached = false
-      invalidate()
+    if (!isAttached) return
+
+    if (detachFn) {
+      detachFn()
+      detachFn = undefined
+    } else if (attachedTo && attachedKey && valueBeforeAttach) {
+      attachedTo[attachedKey] = valueBeforeAttach
+      valueBeforeAttach = undefined
+      attachedTo = undefined
+      attachedKey = undefined
     }
+    isAttached = false
+    invalidate()
   }
 
   onDestroy(() => {

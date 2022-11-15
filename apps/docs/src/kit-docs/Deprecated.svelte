@@ -31,7 +31,9 @@
 		{#if moveToExtras}
 			This module will be moved to <code>@threlte/extras</code> at some point in the future.
 		{:else}
-			This module is deprecated. You can still use it but it will be removed in the future.
+			This module is deprecated. You can still use it but it will be removed in the future. Please
+			consider using
+			<a href="/core/t"><code>{`<T>`}</code></a>/<a href="/core/three"><code>{`<Three>`}</code></a> instead.
 		{/if}
 
 		Please read the <a class="text-brand" href="/core-transition">update notice</a>.
