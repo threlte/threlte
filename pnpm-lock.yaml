@@ -44,6 +44,7 @@ importers:
       eslint: ^8.19.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
+      magic-string: ^0.26.7
       postcss: ^8.4.14
       postcss-load-config: ^4.0.1
       postprocessing: ^6.29.1
@@ -64,6 +65,8 @@ importers:
       typescript: ^4.7.4
       unplugin-icons: ^0.13.4
       vite: ^2.9.14
+    dependencies:
+      magic-string: 0.26.7
     devDependencies:
       '@algolia/client-search': 4.13.1
       '@dimforge/rapier3d-compat': 0.9.0
@@ -3893,7 +3896,6 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       sourcemap-codec: 1.4.8
-    dev: true
 
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -4882,7 +4884,6 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-    dev: true
 
   /spawndamnit/2.0.0:
     resolution: {integrity: sha512-j4JKEcncSjFlqIwU5L/rp2N5SIPsdxaRsIv678+TZxZ0SRDJTm8JrxJMjE/XuiEZNEir3S8l0Fa3Ke339WI4qA==}

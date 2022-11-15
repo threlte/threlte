@@ -28,7 +28,7 @@ In contrast to other threlte components, the component `<Three />` does not wrap
 
 ### Usage with preprocessor
 
-There are two ways to use the component: With or without the [preprocessor](/preprocess).
+There are two ways to use the component: With or without the [preprocessor](/preprocess/preprocessThrelte).
 
 <!-- prettier-ignore-start -->
 

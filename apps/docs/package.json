@@ -64,5 +64,8 @@
 		"vite": "^2.9.14"
 	},
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"magic-string": "^0.26.7"
+	}
 }
