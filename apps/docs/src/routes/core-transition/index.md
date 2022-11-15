@@ -4,9 +4,11 @@
 
 <small>November 2022, by Grischa Erbe</small>
 
-Hi. If you're reading this, you are probably looking for answers to why a component, hook or module from `@threlte/core` is on deprecation notice. The simple answer is that threlte as a wrapper component library for [three.js](https://threejs.org/) can't keep up with three.js's development speed and as such will always be one step behind.
+Hi. If you're reading this, you are probably looking for answers to why a component or hook from `@threlte/core` is on deprecation notice. The simple answer is that `@threlte/core` is evolving towards acting more like a renderer for a simpler, faster, and more flexible developer experience that works with everything you throw at it.
 
-That is why `@threlte/core` is transitioning towards acting more like a renderer which is able to work with everything that you throw at it. But let's dive a bit deeper.
+Why? Up until this transition, threlte has been a wrapper component library for three.js, and as such it wouldn't be able to keep up with three.js's development speed. The wrapper approach would always keep threlte one step behind.
+
+But let's dive a bit deeper.
 
 ## The history of `@threlte/core`
 
