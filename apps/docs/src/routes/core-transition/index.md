@@ -33,6 +33,20 @@ So here's the new threlte way of rendering three.js classes with the new preproc
 </T.Mesh>
 ```
 
+## First impressions
+
+While fleshing out the details of the components `<T>` and `<Three>`, I was constantly testing them. In a admittedly pretty naive use-case they proved to be 2-3x faster in updating props. They're extremely flexible and compatible with existing threlte packages like `@threlte/extras` or `@threlte/rapier`. Here's the result of that testing, have a go and post your score on our [Discord server](https://discord.gg/EqUBCfCaGm)!
+
+<script lang="ts">
+import Example from '$examples/core/three-arcade-game/App.svelte'
+</script>
+
+<ExampleWrapper>
+
+<Example />
+
+</ExampleWrapper>
+
 ## A quick FAQ at this point
 
 - **Why not just `<mesh />`?**
@@ -282,6 +296,10 @@ Threlte's way of composing functionality with _trait components_ works very well
 The trait components might be slightly renamed in the future to fit this use-case a bit better.
 
 :::
+
+## What's next?
+
+You will see that the documentation still is using mostly wrapper components.[ We need your help](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) to make that transition as smooth as possible and transfer as many examples as possible to the new rendering approach. It's important to note that while preprocessing works great for your local setup, there's no definitive roadmap of how to show code using `<T>` in the documentation yet.
 
 ## Wrapping it up
 
