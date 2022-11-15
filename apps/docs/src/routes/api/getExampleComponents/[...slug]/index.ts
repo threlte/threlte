@@ -45,7 +45,15 @@ const parsers: Record<ModuleExtension, (content: string) => Promise<string>> = {
 			}
 		)
 
-		const threltePreprocessed = await preprocess(result.code, preprocessThrelte())
+		const threltePreprocessed = await preprocess(
+			result.code,
+			preprocessThrelte({
+				extensions: {
+					'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
+					'three/examples/jsm/controls/TransformControls': ['TransformControls']
+				}
+			})
+		)
 
 		// replacing lang attributes is purely cosmetic, still …
 		return threltePreprocessed.code

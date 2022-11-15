@@ -1,14 +1,14 @@
 ---
-title: Preprocess
+title: preprocessThrelte
 ---
 
-# Preprocess
+# preprocessThrelte
 
 :::admonition type="experimental"
 This preprocessor is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk. Learn more about this feature [here](/core-transition)
 :::
 
-Threlte provides a custom preprocessor that _automagically_ turns `<T.Mesh>` into `<Three type={Mesh} />`. It resolves dependencies and automatically places imports for the `THREE` modules used throughout your component. By default, you can use any module that `'three'` exports. The preprocessor is extendable, so that other modules (such as those from the famous "examples" directory) can be used.
+Threlte provides a custom preprocessor that _automagically_ turns `<T.Mesh>` into `<Three type={Mesh} />`. It resolves dependencies and automatically places imports for the corresponding modules used throughout your component. By default, you can use any import from `'three'`. The preprocessor is extendable, so that other modules (such as those from the famous "examples" directory) can be used.
 
 :::admonition type="note"
 If you're not familiar with the component [`<Three>`](/), please make yourself comfortable with it first as the preprocessor's main job is to provide syntactic sugar for that component.
@@ -83,7 +83,7 @@ const config = {
 
 ## Configuration
 
-By default, the preprocessor is able to use the default namespace of `three`. This means that if you were to import a module via `import { BoxGeometry } from 'three'` it's automatically in the available catalogue. You can however extend that catalogue with the option `extensions` which is an object where the key is a module name and the value is the corresponding import path:
+By default, the preprocessor is able to use all exports of `three`. This means that if you were to import a module via `import { BoxGeometry } from 'three'` it's automatically in the default catalogue. You can however extend that catalogue with the option `extensions` which is an object where the key is a module name and the value is an array of import names:
 
 ```js title="svelte.config.js"
 import { preprocessThrelte } from '@threlte/preprocess'
@@ -91,8 +91,14 @@ import { preprocessThrelte } from '@threlte/preprocess'
 const config = {
 	preprocess: preprocessThrelte({
 		extensions: {
-			OrbitControls: 'three/examples/jsm/controls/OrbitControls',
-			TransformControls: 'three/examples/jsm/controls/TransformControls'
+			// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+			'three/examples/jsm/controls/OrbitControls': [OrbitControls],
+
+			// import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+			'three/examples/jsm/controls/TransformControls': [TransformControls],
+
+			// import { CustomGrid } from '$lib/CustomGrid'
+			'$lib/CustomGrid': [CustomGrid]
 		}
 	})
 }

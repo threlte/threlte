@@ -311,8 +311,8 @@ export const sidebar = {
 		],
 		'@threlte/preprocess': [
 			{
-				title: 'Introduction',
-				slug: '/preprocess'
+				title: 'preprocessThrelte',
+				slug: '/preprocess/preprocessThrelte'
 			}
 		],
 		'@threlte/extras': [

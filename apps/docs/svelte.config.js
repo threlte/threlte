@@ -13,7 +13,8 @@ const config = {
 		}),
 		preprocessThrelte({
 			extensions: {
-				OrbitControls: 'three/examples/jsm/controls/OrbitControls'
+				'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
+				'three/examples/jsm/controls/TransformControls': ['TransformControls']
 			}
 		})
 	]),

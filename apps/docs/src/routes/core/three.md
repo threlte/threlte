@@ -12,7 +12,7 @@ import Example from '$examples/core/three-arcade-game/App.svelte'
 This component is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk. Learn more about this feature [here](/core-transition)
 :::
 
-The component `<Three />` provides the means to use **any** three.js module as a Svelte component. It does this by leveraging the rigid three.js naming and object property structure and act as a **renderer** to include objects in the scene graph or attach objects to parent object properties.
+The component `<Three />` provides the means to use **any** three.js export as a Svelte component. It does this by leveraging the rigid three.js naming and object property structure and act as a **renderer** to include objects in the scene graph or attach objects to parent object properties.
 
 <ExampleWrapper>
 
@@ -34,9 +34,9 @@ There are two ways to use the component: With or without the [preprocessor](/pre
 
 |  | With Preprocessor | Without Preprocessor |
 |---|---|---|
-| Use a module from 'three' | `<T.Mesh>` | `import { Mesh } from 'three'` `<Three type={Mesh}>` |
-| Use any module | extend preprocessor and `<T.AnyModule>` | `import { Module } from 'package'` `<Three type={Module}>` |
-| Type autocompletion | On 'three' exports only | On anything |
+| Use an import from 'three' | `<T.Mesh>` | `import { Mesh } from 'three'` `<Three type={Mesh}>` |
+| Use any import | extend preprocessor and `<T.AnyImport>` | `import { AnyImport } from 'module'` `<Three type={AnyImport}>` |
+| Type autocompletion | On 'three' imports only | On anything |
 | Setup | Install and implement preprocessor | – |
 
 <!-- prettier-ignore-end -->

@@ -101,15 +101,20 @@ Output:
 
 ## Extending the preprocessor
 
-To use a module outside the main `three` namespace, simply extend the preprocessor where `extensions` are key-value pairs with module names and their corresponding import path:
+To use a module other than `three`, simply extend the preprocessor with the option `extensions` where the key is a module name and the value is an array of import names:
 
 ```js title=svelte.config.js
 const config = {
 	preprocess: preprocessThrelte({
 		extensions: {
-			OrbitControls: 'three/examples/jsm/controls/OrbitControls',
-			TransformControls: 'three/examples/jsm/controls/TransformControls',
-			CustomGrid: '$lib/CustomGrid'
+			// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+			'three/examples/jsm/controls/OrbitControls': [OrbitControls],
+
+			// import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+			'three/examples/jsm/controls/TransformControls': [TransformControls],
+
+			// import { CustomGrid } from '$lib/CustomGrid'
+			'$lib/CustomGrid': [CustomGrid]
 		}
 	})
 }
@@ -146,7 +151,7 @@ On top of that there are props to handle the disposal of objects (`dispose`) and
 
 - **How would I set the x-axis of the position?**
 
-Props can be used with dot-notation to pierce into objects. `mesh.position.x = 5` translates to `<T.Mesh position.x={5} />`
+Props can be used with dot-notation to pierce into objects. `mesh.position.x = 5` translates to `<T.Mesh position.x={5} />`. Be aware that dot-notated props do not provide autocompletion or type checking as of now.
 
 - **What is `args`?**
 
@@ -189,7 +194,7 @@ Looks a bit silly, no? Because we now can use _any_ three.js class, we can _atta
 This shows that objects which cannot be part of the scene graph (`THREE.MeshStandardMaterial` is not extending `THREE.Object3D`) can be attached to parent properties and therefore allow for easy composition of objects.
 
 :::admonition type="tip"
-All three.js modules ending with "Material" receive `attach="material"`, and all modules ending with "Geometry" receive `attach="geometry"` automatically. You do not strictly have to type it out!
+All three.js imports ending with "Material" receive `attach="material"`, and all imports ending with "Geometry" receive `attach="geometry"` automatically. You do not strictly have to type it out!
 :::
 
 #### Attaching to nested properties

@@ -2,20 +2,42 @@ import { preprocess, parse, walk } from 'svelte/compiler'
 import MagicString from 'magic-string'
 import * as THREE from 'three'
 
-type ImportMap = Record<string, string[]>
+type ImportMap = Record<
+  string,
+  {
+    imports: string[]
+  }
+>
 
+/**
+ * Parses an ImportMap to actual imports
+ * @param importMap
+ * @returns
+ */
 const parseImportMap = (importMap: ImportMap) => {
   return Object.entries(importMap)
-    .filter(([_from, modules]) => modules.length > 0)
-    .map(([from, modules]) => {
-      return `import { ${[...new Set(modules)].join(', ')} } from '${from}';`
+    .filter(([_from, { imports }]) => imports.length > 0)
+    .map(([module, { imports }]) => {
+      return `import { ${[...new Set(imports)].join(', ')} } from '${module}';`
     })
     .join('\n')
 }
 
+const addImport = (importMap: ImportMap, module: string, imports: string[]) => {
+  if (importMap[module]) {
+    importMap[module] = {
+      imports: [...importMap[module].imports, ...imports]
+    }
+  } else {
+    importMap[module] = {
+      imports
+    }
+  }
+}
+
 const preprocessMarkup = (
   content: string,
-  transformOptions?: TransformOptions
+  transformOptions?: PreprocessOptions
 ): {
   markup: string
 } => {
@@ -28,27 +50,12 @@ const preprocessMarkup = (
   }
 
   const importMap: ImportMap = {}
+  const documentImportMap: ImportMap = {}
+
   const ast = parse(content)
   const markup = new MagicString(content)
 
   let scriptContentNode: { start: number; end: number } | undefined
-  const documentImportMap: ImportMap = {}
-
-  const addImport = (from: string, module: string) => {
-    if (importMap[from]) {
-      importMap[from].push(module)
-    } else {
-      importMap[from] = [module]
-    }
-  }
-
-  const addDocumentImport = (from: string, modules: string[]) => {
-    if (documentImportMap[from]) {
-      documentImportMap[from].push(...modules)
-    } else {
-      documentImportMap[from] = modules
-    }
-  }
 
   walk(ast, {
     enter(node, parent, key, index) {
@@ -88,7 +95,8 @@ const preprocessMarkup = (
           }
         }
 
-        addDocumentImport(
+        addImport(
+          documentImportMap,
           node.source.value,
           node.specifiers
             .filter((s: any) => s.type === 'ImportSpecifier')
@@ -102,18 +110,27 @@ const preprocessMarkup = (
         const maybeImport = name.replace(prefix, '')
 
         const isInThree = maybeImport in THREE
+
         const isInExtensions =
-          transformOptions?.extensions && maybeImport in transformOptions?.extensions
+          transformOptions?.extensions &&
+          Object.values(transformOptions.extensions).find((extension) => {
+            return extension.includes(maybeImport)
+          })
 
         if (isInThree || isInExtensions) {
           if (isInThree) {
-            addImport('three', maybeImport)
-          } else if (
-            transformOptions &&
-            transformOptions.extensions &&
-            transformOptions.extensions[maybeImport]
-          ) {
-            addImport(transformOptions.extensions[maybeImport], maybeImport)
+            addImport(importMap, 'three', [maybeImport])
+          } else if (transformOptions && transformOptions.extensions) {
+            const extension = Object.entries(transformOptions.extensions).find(([key, value]) => {
+              if (Array.isArray(value)) {
+                return value.includes(maybeImport)
+              } else {
+                return value === maybeImport
+              }
+            })
+            if (!extension) return
+            const [module] = extension
+            addImport(importMap, module, [maybeImport])
           } else {
             // this should never happen, sanity check
             return
@@ -135,13 +152,13 @@ const preprocessMarkup = (
   })
 
   if (Object.keys(importMap).length > 0) {
-    addImport('@threlte/core', 'Three')
+    addImport(importMap, '@threlte/core', ['Three'])
   }
 
   // Filter out existing dependencies
-  Object.entries(documentImportMap).forEach(([from, modules]) => {
+  Object.entries(documentImportMap).forEach(([from, { imports }]) => {
     if (importMap[from]) {
-      importMap[from] = importMap[from].filter((module) => !modules.includes(module))
+      importMap[from].imports = importMap[from].imports.filter((i) => !imports.includes(i))
     }
   })
 
@@ -159,17 +176,24 @@ const preprocessMarkup = (
   }
 }
 
-export type TransformOptions = {
+export type PreprocessOptions = {
   prefix?: string
-  extensions: Record<string, string>
+  /**
+   * A map of extensions to import from. The key is the module to import from,
+   * the value is an array of import names.
+   */
+  extensions: Record<string, string[]>
 }
 
 /**
- * This preprocessor will transform <{prefix}.BoxGeometry> into <Three type={BoxGeometry} /> + imports
+ * This preprocessor will transform <{prefix}.BoxGeometry>
+ * into <Three type={BoxGeometry} /> + imports
  * @param options
  * @returns
  */
-export const preprocessThrelte = (options?: TransformOptions): Parameters<typeof preprocess>[1] => {
+export const preprocessThrelte = (
+  options?: PreprocessOptions
+): Parameters<typeof preprocess>[1] => {
   return {
     markup: ({ content }) => {
       const { markup } = preprocessMarkup(content, options)
