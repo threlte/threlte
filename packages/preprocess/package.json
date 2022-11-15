@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
+    "package": "pnpm run build",
     "cleanup": "rm -rf node_modules && rm -rf dist && rm -rf .turbo"
   },
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
