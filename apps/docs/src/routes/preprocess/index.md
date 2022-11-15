@@ -5,7 +5,7 @@ title: Preprocess
 # Preprocess
 
 :::admonition type="experimental"
-This preprocessor is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk.
+This preprocessor is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk. Learn more about this feature [here](/core-transition)
 :::
 
 Threlte provides a custom preprocessor that _automagically_ turns `<T.Mesh>` into `<Three type={Mesh} />`. It resolves dependencies and automatically places imports for the `THREE` modules used throughout your component. By default, you can use any module that `'three'` exports. The preprocessor is extendable, so that other modules (such as those from the famous "examples" directory) can be used.

@@ -9,7 +9,7 @@ import Example from '$examples/core/three-arcade-game/App.svelte'
 !!!module_summary title=Three|sourcePath=Three.svelte|name=Three|from=core|type=component
 
 :::admonition type="experimental"
-This component is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk.
+This component is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk. Learn more about this feature [here](/core-transition)
 :::
 
 The component `<Three />` provides the means to use **any** three.js module as a Svelte component. It does this by leveraging the rigid three.js naming and object property structure and act as a **renderer** to include objects in the scene graph or attach objects to parent object properties.

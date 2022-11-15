@@ -9,7 +9,7 @@ import Example from '$examples/core/t/App.svelte'
 !!!module_summary title=T|sourcePath=T.svelte|name=T|from=core|type=component
 
 :::admonition type="experimental"
-This component is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk.
+This component is part of a recently released feature of threlte. It is still very much in a beta phase and can be subject to breaking API changes. Please use at your own risk. Learn more about this feature [here](/core-transition).
 :::
 
 **The component `<T>` cannot be used without the threlte preprocessor**. Please follow the [instructions](/preprocess) to install it first.
