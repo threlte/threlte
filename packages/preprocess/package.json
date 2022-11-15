@@ -1,10 +1,11 @@
 {
   "name": "@threlte/preprocess",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A preprocessor that transforms markup into threlte components",
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
+    "package": "pnpm run build",
     "cleanup": "rm -rf node_modules && rm -rf dist && rm -rf .turbo"
   },
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
