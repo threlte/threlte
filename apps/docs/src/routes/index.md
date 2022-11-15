@@ -8,9 +8,23 @@ import Example from '$examples/introduction/App.svelte'
 
 # Introduction
 
-:::admonition type="tip"
-Read the article about the [exciting changes](/core-transition) that are happening to `@threlte/core` in version 5!
-:::
+<a id="v5-intro" href="/core-transition" style="border-bottom-width: 0;" class="block font-normal bg-brand text-white p-4 my-0 rounded-md shadow-lg">
+<p class="!my-0 !py-0">Learn more about the exciting changes that are happening to threlte in version 5:</p>
+<ul class="!pb-0 !mb-0">
+<li>
+Hundreds of new components
+</li>
+<li>
+<code style="background-color: #DE3700">react-three-fiber</code> compatibility
+</li>
+<li>
+ New prop syntax
+</li>
+<li>
+ A custom preprocessor
+</li>
+</ul>
+</a>
 
 Threlte is a component library for Svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
