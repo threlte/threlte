@@ -8,6 +8,10 @@ import Example from '$examples/introduction/App.svelte'
 
 # Introduction
 
+:::admonition type="tip"
+Read the article about the [exciting changes](/core-transition) that are happening to `@threlte/core` in version 5!
+:::
+
 Threlte is a component library for Svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
 
 <ExampleWrapper playgroundHref="/introduction">
@@ -20,10 +24,6 @@ Threlte is a component library for Svelte to build and render three.js scenes de
 
 </div>
 </ExampleWrapper>
-
-:::admonition type="info"
-Hooks that make use of the context (as does [useFrame](/core/use-frame) in this example) need to be nested in a child component to `<Canvas>`.
-:::
 
 It's inspired by the sensible defaults of [react-three-fiber](https://github.com/pmndrs/react-three-fiber), the simplicity and effectiveness of Sveltes reactivity model and [Svelte Cubed](https://github.com/Rich-Harris/svelte-cubed).
 

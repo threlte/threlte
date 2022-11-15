@@ -1,3 +1,5 @@
+#### Introducing threlte 5
+
 # Transitioning towards _Rendering_
 
 <small>November 2022, by Grischa Erbe</small>
@@ -134,6 +136,10 @@ Props can be used with dot-notation to pierce into objects. `mesh.position.x = 5
 
 In three.js objects are classes that are instantiated. These classes can receive one-time constructor arguments, e.g. `new THREE.SphereGeometry(1, 32)`. With threlte, constructor arguments are always passed as an array via `args`. If `args` change later on, the object must naturally get reconstructed from scratch. This is an expensive operation and should be avoided.
 
+- **Do the prop types change?**
+
+Yes, some prop types change. In the past it was possible to define `THREE.Vector3` props as objects. Because the `position` prop on a e.g. `THREE.Mesh` has a setter function, that type is the accepted type and nothing else. This means you will need to use an array for setting the position from now on: `<T.Mesh position={[1, 2, 3]} />`. It is my opinion that the _pierced props_ provide so much comfort, that you will not miss those object-based transform props: `<T.Mesh position.x={1} />`. The compatibility with `react-three-fiber` and `svelte-cubed` is a bonus.
+
 ## Attaching things
 
 Now there are situations where you'd want to `attach` some object to a property. Consider the following example:
@@ -205,7 +211,7 @@ One thing to note is that `<T>`/`<Three>` does not offer interaction or viewport
 
 ## What happens to all the components in `@threlte/core`?
 
-Some of the components in `@threlte/core` will move to `@threlte/extras` because that's where they belong. They are abstractions on top of three.js classes or add functionality that is special to how Svelte does things.
+Some of the components in `@threlte/core` will move to `@threlte/extras` because that's where they belong. They are abstractions on top of three.js classes or add functionality that is special to how Svelte or Threlte does things.
 
 Other components will be removed after a certain transitional period. This gives you time to refactor your app to the new standard while keeping things running. Be aware that "old" `@threlte/core` components like `<Mesh>` or `<PerspectiveCamera>` will work in perfect harmony with the new approach!
 
