@@ -3,14 +3,8 @@ title: T
 ---
 
 <script lang="ts">
-import Example from '$examples/preprocess/basic/App.svelte'
+import Example from '$examples/core/t/App.svelte'
 </script>
-
-<ExampleWrapper>
-
-<Example />
-
-</ExampleWrapper>
 
 !!!module_summary title=T|sourcePath=T.svelte|name=T|from=core|type=component
 
@@ -21,6 +15,19 @@ This component is part of a recently released feature of threlte. It is still ve
 **The component `<T>` cannot be used without the threlte preprocessor**. Please follow the [instructions](/preprocess) to install it first.
 
 The usage of the component `<T>` is derived from the component `<Three>`. The preprocessor essentially transforms all occurrences of `<T>` components to `<Three>` components.
+
+<ExampleWrapper>
+
+<Example />
+
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/core/t/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/core/t/Scene.svelte)
+
+</div>
+
+</ExampleWrapper>
 
 Let's have a look at a basic example. The preprocessor transforms this component:
 
