@@ -281,7 +281,7 @@ I'm undecided on these components:
 
 ## Using Trait Components
 
-Threlte's way of composing functionality with _trait components_ works very well in harmony with the new components `<T>` and `<Three>`. Be aware that these new components are supposed to be as thin of a layer as possible and do not provide event handling or viewport awareness by default. It can easily composed in though:
+Threlte's way of composing functionality with _trait components_ works very well in harmony with the new components `<T>` and `<Three>`. Be aware that these new components are supposed to be as thin of a layer as possible and do not provide event handling or viewport awareness by default. It can easily be composed in though:
 
 ```svelte
 <T.Mesh let:ref>
