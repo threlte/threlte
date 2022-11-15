@@ -37,7 +37,7 @@ So here's the new threlte way of rendering three.js classes with the new preproc
 
 ## First impressions
 
-While fleshing out the details of the components `<T>` and `<Three>`, I was constantly testing them. In a admittedly pretty naive use-case they proved to be 2-3x faster in updating props. They're extremely flexible and compatible with existing threlte packages like `@threlte/extras` or `@threlte/rapier`. Here's the result of that testing, have a go and post your score on our [Discord server](https://discord.gg/EqUBCfCaGm)!
+While fleshing out the details of the component `<T>` and `<Three>`, I was constantly testing them. In an admittedly pretty naive benchmark they proved to be 2-3x faster in updating props. They're extremely flexible and compatible with existing threlte packages like `@threlte/extras` or `@threlte/rapier`. Here's the result of that testing, have a go and post your score on our [Discord server](https://discord.gg/EqUBCfCaGm)!
 
 <script lang="ts">
 import Example from '$examples/core/three-arcade-game/App.svelte'
