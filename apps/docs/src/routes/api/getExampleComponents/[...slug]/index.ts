@@ -4,6 +4,7 @@ import processor from 'svelte-preprocess'
 import { preprocess } from 'svelte/compiler'
 import ts from 'typescript'
 import type { CompilerOptions } from 'typescript'
+import { preprocessThrelte } from '@threlte/preprocess'
 
 const { transpile, ScriptTarget, ModuleKind, JsxEmit, ModuleResolutionKind } = ts
 
@@ -44,8 +45,10 @@ const parsers: Record<ModuleExtension, (content: string) => Promise<string>> = {
 			}
 		)
 
+		const threltePreprocessed = await preprocess(result.code, preprocessThrelte())
+
 		// replacing lang attributes is purely cosmetic, still …
-		return result.code
+		return threltePreprocessed.code
 			.replaceAll('<script lang="ts">', '<script>') // catch regular script blocks
 			.replaceAll('lang="ts"', '') // catch script module blocks
 	},
