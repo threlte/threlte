@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2016",
     "lib": ["DOM", "ES2020"],
-    "module": "commonjs",
+    "module": "ES6",
     "rootDir": "./src",
     "moduleResolution": "node",
     "baseUrl": "./",

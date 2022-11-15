@@ -20,6 +20,7 @@
     "./package.json": "./package.json",
     ".": "./dist/index.js"
   },
+  "type": "module",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
