@@ -8,6 +8,9 @@ import Example from '$examples/core/line-segments/App.svelte'
 
 !!!module_summary title=LineSegments|sourcePath=objects/LineSegments.svelte|name=LineSegments|from=core|type=component|relatedDocs={[{name:"three.js LineSegments reference",url:"https://threejs.org/docs/#api/en/objects/LineSegments"}]}
 
+:::deprecated
+:::
+
 Draw lines using `THREE.LineSegments`.
 
 <ExampleWrapper playgroundHref="/core/line-segments">

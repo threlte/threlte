@@ -9,3 +9,7 @@ declare namespace App {
   // interface Session {}
   // interface Stuff {}
 }
+
+declare module '*.svelte' {
+  export { SvelteComponentDev as default } from 'svelte/internal'
+}

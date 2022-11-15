@@ -3,6 +3,10 @@ title: OrbitControls
 ---
 
 !!!module_summary title=OrbitControls|sourcePath=controls/OrbitControls.svelte|name=OrbitControls|from=core|type=component|relatedDocs={[{name:"three.js OrbitControls reference",url:"https://threejs.org/docs/#examples/en/controls/OrbitControls"}]}
+
+:::deprecated moveToExtras=true
+:::
+
 `<OrbitControls>` allow the camera to orbit around a target.
 
 The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera.

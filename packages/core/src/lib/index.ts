@@ -59,6 +59,10 @@ export { default as TransformableObject } from './internal/TransformableObject.s
 export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
 export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
+// <Three> component
+export { default as Three } from './three/Three.svelte'
+export { T } from './three/T'
+
 // hooks
 export { useFrame } from './hooks/useFrame'
 export { useThrelte } from './hooks/useThrelte'
@@ -84,6 +88,9 @@ export type {
   ThrelteInstance,
   Size
 } from './types/types'
+
+// utils
+export { createObjectStore } from './lib/createObjectStore'
 
 export type {
   HierarchicalObjectProperties,

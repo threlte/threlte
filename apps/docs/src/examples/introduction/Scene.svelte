@@ -1,18 +1,7 @@
 <script lang="ts">
-	import { CircleBufferGeometry, MeshStandardMaterial } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import {
-		AmbientLight,
-		DirectionalLight,
-		Group,
-		Mesh,
-		OrthographicCamera,
-		useFrame
-	} from '@threlte/core'
+	import { T, TransformableObject, useFrame } from '@threlte/core'
 	import { GLTF } from '@threlte/extras'
-
-	const floorGeometry = new CircleBufferGeometry(4, 60)
-	const floorMaterial = new MeshStandardMaterial()
+	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	let rotation = 0
 
@@ -21,19 +10,19 @@
 	})
 </script>
 
-<Group rotation={{ y: rotation }}>
-	<OrthographicCamera position={{ z: 10, y: 5 }} lookAt={{ y: 2 }} zoom={80} />
-</Group>
+<T.Group rotation.y={rotation}>
+	<T.OrthographicCamera zoom={80} let:ref={cam} position={[0, 5, 10]} makeDefault>
+		<TransformableObject object={cam} lookAt={{ y: 2 }} />
+	</T.OrthographicCamera>
+</T.Group>
 
 <GLTF castShadow receiveShadow url={'/models/threlte.glb'} interactive />
 
-<Mesh
-	receiveShadow
-	material={floorMaterial}
-	geometry={floorGeometry}
-	rotation={{ x: DEG2RAD * -90 }}
-/>
+<T.Mesh receiveShadow rotation.x={DEG2RAD * -90}>
+	<T.CircleGeometry args={[4, 60]} />
+	<T.MeshStandardMaterial />
+</T.Mesh>
 
-<DirectionalLight shadow position={{ x: 3, y: 10, z: 10 }} />
-<DirectionalLight position={{ x: -3, y: 10, z: -10 }} intensity={0.2} />
-<AmbientLight intensity={0.5} />
+<T.DirectionalLight position={[3, 10, 10]} castShadow />
+<T.DirectionalLight position={[-3, 10, -10]} intensity={0.2} />
+<T.AmbientLight intensity={0.5} />

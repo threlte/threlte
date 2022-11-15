@@ -318,3 +318,37 @@ nav ul > li > a > svg {
 	height: 18px;
 	margin-right: 10px !important;
 }
+
+.prose :where(code):not(:where([class~='not-prose'] *))::before {
+	content: none;
+}
+
+.prose :where(code):not(:where([class~='not-prose'] *))::after {
+	content: none;
+}
+
+.prose :where(code):not(:where([class~='not-prose'] *)) {
+	background-color: #f0f0f0;
+	@apply rounded-sm px-1 py-0.5 text-[0.8em] whitespace-nowrap;
+}
+
+.prose div.code-fence div.code pre code {
+	background-color: transparent !important;
+	@apply !p-0 whitespace-pre;
+}
+
+.prose {
+	color: rgb(39, 39, 39);
+}
+
+.prose :where(tbody td):not(:where([class~='not-prose'] *)) {
+	@apply whitespace-normal;
+}
+
+.prose :where(tbody td ul):not(:where([class~='not-prose'] *)) {
+	@apply !mt-0 !mb-0;
+}
+
+.prose :where(tbody td ul li):not(:where([class~='not-prose'] *)) {
+	@apply leading-snug;
+}

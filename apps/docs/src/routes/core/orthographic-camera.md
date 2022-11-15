@@ -3,6 +3,10 @@ title: OrthographicCamera
 ---
 
 !!!module_summary title=OrthographicCamera|sourcePath=cameras/OrthographicCamera.svelte|name=OrthographicCamera|from=core|type=component|relatedDocs={[{name:"three.js OrthographicCamera reference",url:"https://threejs.org/docs/#api/en/cameras/OrthographicCamera"}]}
+
+:::deprecated
+:::
+
 A camera that uses orthographic projection.
 
 In this projection mode, an object's size in the rendered image stays constant regardless of its distance from the camera.

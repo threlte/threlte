@@ -73,6 +73,14 @@ export const sidebar = {
 				slug: '/core/canvas'
 			},
 			{
+				title: 'Three',
+				slug: '/core/three'
+			},
+			{
+				title: 'T',
+				slug: '/core/t'
+			},
+			{
 				title: 'Objects',
 				slug: ''
 			},
@@ -299,6 +307,12 @@ export const sidebar = {
 			{
 				title: 'useAudioListener',
 				slug: '/core/use-audio-listener'
+			}
+		],
+		'@threlte/preprocess': [
+			{
+				title: 'preprocessThrelte',
+				slug: '/preprocess/preprocessThrelte'
 			}
 		],
 		'@threlte/extras': [

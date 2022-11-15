@@ -3,6 +3,10 @@ title: CameraInstance
 ---
 
 !!!module_summary title=CameraInstance|sourcePath=instances/CameraInstance.svelte|name=CameraInstance|from=core|type=component|relatedDocs={[{name:"three.js Camera reference",url:"https://threejs.org/docs/#api/en/cameras/Camera"}]}
+
+:::deprecated
+:::
+
 This component lets you use any manually instantiated object that extends `THREE.Camera` in threlte.
 !!!
 

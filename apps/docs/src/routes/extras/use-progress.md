@@ -40,6 +40,7 @@ You can use and place this hook anywhere. Typically you would use this hook outs
 		total, // Readable<number> - total amount of items to load
 		errors, // Readable<string[]> - all error messages
 		progress, // Readable<number> - normalized (0-1) loading progress
+		finishedOnce, // Readable<boolean> – whether a progress of 1 has been achieved ever.
 	} = useProgress()
 </script>
 ```

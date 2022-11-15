@@ -3,6 +3,10 @@ title: MeshInstance
 ---
 
 !!!module_summary title=MeshInstance|sourcePath=instances/MeshInstance.svelte|name=MeshInstance|from=core|type=component|relatedDocs={[{name:"three.js Mesh reference",url:"https://threejs.org/docs/#api/en/objects/Mesh"}]}
+
+:::deprecated
+:::
+
 This component lets you use any manually instantiated object that extends `THREE.Mesh` in threlte.
 !!!
 

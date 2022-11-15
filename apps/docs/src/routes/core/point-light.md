@@ -3,6 +3,10 @@ title: PointLight
 ---
 
 !!!module_summary title=PointLight|sourcePath=lights/PointLight.svelte|name=PointLight|from=core|type=component|relatedDocs={[{name:"three.js PointLight reference",url:"https://threejs.org/docs/#api/en/lights/PointLight"}]}
+
+:::deprecated
+:::
+
 A light that gets emitted from a single point in all directions. A common use case for this is to replicate the light emitted from a bare lightbulb.
 
 This light can cast shadows.
