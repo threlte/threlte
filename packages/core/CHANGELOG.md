@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.1
+
+### Patch Changes
+
+- 7b3aced: Prop types should be optional
+
 ## 5.0.0
 
 ### Major Changes
