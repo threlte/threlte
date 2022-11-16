@@ -79,9 +79,9 @@ The preprocessor enables you to quickly outline a scene graph:
 	import { T } from '@threlte/core'
 </script>
 
-<T.Mesh>
+<T.Mesh position={[1, 2, 1]}>
 	<T.BoxGeometry args={[1, 2, 1]} />
-	<T.MeshStandardMaterial />
+	<T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
 ```
 
@@ -89,7 +89,7 @@ Output:
 
 ```svelte
 <script>
-	import { Mesh, BoxGeometry, MeshStandardMateral } from 'three'
+	import { Mesh, BoxGeometry, MeshStandardMaterial } from 'three'
 	import { Three } from '@threlte/core'
 </script>
 
