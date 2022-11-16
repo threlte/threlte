@@ -71,7 +71,7 @@ Install <code>@threlte/rapier</code><br />
 <div>
 <input id="typescript" type="checkbox" bind:checked={installTypescript} />
 <label for="typescript">
-Install TypeScript types
+Install TypeScript types for <code>three</code><br />
 </label>
 </div>
 
