@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.7.0
+
+### Minor Changes
+
+- 0fa8d16: Added overload to useGltfAnimations to set the root of an animation
+
 ## 4.6.0
 
 ### Minor Changes
