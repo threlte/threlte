@@ -2,7 +2,7 @@
 
 # Transitioning towards _Rendering_
 
-<small>November 2022, by Grischa Erbe</small>
+<small>November 2022, by [Grischa Erbe](https://legrisch.com)</small>
 
 Hi. If you're reading this, you are probably looking for answers to why a component or hook from `@threlte/core` is on deprecation notice. The simple answer is that `@threlte/core` is evolving towards acting more like a renderer for a simpler, faster, and more flexible developer experience that works with everything you throw at it.
 
@@ -160,6 +160,27 @@ In three.js objects are classes that are instantiated. These classes can receive
 - **Do the prop types change?**
 
 Yes, some prop types change. In the past it was possible to define `THREE.Vector3` props as objects. Because the `position` prop on a e.g. `THREE.Mesh` has a setter function, that type is the accepted type and nothing else. This means you will need to use an array for setting the position from now on: `<T.Mesh position={[1, 2, 3]} />`. It is my opinion that the _pierced props_ provide so much comfort, that you will not miss those object-based transform props: `<T.Mesh position.x={1} />`. The compatibility with `react-three-fiber` and `svelte-cubed` is a bonus.
+
+- **What is `let:ref`?**
+
+This is what Svelte calls a [Slot Prop](https://svelte.dev/tutorial/slot-props). In regular projects they're not that much used but they prove to be extra helpful when dealing with the new rendering pattern:
+
+```svelte
+<T.PerspectiveCamera let:ref={camera}>
+	<T.OrbitControls args={[camera, renderer?.domElement]}>
+</T.PerspectiveCamera>
+```
+
+The slot prop `ref` holds a reference (that's why it's called `ref`) to the instantiated object that **children** can consume. Sometimes this spares you from using [`bind`](https://svelte.dev/tutorial/component-bindings) to pass variables up and down. With `bind:ref` you can of course access that object instance in your script as well.
+
+```svelte
+<script>
+	let camera
+	$: console.log(camera)
+</script>
+
+<T.PerspectiveCamera bind:ref={camera} />
+```
 
 ## Attaching things
 
