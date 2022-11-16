@@ -72,3 +72,26 @@ Sometimes you might want to use the hook [`useGltf`](/extras/use-gltf) to reuse 
   <Object3DInstance object={$gltf.scene} />
 {/if}
 ```
+
+#### Applying animations to a different root
+
+Sometimes you want to apply the animations to a different root than the GLTF scene.
+
+```svelte
+<script>
+  import { useGltfAnimations, useGltf } from '@threlte/extras'
+	import { Scene } from 'three'
+
+  const { gltf } = useGltf('/path/to/model.glb')
+
+	const scene = new Scene()
+
+  useGltfAnimations(gltf, ({ actions }) => {
+    actions.someAction?.play()
+  }, scene)
+</script>
+
+<Three type={scene}>
+	<!-- … -->
+</Three>
+```
