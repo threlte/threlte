@@ -2,9 +2,83 @@
 title: Getting Started
 ---
 
+<script>
+	const preprocess = '@threlte/preprocess'
+	let installPreprocess = true
+
+	const extras = '@threlte/extras'
+	let installExtras = true
+
+	const rapier = '@threlte/rapier'
+	let installRapier = true
+
+	const typescript = '@types/three'
+	let installTypescript = true
+
+	$: installCommand = [
+		'npm i -D three',
+		'@threlte/core',
+		installPreprocess && preprocess,
+		installExtras && extras,
+		installRapier && rapier,
+		installTypescript && typescript
+	]
+		.filter(Boolean)
+		.join(' \\\n  ')
+</script>
+
+
 # Getting Started
 
+Threlte consists of 4 packages which can be used individually.
+
 ## Installation
+
+<div class="flex flex-col">
+
+<div class="mb-4">
+<input id="core" type="checkbox" checked disabled />
+<label for="core">
+Install <code>@threlte/core</code> and <code>three</code><br />
+<small><code>three</code> and core components library (required)</small>
+</label>
+</div>
+
+<div class="mb-4">
+<input id="preprocess" type="checkbox" bind:checked={installPreprocess} />
+<label for="preprocess">
+Install <code>@threlte/preprocess</code><br />
+<small>A preprocessor with support for auto-importing and improved DX</small>
+</label>
+</div>
+
+<div class="mb-4">
+<input id="extras" type="checkbox" bind:checked={installExtras} />
+<label for="extras">
+Install <code>@threlte/extras</code><br />
+<small>Components, helpers, hooks and more that extend the core functionality</small>
+</label>
+</div>
+
+<div class="mb-4">
+<input id="rapier" type="checkbox" bind:checked={installRapier} />
+<label for="rapier">
+Install <code>@threlte/rapier</code><br />
+<small>Components and hooks to use the <a href="https://rapier.rs/" target="_blank">Rapier physics engine</a> in Threlte</small>
+</label>
+</div>
+
+<div>
+<input id="typescript" type="checkbox" bind:checked={installTypescript} />
+<label for="typescript">
+Install TypeScript types
+</label>
+</div>
+
+</div>
+
+<CodeFence lang="bash" rawCode={installCommand} code={'<pre><code><span class="line">' + installCommand + '</span></code></pre>'} showCopyCode highlightLines={[]} linesCount={1} />
+
 
 :::steps
 
