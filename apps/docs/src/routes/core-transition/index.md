@@ -79,7 +79,7 @@ The preprocessor enables you to quickly outline a scene graph:
 	import { T } from '@threlte/core'
 </script>
 
-<T.Mesh position={[1, 2, 1]}>
+<T.Mesh position.x={5}>
 	<T.BoxGeometry args={[1, 2, 1]} />
 	<T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
@@ -93,7 +93,7 @@ Output:
 	import { Three } from '@threlte/core'
 </script>
 
-<Three type={Mesh} position={[1, 2, 1]}>
+<Three type={Mesh} position.x={5}>
 	<Three type={BoxGeometry} args={[1, 2, 1]} />
 	<Three type={MeshStandardMaterial} color="hotpink" />
 </Three>
