@@ -75,19 +75,23 @@ type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCamera: tru
   : Record<string, unknown>
 
 // Instance Props
-type InstanceProps<Type extends any> = Omit<
-  MaybeInstance<Type> extends Primitive
-    ? Record<string, unknown>
-    : {
-        [K in keyof MaybeInstance<Type>]?: MaybeInstance<Type>[K] extends {
-          set: (...args: any[]) => any
-        }
-          ? Parameters<MaybeInstance<Type>[K]['set']> | Parameters<MaybeInstance<Type>[K]['set']>[0]
-          : MaybeInstance<Type>[K] extends AnyFn
-          ? never
-          : MaybeInstance<Type>[K]
-      },
-  ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
+type InstanceProps<Type extends any> = Partial<
+  Omit<
+    MaybeInstance<Type> extends Primitive
+      ? Record<string, unknown>
+      : {
+          [K in keyof MaybeInstance<Type>]?: MaybeInstance<Type>[K] extends {
+            set: (...args: any[]) => any
+          }
+            ?
+                | Parameters<MaybeInstance<Type>[K]['set']>
+                | Parameters<MaybeInstance<Type>[K]['set']>[0]
+            : MaybeInstance<Type>[K] extends AnyFn
+            ? never
+            : MaybeInstance<Type>[K]
+        },
+    ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
+  >
 >
 
 // Props
