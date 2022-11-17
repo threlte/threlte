@@ -128,9 +128,7 @@ import { preprocessThrelte } from '@threlte/preprocess'
 const config = {
 	// …
 	preprocess: seqPreprocessor([
-		preprocess({
-			postcss: true
-		}),
+		preprocess(),
 		preprocessThrelte()
 	])
 }
