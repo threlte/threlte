@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.2
+
+### Patch Changes
+
+- 920c040: Fixed a bug where the cameras updater would run on size changes
+
 ## 5.0.1
 
 ### Patch Changes
