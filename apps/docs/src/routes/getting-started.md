@@ -3,8 +3,14 @@ title: Getting Started
 ---
 
 <script>
+	import { preprocessThrelte } from '@threlte/preprocess'
+import { slide } from 'svelte/transition'
+
 	const preprocess = '@threlte/preprocess'
 	let installPreprocess = true
+
+	const sequentialPreprocessor = 'svelte-sequential-preprocessor'
+	let installSequentialPreprocessor = true
 
 	const extras = '@threlte/extras'
 	let installExtras = true
@@ -19,6 +25,7 @@ title: Getting Started
 		'npm i -D three',
 		'@threlte/core',
 		installPreprocess && preprocess,
+		installPreprocess && installSequentialPreprocessor && sequentialPreprocessor,
 		installExtras && extras,
 		installRapier && rapier,
 		installTypescript && typescript
@@ -27,20 +34,19 @@ title: Getting Started
 		.join(' \\\n  ')
 </script>
 
-
 # Getting Started
-
-Threlte consists of 4 packages which can be used individually.
 
 ## Installation
 
-<div class="flex flex-col">
+Threlte consists of 4 packages which can be installed and used individually. The core package is required for all projects, and the other packages are optional. Choose the packages you want to use. **The rest of this guide will adapt**:
+
+<div class="flex flex-col install-script">
 
 <div class="mb-4">
 <input id="core" type="checkbox" checked disabled />
 <label for="core">
 Install <code>@threlte/core</code> and <code>three</code><br />
-<small><code>three</code> and core components library (required)</small>
+<p class="text-sm mt-0.5"><code>three</code> and core the library are required.</p>
 </label>
 </div>
 
@@ -48,15 +54,26 @@ Install <code>@threlte/core</code> and <code>three</code><br />
 <input id="preprocess" type="checkbox" bind:checked={installPreprocess} />
 <label for="preprocess">
 Install <code>@threlte/preprocess</code><br />
-<small>A preprocessor with support for auto-importing and improved DX</small>
+<p class="text-sm mt-0.5"><a href="/preprocess/preprocessThrelte">Threlte's preprocessor</a> with support for auto-importing and improved developer experience.</p>
 </label>
 </div>
+
+{#if installPreprocess}
+
+<div transition:slide class="mb-4">
+<input id="sequentialPreprocessor" type="checkbox" bind:checked={installSequentialPreprocessor} />
+<label for="sequentialPreprocessor">
+Install <code>svelte-sequential-preprocessor</code><br />
+<p class="text-sm mt-0.5"><a href="https://www.npmjs.com/package/svelte-sequential-preprocessor" target="_blank"><code>svelte-sequential-preprocessor</code></a> is required if you need to run other preprocessors as well.</p>
+</label>
+</div>
+{/if}
 
 <div class="mb-4">
 <input id="extras" type="checkbox" bind:checked={installExtras} />
 <label for="extras">
 Install <code>@threlte/extras</code><br />
-<small>Components, helpers, hooks and more that extend the core functionality</small>
+<p class="text-sm mt-0.5"><a href="/extras/use-gltf">Components, helpers, hooks and more</a> that extend the core functionality</p>
 </label>
 </div>
 
@@ -64,7 +81,7 @@ Install <code>@threlte/extras</code><br />
 <input id="rapier" type="checkbox" bind:checked={installRapier} />
 <label for="rapier">
 Install <code>@threlte/rapier</code><br />
-<small>Components and hooks to use the <a href="https://rapier.rs/" target="_blank">Rapier physics engine</a> in Threlte</small>
+<p class="text-sm mt-0.5">Components and hooks to use the <a href="https://rapier.rs/" target="_blank">Rapier physics engine</a> in Threlte</p>
 </label>
 </div>
 
@@ -77,28 +94,66 @@ Install TypeScript types for <code>three</code><br />
 
 </div>
 
-<CodeFence lang="bash" rawCode={installCommand} code={'<pre><code><span class="line">' + installCommand + '</span></code></pre>'} showCopyCode highlightLines={[]} linesCount={1} />
+<CodeFence title="terminal" lang="bash" rawCode={installCommand} code={'<pre><code><span class="line">' + installCommand + '</span></code></pre>'} showCopyCode highlightLines={[]} linesCount={1} />
 
+## Configuration
 
-:::steps
+{#if installPreprocess && installSequentialPreprocessor}
 
-!!!step title="Install threlte and three.js"|description="Threlte consists of several packages but @threlte/core is required"|orientation="vertical"
+#### Adapt `svelte.config.js`
 
-```bash copy
-npm install @threlte/core @threlte/extras three
+Add Threlte's preprocessor as well as `'svelte-sequential-preprocessor'` to your Svelte config:
+
+```js lang=js|title=svelte.config.js
+import preprocess from 'svelte-preprocess'
+import seqPreprocessor from 'svelte-sequential-preprocessor'
+import { preprocessThrelte } from '@threlte/preprocess'
+
+const config = {
+	preprocess: seqPreprocessor([
+		preprocess({
+			postcss: true
+		}),
+		preprocessThrelte({
+			extensions: {
+				'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
+				'three/examples/jsm/controls/TransformControls': ['TransformControls']
+			}
+		})
+	])
+}
+
+export default config
 ```
 
-!!!
+{:else if  installPreprocess}
 
-!!!step title="Install three.js types"|description="Optional for TypeScript users"|orientation="vertical"
+#### Adapt `svelte.config.js`
 
-```bash copy
-npm install -D @types/three
+Add Threlte's preprocessor to your Svelte config:
+
+```js lang=js|title=svelte.config.js
+import { preprocessThrelte } from '@threlte/preprocess'
+
+const config = {
+	preprocess: preprocessThrelte({
+		extensions: {
+			'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
+			'three/examples/jsm/controls/TransformControls': ['TransformControls']
+		}
+	})
+}
+
+export default config
 ```
 
-!!!
+{/if}
 
-!!!step title="Adapt Vite Configuration"|description="If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent three.js and troika-three-text from being externalized for SSR by vites externalization step"|orientation="vertical"
+#### Adapt your Vite config
+
+{#if installExtras}
+
+If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent three.js and troika-three-text from being externalized for SSR by vites externalization step
 
 ```js copyHighlight{3-5}|title=vite.config.js
 const config = {
@@ -110,11 +165,21 @@ const config = {
 }
 ```
 
-!!!
+{:else}
 
-:::
+If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent three.js from being externalized for SSR by vites externalization step
 
-<br>
+```js copyHighlight{3-5}|title=vite.config.js
+const config = {
+	// …
+	ssr: {
+		noExternal: ['three']
+	}
+	// …
+}
+```
+
+{/if}
 
 :::admonition type="tip"
 [See this comment](https://github.com/threlte/threlte/issues/8#issuecomment-1024085864) for tips on how to reduce bundle size when working with bundlers like vite and three.js.
@@ -124,19 +189,32 @@ const config = {
 
 Build your first scene:
 
-[Open in a Svelte REPL](https://svelte.dev/repl/14f38c03710945b797d0c421f55e4373?version=3.46.2)
+{#if installPreprocess}
+
+@[code](../examples/getting-started/preprocessed/Scene.svelte)
+
+{:else}
 
 @[code](../examples/getting-started/Scene.svelte)
+
+{/if}
 
 It should look something like this:
 
 <script lang="ts">
+import GettingStartedPreprocessed from '$examples/getting-started/preprocessed/Scene.svelte'
 import GettingStarted from '$examples/getting-started/Scene.svelte'
 </script>
 
-<div style="height: 600px;" class="my-8 rounded-md shadow-lg mx-auto border border-gray-divider">
-  <GettingStarted />
-</div>
+<ExampleWrapper>
+
+{#if installPreprocess}
+<GettingStartedPreprocessed />
+{:else}
+<GettingStarted />
+{/if}
+
+</ExampleWrapper>
 
 Congratulations :tada:
 Orbit around the cube, hover over it and change some values.
