@@ -31,7 +31,7 @@ title: Getting Started
 		installTypescript && typescript
 	]
 		.filter(Boolean)
-		.join(' \\\n  ')
+		.join(' ')
 
 	onMount(() => {
 		document.getElementsByTagName('main')[0].style.overflowX = 'clip'
