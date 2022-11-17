@@ -29,7 +29,7 @@ A custom preprocessor
 </ul>
 </a>
 
-Threlte is a component library for Svelte to build and render three.js scenes declaratively and state-driven in Svelte apps.
+Threlte is a renderer and component library for Svelte to build and render three.js scenes **declaratively** and **state-driven** in Svelte apps.
 
 <ExampleWrapper playgroundHref="/introduction">
 <Example />
