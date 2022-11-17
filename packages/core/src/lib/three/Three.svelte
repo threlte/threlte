@@ -2,7 +2,6 @@
   import { getContext, setContext } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
   import type { Object3D } from 'three'
-  import { useThrelte } from '../hooks/useThrelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import type { DisposableThreeObject } from '../types/components'
@@ -10,11 +9,8 @@
   import { useCamera } from './lib/useCamera'
   import { useEvents } from './lib/useEvents'
   import { useProps } from './lib/useProps'
-  import type { MaybeInstance, Props } from './types'
+  import type { AnyClass, MaybeInstance, Props } from './types'
 
-  type AnyClass = new (...args: any) => any
-
-  // Basic Prop Types
   type Type = $$Generic
 
   type AllProps = {
@@ -71,9 +67,8 @@
   })
 
   // Camera
-  const { size } = useThrelte()
   $: camera = useCamera()
-  $: camera.update(ref, $size, manual)
+  $: camera.update(ref, manual)
   $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment

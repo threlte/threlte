@@ -1,5 +1,4 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
-import type { DisposableThreeObject } from '../types/components'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
@@ -18,7 +17,7 @@ type OmittedPropKeys =
   | 'uuid'
   | 'name'
 
-type AnyClass = new (...args: any) => any
+export type AnyClass = new (...args: any) => any
 type AnyFn = (...args: any) => any
 
 /**
