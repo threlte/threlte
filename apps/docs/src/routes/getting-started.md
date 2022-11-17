@@ -4,7 +4,8 @@ title: Getting Started
 
 <script>
 	import { preprocessThrelte } from '@threlte/preprocess'
-import { slide } from 'svelte/transition'
+	import { slide } from 'svelte/transition'
+	import { onMount } from 'svelte'
 
 	const preprocess = '@threlte/preprocess'
 	let installPreprocess = true
@@ -32,6 +33,10 @@ import { slide } from 'svelte/transition'
 	]
 		.filter(Boolean)
 		.join(' \\\n  ')
+
+	onMount(() => {
+		document.getElementsByTagName('main')[0].style.overflow = 'unset'
+	})
 </script>
 
 # Getting Started
@@ -40,7 +45,7 @@ import { slide } from 'svelte/transition'
 
 Threlte consists of 4 packages which can be installed and used individually. The core package is required for all projects, and the other packages are optional. Choose the packages you want to use. **The rest of this guide will adapt**:
 
-<div class="flex flex-col install-script">
+<div class="top-0 flex flex-col install-script bg-white z-50">
 
 <div class="mb-4">
 <input id="core" type="checkbox" checked disabled />
@@ -104,22 +109,18 @@ Install TypeScript types for <code>three</code><br />
 
 Add Threlte's preprocessor as well as `'svelte-sequential-preprocessor'` to your Svelte config:
 
-```js lang=js|title=svelte.config.js
+```js lang=js|title=svelte.config.js|copyHighlight{2,3,7-12}
 import preprocess from 'svelte-preprocess'
 import seqPreprocessor from 'svelte-sequential-preprocessor'
 import { preprocessThrelte } from '@threlte/preprocess'
 
 const config = {
+	// …
 	preprocess: seqPreprocessor([
 		preprocess({
 			postcss: true
 		}),
-		preprocessThrelte({
-			extensions: {
-				'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
-				'three/examples/jsm/controls/TransformControls': ['TransformControls']
-			}
-		})
+		preprocessThrelte()
 	])
 }
 
@@ -132,16 +133,12 @@ export default config
 
 Add Threlte's preprocessor to your Svelte config:
 
-```js lang=js|title=svelte.config.js
+```js lang=js|title=svelte.config.js|copyHighlight{1,5}
 import { preprocessThrelte } from '@threlte/preprocess'
 
 const config = {
-	preprocess: preprocessThrelte({
-		extensions: {
-			'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
-			'three/examples/jsm/controls/TransformControls': ['TransformControls']
-		}
-	})
+	// …
+	preprocess: preprocessThrelte()
 }
 
 export default config
@@ -149,7 +146,7 @@ export default config
 
 {/if}
 
-#### Adapt your Vite config
+#### Adapt `vite.config.js`
 
 {#if installExtras}
 
@@ -161,7 +158,6 @@ const config = {
 	ssr: {
 		noExternal: ['three', 'troika-three-text']
 	}
-	// …
 }
 ```
 
