@@ -1,3 +1,4 @@
+import { onDestroy } from 'svelte'
 import type { OrthographicCamera, Camera, PerspectiveCamera } from 'three'
 import { useThrelte } from '../../hooks/useThrelte'
 import { useThrelteRoot } from '../../hooks/useThrelteRoot'
@@ -15,28 +16,50 @@ const isPerspectiveCamera = (value: any): value is PerspectiveCamera => {
   return value && value.isPerspectiveCamera
 }
 
-export const useCamera = () => {
-  const { invalidate } = useThrelte()
+const isPerspectiveCameraOrOrthographicCamera = (
+  value: any
+): value is PerspectiveCamera | OrthographicCamera => {
+  return isPerspectiveCamera(value) || isOrthographicCamera(value)
+}
 
-  const update = <T>(instance: T, size: Size, manual: boolean) => {
-    if (manual) return
-    if (isOrthographicCamera(instance)) {
-      instance.left = size.width / -2
-      instance.right = size.width / 2
-      instance.top = size.height / 2
-      instance.bottom = size.height / -2
-      instance.updateProjectionMatrix()
-      instance.updateMatrixWorld()
+export const useCamera = () => {
+  const { invalidate, size } = useThrelte()
+  const { setCamera } = useThrelteRoot()
+
+  let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
+  let unsubscribe: (() => void) | undefined = undefined
+  onDestroy(() => {
+    unsubscribe?.()
+  })
+
+  const subscriber = (size: Size) => {
+    if (!currentInstance) return
+
+    if (isOrthographicCamera(currentInstance)) {
+      currentInstance.left = size.width / -2
+      currentInstance.right = size.width / 2
+      currentInstance.top = size.height / 2
+      currentInstance.bottom = size.height / -2
+      currentInstance.updateProjectionMatrix()
+      currentInstance.updateMatrixWorld()
       invalidate()
-    } else if (isPerspectiveCamera(instance)) {
-      instance.aspect = size.width / size.height
-      instance.updateProjectionMatrix()
-      instance.updateMatrixWorld()
+    } else if (isPerspectiveCamera(currentInstance)) {
+      currentInstance.aspect = size.width / size.height
+      currentInstance.updateProjectionMatrix()
+      currentInstance.updateMatrixWorld()
       invalidate()
     }
   }
 
-  const { setCamera } = useThrelteRoot()
+  const update = <T>(instance: T, manual: boolean) => {
+    unsubscribe?.()
+    if (manual || !isPerspectiveCameraOrOrthographicCamera(instance)) {
+      currentInstance = undefined
+      return
+    }
+    currentInstance = instance
+    unsubscribe = size.subscribe(subscriber)
+  }
 
   const makeDefaultCamera = <T>(instance: T, makeDefault: boolean) => {
     if (!isCamera(instance) || !makeDefault) return
