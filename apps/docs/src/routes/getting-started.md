@@ -120,7 +120,7 @@ Install the packages with `npm`, `pnpm`, `yarn` or any other package manager you
 
 Add Threlte's preprocessor as well as `'svelte-sequential-preprocessor'` to your Svelte config:
 
-```js lang=js|title=svelte.config.js|copyHighlight{2,3,7-12}
+```js lang=js|title=svelte.config.js|copyHighlight{2,3,7-10}
 import preprocess from 'svelte-preprocess'
 import seqPreprocessor from 'svelte-sequential-preprocessor'
 import { preprocessThrelte } from '@threlte/preprocess'
