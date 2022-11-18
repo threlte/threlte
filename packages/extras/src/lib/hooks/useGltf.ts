@@ -2,6 +2,7 @@ import { createEventDispatcher } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module'
 import { useLoader } from '@threlte/core'
 import type { ThrelteGltf } from '../types/types'
 import {
@@ -14,6 +15,7 @@ import { DefaultLoadingManager } from 'three'
 
 type UseGltfOptions = {
   useDraco?: boolean | string
+	useMeshopt?: boolean
 }
 
 createEventDispatcher
@@ -42,6 +44,10 @@ export const useGltf = <
     )
     loader.setDRACOLoader(dracoLoader)
   }
+
+	if (options?.useMeshopt) {
+		loader.setMeshoptDecoder(MeshoptDecoder);
+	}
 
   loader.load(url, (data: GLTF) => {
     if (data.scene) Object.assign(data, buildSceneGraph<Graph>(data.scene))

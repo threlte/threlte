@@ -13,6 +13,7 @@
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
+	import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
   import { buildSceneGraph } from '../../lib/buildSceneGraph'
   import type { GLTFProperties } from '../../types/components'
   import type { ThrelteGltf } from '../../types/types'
@@ -37,6 +38,7 @@
    */
   export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let useDraco: GLTFProperties['useDraco'] = false
+	export let useMeshopt: GLTFProperties['useMeshopt'] = false
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
@@ -92,6 +94,10 @@
     )
     loader.setDRACOLoader(dracoLoader)
   }
+
+	if (useMeshopt) {
+		loader.setMeshoptDecoder(MeshoptDecoder)
+	}
 
   const { renderer } = useThrelte()
   if (renderer && ktxTranscoderPath) {

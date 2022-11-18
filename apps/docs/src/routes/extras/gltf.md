@@ -57,11 +57,19 @@ The `<GLTF>` component supports interaction:
 <GLTF castShadow receiveShadow url={'/models/flower.glb'} position={{ y: 1 }} scale={3} />
 ```
 
-:::admonition type="tip"
+### Compression
+
+The `<GLTF>` component supports compressed glTF files.
+
+#### DRACO
+
 You can set `useDraco` to `true` to use DRACO compression and Threlte will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
 
 Or you can set `useDraco` to your own DRACO decoder path as a `string`.
-:::
+
+#### Meshopt
+
+You can set `useMeshopt` to `true` to use meshopt compression and Threlte will load a default meshopt decoder from Three, specifically `https://github.com/mrdoob/three.js/blob/dev/examples/jsm/libs/meshopt_decoder.module.js`.
 
 ### Properties
 
@@ -83,6 +91,7 @@ visible: boolean | undefined = undefined
 dispose: boolean | undefined = undefined
 d̶r̶a̶c̶o̶D̶e̶c̶o̶d̶e̶r̶P̶a̶t̶h̶: string | undefined = undefined // Deprecated - use `useDraco` instead
 useDraco: string | boolean = false
+useMeshopt: boolean = false
 ktxTranscoderPath: string | undefined = undefined
 ignorePointer: boolean = false
 interactive: boolean = false
