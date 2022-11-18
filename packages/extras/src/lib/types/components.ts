@@ -98,7 +98,7 @@ export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   /** @deprecated Use `useDraco` instead*/
   dracoDecoderPath?: string
   useDraco?: string | boolean
-  useMeshopt?: string | boolean
+  useMeshopt?: boolean
   ktxTranscoderPath?: string
 } & Omit<InteractiveObjectProperties, 'object'>
 

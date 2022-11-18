@@ -86,6 +86,23 @@ You can also provide custom DRACO decoder binaries.
 {/if}
 ```
 
+### Meshopt decoding
+
+Use a meshopt decoder for compressed glTF files, defaults to Three's included decoder.
+
+```svelte
+<script lang="ts">
+  import { useGltf } from '@threlte/extras'
+
+  const { gltf } = useGltf('/path/to/model.glb', {
+    useMeshopt: true
+  })
+</script>
+
+{#if $gltf}
+  <Object3DInstance object={$gltf.nodes['node-name']} />
+{/if}
+
 ### Nodes and Materials
 
 The hook provides a map of all objects and materials in the loaded glTF.
