@@ -102,6 +102,7 @@ Use a meshopt decoder for compressed glTF files, defaults to Three's included de
 {#if $gltf}
   <Object3DInstance object={$gltf.nodes['node-name']} />
 {/if}
+```
 
 ### Nodes and Materials
 
