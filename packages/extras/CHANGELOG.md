@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.8.0
+
+### Minor Changes
+
+- 5a98c4f: Add support for glTF Meshopt decoding
+
 ## 4.7.0
 
 ### Minor Changes
