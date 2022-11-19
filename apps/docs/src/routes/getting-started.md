@@ -16,7 +16,7 @@ title: Getting Started
 	const extras = '@threlte/extras'
 	let installExtras = true
 
-	const rapier = '@threlte/rapier'
+	const rapier = '@threlte/rapier @dimforge/rapier3d-compat'
 	let installRapier = true
 
 	const typescript = '@types/three'
@@ -78,7 +78,6 @@ Threlte consists of 4 packages which can be installed and used individually. `@t
 
 </ul>
 
-
 #### Choose the packages you want to use
 
 The rest of this guide will adapt.
@@ -127,16 +126,13 @@ import { preprocessThrelte } from '@threlte/preprocess'
 
 const config = {
 	// …
-	preprocess: seqPreprocessor([
-		preprocess(),
-		preprocessThrelte()
-	])
+	preprocess: seqPreprocessor([preprocess(), preprocessThrelte()])
 }
 
 export default config
 ```
 
-{:else if  installPreprocess}
+{:else if installPreprocess}
 
 #### Adapt `svelte.config.js`
 
