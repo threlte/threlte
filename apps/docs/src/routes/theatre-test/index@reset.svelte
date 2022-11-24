@@ -2,4 +2,6 @@
 	import App from '$examples/theatre/basic/App.svelte'
 </script>
 
-<App />
+<div class="w-screen h-screen">
+	<App />
+</div>
