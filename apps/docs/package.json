@@ -25,6 +25,8 @@
 		"@sveltejs/svelte-repl": "^0.4.1",
 		"@svelteness/kit-docs": "v0.24.0",
 		"@tailwindcss/typography": "^0.5.3",
+		"@theatre/core": "^0.5.0",
+		"@theatre/studio": "^0.5.0",
 		"@threlte/core": "workspace:*",
 		"@threlte/extras": "workspace:*",
 		"@threlte/preprocess": "workspace:*",

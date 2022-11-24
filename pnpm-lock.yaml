@@ -27,6 +27,8 @@ importers:
       '@sveltejs/svelte-repl': ^0.4.1
       '@svelteness/kit-docs': v0.24.0
       '@tailwindcss/typography': ^0.5.3
+      '@theatre/core': ^0.5.0
+      '@theatre/studio': ^0.5.0
       '@threlte/core': workspace:*
       '@threlte/extras': workspace:*
       '@threlte/preprocess': workspace:*
@@ -80,6 +82,8 @@ importers:
       '@sveltejs/svelte-repl': 0.4.1
       '@svelteness/kit-docs': 0.24.0_svelte@3.49.0
       '@tailwindcss/typography': 0.5.3_tailwindcss@3.1.5
+      '@theatre/core': 0.5.0
+      '@theatre/studio': 0.5.0_@theatre+core@0.5.0
       '@threlte/core': link:../../packages/core
       '@threlte/extras': link:../../packages/extras
       '@threlte/preprocess': link:../../packages/preprocess
