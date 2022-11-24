@@ -209,7 +209,10 @@
     'pointEnd-changed': (e) => dispatch('pointEnd-changed', e),
     'rotationAxis-changed': (e) => dispatch('rotationAxis-changed', e),
     'rotationAngle-changed': (e) => dispatch('rotationAngle-changed', e),
-    'eye-changed': (e) => dispatch('eye-changed', e)
+    'eye-changed': (e) => dispatch('eye-changed', e),
+    mouseDown: () => dispatch('mouseDown'),
+    mouseUp: () => dispatch('mouseUp'),
+    objectChange: () => dispatch('objectChange')
   }
 
   if (!renderer)
@@ -257,6 +260,9 @@
   })
 </script>
 
-<DisposableObject {dispose} object={transformControls} />
+<DisposableObject
+  {dispose}
+  object={transformControls}
+/>
 
 <LayerableObject object={transformControls} />
