@@ -12,9 +12,18 @@
 
   const project = globalProjects.get(projectName) ?? getProject(projectName, config)
 
+  let isReady = false
+  const init = async () => {
+    await project.ready
+    isReady = true
+  }
+  init()
+
   globalProjects.set(projectName, project)
 
   setContext(`theatre-project-${projectName}`, project)
 </script>
 
-<slot {project} />
+{#if isReady}
+  <slot {project} />
+{/if}
