@@ -3,6 +3,7 @@
 	import { GLTF } from '@threlte/extras'
 	import { Editable, Sheet } from '@threlte/theatre'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { types } from '@theatre/core'
 </script>
 
 <T.Group>
@@ -11,15 +12,25 @@
 	</T.PerspectiveCamera>
 </T.Group>
 
-<Sheet>
+<Sheet autoPlay>
 	<GLTF castShadow receiveShadow url={'/models/threlte.glb'}>
-		<Editable name="threlte" />
+		<Editable key="hello" />
 	</GLTF>
 
-	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90}>
-		<Editable name="ground" />
+	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90} let:ref>
+		<Editable
+			key="ground"
+			transforms
+			color={{
+				def: types.number(ref.rotation.x, { range: [-2, 1] }),
+				get: () => 5,
+				set: (v) => console.log(v)
+			}}
+		/>
 		<T.CircleGeometry args={[4, 60]} />
-		<T.MeshStandardMaterial />
+		<T.MeshStandardMaterial>
+			<Editable key="hello" />
+		</T.MeshStandardMaterial>
 	</T.Mesh>
 </Sheet>
 
