@@ -16,11 +16,13 @@ export type Props<T extends UnknownShorthandCompoundProps> = {
     rotate?: number
     scale?: number
   }
+  read?: () => void
 } & Record<string, AutoProp | any>
 
 export type Slots<T extends UnknownShorthandCompoundProps> = {
   default: {
     values: ISheetObject<T>['value']
+    read: () => void
   }
 }
 

@@ -33,6 +33,12 @@ export const parseAutoPropKeyByPath = (path: string) => {
 }
 
 /**
+ * The values behind properties with these keys are assumed to be normalized, so
+ * in the range [0, 1].
+ */
+const normalizedValueKeys = ['opacity', 'metalness', 'roughness']
+
+/**
  * Auto props need an initial value to be initialized correctly. This value has
  * to be retrieved from the target and in some special cases the value needs to
  * be parsed differently.
@@ -40,7 +46,7 @@ export const parseAutoPropKeyByPath = (path: string) => {
  * @param key
  * @returns
  */
-export const parseAutoPropInitialValue = (
+export const getAutoPropValue = (
   parent: any,
   path: string
 ): {
@@ -55,8 +61,7 @@ export const parseAutoPropInitialValue = (
   }
   let type: PropTransform = 'none'
   let value = target[key]
-  if (key === 'opacity') {
-    // opacity is treated as a number in the range [0, 1]
+  if (normalizedValueKeys.includes(key)) {
     value = types.number(value, { range: [0, 1] })
   } else if (value instanceof Color) {
     // Colors get an RGBA interface

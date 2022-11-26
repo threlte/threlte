@@ -8,7 +8,7 @@
   import { createRawEventDispatcher } from './createRawEventDispatcher'
   import { isObject3D, isPrimitive } from './typeGuards'
   import type { AutoProp, BooleanProp, Props, PropTransform, StringProp } from './types'
-  import { parseAutoPropInitialValue, parseAutoPropKeyByPath, resolve } from './utils'
+  import { getAutoPropValue, parseAutoPropKeyByPath, resolve } from './utils'
 
   type ManualProps = $$Generic<UnknownShorthandCompoundProps>
   type $$Props = Props<ManualProps>
@@ -95,7 +95,7 @@
        * This also means handling special cases like euler angles and colors
        */
       const key = parseAutoPropKeyByPath(propName)
-      const { transform, value } = parseAutoPropInitialValue($parent, propName)
+      const { transform, value } = getAutoPropValue($parent, propName)
       const prop: UnknownShorthandCompoundProps = { [key]: value }
       autoProps.set(key, {
         path: propName,
@@ -112,7 +112,7 @@
        * This also means handling special cases like euler angles and colors
        * The prop value is used as the prop key
        */
-      const { transform, value } = parseAutoPropInitialValue($parent, propName)
+      const { transform, value } = getAutoPropValue($parent, propName)
       const prop: UnknownShorthandCompoundProps = { [propName]: value }
       autoProps.set(name, {
         path: propName,
@@ -189,6 +189,23 @@
       invalidate()
     })
   })
+
+  export const read = () => {
+    if (!$globalStudio) return
+    let props = {}
+    for (const [key, value] of autoProps.entries()) {
+      const prop = {
+        [key]: getAutoPropValue($parent, value.path).value
+      }
+      props = {
+        ...props,
+        ...prop
+      }
+    }
+    $globalStudio.transaction(({ set }) => {
+      set(object.props, props)
+    })
+  }
 
   let scrub: IScrub | undefined = undefined
   const onMouseDown = () => {
@@ -270,7 +287,10 @@
   }
 </script>
 
-<slot {values} />
+<slot
+  {values}
+  {read}
+/>
 
 <svelte:window
   on:keypress={onKeyPress}
