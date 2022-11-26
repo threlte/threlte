@@ -8,8 +8,14 @@ export type Props<T extends UnknownShorthandCompoundProps> = {
   key: string
   projectName?: string
   sheetName?: string
-  transform?: boolean
   props?: T
+  transform?: boolean
+  controls?: boolean
+  snap?: {
+    translate?: number
+    rotate?: number
+    scale?: number
+  }
 } & Record<string, AutoProp | any>
 
 export type Slots<T extends UnknownShorthandCompoundProps> = {

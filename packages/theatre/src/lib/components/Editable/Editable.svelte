@@ -18,6 +18,8 @@
   export let sheetName: $$Props['sheetName'] = 'default'
   export let transform: $$Props['transform'] = false
   export let props: $$Props['props'] = undefined
+  export let controls: $$Props['controls'] = undefined
+  export let snap: $$Props['snap'] = undefined
 
   const parent = useParent()
   const { invalidate } = useThrelte()
@@ -226,12 +228,13 @@
 
   type Mode = 'translate' | 'rotate' | 'scale'
   let mode: Mode = 'translate'
-  let snap = false
-  let snapValues: Record<Mode, number | null> = {
-    translate: 1,
-    rotate: 45 * DEG2RAD,
-    scale: 0.1
-  }
+  let snapActive = false
+  $: snapValues = {
+    translate: snap?.translate ?? 1,
+    rotate: (snap?.rotate ?? 45) * DEG2RAD,
+    scale: snap?.scale ?? 0.1
+  } as Record<Mode, number | null>
+
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 't') {
       mode = 'translate'
@@ -246,13 +249,13 @@
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Shift') {
-      snap = true
+      snapActive = true
     }
   }
 
   const onKeyUp = (e: KeyboardEvent) => {
     if (e.key === 'Shift') {
-      snap = false
+      snapActive = false
     }
   }
 </script>
@@ -265,12 +268,12 @@
   on:keyup={onKeyUp}
 />
 
-{#if selected && isObject3D($parent) && transform}
+{#if selected && isObject3D($parent) && transform && controls}
   <TransformControls
     {mode}
-    translationSnap={snap ? snapValues.translate : null}
-    rotationSnap={snap ? snapValues.rotate : null}
-    scaleSnap={snap ? snapValues.scale : null}
+    translationSnap={snapActive ? snapValues.translate : null}
+    rotationSnap={snapActive ? snapValues.rotate : null}
+    scaleSnap={snapActive ? snapValues.scale : null}
     on:change={onChange}
     on:mouseDown={onMouseDown}
     on:mouseUp={onMouseUp}

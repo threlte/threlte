@@ -16,7 +16,16 @@
 	<GLTF castShadow receiveShadow url={'/models/threlte.glb'} />
 
 	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90} let:ref>
-		<Editable key="ground" transform />
+		<Editable
+			key="ground"
+			transform
+			controls
+			snap={{
+				translate: 0.1,
+				rotate: 3,
+				scale: 1
+			}}
+		/>
 		<T.CircleGeometry args={[4, 60]} />
 		<T.MeshStandardMaterial color="hotpink">
 			<Editable key="mat" color />
