@@ -13,23 +13,13 @@
 </T.Group>
 
 <Sheet autoPlay>
-	<GLTF castShadow receiveShadow url={'/models/threlte.glb'}>
-		<Editable key="hello" />
-	</GLTF>
+	<GLTF castShadow receiveShadow url={'/models/threlte.glb'} />
 
 	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90} let:ref>
-		<Editable
-			key="ground"
-			transforms
-			color={{
-				def: types.number(ref.rotation.x, { range: [-2, 1] }),
-				get: () => 5,
-				set: (v) => console.log(v)
-			}}
-		/>
+		<Editable key="ground" position scale rotation let:values />
 		<T.CircleGeometry args={[4, 60]} />
 		<T.MeshStandardMaterial>
-			<Editable key="hello" />
+			<Editable key="mat" color emissive />
 		</T.MeshStandardMaterial>
 	</T.Mesh>
 </Sheet>

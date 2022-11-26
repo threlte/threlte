@@ -30,7 +30,7 @@
   import type { Primitive } from 'type-fest'
   import { globalStudio } from '../consts'
   import { types } from '../theatre'
-  import type { AllProps, AnyProp } from './props'
+  import type { AllProps, AnyProp, BooleanProp, ManualProp, StringProp } from './types'
   import { resolve } from './resolve'
 
   export let key: AllProps['key']
@@ -44,7 +44,14 @@
   let selected = false
   let isMouseDown = false
 
-  const memoizer = new Map<
+  /**
+   * Automatic Props that are defined via boolean or string values can't use the
+   * component prop name as the theatre prop name because component prop names
+   * do not need to be alphanumeric whereas theatre prop names do. Thats why we
+   * need to define a mapping of theatre prop names to component prop names in
+   * order to resolve the target of the prop.
+   */
+  const autoProps = new Map<
     string,
     {
       path: string
@@ -66,99 +73,147 @@
     }
 
   if (transformsProps) {
-    memoizer.set('Position', {
+    autoProps.set('Position', {
       path: 'position',
       type: 'generic'
     })
-    memoizer.set('Rotation', {
+    autoProps.set('Rotation', {
       path: 'rotation',
       type: 'euler'
     })
-    memoizer.set('Scale', {
+    autoProps.set('Scale', {
       path: 'scale',
       type: 'generic'
     })
   }
 
-  type Prop<T extends any> = {
-    key: string
-    prop: T
+  const parseAutoPropKeyByPath = (path: string) => {
+    return path
+      .split('.')
+      .map((k) => k.charAt(0).toUpperCase() + k.slice(1))
+      .join('')
   }
 
-  const inferPropByPath = (path: string, key?: string): Prop<any> => {
-    const { key: targetKey, target } = resolve($parent, path)
-    let initialValue = target[targetKey]
-    let prop = initialValue
+  const parseAutoPropInitialValue = (
+    target: any,
+    key: any
+  ): {
+    type: 'generic' | 'euler'
+    value: any
+  } => {
+    // Throw error when key is not found in target
+    if (!(key in target)) {
+      throw new Error(`Key ${key} not found in target`)
+    }
     let type: 'generic' | 'euler' = 'generic'
-
-    // special cases treatment
-    if (initialValue instanceof Color) {
+    let value = target[key]
+    if (value instanceof Color) {
       // Colors get an RGBA interface
-      prop = types.rgba({
-        r: initialValue.r,
-        g: initialValue.g,
-        b: initialValue.b,
+      value = types.rgba({
+        r: value.r,
+        g: value.g,
+        b: value.b,
         a: 1
       })
-    } else if (initialValue instanceof Euler) {
+    } else if (value instanceof Euler) {
       // Euler angles will be displayed in degrees
-      prop = {
-        x: initialValue.x * RAD2DEG,
-        y: initialValue.y * RAD2DEG,
-        z: initialValue.z * RAD2DEG
-      }
       type = 'euler'
-    } else if (!isPrimitive(initialValue)) {
-      prop = { ...initialValue }
+      value = {
+        x: value.x * RAD2DEG,
+        y: value.y * RAD2DEG,
+        z: value.z * RAD2DEG
+      }
+    } else if (!isPrimitive(value)) {
+      value = { ...value }
     }
-
-    const propKey =
-      key ??
-      path
-        .split('.')
-        .map((k) => k.charAt(0).toUpperCase() + k.slice(1))
-        .join('')
-
-    memoizer.set(propKey, {
-      path,
-      type
-    })
-
     return {
-      key: propKey,
-      prop
+      type,
+      value
     }
   }
 
-  const props = Object.entries($$restProps as Record<string, AnyProp>)
+  const parseProp: {
+    boolean: (propName: string, propValue: BooleanProp) => Parameters<ISheet['object']>
+    string: (propName: string, propValue: StringProp) => Parameters<ISheet['object']>
+    manual: (propName: string, propValue: ManualProp) => Parameters<ISheet['object']>
+  } = {
+    boolean: (propName, _) => {
+      /**
+       * If the prop value is a boolean, we need to infer some things based on the name of the prop:
+       * - initial value
+       * - target object
+       * - target key
+       * - prop key (because these need to be alphanumeric)
+       * This also means handling special cases like euler angles and colors
+       */
+      const key = parseAutoPropKeyByPath(propName)
+      const { key: targetKey, target } = resolve($parent, propName)
+      const { type, value } = parseAutoPropInitialValue(target, targetKey)
+      const prop: Parameters<ISheet['object']> = [key, value]
+      autoProps.set(key, {
+        path: propName,
+        type
+      })
+      return prop
+    },
+    string: (propName, propValue) => {
+      /**
+       * If the prop value is a string, we need to infer some things based on the name of the prop:
+       * - initial value
+       * - target object
+       * - target key
+       * This also means handling special cases like euler angles and colors
+       * The prop value is used as the prop key
+       */
+      const { key: targetKey, target } = resolve($parent, propName)
+      const { type, value } = parseAutoPropInitialValue(target, targetKey)
+      const prop: Parameters<ISheet['object']> = [propValue, value]
+      autoProps.set(key, {
+        path: propName,
+        type
+      })
+      return prop
+    },
+    manual: (_, propValue) => {
+      /**
+       * If the prop value is a full prop definition, we don't need to infer anything
+       */
+      const prop: Parameters<ISheet['object']> = propValue
+      return prop
+    }
+  }
+
+  const parsedProps = Object.entries($$restProps as Record<string, AnyProp>)
     .filter(Boolean)
-    .map(([path, propDesc]): Prop<any> => {
-      if (typeof propDesc === 'boolean') {
-        return inferPropByPath(path)
-      } else if (typeof propDesc === 'string') {
-        return inferPropByPath(path, propDesc)
+    .map(([key, value]) => {
+      if (typeof value === 'boolean') {
+        return parseProp.boolean(key, value)
+      } else if (typeof value === 'string') {
+        return parseProp.string(key, value)
       } else {
-        return {
-          key: path,
-          prop: propDesc
-        }
+        return parseProp.manual(key, value)
       }
     })
-    .reduce((acc, { prop, propKey }) => {
-      ;(acc as any)[propKey] = prop
+    .reduce((acc, [key, value]) => {
+      ;(acc as any)[key] = value
       return acc
     }, {})
 
   const sheet = getContext(`theatre-project-${projectName}-sheet-${sheetName}`) as ISheet
   const object = sheet.object(key, {
-    ...props,
-    ...transformsProps
+    ...parsedProps
   })
-  object.onValuesChange((values) => {
-    Object.entries(values).forEach((prop) => {
+
+  let values = object.value
+
+  object.onValuesChange((newValues) => {
+    values = newValues
+    Object.entries(newValues).forEach((prop) => {
       if (!prop || isMouseDown) return
       const [key, value] = prop
-      const { path, type } = memoizer.get(key)!
+      const autoProp = autoProps.get(key)
+      if (!autoProp) return
+      const { path, type } = autoProp
       const { key: targetKey, target } = resolve($parent, path)
       if (isPrimitive(value)) {
         target[targetKey] = value
@@ -175,75 +230,77 @@
     })
   })
 
-  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+  // const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-  let scrub: IScrub | undefined = undefined
-  const onMouseDown = () => {
-    scrub = $globalStudio?.scrub()
-    isMouseDown = true
-    isScrubbing.set(true)
-  }
-  const onMouseUp = async () => {
-    await wait(100)
-    isScrubbing.set(false)
-    isMouseDown = false
-    scrub?.commit()
-    scrub = undefined
-  }
-  const onChange = () => {
-    scrub?.capture(({ set }) => {
-      if (!transforms) return
-      if (!$parent) return
-      if (!selected) return
-      if (!object) return
-      const { position, rotation, scale } = $parent
+  // let scrub: IScrub | undefined = undefined
+  // const onMouseDown = () => {
+  //   scrub = $globalStudio?.scrub()
+  //   isMouseDown = true
+  //   isScrubbing.set(true)
+  // }
+  // const onMouseUp = async () => {
+  //   await wait(100)
+  //   isScrubbing.set(false)
+  //   isMouseDown = false
+  //   scrub?.commit()
+  //   scrub = undefined
+  // }
+  // const onChange = () => {
+  //   scrub?.capture(({ set }) => {
+  //     if (!transforms) return
+  //     if (!$parent) return
+  //     if (!selected) return
+  //     if (!object) return
+  //     const { position, rotation, scale } = $parent
 
-      set(object.props, {
-        Position: {
-          x: position.x,
-          y: position.y,
-          z: position.z
-        },
-        Rotation: {
-          x: rotation.x * RAD2DEG,
-          y: rotation.y * RAD2DEG,
-          z: rotation.z * RAD2DEG
-        },
-        Scale: {
-          x: scale.x,
-          y: scale.y,
-          z: scale.z
-        }
-      })
-    })
-  }
+  //     set(object.props, {
+  //       Position: {
+  //         x: position.x,
+  //         y: position.y,
+  //         z: position.z
+  //       },
+  //       Rotation: {
+  //         x: rotation.x * RAD2DEG,
+  //         y: rotation.y * RAD2DEG,
+  //         z: rotation.z * RAD2DEG
+  //       },
+  //       Scale: {
+  //         x: scale.x,
+  //         y: scale.y,
+  //         z: scale.z
+  //       }
+  //     })
+  //   })
+  // }
 
-  $globalStudio?.onSelectionChange((newSelection) => {
-    if (newSelection.includes(object)) {
-      selected = true
-    } else {
-      selected = false
-    }
-  })
+  // $globalStudio?.onSelectionChange((newSelection) => {
+  //   if (newSelection.includes(object)) {
+  //     selected = true
+  //   } else {
+  //     selected = false
+  //   }
+  // })
 
-  $globalStudio?.ui.isHidden
+  // $globalStudio?.ui.isHidden
 
-  let mode: 'translate' | 'rotate' | 'scale' = 'translate'
-  const onKeyPress = (e: KeyboardEvent) => {
-    if (!selected) return
-    if (e.key === 't') {
-      mode = 'translate'
-    }
-    if (e.key === 'r') {
-      mode = 'rotate'
-    }
-    if (e.key === 's') {
-      mode = 'scale'
-    }
-  }
+  // let mode: 'translate' | 'rotate' | 'scale' = 'translate'
+  // const onKeyPress = (e: KeyboardEvent) => {
+  //   if (!selected) return
+  //   if (e.key === 't') {
+  //     mode = 'translate'
+  //   }
+  //   if (e.key === 'r') {
+  //     mode = 'rotate'
+  //   }
+  //   if (e.key === 's') {
+  //     mode = 'scale'
+  //   }
+  // }
 </script>
 
-<svelte:window on:keypress={onKeyPress} />
+<slot {values} />
+
+<!-- <svelte:window on:keypress={onKeyPress} />
 
 {#if $parent && isObject3D($parent) && 'raycast' in $parent}
   <InteractiveObject
@@ -269,4 +326,4 @@
     on:mouseDown={onMouseDown}
     on:mouseUp={onMouseUp}
   />
-{/if}
+{/if} -->
