@@ -373,6 +373,36 @@ export const sidebar = {
 				slug: '/extras/environment'
 			}
 		],
+		'@threlte/theatre': [
+			{
+				title: 'Getting Started',
+				slug: '/theatre/getting-started'
+			},
+			{
+				title: 'Components',
+				slug: ''
+			},
+			{
+				title: 'Theatre',
+				slug: '/theatre/theatre'
+			},
+			{
+				title: 'Studio',
+				slug: '/theatre/studio'
+			},
+			{
+				title: 'Project',
+				slug: '/theatre/project'
+			},
+			{
+				title: 'Sheet',
+				slug: '/theatre/sheet'
+			},
+			{
+				title: 'Editable',
+				slug: '/theatre/editable'
+			}
+		],
 		'@threlte/rapier': [
 			{
 				title: 'Getting Started',

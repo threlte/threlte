@@ -19,6 +19,9 @@ title: Getting Started
 	const rapier = '@threlte/rapier @dimforge/rapier3d-compat'
 	let installRapier = true
 
+	const theatre = '@threlte/theatre @theatre/core @theatre/studio'
+	let installTheatre = true
+
 	const typescript = '@types/three'
 	let installTypescript = true
 
@@ -28,6 +31,7 @@ title: Getting Started
 		installPreprocess && installSequentialPreprocessor && sequentialPreprocessor,
 		installExtras && extras,
 		installRapier && rapier,
+		installTheatre && theatre,
 		installTypescript && typescript
 	]
 		.filter(Boolean)
@@ -72,6 +76,11 @@ Threlte consists of 4 packages which can be installed and used individually. `@t
 </li>
 
 <li style="margin-bottom: 25px !important;">
+<code>@threlte/theatre</code><br />
+<p class="text-sm mt-0.5">Components and hooks to use the animation library <a href="https://www.theatrejs.com/" target="_blank">Theatre.js</a> in Threlte.</p>
+</li>
+
+<li style="margin-bottom: 25px !important;">
 <code>@types/three</code> – external package<br />
 <p class="text-sm mt-0.5">TypeScript types for three.js.</p>
 </li>
@@ -101,6 +110,9 @@ svelte-sequential-preprocessor
 </InstallButton>
 <InstallButton bind:bool={installRapier}>
 @threlte/rapier
+</InstallButton>
+<InstallButton bind:bool={installTheatre}>
+@threlte/theatre
 </InstallButton>
 <InstallButton bind:bool={installTypescript}>
 @types/three
