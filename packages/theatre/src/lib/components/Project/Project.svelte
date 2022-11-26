@@ -2,13 +2,10 @@
   import { globalProjects } from '../consts'
   import { getProject } from '../theatre'
   import { setContext } from 'svelte'
+  import type { IProjectConfig } from '@theatre/core'
 
   export let projectName = 'default'
-  export let projectState: any | undefined = undefined
-
-  console.log(globalProjects.get(projectName))
-
-  const config = projectState ? { state: projectState } : {}
+  export let config: IProjectConfig | undefined = undefined
 
   const project = globalProjects.get(projectName) ?? getProject(projectName, config)
 
@@ -21,7 +18,7 @@
 
   globalProjects.set(projectName, project)
 
-  setContext(`theatre-project-${projectName}`, project)
+  setContext(`theatre-project`, project)
 </script>
 
 {#if isReady}

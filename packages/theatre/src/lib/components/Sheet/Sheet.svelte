@@ -4,8 +4,8 @@
   import { getContext, onDestroy, setContext } from 'svelte'
   import { onChange, val } from '../theatre'
 
-  export let projectName = 'default'
-  export let sheetName = 'default'
+  export let name = 'default'
+  export let instance: string | undefined = undefined
   /**
    * If a number is passed, it will be used as the delay to start autoplaying
    */
@@ -17,12 +17,15 @@
   export let autoPause = false
   export let isPlaying = false
 
-  const project = getContext(`theatre-project-${projectName}`) as IProject
+  const project = getContext(`theatre-project`) as IProject
 
-  export const sheet = globalSheets.get(`${projectName}-${sheetName}`) ?? project.sheet(sheetName)
-  globalSheets.set(`${projectName}-${sheetName}`, sheet)
+  const projectName = project.address.projectId
 
-  setContext(`theatre-project-${projectName}-sheet-${sheetName}`, sheet)
+  export const sheet =
+    globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
+  globalSheets.set(`${projectName}-${name}-${instance}`, sheet)
+
+  setContext(`theatre-sheet`, sheet)
 
   export const play: typeof sheet['sequence']['play'] = (
     ...args: Parameters<typeof sheet['sequence']['play']>

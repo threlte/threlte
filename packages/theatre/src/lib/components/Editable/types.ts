@@ -5,7 +5,7 @@ export type BooleanProp = boolean
 export type AutoProp = StringProp | BooleanProp
 
 export type Props<T extends UnknownShorthandCompoundProps> = {
-  key: string
+  name: string
   projectName?: string
   sheetName?: string
   props?: T

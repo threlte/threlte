@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { OrbitControls, T } from '@threlte/core'
 	import { GLTF } from '@threlte/extras'
-	import { Editable, Sheet } from '@threlte/theatre'
+	import { Editable, Project, Sheet } from '@threlte/theatre'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { types } from '@theatre/core'
 </script>
@@ -17,7 +17,7 @@
 
 	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90} let:ref>
 		<Editable
-			key="ground"
+			name="ground"
 			transform
 			controls
 			snap={{
@@ -27,8 +27,8 @@
 			}}
 		/>
 		<T.CircleGeometry args={[4, 60]} />
-		<T.MeshStandardMaterial color="hotpink">
-			<Editable key="mat" color />
+		<T.MeshStandardMaterial>
+			<Editable name="mat" color />
 		</T.MeshStandardMaterial>
 	</T.Mesh>
 </Sheet>

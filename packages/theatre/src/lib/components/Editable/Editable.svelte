@@ -13,7 +13,7 @@
   type ManualProps = $$Generic<UnknownShorthandCompoundProps>
   type $$Props = Props<ManualProps>
 
-  export let key: $$Props['key']
+  export let name: $$Props['name']
   export let projectName: $$Props['projectName'] = 'default'
   export let sheetName: $$Props['sheetName'] = 'default'
   export let transform: $$Props['transform'] = false
@@ -45,18 +45,22 @@
    * Transform props are props that are added via the component prop
    * "transform".
    */
-  const transformProps: UnknownShorthandCompoundProps | undefined = $parent &&
-    $parent.position &&
-    $parent.rotation &&
-    $parent.scale && {
-      Position: { ...$parent.position },
-      Rotation: {
-        x: $parent.rotation.x * RAD2DEG,
-        y: $parent.rotation.y * RAD2DEG,
-        z: $parent.rotation.z * RAD2DEG
-      },
-      Scale: { ...$parent.scale }
-    }
+  const transformProps: UnknownShorthandCompoundProps | undefined =
+    (transform &&
+      $parent &&
+      $parent.isObject3D &&
+      $parent.position &&
+      $parent.rotation &&
+      $parent.scale && {
+        Position: { ...$parent.position },
+        Rotation: {
+          x: $parent.rotation.x * RAD2DEG,
+          y: $parent.rotation.y * RAD2DEG,
+          z: $parent.rotation.z * RAD2DEG
+        },
+        Scale: { ...$parent.scale }
+      }) ||
+    undefined
 
   /**
    * If transform props are defined, we need to add them to the list of auto
@@ -110,7 +114,7 @@
        */
       const { transform, value } = parseAutoPropInitialValue($parent, propName)
       const prop: UnknownShorthandCompoundProps = { [propName]: value }
-      autoProps.set(key, {
+      autoProps.set(name, {
         path: propName,
         transform
       })
@@ -132,14 +136,20 @@
     })
     .reduce((acc, curr) => ({ ...acc, ...curr }), {})
 
-  const sheet = getContext(`theatre-project-${projectName}-sheet-${sheetName}`) as ISheet
+  const sheet = getContext('theatre-sheet') as ISheet
+
+  const projectId = sheet.address.projectId
+  const sheetId = sheet.address.sheetId
+  const instanceId = sheet.address.sheetInstanceId
+
   const object =
-    globalObjects.get(`${projectName}-${sheetName}-${key}`) ??
-    sheet.object(key, {
+    globalObjects.get(`${projectId}-${sheetId}-${instanceId}-${name}`) ??
+    sheet.object(name, {
       ...parsedProps,
       ...props,
       ...transformProps
     })
+  globalObjects.set(`${projectId}-${sheetId}-${instanceId}-${name}`, object)
 
   let values = object.value
 
