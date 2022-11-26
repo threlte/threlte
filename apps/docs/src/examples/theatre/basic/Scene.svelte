@@ -12,14 +12,14 @@
 	</T.PerspectiveCamera>
 </T.Group>
 
-<Sheet autoPlay>
+<Sheet>
 	<GLTF castShadow receiveShadow url={'/models/threlte.glb'} />
 
 	<T.Mesh receiveShadow rotation.x={DEG2RAD * -90} let:ref>
-		<Editable key="ground" position scale rotation let:values />
+		<Editable key="ground" transform />
 		<T.CircleGeometry args={[4, 60]} />
-		<T.MeshStandardMaterial>
-			<Editable key="mat" color emissive />
+		<T.MeshStandardMaterial color="hotpink">
+			<Editable key="mat" color />
 		</T.MeshStandardMaterial>
 	</T.Mesh>
 </Sheet>

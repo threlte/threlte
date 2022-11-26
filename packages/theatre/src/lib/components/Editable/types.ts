@@ -1,21 +1,25 @@
-import type { ISheet } from '@theatre/core'
+import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
 
 export type StringProp = string
 export type BooleanProp = boolean
-export type ManualProp = Parameters<ISheet['object']>
+export type AutoProp = StringProp | BooleanProp
 
-export type AnyProp = StringProp | BooleanProp | ManualProp
-
-export type AllProps = {
+export type Props<T extends UnknownShorthandCompoundProps> = {
   key: string
   projectName?: string
   sheetName?: string
-  transforms?: boolean
-  [key: string]: AnyProp | undefined
-}
+  transform?: boolean
+  props?: T
+} & Record<string, AutoProp | any>
 
-export type Slots = {
+export type Slots<T extends UnknownShorthandCompoundProps> = {
   default: {
-    values: Record<string, any>
+    values: ISheetObject<T>['value']
   }
 }
+
+export type Events<T extends UnknownShorthandCompoundProps> = {
+  change: ISheetObject<T>['value']
+}
+
+export type PropTransform = 'none' | 'euler'
