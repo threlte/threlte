@@ -46,7 +46,7 @@ In your Scene, add the component `<Editable>` as a child of any component you'd 
 The property `transform` is a shortcut to add `position`, `scale` and `rotation` at once, the property `controls` enables comfortable `THREE.TransformControls` on the Object.
 :::
 
-```svelte title=Scene.svelte|copyHighlight={3,14,17,22}
+```svelte title=Scene.svelte
 <script lang="ts">
 	import { OrbitControls, T } from '@threlte/core'
 	import { Editable } from '@threlte/theatre'
@@ -57,19 +57,31 @@ The property `transform` is a shortcut to add `position`, `scale` and `rotation`
 	<OrbitControls target={{ y: 1.5 }} />
 </T.PerspectiveCamera>
 
-<T.GridHelper />
-
-<T.Mesh receiveShadow rotation.x={DEG2RAD * -90}>
-	<Editable name="dish" position rotation scale />
-	<T.CircleGeometry args={[4, 60]} />
-	<T.MeshStandardMaterial>
-		<Editable name="material" color roughness metalness />
+<!-- Box -->
+<T.Mesh receiveShadow castShadow position.y={0.5}>
+	<Editable name="Box / Mesh" transform controls />
+	<T.BoxGeometry args={[1, 1, 1]} />
+	<T.MeshStandardMaterial color="#b00d03">
+		<Editable name="Box / Material" color roughness metalness />
 	</T.MeshStandardMaterial>
 </T.Mesh>
 
-<T.DirectionalLight position={[3, 10, 10]} castShadow>
-	<Editable name="light" color intensity />
+<!-- Floor -->
+<T.Mesh receiveShadow castShadow rotation.x={DEG2RAD * -90}>
+	<Editable name="Floor / Mesh" scale />
+	<T.CircleGeometry args={[4, 60]} />
+	<T.MeshStandardMaterial>
+		<Editable name="Floor / Material" color roughness metalness />
+	</T.MeshStandardMaterial>
+</T.Mesh>
+
+<T.DirectionalLight position={[0.5, 2, 1]} castShadow>
+	<Editable name="Lights / Main" color intensity transform controls />
 </T.DirectionalLight>
+
+<T.AmbientLight intensity={0.2}>
+	<Editable name="Lights / Fill" color intensity />
+</T.AmbientLight>
 ```
 
 You will now see the Theatre.js Interface. Make yourself comfortable with the controls and if you haven't done yet, please read the [Theatre.js documentation](https://www.theatrejs.com/docs/latest).
