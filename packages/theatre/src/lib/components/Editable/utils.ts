@@ -55,7 +55,10 @@ export const parseAutoPropInitialValue = (
   }
   let type: PropTransform = 'none'
   let value = target[key]
-  if (value instanceof Color) {
+  if (key === 'opacity') {
+    // opacity is treated as a number in the range [0, 1]
+    value = types.number(value, { range: [0, 1] })
+  } else if (value instanceof Color) {
     // Colors get an RGBA interface
     value = types.rgba({
       r: value.r,

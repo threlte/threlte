@@ -27,8 +27,8 @@
 			}}
 		/>
 		<T.CircleGeometry args={[4, 60]} />
-		<T.MeshStandardMaterial>
-			<Editable name="mat" color />
+		<T.MeshStandardMaterial transparent>
+			<Editable name="mat" color opacity />
 		</T.MeshStandardMaterial>
 	</T.Mesh>
 </Sheet>
