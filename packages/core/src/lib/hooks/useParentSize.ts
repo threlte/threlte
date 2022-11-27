@@ -14,24 +14,23 @@ export const useParentSize = (): {
   onDestroy(unsubscribeParentSize)
 
   let el: HTMLElement | undefined
+  const resizeObserver = new ResizeObserver((entries) => {
+    const entry = entries[0]
+    parentSizeStore.set({
+      width: entry.contentRect.width,
+      height: entry.contentRect.height
+    })
+  })
 
   const proxy = () => {
-    const currentParentSize = parentSize
     if (!el) return
     if (!el.parentElement) return
-    const { clientWidth, clientHeight } = el.parentElement
-    if (clientWidth !== currentParentSize.width || clientHeight !== currentParentSize.height) {
-      parentSizeStore.set({
-        width: clientWidth,
-        height: clientHeight
-      })
-    }
+    resizeObserver.observe(el.parentElement)
   }
 
   const parentSizeAction = (node: HTMLElement) => {
     el = node
     proxy()
-    window.addEventListener('resize', proxy)
   }
 
   if (!browser) {
@@ -42,7 +41,8 @@ export const useParentSize = (): {
   }
 
   onDestroy(() => {
-    window.removeEventListener('resize', proxy)
+    unsubscribeParentSize()
+		resizeObserver.disconnect()
   })
 
   return {
