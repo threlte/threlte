@@ -371,6 +371,10 @@ export const sidebar = {
 			{
 				title: 'Environment',
 				slug: '/extras/environment'
+			},
+			{
+				title: 'Sparkles',
+				slug: '/extras/sparkles'
 			}
 		],
 		'@threlte/rapier': [
