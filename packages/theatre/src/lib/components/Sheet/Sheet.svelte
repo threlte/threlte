@@ -25,30 +25,30 @@
     globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
   globalSheets.set(`${projectName}-${name}-${instance}`, sheet)
 
+  export const sequence = sheet.sequence
+
   setContext(`theatre-sheet`, sheet)
 
   export const play: typeof sheet['sequence']['play'] = (
     ...args: Parameters<typeof sheet['sequence']['play']>
   ) => {
-    isPlaying = true
-    return sheet.sequence.play(...args)
+    return sequence.play(...args)
   }
 
   export const pause: typeof sheet['sequence']['pause'] = (
     ...args: Parameters<typeof sheet['sequence']['pause']>
   ) => {
-    isPlaying = false
-    return sheet.sequence.pause(...args)
+    return sequence.pause(...args)
   }
 
-  const unsubscribe = onChange(sheet.sequence.pointer.playing, (playing: boolean) => {
+  const unsubscribe = onChange(sequence.pointer.playing, (playing: boolean) => {
     isPlaying = playing
   })
   onDestroy(unsubscribe)
 
   export let position: number | undefined = undefined
   $: if (position !== undefined) {
-    sheet.sequence.position = position
+    sequence.position = position
   }
 
   let timeoutHandler: ReturnType<typeof setTimeout> | undefined = undefined
@@ -56,16 +56,14 @@
     const options = typeof autoPlay === 'boolean' ? {} : autoPlay
     if (options.delay) {
       timeoutHandler = setTimeout(() => {
-        sheet.sequence.play(options)
-        isPlaying = true
+        sequence.play(options)
       }, options.delay)
     } else {
-      sheet.sequence.play(options)
-      isPlaying = true
+      sequence.play(options)
     }
   }
   if (autoReset && (typeof autoReset === 'boolean' || autoReset === 'onMount')) {
-    sheet.sequence.position = 0
+    sequence.position = 0
   }
 
   onDestroy(() => {
@@ -73,18 +71,17 @@
       clearTimeout(timeoutHandler)
     }
     if (autoPause) {
-      sheet.sequence.pause()
-      isPlaying = false
+      sequence.pause()
     }
     if (autoReset && (typeof autoReset === 'boolean' || autoReset === 'onDestroy')) {
-      sheet.sequence.position = 0
+      sequence.position = 0
     }
   })
 </script>
 
 <slot
   {sheet}
-  sequence={sheet.sequence}
+  {sequence}
   {isPlaying}
   {play}
   {pause}

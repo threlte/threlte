@@ -222,7 +222,6 @@
       if (!transform) return
       if (!$parent) return
       if (!selected) return
-      if (!object) return
       const { position, rotation, scale } = $parent
 
       set(object.props, {
@@ -287,11 +286,6 @@
   }
 </script>
 
-<slot
-  {values}
-  {read}
-/>
-
 <svelte:window
   on:keypress={onKeyPress}
   on:keydown={onKeyDown}
@@ -309,3 +303,8 @@
     on:mouseUp={onMouseUp}
   />
 {/if}
+
+<slot
+  {values}
+  {read}
+/>

@@ -9,7 +9,7 @@ title: Getting Started
 Before you get started with using `@threlte/theatre`, you should get comfortable with the concepts and terminology of Theatre.js itself by reading [their documentation](https://www.theatrejs.com/docs/latest).
 
 :::admonition type="info"
-Code examples in this documentation normally are embedded in the documentation itself. With examples using `@threlte/theatre` that's a bit different because the interface needs a large sceen. Therefore, the examples open in a new tab.
+Code examples normally are embedded in the documentation itself. With examples using `@threlte/theatre` that's a bit different because the interface needs a large sceen. Therefore, the examples open in a new tab.
 :::
 
 ### Installation
