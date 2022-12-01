@@ -168,3 +168,30 @@ The `THREE.TransformControls` added by the flag `controls` provide snapping to a
 	<T.MeshStandardMaterial />
 </T.Mesh>
 ```
+
+## Manual Props
+
+There are cases where auto props are not suitable. For these cases, it's possible to define custom, manual props. These props are then passed to the [Theatre.js sheet object initializer](https://www.theatrejs.com/docs/latest/manual/objects#creating-sheet-objects) as-is. Using the [slot prop](https://svelte.dev/tutorial/slot-props) `values` it's easy to receive the result and work it into the rest of your component.
+
+```svelte
+<script>
+	import { T } from '@threlte/core'
+	import { Editable } from '@threlte/theatre'
+	import { types } from '@theatre/core'
+</script>
+
+<Editable
+	name="Cube"
+	props={{
+		showCube: true
+	}}
+	let:values={{ showCube }}
+>
+	{#if showCube}
+		<T.Mesh>
+			<T.BoxGeometry />
+			<T.MeshStandardMaterial />
+		</T.Mesh>
+	{/if}
+</Editable>
+```
