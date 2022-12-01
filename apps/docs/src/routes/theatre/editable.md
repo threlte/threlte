@@ -117,7 +117,7 @@ Some props are treated differently.
 </T.Mesh>
 ```
 
-## Transform Shorthand
+#### Transform Shorthand
 
 To easily add all transform properties to an `<Editable>` component, simply provide the flag `transform`. If `transform` is provided, add the flag `controls` to automatically add `THREE.TransformControls` when an object is selected in the Theatre.js Outliner.
 
@@ -169,9 +169,37 @@ The `THREE.TransformControls` added by the flag `controls` provide snapping to a
 </T.Mesh>
 ```
 
+#### Read Current Prop Values
+
+We've talked about using the provided `THREE.TransformControls` and the interface Theatre.js provides to edit and animate auto props of an `<Editable>` component. Sometimes this is not sufficient. If you want to for example use `<OrbitControls>` to edit the transforms of a camera and commit changes to the Theatre.js animation, you can use the prop `read` to notify the component `<Editable>` that the underlying data has changed and the values should be read and commited. This only happens when the Theatre.js Studio is used.
+
+```svelte
+<script lang="ts">
+	import { OrbitControls, T } from '@threlte/core'
+	import { Editable } from '@threlte/theatre'
+
+	/**
+	 * "read" is a function that *reads* the values of all declared auto props (in
+	 * this case the transforms of the camera) and commits them as keyframes at
+	 * the current playhead position. This only happens when the Theatre.js Studio
+	 * is used. It can be used to read and commit changes at the press of a button
+	 * too, which comes in handy for custom animation workflows! In this particular
+	 * case, we use the event "change" of the OrbitControls to automatically commit
+	 * changes to the camera transforms.
+	*/
+	let read: (() => void) | undefined = undefined
+</script>
+
+<T.PerspectiveCamera position={[10, 10, 10]}>
+	<Editable name="Camera" transform let:read bind:read>
+		<OrbitControls on:change={read} target={{ y: 1.5 }} />
+	</Editable>
+</T.PerspectiveCamera>
+```
+
 ## Manual Props
 
-There are cases where auto props are not suitable. For these cases, it's possible to define custom, manual props. These props are then passed to the [Theatre.js sheet object initializer](https://www.theatrejs.com/docs/latest/manual/objects#creating-sheet-objects) as-is. Using the [slot prop](https://svelte.dev/tutorial/slot-props) `values` it's easy to receive the result and work it into the rest of your component.
+There are cases where auto props are not suitable. For these cases, it's possible to define custom, manual props. These props are then passed to the [Theatre.js sheet object initializer](https://www.theatrejs.com/docs/latest/manual/objects#creating-sheet-objects) as-is. Using the [slot prop](https://svelte.dev/tutorial/slot-props) `values` it's easy to receive the result and work it into the rest of your component. Additionally, the `change` event can be used to update things based on changing values.
 
 ```svelte
 <script>
@@ -186,6 +214,9 @@ There are cases where auto props are not suitable. For these cases, it's possibl
 		showCube: true
 	}}
 	let:values={{ showCube }}
+	on:change={({ showCube }) => {
+		console.log('showCube changed!', showCube)
+	}}
 >
 	{#if showCube}
 		<T.Mesh>

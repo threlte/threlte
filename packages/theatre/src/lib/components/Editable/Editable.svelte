@@ -14,8 +14,6 @@
   type $$Props = Props<ManualProps>
 
   export let name: $$Props['name']
-  export let projectName: $$Props['projectName'] = 'default'
-  export let sheetName: $$Props['sheetName'] = 'default'
   export let transform: $$Props['transform'] = false
   export let props: $$Props['props'] = undefined
   export let controls: $$Props['controls'] = undefined

@@ -6,8 +6,6 @@ export type AutoProp = StringProp | BooleanProp
 
 export type Props<T extends UnknownShorthandCompoundProps> = {
   name: string
-  projectName?: string
-  sheetName?: string
   props?: T
   transform?: boolean
   controls?: boolean
