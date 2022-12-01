@@ -201,6 +201,10 @@ We've talked about using the provided `THREE.TransformControls` and the interfac
 
 There are cases where auto props are not suitable. For these cases, it's possible to define custom, manual props. These props are then passed to the [Theatre.js sheet object initializer](https://www.theatrejs.com/docs/latest/manual/objects#creating-sheet-objects) as-is. Using the [slot prop](https://svelte.dev/tutorial/slot-props) `values` it's easy to receive the result and work it into the rest of your component. Additionally, the `change` event can be used to update things based on changing values.
 
+:::admonition type="info"
+The component `<Editable>` does not need to be the child of any particular component in this scenario. It's acting as a _provider_ of values now.
+:::
+
 ```svelte
 <script>
 	import { T } from '@threlte/core'
