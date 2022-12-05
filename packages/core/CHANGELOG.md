@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.5
+
+### Patch Changes
+
+- 20ed409: Expose Props, Events and Slots type to move forward with v5 syntax exposure and abstraction abilities
+
 ## 5.0.4
 
 ### Patch Changes
