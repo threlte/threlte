@@ -26,7 +26,9 @@ type PropOptions = {
   manualCamera?: boolean
 }
 
-export const useProps = () => {
+export const useProps = <T extends any[]>(initialBaseProps: T) => {
+  const baseProps = initialBaseProps
+
   const { invalidate } = useThrelte()
 
   const previousValues = new Map<string, any>()
@@ -77,7 +79,29 @@ export const useProps = () => {
     }
   }
 
+  /**
+   * Because reactive callbacks are not only called when the $$restProps change,
+   * but also when regular props change, we have to run simple equality check to
+   * see whether the actual props need to be updated.
+   */
+  const needUpdate = (...args: T) => {
+    // we assume that the props need an update
+    let needsUpdate = true
+
+    // we check if the base props of the component have changed
+    for (let i = 0; i < args.length; i += 1) {
+      if (args[i] !== baseProps[i]) {
+        // if they have changed, we don't need to update the props
+        needsUpdate = false
+        baseProps[i] = args[i]
+        break
+      }
+    }
+    return needsUpdate
+  }
+
   return {
-    updateProps
+    updateProps,
+    needUpdate
   }
 }
