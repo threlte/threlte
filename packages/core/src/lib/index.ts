@@ -62,6 +62,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 // <Three> component
 export { default as Three } from './three/Three.svelte'
 export { T } from './three/T'
+export type { Props, Events, Slots } from './three/types'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
