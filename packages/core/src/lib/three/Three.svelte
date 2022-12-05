@@ -61,16 +61,10 @@
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
   // Props
-  const props = useProps([ref, args, attach, manual, makeDefault, dispose])
-  // initialize props
-  props.updateProps(ref, $$restProps, {
+  const props = useProps()
+  $: props.updateProps(ref, $$restProps, {
     manualCamera: manual
   })
-  $: if (props.needUpdate(ref, args, attach, manual, makeDefault, dispose)) {
-    props.updateProps(ref, $$restProps, {
-      manualCamera: manual
-    })
-  }
 
   // Camera
   const camera = useCamera()
