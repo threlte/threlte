@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 5.0.3
+
+### Patch Changes
+
+- ff8ae66: Added optimizations to check if the \$\$restProps actually changed
+- c969ea4: Rolling back changes about base props. Changing a base prop and a restProp would NOT update the restProp, which is undesirable
+
 ## 5.0.2
 
 ### Patch Changes
