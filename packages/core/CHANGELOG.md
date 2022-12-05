@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.4
+
+### Patch Changes
+
+- 5e475db: More robust rendering of props
+
 ## 5.0.3
 
 ### Patch Changes
