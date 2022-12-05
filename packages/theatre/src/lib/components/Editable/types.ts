@@ -1,4 +1,4 @@
-import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
+import type { ISheet, ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
 
 export type StringProp = string
 export type BooleanProp = boolean
@@ -19,6 +19,8 @@ export type Props<T extends UnknownShorthandCompoundProps> = {
 
 export type Slots<T extends UnknownShorthandCompoundProps> = {
   default: {
+    sheet: ISheet
+    object: ISheetObject<T>
     values: ISheetObject<T>['value']
     read: () => void
   }

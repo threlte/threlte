@@ -6,7 +6,7 @@
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils'
   import { globalObjects, globalStudio } from '../consts'
   import { createRawEventDispatcher } from './createRawEventDispatcher'
-  import { isObject3D, isPrimitive } from './typeGuards'
+  import { isObject3D, isOrthographicOrPerspectiveCamera, isPrimitive } from './typeGuards'
   import type { AutoProp, BooleanProp, Props, PropTransform, StringProp } from './types'
   import { getAutoPropValue, parseAutoPropKeyByPath, resolve } from './utils'
 
@@ -158,6 +158,22 @@
   let selected = false
   let isMouseDown = false
 
+  /**
+   * The values behind properties with these keys make updating the projection
+   * matrix necessary.
+   */
+  const updateProjectionMatrixKeys = [
+    'fov',
+    'near',
+    'far',
+    'zoom',
+    'left',
+    'right',
+    'top',
+    'bottom',
+    'aspect'
+  ]
+
   object.onValuesChange((newValues) => {
     // assign new values to slot prop
     values = newValues
@@ -167,7 +183,10 @@
 
     // update auto props
     Object.entries(newValues).forEach((prop) => {
-      if (!prop || isMouseDown) return
+      // do not apply values while the transformControls are on
+      if (isMouseDown && selected && transform && controls) return
+
+      if (!prop) return
       const [key, value] = prop
       const autoProp = autoProps.get(key)
       if (!autoProp) return
@@ -183,6 +202,12 @@
         Object.entries(value as any).forEach(([k, v]) => {
           target[targetKey][k] = v
         })
+      }
+      if (
+        updateProjectionMatrixKeys.includes(targetKey) &&
+        isOrthographicOrPerspectiveCamera($parent)
+      ) {
+        $parent.updateProjectionMatrix()
       }
       invalidate()
     })
@@ -216,29 +241,33 @@
     scrub = undefined
   }
   const onChange = () => {
+    if (!isMouseDown) return
+    if (!transform) return
+    if (!selected) return
+
     scrub?.capture(({ set }) => {
-      if (!transform) return
       if (!$parent) return
-      if (!selected) return
       const { position, rotation, scale } = $parent
 
-      set(object.props, {
-        Position: {
+      if (mode === 'translate') {
+        set(object.props.Position, {
           x: position.x,
           y: position.y,
           z: position.z
-        },
-        Rotation: {
+        })
+      } else if (mode === 'rotate') {
+        set(object.props.Rotation, {
           x: rotation.x * RAD2DEG,
           y: rotation.y * RAD2DEG,
           z: rotation.z * RAD2DEG
-        },
-        Scale: {
+        })
+      } else if (mode === 'scale') {
+        set(object.props.Scale, {
           x: scale.x,
           y: scale.y,
           z: scale.z
-        }
-      })
+        })
+      }
     })
   }
 
@@ -305,4 +334,6 @@
 <slot
   {values}
   {read}
+  {sheet}
+  {object}
 />
