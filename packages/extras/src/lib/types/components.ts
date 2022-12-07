@@ -6,15 +6,7 @@ import type {
   Object3DInstanceProperties,
   Scale
 } from '@threlte/core'
-import type {
-  Camera,
-  ColorRepresentation,
-  Material,
-  Object3D,
-  Points,
-  TextureEncoding,
-  Vector3
-} from 'three'
+import type { Camera, ColorRepresentation, Material, Object3D, TextureEncoding } from 'three'
 import type { Text as TextType } from './types'
 
 export type EdgesProperties = Omit<LineSegmentsProperties, 'geometry' | 'material'> &
@@ -153,21 +145,4 @@ export type EnvironmentProperties = {
    * Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular
    */
   encoding?: TextureEncoding
-}
-
-export type SparklesProperties = Omit<Points, 'scale'> & {
-  /** Number of particles (default: 100) */
-  count: number
-  /** Speed of particles (default: 1) */
-  speed: number | Float32Array
-  /** Opacity of particles (default: 1) */
-  opacity: number | Float32Array
-  /** Color of particles (default: 100) */
-  color: ColorRepresentation | Float32Array
-  /** Color of particles (default: 100) */
-  size: number | Float32Array
-  /** The space the particles occupy (default: 1) */
-  scale: number | [number, number, number] | Vector3
-  /** The space the particles occupy (default: 1) */
-  noise: number | [number, number, number] | Vector3 | Float32Array
 }

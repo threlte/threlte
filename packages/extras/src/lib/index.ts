@@ -21,7 +21,6 @@ export type {
   FloatProperties,
   GLTFProperties,
   HTMLProperties,
-  SparklesProperties,
   TextProperties
 } from './types/components'
 export type { ThrelteGltf } from './types/types'
