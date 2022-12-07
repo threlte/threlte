@@ -92,4 +92,7 @@ type={Points}
 {material}
 {geometry}
 {...$$restProps}
-/>
+let:ref
+>
+	<slot {ref} />
+</Three>
