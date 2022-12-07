@@ -15,7 +15,7 @@ import { DefaultLoadingManager } from 'three'
 
 type UseGltfOptions = {
   useDraco?: boolean | string
-	useMeshopt?: boolean
+  useMeshopt?: boolean
 }
 
 createEventDispatcher
@@ -45,9 +45,9 @@ export const useGltf = <
     loader.setDRACOLoader(dracoLoader)
   }
 
-	if (options?.useMeshopt) {
-		loader.setMeshoptDecoder(MeshoptDecoder);
-	}
+  if (options?.useMeshopt) {
+    loader.setMeshoptDecoder(MeshoptDecoder)
+  }
 
   loader.load(url, (data: GLTF) => {
     if (data.scene) Object.assign(data, buildSceneGraph<Graph>(data.scene))

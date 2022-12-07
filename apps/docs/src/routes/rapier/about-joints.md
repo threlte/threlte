@@ -11,22 +11,21 @@ To start off, get yourself comfortable with the [basic concepts of Joints](https
 Currently Rapier supports these joints:
 
 - **Fixed joint**
-	- [`useFixedJoint` hook](/rapier/use-fixed-joint)
-	- [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint)
-	- [Rapier Reference](https://rapier.rs/javascript3d/classes/FixedImpulseJoint.html)
+  - [`useFixedJoint` hook](/rapier/use-fixed-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/FixedImpulseJoint.html)
 - **Revolute joint**
-	- [`useRevoluteJoint` hook](/rapier/use-revolute-joint)
-	- [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint)
-	- [Rapier Reference](https://rapier.rs/javascript3d/classes/RevoluteImpulseJoint.html)
+  - [`useRevoluteJoint` hook](/rapier/use-revolute-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/RevoluteImpulseJoint.html)
 - **Prismatic joint**
-	- [`usePrismaticJoint` hook](/rapier/use-prismatic-joint)
-	- [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint)
-	- [Rapier Reference](https://rapier.rs/javascript3d/classes/PrismaticImpulseJoint.html)
+  - [`usePrismaticJoint` hook](/rapier/use-prismatic-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/PrismaticImpulseJoint.html)
 - **Spherical joint**
-	- [`useSphericalJoint` hook](/rapier/use-spherical-joint)
-	- [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint)
-	- [Rapier Reference](https://rapier.rs/javascript3d/classes/SphericalImpulseJoint.html)
-
+  - [`useSphericalJoint` hook](/rapier/use-spherical-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/SphericalImpulseJoint.html)
 
 ### Why hooks?
 

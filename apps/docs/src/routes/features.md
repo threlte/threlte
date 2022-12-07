@@ -18,9 +18,9 @@ By default, threlte only renders the scene if there's need for it: If a prop cha
 ## Interactivity
 
 threlte makes it possible to use events on three.js objects as if they were regular DOM elements:
- `<Mesh … interactive on:click={onClick}>`
- You can also listen to your object leaving or entering the viewport:
- `<Mesh … viewportAware on:viewportenter={onViewportEnter}>`
+`<Mesh … interactive on:click={onClick}>`
+You can also listen to your object leaving or entering the viewport:
+`<Mesh … viewportAware on:viewportenter={onViewportEnter}>`
 
 ## TypeScript
 
@@ -29,7 +29,7 @@ All threlte components are written in TypeScript, so type support is a first-cla
 ## EffectComposer support
 
 Add a Pass with
- `<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the default `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
+`<Pass pass={new GlitchPass()} />` and threlte will take care of setting up the default `RenderPass` and render to the `EffectComposer` instead of the `WebGLRenderer`.
 
 ## Text rendering
 
@@ -54,7 +54,7 @@ Build objects that didn't yet make it to threlte yourself by plugging together _
 ## Tree-shakeble
 
 react-three-fiber is great at making it possible to use three.js classes as JSX components. This means that there is no hard dependency on a certain three.js version and everything that is possible in three.js is covered with react-three-fiber as well. There is however a downside: react-three-fiber looks up three.js classes at runtime. This means that even if your react-three-fiber app only uses a fraction of three.js, you will need to ship three.js in its entirety.
- threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and ([somewhat](https://github.com/mrdoob/three.js/issues/17482)) limit what parts of three.js get shipped. To further reduce the bundle size, see [this comment](https://github.com/grischaerbe/threlte/issues/8#issuecomment-1024085864).
+threlte does not look up three.js classes at runtime and as such is limited in features compared to three.js itself. It tries however to cover most use cases of three.js and provides _functional components_ to make extending threlte as easy as possible. As such, your bundler is able to tree-shake threlte and ([somewhat](https://github.com/mrdoob/three.js/issues/17482)) limit what parts of three.js get shipped. To further reduce the bundle size, see [this comment](https://github.com/grischaerbe/threlte/issues/8#issuecomment-1024085864).
 
 ## Does not get in your way
 

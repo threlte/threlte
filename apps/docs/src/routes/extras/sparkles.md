@@ -31,14 +31,16 @@ This component is a port of [drei's `<Sparkles>` component](https://github.com/p
 
 ```svelte
 <script lang="ts">
-  import { Mesh } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { SphereGeometry, MeshBasicMaterial } from 'three'
   import { Sparkles } from '@threlte/extras'
 </script>
 
-<Mesh geometry={new BoxBufferGeometry(1, 1, 1)} material={new MeshBasicMaterial()}>
+<T.Mesh>
+	<T.MeshBasicMaterial />
+	<T.MeshBufferGeometry args={[1,1,1]} />
 	<Sparkles count={amount} scale={size * 2} size={6} speed={0.4} color="pink" /> />
-</Mesh>
+</T.Mesh>
 ```
 
 ### Properties

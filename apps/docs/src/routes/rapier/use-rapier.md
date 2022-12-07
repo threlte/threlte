@@ -24,15 +24,15 @@ This hook provides access to the underlying `RAPIER.World` as well as the means 
 ```ts
 // type RapierContext
 const {
-    rapier, // RAPIER
-    world, // RAPIER.World
-    colliderObjects, // Map<number, Object3D<Event>>
-    rigidBodyObjects, //Map<number, Object3D<Event>>
-    rigidBodyEventDispatchers, //RigidBodyEventDispatchers
-    colliderEventDispatchers, //ColliderEventDispatchers
-    addColliderToContext, // (collider: Collider, object: Object3D<Event>, eventDispatcher: ColliderEventDispatcher) => void
-    removeColliderFromContext, // (collider: Collider) => void
-    addRigidBodyToContext, // (rigidBody: RigidBody, object: Object3D<Event>, eventDispatcher: RigidBodyEventDispatcher) => void
-    removeRigidBodyFromContext, // (rigidBody: RigidBody) => void
+	rapier, // RAPIER
+	world, // RAPIER.World
+	colliderObjects, // Map<number, Object3D<Event>>
+	rigidBodyObjects, //Map<number, Object3D<Event>>
+	rigidBodyEventDispatchers, //RigidBodyEventDispatchers
+	colliderEventDispatchers, //ColliderEventDispatchers
+	addColliderToContext, // (collider: Collider, object: Object3D<Event>, eventDispatcher: ColliderEventDispatcher) => void
+	removeColliderFromContext, // (collider: Collider) => void
+	addRigidBodyToContext, // (rigidBody: RigidBody, object: Object3D<Event>, eventDispatcher: RigidBodyEventDispatcher) => void
+	removeRigidBodyFromContext // (rigidBody: RigidBody) => void
 } = useRapier()
 ```

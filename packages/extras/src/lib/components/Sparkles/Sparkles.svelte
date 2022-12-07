@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { useFrame, Three  } from '@threlte/core';
+	import { Three, useFrame } from '@threlte/core'
 	import {
-		Vector2,
-		Vector3,
-		Vector4,
-		Color,
-		type ColorRepresentation,
-		ShaderMaterial
-	} from 'three';
-	import { randFloatSpread } from 'three/src/math/MathUtils';
-	import { SparkleShader } from './Shader';
-  import { BufferGeometry } from 'three'
-  import { BufferAttribute } from 'three'
-  import { Points } from 'three'
-	import type { SparklesProperties } from '../../types/components';
+	  BufferAttribute, BufferGeometry, Color, Points, ShaderMaterial, Vector2,
+	  Vector3,
+	  Vector4, type ColorRepresentation
+	} from 'three'
+	import { randFloatSpread } from 'three/src/math/MathUtils'
+	import type { SparklesProperties } from '../../types/components'
+	import { SparkleShader } from './Shader'
 
 	export let count: SparklesProperties['count'] = 100;
 	export let speed: SparklesProperties['speed'] = 1;
@@ -64,15 +58,22 @@
 		return Float32Array.from({ length: count }, setDefault!);
 	};
 
-	let opacities = usePropAsIsOrAsAttribute<number>(count, opacity);
-	let sizes = usePropAsIsOrAsAttribute<number>(count, size, Math.random);
-	let speeds = usePropAsIsOrAsAttribute<number>(count, speed);
-	let noises = usePropAsIsOrAsAttribute<typeof noise>(count * 3, noise);
-	let colors = usePropAsIsOrAsAttribute<ColorRepresentation>(
+	const geometry = new BufferGeometry()
+
+	const setAttribute = (name: string, value: any, size: number) => {
+  	geometry.setAttribute(name, new BufferAttribute(value, size))
+	}
+
+	$: setAttribute('position', positions, 3);
+	$: setAttribute('size', usePropAsIsOrAsAttribute<number>(count, size, Math.random), 1)
+	$: setAttribute('speed', usePropAsIsOrAsAttribute<number>(count, speed), 1);
+	$: setAttribute('opacity', usePropAsIsOrAsAttribute<number>(count, opacity), 3)
+	$: setAttribute('noise', usePropAsIsOrAsAttribute<typeof noise>(count * 3, noise), 3);
+	$: setAttribute('color', usePropAsIsOrAsAttribute<ColorRepresentation>(
 				color === undefined ? count * 3 : count,
 				!isFloat32Array(color) ? new Color(color) : color,
 				() => 1
-			)
+			), 3)
 
 	const material = new ShaderMaterial({
 		uniforms: SparkleShader.uniforms,
@@ -82,15 +83,6 @@
 		depthWrite: false,
 	})
 
-	const geometry = new BufferGeometry()
-
-	geometry.setAttribute('position', new BufferAttribute(positions, 3))
-	geometry.setAttribute('size', new BufferAttribute(sizes, 1))
-	geometry.setAttribute('opacity', new BufferAttribute(opacities, 1))
-	geometry.setAttribute('speed', new BufferAttribute(speeds, 1))
-	geometry.setAttribute('color', new BufferAttribute(colors, 3))
-	geometry.setAttribute('noise', new BufferAttribute(noises, 3))
-
 	useFrame((state) => (material.uniforms.time.value = state.clock.elapsedTime));
 
 </script>
@@ -99,4 +91,5 @@
 type={Points}
 {material}
 {geometry}
+{...$$restProps}
 />

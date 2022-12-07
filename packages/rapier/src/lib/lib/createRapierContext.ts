@@ -81,6 +81,6 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     removeColliderFromContext,
     addRigidBodyToContext,
     removeRigidBodyFromContext,
-    debug: writable(false),
+    debug: writable(false)
   }
 }

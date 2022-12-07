@@ -11,6 +11,7 @@ import type {
   ColorRepresentation,
   Material,
   Object3D,
+  Points,
   TextureEncoding,
   Vector3
 } from 'three'
@@ -154,7 +155,7 @@ export type EnvironmentProperties = {
   encoding?: TextureEncoding
 }
 
-export type SparklesProperties = {
+export type SparklesProperties = Omit<Points, 'scale'> & {
   /** Number of particles (default: 100) */
   count: number
   /** Speed of particles (default: 1) */

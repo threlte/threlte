@@ -6,7 +6,6 @@ title: Debug
 
 Use the Debug component to see live representations of all colliders in a scene.
 
-
 ```svelte
 <Canvas>
 	<World>

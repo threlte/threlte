@@ -1,18 +1,24 @@
 <script lang="ts">
   import Sphere from './Sphere.svelte'
 	import { Environment, ContactShadows } from '@threlte/extras'
-  import { OrbitControls, PerspectiveCamera } from '@threlte/core'
+  import { OrbitControls, T } from '@threlte/core'
+
 </script>
 
-<PerspectiveCamera position={{z: 12}} fov={30}>
+<T.PerspectiveCamera
+	let:ref
+	makeDefault
+	position={[0,0, 12]}
+	fov={30}
+>
 	<OrbitControls
 		enableDamping
 		autoRotateSpeed={0.85}
 		zoomSpeed={0.75}
 		minPolarAngle={Math.PI / 2.5}
 		maxPolarAngle={Math.PI / 2.55}
-	/>
-</PerspectiveCamera>
+	 />
+</T.PerspectiveCamera>
 
 <Environment
 	path="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/"
@@ -32,6 +38,6 @@
 	far={0.5}
 />
 
-<Sphere color="white" amount={50} emissive="green" position={{x: 1, y: 1, z: -1}} />
-<Sphere color="white" amount={30} emissive="purple" position={{x: -1.5, y: 0.5, z: -2}} size={0.5} />
-<Sphere color="lightpink" amount={20} emissive="orange" position={{x: -1, y: 0.25, z: 1}} size={0.25} />
+<Sphere color="white" amount={50} emissive="green" position={[1, 1, -1]} />
+<Sphere color="white" amount={30} emissive="purple" position={[-1.5, 0.5, -2]} size={0.5} />
+<Sphere color="lightpink" amount={20} emissive="orange" position={[-1, 0.25, 1]} size={0.25} />

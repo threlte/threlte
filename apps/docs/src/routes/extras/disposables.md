@@ -10,7 +10,7 @@ This component switches of the automatic disposal of three.js objects for all ch
 
 ### Example
 
-The meshes can be mounted and unmounted *without* the map, material and geometry being disposed. If the component `<Disposables>` is being unmounted, map, material and geometry will be disposed.
+The meshes can be mounted and unmounted _without_ the map, material and geometry being disposed. If the component `<Disposables>` is being unmounted, map, material and geometry will be disposed.
 
 ```svelte
 <script>
