@@ -6,16 +6,16 @@
 	  Vector4, type ColorRepresentation
 	} from 'three'
 	import { randFloatSpread } from 'three/src/math/MathUtils'
-	import type { SparklesProperties } from '../../types/components'
 	import { SparkleShader } from './Shader'
+	import type { SparklesProps } from './Sparkles.svelte'
 
-	export let count: SparklesProperties['count'] = 100;
-	export let speed: SparklesProperties['speed'] = 1;
-	export let opacity: SparklesProperties['opacity'] = 1;
-	export let color: SparklesProperties['color'] = 100;
-	export let size: SparklesProperties['size']= Math.random();
-	export let scale: SparklesProperties['scale'] = 1;
-	export let noise: SparklesProperties['noise'] = 1;
+	export let count: SparklesProps['count'] = 100;
+	export let speed: SparklesProps['speed'] = 1;
+	export let opacity: SparklesProps['opacity'] = 1;
+	export let color: SparklesProps['color'] = 100;
+	export let size: SparklesProps['size']= Math.random();
+	export let scale: SparklesProps['scale'] = 1;
+	export let noise: SparklesProps['noise'] = 1;
 
 	const isVector = (v: any): v is Vector2 | Vector3 | Vector4 =>
 		v instanceof Vector2 || v instanceof Vector3 || v instanceof Vector4;
