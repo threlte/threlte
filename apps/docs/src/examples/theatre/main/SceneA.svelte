@@ -67,7 +67,7 @@
 		</T.PerspectiveCamera>
 
 		<!-- Camera A -->
-		<!-- <T.Group let:ref>
+		<T.Group let:ref>
 			<T.PerspectiveCamera
 				position.z={10}
 				position.y={3}
@@ -95,10 +95,10 @@
 				</Editable>
 			</T.PerspectiveCamera>
 			<T.CameraHelper args={[ref.children[0]]} />
-		</T.Group> -->
+		</T.Group>
 
 		<!-- Camera B -->
-		<!-- <T.Group let:ref>
+		<T.Group let:ref>
 			<T.Group>
 				<Editable name="Camera / B / Group" transform controls />
 
@@ -131,11 +131,11 @@
 				</T.PerspectiveCamera>
 			</T.Group>
 			<T.CameraHelper args={[ref.children[0].children[0]]} />
-		</T.Group> -->
+		</T.Group>
 
 		<!-- Camera C -->
 
-		<!-- <T.Group let:ref>
+		<T.Group let:ref>
 			<T.PerspectiveCamera
 				position.z={10}
 				near={0.05}
@@ -162,7 +162,7 @@
 				</Editable>
 			</T.PerspectiveCamera>
 			<T.CameraHelper args={[ref.children[0]]} />
-		</T.Group> -->
+		</T.Group>
 	</Editable>
 
 	<T.DirectionalLight position.y={1}>

@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { types } from '@theatre/core'
-	import { Instance, InstancedMesh, T, useFrame, type Position } from '@threlte/core'
+	import {
+		Instance,
+		InstancedMesh,
+		T,
+		useFrame,
+		useTexture,
+		type Position,
+		type Rotation
+	} from '@threlte/core'
 	import { RigidBody, AutoColliders, Collider, Attractor } from '@threlte/rapier'
 	import { Editable } from '@threlte/theatre'
 	import { MeshStandardMaterial, SphereGeometry } from 'three'
@@ -11,6 +19,7 @@
 	const gap = 1
 	const matrix: {
 		position: Position
+		rotation: Rotation
 	}[] = []
 	const matrixLength = 6
 	const matrixSize = matrixLength - 1 + (matrixLength - 1) * gap
@@ -22,6 +31,11 @@
 						x: x + x * gap - matrixSize / 2,
 						y: y + y * gap - matrixSize / 2,
 						z: z + z * gap - matrixSize / 2
+					},
+					rotation: {
+						x: Math.random() * Math.PI * 2,
+						y: Math.random() * Math.PI * 2,
+						z: Math.random() * Math.PI * 2
 					}
 				})
 			}
@@ -29,6 +43,9 @@
 	}
 
 	let coneCollider: RapierCollider | undefined = undefined
+
+	const map = useTexture('/assets/theatre/main/textures/ball_texture.jpg')
+	const normalMap = useTexture('/assets/theatre/main/textures/ball_normal_map.jpg')
 </script>
 
 <Editable
@@ -50,7 +67,9 @@
 		<InstancedMesh
 			geometry={new SphereGeometry(0.5)}
 			material={new MeshStandardMaterial({
-				color: 'white'
+				color: 'white',
+				map,
+				normalMap
 			})}
 		>
 			{#each matrix as matrixItem, index}
