@@ -23,7 +23,7 @@ npm install @threlte/theatre @theatre/core @theatre/studio
 To get started, encapsulate your whole scene in the component [`<Theatre>`](/theatre/theatre).
 
 :::admonition type="tip"
-The component `<Theatre>` provides a default [`<Project>`](/theatre/project) as well as a default [`<Sheet>`](/theatre/sheet). For a more flexible structure please consider using `<Project>` and `<Sheet>` on their own.
+The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
 :::
 
 ```svelte title=App.svelte|copyHighlight={3,8,10}
