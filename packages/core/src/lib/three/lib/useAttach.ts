@@ -3,11 +3,13 @@ import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
 import type { Props } from '../types'
 
+const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
+
 export const useAttach = <T>() => {
   const { invalidate } = useThrelte()
 
   let isAttached = false
-  let valueBeforeAttach: any
+  let valueBeforeAttach: any = initialValueBeforeAttach
   let detachFn: (() => void) | undefined | void
   // the target that the object is attached to
   let attachedTo: any
@@ -51,9 +53,9 @@ export const useAttach = <T>() => {
     if (detachFn) {
       detachFn()
       detachFn = undefined
-    } else if (attachedTo && attachedKey && valueBeforeAttach) {
+    } else if (attachedTo && attachedKey && valueBeforeAttach !== initialValueBeforeAttach) {
       attachedTo[attachedKey] = valueBeforeAttach
-      valueBeforeAttach = undefined
+      valueBeforeAttach = initialValueBeforeAttach
       attachedTo = undefined
       attachedKey = undefined
     }
