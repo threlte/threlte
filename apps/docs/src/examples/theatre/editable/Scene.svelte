@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { types } from '@theatre/core'
-	import { OrbitControls, T, Three, useTexture } from '@threlte/core'
+	import { OrbitControls, T, Three, TransformableObject, useTexture } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { Editable } from '@threlte/theatre'
 	import { DoubleSide, RepeatWrapping } from 'three'
@@ -8,7 +8,11 @@
 
 	const map = useTexture('/assets/theatre/main/textures/ball_texture.jpg')
 	const normalMap = useTexture('/assets/theatre/main/textures/ball_normal_map.jpg')
+
+	let innerWidth = window.innerWidth
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
@@ -24,17 +28,17 @@
 	let:values
 >
 	{#if values.camera === 1}
-		<T.PerspectiveCamera makeDefault position.z={10} position.x={3} position.y={1}>
-			<OrbitControls target={{ y: 1 }} />
-		</T.PerspectiveCamera>
+		<T.OrthographicCamera makeDefault let:ref zoom={innerWidth * 0.3}>
+			<TransformableObject position={{ x: 3, y: 3, z: 3 }} lookAt={{ y: 0.3 }} object={ref} />
+		</T.OrthographicCamera>
 	{:else if values.camera === 2}
-		<T.PerspectiveCamera makeDefault position.y={3} position.z={10}>
-			<OrbitControls target={{ y: 1 }} />
+		<T.PerspectiveCamera makeDefault position.z={10} position.x={3} position.y={1}>
+			<OrbitControls target={{ y: 0.3 }} />
 		</T.PerspectiveCamera>
 	{/if}
 </Editable>
 
-<T.Mesh castShadow position.y={1} rotation.x={90 * DEG2RAD}>
+<T.Mesh castShadow position.y={0.3} rotation.x={90 * DEG2RAD}>
 	<Editable name="Mesh / Transforms" transform controls />
 	<T.TorusGeometry args={[1, 0.3, 16, 100]} />
 	<T.MeshStandardMaterial let:ref>
