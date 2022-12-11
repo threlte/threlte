@@ -3,11 +3,11 @@
 	import { OrbitControls, T, Three, useTexture } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { Editable } from '@threlte/theatre'
-	import { DoubleSide } from 'three'
+	import { DoubleSide, RepeatWrapping } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
-	const map = useTexture('/assets/theatre/editable/textures/texture.jpg')
-	const normalMap = useTexture('/assets/theatre/editable/textures/normal_map.jpg')
+	const map = useTexture('/assets/theatre/main/textures/ball_texture.jpg')
+	const normalMap = useTexture('/assets/theatre/main/textures/ball_normal_map.jpg')
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
@@ -42,7 +42,8 @@
 			name="Mesh / Material / Maps"
 			props={{
 				useMap: types.boolean(true, { label: 'Use Map' }),
-				useNormalMap: types.boolean(true, { label: 'Use Normal Map' })
+				useNormalMap: types.boolean(true, { label: 'Use Normal Map' }),
+				wrap: types.number(1, { range: [1, 3], label: 'Wrap' })
 			}}
 			let:values
 			on:change={() => {
@@ -50,14 +51,33 @@
 			}}
 		>
 			{#if values.useMap}
-				<Three type={map} attach="map" />
+				<Three
+					type={map}
+					attach="map"
+					repeat={values.wrap}
+					wrapS={RepeatWrapping}
+					wrapT={RepeatWrapping}
+				/>
 			{/if}
 			{#if values.useNormalMap}
-				<Three type={normalMap} attach="normalMap" />
+				<Three
+					type={normalMap}
+					attach="normalMap"
+					repeat={values.wrap}
+					wrapS={RepeatWrapping}
+					wrapT={RepeatWrapping}
+				/>
 			{/if}
 		</Editable>
 
-		<Editable name="Mesh / Material" color roughness metalness normalScale envMapIntensity />
+		<Editable
+			name="Mesh / Material / Props"
+			color
+			roughness
+			metalness
+			normalScale
+			envMapIntensity
+		/>
 	</T.MeshStandardMaterial>
 </T.Mesh>
 
