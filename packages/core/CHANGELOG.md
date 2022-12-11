@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.6
+
+### Patch Changes
+
+- 357bb54: fixes a bug where if the initial value was nullish, it wasn't reset
+
 ## 5.0.5
 
 ### Patch Changes
