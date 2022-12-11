@@ -20,7 +20,7 @@ npm install @threlte/theatre @theatre/core @theatre/studio
 
 ### Quick Start
 
-To get started, encapsulate your whole scene in the component [`<Theatre>`](/theatre/theatre).
+To get started quickly, encapsulate your whole scene in the component [`<Theatre>`](/theatre/theatre).
 
 :::admonition type="tip"
 The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
