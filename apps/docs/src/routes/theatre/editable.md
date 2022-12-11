@@ -6,6 +6,23 @@ title: Editable
 
 A component `<Editable>` represents a set of editable and animatable properties of its parent. This component is creating a [Theatre.js sheet object](https://www.theatrejs.com/docs/latest/manual/objects) under the hood and therefore all original concepts apply.
 
+<ExampleWrapper class="!h-auto">
+
+<a href="/theatre/examples/editable" target="_blank">
+
+<img class="!my-0" src="/images/theatre/editable-example.jpg" />
+
+</a>
+
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/theatre/editable/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/theatre/editable/Scene.svelte)
+
+</div>
+
+</ExampleWrapper>
+
 !!!
 
 ## Auto Props

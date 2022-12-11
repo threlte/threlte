@@ -11,6 +11,7 @@
 {#if studio}
   <Studio />
 {/if}
+
 <Project {config}>
   <Sheet>
     <slot />

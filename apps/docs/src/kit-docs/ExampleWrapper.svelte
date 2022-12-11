@@ -18,10 +18,13 @@
 	onMount(() => {
 		mounted = true
 	})
+
+	let _class = ''
+	export { _class as class }
 </script>
 
 <div
-	class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-[600px] relative"
+	class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-[600px] relative {_class}"
 >
 	<div class="flex flex-row absolute bottom-6 left-6 z-50 font-semibold">
 		<button
