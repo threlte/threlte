@@ -6,13 +6,9 @@ title: Editable
 
 A component `<Editable>` represents a set of editable and animatable properties of its parent. This component is creating a [Theatre.js sheet object](https://www.theatrejs.com/docs/latest/manual/objects) under the hood and therefore all original concepts apply.
 
-<ExampleWrapper class="!h-auto">
-
-<a href="/theatre/examples/editable" target="_blank">
+<ExampleWrapper class="!h-auto" href="/theatre/examples/editable">
 
 <img class="!my-0" src="/images/theatre/editable-example.jpg" />
-
-</a>
 
 <div slot="code">
 

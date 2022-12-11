@@ -19,7 +19,7 @@
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <Editable
-	name="Camera Manager"
+	name="Cameras / Manager"
 	props={{
 		camera: types.number(1, {
 			range: [1, 2],
@@ -30,11 +30,20 @@
 	let:values
 >
 	{#if values.camera === 1}
-		<T.OrthographicCamera makeDefault let:ref zoom={innerWidth * 0.3}>
-			<TransformableObject position={{ x: 3, y: 3, z: 3 }} lookAt={{ y: 0.3 }} object={ref} />
-		</T.OrthographicCamera>
+		<Editable
+			name="Cameras / Orthographic"
+			props={{
+				zoom: types.number(0.3, { range: [0.001, 5], label: 'Zoom', nudgeMultiplier: 0.1 })
+			}}
+			let:values
+		>
+			<T.OrthographicCamera makeDefault let:ref zoom={innerWidth * values.zoom}>
+				<TransformableObject position={{ y: 3, z: 3 }} lookAt={{ y: 0.3 }} object={ref} />
+			</T.OrthographicCamera>
+		</Editable>
 	{:else if values.camera === 2}
-		<T.PerspectiveCamera makeDefault position.z={10} position.x={3} position.y={1}>
+		<T.PerspectiveCamera makeDefault position.z={5} position.y={5}>
+			<Editable name="Cameras / Perspective" fov />
 			<OrbitControls target={{ y: 0.3 }} />
 		</T.PerspectiveCamera>
 	{/if}
