@@ -187,7 +187,10 @@
           if (!orbitControls) break autopause
           const shouldBeEnabled = !e.value
           if (orbitControls.enabled === shouldBeEnabled) break autopause
-          enabledStateBeforeAutoPause = orbitControls.enabled
+          if (e.value) {
+            // only save the state if we're actually pausing
+            enabledStateBeforeAutoPause = orbitControls.enabled
+          }
           orbitControls.enabled = shouldBeEnabled
         }
       }
