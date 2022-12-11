@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.7
+
+### Patch Changes
+
+- 185c15f: Fixes a bug where the TransformControls would not re-enable the OrbitControls after auto-pausing.
+
 ## 5.0.6
 
 ### Patch Changes
