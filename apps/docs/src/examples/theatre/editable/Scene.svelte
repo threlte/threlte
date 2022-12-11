@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { types } from '@theatre/core'
+	import * as theatreCore from '@theatre/core'
 	import { OrbitControls, T, Three, TransformableObject, useTexture } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { Editable } from '@threlte/theatre'
@@ -8,6 +8,8 @@
 
 	const map = useTexture('/assets/theatre/main/textures/ball_texture.jpg')
 	const normalMap = useTexture('/assets/theatre/main/textures/ball_normal_map.jpg')
+
+	const { types } = theatreCore
 
 	let innerWidth = window.innerWidth
 </script>

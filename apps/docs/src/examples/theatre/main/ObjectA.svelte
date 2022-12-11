@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { types } from '@theatre/core'
-	import {
-		Instance,
-		InstancedMesh,
-		T,
-		useFrame,
-		useTexture,
-		type Position,
-		type Rotation
-	} from '@threlte/core'
-	import { RigidBody, AutoColliders, Collider, Attractor } from '@threlte/rapier'
+	import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
+	import * as theatreCore from '@theatre/core'
+	import { InstancedMesh, T, useTexture, type Position, type Rotation } from '@threlte/core'
+	import { Attractor, Collider } from '@threlte/rapier'
 	import { Editable } from '@threlte/theatre'
 	import { MeshStandardMaterial, SphereGeometry } from 'three'
-	import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
 	import ObjectAInstance from './ObjectAInstance.svelte'
+
+	const { types } = theatreCore
 
 	// matrix of 3 x 3 x 3
 	const gap = 1

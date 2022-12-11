@@ -4,8 +4,12 @@ import { types } from '../theatre'
 import { isPrimitive } from './typeGuards'
 import type { PropTransform } from './types'
 
-// -------------------- AUTO PROPS UTILS ------------------------
-
+/**
+ * Resolves a property path to the target and the key.
+ * @param target
+ * @param propertyPath
+ * @returns
+ */
 export const resolve = (target: any, propertyPath: string) => {
   if (propertyPath.includes('.')) {
     const path = propertyPath.split('.')

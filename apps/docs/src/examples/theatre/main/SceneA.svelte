@@ -1,22 +1,13 @@
 <script lang="ts">
-	import {
-		InteractiveObject,
-		OrbitControls,
-		T,
-		TransformableObject,
-		Three,
-		useThrelte,
-		HierarchicalObject
-	} from '@threlte/core'
-	import { GLTF, Text } from '@threlte/extras'
+	import * as theatreCore from '@theatre/core'
+	import { OrbitControls, T, TransformableObject, useThrelte } from '@threlte/core'
 	import { Editable, Sheet } from '@threlte/theatre'
-	import { types } from '@theatre/core'
 	import { Color, type Object3D } from 'three'
-	import { DoubleSide } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import Promise from './Promise.svelte'
 	import ObjectA from './ObjectA.svelte'
-	import Up from './Up.svelte'
+	import Promise from './Promise.svelte'
+
+	const { types } = theatreCore
 
 	let cameraTargetA: Object3D | undefined = undefined
 	let cameraTargetB: Object3D | undefined = undefined

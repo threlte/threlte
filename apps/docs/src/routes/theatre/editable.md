@@ -226,7 +226,6 @@ The component `<Editable>` does not need to be the child of any particular compo
 <script>
 	import { T } from '@threlte/core'
 	import { Editable } from '@threlte/theatre'
-	import { types } from '@theatre/core'
 </script>
 
 <Editable
