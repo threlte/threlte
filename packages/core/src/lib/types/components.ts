@@ -150,9 +150,9 @@ export type TransformControlsProperties = {
   axis?: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null
   dragging?: boolean
   enabled?: boolean
-  translationSnap?: number
-  scaleSnap?: number
-  rotationSnap?: number
+  translationSnap?: number | null
+  scaleSnap?: number | null
+  rotationSnap?: number | null
   showX?: boolean
   showY?: boolean
   showZ?: boolean

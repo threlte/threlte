@@ -62,9 +62,9 @@ The `<TransformControls>` component can also be used to transform [`<Instance>`]
 autoPauseOrbitControls: boolean = true
 mode: 'translate' | 'rotate' | 'scale' | undefined = undefined
 enabled: boolean | undefined = undefined
-translationSnap: number | undefined = undefined
-scaleSnap: number | undefined = undefined
-rotationSnap: number | undefined = undefined
+translationSnap: number | undefined | null = undefined
+scaleSnap: number | undefined | null = undefined
+rotationSnap: number | undefined | null = undefined
 showX: boolean | undefined = undefined
 showY: boolean | undefined = undefined
 showZ: boolean | undefined = undefined
