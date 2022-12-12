@@ -2,7 +2,7 @@
   import type { ISheet, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
   import { TransformControls, useParent, useThrelte } from '@threlte/core'
-  import { getContext } from 'svelte'
+  import { getContext, onDestroy } from 'svelte'
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils'
   import { globalObjects, globalStudio } from '../consts'
   import { createRawEventDispatcher } from './createRawEventDispatcher'
@@ -174,7 +174,7 @@
     'aspect'
   ]
 
-  object.onValuesChange((newValues) => {
+  const unsubscribe = object.onValuesChange((newValues) => {
     // assign new values to slot prop
     values = newValues
 
@@ -212,6 +212,7 @@
       invalidate()
     })
   })
+  onDestroy(unsubscribe)
 
   export const read = () => {
     if (!$globalStudio) return
