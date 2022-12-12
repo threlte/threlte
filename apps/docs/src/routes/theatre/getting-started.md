@@ -86,4 +86,4 @@ The property `transform` is a shortcut to add `position`, `scale` and `rotation`
 
 You will now see the Theatre.js Interface. Make yourself comfortable with the controls and if you haven't done yet, please read the [Theatre.js documentation](https://www.theatrejs.com/docs/latest).
 
-<img src="/images/theatre/getting-started.png" class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-[600px] relative">
+<img src="/images/theatre/getting-started.png" class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-auto relative">
