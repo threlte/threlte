@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.0.2
+
+### Patch Changes
+
+- 8e1b3d4: Unsubscribe from theatre.js sheet object onDestroy
+
 ## 0.5.0
 
 ### Minor Changes
