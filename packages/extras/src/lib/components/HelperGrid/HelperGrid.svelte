@@ -57,8 +57,6 @@
         }
       },
       transparent: true,
-      // fragmentShader,
-      // vertexShader,
       vertexShader: `
       varying vec3 worldPosition;
       uniform float uFadeDistance;
@@ -154,7 +152,8 @@
 
 <!-- <DisposableObject object={mesh} /> -->
 <!-- <MeshInstance {mesh} /> -->
-<T.Mesh
-  {geometry}
-  {material}
-/>
+<!-- {geometry} -->
+<T.Mesh {material}>
+  >
+  <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+</T.Mesh>

@@ -25,6 +25,25 @@
 			max: 50
 		}
 	})
+
+	const gridSize1 = addInput({
+		label: 'Grid size1',
+		value: 10,
+		params: {
+			step: 1,
+			min: 1,
+			max: 100
+		}
+	})
+	const gridSize2 = addInput({
+		label: 'Grid size2',
+		value: 10,
+		params: {
+			step: 1,
+			min: 1,
+			max: 100
+		}
+	})
 	const cellColor = addInput({
 		label: 'Cell color',
 		value: `#d68fb8`
@@ -133,6 +152,7 @@
 		infiniteGrid={$infiniteGrid}
 		fadeDistance={$fadeDistance}
 		fadeStrength={$fadeStregth}
+		gridSize={[$gridSize1, $gridSize2]}
 	/>
 
 	<!-- Setup example scene -->
