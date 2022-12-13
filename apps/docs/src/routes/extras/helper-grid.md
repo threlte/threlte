@@ -10,13 +10,12 @@ import Example from '$examples/extras/helper-grid/App.svelte'
 
 Helper grid with line thickness adjustment.
 
-<ExampleWrapper playgroundHref="/extras/environment">
+<ExampleWrapper playgroundHref="/extras/helper-grid">
 <Example />
 
 <div slot="code">
 
-@[code svelte|title=App.svelte](../../examples/extras/environment/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/environment/Scene.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/helper-grid/App.svelte)
 
 </div>
 </ExampleWrapper>
@@ -27,3 +26,18 @@ Helper grid with line thickness adjustment.
 
 
 ### Properties
+
+```ts
+  axes?: 'xzy' | 'xyz' | 'zyx' = 'xzy'
+  cellColor?: ColorRepresentation = '#000000'
+  cellSize?: number = 1
+  cellThickness?: number = 1
+  sectionColor?: ColorRepresentation = '#0000ee'
+  sectionSize?: number = 10
+  sectionThickness?: number = 2
+  gridSize?: number | [number, number] = [20,20]
+  followCamera?: boolean = false
+  infiniteGrid?: boolean = false
+  fadeDistance?: number = 100
+  fadeStrength?: number = 1
+```

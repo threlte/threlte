@@ -1,22 +1,23 @@
 <script lang="ts">
-  import { DisposableObject, MeshInstance, useThrelte, T } from '@threlte/core'
-  import { Color, PlaneGeometry, ShaderMaterial, DoubleSide, Mesh } from 'three'
+  import type { HelperGridProperties } from '$lib/types/components'
+  import { useThrelte, T } from '@threlte/core'
+  import { Color, ShaderMaterial, DoubleSide } from 'three'
 
-  export let cellColor = 'black'
-  export let sectionColor = 'red'
-  export let cellSize = 10
-  export let sectionSize = 100
+  export let cellColor: HelperGridProperties['cellColor'] = '#000000'
+  export let sectionColor: HelperGridProperties['sectionColor'] = '#0000ee'
+  export let cellSize: HelperGridProperties['cellSize'] = 1
+  export let sectionSize: HelperGridProperties['sectionSize'] = 10
 
-  export let axes: 'xzy' | 'xyz' | 'zyx' = 'xzy'
-  export let gridSize = [20, 20]
+  export let axes: HelperGridProperties['axes'] = 'xzy'
+  export let gridSize: HelperGridProperties['gridSize'] = [20, 20]
 
-  export let followCamera = false
-  export let infiniteGrid = false
-  export let fadeDistance = 100
-  export let fadeStrength = 1
+  export let followCamera: HelperGridProperties['followCamera'] = false
+  export let infiniteGrid: HelperGridProperties['infiniteGrid'] = false
+  export let fadeDistance: HelperGridProperties['fadeDistance'] = 100
+  export let fadeStrength: HelperGridProperties['fadeStrength'] = 1
 
-  export let cellThickness = 1
-  export let sectionThickness = 2
+  export let cellThickness: HelperGridProperties['cellThickness'] = 1
+  export let sectionThickness: HelperGridProperties['sectionThickness'] = 2
 
   const { invalidate } = useThrelte()
 
@@ -93,7 +94,7 @@
         vec2 grid = abs(fract(r - 0.5) - 0.5) / fwidth(r);
         float line = min(grid.x, grid.y) + 1. - thickness;
 
-        return 1.0 - min(line, 1.0);
+        return 1.0 - min(line, 1.);
       }
 
       void main() {
@@ -105,8 +106,11 @@
         0,
         2
       )}) / uFadeDistance, 1.);
-
-        vec3 color = mix(uColor1, uColor2, g2);
+        
+      // vec3 color = mix(uColor1, uColor2, g2);
+      
+      
+        vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
         gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
         gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
@@ -124,15 +128,11 @@
     })
   }
 
-  const geometry = new PlaneGeometry(...gridSize, 1, 1)
   let material = makeGridMaterial(axes)
-
-  const mesh = new Mesh(geometry, material)
-  mesh.frustumCulled = false
 
   $: {
     material = makeGridMaterial(axes)
-    mesh.material.needsUpdate = true
+    invalidate('Helper Grid axes changed')
   }
 
   $: {
@@ -146,13 +146,10 @@
     material.uniforms.uThickness2 = { value: sectionThickness }
     material.uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
     material.uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
-    invalidate()
+    invalidate('Helper Grid uniforms changed')
   }
 </script>
 
-<!-- <DisposableObject object={mesh} /> -->
-<!-- <MeshInstance {mesh} /> -->
-<!-- {geometry} -->
 <T.Mesh {material}>
   >
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
