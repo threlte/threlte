@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { DisposableObject, MeshInstance, useThrelte } from '@threlte/core'
+  import { DisposableObject, MeshInstance, useThrelte, T } from '@threlte/core'
   import { Color, PlaneGeometry, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
-  export let color1 = 'black'
-  export let color2 = 'red'
-  export let size1 = 10
-  export let size2 = 100
+  export let cellColor = 'black'
+  export let sectionColor = 'red'
+  export let cellSize = 10
+  export let sectionSize = 100
 
   export let axes: 'xzy' | 'xyz' | 'zyx' = 'xzy'
   export let gridSize = [20, 20]
@@ -15,8 +15,8 @@
   export let fadeDistance = 100
   export let fadeStrength = 1
 
-  export let thickness1 = 1
-  export let thickness2 = 2
+  export let cellThickness = 1
+  export let sectionThickness = 2
 
   const { invalidate } = useThrelte()
 
@@ -26,16 +26,16 @@
 
       uniforms: {
         uSize1: {
-          value: size1
+          value: cellSize
         },
         uSize2: {
-          value: size2
+          value: sectionSize
         },
         uColor1: {
-          value: new Color(color1)
+          value: new Color(cellColor)
         },
         uColor2: {
-          value: new Color(color2)
+          value: new Color(sectionColor)
         },
         uFadeDistance: {
           value: fadeDistance
@@ -127,25 +127,34 @@
   }
 
   const geometry = new PlaneGeometry(...gridSize, 1, 1)
-  const material = makeGridMaterial(axes)
+  let material = makeGridMaterial(axes)
 
   const mesh = new Mesh(geometry, material)
   mesh.frustumCulled = false
 
   $: {
-    material.uniforms.uSize1 = { value: size1 }
-    material.uniforms.uSize2 = { value: size2 }
-    material.uniforms.uColor1 = { value: new Color(color1) }
-    material.uniforms.uColor2 = { value: new Color(color2) }
+    material = makeGridMaterial(axes)
+    mesh.material.needsUpdate = true
+  }
+
+  $: {
+    material.uniforms.uSize1 = { value: cellSize }
+    material.uniforms.uSize2 = { value: sectionSize }
+    material.uniforms.uColor1 = { value: new Color(cellColor) }
+    material.uniforms.uColor2 = { value: new Color(sectionColor) }
     material.uniforms.uFadeDistance = { value: fadeDistance }
     material.uniforms.uFadeStrength = { value: fadeStrength }
-    material.uniforms.uThickness1 = { value: thickness1 }
-    material.uniforms.uThickness2 = { value: thickness2 }
+    material.uniforms.uThickness1 = { value: cellThickness }
+    material.uniforms.uThickness2 = { value: sectionThickness }
     material.uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
     material.uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
     invalidate()
   }
 </script>
 
-<DisposableObject object={mesh} />
-<MeshInstance {mesh} />
+<!-- <DisposableObject object={mesh} /> -->
+<!-- <MeshInstance {mesh} /> -->
+<T.Mesh
+  {geometry}
+  {material}
+/>

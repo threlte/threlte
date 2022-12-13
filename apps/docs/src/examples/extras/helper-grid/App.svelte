@@ -6,7 +6,7 @@
 		title: 'Helper'
 	})
 
-	const size1 = addInput({
+	const cellSize = addInput({
 		label: 'Cell size',
 		value: 1,
 		params: {
@@ -16,7 +16,7 @@
 		}
 	})
 
-	const size2 = addInput({
+	const sectionSize = addInput({
 		label: 'Section size',
 		value: 5,
 		params: {
@@ -25,12 +25,12 @@
 			max: 50
 		}
 	})
-	const color1 = addInput({
+	const cellColor = addInput({
 		label: 'Cell color',
 		value: `#d68fb8`
 	})
 
-	const color2 = addInput({
+	const sectionColor = addInput({
 		label: 'Section color',
 		value: `#3c42c4`
 	})
@@ -46,7 +46,7 @@
 		}
 	})
 
-	const thickness1 = addInput({
+	const cellThickness = addInput({
 		label: 'Cell thickness',
 		value: 1,
 		params: {
@@ -55,7 +55,7 @@
 			max: 3
 		}
 	})
-	const thickness2 = addInput({
+	const sectionThickness = addInput({
 		label: 'Section thickness',
 		value: 1.3,
 		params: {
@@ -122,22 +122,27 @@
 
 <Canvas>
 	<HelperGrid
-		color1={$color1}
-		color2={$color2}
-		size1={$size1}
-		size2={$size2}
-		thickness1={$thickness1}
-		thickness2={$thickness2}
+		axes={$axes}
+		cellColor={$cellColor}
+		cellSize={$cellSize}
+		cellThickness={$cellThickness}
+		sectionColor={$sectionColor}
+		sectionSize={$sectionSize}
+		sectionThickness={$sectionThickness}
 		followCamera={$followCamera}
 		infiniteGrid={$infiniteGrid}
 		fadeDistance={$fadeDistance}
 		fadeStrength={$fadeStregth}
-		axes={$axes}
 	/>
 
+	<!-- Setup example scene -->
 	<T.PerspectiveCamera makeDefault position={[0, 10, 20]} fov={36} target={[0, 0, 0]}>
 		<OrbitControls />
 	</T.PerspectiveCamera>
+
+	<T.EdgesGeometry>
+		<T.BoxGeometry />
+	</T.EdgesGeometry>
 
 	{#each { length: 10 } as h, x}
 		{#each { length: 10 } as v, y}
