@@ -1,29 +1,29 @@
 <script lang="ts">
-  import type { HelperGridProperties } from '$lib/types/components'
+  import type { GridProperties } from '$lib/types/components'
   import { useThrelte, T } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
-  export let cellColor: HelperGridProperties['cellColor'] = '#000000'
-  export let sectionColor: HelperGridProperties['sectionColor'] = '#0000ee'
-  export let cellSize: HelperGridProperties['cellSize'] = 1
-  export let sectionSize: HelperGridProperties['sectionSize'] = 10
+  export let cellColor: GridProperties['cellColor'] = '#000000'
+  export let sectionColor: GridProperties['sectionColor'] = '#0000ee'
+  export let cellSize: GridProperties['cellSize'] = 1
+  export let sectionSize: GridProperties['sectionSize'] = 10
 
-  export let axes: HelperGridProperties['axes'] = 'xzy'
-  export let gridSize: HelperGridProperties['gridSize'] = [20, 20]
+  export let axes: GridProperties['axes'] = 'xzy'
+  export let gridSize: GridProperties['gridSize'] = [20, 20]
 
-  export let followCamera: HelperGridProperties['followCamera'] = false
-  export let infiniteGrid: HelperGridProperties['infiniteGrid'] = false
-  export let fadeDistance: HelperGridProperties['fadeDistance'] = 100
-  export let fadeStrength: HelperGridProperties['fadeStrength'] = 1
+  export let followCamera: GridProperties['followCamera'] = false
+  export let infiniteGrid: GridProperties['infiniteGrid'] = false
+  export let fadeDistance: GridProperties['fadeDistance'] = 100
+  export let fadeStrength: GridProperties['fadeStrength'] = 1
 
-  export let cellThickness: HelperGridProperties['cellThickness'] = 1
-  export let sectionThickness: HelperGridProperties['sectionThickness'] = 2
+  export let cellThickness: GridProperties['cellThickness'] = 1
+  export let sectionThickness: GridProperties['sectionThickness'] = 2
 
   export let ref: Mesh
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: HelperGridProperties['axes']) => {
+  const makeGridMaterial = (axes: GridProperties['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
@@ -152,6 +152,7 @@
 <T.Mesh
   {material}
   bind:ref
+  frustumCulled={false}
 >
   >
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />

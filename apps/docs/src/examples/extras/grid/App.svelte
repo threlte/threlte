@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { useTweakpane } from '../../utils/useTweakpane'
 	import { Canvas } from '@threlte/core'
-	import { HelperGrid } from '@threlte/extras'
+	import { Grid } from '@threlte/extras'
 	import Scene from './Scene.svelte'
 
 	const { pane, action, addInput } = useTweakpane({
@@ -149,7 +149,7 @@
 <div use:action />
 
 <Canvas>
-	<HelperGrid
+	<Grid
 		axes={$axes}
 		cellColor={$cellColor}
 		cellSize={$cellSize}

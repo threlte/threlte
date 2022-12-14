@@ -373,8 +373,8 @@ export const sidebar = {
 				slug: '/extras/environment'
 			},
 			{
-				title: 'Helper Grid',
-				slug: '/extras/helper-grid'
+				title: 'Grid',
+				slug: '/extras/grid'
 			}
 		],
 		'@threlte/theatre': [
