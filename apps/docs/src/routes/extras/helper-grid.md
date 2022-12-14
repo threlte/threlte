@@ -1,5 +1,5 @@
 ---
-title: Environment
+title: Helper Grid
 ---
 
 <script lang="ts">
@@ -16,6 +16,7 @@ A robust implementation of a simple helper grid with multiple tweakable paramete
 <div slot="code">
 
 @[code svelte|title=App.svelte](../../examples/extras/helper-grid/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/helper-grid/Scene.svelte)
 
 </div>
 </ExampleWrapper>
