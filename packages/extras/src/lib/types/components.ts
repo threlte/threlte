@@ -148,16 +148,16 @@ export type EnvironmentProperties = {
 }
 
 export type HelperGridProperties = {
-  axes?: 'xzy' | 'xyz' | 'zyx'
-  cellColor?: ColorRepresentation
-  cellSize?: number
-  cellThickness?: number
-  sectionColor?: ColorRepresentation
-  sectionSize?: number
-  sectionThickness?: number
-  gridSize?: number | [number, number]
-  followCamera?: boolean
-  infiniteGrid?: boolean
-  fadeDistance?: number
-  fadeStrength?: number
+  axes: 'xzy' | 'xyz' | 'zyx'
+  cellColor: ColorRepresentation
+  cellSize: number
+  cellThickness: number
+  sectionColor: ColorRepresentation
+  sectionSize: number
+  sectionThickness: number
+  gridSize: number | [number, number]
+  followCamera: boolean
+  infiniteGrid: boolean
+  fadeDistance: number
+  fadeStrength: number
 }

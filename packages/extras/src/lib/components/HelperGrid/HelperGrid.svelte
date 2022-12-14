@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HelperGridProperties } from '$lib/types/components'
   import { useThrelte, T } from '@threlte/core'
-  import { Color, ShaderMaterial, DoubleSide } from 'three'
+  import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
   export let cellColor: HelperGridProperties['cellColor'] = '#000000'
   export let sectionColor: HelperGridProperties['sectionColor'] = '#0000ee'
@@ -19,9 +19,11 @@
   export let cellThickness: HelperGridProperties['cellThickness'] = 1
   export let sectionThickness: HelperGridProperties['sectionThickness'] = 2
 
+  export let ref: Mesh
+
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: string) => {
+  const makeGridMaterial = (axes: HelperGridProperties['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
@@ -105,11 +107,7 @@
         float d = 1.0 - min(distance(cameraPosition.${axes.slice(0, 2)}, worldPosition.${axes.slice(
         0,
         2
-      )}) / uFadeDistance, 1.);
-        
-      // vec3 color = mix(uColor1, uColor2, g2);
-      
-      
+      )}) / uFadeDistance, 1.);   
         vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
         gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
@@ -136,6 +134,7 @@
   }
 
   $: {
+    axes
     material.uniforms.uSize1 = { value: cellSize }
     material.uniforms.uSize2 = { value: sectionSize }
     material.uniforms.uColor1 = { value: new Color(cellColor) }
@@ -150,7 +149,10 @@
   }
 </script>
 
-<T.Mesh {material}>
+<T.Mesh
+  {material}
+  bind:ref
+>
   >
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
 </T.Mesh>
