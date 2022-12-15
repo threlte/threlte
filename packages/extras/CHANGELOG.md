@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.9.0
+
+### Minor Changes
+
+- 8a6e02f: Feature: Grid component
+
 ## 4.8.0
 
 ### Minor Changes
