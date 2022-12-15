@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.9.2
+
+### Patch Changes
+
+- 65d2b64: all <Grid> props should be optional
+
 ## 4.9.1
 
 ### Patch Changes
