@@ -50,14 +50,3 @@
 		{/if}
 	{/each}
 {/each}
-
-<!-- <T.Mesh position={[0, -0.5, 0]}>
-	<T.BoxGeometry args={[200, 0.2, 200]} />
-	<T.MeshBasicMaterial
-		args={[
-			{
-				color: '#121212'
-			}
-		]}
-	/>
-</T.Mesh> -->
