@@ -10,7 +10,7 @@ import Example from '$examples/extras/grid/App.svelte'
 
 A robust implementation of a simple helper grid with multiple tweakable parameters.
 
-<ExampleWrapper playgroundHref="/extras/helper-grid">
+<ExampleWrapper playgroundHref="/extras/grid">
 <Example />
 
 <div slot="code">
