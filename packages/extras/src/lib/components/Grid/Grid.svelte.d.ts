@@ -2,7 +2,7 @@ import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
 import type { ColorRepresentation, Mesh } from 'three'
 
-export type Grid = Props<Mesh> & {
+export type GridProps = Omit<Props<Mesh>, 'material' | 'geometry'> & {
   axes: 'xzy' | 'xyz' | 'zyx'
   cellColor: ColorRepresentation
   cellSize: number
@@ -17,4 +17,4 @@ export type Grid = Props<Mesh> & {
   fadeStrength: number
 }
 
-export default class Sparkles extends SvelteComponentTyped<Grid, Events<Mesh>, Slots<Mesh>> {}
+export default class Sparkles extends SvelteComponentTyped<GridProps, Events<Mesh>, Slots<Mesh>> {}

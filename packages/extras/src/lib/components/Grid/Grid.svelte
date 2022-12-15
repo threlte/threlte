@@ -1,29 +1,29 @@
 <script lang="ts">
-  import type { Grid } from './Grid.svelte'
+  import type { GridProps } from './Grid.svelte'
   import { useThrelte, T } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
-  export let cellColor: Grid['cellColor'] = '#000000'
-  export let sectionColor: Grid['sectionColor'] = '#0000ee'
-  export let cellSize: Grid['cellSize'] = 1
-  export let sectionSize: Grid['sectionSize'] = 10
+  export let cellColor: GridProps['cellColor'] = '#000000'
+  export let sectionColor: GridProps['sectionColor'] = '#0000ee'
+  export let cellSize: GridProps['cellSize'] = 1
+  export let sectionSize: GridProps['sectionSize'] = 10
 
-  export let axes: Grid['axes'] = 'xzy'
-  export let gridSize: Grid['gridSize'] = [20, 20]
+  export let axes: GridProps['axes'] = 'xzy'
+  export let gridSize: GridProps['gridSize'] = [20, 20]
 
-  export let followCamera: Grid['followCamera'] = false
-  export let infiniteGrid: Grid['infiniteGrid'] = false
-  export let fadeDistance: Grid['fadeDistance'] = 100
-  export let fadeStrength: Grid['fadeStrength'] = 1
+  export let followCamera: GridProps['followCamera'] = false
+  export let infiniteGrid: GridProps['infiniteGrid'] = false
+  export let fadeDistance: GridProps['fadeDistance'] = 100
+  export let fadeStrength: GridProps['fadeStrength'] = 1
 
-  export let cellThickness: Grid['cellThickness'] = 1
-  export let sectionThickness: Grid['sectionThickness'] = 2
+  export let cellThickness: GridProps['cellThickness'] = 1
+  export let sectionThickness: GridProps['sectionThickness'] = 2
 
   export let ref: Mesh
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: Grid['axes']) => {
+  const makeGridMaterial = (axes: GridProps['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
