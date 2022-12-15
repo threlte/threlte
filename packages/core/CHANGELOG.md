@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.8
+
+### Patch Changes
+
+- 104ba90: Republishing due to <TransformControls> inconsistency
+
 ## 5.0.7
 
 ### Patch Changes
