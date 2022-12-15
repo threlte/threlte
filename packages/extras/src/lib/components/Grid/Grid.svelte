@@ -130,7 +130,7 @@
 
   $: {
     material = makeGridMaterial(axes)
-    invalidate('Helper Grid axes changed')
+    invalidate('Grid axes changed')
   }
 
   $: {
@@ -145,7 +145,7 @@
     material.uniforms.uThickness2 = { value: sectionThickness }
     material.uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
     material.uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
-    invalidate('Helper Grid uniforms changed')
+    invalidate('Grid uniforms changed')
   }
 </script>
 

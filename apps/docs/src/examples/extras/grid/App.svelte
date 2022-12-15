@@ -5,7 +5,7 @@
 	import Scene from './Scene.svelte'
 
 	const { pane, action, addInput } = useTweakpane({
-		title: 'Helper'
+		title: 'Grid'
 	})
 
 	const cellFolder = pane.addFolder({

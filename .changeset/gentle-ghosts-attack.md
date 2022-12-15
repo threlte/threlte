@@ -2,4 +2,4 @@
 '@threlte/extras': minor
 ---
 
-Feature: Helper Grid component
+Feature: Grid component
