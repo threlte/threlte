@@ -1,29 +1,29 @@
 <script lang="ts">
-  import type { GridProperties } from '$lib/types/components'
+  import type { Grid } from './Grid.svelte'
   import { useThrelte, T } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
-  export let cellColor: GridProperties['cellColor'] = '#000000'
-  export let sectionColor: GridProperties['sectionColor'] = '#0000ee'
-  export let cellSize: GridProperties['cellSize'] = 1
-  export let sectionSize: GridProperties['sectionSize'] = 10
+  export let cellColor: Grid['cellColor'] = '#000000'
+  export let sectionColor: Grid['sectionColor'] = '#0000ee'
+  export let cellSize: Grid['cellSize'] = 1
+  export let sectionSize: Grid['sectionSize'] = 10
 
-  export let axes: GridProperties['axes'] = 'xzy'
-  export let gridSize: GridProperties['gridSize'] = [20, 20]
+  export let axes: Grid['axes'] = 'xzy'
+  export let gridSize: Grid['gridSize'] = [20, 20]
 
-  export let followCamera: GridProperties['followCamera'] = false
-  export let infiniteGrid: GridProperties['infiniteGrid'] = false
-  export let fadeDistance: GridProperties['fadeDistance'] = 100
-  export let fadeStrength: GridProperties['fadeStrength'] = 1
+  export let followCamera: Grid['followCamera'] = false
+  export let infiniteGrid: Grid['infiniteGrid'] = false
+  export let fadeDistance: Grid['fadeDistance'] = 100
+  export let fadeStrength: Grid['fadeStrength'] = 1
 
-  export let cellThickness: GridProperties['cellThickness'] = 1
-  export let sectionThickness: GridProperties['sectionThickness'] = 2
+  export let cellThickness: Grid['cellThickness'] = 1
+  export let sectionThickness: Grid['sectionThickness'] = 2
 
   export let ref: Mesh
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: GridProperties['axes']) => {
+  const makeGridMaterial = (axes: Grid['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
@@ -107,7 +107,7 @@
         float d = 1.0 - min(distance(cameraPosition.${axes.slice(0, 2)}, worldPosition.${axes.slice(
         0,
         2
-      )}) / uFadeDistance, 1.);   
+      )}) / uFadeDistance, 1.);
         vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
         gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
@@ -126,12 +126,8 @@
     })
   }
 
-  let material = makeGridMaterial(axes)
-
-  $: {
-    material = makeGridMaterial(axes)
-    invalidate('Grid axes changed')
-  }
+  $: material = makeGridMaterial(axes)
+  $: material && invalidate('Grid axes changed')
 
   $: {
     axes
@@ -150,10 +146,13 @@
 </script>
 
 <T.Mesh
-  {material}
   bind:ref
+  {material}
   frustumCulled={false}
+  {...$$restProps}
+  let:ref
 >
-  >
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+
+  <slot {ref} />
 </T.Mesh>

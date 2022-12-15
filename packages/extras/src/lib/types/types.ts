@@ -1,6 +1,6 @@
 import type { Color, ColorRepresentation, Material, Mesh } from 'three'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import type { SceneGraph, Nodes, Materials } from '../lib/buildSceneGraph'
+import type { SceneGraph } from '../lib/buildSceneGraph'
 
 export interface Text extends Mesh {
   /**

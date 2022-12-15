@@ -146,22 +146,3 @@ export type EnvironmentProperties = {
    */
   encoding?: TextureEncoding
 }
-
-export type GridProperties = {
-  axes: 'xzy' | 'xyz' | 'zyx'
-  cellColor: ColorRepresentation
-  cellSize: number
-  cellThickness: number
-  sectionColor: ColorRepresentation
-  sectionSize: number
-  sectionThickness: number
-  gridSize: number | [number, number]
-  followCamera: boolean
-  infiniteGrid: boolean
-  fadeDistance: number
-  fadeStrength: number
-  /*
-    Grid passes ref of the Mesh that it's made of.
-  */
-  ref: Mesh
-}
