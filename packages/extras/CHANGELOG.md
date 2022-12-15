@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.9.1
+
+### Patch Changes
+
+- 8120433: Added Mesh props to <Grid>
+
 ## 4.9.0
 
 ### Minor Changes
