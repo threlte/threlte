@@ -215,10 +215,11 @@
     objectChange: () => dispatch('objectChange')
   }
 
-  if (!renderer)
+  if (!renderer) {
     throw new Error(
       'TransformControls: renderer is undefined, is this component a child of <Canvas>?'
     )
+  }
 
   const transformControls = new TransformControls($camera, renderer.domElement)
 
