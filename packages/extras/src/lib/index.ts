@@ -24,7 +24,8 @@ export type {
   TextProperties,
   GLTFProperties,
   ContactShadowProperties,
-  EnvironmentProperties
+  EnvironmentProperties,
+  GridProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'
