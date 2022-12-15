@@ -371,6 +371,10 @@ export const sidebar = {
 			{
 				title: 'Environment',
 				slug: '/extras/environment'
+			},
+			{
+				title: 'Grid',
+				slug: '/extras/grid'
 			}
 		],
 		'@threlte/theatre': [

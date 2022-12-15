@@ -6,7 +6,7 @@ import type {
   Object3DInstanceProperties,
   Scale
 } from '@threlte/core'
-import type { Camera, ColorRepresentation, Material, Object3D, TextureEncoding } from 'three'
+import type { Camera, ColorRepresentation, Material, Mesh, Object3D, TextureEncoding } from 'three'
 import type { Text as TextType } from './types'
 
 export type EdgesProperties = Omit<LineSegmentsProperties, 'geometry' | 'material'> &
@@ -145,4 +145,23 @@ export type EnvironmentProperties = {
    * Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular
    */
   encoding?: TextureEncoding
+}
+
+export type GridProperties = {
+  axes: 'xzy' | 'xyz' | 'zyx'
+  cellColor: ColorRepresentation
+  cellSize: number
+  cellThickness: number
+  sectionColor: ColorRepresentation
+  sectionSize: number
+  sectionThickness: number
+  gridSize: number | [number, number]
+  followCamera: boolean
+  infiniteGrid: boolean
+  fadeDistance: number
+  fadeStrength: number
+  /*
+    Grid passes ref of the Mesh that it's made of.
+  */
+  ref: Mesh
 }
