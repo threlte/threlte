@@ -3,27 +3,30 @@
   import { useThrelte, T } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
 
-  export let cellColor: GridProps['cellColor'] = '#000000'
-  export let sectionColor: GridProps['sectionColor'] = '#0000ee'
-  export let cellSize: GridProps['cellSize'] = 1
-  export let sectionSize: GridProps['sectionSize'] = 10
+  type Props = Required<GridProps>
 
-  export let axes: GridProps['axes'] = 'xzy'
-  export let gridSize: GridProps['gridSize'] = [20, 20]
+  export let cellColor: Props['cellColor'] = '#000000'
+  export let sectionColor: Props['sectionColor'] = '#0000ee'
+  export let cellSize: Props['cellSize'] = 1
+  export let sectionSize: Props['sectionSize'] = 10
 
-  export let followCamera: GridProps['followCamera'] = false
-  export let infiniteGrid: GridProps['infiniteGrid'] = false
-  export let fadeDistance: GridProps['fadeDistance'] = 100
-  export let fadeStrength: GridProps['fadeStrength'] = 1
+  export let axes: Props['axes'] = 'xzy'
 
-  export let cellThickness: GridProps['cellThickness'] = 1
-  export let sectionThickness: GridProps['sectionThickness'] = 2
+  export let gridSize: Props['gridSize'] = [20, 20]
+
+  export let followCamera: Props['followCamera'] = false
+  export let infiniteGrid: Props['infiniteGrid'] = false
+  export let fadeDistance: Props['fadeDistance'] = 100
+  export let fadeStrength: Props['fadeStrength'] = 1
+
+  export let cellThickness: Props['cellThickness'] = 1
+  export let sectionThickness: Props['sectionThickness'] = 2
 
   export let ref: Mesh
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: GridProps['axes']) => {
+  const makeGridMaterial = (axes: Props['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
