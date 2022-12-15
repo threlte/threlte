@@ -17,4 +17,4 @@ export type GridProps = Omit<Props<Mesh>, 'material' | 'geometry'> & {
   fadeStrength: number
 }
 
-export default class Sparkles extends SvelteComponentTyped<GridProps, Events<Mesh>, Slots<Mesh>> {}
+export default class Grid extends SvelteComponentTyped<GridProps, Events<Mesh>, Slots<Mesh>> {}
