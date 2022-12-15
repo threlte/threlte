@@ -23,7 +23,7 @@ jobs:
           version: 7.5.0
 
       - name: Install deps
-        run: pnpm install --filter='!./apps/*'
+        run: pnpm run install:packages
 
       - name: Build packages
         run: pnpm run package

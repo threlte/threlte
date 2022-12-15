@@ -32,7 +32,7 @@ This repo uses [changesets](https://github.com/changesets/changesets) to make co
 - Install [editorconfig](https://editorconfig.org/) extension for your editor
 - **vscode users only** - install recommended extensions
 - Fork the [repository](https://github.com/threlte/threlte), clone or download your fork
-- Install dependencies at the root of the repository with `pnpm run install-dependencies` **(make sure to install with pnpm)**
+- Install dependencies at the root of the repository with `pnpm run install:all` **(make sure to install with pnpm)**
 - After the dependencies have been installed:
 
 **If developing a package [e.g. packages/core, packages/extras]**
