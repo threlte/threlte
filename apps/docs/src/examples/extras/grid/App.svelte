@@ -107,6 +107,7 @@
 		},
 		parent: generalFolder
 	})
+	$: axisTyped = $axes as 'xzy' | 'xyz' | 'zyx'
 
 	const followCamera = addInput({
 		label: 'followCamera',
@@ -150,7 +151,7 @@
 
 <Canvas>
 	<Grid
-		axes={$axes}
+		axes={axisTyped}
 		cellColor={$cellColor}
 		cellSize={$cellSize}
 		cellThickness={$cellThickness}
