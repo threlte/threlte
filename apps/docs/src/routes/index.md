@@ -73,7 +73,7 @@ Threlte is still in active development and you should expect breaking changes. C
 
 ## Don't take our word for it!
 
-Many developers love Threlte.
+Many developers love threlte.
 
 <div class="flex flex-col md:flex-row md:flex-wrap">
   {#each testimonials as _t}
