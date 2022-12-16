@@ -4,6 +4,25 @@ title: Introduction
 
 <script lang="ts">
 import Example from '$examples/introduction/App.svelte'
+
+type Testimonial = {
+  platform: 'twitter'; // Each platform would has its own style, currently only Twitter is supported
+  image: string; // Author image
+  name: string; // Author name
+  title: string; // Author title
+  link: string; // Source URL
+  contents: string; // The testimonial itself
+}
+const testimonials: Testimonial[] = [
+  {
+    platform: 'twitter',
+    image: 'https://avatars.githubusercontent.com/u/1162160?v=4',
+    name: 'Rich Harris',
+    title: "Creator of Svelte.",
+    link: 'https://twitter.com/Rich_Harris/status/1599090054382596097',
+    contents: "indeed — threlte is where it's at. i should get round to updating the svelte cubed repo/site to make that clearer",
+  }
+];
 </script>
 
 # Introduction
@@ -51,3 +70,25 @@ It also aims to provide the building blocks to quickly extend Threlte when it's 
 :::admonition type="note"
 Threlte is still in active development and you should expect breaking changes. Check the release notes before updating. If you want to be on the safe side, install Threlte with `npm i @threlte/core --save-exact` to lock the versions, same goes for `@threlte/extras` and `@threlte/rapier`
 :::
+
+## Don't take our word for it!
+
+Many developers love Threlte.
+
+<div class="flex flex-col md:flex-row md:flex-wrap">
+  {#each testimonials as _t}
+    <a href={_t.link} rel="external" class="w-full md:max-w-sm rounded-md px-4 border-none bg-gray-50 shadow-xl">
+      <div class="w-full flex gap-6">
+        <img src={_t.image} alt="{_t.name} profile photo" class="rounded-full w-16" />
+        <div class="grow">
+          <h4 class="">{_t.name}</h4>
+          <p class="text-sm font-normal text-gray-400">{_t.title}</p>
+        </div>
+        {#if _t.platform === 'twitter'}
+          <svg class="w-12 h-12 self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#03A9F4" d="M42 12.4a15 15 0 0 1-4.2 1.2c1.5-1 2.7-2.4 3.2-4-1.4.8-3 1.4-4.7 1.7A7.4 7.4 0 0 0 31 9a7.4 7.4 0 0 0-7.2 9 21 21 0 0 1-15.2-7.7 7.3 7.3 0 0 0 2.3 9.8c-1.2 0-2.4-.4-3.4-.9 0 3.6 2.6 6.6 6 7.3a7.3 7.3 0 0 1-3.4.1c1 2.9 3.7 5 7 5a15 15 0 0 1-11 3.1A22 22 0 0 0 17.4 38a20.8 20.8 0 0 0 21-21.8c1.5-1 2.7-2.3 3.7-3.8"/></svg>
+        {/if}
+      </div>
+      <p class="mt-0 font-normal text-base text-gray-600">{_t.contents}</p>
+    </a>
+  {/each}
+</div>
