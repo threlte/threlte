@@ -13,7 +13,7 @@
 	]
 </script>
 
-<T.PerspectiveCamera makeDefault position={[-15, 15, 20]} fov={25} target={[0, 0, 0]}>
+<T.PerspectiveCamera makeDefault position={[0, 10, 20]} fov={36} target={[0, 0, 0]}>
 	<OrbitControls />
 </T.PerspectiveCamera>
 

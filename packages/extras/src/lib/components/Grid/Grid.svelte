@@ -10,6 +10,8 @@
   export let cellSize: Props['cellSize'] = 1
   export let sectionSize: Props['sectionSize'] = 10
 
+  export let axes: Props['axes'] = 'xzy'
+
   export let gridSize: Props['gridSize'] = [20, 20]
 
   export let followCamera: Props['followCamera'] = false
@@ -24,7 +26,7 @@
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = () => {
+  const makeGridMaterial = (axes: Props['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
@@ -69,8 +71,8 @@
 
       void main() {
 
-        vec3 pos = position.xzy * (1. + uFadeDistance * uInfiniteGrid);
-        pos.xz += (cameraPosition.xz * uFollowCamera);
+        vec3 pos = position.${axes} * (1. + uFadeDistance * uInfiniteGrid);
+        pos.${axes.slice(0, 2)} += (cameraPosition.${axes.slice(0, 2)} * uFollowCamera);
 
         worldPosition = pos;
 
@@ -92,7 +94,7 @@
 
       float getGrid(float size, float thickness) {
 
-        vec2 r = worldPosition.xz / size;
+        vec2 r = worldPosition.${axes.slice(0, 2)} / size;
 
         vec2 grid = abs(fract(r - 0.5) - 0.5) / fwidth(r);
         float line = min(grid.x, grid.y) + 1. - thickness;
@@ -105,7 +107,10 @@
         float g1 = getGrid(uSize1, uThickness1);
         float g2 = getGrid(uSize2, uThickness2);
 
-        float d = 1.0 - min(distance(cameraPosition.xz, worldPosition.xz) / uFadeDistance, 1.);
+        float d = 1.0 - min(distance(cameraPosition.${axes.slice(0, 2)}, worldPosition.${axes.slice(
+        0,
+        2
+      )}) / uFadeDistance, 1.);
         vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
         gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
@@ -113,9 +118,10 @@
 
         if(gl_FragColor.a <= 0.0)
           discard;
-        #include <tonemapping_fragment>
-        #include <encodings_fragment>
-      }`,
+
+      }
+
+       `,
 
       extensions: {
         derivatives: true
@@ -123,9 +129,11 @@
     })
   }
 
-  const material = makeGridMaterial()
+  $: material = makeGridMaterial(axes)
+  $: material && invalidate('Grid axes changed')
 
   $: {
+    axes
     material.uniforms.uSize1 = { value: cellSize }
     material.uniforms.uSize2 = { value: sectionSize }
     material.uniforms.uColor1 = { value: new Color(cellColor) }

@@ -40,13 +40,14 @@ You can extend the grid into infinity if you set the `infiniteGrid` parameter to
 Changing `fadeDistance` sets how far from the camera position the grid begins to fade by having its alpha reduced. `fadeStrength` determines how fast it happens (exponent). `fadeStrength = 0` means that there is no fading (not recommended for large grids).
 
 ## Follow camera
-Setting `followCamera` to true applies a transform that moves the grid to the camera's position.
+Setting `followCamera` to true applies a transform that moves the grid to the camera's position on the chosen `axes`.
 
 `ref` passes a reference from the `<T.Mesh/> the grid is constructed on.
 
 ### Properties
 
 ```ts  
+  axes: 'xzy' | 'xyz' | 'zyx' = 'xzy'
   cellColor: ColorRepresentation = '#000000'
   cellSize: number = 1
   cellThickness: number = 1
