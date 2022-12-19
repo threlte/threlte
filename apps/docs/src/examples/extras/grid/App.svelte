@@ -150,7 +150,7 @@
 
 <div use:action />
 
-<Canvas>
+<Canvas linear flat>
 	<Grid
 		axes={axisTyped}
 		cellColor={$cellColor}
