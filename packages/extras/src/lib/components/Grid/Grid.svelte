@@ -118,9 +118,9 @@
 
         if(gl_FragColor.a <= 0.0)
           discard;
-
+        #include <tonemapping_fragment>
+        #include <encodings_fragment>
       }
-
        `,
 
       extensions: {

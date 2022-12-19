@@ -5,7 +5,8 @@
 	import Scene from './Scene.svelte'
 
 	const { pane, action, addInput } = useTweakpane({
-		title: 'Grid'
+		title: 'Grid',
+		expanded: false
 	})
 
 	const cellFolder = pane.addFolder({
@@ -23,13 +24,13 @@
 	})
 	const cellColor = addInput({
 		label: 'Cell color',
-		value: `#d68fb8`,
+		value: `#000000`,
 		parent: cellFolder
 	})
 
 	const cellThickness = addInput({
 		label: 'Cell thickness',
-		value: 1,
+		value: 1.4,
 		params: {
 			step: 0.1,
 			min: 1,
@@ -54,12 +55,12 @@
 	})
 	const sectionColor = addInput({
 		label: 'Section color',
-		value: `#3c42c4`,
+		value: `#FF3E00`,
 		parent: sectionFolder
 	})
 	const sectionThickness = addInput({
 		label: 'Section thickness',
-		value: 1.3,
+		value: 2,
 		params: {
 			step: 0.1,
 			min: 1,
@@ -75,7 +76,7 @@
 
 	const gridSize1 = addInput({
 		label: 'Grid size1',
-		value: 10,
+		value: 20,
 		params: {
 			step: 1,
 			min: 1,
@@ -86,7 +87,7 @@
 	})
 	const gridSize2 = addInput({
 		label: 'Grid size2',
-		value: 10,
+		value: 20,
 		params: {
 			step: 1,
 			min: 1,
