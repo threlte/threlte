@@ -1,3 +1,4 @@
+<!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
   import type { GridProps } from './Grid.svelte'
   import { useThrelte, T } from '@threlte/core'
