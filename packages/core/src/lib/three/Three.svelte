@@ -64,9 +64,6 @@
   // Plugins
   const plugins = usePlugins({ ref, props: $$props })
   const pluginsProps = plugins?.pluginsProps ?? []
-  $: plugins?.updateRef(ref)
-  $: plugins?.updateProps($$props)
-  $: plugins?.updateRestProps($$restProps)
 
   // Props
   const props = useProps()
@@ -87,6 +84,11 @@
   // Events
   const events = useEvents()
   $: events.updateRef(ref)
+
+  // update plugins after all other updates
+  $: plugins?.updateRef(ref)
+  $: plugins?.updateProps($$props)
+  $: plugins?.updateRestProps($$restProps)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D
