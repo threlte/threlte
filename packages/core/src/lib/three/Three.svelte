@@ -9,6 +9,7 @@
   import { useCamera } from './lib/useCamera'
   import { useCreateEvent } from './lib/useCreateEvent'
   import { useEvents } from './lib/useEvents'
+  import { usePlugins } from './lib/usePlugins'
   import { useProps } from './lib/useProps'
   import type { AnyClass, MaybeInstance, Props } from './types'
 
@@ -61,10 +62,18 @@
   $: objectStore.set(ref)
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
+  // Plugins
+  const plugins = usePlugins(ref, $$props)
+  const pluginsProps = plugins?.pluginsProps ?? []
+  $: plugins?.updateRef(ref)
+  $: plugins?.updateProps($$props)
+  $: plugins?.updateRestProps($$restProps)
+
   // Props
   const props = useProps()
   $: props.updateProps(ref, $$restProps, {
-    manualCamera: manual
+    manualCamera: manual,
+    pluginsProps
   })
 
   // Camera
