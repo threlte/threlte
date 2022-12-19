@@ -1,4 +1,4 @@
-import { getContext, onDestroy, onMount } from 'svelte'
+import { getContext, onDestroy } from 'svelte'
 import type { Plugin, PluginContext, PluginContextName } from '../../plugins/types'
 
 export const usePlugins = (params: Parameters<Plugin>[0]) => {
@@ -12,14 +12,6 @@ export const usePlugins = (params: Parameters<Plugin>[0]) => {
     .filter(Boolean) as Exclude<ReturnType<Plugin>, void>[]
 
   const pluginsProps = pluginsReturns.flatMap((callback) => callback.pluginProps ?? [])
-
-  onMount(() => {
-    pluginsReturns.forEach((callback) => callback.onMount?.())
-  })
-
-  onDestroy(() => {
-    pluginsReturns.forEach((callback) => callback.onDestroy?.())
-  })
 
   let refCleanupCallbacks: (() => void)[] = []
   onDestroy(() => {
