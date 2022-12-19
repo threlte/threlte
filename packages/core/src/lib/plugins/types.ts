@@ -1,7 +1,4 @@
-export type Plugin = (
-  ref: any,
-  props: Record<string, any>
-) => {
+export type Plugin = (params: { ref: any; props: Record<string, any> }) => {
   pluginProps?: Record<string, any>
   onMount?: () => void
   onDestroy?: () => void

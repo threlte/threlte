@@ -63,7 +63,7 @@
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
   // Plugins
-  const plugins = usePlugins(ref, $$props)
+  const plugins = usePlugins({ ref, props: $$props })
   const pluginsProps = plugins?.pluginsProps ?? []
   $: plugins?.updateRef(ref)
   $: plugins?.updateProps($$props)

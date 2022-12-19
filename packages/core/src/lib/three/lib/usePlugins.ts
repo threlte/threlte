@@ -1,14 +1,14 @@
 import { getContext, onDestroy, onMount } from 'svelte'
 import type { Plugin, PluginContext, PluginContextName } from '../../plugins/types'
 
-export const usePlugins = (ref: any, props: Record<string, any>) => {
+export const usePlugins = (params: Parameters<Plugin>[0]) => {
   const pluginContextName: PluginContextName = 'threlte-plugin-context'
   const plugins = getContext<PluginContext | undefined>(pluginContextName)
 
   if (!plugins) return
 
   const pluginsReturns = Object.values(plugins)
-    .map((plugin) => plugin(ref, props))
+    .map((plugin) => plugin(params))
     .filter(Boolean) as Exclude<ReturnType<Plugin>, void>[]
 
   const pluginsProps = pluginsReturns.flatMap((callback) => callback.pluginProps ?? [])
