@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  '@svelteness/kit-docs@0.24.0':
+    hash: k2oppbdtv66l2eal42gnumnkti
+    path: patches/@svelteness__kit-docs@0.24.0.patch
+
 importers:
 
   .:

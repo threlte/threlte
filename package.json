@@ -26,5 +26,10 @@
     "node": ">=16.0.0"
   },
   "type": "module",
-  "packageManager": "pnpm@7.5.0"
+  "packageManager": "pnpm@7.5.0",
+  "pnpm": {
+    "patchedDependencies": {
+      "@svelteness/kit-docs@0.24.0": "patches/@svelteness__kit-docs@0.24.0.patch"
+    }
+  }
 }

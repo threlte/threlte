@@ -1,0 +1,360 @@
+diff --git a/client/components/layout/useActiveHeaderLinks.js b/client/components/layout/useActiveHeaderLinks.js
+index c588b93dd031e9cdf45c9bbd8752de438264919b..4273ece6c0f3529d1e729882a3536880396bd8da 100644
+--- a/client/components/layout/useActiveHeaderLinks.js
++++ b/client/components/layout/useActiveHeaderLinks.js
+@@ -1,6 +1,6 @@
+ import { onMount, tick } from 'svelte';
+ import { get } from 'svelte/store';
+-import { browser } from '$app/env';
++import { browser } from '$app/environment';
+ import { goto } from '$app/navigation';
+ import { isExtraLargeScreen } from '../../stores/isLargeScreen';
+ import { kitDocs } from '../../stores/kitDocs.js';
+@@ -8,87 +8,110 @@ import { createDisposalBin } from '../../utils/events.js';
+ import { throttleAndDebounce } from '../../utils/timing';
+ const NAVBAR_HEIGHT = 160;
+ export function useActiveHeaderLinks(navContext) {
+-    const disposal = createDisposalBin();
+-    let initialHash = browser ? window.location.hash : null;
+-    const setActiveRouteHash = async () => {
+-        const headerLinks = Array.from(document.querySelectorAll(`.on-this-page a`));
+-        const headerAnchors = Array.from(document.querySelectorAll(`a.header-anchor`));
+-        // Filter anchors that do not have corresponding links.
+-        const validAnchors = headerAnchors.filter((anchor) => headerLinks.some((link) => link.hash === anchor.hash));
+-        const scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+-        const scrollBottom = window.innerHeight + scrollTop;
+-        // Get the total scroll length of current page.
+-        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+-        // Check if we have reached page bottom.
+-        // Notice the `scrollBottom` might not be exactly equal to `scrollHeight`, so we add an offset.
+-        const isAtPageBottom = Math.abs(scrollHeight - scrollBottom) < NAVBAR_HEIGHT;
+-        for (let i = 0; i < validAnchors.length; i++) {
+-            const anchor = validAnchors[i];
+-            const nextAnchor = validAnchors[i + 1];
+-            const isTheFirstAnchorActive = i === 0 && scrollTop === 0;
+-            const currentPosition = (anchor.parentElement?.offsetTop ?? 0) - NAVBAR_HEIGHT;
+-            // If has scrolled past this anchor.
+-            const hasPassedCurrentAnchor = scrollTop >= currentPosition;
+-            // If has not scrolled past next anchor.
+-            const hasNotPassedNextAnchor = !nextAnchor || scrollTop < (nextAnchor.parentElement?.offsetTop ?? 0) - NAVBAR_HEIGHT;
+-            // If this anchor is the active anchor.
+-            const isActive = isTheFirstAnchorActive || (hasPassedCurrentAnchor && hasNotPassedNextAnchor);
+-            if (!isActive)
+-                continue;
+-            const routeHash = location.hash;
+-            const anchorHash = anchor.hash;
+-            // If the active anchor hash is current route hash, do nothing.
+-            if (routeHash === anchorHash)
+-                return;
+-            // Check if anchor is at the bottom of the page to keep hash consistent.
+-            if (isAtPageBottom) {
+-                for (let j = i + 1; j < validAnchors.length; j++) {
+-                    // If current route hash is below the active hash, do nothing.
+-                    if (routeHash === validAnchors[j].hash) {
+-                        return;
+-                    }
+-                }
+-            }
+-            if (!initialHash && get(navContext).canUpdateHash(anchorHash)) {
+-                goto(anchorHash, { replaceState: true, noscroll: true, keepfocus: true });
+-            }
+-            initialHash = null;
++  const disposal = createDisposalBin();
++  let initialHash = browser ? window.location.hash : null;
++  const setActiveRouteHash = async () => {
++    const headerLinks = Array.from(
++      document.querySelectorAll(`.on-this-page a`),
++    );
++    const headerAnchors = Array.from(
++      document.querySelectorAll(`a.header-anchor`),
++    );
++    // Filter anchors that do not have corresponding links.
++    const validAnchors = headerAnchors.filter(anchor =>
++      headerLinks.some(link => link.hash === anchor.hash),
++    );
++    const scrollTop = Math.max(
++      window.pageYOffset,
++      document.documentElement.scrollTop,
++      document.body.scrollTop,
++    );
++    const scrollBottom = window.innerHeight + scrollTop;
++    // Get the total scroll length of current page.
++    const scrollHeight = Math.max(
++      document.documentElement.scrollHeight,
++      document.body.scrollHeight,
++    );
++    // Check if we have reached page bottom.
++    // Notice the `scrollBottom` might not be exactly equal to `scrollHeight`, so we add an offset.
++    const isAtPageBottom =
++      Math.abs(scrollHeight - scrollBottom) < NAVBAR_HEIGHT;
++    for (let i = 0; i < validAnchors.length; i++) {
++      const anchor = validAnchors[i];
++      const nextAnchor = validAnchors[i + 1];
++      const isTheFirstAnchorActive = i === 0 && scrollTop === 0;
++      const currentPosition =
++        (anchor.parentElement?.offsetTop ?? 0) - NAVBAR_HEIGHT;
++      // If has scrolled past this anchor.
++      const hasPassedCurrentAnchor = scrollTop >= currentPosition;
++      // If has not scrolled past next anchor.
++      const hasNotPassedNextAnchor =
++        !nextAnchor ||
++        scrollTop < (nextAnchor.parentElement?.offsetTop ?? 0) - NAVBAR_HEIGHT;
++      // If this anchor is the active anchor.
++      const isActive =
++        isTheFirstAnchorActive ||
++        (hasPassedCurrentAnchor && hasNotPassedNextAnchor);
++      if (!isActive) continue;
++      const routeHash = location.hash;
++      const anchorHash = anchor.hash;
++      // If the active anchor hash is current route hash, do nothing.
++      if (routeHash === anchorHash) return;
++      // Check if anchor is at the bottom of the page to keep hash consistent.
++      if (isAtPageBottom) {
++        for (let j = i + 1; j < validAnchors.length; j++) {
++          // If current route hash is below the active hash, do nothing.
++          if (routeHash === validAnchors[j].hash) {
+             return;
++          }
+         }
+-    };
+-    const onScroll = throttleAndDebounce(() => setActiveRouteHash(), 100);
+-    onMount(() => {
+-        let unsub;
+-        const idleCallback = window.requestIdleCallback ??
+-            ((fn) => {
+-                setTimeout(fn, 300);
+-            });
+-        idleCallback(() => {
+-            function init() {
+-                onScroll();
+-                window.addEventListener('scroll', onScroll);
+-                disposal.add(() => window.removeEventListener('scroll', onScroll));
+-                let skip = true;
+-                disposal.add(kitDocs.subscribe(() => {
+-                    if (skip) {
+-                        skip = false;
+-                        return;
+-                    }
+-                    tick().then(() => onScroll());
+-                }));
+-            }
+-            unsub = isExtraLargeScreen.subscribe(($is) => {
+-                if ($is) {
+-                    tick().then(() => init());
+-                }
+-                else {
+-                    disposal.dispose();
+-                }
+-            });
++      }
++      if (!initialHash && get(navContext).canUpdateHash(anchorHash)) {
++        goto(anchorHash, {
++          replaceState: true,
++          noscroll: true,
++          keepfocus: true,
+         });
+-        return () => {
+-            unsub?.();
+-            disposal.dispose();
+-        };
++      }
++      initialHash = null;
++      return;
++    }
++  };
++  const onScroll = throttleAndDebounce(() => setActiveRouteHash(), 100);
++  onMount(() => {
++    let unsub;
++    const idleCallback =
++      window.requestIdleCallback ??
++      (fn => {
++        setTimeout(fn, 300);
++      });
++    idleCallback(() => {
++      function init() {
++        onScroll();
++        window.addEventListener('scroll', onScroll);
++        disposal.add(() => window.removeEventListener('scroll', onScroll));
++        let skip = true;
++        disposal.add(
++          kitDocs.subscribe(() => {
++            if (skip) {
++              skip = false;
++              return;
++            }
++            tick().then(() => onScroll());
++          }),
++        );
++      }
++      unsub = isExtraLargeScreen.subscribe($is => {
++        if ($is) {
++          tick().then(() => init());
++        } else {
++          disposal.dispose();
++        }
++      });
+     });
++    return () => {
++      unsub?.();
++      disposal.dispose();
++    };
++  });
+ }
+diff --git a/client/polyfills/focus-visible.js b/client/polyfills/focus-visible.js
+index 76676220e7256362406be2f8c004f024114716a5..6b1179ae7076a428037b02fafe51db288c3c1599 100644
+--- a/client/polyfills/focus-visible.js
++++ b/client/polyfills/focus-visible.js
+@@ -1,6 +1,6 @@
+ // @ts-nocheck
+ 
+-import { browser } from '$app/env';
++import { browser } from '$app/environment';
+ 
+ /**
+  * Applies the :focus-visible polyfill at the given scope.
+diff --git a/client/stores/colorScheme.js b/client/stores/colorScheme.js
+index 00c0785f5a1b803a5a96a6d45c47da7ec2254892..e9ecf4b817439658646181dcfe228ed0725abd79 100644
+--- a/client/stores/colorScheme.js
++++ b/client/stores/colorScheme.js
+@@ -1,26 +1,30 @@
+ import { derived, get, writable } from 'svelte/store';
+-import { browser } from '$app/env';
++import { browser } from '$app/environment';
+ import { mediaQuery } from './mediaQuery.js';
+ const LOCAL_STORAGE_KEY = 'svelteness::color-scheme';
+ const prefersDarkColorScheme = mediaQuery('(prefers-color-scheme: dark)');
+ export const colorSchemes = ['light', 'dark', 'system'];
+ const __colorScheme = writable(currentColorScheme());
+ export const colorScheme = {
+-    ...__colorScheme,
+-    set(scheme) {
+-        saveColorScheme(scheme);
+-        __colorScheme.set(scheme);
+-    },
++  ...__colorScheme,
++  set(scheme) {
++    saveColorScheme(scheme);
++    __colorScheme.set(scheme);
++  },
+ };
+-export const isDarkColorScheme = derived([colorScheme, prefersDarkColorScheme], ([$scheme, $prefersDark]) => $scheme === 'dark' || ($scheme === 'system' && $prefersDark));
++export const isDarkColorScheme = derived(
++  [colorScheme, prefersDarkColorScheme],
++  ([$scheme, $prefersDark]) =>
++    $scheme === 'dark' || ($scheme === 'system' && $prefersDark),
++);
+ function currentColorScheme() {
+-    const savedValue = browser && localStorage[LOCAL_STORAGE_KEY];
+-    return savedValue ? savedValue : 'system';
++  const savedValue = browser && localStorage[LOCAL_STORAGE_KEY];
++  return savedValue ? savedValue : 'system';
+ }
+ function saveColorScheme(scheme) {
+-    if (!browser)
+-        return;
+-    localStorage[LOCAL_STORAGE_KEY] = scheme;
+-    const isDarkScheme = scheme === 'dark' || (scheme === 'system' && get(prefersDarkColorScheme));
+-    document.documentElement.classList[isDarkScheme ? 'add' : 'remove']('dark');
++  if (!browser) return;
++  localStorage[LOCAL_STORAGE_KEY] = scheme;
++  const isDarkScheme =
++    scheme === 'dark' || (scheme === 'system' && get(prefersDarkColorScheme));
++  document.documentElement.classList[isDarkScheme ? 'add' : 'remove']('dark');
+ }
+diff --git a/client/stores/mediaQuery.js b/client/stores/mediaQuery.js
+index 7371a141b815c23564c73246b4110a1d54cb8ca2..c946883a83d017ec5821418c1d3d8ed139771fc6 100644
+--- a/client/stores/mediaQuery.js
++++ b/client/stores/mediaQuery.js
+@@ -1,16 +1,15 @@
+ import { readable } from 'svelte/store';
+-import { browser } from '$app/env';
++import { browser } from '$app/environment';
+ export function mediaQuery(query) {
+-    if (!browser)
+-        return readable(false);
+-    const mediaQuery = window.matchMedia(query);
+-    return readable(mediaQuery.matches, (set) => {
+-        const handler = (event) => {
+-            set(event.matches);
+-        };
+-        mediaQuery.addEventListener('change', handler);
+-        return () => {
+-            mediaQuery.removeEventListener('change', handler);
+-        };
+-    });
++  if (!browser) return readable(false);
++  const mediaQuery = window.matchMedia(query);
++  return readable(mediaQuery.matches, set => {
++    const handler = event => {
++      set(event.matches);
++    };
++    mediaQuery.addEventListener('change', handler);
++    return () => {
++      mediaQuery.removeEventListener('change', handler);
++    };
++  });
+ }
+diff --git a/client/stores/scroll.js b/client/stores/scroll.js
+index 48126c980be09bc05c5bd2b44a0750b99eaa34be..88275d4082813ef08d41bfb7012148acdb3e5a3b 100644
+--- a/client/stores/scroll.js
++++ b/client/stores/scroll.js
+@@ -1,33 +1,30 @@
+ import { readable } from 'svelte/store';
+-import { browser } from '$app/env';
++import { browser } from '$app/environment';
+ import { throttleAndDebounce } from '../utils/timing';
+-export const scrollTop = readable(0, (set) => {
+-    if (!browser)
+-        return;
+-    const onScroll = throttleAndDebounce(() => {
+-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+-        set(scrollTop);
+-    }, 50);
+-    window.addEventListener('scroll', onScroll, false);
+-    return () => {
+-        window.removeEventListener('scroll', onScroll);
+-    };
++export const scrollTop = readable(0, set => {
++  if (!browser) return;
++  const onScroll = throttleAndDebounce(() => {
++    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
++    set(scrollTop);
++  }, 50);
++  window.addEventListener('scroll', onScroll, false);
++  return () => {
++    window.removeEventListener('scroll', onScroll);
++  };
+ });
+-export const scrollDirection = readable('none', (set) => {
+-    if (!browser)
+-        return;
+-    let lastScrollTop = 0;
+-    const unsub = scrollTop.subscribe(($scrollTop) => {
+-        if ($scrollTop > lastScrollTop) {
+-            set('down');
+-        }
+-        else {
+-            set('up');
+-        }
+-        lastScrollTop = $scrollTop <= 0 ? 0 : $scrollTop;
+-    });
+-    return () => {
+-        unsub();
+-        lastScrollTop = 0;
+-    };
++export const scrollDirection = readable('none', set => {
++  if (!browser) return;
++  let lastScrollTop = 0;
++  const unsub = scrollTop.subscribe($scrollTop => {
++    if ($scrollTop > lastScrollTop) {
++      set('down');
++    } else {
++      set('up');
++    }
++    lastScrollTop = $scrollTop <= 0 ? 0 : $scrollTop;
++  });
++  return () => {
++    unsub();
++    lastScrollTop = 0;
++  };
+ });

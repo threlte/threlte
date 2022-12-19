@@ -62,7 +62,7 @@
 	import '../../styles/fonts.css'
 	import * as zip from '@zip.js/zip.js'
 
-	import { browser } from '$app/env'
+	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
 	import { page } from '$app/stores'
 
