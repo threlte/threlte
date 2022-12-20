@@ -65,7 +65,8 @@ export { T } from './three/T'
 export type { Props, Events, Slots } from './three/types'
 // <Three> component plugins
 export { injectPlugin } from './plugins/injectPlugin'
-export type { Plugin } from './plugins/types'
+export { createPlugin } from './plugins/createPlugin'
+export type { Plugin, NamedPlugin } from './plugins/types'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
