@@ -22,7 +22,7 @@
 
 	<Text
 		color={new Color('black')}
-		position={{ y: 5 }}
+		position.y={5}
 		anchorX="50%"
 		anchorY="100%"
 		fontSize={0.4}

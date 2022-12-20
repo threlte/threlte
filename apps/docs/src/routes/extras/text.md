@@ -2,8 +2,24 @@
 title: Text
 ---
 
+<script lang="ts">
+import Example from '$examples/extras/text/App.svelte'
+</script>
+
 !!!module_summary title=Text|sourcePath=components/Text/Text.svelte|name=Text|from=extras|type=component|relatedDocs={[{name:"troika-three-text reference",url:"https://protectwise.github.io/troika/troika-three-text/"}]}
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
+
+<ExampleWrapper playgroundHref="/extras/text">
+<Example />
+
+<div slot="code">
+
+@[code svelte|title=App.svelte](../../examples/extras/text/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/text/Scene.svelte)
+
+</div>
+</ExampleWrapper>
+
 !!!
 
 ### Example <!-- omit in toc -->
