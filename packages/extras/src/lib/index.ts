@@ -23,7 +23,6 @@ export type {
   HTMLProperties,
   TextProperties,
   GLTFProperties,
-  ContactShadowProperties,
   EnvironmentProperties
 } from './types/components'
 
