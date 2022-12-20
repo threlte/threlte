@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { EnvironmentProperties } from '$lib/types/components'
   import { useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Scene } from 'three'
@@ -15,15 +14,18 @@
   } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+  import type { GridProps } from '../Grid/Grid.svelte'
 
   import GroundProjectedEnv from './GroundProjectedEnv.svelte'
 
-  export let path: EnvironmentProperties['path'] = undefined
-  export let files: EnvironmentProperties['files']
-  export let isBackground: EnvironmentProperties['isBackground'] = undefined
-  export let groundProjection: EnvironmentProperties['groundProjection'] = undefined
-  export let format: EnvironmentProperties['format'] = undefined
-  export let encoding: EnvironmentProperties['encoding'] = undefined
+  type Props = Required<GridProps>
+
+  export let path: Props['path'] = undefined
+  export let files: Props['files']
+  export let isBackground: Props['isBackground'] = undefined
+  export let groundProjection: Props['groundProjection'] = undefined
+  export let format: Props['format'] = undefined
+  export let encoding: Props['encoding'] = undefined
 
   const isScene = (obj: any): obj is Scene => !!obj.isScene
 

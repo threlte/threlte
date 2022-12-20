@@ -1,11 +1,13 @@
 <script lang="ts">
-  import type { EnvironmentProperties } from '$lib/types/components'
   import { useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Texture } from 'three'
   import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
+  import type { GridProps } from '../Grid/Grid.svelte'
 
-  export let groundProjection: EnvironmentProperties['groundProjection']
+  type Props = Required<GridProps>
+
+  export let groundProjection: Props['groundProjection']
   export let currentEnvMap: Texture
 
   const { scene, invalidate } = useThrelte()
@@ -41,7 +43,7 @@
 
   const toggleGroundEnv = (
     groundEnv: GroundProjectedEnv | undefined,
-    groundEnvProps: EnvironmentProperties['groundProjection'],
+    groundEnvProps: Props['groundProjection'],
     envMap: Texture
   ) => {
     if (groundEnv && previousEnvMap != envMap) removeGroundEnv()
