@@ -8,16 +8,16 @@ Find useful recipes and inspiration for your next project.
 
 ## Animation
 
-- [Animation Transitions](./animation-transitions.md)
+- [Animation Transitions](/examples/animation-transitions)
 
 ## Camera
 
-- [ThirdPersonCamera](./third-person-camera.md)
-- [PointerLockControls](./pointer-lock-controls.md)
+- [ThirdPersonCamera](/examples/third-person-camera)
+- [PointerLockControls](/examples/pointer-lock-controls)
 
 ## Geometry
 
-- [Terrain with 3D noise](./terrain.md)
+- [Terrain with 3D noise](/examples/terrain)
 
 <!-- - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example) -->
 
