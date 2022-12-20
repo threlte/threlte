@@ -14,14 +14,13 @@
   } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-  import type { GridProps } from '../Grid/Grid.svelte'
-
+  import type { EnvironmentProps } from './Environment.svelte'
   import GroundProjectedEnv from './GroundProjectedEnv.svelte'
 
-  type Props = Required<GridProps>
+  type Props = EnvironmentProps
 
-  export let path: Props['path'] = undefined
-  export let files: Props['files']
+  export let path: NonNullable<Props['path']> = ''
+  export let files: NonNullable<Props['files']>
   export let isBackground: Props['isBackground'] = undefined
   export let groundProjection: Props['groundProjection'] = undefined
   export let format: Props['format'] = undefined
@@ -38,7 +37,7 @@
   let previousSceneBackground = scene.background
 
   $: isCubeMap = Array.isArray(files)
-  $: envPath = `${path || ''}${files}`
+  $: envPath = `${path}${files}`
 
   let previousEnvPath: string = envPath
   let previousEnvMap: Texture
@@ -63,7 +62,7 @@
     const loader: any = pickLoader()
     loader.setDataType?.(FloatType)
 
-    loader.setPath(path || '').load(files, (texture: any) => {
+    loader.setPath(path).load(files, (texture: any) => {
       texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
       texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
       previousEnvMap = texture

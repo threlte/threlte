@@ -3,9 +3,9 @@
   import { onDestroy } from 'svelte'
   import type { Texture } from 'three'
   import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
-  import type { GridProps } from '../Grid/Grid.svelte'
+  import type { EnvironmentProps } from './Environment.svelte'
 
-  type Props = Required<GridProps>
+  type Props = Required<EnvironmentProps>
 
   export let groundProjection: Props['groundProjection']
   export let currentEnvMap: Texture
@@ -18,21 +18,29 @@
 
   const applyGroundParams = () => {
     if (groundProjection && currentGroundEnv) {
+      currentGroundEnv.radius = groundProjection.radius
+      currentGroundEnv.height = groundProjection.height
+
+      if (Array.isArray(groundProjection.scale)) {
+        const [x, y, z] = [...groundProjection.scale]
+        currentGroundEnv.scale.set(x | 1, y | 1, z | 1)
+        return
+      }
+
       if (typeof groundProjection.scale === 'number') {
         currentGroundEnv.scale.set(
           groundProjection.scale,
           groundProjection.scale,
           groundProjection.scale
         )
-      } else {
-        currentGroundEnv.scale.set(
-          groundProjection.scale.x ?? 1,
-          groundProjection.scale.y ?? 1,
-          groundProjection.scale.z ?? 1
-        )
+        return
       }
-      currentGroundEnv.radius = groundProjection.radius
-      currentGroundEnv.height = groundProjection.height
+
+      currentGroundEnv.scale.set(
+        groundProjection.scale.x ?? 1,
+        groundProjection.scale.y ?? 1,
+        groundProjection.scale.z ?? 1
+      )
     }
   }
 

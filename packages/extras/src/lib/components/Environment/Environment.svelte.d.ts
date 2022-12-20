@@ -1,6 +1,5 @@
-import type { Scale } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
-import type { TextureEncoding } from 'three'
+import type { TextureEncoding, Vector3 } from 'three'
 
 export type EnvironmentProps = {
   /**
@@ -21,7 +20,7 @@ export type EnvironmentProps = {
   groundProjection?: {
     radius: number
     height: number
-    scale: Scale
+    scale: Partial<Vector3> | number | number[]
   }
   /**
    * Use `ldr` for .png, .jpg and `hdr` for .hdr file formats

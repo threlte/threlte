@@ -21,8 +21,7 @@ export type {
   EdgesProperties,
   FloatProperties,
   HTMLProperties,
-  GLTFProperties,
-  EnvironmentProperties
+  GLTFProperties
 } from './types/components'
 
 export type { ThrelteGltf } from './types/types'
