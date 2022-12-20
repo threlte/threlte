@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.9.3
+
+### Patch Changes
+
+- fb70869: required props in Grid component
+
 ## 4.9.2
 
 ### Patch Changes
