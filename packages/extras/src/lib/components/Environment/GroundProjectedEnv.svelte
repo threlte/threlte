@@ -5,7 +5,7 @@
   import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
   import type { EnvironmentProps } from './Environment.svelte'
 
-  type Props = Required<EnvironmentProps>
+  type Props = EnvironmentProps
 
   export let groundProjection: Props['groundProjection']
   export let currentEnvMap: Texture
