@@ -19,6 +19,10 @@ Find useful recipes and inspiration for your next project.
 
 - [Terrain with 3D noise](./terrain.md)
 
+## Clipping
+
+- [Basic Clipping](./clipping.md)
+
 <!-- - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example) -->
 
 <!-- ## Lights
