@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import { T, useFrame } from '@threlte/core'
 
 	let rotation = 0
@@ -12,6 +12,6 @@
 
 <T.Mesh
 	rotation={[rotation, rotation, rotation]}
-	geometry={new BoxBufferGeometry(2, 2, 2)}
+	geometry={new BoxGeometry(2, 2, 2)}
 	material={new MeshStandardMaterial()}
 />
