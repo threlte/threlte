@@ -41,8 +41,9 @@
 	fontSize={0.5}
 	anchorY="100%"
 	anchorX="50%"
-	rotation={{ y: 90 * DEG2RAD }}
-	position={{ y: 1, x: -1 }}
+	rotation.y={90 * DEG2RAD}
+	position.y={1}
+	position.x={-1}
 	{material}
 />
 
