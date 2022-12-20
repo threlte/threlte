@@ -5,7 +5,8 @@
 	import { useTweakpane } from '../../utils/useTweakpane'
 
 	const { pane, action, addInput } = useTweakpane({
-		title: 'Environment'
+		title: 'Environment',
+		expanded: false
 	})
 
 	const coreFolder = pane.addFolder({
