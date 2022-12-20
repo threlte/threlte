@@ -1,19 +1,4 @@
 import type { CoefficientCombineRule, ColliderDesc } from '@dimforge/rapier3d-compat'
-import type {
-  RawBroadPhase,
-  RawCCDSolver,
-  RawColliderSet,
-  RawDebugRenderPipeline,
-  RawImpulseJointSet,
-  RawIntegrationParameters,
-  RawIslandManager,
-  RawMultibodyJointSet,
-  RawNarrowPhase,
-  RawPhysicsPipeline,
-  RawQueryPipeline,
-  RawRigidBodySet,
-  RawSerializationPipeline
-} from '@dimforge/rapier3d-compat/raw'
 import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
 import type { RigidBodyTypeString } from '../lib/parseRigidBodyType'
 import type { AutoCollidersShapes, ColliderShapes, CollisionGroupsBitMask } from './types'
@@ -168,25 +153,6 @@ export type ColliderProperties<Shape extends ColliderShapes> = Omit<
 
 export type AutoCollidersProperties = Omit<ColliderProperties<AutoCollidersShapes>, 'args'>
 
-export type InnerWorldProperties = {
-  gravity?: Position
-  rawIntegrationParameters?: RawIntegrationParameters
-  rawIslands?: RawIslandManager
-  rawBroadPhase?: RawBroadPhase
-  rawNarrowPhase?: RawNarrowPhase
-  rawBodies?: RawRigidBodySet
-  rawColliders?: RawColliderSet
-  rawImpulseJoints?: RawImpulseJointSet
-  rawMultibodyJoints?: RawMultibodyJointSet
-  rawCCDSolver?: RawCCDSolver
-  rawQueryPipeline?: RawQueryPipeline
-  rawPhysicsPipeline?: RawPhysicsPipeline
-  rawSerializationPipeline?: RawSerializationPipeline
-  rawDebugRenderPipeline?: RawDebugRenderPipeline
-}
-
-export type WorldProperties = InnerWorldProperties
-
 export type CollisionGroupsProperties =
   | {
       groups: CollisionGroupsBitMask
@@ -196,32 +162,30 @@ export type CollisionGroupsProperties =
       memberships: CollisionGroupsBitMask
     }
 
-
-    export type AttractorProperties = Omit<TransformableObjectProperties, 'object'> & {
-      /**
-       * The radius for the Attractor's sphere of influence within which rigid-bodies will be affected.
-       * Default: 10.0
-       */
-      range?: number
-      /**
-       * The strength factor applied to the impulse affecting rigid-bodies within range. For newtonian
-       * calculations, strength is treated as m1 mass.
-       * Default: 1.0
-       */
-      strength?: number
-      /**
-       * The method of calculating gravity on rigid bodies within range.
-       * 'static' = the same force (strength) is applied on bodies within range, regardless of distance
-       * 'linear' = force is calculated as strength * distance / range (force decreases the farther a body is from the attractor position)
-       * 'newtonian' = force is calculated as gravitationalConstant * mass1 * mass2 / Math.pow(distance, 2)
-       * Default: 'static'
-       */
-      gravityType?: GravityType
-      /**
-       * The gravitational constant used to calculate force in newtonian calculations. Most people probably won't use this,
-       * but it provides an option for more realistic physics simulations.
-       * Default: 6.673e-11
-       */
-      gravitationalConstant?: number
-    }
-    
+export type AttractorProperties = Omit<TransformableObjectProperties, 'object'> & {
+  /**
+   * The radius for the Attractor's sphere of influence within which rigid-bodies will be affected.
+   * Default: 10.0
+   */
+  range?: number
+  /**
+   * The strength factor applied to the impulse affecting rigid-bodies within range. For newtonian
+   * calculations, strength is treated as m1 mass.
+   * Default: 1.0
+   */
+  strength?: number
+  /**
+   * The method of calculating gravity on rigid bodies within range.
+   * 'static' = the same force (strength) is applied on bodies within range, regardless of distance
+   * 'linear' = force is calculated as strength * distance / range (force decreases the farther a body is from the attractor position)
+   * 'newtonian' = force is calculated as gravitationalConstant * mass1 * mass2 / Math.pow(distance, 2)
+   * Default: 'static'
+   */
+  gravityType?: GravityType
+  /**
+   * The gravitational constant used to calculate force in newtonian calculations. Most people probably won't use this,
+   * but it provides an option for more realistic physics simulations.
+   * Default: 6.673e-11
+   */
+  gravitationalConstant?: number
+}
