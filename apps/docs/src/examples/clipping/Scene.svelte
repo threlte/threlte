@@ -51,23 +51,23 @@
 	<T.OrbitControls args={[camera, renderer?.domElement]} target={[0, 1, 0]} />
 </T.PerspectiveCamera>
 
-<T.SpotLight
-	color="#ffffff"
-	angle={Math.PI / 5}
-	penumbra={0.2}
-	position={[2, 3, 3]}
-	castShadow
-	shadow={{ camera: { near: 3, far: 10 }, mapSize: [1024, 1024] }}
-/>
+<T.SpotLight color="#ffffff" angle={Math.PI / 5} penumbra={0.2} position={[2, 3, 3]} castShadow>
+	<T.OrthographicCamera attach="shadow.camera" near={3} far={10} />
+	<T.Vector2 attach="shadow.mapSize" args={[1024, 1024]} />
+</T.SpotLight>
 
-<T.DirectionalLight
-	color="#55505a"
-	position={[0, 3, 0]}
-	castShadow
-	shadow={{
-		camera: { near: 1, far: 10, right: 1, left: -1, top: 1, bottom: -1 },
-		mapSize: [1024, 1024]
-	}}
+<T.DirectionalLight color="#55505a" position={[0, 3, 0]} castShadow>
+	<T.OrthographicCamera
+		attach="shadow.camera"
+		near={1}
+		far={10}
+		right={1}
+		left={-1}
+		top={1}
+		bottom={-1}
+	/>
+	<T.Vector2 attach="shadow.mapSize" args={[1024, 1024]} />
+</T.DirectionalLight>
 />
 
 <T.Mesh
