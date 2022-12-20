@@ -11,39 +11,34 @@
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToEuler } from '../../lib/rotationToEuler'
-  import type { RigidBodyProperties } from '../../types/components'
   import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
+  import type { RigidBodyProps } from './RigidBody.svelte'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
+  type Props = Required<RigidBodyProps>
+  type OptProps = RigidBodyProps
+
   export let debug = false
 
-  export let type: NonNullable<RigidBodyProperties['type']> = 'dynamic'
-  export let canSleep: NonNullable<RigidBodyProperties['canSleep']> = true
-  export let linearVelocity: NonNullable<RigidBodyProperties['linearVelocity']> = {}
-  export let angularVelocity: NonNullable<RigidBodyProperties['angularVelocity']> = {}
-  export let gravityScale: NonNullable<RigidBodyProperties['gravityScale']> = 1
-  export let ccd: NonNullable<RigidBodyProperties['ccd']> = false
-  export let angularDamping: NonNullable<RigidBodyProperties['angularDamping']> = 0
-  export let linearDamping: NonNullable<RigidBodyProperties['linearDamping']> = 0
-  export let lockRotations: NonNullable<RigidBodyProperties['lockRotations']> = false
-  export let lockTranslations: NonNullable<RigidBodyProperties['lockTranslations']> = false
-  export let enabledRotations: NonNullable<RigidBodyProperties['enabledRotations']> = [
-    true,
-    true,
-    true
-  ]
-  export let enabledTranslations: NonNullable<RigidBodyProperties['enabledTranslations']> = [
-    true,
-    true,
-    true
-  ]
-  export let dominance: NonNullable<RigidBodyProperties['dominance']> = 0
+  export let type: Props['type'] = 'dynamic'
+  export let canSleep: Props['canSleep'] = true
+  export let linearVelocity: Props['linearVelocity'] = {}
+  export let angularVelocity: Props['angularVelocity'] = {}
+  export let gravityScale: Props['gravityScale'] = 1
+  export let ccd: Props['ccd'] = false
+  export let angularDamping: Props['angularDamping'] = 0
+  export let linearDamping: Props['linearDamping'] = 0
+  export let lockRotations: Props['lockRotations'] = false
+  export let lockTranslations: Props['lockTranslations'] = false
+  export let enabledRotations: Props['enabledRotations'] = [true, true, true]
+  export let enabledTranslations: Props['enabledTranslations'] = [true, true, true]
+  export let dominance: Props['dominance'] = 0
 
-  export let position: RigidBodyProperties['position'] = undefined
-  export let rotation: RigidBodyProperties['rotation'] = undefined
-  export let scale: RigidBodyProperties['scale'] = undefined
-  export let lookAt: RigidBodyProperties['lookAt'] = undefined
+  export let position: OptProps['position'] = undefined
+  export let rotation: OptProps['rotation'] = undefined
+  export let scale: OptProps['scale'] = undefined
+  export let lookAt: OptProps['lookAt'] = undefined
 
   /**
    * Every RigidBody receives and forwards collision-related events
