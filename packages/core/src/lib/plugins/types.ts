@@ -5,6 +5,8 @@ export type Plugin = (params: { ref: any; props: Record<string, any> }) => {
   onRestPropsChange?: (restProps: Record<string, any>) => void
 } | void
 
+export type NamedPlugin = [name: string, plugin: Plugin]
+
 export type PluginContext = Record<string, Plugin>
 
 export type PluginContextName = 'threlte-plugin-context'
