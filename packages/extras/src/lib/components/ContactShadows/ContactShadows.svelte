@@ -1,35 +1,45 @@
 <script lang="ts">
-  import { T, Three, useFrame, useThrelte } from '@threlte/core'
+  import { CameraInstance, Group, Mesh, useFrame, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     Color,
-    Mesh,
+    Mesh as ThreeMesh,
     MeshBasicMaterial,
     MeshDepthMaterial,
     OrthographicCamera,
-    PlaneGeometry,
+    PlaneBufferGeometry,
     ShaderMaterial,
     WebGLRenderTarget
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader'
   import { useMemo } from '../../lib/useMemo'
-  import type { ContactShadowsProps } from './ContactShadows.svelte'
+  import type { ContactShadowProperties } from '../../types/components'
 
-  type Props = Required<ContactShadowsProps>
+  // Group Properties
+  export let position: ContactShadowProperties['position'] = undefined
+  export let rotation: ContactShadowProperties['rotation'] = undefined
+  export let lookAt: ContactShadowProperties['lookAt'] = undefined
+  export let viewportAware: ContactShadowProperties['viewportAware'] = false
+  export let inViewport: ContactShadowProperties['inViewport'] = false
+  export let castShadow: ContactShadowProperties['castShadow'] = undefined
+  export let receiveShadow: ContactShadowProperties['receiveShadow'] = undefined
+  export let frustumCulled: ContactShadowProperties['frustumCulled'] = undefined
+  export let renderOrder: ContactShadowProperties['renderOrder'] = undefined
+  export let visible: ContactShadowProperties['visible'] = undefined
 
   // self
-  export let opacity: Props['opacity'] = 1
-  export let width: Props['width'] = 1
-  export let height: Props['height'] = 1
-  export let blur: Props['blur'] = 1
-  export let far: Props['far'] = 10
-  export let smooth: Props['smooth'] = true
-  export let resolution: Props['resolution'] = 512
-  export let frames: Props['frames'] = Infinity
-  export let scale: Props['scale'] = 10
-  export let color: Props['color'] = '#000000'
-  export let depthWrite: Props['depthWrite'] = false
+  export let opacity: NonNullable<ContactShadowProperties['opacity']> = 1
+  export let width: NonNullable<ContactShadowProperties['width']> = 1
+  export let height: NonNullable<ContactShadowProperties['height']> = 1
+  export let blur: NonNullable<ContactShadowProperties['blur']> = 1
+  export let far: NonNullable<ContactShadowProperties['far']> = 10
+  export let smooth: NonNullable<ContactShadowProperties['smooth']> = true
+  export let resolution: NonNullable<ContactShadowProperties['resolution']> = 512
+  export let frames: NonNullable<ContactShadowProperties['frames']> = Infinity
+  export let scale: NonNullable<ContactShadowProperties['scale']> = 10
+  export let color: NonNullable<ContactShadowProperties['color']> = '#000000'
+  export let depthWrite: NonNullable<ContactShadowProperties['depthWrite']> = false
 
   const { scene, renderer } = useThrelte()
   if (!renderer)
@@ -63,12 +73,12 @@
   $: renderTargetBlur.memoize(resolution)
 
   const planeGeometry = useMemo(() => {
-    return new PlaneGeometry($scaledWidth, $scaledHeight).rotateX(Math.PI / 2)
+    return new PlaneBufferGeometry($scaledWidth, $scaledHeight).rotateX(Math.PI / 2)
   })
   $: planeGeometry.memoize($scaledWidth, $scaledHeight)
 
   const blurPlane = useMemo(() => {
-    return new Mesh($planeGeometry)
+    return new ThreeMesh($planeGeometry)
   })
   $: blurPlane.memoize($planeGeometry)
 
@@ -202,25 +212,37 @@
     verticalBlurMaterial.dispose()
     shadowMaterial.dispose()
   })
+
+  let combinedRotation = {
+    ...rotation,
+    x: rotation?.x ?? 0 + Math.PI / 2
+  }
+  $: combinedRotation = {
+    ...rotation,
+    x: rotation?.x ?? 0 + Math.PI / 2
+  }
 </script>
 
-<T.Group
-  {...$$restProps}
-  let:ref
+<Group
+  rotation={combinedRotation}
+  {position}
+  {lookAt}
+  {viewportAware}
+  {castShadow}
+  {receiveShadow}
+  {frustumCulled}
+  {visible}
+  {renderOrder}
+  bind:inViewport
+  on:viewportenter
+  on:viewportleave
 >
-  <T.Group rotation.x={Math.PI / 2}>
-    <T.Mesh
-      scale.y={-1}
-      rotation.x={-Math.PI / 2}
-      material={shadowMaterial}
-      geometry={$planeGeometry}
-    />
-
-    <Three
-      type={shadowCamera}
-      manual
-    />
-
-    <slot {ref} />
-  </T.Group>
-</T.Group>
+  <Mesh
+    material={shadowMaterial}
+    geometry={$planeGeometry}
+    {renderOrder}
+    scale={{ y: -1 }}
+    rotation={{ x: -Math.PI / 2 }}
+  />
+  <CameraInstance camera={shadowCamera} useCamera={false} />
+</Group>
