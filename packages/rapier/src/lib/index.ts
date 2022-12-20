@@ -22,13 +22,7 @@ export { default as Attractor } from './components/Attractor/Attractor.svelte'
 // recipes
 export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
 
-export type {
-  AutoCollidersProperties,
-  Boolean3Array,
-  RigidBodyProperties,
-  WorldProperties,
-  AttractorProperties
-} from './types/components'
+export type { AutoCollidersProperties, AttractorProperties } from './types/components'
 
 export type {
   CollisionGroupsBitMask,
