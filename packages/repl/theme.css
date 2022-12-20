@@ -1,0 +1,101 @@
+.cm-s-svelte.CodeMirror {
+	--base: hsl(45, 7%, 45%);
+	--comment: hsl(210, 25%, 60%);
+	--keyword: hsl(204, 58%, 45%);
+	--tags: hsl(19, 67%, 45%);
+	--string: hsl(41, 37%, 45%);
+	--number: hsl(102, 27%, 50%);
+	background: transparent;
+	color: var(--base);
+}
+
+.cm-s-svelte .CodeMirror-selected {
+	background: #d9d9d9;
+}
+
+.cm-s-svelte.CodeMirror-focused .CodeMirror-selected {
+	background: #d7d4f0;
+}
+
+.cm-s-svelte .CodeMirror-gutters {
+	padding: 0 16px 0 8px;
+	background: var(--back-light);
+	border: none;
+}
+
+.cm-s-svelte .CodeMirror-guttermarker-subtle {
+	color: #999;
+}
+
+.cm-s-svelte .CodeMirror-linenumber {
+	color: var(--comment);
+	opacity: 0.6;
+}
+
+.cm-s-svelte .CodeMirror-cursor {
+	border-left: 1px solid black;
+}
+
+.cm-s-svelte span.cm-comment {
+	color: var(--comment);
+}
+
+.cm-s-svelte span.cm-atom {
+	color: var(--keyword);
+}
+
+.cm-s-svelte span.cm-number {
+	color: var(--number);
+}
+
+.cm-s-svelte span.cm-attribute,
+.cm-s-svelte span.cm-keyword {
+	color: var(--keyword);
+}
+
+.cm-s-svelte span.cm-string,
+.cm-s-svelte span.cm-string-2 {
+	color: var(--string);
+}
+
+.cm-s-svelte span.cm-variable,
+.cm-s-svelte span.cm-variable-2,
+.cm-s-svelte span.cm-variable-3,
+.cm-s-svelte span.cm-tag,
+.cm-s-svelte span.cm-bracket {
+	color: var(--tags);
+}
+
+.cm-s-svelte span.cm-link {
+	color: var(--flash);;
+}
+
+.cm-s-svelte span.cm-error,
+.cm-s-svelte span.cm-invalidchar {
+	color: #ff008c;
+}
+
+.cm-s-svelte .CodeMirror-foldgutter {
+	width: 0.7em;
+}
+
+.cm-s-svelte .CodeMirror-foldgutter-open,
+.cm-s-svelte .CodeMirror-foldgutter-folded {
+	cursor: pointer;
+}
+
+.cm-s-svelte .CodeMirror-foldgutter-open:after,
+.cm-s-svelte .CodeMirror-foldgutter-folded:after {
+	content: '>';
+	font-size: 0.8em;
+	opacity: 0.8;
+	transition: transform 0.2s;
+	display: inline-block;
+	top: -0.1em;
+	position: relative;
+	transform: rotate(90deg);
+}
+
+.cm-s-svelte .CodeMirror-foldgutter-folded:after {
+	transform: none;
+}

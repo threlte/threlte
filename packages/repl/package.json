@@ -1,0 +1,37 @@
+{
+  "name": "@sveltejs/repl",
+  "version": "0.0.1",
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^1.0.0",
+    "@sveltejs/kit": "^1.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-svelte3": "^3.4.0",
+    "prettier": "^2.5.1",
+    "prettier-plugin-svelte": "^2.6.0",
+    "svelte": "^3.55.0",
+    "svelte2tsx": "^0.4.14",
+    "typescript": "^4.5.5",
+    "vite": "^4.0.1"
+  },
+  "type": "module",
+  "svelte": "./index.js",
+  "dependencies": {
+    "acorn": "^8.7.0",
+    "codemirror": "^5.65.1",
+    "estree-walker": "^3.0.1",
+    "marked": "^4.2.2",
+    "rollup": "^2.67.0",
+    "sourcemap-codec": "^1.4.8",
+    "svelte-json-tree": "^1.0.0",
+    "yootils": "^0.3.1"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./index.js"
+  }
+}

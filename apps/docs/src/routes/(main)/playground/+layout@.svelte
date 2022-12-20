@@ -57,7 +57,7 @@
 </script>
 
 <script lang="ts">
-	import Repl from '@sveltejs/svelte-repl'
+	import Repl from '@sveltejs/repl'
 	import '../../../styles/editor.css'
 	import '../../../styles/fonts.css'
 	import * as zip from '@zip.js/zip.js'
