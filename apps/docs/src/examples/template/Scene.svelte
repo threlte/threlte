@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
-	import { DirectionalLight, Mesh, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 
 	let rotation = 0
 	useFrame(() => {
@@ -8,14 +8,10 @@
 	})
 </script>
 
-<DirectionalLight position={{ y: 10, z: 10 }} />
+<T.DirectionalLight position.y={10} position.z={10} />
 
-<Mesh
-	rotation={{
-		x: rotation,
-		y: rotation,
-		z: rotation
-	}}
+<T.Mesh
+	rotation={[rotation, rotation, rotation]}
 	geometry={new BoxBufferGeometry(2, 2, 2)}
 	material={new MeshStandardMaterial()}
 />
