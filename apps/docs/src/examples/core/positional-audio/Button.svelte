@@ -52,8 +52,8 @@
 			ignorePointer
 			color={textColor}
 			{text}
-			rotation={{ x: DEG2RAD * -90 }}
-			position={{ y: 0.055 }}
+			rotation.x={DEG2RAD * -90}
+			position.y={0.055}
 			fontSize={0.35}
 			anchorX="50%"
 			anchorY="50%"

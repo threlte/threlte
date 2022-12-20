@@ -2,12 +2,10 @@ import type {
   GroupProperties,
   InteractiveObjectProperties,
   LineSegmentsProperties,
-  MeshInstanceProperties,
   Object3DInstanceProperties,
   Scale
 } from '@threlte/core'
-import type { Camera, ColorRepresentation, Material, Mesh, Object3D, TextureEncoding } from 'three'
-import type { Text as TextType } from './types'
+import type { Camera, ColorRepresentation, Material, Object3D, TextureEncoding } from 'three'
 
 export type EdgesProperties = Omit<LineSegmentsProperties, 'geometry' | 'material'> &
   (
@@ -58,39 +56,6 @@ export type FloatProperties = GroupProperties & {
   rotationIntensity: number
   floatIntensity: number
   floatingRange: [number, number]
-}
-
-export type TextProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  text?: TextType['text']
-  anchorX?: TextType['anchorX']
-  anchorY?: TextType['anchorY']
-  curveRadius?: TextType['curveRadius']
-  font?: TextType['font']
-  fontSize?: TextType['fontSize']
-  letterSpacing?: TextType['letterSpacing']
-  lineHeight?: TextType['lineHeight']
-  maxWidth?: TextType['maxWidth']
-  overflowWrap?: TextType['overflowWrap']
-  textAlign?: TextType['textAlign']
-  textIndent?: TextType['textIndent']
-  whiteSpace?: TextType['whiteSpace']
-  material?: TextType['material'] | null
-  color?: TextType['color']
-  depthOffset?: TextType['depthOffset']
-  clipRect?: TextType['clipRect']
-  glyphGeometryDetail?: TextType['glyphGeometryDetail']
-  sdfGlyphSize?: TextType['sdfGlyphSize']
-  outlineWidth?: TextType['outlineWidth']
-  outlineColor?: TextType['outlineColor']
-  outlineOpacity?: TextType['outlineOpacity']
-  outlineBlur?: TextType['outlineBlur']
-  outlineOffsetX?: TextType['outlineOffsetX']
-  outlineOffsetY?: TextType['outlineOffsetY']
-  strokeWidth?: TextType['strokeWidth']
-  strokeColor?: TextType['strokeColor']
-  strokeOpacity?: TextType['strokeOpacity']
-  fillOpacity?: TextType['fillOpacity']
-  direction?: TextType['direction']
 }
 
 export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
