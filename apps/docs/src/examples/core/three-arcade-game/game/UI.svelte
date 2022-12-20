@@ -81,14 +81,14 @@
 	<!-- Centered UI Text -->
 	<Text
 		font="/fonts/beefd.ttf"
-		rotation={{ x: DEG2RAD * -90 }}
+		rotation.x={DEG2RAD * -90}
 		anchorX="50%"
 		anchorY="50%"
 		textAlign="center"
 		fontSize={0.4}
 		lineHeight={2}
 		color={$baseColor}
-		position={{ y: 1 }}
+		position.y={1}
 		text={$mainUiTexts?.text}
 	/>
 </Three>
@@ -96,17 +96,17 @@
 <!-- LEVEL (left column) -->
 <Text
 	font="/fonts/beefd.ttf"
-	rotation={{ x: -90 * DEG2RAD }}
+	rotation.x={-90 * DEG2RAD}
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
 	fontSize={0.3}
 	color={$baseColor}
-	position={{ y: 1, x: -4.65, z: -3.4 }}
+	position={[1, -4.56, -3.4]}
 	text="LVL"
 />
 <Text
-	rotation={{ x: -90 * DEG2RAD }}
+	rotation.x={-90 * DEG2RAD}
 	anchorX="50%"
 	anchorY="0%"
 	textAlign="center"
@@ -114,24 +114,24 @@
 	lineHeight={1.4}
 	fontSize={0.7}
 	color={$baseColor}
-	position={{ y: 1, x: -4.65, z: -3 }}
+	position={[1, -4.65, -3]}
 	text={$levelIndexNewLines}
 />
 
 <!-- SCORE (right column) -->
 <Text
-	rotation={{ x: -90 * DEG2RAD }}
+	rotation.x={-90 * DEG2RAD}
 	anchorX="50%"
 	anchorY="50%"
 	textAlign="center"
 	fontSize={0.3}
 	font="/fonts/beefd.ttf"
 	color={$baseColor}
-	position={{ y: 1, x: 4.65, z: -3.4 }}
+	position={[1, 4.65, -3.4]}
 	text="SCR"
 />
 <Text
-	rotation={{ x: -90 * DEG2RAD }}
+	rotation.x={-90 * DEG2RAD}
 	anchorX="50%"
 	anchorY="0%"
 	lineHeight={1.4}
@@ -139,6 +139,6 @@
 	textAlign="center"
 	fontSize={0.7}
 	color={$baseColor}
-	position={{ y: 1, x: 4.65, z: -3 }}
+	position={[1, 4.65, -3]}
 	text={$scoreNewLines}
 />

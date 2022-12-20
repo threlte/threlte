@@ -21,9 +21,7 @@ export type {
   EdgesProperties,
   FloatProperties,
   HTMLProperties,
-  TextProperties,
   GLTFProperties,
-  ContactShadowProperties,
   EnvironmentProperties
 } from './types/components'
 
