@@ -1,12 +1,10 @@
 <script lang="ts">
   import {
     ActiveCollisionTypes,
-    ActiveEvents,
     CoefficientCombineRule,
-    type Collider,
-    type RigidBody
+    type Collider
   } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject, type TransformableObjectProperties } from '@threlte/core'
+  import { SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Object3D } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
@@ -18,68 +16,33 @@
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { positionToVector3 } from '../../lib/positionToVector3'
   import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
-  import type { AutoCollidersShapes, ColliderEventMap } from '../../types/types'
+  import type { ColliderEventMap } from '../../types/types'
+  import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
-  interface Props {
-    shape?: AutoCollidersShapes
-    position?: NonNullable<TransformableObjectProperties['position']>
-    rotation?: TransformableObjectProperties['rotation']
-    scale?: NonNullable<TransformableObjectProperties['scale']>
-    lookAt?: NonNullable<TransformableObjectProperties['lookAt']>
-    restitution?: number
-    restitutionCombineRule?: CoefficientCombineRule
-    friction?: number
-    frictionCombineRule?: CoefficientCombineRule
-    sensor?: boolean
-    colliders?: Collider[]
-    contactForceEventThreshold?: number
-  }
+  type TMassDef = $$Generic<MassDef>
+  type Props = AutoCollidersProps<TMassDef>
 
-  type Density = $$Generic<number | undefined>
-  type Mass = $$Generic<Density extends undefined ? number | undefined : undefined>
-  type MassProperties = $$Generic<
-    Density extends undefined
-      ? Mass extends undefined
-        ? {
-            mass: number
-            centerOfMass: Position
-            principalAngularInertia: Position
-            angularInertiaLocalFrame: Rotation
-          }
-        : undefined
-      : undefined
-  >
+  export let shape: Props['shape'] = 'convexHull' as Props['shape']
 
-  interface WithDensity extends Props {
-    density?: Density
-  }
+  export let position: Props['position'] = undefined as Props['position']
+  export let rotation: Props['rotation'] = undefined as Props['rotation']
+  export let scale: Props['scale'] = undefined as Props['scale']
+  export let lookAt: Props['lookAt'] = undefined as Props['lookAt']
+  export let restitution: Props['restitution'] = undefined as Props['restitution']
+  export let restitutionCombineRule: Props['restitutionCombineRule'] =
+    undefined as Props['restitutionCombineRule']
+  export let friction: Props['friction'] = undefined as Props['friction']
+  export let frictionCombineRule: Props['frictionCombineRule'] =
+    undefined as Props['frictionCombineRule']
+  export let sensor: Props['sensor'] = undefined as Props['sensor']
+  export let contactForceEventThreshold: Props['contactForceEventThreshold'] =
+    undefined as Props['contactForceEventThreshold']
 
-  interface WithMass extends Props {
-    mass?: Mass
-  }
-
-  interface WithMassProperties extends WithMass {
-    massProperties?: MassProperties
-  }
-
-  type $$Props = WithDensity | WithMass | WithMassProperties
-
-  export let shape: $$Props['shape'] = 'convexHull'
-
-  export let position: $$Props['position'] = undefined
-  export let rotation: $$Props['rotation'] = undefined
-  export let scale: $$Props['scale'] = undefined
-  export let lookAt: $$Props['lookAt'] = undefined
-  export let restitution: $$Props['restitution'] = undefined
-  export let restitutionCombineRule: $$Props['restitutionCombineRule'] = undefined
-  export let friction: $$Props['friction'] = undefined
-  export let frictionCombineRule: $$Props['frictionCombineRule'] = undefined
-  export let sensor: $$Props['sensor'] = undefined
-  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] = undefined
-
-  export let density = undefined as Density
-  export let mass = undefined as Mass
-  export let massProperties = undefined as MassProperties
+  export let density: Props['density'] = undefined
+  export let mass: Props['mass'] = undefined
+  export let centerOfMass: Props['centerOfMass'] = undefined
+  export let principalAngularInertia: Props['principalAngularInertia'] = undefined
+  export let angularInertiaLocalFrame: Props['angularInertiaLocalFrame'] = undefined
 
   const object = new Object3D()
 
@@ -129,14 +92,16 @@
         collider.setSensor(sensor ?? false)
         collider.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
         if (density) collider.setDensity(density)
-        if (mass) collider.setMass(mass)
-        if (massProperties)
-          collider.setMassProperties(
-            massProperties.mass,
-            positionToVector3(massProperties.centerOfMass),
-            positionToVector3(massProperties.principalAngularInertia),
-            rotationToQuaternion(massProperties.angularInertiaLocalFrame)
-          )
+        if (mass) {
+          if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame)
+            collider.setMassProperties(
+              mass,
+              positionToVector3(centerOfMass),
+              positionToVector3(principalAngularInertia),
+              rotationToQuaternion(angularInertiaLocalFrame)
+            )
+          else collider.setMass(mass)
+        }
       })
     }
   }
