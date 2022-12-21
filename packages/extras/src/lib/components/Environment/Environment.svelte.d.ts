@@ -1,5 +1,6 @@
 import { SvelteComponentTyped } from 'svelte'
-import type { TextureEncoding, Vector3 } from 'three'
+import type { Props } from '@threlte/core'
+import type { Mesh, TextureEncoding } from 'three'
 
 export type EnvironmentProps = {
   /**
@@ -17,10 +18,9 @@ export type EnvironmentProps = {
   /**
    * Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.
    */
-  groundProjection?: {
+  groundProjection?: Props<Mesh> & {
     radius: number
     height: number
-    scale: Partial<Vector3> | number | number[]
   }
   /**
    * Use `ldr` for .png, .jpg and `hdr` for .hdr file formats

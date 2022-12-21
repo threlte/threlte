@@ -93,7 +93,9 @@
 		{path}
 		{files}
 		isBackground={$isBackground}
-		groundProjection={$ground ? { radius: $radius, height: $height, scale: $scale } : undefined}
+		groundProjection={$ground
+			? { radius: $radius, height: $height, scale: [$scale.x, $scale.y, $scale.z] }
+			: undefined}
 	/>
 	<Scene />
 </Canvas>

@@ -106,6 +106,6 @@
 {#if groundProjection}
   <GroundProjectedEnv
     {groundProjection}
-    currentEnvMap={previousEnvMap}
+    envMap={previousEnvMap}
   />
 {/if}
