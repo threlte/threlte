@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { EnvironmentProperties } from '$lib/types/components'
   import { useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Scene } from 'three'
@@ -15,15 +14,17 @@
   } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-
+  import type { EnvironmentProps } from './Environment.svelte'
   import GroundProjectedEnv from './GroundProjectedEnv.svelte'
 
-  export let path: EnvironmentProperties['path'] = undefined
-  export let files: EnvironmentProperties['files']
-  export let isBackground: EnvironmentProperties['isBackground'] = undefined
-  export let groundProjection: EnvironmentProperties['groundProjection'] = undefined
-  export let format: EnvironmentProperties['format'] = undefined
-  export let encoding: EnvironmentProperties['encoding'] = undefined
+  type Props = EnvironmentProps
+
+  export let path: NonNullable<Props['path']> = ''
+  export let files: NonNullable<Props['files']>
+  export let isBackground: Props['isBackground'] = undefined
+  export let groundProjection: Props['groundProjection'] = undefined
+  export let format: Props['format'] = undefined
+  export let encoding: Props['encoding'] = undefined
 
   const isScene = (obj: any): obj is Scene => !!obj.isScene
 
@@ -36,7 +37,7 @@
   let previousSceneBackground = scene.background
 
   $: isCubeMap = Array.isArray(files)
-  $: envPath = `${path || ''}${files}`
+  $: envPath = `${path}${files}`
 
   let previousEnvPath: string = envPath
   let previousEnvMap: Texture
@@ -61,7 +62,7 @@
     const loader: any = pickLoader()
     loader.setDataType?.(FloatType)
 
-    loader.setPath(path || '').load(files, (texture: any) => {
+    loader.setPath(path).load(files, (texture: any) => {
       texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
       texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
       previousEnvMap = texture
@@ -104,7 +105,7 @@
 
 {#if groundProjection}
   <GroundProjectedEnv
-    {groundProjection}
-    currentEnvMap={previousEnvMap}
+    {...groundProjection}
+    envMap={previousEnvMap}
   />
 {/if}
