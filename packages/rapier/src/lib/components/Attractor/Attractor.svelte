@@ -1,18 +1,18 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { Mesh, useFrame, Object3DInstance } from '@threlte/core'
-  import { SphereBufferGeometry, MeshBasicMaterial, Vector3, Object3D } from 'three'
+  import { Mesh, useFrame, Three } from '@threlte/core'
+  import { SphereGeometry, MeshBasicMaterial, Vector3, Object3D } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProperties } from '../../types/components'
+  import type { AttractorProps } from './Attractor.svelte'
 
-  export let position: AttractorProperties['position'] = undefined
-  export let strength: NonNullable<AttractorProperties['strength']> = 1
-  export let range: NonNullable<AttractorProperties['range']> = 50
-  export let gravityType: NonNullable<AttractorProperties['gravityType']> = 'static'
-  export let gravitationalConstant: NonNullable<
-    AttractorProperties['gravitationalConstant']
-  > = 6.673e-11
-  
+  type Props = AttractorProps
+
+  export let position: Props['position'] = undefined
+  export let strength: Props['strength'] = 1
+  export let range: Props['range'] = 50
+  export let gravityType: Props['gravityType'] = 'static'
+  export let gravitationalConstant: Props['gravitationalConstant'] = 6.673e-11
+
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
   let obj = new Object3D()
@@ -53,16 +53,18 @@
   })
 </script>
 
-<Object3DInstance
-  bind:object={obj}
-  {position}
+<Three
+  bind:type={obj}
+  position={position?.x && position.y && position.z
+    ? [position.x, position.y, position.z]
+    : undefined}
 >
   <slot />
 
   {#if $debug}
     <Mesh
-      geometry={new SphereBufferGeometry(range)}
+      geometry={new SphereGeometry(range)}
       material={new MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.25 })}
     />
   {/if}
-</Object3DInstance>
+</Three>
