@@ -3,10 +3,28 @@ import type {
   Collider as rapierCollider,
   ColliderDesc
 } from '@dimforge/rapier3d-compat'
-import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
+import type { Position, TransformableObjectProperties, Rotation } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
 
-type Shape =
+// ------------------ BASE ------------------
+
+type BaseProps = {
+  position?: TransformableObjectProperties['position']
+  rotation?: TransformableObjectProperties['rotation']
+  scale?: TransformableObjectProperties['scale']
+  lookAt?: TransformableObjectProperties['lookAt']
+  restitution?: number
+  restitutionCombineRule?: CoefficientCombineRule
+  friction?: number
+  frictionCombineRule?: CoefficientCombineRule
+  sensor?: boolean
+  collider?: rapierCollider
+  contactForceEventThreshold?: number
+}
+
+// ------------------ SHAPE ------------------
+
+export type Shape =
   | 'ball'
   | 'capsule'
   | 'segment'
@@ -26,49 +44,65 @@ type Shape =
   | 'roundConvexHull'
   | 'roundConvexMesh'
 
-type Args = Parameters<typeof ColliderDesc[Shape]>
+type Args<TShape extends Shape> = Parameters<typeof ColliderDesc[TShape]>
 
-interface Props {
-  shape: Shape
-  args: Args
-  position?: NonNullable<TransformableObjectProperties['position']>
-  rotation?: TransformableObjectProperties['rotation']
-  scale?: NonNullable<TransformableObjectProperties['scale']>
-  lookAt?: NonNullable<TransformableObjectProperties['lookAt']>
-  restitution?: number
-  restitutionCombineRule?: CoefficientCombineRule
-  friction?: number
-  frictionCombineRule?: CoefficientCombineRule
-  sensor?: boolean
-  collider?: rapierCollider
-  contactForceEventThreshold?: number
+type ShapeProps<TShape extends Shape> = {
+  shape: TShape
+  args: Args<TShape>
 }
 
-type Density = number | undefined
-export type Mass<Density> = Density extends undefined ? number | undefined : undefined
-export type MassProperties<Density, Mass> = Density extends undefined
-  ? Mass extends undefined
-    ? {
-        mass: number
-        centerOfMass: Position
-        principalAngularInertia: Position
-        angularInertiaLocalFrame: Rotation
-      }
-    : undefined
-  : undefined
+// ------------------ MASS ------------------
 
-interface WithDensity extends Props {
-  density?: Density
+type Density = {
+  density: number
+
+  mass?: never
+  centerOfMass?: never
+  principalAngularInertia?: never
+  angularInertiaLocalFrame?: never
+}
+type Mass = {
+  mass: number
+
+  density?: never
+  centerOfMass?: never
+  principalAngularInertia?: never
+  angularInertiaLocalFrame?: never
+}
+type MassProperties = {
+  mass: number
+  centerOfMass: Position
+  principalAngularInertia: Position
+  angularInertiaLocalFrame: Rotation
+
+  density?: never
 }
 
-interface WithMass<Density> extends Props {
-  mass?: Mass<Density>
+type NoMassProperties = {
+  density?: never
+  mass?: never
+  centerOfMass?: never
+  principalAngularInertia?: never
+  angularInertiaLocalFrame?: never
 }
 
-interface WithMassProperties<Density> extends WithMass<Density> {
-  massProperties?: MassProperties<Density, Mass<Density>>
-}
+export type MassDef = Density | Mass | MassProperties | NoMassProperties
 
-export type ColliderProps<Density> = WithDensity | WithMass<Density> | WithMassProperties<Density>
+type MassProps<TMassDef extends MassDef> = TMassDef extends Density
+  ? Density
+  : TMassDef extends MassProperties
+  ? MassProperties
+  : TMassDef extends Mass
+  ? Mass
+  : NoMassProperties
 
-export default class Collider<Density> extends SvelteComponentTyped<ColliderProps<Density>> {}
+// ------------------ COLLIDER ------------------
+
+export type ColliderProps<TShape extends Shape, TMassDef extends MassDef> = BaseProps &
+  ShapeProps<TShape> &
+  MassProps<TMassDef>
+
+export default class Collider<
+  TShape extends Shape,
+  TMassDef extends MassDef
+> extends SvelteComponentTyped<ColliderProps<TShape, TMassDef>> {}
