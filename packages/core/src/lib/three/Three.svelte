@@ -7,6 +7,7 @@
   import type { DisposableThreeObject } from '../types/components'
   import { useAttach } from './lib/useAttach'
   import { useCamera } from './lib/useCamera'
+  import { useCreateEvent } from './lib/useCreateEvent'
   import { useEvents } from './lib/useEvents'
   import { useProps } from './lib/useProps'
   import type { AnyClass, MaybeInstance, Props } from './types'
@@ -78,6 +79,10 @@
   // Events
   const events = useEvents()
   $: events.updateRef(ref)
+
+  // Create Event
+  const createEvent = useCreateEvent()
+  $: createEvent.updateRef(ref)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D

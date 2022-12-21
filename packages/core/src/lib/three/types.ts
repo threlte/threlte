@@ -112,4 +112,11 @@ export type Slots<Type extends any> = {
 
 // -------------------- EVENTS --------------------
 
-export type Events<Type extends any> = Record<string, unknown>
+type CreateEvent<Type extends any> = {
+  create: {
+    ref: MaybeInstance<Type>
+    cleanup: (callback: () => void) => void
+  }
+}
+
+export type Events<Type extends any> = Record<string, unknown> & CreateEvent<Type>
