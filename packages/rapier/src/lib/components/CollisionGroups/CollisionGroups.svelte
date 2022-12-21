@@ -2,31 +2,14 @@
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type { CollisionGroupsBitMask, CollisionGroupsContext } from '../../types/types'
+  import type { CollisionGroupsProps, Groups, MembershipsAndFilter } from './CollisionGroups.svelte'
 
-  type Groups = $$Generic<
-    (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15)[] | undefined
-  >
+  type TGroupsDef = $$Generic<GroupsDef>
+  type Props = CollisionGroupsProps<TGroupsDef>
 
-  type MembershipsAndFilter = $$Generic<
-    Groups extends undefined
-      ? (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15)[]
-      : undefined
-  >
-
-  interface WithGroups {
-    groups: Groups
-  }
-
-  interface WithMembershipsAndFilter {
-    filter: MembershipsAndFilter
-    memberships: MembershipsAndFilter
-  }
-
-  type $$Props = WithGroups | WithMembershipsAndFilter
-
-  export let groups: Groups = undefined as Groups
-  export let filter: MembershipsAndFilter = undefined as MembershipsAndFilter
-  export let memberships: MembershipsAndFilter = undefined as MembershipsAndFilter
+  export let groups: Props['groups'] = undefined
+  export let filter: Props['filter'] = undefined
+  export let memberships: Props['memberships'] = undefined
 
   const computeBitMask = (
     groups: Groups,
@@ -55,8 +38,20 @@
     return mask
   }
 
-  const store = writable<number>(computeBitMask(groups, filter, memberships))
-  $: store.set(computeBitMask(groups, filter, memberships))
+  const store = writable<number>(
+    computeBitMask(
+      groups as Groups,
+      filter as MembershipsAndFilter,
+      memberships as MembershipsAndFilter
+    )
+  )
+  $: store.set(
+    computeBitMask(
+      groups as Groups,
+      filter as MembershipsAndFilter,
+      memberships as MembershipsAndFilter
+    )
+  )
   setContext<NonNullable<CollisionGroupsContext>>('threlte-rapier-collision-group', store)
 </script>
 
