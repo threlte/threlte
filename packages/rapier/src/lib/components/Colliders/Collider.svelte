@@ -19,28 +19,33 @@
   import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
   import type { ColliderEventMap } from '../../types/types'
-  import type { ColliderProps, Mass, MassProperties } from './Collider.svelte'
+  import type { ColliderProps, MassDef, Shape } from './Collider.svelte'
 
-  type Density = $$Generic
-  type Props = ColliderProps<Density>
+  type TShape = $$Generic<Shape>
+  type TMassDef = $$Generic<MassDef>
+  type Props = ColliderProps<TShape, TMassDef>
 
   export let shape: Props['shape']
   export let args: Props['args']
-  export let position: Props['position'] = undefined
-  export let rotation: Props['rotation'] = undefined
-  export let scale: Props['scale'] = undefined
-  export let lookAt: Props['lookAt'] = undefined
-  export let restitution: Props['restitution'] = undefined
-  export let restitutionCombineRule: Props['restitutionCombineRule'] = undefined
-  export let friction: Props['friction'] = undefined
-  export let frictionCombineRule: Props['frictionCombineRule'] = undefined
-  export let sensor: Props['sensor'] = undefined
-  export let contactForceEventThreshold: Props['contactForceEventThreshold'] = undefined
+  export let position: Props['position'] = undefined as Props['position']
+  export let rotation: Props['rotation'] = undefined as Props['rotation']
+  export let scale: Props['scale'] = undefined as Props['scale']
+  export let lookAt: Props['lookAt'] = undefined as Props['lookAt']
+  export let restitution: Props['restitution'] = undefined as Props['restitution']
+  export let restitutionCombineRule: Props['restitutionCombineRule'] =
+    undefined as Props['restitutionCombineRule']
+  export let friction: Props['friction'] = undefined as Props['friction']
+  export let frictionCombineRule: Props['frictionCombineRule'] =
+    undefined as Props['frictionCombineRule']
+  export let sensor: Props['sensor'] = undefined as Props['sensor']
+  export let contactForceEventThreshold: Props['contactForceEventThreshold'] =
+    undefined as Props['contactForceEventThreshold']
 
-  // TODO: check if Props can be used here
-  export let density: Density | undefined = undefined
-  export let mass: Mass<Density> | undefined = undefined
-  export let massProperties: MassProperties<Density, Mass<Density>> | undefined = undefined
+  export let density: Props['density'] = undefined
+  export let mass: Props['mass'] = undefined
+  export let centerOfMass: Props['centerOfMass'] = undefined
+  export let principalAngularInertia: Props['principalAngularInertia'] = undefined
+  export let angularInertiaLocalFrame: Props['angularInertiaLocalFrame'] = undefined
 
   const object = new Object3D()
 
@@ -132,14 +137,18 @@
       collider.setSensor(sensor ?? false)
       collider.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
       if (density) collider.setDensity(density)
-      if (mass) collider.setMass(mass)
-      if (massProperties)
-        collider.setMassProperties(
-          massProperties.mass,
-          positionToVector3(massProperties.centerOfMass),
-          positionToVector3(massProperties.principalAngularInertia),
-          rotationToQuaternion(massProperties.angularInertiaLocalFrame)
-        )
+      if (mass) {
+        if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
+          collider.setMassProperties(
+            mass,
+            positionToVector3(centerOfMass),
+            positionToVector3(principalAngularInertia),
+            rotationToQuaternion(angularInertiaLocalFrame)
+          )
+        } else {
+          collider.setMass(mass)
+        }
+      }
     }
   }
 
