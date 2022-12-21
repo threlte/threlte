@@ -2,7 +2,6 @@
 export { default as Canvas } from './Canvas.svelte'
 
 // camera components
-export { default as OrthographicCamera } from './cameras/OrthographicCamera.svelte'
 export { default as PerspectiveCamera } from './cameras/PerspectiveCamera.svelte'
 
 // audio components
