@@ -1,33 +1,20 @@
 <script lang="ts">
-	import {
-		Group,
-		Mesh,
-		PositionalAudio,
-		useAudioListener,
-		useFrame,
-		type Position,
-		type Rotation,
-		type Scale
-	} from '@threlte/core'
+	import { InteractiveObject, PositionalAudio, T, useAudioListener, useFrame } from '@threlte/core'
 	import { Edges, useCursor, useGltf } from '@threlte/extras'
 	import { spring, tweened } from 'svelte/motion'
 	import {
-		BoxBufferGeometry,
+		BoxGeometry,
 		BufferGeometry,
 		Color,
-		CylinderBufferGeometry,
+		CylinderGeometry,
 		DoubleSide,
-		Mesh as ThreeMesh,
+		Mesh,
 		MeshStandardMaterial,
 		PositionalAudio as ThreePositionalAudio
 	} from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Button from './Button.svelte'
 	import Disc from './Disc.svelte'
-
-	export let position: Position | undefined = undefined
-	export let rotation: Rotation | undefined = undefined
-	export let scale: Scale | undefined = undefined
 
 	let discSpeed = tweened(0, {
 		duration: 1e3
@@ -86,88 +73,90 @@
 
 	const { onPointerEnter, onPointerLeave } = useCursor()
 
-	const { gltf } = useGltf<'Cover'>('/models/turntable/cover.glb')
+	const { gltf } = useGltf<{
+		nodes: {
+			Cover: Mesh
+		}
+		materials: {}
+	}>('/models/turntable/cover.glb')
 	let coverGeometry: BufferGeometry | undefined
 	$: if ($gltf) {
-		const coverMesh = $gltf.nodes.Cover as ThreeMesh
+		const coverMesh = $gltf.nodes.Cover as Mesh
 		coverGeometry = coverMesh.geometry
 	}
 </script>
 
-<Group {position} {rotation} {scale}>
+<T.Group {...$$restProps}>
 	<!-- DISC -->
-	<Disc position={{ x: 0.5, y: 1.01 }} discSpeed={$discSpeed} />
+	<Disc position.x={0.5} position.y={1.01} discSpeed={$discSpeed} />
 
 	<!-- CASE -->
-	<Mesh
-		receiveShadow
-		castShadow
-		geometry={new BoxBufferGeometry(6, 1, 4.4)}
-		material={new MeshStandardMaterial({
-			color: 0xeedbcb
-		})}
-		position={{ y: 0.5 }}
-		ignorePointer
-	>
+	<T.Mesh receiveShadow castShadow position.y={0.5}>
+		<T.BoxGeometry args={[6, 1, 4.4]} />
+		<T.MeshStandardMaterial color="#eedbcb" />
 		<Edges position={{ y: 0 }} ignorePointer scale={1.001} color="black" />
-	</Mesh>
+	</T.Mesh>
 
 	<!-- COVER -->
-	<Group position={{ z: -2.2, y: 1 }} rotation={{ x: -$coverAngle * DEG2RAD }}>
+	<T.Group position.y={1} position.z={-2.2} rotation.x={-$coverAngle * DEG2RAD}>
 		{#if coverGeometry}
-			<Mesh
+			<T.Mesh
 				geometry={coverGeometry}
-				scale={{ x: 3, z: 2.2, y: 0.5 }}
-				position={{ y: 0.5, z: 2.2 }}
-				material={new MeshStandardMaterial({
-					color: new Color('#ffffff'),
-					roughness: 0.08,
-					metalness: 0.8,
-					envMapIntensity: 1,
-					side: DoubleSide,
-					transparent: true,
-					opacity: 0.65
-				})}
-				interactive
-				on:click={() => (coverOpen = !coverOpen)}
-				on:pointerenter={onPointerEnter}
-				on:pointerleave={onPointerLeave}
+				let:ref
+				scale={[3, 0.5, 2.2]}
+				position.y={0.5}
+				position.z={2.2}
 			>
+				<T.MeshStandardMaterial
+					color="#ffffff"
+					roughness={0.08}
+					metalness={0.8}
+					envMapIntensity={1}
+					side={DoubleSide}
+					transparent
+					opacity={0.65}
+				/>
+				<InteractiveObject
+					object={ref}
+					interactive
+					on:click={() => (coverOpen = !coverOpen)}
+					on:pointerenter={onPointerEnter}
+					on:pointerleave={onPointerLeave}
+				/>
 				<Edges color="white" ignorePointer />
-			</Mesh>
+			</T.Mesh>
 		{/if}
-	</Group>
+	</T.Group>
 
 	<!-- SIDE BUTTON -->
 	<Button
-		position={{ y: 1.01, z: 0.8, x: -2.3 }}
+		position={[-2.3, 1.01, 0.8]}
 		on:click={changeSide}
 		text={source === sideA ? 'SIDE B' : 'SIDE A'}
 	/>
 
 	<!-- PLAY/PAUSE BUTTON -->
-	<Button
-		position={{ y: 1.01, z: 1.7, x: -2.3 }}
-		on:click={toggle}
-		text={isPlaying ? 'PAUSE' : 'PLAY'}
-	/>
+	<Button position={[-2.3, 1.01, 1.7]} on:click={toggle} text={isPlaying ? 'PAUSE' : 'PLAY'} />
 
 	<!-- ARM -->
-	<Group
-		position={{ x: 2.5, y: 1.55, z: -1.8 }}
-		rotation={{ z: DEG2RAD * 90, y: DEG2RAD * 90 - $armPos * 0.3 }}
+	<T.Group
+		position={[2.5, 1.55, -1.8]}
+		rotation.z={DEG2RAD * 90}
+		rotation.y={DEG2RAD * 90 - $armPos * 0.3}
 	>
-		<Mesh
+		<T.Mesh
 			castShadow
 			material={new MeshStandardMaterial({
 				color: 0xffffff
 			})}
-			geometry={new CylinderBufferGeometry(0.1, 0.1, 3, 12)}
-			position={{ y: 1.5 }}
+			geometry={new CylinderGeometry(0.1, 0.1, 3, 12)}
+			position.y={1.5}
 		>
+			<T.CylinderGeometry args={[0.1, 0.1, 3, 12]} />
+			<T.MeshStandardMaterial color="#ffffff" />
 			<Edges ignorePointer color="black" threshold={80} />
-		</Mesh>
-	</Group>
+		</T.Mesh>
+	</T.Group>
 
 	{#if started}
 		<PositionalAudio
@@ -184,4 +173,4 @@
 			}}
 		/>
 	{/if}
-</Group>
+</T.Group>
