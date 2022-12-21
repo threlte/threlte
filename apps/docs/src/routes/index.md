@@ -123,6 +123,12 @@ Threlte is still in active development and you should expect breaking changes. C
 
 Many developers love threlte.
 
+<div class="flex justify-center p-4">
+  <video preload="auto" autoplay="autoplay" class="w-full" controls>
+    <source src="https://i.imgur.com/1Kea5Wk.mp4" type="video/mp4" />
+  </video>
+</div>
+
 <div class="flex flex-col md:flex-row md:flex-wrap gap-3">
   {#each testimonials as _t}
     <a href={_t.link} rel="external" class="w-full md:max-w-sm rounded-md px-4 border-none bg-gray-50 duration-200 shadow-xl hover:shadow-2xl">
