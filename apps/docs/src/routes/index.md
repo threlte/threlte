@@ -6,7 +6,6 @@ title: Introduction
 import Example from '$examples/introduction/App.svelte'
 
 type Testimonial = {
-  platform: 'twitter'; // Each platform would has its own style, currently only Twitter is supported
   image: string; // Author image
   name: string; // Author name
   title: string; // Author title
@@ -15,7 +14,6 @@ type Testimonial = {
 }
 const testimonials: Testimonial[] = [
   {
-    platform: 'twitter',
     image: 'https://avatars.githubusercontent.com/u/1162160?v=4',
     name: 'Rich Harris',
     title: "Creator of Svelte.",
@@ -23,7 +21,6 @@ const testimonials: Testimonial[] = [
     contents: "indeed — threlte is where it's at. i should get round to updating the svelte cubed repo/site to make that clearer",
   },
   {
-    platform: 'twitter',
     image: 'https://www.shiyunlu.com/assets/head-shot-2020.8496dae1_iHYyX.png',
     name: 'Shiyun 诗韵',
     title: "Globalist, learner, software engineer",
@@ -31,7 +28,6 @@ const testimonials: Testimonial[] = [
     contents: `My first try at writing shaders in #threejs .. used the FBO particles technique to explore Chinese characters that have "女" (woman) as a component in them.. OMG it's so challenging! The new @threlte, made it easier though 🤓`,
   },
   {
-    platform: 'twitter',
     image: 'https://www.higsch.com/img/me_coding.jpg',
     name: 'Matthias Stahl 🇪🇺',
     title: "I am a designer creating knowledge through data visualization.",
@@ -39,7 +35,6 @@ const testimonials: Testimonial[] = [
     contents: "🧑‍💻 First experiments using threlte for Svelte. After I didn't succeed using svelte-cubed, threlte seems to be a rather well-documented and good working declarative THREE library for Svelte. Many thanks to @a_warnes and @Reyfenberg!",
   },
   {
-    platform: 'twitter',
     image: 'https://avatars.githubusercontent.com/u/1162160?v=4',
     name: 'Rich Harris',
     title: "Creator of Svelte.",
@@ -47,7 +42,6 @@ const testimonials: Testimonial[] = [
     contents: "give threlte.xyz a whirl. not as mature as the r3f ecosystem, but already pretty capable",
   },
   {
-    platform: 'twitter',
     image: 'https://avatars.githubusercontent.com/u/57304890?v=4',
     name: 'shiva',
     title: "Computer Science + Art student @Carnegie Mellon",
@@ -55,7 +49,6 @@ const testimonials: Testimonial[] = [
     contents: "threlte, which combines threejs and svelte, is easily one of my new favorite libraries",
   },
   {
-    platform: 'twitter',
     image: 'https://www.a3k.me/favicon/apple-touch-icon.png?v=2.2.0',
     name: 'Amr',
     title: "Freelancer web developer",
@@ -63,7 +56,6 @@ const testimonials: Testimonial[] = [
     contents: "I built 3 webGL apps using threlte and it's amazing <3",
   },
   {
-    platform: 'twitter',
     image: 'https://avatars.githubusercontent.com/u/3778969?v=4',
     name: 'Vatroslav Vrbanić',
     title: "Creator of svelthree and svelte-accmod",
@@ -121,26 +113,21 @@ Threlte is still in active development and you should expect breaking changes. C
 
 ## Don't take our word for it!
 
-Many developers love threlte.
-
-<div class="flex justify-center p-4">
+<!-- <div class="flex justify-center p-4">
   <video preload="auto" autoplay="autoplay" class="w-full" controls>
     <source src="https://i.imgur.com/1Kea5Wk.mp4" type="video/mp4" />
   </video>
-</div>
+</div> -->
 
-<div class="flex flex-col md:flex-row md:flex-wrap gap-3">
+<div class="grid place-items-center grid-cols-1 992:grid-cols-2 gap-3">
   {#each testimonials as _t}
-    <a href={_t.link} rel="external" class="w-full md:max-w-sm rounded-md px-4 border-none bg-gray-50 duration-200 shadow-xl hover:shadow-2xl">
-      <div class="w-full flex gap-6">
-        <img src={_t.image} alt="{_t.name} profile photo" class="rounded-full w-16 h-16 object-cover" />
+    <a href={_t.link} rel="external" class="w-full h-full rounded-md px-4 border-none bg-gray-50 duration-200 shadow-xl hover:shadow-2xl">
+      <div class="flex gap-6">
+        <img src={_t.image} alt="{_t.name} profile photo" class="rounded-full w-12 h-12 object-cover" />
         <div class="grow">
-          <h4 class="">{_t.name}</h4>
+          <h4 class="mb-0">{_t.name}</h4>
           <p class="text-sm font-normal text-gray-400">{_t.title}</p>
         </div>
-        {#if _t.platform === 'twitter'}
-          <svg class="w-12 h-12 self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#03A9F4" d="M42 12.4a15 15 0 0 1-4.2 1.2c1.5-1 2.7-2.4 3.2-4-1.4.8-3 1.4-4.7 1.7A7.4 7.4 0 0 0 31 9a7.4 7.4 0 0 0-7.2 9 21 21 0 0 1-15.2-7.7 7.3 7.3 0 0 0 2.3 9.8c-1.2 0-2.4-.4-3.4-.9 0 3.6 2.6 6.6 6 7.3a7.3 7.3 0 0 1-3.4.1c1 2.9 3.7 5 7 5a15 15 0 0 1-11 3.1A22 22 0 0 0 17.4 38a20.8 20.8 0 0 0 21-21.8c1.5-1 2.7-2.3 3.7-3.8"/></svg>
-        {/if}
       </div>
       <p class="mt-0 font-normal text-base text-gray-600">{_t.contents}</p>
     </a>
