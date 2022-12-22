@@ -3,7 +3,7 @@
 	import { AutoColliders } from '@threlte/rapier'
 </script>
 
-<AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>
+<AutoColliders shape={'cuboid'} position={[0, -0.5, 0]}>
 	<T.Mesh receiveShadow>
 		<T.BoxGeometry args={[100, 1, 100]} />
 		<T.MeshStandardMaterial />

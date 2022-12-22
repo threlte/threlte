@@ -4,7 +4,7 @@
 	import { AutoColliders, BasicPlayerController, RigidBody } from '@threlte/rapier'
 	import { CapsuleGeometry, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
 
-	export let position: Position | undefined = undefined
+	export let position: Parameters<Vector3['set']> | undefined = undefined
 
 	export let playerMesh: Mesh
 	let ballMesh: Mesh
@@ -52,7 +52,7 @@
 	/>
 </BasicPlayerController>
 
-<RigidBody bind:rigidBody position={{ y: 1, z: -5 }}>
+<RigidBody bind:rigidBody position={[0, 1, -5]}>
 	<AutoColliders shape={'ball'}>
 		<T.Mesh
 			bind:ref={ballMesh}

@@ -1,26 +1,25 @@
 <script lang="ts">
 	import { useFrame } from '@threlte/core'
-	import { Euler } from 'three'
-	import { Vector3 } from 'three'
+	import type { Euler, Vector3 } from 'three'
 	import Particle from './Particle.svelte'
 
 	const getId = () => {
 		return Math.random().toString(16).slice(2)
 	}
 
-	const getRandomPosition = () => {
-		return new Vector3(0.5 - Math.random() * 1, 5 - Math.random() * 1 + 10, 0.5 - Math.random() * 1)
+	const getRandomPosition = (): Parameters<Vector3['set']> => {
+		return [0.5 - Math.random() * 1, 5 - Math.random() * 1 + 10, 0.5 - Math.random() * 1]
 	}
 
-	const getRandomRotation = () => {
-		return new Euler(Math.random() * 10, Math.random() * 10, Math.random() * 10)
+	const getRandomRotation = (): Parameters<Euler['set']> => {
+		return [Math.random() * 10, Math.random() * 10, Math.random() * 10]
 	}
 
 	type Body = {
 		id: string
 		mounted: number
-		position: Vector3
-		rotation: Euler
+		position: Parameters<Vector3['set']>
+		rotation: Parameters<Euler['set']>
 	}
 
 	let bodies: Body[] = []

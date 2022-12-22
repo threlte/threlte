@@ -90,11 +90,7 @@
 	</HTML>
 
 	<!-- DOOR -->
-	<RigidBody
-		position={{ y: 1.125, x: -0.5 }}
-		bind:rigidBody={doorRigidBody}
-		type={'kinematicPosition'}
-	>
+	<RigidBody position={[-0.5, 1.125, 0]} bind:rigidBody={doorRigidBody} type={'kinematicPosition'}>
 		<AutoColliders shape={'cuboid'}>
 			<T.Mesh
 				receiveShadow
@@ -108,7 +104,7 @@
 
 	<CollisionGroups groups={[15]}>
 		<Collider
-			position={{ y: 1.5 }}
+			position={[0, 1.5, 0]}
 			shape={'cuboid'}
 			args={[1, 1.35, 1.5]}
 			sensor
