@@ -1,28 +1,19 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Group, Mesh, type Position, type Rotation } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { AutoColliders, Collider, CollisionGroups, RigidBody } from '@threlte/rapier'
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import { blur } from 'svelte/transition'
-	import {
-		BoxBufferGeometry,
-		Euler,
-		Group as ThreeGroup,
-		MeshStandardMaterial,
-		Quaternion
-	} from 'three'
+	import { BoxGeometry, Euler, Group, MeshStandardMaterial, Quaternion } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-
-	export let position: Position | undefined = undefined
-	export let rotation: Rotation | undefined = undefined
 
 	let open = false
 	let objectsInSensor = 0
 	$: open = objectsInSensor > 0
 
-	let group: ThreeGroup
+	let group: Group
 	let doorRigidBody: RapierRigidBody
 
 	let doorRotationClosed = 0
@@ -47,33 +38,33 @@
 	$: if (group && doorRigidBody) applyDoorRotation($doorRotation)
 </script>
 
-<Group bind:group {position} {rotation}>
+<T.Group bind:ref={group}>
 	<!-- FRAME -->
 	<AutoColliders shape={'cuboid'}>
 		<!-- SIDE FRAME A -->
-		<Mesh
+		<T.Mesh
 			receiveShadow
 			castShadow
-			position={{ y: 1.125, x: 0.7 }}
-			geometry={new BoxBufferGeometry(0.3, 2.25, 0.3)}
+			position={[0.7, 1.125, 0]}
+			geometry={new BoxGeometry(0.3, 2.25, 0.3)}
 			material={new MeshStandardMaterial()}
 		/>
 
 		<!-- SIDE FRAME B -->
-		<Mesh
+		<T.Mesh
 			receiveShadow
 			castShadow
-			position={{ y: 1.125, x: -0.7 }}
-			geometry={new BoxBufferGeometry(0.3, 2.25, 0.3)}
+			position={[-0.7, 1.125, 0]}
+			geometry={new BoxGeometry(0.3, 2.25, 0.3)}
 			material={new MeshStandardMaterial()}
 		/>
 
 		<!-- TOP FRAME -->
-		<Mesh
+		<T.Mesh
 			receiveShadow
 			castShadow
-			position={{ y: 2.4 }}
-			geometry={new BoxBufferGeometry(1.4 + 0.3, 0.3, 0.3)}
+			position.y={2.4}
+			geometry={new BoxGeometry(1.4 + 0.3, 0.3, 0.3)}
 			material={new MeshStandardMaterial()}
 		/>
 	</AutoColliders>
@@ -105,11 +96,11 @@
 		type={'kinematicPosition'}
 	>
 		<AutoColliders shape={'cuboid'}>
-			<Mesh
+			<T.Mesh
 				receiveShadow
 				castShadow
-				position={{ x: 0.5 }}
-				geometry={new BoxBufferGeometry(1, 2.25, 0.1)}
+				position.x={0.5}
+				geometry={new BoxGeometry(1, 2.25, 0.1)}
 				material={new MeshStandardMaterial()}
 			/>
 		</AutoColliders>
@@ -125,7 +116,7 @@
 			on:sensorexit={() => (objectsInSensor -= 1)}
 		/>
 	</CollisionGroups>
-</Group>
+</T.Group>
 
 <style>
 	.door {
