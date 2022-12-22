@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { T, type Position, type Rotation } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { AutoColliders, Collider, CollisionGroups, RigidBody } from '@threlte/rapier'
 	import { cubicIn, cubicOut } from 'svelte/easing'
