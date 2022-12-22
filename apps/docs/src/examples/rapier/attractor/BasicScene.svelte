@@ -20,7 +20,7 @@
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />
 
-<Three type={new GridHelper(100)} />
+<T.GridHelper args={[100]} />
 
 <RandomMeshes {count} rangeX={[-30, 30]} rangeY={[0, 75]} rangeZ={[-10, 10]} />
 
