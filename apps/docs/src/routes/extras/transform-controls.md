@@ -3,13 +3,10 @@ title: TransformControls
 ---
 
 <script lang="ts">
-import Example from '$examples/core/transform-controls/App.svelte'
+import Example from '$examples/extras/transform-controls/App.svelte'
 </script>
 
-!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=core|type=component|relatedDocs={[{name:"three.js TransformControls reference",url:"https://threejs.org/docs/#examples/en/controls/TransformControls"}]}
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=TransformControls|sourcePath=controls/TransformControls.svelte|name=TransformControls|from=extras|type=component|relatedDocs={[{name:"three.js TransformControls reference",url:"https://threejs.org/docs/#examples/en/controls/TransformControls"}]}
 
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
 
@@ -17,13 +14,13 @@ The component `<TransformControls>` needs to be a direct child of the component 
 
 To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
 
-<ExampleWrapper playgroundHref="/core/transform-controls">
+<ExampleWrapper playgroundHref="/extras/transform-controls">
 <Example />
 
 <div slot="code">
 
-@[code svelte|title=App.svelte](../../examples/core/transform-controls/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/core/transform-controls/Scene.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/transform-controls/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/transform-controls/Scene.svelte)
 
 </div>
 </ExampleWrapper>
