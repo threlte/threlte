@@ -3,19 +3,15 @@ import type {
   BufferGeometry,
   Camera,
   ColorRepresentation,
-  Line,
   Material,
   Mesh,
   Object3D,
-  PositionalAudio,
-  Vector3,
-  Vector3Tuple
+  PositionalAudio
 } from 'three'
-import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 import type { SetOptional } from 'type-fest'
+import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 
 export type HierarchicalObjectProperties = {
   object?: Object3D
@@ -80,11 +76,6 @@ export type Object3DInstanceProperties = SceneGraphObjectProperties &
 export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
   Omit<InteractiveObjectProperties, 'object'> & {
     mesh: Mesh
-  }
-
-export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'> &
-  Omit<Object3DInstanceProperties, 'object'> & {
-    line: Line
   }
 
 export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
@@ -165,22 +156,6 @@ export type LayersProperties = {
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  geometry: BufferGeometry
-  material: Material | Material[]
-}
-
-export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
-  geometry?: BufferGeometry
-  points?: Vector3[] | Vector3Tuple[]
-  material: Material | Material[]
-}
-
-export type Line2Properties = Omit<MeshInstanceProperties, 'mesh'> & {
-  points: Vector3[] | Vector3Tuple[]
-  material: LineMaterial
-}
-
-export type LineSegmentsProperties = Omit<LineInstanceProperties, 'line'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }

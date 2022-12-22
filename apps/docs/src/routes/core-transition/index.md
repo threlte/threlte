@@ -270,7 +270,6 @@ These components provide additional value and **will be moved to `@threlte/extra
 - `<TransformControls>`
 - `<InstancedMesh>`
 - `<Instance>`
-- `<Line2>`
 
 These components will be **removed**:
 
@@ -289,6 +288,7 @@ These components will be **removed**:
 - `<Object3D>`
 - `<Line>`
 - `<LineSegments>`
+- `<Line2>`
 - `<MeshInstance>`
 - `<Object3DInstance>`
 - `<LightInstance>`

@@ -105,18 +105,6 @@ export const sidebar = {
 				slug: '/core/object3d'
 			},
 			{
-				title: 'Line',
-				slug: '/core/line'
-			},
-			{
-				title: 'Line2',
-				slug: '/core/line-2'
-			},
-			{
-				title: 'LineSegments',
-				slug: '/core/line-segments'
-			},
-			{
 				title: 'Cameras',
 				slug: ''
 			},
@@ -203,10 +191,6 @@ export const sidebar = {
 			{
 				title: 'AudioInstance',
 				slug: '/core/audio-instance'
-			},
-			{
-				title: 'LineInstance',
-				slug: '/core/line-instance'
 			},
 			{
 				title: 'Traits',
