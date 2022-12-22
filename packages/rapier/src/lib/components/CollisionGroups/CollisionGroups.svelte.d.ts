@@ -22,11 +22,9 @@ type MembershipsAndFilterProps = {
 
 type GroupsDef = GroupsProps | MembershipsAndFilterProps
 
-export type CollisionGroupsProps<TGroupsDef extends GroupsDef> = TGroupsDef extends Groups
+export type CollisionGroupsProps<TGroupsDef extends GroupsDef> = TGroupsDef extends GroupsProps
   ? GroupsProps
-  : TGroupsDef extends MembershipsAndFilterProps
-  ? MembershipsAndFilterProps
-  : never
+  : MembershipsAndFilterProps
 
 export default class CollisionGroups<TGroupsDef extends GroupsDef> extends SvelteComponentTyped<
   CollisionGroupsProps<TGroupsDef>

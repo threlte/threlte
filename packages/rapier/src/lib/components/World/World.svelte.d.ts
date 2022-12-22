@@ -13,11 +13,11 @@ import type {
   RawRigidBodySet,
   RawSerializationPipeline
 } from '@dimforge/rapier3d-compat/raw'
-import type { Position } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
+import type { Vector3 } from 'three'
 
 export type WorldProps = {
-  gravity?: Position
+  gravity?: Parameters<Vector3['set']>
   rawIntegrationParameters?: RawIntegrationParameters
   rawIslands?: RawIslandManager
   rawBroadPhase?: RawBroadPhase
