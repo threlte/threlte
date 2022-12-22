@@ -29,15 +29,11 @@ export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
 export { default as Instance } from './objects/Instance.svelte'
 export { default as Group } from './objects/Group.svelte'
 export { default as Object3D } from './objects/Object3D.svelte'
-export { default as Line } from './objects/Line.svelte'
-export { default as Line2 } from './objects/Line2.svelte'
-export { default as LineSegments } from './objects/LineSegments.svelte'
 
 // object instance components
 export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
 export { default as CameraInstance } from './instances/CameraInstance.svelte'
-export { default as LineInstance } from './instances/LineInstance.svelte'
 
 // trait components
 export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
@@ -105,10 +101,6 @@ export type {
   AudioInstanceProperties,
   AudioListenerProperties,
   AudioProperties,
-  Line2Properties,
-  LineInstanceProperties,
-  LineProperties,
-  LineSegmentsProperties,
   PositionalAudioProperties,
   SceneGraphObjectProperties,
   TransformControlsProperties
