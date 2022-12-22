@@ -33,8 +33,16 @@
 	}
 </script>
 
-<!-- <Float floatIntensity={5} scale={$scale}> -->
-<Float floatIntensity={15}>
+<Float
+	floatIntensity={[1, 5, 1]}
+	floatingRange={[
+		[-0.1, 0.1],
+		[-0.2, 0.2],
+		[-0.1, 0.1]
+	]}
+	rotationSpeed={[1, 2, 1]}
+	rotationIntensity={[5, 5, 5]}
+>
 	<Mesh
 		interactive
 		on:pointerenter={onPointerEnter}
