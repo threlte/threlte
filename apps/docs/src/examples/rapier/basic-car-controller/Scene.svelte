@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DirectionalLight, Mesh, Object3DInstance, PerspectiveCamera } from '@threlte/core'
+	import { T, Three } from '@threlte/core'
 	import { Environment, HTML, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { BoxGeometry, MeshStandardMaterial } from 'three'
@@ -12,51 +12,49 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<DirectionalLight position={{ y: 20, x: 8, z: -3 }} />
+<T.DirectionalLight position={[8, 20, -3]} />
 
 <Ground />
 
-<RigidBody dominance={1} position={{ y: 3, x: -10, z: -12 }}>
+<RigidBody dominance={1} position={[-10, 3, -12]}>
 	<HTML transform sprite pointerEvents={'none'} position={{ y: 1 }}>
 		<p>Dominance: 1</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxGeometry(1, 1, 1)} material={new MeshStandardMaterial()} />
+		<T.Mesh geometry={new BoxGeometry(1, 1, 1)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
-<RigidBody dominance={-1} position={{ y: 3, x: -15, z: -14 }}>
+<RigidBody dominance={-1} position={[-15, 3, -14]}>
 	<HTML transform sprite pointerEvents={'none'} position={{ y: 3 }}>
 		<p>Dominance: -1</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxGeometry(3, 3, 3)} material={new MeshStandardMaterial()} />
+		<T.Mesh geometry={new BoxGeometry(3, 3, 3)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
-<RigidBody dominance={0} position={{ y: 3, x: -13, z: -10 }}>
+<RigidBody dominance={0} position={[-13, 3, -10]}>
 	<HTML transform sprite pointerEvents={'none'} position={{ y: 2 }}>
 		<p>Dominance: 0</p>
 	</HTML>
 	<AutoColliders shape={'cuboid'}>
-		<Mesh geometry={new BoxGeometry(2, 2, 2)} material={new MeshStandardMaterial()} />
+		<T.Mesh geometry={new BoxGeometry(2, 2, 2)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 
 {#if $gltf}
 	<AutoColliders shape={'trimesh'}>
-		<Object3DInstance
-			rotation={{ y: 90 * DEG2RAD }}
-			object={$gltf.scene}
-			position={{ y: -0.3, x: -50, z: -3 }}
-		/>
+		<Three type={$gltf.scene} rotation.y={90 * DEG2RAD} position={[-50, -0.3, -3]} />
 	</AutoColliders>
 {/if}
 
-<Car position={{ y: 5, x: 70 }}>
-	<PerspectiveCamera
-		rotation={{ x: -90 * DEG2RAD, z: 90 * DEG2RAD, y: 70 * DEG2RAD }}
-		position={{ y: 5, x: 10 }}
+<Car position.x={70} position.y={5}>
+	<T.PerspectiveCamera
+		rotation={[-90 * DEG2RAD, 70 * DEG2RAD, 90 * DEG2RAD]}
+		position.x={10}
+		position.y={5}
 		fov={60}
+		makeDefault
 	/>
 </Car>

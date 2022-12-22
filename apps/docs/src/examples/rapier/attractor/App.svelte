@@ -115,7 +115,7 @@
 <div use:action />
 
 <Canvas>
-	<World gravity={{ y: showAdvanced ? 0 : -3 }}>
+	<World gravity={[0, showAdvanced ? 0 : -3, 0]}>
 		{#if $showHelper}
 			<Debug />
 		{/if}
