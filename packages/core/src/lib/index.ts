@@ -19,13 +19,6 @@ export { default as TransformControls } from './controls/TransformControls.svelt
 // effect components
 export { default as Pass } from './effects/Pass.svelte'
 
-// light components
-export { default as AmbientLight } from './lights/AmbientLight.svelte'
-export { default as DirectionalLight } from './lights/DirectionalLight.svelte'
-export { default as PointLight } from './lights/PointLight.svelte'
-export { default as HemisphereLight } from './lights/HemisphereLight.svelte'
-export { default as SpotLight } from './lights/SpotLight.svelte'
-
 // misc components
 export { default as Fog } from './misc/Fog.svelte'
 export { default as FogExp2 } from './misc/FogExp2.svelte'
@@ -109,11 +102,6 @@ export type {
   PerspectiveCameraProperties,
   OrbitControlsProperties,
   PassProperties,
-  AmbientLightProperties,
-  DirectionalLightProperties,
-  HemisphereLightProperties,
-  PointLightProperties,
-  SpotLightProperties,
   FogProperties,
   FogExp2Properties,
   LayersProperties,
