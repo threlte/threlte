@@ -11,7 +11,7 @@ importers:
     devDependencies:
       '@changesets/cli': 2.23.1
       eslint-config-custom: 0.0.0_baqe24dl4g2yeaom2kijju3o74
-      prettier: 2.8.0
+      prettier: 2.8.1
       turbo: 1.6.3
 
   apps/docs:
@@ -308,6 +308,7 @@ importers:
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1
       '@threlte/core': workspace:*
+      '@threlte/extras': workspace:*
       '@types/node': ^18.0.3
       '@types/three': ^0.144.0
       '@typescript-eslint/eslint-plugin': ^4.31.1
@@ -335,6 +336,7 @@ importers:
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
       '@threlte/core': link:../core
+      '@threlte/extras': link:../extras
       '@types/node': 18.0.3
       '@types/three': 0.144.0
       '@typescript-eslint/eslint-plugin': 4.33.0_k4l66av2tbo6kxzw52jzgbfzii
@@ -4729,8 +4731,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier/2.8.0:
-    resolution: {integrity: sha512-9Lmg8hTFZKG0Asr/kW9Bp8tJjRVluO8EJQVfY2T7FMw9T5jy4I/Uvx0Rca/XWf50QQ1/SS48+6IJWnrb+2yemA==}
+  /prettier/2.8.1:
+    resolution: {integrity: sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
