@@ -169,14 +169,6 @@ export const sidebar = {
 				slug: ''
 			},
 			{
-				title: 'Fog',
-				slug: '/core/fog'
-			},
-			{
-				title: 'FogExp2',
-				slug: '/core/fog-exp-2'
-			},
-			{
 				title: 'Layers',
 				slug: '/core/layers'
 			},
