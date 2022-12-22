@@ -5,7 +5,7 @@
 	import Character from './Character.svelte'
 </script>
 
-<T.PerspectiveCamera position={[-0.6, 1.7, 2.1]} near={0.1} far={100}>
+<T.PerspectiveCamera makeDefault position={[-0.6, 1.7, 2.1]} near={0.1} far={100}>
 	<OrbitControls
 		maxPolarAngle={DEG2RAD * 80}
 		enableRotate={false}

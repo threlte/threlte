@@ -209,10 +209,6 @@ export const sidebar = {
 				slug: '/core/camera-instance'
 			},
 			{
-				title: 'LightInstance',
-				slug: '/core/light-instance'
-			},
-			{
 				title: 'AudioInstance',
 				slug: '/core/audio-instance'
 			},

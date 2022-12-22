@@ -20,7 +20,7 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<T.PerspectiveCamera position.z={10} fov={20} />
+<T.PerspectiveCamera makeDefault position.z={10} fov={20} />
 
 <T.DirectionalLight position.y={10} position.z={10} />
 

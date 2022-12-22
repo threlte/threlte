@@ -5,7 +5,7 @@
 	import Ground from './Ground.svelte'
 </script>
 
-<T.PerspectiveCamera position={[10, 10, 10]} makeDefault>
+<T.PerspectiveCamera makeDefault position={[10, 10, 10]} makeDefault>
 	<OrbitControls enableZoom={false} />
 	<AudioListener />
 </T.PerspectiveCamera>

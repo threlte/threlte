@@ -24,7 +24,7 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<T.PerspectiveCamera position.x={12} position.y={13} fov={40}>
+<T.PerspectiveCamera makeDefault position.x={12} position.y={13} fov={40}>
 	<OrbitControls target={{ x: 2.5 }} />
 </T.PerspectiveCamera>
 
