@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 5.0.0
+
+### Major Changes
+
+- fe439d8: Converted <ContactShadows> to v5
+- a0bf233: Converted <Text> to v5
+
+### Patch Changes
+
+- 3344241: Converted <Edges> component to use Threlte v5 syntax. Changed prop name "threshold" to "thresholdAngle" (as it is used by three.js)
+- dd6668b: Environment: update Types to Threlte V5 standard
+
 ## 4.9.3
 
 ### Patch Changes

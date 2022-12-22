@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 6.0.0
+
+### Major Changes
+
+- b8ba1d2: Removed components <Line>, <Line2>, <LineSegments> and <LineInstance>
+- d589122: Remove components for lights, update docs and examples to v5
+
 ## 5.0.8
 
 ### Patch Changes
