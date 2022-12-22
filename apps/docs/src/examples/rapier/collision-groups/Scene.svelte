@@ -1,14 +1,8 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Mesh,
-		Object3DInstance,
-		OrbitControls,
-		PerspectiveCamera
-	} from '@threlte/core'
+	import { DirectionalLight, OrbitControls, PerspectiveCamera, T } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
-	import { BoxGeometry, GridHelper, MeshStandardMaterial } from 'three'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import Ground from './Ground.svelte'
 
 	const geometry = new BoxGeometry(1, 1, 1)
@@ -30,9 +24,9 @@
 {#key resetCounter}
 	<!-- Collider A -->
 	<CollisionGroups memberships={[1]} filter={[2]}>
-		<RigidBody position={{ y: 1.5, z: 1 - Math.random() * 2 }}>
+		<RigidBody position={[0, 1.5, 1 - Math.random() * 2]}>
 			<AutoColliders shape={'cuboid'}>
-				<Mesh
+				<T.Mesh
 					castShadow
 					{geometry}
 					material={new MeshStandardMaterial({
@@ -45,9 +39,9 @@
 
 	<!-- Collider B -->
 	<CollisionGroups memberships={[2]} filter={[1, 3]}>
-		<RigidBody position={{ y: 4.5, z: 1 - Math.random() * 2 }}>
+		<RigidBody position={[0, 4.5, 1 - Math.random() * 2]}>
 			<AutoColliders shape={'cuboid'}>
-				<Mesh
+				<T.Mesh
 					castShadow
 					{geometry}
 					material={new MeshStandardMaterial({
@@ -60,9 +54,9 @@
 
 	<!-- Collider C -->
 	<CollisionGroups memberships={[3]} filter={[2]}>
-		<RigidBody position={{ y: 3, z: 1 - Math.random() * 2 }}>
+		<RigidBody position={[0, 3, 1 - Math.random() * 2]}>
 			<AutoColliders shape={'cuboid'}>
-				<Mesh
+				<T.Mesh
 					castShadow
 					{geometry}
 					material={new MeshStandardMaterial({
@@ -74,7 +68,7 @@
 	</CollisionGroups>
 {/key}
 
-<Object3DInstance object={new GridHelper(50)} />
+<T.GridHelper args={[50]} />
 
 <CollisionGroups groups={[1, 2, 3]}>
 	<Ground />

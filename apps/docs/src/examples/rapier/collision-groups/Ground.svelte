@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { Mesh } from '@threlte/core'
-	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxBufferGeometry } from 'three'
+	import { T } from '@threlte/core'
+	import { AutoColliders } from '@threlte/rapier'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 </script>
 
-<AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>
-	<Mesh
+<AutoColliders shape={'cuboid'} position={[0, -0.5, 0]}>
+	<T.Mesh
 		receiveShadow
-		geometry={new BoxBufferGeometry(10, 1, 10)}
+		geometry={new BoxGeometry(10, 1, 10)}
 		material={new MeshStandardMaterial()}
 	/>
 </AutoColliders>
