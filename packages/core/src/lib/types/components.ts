@@ -158,17 +158,6 @@ export type PassProperties = {
   pass: Pass
 }
 
-export type FogProperties = {
-  color: ColorRepresentation
-  near?: number
-  far?: number
-}
-
-export type FogExp2Properties = {
-  color: ColorRepresentation
-  density?: number
-}
-
 export type LayersProperties = {
   layers: ThrelteLayers
 }
