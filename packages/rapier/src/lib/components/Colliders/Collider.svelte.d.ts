@@ -3,16 +3,15 @@ import type {
   Collider as rapierCollider,
   ColliderDesc
 } from '@dimforge/rapier3d-compat'
-import type { Position, TransformableObjectProperties, Rotation } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
+import type { Euler, Vector3 } from 'three'
 
 // ------------------ BASE ------------------
 
 type BaseProps = {
-  position?: TransformableObjectProperties['position']
-  rotation?: TransformableObjectProperties['rotation']
-  scale?: TransformableObjectProperties['scale']
-  lookAt?: TransformableObjectProperties['lookAt']
+  position?: Parameters<Vector3['set']>
+  rotation?: Parameters<Euler['set']>
+  scale?: Parameters<Vector3['set']>
   restitution?: number
   restitutionCombineRule?: CoefficientCombineRule
   friction?: number
@@ -71,9 +70,9 @@ type Mass = {
 }
 type MassProperties = {
   mass: number
-  centerOfMass: Position
-  principalAngularInertia: Position
-  angularInertiaLocalFrame: Rotation
+  centerOfMass: Parameters<Vector3['set']>
+  principalAngularInertia: Parameters<Vector3['set']>
+  angularInertiaLocalFrame: Parameters<Euler['set']>
 
   density?: never
 }

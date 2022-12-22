@@ -5,7 +5,7 @@
     Collider,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject, TransformableObject, useFrame } from '@threlte/core'
+  import { SceneGraphObject, useFrame } from '@threlte/core'
   import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
@@ -14,45 +14,43 @@
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { applyTransforms } from '../../lib/applyTransforms'
+  import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
-  import { positionToVector3 } from '../../lib/positionToVector3'
-  import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
   import type { ColliderEventMap } from '../../types/types'
   import type { ColliderProps, MassDef, Shape } from './Collider.svelte'
 
   type TShape = $$Generic<Shape>
   type TMassDef = $$Generic<MassDef>
-  type Props = ColliderProps<TShape, TMassDef>
+  type $$Props = ColliderProps<TShape, TMassDef>
 
-  export let shape: Props['shape']
-  export let args: Props['args']
-  export let position: Props['position'] = undefined as Props['position']
-  export let rotation: Props['rotation'] = undefined as Props['rotation']
-  export let scale: Props['scale'] = undefined as Props['scale']
-  export let lookAt: Props['lookAt'] = undefined as Props['lookAt']
-  export let restitution: Props['restitution'] = undefined as Props['restitution']
-  export let restitutionCombineRule: Props['restitutionCombineRule'] =
-    undefined as Props['restitutionCombineRule']
-  export let friction: Props['friction'] = undefined as Props['friction']
-  export let frictionCombineRule: Props['frictionCombineRule'] =
-    undefined as Props['frictionCombineRule']
-  export let sensor: Props['sensor'] = undefined as Props['sensor']
-  export let contactForceEventThreshold: Props['contactForceEventThreshold'] =
-    undefined as Props['contactForceEventThreshold']
+  export let shape: $$Props['shape']
+  export let args: $$Props['args']
+  export let position: $$Props['position'] = undefined as $$Props['position']
+  export let rotation: $$Props['rotation'] = undefined as $$Props['rotation']
+  export let scale: $$Props['scale'] = undefined as $$Props['scale']
+  export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
+  export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
+    undefined as $$Props['restitutionCombineRule']
+  export let friction: $$Props['friction'] = undefined as $$Props['friction']
+  export let frictionCombineRule: $$Props['frictionCombineRule'] =
+    undefined as $$Props['frictionCombineRule']
+  export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
+  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
+    undefined as $$Props['contactForceEventThreshold']
 
-  export let density: Props['density'] = undefined
-  export let mass: Props['mass'] = undefined
-  export let centerOfMass: Props['centerOfMass'] = undefined
-  export let principalAngularInertia: Props['principalAngularInertia'] = undefined
-  export let angularInertiaLocalFrame: Props['angularInertiaLocalFrame'] = undefined
+  export let density: $$Props['density'] = undefined
+  export let mass: $$Props['mass'] = undefined
+  export let centerOfMass: $$Props['centerOfMass'] = undefined
+  export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
+  export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
 
   const object = new Object3D()
 
   /**
    * Immediately apply transforms
    */
-  applyTransforms(object, position, rotation, scale, lookAt)
+  applyTransforms(object, position, rotation, scale)
   object.updateWorldMatrix(true, false)
 
   const rigidBody = useRigidBody()
@@ -141,9 +139,13 @@
         if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
           collider.setMassProperties(
             mass,
-            positionToVector3(centerOfMass),
-            positionToVector3(principalAngularInertia),
-            rotationToQuaternion(angularInertiaLocalFrame)
+            { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
+            {
+              x: principalAngularInertia[0],
+              y: principalAngularInertia[1],
+              z: principalAngularInertia[2]
+            },
+            eulerToQuaternion(angularInertiaLocalFrame)
           )
         } else {
           collider.setMass(mass)
@@ -152,9 +154,14 @@
     }
   }
 
+  /**
+   * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
+   * transforms on every frame.
+   */
   useFrame(
     () => {
       if (!collider) return
+      applyTransforms(object, position, rotation, scale)
       collider.setTranslation(getWorldPosition(object))
       collider.setRotation(getWorldQuaternion(object))
     },
@@ -177,12 +184,3 @@
 <SceneGraphObject {object}>
   <slot />
 </SceneGraphObject>
-
-{#if !isAttached}
-  <TransformableObject
-    {object}
-    {position}
-    {rotation}
-    {scale}
-  />
-{/if}
