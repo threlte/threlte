@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		AmbientLight,
-		DirectionalLight,
-		OrbitControls,
-		PerspectiveCamera,
-		useThrelte
-	} from '@threlte/core'
+	import { T, OrbitControls, useThrelte } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
@@ -34,13 +28,13 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<PerspectiveCamera position={{ z: 20 }} fov={50}>
+<T.PerspectiveCamera position.z={20} fov={50}>
 	<OrbitControls target={{ y: -2 }} enableDamping />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight position={{ y: 10, z: 10 }} />
+<T.DirectionalLight position.y={10} position.z={10} />
 
-<AmbientLight intensity={0.3} />
+<T.AmbientLight intensity={0.3} />
 
 {#if $meshes}
 	{#each $meshes as mesh}
