@@ -4,10 +4,9 @@
 </script>
 
 <script lang="ts">
-	import { SphereGeometry, MeshBasicMaterial } from 'three'
-	import { Mesh } from '@threlte/core'
-	import { RigidBody, Collider } from '@threlte/rapier'
-	import { Vector3 } from 'three'
+	import { T } from '@threlte/core'
+	import { Collider, RigidBody } from '@threlte/rapier'
+	import { MeshBasicMaterial, SphereGeometry, Vector3 } from 'three'
 
 	export let count: number = 20
 	export let rangeX: [number, number] = [-20, 20]
@@ -47,6 +46,6 @@
 {#each bodies as body (body.id)}
 	<RigidBody position={body.position}>
 		<Collider shape="ball" args={[0.75]} mass={Math.random() * 10} />
-		<Mesh {geometry} {material} />
+		<T.Mesh {geometry} {material} />
 	</RigidBody>
 {/each}

@@ -24,7 +24,6 @@ export { default as Layers } from './misc/Layers.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
 // object components
-export { default as Mesh } from './objects/Mesh.svelte'
 export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
 export { default as Instance } from './objects/Instance.svelte'
 export { default as Group } from './objects/Group.svelte'
@@ -96,7 +95,6 @@ export type {
   PassProperties,
   LayersProperties,
   GroupProperties,
-  MeshProperties,
   Object3DProperties,
   AudioInstanceProperties,
   AudioListenerProperties,
