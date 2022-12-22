@@ -141,10 +141,6 @@ export const sidebar = {
 				slug: '/core/orbit-controls'
 			},
 			{
-				title: 'TransformControls',
-				slug: '/core/transform-controls'
-			},
-			{
 				title: 'Post Processing',
 				slug: ''
 			},
@@ -319,6 +315,10 @@ export const sidebar = {
 			{
 				title: 'Environment',
 				slug: '/extras/environment'
+			},
+			{
+				title: 'TransformControls',
+				slug: '/extras/transform-controls'
 			},
 			{
 				title: 'Grid',

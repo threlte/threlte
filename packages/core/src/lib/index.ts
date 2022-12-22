@@ -14,7 +14,6 @@ export { default as PositionalAudioHelper } from './helpers/PositionalAudioHelpe
 
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
-export { default as TransformControls } from './controls/TransformControls.svelte'
 
 // effect components
 export { default as Pass } from './effects/Pass.svelte'
@@ -76,6 +75,7 @@ export type {
 
 // utils
 export { createObjectStore } from './lib/createObjectStore'
+export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 
 export type {
   HierarchicalObjectProperties,
@@ -100,6 +100,5 @@ export type {
   AudioListenerProperties,
   AudioProperties,
   PositionalAudioProperties,
-  SceneGraphObjectProperties,
-  TransformControlsProperties
+  SceneGraphObjectProperties
 } from './types/components'

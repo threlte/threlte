@@ -13,6 +13,7 @@ export { default as Disposables } from './components/Disposables/Disposables.sve
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
 export { default as Environment } from './components/Environment/Environment.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
+export { default as TransformControls } from './components/TransformControls/TransformControls.svelte'
 
 // text component
 export { default as Text } from './components/Text/Text.svelte'
