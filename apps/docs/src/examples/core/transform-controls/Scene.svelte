@@ -3,7 +3,7 @@
 	import { T, OrbitControls, TransformControls } from '@threlte/core'
 </script>
 
-<T.PerspectiveCamera makeDefault position={[10, 5, 10]} lookAt={{ y: 0.5 }}>
+<T.PerspectiveCamera makeDefault position={[10, 5, 10]} lookAt.y={0.5}>
 	<OrbitControls />
 </T.PerspectiveCamera>
 
