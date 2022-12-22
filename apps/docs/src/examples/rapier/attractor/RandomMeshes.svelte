@@ -1,10 +1,10 @@
 <script lang="ts" context="module">
-	const geometry = new SphereBufferGeometry(1)
+	const geometry = new SphereGeometry(1)
 	const material = new MeshBasicMaterial({ color: 'red' })
 </script>
 
 <script lang="ts">
-	import { SphereBufferGeometry, MeshBasicMaterial } from 'three'
+	import { SphereGeometry, MeshBasicMaterial } from 'three'
 	import { Mesh } from '@threlte/core'
 	import { RigidBody, Collider } from '@threlte/rapier'
 	import { Vector3 } from 'three'
@@ -22,12 +22,12 @@
 		return Math.random() * (max - min) + min
 	}
 
-	const getRandomPosition = () => {
+	const getRandomPosition = (): Parameters<Vector3['set']> => {
 		return new Vector3(
 			randomNumber(rangeX[0], rangeX[1]),
 			randomNumber(rangeY[0], rangeY[1]),
 			randomNumber(rangeZ[0], rangeZ[1])
-		)
+		).toArray()
 	}
 
 	const generateBodies = (c: number) => {
