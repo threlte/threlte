@@ -6,7 +6,7 @@
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import { blur } from 'svelte/transition'
-	import { BoxGeometry, Euler, Group, MeshStandardMaterial, Quaternion } from 'three'
+	import { BoxGeometry, Euler, type Group, MeshStandardMaterial, Quaternion } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	let open = false
@@ -69,7 +69,7 @@
 		/>
 	</AutoColliders>
 
-	<HTML transform position={{ y: 3 }} pointerEvents={'none'}>
+	<HTML transform position.y={3} pointerEvents={'none'}>
 		{#key open}
 			<small
 				in:blur={{

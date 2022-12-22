@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { createEventDispatcher, onDestroy } from 'svelte'
 	import { Euler, Camera } from 'three'
 	import { useThrelte, useParent } from '@threlte/core'
