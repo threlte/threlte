@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Group, useFrame, useThrelte, type Position } from '@threlte/core'
+  import { Group, useFrame, useThrelte } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
@@ -8,7 +8,7 @@
   import RigidBody from '../components/RigidBody/RigidBody.svelte'
   import type { CollisionGroupsBitMask } from '../types/types'
 
-  export let position: Position | undefined = undefined
+  export let position: Parameters<Vector3['set']> | undefined = undefined
   export let height: number = 1.7
   export let radius: number = 0.3
   export let speed = 1
@@ -109,7 +109,10 @@
   }
 </script>
 
-<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup|preventDefault={onKeyUp} />
+<svelte:window
+  on:keydown|preventDefault={onKeyDown}
+  on:keyup|preventDefault={onKeyUp}
+/>
 
 <RigidBody
   dominance={127}
@@ -119,7 +122,10 @@
   type={'dynamic'}
 >
   <CollisionGroups groups={playerCollisionGroups}>
-    <Collider shape={'capsule'} args={[height / 2 - radius, radius]} />
+    <Collider
+      shape={'capsule'}
+      args={[height / 2 - radius, radius]}
+    />
   </CollisionGroups>
 
   <CollisionGroups groups={groundCollisionGroups}>
@@ -129,7 +135,7 @@
       on:sensorexit={() => (groundsSensored -= 1)}
       shape={'ball'}
       args={[radius * 1.2]}
-      position={{ y: -height / 2 + radius }}
+      position={[0, -height / 2 + radius, 0]}
     />
   </CollisionGroups>
 

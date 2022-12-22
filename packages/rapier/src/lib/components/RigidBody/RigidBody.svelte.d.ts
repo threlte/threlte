@@ -1,10 +1,17 @@
-import type { Position, Rotation, TransformableObjectProperties } from '@threlte/core'
+import { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 import { SvelteComponentTyped } from 'svelte'
+import type { Euler, Vector3 } from 'three'
 import type { RigidBodyTypeString } from '../../lib/parseRigidBodyType'
 
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
-export type RigidBodyProps = Omit<TransformableObjectProperties, 'object'> & {
+export type RigidBodyProps = {
+  rigidBody?: RapierRigidBody
+
+  position?: Parameters<Vector3['set']>
+  rotation?: Parameters<Euler['set']>
+  scale?: Parameters<Vector3['set']>
+
   /**
    * Specify the type of this rigid body
    */
@@ -18,12 +25,12 @@ export type RigidBodyProps = Omit<TransformableObjectProperties, 'object'> & {
   /** The linear velocity of this body.
    * default: zero velocity
    */
-  linearVelocity?: Position
+  linearVelocity?: Parameters<Vector3['set']>
 
   /** The angular velocity of this body.
    * Default: zero velocity.
    */
-  angularVelocity?: Rotation
+  angularVelocity?: Parameters<Euler['set']>
 
   /**
    * The scaling factor applied to the gravity affecting the rigid-body.
