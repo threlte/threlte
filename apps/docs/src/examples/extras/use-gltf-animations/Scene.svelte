@@ -11,7 +11,7 @@
 	scene.background = new Color(0xeae8e2)
 </script>
 
-<T.PerspectiveCamera position={[600, 200, 600]} near={10} far={10000}>
+<T.PerspectiveCamera makeDefault position={[600, 200, 600]} near={10} far={10000}>
 	<OrbitControls autoRotate autoRotateSpeed={0.2} enableDamping target={{ y: -75, x: -60 }} />
 </T.PerspectiveCamera>
 

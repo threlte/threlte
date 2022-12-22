@@ -5,7 +5,7 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<T.PerspectiveCamera position={[5, 2, 5]} fov={25}>
+<T.PerspectiveCamera makeDefault position={[5, 2, 5]} fov={25}>
 	<OrbitControls autoRotate enableDamping />
 </T.PerspectiveCamera>
 

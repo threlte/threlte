@@ -14,7 +14,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera position.y={50} position.z={100} fov={70} far={10000}>
+<T.PerspectiveCamera makeDefault position.y={50} position.z={100} fov={70} far={10000}>
 	<OrbitControls enableZoom={true} target={{ y: 20 }} />
 </T.PerspectiveCamera>
 

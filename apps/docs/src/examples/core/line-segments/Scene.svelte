@@ -11,7 +11,7 @@
 	const linesGeometry = new EdgesGeometry(geometry, 30)
 </script>
 
-<T.PerspectiveCamera position={[3, 3, 3]}>
+<T.PerspectiveCamera makeDefault position={[3, 3, 3]}>
 	<OrbitControls autoRotate enableZoom={false} />
 </T.PerspectiveCamera>
 

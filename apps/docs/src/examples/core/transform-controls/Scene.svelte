@@ -11,7 +11,7 @@
 	})
 </script>
 
-<T.PerspectiveCamera position={[10, 5, 10]} lookAt={{ y: 0.5 }}>
+<T.PerspectiveCamera makeDefault position={[10, 5, 10]} lookAt={{ y: 0.5 }}>
 	<OrbitControls />
 </T.PerspectiveCamera>
 

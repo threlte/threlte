@@ -22,7 +22,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera position={[80, 80, 80]}>
+<T.PerspectiveCamera makeDefault position={[80, 80, 80]}>
 	<OrbitControls autoRotate enableZoom={false} />
 </T.PerspectiveCamera>
 
