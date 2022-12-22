@@ -1,18 +1,19 @@
 <script lang="ts" context="module">
-	const geometry = new BoxBufferGeometry(1, 1, 1)
+	const geometry = new BoxGeometry(1, 1, 1)
 	const material = new MeshStandardMaterial()
 	export const muted = writable(true)
 </script>
 
 <script lang="ts">
-	import { Mesh, PositionalAudio, type Position, type Rotation } from '@threlte/core'
+	import { PositionalAudio, T } from '@threlte/core'
 	import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
 	import { writable } from 'svelte/store'
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+	import type { Euler, Vector3 } from 'three'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import { clamp } from 'three/src/math/MathUtils'
 
-	export let position: Position | undefined = undefined
-	export let rotation: Rotation | undefined = undefined
+	export let position: Vector3 | undefined = undefined
+	export let rotation: Euler | undefined = undefined
 
 	const audios: {
 		threshold: number
@@ -37,9 +38,16 @@
 		audio?.stop?.()
 		audio?.play?.()
 	}
+
+	$: rotationCasted = rotation?.toArray() as [x: number, y: number, z: number]
 </script>
 
-<RigidBody type={'dynamic'} {position} {rotation} on:contact={fireSound}>
+<RigidBody
+	type={'dynamic'}
+	position={position?.toArray()}
+	rotation={rotationCasted}
+	on:contact={fireSound}
+>
 	{#each audios as audio}
 		<PositionalAudio
 			autoplay={false}
@@ -57,5 +65,5 @@
 		shape={'cuboid'}
 		args={[0.5, 0.5, 0.5]}
 	/>
-	<Mesh castShadow receiveShadow {geometry} {material} />
+	<T.Mesh castShadow receiveShadow {geometry} {material} />
 </RigidBody>

@@ -16,16 +16,14 @@
   type $$Props = Required<RigidBodyProps>
   type OptProps = RigidBodyProps
 
-  export let debug = false
-
-  export let position: OptProps['position']
-  export let rotation: OptProps['rotation']
-  export let scale: OptProps['scale']
+  export let position: OptProps['position'] = undefined
+  export let rotation: OptProps['rotation'] = undefined
+  export let scale: OptProps['scale'] = undefined
+  export let linearVelocity: OptProps['linearVelocity'] = undefined
+  export let angularVelocity: OptProps['angularVelocity'] = undefined
 
   export let type: $$Props['type'] = 'dynamic'
   export let canSleep: $$Props['canSleep'] = true
-  export let linearVelocity: OptProps['linearVelocity']
-  export let angularVelocity: OptProps['angularVelocity']
   export let gravityScale: $$Props['gravityScale'] = 1
   export let ccd: $$Props['ccd'] = false
   export let angularDamping: $$Props['angularDamping'] = 0

@@ -1,11 +1,8 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Mesh, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-	import { SphereBufferGeometry } from 'three'
-	import { Color } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+	import { Color, MeshStandardMaterial, SphereGeometry } from 'three'
 	import TestBed from './TestBed.svelte'
 
 	const gray = new Color(0x333333)
@@ -35,13 +32,13 @@
 	on:sensorexit={() => (present = false)}
 	sensor
 	shape={'cuboid'}
-	position={{ y: 1 }}
+	position={[0, 1, 0]}
 	args={[1, 1, 1]}
 />
 
-<RigidBody bind:rigidBody type={'kinematicPosition'} position={{ y: 1 }} lockRotations>
+<RigidBody bind:rigidBody type={'kinematicPosition'} position={[0, 1, 0]} lockRotations>
 	<AutoColliders shape={'ball'}>
-		<Mesh castShadow geometry={new SphereBufferGeometry(1)} {material} />
+		<T.Mesh castShadow geometry={new SphereGeometry(1)} {material} />
 	</AutoColliders>
 </RigidBody>
 

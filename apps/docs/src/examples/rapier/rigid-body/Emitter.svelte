@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { useFrame } from '@threlte/core'
-	import { Euler } from 'three'
-	import { Vector3 } from 'three'
+	import { Euler, Vector3 } from 'three'
 	import Particle from './Particle.svelte'
 
 	const getId = () => {

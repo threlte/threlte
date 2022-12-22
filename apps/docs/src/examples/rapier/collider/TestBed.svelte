@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { Mesh } from '@threlte/core'
+	import { T } from '@threlte/core'
 
 	import { HTML } from '@threlte/extras'
 	import { AutoColliders } from '@threlte/rapier'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxBufferGeometry } from 'three'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	export let title: string
@@ -12,10 +11,10 @@
 </script>
 
 {#if useGround}
-	<AutoColliders shape={'cuboid'} position={{ y: -0.5, x: 1 }}>
-		<Mesh
+	<AutoColliders shape={'cuboid'} position={[1, -0.5, 0]}>
+		<T.Mesh
 			receiveShadow
-			geometry={new BoxBufferGeometry(12, 1, 10)}
+			geometry={new BoxGeometry(12, 1, 10)}
 			material={new MeshStandardMaterial()}
 		/>
 	</AutoColliders>

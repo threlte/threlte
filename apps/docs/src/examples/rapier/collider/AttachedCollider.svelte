@@ -1,11 +1,8 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Mesh, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-	import { SphereBufferGeometry } from 'three'
-	import { Color } from 'three'
-	import { MeshStandardMaterial } from 'three'
-	import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+	import { BoxGeometry, Color, MeshStandardMaterial, SphereGeometry } from 'three'
 	import TestBed from './TestBed.svelte'
 
 	const material = new MeshStandardMaterial({ color: new Color(0xff3f00).convertSRGBToLinear() })
@@ -24,15 +21,15 @@
 </script>
 
 <!-- ATTACHED COLLIDER -->
-<RigidBody position={{ y: 2 }}>
-	<Mesh castShadow geometry={new BoxBufferGeometry(2, 2, 2)} {material} />
+<RigidBody position={[0, 2, 0]}>
+	<T.Mesh castShadow geometry={new BoxGeometry(2, 2, 2)} {material} />
 	<Collider shape={'cuboid'} args={[1, 1, 1]} />
 </RigidBody>
 
 <!-- TEST SPHERE -->
-<RigidBody bind:rigidBody type={'kinematicPosition'} position={{ y: 1 }} lockRotations>
+<RigidBody bind:rigidBody type={'kinematicPosition'} position={[0, 1, 0]} lockRotations>
 	<AutoColliders shape={'ball'}>
-		<Mesh castShadow geometry={new SphereBufferGeometry(1)} material={new MeshStandardMaterial()} />
+		<T.Mesh castShadow geometry={new SphereGeometry(1)} material={new MeshStandardMaterial()} />
 	</AutoColliders>
 </RigidBody>
 

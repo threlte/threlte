@@ -65,7 +65,7 @@
 	All physically interactive stuff should be on group 0
 -->
 <CollisionGroups groups={[0]}>
-	<Player bind:playerMesh position={{ z: -3, y: 2 }} />
+	<Player bind:playerMesh position={[0, 2, -3]} />
 
 	<Door />
 

@@ -1,18 +1,19 @@
 <script lang="ts" context="module">
-	const geometry = new BoxBufferGeometry(0.25, 0.25, 0.25)
+	const geometry = new BoxGeometry(0.25, 0.25, 0.25)
 	const material = new MeshStandardMaterial()
 </script>
 
 <script lang="ts">
-	import { Mesh, type Position, type Rotation } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { Collider, RigidBody } from '@threlte/rapier'
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+	import type { Euler } from 'three'
+	import { BoxGeometry, MeshStandardMaterial, Vector3 } from 'three'
 
-	export let position: Position | undefined = undefined
-	export let rotation: Rotation | undefined = undefined
+	export let position: Parameters<Vector3['set']>
+	export let rotation: Parameters<Euler['set']>
 </script>
 
 <RigidBody type={'dynamic'} {position} {rotation}>
 	<Collider shape={'cuboid'} args={[0.125, 0.125, 0.125]} />
-	<Mesh castShadow receiveShadow {geometry} {material} />
+	<T.Mesh castShadow receiveShadow {geometry} {material} />
 </RigidBody>
