@@ -20,8 +20,6 @@ export { default as TransformControls } from './controls/TransformControls.svelt
 export { default as Pass } from './effects/Pass.svelte'
 
 // misc components
-export { default as Fog } from './misc/Fog.svelte'
-export { default as FogExp2 } from './misc/FogExp2.svelte'
 export { default as Layers } from './misc/Layers.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
@@ -100,8 +98,6 @@ export type {
   PerspectiveCameraProperties,
   OrbitControlsProperties,
   PassProperties,
-  FogProperties,
-  FogExp2Properties,
   LayersProperties,
   GroupProperties,
   MeshProperties,
