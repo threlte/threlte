@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-
   import { LayerableObject, SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
@@ -9,41 +8,31 @@
   import { applyTransforms } from '../../lib/applyTransforms'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
-  import { positionToVector3 } from '../../lib/positionToVector3'
-  import { rotationToEuler } from '../../lib/rotationToEuler'
-  import type { RigidBodyProperties } from '../../types/components'
   import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
+  import type { RigidBodyProps } from './RigidBody.svelte'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
-  export let debug = false
+  type $$Props = Required<RigidBodyProps>
+  type OptProps = RigidBodyProps
 
-  export let type: NonNullable<RigidBodyProperties['type']> = 'dynamic'
-  export let canSleep: NonNullable<RigidBodyProperties['canSleep']> = true
-  export let linearVelocity: NonNullable<RigidBodyProperties['linearVelocity']> = {}
-  export let angularVelocity: NonNullable<RigidBodyProperties['angularVelocity']> = {}
-  export let gravityScale: NonNullable<RigidBodyProperties['gravityScale']> = 1
-  export let ccd: NonNullable<RigidBodyProperties['ccd']> = false
-  export let angularDamping: NonNullable<RigidBodyProperties['angularDamping']> = 0
-  export let linearDamping: NonNullable<RigidBodyProperties['linearDamping']> = 0
-  export let lockRotations: NonNullable<RigidBodyProperties['lockRotations']> = false
-  export let lockTranslations: NonNullable<RigidBodyProperties['lockTranslations']> = false
-  export let enabledRotations: NonNullable<RigidBodyProperties['enabledRotations']> = [
-    true,
-    true,
-    true
-  ]
-  export let enabledTranslations: NonNullable<RigidBodyProperties['enabledTranslations']> = [
-    true,
-    true,
-    true
-  ]
-  export let dominance: NonNullable<RigidBodyProperties['dominance']> = 0
+  export let position: OptProps['position'] = undefined
+  export let rotation: OptProps['rotation'] = undefined
+  export let scale: OptProps['scale'] = undefined
+  export let linearVelocity: OptProps['linearVelocity'] = undefined
+  export let angularVelocity: OptProps['angularVelocity'] = undefined
 
-  export let position: RigidBodyProperties['position'] = undefined
-  export let rotation: RigidBodyProperties['rotation'] = undefined
-  export let scale: RigidBodyProperties['scale'] = undefined
-  export let lookAt: RigidBodyProperties['lookAt'] = undefined
+  export let type: $$Props['type'] = 'dynamic'
+  export let canSleep: $$Props['canSleep'] = true
+  export let gravityScale: $$Props['gravityScale'] = 1
+  export let ccd: $$Props['ccd'] = false
+  export let angularDamping: $$Props['angularDamping'] = 0
+  export let linearDamping: $$Props['linearDamping'] = 0
+  export let lockRotations: $$Props['lockRotations'] = false
+  export let lockTranslations: $$Props['lockTranslations'] = false
+  export let enabledRotations: $$Props['enabledRotations'] = [true, true, true]
+  export let enabledTranslations: $$Props['enabledTranslations'] = [true, true, true]
+  export let dominance: $$Props['dominance'] = 0
 
   /**
    * Every RigidBody receives and forwards collision-related events
@@ -71,7 +60,7 @@
    * This is a one-off operation as RigidBodies should
    * not be moved around after initialization.
    */
-  applyTransforms(object, position, rotation, scale, lookAt)
+  applyTransforms(object, position, rotation, scale)
 
   /**
    * Update the world matrix of the object before applying
@@ -99,7 +88,7 @@
    */
   const initPosition = async () => {
     await tick()
-    applyTransforms(object, position, rotation, scale, lookAt)
+    applyTransforms(object, position, rotation, scale)
     object.updateMatrix()
     object.updateWorldMatrix(true, false)
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
@@ -107,11 +96,6 @@
     const worldQuaternion = getWorldQuaternion(object)
     rigidBodyTemp.setTranslation(worldPosition, true)
     rigidBodyTemp.setRotation(worldQuaternion, true)
-    if (debug) {
-      console.log('worldPosition', worldPosition)
-      console.log('worldQuaternion', worldQuaternion)
-    }
-    if (debug) console.log(JSON.stringify(desc, null, 2))
     rigidBody = rigidBodyTemp
   }
   initPosition()
@@ -126,8 +110,16 @@
    */
   $: {
     rigidBodyTemp.setBodyType(parseRigidBodyType(type))
-    rigidBodyTemp.setLinvel(positionToVector3(linearVelocity), true)
-    rigidBodyTemp.setAngvel(rotationToEuler(angularVelocity), true)
+    if (linearVelocity)
+      rigidBodyTemp.setLinvel(
+        { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
+        true
+      )
+    if (angularVelocity)
+      rigidBodyTemp.setAngvel(
+        { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
+        true
+      )
     rigidBodyTemp.setGravityScale(gravityScale, true)
     rigidBodyTemp.enableCcd(ccd)
     rigidBodyTemp.setDominanceGroup(dominance)

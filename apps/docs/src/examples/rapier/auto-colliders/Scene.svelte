@@ -1,92 +1,67 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Mesh,
-		Object3DInstance,
-		OrbitControls,
-		PerspectiveCamera
-	} from '@threlte/core'
+	import { OrbitControls, T } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { derived } from 'svelte/store'
-	import { GridHelper, Mesh as ThreeMesh } from 'three'
+	import type { MeshStandardMaterial, Mesh } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Ground from './Ground.svelte'
 
-	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
-		'/models/helmet/DamagedHelmet.gltf'
-	)
+	const { gltf } = useGltf<{
+		nodes: {
+			'node_damagedHelmet_-6514': Mesh
+		}
+		materials: {
+			Material_MR: MeshStandardMaterial
+		}
+	}>('/models/helmet/DamagedHelmet.gltf')
+
 	const helmet = derived(gltf, (gltf) => {
 		if (!gltf || !gltf.nodes['node_damagedHelmet_-6514']) return
-		return gltf.nodes['node_damagedHelmet_-6514'] as ThreeMesh
+		return gltf.nodes['node_damagedHelmet_-6514']
 	})
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<PerspectiveCamera position={{ y: 13, x: 12 }} fov={40}>
+<T.PerspectiveCamera makeDefault position.x={12} position.y={13} fov={40}>
 	<OrbitControls target={{ x: 2.5 }} />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
+<T.DirectionalLight castShadow position={[8, 20, -3]} />
 
 {#if $helmet}
-	<RigidBody
-		position={{ x: -2.5, y: 2, z: 2.5 }}
-		rotation={{
-			x: 90 * DEG2RAD
-		}}
-	>
+	<RigidBody position={[-2.5, 2, 2.5]} rotation={[90 * DEG2RAD, 0, 0]}>
 		<AutoColliders shape={'convexHull'}>
-			<Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
+			<T.Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
 		</AutoColliders>
 	</RigidBody>
 
-	<RigidBody
-		position={{ x: 2.5, y: 2, z: 2.5 }}
-		rotation={{
-			x: 90 * DEG2RAD
-		}}
-	>
+	<RigidBody position={[2.5, 2, 2.5]} rotation={[90 * DEG2RAD, 0, 0]}>
 		<AutoColliders shape={'ball'}>
-			<Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
+			<T.Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
 		</AutoColliders>
 	</RigidBody>
 
-	<RigidBody
-		position={{ x: 2.5, y: 2, z: -2.5 }}
-		rotation={{
-			x: 90 * DEG2RAD
-		}}
-	>
+	<RigidBody position={[2.5, 2, -2.5]} rotation={[90 * DEG2RAD, 0, 0]}>
 		<AutoColliders shape={'cuboid'}>
-			<Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
+			<T.Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
 		</AutoColliders>
 	</RigidBody>
 
-	<RigidBody
-		position={{ x: 0, y: 2, z: -0 }}
-		rotation={{
-			x: 90 * DEG2RAD
-		}}
-	>
-		<AutoColliders shape={'trimesh'} centerOfMass={{}}>
-			<Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
+	<RigidBody position={[0, 2, 0]} rotation={[90 * DEG2RAD, 0, 0]}>
+		<AutoColliders shape={'trimesh'}>
+			<T.Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
 		</AutoColliders>
 	</RigidBody>
 
-	<RigidBody
-		position={{ x: -2.5, y: 2, z: -2.5 }}
-		rotation={{
-			x: 90 * DEG2RAD
-		}}
-	>
+	<RigidBody position={[-2.5, 2, -2.5]} rotation={[90 * DEG2RAD, 0, 0]}>
 		<AutoColliders shape={'capsule'}>
-			<Mesh geometry={$helmet.geometry} material={$helmet.material} />
+			<T.Mesh castShadow geometry={$helmet.geometry} material={$helmet.material} />
 		</AutoColliders>
 	</RigidBody>
 {/if}
 
-<Object3DInstance object={new GridHelper(50)} />
+<T.GridHelper args={[50]} />
 
 <Ground />

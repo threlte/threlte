@@ -105,18 +105,6 @@ export const sidebar = {
 				slug: '/core/object3d'
 			},
 			{
-				title: 'Line',
-				slug: '/core/line'
-			},
-			{
-				title: 'Line2',
-				slug: '/core/line-2'
-			},
-			{
-				title: 'LineSegments',
-				slug: '/core/line-segments'
-			},
-			{
 				title: 'Cameras',
 				slug: ''
 			},
@@ -127,30 +115,6 @@ export const sidebar = {
 			{
 				title: 'OrthographicCamera',
 				slug: '/core/orthographic-camera'
-			},
-			{
-				title: 'Lights',
-				slug: ''
-			},
-			{
-				title: 'AmbientLight',
-				slug: '/core/ambient-light'
-			},
-			{
-				title: 'DirectionalLight',
-				slug: '/core/directional-light'
-			},
-			{
-				title: 'HemisphereLight',
-				slug: '/core/hemisphere-light'
-			},
-			{
-				title: 'PointLight',
-				slug: '/core/point-light'
-			},
-			{
-				title: 'SpotLight',
-				slug: '/core/spot-light'
 			},
 			{
 				title: 'Audio',
@@ -193,14 +157,6 @@ export const sidebar = {
 				slug: ''
 			},
 			{
-				title: 'Fog',
-				slug: '/core/fog'
-			},
-			{
-				title: 'FogExp2',
-				slug: '/core/fog-exp-2'
-			},
-			{
 				title: 'Layers',
 				slug: '/core/layers'
 			},
@@ -233,16 +189,8 @@ export const sidebar = {
 				slug: '/core/camera-instance'
 			},
 			{
-				title: 'LightInstance',
-				slug: '/core/light-instance'
-			},
-			{
 				title: 'AudioInstance',
 				slug: '/core/audio-instance'
-			},
-			{
-				title: 'LineInstance',
-				slug: '/core/line-instance'
 			},
 			{
 				title: 'Traits',

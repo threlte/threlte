@@ -1,18 +1,7 @@
 <script lang="ts">
-	import {
-		AudioListener,
-		DirectionalLight,
-		HemisphereLight,
-		Mesh,
-		OrbitControls,
-		OrthographicCamera,
-		useLoader,
-		useThrelte
-	} from '@threlte/core'
+	import { AudioListener, OrbitControls, T, useThrelte } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
-	import { CircleGeometry, MeshStandardMaterial } from 'three'
-	import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Speaker from './Speaker.svelte'
 	import Turntable from './Turntable.svelte'
@@ -25,16 +14,20 @@
 
 	const { size } = useThrelte()
 
-	const rgbeLoader = useLoader(RGBELoader, () => new RGBELoader())
-	const { scene, invalidate } = useThrelte()
-
 	let zoom = $size.width / 18
 	$: zoom = $size.width / 18
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<OrthographicCamera {zoom} position={{ z: 9, y: 9, x: 6 }}>
+<T.OrthographicCamera
+	{zoom}
+	makeDefault
+	on:create={({ ref }) => {
+		ref.position.set(6, 9, 9)
+		ref.lookAt(0, 1.5, 0)
+	}}
+>
 	<OrbitControls
 		autoRotate={isPlaying}
 		autoRotateSpeed={0.5}
@@ -43,34 +36,25 @@
 		target={{ y: 1.5 }}
 	/>
 	<AudioListener />
-</OrthographicCamera>
+</T.OrthographicCamera>
 
 <!-- FLOOR -->
-<Mesh
-	receiveShadow
-	geometry={new CircleGeometry(10, 64)}
-	material={new MeshStandardMaterial({
-		color: 0x333333
-	})}
-	rotation={{ x: DEG2RAD * -90 }}
-/>
+<T.Mesh receiveShadow rotation.x={DEG2RAD * -90}>
+	<T.CircleGeometry args={[10, 64]} />
+	<T.MeshStandardMaterial color="#333333" />
+</T.Mesh>
 
 <Turntable bind:isPlaying bind:volume />
 
-<Speaker position={{ x: 6 }} rotation={{ y: DEG2RAD * -7 }} {volume} />
-<Speaker position={{ x: -6 }} rotation={{ y: DEG2RAD * 7 }} {volume} />
+<Speaker position.x={6} rotation.y={DEG2RAD * -7} {volume} />
+<Speaker position.x={-6} rotation.y={DEG2RAD * 7} {volume} />
 
-<DirectionalLight
-	shadow={{
-		mapSize: [1024, 1024],
-		camera: {
-			left: -9,
-			right: 9,
-			top: 9,
-			bottom: -9
-		}
-	}}
-	position={{ x: 10, y: 20, z: 8 }}
+<T.DirectionalLight
+	castShadow
+	shadow.camera.left={-10}
+	shadow.camera.bottom={-10}
+	shadow.camera.right={10}
+	shadow.camera.top={10}
+	position={[10, 20, 8]}
 	intensity={0.3}
 />
-<HemisphereLight intensity={0} skyColor={0xffbd08} groundColor={0x323973} />

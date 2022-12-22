@@ -6,7 +6,7 @@
 </script>
 
 <!-- STANDALONE COLLIDER -->
-<Collider rotation={{ y: 45 * DEG2RAD }} shape={'cuboid'} position={{ y: 1 }} args={[1, 1, 1]} />
+<Collider rotation={[0, 45 * DEG2RAD, 0]} shape={'cuboid'} position={[0, 1, 0]} args={[1, 1, 1]} />
 
 <Emitter />
 

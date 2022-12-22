@@ -3,20 +3,23 @@
 		RevoluteImpulseJoint,
 		RigidBody as RapierRigidBody
 	} from '@dimforge/rapier3d-compat'
-	import { Group, type Position } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { Collider, RigidBody, useFixedJoint, useRevoluteJoint } from '@threlte/rapier'
 	import { spring } from 'svelte/motion'
 	import { clamp, DEG2RAD, mapLinear } from 'three/src/math/MathUtils'
-	import { useCar } from './Car.svelte'
+	import type { AxleProps } from './Axle.svelte'
+	import { useCar } from './useCar'
 	import { useWasd } from './useWasd'
 	import Wheel from './Wheel.svelte'
 
-	export let position: Position | undefined = undefined
-	export let parentRigidBody: RapierRigidBody | undefined = undefined
-	export let anchor: Position
-	export let isSteered: boolean = false
-	export let isDriven: boolean = false
-	export let side: 'left' | 'right'
+	type $$Props = AxleProps
+
+	export let side: $$Props['side']
+	export let anchor: $$Props['anchor']
+
+	export let parentRigidBody: $$Props['parentRigidBody'] = undefined
+	export let isSteered: $$Props['isSteered'] = false
+	export let isDriven: $$Props['isDriven'] = false
 
 	let axleRigidBody: RapierRigidBody
 
@@ -27,8 +30,8 @@
 	$: steeringAngle.set(mapLinear(clamp($speed / 12, 0, 1), 0, 1, 1, 0.5) * $wasd.x * 15)
 
 	const { joint, rigidBodyA, rigidBodyB } = isSteered
-		? useRevoluteJoint(anchor, {}, { y: 1 })
-		: useFixedJoint(anchor, {}, {}, {})
+		? useRevoluteJoint(anchor, [0, 0, 0], [0, 1, 0])
+		: useFixedJoint(anchor, [0, 0, 0], [0, 0, 0], [0, 0, 0])
 	$: if (parentRigidBody) rigidBodyA.set(parentRigidBody)
 	$: if (axleRigidBody) rigidBodyB.set(axleRigidBody)
 	$: $joint?.setContactsEnabled(false)
@@ -41,15 +44,15 @@
 	}
 </script>
 
-<Group {position}>
+<T.Group {...$$restProps}>
 	<RigidBody bind:rigidBody={axleRigidBody}>
 		<Collider mass={1} shape={'cuboid'} args={[0.03, 0.03, 0.03]} />
 	</RigidBody>
 
 	<Wheel
 		{isDriven}
-		anchor={{ z: side === 'left' ? 0.2 : -0.2 }}
-		position={{ z: side === 'left' ? 0.2 : -0.2 }}
+		anchor={[0, 0, side === 'left' ? 0.2 : -0.2]}
+		position={[0, 0, side === 'left' ? 0.2 : -0.2]}
 		parentRigidBody={axleRigidBody}
 	/>
-</Group>
+</T.Group>

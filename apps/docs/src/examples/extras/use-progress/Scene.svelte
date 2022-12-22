@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Group,
-		Object3DInstance,
-		PerspectiveCamera,
-		useFrame
-	} from '@threlte/core'
+	import { T, Three, useFrame } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { derived } from 'svelte/store'
 
@@ -26,12 +20,12 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<PerspectiveCamera position={{ z: 10 }} fov={20} />
+<T.PerspectiveCamera makeDefault position.z={10} fov={20} />
 
-<DirectionalLight position={{ y: 10, z: 10 }} />
+<T.DirectionalLight position.y={10} position.z={10} />
 
-<Group rotation={{ y: rotation }}>
+<T.Group rotation.y={rotation}>
 	{#if $helmet}
-		<Object3DInstance object={$helmet} />
+		<Three type={$helmet} />
 	{/if}
-</Group>
+</T.Group>

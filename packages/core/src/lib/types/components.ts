@@ -3,20 +3,15 @@ import type {
   BufferGeometry,
   Camera,
   ColorRepresentation,
-  Light,
-  Line,
   Material,
   Mesh,
   Object3D,
-  PositionalAudio,
-  Vector3,
-  Vector3Tuple
+  PositionalAudio
 } from 'three'
-import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 import type { SetOptional } from 'type-fest'
+import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 
 export type HierarchicalObjectProperties = {
   object?: Object3D
@@ -82,17 +77,6 @@ export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> 
   Omit<InteractiveObjectProperties, 'object'> & {
     mesh: Mesh
   }
-
-export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'> &
-  Omit<Object3DInstanceProperties, 'object'> & {
-    line: Line
-  }
-
-export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  light: Light
-  color?: ColorRepresentation
-  intensity?: number
-}
 
 export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   camera: Camera
@@ -165,80 +149,6 @@ export type PassProperties = {
   pass: Pass
 }
 
-export type AmbientLightProperties = Omit<LightInstanceProperties, 'light'>
-
-export type DirectionalLightProperties = Omit<
-  LightInstanceProperties,
-  'light' | 'castShadow' | 'lookAt'
-> & {
-  target?: Position | Object3D
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: {
-          left?: number
-          right?: number
-          top?: number
-          bottom?: number
-          near?: number
-          far?: number
-        }
-        bias?: number
-        radius?: number
-      }
-}
-
-export type HemisphereLightProperties = Omit<LightInstanceProperties, 'color' | 'light'> & {
-  skyColor: LightInstanceProperties['color']
-  groundColor?: ColorRepresentation
-}
-
-export type PointLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
-  distance?: number
-  decay?: number
-  power?: number
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      }
-}
-
-export type SpotLightProperties = Omit<
-  LightInstanceProperties,
-  'lookAt' | 'light' | 'castShadow'
-> & {
-  angle?: number
-  decay?: number
-  distance?: number
-  penumbra?: number
-  power?: number
-  target?: Position | Object3D
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      }
-}
-
-export type FogProperties = {
-  color: ColorRepresentation
-  near?: number
-  far?: number
-}
-
-export type FogExp2Properties = {
-  color: ColorRepresentation
-  density?: number
-}
-
 export type LayersProperties = {
   layers: ThrelteLayers
 }
@@ -246,22 +156,6 @@ export type LayersProperties = {
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
 export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  geometry: BufferGeometry
-  material: Material | Material[]
-}
-
-export type LineProperties = Omit<LineInstanceProperties, 'line'> & {
-  geometry?: BufferGeometry
-  points?: Vector3[] | Vector3Tuple[]
-  material: Material | Material[]
-}
-
-export type Line2Properties = Omit<MeshInstanceProperties, 'mesh'> & {
-  points: Vector3[] | Vector3Tuple[]
-  material: LineMaterial
-}
-
-export type LineSegmentsProperties = Omit<LineInstanceProperties, 'line'> & {
   geometry: BufferGeometry
   material: Material | Material[]
 }

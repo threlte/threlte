@@ -1,19 +1,13 @@
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Mesh, useFrame, type Position } from '@threlte/core'
+	import { T, useFrame, type Position } from '@threlte/core'
 	import { AutoColliders, BasicPlayerController, RigidBody } from '@threlte/rapier'
-	import {
-		CapsuleBufferGeometry,
-		Mesh as ThreeMesh,
-		MeshStandardMaterial,
-		SphereBufferGeometry,
-		Vector3
-	} from 'three'
+	import { CapsuleGeometry, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
 
-	export let position: Position | undefined = undefined
+	export let position: Parameters<Vector3['set']> | undefined = undefined
 
-	export let playerMesh: ThreeMesh
-	let ballMesh: ThreeMesh
+	export let playerMesh: Mesh
+	let ballMesh: Mesh
 
 	let rigidBody: RapierRigidBody
 
@@ -48,26 +42,26 @@
 	groundCollisionGroups={[15]}
 	playerCollisionGroups={[0]}
 >
-	<Mesh
-		bind:mesh={playerMesh}
-		position={{ y: 0.9 }}
+	<T.Mesh
+		bind:ref={playerMesh}
+		position.y={0.9}
 		receiveShadow
 		castShadow
-		geometry={new CapsuleBufferGeometry(0.3, 1.8 - 0.3 * 2)}
+		geometry={new CapsuleGeometry(0.3, 1.8 - 0.3 * 2)}
 		material={new MeshStandardMaterial()}
 	/>
 </BasicPlayerController>
 
-<RigidBody bind:rigidBody position={{ y: 1, z: -5 }}>
+<RigidBody bind:rigidBody position={[0, 1, -5]}>
 	<AutoColliders shape={'ball'}>
-		<Mesh
-			bind:mesh={ballMesh}
+		<T.Mesh
+			bind:ref={ballMesh}
 			receiveShadow
 			castShadow
-			geometry={new SphereBufferGeometry(0.25)}
+			geometry={new SphereGeometry(0.25)}
 			material={new MeshStandardMaterial()}
 		>
 			<slot />
-		</Mesh>
+		</T.Mesh>
 	</AutoColliders>
 </RigidBody>

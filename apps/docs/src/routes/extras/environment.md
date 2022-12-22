@@ -33,6 +33,9 @@ Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format 
 
 `isBackground` prop controls if environment is set as the background of `scene`. This is not related to GroundProjection which produces a faux background effect by creating a spherical object textured by the provided environment.
 
+To enable GroundProjection pass a configuration object as a `groundProjection` prop. The most common use case is to pass radius, height and scale (`{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100}`) however, you can pass any props you would pass `THREE.Mesh` since it is built as its extension.
+
+
 ```svelte
 <!-- Cubic jpg envmap -->
 <Environment
@@ -78,10 +81,6 @@ files: string | string[] = ''
 format: 'ldr' | 'hdr' = undefined
 path: string | undefined = undefined
 isBackground: boolean = undefined
-groundProjection: {
-	radius: number
-	height: number
-	scale: Scale
-} = undefined
+groundProjection?: Props<GroundProjectedEnv> = undefined
 encoding: THREE.TextureEncoding = undefined
 ```

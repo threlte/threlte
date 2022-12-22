@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import { onDestroy, setContext, tick } from 'svelte'
   import { useFrameHandler } from '../../hooks/useFrameHandler'
   import { createRapierContext } from '../../lib/createRapierContext'
@@ -6,26 +9,28 @@
 </script>
 
 <script lang="ts">
-  import { positionToVector3 } from '../../lib/positionToVector3'
-  import type { InnerWorldProperties } from '../../types/components'
+  import type { WorldProps } from './World.svelte'
 
-  export let gravity: InnerWorldProperties['gravity'] = { y: -9.81 }
-  export let rawIntegrationParameters: InnerWorldProperties['rawIntegrationParameters'] = undefined
-  export let rawIslands: InnerWorldProperties['rawIslands'] = undefined
-  export let rawBroadPhase: InnerWorldProperties['rawBroadPhase'] = undefined
-  export let rawNarrowPhase: InnerWorldProperties['rawNarrowPhase'] = undefined
-  export let rawBodies: InnerWorldProperties['rawBodies'] = undefined
-  export let rawColliders: InnerWorldProperties['rawColliders'] = undefined
-  export let rawImpulseJoints: InnerWorldProperties['rawImpulseJoints'] = undefined
-  export let rawMultibodyJoints: InnerWorldProperties['rawMultibodyJoints'] = undefined
-  export let rawCCDSolver: InnerWorldProperties['rawCCDSolver'] = undefined
-  export let rawQueryPipeline: InnerWorldProperties['rawQueryPipeline'] = undefined
-  export let rawPhysicsPipeline: InnerWorldProperties['rawPhysicsPipeline'] = undefined
-  export let rawSerializationPipeline: InnerWorldProperties['rawSerializationPipeline'] = undefined
-  export let rawDebugRenderPipeline: InnerWorldProperties['rawDebugRenderPipeline'] = undefined
+  // TODO: should this be Required<WorldProps> instead?
+  type $$Props = WorldProps
+
+  export let gravity: NonNullable<$$Props['gravity']> = [0, -9.81, 0]
+  export let rawIntegrationParameters: $$Props['rawIntegrationParameters'] = undefined
+  export let rawIslands: $$Props['rawIslands'] = undefined
+  export let rawBroadPhase: $$Props['rawBroadPhase'] = undefined
+  export let rawNarrowPhase: $$Props['rawNarrowPhase'] = undefined
+  export let rawBodies: $$Props['rawBodies'] = undefined
+  export let rawColliders: $$Props['rawColliders'] = undefined
+  export let rawImpulseJoints: $$Props['rawImpulseJoints'] = undefined
+  export let rawMultibodyJoints: $$Props['rawMultibodyJoints'] = undefined
+  export let rawCCDSolver: $$Props['rawCCDSolver'] = undefined
+  export let rawQueryPipeline: $$Props['rawQueryPipeline'] = undefined
+  export let rawPhysicsPipeline: $$Props['rawPhysicsPipeline'] = undefined
+  export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
+  export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
 
   const rapierContext = createRapierContext(
-    positionToVector3(gravity),
+    { x: gravity[0], y: gravity[1], z: gravity[2] },
     rawIntegrationParameters,
     rawIslands,
     rawBroadPhase,
@@ -43,7 +48,9 @@
 
   setContext<RapierContext>('threlte-rapier-context', rapierContext)
 
-  $: if (gravity !== undefined) rapierContext.world.gravity = positionToVector3(gravity)
+  $: if (gravity !== undefined) {
+    rapierContext.world.gravity = { x: gravity[0], y: gravity[1], z: gravity[2] }
+  }
 
   useFrameHandler(rapierContext)
 

@@ -268,10 +268,8 @@ These components provide additional value and **will be moved to `@threlte/extra
 - `<PositionalAudio>`
 - `<OrbitControls>`
 - `<TransformControls>`
-- `<SpotLight>`
 - `<InstancedMesh>`
 - `<Instance>`
-- `<Line2>`
 
 These components will be **removed**:
 
@@ -282,6 +280,7 @@ These components will be **removed**:
 - `<DirectionalLight>`
 - `<PointLight>`
 - `<HemisphereLight>`
+- `<SpotLight>`
 - `<Fog>`
 - `<FogExp2>`
 - `<Mesh>`
@@ -289,6 +288,7 @@ These components will be **removed**:
 - `<Object3D>`
 - `<Line>`
 - `<LineSegments>`
+- `<Line2>`
 - `<MeshInstance>`
 - `<Object3DInstance>`
 - `<LightInstance>`

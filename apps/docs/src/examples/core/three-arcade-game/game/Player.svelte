@@ -94,15 +94,7 @@
 				<Three type={$gltf.nodes.Player.geometry} />
 				<Three type={MeshStandardMaterial} color="blue" />
 
-				<Edges
-					scale={{
-						x: 1,
-						y: 1.1,
-						z: 1.1
-					}}
-					threshold={10}
-					color={$baseColor}
-				/>
+				<Edges scale={[1, 1.1, 1.1]} thresholdAngle={10} color={$baseColor} />
 			</Three>
 		</AutoColliders>
 	</Three>
