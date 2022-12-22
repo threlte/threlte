@@ -1,65 +1,52 @@
 <script lang="ts">
-  import { Group as ThreeGroup, MathUtils } from 'three'
-  import { useFrame, Group, T } from '@threlte/core'
-  import type { FloatProperties } from '../../types/components'
+  import { Group, MathUtils } from 'three'
+  import { useFrame, T } from '@threlte/core'
+  import type { FloatProps } from './Float.svelte'
 
-  // Group Properties
-  export let position: FloatProperties['position'] = undefined
-  export let scale: FloatProperties['scale'] = undefined
-  export let rotation: FloatProperties['rotation'] = undefined
-  export let lookAt: FloatProperties['lookAt'] = undefined
-  export let viewportAware: FloatProperties['viewportAware'] = false
-  export let inViewport: FloatProperties['inViewport'] = false
-  export let castShadow: FloatProperties['castShadow'] = undefined
-  export let receiveShadow: FloatProperties['receiveShadow'] = undefined
-  export let frustumCulled: FloatProperties['frustumCulled'] = undefined
-  export let renderOrder: FloatProperties['renderOrder'] = undefined
-  export let visible: FloatProperties['visible'] = undefined
-  export let userData: FloatProperties['userData'] = undefined
-  export let dispose: FloatProperties['dispose'] = undefined
+  type Props = Required<FloatProps>
 
-  // Float Properties
-  export let speed: FloatProperties['speed'] = 1
-  export let rotationIntensity: FloatProperties['rotationIntensity'] = 1
-  export let floatIntensity: FloatProperties['floatIntensity'] = 1
-  export let floatingRange: FloatProperties['floatingRange'] = [-0.1, 0.1]
+  // // Group Properties
+  export let position: Props['position'] = 0
+  export let rotation: Props['rotation'] = 0
 
-  // THREE.Group binding
-  export let group: ThreeGroup | undefined = undefined
+  // // Float Properties
+  export let speed: Props['speed'] = 1
+  export let rotationIntensity: Props['rotationIntensity'] = 1
+  export let floatIntensity: Props['floatIntensity'] = 1
+  export let floatingRange: Props['floatingRange'] = [-0.1, 0.1]
+
+  // // THREE.Group binding
+  // export let group: ThreeGroup | undefined = undefined
 
   let t = Math.random() * 10000
 
+  let floatPosition: [x: number, y: number, z: number] = Array.isArray(position)
+    ? position
+    : [position, position, position]
+
   const map = MathUtils.mapLinear
 
-  let combinedRotation = {
-    x: rotation?.x ?? 0 + (Math.cos((t / 4) * speed) / 8) * rotationIntensity,
-    y: rotation?.y ?? 0 + (Math.sin((t / 4) * speed) / 8) * rotationIntensity,
-    z: rotation?.z ?? 0 + (Math.sin((t / 4) * speed) / 20) * rotationIntensity
-  }
-
-  let combinedPosition = {
-    ...position,
-    y:
-      position?.y ??
-      0 + map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
-  }
+  let floatRotation: [x: number, y: number, z: number, order?: string | undefined] = Array.isArray(
+    rotation
+  )
+    ? rotation
+    : [rotation, rotation, rotation]
 
   useFrame(
     (_, delta) => {
       t += delta
 
-      combinedRotation = {
-        x: rotation?.x ?? 0 + (Math.cos((t / 4) * speed) / 8) * rotationIntensity,
-        y: rotation?.y ?? 0 + (Math.sin((t / 4) * speed) / 8) * rotationIntensity,
-        z: rotation?.z ?? 0 + (Math.sin((t / 4) * speed) / 20) * rotationIntensity
-      }
+      floatPosition = Array.isArray(position) ? position : [position, position, position]
+      floatPosition[1] =
+        floatPosition[1] +
+        map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
+      floatPosition = floatPosition
 
-      combinedPosition = {
-        ...position,
-        y:
-          position?.y ??
-          0 + map(Math.sin((t / 4) * speed) / 10, -0.1, 0.1, ...floatingRange) * floatIntensity
-      }
+      floatRotation = Array.isArray(rotation) ? rotation : [rotation, rotation, rotation]
+      floatRotation[0] += (Math.cos((t / 4) * speed) / 8) * rotationIntensity
+      floatRotation[1] += (Math.cos((t / 4) * speed) / 8) * rotationIntensity
+      floatRotation[2] += (Math.cos((t / 4) * speed) / 20) * rotationIntensity
+      floatRotation = floatRotation
     },
     {
       debugFrameloopMessage: 'Float: framehandler'
@@ -68,20 +55,9 @@
 </script>
 
 <T.Group
-  bind:group
-  position={combinedPosition}
-  {scale}
-  rotation={combinedRotation}
-  {lookAt}
-  {castShadow}
-  {receiveShadow}
-  {frustumCulled}
-  {renderOrder}
-  {visible}
-  {userData}
-  {dispose}
-  {viewportAware}
-  bind:inViewport
+  position={floatPosition}
+  rotation={floatRotation}
+  {...$$restProps}
 >
   <slot />
 </T.Group>
