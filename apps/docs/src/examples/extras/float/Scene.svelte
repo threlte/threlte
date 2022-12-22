@@ -1,18 +1,16 @@
 <script lang="ts">
-	import { T, OrbitControls } from '@threlte/core'
+	import { OrbitControls, T } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
-	import { derived } from 'svelte/store'
-	import type { Mesh as ThreeMesh } from 'three'
+	import type { Mesh } from 'three'
 	import Blob from './Blob.svelte'
 
 	type Nodes = 'ball-1' | 'ball-2' | 'ball-3' | 'ball-4' | 'ball-5'
-	const { gltf } = useGltf<Nodes>('/models/blobs/blobs.glb', {
-		useDraco: true
-	})
 
-	const meshes = derived(gltf, (gltf) => {
-		if (!gltf) return undefined
-		return Object.values(gltf.nodes as Record<keyof typeof gltf['nodes'], ThreeMesh>)
+	const { gltf } = useGltf<{
+		nodes: Record<Nodes, Mesh>
+		materials: {}
+	}>('/models/blobs/blobs.glb', {
+		useDraco: true
 	})
 </script>
 
@@ -28,8 +26,8 @@
 
 <T.GridHelper args={[30]} />
 
-{#if $meshes}
-	{#each $meshes as mesh}
-		<Blob geometry={mesh.geometry} />
+{#if $gltf}
+	{#each Object.values($gltf.nodes) as node}
+		<Blob geometry={node.geometry} />
 	{/each}
 {/if}
