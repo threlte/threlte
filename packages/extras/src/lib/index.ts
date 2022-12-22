@@ -17,6 +17,6 @@ export { default as Grid } from './components/Grid/Grid.svelte'
 // text component
 export { default as Text } from './components/Text/Text.svelte'
 
-export type { EdgesProperties, FloatProperties, GLTFProperties } from './types/components'
+export type { FloatProperties, GLTFProperties } from './types/components'
 
 export type { ThrelteGltf } from './types/types'

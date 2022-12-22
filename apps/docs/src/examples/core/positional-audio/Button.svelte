@@ -43,7 +43,7 @@
 			<T.BoxGeometry args={[1.2, 0.1, 0.8]} />
 			<T.MeshStandardMaterial color={buttonColor} />
 
-			<Edges color="black" ignorePointer />
+			<Edges color="black" />
 		</T.Mesh>
 		<Text
 			renderOrder={-100}

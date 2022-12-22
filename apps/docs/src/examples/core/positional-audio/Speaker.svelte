@@ -66,14 +66,14 @@
 		<T.Mesh castShadow receiveShadow position.y={2.5}>
 			<T.BoxGeometry args={[3, 5, 3]} />
 			<T.MeshStandardMaterial color="#eedbcb" />
-			<Edges ignorePointer color={'black'} scale={1.001} />
+			<Edges color={'black'} scale={1.001} />
 		</T.Mesh>
 
 		<!-- CONE -->
 		<T.Mesh position.z={1.1} position.y={3.5} scale={1 + volume} rotation.x={DEG2RAD * -90}>
 			<T.ConeGeometry args={[1, 1, 64]} />
 			<T.MeshStandardMaterial flatShading color="#111111" />
-			<Edges ignorePointer color="black" scale={1.001} threshold={20} />
+			<Edges color="black" scale={1.001} thresholdAngle={20} />
 		</T.Mesh>
 	</T.Group>
 </T.Group>

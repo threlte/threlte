@@ -94,7 +94,7 @@
 	<T.Mesh receiveShadow castShadow position.y={0.5}>
 		<T.BoxGeometry args={[6, 1, 4.4]} />
 		<T.MeshStandardMaterial color="#eedbcb" />
-		<Edges position={{ y: 0 }} ignorePointer scale={1.001} color="black" />
+		<Edges scale={1.001} color="black" />
 	</T.Mesh>
 
 	<!-- COVER -->
@@ -123,7 +123,7 @@
 					on:pointerenter={onPointerEnter}
 					on:pointerleave={onPointerLeave}
 				/>
-				<Edges color="white" ignorePointer />
+				<Edges color="white" />
 			</T.Mesh>
 		{/if}
 	</T.Group>
@@ -154,7 +154,7 @@
 		>
 			<T.CylinderGeometry args={[0.1, 0.1, 3, 12]} />
 			<T.MeshStandardMaterial color="#ffffff" />
-			<Edges ignorePointer color="black" threshold={80} />
+			<Edges color="black" thresholdAngle={80} />
 		</T.Mesh>
 	</T.Group>
 
