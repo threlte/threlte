@@ -39,21 +39,21 @@
 		<T.Mesh receiveShadow castShadow position.y={0.1}>
 			<T.CylinderGeometry args={[1.85, 2, 0.2, 64]} />
 			<T.MeshStandardMaterial color="#111111" />
-			<Edges color="black" threshold={20} ignorePointer />
+			<Edges color="black" thresholdAngle={20} />
 		</T.Mesh>
 
 		<!-- ACTUAL DISC -->
-		<T.Mesh receiveShadow castShadow position.y={0.2 + 0.05} ignorePointer>
+		<T.Mesh receiveShadow castShadow position.y={0.2 + 0.05}>
 			<T.CylinderGeometry args={[1.75, 1.75, 0.05, 64]} />
 			<T.MeshStandardMaterial color="#111111" />
-			<Edges threshold={50} ignorePointer scale={1} color="black" />
+			<Edges thresholdAngle={50} scale={1} color="black" />
 		</T.Mesh>
 
 		<!-- ROUND LABEL -->
 		<T.Mesh receiveShadow castShadow position.y={0.2 + 0.05 + 0.005}>
 			<T.CylinderGeometry args={[0.8, 0.8, 0.05, 64]} />
 			<T.MeshStandardMaterial color="#eedbcb" />
-			<Edges threshold={50} ignorePointer scale={1} color="black" />
+			<Edges thresholdAngle={50} scale={1} color="black" />
 		</T.Mesh>
 
 		<!-- LOGO -->

@@ -43,36 +43,36 @@
 	<Three type={Mesh}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 
 	<Three type={Mesh} position.x={1}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 
 	<Three type={Mesh} position.x={-1}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 
 	<Three type={Mesh} position.z={1}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 
 	<Three type={Mesh} position.z={-1}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 
 	<Three type={Mesh} position.y={1}>
 		<Three type={geometry} />
 		<Three type={material} />
-		<Edges visible color={$baseColor} />
+		<Edges color={$baseColor} />
 	</Three>
 </Three>
