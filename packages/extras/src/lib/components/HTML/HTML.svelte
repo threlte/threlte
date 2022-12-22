@@ -1,15 +1,9 @@
 <script lang="ts">
-  import { Group, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
+  import { T, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { derived, writable, type Writable } from 'svelte/store'
-  import {
-    Group as ThreeGroup,
-    Object3D as ThreeeObject3D,
-    OrthographicCamera,
-    PerspectiveCamera
-  } from 'three'
+  import { Group, Object3D as ThreeeObject3D, OrthographicCamera, PerspectiveCamera } from 'three'
   import { useHasEventListeners } from '../../hooks/useHasEventListeners'
-  import type { HTMLProperties } from '../../types/components'
   import {
     compileStyles,
     defaultCalculatePosition,
@@ -23,33 +17,32 @@
     updateStyles
   } from './utils'
 
-  // Group Properties
-  export let position: HTMLProperties['position'] = undefined
-  export let scale: HTMLProperties['scale'] = undefined
-  export let rotation: HTMLProperties['rotation'] = undefined
-  export let lookAt: HTMLProperties['lookAt'] = undefined
-  export let viewportAware: HTMLProperties['viewportAware'] = false
-  export let inViewport: HTMLProperties['inViewport'] = false
-  export let dispose: HTMLProperties['dispose'] = false
+  import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
 
-  export let transform: HTMLProperties['transform'] = false
-  export let calculatePosition: HTMLProperties['calculatePosition'] = defaultCalculatePosition
-  export let eps: HTMLProperties['eps'] = 0.001
-  export let occlude: HTMLProperties['occlude'] = false
-  export let zIndexRange: HTMLProperties['zIndexRange'] = [16777271, 0]
-  export let sprite: HTMLProperties['sprite'] = false
-  export let pointerEvents: HTMLProperties['pointerEvents'] = 'auto'
-  export let center: HTMLProperties['center'] = false
-  export let fullscreen: HTMLProperties['fullscreen'] = false
-  export let distanceFactor: HTMLProperties['distanceFactor'] = undefined
-  export let as: HTMLProperties['as'] = 'div'
-  export let portal: HTMLProperties['portal'] = undefined
+  type $$Props = HTMLProps
+  type $$PropsWithDefaults = Required<$$Props>
+  type $$Events = HTMLEvents
+  type $$Slots = HTMLSlots
+
+  // Group Properties
+  export let transform: $$PropsWithDefaults['transform'] = false
+  export let calculatePosition: $$PropsWithDefaults['calculatePosition'] = defaultCalculatePosition
+  export let eps: $$PropsWithDefaults['eps'] = 0.001
+  export let occlude: $$PropsWithDefaults['occlude'] = false
+  export let zIndexRange: $$PropsWithDefaults['zIndexRange'] = [16777271, 0]
+  export let sprite: $$PropsWithDefaults['sprite'] = false
+  export let pointerEvents: $$PropsWithDefaults['pointerEvents'] = 'auto'
+  export let center: $$PropsWithDefaults['center'] = false
+  export let fullscreen: $$PropsWithDefaults['fullscreen'] = false
+  export let distanceFactor: $$Props['distanceFactor'] | undefined = undefined
+  export let as: $$PropsWithDefaults['as'] = 'div'
+  export let portal: $$Props['portal'] | undefined = undefined
 
   const dispatch = createEventDispatcher<{
     visibilitychange: boolean
   }>()
 
-  let group: ThreeGroup | undefined
+  let group: Group | undefined
 
   const { renderer, camera, scene, size } = useThrelte()
 
@@ -315,20 +308,16 @@
   }
 </script>
 
-<Group
-  {position}
-  {scale}
-  {rotation}
-  {lookAt}
-  {viewportAware}
-  {dispose}
-  bind:group
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
+<T.Group
+  bind:ref={group}
+  {...$$restProps}
+  let:ref
 >
-  <slot name="threlte" />
-</Group>
+  <slot
+    name="threlte"
+    {ref}
+  />
+</T.Group>
 
 {#if transform}
   <svelte:element
@@ -337,8 +326,14 @@
     bind:this={el}
     style={compileStyles($transformElStyles)}
   >
-    <div bind:this={transformOuterRef} style={compileStyles($transformOuterRefStyles)}>
-      <div bind:this={transformInnerRef} style={compileStyles($transformInnerRefStyles)}>
+    <div
+      bind:this={transformOuterRef}
+      style={compileStyles($transformOuterRefStyles)}
+    >
+      <div
+        bind:this={transformInnerRef}
+        style={compileStyles($transformInnerRefStyles)}
+      >
         {#if showEl}
           <slot />
         {/if}
