@@ -14,42 +14,40 @@
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { applyTransforms } from '../../lib/applyTransforms'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
-  import { positionToVector3 } from '../../lib/positionToVector3'
-  import { rotationToQuaternion } from '../../lib/rotationToQuaternion'
+  import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import type { ColliderEventMap } from '../../types/types'
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
   type TMassDef = $$Generic<MassDef>
-  type Props = AutoCollidersProps<TMassDef>
+  type $$Props = AutoCollidersProps<TMassDef>
 
-  export let shape: Props['shape'] = 'convexHull' as Props['shape']
+  export let shape: $$Props['shape'] = 'convexHull' as $$Props['shape']
 
-  export let position: Props['position'] = undefined as Props['position']
-  export let rotation: Props['rotation'] = undefined as Props['rotation']
-  export let scale: Props['scale'] = undefined as Props['scale']
-  export let lookAt: Props['lookAt'] = undefined as Props['lookAt']
-  export let restitution: Props['restitution'] = undefined as Props['restitution']
-  export let restitutionCombineRule: Props['restitutionCombineRule'] =
-    undefined as Props['restitutionCombineRule']
-  export let friction: Props['friction'] = undefined as Props['friction']
-  export let frictionCombineRule: Props['frictionCombineRule'] =
-    undefined as Props['frictionCombineRule']
-  export let sensor: Props['sensor'] = undefined as Props['sensor']
-  export let contactForceEventThreshold: Props['contactForceEventThreshold'] =
-    undefined as Props['contactForceEventThreshold']
+  export let position: $$Props['position'] = undefined as $$Props['position']
+  export let rotation: $$Props['rotation'] = undefined as $$Props['rotation']
+  export let scale: $$Props['scale'] = undefined as $$Props['scale']
+  export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
+  export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
+    undefined as $$Props['restitutionCombineRule']
+  export let friction: $$Props['friction'] = undefined as $$Props['friction']
+  export let frictionCombineRule: $$Props['frictionCombineRule'] =
+    undefined as $$Props['frictionCombineRule']
+  export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
+  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
+    undefined as $$Props['contactForceEventThreshold']
 
-  export let density: Props['density'] = undefined
-  export let mass: Props['mass'] = undefined
-  export let centerOfMass: Props['centerOfMass'] = undefined
-  export let principalAngularInertia: Props['principalAngularInertia'] = undefined
-  export let angularInertiaLocalFrame: Props['angularInertiaLocalFrame'] = undefined
+  export let density: $$Props['density'] = undefined
+  export let mass: $$Props['mass'] = undefined
+  export let centerOfMass: $$Props['centerOfMass'] = undefined
+  export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
+  export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
 
   const object = new Object3D()
 
   /**
    * Immediately apply transforms
    */
-  applyTransforms(object, position, rotation, scale, lookAt)
+  applyTransforms(object, position, rotation, scale)
   object.updateWorldMatrix(true, false)
 
   const rigidBody = useRigidBody()
@@ -96,9 +94,13 @@
           if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame)
             collider.setMassProperties(
               mass,
-              positionToVector3(centerOfMass),
-              positionToVector3(principalAngularInertia),
-              rotationToQuaternion(angularInertiaLocalFrame)
+              { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
+              {
+                x: principalAngularInertia[0],
+                y: principalAngularInertia[1],
+                z: principalAngularInertia[2]
+              },
+              eulerToQuaternion(angularInertiaLocalFrame)
             )
           else collider.setMass(mass)
         }

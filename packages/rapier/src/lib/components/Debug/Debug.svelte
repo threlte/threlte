@@ -1,16 +1,11 @@
 <script lang="ts">
-  import { LineSegments, useFrame } from '@threlte/core'
+  import { T, Three, useFrame } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { BufferAttribute, BufferGeometry, LineBasicMaterial } from 'three'
+  import { BufferAttribute, BufferGeometry } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import type { DebugProps } from './Debug.svelte'
 
-  export let vertexColors: DebugProps['vertexColors'] = true
-
-  const material = new LineBasicMaterial({
-    vertexColors,
-    ...($$props as DebugProps)
-  })
+  type $$Props = DebugProps
 
   const { world, debug } = useRapier()
 
@@ -36,13 +31,17 @@
 
   onDestroy(() => {
     geometry.dispose()
-    material.dispose()
     debug.set(false)
   })
 </script>
 
-<LineSegments
-  renderOrder={Infinity}
-  {geometry}
-  {material}
-/>
+<T.LineSegments renderOrder={Infinity}>
+  <Three
+    type={geometry}
+    attach="geometry"
+  />
+  <T.LineBasicMaterial
+    vertexColors
+    {...$$restProps}
+  />
+</T.LineSegments>
