@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Group as ThreeGroup, MathUtils } from 'three'
-  import { useFrame, Group } from '@threlte/core'
+  import { useFrame, Group, T } from '@threlte/core'
   import type { FloatProperties } from '../../types/components'
 
   // Group Properties
@@ -67,7 +67,7 @@
   )
 </script>
 
-<Group
+<T.Group
   bind:group
   position={combinedPosition}
   {scale}
@@ -82,8 +82,6 @@
   {dispose}
   {viewportAware}
   bind:inViewport
-  on:viewportenter
-  on:viewportleave
 >
   <slot />
-</Group>
+</T.Group>
