@@ -21,7 +21,7 @@
 	geometry.computeVertexNormals()
 </script>
 
-<T.PerspectiveCamera makeDefault position.y={5} position.z={10} lookAt={{ y: 2 }}>
+<T.PerspectiveCamera makeDefault position.y={5} position.z={10} lookAt.y={2}>
 	<OrbitControls autoRotate enableZoom={false} maxPolarAngle={DEG2RAD * 80} />
 </T.PerspectiveCamera>
 
