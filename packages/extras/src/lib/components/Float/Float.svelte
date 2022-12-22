@@ -1,20 +1,22 @@
 <script lang="ts">
   import { MathUtils } from 'three'
   import { useFrame, T } from '@threlte/core'
-  import type { FloatProps } from './Float.svelte'
+  import type { FloatEvents, FloatProps, FloatSlots } from './Float.svelte'
 
-  type Props = Required<FloatProps>
+  type $$Props = Required<FloatProps>
+  type $$Events = FloatEvents
+  type $$Slots = FloatSlots
 
   // // Group Properties
-  export let position: Props['position'] = 0
-  export let rotation: Props['rotation'] = 0
+  export let position: $$Props['position'] = 0
+  export let rotation: $$Props['rotation'] = 0
 
   // // Float Properties
-  export let speed: Props['speed'] = 1
-  export let floatIntensity: Props['floatIntensity'] = 1
-  export let floatingRange: Props['floatingRange'] = [-0.1, 0.1]
-  export let rotationSpeed: Props['rotationSpeed'] = 1
-  export let rotationIntensity: Props['rotationIntensity'] = 1
+  export let speed: $$Props['speed'] = 1
+  export let floatIntensity: $$Props['floatIntensity'] = 1
+  export let floatingRange: $$Props['floatingRange'] = [-0.1, 0.1]
+  export let rotationSpeed: $$Props['rotationSpeed'] = 1
+  export let rotationIntensity: $$Props['rotationIntensity'] = 1
 
   let t = Math.random() * 10000
 
@@ -77,7 +79,8 @@
 <T.Group
   position={floatPosition}
   rotation={floatRotation}
+  let:ref
   {...$$restProps}
 >
-  <slot />
+  <slot {ref} />
 </T.Group>
