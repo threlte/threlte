@@ -1,21 +1,22 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { Mesh, useFrame, Object3DInstance } from '@threlte/core'
-  import { SphereBufferGeometry, MeshBasicMaterial, Vector3, Object3D } from 'three'
+  import { T, Three, useFrame } from '@threlte/core'
+  import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProperties } from '../../types/components'
+  import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
 
-  export let position: AttractorProperties['position'] = undefined
-  export let strength: NonNullable<AttractorProperties['strength']> = 1
-  export let range: NonNullable<AttractorProperties['range']> = 50
-  export let gravityType: NonNullable<AttractorProperties['gravityType']> = 'static'
-  export let gravitationalConstant: NonNullable<
-    AttractorProperties['gravitationalConstant']
-  > = 6.673e-11
-  
+  type $$Props = AttractorProps
+  type $$Events = AttractorEvents
+  type $$Slots = AttractorSlots
+
+  export let strength: $$Props['strength'] = 1
+  export let range: $$Props['range'] = 50
+  export let gravityType: $$Props['gravityType'] = 'static'
+  export let gravitationalConstant: $$Props['gravitationalConstant'] = 6.673e-11
+
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
-  let obj = new Object3D()
+  let obj = new Group()
 
   const calcForceByType = {
     static: (s: number, m2: number, r: number, d: number, G: number): number => s,
@@ -53,16 +54,21 @@
   })
 </script>
 
-<Object3DInstance
-  bind:object={obj}
-  {position}
+<Three
+  let:ref
+  type={obj}
+  {...$$restProps}
 >
-  <slot />
+  <slot {ref} />
 
   {#if $debug}
-    <Mesh
-      geometry={new SphereBufferGeometry(range)}
-      material={new MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.25 })}
-    />
+    <T.Mesh>
+      <T.SphereGeometry args={[range]} />
+      <T.MeshBasicMaterial
+        wireframe
+        transparent
+        opacity={0.25}
+      />
+    </T.Mesh>
   {/if}
-</Object3DInstance>
+</Three>
