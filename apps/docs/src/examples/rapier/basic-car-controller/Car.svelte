@@ -1,26 +1,17 @@
-<script lang="ts" context="module">
-	import { writable, type Writable } from 'svelte/store'
-	type CarContext = {
-		speed: Writable<number>
-	}
-
-	export const useCar = () => {
-		return getContext<CarContext>('threlte-car-context')
-	}
-</script>
-
 <script lang="ts">
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-	import { Group, Mesh, useFrame, type Position, type Rotation } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { Collider, RigidBody, useRapier } from '@threlte/rapier'
-	import { getContext, onDestroy, setContext } from 'svelte'
-	import { BoxBufferGeometry, MeshStandardMaterial, Vector3 } from 'three'
+	import { onDestroy, setContext } from 'svelte'
+	import { writable } from 'svelte/store'
+	import { BoxGeometry, MeshStandardMaterial, Vector3 } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Axle from './Axle.svelte'
 
-	export let position: Position | undefined = undefined
-	export let rotation: Rotation | undefined = undefined
+	import type { CarProps } from './Car.svelte'
+
+	type $$Props = CarProps
 
 	let parentRigidBody: RapierRigidBody
 
@@ -58,14 +49,14 @@
 	})
 </script>
 
-<Group {position} {rotation}>
+<T.Group {...$$restProps}>
 	<RigidBody bind:rigidBody={parentRigidBody} canSleep={false}>
 		<Collider mass={1} shape={'cuboid'} args={[1.25, 0.4, 0.5]} />
 
 		<!-- CAR BODY MESH -->
-		<Mesh
+		<T.Mesh
 			castShadow
-			geometry={new BoxBufferGeometry(2.5, 0.8, 1)}
+			geometry={new BoxGeometry(2.5, 0.8, 1)}
 			material={new MeshStandardMaterial()}
 		/>
 
@@ -82,15 +73,15 @@
 		side={'left'}
 		isSteered
 		{parentRigidBody}
-		position={{ x: -1.2, z: 0.8, y: -0.4 }}
-		anchor={{ x: -1.2, z: 0.8, y: -0.4 }}
+		position={[-1.2, -0.4, 0.8]}
+		anchor={[-1.2, -0.4, 0.8]}
 	/>
 	<Axle
 		side={'right'}
 		isSteered
 		{parentRigidBody}
-		position={{ x: -1.2, z: -0.8, y: -0.4 }}
-		anchor={{ x: -1.2, z: -0.8, y: -0.4 }}
+		position={[-1.2, -0.4, -0.8]}
+		anchor={[-1.2, -0.4, -0.8]}
 	/>
 
 	<!-- BACK AXLES -->
@@ -98,14 +89,14 @@
 		isDriven
 		side={'left'}
 		{parentRigidBody}
-		position={{ x: 1.2, z: 0.8, y: -0.4 }}
-		anchor={{ x: 1.2, z: 0.8, y: -0.4 }}
+		position={[1.2, -0.4, 0.8]}
+		anchor={[1.2, -0.4, 0.8]}
 	/>
 	<Axle
 		isDriven
 		side={'right'}
 		{parentRigidBody}
-		position={{ x: 1.2, z: -0.8, y: -0.4 }}
-		anchor={{ x: 1.2, z: -0.8, y: -0.4 }}
+		position={[1.2, -0.4, -0.8]}
+		anchor={[1.2, -0.4, -0.8]}
 	/>
-</Group>
+</T.Group>
