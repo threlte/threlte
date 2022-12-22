@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DirectionalLight, OrbitControls, PerspectiveCamera, T } from '@threlte/core'
+	import { OrbitControls, T } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
 	import { BoxGeometry, MeshStandardMaterial } from 'three'
@@ -15,11 +15,11 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<PerspectiveCamera position={{ y: 13, x: 12 }} fov={40}>
+<T.PerspectiveCamera position.x={12} position.y={13} fov={40}>
 	<OrbitControls target={{ x: 2.5 }} />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
+<T.DirectionalLight castShadow position={[8, 20, -3]} />
 
 {#key resetCounter}
 	<!-- Collider A -->

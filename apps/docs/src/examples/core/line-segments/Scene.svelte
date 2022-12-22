@@ -1,34 +1,29 @@
 <script lang="ts">
-  import {
-    EdgesGeometry,
-    LineBasicMaterial,
-    MeshStandardMaterial,
-    OctahedronBufferGeometry
-  } from 'three'
-  import { DirectionalLight, LineSegments, Mesh, OrbitControls, PerspectiveCamera } from '@threlte/core'
+	import { EdgesGeometry, LineBasicMaterial, MeshStandardMaterial, OctahedronGeometry } from 'three'
+	import { T, OrbitControls } from '@threlte/core'
 
-  const material = new LineBasicMaterial({
-    color: 0x0000ff
-  })
+	const material = new LineBasicMaterial({
+		color: 0x0000ff
+	})
 
-  const geometry = new OctahedronBufferGeometry(1, 1)
+	const geometry = new OctahedronGeometry(1, 1)
 
-  const linesGeometry = new EdgesGeometry(geometry, 30)
+	const linesGeometry = new EdgesGeometry(geometry, 30)
 </script>
 
-<PerspectiveCamera position={{ y: 3, x: 3, z: 3 }}>
-  <OrbitControls autoRotate enableZoom={false} />
-</PerspectiveCamera>
+<T.PerspectiveCamera position={[3, 3, 3]}>
+	<OrbitControls autoRotate enableZoom={false} />
+</T.PerspectiveCamera>
 
-<DirectionalLight position={{ y: 10 }} />
+<T.DirectionalLight position.y={10} />
 
-<Mesh
-  {geometry}
-  material={new MeshStandardMaterial({
-    transparent: true,
-    opacity: 0.5,
-    flatShading: true
-  })}
+<T.Mesh
+	{geometry}
+	material={new MeshStandardMaterial({
+		transparent: true,
+		opacity: 0.5,
+		flatShading: true
+	})}
 />
 
-<LineSegments scale={1.1} geometry={linesGeometry} {material} />
+<T.LineSegments scale={1.1} geometry={linesGeometry} {material} />

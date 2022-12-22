@@ -129,30 +129,6 @@ export const sidebar = {
 				slug: '/core/orthographic-camera'
 			},
 			{
-				title: 'Lights',
-				slug: ''
-			},
-			{
-				title: 'AmbientLight',
-				slug: '/core/ambient-light'
-			},
-			{
-				title: 'DirectionalLight',
-				slug: '/core/directional-light'
-			},
-			{
-				title: 'HemisphereLight',
-				slug: '/core/hemisphere-light'
-			},
-			{
-				title: 'PointLight',
-				slug: '/core/point-light'
-			},
-			{
-				title: 'SpotLight',
-				slug: '/core/spot-light'
-			},
-			{
 				title: 'Audio',
 				slug: ''
 			},
