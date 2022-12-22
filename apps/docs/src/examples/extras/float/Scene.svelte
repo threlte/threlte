@@ -18,7 +18,7 @@
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<T.PerspectiveCamera makeDefault position.z={20} fov={50}>
+<T.PerspectiveCamera makeDefault position.y={10} position.z={20} fov={50}>
 	<OrbitControls target={{ y: -2 }} enableDamping />
 </T.PerspectiveCamera>
 
