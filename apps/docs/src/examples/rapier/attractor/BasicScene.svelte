@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Object3DInstance,
-		OrbitControls,
-		PerspectiveCamera
-	} from '@threlte/core'
+	import { T, Three, OrbitControls } from '@threlte/core'
 	import { Attractor } from '@threlte/rapier'
 	import { GridHelper } from 'three'
 	import RandomMeshes from './RandomMeshes.svelte'
@@ -19,13 +14,13 @@
 	}
 </script>
 
-<PerspectiveCamera position={{ y: 50, z: 100 }} fov={70} far={10000}>
+<T.PerspectiveCamera makeDefault position.y={50} position.z={100} fov={70} far={10000}>
 	<OrbitControls enableZoom={true} target={{ y: 20 }} />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
+<T.DirectionalLight castShadow position={[8, 20, -3]} />
 
-<Object3DInstance object={new GridHelper(100)} />
+<T.GridHelper args={[100]} />
 
 <RandomMeshes {count} rangeX={[-30, 30]} rangeY={[0, 75]} rangeZ={[-10, 10]} />
 

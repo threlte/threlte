@@ -10,7 +10,7 @@ Additionally, most Objects (Lights, Cameras, Meshes, …) can be made _viewport 
 
 ```svelte
 <script lang="ts">
-  import { PointLight } from '@threlte/core'
+  import { T } from '@threlte/core'
   import type { Object3D } from 'three'
 
   let inViewport
@@ -23,7 +23,7 @@ Additionally, most Objects (Lights, Cameras, Meshes, …) can be made _viewport 
   }
 </script>
 
-<PointLight
+<T.PointLight
   viewportAware
   bind:inViewport
   on:viewportenter={onViewportEnter}

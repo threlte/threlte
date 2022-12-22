@@ -20,7 +20,7 @@ The component `<Theatre>` is a good choice if you want to test the waters or to 
 
 <Canvas>
 	<Theatre>
-		<T.PerspectiveCamera position={[5, 10, 3]}>
+		<T.PerspectiveCamera makeDefault position={[5, 10, 3]}>
 			<Editable name="Camera" transform />
 		</T.PerspectiveCamera>
 

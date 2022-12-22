@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { AmbientLight, OrbitControls, PerspectiveCamera } from '@threlte/core'
+	import { T, OrbitControls } from '@threlte/core'
 	import { Environment, GLTF } from '@threlte/extras'
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
-<PerspectiveCamera position={{ x: 5, y: 2, z: 5 }} fov={25}>
+<T.PerspectiveCamera makeDefault position={[5, 2, 5]} fov={25}>
 	<OrbitControls autoRotate enableDamping />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<AmbientLight />
+<T.AmbientLight />
 
 <GLTF url="/models/helmet/DamagedHelmet.gltf" />

@@ -1,13 +1,13 @@
-<script>
-	import { Euler, Vector3, SphereBufferGeometry, MeshStandardMaterial } from 'three'
+<script lang="ts">
+	import { Euler, Vector3, SphereGeometry, MeshStandardMaterial, type Vector3Tuple } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { useFrame, useThrelte, PerspectiveCamera, Group, Mesh } from '@threlte/core'
+	import { T, useFrame, useThrelte } from '@threlte/core'
 	import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
 	import { GLTF, useGltfAnimations } from '@threlte/extras'
 	import { createEventDispatcher } from 'svelte'
 	import Controller from './ThirdPersonControls.svelte'
 
-	export let position = { x: 0, y: 0, z: 0 }
+	export let position: Vector3Tuple = [0, 0, 0]
 	export let playerCollisionGroups = [0]
 	export let groundCollisionGroups = [15]
 	export let radius = 0.3
@@ -63,7 +63,7 @@
 
 		// when body position changes update camera position
 		const pos = rigidBody.translation()
-		position = { x: pos.x, y: pos.y, z: pos.z }
+		position = [pos.x, pos.y, pos.z]
 	})
 
 	/** @param {KeyboardEvent} e */
@@ -133,9 +133,9 @@
 
 <svelte:window on:keydown|preventDefault={onKeyDown} on:keyup={onKeyUp} />
 
-<PerspectiveCamera {position} fov={90}>
+<T.PerspectiveCamera {position} fov={90}>
 	<Controller bind:position bind:object={scene} />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
 <RigidBody bind:rigidBody {position} enabledRotations={[false, false, false]}>
 	<CollisionGroups groups={playerCollisionGroups}>
@@ -149,11 +149,11 @@
 			on:sensorexit={() => (grounded = false)}
 			shape={'ball'}
 			args={[radius * 1.2]}
-			position={{ y: -height / 2 + radius }}
+			position={[0, -height / 2 + radius, 0]}
 		/>
 	</CollisionGroups>
 
-	<Group position={{ y: -height / 2 }}>
+	<T.Group position.y={-height / 2}>
 		<GLTF
 			{url}
 			receiveShadow
@@ -162,20 +162,20 @@
 			rotation={{ y: DEG2RAD * 180 }}
 			bind:gltf={$gltf}
 		>
-			<Mesh
-				geometry={new SphereBufferGeometry(0.1, 10, 10)}
+			<T.Mesh
+				geometry={new SphereGeometry(0.1, 10, 10)}
 				material={new MeshStandardMaterial({ color: 'red' })}
-				position={{ x: 0, y: 1, z: 5 }}
+				position={[0, 1, 5]}
 			/>
-			<Mesh
-				geometry={new SphereBufferGeometry(0.1, 10, 10)}
+			<T.Mesh
+				geometry={new SphereGeometry(0.1, 10, 10)}
 				material={new MeshStandardMaterial({ color: 'green' })}
-				position={{ x: -1, y: 2, z: -3 }}
+				position={[-1, 2, -3]}
 			/>
-			<Mesh
-				geometry={new SphereBufferGeometry(0.1, 10, 10)}
+			<T.Mesh
+				geometry={new SphereGeometry(0.1, 10, 10)}
 				material={new MeshStandardMaterial({ color: 'blue' })}
 			/>
 		</GLTF>
-	</Group>
+	</T.Group>
 </RigidBody>

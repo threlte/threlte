@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { T, useThrelte } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { Environment, Float, HTML, useGltf } from '@threlte/extras'
-	import { spring } from 'svelte/motion'
 	import { derived } from 'svelte/store'
 	import type { Mesh } from 'three'
 	import { Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-
-	const { pointer } = useThrelte()
 
 	const { gltf } = useGltf<{
 		nodes: {

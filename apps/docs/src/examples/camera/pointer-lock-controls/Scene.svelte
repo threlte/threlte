@@ -1,46 +1,48 @@
 <script>
-	import { AmbientLight, DirectionalLight, Mesh } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { AutoColliders, CollisionGroups } from '@threlte/rapier'
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import Door from './Door.svelte'
 	import Player from './Character.svelte'
 </script>
 
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
-<AmbientLight intensity={0.2} />
+<T.DirectionalLight castShadow position={[8, 20, -3]} />
+<T.AmbientLight intensity={0.2} />
 
 <CollisionGroups groups={[0, 15]}>
-	<AutoColliders shape={'cuboid'} position={{ y: -0.5 }}>
-		<Mesh
+	<AutoColliders shape={'cuboid'} position={[0, -0.5, 0]}>
+		<T.Mesh
 			receiveShadow
-			geometry={new BoxBufferGeometry(100, 1, 100)}
+			geometry={new BoxGeometry(100, 1, 100)}
 			material={new MeshStandardMaterial()}
 		/>
 	</AutoColliders>
 </CollisionGroups>
 
 <CollisionGroups groups={[0]}>
-	<Player position={{ z: 2 }} />
+	<Player position={[0, 0, 2]} />
 	<Door />
 
 	<!-- WALLS -->
 	<AutoColliders shape={'cuboid'}>
-		<Mesh
+		<T.Mesh
 			receiveShadow
 			castShadow
-			position={{ y: 1.275, x: 30 + 0.7 + 0.15 }}
-			geometry={new BoxBufferGeometry(60, 2.55, 0.15)}
+			position.x={30 + 0.7 + 0.15}
+			position.y={1.275}
+			geometry={new BoxGeometry(60, 2.55, 0.15)}
 			material={new MeshStandardMaterial({
 				transparent: true,
 				opacity: 0.5,
 				color: 0x333333
 			})}
 		/>
-		<Mesh
+		<T.Mesh
 			receiveShadow
 			castShadow
-			position={{ y: 1.275, x: -30 - 0.7 - 0.15 }}
-			geometry={new BoxBufferGeometry(60, 2.55, 0.15)}
+			position.x={-30 - 0.7 - 0.15}
+			position.y={1.275}
+			geometry={new BoxGeometry(60, 2.55, 0.15)}
 			material={new MeshStandardMaterial({
 				transparent: true,
 				opacity: 0.5,

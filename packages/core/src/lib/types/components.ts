@@ -3,7 +3,6 @@ import type {
   BufferGeometry,
   Camera,
   ColorRepresentation,
-  Light,
   Line,
   Material,
   Mesh,
@@ -88,12 +87,6 @@ export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'>
     line: Line
   }
 
-export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  light: Light
-  color?: ColorRepresentation
-  intensity?: number
-}
-
 export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   camera: Camera
   useCamera: boolean
@@ -163,69 +156,6 @@ export type TransformControlsProperties = {
 
 export type PassProperties = {
   pass: Pass
-}
-
-export type AmbientLightProperties = Omit<LightInstanceProperties, 'light'>
-
-export type DirectionalLightProperties = Omit<
-  LightInstanceProperties,
-  'light' | 'castShadow' | 'lookAt'
-> & {
-  target?: Position | Object3D
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: {
-          left?: number
-          right?: number
-          top?: number
-          bottom?: number
-          near?: number
-          far?: number
-        }
-        bias?: number
-        radius?: number
-      }
-}
-
-export type HemisphereLightProperties = Omit<LightInstanceProperties, 'color' | 'light'> & {
-  skyColor: LightInstanceProperties['color']
-  groundColor?: ColorRepresentation
-}
-
-export type PointLightProperties = Omit<LightInstanceProperties, 'light' | 'castShadow'> & {
-  distance?: number
-  decay?: number
-  power?: number
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      }
-}
-
-export type SpotLightProperties = Omit<
-  LightInstanceProperties,
-  'lookAt' | 'light' | 'castShadow'
-> & {
-  angle?: number
-  decay?: number
-  distance?: number
-  penumbra?: number
-  power?: number
-  target?: Position | Object3D
-  shadow?:
-    | boolean
-    | {
-        mapSize?: [number, number]
-        camera?: { near?: number; far?: number }
-        bias?: number
-        radius?: number
-      }
 }
 
 export type FogProperties = {
