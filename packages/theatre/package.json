@@ -19,6 +19,7 @@
     "@theatre/core": "0.5.1-rc.1",
     "@theatre/studio": "0.5.1-rc.1",
     "@threlte/core": "workspace:*",
+    "@threlte/extras": "workspace:*",
     "@types/node": "^18.0.3",
     "@types/three": "^0.144.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
