@@ -1,19 +1,13 @@
 <script lang="ts" context="module">
-	const geometry = new SphereBufferGeometry(1)
+	const geometry = new SphereGeometry(1)
 	const material = new MeshBasicMaterial({ color: 'red' })
 </script>
 
 <script lang="ts">
-	import {
-		DirectionalLight,
-		Object3DInstance,
-		OrbitControls,
-		PerspectiveCamera,
-		Mesh
-	} from '@threlte/core'
-	import { Debug, Attractor, RigidBody, Collider } from '@threlte/rapier'
+	import { OrbitControls, T } from '@threlte/core'
+	import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
-	import { GridHelper, SphereBufferGeometry, MeshBasicMaterial } from 'three'
+	import { MeshBasicMaterial, SphereGeometry } from 'three'
 
 	export let type: GravityType = 'static'
 	let hide = false
@@ -44,18 +38,18 @@
 	}
 </script>
 
-<PerspectiveCamera position={{ y: 50, z: 100 }} fov={70} far={10000}>
+<T.PerspectiveCamera position.y={50} position.z={100} makeDefault fov={70} far={10000}>
 	<OrbitControls enableZoom={true} target={{ y: 20 }} />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight shadow position={{ y: 20, x: 8, z: -3 }} />
+<T.DirectionalLight castShadow position={[8, 20, -3]} />
 
-<Object3DInstance object={new GridHelper(100)} />
+<T.GridHelper args={[100]} />
 
 {#if !hide}
-	<RigidBody position={{ x: -50 }} linearVelocity={{ x: 5, z: -5 }}>
+	<RigidBody linearVelocity={[5, -5, 0]} position={[-50, 0, 0]}>
 		<Collider shape="ball" args={[1]} mass={config[type].strength} />
-		<Mesh {geometry} {material} />
+		<T.Mesh {geometry} {material} />
 		<Attractor
 			range={config[type].range}
 			gravitationalConstant={config[type].gravitationalConstant}
@@ -63,9 +57,9 @@
 			gravityType={type}
 		/>
 	</RigidBody>
-	<RigidBody linearVelocity={{ y: 5 }}>
+	<RigidBody linearVelocity={[0, 5, 0]}>
 		<Collider shape="ball" args={[1]} mass={config[type].strength} />
-		<Mesh {geometry} {material} />
+		<T.Mesh {geometry} {material} />
 		<Attractor
 			range={config[type].range}
 			gravitationalConstant={config[type].gravitationalConstant}
@@ -73,9 +67,9 @@
 			gravityType={type}
 		/>
 	</RigidBody>
-	<RigidBody position={{ x: 50 }} linearVelocity={{ x: -5, z: 5 }}>
+	<RigidBody position={[50, 0, 0]} linearVelocity={[-5, 0, 5]}>
 		<Collider shape="ball" args={[1]} mass={config[type].strength} />
-		<Mesh {geometry} {material} />
+		<T.Mesh {geometry} {material} />
 		<Attractor
 			range={config[type].range}
 			gravitationalConstant={config[type].gravitationalConstant}

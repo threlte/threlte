@@ -6,13 +6,14 @@
   import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
 
   type $$Props = AttractorProps
+  type DefaultProps = Required<$$Props>
   type $$Events = AttractorEvents
   type $$Slots = AttractorSlots
 
-  export let strength: $$Props['strength'] = 1
-  export let range: $$Props['range'] = 50
-  export let gravityType: $$Props['gravityType'] = 'static'
-  export let gravitationalConstant: $$Props['gravitationalConstant'] = 6.673e-11
+  export let strength: DefaultProps['strength'] = 1
+  export let range: DefaultProps['range'] = 50
+  export let gravityType: DefaultProps['gravityType'] = 'static'
+  export let gravitationalConstant: DefaultProps['gravitationalConstant'] = 6.673e-11
 
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
