@@ -1,145 +1,39 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy } from 'svelte'
-  import type { Camera, Object3D, Quaternion, Vector3 } from 'three'
+  import { createRawEventDispatcher, LayerableObject, useParent, useThrelte } from '@threlte/core'
+  import { onDestroy } from 'svelte'
   import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
-  import { useThrelte } from '../hooks/useThrelte'
-  import DisposableObject from '../internal/DisposableObject.svelte'
-  import { useParent } from '../internal/HierarchicalObject.svelte'
-  import LayerableObject from '../internal/LayerableObject.svelte'
-  import { getThrelteUserData } from '../lib/getThrelteUserData'
-  import type { TransformControlsProperties } from '../types/components'
+  import type { TransformControlsEvents, TransformControlsProps } from './TransformControls.svelte'
 
-  export let autoPauseOrbitControls: TransformControlsProperties['autoPauseOrbitControls'] = true
-  export let mode: TransformControlsProperties['mode'] = undefined
-  export let axis: TransformControlsProperties['axis'] = null
-  export let dragging: TransformControlsProperties['dragging'] = false
-  export let enabled: TransformControlsProperties['enabled'] = undefined
-  export let translationSnap: TransformControlsProperties['translationSnap'] = undefined
-  export let scaleSnap: TransformControlsProperties['scaleSnap'] = undefined
-  export let rotationSnap: TransformControlsProperties['rotationSnap'] = undefined
-  export let showX: TransformControlsProperties['showX'] = undefined
-  export let showY: TransformControlsProperties['showY'] = undefined
-  export let showZ: TransformControlsProperties['showZ'] = undefined
-  export let size: TransformControlsProperties['size'] = undefined
-  export let space: TransformControlsProperties['space'] = undefined
-  export let dispose: TransformControlsProperties['dispose'] = undefined
+  type $$Props = TransformControlsProps
+  type $$Events = TransformControlsEvents
+
+  export let autoPauseOrbitControls: $$Props['autoPauseOrbitControls'] = true
+  export let mode: $$Props['mode'] = undefined
+  export let axis: $$Props['axis'] = null
+  export let dragging: $$Props['dragging'] = false
+  export let enabled: $$Props['enabled'] = undefined
+  export let translationSnap: $$Props['translationSnap'] = undefined
+  export let scaleSnap: $$Props['scaleSnap'] = undefined
+  export let rotationSnap: $$Props['rotationSnap'] = undefined
+  export let showX: $$Props['showX'] = undefined
+  export let showY: $$Props['showY'] = undefined
+  export let showZ: $$Props['showZ'] = undefined
+  export let size: $$Props['size'] = undefined
+  export let space: $$Props['space'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
   const parent = useParent()
   if (!$parent)
     throw new Error('TransformControls: parent not defined. Is this component a child of <Canvas>?')
 
-  const dispatch = createEventDispatcher<{
-    change: void
-    'camera-changed': {
-      type: 'camera-changed'
-      value: Camera
-    }
-    'object-changed': {
-      type: 'object-changed'
-      value: Object3D
-    }
-    'enabled-changed': {
-      type: 'enabled-changed'
-      value: boolean
-    }
-    'axis-changed': {
-      type: 'axis-changed'
-      value: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null
-    }
-    'mode-changed': {
-      type: 'mode-changed'
-      value: 'translate' | 'rotate' | 'scale'
-    }
-    'translationSnap-changed': {
-      type: 'translationSnap-changed'
-      value: number
-    }
-    'rotationSnap-changed': {
-      type: 'rotationSnap-changed'
-      value: number
-    }
-    'scaleSnap-changed': {
-      type: 'scaleSnap-changed'
-      value: number
-    }
-    'space-changed': {
-      type: 'space-changed'
-      value: 'world' | 'local'
-    }
-    'size-changed': {
-      type: 'size-changed'
-      value: number
-    }
-    'dragging-changed': {
-      type: 'dragging-changed'
-      value: boolean
-    }
-    'showX-changed': {
-      type: 'showX-changed'
-      value: boolean
-    }
-    'showY-changed': {
-      type: 'showY-changed'
-      value: boolean
-    }
-    'showZ-changed': {
-      type: 'showZ-changed'
-      value: boolean
-    }
-    'worldPosition-changed': {
-      type: 'worldPosition-changed'
-      value: Vector3
-    }
-    'worldPositionStart-changed': {
-      type: 'worldPositionStart-changed'
-      value: Vector3
-    }
-    'worldQuaternion-changed': {
-      type: 'worldQuaternion-changed'
-      value: Quaternion
-    }
-    'worldQuaternionStart-changed': {
-      type: 'worldQuaternionStart-changed'
-      value: Quaternion
-    }
-    'cameraPosition-changed': {
-      type: 'cameraPosition-changed'
-      value: Vector3
-    }
-    'cameraQuaternion-changed': {
-      type: 'cameraQuaternion-changed'
-      value: Quaternion
-    }
-    'pointStart-changed': {
-      type: 'pointStart-changed'
-      value: Vector3
-    }
-    'pointEnd-changed': {
-      type: 'pointEnd-changed'
-      value: Vector3
-    }
-    'rotationAxis-changed': {
-      type: 'rotationAxis-changed'
-      value: Vector3
-    }
-    'rotationAngle-changed': {
-      type: 'rotationAngle-changed'
-      value: number
-    }
-    'eye-changed': {
-      type: 'eye-changed'
-      value: Vector3
-    }
-    mouseDown: void
-    mouseUp: void
-    objectChange: void
-  }>()
+  const dispatch = createRawEventDispatcher<$$Events>()
 
   const maybeGetCameraOrbitControls = (): OrbitControls | undefined => {
     if (!$camera) return
-    return getThrelteUserData($camera).orbitControls as OrbitControls | undefined
+    if ($camera.userData && $camera.userData.orbitControls) {
+      return $camera.userData.orbitControls as OrbitControls
+    }
   }
 
   let enabledStateBeforeAutoPause: boolean | undefined
@@ -155,14 +49,6 @@
 
   const eventMap: Record<string, (e: any) => void> = {
     change: (e) => {
-      /**
-       * Inform parent object that it's being transformed
-       * This is currently only important for <Instance> components
-       * as they rely on a proxy Object3D instance.
-       * The event handler is set by <TransformableObject>.
-       * Not the best solution but quite efficient.
-       */
-      if ($parent) getThrelteUserData($parent).onTransform?.()
       invalidate('TransformControls: change event')
       dispatch('change', e)
     },
@@ -256,14 +142,10 @@
 
   onDestroy(() => {
     transformControls.detach()
+    transformControls.dispose()
     scene.remove(transformControls)
     removeListeners()
   })
 </script>
-
-<DisposableObject
-  {dispose}
-  object={transformControls}
-/>
 
 <LayerableObject object={transformControls} />
