@@ -38,7 +38,6 @@ export { default as LineSegments } from './objects/LineSegments.svelte'
 // object instance components
 export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
-export { default as LightInstance } from './instances/LightInstance.svelte'
 export { default as CameraInstance } from './instances/CameraInstance.svelte'
 export { default as LineInstance } from './instances/LineInstance.svelte'
 
@@ -96,7 +95,6 @@ export type {
   MeshInstanceProperties,
   InstancedMeshProperties,
   InstanceProperties,
-  LightInstanceProperties,
   CameraInstanceProperties,
   OrthographicCameraProperties,
   PerspectiveCameraProperties,
