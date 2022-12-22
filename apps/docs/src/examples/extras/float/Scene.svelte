@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { OrbitControls, T } from '@threlte/core'
-	import { Environment, useGltf } from '@threlte/extras'
+	import { Environment, Grid, useGltf } from '@threlte/extras'
 	import type { Mesh } from 'three'
 	import Blob from './Blob.svelte'
 
@@ -24,7 +24,13 @@
 
 <T.AmbientLight intensity={0.3} />
 
-<T.GridHelper args={[30]} />
+<Grid
+	position.y={-10}
+	sectionThickness={1}
+	infiniteGrid
+	cellColor="#dddddd"
+	sectionColor="#000000"
+/>
 
 {#if $gltf}
 	{#each Object.values($gltf.nodes) as node}
