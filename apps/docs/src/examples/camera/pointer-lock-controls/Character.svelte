@@ -1,11 +1,12 @@
-<script>
-	import { Vector3 } from 'three'
-	import { useFrame, useThrelte, PerspectiveCamera } from '@threlte/core'
+<script lang="ts">
+	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
+	import { T, useFrame, useThrelte } from '@threlte/core'
 	import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
 	import { createEventDispatcher, onDestroy } from 'svelte'
+	import { PerspectiveCamera, Vector3, type Vector3Tuple } from 'three'
 	import PointerLockControls from './PointerLockControls.svelte'
 
-	export let position = undefined
+	export let position: Vector3Tuple | undefined = undefined
 	export let playerCollisionGroups = [0]
 	export let groundCollisionGroups = [15]
 	export let radius = 0.3
@@ -13,9 +14,9 @@
 	export let speed = 6
 	export let jumpStrength = 4
 
-	let rigidBody
-	let lock
-	let cam
+	let rigidBody: RapierRigidBody
+	let lock: () => void
+	let cam: PerspectiveCamera
 
 	let forward = 0
 	let backward = 0
@@ -54,11 +55,10 @@
 
 		// when body position changes update position prop for camera
 		const pos = rigidBody.translation()
-		position = { x: pos.x, y: pos.y, z: pos.z }
+		position = [pos.x, pos.y, pos.z]
 	})
 
-	/** @param {KeyboardEvent} e */
-	function onKeyDown(e) {
+	function onKeyDown(e: KeyboardEvent) {
 		switch (e.key) {
 			case 's':
 				backward = 1
@@ -81,8 +81,7 @@
 		}
 	}
 
-	/** @param {KeyboardEvent} e */
-	function onKeyUp(e) {
+	function onKeyUp(e: KeyboardEvent) {
 		switch (e.key) {
 			case 's':
 				backward = 0
@@ -104,9 +103,9 @@
 
 <svelte:window on:keydown|preventDefault={onKeyDown} on:keyup={onKeyUp} />
 
-<PerspectiveCamera bind:camera={cam} bind:position fov={90}>
+<T.PerspectiveCamera bind:ref={cam} bind:position fov={90}>
 	<PointerLockControls bind:lock />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
 <RigidBody bind:rigidBody {position} enabledRotations={[false, false, false]}>
 	<CollisionGroups groups={playerCollisionGroups}>
@@ -120,7 +119,7 @@
 			on:sensorexit={() => (grounded = false)}
 			shape={'ball'}
 			args={[radius * 1.2]}
-			position={{ y: -height / 2 + radius }}
+			position={[0, -height / 2 + radius, 0]}
 		/>
 	</CollisionGroups>
 </RigidBody>

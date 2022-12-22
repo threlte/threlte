@@ -20,7 +20,7 @@
 </CollisionGroups>
 
 <CollisionGroups groups={[0]}>
-	<Player position={{ z: 2 }} />
+	<Player position={[0, 0, 2]} />
 	<Door />
 
 	<!-- WALLS -->
