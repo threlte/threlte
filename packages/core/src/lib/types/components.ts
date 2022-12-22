@@ -3,7 +3,6 @@ import type {
   BufferGeometry,
   Camera,
   ColorRepresentation,
-  Light,
   Line,
   Material,
   Mesh,
@@ -87,12 +86,6 @@ export type LineInstanceProperties = Omit<InteractiveObjectProperties, 'object'>
   Omit<Object3DInstanceProperties, 'object'> & {
     line: Line
   }
-
-export type LightInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  light: Light
-  color?: ColorRepresentation
-  intensity?: number
-}
 
 export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
   camera: Camera
