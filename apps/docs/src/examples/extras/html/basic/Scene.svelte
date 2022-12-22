@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { OrbitControls, T, useThrelte } from '@threlte/core'
+	import { OrbitControls, T } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { onDestroy } from 'svelte'
 	import { spring } from 'svelte/motion'
-	import { Color, GridHelper, MeshStandardMaterial } from 'three'
+	import { Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
@@ -18,13 +17,6 @@
 	}
 	let isHovering = false
 	let isPointerDown = false
-
-	const { scene } = useThrelte()
-	const gridHelper = new GridHelper()
-	scene.add(gridHelper)
-	onDestroy(() => {
-		scene.remove(gridHelper)
-	})
 
 	let htmlPosZ = spring(0)
 	$: htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
@@ -46,6 +38,8 @@
 <T.DirectionalLight position={[0, 10, 10]} />
 
 <T.AmbientLight intensity={0.3} />
+
+<T.GridHelper />
 
 <T.Mesh position.y={0.5} {material}>
 	<T.SphereGeometry args={[0.5]} />

@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { T, OrbitControls, useThrelte } from '@threlte/core'
+	import { T, OrbitControls } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
-	import { onDestroy } from 'svelte'
 	import { derived } from 'svelte/store'
-	import { GridHelper, Mesh as ThreeMesh } from 'three'
+	import type { Mesh as ThreeMesh } from 'three'
 	import Blob from './Blob.svelte'
-
-	const { scene } = useThrelte()
 
 	type Nodes = 'ball-1' | 'ball-2' | 'ball-3' | 'ball-4' | 'ball-5'
 	const { gltf } = useGltf<Nodes>('/models/blobs/blobs.glb', {
@@ -16,13 +13,6 @@
 	const meshes = derived(gltf, (gltf) => {
 		if (!gltf) return undefined
 		return Object.values(gltf.nodes as Record<keyof typeof gltf['nodes'], ThreeMesh>)
-	})
-
-	const gridHelper = new GridHelper(30)
-	gridHelper.position.y = -10
-	scene.add(gridHelper)
-	onDestroy(() => {
-		scene.remove(gridHelper)
 	})
 </script>
 
@@ -35,6 +25,8 @@
 <T.DirectionalLight position.y={10} position.z={10} />
 
 <T.AmbientLight intensity={0.3} />
+
+<T.GridHelper args={[30]} />
 
 {#if $meshes}
 	{#each $meshes as mesh}

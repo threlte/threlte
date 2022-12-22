@@ -1,28 +1,13 @@
 <script lang="ts">
-	import { T, OrbitControls, useFrame, useThrelte } from '@threlte/core'
+	import { T, OrbitControls, useFrame } from '@threlte/core'
 	import { ContactShadows, Environment, Float } from '@threlte/extras'
-	import { onDestroy } from 'svelte'
 	import {
 		BoxGeometry,
 		Color,
-		GridHelper,
 		IcosahedronGeometry,
 		MeshStandardMaterial,
 		TorusKnotGeometry
 	} from 'three'
-
-	const material = new MeshStandardMaterial({
-		color: 0x0000ff
-	})
-
-	const { scene, invalidate } = useThrelte()
-
-	const gridHelper = new GridHelper(10, 10)
-	gridHelper.position.y = -0.01
-	scene.add(gridHelper)
-	onDestroy(() => {
-		scene.remove(gridHelper)
-	})
 
 	let pos = {
 		x: 0
@@ -40,6 +25,8 @@
 
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
+
+<T.GridHelper args={[10, 10]} />
 
 <ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} />
 
