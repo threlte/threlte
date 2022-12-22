@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { ISheet, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
-  import { TransformControls, useParent, useThrelte } from '@threlte/core'
+  import { useParent, useThrelte } from '@threlte/core'
+  import { TransformControls } from '@threlte/extras'
   import { getContext, onDestroy } from 'svelte'
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils'
   import { globalObjects, globalStudio } from '../consts'
