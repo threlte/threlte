@@ -155,11 +155,6 @@ export type LayersProperties = {
 
 export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
 
-export type MeshProperties = Omit<MeshInstanceProperties, 'mesh'> & {
-  geometry: BufferGeometry
-  material: Material | Material[]
-}
-
 export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
   geometry: BufferGeometry
   material: Material | Material[]
