@@ -8,6 +8,8 @@
   export let material: EdgesProperties['material'] = undefined
   export let threshold: EdgesProperties['threshold'] = undefined
 
+  // TODO to v5
+
   // LineInstance
   export let position: EdgesProperties['position'] = undefined
   export let scale: EdgesProperties['scale'] = undefined
@@ -77,9 +79,15 @@
 </script>
 
 <!-- Force disposal: not user-provided -->
-<DisposableObject dispose object={edgesGeometry} />
+<DisposableObject
+  dispose
+  object={edgesGeometry}
+/>
 
-<DisposableObject {dispose} object={activeMaterial} />
+<DisposableObject
+  {dispose}
+  object={activeMaterial}
+/>
 
 {#if edgesGeometry}
   <LineSegments
