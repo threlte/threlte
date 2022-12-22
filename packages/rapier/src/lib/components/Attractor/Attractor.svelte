@@ -1,21 +1,22 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { Mesh, useFrame, Three } from '@threlte/core'
-  import { SphereGeometry, MeshBasicMaterial, Vector3, Object3D } from 'three'
+  import { T, Three, useFrame } from '@threlte/core'
+  import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps } from './Attractor.svelte'
+  import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
 
-  type Props = AttractorProps
+  type $$Props = AttractorProps
+  type $$Events = AttractorEvents
+  type $$Slots = AttractorSlots
 
-  export let position: Props['position'] = undefined
-  export let strength: Props['strength'] = 1
-  export let range: Props['range'] = 50
-  export let gravityType: Props['gravityType'] = 'static'
-  export let gravitationalConstant: Props['gravitationalConstant'] = 6.673e-11
+  export let strength: $$Props['strength'] = 1
+  export let range: $$Props['range'] = 50
+  export let gravityType: $$Props['gravityType'] = 'static'
+  export let gravitationalConstant: $$Props['gravitationalConstant'] = 6.673e-11
 
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
-  let obj = new Object3D()
+  let obj = new Group()
 
   const calcForceByType = {
     static: (s: number, m2: number, r: number, d: number, G: number): number => s,
@@ -54,17 +55,20 @@
 </script>
 
 <Three
-  bind:type={obj}
-  position={position?.x && position.y && position.z
-    ? [position.x, position.y, position.z]
-    : undefined}
+  let:ref
+  type={obj}
+  {...$$restProps}
 >
-  <slot />
+  <slot {ref} />
 
   {#if $debug}
-    <Mesh
-      geometry={new SphereGeometry(range)}
-      material={new MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.25 })}
-    />
+    <T.Mesh>
+      <T.SphereGeometry args={[range]} />
+      <T.MeshBasicMaterial
+        wireframe
+        transparent
+        opacity={0.25}
+      />
+    </T.Mesh>
   {/if}
 </Three>
