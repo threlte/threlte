@@ -24,7 +24,6 @@ export { default as Object3D } from './objects/Object3D.svelte'
 // object instance components
 export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
-export { default as CameraInstance } from './instances/CameraInstance.svelte'
 
 // trait components
 export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
@@ -81,7 +80,6 @@ export type {
   MeshInstanceProperties,
   InstancedMeshProperties,
   InstanceProperties,
-  CameraInstanceProperties,
   OrbitControlsProperties,
   PassProperties,
   LayersProperties,
