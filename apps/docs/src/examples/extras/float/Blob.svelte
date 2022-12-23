@@ -1,17 +1,9 @@
 <script lang="ts">
-<<<<<<< HEAD
 	import { T } from '@threlte/core'
 	import { Float } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
 	import { spring } from 'svelte/motion'
 	import { Color, MeshPhysicalMaterial, type BufferGeometry } from 'three'
-=======
-	import { onDestroy } from 'svelte'
-	import { spring } from 'svelte/motion'
-	import { Color, MeshPhysicalMaterial, type BufferGeometry } from 'three'
-	import { Mesh } from '@threlte/core'
-	import { Float } from '@threlte/extras'
->>>>>>> threlte-v5-transition
 
 	export let geometry: BufferGeometry
 
@@ -41,22 +33,8 @@
 	}
 </script>
 
-<<<<<<< HEAD
 <Float floatIntensity={5} scale={$scale}>
 	<T.Mesh
-=======
-<Float
-	floatIntensity={[1, 5, 1]}
-	floatingRange={[
-		[-0.1, 0.1],
-		[-0.2, 0.2],
-		[-0.1, 0.1]
-	]}
-	rotationSpeed={[1, 2, 1]}
-	rotationIntensity={[5, 5, 5]}
->
-	<Mesh
->>>>>>> threlte-v5-transition
 		interactive
 		on:pointerenter={onPointerEnter}
 		on:pointerleave={onPointerLeave}
