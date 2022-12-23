@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Group, useFrame, useThrelte } from '@threlte/core'
+  import { T, useFrame, useThrelte } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
@@ -139,7 +139,7 @@
     />
   </CollisionGroups>
 
-  <Group position={{ y: -height / 2 }}>
+  <T.Group position.y={-height / 2}>
     <slot />
-  </Group>
+  </T.Group>
 </RigidBody>
