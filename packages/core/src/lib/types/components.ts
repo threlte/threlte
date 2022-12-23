@@ -59,15 +59,3 @@ export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> 
 export type PassProperties = {
   pass: Pass
 }
-
-export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
-  geometry: BufferGeometry
-  material: Material | Material[]
-  count?: number
-  id?: string
-}
-
-export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
-  color?: ColorRepresentation
-  id?: string
-}

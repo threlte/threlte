@@ -1,19 +1,24 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { Color, Matrix4, Object3D } from 'three'
-  import { useFrame } from '../hooks/useFrame'
-  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
-  import TransformableObject from '../internal/TransformableObject.svelte'
-  import { useInstancedMesh } from '../objects/InstancedMesh.svelte'
-  import type { InstanceProperties } from '../types/components'
-  import type { ThrelteInstance, ThreltePointerEvent } from '../types/types'
+  import {
+    SceneGraphObject,
+    type ThrelteInstance,
+    type ThreltePointerEvent,
+    TransformableObject,
+    useFrame
+  } from '@threlte/core'
+  import { useInstancedMesh } from '../InstancedMesh/useInstancedMesh'
+  import type { InstanceProps } from './Instance.svelte'
 
-  export let position: InstanceProperties['position'] = undefined
-  export let scale: InstanceProperties['scale'] = undefined
-  export let rotation: InstanceProperties['rotation'] = undefined
-  export let lookAt: InstanceProperties['lookAt'] = undefined
-  export let color: InstanceProperties['color'] = undefined
-  export let id: InstanceProperties['id'] = ''
+  type $$Props = InstanceProps
+
+  export let position: $$Props['position'] = undefined
+  export let scale: $$Props['scale'] = undefined
+  export let rotation: $$Props['rotation'] = undefined
+  export let lookAt: $$Props['lookAt'] = undefined
+  export let color: $$Props['color'] = undefined
+  export let id: $$Props['id'] = ''
 
   const { registerInstance, setInstanceMatrix, removeInstance, setInstanceColor, parentObject } =
     useInstancedMesh(id)
@@ -36,7 +41,7 @@
     return parentObject.uuid === object3d.parent?.uuid
   }
 
-  const parseColor = (color: InstanceProperties['color']): Color | null => {
+  const parseColor = (color: InstanceProps['color']): Color | null => {
     return color !== undefined ? (color instanceof Color ? color : new Color(color)) : null
   }
 
@@ -48,7 +53,7 @@
 
   $: setColor(color)
 
-  const setColor = (color: InstanceProperties['color']) => {
+  const setColor = (color: InstanceProps['color']) => {
     instance.color = parseColor(color)
     setInstanceColor(instance)
   }

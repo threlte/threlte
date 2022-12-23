@@ -1,14 +1,44 @@
-<script context="module" lang="ts">
-  import { getContext, setContext } from 'svelte'
-  import { Color, InstancedMesh as ThreeInstancedMesh, Matrix4, Object3D } from 'three'
-  import { useThrelte } from '../hooks/useThrelte'
-  import { useFrame } from '../hooks/useFrame'
-  import MeshInstance from '../instances/MeshInstance.svelte'
-  import { usePropChange } from '../lib/usePropChange'
-  import type { InstancedMeshProperties } from '../types/components'
-  import type { ThrelteInstance, ThreltePointerEvent, ThreltePointerEventMap } from '../types/types'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
+<script lang="ts">
+  import {
+    T,
+    Three,
+    DisposableObject,
+    type ThrelteInstance,
+    type ThreltePointerEvent,
+    useFrame,
+    useThrelte
+  } from '@threlte/core'
+  // TODO: check this import
+  import type { ThreltePointerEventMap } from '@threlte/core/src/lib/types/types'
   import { writable, type Writable } from 'svelte/store'
+  import { Color, InstancedMesh as ThreeInstancedMesh, Matrix4, Object3D } from 'three'
+  import { usePropChange } from './usePropChange'
+  import type { InstancedMeshProps } from './InstancedMesh.svelte'
+  import { setInstancedMesh } from './useInstancedMesh'
+
+  type $$Props = InstancedMeshProps
+
+  // MeshInstance
+  export let position: $$Props['position'] = undefined
+  export let scale: $$Props['scale'] = undefined
+  export let rotation: $$Props['rotation'] = undefined
+  export let viewportAware: $$Props['viewportAware'] = false
+  export let inViewport: $$Props['inViewport'] = false
+  export let castShadow: $$Props['castShadow'] = undefined
+  export let receiveShadow: $$Props['receiveShadow'] = undefined
+  export let renderOrder: $$Props['renderOrder'] = undefined
+  export let visible: $$Props['visible'] = undefined
+  export let userData: $$Props['userData'] = undefined
+  export let dispose: $$Props['dispose'] = undefined
+  export let interactive: $$Props['interactive'] = false
+  export let ignorePointer: $$Props['ignorePointer'] = false
+  export let lookAt: $$Props['lookAt'] = undefined
+
+  // self
+  export let geometry: $$Props['geometry']
+  export let material: $$Props['material']
+  export let count: $$Props['count'] = undefined
+  export let id: $$Props['id'] = ''
 
   const placeholderObject3D = new Object3D()
   placeholderObject3D.scale.set(0, 0, 0)
@@ -20,46 +50,6 @@
   const emptyM4 = new Matrix4().fromArray(new Array(16).fill(0))
 
   const defaultColor = new Color(0xffffff)
-
-  type InstancedMeshContext = {
-    registerInstance: (instance: ThrelteInstance) => void
-    removeInstance: (instance: ThrelteInstance) => void
-    setInstanceMatrix: (instance: ThrelteInstance) => void
-    setInstanceColor: (instance: ThrelteInstance) => void
-    parentObject: Object3D
-  }
-
-  const instancedMeshContextName = 'threlte-instanced-mesh-context' as const
-
-  export const useInstancedMesh = (id: string | undefined) => {
-    return getContext<InstancedMeshContext>(instancedMeshContextName + id)
-  }
-</script>
-
-<script lang="ts">
-  import DisposableObject from '../internal/DisposableObject.svelte'
-
-  // MeshInstance
-  export let position: InstancedMeshProperties['position'] = undefined
-  export let scale: InstancedMeshProperties['scale'] = undefined
-  export let rotation: InstancedMeshProperties['rotation'] = undefined
-  export let viewportAware: InstancedMeshProperties['viewportAware'] = false
-  export let inViewport: InstancedMeshProperties['inViewport'] = false
-  export let castShadow: InstancedMeshProperties['castShadow'] = undefined
-  export let receiveShadow: InstancedMeshProperties['receiveShadow'] = undefined
-  export let renderOrder: InstancedMeshProperties['renderOrder'] = undefined
-  export let visible: InstancedMeshProperties['visible'] = undefined
-  export let userData: InstancedMeshProperties['userData'] = undefined
-  export let dispose: InstancedMeshProperties['dispose'] = undefined
-  export let interactive: InstancedMeshProperties['interactive'] = false
-  export let ignorePointer: InstancedMeshProperties['ignorePointer'] = false
-  export let lookAt: InstancedMeshProperties['lookAt'] = undefined
-
-  // self
-  export let geometry: InstancedMeshProperties['geometry']
-  export let material: InstancedMeshProperties['material']
-  export let count: InstancedMeshProperties['count'] = undefined
-  export let id: InstancedMeshProperties['id'] = ''
 
   const { onChange } = usePropChange(material)
   $: onChange(material, (newMaterial) => {
@@ -193,7 +183,7 @@
     })
   }
 
-  setContext<InstancedMeshContext>(instancedMeshContextName + id, {
+  setInstancedMesh(id, {
     registerInstance,
     removeInstance,
     setInstanceMatrix,
@@ -217,12 +207,24 @@
   }
 </script>
 
-<DisposableObject {dispose} object={geometry} />
-<DisposableObject {dispose} object={material} />
+<DisposableObject
+  {dispose}
+  object={geometry}
+/>
+<DisposableObject
+  {dispose}
+  object={material}
+/>
 
-<Object3DInstance object={parentObject} {position} {scale} {rotation} {lookAt}>
+<Three
+  type={parentObject}
+  {position}
+  {scale}
+  {rotation}
+  {lookAt}
+>
   {#key $instancedMesh.uuid}
-    <MeshInstance
+    <T.MeshInstance
       mesh={$instancedMesh}
       {castShadow}
       {receiveShadow}
@@ -247,4 +249,4 @@
     />
   {/key}
   <slot />
-</Object3DInstance>
+</Three>

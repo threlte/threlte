@@ -5,8 +5,6 @@ export { default as Canvas } from './Canvas.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
 // object components
-export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
-export { default as Instance } from './objects/Instance.svelte'
 
 // object instance components
 export { default as MeshInstance } from './instances/MeshInstance.svelte'
@@ -73,8 +71,6 @@ export type {
   ViewportAwareObjectProperties,
   Object3DInstanceProperties,
   MeshInstanceProperties,
-  InstancedMeshProperties,
-  InstanceProperties,
   PassProperties,
   SceneGraphObjectProperties
 } from './types/components'
