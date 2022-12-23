@@ -56,15 +56,15 @@ Provide an `id` to use multiple `<InstancedMesh>` components:
 ```svelte
 <InstancedMesh id="tree" geometry={treeGeometry} material={treeMaterial}>
   <InstancedMesh id="leaf" geometry={leafGeometry} material={leafMaterial}>
-    <Group position={{ x: 1 }}>
+    <T.Group position.x={1}>
       <Instance id="tree" /> // Instance of InstancedMesh with id="tree"
       <Instance id="leaf" /> // Instance of InstancedMesh with id="leaf"
-    </Group>
+    </T.Group>
 
-    <Group position={{ x: -2 }}>
+    <T.Group position.x={-2}>
       <Instance id="tree" />
       <Instance id="leaf" />
-    </Group>
+    </T.Group>
   </InstancedMesh>
 </InstancedMesh>
 ```
@@ -100,13 +100,13 @@ Instances can be nested in other objects and all parent transformations apply as
 
 ```svelte
 <InstancedMesh interactive {geometry} {material}>
-  <Group rotation={{ z: DEG2RAD * 180 }}>
+  <T.Group rotation.z={DEG2RAD * 180 }>
     <Instance />
 
-    <Group position={{ y: 2 }}>
+    <T.Group position.y={2}>
       <Instance />
-    </Group>
-  </Group>
+    </T.Group>
+  </T.Group>
 </InstancedMesh>
 ```
 
