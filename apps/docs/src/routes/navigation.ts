@@ -101,18 +101,6 @@ export const sidebar = {
 				slug: '/core/object3d'
 			},
 			{
-				title: 'Cameras',
-				slug: ''
-			},
-			{
-				title: 'PerspectiveCamera',
-				slug: '/core/perspective-camera'
-			},
-			{
-				title: 'OrthographicCamera',
-				slug: '/core/orthographic-camera'
-			},
-			{
 				title: 'Audio',
 				slug: ''
 			},

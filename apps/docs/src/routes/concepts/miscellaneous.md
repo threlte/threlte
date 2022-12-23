@@ -15,12 +15,12 @@ Use the property `lookAt` on an Object to
   let mesh
 </script>
 
-<PerspectiveCamera lookAt={mesh} />
-<Mesh bind:mesh … />
+<T.PerspectiveCamera lookAt={mesh} />
+<T.Mesh bind:ref={mesh} … />
 ```
 
 - to reactively orient an Object towards a Position
 
 ```svelte
-<PerspectiveCamera lookAt={{ x: 5, y: 3 }} />
+<T.PerspectiveCamera lookAt.x={5} lookAt.y={3} />
 ```

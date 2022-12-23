@@ -17,12 +17,12 @@ If the properties `autoRotate` or `enableDamping` are set to true, the frame loo
 
 ```svelte
 <script>
-  import { PerspectiveCamera, OrbitControls } from '@threlte/core'
+  import { T, OrbitControls } from '@threlte/core'
 </script>
 
-<PerspectiveCamera fov={50}>
+<T.PerspectiveCamera fov={50}>
   <OrbitControls enableDamping />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 ```
 
 ### Properties

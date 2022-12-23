@@ -15,12 +15,12 @@ You might want to use this component to pass as a reference to other components:
 
 ```svelte
 <script>
-  import { Object3D, PerspectiveCamera } from '@threlte/core'
+  import { T, Object3D } from '@threlte/core'
 
   let target
 </script>
 
-<PerspectiveCamera lookAt={target} />
+<T.PerspectiveCamera lookAt={target} />
 <Object3D bind:object={target} />
 ```
 
