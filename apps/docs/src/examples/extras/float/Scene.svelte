@@ -34,6 +34,8 @@
 
 {#if $gltf}
 	{#each Object.values($gltf.nodes) as node}
-		<Blob geometry={node.geometry} />
+		{#if node.geometry}
+			<Blob geometry={node.geometry} />
+		{/if}
 	{/each}
 {/if}
