@@ -19,13 +19,13 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 
 ```svelte
 <script>
-  import { Canvas, PerspectiveCamera, AudioListener, Audio } from '@threlte/core'
+  import { T, Canvas, AudioListener, Audio } from '@threlte/core'
 </script>
 
 <Canvas>
-  <PerspectiveCamera position={{ x: 3, y: 3, z: 3 }} lookAt={{ x: 0, y: 0, z: 0 }}>
+  <T.PerspectiveCamera position={[3, 3, 3]} lookAt={[0, 0, 0]}>
     <AudioListener />
-  </PerspectiveCamera>
+  </T.PerspectiveCamera>
 
   <Audio source={'/audio/track.mp3'} />
 </Canvas>
