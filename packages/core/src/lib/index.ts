@@ -1,9 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// camera components
-export { default as PerspectiveCamera } from './cameras/PerspectiveCamera.svelte'
-
 // audio components
 export { default as AudioListener } from './audio/AudioListener.svelte'
 export { default as Audio } from './audio/Audio.svelte'
@@ -84,8 +81,6 @@ export type {
   InstancedMeshProperties,
   InstanceProperties,
   CameraInstanceProperties,
-  OrthographicCameraProperties,
-  PerspectiveCameraProperties,
   OrbitControlsProperties,
   PassProperties,
   LayersProperties,
