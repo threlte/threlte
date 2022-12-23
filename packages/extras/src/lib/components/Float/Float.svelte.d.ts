@@ -8,6 +8,7 @@ export type FloatProps = Props<Group> & {
   floatingRange?: [number, number] | [x: [number, number], y: [number, number], z: [number, number]]
   rotationIntensity?: number | [x: number, y: number, z: number]
   rotationSpeed?: number | [x: number, y: number, z: number]
+  seed?: number
 }
 
 export type FloatEvents = Events<Group>
