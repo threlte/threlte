@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    T,
+    InteractiveObject,
     Three,
     DisposableObject,
     type ThrelteInstance,
@@ -28,7 +28,9 @@
   export let receiveShadow: $$Props['receiveShadow'] = undefined
   export let renderOrder: $$Props['renderOrder'] = undefined
   export let visible: $$Props['visible'] = undefined
-  export let userData: $$Props['userData'] = undefined
+  // TODO: check this
+  export let userData: $$Props['userData'] = {}
+  // export let userData: $$Props['userData'] = undefined
   export let dispose: $$Props['dispose'] = undefined
   export let interactive: $$Props['interactive'] = false
   export let ignorePointer: $$Props['ignorePointer'] = false
@@ -39,6 +41,8 @@
   export let material: $$Props['material']
   export let count: $$Props['count'] = undefined
   export let id: $$Props['id'] = ''
+
+  let mesh: ThreeInstancedMesh
 
   const placeholderObject3D = new Object3D()
   placeholderObject3D.scale.set(0, 0, 0)
@@ -224,8 +228,13 @@
   {lookAt}
 >
   {#key $instancedMesh.uuid}
-    <T.MeshInstance
-      mesh={$instancedMesh}
+    <Three
+      type={$instancedMesh}
+      bind:ref={mesh}
+      {lookAt}
+      {position}
+      {scale}
+      {rotation}
       {castShadow}
       {receiveShadow}
       frustumCulled={undefined}
@@ -233,20 +242,28 @@
       {visible}
       {userData}
       {dispose}
-      {interactive}
-      {ignorePointer}
-      on:click={onEvent}
-      on:contextmenu={onEvent}
-      on:pointerup={onEvent}
-      on:pointerdown={onEvent}
-      on:pointerenter={onEvent}
-      on:pointerleave={onEvent}
-      on:pointermove={onEvent}
       {viewportAware}
-      bind:inViewport
       on:viewportenter
       on:viewportleave
-    />
+      bind:inViewport
+    >
+      <slot />
+    </Three>
+
+    {#if mesh}
+      <InteractiveObject
+        object={mesh}
+        {interactive}
+        {ignorePointer}
+        on:click={onEvent}
+        on:contextmenu={onEvent}
+        on:pointerup={onEvent}
+        on:pointerdown={onEvent}
+        on:pointerenter={onEvent}
+        on:pointerleave={onEvent}
+        on:pointermove={onEvent}
+      />
+    {/if}
   {/key}
   <slot />
 </Three>

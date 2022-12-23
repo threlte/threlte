@@ -1,5 +1,4 @@
 import type { CoefficientCombineRule, Collider } from '@dimforge/rapier3d-compat'
-import type { Position, Rotation } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
 import type { Euler, Vector3 } from 'three'
 import type { AutoCollidersShapes } from '../../types/types'
