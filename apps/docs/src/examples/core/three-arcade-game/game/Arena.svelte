@@ -74,7 +74,7 @@
 <!-- LEFT COLLIDER -->
 <Collider
 	on:collisionenter={onLeftCollision}
-	position={{ x: (colliderWidth / 2 + arenaWidth / 2) * -1 }}
+	position={[(colliderWidth / 2 + arenaWidth / 2) * -1, 0, 0]}
 	shape="cuboid"
 	args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
 />
@@ -82,7 +82,7 @@
 <!-- RIGHT COLLIDER -->
 <Collider
 	on:collisionenter={onRightCollision}
-	position={{ x: colliderWidth / 2 + arenaWidth / 2 }}
+	position={[colliderWidth / 2 + arenaWidth / 2, 0, 0]}
 	shape="cuboid"
 	args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
 />
@@ -90,7 +90,7 @@
 <!-- TOP COLLIDER -->
 <Collider
 	on:collisionenter={onTopCollision}
-	position={{ z: (colliderWidth / 2 + arenaHeight / 2) * -1 }}
+	position={[0, 0, (colliderWidth / 2 + arenaHeight / 2) * -1]}
 	shape="cuboid"
 	args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
 />
@@ -98,7 +98,7 @@
 <!-- BOTTOM COLLIDER (acts as the game over zone sensor) -->
 <Collider
 	sensor
-	position={{ z: colliderWidth / 2 + arenaHeight / 2 }}
+	position={[0, 0, colliderWidth / 2 + arenaHeight / 2]}
 	shape="cuboid"
 	args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
 />

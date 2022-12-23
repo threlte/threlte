@@ -59,10 +59,7 @@
 	type={'dynamic'}
 	on:sensorenter={onSensorEnter}
 	enabledTranslations={[true, false, true]}
-	position={{
-		z: startAtPosZ,
-		x: $playerPosition
-	}}
+	position={[$playerPosition, 0, startAtPosZ]}
 >
 	<AutoColliders
 		shape="ball"
