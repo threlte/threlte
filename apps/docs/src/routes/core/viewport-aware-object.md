@@ -14,9 +14,9 @@ This is a **trait component**. Trait components are mostly used internally and m
 
 ### Basic Example
 
-:::admonition type="tip"
+<!-- :::admonition type="tip"
 You most likely want to use a [`<MeshInstance>`](/core/mesh-instance) component in this scenario. The component `<ViewportAwareObject>` is part of the component [`<Object3DInstance>`](/core/object3d-instance), which the component `<MeshInstance>` is extending.
-:::
+::: -->
 
 ```svelte
 <script>

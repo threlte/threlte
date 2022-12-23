@@ -20,9 +20,9 @@ In this example the component is responsible for
 - adding children to the scene graph, i.e. as children to the mesh
 - removing children from the scene graph
 
-:::admonition type="tip"
+<!-- :::admonition type="tip"
 You most likely want to use a [`<MeshInstance>`](/core/mesh-instance) component in this scenario. The component `<SceneGraphObject>` is part of the component [`<Object3DInstance>`](/core/object3d-instance), which the component `<MeshInstance>` is extending.
-:::
+::: -->
 
 ```svelte
 <script>
