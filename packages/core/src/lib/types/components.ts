@@ -136,8 +136,6 @@ export type LayersProperties = {
   layers: ThrelteLayers
 }
 
-export type GroupProperties = Omit<Object3DInstanceProperties, 'object'>
-
 export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
   geometry: BufferGeometry
   material: Material | Material[]

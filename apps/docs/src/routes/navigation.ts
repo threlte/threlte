@@ -97,10 +97,6 @@ export const sidebar = {
 				slug: '/core/instance'
 			},
 			{
-				title: 'Group',
-				slug: '/core/group'
-			},
-			{
 				title: 'Object3D',
 				slug: '/core/object3d'
 			},
