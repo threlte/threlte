@@ -157,14 +157,6 @@ export const sidebar = {
 				slug: '/core/context-bridge'
 			},
 			{
-				title: 'Helpers',
-				slug: ''
-			},
-			{
-				title: 'PositionalAudioHelper',
-				slug: '/core/positional-audio-helper'
-			},
-			{
 				title: 'Instances',
 				slug: ''
 			},
