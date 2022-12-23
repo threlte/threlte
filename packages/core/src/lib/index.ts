@@ -7,7 +7,6 @@ export { default as ContextBridge } from './misc/ContextBridge.svelte'
 // object components
 
 // object instance components
-export { default as MeshInstance } from './instances/MeshInstance.svelte'
 export { default as Object3DInstance } from './instances/Object3DInstance.svelte'
 
 // trait components
