@@ -9,9 +9,6 @@ export { default as AudioListener } from './audio/AudioListener.svelte'
 export { default as Audio } from './audio/Audio.svelte'
 export { default as PositionalAudio } from './audio/PositionalAudio.svelte'
 
-// helper components
-export { default as PositionalAudioHelper } from './helpers/PositionalAudioHelper.svelte'
-
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
 
