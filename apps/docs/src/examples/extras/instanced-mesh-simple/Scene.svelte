@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MeshStandardMaterial, SphereGeometry } from 'three'
-	import { T, Instance, InstancedMesh, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
+	import { Instance, InstancedMesh } from '@threlte/extras'
 
 	const geometry = new SphereGeometry(0.5)
 	const material = new MeshStandardMaterial()

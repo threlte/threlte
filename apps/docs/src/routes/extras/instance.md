@@ -2,12 +2,9 @@
 title: Instance
 ---
 
-!!!module_summary title=Instance|sourcePath=objects/Instance.svelte|name=Instance|from=core|type=component|relatedDocs={[{name:"three.js InstancedMesh reference",url:"https://threejs.org/docs/#api/en/objects/InstancedMesh"}]}
+!!!module_summary title=Instance|sourcePath=components/Instance/Instance.svelte|name=Instance|from=extras|type=component|relatedDocs={[{name:"three.js InstancedMesh reference",url:"https://threejs.org/docs/#api/en/objects/InstancedMesh"}]}
 
-:::deprecated moveToExtras=true
-:::
-
-Every `<Instance>` component nested in an [`<InstancedMesh>`](/core/instanced-mesh) component resembles one instance. An `<Instance>` can therefore only be used as a child component to a `<InstancedMesh>` component. The `<Instance>` component can be transformed and colorized individually:
+Every `<Instance>` component nested in an [`<InstancedMesh>`](/extras/instanced-mesh) component resembles one instance. An `<Instance>` can therefore only be used as a child component to a `<InstancedMesh>` component. The `<Instance>` component can be transformed and colorized individually:
 
 ```svelte
 <InstancedMesh {geometry} {material}>

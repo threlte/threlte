@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
 	import * as theatreCore from '@theatre/core'
-	import { InstancedMesh, T, type Position, type Rotation } from '@threlte/core'
-	import { useTexture } from '@threlte/extras'
+	import { T, type Position, type Rotation } from '@threlte/core'
+	import { InstancedMesh, useTexture } from '@threlte/extras'
 	import { Attractor, Collider } from '@threlte/rapier'
 	import { Editable } from '@threlte/theatre'
 	import { MeshStandardMaterial, SphereGeometry } from 'three'

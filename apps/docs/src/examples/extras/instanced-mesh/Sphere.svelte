@@ -2,7 +2,8 @@
 	import { cubicIn, cubicOut } from 'svelte/easing'
 	import { tweened } from 'svelte/motion'
 	import { derived } from 'svelte/store'
-	import { Instance, type Position } from '@threlte/core'
+	import type { Position } from '@threlte/core'
+	import { Instance } from '@threlte/extras'
 
 	export let position: Position
 	let hovering = false

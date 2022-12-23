@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { InstancedMesh, T, useThrelte } from '@threlte/core'
+	import { T, useThrelte } from '@threlte/core'
+	import { InstancedMesh } from '@threlte/extras'
 	import { MeshStandardMaterial, OrthographicCamera, SphereGeometry } from 'three'
 	import Sphere from './Sphere.svelte'
 

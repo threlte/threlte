@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Collider, RigidBody } from '@threlte/rapier'
-	import { Instance, type Position, type Rotation } from '@threlte/core'
+	import type { Position, Rotation } from '@threlte/core'
+	import { Instance } from '@threlte/extras'
 	import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
 
 	export let instance: {

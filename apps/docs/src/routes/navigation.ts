@@ -89,14 +89,6 @@ export const sidebar = {
 				slug: '/core/mesh'
 			},
 			{
-				title: 'InstancedMesh',
-				slug: '/core/instanced-mesh'
-			},
-			{
-				title: 'Instance',
-				slug: '/core/instance'
-			},
-			{
 				title: 'Controls',
 				slug: ''
 			},
@@ -281,6 +273,14 @@ export const sidebar = {
 			{
 				title: 'useThrelteAudio',
 				slug: '/extras/use-threlte-audio'
+			},
+			{
+				title: 'Instance',
+				slug: '/extras/instance'
+			},
+			{
+				title: 'InstancedMesh',
+				slug: '/extras/instanced-mesh'
 			}
 		],
 		'@threlte/theatre': [
