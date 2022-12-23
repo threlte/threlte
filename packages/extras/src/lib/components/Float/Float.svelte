@@ -15,8 +15,8 @@
   export let speed: $$Props['speed'] = 1
   export let floatIntensity: $$Props['floatIntensity'] = 1
   export let floatingRange: $$Props['floatingRange'] = [-0.1, 0.1]
-  export let rotationSpeed: $$Props['rotationSpeed'] = 1
-  export let rotationIntensity: $$Props['rotationIntensity'] = 1
+  export let rotationSpeed: $$Props['rotationSpeed'] = 0
+  export let rotationIntensity: $$Props['rotationIntensity'] = 0
   export let seed: $$Props['seed'] = Math.random() * 10000
 
   let t = seed
