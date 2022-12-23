@@ -33,8 +33,8 @@
 	}
 </script>
 
-<Float floatIntensity={5} scale={$scale}>
-	<T.Mesh interactive {geometry} {material} let:ref>
+<Float floatIntensity={5} scale={$scale} rotationIntensity={2} rotationSpeed={[1, 0.5, 0.2]}>
+	<T.Mesh {geometry} {material} let:ref>
 		<InteractiveObject
 			object={ref}
 			interactive
