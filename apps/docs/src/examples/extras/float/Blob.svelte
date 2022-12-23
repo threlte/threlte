@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T } from '@threlte/core'
+	import { InteractiveObject, T } from '@threlte/core'
 	import { Float } from '@threlte/extras'
 	import { onDestroy } from 'svelte'
 	import { spring } from 'svelte/motion'
@@ -33,12 +33,13 @@
 	}
 </script>
 
-<Float floatIntensity={5} scale={$scale}>
-	<T.Mesh
-		interactive
-		on:pointerenter={onPointerEnter}
-		on:pointerleave={onPointerLeave}
-		{geometry}
-		{material}
-	/>
+<Float floatIntensity={5} scale={$scale} rotationIntensity={2} rotationSpeed={[1, 0.5, 0.2]}>
+	<T.Mesh {geometry} {material} let:ref>
+		<InteractiveObject
+			object={ref}
+			interactive
+			on:pointerenter={onPointerEnter}
+			on:pointerleave={onPointerLeave}
+		/>
+	</T.Mesh>
 </Float>

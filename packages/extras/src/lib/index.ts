@@ -18,6 +18,6 @@ export { default as TransformControls } from './components/TransformControls/Tra
 // text component
 export { default as Text } from './components/Text/Text.svelte'
 
-export type { FloatProperties, GLTFProperties } from './types/components'
+export type { GLTFProperties } from './types/components'
 
 export type { ThrelteGltf } from './types/types'
