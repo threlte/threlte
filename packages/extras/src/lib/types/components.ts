@@ -1,8 +1,4 @@
-import type {
-  GroupProperties,
-  InteractiveObjectProperties,
-  Object3DInstanceProperties
-} from '@threlte/core'
+import type { InteractiveObjectProperties, Object3DInstanceProperties } from '@threlte/core'
 
 export type GLTFProperties = Omit<Object3DInstanceProperties, 'object'> & {
   url: string
