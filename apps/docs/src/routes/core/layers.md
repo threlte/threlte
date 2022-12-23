@@ -15,32 +15,32 @@ The `<Layers>` component assigns all child components the layer memberships you 
 
 ```svelte
 <script>
-  import { Layers, PerspectiveCamera, Mesh } from '@threlte/core'
+  import { T, Layers } from '@threlte/core'
 </script>
 
 <!-- Remember to also assign a layer to your camera -->
 <Layers layers={1}>
-  <PerspectiveCamera />
+  <T.PerspectiveCamera />
 </Layers>
 
 <!-- visible if camera is on any layer -->
 <Layers layers={'all'}>
-  <Mesh … />
+  <T.Mesh … />
 </Layers>
 
 <!-- visible if camera is on layer 1 -->
 <Layers layers={1}>
-  <Mesh … />
+  <T.Mesh … />
 </Layers>
 
 <!-- visible if camera is on layer 0 or 1 -->
 <Layers layers={[0, 1]}>
-  <Mesh … />
+  <T.Mesh … />
 </Layers>
 
 <!-- invisible -->
 <Layers layers={'none'}>
-  <Mesh … />
+  <T.Mesh … />
 </Layers>
 ```
 

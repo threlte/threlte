@@ -97,18 +97,6 @@ export const sidebar = {
 				slug: '/core/instance'
 			},
 			{
-				title: 'Cameras',
-				slug: ''
-			},
-			{
-				title: 'PerspectiveCamera',
-				slug: '/core/perspective-camera'
-			},
-			{
-				title: 'OrthographicCamera',
-				slug: '/core/orthographic-camera'
-			},
-			{
 				title: 'Audio',
 				slug: ''
 			},
