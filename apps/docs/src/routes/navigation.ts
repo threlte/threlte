@@ -97,10 +97,6 @@ export const sidebar = {
 				slug: '/core/instance'
 			},
 			{
-				title: 'Object3D',
-				slug: '/core/object3d'
-			},
-			{
 				title: 'Cameras',
 				slug: ''
 			},

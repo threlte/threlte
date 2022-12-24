@@ -148,8 +148,6 @@ export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> &
   id?: string
 }
 
-export type Object3DProperties = Omit<Object3DInstanceProperties, 'object'>
-
 export type AudioListenerProperties = Omit<Object3DInstanceProperties, 'object'> & {
   id?: string
   masterVolume?: number
