@@ -20,7 +20,7 @@ In most cases, the listener component is a child of the camera, so the 3D transf
 </script>
 
 <Canvas>
-  <T.PerspectiveCamera position={[3, 3, 3]} lookAt={[0, 0, 0]}>
+  <T.PerspectiveCamera makeDefault position={[3, 3, 3]} lookAt={[0, 0, 0]}>
     <AudioListener />
   </T.PerspectiveCamera>
 </Canvas>
@@ -34,7 +34,7 @@ You may pass an `id` to the `<AudioListener>` component in order to connect `<Au
 </script>
 
 <Canvas>
-  <T.PerspectiveCamera position={[3, 3, 3]} lookAt={[0, 0, 0]}>
+  <T.PerspectiveCamera makeDefault position={[3, 3, 3]} lookAt={[0, 0, 0]}>
     <AudioListener id="left-ear" position={{ x: -1 }} />
     <AudioListener id="right-ear" position={{ x: 1 }} />
   </T.PerspectiveCamera>

@@ -30,7 +30,7 @@
 </scr` +
 								`ipt>
 
-<T.PerspectiveCamera position.x={5} position.y={5}>
+<T.PerspectiveCamera makeDefault position.x={5} position.y={5}>
 	<OrbitControls autoRotate />
 </T.PerspectiveCamera>
 
