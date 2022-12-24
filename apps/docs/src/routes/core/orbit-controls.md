@@ -20,7 +20,7 @@ If the properties `autoRotate` or `enableDamping` are set to true, the frame loo
   import { T, OrbitControls } from '@threlte/core'
 </script>
 
-<T.PerspectiveCamera fov={50}>
+<T.PerspectiveCamera makeDefault fov={50}>
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 ```

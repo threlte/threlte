@@ -46,7 +46,7 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 </script>
 
 <Canvas>
-  <T.PerspectiveCamera position={[3, 3, 3]} lookAt={[0, 0, 0]}>
+  <T.PerspectiveCamera makeDefault position={[3, 3, 3]} lookAt={[0, 0, 0]}>
     <AudioListener />
   </T.PerspectiveCamera>
 
