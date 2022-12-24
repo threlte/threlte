@@ -20,7 +20,7 @@ The `<Layers>` component assigns all child components the layer memberships you 
 
 <!-- Remember to also assign a layer to your camera -->
 <Layers layers={1}>
-  <T.PerspectiveCamera />
+  <T.PerspectiveCamera makeDefault />
 </Layers>
 
 <!-- visible if camera is on any layer -->

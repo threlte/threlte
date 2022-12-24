@@ -25,7 +25,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera position.z={10} fov={20} />
+<T.PerspectiveCamera makeDefault position.z={10} fov={20} />
 
 <T.Group rotation.y={rotation}>
 	{#if helmetGeometry}
