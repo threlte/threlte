@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PerspectiveCamera, T, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { Edges, useGltf } from '@threlte/extras'
 	import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -25,7 +25,7 @@
 	}
 </script>
 
-<PerspectiveCamera position={{ z: 10 }} fov={20} />
+<T.PerspectiveCamera makeDefault position.z={10} fov={20} />
 
 <T.Group rotation.y={rotation}>
 	{#if helmetGeometry}

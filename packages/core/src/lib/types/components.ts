@@ -83,22 +83,6 @@ export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'
   useCamera: boolean
 }
 
-export type OrthographicCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near?: number
-  far?: number
-  left?: number
-  right?: number
-  top?: number
-  bottom?: number
-  zoom?: number
-}
-
-export type PerspectiveCameraProperties = Omit<CameraInstanceProperties, 'camera'> & {
-  near?: number
-  far?: number
-  fov?: number
-}
-
 export type OrbitControlsProperties = {
   dispose?: boolean
   autoRotate?: boolean

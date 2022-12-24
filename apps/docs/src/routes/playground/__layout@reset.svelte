@@ -25,16 +25,16 @@
 							source:
 								`<scr` +
 								`ipt>
-	import { Mesh, OrbitControls, PerspectiveCamera } from '@threlte/core'
-	import { BoxBufferGeometry, MeshBasicMaterial, Color } from 'three'
+	import { T, OrbitControls } from '@threlte/core'
+	import { BoxGeometry, MeshBasicMaterial, Color } from 'three'
 </scr` +
 								`ipt>
 
-<PerspectiveCamera position={{ x: 5, y: 5 }}>
+<T.PerspectiveCamera makeDefault position.x={5} position.y={5}>
 	<OrbitControls autoRotate />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<Mesh
+<T.Mesh
 	geometry={new BoxBufferGeometry(1, 1, 1)}
 	material={new MeshBasicMaterial({
 		color: new Color('#FF3E00').convertSRGBToLinear(),

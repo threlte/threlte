@@ -41,14 +41,14 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 
 ```svelte
 <script>
-  import { Canvas, PerspectiveCamera, AudioListener, PositionalAudio } from '@threlte/core'
+  import { T, Canvas, AudioListener, PositionalAudio } from '@threlte/core'
   import Car from './Car.svelte'
 </script>
 
 <Canvas>
-  <PerspectiveCamera position={{ x: 3, y: 3, z: 3 }} lookAt={{ x: 0, y: 0, z: 0 }}>
+  <T.PerspectiveCamera makeDefault position={[3, 3, 3]} lookAt={[0, 0, 0]}>
     <AudioListener />
-  </PerspectiveCamera>
+  </T.PerspectiveCamera>
 
   <Car>
     <PositionalAudio autostart loop refDistance={10} volume={0.2} source={'/audio/car-noise.mp3'} />
