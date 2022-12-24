@@ -153,10 +153,6 @@ export const sidebar = {
 				slug: '/core/mesh-instance'
 			},
 			{
-				title: 'CameraInstance',
-				slug: '/core/camera-instance'
-			},
-			{
 				title: 'AudioInstance',
 				slug: '/core/audio-instance'
 			},

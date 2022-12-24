@@ -78,11 +78,6 @@ export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> 
     mesh: Mesh
   }
 
-export type CameraInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  camera: Camera
-  useCamera: boolean
-}
-
 export type OrbitControlsProperties = {
   dispose?: boolean
   autoRotate?: boolean
