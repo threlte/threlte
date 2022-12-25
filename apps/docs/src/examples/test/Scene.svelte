@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { InteractiveObject, Layers, T, TransformableObject, useFrame } from '@threlte/core'
+	import { Layers, T, useFrame, useThrelte } from '@threlte/core'
 	import { GLTF } from '@threlte/extras'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import TransformControls from './TransformControls.svelte'
 
 	let rotation = 0
 
@@ -9,17 +10,19 @@
 		rotation += 0.002
 	})
 
+	const { renderer } = useThrelte()
+
 	let showLight = true
 	let color = 'red'
 </script>
 
-<T.Group rotation.y={rotation}>
-	<T.OrthographicCamera zoom={80} let:ref={cam} position={[0, 5, 10]} makeDefault>
-		<TransformableObject object={cam} lookAt={{ y: 2 }} />
-	</T.OrthographicCamera>
-</T.Group>
+<T.OrthographicCamera zoom={80} let:ref={cam} position={[0, 5, 10]} makeDefault>
+	<T.OrbitControls args={[cam, renderer?.domElement]} target={[0, 0, 0]} />
+</T.OrthographicCamera>
 
-<GLTF castShadow receiveShadow url={'/models/threlte.glb'} interactive />
+<T.Group rotation.y={rotation}>
+	<GLTF castShadow receiveShadow url={'/models/threlte.glb'} interactive />
+</T.Group>
 
 <T.Mesh
 	receiveShadow
@@ -31,6 +34,8 @@
 >
 	<T.CircleGeometry args={[4, 60]} />
 	<T.MeshStandardMaterial />
+
+	<TransformControls />
 </T.Mesh>
 
 {#if showLight}

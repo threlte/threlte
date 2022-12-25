@@ -64,9 +64,11 @@ export { default as Three } from './three/Three.svelte'
 export { T } from './three/T'
 export type { Props, Events, Slots } from './three/types'
 // <Three> component plugins
-export { injectPlugin } from './plugins/injectPlugin'
 export { createPlugin } from './plugins/createPlugin'
-export type { Plugin, NamedPlugin } from './plugins/types'
+export { injectPlugin } from './plugins/injectPlugin'
+export { createRootPlugin } from './plugins/createRootPlugin'
+export { injectRootPlugin } from './plugins/injectRootPlugin'
+export type { Plugin, NamedPlugin, RootPlugin, NamedRootPlugin } from './plugins/types'
 
 // hooks
 export { useFrame } from './hooks/useFrame'

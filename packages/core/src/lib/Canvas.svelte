@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import { onDestroy, onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type { ShadowMapType, WebGLRendererParameters } from 'three'
@@ -16,6 +19,7 @@
     setRendererColorOutput,
     setRendererShadows
   } from './lib/renderer'
+  import type { RootPluginContext, RootPluginContextName } from './plugins/types'
   import type { Size, ThrelteParentContext } from './types/types'
 
   const invalidationHandlers: Set<(debugFrameloopMessage?: string) => void> = new Set()
@@ -102,6 +106,10 @@
   onDestroy(() => {
     disposalCtx.dispose(true)
   })
+
+  // root plugins context
+  const rootPluginsContextName: RootPluginContextName = 'threlte-root-plugin-context'
+  setContext<RootPluginContext>(rootPluginsContextName, writable({}))
 </script>
 
 <canvas

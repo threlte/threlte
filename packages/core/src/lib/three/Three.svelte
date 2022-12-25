@@ -10,6 +10,7 @@
   import { useEvents } from './lib/useEvents'
   import { usePlugins } from './lib/usePlugins'
   import { useProps } from './lib/useProps'
+  import { useRootPlugins } from './lib/useRootPlugins'
   import type { AnyClass, MaybeInstance, Props } from './types'
 
   type Type = $$Generic
@@ -63,13 +64,18 @@
 
   // Plugins
   const plugins = usePlugins({ ref, props: $$props })
-  const pluginsProps = plugins?.pluginsProps ?? []
+  const pluginsProps = plugins?.pluginsProps
+
+  // Root Plugins
+  const rootPlugins = useRootPlugins({ ref, props: $$props })
+  const rootPluginsProps = rootPlugins?.rootPluginsProps
 
   // Props
   const props = useProps()
   $: props.updateProps(ref, $$restProps, {
     manualCamera: manual,
-    pluginsProps
+    pluginsProps,
+    rootPluginsProps
   })
 
   // Camera
@@ -85,10 +91,15 @@
   const events = useEvents()
   $: events.updateRef(ref)
 
-  // update plugins after all other updates
+  // update plugins
   $: plugins?.updateRef(ref)
   $: plugins?.updateProps($$props)
   $: plugins?.updateRestProps($$restProps)
+
+  // update root plugins after all other updates
+  $: rootPlugins?.updateRef(ref)
+  $: rootPlugins?.updateProps($$props)
+  $: rootPlugins?.updateRestProps($$restProps)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D
