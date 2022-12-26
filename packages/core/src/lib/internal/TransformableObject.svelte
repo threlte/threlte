@@ -7,13 +7,15 @@
   import { createObjectStore } from '../lib/createObjectStore'
   import { getThrelteUserData } from '../lib/getThrelteUserData'
   import { useTicked } from '../lib/useTicked'
-  import type { TransformableObjectProperties } from '../types/components'
+  import type { TransformableObjectProps } from './TransformableObject.svelte'
 
-  export let object: TransformableObjectProperties['object']
-  export let position: TransformableObjectProperties['position'] = undefined
-  export let scale: TransformableObjectProperties['scale'] = undefined
-  export let rotation: TransformableObjectProperties['rotation'] = undefined
-  export let lookAt: TransformableObjectProperties['lookAt'] = undefined
+  type $$Props = TransformableObjectProps
+
+  export let object: $$Props['object']
+  export let position: $$Props['position'] = undefined
+  export let scale: $$Props['scale'] = undefined
+  export let rotation: $$Props['rotation'] = undefined
+  export let lookAt: $$Props['lookAt'] = undefined
 
   const targetWorldPos = new Vector3()
 

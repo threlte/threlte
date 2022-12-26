@@ -23,7 +23,17 @@ export type SceneGraphObjectProperties = {
   object: Object3D
 }
 
-export type TransformableObjectProperties = {
+export type InteractiveObjectProperties = {
+  object: Object3D
+  interactive: boolean
+  ignorePointer: boolean
+}
+
+export type LayerableObjectProperties = {
+  object: Object3D
+}
+
+type TransformableObjectProperties = {
   object: Object3D
   position?: Position
   scale?: Scale
