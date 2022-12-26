@@ -2,7 +2,6 @@
   import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useThrelteAudio } from '../hooks/useThrelteAudio'
   import AudioInstance from '../instances/AudioInstance.svelte'
-  import type { PositionalAudioProperties } from '../types/components'
 
   export let position: PositionalAudioProperties['position'] = undefined
   export let scale: PositionalAudioProperties['scale'] = undefined

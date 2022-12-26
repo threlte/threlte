@@ -18,6 +18,11 @@ export { default as TransformControls } from './components/TransformControls/Tra
 // text component
 export { default as Text } from './components/Text/Text.svelte'
 
+// audio components
+export { default as AudioListener } from './audio/AudioListener/AudioListener.svelte'
+export { default as Audio } from './audio/Audio/Audio.svelte'
+export { default as PositionalAudio } from './audio/PositionalAudio/PositionalAudio.svelte'
+
 export type { GLTFProperties } from './types/components'
 
 export type { ThrelteGltf } from './types/types'

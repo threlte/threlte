@@ -13,7 +13,8 @@ In most cases, the listener component is a child of the camera, so the 3D transf
 
 ```svelte
 <script>
-  import { T, Canvas, AudioListener } from '@threlte/core'
+  import { T, Canvas } from '@threlte/core'
+  import { AudioListener } from '@threlte/extras'
 </script>
 
 <Canvas>
@@ -27,7 +28,8 @@ You may pass an `id` to the `<AudioListener>` component in order to connect `<Au
 
 ```svelte
 <script>
-  import { T, Canvas, AudioListener, Audio } from '@threlte/core'
+  import { T, Canvas } from '@threlte/core'
+  import { Audio, AudioListener } from '@threlte/extras'
 </script>
 
 <Canvas>

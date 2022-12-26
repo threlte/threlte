@@ -1,11 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// audio components
-export { default as AudioListener } from './audio/AudioListener.svelte'
-export { default as Audio } from './audio/Audio.svelte'
-export { default as PositionalAudio } from './audio/PositionalAudio.svelte'
-
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
 
@@ -88,8 +83,5 @@ export type {
   PassProperties,
   LayersProperties,
   AudioInstanceProperties,
-  AudioListenerProperties,
-  AudioProperties,
-  PositionalAudioProperties,
   SceneGraphObjectProperties
 } from './types/components'

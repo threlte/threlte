@@ -5,7 +5,8 @@
 </script>
 
 <script lang="ts">
-	import { PositionalAudio, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { PositionalAudio } from '@threlte/extras'
 	import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
 	import { writable } from 'svelte/store'
 	import type { Euler, Vector3 } from 'three'

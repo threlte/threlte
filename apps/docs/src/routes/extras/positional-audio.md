@@ -38,7 +38,8 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 
 ```svelte
 <script>
-  import { T, Canvas, AudioListener, PositionalAudio } from '@threlte/core'
+  import { T, Canvas } from '@threlte/core'
+  import { AudioListener, PositionalAudio } from '@threlte/extras'
   import Car from './Car.svelte'
 </script>
 
