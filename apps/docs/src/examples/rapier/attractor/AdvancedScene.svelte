@@ -5,8 +5,7 @@
 
 <script lang="ts">
 	import { OrbitControls, T } from '@threlte/core'
-	import { Attractor, Collider, RigidBody } from '@threlte/rapier'
-	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
+	import { Attractor, Collider, type GravityType, RigidBody } from '@threlte/rapier'
 	import { MeshBasicMaterial, SphereGeometry } from 'three'
 
 	export let type: GravityType = 'static'
