@@ -3,13 +3,10 @@ title: PositionalAudio
 ---
 
 <script lang="ts">
-import Example from '$examples/core/positional-audio/App.svelte'
+import Example from '$examples/extras/positional-audio/App.svelte'
 </script>
 
-!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=core|type=component|relatedDocs={[{name:"three.js PositionalAudio reference",url:"https://threejs.org/docs/#api/en/audio/PositionalAudio"}]}
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=PositionalAudio|sourcePath=audio/PositionalAudio.svelte|name=PositionalAudio|from=extras|type=component|relatedDocs={[{name:"three.js PositionalAudio reference",url:"https://threejs.org/docs/#api/en/audio/PositionalAudio"}]}
 
 Creates a positional audio entity.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
@@ -18,17 +15,17 @@ This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Au
 You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
 :::
 
-<ExampleWrapper playgroundHref="/core/positional-audio">
+<ExampleWrapper playgroundHref="/extras/positional-audio">
 <Example />
 
 <div slot="code">
 
-@[code svelte|title=App.svelte](../../examples/core/positional-audio/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/core/positional-audio/Scene.svelte)
-@[code svelte|title=Turntable.svelte](../../examples/core/positional-audio/Turntable.svelte)
-@[code svelte|title=Disc.svelte](../../examples/core/positional-audio/Disc.svelte)
-@[code svelte|title=Button.svelte](../../examples/core/positional-audio/Button.svelte)
-@[code svelte|title=Speaker.svelte](../../examples/core/positional-audio/Speaker.svelte)
+@[code svelte|title=App.svelte](../../examples/extras/positional-audio/App.svelte)
+@[code svelte|title=Scene.svelte](../../examples/extras/positional-audio/Scene.svelte)
+@[code svelte|title=Turntable.svelte](../../examples/extras/positional-audio/Turntable.svelte)
+@[code svelte|title=Disc.svelte](../../examples/extras/positional-audio/Disc.svelte)
+@[code svelte|title=Button.svelte](../../examples/extras/positional-audio/Button.svelte)
+@[code svelte|title=Speaker.svelte](../../examples/extras/positional-audio/Speaker.svelte)
 
 </div>
 </ExampleWrapper>

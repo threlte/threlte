@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { AudioListener, OrbitControls, T, useThrelte } from '@threlte/core'
-	import { Environment } from '@threlte/extras'
+	import { OrbitControls, T, useThrelte } from '@threlte/core'
+	import { AudioListener, Environment } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Speaker from './Speaker.svelte'

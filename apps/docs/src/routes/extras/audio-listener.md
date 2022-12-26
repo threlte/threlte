@@ -2,10 +2,7 @@
 title: AudioListener
 ---
 
-!!!module_summary title=AudioListener|sourcePath=audio/AudioListener.svelte|name=AudioListener|from=core|type=component|relatedDocs={[{name:"three.js AudioListener reference",url:"https://threejs.org/docs/#api/en/audio/AudioListener"}]}
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=AudioListener|sourcePath=audio/AudioListener.svelte|name=AudioListener|from=extras|type=component|relatedDocs={[{name:"three.js AudioListener reference",url:"https://threejs.org/docs/#api/en/audio/AudioListener"}]}
 
 The `<AudioListener>` represents a virtual listener of the all positional and non-positional audio effects in the scene.
 An application usually creates a single `<AudioListener>` component. It is a mandatory component for audio components like `<Audio>` and `<PositionalAudio>`.
