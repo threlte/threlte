@@ -1,26 +1,14 @@
 <script lang="ts">
+  import { Three } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
-  import { useThrelteAudio } from '../hooks/useThrelteAudio'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { AudioListenerProperties } from '../types/components'
+  import { useThrelteAudio } from '../useThrelteAudio'
+  import type { AudioListenerProps } from './AudioListener.svelte'
 
-  export let position: AudioListenerProperties['position'] = undefined
-  export let scale: AudioListenerProperties['scale'] = undefined
-  export let rotation: AudioListenerProperties['rotation'] = undefined
-  export let lookAt: AudioListenerProperties['lookAt'] = undefined
-  export let viewportAware: AudioListenerProperties['viewportAware'] = false
-  export let inViewport: AudioListenerProperties['inViewport'] = false
-  export let castShadow: AudioListenerProperties['castShadow'] = undefined
-  export let receiveShadow: AudioListenerProperties['receiveShadow'] = undefined
-  export let frustumCulled: AudioListenerProperties['frustumCulled'] = undefined
-  export let renderOrder: AudioListenerProperties['renderOrder'] = undefined
-  export let visible: AudioListenerProperties['visible'] = undefined
-  export let userData: AudioListenerProperties['userData'] = undefined
-  export let dispose: AudioListenerProperties['dispose'] = undefined
+  type $$Props = AudioListenerProps
 
-  export let id: AudioListenerProperties['id'] = undefined
-  export let masterVolume: AudioListenerProperties['masterVolume'] = undefined
+  export let id: $$Props['id'] = undefined
+  export let masterVolume: $$Props['masterVolume'] = undefined
 
   export const listener = new ThreeAudioListener()
 
@@ -38,23 +26,9 @@
   })
 </script>
 
-<Object3DInstance
-  object={listener}
-  {position}
-  {scale}
-  {rotation}
-  {lookAt}
-  {frustumCulled}
-  {renderOrder}
-  {visible}
-  {userData}
-  {dispose}
-  {castShadow}
-  {receiveShadow}
-  {viewportAware}
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
+<Three
+  type={listener}
+  {...$$restProps}
 >
   <slot />
-</Object3DInstance>
+</Three>

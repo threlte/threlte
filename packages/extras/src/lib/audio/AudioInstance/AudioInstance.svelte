@@ -1,39 +1,24 @@
 <script lang="ts">
+  import { useLoader, Three } from '@threlte/core'
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { DefaultLoadingManager } from 'three'
   import { Audio, AudioLoader, PositionalAudio } from 'three'
-  import { useLoader } from '../hooks/useLoader'
-  import Object3DInstance from '../instances/Object3DInstance.svelte'
-  import type { AudioInstanceProperties } from '../types/components'
+  import type { AudioInstanceProps } from './AudioInstance.svelte'
 
   type T = Audio<GainNode> | PositionalAudio
-  type Props = AudioInstanceProperties<T>
+  type $$Props = AudioInstanceProps<T>
 
-  export let position: Props['position'] = undefined
-  export let scale: Props['scale'] = undefined
-  export let rotation: Props['rotation'] = undefined
-  export let lookAt: Props['lookAt'] = undefined
-  export let viewportAware: Props['viewportAware'] = false
-  export let inViewport: Props['inViewport'] = false
-  export let castShadow: Props['castShadow'] = undefined
-  export let receiveShadow: Props['receiveShadow'] = undefined
-  export let frustumCulled: Props['frustumCulled'] = undefined
-  export let renderOrder: Props['renderOrder'] = undefined
-  export let visible: Props['visible'] = undefined
-  export let userData: Props['userData'] = undefined
-  export let dispose: Props['dispose'] = undefined
-
-  export let autoplay: Props['autoplay'] = undefined
-  export let detune: Props['detune'] = undefined
-  export let source: Props['source'] = undefined
-  export let volume: Props['volume'] = undefined
-  export let loop: Props['loop'] = undefined
-  export let filters: Props['filters'] = undefined
-  export let playbackRate: Props['playbackRate'] = undefined
+  export let autoplay: $$Props['autoplay'] = undefined
+  export let detune: $$Props['detune'] = undefined
+  export let source: $$Props['source'] = undefined
+  export let volume: $$Props['volume'] = undefined
+  export let loop: $$Props['loop'] = undefined
+  export let filters: $$Props['filters'] = undefined
+  export let playbackRate: $$Props['playbackRate'] = undefined
 
   export let audio: T
 
-  export const play: Props['play'] = async (delay) => {
+  export const play: $$Props['play'] = async (delay) => {
     if (audio.context.state !== 'running') {
       await audio.context.resume()
     }
@@ -42,11 +27,11 @@
     return audio
   }
 
-  export const pause: Props['pause'] = () => audio.pause()
+  export const pause: $$Props['pause'] = () => audio.pause() as T
 
-  export const stop: Props['stop'] = () => {
+  export const stop: $$Props['stop'] = () => {
     if (!audio.source) return audio
-    return audio.stop()
+    return audio.stop() as T
   }
 
   const setDetune = (detune?: number) => {
@@ -89,8 +74,8 @@
     })
   }
 
-  let previousSource: Props['source']
-  const onSourceChange = async (newSource: Props['source'], signal: AbortSignal) => {
+  let previousSource: $$Props['source']
+  const onSourceChange = async (newSource: $$Props['source'], signal: AbortSignal) => {
     // stop and return if the source is undefined or an empty string is provided
     if (!newSource) {
       previousSource = newSource
@@ -161,23 +146,9 @@
   })
 </script>
 
-<Object3DInstance
-  object={audio}
-  {position}
-  {scale}
-  {rotation}
-  {lookAt}
-  {frustumCulled}
-  {renderOrder}
-  {visible}
-  {userData}
-  {dispose}
-  {castShadow}
-  {receiveShadow}
-  {viewportAware}
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
+<Three
+  type={audio}
+  {...$$restProps}
 >
   <slot />
-</Object3DInstance>
+</Three>

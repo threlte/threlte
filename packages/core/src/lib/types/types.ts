@@ -1,7 +1,6 @@
 import { createEventDispatcher } from 'svelte'
 import type { Readable, Writable } from 'svelte/store'
 import type {
-  AudioListener,
   Camera,
   Clock,
   Color,
@@ -131,14 +130,10 @@ export type ThrelteDisposalContext = {
   shouldDispose: boolean
 }
 
-export type ThrelteAudioContext = {
-  audioListeners: Map<string, AudioListener>
-  getAudioListener: (id?: string) => AudioListener | undefined
-  addAudioListener: (listener: AudioListener, id?: string) => void
-  removeAudioListener: (id?: string) => void
-}
-
 export type ThrelteDisposeContext = Writable<boolean>
+
+type UserContext = Record<string, any>
+export type ThrelteUserContext = { store: Writable<UserContext>; raw: UserContext }
 
 export type ThrelteUseFrame = {
   stop: () => void

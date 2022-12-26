@@ -2,10 +2,7 @@
 title: useAudioListener
 ---
 
-!!!module_summary title=useAudioListener|sourcePath=hooks/useAudioListener.ts|name=useAudioListener|from=core|type=hook|needsContext=true
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=useAudioListener|sourcePath=audio/useAudioListener.ts|name=useAudioListener|from=extras|type=hook|needsContext=true
 
 Components like `<Audio>` and `<PositionalAudio>` use the Web Audio API and therefore you may find yourself in situations where the `AudioContext` is important to create e.g. a `BiquadFilterNode`.
 !!!
@@ -13,6 +10,8 @@ Components like `<Audio>` and `<PositionalAudio>` use the Web Audio API and ther
 ### Examples <!-- omit in toc -->
 
 ```ts
+import { useAudioListener } from '@threlte/extras'
+
 // Retrieve a THREE.AudioListener which hasn't
 // been assigned an id: <AudioListener />
 const { context, listener } = useAudioListener()

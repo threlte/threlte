@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import { onDestroy, onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type { ShadowMapType, WebGLRendererParameters } from 'three'
@@ -59,7 +62,7 @@
   const { getCtx, renderCtx, disposalCtx } = contexts
 
   // context bindings
-  export const { ctx, rootCtx, audioCtx } = contexts
+  export const { ctx, rootCtx } = contexts
 
   setDefaultCameraAspectOnSizeChange(ctx)
 

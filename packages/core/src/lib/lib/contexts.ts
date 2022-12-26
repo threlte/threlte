@@ -7,9 +7,9 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import type { DisposableThreeObject } from '../types/components'
 import type {
   Size,
-  ThrelteAudioContext,
   ThrelteContext,
   ThrelteDisposalContext,
+  ThrelteUserContext,
   ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
@@ -27,42 +27,12 @@ export const createContexts = (
   ctx: ThrelteContext
   rootCtx: ThrelteRootContext
   renderCtx: ThrelteRenderContext
-  audioCtx: ThrelteAudioContext
   disposalCtx: ThrelteDisposalContext
   getCtx: () => ThrelteContext
   getRootCtx: () => ThrelteRootContext
   getRenderCtx: () => ThrelteRenderContext
-  getAudioCtx: () => ThrelteAudioContext
   getDisposalCtx: () => ThrelteDisposalContext
 } => {
-  const audioCtx: ThrelteAudioContext = {
-    audioListeners: new Map(),
-    addAudioListener: (listener, id?: string) => {
-      id = id ?? 'default'
-      if (audioCtx.audioListeners.has(id)) {
-        console.warn(`An AudioListener with the id "${id}" has already been added, aborting.`)
-        return
-      }
-      audioCtx.audioListeners.set(id, listener)
-    },
-    removeAudioListener: (id?: string) => {
-      id = id ?? 'default'
-      if (!audioCtx.audioListeners.has(id)) {
-        console.warn(`No AudioListener with the id "${id}" found, aborting.`)
-        return
-      }
-      audioCtx.audioListeners.delete(id)
-    },
-    getAudioListener: (id?: string) => {
-      id = id ?? 'default'
-      if (!audioCtx.audioListeners.has(id)) {
-        console.warn(`No AudioListener with the id "${id}" found, aborting.`)
-        return
-      }
-      return audioCtx.audioListeners.get(id)
-    }
-  }
-
   const renderCtx: ThrelteRenderContext = {
     debugFrameloop,
     frameloop,
@@ -145,6 +115,9 @@ export const createContexts = (
     }
   }
 
+  const userCtxObject = {}
+  const userCtx: ThrelteUserContext = { store: writable(userCtxObject), raw: userCtxObject }
+
   const disposalCtx: ThrelteDisposalContext = {
     dispose: async (force = false) => {
       await tick()
@@ -202,25 +175,22 @@ export const createContexts = (
   setContext<ThrelteContext>('threlte', ctx)
   setContext<ThrelteRootContext>('threlte-root', rootCtx)
   setContext<ThrelteRenderContext>('threlte-render-context', renderCtx)
-  setContext<ThrelteAudioContext>('threlte-audio-context', audioCtx)
   setContext<ThrelteDisposalContext>('threlte-disposal-context', disposalCtx)
+  setContext<ThrelteUserContext>('threlte-user-context', userCtx)
 
   const getCtx = (): ThrelteContext => ctx
   const getRootCtx = (): ThrelteRootContext => rootCtx
   const getRenderCtx = (): ThrelteRenderContext => renderCtx
-  const getAudioCtx = (): ThrelteAudioContext => audioCtx
   const getDisposalCtx = (): ThrelteDisposalContext => disposalCtx
 
   return {
     ctx,
     rootCtx,
     renderCtx,
-    audioCtx,
     disposalCtx,
     getCtx,
     getRootCtx,
     getRenderCtx,
-    getAudioCtx,
     getDisposalCtx
   }
 }

@@ -1,40 +1,21 @@
 <script lang="ts">
   import { PositionalAudio as ThreePositionalAudio } from 'three'
-  import { useThrelteAudio } from '../hooks/useThrelteAudio'
-  import AudioInstance from '../instances/AudioInstance.svelte'
+  import AudioInstance from '../AudioInstance/AudioInstance.svelte'
+  import { useThrelteAudio } from '../useThrelteAudio'
+  import type { PositionalAudioProps } from './PositionalAudio.svelte'
 
-  export let position: PositionalAudioProperties['position'] = undefined
-  export let scale: PositionalAudioProperties['scale'] = undefined
-  export let rotation: PositionalAudioProperties['rotation'] = undefined
-  export let lookAt: PositionalAudioProperties['lookAt'] = undefined
-  export let viewportAware: PositionalAudioProperties['viewportAware'] = false
-  export let inViewport: PositionalAudioProperties['inViewport'] = false
-  export let castShadow: PositionalAudioProperties['castShadow'] = undefined
-  export let receiveShadow: PositionalAudioProperties['receiveShadow'] = undefined
-  export let frustumCulled: PositionalAudioProperties['frustumCulled'] = undefined
-  export let renderOrder: PositionalAudioProperties['renderOrder'] = undefined
-  export let visible: PositionalAudioProperties['visible'] = undefined
-  export let userData: PositionalAudioProperties['userData'] = undefined
-  export let dispose: PositionalAudioProperties['dispose'] = undefined
+  type $$Props = PositionalAudioProps
 
-  export let autoplay: PositionalAudioProperties['autoplay'] = undefined
-  export let detune: PositionalAudioProperties['detune'] = undefined
-  export let source: PositionalAudioProperties['source'] = undefined
-  export let volume: PositionalAudioProperties['volume'] = undefined
-  export let loop: PositionalAudioProperties['loop'] = undefined
-  export let filters: PositionalAudioProperties['filters'] = undefined
-  export let playbackRate: PositionalAudioProperties['playbackRate'] = undefined
+  export let play: $$Props['play'] = undefined
+  export let pause: $$Props['pause'] = undefined
+  export let stop: $$Props['stop'] = undefined
 
-  export let play: PositionalAudioProperties['play'] = undefined
-  export let pause: PositionalAudioProperties['pause'] = undefined
-  export let stop: PositionalAudioProperties['stop'] = undefined
-
-  export let id: PositionalAudioProperties['id'] = undefined
-  export let directionalCone: PositionalAudioProperties['directionalCone'] = undefined
-  export let refDistance: PositionalAudioProperties['refDistance'] = undefined
-  export let rolloffFactor: PositionalAudioProperties['rolloffFactor'] = undefined
-  export let distanceModel: PositionalAudioProperties['distanceModel'] = undefined
-  export let maxDistance: PositionalAudioProperties['maxDistance'] = undefined
+  export let id: $$Props['id'] = undefined
+  export let directionalCone: $$Props['directionalCone'] = undefined
+  export let refDistance: $$Props['refDistance'] = undefined
+  export let rolloffFactor: $$Props['rolloffFactor'] = undefined
+  export let distanceModel: $$Props['distanceModel'] = undefined
+  export let maxDistance: $$Props['maxDistance'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -62,29 +43,7 @@
 </script>
 
 <AudioInstance
-  {audio}
-  {position}
-  {filters}
-  {playbackRate}
-  {scale}
-  {rotation}
-  {lookAt}
-  {frustumCulled}
-  {renderOrder}
-  {visible}
-  {userData}
-  {dispose}
-  {castShadow}
-  {receiveShadow}
-  {viewportAware}
-  {autoplay}
-  {source}
-  {detune}
-  {loop}
-  {volume}
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
+  {...$$restProps}
   on:load
   on:progress
   on:error

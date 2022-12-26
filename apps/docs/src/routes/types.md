@@ -38,8 +38,8 @@ const lookAtC = someMesh
 
 ### Context Types
 
-The `<Canvas>` component provides three useful contexts: `ThrelteContext`, `ThrelteRootContext` and `ThrelteAudioContext`.
-See [`useThrelte`](/core/use-threlte), [`useThrelteRoot`](/core/use-threlte-root) and [`useThrelteAudio`](/core/use-threlte-audio) on how to easily consume these from within child components of `<Canvas>`.
+The `<Canvas>` component provides two useful contexts: `ThrelteContext` and `ThrelteRootContext`.
+See [`useThrelte`](/core/use-threlte) and [`useThrelteRoot`](/core/use-threlte-root) on how to easily consume these from within child components of `<Canvas>`.
 
 ```ts
 // type ThrelteContext
@@ -73,14 +73,6 @@ const {
 	raycaster, // Raycaster
 	lastIntersection // Intersection<Object3D<Event>> | null
 } = useThrelteRoot()
-
-// type ThrelteAudioContext
-const {
-	audioListeners, // Map<string, AudioListener>
-	getAudioListener, // (id?: string) => AudioListener | undefined
-	addAudioListener, // (listener: AudioListener, id?: string) => void
-	removeAudioListener // (id?: string) => void
-} = useThrelteAudio()
 ```
 
 ### Type Notation

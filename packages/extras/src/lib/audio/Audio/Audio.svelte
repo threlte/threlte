@@ -1,35 +1,16 @@
 <script lang="ts">
   import { Audio as ThreeAudio } from 'three'
-  import { useThrelteAudio } from '../hooks/useThrelteAudio'
-  import AudioInstance from '../instances/AudioInstance.svelte'
+  import AudioInstance from '../AudioInstance/AudioInstance.svelte'
+  import { useThrelteAudio } from '../useThrelteAudio'
+  import type { AudioProps } from './Audio.svelte'
 
-  export let position: AudioProperties['position'] = undefined
-  export let scale: AudioProperties['scale'] = undefined
-  export let rotation: AudioProperties['rotation'] = undefined
-  export let lookAt: AudioProperties['lookAt'] = undefined
-  export let viewportAware: AudioProperties['viewportAware'] = false
-  export let inViewport: AudioProperties['inViewport'] = false
-  export let castShadow: AudioProperties['castShadow'] = undefined
-  export let receiveShadow: AudioProperties['receiveShadow'] = undefined
-  export let frustumCulled: AudioProperties['frustumCulled'] = undefined
-  export let renderOrder: AudioProperties['renderOrder'] = undefined
-  export let visible: AudioProperties['visible'] = undefined
-  export let userData: AudioProperties['userData'] = undefined
-  export let dispose: AudioProperties['dispose'] = undefined
+  type $$Props = AudioProps
 
-  export let autoplay: AudioProperties['autoplay'] = undefined
-  export let detune: AudioProperties['detune'] = undefined
-  export let source: AudioProperties['source'] = undefined
-  export let volume: AudioProperties['volume'] = undefined
-  export let loop: AudioProperties['loop'] = undefined
-  export let filters: AudioProperties['filters'] = undefined
-  export let playbackRate: AudioProperties['playbackRate'] = undefined
+  export let play: $$Props['play'] = undefined
+  export let pause: $$Props['pause'] = undefined
+  export let stop: $$Props['stop'] = undefined
 
-  export let play: AudioProperties['play'] = undefined
-  export let pause: AudioProperties['pause'] = undefined
-  export let stop: AudioProperties['stop'] = undefined
-
-  export let id: AudioProperties['id'] = undefined
+  export let id: $$Props['id'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -43,29 +24,7 @@
 </script>
 
 <AudioInstance
-  {audio}
-  {position}
-  {scale}
-  {rotation}
-  {lookAt}
-  {frustumCulled}
-  {renderOrder}
-  {visible}
-  {userData}
-  {dispose}
-  {castShadow}
-  {receiveShadow}
-  {viewportAware}
-  {autoplay}
-  {source}
-  {detune}
-  {loop}
-  {filters}
-  {playbackRate}
-  {volume}
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
+  {...$$restProps}
   on:load
   on:progress
   on:error

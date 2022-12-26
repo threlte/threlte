@@ -23,6 +23,10 @@ export { default as AudioListener } from './audio/AudioListener/AudioListener.sv
 export { default as Audio } from './audio/Audio/Audio.svelte'
 export { default as PositionalAudio } from './audio/PositionalAudio/PositionalAudio.svelte'
 
+// audio hooks
+export { useAudioListener } from './audio/useAudioListener'
+export { useThrelteAudio } from './audio/useThrelteAudio'
+
 export type { GLTFProperties } from './types/components'
 
 export type { ThrelteGltf } from './types/types'

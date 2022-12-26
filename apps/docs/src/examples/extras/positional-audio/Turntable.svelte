@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { InteractiveObject, T, useAudioListener, useFrame } from '@threlte/core'
-	import { Edges, PositionalAudio, useCursor, useGltf } from '@threlte/extras'
+	import { InteractiveObject, T, useFrame } from '@threlte/core'
+	import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
 	import { spring, tweened } from 'svelte/motion'
 	import {
 		BufferGeometry,
