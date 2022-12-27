@@ -78,6 +78,7 @@
   onMount(async () => {
     await tick()
     const scale = object.getWorldScale(new Vector3())
+
     const scaledArgs = scaleColliderArgs(shape, args, scale)
 
     // @ts-ignore

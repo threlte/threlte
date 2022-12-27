@@ -21,9 +21,9 @@ export const scaleColliderArgs = <Shape extends ColliderShapes>(
 ): Parameters<typeof ColliderDesc[Shape]> => {
   // Heightfield only scales the last arg
   const newArgs = args.slice()
-
   if (shape === 'heightfield') {
-    ;(newArgs[3] as number) *= scale.x
+    // Is this for auto scaling heightfield to THREE scale of the object?
+    // ;(newArgs[3] as number) = scale.x
     return newArgs as Parameters<typeof ColliderDesc[Shape]>
   }
 
