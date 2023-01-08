@@ -18,6 +18,7 @@ Find useful recipes and inspiration for your next project.
 ## Geometry
 
 - [Terrain with 3D noise](./terrain.md)
+- [Terrain with Rapier physics collider](./terrain-heightfield.md)
 
 <!-- - [portals](https://threejs.org/examples/#webgl_portal) (WIP - three.js example) -->
 
