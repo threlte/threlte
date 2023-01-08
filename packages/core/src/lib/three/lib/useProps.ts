@@ -1,9 +1,9 @@
 import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
 
-const ignoredProps = ['$$scope', '$$slots', 'type', 'args', 'attach', 'instance']
+const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
-const updateProjectionMatrixKeys = [
+const updateProjectionMatrixKeys = new Set([
   'fov',
   'aspect',
   'near',
@@ -13,7 +13,7 @@ const updateProjectionMatrixKeys = [
   'top',
   'bottom',
   'zoom'
-]
+])
 
 /**
  * Only scalar values are memoized, objects and arrays are considered
@@ -83,7 +83,7 @@ export const useProps = () => {
         target[key] = value
         if (options.manualCamera) return
         if (
-          updateProjectionMatrixKeys.includes(key) &&
+          updateProjectionMatrixKeys.has(key) &&
           (target.isPerspectiveCamera || target.isOrthographicCamera)
         ) {
           target.updateProjectionMatrix()
@@ -94,7 +94,7 @@ export const useProps = () => {
 
   const updateProps = <T>(instance: T, props: Record<string, any>, options: PropOptions) => {
     for (const key in props) {
-      if (!ignoredProps.includes(key)) {
+      if (!ignoredProps.has(key)) {
         setProp(instance, key, props[key], options)
       }
       invalidate()
