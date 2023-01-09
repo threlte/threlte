@@ -22,8 +22,6 @@
   export let position: $$Props['position'] = undefined
   export let scale: $$Props['scale'] = undefined
   export let rotation: $$Props['rotation'] = undefined
-  export let viewportAware: $$Props['viewportAware'] = false
-  export let inViewport: $$Props['inViewport'] = false
   export let castShadow: $$Props['castShadow'] = undefined
   export let receiveShadow: $$Props['receiveShadow'] = undefined
   export let renderOrder: $$Props['renderOrder'] = undefined
@@ -32,15 +30,16 @@
   export let userData: $$Props['userData'] = {}
   // export let userData: $$Props['userData'] = undefined
   export let dispose: $$Props['dispose'] = undefined
-  export let interactive: $$Props['interactive'] = false
-  export let ignorePointer: $$Props['ignorePointer'] = false
-  export let lookAt: $$Props['lookAt'] = undefined
-
-  // self
   export let geometry: $$Props['geometry']
   export let material: $$Props['material']
   export let count: $$Props['count'] = undefined
+
+  // self
   export let id: $$Props['id'] = ''
+  export let interactive: $$Props['interactive'] = false
+  export let ignorePointer: $$Props['ignorePointer'] = false
+  export let viewportAware: $$Props['viewportAware'] = false
+  export let inViewport: $$Props['inViewport'] = false
 
   let mesh: ThreeInstancedMesh
 
@@ -225,13 +224,11 @@
   {position}
   {scale}
   {rotation}
-  {lookAt}
 >
   {#key $instancedMesh.uuid}
     <Three
       type={$instancedMesh}
       bind:ref={mesh}
-      {lookAt}
       {position}
       {scale}
       {rotation}
