@@ -57,7 +57,7 @@
 
   const { onChange } = usePropChange(material)
   $: onChange(material, (newMaterial) => {
-    $instancedMesh.material = newMaterial
+    if (newMaterial !== undefined) $instancedMesh.material = newMaterial
   })
 
   const autoCount = (count: number | undefined): count is undefined => count === undefined
