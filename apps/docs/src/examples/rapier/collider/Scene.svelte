@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Debug } from '@threlte/rapier'
 	import AttachedCollider from './AttachedCollider.svelte'
 	import Sensor from './Sensor.svelte'
@@ -11,7 +12,7 @@
 </script>
 
 <T.PerspectiveCamera position.x={12} position.y={13} fov={40} makeDefault>
-	<OrbitControls target={{ x: 2.5 }} />
+	<OrbitControls target={[2.5, 0, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />

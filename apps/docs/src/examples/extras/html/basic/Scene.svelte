@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { HTML } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { HTML, OrbitControls } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import { Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -26,7 +26,7 @@
 
 <T.PerspectiveCamera position={[10, 5, 10]} makeDefault fov={30}>
 	<OrbitControls
-		target={{ y: 0.75 }}
+		target={[0, 0.75, 0]}
 		maxPolarAngle={85 * DEG2RAD}
 		minPolarAngle={20 * DEG2RAD}
 		maxAzimuthAngle={45 * DEG2RAD}

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { T, OrbitControls } from '@threlte/core'
-	import { Environment, GLTF } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { Environment, GLTF, OrbitControls } from '@threlte/extras'
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />

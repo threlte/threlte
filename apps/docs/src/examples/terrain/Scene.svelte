@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { PlaneGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { createNoise2D } from 'simplex-noise'
-	import { T, OrbitControls } from '@threlte/core'
 
 	const geometry = new PlaneGeometry(10, 10, 100, 100)
 	const material = new MeshStandardMaterial()

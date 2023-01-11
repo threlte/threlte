@@ -2,10 +2,7 @@
 title: OrbitControls
 ---
 
-!!!module_summary title=OrbitControls|sourcePath=controls/OrbitControls.svelte|name=OrbitControls|from=core|type=component|relatedDocs={[{name:"three.js OrbitControls reference",url:"https://threejs.org/docs/#examples/en/controls/OrbitControls"}]}
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=OrbitControls|sourcePath=controls/OrbitControls.svelte|name=OrbitControls|from=extras|type=component|relatedDocs={[{name:"three.js OrbitControls reference",url:"https://threejs.org/docs/#examples/en/controls/OrbitControls"}]}
 
 `<OrbitControls>` allow the camera to orbit around a target.
 
@@ -17,7 +14,8 @@ If the properties `autoRotate` or `enableDamping` are set to true, the frame loo
 
 ```svelte
 <script>
-  import { T, OrbitControls } from '@threlte/core'
+  import { T } from '@threlte/extras'
+  import { OrbitControls } from '@threlte/extras'
 </script>
 
 <T.PerspectiveCamera makeDefault fov={50}>

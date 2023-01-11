@@ -1,5 +1,6 @@
 <script>
-	import { Canvas, InteractiveObject, OrbitControls, Three } from '@threlte/core'
+	import { Canvas, InteractiveObject, Three } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import {
 		AmbientLight,
@@ -19,7 +20,7 @@
 <div>
 	<Canvas>
 		<Three type={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
-			<OrbitControls maxPolarAngle={degToRad(80)} enableZoom={false} target={{ y: 0.5 }} />
+			<OrbitControls maxPolarAngle={degToRad(80)} enableZoom={false} target={[0, 0.5, 0]} />
 		</Three>
 
 		<Three type={DirectionalLight} castShadow position={[3, 10, 10]} />

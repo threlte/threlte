@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Color } from 'three'
-	import { T, OrbitControls, useThrelte } from '@threlte/core'
-	import { GLTF, useGltfAnimations } from '@threlte/extras'
+	import { T, useThrelte } from '@threlte/core'
+	import { GLTF, OrbitControls, useGltfAnimations } from '@threlte/extras'
 
 	const { gltf } = useGltfAnimations<'Take 001'>(({ actions }) => {
 		actions['Take 001']?.play()
@@ -12,7 +12,7 @@
 </script>
 
 <T.PerspectiveCamera makeDefault position={[600, 200, 600]} near={10} far={10000}>
-	<OrbitControls autoRotate autoRotateSpeed={0.2} enableDamping target={{ y: -75, x: -60 }} />
+	<OrbitControls autoRotate autoRotateSpeed={0.2} enableDamping target={[-60, -75, 0]} />
 </T.PerspectiveCamera>
 
 <T.AmbientLight />

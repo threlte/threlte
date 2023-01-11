@@ -1,10 +1,11 @@
 <script lang="ts">
+	import RAPIER from '@dimforge/rapier3d-compat'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
+	import { Collider, Debug, RigidBody } from '@threlte/rapier'
+	import { createNoise2D } from 'simplex-noise'
 	import { PlaneGeometry, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import { createNoise2D } from 'simplex-noise'
-	import { T, OrbitControls } from '@threlte/core'
-	import RAPIER from '@dimforge/rapier3d-compat'
-	import { Collider, Debug, RigidBody, useRapier } from '@threlte/rapier'
 
 	let nsubdivs = 10
 	let heights = generateHeightfield(nsubdivs)

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { BoxGeometry } from 'three'
 	const boxColors = [
 		'#3c42c4',

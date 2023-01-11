@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { Environment } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { Environment, OrbitControls } from '@threlte/extras'
 	import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
 	import { BoxGeometry, MeshStandardMaterial } from 'three'
 	import Ground from './Ground.svelte'
@@ -16,7 +16,7 @@
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera makeDefault position.x={12} position.y={13} fov={40}>
-	<OrbitControls target={{ x: 2.5 }} />
+	<OrbitControls target={[0, 2.5, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />

@@ -188,7 +188,8 @@ We've talked about using the provided `THREE.TransformControls` and the interfac
 
 ```svelte
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Editable } from '@threlte/theatre'
 
 	/**
@@ -205,7 +206,7 @@ We've talked about using the provided `THREE.TransformControls` and the interfac
 
 <T.PerspectiveCamera position={[10, 10, 10]}>
 	<Editable name="Camera" transform let:read bind:read>
-		<OrbitControls on:change={read} target={{ y: 1.5 }} />
+		<OrbitControls on:change={read} target={[0, 1.5, 0]} />
 	</Editable>
 </T.PerspectiveCamera>
 ```

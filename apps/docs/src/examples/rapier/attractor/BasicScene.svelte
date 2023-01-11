@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { T, Three, OrbitControls } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Attractor } from '@threlte/rapier'
-	import { GridHelper } from 'three'
 	import RandomMeshes from './RandomMeshes.svelte'
 
 	let count: number = 50
@@ -15,7 +15,7 @@
 </script>
 
 <T.PerspectiveCamera makeDefault position.y={50} position.z={100} fov={70} far={10000}>
-	<OrbitControls enableZoom={true} target={{ y: 20 }} />
+	<OrbitControls enableZoom={true} target={[0, 20, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />

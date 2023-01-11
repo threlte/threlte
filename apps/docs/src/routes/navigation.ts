@@ -117,14 +117,6 @@ export const sidebar = {
 				slug: '/core/positional-audio'
 			},
 			{
-				title: 'Controls',
-				slug: ''
-			},
-			{
-				title: 'OrbitControls',
-				slug: '/core/orbit-controls'
-			},
-			{
 				title: 'Post Processing',
 				slug: ''
 			},
@@ -299,6 +291,14 @@ export const sidebar = {
 			{
 				title: 'Grid',
 				slug: '/extras/grid'
+			},
+			{
+				title: 'Controls',
+				slug: ''
+			},
+			{
+				title: 'OrbitControls',
+				slug: '/extras/orbit-controls'
 			}
 		],
 		'@threlte/theatre': [

@@ -4,7 +4,8 @@
 </script>
 
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 	import type { GravityType } from '@threlte/rapier/src/lib/types/components'
 	import { MeshBasicMaterial, SphereGeometry } from 'three'
@@ -39,7 +40,7 @@
 </script>
 
 <T.PerspectiveCamera position.y={50} position.z={100} makeDefault fov={70} far={10000}>
-	<OrbitControls enableZoom={true} target={{ y: 20 }} />
+	<OrbitControls enableZoom={true} target={[0, 20, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />

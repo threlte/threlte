@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { Environment, Grid, useGltf } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { Environment, Grid, OrbitControls, useGltf } from '@threlte/extras'
 	import type { Mesh } from 'three'
 	import Blob from './Blob.svelte'
 
@@ -17,7 +17,7 @@
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera makeDefault position.y={10} position.z={20} fov={50}>
-	<OrbitControls target={{ y: -2 }} enableDamping />
+	<OrbitControls target={[0, -2, 0]} enableDamping />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight position.y={10} position.z={10} />

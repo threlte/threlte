@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { Environment, useGltf } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { Environment, OrbitControls, useGltf } from '@threlte/extras'
 	import { AutoColliders, RigidBody } from '@threlte/rapier'
 	import { derived } from 'svelte/store'
 	import type { MeshStandardMaterial, Mesh } from 'three'
@@ -25,7 +25,7 @@
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera makeDefault position.x={12} position.y={13} fov={40}>
-	<OrbitControls target={{ x: 2.5 }} />
+	<OrbitControls target={[2.5, 0, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight castShadow position={[8, 20, -3]} />

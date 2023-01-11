@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { T, OrbitControls, useFrame } from '@threlte/core'
-	import { ContactShadows, Environment, Float } from '@threlte/extras'
+	import { T, useFrame } from '@threlte/core'
+	import { ContactShadows, Environment, Float, OrbitControls } from '@threlte/extras'
 	import {
 		BoxGeometry,
 		Color,
@@ -20,7 +20,7 @@
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera makeDefault position={[-10, 10, 10]} fov={25}>
-	<OrbitControls enabled={false} autoRotate autoRotateSpeed={0.5} target={{ y: 1 }} />
+	<OrbitControls enabled={false} autoRotate autoRotateSpeed={0.5} target={[0, 1, 0]} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />

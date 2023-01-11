@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as theatreCore from '@theatre/core'
-	import { OrbitControls, T, TransformableObject, useThrelte } from '@threlte/core'
+	import { T, TransformableObject, useThrelte } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Editable, Sheet } from '@threlte/theatre'
 	import { Color, type Object3D } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -54,7 +55,7 @@
 	>
 		<!-- Editor Camera -->
 		<T.PerspectiveCamera position={[10, 10, 10]} makeDefault={values.camera.editor}>
-			<OrbitControls target={{}} enableDamping />
+			<OrbitControls target={[0, 0, 0]} enableDamping />
 		</T.PerspectiveCamera>
 
 		<!-- Camera A -->

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { T, OrbitControls } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { MeshStandardMaterial, CircleGeometry, DoubleSide } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Character from './Character.svelte'
@@ -10,7 +11,7 @@
 		maxPolarAngle={DEG2RAD * 80}
 		enableRotate={false}
 		enableZoom={false}
-		target={{ y: 0.9 }}
+		target={[0, 0.9, 0]}
 	/>
 </T.PerspectiveCamera>
 

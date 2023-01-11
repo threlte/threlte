@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { T } from '@threlte/core'
+	import { OrbitControls, TransformControls } from '@threlte/extras'
 	import { BoxGeometry, MeshStandardMaterial } from 'three'
-	import { T, OrbitControls } from '@threlte/core'
-	import { TransformControls } from '@threlte/extras'
 </script>
 
 <T.PerspectiveCamera makeDefault position={[10, 5, 10]} lookAt.y={0.5}>

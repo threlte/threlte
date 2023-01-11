@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { AudioListener, OrbitControls, T, useThrelte } from '@threlte/core'
-	import { Environment } from '@threlte/extras'
+	import { AudioListener, T, useThrelte } from '@threlte/core'
+	import { Environment, OrbitControls } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Speaker from './Speaker.svelte'
@@ -33,7 +33,7 @@
 		autoRotateSpeed={0.5}
 		enableDamping
 		maxPolarAngle={DEG2RAD * 80}
-		target={{ y: 1.5 }}
+		target={[0, 1.5, 0]}
 	/>
 	<AudioListener />
 </T.OrthographicCamera>

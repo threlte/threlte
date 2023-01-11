@@ -25,7 +25,8 @@
 							source:
 								`<scr` +
 								`ipt>
-	import { T, OrbitControls } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { BoxGeometry, MeshBasicMaterial, Color } from 'three'
 </scr` +
 								`ipt>

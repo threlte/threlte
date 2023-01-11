@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { GLTF, Text } from '@threlte/extras'
+	import { T } from '@threlte/core'
+	import { GLTF, OrbitControls, Text } from '@threlte/extras'
 	import { Editable, Sheet } from '@threlte/theatre'
 	import { Color } from 'three'
 	import { DoubleSide } from 'three'
@@ -10,7 +10,7 @@
 <T.Group>
 	<T.PerspectiveCamera position={[10, 10, 10]} makeDefault>
 		<Editable name="Camera" transform let:read>
-			<OrbitControls target={{ y: 1.5 }} on:change={read} />
+			<OrbitControls target={[0, 1.5, 0]} on:change={read} />
 		</Editable>
 	</T.PerspectiveCamera>
 </T.Group>

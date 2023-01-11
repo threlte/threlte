@@ -48,13 +48,14 @@ The property `transform` is a shortcut to add `position`, `scale` and `rotation`
 
 ```svelte title=Scene.svelte
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
+	import { T } from '@threlte/core'
+	import { OrbitControls } from '@threlte/extras'
 	import { Editable } from '@threlte/theatre'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 </script>
 
 <T.PerspectiveCamera position={[0, 5, 10]} makeDefault>
-	<OrbitControls target={{ y: 1.5 }} />
+	<OrbitControls target={[0, 1.5, 0]} />
 </T.PerspectiveCamera>
 
 <!-- Box -->
