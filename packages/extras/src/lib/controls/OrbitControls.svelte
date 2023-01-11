@@ -2,40 +2,44 @@
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { Camera, Object3D } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-  import { useFrame } from '../hooks/useFrame'
-  import { useThrelte } from '../hooks/useThrelte'
-  import DisposableObject from '../internal/DisposableObject.svelte'
-  import { useParent } from '../internal/HierarchicalObject.svelte'
-  import TransformableObject from '../internal/TransformableObject.svelte'
-  import { getThrelteUserData } from '../lib/getThrelteUserData'
-  import type { OrbitControlsProperties } from '../types/components'
+  import {
+    useFrame,
+    useParent,
+    useThrelte,
+    DisposableObject,
+    TransformableObject
+  } from '@threlte/core'
+  import { getThrelteUserData } from '../../../../core/src/lib/lib/getThrelteUserData'
+  import type { OrbitControlsProps } from './OrbitControls.svelte'
 
-  export let autoRotate: OrbitControlsProperties['autoRotate'] = undefined
-  export let autoRotateSpeed: OrbitControlsProperties['autoRotateSpeed'] = undefined
-  export let dampingFactor: OrbitControlsProperties['dampingFactor'] = undefined
-  export let enableDamping: OrbitControlsProperties['enableDamping'] = undefined
-  export let enabled: OrbitControlsProperties['enabled'] = undefined
-  export let enablePan: OrbitControlsProperties['enablePan'] = undefined
-  export let enableRotate: OrbitControlsProperties['enableRotate'] = undefined
-  export let enableZoom: OrbitControlsProperties['enableZoom'] = undefined
-  export let keyPanSpeed: OrbitControlsProperties['keyPanSpeed'] = undefined
-  export let keys: OrbitControlsProperties['keys'] = undefined
-  export let maxAzimuthAngle: OrbitControlsProperties['maxAzimuthAngle'] = undefined
-  export let maxDistance: OrbitControlsProperties['maxDistance'] = undefined
-  export let maxPolarAngle: OrbitControlsProperties['maxPolarAngle'] = undefined
-  export let maxZoom: OrbitControlsProperties['maxZoom'] = undefined
-  export let minAzimuthAngle: OrbitControlsProperties['minAzimuthAngle'] = undefined
-  export let minDistance: OrbitControlsProperties['minDistance'] = undefined
-  export let minPolarAngle: OrbitControlsProperties['minPolarAngle'] = undefined
-  export let minZoom: OrbitControlsProperties['minZoom'] = undefined
-  export let mouseButtons: OrbitControlsProperties['mouseButtons'] = undefined
-  export let panSpeed: OrbitControlsProperties['panSpeed'] = undefined
-  export let rotateSpeed: OrbitControlsProperties['rotateSpeed'] = undefined
-  export let screenSpacePanning: OrbitControlsProperties['screenSpacePanning'] = undefined
-  export let touches: OrbitControlsProperties['touches'] = undefined
-  export let zoomSpeed: OrbitControlsProperties['zoomSpeed'] = undefined
-  export let target: OrbitControlsProperties['target'] = undefined
-  export let dispose: OrbitControlsProperties['dispose'] = undefined
+  type $$Props = OrbitControlsProps
+
+  export let autoRotate: $$Props['autoRotate'] = undefined
+  export let autoRotateSpeed: $$Props['autoRotateSpeed'] = undefined
+  export let dampingFactor: $$Props['dampingFactor'] = undefined
+  export let enableDamping: $$Props['enableDamping'] = undefined
+  export let enabled: $$Props['enabled'] = undefined
+  export let enablePan: $$Props['enablePan'] = undefined
+  export let enableRotate: $$Props['enableRotate'] = undefined
+  export let enableZoom: $$Props['enableZoom'] = undefined
+  export let keyPanSpeed: $$Props['keyPanSpeed'] = undefined
+  export let keys: $$Props['keys'] = undefined
+  export let maxAzimuthAngle: $$Props['maxAzimuthAngle'] = undefined
+  export let maxDistance: $$Props['maxDistance'] = undefined
+  export let maxPolarAngle: $$Props['maxPolarAngle'] = undefined
+  export let maxZoom: $$Props['maxZoom'] = undefined
+  export let minAzimuthAngle: $$Props['minAzimuthAngle'] = undefined
+  export let minDistance: $$Props['minDistance'] = undefined
+  export let minPolarAngle: $$Props['minPolarAngle'] = undefined
+  export let minZoom: $$Props['minZoom'] = undefined
+  export let mouseButtons: $$Props['mouseButtons'] = undefined
+  export let panSpeed: $$Props['panSpeed'] = undefined
+  export let rotateSpeed: $$Props['rotateSpeed'] = undefined
+  export let screenSpacePanning: $$Props['screenSpacePanning'] = undefined
+  export let touches: $$Props['touches'] = undefined
+  export let zoomSpeed: $$Props['zoomSpeed'] = undefined
+  export let target: $$Props['target'] = undefined
+  export let dispose: $$Props['dispose'] = undefined
 
   const parent = useParent()
 
@@ -107,7 +111,7 @@
 
   const { start, stop } = useFrame(() => controls.update(), {
     autostart: false,
-    debugFrameloopMessage: 'OrbitControlts: updating controls'
+    debugFrameloopMessage: 'OrbitControls: updating controls'
   })
 
   $: {
@@ -124,6 +128,13 @@
   }
 </script>
 
-<DisposableObject {dispose} object={controls} />
+<DisposableObject
+  {dispose}
+  object={controls}
+/>
 
-<TransformableObject on:transform={updateControls} object={targetObject} position={target} />
+<TransformableObject
+  on:transform={updateControls}
+  object={targetObject}
+  position={target}
+/>

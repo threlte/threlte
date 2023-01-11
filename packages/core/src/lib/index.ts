@@ -84,7 +84,6 @@ export type {
   MeshInstanceProperties,
   InstancedMeshProperties,
   InstanceProperties,
-  OrbitControlsProperties,
   PassProperties,
   LayersProperties,
   AudioInstanceProperties,
