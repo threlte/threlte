@@ -51,7 +51,7 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
   </PerspectiveCamera>
 
   <Car>
-    <PositionalAudio autostart loop refDistance={10} volume={0.2} source={'/audio/car-noise.mp3'} />
+    <PositionalAudio autoplay loop refDistance={10} volume={0.2} source={'/audio/car-noise.mp3'} />
   </Car>
 </Canvas>
 ```
