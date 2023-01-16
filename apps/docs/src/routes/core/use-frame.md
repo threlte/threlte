@@ -7,7 +7,7 @@ import Example from '$examples/core/use-frame/App.svelte'
 </script>
 
 !!!module_summary title=useFrame|sourcePath=hooks/useFrame.ts|name=useFrame|from=core|type=hook|needsContext=true|divider=false
-This hook allows you to execute code on every frame inside the unified frameloop.
+This hook allows you to execute code on every frame as part of the unified frameloop.
 You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
 
@@ -18,6 +18,7 @@ type ThrelteUseFrameOptions = {
 	autostart?: boolean
 	order?: number
 	debugFrameloopMessage?: string
+	invalidate?: boolean
 }
 ```
 
@@ -65,4 +66,18 @@ Accessing the context inside a frameloop handler:
 useFrame(({ camera }) => {
 	get(camera) // camera is a store, so you have to unwrap it
 })
+```
+
+By default, `useFrame` will invalidate every frame and trigger a render after the callback is executed. You can disable this behavior by setting `invalidate` to `false` and using the function `invalidate` from the state to trigger a render manually.
+
+```ts
+useFrame(
+	({ invalidate }) => {
+		// manually invalidate the frame
+		invalidate()
+	},
+	{
+		invalidate: false
+	}
+)
 ```

@@ -209,6 +209,10 @@ export const sidebar = {
 				slug: '/core/use-frame'
 			},
 			{
+				title: 'useRender',
+				slug: '/core/use-render'
+			},
+			{
 				title: 'useLoader',
 				slug: '/core/use-loader'
 			},

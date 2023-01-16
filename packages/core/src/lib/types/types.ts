@@ -83,7 +83,10 @@ export type ThrelteRenderContext = {
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>
-  frameHandlers: Set<ThrelteFrameHandler>
+  manualFrameHandlers: Set<ThrelteFrameHandler>
+  autoFrameHandlers: Set<ThrelteFrameHandler>
+  allFrameHandlers: Set<ThrelteFrameHandler>
+  renderHandlers: Set<ThrelteRenderHandler>
   advance: boolean
 }
 
@@ -151,12 +154,28 @@ export type ThrelteUseFrameOptions = {
    * `debugFrameloop` of the `<Canvas>` component.
    */
   debugFrameloopMessage?: string
+  /**
+   * If false, the frame handler will not automatically invalidate the frame.
+   * This is useful if you want to manually invalidate the frame. Defaults to
+   * true.
+   */
+  invalidate?: boolean
+}
+
+export type ThrelteUseRenderOptions = {
+  order?: number
 }
 
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
   debugFrameloopMessage?: string
+  invalidate: boolean
+}
+
+export type ThrelteRenderHandler = {
+  fn: (ctx: ThrelteContext, delta: number) => void
+  order?: number
 }
 
 export type ThrelteParentContext = Writable<Object3D>

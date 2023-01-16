@@ -40,6 +40,7 @@ export type { Props, Events, Slots } from './three/types'
 
 // hooks
 export { useFrame } from './hooks/useFrame'
+export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
 export { useThrelteAudio } from './hooks/useThrelteAudio'
