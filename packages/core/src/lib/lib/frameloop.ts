@@ -9,12 +9,16 @@ import type {
 } from '../types/types'
 import { useFrameloopRaycast } from './interactivity'
 
-const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderContext): void => {
-  if (renderCtx.frameHandlers.size === 0) return
+const runUseFrameCallbacks = (
+  ctx: ThrelteContext,
+  renderCtx: ThrelteRenderContext,
+  delta: number
+): void => {
+  if (renderCtx.allFrameHandlers.size === 0) return
 
   if (renderCtx.debugFrameloop) {
     let genericFrameHandlers = 0
-    renderCtx.frameHandlers.forEach((h) => {
+    renderCtx.autoFrameHandlers.forEach((h) => {
       if (h.debugFrameloopMessage) {
         renderCtx.invalidations[h.debugFrameloopMessage] =
           h.debugFrameloopMessage in renderCtx.invalidations
@@ -24,20 +28,40 @@ const runFrameloopCallbacks = (ctx: ThrelteContext, renderCtx: ThrelteRenderCont
         ++genericFrameHandlers
       }
     })
-    if (genericFrameHandlers > 0) renderCtx.invalidations['onFrame'] = renderCtx.frameHandlers.size
+    if (genericFrameHandlers > 0)
+      renderCtx.invalidations['useFrame'] = renderCtx.autoFrameHandlers.size
   }
 
-  const anyHasOrder = Array.from(renderCtx.frameHandlers).reduce(
+  const anyHasOrder = Array.from(renderCtx.allFrameHandlers).reduce(
     (acc, h) => (h.order ? true : acc),
     false
   )
-  const delta = ctx.clock.getDelta()
   if (anyHasOrder) {
-    Array.from(renderCtx.frameHandlers)
+    Array.from(renderCtx.allFrameHandlers)
       .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
       .forEach((h) => h.fn(ctx, delta))
   } else {
-    renderCtx.frameHandlers.forEach((h) => h.fn(ctx, delta))
+    renderCtx.allFrameHandlers.forEach((h) => h.fn(ctx, delta))
+  }
+}
+
+const runUseRenderCallbacks = (
+  ctx: ThrelteContext,
+  renderCtx: ThrelteRenderContext,
+  delta: number
+): void => {
+  if (renderCtx.renderHandlers.size === 0) return
+
+  const anyHasOrder = Array.from(renderCtx.renderHandlers).reduce(
+    (acc, h) => (h.order ? true : acc),
+    false
+  )
+  if (anyHasOrder) {
+    Array.from(renderCtx.renderHandlers)
+      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+      .forEach((h) => h.fn(ctx, delta))
+  } else {
+    renderCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
   }
 }
 
@@ -48,6 +72,15 @@ const debugFrame = (renderCtx: ThrelteRenderContext): void => {
   console.log(`frame: ${renderCtx.frame}${Object.keys(renderCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`)
   if (Object.keys(renderCtx.invalidations).length > 0) console.table(renderCtx.invalidations)
   renderCtx.invalidations = {}
+}
+
+const shouldRender = (renderCtx: ThrelteRenderContext) => {
+  return (
+    renderCtx.frameloop === 'always' ||
+    (renderCtx.frameloop === 'demand' &&
+      (renderCtx.frameInvalidated || renderCtx.autoFrameHandlers.size > 0)) ||
+    (renderCtx.frameloop === 'never' && renderCtx.advance)
+  )
 }
 
 export const useFrameloop = (
@@ -65,28 +98,32 @@ export const useFrameloop = (
   useRaf(() => {
     disposalCtx.dispose()
 
-    const shouldRender =
-      renderCtx.frameloop === 'always' ||
-      (renderCtx.frameloop === 'demand' &&
-        (renderCtx.frameInvalidated || renderCtx.frameHandlers.size > 0)) ||
-      (renderCtx.frameloop === 'never' && renderCtx.advance)
+    const delta = ctx.clock.getDelta()
 
-    const shouldRaycast = shouldRender || renderCtx.pointerInvalidated
+    const shouldRaycast = shouldRender(renderCtx) || renderCtx.pointerInvalidated
 
     if (shouldRaycast) {
       raycast()
       renderCtx.pointerInvalidated = false
     }
 
-    if (!shouldRender) return
-
+    // TODO: implement check only in auto-mode
     if (!camera || !ctx.composer || !ctx.renderer) return
-    runFrameloopCallbacks(ctx, renderCtx)
-    if (ctx.composer.passes.length > 1) {
-      ctx.composer.render()
+
+    runUseFrameCallbacks(ctx, renderCtx, delta)
+
+    if (!shouldRender(renderCtx)) return
+
+    if (renderCtx.renderHandlers.size > 0) {
+      runUseRenderCallbacks(ctx, renderCtx, delta)
     } else {
-      ctx.renderer.render(ctx.scene, camera)
+      if (ctx.composer.passes.length > 1) {
+        ctx.composer.render()
+      } else {
+        ctx.renderer.render(ctx.scene, camera)
+      }
     }
+
     debugFrame(renderCtx)
     renderCtx.frameInvalidated = false
     renderCtx.advance = false

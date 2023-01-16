@@ -70,7 +70,10 @@ export const createContexts = (
     frameInvalidated: true,
     pointerInvalidated: true,
     invalidations: {},
-    frameHandlers: new Set(),
+    manualFrameHandlers: new Set(),
+    autoFrameHandlers: new Set(),
+    allFrameHandlers: new Set(),
+    renderHandlers: new Set(),
     advance: false
   }
 
