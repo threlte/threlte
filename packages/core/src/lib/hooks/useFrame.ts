@@ -33,23 +33,38 @@ export const useFrame = (
     }
   }
 
+  const invalidate = options?.invalidate ?? true
+
   const renderCtx = getContext<ThrelteRenderContext>('threlte-render-context')
 
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
-    debugFrameloopMessage: options?.debugFrameloopMessage
+    debugFrameloopMessage: options?.debugFrameloopMessage,
+    invalidate
   }
 
   const started = writable(false)
 
   const stop = () => {
-    renderCtx.frameHandlers.delete(handler)
+    if (invalidate) {
+      renderCtx.autoFrameHandlers.delete(handler)
+    } else {
+      renderCtx.manualFrameHandlers.delete(handler)
+    }
+    renderCtx.allFrameHandlers.delete(handler)
+
     started.set(false)
   }
 
   const start = () => {
-    renderCtx.frameHandlers.add(handler)
+    if (invalidate) {
+      renderCtx.autoFrameHandlers.add(handler)
+    } else {
+      renderCtx.manualFrameHandlers.add(handler)
+    }
+    renderCtx.allFrameHandlers.add(handler)
+
     started.set(true)
   }
 
