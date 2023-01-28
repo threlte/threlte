@@ -1,0 +1,11 @@
+---
+import { getLeftSidebarMenu } from './getLeftSidebarMenu'
+import LeftSidebar from './LeftSidebar.svelte'
+
+const sidebarMenu = await getLeftSidebarMenu()
+---
+
+<LeftSidebar
+  client:load
+  menu={sidebarMenu}
+/>
