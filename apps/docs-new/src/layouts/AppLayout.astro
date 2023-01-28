@@ -1,0 +1,24 @@
+---
+import '$styles/variables.css'
+
+export interface Props {
+  title?: string | undefined
+}
+
+const title = Astro.props.title
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width"
+    />
+    <title>{title ?? 'Threlte'}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
