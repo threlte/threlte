@@ -1,0 +1,20 @@
+div[data-rehype-pretty-code-fragment] {
+}
+pre > code {
+  display: grid;
+  /* background-color: rgba(200, 200, 255, 0.09); */
+}
+.highlighted {
+  position: relative;
+  /* background-color: rgba(200, 200, 255, 0.1); */
+}
+.highlighted::before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 4px;
+  background-color: #60a5fa;
+  position: absolute;
+  left: -4px;
+  top: 0;
+}

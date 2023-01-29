@@ -15,7 +15,7 @@
   import { c } from '$lib/classes'
 
   export let tabs: Tabs
-  export let activeTabId: (typeof tabs)[number]['id']
+  export let activeTabId: (typeof tabs)[number]['id'] = tabs[0]!.id
 
   const dispatch = createEventDispatcher<{
     select: Tab
@@ -30,7 +30,7 @@
     <button
       class={c('border-b-2 border-b-transparent', activeTabId === tab.id && 'border-b-black')}
       on:click={() => {
-        activeTabId === tab.id
+        activeTabId = tab.id
         dispatch('select', tab)
       }}>{tab.title}</button
     >
