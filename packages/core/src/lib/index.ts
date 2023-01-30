@@ -26,6 +26,7 @@ export { default as DirectionalLight } from './lights/DirectionalLight.svelte'
 export { default as PointLight } from './lights/PointLight.svelte'
 export { default as HemisphereLight } from './lights/HemisphereLight.svelte'
 export { default as SpotLight } from './lights/SpotLight.svelte'
+export { default as RectAreaLight } from './lights/RectAreaLight.svelte'
 
 // misc components
 export { default as Fog } from './misc/Fog.svelte'
@@ -115,6 +116,7 @@ export type {
   HemisphereLightProperties,
   PointLightProperties,
   SpotLightProperties,
+	RectAreaLightProperties,
   FogProperties,
   FogExp2Properties,
   LayersProperties,

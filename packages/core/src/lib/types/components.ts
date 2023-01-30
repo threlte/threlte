@@ -228,6 +228,12 @@ export type SpotLightProperties = Omit<
       }
 }
 
+export declare type RectAreaLightProperties = Omit<LightInstanceProperties, 'light'> & {
+	width?: number;
+	height?: number;
+	power?: number;
+};
+
 export type FogProperties = {
   color: ColorRepresentation
   near?: number
