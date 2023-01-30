@@ -153,6 +153,10 @@ export const sidebar = {
 				slug: '/core/spot-light'
 			},
 			{
+				title: 'RectAreaLight',
+				slug: '/core/rect-area-light'
+			},
+			{
 				title: 'Audio',
 				slug: ''
 			},
