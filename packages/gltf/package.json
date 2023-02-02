@@ -63,14 +63,6 @@
 			"pre-commit": "npx lint-staged"
 		}
 	},
-	"prettier": {
-		"semi": false,
-		"trailingComma": "es5",
-		"singleQuote": true,
-		"jsxBracketSameLine": true,
-		"tabWidth": 2,
-		"printWidth": 120
-	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
 			"prettier --write"
