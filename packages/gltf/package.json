@@ -1,71 +1,71 @@
 {
-	"name": "@threlte/gltf",
-	"version": "0.0.1",
-	"description": "GLTF to Threlte converter",
-	"scripts": {
-		"cleanup": "rm -rf node_modules"
-	},
-	"type": "module",
-	"keywords": [
-		"gltf",
-		"threlte",
-		"svelte",
-		"three",
-		"threejs",
-		"webp"
-	],
-	"author": "Grischa Erbe",
-	"contributors": [
-		"Paul Henschel"
-	],
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/threlte/threlte.git"
-	},
-	"bugs": {
-		"url": "https://github.com/threlte/threlte.git/issues"
-	},
-	"homepage": "https://github.com/threlte/threlte.git#readme",
-	"bin": {
-		"gltfjsx": "./cli.js"
-	},
-	"main": "./src/utils/exports.js",
-	"engines": {
-		"node": ">=16"
-	},
-	"dependencies": {
-		"@gltf-transform/core": "3.0.0-alpha.4",
-		"@gltf-transform/extensions": "3.0.0-alpha.4",
-		"@gltf-transform/functions": "3.0.0-alpha.4",
-		"@node-loader/babel": "^2.0.1",
-		"draco3dgltf": "^1.5.5",
-		"jsdom": "^20.0.3",
-		"jsdom-global": "^3.0.2",
-		"meow": "^11.0.0",
-		"meshoptimizer": "^0.18.1",
-		"prettier": "^2.8.3",
-		"prettier-plugin-svelte": "^2.9.0",
-		"sharp": "^0.31.3",
-		"svelte": "^3.55.1",
-		"three": "0.122.0"
-	},
-	"devDependencies": {
-		"chalk": "^4.1.1",
-		"fast-glob": "^3.2.7",
-		"fs-extra": "^9.0.1",
-		"husky": "^4.3.0",
-		"lint-staged": "^10.4.0",
-		"read-pkg-up": "^9.1.0"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "npx lint-staged"
-		}
-	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx}": [
-			"prettier --write"
-		]
-	}
+  "name": "@threlte/gltf",
+  "version": "0.0.1",
+  "description": "GLTF to Threlte converter",
+  "scripts": {
+    "cleanup": "rm -rf node_modules"
+  },
+  "type": "module",
+  "keywords": [
+    "gltf",
+    "threlte",
+    "svelte",
+    "three",
+    "threejs",
+    "webp"
+  ],
+  "author": "Grischa Erbe",
+  "contributors": [
+    "Paul Henschel"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/threlte/threlte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte.git/issues"
+  },
+  "homepage": "https://github.com/threlte/threlte.git#readme",
+  "bin": {
+    "@threlte/core": "./cli.js"
+  },
+  "main": "./src/utils/exports.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "3.0.0-alpha.4",
+    "@gltf-transform/extensions": "3.0.0-alpha.4",
+    "@gltf-transform/functions": "3.0.0-alpha.4",
+    "@node-loader/babel": "^2.0.1",
+    "draco3dgltf": "^1.5.5",
+    "jsdom": "^20.0.3",
+    "jsdom-global": "^3.0.2",
+    "meow": "^11.0.0",
+    "meshoptimizer": "^0.18.1",
+    "prettier": "^2.8.3",
+    "prettier-plugin-svelte": "^2.9.0",
+    "sharp": "^0.31.3",
+    "svelte": "^3.55.1",
+    "three": "0.122.0"
+  },
+  "devDependencies": {
+    "chalk": "^4.1.1",
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^9.0.1",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "read-pkg-up": "^9.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
+  }
 }
