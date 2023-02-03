@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import transform from './utils/transform.js'
 
-import prettier from 'prettier'
+import * as prettier from 'prettier'
 import THREE from 'three'
 global.THREE = THREE
 
