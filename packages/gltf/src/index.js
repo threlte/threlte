@@ -62,8 +62,7 @@ export default function (file, output, options) {
                 printWidth: options.printwidth || 120,
                 svelteBracketNewLine: true,
                 singleQuote: true,
-                parser: 'svelte',
-                plugins: ['prettier-plugin-svelte']
+                parser: 'svelte'
               })
               stream.write(prettiered)
               stream.end()
