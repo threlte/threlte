@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rm -rf node_modules"
@@ -27,9 +27,7 @@
     "url": "https://github.com/threlte/threlte.git/issues"
   },
   "homepage": "https://github.com/threlte/threlte.git#readme",
-  "bin": {
-    "@threlte/core": "./cli.js"
-  },
+  "bin": "./cli.js",
   "main": "./src/utils/exports.js",
   "engines": {
     "node": ">=16"
