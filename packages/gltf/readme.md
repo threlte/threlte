@@ -244,3 +244,7 @@ gltfLoader.load(url, (gltf) => {
 - [three](https://github.com/mrdoob/three.js/) (>= 122.x)
 - @threlte/core > 5.0.0
 - @threlte/core > 4.9.3
+
+## Credits
+
+This tool started off as a fork of [gltfjsx](https://github.com/pmndrs/gltfjsx) by [pmndrs](https://pmnd.rs/).
