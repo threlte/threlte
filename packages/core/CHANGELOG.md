@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 5.0.9
+
+### Patch Changes
+
+- 2629f80: Remove unnecessary get(store) calls
+
 ## 5.0.8
 
 ### Patch Changes
