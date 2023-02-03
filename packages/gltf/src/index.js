@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import transform from './utils/transform.js'
 
-import prettier from 'prettier'
+import * as prettier from 'prettier'
 import THREE from 'three'
 global.THREE = THREE
 
@@ -54,19 +54,25 @@ export default function (file, output, options) {
           '',
           (gltf) => {
             const raw = parse(filePath, gltf, options)
-            const prettiered = prettier.format(raw, {
-              semi: false,
-              bracketSameLine: true,
-              svelteBracketNewLine: false,
-              printWidth: options.printwidth || 120,
-              svelteBracketNewLine: true,
-              singleQuote: true,
-              parser: 'svelte',
-              plugins: ['prettier-plugin-svelte']
-            })
-            stream.write(prettiered)
-            stream.end()
-            resolve()
+            try {
+              const prettiered = prettier.format(raw, {
+                semi: false,
+                bracketSameLine: true,
+                svelteBracketNewLine: false,
+                printWidth: options.printwidth || 120,
+                svelteBracketNewLine: true,
+                singleQuote: true,
+                parser: 'svelte'
+              })
+              stream.write(prettiered)
+              stream.end()
+              resolve()
+            } catch (error) {
+              console.error(error)
+              stream.write(raw)
+              stream.end()
+              reject(error)
+            }
           },
           reject
         )
