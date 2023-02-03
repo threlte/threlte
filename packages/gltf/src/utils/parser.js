@@ -456,6 +456,17 @@ function parse(fileName, gltf, options = {}) {
   // 2nd pass to eliminate hard to swat left-overs
   const scene = printThrelte(gltf.scene)
 
+  const useGltfOptions =
+    options.transform && options.draco
+      ? {
+          useDraco: options.draco
+        }
+      : options.transform
+      ? {
+          useDraco: true
+        }
+      : undefined
+
   // Output
   return `
     <!--
@@ -487,11 +498,7 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
         ${options.types ? printThrelteTypes(objects, animations) : ''}
 
         const { gltf } = useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
-    options.draco
-      ? `, {
-          useDraco: ${JSON.stringify(options.draco)},
-        }`
-      : ''
+    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
   })
     ${
       hasAnimations
