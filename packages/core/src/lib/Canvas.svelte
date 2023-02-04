@@ -9,6 +9,7 @@
   import { useParentSize } from './hooks/useParentSize'
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
+  import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { useFrameloop } from './lib/frameloop'
@@ -60,6 +61,9 @@
   )
 
   const { getCtx, renderCtx, disposalCtx } = contexts
+
+  // create cache context for caching assets
+  createCache()
 
   // context bindings
   export const { ctx, rootCtx } = contexts
