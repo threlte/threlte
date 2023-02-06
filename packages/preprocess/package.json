@@ -12,6 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/three": "^0.144.0",
+    "estree-walker": "^3.0.3",
     "magic-string": "^0.26.7",
     "svelte": "^3.52.0",
     "three": "^0.145.0",

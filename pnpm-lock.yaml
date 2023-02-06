@@ -280,12 +280,14 @@ importers:
   packages/preprocess:
     specifiers:
       '@types/three': ^0.144.0
+      estree-walker: ^3.0.3
       magic-string: ^0.26.7
       svelte: ^3.52.0
       three: ^0.145.0
       typescript: ^4.8.4
     devDependencies:
       '@types/three': 0.144.0
+      estree-walker: 3.0.3
       magic-string: 0.26.7
       svelte: 3.53.0
       three: 0.145.0
@@ -1284,6 +1286,10 @@ packages:
 
   /@tweakpane/core/1.1.0:
     resolution: {integrity: sha512-vbbiQb+aoFI13lIbE7DJvhHZVE1YlUpGoaAamSpU6wLp2jA3VowS1wfRJBBB8IBCYm7nF6ULl7zfJKxl1XdyfA==}
+    dev: true
+
+  /@types/estree/1.0.0:
+    resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: true
 
   /@types/is-ci/3.0.0:
@@ -3705,6 +3711,12 @@ packages:
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: true
+
+  /estree-walker/3.0.3:
+    resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
+    dependencies:
+      '@types/estree': 1.0.0
     dev: true
 
   /esutils/2.0.3:
