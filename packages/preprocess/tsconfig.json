@@ -3,7 +3,7 @@
     "target": "es2016",
     "lib": ["DOM", "ES2020"],
     "module": "ES6",
-    "rootDir": "./src",
+    "rootDir": ".",
     "moduleResolution": "node",
     "baseUrl": "./",
     "declaration": true,
@@ -13,5 +13,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*"]
 }

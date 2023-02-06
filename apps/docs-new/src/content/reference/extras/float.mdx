@@ -1,20 +1,20 @@
 ---
-package: extras
-name: Float
-sourcePath: apps/docs-new/src/content/components/float.md
+package: 'extras'
+name: 'Float'
+sourcePath: 'apps/docs-new/src/content/components/float.md'
 props: ['a', 'b', 'c']
 type: 'component'
 ---
 
-
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
+<Example path="extras/contact-shadows" />
 
 ### Examples
 
 #### Basic Example
 
-```svelte
+```svelte title="src/pages/[id].json.ts" {3}
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Float } from '@threlte/extras'
@@ -40,7 +40,7 @@ Rotation is set by `rotationSpeed` and `rotationIntensity`. Both of them need to
 
 ### Properties
 
-```ts
+```ts {1-4}
 // floating - y axis float by default
 speed?: number | [x: number, y: number, z: number] = 1
 floatIntensity?: number | [x: number, y: number, z: number] = 1
