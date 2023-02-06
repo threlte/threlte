@@ -1,0 +1,26 @@
+---
+import { getHighlighter, type Lang, setCDN, Theme } from 'shiki'
+
+interface Props {
+  code: string
+  lang: Lang
+  theme?: Theme
+}
+
+export let code: string
+export let lang: Lang
+export let theme: string
+
+setCDN('https://unpkg.com/shiki/')
+
+const highlighter = await getHighlighter({
+  theme: Astro.props.theme ?? 'dracula-soft',
+  langs: ['typescript', 'javascript', 'svelte']
+})
+
+const formatted = highlighter.codeToHtml(Astro.props.code, {
+  lang: Astro.props.lang
+})
+---
+
+<div set:html={formatted} />

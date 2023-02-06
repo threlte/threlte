@@ -1,6 +1,6 @@
 ---
 import SvelteWrapper from './SvelteWrapper.svelte'
-import { Code } from 'astro/components'
+import Code from './Code.astro'
 import CodeWrapper from './CodeWrapper.svelte'
 
 interface Props {
@@ -44,7 +44,6 @@ for (const path in allModules) {
     Object.entries(allModules).map(([path, mod]) => (
       <div data-tab-id={path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)}>
         <Code
-          theme="dracula-soft"
           code={mod}
           lang="svelte"
         />
