@@ -36,6 +36,7 @@ export const memoizeProp = (value: unknown): boolean => {
 
 type PropOptions = {
   manualCamera?: boolean
+  pluginsProps?: string[]
 }
 
 export const useProps = () => {
@@ -94,7 +95,7 @@ export const useProps = () => {
 
   const updateProps = <T>(instance: T, props: Record<string, any>, options: PropOptions) => {
     for (const key in props) {
-      if (!ignoredProps.has(key)) {
+      if (!ignoredProps.has(key) && !options.pluginsProps?.includes(key)) {
         setProp(instance, key, props[key], options)
       }
       invalidate()

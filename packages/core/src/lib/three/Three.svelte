@@ -9,6 +9,7 @@
   import { useCamera } from './lib/useCamera'
   import { useCreateEvent } from './lib/useCreateEvent'
   import { useEvents } from './lib/useEvents'
+  import { usePlugins } from './lib/usePlugins'
   import { useProps } from './lib/useProps'
   import type { AnyClass, MaybeInstance, Props } from './types'
 
@@ -61,10 +62,17 @@
   $: objectStore.set(ref)
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
+  // Plugins
+  // Plugins are initialized here so that pluginsProps
+  // is available in the props update
+  const plugins = usePlugins({ ref, props: $$props })
+  const pluginsProps = plugins?.pluginsProps ?? []
+
   // Props
   const props = useProps()
   $: props.updateProps(ref, $$restProps, {
-    manualCamera: manual
+    manualCamera: manual,
+    pluginsProps
   })
 
   // Camera
@@ -83,6 +91,11 @@
   // Create Event
   const createEvent = useCreateEvent()
   $: createEvent.updateRef(ref)
+
+  // update plugins after all other updates
+  $: plugins?.updateRef(ref)
+  $: plugins?.updateProps($$props)
+  $: plugins?.updateRestProps($$restProps)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D

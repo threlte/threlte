@@ -46,6 +46,10 @@ export const sidebar = {
 				}
 			},
 			{
+				title: 'Plugins',
+				slug: '/concepts/plugins'
+			},
+			{
 				title: 'Reactivity',
 				slug: '/concepts/reactivity',
 				icon: {
