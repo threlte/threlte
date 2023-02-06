@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import Test from './Test.svelte'
+  import Scene from './Scene.svelte'
 </script>
 
 <Canvas>
-  <Test />
+  <Scene />
 </Canvas>
