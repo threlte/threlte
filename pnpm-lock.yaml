@@ -131,7 +131,6 @@ importers:
       '@astrojs/tailwind': ^3.0.0
       '@dimforge/rapier3d-compat': ^0.9.0
       '@macfja/svelte-persistent-store': ^2.2.1
-      '@nanostores/persistent': ^0.7.0
       '@tailwindcss/typography': ^0.5.3
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1
@@ -165,7 +164,6 @@ importers:
     devDependencies:
       '@dimforge/rapier3d-compat': 0.9.0
       '@macfja/svelte-persistent-store': 2.2.1_svelte@3.55.1
-      '@nanostores/persistent': 0.7.0_nanostores@0.7.3
       '@tailwindcss/typography': 0.5.3_tailwindcss@3.1.5
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
@@ -1679,15 +1677,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /@nanostores/persistent/0.7.0_nanostores@0.7.3:
-    resolution: {integrity: sha512-4PAInL/T1hbftZUJ0cmgdFHBMalUoq7BUXFBy7QfyMv/8X3LPTYNh/yxspL7+J+XM3UNvVI7IFRMMs6FBasjhQ==}
-    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      nanostores: ^0.7.0
-    dependencies:
-      nanostores: 0.7.3
-    dev: true
 
   /@next/eslint-plugin-next/12.2.2:
     resolution: {integrity: sha512-XOi0WzJhGH3Lk51SkSu9eZxF+IY1ZZhWcJTIGBycAbWU877IQa6+6KxMATWCOs7c+bmp6Sd8KywXJaDRxzu0JA==}
@@ -6996,11 +6985,6 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-
-  /nanostores/0.7.3:
-    resolution: {integrity: sha512-Y9vjY/amja27yjYxj/zlWh+gvXX6pSb8IeF2DK1vCNiYKlZclXbUrSE36gjd1F53+Avg5/bUzKuiej/v82HjPQ==}
-    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
-    dev: true
 
   /napi-build-utils/1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
