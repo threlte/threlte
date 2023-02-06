@@ -1,0 +1,25 @@
+---
+import { getCollection, CollectionEntry } from 'astro:content'
+import DocsLayout from '$layouts/DocsLayout.astro'
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('reference')
+  return blogEntries.map((entry) => {
+    return {
+      params: { slug: entry.slug },
+      props: { entry }
+    }
+  })
+}
+
+interface Props {
+  entry: CollectionEntry<'reference'>
+}
+
+const { entry } = Astro.props
+const { Content } = await entry.render()
+---
+
+<DocsLayout>
+  <Content />
+</DocsLayout>

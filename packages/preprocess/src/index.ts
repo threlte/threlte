@@ -1,6 +1,22 @@
-import { preprocess, parse, walk } from 'svelte/compiler'
+import { parse, walk } from 'svelte/compiler'
+import type { PreprocessorGroup } from 'svelte/types/compiler/preprocess'
 import MagicString from 'magic-string'
 import * as THREE from 'three'
+import { Node } from 'estree-walker'
+
+type ExtendedNode<T> = T & {
+  start: number
+  end: number
+}
+
+const isExtendedNode = <T>(node: any): node is ExtendedNode<T> => {
+  return (
+    'start' in node &&
+    'end' in node &&
+    typeof node.start === 'number' &&
+    typeof node.end === 'number'
+  )
+}
 
 type ImportMap = Record<
   string,
@@ -35,6 +51,71 @@ const addImport = (importMap: ImportMap, module: string, imports: string[]) => {
   }
 }
 
+const actOnImportDeclarationNode = (
+  node: ExtendedNode<Extract<Node, { type: 'ImportDeclaration' }>>,
+  markup: MagicString,
+  documentImportMap: ImportMap
+) => {
+  // remove import of <T> component
+  if (node.source.value === '@threlte/core') {
+    if (node.specifiers.find((s: any) => s.imported.name === 'T')) {
+      // remove import of <T> component
+      const isMultiImport = node.specifiers.length > 1
+      if (!isMultiImport) {
+        // remove the whole import statement
+        markup.remove(node.start, node.end)
+      } else {
+        // cut out the T import
+        const specifierIndex = node.specifiers.findIndex((s) => {
+          return s.type === 'ImportSpecifier' && s.imported.name === 'T'
+        })
+        const specifier = node.specifiers[specifierIndex]
+        const castedSpecifier = specifier as ExtendedNode<typeof specifier>
+
+        const isLastImport = specifierIndex === node.specifiers.length - 1
+        const isFirstImport = specifierIndex === 0
+
+        if (isLastImport) {
+          const specifierBefore = node.specifiers[specifierIndex - 1]
+          const castedSpecifierBefore = specifierBefore as ExtendedNode<typeof specifierBefore>
+          markup.remove(castedSpecifierBefore.end, castedSpecifier.end)
+        } else if (isFirstImport) {
+          const specifierAfter = node.specifiers[specifierIndex + 1]
+          const castedSpecifierAfter = specifierAfter as ExtendedNode<typeof specifierAfter>
+          markup.remove(castedSpecifier.start, castedSpecifierAfter.start)
+        } else {
+          const specifierBefore = node.specifiers[specifierIndex - 1]
+          const specifierAfter = node.specifiers[specifierIndex + 1]
+          const castedSpecifierBefore = specifierBefore as ExtendedNode<typeof specifierBefore>
+          const castedSpecifierAfter = specifierAfter as ExtendedNode<typeof specifierAfter>
+          markup.update(castedSpecifierBefore.end, castedSpecifierAfter.start, ', ')
+        }
+      }
+    }
+  }
+
+  if (typeof node.source.value === 'string') {
+    addImport(
+      documentImportMap,
+      node.source.value,
+      node.specifiers
+        .filter((s) => s.type === 'ImportSpecifier')
+        .map((specifier: any) => specifier.imported.name)
+    )
+  }
+}
+
+const actOnScript = (node: Node, markup: MagicString, documentImportMap: ImportMap) => {
+  if (!isExtendedNode<typeof node>(node)) {
+    // We should probably do something here
+    return
+  }
+
+  if (node.type === 'ImportDeclaration') {
+    actOnImportDeclarationNode(node, markup, documentImportMap)
+  }
+}
+
 const preprocessMarkup = (
   content: string,
   transformOptions?: PreprocessOptions
@@ -53,58 +134,38 @@ const preprocessMarkup = (
   const documentImportMap: ImportMap = {}
 
   const ast = parse(content)
+
   const markup = new MagicString(content)
 
-  let scriptContentNode: { start: number; end: number } | undefined
+  const scriptNode = ast.instance
+  const scriptModuleNode = ast.module
 
-  walk(ast, {
+  // do stuff on the scripts nodes
+  // - collect imports
+  // - remove imports of <T> component
+  walk(scriptNode as any, {
     enter(node, parent, key, index) {
-      if (node.type === 'Script' && node.context === 'default') {
-        scriptContentNode = node.content as { start: number; end: number }
-      }
-      if (node.type === 'ImportDeclaration') {
-        // remove import of <T> component
+      actOnScript(node, markup, documentImportMap)
+    }
+  })
+  walk(scriptModuleNode as any, {
+    enter(node, parent, key, index) {
+      actOnScript(node, markup, documentImportMap)
+    }
+  })
 
-        if (node.source.value === '@threlte/core') {
-          if (node.specifiers.find((s: any) => s.imported.name === 'T')) {
-            // remove import of <T> component
-            const isMultiImport = node.specifiers.length > 1
-            if (!isMultiImport) {
-              // remove the whole import statement
-              markup.remove(node.start, node.end)
-            } else {
-              // cut out the T import
-              const specifierIndex = node.specifiers.findIndex((s: any) => s.imported.name === 'T')
-              const specifier = node.specifiers[specifierIndex]
-
-              const isLastImport = specifierIndex === node.specifiers.length - 1
-              const isFirstImport = specifierIndex === 0
-
-              if (isLastImport) {
-                const specifierBefore = node.specifiers[specifierIndex - 1]
-                markup.remove(specifierBefore.end, specifier.end)
-              } else if (isFirstImport) {
-                const specifierAfter = node.specifiers[specifierIndex + 1]
-                markup.remove(specifier.start, specifierAfter.start)
-              } else {
-                const specifierBefore = node.specifiers[specifierIndex - 1]
-                const specifierAfter = node.specifiers[specifierIndex + 1]
-                markup.update(specifierBefore.end, specifierAfter.start, ', ')
-              }
-            }
-          }
-        }
-
-        addImport(
-          documentImportMap,
-          node.source.value,
-          node.specifiers
-            .filter((s: any) => s.type === 'ImportSpecifier')
-            .map((specifier: any) => specifier.imported.name)
-        )
+  // do stuff on the markup nodes
+  walk(ast.html as any, {
+    enter(node, parent, key, index) {
+      const anyNode = node as any
+      if (!isExtendedNode<typeof node>(node)) {
+        // We should probably do something here
+        return
       }
 
-      if (node.type === 'Element' || node.type === 'InlineComponent') {
+      // The ast that is returned by the svelte compiler is not typed correctly.
+      // It contains HTML nodes that are not part of ESTree.
+      if (anyNode.type === 'Element' || anyNode.type === 'InlineComponent') {
         const { name } = node as { name: string }
         if (!name.startsWith(prefix)) return
         const maybeImport = name.replace(prefix, '')
@@ -138,13 +199,16 @@ const preprocessMarkup = (
 
           // change start of node
           const length = name.length
-          markup.remove(node.start + 1, node.start + 1 + length)
-          markup.appendRight(node.start + 1, `Three type={${maybeImport}}`)
+
+          const castedNode = node as ExtendedNode<typeof node>
+
+          markup.remove(castedNode.start + 1, castedNode.start + 1 + length)
+          markup.appendRight(castedNode.start + 1, `Three type={${maybeImport}}`)
 
           // change end of node: </boxGeometry> -> </Three>
-          const selfClosing = content.slice(node.end - 2, node.end) === '/>'
+          const selfClosing = content.slice(castedNode.end - 2, castedNode.end) === '/>'
           if (!selfClosing) {
-            markup.update(node.end - length - 1, node.end - 1, 'Three')
+            markup.update(castedNode.end - length - 1, castedNode.end - 1, 'Three')
           }
         }
       }
@@ -164,8 +228,25 @@ const preprocessMarkup = (
 
   if (Object.keys(importMap).length > 0) {
     const imports = parseImportMap(importMap)
-    if (scriptContentNode) {
-      markup.appendLeft(scriptContentNode.start, '\n' + imports + '\n')
+
+    let anyScriptNode = scriptNode || scriptModuleNode
+
+    if (anyScriptNode) {
+      let start = -1
+
+      walk(anyScriptNode as any, {
+        enter(node, parent, key, index) {
+          if (!isExtendedNode<typeof node>(node)) {
+            // We should probably do something here
+            return
+          }
+          if (node.type === 'Program') {
+            start = node.start
+          }
+        }
+      })
+
+      markup.appendLeft(start, '\n' + imports + '\n')
     } else {
       markup.prepend('<script>\n' + imports + '\n</script>\n')
     }
@@ -191,11 +272,9 @@ export type PreprocessOptions = {
  * @param options
  * @returns
  */
-export const preprocessThrelte = (
-  options?: PreprocessOptions
-): Parameters<typeof preprocess>[1] => {
+export const preprocessThrelte = (options?: PreprocessOptions): PreprocessorGroup => {
   return {
-    markup: ({ content }) => {
+    markup: ({ content, filename }) => {
       const { markup } = preprocessMarkup(content, options)
 
       return {

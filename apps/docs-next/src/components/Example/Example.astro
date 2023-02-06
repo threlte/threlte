@@ -1,0 +1,54 @@
+---
+import SvelteWrapper from './SvelteWrapper.svelte'
+import { Code } from 'astro/components'
+import CodeWrapper from './CodeWrapper.svelte'
+
+interface Props {
+  /**
+   * The path to the entry App.svelte file relative to src/examples
+   */
+  path: string
+}
+
+const allModules = import.meta.glob('../../examples/**/*', {
+  as: 'raw',
+  eager: true
+}) as Record<string, string>
+
+for (const path in allModules) {
+  if (!path.replace('../../examples/', '').startsWith(Astro.props.path)) {
+    delete allModules[path]
+  }
+}
+---
+
+<SvelteWrapper
+  path={Astro.props.path}
+  client:load
+/>
+
+<CodeWrapper
+  client:load
+  tabs={Object.entries(allModules).map(([path, _module]) => {
+    const relativeFilePath = path
+      .replace('../../examples/', '')
+      .replace(Astro.props.path, '')
+      .slice(1)
+    return {
+      title: relativeFilePath,
+      id: relativeFilePath
+    }
+  })}
+>
+  {
+    Object.entries(allModules).map(([path, mod]) => (
+      <div data-tab-id={path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)}>
+        <Code
+          theme="dracula-soft"
+          code={mod}
+          lang="svelte"
+        />
+      </div>
+    ))
+  }
+</CodeWrapper>

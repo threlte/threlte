@@ -1,0 +1,28 @@
+---
+import { Image } from '@astrojs/image/components'
+import MainMenu from '$components/Menu/MainMenu.astro'
+import AppLayout from './AppLayout.astro'
+import Logo from '$assets/logo/threlte-logo.png'
+
+export interface Props {
+  title?: string
+}
+
+const title = Astro.props.title
+---
+
+<AppLayout title={title}>
+  <header>
+    <header>
+      <a href="/">
+        <Image
+          src={Logo}
+          alt="threlte logo"
+          width={200}
+        />
+      </a>
+    </header>
+    <MainMenu />
+  </header>
+  <slot />
+</AppLayout>

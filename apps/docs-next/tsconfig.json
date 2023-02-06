@@ -1,0 +1,15 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "paths": {
+      "$lib/*": ["./src/lib/*"],
+      "$components/*": ["./src/components/*"],
+      "$layouts/*": ["./src/layouts/*"],
+      "$pages/*": ["./src/pages/*"],
+      "$styles/*": ["./src/styles/*"],
+      "$assets/*": ["./src/assets/*"],
+      "$examples/*": ["./src/examples/*"]
+    },
+    "types": ["@astrojs/image/client"]
+  }
+}
