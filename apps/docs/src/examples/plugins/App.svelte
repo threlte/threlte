@@ -5,12 +5,10 @@
 	import Scene from './Scene.svelte'
 </script>
 
-<div class="w-full h-full fixed top-0 left-0">
-	<Canvas>
-		<LayersPlugin>
-			<InteractivityPlugin>
-				<Scene />
-			</InteractivityPlugin>
-		</LayersPlugin>
-	</Canvas>
-</div>
+<Canvas>
+	<LayersPlugin>
+		<InteractivityPlugin>
+			<Scene />
+		</InteractivityPlugin>
+	</LayersPlugin>
+</Canvas>

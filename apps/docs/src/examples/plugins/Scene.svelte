@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { InteractiveObject, Layers, T, TransformableObject, useFrame } from '@threlte/core'
-	import { GLTF } from '@threlte/extras'
+	import { Layers, T, TransformableObject, useFrame } from '@threlte/core'
+	import { GLTF, useCursor } from '@threlte/extras'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
 	let rotation = 0
@@ -11,6 +11,8 @@
 
 	let showLight = true
 	let color = 'red'
+
+	const { onPointerEnter, onPointerLeave } = useCursor()
 </script>
 
 <T.Group rotation.y={rotation}>
@@ -28,6 +30,8 @@
 		color === 'red' ? (color = 'blue') : (color = 'red')
 		showLight = !showLight
 	}}
+	on:pointerenter={onPointerEnter}
+	on:pointerleave={onPointerLeave}
 >
 	<T.CircleGeometry args={[4, 60]} />
 	<T.MeshStandardMaterial />
