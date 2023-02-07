@@ -131,9 +131,9 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
     <div class="flex flex-row justify-center items-start gap-8 my-12">
       <div class="flex flex-col gap-8 w-1/3">
         <div class="text-xl text-faded">
-          Write clear and <span class="text-highlight">declarative</span> components that seemlessly
-          react to state changes and are ready to be <span class="text-highlight">interactive</span
-          >.
+          Write clear, <span class="text-highlight">declarative</span> and
+          <span class="text-highlight">type-safe</span> components that seemlessly react to state changes
+          and are ready to be <span class="text-highlight">interactive</span>.
         </div>
 
         <div class="z-10">
@@ -352,7 +352,10 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       <code>{'<'}T{'>'}</code>.<br /><br />
 
       This enables you to import a single <code>{'<'}T{'>'}</code> component to render any
-      <code>THREE</code> object, all while keeping your code clean, readable and type-safe.
+      <code>THREE</code> object, all while keeping your code clean, readable and type-safe.<br /><br
+      />
+
+      It's of course perfectly possible to use Threlte without preprocessing!
       <Button
         class="mt-8"
         href=""
@@ -368,7 +371,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
           <Code
             code={PreprocessBeforeExampleRaw}
             lang="svelte"
-            title="Before"
+            title="Your Code"
           />
         </div>
         <div
@@ -411,7 +414,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
           <Code
             code={PreprocessAfterExampleRaw}
             lang="svelte"
-            title="After"
+            title="Preprocessed Code"
           />
         </div>
       </div>

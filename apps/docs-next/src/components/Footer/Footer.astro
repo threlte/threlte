@@ -1,0 +1,39 @@
+---
+import { Image } from '@astrojs/image/components'
+import LogoOnly from '$assets/logo/threlte-logo-only.png'
+import { c } from '$lib/classes'
+
+interface Props {
+  class?: string
+}
+---
+
+<footer class={c('grid grid-cols-1 lg:grid-cols-3 text-sm', Astro.props.class ?? '')}>
+  <div class="flex flex-col gap-6">
+    <Image
+      src={LogoOnly}
+      alt="threlte logo"
+      width={200}
+      class="w-[50px]"
+    />
+    <p class="text-faded">
+      Threlte is a 3D framework in the making.<br />
+      &copy; 2023
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2">
+    <ul>
+      <li class="uppercase mb-4 font-bold">Get Started</li>
+      <li class="text-faded">Install</li>
+      <li class="text-faded">Concepts</li>
+      <li class="text-faded">Reference</li>
+    </ul>
+    <ul>
+      <li class="uppercase mb-4 font-bold">Community</li>
+      <li class="text-faded">Twitter</li>
+      <li class="text-faded">Discord</li>
+      <li class="text-faded">GitHub</li>
+    </ul>
+  </div>
+</footer>
