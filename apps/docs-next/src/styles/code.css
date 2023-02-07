@@ -1,12 +1,15 @@
 div[data-rehype-pretty-code-fragment] {
 }
+code {
+  display: inline;
+  @apply bg-white/5 border border-white/10 rounded-md px-1 py-0.5 text-[0.85em] text-white;
+}
 pre > code {
   display: grid;
-  /* background-color: rgba(200, 200, 255, 0.09); */
+  @apply bg-transparent border-0 text-[1em];
 }
 .highlighted {
   position: relative;
-  /* background-color: rgba(200, 200, 255, 0.1); */
 }
 span.line:empty::before {
   content: ' ';

@@ -22,6 +22,8 @@
     >
       <OrbitControls
         autoRotate
+        enableZoom={false}
+        enableDamping
         autoRotateSpeed={0.5}
         target={{ y: 1.5 }}
       />

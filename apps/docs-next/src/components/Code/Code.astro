@@ -1,15 +1,14 @@
 ---
+import { c } from '$lib/classes'
 import { getHighlighter, type Lang, setCDN, Theme } from 'shiki'
 
 interface Props {
   code: string
   lang: Lang
   theme?: Theme
+  class?: string
+  title?: string
 }
-
-export let code: string
-export let lang: Lang
-export let theme: string
 
 setCDN('https://unpkg.com/shiki/')
 
@@ -18,9 +17,36 @@ const highlighter = await getHighlighter({
   langs: ['typescript', 'javascript', 'svelte']
 })
 
-const formatted = highlighter.codeToHtml(Astro.props.code, {
+const codeWithoutEmptyLastLine = Astro.props.code.replace(/\n$/, '')
+
+const formatted = highlighter.codeToHtml(codeWithoutEmptyLastLine, {
   lang: Astro.props.lang
 })
 ---
 
-<Fragment set:html={formatted} />
+{
+  Astro.props.title ? (
+    <>
+      <div class="text-faded text-sm px-2 py-1 bg-blue-900 inline-block z-10 translate-y-px border rounded-t-md border-x-white/20 border-t-white/20 border-b-white/5">
+        {Astro.props.title}
+      </div>
+      <div
+        class={c(
+          'bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl',
+          Astro.props.class ?? ''
+        )}
+      >
+        <Fragment set:html={formatted} />
+      </div>
+    </>
+  ) : (
+    <div
+      class={c(
+        'bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl',
+        Astro.props.class ?? ''
+      )}
+    >
+      <Fragment set:html={formatted} />
+    </div>
+  )
+}
