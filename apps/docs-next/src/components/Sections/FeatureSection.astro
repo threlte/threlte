@@ -52,9 +52,14 @@ text-green-400
     )
   }
 
-  <h4 class={c('text-base mb-1 empty:hidden', `text-${color}-400`)}>
-    <slot name="subline" />
-  </h4>
+  {
+    Astro.slots.has('subline') && (
+      <h4 class={c('text-base mb-1 empty:hidden', `text-${color}-400`)}>
+        <slot name="subline" />
+      </h4>
+    )
+  }
+
   <h2 class="text-5xl font-bold">
     <slot name="headline" />
   </h2>
@@ -62,12 +67,20 @@ text-green-400
   <div class="flex flex-row mt-12 gap-8 text-xl text-white/60">
     <slot name="body" />
 
-    <div class="flex-1 empty:hidden">
-      <slot name="body-left" />
-    </div>
+    {
+      Astro.slots.has('body-left') && (
+        <div class="flex-1 empty:hidden">
+          <slot name="body-left" />
+        </div>
+      )
+    }
 
-    <div class="flex-1 empty:hidden">
-      <slot name="body-right" />
-    </div>
+    {
+      Astro.slots.has('body-right') && (
+        <div class="flex-1 empty:hidden">
+          <slot name="body-right" />
+        </div>
+      )
+    }
   </div>
 </div>
