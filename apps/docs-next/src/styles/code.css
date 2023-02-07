@@ -8,6 +8,9 @@ pre > code {
   position: relative;
   /* background-color: rgba(200, 200, 255, 0.1); */
 }
+span.line:empty::before {
+  content: ' ';
+}
 .highlighted::before {
   content: '';
   display: block;
@@ -17,4 +20,21 @@ pre > code {
   position: absolute;
   left: -4px;
   top: 0;
+}
+
+pre {
+  counter-reset: line;
+}
+span.line {
+  counter-increment: line;
+}
+span.line:before {
+  content: counter(line) !important;
+  display: inline-block;
+  width: calc(1ch + 1rem);
+  text-align: right;
+  color: #ccc;
+  user-select: none;
+  opacity: 0.3;
+  @apply border-r border-[#ccc] pl-0 pr-2 mr-2 text-[0.9em] h-full;
 }

@@ -1,6 +1,7 @@
 ---
 import '$styles/variables.css'
 import '$styles/code.css'
+import '$styles/app.css'
 
 export interface Props {
   title?: string | undefined
@@ -19,7 +20,9 @@ const title = Astro.props.title
     />
     <title>{title ?? 'Threlte'}</title>
   </head>
-  <body>
+  <body
+    class="relative before:fixed before:h-screen before:w-full before:top-0 before:-z-50 before:content-[' '] before:bg-gradient-to-b before:from-[#0D1421] before:to-[#080c14] text-white"
+  >
     <slot />
   </body>
 </html>
