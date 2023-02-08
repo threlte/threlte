@@ -16,25 +16,31 @@
   }
 </script>
 
-<nav class="pl-6">
-  <Tabs
-    on:select={onTabSelect}
-    tabs={[
-      {
-        id: 'learn',
-        title: 'Learn'
-      },
-      {
-        id: 'reference',
-        title: 'Reference'
-      }
-    ]}
-    activeTabId={$activeMenu}
-  />
+<nav class="pl-6 flex flex-col h-full relative">
+  <div class="relative pb-6">
+    <Tabs
+      on:select={onTabSelect}
+      tabs={[
+        {
+          id: 'learn',
+          title: 'Learn'
+        },
+        {
+          id: 'reference',
+          title: 'Reference'
+        }
+      ]}
+      activeTabId={$activeMenu}
+    />
 
-  <ul>
+    <div
+      class="absolute top-full left-0 w-full h-4 pointer-events-none bg-gradient-to-b from-[#0D131F] to-transparent z-20"
+    />
+  </div>
+
+  <ul class="overflow-auto h-full scrollbar-hide pt-2 pb-6">
     {#each menu[$activeMenu].categories as category}
-      <li>
+      <li class="mb-6">
         <LeftSidebarCategory {category} />
       </li>
     {/each}

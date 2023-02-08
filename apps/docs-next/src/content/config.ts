@@ -13,7 +13,7 @@ export const referenceCollection = defineCollection({
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['start-here', 't', 'preprocessing']),
+    category: z.enum(['Start Here', 'Concepts', 'Preprocessing']),
     title: z.string()
   })
 })

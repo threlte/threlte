@@ -45,21 +45,25 @@ const title = Astro.props.title
   </header>
 
   <main class="flex flex-row">
-    <aside class="w-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)] fixed">
+    <aside
+      class="w-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] pt-6"
+    >
       <LeftSidebar />
     </aside>
 
     <div
-      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6"
+      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto"
     >
-      <div
+      <article
         class="prose before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
       >
         <slot />
-      </div>
+      </article>
     </div>
 
-    <aside class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed right-0">
+    <aside
+      class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] right-0 pt-6"
+    >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
   </main>

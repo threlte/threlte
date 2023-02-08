@@ -1,5 +1,8 @@
 div[data-rehype-pretty-code-fragment] {
 }
+div[data-rehype-pretty-code-fragment] pre {
+  @apply !bg-blue-900;
+}
 code {
   display: inline;
   @apply bg-white/5 border border-white/10 rounded-md px-1 py-0.5 text-[0.85em] text-white;
