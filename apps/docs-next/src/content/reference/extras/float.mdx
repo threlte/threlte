@@ -6,6 +6,8 @@ props: ['a', 'b', 'c']
 type: 'component'
 ---
 
+## Module Details
+
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
 <Example path="extras/contact-shadows" />
@@ -20,7 +22,7 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
   import { Float } from '@threlte/extras'
 </script>
 
-<Float floatIntensity={5} scale={$scale} rotationIntensity={2} rotationSpeed={[1, 0.5, 0.2]}>
+<Float floatIntensity={5} scale={$scale} rotationIntensity={2}
 	<T.Mesh>
 		<T.MeshStandardMaterial color={'orange'} />
 		<T.BoxGeometry args={[5, 5, 5]} />
@@ -44,7 +46,7 @@ Rotation is set by `rotationSpeed` and `rotationIntensity`. Both of them need to
 // floating - y axis float by default
 speed?: number | [x: number, y: number, z: number] = 1
 floatIntensity?: number | [x: number, y: number, z: number] = 1
-floatingRange?: [number, number] | [x: [number, number], y: [number, number], z: [number, number]] = [-0.1,0.1]
+floatingRange?: [number, number] | [x: [number, number],
 
 // rotation - disabled by default
 rotationIntensity?: number | [x: number, y: number, z: number] = 0

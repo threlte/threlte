@@ -20,6 +20,6 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<DocsLayout>
+<DocsLayout entry={entry}>
   <Content />
 </DocsLayout>

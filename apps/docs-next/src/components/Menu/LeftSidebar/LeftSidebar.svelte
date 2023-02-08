@@ -16,7 +16,7 @@
   }
 </script>
 
-<nav>
+<nav class="pl-6">
   <Tabs
     on:select={onTabSelect}
     tabs={[

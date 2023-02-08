@@ -5,8 +5,6 @@ import { getCollection, CollectionEntry } from 'astro:content'
 export async function getStaticPaths() {
   const blogEntries = await getCollection('learn')
   return blogEntries.map((entry) => {
-    console.log(entry)
-
     return {
       params: { slug: entry.slug },
       props: { entry }
@@ -22,6 +20,6 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<DocsLayout>
+<DocsLayout entry={entry}>
   <Content />
 </DocsLayout>
