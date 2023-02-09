@@ -1,39 +1,36 @@
 ---
-title: AudioInstance
+title: Audio
 ---
 
-!!!module_summary title=AudioInstance|sourcePath=instances/AudioInstance.svelte|name=AudioInstance|from=core|type=component|relatedDocs={[{name:"three.js Audio reference",url:"https://threejs.org/docs/#api/en/audio/Audio"}]}
+!!!module_summary title=Audio|sourcePath=audio/Audio.svelte|name=Audio|from=extras|type=component|relatedDocs={[{name:"three.js Audio reference",url:"https://threejs.org/docs/#api/en/audio/Audio"}]}
 
-:::deprecated
+Create a non-positional (global) audio object.
+This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
+
+:::admonition type="tip"
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
 :::
-
-This component lets you use any manually instantiated object that extends `THREE.Audio` in threlte.
-
 !!!
 
-### Example <!-- omit in toc -->
+### Example
 
 ```svelte
 <script>
-  import { AudioInstance, useAudioListener } from '@threlte/core'
-  import { Audio } from 'three'
-
-  export let buffer: AudioBuffer
-
-  const { listener } = useAudioListener()
-  const audio = new Audio(listener)
-  audio.setBuffer(buffer)
+  import { T, Canvas, AudioListener, Audio } from '@threlte/core'
 </script>
 
-<AudioInstance {audio} />
+<Canvas>
+  <T.PerspectiveCamera makeDefault position={[3, 3, 3]} lookAt={[0, 0, 0]}>
+    <AudioListener />
+  </T.PerspectiveCamera>
+
+  <Audio source={'/audio/track.mp3'} />
+</Canvas>
 ```
 
-### Properties <!-- omit in toc -->
+### Properties
 
 ```ts
-// required
-audio: THREE.Audio | THREE.PositionalAudio
-
 // optional
 viewportAware: boolean = false
 position: Position | undefined = undefined
@@ -57,16 +54,17 @@ playbackRate: number | undefined = undefined
 id: string | undefined = undefined
 ```
 
-### Bindings <!-- omit in toc -->
+### Bindings
 
 ```ts
+audio: THREE.Audio
 inViewport: boolean
-play: (delay?: number) => Promise<THREE.Audio | THREE.PositionalAudio>
-pause: () => THREE.Audio | THREE.PositionalAudio
-stop: () => THREE.Audio | THREE.PositionalAudio
+play: (delay?: number) => Promise<THREE.Audio>
+pause: () => THREE.Audio
+stop: () => THREE.Audio
 ```
 
-### Events <!-- omit in toc -->
+### Events
 
 ```ts
 viewportenter: undefined

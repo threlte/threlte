@@ -101,22 +101,6 @@ export const sidebar = {
 				slug: '/core/instance'
 			},
 			{
-				title: 'Audio',
-				slug: ''
-			},
-			{
-				title: 'AudioListener',
-				slug: '/core/audio-listener'
-			},
-			{
-				title: 'Audio',
-				slug: '/core/audio'
-			},
-			{
-				title: 'PositionalAudio',
-				slug: '/core/positional-audio'
-			},
-			{
 				title: 'Controls',
 				slug: ''
 			},
@@ -155,10 +139,6 @@ export const sidebar = {
 			{
 				title: 'MeshInstance',
 				slug: '/core/mesh-instance'
-			},
-			{
-				title: 'AudioInstance',
-				slug: '/core/audio-instance'
 			},
 			{
 				title: 'Traits',
@@ -205,10 +185,6 @@ export const sidebar = {
 				slug: '/core/use-threlte-root'
 			},
 			{
-				title: 'useThrelteAudio',
-				slug: '/core/use-threlte-audio'
-			},
-			{
 				title: 'useFrame',
 				slug: '/core/use-frame'
 			},
@@ -223,10 +199,6 @@ export const sidebar = {
 			{
 				title: 'useTexture',
 				slug: '/core/use-texture'
-			},
-			{
-				title: 'useAudioListener',
-				slug: '/core/use-audio-listener'
 			}
 		],
 		'@threlte/preprocess': [
@@ -299,6 +271,30 @@ export const sidebar = {
 			{
 				title: 'Grid',
 				slug: '/extras/grid'
+			},
+			{
+				title: 'Audio',
+				slug: ''
+			},
+			{
+				title: 'AudioListener',
+				slug: '/extras/audio-listener'
+			},
+			{
+				title: 'Audio',
+				slug: '/extras/audio'
+			},
+			{
+				title: 'PositionalAudio',
+				slug: '/extras/positional-audio'
+			},
+			{
+				title: 'useAudioListener',
+				slug: '/extras/use-audio-listener'
+			},
+			{
+				title: 'useThrelteAudio',
+				slug: '/extras/use-threlte-audio'
 			}
 		],
 		'@threlte/theatre': [

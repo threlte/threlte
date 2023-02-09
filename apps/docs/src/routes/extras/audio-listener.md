@@ -2,10 +2,7 @@
 title: AudioListener
 ---
 
-!!!module_summary title=AudioListener|sourcePath=audio/AudioListener.svelte|name=AudioListener|from=core|type=component|relatedDocs={[{name:"three.js AudioListener reference",url:"https://threejs.org/docs/#api/en/audio/AudioListener"}]}
-
-:::deprecated moveToExtras=true
-:::
+!!!module_summary title=AudioListener|sourcePath=audio/AudioListener.svelte|name=AudioListener|from=extras|type=component|relatedDocs={[{name:"three.js AudioListener reference",url:"https://threejs.org/docs/#api/en/audio/AudioListener"}]}
 
 The `<AudioListener>` represents a virtual listener of the all positional and non-positional audio effects in the scene.
 An application usually creates a single `<AudioListener>` component. It is a mandatory component for audio components like `<Audio>` and `<PositionalAudio>`.
@@ -16,7 +13,8 @@ In most cases, the listener component is a child of the camera, so the 3D transf
 
 ```svelte
 <script>
-  import { T, Canvas, AudioListener } from '@threlte/core'
+  import { T, Canvas } from '@threlte/core'
+  import { AudioListener } from '@threlte/extras'
 </script>
 
 <Canvas>
@@ -30,7 +28,8 @@ You may pass an `id` to the `<AudioListener>` component in order to connect `<Au
 
 ```svelte
 <script>
-  import { T, Canvas, AudioListener, Audio } from '@threlte/core'
+  import { T, Canvas } from '@threlte/core'
+  import { Audio, AudioListener } from '@threlte/extras'
 </script>
 
 <Canvas>

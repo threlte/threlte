@@ -1,11 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// audio components
-export { default as AudioListener } from './audio/AudioListener.svelte'
-export { default as Audio } from './audio/Audio.svelte'
-export { default as PositionalAudio } from './audio/PositionalAudio.svelte'
-
 // control component
 export { default as OrbitControls } from './controls/OrbitControls.svelte'
 
@@ -47,10 +42,9 @@ export { useFrame } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
-export { useThrelteAudio } from './hooks/useThrelteAudio'
+export { setThrelteUserContext, useThrelteUserContext } from './hooks/useThrelteUserContext'
 export { useLoader } from './hooks/useLoader'
 export { useTexture } from './hooks/useTexture'
-export { useAudioListener } from './hooks/useAudioListener'
 export { useParent } from './internal/HierarchicalObject.svelte'
 
 // types
@@ -87,9 +81,5 @@ export type {
   OrbitControlsProperties,
   PassProperties,
   LayersProperties,
-  AudioInstanceProperties,
-  AudioListenerProperties,
-  AudioProperties,
-  PositionalAudioProperties,
   SceneGraphObjectProperties
 } from './types/components'

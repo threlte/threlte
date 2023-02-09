@@ -1,16 +1,6 @@
-import type {
-  Audio,
-  BufferGeometry,
-  Camera,
-  ColorRepresentation,
-  Material,
-  Mesh,
-  Object3D,
-  PositionalAudio
-} from 'three'
+import type { BufferGeometry, ColorRepresentation, Material, Mesh, Object3D } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import type { SetOptional } from 'type-fest'
 import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
 
 export type HierarchicalObjectProperties = {
@@ -125,55 +115,4 @@ export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'fru
 export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
   color?: ColorRepresentation
   id?: string
-}
-
-export type AudioListenerProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  id?: string
-  masterVolume?: number
-}
-
-type AudioSource = string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream
-
-export type AudioInstanceProperties<T extends Audio<GainNode> | PositionalAudio> = Omit<
-  Object3DInstanceProperties,
-  'object'
-> & {
-  audio: T
-  autoplay?: boolean
-  detune?: number
-  source?: AudioSource
-  volume?: number
-  loop?: boolean
-  filters?: BiquadFilterNode[] | BiquadFilterNode
-  playbackRate?: number
-  // TODO unknown is used here to be able to directly use
-  // the function in a svelte event handler: on:click={play}
-  // as otherwise TypeScript will complain about the type
-  // of the argument 'delay'. It's not a perfect solution though.
-  play: (delay?: number | any) => Promise<T>
-  pause: () => T
-  stop: () => T
-}
-
-export type AudioProperties = Omit<
-  SetOptional<AudioInstanceProperties<Audio>, 'play' | 'pause' | 'stop'>,
-  'audio'
-> & {
-  id?: string
-}
-
-export type PositionalAudioProperties = Omit<
-  SetOptional<AudioInstanceProperties<PositionalAudio>, 'play' | 'pause' | 'stop'>,
-  'audio'
-> & {
-  id?: string
-  refDistance?: number
-  rolloffFactor?: number
-  distanceModel?: string
-  maxDistance?: number
-  directionalCone?: {
-    coneInnerAngle: number
-    coneOuterAngle: number
-    coneOuterGain: number
-  }
 }

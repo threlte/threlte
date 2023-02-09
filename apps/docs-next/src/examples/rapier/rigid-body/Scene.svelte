@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { AudioListener, OrbitControls, T } from '@threlte/core'
+	import { OrbitControls, T } from '@threlte/core'
+	import { AudioListener } from '@threlte/extras'
 	import { Debug } from '@threlte/rapier'
 	import Emitter from './Emitter.svelte'
 	import Ground from './Ground.svelte'
