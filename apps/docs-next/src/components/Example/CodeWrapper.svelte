@@ -52,7 +52,7 @@
 <div class="flex flex-row not-prose items-stretch w-full">
   <CodeExplorer
     {currentlySelectedFile}
-    class="border-l border-y border-white/20 rounded-l-md px-4 py-3"
+    class="border-l border-b border-white/20 rounded-bl-md px-4 py-3"
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)

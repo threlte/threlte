@@ -1,8 +1,11 @@
 ---
 import { c } from '$lib/classes'
 
+type Size = 's' | 'm' | 'l'
+
 interface Props {
   color: 'orange' | 'blue' | 'green'
+  size?: Size
   href: string
   class?: string
   glow?: boolean
@@ -18,12 +21,25 @@ hover:bg-orange-400
 hover:bg-blue-400
 hover:bg-green-400
 */
+
+const paddings: Record<Size, string> = {
+  s: 'px-3 py-1',
+  m: 'px-5 py-3',
+  l: 'px-7 py-4'
+}
+const textSizes: Record<Size, string> = {
+  s: 'text-sm',
+  m: 'text-base',
+  l: 'text-lg'
+}
 ---
 
 <a
   href={Astro.props.href}
   class={c(
-    'px-7 py-4 rounded-md shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] text-center flex flex-row gap-3 w-fit text-lg text-white',
+    'rounded-md shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] text-center flex flex-row gap-3 w-fit text-white',
+    paddings[Astro.props.size ?? 'l'],
+    textSizes[Astro.props.size ?? 'l'],
     `bg-${Astro.props.color}`,
     `hover:bg-${Astro.props.color}-400`,
     Astro.props.class ?? ''

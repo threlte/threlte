@@ -42,7 +42,7 @@ for (const path in allModules) {
         <Code
           code={mod}
           lang={(path.split('.').pop() ?? 'svelte') as any}
-          class="!rounded-tl-none !rounded-bl-none h-full"
+          class=" border-t-0 !rounded-t-none !rounded-bl-none h-full"
         />
       </div>
     ))

@@ -19,7 +19,7 @@
   })
 </script>
 
-<div class="w-full aspect-square relative">
+<div class="w-full h-[80vh] relative border border-white/20 rounded-t-md ">
   {#if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />
