@@ -1,8 +1,37 @@
 <script lang="ts">
-  import Tabs, { type Tab, type Tabs as TabsPropType } from '$components/Tabs/Tabs.svelte'
-  export let tabs: TabsPropType
+  import type { File } from './types'
+
+  import CodeExplorer from './CodeExplorer.svelte'
+  import { writable, Writable } from 'svelte/store'
 
   let children: HTMLElement[] = []
+
+  export let filePaths: string[]
+
+  const onFileSelected = (file: File) => {
+    const path = file.path
+
+    // hide all children except the one that was selected
+    children.forEach((child) => {
+      const elPath = child.dataset.path
+      if (!elPath) return
+
+      // path is relative to the root of the example directory
+      if (elPath.endsWith(path)) {
+        child.style.display = 'block'
+      } else {
+        child.style.display = 'none'
+      }
+    })
+
+    currentlySelectedFile.set(file)
+  }
+
+  const currentlySelectedFile: Writable<File> = writable({
+    name: 'App.svelte',
+    path: 'App.svelte',
+    type: 'file'
+  })
 
   const setChildren = (node: HTMLDivElement) => {
     // the first child in node.children is an astro slot, so we need the children of that
@@ -12,34 +41,28 @@
         return item instanceof HTMLElement
       })
     }
-  }
-
-  $: children.forEach((child, index) => {
-    if (index > 0) {
-      child.style.display = 'none'
-    }
-  })
-
-  const onSelect = (e: CustomEvent<Tab>) => {
-    // find the index of the tab that was selected
-    const tabIndex = tabs.findIndex((tab) => tab.id === e.detail.id)
-
-    // hide all children except the one that was selected
-    children.forEach((child, index) => {
-      if (index === tabIndex) {
-        child.style.display = 'block'
-      } else {
-        child.style.display = 'none'
-      }
+    onFileSelected({
+      name: 'App.svelte',
+      path: 'App.svelte',
+      type: 'file'
     })
   }
 </script>
 
-<Tabs
-  {tabs}
-  on:select={onSelect}
-/>
+<div class="flex flex-row not-prose items-stretch w-full">
+  <CodeExplorer
+    {currentlySelectedFile}
+    class="border-l border-y border-white/20 rounded-l-md px-4 py-3"
+    {filePaths}
+    on:fileSelected={(e) => {
+      onFileSelected(e.detail)
+    }}
+  />
 
-<div use:setChildren>
-  <slot />
+  <div
+    use:setChildren
+    class="flex-1 overflow-x-auto"
+  >
+    <slot />
+  </div>
 </div>
