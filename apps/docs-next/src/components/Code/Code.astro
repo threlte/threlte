@@ -1,13 +1,14 @@
 ---
 import { c } from '$lib/classes'
-import { getHighlighter, type Lang, setCDN, Theme } from 'shiki'
+import { getHighlighter, type Lang, setCDN, Theme, HtmlRendererOptions } from 'shiki'
 
 interface Props {
-  code: string
   lang: Lang
   theme?: Theme
   class?: string
   title?: string
+  code: string
+  lineOptions?: HtmlRendererOptions['lineOptions']
 }
 
 setCDN('https://unpkg.com/shiki/')
@@ -17,22 +18,21 @@ const highlighter = await getHighlighter({
   langs: ['typescript', 'javascript', 'svelte']
 })
 
-const codeWithoutEmptyLastLine = Astro.props.code.replace(/\n$/, '')
-
-const formatted = highlighter.codeToHtml(codeWithoutEmptyLastLine, {
-  lang: Astro.props.lang
+const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
+  lang: Astro.props.lang,
+  lineOptions: Astro.props.lineOptions ?? []
 })
 ---
 
 {
   Astro.props.title ? (
     <>
-      <div class="text-faded text-sm px-2 py-1 bg-blue-900 inline-block z-10 translate-y-px border rounded-t-md border-x-white/20 border-t-white/20 border-b-white/5">
+      <div class="not-prose text-faded text-sm px-2 py-1 bg-blue-900 inline-block z-10 translate-y-px border rounded-t-md border-x-white/20 border-t-white/20 border-b-white/5">
         {Astro.props.title}
       </div>
       <div
         class={c(
-          'bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl',
+          'not-prose bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl overflow-x-auto',
           Astro.props.class ?? ''
         )}
       >
@@ -42,7 +42,7 @@ const formatted = highlighter.codeToHtml(codeWithoutEmptyLastLine, {
   ) : (
     <div
       class={c(
-        'bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl',
+        'not-prose bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl overflow-x-auto',
         Astro.props.class ?? ''
       )}
     >

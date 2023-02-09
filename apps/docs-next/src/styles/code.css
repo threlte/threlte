@@ -1,8 +1,3 @@
-div[data-rehype-pretty-code-fragment] {
-}
-div[data-rehype-pretty-code-fragment] pre {
-  @apply !bg-blue-900;
-}
 code {
   display: inline;
   @apply bg-white/5 border border-white/10 rounded-md px-1 py-0.5 text-[0.85em] text-white;
@@ -13,21 +8,11 @@ pre > code {
 }
 .highlighted {
   position: relative;
+  @apply bg-blue-700/50;
 }
 span.line:empty::before {
   content: ' ';
 }
-.highlighted::before {
-  content: '';
-  display: block;
-  height: 100%;
-  width: 4px;
-  background-color: #60a5fa;
-  position: absolute;
-  left: -4px;
-  top: 0;
-}
-
 pre {
   counter-reset: line;
 }
