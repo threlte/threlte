@@ -53,26 +53,36 @@ if (metastring) {
         continue
       }
 
-      // run formatter if it exists
-      const formatter = propFormatters[key as keyof typeof propFormatters]
-      if (formatter) {
-        value = formatter(value)
-      }
-
       if (codeComponentProps.includes(key as any)) {
+        // run formatter if it exists
+        const formatter = propFormatters[key as keyof typeof propFormatters]
+        if (formatter) {
+          value = formatter(value)
+        }
         props[key] = value
       }
     } else {
-      // it can be a line highlight
-      // regex: {[\d-,]+}
-      const lineHighlightRegex = /{[\d-,]+}/
+      /**
+       * it can be a line highlight, e.g. {1,2,3-5,6}, or {2}+ or {2}-
+       * to indicate if the lines are added or removed.
+       * Regex: ^{[\d-,]+}[+-]*$
+       */
+      const lineHighlightRegex = /^{[\d-,]+}[+\-]*$/
       const lineHighlightMatch = element.match(lineHighlightRegex)
       const lineHighlightString = lineHighlightMatch?.[0]
       if (lineHighlightString) {
+        const classes = []
+        if (lineHighlightString.includes('+')) {
+          classes.push('highlighted-add')
+        } else if (lineHighlightString.includes('-')) {
+          classes.push('highlighted-remove')
+        } else {
+          classes.push('highlighted')
+        }
         // separate by comma
         const groups = lineHighlightString.split(',')
-        // trim whitespace and { and }
-        const trimmedGroups = groups.map((group) => group.trim().replace(/[{}]/g, ''))
+        // trim whitespace and {, }, -, +
+        const trimmedGroups = groups.map((group) => group.trim().replace(/[{}\-+]/g, ''))
 
         for (const group of trimmedGroups) {
           // separate by dash
@@ -85,20 +95,18 @@ if (metastring) {
               continue
             }
             for (let i = start; i <= end; i++) {
-              lineOptions.push({ line: i, classes: ['highlighted'] })
+              lineOptions.push({ line: i, classes })
             }
           } else {
             // it's a single line
             const line = parseInt(group, 10)
-            lineOptions.push({ line, classes: ['highlighted'] })
+            lineOptions.push({ line, classes })
           }
         }
       }
     }
   }
 }
-
-console.log(lineOptions)
 ---
 
 <Code

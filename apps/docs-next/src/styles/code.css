@@ -1,6 +1,9 @@
 code {
   display: inline;
-  @apply bg-white/5 border border-white/10 rounded-md px-1 py-0.5 text-[0.85em] text-white;
+  @apply bg-white/10 !font-normal rounded-sm px-1 py-0.5 text-[0.85em] text-white;
+}
+.prose a code {
+  @apply text-orange !font-normal rounded-sm px-1 py-0.5 text-[0.85em];
 }
 pre > code {
   display: grid;
@@ -10,6 +13,14 @@ pre > code {
   position: relative;
   @apply bg-blue-700/50;
 }
+.highlighted-add {
+  position: relative;
+  @apply bg-green-700/70;
+}
+.highlighted-remove {
+  position: relative;
+  @apply bg-red-700/50;
+}
 span.line:empty::before {
   content: ' ';
 }
@@ -18,6 +29,7 @@ pre {
 }
 span.line {
   counter-increment: line;
+  padding-right: 1ch;
 }
 span.line:before {
   content: counter(line) !important;
@@ -27,5 +39,14 @@ span.line:before {
   color: #ccc;
   user-select: none;
   opacity: 0.3;
-  @apply border-r border-[#ccc] pl-0 pr-2 mr-2 text-[0.9em] h-full;
+  margin-left: 0.3ch;
+  @apply border-r border-[#ccc]/50 pl-0 pr-2 mr-2 text-[0.9em] h-full;
+}
+span.line.highlighted-add:before {
+  content: '+' !important;
+  opacity: 1;
+}
+span.line.highlighted-remove:before {
+  content: '-' !important;
+  opacity: 1;
 }

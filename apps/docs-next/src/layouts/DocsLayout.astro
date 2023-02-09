@@ -52,17 +52,17 @@ const title = Astro.props.title
     </aside>
 
     <div
-      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto"
+      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12"
     >
       <article
-        class="prose before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
+        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
       >
         <slot />
       </article>
     </div>
 
     <aside
-      class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] right-0 pt-6"
+      class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] right-0 pt-6 pr-6"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
