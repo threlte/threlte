@@ -32,7 +32,7 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
       </div>
       <div
         class={c(
-          'not-prose bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl overflow-x-auto',
+          'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl overflow-x-auto',
           Astro.props.class ?? ''
         )}
       >
@@ -42,7 +42,7 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
   ) : (
     <div
       class={c(
-        'not-prose bg-blue-900 text-sm scrollbar-hide [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl overflow-x-auto',
+        'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl overflow-x-auto',
         Astro.props.class ?? ''
       )}
     >
