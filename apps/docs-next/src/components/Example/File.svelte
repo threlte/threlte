@@ -16,8 +16,9 @@
 
 <button
   class={c(
-    '[&>*]:w-[1em] flex flex-row items-center gap-1 hover:underline focus:outline-none',
-    isSelected && 'bg-orange-800 px-1 -mx-1 rounded-sm py-0.5 -my-0.5'
+    '[&>*]:w-[1em] flex flex-row items-center gap-1 hover:underline focus:outline-none border border-transparent',
+    isSelected &&
+      'bg-orange-800/50 border-orange/5 text-orange px-1 -mx-1 rounded-sm py-0.5 -my-0.5'
   )}
   on:click={() => selectFile(file)}
 >
