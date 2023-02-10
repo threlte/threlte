@@ -33,9 +33,22 @@ const title = Astro.props.title
       rel="stylesheet"
     />
   </head>
-  <body
-    class="relative before:fixed before:h-screen before:h-[100lvh] before:w-full before:top-0 before:-z-50 before:content-[' '] before:bg-gradient-to-b before:from-[#0D1421] before:to-[#080c14] text-white"
-  >
+  <body>
     <slot />
   </body>
 </html>
+
+<style>
+  html {
+    @apply bg-[#080c14];
+  }
+
+  body {
+    @apply relative;
+  }
+
+  body::before {
+    content: '';
+    @apply block fixed left-0 top-0 right-0 bottom-0 z-[-999] text-white bg-gradient-to-b from-[#0D1421] to-[#080c14];
+  }
+</style>
