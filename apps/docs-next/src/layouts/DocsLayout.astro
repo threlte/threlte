@@ -1,34 +1,70 @@
 ---
 import { Image } from '@astrojs/image/components'
+import type { CollectionEntry } from 'astro:content'
 import AppLayout from './AppLayout.astro'
-import Logo from '$assets/logo/threlte-logo.png'
+import Logo from '$assets/logo/threlte-logo-only.png'
 import LeftSidebar from '$components/Menu/LeftSidebar/LeftSidebar.astro'
+import Socials from '$components/Socials/Socials.astro'
+import RightSidebar from '$components/Menu/RightSidebar/RightSidebar.astro'
 
 export interface Props {
   title?: string
+  entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
 }
 
 const title = Astro.props.title
 ---
 
 <AppLayout title={title}>
-  <header class="fixed">
-    <a href="/">
+  <header
+    class="fixed w-full h-[80px] items-center px-6 mx-auto flex flex-row justify-between bg-[#0D1421] border-b-orange/25 border-b z-10"
+  >
+    <!-- Header Left -->
+    <a
+      href="/"
+      class="flex flex-row gap-4 items-center"
+    >
       <Image
         src={Logo}
         alt="threlte logo"
         width={200}
+        class="w-[37px]"
       />
+
+      <h2
+        class="text-orange text-2xl font-bold border-2 border-orange-500 bg-orange-800/50 rounded-md px-1.5 translate-y-px"
+      >
+        DOCS
+      </h2>
     </a>
+
+    <!-- Header Right -->
+    <div class="flex flex-row gap-5">
+      <Socials />
+    </div>
   </header>
 
   <main class="flex flex-row">
-    <aside class="w-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)] fixed">
+    <aside
+      class="w-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] pt-6"
+    >
       <LeftSidebar />
     </aside>
 
-    <div class="prose ml-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)]">
-      <slot />
+    <div
+      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12"
+    >
+      <article
+        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
+      >
+        <slot />
+      </article>
     </div>
+
+    <aside
+      class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] right-0 pt-6 pr-6"
+    >
+      <RightSidebar entry={Astro.props.entry} />
+    </aside>
   </main>
 </AppLayout>

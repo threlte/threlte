@@ -45,7 +45,11 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 
 type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 
-const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = ['start-here', 't', 'preprocessing']
+const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
+  'Start Here',
+  'Concepts',
+  'Preprocessing'
+]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const referenceCollection = await getCollection('learn')

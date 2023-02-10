@@ -1,0 +1,52 @@
+---
+import { c } from '$lib/classes'
+import { getHighlighter, type Lang, setCDN, Theme, HtmlRendererOptions } from 'shiki'
+
+interface Props {
+  lang: Lang
+  theme?: Theme
+  class?: string
+  title?: string
+  code: string
+  lineOptions?: HtmlRendererOptions['lineOptions']
+}
+
+setCDN('https://unpkg.com/shiki/')
+
+const highlighter = await getHighlighter({
+  theme: Astro.props.theme ?? 'dracula-soft',
+  langs: ['typescript', 'javascript', 'svelte']
+})
+
+const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
+  lang: Astro.props.lang,
+  lineOptions: Astro.props.lineOptions ?? []
+})
+---
+
+{
+  Astro.props.title ? (
+    <>
+      <div class="not-prose text-faded text-sm px-2 py-1 bg-blue-900 inline-block z-10 translate-y-px border rounded-t-md border-x-white/20 border-t-white/20 border-b-white/5">
+        {Astro.props.title}
+      </div>
+      <div
+        class={c(
+          'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl overflow-x-auto',
+          Astro.props.class ?? ''
+        )}
+      >
+        <Fragment set:html={formatted} />
+      </div>
+    </>
+  ) : (
+    <div
+      class={c(
+        'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl overflow-x-auto',
+        Astro.props.class ?? ''
+      )}
+    >
+      <Fragment set:html={formatted} />
+    </div>
+  )
+}

@@ -1,6 +1,7 @@
 ---
 import '$styles/variables.css'
 import '$styles/code.css'
+import '$styles/app.css'
 
 export interface Props {
   title?: string | undefined
@@ -18,8 +19,23 @@ const title = Astro.props.title
       content="width=device-width"
     />
     <title>{title ?? 'Threlte'}</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
+  <body
+    class="relative before:fixed before:h-screen before:h-[100lvh] before:w-full before:top-0 before:-z-50 before:content-[' '] before:bg-gradient-to-b before:from-[#0D1421] before:to-[#080c14] text-white"
+  >
     <slot />
   </body>
 </html>

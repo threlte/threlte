@@ -1,0 +1,59 @@
+<Canvas>
+  <T.PerspectiveCamera
+    makeDefault
+    position={[-10, 10, 10]}
+    fov={15}
+  >
+    <OrbitControls
+      autoRotate
+      enableZoom={false}
+      enableDamping
+      autoRotateSpeed={0.5}
+      target={{ y: 1.5 }}
+    />
+  </T.PerspectiveCamera>
+
+  <!-- Lights -->
+  <T.DirectionalLight
+    intensity={0.8}
+    position={[5, 10, 0]}
+  />
+  <T.AmbientLight intensity={0.2} />
+
+  <Grid
+    position.y={-0.001}
+    cellColor="#ffffff"
+    sectionColor="#ffffff"
+    sectionThickness={0}
+    fadeDistance={25}
+    cellSize={2}
+  />
+
+  <ContactShadows
+    scale={10}
+    blur={2}
+    far={2.5}
+    opacity={0.5}
+  />
+
+  <Float>
+    <T.Mesh position={[0, 1.2, -0.75]}>
+      <T.MeshStandardMaterial color="#0059BA"	/>
+      <T.BoxGeometry color="#0059BA"	/>
+    </T.Mesh>
+  </Float>
+
+  <Float>
+    <T.Mesh position={[1.2, 1.5, 0.75]} rotation={[5, 71, 0]}>
+      <T.MeshStandardMaterial color="#F85122"	/>
+      <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
+    </T.Mesh>
+  </Float>
+
+  <Float>
+    <T.Mesh position={[-1.4, 1.5, 0.75]} rotation={[-5, 128, 10]}>
+      <T.MeshStandardMaterial color={new Color('#F8EBCE').convertSRGBToLinear()}	/>
+      <T.IcosahedronGeometry args={[1, 0]} />
+    </T.Mesh>
+  </Float>
+</Canvas>

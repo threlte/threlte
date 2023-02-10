@@ -1,12 +1,11 @@
 ---
 import DocsLayout from '$layouts/DocsLayout.astro'
 import { getCollection, CollectionEntry } from 'astro:content'
+import MdxCode from '$components/Code/MdxCode.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('learn')
   return blogEntries.map((entry) => {
-    console.log(entry)
-
     return {
       params: { slug: entry.slug },
       props: { entry }
@@ -22,6 +21,6 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<DocsLayout>
-  <Content />
+<DocsLayout entry={entry}>
+  <Content components={{ pre: MdxCode }} />
 </DocsLayout>

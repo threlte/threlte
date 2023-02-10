@@ -1,0 +1,13 @@
+<script>
+  import { RigidBody, AutoColliders } from '@threlte/rapier'
+  import { T } from '@threlte/core'
+</script>
+
+<RigidBody>
+  <AutoColliders shape={'ball'}>
+    <T.Mesh receiveShadow castShadow>
+      <T.SphereGeometry args={[0.25]} />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  </AutoColliders>
+</RigidBody>

@@ -1,0 +1,19 @@
+---
+import { c } from '$lib/classes'
+import { getCollection } from 'astro:content'
+import Testimonial from './Testimonial.astro'
+
+const testimonials = await getCollection('testimonials')
+
+interface Props {
+  class?: string
+}
+---
+
+<div class={c('columns-1 md:columns-2 lg:columns-3 gap-6', Astro.props.class ?? '')}>
+  {
+    testimonials.map((testimonial) => {
+      return <Testimonial testimonial={testimonial} />
+    })
+  }
+</div>

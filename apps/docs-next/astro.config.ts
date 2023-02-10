@@ -4,7 +4,7 @@ import seqPreprocessor from 'svelte-sequential-preprocessor'
 import preprocess from 'svelte-preprocess'
 import { preprocessThrelte } from '@threlte/preprocess'
 import AutoImport from 'astro-auto-import'
-import rehypePrettyCode, { Options } from 'rehype-pretty-code'
+import type { Options } from 'rehype-pretty-code'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
@@ -81,7 +81,7 @@ export default defineConfig({
     }
   },
   markdown: {
-    syntaxHighlight: false,
-    rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+    syntaxHighlight: false
+    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
   }
 })

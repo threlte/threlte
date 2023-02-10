@@ -1,20 +1,52 @@
-div[data-rehype-pretty-code-fragment] {
+code {
+  display: inline;
+  @apply bg-white/10 !font-normal rounded-sm px-1 py-0.5 text-[0.85em] text-white;
+}
+.prose a code {
+  @apply text-orange !font-normal rounded-sm px-1 py-0.5 text-[0.85em];
 }
 pre > code {
   display: grid;
-  /* background-color: rgba(200, 200, 255, 0.09); */
+  @apply bg-transparent border-0 text-[1em];
 }
 .highlighted {
   position: relative;
-  /* background-color: rgba(200, 200, 255, 0.1); */
+  @apply bg-blue-700/50;
 }
-.highlighted::before {
-  content: '';
-  display: block;
-  height: 100%;
-  width: 4px;
-  background-color: #60a5fa;
-  position: absolute;
-  left: -4px;
-  top: 0;
+.highlighted-add {
+  position: relative;
+  @apply bg-green-700/70;
+}
+.highlighted-remove {
+  position: relative;
+  @apply bg-red-700/50;
+}
+span.line:empty::before {
+  content: ' ';
+}
+pre {
+  counter-reset: line;
+}
+span.line {
+  counter-increment: line;
+  padding-right: 1ch;
+}
+span.line:before {
+  content: counter(line) !important;
+  display: inline-block;
+  width: calc(1ch + 1rem);
+  text-align: right;
+  color: #ccc;
+  user-select: none;
+  opacity: 0.3;
+  margin-left: 0.3ch;
+  @apply border-r border-[#ccc]/50 pl-0 pr-2 mr-2 text-[0.9em] h-full;
+}
+span.line.highlighted-add:before {
+  content: '+' !important;
+  opacity: 1;
+}
+span.line.highlighted-remove:before {
+  content: '-' !important;
+  opacity: 1;
 }

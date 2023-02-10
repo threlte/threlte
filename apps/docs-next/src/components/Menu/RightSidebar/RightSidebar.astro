@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import RightSidebar from './RightSidebar.svelte'
+
+interface Props {
+  entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+}
+
+const { entry } = Astro.props
+const content = await entry.render()
+---
+
+<RightSidebar
+  client:load
+  headings={content.headings}
+/>
