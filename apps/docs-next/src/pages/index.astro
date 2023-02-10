@@ -126,31 +126,29 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       </Button>
     </div>
 
-    <div class="flex flex-row justify-center items-start gap-8 md:my-12">
-      <div class="flex flex-col gap-8 w-1/3">
-        <div class="text-xl text-faded">
-          Write clear, <span class="text-highlight">declarative</span> and
-          <span class="text-highlight">type-safe</span> components that seemlessly react to state changes
-          and are ready to be <span class="text-highlight">interactive</span>.
-        </div>
+    <div class="grid md:my-12 gap-8 grid-cols-1 lg:grid-cols-[1fr_2fr]">
+      <div class="text-xl text-faded">
+        Write clear, <span class="text-highlight">declarative</span> and
+        <span class="text-highlight">type-safe</span> components that seemlessly react to state changes
+        and are ready to be <span class="text-highlight">interactive</span>.
+      </div>
 
-        <div class="z-10">
-          <Code
-            class="h-[600px] w-[calc(100%+150px)] overflow-auto"
-            code={IntroExampleRaw}
-            lang="svelte"
+      <div class="lg:h-0">
+        <div
+          class="bg-white/5 border border-white/20 shadow-xl overflow-hidden rounded-md w-full aspect-[4/3]"
+        >
+          <IntroExample
+            class="w-full h-full"
+            client:load
           />
         </div>
       </div>
 
-      <div
-        class="bg-white/5 border border-white/20 shadow-xl overflow-hidden rounded-md w-2/3 aspect-[4/3]"
-      >
-        <IntroExample
-          class="w-full h-full"
-          client:load
-        />
-      </div>
+      <Code
+        class="lg:w-[calc(100%+150px)] h-[calc(50vmin+100px)] overflow-auto"
+        code={IntroExampleRaw}
+        lang="svelte"
+      />
     </div>
   </div>
 
