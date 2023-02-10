@@ -52,7 +52,7 @@ const title = Astro.props.title
     </aside>
 
     <div
-      class="w-full mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12 justify-self-center lg:order-2 order-3"
+      class="w-full lg:mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12 justify-self-center lg:order-2 order-3"
     >
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
@@ -62,7 +62,7 @@ const title = Astro.props.title
     </div>
 
     <aside
-      class="w-full mt-[var(--docs-navbar-height)] pt-6 place-self-start justify-self-end sticky top-[80px] lg:order-3 order-2"
+      class="w-full mt-12 lg:mt-[var(--docs-navbar-height)] pt-6 place-self-start justify-self-end sticky top-[80px] lg:order-3 order-2 ml-4 bg-gradient-to-b from-[#0c1421] via-[#0c1421]"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
