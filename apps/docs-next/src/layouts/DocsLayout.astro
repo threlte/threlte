@@ -19,7 +19,6 @@ const title = Astro.props.title
   <header
     class="fixed w-full h-[80px] items-center px-6 mx-auto flex flex-row justify-between bg-[#0D1421] border-b-orange/25 border-b z-10"
   >
-    <!-- Header Left -->
     <a
       href="/"
       class="flex flex-row gap-4 items-center"
@@ -38,21 +37,22 @@ const title = Astro.props.title
       </h2>
     </a>
 
-    <!-- Header Right -->
     <div class="flex flex-row gap-5">
       <Socials />
     </div>
   </header>
 
-  <main class="flex flex-row">
+  <main
+    class="grid grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
+  >
     <aside
-      class="w-[var(--left-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] pt-6"
+      class="mt-[var(--docs-navbar-height)] pt-6 place-self-start sticky top-[80px] justify-self-stretch row-span-2 lg:row-span-1 order-1"
     >
       <LeftSidebar />
     </aside>
 
     <div
-      class="w-full ml-[var(--left-sidebar-width)] mr-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12"
+      class="w-full mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12 justify-self-center lg:order-2 order-3"
     >
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
@@ -62,7 +62,7 @@ const title = Astro.props.title
     </div>
 
     <aside
-      class="w-[var(--right-sidebar-width)] mt-[var(--docs-navbar-height)] fixed h-[calc(100%-var(--docs-navbar-height))] right-0 pt-6 pr-6"
+      class="w-full mt-[var(--docs-navbar-height)] pt-6 place-self-start justify-self-end sticky top-[80px] lg:order-3 order-2"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>

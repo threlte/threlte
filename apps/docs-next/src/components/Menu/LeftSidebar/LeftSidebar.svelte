@@ -16,8 +16,8 @@
   }
 </script>
 
-<nav class="pl-6 flex flex-col h-full relative">
-  <div class="relative pb-6">
+<nav class="pl-6 flex flex-col h-full relative w-full">
+  <div class="relative pb-6 w-full">
     <Tabs
       on:select={onTabSelect}
       tabs={[
