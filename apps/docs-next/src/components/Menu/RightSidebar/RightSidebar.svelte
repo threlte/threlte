@@ -109,7 +109,7 @@
       {#each filteredHeadings as heading}
         <li
           class={c(
-            'py-6 lg:py-0.5 group border-l-4 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
+            'py-6 lg:py-0.5 group border-l-[8px] lg:border-l-2 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
               'bg-orange-500 !text-white !border-white/60 glow-orange'
