@@ -60,7 +60,7 @@
 </script>
 
 <div
-  class="flex flex-row text-xs overflow-visible h-full scrollbar-hide pb-12 relative pl-12 gap-6 items-center"
+  class="flex flex-row lg:text-xs overflow-visible h-full scrollbar-hide pb-12 relative pl-12 gap-6 items-center"
 >
   <button
     class="group btn items-center overflow-hidden cursor-pointer lg:cursor-default justify-between border border-white/70 rounded-md lg:border-none"
@@ -75,7 +75,7 @@
       {#each filteredHeadings as heading}
         <li
           class={c(
-            'py-0.5 group border-l-4 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
+            'py-2 lg:py-0.5 group border-l-4 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
             !!currentHeadingId &&
               heading.slug === currentHeadingId &&
               'bg-orange-500 !text-white !border-white/60'
@@ -83,7 +83,7 @@
         >
           <a
             data-depth={heading.depth}
-            class={c('group-hover:underline pr-4 block no-underline')}
+            class={c('hover:underline pr-4 block no-underline')}
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}>{heading.text}</a
           >
