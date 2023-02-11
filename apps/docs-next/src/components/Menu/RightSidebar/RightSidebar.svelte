@@ -62,16 +62,19 @@
 </script>
 
 <div
-  class="flex flex-row-reverse lg:text-xs overflow-visible h-full scrollbar-hide pb-12 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between "
+  class="flex lg:text-xs overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between "
 >
+  <span class="font-bold mb-2 px-0 py-0 pl-3 text-sm hidden lg:block w-full"> On this page </span>
   <button
-    class="group btn items-center overflow-hidden cursor-pointer lg:cursor-default justify-between border border-white/70 rounded-md lg:border-none"
-    on:blur={(e) => {
-      console.log('losing focus', e)
-    }}
+    class="group items-center overflow-hidden cursor-pointer lg:cursor-default justify-between flex w-full"
   >
+    <div class="flex gap-4 items-center lg:hidden">
+      <span class="text-base font-bold">{headings[0] ? headings[0].text : ''} </span>
+      <span class="text-sm">{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
+      <span class="text-sm">{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
+    </div>
     <svg
-      class="w-10 block lg:hidden"
+      class="w-10 block lg:hidden border border-white/70 rounded-md lg:border-none"
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -126,11 +129,4 @@
       {/each}
     </ul>
   </button>
-
-  <span class="font-bold mb-2 px-0 py-0 pl-3 text-sm hidden lg:block"> On this page </span>
-  <div class="flex gap-8 items-center lg:hidden">
-    <span class="text-base font-bold">{headings[0] ? headings[0].text : ''} </span>
-    <span class="text-sm">{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
-    <span class="text-sm">{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
-  </div>
 </div>
