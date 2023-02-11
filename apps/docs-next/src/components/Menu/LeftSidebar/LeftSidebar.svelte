@@ -17,7 +17,7 @@
 </script>
 
 <nav
-  class="px-6 md:pl-6 flex flex-col-reverse md:flex-col h-full relative w-full bg-gradient-to-t from-[#0D131F] via-[#0D131F] pt-16 md:pt-0"
+  class="px-6 md:pl-6 flex flex-col-reverse md:flex-col h-full relative w-full bg-gradient-to-t from-[#0D131F] via-[#0D131F] md:bg-none pt-16 md:pt-0"
 >
   <div class="relative pb-6 w-full">
     <Tabs

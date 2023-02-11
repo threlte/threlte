@@ -103,7 +103,7 @@
     >
 
     <ul
-      class={`hidden hover:block absolute top-1/2 w-full text-left group-active:block group-focus:block lg:block bg-[#0c1421] right-0 px-6 lg:px-0 lg:pl-6
+      class={`hidden hover:block absolute top-1/2 w-full text-left group-active:block group-focus:block lg:block bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6
       `}
     >
       {#each filteredHeadings as heading}
