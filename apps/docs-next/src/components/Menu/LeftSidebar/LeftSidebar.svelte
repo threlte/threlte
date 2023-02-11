@@ -16,7 +16,9 @@
   }
 </script>
 
-<nav class="pl-6 flex flex-col h-full relative w-full">
+<nav
+  class="px-6 md:pl-6 flex flex-col-reverse md:flex-col h-full relative w-full bg-gradient-to-t from-[#0D131F] via-[#0D131F] pt-16 md:pt-0"
+>
   <div class="relative pb-6 w-full">
     <Tabs
       on:select={onTabSelect}
@@ -33,12 +35,10 @@
       activeTabId={$activeMenu}
     />
 
-    <div
-      class="absolute top-full left-0 w-full h-4 pointer-events-none bg-gradient-to-b from-[#0D131F] to-transparent z-20"
-    />
+    <div class="absolute top-full left-0 w-full h-4 pointer-events-none  z-20" />
   </div>
 
-  <ul class="overflow-auto h-full scrollbar-hide pt-2 pb-6">
+  <ul class="overflow-auto h-full scrollbar-hide pt-2 pb-6 hidden md:block">
     {#each menu[$activeMenu].categories as category}
       <li class="mb-6">
         <LeftSidebarCategory {category} />
