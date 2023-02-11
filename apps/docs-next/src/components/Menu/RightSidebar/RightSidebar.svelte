@@ -64,7 +64,11 @@
 <div
   class="flex lg:text-sm overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between"
 >
-  <span class="font-bold mb-2 px-0 py-0 pl-3 text-sm hidden lg:block w-full"> On this page </span>
+  <span
+    class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block w-full -top-2 lg:top-0 text-white/80 lg:text-white"
+  >
+    On this page
+  </span>
   <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full ">
     <div
       class="hidden group-active:block group-focus:block fixed top-0 left-0 w-full h-full pointer-events-none backdrop-blur-sm -z-10 md:group-active:hidden md:group-focus:hidden
