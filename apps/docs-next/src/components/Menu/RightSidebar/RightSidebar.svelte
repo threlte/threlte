@@ -62,19 +62,21 @@
 </script>
 
 <div
-  class="flex lg:text-xs overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between "
+  class="flex lg:text-sm overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between"
 >
   <span class="font-bold mb-2 px-0 py-0 pl-3 text-sm hidden lg:block w-full"> On this page </span>
-  <button
-    class="group items-center overflow-hidden cursor-pointer lg:cursor-default justify-between flex w-full"
-  >
-    <div class="flex gap-4 items-center lg:hidden">
-      <span class="text-base font-bold">{headings[0] ? headings[0].text : ''} </span>
-      <span class="text-sm">{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
-      <span class="text-sm">{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
+  <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full ">
+    <div
+      class="hidden group-active:block group-focus:block fixed top-0 left-0 w-full h-full pointer-events-none backdrop-blur-sm -z-10 md:group-active:hidden md:group-focus:hidden
+    "
+    />
+    <div class="flex gap-4 items-center lg:hidden text-base">
+      <span class="font-bold">{headings[0] ? headings[0].text : ''} </span>
+      <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
+      <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
     </div>
     <svg
-      class="w-10 block lg:hidden border border-white/70 rounded-md lg:border-none"
+      class="w-10 block lg:hidden border border-white/70 rounded-md lg:border-none  overflow-visible "
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +112,7 @@
             'py-6 lg:py-0.5 group border-l-4 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
-              'bg-orange-500 !text-white !border-white/60'
+              'bg-orange-500 !text-white !border-white/60 glow-orange'
           )}
           on:keypress={() => {
             setCurrentHeading(heading.slug)
@@ -121,7 +123,7 @@
         >
           <a
             data-depth={heading.depth}
-            class={c('hover:underline pr-4 block no-underline z-10')}
+            class={c('hover:underline pr-4 block no-underline ')}
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}>{heading.text}</a
           >
