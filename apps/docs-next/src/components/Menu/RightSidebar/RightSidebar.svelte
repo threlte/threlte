@@ -31,14 +31,10 @@
 
   const headingClicked = (slug: string) => {
     setCurrentHeading(slug)
-    tocListEnabled = false
-
     setTimeout(() => {
-      tocListEnabled = true
-    }, 200)
+      expanded = false
+    }, 30)
   }
-
-  let tocListEnabled = true
 
   onMount(() => {
     intersectionObserver = new IntersectionObserver(
@@ -69,6 +65,12 @@
   onDestroy(() => {
     intersectionObserver?.disconnect()
   })
+
+  let expanded = false
+
+  const focusFirstDropdownLink = ({ target }: any) => {
+    target.firstElementChild.focus()
+  }
 </script>
 
 <div
@@ -78,45 +80,49 @@
     class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block lg:w-full -top-4 lg:top-0 text-white/80 lg:text-white"
     >On this page</span
   >
-  <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full">
-    <div
-      class="hidden group-active:block group-focus:block fixed top-0 left-0 w-full h-full pointer-events-none backdrop-blur-sm -z-10 md:group-active:hidden md:group-focus:hidden
-    "
-    />
-    <div class="flex gap-4 items-center lg:hidden text-base">
-      <span class="font-bold">{headings[0] ? headings[0].text : ''} </span>
-      <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
-      <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
-    </div>
-    <ul
-      class={`hidden ${
-        tocListEnabled ? 'hover:block ' : ''
-      } absolute top-1/2 w-full text-left  lg:block bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6 group-active:block group-focus:block
-      `}
+  <nav class="lg:hidden w-full">
+    <button
+      aria-expanded={expanded}
+      aria-haspopup="true"
+      aria-label="Toggle for table of contents"
+      on:click={() => (expanded = !expanded)}
     >
-      {#each filteredHeadings as heading}
-        <li
-          class={c(
-            'py-6 lg:py-0.5 group border-l-[8px] lg:border-l-2 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
-            !!currentHeadingSlug &&
-              heading.slug === currentHeadingSlug &&
-              'bg-orange-500 !text-white !border-white/60 glow-orange'
-          )}
-          on:keypress={() => {
-            headingClicked(heading.slug)
-          }}
-          on:click={() => {
-            headingClicked(heading.slug)
-          }}
+      <div class="flex gap-4 items-center lg:hidden text-base">
+        <span class="font-bold">{headings[0] ? headings[0].text : ''} </span>
+        <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
+        <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
+      </div>
+    </button>
+  </nav>
+
+  <ul
+    class={`absolute top-1/2 w-full text-left  bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6 ${
+      expanded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+    } transition-all duration-50 lg:opacity-100 lg:pointer-events-auto`}
+    on:transitionend={focusFirstDropdownLink}
+  >
+    {#each filteredHeadings as heading}
+      <li
+        class={c(
+          'lg:py-0.5 border-l-[8px] lg:border-l-2 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
+          !!currentHeadingSlug &&
+            heading.slug === currentHeadingSlug &&
+            'bg-orange-500 !text-white !border-white/60 glow-orange'
+        )}
+        on:keypress={() => {
+          headingClicked(heading.slug)
+        }}
+        on:click={() => {
+          headingClicked(heading.slug)
+        }}
+      >
+        <a
+          data-depth={heading.depth}
+          class={c('hover:underline pr-4 block no-underline py-6 lg:py-0')}
+          style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
+          href={`#${heading.slug}`}>{heading.text}</a
         >
-          <a
-            data-depth={heading.depth}
-            class={c('hover:underline pr-4 block no-underline ')}
-            style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
-            href={`#${heading.slug}`}>{heading.text}</a
-          >
-        </li>
-      {/each}
-    </ul>
-  </button>
+      </li>
+    {/each}
+  </ul>
 </div>
