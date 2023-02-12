@@ -62,13 +62,12 @@
 </script>
 
 <div
-  class="flex lg:text-sm overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between"
+  class="flex lg:text-sm overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between mt-4"
 >
   <span
-    class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block w-full -top-2 lg:top-0 text-white/80 lg:text-white"
+    class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block lg:w-full -top-4 lg:top-0 text-white/80 lg:text-white"
+    >On this page</span
   >
-    On this page
-  </span>
   <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full ">
     <div
       class="hidden group-active:block group-focus:block fixed top-0 left-0 w-full h-full pointer-events-none backdrop-blur-sm -z-10 md:group-active:hidden md:group-focus:hidden
@@ -79,7 +78,7 @@
       <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
       <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
     </div>
-    <svg
+    <!-- <svg
       class="w-10 block lg:hidden border border-white/70 rounded-md lg:border-none  overflow-visible "
       viewBox="0 0 48 48"
       fill="none"
@@ -104,7 +103,7 @@
           </g>
         </g>
       </g></svg
-    >
+    > -->
 
     <ul
       class={`hidden hover:block absolute top-1/2 w-full text-left group-active:block group-focus:block lg:block bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6
