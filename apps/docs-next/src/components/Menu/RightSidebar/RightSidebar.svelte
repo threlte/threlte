@@ -26,9 +26,19 @@
     })
 
     currentHeadingIndex = newHeadingIndex
-
     currentHeading = headings[newHeadingIndex] || currentHeading
   }
+
+  const headingClicked = (slug: string) => {
+    setCurrentHeading(slug)
+    tocListEnabled = false
+
+    setTimeout(() => {
+      tocListEnabled = true
+    }, 200)
+  }
+
+  let tocListEnabled = true
 
   onMount(() => {
     intersectionObserver = new IntersectionObserver(
@@ -68,7 +78,7 @@
     class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block lg:w-full -top-4 lg:top-0 text-white/80 lg:text-white"
     >On this page</span
   >
-  <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full ">
+  <button class="group items-center  cursor-pointer lg:cursor-default justify-between flex w-full">
     <div
       class="hidden group-active:block group-focus:block fixed top-0 left-0 w-full h-full pointer-events-none backdrop-blur-sm -z-10 md:group-active:hidden md:group-focus:hidden
     "
@@ -78,35 +88,10 @@
       <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
       <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
     </div>
-    <!-- <svg
-      class="w-10 block lg:hidden border border-white/70 rounded-md lg:border-none  overflow-visible "
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      ><g
-        id="SVGRepo_bgCarrier"
-        stroke-width="0"
-      /><g
-        id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      /><g id="SVGRepo_iconCarrier">
-        <g id="list">
-          <g id="list_2">
-            <path
-              id="Combined Shape"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M9 14H11C11.5523 14 12 14.4477 12 15C12 15.5523 11.5523 16 11 16H9C8.44772 16 8 15.5523 8 15C8 14.4477 8.44772 14 9 14ZM17 14H39C39.5523 14 40 14.4477 40 15C40 15.5523 39.5523 16 39 16H17C16.4477 16 16 15.5523 16 15C16 14.4477 16.4477 14 17 14ZM11 26H9C8.44772 26 8 26.4477 8 27C8 27.5523 8.44772 28 9 28H11C11.5523 28 12 27.5523 12 27C12 26.4477 11.5523 26 11 26ZM17 26H39C39.5523 26 40 26.4477 40 27C40 27.5523 39.5523 28 39 28H17C16.4477 28 16 27.5523 16 27C16 26.4477 16.4477 26 17 26ZM11 20H9C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22H11C11.5523 22 12 21.5523 12 21C12 20.4477 11.5523 20 11 20ZM17 20H31C31.5523 20 32 20.4477 32 21C32 21.5523 31.5523 22 31 22H17C16.4477 22 16 21.5523 16 21C16 20.4477 16.4477 20 17 20ZM11 32H9C8.44772 32 8 32.4477 8 33C8 33.5523 8.44772 34 9 34H11C11.5523 34 12 33.5523 12 33C12 32.4477 11.5523 32 11 32ZM17 32H31C31.5523 32 32 32.4477 32 33C32 33.5523 31.5523 34 31 34H17C16.4477 34 16 33.5523 16 33C16 32.4477 16.4477 32 17 32Z"
-              fill="#ffffff"
-            />
-          </g>
-        </g>
-      </g></svg
-    > -->
-
     <ul
-      class={`hidden hover:block absolute top-1/2 w-full text-left group-active:block group-focus:block lg:block bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6
+      class={`hidden ${
+        tocListEnabled ? 'hover:block ' : ''
+      } absolute top-1/2 w-full text-left  lg:block bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6 group-active:block group-focus:block
       `}
     >
       {#each filteredHeadings as heading}
@@ -118,10 +103,10 @@
               'bg-orange-500 !text-white !border-white/60 glow-orange'
           )}
           on:keypress={() => {
-            setCurrentHeading(heading.slug)
+            headingClicked(heading.slug)
           }}
           on:click={() => {
-            setCurrentHeading(heading.slug)
+            headingClicked(heading.slug)
           }}
         >
           <a
