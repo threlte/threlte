@@ -12,7 +12,7 @@
 
 <details
   bind:open={$isOpen}
-  class="block group text-sm"
+  class="block group text-lg md:text-sm"
 >
   <summary class="font-bold list-none cursor-pointer select-none">
     <div class="flex flex-row items-center">
@@ -33,9 +33,9 @@
       </div>
     </div>
   </summary>
-  <ul class="ml-2 text-faded">
+  <ul class="ml-2 text-faded ">
     {#each category.menuItems as item}
-      <li>
+      <li class="my-2 md:my-0">
         <a href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a>
       </li>
     {/each}
