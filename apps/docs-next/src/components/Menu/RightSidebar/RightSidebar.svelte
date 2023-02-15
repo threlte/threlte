@@ -74,25 +74,25 @@
 </script>
 
 <div
-  class="flex lg:text-sm overflow-visible h-full scrollbar-hide pb-16 relative px-6 lg:px-0 lg:pl-6 gap-6 items-center justify-between mt-4"
+  class="scrollbar-hide relative mt-4 flex h-full items-center justify-between gap-6 overflow-visible px-6 pb-16 lg:px-0 lg:pl-6 lg:text-sm"
 >
   <div
-    class={`group-active:block absolute top-0 left-0 w-full h-screen pointer-events-none backdrop-blur-sm -z-10 lg:hidden ${
+    class={`pointer-events-none absolute top-0 left-0 -z-10 h-screen w-full backdrop-blur-sm group-active:block lg:hidden ${
       expanded ? 'block' : 'hidden'
     }`}
   />
   <span
-    class="absolute lg:relative lg:font-bold px-0 py-0 lg:pl-3 text-xs lg:text-sm block lg:w-full -top-4 lg:top-0 text-white/80 lg:text-white"
+    class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
     >On this page</span
   >
-  <nav class="lg:hidden w-full">
+  <nav class="w-full lg:hidden">
     <button
       aria-expanded={expanded}
       aria-haspopup="true"
       aria-label="Toggle for table of contents"
       on:click={() => (expanded = !expanded)}
     >
-      <div class="flex gap-4 items-center lg:hidden text-base">
+      <div class="flex items-center gap-4 text-base lg:hidden">
         <span class="font-bold">{headings[0] ? headings[0].text : ''} </span>
         <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
         <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
@@ -101,18 +101,18 @@
   </nav>
 
   <ul
-    class={`absolute top-1/2 w-full text-left  bg-[#0c1421] lg:bg-transparent right-0 px-6 lg:px-0 lg:pl-6 ${
-      expanded ? 'opacity-100' : 'opacity-0 pointer-events-none'
-    } transition-all duration-50 lg:opacity-100 lg:pointer-events-auto`}
+    class={`absolute top-1/2 right-0 w-full  bg-[#0c1421] px-6 text-left lg:bg-transparent lg:px-0 lg:pl-6 ${
+      expanded ? 'opacity-100' : 'pointer-events-none opacity-0'
+    } duration-50 transition-all lg:pointer-events-auto lg:opacity-100`}
     on:transitionend={focusFirstDropdownLink}
   >
     {#each filteredHeadings as heading}
       <li
         class={c(
-          'lg:py-0.5 border-l-[8px] lg:border-l-2 border-white/20 pl-3 hover:border-white/60 text-faded hover:text-white',
+          'text-faded border-l-[8px] border-white/20 pl-3 hover:border-white/60 hover:text-white lg:border-l-2 lg:py-0.5',
           !!currentHeadingSlug &&
             heading.slug === currentHeadingSlug &&
-            'bg-orange-500 !text-white !border-white/60 glow-orange'
+            'glow-orange !border-white/60 bg-orange-500 !text-white'
         )}
         on:keypress={() => {
           headingClicked(heading.slug)
@@ -123,7 +123,7 @@
       >
         <a
           data-depth={heading.depth}
-          class={c('hover:underline pr-4 block no-underline py-6 lg:py-0 ')}
+          class={c('block py-6 pr-4 no-underline hover:underline lg:py-0 ')}
           style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
           href={`#${heading.slug}`}>{heading.text}</a
         >

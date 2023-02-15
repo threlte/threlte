@@ -39,7 +39,7 @@
   on:click
   {href}
   class={c(
-    'rounded-md shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] text-center flex flex-row gap-3 w-fit text-white',
+    'flex w-fit flex-row gap-3 rounded-md text-center text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)]',
     paddings[size],
     textSizes[size],
     `bg-${color}`,
