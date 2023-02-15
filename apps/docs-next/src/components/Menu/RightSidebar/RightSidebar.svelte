@@ -77,9 +77,11 @@
   class="scrollbar-hide relative mt-4 flex h-full items-center justify-between gap-6 overflow-visible px-6 pb-16 lg:px-0 lg:pl-6 lg:text-sm"
 >
   <div
-    class={`pointer-events-none absolute top-0 left-0 -z-10 h-screen w-full backdrop-blur-sm group-active:block lg:hidden ${
+    class={`absolute top-0 left-0 -z-10 h-screen w-full backdrop-blur-sm group-active:block lg:hidden ${
       expanded ? 'block' : 'hidden'
     }`}
+    on:click={() => (expanded = false)}
+    on:keypress={() => (expanded = false)}
   />
   <span
     class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
