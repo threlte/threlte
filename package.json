@@ -20,6 +20,9 @@
     "@changesets/cli": "^2.23.1",
     "eslint-config-custom": "*",
     "prettier": "latest",
+    "prettier-plugin-astro": "^0.8.0",
+    "prettier-plugin-svelte": "^2.9.0",
+    "prettier-plugin-tailwindcss": "^0.2.3",
     "turbo": "latest"
   },
   "engines": {
