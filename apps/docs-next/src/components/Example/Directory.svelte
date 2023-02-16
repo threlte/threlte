@@ -28,7 +28,7 @@
   <button
     class:expanded
     on:click={toggle}
-    class="flex flex-row gap-1 font-bold items-center"
+    class="flex flex-row items-center gap-1 font-bold"
   >
     <div class="[&>*]:w-[1em]">
       {#if expanded}
@@ -81,8 +81,8 @@
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 1 16 16"
       class={c(
-        'h-[1em] w-[1em] ml-1 rotate-0 translate-y-px transition-all duration-200',
-        expanded && 'rotate-90 -translate-y-px'
+        'ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200',
+        expanded && '-translate-y-px rotate-90'
       )}
       aria-hidden="true"
     >
@@ -99,11 +99,11 @@
   class={c(
     'list-none',
     !expanded && 'hidden',
-    showDirectoryName && 'pl-3 border-l border-white/20 ml-1.5'
+    showDirectoryName && 'ml-1.5 border-l border-white/20 pl-3'
   )}
 >
   {#each sortedFiles as file}
-    <li class={c('pl-0 list-outside my-1')}>
+    <li class={c('my-1 list-outside pl-0')}>
       {#if file.type === 'directory'}
         <svelte:self
           directory={file}

@@ -27,12 +27,12 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
 {
   Astro.props.title ? (
     <>
-      <div class="not-prose text-faded text-sm px-2 py-1 bg-blue-900 inline-block z-10 translate-y-px border rounded-t-md border-x-white/20 border-t-white/20 border-b-white/5">
+      <div class="not-prose text-faded z-10 inline-block translate-y-px rounded-t-md border border-x-white/20 border-t-white/20 border-b-white/5 bg-blue-900 px-2 py-1 text-sm">
         {Astro.props.title}
       </div>
       <div
         class={c(
-          'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-b-md rounded-tr-md border border-white/20 shadow-xl overflow-x-auto',
+          'not-prose overflow-x-auto rounded-b-md rounded-tr-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
           Astro.props.class ?? ''
         )}
       >
@@ -42,7 +42,7 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
   ) : (
     <div
       class={c(
-        'not-prose bg-blue-900 text-sm [&>*]:!bg-transparent [&>*]:p-2 rounded-md border border-white/20 shadow-xl overflow-x-auto',
+        'not-prose overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
         Astro.props.class ?? ''
       )}
     >

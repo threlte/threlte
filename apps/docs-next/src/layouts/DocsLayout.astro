@@ -17,11 +17,11 @@ const title = Astro.props.title
 
 <AppLayout title={title}>
   <header
-    class="fixed w-full h-[80px] items-center px-6 mx-auto flex flex-row justify-between bg-[#0D1421] border-b-orange/25 border-b z-50"
+    class="border-b-orange/25 fixed z-50 mx-auto flex h-[80px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6"
   >
     <a
       href="/"
-      class="flex flex-row gap-4 items-center"
+      class="flex flex-row items-center gap-4"
     >
       <Image
         src={Logo}
@@ -31,7 +31,7 @@ const title = Astro.props.title
       />
 
       <h2
-        class="text-orange text-2xl font-bold border-2 border-orange-500 bg-orange-800/50 rounded-md px-1.5 translate-y-px"
+        class="text-orange translate-y-px rounded-md border-2 border-orange-500 bg-orange-800/50 px-1.5 text-2xl font-bold"
       >
         DOCS
       </h2>
@@ -46,23 +46,23 @@ const title = Astro.props.title
     class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="md:mt-[var(--docs-navbar-height)] md:pt-6 place-self-start md:sticky md:top-[80px] justify-self-stretch row-span-2 lg:row-span-1 order-1 fixed bottom-0 w-full md:w-auto z-20 md:z-0"
+      class="fixed bottom-0 z-20 order-1 row-span-2 w-full place-self-start justify-self-stretch md:sticky md:top-[80px] md:z-0 md:mt-[var(--docs-navbar-height)] md:w-auto md:pt-6 lg:row-span-1"
     >
       <LeftSidebar />
     </aside>
 
     <div
-      class="w-full lg:mt-[var(--docs-navbar-height)] px-6 pt-6 overflow-x-auto pb-12 justify-self-center lg:order-2 order-3"
+      class="order-3 w-full justify-self-center overflow-x-auto px-6 pt-6 pb-12 lg:order-2 lg:mt-[var(--docs-navbar-height)]"
     >
       <article
-        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert mx-auto [&_p]:text-faded max-w-5xl"
+        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded mx-auto max-w-5xl"
       >
         <slot />
       </article>
     </div>
 
     <aside
-      class="w-full mt-10 lg:mt-[calc(var(--docs-navbar-height)*1.2)] pt-6 place-self-start justify-self-end sticky top-[calc(var(--docs-navbar-height)-5px)] lg:order-3 order-2 ml-4 bg-gradient-to-b from-[#0c1421] via-[#0c1421] lg:bg-none z-10 lg:z-0"
+      class="sticky top-[calc(var(--docs-navbar-height)-5px)] z-10 order-2 mt-10 ml-4 w-full place-self-start justify-self-end bg-gradient-to-b from-[#0c1421] via-[#0c1421] pt-6 lg:z-0 lg:order-3 lg:mt-[calc(var(--docs-navbar-height)*1.2)] lg:bg-none"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>

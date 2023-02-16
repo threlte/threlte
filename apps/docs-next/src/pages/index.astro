@@ -21,14 +21,14 @@ import Testimonials from '$components/Testimonials/Testimonials.astro'
 <MainLayout title="Welcome to Threlte.">
   <div class="flex flex-col gap-14 py-24">
     <div class="flex flex-row justify-center">
-      <h2 class="text-6xl font-bold text-center text-glow-white">
+      <h2 class="text-glow-white text-center text-6xl font-bold">
         Rapidly build interactive<br />
-        <span class="inline-block border-b-[12px] border-orange">3D apps</span> for the web.
+        <span class="border-orange inline-block border-b-[12px]">3D apps</span> for the web.
       </h2>
     </div>
 
-    <div class="flex flex-col gap-4 items-center">
-      <div class="text-2xl text-faded flex-1 text-center font-light">
+    <div class="flex flex-col items-center gap-4">
+      <div class="text-faded flex-1 text-center text-2xl font-light">
         A 3D framework for the web.<br />
         Built on top of
         <span class="text-orange font-bold">Svelte</span>
@@ -37,10 +37,10 @@ import Testimonials from '$components/Testimonials/Testimonials.astro'
       </div>
 
       <div
-        class="flex flex-row gap-4 items-center justify-center bg-white/5 border border-white/20 shadow-xl rounded-full py-2 px-2"
+        class="flex flex-row items-center justify-center gap-4 rounded-full border border-white/20 bg-white/5 py-2 px-2 shadow-xl"
       >
         <!-- Svelte Logo -->
-        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center">
+        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white">
           <svg
             class="w-[55%]"
             version="1.1"
@@ -82,7 +82,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
         </div>
 
         <!-- Three.js Logo -->
-        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center">
+        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white">
           <svg
             class="w-[75%] translate-x-[5%]"
             fill="none"
@@ -112,9 +112,9 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       </div>
     </div>
 
-    <div class="flex flex-col-reverse items-center md:flex-row justify-center gap-6 md:gap-3">
+    <div class="flex flex-col-reverse items-center justify-center gap-6 md:flex-row md:gap-3">
       <code class="px-7 py-4 text-[1em]">
-        <span class="mr-2 text-orange font-bold select-none">{'>'}</span>npm i @threlte/core
+        <span class="text-orange mr-2 select-none font-bold">{'>'}</span>npm i @threlte/core
       </code>
       <Button
         href="/docs/learn/getting-started"
@@ -126,8 +126,8 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       </Button>
     </div>
 
-    <div class="grid md:my-12 gap-8 grid-cols-1 lg:grid-cols-[1fr_2fr]">
-      <div class="text-xl text-faded">
+    <div class="grid grid-cols-1 gap-8 md:my-12 lg:grid-cols-[1fr_2fr]">
+      <div class="text-faded text-xl">
         Write clear, <span class="text-highlight">declarative</span> and
         <span class="text-highlight">type-safe</span> components that seemlessly react to state changes
         and are ready to be <span class="text-highlight">interactive</span>.
@@ -135,7 +135,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
 
       <div class="lg:h-0">
         <div
-          class="bg-white/5 border border-white/20 shadow-xl overflow-hidden rounded-md w-full aspect-[4/3]"
+          class="aspect-[4/3] w-full overflow-hidden rounded-md border border-white/20 bg-white/5 shadow-xl"
         >
           <IntroExample
             class="w-full h-full"
@@ -371,7 +371,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
           />
         </div>
         <div
-          class="flex flex-row gap-2 items-center justify-center text-white [&>svg]:w-10 text-base"
+          class="flex flex-row items-center justify-center gap-2 text-base text-white [&>svg]:w-10"
         >
           <svg
             viewBox="0 0 33 33"
@@ -427,7 +427,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
 
     <div
       slot="body"
-      class="w-full flex flex-col items-center"
+      class="flex w-full flex-col items-center"
     >
       <div>
         <Testimonials class="w-full mb-12" />
@@ -443,8 +443,8 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
     </div>
   </FeatureSection>
 
-  <div class="flex flex-col justify-center items-center my-12">
-    <h2 class="text-5xl font-bold mb-8 text-glow-white text-center">Join the Threlte Community.</h2>
+  <div class="my-12 flex flex-col items-center justify-center">
+    <h2 class="text-glow-white mb-8 text-center text-5xl font-bold">Join the Threlte Community.</h2>
 
     <Button
       color="blue"

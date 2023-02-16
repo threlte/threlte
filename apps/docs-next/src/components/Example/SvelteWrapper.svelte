@@ -19,7 +19,7 @@
   })
 </script>
 
-<div class="w-full h-[80vh] relative border border-white/20 rounded-t-md overflow-hidden">
+<div class="relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20">
   {#if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />

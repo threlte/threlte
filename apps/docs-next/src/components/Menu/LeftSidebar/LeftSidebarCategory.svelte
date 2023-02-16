@@ -12,16 +12,16 @@
 
 <details
   bind:open={$isOpen}
-  class="block group text-lg md:text-sm"
+  class="group block text-lg md:text-sm"
 >
-  <summary class="font-bold list-none cursor-pointer select-none">
+  <summary class="cursor-pointer select-none list-none font-bold">
     <div class="flex flex-row items-center">
       {category.title}
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 1 16 16"
-          class="h-[1em] w-[1em] ml-1 rotate-0 translate-y-px group-open:-translate-y-px group-open:rotate-90 transition-all duration-200"
+          class="ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200 group-open:-translate-y-px group-open:rotate-90"
           aria-hidden="true"
         >
           <path
@@ -33,7 +33,7 @@
       </div>
     </div>
   </summary>
-  <ul class="ml-2 text-faded ">
+  <ul class="text-faded ml-2 ">
     {#each category.menuItems as item}
       <li class="my-2 md:my-0">
         <a href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a>
