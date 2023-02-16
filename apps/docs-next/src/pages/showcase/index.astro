@@ -1,7 +1,18 @@
 ---
+import ShowcaseEntry from '$components/Sections/ShowcaseEntry.astro'
 import MainLayout from '$layouts/MainLayout.astro'
+import { getCollection } from 'astro:content'
+
+const showcaseCollection = await getCollection('showcase')
+
+console.log(showcaseCollection)
 ---
 
 <MainLayout>
   <p>Showcase Page</p>
+  {
+    showcaseCollection.map((entry) => {
+      return <ShowcaseEntry {entry} />
+    })
+  }
 </MainLayout>
