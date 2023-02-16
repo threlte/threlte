@@ -1,1 +1,44 @@
-<h1>Showcase entry</h1>
+---
+import Button from '$components/Button/Button.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  entry: CollectionEntry<'showcase'>
+}
+
+const { entry } = Astro.props
+---
+
+<div
+  class={`group rounded-md border border-white/20 text-sm shadow-xl relative aspect-video overflow-hidden flex flex-col ${
+    entry.data.size == 'large' ? 'col-span-2' : ''
+  }`}
+>
+  <div
+    class="flex h-full w-full flex-col items-center justify-center gap-2 opacity-0 backdrop-blur-lg backdrop-contrast-50 transition-all duration-200 group-hover:opacity-100"
+  >
+    <h2 class={` font-bold ${entry.data.size == 'large' ? 'text-5xl' : 'text-3xl'}`}>
+      {entry.data.name}
+    </h2>
+    <p>{entry.data.description}</p>
+    {
+      entry.data.live ? (
+        <Button
+          href={entry.data.live}
+          color="blue"
+          class="glow-blue mt-4"
+          size={entry.data.size == 'large' ? 'l' : 'm'}
+        >
+          Visit
+          <Fragment slot="icon-after">→</Fragment>
+        </Button>
+      ) : (
+        ''
+      )
+    }
+  </div>
+  <img
+    src={entry.data.image}
+    class="absolute top-0 -z-10 w-full"
+  />
+</div>
