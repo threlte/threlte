@@ -7,35 +7,55 @@ interface Props {
 }
 
 const { entry } = Astro.props
+
+const isLarge = entry.data.size == 'large'
 ---
 
 <div
   class={`group rounded-md border border-white/20 text-sm shadow-xl relative aspect-video overflow-hidden flex flex-col ${
-    entry.data.size == 'large' ? 'col-span-2' : ''
+    isLarge ? 'col-span-3' : 'col-span-1'
   }`}
 >
+  <!-- <h1>{entry.data.size}</h1> -->
   <div
-    class="flex h-full w-full flex-col items-center justify-center gap-2 opacity-0 backdrop-blur-lg backdrop-contrast-50 transition-all duration-200 group-hover:opacity-100"
+    class="flex h-full w-full flex-col items-center justify-center gap-2 bg-blue-900/50 opacity-0 backdrop-blur-lg backdrop-contrast-50 transition-all duration-200 group-hover:opacity-100"
   >
-    <h2 class={` font-bold ${entry.data.size == 'large' ? 'text-5xl' : 'text-3xl'}`}>
+    <h2 class={`font-bold ${isLarge ? 'text-4xl' : 'text-xl'}`}>
       {entry.data.name}
     </h2>
-    <p>{entry.data.description}</p>
-    {
-      entry.data.live ? (
-        <Button
-          href={entry.data.live}
-          color="blue"
-          class="glow-blue mt-4"
-          size={entry.data.size == 'large' ? 'l' : 'm'}
-        >
-          Visit
-          <Fragment slot="icon-after">→</Fragment>
-        </Button>
-      ) : (
-        ''
-      )
-    }
+    <p class={`${isLarge ? 'text-lg' : ''}`}>{entry.data.description}</p>
+    <div class="mt-4 flex gap-6">
+      {
+        entry.data.live ? (
+          <Button
+            href={entry.data.live}
+            color="green"
+            class="glow-green"
+            size={isLarge ? 'm' : 's'}
+          >
+            Visit
+            <Fragment slot="icon-after">→</Fragment>
+          </Button>
+        ) : (
+          ''
+        )
+      }
+      {
+        entry.data.repo ? (
+          <Button
+            href={entry.data.repo}
+            size={isLarge ? 'm' : 's'}
+            color={'blue'}
+            class="glow-blue"
+          >
+            Code
+            <Fragment slot="icon-after">→</Fragment>
+          </Button>
+        ) : (
+          ''
+        )
+      }
+    </div>
   </div>
   <img
     src={entry.data.image}

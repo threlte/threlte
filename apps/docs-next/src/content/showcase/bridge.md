@@ -4,5 +4,5 @@ name: 'Sad bridge'
 live: 'https://unsplash.com/t/street-photography'
 repo: 'https://github.com/threlte/threlte/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc'
 description: 'New exciting project made with threlte'
-size: 'regular'
+size: 'large'
 ---

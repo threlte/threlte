@@ -35,7 +35,7 @@ export const showcaseCollection = defineCollection({
     live: z.string().optional(),
     repo: z.string().optional(),
     description: z.string().optional(),
-    size: z.enum(['large', 'regular'])
+    size: z.enum(['regular', 'large'])
   })
 })
 
