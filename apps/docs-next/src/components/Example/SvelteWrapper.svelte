@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import OpenInStackblitz from './OpenInStackblitz.svelte'
 
   export let path: string
+  export let files: Record<string, string>
 
   const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
     string,
@@ -25,4 +27,8 @@
       <Mod.default />
     {/await}
   {/if}
+
+  <div class="absolute right-4 bottom-4">
+    <OpenInStackblitz {files} />
+  </div>
 </div>

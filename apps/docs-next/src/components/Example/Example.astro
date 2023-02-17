@@ -20,11 +20,21 @@ for (const path in allModules) {
     delete allModules[path]
   }
 }
+
+const files: Record<string, string> = {}
+for (const path in allModules) {
+  let relativePath = path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
+  if (relativePath.startsWith('/')) {
+    relativePath = relativePath.slice(1)
+  }
+  files[relativePath] = allModules[path] as string
+}
 ---
 
 <SvelteWrapper
   path={Astro.props.path}
   client:load
+  files={files}
 />
 
 <CodeWrapper
