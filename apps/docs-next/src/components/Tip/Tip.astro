@@ -1,0 +1,20 @@
+---
+interface Props {
+  color: 'orange' | 'blue' | 'green'
+}
+
+const background = {
+  orange: 'bg-orange-400/80 ',
+  blue: 'bg-blue-400/90',
+  green: 'bg-green-400/90'
+}
+---
+
+<div
+  class={`flex w-full flex-row items-center gap-3 rounded-md px-2 py-2 text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] ${
+    background[Astro.props.color]
+  } ${Astro.props.class ?? ''}`}
+>
+  <div class="flex h-10 w-10 empty:hidden"><slot name="icon" /></div>
+  <slot />
+</div>
