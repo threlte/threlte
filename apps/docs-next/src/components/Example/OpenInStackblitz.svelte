@@ -1,18 +1,8 @@
 <script lang="ts">
+  import { files as projectTemplate } from './stackblitz-template'
   import sdk from '@stackblitz/sdk'
 
   export let files: Record<string, string>
-
-  const projectTemplate = import.meta.glob('./stackblitz-template/**/*', {
-    as: 'raw',
-    eager: true
-  }) as Record<string, string>
-  Object.keys(projectTemplate).forEach((key) => {
-    const value = projectTemplate[key] as string
-    const newPath = key.replace('./stackblitz-template/', '')
-    delete projectTemplate[key]
-    projectTemplate[newPath] = value
-  })
 
   const projectFiles: Record<string, string> = {}
   for (const path in files) {
