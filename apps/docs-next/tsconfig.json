@@ -8,9 +8,10 @@
       "$pages/*": ["./src/pages/*"],
       "$styles/*": ["./src/styles/*"],
       "$assets/*": ["./src/assets/*"],
-      "$examples/*": ["./src/examples/*"]
+      "$examples/*": ["./src/examples/*"],
+      "$hooks/*": ["./src/hooks/*"]
     },
-    "types": ["@astrojs/image/client"],
+    "types": ["@astrojs/image/client"]
   },
 	"exclude": ["node_modules", "src/components/Example/stackblitz-template"]
 }
