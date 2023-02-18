@@ -137,6 +137,7 @@ importers:
       '@astrojs/tailwind': ^3.0.0
       '@dimforge/rapier3d-compat': ^0.9.0
       '@macfja/svelte-persistent-store': ^2.2.1
+      '@stackblitz/sdk': ^1.8.2
       '@tailwindcss/typography': ^0.5.3
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1
@@ -171,6 +172,7 @@ importers:
     devDependencies:
       '@dimforge/rapier3d-compat': 0.9.0
       '@macfja/svelte-persistent-store': 2.2.1_svelte@3.55.1
+      '@stackblitz/sdk': 1.8.2
       '@tailwindcss/typography': 0.5.3_tailwindcss@3.1.5
       '@theatre/core': 0.5.1-rc.1
       '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
@@ -1757,6 +1759,10 @@ packages:
 
   /@rushstack/eslint-patch/1.1.4:
     resolution: {integrity: sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==}
+    dev: true
+
+  /@stackblitz/sdk/1.8.2:
+    resolution: {integrity: sha512-3aTg0Tb9dNs1huPkpdYxPEX/yc8A28eZneUMOEJzOLi7EJwl5onr9gCAVjIOkN4WLYu1iBSiJiGBYT629bZIJQ==}
     dev: true
 
   /@sveltejs/adapter-auto/1.0.0-next.61:

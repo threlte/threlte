@@ -23,6 +23,7 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.9.0",
     "@macfja/svelte-persistent-store": "^2.2.1",
+    "@stackblitz/sdk": "^1.8.2",
     "@tailwindcss/typography": "^0.5.3",
     "@theatre/core": "0.5.1-rc.1",
     "@theatre/studio": "0.5.1-rc.1",
