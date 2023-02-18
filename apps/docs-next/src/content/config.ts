@@ -28,9 +28,21 @@ export const testimonialsCollection = defineCollection({
   })
 })
 
+export const showcaseCollection = defineCollection({
+  schema: z.object({
+    image: z.string(),
+    name: z.string(),
+    live: z.string().optional(),
+    repo: z.string().optional(),
+    description: z.string().optional(),
+    size: z.enum(['regular', 'large'])
+  })
+})
+
 // 3. Export a single `collections` object to register your collection(s)
 export const collections = {
   reference: referenceCollection,
   learn: learnCollection,
-  testimonials: testimonialsCollection
+  testimonials: testimonialsCollection,
+  showcase: showcaseCollection
 }
