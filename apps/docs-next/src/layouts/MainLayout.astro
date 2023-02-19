@@ -16,11 +16,18 @@ const title = Astro.props.title
 
 <AppLayout title={title}>
   <!-- Desktop Nav -->
-  <header class="mx-auto lg:flex h-[80px] max-w-7xl flex-row items-center justify-between px-6 hidden">
+  <header
+    class="mx-auto hidden h-[80px] max-w-7xl flex-row items-center justify-between px-6 md:flex"
+  >
     <!-- Header Left -->
     <div class="flex flex-row items-end gap-12">
       <a href="/">
-        <Image src={LogoWithText} alt="threlte logo" width={500} class="h-[37px] w-auto" />
+        <Image
+          src={LogoWithText}
+          alt="threlte logo"
+          width={500}
+          class="h-[37px] w-auto"
+        />
       </a>
 
       <nav class="flex flex-row gap-5">
@@ -37,7 +44,14 @@ const title = Astro.props.title
 
   <!-- Mobile Nav -->
   <MobileMainNav client:load>
-    <Image slot="logo" src={LogoOnly} alt="threlte logo" width={200} class="h-[37px] w-auto" />
+    <Image
+      slot="logo"
+      src={LogoOnly}
+      alt="threlte logo"
+      width={200}
+      class="h-[37px] w-auto"
+    />
+    <Socials slot="after" />
   </MobileMainNav>
 
   <main class="mx-auto max-w-7xl px-6 pb-12">

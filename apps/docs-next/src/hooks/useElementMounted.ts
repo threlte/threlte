@@ -1,20 +1,19 @@
-import {writable} from 'svelte/store'
+import { writable } from 'svelte/store'
 
 export const useElementMounted = () => {
-    const mounted = writable(false)
+  const mounted = writable(false)
 
-    const action = (node: HTMLElement) => {
-        mounted.set(true)
-        return {
-            destroy() {
-                mounted.set(false)
-                
-		},
-	};
-    }
-
+  const action = (node: HTMLElement) => {
+    mounted.set(true)
     return {
-        action,
-        mounted
+      destroy() {
+        mounted.set(false)
+      }
     }
+  }
+
+  return {
+    action,
+    mounted
+  }
 }
