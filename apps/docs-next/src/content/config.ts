@@ -7,7 +7,14 @@ export const referenceCollection = defineCollection({
     type: z.enum(['component', 'hook']),
     name: z.string(),
     sourcePath: z.string(),
-    package: z.enum(['core', 'preprocess', 'extras', 'rapier', 'theatre'])
+    package: z.enum([
+      '@threlte/core',
+      '@threlte/preprocess',
+      '@threlte/extras',
+      '@threlte/rapier',
+      '@threlte/theatre',
+      '@threlte/gltf'
+    ])
   })
 })
 

@@ -6,6 +6,8 @@ import Logo from '$assets/logo/threlte-logo-only.png'
 import LeftSidebar from '$components/Menu/LeftSidebar/LeftSidebar.astro'
 import Socials from '$components/Socials/Socials.astro'
 import RightSidebar from '$components/Menu/RightSidebar/RightSidebar.astro'
+import MobileDocsNav from '$components/Menu/MobileDocsNav.svelte'
+import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarMenu'
 
 export interface Props {
   title?: string
@@ -13,11 +15,13 @@ export interface Props {
 }
 
 const title = Astro.props.title
+
+const sidebarMenu = await getLeftSidebarMenu()
 ---
 
 <AppLayout title={title}>
   <header
-    class="border-b-orange/25 fixed z-50 mx-auto flex h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6"
+    class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6 md:flex"
   >
     <a
       href="/"
@@ -42,6 +46,20 @@ const title = Astro.props.title
     </div>
   </header>
 
+  <MobileDocsNav
+    client:load
+    sidebarMenu={sidebarMenu}
+  >
+    <Image
+      slot="logo"
+      src={Logo}
+      alt="threlte logo"
+      width={200}
+      class="h-[37px] w-auto"
+    />
+    <Socials slot="after-navigation" />
+  </MobileDocsNav>
+
   <main
     class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
@@ -62,7 +80,7 @@ const title = Astro.props.title
     </div>
 
     <aside
-      class="sticky top-[calc(var(--docs-navbar-height)-5px)] z-10 order-2 mt-10 ml-4 w-full place-self-start justify-self-end bg-gradient-to-b from-[#0c1421] via-[#0c1421] pt-6 lg:z-0 lg:order-3 lg:mt-[calc(var(--docs-navbar-height)*1.2)] lg:bg-none"
+      class="sticky top-[var(--docs-navbar-height)] z-10 order-2 ml-4 w-full place-self-start justify-self-end bg-gradient-to-b from-[#0c1421] via-[#0c1421] pt-6 lg:z-0 lg:order-3 lg:mt-[calc(var(--docs-navbar-height)*1.2)] lg:bg-none"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
