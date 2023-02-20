@@ -36,3 +36,9 @@
     <slot />
   </div>
 </details>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
