@@ -79,7 +79,6 @@
     <hr />
 
     <div class="flex flex-col gap-2">
-      <!-- <a href="/docs/learn/getting-started"> Docs </a> -->
       <a href="/showcase"> Showcase </a>
     </div>
 

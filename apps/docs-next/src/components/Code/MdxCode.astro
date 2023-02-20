@@ -69,25 +69,31 @@ if (metastring) {
       const lineHighlightRegex = /^{[\d-,]+}[+\-]*$/
       const lineHighlightMatch = element.match(lineHighlightRegex)
       const lineHighlightString = lineHighlightMatch?.[0]
+
       if (lineHighlightString) {
         const classes = []
-        if (lineHighlightString.includes('+')) {
+        if (lineHighlightString.endsWith('+')) {
           classes.push('highlighted-add')
-        } else if (lineHighlightString.includes('-')) {
+        } else if (lineHighlightString.endsWith('-')) {
           classes.push('highlighted-remove')
         } else {
           classes.push('highlighted')
         }
         // separate by comma
         const groups = lineHighlightString.split(',')
+
         // trim whitespace and {, }, -, +
-        const trimmedGroups = groups.map((group) => group.trim().replace(/[{}\-+]/g, ''))
+        const trimmedGroups = groups.map((group) =>
+          group.trim().replace(/^\D*/g, '').replace(/\D*$/g, '')
+        )
 
         for (const group of trimmedGroups) {
           // separate by dash
           const range = group.split('-')
+
           if (range.length === 2) {
             // it's a range
+
             const [start, end] = range.map((num) => parseInt(num, 10))
             if (!start || !end) {
               // sanity check

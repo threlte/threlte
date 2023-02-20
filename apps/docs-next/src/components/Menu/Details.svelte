@@ -35,7 +35,7 @@
     </div>
   </summary>
 
-  <div class="">
+  <div>
     <slot />
   </div>
 </details>

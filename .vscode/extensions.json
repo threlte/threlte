@@ -4,6 +4,7 @@
     "dbaeumer.vscode-eslint",
     "svelte.svelte-vscode",
     "ardenivanov.svelte-intellisense",
-    "fivethree.vscode-svelte-snippets"
+    "fivethree.vscode-svelte-snippets",
+    "astro-build.astro-vscode"
   ]
 }

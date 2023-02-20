@@ -21,7 +21,7 @@
 
   <ul class="text-faded ml-2 mt-2 mb-2">
     {#each category.menuItems as item}
-      <li>
+      <li class="mb-2 last:mb-0">
         <a href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a>
       </li>
     {/each}

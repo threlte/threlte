@@ -44,7 +44,7 @@
 
   <ul class={c('overflow-y-auto mt-0 overflow-auto pt-2 pb-6 block')}>
     {#each menu[$activeMenu].categories as category}
-      <li class="mb-6">
+      <li class="mb-6 text-sm">
         <LeftSidebarCategory {category} />
       </li>
     {/each}

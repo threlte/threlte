@@ -12,7 +12,7 @@
     slot="content"
     class="flex flex-col gap-2 text-lg"
   >
-    <a href="/docs/learn/getting-started"> Docs </a>
+    <a href="/docs/learn/getting-started/introduction"> Docs </a>
     <a href="/showcase"> Showcase </a>
     <div class="mt-4">
       <slot name="after" />

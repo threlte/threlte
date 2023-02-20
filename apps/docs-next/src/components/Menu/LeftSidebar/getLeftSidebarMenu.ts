@@ -1,23 +1,25 @@
 import { getCollection, CollectionEntry } from 'astro:content'
 
-type ReferenceCategoryKey = CollectionEntry<'reference'>['data']['package']
+type ReferenceCategoryKey = NonNullable<CollectionEntry<'reference'>['data']['category']>
 
 const referenceSidebarMenuCategoryOrder: ReferenceCategoryKey[] = [
-  'core',
-  'preprocess',
-  'extras',
-  'rapier',
-  'theatre'
+  '@threlte/core',
+  '@threlte/preprocess',
+  '@threlte/extras',
+  '@threlte/rapier',
+  '@threlte/theatre',
+  'Documentation'
 ]
 
 const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const referenceCollection = await getCollection('reference')
 
-  const categoryNames = [...new Set(referenceCollection.map((item) => item.data.package))]
+  const categoryNames = [...new Set(referenceCollection.map((item) => item.data.category))]
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = referenceCollection
-      .filter((item) => item.data.package === category)
+      .filter((item) => item.data.category === category)
+      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {
           title: item.data.name,
@@ -46,8 +48,10 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
-  'Start Here',
-  'Concepts',
+  'Getting Started',
+  'Basics',
+  'Render Components',
+  'Advanced',
   'Preprocessing'
 ]
 
@@ -59,6 +63,7 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = referenceCollection
       .filter((item) => item.data.category === category)
+      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {
           title: item.data.title,

@@ -15,7 +15,7 @@ setCDN('https://unpkg.com/shiki/')
 
 const highlighter = await getHighlighter({
   theme: Astro.props.theme ?? 'dracula-soft',
-  langs: ['typescript', 'javascript', 'svelte']
+  langs: ['typescript', 'javascript', 'svelte', 'astro', 'mdx']
 })
 
 const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {

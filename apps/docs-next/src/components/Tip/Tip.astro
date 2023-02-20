@@ -39,11 +39,21 @@ const iconStyles: Record<
   warning: 'bg-yellow-800/50'
 }
 
-const glowStyles = {
-  orange: 'glow-orange',
+const glowStyles: Record<
+  NonNullable<Props['color']> | NonNullable<Props['type']> | 'transparent',
+  string
+> = {
+  orange: 'glow-orange/80',
   blue: 'glow-blue',
-  green: 'glow-green',
-  dark: 'glow-blue/50'
+  green: 'glow-green/70',
+  dark: 'glow-blue/80',
+  danger: 'glow-red-500/80',
+  experimental: 'glow-purple-500/80',
+  info: 'glow-blue',
+  note: 'glow-blue',
+  tip: 'glow-green/70',
+  warning: 'glow-yellow-500/60',
+  transparent: ''
 }
 
 const typeClasses: Record<NonNullable<Props['type']>, string> = {
@@ -72,7 +82,11 @@ const getClasses = (): string => {
       Astro.props.class ?? ''
     )
   } else {
-    return c(typeClasses[Astro.props.type], Astro.props.class ?? '')
+    return c(
+      typeClasses[Astro.props.type],
+      !!Astro.props.glow && glowStyles[Astro.props.type ?? 'transparent'],
+      Astro.props.class ?? ''
+    )
   }
 }
 
