@@ -73,7 +73,8 @@ export default defineConfig({
         $pages: resolve('./src/pages'),
         $styles: resolve('./src/styles'),
         $assets: resolve('./src/assets'),
-        $examples: resolve('./src/examples')
+        $examples: resolve('./src/examples'),
+        $hooks: resolve('./src/hooks')
       }
     },
     ssr: {
