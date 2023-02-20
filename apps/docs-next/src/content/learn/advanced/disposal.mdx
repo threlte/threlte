@@ -1,6 +1,7 @@
 ---
 title: Disposal
-category: Concepts
+category: Advanced
+order: -1100
 ---
 
 # Disposal
@@ -11,11 +12,11 @@ Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index
 
 ```svelte
 <script>
-	import { Mesh, useTexture } from '@threlte/core'
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+  import { Mesh, useTexture } from '@threlte/core'
+  import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
 
-	const map = useTexture('/some/texture')
-	const material = new MeshStandardMaterial({	map })
+  const map = useTexture('/some/texture')
+  const material = new MeshStandardMaterial({ map })
 </script>
 
 <!--
@@ -23,8 +24,8 @@ Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index
 	be disposed as soon as the <Mesh> component unmounts.
 -->
 <Mesh
-	geometry={new BoxBufferGeometry(1, 1, 1)}
-	{material}
+  geometry={new BoxBufferGeometry(1, 1, 1)}
+  {material}
 />
 ```
 
@@ -38,31 +39,31 @@ You can switch off automatic disposal by placing `dispose={false}` onto componen
 
 ```svelte
 <script>
-	import { Mesh, useTexture } from '@threlte/core'
-	import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+  import { Mesh, useTexture } from '@threlte/core'
+  import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
 
-	const map = useTexture('/some/texture')
-	const material = new MeshStandardMaterial({	map })
+  const map = useTexture('/some/texture')
+  const material = new MeshStandardMaterial({ map })
 </script>
 
 <!-- will not be disposed -->
 <Mesh
-	dispose={false}
-	geometry={new BoxBufferGeometry(1, 1, 1)}
-	{material}
+  dispose={false}
+  geometry={new BoxBufferGeometry(1, 1, 1)}
+  {material}
 >
-	<!-- will also not be disposed -->
-	<Mesh
-		geometry={new BoxBufferGeometry(2, 2, 2)}
-		{material}
-	>
-		<!-- will be disposed -->
-		<Mesh
-			dispose
-			geometry={new BoxBufferGeometry(2, 2, 2)}
-			material={new MeshStandardMaterial()}
-		/>
-	</Mesh>
+  <!-- will also not be disposed -->
+  <Mesh
+    geometry={new BoxBufferGeometry(2, 2, 2)}
+    {material}
+  >
+    <!-- will be disposed -->
+    <Mesh
+      dispose
+      geometry={new BoxBufferGeometry(2, 2, 2)}
+      material={new MeshStandardMaterial()}
+    />
+  </Mesh>
 </Mesh>
 ```
 

@@ -4,24 +4,33 @@ import { defineCollection, z } from 'astro:content'
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
-    type: z.enum(['component', 'hook']),
+    type: z.enum(['component', 'hook']).optional(),
     name: z.string(),
-    sourcePath: z.string(),
-    package: z.enum([
+    sourcePath: z.string().optional(),
+    order: z.number().optional(),
+    category: z.enum([
       '@threlte/core',
       '@threlte/preprocess',
       '@threlte/extras',
       '@threlte/rapier',
       '@threlte/theatre',
-      '@threlte/gltf'
+      '@threlte/gltf',
+      'Documentation'
     ])
   })
 })
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Start Here', 'Concepts', 'Preprocessing']),
-    title: z.string()
+    category: z.enum([
+      'Getting Started',
+      'Basics',
+      'Render Components',
+      'Advanced',
+      'Preprocessing'
+    ]),
+    title: z.string(),
+    order: z.number().optional()
   })
 })
 
