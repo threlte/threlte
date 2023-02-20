@@ -38,7 +38,7 @@
       class="border-b-orange/25 w-full border-b bg-[#0D1421] -z-10"
     >
       <div
-        class="pt-0 pb-6 px-6"
+        class="pt-2 pb-6 px-6"
         in:fade={{ delay: 200, duration: 200 }}
         out:fade={{ duration: 200 }}
       >

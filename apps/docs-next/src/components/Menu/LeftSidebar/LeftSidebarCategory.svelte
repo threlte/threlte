@@ -19,9 +19,9 @@
     {category.title}
   </svelte:fragment>
 
-  <ul class="text-faded ml-2">
+  <ul class="text-faded ml-2 mt-2 mb-2">
     {#each category.menuItems as item}
-      <li class="mb-1 md:mb-0">
+      <li>
         <a href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a>
       </li>
     {/each}

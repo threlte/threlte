@@ -10,16 +10,19 @@
 <details
   bind:open
   {id}
-  class={c('group block', _class)}
+  class={c('block', _class)}
 >
-  <summary class={c('cursor-pointer select-none list-none font-bold mb-1')}>
+  <summary class={c('cursor-pointer select-none list-none font-bold')}>
     <div class="flex flex-row items-center mb-0">
       <slot name="summary" />
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 1 16 16"
-          class="ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200 group-open:-translate-y-px group-open:rotate-90"
+          class={c(
+            'ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200',
+            open && '-translate-y-px rotate-90'
+          )}
           aria-hidden="true"
         >
           <path

@@ -111,7 +111,7 @@
     {#each filteredHeadings as heading}
       <li
         class={c(
-          'text-faded border-l-[8px] border-white/20 pl-3 hover:border-white/60 hover:text-white lg:border-l-2 lg:py-0.5',
+          'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white lg:py-0.5',
           !!currentHeadingSlug &&
             heading.slug === currentHeadingSlug &&
             'glow-orange !border-white/60 bg-orange-500 !text-white'
@@ -125,7 +125,7 @@
       >
         <a
           data-depth={heading.depth}
-          class={c('block py-6 pr-4 no-underline hover:underline lg:py-0 ')}
+          class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
           style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
           href={`#${heading.slug}`}>{heading.text}</a
         >

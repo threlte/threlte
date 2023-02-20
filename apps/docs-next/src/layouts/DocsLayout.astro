@@ -64,14 +64,12 @@ const sidebarMenu = await getLeftSidebarMenu()
     class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="fixed bottom-0 z-20 order-1 row-span-2 w-full place-self-start justify-self-stretch md:sticky md:top-[80px] md:z-0 md:mt-[var(--docs-navbar-height)] md:w-auto md:pt-6 lg:row-span-1"
+      class="fixed bottom-0 z-20 order-1 row-span-2 w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:z-0 md:w-auto md:pt-6 lg:row-span-1"
     >
       <LeftSidebar />
     </aside>
 
-    <div
-      class="order-3 w-full justify-self-center overflow-x-auto px-6 pt-6 pb-12 lg:order-2 lg:mt-[var(--docs-navbar-height)]"
-    >
+    <div class="order-3 w-full justify-self-center overflow-x-auto px-6 pt-6 pb-12 lg:order-2">
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded mx-auto max-w-5xl"
       >
@@ -80,7 +78,7 @@ const sidebarMenu = await getLeftSidebarMenu()
     </div>
 
     <aside
-      class="sticky top-[var(--docs-navbar-height)] z-10 order-2 ml-4 w-full place-self-start justify-self-end bg-gradient-to-b from-[#0c1421] via-[#0c1421] pt-6 lg:z-0 lg:order-3 lg:mt-[calc(var(--docs-navbar-height)*1.2)] lg:bg-none"
+      class="sticky top-[var(--docs-navbar-height)] z-10 order-2 ml-4 w-full place-self-start justify-self-end bg-gradient-to-b from-[#0c1421] via-[#0c1421] pt-6 lg:z-0 lg:order-3 lg:bg-none"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { c } from '$lib/classes'
+  import { onMount } from 'svelte'
   import Details from './Details.svelte'
   import type { getLeftSidebarMenu } from './LeftSidebar/getLeftSidebarMenu'
   import LeftSidebarCategory from './LeftSidebar/LeftSidebarCategory.svelte'
@@ -7,6 +8,26 @@
 
   export let sidebarMenu: Awaited<ReturnType<typeof getLeftSidebarMenu>>
   const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference']
+
+  const open: Record<keyof typeof sidebarMenu, boolean> = keys.reduce((acc, currentKey) => {
+    acc[currentKey] = false
+    return acc
+  }, {} as Record<keyof typeof sidebarMenu, boolean>)
+
+  onMount(() => {
+    // make url
+    const url = new URL(window.location.href)
+    // the docs are available at /docs/…
+    const docsPrefix = '/docs/'
+    // get the path after /docs/
+    const path = url.pathname.slice(docsPrefix.length)
+    // get the first part of the path
+    const [category] = path.split('/')
+    if (category === 'learn' || category === 'reference') {
+      // if the first part of the path is "learn" or "reference", open the corresponding category
+      open[category] = true
+    }
+  })
 </script>
 
 <MobileNav>
@@ -25,13 +46,16 @@
   </svelte:fragment>
   <div
     slot="content"
-    class="text-md flex flex-col gap-4"
+    class="flex flex-col gap-4 text-lg"
   >
-    <ul class={c('mt-6 block overflow-y-auto md:mt-0 md:overflow-auto md:pt-2 md:pb-6 md:block')}>
+    <ul class={c('flex flex-col gap-2 overflow-y-auto')}>
       {#each keys as key}
-        <li class="mb-1">
+        <li>
           <!-- The container for "learn" and "reference" categories -->
-          <Details id={key}>
+          <Details
+            id={key}
+            open={open[key]}
+          >
             <div
               class="font-normal"
               slot="summary"
@@ -43,7 +67,7 @@
               {/if}
             </div>
             {#each sidebarMenu[key].categories as category}
-              <li class="ml-2 my-4">
+              <li class="ml-4 mt-2 mb-0 text-sm">
                 <LeftSidebarCategory {category} />
               </li>
             {/each}
@@ -51,6 +75,13 @@
         </li>
       {/each}
     </ul>
+
+    <hr />
+
+    <div class="flex flex-col gap-2">
+      <!-- <a href="/docs/learn/getting-started"> Docs </a> -->
+      <a href="/showcase"> Showcase </a>
+    </div>
 
     <slot name="after-navigation" />
   </div>
