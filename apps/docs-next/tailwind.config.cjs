@@ -1,3 +1,5 @@
+const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -72,6 +74,26 @@ module.exports = {
       addBase({
         ':root': extractColorVars(theme('colors'))
       })
+    },
+    function ({ addUtilities, matchUtilities, theme }) {
+      matchUtilities(
+        {
+          glow: (value) => {
+            return {
+              boxShadow: `0 0px 40px -3px ${value}`
+            }
+          },
+          'text-glow': (value) => {
+            return {
+              filter: `drop-shadow(0 0px 50px ${value})`
+            }
+          }
+        },
+        {
+          values: flattenColorPalette(theme('colors')),
+          type: 'color'
+        }
+      )
     }
   ]
 }

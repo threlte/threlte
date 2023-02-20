@@ -1,28 +1,12 @@
 @tailwind utilities;
 
 @layer utilities {
-  .glow-orange {
-    box-shadow: 0 0px 40px -3px var(--color-orange);
-  }
-
-  .glow-blue {
-    box-shadow: 0 0px 40px -3px var(--color-blue);
-  }
-
-  .glow-green {
-    box-shadow: 0 0px 40px -3px var(--color-green);
-  }
-
-  .text-glow-white {
-    filter: drop-shadow(0 0px 50px rgba(255, 255, 255, 0.3));
-  }
-
   .text-faded {
     @apply text-white/60;
   }
 
   .text-highlight {
-    @apply text-white font-bold;
+    @apply font-bold text-white;
   }
 }
 
@@ -35,14 +19,4 @@
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-}
-
-.three-d {
-  color: #f5f5f5;
-  display: inline-block;
-  text-shadow: 0px 1px 0px #919191, 0px 2px 0px #919191, 0px 3px 0px #919191, 0px 4px 0px #919191,
-    0px 5px 0px #919191, 0px 6px 0px #919191, 0px 7px 0px #919191, 0px 8px 0px #919191,
-    0px 9px 0px #919191, 0px 10px 0px #919191, 1px 18px 6px rgba(16, 16, 16, 0.4),
-    1px 22px 10px rgba(16, 16, 16, 0.2), 1px 25px 35px rgba(16, 16, 16, 0.2),
-    1px 30px 60px rgba(16, 16, 16, 0.4);
 }
