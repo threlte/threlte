@@ -10,7 +10,7 @@
   </svelte:fragment>
   <div
     slot="content"
-    class="flex flex-col items-end"
+    class="flex flex-col gap-2 text-lg"
   >
     <a href="/docs/learn/getting-started"> Docs </a>
     <a href="/showcase"> Showcase </a>

@@ -1,0 +1,38 @@
+---
+import { c } from '$lib/classes'
+
+interface Props {
+  class?: string
+}
+---
+
+<svg
+  class={c(Astro.props.class ?? '')}
+  width="32"
+  height="32"
+  viewBox="0 0 32 32"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M13 4V11.725C12.9988 11.9048 12.9515 12.0813 12.8625 12.2375L4.9125 25.4875C4.82227 25.6387 4.77355 25.8109 4.77125 25.987C4.76895 26.163 4.81315 26.3365 4.8994 26.49C4.98564 26.6434 5.11086 26.7714 5.26241 26.861C5.41396 26.9505 5.58647 26.9985 5.7625 27H26.2375C26.4135 26.9985 26.586 26.9505 26.7376 26.861C26.8891 26.7714 27.0144 26.6434 27.1006 26.49C27.1868 26.3365 27.2311 26.163 27.2288 25.987C27.2264 25.8109 27.1777 25.6387 27.0875 25.4875L19.1375 12.2375C19.0485 12.0813 19.0012 11.9048 19 11.725V4"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M11 4H21"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M7.82501 20.625C9.30001 19.5375 11.8375 18.925 16 21C20.4625 23.2375 23.0625 22.35 24.4875 21.1375"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+</svg>

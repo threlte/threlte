@@ -1,0 +1,52 @@
+---
+import { c } from '$lib/classes'
+
+interface Props {
+  class?: string
+}
+---
+
+<svg
+  class={c(Astro.props.class ?? '')}
+  width="32"
+  height="32"
+  viewBox="0 0 32 32"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M12 12H20"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M12 16H20"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M12 20H16"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M19.5875 27H6C5.73478 27 5.48043 26.8946 5.29289 26.7071C5.10536 26.5196 5 26.2652 5 26V6C5 5.73478 5.10536 5.48043 5.29289 5.29289C5.48043 5.10536 5.73478 5 6 5H26C26.2652 5 26.5196 5.10536 26.7071 5.29289C26.8946 5.48043 27 5.73478 27 6V19.5875C27.0005 19.7174 26.9753 19.846 26.926 19.9661C26.8766 20.0862 26.8041 20.1955 26.7125 20.2875L20.2875 26.7125C20.1955 26.8041 20.0862 26.8766 19.9661 26.926C19.846 26.9753 19.7174 27.0005 19.5875 27Z"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M26.9125 20H20V26.9125"
+    class="stroke-current"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+</svg>

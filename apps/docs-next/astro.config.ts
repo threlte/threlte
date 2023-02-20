@@ -44,7 +44,7 @@ const prettyCodeOptions: Partial<Options> = {
 export default defineConfig({
   integrations: [
     AutoImport({
-      imports: ['$components/Example/Example.astro']
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
     tailwind(),
     image(),

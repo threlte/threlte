@@ -1,0 +1,5 @@
+.prose {
+  .tip {
+    @apply my-4;
+  }
+}

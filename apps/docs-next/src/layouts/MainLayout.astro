@@ -2,7 +2,6 @@
 import { Image } from '@astrojs/image/components'
 import AppLayout from './AppLayout.astro'
 import LogoWithText from '$assets/logo/threlte-logo.png'
-import LogoOnly from '$assets/logo/threlte-logo-only.png'
 import Socials from '$components/Socials/Socials.astro'
 import MobileMainNav from '$components/Menu/MobileMainNav.svelte'
 import Footer from '$components/Footer/Footer.astro'
@@ -17,7 +16,7 @@ const title = Astro.props.title
 <AppLayout title={title}>
   <!-- Desktop Nav -->
   <header
-    class="mx-auto hidden h-[80px] max-w-7xl flex-row items-center justify-between px-6 md:flex"
+    class="mx-auto hidden h-[70px] max-w-7xl flex-row items-center justify-between px-6 md:flex"
   >
     <!-- Header Left -->
     <div class="flex flex-row items-end gap-12">
@@ -46,7 +45,7 @@ const title = Astro.props.title
   <MobileMainNav client:load>
     <Image
       slot="logo"
-      src={LogoOnly}
+      src={LogoWithText}
       alt="threlte logo"
       width={200}
       class="h-[37px] w-auto"
