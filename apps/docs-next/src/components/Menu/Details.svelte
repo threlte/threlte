@@ -38,7 +38,10 @@
 </details>
 
 <style>
-  details summary::-webkit-details-marker {
+  details > summary {
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
     display: none;
   }
 </style>
