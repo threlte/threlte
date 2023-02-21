@@ -57,29 +57,22 @@ export const createCache = () => {
   const query = <Q, Keys extends Tuple<unknown>, Fn extends (...keys: Keys) => Promise<Q>>(
     fn: Fn,
     keys: Keys,
-    preload = false,
-    config: Partial<Config> = {}
+    options: Partial<Config> = {}
   ): AsyncWritable<Q> => {
     for (const entry of cache) {
       // Find a match
       if (shallowEqualArrays(keys, entry.keys, entry.equal)) {
-        // If we're pre-loading and the element is present, just return
-        if (preload) return undefined as unknown as AsyncWritable<Q>
         // If an error occurred, throw
-        if (Object.prototype.hasOwnProperty.call(entry, 'error')) {
-          throw entry.error
-        }
+        if (entry.error) throw entry.error
         // If a response was successful, return
-        if (Object.prototype.hasOwnProperty.call(entry, 'store')) {
-          return entry.store as AsyncWritable<Q>
-        }
+        if (entry.store) return entry.store as AsyncWritable<Q>
       }
     }
 
     // The request is new or has changed.
     const entry: CacheItem<Keys> = {
       keys,
-      equal: config.equal,
+      equal: options.equal,
       store: asyncWritable(() => {
         return fn(...keys)
       })
@@ -91,11 +84,11 @@ export const createCache = () => {
     // remove the entry from the cache after the lifespan
     entry.store.promise
       .then(() => {
-        if (config.lifespan && config.lifespan > 0) {
+        if (options.lifespan && options.lifespan > 0) {
           setTimeout(() => {
             const index = cache.indexOf(entry)
             if (index !== -1) cache.splice(index, 1)
-          }, config.lifespan)
+          }, options.lifespan)
         }
       })
       .catch((error) => {
@@ -107,20 +100,26 @@ export const createCache = () => {
     return entry.store as AsyncWritable<Q>
   }
 
+  /**
+   * Remember what a promise returns, and return the result as a store
+   */
   const remember = <Q, Keys extends Tuple<unknown>, Fn extends (...keys: Keys) => Promise<Q>>(
     fn: Fn,
     keys: Keys,
     config?: Config
   ): AsyncWritable<Q> => {
-    return query(fn, keys, false, config)
+    return query(fn, keys, config)
   }
 
+  /**
+   * Preload a query, but don't return the result
+   */
   const preload = <Keys extends Tuple<unknown>, Fn extends (...keys: Keys) => Promise<unknown>>(
     fn: Fn,
     keys: Keys,
     config?: Config
   ) => {
-    query(fn, keys, false, config)
+    query(fn, keys, config)
   }
 
   const peek = <Keys extends Tuple<unknown>>(keys: Keys) => {
