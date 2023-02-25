@@ -48,6 +48,10 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
           Astro.props.class ?? ''
         )}
       >
+        <CopyCodeButton
+          client:idle
+          code={Astro.props.code}
+        />
         <Fragment set:html={formatted} />
       </div>
     </>
