@@ -1,6 +1,7 @@
 ---
 import { c } from '$lib/classes'
 import { getHighlighter, type Lang, setCDN, Theme, HtmlRendererOptions } from 'shiki'
+import CopyCodeButton from './CopyCodeButton.svelte'
 
 interface Props {
   lang: Lang
@@ -53,10 +54,14 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
   ) : (
     <div
       class={c(
-        'not-prose overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
+        'not-prose group relative overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
         Astro.props.class ?? ''
       )}
     >
+      <CopyCodeButton
+        client:idle
+        code={Astro.props.code}
+      />
       <Fragment set:html={formatted} />
     </div>
   )
