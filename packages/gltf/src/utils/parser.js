@@ -497,7 +497,7 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 
         ${options.types ? printThrelteTypes(objects, animations) : ''}
 
-        const { gltf } = useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
+        const gltf = useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
     useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
   })
     ${
