@@ -108,13 +108,13 @@ const config = {
 	preprocess: preprocessThrelte({
 		extensions: {
 			// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-			'three/examples/jsm/controls/OrbitControls': [OrbitControls],
+			'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
 
 			// import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
-			'three/examples/jsm/controls/TransformControls': [TransformControls],
+			'three/examples/jsm/controls/TransformControls': ['TransformControls'],
 
 			// import { CustomGrid } from '$lib/CustomGrid'
-			'$lib/CustomGrid': [CustomGrid]
+			'$lib/CustomGrid': ['CustomGrid']
 		}
 	})
 }
