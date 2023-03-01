@@ -7,7 +7,7 @@
 	import Car from './Car.svelte'
 	import Ground from './Ground.svelte'
 
-	const { gltf } = useGltf('/models/loop/loop.glb')
+	const gltf = useGltf('/models/loop/loop.glb')
 </script>
 
 <Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />

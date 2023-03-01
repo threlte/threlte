@@ -20,7 +20,7 @@
 		else if (discSpeed > 0 && !$started) start()
 	}
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			Logo: Mesh
 		}
