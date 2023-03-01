@@ -33,6 +33,10 @@ export const createCache = () => {
 export const useCache = () => {
   const cache = getContext<Cache>('threlte-cache')
 
+  if (!cache) {
+    throw new Error('No cache found. The cache can only be used in a child component to <Canvas>.')
+  }
+
   const remember = <T>(callback: () => Promise<T>, keys: Keys): Promise<T> => {
     for (const entry of cache) {
       // Find a match
