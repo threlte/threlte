@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { useLoader, Three } from '@threlte/core'
+  import { Three, useLoader } from '@threlte/core'
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import { DefaultLoadingManager } from 'three'
   import { Audio, AudioLoader, PositionalAudio } from 'three'
   import type { AudioInstanceProps } from './AudioInstance.svelte'
 
@@ -54,24 +53,12 @@
     error: ErrorEvent
   }>()
 
-  const loader = useLoader(AudioLoader, () => new AudioLoader(DefaultLoadingManager))
+  const x = useLoader(AudioLoader).load({ x: 'abc' })
+
+  const loader = useLoader(AudioLoader)
+
   const loadBufferFromUrl = (url: string): Promise<AudioBuffer> => {
-    return new Promise((resolve, reject) => {
-      loader.load(
-        url,
-        (buffer) => {
-          dispatch('load', buffer)
-          resolve(buffer)
-        },
-        (e) => {
-          dispatch('progress', e)
-        },
-        (e) => {
-          dispatch('error', e)
-          reject(e)
-        }
-      )
-    })
+    return loader.load(url).promise
   }
 
   let previousSource: $$Props['source']
@@ -146,9 +133,6 @@
   })
 </script>
 
-<Three
-  type={audio}
-  {...$$restProps}
->
+<Three type={audio} {...$$restProps}>
   <slot />
 </Three>

@@ -275,11 +275,6 @@ export type ThrelteLayers =
 
 export type ThrelteLayersContext = Writable<ThrelteLayers> | undefined
 
-export type ThrelteUseLoader = <T extends typeof Loader>(
-  loader: T,
-  memoizeFn: () => InstanceType<T>
-) => InstanceType<T>
-
 export type Size = {
   width: number
   height: number

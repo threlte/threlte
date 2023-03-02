@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { InteractiveObject, Three, useFrame, useTexture, useThrelte } from '@threlte/core'
-	import { Environment, useCursor, useGltf } from '@threlte/extras'
+	import { InteractiveObject, Three, useFrame, useThrelte } from '@threlte/core'
+	import { Environment, useCursor, useGltf, useTexture } from '@threlte/extras'
 	import { onMount } from 'svelte'
 	import { cubicInOut } from 'svelte/easing'
 	import { spring, tweened } from 'svelte/motion'
@@ -22,7 +22,7 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import { gameState } from './game/state'
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			BodyMesh: THREE.Mesh
 			LeftCover: THREE.Mesh
@@ -383,18 +383,20 @@
 					interactive
 					on:click={onScreenClick}
 				/>
-				<Three
-					type={MeshStandardMaterial}
-					metalness={0.9}
-					roughness={0.2}
-					color={'#141414'}
-					map={scanLinesTexture}
-					metalnessMap={scanLinesTexture}
-					emissiveMap={$gameTexture}
-					emissive={pointLightIntensity}
-					emissiveIntensity={1.2}
-					envMapIntensity={0}
-				/>
+				{#await scanLinesTexture then texture}
+					<Three
+						type={MeshStandardMaterial}
+						metalness={0.9}
+						roughness={0.2}
+						color={'#141414'}
+						map={texture}
+						metalnessMap={texture}
+						emissiveMap={$gameTexture}
+						emissive={pointLightIntensity}
+						emissiveIntensity={1.2}
+						envMapIntensity={0}
+					/>
+				{/await}
 			</Three>
 		</Three>
 	{/if}

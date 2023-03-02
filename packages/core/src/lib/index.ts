@@ -43,9 +43,16 @@ export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteRoot } from './hooks/useThrelteRoot'
 export { setThrelteUserContext, useThrelteUserContext } from './hooks/useThrelteUserContext'
-export { useLoader } from './hooks/useLoader'
-export { useTexture } from './hooks/useTexture'
 export { useParent } from './internal/HierarchicalObject.svelte'
+
+// useLoader
+export {
+  useLoader,
+  type UseLoaderOptions,
+  type UseLoaderLoadInput,
+  type UseLoaderLoadResult
+} from './hooks/useLoader'
+export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // types
 export type {
@@ -57,7 +64,6 @@ export type {
   ThrelteContext,
   ThrelteRootContext,
   ThrelteLayers,
-  ThrelteUseLoader,
   ThreltePointerEvent,
   ThrelteInstance,
   Size

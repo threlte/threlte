@@ -8,7 +8,7 @@
 		rotation += 0.01
 	})
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			'node_damagedHelmet_-6514': Object3D
 		}

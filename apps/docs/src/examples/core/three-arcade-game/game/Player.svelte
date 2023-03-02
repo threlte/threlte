@@ -62,7 +62,7 @@
 		}
 	}
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: { Player: Mesh }
 		materials: Record<string, never>
 	}>('/models/ball-game/player/player-simple.glb')

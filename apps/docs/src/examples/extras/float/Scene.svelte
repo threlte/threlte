@@ -6,7 +6,7 @@
 
 	type Nodes = 'ball-1' | 'ball-2' | 'ball-3' | 'ball-4' | 'ball-5'
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: Record<Nodes, Mesh>
 		materials: {}
 	}>('/models/blobs/blobs.glb', {

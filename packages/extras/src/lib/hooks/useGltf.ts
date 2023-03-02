@@ -1,21 +1,14 @@
+import { useLoader, type AsyncWritable } from '@threlte/core'
 import { createEventDispatcher } from 'svelte'
-import { writable, type Writable } from 'svelte/store'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module'
-import { useLoader } from '@threlte/core'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
 import type { ThrelteGltf } from '../types/types'
-import {
-  buildSceneGraph,
-  type Nodes,
-  type Materials,
-  type SceneGraph
-} from '../lib/buildSceneGraph'
-import { DefaultLoadingManager } from 'three'
 
 type UseGltfOptions = {
   useDraco?: boolean | string
-	useMeshopt?: boolean
+  useMeshopt?: boolean
 }
 
 createEventDispatcher
@@ -28,33 +21,31 @@ export const useGltf = <
 >(
   url: string,
   options?: UseGltfOptions
-): {
-  gltf: Writable<ThrelteGltf<Graph> | undefined>
-} => {
-  const gltf = writable<ThrelteGltf<Graph> | undefined>(undefined)
+): AsyncWritable<ThrelteGltf<Graph>> => {
+  const loader = useLoader(GLTFLoader, {
+    extend(loader) {
+      if (options?.useDraco) {
+        const dracoDecoderPath =
+          typeof options.useDraco === 'string'
+            ? options.useDraco
+            : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
 
-  const loader = useLoader(GLTFLoader, () => new GLTFLoader(DefaultLoadingManager))
-  if (options?.useDraco) {
-    const dracoDecoderPath =
-      typeof options.useDraco === 'string'
-        ? options.useDraco
-        : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
-    const dracoLoader = useLoader(DRACOLoader, () =>
-      new DRACOLoader(DefaultLoadingManager).setDecoderPath(dracoDecoderPath)
-    )
-    loader.setDRACOLoader(dracoLoader)
-  }
+        const dracoLoader = new DRACOLoader().setDecoderPath(dracoDecoderPath)
+        loader.setDRACOLoader(dracoLoader)
+      }
 
-	if (options?.useMeshopt) {
-		loader.setMeshoptDecoder(MeshoptDecoder);
-	}
-
-  loader.load(url, (data: GLTF) => {
-    if (data.scene) Object.assign(data, buildSceneGraph<Graph>(data.scene))
-    gltf.set(data as ThrelteGltf<Graph>)
+      if (options?.useMeshopt) {
+        loader.setMeshoptDecoder(MeshoptDecoder)
+      }
+    }
   })
 
-  return {
-    gltf
-  }
+  return loader.load(url, {
+    transform(result) {
+      return {
+        ...result,
+        ...buildSceneGraph(result.scene)
+      }
+    }
+  })
 }

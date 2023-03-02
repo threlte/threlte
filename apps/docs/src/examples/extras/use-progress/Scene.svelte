@@ -8,7 +8,7 @@
 		rotation += 0.01
 	})
 
-	const { gltf } = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
+	const gltf = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
 		'/models/helmet/DamagedHelmet.gltf?v=' + Math.random().toString() // force a reload on every pageload
 	)
 

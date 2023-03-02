@@ -7,7 +7,7 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 	import Ground from './Ground.svelte'
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			'node_damagedHelmet_-6514': Mesh
 		}

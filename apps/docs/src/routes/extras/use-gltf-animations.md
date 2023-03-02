@@ -60,7 +60,7 @@ Sometimes you might want to use the hook [`useGltf`](/extras/use-gltf) to reuse 
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
-  const { gltf } = useGltf('/path/to/model.glb')
+  const gltf = useGltf('/path/to/model.glb')
 
   // Provide that store to the hook useGltfAnimations
   useGltfAnimations<'All Animations'>(gltf, ({ actions }) => {
@@ -82,7 +82,7 @@ Sometimes you want to apply the animations to a different root than the GLTF sce
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 	import { Scene } from 'three'
 
-  const { gltf } = useGltf('/path/to/model.glb')
+  const gltf = useGltf('/path/to/model.glb')
 
 	const scene = new Scene()
 

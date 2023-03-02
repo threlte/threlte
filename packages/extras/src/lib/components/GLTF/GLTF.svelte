@@ -13,7 +13,7 @@
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
-	import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
+  import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
   import { buildSceneGraph } from '../../lib/buildSceneGraph'
   import type { GLTFProperties } from '../../types/components'
   import type { ThrelteGltf } from '../../types/types'
@@ -33,12 +33,8 @@
 
   export let url: GLTFProperties['url']
 
-  /**
-   * @deprecated Use `useDraco` instead
-   */
-  export let dracoDecoderPath: GLTFProperties['dracoDecoderPath'] = undefined
   export let useDraco: GLTFProperties['useDraco'] = false
-	export let useMeshopt: GLTFProperties['useMeshopt'] = false
+  export let useMeshopt: GLTFProperties['useMeshopt'] = false
   export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
 
   export let ignorePointer: GLTFProperties['ignorePointer'] = false
@@ -73,41 +69,27 @@
       }>['nodes']
     | undefined = undefined
 
-  const loader = useLoader(GLTFLoader, () => new GLTFLoader(DefaultLoadingManager))
-
-  if (useDraco) {
-    // This has a priority over the deprecated `dracoDecoderPath` property
-    if (useDraco === true) {
-      setDracoPath('https://www.gstatic.com/draco/v1/decoders/')
-    } else if (typeof useDraco === 'string') {
-      setDracoPath(useDraco)
-    }
-  } else if (dracoDecoderPath) {
-    // This is discarded if `useDraco` is used
-    console.warn('⚠️ dracoDecoderPath is deprecated, use useDraco instead')
-    setDracoPath(dracoDecoderPath)
-  }
-
-  function setDracoPath(path: string) {
-    const dracoLoader = useLoader(DRACOLoader, () =>
-      new DRACOLoader(DefaultLoadingManager).setDecoderPath(path)
-    )
-    loader.setDRACOLoader(dracoLoader)
-  }
-
-	if (useMeshopt) {
-		loader.setMeshoptDecoder(MeshoptDecoder)
-	}
-
   const { renderer } = useThrelte()
-  if (renderer && ktxTranscoderPath) {
-    const ktx2Loader = useLoader(KTX2Loader, () =>
-      new KTX2Loader(DefaultLoadingManager)
-        .setTranscoderPath(ktxTranscoderPath as string)
-        .detectSupport(renderer)
-    )
-    loader.setKTX2Loader(ktx2Loader)
-  }
+
+  const loader = useLoader(GLTFLoader, {
+    extend(loader) {
+      if (useDraco) {
+        const dracoLoader = new DRACOLoader()
+        dracoLoader.setDecoderPath(
+          typeof useDraco === 'string' ? useDraco : 'https://www.gstatic.com/draco/v1/decoders/'
+        )
+      }
+      if (useMeshopt) {
+        loader.setMeshoptDecoder(MeshoptDecoder)
+      }
+      if (ktxTranscoderPath && renderer) {
+        const ktx2Loader = new KTX2Loader()
+        ktx2Loader.setTranscoderPath(ktxTranscoderPath)
+        ktx2Loader.detectSupport(renderer)
+        loader.setKTX2Loader(ktx2Loader)
+      }
+    }
+  })
 
   const onLoad = (data: ThreeGLTF) => {
     // unload is not in use anymore
@@ -130,8 +112,8 @@
     dispatch('load', gltf)
   }
 
-  const onError = (e: ErrorEvent) => {
-    console.error(`Error loading GLTF: ${e.message}`)
+  const onError = (error: any) => {
+    console.error(`Error loading GLTF: ${error.message}`)
     gltf = undefined
     scene = undefined
     animations = undefined
@@ -142,10 +124,19 @@
     parser = undefined
     nodes = undefined
     materials = undefined
-    dispatch('error', e.message)
+    dispatch('error', error.message)
   }
 
-  $: loader.load(url, onLoad, undefined, onError)
+  const loadGltf = async (url: string) => {
+    try {
+      const model = await loader.load(url)
+      onLoad(model)
+    } catch (error: any) {
+      onError(error)
+    }
+  }
+
+  $: loadGltf(url)
 
   $: {
     if (scene) {
@@ -164,10 +155,7 @@
     {#if node}
       {#key node.uuid}
         <!-- dispose all nodes, i.e. meshes, skinnedMeshs -->
-        <DisposableObject
-          {dispose}
-          object={node}
-        />
+        <DisposableObject {dispose} object={node} />
 
         <LayerableObject object={node} />
 
@@ -193,10 +181,7 @@
 <!-- dispose all materials -->
 {#if materials}
   {#each Object.values(materials) as material}
-    <DisposableObject
-      {dispose}
-      object={material}
-    />
+    <DisposableObject {dispose} object={material} />
   {/each}
 {/if}
 

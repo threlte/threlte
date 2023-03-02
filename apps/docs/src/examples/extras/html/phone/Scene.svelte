@@ -6,7 +6,7 @@
 	import { Color, MeshStandardMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			phone: Mesh
 		}

@@ -71,7 +71,7 @@
 
 	const { onPointerEnter, onPointerLeave } = useCursor()
 
-	const { gltf } = useGltf<{
+	const gltf = useGltf<{
 		nodes: {
 			Cover: Mesh
 		}

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
 	import * as theatreCore from '@theatre/core'
-	import { InstancedMesh, T, useTexture, type Position, type Rotation } from '@threlte/core'
+	import { InstancedMesh, T, type Position, type Rotation } from '@threlte/core'
+	import { useTexture } from '@threlte/extras'
 	import { Attractor, Collider } from '@threlte/rapier'
 	import { Editable } from '@threlte/theatre'
 	import { MeshStandardMaterial, SphereGeometry } from 'three'
@@ -38,8 +39,10 @@
 
 	let coneCollider: RapierCollider | undefined = undefined
 
-	const map = useTexture('/assets/theatre/main/textures/ball_texture.jpg')
-	const normalMap = useTexture('/assets/theatre/main/textures/ball_normal_map.jpg')
+	const maps = useTexture({
+		map: '/assets/theatre/main/textures/ball_texture.jpg',
+		normalMap: '/assets/theatre/main/textures/ball_normal_map.jpg'
+	})
 </script>
 
 <Editable
@@ -58,18 +61,19 @@
 		<Attractor strength={attractor.strength} range={attractor.range}>
 			<Editable name="ObjectA / Attractor / Transform" transform controls />
 		</Attractor>
-		<InstancedMesh
-			geometry={new SphereGeometry(0.5)}
-			material={new MeshStandardMaterial({
-				color: 'white',
-				map,
-				normalMap
-			})}
-		>
-			{#each matrix as matrixItem, index}
-				<ObjectAInstance {coneCollider} instance={matrixItem} />
-			{/each}
-		</InstancedMesh>
+		{#await maps then value}
+			<InstancedMesh
+				geometry={new SphereGeometry(0.5)}
+				material={new MeshStandardMaterial({
+					color: 'white',
+					...value
+				})}
+			>
+				{#each matrix as matrixItem, index}
+					<ObjectAInstance {coneCollider} instance={matrixItem} />
+				{/each}
+			</InstancedMesh>
+		{/await}
 	{/if}
 
 	{#if showColliderA}

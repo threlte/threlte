@@ -38,7 +38,7 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
   import { useGltf } from '@threlte/extras'
   import { MeshBasicMaterial } from 'three'
 
-  const { gltf } = useGltf('/path/to/model.glb')
+  const gltf = useGltf('/path/to/model.glb')
 </script>
 
 <!-- Use an object node entirely -->
@@ -60,7 +60,7 @@ Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO bina
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf('/path/to/model.glb', {
+  const gltf = useGltf('/path/to/model.glb', {
     useDraco: true
   })
 </script>
@@ -76,7 +76,7 @@ You can also provide custom DRACO decoder binaries.
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf('/path/to/model.glb', {
+  const gltf = useGltf('/path/to/model.glb', {
     useDraco: '/custom/draco/decoders/path'
   })
 </script>
@@ -94,7 +94,7 @@ Use a meshopt decoder for compressed glTF files, defaults to Three's included de
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf('/path/to/model.glb', {
+  const gltf = useGltf('/path/to/model.glb', {
     useMeshopt: true
   })
 </script>
@@ -112,7 +112,7 @@ The hook provides a map of all objects and materials in the loaded glTF.
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf('/path/to/model.glb')
+  const gltf = useGltf('/path/to/model.glb')
   $: nodes: $gltf?.nodes
 	$: materials: $gltf?.materials
 </script>
@@ -124,7 +124,7 @@ Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
 
-  const { gltf } = useGltf<{
+  const gltf = useGltf<{
 		nodes: {
 			MeshA: THREE.Mesh
 			MeshB: THREE.Mesh
