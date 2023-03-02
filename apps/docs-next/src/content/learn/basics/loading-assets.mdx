@@ -39,7 +39,7 @@ The type of `texture` is a custom store that Threlte provides called `AsyncWrita
 Since the underlying promise properties `then` and `catch` are exposed on the store itself, we can also make use of that and _await_ the texture to be loaded:
 
 ```svelte
-<!-- texture is acting like a regular promise here -->
+<!-- Here, "texture" is acting like a regular promise -->
 {#await texture then value}
   <T.MeshStandardMaterial map={value} />
 {/await}
