@@ -269,7 +269,6 @@
     position.z={$cameraTargetPos.z}
     bind:ref={cameraTarget}
     type={Object3D}
-    let:ref
   />
 
   {#if $orbitControls}
