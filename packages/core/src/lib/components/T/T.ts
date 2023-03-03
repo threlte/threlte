@@ -2,7 +2,7 @@ import PreprocessFallbackComponent from './PreprocessFallback.svelte'
 import type * as THREE from 'three'
 import type { SvelteComponentTyped } from 'svelte'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Events, Props, Slots } from './types'
+import type { Events, Props, Slots } from '../types/sharedTypes'
 
 /**
  * T is an abstract component that is used in conjunction with the package

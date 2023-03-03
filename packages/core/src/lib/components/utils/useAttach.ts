@@ -1,7 +1,7 @@
 import { onDestroy } from 'svelte'
 import { useThrelte } from '../../hooks/useThrelte'
 import { resolve } from './resolve'
-import type { Props } from '../types'
+import type { BaseProps, MaybeInstance } from '../types/sharedTypes'
 
 const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
 
@@ -16,7 +16,7 @@ export const useAttach = <T>() => {
   // the property name that the object is attached to
   let attachedKey: string | undefined
 
-  const update = (instance: T, parent: any, attach?: Props<T>['attach']) => {
+  const update = (instance: MaybeInstance<T>, parent: any, attach?: BaseProps<T>['attach']) => {
     detach()
 
     // maybe assign 'material' or 'geometry' automatically if not specified

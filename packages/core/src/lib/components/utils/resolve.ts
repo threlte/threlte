@@ -1,3 +1,7 @@
+/**
+ * Resolves a property path to a target object and the property key.
+ * A property path can include dots to indicate nested objects.
+ */
 export const resolve = (target: any, propertyPath: string) => {
   if (propertyPath.includes('.')) {
     const path = propertyPath.split('.')
