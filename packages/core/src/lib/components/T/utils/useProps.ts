@@ -1,4 +1,4 @@
-import { useThrelte } from '../../hooks/useThrelte'
+import { useThrelte } from '../../../hooks/useThrelte'
 import { resolve } from './resolve'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])

@@ -1,7 +1,7 @@
 import { onDestroy } from 'svelte'
-import { useThrelte } from '../../hooks/useThrelte'
+import { useThrelte } from '../../../hooks/useThrelte'
 import { resolve } from './resolve'
-import type { BaseProps, MaybeInstance } from '../types/sharedTypes'
+import type { BaseProps, MaybeInstance } from '../../types/sharedTypes'
 
 const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
 

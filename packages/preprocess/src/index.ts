@@ -58,7 +58,11 @@ const actOnImportDeclarationNode = (
 ) => {
   // remove import of <T> component
   if (node.source.value === '@threlte/core') {
-    if (node.specifiers.find((s: any) => s.imported.name === 'T')) {
+    if (
+      node.specifiers.find((s: any) => s.imported.name === 'T') &&
+      !markup.original.includes('<T ') &&
+      !markup.original.includes('<T\n')
+    ) {
       // remove import of <T> component
       const isMultiImport = node.specifiers.length > 1
       if (!isMultiImport) {
@@ -276,6 +280,11 @@ export const preprocessThrelte = (options?: PreprocessOptions): PreprocessorGrou
   return {
     markup: ({ content, filename }) => {
       const { markup } = preprocessMarkup(content, options)
+
+      if (content.includes('<T')) {
+        console.log('content', content)
+        console.log('markup', markup)
+      }
 
       return {
         code: markup

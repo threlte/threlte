@@ -30,9 +30,8 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
 export { default as Three } from './components/Three/Three.svelte'
-export { default as Primitive } from './components/Primitive/Primitive.svelte'
-export { T } from './components/T/T'
-export type { Props, Events, Slots } from './components/Three/types'
+export { T, extend } from './components/T/T'
+export type { Props, Events, Slots } from './components/T/types'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'

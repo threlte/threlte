@@ -1,8 +1,6 @@
 import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
-import seqPreprocessor from 'svelte-sequential-preprocessor'
 import preprocess from 'svelte-preprocess'
-import { preprocessThrelte } from '@threlte/preprocess'
 import AutoImport from 'astro-auto-import'
 import type { Options } from 'rehype-pretty-code'
 
@@ -49,17 +47,9 @@ export default defineConfig({
     tailwind(),
     image(),
     svelte({
-      preprocess: seqPreprocessor([
-        preprocess({
-          postcss: true
-        }),
-        preprocessThrelte({
-          extensions: {
-            'three/examples/jsm/controls/OrbitControls': ['OrbitControls'],
-            'three/examples/jsm/controls/TransformControls': ['TransformControls']
-          }
-        })
-      ])
+      preprocess: preprocess({
+        postcss: true
+      })
     }),
     mdx()
   ],
