@@ -26,10 +26,8 @@ export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
 }
 
-type AnyThreeModule = typeof THREE[keyof typeof THREE]
-
 const augmentConstructorArgs = (
-  args: ComponentConstructorOptions<ComponentProps<TComp<AnyThreeModule>>>,
+  args: ComponentConstructorOptions<ComponentProps<TComp>>,
   is: keyof typeof THREE
 ) => {
   const module = catalogue[is] || THREE[is]
@@ -48,7 +46,7 @@ const augmentConstructorArgs = (
 const proxyTConstructor = (is: keyof typeof THREE) => {
   return new Proxy(class {}, {
     construct(_, [args]) {
-      const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<AnyThreeModule>>>
+      const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp>>
       return new TComp(augmentConstructorArgs(castedArgs, is))
     }
   })
@@ -76,7 +74,7 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
  */
 export const T = new Proxy(class {}, {
   construct(_, [args]) {
-    const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<AnyThreeModule>>>
+    const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp>>
     return new TComp(castedArgs)
   },
   get(_, is: keyof typeof THREE) {
