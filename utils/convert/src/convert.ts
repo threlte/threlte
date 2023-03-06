@@ -24,11 +24,17 @@ const init = () => {
     }
 
     contents = contents.replace(threeComponentRegex, '<T$2is={')
+    contents = contents.replace(/<\/Three>/gs, '</T>')
 
     if (!contents.match(/(import)(.*?)(T[,\s])(.*?)(from '@threlte\/core')/gs)) {
       contents = contents.replace(importRegex, '$1$2T$4$5')
     } else {
       // the import of `T` is already present, but the import of `Three` must still be removed
+      contents = contents.replace(/(import.*), Three, (.*from '.*')/gs, '$1, $2')
+      contents = contents.replace(/(import.*){ Three, (.*from '.*')/gs, '$1{ $2')
+      contents = contents.replace(/(import.*), Three }(.*from '.*')/gs, '$1 }$2')
+      contents = contents.replace(/(import.*){ Three }(.*from '.*')/gs, '$1{ }$2')
+      contents = contents.replace(/import.*?{\s*?}(.*?from '.*?')/gs, '')
     }
 
     writeFileSync(match.absolute, contents, {
