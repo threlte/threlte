@@ -1,5 +1,6 @@
-import { readdirSync, readFileSync, writeFileSync } from 'fs'
-import { dirname, resolve } from 'path'
+import { exec } from 'child_process'
+import { readFileSync, writeFileSync } from 'fs'
+import { resolve } from 'path'
 import glob from 'readdir-glob'
 
 // replace `<Three[…]type={` with `<T[…]is=`
@@ -16,17 +17,25 @@ const init = () => {
   })
 
   globber.on('match', (match) => {
-    console.log(match.absolute)
+    let contents = readFileSync(match.absolute, { encoding: 'utf-8' })
 
-    const contents = readFileSync(match.absolute, { encoding: 'utf-8' })
+    if (!contents.includes('<Three')) {
+      return
+    }
 
-    const replacedComponentsContent = contents.replace(threeComponentRegex, '<T$2is={')
+    contents = contents.replace(threeComponentRegex, '<T$2is={')
 
-    const finalFileContents = replacedComponentsContent.replace(importRegex, '$1$2T$4$5')
+    if (!contents.match(/(import)(.*?)(T[,\s])(.*?)(from '@threlte\/core')/gs)) {
+      contents = contents.replace(importRegex, '$1$2T$4$5')
+    } else {
+      // the import of `T` is already present, but the import of `Three` must still be removed
+    }
 
-    writeFileSync(match.absolute, finalFileContents, {
+    writeFileSync(match.absolute, contents, {
       encoding: 'utf-8'
     })
+
+    exec('code ' + match.absolute)
   })
   globber.on('error', (err) => {
     console.error('fatal error', err)
