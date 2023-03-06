@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, Three, useFrame } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { BufferAttribute, BufferGeometry } from 'three'
   import { useRapier } from '../../hooks/useRapier'
@@ -36,8 +36,8 @@
 </script>
 
 <T.LineSegments renderOrder={Infinity}>
-  <Three
-    type={geometry}
+  <T
+    is={geometry}
     attach="geometry"
   />
   <T.LineBasicMaterial

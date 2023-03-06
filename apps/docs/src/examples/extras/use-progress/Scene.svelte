@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T, Three, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { Environment, useGltf } from '@threlte/extras'
 	import { derived } from 'svelte/store'
 
@@ -26,6 +26,6 @@
 
 <T.Group rotation.y={rotation}>
 	{#if $helmet}
-		<Three type={$helmet} />
+		<T is={$helmet} />
 	{/if}
 </T.Group>

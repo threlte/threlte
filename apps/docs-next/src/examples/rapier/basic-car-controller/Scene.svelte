@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Environment, HTML, useGltf } from '@threlte/extras'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
@@ -81,8 +81,8 @@
 
 {#if $gltf}
   <AutoColliders shape={'trimesh'}>
-    <Three
-      type={$gltf.scene}
+    <T
+      is={$gltf.scene}
       rotation.y={90 * DEG2RAD}
       position={[-50, -0.3, -3]}
     />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as theatreCore from '@theatre/core'
-  import { OrbitControls, T, Three, TransformableObject } from '@threlte/core'
+  import { OrbitControls, T, TransformableObject } from '@threlte/core'
   import { Environment, useTexture } from '@threlte/extras'
   import { Editable } from '@threlte/theatre'
   import { DoubleSide, RepeatWrapping } from 'three'
@@ -93,8 +93,8 @@
     >
       {#if values.useMap}
         {#await map then value}
-          <Three
-            type={value}
+          <T
+            is={value}
             attach="map"
             repeat={values.wrap}
             wrapS={RepeatWrapping}
@@ -104,8 +104,8 @@
       {/if}
       {#if values.useNormalMap}
         {#await normalMap then value}
-          <Three
-            type={value}
+          <T
+            is={value}
             attach="normalMap"
             repeat={values.wrap}
             wrapS={RepeatWrapping}

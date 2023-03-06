@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Collider } from '@threlte/rapier'
   import { LineBasicMaterial, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -17,112 +17,112 @@
 </script>
 
 <!-- BACKGROUND GRID -->
-<Three
-  type={CustomGridHelper}
+<T
+  is={CustomGridHelper}
   args={[arenaWidth, arenaWidth, arenaHeight, arenaWidth]}
   position.y={-0.5}
 >
-  <Three
-    type={LineBasicMaterial}
+  <T
+    is={LineBasicMaterial}
     color="green"
     transparent
     opacity={0.1}
   />
-</Three>
+</T>
 
 <!-- LEFT GRID -->
-<Three
-  type={CustomGridHelper}
+<T
+  is={CustomGridHelper}
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
   rotation.z={90 * DEG2RAD}
   position.x={(arenaWidth / 2) * -1}
 >
-  <Three
-    type={LineBasicMaterial}
+  <T
+    is={LineBasicMaterial}
     color="green"
     transparent
     opacity={sideGridOpacity}
   />
 
-  <Three
-    type={Mesh}
+  <T
+    is={Mesh}
     rotation.x={90 * DEG2RAD}
   >
-    <Three
-      type={PlaneGeometry}
+    <T
+      is={PlaneGeometry}
       args={[arenaDepth, arenaHeight]}
     />
-    <Three
-      type={MeshBasicMaterial}
+    <T
+      is={MeshBasicMaterial}
       color="green"
       transparent
       opacity={$leftOpacity}
     />
-  </Three>
-</Three>
+  </T>
+</T>
 
 <!-- RIGHT GRID -->
-<Three
-  type={CustomGridHelper}
+<T
+  is={CustomGridHelper}
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
   rotation.z={90 * DEG2RAD}
   position.x={arenaWidth / 2}
 >
-  <Three
-    type={LineBasicMaterial}
+  <T
+    is={LineBasicMaterial}
     color="green"
     transparent
     opacity={sideGridOpacity}
   />
 
-  <Three
-    type={Mesh}
+  <T
+    is={Mesh}
     rotation.x={-90 * DEG2RAD}
   >
-    <Three
-      type={PlaneGeometry}
+    <T
+      is={PlaneGeometry}
       args={[arenaDepth, arenaHeight]}
     />
-    <Three
-      type={MeshBasicMaterial}
+    <T
+      is={MeshBasicMaterial}
       color="green"
       transparent
       opacity={$rightOpacity}
     />
-  </Three>
-</Three>
+  </T>
+</T>
 
 <!-- TOP GRID -->
-<Three
-  type={CustomGridHelper}
+<T
+  is={CustomGridHelper}
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
   rotation.y={90 * DEG2RAD}
   rotation.x={90 * DEG2RAD}
   position.z={(arenaHeight / 2) * -1}
 >
-  <Three
-    type={LineBasicMaterial}
+  <T
+    is={LineBasicMaterial}
     color="green"
     transparent
     opacity={sideGridOpacity}
   />
 
-  <Three
-    type={Mesh}
+  <T
+    is={Mesh}
     rotation.x={-90 * DEG2RAD}
   >
-    <Three
-      type={PlaneGeometry}
+    <T
+      is={PlaneGeometry}
       args={[arenaDepth, arenaHeight]}
     />
-    <Three
-      type={MeshBasicMaterial}
+    <T
+      is={MeshBasicMaterial}
       color="green"
       transparent
       opacity={$topOpacity}
     />
-  </Three>
-</Three>
+  </T>
+</T>
 
 <!-- LEFT COLLIDER -->
 <Collider
