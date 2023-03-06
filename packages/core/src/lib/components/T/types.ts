@@ -113,7 +113,7 @@ export type InstanceProps<Type extends any> = Partial<
 /**
  * ### `Props<Type>`
  *
- * This type is used as the Prop type for the components `<T>` and `<Three>`.
+ * This type is used as the Prop type for the component `<T>`.
  *
  * @example Props<typeof PerspectiveCamera>
  * // { position: [number, number, number], fov: number, etc… }
@@ -131,7 +131,7 @@ export type Props<Type extends any> = AnyProps &
 /**
  * ### `Slots<Type>`
  *
- * This type is used as the Slot type for the components `<T>` and `<Three>`.
+ * This type is used as the Slot type for the component `<T>`.
  * @example Slots<typeof PerspectiveCamera>
  * // { default: { ref: PerspectiveCamera } }
  */
@@ -153,7 +153,7 @@ export type CreateEvent<Type extends any> = {
 /**
  * ### `Events<Type>`
  *
- * This type is used as the Events type for the components `<T>` and `<Three>`.
+ * This type is used as the Events type for the component `<T>`.
  * @example Events<typeof PerspectiveCamera>
  * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
  */

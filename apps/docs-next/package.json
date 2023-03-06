@@ -29,7 +29,6 @@
     "@theatre/studio": "0.5.1-rc.1",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
-    "@threlte/preprocess": "workspace:*",
     "@threlte/rapier": "workspace:*",
     "@threlte/theatre": "workspace:*",
     "@tweakpane/core": "^1.1.0",
@@ -41,7 +40,6 @@
     "shiki": "^0.10.1",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
-    "svelte-sequential-preprocessor": "^0.0.7",
     "three": "^0.145.0",
     "tweakpane": "^3.1.0"
   }

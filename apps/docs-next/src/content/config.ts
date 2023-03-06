@@ -10,7 +10,6 @@ export const referenceCollection = defineCollection({
     order: z.number().optional(),
     category: z.enum([
       '@threlte/core',
-      '@threlte/preprocess',
       '@threlte/extras',
       '@threlte/rapier',
       '@threlte/theatre',

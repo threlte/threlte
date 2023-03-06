@@ -33,7 +33,7 @@
 		{:else}
 			This module is deprecated. You can still use it but it will be removed in the future. Please
 			consider using
-			<a href="/core/t"><code>{`<T>`}</code></a>/<a href="/core/three"><code>{`<Three>`}</code></a> instead.
+			<a href="/core/t"><code>{`<T>`}</code></a> instead.
 		{/if}
 
 		Please read the <a class="text-brand" href="/core-transition">update notice</a>.

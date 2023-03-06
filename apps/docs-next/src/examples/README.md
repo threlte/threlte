@@ -1,24 +1,18 @@
 # Threlte Examples
 
-This directory houses all examples that are part of the threlte docs and the playground. Examples are available as part of individual module documentations (such as `/rapier/rigid-body`) or can be loaded directly into the playground (such as `/playground/rapier/rigid-body`).
+This directory houses all examples that are part of the threlte docs. Examples are available as part of individual module documentations (such as `/rapier/rigid-body`) or can be referenced in sections that span certain topics, such as "Loading Assets".
 
 ## Structure
 
 - **An example can only use relative modules or npm modules**, meaning there **must not** be any imports with path aliases (e.g. `$examples/Component.svelte`) or other path qualifiers.
 
-- Allowed file extensions are:
-	- .svelte
-		- Must be imported as a fully qualified path `import Component from './Component.svelte'`
-	- .ts
-		- Must be imported without an extension `import importName from './moduleName'`
+- An example must be contained in a directory with the name of the example. This directory must contain an `App.svelte` file that is the entry point to the example.
 
-- All relative imports are allowed (e.g. `import importName from '../utils/moduleName'` or `import importName from './directory/moduleName'`)
+- Only relative imports are allowed (e.g. `import importName from './directory/moduleName'`)
 
-- Svelte components can have TypeScript `<script>` blocks. These will be preprocessed and transpiled before being loaded into a playground.
+- Svelte components can have TypeScript `<script>` blocks.
 
-- TypeScript files will be transpiled before being loaded into a playground.
-
-- The entry point to an example must be **"App.svelte"** as all relative imports will be resolved from there.
+- The entry point to an example must be **"App.svelte"**.
 
 ## Example
 
@@ -26,28 +20,8 @@ Use the [template](./template) as a starting point for your example
 
 ## Placing an example in the docs
 
-To place an example in the docs, navigate to the `.md` file and import your "App.svelte" entry point. Wrap your example with the component `<ExampleWrapper>` and insert the code block:
+To place an example in the docs, navigate to the `.md` file and insert your example as follows:
 
-```svelte
-<script lang="ts">
-	import Example from '$examples/new-example/App.svelte'
-</script>
-
-<ExampleWrapper playgroundHref="/new-example">
-<Example />
-
-<div slot="code">
-
-@[code svelte|title=App.svelte](../../examples/new-example/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/new-example/Scene.svelte)
-
-</div>
-</ExampleWrapper>
+```mdx
+<Example path="path/to/example/directory" />
 ```
-
-## Loading an example in a playground
-
-Append the directory path to your example to the url "https://threlte.xyz/playground/" and this will automatically load your example into the playground:
-
-- Directory for new example: `src/examples/new-example`
-- Playground URL for this example: https://threlte.xyz/playground/new-example
