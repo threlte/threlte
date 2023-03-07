@@ -104,7 +104,7 @@ Again, the type of `gltf` is an `AsyncWritable` custom store. Its value will be 
 
 ```svelte
 {#if $gltf}
-  <Three type={$gltf.scene} />
+  <T is={$gltf.scene} />
 {/if}
 ```
 
@@ -129,7 +129,7 @@ Command: npx @threlte/gltf@0.0.5 Flower.glb
 -->
 <script>
   import { Group } from 'three'
-  import { T, Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
 
   export const ref = new Group()
@@ -138,8 +138,8 @@ Command: npx @threlte/gltf@0.0.5 Flower.glb
 </script>
 
 {#if $gltf}
-  <Three
-    type={ref}
+  <T
+    is={ref}
     {...$$restProps}
   >
     <T.Mesh
@@ -156,7 +156,7 @@ Command: npx @threlte/gltf@0.0.5 Flower.glb
     />
 
     <slot {ref} />
-  </Three>
+  </T>
 {/if}
 ```
 
@@ -203,7 +203,7 @@ You can then import this component and use it in your application:
 </script>
 
 {#await useGltf('/assets/model.gltf') then gltf}
-  <Three type={gltf.scene} />
+  <T is={gltf.scene} />
 {/await}
 ```
 

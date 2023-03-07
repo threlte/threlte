@@ -58,7 +58,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
 -->
 <script>
   import { Group } from 'three'
-  import { T, Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
 
   export const ref = new Group()
@@ -68,10 +68,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
 </script>
 
 {#if $gltf}
-  <Three type={ref} {...$$restProps}>
+  <T is={ref} {...$$restProps}>
     <T.Group name="Scene">
       <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-        <Three type={$gltf.nodes.mixamorigHips} />
+        <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"
           geometry={$gltf.nodes.stacy.geometry}
@@ -84,7 +84,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
     </T.Group>
 
     <slot {ref} />
-  </Three>
+  </T>
 {/if}
 ```
 
@@ -161,7 +161,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 <script lang="ts">
   import type * as THREE from 'three'
   import { Group } from 'three'
-  import { T, Three, type Props, type Events, type Slots } from '@threlte/core'
+  import { T, type Props, type Events, type Slots } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
 
   type $$Props = Props<THREE.Group>
@@ -184,10 +184,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 </script>
 
 {#if $gltf}
-  <Three type={ref} {...$$restProps}>
+  <T is={ref} {...$$restProps}>
     <T.Group name="Scene">
       <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-        <Three type={$gltf.nodes.mixamorigHips} />
+        <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"
           geometry={$gltf.nodes.stacy.geometry}
@@ -200,7 +200,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
     </T.Group>
 
     <slot {ref} />
-  </Three>
+  </T>
 {/if}
 ```
 

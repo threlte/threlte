@@ -29,7 +29,6 @@ export { default as ViewportAwareObject } from './internal/ViewportAwareObject.s
 export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
-export { default as Three } from './components/Three/Three.svelte'
 export { T, extend } from './components/T/T'
 export type { Props, Events, Slots } from './components/T/types'
 

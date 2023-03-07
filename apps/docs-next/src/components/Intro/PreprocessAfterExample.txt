@@ -1,9 +1,0 @@
-<script>
-	import { Three } from '@threlte/core'
-	import { Mesh, BoxGeometry, MeshBasicMaterial } from 'three'
-</script>
-
-<Three type={Mesh}>
-	<Three type={BoxGeometry} />
-	<Three type={MeshBasicMaterial} color="red" />
-</Three>
