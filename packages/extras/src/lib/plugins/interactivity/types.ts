@@ -45,7 +45,7 @@ export interface PointerCaptureTarget {
  * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
  * the plugin will use the default compute function.
  */
-export type ComputeFunction = (event: DomEvent, state: State, context: ThrelteContext) => void
+export type ComputeFunction = (event: DomEvent, state: State) => void
 
 export type State = {
   enabled: boolean
@@ -57,10 +57,10 @@ export type State = {
   lastPointerDownHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent<DomEvent>>
   interactiveObjects: THREE.Object3D[]
-  compute: ComputeFunction | undefined
+  compute: ComputeFunction
 }
 
-export type EventMap = {
+export type ThrelteEvents = {
   click: IntersectionEvent<MouseEvent>
   contextmenu: IntersectionEvent<MouseEvent>
   dblclick: IntersectionEvent<MouseEvent>

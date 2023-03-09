@@ -1,8 +1,10 @@
-import { setContext } from 'svelte'
+import { useThrelte } from '@threlte/core'
+import { onDestroy, setContext } from 'svelte'
 import { Raycaster, Vector2 } from 'three'
+import { getDefaultComputeFunction } from './defaults'
 import { injectInteractivityPlugin } from './plugin'
 import { setupInteractivity } from './setupInteractivity'
-import type { InteractivityOptions, State } from './types'
+import type { ComputeFunction, InteractivityOptions, State } from './types'
 
 const interactivity = (options?: InteractivityOptions) => {
   const state: State = {
@@ -15,7 +17,7 @@ const interactivity = (options?: InteractivityOptions) => {
     hovered: new Map(),
     interactiveObjects: [],
     target: undefined,
-    compute: options?.compute
+    compute: options?.compute ?? getDefaultComputeFunction()
   }
 
   setContext<State>('threlte-interactivity-context', state)
@@ -32,5 +34,5 @@ const interactivity = (options?: InteractivityOptions) => {
 
 // exports
 export { useInteractivity } from './hook'
-export type { DomEvent, EventMap, Intersection, IntersectionEvent } from './types'
+export type { DomEvent, ThrelteEvents as EventMap, Intersection, IntersectionEvent } from './types'
 export { interactivity }

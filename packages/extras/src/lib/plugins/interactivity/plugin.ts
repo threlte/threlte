@@ -1,10 +1,10 @@
 import { injectPlugin } from '@threlte/core'
 import { Object3D } from 'three'
 import { useInteractivity } from './hook'
-import type { EventMap, State } from './types'
+import type { ThrelteEvents, State } from './types'
 import { useComponentEvents } from './useComponentEvents'
 
-export const interactivityEventNames: (keyof EventMap)[] = [
+export const interactivityEventNames: (keyof ThrelteEvents)[] = [
   'click',
   'contextmenu',
   'dblclick',
