@@ -1,6 +1,7 @@
-import { createRawEventDispatcher, injectPlugin } from '@threlte/core'
+import { injectPlugin } from '@threlte/core'
 import { Object3D } from 'three'
-import type { EventMap } from './types'
+import { useInteractivity } from './hook'
+import type { EventMap, State } from './types'
 import { useComponentEvents } from './useComponentEvents'
 
 export const interactivityEventNames: (keyof EventMap)[] = [
@@ -18,29 +19,18 @@ export const interactivityEventNames: (keyof EventMap)[] = [
   'pointermissed'
 ]
 
-export const injectInteractivityPlugin = (interactiveObjects: Set<Object3D>) => {
+export const injectInteractivityPlugin = (state: State) => {
   injectPlugin('interactivity', ({ ref }) => {
     if (!(ref instanceof Object3D)) return
 
+    const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
+
     let currentRef = ref
-
     let isListeningToEvents = false
-
-    const eventDispatcher = createRawEventDispatcher()
-
-    const addInteractivity = (ref: Object3D) => {
-      ref.userData._threlte_interactivity_dispatcher = eventDispatcher
-      interactiveObjects.add(currentRef)
-    }
-
-    const removeInteractivity = (ref: Object3D) => {
-      interactiveObjects.delete(currentRef)
-      delete ref.userData._threlte_interactivity_dispatcher
-    }
 
     useComponentEvents(() => {
       isListeningToEvents = true
-      addInteractivity(currentRef)
+      addInteractiveObject(currentRef)
     }, interactivityEventNames as unknown as string[])
 
     return {
@@ -49,8 +39,8 @@ export const injectInteractivityPlugin = (interactiveObjects: Set<Object3D>) => 
 
         currentRef = ref
 
-        removeInteractivity(currentRef)
-        addInteractivity(ref)
+        removeInteractiveObject(currentRef)
+        addInteractiveObject(currentRef)
       }
     }
   })

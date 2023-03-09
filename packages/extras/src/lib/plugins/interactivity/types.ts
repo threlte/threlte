@@ -1,3 +1,5 @@
+import type { ThrelteContext } from '@threlte/core'
+import type { Writable } from 'svelte/store'
 import type { Camera, Raycaster, Vector2 } from 'three'
 
 export type DomEvent = PointerEvent | MouseEvent | WheelEvent
@@ -38,13 +40,24 @@ export interface PointerCaptureTarget {
   target: Element
 }
 
+/**
+ * The compute function is responsible for updating the state of the interactivity plugin.
+ * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
+ * the plugin will use the default compute function.
+ */
+export type ComputeFunction = (event: DomEvent, state: State, context: ThrelteContext) => void
+
 export type State = {
+  enabled: boolean
+  target: HTMLElement | undefined
   pointer: Vector2
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]
   lastPointerDownHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent<DomEvent>>
+  interactiveObjects: THREE.Object3D[]
+  compute: ComputeFunction | undefined
 }
 
 export type EventMap = {
@@ -60,4 +73,9 @@ export type EventMap = {
   pointerleave: IntersectionEvent<PointerEvent>
   pointermove: IntersectionEvent<PointerEvent>
   pointermissed: MouseEvent
+}
+
+export type InteractivityOptions = {
+  enabled?: boolean
+  compute?: ComputeFunction
 }

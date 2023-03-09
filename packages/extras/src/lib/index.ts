@@ -33,6 +33,7 @@ export type { GLTFProperties } from './types/components'
 // plugins
 export {
   interactivity,
+  useInteractivity,
   type DomEvent,
   type EventMap,
   type Intersection,

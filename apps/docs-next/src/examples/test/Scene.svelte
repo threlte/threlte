@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { EventMap, interactivity } from '@threlte/extras'
+  import { Grid, interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
   interactivity()
@@ -23,9 +23,11 @@
 
 <T.Mesh
   on:pointerenter={(e) => {
+    e.stopPropagation()
     color = 'red'
   }}
   on:pointerleave={(e) => {
+    $scale = 1
     color = 'blue'
   }}
   on:pointerdown={(e) => {
@@ -38,4 +40,11 @@
 >
   <T.BoxGeometry />
   <T.MeshStandardMaterial {color} />
+
+  <T.Mesh position.x={2}>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
 </T.Mesh>
+
+<Grid />

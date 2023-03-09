@@ -2,8 +2,14 @@ import { createRawEventDispatcher, useThrelte } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { get } from 'svelte/store'
 import type * as THREE from 'three'
-import { Raycaster, Vector2 } from 'three'
-import type { DomEvent, EventMap, Intersection, IntersectionEvent, State } from './types'
+import type {
+  ComputeFunction,
+  DomEvent,
+  EventMap,
+  Intersection,
+  IntersectionEvent,
+  State
+} from './types'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
@@ -29,8 +35,8 @@ const DOM_EVENTS = [
 
 type DomEventName = typeof DOM_EVENTS[number][0]
 
-export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
-  const { camera: cameraStore, renderer, size: SizeStore } = useThrelte()
+export const setupInteractivity = (state: State) => {
+  const { camera: cameraStore, size: SizeStore, renderer } = useThrelte()
 
   let camera = get(cameraStore)
   onDestroy(cameraStore.subscribe((value) => (camera = value)))
@@ -38,39 +44,25 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
   let size = get(SizeStore)
   onDestroy(SizeStore.subscribe((value) => (size = value)))
 
-  if (!renderer) {
-    throw new Error('No renderer found. Make sure to call interactivity in a child of <Canvas>.')
-  }
-
-  const state: State = {
-    pointer: new Vector2(),
-    lastEvent: undefined,
-    raycaster: new Raycaster(),
-    initialClick: [0, 0],
-    lastPointerDownHits: [],
-    hovered: new Map()
-  }
-
   function calculateDistance(event: DomEvent) {
     const dx = event.offsetX - state.initialClick[0]
     const dy = event.offsetY - state.initialClick[1]
     return Math.round(Math.sqrt(dx * dx + dy * dy))
   }
 
-  const target = renderer.domElement
-
   function cancelPointer(intersections: Intersection[]) {
     for (const hoveredObj of state.hovered.values()) {
       // When no objects were hit or the the hovered object wasn't found underneath the cursor
-      // we call onPointerOut and delete the object from the hovered-elements map
+      // we call pointerout and delete the object from the hovered elements map
       if (
         !intersections.length ||
-        !intersections.find(
-          (hit) =>
+        !intersections.find((hit) => {
+          return (
             hit.object === hoveredObj.object &&
             hit.index === hoveredObj.index &&
             hit.instanceId === hoveredObj.instanceId
-        )
+          )
+        })
       ) {
         const eventObject = hoveredObj.eventObject
         state.hovered.delete(getIntersectionId(hoveredObj))
@@ -89,7 +81,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
     state.pointer.set((event.offsetX / size.width) * 2 - 1, -(event.offsetY / size.height) * 2 + 1)
   }
 
-  const getHits = (event: DomEvent): Intersection[] => {
+  const getHits = (): Intersection[] => {
     const duplicates = new Set<string>()
 
     const intersections: Intersection[] = []
@@ -97,7 +89,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
     // setup raycaster
     state.raycaster.setFromCamera(state.pointer, camera)
 
-    const hits = [...interactiveObjects]
+    const hits = state.interactiveObjects
       .flatMap((obj) => state.raycaster.intersectObject(obj, true))
       // Sort by distance
       .sort((a, b) => a.distance - b.distance)
@@ -142,7 +134,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
 
       setPointer(event)
 
-      const hits = getHits(event)
+      const hits = getHits()
       const delta = isClickEvent ? calculateDistance(event) : 0
 
       // Save initial coordinates on pointer-down
@@ -155,7 +147,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
       // Missed events have to come first in order to establish user-land side-effect clean up
       if (isClickEvent && !hits.length) {
         if (delta <= 2) {
-          pointerMissed(event, [...interactiveObjects])
+          pointerMissed(event, state.interactiveObjects)
         }
       }
 
@@ -164,7 +156,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
 
       let stopped = false
 
-      eventloop: for (const hit of hits) {
+      dispatchEvents: for (const hit of hits) {
         const intersectionEvent: IntersectionEvent<DomEvent> = {
           stopped,
           ...hit,
@@ -225,7 +217,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
               // Missed events have to come first
               pointerMissed(
                 event,
-                [...interactiveObjects].filter(
+                state.interactiveObjects.filter(
                   (object) => !state.lastPointerDownHits.includes(object)
                 )
               )
@@ -238,7 +230,7 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
             if (isClickEvent && state.lastPointerDownHits.includes(hit.eventObject)) {
               pointerMissed(
                 event,
-                [...interactiveObjects].filter(
+                state.interactiveObjects.filter(
                   (object) => !state.lastPointerDownHits.includes(object)
                 )
               )
@@ -246,18 +238,31 @@ export const setupInteractivity = (interactiveObjects: Set<THREE.Object3D>) => {
           }
         }
 
-        if (stopped) break eventloop
+        if (stopped) break dispatchEvents
       }
     }
   }
 
-  DOM_EVENTS.forEach(([eventName, passive]) => {
-    target.addEventListener(eventName, getEventHandler(eventName), { passive })
-  })
-
-  onDestroy(() => {
+  const disconnect = () => {
     DOM_EVENTS.forEach(([eventName]) => {
-      target.removeEventListener(eventName, getEventHandler(eventName))
+      state.target?.removeEventListener(eventName, getEventHandler(eventName))
     })
-  })
+    state.target = undefined
+  }
+  onDestroy(disconnect)
+
+  const connect = (target: HTMLElement) => {
+    if (state.target) disconnect()
+    state.target = target
+    DOM_EVENTS.forEach(([eventName, passive]) => {
+      state.target?.addEventListener(eventName, getEventHandler(eventName), { passive })
+    })
+  }
+
+  if (renderer?.domElement) connect(renderer.domElement)
+
+  return {
+    connect,
+    disconnect
+  }
 }
