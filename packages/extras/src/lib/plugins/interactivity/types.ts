@@ -1,4 +1,3 @@
-import type { ThrelteContext } from '@threlte/core'
 import type { Writable } from 'svelte/store'
 import type { Camera, Raycaster, Vector2 } from 'three'
 
@@ -49,7 +48,7 @@ export type ComputeFunction = (event: DomEvent, state: State) => void
 
 export type State = {
   enabled: boolean
-  target: HTMLElement | undefined
+  target: Writable<HTMLElement | undefined>
   pointer: Vector2
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
@@ -78,4 +77,5 @@ export type ThrelteEvents = {
 export type InteractivityOptions = {
   enabled?: boolean
   compute?: ComputeFunction
+  target?: HTMLElement
 }
