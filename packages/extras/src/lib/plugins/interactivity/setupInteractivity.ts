@@ -5,7 +5,7 @@ import type * as THREE from 'three'
 import type {
   ComputeFunction,
   DomEvent,
-  EventMap,
+  ThrelteEvents,
   Intersection,
   IntersectionEvent,
   State
@@ -13,7 +13,7 @@ import type {
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
-    | ReturnType<typeof createRawEventDispatcher<EventMap>>
+    | ReturnType<typeof createRawEventDispatcher<ThrelteEvents>>
     | undefined
 }
 
@@ -77,20 +77,13 @@ export const setupInteractivity = (state: State) => {
     }
   }
 
-  const setPointer = (event: DomEvent) => {
-    state.pointer.set((event.offsetX / size.width) * 2 - 1, -(event.offsetY / size.height) * 2 + 1)
-  }
-
   const getHits = (): Intersection[] => {
     const duplicates = new Set<string>()
 
     const intersections: Intersection[] = []
 
-    // setup raycaster
-    state.raycaster.setFromCamera(state.pointer, camera)
-
     const hits = state.interactiveObjects
-      .flatMap((obj) => state.raycaster.intersectObject(obj, true))
+      .flatMap((obj) => (state.enabled ? state.raycaster.intersectObject(obj, true) : []))
       // Sort by distance
       .sort((a, b) => a.distance - b.distance)
       // Filter out duplicates
@@ -132,7 +125,11 @@ export const setupInteractivity = (state: State) => {
       const isPointerMove = name === 'pointermove'
       const isClickEvent = name === 'click' || name === 'contextmenu' || name === 'dblclick'
 
-      setPointer(event)
+      /**
+       * Will set up the raycaster. The default implementation will use the
+       * mouse position on the renderers domElement.
+       */
+      state.compute(event, state)
 
       const hits = getHits()
       const delta = isClickEvent ? calculateDistance(event) : 0
