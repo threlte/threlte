@@ -9,12 +9,12 @@ import type { InteractivityOptions, State } from './types'
 
 const interactivity = (options?: InteractivityOptions) => {
   const state: State = {
-    enabled: options?.enabled ?? true,
+    enabled: writable(options?.enabled ?? true),
     pointer: new Vector2(),
     lastEvent: undefined,
     raycaster: new Raycaster(),
     initialClick: [0, 0],
-    lastPointerDownHits: [],
+    initialHits: [],
     hovered: new Map(),
     interactiveObjects: [],
     target: writable(options?.target ?? useThrelte().renderer?.domElement),

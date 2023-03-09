@@ -1,6 +1,6 @@
 import type { createRawEventDispatcher } from '@threlte/core'
 import type * as THREE from 'three'
-import { watch } from '../../lib/watch'
+import { memoize, watch } from '../../lib/storeUtils'
 import type { DomEvent, Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
@@ -61,13 +61,15 @@ export const setupInteractivity = (state: State) => {
     }
   }
 
+  const enabled = memoize(state.enabled)
+
   const getHits = (): Intersection[] => {
     const duplicates = new Set<string>()
 
     const intersections: Intersection[] = []
 
     const hits = state.interactiveObjects
-      .flatMap((obj) => (state.enabled ? state.raycaster.intersectObject(obj, true) : []))
+      .flatMap((obj) => (enabled.current ? state.raycaster.intersectObject(obj, true) : []))
       // Sort by distance
       .sort((a, b) => a.distance - b.distance)
       // Filter out duplicates
@@ -121,7 +123,7 @@ export const setupInteractivity = (state: State) => {
       // Save initial coordinates on pointer-down
       if (name === 'pointerdown') {
         state.initialClick = [event.offsetX, event.offsetY]
-        state.lastPointerDownHits = hits.map((hit) => hit.eventObject)
+        state.initialHits = hits.map((hit) => hit.eventObject)
       }
 
       // If a click yields no results, pass it back to the user as a miss
@@ -194,13 +196,11 @@ export const setupInteractivity = (state: State) => {
           const hasEventListener = eventDispatcher.hasEventListener(name)
 
           if (hasEventListener) {
-            if (!isClickEvent || state.lastPointerDownHits.includes(hit.eventObject)) {
+            if (!isClickEvent || state.initialHits.includes(hit.eventObject)) {
               // Missed events have to come first
               pointerMissed(
                 event,
-                state.interactiveObjects.filter(
-                  (object) => !state.lastPointerDownHits.includes(object)
-                )
+                state.interactiveObjects.filter((object) => !state.initialHits.includes(object))
               )
 
               // Call the event
@@ -208,12 +208,10 @@ export const setupInteractivity = (state: State) => {
             }
           } else {
             // "Real" click event
-            if (isClickEvent && state.lastPointerDownHits.includes(hit.eventObject)) {
+            if (isClickEvent && state.initialHits.includes(hit.eventObject)) {
               pointerMissed(
                 event,
-                state.interactiveObjects.filter(
-                  (object) => !state.lastPointerDownHits.includes(object)
-                )
+                state.interactiveObjects.filter((object) => !state.initialHits.includes(object))
               )
             }
           }

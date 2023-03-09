@@ -47,13 +47,13 @@ export interface PointerCaptureTarget {
 export type ComputeFunction = (event: DomEvent, state: State) => void
 
 export type State = {
-  enabled: boolean
+  enabled: Writable<boolean>
   target: Writable<HTMLElement | undefined>
   pointer: Vector2
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]
-  lastPointerDownHits: THREE.Object3D[]
+  initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent<DomEvent>>
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction

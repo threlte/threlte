@@ -36,3 +36,29 @@ export const watch = <S extends Stores>(
     if (cleanupFn) cleanupFn()
   })
 }
+
+/**
+ * Use a single store or multiple stores and return the value(s) as an object.
+ * This is useful for using stores in a non-reactive way e.g. in loops.
+ * @param stores
+ * @param transform
+ */
+export function memoize<U, S extends Stores>(stores: S): { current: StoresValues<S> }
+export function memoize<U, S extends Stores>(
+  stores: S,
+  transform: (values: StoresValues<S>) => U
+): { current: U }
+export function memoize<U, S extends Stores>(
+  stores: S,
+  transform?: (values: StoresValues<S>) => U
+): { current: U | StoresValues<S> } {
+  const obj = {
+    current: undefined
+  } as any
+
+  watch(stores, (v) => {
+    obj.current = transform ? transform(v) : v
+  })
+
+  return obj
+}

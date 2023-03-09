@@ -1,15 +1,9 @@
 import { useThrelte } from '@threlte/core'
-import type { Camera } from 'three'
-import { watch } from '../../lib/watch'
+import { memoize, watch } from '../../lib/storeUtils'
 import type { ComputeFunction, State } from './types'
 
 export const getDefaultComputeFunction = (state: State): ComputeFunction => {
-  const { camera: cameraStore } = useThrelte()
-
-  let camera: Camera
-  watch(cameraStore, (value) => {
-    camera = value
-  })
+  const camera = memoize(useThrelte().camera)
 
   let width = 0
   let height = 0
@@ -30,6 +24,6 @@ export const getDefaultComputeFunction = (state: State): ComputeFunction => {
 
   return (event, state) => {
     state.pointer.set((event.offsetX / width) * 2 - 1, -(event.offsetY / height) * 2 + 1)
-    state.raycaster.setFromCamera(state.pointer, camera)
+    state.raycaster.setFromCamera(state.pointer, camera.current)
   }
 }
