@@ -1,5 +1,4 @@
 import { onDestroy } from 'svelte'
-import { get } from 'svelte/store'
 import type { Camera, Event, Intersection, Object3D, Vector2 } from 'three'
 import type {
   ThrelteContext,
@@ -61,10 +60,10 @@ export const useEventRaycast = (
   onPointerDown: (e: MouseEvent | PointerEvent) => void
   onPointerMove: (e: MouseEvent | PointerEvent) => void
 } => {
-  let camera = get(ctx.camera)
+  let camera: Camera
   const unsubscribeCamera = ctx.camera.subscribe((value) => (camera = value))
   onDestroy(unsubscribeCamera)
-  let pointer = get(ctx.pointer)
+  let pointer: Vector2
   const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
   onDestroy(unsubscribePointer)
 
@@ -156,15 +155,15 @@ export const useFrameloopRaycast = (
   raycast: () => void
 } => {
   // unwrapping stores
-  let pointerOverCanvas = get(ctx.pointerOverCanvas)
+  let pointerOverCanvas: boolean
   const unsubscribePointerOverCanvas = ctx.pointerOverCanvas.subscribe(
     (value) => (pointerOverCanvas = value)
   )
   onDestroy(unsubscribePointerOverCanvas)
-  let camera = get(ctx.camera)
+  let camera: Camera
   const unsubscribeCamera = ctx.camera.subscribe((value) => (camera = value))
   onDestroy(unsubscribeCamera)
-  let pointer = get(ctx.pointer)
+  let pointer: Vector2
   const unsubscribePointer = ctx.pointer.subscribe((value) => (pointer = value))
   onDestroy(unsubscribePointer)
 

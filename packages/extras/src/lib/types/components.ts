@@ -6,7 +6,7 @@ import type {
   Object3DInstanceProperties,
   Scale
 } from '@threlte/core'
-import type { Camera, ColorRepresentation, Material, Object3D, TextureEncoding } from 'three'
+import type { Camera, ColorRepresentation, Material, Mesh, Object3D, TextureEncoding } from 'three'
 import type { Text as TextType } from './types'
 
 export type EdgesProperties = Omit<LineSegmentsProperties, 'geometry' | 'material'> &

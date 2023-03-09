@@ -1,5 +1,48 @@
 # @threlte/core
 
+## 5.0.9
+
+### Patch Changes
+
+- 2629f80: Remove unnecessary get(store) calls
+
+## 5.0.8
+
+### Patch Changes
+
+- 104ba90: Republishing due to <TransformControls> inconsistency
+
+## 5.0.7
+
+### Patch Changes
+
+- 185c15f: Fixes a bug where the TransformControls would not re-enable the OrbitControls after auto-pausing.
+
+## 5.0.6
+
+### Patch Changes
+
+- 357bb54: fixes a bug where if the initial value was nullish, it wasn't reset
+
+## 5.0.5
+
+### Patch Changes
+
+- 20ed409: Expose Props, Events and Slots type to move forward with v5 syntax exposure and abstraction abilities
+
+## 5.0.4
+
+### Patch Changes
+
+- 5e475db: More robust rendering of props
+
+## 5.0.3
+
+### Patch Changes
+
+- ff8ae66: Added optimizations to check if the \$\$restProps actually changed
+- c969ea4: Rolling back changes about base props. Changing a base prop and a restProp would NOT update the restProp, which is undesirable
+
 ## 5.0.2
 
 ### Patch Changes

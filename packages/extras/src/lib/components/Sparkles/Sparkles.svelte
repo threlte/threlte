@@ -67,7 +67,7 @@
 	$: setAttribute('position', positions, 3);
 	$: setAttribute('size', usePropAsIsOrAsAttribute<number>(count, size, Math.random), 1)
 	$: setAttribute('speed', usePropAsIsOrAsAttribute<number>(count, speed), 1);
-	$: setAttribute('opacity', usePropAsIsOrAsAttribute<number>(count, opacity), 3)
+	$: setAttribute('opacity', usePropAsIsOrAsAttribute<number>(count, opacity), 1)
 	$: setAttribute('noise', usePropAsIsOrAsAttribute<typeof noise>(count * 3, noise), 3);
 	$: setAttribute('color', usePropAsIsOrAsAttribute<ColorRepresentation>(
 				color === undefined ? count * 3 : count,

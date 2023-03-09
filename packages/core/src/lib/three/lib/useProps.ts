@@ -3,6 +3,18 @@ import { resolve } from './resolve'
 
 const ignoredProps = ['$$scope', '$$slots', 'type', 'args', 'attach', 'instance']
 
+const updateProjectionMatrixKeys = [
+  'fov',
+  'aspect',
+  'near',
+  'far',
+  'left',
+  'right',
+  'top',
+  'bottom',
+  'zoom'
+]
+
 /**
  * Only scalar values are memoized, objects and arrays are considered
  * non-equa by default, to ensure reactivity works as you would
@@ -29,15 +41,24 @@ type PropOptions = {
 export const useProps = () => {
   const { invalidate } = useThrelte()
 
-  const previousValues = new Map<string, any>()
+  const memoizedProps = new Map<
+    string,
+    {
+      instance: any
+      value: any
+    }
+  >()
 
   const setProp = <T>(instance: T, propertyPath: string, value: any, options: PropOptions) => {
     if (memoizeProp(value)) {
-      const previousValue = previousValues.get(propertyPath)
-      if (previousValue === value) {
+      const memoizedProp = memoizedProps.get(propertyPath)
+      if (memoizedProp && memoizedProp.instance === instance && memoizedProp.value === value) {
         return
       }
-      previousValues.set(propertyPath, value)
+      memoizedProps.set(propertyPath, {
+        instance,
+        value
+      })
     }
 
     const { key, target } = resolve(instance, propertyPath)
@@ -60,8 +81,11 @@ export const useProps = () => {
       } else {
         // otherwise, we just set the value
         target[key] = value
-        if (key === 'fov' && target.isPerspectiveCamera && !options.manualCamera) {
-          // this is most likely a PerspectiveCamera, so we need to update the aspect ratio
+        if (options.manualCamera) return
+        if (
+          updateProjectionMatrixKeys.includes(key) &&
+          (target.isPerspectiveCamera || target.isOrthographicCamera)
+        ) {
           target.updateProjectionMatrix()
         }
       }

@@ -61,19 +61,23 @@
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
 
   // Props
-  $: props = useProps()
+  const props = useProps()
   $: props.updateProps(ref, $$restProps, {
     manualCamera: manual
   })
 
   // Camera
-  $: camera = useCamera()
+  const camera = useCamera()
   $: camera.update(ref, manual)
   $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment
-  $: attachment = useAttach()
+  const attachment = useAttach()
   $: attachment.update(ref, $parent, attach)
+
+  // Events
+  const events = useEvents()
+  $: events.updateRef(ref)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D
@@ -82,9 +86,6 @@
   const isDisposableObject = (object: any): object is DisposableThreeObject => {
     return (object as any).dispose !== undefined
   }
-
-  const { updateRef } = useEvents()
-  $: updateRef(ref)
 </script>
 
 {#if isDisposableObject(ref)}

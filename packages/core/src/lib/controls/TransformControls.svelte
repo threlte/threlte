@@ -187,7 +187,10 @@
           if (!orbitControls) break autopause
           const shouldBeEnabled = !e.value
           if (orbitControls.enabled === shouldBeEnabled) break autopause
-          enabledStateBeforeAutoPause = orbitControls.enabled
+          if (e.value) {
+            // only save the state if we're actually pausing
+            enabledStateBeforeAutoPause = orbitControls.enabled
+          }
           orbitControls.enabled = shouldBeEnabled
         }
       }
@@ -206,13 +209,17 @@
     'pointEnd-changed': (e) => dispatch('pointEnd-changed', e),
     'rotationAxis-changed': (e) => dispatch('rotationAxis-changed', e),
     'rotationAngle-changed': (e) => dispatch('rotationAngle-changed', e),
-    'eye-changed': (e) => dispatch('eye-changed', e)
+    'eye-changed': (e) => dispatch('eye-changed', e),
+    mouseDown: () => dispatch('mouseDown'),
+    mouseUp: () => dispatch('mouseUp'),
+    objectChange: () => dispatch('objectChange')
   }
 
-  if (!renderer)
+  if (!renderer) {
     throw new Error(
       'TransformControls: renderer is undefined, is this component a child of <Canvas>?'
     )
+  }
 
   const transformControls = new TransformControls($camera, renderer.domElement)
 
@@ -254,6 +261,9 @@
   })
 </script>
 
-<DisposableObject {dispose} object={transformControls} />
+<DisposableObject
+  {dispose}
+  object={transformControls}
+/>
 
 <LayerableObject object={transformControls} />

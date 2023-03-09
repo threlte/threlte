@@ -1,5 +1,29 @@
 # @threlte/extras
 
+## 4.9.3
+
+### Patch Changes
+
+- fb70869: required props in Grid component
+
+## 4.9.2
+
+### Patch Changes
+
+- 65d2b64: all <Grid> props should be optional
+
+## 4.9.1
+
+### Patch Changes
+
+- 8120433: Added Mesh props to <Grid>
+
+## 4.9.0
+
+### Minor Changes
+
+- 8a6e02f: Feature: Grid component
+
 ## 4.8.0
 
 ### Minor Changes
