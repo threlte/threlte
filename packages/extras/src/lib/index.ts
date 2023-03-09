@@ -30,6 +30,12 @@ export { useThrelteAudio } from './audio/useThrelteAudio'
 export type { GLTFProperties } from './types/components'
 
 // plugins
-export { interactivity } from './plugins/interactivity'
+export {
+  interactivity,
+  type DomEvent,
+  type EventMap,
+  type Intersection,
+  type IntersectionEvent
+} from './plugins/interactivity'
 
 export type { ThrelteGltf } from './types/types'

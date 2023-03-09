@@ -1,8 +1,13 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { interactivity } from '@threlte/extras'
+  import { EventMap, interactivity } from '@threlte/extras'
+  import { spring } from 'svelte/motion'
 
   interactivity()
+
+  let color = 'blue'
+
+  const scale = spring(1)
 </script>
 
 <T.OrthographicCamera
@@ -17,20 +22,20 @@
 <T.DirectionalLight position={[1, 2, 5]} />
 
 <T.Mesh
-  on:pointerover={(e) => {
-    console.log('over red!!!')
+  on:pointerenter={(e) => {
+    color = 'red'
   }}
+  on:pointerleave={(e) => {
+    color = 'blue'
+  }}
+  on:pointerdown={(e) => {
+    $scale = 2
+  }}
+  on:pointerup={(e) => {
+    $scale = 1
+  }}
+  scale={$scale}
 >
   <T.BoxGeometry />
-  <T.MeshStandardMaterial color="red" />
-
-  <T.Mesh
-    on:pointerover={(e) => {
-      console.log('over green!!!')
-    }}
-    position.x={1}
-  >
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial color="green" />
-  </T.Mesh>
+  <T.MeshStandardMaterial {color} />
 </T.Mesh>

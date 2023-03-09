@@ -119,4 +119,4 @@ type CreateEvent<Type extends any> = {
   }
 }
 
-export type Events<Type extends any> = Record<string, unknown> & CreateEvent<Type>
+export type Events<Type extends any> = Record<string, any> & CreateEvent<Type>

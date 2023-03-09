@@ -1,13 +1,12 @@
 import { createRawEventDispatcher, injectPlugin } from '@threlte/core'
-import { onDestroy } from 'svelte'
-import { writable } from 'svelte/store'
 import { Object3D } from 'three'
+import type { EventMap } from './types'
 import { useComponentEvents } from './useComponentEvents'
 
-export const eventNames = [
+export const interactivityEventNames: (keyof EventMap)[] = [
   'click',
   'contextmenu',
-  'doubleclick',
+  'dblclick',
   'wheel',
   'pointerup',
   'pointerdown',
@@ -26,49 +25,32 @@ export const injectInteractivityPlugin = (interactiveObjects: Set<Object3D>) => 
     let currentRef = ref
 
     let isListeningToEvents = false
-    const isListeningToEventsStore = writable(false)
 
-    const { eventNames: componentEventNames } = useComponentEvents()
+    const eventDispatcher = createRawEventDispatcher()
 
-    onDestroy(
-      componentEventNames.subscribe((componentEventNames) => {
-        isListeningToEventsStore.set(
-          componentEventNames.filter((value) => eventNames.includes(value)).length > 0
-        )
-      })
-    )
-
-    onDestroy(
-      isListeningToEventsStore.subscribe((isListening) => {
-        isListeningToEvents = isListening
-        if (isListening) {
-          interactiveObjects.add(currentRef)
-        }
-      })
-    )
-
-    const setupEventDispatcher = (ref: Object3D) => {
-      ref.userData._threlte_interactivity_dispatcher = createRawEventDispatcher()
+    const addInteractivity = (ref: Object3D) => {
+      ref.userData._threlte_interactivity_dispatcher = eventDispatcher
+      interactiveObjects.add(currentRef)
     }
 
-    const deleteEventDispatcher = (ref: Object3D) => {
+    const removeInteractivity = (ref: Object3D) => {
+      interactiveObjects.delete(currentRef)
       delete ref.userData._threlte_interactivity_dispatcher
     }
 
-    setupEventDispatcher(currentRef)
+    useComponentEvents(() => {
+      isListeningToEvents = true
+      addInteractivity(currentRef)
+    }, interactivityEventNames as unknown as string[])
 
     return {
       onRefChange(ref: Object3D) {
-        if (!isListeningToEvents) return
-        if (ref.uuid !== currentRef.uuid) return
+        if (!isListeningToEvents || ref.uuid === currentRef.uuid) return
 
         currentRef = ref
 
-        deleteEventDispatcher(currentRef)
-        interactiveObjects.delete(currentRef)
-
-        setupEventDispatcher(ref)
-        interactiveObjects.add(ref)
+        removeInteractivity(currentRef)
+        addInteractivity(ref)
       }
     }
   })
