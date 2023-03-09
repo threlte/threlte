@@ -1,21 +1,11 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Grid, interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
-  const { camera } = useThrelte()
+  const { target } = interactivity()
 
-  const { connect } = interactivity({
-    compute: (event, state) => {
-      state.pointer.set(
-        (event.offsetX / (state.target?.clientWidth ?? 0)) * 2 - 1,
-        -(event.offsetY / (state.target?.clientHeight ?? 0)) * 2 + 1
-      )
-      state.raycaster.setFromCamera(state.pointer, $camera)
-    }
-  })
-
-  connect(document.querySelector('#int-target')!)
+  target.set(document.getElementById('int-target') ?? undefined)
 
   let color = 'blue'
 

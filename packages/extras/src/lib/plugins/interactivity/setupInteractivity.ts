@@ -1,15 +1,7 @@
-import { createRawEventDispatcher, useThrelte } from '@threlte/core'
-import { onDestroy } from 'svelte'
-import { get } from 'svelte/store'
+import type { createRawEventDispatcher } from '@threlte/core'
 import type * as THREE from 'three'
-import type {
-  ComputeFunction,
-  DomEvent,
-  ThrelteEvents,
-  Intersection,
-  IntersectionEvent,
-  State
-} from './types'
+import { watch } from '../../lib/watch'
+import type { DomEvent, Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
@@ -36,14 +28,6 @@ const DOM_EVENTS = [
 type DomEventName = typeof DOM_EVENTS[number][0]
 
 export const setupInteractivity = (state: State) => {
-  const { camera: cameraStore, size: SizeStore, renderer } = useThrelte()
-
-  let camera = get(cameraStore)
-  onDestroy(cameraStore.subscribe((value) => (camera = value)))
-
-  let size = get(SizeStore)
-  onDestroy(SizeStore.subscribe((value) => (size = value)))
-
   function calculateDistance(event: DomEvent) {
     const dx = event.offsetX - state.initialClick[0]
     const dy = event.offsetY - state.initialClick[1]
@@ -170,7 +154,7 @@ export const setupInteractivity = (state: State) => {
               cancelPointer([...higher, hit])
             }
           },
-          camera,
+          camera: state.raycaster.camera,
           delta,
           nativeEvent: event,
           pointer: state.pointer,
@@ -240,26 +224,22 @@ export const setupInteractivity = (state: State) => {
     }
   }
 
-  const disconnect = () => {
+  const disconnect = (target: HTMLElement) => {
     DOM_EVENTS.forEach(([eventName]) => {
-      state.target?.removeEventListener(eventName, getEventHandler(eventName))
+      target.removeEventListener(eventName, getEventHandler(eventName))
     })
-    state.target = undefined
   }
-  onDestroy(disconnect)
 
   const connect = (target: HTMLElement) => {
-    if (state.target) disconnect()
-    state.target = target
     DOM_EVENTS.forEach(([eventName, passive]) => {
-      state.target?.addEventListener(eventName, getEventHandler(eventName), { passive })
+      target.addEventListener(eventName, getEventHandler(eventName), { passive })
     })
   }
 
-  if (renderer?.domElement) connect(renderer.domElement)
-
-  return {
-    connect,
-    disconnect
-  }
+  watch(state.target, (target) => {
+    if (target) connect(target)
+    return () => {
+      if (target) disconnect(target)
+    }
+  })
 }
