@@ -1,8 +1,8 @@
 import { onDestroy } from 'svelte'
 import type { OrthographicCamera, Camera, PerspectiveCamera } from 'three'
-import { useThrelte } from '../../hooks/useThrelte'
-import { useThrelteRoot } from '../../hooks/useThrelteRoot'
-import type { Size } from '../../types/types'
+import { useThrelte } from '../../../hooks/useThrelte'
+import { useThrelteRoot } from '../../../hooks/useThrelteRoot'
+import type { Size } from '../../../types/types'
 
 const isCamera = (value: any): value is Camera => {
   return value && value.isCamera

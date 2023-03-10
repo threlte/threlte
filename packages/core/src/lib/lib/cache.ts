@@ -1,3 +1,8 @@
+/**
+ * @file This file contains the cache implementation for Threlte. The cache is
+ * used to cache the return value of a promise based on the provided keys.
+ */
+
 import { getContext, setContext } from 'svelte'
 
 type Tuple<T = any> = [T] | T[]

@@ -1,5 +1,5 @@
 <script>
-	import { Canvas, InteractiveObject, OrbitControls, Three } from '@threlte/core'
+	import { Canvas, InteractiveObject, OrbitControls, T } from '@threlte/core'
 	import { spring } from 'svelte/motion'
 	import {
 		AmbientLight,
@@ -18,17 +18,17 @@
 
 <div>
 	<Canvas>
-		<Three type={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
+		<T is={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
 			<OrbitControls maxPolarAngle={degToRad(80)} enableZoom={false} target={{ y: 0.5 }} />
-		</Three>
+		</T>
 
-		<Three type={DirectionalLight} castShadow position={[3, 10, 10]} />
-		<Three type={DirectionalLight} position={[-3, 10, -10]} intensity={0.2} />
-		<Three type={AmbientLight} intensity={0.2} />
+		<T is={DirectionalLight} castShadow position={[3, 10, 10]} />
+		<T is={DirectionalLight} position={[-3, 10, -10]} intensity={0.2} />
+		<T is={AmbientLight} intensity={0.2} />
 
 		<!-- Cube -->
-		<Three type={Group} scale={$scale}>
-			<Three type={Mesh} position.y={0.5} castShadow let:ref>
+		<T is={Group} scale={$scale}>
+			<T is={Mesh} position.y={0.5} castShadow let:ref>
 				<!-- Add interaction -->
 				<InteractiveObject
 					object={ref}
@@ -37,16 +37,16 @@
 					on:pointerleave={() => ($scale = 1)}
 				/>
 
-				<Three type={BoxGeometry} />
-				<Three type={MeshStandardMaterial} color="#333333" />
-			</Three>
-		</Three>
+				<T is={BoxGeometry} />
+				<T is={MeshStandardMaterial} color="#333333" />
+			</T>
+		</T>
 
 		<!-- Floor -->
-		<Three type={Mesh} receiveShadow rotation.x={degToRad(-90)}>
-			<Three type={CircleGeometry} args={[3, 72]} />
-			<Three type={MeshStandardMaterial} color="white" />
-		</Three>
+		<T is={Mesh} receiveShadow rotation.x={degToRad(-90)}>
+			<T is={CircleGeometry} args={[3, 72]} />
+			<T is={MeshStandardMaterial} color="white" />
+		</T>
 	</Canvas>
 </div>
 

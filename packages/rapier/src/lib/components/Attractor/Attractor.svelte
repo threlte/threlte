@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { T, Three, useFrame } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
@@ -55,9 +55,9 @@
   })
 </script>
 
-<Three
+<T
   let:ref
-  type={obj}
+  is={obj}
   {...$$restProps}
 >
   <slot {ref} />
@@ -72,4 +72,4 @@
       />
     </T.Mesh>
   {/if}
-</Three>
+</T>

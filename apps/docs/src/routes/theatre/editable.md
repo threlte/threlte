@@ -25,7 +25,7 @@ A component `<Editable>` represents a set of editable and animatable properties 
 
 #### Declaring Auto Props
 
-Similar to the _magic_ that's driving the components `<Three>`/`<T>`, the component `<Editable>` is able to automatically pick up props from its parent.
+Similar to the _magic_ that's driving the component `<T>`, the component `<Editable>` is able to automatically pick up props from its parent.
 
 ```svelte
 <script>
@@ -56,7 +56,7 @@ Similar to the _magic_ that's driving the components `<Three>`/`<T>`, the compon
 
 #### Pierced Auto Props
 
-Similarly to the pierced props of [`<Three>`](/core/three)/[`<T>`](/core/t), the props of the component `<Editable>` can be notated in the same fashion:
+Similarly to the pierced props of [`<T>`](/core/t), the props of the component `<Editable>` can be notated in the same fashion:
 
 ```svelte
 <script>

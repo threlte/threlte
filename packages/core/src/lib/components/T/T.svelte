@@ -2,25 +2,28 @@
   import { getContext, setContext } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
   import type { Object3D } from 'three'
-  import DisposableObject from '../internal/DisposableObject.svelte'
-  import SceneGraphObject from '../internal/SceneGraphObject.svelte'
-  import type { DisposableThreeObject } from '../types/components'
-  import { useAttach } from './lib/useAttach'
-  import { useCamera } from './lib/useCamera'
-  import { useCreateEvent } from './lib/useCreateEvent'
-  import { useEvents } from './lib/useEvents'
-  import { usePlugins } from './lib/usePlugins'
-  import { useProps } from './lib/useProps'
-  import type { AnyClass, MaybeInstance, Props } from './types'
+  import DisposableObject from '../../internal/DisposableObject.svelte'
+  import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
+  import type { DisposableThreeObject } from '../../types/components'
+  import type { AnyClass, MaybeInstance } from '../types/sharedTypes'
+  import { useAttach } from './utils/useAttach'
+  import { useCamera } from './utils/useCamera'
+  import { useCreateEvent } from './utils/useCreateEvent'
+  import { useEvents } from './utils/useEvents'
+  import { usePlugins } from './utils/usePlugins'
+  import { useProps } from './utils/useProps'
+  import type { Props, Events, Slots } from './types'
 
   type Type = $$Generic
 
   type AllProps = {
-    type: Type
+    is: Type
   } & Props<Type>
   type $$Props = AllProps
+  type $$Events = Events<Type>
+  type $$Slots = Slots<Type>
 
-  export let type: Type
+  export let is: Type
   export let args: AllProps['args'] = undefined as AllProps['args']
   export let attach: AllProps['attach'] = undefined as AllProps['attach']
   export let manual: AllProps['manual'] = undefined as unknown as AllProps['manual']
@@ -40,20 +43,20 @@
 
   // We can't create the object in a reactive statement due to providing context
   export let ref = (
-    isClass(type) && argsIsConstructorParameters(args)
-      ? new type(...(args as any)) // TODO: fix this any
-      : isClass(type)
-      ? new type()
-      : type
+    isClass(is) && argsIsConstructorParameters(args)
+      ? new is(...(args as any)) // TODO: fix this any
+      : isClass(is)
+      ? new is()
+      : is
   ) as MaybeInstance<Type>
   let initialized = false
   $: if (initialized) {
     ref = (
-      isClass(type) && argsIsConstructorParameters(args)
-        ? new type(...(args as any)) // TODO: fix this any
-        : isClass(type)
-        ? new type()
-        : type
+      isClass(is) && argsIsConstructorParameters(args)
+        ? new is(...(args as any)) // TODO: fix this any
+        : isClass(is)
+        ? new is()
+        : is
     ) as MaybeInstance<Type>
   } else {
     initialized = true
@@ -107,10 +110,7 @@
 </script>
 
 {#if isDisposableObject(ref)}
-  <DisposableObject
-    object={ref}
-    {dispose}
-  />
+  <DisposableObject object={ref} {dispose} />
 {/if}
 
 {#if extendsObject3D(ref)}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Three, useLoader } from '@threlte/core'
+  import { T, useLoader } from '@threlte/core'
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { Audio, AudioLoader, PositionalAudio } from 'three'
   import type { AudioInstanceProps } from './AudioInstance.svelte'
@@ -133,6 +133,6 @@
   })
 </script>
 
-<Three type={audio} {...$$restProps}>
+<T is={audio} {...$$restProps}>
   <slot />
-</Three>
+</T>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, Three, useFrame, useThrelte } from '@threlte/core'
+  import { T, useFrame, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     Color,
@@ -216,8 +216,8 @@
       geometry={$planeGeometry}
     />
 
-    <Three
-      type={shadowCamera}
+    <T
+      is={shadowCamera}
       manual
     />
 

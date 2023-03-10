@@ -1,5 +1,5 @@
 import { onMount } from 'svelte/internal'
-import { createRawEventDispatcher } from './createRawEventDispatcher'
+import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
 
 export const useCreateEvent = () => {
   const dispatchRaw = createRawEventDispatcher<{

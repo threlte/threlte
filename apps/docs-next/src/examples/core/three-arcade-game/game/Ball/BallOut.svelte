@@ -1,5 +1,5 @@
 <script>
-	import { Three } from '@threlte/core'
+	import { T } from '@threlte/core'
 	import { MeshBasicMaterial } from 'three'
 	import { BoxGeometry } from 'three'
 	import { Mesh } from 'three'
@@ -23,20 +23,20 @@
 	}, 1e3)
 </script>
 
-<Three
+<T
 	visible={!$blinkClock || noBlink}
-	type={Group}
+	is={Group}
 	position.z={$ballPosition.z}
 	position.x={$ballPosition.x}
 	rotation.y={DEG2RAD * 45}
 >
-	<Three type={Mesh}>
-		<Three type={geometry} />
-		<Three type={material} />
-	</Three>
+	<T is={Mesh}>
+		<T is={geometry} />
+		<T is={material} />
+	</T>
 
-	<Three type={Mesh} rotation.y={DEG2RAD * 90}>
-		<Three type={geometry} />
-		<Three type={material} />
-	</Three>
-</Three>
+	<T is={Mesh} rotation.y={DEG2RAD * 90}>
+		<T is={geometry} />
+		<T is={material} />
+	</T>
+</T>

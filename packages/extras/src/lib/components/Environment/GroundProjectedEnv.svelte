@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import type { Texture } from 'three'
   import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
 
@@ -7,8 +7,8 @@
 </script>
 
 {#if envMap}
-  <Three
-    type={GroundProjectedEnv}
+  <T
+    is={GroundProjectedEnv}
     args={[envMap]}
     {...$$restProps}
   />

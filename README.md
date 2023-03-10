@@ -17,11 +17,11 @@ Visit [threlte.xyz](https://threlte.xyz)
 
 **[`@threlte/core`](https://github.com/threlte/threlte/tree/main/packages/core)** - core components library with components that closely follow three.js and accompanying hooks
 
-**[`@threlte/preprocess`](https://github.com/threlte/threlte/tree/main/packages/preprocess)** - a preprocessor for `@threlte/core`
-
 **[`@threlte/extras`](https://github.com/threlte/threlte/tree/main/packages/extras)** - components, helpers, hooks and more that extend the core functionality
 
 **[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the [Rapier physics engine](https://rapier.rs/) in Threlte
+
+**[`@threlte/theatre`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use [Theatre.js](https://www.theatrejs.com/) in Threlte
 
 ## Getting help
 

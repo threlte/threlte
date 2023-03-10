@@ -2,7 +2,7 @@
   lang="ts"
   context="module"
 >
-  import { Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
   import { createEventDispatcher } from 'svelte'
@@ -76,8 +76,8 @@
   }
 </script>
 
-<Three
-  type={Group}
+<T
+  is={Group}
   position.x={position.x}
   position.z={position.z}
 >
@@ -94,16 +94,16 @@
       on:collisionexit={() => dispatch('hit')}
       mass={1}
     >
-      <Three
-        type={Mesh}
+      <T
+        is={Mesh}
         scale={$scale}
       >
-        <Three
-          type={BoxGeometry}
+        <T
+          is={BoxGeometry}
           args={[size, 1, size]}
         />
-        <Three
-          type={MeshStandardMaterial}
+        <T
+          is={MeshStandardMaterial}
           color={innerColor}
           transparent
           opacity={0.6}
@@ -112,7 +112,7 @@
           color={outerColor}
           scale={1.01}
         />
-      </Three>
+      </T>
     </Collider>
   </RigidBody>
-</Three>
+</T>

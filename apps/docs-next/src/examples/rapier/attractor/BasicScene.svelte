@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T, Three, OrbitControls } from '@threlte/core'
+	import { T, OrbitControls } from '@threlte/core'
 	import { Attractor } from '@threlte/rapier'
 	import { GridHelper } from 'three'
 	import RandomMeshes from './RandomMeshes.svelte'

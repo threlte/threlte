@@ -4,7 +4,6 @@ type ReferenceCategoryKey = NonNullable<CollectionEntry<'reference'>['data']['ca
 
 const referenceSidebarMenuCategoryOrder: ReferenceCategoryKey[] = [
   '@threlte/core',
-  '@threlte/preprocess',
   '@threlte/extras',
   '@threlte/rapier',
   '@threlte/theatre',

@@ -21,7 +21,7 @@
 
 ### What it looks like
 
-Plugins open up the component `<Three>` (`<T>` with preprocessing) to external code that will be injected via context into every child instance of a `<Three>` component.
+Plugins open up the component `<T>` to external code that will be injected via context into every child instance of a `<T>` component.
 
 ```ts
 import { injectPlugin } from '@threlte/core'
@@ -31,7 +31,7 @@ injectPlugin('plugin-name', ({ ref, props }) => {
 })
 ```
 
-If a plugin decides via `ref` or `props` analysis that it doesn't need to act in the context of a certain `<Three>` component, it can return early.
+If a plugin decides via `ref` or `props` analysis that it doesn't need to act in the context of a certain `<T>` component, it can return early.
 
 ```ts
 import { injectPlugin } from '@threlte/core'
@@ -44,14 +44,14 @@ injectPlugin('raycast-plugin', ({ ref, props }) => {
 })
 ```
 
-The code of a plugin acts as if it would be part of the `<Three>` component itself and has access to all properties. A plugin is notified about property or `ref` changes and can run code in lifecycle functions such as `onMount` or `onDestroy`.
+The code of a plugin acts as if it would be part of the `<T>` component itself and has access to all properties. A plugin is notified about property or `ref` changes and can run code in lifecycle functions such as `onMount` or `onDestroy`.
 
 ```ts
 import { injectPlugin } from '@threlte/core'
 import { onMount } from 'svelte'
 
 injectPlugin('plugin-name', () => {
-	// Use lifecycle hooks as if it would run inside a <Three> component.
+	// Use lifecycle hooks as if it would run inside a <T> component.
 	onMount(() => {
 		console.log('onMount')
 	})
@@ -69,13 +69,13 @@ injectPlugin('plugin-name', () => {
 		},
 
 		// This is called when the props change and on initialization. This includes
-		// props like "args", "manual" and other base props of <Three> but also
+		// props like "args", "manual" and other base props of <T> but also
 		// props that are not part of the base props.
 		onPropsChange(props) {
 			console.log(props)
 		},
 
-		// This is called when the props change that are not part of the <Three>
+		// This is called when the props change that are not part of the <T>
 		// components base props and on initialization.
 		onRestPropsChange(restProps) {
 			console.log(restProps)
@@ -84,14 +84,14 @@ injectPlugin('plugin-name', () => {
 })
 ```
 
-It can also _claim properties_ so that the component `<Three>` does not act on it.
+It can also _claim properties_ so that the component `<T>` does not act on it.
 
 ```ts
 import { injectPlugin } from '@threlte/core'
 
 injectPlugin('ecs', () => {
 	return {
-		// without claiming the property "position", <Three> would apply the
+		// without claiming the property "position", <T> would apply the
 		// property to the object
 		pluginProps: ['entity', 'health', 'velocity', 'position']
 	}
@@ -132,7 +132,7 @@ injectPlugin(layersPlugin)
 
 ### Interactivity Plugin
 
-This is en example implementation that adds interactivity to all `<Three>` components, so that `<T.Mesh on:click={() => console.log('click')} />` is possible:
+This is en example implementation that adds interactivity to all `<T>` components, so that `<T.Mesh on:click={() => console.log('click')} />` is possible:
 
 ```html
 <script lang="ts">
@@ -266,4 +266,4 @@ Implementing this plugin in your Scene:
 
 ## Effects
 
-In the components prior to version 5 render components (such as `<Mesh>`) all functionality was baked in. This Plugin API makes it possible to write safe and performant code that runs in every instance of `<Three>`/`<T>` and is able to provide generic features such as interactivity or implementing an ECS (such as [miniplex](https://github.com/hmans/miniplex)) or use-case specific plugin code.
+In the components prior to version 5 render components (such as `<Mesh>`) all functionality was baked in. This Plugin API makes it possible to write safe and performant code that runs in every instance of `<T>` and is able to provide generic features such as interactivity or implementing an ECS (such as [miniplex](https://github.com/hmans/miniplex)) or use-case specific plugin code.

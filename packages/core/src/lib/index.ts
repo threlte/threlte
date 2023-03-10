@@ -28,11 +28,11 @@ export { default as TransformableObject } from './internal/TransformableObject.s
 export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
 export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
-// <Three> component
-export { default as Three } from './three/Three.svelte'
-export { T } from './three/T'
-export type { Props, Events, Slots } from './three/types'
-// <Three> component plugins
+// components (v6)
+export { T, extend } from './components/T/T'
+export type { Props, Events, Slots } from './components/T/types'
+
+// plugins
 export { injectPlugin } from './plugins/injectPlugin'
 export { createPlugin } from './plugins/createPlugin'
 export type { Plugin, NamedPlugin } from './plugins/types'
@@ -52,6 +52,8 @@ export {
   type UseLoaderLoadInput,
   type UseLoaderLoadResult
 } from './hooks/useLoader'
+
+// AsyncWritable
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // types

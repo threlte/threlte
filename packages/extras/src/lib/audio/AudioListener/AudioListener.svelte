@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Three } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
@@ -26,9 +26,9 @@
   })
 </script>
 
-<Three
-  type={listener}
+<T
+  is={listener}
   {...$$restProps}
 >
   <slot />
-</Three>
+</T>

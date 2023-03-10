@@ -12,13 +12,13 @@
     "cleanup": "rm -rf .astro node_modules"
   },
   "dependencies": {
-    "@astrojs/image": "^0.13.0",
-    "@astrojs/mdx": "^0.15.1",
-    "@astrojs/svelte": "^2.0.0",
-    "@astrojs/tailwind": "^3.0.0",
-    "astro": "^2.0.0",
+    "@astrojs/image": "^0.13.1",
+    "@astrojs/mdx": "^0.15.2",
+    "@astrojs/svelte": "^2.1.0",
+    "@astrojs/tailwind": "^3.1.0",
+    "astro": "^2.1.2",
     "svelte": "^3.54.0",
-    "tailwindcss": "^3.0.24"
+    "tailwindcss": "^3.2.7"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.9.0",
@@ -29,7 +29,6 @@
     "@theatre/studio": "0.5.1-rc.1",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
-    "@threlte/preprocess": "workspace:*",
     "@threlte/rapier": "workspace:*",
     "@threlte/theatre": "workspace:*",
     "@tweakpane/core": "^1.1.0",
@@ -41,7 +40,6 @@
     "shiki": "^0.10.1",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
-    "svelte-sequential-preprocessor": "^0.0.7",
     "three": "^0.145.0",
     "tweakpane": "^3.1.0"
   }

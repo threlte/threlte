@@ -1,5 +1,5 @@
 import { getContext, onDestroy } from 'svelte'
-import type { Plugin, PluginContext, PluginContextName } from '../../plugins/types'
+import type { Plugin, PluginContext, PluginContextName } from '../../../plugins/types'
 
 export const usePlugins = (params: Parameters<Plugin>[0]) => {
   const pluginContextName: PluginContextName = 'threlte-plugin-context'

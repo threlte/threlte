@@ -24,10 +24,8 @@ export const files = {
     "vite": "*",
     "@threlte/core": "*",
     "@threlte/extras": "*",
-    "@threlte/preprocess": "*",
     "@threlte/rapier": "*",
     "@threlte/theatre": "*",
-    "svelte-sequential-preprocessor": "*",
     "three": "*",
     "postprocessing": "*"
   }
@@ -79,16 +77,11 @@ export default app
 /// <reference types="vite/client" />
 `,
   'svelte.config.js': `import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-import seqPreprocessor from 'svelte-sequential-preprocessor'
-import { preprocessThrelte } from '@threlte/preprocess'
 
 export default {
   // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
   // for more information about preprocessors
-  preprocess: seqPreprocessor([
-    vitePreprocess(),
-    preprocessThrelte()
-  ])
+  preprocess: [vitePreprocess()]
 }
 `,
   'tsconfig.json': `{

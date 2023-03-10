@@ -374,7 +374,7 @@ function parse(fileName, gltf, options = {}) {
 
     // Bail out on lights and bones
     if (type === 'bone') {
-      return `<Three type={$gltf.${node}} />\n`
+      return `<T is={$gltf.${node}} />\n`
     }
 
     // Collect children
@@ -482,7 +482,7 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 
         ${options.types ? `\nimport type * as THREE from 'three'` : ''}
         import { Group } from 'three'
-        import { ${['T', 'Three', options.types ? 'type Props, type Events, type Slots' : ''].join(
+        import { ${['T', options.types ? 'type Props, type Events, type Slots' : ''].join(
           ', '
         )} } from '@threlte/core'
         import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
@@ -511,13 +511,13 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
     </script>
 
     {#if $gltf}
-            <Three type={ref} {...$$restProps}>
+			<T is={ref} {...$$restProps}>
         ${scene}
 
         <slot {ref} />
-            </Three>
-            {/if}
-        `
+			</T>
+		{/if}
+	`
 }
 
 export default parse

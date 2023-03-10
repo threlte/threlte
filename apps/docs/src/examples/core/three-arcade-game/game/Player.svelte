@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Collider } from '@dimforge/rapier3d-compat'
-	import { Three, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { Edges, useGltf } from '@threlte/extras'
 	import { AutoColliders } from '@threlte/rapier'
 	import { writable } from 'svelte/store'
@@ -80,10 +80,10 @@
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
 {#if $gltf?.nodes.Player}
-	<Three type={Group}>
+	<T is={Group}>
 		<AutoColliders shape="convexHull" bind:colliders>
-			<Three
-				type={Mesh}
+			<T
+				is={Mesh}
 				position.z={positionZ}
 				position.x={$positionX}
 				rotation.x={DEG2RAD * -90}
@@ -91,11 +91,11 @@
 				scale.x={0.5}
 				scale.y={0.3}
 			>
-				<Three type={$gltf.nodes.Player.geometry} />
-				<Three type={MeshStandardMaterial} color="blue" />
+				<T is={$gltf.nodes.Player.geometry} />
+				<T is={MeshStandardMaterial} color="blue" />
 
 				<Edges scale={[1, 1.1, 1.1]} thresholdAngle={10} color={$baseColor} />
-			</Three>
+			</T>
 		</AutoColliders>
-	</Three>
+	</T>
 {/if}
