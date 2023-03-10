@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { LayerableObject, SceneGraphObject } from '@threlte/core'
+  import { SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
@@ -162,5 +162,3 @@
 <SceneGraphObject {object}>
   <slot />
 </SceneGraphObject>
-
-<LayerableObject {object} />

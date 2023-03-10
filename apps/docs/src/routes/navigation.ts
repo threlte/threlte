@@ -161,10 +161,6 @@ export const sidebar = {
 				slug: '/core/interactive-object'
 			},
 			{
-				title: 'LayerableObject',
-				slug: '/core/layerable-object'
-			},
-			{
 				title: 'DisposableObject',
 				slug: '/core/disposable-object'
 			},
