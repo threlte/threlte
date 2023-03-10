@@ -39,11 +39,8 @@ export interface PointerCaptureTarget {
   target: Element
 }
 
-/**
- * The compute function is responsible for updating the state of the interactivity plugin.
- * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
- * the plugin will use the default compute function.
- */
+export type FilterFunction = (items: THREE.Intersection[], state: State) => THREE.Intersection[]
+
 export type ComputeFunction = (event: DomEvent, state: State) => void
 
 export type State = {
@@ -57,6 +54,7 @@ export type State = {
   hovered: Map<string, IntersectionEvent<DomEvent>>
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
+  filter?: FilterFunction
 }
 
 export type ThrelteEvents = {
@@ -76,6 +74,17 @@ export type ThrelteEvents = {
 
 export type InteractivityOptions = {
   enabled?: boolean
+  /**
+   * The compute function is responsible for updating the state of the interactivity plugin.
+   * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
+   * the plugin will use the default compute function.
+   */
   compute?: ComputeFunction
   target?: HTMLElement
+  /**
+   * The filter function is responsible for filtering and sorting the
+   * intersections. By default, the intersections are sorted by distance. If no
+   * filter function is provided, the plugin will use the default filter function.
+   */
+  filter?: FilterFunction
 }

@@ -67,7 +67,7 @@ export const setupInteractivity = (state: State) => {
 
     const intersections: Intersection[] = []
 
-    const hits = state.interactiveObjects
+    let hits = state.interactiveObjects
       .flatMap((obj) => (enabled.current ? state.raycaster.intersectObject(obj, true) : []))
       // Sort by distance
       .sort((a, b) => a.distance - b.distance)
@@ -78,6 +78,8 @@ export const setupInteractivity = (state: State) => {
         duplicates.add(id)
         return true
       })
+
+    if (state.filter) hits = state.filter(hits, state)
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of hits) {

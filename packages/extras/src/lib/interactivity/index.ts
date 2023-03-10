@@ -19,7 +19,8 @@ const interactivity = (options?: InteractivityOptions) => {
     interactiveObjects: [],
     target: writable(options?.target ?? useThrelte().renderer?.domElement),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    compute: () => {} // will be replaced by the default or the user-provided function
+    compute: () => {}, // will be replaced by the default or the user-provided function
+    filter: options?.filter
   }
 
   state.compute = options?.compute ?? getDefaultComputeFunction(state)
