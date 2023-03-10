@@ -1,46 +1,28 @@
 <script lang="ts">
-  import {
-    DisposableObject,
-    InteractiveObject,
-    LayerableObject,
-    Object3DInstance,
-    useLoader,
-    useThrelte
-  } from '@threlte/core'
+  import { forwardEvents, T } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
-  import { DefaultLoadingManager } from 'three'
-  import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+  // @ts-ignore
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-  import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
-  import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
-  import { buildSceneGraph } from '../../lib/buildSceneGraph'
-  import type { GLTFProperties } from '../../types/components'
+  import { useGltf } from '../../hooks/useGltf'
   import type { ThrelteGltf } from '../../types/types'
+  import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
 
-  export let position: GLTFProperties['position'] = undefined
-  export let scale: GLTFProperties['scale'] = undefined
-  export let rotation: GLTFProperties['rotation'] = undefined
-  export let viewportAware: GLTFProperties['viewportAware'] = false
-  export let inViewport: GLTFProperties['inViewport'] = false
-  export let castShadow: GLTFProperties['castShadow'] = undefined
-  export let receiveShadow: GLTFProperties['receiveShadow'] = undefined
-  export let frustumCulled: GLTFProperties['frustumCulled'] = undefined
-  export let renderOrder: GLTFProperties['renderOrder'] = undefined
-  export let visible: GLTFProperties['visible'] = undefined
-  export let dispose: GLTFProperties['dispose'] = undefined
-  export let lookAt: GLTFProperties['lookAt'] = undefined
+  type $$Props = GltfProps
+  type $$Events = GltfEvents
+  type $$Slots = GltfSlots
 
-  export let url: GLTFProperties['url']
+  const events = forwardEvents()
 
-  export let useDraco: GLTFProperties['useDraco'] = false
-  export let useMeshopt: GLTFProperties['useMeshopt'] = false
-  export let ktxTranscoderPath: GLTFProperties['ktxTranscoderPath'] = undefined
+  export let url: $$Props['url']
 
-  export let ignorePointer: GLTFProperties['ignorePointer'] = false
-  export let interactive: GLTFProperties['interactive'] = false
+  export let useDraco: $$Props['useDraco'] = false
+  export let useMeshopt: $$Props['useMeshopt'] = false
+  export let ktxTranscoderPath: $$Props['ktxTranscoderPath'] = undefined
 
-  const { invalidate } = useThrelte()
+  type AnyThrelteGltf = ThrelteGltf<{
+    nodes: Record<string, any>
+    materials: Record<string, any>
+  }>
 
   const dispatch = createEventDispatcher<{
     load: ThreeGLTF
@@ -48,7 +30,7 @@
     error: string
   }>()
 
-  export let gltf: ThreeGLTF | undefined = undefined
+  export let gltf: AnyThrelteGltf | undefined = undefined
   export let scene: ThreeGLTF['scene'] | undefined = undefined
   export let animations: ThreeGLTF['animations'] | undefined = undefined
   export let asset: ThreeGLTF['asset'] | undefined = undefined
@@ -56,59 +38,33 @@
   export let scenes: ThreeGLTF['scenes'] | undefined = undefined
   export let userData: ThreeGLTF['userData'] | undefined = undefined
   export let parser: ThreeGLTF['parser'] | undefined = undefined
-  export let materials:
-    | ThrelteGltf<{
-        nodes: Record<string, any>
-        materials: Record<string, any>
-      }>['materials']
-    | undefined = undefined
-  export let nodes:
-    | ThrelteGltf<{
-        nodes: Record<string, any>
-        materials: Record<string, any>
-      }>['nodes']
-    | undefined = undefined
+  export let materials: AnyThrelteGltf['materials'] | undefined = undefined
+  export let nodes: AnyThrelteGltf['nodes'] | undefined = undefined
 
-  const { renderer } = useThrelte()
-
-  const loader = useLoader(GLTFLoader, {
-    extend(loader) {
-      if (useDraco) {
-        const dracoLoader = new DRACOLoader()
-        dracoLoader.setDecoderPath(
-          typeof useDraco === 'string' ? useDraco : 'https://www.gstatic.com/draco/v1/decoders/'
-        )
-      }
-      if (useMeshopt) {
-        loader.setMeshoptDecoder(MeshoptDecoder)
-      }
-      if (ktxTranscoderPath && renderer) {
-        const ktx2Loader = new KTX2Loader()
-        ktx2Loader.setTranscoderPath(ktxTranscoderPath)
-        ktx2Loader.detectSupport(renderer)
-        loader.setKTX2Loader(ktx2Loader)
-      }
-    }
+  const loader = useGltf({
+    useDraco: useDraco
+      ? typeof useDraco === 'string'
+        ? useDraco
+        : 'https://www.gstatic.com/draco/v1/decoders/'
+      : undefined,
+    useMeshopt,
+    ktxTranscoderPath
   })
 
-  const onLoad = (data: ThreeGLTF) => {
-    // unload is not in use anymore
+  const onLoad = (data: AnyThrelteGltf) => {
     if (gltf) dispatch('unload')
 
     gltf = data
-    scene = gltf.scene
-    animations = gltf.animations
-    asset = gltf.asset
-    cameras = gltf.cameras
-    scenes = gltf.scenes
-    userData = gltf.userData
-    parser = gltf.parser
+    scene = data.scene
+    animations = data.animations
+    asset = data.asset
+    cameras = data.cameras
+    scenes = data.scenes
+    userData = data.userData
+    parser = data.parser
+    materials = data.materials
+    nodes = data.nodes
 
-    const { materials: m, nodes: n } = buildSceneGraph(data.scene)
-    materials = m
-    nodes = n
-
-    invalidate('GLTF: model loaded')
     dispatch('load', gltf)
   }
 
@@ -137,72 +93,10 @@
   }
 
   $: loadGltf(url)
-
-  $: {
-    if (scene) {
-      scene.traverse((obj) => {
-        if (castShadow !== undefined) obj.castShadow = castShadow
-        if (receiveShadow !== undefined) obj.receiveShadow = receiveShadow
-        if (frustumCulled !== undefined) obj.frustumCulled = frustumCulled
-        if (renderOrder !== undefined) obj.renderOrder = renderOrder
-      })
-    }
-  }
 </script>
 
-{#if nodes}
-  {#each Object.values(nodes) as node}
-    {#if node}
-      {#key node.uuid}
-        <!-- dispose all nodes, i.e. meshes, skinnedMeshs -->
-        <DisposableObject {dispose} object={node} />
-
-        <LayerableObject object={node} />
-
-        {#if node.type === 'Mesh' || node.type === 'SkinnedMesh'}
-          <InteractiveObject
-            object={node}
-            {interactive}
-            {ignorePointer}
-            on:click
-            on:contextmenu
-            on:pointerup
-            on:pointerdown
-            on:pointerenter
-            on:pointerleave
-            on:pointermove
-          />
-        {/if}
-      {/key}
-    {/if}
-  {/each}
-{/if}
-
-<!-- dispose all materials -->
-{#if materials}
-  {#each Object.values(materials) as material}
-    <DisposableObject {dispose} object={material} />
-  {/each}
-{/if}
-
 {#if scene}
-  <Object3DInstance
-    object={scene}
-    {position}
-    {scale}
-    {rotation}
-    {lookAt}
-    {frustumCulled}
-    {renderOrder}
-    {visible}
-    {dispose}
-    {castShadow}
-    {receiveShadow}
-    {viewportAware}
-    bind:inViewport
-    on:viewportenter
-    on:viewportleave
-  >
-    <slot />
-  </Object3DInstance>
+  <T is={scene} {...$$restProps} let:ref bind:this={$events}>
+    <slot {ref} />
+  </T>
 {/if}

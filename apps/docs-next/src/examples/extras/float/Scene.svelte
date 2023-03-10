@@ -1,6 +1,6 @@
 <script lang="ts">
   import { OrbitControls, T } from '@threlte/core'
-  import { Environment, Grid, useGltf } from '@threlte/extras'
+  import { Environment, Grid, interactivity, useGltf } from '@threlte/extras'
   import type { Mesh } from 'three'
   import Blob from './Blob.svelte'
 
@@ -12,6 +12,8 @@
   }>('/models/blobs/blobs.glb', {
     useDraco: true
   })
+
+  interactivity()
 </script>
 
 <Environment

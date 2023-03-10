@@ -10,7 +10,8 @@ import type { InteractivityOptions, State } from './types'
 const interactivity = (options?: InteractivityOptions) => {
   const state: State = {
     enabled: writable(options?.enabled ?? true),
-    pointer: new Vector2(),
+    pointer: writable(new Vector2()),
+    pointerOverTarget: writable(false),
     lastEvent: undefined,
     raycaster: new Raycaster(),
     initialClick: [0, 0],

@@ -71,7 +71,7 @@
 
   useFrame(() => {
     if (colliders.length) {
-      const collider = colliders[0]
+      const collider = colliders[0]!
       collider.setTranslation({ x: $positionX, y: 0, z: positionZ })
     }
   })

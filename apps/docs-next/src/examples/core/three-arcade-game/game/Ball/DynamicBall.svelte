@@ -6,7 +6,6 @@
   import { T, useFrame } from '@threlte/core'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { derived } from 'svelte/store'
-  import { Mesh } from 'three'
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
   import { gameState } from '../state'
   import { ballGeometry, ballMaterial } from './common'
@@ -69,9 +68,9 @@
     restitutionCombineRule={CoefficientCombineRule.Max}
     frictionCombineRule={CoefficientCombineRule.Min}
   >
-    <T is={Mesh}>
+    <T.Mesh>
       <T is={ballGeometry} />
       <T is={ballMaterial} />
-    </T>
+    </T.Mesh>
   </AutoColliders>
 </RigidBody>

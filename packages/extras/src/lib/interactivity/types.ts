@@ -46,7 +46,8 @@ export type ComputeFunction = (event: DomEvent, state: State) => void
 export type State = {
   enabled: Writable<boolean>
   target: Writable<HTMLElement | undefined>
-  pointer: Vector2
+  pointer: Writable<Vector2>
+  pointerOverTarget: Writable<boolean>
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]

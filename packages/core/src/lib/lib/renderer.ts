@@ -1,4 +1,3 @@
-import { get } from 'svelte/store'
 import type { ShadowMapType, WebGLRendererParameters } from 'three'
 import {
   ACESFilmicToneMapping,
@@ -7,8 +6,6 @@ import {
   sRGBEncoding,
   WebGLRenderer
 } from 'three'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import type { Size, ThrelteContext } from '../types/types'
 
 export const createRendererAndComposer = (
@@ -23,8 +20,6 @@ export const createRendererAndComposer = (
     alpha: true,
     ...rendererParameters
   })
-  ctx.composer = new EffectComposer(ctx.renderer)
-  ctx.composer.addPass(new RenderPass(ctx.scene, get(ctx.camera)))
 }
 
 export const setRendererColorOutput = (
@@ -46,11 +41,9 @@ export const setRendererColorOutput = (
 }
 
 export const setRendererAndComposerSize = (ctx: ThrelteContext, size: Size, dpr: number): void => {
-  if (!ctx.renderer || !ctx.composer) return
+  if (!ctx.renderer) return
   ctx.renderer.setSize?.(size.width, size.height)
   ctx.renderer.setPixelRatio?.(dpr)
-  ctx.composer.setSize?.(size.width, size.height)
-  ctx.composer.setPixelRatio?.(dpr)
 }
 
 export const setRendererShadows = (

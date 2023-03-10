@@ -42,7 +42,7 @@
   let levelStarted = false
   const buildBlocks = async () => {
     if ($state !== 'level-loading') return
-    const { rows, columns } = levels[get(levelIndex)]
+    const { rows, columns } = levels[get(levelIndex)]!
 
     const blockSize =
       (arenaWidth - arenaBorderWidth - ((columns - 1) * blockGap + 2 * blockGap)) / columns

@@ -23,12 +23,6 @@ export type SceneGraphObjectProperties = {
   object: Object3D
 }
 
-export type InteractiveObjectProperties = {
-  object: Object3D
-  interactive: boolean
-  ignorePointer: boolean
-}
-
 export type LayerableObjectProperties = {
   object: Object3D
 }
@@ -63,10 +57,9 @@ export type Object3DInstanceProperties = SceneGraphObjectProperties &
     userData?: Record<string, any>
   }
 
-export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
-  Omit<InteractiveObjectProperties, 'object'> & {
-    mesh: Mesh
-  }
+export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  mesh: Mesh
+}
 
 export type OrbitControlsProperties = {
   dispose?: boolean

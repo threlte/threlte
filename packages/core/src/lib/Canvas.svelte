@@ -7,13 +7,11 @@
   import type { ShadowMapType, WebGLRendererParameters } from 'three'
   import { PCFSoftShadowMap } from 'three'
   import { useParentSize } from './hooks/useParentSize'
-  import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { useFrameloop } from './lib/frameloop'
-  import { useEventRaycast } from './lib/interactivity'
   import {
     createRendererAndComposer,
     setRendererAndComposerSize,
@@ -29,6 +27,7 @@
 </script>
 
 <script lang="ts">
+  import T from "./components/T/T.svelte"
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
   export let flat: boolean = false
   export let linear: boolean = false
@@ -100,12 +99,6 @@
 
   useFrameloop(ctx, rootCtx, renderCtx, disposalCtx)
 
-  const { onClick, onContextMenu, onPointerDown, onPointerMove, onPointerUp } = useEventRaycast(
-    ctx,
-    rootCtx,
-    renderCtx
-  )
-
   onDestroy(() => {
     disposalCtx.dispose(true)
   })
@@ -114,18 +107,11 @@
 <canvas
   use:parentSizeAction
   bind:this={canvas}
-  on:click={onClick}
-  on:contextmenu={onContextMenu}
-  on:pointerup={onPointerUp}
-  on:pointerdown={onPointerDown}
-  on:pointermove={onPointerMove}
-  on:pointerenter={() => getCtx().pointerOverCanvas.set(true)}
-  on:pointerleave={() => getCtx().pointerOverCanvas.set(false)}
 >
   {#if initialized}
-    <SceneGraphObject object={ctx.scene}>
-      <slot />
-    </SceneGraphObject>
+	<T is={ctx.scene}>
+	<slot></slot>
+</T>
   {/if}
 </canvas>
 

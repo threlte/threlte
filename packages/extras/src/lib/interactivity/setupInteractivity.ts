@@ -27,6 +27,8 @@ const DOM_EVENTS = [
 type DomEventName = typeof DOM_EVENTS[number][0]
 
 export const setupInteractivity = (state: State) => {
+  const pointer = memoize(state.pointer)
+
   function calculateDistance(event: DomEvent) {
     const dx = event.offsetX - state.initialClick[0]
     const dy = event.offsetY - state.initialClick[1]
@@ -161,7 +163,7 @@ export const setupInteractivity = (state: State) => {
           camera: state.raycaster.camera,
           delta,
           nativeEvent: event,
-          pointer: state.pointer,
+          pointer: pointer.current,
           ray: state.raycaster.ray
         }
 

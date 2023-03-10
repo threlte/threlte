@@ -1,17 +1,15 @@
 import { setContext, tick } from 'svelte'
 import type { Writable } from 'svelte/store'
 import { derived, writable } from 'svelte/store'
-import { Camera, Clock, Object3D, Raycaster, Scene, Vector2 } from 'three'
-import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import { Camera, Clock, Scene } from 'three'
 import type { DisposableThreeObject } from '../types/components'
 import type {
   Size,
   ThrelteContext,
   ThrelteDisposalContext,
-  ThrelteUserContext,
   ThrelteRenderContext,
-  ThrelteRootContext
+  ThrelteRootContext,
+  ThrelteUserContext
 } from '../types/types'
 import { getDefaultCamera } from './defaultCamera'
 
@@ -38,7 +36,6 @@ export const createContexts = (
     frameloop,
     frame: 0,
     frameInvalidated: true,
-    pointerInvalidated: true,
     invalidations: {},
     manualFrameHandlers: new Set(),
     autoFrameHandlers: new Set(),
@@ -51,13 +48,10 @@ export const createContexts = (
     size: derived([userSize, parentSize], ([uSize, pSize]) => {
       return uSize ? uSize : pSize
     }),
-    pointer: writable(new Vector2()),
-    pointerOverCanvas: writable(false),
     clock: new Clock(),
     camera: writable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined,
-    composer: undefined,
     invalidate: (debugFrameloopMessage?: string) => {
       renderCtx.frameInvalidated = true
       if (renderCtx.debugFrameloop && debugFrameloopMessage) {
@@ -79,39 +73,6 @@ export const createContexts = (
     dpr: writable(dpr),
     setCamera: (camera: Camera) => {
       ctx.camera.set(camera)
-      if (!ctx.composer) return
-      ctx.composer.passes.forEach((pass) => {
-        if (pass instanceof RenderPass) {
-          pass.camera = camera
-        }
-      })
-      ctx.invalidate('Canvas: setting camera')
-    },
-    raycastableObjects: new Set(),
-    interactiveObjects: new Set(),
-    raycaster: new Raycaster(),
-    lastIntersection: null,
-    addRaycastableObject: (object: Object3D) => {
-      rootCtx.raycastableObjects.add(object)
-    },
-    removeRaycastableObject: (object: Object3D) => {
-      rootCtx.raycastableObjects.delete(object)
-    },
-    addInteractiveObject: (object: Object3D) => {
-      rootCtx.interactiveObjects.add(object)
-    },
-    removeInteractiveObject: (object: Object3D) => {
-      rootCtx.interactiveObjects.delete(object)
-    },
-    addPass: (pass: Pass) => {
-      if (!ctx.composer) return
-      ctx.composer.addPass(pass)
-      ctx.invalidate('Canvas: adding pass')
-    },
-    removePass: (pass: Pass) => {
-      if (!ctx.composer) return
-      ctx.composer.removePass(pass)
-      ctx.invalidate('Canvas: removing pass')
     }
   }
 

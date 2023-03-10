@@ -28,9 +28,7 @@ export { default as PositionalAudio } from './audio/PositionalAudio/PositionalAu
 export { useAudioListener } from './audio/useAudioListener'
 export { useThrelteAudio } from './audio/useThrelteAudio'
 
-export type { GLTFProperties } from './types/components'
-
-// plugins
+// interactivity
 export {
   interactivity,
   useInteractivity,
