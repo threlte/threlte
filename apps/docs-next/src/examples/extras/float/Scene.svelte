@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { OrbitControls, T } from '@threlte/core'
-  import { Environment, Grid, interactivity, useGltf } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { Environment, Grid, interactivity, useGltf, OrbitControls } from '@threlte/extras'
   import type { Mesh } from 'three'
   import Blob from './Blob.svelte'
 
@@ -28,7 +28,7 @@
   fov={50}
 >
   <OrbitControls
-    target={{ y: -2 }}
+    target.y={-2}
     enableDamping
   />
 </T.PerspectiveCamera>
