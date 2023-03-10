@@ -8,3 +8,5 @@ export const interactivity = () => {
   injectInteractivityPlugin(interactiveObjects)
   setupInteractivity(interactiveObjects)
 }
+
+export type { EventMap, Intersection, IntersectionEvent, DomEvent } from './types'

@@ -7,12 +7,14 @@ import { get_current_component } from 'svelte/internal'
  * @returns
  */
 
-export function createRawEventDispatcher<EventMap extends Record<string, unknown> = any>(): <
+export function createRawEventDispatcher<EventMap extends Record<string, unknown> = any>(): (<
   EventKey extends Extract<keyof EventMap, string>
 >(
   type: EventKey,
   value?: EventMap[EventKey]
-) => void {
+) => void) & {
+  hasEventListener: <EventKey extends Extract<keyof EventMap, string>>(type: EventKey) => boolean
+} {
   const component = get_current_component()
 
   const dispatchRawEvent = (type: string, value: any) => {
@@ -24,5 +26,11 @@ export function createRawEventDispatcher<EventMap extends Record<string, unknown
     }
   }
 
-  return dispatchRawEvent
+  const hasEventListener = <EventKey extends Extract<keyof EventMap, string>>(type: EventKey) => {
+    return Boolean(component.$$.callbacks[type])
+  }
+
+  dispatchRawEvent.hasEventListener = hasEventListener
+
+  return dispatchRawEvent as ReturnType<typeof createRawEventDispatcher>
 }

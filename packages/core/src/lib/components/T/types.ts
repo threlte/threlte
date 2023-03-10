@@ -157,4 +157,4 @@ export type CreateEvent<Type extends any> = {
  * @example Events<typeof PerspectiveCamera>
  * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
  */
-export type Events<Type extends any> = Record<string, unknown> & CreateEvent<Type>
+export type Events<Type extends any> = Record<string, any> & CreateEvent<Type>
