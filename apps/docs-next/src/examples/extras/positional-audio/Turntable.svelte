@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InteractiveObject, T, useFrame } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
   import { spring, tweened } from 'svelte/motion'
   import {
@@ -115,10 +115,12 @@
     {#if coverGeometry}
       <T.Mesh
         geometry={coverGeometry}
-        let:ref
         scale={[3, 0.5, 2.2]}
         position.y={0.5}
         position.z={2.2}
+        on:click={() => (coverOpen = !coverOpen)}
+        on:pointerenter={onPointerEnter}
+        on:pointerleave={onPointerLeave}
       >
         <T.MeshStandardMaterial
           color="#ffffff"
@@ -128,13 +130,6 @@
           side={DoubleSide}
           transparent
           opacity={0.65}
-        />
-        <InteractiveObject
-          object={ref}
-          interactive
-          on:click={() => (coverOpen = !coverOpen)}
-          on:pointerenter={onPointerEnter}
-          on:pointerleave={onPointerLeave}
         />
         <Edges color="white" />
       </T.Mesh>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as theatreCore from '@theatre/core'
-  import { OrbitControls, T, TransformableObject } from '@threlte/core'
-  import { Environment, useTexture } from '@threlte/extras'
+  import { T, TransformableObject } from '@threlte/core'
+  import { OrbitControls, Environment, useTexture } from '@threlte/extras'
   import { Editable } from '@threlte/theatre'
   import { DoubleSide, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -62,7 +62,7 @@
         name="Cameras / Perspective"
         fov
       />
-      <OrbitControls target={{ y: 0.3 }} />
+      <OrbitControls target.y={0.3} />
     </T.PerspectiveCamera>
   {/if}
 </Editable>

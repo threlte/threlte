@@ -1,42 +1,21 @@
-import { createEventDispatcher } from 'svelte'
 import type { Readable, Writable } from 'svelte/store'
 import type {
   Camera,
   Clock,
   Color,
   Euler,
-  Event,
-  Intersection,
-  Loader,
   Matrix4,
   Object3D,
-  Raycaster,
   Scene,
-  Vector2,
   Vector3,
   WebGLRenderer
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer'
 import type { DisposableThreeObject } from './components'
-
-export type ThreltePointerEventMap = {
-  click: ThreltePointerEvent
-  contextmenu: ThreltePointerEvent
-  pointerup: ThreltePointerEvent
-  pointerdown: ThreltePointerEvent
-  pointerenter: ThreltePointerEvent
-  pointerleave: ThreltePointerEvent
-  pointermove: ThreltePointerEvent
-}
-
-const createEventDispatcherType = () => createEventDispatcher<ThreltePointerEventMap>()
-export type InteractiveObjectEventDispatcher = ReturnType<typeof createEventDispatcherType>
 
 export type ThrelteInstance = {
   matrix: Matrix4
   color: null | Color
-  pointerEventDispatcher?: InteractiveObjectEventDispatcher
 }
 
 export type ThrelteRootContext = {
@@ -44,27 +23,14 @@ export type ThrelteRootContext = {
   linear: Writable<boolean>
   flat: Writable<boolean>
   dpr: Writable<number>
-  addPass: (pass: Pass) => void
-  removePass: (pass: Pass) => void
-  addRaycastableObject: (obj: Object3D) => void
-  removeRaycastableObject: (obj: Object3D) => void
-  addInteractiveObject: (obj: Object3D) => void
-  removeInteractiveObject: (obj: Object3D) => void
-  interactiveObjects: Set<Object3D>
-  raycastableObjects: Set<Object3D>
-  raycaster: Raycaster
-  lastIntersection: Intersection<Object3D<Event>> | null
 }
 
 export type ThrelteContext = {
   size: Readable<Size>
-  pointer: Writable<Vector2>
-  pointerOverCanvas: Writable<boolean>
   clock: Clock
   camera: Writable<Camera>
   scene: Scene
   renderer?: WebGLRenderer
-  composer?: EffectComposer
   /**
    * Invalidates the current frame when frameloop === 'demand'
    */
@@ -78,7 +44,6 @@ export type ThrelteContext = {
 export type ThrelteRenderContext = {
   frameloop: 'always' | 'demand' | 'never'
   debugFrameloop: boolean
-  pointerInvalidated: boolean
   frameInvalidated: boolean
   frame: number
   invalidations: Record<string, number>
@@ -280,13 +245,8 @@ export type Size = {
   height: number
 }
 
-export type ThreltePointerEvent = Intersection<Object3D<Event>> & {
-  event?: MouseEvent | PointerEvent
-}
-
 export type ThrelteUserData = {
   orbitControls?: OrbitControls
-  eventDispatcher?: InteractiveObjectEventDispatcher
   onTransform?: () => Promise<void>
   threlteDefaultCamera?: boolean
 }

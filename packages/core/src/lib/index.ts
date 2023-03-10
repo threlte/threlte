@@ -1,12 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// control component
-export { default as OrbitControls } from './controls/OrbitControls.svelte'
-
-// effect components
-export { default as Pass } from './effects/Pass.svelte'
-
 // misc components
 export { default as Layers } from './misc/Layers.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
@@ -21,7 +15,6 @@ export { default as Object3DInstance } from './instances/Object3DInstance.svelte
 
 // trait components
 export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
-export { default as InteractiveObject } from './internal/InteractiveObject.svelte'
 export { default as LayerableObject } from './internal/LayerableObject.svelte'
 export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
 export { default as TransformableObject } from './internal/TransformableObject.svelte'
@@ -66,7 +59,6 @@ export type {
   ThrelteContext,
   ThrelteRootContext,
   ThrelteLayers,
-  ThreltePointerEvent,
   ThrelteInstance,
   Size
 } from './types/types'
@@ -74,10 +66,11 @@ export type {
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
+export { watch, memoize } from './lib/storeUtils'
+export { forwardEvents } from './lib/forwardEvents'
 
 export type {
   HierarchicalObjectProperties,
-  InteractiveObjectProperties,
   LayerableObjectProperties,
   TransformableObjectProperties,
   DisposableObjectProperties,
@@ -86,7 +79,6 @@ export type {
   MeshInstanceProperties,
   InstancedMeshProperties,
   InstanceProperties,
-  OrbitControlsProperties,
   PassProperties,
   LayersProperties,
   SceneGraphObjectProperties

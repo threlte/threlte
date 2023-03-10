@@ -23,12 +23,6 @@ export type SceneGraphObjectProperties = {
   object: Object3D
 }
 
-export type InteractiveObjectProperties = {
-  object: Object3D
-  interactive: boolean
-  ignorePointer: boolean
-}
-
 export type LayerableObjectProperties = {
   object: Object3D
 }
@@ -63,38 +57,8 @@ export type Object3DInstanceProperties = SceneGraphObjectProperties &
     userData?: Record<string, any>
   }
 
-export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> &
-  Omit<InteractiveObjectProperties, 'object'> & {
-    mesh: Mesh
-  }
-
-export type OrbitControlsProperties = {
-  dispose?: boolean
-  autoRotate?: boolean
-  autoRotateSpeed?: number
-  dampingFactor?: number
-  enableDamping?: boolean
-  enabled?: boolean
-  enablePan?: boolean
-  enableRotate?: boolean
-  enableZoom?: boolean
-  keyPanSpeed?: number
-  keys?: OrbitControls['keys']
-  maxAzimuthAngle?: number
-  maxDistance?: number
-  maxPolarAngle?: number
-  maxZoom?: number
-  minAzimuthAngle?: number
-  minDistance?: number
-  minPolarAngle?: number
-  minZoom?: number
-  mouseButtons?: OrbitControls['mouseButtons']
-  panSpeed?: number
-  rotateSpeed?: number
-  screenSpacePanning?: boolean
-  touches?: OrbitControls['touches']
-  zoomSpeed?: number
-  target?: TransformableObjectProperties['position']
+export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
+  mesh: Mesh
 }
 
 export type PassProperties = {

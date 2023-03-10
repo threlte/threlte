@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { derived } from 'svelte/store'
-  import { Mesh } from 'three'
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
   import { gameState } from '../state'
   import { ballGeometry, ballMaterial } from './common'
@@ -17,11 +16,10 @@
   $: combinedPosX = $usePreviousBallPosition ? $ballPosition.x : $playerPosition
 </script>
 
-<T
-  is={Mesh}
+<T.Mesh
   position.z={combinedPosZ}
   position.x={combinedPosX}
 >
   <T is={ballGeometry} />
   <T is={ballMaterial} />
-</T>
+</T.Mesh>

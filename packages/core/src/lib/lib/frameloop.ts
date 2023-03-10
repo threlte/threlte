@@ -1,5 +1,3 @@
-import { onDestroy } from 'svelte'
-import { get } from 'svelte/store'
 import { useRaf } from '../hooks/useRaf'
 import type {
   ThrelteContext,
@@ -7,7 +5,7 @@ import type {
   ThrelteRenderContext,
   ThrelteRootContext
 } from '../types/types'
-import { useFrameloopRaycast } from './interactivity'
+import { memoize } from './storeUtils'
 
 const runUseFrameCallbacks = (
   ctx: ThrelteContext,
@@ -89,43 +87,35 @@ export const useFrameloop = (
   renderCtx: ThrelteRenderContext,
   disposalCtx: ThrelteDisposalContext
 ): void => {
-  let camera = get(ctx.camera)
-  const unsubscribeCamera = ctx.camera.subscribe((c) => (camera = c))
-  onDestroy(unsubscribeCamera)
-
-  const { raycast } = useFrameloopRaycast(ctx, rootCtx)
+  const camera = memoize(ctx.camera)
 
   useRaf(() => {
+    // dispose all objects that are due to be disposed
     disposalCtx.dispose()
 
+    // get a global delta
     const delta = ctx.clock.getDelta()
 
-    const shouldRaycast = shouldRender(renderCtx) || renderCtx.pointerInvalidated
-
-    if (shouldRaycast) {
-      raycast()
-      renderCtx.pointerInvalidated = false
-    }
-
-    // TODO: implement check only in auto-mode
-    if (!camera || !ctx.composer || !ctx.renderer) return
-
+    // run all useFrame callbacks
     runUseFrameCallbacks(ctx, renderCtx, delta)
 
+    // if we're not rendering, return
     if (!shouldRender(renderCtx)) return
 
     if (renderCtx.renderHandlers.size > 0) {
+      // run all useRender callbacks, or …
       runUseRenderCallbacks(ctx, renderCtx, delta)
-    } else {
-      if (ctx.composer.passes.length > 1) {
-        ctx.composer.render()
-      } else {
-        ctx.renderer.render(ctx.scene, camera)
-      }
+    } else if (ctx.renderer && camera.current) {
+      // … render the scene with the default renderer
+      ctx.renderer.render(ctx.scene, camera.current)
     }
 
+    // if we're debugging, log the frame
     debugFrame(renderCtx)
+
+    // reset the frameInvalidated flag
     renderCtx.frameInvalidated = false
+    // reset the advance flag
     renderCtx.advance = false
   })
 }

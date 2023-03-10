@@ -15,6 +15,7 @@ export { default as ContactShadows } from './components/ContactShadows/ContactSh
 export { default as Environment } from './components/Environment/Environment.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as TransformControls } from './components/TransformControls/TransformControls.svelte'
+export { default as OrbitControls } from './components/OrbitControls/OrbitControls.svelte'
 
 // text component
 export { default as Text } from './components/Text/Text.svelte'
@@ -28,6 +29,14 @@ export { default as PositionalAudio } from './audio/PositionalAudio/PositionalAu
 export { useAudioListener } from './audio/useAudioListener'
 export { useThrelteAudio } from './audio/useThrelteAudio'
 
-export type { GLTFProperties } from './types/components'
+// interactivity
+export {
+  interactivity,
+  useInteractivity,
+  type DomEvent,
+  type EventMap,
+  type Intersection,
+  type IntersectionEvent
+} from './interactivity'
 
 export type { ThrelteGltf } from './types/types'

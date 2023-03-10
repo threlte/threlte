@@ -5,14 +5,13 @@
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import type { DisposableThreeObject } from '../../types/components'
-  import type { AnyClass, MaybeInstance } from '../types/sharedTypes'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots } from './types'
+  import type { Props, Events, Slots, AnyClass, MaybeInstance } from './types'
 
   type Type = $$Generic
 

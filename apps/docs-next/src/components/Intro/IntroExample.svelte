@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Canvas, OrbitControls, T } from '@threlte/core'
-  import { ContactShadows, Float, Grid } from '@threlte/extras'
+  import { Canvas, T } from '@threlte/core'
+  import { ContactShadows, Float, Grid, OrbitControls } from '@threlte/extras'
   import {
     BoxGeometry,
     Color,
@@ -25,7 +25,7 @@
         enableZoom={false}
         enableDamping
         autoRotateSpeed={0.5}
-        target={{ y: 1.5 }}
+        target.y={1.5}
       />
     </T.PerspectiveCamera>
 

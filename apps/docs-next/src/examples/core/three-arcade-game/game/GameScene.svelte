@@ -2,17 +2,7 @@
   import { T } from '@threlte/core'
   import { tweened } from 'svelte/motion'
   import { derived } from 'svelte/store'
-  import {
-    AmbientLight,
-    BackSide,
-    Color,
-    DirectionalLight,
-    Mesh,
-    MeshBasicMaterial,
-    PerspectiveCamera,
-    Scene,
-    SphereGeometry
-  } from 'three'
+  import { BackSide, Color, PerspectiveCamera } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import Arena from './Arena.svelte'
   import Ball from './Ball/Ball.svelte'
@@ -78,40 +68,32 @@
 
 <GameSceneRendering />
 
-<T
-  is={Scene}
-  bind:ref={$gameScene}
+<T.Scene
+  on:create={({ ref }) => {
+    gameScene.set(ref)
+  }}
 >
-  <T is={Mesh}>
-    <T
-      is={SphereGeometry}
-      args={[50, 32, 32]}
-    />
-    <T
-      is={MeshBasicMaterial}
+  <T.Mesh>
+    <T.SphereGeometry args={[50, 32, 32]} />
+    <T.MeshBasicMaterial
       side={BackSide}
       color={$tweenedBackgroundColor}
     />
-  </T>
+  </T.Mesh>
 
-  <T
-    bind:ref={camera}
+  <T.PerspectiveCamera
+    on:create={({ ref }) => {
+      camera = ref
+    }}
     manual
     args={[50, 4 / 3, 0.1, 100]}
-    is={PerspectiveCamera}
     position={[0, 10, 0]}
     rotation.x={-90 * DEG2RAD}
   />
 
-  <T
-    is={AmbientLight}
-    intensity={0.3}
-  />
+  <T.AmbientLight intensity={0.3} />
 
-  <T
-    is={DirectionalLight}
-    position={[4, 10, 2]}
-  />
+  <T.DirectionalLight position={[4, 10, 2]} />
 
   {#if showIntro}
     <Intro />
@@ -128,4 +110,4 @@
     {/if}
     <Ui />
   {/if}
-</T>
+</T.Scene>

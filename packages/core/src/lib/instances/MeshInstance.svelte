@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InteractiveObject from '../internal/InteractiveObject.svelte'
   import type { MeshInstanceProperties } from '../types/components'
   import Object3DInstance from './Object3DInstance.svelte'
 
@@ -17,8 +16,6 @@
   export let visible: MeshInstanceProperties['visible'] = undefined
   export let userData: MeshInstanceProperties['userData'] = undefined
   export let dispose: MeshInstanceProperties['dispose'] = undefined
-  export let interactive: MeshInstanceProperties['interactive'] = false
-  export let ignorePointer: MeshInstanceProperties['ignorePointer'] = false
 </script>
 
 <Object3DInstance
@@ -41,16 +38,3 @@
 >
   <slot />
 </Object3DInstance>
-
-<InteractiveObject
-  object={mesh}
-  {interactive}
-  {ignorePointer}
-  on:click
-  on:contextmenu
-  on:pointerup
-  on:pointerdown
-  on:pointerenter
-  on:pointerleave
-  on:pointermove
-/>

@@ -1,13 +1,18 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
+  import { Canvas, extend } from '@threlte/core'
   import { useProgress } from '@threlte/extras'
   import { World } from '@threlte/rapier'
+  import { CustomGridHelper } from './game/CustomGridHelper'
   import { gameState } from './game/state'
   import MainScene from './MainScene.svelte'
   import { resumeContext } from './sound'
 
   const { progress, finishedOnce } = useProgress()
   const { state, muted } = gameState
+
+  extend({
+    CustomGridHelper
+  })
 </script>
 
 <div class="w-full h-full absolute overflow-hidden">

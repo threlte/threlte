@@ -9,7 +9,6 @@
   import { cubicIn } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import type { Writable } from 'svelte/store'
-  import { BoxGeometry, Group, Mesh, MeshStandardMaterial } from 'three'
   import { clamp } from 'three/src/math/MathUtils'
   import { playFromGroup } from '../../sound'
   import { blinkClock } from '../state'
@@ -76,8 +75,7 @@
   }
 </script>
 
-<T
-  is={Group}
+<T.Group
   position.x={position.x}
   position.z={position.z}
 >
@@ -94,16 +92,9 @@
       on:collisionexit={() => dispatch('hit')}
       mass={1}
     >
-      <T
-        is={Mesh}
-        scale={$scale}
-      >
-        <T
-          is={BoxGeometry}
-          args={[size, 1, size]}
-        />
-        <T
-          is={MeshStandardMaterial}
+      <T.Mesh scale={$scale}>
+        <T.BoxGeometry args={[size, 1, size]} />
+        <T.MeshStandardMaterial
           color={innerColor}
           transparent
           opacity={0.6}
@@ -112,7 +103,7 @@
           color={outerColor}
           scale={1.01}
         />
-      </T>
+      </T.Mesh>
     </Collider>
   </RigidBody>
-</T>
+</T.Group>

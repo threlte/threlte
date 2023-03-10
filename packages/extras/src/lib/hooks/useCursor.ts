@@ -44,7 +44,8 @@ type Cursor = LiteralUnion<
 
 export const useCursor = (
   onPointerOver: Cursor | Writable<Cursor> = 'pointer',
-  onPointerOut: Cursor | Writable<Cursor> = 'auto'
+  onPointerOut: Cursor | Writable<Cursor> = 'auto',
+  target: HTMLElement | undefined = undefined
 ): {
   onPointerEnter: () => void
   onPointerLeave: () => void
@@ -69,9 +70,7 @@ export const useCursor = (
     }
   }
 
-  let el: HTMLElement = document.body
-  const rootCtx = useThrelte()
-  if (rootCtx && rootCtx.renderer) el = rootCtx.renderer.domElement
+  const el: HTMLElement = target ?? document.body
 
   let onPointerOverValue = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
   if (typeof onPointerOver !== 'string') {
