@@ -1,6 +1,5 @@
-import type { createRawEventDispatcher } from '@threlte/core'
+import { memoize, watch, type createRawEventDispatcher } from '@threlte/core'
 import type * as THREE from 'three'
-import { memoize, watch } from '../lib/storeUtils'
 import type { DomEvent, Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
@@ -139,6 +138,7 @@ export const setupInteractivity = (state: State) => {
 
       let stopped = false
 
+      // loop through all hits and dispatch events
       dispatchEvents: for (const hit of hits) {
         const intersectionEvent: IntersectionEvent<DomEvent> = {
           stopped,

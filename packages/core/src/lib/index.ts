@@ -74,6 +74,7 @@ export type {
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
+export { watch, memoize } from './lib/storeUtils'
 
 export type {
   HierarchicalObjectProperties,

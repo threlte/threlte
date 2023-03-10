@@ -10,8 +10,43 @@ type StoresValues<T> = T extends Readable<infer U>
     }
 
 /**
+ * ### `watch`
+ *
  * Watch a single store or multiple stores and call a callback when they change.
  * The callback can return a cleanup function that will be called when the stores change again.
+ *
+ * ```ts
+ * const store = writable(0)
+ *
+ * watch(store, (value) => {
+ * 	console.log(value) // 0
+ * })
+ * ```
+ *
+ * You can also watch multiple stores:
+ *
+ * ```ts
+ * const store1 = writable(0)
+ * const store2 = writable(1)
+ *
+ * watch([store1, store2], ([value1, value2]) => {
+ * 	console.log(value1, value2) // 0 1
+ * })
+ * ```
+ *
+ * The callback can return a cleanup function that will be called when the stores change again.
+ *
+ * ```ts
+ * const store = writable(0)
+ *
+ * watch(store, (value) => {
+ * 	console.log(value) // 0
+ * 	return () => {
+ * 		console.log('cleanup')
+ * 	}
+ * })
+ * ```
+ *
  * @param stores
  * @param callback
  */
@@ -38,8 +73,33 @@ export const watch = <S extends Stores>(
 }
 
 /**
+ * ### `memoize`
+ *
  * Use a single store or multiple stores and return the value(s) as an object.
  * This is useful for using stores in a non-reactive way e.g. in loops.
+ *
+ * ```ts
+ * const store = writable(0)
+ * const memoized = memoize(store) // { current: 0 }
+ *
+ * useFrame(() => {
+ * 	store.update(n => n + 1)
+ * 	console.log(memoized.current) // 1, 2, 3, ...
+ * })
+ * ```
+ *
+ * You can also pass a transform function to transform the values:
+ *
+ * ```ts
+ * const store = writable(0)
+ * const doubled = memoize(store, n => n * 2) // { current: 0 }
+ *
+ * useFrame(() => {
+ * 	store.update(n => n + 1)
+ * 	console.log(doubled.current) // 2, 4, 6, ...
+ * })
+ * ```
+ *
  * @param stores
  * @param transform
  */
