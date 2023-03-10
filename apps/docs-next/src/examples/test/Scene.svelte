@@ -2,51 +2,37 @@
   import { T } from '@threlte/core'
   import { Grid, interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
+  import Box from './Box.svelte'
+  import Camera from './Camera.svelte'
 
   const { target } = interactivity()
 
   target.set(document.getElementById('int-target') ?? undefined)
 
-  let color = 'blue'
-
-  const scale = spring(1)
+  const pos = spring({ x: 0, z: 0 })
+  const setRandomPos = () => {
+    pos.set({
+      x: Math.random() * 10 - 5,
+      z: Math.random() * 10 - 5
+    })
+  }
 </script>
 
-<T.OrthographicCamera
-  zoom={80}
-  position={[5, 5, 5]}
-  makeDefault
-  on:create={({ ref }) => {
-    ref.lookAt(0, 0, 0)
-  }}
-/>
+<Camera />
 
 <T.DirectionalLight position={[1, 2, 5]} />
 
-<T.Mesh
-  on:pointerenter={(e) => {
-    e.stopPropagation()
-    color = 'red'
-  }}
-  on:pointerleave={(e) => {
-    $scale = 1
-    color = 'blue'
-  }}
-  on:pointerdown={(e) => {
-    $scale = 2
-  }}
-  on:pointerup={(e) => {
-    $scale = 1
-  }}
-  scale={$scale}
->
-  <T.BoxGeometry />
-  <T.MeshStandardMaterial {color} />
+<Box
+  on:click={setRandomPos}
+  position.x={$pos.x}
+  position.z={$pos.z}
+/>
 
-  <T.Mesh position.x={2}>
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-</T.Mesh>
-
-<Grid />
+<Grid
+  position.y={-0.001}
+  cellColor="#ffffff"
+  sectionColor="#ffffff"
+  sectionThickness={0}
+  fadeDistance={25}
+  cellSize={2}
+/>

@@ -75,6 +75,7 @@ export type {
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 export { watch, memoize } from './lib/storeUtils'
+export { forwardEvents } from './lib/forwardEvents'
 
 export type {
   HierarchicalObjectProperties,
