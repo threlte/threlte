@@ -38,6 +38,6 @@ export {
   type EventMap,
   type Intersection,
   type IntersectionEvent
-} from './plugins/interactivity'
+} from './interactivity'
 
 export type { ThrelteGltf } from './types/types'

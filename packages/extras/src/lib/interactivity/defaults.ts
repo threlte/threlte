@@ -1,5 +1,5 @@
 import { useThrelte } from '@threlte/core'
-import { memoize, watch } from '../../lib/storeUtils'
+import { memoize, watch } from '../lib/storeUtils'
 import type { ComputeFunction, State } from './types'
 
 export const getDefaultComputeFunction = (state: State): ComputeFunction => {

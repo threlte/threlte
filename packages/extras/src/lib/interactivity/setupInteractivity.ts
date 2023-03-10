@@ -1,6 +1,6 @@
 import type { createRawEventDispatcher } from '@threlte/core'
 import type * as THREE from 'three'
-import { memoize, watch } from '../../lib/storeUtils'
+import { memoize, watch } from '../lib/storeUtils'
 import type { DomEvent, Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
