@@ -39,4 +39,7 @@ export {
   type IntersectionEvent
 } from './interactivity'
 
+// layers
+export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
+
 export type { ThrelteGltf } from './types/types'
