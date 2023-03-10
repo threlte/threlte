@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { createRawEventDispatcher, LayerableObject, useParent, useThrelte } from '@threlte/core'
+  import {
+    createRawEventDispatcher,
+    LayerableObject,
+    useParent,
+    useThrelte,
+    useThrelteUserContext
+  } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'

@@ -4,7 +4,6 @@
   import { spring } from 'svelte/motion'
   import Box from './Box.svelte'
   import Camera from './Camera.svelte'
-  import Flower from './Flower.svelte'
 
   const { target } = interactivity()
 

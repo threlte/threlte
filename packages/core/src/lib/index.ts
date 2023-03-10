@@ -1,9 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// control component
-export { default as OrbitControls } from './controls/OrbitControls.svelte'
-
 // misc components
 export { default as Layers } from './misc/Layers.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
@@ -82,7 +79,6 @@ export type {
   MeshInstanceProperties,
   InstancedMeshProperties,
   InstanceProperties,
-  OrbitControlsProperties,
   PassProperties,
   LayersProperties,
   SceneGraphObjectProperties

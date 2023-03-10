@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { OrbitControls, T } from '@threlte/core'
-  import { Environment, useGltf } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { OrbitControls, Environment, useGltf } from '@threlte/extras'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { derived } from 'svelte/store'
   import type { MeshStandardMaterial, Mesh } from 'three'
@@ -33,7 +33,7 @@
   position.y={13}
   fov={40}
 >
-  <OrbitControls target={{ x: 2.5 }} />
+  <OrbitControls target.x={2.5} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

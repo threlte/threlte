@@ -1,5 +1,6 @@
 <script>
-  import { OrbitControls, T } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import {
     AmbientLight,
@@ -25,7 +26,7 @@
   <OrbitControls
     maxPolarAngle={degToRad(80)}
     enableZoom={false}
-    target={{ y: 0.5 }}
+    target.y={0.5}
   />
 </T>
 

@@ -1,5 +1,6 @@
 <script>
-  import { Canvas, OrbitControls, T } from '@threlte/core'
+  import { Canvas, T } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { degToRad } from 'three/src/math/MathUtils'
 
@@ -16,7 +17,7 @@
       <OrbitControls
         maxPolarAngle={degToRad(80)}
         enableZoom={false}
-        target={{ y: 0.5 }}
+        target.y={0.5}
       />
     </T.PerspectiveCamera>
 
