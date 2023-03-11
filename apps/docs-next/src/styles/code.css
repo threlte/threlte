@@ -17,6 +17,10 @@ pre > code {
   position: relative;
   @apply bg-green-700/50;
 }
+.highlighted-modified {
+  position: relative;
+  @apply bg-yellow-500/30;
+}
 .highlighted-remove {
   position: relative;
   @apply bg-red-700/50;
@@ -48,5 +52,9 @@ span.line.highlighted-add:before {
 }
 span.line.highlighted-remove:before {
   content: '-' !important;
+  opacity: 1;
+}
+span.line.highlighted-modified:before {
+  content: 'M' !important;
   opacity: 1;
 }

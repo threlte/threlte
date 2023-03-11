@@ -81,11 +81,11 @@ You can highlight lines by adding an attribute to the code block.
 <T.Mesh position={20}>
 ```
 
-**Highlight as added or removed line**
+**Highlight as added, removed or modified line**
 
 {/* prettier-ignore-start */}
 <pre>
-  <code>\```svelte \{1}+ \{2}-
+  <code>\```svelte \{1}+ \{2}- \{3}m
 		\<T.Mesh position=\{5\}\>
 		\<T.Mesh position=\{10\}\>
 		\<T.Mesh position=\{20\}\>
@@ -93,7 +93,7 @@ You can highlight lines by adding an attribute to the code block.
 </pre>
 {/* prettier-ignore-end */}
 
-```svelte {1}+ {2}-
+```svelte {1}+ {2}- {3}m
 <T.Mesh position={5}>
 <T.Mesh position={10}>
 <T.Mesh position={20}>

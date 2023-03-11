@@ -18,5 +18,6 @@
     bind:this={$events}
     args={[ref, el]}
     on:change={invalidate}
+    enableZoom={false}
   />
 </T.OrthographicCamera>

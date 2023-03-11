@@ -20,6 +20,7 @@ const DOM_EVENTS = [
   ['pointerdown', true],
   ['pointerup', true],
   ['pointerleave', true],
+  ['pointerenter', true],
   ['pointermove', true],
   ['pointercancel', true]
 ] as const
@@ -27,8 +28,6 @@ const DOM_EVENTS = [
 type DomEventName = typeof DOM_EVENTS[number][0]
 
 export const setupInteractivity = (state: State) => {
-  const pointer = memoize(state.pointer)
-
   function calculateDistance(event: DomEvent) {
     const dx = event.offsetX - state.initialClick[0]
     const dy = event.offsetY - state.initialClick[1]
@@ -107,7 +106,16 @@ export const setupInteractivity = (state: State) => {
   const getEventHandler = (name: DomEventName): ((event: DomEvent) => void) => {
     // Deal with cancelation
     if (name === 'pointerleave' || name === 'pointercancel') {
-      return () => cancelPointer([])
+      return () => {
+        state.pointerOverTarget.set(false)
+        cancelPointer([])
+      }
+    }
+
+    if (name === 'pointerenter') {
+      return () => {
+        state.pointerOverTarget.set(true)
+      }
     }
 
     return (event: DomEvent) => {
@@ -163,7 +171,7 @@ export const setupInteractivity = (state: State) => {
           camera: state.raycaster.camera,
           delta,
           nativeEvent: event,
-          pointer: pointer.current,
+          pointer: state.pointer.current,
           ray: state.raycaster.ray
         }
 
