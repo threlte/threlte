@@ -4,7 +4,7 @@ import { defineCollection, z } from 'astro:content'
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
-    type: z.enum(['component', 'hook']).optional(),
+    type: z.enum(['component', 'hook', 'plugin']).optional(),
     name: z.string(),
     sourcePath: z.string().optional(),
     order: z.number().optional(),

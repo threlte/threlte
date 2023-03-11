@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     createRawEventDispatcher,
-    LayerableObject,
     useParent,
     useThrelte,
     useThrelteUserContext
@@ -153,5 +152,3 @@
     removeListeners()
   })
 </script>
-
-<LayerableObject object={transformControls} />

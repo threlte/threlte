@@ -1,7 +1,7 @@
 import type { BufferGeometry, ColorRepresentation, Material, Mesh, Object3D } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
-import type { LookAt, Position, Rotation, Scale, ThrelteLayers } from './types'
+import type { LookAt, Position, Rotation, Scale } from './types'
 
 export type HierarchicalObjectProperties = {
   object?: Object3D
@@ -23,10 +23,6 @@ export type SceneGraphObjectProperties = {
   object: Object3D
 }
 
-export type LayerableObjectProperties = {
-  object: Object3D
-}
-
 export type TransformableObjectProperties = {
   object: Object3D
   position?: Position
@@ -45,7 +41,6 @@ export type ViewportAwareObjectProperties = {
 }
 
 export type Object3DInstanceProperties = SceneGraphObjectProperties &
-  LayerableObjectProperties &
   TransformableObjectProperties &
   ViewportAwareObjectProperties &
   DisposableObjectProperties & {
@@ -63,10 +58,6 @@ export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> 
 
 export type PassProperties = {
   pass: Pass
-}
-
-export type LayersProperties = {
-  layers: ThrelteLayers
 }
 
 export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {

@@ -1,13 +1,13 @@
 code {
   display: inline;
-  @apply bg-white/10 !font-normal rounded-sm px-1 py-0.5 text-[0.85em] text-white;
+  @apply rounded-sm bg-white/10 px-1 py-0.5 text-[0.85em] !font-normal text-white;
 }
 .prose a code {
-  @apply text-orange !font-normal rounded-sm px-1 py-0.5 text-[0.85em];
+  @apply text-orange rounded-sm px-1 py-0.5 text-[0.85em] !font-normal;
 }
 pre > code {
   display: grid;
-  @apply bg-transparent border-0 text-[1em];
+  @apply border-0 bg-transparent text-[1em];
 }
 .highlighted {
   position: relative;
@@ -15,7 +15,7 @@ pre > code {
 }
 .highlighted-add {
   position: relative;
-  @apply bg-green-700/70;
+  @apply bg-green-700/50;
 }
 .highlighted-remove {
   position: relative;
@@ -40,7 +40,7 @@ span.line:before {
   user-select: none;
   opacity: 0.3;
   margin-left: 0.3ch;
-  @apply border-r border-[#ccc]/50 pl-0 pr-2 mr-2 text-[0.9em] h-full;
+  @apply mr-2 h-full border-r border-[#ccc]/50 pl-0 pr-2 text-[0.9em];
 }
 span.line.highlighted-add:before {
   content: '+' !important;
