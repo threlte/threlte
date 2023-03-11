@@ -16,10 +16,10 @@ interface Props {
 }
 
 const colorStyles: Record<NonNullable<Props['color']>, string> = {
-  orange: 'bg-orange-800/30 border-orange-500',
-  blue: 'bg-blue-800/90 border-blue-500',
-  green: 'bg-green-800/30 border-green-500',
-  dark: 'bg-blue-800/20 border-blue-500/50'
+  orange: 'bg-orange-800/30 border-orange-500 [&_a]:text-orange-500',
+  blue: 'bg-blue-800/90 border-blue-500 [&_a]:text-blue-500',
+  green: 'bg-green-800/30 border-green-500 [&_a]:text-green-500',
+  dark: 'bg-blue-800/20 border-blue-500/50 [&_a]:text-blue-500'
 }
 
 const iconStyles: Record<

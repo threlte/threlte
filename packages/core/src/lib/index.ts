@@ -2,7 +2,6 @@
 export { default as Canvas } from './Canvas.svelte'
 
 // misc components
-export { default as Layers } from './misc/Layers.svelte'
 export { default as ContextBridge } from './misc/ContextBridge.svelte'
 
 // object components
@@ -15,7 +14,6 @@ export { default as Object3DInstance } from './instances/Object3DInstance.svelte
 
 // trait components
 export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
-export { default as LayerableObject } from './internal/LayerableObject.svelte'
 export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
 export { default as TransformableObject } from './internal/TransformableObject.svelte'
 export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
@@ -58,7 +56,6 @@ export type {
   ThrelteUseFrameOptions,
   ThrelteContext,
   ThrelteRootContext,
-  ThrelteLayers,
   ThrelteInstance,
   Size
 } from './types/types'
@@ -66,12 +63,11 @@ export type {
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
-export { watch, memoize } from './lib/storeUtils'
+export { watch, memoize, currentWritable, type CurrentWritable } from './lib/storeUtils'
 export { forwardEvents } from './lib/forwardEvents'
 
 export type {
   HierarchicalObjectProperties,
-  LayerableObjectProperties,
   TransformableObjectProperties,
   DisposableObjectProperties,
   ViewportAwareObjectProperties,
@@ -80,6 +76,5 @@ export type {
   InstancedMeshProperties,
   InstanceProperties,
   PassProperties,
-  LayersProperties,
   SceneGraphObjectProperties
 } from './types/components'

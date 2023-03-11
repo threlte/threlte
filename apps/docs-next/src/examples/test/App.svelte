@@ -18,7 +18,7 @@
     id="int-target"
   >
     <div class="relative top-6 left-6">
-      <div class="text-sm text-orange uppercase">Custom Event Target</div>
+      <div class="text-sm text-orange uppercase font-bold">Custom Event Target</div>
       <div class="text-3xl font-bold text-orange">Event Handling on Foreground Element</div>
     </div>
   </div>

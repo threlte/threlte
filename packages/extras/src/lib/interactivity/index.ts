@@ -1,6 +1,5 @@
-import { useThrelte } from '@threlte/core'
+import { currentWritable, useThrelte } from '@threlte/core'
 import { setContext } from 'svelte'
-import { writable } from 'svelte/store'
 import { Raycaster, Vector2 } from 'three'
 import { getDefaultComputeFunction } from './defaults'
 import { injectInteractivityPlugin } from './plugin'
@@ -9,16 +8,16 @@ import type { InteractivityOptions, State } from './types'
 
 const interactivity = (options?: InteractivityOptions) => {
   const state: State = {
-    enabled: writable(options?.enabled ?? true),
-    pointer: writable(new Vector2()),
-    pointerOverTarget: writable(false),
+    enabled: currentWritable(options?.enabled ?? true),
+    pointer: currentWritable(new Vector2()),
+    pointerOverTarget: currentWritable(false),
     lastEvent: undefined,
     raycaster: new Raycaster(),
     initialClick: [0, 0],
     initialHits: [],
     hovered: new Map(),
     interactiveObjects: [],
-    target: writable(options?.target ?? useThrelte().renderer?.domElement),
+    target: currentWritable(options?.target ?? useThrelte().renderer?.domElement),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     compute: () => {}, // will be replaced by the default or the user-provided function
     filter: options?.filter

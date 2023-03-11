@@ -1,7 +1,6 @@
 <script lang="ts">
   import { useThrelte } from '../hooks/useThrelte'
   import DisposableObject from '../internal/DisposableObject.svelte'
-  import LayerableObject from '../internal/LayerableObject.svelte'
   import SceneGraphObject from '../internal/SceneGraphObject.svelte'
   import TransformableObject from '../internal/TransformableObject.svelte'
   import ViewportAwareObject from '../internal/ViewportAwareObject.svelte'
@@ -43,8 +42,6 @@
     invalidate('Object3DInstance: props changed')
   }
 </script>
-
-<LayerableObject {object} />
 
 <TransformableObject {object} {position} {rotation} {scale} {lookAt} />
 

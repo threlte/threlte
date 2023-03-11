@@ -1,4 +1,4 @@
-import type { Writable } from 'svelte/store'
+import type { CurrentWritable } from '@threlte/core'
 import type { Camera, Raycaster, Vector2 } from 'three'
 
 export type DomEvent = PointerEvent | MouseEvent | WheelEvent
@@ -44,10 +44,10 @@ export type FilterFunction = (items: THREE.Intersection[], state: State) => THRE
 export type ComputeFunction = (event: DomEvent, state: State) => void
 
 export type State = {
-  enabled: Writable<boolean>
-  target: Writable<HTMLElement | undefined>
-  pointer: Writable<Vector2>
-  pointerOverTarget: Writable<boolean>
+  enabled: CurrentWritable<boolean>
+  target: CurrentWritable<HTMLElement | undefined>
+  pointer: CurrentWritable<Vector2>
+  pointerOverTarget: CurrentWritable<boolean>
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]

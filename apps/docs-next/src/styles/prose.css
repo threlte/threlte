@@ -1,5 +1,9 @@
 .prose {
   .tip {
-    @apply my-4;
+    @apply my-5;
+  }
+
+  div.code {
+    @apply my-5;
   }
 }
