@@ -25,12 +25,12 @@
   export { _class as class }
 </script>
 
-<div class={c('w-full flex flex-row justify-center', _class)}>
+<div class={c('flex w-full flex-row justify-center', _class)}>
   {#each tabs as tab}
     <button
       class={c(
-        'border-b-[5px] border-b-transparent w-full pb-2 font-bold text-faded hover:!text-white',
-        activeTabId === tab.id && 'border-b-orange !text-white',
+        'text-faded w-full border-b-[5px] border-b-transparent pb-2 font-bold hover:!text-white',
+        activeTabId === tab.id && '!border-b-orange !text-white',
         activeTabId !== tab.id && 'border-b-white/20 hover:border-b-white/30'
       )}
       on:click={() => {
