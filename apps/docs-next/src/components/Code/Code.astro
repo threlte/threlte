@@ -44,7 +44,7 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
       </div>
       <div
         class={c(
-          'not-prose overflow-x-auto rounded-b-md rounded-tr-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
+          'not-prose relative overflow-x-auto rounded-b-md rounded-tr-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
           Astro.props.class ?? ''
         )}
       >
