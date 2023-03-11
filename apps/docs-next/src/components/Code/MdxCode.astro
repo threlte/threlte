@@ -62,11 +62,11 @@ if (metastring) {
       }
     } else {
       /**
-       * it can be a line highlight, e.g. {1,2,3-5,6}, or {2}+ or {2}-
-       * to indicate if the lines are added or removed.
-       * Regex: ^{[\d-,]+}[+-]*$
+       * it can be a line highlight, e.g. {1,2,3-5,6}, or {2}+ or {2}- or {2}m
+       * to indicate if the lines are added, removed or modified.
+       * Regex: ^{[\d-,]+}[+-m]*$
        */
-      const lineHighlightRegex = /^{[\d-,]+}[+\-]*$/
+      const lineHighlightRegex = /^{[\d-,]+}[+\-m]*$/
       const lineHighlightMatch = element.match(lineHighlightRegex)
       const lineHighlightString = lineHighlightMatch?.[0]
 
@@ -76,6 +76,8 @@ if (metastring) {
           classes.push('highlighted-add')
         } else if (lineHighlightString.endsWith('-')) {
           classes.push('highlighted-remove')
+        } else if (lineHighlightString.endsWith('m')) {
+          classes.push('highlighted-modified')
         } else {
           classes.push('highlighted')
         }
