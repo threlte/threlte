@@ -2,3 +2,38 @@
 category: Getting Started
 title: Your First Scene
 ---
+
+# First Scene
+
+Build your first scene:
+
+{#if installPreprocess}
+
+@[code](../examples/getting-started/preprocessed/Scene.svelte)
+
+{:else}
+
+@[code](../examples/getting-started/Scene.svelte)
+
+{/if}
+
+It should look something like this:
+
+<script lang="ts">
+  import GettingStartedPreprocessed from '$examples/getting-started/preprocessed/Scene.svelte'
+  import GettingStarted from '$examples/getting-started/Scene.svelte'
+</script>
+
+<ExampleWrapper playgroundHref="/getting-started/playground">
+
+{#if installPreprocess}
+
+<GettingStartedPreprocessed />
+{:else}
+<GettingStarted />
+{/if}
+
+</ExampleWrapper>
+
+Congratulations :tada:
+Orbit around the cube, hover over, [head over to the Playground](/playground/getting-started/playground) and change some values.
