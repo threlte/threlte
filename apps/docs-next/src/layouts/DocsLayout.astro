@@ -17,6 +17,12 @@ export interface Props {
 const title = Astro.props.title
 
 const sidebarMenu = await getLeftSidebarMenu()
+
+const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
+  ? 'learn'
+  : 'reference'
+
+const activeUrlPathName = Astro.url.pathname
 ---
 
 <AppLayout title={title}>
@@ -49,6 +55,8 @@ const sidebarMenu = await getLeftSidebarMenu()
   <MobileDocsNav
     client:load
     sidebarMenu={sidebarMenu}
+    activeSidebarTab={activeSidebarTab}
+    activeUrlPathName={activeUrlPathName}
   >
     <Image
       slot="logo"

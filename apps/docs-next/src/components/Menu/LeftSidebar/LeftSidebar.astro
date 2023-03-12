@@ -3,9 +3,17 @@ import { getLeftSidebarMenu } from './getLeftSidebarMenu'
 import LeftSidebar from './LeftSidebar.svelte'
 
 const sidebarMenu = await getLeftSidebarMenu()
+
+const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
+  ? 'learn'
+  : 'reference'
+
+const activeUrlPathName = Astro.url.pathname
 ---
 
 <LeftSidebar
   client:load
   menu={sidebarMenu}
+  activeSidebarTab={activeSidebarTab}
+  activeUrlPathName={activeUrlPathName}
 />

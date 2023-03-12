@@ -10,10 +10,10 @@
   const { action, mounted } = useElementMounted()
 </script>
 
-<div class="fixed top-0 left-0 z-50 flex w-full flex-col md:hidden">
+<div class="fixed top-0 left-0 z-50 flex w-full flex-col md:hidden max-h-screen">
   <header
     class={c(
-      'flex h-[70px] w-full flex-row items-center justify-between bg-[#0D1421] px-6 py-2 border-b',
+      'flex h-[70px] w-full flex-row items-center justify-between bg-[#0D1421] px-6 py-2 border-b flex-shrink-0',
       $mounted ? 'border-b-transparent' : 'border-b-orange/25'
     )}
   >
@@ -35,7 +35,7 @@
         duration: 200
       }}
       in:customSlide={{ duration: 200 }}
-      class="border-b-orange/25 w-full border-b bg-[#0D1421] -z-10"
+      class="border-b-orange/25 w-full border-b bg-[#0D1421] -z-10 min-h-0 overflow-auto"
     >
       <div
         class="pt-2 pb-6 px-6"
