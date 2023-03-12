@@ -1,12 +1,9 @@
 ---
-title: GLTF
+category: '@threlte/extras'
+name: <GLTF>
+type: 'component'
 ---
 
-<script lang="ts">
-import Example from '$examples/extras/gltf/App.svelte'
-</script>
-
-!!!module_summary title=GLTF|sourcePath=components/GLTF/GLTF.svelte|name=GLTF|from=extras|type=component|relatedDocs={[{name:"three.js GLTFLoader reference",url:"https://threejs.org/docs/examples/en/loaders/GLTFLoader.html"}]}
 To use DRACO compression, provide a path to the DRACO decoder.
 To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
@@ -14,24 +11,16 @@ Change the property `url` to load new 3D content. The new content will be swappe
 
 Use the hook [`useGltf`](/extras/use-gltf) to reuse a glTF model or to use parts of it.
 
-:::admonition type="tip"
-See the hook [`useGltfAnimations`](/extras/use-gltf-animations) on how to use animations of glTF Files.
-:::
+<Tip type="tip">
+  See the hook [`useGltfAnimations`](/extras/use-gltf-animations) on how to use animations of glTF
+  Files.
+</Tip>
 
-<ExampleWrapper playgroundHref="/extras/gltf">
-<Example />
+<Example path="extras/gltf" />
 
-<div slot="code">
-
-@[code svelte|title=App.svelte](../../examples/extras/gltf/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/gltf/Scene.svelte)
-
-</div>
-</ExampleWrapper>
-
-<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
-
-!!!
+<small>
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+</small>
 
 ### Interaction
 
@@ -54,7 +43,13 @@ The `<GLTF>` component supports interaction:
   import { GLTF } from '@threlte/extras'
 </script>
 
-<GLTF castShadow receiveShadow url={'/models/flower.glb'} position={{ y: 1 }} scale={3} />
+<GLTF
+  castShadow
+  receiveShadow
+  url={'/models/flower.glb'}
+  position={{ y: 1 }}
+  scale={3}
+/>
 ```
 
 ### Compression

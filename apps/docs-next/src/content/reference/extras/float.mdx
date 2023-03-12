@@ -1,18 +1,17 @@
 ---
 category: '@threlte/extras'
-name: 'Float'
+name: '<Float>'
 sourcePath: 'apps/docs-new/src/content/components/float.md'
-props: ['a', 'b', 'c']
 type: 'component'
 ---
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
-<Example path="core/three-arcade-game" />
+<Example path="extras/float" />
 
-### Examples
+## Examples
 
-#### Basic Example
+### Basic Example
 
 ```svelte title="src/pages/[id].json.ts" {3}
 <script lang="ts">
@@ -42,7 +41,7 @@ Rotation is set by `rotationSpeed` and `rotationIntensity`. Both of them need to
 
 `seed` is responsible for the starting state of the animations and is random by default. Setting to a fixed value to get a predictable starting result.
 
-### Properties
+## Properties
 
 ```ts {1,6} {4}+ {7,8}- title="src/pages/[id].json.ts"
 // floating - y axis float by default

@@ -1,32 +1,20 @@
 ---
-title: useGltf
+category: '@threlte/extras'
+name: useGltf
+type: 'hook'
 ---
 
-<script lang="ts">
-import Example from '$examples/extras/use-gltf/App.svelte'
-</script>
-
-!!!module_summary title=useGltf|sourcePath=hooks/useGltf.ts|name=useGltf|from=extras|type=hook|relatedDocs={[{name:"three.js GLTFLoader reference",url:"https://threejs.org/docs/examples/en/loaders/GLTFLoader.html"}]}
 A Hook to load glTF files and use separate object nodes and materials of it.
 
 Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its entirety.
 
-<ExampleWrapper playgroundHref="/extras/use-gltf">
-<Example />
+<Example path="extras/use-gltf" />
 
-<div slot="code">
+<small>
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+</small>
 
-@[code svelte|title=App.svelte](../../examples/extras/use-gltf/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/use-gltf/Scene.svelte)
-
-</div>
-</ExampleWrapper>
-
-<small>Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)</small>
-
-!!!
-
-## Examples <!-- omit in toc -->
+## Examples
 
 ### Basic Example
 
@@ -48,7 +36,10 @@ Use the component [`<GLTF>`](/extras/gltf) if you want to use a model in its ent
 
 <!-- or only the geometry -->
 {#if $gltf}
-  <Mesh geometry={$gltf.nodes['node-name'].geometry} material={new MeshBasicMaterial()} />
+  <Mesh
+    geometry={$gltf.nodes['node-name'].geometry}
+    material={new MeshBasicMaterial()}
+  />
 {/if}
 ```
 
@@ -114,7 +105,7 @@ The hook provides a map of all objects and materials in the loaded glTF.
 
   const gltf = useGltf('/path/to/model.glb')
   $: nodes: $gltf?.nodes
-	$: materials: $gltf?.materials
+  $: materials: $gltf?.materials
 </script>
 ```
 
@@ -125,16 +116,16 @@ Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/
   import { useGltf } from '@threlte/extras'
 
   const gltf = useGltf<{
-		nodes: {
-			MeshA: THREE.Mesh
-			MeshB: THREE.Mesh
-			Object3DA: THREE.Object3D
-		}
-		materials: {
-			MaterialA: THREE.MeshStandardMaterial
-			MaterialB: THREE.MeshBasicMaterial
-		}
-	}>('/path/to/model.glb')
+    nodes: {
+      MeshA: THREE.Mesh
+      MeshB: THREE.Mesh
+      Object3DA: THREE.Object3D
+    }
+    materials: {
+      MaterialA: THREE.MeshStandardMaterial
+      MaterialB: THREE.MeshBasicMaterial
+    }
+  }>('/path/to/model.glb')
 
   $: if ($gltf) {
     const objectA = $gltf.nodes['MeshA'] // -> THREE.Mesh

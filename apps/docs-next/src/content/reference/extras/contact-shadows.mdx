@@ -1,12 +1,8 @@
 ---
-title: ContactShadows
+category: '@threlte/extras'
+name: <ContactShadows>
+type: 'component'
 ---
-
-<script lang="ts">
-import Example from '$examples/extras/contact-shadows/App.svelte'
-</script>
-
-!!!module_summary title=ContactShadows|sourcePath=/components/ContactShadows/ContactShadows.svelte|name=ContactShadows|from=extras|type=component
 
 This component is a port of [drei's `<ContactShadows>` component](https://github.com/pmndrs/drei#contactshadows).
 
@@ -14,12 +10,12 @@ A contact shadow implementation, facing upwards (positive Y) by default. `scale`
 
 ```svelte
 <ContactShadows
-	opacity={1}
-	scale={10}
-	blur={1}
-	far={10}
-	resolution={256}
-	color="#000000"
+  opacity={1}
+  scale={10}
+  blur={1}
+  far={10}
+  resolution={256}
+  color="#000000"
 />
 ```
 
@@ -33,30 +29,22 @@ Use the binding `refresh` to manually refresh the shadows:
 
 ```svelte
 <script>
-	let refresh
+  let refresh
 
-	const onSomeEvent = () => {
-		if (refresh) refresh()
-	}
+  const onSomeEvent = () => {
+    if (refresh) refresh()
+  }
 </script>
 
-<ContactShadows bind:refresh frames={0} />
+<ContactShadows
+  bind:refresh
+  frames={0}
+/>
 ```
 
 Currently it has the same limitations of drei's version: It yields unexpected results if moved on the x or the z axis.
 
-<ExampleWrapper playgroundHref="/extras/contact-shadows">
-<Example />
-
-<div slot="code">
-
-@[code svelte|title=App.svelte](../../examples/extras/contact-shadows/App.svelte)
-@[code svelte|title=Scene.svelte](../../examples/extras/contact-shadows/Scene.svelte)
-
-</div>
-</ExampleWrapper>
-
-!!!
+<Example path="extras/contact-shadows" />
 
 ### Example
 
@@ -65,7 +53,12 @@ Currently it has the same limitations of drei's version: It yields unexpected re
   import { ContactShadows } from 'threlte/extras'
 </script>
 
-<ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} />
+<ContactShadows
+  scale={10}
+  blur={2}
+  far={2.5}
+  opacity={0.5}
+/>
 ```
 
 ### Properties

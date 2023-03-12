@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, forwardEvents } from '@threlte/core'
   import { Edges, Text, useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -12,34 +12,45 @@
   let textColor = '#eedbcb'
 
   const { onPointerEnter, onPointerLeave } = useCursor()
+
+  const events = forwardEvents()
 </script>
 
 <T.Group {...$$restProps}>
   <T.Group position.y={0.05 - $buttonOffsetY}>
     <T.Mesh
-      on:click
-      on:pointerenter={() => {
+      bind:this={$events}
+      on:pointerenter={(e) => {
+        e.stopPropagation()
         buttonColor = '#eedbcb'
         textColor = '#111111'
         onPointerEnter()
       }}
-      on:pointerleave={() => {
+      on:pointerleave={(e) => {
+        e.stopPropagation()
         buttonColor = '#111111'
         textColor = '#eedbcb'
         buttonOffsetY.set(0)
         onPointerLeave()
       }}
-      on:pointerdown={() => {
+      on:pointerdown={(e) => {
+        e.stopPropagation()
         buttonOffsetY.set(0.05)
       }}
-      on:pointerup={() => {
+      on:pointerup={(e) => {
+        e.stopPropagation()
         buttonOffsetY.set(0)
       }}
     >
       <T.BoxGeometry args={[1.2, 0.1, 0.8]} />
       <T.MeshStandardMaterial color={buttonColor} />
 
-      <Edges color="black" />
+      <Edges
+        color="black"
+        raycast={() => {
+          return false
+        }}
+      />
     </T.Mesh>
     <Text
       renderOrder={-100}
