@@ -87,20 +87,6 @@
     class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
     >On this page</span
   >
-  <nav class="w-full lg:hidden">
-    <button
-      aria-expanded={expanded}
-      aria-haspopup="true"
-      aria-label="Toggle for table of contents"
-      on:click={() => (expanded = !expanded)}
-    >
-      <div class="flex items-center gap-4 text-base lg:hidden">
-        <span class="font-bold">{headings[0] ? headings[0].text : ''} </span>
-        <span>{`${currentHeadingIndex > 0 ? `/` : ''}`}</span>
-        <span>{`${currentHeadingIndex > 0 ? `${currentHeading?.text}` : ''}`}</span>
-      </div>
-    </button>
-  </nav>
 
   <ul
     class={`absolute top-1/2 right-0 w-full  bg-[#0c1421] px-6 text-left lg:bg-transparent lg:px-0 lg:pl-6 ${
