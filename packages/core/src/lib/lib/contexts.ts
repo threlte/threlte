@@ -12,6 +12,7 @@ import type {
   ThrelteUserContext
 } from '../types/types'
 import { getDefaultCamera } from './defaultCamera'
+import { currentWritable } from './storeUtils'
 
 export const createContexts = (
   linear: boolean,
@@ -49,7 +50,7 @@ export const createContexts = (
       return uSize ? uSize : pSize
     }),
     clock: new Clock(),
-    camera: writable(getDefaultCamera()),
+    camera: currentWritable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined,
     invalidate: (debugFrameloopMessage?: string) => {

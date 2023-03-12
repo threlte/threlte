@@ -18,9 +18,17 @@ interface Props {
 }
 
 const { entry } = Astro.props
+const { name, category } = entry.data
 const { Content } = await entry.render()
 ---
 
 <DocsLayout entry={entry}>
+  <h6 class="text-faded text-sm font-bold">
+    {category}
+  </h6>
+  <h1>
+    {name}
+  </h1>
+
   <Content components={{ pre: MdxCode }} />
 </DocsLayout>
