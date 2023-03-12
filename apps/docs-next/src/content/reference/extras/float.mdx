@@ -6,8 +6,6 @@ props: ['a', 'b', 'c']
 type: 'component'
 ---
 
-## Module Details
-
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
 
 <Example path="core/three-arcade-game" />
@@ -22,11 +20,15 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
   import { Float } from '@threlte/extras'
 </script>
 
-<Float floatIntensity={5} scale={$scale} rotationIntensity={2}>
-	<T.Mesh>
-		<T.MeshStandardMaterial color={'orange'} />
-		<T.BoxGeometry args={[5, 5, 5]} />
-	</T.Mesh>
+<Float
+  floatIntensity={5}
+  scale={$scale}
+  rotationIntensity={2}
+>
+  <T.Mesh>
+    <T.MeshStandardMaterial color={'orange'} />
+    <T.BoxGeometry args={[5, 5, 5]} />
+  </T.Mesh>
 </Float>
 ```
 
