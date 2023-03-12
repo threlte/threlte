@@ -21,7 +21,7 @@
       <li class="last:mb-0">
         <a
           class={c(
-            'block pl-4 -mx-2 py-1 rounded-sm',
+            'block pl-2 md:pl-4 md:-mx-2 py-1 rounded-sm',
             activeUrlPathName === `${category.urlPrefix}/${item.slug}` &&
               'bg-blue-700/30 text-white'
           )}
