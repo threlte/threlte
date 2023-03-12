@@ -1,6 +1,7 @@
 ---
 import { c } from '$lib/classes'
-import { getHighlighter, type Lang, setCDN, Theme, HtmlRendererOptions } from 'shiki'
+import { type HtmlRendererOptions, Theme, type Lang } from 'shiki'
+import { getShiki } from '../../lib/highlighter'
 import CopyCodeButton from './CopyCodeButton.svelte'
 
 interface Props {
@@ -12,23 +13,7 @@ interface Props {
   lineOptions?: HtmlRendererOptions['lineOptions']
 }
 
-setCDN('https://unpkg.com/shiki/')
-
-const highlighter = await getHighlighter({
-  theme: Astro.props.theme ?? 'dracula-soft',
-  langs: [
-    ...new Set<Lang>([
-      Astro.props.lang,
-      'astro',
-      'typescript',
-      'javascript',
-      'svelte',
-      'astro',
-      'markdown',
-      'mdx'
-    ])
-  ]
-})
+const highlighter = await getShiki()
 
 const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
   lang: Astro.props.lang,
