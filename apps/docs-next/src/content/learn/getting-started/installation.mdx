@@ -3,6 +3,8 @@ category: Getting Started
 title: Installation
 ---
 
+import SvelteButton from '$components/Button/Button.svelte'
+
 # Installation
 
 Threlte consists of 4 packages which can be installed and used individually. `@threlte/core` and `three` are required for all projects while the other packages are optional.
@@ -18,66 +20,19 @@ Threlte consists of 4 packages which can be installed and used individually. `@t
 - `@types/three` - external package
   TypeScript types for three.js.
 
-## Choose the packages you want to use
-
-The rest of this guide will adapt.
-
-placeholder.
-
 Install the packages with `npm`, `pnpm`, `yarn` or any other package manager you prefer.
 
-placeholder
+```bash
+npm i -D three @threlte/core @types/three
+```
 
 ## Configuration
 
-#### Adapt `svelte.config.js`
-
-Add Threlte's preprocessor as well as `'svelte-sequential-preprocessor'` to your Svelte config:
-
-```js lang=js|title=svelte.config.js|copyHighlight{2,3,7-10}
-import preprocess from 'svelte-preprocess'
-import seqPreprocessor from 'svelte-sequential-preprocessor'
-import { preprocessThrelte } from '@threlte/preprocess'
-
-const config = {
-  // …
-  preprocess: seqPreprocessor([preprocess(), preprocessThrelte()])
-}
-
-export default config
-```
-
-#### Adapt `svelte.config.js`
-
-Add Threlte's preprocessor to your Svelte config:
-
-```js lang=js|title=svelte.config.js|copyHighlight{1,5}
-import { preprocessThrelte } from '@threlte/preprocess'
-
-const config = {
-  // …
-  preprocess: preprocessThrelte()
-}
-
-export default config
-```
-
-#### Adapt `vite.config.js`
-
-If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent `three` and `troika-three-text` from being externalized for SSR by vites externalization step
-
-```js copyHighlight{3-5}|title=vite.config.js
-const config = {
-  // …
-  ssr: {
-    noExternal: ['three', 'troika-three-text']
-  }
-}
-```
+### Adapt `vite.config.js`
 
 If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent `three` from being externalized for SSR by vites externalization step
 
-```js copyHighlight{3-5}|title=vite.config.js
+```js {3-5} title=vite.config.js
 const config = {
   // …
   ssr: {
