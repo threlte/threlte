@@ -17,7 +17,13 @@
   let zoom = $size.width / 18
   $: zoom = $size.width / 18
 
-  interactivity()
+  interactivity({
+    filter: (hits) => {
+      // only return first hit, we don't care
+      // about propagation in this example
+      return hits.slice(0, 1)
+    }
+  })
 </script>
 
 <Environment

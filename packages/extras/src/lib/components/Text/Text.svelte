@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { forwardEvents, T, useThrelte } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { Text } from 'troika-three-text'
   import type { TextMesh, TextProps } from './Text.svelte'
@@ -43,6 +43,8 @@
     sync: undefined
   }>()
 
+  const events = forwardEvents()
+
   let textObject: TextMesh | undefined = undefined
 
   $: {
@@ -85,11 +87,6 @@
   }
 </script>
 
-<T
-  bind:ref={textObject}
-  is={TypedText}
-  let:ref
-  {...$$restProps}
->
+<T bind:ref={textObject} is={TypedText} let:ref {...$$restProps} bind:this={$events}>
   <slot {ref} />
 </T>
