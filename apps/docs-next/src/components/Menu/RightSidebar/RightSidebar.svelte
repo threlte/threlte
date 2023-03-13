@@ -98,8 +98,10 @@
           data-depth={heading.depth}
           class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
           style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
-          href={`#${heading.slug}`}>{heading.text}</a
+          href={`#${heading.slug}`}
         >
+          {heading.text}
+        </a>
       </li>
     {/each}
   </ul>
