@@ -1,15 +1,6 @@
 <script lang="ts">
-  import {
-    InteractiveObject,
-    Three,
-    DisposableObject,
-    type ThrelteInstance,
-    type ThreltePointerEvent,
-    useFrame,
-    useThrelte
-  } from '@threlte/core'
+  import { T, DisposableObject, type ThrelteInstance, useFrame, useThrelte } from '@threlte/core'
   // TODO: check this import
-  import type { ThreltePointerEventMap } from '@threlte/core/src/lib/types/types'
   import { writable, type Writable } from 'svelte/store'
   import { Color, InstancedMesh as ThreeInstancedMesh, Matrix4, Object3D } from 'three'
   import { usePropChange } from './usePropChange'
@@ -30,8 +21,8 @@
   export let userData: $$Props['userData'] = {}
   // export let userData: $$Props['userData'] = undefined
   export let dispose: $$Props['dispose'] = undefined
-  export let geometry: $$Props['geometry']
-  export let material: $$Props['material']
+  export let geometry: $$Props['geometry'] = undefined
+  export let material: $$Props['material'] = undefined
   export let count: $$Props['count'] = undefined
 
   // self
@@ -193,41 +184,15 @@
     setInstanceColor,
     parentObject
   })
-
-  /**
-   * The <InstancedMesh> component itself will not dispatch events.
-   * Instances are however able to dispatch events. For now it's an
-   * all-or-nothing approach where the props "interactive" and
-   * "ignorePointer" are set on the <InstancedMesh> component and the
-   * events are triggered on the instances.
-   */
-  const onEvent = (e: CustomEvent<ThreltePointerEvent>) => {
-    if (e.detail.instanceId === undefined) return
-    const instance = instances[e.detail.instanceId]
-    if (instance && instance.pointerEventDispatcher) {
-      instance.pointerEventDispatcher(e.type as keyof ThreltePointerEventMap, e.detail)
-    }
-  }
 </script>
 
-<DisposableObject
-  {dispose}
-  object={geometry}
-/>
-<DisposableObject
-  {dispose}
-  object={material}
-/>
+<DisposableObject {dispose} object={geometry} />
+<DisposableObject {dispose} object={material} />
 
-<Three
-  type={parentObject}
-  {position}
-  {scale}
-  {rotation}
->
+<T is={parentObject} {position} {scale} {rotation}>
   {#key $instancedMesh.uuid}
-    <Three
-      type={$instancedMesh}
+    <T
+      is={$instancedMesh}
       bind:ref={mesh}
       {position}
       {scale}
@@ -245,22 +210,7 @@
       bind:inViewport
     >
       <slot />
-    </Three>
-
-    {#if mesh}
-      <InteractiveObject
-        object={mesh}
-        {interactive}
-        {ignorePointer}
-        on:click={onEvent}
-        on:contextmenu={onEvent}
-        on:pointerup={onEvent}
-        on:pointerdown={onEvent}
-        on:pointerenter={onEvent}
-        on:pointerleave={onEvent}
-        on:pointermove={onEvent}
-      />
-    {/if}
+    </T>
   {/key}
   <slot />
-</Three>
+</T>

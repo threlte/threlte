@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { Color, Matrix4, Object3D } from 'three'
   import {
     SceneGraphObject,
     type ThrelteInstance,
-    type ThreltePointerEvent,
     TransformableObject,
     useFrame
   } from '@threlte/core'
@@ -26,16 +25,6 @@
   const object3d = new Object3D()
   const m4 = new Matrix4()
 
-  const pointerEventDispatcher = createEventDispatcher<{
-    click: ThreltePointerEvent
-    contextmenu: ThreltePointerEvent
-    pointerup: ThreltePointerEvent
-    pointerdown: ThreltePointerEvent
-    pointerenter: ThreltePointerEvent
-    pointerleave: ThreltePointerEvent
-    pointermove: ThreltePointerEvent
-  }>()
-
   const isDirectChild = () => {
     // sanity null check in case it's not mounted yet
     return parentObject.uuid === object3d.parent?.uuid
@@ -47,8 +36,7 @@
 
   const instance: ThrelteInstance = {
     color: parseColor(color),
-    matrix: object3d.matrix,
-    pointerEventDispatcher
+    matrix: object3d.matrix
   }
 
   $: setColor(color)
