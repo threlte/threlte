@@ -1,8 +1,52 @@
 ---
-category: '@threlte/core'
-name: <Canvas>
-order: -1
-type: component
+{
+  'category': '@threlte/core',
+  'name': '<Canvas>',
+  'order': -1,
+  'type': 'component',
+  'componentSignature':
+    {
+      'props':
+        [
+          {
+            'name': 'dpr',
+            'type': 'number',
+            'default': 'window.devicePixelRatio',
+            'required': false
+          },
+          { name: 'flat', type: 'boolean', default: 'false', required: false },
+          { name: 'linear', type: 'boolean', default: 'false', required: false },
+          {
+            name: 'frameloop',
+            type: { name: '"always" | "demand" | "never"', url: 'https://google.com' },
+            default: '"demand"',
+            required: false
+          },
+          { name: 'debugFrameloop', type: 'boolean', default: 'false', required: false },
+          { name: 'shadows', type: 'boolean', default: 'true', required: false },
+          {
+            name: 'shadowMapType',
+            type: 'THREE.ShadowMapType',
+            default: 'THREE.PCFSoftShadowMap',
+            required: false
+          },
+          {
+            name: 'size',
+            type: '{ width: number, height: number } | undefined',
+            default: 'undefined',
+            required: false
+          },
+          {
+            name: 'rendererParameters',
+            type: 'THREE.WebGLRendererParameters | undefined',
+            default: 'undefined',
+            required: false
+          }
+        ],
+      bindings:
+        [{ name: 'ctx', type: 'ThrelteContext' }, { name: 'rootCtx', type: 'ThrelteRootContext' }]
+    }
+}
 ---
 
 The `<Canvas>` component is the root of your threlte scene. It provides contexts that all other components and many hooks are depending on. This means they need to be **child components** to the `<Canvas>` component.
@@ -24,25 +68,3 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 If `frameloop` is set to `demand` (default) property changes to components and other changes that are picked up by threlte automatically invalidate the current frame.
 If `frameloop` is set to `always` the frameloop always renders.
 If `frameloop` is set to `never` the frameloop must manually be advanced with `useThrelte().advance()`. This is especially useful if you want to debug the frameloop with `debugFrameloop` set to `true`.
-
-### Properties
-
-```ts
-// optional
-dpr: number = browser ? window.devicePixelRatio : 1
-flat: boolean = false
-linear: boolean = false
-frameloop: 'always' | 'demand' | 'never' = 'demand'
-debugFrameloop: boolean = false
-shadows: boolean = true
-shadowMapType: THREE.ShadowMapType = THREE.PCFSoftShadowMap
-size: { width: number, height: number } | undefined = undefined
-rendererParameters: THREE.WebGLRendererParameters | undefined = undefined
-```
-
-### Bindings
-
-```ts
-ctx: ThrelteContext
-rootCtx: ThrelteRootContext
-```

@@ -1,6 +1,58 @@
 // 1. Import utilities from `astro:content`
 import { defineCollection, z } from 'astro:content'
 
+export const componentSignature = z.object({
+  extends: z
+    .object({
+      type: z.string(),
+      url: z.string().optional()
+    })
+    .optional(),
+  props: z
+    .array(
+      z.object({
+        name: z.string(),
+        type: z.string().or(
+          z.object({
+            name: z.string(),
+            url: z.string()
+          })
+        ),
+        required: z.boolean(),
+        default: z.string().optional(),
+        description: z.string().optional()
+      })
+    )
+    .optional(),
+  events: z
+    .array(
+      z.object({
+        name: z.string(),
+        type: z.string().or(
+          z.object({
+            name: z.string(),
+            url: z.string()
+          })
+        ),
+        description: z.string().optional()
+      })
+    )
+    .optional(),
+  bindings: z
+    .array(
+      z.object({
+        name: z.string(),
+        type: z.string().or(
+          z.object({
+            name: z.string(),
+            url: z.string()
+          })
+        )
+      })
+    )
+    .optional()
+})
+
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
@@ -15,7 +67,8 @@ export const referenceCollection = defineCollection({
       '@threlte/theatre',
       '@threlte/gltf',
       'Documentation'
-    ])
+    ]),
+    componentSignature: componentSignature.optional()
   })
 })
 
