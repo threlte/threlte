@@ -49,10 +49,10 @@
   }
 </script>
 
-<div class="not-prose flex max-h-[80vh] w-full flex-row items-stretch">
+<div class="not-prose flex md:max-h-[80vh] w-full flex-col md:flex-row items-stretch">
   <CodeExplorer
     {currentlySelectedFile}
-    class="overflow-y-auto rounded-bl-md border-l border-b border-white/20 px-4 py-3"
+    class="overflow-y-auto md:rounded-bl-md border-x md:border-r-0 border-b border-white/20 px-4 py-3 max-md:flex-shrink-0"
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)

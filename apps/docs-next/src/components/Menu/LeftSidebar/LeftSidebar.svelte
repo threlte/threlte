@@ -1,20 +1,16 @@
 <script lang="ts">
   import Tabs, { type Tab } from '$components/Tabs/Tabs.svelte'
   import { c } from '$lib/classes'
-  import { persistBrowserSession } from '@macfja/svelte-persistent-store'
-  import { writable } from 'svelte/store'
   import LeftSidebarCategory from './LeftSidebarCategory.svelte'
 
   export let menu: Record<'learn' | 'reference', LeftSidebarMenu>
-
-  const activeMenu = persistBrowserSession(
-    writable<keyof typeof menu>('learn'),
-    'docs-left-sidebar-active-menu'
-  )
+  export let activeSidebarTab: 'learn' | 'reference'
 
   const onTabSelect = (e: CustomEvent<Tab>) => {
-    $activeMenu = e.detail.id as 'learn' | 'reference'
+    activeSidebarTab = e.detail.id as 'learn' | 'reference'
   }
+
+  export let activeUrlPathName: string
 
   let leftSidebar: HTMLElement
 </script>
@@ -36,16 +32,19 @@
           title: 'Reference'
         }
       ]}
-      activeTabId={$activeMenu}
+      activeTabId={activeSidebarTab}
     />
 
     <div class="pointer-events-none absolute top-full left-0 z-20 h-4 w-full" />
   </div>
 
-  <ul class={c('overflow-y-auto mt-0 overflow-auto pt-2 pb-6 block')}>
-    {#each menu[$activeMenu].categories as category}
+  <ul class={c('overflow-y-auto mt-0 overflow-auto pt-2 pb-6 block px-2')}>
+    {#each menu[activeSidebarTab].categories as category}
       <li class="mb-6 text-sm">
-        <LeftSidebarCategory {category} />
+        <LeftSidebarCategory
+          {category}
+          {activeUrlPathName}
+        />
       </li>
     {/each}
   </ul>

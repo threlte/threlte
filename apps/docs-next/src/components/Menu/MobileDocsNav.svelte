@@ -1,6 +1,5 @@
 <script lang="ts">
   import { c } from '$lib/classes'
-  import { onMount } from 'svelte'
   import Details from './Details.svelte'
   import type { getLeftSidebarMenu } from './LeftSidebar/getLeftSidebarMenu'
   import LeftSidebarCategory from './LeftSidebar/LeftSidebarCategory.svelte'
@@ -9,25 +8,8 @@
   export let sidebarMenu: Awaited<ReturnType<typeof getLeftSidebarMenu>>
   const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference']
 
-  const open: Record<keyof typeof sidebarMenu, boolean> = keys.reduce((acc, currentKey) => {
-    acc[currentKey] = false
-    return acc
-  }, {} as Record<keyof typeof sidebarMenu, boolean>)
-
-  onMount(() => {
-    // make url
-    const url = new URL(window.location.href)
-    // the docs are available at /docs/…
-    const docsPrefix = '/docs/'
-    // get the path after /docs/
-    const path = url.pathname.slice(docsPrefix.length)
-    // get the first part of the path
-    const [category] = path.split('/')
-    if (category === 'learn' || category === 'reference') {
-      // if the first part of the path is "learn" or "reference", open the corresponding category
-      open[category] = true
-    }
-  })
+  export let activeSidebarTab: 'learn' | 'reference'
+  export let activeUrlPathName: string
 </script>
 
 <MobileNav>
@@ -54,7 +36,7 @@
           <!-- The container for "learn" and "reference" categories -->
           <Details
             id={key}
-            open={open[key]}
+            open={activeSidebarTab === key}
           >
             <div
               class="font-normal"
@@ -68,7 +50,10 @@
             </div>
             {#each sidebarMenu[key].categories as category}
               <li class="ml-4 mt-2 mb-0 text-sm">
-                <LeftSidebarCategory {category} />
+                <LeftSidebarCategory
+                  {category}
+                  {activeUrlPathName}
+                />
               </li>
             {/each}
           </Details>

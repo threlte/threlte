@@ -1,28 +1,32 @@
 <script lang="ts">
-  import { persistBrowserSession } from '@macfja/svelte-persistent-store'
-  import { writable } from 'svelte/store'
+  import { c } from '$lib/classes'
   import Details from '../Details.svelte'
 
   export let category: LeftSidebarMenuCategory
+  export let activeUrlPathName: string
 
-  const open = persistBrowserSession(
-    writable<boolean>(true),
-    `docs-left-sidebar-${category.title}-is-open`
-  )
+  let open = true
 </script>
 
 <Details
-  bind:open={$open}
+  {open}
   id="sidebar-category-{category.title}"
 >
   <svelte:fragment slot="summary">
     {category.title}
   </svelte:fragment>
 
-  <ul class="text-faded ml-2 mt-2 mb-2">
+  <ul class="text-faded my-2">
     {#each category.menuItems as item}
-      <li class="mb-2 last:mb-0">
-        <a href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a>
+      <li class="last:mb-0">
+        <a
+          class={c(
+            'block pl-2 md:pl-4 md:-mx-2 py-1 rounded-sm',
+            activeUrlPathName === `${category.urlPrefix}/${item.slug}` &&
+              'bg-blue-700/30 text-white'
+          )}
+          href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a
+        >
       </li>
     {/each}
   </ul>
