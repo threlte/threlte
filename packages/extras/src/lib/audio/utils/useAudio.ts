@@ -17,6 +17,7 @@ export type AudioProps = {
 
 /**
  * This hook handles basic audio functionality.
+ * It's used by the <Audio> and <PositionalAudio> components.
  */
 export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) => {
   const loaded = currentWritable(false)
