@@ -11,6 +11,7 @@ import type {
   WebGLRenderer
 } from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import type { CurrentWritable } from '../lib/storeUtils'
 import type { DisposableThreeObject } from './components'
 
 export type ThrelteInstance = {
@@ -28,7 +29,7 @@ export type ThrelteRootContext = {
 export type ThrelteContext = {
   size: Readable<Size>
   clock: Clock
-  camera: Writable<Camera>
+  camera: CurrentWritable<Camera>
   scene: Scene
   renderer?: WebGLRenderer
   /**
@@ -97,8 +98,7 @@ export type ThrelteDisposalContext = {
 
 export type ThrelteDisposeContext = Writable<boolean>
 
-type UserContext = Record<string, any>
-export type ThrelteUserContext = { store: Writable<UserContext>; raw: UserContext }
+export type ThrelteUserContext = CurrentWritable<Record<string, any>>
 
 export type ThrelteUseFrame = {
   stop: () => void

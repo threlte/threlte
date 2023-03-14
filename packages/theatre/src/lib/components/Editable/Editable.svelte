@@ -315,15 +315,12 @@
   }
 </script>
 
-<svelte:window
-  on:keypress={onKeyPress}
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
-/>
+<svelte:window on:keypress={onKeyPress} on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
 {#if selected && isObject3D($parent) && transform && controls}
   <TransformControls
     {mode}
+    object={$parent}
     translationSnap={snapActive ? snapValues.translate : null}
     rotationSnap={snapActive ? snapValues.rotate : null}
     scaleSnap={snapActive ? snapValues.scale : null}
@@ -333,9 +330,4 @@
   />
 {/if}
 
-<slot
-  {values}
-  {read}
-  {sheet}
-  {object}
-/>
+<slot {values} {read} {sheet} {object} />

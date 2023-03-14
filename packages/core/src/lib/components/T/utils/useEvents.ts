@@ -1,5 +1,6 @@
-import { createEventDispatcher, get_current_component, onDestroy, onMount } from 'svelte/internal'
+import { get_current_component, onDestroy, onMount } from 'svelte/internal'
 import { writable } from 'svelte/store'
+import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
 
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher
@@ -16,7 +17,7 @@ const isEventDispatcher = (
 }
 
 export const useEvents = () => {
-  const dispatch = createEventDispatcher()
+  const dispatch = createRawEventDispatcher()
   const component = get_current_component()
 
   const eventHandlerProxy = (

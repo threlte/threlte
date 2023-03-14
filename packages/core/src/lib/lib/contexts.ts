@@ -12,6 +12,7 @@ import type {
   ThrelteUserContext
 } from '../types/types'
 import { getDefaultCamera } from './defaultCamera'
+import { currentWritable } from './storeUtils'
 
 export const createContexts = (
   linear: boolean,
@@ -49,7 +50,7 @@ export const createContexts = (
       return uSize ? uSize : pSize
     }),
     clock: new Clock(),
-    camera: writable(getDefaultCamera()),
+    camera: currentWritable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined,
     invalidate: (debugFrameloopMessage?: string) => {
@@ -77,7 +78,7 @@ export const createContexts = (
   }
 
   const userCtxObject = {}
-  const userCtx: ThrelteUserContext = { store: writable(userCtxObject), raw: userCtxObject }
+  const userCtx: ThrelteUserContext = currentWritable(userCtxObject)
 
   const disposalCtx: ThrelteDisposalContext = {
     dispose: async (force = false) => {

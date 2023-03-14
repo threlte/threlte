@@ -163,7 +163,7 @@ If no event target is specified, all event handlers listen to events on the `dom
 `renderer` (which is the canvas element by default). You can specify a different target by passing
 a `target` prop to the `interactivity` plugin.
 
-```svelte title="Scene.svelte" {4}
+```svelte title="Scene.svelte"
 <script>
   import { interactivity } from '@threlte/extras'
 
@@ -176,7 +176,7 @@ a `target` prop to the `interactivity` plugin.
 It's also possible to change the target at runtime by updating the store `target` returned from the
 `interactivity` plugin.
 
-```svelte title="Scene.svelte" {3,4}
+```svelte title="Scene.svelte"
 <script>
   import { interactivity } from '@threlte/extras'
 

@@ -9,9 +9,13 @@ export type AsyncWritable<T> = Writable<T | undefined> & {
 export const asyncWritable = <T>(promise: Promise<T>): AsyncWritable<T> => {
   const { subscribe, set, update } = writable<T>(undefined)
 
-  promise.then((result) => {
-    set(result)
-  })
+  promise
+    .then((result) => {
+      set(result)
+    })
+    .catch((error) => {
+      console.error('Error in asyncWritable:', error.message)
+    })
 
   return {
     subscribe,

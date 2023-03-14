@@ -16,10 +16,10 @@ interface Props {
 }
 
 const colorStyles: Record<NonNullable<Props['color']>, string> = {
-  orange: 'bg-orange-800/30 border-orange-500 [&_a]:text-orange-500',
-  blue: 'bg-blue-800/90 border-blue-500 [&_a]:text-blue-500',
-  green: 'bg-green-800/30 border-green-500 [&_a]:text-green-500',
-  dark: 'bg-blue-800/20 border-blue-500/50 [&_a]:text-blue-500'
+  orange: 'bg-orange-800/30 border-orange-500 [&_a]:text-orange-500 [&_a_code]:text-orange-500',
+  blue: 'bg-blue-800/90 border-blue-500 [&_a]:text-blue-500 [&_a_code]:text-blue-500',
+  green: 'bg-green-800/30 border-green-500 [&_a]:text-green-500 [&_a_code]:text-green-500',
+  dark: 'bg-blue-800/20 border-blue-500/50 [&_a]:text-blue-500 [&_a_code]:text-blue-500'
 }
 
 const iconStyles: Record<
@@ -57,12 +57,13 @@ const glowStyles: Record<
 }
 
 const typeClasses: Record<NonNullable<Props['type']>, string> = {
-  warning: 'bg-yellow-800/30 border-yellow-500',
+  warning: 'bg-yellow-800/30 border-yellow-500 [&_a]:text-yellow-600 [&_a_code]:text-yellow-600',
   tip: colorStyles.green,
-  info: 'bg-blue-800/30 border-blue-500',
+  info: 'bg-blue-800/30 border-blue-500 [&_a]:text-blue-500 [&_a_code]:text-blue-500',
   note: colorStyles.dark,
-  danger: 'bg-red-800/30 border-red-500',
-  experimental: 'bg-purple-800/30 border-purple-500'
+  danger: 'bg-red-800/30 border-red-500 [&_a]:text-red-500 [&_a_code]:text-red-500',
+  experimental:
+    'bg-purple-800/30 border-purple-500 [&_a]:text-purple-500 [&_a_code]:text-purple-500'
 }
 
 const typeIcons: Record<NonNullable<Props['type']>, any> = {
@@ -106,7 +107,7 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
     Astro.props.title && (
       <div class="py-2 px-3 [&>*]:!text-white [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
         <h4 class="!mb-1 empty:hidden">{Astro.props.title}</h4>
-        <div class="text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <div class="overflow-x-auto text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
           <slot />
         </div>
       </div>
@@ -114,7 +115,7 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
   }
   {
     !Astro.props.title && (
-      <div class="py-2 px-3 text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+      <div class="overflow-x-auto py-2 px-3 text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
         <slot />
       </div>
     )

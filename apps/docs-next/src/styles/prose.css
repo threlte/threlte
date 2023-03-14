@@ -1,9 +1,29 @@
 .prose {
+  a strong {
+    @apply !text-inherit;
+  }
+
   .tip {
     @apply my-5;
   }
 
   div.code {
     @apply my-5;
+  }
+
+  details {
+    @apply rounded-md bg-blue-700/20 px-4 py-2;
+
+    summary {
+      @apply cursor-pointer select-none text-white;
+
+      & > * {
+        @apply !mb-0 ml-2 inline !font-bold text-white;
+      }
+    }
+
+    & > *:last-child {
+      @apply !mb-2;
+    }
   }
 }

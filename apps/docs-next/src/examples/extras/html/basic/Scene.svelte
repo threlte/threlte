@@ -68,7 +68,7 @@
         isHovering = false
       }}
       on:click={onClick}
-      class="bg-brand rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
+      class="bg-orange-500 rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
     >
       I'm a regular HTML button
     </button>

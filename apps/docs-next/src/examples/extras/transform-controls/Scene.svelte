@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
   import { T } from '@threlte/core'
-  import { TransformControls, OrbitControls } from '@threlte/extras'
+  import { OrbitControls, TransformControls } from '@threlte/extras'
+  import { BoxGeometry, MeshStandardMaterial } from 'three'
 </script>
 
 <T.PerspectiveCamera
@@ -16,16 +16,18 @@
   position.y={10}
   position.z={10}
 />
+<T.AmbientLight
+intensity={0.3}
+/>
 
 <T.GridHelper args={[10, 10]} />
 
-<T.Mesh
+<TransformControls
+  translationSnap={1}
   position.y={1}
-  geometry={new BoxGeometry(2, 2, 2)}
-  material={new MeshStandardMaterial()}
 >
-  <TransformControls
-    translationSnap={1}
-    showY={false}
+  <T.Mesh
+    geometry={new BoxGeometry(2, 2, 2)}
+    material={new MeshStandardMaterial()}
   />
-</T.Mesh>
+</TransformControls>
