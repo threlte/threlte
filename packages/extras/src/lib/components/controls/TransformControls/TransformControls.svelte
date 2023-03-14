@@ -1,13 +1,10 @@
 <script lang="ts">
-  import {
-    createRawEventDispatcher,
-    useParent,
-    useThrelte,
-    useThrelteUserContext
-  } from '@threlte/core'
+  import { createRawEventDispatcher, useParent, useThrelte, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { writable } from 'svelte/store'
+  import type { Camera, Renderer } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import { useControlsContext } from '../useControlsContext'
   import type { TransformControlsEvents, TransformControlsProps } from './TransformControls.svelte'
 
   type $$Props = TransformControlsProps
@@ -34,23 +31,25 @@
 
   const dispatch = createRawEventDispatcher<$$Events>()
 
-  const maybeGetCameraOrbitControls = (): OrbitControls | undefined => {
-    if (!$camera) return
-    if ($camera.userData && $camera.userData.orbitControls) {
-      return $camera.userData.orbitControls as OrbitControls
-    }
-  }
+  const { orbitControls } = useControlsContext()
+  const isDragging = writable(false)
+  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls) ?? true
+  $: useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true)
 
-  let enabledStateBeforeAutoPause: boolean | undefined
-  const cleanupAutoPause = () => {
-    if (enabledStateBeforeAutoPause !== undefined) {
-      const orbitControls = maybeGetCameraOrbitControls()
-      if (orbitControls) orbitControls.enabled = enabledStateBeforeAutoPause
-      enabledStateBeforeAutoPause = undefined
+  watch(
+    [orbitControls, isDragging, useAutoPauseOrbitControls],
+    ([orbitControls, isDragging, useAutoPauseOrbitControls]) => {
+      // if there are no orbitcontrols or we're not even
+      // dragging, or the orbitcontrols are disabled, return
+      if (!orbitControls || (!orbitControls.enabled && isDragging)) return
+      orbitControls.enabled = !(isDragging && useAutoPauseOrbitControls)
+      return () => {
+        // we know they were enabled before, so we can
+        // safely re-enable them
+        orbitControls.enabled = true
+      }
     }
-  }
-  $: if (!autoPauseOrbitControls) cleanupAutoPause()
-  onDestroy(cleanupAutoPause)
+  )
 
   const eventMap: Record<string, (e: any) => void> = {
     change: (e) => {
@@ -71,20 +70,7 @@
     'space-changed': (e) => dispatch('space-changed', e),
     'size-changed': (e) => dispatch('size-changed', e),
     'dragging-changed': (e) => {
-      dragging = e.value
-      autopause: {
-        if (autoPauseOrbitControls) {
-          const orbitControls = maybeGetCameraOrbitControls()
-          if (!orbitControls) break autopause
-          const shouldBeEnabled = !e.value
-          if (orbitControls.enabled === shouldBeEnabled) break autopause
-          if (e.value) {
-            // only save the state if we're actually pausing
-            enabledStateBeforeAutoPause = orbitControls.enabled
-          }
-          orbitControls.enabled = shouldBeEnabled
-        }
-      }
+      isDragging.set(e.value)
       dispatch('dragging-changed', e)
     },
     'showX-changed': (e) => dispatch('showX-changed', e),
@@ -112,43 +98,49 @@
     )
   }
 
-  const transformControls = new TransformControls($camera, renderer.domElement)
+  let transformControls: TransformControls | undefined = undefined
 
-  export const reset = () => transformControls.reset()
+  export const reset = () => transformControls?.reset()
 
-  $: if (mode !== undefined) transformControls.setMode(mode)
-  $: if (enabled !== undefined) transformControls.enabled = enabled
-  $: if (translationSnap !== undefined) transformControls.setTranslationSnap(translationSnap)
-  $: if (scaleSnap !== undefined) transformControls.setScaleSnap(scaleSnap)
-  $: if (rotationSnap !== undefined) transformControls.setRotationSnap(rotationSnap)
-  $: if (showX !== undefined) transformControls.showX = showX
-  $: if (showY !== undefined) transformControls.showY = showY
-  $: if (showZ !== undefined) transformControls.showZ = showZ
-  $: if (size !== undefined) transformControls.setSize(size)
-  $: if (space !== undefined) transformControls.setSpace(space)
+  $: if (mode !== undefined) transformControls?.setMode(mode)
+  $: if (enabled !== undefined && transformControls) transformControls.enabled = enabled
+  $: if (translationSnap !== undefined) transformControls?.setTranslationSnap(translationSnap)
+  $: if (scaleSnap !== undefined) transformControls?.setScaleSnap(scaleSnap)
+  $: if (rotationSnap !== undefined) transformControls?.setRotationSnap(rotationSnap)
+  $: if (showX !== undefined && transformControls) transformControls.showX = showX
+  $: if (showY !== undefined && transformControls) transformControls.showY = showY
+  $: if (showZ !== undefined && transformControls) transformControls.showZ = showZ
+  $: if (size !== undefined) transformControls?.setSize(size)
+  $: if (space !== undefined) transformControls?.setSpace(space)
 
-  transformControls.attach($parent)
+  // The TransformControls are depending on the camera, so we need to watch that.
+  watch(camera, (camera) => {
+    if (!$parent) {
+      throw new Error(
+        'TransformControls: parent not defined. Is this component a child of <Canvas>?'
+      )
+    }
 
-  const addListeners = () => {
+    const transformControls = new TransformControls(camera, renderer.domElement)
+
+    // add events
     Object.entries(eventMap).forEach(([key, fn]) => {
       transformControls.addEventListener(key, fn)
     })
-  }
 
-  const removeListeners = () => {
-    Object.entries(eventMap).forEach(([key, fn]) => {
-      transformControls.removeEventListener(key, fn)
-    })
-  }
+    // TransformControls need to be added to the scene …
+    scene.add(transformControls)
+    // … and *attached* to the parent object
+    transformControls.attach($parent)
 
-  addListeners()
+    return () => {
+      transformControls.detach()
+      transformControls.dispose()
+      scene.remove(transformControls)
 
-  scene.add(transformControls)
-
-  onDestroy(() => {
-    transformControls.detach()
-    transformControls.dispose()
-    scene.remove(transformControls)
-    removeListeners()
+      Object.entries(eventMap).forEach(([key, fn]) => {
+        transformControls.removeEventListener(key, fn)
+      })
+    }
   })
 </script>
