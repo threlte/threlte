@@ -16,6 +16,9 @@
   position.y={10}
   position.z={10}
 />
+<T.AmbientLight
+intensity={0.3}
+/>
 
 <T.GridHelper args={[10, 10]} />
 

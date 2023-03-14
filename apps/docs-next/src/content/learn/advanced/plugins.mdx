@@ -129,7 +129,7 @@ This is en example implementation that adds the property `lookAt` to all `<T>` c
 
 A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mesh-bvh) on all child meshes and geometries.
 
-```html
+```svelte
 <script lang="ts">
   import { injectPlugin } from '@threlte/core'
   import type { BufferGeometry, Mesh } from 'three'
@@ -169,18 +169,18 @@ A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mes
 
 Implementing this plugin in your Scene:
 
-```html
+```svelte
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import BvhRaycast from './plugins/BvhRaycast.svelte'
   import Scene from './Scene.svelte'
 </script>
 
-<canvas>
+<Canvas>
   <BvhRaycast>
     <Scene />
   </BvhRaycast>
-</canvas>
+</Canvas>
 ```
 
 ## Effects

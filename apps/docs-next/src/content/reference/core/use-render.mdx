@@ -10,6 +10,7 @@ Typically this hook is used to implement advanced rendering techniques such as p
 
 <Tip type="warning">
   As soon as this hook is used anywhere in the component tree, the default render loop is disabled.
+  You need to take care of rendering yourself.
 </Tip>
 
 You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useRender` callbacks across the component tree where callbacks are ordered from low to high.

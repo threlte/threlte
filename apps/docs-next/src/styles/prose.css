@@ -1,4 +1,8 @@
 .prose {
+  a strong {
+    @apply !text-inherit;
+  }
+
   .tip {
     @apply my-5;
   }

@@ -17,15 +17,15 @@ type UseGltfOptions = {
 
 createEventDispatcher
 
-export function useGltf<
-  Graph extends SceneGraph = {
-    nodes: Record<string, any>
-    materials: Record<string, any>
-  }
->(
-  options?: UseGltfOptions
-): {
-  load: (url: string) => AsyncWritable<ThrelteGltf<Graph>>
+export function useGltf(options?: UseGltfOptions): {
+  load: <
+    Graph extends SceneGraph = {
+      nodes: Record<string, any>
+      materials: Record<string, any>
+    }
+  >(
+    url: string
+  ) => AsyncWritable<ThrelteGltf<Graph>>
 }
 export function useGltf<
   Graph extends SceneGraph = {
@@ -44,7 +44,14 @@ export function useGltf<
 ):
   | AsyncWritable<ThrelteGltf<Graph>>
   | {
-      load: (url: string) => AsyncWritable<ThrelteGltf<Graph>>
+      load: <
+        Graph extends SceneGraph = {
+          nodes: Record<string, any>
+          materials: Record<string, any>
+        }
+      >(
+        url: string
+      ) => AsyncWritable<ThrelteGltf<Graph>>
     } {
   const { renderer } = useThrelte()
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions

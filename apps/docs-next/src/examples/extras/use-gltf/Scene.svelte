@@ -5,7 +5,7 @@
 
   let rotation = 0
   useFrame(() => {
-    rotation += 0.01
+    rotation += 0.005
   })
 
   const gltf = useGltf<{
@@ -16,7 +16,6 @@
       Material_MR: Material
     }
   }>('/models/helmet/DamagedHelmet.gltf')
-  $: helmet = $gltf?.nodes['node_damagedHelmet_-6514']
 </script>
 
 <Environment
@@ -36,7 +35,9 @@
 />
 
 <T.Group rotation.y={rotation}>
-  {#if helmet}
-    <T is={helmet} />
-  {/if}
+  {#await gltf}
+    <!-- Place loading placeholder here -->
+  {:then value}
+    <T is={value.nodes['node_damagedHelmet_-6514']} />
+  {/await}
 </T.Group>
