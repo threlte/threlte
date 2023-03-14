@@ -1,9 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { PositionalAudio as ThreePositionalAudio } from 'three'
-  import { useAudioPlayback } from '../useAudioPlayback'
-  import { useAudioSource } from '../useAudioSource'
-  import { useAudioVolume, useAudioPlaybackRate } from '../useAudio'
+  import { useAudio } from '../useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
   import type {
     PositionalAudioEvents,
@@ -20,6 +18,8 @@
   export let volume: $$Props['volume'] = undefined
   export let playbackRate: $$Props['playbackRate'] = undefined
   export let autoplay: $$Props['autoplay'] = undefined
+  export let detune: $$Props['detune'] = undefined
+  export let loop: $$Props['loop'] = undefined
 
   export let directionalCone: $$Props['directionalCone'] = undefined
   export let refDistance: $$Props['refDistance'] = undefined
@@ -51,19 +51,24 @@
     }
   }
 
-  const { setSource, loaded } = useAudioSource(ref)
-  $: setSource(source)
-
-  const { setVolume } = useAudioVolume(ref)
-  $: setVolume(volume)
-
-  const { setPlaybackRate } = useAudioPlaybackRate(ref)
-  $: setPlaybackRate(playbackRate)
-
-  const { pause, play, stop, setAutoPlay, setLoaded } = useAudioPlayback(ref)
+  const {
+    pause,
+    play,
+    stop,
+    setAutoPlay,
+    setDetune,
+    setLoop,
+    setPlaybackRate,
+    setSource,
+    setVolume
+  } = useAudio(ref)
   export { play, pause, stop }
   $: setAutoPlay(autoplay)
-  $: setLoaded($loaded)
+  $: setSource(source)
+  $: setVolume(volume)
+  $: setPlaybackRate(playbackRate)
+  $: setLoop(loop)
+  $: setDetune(detune)
 </script>
 
 <T is={ref} {...$$restProps} let:ref>

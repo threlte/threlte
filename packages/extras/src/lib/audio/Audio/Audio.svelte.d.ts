@@ -1,17 +1,12 @@
 import type { Props, Events, Slots } from '@threlte/core'
 import type { SvelteComponentTyped } from 'svelte'
 import type { Audio as ThreeAudio } from 'three'
-import type { AudioSource } from '../useAudioSource'
-import type { AudioVolume, AudioPlaybackRate } from '../useAudio'
+import type { AudioProps as CommonAudioProps } from '../useAudio'
 
-export type AudioProps = Omit<Props<ThreeAudio<GainNode>>, 'source'> & {
-  source: AudioSource
-  id?: string
-  volume?: AudioVolume
-  playbackRate?: AudioPlaybackRate
-  autoplay?: boolean
-  loop?: boolean
-}
+export type AudioProps = Omit<Props<ThreeAudio<GainNode>>, 'source'> &
+  CommonAudioProps & {
+    id?: string
+  }
 
 export type AudioEvents = Events<ThreeAudio<GainNode>>
 

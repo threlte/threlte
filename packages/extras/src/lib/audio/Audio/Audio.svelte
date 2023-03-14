@@ -1,9 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
-  import { useAudioPlaybackRate, useAudioVolume } from '../useAudio'
-  import { useAudioPlayback } from '../useAudioPlayback'
-  import { useAudioSource } from '../useAudioSource'
+  import { useAudio } from '../useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
   import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
 
@@ -16,6 +14,7 @@
   export let volume: $$Props['volume'] = undefined
   export let playbackRate: $$Props['playbackRate'] = undefined
   export let autoplay: $$Props['autoplay'] = undefined
+  export let detune: $$Props['detune'] = undefined
   export let loop: $$Props['loop'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
@@ -28,21 +27,24 @@
 
   export const ref = new ThreeAudio<GainNode>(listener)
 
-  const { setSource, loaded } = useAudioSource(ref)
-  $: setSource(source)
-
-  const { setVolume } = useAudioVolume(ref)
-  $: setVolume(volume)
-
-  const { setPlaybackRate } = useAudioPlaybackRate(ref)
-  $: setPlaybackRate(playbackRate)
-
-  const { pause, play, stop, setAutoPlay, setLoaded } = useAudioPlayback(ref)
+  const {
+    pause,
+    play,
+    stop,
+    setAutoPlay,
+    setDetune,
+    setLoop,
+    setPlaybackRate,
+    setSource,
+    setVolume
+  } = useAudio(ref)
   export { play, pause, stop }
   $: setAutoPlay(autoplay)
-  $: setLoaded($loaded)
-
-  $: ref.setLoop(loop ?? false)
+  $: setSource(source)
+  $: setVolume(volume)
+  $: setPlaybackRate(playbackRate)
+  $: setLoop(loop)
+  $: setDetune(detune)
 </script>
 
 <T is={ref} {...$$restProps} let:ref>

@@ -1,27 +1,22 @@
-import type { Props, Events, Slots } from '@threlte/core'
+import type { Events, Props, Slots } from '@threlte/core'
 import type { SvelteComponentTyped } from 'svelte'
 import type { PositionalAudio as ThreePositionalAudio } from 'three'
-import type { AudioSource } from '../useAudioSource'
-import type { AudioVolume, AudioPlaybackRate } from '../useAudio'
+import type { AudioProps } from '../useAudio'
 
-export type PositionalAudioProps = Omit<Props<ThreePositionalAudio>, 'source'> & {
-  source: AudioSource
-  id?: string
-  volume?: AudioVolume
-  playbackRate?: AudioPlaybackRate
-  autoplay?: boolean
-  loop?: boolean
+export type PositionalAudioProps = Omit<Props<ThreePositionalAudio>, 'source'> &
+  AudioProps & {
+    id?: string
 
-  refDistance?: number
-  rolloffFactor?: number
-  distanceModel?: string
-  maxDistance?: number
-  directionalCone?: {
-    coneInnerAngle: number
-    coneOuterAngle: number
-    coneOuterGain: number
+    refDistance?: number
+    rolloffFactor?: number
+    distanceModel?: string
+    maxDistance?: number
+    directionalCone?: {
+      coneInnerAngle: number
+      coneOuterAngle: number
+      coneOuterGain: number
+    }
   }
-}
 
 export type PositionalAudioEvents = Events<ThreePositionalAudio>
 
