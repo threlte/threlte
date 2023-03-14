@@ -1,16 +1,26 @@
 <script lang="ts">
+  import { T } from '@threlte/core'
   import { PositionalAudio as ThreePositionalAudio } from 'three'
-  import AudioInstance from '../AudioInstance/AudioInstance.svelte'
+  import { useAudioPlayback } from '../useAudioPlayback'
+  import { useAudioSource } from '../useAudioSource'
+  import { useAudioVolume, useAudioPlaybackRate } from '../useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { PositionalAudioProps } from './PositionalAudio.svelte'
+  import type {
+    PositionalAudioEvents,
+    PositionalAudioProps,
+    PositionalAudioSlots
+  } from './PositionalAudio.svelte'
 
   type $$Props = PositionalAudioProps
+  type $$Events = PositionalAudioEvents
+  type $$Slots = PositionalAudioSlots
 
-  export let play: $$Props['play'] = undefined
-  export let pause: $$Props['pause'] = undefined
-  export let stop: $$Props['stop'] = undefined
-
+  export let source: $$Props['source']
   export let id: $$Props['id'] = undefined
+  export let volume: $$Props['volume'] = undefined
+  export let playbackRate: $$Props['playbackRate'] = undefined
+  export let autoplay: $$Props['autoplay'] = undefined
+
   export let directionalCone: $$Props['directionalCone'] = undefined
   export let refDistance: $$Props['refDistance'] = undefined
   export let rolloffFactor: $$Props['rolloffFactor'] = undefined
@@ -25,31 +35,37 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const audio = new ThreePositionalAudio(listener)
+  export const ref = new ThreePositionalAudio(listener)
 
   $: {
-    if (refDistance !== undefined) audio.setRefDistance(refDistance)
-    if (rolloffFactor !== undefined) audio.setRolloffFactor(rolloffFactor)
-    if (distanceModel !== undefined) audio.setDistanceModel(distanceModel)
-    if (maxDistance !== undefined) audio.setMaxDistance(maxDistance)
+    if (refDistance !== undefined) ref.setRefDistance(refDistance)
+    if (rolloffFactor !== undefined) ref.setRolloffFactor(rolloffFactor)
+    if (distanceModel !== undefined) ref.setDistanceModel(distanceModel)
+    if (maxDistance !== undefined) ref.setMaxDistance(maxDistance)
     if (directionalCone !== undefined) {
-      audio.setDirectionalCone(
+      ref.setDirectionalCone(
         directionalCone.coneInnerAngle,
         directionalCone.coneOuterAngle,
         directionalCone.coneOuterGain
       )
     }
   }
+
+  const { setSource, loaded } = useAudioSource(ref)
+  $: setSource(source)
+
+  const { setVolume } = useAudioVolume(ref)
+  $: setVolume(volume)
+
+  const { setPlaybackRate } = useAudioPlaybackRate(ref)
+  $: setPlaybackRate(playbackRate)
+
+  const { pause, play, stop, setAutoPlay, setLoaded } = useAudioPlayback(ref)
+  export { play, pause, stop }
+  $: setAutoPlay(autoplay)
+  $: setLoaded($loaded)
 </script>
 
-<AudioInstance
-  {...$$restProps}
-  on:load
-  on:progress
-  on:error
-  bind:play
-  bind:pause
-  bind:stop
->
-  <slot />
-</AudioInstance>
+<T is={ref} {...$$restProps} let:ref>
+  <slot {ref} />
+</T>

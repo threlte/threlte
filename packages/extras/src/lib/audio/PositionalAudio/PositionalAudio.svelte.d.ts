@@ -1,10 +1,17 @@
-import type { Props } from '@threlte/core'
+import type { Props, Events, Slots } from '@threlte/core'
 import type { SvelteComponentTyped } from 'svelte'
-import type { Audio as ThreeAudio, PositionalAudio as ThreePositionalAudio } from 'three'
+import type { PositionalAudio as ThreePositionalAudio } from 'three'
+import type { AudioSource } from '../useAudioSource'
+import type { AudioVolume, AudioPlaybackRate } from '../useAudio'
 
-export type PositionalAudioProps = Props<ThreePositionalAudio> & {
+export type PositionalAudioProps = Omit<Props<ThreePositionalAudio>, 'source'> & {
+  source: AudioSource
   id?: string
-  volume?: number
+  volume?: AudioVolume
+  playbackRate?: AudioPlaybackRate
+  autoplay?: boolean
+  loop?: boolean
+
   refDistance?: number
   rolloffFactor?: number
   distanceModel?: string
@@ -14,13 +21,14 @@ export type PositionalAudioProps = Props<ThreePositionalAudio> & {
     coneOuterAngle: number
     coneOuterGain: number
   }
-  // TODO unknown is used here to be able to directly use
-  // the function in a svelte event handler: on:click={play}
-  // as otherwise TypeScript will complain about the type
-  // of the argument 'delay'. It's not a perfect solution though.
-  play?: (delay?: number | any) => Promise<ThreeAudio>
-  pause?: () => ThreeAudio
-  stop?: () => ThreeAudio
 }
 
-export default class PositionalAudio extends SvelteComponentTyped<PositionalAudioProps> {}
+export type PositionalAudioEvents = Events<ThreePositionalAudio>
+
+export type PositionalAudioSlots = Slots<ThreePositionalAudio>
+
+export default class PositionalAudio extends SvelteComponentTyped<
+  PositionalAudioProps,
+  PositionalAudioEvents,
+  PositionalAudioSlots
+> {}

@@ -176,7 +176,7 @@
   {#if started}
     <PositionalAudio
       autoplay
-      bind:audio
+      bind:ref={audio}
       refDistance={15}
       loop
       playbackRate={$discSpeed}

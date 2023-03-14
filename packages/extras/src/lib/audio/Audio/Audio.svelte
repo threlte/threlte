@@ -1,16 +1,22 @@
 <script lang="ts">
+  import { T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
-  import AudioInstance from '../AudioInstance/AudioInstance.svelte'
+  import { useAudioPlaybackRate, useAudioVolume } from '../useAudio'
+  import { useAudioPlayback } from '../useAudioPlayback'
+  import { useAudioSource } from '../useAudioSource'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioProps } from './Audio.svelte'
+  import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
 
   type $$Props = AudioProps
+  type $$Events = AudioEvents
+  type $$Slots = AudioSlots
 
-  export let play: $$Props['play'] = undefined
-  export let pause: $$Props['pause'] = undefined
-  export let stop: $$Props['stop'] = undefined
-
+  export let source: $$Props['source']
   export let id: $$Props['id'] = undefined
+  export let volume: $$Props['volume'] = undefined
+  export let playbackRate: $$Props['playbackRate'] = undefined
+  export let autoplay: $$Props['autoplay'] = undefined
+  export let loop: $$Props['loop'] = undefined
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -20,17 +26,25 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const audio = new ThreeAudio(listener)
+  export const ref = new ThreeAudio<GainNode>(listener)
+
+  const { setSource, loaded } = useAudioSource(ref)
+  $: setSource(source)
+
+  const { setVolume } = useAudioVolume(ref)
+  $: setVolume(volume)
+
+  const { setPlaybackRate } = useAudioPlaybackRate(ref)
+  $: setPlaybackRate(playbackRate)
+
+  const { pause, play, stop, setAutoPlay, setLoaded } = useAudioPlayback(ref)
+  export { play, pause, stop }
+  $: setAutoPlay(autoplay)
+  $: setLoaded($loaded)
+
+  $: ref.setLoop(loop ?? false)
 </script>
 
-<AudioInstance
-  {...$$restProps}
-  on:load
-  on:progress
-  on:error
-  bind:play
-  bind:pause
-  bind:stop
->
-  <slot />
-</AudioInstance>
+<T is={ref} {...$$restProps} let:ref>
+  <slot {ref} />
+</T>
