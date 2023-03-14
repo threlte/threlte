@@ -1,5 +1,6 @@
 import { SvelteComponentTyped } from 'svelte'
 import type { Camera, Object3D, Quaternion, Vector3 } from 'three'
+import type { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 
 export type TransformControlsEvents = {
   change: void
@@ -109,6 +110,7 @@ export type TransformControlsEvents = {
 }
 
 export type TransformControlsProps = {
+  ref?: TransformControls
   autoPauseOrbitControls?: boolean
   mode?: 'translate' | 'rotate' | 'scale' | undefined
   axis?: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null

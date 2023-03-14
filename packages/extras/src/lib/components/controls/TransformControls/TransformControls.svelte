@@ -98,20 +98,20 @@
     )
   }
 
-  let transformControls: TransformControls | undefined = undefined
+  export let ref: TransformControls | undefined = undefined
 
-  export const reset = () => transformControls?.reset()
+  export const reset = () => ref?.reset()
 
-  $: if (mode !== undefined) transformControls?.setMode(mode)
-  $: if (enabled !== undefined && transformControls) transformControls.enabled = enabled
-  $: if (translationSnap !== undefined) transformControls?.setTranslationSnap(translationSnap)
-  $: if (scaleSnap !== undefined) transformControls?.setScaleSnap(scaleSnap)
-  $: if (rotationSnap !== undefined) transformControls?.setRotationSnap(rotationSnap)
-  $: if (showX !== undefined && transformControls) transformControls.showX = showX
-  $: if (showY !== undefined && transformControls) transformControls.showY = showY
-  $: if (showZ !== undefined && transformControls) transformControls.showZ = showZ
-  $: if (size !== undefined) transformControls?.setSize(size)
-  $: if (space !== undefined) transformControls?.setSpace(space)
+  $: if (mode !== undefined) ref?.setMode(mode)
+  $: if (enabled !== undefined && ref) ref.enabled = enabled
+  $: if (translationSnap !== undefined) ref?.setTranslationSnap(translationSnap)
+  $: if (scaleSnap !== undefined) ref?.setScaleSnap(scaleSnap)
+  $: if (rotationSnap !== undefined) ref?.setRotationSnap(rotationSnap)
+  $: if (showX !== undefined && ref) ref.showX = showX
+  $: if (showY !== undefined && ref) ref.showY = showY
+  $: if (showZ !== undefined && ref) ref.showZ = showZ
+  $: if (size !== undefined) ref?.setSize(size)
+  $: if (space !== undefined) ref?.setSpace(space)
 
   // The TransformControls are depending on the camera, so we need to watch that.
   watch(camera, (camera) => {
@@ -121,25 +121,28 @@
       )
     }
 
-    const transformControls = new TransformControls(camera, renderer.domElement)
+    ref = new TransformControls(camera, renderer.domElement)
 
     // add events
     Object.entries(eventMap).forEach(([key, fn]) => {
-      transformControls.addEventListener(key, fn)
+      if (!ref) return
+      ref.addEventListener(key, fn)
     })
 
     // TransformControls need to be added to the scene …
-    scene.add(transformControls)
+    scene.add(ref)
     // … and *attached* to the parent object
-    transformControls.attach($parent)
+    ref.attach($parent)
 
     return () => {
-      transformControls.detach()
-      transformControls.dispose()
-      scene.remove(transformControls)
+      if (!ref) return
+      ref.detach()
+      ref.dispose()
+      scene.remove(ref)
 
       Object.entries(eventMap).forEach(([key, fn]) => {
-        transformControls.removeEventListener(key, fn)
+        if (!ref) return
+        ref.removeEventListener(key, fn)
       })
     }
   })
