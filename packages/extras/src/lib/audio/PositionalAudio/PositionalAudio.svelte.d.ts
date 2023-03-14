@@ -3,10 +3,9 @@ import type { SvelteComponentTyped } from 'svelte'
 import type { PositionalAudio as ThreePositionalAudio } from 'three'
 import type { AudioProps } from '../useAudio'
 
-export type PositionalAudioProps = Omit<Props<ThreePositionalAudio>, 'source'> &
+export type PositionalAudioProps = Props<ThreePositionalAudio> &
   AudioProps & {
     id?: string
-
     refDistance?: number
     rolloffFactor?: number
     distanceModel?: string

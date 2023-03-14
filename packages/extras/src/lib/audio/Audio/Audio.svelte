@@ -9,7 +9,7 @@
   type $$Events = AudioEvents
   type $$Slots = AudioSlots
 
-  export let source: $$Props['source']
+  export let src: $$Props['src']
   export let id: $$Props['id'] = undefined
   export let volume: $$Props['volume'] = undefined
   export let playbackRate: $$Props['playbackRate'] = undefined
@@ -27,20 +27,11 @@
 
   export const ref = new ThreeAudio<GainNode>(listener)
 
-  const {
-    pause,
-    play,
-    stop,
-    setAutoPlay,
-    setDetune,
-    setLoop,
-    setPlaybackRate,
-    setSource,
-    setVolume
-  } = useAudio(ref)
+  const { pause, play, stop, setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume } =
+    useAudio(ref)
   export { play, pause, stop }
   $: setAutoPlay(autoplay)
-  $: setSource(source)
+  $: setSrc(src)
   $: setVolume(volume)
   $: setPlaybackRate(playbackRate)
   $: setLoop(loop)

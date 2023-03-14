@@ -13,7 +13,7 @@
   type $$Events = PositionalAudioEvents
   type $$Slots = PositionalAudioSlots
 
-  export let source: $$Props['source']
+  export let src: $$Props['src']
   export let id: $$Props['id'] = undefined
   export let volume: $$Props['volume'] = undefined
   export let playbackRate: $$Props['playbackRate'] = undefined
@@ -59,12 +59,12 @@
     setDetune,
     setLoop,
     setPlaybackRate,
-    setSource,
+    setSrc: setSource,
     setVolume
   } = useAudio(ref)
   export { play, pause, stop }
   $: setAutoPlay(autoplay)
-  $: setSource(source)
+  $: setSource(src)
   $: setVolume(volume)
   $: setPlaybackRate(playbackRate)
   $: setLoop(loop)

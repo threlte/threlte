@@ -3,7 +3,7 @@ import type { SvelteComponentTyped } from 'svelte'
 import type { Audio as ThreeAudio } from 'three'
 import type { AudioProps as CommonAudioProps } from '../useAudio'
 
-export type AudioProps = Omit<Props<ThreeAudio<GainNode>>, 'source'> &
+export type AudioProps = Props<ThreeAudio<GainNode>> &
   CommonAudioProps & {
     id?: string
   }

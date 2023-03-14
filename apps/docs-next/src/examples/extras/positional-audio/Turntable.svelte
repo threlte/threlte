@@ -180,7 +180,7 @@
       refDistance={15}
       loop
       playbackRate={$discSpeed}
-      {source}
+      src={source}
       directionalCone={{
         coneInnerAngle: 90,
         coneOuterAngle: 220,

@@ -7,7 +7,7 @@ type AudioVolume = number | undefined
 type AudioPlaybackRate = number | undefined
 
 export type AudioProps = {
-  source: AudioSource
+  src: AudioSource
   autoplay?: boolean
   loop?: boolean
   volume?: AudioVolume
@@ -22,7 +22,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
 
   const loader = useLoader(AudioLoader)
 
-  const setSource = async (source: AudioSource) => {
+  const setSrc = async (source: AudioProps['src']) => {
     loaded.set(false)
     if (typeof source === 'string') {
       const audioBuffer = await loader.load(source)
@@ -39,11 +39,11 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
     loaded.set(true)
   }
 
-  const setVolume = (volume: AudioVolume) => {
+  const setVolume = (volume: AudioProps['volume']) => {
     audio.setVolume(volume ?? 1)
   }
 
-  const setPlaybackRate = (playbackRate: AudioPlaybackRate) => {
+  const setPlaybackRate = (playbackRate: AudioProps['playbackRate']) => {
     audio.setPlaybackRate(playbackRate ?? 1)
   }
 
@@ -68,17 +68,17 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
     return audio.stop()
   }
 
-  const setAutoPlay = (value?: boolean) => {
+  const setAutoPlay = (value?: AudioProps['autoplay']) => {
     autoplay.set(value ?? false)
   }
 
-  const setDetune = (value?: number) => {
+  const setDetune = (value?: AudioProps['detune']) => {
     if (audio.source && audio.source.detune) {
       audio.setDetune(value ?? 0)
     }
   }
 
-  const setLoop = (value?: boolean) => {
+  const setLoop = (value?: AudioProps['loop']) => {
     audio.setLoop(value ?? false)
   }
 
@@ -99,7 +99,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
 
   return {
     setVolume,
-    setSource,
+    setSrc,
     setPlaybackRate,
     setAutoPlay,
     setDetune,
