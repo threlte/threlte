@@ -98,8 +98,7 @@ export type ThrelteDisposalContext = {
 
 export type ThrelteDisposeContext = Writable<boolean>
 
-type UserContext = Record<string, any>
-export type ThrelteUserContext = { store: Writable<UserContext>; raw: UserContext }
+export type ThrelteUserContext = CurrentWritable<Record<string, any>>
 
 export type ThrelteUseFrame = {
   stop: () => void

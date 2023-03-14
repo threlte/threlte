@@ -63,7 +63,7 @@ export type {
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
-export { watch, memoize, currentWritable, type CurrentWritable } from './lib/storeUtils'
+export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
 export { forwardEvents } from './lib/forwardEvents'
 
 export type {

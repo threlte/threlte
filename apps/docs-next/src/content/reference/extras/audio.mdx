@@ -8,7 +8,16 @@ Create a non-positional (global) audio object.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
 <Tip type="warning">
-You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted *before* any `<Audio>` or `<PositionalAudio>` components:
+
+```svelte
+<T.PerspectiveCamera makeDefault>
+  <AudioListener />
+</T.PerspectiveCamera>
+
+<PositionalAudio />
+```
+
 </Tip>
 
 ### Example
@@ -27,7 +36,7 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
     <AudioListener />
   </T.PerspectiveCamera>
 
-  <Audio source={'/audio/track.mp3'} />
+  <Audio src={'/audio/track.mp3'} />
 </Canvas>
 ```
 
@@ -49,7 +58,7 @@ dispose: boolean | undefined = undefined
 userData: Record<string, any> | undefined = undefined
 autoplay: boolean | undefined = undefined
 detune: number | undefined = undefined
-source: string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream | undefined = undefined
+src: string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream | undefined = undefined
 volume: number | undefined = undefined
 loop: boolean | undefined = undefined
 filters: BiquadFilterNode[] | BiquadFilterNode | undefined = undefined

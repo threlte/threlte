@@ -78,7 +78,7 @@ export const createContexts = (
   }
 
   const userCtxObject = {}
-  const userCtx: ThrelteUserContext = { store: writable(userCtxObject), raw: userCtxObject }
+  const userCtx: ThrelteUserContext = currentWritable(userCtxObject)
 
   const disposalCtx: ThrelteDisposalContext = {
     dispose: async (force = false) => {

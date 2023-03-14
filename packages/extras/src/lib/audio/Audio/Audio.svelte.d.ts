@@ -1,17 +1,18 @@
-import type { Props } from '@threlte/core'
+import type { Props, Events, Slots } from '@threlte/core'
 import type { SvelteComponentTyped } from 'svelte'
 import type { Audio as ThreeAudio } from 'three'
+import type {
+  AudioProps as CommonAudioProps,
+  AudioEvents as CommonAudioEvents
+} from '../utils/useAudio'
 
-export type AudioProps = Props<ThreeAudio> & {
-  id?: string
-  volume?: number
-  // TODO unknown is used here to be able to directly use
-  // the function in a svelte event handler: on:click={play}
-  // as otherwise TypeScript will complain about the type
-  // of the argument 'delay'. It's not a perfect solution though.
-  play?: (delay?: number | any) => Promise<ThreeAudio>
-  pause?: () => ThreeAudio
-  stop?: () => ThreeAudio
-}
+export type AudioProps = Props<ThreeAudio<GainNode>> &
+  CommonAudioProps & {
+    id?: string
+  }
 
-export default class Audio extends SvelteComponentTyped<AudioProps> {}
+export type AudioEvents = Events<ThreeAudio<GainNode>> & CommonAudioEvents
+
+export type AudioSlots = Slots<ThreeAudio<GainNode>>
+
+export default class Audio extends SvelteComponentTyped<AudioProps, AudioEvents, AudioSlots> {}

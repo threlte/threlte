@@ -48,8 +48,6 @@ export const useCache = () => {
       if (shallowEqualArrays(keys, entry.keys)) {
         // If an error occurred, throw
         if (entry.error) throw entry.error
-        // If a response was successful, return
-        if (entry.value) return entry.value
         // If a response is pending, return
         if (entry.promise) return entry.promise as Promise<T>
       }
@@ -65,17 +63,12 @@ export const useCache = () => {
     // Add the entry to the cache
     cache.push(entry)
 
-    // Add a then and catch handler to the promise
-    entry.promise
-      .then((value) => {
-        // store the value
-        entry.value = value
-      })
-      .catch((error) => {
-        // store the error
-        entry.error = error
-        throw error
-      })
+    // Add a catch handler to the promise
+    entry.promise.catch((error) => {
+      // store the error
+      entry.error = error
+      // we don't throw here
+    })
 
     // Return the promise
     return entry.promise
