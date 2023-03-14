@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { forwardEvents, T } from '@threlte/core'
   import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useAudio } from '../useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
@@ -69,8 +69,10 @@
   $: setPlaybackRate(playbackRate)
   $: setLoop(loop)
   $: setDetune(detune)
+
+  const component = forwardEvents()
 </script>
 
-<T is={ref} {...$$restProps} let:ref>
+<T is={ref} {...$$restProps} let:ref bind:this={$component}>
   <slot {ref} />
 </T>
