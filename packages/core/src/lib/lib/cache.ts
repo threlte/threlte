@@ -67,7 +67,7 @@ export const useCache = () => {
     entry.promise.catch((error) => {
       // store the error
       entry.error = error
-      throw error
+      // we don't throw here
     })
 
     // Return the promise

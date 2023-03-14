@@ -1,4 +1,4 @@
-import { currentWritable, useLoader, watch } from '@threlte/core'
+import { createRawEventDispatcher, currentWritable, useLoader, watch } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { AudioLoader, type Audio, type PositionalAudio } from 'three'
 
@@ -15,9 +15,15 @@ export type AudioProps = {
   detune?: number
 }
 
+export type AudioEvents = {
+  load: AudioBuffer | void
+  progress: ProgressEvent<EventTarget>
+  error: ErrorEvent
+}
+
 /**
  * This hook handles basic audio functionality.
- * It's used by the <Audio> and <PositionalAudio> components.
+ * It’s used by the <Audio> and <PositionalAudio> components.
  */
 export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) => {
   const loaded = currentWritable(false)
@@ -26,21 +32,32 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
 
   const loader = useLoader(AudioLoader)
 
+  const dispatch = createRawEventDispatcher<AudioEvents>()
+
   const setSrc = async (source: AudioProps['src']) => {
     loaded.set(false)
-    if (typeof source === 'string') {
-      const audioBuffer = await loader.load(source)
-      audio.setBuffer(audioBuffer)
-    } else if (source instanceof AudioBuffer) {
-      audio.setBuffer(source)
-    } else if (source instanceof HTMLMediaElement) {
-      audio.setMediaElementSource(source)
-    } else if (source instanceof AudioBufferSourceNode) {
-      audio.setNodeSource(source)
-    } else if (source instanceof MediaStream) {
-      audio.setMediaStreamSource(source)
+    try {
+      if (typeof source === 'string') {
+        const audioBuffer = await loader.load(source, {
+          onProgress(event) {
+            dispatch('progress', event)
+          }
+        })
+        audio.setBuffer(audioBuffer)
+      } else if (source instanceof AudioBuffer) {
+        audio.setBuffer(source)
+      } else if (source instanceof HTMLMediaElement) {
+        audio.setMediaElementSource(source)
+      } else if (source instanceof AudioBufferSourceNode) {
+        audio.setNodeSource(source)
+      } else if (source instanceof MediaStream) {
+        audio.setMediaStreamSource(source)
+      }
+      loaded.set(true)
+      audio.source?.buffer ? dispatch('load', audio.source.buffer) : dispatch('load')
+    } catch (error) {
+      dispatch('error', error as ErrorEvent)
     }
-    loaded.set(true)
   }
 
   const setVolume = (volume: AudioProps['volume']) => {
