@@ -2,6 +2,7 @@
   import { forwardEvents, T, useFrame, useParent, useThrelte } from '@threlte/core'
   import { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { useControlsContext } from '../useControlsContext'
   import type {
     OrbitControlsEvents,
     OrbitControlsProps,
@@ -34,9 +35,23 @@
     else stop()
   }
 
-  const events = forwardEvents()
+  const component = forwardEvents()
+
+  const { orbitControls } = useControlsContext()
 </script>
 
-<T is={controls} let:ref {...$$restProps} bind:this={$events} on:change={invalidate}>
+<T
+  is={controls}
+  let:ref
+  {...$$restProps}
+  bind:this={$component}
+  on:change={invalidate}
+  on:create={({ ref, cleanup }) => {
+    orbitControls.set(ref)
+    cleanup(() => {
+      orbitControls.set(undefined)
+    })
+  }}
+>
   <slot {ref} />
 </T>

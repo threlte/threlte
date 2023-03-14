@@ -12,7 +12,7 @@ type StoresValues<T> = T extends Readable<infer U>
 /**
  * ### `watch`
  *
- * Watch a single store or multiple stores and call a callback when they change.
+ * Watch a single store or multiple stores and call a callback when they change to trigger side effects.
  * The callback can return a cleanup function that will be called when the stores change again.
  *
  * ```ts
