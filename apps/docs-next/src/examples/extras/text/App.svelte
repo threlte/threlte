@@ -3,7 +3,7 @@
   import Scene from './Scene.svelte'
   import { useTweakpane } from '../../utils/useTweakpane'
 
-  const { pane, action, addInput } = useTweakpane({
+  const { action, addInput } = useTweakpane({
     title: 'Text',
     expanded: false
   })

@@ -19,7 +19,7 @@
   class={c('hidden relative md:block h-full w-full px-6')}
   bind:this={leftSidebar}
 >
-  <div class={c('relative pb-6 w-full pt-0 block')}>
+  <div class={c('relative w-full pt-0 block')}>
     <Tabs
       on:select={onTabSelect}
       tabs={[
@@ -38,7 +38,7 @@
     <div class="pointer-events-none absolute top-full left-0 z-20 h-4 w-full" />
   </div>
 
-  <ul class={c('overflow-y-auto mt-0 overflow-auto pt-2 pb-6 block px-2')}>
+  <ul class={c('overflow-y-auto mt-0 overflow-auto pt-6 pb-24 block px-2 h-full scrollbar-hide')}>
     {#each menu[activeSidebarTab].categories as category}
       <li class="mb-6 text-sm">
         <LeftSidebarCategory

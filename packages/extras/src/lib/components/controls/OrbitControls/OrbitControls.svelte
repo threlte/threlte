@@ -23,9 +23,9 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  export const controls = new ThreeOrbitControls($parent, renderer.domElement)
+  export const ref = new ThreeOrbitControls($parent, renderer.domElement)
 
-  const { start, stop } = useFrame(() => controls.update(), {
+  const { start, stop } = useFrame(() => ref.update(), {
     autostart: false,
     debugFrameloopMessage: 'OrbitControls: updating controls'
   })
@@ -41,7 +41,7 @@
 </script>
 
 <T
-  is={controls}
+  is={ref}
   let:ref
   {...$$restProps}
   bind:this={$component}

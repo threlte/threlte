@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Environment, Grid, interactivity, useGltf, OrbitControls } from '@threlte/extras'
+  import { Environment, Float, Grid, interactivity, useGltf } from '@threlte/extras'
   import type { Mesh } from 'three'
   import Blob from './Blob.svelte'
 
@@ -21,17 +21,20 @@
   files="shanghai_riverside_1k.hdr"
 />
 
-<T.PerspectiveCamera
-  makeDefault
-  position.y={10}
-  position.z={20}
-  fov={50}
+<Float
+  rotationIntensity={0.15}
+  rotationSpeed={2}
 >
-  <OrbitControls
-    target.y={-2}
-    enableDamping
+  <T.PerspectiveCamera
+    makeDefault
+    position.y={10}
+    position.z={10}
+    fov={90}
+    on:create={({ ref }) => {
+      ref.lookAt(0, 0, 0)
+    }}
   />
-</T.PerspectiveCamera>
+</Float>
 
 <T.DirectionalLight
   position.y={10}
@@ -45,7 +48,9 @@
   sectionThickness={1}
   infiniteGrid
   cellColor="#dddddd"
-  sectionColor="#000000"
+  sectionColor="#ffffff"
+  sectionSize={10}
+  cellSize={2}
 />
 
 {#if $gltf}

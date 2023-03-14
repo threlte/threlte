@@ -26,6 +26,8 @@ const hasEvents = !!Astro.props.signature.events?.length
 const hasProps = !!Astro.props.signature.props?.length
 const hasBindings = !!Astro.props.signature.bindings?.length
 
+const hasAnySignature = hasEvents || hasProps || hasBindings
+
 const propsGridCols = anyPropHasDescription &&
 anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto_auto]' :anyPropHasDescription ||
 anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto]' : 'grid-cols-[auto_auto_auto]'
@@ -44,7 +46,7 @@ const shiki = await getShiki()
 
 		{
 			Astro.props.signature.extends && (
-				<p class="text-faded">
+				<p class={c("text-faded", !hasAnySignature && '!mb-0')}>
 					<code>{Astro.props.componentName}</code> extends
 					<!-- prettier-ignore -->
 					<code>{'<'}<a class="!text-white" href="/docs/reference/core/t">{'T'}</a>.<a class="!text-white" target="_blank" rel="noopener noreferrer" href={Astro.props.signature.extends.url}>{Astro.props.signature.extends.type}</a>{'>'}</code>
@@ -55,7 +57,7 @@ const shiki = await getShiki()
 
 		{
 			Astro.props.signature.pretext && (
-				<p class="text-faded" set:html={Astro.props.signature.pretext}>
+				<p class={c("text-faded", !hasAnySignature && '!mb-0')} set:html={Astro.props.signature.pretext}>
 				</p>
 			)
 		}

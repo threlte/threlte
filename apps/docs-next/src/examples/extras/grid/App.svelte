@@ -24,7 +24,7 @@
   })
   const cellColor = addInput({
     label: 'Cell color',
-    value: `#000000`,
+    value: `#ffffff`,
     parent: cellFolder
   })
 
@@ -150,25 +150,27 @@
 
 <div use:action />
 
-<Canvas
-  linear
-  flat
->
-  <Grid
-    axes={axisTyped}
-    cellColor={$cellColor}
-    cellSize={$cellSize}
-    cellThickness={$cellThickness}
-    sectionColor={$sectionColor}
-    sectionSize={$sectionSize}
-    sectionThickness={$sectionThickness}
-    followCamera={$followCamera}
-    infiniteGrid={$infiniteGrid}
-    fadeDistance={$fadeDistance}
-    fadeStrength={$fadeStregth}
-    gridSize={[$gridSize1, $gridSize2]}
-  />
+<div class="w-full h-full relative bg-orange-500/20">
+  <Canvas
+    linear
+    flat
+  >
+    <Grid
+      axes={axisTyped}
+      cellColor={$cellColor}
+      cellSize={$cellSize}
+      cellThickness={$cellThickness}
+      sectionColor={$sectionColor}
+      sectionSize={$sectionSize}
+      sectionThickness={$sectionThickness}
+      followCamera={$followCamera}
+      infiniteGrid={$infiniteGrid}
+      fadeDistance={$fadeDistance}
+      fadeStrength={$fadeStregth}
+      gridSize={[$gridSize1, $gridSize2]}
+    />
 
-  <!-- Example scene with boxes -->
-  <Scene />
-</Canvas>
+    <!-- Example scene with boxes -->
+    <Scene />
+  </Canvas>
+</div>

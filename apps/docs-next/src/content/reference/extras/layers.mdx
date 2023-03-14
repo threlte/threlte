@@ -1,4 +1,5 @@
 ---
+order: 15
 category: '@threlte/extras'
 name: 'layers'
 sourcePath: 'extras/src/lib/layers'
@@ -10,7 +11,8 @@ Typically when assigning a value to `layers` on a `<T>` component, it will only 
 This plugin allows you to assign a value to `layers` on a parent component and have it be inherited by all child components.
 
 <Tip type="tip">
-  This plugin injects and relies on a context. Check out the [guide on structuring your
+  This plugin injects and relies on a context. It's affecting all `<T>` components that are
+	descendants of the component that uses it. Check out the [guide on structuring your
   app](/docs/learn/basics/context#recommended-app-structure) to learn more about contexts.
 </Tip>
 

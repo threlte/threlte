@@ -18,7 +18,8 @@ export const getShiki = () => {
       'mdx',
       'md',
       'json',
-      'html'
+      'html',
+      'bash'
     ]
   })
   return highlighter
