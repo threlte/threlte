@@ -15,6 +15,9 @@ export type AudioProps = {
   detune?: number
 }
 
+/**
+ * This hook handles basic audio functionality.
+ */
 export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) => {
   const loaded = currentWritable(false)
   const autoplay = currentWritable(false)

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { forwardEvents, T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
-  import { useAudio } from '../useAudio'
+  import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
   import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
 

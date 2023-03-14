@@ -1,7 +1,7 @@
 <script lang="ts">
   import { forwardEvents, T } from '@threlte/core'
   import { PositionalAudio as ThreePositionalAudio } from 'three'
-  import { useAudio } from '../useAudio'
+  import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
   import type {
     PositionalAudioEvents,
