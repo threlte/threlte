@@ -2,6 +2,7 @@
 import { defineCollection, z } from 'astro:content'
 
 export const componentSignature = z.object({
+  pretext: z.string().optional(),
   extends: z
     .object({
       type: z.string(),
@@ -28,7 +29,7 @@ export const componentSignature = z.object({
     .array(
       z.object({
         name: z.string(),
-        type: z.string().or(
+        payload: z.string().or(
           z.object({
             name: z.string(),
             url: z.string()

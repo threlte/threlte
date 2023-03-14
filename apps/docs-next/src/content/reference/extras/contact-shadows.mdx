@@ -2,6 +2,30 @@
 category: '@threlte/extras'
 name: <ContactShadows>
 type: 'component'
+'componentSignature':
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    'props':
+      [
+        { name: 'opacity', type: 'number', required: false },
+        { name: 'width', type: 'number', required: false },
+        { name: 'height', type: 'number', required: false },
+        { name: 'blur', type: 'number', required: false },
+        { name: 'far', type: 'number', required: false },
+        { name: 'smooth', type: 'boolean', required: false },
+        { name: 'resolution', type: 'number', required: false },
+        { name: 'frames', type: 'number', required: false },
+        { name: 'scale', type: 'number | [x: number, y: number]', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', required: false },
+        { name: 'depthWrite', type: 'boolean', required: false }
+      ],
+			bindings: [
+				{
+					name: 'refresh',
+					type: '() => void',
+				}
+			]
+  }
 ---
 
 This component is a port of [drei's `<ContactShadows>` component](https://github.com/pmndrs/drei#contactshadows).
@@ -59,45 +83,4 @@ Currently it has the same limitations of drei's version: It yields unexpected re
   far={2.5}
   opacity={0.5}
 />
-```
-
-### Properties
-
-```ts
-// optional
-position: Position | undefined = undefined
-scale: Scale | undefined = undefined
-rotation: Rotation | undefined = undefined
-lookAt: LookAt | undefined = undefined
-viewportAware: boolean = false
-castShadow: boolean | undefined = undefined
-receiveShadow: boolean | undefined = undefined
-frustumCulled: boolean | undefined = undefined
-renderOrder: number | undefined = undefined
-visible: boolean | undefined = undefined
-opacity: number = 1 // general shadow opacity
-width: number = 1 // width of shadow area
-height: number = 1 // height of shadow area
-blur: number = 1 // amount of blur
-far: number = 10 // far plane of the shadow camera
-smooth: boolean = true	// true for two blur iterations
-resolution: number = 512
-frames: number = Infinity
-scale: number | [x: number, y: number] = 10 // scale of the shadow area
-color: THREE.ColorRepresentation = '#000000'
-depthWrite: boolean = false
-```
-
-### Bindings
-
-```ts
-inViewport: boolean
-refresh: () => void
-```
-
-### Events
-
-```ts
-viewportenter: undefined
-viewportleave: undefined
 ```

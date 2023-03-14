@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { forwardEvents, T, useFrame, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     Color,
@@ -14,22 +14,28 @@
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader'
   import { useMemo } from '../../lib/useMemo'
-  import type { ContactShadowsProps } from './ContactShadows.svelte'
+  import type {
+    ContactShadowsProps,
+    ContactShadowsEvents,
+    ContactShadowsSlots
+  } from './ContactShadows.svelte'
 
-  type Props = Required<ContactShadowsProps>
+  type $$Props = ContactShadowsProps
+  type $$Events = ContactShadowsEvents
+  type $$Slots = ContactShadowsSlots
 
   // self
-  export let opacity: Props['opacity'] = 1
-  export let width: Props['width'] = 1
-  export let height: Props['height'] = 1
-  export let blur: Props['blur'] = 1
-  export let far: Props['far'] = 10
-  export let smooth: Props['smooth'] = true
-  export let resolution: Props['resolution'] = 512
-  export let frames: Props['frames'] = Infinity
-  export let scale: Props['scale'] = 10
-  export let color: Props['color'] = '#000000'
-  export let depthWrite: Props['depthWrite'] = false
+  export let opacity: NonNullable<$$Props['opacity']> = 1
+  export let width: NonNullable<$$Props['width']> = 1
+  export let height: NonNullable<$$Props['height']> = 1
+  export let blur: NonNullable<$$Props['blur']> = 1
+  export let far: NonNullable<$$Props['far']> = 10
+  export let smooth: NonNullable<$$Props['smooth']> = true
+  export let resolution: NonNullable<$$Props['resolution']> = 512
+  export let frames: NonNullable<$$Props['frames']> = Infinity
+  export let scale: NonNullable<$$Props['scale']> = 10
+  export let color: NonNullable<$$Props['color']> = '#000000'
+  export let depthWrite: NonNullable<$$Props['depthWrite']> = false
 
   const { scene, renderer } = useThrelte()
   if (!renderer)
@@ -202,12 +208,11 @@
     verticalBlurMaterial.dispose()
     shadowMaterial.dispose()
   })
+
+  const components = forwardEvents()
 </script>
 
-<T.Group
-  {...$$restProps}
-  let:ref
->
+<T.Group {...$$restProps} let:ref bind:this={$components}>
   <T.Group rotation.x={Math.PI / 2}>
     <T.Mesh
       scale.y={-1}
@@ -216,10 +221,7 @@
       geometry={$planeGeometry}
     />
 
-    <T
-      is={shadowCamera}
-      manual
-    />
+    <T is={shadowCamera} manual />
 
     <slot {ref} />
   </T.Group>

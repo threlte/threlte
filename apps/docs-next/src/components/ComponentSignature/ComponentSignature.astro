@@ -16,6 +16,7 @@ const props = Astro.props.signature.props?.sort((a, b) => {
   return a.name.localeCompare(b.name)
 }) ?? []
 const anyPropHasDescription = props.some((prop) => prop.description)
+const anyPropHasDefault = props.some((prop) => prop.default)
 
 const events = Astro.props.signature.events ?? []
 const anyEventHasDescription = events.some((event) => event.description)
@@ -24,6 +25,10 @@ const anyEventHasDescription = events.some((event) => event.description)
 const hasEvents = !!Astro.props.signature.events?.length
 const hasProps = !!Astro.props.signature.props?.length
 const hasBindings = !!Astro.props.signature.bindings?.length
+
+const propsGridCols = anyPropHasDescription &&
+anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto_auto]' :anyPropHasDescription ||
+anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto]' : 'grid-cols-[auto_auto_auto]'
 
 const showComponentSignature = hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
 
@@ -48,6 +53,13 @@ const shiki = await getShiki()
 			)
 		}
 
+		{
+			Astro.props.signature.pretext && (
+				<p class="text-faded" set:html={Astro.props.signature.pretext}>
+				</p>
+			)
+		}
+
 		{ (hasEvents || hasProps || hasBindings) && (
 			<div class="flex flex-col gap-6">
 				{
@@ -58,9 +70,7 @@ const shiki = await getShiki()
 							<div
 								class={c(
 									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent',
-									anyPropHasDescription
-										? 'grid-cols-[auto_auto_auto_auto_auto]'
-										: 'grid-cols-[auto_auto_auto_auto]'
+									propsGridCols
 								)}
 							>
 								<div class="font-bold">name</div>
@@ -69,7 +79,7 @@ const shiki = await getShiki()
 
 								<div class="font-bold">required</div>
 
-								<div class="font-bold">default</div>
+								{anyPropHasDefault && <div class="font-bold">default</div>}
 
 								{anyPropHasDescription && <div class="font-bold">description</div>}
 
@@ -84,7 +94,7 @@ const shiki = await getShiki()
 												{
 													typeof prop.type === 'string' ? (
 														<div
-														class="text-faded whitespace-nowrap"
+														class="text-faded"
 														set:html={shiki
 															.codeToHtml(prop.type, {
 																lang: 'typescript',
@@ -95,7 +105,7 @@ const shiki = await getShiki()
 														/>
 													) : (
 														<a
-															class="text-faded whitespace-nowrap decoration-white/70 !decoration-solid"
+															class="text-faded decoration-white/70 !decoration-solid"
 															href={prop.type.url}
 															set:html={shiki
 																.codeToHtml(prop.type.name, {
@@ -110,22 +120,25 @@ const shiki = await getShiki()
 
 												<div class="text-faded">{prop.required ? 'yes' : 'no'}</div>
 
-												<div
-													class="text-faded whitespace-nowrap"
-													set:html={
-														prop.default
-															? shiki
-																	.codeToHtml(prop.default, {
-																		lang: 'typescript',
-																		theme: 'dracula-soft'
-																	})
-																	.replace('<pre class="shiki" style="background-color: #282A36">', '')
-																	.replace('</pre>', '')
-															: ''
-													}
-												/>
+												{anyPropHasDefault && (
+													<div
+														class="text-faded"
+														set:html={
+															prop.default
+																? shiki
+																		.codeToHtml(prop.default, {
+																			lang: 'typescript',
+																			theme: 'dracula-soft'
+																		})
+																		.replace('<pre class="shiki" style="background-color: #282A36">', '')
+																		.replace('</pre>', '')
+																: ''
+														}
+													/>
+												)}
 
-												<div class="text-faded">{prop.description}</div>
+												{anyPropHasDescription && <div class="text-faded">{prop.description}</div>}
+
 
 												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
 											</>
@@ -152,7 +165,7 @@ const shiki = await getShiki()
 							>
 								<div class="font-bold">name</div>
 
-								<div class="font-bold">type</div>
+								<div class="font-bold">payload</div>
 
 								{anyEventHasDescription && <div class="font-bold">description</div>}
 
@@ -165,11 +178,11 @@ const shiki = await getShiki()
 												<div class="text-faded">{event.name}</div>
 
 												{
-													typeof event.type === 'string' ? (
+													typeof event.payload === 'string' ? (
 														<div
-														class="text-faded whitespace-nowrap"
+														class="text-faded"
 														set:html={shiki
-															.codeToHtml(event.type, {
+															.codeToHtml(event.payload, {
 																lang: 'typescript',
 																theme: 'dracula-soft'
 															})
@@ -178,10 +191,10 @@ const shiki = await getShiki()
 														/>
 													) : (
 														<a
-															class="text-faded whitespace-nowrap decoration-white/70 !decoration-solid"
-															href={event.type.url}
+															class="text-faded decoration-white/70 !decoration-solid"
+															href={event.payload.url}
 															set:html={shiki
-																.codeToHtml(event.type.name, {
+																.codeToHtml(event.payload.name, {
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
@@ -229,7 +242,7 @@ const shiki = await getShiki()
 												{
 													typeof binding.type === 'string' ? (
 														<div
-														class="text-faded whitespace-nowrap"
+														class="text-faded"
 														set:html={shiki
 															.codeToHtml(binding.type, {
 																lang: 'typescript',
@@ -240,7 +253,7 @@ const shiki = await getShiki()
 														/>
 													) : (
 														<a
-															class="text-faded whitespace-nowrap decoration-white/70 !decoration-solid"
+															class="text-faded decoration-white/70 !decoration-solid"
 															href={binding.type.url}
 															set:html={shiki
 																.codeToHtml(binding.type.name, {

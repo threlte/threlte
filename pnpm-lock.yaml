@@ -246,6 +246,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.34
       '@sveltejs/kit': 1.0.0-next.377
       '@threlte/core': workspace:*
+      '@types/lodash': ^4.14.191
       '@types/node': ^18.0.3
       '@types/three': ^0.144.0
       '@typescript-eslint/eslint-plugin': ^4.31.1
@@ -254,6 +255,7 @@ importers:
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-svelte3: ^3.2.1
+      lodash: ^4.17.21
       prettier: ^2.6.2
       prettier-plugin-svelte: ^2.4.0
       svelte: ^3.47.0
@@ -274,6 +276,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.34
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.49.0+vite@3.2.3
       '@threlte/core': link:../core
+      '@types/lodash': 4.14.191
       '@types/node': 18.0.3
       '@types/three': 0.144.0
       '@typescript-eslint/eslint-plugin': 4.33.0_3ekaj7j3owlolnuhj3ykrb7u7i
@@ -282,6 +285,7 @@ importers:
       eslint: 7.32.0
       eslint-config-prettier: 8.5.0_eslint@7.32.0
       eslint-plugin-svelte3: 3.4.1_k4rvtr32uzrs6rwp57u73ssa6q
+      lodash: 4.17.21
       prettier: 2.7.1
       prettier-plugin-svelte: 2.7.0_o3ioganyptcsrh6x4hnxvjkpqi
       svelte: 3.49.0
@@ -2156,6 +2160,10 @@ packages:
 
   /@types/linkify-it/3.0.2:
     resolution: {integrity: sha512-HZQYqbiFVWufzCwexrvh694SOim8z2d+xJl5UNamcvQFejLY/2YUtzXHYi3cHdI7PMlS8ejH2slRAOJQ32aNbA==}
+    dev: true
+
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
     dev: true
 
   /@types/lru-cache/7.10.10:
@@ -6359,6 +6367,10 @@ packages:
 
   /lodash.truncate/4.4.2:
     resolution: {integrity: sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==}
+    dev: true
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: true
 
   /log-symbols/4.1.0:
