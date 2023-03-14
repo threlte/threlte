@@ -1,4 +1,5 @@
 import { setThrelteUserContext, useThrelteUserContext } from '@threlte/core'
+import { get } from 'svelte/store'
 import type { AudioListener } from 'three'
 
 export type ThrelteAudioContext = {
@@ -41,7 +42,11 @@ function createAudioContext(): ThrelteAudioContext {
 }
 
 export function useThrelteAudio(): ThrelteAudioContext {
-  const audioCtx =
-    useThrelteUserContext<ThrelteAudioContext>('threlte-audio') ?? createAudioContext()
-  return audioCtx
+  const audioCtxStore = useThrelteUserContext<ThrelteAudioContext>('threlte-audio')
+  const audioCtx = get(audioCtxStore)
+  if (!audioCtx) {
+    return createAudioContext()
+  } else {
+    return audioCtx
+  }
 }
