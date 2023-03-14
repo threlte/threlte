@@ -7,21 +7,22 @@ type: 'component'
 Creates a positional audio entity.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
-<Tip type="tip">
-You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components.
+<Tip type="warning">
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted *before* any `<Audio>` or `<PositionalAudio>` components:
+
+```svelte
+<T.PerspectiveCamera makeDefault>
+  <AudioListener />
+</T.PerspectiveCamera>
+
+<PositionalAudio />
+```
+
 </Tip>
 
 <Example path="extras/positional-audio" />
 
-<small>
-  Music:{' '}
-  <a
-    href="https://legrisch.com"
-    target="_blank"
-  >
-    legrisch
-  </a>
-</small>
+<small>Music: [legrisch](https://legrisch.com)</small>
 
 ### Example
 

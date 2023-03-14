@@ -107,7 +107,7 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
     Astro.props.title && (
       <div class="py-2 px-3 [&>*]:!text-white [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
         <h4 class="!mb-1 empty:hidden">{Astro.props.title}</h4>
-        <div class="text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <div class="overflow-x-auto text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
           <slot />
         </div>
       </div>
@@ -115,7 +115,7 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
   }
   {
     !Astro.props.title && (
-      <div class="py-2 px-3 text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+      <div class="overflow-x-auto py-2 px-3 text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
         <slot />
       </div>
     )
