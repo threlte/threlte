@@ -293,7 +293,7 @@ Use the property `makeDefault` to set a camera to the default rendering camera.
 
 ## Events
 
-Adding an event listener to a component will also add the corresponding event listener to the three.js class instance. The event will be forwarded and is available at `event.detail`.
+Adding an event listener to a component will also add the corresponding event listener to the three.js class instance. The event will be forwarded and the native payload available as the first argument to the event listener.
 
 This will listen to the "change" event on the `THREE.OrbitControls`:
 
@@ -301,7 +301,7 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 <T
   is={OrbitControls}
   on:change={(e) => {
-    console.log('OrbitControls changed.', e.detail)
+    console.log('OrbitControls changed. payload:', e)
   }}
 />
 ```

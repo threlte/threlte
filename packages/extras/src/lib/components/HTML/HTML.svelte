@@ -1,8 +1,21 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
+  import {
+    createRawEventDispatcher,
+    forwardEvents,
+    T,
+    useFrame,
+    useThrelte,
+    useThrelteRoot
+  } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
   import { derived, writable, type Writable } from 'svelte/store'
-  import { Group, Object3D as ThreeeObject3D, OrthographicCamera, PerspectiveCamera } from 'three'
+  import {
+    Group,
+    Object3D as ThreeeObject3D,
+    OrthographicCamera,
+    PerspectiveCamera,
+    Raycaster
+  } from 'three'
   import { useHasEventListeners } from '../../hooks/useHasEventListeners'
   import {
     compileStyles,
@@ -38,11 +51,11 @@
   export let as: $$PropsWithDefaults['as'] = 'div'
   export let portal: $$Props['portal'] | undefined = undefined
 
-  const dispatch = createEventDispatcher<{
+  const dispatch = createRawEventDispatcher<{
     visibilitychange: boolean
   }>()
 
-  let group: Group | undefined
+  export let ref = new Group()
 
   const { renderer, camera, scene, size } = useThrelte()
 
@@ -52,7 +65,7 @@
     return $camera
   }
 
-  const { raycaster } = useThrelteRoot()
+  const raycaster = new Raycaster()
 
   let oldPosition = [0, 0]
   let oldZoom = 0
@@ -171,9 +184,8 @@
    * Check ancestor visibility
    */
   const getAncestorVisibility = (): boolean => {
-    if (!group) return true
     let ancestorsAreVisible = true
-    let parent: ThreeeObject3D | null = group.parent
+    let parent: ThreeeObject3D | null = ref.parent
     traverse: while (parent) {
       if ('visible' in parent && !parent.visible) {
         ancestorsAreVisible = false
@@ -188,16 +200,14 @@
 
   useFrame(
     async () => {
-      if (!group) return
-
       showEl = getAncestorVisibility()
 
       const camera = getCamera()
 
       camera.updateMatrixWorld()
-      group.updateWorldMatrix(true, false)
+      ref.updateWorldMatrix(true, false)
 
-      const vec = transform ? oldPosition : calculatePosition(group, camera, $size)
+      const vec = transform ? oldPosition : calculatePosition(ref, camera, $size)
 
       if (
         transform ||
@@ -205,11 +215,11 @@
         Math.abs(oldPosition[0] - vec[0]) > eps ||
         Math.abs(oldPosition[1] - vec[1]) > eps
       ) {
-        const isBehindCamera = isObjectBehindCamera(group, camera)
+        const isBehindCamera = isObjectBehindCamera(ref, camera)
 
         const previouslyVisible = visible
         if (raytraceTarget) {
-          const isvisible = isObjectVisible(group, camera, raycaster, raytraceTarget)
+          const isvisible = isObjectVisible(ref, camera, raycaster, raytraceTarget)
           visible = isvisible && !isBehindCamera
         } else {
           visible = !isBehindCamera
@@ -225,19 +235,19 @@
         }
 
         updateStyles(styles.common.el, {
-          zIndex: `${objectZIndex(group, camera, zIndexRange)}`
+          zIndex: `${objectZIndex(ref, camera, zIndexRange)}`
         })
         if (transform) {
           const fov = camera.projectionMatrix.elements[5] * $heightHalf
           const { isOrthographicCamera, top, left, bottom, right } = camera as OrthographicCamera
 
-          let matrix = group.matrixWorld
+          let matrix = ref.matrixWorld
           if (sprite) {
             matrix = camera.matrixWorldInverse
               .clone()
               .transpose()
               .copyPosition(matrix)
-              .scale(group.scale)
+              .scale(ref.scale)
             matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0
             matrix.elements[15] = 1
           }
@@ -260,8 +270,7 @@
             })
           }
         } else {
-          const scale =
-            distanceFactor === undefined ? 1 : objectScale(group, camera) * distanceFactor
+          const scale = distanceFactor === undefined ? 1 : objectScale(ref, camera) * distanceFactor
           updateStyles(styles.noTransform.el, {
             transform: `translate3d(${vec[0]}px, ${vec[1]}px, 0) scale(${scale})`
           })
@@ -276,9 +285,9 @@
   )
 
   const buildDefaultNonTransformStyles = (_: HTMLElement) => {
-    if (!group || transform) return
+    if (!ref || transform) return
     scene.updateMatrixWorld()
-    const vec = calculatePosition(group, $camera, $size)
+    const vec = calculatePosition(ref, $camera, $size)
     updateStyles(styles.noTransform.el, {
       position: 'absolute',
       top: '0',
@@ -306,18 +315,13 @@
       }
     }
   }
+
+  const component = forwardEvents()
 </script>
 
-<T.Group
-  bind:ref={group}
-  {...$$restProps}
-  let:ref
->
-  <slot
-    name="threlte"
-    {ref}
-  />
-</T.Group>
+<T is={ref} {...$$restProps} let:ref bind:this={$component}>
+  <slot name="threlte" {ref} />
+</T>
 
 {#if transform}
   <svelte:element
@@ -326,14 +330,8 @@
     bind:this={el}
     style={compileStyles($transformElStyles)}
   >
-    <div
-      bind:this={transformOuterRef}
-      style={compileStyles($transformOuterRefStyles)}
-    >
-      <div
-        bind:this={transformInnerRef}
-        style={compileStyles($transformInnerRefStyles)}
-      >
+    <div bind:this={transformOuterRef} style={compileStyles($transformOuterRefStyles)}>
+      <div bind:this={transformInnerRef} style={compileStyles($transformInnerRefStyles)}>
         {#if showEl}
           <slot />
         {/if}

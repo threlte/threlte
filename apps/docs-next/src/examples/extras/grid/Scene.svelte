@@ -25,8 +25,8 @@
 
 <!-- Make a box in every second cell to show aligment -->
 
-{#each { length: 10 } as h, x}
-  {#each { length: 10 } as v, y}
+{#each { length: 10 } as _h, x}
+  {#each { length: 10 } as _v, y}
     {#if x % 2 == 0 && y % 2 == 0}
       <T.Group position={[x - 4.5, 0.5, y - 4.5]}>
         <T.Mesh>

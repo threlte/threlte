@@ -1,8 +1,47 @@
 ---
-category: '@threlte/extras'
-name: '<Float>'
-sourcePath: 'apps/docs-new/src/content/components/float.md'
-type: 'component'
+{
+  category: '@threlte/extras',
+  name: '<Float>',
+  type: 'component',
+  'componentSignature':
+    {
+      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+      'props':
+        [
+          {
+            name: 'speed',
+            type: 'number | [x: number, y: number, z: number]',
+            default: '1',
+            required: false
+          },
+          {
+            name: 'floatIntensity',
+            type: 'number | [x: number, y: number, z: number]',
+            default: '1',
+            required: false
+          },
+          {
+            name: 'floatingRange',
+            type: '[number, number] | [x: [number, number], y: [number, number], z: [number, number]]',
+            default: '[-0.1, 0.1]',
+            required: false
+          },
+          {
+            name: 'rotationIntensity',
+            type: 'number | [x: number, y: number, z: number]',
+            default: '0',
+            required: false
+          },
+          {
+            name: 'rotationSpeed',
+            type: 'number | [x: number, y: number, z: number]',
+            default: '0',
+            required: false
+          },
+          { name: 'seed', type: 'number', default: 'Math.random() * 10000', required: false }
+        ]
+    }
+}
 ---
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
@@ -13,7 +52,7 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 
 ### Basic Example
 
-```svelte title="src/pages/[id].json.ts" {3}
+```svelte title="FloatingMesh.svelte"
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Float } from '@threlte/extras'
@@ -40,19 +79,3 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 Rotation is set by `rotationSpeed` and `rotationIntensity`. Both of them need to be different from 0 to enable rotation. Providing a `number` in either of them applies it to all three axes. You get more granual control by passing an array `[x: number, y: number, z: number]`. `rotationSpeed` is responsible for the speed of the animation and `rotationIntensity` for the angle.
 
 `seed` is responsible for the starting state of the animations and is random by default. Setting to a fixed value to get a predictable starting result.
-
-## Properties
-
-```ts {1,6} {4}+ {7,8}- title="src/pages/[id].json.ts"
-// floating - y axis float by default
-speed?: number | [x: number, y: number, z: number] = 1
-floatIntensity?: number | [x: number, y: number, z: number] = 1
-floatingRange?: [number, number] | [x: [number, number],
-
-// rotation - disabled by default
-rotationIntensity?: number | [x: number, y: number, z: number] = 0
-rotationSpeed?: number | [x: number, y: number, z: number] = 0
-
-// seed
-seed?: number = Math.random() * 10000
-```

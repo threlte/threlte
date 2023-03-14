@@ -1,7 +1,54 @@
 ---
-category: '@threlte/extras'
-name: <Text>
-type: 'component'
+{
+  'category': '@threlte/extras',
+  'name': '<Text>',
+  'type': 'component',
+  'componentSignature':
+    {
+      extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+      'props':
+        [
+          { name: 'text', type: 'string', required: false },
+          {
+            name: 'anchorX',
+            type: "number | 'left' | 'center' | 'right' | string",
+            required: false
+          },
+          {
+            name: 'anchorY',
+            type: "number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string",
+            required: false
+          },
+          { name: 'curveRadius', type: 'number', required: false },
+          { name: 'direction', type: "'auto' | 'ltr' | 'rtl'", required: false },
+          { name: 'font', type: 'string', required: false },
+          { name: 'fontSize', type: 'number', required: false },
+          { name: 'letterSpacing', type: 'number', required: false },
+          { name: 'lineHeight', type: 'number | string', required: false },
+          { name: 'maxWidth', type: 'number', required: false },
+          { name: 'overflowWrap', type: "'normal' | 'break-word' | 'normal'", required: false },
+          { name: 'textAlign', type: "'left' | 'right' | 'center' | 'justify'", required: false },
+          { name: 'textIndent', type: 'number', required: false },
+          { name: 'whiteSpace', type: "'normal' | 'nowrap' | 'pre-wrap'", required: false },
+          { name: 'material', type: 'Material | Material[]', required: false },
+          { name: 'color', type: 'string | number | Color', required: false },
+          { name: 'depthOffset', type: 'number', required: false },
+          { name: 'clipRect', type: '[number, number, number, number]', required: false },
+          { name: 'glyphGeometryDetail', type: 'number', required: false },
+          { name: 'sdfGlyphSize', type: 'number', required: false },
+          { name: 'outlineWidth', type: 'number | string', required: false },
+          { name: 'outlineColor', type: 'ColorRepresentation', required: false },
+          { name: 'outlineOpacity', type: 'number', required: false },
+          { name: 'outlineBlur', type: 'number | string', required: false },
+          { name: 'outlineOffsetX', type: 'number | string', required: false },
+          { name: 'outlineOffsetY', type: 'number | string', required: false },
+          { name: 'strokeWidth', type: 'number | string', required: false },
+          { name: 'strokeColor', type: 'ColorRepresentation | Color', required: false },
+          { name: 'strokeOpacity', type: 'number', required: false },
+          { name: 'fillOpacity', type: 'number', required: false }
+        ]
+    }
+}
 ---
 
 The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
@@ -21,76 +68,4 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
   bind:value
 />
 <Text text={value} />
-```
-
-### Properties
-
-```ts
-// optional
-position: Position | undefined = undefined
-scale: Scale | undefined = undefined
-rotation: Rotation | undefined = undefined
-lookAt: LookAt | undefined = undefined
-viewportAware: boolean = false
-castShadow: boolean | undefined = undefined
-receiveShadow: boolean | undefined = undefined
-frustumCulled: boolean | undefined = undefined
-renderOrder: number | undefined = undefined
-visible: boolean | undefined = undefined
-dispose: boolean | undefined = undefined
-userData: Record<string, any> | undefined = undefined
-interactive: boolean = false
-ignorePointer: boolean = false
-
-text: string | undefined = undefined
-anchorX: number | 'left' | 'center' | 'right' | string | undefined = undefined
-anchorY: number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string | undefined = undefined
-curveRadius: number | undefined = undefined
-font: null | string | undefined = undefined
-fontSize: number | undefined = undefined
-letterSpacing: number | undefined = undefined
-lineHeight: number | string | undefined = undefined
-maxWidth: number | undefined = undefined
-overflowWrap: 'normal' | 'break-word' | 'normal' | undefined = undefined
-textAlign: 'left' | 'right' | 'center' | 'justify' | undefined = undefined
-textIndent: number | undefined = undefined
-whiteSpace: 'normal' | 'nowrap' | 'pre-wrap' | undefined = undefined
-material: THREE.Material | THREE.Material[] | null | undefined = undefined
-color: string | number | THREE.Color | null | undefined = undefined
-depthOffset: number | undefined = undefined
-clipRect: [number, number, number, number] | null | undefined = undefined
-glyphGeometryDetail: number | undefined = undefined
-sdfGlyphSize: number | null | undefined = undefined
-outlineWidth: number | string | undefined = undefined
-outlineColor: THREE.ColorRepresentation | undefined = undefined
-outlineOpacity: number | undefined = undefined
-outlineBlur: number | string | undefined = undefined
-outlineOffsetX: number | string | undefined = undefined
-outlineOffsetY: number | string | undefined = undefined
-strokeWidth: number | string | undefined = undefined
-strokeColor: THREE.ColorRepresentation | THREE.Color | undefined = undefined
-strokeOpacity: number | undefined = undefined
-fillOpacity: number | undefined = undefined
-direction: 'auto' | 'ltr' | 'rtl' | undefined = undefined
-```
-
-### Bindings
-
-```ts
-inViewport: boolean
-textObject: Text
-```
-
-### Events
-
-```ts
-viewportenter: undefined
-viewportleave: undefined
-click: CustomEvent<ThreltePointerEvent>
-contextmenu: CustomEvent<ThreltePointerEvent>
-pointerup: CustomEvent<ThreltePointerEvent>
-pointerdown: CustomEvent<ThreltePointerEvent>
-pointerenter: CustomEvent<ThreltePointerEvent>
-pointerleave: CustomEvent<ThreltePointerEvent>
-pointermove: CustomEvent<ThreltePointerEvent>
 ```

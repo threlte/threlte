@@ -1,12 +1,28 @@
 ---
-category: '@threlte/extras'
-name: <TransformControls>
-type: 'component'
+{
+  'category': '@threlte/extras',
+  'name': '<TransformControls>',
+  'type': 'component',
+  'componentSignature':
+    {
+      pretext: 'The component <code>&lt;TransformControls&gt;</code> extends both <code>&lt;T.TransformControls&gt;</code> and <code>&lt;T.Group&gt;</code>. You may pass any property of either of these components to the component <code>&lt;TransformControls&gt;</code>.',
+      'props':
+        [
+          { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
+          { name: 'object', type: 'THREE.Object3D', required: false }
+        ],
+      bindings:
+        [
+          { name: 'controls', type: 'THREE.TransformControls' },
+          { name: 'group', type: 'THREE.Group' }
+        ]
+    }
+}
 ---
 
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
 
-The component `<TransformControls>` needs to be a direct child of the component to be transformed.
+The component `<TransformControls>` needs to be the parent of the component to be transformed.
 
 To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
 
@@ -14,161 +30,37 @@ To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in
 
 ### Examples
 
-```svelte
+```svelte title="Scene.svelte"
 <script>
-  import { TransformControls, Mesh, TransformControls } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { TransformControls } from '@threlte/extras'
   import { MeshStandardMaterial, BoxBufferGeometry } from 'three'
 </script>
 
-<Mesh
-  geometry={new BoxBufferGeometry(1, 1, 1)}
-  material={new MeshStandardMaterial()}
->
-  <TransformControls />
-</Mesh>
+<TransformControls>
+  <T.Mesh
+    geometry={new BoxBufferGeometry(1, 1, 1)}
+    material={new MeshStandardMaterial()}
+  />
+</TransformControls>
 ```
 
-The `<TransformControls>` component can also be used to transform [`<Instance>`](/core/instance) components:
+The `<TransformControls>` component can also be used to transform an object passed to it:
 
-```svelte
+```svelte title="Scene.svelte"
 <script>
-  import { Instance, TransformControls } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { TransformControls } from '@threlte/extras'
+  import { MeshStandardMaterial, BoxBufferGeometry } from 'three'
 </script>
 
-<Instance>
-  <TransformControls />
-</Instance>
-```
+<T.Mesh
+  geometry={new BoxBufferGeometry(1, 1, 1)}
+  material={new MeshStandardMaterial()}
+  let:ref
+>
+  <TransformControls object={ref} />
+</T.Mesh>
 
-### Properties
-
-```ts
-// optional
-autoPauseOrbitControls: boolean = true
-mode: 'translate' | 'rotate' | 'scale' | undefined = undefined
-enabled: boolean | undefined = undefined
-translationSnap: number | undefined | null = undefined
-scaleSnap: number | undefined | null = undefined
-rotationSnap: number | undefined | null = undefined
-showX: boolean | undefined = undefined
-showY: boolean | undefined = undefined
-showZ: boolean | undefined = undefined
-size: number | undefined = undefined
-space: 'world' | 'local' | undefined = undefined
-```
-
-### Bindings
-
-```ts
-axis: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null
-dragging: boolean
-```
-
-### Events
-
-```ts
-change: void
-'camera-changed': {
-  type: 'camera-changed'
-  value: Camera
-}
-'object-changed': {
-  type: 'object-changed'
-  value: Object3D
-}
-'enabled-changed': {
-  type: 'enabled-changed'
-  value: boolean
-}
-'axis-changed': {
-  type: 'axis-changed'
-  value: 'X' | 'Y' | 'Z' | 'E' | 'XY' | 'YZ' | 'XZ' | 'XYZ' | 'XYZE' | null
-}
-'mode-changed': {
-  type: 'mode-changed'
-  value: 'translate' | 'rotate' | 'scale'
-}
-'translationSnap-changed': {
-  type: 'translationSnap-changed'
-  value: number
-}
-'rotationSnap-changed': {
-  type: 'rotationSnap-changed'
-  value: number
-}
-'scaleSnap-changed': {
-  type: 'scaleSnap-changed'
-  value: number
-}
-'space-changed': {
-  type: 'space-changed'
-  value: 'world' | 'local'
-}
-'size-changed': {
-  type: 'size-changed'
-  value: number
-}
-'dragging-changed': {
-  type: 'dragging-changed'
-  value: boolean
-}
-'showX-changed': {
-  type: 'showX-changed'
-  value: boolean
-}
-'showY-changed': {
-  type: 'showY-changed'
-  value: boolean
-}
-'showZ-changed': {
-  type: 'showZ-changed'
-  value: boolean
-}
-'worldPosition-changed': {
-  type: 'worldPosition-changed'
-  value: Vector3
-}
-'worldPositionStart-changed': {
-  type: 'worldPositionStart-changed'
-  value: Vector3
-}
-'worldQuaternion-changed': {
-  type: 'worldQuaternion-changed'
-  value: Quaternion
-}
-'worldQuaternionStart-changed': {
-  type: 'worldQuaternionStart-changed'
-  value: Quaternion
-}
-'cameraPosition-changed': {
-  type: 'cameraPosition-changed'
-  value: Vector3
-}
-'cameraQuaternion-changed': {
-  type: 'cameraQuaternion-changed'
-  value: Quaternion
-}
-'pointStart-changed': {
-  type: 'pointStart-changed'
-  value: Vector3
-}
-'pointEnd-changed': {
-  type: 'pointEnd-changed'
-  value: Vector3
-}
-'rotationAxis-changed': {
-  type: 'rotationAxis-changed'
-  value: Vector3
-}
-'rotationAngle-changed': {
-  type: 'rotationAngle-changed'
-  value: number
-}
-'eye-changed': {
-  type: 'eye-changed'
-  value: Vector3
-}
-mouseDown: void
-mouseUp: void
-objectChange: void
+<TransformControls object={someObject} />
 ```

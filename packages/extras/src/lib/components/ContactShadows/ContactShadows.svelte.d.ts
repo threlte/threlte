@@ -16,8 +16,12 @@ export type ContactShadowsProps = Props<Group> & {
   depthWrite?: boolean
 }
 
+export type ContactShadowsEvents = Events<Group>
+
+export type ContactShadowsSlots = Slots<Group>
+
 export default class ContactShadows extends SvelteComponentTyped<
   ContactShadowsProps,
-  Events<Group>,
-  Slots<Group>
+  ContactShadowsEvents,
+  ContactShadowsSlots
 > {}

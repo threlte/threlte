@@ -228,4 +228,8 @@ export interface TextMesh extends Mesh {
 
 export type TextProps = Props<TextMesh>
 
-export default class Text extends SvelteComponentTyped<TextProps, Events<Mesh>, Slots<Mesh>> {}
+export type TextEvents = Events<TextMesh>
+
+export type TextSlots = Slots<TextMesh>
+
+export default class Text extends SvelteComponentTyped<TextProps, TextEvents, TextSlots> {}

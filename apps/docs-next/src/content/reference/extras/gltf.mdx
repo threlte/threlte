@@ -1,7 +1,45 @@
 ---
-category: '@threlte/extras'
-name: <GLTF>
-type: 'component'
+{
+  category: '@threlte/extras',
+  name: <GLTF>,
+  type: 'component',
+  'componentSignature':
+    {
+      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+      'props':
+        [
+          { name: 'url', type: 'string', required: true },
+          { name: 'useDraco', type: 'string | boolean', required: false },
+          { name: 'useMeshopt', type: 'boolean', required: false },
+          { name: 'ktxTranscoderPath', type: 'string', required: false }
+        ],
+      events:
+        [
+          {
+            name: 'load',
+            payload: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+          },
+          { name: 'unload', payload: 'void' },
+          { name: 'error', payload: 'string' }
+        ],
+      bindings:
+        [
+          {
+            name: 'gltf',
+            type: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+          },
+          { name: 'scene', type: 'THREE.Group' },
+          { name: 'animations', type: 'THREE.AnimationClip[]' },
+          { name: 'asset', type: "GLTF['asset']" },
+          { name: 'cameras', type: 'THREE.Camera[]' },
+          { name: 'scenes', type: 'THREE.Group[]' },
+          { name: 'userData', type: 'any' },
+          { name: 'parser', type: 'GLTFParser' },
+          { name: 'materials', type: 'Record<string, THREE.Material>' },
+          { name: 'nodes', type: 'Record<string, THREE.Object3D>' }
+        ]
+    }
+}
 ---
 
 To use DRACO compression, provide a path to the DRACO decoder.
@@ -65,70 +103,3 @@ Or you can set `useDraco` to your own DRACO decoder path as a `string`.
 #### Meshopt
 
 You can set `useMeshopt` to `true` to use meshopt compression and Threlte will load a default meshopt decoder from Three, specifically `https://github.com/mrdoob/three.js/blob/dev/examples/jsm/libs/meshopt_decoder.module.js`.
-
-### Properties
-
-```ts
-// required
-url: string
-
-// optional
-position: Position | undefined = undefined
-scale: Scale | undefined = undefined
-rotation: Rotation | undefined = undefined
-lookAt: LookAt | undefined = undefined
-viewportAware: boolean = false
-castShadow: boolean | undefined = undefined
-receiveShadow: boolean | undefined = undefined
-frustumCulled: boolean | undefined = undefined
-renderOrder: number | undefined = undefined
-visible: boolean | undefined = undefined
-dispose: boolean | undefined = undefined
-d̶r̶a̶c̶o̶D̶e̶c̶o̶d̶e̶r̶P̶a̶t̶h̶: string | undefined = undefined // Deprecated - use `useDraco` instead
-useDraco: string | boolean = false
-useMeshopt: boolean = false
-ktxTranscoderPath: string | undefined = undefined
-ignorePointer: boolean = false
-interactive: boolean = false
-```
-
-### Bindings
-
-```ts
-gltf: THREE.GLTF | undefined
-scene: THREE.Group | undefined
-animations: THREE.AnimationClip[] | undefined
-asset:
-  | {
-      copyright?: string | undefined;
-      generator?: string | undefined;
-      version?: string | undefined;
-      minVersion?: string | undefined;
-      extensions?: any;
-      extras?: any;
-    }
-  | undefined
-cameras: THREE.Camera[] | undefined
-scenes: THREE.Group[] | undefined
-userData: any
-parser: THREE.GLTFParser | undefined
-materials: Record<string, THREE.Material>
-nodes: Record<string, THREE.Object3D>
-```
-
-### Events
-
-```ts
-load: GLTF // The content finished loading
-unload: undefined // New content finished loading and the old content is unloaded and disposed
-error: string // An error occured while loading and parsing
-viewportenter: undefined
-viewportleave: undefined
-click: CustomEvent<ThreltePointerEvent>
-contextmenu: CustomEvent<ThreltePointerEvent>
-pointerup: CustomEvent<ThreltePointerEvent>
-pointerdown: CustomEvent<ThreltePointerEvent>
-pointerenter: CustomEvent<ThreltePointerEvent>
-pointerleave: CustomEvent<ThreltePointerEvent>
-pointermove: CustomEvent<ThreltePointerEvent>
-```

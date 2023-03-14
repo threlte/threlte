@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { forwardEvents, T } from '@threlte/core'
-  import { createEventDispatcher } from 'svelte'
+  import { createRawEventDispatcher, forwardEvents, T } from '@threlte/core'
   // @ts-ignore
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { useGltf } from '../../hooks/useGltf'
@@ -24,7 +23,7 @@
     materials: Record<string, any>
   }>
 
-  const dispatch = createEventDispatcher<{
+  const dispatch = createRawEventDispatcher<{
     load: ThreeGLTF
     unload: undefined
     error: string

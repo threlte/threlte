@@ -1,7 +1,66 @@
 ---
-category: '@threlte/extras'
-name: <PositionalAudio>
-type: 'component'
+{
+  category: '@threlte/extras',
+  name: <PositionalAudio>,
+  type: 'component',
+  componentSignature:
+    {
+      extends:
+        {
+          type: 'PositionalAudio',
+          url: 'https://threejs.org/docs/index.html#api/en/audio/PositionalAudio'
+        },
+      props:
+        [
+          {
+            name: 'src',
+            type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
+            required: true
+          },
+          {
+            name: 'id',
+            type: 'string',
+            required: false,
+            default: 'default',
+            description: 'The id of the AudioListener this Audio will be attached to.'
+          },
+          { name: 'autoplay', type: 'boolean', required: false },
+          { name: 'loop', type: 'boolean', required: false },
+          { name: 'volume', type: 'number', required: false },
+          { name: 'playbackRate', type: 'number', required: false },
+          { name: 'detune', type: 'number', required: false },
+          {
+            name: 'directionalCone',
+            type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }',
+            required: false
+          },
+          { name: 'refDistance', type: 'number', required: false },
+          { name: 'rolloffFactor', type: 'number', required: false },
+          { name: 'distanceModel', type: 'string', required: false },
+          { name: 'maxDistance', type: 'number', required: false }
+        ],
+      events:
+        [
+          { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
+          {
+            name: 'progress',
+            payload: 'ProgressEvent<EventTarget>',
+            description: 'Fired when the audio is loading.'
+          },
+          {
+            name: 'error',
+            payload: 'ErrorEvent',
+            description: 'Fired when the audio fails to load.'
+          }
+        ],
+      bindings:
+        [
+          { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
+          { name: pause, type: '() => THREE.Audio' },
+          { name: stop, type: '() => THREE.Audio' }
+        ]
+    }
+}
 ---
 
 Creates a positional audio entity.
@@ -52,61 +111,4 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
     />
   </Car>
 </Canvas>
-```
-
-### Properties
-
-```ts
-// optional
-viewportAware: boolean = false
-position: Position | undefined = undefined
-scale: Scale | undefined = undefined
-rotation: Rotation | undefined = undefined
-lookAt: LookAt | undefined = undefined
-castShadow: boolean | undefined = undefined
-receiveShadow: boolean | undefined = undefined
-frustumCulled: boolean | undefined = undefined
-renderOrder: number | undefined = undefined
-visible: boolean | undefined = undefined
-dispose: boolean | undefined = undefined
-userData: Record<string, any> | undefined = undefined
-autoplay: boolean | undefined = undefined
-detune: number | undefined = undefined
-src: string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream | undefined = undefined
-volume: number | undefined = undefined
-loop: boolean | undefined = undefined
-filters: BiquadFilterNode[] | BiquadFilterNode | undefined = undefined
-playbackRate: number | undefined = undefined
-id: string | undefined = undefined
-directionalCone:
-  | {
-      coneInnerAngle: number
-      coneOuterAngle: number
-      coneOuterGain: number
-    }
-  | undefined = undefined
-refDistance: number | undefined = undefined
-rolloffFactor: number | undefined = undefined
-distanceModel: string | undefined = undefined
-maxDistance: number | undefined = undefined
-```
-
-### Bindings
-
-```ts
-audio: THREE.PositionalAudio
-inViewport: boolean
-play: (delay?: number) => Promise<THREE.PositionalAudio>
-pause: () => THREE.PositionalAudio
-stop: () => THREE.PositionalAudio
-```
-
-### Events
-
-```ts
-viewportenter: undefined
-viewportleave: undefined
-load: AudioBuffer
-progress: ProgressEvent<EventTarget>
-error: ErrorEvent
 ```
