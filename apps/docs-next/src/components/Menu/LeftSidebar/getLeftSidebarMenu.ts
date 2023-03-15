@@ -51,7 +51,8 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Basics',
   'Render Components',
   'Advanced',
-  'Preprocessing'
+  'Preprocessing',
+  'Examples'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
@@ -61,7 +62,14 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = referenceCollection
-      .filter((item) => item.data.category === category)
+      .filter((item) => {
+        if (item.data.category == 'Examples') {
+          if (item.data.title != 'Index') {
+            return false
+          }
+        }
+        return item.data.category === category
+      })
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {
