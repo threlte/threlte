@@ -1,7 +1,7 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
   import type { GridProps, GridEvents, GridSlots } from './Grid.svelte'
-  import { useThrelte, T, forwardEvents } from '@threlte/core'
+  import { useThrelte, T, forwardEventHandlers } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, type Mesh } from 'three'
 
   type $$Props = Required<GridProps>
@@ -147,7 +147,7 @@
     invalidate('Grid uniforms changed')
   }
 
-  const component = forwardEvents()
+  const component = forwardEventHandlers()
 </script>
 
 <T.Mesh bind:this={$component} bind:ref {material} frustumCulled={false} {...$$restProps} let:ref>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useParent, forwardEvents } from '@threlte/core'
+  import { T, useParent, forwardEventHandlers } from '@threlte/core'
   import type { Mesh } from 'three'
   import type { EdgesEvents, EdgesProps, EdgesSlots } from './Edges.svelte'
 
@@ -19,10 +19,10 @@
   const geometry =
     'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
 
-  const events = forwardEvents()
+  const component = forwardEventHandlers()
 </script>
 
-<T.LineSegments let:ref {...$$restProps} bind:this={$events}>
+<T.LineSegments let:ref {...$$restProps} bind:this={$component}>
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
   <slot {ref} />

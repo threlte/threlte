@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { forwardEvents, T, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useThrelte } from '@threlte/core'
 
   const { invalidate } = useThrelte()
 
   const el = document.getElementById('int-target')
 
-  const events = forwardEvents()
+  const component = forwardEventHandlers()
 </script>
 
 <T.OrthographicCamera
@@ -15,7 +15,7 @@
   let:ref
 >
   <T.OrbitControls
-    bind:this={$events}
+    bind:this={$component}
     args={[ref, el]}
     on:change={invalidate}
     enableZoom={false}

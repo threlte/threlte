@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEvents, T, useFrame, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useFrame, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     Color,
@@ -209,7 +209,7 @@
     shadowMaterial.dispose()
   })
 
-  const components = forwardEvents()
+  const components = forwardEventHandlers()
 </script>
 
 <T.Group {...$$restProps} let:ref bind:this={$components}>

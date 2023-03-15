@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    forwardEvents,
+    forwardEventHandlers,
     HierarchicalObject,
     T,
     useThrelte,
@@ -91,7 +91,7 @@
   $: transformProps = pick($$restProps, transformOnlyPropNames) as Props<TransformControls>
   $: objectProps = omit($$restProps, transformOnlyPropNames) as Props<Group>
 
-  const component = forwardEvents()
+  const component = forwardEventHandlers()
 </script>
 
 <!-- TransformControls need to be added to the scene -->
