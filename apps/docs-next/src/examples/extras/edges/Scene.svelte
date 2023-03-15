@@ -38,7 +38,7 @@
       geometry={helmetGeometry}
     >
       <T.MeshBasicMaterial
-        color={new Color(0xff3e00).convertSRGBToLinear()}
+        color={new Color(0xff3e00)}
         toneMapped={false}
       />
       <Edges

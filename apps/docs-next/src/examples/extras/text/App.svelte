@@ -27,10 +27,7 @@
 <div use:action />
 
 <div class="w-full h-full -z-10 relative bg-orange-500/20">
-  <Canvas
-    linear
-    flat
-  >
+  <Canvas>
     <Scene
       text={$text}
       fontSize={$fontSize}

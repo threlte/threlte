@@ -61,7 +61,7 @@
         position.z={-0.75}
         geometry={new BoxGeometry(1, 1, 1)}
         material={new MeshStandardMaterial({
-          color: new Color('#0059BA').convertSRGBToLinear()
+          color: new Color('#0059BA')
         })}
       />
     </Float>
@@ -76,7 +76,7 @@
         rotation.y={71}
         geometry={new TorusKnotGeometry(0.5, 0.15, 100, 12, 2, 3)}
         material={new MeshStandardMaterial({
-          color: new Color('#F85122').convertSRGBToLinear()
+          color: new Color('#F85122')
         })}
       />
     </Float>
@@ -90,7 +90,7 @@
         rotation={[-5, 128, 10]}
         geometry={new IcosahedronGeometry(1, 0)}
         material={new MeshStandardMaterial({
-          color: new Color('#F8EBCE').convertSRGBToLinear()
+          color: new Color('#F8EBCE')
         })}
       />
     </Float>

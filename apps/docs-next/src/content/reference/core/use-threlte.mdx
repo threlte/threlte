@@ -1,0 +1,72 @@
+---
+category: '@threlte/core'
+name: useThrelte
+---
+
+This hook lets you consume the main Threlte context (`ThrelteContext`) which contains the renderer, camera, scene and other properties.
+
+Use this hook to manually invalidate the current frame …
+
+```ts
+const { invalidate } = useThrelte()
+invalidate()
+```
+
+… access the current pointer coordinates …
+
+```ts
+const { pointer } = useThrelte()
+console.log($pointer)
+```
+
+… or use the currently active camera:
+
+```ts
+const { camera } = useThrelte()
+$camera.updateProjectionMatrix()
+```
+
+### Usage
+
+This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
+
+```ts
+const {
+  size, // Readable<Size>
+  clock, // Clock
+  camera, // CurrentWritable<Camera>
+  scene, // Scene
+  renderer, // WebGLRenderer | undefined
+  invalidate, // (debugFrameloopMessage?: string) => void
+  advance, // () => void
+  colorSpace, // CurrentWritable<TextureEncoding>
+  toneMapping, // CurrentWritable<ToneMapping>
+  dpr, // CurrentWritable<number>
+  shadows, // CurrentWritable<boolean | ShadowMapType>
+  colorManagementEnabled, // CurrentWritable<boolean>
+  frameloop // CurrentWritable<'always' | 'demand' | 'never'>
+} = useThrelte()
+```
+
+### Frameloop
+
+If the [frameloop is set to `'demand'`](/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+
+```ts
+const { invalidate } = useThrelte()
+
+invalidate()
+
+// Optionally provide a debugFrameloopMessage to debug the frame loop
+invalidate('changed material color')
+```
+
+If the [frameloop is set to `'never'`](/core/canvas) you must manually advance the frameloop to request a new render:
+
+```ts
+const { advance } = useThrelte()
+
+advance()
+```
+
+The property can be changed at any time, but it will only take effect on the next frame.

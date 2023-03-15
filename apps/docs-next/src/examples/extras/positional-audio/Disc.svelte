@@ -86,7 +86,7 @@
         position.y={0.2 + 0.05 + 0.025 + 0.01}
       >
         <T.MeshBasicMaterial
-          color={new Color('#ff3e00').convertSRGBToLinear()}
+          color={new Color('#ff3e00')}
           toneMapped={false}
         />
       </T.Mesh>

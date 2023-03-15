@@ -1,13 +1,5 @@
 <script lang="ts">
-  import {
-    createRawEventDispatcher,
-    forwardEvents,
-    T,
-    useFrame,
-    useThrelte,
-    useThrelteRoot
-  } from '@threlte/core'
-  import { createEventDispatcher } from 'svelte'
+  import { createRawEventDispatcher, forwardEvents, T, useFrame, useThrelte } from '@threlte/core'
   import { derived, writable, type Writable } from 'svelte/store'
   import {
     Group,
