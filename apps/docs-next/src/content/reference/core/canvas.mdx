@@ -14,8 +14,24 @@
             'default': 'window.devicePixelRatio',
             'required': false
           },
-          { 'name': 'flat', 'type': 'boolean', 'default': 'false', 'required': false },
-          { 'name': 'linear', 'type': 'boolean', 'default': 'false', 'required': false },
+          {
+            'name': 'toneMapping',
+            'type': 'THREE.ToneMapping',
+            'default': 'THREE.ACESFilmicToneMapping',
+            'required': false
+          },
+          {
+            'name': 'colorSpace',
+            'type': 'THREE.TextureEncoding',
+            'default': 'THREE.sRGBEncoding',
+            'required': false
+          },
+          {
+            'name': 'colorManagementEnabled',
+            'type': 'boolean',
+            'default': 'true',
+            'required': false
+          },
           {
             'name': 'frameloop',
             'type': { 'name': '"always" | "demand" | "never"', 'url': 'https://google.com' },
@@ -25,8 +41,8 @@
           { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
           { 'name': 'shadows', 'type': 'boolean', 'default': 'true', 'required': false },
           {
-            'name': 'shadowMapType',
-            'type': 'THREE.ShadowMapType',
+            'name': 'shadows',
+            'type': 'boolean | ShadowMapType',
             'default': 'THREE.PCFSoftShadowMap',
             'required': false
           },
