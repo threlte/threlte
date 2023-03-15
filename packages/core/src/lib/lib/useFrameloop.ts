@@ -76,9 +76,19 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
   )
 }
 
+/**
+ * ### `useFrameloop`
+ *
+ * This hook is responsible for running all `useFrame` and `useRender`
+ * callbacks, and for rendering the scene if no `useRender` callbacks are
+ * present.
+ *
+ * It also handles disposing objects that are due to be disposed right before any
+ * `useFrame` callbacks are run.
+ *
+ * A global delta is calculated and passed to all `useFrame` and `useRender` callbacks.
+ */
 export const useFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
-  const camera = memoize(ctx.camera)
-
   useRaf(() => {
     // dispose all objects that are due to be disposed
     internalCtx.dispose()
@@ -95,9 +105,9 @@ export const useFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalCo
     if (internalCtx.renderHandlers.size > 0) {
       // run all useRender callbacks, or …
       runUseRenderCallbacks(ctx, internalCtx, delta)
-    } else if (ctx.renderer && camera.current) {
+    } else if (ctx.renderer && ctx.camera.current) {
       // … render the scene with the default renderer
-      ctx.renderer.render(ctx.scene, camera.current)
+      ctx.renderer.render(ctx.scene, ctx.camera.current)
     }
 
     // if we're debugging, log the frame

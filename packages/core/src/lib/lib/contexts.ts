@@ -12,6 +12,12 @@ import type {
 import { createDefaultCamera } from './defaultCamera'
 import { currentWritable } from './storeUtils'
 
+/**
+ * ### `createContexts`
+ *
+ * This function creates the context objects `ThrelteContext` and
+ * `ThrelteInternalContext` for a Threlte application.
+ */
 export const createContexts = (options: {
   colorSpace: TextureEncoding
   toneMapping: ToneMapping

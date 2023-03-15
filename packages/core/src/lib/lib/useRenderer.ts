@@ -11,6 +11,20 @@ import {
 import type { ThrelteContext } from '../types/types'
 import { watch } from './storeUtils'
 
+/**
+ * ### `useRenderer`
+ *
+ * This hook creates a renderer and listens to changes in the context to
+ * update the renderer accordingly.
+ *
+ * It listens to the following context properties:
+ * - `size`
+ * - `toneMapping`
+ * - `colorSpace`
+ * - `dpr`
+ * - `shadows`
+ * - `colorManagementEnabled`
+ */
 export const useRenderer = (ctx: ThrelteContext) => {
   const renderer = writable<WebGLRenderer | undefined>(undefined)
 

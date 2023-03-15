@@ -98,7 +98,6 @@
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)
 
-  // destructure stores on top level
   useFrameloop(contexts.ctx, contexts.internalCtx)
 
   onMount(() => {
