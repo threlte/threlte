@@ -51,16 +51,12 @@ export const useRenderer = (ctx: ThrelteContext) => {
         renderer.shadowMap.type = PCFSoftShadowMap
       }
       const cm = ColorManagement as any
-      if (cm.enabled) {
+      if (cm.enabled !== undefined) {
         // since three.js r150 the color management prop is
         // called "enabled", but the types are not up to date :/
         cm.enabled = colorManagementEnabled
-      } else {
-        // in r147 the prop was called "legacyMode" but it was
-        // inverted, so we need to invert it again
-        if (cm.legacyMode) {
-          cm.legacyMode = !colorManagementEnabled
-        }
+      } else if (cm.legacyMode !== undefined) {
+        cm.legacyMode = !colorManagementEnabled
       }
     }
   )
