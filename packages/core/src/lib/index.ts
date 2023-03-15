@@ -32,7 +32,6 @@ export type { Plugin, NamedPlugin } from './plugins/types'
 export { useFrame } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
-export { useThrelteRoot } from './hooks/useThrelteRoot'
 export { setThrelteUserContext, useThrelteUserContext } from './hooks/useThrelteUserContext'
 export { useParent } from './internal/HierarchicalObject.svelte'
 
@@ -55,7 +54,6 @@ export type {
   LookAt,
   ThrelteUseFrameOptions,
   ThrelteContext,
-  ThrelteRootContext,
   ThrelteInstance,
   Size
 } from './types/types'

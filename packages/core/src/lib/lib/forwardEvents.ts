@@ -3,6 +3,27 @@ import { get_current_component } from 'svelte/internal'
 import { writable } from 'svelte/store'
 import { watch } from './storeUtils'
 
+/**
+ * ### `forwardEvents`
+ *
+ * Natively, Svelte has no way of passing down event listeners inside a
+ * component to a child component. Events have to be hand-wired upstream. This
+ * function allows you to forward events from a parent component to a child
+ * component.
+ *
+ * ```svelte
+ * <!-- Child.svelte -->
+ * <script>
+ * 	import { forwardEvents } from '@threlte/core'
+ * 	const dispatchingComponent = forwardEvents()
+ * </script>
+ *
+ * <OtherChildComponent bind:this={$dispatchingComponent} />
+ * ```
+ *
+ * Now, when implementing `<Child>` and adding event listeners via `on:eventname`,
+ * those event listeners will be forwarded to `<OtherChildComponent>`.
+ */
 export const forwardEvents = () => {
   const component = get_current_component()
 

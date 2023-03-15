@@ -1,12 +1,12 @@
 <script lang="ts">
   import { getContext, onDestroy, setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import { useThrelteDisposal } from '../hooks/useThrelteDisposal'
+  import { useThrelteInternal } from '../hooks/useThrelteInternal'
   import type { DisposableObjectProperties } from '../types/components'
   import type { ThrelteDisposeContext } from '../types/types'
 
   const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
-    useThrelteDisposal()
+    useThrelteInternal()
 
   export let object: DisposableObjectProperties['object'] = undefined
   let previousObject = object

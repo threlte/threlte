@@ -1,7 +1,6 @@
 import { onDestroy } from 'svelte'
-import type { OrthographicCamera, Camera, PerspectiveCamera } from 'three'
+import type { Camera, OrthographicCamera, PerspectiveCamera } from 'three'
 import { useThrelte } from '../../../hooks/useThrelte'
-import { useThrelteRoot } from '../../../hooks/useThrelteRoot'
 import type { Size } from '../../../types/types'
 
 const isCamera = (value: any): value is Camera => {
@@ -23,8 +22,7 @@ const isPerspectiveCameraOrOrthographicCamera = (
 }
 
 export const useCamera = () => {
-  const { invalidate, size } = useThrelte()
-  const { setCamera } = useThrelteRoot()
+  const { invalidate, size, camera } = useThrelte()
 
   let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
   let unsubscribe: (() => void) | undefined = undefined
@@ -63,7 +61,7 @@ export const useCamera = () => {
 
   const makeDefaultCamera = <T>(instance: T, makeDefault: boolean) => {
     if (!isCamera(instance) || !makeDefault) return
-    setCamera(instance)
+    camera.set(instance)
     invalidate()
   }
 

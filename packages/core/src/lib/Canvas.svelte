@@ -1,25 +1,4 @@
-<script
-  context="module"
-  lang="ts"
->
-  import { onDestroy, onMount, setContext } from 'svelte'
-  import { writable } from 'svelte/store'
-  import type { ShadowMapType, WebGLRendererParameters } from 'three'
-  import { PCFSoftShadowMap } from 'three'
-  import { useParentSize } from './hooks/useParentSize'
-  import { browser } from './lib/browser'
-  import { createCache } from './lib/cache'
-  import { createContexts } from './lib/contexts'
-  import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
-  import { useFrameloop } from './lib/frameloop'
-  import {
-    createRendererAndComposer,
-    setRendererAndComposerSize,
-    setRendererColorOutput,
-    setRendererShadows
-  } from './lib/renderer'
-  import type { Size, ThrelteParentContext } from './types/types'
-
+<script context="module" lang="ts">
   const invalidationHandlers: Set<(debugFrameloopMessage?: string) => void> = new Set()
   export const invalidateGlobally = (debugFrameloopMessage?: string) => {
     invalidationHandlers.forEach((fn) => fn(debugFrameloopMessage))
@@ -27,16 +6,57 @@
 </script>
 
 <script lang="ts">
-  import T from "./components/T/T.svelte"
+  import { onDestroy, onMount } from 'svelte'
+  import { writable } from 'svelte/store'
+  import {
+    ACESFilmicToneMapping,
+    PCFSoftShadowMap,
+    sRGBEncoding,
+    type ShadowMapType,
+    type TextureEncoding,
+    type ToneMapping,
+    type WebGLRendererParameters
+  } from 'three'
+  import T from './components/T/T.svelte'
+  import { useParentSize } from './hooks/useParentSize'
+  import { browser } from './lib/browser'
+  import { createCache } from './lib/cache'
+  import { createContexts } from './lib/contexts'
+  import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
+  import { useFrameloop } from './lib/useFrameloop'
+  import { useRenderer } from './lib/useRenderer'
+  import type { Size } from './types/types'
+
+  /**
+   * @default window.devicePixelRatio
+   */
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
-  export let flat: boolean = false
-  export let linear: boolean = false
+  /**
+   * @default ACESFilmicToneMapping
+   */
+  export let toneMapping: ToneMapping = ACESFilmicToneMapping
+  /**
+   * @default sRGBEncoding
+   */
+  export let colorSpace: TextureEncoding = sRGBEncoding
+  /**
+   * @default 'demand'
+   */
   export let frameloop: 'always' | 'demand' | 'never' = 'demand'
+  /**
+   * @default false
+   */
   export let debugFrameloop: boolean = false
-  export let shadows: boolean = true
-  export let shadowMapType: ShadowMapType = PCFSoftShadowMap
+  /**
+   * @default PCFSoftShadowMap
+   */
+  export let shadows: boolean | ShadowMapType = PCFSoftShadowMap
   export let size: Size | undefined = undefined
   export let rendererParameters: WebGLRendererParameters | undefined = undefined
+  /**
+   * @default true
+   */
+  export let colorManagementEnabled: boolean = true
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
@@ -49,23 +69,23 @@
   const { parentSize, parentSizeAction } = useParentSize()
 
   // creating and setting the contexts
-  const contexts = createContexts(
-    linear,
-    flat,
+  const contexts = createContexts({
+    colorSpace,
+    toneMapping,
     dpr,
     userSize,
     parentSize,
     debugFrameloop,
-    frameloop
-  )
-
-  const { getCtx, renderCtx, disposalCtx } = contexts
+    frameloop,
+    shadows,
+    colorManagementEnabled
+  })
 
   // create cache context for caching assets
   createCache()
 
   // context bindings
-  export const { ctx, rootCtx } = contexts
+  export const ctx = contexts.ctx
 
   setDefaultCameraAspectOnSizeChange(ctx)
 
@@ -75,43 +95,28 @@
     invalidationHandlers.delete(ctx.invalidate)
   })
 
+  // the hook useRenderer is managing the renderer.
+  const { createRenderer } = useRenderer(ctx)
+
   // destructure stores on top level
-  const { size: derivedSize, scene } = ctx
-  const { flat: flatStore, linear: linearStore, dpr: dprStore } = rootCtx
-
-  setContext<ThrelteParentContext>('threlte-parent', writable(scene))
-
-  $: $linearStore = linear
-  $: $flatStore = flat
-  $: $dprStore = dpr
-  $: setRendererColorOutput(getCtx(), $linearStore, $flatStore)
-  $: setRendererAndComposerSize(getCtx(), $derivedSize, $dprStore)
-  $: setRendererShadows(getCtx(), shadows, shadowMapType)
+  useFrameloop(contexts.ctx, contexts.internalCtx)
 
   onMount(() => {
     if (!canvas) return
-    createRendererAndComposer(ctx, canvas, rendererParameters)
-    setRendererColorOutput(ctx, $linearStore, $flatStore)
-    setRendererAndComposerSize(ctx, $derivedSize, $dprStore)
-    setRendererShadows(ctx, shadows, shadowMapType)
+    createRenderer(canvas, rendererParameters)
     initialized = true
   })
 
-  useFrameloop(ctx, rootCtx, renderCtx, disposalCtx)
-
   onDestroy(() => {
-    disposalCtx.dispose(true)
+    contexts.internalCtx.dispose(true)
   })
 </script>
 
-<canvas
-  use:parentSizeAction
-  bind:this={canvas}
->
+<canvas use:parentSizeAction bind:this={canvas}>
   {#if initialized}
-	<T is={ctx.scene}>
-	<slot></slot>
-</T>
+    <T is={contexts.ctx.scene}>
+      <slot />
+    </T>
   {/if}
 </canvas>
 
