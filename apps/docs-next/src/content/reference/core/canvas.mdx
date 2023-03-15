@@ -14,37 +14,42 @@
             'default': 'window.devicePixelRatio',
             'required': false
           },
-          { name: 'flat', type: 'boolean', default: 'false', required: false },
-          { name: 'linear', type: 'boolean', default: 'false', required: false },
+          { 'name': 'flat', 'type': 'boolean', 'default': 'false', 'required': false },
+          { 'name': 'linear', 'type': 'boolean', 'default': 'false', 'required': false },
           {
-            name: 'frameloop',
-            type: { name: '"always" | "demand" | "never"', url: 'https://google.com' },
-            default: '"demand"',
-            required: false
+            'name': 'frameloop',
+            'type': { 'name': '"always" | "demand" | "never"', 'url': 'https://google.com' },
+            'default': '"demand"',
+            'required': false
           },
-          { name: 'debugFrameloop', type: 'boolean', default: 'false', required: false },
-          { name: 'shadows', type: 'boolean', default: 'true', required: false },
+          { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
+          { 'name': 'shadows', 'type': 'boolean', 'default': 'true', 'required': false },
           {
-            name: 'shadowMapType',
-            type: 'THREE.ShadowMapType',
-            default: 'THREE.PCFSoftShadowMap',
-            required: false
-          },
-          {
-            name: 'size',
-            type: '{ width: number, height: number } | undefined',
-            default: 'undefined',
-            required: false
+            'name': 'shadowMapType',
+            'type': 'THREE.ShadowMapType',
+            'default': 'THREE.PCFSoftShadowMap',
+            'required': false
           },
           {
-            name: 'rendererParameters',
-            type: 'THREE.WebGLRendererParameters | undefined',
-            default: 'undefined',
-            required: false
+            'name': 'size',
+            'type': '{ width: number, height: number } | undefined',
+            'default': 'undefined',
+            'required': false
+          },
+          {
+            'name': 'rendererParameters',
+            'type': 'THREE.WebGLRendererParameters | undefined',
+            'default': 'undefined',
+            'required': false
           }
         ],
-      bindings:
-        [{ name: 'ctx', type: { name: 'ThrelteContext', url: '/docs/reference/core/use-threlte' } }]
+      'bindings':
+        [
+          {
+            'name': 'ctx',
+            'type': { 'name': 'ThrelteContext', 'url': '/docs/reference/core/use-threlte' }
+          }
+        ]
     }
 }
 ---
