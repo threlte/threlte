@@ -1,7 +1,7 @@
 ---
 category: '@threlte/core'
 name: <T>
-order: 0
+order: 1
 type: component
 ---
 
@@ -204,9 +204,9 @@ The following attaches a material to the material property of a mesh and a geome
 ```
 
 <Tip type="tip">
-  All native elements ending with "Material" (such as `MeshStandardMaterial`) receive
-  `attach="material"`, and all elements ending with "Geometry" receive
-  `attach="geometry"`automatically. You do not strictly have to type it out!
+  All objects ending with "Material" (such as `MeshStandardMaterial`) receive `attach="material"`,
+  and all objects ending with "Geometry" receive `attach="geometry"` automatically. You do not
+  strictly have to type it out!
 </Tip>
 
 - The value inferred from the property `is` is "attached" to a parent property.
@@ -293,15 +293,37 @@ Use the property `makeDefault` to set a camera to the default rendering camera.
 
 ## Events
 
-Adding an event listener to a component will also add the corresponding event listener to the three.js class instance. The event will be forwarded and the native payload available as the first argument to the event listener.
+Adding an event listener to a component will also add the corresponding event listener to the three.js class
+instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
+
+<Tip type="info">
+	For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
+	`CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
+</Tip>
 
 This will listen to the "change" event on the `THREE.OrbitControls`:
 
 ```svelte
 <T
   is={OrbitControls}
-  on:change={(e) => {
-    console.log('OrbitControls changed. payload:', e)
+  on:change={(e) => console.log('change:', e)}
+/>
+```
+
+All `<T>` components also emit the `create` event when the underlying three.js class instance is created.
+This can be used to access the instance from the parent component or do tasks on the objects upon creation.
+The event handler is called with an object containing a reference to the object as well as a function `cleanup`
+that you may invoke with a callback to clean up after the object is destroyed when the component unmounts or the `args` change.
+
+```svelte
+<T.PerspectiveCamera
+  on:create={({ ref, cleanup }) => {
+    // Look at the center
+    ref.lookAt(0, 0, 0)
+
+    cleanup(() => {
+      // Do something when the camera is disposed
+    })
   }}
 />
 ```
@@ -311,10 +333,7 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 The value infered from the property `is` is available as the slot prop `ref`:
 
 ```svelte
-<T
-  is={PerspectiveCamera}
-  let:ref={camera}
->
+<T.PerspectiveCamera let:ref={camera}>
   <!--
 		The slot prop "ref" is used to reference the
 		camera and instantiate the OrbitControls
@@ -323,7 +342,7 @@ The value infered from the property `is` is available as the slot prop `ref`:
     is={OrbitControls}
     args={[camera, renderer.domElement]}
   />
-</T>
+</T.PerspectiveCamera>
 ```
 
 ## Bindings
@@ -333,11 +352,41 @@ The value infered from the property `is` is available as the binding `ref`:
 ```svelte
 <script>
   let camera
-  $: console.log(camera)
+  $: console.log(camera) // THREE.PerspectiveCamera
 </script>
 
 <T
   is={PerspectiveCamera}
   bind:ref={camera}
 />
+
+<!-- or -->
+
+<T.PerspectiveCamera bind:ref={camera} />
 ```
+
+## Extending the default component catalogue
+
+By default when using the dot-notation to access Three.js objects (e.g. `<T.Mesh>`), Threlte will automatically import
+the corresponding class from the namespance `'three'`. If you want to use a custom class or classes from Three.js that
+are available elsewhere (like `OrbitControls`), you can extend the default catalogue with the `extend` function:
+
+```svelte
+<script>
+  import { extend, T } from '@threlte/core'
+  import { CustomMesh } from './MyCustomMesh.ts'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
+  extend({
+    CustomMesh
+  })
+</script>
+
+<T.CustomMesh />
+```
+
+<Tip type="tip">
+	Be aware that in this case `<T>` can't provide type-safety on properties and events.
+	If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
+	This way, Threlte can infer the type of the object and provide type-safety on properties and events.
+</Tip>

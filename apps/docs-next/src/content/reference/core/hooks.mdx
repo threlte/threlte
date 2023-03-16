@@ -1,0 +1,393 @@
+---
+category: '@threlte/core'
+name: Hooks
+order: 5
+---
+
+## `useThrelte`
+
+This hook lets you consume the main Threlte context (`ThrelteContext`) of your application (scoped to the root `<Canvas>`) which contains the renderer, camera, scene and other properties.
+
+Use this hook to manually invalidate the current frame …
+
+```ts
+const { invalidate } = useThrelte()
+invalidate()
+```
+
+… access the renderer or the currently active camera …
+
+```ts
+const { renderer, camera } = useThrelte()
+console.log(renderer, $camera)
+```
+
+… or update render properties:
+
+```ts
+const { toneMapping } = useThrelte()
+toneMapping.set(THREE.LinearToneMapping)
+```
+
+### Usage
+
+<Tip type="info">
+	This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
+</Tip>
+
+```ts
+const {
+  size, // Readable<Size>
+  clock, // Clock
+  camera, // CurrentWritable<Camera>
+  scene, // Scene
+  renderer, // WebGLRenderer | undefined
+  invalidate, // (debugFrameloopMessage?: string) => void
+  advance, // () => void
+  colorSpace, // CurrentWritable<TextureEncoding>
+  toneMapping, // CurrentWritable<ToneMapping>
+  dpr, // CurrentWritable<number>
+  shadows, // CurrentWritable<boolean | ShadowMapType>
+  colorManagementEnabled, // CurrentWritable<boolean>
+  frameloop // CurrentWritable<'always' | 'demand' | 'never'>
+} = useThrelte()
+```
+
+### Frameloop
+
+If the [frameloop is set to `'demand'`](/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+
+```ts
+const { invalidate } = useThrelte()
+
+invalidate()
+
+// Optionally provide a debugFrameloopMessage to debug the frame loop
+invalidate('changed material color')
+```
+
+If the [frameloop is set to `'never'`](/core/canvas) you must manually advance the frameloop to request a new render:
+
+```ts
+const { advance } = useThrelte()
+
+advance()
+```
+
+The property can be changed at any time, but it will only take effect on the next frame.
+
+---
+
+## `useFrame`
+
+This hook allows you to execute code on every frame as part of the unified frameloop.
+You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
+Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
+
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/core/canvas) component.
+
+```ts
+type ThrelteUseFrameOptions = {
+  autostart?: boolean
+  order?: number
+  debugFrameloopMessage?: string
+  invalidate?: boolean
+}
+```
+
+`useFrame` returns an object containing functions `start` and `stop` to control the execution of the callback and a store `started` to subscribe to its state.
+
+### Example
+
+Starting and stopping the execution of a frameloop handler:
+
+```ts
+const { start, stop, started } = useFrame(
+  () => {
+    console.log('rendering…')
+  },
+  {
+    autostart: false
+  }
+)
+
+const toggleUseFrame = () => {
+  if ($started) {
+    stop()
+  } else {
+    start()
+  }
+}
+```
+
+Accessing the context and the global clocks delta inside a frameloop handler:
+
+```ts
+useFrame(({ camera }, delta) => {
+  const cameraPosition = camera.current.position
+})
+```
+
+<Tip type="tip">
+  The state available in the callback is the same as the one available with <code>useThrelte</code>.
+  Some properties (such as the property `camera`) use a `CurrentWritable` store. which is a custom
+  Threlte store. It's a regular writable store that also has a `current` property which is the
+  current value of the store. It's useful for accessing the value of a store in a non-reactive
+  context, such as in loops.
+</Tip>
+
+By default, `useFrame` will invalidate every frame and trigger a render after the callback is executed. You can disable this behavior by setting `invalidate` to `false` and using the function `invalidate` from the state to trigger a render manually.
+
+```ts
+useFrame(
+  ({ invalidate }) => {
+    // manually invalidate the frame
+    invalidate()
+  },
+  {
+    invalidate: false
+  }
+)
+```
+
+---
+
+## `useRender`
+
+This hook allows you to execute code on every **invalidated** frame and after all `useFrame` hooks have been executed.
+You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
+Typically this hook is used to implement advanced rendering techniques such as post processing or custom render passes.
+
+<Tip type="warning">
+  As soon as this hook is used anywhere in the component tree, the default render loop is disabled.
+  You need to take care of rendering yourself.
+</Tip>
+
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useRender` callbacks across the component tree where callbacks are ordered from low to high.
+
+```ts
+type ThrelteUseRenderOptions = {
+  order?: number
+}
+```
+
+### Basic Rendering
+
+```svelte title="Renderer.svelte"
+<script>
+  import { useRender } from '@threlte/core'
+
+  useRender(({ camera, renderer, scene }, delta) => {
+    renderer.render(scene, camera.current)
+  })
+</script>
+```
+
+<Tip type="tip">
+  The state available in the callback is the same as the one available with <code>useThrelte</code>.
+  Some properties (such as the property `camera`) use a `CurrentWritable` store. which is a custom
+  Threlte store. It's a regular writable store that also has a `current` property which is the
+  current value of the store. It's useful for accessing the value of a store in a non-reactive
+  context, such as in loops.
+</Tip>
+
+### Post Processing
+
+This example demonstrates how to use `useRender` to implement post processing effects using the library [`postprocessing`](https://github.com/pmndrs/postprocessing).
+
+```svelte title="Renderer.svelte"
+<script>
+  import { useRender } from '@threlte/core'
+  import {
+    EffectComposer,
+    EffectPass,
+    RenderPass,
+    SMAAEffect,
+    SMAAPreset,
+    BloomEffect,
+    KernelSize
+  } from 'postprocessing'
+
+  const { scene, renderer, camera } = useThrelte()
+
+  // To use the EffectComposer we need to pass arguments to the
+  // default WebGLRenderer: https://github.com/pmndrs/postprocessing#usage
+  const composer = new EffectComposer(renderer)
+
+  const setupEffectComposer = (camera) => {
+    composer.removeAllPasses()
+    composer.addPass(new RenderPass(scene, camera))
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new BloomEffect({
+          intensity: 1,
+          luminanceThreshold: 0.15,
+          height: 512,
+          width: 512,
+          luminanceSmoothing: 0.08,
+          mipmapBlur: true,
+          kernelSize: KernelSize.MEDIUM
+        })
+      )
+    )
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new SMAAEffect({
+          preset: SMAAPreset.LOW
+        })
+      )
+    )
+  }
+
+  // We need to set up the passes according to the camera in use
+  $: setupEffectComposer($camera)
+
+  useRender((_, delta) => {
+    composer.render(delta)
+  })
+</script>
+```
+
+---
+
+## `useLoader`
+
+A hook to load data with an arbitrary `THREE` loader class. The result of `load` is cached and subsequent calls will return the same result.
+
+### Instantiating A Loader
+
+A loader must always be instantiated at the top level of a component. This is because the loader is depending on an application-wide cache:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const loader = useLoader(TextureLoader)
+</script>
+```
+
+A loader can be **extended**, to add custom features:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const loader = useLoader(CustomTextureLoader, {
+    extend: (loader) => {
+      // do something with the loader, e.g. add DRACO support for
+      // GLTFLoader or add custom headers for TextureLoader.
+    }
+  })
+</script>
+```
+
+### Loading An Asset
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const texture = useLoader(TextureLoader).load('path/to/texture.png')
+
+  // A loader must always be instantiated at the top level of a component.
+  const { load } = useLoader(TextureLoader)
+  const onSomeEvent = () => {
+    // To load an asset outside of the top level, use the `load` method.
+    const texture = load('path/to/texture.png')
+  }
+</script>
+```
+
+The return type of `load` is a custom Threlte store called `AsyncWritable` and can be used as a regular Svelte store.
+Its initial value is `undefined` and will be updated once the asset is loaded.
+
+The store also exposes the underlying promise methods `then` and `catch` and can therefore be directly awaited:
+
+```svelte
+<script>
+  import { useLoader, T } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+
+  const onSomeEvent = async () => {
+    // Load an asset and await the result.
+    const texture = await load('path/to/texture.png')
+  }
+</script>
+
+<!-- Or make use of Svelte's await block -->
+{#await load('path/to/texture.png') then map}
+  <T.MeshStandardMaterial {map} />
+{/await}
+```
+
+### Loading Multiple Assets
+
+The function `load` of `useLoader` also accepts an array of paths in which case the return value is an array of loaded assets:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const textures = load(['texture1.png', 'texture2.png'])
+
+  $: console.log($textures) // [Texture, Texture]
+</script>
+```
+
+<Tip type="tip">
+  Keep in mind that the store will be updated and the promise resolves once all assets are loaded.
+</Tip>
+
+You can also provide a map of paths to load multiple assets at once. In this case the return value is a map of the loaded assets:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const textures = load({
+    texture1: 'texture1.png',
+    texture2: 'texture2.png'
+  })
+
+  $: console.log($textures) // { texture1: Texture, texture2: Texture }
+</script>
+```
+
+### Transforming The Result
+
+<Tip
+  type="warning"
+  title="Caching"
+>
+  The result of the transformation is cached and subsequent calls will return the same result.
+</Tip>
+
+The `load` method accepts an optional second argument to transform the result of the loader:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const texture = load('path/to/texture.png', {
+    transform: (texture) => {
+      // do something with the texture
+      return texture
+    }
+  })
+</script>
+```
+
+The return type of the transformation is used to infer the return type of the `load` method.
