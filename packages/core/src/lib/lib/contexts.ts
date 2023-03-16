@@ -1,40 +1,41 @@
 import { setContext, tick } from 'svelte'
 import type { Writable } from 'svelte/store'
-import { derived, writable } from 'svelte/store'
-import { Camera, Clock, Scene } from 'three'
+import { derived } from 'svelte/store'
+import { Clock, Scene, type ShadowMapType, type TextureEncoding, type ToneMapping } from 'three'
 import type { DisposableThreeObject } from '../types/components'
 import type {
   Size,
   ThrelteContext,
-  ThrelteDisposalContext,
-  ThrelteRenderContext,
-  ThrelteRootContext,
+  ThrelteInternalContext,
   ThrelteUserContext
 } from '../types/types'
-import { getDefaultCamera } from './defaultCamera'
+import { createDefaultCamera } from './defaultCamera'
 import { currentWritable } from './storeUtils'
 
-export const createContexts = (
-  linear: boolean,
-  flat: boolean,
-  dpr: number,
-  userSize: Writable<Size | undefined>,
-  parentSize: Writable<Size>,
-  debugFrameloop: boolean,
+/**
+ * ### `createContexts`
+ *
+ * This function creates the context objects `ThrelteContext` and
+ * `ThrelteInternalContext` for a Threlte application.
+ */
+export const createContexts = (options: {
+  colorSpace: TextureEncoding
+  toneMapping: ToneMapping
+  dpr: number
+  userSize: Writable<Size | undefined>
+  parentSize: Writable<Size>
+  debugFrameloop: boolean
   frameloop: 'always' | 'demand' | 'never'
-): {
+  shadows: boolean | ShadowMapType
+  colorManagementEnabled: boolean
+}): {
   ctx: ThrelteContext
-  rootCtx: ThrelteRootContext
-  renderCtx: ThrelteRenderContext
-  disposalCtx: ThrelteDisposalContext
+  internalCtx: ThrelteInternalContext
   getCtx: () => ThrelteContext
-  getRootCtx: () => ThrelteRootContext
-  getRenderCtx: () => ThrelteRenderContext
-  getDisposalCtx: () => ThrelteDisposalContext
+  getInternalCtx: () => ThrelteInternalContext
 } => {
-  const renderCtx: ThrelteRenderContext = {
-    debugFrameloop,
-    frameloop,
+  const internalCtx: ThrelteInternalContext = {
+    debugFrameloop: options.debugFrameloop,
     frame: 0,
     frameInvalidated: true,
     invalidations: {},
@@ -42,55 +43,17 @@ export const createContexts = (
     autoFrameHandlers: new Set(),
     allFrameHandlers: new Set(),
     renderHandlers: new Set(),
-    advance: false
-  }
-
-  const ctx: ThrelteContext = {
-    size: derived([userSize, parentSize], ([uSize, pSize]) => {
-      return uSize ? uSize : pSize
-    }),
-    clock: new Clock(),
-    camera: currentWritable(getDefaultCamera()),
-    scene: new Scene(),
-    renderer: undefined,
-    invalidate: (debugFrameloopMessage?: string) => {
-      renderCtx.frameInvalidated = true
-      if (renderCtx.debugFrameloop && debugFrameloopMessage) {
-        renderCtx.invalidations[debugFrameloopMessage] = renderCtx.invalidations[
-          debugFrameloopMessage
-        ]
-          ? renderCtx.invalidations[debugFrameloopMessage] + 1
-          : 1
-      }
-    },
-    advance: () => {
-      renderCtx.advance = true
-    }
-  }
-
-  const rootCtx: ThrelteRootContext = {
-    flat: writable(flat),
-    linear: writable(linear),
-    dpr: writable(dpr),
-    setCamera: (camera: Camera) => {
-      ctx.camera.set(camera)
-    }
-  }
-
-  const userCtxObject = {}
-  const userCtx: ThrelteUserContext = currentWritable(userCtxObject)
-
-  const disposalCtx: ThrelteDisposalContext = {
+    advance: false,
     dispose: async (force = false) => {
       await tick()
-      if (!disposalCtx.shouldDispose && !force) return
-      disposalCtx.disposableObjects.forEach((mounted, object) => {
+      if (!internalCtx.shouldDispose && !force) return
+      internalCtx.disposableObjects.forEach((mounted, object) => {
         if (mounted === 0 || force) {
           object?.dispose?.()
-          disposalCtx.disposableObjects.delete(object)
+          internalCtx.disposableObjects.delete(object)
         }
       })
-      disposalCtx.shouldDispose = false
+      internalCtx.shouldDispose = false
     },
     collectDisposableObjects: (object, objects) => {
       const disposables: DisposableThreeObject[] = objects ?? []
@@ -105,54 +68,77 @@ export const createContexts = (
         if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
         const value = propValue as any
         if (value?.dispose) {
-          disposalCtx.collectDisposableObjects(value, disposables)
+          internalCtx.collectDisposableObjects(value, disposables)
         }
       })
       return disposables
     },
     addDisposableObjects: (objects) => {
       objects.forEach((obj) => {
-        const currentValue = disposalCtx.disposableObjects.get(obj)
+        const currentValue = internalCtx.disposableObjects.get(obj)
         if (currentValue) {
-          disposalCtx.disposableObjects.set(obj, currentValue + 1)
+          internalCtx.disposableObjects.set(obj, currentValue + 1)
         } else {
-          disposalCtx.disposableObjects.set(obj, 1)
+          internalCtx.disposableObjects.set(obj, 1)
         }
       })
     },
     removeDisposableObjects: (objects) => {
       if (objects.length === 0) return
       objects.forEach((obj) => {
-        const currentValue = disposalCtx.disposableObjects.get(obj)
+        const currentValue = internalCtx.disposableObjects.get(obj)
         if (currentValue && currentValue > 0) {
-          disposalCtx.disposableObjects.set(obj, currentValue - 1)
+          internalCtx.disposableObjects.set(obj, currentValue - 1)
         }
       })
-      disposalCtx.shouldDispose = true
+      internalCtx.shouldDispose = true
     },
     disposableObjects: new Map(),
     shouldDispose: false
   }
 
+  const ctx: ThrelteContext = {
+    size: derived([options.userSize, options.parentSize], ([uSize, pSize]) => {
+      return uSize ? uSize : pSize
+    }),
+    clock: new Clock(),
+    camera: currentWritable(createDefaultCamera()),
+    scene: new Scene(),
+    renderer: undefined,
+    invalidate: (debugFrameloopMessage?: string) => {
+      internalCtx.frameInvalidated = true
+      if (internalCtx.debugFrameloop && debugFrameloopMessage) {
+        internalCtx.invalidations[debugFrameloopMessage] = internalCtx.invalidations[
+          debugFrameloopMessage
+        ]
+          ? internalCtx.invalidations[debugFrameloopMessage] + 1
+          : 1
+      }
+    },
+    advance: () => {
+      internalCtx.advance = true
+    },
+    colorSpace: currentWritable(options.colorSpace),
+    toneMapping: currentWritable(options.toneMapping),
+    dpr: currentWritable(options.dpr),
+    shadows: currentWritable(options.shadows),
+    colorManagementEnabled: currentWritable(options.colorManagementEnabled),
+    frameloop: currentWritable(options.frameloop)
+  }
+
+  const userCtx: ThrelteUserContext = currentWritable({})
+
   setContext<ThrelteContext>('threlte', ctx)
-  setContext<ThrelteRootContext>('threlte-root', rootCtx)
-  setContext<ThrelteRenderContext>('threlte-render-context', renderCtx)
-  setContext<ThrelteDisposalContext>('threlte-disposal-context', disposalCtx)
+  setContext<ThrelteInternalContext>('threlte-internal-context', internalCtx)
   setContext<ThrelteUserContext>('threlte-user-context', userCtx)
 
   const getCtx = (): ThrelteContext => ctx
-  const getRootCtx = (): ThrelteRootContext => rootCtx
-  const getRenderCtx = (): ThrelteRenderContext => renderCtx
-  const getDisposalCtx = (): ThrelteDisposalContext => disposalCtx
+  const getInternalCtx = (): ThrelteInternalContext => internalCtx
 
   return {
     ctx,
-    rootCtx,
-    renderCtx,
-    disposalCtx,
+    internalCtx,
     getCtx,
-    getRootCtx,
-    getRenderCtx,
-    getDisposalCtx
+    getInternalCtx
   }
 }

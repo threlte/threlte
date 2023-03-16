@@ -31,10 +31,41 @@ export const shallowEqualArrays = (arrA: any[], arrB: any[]) => {
   return true
 }
 
+/**
+ * ### `createCache`
+ *
+ * Every Threlte application has its own cache. This prevents models from being
+ * shared between applications because e.g. THREE.Mesh objects cannot be mounted
+ * in multiple scenes.
+ */
 export const createCache = () => {
   setContext<Cache>('threlte-cache', [])
 }
 
+/**
+ * ### `useCache`
+ *
+ * This hook is used to access the cache. It returns a `remember` function that
+ * can be used to cache a promise based on the provided keys. The `remember`
+ * function will return the cached value if the promise has already been
+ * resolved and the keys match.
+ *
+ * @example
+ * ```ts
+ * const { remember } = useCache()
+ *
+ * const asnycWritable = remember(async () => {
+ *  const loader = new GLTFLoader()
+ *  const { scene } = await loader.loadAsync('/path/to/model.glb')
+ *  return scene
+ * })
+ * ```
+ *
+ * The model will only be loaded once, even if `remember` is invoked multiple
+ * times with the same keys.
+ *
+ * The `clear` function can be used to clear the cache for a specific set of keys.
+ */
 export const useCache = () => {
   const cache = getContext<Cache>('threlte-cache')
 

@@ -271,12 +271,12 @@ export type State = {
 
 ## Authoring Reusable Components
 
-Svelte has no native way of forwarding arbitrary event listeners from inside a component. To make it easier
-to author components the `forwardEvents` function from `'@threlte/core'` can be used to forward event listeners
+Svelte has no native way of forwarding arbitrary event handlers from inside a component. To make it easier
+to author components the `forwardEventHandlers` function from `'@threlte/core'` can be used to forward event handlers
 defined on the component itself to an instance of `<T>`.
 
 To make things clearer, let's start with a simple
-component that _doesn't_ forward events:
+component that _doesn't_ forward event handlers:
 
 ```svelte title="Box.svelte"
 <script lang="ts">
@@ -320,15 +320,17 @@ component in our Scene like this:
 <Box position={[0, 10, 0]} />
 ```
 
-This works fine, but we can't use any events like `on:click` on the `<Box>` component. We can forward all event listeners defined on `<Box>` by using the `forwardEvents` function. Let's update our `<Box>` component to forward all event handlers defined on `<Box>` to the component `<T.Mesh>` inside `Box.svelte`:
+This works fine, but we can't use any events like `on:click` on the `<Box>` component. We can forward all
+event handlers defined on `<Box>` by using the `forwardEventHandlers` function. Let's update our `<Box>`
+component to forward all event handlers defined on `<Box>` to the component `<T.Mesh>` inside `Box.svelte`:
 
 ```svelte title="Box.svelte" {2}m {6,22}+
 <script lang="ts">
-  import { forwardEvents, T } from '@threlte/core'
+  import { forwardEventHandlers, T } from '@threlte/core'
   import { useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
-  const events = forwardEvents()
+  const component = forwardEventHandlers()
 
   let color = 'blue'
   const { onPointerEnter, onPointerLeave } = useCursor()
@@ -344,14 +346,14 @@ This works fine, but we can't use any events like `on:click` on the `<Box>` comp
   on:pointerleave={() => {
     color = 'blue'
   }}
-  bind:this={$events}
+  bind:this={$component}
 >
   <T.BoxGeometry />
   <T.MeshStandardMaterial {color} />
 </T.Mesh>
 ```
 
-Now we can use the `on:click` event handler on the `<Box>` component:
+Now we can use the `on:click` event on the `<Box>` component:
 
 ```svelte title="Scene.svelte" {10-12}+
 <script>

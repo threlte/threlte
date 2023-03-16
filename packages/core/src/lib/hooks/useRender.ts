@@ -1,7 +1,7 @@
 import { getContext, onDestroy } from 'svelte'
 import { browser } from '../lib/browser'
 import type {
-  ThrelteRenderContext,
+  ThrelteInternalContext,
   ThrelteRenderHandler,
   ThrelteContext,
   ThrelteUseRenderOptions
@@ -22,7 +22,7 @@ export const useRender = (
     return
   }
 
-  const renderCtx = getContext<ThrelteRenderContext>('threlte-render-context')
+  const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
 
   const handler: ThrelteRenderHandler = {
     fn,

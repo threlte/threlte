@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createRawEventDispatcher, forwardEvents, T } from '@threlte/core'
+  import { createRawEventDispatcher, forwardEventHandlers, T } from '@threlte/core'
   // @ts-ignore
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { useGltf } from '../../hooks/useGltf'
@@ -10,7 +10,7 @@
   type $$Events = GltfEvents
   type $$Slots = GltfSlots
 
-  const events = forwardEvents()
+  const component = forwardEventHandlers()
 
   export let url: $$Props['url']
 
@@ -95,7 +95,7 @@
 </script>
 
 {#if scene}
-  <T is={scene} {...$$restProps} let:ref bind:this={$events}>
+  <T is={scene} {...$$restProps} let:ref bind:this={$component}>
     <slot {ref} />
   </T>
 {/if}

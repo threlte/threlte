@@ -59,7 +59,7 @@
       scale={5.65}
       geometry={$phoneGeometry}
       material={new MeshStandardMaterial({
-        color: new Color('#FF3F00').convertSRGBToLinear()
+        color: new Color('#FF3F00')
       })}
     />
   {/if}

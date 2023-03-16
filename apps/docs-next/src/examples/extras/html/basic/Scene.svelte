@@ -8,7 +8,7 @@
   const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
 
   let material = new MeshStandardMaterial({
-    color: new Color(getRandomColor()).convertSRGBToLinear()
+    color: new Color(getRandomColor())
   })
 
   const onClick = () => {

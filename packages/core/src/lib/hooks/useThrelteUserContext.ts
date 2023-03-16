@@ -1,100 +1,136 @@
 import { getContext } from 'svelte'
 import { derived, type Readable } from 'svelte/store'
-import type { CurrentWritable } from '../lib/storeUtils'
 import type { ThrelteUserContext } from '../types/types'
 
 type UserContextEntry = Record<string, any>
 type UserContext = Record<string, UserContextEntry>
-
-/**
- * ### `useThrelteUserContext`
- *
- * Returns the user context store. The Threlte user context store is a store
- * that can be used to store arbitrary data from anywhere in the Threlte app.
- *
- * Use the function `setThrelteUserContext` to set the user context.
- *
- * If a name is provided, the function returns a derived store that only
- * contains the value of the provided user context name.
- *
- * ```ts
- * import { useThrelteUserContext, setThrelteUserContext } from '@threlte/core'
- *
- * setThrelteUserContext('some-context', { foo: 'bar' })
- *
- * const userCtx = useThrelteUserContext() // -> CurrentReadable<{ 'some-context': { foo: 'bar' } }>
- * // or
- * const userCtx = useThrelteUserContext('some-context') // -> CurrentReadable<{ foo: 'bar' }>
- * ```
- */
-export function useThrelteUserContext(): CurrentWritable<UserContext>
-export function useThrelteUserContext<T extends UserContextEntry = UserContextEntry>(
-  name: string
-): Readable<T | undefined>
-export function useThrelteUserContext<T extends UserContextEntry = UserContextEntry>(
-  name?: string
-): Readable<T | undefined> | CurrentWritable<UserContext> {
-  const userCtx = getContext<ThrelteUserContext>('threlte-user-context')
-  if (!name) {
-    return userCtx
-  } else {
-    return derived(userCtx, (ctx) => ctx[name] as T)
-  }
-}
 
 type SetThrelteUserContextOptions = {
   existing: 'merge' | 'replace' | 'skip'
 }
 
 /**
- * ### `setThrelteUserContext`
+ * ### `useThrelteUserContext`
  *
- * Sets the user context store. The Threlte user context store is a store
- * that can be used to store arbitrary data from anywhere in the Threlte app.
+ * The `UserContext` is a store scoped to the context of your root `<Canvas>` component and can be used to
+ * store and retrieve arbitrary data from anywhere in the Threlte app.
+ * Because it's scoped, it's especially interesting for authoring reusable components and inter-component communication.
  *
- * Use the function `useThrelteUserContext` to get the user context.
+ * `useThrelteUserContext` can set and get the user context store.
  *
- * ```ts
- * import { useThrelteUserContext, setThrelteUserContext } from '@threlte/core'
+ * ### Get the user context store
  *
- * setThrelteUserContext('some-context', { foo: 'bar' })
+ * If no `namespace` is provided, the whole user context store is returned.
  *
- * const userCtx = useThrelteUserContext() // -> CurrentReadable<{ 'some-context': { foo: 'bar' } }>
- * // or
- * const userCtx = useThrelteUserContext('some-context') // -> Readable<{ foo: 'bar' }>
+ * ```svelte
+ * <script>
+ *   import { useThrelteUserContext } from '@threlte/core'
+ *
+ *   const userCtx = useThrelteUserContext()
+ *   console.log($userCtx) // -> { 'some-context': { foo: 'bar' } }
+ * </script>
  * ```
  *
- * ### Options
+ * If a `namespace` is provided, the hook returns a derived store.
  *
- * By default, if a name already exists in the user context, the new value
- * will be skipped. This can be changed by providing the `options` argument.
+ * ```svelte
+ * <script>
+ *   import { useThrelteUserContext } from '@threlte/core'
  *
- * ```ts
- * import { useThrelteUserContext, setThrelteUserContext } from '@threlte/core'
+ *   const ctx = useThrelteUserContext('some-context')
+ *   console.log($ctx) // -> { foo: 'bar' }
+ * </script>
+ * ```
  *
- * setThrelteUserContext('some-context', { foo: 'bar' })
- * setThrelteUserContext('some-context', { foo: 'baz' }, { existing: 'replace' })
+ * ### Set the user context store
  *
- * const userCtx = useThrelteUserContext('some-context') // -> Readable<{ foo: 'baz' }>
+ * ```svelte
+ * <script>
+ *   import { useThrelteUserContext } from '@threlte/core'
+ *
+ *   const getCtx = () => {
+ *     return {
+ *       foo: 'bar'
+ *     }
+ *   }
+ *
+ *   const ctx = useThrelteUserContext('some-context', getCtx)
+ *   console.log(ctx) // -> { foo: 'bar' }
+ * </script>
+ * ```
+ *
+ * By default, when a context is set at a given namespace, setting it again will be ignored.
+ * You can override this behaviour:
+ *
+ * ```svelte
+ * <script>
+ *   import { useThrelteUserContext } from '@threlte/core'
+ *
+ *   const getCtx = () => {
+ *     return {
+ *       foo: 'bar'
+ *     }
+ *   }
+ *
+ *   const ctx = useThrelteUserContext('some-context', getCtx, { exising: 'merge' })
+ *   console.log(ctx) // -> { foo: 'bar' }
+ * </script>
  * ```
  */
-export function setThrelteUserContext<T extends UserContextEntry = UserContextEntry>(
-  name: string,
-  value: T,
-  options: SetThrelteUserContextOptions = { existing: 'skip' }
-) {
-  const userCtx = getContext<ThrelteUserContext>('threlte-user-context')
-  userCtx.update((ctx) => {
-    if (name in ctx) {
-      if (options.existing === 'skip') return ctx
+
+export function useThrelteUserContext<UC extends UserContext = UserContext>(): Readable<UC>
+export function useThrelteUserContext<UCT extends UserContextEntry = UserContextEntry>(
+  namespace: string
+): Readable<UCT>
+export function useThrelteUserContext<UCT extends UserContextEntry = UserContextEntry>(
+  namespace: string,
+  value: UCT,
+  options?: SetThrelteUserContextOptions
+): UCT
+export function useThrelteUserContext<
+  UCorUCT extends UserContext | UserContextEntry,
+  Value extends UserContextEntry,
+  Result = UCorUCT extends UserContext
+    ? Readable<UCorUCT>
+    : Value extends UserContextEntry
+    ? UserContextEntry
+    : Readable<UserContextEntry>
+>(namespace?: string, value?: Value, options?: SetThrelteUserContextOptions): Result {
+  const userCtxStore = getContext<ThrelteUserContext>('threlte-user-context')
+  if (!userCtxStore) {
+    throw new Error(
+      'No user context store found, did you invoke this function outside of your main <Canvas> component?'
+    )
+  }
+
+  // return the plain user context store
+  if (!namespace) {
+    return {
+      subscribe: userCtxStore.subscribe
+    } as Result
+  }
+
+  // return a specific user context entry
+  if (namespace && !value) {
+    return derived(userCtxStore, (ctx) => ctx[namespace]) as Result
+  }
+
+  // we are possibly setting a new user context entry here
+  userCtxStore.update((ctx) => {
+    if (namespace in ctx) {
+      // skip is the default value
+      if (!options || options.existing === 'skip') return ctx
+
       if (options.existing === 'merge') {
-        Object.assign(ctx[name], value)
+        Object.assign(ctx[namespace], value)
         return ctx
       }
     }
+
     // also handles options.existing === 'replace'
-    ctx[name] = value
+    ctx[namespace] = value
     return ctx
   })
-  return userCtx
+
+  return userCtxStore.current[namespace] as Result
 }

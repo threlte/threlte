@@ -1,13 +1,11 @@
 <script lang="ts">
   import {
     createRawEventDispatcher,
-    forwardEvents,
+    forwardEventHandlers,
     T,
     useFrame,
-    useThrelte,
-    useThrelteRoot
+    useThrelte
   } from '@threlte/core'
-  import { createEventDispatcher } from 'svelte'
   import { derived, writable, type Writable } from 'svelte/store'
   import {
     Group,
@@ -316,7 +314,7 @@
     }
   }
 
-  const component = forwardEvents()
+  const component = forwardEventHandlers()
 </script>
 
 <T is={ref} {...$$restProps} let:ref bind:this={$component}>

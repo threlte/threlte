@@ -1,5 +1,4 @@
 import type { BufferGeometry, ColorRepresentation, Material, Mesh, Object3D } from 'three'
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
 import type { LookAt, Position, Rotation, Scale } from './types'
 

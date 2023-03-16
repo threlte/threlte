@@ -1,9 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// misc components
-export { default as ContextBridge } from './misc/ContextBridge.svelte'
-
 // object components
 export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
 export { default as Instance } from './objects/Instance.svelte'
@@ -32,8 +29,7 @@ export type { Plugin, NamedPlugin } from './plugins/types'
 export { useFrame } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
-export { useThrelteRoot } from './hooks/useThrelteRoot'
-export { setThrelteUserContext, useThrelteUserContext } from './hooks/useThrelteUserContext'
+export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 export { useParent } from './internal/HierarchicalObject.svelte'
 
 // useLoader
@@ -55,7 +51,6 @@ export type {
   LookAt,
   ThrelteUseFrameOptions,
   ThrelteContext,
-  ThrelteRootContext,
   ThrelteInstance,
   Size
 } from './types/types'
@@ -64,7 +59,7 @@ export type {
 export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { forwardEvents } from './lib/forwardEvents'
+export { forwardEventHandlers } from './lib/forwardEventHandlers'
 
 export type {
   HierarchicalObjectProperties,

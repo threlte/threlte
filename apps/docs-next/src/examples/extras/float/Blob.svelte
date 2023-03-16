@@ -7,8 +7,8 @@
 
   export let geometry: BufferGeometry
 
-  const red = new Color('#FF3E00').convertSRGBToLinear()
-  const blue = new Color('#0000ff').convertSRGBToLinear()
+  const red = new Color(0xfe3d00)
+  const blue = new Color(0x0000ff)
 
   let material = new MeshPhysicalMaterial({
     color: red,

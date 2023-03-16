@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEvents, T, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useThrelte } from '@threlte/core'
   import { createEventDispatcher, tick } from 'svelte'
   import { Text } from 'troika-three-text'
   import type { TextMesh } from './Text.svelte'
@@ -12,7 +12,7 @@
     sync: void
   }>()
 
-  const component = forwardEvents()
+  const component = forwardEventHandlers()
 
   const onUpdate = async () => {
     await tick()

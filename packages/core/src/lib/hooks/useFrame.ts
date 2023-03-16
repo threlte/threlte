@@ -4,7 +4,7 @@ import { browser } from '../lib/browser'
 import type {
   ThrelteContext,
   ThrelteFrameHandler,
-  ThrelteRenderContext,
+  ThrelteInternalContext,
   ThrelteUseFrame,
   ThrelteUseFrameOptions
 } from '../types/types'
@@ -35,7 +35,7 @@ export const useFrame = (
 
   const invalidate = options?.invalidate ?? true
 
-  const renderCtx = getContext<ThrelteRenderContext>('threlte-render-context')
+  const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
 
   const handler: ThrelteFrameHandler = {
     fn,

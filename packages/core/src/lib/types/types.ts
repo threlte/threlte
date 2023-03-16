@@ -7,6 +7,9 @@ import type {
   Matrix4,
   Object3D,
   Scene,
+  ShadowMapType,
+  TextureEncoding,
+  ToneMapping,
   Vector3,
   WebGLRenderer
 } from 'three'
@@ -19,19 +22,23 @@ export type ThrelteInstance = {
   color: null | Color
 }
 
-export type ThrelteRootContext = {
-  setCamera: (camera: Camera) => void
-  linear: Writable<boolean>
-  flat: Writable<boolean>
-  dpr: Writable<number>
-}
-
+/**
+ * ### `ThrelteContext`
+ *
+ * This is the main context of a Threlte application.
+ * It's exposed to the user via the hook `useThrelte`.
+ */
 export type ThrelteContext = {
+  // Basics
   size: Readable<Size>
   clock: Clock
   camera: CurrentWritable<Camera>
   scene: Scene
+  dpr: CurrentWritable<number>
+
+  // Rendering Management
   renderer?: WebGLRenderer
+  frameloop: CurrentWritable<'always' | 'demand' | 'never'>
   /**
    * Invalidates the current frame when frameloop === 'demand'
    */
@@ -40,10 +47,25 @@ export type ThrelteContext = {
    * Advance one frame when frameloop === 'never'
    */
   advance: () => void
+
+  // Color Management
+  colorManagementEnabled: CurrentWritable<boolean>
+  colorSpace: CurrentWritable<TextureEncoding>
+  toneMapping: CurrentWritable<ToneMapping>
+
+  // Shadows
+  shadows: CurrentWritable<boolean | ShadowMapType>
 }
 
-export type ThrelteRenderContext = {
-  frameloop: 'always' | 'demand' | 'never'
+/**
+ * The internal context is used to store the state of the
+ * frameloop and the disposal methods. It is not exposed
+ * to the user.
+ */
+export type ThrelteInternalContext = {
+  /**
+   * Render context
+   */
   debugFrameloop: boolean
   frameInvalidated: boolean
   frame: number
@@ -53,9 +75,11 @@ export type ThrelteRenderContext = {
   allFrameHandlers: Set<ThrelteFrameHandler>
   renderHandlers: Set<ThrelteRenderHandler>
   advance: boolean
-}
 
-export type ThrelteDisposalContext = {
+  /**
+   * Disposal context
+   */
+
   /**
    * Disposes all disposable objects from disposableObjects
    * that are not mounted anymore and clears the Map entry.

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEvents, T, useFrame, useParent, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useFrame, useParent, useThrelte } from '@threlte/core'
   import { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useControlsContext } from '../useControlsContext'
@@ -35,7 +35,7 @@
     else stop()
   }
 
-  const component = forwardEvents()
+  const component = forwardEventHandlers()
 
   const { orbitControls } = useControlsContext()
 </script>

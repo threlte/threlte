@@ -2,7 +2,7 @@
 {
   'category': '@threlte/core',
   'name': '<Canvas>',
-  'order': -1,
+  'order': 0,
   'type': 'component',
   'componentSignature':
     {
@@ -14,37 +14,58 @@
             'default': 'window.devicePixelRatio',
             'required': false
           },
-          { name: 'flat', type: 'boolean', default: 'false', required: false },
-          { name: 'linear', type: 'boolean', default: 'false', required: false },
           {
-            name: 'frameloop',
-            type: { name: '"always" | "demand" | "never"', url: 'https://google.com' },
-            default: '"demand"',
-            required: false
-          },
-          { name: 'debugFrameloop', type: 'boolean', default: 'false', required: false },
-          { name: 'shadows', type: 'boolean', default: 'true', required: false },
-          {
-            name: 'shadowMapType',
-            type: 'THREE.ShadowMapType',
-            default: 'THREE.PCFSoftShadowMap',
-            required: false
+            'name': 'toneMapping',
+            'type': 'THREE.ToneMapping',
+            'default': 'THREE.ACESFilmicToneMapping',
+            'required': false,
+            'description': 'renderer.toneMapping'
           },
           {
-            name: 'size',
-            type: '{ width: number, height: number } | undefined',
-            default: 'undefined',
-            required: false
+            'name': 'colorSpace',
+            'type': 'THREE.TextureEncoding',
+            'default': 'THREE.sRGBEncoding',
+            'required': false,
+            'description': 'renderer.outputEncoding'
           },
           {
-            name: 'rendererParameters',
-            type: 'THREE.WebGLRendererParameters | undefined',
-            default: 'undefined',
-            required: false
+            'name': 'colorManagementEnabled',
+            'type': 'boolean',
+            'default': 'true',
+            'required': false
+          },
+          {
+            'name': 'frameloop',
+            'type': { 'name': '"always" | "demand" | "never"', 'url': 'https://google.com' },
+            'default': '"demand"',
+            'required': false
+          },
+          { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
+          {
+            'name': 'shadows',
+            'type': 'boolean | ShadowMapType',
+            'default': 'THREE.PCFSoftShadowMap',
+            'required': false
+          },
+          {
+            'name': 'size',
+            'type': '{ width: number, height: number }',
+            'required': false,
+            'description': 'If not provided, the dimensions of the parent element will be used.'
+          },
+          {
+            'name': 'rendererParameters',
+            'type': 'THREE.WebGLRendererParameters',
+            'required': false
           }
         ],
-      bindings:
-        [{ name: 'ctx', type: 'ThrelteContext' }, { name: 'rootCtx', type: 'ThrelteRootContext' }]
+      'bindings':
+        [
+          {
+            'name': 'ctx',
+            'type': { 'name': 'ThrelteContext', 'url': '/docs/reference/core/hooks#usethrelte' }
+          }
+        ]
     }
 }
 ---
