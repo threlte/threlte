@@ -5,13 +5,12 @@ order: 7
 ---
 
 Plugins are one of Threlte's superpowers. Plugins allow you to globally extend Threlte's [`<T>`](/docs/reference/core/t) component
-functionality. This means you can not only add arbitrary props and events to your `<T>` components but also
-override the default behavior of the `<T>` component.
+functionality. This means you can not only add arbitrary props and event handlers to your `<T>` components but also
+override the default behavior of the `<T>` component entirely.
 
-Plugins can add arbitrary code to every `<T>` component instance and can act as if
-they were part of the `<T>` component itself. You have full access to props, event listeners and the
-component instance itself. For an advanced example of what a plugin can do, see the
-[interactivity plugin of `@threlte/extras`](/docs/reference/extras/interactivity).
+Plugins add code to every `<T>` component instance. That code acts as if it were part of the `<T>` component itself.
+You have full access to props, event listeners and the component instance itself. For an advanced example of what
+a plugin can do, see the [interactivity plugin of `@threlte/extras`](/docs/reference/extras/interactivity).
 
 ## `injectPlugin`
 
