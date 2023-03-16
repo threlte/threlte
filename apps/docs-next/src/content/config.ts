@@ -80,7 +80,8 @@ export const learnCollection = defineCollection({
       'Basics',
       'Render Components',
       'Advanced',
-      'Preprocessing'
+      'Preprocessing',
+      'Examples'
     ]),
     title: z.string(),
     order: z.number().optional()

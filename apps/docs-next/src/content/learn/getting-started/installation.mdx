@@ -2,3 +2,46 @@
 category: Getting Started
 title: Installation
 ---
+
+import SvelteButton from '$components/Button/Button.svelte'
+
+# Installation
+
+Threlte consists of 4 packages which can be installed and used individually. `@threlte/core` and `three` are required for all projects while the other packages are optional.
+
+- `@threlte/core` and `three` - required
+  three.js and core the library are required. Compose three.js scenes declaratively and state-driven.
+- `@threlte/extras`
+  <a href="/extras/use-gltf">Components, helpers, hooks and more</a> that extend the core functionality.
+- `@threlte/rapier`
+  Components and hooks to use the [Rapier physics engine](https://rapier.rs/) in Threlte.
+- `@threlte/theatre`
+  Components and hooks to use the animation library [Theatre.js](https://www.theatrejs.com/) in Threlte.
+- `@types/three` - external package
+  TypeScript types for three.js.
+
+Install the packages with `npm`, `pnpm`, `yarn` or any other package manager you prefer.
+
+```bash
+npm i -D three @threlte/core @types/three
+```
+
+## Configuration
+
+### Adapt `vite.config.js`
+
+If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent `three` from being externalized for SSR by vites externalization step
+
+```js {3-5} title=vite.config.js
+const config = {
+  // …
+  ssr: {
+    noExternal: ['three']
+  }
+}
+```
+
+<Tip type="tip">
+  [See this comment](https://github.com/threlte/threlte/issues/8#issuecomment-1024085864) for tips
+  on how to reduce bundle size when working with bundlers like vite and three.js.
+</Tip>

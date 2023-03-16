@@ -2,7 +2,7 @@
 	"name": "@threlte/docs",
 	"version": "0.1.1",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --port 3001",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
@@ -29,7 +29,6 @@
 		"@theatre/studio": "0.5.1-rc.1",
 		"@threlte/core": "workspace:*",
 		"@threlte/extras": "workspace:*",
-		"@threlte/preprocess": "workspace:*",
 		"@threlte/rapier": "workspace:*",
 		"@threlte/theatre": "workspace:*",
 		"@tweakpane/core": "^1.1.0",

@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { PlaneGeometry, MeshStandardMaterial } from 'three'
+  import { PlaneGeometry } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import { createNoise2D } from 'simplex-noise'
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
+  import { AutoColliders, Debug } from '@threlte/rapier'
+  import { Pane } from 'tweakpane'
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
-  const material = new MeshStandardMaterial()
 
   const noise = createNoise2D()
   const vertices = geometry.getAttribute('position').array
@@ -20,7 +21,13 @@
 
   // needed for lighting
   geometry.computeVertexNormals()
+
+  // add tweakpane to show or hide the terrain collision mesh
+  const tp = new Pane({ title: 'hello world' })
+  tp.addButton({ title: 'click me' })
 </script>
+
+<Debug visible={false} />
 
 <T.PerspectiveCamera
   makeDefault
@@ -38,9 +45,11 @@
 <T.DirectionalLight position={[3, 10, 10]} />
 <T.HemisphereLight intensity={0.2} />
 
-<T.Mesh
-  receiveShadow
-  {material}
-  {geometry}
-  rotation.x={DEG2RAD * -90}
-/>
+<AutoColliders shape="trimesh">
+  <T.Mesh
+    {geometry}
+    rotation.x={DEG2RAD * -90}
+  >
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</AutoColliders>
