@@ -1,9 +1,6 @@
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// misc components
-export { default as ContextBridge } from './misc/ContextBridge.svelte'
-
 // object components
 export { default as InstancedMesh } from './objects/InstancedMesh.svelte'
 export { default as Instance } from './objects/Instance.svelte'
@@ -32,7 +29,7 @@ export type { Plugin, NamedPlugin } from './plugins/types'
 export { useFrame } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
-export { setThrelteUserContext, useThrelteUserContext } from './hooks/useThrelteUserContext'
+export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 export { useParent } from './internal/HierarchicalObject.svelte'
 
 // useLoader

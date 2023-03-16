@@ -1,5 +1,5 @@
-import { setThrelteUserContext, useThrelteUserContext, type CurrentWritable } from '@threlte/core'
-import { get, writable, type Writable } from 'svelte/store'
+import { useThrelteUserContext } from '@threlte/core'
+import { writable, type Writable } from 'svelte/store'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 type ControlsContext = {
@@ -14,16 +14,7 @@ type ControlsContext = {
  * controls when the user is interacting with the TransformControls.
  */
 export const useControlsContext = (): ControlsContext => {
-  const controlsContextStore = useThrelteUserContext<ControlsContext>('threlte-controls')
-
-  const controlsContext = get(controlsContextStore)
-  if (controlsContext) return controlsContext
-
-  const newControlsContext: ControlsContext = {
+  return useThrelteUserContext<ControlsContext>('threlte-controls', {
     orbitControls: writable<OrbitControls | undefined>(undefined)
-  }
-
-  setThrelteUserContext<ControlsContext>('threlte-controls', newControlsContext)
-
-  return newControlsContext
+  })
 }

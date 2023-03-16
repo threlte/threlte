@@ -1,6 +1,10 @@
-import type { Loader } from 'three'
+import type { Loader as ThreeLoader } from 'three'
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
+
+export interface Loader extends ThreeLoader {
+  loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any>
+}
 
 type LoaderProto = { new (): Loader }
 
