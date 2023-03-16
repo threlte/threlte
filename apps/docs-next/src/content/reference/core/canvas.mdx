@@ -18,13 +18,15 @@
             'name': 'toneMapping',
             'type': 'THREE.ToneMapping',
             'default': 'THREE.ACESFilmicToneMapping',
-            'required': false
+            'required': false,
+            'description': 'renderer.toneMapping'
           },
           {
             'name': 'colorSpace',
             'type': 'THREE.TextureEncoding',
             'default': 'THREE.sRGBEncoding',
-            'required': false
+            'required': false,
+            'description': 'renderer.outputEncoding'
           },
           {
             'name': 'colorManagementEnabled',
@@ -39,7 +41,6 @@
             'required': false
           },
           { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
-          { 'name': 'shadows', 'type': 'boolean', 'default': 'true', 'required': false },
           {
             'name': 'shadows',
             'type': 'boolean | ShadowMapType',
@@ -48,14 +49,13 @@
           },
           {
             'name': 'size',
-            'type': '{ width: number, height: number } | undefined',
-            'default': 'undefined',
-            'required': false
+            'type': '{ width: number, height: number }',
+            'required': false,
+            'description': 'If not provided, the dimensions of the parent element will be used.'
           },
           {
             'name': 'rendererParameters',
-            'type': 'THREE.WebGLRendererParameters | undefined',
-            'default': 'undefined',
+            'type': 'THREE.WebGLRendererParameters',
             'required': false
           }
         ],
