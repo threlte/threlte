@@ -240,7 +240,7 @@ We only changed the `y` coordinate of the position, so we can use a **pierced pr
 </T.Mesh>
 ```
 
-This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value.
+This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value. Unfortunately with pierced props we miss out on the type hints and auto-completion.
 
 ### args
 
