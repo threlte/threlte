@@ -296,6 +296,56 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
   only a single number is passed. This is equivalent to calling `scale.setScalar($scale)`.
 </Tip>
 
+## Frame Loop
+
+Let's add some motion to our cube. We will use Threlte's [`useFrame`](/docs/reference/core/hooks#useFrame) hook to tap
+into Threlte's **unified frame loop** and run a function on every frame. We again use a pierced prop to let the
+cube rotate around its y-axis.
+
+{/* prettier-ignore-start */}
+```svelte title="Scene.svelte" {2}m {9-12,24}+
+<script>
+  import { T, useFrame } from '@threlte/core'
+  import { interactivity } from '@threlte/extras'
+  import { spring } from 'svelte/motion'
+
+  interactivity()
+  const scale = spring(1)
+
+  let rotation = 0
+  useFrame((state, delta) => {
+    rotation += delta
+  })
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[10, 10, 10]}
+  on:create={({ ref }) => {
+    ref.lookAt(0, 1, 0)
+  }}
+/>
+
+<T.Mesh
+  rotation.y={rotation}
+  position.y={1}
+  scale={$scale}
+  on:pointerenter={() => scale.set(1.5)}
+  on:pointerleave={() => scale.set(1)}
+>
+  <T.BoxGeometry args={[1, 2, 1]} />
+  <T.MeshBasicMaterial color="hotpink" />
+</T.Mesh>
+```
+{/* prettier-ignore-end */}
+
+`useFrame` registers a callback that will be invoked on every frame. The function receives two arguments: the
+current state of the Threlte application (the same context available via the
+[`useThrelte`](/docs/reference/core/hooks#useFrame)) and the time delta since the last frame. We use
+the delta to update the rotation
+[independent of the frame rate](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+– the cube will rotate at the same speed regardless of the frame rate.
+
 ## Finishing Touches
 
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
@@ -304,12 +354,16 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 {/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {27}m {18}+
 <script>
-  import { T } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
   interactivity()
   const scale = spring(1)
+  let rotation = 0
+  useFrame((state, delta) => {
+    rotation += delta
+  })
 </script>
 
 <T.PerspectiveCamera
@@ -323,6 +377,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 <T.DirectionalLight position={[3, 10, 7]} />
 
 <T.Mesh
+  rotation.y={rotation}
   position.y={1}
   scale={$scale}
   on:pointerenter={() => scale.set(1.5)}

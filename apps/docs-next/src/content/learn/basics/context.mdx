@@ -4,15 +4,14 @@ title: Context
 order: -900
 ---
 
-## What is Context?
-
-Context is a way to pass data through the component tree without having to pass props down manually at every level.
+Svelte's [Context](https://svelte.dev/tutorial/context-api) is a way to pass data through the component tree without having to pass props down manually at every level.
 
 ## Recommended App Structure
 
-The recommended app structure is to implement the component `<Canvas>` that provides all basic contexts and use a single
-child component (typically named "Scene.svelte" in examples) for your Threlte app. This way, you don't need to worry about
-the presence of contexts in your components.
+The recommended app structure is to implement the component [`<Canvas>`](/docs/reference/core/canvas)
+that provides all basic contexts and use a single child component (typically named "Scene.svelte" in
+examples) for your Threlte app. This way, you don't need to worry about the presence of contexts
+in your components.
 
 ```svelte title="App.svelte"
 <script>
@@ -28,18 +27,22 @@ the presence of contexts in your components.
 ```svelte title="Scene.svelte"
 <script>
   import { T, useFrame } from '@threlte/core'
+  import { interactivity } from '@threlte/extras'
   import Player from './Player.svelte'
   import World from './World.svelte'
 
   let rotation = 0
 
   // useFrame is relying on a context provided
-  // by <Canvas>. Because we are using a single
-  // child component, we don't need to worry
-  // about it.
+  // by <Canvas>. Because we are definitely inside
+  // <Canvas>, we can safely use it.
   useFrame((_, delta) => {
     rotation += delta
   })
+
+  // This file is also typically the place to
+  // inject plugins
+  interactivity()
 </script>
 
 <T.Mesh rotation.y={rotation}>

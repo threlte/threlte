@@ -49,7 +49,6 @@ type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
-  'Render Components',
   'Advanced',
   'Preprocessing',
   'Examples'
