@@ -194,7 +194,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.34
       '@sveltejs/kit': 1.0.0-next.377
       '@types/node': ^18.0.3
-      '@types/three': ^0.149.0
+      '@types/three': ^0.144.0
       '@typescript-eslint/eslint-plugin': ^4.31.1
       '@typescript-eslint/parser': ^4.31.1
       '@yushijinhun/three-minifier-rollup': ^0.3.1
@@ -207,7 +207,7 @@ importers:
       svelte-check: ^2.7.0
       svelte-preprocess: ^4.10.5
       svelte2tsx: ^0.5.9
-      three: ^0.150.1
+      three: ^0.145.0
       ts-node: ^10.8.2
       tsafe: ^0.9.0
       tslib: ^2.3.1
@@ -218,7 +218,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.34
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.49.0+vite@3.2.3
       '@types/node': 18.0.3
-      '@types/three': 0.149.0
+      '@types/three': 0.144.0
       '@typescript-eslint/eslint-plugin': 4.33.0_3ekaj7j3owlolnuhj3ykrb7u7i
       '@typescript-eslint/parser': 4.33.0_hxadhbs2xogijvk7vq4t2azzbu
       '@yushijinhun/three-minifier-rollup': 0.3.1
@@ -231,7 +231,7 @@ importers:
       svelte-check: 2.8.0_svelte@3.49.0
       svelte-preprocess: 4.10.7_uslzfc62di2n2otc2tvfklnwji
       svelte2tsx: 0.5.11_uslzfc62di2n2otc2tvfklnwji
-      three: 0.150.1
+      three: 0.145.0
       ts-node: 10.8.2_fxk5i3xm3ivo7fjwhcizcinpla
       tsafe: 0.9.1
       tslib: 2.4.0
@@ -2239,12 +2239,6 @@ packages:
 
   /@types/three/0.144.0:
     resolution: {integrity: sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==}
-    dependencies:
-      '@types/webxr': 0.5.0
-    dev: true
-
-  /@types/three/0.149.0:
-    resolution: {integrity: sha512-fgNBm9LWc65ER/W0cvoXdC0iMy7Ke9e2CONmEr6Jt8sDSY3sw4DgOubZfmdZ747dkPhbQrgRQAWwDEr2S/7IEg==}
     dependencies:
       '@types/webxr': 0.5.0
     dev: true
@@ -9680,10 +9674,6 @@ packages:
 
   /three/0.145.0:
     resolution: {integrity: sha512-EKoHQEtEJ4CB6b2BGMBgLZrfwLjXcSUfoI/MiIXUuRpeYsfK5aPWbYhdtIVWOH+x6X0TouldHKHBuc/LAiFzAw==}
-
-  /three/0.150.1:
-    resolution: {integrity: sha512-5C1MqKUWaHYo13BX0Q64qcdwImgnnjSOFgBscOzAo8MYCzEtqfQqorEKMcajnA3FHy1yVlIe9AmaMQ0OQracNA==}
-    dev: true
 
   /through/2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
