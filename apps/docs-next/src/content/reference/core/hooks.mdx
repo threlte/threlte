@@ -60,7 +60,7 @@ const {
 
 ### Frameloop
 
-If the [frameloop is set to `'demand'`](/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+If the [frameloop is set to `'demand'`]/docs/reference/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()
@@ -71,7 +71,7 @@ invalidate()
 invalidate('changed material color')
 ```
 
-If the [frameloop is set to `'never'`](/core/canvas) you must manually advance the frameloop to request a new render:
+If the [frameloop is set to `'never'`]/docs/reference/core/canvas) you must manually advance the frameloop to request a new render:
 
 ```ts
 const { advance } = useThrelte()
@@ -86,10 +86,10 @@ The property can be changed at any time, but it will only take effect on the nex
 ## `useFrame`
 
 This hook allows you to execute code on every frame as part of the unified frameloop.
-You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
+You receive the state (the same as [`useThrelte`](/docs/reference/core/hooks#usethrelte)) and a clock delta in seconds.
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
 
-You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/core/canvas) component.
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/docs/reference/core/canvas) component.
 
 ```ts
 type ThrelteUseFrameOptions = {
@@ -160,7 +160,7 @@ useFrame(
 ## `useRender`
 
 This hook allows you to execute code on every **invalidated** frame and after all `useFrame` hooks have been executed.
-You receive the state (the same as [`useThrelte`](/core/use-threlte)) and a clock delta in seconds.
+You receive the state (the same as [`useThrelte`](/docs/reference/core/hooks#usethrelte)) and a clock delta in seconds.
 Typically this hook is used to implement advanced rendering techniques such as post processing or custom render passes.
 
 <Tip type="warning">
