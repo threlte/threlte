@@ -71,7 +71,11 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
     )
   }
 
-  <hr class="my-0 self-stretch md:hidden" />
+  {
+    nextMenuItem && nextMenuItemCategory && previousMenuItem && previousMenuItemCategory && (
+      <hr class="my-0 self-stretch md:hidden" />
+    )
+  }
 
   {
     nextMenuItem && nextMenuItemCategory ? (
