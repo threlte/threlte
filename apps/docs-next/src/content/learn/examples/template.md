@@ -1,6 +1,7 @@
 ---
 category: Examples
 title: Template
+showInSidebar: false
 ---
 
 # Example Name

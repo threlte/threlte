@@ -17,7 +17,7 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = referenceCollection
-      .filter((item) => item.data.category === category)
+      .filter((item) => item.data.showInSidebar && item.data.category === category)
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {
@@ -56,20 +56,13 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
-  const referenceCollection = await getCollection('learn')
+  const learnCollection = await getCollection('learn')
 
-  const categoryNames = [...new Set(referenceCollection.map((item) => item.data.category))]
+  const categoryNames = [...new Set(learnCollection.map((item) => item.data.category))]
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
-    const menuItems = referenceCollection
-      .filter((item) => {
-        if (item.data.category == 'Examples') {
-          if (item.data.title != 'Index') {
-            return false
-          }
-        }
-        return item.data.category === category
-      })
+    const menuItems = learnCollection
+      .filter((item) => item.data.showInSidebar && item.data.category === category)
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {

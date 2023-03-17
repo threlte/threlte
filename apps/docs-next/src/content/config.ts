@@ -69,7 +69,8 @@ export const referenceCollection = defineCollection({
       '@threlte/gltf',
       'Documentation'
     ]),
-    componentSignature: componentSignature.optional()
+    componentSignature: componentSignature.optional(),
+    showInSidebar: z.boolean().optional().default(true)
   })
 })
 
@@ -84,7 +85,8 @@ export const learnCollection = defineCollection({
       'Examples'
     ]),
     title: z.string(),
-    order: z.number().optional()
+    order: z.number().optional(),
+    showInSidebar: z.boolean().optional().default(true)
   })
 })
 
