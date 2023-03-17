@@ -1,13 +1,6 @@
 <script lang="ts">
   import { Canvas, T } from '@threlte/core'
   import { ContactShadows, Float, Grid, OrbitControls } from '@threlte/extras'
-  import {
-    BoxGeometry,
-    Color,
-    IcosahedronGeometry,
-    MeshStandardMaterial,
-    TorusKnotGeometry
-  } from 'three'
 
   let _class = ''
   export { _class as class }
@@ -59,11 +52,10 @@
       <T.Mesh
         position.y={1.2}
         position.z={-0.75}
-        geometry={new BoxGeometry(1, 1, 1)}
-        material={new MeshStandardMaterial({
-          color: new Color('#0059BA')
-        })}
-      />
+      >
+        <T.BoxGeometry />
+        <T.MeshStandardMaterial color="#0059BA" />
+      </T.Mesh>
     </Float>
 
     <Float
@@ -74,11 +66,10 @@
         position={[1.2, 1.5, 0.75]}
         rotation.x={5}
         rotation.y={71}
-        geometry={new TorusKnotGeometry(0.5, 0.15, 100, 12, 2, 3)}
-        material={new MeshStandardMaterial({
-          color: new Color('#F85122')
-        })}
-      />
+      >
+        <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
+        <T.MeshStandardMaterial color="#F85122" />
+      </T.Mesh>
     </Float>
 
     <Float
@@ -88,11 +79,10 @@
       <T.Mesh
         position={[-1.4, 1.5, 0.75]}
         rotation={[-5, 128, 10]}
-        geometry={new IcosahedronGeometry(1, 0)}
-        material={new MeshStandardMaterial({
-          color: new Color('#F8EBCE')
-        })}
-      />
+      >
+        <T.IcosahedronGeometry args={[1, 0]} />
+        <T.MeshStandardMaterial color="#F8EBCE" />
+      </T.Mesh>
     </Float>
   </Canvas>
 </div>

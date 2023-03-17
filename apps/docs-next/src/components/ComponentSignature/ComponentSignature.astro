@@ -107,16 +107,18 @@ const shiki = await getShiki()
 														/>
 													) : (
 														<a
-															class="text-faded decoration-white/70 !decoration-solid"
+															class="text-faded no-underline"
 															href={prop.type.url}
-															set:html={shiki
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
 																.codeToHtml(prop.type.name, {
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
 																.replace('<pre class="shiki" style="background-color: #282A36">', '')
-																.replace('</pre>', '')}
-														/>
+																.replace('</pre>', '')} />
+														</a>
 													)
 												}
 
@@ -192,17 +194,19 @@ const shiki = await getShiki()
 															.replace('</pre>', '')}
 														/>
 													) : (
-														<a
-															class="text-faded decoration-white/70 !decoration-solid"
+													<a
+															class="text-faded no-underline"
 															href={event.payload.url}
-															set:html={shiki
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
 																.codeToHtml(event.payload.name, {
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
 																.replace('<pre class="shiki" style="background-color: #282A36">', '')
-																.replace('</pre>', '')}
-														/>
+																.replace('</pre>', '')} />
+														</a>
 													)
 												}
 
@@ -254,17 +258,19 @@ const shiki = await getShiki()
 															.replace('</pre>', '')}
 														/>
 													) : (
-														<a
-															class="text-faded decoration-white/70 !decoration-solid"
+													<a
+															class="text-faded no-underline"
 															href={binding.type.url}
-															set:html={shiki
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
 																.codeToHtml(binding.type.name, {
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
 																.replace('<pre class="shiki" style="background-color: #282A36">', '')
-																.replace('</pre>', '')}
-														/>
+																.replace('</pre>', '')} />
+														</a>
 													)
 												}
 
