@@ -1,9 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { c } from '../../lib/classes'
   import OpenInStackblitz from './OpenInStackblitz.svelte'
 
   export let path: string
   export let files: Record<string, string>
+  export let hideCode: boolean
 
   const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
     string,
@@ -19,9 +21,18 @@
   onMount(() => {
     mounted = true
   })
+
+  let _class = ''
+  export { _class as class }
 </script>
 
-<div class="relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20">
+<div
+  class={c(
+    'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20',
+    hideCode && '!rounded-md',
+    _class
+  )}
+>
   {#if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />

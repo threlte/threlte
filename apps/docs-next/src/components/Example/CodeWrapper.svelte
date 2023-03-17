@@ -3,10 +3,12 @@
 
   import CodeExplorer from './CodeExplorer.svelte'
   import { writable, Writable } from 'svelte/store'
+  import { c } from '../../lib/classes'
 
   let children: HTMLElement[] = []
 
   export let filePaths: string[]
+  export let hidePreview: boolean
 
   const onFileSelected = (file: File) => {
     const path = file.path
@@ -52,7 +54,10 @@
 <div class="not-prose flex md:max-h-[80vh] w-full flex-col md:flex-row items-stretch">
   <CodeExplorer
     {currentlySelectedFile}
-    class="overflow-y-auto md:rounded-bl-md border-x md:border-r-0 border-b border-white/20 px-4 py-3 max-md:flex-shrink-0"
+    class={c(
+      'overflow-y-auto md:rounded-bl-md border-x md:border-r-0 border-b border-white/20 px-4 py-3 max-md:flex-shrink-0',
+      hidePreview && 'border-t rounded-tl-md'
+    )}
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)
