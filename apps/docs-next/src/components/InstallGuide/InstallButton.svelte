@@ -11,8 +11,8 @@
   {...$$restProps}
   on:click
   class={c(
-    'px-3 pr-4 py-1 gap-2 rounded-md flex flex-row items-center border-white/20 border justify-start',
-    active ? 'bg-green-500/70 text-white' : 'bg-blue-700/10 text-faded hover:text-white',
+    'px-3 pr-4 py-1 gap-2 rounded-md flex flex-row items-center border-white/20 border justify-start group',
+    active ? 'bg-green-500/70 text-white' : 'bg-blue-900 hover:bg-blue-700/30',
     _class
   )}
 >
@@ -21,7 +21,7 @@
       xmlns="http://www.w3.org/2000/svg"
       width="76"
       height="76"
-      class="fill-current h-[1.5em] w-auto"
+      class="fill-current h-[1.5em] w-auto group-hover:text-white"
       viewBox="0 0 256 256"
       ><path
         d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z"
@@ -35,7 +35,7 @@
       xmlns="http://www.w3.org/2000/svg"
       width="76"
       height="76"
-      class="fill-current h-[1.5em] w-auto"
+      class="fill-current h-[1.5em] w-auto group-hover:text-white"
       viewBox="0 0 256 256"
       ><path
         d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z"
@@ -45,7 +45,12 @@
       /></svg
     >
   {/if}
-  <code class="bg-transparent mx-0 px-0">
+  <code
+    class={c(
+      'bg-transparent mx-0 px-0',
+      active ? 'text-white' : 'text-faded group-hover:text-white'
+    )}
+  >
     <slot />
   </code>
 </button>
