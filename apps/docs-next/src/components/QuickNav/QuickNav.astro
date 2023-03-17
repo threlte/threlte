@@ -36,7 +36,9 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
 }
 ---
 
-<div class="text-faded mt-20 flex flex-row justify-between rounded-md border-white/10 bg-blue-900">
+<div
+  class="text-faded mt-20 flex flex-col justify-between rounded-md border-white/10 bg-blue-900 md:flex-row"
+>
   {
     previousMenuItem && previousMenuItemCategory ? (
       <a
@@ -69,10 +71,12 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
     )
   }
 
+  <hr class="my-0 self-stretch md:hidden" />
+
   {
     nextMenuItem && nextMenuItemCategory ? (
       <a
-        class="flex flex-row items-center gap-3 px-6 py-6 !text-inherit no-underline hover:!text-white"
+        class="flex flex-row items-center gap-3 self-end px-6 py-6 !text-inherit no-underline hover:!text-white md:self-auto"
         href={makeHref(nextMenuItem, nextMenuItemCategory)}
       >
         <div class="flex flex-col items-end">
