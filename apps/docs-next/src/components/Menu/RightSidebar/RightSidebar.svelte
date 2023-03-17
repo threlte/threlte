@@ -67,42 +67,44 @@
   }
 </script>
 
-<div
-  class="scrollbar-hide relative mt-4 flex h-full items-center justify-between gap-6 overflow-visible px-6 pb-12 lg:px-0 lg:pl-6 lg:text-sm"
->
-  <span
-    class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
-    >On this page</span
+{#if filteredHeadings.length}
+  <div
+    class="scrollbar-hide relative mt-4 flex h-full items-center justify-between gap-6 overflow-visible px-6 pb-12 lg:px-0 lg:pl-6 lg:text-sm"
   >
+    <span
+      class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
+      >On this page</span
+    >
 
-  <ul
-    class="absolute top-1/2 right-0 w-full  bg-[#0c1421] px-6 text-left lg:bg-transparent lg:px-0 lg:pl-6 duration-50 transition-all lg:pointer-events-auto lg:opacity-100"
-    on:transitionend={focusFirstDropdownLink}
-  >
-    {#each filteredHeadings as heading}
-      <li
-        class={c(
-          'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white lg:py-0.5',
-          !!currentHeadingSlug &&
-            heading.slug === currentHeadingSlug &&
-            '!border-white/60 bg-blue-700/30 !text-white'
-        )}
-        on:keypress={() => {
-          headingClicked(heading.slug)
-        }}
-        on:click={() => {
-          headingClicked(heading.slug)
-        }}
-      >
-        <a
-          data-depth={heading.depth}
-          class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
-          style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
-          href={`#${heading.slug}`}
+    <ul
+      class="absolute top-1/2 right-0 w-full  bg-[#0c1421] px-6 text-left lg:bg-transparent lg:px-0 lg:pl-6 duration-50 transition-all lg:pointer-events-auto lg:opacity-100"
+      on:transitionend={focusFirstDropdownLink}
+    >
+      {#each filteredHeadings as heading}
+        <li
+          class={c(
+            'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white lg:py-0.5',
+            !!currentHeadingSlug &&
+              heading.slug === currentHeadingSlug &&
+              '!border-white/60 bg-blue-700/30 !text-white'
+          )}
+          on:keypress={() => {
+            headingClicked(heading.slug)
+          }}
+          on:click={() => {
+            headingClicked(heading.slug)
+          }}
         >
-          {heading.text}
-        </a>
-      </li>
-    {/each}
-  </ul>
-</div>
+          <a
+            data-depth={heading.depth}
+            class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
+            style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
+            href={`#${heading.slug}`}
+          >
+            {heading.text}
+          </a>
+        </li>
+      {/each}
+    </ul>
+  </div>
+{/if}
