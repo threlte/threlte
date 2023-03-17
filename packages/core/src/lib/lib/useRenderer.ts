@@ -25,8 +25,10 @@ const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
   '': LinearEncoding
 }
 
-const rendererHasColorSpaceProperty = (renderer: any): renderer is { colorSpace: string } => {
-  return renderer.colorSpace !== undefined
+const rendererHasOutputColorSpaceProperty = (
+  renderer: any
+): renderer is { outputColorSpace: string } => {
+  return renderer.outputColorSpace !== undefined
 }
 
 /**
@@ -77,8 +79,8 @@ export const useRenderer = (ctx: ThrelteContext) => {
 
       // check if the renderer has a colorSpace property, if so, use that
       // otherwise, use the old encoding property
-      if (rendererHasColorSpaceProperty(renderer)) {
-        renderer.colorSpace = colorSpace
+      if (rendererHasOutputColorSpaceProperty(renderer)) {
+        renderer.outputColorSpace = colorSpace
       } else {
         const encoding = colorSpaceToEncoding[colorSpace]
         if (!encoding) {
