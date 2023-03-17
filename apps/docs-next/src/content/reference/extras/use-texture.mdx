@@ -1,0 +1,28 @@
+---
+order: 14.5
+category: '@threlte/extras'
+name: useTexture
+type: 'hook'
+---
+
+`useTexture` is a convenience hook wrapping [`useLoader`](/docs/reference/core/hooks#useloader)
+that returns an [`AsyncWritable`](/docs/reference/core/utilities#asyncwritable) store populated
+with a `THREE.Texture`.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const map = useTexture('texture.png')
+
+  $: console.log($map) // eventually THREE.Texture
+</script>
+
+{#await map then value}
+  <T.Mesh>
+    <T.SphereGeometry />
+    <T.MeshBasicMaterial map={value} />
+  </T.Mesh>
+{/await}
+```

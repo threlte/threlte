@@ -5,7 +5,7 @@
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 
-  $: color = $hovering ? '#dddddd' : '#c62004'
+  $: color = $hovering ? '#dddddd' : '#FE3D00'
 
   const { size } = useThrelte()
 
