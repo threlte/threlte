@@ -11,9 +11,8 @@
   import {
     ACESFilmicToneMapping,
     PCFSoftShadowMap,
-    sRGBEncoding,
+    type ColorSpace,
     type ShadowMapType,
-    type TextureEncoding,
     type ToneMapping,
     type WebGLRendererParameters
   } from 'three'
@@ -38,7 +37,7 @@
   /**
    * @default sRGBEncoding
    */
-  export let colorSpace: TextureEncoding = sRGBEncoding
+  export let colorSpace: ColorSpace = 'srgb'
   /**
    * @default 'demand'
    */

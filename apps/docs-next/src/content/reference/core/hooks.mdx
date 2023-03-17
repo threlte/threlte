@@ -44,15 +44,15 @@ toneMapping.set(THREE.LinearToneMapping)
 const {
   size, // Readable<Size>
   clock, // Clock
-  camera, // CurrentWritable<Camera>
-  scene, // Scene
-  renderer, // WebGLRenderer | undefined
+  camera, // CurrentWritable<THREE.Camera>
+  scene, // THREE.Scene
+  renderer, // THREE.WebGLRenderer | undefined
   invalidate, // (debugFrameloopMessage?: string) => void
   advance, // () => void
-  colorSpace, // CurrentWritable<TextureEncoding>
-  toneMapping, // CurrentWritable<ToneMapping>
+  colorSpace, // CurrentWritable<THREE.ColorSpace>
+  toneMapping, // CurrentWritable<THREE.ToneMapping>
   dpr, // CurrentWritable<number>
-  shadows, // CurrentWritable<boolean | ShadowMapType>
+  shadows, // CurrentWritable<boolean | THREE.ShadowMapType>
   colorManagementEnabled, // CurrentWritable<boolean>
   frameloop // CurrentWritable<'always' | 'demand' | 'never'>
 } = useThrelte()

@@ -1,15 +1,33 @@
 import { onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
 import {
+  ColorManagement,
+  LinearEncoding,
   PCFSoftShadowMap,
+  sRGBEncoding,
   WebGLRenderer,
-  type WebGLRendererParameters,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  ColorManagement
+  type ColorSpace,
+  type TextureEncoding,
+  type WebGLRendererParameters
 } from 'three'
 import type { ThrelteContext } from '../types/types'
 import { watch } from './storeUtils'
+
+/**
+ * March 2023: Three.js is making a transition to a new color management system. Part of
+ * that is that the renderer will accept a `colorSpace` property rather than a
+ * property `encoding`. As a fallback for older three versions, we need to map
+ * the new `colorSpace` to the old `encoding`.
+ */
+const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
+  srgb: sRGBEncoding,
+  'srgb-linear': LinearEncoding,
+  '': LinearEncoding
+}
+
+const rendererHasColorSpaceProperty = (renderer: any): renderer is { colorSpace: string } => {
+  return renderer.colorSpace !== undefined
+}
 
 /**
  * ### `useRenderer`
@@ -56,7 +74,20 @@ export const useRenderer = (ctx: ThrelteContext) => {
       if (!renderer) return
       renderer.setSize(size.width, size.height)
       renderer.setPixelRatio(dpr)
-      renderer.outputEncoding = colorSpace
+
+      // check if the renderer has a colorSpace property, if so, use that
+      // otherwise, use the old encoding property
+      if (rendererHasColorSpaceProperty(renderer)) {
+        renderer.colorSpace = colorSpace
+      } else {
+        const encoding = colorSpaceToEncoding[colorSpace]
+        if (!encoding) {
+          console.warn('No encoding found for colorSpace', colorSpace)
+        } else {
+          renderer.outputEncoding = encoding
+        }
+      }
+
       renderer.toneMapping = toneMapping
       renderer.shadowMap.enabled = !!shadows
       if (shadows && shadows !== true) {
