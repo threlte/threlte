@@ -35,7 +35,7 @@
    */
   export let toneMapping: ToneMapping = ACESFilmicToneMapping
   /**
-   * @default sRGBEncoding
+   * @default 'srgb'
    */
   export let colorSpace: ColorSpace = 'srgb'
   /**
