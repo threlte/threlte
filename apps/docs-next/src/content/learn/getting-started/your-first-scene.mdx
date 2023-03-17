@@ -29,7 +29,7 @@ renderer and sets up some sensible defaults for you like antialiasing and color 
 It also creates a default camera and provides the context in which your Threlte application
 will run, so it's a good idea to wrap your entire application in it.
 
-## Adding a Cube
+## Creating Objects
 
 At this point we're looking at a blank screen. Let's add a simple cube to it. We do this by first adding
 another Svelte file called `Scene.svelte` and including it in our `App.svelte` file.
@@ -79,7 +79,7 @@ We're now looking at a white cube on a transparent background.
   />
 </details>
 
-## Constructing Objects
+### Constructor Arguments
 
 In Three.js objects are classes that are instantiated. These classes can receive one-time constructor
 arguments (`new THREE.SphereGeometry(1, 32)`). In Threlte, constructor arguments are always passed as an
@@ -225,10 +225,10 @@ the method `lookAt` to look at the cube.
 ```
 {/* prettier-ignore-end */}
 
-## Adding Interactivity
+### Pointer Events
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
-plugin [`interactivity`](/docs/reference/extras/interactivity) from
+[plugin](/docs/learn/advanced/plugins) [`interactivity`](/docs/reference/extras/interactivity) from
 [`'@threlte/extras'`](/docs/reference/extras/getting-started) and invoke it in our Scene.svelte file:
 
 {/* prettier-ignore-start */}
