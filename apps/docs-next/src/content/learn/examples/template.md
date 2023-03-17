@@ -4,8 +4,6 @@ title: Template
 showInSidebar: false
 ---
 
-# Example Name
-
 For some extra info on what can be used within your example's markup [see](../../reference/docs/docs.mdx)
 
 ## Sections

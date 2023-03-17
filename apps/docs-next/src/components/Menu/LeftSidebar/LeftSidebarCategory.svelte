@@ -6,6 +6,14 @@
   export let activeUrlPathName: string
 
   let open = true
+
+  const isEqual = (a: string, b: string) => {
+    a = a.startsWith('/') ? a.slice(1) : a
+    a = a.endsWith('/') ? a.slice(0, -1) : a
+    b = b.startsWith('/') ? b.slice(1) : b
+    b = b.endsWith('/') ? b.slice(0, -1) : b
+    return a === b
+  }
 </script>
 
 <Details
@@ -22,7 +30,7 @@
         <a
           class={c(
             'block pl-2 md:pl-4 md:-mx-2 py-1 rounded-sm',
-            activeUrlPathName === `${category.urlPrefix}/${item.slug}` &&
+            isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`) &&
               'bg-blue-700/30 text-white'
           )}
           href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a

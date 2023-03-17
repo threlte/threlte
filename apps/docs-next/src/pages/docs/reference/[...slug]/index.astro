@@ -3,6 +3,7 @@ import { getCollection, CollectionEntry } from 'astro:content'
 import DocsLayout from '$layouts/DocsLayout.astro'
 import MdxCode from '$components/Code/MdxCode.astro'
 import ComponentSignature from '../../../../components/ComponentSignature/ComponentSignature.astro'
+import QuickNav from '../../../../components/QuickNav/QuickNav.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('reference')
@@ -43,4 +44,6 @@ const { Content } = await entry.render()
       </div>
     )
   }
+
+  <QuickNav />
 </DocsLayout>
