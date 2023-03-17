@@ -23,14 +23,17 @@
           },
           {
             'name': 'colorSpace',
-            'type': 'THREE.TextureEncoding',
-            'default': 'THREE.sRGBEncoding',
-            'required': false,
-            'description': 'renderer.outputEncoding'
+            'type': 'THREE.ColorSpace',
+            'default': "'srgb'",
+            'required': false
           },
           {
             'name': 'colorManagementEnabled',
-            'type': 'boolean',
+            'type':
+              {
+                name: 'boolean',
+                url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
+              },
             'default': 'true',
             'required': false
           },
@@ -43,7 +46,7 @@
           { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
           {
             'name': 'shadows',
-            'type': 'boolean | ShadowMapType',
+            'type': 'boolean | THREE.ShadowMapType',
             'default': 'THREE.PCFSoftShadowMap',
             'required': false
           },

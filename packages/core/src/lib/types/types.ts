@@ -8,7 +8,7 @@ import type {
   Object3D,
   Scene,
   ShadowMapType,
-  TextureEncoding,
+  ColorSpace,
   ToneMapping,
   Vector3,
   WebGLRenderer
@@ -50,7 +50,7 @@ export type ThrelteContext = {
 
   // Color Management
   colorManagementEnabled: CurrentWritable<boolean>
-  colorSpace: CurrentWritable<TextureEncoding>
+  colorSpace: CurrentWritable<ColorSpace>
   toneMapping: CurrentWritable<ToneMapping>
 
   // Shadows

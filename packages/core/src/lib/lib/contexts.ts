@@ -1,7 +1,7 @@
 import { setContext, tick } from 'svelte'
 import type { Writable } from 'svelte/store'
 import { derived } from 'svelte/store'
-import { Clock, Scene, type ShadowMapType, type TextureEncoding, type ToneMapping } from 'three'
+import { Clock, Scene, type ColorSpace, type ShadowMapType, type ToneMapping } from 'three'
 import type { DisposableThreeObject } from '../types/components'
 import type {
   Size,
@@ -19,7 +19,7 @@ import { currentWritable } from './storeUtils'
  * `ThrelteInternalContext` for a Threlte application.
  */
 export const createContexts = (options: {
-  colorSpace: TextureEncoding
+  colorSpace: ColorSpace
   toneMapping: ToneMapping
   dpr: number
   userSize: Writable<Size | undefined>
