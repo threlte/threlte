@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.0.0-next.0
+
+### Major Changes
+
+- d41cb6cf: Adapted rapier package to Threlte v6 syntax
+
 ## 0.5.0
 
 ### Minor Changes
