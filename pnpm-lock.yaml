@@ -268,6 +268,7 @@ importers:
       type-fest: ^2.13.0
       typescript: ^4.6.3
     dependencies:
+      lodash: 4.17.21
       troika-three-text: 0.46.4_three@0.145.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.61
@@ -283,7 +284,6 @@ importers:
       eslint: 7.32.0
       eslint-config-prettier: 8.5.0_eslint@7.32.0
       eslint-plugin-svelte3: 3.4.1_k4rvtr32uzrs6rwp57u73ssa6q
-      lodash: 4.17.21
       prettier: 2.7.1
       prettier-plugin-svelte: 2.7.0_o3ioganyptcsrh6x4hnxvjkpqi
       svelte: 3.49.0
@@ -6315,7 +6315,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
+    dev: false
 
   /log-symbols/4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
