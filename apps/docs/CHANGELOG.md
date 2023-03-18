@@ -1,5 +1,16 @@
 # @threlte/docs
 
+## 0.2.0-next.0
+
+### Minor Changes
+
+- 45821797: Remove components for lights, update docs and examples to v5
+
+### Patch Changes
+
+- e28b8ada: Move audio context and components to extras
+- eb302d2e: Fix core-transition docs to match preprocessThrelte configuration docs
+
 ## 0.1.1
 
 ### Patch Changes

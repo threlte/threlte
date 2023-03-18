@@ -1,5 +1,26 @@
 # @threlte/extras
 
+## 5.0.0-next.0
+
+### Major Changes
+
+- fcfcc0e4: Refactored <Audio> as well as <PositionalAudio>. The new main source prop is now called "src" to accomodate the original prop "source" alognside.
+- 15309755: Converted <ContactShadows> to v5
+- df4b307b: Converted <Text> to v5
+
+### Minor Changes
+
+- ae514436: Moved <TransformControls> from core to extras, added createRawEventDispatcher to core
+- e28b8ada: Move audio context and components to extras
+- aac59eb1: - Float component updated to V5.
+  - Float added features: float direction and rotation can now happen on all 3 axes
+    Backwards compatible
+
+### Patch Changes
+
+- 300cbe4e: Converted <Edges> component to use Threlte v5 syntax. Changed prop name "threshold" to "thresholdAngle" (as it is used by three.js)
+- b71145ea: Environment: update Types to Threlte V5 standard
+
 ## 4.9.3
 
 ### Patch Changes
@@ -62,10 +83,6 @@
 
   ```ts
   const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
-
-  // -> $gltf.nodes.MeshA -> THREE.Object3D
-  // -> $gltf.nodes.Object3DA -> THREE.Object3D
-  // -> $gltf.materials.MaterialA -> THREE.Material
   ```
 
   - After:
@@ -82,10 +99,6 @@
       MaterialB: THREE.MeshBasicMaterial
     }
   }>('/some/url')
-
-  // -> $gltf.nodes.MeshA -> THREE.Mesh
-  // -> $gltf.nodes.Object3DA -> THREE.Object3D
-  // -> $gltf.materials.MaterialA -> THREE.MeshStandardMaterial
   ```
 
 ## 4.4.1
