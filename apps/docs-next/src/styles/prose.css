@@ -33,5 +33,9 @@
     & > *:last-child {
       @apply !mb-2;
     }
+
+    & > .code {
+      @apply !mb-0 mt-2;
+    }
   }
 }

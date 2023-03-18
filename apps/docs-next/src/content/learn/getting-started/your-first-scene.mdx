@@ -27,12 +27,8 @@ As a first step we're creating a new Svelte file called `App.svelte` where we ar
 The `<Canvas>` component is the root component of your Threlte application. It creates a
 renderer and sets up some sensible defaults for you like antialiasing and color management.
 It also creates a default camera and provides the context in which your Threlte application
-will run, so it's a good idea to wrap your entire application in it.
-
-## Creating Objects
-
-At this point we're looking at a blank screen. Let's add a simple cube to it. We do this by first adding
-another Svelte file called `Scene.svelte` and including it in our `App.svelte` file.
+will run, so it's a good idea to wrap your entire application in it. We do this by creating
+a Svelte file called `Scene.svelte` and including it in our `App.svelte` file.
 
 {/* prettier-ignore-start */}
 ```svelte title="App.svelte" {3,7}+
@@ -47,15 +43,61 @@ another Svelte file called `Scene.svelte` and including it in our `App.svelte` f
 ```
 {/* prettier-ignore-end */}
 
+## Creating Objects
+
+At this point we're looking at a blank screen. Let's add a simple cube to it.
+
 In `Scene.svelte`, we're importing the [`<T>` component](/docs/reference/core/t) which is
-the **main building block** of your Threlte application. It's a generic
-component that we use to render any Three.js object. In this case we're creating a
+the **main building block** of your Threlte application. It's a **generic
+component** that we use to render **any Three.js object**. In this case we're creating a
 [`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
 a [`THREE.BoxGeometry`](https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry) and
 a [`THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materials/MeshBasicMaterial).
 
+### Attaching Objects
+
+We're using the property `attach` available on `<T>` to
+**attach an object to a property of its parent**. In our case we're **attaching** the underlying Three.js
+object of `<T.BoxGeometry>` to the property `geometry` of the `<T.Mesh>` component. We're also attaching
+the underlying Three.js object of `<T.MeshBasicMaterial>` to the property `material` of the `<T.Mesh>` component.
+
 {/* prettier-ignore-start */}
 ```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry attach="geometry" />
+  <T.MeshBasicMaterial attach="material" />
+</T.Mesh>
+```
+{/* prettier-ignore-end */}
+
+<details>
+	<summary>
+		Three.js equivalent
+	</summary>
+
+```ts
+// creating the objects
+const geometry = new THREE.BoxGeometry()
+const material = new THREE.MeshBasicMaterial()
+const mesh = new THREE.Mesh()
+
+// "attaching" the objects
+mesh.geometry = geometry
+mesh.material = material
+```
+
+</details>
+
+Binding geometries to the property `geometry` and materials to the property `material` is a common
+pattern so Threlte will take care of it. It checks for the properties `isMaterial` and `isGeometry` on
+the underlying Three.js object and attaches it to the correct property.
+
+{/* prettier-ignore-start */}
+```svelte title="Scene.svelte" {6,7}m
 <script>
   import { T } from '@threlte/core'
 </script>
@@ -98,7 +140,16 @@ array via the prop `args`. If `args` change later on, the object must naturally 
 ```
 {/* prettier-ignore-end */}
 
-This is equivalent to calling `new THREE.BoxGeometry(1, 2, 1)`.
+<details>
+	<summary>
+		Three.js equivalent
+	</summary>
+
+```ts
+const geometry = new THREE.BoxGeometry(1, 2, 1)
+```
+
+</details>
 
 ## Adding Props
 
@@ -117,6 +168,18 @@ That cube is still a bit boring. Let's add some color to it! We can do this by p
 </T.Mesh>
 ```
 {/* prettier-ignore-end */}
+
+<details>
+	<summary>
+		Three.js equivalent
+	</summary>
+
+```ts
+const material = new THREE.MeshBasicMaterial()
+material.color.set('hotpink')
+```
+
+</details>
 
 Threlte has some rules of what we can pass as props to `<T>` components. First, it will try to find
 the **property on the underlying Three.js object** based on the **name of the prop**. In this case it's the property [`color` on our `THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materials/MeshBasicMaterial.color).
@@ -141,7 +204,17 @@ If there's a `set` method and it accepts more than one value (such as a `THREE.V
 ```
 {/* prettier-ignore-end */}
 
-This is equivalent to calling `mesh.position.set(0, 0.5, 0)`.
+<details>
+	<summary>
+		Three.js equivalent
+	</summary>
+
+```ts
+const mesh = new THREE.Mesh()
+mesh.position.set(0, 1, 0)
+```
+
+</details>
 
 ### Pierced Props
 
@@ -162,6 +235,18 @@ leverage **pierced props** to only set the `y` position of our cube.
 </T.Mesh>
 ```
 {/* prettier-ignore-end */}
+
+<details>
+	<summary>
+		Three.js equivalent
+	</summary>
+
+```ts
+const mesh = new THREE.Mesh()
+mesh.position.y = 1
+```
+
+</details>
 
 <Tip
   type="tip"
@@ -192,7 +277,8 @@ We're still staring at the side of a cube, let's add a camera and offset it from
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
-```
+````
+
 {/* prettier-ignore-end */}
 
 We're again using the `<T>` component to create a [`THREE.PerspectiveCamera`](https://threejs.org/docs/index.html#api/en/cameras/PerspectiveCamera).
