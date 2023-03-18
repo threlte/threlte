@@ -10,7 +10,6 @@
 
   export let activeSidebarTab: 'learn' | 'reference'
   export let activeUrlPathName: string
-
 </script>
 
 <MobileNav>
@@ -64,9 +63,10 @@
 
     <hr />
 
-    <div class="flex flex-col gap-2">
+    <!-- Implement as soon as there are showcase entries -->
+    <!-- <div class="flex flex-col gap-2">
       <a href="/showcase"> Showcase </a>
-    </div>
+    </div> -->
 
     <slot name="after-navigation" />
   </div>

@@ -83,7 +83,7 @@
       {#each filteredHeadings as heading}
         <li
           class={c(
-            'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white lg:py-0.5',
+            'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white py-1 text-sm',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
               '!border-white/60 bg-blue-700/30 !text-white'
