@@ -1,6 +1,6 @@
 {
   "name": "@threlte/theatre",
-  "version": "0.0.2",
+  "version": "0.0.3-next.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {

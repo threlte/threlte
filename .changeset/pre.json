@@ -11,5 +11,21 @@
     "@threlte/theatre": "0.0.2",
     "@threlte/convert": "0.0.1"
   },
-  "changesets": []
+  "changesets": [
+    "beige-pants-obey",
+    "dirty-clouds-teach",
+    "gentle-shrimps-leave",
+    "hip-pugs-report",
+    "nasty-llamas-fry",
+    "nine-seahorses-deliver",
+    "popular-seahorses-allow",
+    "quick-papayas-hammer",
+    "shaggy-rockets-call",
+    "short-houses-protect",
+    "silver-lemons-decide",
+    "six-readers-smile",
+    "spicy-moons-chew",
+    "strange-carrots-matter",
+    "witty-geckos-cheat"
+  ]
 }

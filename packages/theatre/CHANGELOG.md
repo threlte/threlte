@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.0.3-next.0
+
+### Patch Changes
+
+- d41cb6cf: Adapted theatre package to new TransformControls syntax
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @threlte/core
 
+## 6.0.0-next.0
+
+### Major Changes
+
+- f0065c38: Removed components <Line>, <Line2>, <LineSegments> and <LineInstance>
+- ae514436: Moved <TransformControls> from core to extras, added createRawEventDispatcher to core
+- e28b8ada: Move audio context and components to extras
+- d649e237: Removed <Mesh> and respective type exports
+- 45821797: Remove components for lights, update docs and examples to v5
+
+### Minor Changes
+
+- 848af1ae: Added useRender: a hook that runs code after a frame has been invalidated, typically to implement custom render pipelines. Added the option to not automatically invalidate a frame with useFrame.
+
 ## 5.0.9
 
 ### Patch Changes
