@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@threlte/docs": "0.1.1",
+    "@threlte/docs-next": "0.0.1",
+    "@threlte/core": "5.0.9",
+    "@threlte/extras": "4.9.3",
+    "@threlte/gltf": "0.0.5",
+    "@threlte/rapier": "0.5.0",
+    "@threlte/theatre": "0.0.2",
+    "@threlte/convert": "0.0.1"
+  },
+  "changesets": []
+}
