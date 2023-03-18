@@ -9,17 +9,19 @@
   let installTypes = false
 
   $: installCode = [
-    `npm install three @threlte/core${
+    `npm install three @threlte/core@next${
       installExtras || installRapier || installTheatre || installTypes ? ' \\' : ''
     }`,
     installExtras &&
-      `            @threlte/extras${installRapier || installTheatre || installTypes ? ' \\' : ''}`,
+      `            @threlte/extras@next${
+        installRapier || installTheatre || installTypes ? ' \\' : ''
+      }`,
     installRapier &&
-      `            @threlte/rapier @dimforge/rapier3d-compat${
+      `            @threlte/rapier@next @dimforge/rapier3d-compat${
         installTypes || installTheatre ? ' \\' : ''
       }`,
     installTheatre &&
-      `            @threlte/theatre @theatre/core @theatre/studio${installTypes ? ' \\' : ''}`,
+      `            @threlte/theatre@next @theatre/core @theatre/studio${installTypes ? ' \\' : ''}`,
     installTypes && '            @types/three'
   ]
     .filter(Boolean)
