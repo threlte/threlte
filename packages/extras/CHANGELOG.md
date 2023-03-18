@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.1
+
+### Patch Changes
+
+- 33c37682: Moved lodash from dev dep to regular dep
+
 ## 5.0.0-next.0
 
 ### Major Changes
