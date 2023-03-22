@@ -46,6 +46,13 @@
             'required': false
           },
           {
+            'name': 'useLegacyLights',
+            'type': 'boolean',
+            'default': 'false',
+            'required': false,
+            description: 'Whether to use legacy lighting mode or physically correct lighting mode. Physically correct lighting mode is more physically accurate, but legacy lighting mode may be more intuitive.'
+          },
+          {
             'name': 'frameloop',
             'type': { 'name': '"always" | "demand" | "never"', 'url': 'https://google.com' },
             'default': '"demand"',
