@@ -17,6 +17,10 @@ export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
 
+// portals
+export { default as Portal } from './components/portals/Portal/Portal.svelte'
+export { default as PortalTarget } from './components/portals/PortalTarget/PortalTarget.svelte'
+
 // text component
 export { default as Text } from './components/Text/Text.svelte'
 
