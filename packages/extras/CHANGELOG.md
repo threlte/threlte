@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.2
+
+### Minor Changes
+
+- bd4a4b76: Added Portal and PortalTarget component
+
 ## 5.0.0-next.1
 
 ### Patch Changes
