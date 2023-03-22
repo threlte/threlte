@@ -14,9 +14,9 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
   Fox](https://artstation.com/glenatron), CC Attribution.
 </small>
 
-### Examples
+## Examples
 
-#### Basic Example
+### Basic Example
 
 ```svelte
 <script lang="ts">
@@ -43,13 +43,13 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
 />
 ```
 
-#### Using the `useGltf` Hook
+### Using the `useGltf` Hook
 
 Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse parts of a model or use the embedded camera. In this case, the hook `useGltf` returns an object with a property `gltf` which you can pass as the first argument to the hook `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">
-  import { Object3DInstance } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
@@ -62,33 +62,48 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
 </script>
 
 {#if $gltf}
-  <Object3DInstance object={$gltf.scene} />
+  <T is={$gltf.scene} />
 {/if}
 ```
 
-#### Applying animations to a different root
+### Applying animations to a different root
 
 Sometimes you want to apply the animations to a different root than the GLTF scene.
 
 ```svelte
 <script>
   import { useGltfAnimations, useGltf } from '@threlte/extras'
-  import { Scene } from 'three'
+  import { Group } from 'three'
 
   const gltf = useGltf('/path/to/model.glb')
 
-  const scene = new Scene()
+  const group = new Group()
 
-  useGltfAnimations(
-    gltf,
-    ({ actions }) => {
-      actions.someAction?.play()
-    },
-    scene
-  )
+  const { root } = useGltfAnimations(gltf, group)
 </script>
 
-<Three type={scene}>
-  <!-- … -->
-</Three>
+{#if $gltf}
+  <T is={group}>
+    <T is={$gltf.scene}>
+  </T>
+{/if}
+```
+
+This can also be done after the animations have been loaded.
+
+```svelte
+<script>
+  import { useGltfAnimations, useGltf } from '@threlte/extras'
+  import { Group } from 'three'
+
+  const gltf = useGltf('/path/to/model.glb')
+
+  const { root } = useGltfAnimations(gltf, group)
+</script>
+
+{#if $gltf}
+  <T.Group bind:ref={$root}>
+    <T is={$gltf.scene}>
+  </T>
+{/if}
 ```

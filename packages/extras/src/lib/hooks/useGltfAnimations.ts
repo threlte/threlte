@@ -1,16 +1,18 @@
-import { onDestroy } from 'svelte'
+import { currentWritable, useFrame, watch, type CurrentWritable } from '@threlte/core'
+import { tick } from 'svelte'
 import { writable, type Writable } from 'svelte/store'
-import { AnimationMixer, type AnimationAction, type Object3D } from 'three'
+import { AnimationClip, AnimationMixer, type AnimationAction, type Object3D } from 'three'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useFrame } from '@threlte/core'
 
 type UseGltfAnimationsReturnType<Actions extends any> = {
   gltf: Writable<GLTF | undefined>
-  mixer: Writable<AnimationMixer | undefined>
-  actions: Writable<Actions>
+  mixer: CurrentWritable<AnimationMixer | undefined>
+  actions: CurrentWritable<Actions>
+  root: RootStore
 }
 
 type Root = Object3D
+type RootStore = CurrentWritable<Root | undefined>
 const isRoot = (value: any): value is Root => !!value?.isObject3D
 
 type GltfStore = Writable<GLTF | undefined>
@@ -76,53 +78,64 @@ export function useGltfAnimations<T extends string, Actions = Partial<Record<T, 
     ? rootOrGltfOrCallback
     : isCallback(callbackOrRoot)
     ? callbackOrRoot
-    : undefined
+    : (undefined as Callback<Actions> | undefined)
 
-  const root = isRoot(rootOrGltfOrCallback)
+  const rootParam = isRoot(rootOrGltfOrCallback)
     ? rootOrGltfOrCallback
     : isRoot(callbackOrRoot)
     ? callbackOrRoot
     : maybeRoot
 
-  const mixerStore = writable<AnimationMixer | undefined>(undefined)
-  const actions = writable<Actions>({} as Actions)
+  const root = currentWritable<Root | undefined>(rootParam)
+  const actions = currentWritable<Actions>({} as Actions)
+  const mixer: CurrentWritable<AnimationMixer> = currentWritable(
+    new AnimationMixer(undefined as unknown as Object3D)
+  )
 
-  const unsubscribe = gltf.subscribe((gltf) => {
-    if (!gltf || !gltf.scene || !gltf.animations.length) return
-    const newMixer = new AnimationMixer(undefined as unknown as Object3D)
-    const newActions = gltf.animations.reduce((acc, clip) => {
-      const action = newMixer.clipAction(clip, root ?? gltf.scene)
-      return {
-        ...acc,
-        [clip.name as T]: action
-      }
-    }, {} as Actions)
-    mixerStore.set(newMixer)
-    actions.set(newActions)
-    cb?.({
-      actions: newActions,
-      mixer: newMixer
-    })
+  watch([gltf, root], ([gltf, root]) => {
+    // we need to wait for the tick in certain
+    // situations, so the root is properly set up
+    ;(async () => {
+      await tick()
+      const actualRoot = root ?? gltf?.scene
+      if (!gltf || !gltf.scene || !gltf.animations.length) return
+      // if there's a mixer, we stop all running actions
+      mixer.current.stopAllAction()
+      actions.set(
+        gltf.animations.reduce((acc, clip) => {
+          const action = mixer.current?.clipAction(clip, actualRoot)
+          return {
+            ...acc,
+            [clip.name as T]: action
+          }
+        }, {} as Actions)
+      )
+      cb?.({
+        actions: actions.current,
+        mixer: mixer.current as AnimationMixer
+      })
+    })()
   })
-  onDestroy(unsubscribe)
-
-  let mixer: AnimationMixer | undefined = undefined
-  const unsubscribeMixer = mixerStore.subscribe((m) => (mixer = m))
-  onDestroy(unsubscribeMixer)
 
   useFrame(
     (_, delta) => {
-      if (!mixer) return
-      mixer.update(delta)
+      mixer.current.update(delta)
     },
     {
       debugFrameloopMessage: 'useGltfAnimations: AnimationMixer updated'
     }
   )
 
+  watch(mixer, (mixer) => {
+    return () => {
+      mixer?.stopAllAction()
+    }
+  })
+
   return {
     gltf,
-    mixer: mixerStore,
+    root: root,
+    mixer,
     actions
   }
 }
