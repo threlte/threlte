@@ -86,3 +86,20 @@ useFrame(({ camera, colorSpace }) => {
 ```
 
 The full type definition is [currently listed here](/docs/reference/core/hooks#usethrelte).
+
+## `useGltfAnimations` Signature
+
+The signature of the hook `useGltfAnimations` has changed. It no longer provides a callback that is invoked
+when the `gltf` store has been populated and the `actions` store has been set. This is because it with the option to set
+a custom root for the `THREE.AnimationAction`, the callback could be triggered multiple times, leading to an
+unpredictable behavior. You should reside to using the `actions` store returned from the hook instead.
+
+```ts
+const { actions } = useGltfAnimations(gltf)
+// this animation will play when the gltf store has been populated
+// and the actions store has been set, effectively replacing the
+// callback.
+$: $actions.Greet?.play()
+```
+
+Check out the [hooks documentation](/docs/reference/extras/use-gltf-animations) for more information.
