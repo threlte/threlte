@@ -23,13 +23,9 @@ Convenience hook to use animations loaded with a `<GLTF>` threlte component.
   import { GLTF, useGltfAnimations } from '@threlte/extras'
   // `useGltfAnimations` returns stores that populate
   // when the `<GLTF>` component finished loading.
-  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>(({ actions, mixer }) => {
-    // Either play your animations as soon as they are loaded
-    mixer.timeScale = 0.5
-    actions['All Animations']?.play()
-  })
+  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
 
-  // Or play them whenever you need
+  // Play them whenever you need
   export const triggerAnimation = () => {
     if ($mixer) $mixer.timeScale = 0.5
     $actions['All Animations']?.play()
@@ -56,9 +52,10 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
   const gltf = useGltf('/path/to/model.glb')
 
   // Provide that store to the hook useGltfAnimations
-  useGltfAnimations<'All Animations'>(gltf, ({ actions }) => {
-    actions['All Animations']?.play()
-  })
+  useGltfAnimations<'All Animations'>(gltf)
+
+  // play the animation as soon as it's loaded
+  $: $actions['All Animations']?.play()
 </script>
 
 {#if $gltf}
@@ -68,7 +65,7 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
 
 ### Applying animations to a different root
 
-Sometimes you want to apply the animations to a different root than the GLTF scene.
+Sometimes you want to apply the animations to a different root than the GLTF scene. In this case, pass the root as the second argument to the hook `useGltfAnimations`.
 
 ```svelte
 <script>
@@ -89,7 +86,7 @@ Sometimes you want to apply the animations to a different root than the GLTF sce
 {/if}
 ```
 
-This can also be done after the animations have been loaded.
+This can also be done after the animations have been loaded. In this case, you can use the `bind:ref` directive to bind the root to the `root` store returned by the hook.
 
 ```svelte
 <script>
@@ -106,4 +103,15 @@ This can also be done after the animations have been loaded.
     <T is={$gltf.scene}>
   </T>
 {/if}
+```
+
+## Types
+
+```ts
+const {
+  gltf, // Writable<GLTF | undefined>
+  mixer, // AnimationMixer
+  actions, // CurrentWritable<Record<string, AnimationAction>>
+  root // CurrentWritable<Root | undefined>
+} = useGLtfAnimations()
 ```

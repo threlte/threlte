@@ -1,15 +1,20 @@
 <script lang="ts">
-  import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { GLTF, useGltfAnimations, OrbitControls } from '@threlte/extras'
-
-  const { gltf } = useGltfAnimations<'Take 001'>(({ actions }) => {
-    actions['Take 001']?.play()
-  })
+  import { OrbitControls } from '@threlte/extras'
+  import { Color } from 'three'
+  import Tokyo from './Tokyo.svelte'
 
   const { scene } = useThrelte()
   scene.background = new Color(0xeae8e2)
+
+  let showTokyo = true
 </script>
+
+<svelte:window
+  on:keypress={() => {
+    showTokyo = !showTokyo
+  }}
+/>
 
 <T.PerspectiveCamera
   makeDefault
@@ -29,8 +34,6 @@
 <T.AmbientLight />
 <T.DirectionalLight position={[5, 10, 5]} />
 
-<GLTF
-  bind:gltf={$gltf}
-  url="/models/LittlestTokyo.glb"
-  useDraco="https://www.gstatic.com/draco/v1/decoders/"
-/>
+{#if showTokyo}
+  <Tokyo />
+{/if}
