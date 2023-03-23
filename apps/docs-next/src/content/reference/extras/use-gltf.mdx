@@ -23,7 +23,7 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 
 ```svelte
 <script lang="ts">
-  import { Object3DInstance, Mesh } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { MeshBasicMaterial } from 'three'
 
@@ -32,12 +32,12 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 
 <!-- Use an object node entirely -->
 {#if $gltf}
-  <Object3DInstance object={$gltf.nodes['node-name']} />
+  <T is={$gltf.nodes['node-name']} />
 {/if}
 
 <!-- or only the geometry -->
 {#if $gltf}
-  <Mesh
+  <T.Mesh
     geometry={$gltf.nodes['node-name'].geometry}
     material={new MeshBasicMaterial()}
   />
@@ -48,52 +48,34 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 
 Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO binaries.
 
-```svelte
-<script lang="ts">
-  import { useGltf } from '@threlte/extras'
+```ts
+import { useGltf } from '@threlte/extras'
 
-  const gltf = useGltf('/path/to/model.glb', {
-    useDraco: true
-  })
-</script>
-
-{#if $gltf}
-  <Object3DInstance object={$gltf.nodes['node-name']} />
-{/if}
+const gltf = useGltf('/path/to/model.glb', {
+  useDraco: true
+})
 ```
 
 You can also provide custom DRACO decoder binaries.
 
-```svelte
-<script lang="ts">
-  import { useGltf } from '@threlte/extras'
+```ts
+import { useGltf } from '@threlte/extras'
 
-  const gltf = useGltf('/path/to/model.glb', {
-    useDraco: '/custom/draco/decoders/path'
-  })
-</script>
-
-{#if $gltf}
-  <Object3DInstance object={$gltf.nodes['node-name']} />
-{/if}
+const gltf = useGltf('/path/to/model.glb', {
+  useDraco: '/custom/draco/decoders/path'
+})
 ```
 
 ### Meshopt decoding
 
 Use a meshopt decoder for compressed glTF files, defaults to Three's included decoder.
 
-```svelte
-<script lang="ts">
-  import { useGltf } from '@threlte/extras'
+```ts
+import { useGltf } from '@threlte/extras'
 
-  const gltf = useGltf('/path/to/model.glb', {
-    useMeshopt: true
-  })
-</script>
-
-{#if $gltf}
-  <Object3DInstance object={$gltf.nodes['node-name']} />
-{/if}
+const gltf = useGltf('/path/to/model.glb', {
+  useMeshopt: true
+})
 ```
 
 ### Nodes and Materials

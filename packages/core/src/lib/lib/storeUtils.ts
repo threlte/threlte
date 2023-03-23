@@ -9,6 +9,10 @@ type StoresValues<T> = T extends Readable<infer U>
       [K in keyof T]: T[K] extends Readable<infer U> ? U : never
     }
 
+type MaybePromise<T> = T | Promise<T>
+
+type CleanupFn = () => MaybePromise<void>
+type CallbackFn<T> = (values: T) => MaybePromise<void | CleanupFn>
 /**
  * ### `watch`
  *
@@ -50,19 +54,16 @@ type StoresValues<T> = T extends Readable<infer U>
  * @param stores
  * @param callback
  */
-export const watch = <S extends Stores>(
-  stores: S,
-  callback: (values: StoresValues<S>) => (() => void) | void
-): void => {
+export const watch = <S extends Stores>(stores: S, callback: CallbackFn<StoresValues<S>>): void => {
   const d = derived(stores, (values) => {
     return values
   })
 
-  let cleanupFn: () => void
+  let cleanupFn: CleanupFn
 
-  const unsubscribe = d.subscribe((values) => {
+  const unsubscribe = d.subscribe(async (values) => {
     if (cleanupFn) cleanupFn()
-    const fn = callback(values)
+    const fn = await callback(values)
     if (fn) cleanupFn = fn
   })
 
