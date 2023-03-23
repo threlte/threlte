@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 5.0.0-next.3
+
+### Major Changes
+
+- 8ed809b2: The hook useGltfAnimations does not provide a callback anymore because its usage was ambiguous. The signature also changed slightly. Check its documentation for details
+
+### Minor Changes
+
+- 151cdc08: useGltfAnimations now can also set a root object after its creation, the creation of the mixer etc is deferred by tick()
+
 ## 5.0.0-next.2
 
 ### Minor Changes
