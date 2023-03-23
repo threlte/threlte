@@ -1,8 +1,21 @@
 ---
-order: 6
-category: '@threlte/rapier'
-name: '<Attractor>'
-type: 'component'
+{
+  order: 6,
+  category: '@threlte/rapier',
+  name: '<Attractor>',
+  type: 'component',
+  componentSignature:
+    {
+      props:
+        [
+          { name: 'position', type: 'Position', required: false },
+          { name: 'strength', type: 'number', default: '1', required: false },
+          { name: 'range', type: 'number', default: '10', required: false },
+          { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
+          { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
+        ]
+    }
+}
 ---
 
 An attractor simulates a source of gravity. Any rigid-body within range will be "pulled" toward the attractor's center.
@@ -35,14 +48,3 @@ Newtonian gravity uses the traditional method of calculating gravitational force
 ## Debugging
 
 The `<Debug />` component will activate a wireframe helper to visualize the attractor's range.
-
-### Properties
-
-```ts
-// optional
-position: Position | undefined = undefined
-strength: number = 1
-range: number = 10
-gravityType: "static" | "linear" | "newtonian"
-gravitationalConstant: number = 6.673e-11
-```

@@ -1,8 +1,20 @@
 ---
-order: 5
-category: '@threlte/rapier'
-name: '<CollisionGroups>'
-type: 'component'
+{
+  order: 5,
+  category: '@threlte/rapier',
+  name: '<CollisionGroups>',
+  type: 'component',
+  componentSignature:
+    {
+      pretext: 'Provide either the shorthand property <code>groups</code> to set both <code>memberships</code> and <code>filter</code> to the same value or set them up individually.',
+      props:
+        [
+          { name: 'groups', type: 'CollisionGroupsBitMask', required: true },
+          { name: 'filter', type: 'CollisionGroupsBitMask', required: true },
+          { name: 'memberships', type: 'CollisionGroupsBitMask', required: true }
+        ]
+    }
+}
 ---
 
 The most efficient way of preventing some pairs of colliders from interacting with each other is to use a `<CollisionGroups>` component.
@@ -73,19 +85,4 @@ For general usage instructions, see the relevant documentation [here](https://ra
     </AutoColliders>
   </RigidBody>
 </CollisionGroups>
-```
-
-### Properties
-
-Provide either the shorthand property `groups` to set both `memberships` and `filter` to the same value or set them up individually.
-
-```ts
-// required
-
-// Provide either …
-groups: CollisionGroupsBitMask
-
-// … or …
-filter: CollisionGroupsBitMask
-memberships: CollisionGroupsBitMask
 ```
