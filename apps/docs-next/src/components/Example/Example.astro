@@ -52,6 +52,7 @@ const hidePreview = Astro.props.hidePreview ?? false
   {
     !hideCode && (
       <CodeWrapper
+        expanded={hidePreview}
         hidePreview={hidePreview}
         client:load
         filePaths={Object.keys(allModules).map((path) =>
@@ -66,10 +67,7 @@ const hidePreview = Astro.props.hidePreview ?? false
             <Code
               code={mod}
               lang={(path.split('.').pop() ?? 'svelte') as any}
-              class={c(
-                '!mt-0 h-full !rounded-t-none !rounded-bl-none border-t-0',
-                hidePreview && '!rounded-tr-md !border-t'
-              )}
+              class={c('!mt-0 !mb-0 h-full rounded-none border-none')}
             />
           </div>
         ))}
