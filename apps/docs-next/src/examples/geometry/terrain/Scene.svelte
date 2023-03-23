@@ -5,7 +5,7 @@
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { AutoColliders, Debug } from '@threlte/rapier'
-  import { Pane } from 'tweakpane'
+  import { showCollider, autoRotate } from './state'
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
 
@@ -21,13 +21,9 @@
 
   // needed for lighting
   geometry.computeVertexNormals()
-
-  // add tweakpane to show or hide the terrain collision mesh
-  const tp = new Pane({ title: 'hello world' })
-  tp.addButton({ title: 'click me' })
 </script>
 
-<Debug visible={false} />
+<Debug visible={$showCollider} />
 
 <T.PerspectiveCamera
   makeDefault
@@ -36,7 +32,7 @@
   lookAt.y={2}
 >
   <OrbitControls
-    autoRotate
+    autoRotate={$autoRotate}
     enableZoom={false}
     maxPolarAngle={DEG2RAD * 80}
   />
