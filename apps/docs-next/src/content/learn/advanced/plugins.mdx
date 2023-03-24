@@ -180,3 +180,96 @@ Implementing this plugin in your Scene:
   </BvhRaycast>
 </Canvas>
 ```
+
+### Threlte-managed Matrix Updates
+
+By default, Three.js is automatically updating the `matrix` and `matrixWorld` properties of all objects every frame. This can be a performance problem in large apps, because it is not necessary in certain situations. This plugin listens for changes to certain transform-related properties and updates the `matrix` and `matrixWorld` properties only when necessary.
+
+```svelte
+<script lang="ts">
+  import { Object3D } from 'three'
+  import { injectPlugin, useFrame } from '@threlte/core'
+
+  const isObject3D = (obj: any): obj is Object3D => {
+    return obj instanceof Object3D
+  }
+
+  const propKeysRequiringMatrixUpdate = [
+    'position',
+    'position.x',
+    'position.y',
+    'position.z',
+    'rotation',
+    'rotation.x',
+    'rotation.y',
+    'rotation.z',
+    'rotation.order',
+    'quaternion',
+    'quaternion.x',
+    'quaternion.y',
+    'quaternion.z',
+    'quaternion.w',
+    'scale',
+    'scale.x',
+    'scale.y',
+    'scale.z'
+  ]
+
+  const objectsToUpdate: Set<Object3D> = new Set()
+
+  type MatrixPluginProps = {
+    matrixAutoUpdate?: boolean
+  }
+
+  injectPlugin<MatrixPluginProps>('matrix-update', ({ ref, props }) => {
+    if (!isObject3D(ref)) return
+    if (props.matrixAutoUpdate) return
+    ref.matrixAutoUpdate = false
+
+    const checkForMatrixUpdate = (props: Record<string, any>) => {
+      if (Object.keys(props).some((key) => propKeysRequiringMatrixUpdate.includes(key))) {
+        objectsToUpdate.add(ref)
+      }
+    }
+    checkForMatrixUpdate(props)
+
+    return {
+      pluginProps: ['matrixAutoUpdate'],
+      onRestPropsChange(restProps) {
+        checkForMatrixUpdate(restProps)
+      }
+    }
+  })
+
+  useFrame(
+    ({ invalidate }) => {
+      if (!objectsToUpdate.size) return
+      objectsToUpdate.forEach((obj) => obj.updateMatrix())
+      objectsToUpdate.clear()
+      invalidate()
+    },
+    {
+      order: -Infinity,
+      invalidate: false
+    }
+  )
+</script>
+
+<slot />
+```
+
+Now when applying props like `position.x` or `scale` to any `<T>` component, the matrix of the object will update but doesn't just update every frame as Three.js does by default. If an object is transformed without props (like a camera being transformed by `THREE.OrbitControls`) you can apply the flag `matrixAutoUpdate`:
+
+```svelte
+<T.PerspectiveCamera
+  matrixAutoUpdate
+  makeDefault
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
+```
+
+<Tip type="tip">
+  Notice how this plugin uses TypeScript to augment to possible props this plugin may receive. This
+  is not necessary, but it is a good practice to do so.
+</Tip>
