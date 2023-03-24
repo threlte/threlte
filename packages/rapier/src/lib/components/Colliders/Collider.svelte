@@ -5,15 +5,14 @@
     Collider,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject, useFrame } from '@threlte/core'
-  import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte'
+  import { createRawEventDispatcher, SceneGraphObject, useFrame } from '@threlte/core'
+  import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { applyTransforms } from '../../lib/applyTransforms'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
@@ -26,9 +25,7 @@
 
   export let shape: $$Props['shape']
   export let args: $$Props['args']
-  export let position: $$Props['position'] = undefined as $$Props['position']
-  export let rotation: $$Props['rotation'] = undefined as $$Props['rotation']
-  export let scale: $$Props['scale'] = undefined as $$Props['scale']
+  export let type: $$Props['type'] = undefined as $$Props['type']
   export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
   export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
     undefined as $$Props['restitutionCombineRule']
@@ -47,14 +44,8 @@
 
   const object = new Object3D()
 
-  /**
-   * Immediately apply transforms
-   */
-  applyTransforms(object, position, rotation, scale)
-  object.updateWorldMatrix(true, false)
-
   const rigidBody = useRigidBody()
-  const isAttached = !!rigidBody
+  const hasRigidBodyParent = !!rigidBody
 
   const rapierContext = useRapier()
   const { world } = rapierContext
@@ -69,7 +60,7 @@
   type $$Events = {
     [key in keyof ColliderEventMap]: CustomEvent<ColliderEventMap[key]>
   }
-  const dispatcher = createEventDispatcher<ColliderEventMap>()
+  const dispatcher = createRawEventDispatcher<ColliderEventMap>()
 
   /**
    * Actual collider setup happens onMount as only then
@@ -96,7 +87,7 @@
      */
     collisionGroups.registerColliders([collider])
 
-    if (isAttached) {
+    if (hasRigidBodyParent) {
       const rigidBodyWorldPos = new Vector3()
       const rigidBodyWorldQuatInversed = new Quaternion()
       object.traverseAncestors((child: Object3D) => {
@@ -155,21 +146,29 @@
     }
   }
 
+  export const refresh = () => {
+    if (!collider) return
+    collider.setTranslation(getWorldPosition(object))
+    collider.setRotation(getWorldQuaternion(object))
+  }
+
   /**
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
    * transforms on every frame.
    */
-  useFrame(
+  const { start, stop } = useFrame(
     () => {
-      if (!collider) return
-      applyTransforms(object, position, rotation, scale)
-      collider.setTranslation(getWorldPosition(object))
-      collider.setRotation(getWorldQuaternion(object))
+      refresh()
     },
     {
-      autostart: !isAttached
+      autostart: !hasRigidBodyParent && type === 'dynamic'
     }
   )
+
+  $: {
+    if (!hasRigidBodyParent && type === 'dynamic') start()
+    else stop()
+  }
 
   /**
    * Cleanup
@@ -179,9 +178,10 @@
     rapierContext.removeColliderFromContext(collider)
     collisionGroups.removeColliders([collider])
     world.removeCollider(collider, true)
+    collider = undefined
   })
 </script>
 
 <SceneGraphObject {object}>
-  <slot />
+  <slot {collider} />
 </SceneGraphObject>

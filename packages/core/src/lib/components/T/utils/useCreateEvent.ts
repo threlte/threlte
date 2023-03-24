@@ -1,4 +1,4 @@
-import { onMount } from 'svelte/internal'
+import { onDestroy, onMount } from 'svelte'
 import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
 
 export const useCreateEvent = () => {
@@ -38,6 +38,11 @@ export const useCreateEvent = () => {
   onMount(() => {
     dispatchCreateEvent()
     mounted = true
+  })
+
+  onDestroy(() => {
+    // call every cleanup function
+    cleanupFunctions.forEach((cleanup) => cleanup())
   })
 
   return {

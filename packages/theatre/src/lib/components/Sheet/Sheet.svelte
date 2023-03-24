@@ -79,10 +79,4 @@
   })
 </script>
 
-<slot
-  {sheet}
-  {sequence}
-  {isPlaying}
-  {play}
-  {pause}
-/>
+<slot {sheet} {sequence} {isPlaying} {play} {pause} />

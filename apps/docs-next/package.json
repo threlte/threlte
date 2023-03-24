@@ -21,12 +21,12 @@
     "tailwindcss": "^3.2.7"
   },
   "devDependencies": {
-    "@dimforge/rapier3d-compat": "^0.9.0",
+    "@dimforge/rapier3d-compat": "^0.11.2",
     "@macfja/svelte-persistent-store": "^2.2.1",
     "@stackblitz/sdk": "^1.8.2",
     "@tailwindcss/typography": "^0.5.3",
-    "@theatre/core": "0.5.1-rc.1",
-    "@theatre/studio": "0.5.1-rc.1",
+    "@theatre/core": "0.6.0",
+    "@theatre/studio": "0.6.0",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
     "@threlte/rapier": "workspace:*",

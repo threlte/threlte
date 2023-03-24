@@ -53,24 +53,25 @@
   })
 </script>
 
-<RigidBody
-  bind:rigidBody
-  type={'dynamic'}
-  on:sensorenter={onSensorEnter}
-  enabledTranslations={[true, false, true]}
-  position={[$playerPosition, 0, startAtPosZ]}
->
-  <AutoColliders
-    shape="ball"
-    mass={1}
-    friction={0}
-    restitution={1}
-    restitutionCombineRule={CoefficientCombineRule.Max}
-    frictionCombineRule={CoefficientCombineRule.Min}
+<T.Group position={[$playerPosition, 0, startAtPosZ]}>
+  <RigidBody
+    bind:rigidBody
+    type={'dynamic'}
+    on:sensorenter={onSensorEnter}
+    enabledTranslations={[true, false, true]}
   >
-    <T.Mesh>
-      <T is={ballGeometry} />
-      <T is={ballMaterial} />
-    </T.Mesh>
-  </AutoColliders>
-</RigidBody>
+    <AutoColliders
+      shape="ball"
+      mass={1}
+      friction={0}
+      restitution={1}
+      restitutionCombineRule={CoefficientCombineRule.Max}
+      frictionCombineRule={CoefficientCombineRule.Min}
+    >
+      <T.Mesh>
+        <T is={ballGeometry} />
+        <T is={ballMaterial} />
+      </T.Mesh>
+    </AutoColliders>
+  </RigidBody>
+</T.Group>

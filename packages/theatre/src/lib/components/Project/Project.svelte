@@ -7,7 +7,7 @@
   export let name = 'default'
   export let config: IProjectConfig | undefined = undefined
 
-  const project = globalProjects.get(name) ?? getProject(name, config)
+  export const project = globalProjects.get(name) ?? getProject(name, config)
   globalProjects.set(name, project)
 
   let isReady = false

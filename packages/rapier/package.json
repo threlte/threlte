@@ -13,7 +13,7 @@
     "cleanup": "rm -rf node_modules && rm -rf .svelte-kit"
   },
   "devDependencies": {
-    "@dimforge/rapier3d-compat": "^0.9.0",
+    "@dimforge/rapier3d-compat": "^0.11.2",
     "@sveltejs/adapter-auto": "1.0.0-next.61",
     "@sveltejs/adapter-static": "1.0.0-next.35",
     "@sveltejs/kit": "1.0.0-next.377",

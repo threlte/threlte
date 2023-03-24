@@ -31,6 +31,7 @@ export type WorldProps = {
   rawPhysicsPipeline?: RawPhysicsPipeline
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline
+  order?: number
 }
 
 export default class World extends SvelteComponentTyped<WorldProps> {}

@@ -1,20 +1,49 @@
 <script lang="ts">
+  import type { IStudio } from '@theatre/studio'
+  import { watch } from '@threlte/core'
+  import { onMount } from 'svelte'
+  import { writable } from 'svelte/store'
   import { globalStudio } from '../consts'
+  import { useStudio } from './useStudio'
 
-  import { onDestroy, onMount } from 'svelte'
+  export let studio: IStudio | undefined = undefined
+  export let hide: boolean
+
+  const hideStore = writable(hide)
+  $: hideStore.set(hide)
+
+  const studioCtx = useStudio()
+
+  let initialized = false
 
   onMount(async () => {
     if ($globalStudio) {
-      $globalStudio.ui.restore()
+      studioCtx.studio.set($globalStudio)
+      initialized = true
       return
     }
-    const studioPkg = await import('@theatre/studio')
-    const studio = studioPkg.default
-    studio.initialize()
-    globalStudio.set(studio)
+    const pkg = await import('@theatre/studio')
+    const Studio = pkg.default
+    Studio.initialize()
+    globalStudio.set(Studio)
+    studioCtx.studio.set(Studio)
+    studio = Studio
+    initialized = true
   })
 
-  onDestroy(() => {
-    $globalStudio?.ui.hide()
+  watch([globalStudio, hideStore], ([studio, hide]) => {
+    if (hide) {
+      studio?.ui.hide()
+    } else {
+      studio?.ui.restore()
+    }
+
+    return () => {
+      studio?.ui.hide()
+    }
   })
 </script>
+
+{#if initialized}
+  <slot />
+{/if}

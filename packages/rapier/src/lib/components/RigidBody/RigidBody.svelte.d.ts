@@ -8,10 +8,6 @@ export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 export type RigidBodyProps = {
   rigidBody?: RapierRigidBody
 
-  position?: Parameters<Vector3['set']>
-  rotation?: Parameters<Euler['set']>
-  scale?: Parameters<Vector3['set']>
-
   /**
    * Specify the type of this rigid body
    */
@@ -89,6 +85,11 @@ export type RigidBodyProps = {
    * values are 0.0 (no damping at all).
    */
   angularDamping?: number
+
+  /**
+   * Set the rigidBody as enabled or disabled.
+   */
+  enabled?: boolean
 }
 
 export default class RigidBody extends SvelteComponentTyped<RigidBodyProps> {}

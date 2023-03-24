@@ -52,19 +52,18 @@
   />
 </BasicPlayerController>
 
-<RigidBody
-  bind:rigidBody
-  position={[0, 1, -5]}
->
-  <AutoColliders shape={'ball'}>
-    <T.Mesh
-      bind:ref={ballMesh}
-      receiveShadow
-      castShadow
-      geometry={new SphereGeometry(0.25)}
-      material={new MeshStandardMaterial()}
-    >
-      <slot />
-    </T.Mesh>
-  </AutoColliders>
-</RigidBody>
+<T.Group position={[0, 1, -5]}>
+  <RigidBody bind:rigidBody>
+    <AutoColliders shape={'ball'}>
+      <T.Mesh
+        bind:ref={ballMesh}
+        receiveShadow
+        castShadow
+        geometry={new SphereGeometry(0.25)}
+        material={new MeshStandardMaterial()}
+      >
+        <slot />
+      </T.Mesh>
+    </AutoColliders>
+  </RigidBody>
+</T.Group>

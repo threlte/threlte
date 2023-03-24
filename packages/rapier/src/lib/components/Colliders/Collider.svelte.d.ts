@@ -1,24 +1,26 @@
 import type {
   CoefficientCombineRule,
-  Collider as rapierCollider,
+  Collider as RapierCollider,
   ColliderDesc
 } from '@dimforge/rapier3d-compat'
 import { SvelteComponentTyped } from 'svelte'
 import type { Euler, Vector3 } from 'three'
+import type { ColliderEventMap } from '../../types/types'
 
 // ------------------ BASE ------------------
 
+type Type = 'static' | 'dynamic'
+
 type BaseProps = {
-  position?: Parameters<Vector3['set']>
-  rotation?: Parameters<Euler['set']>
-  scale?: Parameters<Vector3['set']>
+  type?: Type
   restitution?: number
   restitutionCombineRule?: CoefficientCombineRule
   friction?: number
   frictionCombineRule?: CoefficientCombineRule
   sensor?: boolean
-  collider?: rapierCollider
+  collider?: RapierCollider
   contactForceEventThreshold?: number
+  refresh?: () => void
 }
 
 // ------------------ SHAPE ------------------
@@ -54,7 +56,6 @@ type ShapeProps<TShape extends Shape> = {
 
 type Density = {
   density: number
-
   mass?: never
   centerOfMass?: never
   principalAngularInertia?: never
@@ -62,7 +63,6 @@ type Density = {
 }
 type Mass = {
   mass: number
-
   density?: never
   centerOfMass?: never
   principalAngularInertia?: never
@@ -73,7 +73,6 @@ type MassProperties = {
   centerOfMass: Parameters<Vector3['set']>
   principalAngularInertia: Parameters<Vector3['set']>
   angularInertiaLocalFrame: Parameters<Euler['set']>
-
   density?: never
 }
 
@@ -101,7 +100,13 @@ export type ColliderProps<TShape extends Shape, TMassDef extends MassDef> = Base
   ShapeProps<TShape> &
   MassProps<TMassDef>
 
+export type ColliderSlots = {
+  default: {
+    collider: RapierCollider
+  }
+}
+
 export default class Collider<
   TShape extends Shape,
   TMassDef extends MassDef
-> extends SvelteComponentTyped<ColliderProps<TShape, TMassDef>> {}
+> extends SvelteComponentTyped<ColliderProps<TShape, TMassDef>, ColliderEventMap, ColliderSlots> {}

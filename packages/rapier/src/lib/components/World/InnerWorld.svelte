@@ -28,6 +28,7 @@
   export let rawPhysicsPipeline: $$Props['rawPhysicsPipeline'] = undefined
   export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
   export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
+  export let order: $$Props['order'] = undefined
 
   const rapierContext = createRapierContext(
     { x: gravity[0], y: gravity[1], z: gravity[2] },
@@ -43,7 +44,7 @@
     rawQueryPipeline,
     rawPhysicsPipeline,
     rawSerializationPipeline,
-    rawDebugRenderPipeline
+    rawDebugRenderPipeline,
   )
 
   setContext<RapierContext>('threlte-rapier-context', rapierContext)
@@ -52,7 +53,7 @@
     rapierContext.world.gravity = { x: gravity[0], y: gravity[1], z: gravity[2] }
   }
 
-  useFrameHandler(rapierContext)
+  useFrameHandler(rapierContext, order)
 
   onDestroy(async () => {
     await tick()

@@ -14,11 +14,11 @@ importers:
     devDependencies:
       '@changesets/cli': 2.23.1
       eslint-config-custom: 0.0.0_zcxb7fyq5g6si26hwdg656hqxm
-      prettier: 2.8.4
+      prettier: 2.8.7
       prettier-plugin-astro: 0.8.0
-      prettier-plugin-svelte: 2.9.0_jrsxveqmsx2uadbqiuq74wlc4u
-      prettier-plugin-tailwindcss: 0.2.3_zriwyfnaw6wq3y4z6dd7fivwh4
-      turbo: 1.8.3
+      prettier-plugin-svelte: 2.9.0_ypyvbnee24iat4jv7rt6zmhkza
+      prettier-plugin-tailwindcss: 0.2.3_xghekpmhmdswxu5thl36mofstm
+      turbo: 1.9.1
 
   apps/docs:
     specifiers:
@@ -33,8 +33,8 @@ importers:
       '@sveltejs/svelte-repl': ^0.4.1
       '@svelteness/kit-docs': v0.24.0
       '@tailwindcss/typography': ^0.5.3
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0
       '@threlte/core': workspace:*
       '@threlte/extras': workspace:*
       '@threlte/rapier': workspace:*
@@ -87,8 +87,8 @@ importers:
       '@sveltejs/svelte-repl': 0.4.1
       '@svelteness/kit-docs': 0.24.0_svelte@3.49.0
       '@tailwindcss/typography': 0.5.3_tailwindcss@3.1.5
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0_@theatre+core@0.6.0
       '@threlte/core': link:../../packages/core
       '@threlte/extras': link:../../packages/extras
       '@threlte/rapier': link:../../packages/rapier
@@ -133,12 +133,12 @@ importers:
       '@astrojs/mdx': ^0.15.2
       '@astrojs/svelte': ^2.1.0
       '@astrojs/tailwind': ^3.1.0
-      '@dimforge/rapier3d-compat': ^0.9.0
+      '@dimforge/rapier3d-compat': ^0.11.2
       '@macfja/svelte-persistent-store': ^2.2.1
       '@stackblitz/sdk': ^1.8.2
       '@tailwindcss/typography': ^0.5.3
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0
       '@threlte/core': workspace:*
       '@threlte/extras': workspace:*
       '@threlte/rapier': workspace:*
@@ -166,12 +166,12 @@ importers:
       svelte: 3.55.1
       tailwindcss: 3.2.7_postcss@8.4.21
     devDependencies:
-      '@dimforge/rapier3d-compat': 0.9.0
+      '@dimforge/rapier3d-compat': 0.11.2
       '@macfja/svelte-persistent-store': 2.2.1_svelte@3.55.1
       '@stackblitz/sdk': 1.8.2
       '@tailwindcss/typography': 0.5.3_tailwindcss@3.2.7
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0_@theatre+core@0.6.0
       '@threlte/core': link:../../packages/core
       '@threlte/extras': link:../../packages/extras
       '@threlte/rapier': link:../../packages/rapier
@@ -344,7 +344,7 @@ importers:
 
   packages/rapier:
     specifiers:
-      '@dimforge/rapier3d-compat': ^0.9.0
+      '@dimforge/rapier3d-compat': ^0.11.2
       '@sveltejs/adapter-auto': 1.0.0-next.61
       '@sveltejs/adapter-static': 1.0.0-next.35
       '@sveltejs/kit': 1.0.0-next.377
@@ -370,7 +370,7 @@ importers:
       type-fest: ^2.13.0
       typescript: ^4.6.3
     devDependencies:
-      '@dimforge/rapier3d-compat': 0.9.0
+      '@dimforge/rapier3d-compat': 0.11.2
       '@sveltejs/adapter-auto': 1.0.0-next.61
       '@sveltejs/adapter-static': 1.0.0-next.35
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.49.0+vite@3.2.3
@@ -401,8 +401,8 @@ importers:
       '@sveltejs/adapter-auto': 1.0.0-next.61
       '@sveltejs/adapter-static': 1.0.0-next.35
       '@sveltejs/kit': 1.0.0-next.377
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0
       '@threlte/core': workspace:*
       '@threlte/extras': workspace:*
       '@types/node': ^18.0.3
@@ -429,8 +429,8 @@ importers:
       '@sveltejs/adapter-auto': 1.0.0-next.61
       '@sveltejs/adapter-static': 1.0.0-next.35
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.53.0+vite@3.2.3
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/studio': 0.5.1-rc.1_@theatre+core@0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/studio': 0.6.0_@theatre+core@0.6.0
       '@threlte/core': link:../core
       '@threlte/extras': link:../extras
       '@types/node': 18.0.3
@@ -624,7 +624,7 @@ packages:
     dependencies:
       '@vscode/emmet-helper': 2.8.6
       events: 3.3.0
-      prettier: 2.8.4
+      prettier: 2.8.7
       prettier-plugin-astro: 0.7.2
       source-map: 0.7.4
       vscode-css-languageservice: 6.2.3
@@ -1196,6 +1196,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    dev: true
+
+  /@dimforge/rapier3d-compat/0.11.2:
+    resolution: {integrity: sha512-vdWmlkpS3G8nGAzLuK7GYTpNdrkn/0NKCe0l1Jqxc7ZZOB3N0q9uG/Ap9l9bothWuAvxscIt0U97GVLr0lXWLg==}
     dev: true
 
   /@dimforge/rapier3d-compat/0.9.0:
@@ -2005,25 +2009,25 @@ packages:
       tailwindcss: 3.2.7_postcss@8.4.21
     dev: true
 
-  /@theatre/core/0.5.1-rc.1:
-    resolution: {integrity: sha512-YClabRfCE7FOXAkLKr2P27H4cBa5MYQMiKiiVW/ouFIA2W9fpgxwnOXmZgv/SqQGKaRF6JcGyJEPS46HonAeAQ==}
+  /@theatre/core/0.6.0:
+    resolution: {integrity: sha512-HyOoEQapeVbgKBBVfv1rjklN8oAY1/6RZuzntdL9Nfqb5UVzyVR0Im9q4WBPHx6d1dB1BKpAwIw6PzqlKoyehA==}
     dependencies:
-      '@theatre/dataverse': 0.5.1-rc.1
+      '@theatre/dataverse': 0.6.0
     dev: true
 
-  /@theatre/dataverse/0.5.1-rc.1:
-    resolution: {integrity: sha512-0jQEYa6M6WtziPa+Kn/oJTQXGiz4x4hb6Wg7zgREFgler6F9+OfGdJbTT2uovb8UTMh4MrzcEIGvZyMYk73DLw==}
+  /@theatre/dataverse/0.6.0:
+    resolution: {integrity: sha512-1W7b8bQTZeRmmrY64HTQzEtjLJWBmdOkfK/liR+LSSjgAylY3CjZ4/vaDUMmRQr4zCeQjyNVmrvwaIZ/33s+tQ==}
     dependencies:
       lodash-es: 4.17.21
     dev: true
 
-  /@theatre/studio/0.5.1-rc.1_@theatre+core@0.5.1-rc.1:
-    resolution: {integrity: sha512-S46BMcSx1EoBjcz1zqtWc11VIHMWc33UuYtek3NTBp5IJSGzMCYxe+0q8GZDSkE2W7cq+VnYUnRnvQfvcBXJlQ==}
+  /@theatre/studio/0.6.0_@theatre+core@0.6.0:
+    resolution: {integrity: sha512-DH53wWSkIDevbYJUybLH5nIx+rFgiWlykYOmDKC9WK9QUQFYRpnaBu4UNIo+RmGZ+I2ZMSHx1RfrfnBJCr1j6A==}
     peerDependencies:
       '@theatre/core': '*'
     dependencies:
-      '@theatre/core': 0.5.1-rc.1
-      '@theatre/dataverse': 0.5.1-rc.1
+      '@theatre/core': 0.6.0
+      '@theatre/dataverse': 0.6.0
     dev: true
 
   /@tootallnate/once/2.0.0:
@@ -7848,7 +7852,7 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0, pnpm: '>=7.14.0'}
     dependencies:
       '@astrojs/compiler': 0.31.4
-      prettier: 2.8.4
+      prettier: 2.8.7
       sass-formatter: 0.7.5
       synckit: 0.8.5
 
@@ -7857,7 +7861,7 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0, pnpm: '>=7.14.0'}
     dependencies:
       '@astrojs/compiler': 1.0.1
-      prettier: 2.8.4
+      prettier: 2.8.7
       sass-formatter: 0.7.5
       synckit: 0.8.5
     dev: true
@@ -7882,16 +7886,6 @@ packages:
       svelte: 3.53.0
     dev: true
 
-  /prettier-plugin-svelte/2.9.0_jrsxveqmsx2uadbqiuq74wlc4u:
-    resolution: {integrity: sha512-3doBi5NO4IVgaNPtwewvrgPpqAcvNv0NwJNflr76PIGgi9nf1oguQV1Hpdm9TI2ALIQVn/9iIwLpBO5UcD2Jiw==}
-    peerDependencies:
-      prettier: ^1.16.4 || ^2.0.0
-      svelte: ^3.2.0
-    dependencies:
-      prettier: 2.8.4
-      svelte: 3.55.1
-    dev: true
-
   /prettier-plugin-svelte/2.9.0_kdmmghgdi3ngrsq6otxkjilbry:
     resolution: {integrity: sha512-3doBi5NO4IVgaNPtwewvrgPpqAcvNv0NwJNflr76PIGgi9nf1oguQV1Hpdm9TI2ALIQVn/9iIwLpBO5UcD2Jiw==}
     peerDependencies:
@@ -7902,7 +7896,17 @@ packages:
       svelte: 3.55.1
     dev: false
 
-  /prettier-plugin-tailwindcss/0.2.3_zriwyfnaw6wq3y4z6dd7fivwh4:
+  /prettier-plugin-svelte/2.9.0_ypyvbnee24iat4jv7rt6zmhkza:
+    resolution: {integrity: sha512-3doBi5NO4IVgaNPtwewvrgPpqAcvNv0NwJNflr76PIGgi9nf1oguQV1Hpdm9TI2ALIQVn/9iIwLpBO5UcD2Jiw==}
+    peerDependencies:
+      prettier: ^1.16.4 || ^2.0.0
+      svelte: ^3.2.0
+    dependencies:
+      prettier: 2.8.7
+      svelte: 3.55.1
+    dev: true
+
+  /prettier-plugin-tailwindcss/0.2.3_xghekpmhmdswxu5thl36mofstm:
     resolution: {integrity: sha512-s2N5Dh7Ao5KTV1mao5ZBnn8EKtUcDPJEkGViZIjI0Ij9TTI5zgTz4IHOxW33jOdjHKa8CSjM88scelUiC5TNRQ==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
@@ -7954,9 +7958,9 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      prettier: 2.8.4
+      prettier: 2.8.7
       prettier-plugin-astro: 0.8.0
-      prettier-plugin-svelte: 2.9.0_jrsxveqmsx2uadbqiuq74wlc4u
+      prettier-plugin-svelte: 2.9.0_ypyvbnee24iat4jv7rt6zmhkza
     dev: true
 
   /prettier/1.19.1:
@@ -7977,8 +7981,8 @@ packages:
     hasBin: true
     dev: false
 
-  /prettier/2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
+  /prettier/2.8.7:
+    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -9890,65 +9894,65 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /turbo-darwin-64/1.8.3:
-    resolution: {integrity: sha512-bLM084Wr17VAAY/EvCWj7+OwYHvI9s/NdsvlqGp8iT5HEYVimcornCHespgJS/yvZDfC+mX9EQkn3V2JmYgGGw==}
+  /turbo-darwin-64/1.9.1:
+    resolution: {integrity: sha512-IX/Ph4CO80lFKd9pPx3BWpN2dynt6mcUFifyuHUNVkOP1Usza/G9YuZnKQFG6wUwKJbx40morFLjk1TTeLe04w==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64/1.8.3:
-    resolution: {integrity: sha512-4oZjXtzakopMK110kue3z/hqu3WLv+eDLZOX1NGdo49gqca9BeD8GbH+sXpAp6tqyeuzpss+PIliVYuyt7LgbA==}
+  /turbo-darwin-arm64/1.9.1:
+    resolution: {integrity: sha512-6tCbmIboy9dTbhIZ/x9KIpje73nvxbiyVnHbr9xKnsxLJavD0xqjHZzbL5U2tHp8chqmYf0E4WYOXd+XCNg+OQ==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64/1.8.3:
-    resolution: {integrity: sha512-uvX2VKotf5PU14FCxJA5iHItPQno2JWzerMd+g3/h/Asay6dvxvtVjc39MQeGT0H5njSvzVKFkT+3/5q8lgOEg==}
+  /turbo-linux-64/1.9.1:
+    resolution: {integrity: sha512-ti8XofnJFO1XaadL92lYJXgxb0VBl03Yu9VfhxkOTywFe7USTLBkJcdvQ4EpFk/KZwLiTdCmT2NQVxsG4AxBiQ==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64/1.8.3:
-    resolution: {integrity: sha512-E1p+oH3XKMaPS4rqWhYsL4j2Pzc0d/9P5KU7Kn1kqVLo2T3iRA7n2KVULEieUNE0nTH+aIJPXYXOpqCI5wFJaA==}
+  /turbo-linux-arm64/1.9.1:
+    resolution: {integrity: sha512-XYvIbeiCCCr+ENujd2Jtck/lJPTKWb8T2MSL/AEBx21Zy3Sa7HgrQX6LX0a0pNHjaleHz00XXt1D0W5hLeP+tA==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64/1.8.3:
-    resolution: {integrity: sha512-cnzAytHtoLXd0J7aNzRpZFpL/GTjcBmkvAPlbOdf/Pl1iwS4qzGrudZQ+OM1lmLgLIfBPIavsGHBknTwTNib4A==}
+  /turbo-windows-64/1.9.1:
+    resolution: {integrity: sha512-x7lWAspe4/v3XQ0gaFRWDX/X9uyWdhwFBPEfb8BA0YKtnsrPOHkV0mRHCRrXzvzjA7pcDCl2agGzb7o863O+Jg==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64/1.8.3:
-    resolution: {integrity: sha512-ulIiItNm2w/zYJdD5/oAzjzNns1IjbpweRzpsE8tLXaWwo6+fnXXkyloUug0IUhcd2k6fJXfoiDZfygqpOVuXg==}
+  /turbo-windows-arm64/1.9.1:
+    resolution: {integrity: sha512-QSLNz8dRBLDqXOUv/KnoesBomSbIz2Huef/a3l2+Pat5wkQVgMfzFxDOnkK5VWujPYXz+/prYz+/7cdaC78/kw==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo/1.8.3:
-    resolution: {integrity: sha512-zGrkU1EuNFmkq6iky6LcMqD4h0OLE8XysVFxQWRIZbcTNnf0XAycbsbeEyiJpiWeqb7qtg2bVuY9EYcNoNhVuQ==}
+  /turbo/1.9.1:
+    resolution: {integrity: sha512-Rqe8SP96e53y4Pk29kk2aZbA8EF11UtHJ3vzXJseadrc1T3V6UhzvAWwiKJL//x/jojyOoX1axnoxmX3UHbZ0g==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.8.3
-      turbo-darwin-arm64: 1.8.3
-      turbo-linux-64: 1.8.3
-      turbo-linux-arm64: 1.8.3
-      turbo-windows-64: 1.8.3
-      turbo-windows-arm64: 1.8.3
+      turbo-darwin-64: 1.9.1
+      turbo-darwin-arm64: 1.9.1
+      turbo-linux-64: 1.9.1
+      turbo-linux-arm64: 1.9.1
+      turbo-windows-64: 1.9.1
+      turbo-windows-arm64: 1.9.1
     dev: true
 
   /tweakpane/3.1.0:
