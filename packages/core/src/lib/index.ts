@@ -23,7 +23,7 @@ export type { Props, Events, Slots } from './components/T/types'
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'
 export { createPlugin } from './plugins/createPlugin'
-export type { Plugin, NamedPlugin } from './plugins/types'
+export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
 
 // hooks
 export { useFrame } from './hooks/useFrame'

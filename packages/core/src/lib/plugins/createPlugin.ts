@@ -1,5 +1,8 @@
-import type { NamedPlugin, Plugin } from './types'
+import type { AnyProps, NamedPlugin, Plugin } from './types'
 
-export function createPlugin(name: string, plugin: Plugin): NamedPlugin {
-  return [name, plugin]
+export function createPlugin<Props extends AnyProps = AnyProps>(
+  name: string,
+  plugin: Plugin<Props>
+): NamedPlugin<Props> {
+  return [name, plugin as Plugin]
 }
