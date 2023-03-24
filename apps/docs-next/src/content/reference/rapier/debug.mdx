@@ -1,0 +1,35 @@
+---
+{
+  order: 7,
+  category: '@threlte/rapier',
+  name: '<Debug>',
+  type: 'component',
+  'componentSignature':
+    {
+      extends:
+        {
+          type: 'LineBasicMaterial',
+          url: 'https://threejs.org/docs/index.html#api/en/materials/LineBasicMaterial'
+        }
+    }
+}
+---
+
+Use the Debug component to see live representations of all colliders in a scene.
+
+```svelte
+<Canvas>
+  <World>
+    <Debug />
+
+    <RigidBody>
+      <AutoColliders>
+        <Mesh
+          {geometry}
+          {material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </World>
+</Canvas>
+```

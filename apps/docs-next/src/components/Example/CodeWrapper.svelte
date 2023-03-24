@@ -4,11 +4,14 @@
   import CodeExplorer from './CodeExplorer.svelte'
   import { writable, Writable } from 'svelte/store'
   import { c } from '../../lib/classes'
+  import { fade } from 'svelte/transition'
 
   let children: HTMLElement[] = []
 
   export let filePaths: string[]
   export let hidePreview: boolean
+
+  export let expanded = false
 
   const onFileSelected = (file: File) => {
     const path = file.path
@@ -51,12 +54,48 @@
   }
 </script>
 
-<div class="not-prose flex md:max-h-[80vh] w-full flex-col md:flex-row items-stretch">
+<div
+  class={c(
+    'not-prose flex md:max-h-[80vh] w-full flex-col md:flex-row items-stretch transition-all ease-in-out duration-700 will-change-[max-height] relative !rounded-b-md overflow-hidden border-b border-x border-white/20',
+    !expanded && '!max-h-[100px] overflow-hidden',
+    hidePreview && 'border-t !rounded-md'
+  )}
+>
+  {#if !expanded}
+    <div
+      transition:fade
+      class="bg-gradient-to-t from-blue-900 to-blue-900/50 absolute top-0 left-0 w-full h-full z-10"
+    />
+  {/if}
+  {#if !expanded}
+    <div class="flex flex-row justify-center items-center absolute top-0 left-0 w-full h-full">
+      <button
+        class="z-10 flex flex-row gap-3 items-center justify-center text-orange	hover:text-orange-400 text-sm focus:outline-none border bg-orange-800/50 border-orange/10 px-2 rounded-sm py-1 hover:bg-orange-800/70 backdrop-blur-md"
+        on:click={() => (expanded = true)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="76"
+          height="76"
+          viewBox="0 0 256 256"
+          class="w-5 h-5 fill-current"
+        >
+          <path
+            d="M240,128l-48,40H64L16,128,64,88H192Z"
+            opacity="0.2"
+          />
+          <path
+            d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"
+          />
+        </svg>
+        <span>Show Code</span>
+      </button>
+    </div>
+  {/if}
   <CodeExplorer
     {currentlySelectedFile}
     class={c(
-      'overflow-y-auto md:rounded-bl-md border-x md:border-r-0 border-b border-white/20 px-4 py-3 max-md:flex-shrink-0',
-      hidePreview && 'border-t rounded-tl-md'
+      'overflow-y-auto px-4 py-3 max-md:flex-shrink-0 border-white/20 border-b scrollbar-hide md:border-r md:border-b-0'
     )}
     {filePaths}
     on:fileSelected={(e) => {

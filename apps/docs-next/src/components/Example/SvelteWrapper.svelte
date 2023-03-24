@@ -28,7 +28,7 @@
 
 <div
   class={c(
-    'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20',
+    'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
     hideCode && '!rounded-md',
     _class
   )}

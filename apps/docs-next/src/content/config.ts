@@ -61,6 +61,7 @@ export const referenceCollection = defineCollection({
     name: z.string(),
     sourcePath: z.string().optional(),
     order: z.number().optional(),
+    isDivider: z.boolean().optional(),
     category: z.enum([
       '@threlte/core',
       '@threlte/extras',
@@ -77,6 +78,7 @@ export const referenceCollection = defineCollection({
 export const learnCollection = defineCollection({
   schema: z.object({
     category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing', 'Examples']),
+    isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
     showInSidebar: z.boolean().optional().default(true)
