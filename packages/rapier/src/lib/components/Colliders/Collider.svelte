@@ -13,7 +13,6 @@
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { applyTransforms } from '../../lib/applyTransforms'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
@@ -26,9 +25,6 @@
 
   export let shape: $$Props['shape']
   export let args: $$Props['args']
-  export let position: $$Props['position'] = undefined as $$Props['position']
-  export let rotation: $$Props['rotation'] = undefined as $$Props['rotation']
-  export let scale: $$Props['scale'] = undefined as $$Props['scale']
   export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
   export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
     undefined as $$Props['restitutionCombineRule']
@@ -47,14 +43,8 @@
 
   const object = new Object3D()
 
-  /**
-   * Immediately apply transforms
-   */
-  applyTransforms(object, position, rotation, scale)
-  object.updateWorldMatrix(true, false)
-
   const rigidBody = useRigidBody()
-  const isAttached = !!rigidBody
+  const hasRigidBodyParent = !!rigidBody
 
   const rapierContext = useRapier()
   const { world } = rapierContext
@@ -96,7 +86,7 @@
      */
     collisionGroups.registerColliders([collider])
 
-    if (isAttached) {
+    if (hasRigidBodyParent) {
       const rigidBodyWorldPos = new Vector3()
       const rigidBodyWorldQuatInversed = new Quaternion()
       object.traverseAncestors((child: Object3D) => {
@@ -162,12 +152,11 @@
   useFrame(
     () => {
       if (!collider) return
-      applyTransforms(object, position, rotation, scale)
       collider.setTranslation(getWorldPosition(object))
       collider.setRotation(getWorldQuaternion(object))
     },
     {
-      autostart: !isAttached
+      autostart: !hasRigidBodyParent
     }
   )
 

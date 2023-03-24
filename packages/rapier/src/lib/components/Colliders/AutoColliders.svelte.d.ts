@@ -1,5 +1,4 @@
 import type { CoefficientCombineRule, Collider } from '@dimforge/rapier3d-compat'
-import type { Position, Rotation } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
 import type { Euler, Vector3 } from 'three'
 import type { AutoCollidersShapes } from '../../types/types'
@@ -8,9 +7,6 @@ import type { AutoCollidersShapes } from '../../types/types'
 
 type BaseProps = {
   shape?: AutoCollidersShapes
-  position?: Parameters<Vector3['set']>
-  rotation?: Parameters<Euler['set']>
-  scale?: Parameters<Vector3['set']>
   restitution?: number
   restitutionCombineRule?: CoefficientCombineRule
   friction?: number
@@ -30,20 +26,20 @@ type Density = {
   principalAngularInertia?: never
   angularInertiaLocalFrame?: never
 }
+
 type Mass = {
   mass: number
-
   density?: never
   centerOfMass?: never
   principalAngularInertia?: never
   angularInertiaLocalFrame?: never
 }
+
 type MassProperties = {
   mass: number
   centerOfMass: Parameters<Vector3['set']>
   principalAngularInertia: Parameters<Vector3['set']>
   angularInertiaLocalFrame: Parameters<Euler['set']>
-
   density?: never
 }
 

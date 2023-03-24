@@ -6,13 +6,12 @@
   } from '@dimforge/rapier3d-compat'
   import { SceneGraphObject } from '@threlte/core'
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
-  import { Object3D } from 'three'
+  import { Group } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { applyTransforms } from '../../lib/applyTransforms'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import type { ColliderEventMap } from '../../types/types'
@@ -22,10 +21,6 @@
   type $$Props = AutoCollidersProps<TMassDef>
 
   export let shape: $$Props['shape'] = 'convexHull' as $$Props['shape']
-
-  export let position: $$Props['position'] = undefined as $$Props['position']
-  export let rotation: $$Props['rotation'] = undefined as $$Props['rotation']
-  export let scale: $$Props['scale'] = undefined as $$Props['scale']
   export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
   export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
     undefined as $$Props['restitutionCombineRule']
@@ -35,20 +30,13 @@
   export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
   export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
     undefined as $$Props['contactForceEventThreshold']
-
   export let density: $$Props['density'] = undefined
   export let mass: $$Props['mass'] = undefined
   export let centerOfMass: $$Props['centerOfMass'] = undefined
   export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
   export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
 
-  const object = new Object3D()
-
-  /**
-   * Immediately apply transforms
-   */
-  applyTransforms(object, position, rotation, scale)
-  object.updateWorldMatrix(true, false)
+  const group = new Group()
 
   const rigidBody = useRigidBody()
 
@@ -69,8 +57,8 @@
   const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
   onMount(() => {
-    colliders = createCollidersFromChildren(object, shape ?? 'convexHull', world, rigidBody)
-    colliders.forEach((c) => addColliderToContext(c, object, dispatcher))
+    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody)
+    colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
     collisionGroups.registerColliders(colliders)
   })
 
@@ -120,6 +108,6 @@
   })
 </script>
 
-<SceneGraphObject {object}>
-  <slot />
+<SceneGraphObject object={group}>
+  <slot {colliders} />
 </SceneGraphObject>

@@ -9,9 +9,6 @@ import type { Euler, Vector3 } from 'three'
 // ------------------ BASE ------------------
 
 type BaseProps = {
-  position?: Parameters<Vector3['set']>
-  rotation?: Parameters<Euler['set']>
-  scale?: Parameters<Vector3['set']>
   restitution?: number
   restitutionCombineRule?: CoefficientCombineRule
   friction?: number
@@ -54,7 +51,6 @@ type ShapeProps<TShape extends Shape> = {
 
 type Density = {
   density: number
-
   mass?: never
   centerOfMass?: never
   principalAngularInertia?: never
@@ -62,7 +58,6 @@ type Density = {
 }
 type Mass = {
   mass: number
-
   density?: never
   centerOfMass?: never
   principalAngularInertia?: never
@@ -73,7 +68,6 @@ type MassProperties = {
   centerOfMass: Parameters<Vector3['set']>
   principalAngularInertia: Parameters<Vector3['set']>
   angularInertiaLocalFrame: Parameters<Euler['set']>
-
   density?: never
 }
 

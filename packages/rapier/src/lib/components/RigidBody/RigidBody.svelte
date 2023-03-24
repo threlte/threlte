@@ -16,9 +16,6 @@
   type $$Props = Required<RigidBodyProps>
   type OptProps = RigidBodyProps
 
-  export let position: OptProps['position'] = undefined
-  export let rotation: OptProps['rotation'] = undefined
-  export let scale: OptProps['scale'] = undefined
   export let linearVelocity: OptProps['linearVelocity'] = undefined
   export let angularVelocity: OptProps['angularVelocity'] = undefined
 
@@ -55,20 +52,6 @@
   object.userData.isSleeping = false
 
   /**
-   * Immediately apply transforms to get the objects
-   * world position to apply to the RigidBody.
-   * This is a one-off operation as RigidBodies should
-   * not be moved around after initialization.
-   */
-  applyTransforms(object, position, rotation, scale)
-
-  /**
-   * Update the world matrix of the object before applying
-   * the world position to the RigidBody
-   */
-  object.updateWorldMatrix(true, false)
-
-  /**
    * RigidBody Description
    */
   const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
@@ -88,7 +71,6 @@
    */
   const initPosition = async () => {
     await tick()
-    applyTransforms(object, position, rotation, scale)
     object.updateMatrix()
     object.updateWorldMatrix(true, false)
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
