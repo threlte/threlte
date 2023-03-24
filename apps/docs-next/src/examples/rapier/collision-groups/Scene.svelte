@@ -38,17 +38,19 @@
     memberships={[1]}
     filter={[2]}
   >
-    <RigidBody position={[0, 1.5, 1 - Math.random() * 2]}>
-      <AutoColliders shape={'cuboid'}>
-        <T.Mesh
-          castShadow
-          {geometry}
-          material={new MeshStandardMaterial({
-            color: 'red'
-          })}
-        />
-      </AutoColliders>
-    </RigidBody>
+    <T.Group position={[0, 1.5, 1 - Math.random() * 2]}>
+      <RigidBody>
+        <AutoColliders shape={'cuboid'}>
+          <T.Mesh
+            castShadow
+            {geometry}
+            material={new MeshStandardMaterial({
+              color: 'red'
+            })}
+          />
+        </AutoColliders>
+      </RigidBody>
+    </T.Group>
   </CollisionGroups>
 
   <!-- Collider B -->
@@ -56,17 +58,19 @@
     memberships={[2]}
     filter={[1, 3]}
   >
-    <RigidBody position={[0, 4.5, 1 - Math.random() * 2]}>
-      <AutoColliders shape={'cuboid'}>
-        <T.Mesh
-          castShadow
-          {geometry}
-          material={new MeshStandardMaterial({
-            color: 'green'
-          })}
-        />
-      </AutoColliders>
-    </RigidBody>
+    <T.Group position={[0, 4.5, 1 - Math.random() * 2]}>
+      <RigidBody>
+        <AutoColliders shape={'cuboid'}>
+          <T.Mesh
+            castShadow
+            {geometry}
+            material={new MeshStandardMaterial({
+              color: 'green'
+            })}
+          />
+        </AutoColliders>
+      </RigidBody>
+    </T.Group>
   </CollisionGroups>
 
   <!-- Collider C -->
@@ -74,17 +78,19 @@
     memberships={[3]}
     filter={[2]}
   >
-    <RigidBody position={[0, 3, 1 - Math.random() * 2]}>
-      <AutoColliders shape={'cuboid'}>
-        <T.Mesh
-          castShadow
-          {geometry}
-          material={new MeshStandardMaterial({
-            color: 'blue'
-          })}
-        />
-      </AutoColliders>
-    </RigidBody>
+    <T.Group position={[0, 3, 1 - Math.random() * 2]}>
+      <RigidBody>
+        <AutoColliders shape={'cuboid'}>
+          <T.Mesh
+            castShadow
+            {geometry}
+            material={new MeshStandardMaterial({
+              color: 'blue'
+            })}
+          />
+        </AutoColliders>
+      </RigidBody>
+    </T.Group>
   </CollisionGroups>
 {/key}
 

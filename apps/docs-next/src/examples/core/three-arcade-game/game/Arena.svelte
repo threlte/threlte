@@ -94,33 +94,37 @@
 </T.CustomGridHelper>
 
 <!-- LEFT COLLIDER -->
-<Collider
-  position={[(colliderWidth / 2 + arenaWidth / 2) * -1, 0, 0]}
-  on:collisionenter={onLeftCollision}
-  shape="cuboid"
-  args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
-/>
+<T.Group position={[(colliderWidth / 2 + arenaWidth / 2) * -1, 0, 0]}>
+  <Collider
+    on:collisionenter={onLeftCollision}
+    shape="cuboid"
+    args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
+  />
+</T.Group>
 
 <!-- RIGHT COLLIDER -->
-<Collider
-  on:collisionenter={onRightCollision}
-  position={[colliderWidth / 2 + arenaWidth / 2, 0, 0]}
-  shape="cuboid"
-  args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
-/>
+<T.Group position={[colliderWidth / 2 + arenaWidth / 2, 0, 0]}>
+  <Collider
+    on:collisionenter={onRightCollision}
+    shape="cuboid"
+    args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
+  />
+</T.Group>
 
 <!-- TOP COLLIDER -->
-<Collider
-  on:collisionenter={onTopCollision}
-  position={[0, 0, (colliderWidth / 2 + arenaHeight / 2) * -1]}
-  shape="cuboid"
-  args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
-/>
+<T.Group position={[0, 0, (colliderWidth / 2 + arenaHeight / 2) * -1]}>
+  <Collider
+    on:collisionenter={onTopCollision}
+    shape="cuboid"
+    args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
+  />
+</T.Group>
 
 <!-- BOTTOM COLLIDER (acts as the game over zone sensor) -->
-<Collider
-  sensor
-  position={[0, 0, colliderWidth / 2 + arenaHeight / 2]}
-  shape="cuboid"
-  args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
-/>
+<T.Group position={[0, 0, colliderWidth / 2 + arenaHeight / 2]}>
+  <Collider
+    sensor
+    shape="cuboid"
+    args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
+  />
+</T.Group>

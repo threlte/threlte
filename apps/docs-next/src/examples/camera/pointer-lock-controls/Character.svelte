@@ -114,26 +114,28 @@
   <PointerLockControls bind:lock />
 </T.PerspectiveCamera>
 
-<RigidBody
-  bind:rigidBody
-  {position}
-  enabledRotations={[false, false, false]}
->
-  <CollisionGroups groups={playerCollisionGroups}>
-    <Collider
-      shape={'capsule'}
-      args={[height / 2 - radius, radius]}
-    />
-  </CollisionGroups>
+<T.Group {position}>
+  <RigidBody
+    bind:rigidBody
+    enabledRotations={[false, false, false]}
+  >
+    <CollisionGroups groups={playerCollisionGroups}>
+      <Collider
+        shape={'capsule'}
+        args={[height / 2 - radius, radius]}
+      />
+    </CollisionGroups>
 
-  <CollisionGroups groups={groundCollisionGroups}>
-    <Collider
-      sensor
-      on:sensorenter={() => (grounded = true)}
-      on:sensorexit={() => (grounded = false)}
-      shape={'ball'}
-      args={[radius * 1.2]}
-      position={[0, -height / 2 + radius, 0]}
-    />
-  </CollisionGroups>
-</RigidBody>
+    <CollisionGroups groups={groundCollisionGroups}>
+      <T.Group position={[0, -height / 2 + radius, 0]}>
+        <Collider
+          sensor
+          on:sensorenter={() => (grounded = true)}
+          on:sensorexit={() => (grounded = false)}
+          shape={'ball'}
+          args={[radius * 1.2]}
+        />
+      </T.Group>
+    </CollisionGroups>
+  </RigidBody>
+</T.Group>

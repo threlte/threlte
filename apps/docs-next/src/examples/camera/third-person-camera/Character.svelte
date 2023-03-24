@@ -143,52 +143,54 @@
   />
 </T.PerspectiveCamera>
 
-<RigidBody
-  bind:rigidBody
-  {position}
-  enabledRotations={[false, false, false]}
->
-  <CollisionGroups groups={playerCollisionGroups}>
-    <Collider
-      shape={'capsule'}
-      args={[height / 2 - radius, radius]}
-    />
-  </CollisionGroups>
+<T.Group {position}>
+  <RigidBody
+    bind:rigidBody
+    enabledRotations={[false, false, false]}
+  >
+    <CollisionGroups groups={playerCollisionGroups}>
+      <Collider
+        shape={'capsule'}
+        args={[height / 2 - radius, radius]}
+      />
+    </CollisionGroups>
 
-  <CollisionGroups groups={groundCollisionGroups}>
-    <Collider
-      sensor
-      on:sensorenter={() => (grounded = true)}
-      on:sensorexit={() => (grounded = false)}
-      shape={'ball'}
-      args={[radius * 1.2]}
-      position={[0, -height / 2 + radius, 0]}
-    />
-  </CollisionGroups>
+    <CollisionGroups groups={groundCollisionGroups}>
+      <T.Group position={[0, -height / 2 + radius, 0]}>
+        <Collider
+          sensor
+          on:sensorenter={() => (grounded = true)}
+          on:sensorexit={() => (grounded = false)}
+          shape={'ball'}
+          args={[radius * 1.2]}
+        />
+      </T.Group>
+    </CollisionGroups>
 
-  <T.Group position.y={-height / 2}>
-    <GLTF
-      {url}
-      receiveShadow
-      castShadow
-      bind:scene
-      rotation={{ y: DEG2RAD * 180 }}
-      bind:gltf={$gltf}
-    >
-      <T.Mesh
-        geometry={new SphereGeometry(0.1, 10, 10)}
-        material={new MeshStandardMaterial({ color: 'red' })}
-        position={[0, 1, 5]}
-      />
-      <T.Mesh
-        geometry={new SphereGeometry(0.1, 10, 10)}
-        material={new MeshStandardMaterial({ color: 'green' })}
-        position={[-1, 2, -3]}
-      />
-      <T.Mesh
-        geometry={new SphereGeometry(0.1, 10, 10)}
-        material={new MeshStandardMaterial({ color: 'blue' })}
-      />
-    </GLTF>
-  </T.Group>
-</RigidBody>
+    <T.Group position.y={-height / 2}>
+      <GLTF
+        {url}
+        receiveShadow
+        castShadow
+        bind:scene
+        rotation={{ y: DEG2RAD * 180 }}
+        bind:gltf={$gltf}
+      >
+        <T.Mesh
+          geometry={new SphereGeometry(0.1, 10, 10)}
+          material={new MeshStandardMaterial({ color: 'red' })}
+          position={[0, 1, 5]}
+        />
+        <T.Mesh
+          geometry={new SphereGeometry(0.1, 10, 10)}
+          material={new MeshStandardMaterial({ color: 'green' })}
+          position={[-1, 2, -3]}
+        />
+        <T.Mesh
+          geometry={new SphereGeometry(0.1, 10, 10)}
+          material={new MeshStandardMaterial({ color: 'blue' })}
+        />
+      </GLTF>
+    </T.Group>
+  </RigidBody>
+</T.Group>

@@ -1,13 +1,18 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Environment, HTML, useGltf } from '@threlte/extras'
-  import { AutoColliders, RigidBody } from '@threlte/rapier'
+  import { AutoColliders, RigidBody, useRapier } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import Car from './Car.svelte'
   import Ground from './Ground.svelte'
 
   const gltf = useGltf('/models/loop/loop.glb')
+
+  const { world } = useRapier()
+  world.maxStabilizationIterations = 10
+  world.maxVelocityIterations = 10
+  world.maxVelocityFrictionIterations = 16
 </script>
 
 <Environment
@@ -19,65 +24,62 @@
 
 <Ground />
 
-<RigidBody
-  dominance={1}
-  position={[-10, 3, -12]}
->
-  <HTML
-    transform
-    sprite
-    pointerEvents={'none'}
-    position={{ y: 1 }}
-  >
-    <p>Dominance: 1</p>
-  </HTML>
-  <AutoColliders shape={'cuboid'}>
-    <T.Mesh
-      geometry={new BoxGeometry(1, 1, 1)}
-      material={new MeshStandardMaterial()}
-    />
-  </AutoColliders>
-</RigidBody>
+<T.Group position={[-10, 3, -12]}>
+  <RigidBody dominance={1}>
+    <HTML
+      transform
+      sprite
+      pointerEvents={'none'}
+      position.y={1}
+    >
+      <p class="!text-orange">Dominance: 1</p>
+    </HTML>
+    <AutoColliders shape={'cuboid'}>
+      <T.Mesh
+        geometry={new BoxGeometry(1, 1, 1)}
+        material={new MeshStandardMaterial()}
+      />
+    </AutoColliders>
+  </RigidBody>
+</T.Group>
 
-<RigidBody
-  dominance={-1}
-  position={[-15, 3, -14]}
->
-  <HTML
-    transform
-    sprite
-    pointerEvents={'none'}
-    position={{ y: 3 }}
-  >
-    <p>Dominance: -1</p>
-  </HTML>
-  <AutoColliders shape={'cuboid'}>
-    <T.Mesh
-      geometry={new BoxGeometry(3, 3, 3)}
-      material={new MeshStandardMaterial()}
-    />
-  </AutoColliders>
-</RigidBody>
+<T.Group position={[-15, 3, -14]}>
+  <RigidBody dominance={-1}>
+    <HTML
+      transform
+      sprite
+      pointerEvents={'none'}
+      position.y={3}
+    >
+      <p class="!text-orange">Dominance: -1</p>
+    </HTML>
+    <AutoColliders shape={'cuboid'}>
+      <T.Mesh
+        geometry={new BoxGeometry(3, 3, 3)}
+        material={new MeshStandardMaterial()}
+      />
+    </AutoColliders>
+  </RigidBody>
+</T.Group>
 
-<RigidBody
-  dominance={0}
-  position={[-13, 3, -10]}
->
-  <HTML
-    transform
-    sprite
-    pointerEvents={'none'}
-    position={{ y: 2 }}
-  >
-    <p>Dominance: 0</p>
-  </HTML>
-  <AutoColliders shape={'cuboid'}>
-    <T.Mesh
-      geometry={new BoxGeometry(2, 2, 2)}
-      material={new MeshStandardMaterial()}
-    />
-  </AutoColliders>
-</RigidBody>
+<T.Group position={[-13, 3, -10]}>
+  <RigidBody dominance={0}>
+    <HTML
+      transform
+      sprite
+      pointerEvents={'none'}
+      position.y={2}
+    >
+      <p class="!text-orange">Dominance: 0</p>
+    </HTML>
+    <AutoColliders shape={'cuboid'}>
+      <T.Mesh
+        geometry={new BoxGeometry(2, 2, 2)}
+        material={new MeshStandardMaterial()}
+      />
+    </AutoColliders>
+  </RigidBody>
+</T.Group>
 
 {#if $gltf}
   <AutoColliders shape={'trimesh'}>

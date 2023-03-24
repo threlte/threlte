@@ -42,70 +42,80 @@
 />
 
 {#if $helmet}
-  <RigidBody
+  <T.Group
     position={[-2.5, 2, 2.5]}
     rotation={[90 * DEG2RAD, 0, 0]}
   >
-    <AutoColliders shape={'convexHull'}>
-      <T.Mesh
-        castShadow
-        geometry={$helmet.geometry}
-        material={$helmet.material}
-      />
-    </AutoColliders>
-  </RigidBody>
+    <RigidBody>
+      <AutoColliders shape={'convexHull'}>
+        <T.Mesh
+          castShadow
+          geometry={$helmet.geometry}
+          material={$helmet.material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 
-  <RigidBody
+  <T.Group
     position={[2.5, 2, 2.5]}
     rotation={[90 * DEG2RAD, 0, 0]}
   >
-    <AutoColliders shape={'ball'}>
-      <T.Mesh
-        castShadow
-        geometry={$helmet.geometry}
-        material={$helmet.material}
-      />
-    </AutoColliders>
-  </RigidBody>
+    <RigidBody>
+      <AutoColliders shape={'ball'}>
+        <T.Mesh
+          castShadow
+          geometry={$helmet.geometry}
+          material={$helmet.material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 
-  <RigidBody
+  <T.Group
     position={[2.5, 2, -2.5]}
     rotation={[90 * DEG2RAD, 0, 0]}
   >
-    <AutoColliders shape={'cuboid'}>
-      <T.Mesh
-        castShadow
-        geometry={$helmet.geometry}
-        material={$helmet.material}
-      />
-    </AutoColliders>
-  </RigidBody>
+    <RigidBody>
+      <AutoColliders shape={'cuboid'}>
+        <T.Mesh
+          castShadow
+          geometry={$helmet.geometry}
+          material={$helmet.material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 
-  <RigidBody
+  <T.Group
     position={[0, 2, 0]}
     rotation={[90 * DEG2RAD, 0, 0]}
   >
-    <AutoColliders shape={'trimesh'}>
-      <T.Mesh
-        castShadow
-        geometry={$helmet.geometry}
-        material={$helmet.material}
-      />
-    </AutoColliders>
-  </RigidBody>
+    <RigidBody>
+      <AutoColliders shape={'trimesh'}>
+        <T.Mesh
+          castShadow
+          geometry={$helmet.geometry}
+          material={$helmet.material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 
-  <RigidBody
+  <T.Group
     position={[-2.5, 2, -2.5]}
     rotation={[90 * DEG2RAD, 0, 0]}
   >
-    <AutoColliders shape={'capsule'}>
-      <T.Mesh
-        castShadow
-        geometry={$helmet.geometry}
-        material={$helmet.material}
-      />
-    </AutoColliders>
-  </RigidBody>
+    <RigidBody>
+      <AutoColliders shape={'capsule'}>
+        <T.Mesh
+          castShadow
+          geometry={$helmet.geometry}
+          material={$helmet.material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 {/if}
 
 <T.GridHelper args={[50]} />

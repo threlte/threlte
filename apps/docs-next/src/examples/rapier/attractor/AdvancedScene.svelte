@@ -63,26 +63,26 @@
 <T.GridHelper args={[100]} />
 
 {#if !hide}
-  <RigidBody
-    linearVelocity={[5, -5, 0]}
-    position={[-50, 0, 0]}
-  >
-    <Collider
-      shape="ball"
-      args={[1]}
-      mass={config[type].strength}
-    />
-    <T.Mesh
-      {geometry}
-      {material}
-    />
-    <Attractor
-      range={config[type].range}
-      gravitationalConstant={config[type].gravitationalConstant}
-      strength={config[type].strength}
-      gravityType={type}
-    />
-  </RigidBody>
+  <T.Group position={[-50, 0, 0]}>
+    <RigidBody linearVelocity={[5, -5, 0]}>
+      <Collider
+        shape="ball"
+        args={[1]}
+        mass={config[type].strength}
+      />
+      <T.Mesh
+        {geometry}
+        {material}
+      />
+      <Attractor
+        range={config[type].range}
+        gravitationalConstant={config[type].gravitationalConstant}
+        strength={config[type].strength}
+        gravityType={type}
+      />
+    </RigidBody>
+  </T.Group>
+
   <RigidBody linearVelocity={[0, 5, 0]}>
     <Collider
       shape="ball"
@@ -100,24 +100,24 @@
       gravityType={type}
     />
   </RigidBody>
-  <RigidBody
-    position={[50, 0, 0]}
-    linearVelocity={[-5, 0, 5]}
-  >
-    <Collider
-      shape="ball"
-      args={[1]}
-      mass={config[type].strength}
-    />
-    <T.Mesh
-      {geometry}
-      {material}
-    />
-    <Attractor
-      range={config[type].range}
-      gravitationalConstant={config[type].gravitationalConstant}
-      strength={config[type].strength}
-      gravityType={type}
-    />
-  </RigidBody>
+
+  <T.Group position={[50, 0, 0]}>
+    <RigidBody linearVelocity={[-5, 0, 5]}>
+      <Collider
+        shape="ball"
+        args={[1]}
+        mass={config[type].strength}
+      />
+      <T.Mesh
+        {geometry}
+        {material}
+      />
+      <Attractor
+        range={config[type].range}
+        gravitationalConstant={config[type].gravitationalConstant}
+        strength={config[type].strength}
+        gravityType={type}
+      />
+    </RigidBody>
+  </T.Group>
 {/if}

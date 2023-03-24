@@ -110,31 +110,33 @@
   </HTML>
 
   <!-- DOOR -->
-  <RigidBody
-    position={[-0.5, 1.125, 0]}
-    bind:rigidBody={doorRigidBody}
-    type={'kinematicPosition'}
-  >
-    <AutoColliders shape={'cuboid'}>
-      <T.Mesh
-        receiveShadow
-        castShadow
-        position.x={0.5}
-        geometry={new BoxGeometry(1, 2.25, 0.1)}
-        material={new MeshStandardMaterial()}
-      />
-    </AutoColliders>
-  </RigidBody>
+  <T.Group position={[-0.5, 1.125, 0]}>
+    <RigidBody
+      bind:rigidBody={doorRigidBody}
+      type={'kinematicPosition'}
+    >
+      <AutoColliders shape={'cuboid'}>
+        <T.Mesh
+          receiveShadow
+          castShadow
+          position.x={0.5}
+          geometry={new BoxGeometry(1, 2.25, 0.1)}
+          material={new MeshStandardMaterial()}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </T.Group>
 
   <CollisionGroups groups={[15]}>
-    <Collider
-      position={[0, 1.5, 0]}
-      shape={'cuboid'}
-      args={[1, 1.35, 1.5]}
-      sensor
-      on:sensorenter={() => (objectsInSensor += 1)}
-      on:sensorexit={() => (objectsInSensor -= 1)}
-    />
+    <T.Group position={[0, 1.5, 0]}>
+      <Collider
+        shape={'cuboid'}
+        args={[1, 1.35, 1.5]}
+        sensor
+        on:sensorenter={() => (objectsInSensor += 1)}
+        on:sensorexit={() => (objectsInSensor -= 1)}
+      />
+    </T.Group>
   </CollisionGroups>
 </T.Group>
 
