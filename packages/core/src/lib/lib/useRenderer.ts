@@ -1,6 +1,8 @@
 import { onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
 import {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   ColorManagement,
   LinearEncoding,
   PCFSoftShadowMap,
@@ -70,9 +72,19 @@ export const useRenderer = (ctx: ThrelteContext) => {
       ctx.colorSpace,
       ctx.dpr,
       ctx.shadows,
-      ctx.colorManagementEnabled
+      ctx.colorManagementEnabled,
+      ctx.useLegacyLights
     ],
-    ([renderer, size, toneMapping, colorSpace, dpr, shadows, colorManagementEnabled]) => {
+    ([
+      renderer,
+      size,
+      toneMapping,
+      colorSpace,
+      dpr,
+      shadows,
+      colorManagementEnabled,
+      useLegacyLights
+    ]) => {
       if (!renderer) return
       renderer.setSize(size.width, size.height)
       renderer.setPixelRatio(dpr)
@@ -104,6 +116,15 @@ export const useRenderer = (ctx: ThrelteContext) => {
         cm.enabled = colorManagementEnabled
       } else if (cm.legacyMode !== undefined) {
         cm.legacyMode = !colorManagementEnabled
+      }
+
+      const anyRenderer = renderer as any
+      // > r150
+      if (useLegacyLights && anyRenderer.useLegacyLights !== undefined) {
+        anyRenderer.useLegacyLights = useLegacyLights
+      } else if (anyRenderer.physicallyCorrectLights !== undefined) {
+        // < r150
+        anyRenderer.physicallyCorrectLights = !useLegacyLights
       }
     }
   )

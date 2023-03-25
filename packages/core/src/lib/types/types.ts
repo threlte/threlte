@@ -35,6 +35,7 @@ export type ThrelteContext = {
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
+  useLegacyLights: CurrentWritable<boolean>
 
   // Rendering Management
   renderer?: WebGLRenderer

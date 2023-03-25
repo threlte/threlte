@@ -56,6 +56,10 @@
    * @default true
    */
   export let colorManagementEnabled: boolean = true
+  /**
+   * @default true
+   */
+  export let useLegacyLights: boolean = true
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
@@ -77,7 +81,8 @@
     debugFrameloop,
     frameloop,
     shadows,
-    colorManagementEnabled
+    colorManagementEnabled,
+    useLegacyLights
   })
 
   // create cache context for caching assets

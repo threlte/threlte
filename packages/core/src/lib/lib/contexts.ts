@@ -28,6 +28,7 @@ export const createContexts = (options: {
   frameloop: 'always' | 'demand' | 'never'
   shadows: boolean | ShadowMapType
   colorManagementEnabled: boolean
+  useLegacyLights: boolean
 }): {
   ctx: ThrelteContext
   internalCtx: ThrelteInternalContext
@@ -121,6 +122,7 @@ export const createContexts = (options: {
     colorSpace: currentWritable(options.colorSpace),
     toneMapping: currentWritable(options.toneMapping),
     dpr: currentWritable(options.dpr),
+    useLegacyLights: currentWritable(options.useLegacyLights),
     shadows: currentWritable(options.shadows),
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
     frameloop: currentWritable(options.frameloop)
