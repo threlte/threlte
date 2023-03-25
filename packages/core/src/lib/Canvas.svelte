@@ -57,9 +57,9 @@
    */
   export let colorManagementEnabled: boolean = true
   /**
-   * @default false
+   * @default true
    */
-  export let useLegacyLights: boolean = false
+  export let useLegacyLights: boolean = true
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
