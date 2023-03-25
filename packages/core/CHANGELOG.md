@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 6.0.0-next.1
+
+### Major Changes
+
+- d9647fdc: Changed the default lighting mode from legacy to physical
+
+### Minor Changes
+
+- a27edc5f: Added option "useLegacyLights" on Canvas component, now defaulting to "true" to stay in line with defaults of three.js. Added prop types to plugins
+
 ## 6.0.0-next.0
 
 ### Major Changes
