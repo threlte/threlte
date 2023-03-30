@@ -2,17 +2,14 @@
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T, useFrame, useThrelte } from '@threlte/core'
   import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
-  import { createEventDispatcher, onDestroy } from 'svelte'
-  import { PerspectiveCamera, Vector3, type Vector3Tuple } from 'three'
+  import { onDestroy } from 'svelte'
+  import { PerspectiveCamera, Vector3 } from 'three'
   import PointerLockControls from './PointerLockControls.svelte'
 
-  export let position: Vector3Tuple | undefined = undefined
-  export let playerCollisionGroups = [0]
-  export let groundCollisionGroups = [15]
-  export let radius = 0.3
-  export let height = 1.7
+  export let position: [x: number, y: number, z: number] = [0, 0, 0]
+  let radius = 0.3
+  let height = 1.7
   export let speed = 6
-  export let jumpStrength = 4
 
   let rigidBody: RapierRigidBody
   let lock: () => void
@@ -24,11 +21,6 @@
   let right = 0
 
   const t = new Vector3()
-
-  const dispatch = createEventDispatcher()
-
-  let grounded = false
-  $: grounded ? dispatch('groundenter') : dispatch('groundexit')
 
   const lockControls = () => lock()
 
@@ -72,10 +64,6 @@
       case 'd':
         right = 1
         break
-      case ' ':
-        if (!rigidBody || !grounded) break
-        rigidBody.applyImpulse({ x: 0, y: jumpStrength, z: 0 }, true)
-        break
       default:
         break
     }
@@ -106,31 +94,37 @@
   on:keyup={onKeyUp}
 />
 
-<T.PerspectiveCamera
-  bind:ref={cam}
-  bind:position
-  fov={90}
->
-  <PointerLockControls bind:lock />
-</T.PerspectiveCamera>
+<T.Group position.y={0.9}>
+  <T.PerspectiveCamera
+    makeDefault
+    fov={90}
+    bind:ref={cam}
+    position.x={position[0]}
+    position.y={position[1]}
+    position.z={position[2]}
+    on:create={({ ref }) => {
+      ref.lookAt(new Vector3(0, 2, 0))
+    }}
+  >
+    <PointerLockControls bind:lock />
+  </T.PerspectiveCamera>
+</T.Group>
 
 <RigidBody
   bind:rigidBody
   {position}
   enabledRotations={[false, false, false]}
 >
-  <CollisionGroups groups={playerCollisionGroups}>
+  <CollisionGroups groups={[0]}>
     <Collider
       shape={'capsule'}
       args={[height / 2 - radius, radius]}
     />
   </CollisionGroups>
 
-  <CollisionGroups groups={groundCollisionGroups}>
+  <CollisionGroups groups={[15]}>
     <Collider
       sensor
-      on:sensorenter={() => (grounded = true)}
-      on:sensorexit={() => (grounded = false)}
       shape={'ball'}
       args={[radius * 1.2]}
       position={[0, -height / 2 + radius, 0]}
