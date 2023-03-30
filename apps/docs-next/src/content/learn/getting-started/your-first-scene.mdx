@@ -382,6 +382,15 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
   only a single number is passed. This is equivalent to calling `scale.setScalar($scale)`.
 </Tip>
 
+<Tip
+  type="tip"
+  title="Realtime Variables"
+>
+  When working with realtime apps where variables e.g. position and rotation change constantly, an
+  easy way observe the values is with [live
+  expressions](https://developer.chrome.com/docs/devtools/console/live-expressions/).
+</Tip>
+
 ## Frame Loop
 
 Let's add some motion to our cube. We will use Threlte's [`useFrame`](/docs/reference/core/hooks#useFrame) hook to tap
