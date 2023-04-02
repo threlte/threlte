@@ -6,6 +6,7 @@
   export let path: string
   export let files: Record<string, string>
   export let hideCode: boolean
+  export let iframe: boolean
 
   const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
     string,
@@ -33,7 +34,13 @@
     _class
   )}
 >
-  {#if mounted && AppModule}
+  {#if iframe}
+    <iframe
+      src="/examples/{path}"
+      title={path}
+      class="w-full h-full border-none"
+    />
+  {:else if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />
     {/await}
