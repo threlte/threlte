@@ -11,76 +11,6 @@ A typical Threlte application will make use of textures, models, and other asset
   application where you can import them easily.
 </Tip>
 
-## Loading Textures
-
-To start off, we import the `TextureLoader` from `three` and the `useLoader` hook from `@threlte/core`:
-
-```ts
-import { TextureLoader } from 'three'
-import { useLoader } from '@threlte/core'
-```
-
-Then we can use the `useLoader` hook to load our texture:
-
-```ts
-const texture = useLoader(TextureLoader).load('/assets/texture.png')
-```
-
-The type of `texture` is a custom store that Threlte provides called `AsyncWritable`. It's very much like a regular Svelte store but with a few extra features. Its value will be `undefined` until the texture has loaded. Once the texture has loaded, the value will be the loaded texture. To use this texture on a material, we can use a conditional:
-
-```svelte
-{#if $texture}
-  <T.MeshStandardMaterial map={$texture} />
-{/if}
-```
-
-Since the underlying promise properties `then` and `catch` are exposed on the store itself, we can also make use of that and _await_ the texture to be loaded:
-
-```svelte
-<!-- Here, "texture" is acting like a regular promise -->
-{#await texture then value}
-  <T.MeshStandardMaterial map={value} />
-{/await}
-```
-
-### Loading multiple textures
-
-Some materials are composed of multiple textures for different material channels. `useLoader` provides a way to load multiple textures at once and _spread_ the loaded textures on a material. Let's say we want to load a texture for the `map` and `normalMap` channels:
-
-```ts
-const textures = useLoader(TextureLoader).load({
-  map: '/assets/texture.png',
-  normalMap: '/assets/normal.png'
-})
-```
-
-We can then spread the textures on a material via Svelte's spread syntax:
-
-```svelte
-{#if $textures}
-  <T.MeshStandardMaterial {...$textures} />
-{/if}
-```
-
-<Tip type="tip">
-  Keep in mind that the promise only resolves and the store gets populated once all textures have
-  loaded.
-</Tip>
-
-### Convenient: useTexture
-
-`@threlte/extras` provides a handy hook for loading textures called `useTexture`:
-
-```svelte
-<script>
-  import { useTexture } from '@threlte/extras'
-</script>
-
-{#await useTexture('/assets/texture.png') then texture}
-  <T.MeshStandardMaterial map={texture} />
-{/await}
-```
-
 ## Loading Models
 
 Models of different 3D model extensions can be loaded with their respective loaders. For this guide, we're going to use the `GLTFLoader` to load a `.gltf` model. In this section we're also going to discuss a few things that are specific to **loading and caching models**.
@@ -212,6 +142,76 @@ You can then import this component and use it in your application:
   Keep in mind that this hook caches the result and therefore is most suitable for loading models
   that are placed in the scene only once.
 </Tip>
+
+## Loading Textures
+
+To start off, we import the `TextureLoader` from `three` and the `useLoader` hook from `@threlte/core`:
+
+```ts
+import { TextureLoader } from 'three'
+import { useLoader } from '@threlte/core'
+```
+
+Then we can use the `useLoader` hook to load our texture:
+
+```ts
+const texture = useLoader(TextureLoader).load('/assets/texture.png')
+```
+
+The type of `texture` is a custom store that Threlte provides called `AsyncWritable`. It's very much like a regular Svelte store but with a few extra features. Its value will be `undefined` until the texture has loaded. Once the texture has loaded, the value will be the loaded texture. To use this texture on a material, we can use a conditional:
+
+```svelte
+{#if $texture}
+  <T.MeshStandardMaterial map={$texture} />
+{/if}
+```
+
+Since the underlying promise properties `then` and `catch` are exposed on the store itself, we can also make use of that and _await_ the texture to be loaded:
+
+```svelte
+<!-- Here, "texture" is acting like a regular promise -->
+{#await texture then value}
+  <T.MeshStandardMaterial map={value} />
+{/await}
+```
+
+### Loading multiple textures
+
+Some materials are composed of multiple textures for different material channels. `useLoader` provides a way to load multiple textures at once and _spread_ the loaded textures on a material. Let's say we want to load a texture for the `map` and `normalMap` channels:
+
+```ts
+const textures = useLoader(TextureLoader).load({
+  map: '/assets/texture.png',
+  normalMap: '/assets/normal.png'
+})
+```
+
+We can then spread the textures on a material via Svelte's spread syntax:
+
+```svelte
+{#if $textures}
+  <T.MeshStandardMaterial {...$textures} />
+{/if}
+```
+
+<Tip type="tip">
+  Keep in mind that the promise only resolves and the store gets populated once all textures have
+  loaded.
+</Tip>
+
+### Convenient: useTexture
+
+`@threlte/extras` provides a handy hook for loading textures called `useTexture`:
+
+```svelte
+<script>
+  import { useTexture } from '@threlte/extras'
+</script>
+
+{#await useTexture('/assets/texture.png') then texture}
+  <T.MeshStandardMaterial map={texture} />
+{/await}
+```
 
 ## Context Awareness
 
