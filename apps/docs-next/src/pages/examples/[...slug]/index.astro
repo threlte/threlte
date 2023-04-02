@@ -1,0 +1,28 @@
+---
+import Loader from './Loader.svelte'
+
+export async function getStaticPaths() {
+  const examples = import.meta.glob('../../../examples/**/App.svelte')
+  const keys = Object.keys(examples) as string[]
+  const slugs = keys.map((key) => key.replace('../../../examples/', '').replace('/App.svelte', ''))
+
+  return slugs.map((slug) => {
+    return {
+      params: { slug }
+    }
+  })
+}
+
+// const AppComponent = import.meta.glob('../../../examples/' + Astro.params.slug + '/App.svelte', {
+//   eager: true
+// })
+
+const slug = Astro.params.slug
+---
+
+<div class="absolute h-full w-full">
+  <Loader
+    client:load
+    slug={slug}
+  />
+</div>

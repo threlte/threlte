@@ -11,6 +11,7 @@ interface Props {
   path: string
   hideCode?: boolean
   hidePreview?: boolean
+  iframe?: boolean
 }
 
 const allModules = import.meta.glob('../../examples/**/*', {
@@ -45,6 +46,7 @@ const hidePreview = Astro.props.hidePreview ?? false
         path={Astro.props.path}
         client:load
         files={files}
+        iframe={Astro.props.iframe ?? false}
       />
     )
   }
