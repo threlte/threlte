@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.1
+
+### Minor Changes
+
+- 72c71414: Added option to add a preload method that makes preloading an asset easy. Also, added the option to make an isolated component (so no \$\$restProps usage)
+
 ## 1.0.0-next.0
 
 ### Major Changes
