@@ -186,3 +186,30 @@ The component `<Example>` renders an example that is defined in the `src/example
 renders as:
 
 <Example path="core/use-frame" />
+
+Hide the code:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  hideCode
+/>
+```
+
+Hide the preview:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  hidePreview
+/>
+```
+
+Embed the example preview as an iframe, which helps when third party UI libraries are used that overlay the whole page like Theatre.js Studio:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  iframe
+/>
+```
