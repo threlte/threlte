@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- 124eabab: Fixed preload method to return a Promise
+
 ## 1.0.0-next.1
 
 ### Minor Changes
