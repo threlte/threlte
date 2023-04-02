@@ -506,8 +506,8 @@ ${
 		return ${useGltf}
 	}
 
-	export const preload${baseName} = () => {
-		load()
+	export const preload${baseName} = async () => {
+		await load()
 	}
 </script>
 `
