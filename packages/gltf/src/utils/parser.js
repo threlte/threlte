@@ -1,7 +1,7 @@
 import THREE from 'three'
 import isVarName from './isVarName.js'
 
-function parse(fileName, gltf, options = {}) {
+function parse(fileName, baseName, gltf, options = {}) {
   const url = (fileName.toLowerCase().startsWith('http') ? '' : '/') + fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -467,6 +467,22 @@ function parse(fileName, gltf, options = {}) {
         }
       : undefined
 
+  const imports = `
+	${options.types ? `\nimport type * as THREE from 'three'` : ''}
+        import { Group } from 'three'
+        import { ${[
+          'T',
+          options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
+        ].join(', ')} } from '@threlte/core'
+        import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
+          ', '
+        )} } from '@threlte/extras'
+	`
+
+  const useGltf = `useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
+    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
+  })`
+
   // Output
   return `
     <!--
@@ -477,29 +493,41 @@ ${
 }
 ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 
+${
+  options.preload
+    ? `
+
+<script context="module"${options.types ? ' lang="ts"' : ''}>
+	${imports}
+
+	${options.types ? printThrelteTypes(objects, animations) : ''}
+
+	const load = () => {
+		return ${useGltf}
+	}
+
+	export const preload${baseName} = () => {
+		load()
+	}
+</script>
+`
+    : ''
+}
+
+
     <script${options.types ? ' lang="ts"' : ''}>
 
+				${!options.preload ? imports : ''}
 
-        ${options.types ? `\nimport type * as THREE from 'three'` : ''}
-        import { Group } from 'three'
-        import { ${['T', options.types ? 'type Props, type Events, type Slots' : ''].join(
-          ', '
-        )} } from '@threlte/core'
-        import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
-          ', '
-        )} } from '@threlte/extras'
-
-        ${options.types ? 'type $$Props = Props<THREE.Group>' : ''}
-        ${options.types ? 'type $$Events = Events<THREE.Group>' : ''}
-        ${options.types ? 'type $$Slots = Slots<THREE.Group>' : ''}
+        ${options.types && !options.isolated ? 'type $$Props = Props<THREE.Group>' : ''}
+        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
+        ${options.types && !options.isolated ? 'type $$Slots = Slots<THREE.Group>' : ''}
 
         export const ref = new Group()
 
-        ${options.types ? printThrelteTypes(objects, animations) : ''}
+        ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
-        const gltf = useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
-    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
-  })
+        ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
     ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
@@ -511,7 +539,7 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
     </script>
 
     {#if $gltf}
-			<T is={ref} {...$$restProps}>
+			<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
         ${scene}
 
         <slot {ref} />

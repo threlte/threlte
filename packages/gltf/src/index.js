@@ -22,7 +22,7 @@ function toArrayBuffer(buf) {
   return ab
 }
 
-export default function (file, output, options) {
+export default function (file, output, baseName, options) {
   function getRelativeFilePath(file) {
     const filePath = path.resolve(file)
     const rootPath = options.root ? path.resolve(options.root) : path.dirname(file)
@@ -53,7 +53,7 @@ export default function (file, output, options) {
           arrayBuffer,
           '',
           (gltf) => {
-            const raw = parse(filePath, gltf, options)
+            const raw = parse(filePath, baseName, gltf, options)
             try {
               const prettiered = prettier.format(raw, {
                 semi: false,
