@@ -1,9 +1,9 @@
 <script>
   import { T } from '@threlte/core'
-  import { AutoColliders, CollisionGroups } from '@threlte/rapier'
+  import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import Door from './Door.svelte'
-  import Player from './Character.svelte'
+  import Door from '../../rapier/world/Door.svelte'
+  import Player from './Player.svelte'
 </script>
 
 <T.DirectionalLight
@@ -11,6 +11,13 @@
   position={[8, 20, -3]}
 />
 <T.AmbientLight intensity={0.2} />
+
+<Debug />
+
+<T.GridHelper
+  args={[50]}
+  position.y={0.01}
+/>
 
 <CollisionGroups groups={[0, 15]}>
   <AutoColliders

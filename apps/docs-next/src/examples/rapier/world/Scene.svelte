@@ -1,55 +1,73 @@
 <script lang="ts">
-	import { T, useFrame, useThrelte } from '@threlte/core'
-	import { Environment } from '@threlte/extras'
-	import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
-	import { spring } from 'svelte/motion'
-	import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from 'three'
-	import Door from './Door.svelte'
-	import Ground from './Ground.svelte'
-	import Player from './Player.svelte'
+  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { Environment } from '@threlte/extras'
+  import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
+  import { spring } from 'svelte/motion'
+  import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from 'three'
+  import Door from './Door.svelte'
+  import Ground from './Ground.svelte'
+  import Player from './Player.svelte'
 
-	let playerMesh: Mesh
-	let positionHasBeenSet = false
-	const smoothPlayerPosX = spring(0)
-	const smoothPlayerPosZ = spring(0)
-	const t3 = new Vector3()
+  let playerMesh: Mesh
+  let positionHasBeenSet = false
+  const smoothPlayerPosX = spring(0)
+  const smoothPlayerPosZ = spring(0)
+  const t3 = new Vector3()
 
-	useFrame(() => {
-		if (!playerMesh) return
-		playerMesh.getWorldPosition(t3)
-		smoothPlayerPosX.set(t3.x, {
-			hard: !positionHasBeenSet
-		})
-		smoothPlayerPosZ.set(t3.z, {
-			hard: !positionHasBeenSet
-		})
-		if (!positionHasBeenSet) positionHasBeenSet = true
-	})
+  useFrame(() => {
+    if (!playerMesh) return
+    playerMesh.getWorldPosition(t3)
+    smoothPlayerPosX.set(t3.x, {
+      hard: !positionHasBeenSet
+    })
+    smoothPlayerPosZ.set(t3.z, {
+      hard: !positionHasBeenSet
+    })
+    if (!positionHasBeenSet) positionHasBeenSet = true
+  })
 
-	const { size } = useThrelte()
-	$: zoom = $size.width / 8
+  const { size } = useThrelte()
+  $: zoom = $size.width / 8
 </script>
 
-<Environment path="/hdr/" files="shanghai_riverside_1k.hdr" />
+<Environment
+  path="/hdr/"
+  files="shanghai_riverside_1k.hdr"
+/>
 
-<T.Group position.x={$smoothPlayerPosX} position.z={$smoothPlayerPosZ}>
-	<T.Group position.y={0.9} let:ref={target}>
-		<T.OrthographicCamera
-			makeDefault
-			{zoom}
-			position={[50, 50, 30]}
-			on:create={({ ref }) => {
-				ref.lookAt(target.getWorldPosition(new Vector3()))
-			}}
-		/>
-	</T.Group>
+<T.Group
+  position.x={$smoothPlayerPosX}
+  position.z={$smoothPlayerPosZ}
+>
+  <T.Group
+    position.y={0.9}
+    let:ref={target}
+  >
+    <T.OrthographicCamera
+      makeDefault
+      {zoom}
+      position={[50, 50, 30]}
+      on:create={({ ref }) => {
+        ref.lookAt(target.getWorldPosition(new Vector3()))
+      }}
+    />
+  </T.Group>
 </T.Group>
 
-<T.DirectionalLight castShadow position={[8, 20, -3]} />
+<T.DirectionalLight
+  castShadow
+  position={[8, 20, -3]}
+/>
 
-<T.GridHelper args={[50]} />
+<T.GridHelper
+  args={[50]}
+  position.y={0.01}
+/>
 
-<Debug depthTest={false} depthWrite={false} />
+<Debug
+  depthTest={false}
+  depthWrite={false}
+/>
 
 <!--
 	The ground needs to be on both group 15 which is the group
@@ -58,42 +76,45 @@
 	interacting with.
  -->
 <CollisionGroups groups={[0, 15]}>
-	<Ground />
+  <Ground />
 </CollisionGroups>
 
 <!--
 	All physically interactive stuff should be on group 0
 -->
 <CollisionGroups groups={[0]}>
-	<Player bind:playerMesh position={[0, 2, -3]} />
+  <Player
+    bind:playerMesh
+    position={[0, 2, -3]}
+  />
 
-	<Door />
+  <Door />
 
-	<!-- WALLS -->
-	<AutoColliders shape={'cuboid'}>
-		<T.Mesh
-			receiveShadow
-			castShadow
-			position.x={30 + 0.7 + 0.15}
-			position.y={1.275}
-			geometry={new BoxGeometry(60, 2.55, 0.15)}
-			material={new MeshStandardMaterial({
-				transparent: true,
-				opacity: 0.5,
-				color: 0x333333
-			})}
-		/>
-		<T.Mesh
-			receiveShadow
-			castShadow
-			position.x={-30 - 0.7 - 0.15}
-			position.y={1.275}
-			geometry={new BoxGeometry(60, 2.55, 0.15)}
-			material={new MeshStandardMaterial({
-				transparent: true,
-				opacity: 0.5,
-				color: 0x333333
-			})}
-		/>
-	</AutoColliders>
+  <!-- WALLS -->
+  <AutoColliders shape={'cuboid'}>
+    <T.Mesh
+      receiveShadow
+      castShadow
+      position.x={30 + 0.7 + 0.15}
+      position.y={1.275}
+      geometry={new BoxGeometry(60, 2.55, 0.15)}
+      material={new MeshStandardMaterial({
+        transparent: true,
+        opacity: 0.5,
+        color: 0x333333
+      })}
+    />
+    <T.Mesh
+      receiveShadow
+      castShadow
+      position.x={-30 - 0.7 - 0.15}
+      position.y={1.275}
+      geometry={new BoxGeometry(60, 2.55, 0.15)}
+      material={new MeshStandardMaterial({
+        transparent: true,
+        opacity: 0.5,
+        color: 0x333333
+      })}
+    />
+  </AutoColliders>
 </CollisionGroups>
