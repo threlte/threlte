@@ -46,7 +46,7 @@
     "prettier-plugin-svelte": "^2.9.0",
     "sharp": "^0.31.3",
     "svelte": "^3.55.1",
-    "three": "0.122.0"
+    "three": "0.151.3"
   },
   "devDependencies": {
     "chalk": "^4.1.1",
