@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.2
+
+### Patch Changes
+
+- 4b67b473: Event on:create bugfix
+
 ## 6.0.0-next.1
 
 ### Major Changes

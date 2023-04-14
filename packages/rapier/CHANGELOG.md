@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.0.0-next.1
+
+### Major Changes
+
+- 4b67b473: Removed transform properties on rapier components Collider, AutoColliders and RigidBody
+
 ## 1.0.0-next.0
 
 ### Major Changes
