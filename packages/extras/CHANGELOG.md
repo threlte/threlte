@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 5.0.0-next.5
+
+### Minor Changes
+
+- 4b67b473: Environment uses threlte cache
+
+### Patch Changes
+
+- 4b67b473: Audio bugfix
+
 ## 5.0.0-next.4
 
 ### Major Changes

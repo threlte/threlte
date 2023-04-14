@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.1.0-next.1
+
+### Minor Changes
+
+- 4b67b473: The hook useStudio exposes Theatre.js' studio instance.
+
 ## 0.0.3-next.0
 
 ### Patch Changes
