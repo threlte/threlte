@@ -103,3 +103,37 @@ $: $actions.Greet?.play()
 ```
 
 Check out the [hooks documentation](/docs/reference/extras/use-gltf-animations) for more information.
+
+## `@threlte/rapier`
+
+### Transform props
+
+In an effort to clearly separate concerns, the components `<Collider>`, `<AutoColliders>` and `<RigidBody>` **no longer
+offer transform props** (`position`, `rotation`, `scale` and `lookAt`). Instead, you should wrap these components
+in for instance `<T.Group>` components and apply transforms on these.
+
+```svelte title="Before.svelte" {2,3}-
+<Collider
+  position={[0, 1, 0]}
+  rotation={[0, 45 * DEG2RAD, 0]}
+>
+  <T.Mesh>
+    <T.BoxBufferGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</Collider>
+```
+
+```svelte title="After.svelte" {1-4,11}+
+<T.Group
+  position={[0, 1, 0]}
+  rotation={[0, 45 * DEG2RAD, 0]}
+>
+  <Collider>
+    <T.Mesh>
+      <T.BoxBufferGeometry />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  </Collider>
+</T.Group>
+```

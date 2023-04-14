@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { ISheet, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
-  import { useParent, useThrelte } from '@threlte/core'
+  import { createRawEventDispatcher, useParent, useThrelte } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { getContext, onDestroy } from 'svelte'
+  import { getContext, onDestroy, onMount } from 'svelte'
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils'
   import { globalObjects, globalStudio } from '../consts'
-  import { createRawEventDispatcher } from './createRawEventDispatcher'
   import { isObject3D, isOrthographicOrPerspectiveCamera, isPrimitive } from './typeGuards'
   import type { AutoProp, BooleanProp, Props, PropTransform, StringProp } from './types'
   import { getAutoPropValue, parseAutoPropKeyByPath, resolve } from './utils'
@@ -19,6 +18,10 @@
   export let props: $$Props['props'] = undefined
   export let controls: $$Props['controls'] = undefined
   export let snap: $$Props['snap'] = undefined
+  /**
+   * @default false
+   */
+  export let detach: $$Props['detach'] = false
 
   const parent = useParent()
   const { invalidate } = useThrelte()
@@ -135,26 +138,43 @@
     })
     .reduce((acc, curr) => ({ ...acc, ...curr }), {})
 
+  const dispatch = createRawEventDispatcher<{
+    change: typeof values
+    create: typeof values
+  }>()
+
   const sheet = getContext('theatre-sheet') as ISheet
 
   const projectId = sheet.address.projectId
   const sheetId = sheet.address.sheetId
   const instanceId = sheet.address.sheetInstanceId
 
-  const object =
+  export const object =
     globalObjects.get(`${projectId}-${sheetId}-${instanceId}-${name}`) ??
-    sheet.object(name, {
-      ...parsedProps,
-      ...props,
-      ...transformProps
-    })
+    sheet.object(
+      name,
+      {
+        ...parsedProps,
+        ...props,
+        ...transformProps
+      },
+      {
+        reconfigure: true
+      }
+    )
   globalObjects.set(`${projectId}-${sheetId}-${instanceId}-${name}`, object)
+
+  onDestroy(() => {
+    if (detach) {
+      sheet.detachObject(name)
+    }
+  })
 
   let values = object.value
 
-  const dispatchRaw = createRawEventDispatcher<{
-    change: typeof values
-  }>()
+  onMount(() => {
+    dispatch('create', object.value)
+  })
 
   let selected = false
   let isMouseDown = false
@@ -180,7 +200,7 @@
     values = newValues
 
     // dispatch events to parent component callbacks
-    dispatchRaw('change', newValues)
+    dispatch('change', newValues)
 
     // update auto props
     Object.entries(newValues).forEach((prop) => {
@@ -210,6 +230,7 @@
       ) {
         $parent.updateProjectionMatrix()
       }
+
       invalidate()
     })
   })
@@ -289,6 +310,7 @@
     rotate: (snap?.rotate ?? 45) * DEG2RAD,
     scale: snap?.scale ?? 0.1
   } as Record<Mode, number | null>
+  let space: 'local' | 'world' = 'local'
 
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 't') {
@@ -299,6 +321,13 @@
     }
     if (e.key === 's') {
       mode = 'scale'
+    }
+    if (e.key === 'g') {
+      if (space === 'local') {
+        space = 'world'
+      } else {
+        space = 'local'
+      }
     }
   }
 
@@ -324,6 +353,7 @@
     translationSnap={snapActive ? snapValues.translate : null}
     rotationSnap={snapActive ? snapValues.rotate : null}
     scaleSnap={snapActive ? snapValues.scale : null}
+    {space}
     on:change={onChange}
     on:mouseDown={onMouseDown}
     on:mouseUp={onMouseUp}

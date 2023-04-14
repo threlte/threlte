@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useParent, useThrelte } from '@threlte/core'
+  import { useCache, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Scene } from 'three'
   import {
@@ -43,33 +43,47 @@
   let previousEnvMap: Texture
   let previousFormat: string | undefined
 
-  const pickLoader = () => {
+  const pickLoader = (): new () => any => {
     const inferredFormat =
       format || (Array.isArray(files) ? files[0] : files).split('.').pop() == 'hdr' ? 'hdr' : 'ldr'
 
-    if (isCubeMap && inferredFormat == 'ldr') return new CubeTextureLoader()
-    if (!isCubeMap && inferredFormat == 'ldr') return new TextureLoader()
-    if (isCubeMap && inferredFormat == 'hdr') return new HDRCubeTextureLoader()
-    if (!isCubeMap && inferredFormat == 'hdr') return new RGBELoader()
-    return new TextureLoader()
+    if (isCubeMap && inferredFormat == 'ldr') return CubeTextureLoader
+    if (!isCubeMap && inferredFormat == 'ldr') return TextureLoader
+    if (isCubeMap && inferredFormat == 'hdr') return HDRCubeTextureLoader
+    if (!isCubeMap && inferredFormat == 'hdr') return RGBELoader
+    return TextureLoader
   }
 
-  const loadEnvironment = () => {
+  const { remember } = useCache()
+
+  const loadEnvironment = async () => {
     if (!renderer)
       throw new Error(
         'Threlte renderer undefined. Component <Environment/> must be a descendant of <Canvas/>.'
       )
-    const loader: any = pickLoader()
+    const LoaderType = pickLoader()
+    const loader: any = new LoaderType()
     loader.setDataType?.(FloatType)
 
-    loader.setPath(path).load(files, (texture: any) => {
-      texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
-      texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
-      previousEnvMap = texture
-      scene.environment = previousEnvMap
-      if (isBackground) scene.background = previousEnvMap
-      invalidate()
-    })
+    const filesKey = Array.isArray(files) ? files.join(',') : files
+    const cacheKey = [LoaderType, path, filesKey]
+
+    const texture = (await remember(async () => {
+      return new Promise((resolve, reject) => {
+        loader.setPath(path).load(files, (texture: any) => {
+          resolve(texture)
+        })
+      })
+    }, cacheKey)) as any
+
+    texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
+    texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
+    previousEnvMap = texture
+    scene.environment = previousEnvMap
+    if (isBackground) scene.background = previousEnvMap
+
+    invalidate()
+
     previousFormat = format || undefined
     previousEnvPath = envPath
   }

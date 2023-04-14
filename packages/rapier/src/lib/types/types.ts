@@ -1,15 +1,15 @@
-import type { createEventDispatcher } from 'svelte'
 import type {
+  Collider,
+  ColliderHandle,
   RigidBody,
   RigidBodyHandle,
   TempContactManifold,
-  ColliderHandle,
-  Collider,
   Vector
 } from '@dimforge/rapier3d-compat'
-import type { createRapierContext } from '../lib/createRapierContext'
+import type { createRawEventDispatcher } from '@threlte/core'
 import type { Writable } from 'svelte/store'
 import type { useHasEventListeners } from '../hooks/useHasEventListener'
+import type { createRapierContext } from '../lib/createRapierContext'
 
 export type ColliderShapes =
   | 'ball'
@@ -73,8 +73,10 @@ export type RigidBodyEventMap = ColliderEventMap & {
   wake: void
 }
 
-export type RigidBodyEventDispatcher = ReturnType<typeof createEventDispatcher<RigidBodyEventMap>>
-export type ColliderEventDispatcher = ReturnType<typeof createEventDispatcher<ColliderEventMap>>
+export type RigidBodyEventDispatcher = ReturnType<
+  typeof createRawEventDispatcher<RigidBodyEventMap>
+>
+export type ColliderEventDispatcher = ReturnType<typeof createRawEventDispatcher<ColliderEventMap>>
 
 export type RigidBodyEventDispatchers = Map<RigidBodyHandle, RigidBodyEventDispatcher>
 export type ColliderEventDispatchers = Map<ColliderHandle, ColliderEventDispatcher>

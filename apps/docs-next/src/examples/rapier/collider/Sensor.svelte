@@ -27,29 +27,31 @@
 </script>
 
 <!-- SENSOR -->
-<Collider
-  on:sensorenter={() => (present = true)}
-  on:sensorexit={() => (present = false)}
-  sensor
-  shape={'cuboid'}
-  position={[0, 1, 0]}
-  args={[1, 1, 1]}
-/>
+<T.Group position={[0, 1, 0]}>
+  <Collider
+    on:sensorenter={() => (present = true)}
+    on:sensorexit={() => (present = false)}
+    sensor
+    shape={'cuboid'}
+    args={[1, 1, 1]}
+  />
+</T.Group>
 
-<RigidBody
-  bind:rigidBody
-  type={'kinematicPosition'}
-  position={[0, 1, 0]}
-  lockRotations
->
-  <AutoColliders shape={'ball'}>
-    <T.Mesh
-      castShadow
-      geometry={new SphereGeometry(1)}
-      {material}
-    />
-  </AutoColliders>
-</RigidBody>
+<T.Group position={[0, 1, 0]}>
+  <RigidBody
+    bind:rigidBody
+    type={'kinematicPosition'}
+    lockRotations
+  >
+    <AutoColliders shape={'ball'}>
+      <T.Mesh
+        castShadow
+        geometry={new SphereGeometry(1)}
+        {material}
+      />
+    </AutoColliders>
+  </RigidBody>
+</T.Group>
 
 <TestBed title={'Sensor Collider'}>
   <div slot="text">

@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject } from '@threlte/core'
-  import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte'
+  import { createRawEventDispatcher, SceneGraphObject } from '@threlte/core'
+  import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
-  import { applyTransforms } from '../../lib/applyTransforms'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
@@ -16,9 +15,6 @@
   type $$Props = Required<RigidBodyProps>
   type OptProps = RigidBodyProps
 
-  export let position: OptProps['position'] = undefined
-  export let rotation: OptProps['rotation'] = undefined
-  export let scale: OptProps['scale'] = undefined
   export let linearVelocity: OptProps['linearVelocity'] = undefined
   export let angularVelocity: OptProps['angularVelocity'] = undefined
 
@@ -33,6 +29,7 @@
   export let enabledRotations: $$Props['enabledRotations'] = [true, true, true]
   export let enabledTranslations: $$Props['enabledTranslations'] = [true, true, true]
   export let dominance: $$Props['dominance'] = 0
+  export let enabled: $$Props['enabled'] = true
 
   /**
    * Every RigidBody receives and forwards collision-related events
@@ -40,7 +37,7 @@
   type $$Events = {
     [key in keyof RigidBodyEventMap]: CustomEvent<RigidBodyEventMap[key]>
   }
-  const dispatcher = createEventDispatcher<RigidBodyEventMap>()
+  const dispatcher = createRawEventDispatcher<RigidBodyEventMap>()
 
   const object = new Object3D()
 
@@ -53,20 +50,6 @@
    * isSleeping used for events "sleep" and "wake" in `useFrameHandler`
    */
   object.userData.isSleeping = false
-
-  /**
-   * Immediately apply transforms to get the objects
-   * world position to apply to the RigidBody.
-   * This is a one-off operation as RigidBodies should
-   * not be moved around after initialization.
-   */
-  applyTransforms(object, position, rotation, scale)
-
-  /**
-   * Update the world matrix of the object before applying
-   * the world position to the RigidBody
-   */
-  object.updateWorldMatrix(true, false)
 
   /**
    * RigidBody Description
@@ -88,7 +71,6 @@
    */
   const initPosition = async () => {
     await tick()
-    applyTransforms(object, position, rotation, scale)
     object.updateMatrix()
     object.updateWorldMatrix(true, false)
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
@@ -108,28 +90,27 @@
   /**
    * Reactive RigidBody properties
    */
-  $: {
-    rigidBodyTemp.setBodyType(parseRigidBodyType(type))
-    if (linearVelocity)
-      rigidBodyTemp.setLinvel(
-        { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
-        true
-      )
-    if (angularVelocity)
-      rigidBodyTemp.setAngvel(
-        { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
-        true
-      )
-    rigidBodyTemp.setGravityScale(gravityScale, true)
-    rigidBodyTemp.enableCcd(ccd)
-    rigidBodyTemp.setDominanceGroup(dominance)
-    rigidBodyTemp.lockRotations(lockRotations, true)
-    rigidBodyTemp.lockTranslations(lockTranslations, true)
-    rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
-    rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
-    rigidBodyTemp.setAngularDamping(angularDamping)
-    rigidBodyTemp.setLinearDamping(linearDamping)
-  }
+  $: rigidBodyTemp.setBodyType(parseRigidBodyType(type), true)
+  $: if (linearVelocity)
+    rigidBodyTemp.setLinvel(
+      { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
+      true
+    )
+  $: if (angularVelocity)
+    rigidBodyTemp.setAngvel(
+      { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
+      true
+    )
+  $: rigidBodyTemp.setGravityScale(gravityScale, true)
+  $: rigidBodyTemp.enableCcd(ccd)
+  $: rigidBodyTemp.setDominanceGroup(dominance)
+  $: rigidBodyTemp.lockRotations(lockRotations, true)
+  $: rigidBodyTemp.lockTranslations(lockTranslations, true)
+  $: rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
+  $: rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
+  $: rigidBodyTemp.setAngularDamping(angularDamping)
+  $: rigidBodyTemp.setLinearDamping(linearDamping)
+  $: rigidBodyTemp.setEnabled(enabled)
 
   /**
    * Add userData to the rigidBody

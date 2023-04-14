@@ -34,6 +34,12 @@
   export let rawPhysicsPipeline: $$Props['rawPhysicsPipeline'] = undefined
   export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
   export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
+	/**
+   * The property order is passed to the useFrame handler.
+   * Use this to control when the rapier physics engine is updating the scene.
+   * @default undefined
+   */
+  export let order: $$Props['order'] = undefined
 
   let error = false
 
@@ -66,6 +72,7 @@
     {rawPhysicsPipeline}
     {rawSerializationPipeline}
     {rawDebugRenderPipeline}
+		{order}
   >
     <slot />
   </InnerWorld>

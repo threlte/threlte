@@ -5,7 +5,8 @@ import type {
   RigidBodyHandle
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import { writable } from 'svelte/store'
+import { currentWritable } from '@threlte/core'
+import { readable, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type {
   ColliderEventDispatcher,
@@ -70,6 +71,13 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     rigidBodyEventDispatchers.delete(rigidBody.handle)
   }
 
+  // Dummy functions, will be replaced by useFrameHandler fn
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const pause = () => {}
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const resume = () => {}
+
   return {
     rapier: RAPIER,
     world,
@@ -82,5 +90,8 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     addRigidBodyToContext,
     removeRigidBodyFromContext,
     debug: writable(false),
+    pause,
+    resume,
+    paused: readable(false)
   }
 }

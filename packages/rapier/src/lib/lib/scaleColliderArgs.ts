@@ -34,7 +34,7 @@ export const scaleColliderArgs = <Shape extends ColliderShapes>(
   }
 
   const scaleArray = [scale.x, scale.y, scale.z]
-  return newArgs.map((arg, index) => scaleArray[index] * (arg as number)) as Parameters<
+  return newArgs.map((arg, index) => (scaleArray[index] ?? 1) * (arg as number)) as Parameters<
     typeof ColliderDesc[Shape]
   >
 }

@@ -60,6 +60,7 @@ export { createObjectStore } from './lib/createObjectStore'
 export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
 export { forwardEventHandlers } from './lib/forwardEventHandlers'
+export { useCache } from './lib/cache'
 
 export type {
   HierarchicalObjectProperties,

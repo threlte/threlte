@@ -19,9 +19,11 @@ export { default as AutoColliders } from './components/Colliders/AutoColliders.s
 export { default as CollisionGroups } from './components/CollisionGroups/CollisionGroups.svelte'
 export { default as Attractor } from './components/Attractor/Attractor.svelte'
 
+// lib
+export { computeBitMask } from './lib/computeBitMask'
+
 // recipes
 export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
-
 export type { AutoCollidersProperties, AttractorProperties } from './types/components'
 
 export type {

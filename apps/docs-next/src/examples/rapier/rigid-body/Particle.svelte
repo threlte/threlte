@@ -46,33 +46,36 @@
   $: rotationCasted = rotation?.toArray() as [x: number, y: number, z: number]
 </script>
 
-<RigidBody
-  type={'dynamic'}
+<T.Group
   position={position?.toArray()}
   rotation={rotationCasted}
-  on:contact={fireSound}
 >
-  {#each audios as audio}
-    <PositionalAudio
-      autoplay={false}
-      detune={600 - Math.random() * 1200}
-      bind:stop={audio.stop}
-      bind:play={audio.play}
-      src={audio.source}
-      volume={audio.volume}
-    />
-  {/each}
+  <RigidBody
+    type={'dynamic'}
+    on:contact={fireSound}
+  >
+    {#each audios as audio}
+      <PositionalAudio
+        autoplay={false}
+        detune={600 - Math.random() * 1200}
+        bind:stop={audio.stop}
+        bind:play={audio.play}
+        src={audio.source}
+        volume={audio.volume}
+      />
+    {/each}
 
-  <Collider
-    contactForceEventThreshold={30}
-    restitution={0.4}
-    shape={'cuboid'}
-    args={[0.5, 0.5, 0.5]}
-  />
-  <T.Mesh
-    castShadow
-    receiveShadow
-    {geometry}
-    {material}
-  />
-</RigidBody>
+    <Collider
+      contactForceEventThreshold={30}
+      restitution={0.4}
+      shape={'cuboid'}
+      args={[0.5, 0.5, 0.5]}
+    />
+    <T.Mesh
+      castShadow
+      receiveShadow
+      {geometry}
+      {material}
+    />
+  </RigidBody>
+</T.Group>

@@ -21,33 +21,36 @@
 </script>
 
 <!-- ATTACHED COLLIDER -->
-<RigidBody position={[0, 2, 0]}>
-  <T.Mesh
-    castShadow
-    geometry={new BoxGeometry(2, 2, 2)}
-    {material}
-  />
-  <Collider
-    shape={'cuboid'}
-    args={[1, 1, 1]}
-  />
-</RigidBody>
-
-<!-- TEST SPHERE -->
-<RigidBody
-  bind:rigidBody
-  type={'kinematicPosition'}
-  position={[0, 1, 0]}
-  lockRotations
->
-  <AutoColliders shape={'ball'}>
+<T.Group position={[0, 2, 0]}>
+  <RigidBody>
     <T.Mesh
       castShadow
-      geometry={new SphereGeometry(1)}
-      material={new MeshStandardMaterial()}
+      geometry={new BoxGeometry(2, 2, 2)}
+      {material}
     />
-  </AutoColliders>
-</RigidBody>
+    <Collider
+      shape={'cuboid'}
+      args={[1, 1, 1]}
+    />
+  </RigidBody>
+</T.Group>
+
+<!-- TEST SPHERE -->
+<T.Group position={[0, 1, 0]}>
+  <RigidBody
+    bind:rigidBody
+    type={'kinematicPosition'}
+    lockRotations
+  >
+    <AutoColliders shape={'ball'}>
+      <T.Mesh
+        castShadow
+        geometry={new SphereGeometry(1)}
+        material={new MeshStandardMaterial()}
+      />
+    </AutoColliders>
+  </RigidBody>
+</T.Group>
 
 <TestBed title={'Attached Collider'}>
   <div slot="text">

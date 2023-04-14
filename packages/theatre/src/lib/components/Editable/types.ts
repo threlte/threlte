@@ -15,6 +15,8 @@ export type Props<T extends UnknownShorthandCompoundProps> = {
     scale?: number
   }
   read?: () => void
+  object?: ISheetObject<T>
+  detach?: boolean
 } & Record<string, AutoProp | any>
 
 export type Slots<T extends UnknownShorthandCompoundProps> = {
@@ -28,6 +30,7 @@ export type Slots<T extends UnknownShorthandCompoundProps> = {
 
 export type Events<T extends UnknownShorthandCompoundProps> = {
   change: ISheetObject<T>['value']
+  create: ISheetObject<T>['value']
 }
 
 export type PropTransform = 'none' | 'euler'

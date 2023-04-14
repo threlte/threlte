@@ -110,24 +110,27 @@
   </T.PerspectiveCamera>
 </T.Group>
 
-<RigidBody
-  bind:rigidBody
-  {position}
-  enabledRotations={[false, false, false]}
->
-  <CollisionGroups groups={[0]}>
-    <Collider
-      shape={'capsule'}
-      args={[height / 2 - radius, radius]}
-    />
-  </CollisionGroups>
+<T.Group {position}>
+  <RigidBody
+    bind:rigidBody
+    {position}
+    enabledRotations={[false, false, false]}
+  >
+    <CollisionGroups groups={[0]}>
+      <Collider
+        shape={'capsule'}
+        args={[height / 2 - radius, radius]}
+      />
+    </CollisionGroups>
 
-  <CollisionGroups groups={[15]}>
-    <Collider
-      sensor
-      shape={'ball'}
-      args={[radius * 1.2]}
-      position={[0, -height / 2 + radius, 0]}
-    />
-  </CollisionGroups>
-</RigidBody>
+    <CollisionGroups groups={[15]}>
+      <T.Group position={[0, -height / 2 + radius, 0]}>
+        <Collider
+          sensor
+          shape={'ball'}
+          args={[radius * 1.2]}
+        />
+      </T.Group>
+    </CollisionGroups>
+  </RigidBody>
+</T.Group>
