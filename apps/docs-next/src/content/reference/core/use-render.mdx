@@ -45,9 +45,13 @@ type ThrelteUseRenderOptions = {
 
 This example demonstrates how to use `useRender` to implement post processing effects using the library [`postprocessing`](https://github.com/pmndrs/postprocessing).
 
+<Tip type="warning">
+  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: [ 'postprocessing' ] }` to your `vite.config.js`.
+</Tip>
+
 ```svelte title="Renderer.svelte"
 <script>
-  import { useRender } from '@threlte/core'
+  import { useThrelte, useRender } from '@threlte/core'
   import {
     EffectComposer,
     EffectPass,
