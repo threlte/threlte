@@ -509,6 +509,8 @@ ${
 	export const preload${baseName} = async () => {
 		await load()
 	}
+
+	export const preload = preload${baseName}
 </script>
 `
     : ''

@@ -23,22 +23,24 @@ Usage
 
 Options
   --output, -o        Output file name/path
-  --types, -t         Add Typescript definitions
-  --keepnames, -k     Keep original names
-  --keepgroups, -K    Keep (empty) groups, disable pruning
-  --meta, -m          Include metadata (as userData)
-  --shadows, s        Let meshes cast and receive shadows
-  --printwidth, w     Prettier printWidth (default: 120)
-  --precision, -p     Number of fractional digits (default: 2)
-  --draco, -d         Draco binary path
-  --root, -r          Sets directory from which .gltf file is served
-  --transform, -T     Transform the asset for the web (draco, prune, resize)
-    --resolution, -R  Transform resolution for texture resizing (default: 1024)
-    --simplify, -S    Transform simplification (default: false) (experimental!)
-      --weld          Weld tolerance (default: 0.0001)
-      --ratio         Simplifier ratio (default: 0.075)
-      --error         Simplifier error threshold (default: 0.001)
-  --debug, -D         Debug output
+	--types, -t         Add Typescript definitions
+	--keepnames, -k     Keep original names
+	--keepgroups, -K    Keep (empty) groups, disable pruning
+	--meta, -m          Include metadata (as userData)
+	--shadows, -s       Let meshes cast and receive shadows
+	--printwidth, -w    Prettier printWidth (default: 120)
+	--precision, -p     Number of fractional digits (default: 2)
+	--draco, -d         Draco binary path
+	--preload -P        Add preload method to module script
+	--isolated, -i      Output as isolated module (No $$restProps usage)
+	--root, -r          Sets directory from which .gltf file is served
+	--transform, -T     Transform the asset for the web (draco, prune, resize)
+		--resolution, -R  Transform resolution for texture resizing (default: 1024)
+		--simplify, -S    Transform simplification (default: false) (experimental!)
+			--weld          Weld tolerance (default: 0.0001)
+			--ratio         Simplifier ratio (default: 0.75)
+			--error         Simplifier error threshold (default: 0.001)
+	--debug, -D         Debug output
 ```
 
 ### A typical use-case

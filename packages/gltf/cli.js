@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 'use strict'
 import meow from 'meow'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import gltf from './src/index.js'
 import { readPackageUpSync } from 'read-pkg-up'
+import { fileURLToPath } from 'url'
+import gltf from './src/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -64,13 +63,24 @@ const cli = meow(
 
 const { packageJson } = readPackageUpSync({ cwd: __dirname, normalize: false })
 
-function toPascalCase(string) {
-  return `${string}`
-    .toLowerCase()
-    .replace(new RegExp(/[-_]+/, 'g'), ' ')
-    .replace(new RegExp(/[^\w\s]/, 'g'), '')
-    .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${$2.toUpperCase() + $3}`)
-    .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+function toPascalCase(str) {
+  return (
+    str
+      .replace(/(\w)(\w*)/g, function (g0, g1, g2) {
+        // capitalize first letter of g1, leave the reset as-is and return the result
+        return g1.toUpperCase() + g2
+      })
+      // replace every non-word character with an empty string and capitalize the first following letter
+      .replace(/\W+(.)/g, function (g0, g1) {
+        return g1.toUpperCase()
+      })
+      // replace every non-word character with an empty string
+      .replace(/\s+/g, '')
+      // make first letter uppercase
+      .replace(/^\w/, function (g0) {
+        return g0.toUpperCase()
+      })
+  )
 }
 
 if (cli.input.length === 0) {
@@ -84,13 +94,13 @@ Command: npx @threlte/gltf@${packageJson.version} ${process.argv.slice(2).join('
   const file = cli.input[0]
   let nameExt = file.match(/[-_\w]+[.][\w]+$/i)[0]
   let name = nameExt.split('.').slice(0, -1).join('.')
-  const baseName = toPascalCase(name.charAt(0).toUpperCase() + name.slice(1))
+  const baseName = toPascalCase(name)
   const output = baseName + '.svelte'
   const showLog = (log) => {
     console.info('log:', log)
   }
   try {
-    const response = await gltf(file, output, baseName, {
+    await gltf(file, output, baseName, {
       ...config,
       showLog,
       timeout: 0,
