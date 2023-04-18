@@ -8,8 +8,18 @@ componentSignature:
     props:
       [
         {name: 'name', type: 'string', default: 'default', required: false},
-        {name: 'config', type: 'IProjectConfig', required: false},
-      ]
+        {name: 'instance', type: 'string | undefined', default: 'undefined', required: false},
+        {name: 'autoPlay', type: 'boolean | number', default: 'false', required: false, description: 'If a number is passed, it will be used as the delay to start autoplaying'},
+        {name: 'autoReset', type: 'boolean | onMount | onDestroy', default: 'false', required: false, description: 'Resets the playhead to 0 when the sheet is unmounted or mounted or both' },
+        {name: 'position', type: 'number | undefined', default: 'undefined', required: false}
+      ],
+    bindings:
+      [
+        {name: sheet, type: 'Sheet'},
+        {name: sequence, type: 'Sequence'},
+        {name: play, type: '(opts?) => Promise<boolean> (see Theatre.js Sequence API docs for options)'},
+        {name: pause, type: '() => void'}
+    ]
   }
 ---
 
