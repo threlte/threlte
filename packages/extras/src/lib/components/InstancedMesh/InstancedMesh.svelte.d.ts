@@ -2,10 +2,7 @@ import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponentTyped } from 'svelte'
 import type { InstancedMesh as ThreeInstancedMesh } from 'three'
 
-export type InstancedMeshProps = Omit<
-  Props<ThreeInstancedMesh>,
-  'instanceMatrix' | 'instanceColor'
-> & {
+export type InstancedMeshProps = Props<ThreeInstancedMesh> & {
   id?: string
   limit?: number
   range?: number

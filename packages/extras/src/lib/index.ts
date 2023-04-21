@@ -18,6 +18,7 @@ export { default as TransformControls } from './components/controls/TransformCon
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
 export { default as InstancedMesh } from './components/InstancedMesh/InstancedMesh.svelte'
 export { default as Instance } from './components/InstancedMesh/Instance.svelte'
+export { default as Merged } from './components/InstancedMesh/Merged/Merged.svelte'
 
 // portals
 export { default as Portal } from './components/portals/Portal/Portal.svelte'

@@ -9,7 +9,8 @@ import {
   MeshBasicMaterial,
   type InstancedMesh,
   type Intersection,
-  Raycaster
+  Raycaster,
+  FrontSide
 } from 'three'
 
 const _instanceLocalMatrix = new Matrix4()
@@ -54,7 +55,7 @@ export class PositionMesh extends Group {
     _mesh.matrixWorld = _instanceWorldMatrix
     // raycast side according to instance material
     if (parent.material instanceof Material) _mesh.material.side = parent.material.side
-    else _mesh.material.side = parent.material[0].side
+    else _mesh.material.side = parent.material[0]?.side ?? FrontSide
     _mesh.raycast(raycaster, _instanceIntersects)
     // process the result of raycast
     for (let i = 0, l = _instanceIntersects.length; i < l; i++) {
