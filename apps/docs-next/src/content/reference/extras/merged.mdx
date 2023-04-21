@@ -1,0 +1,44 @@
+---
+{
+  order: -0.3,
+  category: '@threlte/extras',
+  name: '<Merged>',
+  type: 'component',
+  'componentSignature':
+    {
+      extends:
+        {
+          type: 'InstancedMesh',
+          url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+        },
+      'props':
+        [
+          {
+            name: 'limit',
+            type: 'number',
+            default: '1000',
+            required: false,
+            description: 'Limits the amount of possible <Instance> components.'
+          },
+          {
+            name: 'range',
+            type: 'number',
+            default: '1000',
+            required: false,
+            description: 'Limits the amount of drawn <Instance> components.'
+          },
+          {
+            name: 'update',
+            type: 'boolean',
+            default: 'true',
+            required: false,
+            description: 'Whether the THREE.InstancedMesh should be updated.'
+          }
+        ]
+    }
+}
+---
+
+The component `<Merged>` …
+
+<Example path="extras/instanced-mesh/merged" />

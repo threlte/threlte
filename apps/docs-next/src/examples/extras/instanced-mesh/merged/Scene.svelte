@@ -70,8 +70,12 @@
 <T.AmbientLight intensity={0.1} />
 
 <T.PerspectiveCamera
-  position={[10, 10, 10]}
+  position={[3, 0.5, 3]}
   makeDefault
+  fov={20}
 >
-  <OrbitControls />
+  <OrbitControls
+    autoRotate
+    autoRotateSpeed={0.1}
+  />
 </T.PerspectiveCamera>
