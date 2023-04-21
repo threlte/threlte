@@ -40,9 +40,10 @@
         rotation.y={(item.rotation.y * Math.PI) / 180}
         rotation.x={(item.rotation.x * Math.PI) / 180}
         rotation.z={(item.rotation.z * Math.PI) / 180}
-        {Blossom}
-        {Stem}
-      />
+      >
+        <Blossom />
+        <Stem />
+      </Flower>
     {/each}
   </Merged>
 {/if}
