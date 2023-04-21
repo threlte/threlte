@@ -1,0 +1,19 @@
+---
+{
+  order: 4,
+  category: '@threlte/extras',
+  name: '<Instance>',
+  type: 'component',
+  showInSidebar: false,
+  'componentSignature':
+    {
+      extends:
+        { type: 'PositionalMesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+      'props':
+        [
+          { name: 'id', type: 'string', default: "'default'", required: false },
+          { name: 'color', type: 'THREE.ColorRepresentation', required: false }
+        ]
+    }
+}
+---

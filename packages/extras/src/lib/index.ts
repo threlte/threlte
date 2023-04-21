@@ -16,6 +16,8 @@ export { default as Environment } from './components/Environment/Environment.sve
 export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
+export { default as InstancedMesh } from './components/InstancedMesh/InstancedMesh.svelte'
+export { default as Instance } from './components/InstancedMesh/Instance.svelte'
 
 // portals
 export { default as Portal } from './components/portals/Portal/Portal.svelte'
