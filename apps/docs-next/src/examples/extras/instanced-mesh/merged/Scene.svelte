@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Merged, OrbitControls, useGltf } from '@threlte/extras'
-  import type { Mesh } from 'three'
+  import { DoubleSide, Mesh } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import Flower from './Flower.svelte'
 
@@ -65,7 +65,10 @@
   rotation.x={-90 * DEG2RAD}
 >
   <T.PlaneGeometry args={[5, 5]} />
-  <T.MeshStandardMaterial color="#288278" />
+  <T.MeshStandardMaterial
+    color="#288278"
+    side={DoubleSide}
+  />
 </T.Mesh>
 
 <T.AmbientLight intensity={0.1} />
@@ -77,6 +80,9 @@
 >
   <OrbitControls
     autoRotate
+    enableZoom={false}
+    enableDamping
     autoRotateSpeed={0.1}
+    enablePan={false}
   />
 </T.PerspectiveCamera>
