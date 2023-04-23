@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Merged, OrbitControls, useGltf } from '@threlte/extras'
+  import { InstancedMeshes, OrbitControls, useGltf } from '@threlte/extras'
   import { DoubleSide, Mesh } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import Flower from './Flower.svelte'
@@ -27,7 +27,7 @@
 </script>
 
 {#if $gltf}
-  <Merged
+  <InstancedMeshes
     castShadow
     meshes={$gltf.nodes}
     let:components={{ Blossom, Stem }}
@@ -45,7 +45,7 @@
         <Stem />
       </Flower>
     {/each}
-  </Merged>
+  </InstancedMeshes>
 {/if}
 
 <T.DirectionalLight

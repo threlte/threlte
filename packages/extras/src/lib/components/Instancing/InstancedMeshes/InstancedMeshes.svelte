@@ -1,15 +1,20 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { forwardEventHandlers } from '@threlte/core'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
-  import InnerMerged from './InnerMerged.svelte'
-  import type { MergedEvents, MergedProps, MergedSlots, Meshes } from './Merged.svelte'
+  import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
+  import type {
+    InstancedMeshesEvents,
+    InstancedMeshesProps,
+    InstancedMeshesSlots,
+    Meshes
+  } from './InstancedMeshes.svelte'
 
   type T = $$Generic<Meshes>
 
-  type $$Props = MergedProps<T>
-  type $$Events = MergedEvents
-  type $$Slots = MergedSlots<T>
+  type $$Props = InstancedMeshesProps<T>
+  type $$Events = InstancedMeshesEvents
+  type $$Slots = InstancedMeshesSlots<T>
 
   export let meshes: T
 
@@ -53,6 +58,10 @@
   const dispatchingComponent = forwardEventHandlers()
 </script>
 
-<InnerMerged meshes={filteredMeshesArray} bind:this={$dispatchingComponent} {...$$restProps}>
+<InnerInstancedMeshes
+  meshes={filteredMeshesArray}
+  bind:this={$dispatchingComponent}
+  {...$$restProps}
+>
   <slot {components} />
-</InnerMerged>
+</InnerInstancedMeshes>

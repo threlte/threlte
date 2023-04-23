@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { forwardEventHandlers } from '@threlte/core'
   import type { Mesh } from 'three'
   import InstancedMesh from '../InstancedMesh.svelte'
-  import { forwardEventHandlers } from '@threlte/core'
 
   export let meshes: Mesh[]
 
