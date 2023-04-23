@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.6
+
+### Minor Changes
+
+- fef242de: Added the components InstancedMesh, Instance and InstancedMeshes
+
 ## 5.0.0-next.5
 
 ### Minor Changes

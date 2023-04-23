@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- eb0dc69f: Removed the component TransformableObject, removed stale types from rapier package
+
 ## 1.0.0-next.1
 
 ### Major Changes
