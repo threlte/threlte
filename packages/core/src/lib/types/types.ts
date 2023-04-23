@@ -165,14 +165,6 @@ export type ThrelteRenderHandler = {
 
 export type ThrelteParentContext = Writable<Object3D>
 
-export type Position =
-  | Vector3
-  | {
-      x?: number
-      y?: number
-      z?: number
-    }
-
 export type Scale =
   | Vector3
   | number
@@ -181,17 +173,6 @@ export type Scale =
       y?: number
       z?: number
     }
-
-export type Rotation =
-  | Euler
-  | {
-      x?: number
-      y?: number
-      z?: number
-      order?: Euler['order']
-    }
-
-export type LookAt = Position | Object3D
 
 export type Size = {
   width: number

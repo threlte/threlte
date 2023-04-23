@@ -35,10 +35,7 @@ export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // types
 export type {
-  Position,
   Scale,
-  Rotation,
-  LookAt,
   ThrelteUseFrameOptions,
   ThrelteContext,
   ThrelteInstance,
