@@ -165,15 +165,6 @@ export type ThrelteRenderHandler = {
 
 export type ThrelteParentContext = Writable<Object3D>
 
-export type Scale =
-  | Vector3
-  | number
-  | {
-      x?: number
-      y?: number
-      z?: number
-    }
-
 export type Size = {
   width: number
   height: number
