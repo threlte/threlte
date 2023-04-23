@@ -16,7 +16,7 @@
   /**
    * spawnRate is the number of stars to spawn per frame
    */
-  const spawnRate = 5
+  const spawnRate = 2
   const lifetimeInFrames = 40
 
   let frame = 0
@@ -39,11 +39,11 @@
 </script>
 
 <InstancedMesh>
-  <T.BoxGeometry args={[0.02, 0.02, 30]} />
+  <T.BoxGeometry args={[0.04, 0.04, 30]} />
   <T.MeshBasicMaterial
     color="white"
     transparent
-    opacity={0.5}
+    opacity={0.2}
   />
 
   {#each stars as star (star.id)}

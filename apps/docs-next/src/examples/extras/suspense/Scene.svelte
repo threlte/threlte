@@ -27,12 +27,7 @@
   intensity={1}
 />
 
-<Suspense
-  final
-  on:load={() => {
-    posZ.set(0)
-  }}
->
+<Suspense final>
   <Text
     position.z={-8}
     slot="fallback"
