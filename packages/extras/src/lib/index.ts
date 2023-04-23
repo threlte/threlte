@@ -20,6 +20,10 @@ export { default as InstancedMesh } from './components/Instancing/InstancedMesh.
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 
+// suspense
+export { default as Suspense } from './suspense/Suspense.svelte'
+export { useSuspense } from './suspense/useSuspense'
+
 // portals
 export { default as Portal } from './components/portals/Portal/Portal.svelte'
 export { default as PortalTarget } from './components/portals/PortalTarget/PortalTarget.svelte'
