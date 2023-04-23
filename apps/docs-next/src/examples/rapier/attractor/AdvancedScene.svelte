@@ -10,7 +10,7 @@
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { Attractor, Collider, RigidBody } from '@threlte/rapier'
-  import type { GravityType } from '@threlte/rapier/src/lib/types/components'
+  import type { GravityType } from '@threlte/rapier'
   import { MeshBasicMaterial, SphereGeometry } from 'three'
 
   export let type: GravityType = 'static'

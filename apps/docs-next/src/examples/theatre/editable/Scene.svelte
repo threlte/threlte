@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as theatreCore from '@theatre/core'
-  import { T, TransformableObject } from '@threlte/core'
-  import { OrbitControls, Environment, useTexture } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { Environment, OrbitControls, useTexture } from '@threlte/extras'
   import { Editable } from '@threlte/theatre'
   import { DoubleSide, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -42,15 +42,12 @@
     >
       <T.OrthographicCamera
         makeDefault
-        let:ref
         zoom={innerWidth * values.zoom}
-      >
-        <TransformableObject
-          position={{ y: 3, z: 3 }}
-          lookAt={{ y: 0.3 }}
-          object={ref}
-        />
-      </T.OrthographicCamera>
+        position={[0, 3, 3]}
+        on:create={({ ref }) => {
+          ref.lookAt(0, 0.3, 0)
+        }}
+      />
     </Editable>
   {:else if values.camera === 2}
     <T.PerspectiveCamera

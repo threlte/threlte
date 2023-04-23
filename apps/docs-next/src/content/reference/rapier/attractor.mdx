@@ -6,9 +6,9 @@
   type: 'component',
   componentSignature:
     {
+      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
       props:
         [
-          { name: 'position', type: 'Position', required: false },
           { name: 'strength', type: 'number', default: '1', required: false },
           { name: 'range', type: 'number', default: '10', required: false },
           { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },

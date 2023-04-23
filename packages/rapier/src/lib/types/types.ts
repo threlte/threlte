@@ -115,3 +115,8 @@ export type CollisionGroupsBitMask = (
   | 14
   | 15
 )[]
+
+/**
+ * Used in the <Attractor> component
+ */
+export type GravityType = 'static' | 'linear' | 'newtonian'

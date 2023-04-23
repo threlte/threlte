@@ -24,7 +24,6 @@ export { computeBitMask } from './lib/computeBitMask'
 
 // recipes
 export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
-export type { AutoCollidersProperties, AttractorProperties } from './types/components'
 
 export type {
   CollisionGroupsBitMask,
@@ -37,5 +36,6 @@ export type {
   CollisionExitEvent,
   SensorEnterEvent,
   SensorExitEvent,
-  ContactEvent
+  ContactEvent,
+  GravityType
 } from './types/types'
