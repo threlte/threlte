@@ -6,7 +6,6 @@
   import { Color, Object3D } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import ObjectA from './ObjectA.svelte'
-  import Promise from './Promise.svelte'
 
   const { types } = theatreCore
 
@@ -249,14 +248,4 @@
   </T.AmbientLight>
 
   <ObjectA />
-
-  <Promise
-    new={() =>
-      sequence.attachAudio({
-        source: '/assets/theatre/main/audio/theatre.mp3'
-      })}
-    on:resolve={() => {
-      // play()
-    }}
-  />
 </Sheet>

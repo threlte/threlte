@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
   import * as theatreCore from '@theatre/core'
-  import { InstancedMesh, T, type Position, type Rotation } from '@threlte/core'
-  import { useTexture } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { InstancedMesh, useTexture } from '@threlte/extras'
   import { Attractor, Collider } from '@threlte/rapier'
   import { Editable } from '@threlte/theatre'
   import { MeshStandardMaterial, SphereGeometry } from 'three'
@@ -13,8 +13,8 @@
   // matrix of 3 x 3 x 3
   const gap = 1
   const matrix: {
-    position: Position
-    rotation: Rotation
+    position: [number, number, number]
+    rotation: [number, number, number]
   }[] = []
   const matrixLength = 6
   const matrixSize = matrixLength - 1 + (matrixLength - 1) * gap
@@ -22,16 +22,16 @@
     for (let y = 0; y < matrixLength; y++) {
       for (let z = 0; z < matrixLength; z++) {
         matrix.push({
-          position: {
-            x: x + x * gap - matrixSize / 2,
-            y: y + y * gap - matrixSize / 2,
-            z: z + z * gap - matrixSize / 2
-          },
-          rotation: {
-            x: Math.random() * Math.PI * 2,
-            y: Math.random() * Math.PI * 2,
-            z: Math.random() * Math.PI * 2
-          }
+          position: [
+            x + x * gap - matrixSize / 2,
+            y + y * gap - matrixSize / 2,
+            z + z * gap - matrixSize / 2
+          ],
+          rotation: [
+            Math.random() * Math.PI * 2,
+            Math.random() * Math.PI * 2,
+            Math.random() * Math.PI * 2
+          ]
         })
       }
     }
@@ -76,7 +76,7 @@
           ...value
         })}
       >
-        {#each matrix as matrixItem, index}
+        {#each matrix as matrixItem}
           <ObjectAInstance
             {coneCollider}
             instance={matrixItem}

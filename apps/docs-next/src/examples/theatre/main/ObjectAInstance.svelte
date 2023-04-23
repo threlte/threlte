@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Collider, RigidBody } from '@threlte/rapier'
-  import { Instance, T, type Position, type Rotation } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { Instance } from '@threlte/extras'
   import type { Collider as RapierCollider } from '@dimforge/rapier3d-compat'
 
   export let instance: {
-    position: Position
-    rotation: Rotation
+    position: [number, number, number]
+    rotation: [number, number, number]
   }
   export let coneCollider: RapierCollider | undefined
   let color = 'red'
@@ -25,7 +26,7 @@
       shape="ball"
       args={[0.5]}
       on:contact={(e) => {
-        if (e.detail.targetCollider === coneCollider) {
+        if (e.targetCollider === coneCollider) {
           color = 'white'
         }
       }}
