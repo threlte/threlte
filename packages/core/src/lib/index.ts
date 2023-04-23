@@ -4,7 +4,6 @@ export { default as Canvas } from './Canvas.svelte'
 // trait components
 export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
 export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
-export { default as ViewportAwareObject } from './internal/ViewportAwareObject.svelte'
 export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
@@ -56,6 +55,5 @@ export { useCache } from './lib/cache'
 export type {
   HierarchicalObjectProperties,
   DisposableObjectProperties,
-  ViewportAwareObjectProperties,
   SceneGraphObjectProperties
 } from './types/components'

@@ -1,5 +1,4 @@
 import type { Object3D } from 'three'
-import type { LookAt, Position, Rotation, Scale } from './types'
 
 export type HierarchicalObjectProperties = {
   object?: Object3D
@@ -19,13 +18,4 @@ export type DisposableObjectProperties = {
 
 export type SceneGraphObjectProperties = {
   object: Object3D
-}
-
-export type ViewportAwareObjectProperties = {
-  object: Object3D
-  viewportAware: boolean
-  /**
-   * Use as a binding.
-   */
-  inViewport: boolean
 }
