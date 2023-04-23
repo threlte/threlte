@@ -1,5 +1,13 @@
 # @threlte/core
 
+## 6.0.0-next.3
+
+### Major Changes
+
+- fef242de: Removed the stale types of Pass, removed MeshInstance, Object3DInstance, Instance and InstancedMesh from core.
+- eb0dc69f: Removed the component TransformableObject, removed stale types from rapier package
+- a39ccd68: Removed ViewportAwareObject (replaced in user-land by plugins)
+
 ## 6.0.0-next.2
 
 ### Patch Changes
