@@ -1,5 +1,4 @@
-import type { BufferGeometry, ColorRepresentation, Material, Mesh, Object3D } from 'three'
-import type { Pass } from 'three/examples/jsm/postprocessing/Pass'
+import type { Object3D } from 'three'
 import type { LookAt, Position, Rotation, Scale } from './types'
 
 export type HierarchicalObjectProperties = {
@@ -37,36 +36,4 @@ export type ViewportAwareObjectProperties = {
    * Use as a binding.
    */
   inViewport: boolean
-}
-
-export type Object3DInstanceProperties = SceneGraphObjectProperties &
-  TransformableObjectProperties &
-  ViewportAwareObjectProperties &
-  DisposableObjectProperties & {
-    castShadow?: boolean
-    receiveShadow?: boolean
-    frustumCulled?: boolean
-    renderOrder?: number
-    visible?: boolean
-    userData?: Record<string, any>
-  }
-
-export type MeshInstanceProperties = Omit<Object3DInstanceProperties, 'object'> & {
-  mesh: Mesh
-}
-
-export type PassProperties = {
-  pass: Pass
-}
-
-export type InstancedMeshProperties = Omit<MeshInstanceProperties, 'mesh' | 'frustumCulled'> & {
-  geometry: BufferGeometry
-  material: Material | Material[]
-  count?: number
-  id?: string
-}
-
-export type InstanceProperties = Omit<TransformableObjectProperties, 'object'> & {
-  color?: ColorRepresentation
-  id?: string
 }
