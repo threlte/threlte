@@ -1,24 +1,50 @@
 <script lang="ts">
   import * as theatreCore from '@theatre/core'
-  import { T, TransformableObject, useThrelte } from '@threlte/core'
+  import { T, injectPlugin, useFrame, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { Editable, Sheet } from '@threlte/theatre'
-  import { Color, type Object3D } from 'three'
+  import { Color, Object3D } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import ObjectA from './ObjectA.svelte'
   import Promise from './Promise.svelte'
 
   const { types } = theatreCore
 
-  let cameraTargetA: Object3D | undefined = undefined
-  let cameraTargetB: Object3D | undefined = undefined
-  let cameraTargetC: Object3D | undefined = undefined
+  let cameraTargetA: Object3D
+  let cameraTargetB: Object3D
+  let cameraTargetC: Object3D
 
   const { scene, renderer } = useThrelte()
   renderer!.physicallyCorrectLights = true
 
   const backgroundColor = new Color()
   scene.background = backgroundColor
+
+  injectPlugin('lookAt', ({ ref, props }) => {
+    // skip injection if ref is not an Object3D
+    if (!(ref instanceof Object3D)) return
+    let currentRef = ref
+    let currentLookAt: [number, number, number] | Object3D | undefined = props.lookAt
+
+    useFrame(() => {
+      if (currentLookAt) {
+        if (currentLookAt instanceof Object3D) {
+          currentRef.lookAt(currentLookAt.position)
+        } else {
+          currentRef.lookAt(...currentLookAt)
+        }
+      }
+    })
+    return {
+      onRefChange(ref) {
+        currentRef = ref
+      },
+      onRestPropsChange(props) {
+        currentLookAt = props.lookAt
+      },
+      pluginProps: ['lookAt']
+    }
+  })
 </script>
 
 <Sheet let:sequence>
@@ -85,8 +111,8 @@
         position.z={10}
         position.y={3}
         near={0.05}
-        let:ref={camera}
         makeDefault={values.camera.a && !values.camera.editor}
+        lookAt={cameraTargetA}
       >
         <Editable
           name="Camera / A"
@@ -98,12 +124,6 @@
           }}
           let:values={{ fade }}
         >
-          {#if cameraTargetA}
-            <TransformableObject
-              object={camera}
-              lookAt={cameraTargetA}
-            />
-          {/if}
           <T.Mesh
             rotation.z={-90 * DEG2RAD}
             position.z={-0.1}
@@ -135,7 +155,7 @@
           position.x={10}
           near={0.05}
           makeDefault={values.camera.b && !values.camera.editor}
-          let:ref={camera}
+          lookAt={cameraTargetB}
         >
           <Editable
             name="Camera / B"
@@ -147,12 +167,6 @@
             }}
             let:values={{ fade }}
           >
-            {#if cameraTargetA}
-              <TransformableObject
-                object={camera}
-                lookAt={cameraTargetB}
-              />
-            {/if}
             <T.Mesh
               rotation.z={-90 * DEG2RAD}
               position.z={-0.1}
@@ -167,7 +181,7 @@
           </Editable>
         </T.PerspectiveCamera>
       </T.Group>
-      <T.CameraHelper args={[ref.children[0].children[0]]} />
+      <T.CameraHelper args={[ref.children[0]?.children[0]]} />
     </T.Group>
 
     <!-- Camera C -->
@@ -176,8 +190,8 @@
       <T.PerspectiveCamera
         position.z={10}
         near={0.05}
-        let:ref={camera}
         makeDefault={values.camera.c && !values.camera.editor}
+        lookAt={cameraTargetC}
       >
         <Editable
           name="Camera / C"
@@ -189,12 +203,6 @@
           }}
           let:values={{ fade }}
         >
-          {#if cameraTargetA}
-            <TransformableObject
-              object={camera}
-              lookAt={cameraTargetC}
-            />
-          {/if}
           <T.Mesh
             rotation.z={-90 * DEG2RAD}
             position.z={-0.1}

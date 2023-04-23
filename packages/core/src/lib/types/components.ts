@@ -21,14 +21,6 @@ export type SceneGraphObjectProperties = {
   object: Object3D
 }
 
-export type TransformableObjectProperties = {
-  object: Object3D
-  position?: Position
-  scale?: Scale
-  rotation?: Rotation
-  lookAt?: LookAt
-}
-
 export type ViewportAwareObjectProperties = {
   object: Object3D
   viewportAware: boolean

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, TransformableObject, useFrame } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { Grid, Text } from '@threlte/extras'
 
   let rotation = 0
@@ -15,15 +15,12 @@
 <T.Group rotation.y={rotation}>
   <T.OrthographicCamera
     zoom={80}
-    let:ref={cam}
     position={[0, 5, 10]}
     makeDefault
-  >
-    <TransformableObject
-      object={cam}
-      lookAt={{}}
-    />
-  </T.OrthographicCamera>
+    on:create={({ ref }) => {
+      ref.lookAt(0, 0, 0)
+    }}
+  />
 </T.Group>
 
 <Text
