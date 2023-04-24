@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.5
+
+### Patch Changes
+
+- 4bcf0ee4: changed return signature of useSuspense->suspend
+
 ## 6.0.0-next.4
 
 ### Patch Changes
