@@ -69,15 +69,19 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
       addPromise(component, promise)
       promise
         .then(() => {
-          removePromise(component, promise)
-          checkFinalized()
+          if (promises.current.get(component)?.has(promise)) {
+            removePromise(component, promise)
+          }
         })
         .catch((error) => {
-          if (promises.current.has(component) && promises.current.get(component)?.has(promise)) {
+          if (promises.current.get(component)?.has(promise)) {
             removePromise(component, promise)
             addError(component, error)
             dispatch('error', error)
           }
+        })
+        .finally(() => {
+          checkFinalized()
         })
     },
     onComponentDestroy(component: SvelteComponentDev) {

@@ -25,11 +25,9 @@ inside (nested) child components. The implementation roughly follows a subset of
 established by the [React Suspense
 API](https://react.dev/reference/react/Suspense) and has certain limitations.
 
-The basic idea is to allow a component to make decisions based on the loading
-state of a child component. This is especially useful when loading a model in a
-child component while the parent component is already rendered. The parent
-component can then decide to show a loading indicator or a fallback component
-while the child component is loading.
+The basic idea is to allow a parent component to make decisions based on the loading
+state of child components. The parent component can then decide to show a loading
+indicator or a fallback component while the child component is loading.
 
 <Example path="extras/suspense" />
 
