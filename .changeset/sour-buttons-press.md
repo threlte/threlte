@@ -1,0 +1,5 @@
+---
+'@threlte/gltf': patch
+---
+
+typo

@@ -515,7 +515,7 @@ ${
 	${options.types ? printThrelteTypes(objects, animations) : ''}
 
 	const load = () => {
-		${options.suspend ? 'const suspend = useSuspense()' : ''}
+		${options.suspense ? 'const suspend = useSuspense()' : ''}
 		return ${useGltf}
 	}
 
