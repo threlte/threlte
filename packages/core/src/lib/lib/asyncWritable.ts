@@ -3,9 +3,7 @@ import { writable, type Writable } from 'svelte/store'
 export type AsyncWritable<T> = Writable<T | undefined> & {
   promise: Promise<T>
   error: Writable<Error | undefined>
-  then: Promise<T>['then']
-  catch: Promise<T>['catch']
-}
+} & Promise<T>
 
 /**
  * ### `asyncWritable`
@@ -54,7 +52,7 @@ export type AsyncWritable<T> = Writable<T | undefined> & {
  * ```
  */
 export const asyncWritable = <T>(promise: Promise<T>): AsyncWritable<T> => {
-  const store = writable<T>(undefined)
+  const store = writable<T | undefined>(undefined)
   const error = writable<Error | undefined>(undefined)
 
   promise
@@ -66,11 +64,5 @@ export const asyncWritable = <T>(promise: Promise<T>): AsyncWritable<T> => {
       error.set(e)
     })
 
-  return {
-    ...store,
-    error,
-    promise,
-    then: promise.then.bind(promise),
-    catch: promise.catch.bind(promise)
-  }
+  return Object.assign(Object.assign(promise, store), { error, promise })
 }
