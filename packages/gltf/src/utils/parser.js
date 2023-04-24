@@ -474,14 +474,18 @@ function parse(fileName, baseName, gltf, options = {}) {
           'T',
           options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
         ].join(', ')} } from '@threlte/core'
-        import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
-          ', '
-        )} } from '@threlte/extras'
+        import { ${[
+          'useGltf',
+          hasAnimations ? 'useGltfAnimations' : '',
+          options.suspense ? 'useSuspense' : ''
+        ].join(', ')} } from '@threlte/extras'
 	`
 
-  const useGltf = `useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
-    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
-  })`
+  const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
+    options.types ? '<GLTFResult>' : ''
+  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+    options.suspense ? ')' : ''
+  }`
 
   // Output
   return `
@@ -525,6 +529,8 @@ ${
 
         export const ref = new Group()
 
+				${options.suspense ? 'const suspend = useSuspense()' : ''}
+
         ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
         ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
@@ -538,13 +544,13 @@ ${
 
     </script>
 
-    {#if $gltf}
-			<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
+		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
+    	{#if $gltf}
         ${scene}
+			{/if}
 
-        <slot {ref} />
-			</T>
-		{/if}
+			<slot {ref} />
+		</T>
 	`
 }
 
