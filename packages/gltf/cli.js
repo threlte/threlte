@@ -65,13 +65,24 @@ const cli = meow(
 
 const { packageJson } = readPackageUpSync({ cwd: __dirname, normalize: false })
 
-function toPascalCase(string) {
-  return `${string}`
-    .toLowerCase()
-    .replace(new RegExp(/[-_]+/, 'g'), ' ')
-    .replace(new RegExp(/[^\w\s]/, 'g'), '')
-    .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${$2.toUpperCase() + $3}`)
-    .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+function toPascalCase(str) {
+  return (
+    str
+      .replace(/(\w)(\w*)/g, function (g0, g1, g2) {
+        // capitalize first letter of g1, leave the reset as-is and return the result
+        return g1.toUpperCase() + g2
+      })
+      // replace every non-word character with an empty string and capitalize the first following letter
+      .replace(/\W+(.)/g, function (g0, g1) {
+        return g1.toUpperCase()
+      })
+      // replace every non-word character with an empty string
+      .replace(/\s+/g, '')
+      // make first letter uppercase
+      .replace(/^\w/, function (g0) {
+        return g0.toUpperCase()
+      })
+  )
 }
 
 if (cli.input.length === 0) {
