@@ -34,16 +34,7 @@ export {
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // types
-export type {
-  Position,
-  Scale,
-  Rotation,
-  LookAt,
-  ThrelteUseFrameOptions,
-  ThrelteContext,
-  ThrelteInstance,
-  Size
-} from './types/types'
+export type { ThrelteUseFrameOptions, ThrelteContext, Size } from './types/types'
 
 // utils
 export { createObjectStore } from './lib/createObjectStore'

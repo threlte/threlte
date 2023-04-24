@@ -17,11 +17,6 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { CurrentWritable } from '../lib/storeUtils'
 import type { DisposableThreeObject } from './components'
 
-export type ThrelteInstance = {
-  matrix: Matrix4
-  color: null | Color
-}
-
 /**
  * ### `ThrelteContext`
  *
@@ -162,36 +157,6 @@ export type ThrelteRenderHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
 }
-
-export type ThrelteParentContext = Writable<Object3D>
-
-export type Position =
-  | Vector3
-  | {
-      x?: number
-      y?: number
-      z?: number
-    }
-
-export type Scale =
-  | Vector3
-  | number
-  | {
-      x?: number
-      y?: number
-      z?: number
-    }
-
-export type Rotation =
-  | Euler
-  | {
-      x?: number
-      y?: number
-      z?: number
-      order?: Euler['order']
-    }
-
-export type LookAt = Position | Object3D
 
 export type Size = {
   width: number
