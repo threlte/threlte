@@ -11,7 +11,7 @@ export const useSuspense = () => {
 
   const component = get_current_component()
 
-  const suspend = <T>(promise: Promise<T>): Promise<T> => {
+  const suspend = <T extends Promise<any>>(promise: T): T => {
     ctx?.suspend(component, promise)
     return promise
   }
