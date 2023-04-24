@@ -51,20 +51,11 @@ export default function (file, output, options) {
         const filePath = getRelativeFilePath(file)
         const data = fs.readFileSync(file)
         const arrayBuffer = toArrayBuffer(data)
-        console.log(arrayBuffer)
-
-        gltfLoader.parse(
-          arrayBuffer,
-          '',
-          (gltf) => {},
-          (error) => console.error(error)
-        )
 
         gltfLoader.parse(
           arrayBuffer,
           '',
           (gltf) => {
-            console.log('NO PARSE?')
             const raw = parse(filePath, gltf, options)
             try {
               const prettiered = prettier.format(raw, {
