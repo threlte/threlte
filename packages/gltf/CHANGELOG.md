@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.3
+
+### Major Changes
+
+- a07850e4: Removed the name from the exported preload function (seems silly and might collide anyway), updated deps and included three-stdlib instead of rolling an own implementation of GLTFLoader and DRACOLoader. Added option to make the component suspense-ready, updated README.
+
 ## 1.0.0-next.2
 
 ### Patch Changes

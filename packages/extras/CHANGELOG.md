@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.7
+
+### Minor Changes
+
+- 23049766: Added Suspense component and useSuspense hook.
+
 ## 5.0.0-next.6
 
 ### Minor Changes
