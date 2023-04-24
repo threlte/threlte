@@ -299,12 +299,12 @@ importers:
 
   packages/gltf:
     specifiers:
-      '@gltf-transform/core': 3.0.0-alpha.4
-      '@gltf-transform/extensions': 3.0.0-alpha.4
-      '@gltf-transform/functions': 3.0.0-alpha.4
+      '@gltf-transform/core': ^3.2.1
+      '@gltf-transform/extensions': ^3.2.1
+      '@gltf-transform/functions': ^3.2.1
       '@node-loader/babel': ^2.0.1
       chalk: ^4.1.1
-      draco3dgltf: ^1.5.5
+      draco3dgltf: ^1.5.6
       fast-glob: ^3.2.7
       fs-extra: ^9.0.1
       husky: ^4.3.0
@@ -321,11 +321,11 @@ importers:
       three: 0.151.3
       three-stdlib: ^2.21.8
     dependencies:
-      '@gltf-transform/core': 3.0.0-alpha.4
-      '@gltf-transform/extensions': 3.0.0-alpha.4
-      '@gltf-transform/functions': 3.0.0-alpha.4
+      '@gltf-transform/core': 3.2.1
+      '@gltf-transform/extensions': 3.2.1
+      '@gltf-transform/functions': 3.2.1
       '@node-loader/babel': 2.0.1
-      draco3dgltf: 1.5.5
+      draco3dgltf: 1.5.6
       jsdom: 20.0.3
       jsdom-global: 3.0.2_jsdom@20.0.3
       meow: 11.0.0
@@ -1505,30 +1505,28 @@ packages:
       - supports-color
     dev: true
 
-  /@gltf-transform/core/3.0.0-alpha.4:
-    resolution: {integrity: sha512-fvZFPeq+etlY0TEm3/JBEwvrRY6XI2U2PeqUz/p/5srtRWP5UoWj/v6wX4/GIk1lbNPjHGH8KjVA55b2Ihq6vg==}
+  /@gltf-transform/core/3.2.1:
+    resolution: {integrity: sha512-EE4AXJsu1jsSvcTnzk+mCu/VgLldPsb0gGhOV7onRlHM4DYh8m9aCCjGdLJf1uNJi+KUP5hPmOrUteXuopFq2A==}
     dependencies:
-      gl-matrix: 3.4.3
-      property-graph: 0.2.6
+      property-graph: 1.2.0
     dev: false
 
-  /@gltf-transform/extensions/3.0.0-alpha.4:
-    resolution: {integrity: sha512-IzHXO/KvdBc045dJ5YqJaVF/yUClvyeuC5Yh0PRUS9W6/+OBpqw9i+yuPQzlJe7V/3v6ouT/HWvr1/QHxNalqg==}
+  /@gltf-transform/extensions/3.2.1:
+    resolution: {integrity: sha512-7uiCXDV7/o2pnuXM9z/URdP9RR3baOaVo3f3eo65WtoUBIRKO6I/WHJzwGrRdWIWKQQWfxwZLTzYYaAgprnxDg==}
     dependencies:
-      '@gltf-transform/core': 3.0.0-alpha.4
-      ktx-parse: 0.4.5
+      '@gltf-transform/core': 3.2.1
+      ktx-parse: 0.5.0
     dev: false
 
-  /@gltf-transform/functions/3.0.0-alpha.4:
-    resolution: {integrity: sha512-K5iINos3B+g6cOrXTF5NyyhghP01aO+fRW5Rp1fDFTWtnnoi1/bBjJFRNm/oLxHgvCuiGdvj3cnmkqcBtz/TjQ==}
+  /@gltf-transform/functions/3.2.1:
+    resolution: {integrity: sha512-zrwBd56XgmeMFC9E/FDYkJlN7lvYJrdmZTT0lWU92IL7YYLaigaZo8J/L1bRaE7uYu1+iWHfodk7cV357q1S8w==}
     dependencies:
-      '@gltf-transform/core': 3.0.0-alpha.4
-      '@gltf-transform/extensions': 3.0.0-alpha.4
-      gl-matrix: 3.4.3
-      ktx-parse: 0.4.5
+      '@gltf-transform/core': 3.2.1
+      '@gltf-transform/extensions': 3.2.1
+      ktx-parse: 0.5.0
       ndarray: 1.0.19
-      ndarray-lanczos: 0.1.2
-      ndarray-pixels: 1.0.0
+      ndarray-lanczos: 0.3.0
+      ndarray-pixels: 2.0.1
     dev: false
 
   /@humanwhocodes/config-array/0.5.0:
@@ -3882,8 +3880,8 @@ packages:
     resolution: {integrity: sha512-+3NaRjWktb5r61ZFoDejlykPEFKT5N/LkbXsaddlw6xNSXBanUYpFc2AXXpbJDilPHazcSreU/DpQIaxfX0NfQ==}
     dev: false
 
-  /draco3dgltf/1.5.5:
-    resolution: {integrity: sha512-JrtTBTZHedeXCaFEIELZf71SGAK+j0LgaLW0xIBUGNNMEYzmoF72jUutLuMpY3go/bulwbd/W7PZsnJG0IQLjA==}
+  /draco3dgltf/1.5.6:
+    resolution: {integrity: sha512-wCKFfJhRB2lkAV/dzlKs+EmHSoI3x8w4Z8yBpkzLIF9GAvjh6jk90jomC13k/DLVFTJSesm8LHg9ok6p3OVfVA==}
     dev: false
 
   /dset/3.1.2:
@@ -5358,10 +5356,6 @@ packages:
   /github-slugger/2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
 
-  /gl-matrix/3.4.3:
-    resolution: {integrity: sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==}
-    dev: false
-
   /glob-parent/5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -6222,6 +6216,10 @@ packages:
 
   /ktx-parse/0.4.5:
     resolution: {integrity: sha512-MK3FOody4TXbFf8Yqv7EBbySw7aPvEcPX++Ipt6Sox+/YMFvR5xaTyhfNSk1AEmMy+RYIw81ctN4IMxCB8OAlg==}
+    dev: false
+
+  /ktx-parse/0.5.0:
+    resolution: {integrity: sha512-5IZrv5s1byUeDTIee1jjJQBiD5LPDB0w9pJJ0oT9BCKKJf16Tuj123vm1Ps0GOHSHmeWPgKM0zuViCVuTRpqaA==}
     dev: false
 
   /language-subtag-registry/0.3.22:
@@ -7155,8 +7153,8 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /ndarray-lanczos/0.1.2:
-    resolution: {integrity: sha512-o3dCYwaN0q4rDrhFx+1eMnyn3FIVL66xbpbKpuWb4UtGAwdgRWFc1iWyeCs8aW7fAklkJxLvqAnxDtiRB+Yf4g==}
+  /ndarray-lanczos/0.3.0:
+    resolution: {integrity: sha512-5kBmmG3Zvyj77qxIAC4QFLKuYdDIBJwCG+DukT6jQHNa1Ft74/hPH1z5mbQXeHBt8yvGPBGVrr3wEOdJPYYZYg==}
     dependencies:
       '@types/ndarray': 1.0.11
       ndarray: 1.0.19
@@ -7175,8 +7173,8 @@ packages:
       ndarray: 1.0.19
     dev: false
 
-  /ndarray-pixels/1.0.0:
-    resolution: {integrity: sha512-vJlxc6yM5uCyQbmGacanhEleG5Ha5NoLZojQh14VitIjf2W0EVwKc06BUayoyKkn8ISVXWDBfL3UQc708/MpgQ==}
+  /ndarray-pixels/2.0.1:
+    resolution: {integrity: sha512-xeXHL/V6HZ/wkJl5bJ42ReL+6gCd4GTyp0cIaU0gTnwzoxnJw8djljiqLAdbb1aYeIyXVnW5jreel/gS0Me5ow==}
     dependencies:
       '@types/ndarray': 1.0.11
       get-pixels: 3.3.3
@@ -8078,8 +8076,8 @@ packages:
       react-is: 16.13.1
     dev: true
 
-  /property-graph/0.2.6:
-    resolution: {integrity: sha512-QiBHxNZlwIarbkxsqCY688aP1ANbwtoQFBYgTZopQ0Bvku6/EYp3H4KH0ygxkhWQbJv5DEONspLy1rHi5xIycg==}
+  /property-graph/1.2.0:
+    resolution: {integrity: sha512-dbJCp1F/uG0G9ZhkJ0GKDoz9MOAtJHvtWVK+9UNOJewkXZVebuaPAAxh27ROJDHGLdLw+DkCGNBk9Le5DRTFJQ==}
     dev: false
 
   /property-information/6.2.0:

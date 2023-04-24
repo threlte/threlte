@@ -33,11 +33,11 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@gltf-transform/core": "3.0.0-alpha.4",
-    "@gltf-transform/extensions": "3.0.0-alpha.4",
-    "@gltf-transform/functions": "3.0.0-alpha.4",
+    "@gltf-transform/core": "^3.2.1",
+    "@gltf-transform/extensions": "^3.2.1",
+    "@gltf-transform/functions": "^3.2.1",
     "@node-loader/babel": "^2.0.1",
-    "draco3dgltf": "^1.5.5",
+    "draco3dgltf": "^1.5.6",
     "jsdom": "^20.0.3",
     "jsdom-global": "^3.0.2",
     "meow": "^11.0.0",
