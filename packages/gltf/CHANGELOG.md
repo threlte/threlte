@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- 16e75c31: Fixed a bug where the suspense was created in the wrong place when preloading was activated.
+
 ## 1.0.0-next.3
 
 ### Major Changes
