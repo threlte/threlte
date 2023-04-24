@@ -2,17 +2,20 @@ import 'jsdom-global'
 import fs from 'fs'
 import path from 'path'
 import transform from './utils/transform.js'
-import { GLTFLoader, DRACOLoader } from 'three-stdlib'
+// import { GLTFLoader, DRACOLoader } from 'three-stdlib'
 import * as prettier from 'prettier'
-import * as THREE from 'three'
+import THREE from 'three'
+
 global.THREE = THREE
+
+import './bin/GLTFLoader.js'
+import DracoLoader from './bin/DRACOLoader.js'
+THREE.DRACOLoader.getDecoderModule = () => {}
 
 import parse from './utils/parser.js'
 
-const gltfLoader = new GLTFLoader()
-const dracoloader = new DRACOLoader()
-dracoloader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
-gltfLoader.setDRACOLoader(dracoloader)
+const gltfLoader = new THREE.GLTFLoader()
+gltfLoader.setDRACOLoader(new DracoLoader())
 
 function toArrayBuffer(buf) {
   var ab = new ArrayBuffer(buf.length)
@@ -48,10 +51,20 @@ export default function (file, output, options) {
         const filePath = getRelativeFilePath(file)
         const data = fs.readFileSync(file)
         const arrayBuffer = toArrayBuffer(data)
+        console.log(arrayBuffer)
+
+        gltfLoader.parse(
+          arrayBuffer,
+          '',
+          (gltf) => {},
+          (error) => console.error(error)
+        )
+
         gltfLoader.parse(
           arrayBuffer,
           '',
           (gltf) => {
+            console.log('NO PARSE?')
             const raw = parse(filePath, gltf, options)
             try {
               const prettiered = prettier.format(raw, {

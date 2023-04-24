@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import THREE from 'three'
 import isVarName from './isVarName.js'
 
 function parse(fileName, gltf, options = {}) {
