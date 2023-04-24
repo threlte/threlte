@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.4
+
+### Patch Changes
+
+- 3a9a26c6: Changed return signature of asyncWritable
+
 ## 6.0.0-next.3
 
 ### Major Changes
