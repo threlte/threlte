@@ -41,14 +41,14 @@ Let's have a look at a simple component that loads a model with the hook `useGlt
 
 ```svelte title="Model.svelte"
 <script>
-	import { T } from '@threlte/core'
-	import { useGltf } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { useGltf } from '@threlte/extras'
 
-	const gltf = useGltf('model.gltf')
+  const gltf = useGltf('model.gltf')
 </script>
 
 {#await gltf then { scene }}
-	<T is={scene}>
+  <T is={scene}>
 {/await}
 ```
 
@@ -56,20 +56,20 @@ We can make that component _suspense-ready_ by using the hook `useSuspense` and 
 
 ```svelte {3,6}m {5}+ title="Model.svelte"
 <script>
-	import { T } from '@threlte/core'
-	import { useGltf, useSuspense } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { useGltf, useSuspense } from '@threlte/extras'
 
-	const suspend = useSuspense()
-	const gltf = suspend(useGltf('model.gltf'))
+  const suspend = useSuspense()
+  const gltf = suspend(useGltf('model.gltf'))
 </script>
 
 {#await gltf then { scene }}
-	<T is={scene}>
+  <T is={scene}>
 {/await}
 ```
 
 <Tip type="tip" title="Suspense-ready">
-	*Suspense-ready* means it has the ability to hit a `<Suspense>` boundary if there is any. If there's no `<Suspense>` boundary, the component will behave as usual.
+  *Suspense-ready* means it has the ability to hit a `<Suspense>` boundary if there is any. If there's no `<Suspense>` boundary, the component will behave as usual.
 </Tip>
 
 ### In a parent component
@@ -100,8 +100,8 @@ To let the parent component decide what to do while the model component is loadi
 ```
 
 <Tip type="tip" title="Error Boundary">
-	In contrast to the React Suspense API, the `<Suspense>` component also acts as an
-	error boundary for async requests	made in child components wrapped in `suspend`.
+  In contrast to the React Suspense API, the `<Suspense>` component also acts as an
+  error boundary for async requests	made in child components wrapped in `suspend`.
 
     The slot `"error"` will be mounted as soon as an error is thrown in a child component
     wrapped in `suspend` and the slot prop `let:errors` can be used to display a meaningful
