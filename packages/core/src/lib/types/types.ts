@@ -158,8 +158,6 @@ export type ThrelteRenderHandler = {
   order?: number
 }
 
-export type ThrelteParentContext = Writable<Object3D>
-
 export type Size = {
   width: number
   height: number
