@@ -1,7 +1,7 @@
-import THREE from 'three'
+import * as THREE from 'three'
 import isVarName from './isVarName.js'
 
-function parse(fileName, baseName, gltf, options = {}) {
+function parse(fileName, gltf, options = {}) {
   const url = (fileName.toLowerCase().startsWith('http') ? '' : '/') + fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -183,7 +183,11 @@ function parse(fileName, baseName, gltf, options = {}) {
       result += `position={[${rNbr(obj.position.x)}, ${rNbr(obj.position.y)}, ${rNbr(
         obj.position.z
       )},]} `
-    if (obj.rotation && obj.rotation.isEuler && rNbr(obj.rotation.toVector3().length()))
+    if (
+      obj.rotation &&
+      obj.rotation.isEuler &&
+      rNbr(new THREE.Vector3(...obj.rotation.toArray()).length())
+    )
       result += `rotation={[${rDeg(obj.rotation.x)}, ${rDeg(obj.rotation.y)}, ${rDeg(
         obj.rotation.z
       )},]} `
@@ -473,15 +477,23 @@ function parse(fileName, baseName, gltf, options = {}) {
         import { ${[
           'T',
           options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
-        ].join(', ')} } from '@threlte/core'
-        import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
-          ', '
-        )} } from '@threlte/extras'
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/core'
+        import { ${[
+          'useGltf',
+          hasAnimations ? 'useGltfAnimations' : '',
+          options.suspense ? 'useSuspense' : ''
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/extras'
 	`
 
-  const useGltf = `useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
-    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
-  })`
+  const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
+    options.types ? '<GLTFResult>' : ''
+  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+    options.suspense ? ')' : ''
+  }`
 
   // Output
   return `
@@ -506,7 +518,7 @@ ${
 		return ${useGltf}
 	}
 
-	export const preload${baseName} = async () => {
+	export const preload = async () => {
 		await load()
 	}
 </script>
@@ -525,6 +537,8 @@ ${
 
         export const ref = new Group()
 
+				${options.suspense ? 'const suspend = useSuspense()' : ''}
+
         ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
         ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
@@ -538,13 +552,13 @@ ${
 
     </script>
 
-    {#if $gltf}
-			<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
+		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
+    	{#if $gltf}
         ${scene}
+			{/if}
 
-        <slot {ref} />
-			</T>
-		{/if}
+			<slot {ref} />
+		</T>
 	`
 }
 

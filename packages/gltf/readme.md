@@ -27,16 +27,19 @@ Options
   --keepnames, -k     Keep original names
   --keepgroups, -K    Keep (empty) groups, disable pruning
   --meta, -m          Include metadata (as userData)
-  --shadows, s        Let meshes cast and receive shadows
-  --printwidth, w     Prettier printWidth (default: 120)
+  --shadows, -s       Let meshes cast and receive shadows
+  --printwidth, -w    Prettier printWidth (default: 120)
   --precision, -p     Number of fractional digits (default: 2)
   --draco, -d         Draco binary path
+  --preload -P        Add preload method to module script
+  --suspense -u       Make the component suspense-ready
+  --isolated, -i      Output as isolated module (No $$restProps usage)
   --root, -r          Sets directory from which .gltf file is served
   --transform, -T     Transform the asset for the web (draco, prune, resize)
     --resolution, -R  Transform resolution for texture resizing (default: 1024)
     --simplify, -S    Transform simplification (default: false) (experimental!)
       --weld          Weld tolerance (default: 0.0001)
-      --ratio         Simplifier ratio (default: 0.075)
+      --ratio         Simplifier ratio (default: 0.75)
       --error         Simplifier error threshold (default: 0.001)
   --debug, -D         Debug output
 ```
@@ -217,7 +220,7 @@ If you want to play an animation you can do so at any time:
 
 ```ts
 const onEvent = () => {
-	$actions.jump.play()
+  $actions.jump.play()
 }
 ```
 

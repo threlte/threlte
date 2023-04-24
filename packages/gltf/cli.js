@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 'use strict'
 import meow from 'meow'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import gltf from './src/index.js'
 import { readPackageUpSync } from 'read-pkg-up'
+import { fileURLToPath } from 'url'
+import gltf from './src/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -26,6 +25,7 @@ const cli = meow(
     --precision, -p     Number of fractional digits (default: 2)
     --draco, -d         Draco binary path
     --preload -P        Add preload method to module script
+    --suspense -u       Make the component suspense-ready
     --isolated, -i      Output as isolated module (No $$restProps usage)
     --root, -r          Sets directory from which .gltf file is served
     --transform, -T     Transform the asset for the web (draco, prune, resize)
@@ -49,6 +49,7 @@ const cli = meow(
       precision: { type: 'number', alias: 'p', default: 2 },
       isolated: { type: 'boolean', alias: 'i', default: false },
       preload: { type: 'boolean', alias: 'P', default: false },
+      suspense: { type: 'boolean', alias: 'u', default: false },
       draco: { type: 'string', alias: 'd' },
       root: { type: 'string', alias: 'r' },
       transform: { type: 'boolean', alias: 'T' },
@@ -90,7 +91,7 @@ Command: npx @threlte/gltf@${packageJson.version} ${process.argv.slice(2).join('
     console.info('log:', log)
   }
   try {
-    const response = await gltf(file, output, baseName, {
+    const response = await gltf(file, output, {
       ...config,
       showLog,
       timeout: 0,
