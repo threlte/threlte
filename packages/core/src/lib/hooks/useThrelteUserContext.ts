@@ -1,6 +1,6 @@
 import { getContext } from 'svelte'
 import { derived, type Readable } from 'svelte/store'
-import type { ThrelteUserContext } from '../types/types'
+import type { ThrelteUserContext } from '../lib/contexts'
 
 type UserContextEntry = Record<string, any>
 type UserContext = Record<string, UserContextEntry>

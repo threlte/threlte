@@ -33,8 +33,11 @@ export {
 // AsyncWritable
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
+// contexts
+export type { ThrelteContext } from './lib/contexts'
+
 // types
-export type { ThrelteContext, Size } from './types/types'
+export type { Size } from './types/types'
 
 // utils
 export { createObjectStore } from './lib/createObjectStore'
