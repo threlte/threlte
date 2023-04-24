@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.5
+
+### Patch Changes
+
+- da70d570: typo
+
 ## 1.0.0-next.4
 
 ### Patch Changes
