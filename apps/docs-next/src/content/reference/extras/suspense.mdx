@@ -20,4 +20,115 @@
 }
 ---
 
+The component `<Suspense>` allows you to orchestrate the loading of resources
+inside child components. The implementation roughly follows a subset of the concept
+established by the [React Suspense
+API](https://react.dev/reference/react/Suspense) and has certain limitations.
+
+The basic idea is to allow a component to make decisions based on the loading
+state of a child component. This is especially useful when loading a model in a
+child component while the parent component is already rendered. The parent
+component can then decide to show a loading indicator or a fallback component
+while the child component is loading.
+
 <Example path="extras/suspense" />
+
+## Usage
+
+### In a child component
+
+Let's have a look at a simple component that loads a model with the hook `useGltf`.
+
+```svelte title="Model.svelte"
+<script>
+	import { T } from '@threlte/core'
+	import { useGltf } from '@threlte/extras'
+
+	const gltf = useGltf('model.gltf')
+</script>
+
+{#await gltf then { scene }}
+	<T is={scene}>
+{/await}
+```
+
+We can make that component _suspense-ready_ by using the hook `useSuspense` and passing the promise returned by `useGltf` to it.
+
+```svelte {3,6}m {5}+ title="Model.svelte"
+<script>
+	import { T } from '@threlte/core'
+	import { useGltf, useSuspense } from '@threlte/extras'
+
+	const suspend = useSuspense()
+	const gltf = suspend(useGltf('model.gltf'))
+</script>
+
+{#await gltf then { scene }}
+	<T is={scene}>
+{/await}
+```
+
+<Tip type="tip" title="Suspense-ready">
+	*Suspense-ready* means it has the ability to hit a `<Suspense>` boundary if there is any. If there's no `<Suspense>` boundary, the component will behave as usual.
+</Tip>
+
+### In a parent component
+
+Now we implement the component "Model.svelte" in a parent component:
+
+```svelte title="Parent.svelte"
+<script>
+  import Model from './Model.svelte'
+</script>
+
+<Model />
+```
+
+To let the parent component decide what to do while the model component is loading, we wrap the child component in a `<Suspense>` component and show a fallback component while the child component is loading.
+
+```svelte {3,4,7,8,10}+ title="Parent.svelte"
+<script>
+  import Model from './Model.svelte'
+  import Fallback from './Fallback.svelte'
+  import { Suspense } from '@threlte/extras'
+</script>
+
+<Suspense>
+  <Fallback slot="fallback" />
+  <Model />
+</Suspense>
+```
+
+<Tip type="tip" title="Error Boundary">
+	In contrast to the React Suspense API, the `<Suspense>` component also acts as an
+	error boundary for async requests	made in child components wrapped in `suspend`.
+
+    The slot `"error"` will be mounted as soon as an error is thrown in a child component
+    wrapped in `suspend` and the slot prop `let:errors` can be used to display a meaningful
+    error message.
+
+</Tip>
+
+## UX considerations and implementation limitations
+
+The `<Suspense>` component is a great tool to improve the user experience of your application. However, it is important to consider the following points:
+
+- Directly citing the [React Suspense API](https://react.dev/reference/react/Suspense#revealing-nested-content-as-it-loads):
+  > Don't put a Suspense boundary around every component. Suspense boundaries should not be more granular than the loading sequence that you want the user to experience.
+- The `<Suspense>` component will **mount** child components in the default slot immediately and hide the contents
+  as long as they are suspended. This means that any side effects (for instance `useFrame` hooks) that are triggered
+  by the child components will be executed immediately.
+- A `<Suspense>` component can be re-suspended if a child component invokes `suspend` again. The property `final` on the component `<Suspense>` can be used to prevent this behavior.
+
+## Inner workings
+
+The `<Suspense>` component will only ever show one of the available slots at any time:
+
+- The slot `"error"` will be shown as soon as an error is thrown.
+- The slot `"fallback"` will be shown as long as a child component is suspended.
+- The default slot will be shown as long as no child component is suspended and no error has been thrown.
+
+It's important to keep in mind that while the contents of the default slot are not visible, they are still mounted and
+the component is otherwise fully functional. This means that any side effects (for instance `useFrame` hooks) that are triggered
+by the child components will be executed immediately. As long as a component is suspended, it is added to a `THREE.Group` which
+is not added to the scene.

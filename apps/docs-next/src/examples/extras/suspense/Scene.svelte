@@ -36,6 +36,9 @@
     color="white"
     anchorX="50%"
     anchorY="50%"
+    on:create={({ ref }) => {
+      ref.lookAt(-40, 25, 40)
+    }}
   />
 
   <Text
@@ -47,6 +50,9 @@
     color="white"
     anchorX="50%"
     anchorY="50%"
+    on:create={({ ref }) => {
+      ref.lookAt(-40, 25, 40)
+    }}
   />
 
   <StarsEmitter />
