@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.8
+
+### Patch Changes
+
+- f9f8e615: changed return signature of useSuspense->suspend
+
 ## 5.0.0-next.7
 
 ### Minor Changes
