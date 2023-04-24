@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.7
+
+### Patch Changes
+
+- 89e0c7a9: Updated dependencies
+
 ## 1.0.0-next.6
 
 ### Patch Changes
