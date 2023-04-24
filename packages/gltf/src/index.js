@@ -2,18 +2,17 @@ import 'jsdom-global'
 import fs from 'fs'
 import path from 'path'
 import transform from './utils/transform.js'
-
+import { GLTFLoader, DRACOLoader } from 'three-stdlib'
 import * as prettier from 'prettier'
-import THREE from 'three'
+import * as THREE from 'three'
 global.THREE = THREE
 
-import './bin/GLTFLoader.js'
-import DracoLoader from './bin/DRACOLoader.js'
-THREE.DRACOLoader.getDecoderModule = () => {}
 import parse from './utils/parser.js'
 
-const gltfLoader = new THREE.GLTFLoader()
-gltfLoader.setDRACOLoader(new DracoLoader())
+const gltfLoader = new GLTFLoader()
+const dracoloader = new DRACOLoader()
+dracoloader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+gltfLoader.setDRACOLoader(dracoloader)
 
 function toArrayBuffer(buf) {
   var ab = new ArrayBuffer(buf.length)
@@ -22,7 +21,7 @@ function toArrayBuffer(buf) {
   return ab
 }
 
-export default function (file, output, baseName, options) {
+export default function (file, output, options) {
   function getRelativeFilePath(file) {
     const filePath = path.resolve(file)
     const rootPath = options.root ? path.resolve(options.root) : path.dirname(file)
@@ -53,7 +52,7 @@ export default function (file, output, baseName, options) {
           arrayBuffer,
           '',
           (gltf) => {
-            const raw = parse(filePath, baseName, gltf, options)
+            const raw = parse(filePath, gltf, options)
             try {
               const prettiered = prettier.format(raw, {
                 semi: false,

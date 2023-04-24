@@ -1,7 +1,7 @@
-import THREE from 'three'
+import * as THREE from 'three'
 import isVarName from './isVarName.js'
 
-function parse(fileName, baseName, gltf, options = {}) {
+function parse(fileName, gltf, options = {}) {
   const url = (fileName.toLowerCase().startsWith('http') ? '' : '/') + fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -183,7 +183,11 @@ function parse(fileName, baseName, gltf, options = {}) {
       result += `position={[${rNbr(obj.position.x)}, ${rNbr(obj.position.y)}, ${rNbr(
         obj.position.z
       )},]} `
-    if (obj.rotation && obj.rotation.isEuler && rNbr(obj.rotation.toVector3().length()))
+    if (
+      obj.rotation &&
+      obj.rotation.isEuler &&
+      rNbr(new THREE.Vector3(...obj.rotation.toArray()).length())
+    )
       result += `rotation={[${rDeg(obj.rotation.x)}, ${rDeg(obj.rotation.y)}, ${rDeg(
         obj.rotation.z
       )},]} `
@@ -473,12 +477,16 @@ function parse(fileName, baseName, gltf, options = {}) {
         import { ${[
           'T',
           options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
-        ].join(', ')} } from '@threlte/core'
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/core'
         import { ${[
           'useGltf',
           hasAnimations ? 'useGltfAnimations' : '',
           options.suspense ? 'useSuspense' : ''
-        ].join(', ')} } from '@threlte/extras'
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/extras'
 	`
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
@@ -510,7 +518,7 @@ ${
 		return ${useGltf}
 	}
 
-	export const preload${baseName} = async () => {
+	export const preload = async () => {
 		await load()
 	}
 </script>

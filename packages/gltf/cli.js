@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 'use strict'
 import meow from 'meow'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import gltf from './src/index.js'
 import { readPackageUpSync } from 'read-pkg-up'
+import { fileURLToPath } from 'url'
+import gltf from './src/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -92,7 +91,7 @@ Command: npx @threlte/gltf@${packageJson.version} ${process.argv.slice(2).join('
     console.info('log:', log)
   }
   try {
-    const response = await gltf(file, output, baseName, {
+    const response = await gltf(file, output, {
       ...config,
       showLog,
       timeout: 0,
