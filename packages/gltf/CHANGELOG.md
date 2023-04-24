@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.6
+
+### Patch Changes
+
+- 81834dd4: Refactored the pascal case function
+
 ## 1.0.0-next.5
 
 ### Patch Changes
