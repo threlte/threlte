@@ -515,6 +515,7 @@ ${
 	${options.types ? printThrelteTypes(objects, animations) : ''}
 
 	const load = () => {
+		${options.suspend ? 'const suspend = useSuspense()' : ''}
 		return ${useGltf}
 	}
 
@@ -537,7 +538,7 @@ ${
 
         export const ref = new Group()
 
-				${options.suspense ? 'const suspend = useSuspense()' : ''}
+				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
         ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
