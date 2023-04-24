@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.8
+
+### Patch Changes
+
+- 119a04d1: Downgrading three and reusing own GLTFLoader and DRACOLoader implementations
+
 ## 1.0.0-next.7
 
 ### Patch Changes
