@@ -128,7 +128,10 @@ The `<Suspense>` component will only ever show one of the available slots at any
 - The slot `"fallback"` will be shown as long as a child component is suspended.
 - The default slot will be shown as long as no child component is suspended and no error has been thrown.
 
-It's important to keep in mind that while the contents of the default slot are not visible, they are still mounted and
-the component is otherwise fully functional. This means that any side effects (for instance `useFrame` hooks) that are triggered
-by the child components will be executed immediately. As long as a component is suspended, it is added to a `THREE.Group` which
-is not added to the scene.
+<Tip type="warning">
+  It's important to keep in mind that while the contents of the default slot are not visible, they
+  are still mounted and the component is otherwise fully functional. This means that any side
+  effects (for instance `useFrame` hooks) that are triggered by the child components will be
+  executed immediately. As long as a component is suspended, it is added to a `THREE.Group` which is
+  not added to the scene.
+</Tip>
