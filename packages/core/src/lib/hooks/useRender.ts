@@ -1,6 +1,6 @@
 import { getContext, onDestroy } from 'svelte'
 import { browser } from '../lib/browser'
-import type { ThrelteInternalContext, ThrelteContext } from '../types/types'
+import type { ThrelteInternalContext, ThrelteContext } from '../lib/contexts'
 
 export type ThrelteUseRenderOptions = {
   order?: number

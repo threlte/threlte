@@ -12,7 +12,7 @@ import {
   type TextureEncoding,
   type WebGLRendererParameters
 } from 'three'
-import type { ThrelteContext } from '../types/types'
+import type { ThrelteContext } from '../lib/contexts'
 import { watch } from './storeUtils'
 
 /**

@@ -2,7 +2,7 @@ import { onDestroy } from 'svelte'
 import type { Writable } from 'svelte/store'
 import { writable } from 'svelte/store'
 import { browser } from '../lib/browser'
-import type { Size } from '../types/types'
+import type { Size } from '../types'
 
 export const useParentSize = (): {
   parentSizeAction: (node: HTMLElement) => void

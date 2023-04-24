@@ -24,7 +24,7 @@
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { useFrameloop } from './lib/useFrameloop'
   import { useRenderer } from './lib/useRenderer'
-  import type { Size } from './types/types'
+  import type { Size } from './types'
 
   /**
    * @default window.devicePixelRatio

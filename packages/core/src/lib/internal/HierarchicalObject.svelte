@@ -12,7 +12,7 @@
   import { type ThrelteParentContext, useParent } from '../hooks/useParent'
   import { useThrelte } from '../hooks/useThrelte'
   import { createObjectStore } from '../lib/createObjectStore'
-  import type { HierarchicalObjectProperties } from '../types/components'
+  import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
 
   const useHierarchicalObject = () => {
     return {
