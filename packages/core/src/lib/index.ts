@@ -20,7 +20,6 @@ export { useFrame, type ThrelteUseFrameOptions } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
-export { useParent } from './internal/HierarchicalObject.svelte'
 
 // useLoader
 export {
@@ -29,6 +28,9 @@ export {
   type UseLoaderLoadInput,
   type UseLoaderLoadResult
 } from './hooks/useLoader'
+
+// useParent
+export { useParent } from './hooks/useParent'
 
 // AsyncWritable
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
