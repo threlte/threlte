@@ -11,8 +11,7 @@ import {
 } from 'three'
 import type { ThrelteFrameHandler } from '../hooks/useFrame'
 import type { ThrelteRenderHandler } from '../hooks/useRender'
-import type { DisposableThreeObject } from '../types/components'
-import type { Size } from '../types'
+import type { DisposableThreeObject, Size } from '../types'
 import { createDefaultCamera } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
 

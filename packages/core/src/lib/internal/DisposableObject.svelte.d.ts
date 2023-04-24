@@ -1,5 +1,5 @@
 import type { SvelteComponentTyped } from 'svelte'
-import type { DisposableThreeObject } from '../types/components'
+import type { DisposableThreeObject } from '../types'
 
 export type DisposableObjectProperties = {
   object?: DisposableThreeObject

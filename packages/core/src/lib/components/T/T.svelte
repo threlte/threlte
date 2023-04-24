@@ -4,7 +4,7 @@
   import type { Object3D } from 'three'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import type { DisposableThreeObject } from '../../types/components'
+  import type { DisposableThreeObject } from '../../types'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
