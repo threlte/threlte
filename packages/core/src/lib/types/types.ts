@@ -17,11 +17,6 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { CurrentWritable } from '../lib/storeUtils'
 import type { DisposableThreeObject } from './components'
 
-export type ThrelteInstance = {
-  matrix: Matrix4
-  color: null | Color
-}
-
 /**
  * ### `ThrelteContext`
  *
