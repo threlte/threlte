@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.9
+
+### Patch Changes
+
+- 89710f3e: Removed logs
+
 ## 1.0.0-next.8
 
 ### Patch Changes
