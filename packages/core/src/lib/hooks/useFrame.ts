@@ -1,13 +1,36 @@
 import { getContext, onDestroy } from 'svelte'
-import { readable, writable } from 'svelte/store'
+import { readable, writable, type Readable } from 'svelte/store'
 import { browser } from '../lib/browser'
-import type {
-  ThrelteContext,
-  ThrelteFrameHandler,
-  ThrelteInternalContext,
-  ThrelteUseFrame,
-  ThrelteUseFrameOptions
-} from '../types/types'
+import type { ThrelteContext, ThrelteInternalContext } from '../types/types'
+
+export type ThrelteUseFrame = {
+  stop: () => void
+  start: () => void
+  started: Readable<boolean>
+}
+
+export type ThrelteUseFrameOptions = {
+  autostart?: boolean
+  order?: number
+  /**
+   * Optionally provide a message to use with the property
+   * `debugFrameloop` of the `<Canvas>` component.
+   */
+  debugFrameloopMessage?: string
+  /**
+   * If false, the frame handler will not automatically invalidate the frame.
+   * This is useful if you want to manually invalidate the frame. Defaults to
+   * true.
+   */
+  invalidate?: boolean
+}
+
+export type ThrelteFrameHandler = {
+  fn: (ctx: ThrelteContext, delta: number) => void
+  order?: number
+  debugFrameloopMessage?: string
+  invalidate: boolean
+}
 
 /**
  * Adds a handler to threltes unified render loop.

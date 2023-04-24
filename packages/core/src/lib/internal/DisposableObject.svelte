@@ -1,9 +1,10 @@
 <script lang="ts">
   import { getContext, onDestroy, setContext } from 'svelte'
-  import { writable } from 'svelte/store'
+  import { writable, type Writable } from 'svelte/store'
   import { useThrelteInternal } from '../hooks/useThrelteInternal'
   import type { DisposableObjectProperties } from '../types/components'
-  import type { ThrelteDisposeContext } from '../types/types'
+
+  type ThrelteDisposeContext = Writable<boolean>
 
   const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
     useThrelteInternal()

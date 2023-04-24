@@ -16,7 +16,7 @@ export { createPlugin } from './plugins/createPlugin'
 export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
 
 // hooks
-export { useFrame } from './hooks/useFrame'
+export { useFrame, type ThrelteUseFrameOptions } from './hooks/useFrame'
 export { useRender } from './hooks/useRender'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
@@ -34,7 +34,7 @@ export {
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // types
-export type { ThrelteUseFrameOptions, ThrelteContext, Size } from './types/types'
+export type { ThrelteContext, Size } from './types/types'
 
 // utils
 export { createObjectStore } from './lib/createObjectStore'

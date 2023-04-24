@@ -1,19 +1,15 @@
-import type { Readable, Writable } from 'svelte/store'
+import type { Readable } from 'svelte/store'
 import type {
   Camera,
   Clock,
-  Color,
-  Euler,
-  Matrix4,
-  Object3D,
   Scene,
   ShadowMapType,
   ColorSpace,
   ToneMapping,
-  Vector3,
   WebGLRenderer
 } from 'three'
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import type { ThrelteFrameHandler } from '../hooks/useFrame'
+import type { ThrelteRenderHandler } from '../hooks/useRender'
 import type { CurrentWritable } from '../lib/storeUtils'
 import type { DisposableThreeObject } from './components'
 
@@ -116,55 +112,9 @@ export type ThrelteInternalContext = {
   shouldDispose: boolean
 }
 
-export type ThrelteDisposeContext = Writable<boolean>
-
 export type ThrelteUserContext = CurrentWritable<Record<string, any>>
-
-export type ThrelteUseFrame = {
-  stop: () => void
-  start: () => void
-  started: Readable<boolean>
-}
-
-export type ThrelteUseFrameOptions = {
-  autostart?: boolean
-  order?: number
-  /**
-   * Optionally provide a message to use with the property
-   * `debugFrameloop` of the `<Canvas>` component.
-   */
-  debugFrameloopMessage?: string
-  /**
-   * If false, the frame handler will not automatically invalidate the frame.
-   * This is useful if you want to manually invalidate the frame. Defaults to
-   * true.
-   */
-  invalidate?: boolean
-}
-
-export type ThrelteUseRenderOptions = {
-  order?: number
-}
-
-export type ThrelteFrameHandler = {
-  fn: (ctx: ThrelteContext, delta: number) => void
-  order?: number
-  debugFrameloopMessage?: string
-  invalidate: boolean
-}
-
-export type ThrelteRenderHandler = {
-  fn: (ctx: ThrelteContext, delta: number) => void
-  order?: number
-}
 
 export type Size = {
   width: number
   height: number
-}
-
-export type ThrelteUserData = {
-  orbitControls?: OrbitControls
-  onTransform?: () => Promise<void>
-  threlteDefaultCamera?: boolean
 }
