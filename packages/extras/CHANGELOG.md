@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.9
+
+### Minor Changes
+
+- 2720cd42: Added lifecycle methods onReveal and onSuspend
+
 ## 5.0.0-next.8
 
 ### Patch Changes
