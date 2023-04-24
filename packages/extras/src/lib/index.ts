@@ -23,6 +23,8 @@ export { default as InstancedMeshes } from './components/Instancing/InstancedMes
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
 export { useSuspense } from './suspense/useSuspense'
+export { onReveal } from './suspense/onReveal'
+export { onSuspend } from './suspense/onSuspend'
 
 // portals
 export { default as Portal } from './components/portals/Portal/Portal.svelte'

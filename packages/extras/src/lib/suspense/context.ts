@@ -1,10 +1,11 @@
 import { createRawEventDispatcher, currentWritable } from '@threlte/core'
 import { setContext } from 'svelte'
 import type { SvelteComponentDev } from 'svelte/internal'
-import { derived, writable } from 'svelte/store'
+import { derived, writable, type Readable } from 'svelte/store'
 
 export type SuspenseContext = {
   suspend: (component: SvelteComponentDev, promise: Promise<any>) => void
+  suspended: Readable<boolean>
   onComponentDestroy: (component: SvelteComponentDev) => void
 }
 
@@ -64,6 +65,30 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
     })
   }
 
+  /**
+   * A Suspense component is suspending its children if it has any pending
+   * promises or errors.
+   * "suspended" means that the default slot is not rendered.
+   * If the final prop is set to true, the Suspense component will not
+   * suspend its children once all promises are resolved and all errors are
+   * handled.
+   */
+  const suspended = derived(
+    [promises, errors, finalStore, finalized],
+    ([promises, errors, final, finalized]) => {
+      if (final && finalized) {
+        // if the suspense settled *once*, it will never suspend again.
+        return false
+      } else if (errors.size > 0) {
+        // suspense if there are errors
+        return true
+      } else {
+        // suspense if there are pending promises
+        return promises.size > 0
+      }
+    }
+  )
+
   const context: SuspenseContext = {
     suspend(component: SvelteComponentDev, promise: Promise<any>) {
       addPromise(component, promise)
@@ -94,32 +119,9 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
         return map
       })
       checkFinalized()
-    }
+    },
+    suspended
   }
-
-  /**
-   * A Suspense component is suspending its children if it has any pending
-   * promises or errors.
-   * "suspended" means that the default slot is not rendered.
-   * If the final prop is set to true, the Suspense component will not
-   * suspend its children once all promises are resolved and all errors are
-   * handled.
-   */
-  const suspended = derived(
-    [promises, errors, finalStore, finalized],
-    ([promises, errors, final, finalized]) => {
-      if (final && finalized) {
-        // if the suspense settled *once*, it will never suspend again.
-        return false
-      } else if (errors.size > 0) {
-        // suspense if there are errors
-        return true
-      } else {
-        // suspense if there are pending promises
-        return promises.size > 0
-      }
-    }
-  )
 
   const errorsArray = derived(errors, (errors) => Array.from(errors.values()).flat())
 
