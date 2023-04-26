@@ -1,6 +1,5 @@
 import { useRaf } from '../hooks/useRaf'
-import type { ThrelteContext, ThrelteInternalContext } from '../types/types'
-import { memoize } from './storeUtils'
+import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
 
 const runUseFrameCallbacks = (
   ctx: ThrelteContext,

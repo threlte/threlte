@@ -8,11 +8,11 @@
 -->
 <script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
-  import type { Writable } from 'svelte/store'
-  import type { Object3D, Object3D as ThreeObject3D } from 'three'
+  import type { Object3D } from 'three'
+  import { type ThrelteParentContext, useParent } from '../hooks/useParent'
   import { useThrelte } from '../hooks/useThrelte'
   import { createObjectStore } from '../lib/createObjectStore'
-  import type { HierarchicalObjectProperties } from '../types/components'
+  import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
 
   const useHierarchicalObject = () => {
     return {
@@ -23,12 +23,6 @@
         'threlte-hierarchical-object-on-destroy'
       )
     }
-  }
-
-  type ThrelteParentContext = Writable<ThreeObject3D | undefined>
-
-  export const useParent = () => {
-    return getContext<ThrelteParentContext>('threlte-hierarchical-parent-context')
   }
 </script>
 

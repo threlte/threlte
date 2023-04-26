@@ -1,11 +1,15 @@
 import { getContext, onDestroy } from 'svelte'
 import { browser } from '../lib/browser'
-import type {
-  ThrelteInternalContext,
-  ThrelteRenderHandler,
-  ThrelteContext,
-  ThrelteUseRenderOptions
-} from '../types/types'
+import type { ThrelteInternalContext, ThrelteContext } from '../lib/contexts'
+
+export type ThrelteUseRenderOptions = {
+  order?: number
+}
+
+export type ThrelteRenderHandler = {
+  fn: (ctx: ThrelteContext, delta: number) => void
+  order?: number
+}
 
 /**
  * Adds a handler that is called on every invalidated frame. This handler is
