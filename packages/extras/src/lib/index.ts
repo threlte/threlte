@@ -52,6 +52,10 @@ export {
   type IntersectionEvent
 } from './interactivity'
 
+// transitions
+export { transitions } from './transitions/transitions-plugin'
+export type { Transition } from './transitions/types'
+
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
 
