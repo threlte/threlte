@@ -94,7 +94,7 @@ export const transitions = () => {
 
     let currentRef = ref
 
-    // fake element
+    // fake HTML Element
     const el = {
       style: {},
       // eslint-disable-next-line @typescript-eslint/no-empty-function
