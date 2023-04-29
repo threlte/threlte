@@ -1,7 +1,3 @@
-import type { ThrelteTransitionConfig, ThrelteTransitionInput } from './types'
+import type { ThrelteTransition } from './types'
 
-export const createTransition = <Ref>(
-  callback: (...args: ThrelteTransitionInput<Ref>) => ThrelteTransitionConfig
-) => {
-  return callback
-}
+export const createTransition = <Ref>(transition: ThrelteTransition<Ref>) => transition

@@ -11,7 +11,7 @@ import {
 
 import { create_out_transition } from 'svelte/internal'
 import type { TransitionConfig } from 'svelte/transition'
-import type { Transition } from './types'
+import type { ThrelteTransition } from './types'
 
 const fragmentFunctions = {
   create: 'c',
@@ -45,9 +45,9 @@ const appendToFragmentFunction = (
 
 export const transitions = () => {
   injectPlugin<{
-    in?: Transition<any>
-    out?: Transition<any>
-    transition?: Transition<any>
+    in?: ThrelteTransition<any>
+    out?: ThrelteTransition<any>
+    transition?: ThrelteTransition<any>
   }>('transitions', ({ ref, props }) => {
     if (!props.in && !props.out && !props.transition) return
 
@@ -59,7 +59,7 @@ export const transitions = () => {
     const comp = get_current_component()
 
     const convertTransition = (
-      transition: Transition<any>
+      transition: ThrelteTransition<any>
     ): ((...args: any[]) => TransitionConfig) => {
       return (_node: Element, _params: any, options: { direction: 'in' | 'out' | 'both' }) => {
         return transition(

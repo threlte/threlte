@@ -54,7 +54,7 @@ export {
 
 // transitions
 export { transitions } from './transitions/transitions-plugin'
-export type { Transition } from './transitions/types'
+export type { ThrelteTransition } from './transitions/types'
 export { createTransition } from './transitions/createTransition'
 
 // layers

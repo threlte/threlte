@@ -12,4 +12,6 @@ export type ThrelteTransitionInput<Ref> = [
 
 export type ThrelteTransitionConfig = Simplify<Omit<TransitionConfig, 'css'>>
 
-export type Transition<Ref> = (...args: ThrelteTransitionInput<Ref>) => ThrelteTransitionConfig
+export type ThrelteTransition<Ref> = (
+  ...args: ThrelteTransitionInput<Ref>
+) => ThrelteTransitionConfig
