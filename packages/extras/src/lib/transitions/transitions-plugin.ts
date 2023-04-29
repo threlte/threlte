@@ -3,9 +3,7 @@ import {
   add_render_callback,
   create_bidirectional_transition,
   create_in_transition,
-  element,
   get_current_component,
-  onDestroy,
   onMount
 } from 'svelte/internal'
 
