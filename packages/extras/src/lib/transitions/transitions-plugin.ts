@@ -44,7 +44,7 @@ const appendToFragmentFunction = (
 /**
  * # EXPERIMENTAL
  *
- * **This plugin is experimental and may change or be removed in the future.**
+ * **This plugin is experimental and may change or be removed.**
  *
  * ---
  *
