@@ -7,13 +7,13 @@
 
   transitions()
 
-  const fade: Transition<MeshBasicMaterial> = (ref, { invalidate }) => {
+  const fade: Transition<MeshBasicMaterial> = ({ ref }, { invalidate }) => {
     return {
       tick(t) {
         ref.opacity = t
         invalidate()
       },
-      duration: 2e3
+      duration: 400
     }
   }
 </script>
@@ -36,7 +36,7 @@
     <T.BoxGeometry />
     <T.MeshBasicMaterial
       transparent
-      out={fade}
+      transition={fade}
     />
   </T.Mesh>
 {/if}
