@@ -3,6 +3,7 @@
   import { OrbitControls, createTransition, transitions } from '@threlte/extras'
   import { cubicOut } from 'svelte/easing'
   import type { Material, Mesh } from 'three'
+  import { DEG2RAD } from 'three/src/math/MathUtils'
 
   export let showCube = true
 
@@ -45,18 +46,32 @@
 </script>
 
 <T.PerspectiveCamera
-  position={[0, 5, 10]}
+  position={[8, 5, 8]}
   makeDefault
 >
   <OrbitControls />
 </T.PerspectiveCamera>
 
+<T.DirectionalLight position={[3, 15, 3]} />
+<T.AmbientLight />
+
 {#if showCube}
   <T.Mesh
     in={fly}
     out={scale}
+    on:introstart={() => {
+      console.log('introstart')
+    }}
   >
     <T.BoxGeometry />
-    <T.MeshBasicMaterial transition={fade} />
+    <T.MeshStandardMaterial transition={fade} />
   </T.Mesh>
 {/if}
+
+<T.Mesh
+  rotation.x={-90 * DEG2RAD}
+  position.y={-0.5}
+>
+  <T.PlaneGeometry args={[4, 4]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>

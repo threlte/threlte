@@ -1,4 +1,4 @@
-import { injectPlugin, useThrelte } from '@threlte/core'
+import { createRawEventDispatcher, injectPlugin, useThrelte } from '@threlte/core'
 import {
   add_render_callback,
   create_bidirectional_transition,
@@ -52,10 +52,20 @@ export const transitions = () => {
     if (!props.in && !props.out && !props.transition) return
 
     const { invalidate } = useThrelte()
+    const dispatch = createRawEventDispatcher()
 
     let currentRef = ref
 
-    const el = element('div')
+    // fake element
+    const el = {
+      style: {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      dispatchEvent: (...args: any) => {
+        const eventType = args[0].type
+        dispatch(eventType, ...args)
+      }
+    } as any
+
     const comp = get_current_component()
 
     const convertTransition = (
@@ -153,10 +163,6 @@ export const transitions = () => {
         })
       }
     }
-
-    onDestroy(() => {
-      el.remove()
-    })
 
     return {
       onRefChange(ref) {
