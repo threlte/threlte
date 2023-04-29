@@ -3,6 +3,7 @@ import {
   add_render_callback,
   create_bidirectional_transition,
   create_in_transition,
+  element,
   get_current_component,
   onDestroy,
   onMount
@@ -12,10 +13,33 @@ import { create_out_transition } from 'svelte/internal'
 import type { TransitionConfig } from 'svelte/transition'
 import type { Transition } from './types'
 
-const prepend = (target: (...args: any[]) => any, prepend: (...args: any[]) => any) => {
-  return (...args: any[]) => {
-    prepend(...args)
-    target(...args)
+const fragmentFunctions = {
+  create: 'c',
+  claim: 'l',
+  hydrate: 'h',
+  mount: 'm',
+  update: 'p',
+  measure: 'r',
+  fix: 'f',
+  animate: 'a',
+  intro: 'i',
+  outro: 'o',
+  destroy: 'd'
+} as const
+
+type FragmentFunction = keyof typeof fragmentFunctions
+
+const appendToFragmentFunction = (
+  component: any,
+  fragmentFn: FragmentFunction,
+  append: (...args: any[]) => any
+) => {
+  const fragment = component.$$.fragment
+  const fragmentFnShorthand = fragmentFunctions[fragmentFn]
+  const original = fragment[fragmentFnShorthand]
+  fragment[fragmentFnShorthand] = (...args: any[]) => {
+    append(...args)
+    original(...args)
   }
 }
 
@@ -31,7 +55,7 @@ export const transitions = () => {
 
     let currentRef = ref
 
-    const el = document.createElement('div')
+    const el = element('div')
     const comp = get_current_component()
 
     const convertTransition = (
@@ -47,7 +71,6 @@ export const transitions = () => {
         )
       }
     }
-
     if (props.transition) {
       let transition: ReturnType<typeof create_bidirectional_transition>
       onMount(() => {
@@ -63,7 +86,7 @@ export const transitions = () => {
           }
           transition.run(1)
         })
-        comp.$$.fragment.i = prepend(comp.$$.fragment.i, () => {
+        appendToFragmentFunction(comp, 'intro', () => {
           add_render_callback(() => {
             if (!transition) {
               if (!props.transition) return
@@ -77,7 +100,7 @@ export const transitions = () => {
             transition.run(1)
           })
         })
-        comp.$$.fragment.o = prepend(comp.$$.fragment.c, () => {
+        appendToFragmentFunction(comp, 'outro', () => {
           if (!transition) {
             if (!props.transition) return
             transition = create_bidirectional_transition(
@@ -89,40 +112,42 @@ export const transitions = () => {
           }
           transition.run(0)
         })
-        comp.$$.fragment.d = prepend(comp.$$.fragment.d, (...args: any) => {
+        appendToFragmentFunction(comp, 'destroy', (...args: any) => {
           const detaching = args[0]
           if (detaching && transition) transition.end()
         })
       })
-    } else if (props.in) {
-      let intro: ReturnType<typeof create_in_transition>
-      onMount(() => {
-        add_render_callback(() => {
-          if (!props.in) return
-          intro = create_in_transition(el, convertTransition(props.in), {})
-          intro.start()
-        })
+    } else {
+      if (props.in) {
+        let intro: ReturnType<typeof create_in_transition>
+        onMount(() => {
+          add_render_callback(() => {
+            if (!props.in) return
+            intro = create_in_transition(el, convertTransition(props.in), {})
+            intro.start()
+          })
 
-        comp.$$.fragment.o = prepend(comp.$$.fragment.c, () => {
-          intro?.end()
+          appendToFragmentFunction(comp, 'outro', (...args: any) => {
+            intro?.end()
+          })
         })
-      })
-    } else if (props.out) {
-      let outro: ReturnType<typeof create_out_transition>
-      onMount(() => {
-        // Set up outro
-        comp.$$.fragment.o = prepend(comp.$$.fragment.o, () => {
-          if (!props.out) return
-          outro = create_out_transition(el, convertTransition(props.out), {})
+      }
+      if (props.out) {
+        let outro: ReturnType<typeof create_out_transition>
+        onMount(() => {
+          appendToFragmentFunction(comp, 'outro', (...args: any) => {
+            if (!props.out) return
+            outro = create_out_transition(el, convertTransition(props.out), {})
+          })
+          appendToFragmentFunction(comp, 'intro', (...args: any) => {
+            outro?.end(1)
+          })
+          appendToFragmentFunction(comp, 'destroy', (...args: any) => {
+            const detaching = args[0]
+            if (detaching && outro) outro.end(0)
+          })
         })
-        comp.$$.fragment.i = prepend(comp.$$.fragment.i, () => {
-          outro?.end(1)
-        })
-        comp.$$.fragment.d = prepend(comp.$$.fragment.d, (...args: any) => {
-          const detaching = args[0]
-          if (detaching && outro) outro.end(0)
-        })
-      })
+      }
     }
 
     onDestroy(() => {
