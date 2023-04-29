@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.6
+
+### Patch Changes
+
+- d9fdbd7f: Collocate types with respective hooks and components
+
 ## 6.0.0-next.5
 
 ### Patch Changes
