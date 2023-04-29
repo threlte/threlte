@@ -51,7 +51,7 @@ export const transitions = () => {
   }>('transitions', ({ ref, props }) => {
     if (!props.in && !props.out && !props.transition) return
 
-    const ctx = useThrelte()
+    const { invalidate } = useThrelte()
 
     let currentRef = ref
 
@@ -62,15 +62,19 @@ export const transitions = () => {
       transition: ThrelteTransition<any>
     ): ((...args: any[]) => TransitionConfig) => {
       return (_node: Element, _params: any, options: { direction: 'in' | 'out' | 'both' }) => {
-        return transition(
-          {
-            ref: currentRef,
-            direction: options.direction
-          },
-          ctx
-        )
+        const t = transition(currentRef, {
+          direction: options.direction
+        })
+        return {
+          ...t,
+          tick(...args) {
+            invalidate()
+            t?.tick?.(...args)
+          }
+        }
       }
     }
+
     if (props.transition) {
       let transition: ReturnType<typeof create_bidirectional_transition>
       onMount(() => {
