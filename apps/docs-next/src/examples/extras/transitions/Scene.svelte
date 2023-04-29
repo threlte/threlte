@@ -4,7 +4,7 @@
   import { cubicOut } from 'svelte/easing'
   import type { Material, Mesh } from 'three'
 
-  let show = true
+  export let showCube = true
 
   transitions()
 
@@ -44,12 +44,6 @@
   })
 </script>
 
-<svelte:window
-  on:keydown={(e) => {
-    if (e.key === 'e') show = !show
-  }}
-/>
-
 <T.PerspectiveCamera
   position={[0, 5, 10]}
   makeDefault
@@ -57,7 +51,7 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-{#if show}
+{#if showCube}
   <T.Mesh
     in={fly}
     out={scale}
