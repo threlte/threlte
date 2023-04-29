@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.10
+
+### Minor Changes
+
+- 1f4e3e01: Added the experimental transitions feature. This feature is marked as experimental and might change or be removed.
+
 ## 5.0.0-next.9
 
 ### Minor Changes
