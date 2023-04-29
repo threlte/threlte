@@ -41,6 +41,46 @@ const appendToFragmentFunction = (
   }
 }
 
+/**
+ * # EXPERIMENTAL
+ *
+ * **This plugin is experimental and may change or be removed in the future.**
+ *
+ * ---
+ *
+ * The plugin `transitions` allows you to use transitions with Threlte.
+ * The syntax is slightly different from Svelte's transitions, but it's very similar.
+ *
+ * ## Usage
+ *
+ * ```svelte
+ * <script>
+ *   import { transitions, createTransition } from '@threlte/extras'
+ *
+ *   transitions()
+ *
+ *   export let show = false
+ *
+ *   const fade = createTransition<Material>((ref) => {
+ *     if (!ref.transparent) ref.transparent = true
+ *     return {
+ *       tick(t) {
+ *         ref.opacity = t
+ *       },
+ *       easing: cubicOut,
+ *       duration: 400
+ *     }
+ *   })
+ * </script>
+ *
+ * {#if showCube}
+ *   <T.Mesh>
+ *     <T.BoxGeometry />
+ *     <T.MeshStandardMaterial transition={fade} />
+ *   </T.Mesh>
+ * {/if}
+ * ```
+ */
 export const transitions = () => {
   injectPlugin<{
     in?: ThrelteTransition<any>
