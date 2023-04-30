@@ -116,3 +116,22 @@ Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/
   }
 </script>
 ```
+
+An alternative to keeping your GLTF types within your component is to import then from a types file instead. Types can be easily generated via the `@threlte/gltf` cli tool [hello world](/docs/learn/basics/loading-assets#reusing-models)
+
+```ts title=“SomeGltf.ts”
+export type SomeGltf = {
+  nodes: {
+    Suzanne: THREE.Mesh
+  }
+  materials: {}
+}
+```
+
+```svelte title=“MyComponent.svelte”
+<script lang="ts">
+  import { SomeGltf } from './types'
+
+  useGltf<SomeGltf>('model.glb')
+</script>
+```
