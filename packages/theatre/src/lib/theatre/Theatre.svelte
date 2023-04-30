@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { IProjectConfig } from '@theatre/core'
-  import Project from '../Project/Project.svelte'
-  import Sheet from '../Sheet/Sheet.svelte'
-  import Studio from '../Studio/Studio.svelte'
+
+  import { Project, Sheet, Studio } from '..'
 
   export let studio = true
   export let config: IProjectConfig | undefined = undefined

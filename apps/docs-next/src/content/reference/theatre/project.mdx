@@ -9,7 +9,12 @@ componentSignature:
       [
         {name: 'name', type: 'string', default: 'default', required: false},
         {name: 'config', type: 'IProjectConfig', required: false},
-      ]
+      ],
+	bindings:
+	  [
+	    {name: 'project', type: 'IProject'},
+		{name: 'isReady', type: 'boolean'},
+	  ]
   }
 ---
 
@@ -48,7 +53,7 @@ The state of a project edited in the [\<Studio\>](./studio) is saved in your bro
 ```svelte
 <script>
 	import { Project, Sheet, Editable } from '@threlte/theatre'
-	import state from '.state.json'
+	import state from './state.json'
 </script>
 
 <!--
@@ -57,7 +62,7 @@ The state of a project edited in the [\<Studio\>](./studio) is saved in your bro
 	finished loading
 -->
 <Project config={{ state }} name="Project A">
-	<Sheet name="Sheet A" autoPlay>
+	<Sheet name="Sheet A" autoplay>
 		<Editable name="Editable A" />
 	</Sheet>
 </Project>

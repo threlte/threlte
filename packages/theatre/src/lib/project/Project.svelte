@@ -4,22 +4,28 @@
   import { setContext } from 'svelte'
   import type { IProjectConfig } from '@theatre/core'
 
+  // PROPS
+
   export let name = 'default'
   export let config: IProjectConfig | undefined = undefined
+
+  // BINDINGS
 
   export const project = globalProjects.get(name) ?? getProject(name, config)
   globalProjects.set(name, project)
 
-  let isReady = false
-  const init = async () => {
+  export let isReady = false
+  const syncReady = async () => {
     await project.ready
     isReady = true
   }
-  init()
+  syncReady()
+
+  // CHILD CONTEXT
 
   setContext(`theatre-project`, project)
 </script>
 
-{#if isReady}
+{#await project.ready then}
   <slot {project} />
-{/if}
+{/await}

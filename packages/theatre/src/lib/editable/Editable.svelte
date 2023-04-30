@@ -143,7 +143,7 @@
     create: typeof values
   }>()
 
-  const sheet = getContext('theatre-sheet') as ISheet
+  const sheet = getContext('theatre-sheet').sheet as ISheet
 
   const projectId = sheet.address.projectId
   const sheetId = sheet.address.sheetId
