@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.10
+
+### Minor Changes
+
+- 05d91701: Added forwarding event handlers
+
 ## 1.0.0-next.9
 
 ### Patch Changes
