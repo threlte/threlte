@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "1.0.0-next.10",
+  "version": "1.0.0-next.11",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rm -rf node_modules"

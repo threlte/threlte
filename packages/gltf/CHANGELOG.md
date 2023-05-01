@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.11
+
+### Minor Changes
+
+- e91cc094: await instead of if clause for less if-blocks (helps with transitions)
+
 ## 1.0.0-next.10
 
 ### Minor Changes
