@@ -121,14 +121,14 @@ Provide types and you will gain autocompletion for these objects and materials.
   type="tip"
   title="How to get the types?"
 >
-  On the [loading-assets](/docs/learn/basics/loading-assets) page, threlte provides the
-  `@threlte/gltf` cli tool that can be used to generate a reusable svelte component for your gltf as
-  well as it's types
+  On the [loading-assets](/docs/learn/basics/loading-assets) page, Threlte provides the
+  `@threlte/gltf` CLI tool that can be used to generate a reusable Svelte component for your gltf as
+  well as its types.
 </Tip>
 
 Types can be separated into a typescript file and imported like so if you feel the need.
 
-```ts title=“SomeGltf.ts”
+```ts title=SomeGltf.ts
 export type SomeGltf = {
   nodes: {
     Suzanne: THREE.Mesh
@@ -137,7 +137,7 @@ export type SomeGltf = {
 }
 ```
 
-```svelte title=“MyComponent.svelte”
+```svelte title=MyComponent.svelte
 <script lang="ts">
   import { useGltf } from '@threlte/extras'
   import type { SomeGltf } from './SomeGltf.ts'
