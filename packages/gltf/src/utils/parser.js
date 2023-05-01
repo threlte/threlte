@@ -557,11 +557,11 @@ ${
 
 		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
 			{#await gltf}
-				<slot name="loading" />
+				<slot name="fallback" />
 			{:then gltf}
 				${scene}
 			{:catch error}
-				<slot name="fallback" />
+				<slot name="error" {error} />
 			{/await}
 
 			<slot {ref} />
