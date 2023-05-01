@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.12
+
+### Patch Changes
+
+- 6d56d11c: Added proper types for new slots error & fallback
+
 ## 1.0.0-next.11
 
 ### Minor Changes
