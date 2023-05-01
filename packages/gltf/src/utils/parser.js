@@ -476,7 +476,8 @@ function parse(fileName, gltf, options = {}) {
         import { Group } from 'three'
         import { ${[
           'T',
-          options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
+          options.types && !options.isolated ? 'type Props, type Events, type Slots' : '',
+          !options.isolated && 'forwardEventHandlers'
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
@@ -551,9 +552,10 @@ ${
         : ''
     }
 
+			${!options.isolated ? 'const component = forwardEventHandlers()' : ''}
     </script>
 
-		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps}' : ''}>
+		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
     	{#if $gltf}
         ${scene}
 			{/if}
