@@ -92,7 +92,7 @@ The hook provides a map of all objects and materials in the loaded glTF.
 </script>
 ```
 
-Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/pmndrs/gltfjsx) to extract types from glTF files.
+Provide types and you will gain autocompletion for these objects and materials.
 
 ```svelte
 <script lang="ts">
@@ -117,7 +117,16 @@ Provide types to use your IDEs autocompletion. Use [gltfjsx](https://github.com/
 </script>
 ```
 
-An alternative to keeping your GLTF types within your component is to import then from a types file instead. Types can be easily generated via the `@threlte/gltf` cli tool [hello world](/docs/learn/basics/loading-assets#reusing-models)
+<Tip
+  type="tip"
+  title="How to get the types?"
+>
+  On the [loading-assets](/docs/learn/basics/loading-assets) page, threlte provides the
+  `@threlte/gltf` cli tool that can be used to generate a reusable svelte component for your gltf as
+  well as it's types
+</Tip>
+
+Types can be separated into a typescript file and imported like so if you feel the need.
 
 ```ts title=“SomeGltf.ts”
 export type SomeGltf = {
@@ -130,7 +139,8 @@ export type SomeGltf = {
 
 ```svelte title=“MyComponent.svelte”
 <script lang="ts">
-  import { SomeGltf } from './types'
+  import { useGltf } from '@threlte/extras'
+  import type { SomeGltf } from './SomeGltf.ts'
 
   useGltf<SomeGltf>('model.glb')
 </script>
