@@ -149,24 +149,24 @@ function parse(fileName, gltf, options = {}) {
 
       // Write out geometry first
       if (obj.geometry) {
-        result += `geometry={$gltf.${node}.geometry} `
+        result += `geometry={gltf.${node}.geometry} `
       }
 
       // Write out materials
       if (obj.material) {
         if (obj.material.name)
-          result += `material={$gltf.materials${sanitizeName(obj.material.name)}} `
-        else result += `material={$gltf.${node}.material} `
+          result += `material={gltf.materials${sanitizeName(obj.material.name)}} `
+        else result += `material={gltf.${node}.material} `
       }
 
-      if (obj.skeleton) result += `skeleton={$gltf.${node}.skeleton} `
+      if (obj.skeleton) result += `skeleton={gltf.${node}.skeleton} `
       if (obj.visible === false) result += `visible={false} `
       if (obj.castShadow === true) result += `castShadow `
       if (obj.receiveShadow === true) result += `receiveShadow `
       if (obj.morphTargetDictionary)
-        result += `morphTargetDictionary={$gltf.${node}.morphTargetDictionary} `
+        result += `morphTargetDictionary={gltf.${node}.morphTargetDictionary} `
       if (obj.morphTargetInfluences)
-        result += `morphTargetInfluences={$gltf.${node}.morphTargetInfluences} `
+        result += `morphTargetInfluences={gltf.${node}.morphTargetInfluences} `
       if (obj.intensity && rNbr(obj.intensity)) result += `intensity={${rNbr(obj.intensity)}} `
       //if (obj.power && obj.power !== 4 * Math.PI) result += `power={${rNbr(obj.power)}} `
       if (obj.angle && obj.angle !== Math.PI / 3) result += `angle={${rDeg(obj.angle)}} `
@@ -378,7 +378,7 @@ function parse(fileName, gltf, options = {}) {
 
     // Bail out on lights and bones
     if (type === 'bone') {
-      return `<T is={$gltf.${node}} />\n`
+      return `<T is={gltf.${node}} />\n`
     }
 
     // Collect children
@@ -556,9 +556,13 @@ ${
     </script>
 
 		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
-    	{#if $gltf}
-        ${scene}
-			{/if}
+			{#await gltf}
+				<slot name="loading" />
+			{:then gltf}
+				${scene}
+			{:catch error}
+				<slot name="fallback" />
+			{/await}
 
 			<slot {ref} />
 		</T>
