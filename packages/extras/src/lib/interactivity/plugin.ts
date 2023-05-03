@@ -1,9 +1,9 @@
 import { injectPlugin, watch } from '@threlte/core'
-import { derived, writable } from 'svelte/store'
+import { writable } from 'svelte/store'
 import { Object3D } from 'three'
 import { useInteractivity } from './hook'
 import type { ThrelteEvents } from './types'
-import { useComponentEvents } from './useComponentEvents'
+import { useComponentHasEventHandlers } from './useComponentHasEventHandlers'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
   'click',
@@ -28,15 +28,14 @@ export const injectInteractivityPlugin = (): void => {
 
     const refStore = writable<Object3D>(ref)
 
-    const { callbacks } = useComponentEvents(undefined, interactivityEventNames)
-    const isListeningToEvents = derived(callbacks, (callbacks) => Object.keys(callbacks).length > 0)
+    const { hasEventHandlers } = useComponentHasEventHandlers(interactivityEventNames)
 
-    watch([isListeningToEvents, refStore], ([isListeningToEvents, ref]) => {
-      // Because isListeningToEvents will only be set from false to true in the
+    watch([hasEventHandlers, refStore], ([hasEventHandlers, ref]) => {
+      // Because hasEventHandlers will only be set from false to true in the
       // lifecycle of the component, we can safely assume that we do not need to
       // remove the object from the list of interactive objects when
-      // isListeningToEvents is false.
-      if (!isListeningToEvents) return
+      // hasEventHandlers is false.
+      if (!hasEventHandlers) return
       addInteractiveObject(ref)
       return () => removeInteractiveObject(ref)
     })
