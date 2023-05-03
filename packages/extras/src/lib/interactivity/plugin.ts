@@ -32,6 +32,10 @@ export const injectInteractivityPlugin = (): void => {
     const isListeningToEvents = derived(callbacks, (callbacks) => Object.keys(callbacks).length > 0)
 
     watch([isListeningToEvents, refStore], ([isListeningToEvents, ref]) => {
+      // Because isListeningToEvents will only be set from false to true in the
+      // lifecycle of the component, we can safely assume that we do not need to
+      // remove the object from the list of interactive objects when
+      // isListeningToEvents is false.
       if (!isListeningToEvents) return
       addInteractiveObject(ref)
       return () => removeInteractiveObject(ref)
