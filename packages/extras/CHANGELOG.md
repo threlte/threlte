@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.11
+
+### Patch Changes
+
+- 1505665c: Fixed a bug in interactivity plugin
+
 ## 5.0.0-next.10
 
 ### Minor Changes
