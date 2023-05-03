@@ -1,7 +1,8 @@
-import { injectPlugin } from '@threlte/core'
+import { injectPlugin, watch } from '@threlte/core'
+import { derived, writable } from 'svelte/store'
 import { Object3D } from 'three'
 import { useInteractivity } from './hook'
-import type { ThrelteEvents, State } from './types'
+import type { ThrelteEvents } from './types'
 import { useComponentEvents } from './useComponentEvents'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
@@ -19,28 +20,26 @@ export const interactivityEventNames: (keyof ThrelteEvents)[] = [
   'pointermissed'
 ]
 
-export const injectInteractivityPlugin = (state: State) => {
+export const injectInteractivityPlugin = (): void => {
   injectPlugin('interactivity', ({ ref }) => {
     if (!(ref instanceof Object3D)) return
 
     const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
 
-    let currentRef = ref
-    let isListeningToEvents = false
+    const refStore = writable<Object3D>(ref)
 
-    useComponentEvents(() => {
-      isListeningToEvents = true
-      addInteractiveObject(currentRef)
-    }, interactivityEventNames as unknown as string[])
+    const { callbacks } = useComponentEvents(undefined, interactivityEventNames)
+    const isListeningToEvents = derived(callbacks, (callbacks) => Object.keys(callbacks).length > 0)
+
+    watch([isListeningToEvents, refStore], ([isListeningToEvents, ref]) => {
+      if (!isListeningToEvents) return
+      addInteractiveObject(ref)
+      return () => removeInteractiveObject(ref)
+    })
 
     return {
-      onRefChange(ref: Object3D) {
-        if (!isListeningToEvents || ref.uuid === currentRef.uuid) return
-
-        currentRef = ref
-
-        removeInteractiveObject(currentRef)
-        addInteractiveObject(currentRef)
+      onRefChange(ref) {
+        refStore.set(ref)
       }
     }
   })

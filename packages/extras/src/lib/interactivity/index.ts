@@ -27,7 +27,7 @@ const interactivity = (options?: InteractivityOptions) => {
 
   setContext<State>('threlte-interactivity-context', state)
 
-  injectInteractivityPlugin(state)
+  injectInteractivityPlugin()
   setupInteractivity(state)
 
   return state
