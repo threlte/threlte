@@ -14,6 +14,10 @@ export const useInteractivity = () => {
       return
     }
     object.userData._threlte_interactivity_dispatcher = eventDispatcher
+
+    // check if the object is already in the list
+    if (state.interactiveObjects.find((obj) => obj.uuid === object.uuid)) return
+
     state.interactiveObjects.push(object)
   }
 
