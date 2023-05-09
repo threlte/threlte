@@ -1,4 +1,5 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
+import type CameraControls from 'camera-controls'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
@@ -143,6 +144,25 @@ export type Slots<Type extends any> = {
 
 // –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
 
+/**
+ * ### `ObjectEvents<Type>`
+ *
+ * This type can extract the event names and details from the provided type.
+ * The event dispatcher currently needs to follow the strict pattern of
+ * implementing an event map with the event name as the key and the event
+ * payload as the value with a `type` property that matches the key.
+ */
+export type ObjectEvents<Type extends any> = MaybeInstance<Type> extends {
+  addEventListener: (...args: any[]) => any
+}
+  ? {
+      [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
+        Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
+        { type: Key }
+      >
+    }
+  : Record<string, unknown>
+
 export type CreateEvent<Type extends any> = {
   create: {
     ref: MaybeInstance<Type>
@@ -157,4 +177,4 @@ export type CreateEvent<Type extends any> = {
  * @example Events<typeof PerspectiveCamera>
  * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
  */
-export type Events<Type extends any> = Record<string, any> & CreateEvent<Type>
+export type Events<Type extends any> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
