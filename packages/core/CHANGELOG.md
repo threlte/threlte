@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.7
+
+### Minor Changes
+
+- 9291b0cf: Added strong event map types for component "T"
+
 ## 6.0.0-next.6
 
 ### Patch Changes
