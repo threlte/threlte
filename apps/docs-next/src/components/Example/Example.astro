@@ -12,6 +12,8 @@ interface Props {
   hideCode?: boolean
   hidePreview?: boolean
   iframe?: boolean
+  showFile?: string
+  expandCode?: boolean
 }
 
 const allModules = import.meta.glob('../../examples/**/*', {
@@ -54,7 +56,8 @@ const hidePreview = Astro.props.hidePreview ?? false
   {
     !hideCode && (
       <CodeWrapper
-        expanded={hidePreview}
+        showFile={Astro.props.showFile}
+        expanded={hidePreview || Astro.props.expandCode}
         hidePreview={hidePreview}
         client:load
         filePaths={Object.keys(allModules).map((path) =>

@@ -11,23 +11,23 @@ export const files = {
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "*",
     "@dimforge/rapier3d-compat": "*",
+    "@sveltejs/vite-plugin-svelte": "*",
     "@theatre/core": "*",
     "@theatre/studio": "*",
-    "@types/three": "*",
+    "@threlte/core": "next",
+    "@threlte/extras": "next",
+    "@threlte/rapier": "next",
+    "@threlte/theatre": "next",
     "@tsconfig/svelte": "*",
+    "@types/three": "*",
+    "postprocessing": "*",
     "svelte": "*",
     "svelte-check": "*",
+    "three": "*",
     "tslib": "*",
     "typescript": "*",
-    "vite": "*",
-    "@threlte/core": "*",
-    "@threlte/extras": "*",
-    "@threlte/rapier": "*",
-    "@threlte/theatre": "*",
-    "three": "*",
-    "postprocessing": "*"
+    "vite": "*"
   }
 }
 `,

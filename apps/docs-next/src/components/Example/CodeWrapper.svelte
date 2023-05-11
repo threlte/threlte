@@ -10,7 +10,7 @@
 
   export let filePaths: string[]
   export let hidePreview: boolean
-
+  export let showFile: string | null
   export let expanded = false
 
   const onFileSelected = (file: File) => {
@@ -32,9 +32,16 @@
     currentlySelectedFile.set(file)
   }
 
+  const initialFilePath = showFile
+    ? filePaths.includes(showFile)
+      ? showFile
+      : 'App.svelte'
+    : 'App.svelte'
+  const initialFileName = initialFilePath.split('/').pop() || 'App.svelte'
+
   const currentlySelectedFile: Writable<File> = writable({
-    name: 'App.svelte',
-    path: 'App.svelte',
+    name: initialFileName,
+    path: initialFilePath,
     type: 'file'
   })
 
@@ -46,11 +53,7 @@
         return item instanceof HTMLElement
       })
     }
-    onFileSelected({
-      name: 'App.svelte',
-      path: 'App.svelte',
-      type: 'file'
-    })
+    onFileSelected($currentlySelectedFile)
   }
 </script>
 

@@ -1,5 +1,4 @@
 import type { TransitionConfig } from 'svelte/transition'
-import type { Simplify } from 'type-fest'
 
 export type ThrelteTransitionInput<Ref> = [
   ref: Ref,
@@ -8,7 +7,7 @@ export type ThrelteTransitionInput<Ref> = [
   }
 ]
 
-export type ThrelteTransitionConfig = Simplify<Omit<TransitionConfig, 'css'>>
+export type ThrelteTransitionConfig = Omit<TransitionConfig, 'css'>
 
 export type ThrelteTransition<Ref> = (
   ...args: ThrelteTransitionInput<Ref>
