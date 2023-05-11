@@ -199,6 +199,24 @@ We can then spread the textures on a material via Svelte's spread syntax:
   loaded.
 </Tip>
 
+### Applying different textures to different faces
+
+For example, we may want to apply different textures to different faces of a `BoxGeometry` instance. To apply each texture to the corresponding face we can pass a function to the `attach` prop:
+
+```svelte
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial map={texture1} attach={(parent, self) => {
+    if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
+    else parent.material = [self]
+  }} />
+	<T.MeshStandardMaterial map={texture2} attach={(parent, self) => {
+    if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
+    else parent.material = [self]
+  }} />
+</T>
+```
+
 ### Convenient: useTexture
 
 `@threlte/extras` provides a handy hook for loading textures called `useTexture`:
