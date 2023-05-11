@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.12
+
+### Patch Changes
+
+- feab5e8b: "Unsimplified" types of transitions plugin
+
 ## 5.0.0-next.11
 
 ### Patch Changes
