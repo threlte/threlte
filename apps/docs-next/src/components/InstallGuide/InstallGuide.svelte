@@ -2,30 +2,43 @@
   import { c } from '../../lib/classes'
   import CopyCodeButton from '../Code/CopyCodeButton.svelte'
   import InstallButton from './InstallButton.svelte'
+  import { onMount } from 'svelte'
 
   let installExtras = false
   let installRapier = false
   let installTheatre = false
   let installTypes = false
 
+  let divider = ' \\'
+  let merger = '\n'
+  let space = '            '
+
   $: installCode = [
     `npm install three @threlte/core@next${
-      installExtras || installRapier || installTheatre || installTypes ? ' \\' : ''
+      installExtras || installRapier || installTheatre || installTypes ? divider : ''
     }`,
     installExtras &&
-      `            @threlte/extras@next${
-        installRapier || installTheatre || installTypes ? ' \\' : ''
+      `${space}@threlte/extras@next${
+        installRapier || installTheatre || installTypes ? divider : ''
       }`,
     installRapier &&
-      `            @threlte/rapier@next @dimforge/rapier3d-compat${
-        installTypes || installTheatre ? ' \\' : ''
+      `${space}@threlte/rapier@next @dimforge/rapier3d-compat${
+        installTypes || installTheatre ? divider : ''
       }`,
     installTheatre &&
-      `            @threlte/theatre@next @theatre/core @theatre/studio${installTypes ? ' \\' : ''}`,
-    installTypes && '            @types/three'
+      `${space}@threlte/theatre@next @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+    installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
-    .join('\n')
+    .join(merger)
+
+  onMount(() => {
+    if (window.navigator.userAgent.includes('Windows')) {
+      divider = ' '
+      merger = ''
+      space = ''
+    }
+  })
 </script>
 
 <InstallButton
