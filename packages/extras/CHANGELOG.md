@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.13
+
+### Patch Changes
+
+- 5df4ca04: Added transitions plugin props
+
 ## 5.0.0-next.12
 
 ### Patch Changes
