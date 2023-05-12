@@ -205,7 +205,8 @@ export const transitions = () => {
     return {
       onRefChange(ref) {
         currentRef = ref
-      }
+      },
+      pluginProps: ['in', 'out', 'transition']
     }
   })
 }
