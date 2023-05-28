@@ -6,6 +6,14 @@
   export let id = ''
 
   let mounted = false
+
+  $: if (mounted) {
+    const storage = sessionStorage.getItem(id)
+    if (storage) {
+      open = JSON.parse(storage)
+    }
+  }
+
   $: if (mounted) {
     sessionStorage.setItem(id, JSON.stringify(open))
   }
@@ -15,10 +23,6 @@
 
   onMount(() => {
     mounted = true
-    const storage = sessionStorage.getItem(id)
-    if (storage) {
-      open = JSON.parse(storage)
-    }
   })
 </script>
 
