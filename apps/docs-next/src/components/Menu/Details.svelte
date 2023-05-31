@@ -1,10 +1,29 @@
 <script lang="ts">
   import { c } from '$lib/classes'
+  import { onMount } from 'svelte'
 
   export let open = false
   export let id = ''
+
+  let mounted = false
+
+  $: if (mounted) {
+    const storage = sessionStorage.getItem(id)
+    if (storage) {
+      open = JSON.parse(storage)
+    }
+  }
+
+  $: if (mounted) {
+    sessionStorage.setItem(id, JSON.stringify(open))
+  }
+
   let _class = ''
   export { _class as class }
+
+  onMount(() => {
+    mounted = true
+  })
 </script>
 
 <details
