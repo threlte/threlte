@@ -40,6 +40,9 @@
     return Array.isArray(args)
   }
 
+  // Create Event
+  const createEvent = useCreateEvent()
+
   // We can't create the object in a reactive statement due to providing context
   export let ref = (
     isClass(is) && argsIsConstructorParameters(args)
@@ -49,7 +52,19 @@
       : is
   ) as MaybeInstance<Type>
   let initialized = false
-  $: if (initialized) {
+  // the ref has been created, emit the create event …
+  createEvent.updateRef(ref)
+  // … and create the object store. This store is used to
+  // run updates based on actual ref changes. So this store
+  // should be used in reactive statements
+  const refStore = writable(ref)
+
+  const maybeSetRef = () => {
+    // because reactive statements run immediately, we need to ignore the first run
+    if (!initialized) {
+      initialized = true
+      return
+    }
     ref = (
       isClass(is) && argsIsConstructorParameters(args)
         ? new is(...(args as any)) // TODO: fix this any
@@ -57,14 +72,15 @@
         ? new is()
         : is
     ) as MaybeInstance<Type>
-  } else {
-    initialized = true
+    // the ref has been recreated, emit the create event …
+    createEvent.updateRef(ref)
+    // … and set the object store.
+    refStore.set(ref)
   }
-  const objectStore = writable(ref)
-  $: objectStore.set(ref)
-  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
+  $: is, args, maybeSetRef()
 
-  // Plugins
+  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', refStore)
+
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
   const plugins = usePlugins({ ref, props: $$props })
@@ -72,30 +88,26 @@
 
   // Props
   const props = useProps()
-  $: props.updateProps(ref, $$restProps, {
+  $: props.updateProps($refStore, $$restProps, {
     manualCamera: manual,
     pluginsProps
   })
 
   // Camera
   const camera = useCamera()
-  $: camera.update(ref, manual)
-  $: camera.makeDefaultCamera(ref, makeDefault)
+  $: camera.update($refStore, manual)
+  $: camera.makeDefaultCamera($refStore, makeDefault)
 
   // Attachment
   const attachment = useAttach()
-  $: attachment.update(ref, $parent, attach)
+  $: attachment.update($refStore, $parent, attach)
 
   // Events
   const events = useEvents()
-  $: events.updateRef(ref)
-
-  // Create Event
-  const createEvent = useCreateEvent()
-  $: createEvent.updateRef(ref)
+  $: events.updateRef($refStore)
 
   // update plugins after all other updates
-  $: plugins?.updateRef(ref)
+  $: plugins?.updateRef($refStore)
   $: plugins?.updateProps($$props)
   $: plugins?.updateRestProps($$restProps)
 
@@ -108,12 +120,12 @@
   }
 </script>
 
-{#if isDisposableObject(ref)}
-  <DisposableObject object={ref} {dispose} />
+{#if isDisposableObject($refStore)}
+  <DisposableObject object={$refStore} {dispose} />
 {/if}
 
-{#if extendsObject3D(ref)}
-  <SceneGraphObject object={ref}>
+{#if extendsObject3D($refStore)}
+  <SceneGraphObject object={$refStore}>
     <slot {ref} />
   </SceneGraphObject>
 {:else}

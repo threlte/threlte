@@ -1,5 +1,4 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
-import type CameraControls from 'camera-controls'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
