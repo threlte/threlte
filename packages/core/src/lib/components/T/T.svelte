@@ -40,27 +40,23 @@
     return Array.isArray(args)
   }
 
-  // Create Event
-  const createEvent = useCreateEvent()
-
   // We can't create the object in a reactive statement due to providing context
-  export let ref = (
+  let ref = (
     isClass(is) && argsIsConstructorParameters(args)
       ? new is(...(args as any)) // TODO: fix this any
       : isClass(is)
       ? new is()
       : is
   ) as MaybeInstance<Type>
-  let initialized = false
-  // the ref has been created, emit the create event …
-  createEvent.updateRef(ref)
-  // … and create the object store. This store is used to
-  // run updates based on actual ref changes. So this store
-  // should be used in reactive statements
-  const refStore = writable(ref)
 
+  // Create Event
+  const createEvent = useCreateEvent()
+  $: createEvent.updateRef(ref)
+
+  let initialized = false
+  // When "is" or "args" change, we need to create a new ref.
   const maybeSetRef = () => {
-    // because reactive statements run immediately, we need to ignore the first run
+    // Because reactive statements run immediately, we need to ignore the first run.
     if (!initialized) {
       initialized = true
       return
@@ -72,42 +68,46 @@
         ? new is()
         : is
     ) as MaybeInstance<Type>
-    // the ref has been recreated, emit the create event …
-    createEvent.updateRef(ref)
-    // … and set the object store.
-    refStore.set(ref)
   }
   $: is, args, maybeSetRef()
 
+  // In order to prevent updates by outside mutations on ref,
+  // we need to create a publicly exposed ref.
+  let publicRef = ref
+  $: publicRef = ref
+  export { publicRef as ref }
+
+  const refStore = writable(ref)
+  $: refStore.set(ref)
   setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', refStore)
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({ ref, props: $$props })
+  const plugins = usePlugins({ ref: ref, props: $$props })
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
   const props = useProps()
-  $: props.updateProps($refStore, $$restProps, {
+  $: props.updateProps(ref, $$restProps, {
     manualCamera: manual,
     pluginsProps
   })
 
   // Camera
   const camera = useCamera()
-  $: camera.update($refStore, manual)
-  $: camera.makeDefaultCamera($refStore, makeDefault)
+  $: camera.update(ref, manual)
+  $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment
   const attachment = useAttach()
-  $: attachment.update($refStore, $parent, attach)
+  $: attachment.update(ref, $parent, attach)
 
   // Events
   const events = useEvents()
-  $: events.updateRef($refStore)
+  $: events.updateRef(ref)
 
   // update plugins after all other updates
-  $: plugins?.updateRef($refStore)
+  $: plugins?.updateRef(ref)
   $: plugins?.updateProps($$props)
   $: plugins?.updateRestProps($$restProps)
 
@@ -120,12 +120,12 @@
   }
 </script>
 
-{#if isDisposableObject($refStore)}
-  <DisposableObject object={$refStore} {dispose} />
+{#if isDisposableObject(ref)}
+  <DisposableObject object={ref} {dispose} />
 {/if}
 
-{#if extendsObject3D($refStore)}
-  <SceneGraphObject object={$refStore}>
+{#if extendsObject3D(ref)}
+  <SceneGraphObject object={ref}>
     <slot {ref} />
   </SceneGraphObject>
 {:else}
