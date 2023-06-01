@@ -41,15 +41,26 @@
   }
 
   // We can't create the object in a reactive statement due to providing context
-  export let ref = (
+  let ref = (
     isClass(is) && argsIsConstructorParameters(args)
       ? new is(...(args as any)) // TODO: fix this any
       : isClass(is)
       ? new is()
       : is
   ) as MaybeInstance<Type>
+
+  // Create Event
+  const createEvent = useCreateEvent()
+  $: createEvent.updateRef(ref)
+
   let initialized = false
-  $: if (initialized) {
+  // When "is" or "args" change, we need to create a new ref.
+  const maybeSetRef = () => {
+    // Because reactive statements run immediately, we need to ignore the first run.
+    if (!initialized) {
+      initialized = true
+      return
+    }
     ref = (
       isClass(is) && argsIsConstructorParameters(args)
         ? new is(...(args as any)) // TODO: fix this any
@@ -57,17 +68,22 @@
         ? new is()
         : is
     ) as MaybeInstance<Type>
-  } else {
-    initialized = true
   }
-  const objectStore = writable(ref)
-  $: objectStore.set(ref)
-  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', objectStore)
+  $: is, args, maybeSetRef()
 
-  // Plugins
+  // In order to prevent updates by outside mutations on ref,
+  // we need to create a publicly exposed ref.
+  let publicRef = ref
+  $: publicRef = ref
+  export { publicRef as ref }
+
+  const refStore = writable(ref)
+  $: refStore.set(ref)
+  setContext<ThrelteThreeParentContext>('threlte-hierarchical-parent-context', refStore)
+
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({ ref, props: $$props })
+  const plugins = usePlugins({ ref: ref, props: $$props })
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
@@ -89,10 +105,6 @@
   // Events
   const events = useEvents()
   $: events.updateRef(ref)
-
-  // Create Event
-  const createEvent = useCreateEvent()
-  $: createEvent.updateRef(ref)
 
   // update plugins after all other updates
   $: plugins?.updateRef(ref)
