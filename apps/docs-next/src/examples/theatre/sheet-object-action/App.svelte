@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Project, Sheet, Sequence, Studio } from '@threlte/theatre'
+  import { Project, Sequence, Sheet } from '@threlte/theatre'
 
   import Scene from './Scene.svelte'
   import state from './state.json'

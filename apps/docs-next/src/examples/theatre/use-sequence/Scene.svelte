@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Environment, GLTF, Text, interactivity, useInteractivity } from '@threlte/extras'
-  import { useSequence, Editable } from '@threlte/theatre'
+  import { Environment, Text, interactivity } from '@threlte/extras'
+  import { useSequence } from '@threlte/theatre'
 
   import Feather from './Feather.svelte'
 
@@ -40,5 +40,5 @@
   files="industrial_sunset_puresky_1k.hdr"
   isBackground={true}
   format="hdr"
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
+  groundProjection={{ radius: 200, height: 5, scale: 100 }}
 />

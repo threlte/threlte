@@ -4,7 +4,7 @@
   export let play: (opts?: {}) => Promise<boolean>
   export let pause: (opts?: {}) => Promise<boolean>
 
-  import { PlayIcon, PauseIcon } from './icons'
+  import { PauseIcon, PlayIcon } from './icons'
 
   const fmt = (n: number) =>
     n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
