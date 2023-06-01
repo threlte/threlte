@@ -1,39 +1,32 @@
 <script lang="ts">
   import type { IProject } from '@theatre/core'
   import { getContext, setContext } from 'svelte'
-
-  import { Sequence } from '../sequence/sequence'
-
+  import { SequenceController } from '../sequence/SequenceController'
   import { globalSheets } from '../consts'
+  import type { SheetContext } from './types'
 
-  // PARENT CONTEXT
-
-  export const project = getContext(`theatre-project`) as IProject
+  // parent context
+  export const project = getContext('theatre-project') as IProject
   const projectName = project.address.projectId
 
-  // PROPS
-
+  // props
   export let name = 'default'
   export let instance: string | undefined = undefined
 
-  // BINDINGS
-
+  // bindings
   export const sheet =
     globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
 
-  // REGISTER INSTANCE LOGIC
-
+  // register instance logic
   globalSheets.set(`${projectName}-${name}-${instance}`, sheet)
 
-  // INIT SEQUENCE STORE
+  // init sequence store
+  export const sequence = new SequenceController(sheet.sequence)
 
-  export const sequence = new Sequence(sheet.sequence)
-
-  // CHILD CONTEXT
-
+  // child context
   const sequences = { default: sequence }
 
-  setContext(`theatre-sheet`, { sheet, sequences })
+  setContext<SheetContext>('theatre-sheet', { sheet, sequences })
 </script>
 
 <slot {sheet} />

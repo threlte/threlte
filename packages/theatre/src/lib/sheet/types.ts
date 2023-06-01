@@ -1,8 +1,7 @@
 import type { ISheet } from '@theatre/core'
-
-import type { SequenceContext } from '../Sequence/types'
+import type { SequenceController } from '../sequence/SequenceController'
 
 export interface SheetContext {
-	sheet: ISheet
-	sequences: { [key: string]: SequenceContext }
+  sheet: ISheet
+  sequences: { [key: string]: SequenceController }
 }

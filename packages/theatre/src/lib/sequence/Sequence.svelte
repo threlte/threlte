@@ -1,26 +1,20 @@
 <script lang="ts">
-  import type { ISequence, IRafDriver } from '@theatre/core'
-
-  import { getContext, onMount, onDestroy, setContext } from 'svelte'
-
+  import type { IRafDriver, ISequence } from '@theatre/core'
+  import { getContext, onDestroy, onMount, setContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
-
   import type {
     Autoreset,
-    PlaybackRange,
     IterationCount,
     PlaybackDirection,
+    PlaybackRange,
     SequenceAudioOptions,
     SequenceOptions
   } from './types'
-  import { Sequence } from './sequence'
 
-  // PARENT CONTEXT
+  // Parent context
+  const { sequences } = getContext<SheetContext>('theatre-sheet')
 
-  export const { sheet, sequences }: SheetContext = getContext('theatre-sheet')
-
-  // PROPS
-
+  // Props
   let key = 'default' // not exposed yet, will be a prop in the future
 
   // Theatre's native playback options
@@ -37,8 +31,7 @@
   export let autopause: boolean = false
   export let delay: number = 0
 
-  // INIT
-
+  // Get the Sequence instance
   export const sequence = sequences[key]
 
   let mounted = false
@@ -64,8 +57,7 @@
       rafDriver
     })
 
-  // BINDINGS
-
+  // Bindings
   const { position: positionStore, playing: playingStore, length: lengthStore } = sequence
 
   export let position = $positionStore
@@ -74,8 +66,6 @@
 
   export const play: ISequence['play'] = (opts?: SequenceOptions) => sequence.play(opts)
   export const pause: ISequence['pause'] = () => sequence.pause()
-
-  // REACTIVITY
 
   // position
   let positionChangedBy = 'user'
@@ -95,16 +85,13 @@
   })
   $: playing, playingChangedBy === 'user' && ($playingStore = playing), (playingChangedBy = 'user')
 
-  // CONTEXTS
-
-  // pass to children
-  setContext(`theatre-sequence-[${key}]`, sequence)
+  // pass sequence to children via context
+  setContext('theatre-sequence', sequence)
 
   // pass to parent
   sequences[key] = sequence
 
-  // CLEANUP
-
+  // Cleanup
   onDestroy(() => {
     delete sequences[key]
     sequence.destroy()
