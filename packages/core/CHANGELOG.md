@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.8
+
+### Patch Changes
+
+- 2943cb32: Fixed a bug which could lead to memory leaks, removed unused type import
+
 ## 6.0.0-next.7
 
 ### Minor Changes
