@@ -3,7 +3,7 @@
   import { useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Texture } from 'three'
-  import { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
+  import { GroundProjectedSkybox } from 'three/examples/jsm/objects/GroundProjectedSkybox'
 
   export let groundProjection: EnvironmentProperties['groundProjection']
   export let currentEnvMap: Texture
@@ -40,13 +40,13 @@
   }
 
   const toggleGroundEnv = (
-    groundEnv: GroundProjectedEnv | undefined,
+    groundEnv: GroundProjectedSkybox | undefined,
     groundEnvProps: EnvironmentProperties['groundProjection'],
     envMap: Texture
   ) => {
     if (groundEnv && previousEnvMap != envMap) removeGroundEnv()
     if ((!groundEnv || previousEnvMap != envMap) && groundEnvProps && envMap) {
-      currentGroundEnv = new GroundProjectedEnv(envMap)
+      currentGroundEnv = new GroundProjectedSkybox(envMap)
 
       scene.add(currentGroundEnv)
       previousEnvMap = envMap

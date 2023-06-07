@@ -16,7 +16,7 @@
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 
-  import GroundProjectedEnv from './GroundProjectedEnv.svelte'
+  import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
 
   export let path: EnvironmentProperties['path'] = undefined
   export let files: EnvironmentProperties['files']
@@ -103,7 +103,7 @@
 </script>
 
 {#if groundProjection}
-  <GroundProjectedEnv
+  <GroundProjectedSkybox
     {groundProjection}
     currentEnvMap={previousEnvMap}
   />
