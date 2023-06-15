@@ -41,87 +41,101 @@
   })
 </script>
 
-<InstallButton
-  disabled
-  active
-  class="cursor-not-allowed">@threlte/core</InstallButton
+<div
+  class="grid grid-cols-1 md:grid-cols-[auto_auto] justify-start justify-items-start items-start gap-x-4 gap-y-1 md:gap-y-2"
 >
-
-<p class="mt-1">
-  Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
-  are required.
-</p>
-
-<InstallButton
-  on:click={() => {
-    installExtras = !installExtras
-  }}
-  active={installExtras}
-  passivelyActive={useGltf}>@threlte/extras</InstallButton
->
-
-<p class="mt-1">
-  <a
-    href="/docs/reference/extras/getting-started"
-    target="_blank">Components, helpers, hooks</a
+  <InstallButton
+    disabled
+    active
+    class="cursor-not-allowed">@threlte/core</InstallButton
   >
-  and more that extend the core functionality.
-</p>
 
-<InstallButton
-  on:click={() => {
-    useGltf = !useGltf
-  }}
-  active={useGltf}>@threlte/gltf</InstallButton
->
+  <p class="my-0 text-sm">
+    Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
+    are required.
+  </p>
 
-<p class="mt-1">
-  A <a
-    href="/docs/reference/gltf/getting-started"
-    target="_blank">command-line tool</a
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+
+  <InstallButton
+    on:click={() => {
+      installExtras = !installExtras
+    }}
+    active={installExtras}
+    passivelyActive={useGltf}>@threlte/extras</InstallButton
   >
-  that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
-  make use of the package <code>@threlte/extras</code>.
-</p>
 
-<InstallButton
-  on:click={() => {
-    installRapier = !installRapier
-  }}
-  active={installRapier}>@threlte/rapier</InstallButton
->
+  <p class="my-0 text-sm">
+    <a
+      href="/docs/reference/extras/getting-started"
+      target="_blank">Components, helpers, hooks</a
+    >
+    and more that extend the core functionality.
+  </p>
 
-<p class="mt-1">
-  Components and hooks to use the <a
-    href="https://rapier.rs/"
-    target="_blank"
-    rel="noreferrer">Rapier physics engine</a
-  > in Threlte.
-</p>
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
 
-<InstallButton
-  on:click={() => {
-    installTheatre = !installTheatre
-  }}
-  active={installTheatre}>@threlte/theatre</InstallButton
->
+  <InstallButton
+    on:click={() => {
+      useGltf = !useGltf
+    }}
+    active={useGltf}>@threlte/gltf</InstallButton
+  >
 
-<p class="mt-1">
-  Components and hooks to use the animation library <a
-    href="https://www.theatrejs.com/"
-    target="_blank"
-    rel="noreferrer">Theatre.js</a
-  > in Threlte.
-</p>
+  <p class="my-0 text-sm">
+    A <a
+      href="/docs/reference/gltf/getting-started"
+      target="_blank">command-line tool</a
+    >
+    that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
+    make use of the package <code>@threlte/extras</code>.
+  </p>
 
-<InstallButton
-  on:click={() => {
-    installTypes = !installTypes
-  }}
-  active={installTypes}>@types/three</InstallButton
->
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
 
-<p class="mt-1">TypeScript types for three.js.</p>
+  <InstallButton
+    on:click={() => {
+      installRapier = !installRapier
+    }}
+    active={installRapier}>@threlte/rapier</InstallButton
+  >
+
+  <p class="my-0 text-sm">
+    Components and hooks to use the <a
+      href="https://rapier.rs/"
+      target="_blank"
+      rel="noreferrer">Rapier physics engine</a
+    > in Threlte.
+  </p>
+
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+
+  <InstallButton
+    on:click={() => {
+      installTheatre = !installTheatre
+    }}
+    active={installTheatre}>@threlte/theatre</InstallButton
+  >
+
+  <p class="my-0 text-sm">
+    Components and hooks to use the animation library <a
+      href="https://www.theatrejs.com/"
+      target="_blank"
+      rel="noreferrer">Theatre.js</a
+    > in Threlte.
+  </p>
+
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+
+  <InstallButton
+    on:click={() => {
+      installTypes = !installTypes
+    }}
+    active={installTypes}>@types/three</InstallButton
+  >
+
+  <p class="my-0 text-sm">TypeScript types for three.js.</p>
+</div>
 
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
