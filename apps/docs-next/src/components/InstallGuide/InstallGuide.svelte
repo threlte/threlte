@@ -42,7 +42,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 md:grid-cols-[auto_auto] justify-start justify-items-start items-start gap-x-4 gap-y-1 md:gap-y-2"
+  class="grid grid-cols-1 md:grid-cols-[auto_auto] justify-start max-md:justify-items-start items-start gap-x-4 gap-y-2 md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -50,7 +50,7 @@
     class="cursor-not-allowed">@threlte/core</InstallButton
   >
 
-  <p class="my-0 text-sm">
+  <p class="my-0 text-sm md:text-base self-center">
     Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
     are required.
   </p>
@@ -65,7 +65,7 @@
     passivelyActive={useGltf}>@threlte/extras</InstallButton
   >
 
-  <p class="my-0 text-sm">
+  <p class="my-0 text-sm md:text-base self-center">
     <a
       href="/docs/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
@@ -82,7 +82,7 @@
     active={useGltf}>@threlte/gltf</InstallButton
   >
 
-  <p class="my-0 text-sm">
+  <p class="my-0 text-sm md:text-base self-center">
     A <a
       href="/docs/reference/gltf/getting-started"
       target="_blank">command-line tool</a
@@ -100,7 +100,7 @@
     active={installRapier}>@threlte/rapier</InstallButton
   >
 
-  <p class="my-0 text-sm">
+  <p class="my-0 text-sm md:text-base self-center">
     Components and hooks to use the <a
       href="https://rapier.rs/"
       target="_blank"
@@ -117,7 +117,7 @@
     active={installTheatre}>@threlte/theatre</InstallButton
   >
 
-  <p class="my-0 text-sm">
+  <p class="my-0 text-sm md:text-base self-center">
     Components and hooks to use the animation library <a
       href="https://www.theatrejs.com/"
       target="_blank"
@@ -134,7 +134,7 @@
     active={installTypes}>@types/three</InstallButton
   >
 
-  <p class="my-0 text-sm">TypeScript types for three.js.</p>
+  <p class="my-0 text-sm md:text-base self-center">TypeScript types for three.js.</p>
 </div>
 
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
