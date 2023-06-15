@@ -21,7 +21,7 @@
     _class
   )}
 >
-  {#if active}
+  {#if active || passivelyActive}
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="76"
@@ -53,7 +53,7 @@
   <code
     class={c(
       'bg-transparent mx-0 px-0',
-      active ? 'text-white' : 'text-faded group-hover:text-white'
+      active || passivelyActive ? 'text-white' : 'text-faded group-hover:text-white'
     )}
   >
     <slot />
