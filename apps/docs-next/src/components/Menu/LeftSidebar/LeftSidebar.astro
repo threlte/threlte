@@ -17,3 +17,17 @@ const activeUrlPathName = Astro.url.pathname
   activeSidebarTab={activeSidebarTab}
   activeUrlPathName={activeUrlPathName}
 />
+
+<!-- Preserve sidebar scroll across page loads -->
+<script is:inline>
+{
+  const leftSidebar = document.querySelector('#sidebar-scrollwindow')
+  const leftSidebarScroll = localStorage.getItem('sidebar-scroll')
+  if (leftSidebarScroll !== null) {
+    leftSidebar.scrollTop = parseInt(leftSidebarScroll, 10)
+  }
+  window.addEventListener('beforeunload', () => {
+    localStorage.setItem('sidebar-scroll', leftSidebar.scrollTop)
+  })
+}
+</script>
