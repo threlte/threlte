@@ -15,7 +15,7 @@
 
   $: installCode = [
     `npm install three @threlte/core@next${
-      installExtras || installRapier || installTheatre || installTypes ? divider : ''
+      installExtras || useGltf || installRapier || installTheatre || installTypes ? divider : ''
     }`,
     (installExtras || useGltf) &&
       `${space}@threlte/extras@next${
