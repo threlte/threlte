@@ -40,6 +40,9 @@
     return Array.isArray(args)
   }
 
+  // Create Event
+  const createEvent = useCreateEvent()
+
   // We can't create the object in a reactive statement due to providing context
   let ref = (
     isClass(is) && argsIsConstructorParameters(args)
@@ -48,10 +51,8 @@
       ? new is()
       : is
   ) as MaybeInstance<Type>
-
-  // Create Event
-  const createEvent = useCreateEvent()
-  $: createEvent.updateRef(ref)
+  // The ref is created, emit the event
+  createEvent.updateRef(ref)
 
   let initialized = false
   // When "is" or "args" change, we need to create a new ref.
@@ -68,6 +69,8 @@
         ? new is()
         : is
     ) as MaybeInstance<Type>
+    // The ref is recreated, emit the event
+    createEvent.updateRef(ref)
   }
   $: is, args, maybeSetRef()
 
