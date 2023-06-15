@@ -1,5 +1,18 @@
 import { get_current_component } from 'svelte/internal'
 
+type Dispatcher<EventMap extends Record<string, unknown>> = <Type extends keyof EventMap>(
+  type: Type,
+  payload?: EventMap[Type]
+) => void
+
+type HasEventListener<EventMap extends Record<string, unknown>> = <Type extends keyof EventMap>(
+  type: Type
+) => boolean
+
+type RawEventDispatcher<EventMap extends Record<string, unknown>> = Dispatcher<EventMap> & {
+  hasEventListener: HasEventListener<EventMap>
+}
+
 /**
  * ### `createRawEventDispatcher`
  *
@@ -22,17 +35,12 @@ import { get_current_component } from 'svelte/internal'
  * <ComponentA on:foo={(e) => console.log(e)} /> <!-- 'bar' -->
  * ```
  */
-export function createRawEventDispatcher<EventMap extends Record<string, unknown> = any>(): (<
-  EventKey extends Extract<keyof EventMap, string>
->(
-  type: EventKey,
-  value?: EventMap[EventKey]
-) => void) & {
-  hasEventListener: <EventKey extends Extract<keyof EventMap, string>>(type: EventKey) => boolean
-} {
+export const createRawEventDispatcher = <
+  EventMap extends Record<string, unknown> = any
+>(): RawEventDispatcher<EventMap> => {
   const component = get_current_component()
 
-  const dispatchRawEvent = (type: string, value: any) => {
+  const dispatchRawEvent: Dispatcher<EventMap> = (type, value) => {
     const callbacks = component.$$.callbacks[type]
     if (callbacks) {
       callbacks.forEach((fn: (...args: any[]) => any) => {
@@ -41,11 +49,14 @@ export function createRawEventDispatcher<EventMap extends Record<string, unknown
     }
   }
 
-  const hasEventListener = <EventKey extends Extract<keyof EventMap, string>>(type: EventKey) => {
+  const hasEventListener: HasEventListener<EventMap> = (type) => {
     return Boolean(component.$$.callbacks[type])
   }
 
-  dispatchRawEvent.hasEventListener = hasEventListener
+  Object.defineProperty(dispatchRawEvent, 'hasEventListener', {
+    value: hasEventListener,
+    enumerable: true
+  })
 
-  return dispatchRawEvent as ReturnType<typeof createRawEventDispatcher>
+  return dispatchRawEvent as RawEventDispatcher<EventMap>
 }
