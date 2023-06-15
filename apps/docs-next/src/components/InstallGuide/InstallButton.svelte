@@ -2,6 +2,7 @@
   import { c } from '../../lib/classes'
 
   export let active = false
+  export let passivelyActive = false
 
   let _class = ''
   export { _class as class }
@@ -12,7 +13,11 @@
   on:click
   class={c(
     'px-3 pr-4 py-1 gap-2 rounded-md flex flex-row items-center border-white/20 border justify-start group',
-    active ? 'bg-green-500/70 text-white' : 'bg-blue-900 hover:bg-blue-700/30',
+    active
+      ? 'bg-green-500/70 text-white'
+      : passivelyActive
+      ? 'bg-green-500/20 text-white'
+      : 'bg-blue-900 hover:bg-blue-700/30',
     _class
   )}
 >

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { c } from '../../lib/classes'
   import CopyCodeButton from '../Code/CopyCodeButton.svelte'
   import InstallButton from './InstallButton.svelte'
   import { onMount } from 'svelte'
 
+  let useGltf = false
   let installExtras = false
   let installRapier = false
   let installTheatre = false
@@ -17,7 +17,7 @@
     `npm install three @threlte/core@next${
       installExtras || installRapier || installTheatre || installTypes ? divider : ''
     }`,
-    installExtras &&
+    (installExtras || useGltf) &&
       `${space}@threlte/extras@next${
         installRapier || installTheatre || installTypes ? divider : ''
       }`,
@@ -56,10 +56,33 @@
   on:click={() => {
     installExtras = !installExtras
   }}
-  active={installExtras}>@threlte/extras</InstallButton
+  active={installExtras}
+  passivelyActive={useGltf}>@threlte/extras</InstallButton
 >
 
-<p class="mt-1">Components, helpers, hooks and more that extend the core functionality.</p>
+<p class="mt-1">
+  <a
+    href="/docs/reference/extras/getting-started"
+    target="_blank">Components, helpers, hooks</a
+  >
+  and more that extend the core functionality.
+</p>
+
+<InstallButton
+  on:click={() => {
+    useGltf = !useGltf
+  }}
+  active={useGltf}>@threlte/gltf</InstallButton
+>
+
+<p class="mt-1">
+  A <a
+    href="/docs/reference/gltf/getting-started"
+    target="_blank">command-line tool</a
+  >
+  that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
+  make use of the package <code>@threlte/extras</code>.
+</p>
 
 <InstallButton
   on:click={() => {
@@ -68,7 +91,13 @@
   active={installRapier}>@threlte/rapier</InstallButton
 >
 
-<p class="mt-1">Components and hooks to use the Rapier physics engine in Threlte.</p>
+<p class="mt-1">
+  Components and hooks to use the <a
+    href="https://rapier.rs/"
+    target="_blank"
+    rel="noreferrer">Rapier physics engine</a
+  > in Threlte.
+</p>
 
 <InstallButton
   on:click={() => {
@@ -77,7 +106,13 @@
   active={installTheatre}>@threlte/theatre</InstallButton
 >
 
-<p class="mt-1">Components and hooks to use the animation library Theatre.js in Threlte.</p>
+<p class="mt-1">
+  Components and hooks to use the animation library <a
+    href="https://www.theatrejs.com/"
+    target="_blank"
+    rel="noreferrer">Theatre.js</a
+  > in Threlte.
+</p>
 
 <InstallButton
   on:click={() => {
