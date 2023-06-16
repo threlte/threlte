@@ -1,6 +1,6 @@
 {
   "name": "create-threlte",
-  "version": "0.0.2-next.8",
+  "version": "0.0.2-next.9",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "bin": "./dist/bin.js",
