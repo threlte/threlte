@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.8
+
+### Patch Changes
+
+- 568b8c0: Added three.js dependency
+
 ## 0.0.2-next.7
 
 ### Patch Changes
