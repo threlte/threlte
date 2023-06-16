@@ -138,7 +138,9 @@ const create = async () => {
   const svelteKitPkg = JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf-8'))
 
   const threltePackageJson = {
-    devDependencies: {}
+    devDependencies: {
+      '@threlte/core': 'next'
+    }
   }
 
   if (options.threltePackages.includes('@threlte/extras')) {
