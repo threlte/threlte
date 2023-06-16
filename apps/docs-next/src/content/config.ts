@@ -80,6 +80,7 @@ export const learnCollection = defineCollection({
     category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing', 'Examples']),
     isDivider: z.boolean().optional(),
     title: z.string(),
+    subtitle: z.string().optional(),
     order: z.number().optional(),
     showInSidebar: z.boolean().optional().default(true)
   })

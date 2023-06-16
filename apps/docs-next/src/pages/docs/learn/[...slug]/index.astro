@@ -19,7 +19,7 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { category, title } = entry.data
+const { category, title, subtitle } = entry.data
 const { Content } = await entry.render()
 ---
 
@@ -30,6 +30,7 @@ const { Content } = await entry.render()
   <h1>
     {title}
   </h1>
+  {subtitle !== undefined && <h2 class="mt-6">{subtitle}</h2>}
 
   <Content components={{ pre: MdxCode }} />
 
