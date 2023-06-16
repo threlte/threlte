@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.7
+
+### Patch Changes
+
+- 4d40c88: Fixed package name in intro
+
 ## 0.0.2-next.6
 
 ### Patch Changes
