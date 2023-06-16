@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.5
+
+### Patch Changes
+
+- ab88499: Added basic examples for core and extras, fixed dev
+
 ## 0.0.2-next.4
 
 ### Patch Changes
