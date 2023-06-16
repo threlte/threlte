@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.9
+
+### Patch Changes
+
+- b14aa99: removed unused hook, cleaned up types and improved create event of T component.
+
 ## 6.0.0-next.8
 
 ### Patch Changes
