@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.9
+
+### Patch Changes
+
+- ea2ff82: Added proper dep versions
+
 ## 0.0.2-next.8
 
 ### Patch Changes
