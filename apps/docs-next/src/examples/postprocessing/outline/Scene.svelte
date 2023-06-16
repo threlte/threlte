@@ -1,23 +1,59 @@
 <script lang="ts">
-  import { PlaneGeometry } from 'three'
+	import { onMount } from 'svelte';
+	import { quadInOut } from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
+
   import { T } from '@threlte/core'
   import { OrbitControls, Grid, ContactShadows } from '@threlte/extras'
-  import { animationPlaying } from './state'
+
+  import { PlaneGeometry } from 'three'
+
   import Maze from './Maze.svelte'
   import CustomRenderer from './CustomRenderer.svelte'
 
+  const route = [
+		[0, 1, -3],
+		[0, 1, 1.5],
+		[4.7, 1, 1.5],
+		[4.7, 1, 5],
+		[2, 1, 5],
+		[2, 1, 9],
+		[8, 1, 9],
+		[8, 1, -3]
+	];
+	let routeIndex = 0;
+	let cubePosition = tweened(route[routeIndex], {
+		duration: 400,
+		easing: quadInOut,
+	});
 	let outlinedCube;
+
+	onMount(() => {
+		const interval = setInterval(nextCubePosition, 500);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
+
+	const nextCubePosition = () => {
+		if (routeIndex < route.length - 1) {
+			routeIndex++;
+		} else {
+			routeIndex = 0;
+		}
+		cubePosition.set(route[routeIndex]);
+	};
 </script>
 
 <Maze />
 
-<T.Mesh position={[1.8,1,1]} bind:ref={outlinedCube}>
+<T.Mesh position={$cubePosition} bind:ref={outlinedCube}>
   <T.MeshToonMaterial color="gold" />
   <T.BoxGeometry />
 </T.Mesh>
 
 <CustomRenderer selectedMesh={outlinedCube} />
-
 
 <T.PerspectiveCamera
   makeDefault
@@ -25,7 +61,7 @@
   fov={15}
   zoom={0.2}
 >
-  <OrbitControls enableZoom={true} enableDamping target.y={0} />
+  <OrbitControls enableZoom={true} enableDamping target={[0, 0, 5]}/>
 </T.PerspectiveCamera>
 
 <T.DirectionalLight
@@ -36,13 +72,10 @@
 <T.AmbientLight intensity={0.2} />
 
 <Grid
-  position.y={-0.001}
+  gridSize={18}
+  position={[0, -0.001, 5]}
   cellColor="#ffffff"
   sectionColor="#ffffff"
   sectionThickness={0}
-  fadeDistance={75}
-  cellSize={2}
+  fadeDistance={25}
 />
-
-<ContactShadows scale={12} blur={2} far={5} opacity={0.5} />
-
