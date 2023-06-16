@@ -139,25 +139,25 @@ const create = async () => {
 
   const threltePackageJson = {
     devDependencies: {
-      three: 'latest',
+      three: '^0.153.0',
       '@threlte/core': 'next'
     }
   }
 
   if (options.types === 'typescript') {
-    threltePackageJson.devDependencies['@types/three'] = 'latest'
+    threltePackageJson.devDependencies['@types/three'] = '^0.152.1'
   }
   if (options.threltePackages.includes('@threlte/extras')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'next'
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
     threltePackageJson.devDependencies['@threlte/rapier'] = 'next'
-    threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = 'latest'
+    threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = '^0.11.2'
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
     threltePackageJson.devDependencies['@threlte/theatre'] = 'next'
-    threltePackageJson.devDependencies['@theatre/core'] = 'latest'
-    threltePackageJson.devDependencies['@theatre/studio'] = 'latest'
+    threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
+    threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
   }
 
   const mergedPkg = merger.mergeObjects([svelteKitPkg, threltePackageJson])
