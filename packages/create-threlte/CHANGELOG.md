@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.6
+
+### Patch Changes
+
+- 51de433: Edited root page
+
 ## 0.0.2-next.5
 
 ### Patch Changes
