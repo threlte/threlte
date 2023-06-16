@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.0.2-next.3
+
+### Patch Changes
+
+- d111d18: Added shebang line
+
 ## 0.0.2-next.2
 
 ### Patch Changes
