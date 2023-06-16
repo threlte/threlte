@@ -1,5 +1,12 @@
 # create-threlte
 
+## 0.0.2-next.4
+
+### Patch Changes
+
+- 4c930d8: TypeScript should exclude the templates
+- 09a07a2: Added core dependency, added modified vite config
+
 ## 0.0.2-next.3
 
 ### Patch Changes
