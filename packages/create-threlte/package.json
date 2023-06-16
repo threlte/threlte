@@ -22,9 +22,6 @@
   },
   "type": "module",
   "types": "./src/lib/index.ts",
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@clack/prompts": "^0.6.3",
     "create-svelte": "^4.2.0",
