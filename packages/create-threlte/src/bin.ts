@@ -139,10 +139,14 @@ const create = async () => {
 
   const threltePackageJson = {
     devDependencies: {
+      three: 'latest',
       '@threlte/core': 'next'
     }
   }
 
+  if (options.types === 'typescript') {
+    threltePackageJson.devDependencies['@types/three'] = 'latest'
+  }
   if (options.threltePackages.includes('@threlte/extras')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'next'
   }
