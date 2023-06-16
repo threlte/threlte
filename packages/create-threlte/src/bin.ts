@@ -15,7 +15,7 @@ const { version } = JSON.parse(
   fs.readFileSync(new URL('../package.json', import.meta.url), 'utf-8')
 )
 
-print(grey(`\n@threlte/create version ${version}\n`))
+print(grey(`\ncreate-threlte version ${version}\n`))
 
 let cwd = process.argv[2] || '.'
 
