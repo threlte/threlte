@@ -5,7 +5,7 @@
   "license": "MIT",
   "bin": "./dist/bin.js",
   "scripts": {
-    "dev": "ts-node-esm src/bin.ts",
+    "dev": "node --loader ts-node/esm src/bin.ts",
     "build": "rimraf dist/ && tsc && cpy ./templates '../dist/' --cwd=src",
     "package": "pnpm build",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",

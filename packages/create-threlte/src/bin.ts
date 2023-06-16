@@ -160,10 +160,20 @@ const create = async () => {
 
   fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(mergedPkg, null, 2))
 
+  const templatesDir = path.join(dirname(fileURLToPath(import.meta.url)), 'templates')
+
   if (options.types === 'typescript') {
-    copy(path.join(dirname(fileURLToPath(import.meta.url)), 'templates', 'typescript'), cwd)
+    // handle typescript templates
+    await copy(path.join(templatesDir, 'typescript'), cwd)
+    if (options.threltePackages.includes('@threlte/extras')) {
+      await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
+    }
   } else {
-    copy(path.join(dirname(fileURLToPath(import.meta.url)), 'templates', 'javascript'), cwd)
+    // handle javascript templates
+    await copy(path.join(templatesDir, 'javascript'), cwd)
+    if (options.threltePackages.includes('@threlte/extras')) {
+      await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
+    }
   }
 
   p.outro('Your project is ready!')
