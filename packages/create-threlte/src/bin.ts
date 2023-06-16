@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { create as createSvelteKitApp } from 'create-svelte'
 import { copy } from 'fs-extra'
 import { Merger } from 'json-merger'
