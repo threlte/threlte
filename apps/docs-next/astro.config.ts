@@ -45,7 +45,7 @@ export default defineConfig({
       imports: [
         '$components/Example/Example.astro',
         '$components/Tip/Tip.astro',
-        '$components/InstallGuide/InstallGuide.svelte'
+        '$components/ManualInstallGuide/ManualInstallGuide.svelte'
       ]
     }),
     tailwind(),

@@ -1,3 +1,7 @@
+html {
+  scroll-padding-top: calc(70px + 1.5rem);
+}
+
 .prose {
   a strong {
     @apply !text-inherit;
