@@ -102,6 +102,11 @@ const create = async () => {
               hint: 'Components, helpers, hooks and more that extend the core functionality'
             },
             {
+              value: '@threlte/gltf',
+              label: '@threlte/gltf',
+              hint: 'A command-line tool that turns GLTF assets into declarative and re-usable Threlte components. A simple asset pipeline will be set up for you'
+            },
+            {
               value: '@threlte/rapier',
               label: '@threlte/rapier',
               hint: 'Components and hooks to use the Rapier physics engine in Threlte'
@@ -141,7 +146,8 @@ const create = async () => {
     devDependencies: {
       three: '^0.153.0',
       '@threlte/core': 'next'
-    }
+    },
+    scripts: {}
   }
 
   if (options.types === 'typescript') {
@@ -158,6 +164,10 @@ const create = async () => {
     threltePackageJson.devDependencies['@threlte/theatre'] = 'next'
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
+  }
+  if (options.threltePackages.includes('@threlte/gltf')) {
+    threltePackageJson.devDependencies['@threlte/extras'] = 'next'
+    threltePackageJson.scripts['assets:run'] = 'node scripts/model-pipeline.js'
   }
 
   const mergedPkg = merger.mergeObjects([svelteKitPkg, threltePackageJson])
