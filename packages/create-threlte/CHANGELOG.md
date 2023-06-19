@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.1.0-next.12
+
+### Patch Changes
+
+- a107ec7: Fixed targetDir preconfiguration
+
 ## 0.1.0-next.11
 
 ### Patch Changes
