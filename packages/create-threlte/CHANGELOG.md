@@ -1,5 +1,15 @@
 # create-threlte
 
+## 0.1.0-next.10
+
+### Minor Changes
+
+- e61b376: Added model pipeline feature to create command, added docs for create command
+
+### Patch Changes
+
+- a78b413: Fixed a bug where transformed models would be transformed again
+
 ## 0.0.2-next.9
 
 ### Patch Changes
