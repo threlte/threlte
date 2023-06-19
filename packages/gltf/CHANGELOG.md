@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.0-next.13
+
+### Major Changes
+
+- d5abde5: Simplified root option to more reasonable approach. When no root is given, the path supplied will be normalized and used as a file path, if root is given, takes full control.
+
 ## 1.0.0-next.12
 
 ### Patch Changes

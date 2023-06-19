@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.1.0-next.11
+
+### Patch Changes
+
+- 7ac7c20: Added root configuration option, preconfigured
+
 ## 0.1.0-next.10
 
 ### Minor Changes
