@@ -43,10 +43,16 @@ if (!existsSync(configuration.sourceDir)) {
   throw new Error(`Source directory ${configuration.sourceDir} doesn't exist.`)
 }
 
-// read the directory, filter for .glb and .gltf files
-const gltfFiles = readdirSync(configuration.sourceDir).filter(
-  (file) => file.endsWith('.glb') || file.endsWith('.gltf')
-)
+// read the directory, filter for .glb and .gltf files and files *not* ending
+// with -transformed.gltf or -transformed.glb as these should not be transformed
+// again.
+const gltfFiles = readdirSync(configuration.sourceDir).filter((file) => {
+  return (
+    (file.endsWith('.glb') || file.endsWith('.gltf')) &&
+    !file.endsWith('-transformed.gltf') &&
+    !file.endsWith('-transformed.glb')
+  )
+})
 
 gltfFiles.forEach((file) => {
   // run the gltf transform command on every file
