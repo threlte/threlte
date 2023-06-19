@@ -12,6 +12,7 @@ import { join, resolve } from 'node:path'
 const configuration = {
   sourceDir: resolve(join('static', 'models')),
   targetDir: resolve(join('src', 'components', 'models')),
+  overwrite: false,
   types: false,
   keepnames: false,
   meta: false,
@@ -94,6 +95,13 @@ svelteFiles.forEach((file) => {
   const path = join(configuration.sourceDir, file)
   const newPath = join(configuration.targetDir, file)
   try {
+    if (!configuration.overwrite) {
+      // check if file already exists
+      if (existsSync(newPath)) {
+        console.error(`File ${newPath} already exists, skipping.`)
+        return
+      }
+    }
     copyFileSync(path, newPath)
   } catch (error) {
     console.error(`Error copying file: ${error}`)

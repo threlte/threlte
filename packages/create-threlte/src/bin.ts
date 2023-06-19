@@ -102,11 +102,6 @@ const create = async () => {
               hint: 'Components, helpers, hooks and more that extend the core functionality'
             },
             {
-              value: '@threlte/gltf',
-              label: '@threlte/gltf',
-              hint: 'A command-line tool that turns GLTF assets into declarative and re-usable Threlte components. A simple asset pipeline will be set up for you'
-            },
-            {
               value: '@threlte/rapier',
               label: '@threlte/rapier',
               hint: 'Components and hooks to use the Rapier physics engine in Threlte'
@@ -115,6 +110,11 @@ const create = async () => {
               value: '@threlte/theatre',
               label: '@threlte/theatre',
               hint: 'Components and hooks to use the animation library Theatre.js in Threlte'
+            },
+            {
+              value: 'model-pipeline',
+              label: 'Model Pipeline',
+              hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
             }
           ]
         })
@@ -165,9 +165,9 @@ const create = async () => {
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
   }
-  if (options.threltePackages.includes('@threlte/gltf')) {
+  if (options.threltePackages.includes('model-pipeline')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'next'
-    threltePackageJson.scripts['assets:run'] = 'node scripts/model-pipeline.js'
+    threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
   }
 
   const mergedPkg = merger.mergeObjects([svelteKitPkg, threltePackageJson])
@@ -176,6 +176,7 @@ const create = async () => {
 
   const templatesDir = path.join(dirname(fileURLToPath(import.meta.url)), 'templates')
 
+  // Copy Templates
   if (options.types === 'typescript') {
     // handle typescript templates
     await copy(path.join(templatesDir, 'typescript'), cwd)
@@ -188,6 +189,10 @@ const create = async () => {
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
     }
+  }
+
+  if (options.threltePackages.includes('model-pipeline')) {
+    await copy(path.join(templatesDir, 'model-pipeline'), cwd, { overwrite: true })
   }
 
   p.outro('Your project is ready!')
@@ -234,6 +239,11 @@ const create = async () => {
     print(bold('✔ @threlte/theatre'))
     print(cyan('  https://next.threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
+  }
+  if (options.threltePackages.includes('model-pipeline')) {
+    print(bold('✔ Model Pipeline'))
+    print(cyan('  npm run model-pipeline:run'))
+    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started'))
   }
 
   print('\nNext steps:')
