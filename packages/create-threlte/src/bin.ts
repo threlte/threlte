@@ -193,6 +193,11 @@ const create = async () => {
 
   if (options.threltePackages.includes('model-pipeline')) {
     await copy(path.join(templatesDir, 'model-pipeline'), cwd, { overwrite: true })
+    if (options.types === 'typescript') {
+      await copy(path.join(templatesDir, 'model-pipeline+typescript'), cwd, { overwrite: true })
+    } else {
+      await copy(path.join(templatesDir, 'model-pipeline+javascript'), cwd, { overwrite: true })
+    }
   }
 
   p.outro('Your project is ready!')
