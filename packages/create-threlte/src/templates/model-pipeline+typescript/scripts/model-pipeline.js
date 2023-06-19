@@ -13,6 +13,7 @@ const configuration = {
   sourceDir: resolve(join('static', 'models')),
   targetDir: resolve(join('src', 'components', 'models')),
   overwrite: false,
+  root: '/models/',
   types: true,
   keepnames: false,
   meta: false,
@@ -60,6 +61,7 @@ gltfFiles.forEach((file) => {
 
   // parse the configuration
   const args = []
+  if (configuration.root) args.push(`--root ${configuration.root}`)
   if (configuration.types) args.push('--types')
   if (configuration.keepnames) args.push('--keepnames')
   if (configuration.meta) args.push('--meta')
