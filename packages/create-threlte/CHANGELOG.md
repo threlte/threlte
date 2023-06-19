@@ -1,5 +1,11 @@
 # create-threlte
 
+## 0.1.0-next.13
+
+### Patch Changes
+
+- 718f285: Fixed shared basic Scene.svelte templates
+
 ## 0.1.0-next.12
 
 ### Patch Changes
