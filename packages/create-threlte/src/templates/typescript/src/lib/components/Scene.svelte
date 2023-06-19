@@ -31,7 +31,6 @@
   intensity={0.8}
   position.x={5}
   position.y={10}
-  rotation
 />
 <T.AmbientLight intensity={0.2} />
 
