@@ -11,7 +11,7 @@ import { join, resolve } from 'node:path'
  */
 const configuration = {
   sourceDir: resolve(join('static', 'models')),
-  targetDir: resolve(join('src', 'components', 'models')),
+  targetDir: resolve(join('src', 'lib', 'components', 'models')),
   overwrite: false,
   root: '/models/',
   types: false,
