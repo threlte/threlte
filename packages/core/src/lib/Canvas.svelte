@@ -25,8 +25,10 @@
   import { useFrameloop } from './lib/useFrameloop'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
+	import type { Plugin } from "./plugins/types";
+	import Plugins from "./plugins/Plugins.svelte";
 
-  /**
+	/**
    * @default window.devicePixelRatio
    */
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
@@ -60,6 +62,10 @@
    * @default true
    */
   export let useLegacyLights: boolean = true
+  /**
+   * @default undefined
+   */
+  export let plugins: undefined | null | Plugin[]
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
@@ -115,6 +121,7 @@
   })
 </script>
 
+<Plugins {plugins} />
 <canvas use:parentSizeAction bind:this={canvas}>
   {#if initialized}
     <T is={contexts.ctx.scene}>

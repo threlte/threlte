@@ -12,6 +12,8 @@ export type Plugin<Props extends AnyProps = AnyProps> = (params: {
 
 export type NamedPlugin<Props extends AnyProps = AnyProps> = [name: string, plugin: Plugin<Props>]
 
+export type AnyPlugin<Props extends AnyProps = AnyProps> = NamedPlugin<Props> | Plugin<Props>
+
 export type PluginContext = Record<string, Plugin<AnyProps>>
 
 export type PluginContextName = 'threlte-plugin-context'

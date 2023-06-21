@@ -6,9 +6,13 @@ order: 0
 
 ## Injecting a Plugin
 
+Plugin are a way to extend the functionality of the `<T>` component. They are a way to inject code into the component without having to fork the codebase.
+
 ### What it looks like
 
-Plugins open up the component `<T>` to external code that will be injected via context into every child instance of a `<T>` component.
+There are two ways to inject a plugin into the `<T>` component. The first one is to use the `injectPlugin` function. This function is available in the `@threlte/core` package.
+
+Like this:
 
 ```ts
 import { injectPlugin } from '@threlte/core'
@@ -17,6 +21,18 @@ injectPlugin('plugin-name', ({ ref, props }) => {
   console.log(ref, props)
 })
 ```
+
+The second way is to provide `plugins` prop to the `<Canvas>` component. This is useful if you want to make a simple application that doesn't need to split up the code into multiple files.
+
+```svelte
+<Canvas plugins={[({ ref, props }) => {
+	console.log(ref, props)
+}]}>
+	<T.Mesh />
+</Canvas>
+```
+
+Plugins open up the component `<T>` to external code that will be injected via context into every child instance of a `<T>` component.
 
 If a plugin decides via `ref` or `props` analysis that it doesn't need to act in the context of a certain `<T>` component, it can return early.
 

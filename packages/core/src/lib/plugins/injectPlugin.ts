@@ -1,32 +1,26 @@
-import { getContext, setContext } from 'svelte'
-import type { AnyProps, NamedPlugin, Plugin, PluginContext, PluginContextName } from './types'
+import {getContext, setContext} from 'svelte'
+import type {AnyPlugin, AnyProps, NamedPlugin, Plugin, PluginContext, PluginContextName} from './types'
+
+let unNamedCount = 0;
 
 export function injectPlugin<Props extends AnyProps = AnyProps>(
-  namedPlugin: NamedPlugin<Props>
+	plugin: AnyPlugin<Props>
 ): void
 export function injectPlugin<Props extends AnyProps = AnyProps>(
-  name: string,
-  plugin: Plugin<Props>
+	name: string,
+	plugin: AnyPlugin<Props>
 ): void
 export function injectPlugin<Props extends AnyProps = AnyProps>(
-  nameOrNamedPlugin: string | NamedPlugin<Props>,
-  maybePlugin?: Plugin<Props>
+	nameOrPlugin: string | AnyPlugin<Props>,
+	maybePlugin?: AnyPlugin<Props>
 ): void {
-  const contextName: PluginContextName = 'threlte-plugin-context'
+	const contextName: PluginContextName = 'threlte-plugin-context'
 
-  if (Array.isArray(nameOrNamedPlugin)) {
-    const [name, plugin] = nameOrNamedPlugin
-    setContext<PluginContext>(contextName, {
-      ...getContext<PluginContext | undefined>(contextName),
-      [name]: plugin as Plugin
-    })
-  } else {
-    const name = nameOrNamedPlugin
-    const plugin = maybePlugin
-    if (!plugin) return
-    setContext<PluginContext>(contextName, {
-      ...getContext<PluginContext | undefined>(contextName),
-      [name]: plugin as Plugin
-    })
-  }
+	const name = maybePlugin ? <string>nameOrPlugin : (<NamedPlugin<Props>>nameOrPlugin)?.[0] || `--threlte-internal-plugin-${unNamedCount++}`
+	let plugin: AnyPlugin<Props> = maybePlugin || <AnyPlugin<Props>>nameOrPlugin
+	if (Array.isArray(plugin)) plugin = plugin[1]
+	setContext<PluginContext>(contextName, {
+		...getContext<PluginContext | undefined>(contextName),
+		[name]: plugin as Plugin
+	})
 }

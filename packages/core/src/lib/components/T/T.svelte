@@ -110,9 +110,9 @@
   $: events.updateRef(ref)
 
   // update plugins after all other updates
-  $: plugins?.updateRef(ref)
-  $: plugins?.updateProps($$props)
-  $: plugins?.updateRestProps($$restProps)
+  $: plugins?.updateRef?.(ref)
+  $: plugins?.updateProps?.($$props)
+  $: plugins?.updateRestProps?.($$restProps)
 
   const extendsObject3D = (object: any): object is Object3D => {
     return !!(object as any).isObject3D
