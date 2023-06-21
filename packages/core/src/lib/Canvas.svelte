@@ -121,14 +121,15 @@
   })
 </script>
 
-<Plugins {plugins} />
-<canvas use:parentSizeAction bind:this={canvas}>
-  {#if initialized}
-    <T is={contexts.ctx.scene}>
-      <slot />
-    </T>
-  {/if}
-</canvas>
+<Plugins {plugins}>
+	<canvas use:parentSizeAction bind:this={canvas}>
+		{#if initialized}
+			<T is={contexts.ctx.scene}>
+				<slot />
+			</T>
+		{/if}
+	</canvas>
+</Plugins>
 
 <style>
   canvas {

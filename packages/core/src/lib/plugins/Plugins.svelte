@@ -5,3 +5,5 @@
 	export let plugins: undefined | null | AnyPlugin[];
 	for (const plugin of plugins || []) injectPlugin(plugin);
 </script>
+
+<slot />
