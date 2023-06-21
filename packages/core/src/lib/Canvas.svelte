@@ -25,7 +25,7 @@
   import { useFrameloop } from './lib/useFrameloop'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
-	import type { Plugin } from "./plugins/types";
+	import type { AnyPlugin } from "./plugins/types";
 	import Plugins from "./plugins/Plugins.svelte";
 
 	/**
@@ -65,7 +65,7 @@
   /**
    * @default undefined
    */
-  export let plugins: undefined | null | Plugin[]
+  export let plugins: undefined | null | AnyPlugin[]
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
