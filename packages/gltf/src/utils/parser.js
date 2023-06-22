@@ -2,7 +2,7 @@ import THREE from 'three'
 import isVarName from './isVarName.js'
 
 function parse(fileName, gltf, options = {}) {
-  const url = (fileName.toLowerCase().startsWith('http') ? '' : '/') + fileName
+  const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
 

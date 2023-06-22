@@ -25,12 +25,8 @@ function toArrayBuffer(buf) {
 }
 
 export default function (file, output, options) {
-  function getRelativeFilePath(file) {
-    const filePath = path.resolve(file)
-    const rootPath = options.root ? path.resolve(options.root) : path.dirname(file)
-    const relativePath = path.relative(rootPath, filePath) || ''
-    if (process.platform === 'win32') return relativePath.replace(/\\/g, '/')
-    return relativePath
+  function getFilePath(file) {
+    return `${options.root ?? '/'}${options.root ? path.basename(file) : path.normalize(file)}`
   }
 
   return new Promise((resolve, reject) => {
@@ -48,7 +44,7 @@ export default function (file, output, options) {
         }
         resolve()
 
-        const filePath = getRelativeFilePath(file)
+        const filePath = getFilePath(file)
         const data = fs.readFileSync(file)
         const arrayBuffer = toArrayBuffer(data)
 
