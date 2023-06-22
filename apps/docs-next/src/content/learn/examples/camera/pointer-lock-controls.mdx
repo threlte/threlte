@@ -4,8 +4,14 @@ title: Pointer Lock Controls
 showInSidebar: false
 ---
 
-A remix of threejs' [PointerLockControls](https://threejs.org/docs/#examples/en/controls/PointerLockControls)
-It uses the [Pointer Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API)
+A remix of threejs' [PointerLockControls](https://threejs.org/docs/#examples/en/controls/PointerLockControls). It uses the [Pointer Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API).
+
+### How to lock and unlock the pointer
+
+- click the scene to lock the pointer, allowing camera movement
+- press 'Esc' to release pointer
+
+<Example path="camera/pointer-lock-controls" />
 
 ### Why you might want to use this
 
@@ -15,10 +21,3 @@ From the Pointer Lock API MDN doc:
 
 TL;DR
 to tie mouse movement to a threlte camera, _and_ have it behave properly, then use this.
-
-### How to lock and unlock the pointer
-
-- click the scene to lock the pointer
-- press 'Esc' to release pointer
-
-<Example path="camera/pointer-lock-controls" />
