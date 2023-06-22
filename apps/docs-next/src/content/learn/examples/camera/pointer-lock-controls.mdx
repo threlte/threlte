@@ -4,6 +4,21 @@ title: Pointer Lock Controls
 showInSidebar: false
 ---
 
-This implementation of `PointerLockControls` is a remix of three.js's pointerlock controls.
+A remix of threejs' [PointerLockControls](https://threejs.org/docs/#examples/en/controls/PointerLockControls)
+It uses the [Pointer Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API)
+
+### Why you might want to use this
+
+From the Pointer Lock API MDN doc:
+
+> Pointer lock lets you access mouse events even when the cursor goes past the boundary of the browser or screen
+
+TL;DR if you want to tie mouse movement to a threlte camera, and have it behave properly, then use this.
+
+### When the pointer is locked/unlocked
+
+- the pointer is locked on
+- press 'Esc' to release pointer
+- click/focus the environment to lock the pointer again
 
 <Example path="camera/pointer-lock-controls" />
