@@ -192,8 +192,8 @@ importers:
         specifier: ^0.6.3
         version: 0.6.3
       create-svelte:
-        specifier: ^4.2.0
-        version: 4.2.0
+        specifier: ^5.0.1
+        version: 5.0.1
       fs-extra:
         specifier: ^9.0.1
         version: 9.1.0
@@ -3233,8 +3233,8 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /create-svelte@4.2.0:
-    resolution: {integrity: sha512-jngi/IOM4NIGL4A61fN6diilrxcNe1iH3pziK6QmsL95h3B2p8gFyc4xZ7Oi9UbxO74o/kivrd3cIwqefWd0bA==}
+  /create-svelte@5.0.1:
+    resolution: {integrity: sha512-wFXMB3UDPJEnjn8p7UP6bdHxqdz44wDEgzYYT6FZml63OD7KPKc7mFvgyLQLPvyOhtpX52mPIQjBpMelcX34kw==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.6.3
