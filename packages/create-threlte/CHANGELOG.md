@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.0.0-next.14
+
+### Major Changes
+
+- 7f64e75: breaking: bumped create-svelte to use Svelte 4
+
 ## 0.1.0-next.13
 
 ### Patch Changes
