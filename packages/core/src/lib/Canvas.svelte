@@ -22,7 +22,7 @@
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
-  import { startFrameloop } from './lib/useFrameloop'
+  import { startFrameloop } from './lib/startFrameloop'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
 

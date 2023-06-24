@@ -1,4 +1,4 @@
-import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+import type { ThrelteContext, ThrelteInternalContext } from './contexts'
 
 const runUseFrameCallbacks = (
   ctx: ThrelteContext,
