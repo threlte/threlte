@@ -22,7 +22,7 @@
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
-  import { useFrameloop } from './lib/useFrameloop'
+  import { startFrameloop } from './lib/useFrameloop'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
 
@@ -102,16 +102,16 @@
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)
 
-  useFrameloop(contexts.ctx, contexts.internalCtx)
-
   onMount(() => {
     if (!canvas) return
     createRenderer(canvas, rendererParameters)
+    startFrameloop(contexts.ctx, contexts.internalCtx)
     initialized = true
   })
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
+    contexts.ctx.renderer?.setAnimationLoop(null)
   })
 </script>
 

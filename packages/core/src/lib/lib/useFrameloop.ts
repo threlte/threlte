@@ -1,5 +1,3 @@
-import { onDestroy } from 'svelte'
-import { browser } from '../lib/browser'
 import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
 
 const runUseFrameCallbacks = (
@@ -79,7 +77,7 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
 /**
  * ### `useFrameloop`
  *
- * This hook is responsible for running all `useFrame` and `useRender`
+ * This function is responsible for starting all `useFrame` and `useRender`
  * callbacks, and for rendering the scene if no `useRender` callbacks are
  * present.
  *
@@ -88,10 +86,8 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
  *
  * A global delta is calculated and passed to all `useFrame` and `useRender` callbacks.
  */
-export const useFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
-  if (!browser) return
-
-  ctx.renderer!.setAnimationLoop(() => {
+export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
+  ctx.renderer?.setAnimationLoop(() => {
     // dispose all objects that are due to be disposed
     internalCtx.dispose()
 
@@ -120,6 +116,4 @@ export const useFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalCo
     // reset the advance flag
     internalCtx.advance = false
   })
-
-  onDestroy(() => ctx.renderer!.setAnimationLoop(null))
 }
