@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { Props } from '@threlte/core'
 
 type ObjectProp<T> = {
@@ -6,13 +6,13 @@ type ObjectProp<T> = {
 }
 
 type BooleanProps<T> = {
-  [P in keyof Props<T>]?: any
+  [P in keyof Props<T>]?: any // should be string | boolean
 }
 
 type AllProps<T> = BooleanProps<T> & ObjectProp<T> & Record<string, any>
 
-export default class AutoProps<T = any> extends SvelteComponentTyped<
+export default class AutoProps<T> extends SvelteComponent<
   AllProps<T>,
-  Record<string, never>,
-  Record<string, never>
+  Record<string, any>,
+  Record<string, any>
 > {}
