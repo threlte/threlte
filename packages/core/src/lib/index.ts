@@ -8,7 +8,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
 export { T, extend } from './components/T/T'
-export type { Props, Events, Slots } from './components/T/types'
+export type { Props, Events, Slots, InstanceProps } from './components/T/types'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'
@@ -47,6 +47,7 @@ export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
 export { forwardEventHandlers } from './lib/forwardEventHandlers'
 export { useCache } from './lib/cache'
+export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 
 // internal components
 // NOTE: for some reason TS seems to be confusing the types exposed from the .svelte and .svelte.d.ts files

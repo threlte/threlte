@@ -1,5 +1,5 @@
 import { useThrelte } from '../../../hooks/useThrelte'
-import { resolve } from './resolve'
+import { resolvePropertyPath } from './resolvePropertyPath'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
@@ -62,7 +62,7 @@ export const useProps = () => {
       })
     }
 
-    const { key, target } = resolve(instance, propertyPath)
+    const { key, target } = resolvePropertyPath(instance, propertyPath)
 
     if (
       !Array.isArray(value) &&

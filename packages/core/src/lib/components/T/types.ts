@@ -90,6 +90,11 @@ export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCame
  * ### Instance Props
  *
  * Enables the use of props that are infered from the provided type.
+ *
+ * ```ts
+ * type PerspectiveCameraProps = InstanceProps<typeof PerspectiveCamera>
+ * // { fov: number, aspect: number, etc… }
+ * ```
  */
 export type InstanceProps<Type extends any> = Partial<
   Omit<
