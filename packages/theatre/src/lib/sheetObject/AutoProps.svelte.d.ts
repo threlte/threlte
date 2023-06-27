@@ -1,15 +1,24 @@
+import type { InstanceProps } from '@threlte/core'
 import type { SvelteComponent } from 'svelte'
-import type { Props } from '@threlte/core'
+import type { Transformer } from './transfomers/types'
 
 type ObjectProp<T> = {
   ref?: T
 }
 
-type BooleanProps<T> = {
-  [P in keyof Props<T>]?: any // should be string | boolean
+export type ComplexProp = {
+  transformer?: Transformer
+  initialValue?: any
+  label?: string
 }
 
-type AllProps<T> = BooleanProps<T> & ObjectProp<T> & Record<string, any>
+export type AnyProp = string | boolean | ComplexProp
+
+type AnyProps<T> = {
+  [P in keyof InstanceProps<T>]?: AnyProp
+}
+
+type AllProps<T> = AnyProps<T> & ObjectProp<T> & Record<string, any>
 
 export default class AutoProps<T> extends SvelteComponent<
   AllProps<T>,

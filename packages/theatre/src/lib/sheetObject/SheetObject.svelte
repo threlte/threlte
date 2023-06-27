@@ -8,20 +8,23 @@
   import AutoProps from './AutoProps.svelte'
   import { getContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
+  import { currentWritable, type CurrentWritable } from '@threlte/core'
 
   export let key: string
 
   let sheetObjectProps: UnknownShorthandCompoundProps = {}
 
-  let sheetObject: ISheetObject
+  let sheetObject: CurrentWritable<ISheetObject | undefined> = currentWritable(undefined)
 
   const { sheet } = getContext<SheetContext>('theatre-sheet')
 
   const updateSheetObject = () => {
     // create or reconfigure a sheet object here.
-    sheetObject = sheet.object(key, sheetObjectProps, {
-      reconfigure: true
-    })
+    sheetObject.set(
+      sheet.object(key, sheetObjectProps, {
+        reconfigure: true
+      })
+    )
   }
 
   const addProps = (props: UnknownShorthandCompoundProps) => {
@@ -33,9 +36,9 @@
     // update sheet object (create or reconfigure)
     updateSheetObject()
   }
-  const removeProps = (props: UnknownShorthandCompoundProps) => {
+  const removeProps = (propNames: string[]) => {
     // remove props from sheet object
-    Object.keys(props).forEach((prop) => {
+    Object.keys(propNames).forEach((prop) => {
       delete sheetObjectProps[prop]
     })
     // if there are no more props, detach sheet object
@@ -53,6 +56,7 @@
       ...args,
       props: {
         ...args.props,
+        sheetObject,
         addProps,
         removeProps
       }
