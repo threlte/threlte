@@ -4,8 +4,6 @@ title: Terrain with 3D noise
 showInSidebar: false
 ---
 
-### Why
-
 The key to creating "random" yet smooth terrain is using "noise".
 
 To create a terrain map, we want to be able to input the x and y coordinate , and return a height value.
@@ -13,7 +11,7 @@ Therefore we want to utilise 2D noise, and this example uses the function `creat
 
 <Example path="geometry/terrain" />
 
-### How is it done
+### How is this done?
 
 In Scene.svelte:
 
@@ -25,7 +23,12 @@ In Scene.svelte:
 
 `const geometry = new PlaneGeometry(10, 10, 100, 100)`
 
-(remember that planes are on their side by default, i.e. they extend in the x and y directions, and every z is 0)
+<Tip type="tip">
+Reminder that planes are on their side by default!
+
+i.e. they extend in the x and y directions, and the z value of each vertex is 0
+
+</Tip>
 
 3. Extract the "position" (vertices) array from the PlaneGeometry
 
@@ -42,10 +45,13 @@ for (let i = 0; i < vertices.length; i += 3) {
   }
 ```
 
-Aside: Why `i+=3`?
+<Tip type="tip">
+Why `i+=3`?
 
 The position array is a **flat** array of vertices, in the recurring format "x y z x y z..."
 So if we want to set each vertex's z value from it's x and y, we need to loop in triplets.
+
+</Tip>
 
 5. Attach the plane geometry to a mesh, and rotate
 
@@ -57,8 +63,11 @@ So if we want to set each vertex's z value from it's x and y, we need to loop in
 ...
 ```
 
-6. This example intentionally used only part of the noise map (the middle 25%), in order to generate gentler terrain.
+<Tip type="tip">
+This example intentionally used only part of the noise map (the middle 25%), in order to generate gentler terrain.
 
 To "see" the noise map in full, change `noise(x/4, y/4)` to `noise(x, y)`.
 
 You'll see that the terrain is much more hilly!
+
+</Tip>
