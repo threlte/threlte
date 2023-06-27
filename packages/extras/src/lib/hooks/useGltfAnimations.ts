@@ -19,7 +19,7 @@ const isGltfStore = (value: any): value is GltfStore =>
   !!value?.subscribe && typeof value.subscribe === 'function'
 
 /**
- * Convenience hook to use animations loaded with a <GLTF> threlte component.
+ * Convenience hook to use animations loaded with a <GLTF> Threlte component.
  *
  * ### Example
  *
