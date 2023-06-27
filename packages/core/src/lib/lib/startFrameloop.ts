@@ -1,5 +1,4 @@
-import { useRaf } from '../hooks/useRaf'
-import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+import type { ThrelteContext, ThrelteInternalContext } from './contexts'
 
 const runUseFrameCallbacks = (
   ctx: ThrelteContext,
@@ -78,7 +77,7 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
 /**
  * ### `useFrameloop`
  *
- * This hook is responsible for running all `useFrame` and `useRender`
+ * This function is responsible for starting all `useFrame` and `useRender`
  * callbacks, and for rendering the scene if no `useRender` callbacks are
  * present.
  *
@@ -87,8 +86,8 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
  *
  * A global delta is calculated and passed to all `useFrame` and `useRender` callbacks.
  */
-export const useFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
-  useRaf(() => {
+export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
+  ctx.renderer?.setAnimationLoop(() => {
     // dispose all objects that are due to be disposed
     internalCtx.dispose()
 
