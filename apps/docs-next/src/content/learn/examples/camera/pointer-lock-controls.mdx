@@ -20,7 +20,7 @@ Controlling the camera in a 1st-person video game.
 When the scene is clicked, the pointer is locked to the scene, and now pointer movements will control the angle of the camera in the scene.
 
 1. there is no need to click and drag, like with e.g. OrbitControls.
-2. > Pointer lock lets you access mouse events even when the cursor goes past the boundary of the browser or screen (from MDN doc)
+2. > Pointer lock lets you access mouse events even when the cursor goes past the boundary of the browser or screen
 
 To explain the 2nd point, find a Threlte scene which uses OrbitControls for it's camera. Now click and drag the cursor left until you hit the edge of your screen.
 When you hit the edge, the camera will stop rotating. But in a video game, we want to be able to for example, turn to spin clockwise as many times as we like. Hence why we need to lock the pointer.
