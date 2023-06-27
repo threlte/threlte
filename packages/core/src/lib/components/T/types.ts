@@ -72,7 +72,7 @@ export type RefProps<Type extends any> = {
 export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCamera: true }
   ? {
       /**
-       * By default, threlte will update the cameras aspect ratio or frustum
+       * By default, Threlte will update the cameras aspect ratio or frustum
        * when the canvas is resized. If you want to manually control the
        * camera, set this to true.
        * @default true

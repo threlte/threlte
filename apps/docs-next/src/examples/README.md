@@ -1,6 +1,6 @@
 # Threlte Examples
 
-This directory houses all examples that are part of the threlte docs. Examples are available as part of individual module documentations (such as `/rapier/rigid-body`) or can be referenced in sections that span certain topics, such as "Loading Assets".
+This directory houses all examples that are part of the Threlte docs. Examples are available as part of individual module documentations (such as `/rapier/rigid-body`) or can be referenced in sections that span certain topics, such as "Loading Assets".
 
 ## Structure
 
