@@ -72,11 +72,13 @@ export const useProps = () => {
       // edge case of setScalar setters
       target[key].setScalar(value)
     } else {
-      if (typeof target[key]?.set === 'function') {
+			// copy if available
+			if (typeof target[key]?.clone === 'function' && (target[key].constructor === value.constructor || (value.constructor === Object && !Object.keys(value).some(k => !(k in target[key]))))) {
+				target[key].copy(value)
+			}
+      else if (typeof target[key]?.set === 'function') {
         // if the property has a "set" function, we can use it
-				if (target[key].constructor === value.constructor || (value.constructor === Object && !Object.keys(value).some(k => !(k in target[key])))) {
-          target[key].copy(value)
-        } else if (Array.isArray(value)) {
+				if (Array.isArray(value)) {
           target[key].set(...value)
         } else {
 					target[key].set(value)
