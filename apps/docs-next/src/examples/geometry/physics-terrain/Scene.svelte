@@ -33,15 +33,15 @@
 
   const scale = new RAPIER.Vector3(10.0, 1, 10)
 
-	let resetCounter = 0
+  let resetCounter = 0
   export const reset = () => {
     resetCounter += 1
   }
 
-	let debugEnabled = false
-	export const toggleDebug = () => {
-		debugEnabled = !debugEnabled
-	}
+  let debugEnabled = false
+  export const toggleDebug = () => {
+    debugEnabled = !debugEnabled
+  }
 </script>
 
 <T.PerspectiveCamera
@@ -57,24 +57,28 @@
 <T.HemisphereLight intensity={0.2} />
 
 {#key resetCounter}
-	<FallingShapes />
+  <FallingShapes />
 {/key}
 
 <T.Mesh
-	receiveShadow
-	{geometry}
-	rotation.x={DEG2RAD * -90}
-	rotation.z={DEG2RAD * 0}
+  receiveShadow
+  {geometry}
+  rotation.x={DEG2RAD * -90}
+  rotation.z={DEG2RAD * 0}
 >
-	<T.MeshStandardMaterial color="teal" opacity="0.8" transparent/>
+  <T.MeshStandardMaterial
+    color="teal"
+    opacity="0.8"
+    transparent
+  />
 </T.Mesh>
 <RigidBody type={'fixed'}>
   <Collider
-	shape={'heightfield'}
-	args={[nsubdivs, nsubdivs, heights, scale]}
+    shape={'heightfield'}
+    args={[nsubdivs, nsubdivs, heights, scale]}
   />
 </RigidBody>
 
-{#if debugEnabled===true}
-	<Debug />
+{#if debugEnabled === true}
+  <Debug />
 {/if}
