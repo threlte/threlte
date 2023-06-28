@@ -2,16 +2,18 @@
 import { Image } from '@astrojs/image/components'
 import type { CollectionEntry } from 'astro:content'
 import AppLayout from './AppLayout.astro'
-import Logo from '$assets/logo/threlte-logo-only.png'
+import Logo from '$assets/logo/threlte-logo.png'
 import LeftSidebar from '$components/Menu/LeftSidebar/LeftSidebar.astro'
 import Socials from '$components/Socials/Socials.astro'
 import RightSidebar from '$components/Menu/RightSidebar/RightSidebar.astro'
 import MobileDocsNav from '$components/Menu/MobileDocsNav.svelte'
 import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarMenu'
+import Package from './Package.astro'
+import { c } from '../lib/classes'
 
 export interface Props {
-  title?: string
-  entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+	title?: string
+	entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
 }
 
 const title = Astro.props.title
@@ -19,78 +21,151 @@ const title = Astro.props.title
 const sidebarMenu = await getLeftSidebarMenu()
 
 const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
-  ? 'learn'
-  : 'reference'
+	? 'learn'
+	: 'reference'
 
 const activeUrlPathName = Astro.url.pathname
+
+const packageBaseStyles =
+	'flex items-center gap-1 rounded-md border border-orange-500/10 bg-orange-800/30 px-1.5 font-mono text-orange-500 hover:border-orange-500/80 hover:bg-orange-800/50 hover:text-orange-400'
+const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-400'
 ---
 
 <AppLayout title={title}>
-  <header
-    class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6 md:flex"
-  >
-    <a
-      href="/"
-      class="flex flex-row items-center gap-4"
-    >
-      <Image
-        src={Logo}
-        alt="threlte logo"
-        width={200}
-        class="h-[37px] w-auto"
-      />
+	<header
+		class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6 md:flex"
+	>
+		<div class="justify flex items-center justify-start gap-12">
+			<a
+				href="/"
+				class="flex flex-row items-center gap-4"
+			>
+				<Image
+					src={Logo}
+					alt="threlte logo"
+					width={200}
+					class="h-[37px] w-auto"
+				/>
 
-      <h2
-        class="text-orange translate-y-px rounded-md border-2 border-orange-500 bg-orange-800/50 px-1.5 text-2xl font-bold"
-      >
-        DOCS
-      </h2>
-    </a>
+				<!-- <h2
+					class="text-orange translate-y-px rounded-md border-2 border-orange-500 bg-orange-800/50 px-1.5 text-2xl font-bold"
+				>
+					DOCS
+				</h2> -->
+			</a>
 
-    <div class="flex flex-row gap-5">
-      <Socials />
-    </div>
-  </header>
+			<div class="flex h-[30px] flex-row items-center justify-start gap-4">
+				<a href="/learn">Learn</a>
 
-  <MobileDocsNav
-    client:load
-    sidebarMenu={sidebarMenu}
-    activeSidebarTab={activeSidebarTab}
-    activeUrlPathName={activeUrlPathName}
-  >
-    <Image
-      slot="logo"
-      src={Logo}
-      alt="threlte logo"
-      width={200}
-      class="h-[37px] w-auto"
-    />
-    <Socials slot="after-navigation" />
-  </MobileDocsNav>
+				<div class="ml-4 flex h-full items-start justify-start gap-1">
+					<div class="h-full w-px bg-orange-500/70"></div>
+					<span class="font-mono text-xs text-orange-500/70">API</span>
+				</div>
 
-  <main
-    class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
-  >
-    <aside
-      class="fixed bottom-0 z-20 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:z-0 md:block md:w-auto md:pt-6 lg:row-span-1"
-    >
-      <LeftSidebar />
-    </aside>
+				<div class="flex items-center gap-2">
+					<a
+						href="/docs/reference/core/getting-started"
+						class={c(
+							packageBaseStyles,
+							activeUrlPathName.includes('/docs/reference/core/getting-started') &&
+								activePackageStyles
+						)}
+					>
+						<Package />
+						core</a
+					>
+					<a
+						href="/docs/reference/extras/getting-started"
+						class={c(
+							packageBaseStyles,
+							activeUrlPathName.includes('/docs/reference/extras/getting-started') &&
+								activePackageStyles
+						)}
+					>
+						<Package />
+						extras</a
+					>
+					<a
+						href="/docs/reference/gltf/getting-started"
+						class={c(
+							packageBaseStyles,
+							activeUrlPathName.includes('/docs/reference/gltf/getting-started') &&
+								activePackageStyles
+						)}
+					>
+						<Package />
+						gltf</a
+					>
+					<a
+						href="/docs/reference/rapier/getting-started"
+						class={c(
+							packageBaseStyles,
+							activeUrlPathName.includes('/docs/reference/rapier/getting-started') &&
+								activePackageStyles
+						)}
+					>
+						<Package />
+						rapier</a
+					>
+					<a
+						href="/docs/reference/theatre/getting-started"
+						class={c(
+							packageBaseStyles,
+							activeUrlPathName.includes('/docs/reference/theatre/getting-started') &&
+								activePackageStyles
+						)}
+					>
+						<Package />
+						theatre</a
+					>
+				</div>
+			</div>
+		</div>
 
-    <div
-      class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
-    >
-      <article
-        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
-      >
-        <slot />
-      </article>
-    </div>
+		<div class="flex flex-row gap-5">
+			<Socials />
+		</div>
+	</header>
 
-    <aside
-      class="sticky top-[var(--docs-navbar-height)] z-10 ml-4 hidden w-full place-self-start justify-self-end pt-6 lg:z-0 lg:block"
-    >
-      <RightSidebar entry={Astro.props.entry} />
-    </aside>
-  </main>
+	<MobileDocsNav
+		client:load
+		sidebarMenu={sidebarMenu}
+		activeSidebarTab={activeSidebarTab}
+		activeUrlPathName={activeUrlPathName}
+	>
+		<Image
+			slot="logo"
+			src={Logo}
+			alt="threlte logo"
+			width={200}
+			class="h-[37px] w-auto"
+		/>
+		<Socials slot="after-navigation" />
+	</MobileDocsNav>
+
+	<main
+		class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
+	>
+		<aside
+			class="fixed bottom-0 z-20 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:z-0 md:block md:w-auto md:pt-6 lg:row-span-1"
+		>
+			<LeftSidebar />
+		</aside>
+
+		<div
+			class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
+		>
+			<article
+				class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
+			>
+				<slot />
+			</article>
+		</div>
+
+		<aside
+			class="sticky top-[var(--docs-navbar-height)] z-10 ml-4 hidden w-full place-self-start justify-self-end pt-6 lg:z-0 lg:block"
+		>
+			<RightSidebar entry={Astro.props.entry} />
+		</aside>
+	</main>
 </AppLayout>
