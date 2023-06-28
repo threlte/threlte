@@ -1,38 +1,75 @@
-![Threlte Logo](./assets/threlte/logo/threlte_logo_github.png)
+<div align="right">
+ <img alt="license" src="https://img.shields.io/npm/l/@threlte/core?color=fe4100&labelColor=171d27&logo=git&logoColor=white"/>
+ <img alt="npm" src="https://img.shields.io/npm/v/@threlte/core?color=fe4100&labelColor=171d27&logo=npm&logoColor=white"/>
+ <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
+ <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
+</div>
 
-A three.js component library for svelte.
+<a href="https://threlte.xyz">
+ <img src="./assets/threlte/banner/threlte-banner.png"/>
+</a>
 
-![npm-license](https://img.shields.io/npm/l/@threlte/core?style=flat-square)
-![npm-version](https://img.shields.io/npm/v/@threlte/core?style=flat-square)
-![discord](https://img.shields.io/discord/985983540804091964?label=discord&style=flat-square)
-![website](https://img.shields.io/website?down_color=red&down_message=offline&label=threlte.xyz&style=flat-square&up_message=online&url=https%3A%2F%2Fthrelte.xyz)
+## Create 3D Apps for the Web
 
-Build three.js scenes declaratively with Threlte components that are reactive to the core, readily interactive and can participate in Svelte's ecosystem.
+Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D apps for the web. It provides a **declarative**, **type-safe**, **reactive** and **interactive** API out-of-the-box.
 
-## Official Documentation
+Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
 
-Visit [threlte.xyz](https://threlte.xyz)
+Check out our **[documentation](https://next.threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
+
+## Quickstart
+
+### Installation
+
+For a quick interactive setup of a fresh Threlte project, run:
+
+```sh
+npm create threlte my-project
+```
+
+Alternatively you can check out the full [installation instructions](https://next.threlte.xyz/docs/learn/getting-started/installation).
+
+### Tutorial
+
+To get a hang of the basics, we recommend following our [introductory tutorial](https://next.threlte.xyz/docs/learn/getting-started/your-first-scene).
+
+### Support
+
+Have questions? Feel free to ask in our [Discord support forum](https://discord.com/channels/985983540804091964/1031843197963477002).
+
+## Features
+
+ - [Clean API](https://next.threlte.xyz/docs/reference/core/t) transparently exposing *all* Three.js objects through declarative API.
+
+ - [Hooks](https://next.threlte.xyz/docs/learn/basics/hooks) providing easy access to low-level contexts like animation frames and the rendering engine.
+
+ - [Plugins](https://next.threlte.xyz/docs/learn/advanced/plugins) making it easy to extend Threlte with custom code and logic.
+
+ - [Events](https://next.threlte.xyz/docs/learn/basics/events) enabling robust and Svelte-native access to state transformations in your scenes.
+
+ - [Interactivity](https://next.threlte.xyz/docs/reference/extras/interactivity) makes it easy to react to user inputs on 3D objects.
+
 
 ## Packages
 
-**[`@threlte/core`](https://github.com/threlte/threlte/tree/main/packages/core)** - core components library with components that closely follow three.js and accompanying hooks
+Threlte is comprised of five distinct packages to allow you to import only what you need:
 
-**[`@threlte/extras`](https://github.com/threlte/threlte/tree/main/packages/extras)** - components, helpers, hooks and more that extend the core functionality
+- [@threlte/core](https://next.threlte.xyz/docs/reference/core/getting-started) provides declarative and transparent Svelte binding to [Three.js](https://threejs.org/).
 
-**[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the [Rapier physics engine](https://rapier.rs/) in Threlte
+- [@threlte/extras](https://next.threlte.xyz/docs/reference/extras/getting-started) boosts productivity with assorted enhancements that extend Threlte's functionality.
 
-**[`@threlte/theatre`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use [Theatre.js](https://www.theatrejs.com/) in Threlte
+- [@threlte/gltf](https://next.threlte.xyz/docs/reference/gltf/getting-started) gives you a CLI to that turn GLTF assets into declarative and reusable Threlte components.
 
-## Getting help
+- [@threlte/rapier](https://next.threlte.xyz/docs/reference/rapier/getting-started) enables performant physics in your Threlte app through the [Rapier engine](https://rapier.rs/)
 
-We want to build a friendly community that is happy to help those who need it. Feel free to join our [Discord server](https://discord.gg/EqUBCfCaGm).
+- [@threlte/theatre](https://next.threlte.xyz/docs/reference/theatre/getting-started) lets you animate in your Threlte app through the [Theatre.js studio](https://www.theatrejs.com/)
 
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-- If you have a suggestion that would make this project better, submit an issue
-- If you would like to directly contribute, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) then submit a PR
+- **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
+- **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
 
 ## Sponsors
 
