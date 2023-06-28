@@ -54,6 +54,15 @@ export const componentSignature = z.object({
     .optional()
 })
 
+export const referenceCategories = [
+  '@threlte/core',
+  '@threlte/extras',
+  '@threlte/rapier',
+  '@threlte/theatre',
+  '@threlte/gltf',
+  'Documentation'
+] as const
+
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
@@ -62,14 +71,7 @@ export const referenceCollection = defineCollection({
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
-    category: z.enum([
-      '@threlte/core',
-      '@threlte/extras',
-      '@threlte/rapier',
-      '@threlte/theatre',
-      '@threlte/gltf',
-      'Documentation'
-    ]),
+    category: z.enum(referenceCategories),
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true)
   })
