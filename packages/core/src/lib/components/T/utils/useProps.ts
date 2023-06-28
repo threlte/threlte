@@ -74,11 +74,13 @@ export const useProps = () => {
     } else {
       if (typeof target[key]?.set === 'function') {
         // if the property has a "set" function, we can use it
-        if (Array.isArray(value)) {
+				if (target[key].constructor === value.constructor || (value.constructor === Object && !Object.keys(value).some(k => !(k in target[key])))) {
+          target[key].copy(value)
+        } else if (Array.isArray(value)) {
           target[key].set(...value)
         } else {
-          target[key].set(value)
-        }
+					target[key].set(value)
+				}
       } else {
         // otherwise, we just set the value
         target[key] = value
