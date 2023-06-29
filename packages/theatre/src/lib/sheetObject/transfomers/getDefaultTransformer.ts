@@ -26,8 +26,6 @@ export const getDefaultTransformer = (target: any, path: string, fullPropertyPat
     return degrees
   }
 
-  if (isFullOrEndingPattern(fullPropertyPath, 'intensity')) return normalized
-
   if (isFullOrEndingPattern(fullPropertyPath, 'r')) return normalized
   if (isFullOrEndingPattern(fullPropertyPath, 'g')) return normalized
   if (isFullOrEndingPattern(fullPropertyPath, 'b')) return normalized

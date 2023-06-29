@@ -1,9 +1,12 @@
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import { resolvePropertyPath, useParent, watch, type CurrentWritable } from '@threlte/core'
+  import type { AnyProp } from './AutoProps.svelte'
   import type { Transformer } from './transfomers/types'
   import { getInitialValue } from './utils/getInitialValue'
+  import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
+  import { isComplexProp } from './utils/isComplexProp'
 
   // used for type hinting auto props
   export let ref: any
@@ -33,21 +36,31 @@
     const props = {} as Record<string, any>
 
     // propertyPath is for example "position.x" or "intensity", so a property path on the parent object
-    Object.keys($$restProps).forEach((propertyPath) => {
-      // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
-      const propValue = $$restProps[propertyPath]
+    Object.entries(<Record<string, AnyProp>>$$restProps).forEach(
+      ([propertyPath, propertyValue]) => {
+        // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
+        const customKey = isComplexProp(propertyValue) ? propertyValue.key : undefined
+        const key = customKey ?? makeAlphanumeric(propertyPath)
 
-      const label = parsePropLabel(propertyPath, propValue)
-      const { value, transformer } = getInitialValue(propertyPath, propValue, $parent)
+        // get the initial value as well as the correct transformer for the property
+        const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
+        const label = parsePropLabel(key, propertyValue)
 
-      propMappings[label] = {
-        propertyPath,
-        transformer
+        // apply the label to the value
+        value.label = label
+
+        // add the prop to the propMappings map
+        propMappings[key] = {
+          propertyPath,
+          transformer
+        }
+
+        // add the prop to the props object
+        props[key] = value
       }
+    )
 
-      props[label] = value
-    })
-
+    // add the props to the parent IsheetObject
     addProps(props)
   }
 

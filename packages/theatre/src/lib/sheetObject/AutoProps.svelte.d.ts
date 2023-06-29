@@ -8,8 +8,8 @@ type ObjectProp<T> = {
 
 export type ComplexProp = {
   transformer?: Transformer
-  initialValue?: any
   label?: string
+  key?: string
 }
 
 export type AnyProp = string | boolean | ComplexProp
@@ -18,7 +18,7 @@ type AnyProps<T> = {
   [P in keyof InstanceProps<T>]?: AnyProp
 }
 
-type AllProps<T> = AnyProps<T> & ObjectProp<T> & Record<string, any>
+type AllProps<T> = AnyProps<T> & ObjectProp<T> & Record<string, AnyProp | T>
 
 export default class AutoProps<T> extends SvelteComponent<
   AllProps<T>,

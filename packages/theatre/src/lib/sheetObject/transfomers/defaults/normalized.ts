@@ -1,8 +1,8 @@
 import { types } from '@theatre/core'
-import type { Transformer } from '../types'
+import { createTransformer } from '../createTransformer'
 
-export const normalized: Transformer = {
-  initialize(value) {
+export const normalized = createTransformer({
+  transform(value) {
     return types.number(value, {
       range: [0, 1]
     })
@@ -10,4 +10,4 @@ export const normalized: Transformer = {
   apply(target, path, value) {
     target[path] = value
   }
-}
+})

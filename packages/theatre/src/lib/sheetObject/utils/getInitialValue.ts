@@ -1,6 +1,7 @@
 import { resolvePropertyPath } from '@threlte/core'
 import type { AnyProp } from '../AutoProps.svelte'
 import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
+import { isComplexProp } from './isComplexProp'
 
 export const getInitialValue = (
   propertyPath: string,
@@ -9,14 +10,12 @@ export const getInitialValue = (
 ) => {
   const { target, key } = resolvePropertyPath(targetObject, propertyPath)
 
-  let value = target[key]
+  const rawValue = target[key]
 
-  const transformer =
-    typeof propertyValue === 'object' && propertyValue.transformer
-      ? propertyValue.transformer
-      : getDefaultTransformer(targetObject, key, propertyPath)
+  const customTransformer = isComplexProp(propertyValue) ? propertyValue.transformer : undefined
+  const transformer = customTransformer ?? getDefaultTransformer(targetObject, key, propertyPath)
 
-  value = transformer?.initialize(value)
+  const value = transformer?.transform(rawValue)
 
   return {
     value,
