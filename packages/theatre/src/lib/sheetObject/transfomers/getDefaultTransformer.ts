@@ -33,6 +33,7 @@ export const getDefaultTransformer = (target: any, path: string, fullPropertyPat
   if (isFullOrEndingPattern(fullPropertyPath, 'opacity')) return normalized
   if (isFullOrEndingPattern(fullPropertyPath, 'roughness')) return normalized
   if (isFullOrEndingPattern(fullPropertyPath, 'metalness')) return normalized
+  if (isFullOrEndingPattern(fullPropertyPath, 'transmission')) return normalized
 
   if (isFullOrEndingPattern(fullPropertyPath, 'side')) return side
 

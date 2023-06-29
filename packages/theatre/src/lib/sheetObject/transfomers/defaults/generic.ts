@@ -3,18 +3,18 @@ import { isPrimitive } from '../../utils/isPrimitive'
 import { createTransformer } from '../createTransformer'
 
 export const generic = createTransformer({
-  transform(target) {
-    if (isPrimitive(target)) {
-      if (typeof target === 'number') {
-        return types.number(target)
-      } else if (typeof target === 'string') {
-        return types.string(target)
-      } else if (typeof target === 'boolean') {
-        return types.boolean(target)
+  transform(value) {
+    if (isPrimitive(value)) {
+      if (typeof value === 'number') {
+        return types.number(value === Infinity ? Number.MAX_VALUE : value)
+      } else if (typeof value === 'string') {
+        return types.string(value)
+      } else if (typeof value === 'boolean') {
+        return types.boolean(value)
       }
     }
     return types.compound({
-      ...target
+      ...value
     })
   },
   apply(target, path, value) {
