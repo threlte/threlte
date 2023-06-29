@@ -6,9 +6,9 @@
   import MobileNav from './MobileNav.svelte'
 
   export let sidebarMenu: Awaited<ReturnType<typeof getLeftSidebarMenu>>
-  const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference']
+  const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference', 'examples']
 
-  export let activeSidebarTab: 'learn' | 'reference'
+  export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
 </script>
 
@@ -19,11 +19,6 @@
       href="/"
     >
       <slot name="logo" />
-      <h2
-        class="text-orange translate-y-px rounded-md border-2 border-orange-500 bg-orange-800/50 px-1.5 text-2xl font-bold"
-      >
-        DOCS
-      </h2>
     </a>
   </svelte:fragment>
   <div
@@ -46,6 +41,8 @@
                 Learn
               {:else if key === 'reference'}
                 Reference
+              {:else if key === 'examples'}
+                Examples
               {/if}
             </div>
             {#each sidebarMenu[key].categories as category}

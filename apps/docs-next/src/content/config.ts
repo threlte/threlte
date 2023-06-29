@@ -54,6 +54,15 @@ export const componentSignature = z.object({
     .optional()
 })
 
+export const referenceCategories = [
+  '@threlte/core',
+  '@threlte/extras',
+  '@threlte/rapier',
+  '@threlte/theatre',
+  '@threlte/gltf',
+  'Documentation'
+] as const
+
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
@@ -62,14 +71,7 @@ export const referenceCollection = defineCollection({
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
-    category: z.enum([
-      '@threlte/core',
-      '@threlte/extras',
-      '@threlte/rapier',
-      '@threlte/theatre',
-      '@threlte/gltf',
-      'Documentation'
-    ]),
+    category: z.enum(referenceCategories),
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true)
   })
@@ -77,11 +79,19 @@ export const referenceCollection = defineCollection({
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing', 'Examples']),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
     showInSidebar: z.boolean().optional().default(true)
+  })
+})
+
+export const examplesCollection = defineCollection({
+  schema: z.object({
+    category: z.enum(['Animation', 'Camera', 'Geometry', 'Postprocessing']).optional(),
+    title: z.string(),
+    order: z.number().optional()
   })
 })
 
@@ -111,5 +121,6 @@ export const collections = {
   reference: referenceCollection,
   learn: learnCollection,
   testimonials: testimonialsCollection,
-  showcase: showcaseCollection
+  showcase: showcaseCollection,
+  examples: examplesCollection
 }
