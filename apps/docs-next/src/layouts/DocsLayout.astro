@@ -54,8 +54,26 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 				</h2> -->
 			</a>
 
-			<div class="flex h-[30px] flex-row items-center justify-start gap-4">
-				<a href="/docs/learn/getting-started/introduction">Learn</a>
+			<div class="flex h-[30px] flex-row items-center justify-start gap-6">
+				<a
+					href="/docs/learn/getting-started/introduction"
+					class={c(
+						activeUrlPathName.includes('/docs/learn/getting-started/introduction')
+							? 'text-white underline'
+							: 'text-gray-200'
+					)}
+					>Learn</a
+				>
+
+				<a
+					href="/docs/examples/index"
+					class={c(
+						activeUrlPathName.includes('/docs/examples/index')
+							? 'text-white underline'
+							: 'text-gray-200'
+					)}
+					>Examples</a
+				>
 
 				<div class="ml-4 flex h-full items-start justify-start gap-1">
 					<div class="h-full w-px bg-orange-500/70"></div>

@@ -5,8 +5,12 @@ import Sidebar from './LeftSidebar.svelte'
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
+const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
+	'/docs/learn'
+)
 	? 'learn'
+	: Astro.url.pathname.startsWith('/docs/examples')
+	? 'examples'
 	: 'reference'
 
 const activeUrlPathName = Astro.url.pathname
@@ -19,10 +23,6 @@ const referenceUrlMap: Record<(typeof referenceCategories)[number], string> = {
 	'@threlte/theatre': '/docs/reference/theatre',
 	Documentation: '/docs/reference/docs'
 }
-
-const isReferencePage = Object.values(referenceUrlMap).some((url) =>
-	activeUrlPathName.includes(url)
-)
 
 const referenceCategory = Object.keys(referenceUrlMap).find((category) =>
 	activeUrlPathName.includes(referenceUrlMap[category])

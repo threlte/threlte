@@ -3,8 +3,8 @@
   import { c } from '$lib/classes'
   import LeftSidebarCategory from './LeftSidebarCategory.svelte'
 
-  export let menu: Record<'learn' | 'reference', LeftSidebarMenu>
-  export let activeSidebarTab: 'learn' | 'reference'
+  export let menu: Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
+  export let activeSidebarTab: 'learn' | 'reference' | 'examples'
 
   const onTabSelect = (e: CustomEvent<Tab>) => {
     activeSidebarTab = e.detail.id as 'learn' | 'reference'

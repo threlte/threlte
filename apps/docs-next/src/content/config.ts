@@ -79,11 +79,19 @@ export const referenceCollection = defineCollection({
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing', 'Examples']),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
     showInSidebar: z.boolean().optional().default(true)
+  })
+})
+
+export const examplesCollection = defineCollection({
+  schema: z.object({
+    category: z.enum(['Animation', 'Camera', 'Geometry', 'Postprocessing']).optional(),
+    title: z.string(),
+    order: z.number().optional()
   })
 })
 
@@ -113,5 +121,6 @@ export const collections = {
   reference: referenceCollection,
   learn: learnCollection,
   testimonials: testimonialsCollection,
-  showcase: showcaseCollection
+  showcase: showcaseCollection,
+  examples: examplesCollection
 }
