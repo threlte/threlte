@@ -3,6 +3,7 @@ import { Image } from '@astrojs/image/components'
 import type { CollectionEntry } from 'astro:content'
 import AppLayout from './AppLayout.astro'
 import Logo from '$assets/logo/threlte-logo.png'
+import LogoOnly from '$assets/logo/threlte-logo-only.png'
 import LeftSidebar from '$components/Menu/LeftSidebar/LeftSidebar.astro'
 import Socials from '$components/Socials/Socials.astro'
 import RightSidebar from '$components/Menu/RightSidebar/RightSidebar.astro'
@@ -10,6 +11,8 @@ import MobileDocsNav from '$components/Menu/MobileDocsNav.svelte'
 import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarMenu'
 import Package from './Package.astro'
 import { c } from '../lib/classes'
+import Book from './Book.astro'
+import Circles from './Circles.astro'
 
 export interface Props {
 	title?: string
@@ -26,16 +29,15 @@ const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/
 
 const activeUrlPathName = Astro.url.pathname
 
-const packageBaseStyles =
-	'flex items-center gap-1 rounded-md border border-orange-500/10 bg-orange-800/30 px-1.5 font-mono text-orange-500 hover:border-orange-500/80 hover:bg-orange-800/50 hover:text-orange-400'
-const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-400'
+const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white'
+const activeLinkStyles = '!text-orange bg-blue-900/50'
 ---
 
 <AppLayout title={title}>
 	<header
 		class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6 md:flex"
 	>
-		<div class="justify flex items-center justify-start gap-12">
+		<div class="justify flex items-center justify-start gap-6 lg:gap-12">
 			<a
 				href="/"
 				class="flex flex-row items-center gap-4"
@@ -44,50 +46,53 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 					src={Logo}
 					alt="threlte logo"
 					width={200}
-					class="h-[37px] w-auto"
+					class="h-[37px] w-auto md:hidden lg:block"
 					loading="eager"
 				/>
-
-				<!-- <h2
-					class="text-orange translate-y-px rounded-md border-2 border-orange-500 bg-orange-800/50 px-1.5 text-2xl font-bold"
-				>
-					DOCS
-				</h2> -->
+				<Image
+					src={LogoOnly}
+					alt="threlte logo"
+					width={200}
+					class="h-[37px] w-auto hidden md:block lg:hidden"
+					loading="lazy"
+				/>
 			</a>
 
 			<div class="flex h-[30px] flex-row items-center justify-start gap-6">
 				<a
 					href="/docs/learn/getting-started/introduction"
 					class={c(
-						activeUrlPathName.includes('/docs/learn/getting-started/introduction')
-							? 'text-white underline'
-							: 'text-gray-200'
+						linkStyles,
+						activeUrlPathName.includes('/docs/learn/getting-started/introduction') &&
+							activeLinkStyles
 					)}
-					>Learn</a
 				>
+					<Book />
+					Learn
+				</a>
 
 				<a
 					href="/docs/examples/intro"
 					class={c(
-						activeUrlPathName.includes('/docs/examples/intro')
-							? 'text-white underline'
-							: 'text-gray-200'
+						linkStyles,
+						activeUrlPathName.includes('/docs/examples/intro') && activeLinkStyles
 					)}
-					>Examples</a
 				>
+					<Circles />
+					Examples
+				</a>
 
-				<div class="ml-4 flex h-full items-start justify-start gap-1">
-					<div class="h-full w-px bg-orange-500/70"></div>
-					<span class="font-mono text-xs text-orange-500/70">API</span>
+				<div class="flex h-full items-start justify-start gap-1">
+					<div class="h-full w-px bg-gray-500/70"></div>
+					<span class="font-mono text-xs text-gray-500/70">API</span>
 				</div>
 
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-6">
 					<a
 						href="/docs/reference/core/getting-started"
 						class={c(
-							packageBaseStyles,
-							activeUrlPathName.includes('/docs/reference/core/getting-started') &&
-								activePackageStyles
+							linkStyles,
+							activeUrlPathName.includes('/docs/reference/core/getting-started') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -96,9 +101,9 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 					<a
 						href="/docs/reference/extras/getting-started"
 						class={c(
-							packageBaseStyles,
+							linkStyles,
 							activeUrlPathName.includes('/docs/reference/extras/getting-started') &&
-								activePackageStyles
+								activeLinkStyles
 						)}
 					>
 						<Package />
@@ -107,9 +112,8 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 					<a
 						href="/docs/reference/gltf/getting-started"
 						class={c(
-							packageBaseStyles,
-							activeUrlPathName.includes('/docs/reference/gltf/getting-started') &&
-								activePackageStyles
+							linkStyles,
+							activeUrlPathName.includes('/docs/reference/gltf/getting-started') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -118,9 +122,9 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 					<a
 						href="/docs/reference/rapier/getting-started"
 						class={c(
-							packageBaseStyles,
+							linkStyles,
 							activeUrlPathName.includes('/docs/reference/rapier/getting-started') &&
-								activePackageStyles
+								activeLinkStyles
 						)}
 					>
 						<Package />
@@ -129,9 +133,9 @@ const activePackageStyles = '!border-orange-500 !bg-orange-800/80 !text-orange-4
 					<a
 						href="/docs/reference/theatre/getting-started"
 						class={c(
-							packageBaseStyles,
+							linkStyles,
 							activeUrlPathName.includes('/docs/reference/theatre/getting-started') &&
-								activePackageStyles
+								activeLinkStyles
 						)}
 					>
 						<Package />
