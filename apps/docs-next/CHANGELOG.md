@@ -1,5 +1,12 @@
 # @threlte/docs-next
 
+## 0.0.2-next.2
+
+### Patch Changes
+
+- 1a2ad70: fixed up terrain physics example + explanation
+- 079f53f: add example titles to doc page content as subtitle
+
 ## 0.0.2-next.1
 
 ### Patch Changes

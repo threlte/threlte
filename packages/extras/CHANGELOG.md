@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.14
+
+### Patch Changes
+
+- dd686a7: upgrade troika-three-text to 0.47.2
+
 ## 5.0.0-next.13
 
 ### Patch Changes

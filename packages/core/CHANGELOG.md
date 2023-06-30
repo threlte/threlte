@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.0-next.10
+
+### Patch Changes
+
+- b845685: replace requestanimationframe with setanimationloop
+
 ## 6.0.0-next.9
 
 ### Patch Changes
