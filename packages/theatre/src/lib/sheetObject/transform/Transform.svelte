@@ -1,7 +1,11 @@
 <script lang="ts">
   import { types, type ISheetObject, type UnknownShorthandCompoundProps } from '@theatre/core'
+  import type { IScrub } from '@theatre/studio'
   import { useParent, watch, type CurrentWritable } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { TransformControls } from '@threlte/extras'
+  import { onDestroy, onMount } from 'svelte'
+  import { RAD2DEG } from 'three/src/math/MathUtils'
+  import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
 
   export let name: string | undefined = undefined
@@ -64,4 +68,61 @@
   onDestroy(() => {
     removeProps(name ? [name] : ['position', 'rotation', 'scale'])
   })
+
+  const { studio } = useStudio()
+  let scrub: IScrub | undefined
+
+  let isSelected = false
+
+  onMount(() => {
+    return $studio?.onSelectionChange((selection) => {
+      if (!$sheetObject) return
+      isSelected = selection.includes($sheetObject)
+    })
+  })
+
+  const onMouseDown = () => {
+    if (!studio) return
+    if (scrub) return
+    scrub = $studio?.scrub()
+  }
+
+  const onChange = () => {
+    if (!scrub) return
+    scrub.capture((api) => {
+      if (!$parent) return
+      if (!$sheetObject) return
+
+      const baseTarget = name ? $sheetObject.props[name] : $sheetObject.props
+
+      api.set(baseTarget.position as any, {
+        ...$parent.position
+      })
+
+      api.set(baseTarget.rotation as any, {
+        x: $parent.rotation.x * RAD2DEG,
+        y: $parent.rotation.y * RAD2DEG,
+        z: $parent.rotation.z * RAD2DEG
+      })
+
+      api.set(baseTarget.scale as any, {
+        ...$parent.scale
+      })
+    })
+  }
+
+  const onMouseUp = () => {
+    if (!scrub) return
+    scrub.commit()
+    scrub = undefined
+  }
 </script>
+
+{#if isSelected}
+  <TransformControls
+    object={$parent}
+    on:mouseDown={onMouseDown}
+    on:objectChange={onChange}
+    on:mouseUp={onMouseUp}
+  />
+{/if}

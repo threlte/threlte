@@ -8,11 +8,17 @@
 </script>
 
 {#if studio}
-  <Studio />
+  <Studio>
+    <Project {config}>
+      <Sheet>
+        <slot />
+      </Sheet>
+    </Project>
+  </Studio>
+{:else}
+  <Project {config}>
+    <Sheet>
+      <slot />
+    </Sheet>
+  </Project>
 {/if}
-
-<Project {config}>
-  <Sheet>
-    <slot />
-  </Sheet>
-</Project>
