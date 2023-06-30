@@ -8,7 +8,7 @@
     useThrelte
   } from '@threlte/core'
   import type { AnyProp } from './AutoProps.svelte'
-  import type { Transformer } from './transfomers/types'
+  import type { Transformer } from '../transfomers/types'
   import { getInitialValue } from './utils/getInitialValue'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
