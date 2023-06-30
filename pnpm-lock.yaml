@@ -114,78 +114,6 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
 
-  apps/testbed:
-    devDependencies:
-      '@dimforge/rapier3d-compat':
-        specifier: ^0.11.2
-        version: 0.11.2
-      '@sveltejs/adapter-auto':
-        specifier: ^2.0.0
-        version: 2.0.0(@sveltejs/kit@1.20.4)
-      '@sveltejs/kit':
-        specifier: ^1.20.4
-        version: 1.20.4(svelte@4.0.0)(vite@4.3.6)
-      '@theatre/core':
-        specifier: ^0.6.1
-        version: 0.6.1
-      '@theatre/studio':
-        specifier: ^0.6.1
-        version: 0.6.1(@theatre/core@0.6.1)
-      '@threlte/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@threlte/extras':
-        specifier: workspace:*
-        version: link:../../packages/extras
-      '@threlte/rapier':
-        specifier: workspace:*
-        version: link:../../packages/rapier
-      '@threlte/theatre':
-        specifier: workspace:*
-        version: link:../../packages/theatre
-      '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^5.45.0
-        version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
-      '@typescript-eslint/parser':
-        specifier: ^5.45.0
-        version: 5.45.0(eslint@8.28.0)(typescript@5.0.2)
-      eslint:
-        specifier: ^8.28.0
-        version: 8.28.0
-      eslint-config-prettier:
-        specifier: ^8.5.0
-        version: 8.5.0(eslint@8.28.0)
-      eslint-plugin-svelte:
-        specifier: ^2.30.0
-        version: 2.30.0(eslint@8.28.0)(svelte@4.0.0)
-      prettier:
-        specifier: ^2.8.0
-        version: 2.8.8
-      prettier-plugin-svelte:
-        specifier: ^2.10.1
-        version: 2.10.1(prettier@2.8.8)(svelte@4.0.0)
-      svelte:
-        specifier: ^4.0.0
-        version: 4.0.0
-      svelte-check:
-        specifier: ^3.4.3
-        version: 3.4.3(postcss@8.4.24)(svelte@4.0.0)
-      three:
-        specifier: ^0.153.0
-        version: 0.153.0
-      tslib:
-        specifier: ^2.4.1
-        version: 2.5.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.0.2
-      vite:
-        specifier: ^4.3.6
-        version: 4.3.6(@types/node@18.0.3)
-
   packages/core:
     devDependencies:
       '@sveltejs/adapter-auto':
@@ -2219,6 +2147,7 @@ packages:
     resolution: {integrity: sha512-ZvSqAAB2LVVnB6hDzKQOVHjeZtb7Hvqu1IrFRITv4Kq6465Cn9VI2nwcDjelDCOmTIv23pd8d3Fz2DPYjjF9mg==}
     dependencies:
       '@theatre/dataverse': 0.6.1
+    dev: false
 
   /@theatre/dataverse@0.6.0:
     resolution: {integrity: sha512-1W7b8bQTZeRmmrY64HTQzEtjLJWBmdOkfK/liR+LSSjgAylY3CjZ4/vaDUMmRQr4zCeQjyNVmrvwaIZ/33s+tQ==}
@@ -2230,6 +2159,7 @@ packages:
     resolution: {integrity: sha512-iomovt4oWCEAZFP6/BdSJAb2cAjPOs6y3wh7QlrUBmEwdQ/21ISK9N2IsCzlJ0t16w58l7Eh61Gw60Y0t7/uNA==}
     dependencies:
       lodash-es: 4.17.21
+    dev: false
 
   /@theatre/studio@0.6.0(@theatre/core@0.6.0):
     resolution: {integrity: sha512-DH53wWSkIDevbYJUybLH5nIx+rFgiWlykYOmDKC9WK9QUQFYRpnaBu4UNIo+RmGZ+I2ZMSHx1RfrfnBJCr1j6A==}
@@ -2247,6 +2177,7 @@ packages:
     dependencies:
       '@theatre/core': 0.6.1
       '@theatre/dataverse': 0.6.1
+    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -9928,6 +9859,7 @@ packages:
 
   /three@0.153.0:
     resolution: {integrity: sha512-OCP2/uQR6GcDpSLnJt/3a4mdS0kNWcbfUXIwLoEMgLzEUIVIYsSDwskpmOii/AkDM+BBwrl6+CKgrjX9+E2aWg==}
+    dev: false
 
   /through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
