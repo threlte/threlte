@@ -42,7 +42,7 @@
   "type": "module",
   "dependencies": {
     "lodash": "^4.17.21",
-    "troika-three-text": "^0.46.4"
+    "troika-three-text": "^0.47.2"
   },
   "exports": {
     "./package.json": "./package.json",
