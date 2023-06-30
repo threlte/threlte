@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import AutoProps from './AutoProps.svelte'
+  import AutoProps from './autoProps/AutoProps.svelte'
   import { getContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import { currentWritable, type CurrentWritable } from '@threlte/core'
