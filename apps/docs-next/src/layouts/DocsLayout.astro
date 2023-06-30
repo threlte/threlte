@@ -61,11 +61,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 			<div class="flex h-[30px] flex-row items-center justify-start gap-6">
 				<a
 					href="/docs/learn/getting-started/introduction"
-					class={c(
-						linkStyles,
-						activeUrlPathName.includes('/docs/learn/getting-started/introduction') &&
-							activeLinkStyles
-					)}
+					class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
 				>
 					<Book />
 					Learn
@@ -73,10 +69,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 
 				<a
 					href="/docs/examples/intro"
-					class={c(
-						linkStyles,
-						activeUrlPathName.includes('/docs/examples/intro') && activeLinkStyles
-					)}
+					class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
 				>
 					<Circles />
 					Examples
@@ -89,7 +82,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 						href="/docs/reference/core/getting-started"
 						class={c(
 							linkStyles,
-							activeUrlPathName.includes('/docs/reference/core/getting-started') && activeLinkStyles
+							activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -99,8 +92,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 						href="/docs/reference/extras/getting-started"
 						class={c(
 							linkStyles,
-							activeUrlPathName.includes('/docs/reference/extras/getting-started') &&
-								activeLinkStyles
+							activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -110,7 +102,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 						href="/docs/reference/gltf/getting-started"
 						class={c(
 							linkStyles,
-							activeUrlPathName.includes('/docs/reference/gltf/getting-started') && activeLinkStyles
+							activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -120,8 +112,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 						href="/docs/reference/rapier/getting-started"
 						class={c(
 							linkStyles,
-							activeUrlPathName.includes('/docs/reference/rapier/getting-started') &&
-								activeLinkStyles
+							activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
 						)}
 					>
 						<Package />
@@ -131,8 +122,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 						href="/docs/reference/theatre/getting-started"
 						class={c(
 							linkStyles,
-							activeUrlPathName.includes('/docs/reference/theatre/getting-started') &&
-								activeLinkStyles
+							activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
 						)}
 					>
 						<Package />
