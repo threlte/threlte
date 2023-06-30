@@ -1,12 +1,19 @@
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { resolvePropertyPath, useParent, watch, type CurrentWritable } from '@threlte/core'
+  import {
+    resolvePropertyPath,
+    useParent,
+    watch,
+    type CurrentWritable,
+    useThrelte
+  } from '@threlte/core'
   import type { AnyProp } from './AutoProps.svelte'
   import type { Transformer } from './transfomers/types'
   import { getInitialValue } from './utils/getInitialValue'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
   import { isComplexProp } from './utils/isComplexProp'
+  import { onDestroy } from 'svelte'
 
   // used for type hinting auto props
   export let ref: any
@@ -16,12 +23,6 @@
   export let removeProps: (propNames: string[]) => void
 
   const parent = useParent()
-
-  if (!$parent) {
-    throw new Error(
-      '<AutoProps> must be used as a child to a component instantiating a THREE.Object3D'
-    )
-  }
 
   // serves as a map to map (custom) prop names to object target properties
   let propMappings = {} as Record<
@@ -76,6 +77,8 @@
     'aspect'
   ]
 
+  const { invalidate } = useThrelte()
+
   watch([parent, sheetObject], ([parent, sheetObject]) => {
     if (!parent) return
 
@@ -102,8 +105,14 @@
           target.updateProjectionMatrix?.()
         }
       })
+
+      invalidate('AutoProps: props changed')
     })
   })
 
   initAutoProps()
+
+  onDestroy(() => {
+    removeProps(Object.keys(propMappings))
+  })
 </script>

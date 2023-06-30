@@ -1,6 +1,6 @@
 import type { InstanceProps } from '@threlte/core'
 import type { SvelteComponent } from 'svelte'
-import type { Transformer } from './transfomers/types'
+import type { Transformer } from '../transfomers/types'
 
 type ObjectProp<T> = {
   ref?: T

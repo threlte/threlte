@@ -1,6 +1,6 @@
 import { resolvePropertyPath } from '@threlte/core'
 import type { AnyProp } from '../AutoProps.svelte'
-import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
+import { getDefaultTransformer } from '../../transfomers/getDefaultTransformer'
 import { isComplexProp } from './isComplexProp'
 
 export const getInitialValue = (

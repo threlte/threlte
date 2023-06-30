@@ -6,6 +6,7 @@
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import AutoProps from './autoProps/AutoProps.svelte'
+  import Transform from './transform/Transform.svelte'
   import { getContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import { currentWritable, type CurrentWritable } from '@threlte/core'
@@ -36,6 +37,7 @@
     // update sheet object (create or reconfigure)
     updateSheetObject()
   }
+
   const removeProps = (propNames: string[]) => {
     // remove props from sheet object
     Object.keys(propNames).forEach((prop) => {
@@ -68,6 +70,15 @@
       return new AutoProps(augmentConstructorArgs(args))
     }
   })
+
+  const proxyTransformComponent = new Proxy(Transform, {
+    construct(_target, [args]) {
+      return new Transform(augmentConstructorArgs(args))
+    }
+  })
 </script>
 
-<slot AutoProps={proxyAutoPropsComponent} />
+<slot
+  AutoProps={proxyAutoPropsComponent}
+  Transform={proxyTransformComponent}
+/>
