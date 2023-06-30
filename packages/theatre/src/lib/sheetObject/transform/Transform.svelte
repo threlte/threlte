@@ -3,12 +3,16 @@
   import type { IScrub } from '@theatre/studio'
   import { useParent, watch, type CurrentWritable } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, type ComponentProps } from 'svelte'
   import { RAD2DEG } from 'three/src/math/MathUtils'
   import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
+  import type Transform from './Transform.svelte'
 
-  export let name: string | undefined = undefined
+  type Props = ComponentProps<Transform>
+
+  export let name: Props['name'] = undefined
+  export let mode: Props['mode'] = undefined
 
   export let sheetObject: CurrentWritable<ISheetObject | undefined>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
@@ -121,6 +125,7 @@
 {#if isSelected}
   <TransformControls
     object={$parent}
+    {mode}
     on:mouseDown={onMouseDown}
     on:objectChange={onChange}
     on:mouseUp={onMouseUp}
