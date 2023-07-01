@@ -14,7 +14,7 @@
   export let name: Props['name'] = undefined
   export let mode: Props['mode'] = undefined
 
-  export let sheetObject: CurrentWritable<ISheetObject | undefined>
+  export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
   export let removeProps: (propNames: string[]) => void
 
@@ -58,7 +58,8 @@
     if (!parent) return
 
     return sheetObject?.onValuesChange((values) => {
-      if (!parent) return
+      if (!values.position || !values.rotation || !values.scale || !parent) return
+
       const object = name ? values[name] : values
 
       positionTransformer.apply(parent, 'position', object.position)

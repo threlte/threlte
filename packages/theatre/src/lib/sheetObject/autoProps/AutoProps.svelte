@@ -18,7 +18,7 @@
   // used for type hinting auto props
   export let ref: any
 
-  export let sheetObject: CurrentWritable<ISheetObject | undefined>
+  export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
   export let removeProps: (propNames: string[]) => void
 

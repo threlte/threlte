@@ -5,26 +5,35 @@
 -->
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import AutoProps from './autoProps/AutoProps.svelte'
-  import Transform from './transform/Transform.svelte'
+  import { currentWritable, type CurrentWritable } from '@threlte/core'
   import { getContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
-  import { currentWritable, type CurrentWritable } from '@threlte/core'
+  import AutoProps from './autoProps/AutoProps.svelte'
+  import Transform from './transform/Transform.svelte'
+  import Props from './props/Props.svelte'
+
+  type ManualProps = $$Generic<UnknownShorthandCompoundProps>
 
   export let key: string
 
+  export let props: ManualProps | undefined = undefined
+
   let sheetObjectProps: UnknownShorthandCompoundProps = {}
 
-  let sheetObject: CurrentWritable<ISheetObject | undefined> = currentWritable(undefined)
-
   const { sheet } = getContext<SheetContext>('theatre-sheet')
+
+  let sheetObject: CurrentWritable<ISheetObject<ManualProps>> = currentWritable(
+    sheet.object(key, props ?? {}, {
+      reconfigure: true
+    }) as any
+  )
 
   const updateSheetObject = () => {
     // create or reconfigure a sheet object here.
     sheetObject.set(
       sheet.object(key, sheetObjectProps, {
         reconfigure: true
-      })
+      }) as any
     )
   }
 
@@ -76,9 +85,21 @@
       return new Transform(augmentConstructorArgs(args))
     }
   })
+
+  const proxyPropsComponent = new Proxy(Props, {
+    construct(_target, [args]) {
+      return new Props(augmentConstructorArgs(args))
+    }
+  })
+
+  let values = $sheetObject?.value
+  $: values = $sheetObject?.value
 </script>
 
 <slot
+  {values}
+  sheetObject={$sheetObject}
   AutoProps={proxyAutoPropsComponent}
   Transform={proxyTransformComponent}
+  Props={proxyPropsComponent}
 />
