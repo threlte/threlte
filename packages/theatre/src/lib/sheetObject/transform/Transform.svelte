@@ -3,16 +3,18 @@
   import type { IScrub } from '@theatre/studio'
   import { useParent, watch, type CurrentWritable } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { onDestroy, onMount, type ComponentProps } from 'svelte'
+  import { onMount, type ComponentProps } from 'svelte'
   import { RAD2DEG } from 'three/src/math/MathUtils'
   import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
   import type Transform from './Transform.svelte'
 
-  type Props = ComponentProps<Transform>
+  type Label = $$Generic<string | undefined>
+  type Props = ComponentProps<Transform<Label>>
 
-  export let name: Props['name'] = undefined
-  export let mode: Props['mode'] = undefined
+  export let label: Label = undefined as Label
+  export let key: Props['key'] = undefined as Props['key']
+  export let mode: Props['mode'] = undefined as Props['mode']
 
   export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
@@ -37,13 +39,18 @@
     const rotationProp = rotationTransformer.transform($parent.rotation)
     const scaleProp = scaleTransformer.transform($parent.scale)
 
-    if (name) {
+    if (label && key) {
       addProps({
-        [name]: types.compound({
-          position: positionProp,
-          rotation: rotationProp,
-          scale: scaleProp
-        })
+        [key]: types.compound(
+          {
+            position: positionProp,
+            rotation: rotationProp,
+            scale: scaleProp
+          },
+          {
+            label
+          }
+        )
       })
     } else {
       addProps({
@@ -60,7 +67,9 @@
     return sheetObject?.onValuesChange((values) => {
       if (!values.position || !values.rotation || !values.scale || !parent) return
 
-      const object = name ? values[name] : values
+      const object = key ? values[key] : values
+
+      if (!object) return
 
       positionTransformer.apply(parent, 'position', object.position)
       rotationTransformer.apply(parent, 'rotation', object.rotation)
@@ -68,15 +77,15 @@
     })
   })
 
-  initTransform()
-
-  onDestroy(() => {
-    removeProps(name ? [name] : ['position', 'rotation', 'scale'])
+  onMount(() => {
+    initTransform()
+    return () => {
+      removeProps(key ? [key] : ['position', 'rotation', 'scale'])
+    }
   })
 
   const { studio } = useStudio()
   let scrub: IScrub | undefined
-
   let isSelected = false
 
   onMount(() => {
@@ -98,7 +107,7 @@
       if (!$parent) return
       if (!$sheetObject) return
 
-      const baseTarget = name ? $sheetObject.props[name] : $sheetObject.props
+      const baseTarget = key ? $sheetObject.props[key] : $sheetObject.props
 
       api.set(baseTarget.position as any, {
         ...$parent.position

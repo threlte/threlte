@@ -1,10 +1,17 @@
 import type { SvelteComponent } from 'svelte'
 
-export default class Transform extends SvelteComponent<
+export default class Transform<Label extends string | undefined> extends SvelteComponent<
   {
-    name?: string
+    label?: Label
+  } & {
     mode?: 'translate' | 'rotate' | 'scale'
-  },
-  Record<string, any>,
-  Record<string, any>
+  } & (Label extends string
+      ? {
+          key: string
+        }
+      : {
+          key?: string
+        }),
+  Record<string, unknown>,
+  Record<string, unknown>
 > {}
