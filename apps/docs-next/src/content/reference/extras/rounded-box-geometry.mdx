@@ -6,11 +6,6 @@
   type: 'component',
   componentSignature:
     {
-      extends:
-        {
-          type: 'ExtrudeGeometry',
-          url: 'https://threejs.org/docs/index.html?q=extrud#api/en/geometries/ExtrudeGeometry'
-        },
       props:
         [
           {
@@ -44,7 +39,7 @@
           {
             name: 'steps',
             type: 'number',
-            required: 'false',
+            required: false,
             default: '1',
             description: 'Number of points used for subdividing segments along the depth of the extruded spline.'
           }
@@ -53,7 +48,7 @@
 }
 ---
 
-Creates a rounded box geometry.
+Creates a rounded box geometry with a Three.js ExtrudeGeometry.
 
 ### Example
 
