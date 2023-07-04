@@ -33,7 +33,19 @@ export const useRender = (
     order: options?.order
   }
 
-  renderCtx.renderHandlers.add(handler)
+  const anyHasOrder = Array.from(renderCtx.renderHandlers).reduce(
+    (acc, h) => (h.order ? true : acc),
+    false
+  )
+
+  if (anyHasOrder) {
+    const sorted = Array.from(renderCtx.renderHandlers)
+      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+    renderCtx.renderHandlers.clear()
+    sorted.forEach((handler) => renderCtx.renderHandlers.add(handler)) 
+  } else {
+    renderCtx.renderHandlers.add(handler)
+  }
 
   onDestroy(() => {
     renderCtx.renderHandlers.delete(handler)

@@ -23,17 +23,7 @@ const runUseFrameCallbacks = (
       internalCtx.invalidations['useFrame'] = internalCtx.autoFrameHandlers.size
   }
 
-  const anyHasOrder = Array.from(internalCtx.allFrameHandlers).reduce(
-    (acc, h) => (h.order ? true : acc),
-    false
-  )
-  if (anyHasOrder) {
-    Array.from(internalCtx.allFrameHandlers)
-      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-      .forEach((h) => h.fn(ctx, delta))
-  } else {
-    internalCtx.allFrameHandlers.forEach((h) => h.fn(ctx, delta))
-  }
+  internalCtx.allFrameHandlers.forEach((h) => h.fn(ctx, delta))
 }
 
 const runUseRenderCallbacks = (
@@ -43,17 +33,7 @@ const runUseRenderCallbacks = (
 ): void => {
   if (internalCtx.renderHandlers.size === 0) return
 
-  const anyHasOrder = Array.from(internalCtx.renderHandlers).reduce(
-    (acc, h) => (h.order ? true : acc),
-    false
-  )
-  if (anyHasOrder) {
-    Array.from(internalCtx.renderHandlers)
-      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-      .forEach((h) => h.fn(ctx, delta))
-  } else {
-    internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
-  }
+  internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
 }
 
 const debugFrame = (internalCtx: ThrelteInternalContext): void => {

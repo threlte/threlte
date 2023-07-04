@@ -86,7 +86,20 @@ export const useFrame = (
     } else {
       renderCtx.manualFrameHandlers.add(handler)
     }
-    renderCtx.allFrameHandlers.add(handler)
+
+    const anyHasOrder = Array.from(renderCtx.allFrameHandlers).reduce(
+      (acc, h) => (h.order ? true : acc),
+      false
+    )
+
+    if (anyHasOrder) {
+      const sorted = Array.from(renderCtx.allFrameHandlers)
+        .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+      renderCtx.allFrameHandlers.clear()
+      sorted.forEach((handler) => renderCtx.allFrameHandlers.add(handler))
+    } else {
+      renderCtx.allFrameHandlers.add(handler)
+    }
 
     started.set(true)
   }
