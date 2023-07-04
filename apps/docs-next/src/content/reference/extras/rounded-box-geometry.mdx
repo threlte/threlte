@@ -1,0 +1,69 @@
+---
+{
+  order: 2,
+  category: '@threlte/extras',
+  name: <RoundedBoxGeometry>,
+  type: 'component',
+  componentSignature:
+    {
+      extends:
+        {
+          type: 'ExtrudeGeometry',
+          url: 'https://threejs.org/docs/index.html?q=extrud#api/en/geometries/ExtrudeGeometry'
+        },
+      props:
+        [
+          {
+            name: 'args',
+            type: '[number, number, number]',
+            required: false,
+            default: '[1, 1, 1]',
+            description: 'Width, height, depth'
+          },
+          {
+            name: 'radius',
+            type: 'number',
+            required: false,
+            default: '0.05',
+            description: 'Radius of the rounded corners.'
+          },
+          {
+            name: 'smoothness',
+            type: 'number',
+            required: false,
+            description: 'The number of curve segments.'
+          },
+          {
+            name: 'creaseAngle',
+            type: 'number',
+            required: false,
+            description: 'Smooth normals everywhere except faces that meet at an angle greater than the crease angle.'
+          },
+        ],
+    }
+}
+---
+
+Creates a rounded box geometry.
+
+### Example
+
+```svelte
+<script>
+  import { T, Canvas } from '@threlte/core'
+  import { RoundedBoxGeometry } from '@threlte/extras'
+</script>
+
+<Canvas>
+  <T.PerspectiveCamera
+    makeDefault
+    position={[3, 3, 3]}
+    lookAt={[0, 0, 0]}
+  />
+
+  <T.Mesh>
+    <RoundedBoxGeometry />
+    <T.MeshPhongMaterial color='hotpink' />
+  </T.Mesh>
+</Canvas>
+```

@@ -14,6 +14,7 @@ export { default as Disposables } from './components/Disposables/Disposables.sve
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
 export { default as Environment } from './components/Environment/Environment.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
+export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
 export { default as InstancedMesh } from './components/Instancing/InstancedMesh.svelte'
