@@ -67,7 +67,9 @@ export type ThrelteInternalContext = {
   manualFrameHandlers: Set<ThrelteFrameHandler>
   autoFrameHandlers: Set<ThrelteFrameHandler>
   allFrameHandlers: Set<ThrelteFrameHandler>
+  allFrameHandlersNeedSort: boolean
   renderHandlers: Set<ThrelteRenderHandler>
+  renderHandlersNeedSort: boolean
   advance: boolean
 
   /**

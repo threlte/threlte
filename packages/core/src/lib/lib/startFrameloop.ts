@@ -7,6 +7,14 @@ const runUseFrameCallbacks = (
 ): void => {
   if (internalCtx.allFrameHandlers.size === 0) return
 
+  if (internalCtx.allFrameHandlersNeedSort) {
+    const sorted = Array.from(internalCtx.allFrameHandlers)
+      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+    internalCtx.allFrameHandlers.clear()
+    sorted.forEach((h) => internalCtx.allFrameHandlers.add(h))
+    internalCtx.allFrameHandlersNeedSort = false
+  }
+
   if (internalCtx.debugFrameloop) {
     let genericFrameHandlers = 0
     internalCtx.autoFrameHandlers.forEach((h) => {
@@ -32,6 +40,13 @@ const runUseRenderCallbacks = (
   delta: number
 ): void => {
   if (internalCtx.renderHandlers.size === 0) return
+
+  if (internalCtx.renderHandlersNeedSort) {
+    const sorted = Array.from(internalCtx.renderHandlers)
+      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+    internalCtx.renderHandlers.clear()
+    sorted.forEach((h) => internalCtx.renderHandlers.add(h))
+  }
 
   internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
 }
