@@ -1,14 +1,16 @@
 <script lang='ts'>
 
 import { Shape } from 'three'
-import { T } from '@threlte/core'
+import { T, forwardEventHandlers } from '@threlte/core'
 import { toCreasedNormals } from './toCreasedNormals'
+
+const component = forwardEventHandlers()
 
 export let args: [width?: number, height?: number, depth?: number] | [] = []
 export let radius = 0.05
 export let smoothness = 4
-export let steps = 1
 export let creaseAngle = 0.4
+export let steps = 1
 
 const eps = 0.00001
 
@@ -22,13 +24,10 @@ const createShape = (width: number, height: number, radius0: number) => {
   return shape
 }
 
-let width = 0
-let height = 0
-let depth = 0
-
-$: [width = 1, height = 1, depth = 1] = args
+$: width = args[0] ?? 1
+$: height = args[1] ?? 1
+$: depth = args[2] ?? 1
 $: shape = createShape(width, height, radius)
-
 $: params = {
   depth: depth - radius * 2,
   bevelEnabled: true,
@@ -42,9 +41,13 @@ $: params = {
 </script>
 
 <T.ExtrudeGeometry
+  let:ref
+  bind:this={$component}
   args={[shape, params]}
   on:create={({ ref }) => {
     ref.center()
     toCreasedNormals(ref, creaseAngle)
   }}
-/>
+>
+  <slot {ref} />  
+</T.ExtrudeGeometry>
