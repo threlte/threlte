@@ -149,7 +149,9 @@ export const createContexts = (options: {
     manualFrameHandlers: new Set(),
     autoFrameHandlers: new Set(),
     allFrameHandlers: new Set(),
+    allFrameHandlersNeedSort: false,
     renderHandlers: new Set(),
+    renderHandlersNeedSort: false,
     advance: false,
     dispose: async (force = false) => {
       await tick()
