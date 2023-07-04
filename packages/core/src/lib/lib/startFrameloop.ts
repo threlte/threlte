@@ -7,12 +7,17 @@ const runUseFrameCallbacks = (
 ): void => {
   if (internalCtx.allFrameHandlers.size === 0) return
 
-  if (internalCtx.allFrameHandlersNeedSort) {
-    const sorted = Array.from(internalCtx.allFrameHandlers)
-      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-    internalCtx.allFrameHandlers.clear()
-    sorted.forEach((h) => internalCtx.allFrameHandlers.add(h))
-    internalCtx.allFrameHandlersNeedSort = false
+  if (internalCtx.allFrameHandlersNeedSortCheck) {
+    const arr = Array.from(internalCtx.allFrameHandlers)
+    const needsSort = arr.some((h) => h.order)
+
+    if (needsSort) {
+      const sorted = arr.sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+      internalCtx.allFrameHandlers.clear()
+      sorted.forEach((h) => internalCtx.allFrameHandlers.add(h))
+    }
+
+    internalCtx.allFrameHandlersNeedSortCheck = false
   }
 
   if (internalCtx.debugFrameloop) {
@@ -41,12 +46,17 @@ const runUseRenderCallbacks = (
 ): void => {
   if (internalCtx.renderHandlers.size === 0) return
 
-  if (internalCtx.renderHandlersNeedSort) {
-    const sorted = Array.from(internalCtx.renderHandlers)
-      .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-    internalCtx.renderHandlers.clear()
-    sorted.forEach((h) => internalCtx.renderHandlers.add(h))
-    internalCtx.renderHandlersNeedSort = false
+  if (internalCtx.renderHandlersNeedSortCheck) {
+    const arr = Array.from(internalCtx.renderHandlers)
+    const needsSort = arr.some((h) => h.order)
+
+    if (needsSort) {
+      const sorted = arr.sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+      internalCtx.renderHandlers.clear()
+      sorted.forEach((h) => internalCtx.renderHandlers.add(h))
+    }
+
+    internalCtx.renderHandlersNeedSortCheck = false
   }
 
   internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))

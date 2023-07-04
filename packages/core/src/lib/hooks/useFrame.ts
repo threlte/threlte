@@ -88,7 +88,7 @@ export const useFrame = (
     }
 
     renderCtx.allFrameHandlers.add(handler)
-    renderCtx.allFrameHandlersNeedSort = Array.from(renderCtx.allFrameHandlers).some((h) => h.order)
+    renderCtx.allFrameHandlersNeedSortCheck = true
 
     started.set(true)
   }
