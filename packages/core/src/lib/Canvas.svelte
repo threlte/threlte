@@ -26,7 +26,7 @@
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
 	import type { AnyPlugin } from "./plugins/types";
-	import Plugins from "./plugins/Plugins.svelte";
+	import Wrapper from "./Wrapper.svelte";
 
 	/**
    * @default window.devicePixelRatio
@@ -62,10 +62,11 @@
    * @default true
    */
   export let useLegacyLights: boolean = true
+	type PluginRegistrator = (() => void)
   /**
    * @default undefined
    */
-  export let plugins: undefined | null | AnyPlugin[]
+  export let plugins: undefined | null | PluginRegistrator | PluginRegistrator[] = undefined
 
   let canvas: HTMLCanvasElement | undefined
   let initialized = false
@@ -121,7 +122,7 @@
   })
 </script>
 
-<Plugins {plugins}>
+<Wrapper {plugins}>
 	<canvas use:parentSizeAction bind:this={canvas}>
 		{#if initialized}
 			<T is={contexts.ctx.scene}>
@@ -129,7 +130,7 @@
 			</T>
 		{/if}
 	</canvas>
-</Plugins>
+</Wrapper>
 
 <style>
   canvas {

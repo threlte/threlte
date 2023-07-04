@@ -78,9 +78,9 @@
           },
           {
             'name': 'plugins',
-            'type': 'AnyPlugin[]',
+            'type': 'undefined | null | PluginRegistrator | PluginRegistrator[]',
             'required': false,
-            'description': 'An array of plugins to be used by the renderer.'
+            'description': 'An callback function or list of them that inject plugin to the renderer.'
           }
         ],
       'bindings':

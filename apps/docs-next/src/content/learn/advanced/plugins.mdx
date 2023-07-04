@@ -25,9 +25,9 @@ injectPlugin('plugin-name', ({ ref, props }) => {
 The second way is to provide `plugins` prop to the `<Canvas>` component. This is useful if you want to make a simple application that doesn't need to split up the code into multiple files.
 
 ```svelte
-<Canvas plugins={[({ ref, props }) => {
+<Canvas plugins={[() => injectPlugin(({ ref, props }) => {
 	console.log(ref, props)
-}]}>
+})]}>
 	<T.Mesh />
 </Canvas>
 ```
