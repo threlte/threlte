@@ -1,8 +1,9 @@
+import AutoImport from 'astro-auto-import'
 import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
 import preprocess from 'svelte-preprocess'
-import AutoImport from 'astro-auto-import'
-import type { Options } from 'rehype-pretty-code'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
@@ -15,28 +16,6 @@ import svelte from '@astrojs/svelte'
 
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
-
-const prettyCodeOptions: Partial<Options> = {
-  theme: 'dracula-soft',
-  onVisitLine(node: any) {
-    if (node.children.length === 0) {
-      node.children = [
-        {
-          type: 'text',
-          value: ' '
-        }
-      ]
-    }
-  },
-  onVisitHighlightedLine(node: any) {
-    node.properties.className.push('highlighted')
-  },
-  onVisitHighlightedWord(node: any) {
-    node.properties.className = ['word']
-  },
-  tokensMap: {},
-  keepBackground: true
-}
 
 // https://astro.build/config
 export default defineConfig({
@@ -55,7 +34,9 @@ export default defineConfig({
         postcss: true
       })
     }),
-    mdx()
+    mdx({
+      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
+    })
   ],
   output: 'static',
   vite: {
