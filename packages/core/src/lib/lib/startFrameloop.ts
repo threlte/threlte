@@ -46,6 +46,7 @@ const runUseRenderCallbacks = (
       .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
     internalCtx.renderHandlers.clear()
     sorted.forEach((h) => internalCtx.renderHandlers.add(h))
+    internalCtx.renderHandlersNeedSort = false
   }
 
   internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
