@@ -1,10 +1,11 @@
 {
 	"name": "xr",
 	"version": "0.0.1",
+	"license": "MIT",
 	"scripts": {
-		"start": "vite dev",
+		"start": "vite dev --host",
 		"build": "vite build && npm run package",
-		"preview": "vite preview",
+		"preview": "vite preview --host",
 		"package": "svelte-kit sync && svelte-package && publint",
 		"prepublishOnly": "npm run package",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -22,18 +23,31 @@
 		"!dist/**/*.spec.*"
 	],
 	"peerDependencies": {
-		"svelte": "^4.0.0"
+		"@threlte/core": "^6.0.0-next.10",
+		"svelte": "^3.54.0",
+		"three": "^0.153.0"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
-		"@sveltejs/package": "^2.0.0",
-		"publint": "^0.1.9",
-		"svelte": "^4.0.0",
-		"svelte-check": "^3.4.3",
-		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
-		"vite": "^4.3.6"
+		"@dimforge/rapier3d-compat": "^0.11.2",
+		"@sveltejs/adapter-auto": "^2.1.0",
+		"@sveltejs/kit": "^1.21.0",
+		"@sveltejs/package": "^2.1.0",
+		"@threlte/core": "^6.0.0-next.10",
+		"@threlte/extras": "^5.0.0-next.14",
+		"@threlte/rapier": "^1.0.0-next.2",
+		"@types/three": "^0.152.1",
+		"autoprefixer": "^10.4.14",
+		"postcss": "^8.4.24",
+		"publint": "^0.1.15",
+		"svelte": "^4.0.3",
+		"svelte-check": "^3.4.4",
+		"tailwindcss": "^3.3.2",
+		"three": "^0.154.0",
+		"three-inspect": "^0.3.4",
+		"tslib": "^2.6.0",
+		"typescript": "^5.1.6",
+		"vite": "^4.3.9",
+		"vite-plugin-mkcert": "^1.16.0"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
