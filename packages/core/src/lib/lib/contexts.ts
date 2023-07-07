@@ -67,7 +67,9 @@ export type ThrelteInternalContext = {
   manualFrameHandlers: Set<ThrelteFrameHandler>
   autoFrameHandlers: Set<ThrelteFrameHandler>
   allFrameHandlers: Set<ThrelteFrameHandler>
+  allFrameHandlersNeedSortCheck: boolean
   renderHandlers: Set<ThrelteRenderHandler>
+  renderHandlersNeedSortCheck: boolean
   advance: boolean
 
   /**
@@ -147,7 +149,9 @@ export const createContexts = (options: {
     manualFrameHandlers: new Set(),
     autoFrameHandlers: new Set(),
     allFrameHandlers: new Set(),
+    allFrameHandlersNeedSortCheck: false,
     renderHandlers: new Set(),
+    renderHandlersNeedSortCheck: false,
     advance: false,
     dispose: async (force = false) => {
       await tick()
