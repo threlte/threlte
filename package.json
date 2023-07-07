@@ -17,7 +17,7 @@
     "cleanup": "turbo run cleanup && rm -rf node_modules"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.23.1",
+    "@changesets/cli": "^2.26.2",
     "eslint-config-custom": "*",
     "prettier": "latest",
     "prettier-plugin-astro": "^0.8.0",
