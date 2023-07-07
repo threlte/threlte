@@ -31,15 +31,13 @@ export const injectLayersPlugin = () => {
     setContext<ThrelteLayersContext>('threlte-layers-context', merged)
 
     const applyLayers = (ref: Object3D, layers?: ThrelteLayers) => {
-      console.log('applyLayers', layers, ref)
-
       if (layers === 'all') {
         ref.layers.enableAll()
       } else if (layers === 'none') {
         ref.layers.disableAll()
       } else if (Array.isArray(layers)) {
         for (let index = 0; index < 32; index += 1) {
-          const layerIndex = index as typeof layers[number]
+          const layerIndex = index as (typeof layers)[number]
           const enabled = layers.includes(layerIndex)
           if (enabled) {
             ref.layers.enable(index)
