@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.0-next.16
+
+### Patch Changes
+
+- 5ba62e2: Removed log
+
 ## 5.0.0-next.15
 
 ### Patch Changes
