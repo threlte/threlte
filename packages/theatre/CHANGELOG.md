@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 0.1.0-next.2
+
+### Patch Changes
+
+- 3868395: Updated prettier
+
 ## 0.1.0-next.1
 
 ### Minor Changes

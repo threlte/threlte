@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.0.2-next.3
+
+### Patch Changes
+
+- 8734041: Add RoundedBoxGeometry component
+
 ## 0.0.2-next.2
 
 ### Patch Changes

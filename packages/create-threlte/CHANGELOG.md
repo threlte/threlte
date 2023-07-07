@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.0.0-next.15
+
+### Minor Changes
+
+- 6b219b5: Updated create-svelte, added options to initialize a git repository and install dependencies via preferred package manager.
+
 ## 1.0.0-next.14
 
 ### Major Changes

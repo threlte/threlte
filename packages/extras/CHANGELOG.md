@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 5.0.0-next.15
+
+### Patch Changes
+
+- 3868395: Updated prettier
+- 8734041: Add RoundedBoxGeometry component
+
 ## 5.0.0-next.14
 
 ### Patch Changes
