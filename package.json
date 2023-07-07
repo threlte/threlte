@@ -19,7 +19,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "eslint-config-custom": "*",
-    "prettier": "latest",
+    "prettier": "^2.8.8",
     "prettier-plugin-astro": "^0.8.0",
     "prettier-plugin-svelte": "^2.9.0",
     "prettier-plugin-tailwindcss": "^0.2.3",

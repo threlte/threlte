@@ -24,7 +24,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
-    "prettier": "^2.6.2",
+    "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.4.0",
     "svelte": "^3.47.0",
     "svelte-check": "^2.7.0",
