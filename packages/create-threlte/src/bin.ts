@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+import * as p from '@clack/prompts'
 import { create as createSvelteKitApp } from 'create-svelte'
+import { execa } from 'execa'
 import { copy } from 'fs-extra'
 import { Merger } from 'json-merger'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import * as p from '@clack/prompts'
-import { bold, cyan, grey } from 'kleur/colors'
+import { bold, cyan, grey, red } from 'kleur/colors'
 import fs from 'node:fs'
-import path from 'node:path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import detectPackageManager from 'which-pm-runs'
 
 const print = console.log
 
@@ -48,6 +49,8 @@ const create = async () => {
       }
     }
   }
+
+  const pkgManager = detectPackageManager()?.name ?? 'npm'
 
   const options = await p.group(
     {
@@ -91,6 +94,7 @@ const create = async () => {
             }
           ]
         }),
+
       threltePackages: () =>
         p.multiselect({
           message: 'Select Threlte packages (use arrow keys/space bar)',
@@ -117,6 +121,18 @@ const create = async () => {
               hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
             }
           ]
+        }),
+
+      git: () =>
+        p.confirm({
+          message: 'Initialize a git repository?',
+          initialValue: true
+        }),
+
+      install: () =>
+        p.confirm({
+          message: `Install dependencies using ${pkgManager}?`,
+          initialValue: true
         })
     },
     { onCancel: () => process.exit(1) }
@@ -200,6 +216,37 @@ const create = async () => {
     }
   }
 
+  if (options.git) {
+    // initialize git repository
+    await execa('git', ['init'], { cwd, stdio: 'ignore' })
+    await execa('git', ['add', '-A'], { cwd, stdio: 'ignore' })
+    await execa(
+      'git',
+      [
+        'commit',
+        '-m',
+        'Initial commit',
+        '--author="threlte-bot <threlte-bot@users.noreply.github.com>"'
+      ],
+      { cwd, stdio: 'ignore' }
+    )
+  }
+
+  if (options.install) {
+    const s = p.spinner()
+    try {
+      // Install dependencies
+      s.start(`Installing dependencies using ${pkgManager}`)
+      await execa(pkgManager, ['install'], { cwd, stdio: 'ignore' })
+      s.stop(`Installed dependencies using ${pkgManager}`)
+    } catch (error) {
+      s.stop(red('Failed to install dependencies'))
+      p.note('You can install them manually.')
+      // This will show install instructions later on
+      options.install = false
+    }
+  }
+
   p.outro('Your project is ready!')
 
   if (options.types === 'typescript') {
@@ -247,8 +294,12 @@ const create = async () => {
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
-    print(cyan('  npm run model-pipeline:run'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started'))
+    print(cyan(`  ${pkgManager} run model-pipeline:run`))
+    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started\n'))
+  }
+  if (options.git) {
+    print(bold('✔ Git'))
+    print(cyan('  Initialized a git repository.'))
   }
 
   print('\nNext steps:')
@@ -259,10 +310,14 @@ const create = async () => {
     print(`  ${step++}: ${bold(cyan(`cd ${relative}`))}`)
   }
 
-  print(`  ${step++}: ${bold(cyan('npm install'))} (or pnpm install, etc)`)
+  if (!options.install) {
+    print(`  ${step++}: ${bold(cyan(`${pkgManager} install`))}`)
+  }
+
   // prettier-ignore
-  print(`  ${step++}: ${bold(cyan('git init && git add -A && git commit -m "Initial commit"'))} (optional)`);
-  print(`  ${step++}: ${bold(cyan('npm run dev -- --open'))}`)
+  if (!options.git) print(`  ${step++}: ${bold(cyan('git init && git add -A && git commit -m "Initial commit"'))} (optional)`);
+
+  print(`  ${step++}: ${bold(cyan(`${pkgManager} run dev -- --open`))}`)
 
   print(`\nTo close the dev server, hit ${bold(cyan('Ctrl-C'))}`)
   print(`\nStuck? Visit us at ${cyan('https://chat.threlte.xyz')}`)
