@@ -10,9 +10,10 @@
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
+  export let search = false
 </script>
 
-<MobileNav>
+<MobileNav search>
   <svelte:fragment slot="topbar-left">
     <a
       class="flex flex-row gap-3"
@@ -21,6 +22,7 @@
       <slot name="logo" />
     </a>
   </svelte:fragment>
+
   <div
     slot="content"
     class="flex flex-col gap-4 text-lg"

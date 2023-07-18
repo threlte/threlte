@@ -72,21 +72,21 @@
     class="scrollbar-hide relative mt-4 flex h-full items-center justify-between gap-6 overflow-visible px-6 pb-12 lg:px-0 lg:pl-6 lg:text-sm"
   >
     <span
-      class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:pl-3 lg:text-sm lg:font-bold lg:text-white"
+      class="absolute -top-4 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
       >On this page</span
     >
 
     <ul
-      class="absolute top-1/2 right-0 w-full  bg-[#0c1421] px-6 text-left lg:bg-transparent lg:px-0 lg:pl-6 duration-50 transition-all lg:pointer-events-auto lg:opacity-100"
+      class="duration-50 absolute top-1/2 right-0  w-full bg-[#0c1421] px-6 text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:px-0 lg:pl-6 lg:opacity-100"
       on:transitionend={focusFirstDropdownLink}
     >
       {#each filteredHeadings as heading}
         <li
           class={c(
-            'text-faded border-l-2 border-white/20 pl-3 hover:border-white/60 hover:text-white py-1 text-sm',
+            'text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
-              '!border-white/60 bg-blue-700/30 !text-white'
+              '!border-orange !text-orange font-bold'
           )}
           on:keypress={() => {
             headingClicked(heading.slug)

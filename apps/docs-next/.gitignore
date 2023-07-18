@@ -20,3 +20,6 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# orama search doesn't work in dev environment and we have to put a temporary .json file in /assets. In production, this gets built into the /assets
+oramaDB_mydb.json
