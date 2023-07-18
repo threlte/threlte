@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import Scene from './Scene.svelte'
+  // import { Canvas } from '@threlte/core'
+  // import Scene from './Scene.svelte'
   import snarkdown from 'snarkdown'
   import { clippyStores } from './clippyStores'
   import { loadHistoryAnswer, loadHistoryMeta, saveClippyAnswerToHistory } from './clippyHistory'
@@ -11,7 +11,7 @@
 
   const { clippyHistory, clippyRect, clippyRectEl, clippyDialogueRect } = clippyStores
 
-  let askingQuestion = true
+  let askingQuestion = false
 
   let userQuestion = ''
 
@@ -323,12 +323,11 @@
   </dialog>
 </div>
 
-<div class="fixed h-screen w-screen top-0 left-0 z-50 pointer-events-none">
+<!-- <div class="fixed h-screen w-screen top-0 left-0 z-50 pointer-events-none">
   <Canvas>
     <Scene />
   </Canvas>
-</div>
-
+</div> -->
 <style>
   /* https://loading.io/css/ */
   .lds-ellipsis {

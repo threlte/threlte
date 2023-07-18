@@ -28,7 +28,7 @@
     {#if result.score > 2}
       {@const breadcrumbs = result.document.path.replace('/docs/', '').split('/')}
       <a
-        href="/"
+        href={result.document.path}
         class="opacity-75 hover:opacity-100 text-left py-1 flex flex-col"
       >
         <div class="flex gap-2">
