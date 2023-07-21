@@ -1,6 +1,7 @@
 import { onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
 import {
+  REVISION,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   ColorManagement,
@@ -109,21 +110,21 @@ export const useRenderer = (ctx: ThrelteContext) => {
       } else if (shadows === true) {
         renderer.shadowMap.type = PCFSoftShadowMap
       }
+
+      const revision = Number.parseInt(REVISION)
       const cm = ColorManagement as any
-      if (cm.enabled !== undefined) {
+      if (revision >= 150) {
         // since three.js r150 the color management prop is
         // called "enabled", but the types are not up to date :/
         cm.enabled = colorManagementEnabled
-      } else if (cm.legacyMode !== undefined) {
+      } else {
         cm.legacyMode = !colorManagementEnabled
       }
 
       const anyRenderer = renderer as any
-      // > r150
-      if (useLegacyLights && anyRenderer.useLegacyLights !== undefined) {
+      if (revision >= 150 && useLegacyLights) {
         anyRenderer.useLegacyLights = useLegacyLights
-      } else if (anyRenderer.physicallyCorrectLights !== undefined) {
-        // < r150
+      } else if (revision < 150) {
         anyRenderer.physicallyCorrectLights = !useLegacyLights
       }
     }
