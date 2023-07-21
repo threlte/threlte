@@ -111,7 +111,8 @@ export const useRenderer = (ctx: ThrelteContext) => {
         renderer.shadowMap.type = PCFSoftShadowMap
       }
 
-      const revision = Number.parseInt(REVISION)
+      // REVISION can be '{number}' or '{number}dev'
+      const revision = Number.parseInt(REVISION.replace('dev', ''))
       const cm = ColorManagement as any
       if (revision >= 150) {
         // since three.js r150 the color management prop is
