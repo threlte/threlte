@@ -13,6 +13,7 @@ import Package from './Package.astro'
 import { c } from '../lib/classes'
 import Book from './Book.astro'
 import Circles from './Circles.astro'
+import Search from '$components/Search/Search.svelte'
 
 export interface Props {
   title?: string
@@ -77,60 +78,61 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 
         <div class="h-full w-px bg-gray-500/70"></div>
 
-				<div class="flex items-center gap-6">
-					<a
-						href="/docs/reference/core/getting-started"
-						class={c(
-							linkStyles,
-							activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
-						)}
-					>
-						<Package />
-						core</a
-					>
-					<a
-						href="/docs/reference/extras/getting-started"
-						class={c(
-							linkStyles,
-							activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
-						)}
-					>
-						<Package />
-						extras</a
-					>
-					<a
-						href="/docs/reference/gltf/getting-started"
-						class={c(
-							linkStyles,
-							activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
-						)}
-					>
-						<Package />
-						gltf</a
-					>
-					<a
-						href="/docs/reference/rapier/getting-started"
-						class={c(
-							linkStyles,
-							activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
-						)}
-					>
-						<Package />
-						rapier</a
-					>
-					<a
-						href="/docs/reference/theatre/getting-started"
-						class={c(
-							linkStyles,
-							activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
-						)}
-					>
-						<Package />
-						theatre</a
-					>
-				</div>
-			</div>
-		</div>
+        <div class="flex items-center gap-6">
+          <a
+            href="/docs/reference/core/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
+            )}
+          >
+            <Package />
+            core</a
+          >
+          <a
+            href="/docs/reference/extras/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
+            )}
+          >
+            <Package />
+            extras</a
+          >
+          <a
+            href="/docs/reference/gltf/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
+            )}
+          >
+            <Package />
+            gltf</a
+          >
+          <a
+            href="/docs/reference/rapier/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
+            )}
+          >
+            <Package />
+            rapier</a
+          >
+          <a
+            href="/docs/reference/theatre/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
+            )}
+          >
+            <Package />
+            theatre</a
+          >
+          <Search client:idle />
+        </div>
+      </div>
+    </div>
 
 		<div class="flex flex-row gap-5">
 			<Socials />

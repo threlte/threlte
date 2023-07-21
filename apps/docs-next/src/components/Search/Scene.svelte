@@ -3,7 +3,7 @@
   // import DragonEvolved from './DragonEvolved.svelte'
 </script>
 
-<DragonEvolved />
+<!-- <DragonEvolved /> -->
 
 <!-- <T.PerspectiveCamera
   makeDefault
