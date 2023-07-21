@@ -21,7 +21,9 @@ type $$Events = {
 const dispatch = createRawEventDispatcher<$$Events>()
 const handedness: ['left' | 'right' | undefined, 'left' | 'right' | undefined] = [undefined, undefined]
 
-const handleXrEvent = (event: XREvent) => dispatch(event.type, event)
+const handleXrEvent = (event: XREvent) => {
+  dispatch(event.type, event)
+}
 
 const setHandedness = (index: number, event: XREvent<'connected'>) => {
   handedness[index] = event.data.handedness
@@ -36,13 +38,13 @@ const setHandedness = (index: number, event: XREvent<'connected'>) => {
     setHandedness(0, event)
     handleXrEvent(event)
   }}
-  on:disconnected={handleXrEvent}
-  on:select={handleXrEvent}
-  on:selectstart={handleXrEvent}
-  on:selectend={handleXrEvent}
-  on:squeeze={handleXrEvent}
-  on:squeezeend={handleXrEvent}
-  on:squeezestart={handleXrEvent}
+  on:disconnected
+  on:select
+  on:selectstart
+  on:selectend
+  on:squeeze
+  on:squeezeend
+  on:squeezestart
 >
   {#if handedness[0] === 'left'}
     <slot name='left' />
@@ -58,13 +60,13 @@ const setHandedness = (index: number, event: XREvent<'connected'>) => {
     setHandedness(1, event)
     handleXrEvent(event)
   }}
-  on:disconnected={handleXrEvent}
-  on:select={handleXrEvent}
-  on:selectstart={handleXrEvent}
-  on:selectend={handleXrEvent}
-  on:squeeze={handleXrEvent}
-  on:squeezeend={handleXrEvent}
-  on:squeezestart={handleXrEvent}
+  on:disconnected
+  on:select
+  on:selectstart
+  on:selectend
+  on:squeeze
+  on:squeezeend
+  on:squeezestart
 >
   {#if handedness[1] === 'left'}
     <slot name='left' />

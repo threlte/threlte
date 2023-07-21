@@ -1,14 +1,11 @@
 <script lang='ts'>
 
-import { createEventDispatcher } from 'svelte'
 import XRButton from './button.svelte'
 
 type $$Events = {
   click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
   error: Error
 }
-
-const dispatch = createEventDispatcher<$$Events>()
 
 </script>
 
@@ -30,6 +27,6 @@ const dispatch = createEventDispatcher<$$Events>()
     domOverlay: typeof document !== 'undefined' ? { root: document.body } : undefined,
     optionalFeatures: ['hit-test', 'dom-overlay', 'dom-overlay-for-handheld-ar']
   }}
-  on:click={(event) => dispatch('click', event.detail)}
-  on:error={(event) => dispatch('error', event.detail)}
+  on:click
+  on:error
 />

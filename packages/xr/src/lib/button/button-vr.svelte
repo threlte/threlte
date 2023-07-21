@@ -1,6 +1,5 @@
 <script lang='ts'>
 
-import { createEventDispatcher } from 'svelte'
 import XRButton from './button.svelte'
 
 type $$Events = {
@@ -8,7 +7,6 @@ type $$Events = {
   error: unknown
 }
 
-const dispatch = createEventDispatcher<$$Events>()
 
 </script>
 
@@ -29,6 +27,6 @@ const dispatch = createEventDispatcher<$$Events>()
   sessionInit={{
     optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
   }}
-  on:click={(event) => dispatch('click', event.detail)}
-  on:error={(event) => dispatch('error', event.detail)}
+  on:click
+  on:error
 />

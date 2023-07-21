@@ -1,3 +1,19 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang='ts'>
+
+const demos = [
+  ['Hands', '/hands'],
+  ['Events', '/events'],
+  ['Custom controller models', '/models'],
+  ['Teleporting', '/teleport'],
+  ['Immersive AR', '/ar'],
+  ['BonkSaber', '/bonksaber'],
+] as const
+
+</script>
+
+<main class='p-4'>
+  <h1 class='font-bold text-xl'>Demos</h1>
+  {#each demos as [text, href] (href)}
+    <a {href} class='block hover:underline'>{text}</a>
+  {/each}
+</main>

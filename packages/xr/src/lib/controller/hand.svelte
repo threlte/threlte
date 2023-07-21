@@ -77,7 +77,11 @@ const { start, stop } = useFrame(() => {
   children.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
 }, { autostart: false })
 
-$: if ($$slots.default) { start() } else { stop() }
+$: if ($$slots.default) {
+  start()
+} else {
+  stop()
+}
 
 </script>
 
@@ -94,5 +98,3 @@ $: if ($$slots.default) { start() } else { stop() }
     <slot />
   </T.Group>
 </T>
-
-
