@@ -131,30 +131,10 @@
   }}
 />
 
-<div class="fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none">
-  <div
-    id="clippy-corner-area"
-    class="absolute bottom-0 right-0 w-96 px-6 py-4 flex flex-col items-center"
-  >
-    <div
-      class={'px-3 pr-4 py-1 gap-2 rounded-md flex flex-row items-center border-white/20 border justify-start group bg-blue-900 hover:bg-blue-700/30'}
-    >
-      <button
-        class="pointer-events-auto"
-        on:click={toggleDialog}
-      >
-        Hi friend! Need some help?
-      </button>
-    </div>
-    <div
-      class="w-64 aspect-square border border-red-500/20"
-      bind:this={cornerEl}
-    />
-  </div>
-
+<div class="pointer-events-none fixed top-0 left-0 z-50 h-screen w-screen">
   {#if askingQuestion}
     <div
-      class={`w-screen h-screen fixed top-0 left-0  pointer-events-auto bg-gray-900/70
+      class={`pointer-events-auto fixed top-0 left-0 h-screen  w-screen bg-gray-900/70
       `}
       on:click={toggleDialog}
       on:keypress={toggleDialog}
@@ -163,24 +143,15 @@
 
   <dialog
     open={askingQuestion}
-    class={`bg-blue-900 text-white w-full px-0 py-2 flex flex-col gap-4 max-w-[50%] pointer-events-auto max-h-[500px] mt-[10%] border-white/20 border rounded-lg glow-blue ${
+    class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[500px] w-full max-w-[50%] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
       askingQuestion ? '' : 'hidden'
     }`}
   >
-    <div
-      id="clippy-dialogue-area"
-      class="absolute top-0 left-0 w-64 flex flex-col items-center -translate-x-full"
-    >
-      <div
-        class="w-full aspect-square border border-red-500/20"
-        bind:this={dialogueEl}
-      />
-    </div>
-    <div class="flex flex-col absolute -right-6 translate-x-full top-0 gap-1">
+    <div class="absolute -right-6 top-0 flex translate-x-full flex-col gap-1">
       <h2 class="font-bold">Previously asked questions:</h2>
       {#each $clippyHistory as entry}
         <button
-          class="opacity-75 hover:opacity-100 text-left py-1"
+          class="py-1 text-left opacity-75 hover:opacity-100"
           on:click={() => {
             userQuestion = entry.question
             answer = snarkdown(loadHistoryAnswer(entry.answerUuid) || '')
@@ -189,18 +160,18 @@
       {/each}
     </div>
     <div
-      class={`absolute top-40 -translate-y-full left-0 w-full h-96 ${glowClasses['blue']} pointer-events-none`}
+      class={`absolute top-40 left-0 h-96 w-full -translate-y-full ${glowClasses['blue']} pointer-events-none`}
     />
-    <div class="w-full relative flex items-center flex-col gap-1">
-      <div class="border-b border-blue-500/90 w-full pb-1">
+    <div class="relative flex w-full flex-col items-center gap-1">
+      <div class="w-full border-b border-blue-500/90 pb-1">
         <input
-          class="w-full  px-4 py-1 outline-none bg-transparent 0"
+          class="0  w-full bg-transparent px-4 py-1 outline-none"
           placeholder="Search a phrase or ask an AI assistant about Threlte..."
           bind:value={userQuestion}
         />
       </div>
 
-      <div class="flex flex-col gap-2 items-stretch  border-b border-blue-500/90 w-full pb-2">
+      <div class="flex w-full flex-col items-stretch  gap-2 border-b border-blue-500/90 pb-2">
         <div class="px-2">
           <input
             type="radio"
@@ -212,7 +183,7 @@
           />
           <label
             for="search-docs-radio"
-            class="block cursor-pointer select-none p-2 bg-blue-900  peer-checked:bg-blue-700/30 peer-checked:font-bold hover:brightness-150"
+            class="block cursor-pointer select-none bg-blue-900 p-2  hover:brightness-150 peer-checked:bg-blue-700/30 peer-checked:font-bold"
           >
             Search docs</label
           >
@@ -229,14 +200,14 @@
           />
           <label
             for="search-ai-radio"
-            class="block cursor-pointer select-none p-2 bg-blue-900  peer-checked:bg-blue-700/30 peer-checked:font-bold  hover:brightness-150"
+            class="block cursor-pointer select-none bg-blue-900 p-2  hover:brightness-150 peer-checked:bg-blue-700/30  peer-checked:font-bold"
             >Ask AI assistant</label
           >
         </div>
       </div>
 
       <button
-        class={`absolute right-0 mr-2 flex gap-2 duration-200 hover:bg-blue-300/20 px-1 py-1 rounded-md ${
+        class={`absolute right-0 mr-2 flex gap-2 rounded-md px-1 py-1 duration-200 hover:bg-blue-300/20 ${
           userQuestion.length > 3 ? 'opacity-90' : 'opacity-0'
         } ${fetchingAnswer ? 'hidden' : ''}
         `}
