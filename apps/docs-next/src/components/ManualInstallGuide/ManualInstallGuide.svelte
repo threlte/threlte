@@ -7,6 +7,7 @@
   let installExtras = false
   let installRapier = false
   let installTheatre = false
+  let installXR = false
   let installTypes = false
 
   let divider = ' \\'
@@ -15,18 +16,19 @@
 
   $: installCode = [
     `npm install three @threlte/core@next${
-      installExtras || useGltf || installRapier || installTheatre || installTypes ? divider : ''
+      installExtras || useGltf || installRapier || installTheatre || installXR || installTypes ? divider : ''
     }`,
     (installExtras || useGltf) &&
       `${space}@threlte/extras@next${
-        installRapier || installTheatre || installTypes ? divider : ''
+        installRapier || installTheatre || installXR || installTypes ? divider : ''
       }`,
     installRapier &&
       `${space}@threlte/rapier@next @dimforge/rapier3d-compat${
-        installTypes || installTheatre ? divider : ''
+        installTypes || installTheatre || installXR ? divider : ''
       }`,
     installTheatre &&
-      `${space}@threlte/theatre@next @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+      `${space}@threlte/theatre@next @theatre/core @theatre/studio${installXR || installTypes ? divider : ''}`,
+    installXR && `${space}@threlte/xr@next${installTypes ? divider : ''}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -126,6 +128,20 @@
   </p>
 
   <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+
+  <InstallButton
+    on:click={() => {
+      installXR = !installXR
+    }}
+    active={installXR}>@threlte/xr</InstallButton
+  >
+
+  <p class="my-0 text-sm md:text-base self-center">
+    Components and hooks for VR and AR.
+  </p>
+
+  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+
 
   <InstallButton
     on:click={() => {

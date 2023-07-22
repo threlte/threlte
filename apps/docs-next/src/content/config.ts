@@ -68,6 +68,7 @@ export const referenceCollection = defineCollection({
       '@threlte/rapier',
       '@threlte/theatre',
       '@threlte/gltf',
+      '@threlte/xr',
       'Documentation'
     ]),
     componentSignature: componentSignature.optional(),

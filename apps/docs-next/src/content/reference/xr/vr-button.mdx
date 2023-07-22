@@ -1,19 +1,18 @@
 ---
 {
   'category': '@threlte/xr',
-  'name': '<XR>',
-  'order': 0,
+  'name': '<VRButton>',
+  'order': 2,
   'type': 'component',
   'componentSignature':
     {
       'props':
         [
           {
-            'name': 'foveation',
+            'name': 'mode',
             'type': 'number',
-            'default': '0',
-            'required': false,
-            'description': 'Enables foveated rendering. `0` represents no foveation, full resolution. 1 represents maximum foveation, with the edges rendered at a lower resolution.'
+            'required': true,
+            'description': 'The type of `XRSession` to create'
           },
           {
             'name': 'frameRate',
@@ -25,26 +24,12 @@
             'name': 'referenceSpace',
             'type': 'string',
             'required': false,
-            'default': "'local-floor'",
+            'default': '"local-floor"',
             'description': 'Type of WebXR reference space to use.',
-          },
-        ],
-      events:
-        [
-          { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
-          {
-            name: 'progress',
-            payload: 'ProgressEvent<EventTarget>',
-            description: 'Fired when the audio is loading.'
-          },
-          {
-            name: 'error',
-            payload: 'ErrorEvent',
-            description: 'Fired when the audio fails to load.'
           }
-        ],
+        ]
     }
 }
 ---
 
-The `<XR>` component prepares your scene for WebXR rendering. It sets up a context that is accessible via the `useXR` hook.
+`<XRButton />` is an HTML `<button />` that can be used to init and display info about your WebXR session. This is aliased by `ARButton` and `VRButton` with sensible session defaults.

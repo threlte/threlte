@@ -19,6 +19,7 @@ export const files = {
     "@threlte/extras": "next",
     "@threlte/rapier": "next",
     "@threlte/theatre": "next",
+    "@threlte/xr": "next",
     "@tsconfig/svelte": "*",
     "@types/three": "*",
     "postprocessing": "*",
