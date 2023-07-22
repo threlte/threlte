@@ -5,11 +5,11 @@
  <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
 </div>
 
-<a href="https://threlte.xyz">
+<a href="https://next.threlte.xyz">
  <img src="./assets/threlte/banner/threlte-banner.png"/>
 </a>
 
-## Create 3D Apps for the Web
+## Rapidly Build Interactive 3D Apps for the Web
 
 Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D apps for the web. It provides a **declarative**, **type-safe**, **reactive** and **interactive** API out-of-the-box.
 
