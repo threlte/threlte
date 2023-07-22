@@ -9,37 +9,22 @@ Use this hook to get context about the current WebXR session.
 
 ```svelte
 <script>
-  import { usePrismaticJoint, RigidBody, Collider } from '@threlte/rapier'
+  import { useXR } from '@threlte/xr'
 
-  const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint({ x: 1 }, {}, { y: 1 }, [0, 1])
+  const { isPresenting, isHandTracking, player, session, xrFrame } = useXR()
 </script>
-
-<RigidBody bind:rigidBody={$rigidBodyA}>
-  <Collider
-    shape="cuboid"
-    args={[1, 1, 1]}
-  />
-</RigidBody>
-
-<RigidBody bind:rigidBody={$rigidBodyB}>
-  <Collider
-    shape="cuboid"
-    args={[1, 1, 1]}
-  />
-</RigidBody>
 ```
 
 ### Signature
 
 ```ts
+import { useXR } from 'threlte-xr'
+
 const {
-	joint: Writable<PrismaticImpulseJoint>
-	rigidBodyA: Writable<RAPIER.RigidBody>
-	rigidBodyB: Writable<RAPIER.RigidBody>
-} = usePrismaticJoint(
-	anchorA,  // Position
-  anchorB,  // Position
-  axis,     // Rotation
-  limits    // [min, max] | undefined
-)
+  isPresenting, // CurrentWritable<boolean> - Whether the XR device is presenting in an XR session
+  isHandTracking, // CurrentWritable<boolean> - Whether hand tracking inputs are active
+  player, // CurrentWritable<THREE.Group> - Representing the XR viewer or player
+  session, // CurrentWritable<XRSession | undefined> - The active `XRSession`
+  xrFrame, // CurrentWritable<XRFrame> - The current XRFrame
+} = useXR()
 ```
