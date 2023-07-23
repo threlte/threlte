@@ -1,8 +1,13 @@
 <div align="right">
- <img alt="license" src="https://img.shields.io/npm/l/@threlte/core?color=fe4100&labelColor=171d27&logo=git&logoColor=white"/>
- <img alt="npm" src="https://img.shields.io/npm/v/@threlte/core?color=fe4100&labelColor=171d27&logo=npm&logoColor=white"/>
- <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
- <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
+ <a href="https://github.com/threlte/threlte/blob/main/LICENSE.md">
+  <img alt="license" src="https://img.shields.io/npm/l/@threlte/core?color=fe4100&labelColor=171d27&logo=git&logoColor=white"/>
+ </a>
+ <a href="https://discord.com/channels/985983540804091964">
+  <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
+ </a>
+ <a href="https://next.threlte.xyz">
+  <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
+ </a>
 </div>
 
 <a href="https://next.threlte.xyz">
