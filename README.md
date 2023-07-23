@@ -21,7 +21,9 @@ Visit [threlte.xyz](https://threlte.xyz)
 
 **[`@threlte/rapier`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use the [Rapier physics engine](https://rapier.rs/) in Threlte
 
-**[`@threlte/theatre`](https://github.com/threlte/threlte/tree/main/packages/rapier)** - components and hooks to use [Theatre.js](https://www.theatrejs.com/) in Threlte
+**[`@threlte/theatre`](https://github.com/threlte/threlte/tree/main/packages/theatre)** - components and hooks to use [Theatre.js](https://www.theatrejs.com/) in Threlte
+
+**[`@threlte/xr`](https://github.com/threlte/threlte/tree/main/packages/xr)** - components and hooks for VR and AR environments
 
 ## Getting help
 
