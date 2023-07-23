@@ -1,10 +1,27 @@
+<!--
+@component
+`<XR />` is a WebXR manager that configures your scene for XR rendering
+and interaction. This should be placed within a Threlte `<Canvas />`.
+
+```svelte
+  <XR
+    foveation={0}
+    frameRate={90}
+    referenceSpace='local-floor'
+    on:sessionstart={(event: XREvent<XRManagerEvent>) => {}}
+    on:sessionend={(event: XREvent<XRManagerEvent>) => {}}
+    on:visibilitychange={(event: XREvent<XRSessionEvent>) => {}}
+    on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
+  />
+```
+-->
+
 <script lang='ts'>
 
 import { onDestroy } from 'svelte';
 import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
-import type { XRManagerEvent } from './types'
+import type { XRSessionEvent } from './types'
 import { session, referenceSpaceType, player, isPresenting, isHandTracking, xrFrame, initialized } from './stores'
-import { xrRenderCallbacks } from './hooks/use-xr-frame'
 
 /**
  * Enables foveated rendering. `Default is `0`
@@ -28,43 +45,38 @@ export let referenceSpace: XRReferenceSpaceType = 'local-floor'
 
 type $$Events = {
   /** Called as an XRSession is requested */
-  sessionstart: THREE.Event & { target: XRSession }
+  sessionstart: XRSessionEvent<'sessionstart'>
   /** Called after an XRSession is terminated */
-  sessionend: THREE.Event & { target: XRSession }
+  sessionend: XRSessionEvent<'sessionend'>
   /** Called when an XRSession is hidden or unfocused. */
-  visibilitychange: THREE.Event & { target: XRSession }
+  visibilitychange: globalThis.XRSessionEvent
   /** Called when available inputsources change */
-  inputsourceschange: THREE.Event & { target: XRSession }
+  inputsourceschange: globalThis.XRSessionEvent
 }
 
 const dispatch = createRawEventDispatcher<$$Events>()
 
 const { renderer, camera } = useThrelte()
+const { xr } = renderer!
 
-let cleanup: () => void = () => {}
-
-const { start, stop } = useFrame((_ctx, dt) => {
-  const frame = renderer!.xr.getFrame()
-  xrFrame.set(frame)
-  for (let callback of xrRenderCallbacks) {
-    callback(frame, dt)
-  }
+const { start, stop } = useFrame(() => {
+  xrFrame.set(xr.getFrame())
 }, { autostart: false })
 
-const handleSessionStart = (event: XRManagerEvent) => {
+const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
   start()
   $isPresenting = true
   dispatch('sessionstart', { ...event, target: $session! })
 }
 
-const handleSessionEnd = (event: XRManagerEvent) => {
+const handleSessionEnd = (event: XRSessionEvent<'sessionend'>) => {
   stop()
   dispatch('sessionend', { ...event, target: $session! })
   $isPresenting = false
   $session = undefined
 }
 
-const handleVisibilityChange = (event: XRSessionEvent) => {
+const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
   dispatch('visibilitychange', { ...event, target: $session! })
 }
 
@@ -73,73 +85,64 @@ const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
   dispatch('inputsourceschange', { ...event, target: $session! })
 }
 
-renderer!.xr.enabled = true
-renderer!.xr.addEventListener('sessionstart', handleSessionStart)
-renderer!.xr.addEventListener('sessionend', handleSessionEnd)
+const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
+  dispatch('visibilitychange', { ...event, target: $session! })
+}
 
-$: renderer!.xr.setFoveation(foveation)
+const cleanupSession = (session?: XRSession) => {
+  if (session === undefined) return
 
-$: if (frameRate !== undefined) {
+  session.removeEventListener('visibilitychange', handleVisibilityChange)
+  session.removeEventListener('inputsourceschange', handleInputSourcesChange)
+  session.removeEventListener('frameratechange', handleFramerateChange)
+}
+
+const updateTargetFrameRate = (frameRate?: number) => {
+  if (frameRate === undefined) return
+
   try {
     $session?.updateTargetFrameRate(frameRate)
   } catch {}
 }
 
+const updateSession = async (session?: XRSession) => {
+  if (session === undefined) return
+
+  session.addEventListener('visibilitychange', handleVisibilityChange)
+  session.addEventListener('inputsourceschange', handleInputSourcesChange)
+  session.addEventListener('frameratechange', handleFramerateChange)
+
+  await xr.setSession(session)
+
+  xr.setFoveation(foveation)
+  
+  updateTargetFrameRate(frameRate)
+}
+
+xr.enabled = true
+xr.addEventListener('sessionstart', handleSessionStart)
+xr.addEventListener('sessionend', handleSessionEnd)
+
 $: {
-  renderer!.xr.setReferenceSpaceType(referenceSpace)
+  xr.setReferenceSpaceType(referenceSpace)
   $referenceSpaceType = referenceSpace
 }
 
-$: {
-  cleanup()
-
-  if ($session === undefined) {
-    renderer!.xr.setSession(null)
-  } else {
-    $session.addEventListener('visibilitychange', handleVisibilityChange)
-    $session.addEventListener('inputsourceschange', handleInputSourcesChange)
-
-    renderer!.xr.setSession($session!).then(() => {
-      // on setSession, three#WebXRManager resets foveation to 1
-      // so foveation set needs to happen after it
-      renderer!.xr.setFoveation(foveation)
-    })
-
-    cleanup = () => {
-      $session?.removeEventListener('visibilitychange', handleVisibilityChange)
-      $session?.removeEventListener('inputsourceschange', handleInputSourcesChange)
-    }
-  }
-}
+$: cleanupSession($session)
+$: updateSession($session)
+$: updateTargetFrameRate(frameRate)
+$: xr.setFoveation(foveation)
 
 onDestroy(() => {
-  renderer!.xr.enabled = false
-  renderer!.xr.removeEventListener('sessionstart', handleSessionStart)
-  renderer!.xr.removeEventListener('sessionend', handleSessionEnd)
-  renderer!.setAnimationLoop(null)
+  xr.enabled = false
+  xr.removeEventListener('sessionstart', handleSessionStart)
+  xr.removeEventListener('sessionend', handleSessionEnd)
 })
 
 $initialized = true
 
 </script>
 
-<!--
-@component
-`<XR />` is a WebXR manager that configures your scene for XR rendering
-and interaction. This lives within a Threlte `<Canvas />`.
-
-```svelte
-  <XR
-    foveation={0}
-    frameRate={90}
-    referenceSpace='local-floor'
-    on:sessionstart={(event: XREvent<XRManagerEvent>) => {}}
-    on:sessionend={(event: XREvent<XRManagerEvent>) => {}}
-    on:visibilitychange={(event: XREvent<XRSessionEvent>) => {}}
-    on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
-  />
-```
--->
 <T name='Player' is={$player}>
   <T is={camera.current} />
 </T>

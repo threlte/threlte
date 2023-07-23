@@ -2,8 +2,9 @@ import { onDestroy } from 'svelte'
 import { on, off } from '$lib/events'
 import type {
   XRControllerEventType,
-  XREventHandler,
-  XREventOptions,
+  XRHandEventType,
+  XRControllerEvent,
+  XRHandEvent,
 } from '$lib/types'
 
 /**
@@ -14,16 +15,46 @@ import type {
  * @param handler 
  * @param options 
  */
-export const useXREvent = (event: XRControllerEventType, handler: XREventHandler<any>, { handedness }: XREventOptions = {}) => {
-  const listener = (event: any) => {
-    if (handedness !== undefined && event.data.handedness !== handedness) {
+export const useXRControllerEvent = (
+  event: XRControllerEventType,
+  handler: (event: XRControllerEvent) => void,
+  { handedness }: { handedness?: 'left' | 'right' | 'none' } = {}
+): void => {
+  const listener = (event: XRControllerEvent) => {
+    if (handedness !== undefined && event.data?.handedness !== handedness) {
       return
     }
 
     handler(event)
   }
 
-  on(event, listener)
+  on<XRControllerEvent>(event, listener)
+
+  onDestroy(() => off(event, listener))
+}
+
+/**
+ * Adds listeners for hand events.
+ * This subscribes directly into the native XRInputSource (see XRInputSourceEvent).
+ *
+ * @param event 
+ * @param handler 
+ * @param options 
+ */
+export const useXRHandEvent = (
+  event: XRHandEventType,
+  handler: (event: XRHandEvent) => void,
+  { handedness }: { handedness?: 'left' | 'right' } = {}
+): void => {
+  const listener = (event: XRHandEvent) => {
+    if (handedness !== undefined && event.data?.handedness !== handedness) {
+      return
+    }
+
+    handler(event)
+  }
+
+  on<XRHandEvent>(event, listener)
 
   onDestroy(() => off(event, listener))
 }

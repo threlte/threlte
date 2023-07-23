@@ -1,4 +1,22 @@
+<!--
+@component
 
+`<TeleportControls />` creates a teleportation experience similar to that on the Quest home environment.
+
+@param handedness - Which hands to allow teleportation from.
+
+@param maxDistance - The maximum radial teleportation distance in meters.
+
+@event teleport - Fires after a teleport event.
+
+```svelte
+  <TeleportControls
+    handedness={'left' | 'right'}
+    maxDistance={10}
+    on:teleport={(event) => {}} 
+  />
+```
+-->
 
 <script lang='ts'>
 
@@ -9,8 +27,6 @@ import { activeTeleportController, pendingTeleportDestination } from '$lib/store
 import { useTeleport, useXrController, useXrGamepad } from '$lib/hooks'
 import Ray from '$lib/ray.svelte'
 import Marker from './marker.svelte'
-
-// export let intersects: THREE.Object3D[] = []
 
 /**
  * The raycaster used for teleportation.
@@ -136,26 +152,6 @@ onMount(() => {
 })
 
 </script>
-
-<!--
-@component
-
-`<TeleportControls />` creates a teleportation experience similar to that on the Quest home environment.
-
-@param handedness - Which hands to allow teleportation from.
-
-@param maxDistance - The maximum radial teleportation distance in meters.
-
-@event teleport - Fires after a teleport event.
-
-```svelte
-  <TeleportControls
-    handedness={'left' | 'right'}
-    maxDistance={10}
-    on:teleport={(event) => {}} 
-  />
-```
--->
 
 <T.Group bind:ref={navmeshParent}>
   <slot />

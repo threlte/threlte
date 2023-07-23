@@ -2,75 +2,65 @@
 
 import { createRawEventDispatcher } from '@threlte/core'
 import Controller from './controller.svelte'
-import type { XREvent } from '../types'
+import type { XRControllerEvent } from '../types'
 
 export let modelLeft: THREE.Object3D | undefined = undefined
 export let modelRight: THREE.Object3D | undefined = undefined
 
 type $$Events = {
-  connected: XREvent<'connected'>
-  disconnected: XREvent<'disconnected'>
-  select: XREvent<'select'>
-  selectstart: XREvent<'selectstart'>
-  selectend: XREvent<'selectend'>
-  squeeze: XREvent<'squeeze'>
-  squeezeend: XREvent<'squeezeend'>
-  squeezestart: XREvent<'squeezestart'>
+  connected: XRControllerEvent<'connected'>
+  disconnected: XRControllerEvent<'disconnected'>
+  select: XRControllerEvent<'select'>
+  selectstart: XRControllerEvent<'selectstart'>
+  selectend: XRControllerEvent<'selectend'>
+  squeeze: XRControllerEvent<'squeeze'>
+  squeezeend: XRControllerEvent<'squeezeend'>
+  squeezestart: XRControllerEvent<'squeezestart'>
 }
 
-const dispatch = createRawEventDispatcher<$$Events>()
-const handedness: ['left' | 'right' | undefined, 'left' | 'right' | undefined] = [undefined, undefined]
+type Handedness = XRHandedness | undefined
 
-const handleXrEvent = (event: XREvent) => {
+const dispatch = createRawEventDispatcher<$$Events>()
+const handedness: [Handedness, Handedness] = [undefined, undefined]
+
+const handleXrEvent = (event: XRControllerEvent) => {
   dispatch(event.type, event)
 }
 
-const setHandedness = (index: number, event: XREvent<'connected'>) => {
-  handedness[index] = event.data.handedness
+const setHandedness = (index: number, event: XRControllerEvent<'connected'>) => {
+  if (event.data !== undefined) {
+    handedness[index] = event.data.handedness
+  }
+}
+
+$: models = {
+  left: modelLeft,
+  right: modelRight,
+  none: undefined
 }
 
 </script>
 
-<Controller
-  model={modelLeft}
-  index={0}
-  on:connected={(event) => {
-    setHandedness(0, event)
-    handleXrEvent(event)
-  }}
-  on:disconnected
-  on:select
-  on:selectstart
-  on:selectend
-  on:squeeze
-  on:squeezeend
-  on:squeezestart
->
-  {#if handedness[0] === 'left'}
-    <slot name='left' />
-  {:else if handedness[0] === 'right'}
-    <slot name='right' />
-  {/if}
-</Controller>
-
-<Controller
-  model={modelRight}
-  index={1}
-  on:connected={(event) => {
-    setHandedness(1, event)
-    handleXrEvent(event)
-  }}
-  on:disconnected
-  on:select
-  on:selectstart
-  on:selectend
-  on:squeeze
-  on:squeezeend
-  on:squeezestart
->
-  {#if handedness[1] === 'left'}
-    <slot name='left' />
-  {:else if handedness[1] === 'right'}
-    <slot name='right' />
-  {/if}
-</Controller>
+{#each [0, 1] as index (index)}
+  <Controller
+    model={models[handedness[index] ?? 'none']}
+    {index}
+    on:connected={(event) => {
+      setHandedness(index, event)
+      handleXrEvent(event)
+    }}
+    on:disconnected
+    on:select
+    on:selectstart
+    on:selectend
+    on:squeeze
+    on:squeezeend
+    on:squeezestart
+  >
+    {#if handedness[index] === 'left'}
+      <slot name='left' />
+    {:else if handedness[index] === 'right'}
+      <slot name='right' />
+    {/if}
+  </Controller>
+{/each}

@@ -146,7 +146,6 @@ This hook gives you access to the current state configured by `<XR />`.
 import { useXR } from 'threlte-xr'
 
 const {
-  controllers, // Writable<XRController[]>
   isPresenting, // CurrentWritable<boolean> - Whether the XR device is presenting in an XR session
   isHandTracking, // CurrentWritable<boolean> - Whether hand tracking inputs are active
   player, // CurrentWritable<THREE.Group> - Representing the XR viewer or player

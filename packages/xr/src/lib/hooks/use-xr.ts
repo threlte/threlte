@@ -1,5 +1,4 @@
 import {
-  controllers,
   isPresenting,
   isHandTracking,
   player,
@@ -8,7 +7,6 @@ import {
 } from '$lib/stores'
 
 const stores = {
-  controllers,
   isPresenting,
   isHandTracking,
   player,

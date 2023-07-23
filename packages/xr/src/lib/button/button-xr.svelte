@@ -1,3 +1,22 @@
+<!--
+@component
+`<XRButton />` is an HTML `<button />` that can be used to init and
+display info about your WebXR session. This is aliased by `ARButton` and
+`VRButton` with sensible session defaults.
+
+```svelte
+  <XRButton
+    mode={'immersive-ar' | 'immersive-vr' | 'inline'}
+    sessionInit={{
+      optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
+    }}
+    force={'enter' | 'exit' | undefined}
+    on:error={(event) => {}}
+    on:click={(event) => {}}
+  />
+```
+-->
+
 <script lang='ts'>
 
 import { createEventDispatcher } from 'svelte'
@@ -17,8 +36,10 @@ export let sessionInit: XRSessionInit & { domOverlay?: { root: HTMLElement } | u
 export let force: 'enter' | 'exit' | undefined = undefined
 
 type $$Events = {
-  click: any
-  error: any
+  /** Fires when a user clicks the VR button. */
+  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
+  /** Fires when an enter / exit session error occurs. */
+  error: Error
 }
 
 const dispatch = createEventDispatcher<$$Events>()
@@ -36,7 +57,7 @@ const handleButtonClick = async (state: 'unsupported' | 'insecure' | 'blocked' |
     await toggleSession(mode, sessionInit, force)
   } catch (error) {
     /** This callback gets fired if XR initialization fails. */
-    dispatch('error', error)
+    dispatch('error', error as Error)
   }
 }
 
@@ -48,24 +69,6 @@ $: modeText = {
 
 </script>
 
-<!--
-@component
-`<XRButton />` is an HTML `<button />` that can be used to init and
-display info about your WebXR session. This is aliased by `ARButton` and
-`VRButton` with sensible session defaults.
-
-```svelte
-  <XRButton
-    mode={'immersive-ar' | 'immersive-vr' | 'inline'}
-    sessionInit={{
-      optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
-    }}
-    force={'enter' | 'exit' | undefined}
-    on:error={(event) => {}}
-    on:click={(event) => {}}
-  />
-```
--->
 {#await getSupportState(mode) then state}
   <button {...$$restProps} on:click={() => handleButtonClick(state)}>
     {#if state === 'unsupported'}

@@ -21,8 +21,6 @@ void main(){
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`
 
-let material: THREE.ShaderMaterial
-
 </script>
 
 <T.Mesh
@@ -37,10 +35,9 @@ let material: THREE.ShaderMaterial
   <T.ShaderMaterial
     {fragmentShader}
     {vertexShader}
-    bind:ref={material}
-    uniforms={{ size: 10 }}
     transparent
     polygonOffset
     polygonOffsetFactor={-1}
+    on:create={({ ref }) => (ref.uniforms.size = { value: 10 })}
   />
 </T.Mesh>

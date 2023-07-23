@@ -1,14 +1,3 @@
-<script lang='ts'>
-
-import XRButton from './button.svelte'
-
-type $$Events = {
-  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
-  error: Error
-}
-
-</script>
-
 <!--
 @component
 `<ARButton />` is an HTML `<button />` that can be used to init and display info about your immersive AR session.
@@ -20,6 +9,18 @@ type $$Events = {
   />
 ```
 -->
+
+<script lang='ts'>
+
+import XRButton from './button-xr.svelte'
+
+type $$Events = {
+  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
+  error: Error
+}
+
+</script>
+
 <XRButton
   {...$$restProps}
   mode='immersive-ar'

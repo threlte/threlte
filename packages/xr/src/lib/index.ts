@@ -1,6 +1,6 @@
 export { default as ARButton } from './button/button-ar.svelte'
 export { default as VRButton } from './button/button-vr.svelte'
-export { default as XRButton } from './button/button.svelte'
+export { default as XRButton } from './button/button-xr.svelte'
 export { default as Controller } from './controller/controller.svelte'
 export { default as Controllers } from './controller/controllers.svelte'
 export { default as Hand } from './controller/hand.svelte'

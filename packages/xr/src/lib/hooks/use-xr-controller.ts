@@ -1,9 +1,9 @@
-import { currentWritable } from '@threlte/core'
+import { currentWritable, type CurrentWritable } from '@threlte/core'
 import type { XRController } from '$lib/types'
 
-export const left = currentWritable<undefined | XRController>(undefined)
-export const right = currentWritable<undefined | XRController>(undefined)
-export const gaze = currentWritable<undefined | XRController>(undefined)
+export const left = currentWritable<XRController | undefined>(undefined)
+export const right = currentWritable<XRController | undefined>(undefined)
+export const gaze = currentWritable<XRController | undefined>(undefined)
 
 const gamepadLeft = currentWritable<Gamepad | undefined>(undefined)
 const gamepadRight = currentWritable<Gamepad | undefined>(undefined)
@@ -11,7 +11,7 @@ const gamepadRight = currentWritable<Gamepad | undefined>(undefined)
 left.subscribe((value) => gamepadLeft.set(value?.inputSource.gamepad))
 right.subscribe((value) => gamepadRight.set(value?.inputSource.gamepad))
 
-export const useXrController = (handedness: XRHandedness) => {
+export const useXrController = (handedness: XRHandedness): CurrentWritable<XRController | undefined> => {
   switch (handedness) {
     case 'left': return left
     case 'right': return right
@@ -19,7 +19,7 @@ export const useXrController = (handedness: XRHandedness) => {
   }
 }
 
-export const useXrGamepad = (handedness: 'left' | 'right') => {
+export const useXrGamepad = (handedness: 'left' | 'right'): CurrentWritable<Gamepad | undefined> => {
   switch (handedness) {
     case 'left': return gamepadLeft
     case 'right': return gamepadRight

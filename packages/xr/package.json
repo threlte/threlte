@@ -1,6 +1,7 @@
 {
-	"name": "xr",
-	"version": "0.0.1",
+	"name": "@threlte/xr",
+	"version": "0.0.1-next.1",
+	"author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
 	"license": "MIT",
 	"scripts": {
 		"start": "vite dev --host",
@@ -9,7 +10,10 @@
 		"package": "svelte-kit sync && svelte-package && publint",
 		"prepublishOnly": "npm run package",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"format": "prettier --write --plugin-search-dir=. .",
+		"cleanup": "rm -rf node_modules && rm -rf .svelte-kit"
 	},
 	"exports": {
 		".": {
@@ -22,31 +26,21 @@
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
-	"peerDependencies": {
-		"@threlte/core": "^6.0.0-next.10",
-		"svelte": "^3.54.0",
-		"three": "^0.153.0"
-	},
 	"devDependencies": {
-		"@dimforge/rapier3d-compat": "^0.11.2",
 		"@sveltejs/adapter-auto": "^2.1.0",
-		"@sveltejs/kit": "^1.21.0",
-		"@sveltejs/package": "^2.1.0",
-		"@threlte/core": "^6.0.0-next.10",
-		"@threlte/extras": "^5.0.0-next.14",
-		"@threlte/rapier": "^1.0.0-next.2",
-		"@types/three": "^0.152.1",
+		"@sveltejs/kit": "^1.22.3",
+		"@sveltejs/package": "^2.2.0",
+		"@threlte/core": "workspace:*",
+		"@types/three": "^0.154.0",
 		"autoprefixer": "^10.4.14",
-		"postcss": "^8.4.24",
-		"publint": "^0.1.15",
-		"svelte": "^4.0.3",
-		"svelte-check": "^3.4.4",
-		"tailwindcss": "^3.3.2",
-		"three": "^0.154.0",
-		"three-inspect": "^0.3.4",
+		"postcss": "^8.4.27",
+		"publint": "^0.1.16",
+		"svelte": "^4.1.1",
+		"svelte-check": "^3.4.6",
+		"three": "^0.144.0",
 		"tslib": "^2.6.0",
 		"typescript": "^5.1.6",
-		"vite": "^4.3.9",
+		"vite": "^4.4.6",
 		"vite-plugin-mkcert": "^1.16.0"
 	},
 	"svelte": "./dist/index.js",

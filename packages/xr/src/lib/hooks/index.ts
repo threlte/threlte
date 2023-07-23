@@ -1,6 +1,5 @@
 export { useHitTest } from './use-hit-test'
 export { useTeleport } from './use-teleport'
 export { useXrController, useXrGamepad } from './use-xr-controller'
-export { useXREvent } from './use-xr-event'
-export { useXRFrame } from './use-xr-frame'
+export { useXRControllerEvent, useXRHandEvent } from './use-xr-event'
 export { useXR } from './use-xr'

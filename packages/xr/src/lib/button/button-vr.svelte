@@ -1,15 +1,3 @@
-<script lang='ts'>
-
-import XRButton from './button.svelte'
-
-type $$Events = {
-  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
-  error: unknown
-}
-
-
-</script>
-
 <!--
 @component
 `<VRButton />` is an HTML `<button />` that can be used to init and display info about your immersive VR session.
@@ -21,6 +9,20 @@ type $$Events = {
   />
 ```
 -->
+
+<script lang='ts'>
+
+import XRButton from './button-xr.svelte'
+
+type $$Events = {
+  /** Fires when a user clicks the VR button. */
+  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
+  /** Fires when an enter / exit session error occurs. */
+  error: Error
+}
+
+</script>
+
 <XRButton
   {...$$restProps}
   mode='immersive-vr'

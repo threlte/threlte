@@ -1,9 +1,10 @@
-import { currentWritable } from '@threlte/core'
+import { currentWritable, type CurrentWritable } from '@threlte/core'
+import type { XRHand } from '$lib/types'
 
-export const left = currentWritable<undefined | any>(undefined)
-export const right = currentWritable<undefined | any>(undefined)
+export const left = currentWritable<undefined | XRHand>(undefined)
+export const right = currentWritable<undefined | XRHand>(undefined)
 
-export const useXrHand = (handedness: 'left' | 'right') => {
+export const useXrHand = (handedness: 'left' | 'right'): CurrentWritable<undefined | XRHand> => {
   switch (handedness) {
     case 'left': return left
     case 'right': return right

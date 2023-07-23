@@ -2,7 +2,7 @@
 
 import { createRawEventDispatcher } from '@threlte/core'
 import Hand from './hand.svelte'
-import type { XREvent, XRHandEvent } from '$lib/types'
+import type { XRHandEvent } from '$lib/types'
 
 export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
 
@@ -17,10 +17,10 @@ const dispatch = createRawEventDispatcher<$$Events>()
 
 const handedness: ['left' | 'right', 'left' | 'right'] = [undefined!, undefined!]
 
-const handleXrEvent = (event: XREvent) => dispatch(event.type, event)
-
-const setHandedness = (index: number, event: XREvent<'connected'>) => {
-  handedness[index] = event.data.handedness
+const setHandedness = (index: number, event: XRHandEvent<'connected'>) => {
+  if (event.data) {
+    handedness[index] = event.data.handedness as 'left' | 'right'
+  }
 }
 
 </script>
@@ -31,11 +31,11 @@ const setHandedness = (index: number, event: XREvent<'connected'>) => {
     {profile}
     on:connected={(event) => {
       setHandedness(index, event)
-      handleXrEvent(event)
+      dispatch(event.type, event)
     }}
-    on:disconnected={handleXrEvent}
-    on:pinchstart={handleXrEvent}
-    on:pinchend={handleXrEvent}
+    on:disconnected
+    on:pinchstart
+    on:pinchend
   >
     {#if handedness[index] === 'left'}
       <slot name='left' />

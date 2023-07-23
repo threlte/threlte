@@ -5,6 +5,7 @@ import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 import type { XRHandEvent } from '$lib/types'
 import { fire } from '$lib/events'
+import { left, right } from '$lib/hooks/use-hand'
 
 const handModelFactory = new XRHandModelFactory()
 
@@ -23,19 +24,39 @@ type $$Events = {
   pinchend: XRHandEvent<'pinchend'>
 }
 
+type ConnectionEvent<Type> = THREE.Event & { type: Type } & { target: THREE.XRHandSpace }
+
 const dispatch = createRawEventDispatcher<$$Events>()
 
 const { renderer } = useThrelte()
-const hand = renderer!.xr.getHand(index)
+const { xr } = renderer!
+
+const hand = xr.getHand(index)
+const space = xr.getReferenceSpace()
 const model = handModelFactory.createHandModel(hand, profile === 'none' ? 'mesh' : profile)
 
 let connected = false
-let inputSource: XRHand | undefined
+let inputSource: globalThis.XRHand | undefined
+let children: THREE.Group
 
-const handleConnectionUpdate = (event: XRHandEvent) => {
+const handleConnected = (event: ConnectionEvent<'connected'>) => {
+  inputSource = event.data.hand as XRHand
+  connected = true
+
+  dispatch(event.type, event)
+
+  const xrHand = { hand, inputSource }
+
+  switch (event.data.handedness) {
+    case 'left': return left.set(xrHand)
+    case 'right': return right.set(xrHand)
+  }
+}
+
+const handleDisconnected = (event: ConnectionEvent<'disconnected'>) => {
   inputSource = event.data.hand
-  connected = event.type === 'connected'
-  hand.visible = connected
+  connected = false
+
   dispatch(event.type, event)
 }
 
@@ -44,31 +65,13 @@ const handlePinchEvent = (event: XRHandEvent) => {
   fire(event.type, event)
 }
 
-onMount(() => {
-  hand.addEventListener('connected', handleConnectionUpdate)
-  hand.addEventListener('disconnected', handleConnectionUpdate)
-  hand.addEventListener('pinchstart', handlePinchEvent)
-  hand.addEventListener('pinchend', handlePinchEvent)
-})
-
-onDestroy(() => {
-  hand.removeEventListener('connected', handleConnectionUpdate)
-  hand.removeEventListener('disconnected', handleConnectionUpdate)
-  hand.removeEventListener('pinchstart', handlePinchEvent)
-  hand.removeEventListener('pinchend', handlePinchEvent)
-})
-
-const space = renderer!.xr.getReferenceSpace()
-
-let children: THREE.Group
-
 const { start, stop } = useFrame(() => {
-  const frame = renderer!.xr.getFrame()
+  const frame = xr.getFrame()
   const joint = inputSource?.get('wrist' as unknown as number)
 
   if (joint === undefined || space === null) return 
 
-  const pose = frame?.getJointPose?.(joint, space)
+  const pose = frame.getJointPose?.(joint, space)
 
   if (pose === undefined) return
 
@@ -82,6 +85,20 @@ $: if ($$slots.default) {
 } else {
   stop()
 }
+
+onMount(() => {
+  hand.addEventListener('connected', handleConnected)
+  hand.addEventListener('disconnected', handleDisconnected)
+  hand.addEventListener('pinchstart', handlePinchEvent)
+  hand.addEventListener('pinchend', handlePinchEvent)
+})
+
+onDestroy(() => {
+  hand.removeEventListener('connected', handleConnected)
+  hand.removeEventListener('disconnected', handleDisconnected)
+  hand.removeEventListener('pinchstart', handlePinchEvent)
+  hand.removeEventListener('pinchend', handlePinchEvent)
+})
 
 </script>
 
