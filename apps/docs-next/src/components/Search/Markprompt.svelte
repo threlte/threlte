@@ -1,11 +1,11 @@
 <script lang="ts">
   import '@markprompt/css'
-  import { markprompt } from '@markprompt/web'
   import { onMount } from 'svelte'
 
   let container: HTMLDivElement
 
-  onMount(() => {
+  onMount(async () => {
+    const { markprompt } = await import('@markprompt/web')
     markprompt('sk_test_MWgsGFl6V2FdFnBBIVAMXhC1BVwl3u5T', container, {
       display: 'plain',
       close: {
