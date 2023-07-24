@@ -2,14 +2,13 @@
   // import { Canvas } from '@threlte/core'
   // import Scene from './Scene.svelte'
   import snarkdown from 'snarkdown'
-  import { clippyStores } from './clippyStores'
-  import { loadHistoryAnswer, loadHistoryMeta, saveClippyAnswerToHistory } from './clippyHistory'
+  import { loadHistoryMeta, saveClippyAnswerToHistory } from './clippyHistory'
   import SearchbarButton from './SearchbarButton.svelte'
+  import { focusTrap } from '$lib/focusTrap'
+  import Markprompt from './Markprompt.svelte'
 
   let SearchOrama: any
   let searchType: 'ai' | 'query' = 'query'
-
-  const { clippyHistory, clippyRect, clippyRectEl, clippyDialogueRect } = clippyStores
 
   let askingQuestion = false
 
@@ -100,20 +99,7 @@
 
   function toggleDialog() {
     askingQuestion = !askingQuestion
-  }
-
-  let cornerEl: HTMLElement
-  let dialogueEl: HTMLElement
-
-  $: {
-    if (clippyRect && askingQuestion) {
-      clippyRect.set(dialogueEl)
-    }
-    if (clippyRect && !askingQuestion) {
-      clippyRect.set(cornerEl)
-    }
-    clippyRectEl.set(cornerEl)
-    clippyDialogueRect.set(dialogueEl)
+    isFocused = !isFocused
   }
 
   function handleEnterQuestion(e: any) {
@@ -121,15 +107,15 @@
       sendQuestion(userQuestion)
     }
   }
+
+  let dialogElement: HTMLDialogElement
+
+  let isFocused = false
 </script>
 
 <svelte:window on:keydown={handleEnterQuestion} />
 
-<SearchbarButton
-  on:click={() => {
-    askingQuestion = true
-  }}
-/>
+<SearchbarButton on:click={toggleDialog} />
 
 <div class="pointer-events-none fixed top-0 left-0 z-50 h-screen w-screen">
   {#if askingQuestion}
@@ -142,163 +128,21 @@
   {/if}
 
   <dialog
+    use:focusTrap={isFocused}
     open={askingQuestion}
     class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[500px] w-full max-w-[50%] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
       askingQuestion ? '' : 'hidden'
     }`}
+    bind:this={dialogElement}
   >
-    <div class="absolute -right-6 top-0 flex translate-x-full flex-col gap-1">
-      <h2 class="font-bold">Previously asked questions:</h2>
-      {#each $clippyHistory as entry}
-        <button
-          class="py-1 text-left opacity-75 hover:opacity-100"
-          on:click={() => {
-            userQuestion = entry.question
-            answer = snarkdown(loadHistoryAnswer(entry.answerUuid) || '')
-          }}>- {entry.question}</button
-        >
-      {/each}
-    </div>
+    <Markprompt />
+
     <div
       class={`absolute top-40 left-0 h-96 w-full -translate-y-full ${glowClasses['blue']} pointer-events-none`}
     />
-    <div class="relative flex w-full flex-col items-center gap-1">
-      <div class="w-full border-b border-blue-500/90 pb-1">
-        <input
-          class="0  w-full bg-transparent px-4 py-1 outline-none"
-          placeholder="Search a phrase or ask an AI assistant about Threlte..."
-          bind:value={userQuestion}
-        />
-      </div>
-
-      <div class="flex w-full flex-col items-stretch  gap-2 border-b border-blue-500/90 pb-2">
-        <div class="px-2">
-          <input
-            type="radio"
-            name="searchType"
-            class="peer hidden"
-            id="search-docs-radio"
-            bind:group={searchType}
-            value={'query'}
-          />
-          <label
-            for="search-docs-radio"
-            class="block cursor-pointer select-none bg-blue-900 p-2  hover:brightness-150 peer-checked:bg-blue-700/30 peer-checked:font-bold"
-          >
-            Search docs</label
-          >
-        </div>
-
-        <div class="px-2">
-          <input
-            type="radio"
-            name="searchType"
-            id="search-ai-radio"
-            class="peer hidden"
-            bind:group={searchType}
-            value={'ai'}
-          />
-          <label
-            for="search-ai-radio"
-            class="block cursor-pointer select-none bg-blue-900 p-2  hover:brightness-150 peer-checked:bg-blue-700/30  peer-checked:font-bold"
-            >Ask AI assistant</label
-          >
-        </div>
-      </div>
-
-      <button
-        class={`absolute right-0 mr-2 flex gap-2 rounded-md px-1 py-1 duration-200 hover:bg-blue-300/20 ${
-          userQuestion.length > 3 ? 'opacity-90' : 'opacity-0'
-        } ${fetchingAnswer ? 'hidden' : ''}
-        `}
-        on:click={() => {
-          sendQuestion(userQuestion)
-        }}
-      >
-        <span>Ask</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 64 64"
-          aria-labelledby="title"
-          aria-describedby="desc"
-          role="img"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          class="w-6"
-        >
-          <title>Enter Key</title>
-          <desc>A line styled icon from Orion Icon Library.</desc>
-          <rect
-            data-name="layer2"
-            x="2"
-            y="2"
-            width="60"
-            height="60"
-            rx="7.8"
-            ry="7.8"
-            fill="none"
-            stroke="#ffffff"
-            stroke-miterlimit="10"
-            stroke-width="2"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          />
-          <path
-            data-name="layer1"
-            fill="none"
-            stroke="#ffffff"
-            stroke-miterlimit="10"
-            stroke-width="2"
-            d="M16 32h30v-8"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          />
-          <path
-            data-name="layer1"
-            fill="none"
-            stroke="#ffffff"
-            stroke-miterlimit="10"
-            stroke-width="2"
-            d="M24 40l-8-8 8-8"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          />
-        </svg></button
-      >
-    </div>
-    <form
-      method="dialog"
-      class="overflow-y-scroll px-4 pb-4"
-    >
-      <div class="flex flex-col items-center">
-        {#if fetchingAnswer}
-          <div class="lds-ellipsis">
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>
-        {/if}
-        <div class="w-full">
-          {#if SearchOrama && searchType == 'query'}
-            <svelte:component
-              this={SearchOrama}
-              {oramaQuery}
-            />
-          {/if}
-          {#if searchType == 'ai'}
-            {@html answer}
-          {/if}
-        </div>
-      </div>
-    </form>
   </dialog>
 </div>
 
-<!-- <div class="fixed h-screen w-screen top-0 left-0 z-50 pointer-events-none">
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div> -->
 <style>
   /* https://loading.io/css/ */
   .lds-ellipsis {

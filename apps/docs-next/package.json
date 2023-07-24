@@ -16,6 +16,8 @@
     "@astrojs/mdx": "^0.15.2",
     "@astrojs/svelte": "^2.1.0",
     "@astrojs/tailwind": "^3.1.0",
+    "@markprompt/css": "^0.10.0",
+    "@markprompt/web": "^0.14.1",
     "astro": "^2.1.2",
     "snarkdown": "^2.0.0",
     "svelte": "^3.54.0",
