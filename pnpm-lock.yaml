@@ -124,76 +124,80 @@ importers:
         version: 3.1.0
 
   packages/core:
+    dependencies:
+      svelte:
+        specifier: ^4.0.0
+        version: 4.0.0
+      three:
+        specifier: ^0.153.0
+        version: 0.153.0
     devDependencies:
       '@sveltejs/adapter-auto':
-        specifier: 1.0.0-next.61
-        version: 1.0.0-next.61
-      '@sveltejs/adapter-static':
-        specifier: 1.0.0-next.34
-        version: 1.0.0-next.34
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@1.22.3)
       '@sveltejs/kit':
-        specifier: 1.0.0-next.377
-        version: 1.0.0-next.377(svelte@3.49.0)(vite@3.2.3)
+        specifier: ^1.22.3
+        version: 1.22.3(svelte@4.0.0)(vite@4.3.6)
+      '@sveltejs/package':
+        specifier: ^2.1.0
+        version: 2.1.0(svelte@4.0.0)(typescript@5.0.2)
       '@types/node':
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.144.0
-        version: 0.144.0
+        specifier: ^0.152.1
+        version: 0.152.1
       '@typescript-eslint/eslint-plugin':
-        specifier: ^4.31.1
-        version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.7.4)
+        specifier: ^5.45.0
+        version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
       '@typescript-eslint/parser':
-        specifier: ^4.31.1
-        version: 4.33.0(eslint@7.32.0)(typescript@4.7.4)
+        specifier: ^5.45.0
+        version: 5.45.0(eslint@8.28.0)(typescript@5.0.2)
       '@yushijinhun/three-minifier-rollup':
         specifier: ^0.3.1
         version: 0.3.1
       eslint:
-        specifier: ^7.32.0
-        version: 7.32.0
+        specifier: ^8.28.0
+        version: 8.28.0
       eslint-config-prettier:
-        specifier: ^8.3.0
-        version: 8.5.0(eslint@7.32.0)
-      eslint-plugin-svelte3:
-        specifier: ^3.2.1
-        version: 3.4.1(eslint@7.32.0)(svelte@3.49.0)
+        specifier: ^8.5.0
+        version: 8.5.0(eslint@8.28.0)
+      eslint-plugin-svelte:
+        specifier: ^2.30.0
+        version: 2.30.0(eslint@8.28.0)(svelte@4.0.0)
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
       prettier-plugin-svelte:
-        specifier: ^2.4.0
-        version: 2.7.0(prettier@2.8.8)(svelte@3.49.0)
-      svelte:
-        specifier: ^3.47.0
-        version: 3.49.0
+        specifier: ^2.10.1
+        version: 2.10.1(prettier@2.8.8)(svelte@4.0.0)
+      publint:
+        specifier: ^0.1.12
+        version: 0.1.12
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.1
       svelte-check:
-        specifier: ^2.7.0
-        version: 2.8.0(svelte@3.49.0)
+        specifier: ^3.4.3
+        version: 3.4.3(postcss@8.4.24)(svelte@4.0.0)
       svelte-preprocess:
-        specifier: ^4.10.5
-        version: 4.10.7(svelte@3.49.0)(typescript@4.7.4)
+        specifier: ^5.0.4
+        version: 5.0.4(postcss@8.4.24)(svelte@4.0.0)(typescript@5.0.2)
       svelte2tsx:
-        specifier: ^0.5.9
-        version: 0.5.11(svelte@3.49.0)(typescript@4.7.4)
-      three:
-        specifier: ^0.151.3
-        version: 0.151.3
-      ts-node:
-        specifier: ^10.8.2
-        version: 10.8.2(@types/node@18.0.3)(typescript@4.7.4)
-      tsafe:
-        specifier: ^0.9.0
-        version: 0.9.1
+        specifier: ^0.6.19
+        version: 0.6.19(svelte@4.0.0)(typescript@5.0.2)
       tslib:
-        specifier: ^2.3.1
-        version: 2.4.0
+        specifier: ^2.4.1
+        version: 2.5.0
       type-fest:
         specifier: ^2.13.0
         version: 2.16.0
       typescript:
-        specifier: ^4.6.3
-        version: 4.7.4
+        specifier: ^5.0.0
+        version: 5.0.2
+      vite:
+        specifier: ^4.3.6
+        version: 4.3.6(@types/node@18.0.3)
 
   packages/create-threlte:
     dependencies:
@@ -2004,6 +2008,15 @@ packages:
       import-meta-resolve: 2.2.1
     dev: true
 
+  /@sveltejs/adapter-auto@2.0.0(@sveltejs/kit@1.22.3):
+    resolution: {integrity: sha512-b+gkHFZgD771kgV3aO4avHFd7y1zhmMYy9i6xOK7m/rwmwaRO8gnF5zBc0Rgca80B2PMU1bKNxyBTHA14OzUAQ==}
+    peerDependencies:
+      '@sveltejs/kit': ^1.0.0
+    dependencies:
+      '@sveltejs/kit': 1.22.3(svelte@4.0.0)(vite@4.3.6)
+      import-meta-resolve: 2.2.1
+    dev: true
+
   /@sveltejs/adapter-cloudflare@1.0.0-next.29:
     resolution: {integrity: sha512-bm95d2pDEExy1cSPqvWxvftHEJz57krLlW3DdGtxbXWLr8M+WZbCEe1AqsnGycaFXUsn0GZ77IWNrHqcGxwvRg==}
     dependencies:
@@ -2063,6 +2076,33 @@ packages:
 
   /@sveltejs/kit@1.20.4(svelte@4.0.0)(vite@4.3.6):
     resolution: {integrity: sha512-MmAzIuMrP7A+8fqDVbxm6ekGHRHL/+Fk8sQPAzPG4G2TxUDtHdn/WcIxeEqHzARMf0OtGSC+VPyOSFuw2Cy2Mg==}
+    engines: {node: ^16.14 || >=18}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0-next.0
+      vite: ^4.0.0
+    dependencies:
+      '@sveltejs/vite-plugin-svelte': 2.4.2(svelte@4.0.0)(vite@4.3.6)
+      '@types/cookie': 0.5.1
+      cookie: 0.5.0
+      devalue: 4.3.2
+      esm-env: 1.0.0
+      kleur: 4.1.5
+      magic-string: 0.30.0
+      mime: 3.0.0
+      sade: 1.8.1
+      set-cookie-parser: 2.6.0
+      sirv: 2.0.3
+      svelte: 4.0.0
+      undici: 5.22.1
+      vite: 4.3.6(@types/node@18.0.3)
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@sveltejs/kit@1.22.3(svelte@4.0.0)(vite@4.3.6):
+    resolution: {integrity: sha512-IpHD5wvuoOIHYaHQUBJ1zERD2Iz+fB/rBXhXjl8InKw6X4VKE9BSus+ttHhE7Ke+Ie9ecfilzX8BnWE3FeQyng==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true
@@ -2497,7 +2537,7 @@ packages:
       ignore: 5.2.0
       natural-compare-lite: 1.4.0
       regexpp: 3.2.0
-      semver: 7.3.8
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.0.2)
       typescript: 5.0.2
     transitivePeerDependencies:
@@ -2642,7 +2682,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.8
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@4.7.4)
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -2663,7 +2703,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.8
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.0.2)
       typescript: 5.0.2
     transitivePeerDependencies:
@@ -2684,7 +2724,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.8
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.1.3)
       typescript: 5.1.3
     transitivePeerDependencies:
@@ -2705,7 +2745,7 @@ packages:
       eslint: 8.28.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0(eslint@8.28.0)
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -7603,7 +7643,7 @@ packages:
     resolution: {integrity: sha512-eSKV6s+APenqVh8ubJyiu/YhZgxQpGP66ntzUb3lY1xB9ukSRaGnx0AIxI+IM+1+IVYC1oWobgG5L3Lt9ARykQ==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.3.8
+      semver: 7.5.4
     dev: false
 
   /node-addon-api@5.1.0:
@@ -7665,7 +7705,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.9.0
-      semver: 7.3.8
+      semver: 7.5.4
       validate-npm-package-license: 3.0.4
 
   /normalize-package-data@4.0.1:
@@ -7674,7 +7714,7 @@ packages:
     dependencies:
       hosted-git-info: 5.2.1
       is-core-module: 2.9.0
-      semver: 7.3.8
+      semver: 7.5.4
       validate-npm-package-license: 3.0.4
     dev: false
 
@@ -9091,7 +9131,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: true
 
   /server-destroy@1.0.1:
     resolution: {integrity: sha512-rb+9B5YBIEzYcD6x2VKidaa+cqYBJQKnU4oe4E3ANwRRN56yk/ua1YCJT1n21NTS8w6CcOclAKNP3PhdCXKYtQ==}
@@ -9548,8 +9587,8 @@ packages:
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 3.49.0
-      svelte-preprocess: 4.10.7(svelte@3.49.0)(typescript@5.0.2)
-      typescript: 5.0.2
+      svelte-preprocess: 4.10.7(svelte@3.49.0)(typescript@5.1.3)
+      typescript: 5.1.3
     transitivePeerDependencies:
       - '@babel/core'
       - coffeescript
@@ -9683,7 +9722,7 @@ packages:
       typescript: 4.7.4
     dev: true
 
-  /svelte-preprocess@4.10.7(svelte@3.49.0)(typescript@5.0.2):
+  /svelte-preprocess@4.10.7(svelte@3.49.0)(typescript@5.1.3):
     resolution: {integrity: sha512-sNPBnqYD6FnmdBrUmBCaqS00RyCsCpj2BG58A1JBswNF7b0OKviwxqVrOL/CKyJrLSClrSeqQv5BXNg2RUbPOw==}
     engines: {node: '>= 9.11.2'}
     requiresBuild: true
@@ -9731,7 +9770,7 @@ packages:
       sorcery: 0.10.0
       strip-indent: 3.0.0
       svelte: 3.49.0
-      typescript: 5.0.2
+      typescript: 5.1.3
     dev: true
 
   /svelte-preprocess@5.0.1(@babel/core@7.20.12)(postcss@8.4.24)(svelte@3.55.1)(typescript@4.9.5):
