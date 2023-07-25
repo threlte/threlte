@@ -3,15 +3,15 @@
   --markprompt-foreground: #d4d4d4;
   --markprompt-muted: unset;
   --markprompt-mutedForeground: #949494;
-  --markprompt-border: unset;
+  --markprompt-border: #262626;
   --markprompt-input: #fff;
-  --markprompt-primary: #fe3d00;
+  --markprompt-primary: #ff5b28;
   --markprompt-primaryTransparent: #ff5b2860;
   --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #ff5b28;
   --markprompt-secondary: #0e0e0e;
   --markprompt-secondaryForeground: #fff;
-  --markprompt-primaryHighlight: #fe3d00;
+  --markprompt-primaryHighlight: #ec4899;
   --markprompt-secondaryHighlight: #a855f7;
   --markprompt-overlay: #00000040;
   --markprompt-ring: #0ea5e9;
@@ -139,21 +139,12 @@
   overflow-y: auto;
 }
 
-.MarkpromptTabsList {
+:where(.MarkpromptTabsList) {
   flex-shrink: 0;
   display: flex;
   justify-content: center;
   gap: 1rem;
   border-bottom: 1px solid var(--markprompt-border);
-  @apply text-white/60;
-}
-
-.MarkpromptTabsList button svg {
-  @apply stroke-current;
-}
-
-.MarkpromptTabsList button[data-state='active'] {
-  @apply text-orange;
 }
 
 :where(.MarkpromptTab) {
@@ -259,8 +250,8 @@
   color: var(--markprompt-primary);
 }
 
-.MarkpromptHighlightedIcon {
-  @apply text-current;
+:where(.MarkpromptHighlightedIcon) {
+  color: var(--markprompt-primaryHighlight);
 }
 
 :where(.MarkpromptBaseIcon) {
@@ -301,8 +292,7 @@
 
 /* Remove 2px padding that some browsers add to input */
 :where(.MarkpromptPrompt[type='search' i]) {
-  padding: 0.5rem 2rem 0.5rem 0 !important;
-  border-bottom: 1px solid #4a91d460;
+  padding: 1rem 3rem 1rem 0;
 }
 
 /* Remove the 'x' clear button from the search :where(.MarkpromptPrompt field */
@@ -592,14 +582,14 @@
   margin-top: 1.6666667em;
   margin-bottom: 1.6666667em;
   border-radius: 0.25rem;
-  padding: 0.6666667em 1em 0.6666667em 0;
+  padding: 0.6666667em 1em;
 }
 
 :where(.MarkpromptAnswer pre code) {
   background-color: transparent;
   border-width: 0;
   border-radius: 0;
-  padding: 0 !important;
+  padding: 0;
   font-weight: inherit;
   color: inherit;
   font-size: inherit;
@@ -844,11 +834,10 @@
 
 :where(.MarkpromptReferences) {
   position: relative;
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
+  padding-top: 1rem;
   padding-bottom: 0.5rem;
   background-color: var(--markprompt-muted);
-  @apply border-t border-white/20;
+  border-top: 1px solid var(--markprompt-border);
   font-size: 0.75rem;
   color: var(--markprompt-mutedForeground);
   overflow: auto;
@@ -860,10 +849,10 @@
 
 :where(.MarkpromptReferences p) {
   animation: markprompt-fade-in 500ms ease-out forwards 1;
+  font-weight: 600;
   margin: 0;
   padding-inline: 2rem;
-  margin-bottom: 0.5rem !important;
-  @apply pt-1;
+  margin-bottom: 0.5rem;
 }
 
 :where(.MarkpromptReferences ul) {
@@ -872,10 +861,10 @@
   --shadow-color: var(--markprompt-border);
 
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
   gap: 0.5rem;
-  padding-inline: 2rem !important;
+  padding: 0.25rem 2rem 0.5rem;
   margin-top: -0.25rem;
   list-style-type: none;
   margin-bottom: 0;
@@ -883,7 +872,6 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   background-color: var(--markprompt-muted);
-  @apply !pb-2;
 }
 
 .MarkpromptReferences ul::-webkit-scrollbar {
@@ -919,7 +907,6 @@
   animation-duration: 1s;
   animation-fill-mode: both;
   transition-timing-function: ease-in-out;
-  @apply rounded-sm bg-[#122135] font-normal hover:brightness-110;
 }
 
 :where(.MarkpromptReference a) {
@@ -929,11 +916,14 @@
   border: 1px solid var(--markprompt-border);
   border-radius: 0.375rem;
   color: var(--markprompt-primary);
+  font-weight: 500;
+  transition-property: opacity;
+  transition-duration: 200ms;
   white-space: nowrap;
 }
 
 :where(.MarkpromptReference a:hover) {
-  color: var(--markprompt-primary) !important;
+  opacity: 0.8;
 }
 
 :where(.MarkpromptBackButton) {
@@ -1053,6 +1043,7 @@
   text-align: -webkit-match-parent;
   padding-left: 0;
   padding-right: 0;
+  padding-bottom: 0.5rem;
 }
 
 :where(.MarkpromptSearchResult a) {
@@ -1073,12 +1064,14 @@
 
 :where(.MarkpromptSearchResultLink) {
   display: block;
+  border-radius: 0.5rem;
   padding: 0.5rem 1rem;
-  @apply rounded-sm !text-white/60;
+  background-color: var(--markprompt-muted);
 }
 
 :where([aria-selected='true'] .MarkpromptSearchResultLink) {
-  @apply bg-[#122135] !text-white;
+  background-color: var(--markprompt-primaryTransparent);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchResultContainer) {
@@ -1093,10 +1086,16 @@
   display: flex;
   flex: none;
   padding: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
 }
 
 :where(.MarkpromptSearchResultIconWrapperBordered) {
   background-color: var(--markprompt-background);
+  border-radius: 0.375rem;
+  border-style: solid;
+  border-color: var(--markprompt-border);
 }
 
 :where([aria-selected='true'] .MarkpromptSearchResultIconWrapperBordered) {
@@ -1129,13 +1128,19 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  background-color: var(--markprompt-background);
+  border-radius: 9999px;
+  border-color: var(--markprompt-border);
+  border-style: solid;
+  border-width: 1px;
+  padding: 1px 8px;
   font-size: var(--markprompt-text-size-xs);
+  font-weight: 600;
   margin-bottom: 0.25rem;
-  @apply hidden font-bold;
 }
 
 :where([aria-selected='true'] .MarkpromptSearchResultHeading) {
-  /* background-color: var(--markprompt-primaryMuted); */
+  background-color: var(--markprompt-primaryMuted);
   border-color: var(--markprompt-primaryMuted);
 }
 
@@ -1163,7 +1168,7 @@
 :where(.MarkpromptMatch) {
   font-weight: 600;
   color: var(--markprompt-primary);
-  /* border-bottom: 0.1rem solid var(--markprompt-primary); */
+  border-bottom: 0.1rem solid var(--markprompt-primary);
 }
 
 [aria-selected='true'] .MarkpromptSearchResultHeading .MarkpromptMatch,
@@ -1172,7 +1177,7 @@
 }
 
 :where([aria-selected='true'] .MarkpromptMatch) {
-  /* border-color: var(--markprompt-primaryForeground); */
+  border-color: var(--markprompt-primaryForeground);
   color: var(--markprompt-primaryForeground);
 }
 
