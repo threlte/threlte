@@ -1,7 +1,7 @@
 <script lang="ts">
   import '@markprompt/css'
   import { focusTrap } from '$lib/focusTrap'
-  import { onDestroy, onMount } from 'svelte'
+  import { onMount } from 'svelte'
 
   export let focus = false
 
@@ -9,7 +9,6 @@
 
   onMount(async () => {
     const { markprompt } = await import('@markprompt/web')
-    console.log(markprompt)
 
     markprompt('sk_test_MWgsGFl6V2FdFnBBIVAMXhC1BVwl3u5T', container, {
       display: 'plain',
@@ -27,10 +26,6 @@
         }
       }
     })
-  })
-
-  onDestroy(() => {
-    console.log('Date Component removed')
   })
 
   const focusInput = (val: boolean) => {

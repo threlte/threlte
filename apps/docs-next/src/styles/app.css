@@ -20,3 +20,21 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+:root {
+  --markprompt-background: unset !important;
+  --markprompt-muted: unset !important;
+  --markprompt-mutedForeground: #949494 !important;
+  --markprompt-primary: #ff5b28 !important;
+  --markprompt-primaryMuted: #fe3d00 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --markprompt-background: unset !important;
+    --markprompt-muted: unset !important;
+    --markprompt-mutedForeground: #949494 !important;
+    --markprompt-primary: #ff5b28 !important;
+    --markprompt-primaryMuted: #fe3d00 !important;
+  }
+}
