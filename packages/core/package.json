@@ -10,7 +10,7 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "cleanup": "rimraf node_modules && rimraf .svelte-kit rimraf dist"
+    "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",

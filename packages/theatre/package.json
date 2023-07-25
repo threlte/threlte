@@ -10,7 +10,7 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "cleanup": "rm -rf node_modules && rm -rf .svelte-kit"
+    "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
@@ -24,23 +24,24 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte": "^2.30.0",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.1",
     "publint": "^0.1.12",
+    "rimraf": "^5.0.1",
     "svelte-check": "^3.4.3",
     "svelte-preprocess": "^5.0.4",
     "svelte2tsx": "^0.6.19",
     "tslib": "^2.4.1",
     "type-fest": "^2.13.0",
     "typescript": "^5.0.0",
-    "vite": "^4.3.6"
+    "vite": "^4.3.6",
+		"svelte": "^4.0.0"
   },
   "dependencies": {
     "@theatre/core": "0.6.1",
     "@theatre/studio": "0.6.1",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
-    "svelte": "^4.0.0",
     "three": "^0.153.0"
   },
   "type": "module",

@@ -253,19 +253,22 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      three:
+        specifier: ^0.153.0
+        version: 0.153.0
       troika-three-text:
         specifier: ^0.47.2
-        version: 0.47.2(three@0.151.3)
+        version: 0.47.2(three@0.153.0)
     devDependencies:
       '@sveltejs/adapter-auto':
-        specifier: 1.0.0-next.61
-        version: 1.0.0-next.61
-      '@sveltejs/adapter-static':
-        specifier: 1.0.0-next.34
-        version: 1.0.0-next.34
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@1.22.3)
       '@sveltejs/kit':
-        specifier: 1.0.0-next.377
-        version: 1.0.0-next.377(svelte@3.49.0)(vite@3.2.3)
+        specifier: ^1.20.4
+        version: 1.22.3(svelte@4.0.0)(vite@4.3.6)
+      '@sveltejs/package':
+        specifier: ^2.1.0
+        version: 2.1.0(svelte@4.0.0)(typescript@5.0.2)
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
@@ -276,62 +279,62 @@ importers:
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.144.0
-        version: 0.144.0
+        specifier: ^0.152.1
+        version: 0.152.1
       '@typescript-eslint/eslint-plugin':
-        specifier: ^4.31.1
-        version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.7.4)
+        specifier: ^5.45.0
+        version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
       '@typescript-eslint/parser':
-        specifier: ^4.31.1
-        version: 4.33.0(eslint@7.32.0)(typescript@4.7.4)
+        specifier: ^5.45.0
+        version: 5.45.0(eslint@8.28.0)(typescript@5.0.2)
       '@yushijinhun/three-minifier-rollup':
         specifier: ^0.3.1
         version: 0.3.1
       eslint:
-        specifier: ^7.32.0
-        version: 7.32.0
+        specifier: ^8.28.0
+        version: 8.28.0
       eslint-config-prettier:
-        specifier: ^8.3.0
-        version: 8.5.0(eslint@7.32.0)
-      eslint-plugin-svelte3:
-        specifier: ^3.2.1
-        version: 3.4.1(eslint@7.32.0)(svelte@3.49.0)
+        specifier: ^8.5.0
+        version: 8.5.0(eslint@8.28.0)
+      eslint-plugin-svelte:
+        specifier: ^2.30.0
+        version: 2.30.0(eslint@8.28.0)(svelte@4.0.0)
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
       prettier-plugin-svelte:
-        specifier: ^2.4.0
-        version: 2.7.0(prettier@2.8.8)(svelte@3.49.0)
+        specifier: ^2.10.1
+        version: 2.10.1(prettier@2.8.8)(svelte@4.0.0)
+      publint:
+        specifier: ^0.1.12
+        version: 0.1.12
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.1
       svelte:
-        specifier: ^3.47.0
-        version: 3.49.0
+        specifier: ^4.0.0
+        version: 4.0.0
       svelte-check:
-        specifier: ^2.7.0
-        version: 2.8.0(svelte@3.49.0)
+        specifier: ^3.4.3
+        version: 3.4.3(postcss@8.4.24)(svelte@4.0.0)
       svelte-preprocess:
-        specifier: ^4.10.5
-        version: 4.10.7(svelte@3.49.0)(typescript@4.7.4)
+        specifier: ^5.0.4
+        version: 5.0.4(postcss@8.4.24)(svelte@4.0.0)(typescript@5.0.2)
       svelte2tsx:
-        specifier: ^0.5.9
-        version: 0.5.11(svelte@3.49.0)(typescript@4.7.4)
-      three:
-        specifier: ^0.151.3
-        version: 0.151.3
-      ts-node:
-        specifier: ^10.8.2
-        version: 10.8.2(@types/node@18.0.3)(typescript@4.7.4)
-      tsafe:
-        specifier: ^0.9.0
-        version: 0.9.1
+        specifier: ^0.6.19
+        version: 0.6.19(svelte@4.0.0)(typescript@5.0.2)
       tslib:
-        specifier: ^2.3.1
-        version: 2.4.0
+        specifier: ^2.4.1
+        version: 2.5.0
       type-fest:
         specifier: ^2.13.0
         version: 2.16.0
       typescript:
-        specifier: ^4.6.3
-        version: 4.7.4
+        specifier: ^5.0.0
+        version: 5.0.2
+      vite:
+        specifier: ^4.3.6
+        version: 4.3.6(@types/node@18.0.3)
 
   packages/gltf:
     dependencies:
@@ -492,9 +495,6 @@ importers:
       '@threlte/extras':
         specifier: workspace:*
         version: link:../extras
-      svelte:
-        specifier: ^4.0.0
-        version: 4.0.0
       three:
         specifier: ^0.153.0
         version: 0.153.0
@@ -533,7 +533,7 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0(eslint@8.28.0)(svelte@4.0.0)
       prettier:
-        specifier: ^2.8.0
+        specifier: ^2.8.8
         version: 2.8.8
       prettier-plugin-svelte:
         specifier: ^2.10.1
@@ -541,6 +541,12 @@ importers:
       publint:
         specifier: ^0.1.12
         version: 0.1.12
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.1
+      svelte:
+        specifier: ^4.0.0
+        version: 4.0.0
       svelte-check:
         specifier: ^3.4.3
         version: 3.4.3(postcss@8.4.24)(svelte@4.0.0)
@@ -2031,12 +2037,6 @@ packages:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.49
       set-cookie-parser: 2.6.0
-      tiny-glob: 0.2.9
-    dev: true
-
-  /@sveltejs/adapter-static@1.0.0-next.34:
-    resolution: {integrity: sha512-XjuMhemme5z0L/B2nTZpA6k+RJjF+b6L96ts6gIQ6ixiCzJQSbBqJhrrBYBCaeLAKvdUMoGEmX8m862JhKjRFg==}
-    dependencies:
       tiny-glob: 0.2.9
     dev: true
 
@@ -10107,6 +10107,7 @@ packages:
 
   /three@0.151.3:
     resolution: {integrity: sha512-+vbuqxFy8kzLeO5MgpBHUvP/EAiecaDwDuOPPDe6SbrZr96kccF0ktLngXc7xA7bzyd3N0t2f6mw3Z9y6JCojQ==}
+    dev: true
 
   /three@0.153.0:
     resolution: {integrity: sha512-OCP2/uQR6GcDpSLnJt/3a4mdS0kNWcbfUXIwLoEMgLzEUIVIYsSDwskpmOii/AkDM+BBwrl6+CKgrjX9+E2aWg==}
@@ -10195,24 +10196,24 @@ packages:
     resolution: {integrity: sha512-GJtWyq9InR/2HRiLZgpIKv+ufIKrVrvjQWEj7PxAXNc5dwbNJkqhAUoAGgzRmULAnoOM5EIpveYd3J2VeSAIew==}
     engines: {node: '>=12'}
 
-  /troika-three-text@0.47.2(three@0.151.3):
+  /troika-three-text@0.47.2(three@0.153.0):
     resolution: {integrity: sha512-qylT0F+U7xGs+/PEf3ujBdJMYWbn0Qci0kLqI5BJG2kW1wdg4T1XSxneypnF05DxFqJhEzuaOR9S2SjiyknMng==}
     peerDependencies:
       three: '>=0.125.0'
     dependencies:
       bidi-js: 1.0.2
-      three: 0.151.3
-      troika-three-utils: 0.47.2(three@0.151.3)
+      three: 0.153.0
+      troika-three-utils: 0.47.2(three@0.153.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
     dev: false
 
-  /troika-three-utils@0.47.2(three@0.151.3):
+  /troika-three-utils@0.47.2(three@0.153.0):
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
     peerDependencies:
       three: '>=0.125.0'
     dependencies:
-      three: 0.151.3
+      three: 0.153.0
     dev: false
 
   /troika-worker-utils@0.47.2:
