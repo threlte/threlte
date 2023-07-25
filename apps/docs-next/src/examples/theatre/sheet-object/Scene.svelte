@@ -7,9 +7,6 @@
 
 <SheetObject
   key="Directional Light"
-  props={{
-    x: 5
-  }}
   let:Sync
   let:Transform
 >
