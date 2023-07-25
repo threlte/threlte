@@ -1,6 +1,4 @@
 <script lang="ts">
-  import SearchbarButton from './SearchbarButton.svelte'
-  import { focusTrap } from '$lib/focusTrap'
   import Markprompt from './Markprompt.svelte'
 
   let askingQuestion = false
@@ -18,12 +16,58 @@
     isFocused = !isFocused
   }
 
-  let dialogElement: HTMLDialogElement
-
   let isFocused = false
 </script>
 
-<SearchbarButton on:click={toggleDialog} />
+<button
+  class="relative flex w-full items-center hover:brightness-125"
+  on:click={toggleDialog}
+>
+  <input
+    class="w-full bg-blue-800/90  px-10 py-1 text-sm outline-none outline-blue-500"
+    placeholder="Search docs"
+    disabled
+  />
+  <button
+    class={`absolute left-0 ml-2 flex gap-2 rounded-md px-1 py-1 duration-200 hover:bg-blue-300/20 
+    `}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      aria-labelledby="title"
+      aria-describedby="desc"
+      class="w-6"
+      role="img"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+    >
+      <title>Search</title>
+      <desc>A line styled icon from Orion Icon Library.</desc>
+      <path
+        data-name="layer2"
+        fill="none"
+        stroke="#ffffff"
+        stroke-miterlimit="10"
+        stroke-width="2"
+        d="M39.049 39.049L56 56"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+      <circle
+        data-name="layer1"
+        cx="27"
+        cy="27"
+        r="17"
+        fill="none"
+        stroke="#ffffff"
+        stroke-miterlimit="10"
+        stroke-width="2"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+    </svg></button
+  >
+</button>
 
 <div class="pointer-events-none fixed top-0 left-0 z-50 h-screen w-screen">
   {#if askingQuestion}
@@ -36,14 +80,12 @@
   {/if}
 
   <dialog
-    use:focusTrap={isFocused}
     open={askingQuestion}
     class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[500px] w-full max-w-[50%] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
       askingQuestion ? '' : 'hidden'
     }`}
-    bind:this={dialogElement}
   >
-    <Markprompt />
+    <Markprompt focus={askingQuestion} />
 
     <div
       class={`absolute top-40 left-0 h-96 w-full -translate-y-full ${glowClasses['blue']} pointer-events-none`}
