@@ -3,9 +3,9 @@
 
   let searchActive = false
 
-  const glowClasses = {
-    blue: '[background-image:radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]'
-  }
+  // const glowClasses = {
+  //   blue: '[background-image:radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]'
+  // }
 
   function toggleSearch() {
     searchActive = !searchActive
@@ -13,6 +13,8 @@
   }
 
   let isFocused = false
+
+  console.log('mountin')
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
@@ -29,7 +31,7 @@
   on:click={toggleSearch}
 >
   <input
-    class="w-full bg-blue-800/90  px-10 py-1 text-sm outline-none outline-blue-500"
+    class="w-full bg-blue-800/90 px-2 py-1 text-sm outline-none outline-blue-500 md:px-10"
     placeholder="Search docs"
     disabled
   />
@@ -42,7 +44,7 @@
       viewBox="0 0 64 64"
       aria-labelledby="title"
       aria-describedby="desc"
-      class="w-6"
+      class="hidden w-6 md:block"
       role="img"
       xmlns:xlink="http://www.w3.org/1999/xlink"
     >
@@ -74,7 +76,7 @@
   </div>
 </button>
 
-<div class="pointer-events-none fixed top-0 left-0 z-50 h-screen w-screen">
+<div class="pointer-events-none absolute top-0 left-0 z-50 h-full w-full">
   {#if searchActive}
     <div
       class={`pointer-events-auto fixed top-0 left-0 h-screen  w-screen bg-gray-900/70
@@ -86,7 +88,7 @@
 
   <dialog
     open={searchActive}
-    class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[500px] w-full max-w-[50%] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
+    class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[60vh] w-full max-w-[800px] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
       searchActive ? '' : 'hidden'
     }`}
   >

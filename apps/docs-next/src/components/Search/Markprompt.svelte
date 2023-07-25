@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import '@markprompt/css'
   import { focusTrap } from '$lib/focusTrap'
   import { onMount } from 'svelte'
 
@@ -10,10 +9,11 @@
   onMount(async () => {
     const { markprompt } = await import('@markprompt/web')
 
+    console.log('markpromptt')
+
     markprompt('sk_test_MWgsGFl6V2FdFnBBIVAMXhC1BVwl3u5T', container, {
       display: 'plain',
       close: {
-        label: 'close',
         visible: false
       },
       search: {
@@ -43,5 +43,5 @@
 <div
   bind:this={container}
   use:focusTrap={focus}
-  class="h-[500px]"
+  class="h-[60vh]"
 />

@@ -129,31 +129,33 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
             <Package />
             theatre</a
           >
-          <Search client:idle />
         </div>
       </div>
     </div>
+    <Search client:media="(min-width: 768px)" />
+    <div class="flex flex-row gap-5">
+      <Socials />
+    </div>
+  </header>
 
-		<div class="flex flex-row gap-5">
-			<Socials />
-		</div>
-	</header>
+  <MobileDocsNav
+    client:load
+    client:media="(max-width: 768px)"
+    sidebarMenu={sidebarMenu}
+    activeSidebarTab={activeSidebarTab}
+    activeUrlPathName={activeUrlPathName}
+    search
+  >
+    <Image
+      slot="logo"
+      src={Logo}
+      alt="threlte logo"
+      width={200}
+      class="h-[37px] w-auto"
+    />
 
-	<MobileDocsNav
-		client:load
-		sidebarMenu={sidebarMenu}
-		activeSidebarTab={activeSidebarTab}
-		activeUrlPathName={activeUrlPathName}
-	>
-		<Image
-			slot="logo"
-			src={Logo}
-			alt="threlte logo"
-			width={200}
-			class="h-[37px] w-auto"
-		/>
-		<Socials slot="after-navigation" />
-	</MobileDocsNav>
+    <Socials slot="after-navigation" />
+  </MobileDocsNav>
 
 	<main
 		class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
