@@ -32,7 +32,7 @@
     const rotationProp = rotationTransformer.transform(group.rotation)
     const scaleProp = scaleTransformer.transform(group.scale)
 
-    if (label && key) {
+    if (key) {
       addProps({
         [key]: types.compound(
           {
@@ -41,7 +41,7 @@
             scale: scaleProp
           },
           {
-            label
+            label: label ?? key
           }
         )
       })

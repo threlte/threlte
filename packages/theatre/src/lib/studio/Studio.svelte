@@ -16,7 +16,10 @@
 </script>
 
 {#if browser && enabled}
-  <InnerStudio bind:studio {hide}>
+  <InnerStudio
+    bind:studio
+    {hide}
+  >
     <slot />
   </InnerStudio>
 {:else}

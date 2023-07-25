@@ -3,28 +3,32 @@
   import { SheetObject } from '@threlte/theatre'
 </script>
 
+<T.DirectionalLight position={[1, 1, 0]} />
+
 <SheetObject
   key="box"
   let:AutoProps
-  let:ManualProps
   let:Transform
 >
-  <T.Mesh>
-    <Transform key="positioning" />
-    <T.BoxGeometry />
-    <T.MeshPhysicalMaterial
-      let:ref
-      color="red"
-    >
-      <AutoProps
-        {ref}
-        transparent
-        opacity
-        metalness
-        roughness
-        side
-        color
-      />
-    </T.MeshPhysicalMaterial>
-  </T.Mesh>
+  <Transform
+    key="helo"
+    label="Hello"
+  >
+    <T.Mesh>
+      <T.BoxGeometry />
+      <T.MeshPhysicalMaterial
+        let:ref
+        color="red"
+      >
+        <AutoProps
+          {ref}
+          roughness
+          metalness
+          clearcoat
+          opacity
+          transparent
+        />
+      </T.MeshPhysicalMaterial>
+    </T.Mesh>
+  </Transform>
 </SheetObject>

@@ -3,22 +3,21 @@
 
   import { Project, Sheet, Studio } from '..'
 
-  export let studio = true
+  export let studio: {
+    enabled?: boolean
+    hide?: boolean
+  } = {}
+
   export let config: IProjectConfig | undefined = undefined
 </script>
 
-{#if studio}
-  <Studio>
-    <Project {config}>
-      <Sheet>
-        <slot />
-      </Sheet>
-    </Project>
-  </Studio>
-{:else}
+<Studio
+  enabled={studio.enabled}
+  hide={studio.hide}
+>
   <Project {config}>
     <Sheet>
       <slot />
     </Sheet>
   </Project>
-{/if}
+</Studio>
