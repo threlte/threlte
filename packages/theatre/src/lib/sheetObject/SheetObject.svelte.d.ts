@@ -22,3 +22,5 @@ export default class SheetObject<T extends UnknownShorthandCompoundProps> extend
     }
   }
 > {}
+
+// test
