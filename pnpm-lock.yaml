@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -69,11 +73,11 @@ importers:
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.2.7)
       '@theatre/core':
-        specifier: 0.6.0
-        version: 0.6.0
+        specifier: 0.6.2
+        version: 0.6.2
       '@theatre/studio':
-        specifier: 0.6.0
-        version: 0.6.0(@theatre/core@0.6.0)
+        specifier: 0.6.2
+        version: 0.6.2(@theatre/core@0.6.2)
       '@threlte/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -2061,22 +2065,16 @@ packages:
       tailwindcss: 3.2.7(postcss@8.4.24)
     dev: true
 
-  /@theatre/core@0.6.0:
-    resolution: {integrity: sha512-HyOoEQapeVbgKBBVfv1rjklN8oAY1/6RZuzntdL9Nfqb5UVzyVR0Im9q4WBPHx6d1dB1BKpAwIw6PzqlKoyehA==}
-    dependencies:
-      '@theatre/dataverse': 0.6.0
-    dev: true
-
   /@theatre/core@0.6.1:
     resolution: {integrity: sha512-ZvSqAAB2LVVnB6hDzKQOVHjeZtb7Hvqu1IrFRITv4Kq6465Cn9VI2nwcDjelDCOmTIv23pd8d3Fz2DPYjjF9mg==}
     dependencies:
       '@theatre/dataverse': 0.6.1
     dev: false
 
-  /@theatre/dataverse@0.6.0:
-    resolution: {integrity: sha512-1W7b8bQTZeRmmrY64HTQzEtjLJWBmdOkfK/liR+LSSjgAylY3CjZ4/vaDUMmRQr4zCeQjyNVmrvwaIZ/33s+tQ==}
+  /@theatre/core@0.6.2:
+    resolution: {integrity: sha512-AmIIJ4rcSREn2VbNRH6cchIBj9hG9+lEkhVrABDfXojnjMJK/ZzX5dyaJGGgyjye2jKmc4sItoyEqbF7jdkqJQ==}
     dependencies:
-      lodash-es: 4.17.21
+      '@theatre/dataverse': 0.6.2
     dev: true
 
   /@theatre/dataverse@0.6.1:
@@ -2085,13 +2083,10 @@ packages:
       lodash-es: 4.17.21
     dev: false
 
-  /@theatre/studio@0.6.0(@theatre/core@0.6.0):
-    resolution: {integrity: sha512-DH53wWSkIDevbYJUybLH5nIx+rFgiWlykYOmDKC9WK9QUQFYRpnaBu4UNIo+RmGZ+I2ZMSHx1RfrfnBJCr1j6A==}
-    peerDependencies:
-      '@theatre/core': '*'
+  /@theatre/dataverse@0.6.2:
+    resolution: {integrity: sha512-wcnl6QuOVhNFzYL2rmu4lbVRR4t5A6a5ZBjZ4To+J/pKQ5MozPZtWJVPguMAa+rgoxAwVh7sZ0SNEpfYXajgaQ==}
     dependencies:
-      '@theatre/core': 0.6.0
-      '@theatre/dataverse': 0.6.0
+      lodash-es: 4.17.21
     dev: true
 
   /@theatre/studio@0.6.1(@theatre/core@0.6.1):
@@ -2102,6 +2097,15 @@ packages:
       '@theatre/core': 0.6.1
       '@theatre/dataverse': 0.6.1
     dev: false
+
+  /@theatre/studio@0.6.2(@theatre/core@0.6.2):
+    resolution: {integrity: sha512-jX5m7aYMIuXXZXIqc5ZJPIlgP4QnU1lc3sDRcjoNantz47Qzq3/JjRt5MIrahsKKONZwgEvl5WA57qCo7IW+hA==}
+    peerDependencies:
+      '@theatre/core': '*'
+    dependencies:
+      '@theatre/core': 0.6.2
+      '@theatre/dataverse': 0.6.2
+    dev: true
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}

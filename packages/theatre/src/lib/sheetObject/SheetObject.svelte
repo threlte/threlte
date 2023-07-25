@@ -22,12 +22,12 @@
   export let key: string
   export let props: Props | undefined = undefined
 
-  let sheetObjectProps: UnknownShorthandCompoundProps = {}
+  let aggregatedProps: UnknownShorthandCompoundProps = { ...props }
 
   const { sheet } = getContext<SheetContext>('theatre-sheet')
 
-  let sheetObject: CurrentWritable<ISheetObject<Props>> = currentWritable(
-    sheet.object(key, props ?? {}, {
+  const sheetObject: CurrentWritable<ISheetObject<Props>> = currentWritable(
+    sheet.object(key, aggregatedProps, {
       reconfigure: true
     }) as any
   )
@@ -37,9 +37,12 @@
   }>()
 
   const updateSheetObject = () => {
+    // first, detach the sheet object
+    sheet.detachObject(key)
+
     // create or reconfigure a sheet object here.
     sheetObject.set(
-      sheet.object(key, sheetObjectProps, {
+      sheet.object(key, aggregatedProps, {
         reconfigure: true
       }) as any
     )
@@ -47,8 +50,8 @@
 
   const addProps = (props: UnknownShorthandCompoundProps) => {
     // add props to list of props
-    sheetObjectProps = {
-      ...sheetObjectProps,
+    aggregatedProps = {
+      ...aggregatedProps,
       ...props
     }
     // update sheet object (create or reconfigure)
@@ -58,10 +61,10 @@
   const removeProps = (propNames: string[]) => {
     // remove props from sheet object
     Object.keys(propNames).forEach((prop) => {
-      delete sheetObjectProps[prop]
+      delete aggregatedProps[prop]
     })
     // if there are no more props, detach sheet object
-    if (Object.keys(sheetObjectProps).length === 0) {
+    if (Object.keys(aggregatedProps).length === 0) {
       // detach sheet object
       sheet.detachObject(key)
     } else {

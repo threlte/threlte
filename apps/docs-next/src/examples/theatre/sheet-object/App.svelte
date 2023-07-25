@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { Sheet, Theatre } from '@threlte/theatre'
+  import { Theatre } from '@threlte/theatre'
   import Scene from './Scene.svelte'
   import state from './default.theatre-project-state.json'
 </script>
@@ -11,8 +11,6 @@
       state
     }}
   >
-    <Sheet>
-      <Scene />
-    </Sheet>
+    <Scene />
   </Theatre>
 </Canvas>
