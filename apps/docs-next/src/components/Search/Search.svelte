@@ -11,25 +11,34 @@
       '[background-image:radial-gradient(closest-side,rgba(135,230,151,0.12)_0%,transparent_100%)]'
   }
 
-  function toggleDialog() {
+  function toggleSearch() {
     askingQuestion = !askingQuestion
     isFocused = !isFocused
   }
 
   let isFocused = false
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      toggleSearch()
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <button
   class="relative flex w-full items-center hover:brightness-125"
-  on:click={toggleDialog}
+  on:click={toggleSearch}
 >
   <input
     class="w-full bg-blue-800/90  px-10 py-1 text-sm outline-none outline-blue-500"
     placeholder="Search docs"
     disabled
   />
-  <button
-    class={`absolute left-0 ml-2 flex gap-2 rounded-md px-1 py-1 duration-200 hover:bg-blue-300/20 
+  <div
+    class={`absolute left-0 ml-2 flex gap-2 rounded-md px-1 py-1 duration-200 
     `}
   >
     <svg
@@ -65,8 +74,8 @@
         stroke-linejoin="round"
         stroke-linecap="round"
       />
-    </svg></button
-  >
+    </svg>
+  </div>
 </button>
 
 <div class="pointer-events-none fixed top-0 left-0 z-50 h-screen w-screen">
@@ -74,8 +83,8 @@
     <div
       class={`pointer-events-auto fixed top-0 left-0 h-screen  w-screen bg-gray-900/70
       `}
-      on:click={toggleDialog}
-      on:keypress={toggleDialog}
+      on:click={toggleSearch}
+      on:keypress={toggleSearch}
     />
   {/if}
 
