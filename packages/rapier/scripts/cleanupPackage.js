@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from 'fs'
 
 /**
- * This script cleans up the package to not include
- * a .publishConfig property and to set the proper exports
+ * This script utilizes a property called "publishOverrides" in the package.json
+ * to override specific properties in the package.json when publishing to npm.
  */
 const cleanPackage = () => {
   let packageJson = JSON.parse(
@@ -13,10 +13,10 @@ const cleanPackage = () => {
 
   packageJson = {
     ...packageJson,
-    ...packageJson.publishConfig
+    ...packageJson.publishOverrides
   }
 
-  delete packageJson.publishConfig
+  delete packageJson.publishOverrides
 
   writeFileSync('./package.json', JSON.stringify(packageJson, null, 2), {
     encoding: 'utf-8'
