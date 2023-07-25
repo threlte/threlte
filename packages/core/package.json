@@ -37,7 +37,7 @@
     "vite": "^4.3.6"
   },
   "dependencies": {
-    "svelte": "^4.0.0",
+    "svelte": "^4.1.1",
     "three": "^0.153.0"
   },
   "type": "module",

@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "three": "^0.151.3",
-    "svelte": "^4.0.0",
+    "svelte": "^4.1.1",
     "@dimforge/rapier3d-compat": "^0.11.2"
   },
   "type": "module",
