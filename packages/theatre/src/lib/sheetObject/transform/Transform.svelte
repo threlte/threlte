@@ -56,10 +56,16 @@
 
   watch([sheetObject], ([sheetObject]) => {
     return sheetObject?.onValuesChange((values) => {
-      if (!values.position || !values.rotation || !values.scale) return
+      let object = values
 
-      const object = key ? values[key] : values
+      if (key) {
+        if (!values[key]) return
+        object = values[key]
+      } else {
+        if (!values.position || !values.rotation || !values.scale) return
+      }
 
+      // sanity check
       if (!object) return
 
       positionTransformer.apply(group, 'position', object.position)
