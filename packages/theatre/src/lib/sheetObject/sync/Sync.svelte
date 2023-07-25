@@ -3,20 +3,20 @@
   import {
     resolvePropertyPath,
     useParent,
+    useThrelte,
     watch,
-    type CurrentWritable,
-    useThrelte
+    type CurrentWritable
   } from '@threlte/core'
-  import type { AnyProp } from './AutoProps.svelte'
+  import { onDestroy } from 'svelte'
   import type { Transformer } from '../transfomers/types'
+  import type { AnyProp } from './Sync.svelte'
   import { getInitialValue } from './utils/getInitialValue'
+  import { isComplexProp } from './utils/isComplexProp'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
-  import { isComplexProp } from './utils/isComplexProp'
-  import { onDestroy } from 'svelte'
 
   // used for type hinting auto props
-  export let ref: any
+  export let type: any
 
   export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
@@ -33,7 +33,7 @@
     }
   >
 
-  const initAutoProps = () => {
+  const initProps = () => {
     const props = {} as Record<string, any>
 
     // propertyPath is for example "position.x" or "intensity", so a property path on the parent object
@@ -106,11 +106,11 @@
         }
       })
 
-      invalidate('AutoProps: props changed')
+      invalidate('Sync: props changed')
     })
   })
 
-  initAutoProps()
+  initProps()
 
   onDestroy(() => {
     removeProps(Object.keys(propMappings))

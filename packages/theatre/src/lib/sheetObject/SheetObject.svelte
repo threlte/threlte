@@ -5,28 +5,36 @@
 -->
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { currentWritable, type CurrentWritable } from '@threlte/core'
+  import {
+    createRawEventDispatcher,
+    currentWritable,
+    watch,
+    type CurrentWritable
+  } from '@threlte/core'
   import { getContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
-  import AutoProps from './autoProps/AutoProps.svelte'
+  import Declare from './declare/Declare.svelte'
+  import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
-  import Props from './props/Props.svelte'
 
-  type ManualProps = $$Generic<UnknownShorthandCompoundProps>
+  type Props = $$Generic<UnknownShorthandCompoundProps>
 
   export let key: string
-
-  export let props: ManualProps | undefined = undefined
+  export let props: Props | undefined = undefined
 
   let sheetObjectProps: UnknownShorthandCompoundProps = {}
 
   const { sheet } = getContext<SheetContext>('theatre-sheet')
 
-  let sheetObject: CurrentWritable<ISheetObject<ManualProps>> = currentWritable(
+  let sheetObject: CurrentWritable<ISheetObject<Props>> = currentWritable(
     sheet.object(key, props ?? {}, {
       reconfigure: true
     }) as any
   )
+
+  const dispatch = createRawEventDispatcher<{
+    change: ISheetObject<Props>['value']
+  }>()
 
   const updateSheetObject = () => {
     // create or reconfigure a sheet object here.
@@ -74,9 +82,9 @@
     }
   }
 
-  const proxyAutoPropsComponent = new Proxy(AutoProps, {
+  const proxySyncComponent = new Proxy(Sync, {
     construct(_target, [args]) {
-      return new AutoProps(augmentConstructorArgs(args))
+      return new Sync(augmentConstructorArgs(args))
     }
   })
 
@@ -86,10 +94,16 @@
     }
   })
 
-  const proxyPropsComponent = new Proxy(Props, {
+  const proxyDeclareComponent = new Proxy(Declare, {
     construct(_target, [args]) {
-      return new Props(augmentConstructorArgs(args))
+      return new Declare(augmentConstructorArgs(args))
     }
+  })
+
+  watch(sheetObject, (sheetObject) => {
+    return sheetObject.onValuesChange((values) => {
+      dispatch('change', values)
+    })
   })
 
   let values = $sheetObject?.value
@@ -99,7 +113,7 @@
 <slot
   {values}
   sheetObject={$sheetObject}
-  AutoProps={proxyAutoPropsComponent}
+  Sync={proxySyncComponent}
   Transform={proxyTransformComponent}
-  Props={proxyPropsComponent}
+  Declare={proxyDeclareComponent}
 />

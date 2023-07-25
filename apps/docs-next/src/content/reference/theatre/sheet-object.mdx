@@ -1,16 +1,26 @@
 ---
-order: 4
-category: '@threlte/theatre'
-name: '<SheetObject>'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        { name: 'key', type: 'string', required: true },
-        { name: 'props', type: 'object', required: false }
-      ]
-  }
+{
+  'order': 4,
+  'category': '@threlte/theatre',
+  'name': '<SheetObject>',
+  'type': 'component',
+  'componentSignature':
+    {
+      'props':
+        [
+          { 'name': 'key', 'type': 'string', 'required': true },
+          {
+            'name': 'props',
+            'type':
+              {
+                'name': 'UnknownShorthandCompoundProps',
+                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+              },
+            'required': false
+          }
+        ]
+    }
+}
 ---
 
 The component `<SheetObject>` represents a Theatre.js sheet object. This component is creating a Theatre.js sheet object under the
@@ -19,6 +29,11 @@ hood and therefore all original concepts apply.
 A Theatre.js [Sheet Object](https://www.theatrejs.com/docs/latest/manual/objects) pools the properties of a **logical entity** which
 can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` is able to
 pool the properties of a logical entity and make them editable and animatable in the Theatre.js studio.
+
+<Example
+  path="theatre/sheet-object"
+  iframe
+/>
 
 ## Usage
 
@@ -37,12 +52,12 @@ You have the following options to add properties to the underlying sheet object:
 </SheetObject>
 ```
 
-- Use the component `<AutoProps>` from the `<SheetObject>` slot props to automatically pick up properties from its parent.
+- Use the component `<Sync>` from the `<SheetObject>` slot props to automatically pick up properties from its parent.
 
 ```svelte
-<SheetObject let:AutoProps>
+<SheetObject let:Sync>
   <T.MeshBasicMaterial>
-    <AutoProps
+    <Sync
       color
       roughness
     />
@@ -60,18 +75,20 @@ You have the following options to add properties to the underlying sheet object:
 </SheetObject>
 ```
 
-- Use the component `<ManualProps>` to co-locate an object and its properties with manual property declaration.
+- Use the component `<Declare>` to co-locate an object and its properties with manual property declaration.
 
 ```svelte
-<SheetObject let:ManualProps>
-  <ManualProps
+<SheetObject let:Declare>
+  <Declare
     props={{ transparent: false }}
     let:values
   >
     <T.MeshBasicMaterial transparent={values.transparent} />
-  </ManualProps>
+  </Declare>
 </SheetObject>
 ```
+
+# THIS MARKS THE END OF HAND WRITTEN DOCS FOR `<SheetObject>`, THE REST IS COPIED FROM THE OLD DOCS!!!
 
 ## Manual Property Declaration
 
@@ -79,14 +96,14 @@ To manually declare properties, provide the `props` property to the component `<
 
 ```svelte
 <SheetObject
-	props={{
-		x: 0,
-		y: 0,
-		z: 0
-	}}
-	let:values
+  props={{
+    x: 0,
+    y: 0,
+    z: 0
+  }}
+  let:values
 >
-	<T.Mesh position={[values.x, values.y, values.z]} />
+  <T.Mesh position={[values.x, values.y, values.z]} />
 </SheetObject>
 ```
 
@@ -130,7 +147,7 @@ Similar to the _magic_ that's driving the component `<T>`, the component `<Edita
     />
   </T.MeshStandardMaterial>
 </T.Mesh>
-````
+```
 
 #### Pierced Auto Props
 

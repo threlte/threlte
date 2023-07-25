@@ -1,4 +1,4 @@
-import type { AnyProp } from '../AutoProps.svelte'
+import type { AnyProp } from '../Sync.svelte'
 
 export const parsePropLabel = (alphaNumericKey: string, propValue: AnyProp): string => {
   let label = alphaNumericKey

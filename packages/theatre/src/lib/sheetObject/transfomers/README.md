@@ -28,6 +28,6 @@ const color = createTransformer({
 
 ## Usage in built-in components
 
-- `<AutoProps>` uses transformers to transform arbitrary props that are *discovered* by a property path to a value that Theatre.js can handle.
+- `<Sync>` uses transformers to transform arbitrary props that are *discovered* by a property path to a value that Theatre.js can handle.
 
 - `<Transform>` uses transformers to transform the properties `position`, `rotation` and `scale` of a Three.js object to a value that Theatre.js can handle.

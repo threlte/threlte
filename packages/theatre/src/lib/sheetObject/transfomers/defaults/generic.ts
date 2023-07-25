@@ -1,5 +1,5 @@
 import { types } from '@theatre/core'
-import { isPrimitive } from '../../autoProps/utils/isPrimitive'
+import { isPrimitive } from '../../sync/utils/isPrimitive'
 import { createTransformer } from '../createTransformer'
 
 export const generic = createTransformer({
