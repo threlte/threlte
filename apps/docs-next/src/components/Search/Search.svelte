@@ -92,8 +92,8 @@
   >
     <Markprompt focus={searchActive} />
 
-    <div
+    <!-- <div
       class={`absolute top-40 left-0 h-96 w-full -translate-y-full ${glowClasses['blue']} pointer-events-none`}
-    />
+    /> -->
   </dialog>
 </div>
