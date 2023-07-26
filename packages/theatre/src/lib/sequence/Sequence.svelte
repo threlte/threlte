@@ -93,9 +93,14 @@
 
   // Cleanup
   onDestroy(() => {
-    delete sequences[key]
     sequence.destroy()
   })
 </script>
 
-<slot {sequence} {position} {playing} {play} {pause} />
+<slot
+  {sequence}
+  {position}
+  {playing}
+  {play}
+  {pause}
+/>
