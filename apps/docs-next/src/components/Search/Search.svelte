@@ -3,23 +3,22 @@
 
   let searchActive = false
 
-  // const glowClasses = {
-  //   blue: '[background-image:radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]'
-  // }
-
-  function toggleSearch() {
+  const toggleSearch = () => {
     searchActive = !searchActive
     isFocused = !isFocused
   }
 
   let isFocused = false
 
-  console.log('mountin')
-
-  function handleKeyDown(e: KeyboardEvent) {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault()
       toggleSearch()
+    }
+
+    if (e.key === 'Escape') {
+      searchActive = false
+      isFocused = false
     }
   }
 </script>
@@ -27,7 +26,7 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <button
-  class="relative flex w-full max-w-[28rem] items-center hover:brightness-125"
+  class="relative flex w-full max-w-[28rem] items-center hover:brightness-125 md:mx-6"
   on:click={toggleSearch}
 >
   <input
