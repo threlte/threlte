@@ -5,6 +5,7 @@
   import { TransformControls } from '@threlte/extras'
   import { onMount, type ComponentProps } from 'svelte'
   import { Group } from 'three'
+  import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls'
   import { RAD2DEG } from 'three/src/math/MathUtils'
   import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
@@ -17,9 +18,33 @@
   export let key: Props['key'] = undefined as Props['key']
   export let mode: Props['mode'] = 'translate' as Props['mode']
 
+  export let translationSnap: Props['translationSnap'] = undefined as Props['translationSnap']
+  export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
+  export let scaleSnap: Props['scaleSnap'] = undefined as Props['scaleSnap']
+
   export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void
   export let removeProps: (propNames: string[]) => void
+
+  let controls: TC | undefined
+
+  $: if (controls) {
+    if (translationSnap) {
+      controls.setTranslationSnap(translationSnap)
+    } else {
+      controls.setTranslationSnap(null)
+    }
+    if (rotationSnap) {
+      controls.setRotationSnap(rotationSnap)
+    } else {
+      controls.setRotationSnap(null)
+    }
+    if (scaleSnap) {
+      controls.setScaleSnap(scaleSnap)
+    } else {
+      controls.setScaleSnap(null)
+    }
+  }
 
   const group = new Group()
 
@@ -138,6 +163,7 @@
     <TransformControls
       object={ref}
       {mode}
+      bind:controls
       on:mouseDown={onMouseDown}
       on:objectChange={onChange}
       on:mouseUp={onMouseUp}
