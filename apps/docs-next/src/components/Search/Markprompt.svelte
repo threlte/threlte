@@ -1,6 +1,6 @@
 <script lang="ts">
   import { focusTrap } from '$lib/focusTrap'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
 
   import hljs from 'highlight.js'
   //@ts-ignore
@@ -34,7 +34,6 @@
       references: {
         heading: 'Visit sources this answer was generated from:',
         getHref: (ref) => {
-          console.log(ref)
           const baseUrl = `/docs${ref.file.path.replace('.mdx', '').replace('.md', '')}`
           if (ref.meta?.leadHeading?.slug) {
             return `${baseUrl}#${ref.meta.leadHeading.slug}`
@@ -53,6 +52,9 @@
         }
       }
     })
+
+    // Start observing the target node for configured mutations
+    observer.observe(container, config)
   })
 
   const focusInput = (val: boolean) => {
@@ -66,50 +68,39 @@
 
   $: focusInput(focus)
 
-  const isContainerStringSame = () => {
-    if (container) {
-      let currentString = container.querySelector('.MarkpromptAnswer')
-      if (currentString && currentString?.innerHTML === lastString) {
-        return true
-      } else {
-        lastString = `${currentString?.innerHTML}`
-        return false
-      }
-    }
-
-    return false
-  }
-
   const highlightCode = () => {
     container.querySelectorAll('code').forEach((el) => {
       // then highlight each
-      if (!el.classList.contains('hljs') && el.innerHTML.length > 30) {
+      if (!el.classList.contains('hljs') && el.innerHTML.length > 20) {
         hljs.highlightElement(el)
       }
     })
   }
 
-  let sameCounter = 0
+  const config = { attributes: true, childList: true, subtree: true }
 
-  let highlighted = false
+  const callback = (mutationList: any) => {
+    for (const mutation of mutationList) {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === 'data-loading-state' &&
+        mutation.target.className === 'MarkpromptContentPlain'
+      ) {
+        const value = mutation.target.attributes.getNamedItem('data-loading-state')
+        console.log(mutation, value, { v: value.nodeValue })
 
-  setInterval(() => {
-    if (focus) {
-      const same = isContainerStringSame()
-
-      if (same) sameCounter++
-
-      if (sameCounter > 3 && !highlighted) {
-        highlightCode()
-        highlighted = true
-      }
-
-      if (!same) {
-        sameCounter = 0
-        highlighted = false
+        if (value.nodeValue === 'done') {
+          highlightCode()
+        }
       }
     }
-  }, 100)
+  }
+
+  const observer = new MutationObserver(callback)
+
+  onDestroy(() => {
+    observer.disconnect()
+  })
 </script>
 
 <div
