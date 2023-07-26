@@ -501,11 +501,11 @@ importers:
   packages/theatre:
     dependencies:
       '@theatre/core':
-        specifier: 0.6.1
-        version: 0.6.1
+        specifier: ^0.6.2
+        version: 0.6.2
       '@theatre/studio':
-        specifier: 0.6.1
-        version: 0.6.1(@theatre/core@0.6.1)
+        specifier: ^0.6.2
+        version: 0.6.2(@theatre/core@0.6.2)
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
@@ -2065,38 +2065,15 @@ packages:
       tailwindcss: 3.2.7(postcss@8.4.24)
     dev: true
 
-  /@theatre/core@0.6.1:
-    resolution: {integrity: sha512-ZvSqAAB2LVVnB6hDzKQOVHjeZtb7Hvqu1IrFRITv4Kq6465Cn9VI2nwcDjelDCOmTIv23pd8d3Fz2DPYjjF9mg==}
-    dependencies:
-      '@theatre/dataverse': 0.6.1
-    dev: false
-
   /@theatre/core@0.6.2:
     resolution: {integrity: sha512-AmIIJ4rcSREn2VbNRH6cchIBj9hG9+lEkhVrABDfXojnjMJK/ZzX5dyaJGGgyjye2jKmc4sItoyEqbF7jdkqJQ==}
     dependencies:
       '@theatre/dataverse': 0.6.2
-    dev: true
-
-  /@theatre/dataverse@0.6.1:
-    resolution: {integrity: sha512-iomovt4oWCEAZFP6/BdSJAb2cAjPOs6y3wh7QlrUBmEwdQ/21ISK9N2IsCzlJ0t16w58l7Eh61Gw60Y0t7/uNA==}
-    dependencies:
-      lodash-es: 4.17.21
-    dev: false
 
   /@theatre/dataverse@0.6.2:
     resolution: {integrity: sha512-wcnl6QuOVhNFzYL2rmu4lbVRR4t5A6a5ZBjZ4To+J/pKQ5MozPZtWJVPguMAa+rgoxAwVh7sZ0SNEpfYXajgaQ==}
     dependencies:
       lodash-es: 4.17.21
-    dev: true
-
-  /@theatre/studio@0.6.1(@theatre/core@0.6.1):
-    resolution: {integrity: sha512-aJlHnfYctYbw2zDd+AK0ts4oKR4RuiQZCgMhANKv8VucINFqfDFcl6ixN6qxCTQfBFe4s/qyyc9y/9Np1ZCPwQ==}
-    peerDependencies:
-      '@theatre/core': '*'
-    dependencies:
-      '@theatre/core': 0.6.1
-      '@theatre/dataverse': 0.6.1
-    dev: false
 
   /@theatre/studio@0.6.2(@theatre/core@0.6.2):
     resolution: {integrity: sha512-jX5m7aYMIuXXZXIqc5ZJPIlgP4QnU1lc3sDRcjoNantz47Qzq3/JjRt5MIrahsKKONZwgEvl5WA57qCo7IW+hA==}
@@ -2105,7 +2082,6 @@ packages:
     dependencies:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
-    dev: true
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}

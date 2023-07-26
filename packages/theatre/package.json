@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "svelte": "^4.1.1",
-    "@theatre/core": "0.6.1",
-    "@theatre/studio": "0.6.1",
+    "@theatre/core": "^0.6.2",
+    "@theatre/studio": "^0.6.2",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
     "three": "^0.153.0"
