@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { types, type ISheet } from '@theatre/core'
+	import type { ISheet } from '@theatre/core'
 	import { T, useThrelte } from '@threlte/core'
 	import { Float, Grid, OrbitControls, Portal } from '@threlte/extras'
-	import { SheetObject } from '@threlte/theatre'
+	import { Sheet, SheetObject } from '@threlte/theatre'
+	import DirLight from './DirLight.svelte'
 	import KeyboardControls from './KeyboardControls.svelte'
 	import ScrollSheet from './ScrollSheet.svelte'
 	import { springScrollPos } from './scrollPos'
@@ -14,6 +15,12 @@
 
 	const { scene } = useThrelte()
 </script>
+
+<Sheet name="Scene">
+	<DirLight key="Directional Light 1" />
+
+	<DirLight key="Directional Light 2" />
+</Sheet>
 
 <T.PerspectiveCamera
 	makeDefault={$debug}
@@ -55,7 +62,7 @@
 						<T.Mesh>
 							<T is={$cubeGeometry} />
 							<T.MeshStandardMaterial transparent>
-								<Sync color opacity emissive />
+								<Sync color opacity emissive roughness metalness />
 							</T.MeshStandardMaterial>
 						</T.Mesh>
 					</Float>

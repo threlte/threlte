@@ -3,6 +3,7 @@
 	import { Theatre } from '@threlte/theatre'
 	import Scene from './Scene.svelte'
 	import { cubeGeometry } from './state'
+	import state from './state.json'
 
 	type GLTFResult = {
 		nodes: {
@@ -14,7 +15,7 @@
 	$: if ($gltf) cubeGeometry.set($gltf.nodes.Cube.geometry)
 </script>
 
-<Theatre>
+<Theatre config={{ state }}>
 	{#if $cubeGeometry}
 		<Scene />
 	{/if}
