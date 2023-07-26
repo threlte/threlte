@@ -10,14 +10,13 @@ name: 'Getting Started'
 
 As with the rest of Threlte, `@threlte/theatre` provides an idiomatic yet transparent Svelte wrapper. The core concepts of `@threlte/theatre` are:
 
-| @threlte/theatre Component | Description | Corresponding Theatre.js Concept(s) |
-| -------------------------|-------------|-----------------------------------|
-| [\<Project\>](./project) | Contains your project's  animation sheets | [Project](https://www.theatrejs.com/docs/0.5/manual/projects) |
-| [\<Sheet\>](./sheet) | Binds to an animation *sequence* and contains the animated components | [Sheet](https://www.theatrejs.com/docs/0.5/manual/sheets), [Sequence](https://www.theatrejs.com/docs/0.5/manual/sequences) |
-| [\<Studio\>](./project) | Enables the Theatre.js in-browser studio *interface* during development | [Studio](https://www.theatrejs.com/docs/0.5/manual/Studio)  |
-| [\<Editable\>](./project) | Enables editing and animating its parent in the studio interface | [Sheet Object](https://www.theatrejs.com/docs/0.5/manual/objects)  |
-| [\<Theatre\>](./theatre) | A helper component providing a project with a single sheet and a studio |  [Project](https://www.theatrejs.com/docs/0.5/manual/projects),  [Sheet](https://www.theatrejs.com/docs/0.5/manual/sheets), [Studio](https://www.theatrejs.com/docs/0.5/manual/Studio) |
-
+| @threlte/theatre Component        | Description                                                             | Corresponding Theatre.js Concept(s)                                                                                                                                                  |
+| --------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [\<Project\>](./project)          | Contains your project's animation sheets                                | [Project](https://www.theatrejs.com/docs/0.5/manual/projects)                                                                                                                        |
+| [\<Sheet\>](./sheet)              | Binds to an animation _sequence_ and contains the animated components   | [Sheet](https://www.theatrejs.com/docs/0.5/manual/sheets), [Sequence](https://www.theatrejs.com/docs/0.5/manual/sequences)                                                           |
+| [\<Studio\>](./project)           | Enables the Theatre.js in-browser studio _interface_ during development | [Studio](https://www.theatrejs.com/docs/0.5/manual/Studio)                                                                                                                           |
+| [\<SheetObject\>](./sheet-object) | Enables editing and animating its parent in the studio interface        | [Sheet Object](https://www.theatrejs.com/docs/0.5/manual/objects)                                                                                                                    |
+| [\<Theatre\>](./theatre)          | A helper component providing a project with a single sheet and a studio | [Project](https://www.theatrejs.com/docs/0.5/manual/projects), [Sheet](https://www.theatrejs.com/docs/0.5/manual/sheets), [Studio](https://www.theatrejs.com/docs/0.5/manual/Studio) |
 
 The `@threlte/theatre` documentation cross-references [the Theatre.js documentation](https://www.theatrejs.com/docs/latest), allowing you to get a deeper understanding of the underlying concepts.
 
@@ -25,11 +24,11 @@ The `@threlte/theatre` documentation cross-references [the Theatre.js documentat
 
 Theatre.js combines programming in your IDE with editing in a browser-based GUI. The core workflow looks something like this:
 
-  1. **Create** your scene as usual, placing a `<Project>` and one or more `<Sheets>` in your `<Canvas>`.
-  2. **Identify** the elements and props you wish to edit in the `<Studio>`, and place an `<Editable>` component inside them.
-  3. **Edit**  props and animations of elements in the `<Studio>` in the browser; [config state](https://www.theatrejs.com/docs/latest/manual/projects#state) is autosaved to local storage.
-  4. **Export** the updated state [as a JSON file](https://www.theatrejs.com/docs/latest/manual/projects#state) by selecting your project in the studio and clicking export (top-right corner).
-  5. **Import** your scene's `state.json` and use it in your `<Project>`'s `config` prop.
+1. **Create** your scene as usual, placing a `<Project>` and one or more `<Sheets>` in your `<Canvas>`.
+2. **Identify** the elements and props you wish to edit in the `<Studio>`, and place an `<SheetObject>` component around them, then use the slotted components `<Sync>`, `<Declare>` or `<Transform>` to add editable props.
+3. **Edit** props and animations of elements in the `<Studio>` in the browser; [config state](https://www.theatrejs.com/docs/latest/manual/projects#state) is autosaved to local storage.
+4. **Export** the updated state [as a JSON file](https://www.theatrejs.com/docs/latest/manual/projects#state) by selecting your project in the studio and clicking export (top-right corner).
+5. **Import** your scene's `state.json` and use it in your `<Project>`'s `config` prop.
 
 ### Installation
 
@@ -45,64 +44,64 @@ To get started quickly, encapsulate your whole scene in the component [`<Theatre
   The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
 </Tip>
 
-```svelte title=App.svelte|copyHighlight={3,8,10}
+```svelte title=App.svelte {3,8,10}+
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import { Theatre } from '@threlte/theatre'
-	import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { Theatre } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
 </script>
 
 <Canvas>
-	<Theatre>
-		<Scene />
-	</Theatre>
+  <Theatre>
+    <Scene />
+  </Theatre>
 </Canvas>
 ```
 
-In your Scene, add the component `<Editable>` as a child of any component you'd wish to edit or animate. Add boolean props (~_flags_) to the component indicating which parent property you'd like to manipulate.
+In your Scene, add the component `<SheetObject>` as a parent of any component you'd wish to edit or animate. The component `<SheetObject>` provides the components `<Sync>`, `<Declare>` and `<Transform>` that allow you to manipulate properties in Theatre.js based on your Threlte markup.
 
 <Tip type="tip">
-The property `transform` is a shortcut to add `position`, `scale` and `rotation` at once, the property `controls` enables comfortable `THREE.TransformControls` on the Object.
+  The component `<Transform>` is a shortcut to add `position`, `scale` and `rotation` at once as
+  well as mount handy `<TransformControls>` whenever the respective Sheet Object is selected in the studio.
 </Tip>
 
 ```svelte title=Scene.svelte
 <script lang="ts">
-	import { OrbitControls, T } from '@threlte/core'
-	import { Editable } from '@threlte/theatre'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { OrbitControls, T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+  import { DEG2RAD } from 'three/src/math/MathUtils'
 </script>
 
-<T.PerspectiveCamera position={[0, 5, 10]} makeDefault>
-	<OrbitControls target={{ y: 1.5 }} />
+<T.PerspectiveCamera
+  position={[0, 5, 10]}
+  makeDefault
+>
+  <OrbitControls target={{ y: 1.5 }} />
 </T.PerspectiveCamera>
 
 <!-- Box -->
-<T.Mesh receiveShadow castShadow position.y={0.5}>
-	<Editable name="Box / Mesh" transform controls />
-	<T.BoxGeometry args={[1, 1, 1]} />
-	<T.MeshStandardMaterial color="#b00d03">
-		<Editable name="Box / Material" color roughness metalness />
-	</T.MeshStandardMaterial>
-</T.Mesh>
-
-<!-- Floor -->
-<T.Mesh receiveShadow castShadow rotation.x={DEG2RAD * -90}>
-	<Editable name="Floor / Mesh" scale />
-	<T.CircleGeometry args={[4, 60]} />
-	<T.MeshStandardMaterial>
-		<Editable name="Floor / Material" color roughness metalness />
-	</T.MeshStandardMaterial>
-</T.Mesh>
-
-<T.DirectionalLight position={[0.5, 2, 1]} castShadow>
-	<Editable name="Lights / Main" color intensity transform controls />
-</T.DirectionalLight>
-
-<T.AmbientLight intensity={0.2}>
-	<Editable name="Lights / Fill" color intensity />
-</T.AmbientLight>
+<SheetObject
+  key="Box"
+  let:Transform
+  let:Sync
+>
+  <Transform>
+    <T.Mesh
+      receiveShadow
+      castShadow
+      position.y={0.5}
+    >
+      <T.BoxGeometry args={[1, 1, 1]} />
+      <T.MeshStandardMaterial color="#b00d03">
+        <Sync
+          color
+          roughness
+          metalness
+        />
+      </T.MeshStandardMaterial>
+    </T.Mesh>
+  </Transform>
+</SheetObject>
 ```
 
 You will now see the Theatre.js studio interface. Make yourself comfortable with the controls and if you haven't done yet, please read the Theatre.js [studio manual](https://www.theatrejs.com/docs/0.5/manual/Studio) and [keyboard shortcuts](https://www.theatrejs.com/docs/0.5/manual/keyboard-shortcuts).
-
-<img src="/images/theatre/getting-started.png" class="mt-8 rounded-md shadow-lg mx-auto border border-gray-divider overflow-hidden h-auto relative"/>
