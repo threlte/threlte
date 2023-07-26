@@ -84,13 +84,16 @@
 
   const removeProps = (propNames: string[]) => {
     // remove props from sheet object
-    Object.keys(propNames).forEach((prop) => {
+    propNames.forEach((prop) => {
       delete aggregatedProps[prop]
     })
+
     // if there are no more props, detach sheet object
     if (Object.keys(aggregatedProps).length === 0) {
       // detach sheet object
-      sheet.detachObject(key)
+      if (detach) {
+        sheet.detachObject(key)
+      }
     } else {
       // update sheet object (reconfigure)
       updateSheetObject()
@@ -127,14 +130,13 @@
     }
   })
 
+  let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
-    return sheetObject.onValuesChange((values) => {
-      dispatch('change', values)
+    return sheetObject.onValuesChange((newValues) => {
+      dispatch('change', newValues)
+      values = newValues
     })
   })
-
-  let values = $sheetObject?.value
-  $: values = $sheetObject?.value
 
   // Provide a flag to indicate whether this sheet object is selected in the
   // Theatre.js studio.
