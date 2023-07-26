@@ -1,5 +1,6 @@
 <script lang="ts">
 	import App from '$lib/components/App.svelte'
+	import { Canvas } from '@threlte/core'
 	import { scrollPos, _springScrollPos } from '../lib/components/scrollPos'
 	import { debug } from '../lib/components/state'
 
@@ -21,7 +22,9 @@
 <svelte:window on:scroll={onScroll} on:keydown={onKeyDown} />
 
 <div class="app">
-	<App />
+	<Canvas>
+		<App />
+	</Canvas>
 </div>
 
 <div class="scroller" />

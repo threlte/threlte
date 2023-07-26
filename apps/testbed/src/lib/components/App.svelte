@@ -1,11 +1,21 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import Scene from './Scene.svelte'
+	import { useGltf } from '@threlte/extras'
 	import { Theatre } from '@threlte/theatre'
+	import Scene from './Scene.svelte'
+	import { cubeGeometry } from './state'
+
+	type GLTFResult = {
+		nodes: {
+			Cube: THREE.Mesh
+		}
+		materials: {}
+	}
+	const gltf = useGltf<GLTFResult>('/cube.glb')
+	$: if ($gltf) cubeGeometry.set($gltf.nodes.Cube.geometry)
 </script>
 
-<Canvas>
-	<Theatre>
+<Theatre>
+	{#if $cubeGeometry}
 		<Scene />
-	</Theatre>
-</Canvas>
+	{/if}
+</Theatre>

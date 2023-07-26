@@ -1,13 +1,12 @@
 <script lang="ts">
-	import type { ISheet } from '@theatre/core'
+	import { types, type ISheet } from '@theatre/core'
 	import { T, useThrelte } from '@threlte/core'
-	import { Grid, OrbitControls, Portal } from '@threlte/extras'
-	import { Sheet, SheetObject } from '@threlte/theatre'
+	import { Float, Grid, OrbitControls, Portal } from '@threlte/extras'
+	import { SheetObject } from '@threlte/theatre'
 	import KeyboardControls from './KeyboardControls.svelte'
-	import { springScrollPos } from './scrollPos'
-	import { debug } from './state'
 	import ScrollSheet from './ScrollSheet.svelte'
-	import Threlte from './Threlte.svelte'
+	import { springScrollPos } from './scrollPos'
+	import { cubeGeometry, debug } from './state'
 
 	let sheet: ISheet | undefined
 
@@ -43,12 +42,24 @@
 </T.PerspectiveCamera>
 
 <ScrollSheet name="Box" startAtScrollPosition={0} endAtScrollPosition={4}>
-	<SheetObject key="Box" let:Transform let:Sync>
+	<SheetObject key="Box" let:Transform let:Sync let:Declare>
 		<KeyboardControls let:transform>
 			<Transform {...transform}>
-				<Threlte>
-					<Sync material.color />
-				</Threlte>
+				<Declare
+					props={{
+						floatIntensity: 0
+					}}
+					let:values
+				>
+					<Float floatIntensity={values.floatIntensity}>
+						<T.Mesh>
+							<T is={$cubeGeometry} />
+							<T.MeshStandardMaterial transparent>
+								<Sync color opacity emissive />
+							</T.MeshStandardMaterial>
+						</T.Mesh>
+					</Float>
+				</Declare>
 			</Transform>
 		</KeyboardControls>
 	</SheetObject>
