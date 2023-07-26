@@ -9,10 +9,7 @@
   export let focus = false
 
   let container: HTMLDivElement
-
   hljs_svelte(hljs)
-
-  let lastString = ''
 
   onMount(async () => {
     const { markprompt } = await import('@markprompt/web')
