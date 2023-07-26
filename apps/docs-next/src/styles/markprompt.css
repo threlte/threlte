@@ -292,7 +292,8 @@
 
 /* Remove 2px padding that some browsers add to input */
 :where(.MarkpromptPrompt[type='search' i]) {
-  padding: 1rem 3rem 1rem 0;
+  padding: 0.5rem 2rem 0.5rem 0 !important;
+  border-bottom: 1px solid #4a91d460;
 }
 
 /* Remove the 'x' clear button from the search :where(.MarkpromptPrompt field */
@@ -834,10 +835,11 @@
 
 :where(.MarkpromptReferences) {
   position: relative;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: var(--markprompt-muted);
-  border-top: 1px solid var(--markprompt-border);
+  border-top: 1px solid #4a91d460;
   font-size: 0.75rem;
   color: var(--markprompt-mutedForeground);
   overflow: auto;
@@ -861,10 +863,10 @@
   --shadow-color: var(--markprompt-border);
 
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 2rem 0.5rem;
+  padding-inline: 2rem !important;
   margin-top: -0.25rem;
   list-style-type: none;
   margin-bottom: 0;
@@ -907,6 +909,7 @@
   animation-duration: 1s;
   animation-fill-mode: both;
   transition-timing-function: ease-in-out;
+  border: 1px solid var(--markprompt-ring);
 }
 
 :where(.MarkpromptReference a) {
@@ -917,13 +920,11 @@
   border-radius: 0.375rem;
   color: var(--markprompt-primary);
   font-weight: 500;
-  transition-property: opacity;
-  transition-duration: 200ms;
   white-space: nowrap;
 }
 
 :where(.MarkpromptReference a:hover) {
-  opacity: 0.8;
+  color: var(--markprompt-primary) !important;
 }
 
 :where(.MarkpromptBackButton) {

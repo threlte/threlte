@@ -87,7 +87,7 @@
 
   <dialog
     open={searchActive}
-    class={`glow-blue pointer-events-auto mt-[10%] flex max-h-[60vh] w-full max-w-[800px] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
+    class={`glow-blue pointer-events-auto mt-[10vh] flex max-h-[75vh] w-full max-w-[800px] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white ${
       searchActive ? '' : 'hidden'
     }`}
   >
