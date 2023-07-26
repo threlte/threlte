@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Group } from 'three'
   import { types, type ISheetObject, type UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
-  import { watch, type CurrentWritable, T } from '@threlte/core'
+  import { T, watch, type CurrentWritable } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
   import { onMount, type ComponentProps } from 'svelte'
+  import { Group } from 'three'
   import { RAD2DEG } from 'three/src/math/MathUtils'
   import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
@@ -81,12 +81,12 @@
     }
   })
 
-  const { studio } = useStudio()
+  const studio = useStudio()
   let scrub: IScrub | undefined
   let isSelected = false
 
-  onMount(() => {
-    return $studio?.onSelectionChange((selection) => {
+  watch([studio], ([studio]) => {
+    return studio?.onSelectionChange((selection) => {
       if (!$sheetObject) return
       isSelected = selection.includes($sheetObject)
     })

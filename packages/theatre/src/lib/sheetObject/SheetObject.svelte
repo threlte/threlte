@@ -4,6 +4,8 @@
 	- Potentially Providing a sheet object
 -->
 <script lang="ts">
+  import { useStudio } from '../studio/useStudio'
+
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import {
     createRawEventDispatcher,
@@ -11,7 +13,7 @@
     watch,
     type CurrentWritable
   } from '@threlte/core'
-  import { getContext } from 'svelte'
+  import { getContext, onDestroy, onMount } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import Declare from './declare/Declare.svelte'
   import Sync from './sync/Sync.svelte'
@@ -20,6 +22,7 @@
   type Props = $$Generic<UnknownShorthandCompoundProps>
 
   export let key: string
+  export let detach: boolean = false
   export let props: Props | undefined = undefined
 
   let aggregatedProps: UnknownShorthandCompoundProps = { ...props }
@@ -36,8 +39,29 @@
     change: ISheetObject<Props>['value']
   }>()
 
+  onMount(() => {
+    // Because the sheet object value subscription is not running before any
+    // values change, we're emitting the initial value here. Doing this in
+    // onMount also means that child components which might add props to the
+    // sheet object have already been mounted.
+    dispatch('change', sheetObject.current.value)
+  })
+
+  // This flag is used to prevent the sheet object from being created after it
+  // has been detached.
+  let detached = false
+  onDestroy(() => {
+    if (detach) {
+      detached = true
+      sheet.detachObject(key)
+    }
+  })
+
   const updateSheetObject = () => {
-    // first, detach the sheet object
+    // if the sheetObject has already been detached, do nothing.
+    if (detached) return
+
+    // first, detach the sheet object.
     sheet.detachObject(key)
 
     // create or reconfigure a sheet object here.
@@ -111,10 +135,35 @@
 
   let values = $sheetObject?.value
   $: values = $sheetObject?.value
+
+  // Provide a flag to indicate whether this sheet object is selected in the
+  // Theatre.js studio.
+  const studio = useStudio()
+  export let selected = false
+  watch([studio, sheetObject], ([studio, sheetObject]) => {
+    return studio?.onSelectionChange((selection) => {
+      selected = selection.includes(sheetObject)
+    })
+  })
+
+  // Provide a select function to select this sheet object in the Theatre.js
+  // studio.
+  const select = () => {
+    $studio?.setSelection([sheetObject.current])
+  }
+
+  const deselect = () => {
+    if ($studio?.selection.includes(sheetObject.current)) {
+      $studio?.setSelection([])
+    }
+  }
 </script>
 
 <slot
   {values}
+  {selected}
+  {select}
+  {deselect}
   sheetObject={$sheetObject}
   Sync={proxySyncComponent}
   Transform={proxyTransformComponent}

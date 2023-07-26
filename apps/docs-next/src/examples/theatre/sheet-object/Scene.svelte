@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { RoundedBoxGeometry } from '@threlte/extras'
+  import { T, useFrame } from '@threlte/core'
+  import { Edges, RoundedBoxGeometry, interactivity, useCursor } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { DEG2RAD } from 'three/src/math/MathUtils'
+
+  interactivity()
+
+  const { onPointerEnter, onPointerLeave } = useCursor()
 </script>
 
 <SheetObject
@@ -44,16 +48,29 @@
   key="Box"
   let:Sync
   let:Transform
+  let:select
+  let:deselect
 >
   <Transform>
-    <T.Mesh castShadow>
+    <T.Mesh
+      castShadow
+      on:click={select}
+      on:pointerenter={onPointerEnter}
+      on:pointerleave={onPointerLeave}
+      on:pointermissed={deselect}
+    >
       <RoundedBoxGeometry radius={0.1} />
-      <T.MeshStandardMaterial let:ref>
+      <T.MeshStandardMaterial
+        let:ref
+        transparent
+      >
         <Sync
           type={ref}
           color
           roughness
           metalness
+          side
+          opacity
         />
       </T.MeshStandardMaterial>
     </T.Mesh>

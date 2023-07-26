@@ -1,11 +1,25 @@
-import type { IStudio } from '@theatre/studio'
-import type { CurrentWritable } from '@threlte/core'
-import { getContext } from 'svelte'
+import { studio } from '../consts'
 
+/**
+ * ### `useStudio`
+ *
+ * The hook `useStudio` works just like a regular context-based hook but
+ * actually returns a store because the Theatre.js Studio can only be
+ * initialized once and therefore is a singleton. This hook can therefore be
+ * called anywhere in the application to access the Theatre.js Studio.
+ *
+ * @example
+ * ```svelte
+ * <script>
+ *   import { useStudio } from '@threlte/theatre'
+ *
+ *   const studio = useStudio()
+ *   $studio?.onSelectionChange((selection) => {
+ *     console.log(selection)
+ *   })
+ * </script>
+ * ```
+ */
 export const useStudio = () => {
-  const studio = getContext<CurrentWritable<IStudio | undefined>>('theatre-studio')
-  if (!studio) {
-    throw new Error('Theatre context not found, did you forget to wrap your app in <Theatre>?')
-  }
-  return { studio }
+  return studio
 }

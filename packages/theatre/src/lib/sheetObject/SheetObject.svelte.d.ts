@@ -7,6 +7,8 @@ import type Transform from './transform/Transform.svelte'
 export default class SheetObject<T extends UnknownShorthandCompoundProps> extends SvelteComponent<
   {
     key: string
+    detach?: boolean
+    selected?: boolean
     props?: T
   },
   {
@@ -15,6 +17,9 @@ export default class SheetObject<T extends UnknownShorthandCompoundProps> extend
   {
     default: {
       values: ISheetObject<T>['value']
+      selected: boolean
+      select: () => void
+      deselect: () => void
       sheetObject: ISheetObject<T>
       Sync: typeof Sync
       Transform: typeof Transform
