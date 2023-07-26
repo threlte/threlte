@@ -16,7 +16,7 @@
   import { parsePropLabel } from './utils/parsePropLabel'
 
   // used for type hinting auto props
-  export let type: any
+  export let type: any = undefined
 
   export let sheetObject: CurrentWritable<ISheetObject>
   export let addProps: (props: UnknownShorthandCompoundProps) => void

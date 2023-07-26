@@ -13,7 +13,7 @@ export const getInitialValue = (
   const rawValue = target[key]
 
   const customTransformer = isComplexProp(propertyValue) ? propertyValue.transformer : undefined
-  const transformer = customTransformer ?? getDefaultTransformer(targetObject, key, propertyPath)
+  const transformer = customTransformer ?? getDefaultTransformer(target, key, propertyPath)
 
   const value = transformer?.transform(rawValue)
 
