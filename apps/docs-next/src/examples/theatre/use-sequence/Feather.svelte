@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { GLTF, interactivity } from '@threlte/extras'
-  import { useSequence, Editable } from '@threlte/theatre'
+  import { SheetObject, useSequence } from '@threlte/theatre'
 
   interactivity()
 
@@ -27,11 +27,12 @@
   on:pointerup={() => (baseline = undefined)}
   on:pointerleave={() => (baseline = undefined)}
 >
-  <GLTF url="/models/feather.glb">
-    <Editable
-      name="Feather"
-      transform
-      controls
-    />
-  </GLTF>
+  <SheetObject
+    key="Feather"
+    let:Transform
+  >
+    <Transform>
+      <GLTF url="/models/feather.glb" />
+    </Transform>
+  </SheetObject>
 </T.Group>

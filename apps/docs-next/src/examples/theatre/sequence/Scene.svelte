@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
-  import { Editable } from '@threlte/theatre'
+  import { SheetObject } from '@threlte/theatre'
 </script>
 
 <T.PerspectiveCamera
@@ -12,18 +12,20 @@
 </T.PerspectiveCamera>
 
 <!-- Box -->
-<T.Mesh
-  receiveShadow
-  castShadow
+<SheetObject
+  key="Box"
+  let:Transform
 >
-  <Editable
-    name="Box / Mesh"
-    transform
-    controls
-  />
-  <T.BoxGeometry args={[1, 1, 1]} />
-  <T.MeshStandardMaterial color="#b00d03" />
-</T.Mesh>
+  <Transform>
+    <T.Mesh
+      receiveShadow
+      castShadow
+    >
+      <T.BoxGeometry args={[1, 1, 1]} />
+      <T.MeshStandardMaterial color="#b00d03" />
+    </T.Mesh>
+  </Transform>
+</SheetObject>
 
 <T.DirectionalLight
   position={[0.5, 2, 1]}
