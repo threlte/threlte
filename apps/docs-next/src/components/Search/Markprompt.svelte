@@ -2,9 +2,17 @@
   import { focusTrap } from '$lib/focusTrap'
   import { onMount } from 'svelte'
 
+  import hljs from 'highlight.js'
+  //@ts-ignore
+  import hljs_svelte from 'highlightjs-svelte'
+
   export let focus = false
 
   let container: HTMLDivElement
+
+  hljs_svelte(hljs)
+
+  let lastString = ''
 
   onMount(async () => {
     const { markprompt } = await import('@markprompt/web')
@@ -57,6 +65,51 @@
   }
 
   $: focusInput(focus)
+
+  const isContainerStringSame = () => {
+    if (container) {
+      let currentString = container.querySelector('.MarkpromptAnswer')
+      if (currentString && currentString?.innerHTML === lastString) {
+        return true
+      } else {
+        lastString = `${currentString?.innerHTML}`
+        return false
+      }
+    }
+
+    return false
+  }
+
+  const highlightCode = () => {
+    container.querySelectorAll('code').forEach((el) => {
+      // then highlight each
+      if (!el.classList.contains('hljs') && el.innerHTML.length > 30) {
+        hljs.highlightElement(el)
+      }
+    })
+  }
+
+  let sameCounter = 0
+
+  let highlighted = false
+
+  setInterval(() => {
+    if (focus) {
+      const same = isContainerStringSame()
+
+      if (same) sameCounter++
+
+      if (sameCounter > 3 && !highlighted) {
+        highlightCode()
+        highlighted = true
+      }
+
+      if (!same) {
+        sameCounter = 0
+        highlighted = false
+      }
+    }
+  }, 100)
 </script>
 
 <div

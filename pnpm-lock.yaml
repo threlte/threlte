@@ -59,6 +59,12 @@ importers:
       astro:
         specifier: ^2.1.2
         version: 2.1.2
+      highlight.js:
+        specifier: ^11.8.0
+        version: 11.8.0
+      highlightjs-svelte:
+        specifier: ^1.0.6
+        version: 1.0.6
       svelte:
         specifier: ^3.54.0
         version: 3.55.1
