@@ -77,8 +77,6 @@
     'aspect'
   ]
 
-  const { invalidate } = useThrelte()
-
   watch([parent, sheetObject], ([parent, sheetObject]) => {
     if (!parent) return
 
@@ -105,8 +103,6 @@
           target.updateProjectionMatrix?.()
         }
       })
-
-      invalidate('Sync: props changed')
     })
   })
 

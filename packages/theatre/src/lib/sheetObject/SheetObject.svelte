@@ -11,7 +11,8 @@
     createRawEventDispatcher,
     currentWritable,
     watch,
-    type CurrentWritable
+    type CurrentWritable,
+    useThrelte
   } from '@threlte/core'
   import { getContext, onDestroy, onMount } from 'svelte'
   import type { SheetContext } from '../sheet/types'
@@ -24,6 +25,8 @@
   export let key: string
   export let detach: boolean = false
   export let props: Props | undefined = undefined
+
+  const { invalidate } = useThrelte()
 
   let aggregatedProps: UnknownShorthandCompoundProps = { ...props }
 
@@ -135,6 +138,9 @@
     return sheetObject.onValuesChange((newValues) => {
       dispatch('change', newValues)
       values = newValues
+      // this invalidation also invalidates changes catched by slotted
+      // components such as <Sync> or <Declare>.
+      invalidate('<SheetObject>: props updated')
     })
   })
 
