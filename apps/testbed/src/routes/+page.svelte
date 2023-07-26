@@ -1,14 +1,24 @@
 <script lang="ts">
 	import App from '$lib/components/App.svelte'
-	import { scrollPos } from '../lib/components/scrollPos'
+	import { scrollPos, _springScrollPos } from '../lib/components/scrollPos'
+	import { debug } from '../lib/components/state'
 
 	const onScroll = () => {
-		// set normalized scroll position in document
-		scrollPos.set(window.scrollY / (document.body.scrollHeight - window.innerHeight))
+		// get normalized scroll position in document. 0 should equal top of page, 1
+		// should equal 1 page height from top, 2 should equal 2 page heights from
+		// top, etc. This allows easier addition of content to the bottom as opposed
+		// to a normalized scroll position where 1 is the bottom of the page.
+		const newScrollPos = Math.max(window.scrollY / window.innerHeight, 0)
+		scrollPos.set(newScrollPos)
+		_springScrollPos.set(newScrollPos)
+	}
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		if (e.key === 'd') debug.set(!debug.current)
 	}
 </script>
 
-<svelte:window on:scroll={onScroll} />
+<svelte:window on:scroll={onScroll} on:keydown={onKeyDown} />
 
 <div class="app">
 	<App />
