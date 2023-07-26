@@ -58,13 +58,17 @@
   }
 
   export const group = new Group()
-  export const controls = derived(camera, (camera) => {
+
+  const controlsStore = derived(camera, (camera) => {
     return new TransformControls(camera, renderer.domElement)
   })
 
+  export let controls = $controlsStore
+  $: controls = $controlsStore
+
   const attachTo = writable(object ?? group)
 
-  watch([controls, attachTo], ([controls, attachTo]) => {
+  watch([controlsStore, attachTo], ([controls, attachTo]) => {
     controls.attach(attachTo)
     return () => {
       controls.detach()
@@ -104,7 +108,7 @@
   }}
 >
   <T
-    is={$controls}
+    is={$controlsStore}
     on:dragging-changed={onDraggingChanged}
     on:change={invalidate}
     {...transformProps}
@@ -112,6 +116,10 @@
   />
 </HierarchicalObject>
 
-<T is={group} let:ref {...objectProps}>
+<T
+  is={group}
+  let:ref
+  {...objectProps}
+>
   <slot {ref} />
 </T>
