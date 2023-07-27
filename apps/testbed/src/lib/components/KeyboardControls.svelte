@@ -7,6 +7,7 @@
 
 	let useSnap = false
 	let mode: 'translate' | 'rotate' | 'scale' = 'translate'
+	let space: 'world' | 'local' = 'world'
 
 	const onKeyDown = (e: KeyboardEvent) => {
 		// toggle snap on Shift
@@ -25,6 +26,13 @@
 		if (e.key === 't') mode = 'translate'
 		if (e.key === 'r') mode = 'rotate'
 		if (e.key === 's') mode = 'scale'
+		if (e.key === 'g') {
+			if (space === 'world') {
+				space = 'local'
+			} else {
+				space = 'world'
+			}
+		}
 	}
 </script>
 
@@ -35,6 +43,7 @@
 		translationSnap: useSnap ? translationSnap : undefined,
 		rotationSnap: useSnap ? rotationSnap : undefined,
 		scaleSnap: useSnap ? scaleSnap : undefined,
-		mode
+		mode,
+		space
 	}}
 />
