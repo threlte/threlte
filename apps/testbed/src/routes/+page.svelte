@@ -10,6 +10,7 @@
 		scrollPos
 	} from '../lib/components/scrollPos'
 	import { debug } from '../lib/components/state'
+	import { NoToneMapping } from 'three'
 
 	const onScroll = () => {
 		// get normalized scroll position in document. 0 should equal top of page, 1
@@ -38,11 +39,12 @@
 
 <div class="fixed top-0 left-0 w-screen h-screen app">
 	<Canvas
+		toneMapping={NoToneMapping}
 		rendererParameters={{
-			// powerPreference: 'high-performance',
-			// antialias: false,
-			// stencil: false,
-			// depth: false
+			powerPreference: 'high-performance',
+			antialias: false,
+			stencil: false,
+			depth: false
 		}}
 	>
 		<App />

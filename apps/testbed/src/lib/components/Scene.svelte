@@ -10,6 +10,7 @@
 	import { mouseCoordsSpring, springScrollPos } from './scrollPos'
 	import { debug } from './state'
 	import Test from './Test.svelte'
+	import PostProcessing from './PostProcessing.svelte'
 
 	let sheet: ISheet | undefined
 
@@ -18,7 +19,7 @@
 	const { scene } = useThrelte()
 </script>
 
-<!-- <PostProcessing /> -->
+<PostProcessing />
 
 <Environment files="oil-on-water.png" />
 

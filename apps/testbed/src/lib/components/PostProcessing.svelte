@@ -1,16 +1,51 @@
 <script lang="ts">
 	import { useRender, useThrelte } from '@threlte/core'
 	import {
+		BlendFunction,
+		BrightnessContrastEffect,
 		ChromaticAberrationEffect,
 		EffectComposer,
 		EffectPass,
-		NoiseEffect,
+		FXAAEffect,
+		// NoiseEffect,
 		RenderPass,
 		ToneMappingEffect,
-		ToneMappingMode,
-		SMAAEffect,
-		BlendFunction
+		ToneMappingMode
 	} from 'postprocessing'
+	import { StaticNoiseEffect } from './StaticNoise/StaticNoise'
+
+	/**
+	 * Chromatic Aberration
+	 */
+	const chromaticAberrationEffect = new ChromaticAberrationEffect()
+	chromaticAberrationEffect.offset.x = 0.0008
+	chromaticAberrationEffect.offset.y = 0
+
+	/**
+	 * Tone Mapping
+	 */
+	const toneMappingEffect = new ToneMappingEffect({
+		mode: ToneMappingMode.ACES_FILMIC
+	})
+
+	/**
+	 * Noise
+	 */
+	const noiseEffect = new StaticNoiseEffect({
+		blendFunction: BlendFunction.COLOR_DODGE
+	})
+	noiseEffect.blendMode.opacity.value = 0.03
+
+	/**
+	 * Anti-aliasing
+	 */
+	const fxaaEffect = new FXAAEffect()
+
+	/**
+	 * Brightness/Contrast
+	 */
+	const bcEffect = new BrightnessContrastEffect()
+	bcEffect.contrast = 0.1
 
 	const { renderer, scene, camera } = useThrelte()
 
@@ -24,23 +59,11 @@
 		// @ts-expect-error
 		composer.addPass(new RenderPass(scene, camera.current))
 
-		const chromaticAberrationEffect = new ChromaticAberrationEffect()
-		chromaticAberrationEffect.offset.x = 0.0008
-		chromaticAberrationEffect.offset.y = 0
-		const toneMappingEffect = new ToneMappingEffect({
-			mode: ToneMappingMode.ACES_FILMIC
-		})
-		const noiseEffect = new NoiseEffect({
-			blendFunction: BlendFunction.COLOR_DODGE
-		})
-		noiseEffect.blendMode.opacity.value = 0.1
-		const smaaEffect = new SMAAEffect()
-
 		composer.addPass(
 			new EffectPass(
 				// @ts-expect-error
 				camera.current,
-				smaaEffect
+				fxaaEffect
 			)
 		)
 
@@ -48,9 +71,9 @@
 			new EffectPass(
 				// @ts-expect-error
 				camera.current,
-				// noiseEffect,
-				chromaticAberrationEffect,
-				toneMappingEffect
+				noiseEffect,
+				toneMappingEffect,
+				bcEffect
 			)
 		)
 	}
