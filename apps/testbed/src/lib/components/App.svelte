@@ -16,7 +16,7 @@
 	$: if ($cube) cubeGeometry.set($cube.nodes.Cube.geometry)
 </script>
 
-<Theatre config={{ state }}>
+<Theatre config={{ state }} studio={{ enabled: false }}>
 	{#if $cubeGeometry}
 		<Scene />
 	{/if}

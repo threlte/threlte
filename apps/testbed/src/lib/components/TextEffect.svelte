@@ -8,10 +8,12 @@
 		start: number
 		end: number
 	}
-	let _out: {
-		start: number
-		end: number
-	}
+	let _out:
+		| {
+				start: number
+				end: number
+		  }
+		| undefined = undefined
 	export let useSpring = true
 
 	export { _in as in, _out as out }
@@ -28,7 +30,8 @@
 
 		timeline.add({
 			targets: `#${id} .letter`,
-			translateX: [20, 0],
+			translateY: [5, 0],
+			skewY: [10, 0],
 			opacity: [0, 1],
 			easing: 'easeOutCubic',
 			duration: 1000,
@@ -40,6 +43,8 @@
 
 	const transform = (node: HTMLDivElement) => {
 		const originalInnerHTML = node.innerHTML
+		console.log(node.textContent)
+
 		node.innerHTML =
 			node.textContent?.replace(
 				/\S/g,
@@ -63,13 +68,11 @@
 
 	$: if (timeline) timeline.seek(progress)
 
-	$: opacity = clamp(
-		mapLinear(useSpring ? $springScrollPos : $scrollPos, _out.start, _out.end, 1, 0),
-		0,
-		1
-	)
+	$: opacity = _out
+		? clamp(mapLinear(useSpring ? $springScrollPos : $scrollPos, _out.start, _out.end, 1, 0), 0, 1)
+		: 1
 </script>
 
-<div {id} use:transform style="opacity: {opacity}">
+<div {id} {...$$restProps} use:transform style="opacity: {opacity}">
 	<slot />
 </div>

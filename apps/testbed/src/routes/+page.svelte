@@ -1,10 +1,15 @@
 <script lang="ts">
 	import App from '$lib/components/App.svelte'
 	import { Canvas } from '@threlte/core'
-	import { scrollPos, _springScrollPos } from '../lib/components/scrollPos'
-	import { debug } from '../lib/components/state'
-	import { NoToneMapping } from 'three'
 	import TextEffect from '../lib/components/TextEffect.svelte'
+	import Trigger from '../lib/components/Trigger.svelte'
+	import {
+		_springScrollPos,
+		mouseCoords,
+		mouseCoordsSpring,
+		scrollPos
+	} from '../lib/components/scrollPos'
+	import { debug } from '../lib/components/state'
 
 	const onScroll = () => {
 		// get normalized scroll position in document. 0 should equal top of page, 1
@@ -19,9 +24,17 @@
 	const onKeyDown = (e: KeyboardEvent) => {
 		if (e.key === 'd') debug.set(!debug.current)
 	}
+
+	const onMouseMove = (e: MouseEvent) => {
+		// get normalized mouse coords
+		const x = e.clientX / window.innerWidth
+		const y = e.clientY / window.innerHeight
+		mouseCoords.set({ x, y })
+		mouseCoordsSpring.set({ x, y })
+	}
 </script>
 
-<svelte:window on:scroll={onScroll} on:keydown={onKeyDown} />
+<svelte:window on:scroll={onScroll} on:keydown={onKeyDown} on:mousemove={onMouseMove} />
 
 <div class="fixed top-0 left-0 w-screen h-screen app">
 	<Canvas
@@ -37,24 +50,33 @@
 </div>
 
 <!-- HTML PART -->
-<div class="w-screen h-[300vh]" />
+<div class="w-screen h-[300vh] pointer-events-none" />
 
-<div class="w-screen h-[200vh]">
-	<!-- <div class="text-7xl text-white font-bold">
-		<TextEffect
-			id="test"
-			in={{
-				start: 2.2,
-				end: 2.5
-			}}
-			out={{
-				start: 2.6,
-				end: 2.8
-			}}
-		>
-			Hello World
-		</TextEffect>
-	</div> -->
+<div class="w-screen h-[200vh] pointer-events-none">
+	<Trigger in={2.7}>
+		<div class="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center">
+			<TextEffect
+				id="intro"
+				class="inline-block text-3xl text-white/60 mt-[40vh]"
+				in={{
+					start: 2.7,
+					end: 2.8
+				}}
+			>
+				Introducing
+			</TextEffect>
+			<TextEffect
+				id="t6"
+				class="inline-block text-7xl text-white/90 font-bold"
+				in={{
+					start: 3.0,
+					end: 3.5
+				}}
+			>
+				Threlte 6
+			</TextEffect>
+		</div>
+	</Trigger>
 </div>
 
 <style>
