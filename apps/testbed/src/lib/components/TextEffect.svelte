@@ -3,6 +3,8 @@
 	import { scrollPos, springScrollPos } from './scrollPos'
 	import { clamp, mapLinear } from 'three/src/math/MathUtils'
 
+	export let type: 'fade-up-skew-individual' | 'fade' | 'fade-individual' | 'fade-up' = 'fade'
+
 	export let id: string
 	let _in: {
 		start: number
@@ -25,25 +27,49 @@
 	const initializeTimeline = () => {
 		timeline = anime.timeline({ autoplay: false })
 
-		// get all letter elements
-		completeDuration = 1000 + 150 * document.querySelectorAll(`#${id} .letter`).length
+		if (type === 'fade-up-skew-individual') {
+			// get all letter elements
+			timeline.add({
+				targets: `#${id} .letter`,
+				translateY: [30, 0],
+				skewY: [10, 0],
+				opacity: [0, 1],
+				easing: 'easeOutCubic',
+				duration: 1000,
+				delay: (el, i) => 50 * (i + 1)
+			})
+		} else if (type === 'fade-individual') {
+			timeline.add({
+				targets: `#${id} .letter`,
+				opacity: [0, 1],
+				easing: 'easeOutCubic',
+				duration: 1000,
+				delay: (el, i) => 150 * (i + 1)
+			})
+		} else if (type === 'fade') {
+			timeline.add({
+				targets: `#${id} .letter`,
+				opacity: [0, 1],
+				easing: 'easeOutCubic',
+				duration: 1000
+			})
+		} else if (type === 'fade-up') {
+			timeline.add({
+				targets: `#${id} .letter`,
+				opacity: [0, 1],
+				translateY: [5, 0],
+				easing: 'easeOutCubic',
+				duration: 1000
+			})
+		}
 
-		timeline.add({
-			targets: `#${id} .letter`,
-			translateY: [5, 0],
-			skewY: [10, 0],
-			opacity: [0, 1],
-			easing: 'easeOutCubic',
-			duration: 1000,
-			delay: (el, i) => 150 * (i + 1)
-		})
+		completeDuration = timeline.duration
 
 		timeline = timeline
 	}
 
 	const transform = (node: HTMLDivElement) => {
 		const originalInnerHTML = node.innerHTML
-		console.log(node.textContent)
 
 		node.innerHTML =
 			node.textContent?.replace(

@@ -57,19 +57,21 @@
 		<div class="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center">
 			<TextEffect
 				id="intro"
-				class="inline-block text-3xl text-white/60 mt-[40vh]"
+				type="fade-up"
+				class="inline-block text-3xl text-white/60 mt-[50vh]"
 				in={{
 					start: 2.7,
-					end: 2.8
+					end: 3.1
 				}}
 			>
 				Introducing
 			</TextEffect>
 			<TextEffect
 				id="t6"
+				type="fade-up-skew-individual"
 				class="inline-block text-7xl text-white/90 font-bold"
 				in={{
-					start: 3.0,
+					start: 2.8,
 					end: 3.5
 				}}
 			>
