@@ -7,7 +7,6 @@
 	import { types } from '@theatre/core'
 
 	export let key: string
-	export let castShadow: boolean = false
 
 	const { scene } = useThrelte()
 
@@ -19,15 +18,7 @@
 
 <SheetObject {key} let:Transform let:Sync>
 	<Transform>
-		<T.DirectionalLight
-			let:ref={light}
-			position={[0, 0, 0]}
-			shadow.camera.left={-5}
-			shadow.camera.bottom={-5}
-			shadow.camera.right={5}
-			shadow.camera.top={5}
-			{castShadow}
-		>
+		<T.DirectionalLight let:ref={light} position={[0, 0, 0]}>
 			<Sync
 				intensity={{
 					transformer: {

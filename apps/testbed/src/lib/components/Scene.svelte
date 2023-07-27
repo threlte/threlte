@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { types, type ISheet } from '@theatre/core'
 	import { T, useThrelte } from '@threlte/core'
-	import { Environment, Float, Grid, OrbitControls, Portal, useTexture } from '@threlte/extras'
+	import { Float, Grid, OrbitControls, Portal, useTexture } from '@threlte/extras'
 	import { SheetObject } from '@threlte/theatre'
 	import AnimatableCube from './AnimatableCube.svelte'
 	import AnimatableStarField from './AnimatableStarField.svelte'
 	import KeyboardControls from './KeyboardControls.svelte'
+	import PostProcessing from './PostProcessing.svelte'
 	import ScrollSheet from './ScrollSheet.svelte'
 	import { mouseCoordsSpring, springScrollPos } from './scrollPos'
 	import { debug } from './state'
-	import Test from './Test.svelte'
-	import PostProcessing from './PostProcessing.svelte'
 
 	let sheet: ISheet | undefined
 
@@ -20,8 +19,6 @@
 </script>
 
 <PostProcessing />
-
-<Environment files="oil-on-water.png" />
 
 <T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
 	<AnimatableStarField key="Star Field" />

@@ -10,7 +10,7 @@
 <SheetObject {key} let:Transform let:Sync>
 	<KeyboardControls let:transform>
 		<Transform {...transform}>
-			<T.Mesh castShadow receiveShadow frustumCulled={false}>
+			<T.Mesh frustumCulled={false}>
 				<T is={$cubeGeometry} dispose={false} />
 				<T.MeshStandardMaterial
 					transparent
