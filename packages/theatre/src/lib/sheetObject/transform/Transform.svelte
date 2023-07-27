@@ -17,6 +17,7 @@
   export let label: Label = undefined as Label
   export let key: Props['key'] = undefined as Props['key']
   export let mode: Props['mode'] = 'translate' as Props['mode']
+  export let space: Props['space'] = undefined as Props['space']
 
   export let translationSnap: Props['translationSnap'] = undefined as Props['translationSnap']
   export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
@@ -163,6 +164,7 @@
     <TransformControls
       object={ref}
       {mode}
+      {space}
       bind:controls
       on:mouseDown={onMouseDown}
       on:objectChange={onChange}

@@ -7,6 +7,7 @@ export default class Transform<Label extends string | undefined> extends SvelteC
     translationSnap?: number
     rotationSnap?: number
     scaleSnap?: number
+    space?: 'world' | 'local'
   } & (Label extends string
     ? {
         key: string
