@@ -8,6 +8,7 @@
   import { isComplexProp } from './utils/isComplexProp'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
+  import { isStringProp } from './utils/isStringProp'
 
   // used for type hinting auto props
   export let type: any = undefined
@@ -37,7 +38,12 @@
     Object.entries(<Record<string, AnyProp>>$$restProps).forEach(
       ([propertyPath, propertyValue]) => {
         // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
-        const customKey = isComplexProp(propertyValue) ? propertyValue.key : undefined
+        const customKey = isComplexProp(propertyValue)
+          ? propertyValue.key
+          : isStringProp(propertyValue)
+          ? propertyValue
+          : undefined
+
         const key = customKey ?? makeAlphanumeric(propertyPath)
 
         // get the initial value as well as the correct transformer for the property
