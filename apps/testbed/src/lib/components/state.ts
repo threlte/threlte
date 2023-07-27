@@ -1,5 +1,5 @@
 import { currentWritable } from '@threlte/core'
-import { BufferGeometry } from 'three'
+import type { BufferGeometry } from 'three'
 
 export const debug = currentWritable(false)
 

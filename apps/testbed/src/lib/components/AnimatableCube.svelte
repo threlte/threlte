@@ -18,8 +18,9 @@
 					metalness={0.6139}
 					color="#ff1f00"
 					emissive="#000105"
+					envMapIntensity={10}
 				>
-					<Sync color opacity emissive roughness metalness />
+					<Sync color opacity emissive roughness metalness envMapIntensity />
 				</T.MeshStandardMaterial>
 			</T.Mesh>
 		</Transform>

@@ -5,14 +5,15 @@
 	import { cubeGeometry } from './state'
 	import state from './state.json'
 
-	type GLTFResult = {
+	type CubeGltf = {
 		nodes: {
 			Cube: THREE.Mesh
 		}
 		materials: {}
 	}
-	const gltf = useGltf<GLTFResult>('/cube.glb')
-	$: if ($gltf) cubeGeometry.set($gltf.nodes.Cube.geometry)
+	const cube = useGltf<CubeGltf>('/cube.glb')
+
+	$: if ($cube) cubeGeometry.set($cube.nodes.Cube.geometry)
 </script>
 
 <Theatre config={{ state }}>

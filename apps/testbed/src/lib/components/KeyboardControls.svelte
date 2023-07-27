@@ -7,7 +7,7 @@
 
 	let useSnap = false
 	let mode: 'translate' | 'rotate' | 'scale' = 'translate'
-	let space: 'world' | 'local' = 'world'
+	let space: 'world' | 'local' = 'local'
 
 	const onKeyDown = (e: KeyboardEvent) => {
 		// toggle snap on Shift

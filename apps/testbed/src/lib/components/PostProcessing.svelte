@@ -25,6 +25,8 @@
 		composer.addPass(new RenderPass(scene, camera.current))
 
 		const chromaticAberrationEffect = new ChromaticAberrationEffect()
+		chromaticAberrationEffect.offset.x = 0.0008
+		chromaticAberrationEffect.offset.y = 0
 		const toneMappingEffect = new ToneMappingEffect({
 			mode: ToneMappingMode.ACES_FILMIC
 		})
@@ -47,7 +49,7 @@
 				// @ts-expect-error
 				camera.current,
 				// noiseEffect,
-				// chromaticAberrationEffect,
+				chromaticAberrationEffect,
 				toneMappingEffect
 			)
 		)
