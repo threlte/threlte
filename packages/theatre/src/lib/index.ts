@@ -15,7 +15,7 @@ export { useStudio } from './studio/useStudio'
 export { useSequence } from './sequence/useSequence'
 
 // actions
-export { useSheetObject } from './sheet/useSheetObject'
+export { createSheetObjectAction } from './sheet/createSheetObjectAction'
 
 // type exports
 export type { SequenceController } from './sequence/SequenceController'

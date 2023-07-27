@@ -1,12 +1,6 @@
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import {
-    resolvePropertyPath,
-    useParent,
-    useThrelte,
-    watch,
-    type CurrentWritable
-  } from '@threlte/core'
+  import { resolvePropertyPath, useParent, watch, type CurrentWritable } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Transformer } from '../transfomers/types'
   import type { AnyProp } from './Sync.svelte'

@@ -1,5 +1,5 @@
 ---
-order: 2.1
+order: 1.4
 category: '@threlte/theatre'
 name: '<Sequence>'
 type: 'component'
@@ -44,8 +44,6 @@ Currently, you can only have one sequence in each sheet. Future versions of Thea
 
 The following example shows how `<Sequence>` can be used to build a simple playback controller.
 
-<Tip type="info">You can only adjust the sequence position slider when playback is paused.</Tip>
-
 <Example path="theatre/sequence" iframe/>
 
 ## Lifecycle
@@ -67,17 +65,23 @@ When using the sequence in a child component, a slot prop can come in handy.
 ```svelte
 <script lang="ts">
 	import { T, InteractiveObject } from '@threlte/core'
-	import { Sheet, Sequence, Editable } from '@threlte/theatre'
+	import { Sheet, Sequence, SheetObject } from '@threlte/theatre'
 </script>
 
 <Sheet>
 	<Sequence let:play>
-		<T.Mesh>
-			<Editable name="Cube" transform controls />
-			<InteractiveObject interactive on:click={play}>
-			<T.BoxGeometry />
-			<T.MeshStandardMaterial />
-		</T.Mesh>
+		<SheetObject
+			key="Cube"
+			let:Transform
+		>
+			<Transform>
+				<T.Mesh>
+					<InteractiveObject interactive on:click={play}>
+					<T.BoxGeometry />
+					<T.MeshStandardMaterial />
+				</T.Mesh>
+			</Transform>
+		</SheetObject>
 	</Sequence>
 </Sheet>
 ```

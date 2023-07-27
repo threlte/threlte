@@ -2,7 +2,7 @@
   import { Canvas } from '@threlte/core'
   import { Theatre } from '@threlte/theatre'
   import Scene from './Scene.svelte'
-  import state from './default.theatre-project-state.json'
+  import state from './state.json'
 </script>
 
 <Canvas>

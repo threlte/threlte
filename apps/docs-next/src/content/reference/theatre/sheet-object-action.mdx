@@ -1,12 +1,12 @@
 ---
-order: 4.4
+order: 7.1
 category: '@threlte/theatre'
-name: 'sheetObject'
+name: 'sheetObjectAction'
 ---
 
 When Theatre.js represents the animated elements on a page as **Sheet Objects** which have _props_ you can animate. A Sheet Object can be a ThreeJS element or a DOM element.
 
-The `useSheetObject` hook allows you to animate DOM elements through a Svelte Action.
+The `createSheetObjectAction` hook allows you to animate DOM elements through a Svelte Action.
 
 #### Theatre.js Docs
 
@@ -22,13 +22,13 @@ This hook must be initialized inside a child component of `<Sheet>`:
 ```svelte
 // Scene.svelte
 <script lang="ts">
-  import { useSheetObject, useSequence } from '@threlte/theatre'
+  import { createSheetObjectAction, useSequence } from '@threlte/theatre'
 
-  const sheetObject = useSheetObject()
+  const sheetObjectAction = createSheetObjectAction()
 </script>
 
 <div
-	use:sheetObject={{
+	use:sheetObjectAction={{
 		key: 'foo',
 		props: { width: 230 },
 		callback: {node, { width }} => {
@@ -64,7 +64,7 @@ This is because under the hood we must first retrieve the _sheet context_ so we 
 ### Example
 
 <Example
-  path="theatre/use-sheet-object"
+  path="theatre/sheet-object-action"
   iframe
 />
 

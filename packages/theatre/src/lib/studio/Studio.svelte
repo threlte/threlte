@@ -6,8 +6,6 @@
   export let hide = false
 
   const browser = typeof window !== 'undefined'
-
-  export let studio: IStudio | undefined = undefined
 </script>
 
 {#if browser && enabled}

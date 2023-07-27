@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { useSheetObject, useSequence } from '@threlte/theatre'
+  import { createSheetObjectAction, useSequence } from '@threlte/theatre'
 
-  const sheetObject = useSheetObject()
+  const sheetObjectAction = createSheetObjectAction()
 
   const { position, playing, pause, play } = useSequence()
 
@@ -11,7 +11,7 @@
 <div>
   <button
     on:click={toggle}
-    use:sheetObject={{
+    use:sheetObjectAction={{
       key: 'button',
       props: { x: 0, y: 0, bold: false },
       callback: (node, { x, y, bold }) => {

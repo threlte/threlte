@@ -10,7 +10,7 @@ type PropsValue<Props extends UnknownShorthandCompoundProps> = Parameters<
 >[0]
 
 // hook
-export function useSheetObject<Props extends UnknownShorthandCompoundProps>() {
+export function createSheetObjectAction<Props extends UnknownShorthandCompoundProps>() {
   // get sheet from context
   const sheet: ISheet = getContext<SheetContext>('theatre-sheet').sheet
 

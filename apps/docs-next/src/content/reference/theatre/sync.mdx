@@ -1,0 +1,96 @@
+---
+{
+  'order': 4.2,
+  'category': '@threlte/theatre',
+  'name': '<Sync>',
+  'type': 'component',
+  'componentSignature':
+    {
+      'props':
+        [
+          { 'name': 'key', 'type': 'string', 'required': true },
+          {
+            'name': 'props',
+            'type':
+              {
+                'name': 'UnknownShorthandCompoundProps',
+                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+              },
+            'required': false
+          }
+        ]
+    }
+}
+---
+
+Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop to automatically pick up properties from its parent.
+
+```svelte
+<SheetObject let:Sync>
+  <T.MeshBasicMaterial>
+    <Sync
+      color
+      roughness
+      rotation
+    />
+  </T.MeshBasicMaterial>
+</SheetObject>
+```
+
+<Tip type="info">
+  #### Special Properties
+  
+  Note that some properties are treated differently. The `rotation` prop and other properties with type `THREE.Euler` are automatically converted 
+  from radians to degrees. Properties like `color` which have a type of `THREE.Color` receive a color picker in the studio automatically.
+</Tip>
+
+#### Labeled Prop
+
+To label an auto prop, just provide a string instead of a boolean value.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+</script>
+
+<SheetObject
+  key="cube"
+  let:Sync
+>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial>
+      <!-- labeled prop: rename color to tone in the studio -->
+      <Sync
+        color="tone" 
+      />
+    </T.MeshStandardMaterial>
+  </T.Mesh>
+</SheetObject>
+```
+
+#### Pierced Prop
+
+Similarly to the pierced props of [`<T>`](/docs/reference/core/t), the props of the component `<Sync>` can be anotated in the same fashion.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+</script>
+
+<SheetObject
+  key="cube"
+  let:Sync
+>
+  <T.Mesh>
+    <!-- pierced prop: edit only x coord. in the studio -->
+    <Sync
+      position.x  
+    />
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial/>
+  </T.Mesh>
+</SheetObject>
+```

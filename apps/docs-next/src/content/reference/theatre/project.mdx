@@ -1,5 +1,5 @@
 ---
-order: 1
+order: 1.2
 category: '@threlte/theatre'
 name: '<Project>'
 type: 'component'
@@ -35,13 +35,13 @@ While multiple projects may be created, one is usually sufficient for a whole Th
 
 ```svelte
 <script>
-	import { Project, Sheet, Editable } from '@threlte/theatre'
+	import { Project, Sheet, SheetObject } from '@threlte/theatre'
 </script>
 
 <!-- Will create a project with the name "Project A" -->
 <Project name="Project A">
 	<Sheet name="Sheet A">
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectA" />
 	</Sheet>
 </Project>
 ```
@@ -52,7 +52,7 @@ The state of a project edited in the [\<Studio\>](./studio) is saved in your bro
 
 ```svelte
 <script>
-	import { Project, Sheet, Editable } from '@threlte/theatre'
+	import { Project, Sheet, SheetObject } from '@threlte/theatre'
 	import state from './state.json'
 </script>
 
@@ -63,7 +63,7 @@ The state of a project edited in the [\<Studio\>](./studio) is saved in your bro
 -->
 <Project config={{ state }} name="Project A">
 	<Sheet name="Sheet A" autoplay>
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectA" />
 	</Sheet>
 </Project>
 ```

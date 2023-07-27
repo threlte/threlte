@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 1.3
 category: '@threlte/theatre'
 name: '<Sheet>'
 type: 'component'
@@ -33,23 +33,23 @@ You can create a sheet by placing the component `<Sheet>` as a child of a [`<Pro
 
 ```svelte
 <script>
-	import { Project, Sheet, Editable } from '@threlte/theatre'
+	import { Project, Sheet, SheetObject } from '@threlte/theatre'
 </script>
 
 <Project>
 	<!-- Will create a sheet with the name "Sheet A" -->
 	<Sheet name="Sheet A">
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectA" />
 	</Sheet>
 
 	<!-- Will create a sheet with the name "Sheet B" -->
 	<Sheet name="Sheet B">
-		<Editable name="Editable B" />
+		<SheetObject key="ObjectB" />
 	</Sheet>
 
 	<!-- Will NOT create a sheet but reference "Sheet A" -->
 	<Sheet name="Sheet A">
-		<Editable name="Editable C" />
+		<SheetObject key="ObjectC" />
 	</Sheet>
 </Project>
 ```

@@ -1,0 +1,37 @@
+---
+{
+  'order': 4.3,
+  'category': '@threlte/theatre',
+  'name': '<Transform>',
+  'type': 'component',
+  'componentSignature':
+    {
+      'props':
+        [
+          { 'name': 'key', 'type': 'string', 'required': true },
+          {
+            'name': 'props',
+            'type':
+              {
+                'name': 'UnknownShorthandCompoundProps',
+                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+              },
+            'required': false
+          }
+        ]
+    }
+}
+---
+
+One of the most common usecases in the studio is repositioning objects or groups of objects in the canvas.
+
+Use the component `<Transform>` from the [`<SheetObject>`](./sheet-object) slot props to add the transform properties of an object to the sheet object.
+
+```svelte
+<SheetObject let:Transform>
+  <Transform>
+    <T.Mesh />
+  </Transform>
+</SheetObject>
+```
+
