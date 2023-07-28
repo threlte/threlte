@@ -64,10 +64,7 @@
   useRender(() => {
     composer.render()
   })
-</script>
 
-<svelte:window
-  on:resize={() => {
-    composer.setSize(window.innerWidth, window.innerHeight)
-  }}
-/>
+  const { size } = useThrelte()
+  $: composer.setSize($size.width, $size.height)
+</script>

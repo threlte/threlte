@@ -61,7 +61,7 @@
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="app pointer-events-none fixed top-0 left-0 z-10 h-screen w-screen">
+    <div class="pointer-events-none fixed top-0 left-0 z-10 h-[100lvh] w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         rendererParameters={{
@@ -154,7 +154,7 @@
 
     <Trigger in={2.7}>
       <div
-        class="fixed bottom-0 left-0 flex h-[45vh] w-screen flex-col items-center justify-center"
+        class="fixed top-[66svh] top-[66vh] left-0 flex w-screen flex-col items-center justify-center"
       >
         <TextEffect
           id="intro"
