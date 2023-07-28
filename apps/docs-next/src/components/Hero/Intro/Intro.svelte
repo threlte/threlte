@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { Sequence } from '@threlte/theatre'
+  import { types } from '@theatre/core'
+  import { Sequence, useSheetObject } from '@threlte/theatre'
   import { onMount } from 'svelte'
+  import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
-  import { types } from '@theatre/core'
-  import { useSheetObject } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
 
   const sheetObject = useSheetObject()
 
@@ -31,7 +30,6 @@
   to={0.6}
 >
   <div
-    class="fixed top-0 left-0 mt-[40vh] flex w-screen flex-col items-center justify-center"
     class="fixed top-0 left-0 mt-[30vh] flex w-screen flex-col items-center justify-center"
     style="transform: translateY({$springScrollPos * -50}px)"
   >
