@@ -929,11 +929,6 @@
               "x": 0,
               "z": 0
             },
-            "position": {
-              "y": 0,
-              "x": 0,
-              "z": 0
-            },
             "floatIntensity": 2.7215189873417724,
             "rotationIntensity": 0,
             "rotationSpeed": 0.17088607594936536,
@@ -960,6 +955,9 @@
               "x": 1,
               "y": 1,
               "z": 1
+            },
+            "position": {
+              "y": 1
             }
           },
           "Floor": {
@@ -2957,30 +2955,12 @@
                     "value": 0.19620253164556953
                   }
                 ]
-              },
-              "cSXR7hT1dZ": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Composite:[\"position\",\"x\"]",
-                "keyframes": []
-              },
-              "qiR-GCDKJP": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Composite:[\"position\",\"y\"]",
-                "keyframes": []
-              },
-              "eIV4bw35nz": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Composite:[\"position\",\"z\"]",
-                "keyframes": []
               }
             },
             "trackIdByPropPath": {
               "[\"floatIntensity\"]": "kVXX2GZuih",
               "[\"rotation\",\"y\"]": "b6CEWEhpk7",
-              "[\"rotationIntensity\"]": "UehIjmUeW4",
-              "[\"position\",\"x\"]": "cSXR7hT1dZ",
-              "[\"position\",\"y\"]": "qiR-GCDKJP",
-              "[\"position\",\"z\"]": "eIV4bw35nz"
+              "[\"rotationIntensity\"]": "UehIjmUeW4"
             }
           },
           "Box Middle": {
@@ -3771,7 +3751,7 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": -1.4675053557811257
+                    "value": -1.2827612020826857
                   },
                   {
                     "id": "G1Zr3fUVGh",
@@ -3816,7 +3796,7 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": -4.2491542075862645
+                    "value": -4.32477023592222
                   },
                   {
                     "id": "2EhM8wL39N",
@@ -4534,6 +4514,7 @@
   },
   "definitionVersion": "0.4.0",
   "revisionHistory": [
+    "dVwbW54dca7FNsa1",
     "uKRhhy_Sv6IEJAJu",
     "cwis27qlWGuLRCbp",
     "5nWLZIm3_b-TfiLG",
