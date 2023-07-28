@@ -36,7 +36,6 @@
     <TheatreTextBox key="mission">
       <div class="mb-2 text-xl text-white/60">The Mission:</div>
     </TheatreTextBox>
-
     <TheatreTextBox key="statement">
       <div class="text-center text-4xl font-bold text-white/90">
         Rapidly build interactive<br />
