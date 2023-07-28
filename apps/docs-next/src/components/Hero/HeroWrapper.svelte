@@ -59,7 +59,7 @@
 <div class="relative z-20 h-[500vh] w-screen">
   <Theatre
     config={{ state }}
-    studio={{ enabled: true }}
+    studio={{ enabled: false }}
   >
     <div class="app pointer-events-none fixed top-0 left-0 z-10 h-screen w-screen">
       <Canvas
