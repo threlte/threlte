@@ -22,13 +22,6 @@ import Testimonials from '$components/Testimonials/Testimonials.astro'
   <HeroWrapper client:load />
 
   <div class="flex flex-col gap-14 py-24">
-    <div class="flex flex-row justify-center">
-      <h2 class="text-glow-white text-center text-6xl font-bold">
-        Rapidly build interactive<br />
-        <span class="border-orange inline-block border-b-[12px]">3D apps</span> for the web.
-      </h2>
-    </div>
-
     <div class="flex flex-col items-center gap-4">
       <div class="text-faded flex-1 text-center text-2xl font-light">
         A 3D framework for the web.<br />
@@ -112,45 +105,6 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
           </svg>
         </div>
       </div>
-    </div>
-
-    <div class="flex flex-col-reverse items-center justify-center gap-6 md:flex-row md:gap-3">
-      <code class="px-7 py-4 text-sm text-[1em] md:text-base">
-        <span class="text-orange mr-2 select-none font-bold">{'>'}</span>npm create threlte
-      </code>
-      <Button
-        href="/docs/learn/getting-started/introduction"
-        color="orange"
-        class="glow-orange"
-      >
-        Get Started
-        <Fragment slot="icon-after">→</Fragment>
-      </Button>
-    </div>
-
-    <div class="grid grid-cols-1 gap-8 md:my-12 lg:grid-cols-[1fr_2fr]">
-      <div class="text-faded text-xl">
-        Write clear, <span class="text-highlight">declarative</span> and
-        <span class="text-highlight">type-safe</span> components that seemlessly react to state changes
-        and are ready to be <span class="text-highlight">interactive</span>.
-      </div>
-
-      <div class="lg:h-0">
-        <div
-          class="aspect-[4/3] w-full overflow-hidden rounded-md border border-white/20 bg-white/5 shadow-xl"
-        >
-          <IntroExample
-            class="w-full h-full"
-            client:load
-          />
-        </div>
-      </div>
-
-      <Code
-        class="lg:w-[calc(100%+150px)] h-[calc(50vmin+100px)] overflow-auto"
-        code={IntroExampleRaw}
-        lang="svelte"
-      />
     </div>
   </div>
 

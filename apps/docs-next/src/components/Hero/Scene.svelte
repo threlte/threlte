@@ -22,8 +22,14 @@
 <PostProcessing />
 
 <T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
-  <AnimatableStarField key="Star Field" />
-  <AnimatableStarField key="Star Field Top" />
+  <ScrollSheet
+    name="Star Fields"
+    startAtScrollPosition={4}
+    endAtScrollPosition={5}
+  >
+    <AnimatableStarField key="Star Field" />
+    <AnimatableStarField key="Star Field Top" />
+  </ScrollSheet>
 </T.Group>
 
 <T.PerspectiveCamera
