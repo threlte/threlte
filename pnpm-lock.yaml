@@ -93,9 +93,15 @@ importers:
       '@tweakpane/core':
         specifier: ^1.1.0
         version: 1.1.0
+      '@types/animejs':
+        specifier: ^3.1.7
+        version: 3.1.7
       '@types/three':
-        specifier: ^0.144.0
-        version: 0.144.0
+        specifier: ^0.152.1
+        version: 0.152.1
+      animejs:
+        specifier: ^3.2.1
+        version: 3.2.1
       astro-auto-import:
         specifier: ^0.2.1
         version: 0.2.1(astro@2.1.2)
@@ -103,8 +109,8 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       postprocessing:
-        specifier: ^6.29.1
-        version: 6.29.1(three@0.145.0)
+        specifier: ^6.32.2
+        version: 6.32.2(three@0.153.0)
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
@@ -127,8 +133,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(@babel/core@7.20.12)(postcss@8.4.24)(svelte@3.55.1)(typescript@4.9.5)
       three:
-        specifier: ^0.145.0
-        version: 0.145.0
+        specifier: 0.153.0
+        version: 0.153.0
       tweakpane:
         specifier: ^3.1.0
         version: 3.1.0
@@ -2370,12 +2376,6 @@ packages:
 
   /@types/stats.js@0.17.0:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
-    dev: true
-
-  /@types/three@0.144.0:
-    resolution: {integrity: sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==}
-    dependencies:
-      '@types/webxr': 0.5.0
     dev: true
 
   /@types/three@0.152.1:
@@ -7520,15 +7520,6 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /postprocessing@6.29.1(three@0.145.0):
-    resolution: {integrity: sha512-w+XoL2Z7YpVDsHbIeg6sldMMmDqZS4Hul1FDq3TjOeXZ0Wnp0Qy1EvR7QmYJxyWBux1cKQx/k3XO7LxfvPsZyg==}
-    engines: {node: '>= 0.13.2'}
-    peerDependencies:
-      three: '>= 0.125.0 < 0.147.0'
-    dependencies:
-      three: 0.145.0
-    dev: true
-
   /postprocessing@6.32.2(three@0.153.0):
     resolution: {integrity: sha512-BpjIHeElXRmkcqO6p8Pi6W1uDcivQa2FVQ/Swnoo32Cg5bq/bb0mh9hXSHeCkIBD0W4D2KU8Fg7jBICztcN9iQ==}
     engines: {node: '>= 0.13.2'}
@@ -9159,10 +9150,6 @@ packages:
   /three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
     dev: false
-
-  /three@0.145.0:
-    resolution: {integrity: sha512-EKoHQEtEJ4CB6b2BGMBgLZrfwLjXcSUfoI/MiIXUuRpeYsfK5aPWbYhdtIVWOH+x6X0TouldHKHBuc/LAiFzAw==}
-    dev: true
 
   /three@0.151.3:
     resolution: {integrity: sha512-+vbuqxFy8kzLeO5MgpBHUvP/EAiecaDwDuOPPDe6SbrZr96kccF0ktLngXc7xA7bzyd3N0t2f6mw3Z9y6JCojQ==}
