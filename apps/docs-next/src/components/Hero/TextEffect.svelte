@@ -86,13 +86,10 @@
     }
   }
 
-  $: progress = clamp(
-    mapLinear(progress, _in.start, _in.end, 0, completeDuration),
-    0,
-    completeDuration
-  )
-
-  $: if (timeline) timeline.seek(progress)
+  $: if (timeline)
+    timeline.seek(
+      clamp(mapLinear(progress, _in.start, _in.end, 0, completeDuration), 0, completeDuration)
+    )
 
   $: opacity = _out ? clamp(mapLinear(progress, _out.start, _out.end, 1, 0), 0, 1) : 1
 </script>

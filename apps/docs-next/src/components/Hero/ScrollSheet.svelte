@@ -2,7 +2,7 @@
   import type { ISheet } from '@theatre/core'
   import { Sheet } from '@threlte/theatre'
   import { scrollPos, springScrollPos } from './scrollPos'
-  import { mapLinear } from 'three/src/math/MathUtils'
+  import { clamp, mapLinear } from 'three/src/math/MathUtils'
 
   export let useSpring = true
   export let name: string
@@ -12,12 +12,15 @@
 
   let sheet: ISheet | undefined
 
-  $: sheetProgress = mapLinear(
-    useSpring ? $springScrollPos : $scrollPos,
-    startAtScrollPosition,
-    endAtScrollPosition,
-    0,
-    10
+  $: sheetProgress = Math.max(
+    mapLinear(
+      useSpring ? $springScrollPos : $scrollPos,
+      startAtScrollPosition,
+      endAtScrollPosition,
+      0,
+      10
+    ),
+    0
   )
   $: if (sheet) {
     sheet.sequence.position = sheetProgress

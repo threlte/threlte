@@ -59,9 +59,9 @@
 <div class="relative z-20 h-[500vh] w-screen">
   <Theatre
     config={{ state }}
-    studio={{ enabled: false }}
+    studio={{ enabled: true, hide: true }}
   >
-    <div class="app pointer-events-none fixed top-0 left-0 z-10 h-screen w-screen">
+    <div class="app fixed top-0 left-0 z-10 h-screen w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         rendererParameters={{
@@ -165,6 +165,10 @@
             start: 2.7,
             end: 3.1
           }}
+          out={{
+            start: 3.6,
+            end: 3.9
+          }}
         >
           Introducing
         </TextEffect>
@@ -176,6 +180,10 @@
           in={{
             start: 2.8,
             end: 3.5
+          }}
+          out={{
+            start: 3.7,
+            end: 4
           }}
         >
           Threlte 6
