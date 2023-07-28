@@ -11,13 +11,31 @@
   import ScrollSheet from './ScrollSheet.svelte'
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
+  import { onMount } from 'svelte'
 
   let sheet: ISheet | undefined
 
   $: sheet && (sheet.sequence.position = $springScrollPos * 10)
 
   const { scene } = useThrelte()
+
+  let fov = 40
+  onMount(() => {
+    if (window.innerWidth > 640) {
+      fov = 35
+    }
+  })
 </script>
+
+<svelte:window
+  on:resize={() => {
+    if (window.innerWidth > 640) {
+      fov = 35
+    } else {
+      fov = 40
+    }
+  }}
+/>
 
 <PostProcessing />
 
@@ -52,16 +70,14 @@
   <SheetObject
     key="Camera"
     let:Transform
-    let:Sync
   >
     <KeyboardControls let:transform>
       <Transform {...transform}>
         <T.PerspectiveCamera
-          fov={35}
+          {fov}
           makeDefault={!$debug}
           let:ref={camera}
         >
-          <Sync fov />
           {#if $debug}
             <Portal object={scene}>
               <T.CameraHelper args={[camera]} />

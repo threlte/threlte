@@ -56,7 +56,7 @@
   on:mousemove={onMouseMove}
 />
 
-<div class="relative z-20 h-[500vh] w-screen">
+<div class="relative z-20 h-[500vh]">
   <Theatre
     config={{ state }}
     studio={{ enabled: false }}
@@ -86,7 +86,7 @@
         {@const duration = 0.6}
         {@const outStart = 2.2}
         {@const outEnd = 2.7}
-        <div class="fixed bottom-0 left-0 flex w-screen justify-center p-12">
+        <div class="fixed bottom-0 left-0 hidden w-screen justify-center p-12 md:flex">
           <div class="grid max-w-[1200px] grid-cols-3 gap-12">
             <div class="col-span-1">
               <Reveal
@@ -160,7 +160,7 @@
           id="intro"
           type="fade-up"
           progress={$springScrollPos}
-          class="inline-block text-3xl text-white/60"
+          class="inline-block text-xl text-white/60 md:text-3xl"
           in={{
             start: 2.7,
             end: 3.1
@@ -176,7 +176,7 @@
           progress={$springScrollPos}
           id="t6"
           type="fade-up-skew-individual"
-          class="inline-block text-7xl font-bold text-white/90"
+          class="inline-block text-6xl font-bold text-white/90 md:text-7xl"
           in={{
             start: 2.8,
             end: 3.5

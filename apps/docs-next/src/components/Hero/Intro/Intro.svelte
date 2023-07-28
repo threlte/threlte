@@ -30,7 +30,7 @@
   to={0.6}
 >
   <div
-    class="fixed top-0 left-0 mt-[30vh] flex w-screen flex-col items-center justify-center"
+    class="fixed top-0 left-0 mt-[18vh] flex w-screen flex-col items-center justify-center px-8 sm:mt-[25vh] md:mt-[30vh]"
     style="transform: translateY({$springScrollPos * -50}px)"
   >
     <TheatreTextBox key="mission">
@@ -38,8 +38,8 @@
     </TheatreTextBox>
 
     <TheatreTextBox key="statement">
-      <div class="text-center text-4xl font-bold text-white/90">
-        Rapidly build interactive<br />
+      <div class="max-w-[450px] text-center text-4xl font-bold text-white/90">
+        Rapidly build interactive
         <span class="relative inline-block"
           ><div
             use:sheetObject={{
