@@ -4,6 +4,11 @@
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
+  import { types } from '@theatre/core'
+  import { useSheetObject } from '@threlte/theatre'
+  import Button from '../../Button/Button.svelte'
+
+  const sheetObject = useSheetObject()
 
   let play = false
   onMount(() => {
@@ -14,16 +19,12 @@
       clearTimeout(timeout)
     }
   })
-
-  import { types } from '@theatre/core'
-  import { useSheetObject } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
-  const sheetObject = useSheetObject()
 </script>
 
 {#if play}
   <Sequence autoplay />
 {/if}
+
 <FadeOut
   progress={$springScrollPos}
   from={0.3}
