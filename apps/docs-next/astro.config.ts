@@ -53,7 +53,7 @@ export default defineConfig({
       }
     },
     ssr: {
-      noExternal: ['three', 'troika-three-text', 'postprocessing']
+      noExternal: ['three', 'troika-three-text', 'postprocessing', '@theatre/core']
     }
   },
   markdown: {
