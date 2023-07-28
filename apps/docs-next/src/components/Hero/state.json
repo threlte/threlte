@@ -2972,10 +2972,181 @@
           }
         }
       }
+    },
+    "Intro": {
+      "staticOverrides": {
+        "byObject": {
+          "intro-text": {},
+          "mission": {
+            "reveal": 1,
+            "translateY": 0
+          },
+          "statement": {
+            "reveal": 1
+          }
+        }
+      },
+      "sequence": {
+        "subUnitsPerUnit": 30,
+        "length": 3,
+        "type": "PositionalSequence",
+        "tracksByObject": {
+          "intro-text": {
+            "trackData": {},
+            "trackIdByPropPath": {}
+          },
+          "mission": {
+            "trackData": {
+              "TbOZVKNN7s": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "mission:[\"translateX\"]",
+                "keyframes": [
+                  {
+                    "id": "H_6YMDVd6r",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": -15
+                  },
+                  {
+                    "id": "1WXKXlJJUO",
+                    "position": 2.067,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  }
+                ]
+              },
+              "ocv_hkChCJ": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "mission:[\"reveal\"]",
+                "keyframes": [
+                  {
+                    "id": "i_FCysCwxx",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "4YKuvJJLap",
+                    "position": 2.067,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "trackIdByPropPath": {
+              "[\"translateX\"]": "TbOZVKNN7s",
+              "[\"reveal\"]": "ocv_hkChCJ"
+            }
+          },
+          "statement": {
+            "trackData": {
+              "30Sebg5Zrp": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "statement:[\"reveal\"]",
+                "keyframes": [
+                  {
+                    "id": "e1wG2jW5eI",
+                    "position": 1.1,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "UUb5dU3Smz",
+                    "position": 2.9,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 1
+                  }
+                ]
+              },
+              "CO0B3RUTzI": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "statement:[\"translateX\"]",
+                "keyframes": [
+                  {
+                    "id": "VBaW6tOXxi",
+                    "position": 1.1,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": -10
+                  },
+                  {
+                    "id": "eS87e9jKpa",
+                    "position": 2.9,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            "trackIdByPropPath": {
+              "[\"reveal\"]": "30Sebg5Zrp",
+              "[\"translateX\"]": "CO0B3RUTzI"
+            }
+          }
+        }
+      }
     }
   },
   "definitionVersion": "0.4.0",
   "revisionHistory": [
+    "x6m_Bdg3ulj3Y-ie",
+    "DlWwgdg9BslDpKpf",
     "4pBLjGwIWkM_Rv_F",
     "rnlVqv632wC08gHa",
     "K4L2uWYikItNr1Qg",

@@ -29,11 +29,11 @@
   transitions()
 </script>
 
-<Theatre
+<!-- <Theatre
   config={{ state }}
   studio={{ enabled: false }}
->
-  {#if $cubeGeometry && $env}
-    <Scene />
-  {/if}
-</Theatre>
+> -->
+{#if $cubeGeometry && $env}
+  <Scene />
+{/if}
+<!-- </Theatre> -->

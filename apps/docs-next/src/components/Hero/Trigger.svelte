@@ -1,18 +1,15 @@
 <script lang="ts">
-	import { scrollPos } from './scrollPos'
+  import { scrollPos } from './scrollPos'
 
-	let _in: number | false = 0
-	let _out: number | false | undefined = 1
+  let _in: number | undefined = undefined
+  let _out: number | undefined = undefined
 
-	export { _in as in }
-	export { _out as out }
-
-	$: inC = _in === false ? -Infinity : _in
-	$: outC = _out === false ? Infinity : _out === undefined ? 0 : _out
+  export { _in as in }
+  export { _out as out }
 </script>
 
-{#if $scrollPos > inC && (_out !== undefined || $scrollPos < outC)}
-	<slot />
+{#if (_in === undefined || $scrollPos > _in) && (_out === undefined || $scrollPos < _out)}
+  <slot />
 {:else}
-	<slot name="fallback" />
+  <slot name="fallback" />
 {/if}

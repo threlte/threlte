@@ -9,6 +9,6 @@
 	$: p = clamp(mapLinear(progress, from, to, 1, 0), 0, 1)
 </script>
 
-<div style="opacity: {p};">
+<div style="opacity: {p};" {...$$restProps}>
 	<slot />
 </div>
