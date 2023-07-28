@@ -54,7 +54,7 @@
           href="/docs/learn/getting-started/introduction"
           color="orange"
         >
-          Get Started →
+          Start Building →
         </Button>
       </div>
     </TheatreTextBox>
