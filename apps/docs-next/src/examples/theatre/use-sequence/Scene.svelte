@@ -40,5 +40,4 @@
   files="industrial_sunset_puresky_1k.hdr"
   isBackground={true}
   format="hdr"
-  groundProjection={{ radius: 200, height: 5, scale: 100 }}
 />
