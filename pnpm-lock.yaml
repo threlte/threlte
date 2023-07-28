@@ -73,10 +73,10 @@ importers:
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.2.7)
       '@theatre/core':
-        specifier: 0.6.2
+        specifier: ^0.6.2
         version: 0.6.2
       '@theatre/studio':
-        specifier: 0.6.2
+        specifier: ^0.6.2
         version: 0.6.2(@theatre/core@0.6.2)
       '@threlte/core':
         specifier: workspace:*
