@@ -35,11 +35,30 @@
     style="transform: translateY({$springScrollPos * -50}px)"
   >
     <TheatreTextBox key="mission">
-      <div class="text-xl text-white/60">The Mission:</div>
+      <div class="mb-2 text-xl text-white/60">The Mission:</div>
     </TheatreTextBox>
 
     <TheatreTextBox key="statement">
-      <div class="text-4xl font-bold text-white/90">Reimagine 3D</div>
+      <div class="text-center text-4xl font-bold text-white/90">
+        Rapidly build interactive<br />
+        <span class="relative inline-block"
+          ><div
+            use:sheetObject={{
+              key: 'underline',
+              props: {
+                scaleX: types.number(0, {
+                  range: [0, 1]
+                })
+              },
+              callback(node, props) {
+                node.style.transform = `scaleX(${props.scaleX})`
+              }
+            }}
+            class="bg-orange absolute bottom-0 left-0 -z-10 h-4 w-full origin-left will-change-transform"
+          />
+          3D apps
+        </span> for the web.
+      </div>
     </TheatreTextBox>
 
     <TheatreTextBox key="start-building">
@@ -68,6 +87,7 @@
     to={0.2}
   >
     <div
+      class="will-change-auto"
       use:sheetObject={{
         key: 'scroll',
         callback(node, props) {

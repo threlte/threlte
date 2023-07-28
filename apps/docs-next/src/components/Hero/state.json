@@ -4027,12 +4027,15 @@
           "scroll": {},
           "start-building": {
             "reveal": 1
+          },
+          "underline": {
+            "scaleX": 0
           }
         }
       },
       "sequence": {
         "subUnitsPerUnit": 30,
-        "length": 4,
+        "length": 3.93,
         "type": "PositionalSequence",
         "tracksByObject": {
           "intro-text": {
@@ -4052,19 +4055,19 @@
                     "handles": [
                       0.5,
                       1,
-                      0.5,
-                      0
+                      0.25,
+                      0.46
                     ],
                     "type": "bezier",
-                    "value": -15
+                    "value": 15
                   },
                   {
                     "id": "1WXKXlJJUO",
                     "position": 2.067,
                     "connectedRight": true,
                     "handles": [
-                      0.5,
-                      1,
+                      0.45,
+                      0.94,
                       0.5,
                       0
                     ],
@@ -4150,25 +4153,25 @@
                 "__debugName": "statement:[\"translateX\"]",
                 "keyframes": [
                   {
-                    "id": "VBaW6tOXxi",
+                    "id": "TvMQgl1uik",
                     "position": 0.833,
                     "connectedRight": true,
                     "handles": [
                       0.5,
                       1,
-                      0.5,
-                      0
+                      0.25,
+                      0.46
                     ],
                     "type": "bezier",
-                    "value": -10
+                    "value": 10
                   },
                   {
                     "id": "eS87e9jKpa",
                     "position": 2.633,
                     "connectedRight": true,
                     "handles": [
-                      0.5,
-                      1,
+                      0.45,
+                      0.94,
                       0.5,
                       0
                     ],
@@ -4296,7 +4299,7 @@
                 "keyframes": [
                   {
                     "id": "Nk9825ZV84",
-                    "position": 0.833,
+                    "position": 1.9,
                     "connectedRight": true,
                     "handles": [
                       0.5,
@@ -4309,7 +4312,7 @@
                   },
                   {
                     "id": "_Mk56hA7qD",
-                    "position": 2.633,
+                    "position": 3.7,
                     "connectedRight": true,
                     "handles": [
                       0.5,
@@ -4328,24 +4331,24 @@
                 "keyframes": [
                   {
                     "id": "rZlpCcIlJb",
-                    "position": 0.833,
+                    "position": 1.9,
                     "connectedRight": true,
                     "handles": [
                       0.5,
                       1,
-                      0.5,
-                      0
+                      0.25,
+                      0.46
                     ],
                     "type": "bezier",
-                    "value": -10
+                    "value": 10
                   },
                   {
                     "id": "SQ03F17bSW",
-                    "position": 2.633,
+                    "position": 3.7,
                     "connectedRight": true,
                     "handles": [
-                      0.5,
-                      1,
+                      0.45,
+                      0.94,
                       0.5,
                       0
                     ],
@@ -4358,6 +4361,45 @@
             "trackIdByPropPath": {
               "[\"reveal\"]": "73G3XcEuPJ",
               "[\"translateX\"]": "EBLNX4YpJo"
+            }
+          },
+          "underline": {
+            "trackData": {
+              "heEGlQFSBn": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "underline:[\"scaleX\"]",
+                "keyframes": [
+                  {
+                    "id": "4ml9la4v7f",
+                    "position": 1.833,
+                    "connectedRight": true,
+                    "handles": [
+                      0.5,
+                      1,
+                      0.25,
+                      0.46
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "2cdaOoZsjo",
+                    "position": 2.6,
+                    "connectedRight": true,
+                    "handles": [
+                      0.45,
+                      0.94,
+                      0.5,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "trackIdByPropPath": {
+              "[\"scaleX\"]": "heEGlQFSBn"
             }
           }
         }
@@ -4815,6 +4857,7 @@
   },
   "definitionVersion": "0.4.0",
   "revisionHistory": [
+    "CNPo7O4IZd9kWjv1",
     "1__BY2dVZ8NFfSqW",
     "nLT0xCsUfoKSSmG0",
     "dVwbW54dca7FNsa1",
