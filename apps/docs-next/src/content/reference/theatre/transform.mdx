@@ -8,17 +8,14 @@
     {
       'props':
         [
-          { 'name': 'key', 'type': 'string', 'required': true },
-          {
-            'name': 'props',
-            'type':
-              {
-                'name': 'UnknownShorthandCompoundProps',
-                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
-              },
-            'required': false
-          }
-        ]
+          { 'name': 'label', 'type': 'string', 'required': false },
+          { 'name': 'key', 'type': 'string', 'required': false },
+          { 'name': 'mode', 'type': 'translate | rotate | scale', 'required': false, default: 'translate' },
+          { 'name': 'space', 'type': 'world | local', 'required': false, default: 'world' },
+          { 'name': 'translationSnap', 'type': 'number', 'required': false },
+          { 'name': 'rotationSnap', 'type': 'number', 'required': false },
+          { 'name': 'scaleSnap', 'type': 'number', 'required': false },
+        ],
     }
 }
 ---

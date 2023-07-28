@@ -7,8 +7,11 @@
 
   export let props: P
 
+  /** @package */
   export let sheetObject: CurrentWritable<ISheetObject<P>>
+  /** @package */
   export let addProps: (props: UnknownShorthandCompoundProps) => void
+  /** @package */
   export let removeProps: (propNames: string[]) => void
 
   let values = $sheetObject?.value

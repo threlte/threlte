@@ -12,8 +12,11 @@
   // used for type hinting auto props
   export let type: any = undefined
 
+  /** @package */
   export let sheetObject: CurrentWritable<ISheetObject>
+  /** @package */
   export let addProps: (props: UnknownShorthandCompoundProps) => void
+  /** @package */
   export let removeProps: (propNames: string[]) => void
 
   const parent = useParent()

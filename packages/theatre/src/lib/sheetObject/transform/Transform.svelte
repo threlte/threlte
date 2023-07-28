@@ -23,8 +23,11 @@
   export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
   export let scaleSnap: Props['scaleSnap'] = undefined as Props['scaleSnap']
 
+  /** @package */
   export let sheetObject: CurrentWritable<ISheetObject>
+  /** @package */
   export let addProps: (props: UnknownShorthandCompoundProps) => void
+  /** @package */
   export let removeProps: (propNames: string[]) => void
 
   let controls: TC | undefined
