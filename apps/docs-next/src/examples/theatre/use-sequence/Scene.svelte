@@ -7,10 +7,10 @@
 
   interactivity()
 
-  const { position, config } = useSequence()
+  const { position, config, play } = useSequence()
 
   // adjust playback settings
-  config({ iterationCount: Infinity, rate: 0.5 })
+  config({ iterationCount: Infinity, rate: 0.3 })
 
   const format = (num: number) =>
     num.toLocaleString('en-US', {
@@ -19,6 +19,8 @@
     })
 
   $: time = format($position)
+
+  play()
 </script>
 
 <Feather />
