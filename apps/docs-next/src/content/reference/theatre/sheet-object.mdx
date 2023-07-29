@@ -65,3 +65,9 @@ specific props. We can achieve this using *manual prop declaration*. Provide the
 ```
 
 You can also use the [`<Declare>`](./declare) prop slot component to colocate your manual declaration with other code.
+
+## Selection
+
+The `<SheetObject>` component offers a slot prop based API for controlling selection in the Theatre.js studio. Simply 
+declare the `select` and `deselect` methods and the `selected` variables to use it. You then need to use these in the
+mesh of your choice; see the example above for a demonstration.
