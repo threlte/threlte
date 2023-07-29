@@ -3,11 +3,22 @@
   export let playing: boolean
   export let play: (opts?: {}) => Promise<boolean>
   export let pause: (opts?: {}) => Promise<boolean>
+  export let rate: number = 1
 
   import { PauseIcon, PlayIcon } from './icons'
 
   const fmt = (n: number) =>
     n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+  const toggleRate = () => {
+    if (rate == 1) {
+      rate = 0.5
+    } else if (rate == 0.5) {
+      rate = 2
+    } else {
+      rate = 1
+    }
+  }
 </script>
 
 <menu>
@@ -20,6 +31,9 @@
       <PauseIcon />
     </button>
   {/if}
+  <button on:click={() => toggleRate()}>
+    x{rate.toFixed(1)}
+  </button>
   <input
     type="range"
     min={0}

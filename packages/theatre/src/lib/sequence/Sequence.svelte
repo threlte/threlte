@@ -34,28 +34,28 @@
   // Get the Sequence instance
   export const sequence = sequences[key]
 
-  let mounted = false
-  onMount(() => (mounted = true))
+  // autoplay logic
+  if (autoplay) {
+    sequence.autoplay(delay)
+  }
 
   // config reactivity
-  $: mounted,
-    sequence.config({
-      audio,
-      autoplay,
-      autoreset,
-      autopause,
-      delay
-    })
+  $: sequence.config({
+    audio,
+    autoplay,
+    autoreset,
+    autopause,
+    delay
+  })
   // some options require replaying
   // we seperate these for performance
-  $: mounted,
-    sequence.config({
-      rate,
-      range,
-      iterationCount,
-      direction,
-      rafDriver
-    })
+  $: sequence.config({
+    rate,
+    range,
+    iterationCount,
+    direction,
+    rafDriver
+  })
 
   // Bindings
   const { position: positionStore, playing: playingStore, length: lengthStore } = sequence

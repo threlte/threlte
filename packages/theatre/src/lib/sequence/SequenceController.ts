@@ -1,5 +1,6 @@
 import { onChange, val, type ISequence } from '@theatre/core'
 
+import { get } from 'svelte/store'
 import type { Readable, Subscriber, Writable } from 'svelte/store'
 
 import type { SequenceOptions } from './types'
@@ -42,6 +43,21 @@ export class SequenceController {
     this.pause = this.pause.bind(this)
     this.config = this.config.bind(this)
     this.destroy = this.destroy.bind(this)
+
+    // autoplay logic
+    if (!options.autoplay && options.delay! > 0) {
+      console.warn('Sequence: delay has no effect unless the option autoplay is enabled.', {
+        sequence: this.sequence
+      })
+    }
+    if (options.autoplay) {
+      this.autoplay()
+    }
+
+    // autoreset logic
+    if (this.options.autoreset === 'onMount' || this.options.autoreset === 'always') {
+      this.position.set(0)
+    }
   }
   public config(options: SequenceOptions): void {
     // update options
@@ -51,7 +67,7 @@ export class SequenceController {
     const noChange = Object.keys(updatedOptions).every(
       (key) =>
         this.options[key as keyof SequenceOptions] == updatedOptions[key as keyof SequenceOptions]
-    ) // TODO: fix type of key
+    )
     if (noChange) {
       return
     } else {
@@ -61,33 +77,29 @@ export class SequenceController {
     // update audio options
     if (options.audio) this.sequence.attachAudio(options.audio)
 
-    // update autoplay logic
-    if (!options.autoplay && options.delay! > 0) {
-      console.warn('Sequence: delay has no effect unless the option autoplay is enabled.', {
-        sequence: this.sequence
-      })
-    }
-    if (options.autoplay) {
-      this.timer = setTimeout(() => this.play(), this.options.delay)
-    }
-    if (this.options.autoreset === 'onMount' || this.options.autoreset === 'always') {
-      this.position.set(0)
-    } // TODO - check if this needs to be moved
-
-    // trigger update for options passed to play
+    // get replay conditions
     const replay =
       options.rate ||
       options.range ||
       options.iterationCount ||
       options.direction ||
       options.rafDriver
-    if (replay) {
+    // and also check if playing
+    const playing = get(this.playing)
+    // trigger replay if needed
+    if (playing && replay) {
       this.pause()
       this.play()
     }
   }
   public play(opts: Parameters<ISequence['play']>[0] = {}): ReturnType<ISequence['play']> {
     return this.sequence.play({ ...this.options, ...opts })
+  }
+  public autoplay(delay: number | undefined = undefined) {
+    this.timer = setTimeout(
+      () => this.play(),
+      delay ?? this.options.delay
+    )
   }
   public pause(): ReturnType<ISequence['pause']> {
     return this.sequence.pause()

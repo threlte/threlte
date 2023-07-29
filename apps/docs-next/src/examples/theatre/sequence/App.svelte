@@ -11,6 +11,7 @@
   let playing: boolean = false
   let play: (opts?: {}) => Promise<boolean>
   let pause: (opts?: {}) => Promise<boolean>
+  let rate: number = 1
 </script>
 
 <Canvas>
@@ -25,6 +26,9 @@
         bind:pause
         iterationCount={3}
         direction="alternate"
+        autoplay
+        delay={1000}
+        {rate}
       />
     </Sheet>
   </Project>
@@ -33,6 +37,7 @@
 <Controller
   bind:position
   bind:playing
+  bind:rate
   {play}
   {pause}
 />
