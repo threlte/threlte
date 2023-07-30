@@ -1,28 +1,15 @@
 <script lang="ts">
   import { types } from '@theatre/core'
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
-  import { onMount } from 'svelte'
   import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
 
   const sheetObject = createSheetObjectAction()
-
-  let play = false
-  onMount(() => {
-    const timeout = setTimeout(() => {
-      play = true
-    }, 1000)
-    return () => {
-      clearTimeout(timeout)
-    }
-  })
 </script>
 
-{#if play}
-  <Sequence autoplay />
-{/if}
+<Sequence autoplay />
 
 <FadeOut
   progress={$springScrollPos}
