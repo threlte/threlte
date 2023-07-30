@@ -28,6 +28,7 @@
           indexName: 'threlte'
         }
       },
+      showBranding: false,
       references: {
         heading: 'Visit sources this answer was generated from:',
         getHref: (ref) => {
@@ -66,7 +67,7 @@
   $: focusInput(focus)
 
   const highlightCode = () => {
-    container.querySelectorAll('code').forEach((el) => {
+    container.querySelectorAll('pre').forEach((el) => {
       // then highlight each
       if (!el.classList.contains('hljs') && el.innerHTML.length > 20) {
         hljs.highlightElement(el)
