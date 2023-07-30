@@ -133,7 +133,6 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
       </div>
     </div>
     <div class="flex flex-row gap-5">
-      <Search client:media="(min-width: 768px)" />
       <Socials />
     </div>
   </header>
@@ -157,14 +156,17 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     <Socials slot="after-navigation" />
   </MobileDocsNav>
 
-	<main
-		class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
-	>
-		<aside
-			class="fixed bottom-0 z-20 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:z-0 md:block md:w-auto md:pt-6 lg:row-span-1"
-		>
-			<LeftSidebar />
-		</aside>
+  <main
+    class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
+  >
+    <aside
+      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
+    >
+      <div class="mb-4 w-full">
+        <Search client:media="(min-width: 768px)" />
+      </div>
+      <LeftSidebar />
+    </aside>
 
     <div
       class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"

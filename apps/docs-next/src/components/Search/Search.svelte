@@ -27,7 +27,7 @@
 
 <button
   aria-label="Search"
-  class="text-faded relative flex w-full min-w-[200px] max-w-[14rem] flex-row items-center justify-start gap-2 rounded-sm bg-[#111A2B] px-2 py-2 hover:text-white hover:brightness-110 md:mx-6"
+  class="text-faded relative flex w-full min-w-[200px] max-w-[14rem] flex-row items-center justify-start gap-2 rounded-sm bg-[#112135] px-2 py-2 hover:text-white hover:brightness-110 md:mx-6"
   on:click={toggleSearch}
 >
   <svg
@@ -44,7 +44,7 @@
   <p class="text-sm">Search</p>
 </button>
 
-<div class="pointer-events-none absolute top-0 left-0 z-50 h-full w-full">
+<div class="pointer-events-none fixed top-0 left-0 z-50 h-full w-full">
   {#if searchActive}
     <div
       class={`pointer-events-auto fixed top-0 left-0 h-screen  w-screen bg-gray-900/70
