@@ -33,13 +33,14 @@ export function createSheetObjectAction<Props extends UnknownShorthandCompoundPr
     const obj = sheet.object<Props>(key, props, options)
 
     // callback reactivity
-    obj.onValuesChange((obj) => {
+    const unsubscribe = obj.onValuesChange((obj) => {
       callback(node, obj)
     })
 
     // disposal
     return {
       destroy() {
+        unsubscribe()
         sheet.detachObject(key)
       }
     }
