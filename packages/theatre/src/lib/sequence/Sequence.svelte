@@ -35,21 +35,43 @@
   export const sequence = sequences[key]
 
   // autoplay logic
-  if (autoplay) {
-    sequence.autoplay(delay)
+  if (!autoplay && delay! > 0) {
+    console.warn('Sequence: delay has no effect unless the option autoplay is enabled.', {
+      sequence
+    })
   }
+
+  let delayTimer: ReturnType<typeof setTimeout>
+
+  if (autoplay) {
+    delayTimer = setTimeout(() => sequence.play(), delay)
+  }
+
+  onDestroy(() => {
+    clearTimeout(delayTimer)
+  })
+
+  // autopause logic
+  onDestroy(() => {
+    if (autopause) {
+      sequence.pause()
+    }
+  })
+
+  // autoreset logic
+  if (autoreset === 'onMount' || autoreset === 'always') {
+    sequence.reset()
+  }
+
+  onDestroy(() => {
+    if (autoreset === 'onDestroy' || autoreset === 'always') {
+      sequence.reset()
+    }
+  })
 
   // config reactivity
   $: sequence.config({
     audio,
-    autoplay,
-    autoreset,
-    autopause,
-    delay
-  })
-  // some options require replaying
-  // we seperate these for performance
-  $: sequence.config({
     rate,
     range,
     iterationCount,
@@ -90,11 +112,6 @@
 
   // pass to parent
   sequences[key] = sequence
-
-  // Cleanup
-  onDestroy(() => {
-    sequence.destroy()
-  })
 </script>
 
 <slot

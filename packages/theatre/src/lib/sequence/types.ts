@@ -21,9 +21,4 @@ export interface SequenceOptions {
   direction?: PlaybackDirection
   rafDriver?: IRafDriver
   audio?: SequenceAudioOptions
-  // threlte options
-  autoplay?: boolean
-  autoreset?: Autoreset
-  autopause?: boolean
-  delay?: number
 }
