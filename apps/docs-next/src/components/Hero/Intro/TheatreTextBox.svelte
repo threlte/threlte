@@ -1,9 +1,10 @@
 <script lang="ts">
   import { types } from '@theatre/core'
-  import { useSheetObject } from '@threlte/theatre'
+  import { createSheetObjectAction } from '@threlte/theatre'
   import Reveal from '../Reveal.svelte'
   import FadeOut from '../FadeOut.svelte'
-  const sheetObject = useSheetObject()
+
+  const sheetObject = createSheetObjectAction()
 
   export let key: string
   let reveal = 0

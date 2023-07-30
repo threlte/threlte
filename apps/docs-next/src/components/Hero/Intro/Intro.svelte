@@ -1,13 +1,13 @@
 <script lang="ts">
   import { types } from '@theatre/core'
-  import { Sequence, useSheetObject } from '@threlte/theatre'
+  import { Sequence, createSheetObjectAction } from '@threlte/theatre'
   import { onMount } from 'svelte'
   import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
 
-  const sheetObject = useSheetObject()
+  const sheetObject = createSheetObjectAction()
 
   let play = false
   onMount(() => {
