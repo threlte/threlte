@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "cleanup": "rm -rf .astro node_modules"
+    "cleanup": "rimraf .astro node_modules"
   },
   "dependencies": {
     "@astrojs/image": "^0.13.1",
@@ -25,8 +25,8 @@
     "@macfja/svelte-persistent-store": "^2.2.1",
     "@stackblitz/sdk": "^1.8.2",
     "@tailwindcss/typography": "^0.5.3",
-    "@theatre/core": "0.6.0",
-    "@theatre/studio": "0.6.0",
+    "@theatre/core": "0.6.2",
+    "@theatre/studio": "0.6.2",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
     "@threlte/rapier": "workspace:*",
@@ -36,7 +36,10 @@
     "astro-auto-import": "^0.2.1",
     "node-html-parser": "^6.1.4",
     "postprocessing": "^6.29.1",
+    "rehype-autolink-headings": "^6.1.1",
     "rehype-pretty-code": "^0.9.2",
+    "rehype-slug": "^5.1.0",
+    "rimraf": "^5.0.1",
     "shiki": "^0.10.1",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",

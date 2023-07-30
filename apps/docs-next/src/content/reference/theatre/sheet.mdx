@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 1.3
 category: '@threlte/theatre'
 name: '<Sheet>'
 type: 'component'
@@ -9,28 +9,23 @@ componentSignature:
       [
         {name: 'name', type: 'string', default: 'default', required: false},
         {name: 'instance', type: 'string | undefined', default: 'undefined', required: false},
-        {name: 'autoPlay', type: 'boolean | number', default: 'false', required: false, description: 'If a number is passed, it will be used as the delay to start autoplaying'},
-        {name: 'autoReset', type: 'boolean | onMount | onDestroy', default: 'false', required: false, description: 'Resets the playhead to 0 when the sheet is unmounted or mounted or both' },
-        {name: 'position', type: 'number | undefined', default: 'undefined', required: false}
       ],
     bindings:
       [
-        {name: sheet, type: 'Sheet'},
-        {name: sequence, type: 'Sequence'},
-        {name: play, type: '(opts?) => Promise<boolean> (see Theatre.js Sequence API docs for options)'},
-        {name: pause, type: '() => void'}
+        {name: project, type: 'IProject'},
+        {name: sheet, type: 'ISheet'},
     ]
   }
 ---
 
-Theatre.js sheets contain one or more Theatre.js objects (which can be created with [`<Editable>`](/docs/reference/theatre/editable) components), that can be animated together.
+Theatre.js sheets contain one or more Theatre.js objects and optionally a [`<Sequence>`](/docs/reference/theatre/sequence) component that allows controlling the animation.
+The animated objects can adjusted in the [`<Studio>`](/docs/reference/theatre/studio) using the [`<Editable>`](/docs/reference/theatre/editable) component. 
 
 #### Theatre.js Docs
 
 |&nbsp;|&nbsp;|&nbsp;|
 |---|---|---|
 | **Sheet** | [Sheet Manual](https://www.theatrejs.com/docs/latest/manual/sheets)  | [Sheet API Reference](https://www.theatrejs.com/docs/0.5/api/core#sheet)  |
-|**Sequence** | [Sequence Manual](https://www.theatrejs.com/docs/latest/manual/sequences) | [Sequence API Reference](https://www.theatrejs.com/docs/0.5/api/core#sequence) |
 
 ## Creating Sheets
 
@@ -38,150 +33,36 @@ You can create a sheet by placing the component `<Sheet>` as a child of a [`<Pro
 
 ```svelte
 <script>
-	import { Project, Sheet, Editable } from '@threlte/theatre'
+	import { Project, Sheet, SheetObject } from '@threlte/theatre'
 </script>
 
 <Project>
 	<!-- Will create a sheet with the name "Sheet A" -->
 	<Sheet name="Sheet A">
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectA" />
 	</Sheet>
 
 	<!-- Will create a sheet with the name "Sheet B" -->
 	<Sheet name="Sheet B">
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectB" />
 	</Sheet>
 
 	<!-- Will NOT create a sheet but reference "Sheet A" -->
 	<Sheet name="Sheet A">
-		<Editable name="Editable A" />
+		<SheetObject key="ObjectC" />
 	</Sheet>
 </Project>
 ```
 
 ## Playing a Sheet's animation
 
-Each Theatre.js sheet has a sequence attached to it.
+Each Theatre.js sheet has a sequence attached to it. The sequence is the heart of the Theatre.js API: it determines where we are in the animation timeline, and 
+provides and API to play and pause the animation in a variety of ways.
 
-#### Binding to the Sequence
+#### Using the `<Sequence>` component
 
-You can access a sheet's sequence by binding to the sheet or its sequence directly. You can then use the playback controls on the sequence to play back the animation.
+The first way to control the sequence is using a reactive API with the [`<Sequence>`](/docs/reference/theatre/sequence) component.
 
-```svelte
-<script lang="ts">
-	import { Sheet } from '@threlte/theatre'
-	import type { ISequence } from '@theatre/core'
+#### Using the `useSequence` hook
 
-	let sequence: ISequence | undefined = undefined
-
-	const runAnimation = () => {
-		sequence?.play()
-	}
-</script>
-
-<Sheet bind:sequence>
-	<!-- … -->
-</Sheet>
-```
-
-#### Using the property `autoPlay`
-
-If you want your animation to play as soon as the Sheet is mounted or with a set delay, use the property `autoPlay`.
-
-```svelte
-<script lang="ts">
-	import { Sheet } from '@threlte/theatre'
-</script>
-
-<!-- Plays immediately -->
-<Sheet autoPlay>
-	<!-- … -->
-</Sheet>
-
-<!-- Plays the sequence with a delay of 300ms -->
-<Sheet autoPlay={{ delay: 300 }}>
-	<!-- … -->
-</Sheet>
-
-<!-- Plays the sequence in reverse -->
-<Sheet autoPlay={{ direction: 'reverse' }}>
-	<!-- … -->
-</Sheet>
-
-<!-- Plays the sequence 3 times -->
-<Sheet autoPlay={{ iterationCount: 3 }}>
-	<!-- … -->
-</Sheet>
-
-<!-- Plays the sequence from second 1 to 3 -->
-<Sheet autoPlay={{ range: [1, 3] }}>
-	<!-- … -->
-</Sheet>
-
-<!-- Plays the sequence in half speed -->
-<Sheet autoPlay={{ rate: 0.5 }}>
-	<!-- … -->
-</Sheet>
-```
-
-#### Using a Slot Prop
-
-When using the sequence or sheet in a child component, a slot prop can come in handy.
-
-```svelte
-<script lang="ts">
-	import { T, InteractiveObject } from '@threlte/core'
-	import { Sheet, Editable } from '@threlte/theatre'
-</script>
-
-<Sheet let:play>
-	<T.Mesh>
-		<Editable name="Cube" transform controls />
-		<InteractiveObject interactive on:click={play}>
-		<T.BoxGeometry />
-		<T.MeshStandardMaterial />
-	</T.Mesh>
-</Sheet>
-```
-
-## Playback Controls
-
-#### autoReset
-
-The underlying Theatre.js sheets are persisted even when unmounting a `<Sheet>` component. That's why the sequence of a sheet does not reset itself to the initial playback position when unmounting a `<Sheet>` component. Provide the property `autoReset` to reset the playback to the position 0 of the sequence.
-
-```svelte
-<script lang="ts">
-	import { Sheet } from '@threlte/theatre'
-</script>
-
-<!-- Resets the sequence position onMount and onDestros -->
-<Sheet autoReset>
-	<!-- … -->
-</Sheet>
-
-<!-- Resets the sequence position only on onMount -->
-<Sheet autoReset="onMount">
-	<!-- … -->
-</Sheet>
-
-<!-- Resets the sequence position only on onDestroy -->
-<Sheet autoReset="onDestroy">
-	<!-- … -->
-</Sheet>
-```
-
-#### autoPause
-
-Similarly, when you want to pause a sequence as soon as a `<Sheet>` is unmounted, provide the flag `autoPause`.
-
-```svelte
-<script lang="ts">
-	import { Sheet } from '@threlte/theatre'
-</script>
-
-<!-- Pauses the sequence as soon as it's unmounted -->
-<Sheet autoPause>
-	<!-- … -->
-</Sheet>
-```
+xxx

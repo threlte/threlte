@@ -3,6 +3,29 @@ html {
 }
 
 .prose {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply relative transition-transform;
+
+    a {
+      &::before {
+        content: '#';
+        @apply absolute inline-block -translate-x-full pr-2 text-white/50 opacity-0 transition-opacity;
+      }
+    }
+
+    &:hover {
+      a {
+        &::before {
+          @apply opacity-100;
+        }
+      }
+    }
+  }
+
   a strong {
     @apply !text-inherit;
   }
