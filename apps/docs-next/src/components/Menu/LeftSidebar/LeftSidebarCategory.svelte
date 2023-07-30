@@ -28,7 +28,7 @@
     {#each category.menuItems as item}
       {#if item.isDivider}
         <div
-          class="py-1 pt-4 pl-3 md:pl-5 md:-mx-2 tracking-wide font-bold text-white/30 flex flex-row items-end justify-start gap-1 uppercase text-xs"
+          class="mb-2 flex flex-row items-end justify-start gap-1 py-1 pt-4 text-xs font-bold uppercase tracking-wide text-white"
         >
           {item.title}
         </div>
@@ -36,12 +36,15 @@
         <li class="last:mb-0">
           <a
             class={c(
-              'block pl-3 md:pl-5 md:-mx-2 py-1 rounded-sm hover:text-white',
-              isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`) &&
-                'bg-blue-700/30 text-white'
+              'group relative block border-l-2 py-1 pl-4 hover:text-white',
+              isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
+                ? 'text-orange border-orange font-bold'
+                : 'border-white/20 hover:border-white'
             )}
-            href={`${category.urlPrefix}/${item.slug}`}>{item.title}</a
+            href={`${category.urlPrefix}/${item.slug}`}
           >
+            {item.title}
+          </a>
         </li>
       {/if}
     {/each}

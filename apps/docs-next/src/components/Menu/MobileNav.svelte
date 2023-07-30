@@ -4,6 +4,9 @@
   import { fade } from 'svelte/transition'
   import { customSlide } from './customSlide'
   import BurgerIcon from './BurgerIcon.svelte'
+  import Search from '$components/Search/Search.svelte'
+
+  export let search = false
 
   let showMenu = false
 
@@ -20,6 +23,7 @@
     <div>
       <slot name="topbar-left" />
     </div>
+    <div class="max-w-[30%]" />
     <div class="flex flex-row items-center justify-end gap-4">
       <div>
         <slot name="topbar-right" />
@@ -35,13 +39,18 @@
         duration: 200
       }}
       in:customSlide={{ duration: 200 }}
-      class="border-b-orange/25 -z-10 min-h-0 w-full overflow-auto border-b bg-[#0D1421]"
+      class="border-b-orange/25 -z-10 min-h-0 w-full overflow-visible border-b bg-[#0D1421]"
     >
       <div
         class="px-6 pt-2 pb-6"
         in:fade={{ delay: 200, duration: 200 }}
         out:fade={{ duration: 200 }}
       >
+        {#if search}
+          <div class="relative w-full pt-4 pb-8">
+            <Search />
+          </div>
+        {/if}
         <slot name="content" />
       </div>
     </div>
