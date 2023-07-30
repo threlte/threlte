@@ -17,6 +17,11 @@ import svelte from '@astrojs/svelte'
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
 
+const notExternalized = ['three', 'troika-three-text', 'postprocessing']
+if (process.env.NODE_ENV === 'production') {
+  notExternalized.push('@theatre/core')
+}
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [
@@ -53,7 +58,8 @@ export default defineConfig({
       }
     },
     ssr: {
-      noExternal: ['three', 'troika-three-text', 'postprocessing']
+      // "@theatre/core" needs to be externalized in development mode but not in production!
+      noExternal: notExternalized
     }
   },
   markdown: {
