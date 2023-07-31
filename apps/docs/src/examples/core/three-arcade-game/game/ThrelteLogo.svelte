@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import { Edges } from '@threlte/extras'
 	import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
 	import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -33,46 +33,46 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<Three
-	type={Group}
+<T
+	is={Group}
 	rotation.x={-65 * DEG2RAD}
 	rotation.y={rotationY}
 	position.z={positionZ}
 	{scale}
 >
-	<Three type={Mesh}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
+	<T is={Mesh}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
 
-	<Three type={Mesh} position.x={1}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
+	<T is={Mesh} position.x={1}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
 
-	<Three type={Mesh} position.x={-1}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
+	<T is={Mesh} position.x={-1}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
 
-	<Three type={Mesh} position.z={1}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
+	<T is={Mesh} position.z={1}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
 
-	<Three type={Mesh} position.z={-1}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
+	<T is={Mesh} position.z={-1}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
 
-	<Three type={Mesh} position.y={1}>
-		<Three type={geometry} />
-		<Three type={material} />
-		<Edges visible color={$baseColor} />
-	</Three>
-</Three>
+	<T is={Mesh} position.y={1}>
+		<T is={geometry} />
+		<T is={material} />
+		<Edges color={$baseColor} />
+	</T>
+</T>

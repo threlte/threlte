@@ -1,0 +1,13 @@
+<script>
+  import { GLTF, Float } from '@threlte/extras'
+</script>
+
+<Float>
+  <GLTF
+    castShadow
+    receiveShadow
+    url={'/models/flower.glb'}
+    position.y={1}
+    scale={3}
+  />
+</Float>

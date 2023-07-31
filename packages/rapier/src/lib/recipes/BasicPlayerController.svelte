@@ -1,14 +1,13 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Group, useFrame, useThrelte, type Position } from '@threlte/core'
-  import { createEventDispatcher } from 'svelte'
+  import { createRawEventDispatcher, T, useFrame, useThrelte } from '@threlte/core'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
   import CollisionGroups from '../components/CollisionGroups/CollisionGroups.svelte'
   import RigidBody from '../components/RigidBody/RigidBody.svelte'
   import type { CollisionGroupsBitMask } from '../types/types'
 
-  export let position: Position | undefined = undefined
+  export let position: Parameters<Vector3['set']> | undefined = undefined
   export let height: number = 1.7
   export let radius: number = 0.3
   export let speed = 1
@@ -33,7 +32,7 @@
   const t = new Vector3()
   const t2 = new Vector2()
 
-  const dispatch = createEventDispatcher<{
+  const dispatch = createRawEventDispatcher<{
     groundenter: void
     groundexit: void
   }>()
@@ -111,29 +110,31 @@
 
 <svelte:window on:keydown|preventDefault={onKeyDown} on:keyup|preventDefault={onKeyUp} />
 
-<RigidBody
-  dominance={127}
-  enabledRotations={[false, false, false]}
-  bind:rigidBody
-  {position}
-  type={'dynamic'}
->
-  <CollisionGroups groups={playerCollisionGroups}>
-    <Collider shape={'capsule'} args={[height / 2 - radius, radius]} />
-  </CollisionGroups>
+<T.Group {position}>
+  <RigidBody
+    dominance={127}
+    enabledRotations={[false, false, false]}
+    bind:rigidBody
+    type={'dynamic'}
+  >
+    <CollisionGroups groups={playerCollisionGroups}>
+      <Collider shape={'capsule'} args={[height / 2 - radius, radius]} />
+    </CollisionGroups>
 
-  <CollisionGroups groups={groundCollisionGroups}>
-    <Collider
-      sensor
-      on:sensorenter={() => (groundsSensored += 1)}
-      on:sensorexit={() => (groundsSensored -= 1)}
-      shape={'ball'}
-      args={[radius * 1.2]}
-      position={{ y: -height / 2 + radius }}
-    />
-  </CollisionGroups>
+    <CollisionGroups groups={groundCollisionGroups}>
+      <T.Group position={[0, -height / 2 + radius, 0]}>
+        <Collider
+          sensor
+          on:sensorenter={() => (groundsSensored += 1)}
+          on:sensorexit={() => (groundsSensored -= 1)}
+          shape={'ball'}
+          args={[radius * 1.2]}
+        />
+      </T.Group>
+    </CollisionGroups>
 
-  <Group position={{ y: -height / 2 }}>
-    <slot />
-  </Group>
-</RigidBody>
+    <T.Group position.y={-height / 2}>
+      <slot />
+    </T.Group>
+  </RigidBody>
+</T.Group>

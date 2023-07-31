@@ -1,5 +1,104 @@
 # @threlte/core
 
+## 6.0.0-next.12
+
+### Major Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`a764739`](https://github.com/threlte/threlte/commit/a764739674a9d97c9f43fe40cee2f0893116b5ac) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Removed type export "InstanceProps"
+
+### Patch Changes
+
+- [#454](https://github.com/threlte/threlte/pull/454) [`e58cb58`](https://github.com/threlte/threlte/commit/e58cb5842e9a77240376c30827f046ad75afa17f) Thanks [@michealparks](https://github.com/michealparks)! - Use three.js REVISION export for breaking api changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
+## 6.0.0-next.11
+
+### Patch Changes
+
+- 3868395: Updated prettier
+- 71f5efa: Sort render and frame handlers only when new ordered callbacks are introduced
+
+## 6.0.0-next.10
+
+### Patch Changes
+
+- b845685: replace requestanimationframe with setanimationloop
+
+## 6.0.0-next.9
+
+### Patch Changes
+
+- b14aa99: removed unused hook, cleaned up types and improved create event of T component.
+
+## 6.0.0-next.8
+
+### Patch Changes
+
+- 2943cb32: Fixed a bug which could lead to memory leaks, removed unused type import
+
+## 6.0.0-next.7
+
+### Minor Changes
+
+- 9291b0cf: Added strong event map types for component "T"
+
+## 6.0.0-next.6
+
+### Patch Changes
+
+- d9fdbd7f: Collocate types with respective hooks and components
+
+## 6.0.0-next.5
+
+### Patch Changes
+
+- 4bcf0ee4: changed return signature of useSuspense->suspend
+
+## 6.0.0-next.4
+
+### Patch Changes
+
+- 3a9a26c6: Changed return signature of asyncWritable
+
+## 6.0.0-next.3
+
+### Major Changes
+
+- fef242de: Removed the stale types of Pass, removed MeshInstance, Object3DInstance, Instance and InstancedMesh from core.
+- eb0dc69f: Removed the component TransformableObject, removed stale types from rapier package
+- a39ccd68: Removed ViewportAwareObject (replaced in user-land by plugins)
+
+## 6.0.0-next.2
+
+### Patch Changes
+
+- 4b67b473: Event on:create bugfix
+
+## 6.0.0-next.1
+
+### Major Changes
+
+- d9647fdc: Changed the default lighting mode from legacy to physical
+
+### Minor Changes
+
+- a27edc5f: Added option "useLegacyLights" on Canvas component, now defaulting to "true" to stay in line with defaults of three.js. Added prop types to plugins
+
+## 6.0.0-next.0
+
+### Major Changes
+
+- f0065c38: Removed components <Line>, <Line2>, <LineSegments> and <LineInstance>
+- ae514436: Moved <TransformControls> from core to extras, added createRawEventDispatcher to core
+- e28b8ada: Move audio context and components to extras
+- d649e237: Removed <Mesh> and respective type exports
+- 45821797: Remove components for lights, update docs and examples to v5
+
+### Minor Changes
+
+- 848af1ae: Added useRender: a hook that runs code after a frame has been invalidated, typically to implement custom render pipelines. Added the option to not automatically invalidate a frame with useFrame.
+
 ## 5.0.9
 
 ### Patch Changes

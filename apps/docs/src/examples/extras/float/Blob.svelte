@@ -1,14 +1,14 @@
 <script lang="ts">
+  import { T } from '@threlte/core'
+  import { Float } from '@threlte/extras'
   import { onDestroy } from 'svelte'
   import { spring } from 'svelte/motion'
   import { Color, MeshPhysicalMaterial, type BufferGeometry } from 'three'
-  import { Mesh } from '@threlte/core'
-  import { Float } from '@threlte/extras'
 
   export let geometry: BufferGeometry
 
-  const red = new Color('#FF3E00').convertSRGBToLinear()
-  const blue = new Color('#0000ff').convertSRGBToLinear()
+  const red = new Color(0xfe3d00)
+  const blue = new Color(0x0000ff)
 
   let material = new MeshPhysicalMaterial({
     color: red,
@@ -33,12 +33,16 @@
   }
 </script>
 
-<Float floatIntensity={5} scale={$scale}>
-  <Mesh
-    interactive
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
+<Float
+  floatIntensity={5}
+  scale={$scale}
+  rotationIntensity={2}
+  rotationSpeed={[1, 0.5, 0.2]}
+>
+  <T.Mesh
     {geometry}
     {material}
+    on:pointerenter={onPointerEnter}
+    on:pointerleave={onPointerLeave}
   />
 </Float>

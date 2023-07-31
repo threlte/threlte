@@ -1,0 +1,7 @@
+{
+  "installDependencies": false,
+  "startCommand": "pnpm install:all && cd apps/docs && pnpm dev",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

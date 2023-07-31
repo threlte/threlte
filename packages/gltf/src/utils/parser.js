@@ -2,7 +2,7 @@ import THREE from 'three'
 import isVarName from './isVarName.js'
 
 function parse(fileName, gltf, options = {}) {
-  const url = (fileName.toLowerCase().startsWith('http') ? '' : '/') + fileName
+  const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
 
@@ -149,24 +149,24 @@ function parse(fileName, gltf, options = {}) {
 
       // Write out geometry first
       if (obj.geometry) {
-        result += `geometry={$gltf.${node}.geometry} `
+        result += `geometry={gltf.${node}.geometry} `
       }
 
       // Write out materials
       if (obj.material) {
         if (obj.material.name)
-          result += `material={$gltf.materials${sanitizeName(obj.material.name)}} `
-        else result += `material={$gltf.${node}.material} `
+          result += `material={gltf.materials${sanitizeName(obj.material.name)}} `
+        else result += `material={gltf.${node}.material} `
       }
 
-      if (obj.skeleton) result += `skeleton={$gltf.${node}.skeleton} `
+      if (obj.skeleton) result += `skeleton={gltf.${node}.skeleton} `
       if (obj.visible === false) result += `visible={false} `
       if (obj.castShadow === true) result += `castShadow `
       if (obj.receiveShadow === true) result += `receiveShadow `
       if (obj.morphTargetDictionary)
-        result += `morphTargetDictionary={$gltf.${node}.morphTargetDictionary} `
+        result += `morphTargetDictionary={gltf.${node}.morphTargetDictionary} `
       if (obj.morphTargetInfluences)
-        result += `morphTargetInfluences={$gltf.${node}.morphTargetInfluences} `
+        result += `morphTargetInfluences={gltf.${node}.morphTargetInfluences} `
       if (obj.intensity && rNbr(obj.intensity)) result += `intensity={${rNbr(obj.intensity)}} `
       //if (obj.power && obj.power !== 4 * Math.PI) result += `power={${rNbr(obj.power)}} `
       if (obj.angle && obj.angle !== Math.PI / 3) result += `angle={${rDeg(obj.angle)}} `
@@ -183,7 +183,11 @@ function parse(fileName, gltf, options = {}) {
       result += `position={[${rNbr(obj.position.x)}, ${rNbr(obj.position.y)}, ${rNbr(
         obj.position.z
       )},]} `
-    if (obj.rotation && obj.rotation.isEuler && rNbr(obj.rotation.toVector3().length()))
+    if (
+      obj.rotation &&
+      obj.rotation.isEuler &&
+      rNbr(new THREE.Vector3(...obj.rotation.toArray()).length())
+    )
       result += `rotation={[${rDeg(obj.rotation.x)}, ${rDeg(obj.rotation.y)}, ${rDeg(
         obj.rotation.z
       )},]} `
@@ -374,7 +378,7 @@ function parse(fileName, gltf, options = {}) {
 
     // Bail out on lights and bones
     if (type === 'bone') {
-      return `<Three type={$gltf.${node}} />\n`
+      return `<T is={gltf.${node}} />\n`
     }
 
     // Collect children
@@ -467,6 +471,31 @@ function parse(fileName, gltf, options = {}) {
         }
       : undefined
 
+  const imports = `
+	${options.types ? `\nimport type * as THREE from 'three'` : ''}
+        import { Group } from 'three'
+        import { ${[
+          'T',
+          options.types && !options.isolated ? 'type Props, type Events, type Slots' : '',
+          !options.isolated && 'forwardEventHandlers'
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/core'
+        import { ${[
+          'useGltf',
+          hasAnimations ? 'useGltfAnimations' : '',
+          options.suspense ? 'useSuspense' : ''
+        ]
+          .filter(Boolean)
+          .join(', ')} } from '@threlte/extras'
+	`
+
+  const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
+    options.types ? '<GLTFResult>' : ''
+  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+    options.suspense ? ')' : ''
+  }`
+
   // Output
   return `
     <!--
@@ -477,29 +506,48 @@ ${
 }
 ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 
+${
+  options.preload
+    ? `
+
+<script context="module"${options.types ? ' lang="ts"' : ''}>
+	${imports}
+
+	${options.types ? printThrelteTypes(objects, animations) : ''}
+
+	const load = () => {
+		${options.suspense ? 'const suspend = useSuspense()' : ''}
+		return ${useGltf}
+	}
+
+	export const preload = async () => {
+		await load()
+	}
+</script>
+`
+    : ''
+}
+
+
     <script${options.types ? ' lang="ts"' : ''}>
 
+				${!options.preload ? imports : ''}
 
-        ${options.types ? `\nimport type * as THREE from 'three'` : ''}
-        import { Group } from 'three'
-        import { ${['T', 'Three', options.types ? 'type Props, type Events, type Slots' : ''].join(
-          ', '
-        )} } from '@threlte/core'
-        import { ${['useGltf', hasAnimations ? 'useGltfAnimations' : ''].join(
-          ', '
-        )} } from '@threlte/extras'
-
-        ${options.types ? 'type $$Props = Props<THREE.Group>' : ''}
-        ${options.types ? 'type $$Events = Events<THREE.Group>' : ''}
-        ${options.types ? 'type $$Slots = Slots<THREE.Group>' : ''}
+        ${options.types && !options.isolated ? 'type $$Props = Props<THREE.Group>' : ''}
+        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
+        ${
+          options.types && !options.isolated
+            ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
+            : ''
+        }
 
         export const ref = new Group()
 
-        ${options.types ? printThrelteTypes(objects, animations) : ''}
+				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
-        const { gltf } = useGltf${options.types ? '<GLTFResult>' : ''}('${url}'${
-    useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''
-  })
+        ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
+
+        ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
     ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
@@ -508,16 +556,21 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
         : ''
     }
 
+			${!options.isolated ? 'const component = forwardEventHandlers()' : ''}
     </script>
 
-    {#if $gltf}
-            <Three type={ref} {...$$restProps}>
-        ${scene}
+		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
+			{#await gltf}
+				<slot name="fallback" />
+			{:then gltf}
+				${scene}
+			{:catch error}
+				<slot name="error" {error} />
+			{/await}
 
-        <slot {ref} />
-            </Three>
-            {/if}
-        `
+			<slot {ref} />
+		</T>
+	`
 }
 
 export default parse

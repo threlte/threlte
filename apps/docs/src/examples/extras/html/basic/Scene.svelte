@@ -1,23 +1,14 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
+  import { T } from '@threlte/core'
+  import { HTML, OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-
-  import { Color, GridHelper, MeshStandardMaterial, SphereBufferGeometry } from 'three'
+  import { Color, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
-  import {
-    AmbientLight,
-    DirectionalLight,
-    Mesh,
-    OrbitControls,
-    PerspectiveCamera,
-    useThrelte
-  } from '@threlte/core'
-  import { HTML } from '@threlte/extras'
 
   const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
 
   let material = new MeshStandardMaterial({
-    color: new Color(getRandomColor()).convertSRGBToLinear()
+    color: new Color(getRandomColor())
   })
 
   const onClick = () => {
@@ -27,36 +18,43 @@
   let isHovering = false
   let isPointerDown = false
 
-  const { scene } = useThrelte()
-  const gridHelper = new GridHelper()
-  scene.add(gridHelper)
-  onDestroy(() => {
-    scene.remove(gridHelper)
-  })
-
   let htmlPosZ = spring(0)
   $: htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
     hard: isPointerDown
   })
 </script>
 
-<PerspectiveCamera position={{ z: 10, y: 5, x: 10 }} fov={30}>
+<T.PerspectiveCamera
+  position={[10, 5, 10]}
+  makeDefault
+  fov={30}
+>
   <OrbitControls
-    target={{ y: 0.75 }}
+    target.y={0.75}
     maxPolarAngle={85 * DEG2RAD}
     minPolarAngle={20 * DEG2RAD}
     maxAzimuthAngle={45 * DEG2RAD}
     minAzimuthAngle={-45 * DEG2RAD}
     enableZoom={false}
   />
-</PerspectiveCamera>
+</T.PerspectiveCamera>
 
-<DirectionalLight position={{ y: 10, z: 10 }} />
+<T.DirectionalLight position={[0, 10, 10]} />
 
-<AmbientLight intensity={0.3} />
+<T.AmbientLight intensity={0.3} />
 
-<Mesh position={{ y: 0.5 }} geometry={new SphereBufferGeometry(0.5)} {material}>
-  <HTML position={{ y: 1.25, z: $htmlPosZ }} transform>
+<T.GridHelper />
+
+<T.Mesh
+  position.y={0.5}
+  {material}
+>
+  <T.SphereGeometry args={[0.5]} />
+  <HTML
+    position.y={1.25}
+    position.z={$htmlPosZ}
+    transform
+  >
     <button
       on:pointerenter={() => (isHovering = true)}
       on:pointerleave={() => {
@@ -70,13 +68,17 @@
         isHovering = false
       }}
       on:click={onClick}
-      class="bg-brand rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
+      class="bg-orange-500 rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
     >
       I'm a regular HTML button
     </button>
   </HTML>
 
-  <HTML position={{ x: 0.75 }} transform pointerEvents="none">
+  <HTML
+    position.x={0.75}
+    transform
+    pointerEvents="none"
+  >
     <p
       class="text-xs w-auto translate-x-1/2 drop-shadow-lg"
       style="color: #{material.color.getHexString()}"
@@ -84,4 +86,4 @@
       color: #{material.color.getHexString()}
     </p>
   </HTML>
-</Mesh>
+</T.Mesh>

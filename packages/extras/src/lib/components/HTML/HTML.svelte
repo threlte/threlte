@@ -1,15 +1,20 @@
 <script lang="ts">
-  import { Group, useFrame, useThrelte, useThrelteRoot } from '@threlte/core'
-  import { createEventDispatcher } from 'svelte'
+  import {
+    createRawEventDispatcher,
+    forwardEventHandlers,
+    T,
+    useFrame,
+    useThrelte
+  } from '@threlte/core'
   import { derived, writable, type Writable } from 'svelte/store'
   import {
-    Group as ThreeGroup,
+    Group,
     Object3D as ThreeeObject3D,
     OrthographicCamera,
-    PerspectiveCamera
+    PerspectiveCamera,
+    Raycaster
   } from 'three'
   import { useHasEventListeners } from '../../hooks/useHasEventListeners'
-  import type { HTMLProperties } from '../../types/components'
   import {
     compileStyles,
     defaultCalculatePosition,
@@ -23,33 +28,32 @@
     updateStyles
   } from './utils'
 
+  import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
+
+  type $$Props = HTMLProps
+  type $$PropsWithDefaults = Required<$$Props>
+  type $$Events = HTMLEvents
+  type $$Slots = HTMLSlots
+
   // Group Properties
-  export let position: HTMLProperties['position'] = undefined
-  export let scale: HTMLProperties['scale'] = undefined
-  export let rotation: HTMLProperties['rotation'] = undefined
-  export let lookAt: HTMLProperties['lookAt'] = undefined
-  export let viewportAware: HTMLProperties['viewportAware'] = false
-  export let inViewport: HTMLProperties['inViewport'] = false
-  export let dispose: HTMLProperties['dispose'] = false
+  export let transform: $$PropsWithDefaults['transform'] = false
+  export let calculatePosition: $$PropsWithDefaults['calculatePosition'] = defaultCalculatePosition
+  export let eps: $$PropsWithDefaults['eps'] = 0.001
+  export let occlude: $$PropsWithDefaults['occlude'] = false
+  export let zIndexRange: $$PropsWithDefaults['zIndexRange'] = [16777271, 0]
+  export let sprite: $$PropsWithDefaults['sprite'] = false
+  export let pointerEvents: $$PropsWithDefaults['pointerEvents'] = 'auto'
+  export let center: $$PropsWithDefaults['center'] = false
+  export let fullscreen: $$PropsWithDefaults['fullscreen'] = false
+  export let distanceFactor: $$Props['distanceFactor'] | undefined = undefined
+  export let as: $$PropsWithDefaults['as'] = 'div'
+  export let portal: $$Props['portal'] | undefined = undefined
 
-  export let transform: HTMLProperties['transform'] = false
-  export let calculatePosition: HTMLProperties['calculatePosition'] = defaultCalculatePosition
-  export let eps: HTMLProperties['eps'] = 0.001
-  export let occlude: HTMLProperties['occlude'] = false
-  export let zIndexRange: HTMLProperties['zIndexRange'] = [16777271, 0]
-  export let sprite: HTMLProperties['sprite'] = false
-  export let pointerEvents: HTMLProperties['pointerEvents'] = 'auto'
-  export let center: HTMLProperties['center'] = false
-  export let fullscreen: HTMLProperties['fullscreen'] = false
-  export let distanceFactor: HTMLProperties['distanceFactor'] = undefined
-  export let as: HTMLProperties['as'] = 'div'
-  export let portal: HTMLProperties['portal'] = undefined
-
-  const dispatch = createEventDispatcher<{
+  const dispatch = createRawEventDispatcher<{
     visibilitychange: boolean
   }>()
 
-  let group: ThreeGroup | undefined
+  export let ref = new Group()
 
   const { renderer, camera, scene, size } = useThrelte()
 
@@ -59,7 +63,7 @@
     return $camera
   }
 
-  const { raycaster } = useThrelteRoot()
+  const raycaster = new Raycaster()
 
   let oldPosition = [0, 0]
   let oldZoom = 0
@@ -178,9 +182,8 @@
    * Check ancestor visibility
    */
   const getAncestorVisibility = (): boolean => {
-    if (!group) return true
     let ancestorsAreVisible = true
-    let parent: ThreeeObject3D | null = group.parent
+    let parent: ThreeeObject3D | null = ref.parent
     traverse: while (parent) {
       if ('visible' in parent && !parent.visible) {
         ancestorsAreVisible = false
@@ -195,16 +198,14 @@
 
   useFrame(
     async () => {
-      if (!group) return
-
       showEl = getAncestorVisibility()
 
       const camera = getCamera()
 
       camera.updateMatrixWorld()
-      group.updateWorldMatrix(true, false)
+      ref.updateWorldMatrix(true, false)
 
-      const vec = transform ? oldPosition : calculatePosition(group, camera, $size)
+      const vec = transform ? oldPosition : calculatePosition(ref, camera, $size)
 
       if (
         transform ||
@@ -212,11 +213,11 @@
         Math.abs(oldPosition[0] - vec[0]) > eps ||
         Math.abs(oldPosition[1] - vec[1]) > eps
       ) {
-        const isBehindCamera = isObjectBehindCamera(group, camera)
+        const isBehindCamera = isObjectBehindCamera(ref, camera)
 
         const previouslyVisible = visible
         if (raytraceTarget) {
-          const isvisible = isObjectVisible(group, camera, raycaster, raytraceTarget)
+          const isvisible = isObjectVisible(ref, camera, raycaster, raytraceTarget)
           visible = isvisible && !isBehindCamera
         } else {
           visible = !isBehindCamera
@@ -232,19 +233,19 @@
         }
 
         updateStyles(styles.common.el, {
-          zIndex: `${objectZIndex(group, camera, zIndexRange)}`
+          zIndex: `${objectZIndex(ref, camera, zIndexRange)}`
         })
         if (transform) {
           const fov = camera.projectionMatrix.elements[5] * $heightHalf
           const { isOrthographicCamera, top, left, bottom, right } = camera as OrthographicCamera
 
-          let matrix = group.matrixWorld
+          let matrix = ref.matrixWorld
           if (sprite) {
             matrix = camera.matrixWorldInverse
               .clone()
               .transpose()
               .copyPosition(matrix)
-              .scale(group.scale)
+              .scale(ref.scale)
             matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0
             matrix.elements[15] = 1
           }
@@ -267,8 +268,7 @@
             })
           }
         } else {
-          const scale =
-            distanceFactor === undefined ? 1 : objectScale(group, camera) * distanceFactor
+          const scale = distanceFactor === undefined ? 1 : objectScale(ref, camera) * distanceFactor
           updateStyles(styles.noTransform.el, {
             transform: `translate3d(${vec[0]}px, ${vec[1]}px, 0) scale(${scale})`
           })
@@ -283,9 +283,9 @@
   )
 
   const buildDefaultNonTransformStyles = (_: HTMLElement) => {
-    if (!group || transform) return
+    if (!ref || transform) return
     scene.updateMatrixWorld()
-    const vec = calculatePosition(group, $camera, $size)
+    const vec = calculatePosition(ref, $camera, $size)
     updateStyles(styles.noTransform.el, {
       position: 'absolute',
       top: '0',
@@ -313,22 +313,13 @@
       }
     }
   }
+
+  const component = forwardEventHandlers()
 </script>
 
-<Group
-  {position}
-  {scale}
-  {rotation}
-  {lookAt}
-  {viewportAware}
-  {dispose}
-  bind:group
-  bind:inViewport
-  on:viewportenter
-  on:viewportleave
->
-  <slot name="threlte" />
-</Group>
+<T is={ref} {...$$restProps} let:ref bind:this={$component}>
+  <slot name="threlte" {ref} />
+</T>
 
 {#if transform}
   <svelte:element

@@ -5,7 +5,8 @@
 	import { useTweakpane } from '../../utils/useTweakpane'
 
 	const { pane, action, addInput } = useTweakpane({
-		title: 'Environment'
+		title: 'Environment',
+		expanded: false
 	})
 
 	const coreFolder = pane.addFolder({
@@ -92,7 +93,9 @@
 		{path}
 		{files}
 		isBackground={$isBackground}
-		groundProjection={$ground ? { radius: $radius, height: $height, scale: $scale } : undefined}
+		groundProjection={$ground
+			? { radius: $radius, height: $height, scale: [$scale.x, $scale.y, $scale.z] }
+			: undefined}
 	/>
 	<Scene />
 </Canvas>

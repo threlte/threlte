@@ -15,7 +15,11 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["build/**"]
+      "outputs": ["build/**"],
+      "cache": false
+    },
+    "build:docs": {
+      "cache": false
     },
     "preview": {
       "cache": false

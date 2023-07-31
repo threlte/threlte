@@ -1,5 +1,35 @@
 # @threlte/extras
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
+## 1.0.0-next.3
+
+### Patch Changes
+
+- 3868395: Updated prettier
+
+## 1.0.0-next.2
+
+### Patch Changes
+
+- eb0dc69f: Removed the component TransformableObject, removed stale types from rapier package
+
+## 1.0.0-next.1
+
+### Major Changes
+
+- 4b67b473: Removed transform properties on rapier components Collider, AutoColliders and RigidBody
+
+## 1.0.0-next.0
+
+### Major Changes
+
+- d41cb6cf: Adapted rapier package to Threlte v6 syntax
+
 ## 0.5.0
 
 ### Minor Changes

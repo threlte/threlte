@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { useTweakpane } from '../../utils/useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
-	import { Debug, World } from '@threlte/rapier'
+	import { World } from '@threlte/rapier'
+	import { useTweakpane } from '../../utils/useTweakpane'
 	import Scene from './Scene.svelte'
 
 	const { pane, action } = useTweakpane()

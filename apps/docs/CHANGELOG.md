@@ -1,49 +1,28 @@
-# @threlte/docs
+# @threlte/docs-next
 
-## 0.1.1
-
-### Patch Changes
-
-- e91ce33: Environment - GroundProjection reactivity bugfix & docs update
-
-## 0.1.0
-
-### Minor Changes
-
-- d69391a: Add Attractor component and documentation
-
-## 0.0.7
+## 0.0.2-next.3
 
 ### Patch Changes
 
-- 4a94f6c: Added `useDraco` to GLTF component, and deprecated `dracoDecoderPath`
+- 8734041: Add RoundedBoxGeometry component
 
-## 0.0.6
-
-### Patch Changes
-
-- e3c5d60: Add links to related external docs
-
-## 0.0.5
+## 0.0.2-next.2
 
 ### Patch Changes
 
-- ff9dc16: Add click event to interactivity example
+- 1a2ad70: fixed up terrain physics example + explanation
+- 079f53f: add example titles to doc page content as subtitle
 
-## 0.0.4
-
-### Patch Changes
-
-- trying to delete
-
-## 0.0.3
+## 0.0.2-next.1
 
 ### Patch Changes
 
-- a2a6d93: test
+- 818c8cf: add outline example to docs
+- a0d72b5: remove debugger statements
+- 093a06b: maintain left sidebar scroll position on page change
 
-## 0.0.2
+## 0.0.2-next.0
 
 ### Patch Changes
 
-- bb1fd30: excluded troika-three-text from externalization
+- e28b8ada: Move audio context and components to extras

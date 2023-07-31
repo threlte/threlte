@@ -1,9 +1,9 @@
 {
   "name": "@threlte/gltf",
-  "version": "0.0.5",
+  "version": "1.0.0-next.13",
   "description": "GLTF to Threlte converter",
   "scripts": {
-    "cleanup": "rm -rf node_modules"
+    "cleanup": "rimraf node_modules"
   },
   "type": "module",
   "keywords": [
@@ -33,11 +33,11 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@gltf-transform/core": "3.0.0-alpha.4",
-    "@gltf-transform/extensions": "3.0.0-alpha.4",
-    "@gltf-transform/functions": "3.0.0-alpha.4",
+    "@gltf-transform/core": "^3.2.1",
+    "@gltf-transform/extensions": "^3.2.1",
+    "@gltf-transform/functions": "^3.2.1",
     "@node-loader/babel": "^2.0.1",
-    "draco3dgltf": "^1.5.5",
+    "draco3dgltf": "^1.5.6",
     "jsdom": "^20.0.3",
     "jsdom-global": "^3.0.2",
     "meow": "^11.0.0",
@@ -46,7 +46,8 @@
     "prettier-plugin-svelte": "^2.9.0",
     "sharp": "^0.31.3",
     "svelte": "^3.55.1",
-    "three": "0.122.0"
+    "three": "0.122.0",
+    "three-stdlib": "^2.21.8"
   },
   "devDependencies": {
     "chalk": "^4.1.1",
@@ -54,7 +55,8 @@
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "read-pkg-up": "^9.1.0"
+    "read-pkg-up": "^9.1.0",
+    "rimraf": "^5.0.1"
   },
   "husky": {
     "hooks": {

@@ -1,0 +1,22 @@
+@tailwind utilities;
+
+@layer utilities {
+  .text-faded {
+    @apply text-white/60;
+  }
+
+  .text-highlight {
+    @apply font-bold text-white;
+  }
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

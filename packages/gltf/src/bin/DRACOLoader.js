@@ -9,7 +9,12 @@ const DRACOLoader = (THREE.DRACOLoader = function (t) {
     (this.verbosity = 0),
     (this.attributeOptions = {}),
     (this.drawMode = THREE.TrianglesDrawMode),
-    (this.nativeAttributeMap = { position: 'POSITION', normal: 'NORMAL', color: 'COLOR', uv: 'TEX_COORD' })
+    (this.nativeAttributeMap = {
+      position: 'POSITION',
+      normal: 'NORMAL',
+      color: 'COLOR',
+      uv: 'TEX_COORD'
+    })
 })
 
 export default DRACOLoader
@@ -123,7 +128,8 @@ THREE.DRACOLoader.prototype = {
   convertDracoGeometryTo3JS: function (t, e, r, o, i, n) {
     var a, s, u
     if (
-      (!0 === this.getAttributeOptions('position').skipDequantization && e.SkipAttributeTransform(t.POSITION),
+      (!0 === this.getAttributeOptions('position').skipDequantization &&
+        e.SkipAttributeTransform(t.POSITION),
       r === t.TRIANGULAR_MESH
         ? ((a = new t.Mesh()), (s = e.DecodeBufferToMesh(o, a)))
         : ((a = new t.PointCloud()), (s = e.DecodeBufferToPointCloud(o, a))),
@@ -135,7 +141,8 @@ THREE.DRACOLoader.prototype = {
     }
     t.destroy(o),
       r == t.TRIANGULAR_MESH
-        ? ((u = a.num_faces()), this.verbosity > 0 && console.log('Number of faces loaded: ' + u.toString()))
+        ? ((u = a.num_faces()),
+          this.verbosity > 0 && console.log('Number of faces loaded: ' + u.toString()))
         : (u = 0)
     var A = a.num_points(),
       c = a.num_attributes()
@@ -180,14 +187,18 @@ THREE.DRACOLoader.prototype = {
         for (I = 0; I < u; ++I) {
           e.GetFaceFromMesh(a, I, D)
           var m = 3 * I
-          ;(f.indices[m] = D.GetValue(0)), (f.indices[m + 1] = D.GetValue(1)), (f.indices[m + 2] = D.GetValue(2))
+          ;(f.indices[m] = D.GetValue(0)),
+            (f.indices[m + 1] = D.GetValue(1)),
+            (f.indices[m + 2] = D.GetValue(2))
         }
         t.destroy(D)
       }
     ;(y.drawMode = this.drawMode),
       r == t.TRIANGULAR_MESH &&
         y.setIndex(
-          new (f.indices.length > 65535 ? THREE.Uint32BufferAttribute : THREE.Uint16BufferAttribute)(f.indices, 1)
+          new (f.indices.length > 65535
+            ? THREE.Uint32BufferAttribute
+            : THREE.Uint16BufferAttribute)(f.indices, 1)
         )
     var G = new t.AttributeQuantizationTransform()
     if (G.InitFromAttribute(b)) {
@@ -203,6 +214,9 @@ THREE.DRACOLoader.prototype = {
     e(decoder.isVersionSupported(t))
   },
   getAttributeOptions: function (t) {
-    return void 0 === this.attributeOptions[t] && (this.attributeOptions[t] = {}), this.attributeOptions[t]
-  },
+    return (
+      void 0 === this.attributeOptions[t] && (this.attributeOptions[t] = {}),
+      this.attributeOptions[t]
+    )
+  }
 }

@@ -1,0 +1,38 @@
+---
+{
+  order: 9,
+  'category': '@threlte/extras',
+  'name': '<OrbitControls>',
+  'type': 'component',
+  'componentSignature':
+    {
+      extends:
+        { type: 'OrbitControls', url: 'https://threejs.org/docs/#examples/controls/OrbitControls' }
+    }
+}
+---
+
+`<OrbitControls>` allow the camera to orbit around a target.
+
+The component `<OrbitControls>` must be a direct child of a camera component and will mount itself to that camera.
+If the properties `autoRotate` or `enableDamping` are set to true, the frame loop will run continously.
+
+## Usage
+
+```svelte
+<script>
+  import { OrbitControls } from '@threlte/extras'
+  import { T } from '@threlte/core'
+</script>`
+
+<T.PerspectiveCamera
+  makeDefault
+  fov={50}
+>
+  <OrbitControls enableDamping />
+</T.PerspectiveCamera>
+```
+
+`<OrbitControls>` is a light wrapper that will use its parent as the target camera and the DOM element
+the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop
+and will run the frame loop continuously if the `autoRotate` or `enableDamping` properties are set to `true`.

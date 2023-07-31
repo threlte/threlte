@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 
 /**
@@ -6,11 +5,6 @@ import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
  */
 const config = {
   plugins: [{ ...threeMinifier(), enforce: 'pre' }],
-  resolve: {
-    alias: {
-      threlte: resolve('./src/lib')
-    }
-  },
   ssr: {
     noExternal: ['three']
   }
