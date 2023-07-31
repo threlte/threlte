@@ -1,5 +1,17 @@
 # @threlte/core
 
+## 6.0.0-next.12
+
+### Major Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`a764739`](https://github.com/threlte/threlte/commit/a764739674a9d97c9f43fe40cee2f0893116b5ac) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Removed type export "InstanceProps"
+
+### Patch Changes
+
+- [#454](https://github.com/threlte/threlte/pull/454) [`e58cb58`](https://github.com/threlte/threlte/commit/e58cb5842e9a77240376c30827f046ad75afa17f) Thanks [@michealparks](https://github.com/michealparks)! - Use three.js REVISION export for breaking api changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
 ## 6.0.0-next.11
 
 ### Patch Changes
