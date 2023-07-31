@@ -14,6 +14,7 @@ import { c } from '../lib/classes'
 import Book from './Book.astro'
 import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
+import Footer from '../components/Footer/Footer.astro'
 
 export interface Props {
   title?: string
@@ -36,7 +37,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 
 <AppLayout title={title}>
   <header
-    class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0D1421] px-6 md:flex"
+    class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
   >
     <div class="justify flex items-center justify-start gap-6 lg:gap-12">
       <a
@@ -138,12 +139,10 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
   </header>
 
   <MobileDocsNav
-    client:load
     client:media="(max-width: 768px)"
     sidebarMenu={sidebarMenu}
     activeSidebarTab={activeSidebarTab}
     activeUrlPathName={activeUrlPathName}
-    search
   >
     <Image
       slot="logo"
@@ -184,4 +183,6 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
       <RightSidebar entry={Astro.props.entry} />
     </aside>
   </main>
+
+  <Footer class="w-full px-6 mx-auto py-12 border-t border-white/20" />
 </AppLayout>

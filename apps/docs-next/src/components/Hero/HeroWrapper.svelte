@@ -56,12 +56,12 @@
   on:mousemove={onMouseMove}
 />
 
-<div class="relative z-20 h-[500vh]">
+<div class="pointer-events-none relative z-20 h-[500vh]">
   <Theatre
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="pointer-events-none fixed top-0 left-0 z-10 h-[100lvh] w-screen">
+    <div class="fixed top-0 left-0 z-10 h-[100lvh] w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         rendererParameters={{
@@ -75,18 +75,25 @@
       </Canvas>
     </div>
 
-    <Sheet name="Intro">
-      <Intro />
-    </Sheet>
+    <div class="pointer-events-auto contents">
+      <Sheet name="Intro">
+        <Intro />
+      </Sheet>
+    </div>
 
-    <Trigger in={0.5}>
+    <Trigger
+      in={0.5}
+      out={2.7}
+    >
       <svelte:fragment>
         {@const start = 0.6}
         {@const stagger = 0.4}
         {@const duration = 0.6}
         {@const outStart = 2.2}
         {@const outEnd = 2.7}
-        <div class="fixed bottom-0 left-0 hidden w-screen justify-center p-12 md:flex">
+        <div
+          class="pointer-events-auto fixed bottom-0 left-0 hidden w-screen justify-center p-12 md:flex"
+        >
           <div class="grid max-w-[1200px] grid-cols-3 gap-12">
             <div class="col-span-1">
               <Reveal
@@ -152,7 +159,10 @@
       </svelte:fragment>
     </Trigger>
 
-    <Trigger in={2.7}>
+    <Trigger
+      in={2.7}
+      out={3.9}
+    >
       <div
         class="fixed top-[66svh] top-[66vh] left-0 flex w-screen flex-col items-center justify-center"
       >

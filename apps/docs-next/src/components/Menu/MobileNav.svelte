@@ -16,7 +16,7 @@
 <div class="fixed top-0 left-0 z-50 flex max-h-screen w-full flex-col md:hidden">
   <header
     class={c(
-      'flex h-[70px] w-full flex-shrink-0 flex-row items-center justify-between border-b bg-[#0D1421] px-6 py-2',
+      'flex h-[70px] w-full flex-shrink-0 flex-row items-center justify-between border-b bg-[#0A0F19] px-6 py-2',
       $mounted ? 'border-b-transparent' : 'border-b-orange/25'
     )}
   >

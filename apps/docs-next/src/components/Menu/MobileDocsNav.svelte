@@ -10,7 +10,6 @@
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
-  export let search = false
 </script>
 
 <MobileNav search>
