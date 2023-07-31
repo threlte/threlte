@@ -14,7 +14,7 @@
   onMount(async () => {
     const { markprompt } = await import('@markprompt/web')
 
-    markprompt('sk_test_MWgsGFl6V2FdFnBBIVAMXhC1BVwl3u5T', container, {
+    markprompt('q5trazVG0x8ktiY63vB3imwnZJ9bHbyN', container, {
       display: 'plain',
       close: {
         visible: false
@@ -28,7 +28,7 @@
           indexName: 'threlte'
         }
       },
-      showBranding: false,
+      showBranding: true,
       references: {
         heading: 'Visit sources this answer was generated from:',
         getHref: (ref) => {
