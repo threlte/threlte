@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.0.1/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "threlte/threlte" }],
+  "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
   "linked": [],
