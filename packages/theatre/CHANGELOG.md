@@ -1,5 +1,78 @@
 # @threlte/extras
 
+## 1.0.0
+
+### Major Changes
+
+- a764739: Renamed slotted components of <SheetObject> to <Sync>, <Declare> and <Transform>, added change event on <SheetObject>
+- 3756ba2: Removed <Editable> component
+
+### Minor Changes
+
+- 3f0ce85: Added Sequence component and SequenceController store
+- 4b67b473: The hook useStudio exposes Theatre.js' studio instance.
+- df6ca2d: Added snap settings to <Transform>
+
+### Patch Changes
+
+- d4612fc: unsubscribe in createSheetObjectAction
+- 3868395: Updated prettier
+- d41cb6cf: Adapted theatre package to new TransformControls syntax
+- 1ef92b9: fixed frame invalidation after values changed
+- 5238844: Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+- Updated dependencies [f0065c38]
+- Updated dependencies [f9f8e61]
+- Updated dependencies [33c37682]
+- Updated dependencies [300cbe4e]
+- Updated dependencies [9526d5d]
+- Updated dependencies [4b67b473]
+- Updated dependencies [bd4a4b76]
+- Updated dependencies [151cdc08]
+- Updated dependencies [dd686a7]
+- Updated dependencies [e58cb58]
+- Updated dependencies [3868395]
+- Updated dependencies [5df4ca0]
+- Updated dependencies [1f4e3e0]
+- Updated dependencies [fef242de]
+- Updated dependencies [fcfcc0e4]
+- Updated dependencies [1505665]
+- Updated dependencies [eb0dc69f]
+- Updated dependencies [ae514436]
+- Updated dependencies [0620502]
+- Updated dependencies [b14aa99]
+- Updated dependencies [2720cd4]
+- Updated dependencies [e28b8ada]
+- Updated dependencies [fef242de]
+- Updated dependencies [a27edc5f]
+- Updated dependencies [8ed809b2]
+- Updated dependencies [8734041]
+- Updated dependencies [d649e237]
+- Updated dependencies [9291b0c]
+- Updated dependencies [45821797]
+- Updated dependencies [71f5efa]
+- Updated dependencies [feab5e8]
+- Updated dependencies [848af1ae]
+- Updated dependencies [5238844]
+- Updated dependencies [4b67b473]
+- Updated dependencies [d9647fdc]
+- Updated dependencies [aac59eb1]
+- Updated dependencies [4bcf0ee]
+- Updated dependencies [3a9a26c]
+- Updated dependencies [a764739]
+- Updated dependencies [23049766]
+- Updated dependencies [15309755]
+- Updated dependencies [b71145ea]
+- Updated dependencies [2943cb3]
+- Updated dependencies [4b67b473]
+- Updated dependencies [b845685]
+- Updated dependencies [d9fdbd7]
+- Updated dependencies [4b383b0a]
+- Updated dependencies [5ba62e2]
+- Updated dependencies [a39ccd68]
+- Updated dependencies [df4b307b]
+  - @threlte/core@6.0.0
+  - @threlte/extras@5.0.0
+
 ## 1.0.0-next.3
 
 ### Major Changes

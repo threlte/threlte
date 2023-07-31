@@ -1,5 +1,18 @@
 # @threlte/extras
 
+## 1.0.0
+
+### Major Changes
+
+- 4b67b473: Removed transform properties on rapier components Collider, AutoColliders and RigidBody
+- d41cb6cf: Adapted rapier package to Threlte v6 syntax
+
+### Patch Changes
+
+- 3868395: Updated prettier
+- eb0dc69f: Removed the component TransformableObject, removed stale types from rapier package
+- 5238844: Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
 ## 1.0.0-next.4
 
 ### Patch Changes
