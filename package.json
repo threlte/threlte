@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:docs": "turbo run build --filter='@threlte/docs'",
     "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
