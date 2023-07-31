@@ -280,22 +280,22 @@ const create = async () => {
 
   if (options.threltePackages.includes('@threlte/extras')) {
     print(bold('✔ @threlte/extras'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/extras/getting-started\n'))
+    print(cyan('  https://threlte.xyz/docs/reference/extras/getting-started\n'))
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
     print(bold('✔ @threlte/rapier'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/rapier/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/rapier/getting-started'))
     print(cyan('  https://rapier.rs/\n'))
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
     print(bold('✔ @threlte/theatre'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/theatre/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
     print(cyan(`  ${pkgManager} run model-pipeline:run`))
-    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started\n'))
+    print(cyan('  https://threlte.xyz/docs/reference/gltf/getting-started\n'))
   }
   if (options.git) {
     print(bold('✔ Git'))

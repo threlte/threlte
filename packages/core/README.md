@@ -8,12 +8,12 @@
  <a href="https://discord.com/channels/985983540804091964">
   <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
  </a>
- <a href="https://next.threlte.xyz">
+ <a href="https://threlte.xyz">
   <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
  </a>
 </div>
 
-<a href="https://next.threlte.xyz">
+<a href="https://threlte.xyz">
  <img src="./threlte-banner.jpg"/>
 </a>
 
@@ -23,11 +23,11 @@ Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D a
 
 Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
 
-Check out our **[documentation](https://next.threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
+Check out our **[documentation](https://threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
 
 ## @threlte/core
 
-[@threlte/core](https://next.threlte.xyz/docs/reference/core/getting-started) provides declarative and transparent Svelte binding to [Three.js](https://threejs.org/).
+[@threlte/core](https://threlte.xyz/docs/reference/core/getting-started) provides declarative and transparent Svelte binding to [Three.js](https://threejs.org/).
 
 This package is the heart of the Threlte library. It's an excellent starting point for those learning Threlte for the first time.
 
@@ -41,11 +41,11 @@ For a quick interactive setup of a fresh Threlte project, run:
 npm create threlte my-project
 ```
 
-Alternatively you can check out the full [installation instructions](https://next.threlte.xyz/docs/learn/getting-started/installation).
+Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Tutorial
 
-To get a hang of the basics, we recommend following our [introductory tutorial](https://next.threlte.xyz/docs/learn/getting-started/your-first-scene).
+To get a hang of the basics, we recommend following our [introductory tutorial](https://threlte.xyz/docs/learn/getting-started/your-first-scene).
 
 ### Support
 
@@ -53,15 +53,15 @@ Have questions? Feel free to ask in our [Discord support forum](https://discord.
 
 ## Features
 
- - [Clean API](https://next.threlte.xyz/docs/reference/core/t) transparently exposing *all* Three.js objects through declarative API.
+ - [Clean API](https://threlte.xyz/docs/reference/core/t) transparently exposing *all* Three.js objects through declarative API.
 
- - [Hooks](https://next.threlte.xyz/docs/learn/basics/hooks) providing easy access to low-level contexts like animation frames and the rendering engine.
+ - [Hooks](https://threlte.xyz/docs/learn/basics/hooks) providing easy access to low-level contexts like animation frames and the rendering engine.
 
- - [Plugins](https://next.threlte.xyz/docs/learn/advanced/plugins) making it easy to extend Threlte with custom code and logic.
+ - [Plugins](https://threlte.xyz/docs/learn/advanced/plugins) making it easy to extend Threlte with custom code and logic.
 
- - [Events](https://next.threlte.xyz/docs/learn/basics/events) enabling robust and Svelte-native access to state transformations in your scenes.
+ - [Events](https://threlte.xyz/docs/learn/basics/events) enabling robust and Svelte-native access to state transformations in your scenes.
 
- - [Interactivity](https://next.threlte.xyz/docs/reference/extras/interactivity) makes it easy to react to user inputs on 3D objects.
+ - [Interactivity](https://threlte.xyz/docs/reference/extras/interactivity) makes it easy to react to user inputs on 3D objects.
 
 ## Contributing
 
