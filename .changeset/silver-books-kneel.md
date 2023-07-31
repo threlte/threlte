@@ -1,5 +1,5 @@
 ---
-'@threlte/docs-next': patch
+'@threlte/docs': patch
 ---
 
 maintain left sidebar scroll position on page change

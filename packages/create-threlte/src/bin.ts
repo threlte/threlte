@@ -161,7 +161,7 @@ const create = async () => {
   const threltePackageJson = {
     devDependencies: {
       three: '^0.153.0',
-      '@threlte/core': 'next'
+      '@threlte/core': 'latest'
     },
     scripts: {}
   }
@@ -170,19 +170,19 @@ const create = async () => {
     threltePackageJson.devDependencies['@types/three'] = '^0.152.1'
   }
   if (options.threltePackages.includes('@threlte/extras')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'next'
+    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
-    threltePackageJson.devDependencies['@threlte/rapier'] = 'next'
+    threltePackageJson.devDependencies['@threlte/rapier'] = 'latest'
     threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = '^0.11.2'
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
-    threltePackageJson.devDependencies['@threlte/theatre'] = 'next'
+    threltePackageJson.devDependencies['@threlte/theatre'] = 'latest'
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
   }
   if (options.threltePackages.includes('model-pipeline')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'next'
+    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
     threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
   }
 
@@ -280,22 +280,22 @@ const create = async () => {
 
   if (options.threltePackages.includes('@threlte/extras')) {
     print(bold('✔ @threlte/extras'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/extras/getting-started\n'))
+    print(cyan('  https://threlte.xyz/docs/reference/extras/getting-started\n'))
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
     print(bold('✔ @threlte/rapier'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/rapier/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/rapier/getting-started'))
     print(cyan('  https://rapier.rs/\n'))
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
     print(bold('✔ @threlte/theatre'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/theatre/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
     print(cyan(`  ${pkgManager} run model-pipeline:run`))
-    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started\n'))
+    print(cyan('  https://threlte.xyz/docs/reference/gltf/getting-started\n'))
   }
   if (options.git) {
     print(bold('✔ Git'))

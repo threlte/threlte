@@ -8,12 +8,12 @@
  <a href="https://discord.com/channels/985983540804091964">
   <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
  </a>
- <a href="https://next.threlte.xyz">
+ <a href="https://threlte.xyz">
   <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
  </a>
 </div>
 
-<a href="https://next.threlte.xyz">
+<a href="https://threlte.xyz">
  <img src="./threlte-banner.jpg"/>
 </a>
 
@@ -23,11 +23,11 @@ Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D a
 
 Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
 
-Check out our **[documentation](https://next.threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
+Check out our **[documentation](https://threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
 
 ## @threlte/gltf
 
-[@threlte/gltf](https://next.threlte.xyz/docs/reference/gltf/getting-started) gives you a CLI to that turn GLTF assets into declarative and reusable Threlte components.
+[@threlte/gltf](https://threlte.xyz/docs/reference/gltf/getting-started) gives you a CLI to that turn GLTF assets into declarative and reusable Threlte components.
 
 This helps with performance optimization for asset-heavy Threlte apps. It also allows you to modify your GLTF assets as Svelte components, instead of working with 3D software like Blender.
 

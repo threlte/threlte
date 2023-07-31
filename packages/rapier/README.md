@@ -8,12 +8,12 @@
  <a href="https://discord.com/channels/985983540804091964">
   <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
  </a>
- <a href="https://next.threlte.xyz">
+ <a href="https://threlte.xyz">
   <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
  </a>
 </div>
 
-<a href="https://next.threlte.xyz">
+<a href="https://threlte.xyz">
  <img src="./threlte-banner.jpg"/>
 </a>
 
@@ -23,11 +23,11 @@ Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D a
 
 Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
 
-Check out our **[documentation](https://next.threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
+Check out our **[documentation](https://threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
 
 ## @threlte/rapier
 
-[@threlte/rapier](https://next.threlte.xyz/docs/reference/rapier/getting-started) enables performant physics in your Threlte app through the [Rapier engine](https://rapier.rs/).
+[@threlte/rapier](https://threlte.xyz/docs/reference/rapier/getting-started) enables performant physics in your Threlte app through the [Rapier engine](https://rapier.rs/).
 
 This is a great way to implement key features of games or simulators, such as collisions, gravity and attraction fields.
 
@@ -42,7 +42,7 @@ npm create threlte my-project
 ```
 and select the `@threlte/rapier` option.
 
-Alternatively you can check out the full [installation instructions](https://next.threlte.xyz/docs/learn/getting-started/installation).
+Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Support
 
