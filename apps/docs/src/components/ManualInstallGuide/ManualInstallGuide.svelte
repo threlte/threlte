@@ -14,19 +14,17 @@
   let space = '            '
 
   $: installCode = [
-    `npm install three @threlte/core@next${
+    `npm install three @threlte/core${
       installExtras || useGltf || installRapier || installTheatre || installTypes ? divider : ''
     }`,
     (installExtras || useGltf) &&
-      `${space}@threlte/extras@next${
-        installRapier || installTheatre || installTypes ? divider : ''
-      }`,
+      `${space}@threlte/extras${installRapier || installTheatre || installTypes ? divider : ''}`,
     installRapier &&
-      `${space}@threlte/rapier@next @dimforge/rapier3d-compat${
+      `${space}@threlte/rapier @dimforge/rapier3d-compat${
         installTypes || installTheatre ? divider : ''
       }`,
     installTheatre &&
-      `${space}@threlte/theatre@next @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+      `${space}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -42,7 +40,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 md:grid-cols-[auto_auto] justify-start max-md:justify-items-start items-start gap-x-4 gap-y-2 md:gap-y-2 md:[&>button]:my-1"
+  class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -50,12 +48,12 @@
     class="cursor-not-allowed">@threlte/core</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
+  <p class="my-0 self-center text-sm md:text-base">
     Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
     are required.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {
@@ -65,7 +63,7 @@
     passivelyActive={useGltf}>@threlte/extras</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
+  <p class="my-0 self-center text-sm md:text-base">
     <a
       href="/docs/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
@@ -73,7 +71,7 @@
     and more that extend the core functionality.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {
@@ -82,7 +80,7 @@
     active={useGltf}>@threlte/gltf</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
+  <p class="my-0 self-center text-sm md:text-base">
     A <a
       href="/docs/reference/gltf/getting-started"
       target="_blank">command-line tool</a
@@ -91,7 +89,7 @@
     make use of the package <code>@threlte/extras</code>.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {
@@ -100,7 +98,7 @@
     active={installRapier}>@threlte/rapier</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
+  <p class="my-0 self-center text-sm md:text-base">
     Components and hooks to use the <a
       href="https://rapier.rs/"
       target="_blank"
@@ -108,7 +106,7 @@
     > in Threlte.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {
@@ -117,7 +115,7 @@
     active={installTheatre}>@threlte/theatre</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
+  <p class="my-0 self-center text-sm md:text-base">
     Components and hooks to use the animation library <a
       href="https://www.theatrejs.com/"
       target="_blank"
@@ -125,7 +123,7 @@
     > in Threlte.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {
@@ -134,15 +132,15 @@
     active={installTypes}>@types/three</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">TypeScript types for three.js.</p>
+  <p class="my-0 self-center text-sm md:text-base">TypeScript types for three.js.</p>
 </div>
 
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
 <div
-  class="relative not-prose group overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent p-3 whitespace-pre-wrap"
+  class="not-prose group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl [&>*]:!bg-transparent"
 >
-  <code class="text-[1em] p-0">
+  <code class="p-0 text-[1em]">
     {installCode}
   </code>
 
