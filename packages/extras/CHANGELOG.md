@@ -8,9 +8,9 @@
 
 ### Patch Changes
 
-- [#380](https://github.com/threlte/threlte/pull/380) [`9526d5d`](https://github.com/threlte/threlte/commit/9526d5d2d6285b8ddb8c81dc9e6ce819a90db193) Thanks [@ixxie](https://github.com/ixxie)! - Fixed bindings of TransformControls
+- [#380](https://github.com/threlte/threlte/pull/380) [`9526d5d`](https://github.com/threlte/threlte/commit/9526d5d2d6285b8ddb8c81dc9e6ce819a90db193) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Fixed bindings of TransformControls
 
-- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@ixxie](https://github.com/ixxie)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
 
 ## 5.0.0-next.16
 
