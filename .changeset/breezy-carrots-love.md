@@ -1,5 +1,5 @@
 ---
-'@threlte/docs-next': patch
+'@threlte/docs': patch
 ---
 
 remove debugger statements

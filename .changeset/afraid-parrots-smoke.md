@@ -1,5 +1,5 @@
 ---
-'@threlte/docs-next': patch
+'@threlte/docs': patch
 ---
 
 add outline example to docs
