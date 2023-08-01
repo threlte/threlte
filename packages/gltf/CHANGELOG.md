@@ -1,5 +1,30 @@
 # @threlte/gltf
 
+## 1.0.0
+
+### Major Changes
+
+- a07850e4: Removed the name from the exported preload function (seems silly and might collide anyway), updated deps and included three-stdlib instead of rolling an own implementation of GLTFLoader and DRACOLoader. Added option to make the component suspense-ready, updated README.
+- 3a5376e2: Adapted gltf package to Threlte 6 T syntax
+- d5abde5: Simplified root option to more reasonable approach. When no root is given, the path supplied will be normalized and used as a file path, if root is given, takes full control.
+
+### Minor Changes
+
+- e91cc09: await instead of if clause for less if-blocks (helps with transitions)
+- 72c71414: Added option to add a preload method that makes preloading an asset easy. Also, added the option to make an isolated component (so no \$\$restProps usage)
+- 05d9170: Added forwarding event handlers
+
+### Patch Changes
+
+- 6d56d11: Added proper types for new slots error & fallback
+- 119a04d: Downgrading three and reusing own GLTFLoader and DRACOLoader implementations
+- 89e0c7a: Updated dependencies
+- 16e75c31: Fixed a bug where the suspense was created in the wrong place when preloading was activated.
+- da70d570: typo
+- 81834dd4: Refactored the pascal case function
+- 124eabab: Fixed preload method to return a Promise
+- 89710f3: Removed logs
+
 ## 1.0.0-next.13
 
 ### Major Changes

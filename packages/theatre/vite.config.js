@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 
 /**

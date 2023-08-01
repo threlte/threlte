@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:docs-next": "turbo run build  --filter='!@threlte/docs'",
+    "build:docs": "turbo run build --filter='@threlte/docs'",
     "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
@@ -14,15 +14,17 @@
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "release": "changeset publish",
-    "cleanup": "turbo run cleanup && rm -rf node_modules"
+    "cleanup": "turbo run cleanup && rimraf node_modules"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.23.1",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.2",
     "eslint-config-custom": "*",
-    "prettier": "latest",
+    "prettier": "^2.8.8",
     "prettier-plugin-astro": "^0.8.0",
     "prettier-plugin-svelte": "^2.9.0",
     "prettier-plugin-tailwindcss": "^0.2.3",
+    "rimraf": "^5.0.1",
     "turbo": "latest"
   },
   "engines": {

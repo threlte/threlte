@@ -17,7 +17,7 @@ type CallbackFn<T> = (values: T) => MaybePromise<void | CleanupFn>
  * ### `watch`
  *
  * Watch a single store or multiple stores and call a callback when they change to trigger side effects.
- * The callback can return a cleanup function that will be called when the stores change again.
+ * The callback can return a cleanup function that will be called when the stores change again or when the component is destroyed.
  *
  * ```ts
  * const store = writable(0)
@@ -38,7 +38,7 @@ type CallbackFn<T> = (values: T) => MaybePromise<void | CleanupFn>
  * })
  * ```
  *
- * The callback can return a cleanup function that will be called when the stores change again.
+ * The callback can return a cleanup function that will be called when the stores change again or when the component is destroyed.
  *
  * ```ts
  * const store = writable(0)

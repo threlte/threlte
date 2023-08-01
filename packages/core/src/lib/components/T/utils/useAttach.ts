@@ -1,7 +1,7 @@
 import { onDestroy } from 'svelte'
 import { useThrelte } from '../../../hooks/useThrelte'
 import type { BaseProps, MaybeInstance } from '../types'
-import { resolve } from './resolve'
+import { resolvePropertyPath } from './resolvePropertyPath'
 
 const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
 
@@ -37,7 +37,7 @@ export const useAttach = <T>() => {
     if (typeof attach === 'function') {
       detachFn = attach(parent, instance)
     } else {
-      const { target, key } = resolve(parent, attach)
+      const { target, key } = resolvePropertyPath(parent, attach)
       valueBeforeAttach = target[key]
       target[key] = instance
       attachedTo = target

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+import * as p from '@clack/prompts'
 import { create as createSvelteKitApp } from 'create-svelte'
+import { execa } from 'execa'
 import { copy } from 'fs-extra'
 import { Merger } from 'json-merger'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import * as p from '@clack/prompts'
-import { bold, cyan, grey } from 'kleur/colors'
+import { bold, cyan, grey, red } from 'kleur/colors'
 import fs from 'node:fs'
-import path from 'node:path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import detectPackageManager from 'which-pm-runs'
 
 const print = console.log
 
@@ -48,6 +49,8 @@ const create = async () => {
       }
     }
   }
+
+  const pkgManager = detectPackageManager()?.name ?? 'npm'
 
   const options = await p.group(
     {
@@ -91,6 +94,7 @@ const create = async () => {
             }
           ]
         }),
+
       threltePackages: () =>
         p.multiselect({
           message: 'Select Threlte packages (use arrow keys/space bar)',
@@ -117,6 +121,18 @@ const create = async () => {
               hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
             }
           ]
+        }),
+
+      git: () =>
+        p.confirm({
+          message: 'Initialize a git repository?',
+          initialValue: true
+        }),
+
+      install: () =>
+        p.confirm({
+          message: `Install dependencies using ${pkgManager}?`,
+          initialValue: true
         })
     },
     { onCancel: () => process.exit(1) }
@@ -145,7 +161,7 @@ const create = async () => {
   const threltePackageJson = {
     devDependencies: {
       three: '^0.153.0',
-      '@threlte/core': 'next'
+      '@threlte/core': 'latest'
     },
     scripts: {}
   }
@@ -154,19 +170,19 @@ const create = async () => {
     threltePackageJson.devDependencies['@types/three'] = '^0.152.1'
   }
   if (options.threltePackages.includes('@threlte/extras')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'next'
+    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
-    threltePackageJson.devDependencies['@threlte/rapier'] = 'next'
+    threltePackageJson.devDependencies['@threlte/rapier'] = 'latest'
     threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = '^0.11.2'
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
-    threltePackageJson.devDependencies['@threlte/theatre'] = 'next'
+    threltePackageJson.devDependencies['@threlte/theatre'] = 'latest'
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
   }
   if (options.threltePackages.includes('model-pipeline')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'next'
+    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
     threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
   }
 
@@ -197,6 +213,37 @@ const create = async () => {
       await copy(path.join(templatesDir, 'model-pipeline+typescript'), cwd, { overwrite: true })
     } else {
       await copy(path.join(templatesDir, 'model-pipeline+javascript'), cwd, { overwrite: true })
+    }
+  }
+
+  if (options.git) {
+    // initialize git repository
+    await execa('git', ['init'], { cwd, stdio: 'ignore' })
+    await execa('git', ['add', '-A'], { cwd, stdio: 'ignore' })
+    await execa(
+      'git',
+      [
+        'commit',
+        '-m',
+        'Initial commit',
+        '--author="threlte-bot <threlte-bot@users.noreply.github.com>"'
+      ],
+      { cwd, stdio: 'ignore' }
+    )
+  }
+
+  if (options.install) {
+    const s = p.spinner()
+    try {
+      // Install dependencies
+      s.start(`Installing dependencies using ${pkgManager}`)
+      await execa(pkgManager, ['install'], { cwd, stdio: 'ignore' })
+      s.stop(`Installed dependencies using ${pkgManager}`)
+    } catch (error) {
+      s.stop(red('Failed to install dependencies'))
+      p.note('You can install them manually.')
+      // This will show install instructions later on
+      options.install = false
     }
   }
 
@@ -233,22 +280,26 @@ const create = async () => {
 
   if (options.threltePackages.includes('@threlte/extras')) {
     print(bold('✔ @threlte/extras'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/extras/getting-started\n'))
+    print(cyan('  https://threlte.xyz/docs/reference/extras/getting-started\n'))
   }
   if (options.threltePackages.includes('@threlte/rapier')) {
     print(bold('✔ @threlte/rapier'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/rapier/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/rapier/getting-started'))
     print(cyan('  https://rapier.rs/\n'))
   }
   if (options.threltePackages.includes('@threlte/theatre')) {
     print(bold('✔ @threlte/theatre'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/theatre/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
-    print(cyan('  npm run model-pipeline:run'))
-    print(cyan('  https://next.threlte.xyz/docs/reference/gltf/getting-started'))
+    print(cyan(`  ${pkgManager} run model-pipeline:run`))
+    print(cyan('  https://threlte.xyz/docs/reference/gltf/getting-started\n'))
+  }
+  if (options.git) {
+    print(bold('✔ Git'))
+    print(cyan('  Initialized a git repository.'))
   }
 
   print('\nNext steps:')
@@ -259,10 +310,14 @@ const create = async () => {
     print(`  ${step++}: ${bold(cyan(`cd ${relative}`))}`)
   }
 
-  print(`  ${step++}: ${bold(cyan('npm install'))} (or pnpm install, etc)`)
+  if (!options.install) {
+    print(`  ${step++}: ${bold(cyan(`${pkgManager} install`))}`)
+  }
+
   // prettier-ignore
-  print(`  ${step++}: ${bold(cyan('git init && git add -A && git commit -m "Initial commit"'))} (optional)`);
-  print(`  ${step++}: ${bold(cyan('npm run dev -- --open'))}`)
+  if (!options.git) print(`  ${step++}: ${bold(cyan('git init && git add -A && git commit -m "Initial commit"'))} (optional)`);
+
+  print(`  ${step++}: ${bold(cyan(`${pkgManager} run dev -- --open`))}`)
 
   print(`\nTo close the dev server, hit ${bold(cyan('Ctrl-C'))}`)
   print(`\nStuck? Visit us at ${cyan('https://chat.threlte.xyz')}`)

@@ -1,5 +1,89 @@
 # @threlte/extras
 
+## 5.0.1
+
+### Patch Changes
+
+- 3a68dcf: fix: Replaced instances of "instanceof" with checks that are cross-source compatible
+
+## 5.0.0
+
+### Major Changes
+
+- fcfcc0e4: Refactored <Audio> as well as <PositionalAudio>. The new main source prop is now called "src" to accomodate the original prop "source" alognside.
+- 0620502: Removed <Disposables> component
+- 8ed809b2: The hook useGltfAnimations does not provide a callback anymore because its usage was ambiguous. The signature also changed slightly. Check its documentation for details
+- 15309755: Converted <ContactShadows> to v5
+- 4b383b0a: requires min. three.js version 151
+
+  WHAT: we changed import name to match update-to-date three.js names
+  WHY: see [this pull request](https://github.com/mrdoob/three.js/pull/25645) for details.
+
+- df4b307b: Converted <Text> to v5
+
+### Minor Changes
+
+- bd4a4b76: Added Portal and PortalTarget component
+- 151cdc08: useGltfAnimations now can also set a root object after its creation, the creation of the mixer etc is deferred by tick()
+- 1f4e3e0: Added the experimental transitions feature. This feature is marked as experimental and might change or be removed.
+- ae514436: Moved <TransformControls> from core to extras, added createRawEventDispatcher to core
+- 2720cd4: Added lifecycle methods onReveal and onSuspend
+- e28b8ada: Move audio context and components to extras
+- fef242de: Added the components InstancedMesh, Instance and InstancedMeshes
+- 4b67b473: Environment uses threlte cache
+- aac59eb1: - Float component updated to V5.
+  - Float added features: float direction and rotation can now happen on all 3 axes
+    Backwards compatible
+- 23049766: Added Suspense component and useSuspense hook.
+
+### Patch Changes
+
+- f9f8e61: changed return signature of useSuspense->suspend
+- 33c37682: Moved lodash from dev dep to regular dep
+- 300cbe4e: Converted <Edges> component to use Threlte v5 syntax. Changed prop name "threshold" to "thresholdAngle" (as it is used by three.js)
+- 9526d5d: Fixed bindings of TransformControls
+- dd686a7: upgrade troika-three-text to 0.47.2
+- 3868395: Updated prettier
+- 5df4ca0: Added transitions plugin props
+- 1505665: Fixed a bug in interactivity plugin
+- 8734041: Add RoundedBoxGeometry component
+- feab5e8: "Unsimplified" types of transitions plugin
+- 5238844: Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+- b71145ea: Environment: update Types to Threlte V5 standard
+- 4b67b473: Audio bugfix
+- 5ba62e2: Removed log
+
+## 5.0.0-next.17
+
+### Major Changes
+
+- [#272](https://github.com/threlte/threlte/pull/272) [`0620502`](https://github.com/threlte/threlte/commit/0620502ba9d9fbd0fc15100c298816130ed526d7) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Removed <Disposables> component
+
+### Patch Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`9526d5d`](https://github.com/threlte/threlte/commit/9526d5d2d6285b8ddb8c81dc9e6ce819a90db193) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Fixed bindings of TransformControls
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
+## 5.0.0-next.16
+
+### Patch Changes
+
+- 5ba62e2: Removed log
+
+## 5.0.0-next.15
+
+### Patch Changes
+
+- 3868395: Updated prettier
+- 8734041: Add RoundedBoxGeometry component
+
+## 5.0.0-next.14
+
+### Patch Changes
+
+- dd686a7: upgrade troika-three-text to 0.47.2
+
 ## 5.0.0-next.13
 
 ### Patch Changes

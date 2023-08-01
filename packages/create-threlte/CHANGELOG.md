@@ -1,5 +1,46 @@
 # create-threlte
 
+## 1.0.0
+
+### Major Changes
+
+- 7f64e75: breaking: bumped create-svelte to use Svelte 4
+
+### Minor Changes
+
+- 6b219b5: Updated create-svelte, added options to initialize a git repository and install dependencies via preferred package manager.
+- e61b376: Added model pipeline feature to create command, added docs for create command
+
+### Patch Changes
+
+- a78b413: Fixed a bug where transformed models would be transformed again
+- 568b8c0: Added three.js dependency
+- a107ec7: Fixed targetDir preconfiguration
+- 718f285: Fixed shared basic Scene.svelte templates
+- ea2ff82: Added proper dep versions
+- 020359a: Removed files from package.json
+- defe0f1: Prototype of create package
+- ab88499: Added basic examples for core and extras, fixed dev
+- 7ac7c20: Added root configuration option, preconfigured
+- d111d18: Added shebang line
+- 4c930d8: TypeScript should exclude the templates
+- 0099894: Moved create-svelte to dependencies
+- 51de433: Edited root page
+- 4d40c88: Fixed package name in intro
+- 09a07a2: Added core dependency, added modified vite config
+
+## 1.0.0-next.15
+
+### Minor Changes
+
+- 6b219b5: Updated create-svelte, added options to initialize a git repository and install dependencies via preferred package manager.
+
+## 1.0.0-next.14
+
+### Major Changes
+
+- 7f64e75: breaking: bumped create-svelte to use Svelte 4
+
 ## 0.1.0-next.13
 
 ### Patch Changes

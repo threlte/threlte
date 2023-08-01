@@ -1,11 +1,11 @@
 import { injectPlugin, watch } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { derived, writable } from 'svelte/store'
-import { Object3D } from 'three'
+import type { Object3D } from 'three'
 import type { ThrelteLayers, ThrelteLayersContext } from './types'
 
 const isObject3D = (ref: any): ref is Object3D => {
-  return ref instanceof Object3D
+  return ref.isObject3D
 }
 
 const propIsThrelteLayers = (prop: any): prop is ThrelteLayers => {
@@ -31,15 +31,13 @@ export const injectLayersPlugin = () => {
     setContext<ThrelteLayersContext>('threlte-layers-context', merged)
 
     const applyLayers = (ref: Object3D, layers?: ThrelteLayers) => {
-      console.log('applyLayers', layers, ref)
-
       if (layers === 'all') {
         ref.layers.enableAll()
       } else if (layers === 'none') {
         ref.layers.disableAll()
       } else if (Array.isArray(layers)) {
         for (let index = 0; index < 32; index += 1) {
-          const layerIndex = index as typeof layers[number]
+          const layerIndex = index as (typeof layers)[number]
           const enabled = layers.includes(layerIndex)
           if (enabled) {
             ref.layers.enable(index)

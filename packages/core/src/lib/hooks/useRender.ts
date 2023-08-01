@@ -34,6 +34,7 @@ export const useRender = (
   }
 
   renderCtx.renderHandlers.add(handler)
+  renderCtx.renderHandlersNeedSortCheck = true
 
   onDestroy(() => {
     renderCtx.renderHandlers.delete(handler)

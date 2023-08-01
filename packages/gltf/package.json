@@ -1,9 +1,9 @@
 {
   "name": "@threlte/gltf",
-  "version": "1.0.0-next.13",
+  "version": "1.0.0",
   "description": "GLTF to Threlte converter",
   "scripts": {
-    "cleanup": "rm -rf node_modules"
+    "cleanup": "rimraf node_modules"
   },
   "type": "module",
   "keywords": [
@@ -55,7 +55,8 @@
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "read-pkg-up": "^9.1.0"
+    "read-pkg-up": "^9.1.0",
+    "rimraf": "^5.0.1"
   },
   "husky": {
     "hooks": {

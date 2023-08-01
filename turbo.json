@@ -18,7 +18,7 @@
       "outputs": ["build/**"],
       "cache": false
     },
-    "build:docs-next": {
+    "build:docs": {
       "cache": false
     },
     "preview": {
