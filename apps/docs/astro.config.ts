@@ -27,6 +27,9 @@ export default defineConfig({
   experimental: {
     viewTransitions: true
   },
+  build: {
+    inlineStylesheets: 'always'
+  },
   integrations: [
     AutoImport({
       imports: [
