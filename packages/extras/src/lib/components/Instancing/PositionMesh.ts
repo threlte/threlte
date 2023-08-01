@@ -18,6 +18,10 @@ const _instanceWorldMatrix = new Matrix4()
 const _instanceIntersects: Intersection[] = []
 const _mesh = new Mesh<BufferGeometry, MeshBasicMaterial>()
 
+const isMaterial = (o: any): o is Material => {
+  return o.isMaterial
+}
+
 export class PositionMesh extends Group {
   color: Color
   instancedMesh: CurrentWritable<InstancedMesh | undefined>
@@ -54,7 +58,7 @@ export class PositionMesh extends Group {
     // the mesh represents this single instance
     _mesh.matrixWorld = _instanceWorldMatrix
     // raycast side according to instance material
-    if (parent.material instanceof Material) _mesh.material.side = parent.material.side
+    if (isMaterial(parent.material)) _mesh.material.side = parent.material.side
     else _mesh.material.side = parent.material[0]?.side ?? FrontSide
     _mesh.raycast(raycaster, _instanceIntersects)
     // process the result of raycast

@@ -13,6 +13,20 @@ const v1 = new Vector3()
 const v2 = new Vector3()
 const v3 = new Vector3()
 
+const isOrthographicCamera = (o: any): o is OrthographicCamera => {
+  return o.isOrthographicCamera
+}
+
+const isPerspectiveCamera = (o: any): o is PerspectiveCamera => {
+  return o.isPerspectiveCamera
+}
+
+const isOrthographicCameraOrPerspectiveCamera = (
+  o: any
+): o is OrthographicCamera | PerspectiveCamera => {
+  return isOrthographicCamera(o) || isPerspectiveCamera(o)
+}
+
 export const defaultCalculatePosition = (
   obj: Object3D,
   camera: Camera,
@@ -53,9 +67,9 @@ export const isObjectVisible = (
 }
 
 export const objectScale = (el: Object3D, camera: Camera) => {
-  if (camera instanceof OrthographicCamera) {
+  if (isOrthographicCamera(camera)) {
     return camera.zoom
-  } else if (camera instanceof PerspectiveCamera) {
+  } else if (isPerspectiveCamera(camera)) {
     const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
     const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
     const vFOV = (camera.fov * Math.PI) / 180
@@ -68,7 +82,7 @@ export const objectScale = (el: Object3D, camera: Camera) => {
 }
 
 export const objectZIndex = (el: Object3D, camera: Camera, zIndexRange: Array<number>) => {
-  if (camera instanceof PerspectiveCamera || camera instanceof OrthographicCamera) {
+  if (isOrthographicCameraOrPerspectiveCamera(camera)) {
     const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
     const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
     const dist = objectPos.distanceTo(cameraPos)

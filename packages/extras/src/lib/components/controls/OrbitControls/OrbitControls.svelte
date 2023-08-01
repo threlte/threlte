@@ -15,11 +15,15 @@
 
   const parent = useParent()
 
+  const isCamera = (p: any): p is Camera => {
+    return p.isCamera
+  }
+
   const { renderer, invalidate } = useThrelte()
 
   if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
 
-  if (!($parent instanceof Camera)) {
+  if (!isCamera($parent)) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
