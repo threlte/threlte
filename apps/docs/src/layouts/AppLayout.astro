@@ -115,8 +115,6 @@ const title = Astro.props.title
       property="og:image:alt"
       content="Threlte - rapidly build interactive 3D apps for the web."
     />
-    <!-- Vercel Analytics -->
-    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <slot />
@@ -133,3 +131,8 @@ const title = Astro.props.title
     @apply bg-[#0A0F19];
   }
 </style>
+
+<script>
+  import { inject } from '@vercel/analytics'
+  inject()
+</script>

@@ -18,6 +18,7 @@
     "@astrojs/tailwind": "^3.1.0",
     "@markprompt/css": "^0.10.0",
     "@markprompt/web": "^0.14.1",
+    "@vercel/analytics": "^1.0.1",
     "astro": "^2.1.2",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",

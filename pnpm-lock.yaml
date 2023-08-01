@@ -56,6 +56,9 @@ importers:
       '@markprompt/web':
         specifier: ^0.14.1
         version: 0.14.1(@types/react@18.2.15)(react-dom@18.2.0)(react@18.2.0)
+      '@vercel/analytics':
+        specifier: ^1.0.1
+        version: 1.0.1
       astro:
         specifier: ^2.1.2
         version: 2.1.2
@@ -2714,6 +2717,10 @@ packages:
       '@typescript-eslint/types': 5.45.0
       eslint-visitor-keys: 3.4.1
     dev: true
+
+  /@vercel/analytics@1.0.1:
+    resolution: {integrity: sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow==}
+    dev: false
 
   /@vscode/emmet-helper@2.8.6:
     resolution: {integrity: sha512-IIB8jbiKy37zN8bAIHx59YmnIelY78CGHtThnibD/d3tQOKRY83bYVi9blwmZVUZh6l9nfkYH3tvReaiNxY9EQ==}
