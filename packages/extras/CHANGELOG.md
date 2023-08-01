@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.1
+
+### Patch Changes
+
+- 3a68dcf: fix: Replaced instances of "instanceof" with checks that are cross-source compatible
+
 ## 5.0.0
 
 ### Major Changes
