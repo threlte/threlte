@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.1.1
+
+### Patch Changes
+
+- 3a68dcf: fix: Replaced instances of "instanceof" with checks that are cross-source compatible
+
 ## 0.1.0
 
 ### Minor Changes
