@@ -191,7 +191,7 @@ By default, Three.js is automatically updating the `matrix` and `matrixWorld` pr
   import { injectPlugin, useFrame } from '@threlte/core'
 
   const isObject3D = (obj: any): obj is Object3D => {
-    return obj instanceof Object3D
+    return obj.isObject3D
   }
 
   const propKeysRequiringMatrixUpdate = [

@@ -1,11 +1,11 @@
 import { injectPlugin, watch } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { derived, writable } from 'svelte/store'
-import { Object3D } from 'three'
+import type { Object3D } from 'three'
 import type { ThrelteLayers, ThrelteLayersContext } from './types'
 
 const isObject3D = (ref: any): ref is Object3D => {
-  return ref instanceof Object3D
+  return ref.isObject3D
 }
 
 const propIsThrelteLayers = (prop: any): prop is ThrelteLayers => {

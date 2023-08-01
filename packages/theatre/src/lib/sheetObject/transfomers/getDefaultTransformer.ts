@@ -13,14 +13,14 @@ const isFullOrEndingPattern = (fullPropertyPath: string, pattern: string) => {
 export const getDefaultTransformer = (target: any, path: string, fullPropertyPath: string) => {
   const property = target[path]
 
-  if (property instanceof Euler) return euler
-  if (property instanceof Color) return color
+  if (property.isEuler) return euler
+  if (property.isColor) return color
 
   if (
     isFullOrEndingPattern(fullPropertyPath, 'rotation.x') ||
     isFullOrEndingPattern(fullPropertyPath, 'rotation.y') ||
     isFullOrEndingPattern(fullPropertyPath, 'rotation.z') ||
-    (target instanceof Euler &&
+    (target.isEuler &&
       (fullPropertyPath === 'x' || fullPropertyPath === 'y' || fullPropertyPath === 'z'))
   ) {
     return degrees

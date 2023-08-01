@@ -57,9 +57,14 @@
 
   const { renderer, camera, scene, size } = useThrelte()
 
+  const isViableCamera = (c: any): c is PerspectiveCamera | OrthographicCamera => {
+    return c.isPerspectiveCamera || c.isOrthographicCamera
+  }
+
   const getCamera = (): PerspectiveCamera | OrthographicCamera => {
-    if (!($camera instanceof PerspectiveCamera) && !($camera instanceof OrthographicCamera))
+    if (!isViableCamera($camera)) {
       throw new Error('Only PerspectiveCamera or OrthographicCamera supported for component <HTML>')
+    }
     return $camera
   }
 
@@ -317,8 +322,16 @@
   const component = forwardEventHandlers()
 </script>
 
-<T is={ref} {...$$restProps} let:ref bind:this={$component}>
-  <slot name="threlte" {ref} />
+<T
+  is={ref}
+  {...$$restProps}
+  let:ref
+  bind:this={$component}
+>
+  <slot
+    name="threlte"
+    {ref}
+  />
 </T>
 
 {#if transform}
@@ -328,8 +341,14 @@
     bind:this={el}
     style={compileStyles($transformElStyles)}
   >
-    <div bind:this={transformOuterRef} style={compileStyles($transformOuterRefStyles)}>
-      <div bind:this={transformInnerRef} style={compileStyles($transformInnerRefStyles)}>
+    <div
+      bind:this={transformOuterRef}
+      style={compileStyles($transformOuterRefStyles)}
+    >
+      <div
+        bind:this={transformInnerRef}
+        style={compileStyles($transformInnerRefStyles)}
+      >
         {#if showEl}
           <slot />
         {/if}

@@ -4,7 +4,7 @@ import { Object3D, Vector3 } from 'three'
 export const injectLookAtPlugin = () => {
   injectPlugin('lookAt', ({ ref, props }) => {
     // skip injection if ref is not an Object3D
-    if (!(ref instanceof Object3D) || !('lookAt' in props)) return
+    if (!ref.isObject3D || !('lookAt' in props)) return
 
     // get the invalidate function from the useThrelte hook
     const { invalidate } = useThrelte()
@@ -19,7 +19,7 @@ export const injectLookAtPlugin = () => {
     const applyProps = (p: typeof props, r: typeof ref) => {
       if (!('lookAt' in p)) return
       const prop = p.lookAt
-      if (prop instanceof Vector3) tempV3.copy(prop)
+      if (prop.isVector3) tempV3.copy(prop)
       if (Array.isArray(prop) && prop.length === 3) {
         tempV3.set(prop[0], prop[1], prop[2])
       } else if (typeof prop === 'object') {

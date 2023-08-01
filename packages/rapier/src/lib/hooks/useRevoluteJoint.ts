@@ -1,6 +1,7 @@
 import type { RevoluteImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
 import { useJoint } from './useJoint'
+import { isVector3 } from './utils'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useRevoluteJoint = (
@@ -10,9 +11,9 @@ export const useRevoluteJoint = (
   limits?: [min: number, max: number]
 ) => {
   return useJoint((rbA, rbB, { world, rapier }) => {
-    const jaA = anchorA instanceof Vector3 ? anchorA : new Vector3(...anchorA)
-    const jaB = anchorB instanceof Vector3 ? anchorB : new Vector3(...anchorB)
-    const jAxis = (axis instanceof Vector3 ? axis : new Vector3(...axis)).normalize()
+    const jaA = isVector3(anchorA) ? anchorA : new Vector3(...anchorA)
+    const jaB = isVector3(anchorB) ? anchorB : new Vector3(...anchorB)
+    const jAxis = (isVector3(axis) ? axis : new Vector3(...axis)).normalize()
 
     const params = rapier.JointData.revolute(jaA, jaB, jAxis)
     if (limits) {

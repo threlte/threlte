@@ -49,7 +49,11 @@
   if (!renderer)
     throw new Error('Threlte Context missing: Is <PointerLockControls> a child of <Canvas>?')
 
-  if (!($camera instanceof Camera)) {
+  const isCamera = (p: any): p is Camera => {
+    return p.isCamera
+  }
+
+  if (!isCamera($camera)) {
     throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
   }
 
