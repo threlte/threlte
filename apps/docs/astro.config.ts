@@ -13,6 +13,8 @@ import image from '@astrojs/image'
 
 // https://astro.build/config
 import svelte from '@astrojs/svelte'
+import preact from '@astrojs/preact'
+import react from '@astrojs/react'
 
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
@@ -47,7 +49,8 @@ export default defineConfig({
     }),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    })
+    }),
+    preact({ compat: true })
   ],
   output: 'static',
   vite: {
