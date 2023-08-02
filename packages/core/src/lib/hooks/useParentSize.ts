@@ -17,6 +17,7 @@ export const useParentSize = (): {
     }
   }
 
+  // Only observe childList changes of the parent
   const mutationOptions = { childList: true, subtree: false, attributes: false }
 
   let el: HTMLElement
@@ -28,6 +29,7 @@ export const useParentSize = (): {
     mutationObserver.observe(parent, mutationOptions)
   }
 
+  // The canvas should match the contentRect of its parent
   const resizeObserver = new ResizeObserver(([entry]) => {
     const { contentRect } = entry
 
@@ -38,6 +40,7 @@ export const useParentSize = (): {
     })
   })
 
+  // Use a mutation observer to detect reparenting
   const mutationObserver = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
       for (const node of mutation.removedNodes) {
