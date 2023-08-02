@@ -15,6 +15,7 @@ import Book from './Book.astro'
 import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Footer from '../components/Footer/Footer.astro'
+import NewMarkprompt from '$components/Search/NewMarkprompt'
 
 export interface Props {
   title?: string
@@ -170,6 +171,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     <div
       class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
+      <NewMarkprompt client:only="preact" />
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
       >
