@@ -8,45 +8,35 @@ export const useParentSize = (): {
   parentSizeAction: (node: HTMLElement) => void
   parentSize: Writable<Size>
 } => {
-  const parentSizeStore = writable({ width: 0, height: 0 })
-  let parentSize = { width: 0, height: 0 }
-  const unsubscribeParentSize = parentSizeStore.subscribe((s) => (parentSize = s))
-  onDestroy(unsubscribeParentSize)
-
-  let el: HTMLElement | undefined
-
-  const proxy = () => {
-    const currentParentSize = parentSize
-    if (!el) return
-    if (!el.parentElement) return
-    const { clientWidth, clientHeight } = el.parentElement
-    if (clientWidth !== currentParentSize.width || clientHeight !== currentParentSize.height) {
-      parentSizeStore.set({
-        width: clientWidth,
-        height: clientHeight
-      })
-    }
-  }
-
-  const parentSizeAction = (node: HTMLElement) => {
-    el = node
-    proxy()
-    window.addEventListener('resize', proxy)
-  }
+  const parentSize = writable({ width: 0, height: 0 })
 
   if (!browser) {
     return {
-      parentSize: parentSizeStore,
-      parentSizeAction
+      parentSize,
+      parentSizeAction: () => { /* do nothing */ }
     }
   }
 
-  onDestroy(() => {
-    window.removeEventListener('resize', proxy)
+  const resizeObserver = new ResizeObserver(([entry]) => {
+    const { contentRect } = entry
+
+    parentSize.update((value) => {
+      value.width = contentRect.width
+      value.height = contentRect.height
+      return value
+    })
   })
 
+  const parentSizeAction = (node: HTMLElement) => {
+    if (!node.parentElement) return
+    resizeObserver.disconnect()
+    resizeObserver.observe(node.parentElement)
+  }
+
+  onDestroy(() => resizeObserver.disconnect())
+
   return {
+    parentSize,
     parentSizeAction,
-    parentSize: parentSizeStore
   }
 }
