@@ -13,7 +13,9 @@ export const useParentSize = (): {
   if (!browser) {
     return {
       parentSize,
-      parentSizeAction: () => { /* do nothing */ }
+      parentSizeAction: () => {
+        /* do nothing */
+      }
     }
   }
 
@@ -65,6 +67,6 @@ export const useParentSize = (): {
 
   return {
     parentSize,
-    parentSizeAction,
+    parentSizeAction
   }
 }
