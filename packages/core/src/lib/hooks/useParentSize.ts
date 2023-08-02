@@ -20,7 +20,7 @@ export const useParentSize = (): {
   // Only observe childList changes of the parent
   const mutationOptions = { childList: true, subtree: false, attributes: false }
 
-  let el: HTMLElement
+  let el: HTMLElement | undefined
 
   const observeParent = (parent: HTMLElement) => {
     resizeObserver.disconnect()
