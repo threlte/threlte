@@ -17,6 +17,17 @@ export const useParentSize = (): {
     }
   }
 
+  const mutationOptions = { childList: true, subtree: false, attributes: false }
+
+  let el: HTMLElement
+
+  const observeParent = (parent: HTMLElement) => {
+    resizeObserver.disconnect()
+    mutationObserver.disconnect()
+    resizeObserver.observe(parent)
+    mutationObserver.observe(parent, mutationOptions)
+  }
+
   const resizeObserver = new ResizeObserver(([entry]) => {
     const { contentRect } = entry
 
@@ -27,13 +38,27 @@ export const useParentSize = (): {
     })
   })
 
+  const mutationObserver = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      for (const node of mutation.removedNodes) {
+        if (el === node && el.parentElement) {
+          observeParent(el.parentElement)
+          return
+        }
+      }
+    }
+  })
+
   const parentSizeAction = (node: HTMLElement) => {
-    if (!node.parentElement) return
-    resizeObserver.disconnect()
-    resizeObserver.observe(node.parentElement)
+    el = node
+    if (!el.parentElement) return
+    observeParent(el.parentElement)
   }
 
-  onDestroy(() => resizeObserver.disconnect())
+  onDestroy(() => {
+    resizeObserver.disconnect()
+    mutationObserver.disconnect()
+  })
 
   return {
     parentSize,
