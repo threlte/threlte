@@ -15,7 +15,7 @@ import Book from './Book.astro'
 import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Footer from '../components/Footer/Footer.astro'
-import NewMarkprompt from '$components/Search/NewMarkprompt'
+import Markprompt from '$components/Search/Markprompt'
 
 export interface Props {
   title?: string
@@ -37,6 +37,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 ---
 
 <AppLayout title={title}>
+  <Markprompt client:idle />
   <header
     class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
   >
@@ -66,16 +67,14 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
         >
-          <Book />
-          Learn
+          <Book />Learn
         </a>
 
         <a
           href="/docs/examples/intro"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
         >
-          <Circles />
-          Examples
+          <Circles />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
@@ -88,8 +87,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
           >
-            <Package />
-            core</a
+            <Package />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
@@ -98,8 +96,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
           >
-            <Package />
-            extras</a
+            <Package />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
@@ -108,8 +105,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
           >
-            <Package />
-            gltf</a
+            <Package />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
@@ -118,8 +114,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
           >
-            <Package />
-            rapier</a
+            <Package />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
@@ -128,8 +123,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
           >
-            <Package />
-            theatre</a
+            <Package />theatre</a
           >
         </div>
       </div>
@@ -171,7 +165,6 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     <div
       class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
-      <NewMarkprompt client:only="preact" />
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
       >
@@ -187,4 +180,4 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
   </main>
 
   <Footer class="w-full px-6 mx-auto py-12 border-t border-white/20" />
-</AppLayout>
+</AppLayout>$components/Search/Markprompt
