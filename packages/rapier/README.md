@@ -14,7 +14,7 @@
 </div>
 
 <a href="https://threlte.xyz">
- <img src="./threlte-banner.jpg"/>
+ <img src="https://threlte.xyz/logo/threlte-banner.jpg"/>
 </a>
 
 ## Rapidly Build Interactive 3D Apps for the Web
