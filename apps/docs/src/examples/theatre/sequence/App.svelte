@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { Project, Sequence, Sheet, type SequenceController } from '@threlte/theatre'
+  import { Project, Sequence, Sheet, type SequenceController, Studio } from '@threlte/theatre'
   import Controller from './Controller.svelte'
   import Scene from './Scene.svelte'
   import state from './state.json'
