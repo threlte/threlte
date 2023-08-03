@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 1.0.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+- Updated dependencies [ee1d319]
+- Updated dependencies [5bb6746]
+  - @threlte/core@6.0.1
+  - @threlte/extras@5.0.2
+
 ## 1.0.1
 
 ### Patch Changes

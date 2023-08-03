@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 6.0.1
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+- 5bb6746: Use a resize observer for handling parent size
+
 ## 6.0.0
 
 ### Major Changes
