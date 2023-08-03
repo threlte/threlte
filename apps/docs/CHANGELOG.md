@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.1.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+
 ## 0.1.1
 
 ### Patch Changes
