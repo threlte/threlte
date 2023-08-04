@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.3
+
+### Patch Changes
+
+- 5b74e1a: Fix #478 Switch to lodash-es to solve vite build issues
+
 ## 5.0.2
 
 ### Patch Changes
