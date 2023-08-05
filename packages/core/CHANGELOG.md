@@ -1,5 +1,13 @@
 # @threlte/core
 
+## 6.0.3
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
+Note: We're considering this a bug fix, but it might be a breaking change for you depending on your setup. If you run into dependency issues, reinstall the packages following the [installation guide](https://threlte.xyz/docs/learn/getting-started/installation).
+
 ## 6.0.2
 
 ### Patch Changes
