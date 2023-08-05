@@ -28,7 +28,7 @@
 
   const isScene = (obj: any): obj is Scene => !!obj.isScene
 
-  const { scene: globalScene, invalidate, renderer } = useThrelte()
+  const { scene: globalScene, invalidate } = useThrelte()
   const parent = useParent()
   let scene = globalScene
   if (isScene($parent)) scene = $parent
@@ -57,10 +57,6 @@
   const { remember } = useCache()
 
   const loadEnvironment = async () => {
-    if (!renderer)
-      throw new Error(
-        'Threlte renderer undefined. Component <Environment/> must be a descendant of <Canvas/>.'
-      )
     const LoaderType = pickLoader()
     const loader: any = new LoaderType()
     loader.setDataType?.(FloatType)

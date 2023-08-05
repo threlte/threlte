@@ -38,10 +38,6 @@
   export let depthWrite: NonNullable<$$Props['depthWrite']> = false
 
   const { scene, renderer } = useThrelte()
-  if (!renderer)
-    throw new Error(
-      'ContactShadow: WebGLRenderer is undefined, is this component a child of <Canvas>?'
-    )
 
   const scaledWidth = useMemo(() => {
     return width * (Array.isArray(scale) ? scale[0] : scale || 1)

@@ -48,8 +48,6 @@
 
   const { renderer, scene, camera } = useThrelte()
 
-  if (!renderer) throw new Error('No renderer')
-
   const composer = new EffectComposer(renderer)
 
   const setup = () => {

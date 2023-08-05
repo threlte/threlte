@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, T, useFrame, useThrelte } from '@threlte/core'
+  import { createRawEventDispatcher, T, useFrame } from '@threlte/core'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
   import CollisionGroups from '../components/CollisionGroups/CollisionGroups.svelte'
@@ -16,9 +16,6 @@
   export let groundCollisionGroups: CollisionGroupsBitMask = [15]
 
   let rigidBody: RapierRigidBody
-
-  const { renderer } = useThrelte()
-  if (!renderer) throw new Error()
 
   type Keys = 'left' | 'right' | 'down' | 'up'
 

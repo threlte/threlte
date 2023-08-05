@@ -21,8 +21,6 @@
 
   const { renderer, invalidate } = useThrelte()
 
-  if (!renderer) throw new Error('Threlte Context missing: Is <OrbitControls> a child of <Canvas>?')
-
   if (!isCamera($parent)) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }

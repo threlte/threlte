@@ -51,7 +51,7 @@
 	let renderEvery = 2
 	useFrame(() => {
 		frame += 1
-		if (!renderer || !$gameScene || !$gameCamera || frame % renderEvery !== 0) return
+		if (!$gameScene || !$gameCamera || frame % renderEvery !== 0) return
 		renderer.setRenderTarget(gameRenderTarget)
 		renderer.clear()
 		renderer.render($gameScene, $gameCamera)

@@ -71,7 +71,7 @@ export function useGltf<
         loader.setMeshoptDecoder(MeshoptDecoder)
       }
 
-      if (opts?.ktxTranscoderPath && renderer) {
+      if (opts?.ktxTranscoderPath) {
         const ktx2Loader = new KTX2Loader()
         ktx2Loader.setTranscoderPath(opts?.ktxTranscoderPath)
         ktx2Loader.detectSupport(renderer)

@@ -22,9 +22,6 @@
   let left = 0
   let right = 0
 
-  const { renderer } = useThrelte()
-  if (!renderer) throw new Error()
-
   const temp = new Vector3()
   const dispatch = createEventDispatcher()
 

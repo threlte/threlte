@@ -31,7 +31,7 @@ export type ThrelteContext = {
   useLegacyLights: CurrentWritable<boolean>
 
   // Rendering Management
-  renderer?: WebGLRenderer
+  renderer: WebGLRenderer
   frameloop: CurrentWritable<'always' | 'demand' | 'never'>
   /**
    * Invalidates the current frame when frameloop === 'demand'
@@ -213,7 +213,7 @@ export const createContexts = (options: {
     clock: new Clock(),
     camera: currentWritable(createDefaultCamera()),
     scene: new Scene(),
-    renderer: undefined,
+    renderer: undefined!,
     invalidate: (debugFrameloopMessage?: string) => {
       internalCtx.frameInvalidated = true
       if (internalCtx.debugFrameloop && debugFrameloopMessage) {

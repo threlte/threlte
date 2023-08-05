@@ -301,10 +301,6 @@
   }
 
   const portalAction = (el: HTMLElement) => {
-    if (!renderer) {
-      console.warn('HTML: renderer is undefined. Is this component a child to <Canvas>?')
-      return
-    }
     const target = portal ?? renderer.domElement.parentElement
     if (!target) {
       console.warn('HTML: target is undefined.')
