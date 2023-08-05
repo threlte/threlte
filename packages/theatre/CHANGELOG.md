@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [7424123]
+  - @threlte/extras@5.0.4
+  - @threlte/core@6.0.2
+
 ## 1.0.3
 
 ### Patch Changes

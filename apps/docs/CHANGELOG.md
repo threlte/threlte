@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.1.3
+
+### Patch Changes
+
+- 7424123: Remove optional type for renderer
+
 ## 0.1.2
 
 ### Patch Changes
