@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.0.3
+
+### Patch Changes
+
+- 7424123: Remove optional type for renderer
+
 ## 1.0.2
 
 ### Patch Changes

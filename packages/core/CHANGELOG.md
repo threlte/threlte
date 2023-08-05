@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.2
+
+### Patch Changes
+
+- 7424123: Remove optional type for renderer
+
 ## 6.0.1
 
 ### Patch Changes
