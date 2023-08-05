@@ -34,7 +34,7 @@ importers:
         version: 5.0.1
       turbo:
         specifier: latest
-        version: 1.10.12
+        version: 1.10.9
 
   apps/docs:
     dependencies:
@@ -155,13 +155,6 @@ importers:
         version: 3.1.0
 
   packages/core:
-    dependencies:
-      svelte:
-        specifier: ^4.1.1
-        version: 4.1.1
-      three:
-        specifier: ^0.153.0
-        version: 0.153.0
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
@@ -208,6 +201,9 @@ importers:
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
+      svelte:
+        specifier: ^4.1.1
+        version: 4.1.1
       svelte-check:
         specifier: ^3.4.3
         version: 3.4.3(postcss@8.4.24)(svelte@4.1.1)
@@ -217,6 +213,9 @@ importers:
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
+      three:
+        specifier: ^0.153.0
+        version: 0.153.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -284,12 +283,6 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
-      svelte:
-        specifier: ^4.1.1
-        version: 4.1.1
-      three:
-        specifier: ^0.153.0
-        version: 0.153.0
       troika-three-text:
         specifier: ^0.47.2
         version: 0.47.2(three@0.153.0)
@@ -345,6 +338,9 @@ importers:
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
+      svelte:
+        specifier: ^4.1.1
+        version: 4.1.1
       svelte-check:
         specifier: ^3.4.3
         version: 3.4.3(postcss@8.4.24)(svelte@4.1.1)
@@ -354,6 +350,9 @@ importers:
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
+      three:
+        specifier: ^0.153.0
+        version: 0.153.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -439,16 +438,16 @@ importers:
 
   packages/rapier:
     dependencies:
+      svelte:
+        specifier: '>=4'
+        version: 4.1.1
+      three:
+        specifier: '>=0.133'
+        version: 0.153.0
+    devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.11.2
         version: 0.11.2
-      svelte:
-        specifier: ^4.1.1
-        version: 4.1.1
-      three:
-        specifier: ^0.151.3
-        version: 0.151.3
-    devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.0.0(@sveltejs/kit@1.22.3)
@@ -522,23 +521,11 @@ importers:
   packages/theatre:
     dependencies:
       '@theatre/core':
-        specifier: ^0.6.2
+        specifier: '>=0.6'
         version: 0.6.2
       '@theatre/studio':
-        specifier: ^0.6.2
+        specifier: '>=0.6'
         version: 0.6.2(@theatre/core@0.6.2)
-      '@threlte/core':
-        specifier: workspace:*
-        version: link:../core
-      '@threlte/extras':
-        specifier: workspace:*
-        version: link:../extras
-      svelte:
-        specifier: ^4.1.1
-        version: 4.1.1
-      three:
-        specifier: ^0.153.0
-        version: 0.153.0
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
@@ -549,6 +536,12 @@ importers:
       '@sveltejs/package':
         specifier: ^2.1.0
         version: 2.1.0(svelte@4.1.1)(typescript@5.0.2)
+      '@threlte/core':
+        specifier: workspace:*
+        version: link:../core
+      '@threlte/extras':
+        specifier: workspace:*
+        version: link:../extras
       '@types/node':
         specifier: ^18.0.3
         version: 18.0.3
@@ -585,6 +578,9 @@ importers:
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
+      svelte:
+        specifier: ^4.1.1
+        version: 4.1.1
       svelte-check:
         specifier: ^3.4.3
         version: 3.4.3(postcss@8.4.24)(svelte@4.1.1)
@@ -594,6 +590,9 @@ importers:
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
+      three:
+        specifier: ^0.153.0
+        version: 0.153.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -1254,6 +1253,7 @@ packages:
 
   /@dimforge/rapier3d-compat@0.11.2:
     resolution: {integrity: sha512-vdWmlkpS3G8nGAzLuK7GYTpNdrkn/0NKCe0l1Jqxc7ZZOB3N0q9uG/Ap9l9bothWuAvxscIt0U97GVLr0lXWLg==}
+    dev: true
 
   /@emmetio/abbreviation@2.3.3:
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -5969,7 +5969,7 @@ packages:
   /is-reference@3.0.1:
     resolution: {integrity: sha512-baJJdQLiYaJdvFbJqXrcGv3WU3QCzBlUcI5QhbesIm6/xPsvmO+2CDoi/GMOFBQEQm+PXkwOPrp9KK5ozZsp2w==}
     dependencies:
-      '@types/estree': 1.0.0
+      '@types/estree': 1.0.1
 
   /is-regex@1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -6505,13 +6505,13 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
 
   /magic-string@0.30.2:
     resolution: {integrity: sha512-lNZdu7pewtq/ZvWUp9Wpf/x7WzMTsR26TWV03BRZrXFsv+BI6dy8RAiKgm1uM/kyR0rCfUcqvOlXKG66KhIGug==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
-    dev: false
 
   /make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -9591,7 +9591,7 @@ packages:
       estree-walker: 3.0.3
       is-reference: 3.0.1
       locate-character: 3.0.0
-      magic-string: 0.30.0
+      magic-string: 0.30.2
       periscopic: 3.1.0
 
   /symbol-tree@3.2.4:
@@ -9688,10 +9688,6 @@ packages:
 
   /three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
-    dev: false
-
-  /three@0.151.3:
-    resolution: {integrity: sha512-+vbuqxFy8kzLeO5MgpBHUvP/EAiecaDwDuOPPDe6SbrZr96kccF0ktLngXc7xA7bzyd3N0t2f6mw3Z9y6JCojQ==}
     dev: false
 
   /three@0.153.0:
@@ -9907,65 +9903,65 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /turbo-darwin-64@1.10.12:
-    resolution: {integrity: sha512-vmDfGVPl5/aFenAbOj3eOx3ePNcWVUyZwYr7taRl0ZBbmv2TzjRiFotO4vrKCiTVnbqjQqAFQWY2ugbqCI1kOQ==}
+  /turbo-darwin-64@1.10.9:
+    resolution: {integrity: sha512-Avz3wsYYb8/vjyHPVRFbNbowIiaF33vcBRklIUkPchTLvZekrT5x3ltQBCflyoi2zJV9g08hK4xXTGuCxeVvPA==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.10.12:
-    resolution: {integrity: sha512-3JliEESLNX2s7g54SOBqqkqJ7UhcOGkS0ywMr5SNuvF6kWVTbuUq7uBU/sVbGq8RwvK1ONlhPvJne5MUqBCTCQ==}
+  /turbo-darwin-arm64@1.10.9:
+    resolution: {integrity: sha512-HyggdSPc/v2HuYrJF75smhIlurn8bY2cWpZYCjOL5Pj2DpLyhBs+nk+JirZl7XQiaUEVFj6eTbsejXyDP2Ritw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@1.10.12:
-    resolution: {integrity: sha512-siYhgeX0DidIfHSgCR95b8xPee9enKSOjCzx7EjTLmPqPaCiVebRYvbOIYdQWRqiaKh9yfhUtFmtMOMScUf1gg==}
+  /turbo-linux-64@1.10.9:
+    resolution: {integrity: sha512-qvdEgJKzDjOYY8o/HlnSwD+TIXiAML+3l6wUG4Ojuh/6cIhemLMRaHmEG+LygRW7GRw3dDv3hpp9OtiKmyxFdQ==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.10.12:
-    resolution: {integrity: sha512-K/ZhvD9l4SslclaMkTiIrnfcACgos79YcAo4kwc8bnMQaKuUeRpM15sxLpZp3xDjDg8EY93vsKyjaOhdFG2UbA==}
+  /turbo-linux-arm64@1.10.9:
+    resolution: {integrity: sha512-gva8H3CS8F6HlXL6YTDJAPrvPXVjBCxdd4DKABghjAxdknV5mZV1WWwMuGf0Z2W8qtmNG1XS0Dt2Wrb1ERFnLw==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@1.10.12:
-    resolution: {integrity: sha512-7FSgSwvktWDNOqV65l9AbZwcoueAILeE4L7JvjauNASAjjbuzXGCEq5uN8AQU3U5BOFj4TdXrVmO2dX+lLu8Zg==}
+  /turbo-windows-64@1.10.9:
+    resolution: {integrity: sha512-OZ+bkSBJIkyl4JBDk8FX2/bOqtrElfXQV/KQ8/ibddB8Clzn/owx9FS1eXGdvttRZ9IJWzPrdFv+k4vbWQfE7w==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.10.12:
-    resolution: {integrity: sha512-gCNXF52dwom1HLY9ry/cneBPOKTBHhzpqhMylcyvJP0vp9zeMQQkt6yjYv+6QdnmELC92CtKNp2FsNZo+z0pyw==}
+  /turbo-windows-arm64@1.10.9:
+    resolution: {integrity: sha512-WhhhioGaePkGdGOIlrOB8LF8400FJUAQcVf8yCTvjzDB+OWn3dJQ3nalFjxH0PlZ17l6TPGt1WvWQiDVXUE4pw==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@1.10.12:
-    resolution: {integrity: sha512-WM3+jTfQWnB9W208pmP4oeehZcC6JQNlydb/ZHMRrhmQa+htGhWLCzd6Q9rLe0MwZLPpSPFV2/bN5egCLyoKjQ==}
+  /turbo@1.10.9:
+    resolution: {integrity: sha512-s1ZRRD89NelCYHty1SpV1Elpv2LRrktgcddbZm9oTq1RPNpJFSrrEOAJhNz/w0fxTSjSN1Ey3TWZghjUjgKuzg==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.10.12
-      turbo-darwin-arm64: 1.10.12
-      turbo-linux-64: 1.10.12
-      turbo-linux-arm64: 1.10.12
-      turbo-windows-64: 1.10.12
-      turbo-windows-arm64: 1.10.12
+      turbo-darwin-64: 1.10.9
+      turbo-darwin-arm64: 1.10.9
+      turbo-linux-64: 1.10.9
+      turbo-linux-arm64: 1.10.9
+      turbo-windows-64: 1.10.9
+      turbo-windows-arm64: 1.10.9
     dev: true
 
   /tweakpane@3.1.0:
