@@ -25,7 +25,6 @@
   const lockControls = () => lock()
 
   const { renderer } = useThrelte()
-  if (!renderer) throw new Error()
 
   renderer.domElement.addEventListener('click', lockControls)
 

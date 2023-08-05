@@ -51,12 +51,6 @@
     }
   )
 
-  if (!renderer) {
-    throw new Error(
-      'TransformControls: renderer is undefined, is this component a child of <Canvas>?'
-    )
-  }
-
   export const group = new Group()
 
   const controlsStore = derived(camera, (camera) => {

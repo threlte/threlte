@@ -17,7 +17,7 @@ const interactivity = (options?: InteractivityOptions) => {
     initialHits: [],
     hovered: new Map(),
     interactiveObjects: [],
-    target: currentWritable(options?.target ?? useThrelte().renderer?.domElement),
+    target: currentWritable(options?.target ?? useThrelte().renderer.domElement),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     compute: () => {}, // will be replaced by the default or the user-provided function
     filter: options?.filter

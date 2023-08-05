@@ -61,7 +61,7 @@
    */
   export let useLegacyLights: boolean = true
 
-  let canvas: HTMLCanvasElement | undefined
+  let canvas: HTMLCanvasElement
   let initialized = false
 
   // user size as a store
@@ -103,7 +103,6 @@
   const { createRenderer } = useRenderer(ctx)
 
   onMount(() => {
-    if (!canvas) return
     createRenderer(canvas, rendererParameters)
     startFrameloop(contexts.ctx, contexts.internalCtx)
     initialized = true
@@ -111,7 +110,7 @@
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-    contexts.ctx.renderer?.setAnimationLoop(null)
+    contexts.ctx.renderer.setAnimationLoop(null)
   })
 </script>
 

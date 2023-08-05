@@ -132,7 +132,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
   )
 
   onDestroy(() => {
-    ctx.renderer?.dispose()
+    ctx.renderer.dispose()
   })
 
   return {
