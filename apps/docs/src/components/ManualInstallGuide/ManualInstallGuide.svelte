@@ -24,7 +24,7 @@
         installTypes || installTheatre ? divider : ''
       }`,
     installTheatre &&
-      `${space}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+      `${space}${installExtras ? '' : '@threlte/extras '}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
