@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.0.5
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
 ## 5.0.4
 
 ### Patch Changes

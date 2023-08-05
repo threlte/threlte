@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.3
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
 ## 6.0.2
 
 ### Patch Changes
