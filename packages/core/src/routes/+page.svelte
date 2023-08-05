@@ -1,7 +1,14 @@
 <script lang='ts'>
   import { T, Canvas } from '$lib'
+
+  let mount = false
+
+  setInterval(() => {
+    mount = !mount
+  }, 1000)
 </script>
 
+{#if mount}
 <main>
   <Canvas>
     <T.PerspectiveCamera
@@ -17,6 +24,7 @@
     <T.AmbientLight />
   </Canvas>
 </main>
+{/if}
 
 <style>
   main {

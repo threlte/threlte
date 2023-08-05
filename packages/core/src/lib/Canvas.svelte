@@ -110,7 +110,9 @@
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-    contexts.ctx.renderer?.setAnimationLoop(null)
+
+    // Renderer is marked as optional because it is never defined in SSR
+    contexts.ctx.renderer?.dispose()
   })
 </script>
 
