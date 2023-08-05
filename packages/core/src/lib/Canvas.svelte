@@ -110,7 +110,7 @@
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-    contexts.ctx.renderer.setAnimationLoop(null)
+    contexts.ctx.renderer?.setAnimationLoop(null)
   })
 </script>
 
