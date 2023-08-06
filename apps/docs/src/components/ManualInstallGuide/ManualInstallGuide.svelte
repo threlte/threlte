@@ -17,14 +17,14 @@
     `npm install three @threlte/core${
       installExtras || useGltf || installRapier || installTheatre || installTypes ? divider : ''
     }`,
-    (installExtras || useGltf) &&
+    (installExtras || useGltf || installTheatre) &&
       `${space}@threlte/extras${installRapier || installTheatre || installTypes ? divider : ''}`,
     installRapier &&
       `${space}@threlte/rapier @dimforge/rapier3d-compat${
         installTypes || installTheatre ? divider : ''
       }`,
     installTheatre &&
-      `${space}${installExtras ? '' : '@threlte/extras '}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+      `${space}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -60,7 +60,7 @@
       installExtras = !installExtras
     }}
     active={installExtras}
-    passivelyActive={useGltf}>@threlte/extras</InstallButton
+    passivelyActive={useGltf || installTheatre}>@threlte/extras</InstallButton
   >
 
   <p class="my-0 self-center text-sm md:text-base">
