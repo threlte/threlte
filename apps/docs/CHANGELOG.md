@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.1.4
+
+### Patch Changes
+
+- 5f3a70e: install guide: Apply extras install on theatre install
+
 ## 0.1.3
 
 ### Patch Changes
