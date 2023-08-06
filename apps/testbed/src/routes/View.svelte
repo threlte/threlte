@@ -5,8 +5,8 @@
 		useFrame,
 		useRender,
 		useThrelte,
-		type ThrelteContext,
-		type CurrentWritable
+		type CurrentWritable,
+		type ThrelteContext
 	} from '@threlte/core';
 	import { onMount, setContext } from 'svelte';
 	import { Color, PerspectiveCamera, Scene, Vector4 } from 'three';
@@ -49,6 +49,10 @@
 	});
 
 	setContext<ThrelteContext>('threlte', childContext);
+
+	// we also need to make a state enclave for the user context
+	const userCtx = currentWritable({});
+	setContext('threlte-user-context', userCtx);
 
 	const originalViewport = new Vector4();
 	const originalScissor = new Vector4();
