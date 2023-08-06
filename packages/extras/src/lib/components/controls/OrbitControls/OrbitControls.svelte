@@ -1,7 +1,9 @@
 <script lang="ts">
   import { forwardEventHandlers, T, useFrame, useParent, useThrelte } from '@threlte/core'
-  import { Camera } from 'three'
+  import { derived } from 'svelte/store'
+  import type { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { useInteractivity } from '../../../interactivity'
   import { useControlsContext } from '../useControlsContext'
   import type {
     OrbitControlsEvents,
@@ -15,6 +17,8 @@
 
   const parent = useParent()
 
+  const interactivity = useInteractivity()
+
   const isCamera = (p: any): p is Camera => {
     return p.isCamera
   }
@@ -25,9 +29,17 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  export const ref = new ThreeOrbitControls($parent, renderer.domElement)
+  const ref = interactivity
+    ? derived([interactivity.target, parent], ([target, parent]) => {
+        if (!parent || !isCamera(parent)) return
+        return new ThreeOrbitControls(parent, target || renderer.domElement)
+      })
+    : derived(parent, (parent) => {
+        if (!parent || !isCamera(parent)) return
+        return new ThreeOrbitControls(parent, renderer.domElement)
+      })
 
-  const { start, stop } = useFrame(() => ref.update(), {
+  const { start, stop } = useFrame(() => $ref?.update(), {
     autostart: false,
     debugFrameloopMessage: 'OrbitControls: updating controls'
   })
@@ -42,18 +54,19 @@
   const { orbitControls } = useControlsContext()
 </script>
 
-<T
-  is={ref}
-  let:ref
-  {...$$restProps}
-  bind:this={$component}
-  on:change={invalidate}
-  on:create={({ ref, cleanup }) => {
-    orbitControls.set(ref)
-    cleanup(() => {
-      orbitControls.set(undefined)
-    })
-  }}
->
-  <slot {ref} />
-</T>
+{#if $ref}
+  <T
+    is={$ref}
+    {...$$restProps}
+    bind:this={$component}
+    on:change={invalidate}
+    on:create={({ ref, cleanup }) => {
+      orbitControls.set(ref)
+      cleanup(() => {
+        orbitControls.set(undefined)
+      })
+    }}
+  >
+    <slot ref={$ref} />
+  </T>
+{/if}

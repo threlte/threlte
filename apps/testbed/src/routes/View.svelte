@@ -5,12 +5,13 @@
 		useFrame,
 		useRender,
 		useThrelte,
-		type ThrelteContext
+		type ThrelteContext,
+		type CurrentWritable
 	} from '@threlte/core';
 	import { onMount, setContext } from 'svelte';
-	import { OrthographicCamera, PerspectiveCamera, Scene, Vector4 } from 'three';
+	import { Color, PerspectiveCamera, Scene, Vector4 } from 'three';
 
-	const context = useThrelte();
+	const parentContext = useThrelte();
 
 	export let element: HTMLElement;
 
@@ -24,37 +25,35 @@
 	const defaultCamera = new PerspectiveCamera();
 	defaultCamera.position.set(0, 0, 3);
 
-	const viewScene = new Scene();
-
-	const viewContext: typeof context = {
-		...context,
-		invalidate: () => {
-			context.invalidate();
-		},
+	const childContextOverrides = {
+		scene: new Scene(),
 		camera: currentWritable(createDefaultCamera())
 	};
 
-	const { camera: viewCamera } = viewContext;
-
-	setContext<ThrelteContext>('threlte', viewContext);
+	const childContext: ThrelteContext & {
+		size: CurrentWritable<{ width: number; height: number }>;
+	} = {
+		...parentContext,
+		size: currentWritable({ width: 0, height: 0 }),
+		scene: childContextOverrides.scene,
+		camera: childContextOverrides.camera
+	};
 
 	onMount(() => {
-		// if the viewScene has children, it means that the user has added objects
-		// to the viewScene, therefore this is the default scene in this context
-		// now.
-		if (viewScene.children) viewContext.scene = viewScene;
+		// Only render the view scene if it has children, otherwise render the
+		// default scene.
+		if (!childContextOverrides.scene.children.length) {
+			childContext.scene = parentContext.scene;
+			childContext.camera = parentContext.camera;
+		}
 	});
 
-	const isOrthographicCamera = (obj: any): obj is OrthographicCamera => !!obj.isOrthographicCamera;
-	const isPerspectiveCamera = (obj: any): obj is PerspectiveCamera => !!obj.isPerspectiveCamera;
+	setContext<ThrelteContext>('threlte', childContext);
 
-	let originalViewport = new Vector4();
-	let originalScissor = new Vector4();
+	const originalViewport = new Vector4();
+	const originalScissor = new Vector4();
 	let originalScissorTest: boolean;
-
-	onMount(() => {
-		console.log(viewScene.children);
-	});
+	const clearColor = new Color();
 
 	function computeContainerPosition(
 		canvas: HTMLCanvasElement,
@@ -88,30 +87,9 @@
 			isOffscreen
 		} = computeContainerPosition(renderer.domElement, element);
 
-		const aspect = width / height;
-
-		// update camera
-		if (isOrthographicCamera($viewCamera)) {
-			if (
-				$viewCamera.left !== width / -2 ||
-				$viewCamera.right !== width / 2 ||
-				$viewCamera.top !== height / 2 ||
-				$viewCamera.bottom !== height / -2
-			) {
-				Object.assign($viewCamera, {
-					left: width / -2,
-					right: width / 2,
-					top: height / 2,
-					bottom: height / -2
-				});
-				$viewCamera.updateProjectionMatrix();
-			}
-		} else if (isPerspectiveCamera($viewCamera) && $viewCamera.aspect !== aspect) {
-			$viewCamera.aspect = aspect;
-			$viewCamera.updateProjectionMatrix();
+		if (childContext.size.current.width !== width || childContext.size.current.height !== height) {
+			childContext.size.set({ width, height });
 		}
-
-		if (isOffscreen) return;
 
 		// save original state
 		renderer.getScissor(originalScissor);
@@ -123,8 +101,14 @@
 		renderer.setScissor(left, bottom, width, height);
 		renderer.setScissorTest(true);
 
-		// render
-		renderer.render(viewScene, $viewCamera);
+		// render or clear depending on offscreen status
+		if (isOffscreen) {
+			renderer.getClearColor(clearColor);
+			renderer.setClearColor(clearColor, renderer.getClearAlpha());
+			renderer.clear(true, true);
+		} else {
+			renderer.render(childContext.scene, childContext.camera.current);
+		}
 
 		// reset state
 		renderer.setViewport(originalViewport);
@@ -135,10 +119,10 @@
 
 <HierarchicalObject
 	onChildMount={(child) => {
-		viewScene.add(child);
+		childContextOverrides.scene.add(child);
 	}}
 	onChildDestroy={(child) => {
-		viewScene.remove(child);
+		childContextOverrides.scene.remove(child);
 	}}
 >
 	<slot />

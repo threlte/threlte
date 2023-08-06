@@ -1,8 +1,8 @@
 <script lang="ts">
   import {
-    forwardEventHandlers,
     HierarchicalObject,
     T,
+    forwardEventHandlers,
     useThrelte,
     watch,
     type Props
@@ -11,6 +11,7 @@
   import { derived, writable } from 'svelte/store'
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import { useInteractivity } from '../../../interactivity'
   import { useControlsContext } from '../useControlsContext'
   import type {
     TransformControlsEvents,
@@ -26,6 +27,7 @@
   export let object: $$Props['object'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
+  const interactivity = useInteractivity()
 
   const { orbitControls } = useControlsContext()
   const isDragging = writable(false)
@@ -53,9 +55,13 @@
 
   export const group = new Group()
 
-  const controlsStore = derived(camera, (camera) => {
-    return new TransformControls(camera, renderer.domElement)
-  })
+  const controlsStore = interactivity
+    ? derived([interactivity.target, camera], ([target, camera]) => {
+        return new TransformControls(camera, target || renderer.domElement)
+      })
+    : derived(camera, (camera) => {
+        return new TransformControls(camera, renderer.domElement)
+      })
 
   export let controls = $controlsStore
   $: controls = $controlsStore

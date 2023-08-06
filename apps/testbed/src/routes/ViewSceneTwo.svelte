@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { interactivity } from '@threlte/extras';
+	import { OrbitControls, interactivity } from '@threlte/extras';
 
 	export let element: HTMLElement;
 
@@ -16,7 +16,9 @@
 	zoom={100}
 	position={[3, 2, 3]}
 	on:create={({ ref }) => ref.lookAt(0, 0, 0)}
-/>
+>
+	<OrbitControls />
+</T.OrthographicCamera>
 
 <T.Mesh
 	on:pointerenter={() => {
