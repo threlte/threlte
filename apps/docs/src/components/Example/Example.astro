@@ -16,7 +16,7 @@ interface Props {
   expandCode?: boolean
 }
 
-const allModules = import.meta.glob('../../examples/**/*', {
+const allModules = import.meta.glob('../../examples/**/*.*[!glb]', {
   as: 'raw',
   eager: true
 }) as Record<string, string>
