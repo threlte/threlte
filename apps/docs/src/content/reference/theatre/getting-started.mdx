@@ -68,9 +68,9 @@ In your Scene, add the component `<SheetObject>` as a parent of any component yo
 
 ```svelte title=Scene.svelte
 <script lang="ts">
-  import { OrbitControls, T } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
 </script>
 
 <T.PerspectiveCamera
