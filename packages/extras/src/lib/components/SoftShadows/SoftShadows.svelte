@@ -1,19 +1,28 @@
 <!--
 	@component
-	This component is a port of the component [`<SoftShadows>` by drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx)
-	Integration and compilation: @N8Programs
-	Inspired by:
-		https://github.com/mrdoob/three.js/blob/dev/examples/webgl_shadowmap_pcss.html
-		https://developer.nvidia.com/gpugems/gpugems2/part-ii-shading-lighting-and-shadows/chapter-17-efficient-soft-edged-shadows-using
-		https://developer.download.nvidia.com/whitepapers/2008/PCSS_Integration.pdf
-		https://github.com/mrdoob/three.js/blob/master/examples/webgl_shadowmap_pcss.html [spidersharma03]
-		https://spline.design/
-	Concept:
-		https://www.gamedev.net/tutorials/programming/graphics/contact-hardening-soft-shadows-made-fast-r4906/
-	Vogel Disk Implementation:
-		https://www.shadertoy.com/view/4l3yRM [ashalah]
-	High-Frequency Noise Implementation:
-		https://www.shadertoy.com/view/tt3fDH [spawner64]
+	This component injects Percentage-Closer Soft Shadows (PCSS) into
+	Three.js' shader chunk. Mounting and unmounting this component will lead to
+	all shaders being be re-compiled, although it will only cause overhead if
+	`<SoftShadows>` is mounted after the scene has already rendered, if it mounts
+	with everything else in your scene shaders will compile naturally.
+-->
+
+<!--
+	This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx)
+	Original comment:
+		Integration and compilation: @N8Programs
+		Inspired by:
+			https://github.com/mrdoob/three.js/blob/dev/examples/webgl_shadowmap_pcss.html
+			https://developer.nvidia.com/gpugems/gpugems2/part-ii-shading-lighting-and-shadows/chapter-17-efficient-soft-edged-shadows-using
+			https://developer.download.nvidia.com/whitepapers/2008/PCSS_Integration.pdf
+			https://github.com/mrdoob/three.js/blob/master/examples/webgl_shadowmap_pcss.html [spidersharma03]
+			https://spline.design/
+		Concept:
+			https://www.gamedev.net/tutorials/programming/graphics/contact-hardening-soft-shadows-made-fast-r4906/
+		Vogel Disk Implementation:
+			https://www.shadertoy.com/view/4l3yRM [ashalah]
+		High-Frequency Noise Implementation:
+			https://www.shadertoy.com/view/tt3fDH [spawner64]
 -->
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
