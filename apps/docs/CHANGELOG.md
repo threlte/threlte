@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 9c0035e: Added <SoftShadows> component
+- 9c0035e: Added `<SoftShadows>` component
 
 ### Patch Changes
 
