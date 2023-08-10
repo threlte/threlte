@@ -8,7 +8,6 @@ Command: npx @threlte/gltf@1.0.1 ./Suzanne.glb -t -s
   import { Sequence, Sheet, SheetObject } from '@threlte/theatre'
   import type * as THREE from 'three'
   import { Group } from 'three'
-  import Suzanne from './Suzanne.glb'
 
   type $$Props = Props<THREE.Group>
   type $$Events = Events<THREE.Group>
@@ -28,7 +27,7 @@ Command: npx @threlte/gltf@1.0.1 ./Suzanne.glb -t -s
     }
   }
 
-  const gltf = useGltf<GLTFResult>(Suzanne)
+  const gltf = useGltf<GLTFResult>('/models/Suzanne.glb')
 
   const component = forwardEventHandlers()
 </script>

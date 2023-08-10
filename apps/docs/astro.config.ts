@@ -51,7 +51,6 @@ export default defineConfig({
   ],
   output: 'static',
   vite: {
-    assetsInclude: ['**/*.glb'],
     resolve: {
       alias: {
         $lib: resolve('./src/lib'),
