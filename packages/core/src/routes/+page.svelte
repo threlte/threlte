@@ -7,6 +7,7 @@
     <T.PerspectiveCamera
       makeDefault
       position={[3, 3, 3]}
+      on:create={({ ref }) => ref.lookAt(0, 0, 0)}
     />
     <T.Mesh>
       <T.MeshStandardMaterial color='hotpink' />
@@ -19,6 +20,6 @@
 
 <style>
   main {
-    height: 100dvh;
+    height: 100vh;
   }
 </style>
