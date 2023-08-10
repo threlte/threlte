@@ -1,7 +1,4 @@
 <script lang="ts">
-  import type { IStudio } from '@theatre/studio'
-  import InnerStudio from './InnerStudio.svelte'
-
   export let enabled = true
   export let hide = false
 
@@ -9,9 +6,11 @@
 </script>
 
 {#if browser && enabled}
-  <InnerStudio {hide}>
-    <slot />
-  </InnerStudio>
+  {#await import('./InnerStudio.svelte') then Component}
+    <svelte:component this={Component.default} {hide}>
+      <slot />
+    </svelte:component>
+  {/await}
 {:else}
   <slot />
 {/if}
