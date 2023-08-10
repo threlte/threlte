@@ -2,6 +2,7 @@
   import { watch } from '@threlte/core'
   import { onMount } from 'svelte'
   import { writable } from 'svelte/store'
+  import Studio from '@theatre/studio'
   import { studio } from '../consts'
 
   export let hide: boolean
@@ -16,8 +17,6 @@
       initialized = true
       return
     }
-    const pkg = await import('@theatre/studio')
-    const Studio = pkg.default
     Studio.initialize()
     studio.set(Studio)
     initialized = true
