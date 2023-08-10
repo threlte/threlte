@@ -1,5 +1,15 @@
 # @threlte/docs-next
 
+## 0.2.0
+
+### Minor Changes
+
+- 9c0035e: Added <SoftShadows> component
+
+### Patch Changes
+
+- a6c4a56: Fix: dynamically import studio component instead of npm package
+
 ## 0.1.4
 
 ### Patch Changes

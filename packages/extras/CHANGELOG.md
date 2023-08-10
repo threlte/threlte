@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.1.0
+
+### Minor Changes
+
+- 9c0035e: Added <SoftShadows> component
+
 ## 5.0.5
 
 ### Patch Changes

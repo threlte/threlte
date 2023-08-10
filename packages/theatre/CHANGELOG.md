@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 2.0.0
+
+### Patch Changes
+
+- a6c4a56: Fix: dynamically import studio component instead of npm package
+- Updated dependencies [9c0035e]
+  - @threlte/extras@5.1.0
+
 ## 1.0.5
 
 ### Patch Changes
