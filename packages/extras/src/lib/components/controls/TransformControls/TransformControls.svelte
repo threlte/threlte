@@ -7,7 +7,7 @@
     watch,
     type Props
   } from '@threlte/core'
-  import { omit, pick } from 'lodash'
+  import { omit, pick } from 'lodash-es'
   import { derived, writable } from 'svelte/store'
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
@@ -50,12 +50,6 @@
       }
     }
   )
-
-  if (!renderer) {
-    throw new Error(
-      'TransformControls: renderer is undefined, is this component a child of <Canvas>?'
-    )
-  }
 
   export const group = new Group()
 

@@ -19,6 +19,7 @@ export { default as OrbitControls } from './components/controls/OrbitControls/Or
 export { default as InstancedMesh } from './components/Instancing/InstancedMesh.svelte'
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
+export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'

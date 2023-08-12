@@ -39,15 +39,11 @@
   const rotationQuat = new Quaternion()
 
   const { renderer, invalidate } = useThrelte()
-  if (!renderer) throw new Error()
 
   const domElement = renderer.domElement
   const camera = useParent()
 
   const dispatch = createEventDispatcher()
-
-  if (!renderer)
-    throw new Error('Threlte Context missing: Is <PointerLockControls> a child of <Canvas>?')
 
   const isCamera = (p: any): p is Camera => {
     return p.isCamera

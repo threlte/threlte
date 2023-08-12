@@ -1,6 +1,6 @@
 {
   "name": "@threlte/rapier",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -13,6 +13,7 @@
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
+    "@dimforge/rapier3d-compat": "^0.11.2",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.1.0",
@@ -37,10 +38,10 @@
     "typescript": "^5.0.0",
     "vite": "^4.3.6"
   },
-  "dependencies": {
-    "three": "^0.151.3",
-    "svelte": "^4.1.1",
-    "@dimforge/rapier3d-compat": "^0.11.2"
+  "peerDependencies": {
+    "svelte": ">=4",
+    "three": ">=0.133",
+    "@dimforge/rapier3d-compat": ">=0.11"
   },
   "type": "module",
   "exports": {

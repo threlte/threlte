@@ -93,7 +93,7 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
  * A global delta is calculated and passed to all `useFrame` and `useRender` callbacks.
  */
 export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
-  ctx.renderer?.setAnimationLoop(() => {
+  ctx.renderer.setAnimationLoop(() => {
     // dispose all objects that are due to be disposed
     internalCtx.dispose()
 
@@ -109,7 +109,7 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
     if (internalCtx.renderHandlers.size > 0) {
       // run all useRender callbacks, or …
       runUseRenderCallbacks(ctx, internalCtx, delta)
-    } else if (ctx.renderer && ctx.camera.current) {
+    } else if (ctx.camera.current) {
       // … render the scene with the default renderer
       ctx.renderer.render(ctx.scene, ctx.camera.current)
     }

@@ -1,5 +1,37 @@
 # @threlte/extras
 
+## 5.1.0
+
+### Minor Changes
+
+- 9c0035e: Added `<SoftShadows>` component
+
+## 5.0.5
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
+Note: We're considering this a bug fix, but it might be a breaking change for you depending on your setup. If you run into dependency issues, reinstall the packages following the [installation guide](https://threlte.xyz/docs/learn/getting-started/installation).
+
+## 5.0.4
+
+### Patch Changes
+
+- 7424123: Remove optional type for renderer
+
+## 5.0.3
+
+### Patch Changes
+
+- 5b74e1a: Fix #478 Switch to lodash-es to solve vite build issues
+
+## 5.0.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+
 ## 5.0.1
 
 ### Patch Changes

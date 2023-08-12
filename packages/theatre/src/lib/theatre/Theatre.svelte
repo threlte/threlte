@@ -11,10 +11,7 @@
   export let config: IProjectConfig | undefined = undefined
 </script>
 
-<Studio
-  enabled={studio.enabled}
-  hide={studio.hide}
->
+<Studio {...studio}>
   <Project {config}>
     <Sheet>
       <slot />

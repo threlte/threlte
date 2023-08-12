@@ -216,7 +216,9 @@
   $: backgroundColor.set($machineIsOff ? new Color('#020203') : new Color('#020203'))
 
   const { scene, renderer } = useThrelte()
-  if (renderer) renderer.physicallyCorrectLights = true
+  
+  renderer.useLegacyLights = false
+
   $: scene.background = new Color($backgroundColor)
 
   const blueLightIntensity = tweened(2, {
@@ -276,7 +278,7 @@
     >
       <T
         is={OrbitControls}
-        args={[camera, renderer?.domElement]}
+        args={[camera, renderer.domElement]}
       />
     </T.PerspectiveCamera>
   {:else}

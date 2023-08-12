@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 1.0.1
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+
 ## 1.0.0
 
 ### Major Changes

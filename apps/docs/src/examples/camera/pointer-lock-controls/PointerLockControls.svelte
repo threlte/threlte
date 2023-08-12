@@ -12,7 +12,7 @@
   let isLocked = false
 
   const { renderer, invalidate } = useThrelte()
-  if (!renderer) throw new Error()
+
   const domElement = renderer.domElement
   const camera = useParent()
   const dispatch = createEventDispatcher()

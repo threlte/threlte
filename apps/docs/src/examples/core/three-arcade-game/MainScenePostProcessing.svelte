@@ -76,7 +76,7 @@
     )
   }
 
-  $: if (renderer && $camera && $arcadeMachineScene) {
+  $: if ($camera && $arcadeMachineScene) {
     addComposerAndPasses()
   }
   onDestroy(() => {

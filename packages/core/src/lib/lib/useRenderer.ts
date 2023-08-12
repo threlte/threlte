@@ -1,4 +1,3 @@
-import { onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
 import {
   REVISION,
@@ -130,10 +129,6 @@ export const useRenderer = (ctx: ThrelteContext) => {
       }
     }
   )
-
-  onDestroy(() => {
-    ctx.renderer?.dispose()
-  })
 
   return {
     createRenderer

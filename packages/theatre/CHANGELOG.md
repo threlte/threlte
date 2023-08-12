@@ -1,5 +1,50 @@
 # @threlte/extras
 
+## 2.0.0
+
+### Patch Changes
+
+- a6c4a56: Fix: dynamically import studio component instead of npm package
+- Updated dependencies [9c0035e]
+  - @threlte/extras@5.1.0
+
+## 1.0.5
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
+Note: We're considering this a bug fix, but it might be a breaking change for you depending on your setup. If you run into dependency issues, reinstall the packages following the [installation guide](https://threlte.xyz/docs/learn/getting-started/installation).
+
+- Updated dependencies [dfa5cbd]
+  - @threlte/extras@5.0.5
+  - @threlte/core@6.0.3
+
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [7424123]
+  - @threlte/extras@5.0.4
+  - @threlte/core@6.0.2
+
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [5b74e1a]
+  - @threlte/extras@5.0.3
+
+## 1.0.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+- Updated dependencies [ee1d319]
+- Updated dependencies [5bb6746]
+  - @threlte/core@6.0.1
+  - @threlte/extras@5.0.2
+
 ## 1.0.1
 
 ### Patch Changes

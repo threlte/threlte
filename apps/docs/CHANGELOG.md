@@ -1,5 +1,33 @@
 # @threlte/docs-next
 
+## 0.2.0
+
+### Minor Changes
+
+- 9c0035e: Added `<SoftShadows>` component
+
+### Patch Changes
+
+- a6c4a56: Fix: dynamically import studio component instead of npm package
+
+## 0.1.4
+
+### Patch Changes
+
+- 5f3a70e: install guide: Apply extras install on theatre install
+
+## 0.1.3
+
+### Patch Changes
+
+- 7424123: Remove optional type for renderer
+
+## 0.1.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+
 ## 0.1.1
 
 ### Patch Changes
