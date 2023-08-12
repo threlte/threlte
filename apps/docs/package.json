@@ -38,11 +38,11 @@
     "@threlte/theatre": "workspace:*",
     "@tweakpane/core": "^1.1.0",
     "@types/animejs": "^3.1.7",
-    "@types/three": "^0.155.0",
+    "@types/three": "^0.152.1",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.3.0",
     "node-html-parser": "^6.1.4",
-    "postprocessing": "^6.33.0",
+    "postprocessing": "^6.32.2",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-pretty-code": "^0.9.2",
     "rehype-slug": "^5.1.0",
@@ -50,7 +50,7 @@
     "shiki": "^0.10.1",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
-    "three": "0.155.0",
+    "three": "0.153.0",
     "tweakpane": "^3.1.0"
   }
 }
