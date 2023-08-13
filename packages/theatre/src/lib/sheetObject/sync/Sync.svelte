@@ -9,6 +9,7 @@
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
   import { isStringProp } from './utils/isStringProp'
+  import { useStudio } from '../../studio/useStudio'
 
   // used for type hinting auto props
   export let type: any = undefined
@@ -111,7 +112,34 @@
 
   initProps()
 
+  const studio = useStudio()
+
+  export const capture = () => {
+    if (!$studio) return
+    const scrub = $studio.scrub()
+
+    Object.keys(sheetObject.current.value).forEach((key) => {
+      // first, check if the prop is mapped in this component
+      const propMapping = propMappings[key]
+
+      if (!propMapping) return
+
+      // we're using the addedProps map to infer the target property name from the property name on values
+      const { target, key: targetKey } = resolvePropertyPath($parent, propMapping.propertyPath)
+
+      const value = propMapping.transformer.transform(target[targetKey]).default
+
+      scrub.capture(({ set }) => {
+        set(sheetObject.current.props[key], value)
+      })
+    })
+
+    scrub.commit()
+  }
+
   onDestroy(() => {
     removeProps(Object.keys(propMappings))
   })
 </script>
+
+<slot {capture} />
