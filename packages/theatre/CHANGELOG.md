@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.0
+
+### Minor Changes
+
+- 82ee149: Added capturing in <Sync> component
+
 ## 2.0.0
 
 ### Patch Changes

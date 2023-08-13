@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.2.1
+
+### Patch Changes
+
+- 5b7363b: Fix: docs text and outline examples
+
 ## 0.2.0
 
 ### Minor Changes
