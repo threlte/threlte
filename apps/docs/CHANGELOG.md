@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.3.0
+
+### Minor Changes
+
+- 0dbdd65: Added `<Center>` component
+
 ## 0.2.1
 
 ### Patch Changes
