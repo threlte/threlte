@@ -20,6 +20,7 @@ export { default as InstancedMesh } from './components/Instancing/InstancedMesh.
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
+export { default as Center } from './components/Center/Center.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
