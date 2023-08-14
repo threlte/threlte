@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 3.0.0
+
+### Patch Changes
+
+- Updated dependencies [0dbdd65]
+  - @threlte/extras@5.2.0
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/theatre",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -45,7 +45,7 @@
     "svelte": ">=4",
     "three": ">=0.133",
     "@threlte/core": ">=6.0.3",
-    "@threlte/extras": ">=5.1.0",
+    "@threlte/extras": ">=5.2.0",
     "@theatre/core": ">=0.6",
     "@theatre/studio": ">=0.6"
   },

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.2.0
+
+### Minor Changes
+
+- 0dbdd65: Added `<Center>` component
+
 ## 5.1.0
 
 ### Minor Changes
