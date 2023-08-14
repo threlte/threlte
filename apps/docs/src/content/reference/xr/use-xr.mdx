@@ -11,7 +11,7 @@ Use this hook to get context about the current WebXR session.
 <script>
   import { useXR } from '@threlte/xr'
 
-  const { isPresenting, isHandTracking, player, session, xrFrame } = useXR()
+  const { isPresenting, isHandTracking, session, xrFrame } = useXR()
 </script>
 ```
 
@@ -23,7 +23,6 @@ import { useXR } from 'threlte-xr'
 const {
   isPresenting, // CurrentWritable<boolean> - Whether the XR device is presenting in an XR session
   isHandTracking, // CurrentWritable<boolean> - Whether hand tracking inputs are active
-  player, // CurrentWritable<THREE.Group> - Representing the XR viewer or player
   session, // CurrentWritable<XRSession | undefined> - The active `XRSession`
   xrFrame, // CurrentWritable<XRFrame> - The current XRFrame
 } = useXR()

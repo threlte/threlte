@@ -1,0 +1,52 @@
+---
+{
+  category: '@threlte/xr',
+  name: '<Hands>',
+  order: 2,
+  type: 'component',
+  componentSignature:
+    {
+      props:
+        [
+          {
+            name: 'modelLeft',
+            type: "THREE.Object3D | 'none' | undefined",
+            required: false,
+            description: 'An optional model for the left controller. If "none" is passed, no controller model will render.'
+          },
+          {
+            name: 'modelRight',
+            type: "THREE.Object3D | 'none' | undefined",
+            required: false,
+            description: 'An optional model for the right controller. If "none" is passed, no controller model will render.'
+          },
+        ],
+      events:
+        [
+          {
+            name: 'click',
+            payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
+            description: 'Fires when a user clicks the VR button.'
+          },
+          {
+            name: 'error',
+            payload: 'CustomEvent<Error>',
+            description: 'Fires when an enter / exit session error occurs.'
+          },
+        ],
+    }
+}
+---
+
+`<Controllers />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model per each hand.
+
+You can specify custom models, or no models to be rendered for these controllers.
+
+This component can accept children in `left` and `right` slots, which will be parented to the controller of the respective handedness.
+
+```svelte
+<Controllers>
+  <T slot='left' is={$gltf1.scene} />
+  <T slot='right' is={$gltf2.scene} />
+</Controllers>
+```
