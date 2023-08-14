@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useRender } from '@threlte/core'
-  import { Center, OrbitControls, RoundedBoxGeometry } from '@threlte/extras'
+  import { Center, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
   import { tick } from 'svelte'
   import type { Box3, Vector3 } from 'three'
 
@@ -39,10 +39,18 @@
       center = newCenter
       boundingBox = newBoundingBox
     }}
+    let:center
   >
-    <T.Mesh position.x={-1}>
+    <T.Mesh
+      position.x={-1}
+      let:ref
+    >
+      <TransformControls
+        object={ref}
+        on:objectChange={center}
+      />
       <RoundedBoxGeometry args={[1, 2, 1]} />
-      <T.MeshStandardMaterial color="#782000" />
+      <T.MeshStandardMaterial color="white" />
     </T.Mesh>
 
     <T.Mesh
@@ -50,7 +58,7 @@
       position.y={1}
     >
       <RoundedBoxGeometry args={[1, 2, 3]} />
-      <T.MeshStandardMaterial color="#153061" />
+      <T.MeshStandardMaterial color="white" />
     </T.Mesh>
 
     {#if showSphere}
@@ -59,7 +67,7 @@
         position.y={3}
       >
         <T.SphereGeometry />
-        <T.MeshStandardMaterial color="orange" />
+        <T.MeshStandardMaterial color="white" />
       </T.Mesh>
     {/if}
   </Center>
@@ -76,5 +84,6 @@
 {/if}
 
 <T.DirectionalLight position={[3, 10, 5]} />
+<T.AmbientLight intensity={0.1} />
 
 <T.AxesHelper />
