@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useRender } from '@threlte/core'
-  import { Center, RoundedBoxGeometry } from '@threlte/extras'
+  import { Center, OrbitControls, RoundedBoxGeometry } from '@threlte/extras'
   import { tick } from 'svelte'
   import type { Box3, Vector3 } from 'three'
 
@@ -23,7 +23,9 @@
 <T.PerspectiveCamera
   makeDefault
   position.z={10}
-/>
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
 
 <!-- The property autoCenter is not reactive, therefore we need to key it here. -->
 {#key autoCenter}
@@ -40,7 +42,7 @@
   >
     <T.Mesh position.x={-1}>
       <RoundedBoxGeometry args={[1, 2, 1]} />
-      <T.MeshStandardMaterial color="#540005" />
+      <T.MeshStandardMaterial color="#782000" />
     </T.Mesh>
 
     <T.Mesh
@@ -48,7 +50,7 @@
       position.y={1}
     >
       <RoundedBoxGeometry args={[1, 2, 3]} />
-      <T.MeshStandardMaterial color="#010039" />
+      <T.MeshStandardMaterial color="#153061" />
     </T.Mesh>
 
     {#if showSphere}
@@ -74,3 +76,5 @@
 {/if}
 
 <T.DirectionalLight position={[3, 10, 5]} />
+
+<T.AxesHelper />
