@@ -1,3 +1,7 @@
+<!--
+  @component
+  Creates XRHand inputs for devices that allow hand tracking.
+-->
 <script lang='ts'>
 
 import { createRawEventDispatcher } from '@threlte/core'
@@ -7,17 +11,17 @@ import type { XRHandEvent } from '$lib/types'
 export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
 
 type $$Events = {
-  connected: XRHandEvent<'connected'>
-  disconnected: XRHandEvent<'disconnected'>
-  pinchstart: XRHandEvent<'pinchstart'>
-  pinchend: XRHandEvent<'pinchend'>
+  connected: XRHandEvent<'connected', null>
+  disconnected: XRHandEvent<'disconnected', null>
+  pinchstart: XRHandEvent<'pinchstart', THREE.XRHandSpace>
+  pinchend: XRHandEvent<'pinchend', THREE.XRHandSpace>
 }
 
 const dispatch = createRawEventDispatcher<$$Events>()
 
 const handedness: ['left' | 'right', 'left' | 'right'] = [undefined!, undefined!]
 
-const setHandedness = (index: number, event: XRHandEvent<'connected'>) => {
+const setHandedness = (index: number, event: XRHandEvent<'connected', null>) => {
   if (event.data) {
     handedness[index] = event.data.handedness as 'left' | 'right'
   }

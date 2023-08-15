@@ -11,6 +11,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
     }}
     force={'enter' | 'exit' | undefined}
+    styled={'true' | 'false'}
     on:error={(event) => {}}
     on:click={(event) => {}}
   />
@@ -20,8 +21,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
 <script lang='ts'>
 
 import { createEventDispatcher } from 'svelte'
-import { toggleSession, getSupportState } from '$lib/utils'
-import { session, initialized } from '$lib/stores'
+import { getXRSupportState } from '$lib/lib/get-xr-support-state'
+import { toggleXRSession } from '$lib/lib/toggle-xr-session'
+import { session, initialized } from '$lib/internal/stores'
 
 /** The type of `XRSession` to create */
 export let mode: XRSessionMode
@@ -34,6 +36,9 @@ export let sessionInit: XRSessionInit & { domOverlay?: { root: HTMLElement } | u
 
 /** Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways */
 export let force: 'enter' | 'exit' | undefined = undefined
+
+/** Whether to apply automatic styling to the button. Set false to apply custom styles. Default is true. */
+export let styled = true
 
 type $$Events = {
   /** Fires when a user clicks the VR button. */
@@ -54,7 +59,7 @@ const handleButtonClick = async (state: 'unsupported' | 'insecure' | 'blocked' |
   if (state !== 'supported') return
 
   try {
-    await toggleSession(mode, sessionInit, force)
+    await toggleXRSession(mode, sessionInit, force)
   } catch (error) {
     /** This callback gets fired if XR initialization fails. */
     dispatch('error', error as Error)
@@ -67,9 +72,25 @@ $: modeText = {
   inline: 'inline'
 }[mode]
 
+$: if (styled) {
+  $$restProps.style = `
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border: 1px solid white;
+    background: rgba(0, 0, 0, 0.1);
+    color: white;
+    outline: none;
+    z-index: 99999;
+    ${($$restProps.style ?? '')}
+  `
+}
+
 </script>
 
-{#await getSupportState(mode) then state}
+{#await getXRSupportState(mode) then state}
   <button {...$$restProps} on:click={() => handleButtonClick(state)}>
     {#if state === 'unsupported'}
       {modeText} unsupported
@@ -82,18 +103,3 @@ $: modeText = {
     {/if}
   </button>
 {/await}
-
-<style>
-  button {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    border: 1px solid white;
-    background: rgba(0, 0, 0, 0.1);
-    color: white;
-    outline: none;
-    z-index: 99999;
-  }
-</style>

@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import { on, off } from '$lib/events'
+import { on, off } from '$lib/internal/events'
 import type {
   XRControllerEventType,
   XRHandEventType,
@@ -8,17 +8,12 @@ import type {
 } from '$lib/types'
 
 /**
- * Handles controller events that are not bound to any object in the scene.
- * This subscribes directly into the native XRInputSource (see XRInputSourceEvent).
- *
- * @param event 
- * @param handler 
- * @param options 
+ * Adds listeners for controller events.
  */
-export const useXRControllerEvent = (
+export const useControllerEvent = (
   event: XRControllerEventType,
   handler: (event: XRControllerEvent) => void,
-  { handedness }: { handedness?: 'left' | 'right' | 'none' } = {}
+  { handedness }: { handedness?: XRHandedness } = {}
 ): void => {
   const listener = (event: XRControllerEvent) => {
     if (handedness !== undefined && event.data?.handedness !== handedness) {
@@ -35,26 +30,21 @@ export const useXRControllerEvent = (
 
 /**
  * Adds listeners for hand events.
- * This subscribes directly into the native XRInputSource (see XRInputSourceEvent).
- *
- * @param event 
- * @param handler 
- * @param options 
  */
-export const useXRHandEvent = (
+export const useHandEvent = (
   event: XRHandEventType,
-  handler: (event: XRHandEvent) => void,
+  handler: (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>) => void,
   { handedness }: { handedness?: 'left' | 'right' } = {}
 ): void => {
-  const listener = (event: XRHandEvent) => {
-    if (handedness !== undefined && event.data?.handedness !== handedness) {
+  const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>) => {
+    if (handedness !== undefined && event.handedness !== handedness) {
       return
     }
 
     handler(event)
   }
 
-  on<XRHandEvent>(event, listener)
+  on(event, listener)
 
   onDestroy(() => off(event, listener))
 }

@@ -11,32 +11,24 @@ extend({ Line2, LineGeometry, LineMaterial })
 
 <script lang='ts'>
 
-export let positions = new Float32Array([0, 0, 0, 0, 0, -0.3])
-export let colors: Float32Array | undefined = undefined
-export let length = 1
+export let positions: Float32Array | undefined
 export let color = 'white'
-export let transparent = false
 
-const lineGeometry = new LineGeometry()
+let lineGeometry = new LineGeometry()
 
-$: lineGeometry.setPositions(positions)
-
-$: if (colors !== undefined) {
-  lineGeometry.setColors(colors)
+$: if (positions) {
+  lineGeometry.setPositions(positions)
 }
 
 </script>
 
 <T.Line2
   {...$$restProps}
-  scale.z={length}
   position.z={-0.01}
 >
   <T is={lineGeometry} />
   <T.LineMaterial
     {color}
-    {transparent}
-    vertexColors={colors !== undefined}
     linewidth={0.004}
   />
 </T.Line2>

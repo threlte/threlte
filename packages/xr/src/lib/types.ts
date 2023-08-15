@@ -15,19 +15,20 @@ export type XRControllerEvent<Type = XRControllerEventType> = THREE.Event & {
   data?: XRInputSource
 }
 
-export type XRHandEvent<Type = XRHandEventType> = THREE.Event & {
-  type: Type
-  target: any
-  data?: XRInputSource
-}
-
 export type XRController = {
   controller: THREE.XRTargetRaySpace
   grip: THREE.XRGripSpace
-  inputSource: XRInputSource & { inputSource: XRInputSource }
+  inputSource: XRInputSource
 }
 
 export type XRHand = {
   hand: THREE.XRHandSpace
-  inputSource: XRInputSource & { inputSource: XRInputSource }
+  inputSource: globalThis.XRHand
 }
+
+export type XRHandEvent<Type = XRHandEventType, Target = null | THREE.XRHandSpace> = THREE.Event & {
+  type: Type
+  target: Target
+}
+
+export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => void

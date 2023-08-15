@@ -19,9 +19,9 @@ and interaction. This should be placed within a Threlte `<Canvas />`.
 <script lang='ts'>
 
 import { onDestroy } from 'svelte';
-import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
-import type { XRSessionEvent } from './types'
-import { session, referenceSpaceType, player, isPresenting, isHandTracking, xrFrame, initialized } from './stores'
+import { useThrelte, createRawEventDispatcher } from '@threlte/core'
+import type { XRSessionEvent } from '$lib/types'
+import { session, referenceSpaceType, isPresenting, isHandTracking, initialized, xr as xrStore } from '$lib/internal/stores'
 
 /**
  * Enables foveated rendering. `Default is `0`
@@ -55,22 +55,14 @@ type $$Events = {
 }
 
 const dispatch = createRawEventDispatcher<$$Events>()
-
-const { renderer, camera } = useThrelte()
-const { xr } = renderer!
-
-const { start, stop } = useFrame(() => {
-  xrFrame.set(xr.getFrame())
-}, { autostart: false })
+const { xr } = useThrelte().renderer
 
 const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
-  start()
   $isPresenting = true
   dispatch('sessionstart', { ...event, target: $session! })
 }
 
 const handleSessionEnd = (event: XRSessionEvent<'sessionend'>) => {
-  stop()
   dispatch('sessionend', { ...event, target: $session! })
   $isPresenting = false
   $session = undefined
@@ -89,14 +81,6 @@ const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
   dispatch('visibilitychange', { ...event, target: $session! })
 }
 
-const cleanupSession = (session?: XRSession) => {
-  if (session === undefined) return
-
-  session.removeEventListener('visibilitychange', handleVisibilityChange)
-  session.removeEventListener('inputsourceschange', handleInputSourcesChange)
-  session.removeEventListener('frameratechange', handleFramerateChange)
-}
-
 const updateTargetFrameRate = (frameRate?: number) => {
   if (frameRate === undefined) return
 
@@ -105,14 +89,20 @@ const updateTargetFrameRate = (frameRate?: number) => {
   } catch {}
 }
 
-const updateSession = async (session?: XRSession) => {
-  if (session === undefined) return
+const cleanupSession = (currentSession?: XRSession) => {
+  if (currentSession === undefined) return
 
-  session.addEventListener('visibilitychange', handleVisibilityChange)
-  session.addEventListener('inputsourceschange', handleInputSourcesChange)
-  session.addEventListener('frameratechange', handleFramerateChange)
+  currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
+  currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
+  currentSession.removeEventListener('frameratechange', handleFramerateChange)
+}
 
-  await xr.setSession(session)
+const updateSession = async (currentSession?: XRSession) => {
+  if (currentSession === undefined) return
+
+  currentSession.addEventListener('visibilitychange', handleVisibilityChange)
+  currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
+  currentSession.addEventListener('frameratechange', handleFramerateChange)
 
   xr.setFoveation(foveation)
   
@@ -128,24 +118,28 @@ $: {
   $referenceSpaceType = referenceSpace
 }
 
-$: cleanupSession($session)
-$: updateSession($session)
+let lastSession: XRSession | undefined
+
+$: if (lastSession !== $session) {
+  cleanupSession(lastSession)
+  updateSession($session)
+  lastSession = $session
+}
+
 $: updateTargetFrameRate(frameRate)
 $: xr.setFoveation(foveation)
 
+$xrStore = xr
+$initialized = true
+
 onDestroy(() => {
+  $initialized = false
   xr.enabled = false
   xr.removeEventListener('sessionstart', handleSessionStart)
   xr.removeEventListener('sessionend', handleSessionEnd)
 })
 
-$initialized = true
-
 </script>
-
-<T name='Player' is={$player}>
-  <T is={camera.current} />
-</T>
 
 {#if $isPresenting}
   <slot />

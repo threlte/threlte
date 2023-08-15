@@ -9,11 +9,11 @@
 import { onMount, onDestroy } from 'svelte'
 import { T, useThrelte, createRawEventDispatcher } from '@threlte/core'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-import { fire } from '$lib/events'
+import { fire } from '$lib/internal/events'
 import type { XRController, XRControllerEvent } from '$lib/types'
-import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '$lib/stores'
-import { left, right, gaze } from '$lib/hooks/use-xr-controller'
-import ShortRay from '$lib/rayshort.svelte'
+import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '$lib/internal/stores'
+import { left, right, gaze } from '$lib/hooks/use-controller'
+import ShortRay from '$lib/components/ray-short.svelte'
 
 const controllerModelFactory = new XRControllerModelFactory()
 
@@ -31,6 +31,7 @@ const xrEvents = [
 <script lang='ts'>
 
 export let index: number
+export let model: THREE.Object3D | 'none' | undefined = undefined
 
 type $$Events = {
   connected: XRControllerEvent<'connected'>
@@ -44,14 +45,9 @@ type $$Events = {
 }
 
 const dispatch = createRawEventDispatcher<$$Events>()
-
-const { renderer } = useThrelte()
-const { xr } = renderer!
-
+const { xr } =  useThrelte().renderer
 const controller = xr.getController(index)
 const grip = xr.getControllerGrip(index)
-
-export let model: THREE.Object3D | undefined = controllerModelFactory.createControllerModel(grip)
 
 let connected = false
 
@@ -103,6 +99,8 @@ onDestroy(() => {
   xrEvents.forEach((event) => controller.removeEventListener(event, handleXrEvent))
 })
 
+$: controllerModel = model ?? controllerModelFactory.createControllerModel(grip)
+
 </script>
 
 <T
@@ -110,7 +108,9 @@ onDestroy(() => {
   name='XR Controller Grip {index}'
   visible={connected && !$isHandTracking}
 >
-  <T is={model} name='XR Controller Grip Model {index}' />
+  {#if model !== 'none'}
+    <T is={controllerModel} name='XR Controller Grip Model {index}' />
+  {/if}
   <slot />
 </T>
 

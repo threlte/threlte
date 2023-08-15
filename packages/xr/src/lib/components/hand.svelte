@@ -4,7 +4,7 @@ import { onMount, onDestroy } from 'svelte'
 import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 import type { XRHandEvent } from '$lib/types'
-import { fire } from '$lib/events'
+import { fire } from '$lib/internal/events'
 import { left, right } from '$lib/hooks/use-hand'
 
 const handModelFactory = new XRHandModelFactory()
@@ -17,30 +17,26 @@ export let index: number
 
 export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
 
+
 type $$Events = {
-  connected: XRHandEvent<'connected'>
-  disconnected: XRHandEvent<'disconnected'>
-  pinchstart: XRHandEvent<'pinchstart'>
-  pinchend: XRHandEvent<'pinchend'>
+  connected: XRHandEvent<'connected', null>
+  disconnected: XRHandEvent<'disconnected', null>
+  pinchstart: XRHandEvent<'pinchstart', THREE.XRHandSpace>
+  pinchend: XRHandEvent<'pinchend', THREE.XRHandSpace>
 }
 
-type ConnectionEvent<Type> = THREE.Event & { type: Type } & { target: THREE.XRHandSpace }
-
 const dispatch = createRawEventDispatcher<$$Events>()
-
-const { renderer } = useThrelte()
-const { xr } = renderer!
-
+const { xr } = useThrelte().renderer
 const hand = xr.getHand(index)
 const space = xr.getReferenceSpace()
 const model = handModelFactory.createHandModel(hand, profile === 'none' ? 'mesh' : profile)
 
 let connected = false
-let inputSource: globalThis.XRHand | undefined
+let inputSource: XRHand | undefined
 let children: THREE.Group
 
-const handleConnected = (event: ConnectionEvent<'connected'>) => {
-  inputSource = event.data.hand as XRHand
+const handleConnected = (event: XRHandEvent<'connected', null>) => {
+  inputSource = event.data.hand as globalThis.XRHand
   connected = true
 
   dispatch(event.type, event)
@@ -53,14 +49,14 @@ const handleConnected = (event: ConnectionEvent<'connected'>) => {
   }
 }
 
-const handleDisconnected = (event: ConnectionEvent<'disconnected'>) => {
+const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
   inputSource = event.data.hand
   connected = false
 
   dispatch(event.type, event)
 }
 
-const handlePinchEvent = (event: XRHandEvent) => {
+const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
   dispatch(event.type, event)
   fire(event.type, event)
 }
@@ -73,7 +69,8 @@ const { start, stop } = useFrame(() => {
 
   const pose = frame.getJointPose?.(joint, space)
 
-  if (pose === undefined) return
+  // This isn't correctly typed by @types/xr. Pose can also be null.
+  if (pose === undefined || pose === null) return
 
   const { position, orientation } = pose.transform
   children.position.set(position.x, position.y, position.z)

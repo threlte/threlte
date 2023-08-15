@@ -23,10 +23,9 @@
 import * as THREE from 'three'
 import { onMount, afterUpdate } from 'svelte'
 import { T, useFrame, createRawEventDispatcher } from '@threlte/core'
-import { activeTeleportController, pendingTeleportDestination } from '$lib/stores'
-import { useTeleport, useXrController, useXrGamepad } from '$lib/hooks'
-import Ray from '$lib/ray.svelte'
-import Marker from './marker.svelte'
+import { activeTeleportController, pendingTeleportDestination } from '$lib/internal/stores'
+import { useTeleport, useController, useGamepad } from '$lib/hooks'
+import Ray from '$lib/components/ray.svelte'
 
 /**
  * The raycaster used for teleportation.
@@ -66,8 +65,8 @@ const curve = new THREE.QuadraticBezierCurve3()
 const curvePoint = new THREE.Vector3()
 
 $: raycaster.far = maxDistance
-$: teleportController = useXrController(handedness)
-$: teleportGamepad = useXrGamepad(handedness)
+$: teleportController = useController(handedness)
+$: teleportGamepad = useGamepad(handedness)
 
 const calculateRayMidpoint = (vector1: THREE.Vector3, vector2: THREE.Vector3) => {
   rayMidpoint.x = (vector1.x + vector2.x) / 2;
@@ -159,12 +158,23 @@ onMount(() => {
 
 <Ray
   visible={activeController !== undefined && destination !== undefined}
-  {positions}
+  positions={activeController !== undefined && destination !== undefined ? positions : undefined}
 />
 
-<Marker
+<T.Mesh
+  name='Teleport Marker'
   visible={activeController !== undefined && destination !== undefined}
+  renderOrder={9999}
   position.x={destination?.x}
   position.y={destination?.y}
   position.z={destination?.z}
-/>
+>
+  <T.RingGeometry
+    args={[0.175, 0.2, 32]}
+    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+  />
+  <T.MeshBasicMaterial
+    polygonOffset
+    polygonOffsetFactor={-1}
+  />
+</T.Mesh>

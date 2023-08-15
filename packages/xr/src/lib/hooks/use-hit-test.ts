@@ -1,40 +1,41 @@
 import * as THREE from 'three'
 import { onDestroy } from 'svelte'
-import { session } from '$lib/stores'
+import { session } from '$lib/internal/stores'
+import type { HitTestCallback } from '$lib/types'
 import { useThrelte, useFrame } from '@threlte/core'
-
-export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => void
 
 /**
  * Use this hook to perform a hit test for an AR environment.
- *
- * @param hitTestCallback 
  */
 export const useHitTest = (hitTestCallback: HitTestCallback): void => {
-  const { renderer } = useThrelte()
-  const { xr } = renderer!
-
+  const { xr } = useThrelte().renderer
   const hitMatrix = new THREE.Matrix4()
 
+  let started = false
   let hitTestSource: XRHitTestSource | undefined
 
-  const unsub = session.subscribe((value) => {
+  const unsub = session.subscribe(async (value) => {
     if (value === undefined) {
       hitTestSource = undefined
+      if (started) {
+        stop()
+        started = false
+      }
       return
     }
 
-    value.requestReferenceSpace('viewer').then(async (space) => {
-      hitTestSource = await value.requestHitTestSource?.({ space })
-    })
+    const space = await value.requestReferenceSpace('viewer')
+    hitTestSource = await value.requestHitTestSource?.({ space })
+    if (!started) {
+      start()
+      started = true
+    }
   })
 
-  const { stop } = useFrame(() => {
-    const frame = xr.getFrame()
-
+  const { start, stop } = useFrame(() => {
     if (hitTestSource === undefined) return
 
-    const [hit] = frame.getHitTestResults(hitTestSource)
+    const [hit] = xr.getFrame().getHitTestResults(hitTestSource)
 
     if (hit === undefined) return
     
@@ -48,7 +49,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
 
     hitMatrix.fromArray(pose.transform.matrix)
     hitTestCallback(hitMatrix, hit)
-  })
+  }, { autostart: false })
 
   onDestroy(() => {
     stop()

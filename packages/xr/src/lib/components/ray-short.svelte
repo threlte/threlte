@@ -9,7 +9,7 @@ void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(
 
 const fragmentShader = `
 varying vec2 vUv;
-void main () { gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.)); }
+void main() { gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.)); }
 `
 
 const width = 0.002

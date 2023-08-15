@@ -1,11 +1,21 @@
+<!--
+@component
+`<Controllers />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model per each hand.
+
+It can optionally accept children in `left` and `right` slots, which will be parented to the controller of the respective handedness.
+-->
+
 <script lang='ts'>
 
 import { createRawEventDispatcher } from '@threlte/core'
 import Controller from './controller.svelte'
 import type { XRControllerEvent } from '../types'
 
-export let modelLeft: THREE.Object3D | undefined = undefined
-export let modelRight: THREE.Object3D | undefined = undefined
+/** An optional model for the left controller. If 'none' is passed, no controller model will render.  */
+export let modelLeft: THREE.Object3D | 'none' | undefined = undefined
+
+/** An optional model for the right controller. If 'none' is passed, no controller model will render.  */
+export let modelRight: THREE.Object3D | 'none' | undefined = undefined
 
 type $$Events = {
   connected: XRControllerEvent<'connected'>
@@ -36,14 +46,15 @@ const setHandedness = (index: number, event: XRControllerEvent<'connected'>) => 
 $: models = {
   left: modelLeft,
   right: modelRight,
-  none: undefined
-}
+  none: 'none',
+  default: undefined,
+} as const
 
 </script>
 
 {#each [0, 1] as index (index)}
   <Controller
-    model={models[handedness[index] ?? 'none']}
+    model={models[handedness[index] ?? 'default']}
     {index}
     on:connected={(event) => {
       setHandedness(index, event)
