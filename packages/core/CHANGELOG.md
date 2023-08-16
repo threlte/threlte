@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.4
+
+### Patch Changes
+
+- 6e5f929: fix size store to provide fresh new object on change
+
 ## 6.0.3
 
 ### Patch Changes
