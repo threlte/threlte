@@ -35,10 +35,9 @@ export const useParentSize = (): {
   const resizeObserver = new ResizeObserver(([entry]) => {
     const { contentRect } = entry
 
-    parentSize.update((value) => {
-      value.width = contentRect.width
-      value.height = contentRect.height
-      return value
+    parentSize.set({
+      width: contentRect.width,
+      height: contentRect.height
     })
   })
 
