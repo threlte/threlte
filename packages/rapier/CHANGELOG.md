@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.1.0
+
+### Minor Changes
+
+- 6239c5b: Added prop for userData on `<RigidBody>`
+
 ## 1.0.4
 
 ### Patch Changes
