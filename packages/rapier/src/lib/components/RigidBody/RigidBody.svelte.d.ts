@@ -90,6 +90,10 @@ export type RigidBodyProps = {
    * Set the rigidBody as enabled or disabled.
    */
   enabled?: boolean
+  /**
+   * An arbitrary user-defined object associated with this rigid-body.
+   */
+  userData?: Record<string, any>
 }
 
 export default class RigidBody extends SvelteComponentTyped<RigidBodyProps> {}
