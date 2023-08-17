@@ -6,7 +6,10 @@
   this component and let the parent decide on what to do with it.
 
 -->
-<script lang="ts" context="module">
+<script
+  lang="ts"
+  context="module"
+>
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Object3D } from 'three'
   import { type ThrelteParentContext, useParent } from '../hooks/useParent'

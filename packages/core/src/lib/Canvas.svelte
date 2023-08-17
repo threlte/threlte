@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   const invalidationHandlers: Set<(debugFrameloopMessage?: string) => void> = new Set()
   export const invalidateGlobally = (debugFrameloopMessage?: string) => {
     invalidationHandlers.forEach((fn) => fn(debugFrameloopMessage))
@@ -19,6 +22,7 @@
   import T from './components/T/T.svelte'
   import { useParentSize } from './hooks/useParentSize'
   import { browser } from './lib/browser'
+  import { revision } from './lib/revision'
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
@@ -57,9 +61,11 @@
    */
   export let colorManagementEnabled: boolean = true
   /**
-   * @default true
+   * @default false if greater than or equal to r155, true if less than 155
+   *
+   * @see https://github.com/mrdoob/three.js/pull/26392
    */
-  export let useLegacyLights: boolean = true
+  export let useLegacyLights: boolean = revision >= 155 ? false : true
 
   let canvas: HTMLCanvasElement
   let initialized = false
@@ -116,7 +122,10 @@
   })
 </script>
 
-<canvas use:parentSizeAction bind:this={canvas}>
+<canvas
+  use:parentSizeAction
+  bind:this={canvas}
+>
   {#if initialized}
     <T is={contexts.ctx.scene}>
       <slot />

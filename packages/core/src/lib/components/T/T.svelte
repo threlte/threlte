@@ -124,7 +124,10 @@
 </script>
 
 {#if isDisposableObject(ref)}
-  <DisposableObject object={ref} {dispose} />
+  <DisposableObject
+    object={ref}
+    {dispose}
+  />
 {/if}
 
 {#if extendsObject3D(ref)}
