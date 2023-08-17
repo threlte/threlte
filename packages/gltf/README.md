@@ -52,7 +52,7 @@ This helps with performance optimization for asset-heavy Threlte apps. It also a
 
 ```bash
 Usage
-  $ npx @threlte/gltf [Model.glb] [options]
+  $ npx @threlte/gltf@latest [Model.glb] [options]
 
 Options
   --output, -o        Output file name/path
@@ -94,7 +94,7 @@ Have questions? Feel free to ask in our [Discord support forum](https://discord.
 First you run your model through `@threlte/gltf`. `npx` allows you to use npm packages without installing them.
 
 ```bash
-npx @threlte/gltf model.gltf --transform
+npx @threlte/gltf@latest model.gltf --transform
 ```
 
 This will create a `Model.svelte` file that plots out all of the assets contents.
