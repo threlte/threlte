@@ -1,8 +1,7 @@
-import { onChange, val, type ISequence } from '@theatre/core'
-
-import { get } from 'svelte/store'
+import type { ISequence } from '@theatre/core'
 import type { Readable, Subscriber, Writable } from 'svelte/store'
-
+import { get } from 'svelte/store'
+import { onChange, val } from '../theatre'
 import type { SequenceOptions } from './types'
 
 /**
@@ -20,10 +19,7 @@ export class SequenceController {
   private options: SequenceOptions
   private sequence: ISequence
 
-  constructor(
-    sequence: ISequence,
-    options: SequenceOptions = {}
-  ) {
+  constructor(sequence: ISequence, options: SequenceOptions = {}) {
     // api
     this.key = options?.key ?? 'default' // not in use - for future proofing
     this.sequence = sequence // theatre native object
@@ -37,7 +33,6 @@ export class SequenceController {
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
     this.reset = this.reset.bind(this)
-
   }
   public config(options: SequenceOptions): void {
     // update options

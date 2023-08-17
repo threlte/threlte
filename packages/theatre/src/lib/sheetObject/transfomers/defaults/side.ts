@@ -1,4 +1,4 @@
-import { types } from '@theatre/core'
+import { types } from '../../../theatre'
 import { createTransformer } from '../createTransformer'
 import { BackSide, DoubleSide, FrontSide } from 'three'
 

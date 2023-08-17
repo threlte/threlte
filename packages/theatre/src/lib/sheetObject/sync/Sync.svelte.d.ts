@@ -2,7 +2,7 @@ import type { SvelteComponent } from 'svelte'
 import type { Transformer } from '../transfomers/types'
 import type { ConditionalKeys, Primitive } from 'type-fest'
 
-/* COPIED FROM @theatre/core START */
+/* COPIED FROM @threlte/core START */
 type OmittedPropKeys =
   | 'type'
   | 'args'
@@ -36,7 +36,7 @@ type InstanceProps<Type extends any> = Partial<
     ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
   >
 >
-/* COPIED FROM @theatre/core END */
+/* COPIED FROM @threlte/core END */
 
 type ObjectProp<T> = {
   type?: T
