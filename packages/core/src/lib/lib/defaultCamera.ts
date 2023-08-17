@@ -1,7 +1,8 @@
 import { get } from 'svelte/store'
 import { PerspectiveCamera } from 'three'
-import { watch, type ThrelteContext } from '..'
 import { getThrelteUserData } from './getThrelteUserData'
+import { watch } from './storeUtils'
+import type { ThrelteContext } from './contexts'
 
 export const createDefaultCamera = (): PerspectiveCamera => {
   const defaultCamera = new PerspectiveCamera(75, 0, 0.1, 1000)

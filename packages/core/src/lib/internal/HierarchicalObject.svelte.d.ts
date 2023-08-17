@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { Object3D } from 'three'
 
 export type HierarchicalObjectProperties = {
@@ -7,4 +7,4 @@ export type HierarchicalObjectProperties = {
   onChildDestroy?: (child: Object3D) => void
 }
 
-export default class HierarchicalObject extends SvelteComponentTyped<HierarchicalObjectProperties> {}
+export default class HierarchicalObject extends SvelteComponent<HierarchicalObjectProperties> {}
