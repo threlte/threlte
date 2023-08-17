@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { types, type ISheetObject, type UnknownShorthandCompoundProps } from '@theatre/core'
+  import { types } from '../../theatre'
+  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
   import { T, watch, type CurrentWritable } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'

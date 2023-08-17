@@ -1,4 +1,4 @@
-import { types } from '@theatre/core'
+import { types } from '../../../theatre'
 import { isPrimitive } from '../../sync/utils/isPrimitive'
 import { createTransformer } from '../createTransformer'
 
