@@ -82,8 +82,8 @@ export const T = new Proxy(class {}, {
   }
 }) as unknown as typeof TComp & {
   [Key in keyof typeof THREE]: typeof SvelteComponentTyped<
-    Props<typeof THREE[Key]>,
-    Events<typeof THREE[Key]>,
-    Slots<typeof THREE[Key]>
+    Props<(typeof THREE)[Key]>,
+    Events<(typeof THREE)[Key]>,
+    Slots<(typeof THREE)[Key]>
   >
 } & Record<string, typeof SvelteComponentTyped>
