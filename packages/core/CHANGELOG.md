@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.6
+
+### Patch Changes
+
+- 0602a68: Removed circular import, cleanup
+
 ## 6.0.5
 
 ### Patch Changes
