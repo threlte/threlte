@@ -30,6 +30,7 @@
   export let enabledTranslations: $$Props['enabledTranslations'] = [true, true, true]
   export let dominance: $$Props['dominance'] = 0
   export let enabled: $$Props['enabled'] = true
+  export let userData: $$Props['userData'] = {}
 
   /**
    * Every RigidBody receives and forwards collision-related events
@@ -116,8 +117,9 @@
    * Add userData to the rigidBody
    */
   const { hasEventListeners } = useHasEventListeners<typeof dispatcher>()
-  rigidBodyTemp.userData = {
-    hasEventListeners
+  $: rigidBodyTemp.userData = {
+    hasEventListeners,
+    ...userData
   }
 
   /**
