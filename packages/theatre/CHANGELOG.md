@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.1
+
+### Patch Changes
+
+- ef17718: fix: imported theatre/core from own named exports
+
 ## 2.1.0
 
 ### Minor Changes
