@@ -5,7 +5,7 @@ import '$styles/app.css'
 import '$styles/prose.css'
 import '$styles/markprompt.css'
 import '$styles/dracula.css'
-// import { ViewTransitions } from 'astro:transitions'
+import { ViewTransitions } from 'astro:transitions'
 
 export interface Props {
   title?: string | undefined
@@ -23,7 +23,7 @@ const title = Astro.props.title
       content="width=device-width"
     />
     <title>{title ?? 'Threlte'}</title>
-    <!-- <ViewTransitions fallback="none" /> -->
+    <ViewTransitions />
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -118,7 +118,7 @@ const title = Astro.props.title
       content="Threlte - rapidly build interactive 3D apps for the web."
     />
   </head>
-  <body>
+  <body transition:animate="morph">
     <slot />
     <style>
       html {

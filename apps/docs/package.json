@@ -23,7 +23,7 @@
     "@preact/signals": "^1.1.5",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@vercel/analytics": "^1.0.1",
-    "astro": "^2.9.7",
+    "astro": "^2.10.0",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
     "install": "^0.13.0",

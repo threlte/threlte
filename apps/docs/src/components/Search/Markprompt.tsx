@@ -7,8 +7,6 @@ import hljs from 'highlight.js'
 import hljs_svelte from 'highlightjs-svelte'
 
 function Search({ visible }: { visible: boolean }) {
-  // Code highlighting
-
   const container = useRef(null)
 
   const callback = (mutationList: any) => {
@@ -51,7 +49,7 @@ function Search({ visible }: { visible: boolean }) {
           ref={container}
         >
           <Markprompt
-            projectKey="sk_test_jRhXPf4l0JEZlzdGzRwSsTFKSYT6ZzeA"
+            projectKey="q5trazVG0x8ktiY63vB3imwnZJ9bHbyN"
             close={{
               visible: false
             }}
@@ -92,7 +90,7 @@ function Search({ visible }: { visible: boolean }) {
   )
 }
 
-export default function NewMarkprompt() {
+export default function SearchDialog() {
   // Visibility
   const [visible, setVisible] = useState(false)
 
