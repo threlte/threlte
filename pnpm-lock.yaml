@@ -238,8 +238,8 @@ importers:
         specifier: ^1.7.2
         version: 1.7.2
       create-svelte:
-        specifier: ^5.0.2
-        version: 5.0.2
+        specifier: ^5.0.5
+        version: 5.0.5
       execa:
         specifier: ^7.1.1
         version: 7.1.1
@@ -252,6 +252,9 @@ importers:
       kleur:
         specifier: ^4.1.5
         version: 4.1.5
+      undici:
+        specifier: ^5.23.0
+        version: 5.23.0
       which-pm-runs:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1234,10 +1237,27 @@ packages:
       sisteransi: 1.0.5
     dev: false
 
+  /@clack/core@0.3.3:
+    resolution: {integrity: sha512-5ZGyb75BUBjlll6eOa1m/IZBxwk91dooBWhPSL67sWcLS0zt9SnswRL0l26TVdBhb0wnWORRxUn//uH6n4z7+A==}
+    dependencies:
+      picocolors: 1.0.0
+      sisteransi: 1.0.5
+    dev: false
+
   /@clack/prompts@0.6.3:
     resolution: {integrity: sha512-AM+kFmAHawpUQv2q9+mcB6jLKxXGjgu/r2EQjEwujgpCdzrST6BJqYw00GRn56/L/Izw5U7ImoLmy00X/r80Pw==}
     dependencies:
       '@clack/core': 0.3.2
+      picocolors: 1.0.0
+      sisteransi: 1.0.5
+    dev: false
+    bundledDependencies:
+      - is-unicode-supported
+
+  /@clack/prompts@0.7.0:
+    resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
+    dependencies:
+      '@clack/core': 0.3.3
       picocolors: 1.0.0
       sisteransi: 1.0.5
     dev: false
@@ -3865,11 +3885,11 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /create-svelte@5.0.2:
-    resolution: {integrity: sha512-CvDMBk2vqxucAZyIROqrF5IytkE1nReA2hZq2JcPj2LuICZT4WFZJ9U/a9QzW8pvXo3ATdsailzLnoWOYbmISQ==}
+  /create-svelte@5.0.5:
+    resolution: {integrity: sha512-+Pki3j1WjBy4FGxaoz5mrYNYDTFmVX6qLf7MLBEruPFCV1xVQAiUZozvABJneWQojjqTJOriksrDDdoiwTGUAg==}
     hasBin: true
     dependencies:
-      '@clack/prompts': 0.6.3
+      '@clack/prompts': 0.7.0
       kleur: 4.1.5
     dev: false
 
@@ -10032,6 +10052,13 @@ packages:
     engines: {node: '>=14.0'}
     dependencies:
       busboy: 1.6.0
+
+  /undici@5.23.0:
+    resolution: {integrity: sha512-1D7w+fvRsqlQ9GscLBwcAJinqcZGHUKjbOmXdlE/v8BvEGXjeWAax+341q44EuTcHXXnfyKNbKRq4Lg7OzhMmg==}
+    engines: {node: '>=14.0'}
+    dependencies:
+      busboy: 1.6.0
+    dev: false
 
   /unherit@3.0.1:
     resolution: {integrity: sha512-akOOQ/Yln8a2sgcLj4U0Jmx0R5jpIg2IUyRrWOzmEbjBtGzBdHtSeFKgoEcoH4KYIG/Pb8GQ/BwtYm0GCq1Sqg==}
