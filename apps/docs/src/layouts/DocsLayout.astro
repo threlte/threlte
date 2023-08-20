@@ -40,6 +40,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
   <Markprompt client:idle />
   <header
     class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
+    transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 lg:gap-12">
       <a
@@ -155,6 +156,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
   >
     <aside
       class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
+      transition:name="left_sidebar"
     >
       <div class="mb-4 w-full">
         <Search client:media="(min-width: 768px)" />
@@ -174,6 +176,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 
     <aside
       class="sticky top-[var(--docs-navbar-height)] z-10 ml-4 hidden w-full place-self-start justify-self-end pt-6 lg:z-0 lg:block"
+      transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
