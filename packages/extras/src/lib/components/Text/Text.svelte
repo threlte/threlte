@@ -1,8 +1,14 @@
 <script lang="ts">
   import { forwardEventHandlers, T, useThrelte } from '@threlte/core'
   import { createEventDispatcher, tick } from 'svelte'
-  import { Text } from 'troika-three-text'
+  import { preloadFont, Text } from 'troika-three-text'
+  import { useSuspense } from '../../suspense/useSuspense'
   import type { TextMesh } from './Text.svelte'
+  import type { TextProps } from './Text.svelte'
+
+  export let font: TextProps['font']
+  export let characters: TextProps['characters']
+  export let sdfGlyphSize: TextProps['sdfGlyphSize']
 
   export const ref = new Text() as TextMesh
 
@@ -23,8 +29,16 @@
   }
 
   $: $$restProps && onUpdate()
+
+  const suspend = useSuspense()
+  $: suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
 </script>
 
-<T is={ref} let:ref {...$$restProps} bind:this={$component}>
+<T
+  is={ref}
+  let:ref
+  {...$$restProps}
+  bind:this={$component}
+>
   <slot {ref} />
 </T>
