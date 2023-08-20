@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.3.1
+
+### Patch Changes
+
+- 6f49729: Fix: bad link in Rapier terrain example
+
 ## 0.3.0
 
 ### Minor Changes
