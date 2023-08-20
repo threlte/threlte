@@ -92,12 +92,7 @@ function Search({ visible }: { visible: boolean }) {
 export default function SearchDialog() {
   const [visible, setVisible] = useState(false)
 
-  useEffect(() => {
-    const unsubscribe = searchActive.subscribe((v) => {
-      setVisible(v)
-    })
-    return () => unsubscribe()
-  })
+  useEffect(() => searchActive.subscribe(setVisible))
 
   const close = () => searchActive.set(false)
 
