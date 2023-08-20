@@ -31,11 +31,9 @@ function Search({ visible }: { visible: boolean }) {
   const config = { attributes: true, childList: true, subtree: true }
 
   useEffect(() => {
+		if (!container.current) return
     const observer = new MutationObserver(callback)
-
-    if (container.current) {
-      observer.observe(container.current, config)
-    }
+		observer.observe(container.current, config)
 
     return () => observer.disconnect()
   }, [])
