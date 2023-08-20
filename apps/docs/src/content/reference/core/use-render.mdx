@@ -62,7 +62,7 @@ This example demonstrates how to use `useRender` to implement post processing ef
     KernelSize
   } from 'postprocessing'
 
-  const { scene, renderer, camera } = useThrelte()
+  const { scene, renderer, camera, size } = useThrelte()
 
   // To use the EffectComposer we need to pass arguments to the
   // default WebGLRenderer: https://github.com/pmndrs/postprocessing#usage
@@ -97,6 +97,7 @@ This example demonstrates how to use `useRender` to implement post processing ef
 
   // We need to set up the passes according to the camera in use
   $: setupEffectComposer($camera)
+  $: composer.setSize($size.width, $size.height)
 
   useRender((_, delta) => {
     composer.render(delta)

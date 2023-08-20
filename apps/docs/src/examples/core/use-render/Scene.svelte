@@ -10,7 +10,7 @@
   } from 'postprocessing'
   import { DEG2RAD } from 'three/src/math/MathUtils'
 
-  const { renderer, scene, camera } = useThrelte()
+  const { renderer, scene, camera, size } = useThrelte()
 
   const composer = new EffectComposer(renderer)
 
@@ -38,6 +38,8 @@
       invalidate: true
     }
   )
+
+  $: composer.setSize($size.width, $size.height)
 
   useRender(() => {
     composer.render()
