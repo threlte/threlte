@@ -13,6 +13,7 @@ import image from '@astrojs/image'
 
 // https://astro.build/config
 import svelte from '@astrojs/svelte'
+import preact from '@astrojs/preact'
 
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
@@ -24,12 +25,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
-  // experimental: {
-  //   viewTransitions: true
-  // },
-  // build: {
-  //   inlineStylesheets: 'always'
-  // },
+  experimental: {
+    viewTransitions: true
+  },
   integrations: [
     AutoImport({
       imports: [
@@ -47,7 +45,8 @@ export default defineConfig({
     }),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    })
+    }),
+    preact({ compat: true })
   ],
   output: 'static',
   vite: {

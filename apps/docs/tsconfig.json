@@ -12,7 +12,8 @@
       "$examples/*": ["src/examples/*"],
       "$hooks/*": ["src/hooks/*"]
     },
-    "types": ["@astrojs/image/client"]
+    "types": ["@astrojs/image/client"],
+    "jsx": "preserve"
   },
   "exclude": ["node_modules", "src/components/Example/stackblitz-template"]
 }

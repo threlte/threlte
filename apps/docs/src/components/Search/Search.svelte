@@ -1,15 +1,8 @@
 <script lang="ts">
-  import { c } from '../../lib/classes'
-  import Markprompt from './Markprompt.svelte'
-
-  let searchActive = false
-
+  import { searchActive } from './searchStore'
   const toggleSearch = () => {
-    searchActive = !searchActive
-    isFocused = !isFocused
+    searchActive.set(!$searchActive)
   }
-
-  let isFocused = false
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
@@ -18,8 +11,7 @@
     }
 
     if (e.key === 'Escape') {
-      searchActive = false
-      isFocused = false
+      searchActive.set(false)
     }
   }
 </script>
@@ -44,23 +36,3 @@
   >
   <p class="text-sm">Search</p>
 </button>
-
-<div class="pointer-events-none fixed top-0 left-0 z-50 h-full w-full">
-  {#if searchActive}
-    <div
-      class="pointer-events-auto fixed top-0 left-0 h-screen  w-screen bg-gray-900/70"
-      on:click={toggleSearch}
-      on:keypress={toggleSearch}
-    />
-  {/if}
-
-  <dialog
-    open={searchActive}
-    class={c(
-      'pointer-events-auto mt-[10vh] flex max-h-[75vh] w-full max-w-[800px] flex-col gap-4 rounded-lg border border-white/20 bg-blue-900 px-0 py-2 text-white',
-      !searchActive && 'hidden'
-    )}
-  >
-    <Markprompt focus={searchActive} />
-  </dialog>
-</div>

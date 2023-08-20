@@ -15,6 +15,7 @@ import Book from './Book.astro'
 import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Footer from '../components/Footer/Footer.astro'
+import Markprompt from '$components/Search/Markprompt'
 
 export interface Props {
   title?: string
@@ -36,8 +37,10 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 ---
 
 <AppLayout title={title}>
+  <Markprompt client:idle />
   <header
     class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
+    transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 lg:gap-12">
       <a
@@ -65,16 +68,14 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
         >
-          <Book />
-          Learn
+          <Book />Learn
         </a>
 
         <a
           href="/docs/examples/intro"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
         >
-          <Circles />
-          Examples
+          <Circles />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
@@ -87,8 +88,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
           >
-            <Package />
-            core</a
+            <Package />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
@@ -97,8 +97,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
           >
-            <Package />
-            extras</a
+            <Package />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
@@ -107,8 +106,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
           >
-            <Package />
-            gltf</a
+            <Package />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
@@ -117,8 +115,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
           >
-            <Package />
-            rapier</a
+            <Package />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
@@ -127,8 +124,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
           >
-            <Package />
-            theatre</a
+            <Package />theatre</a
           >
         </div>
       </div>
@@ -160,6 +156,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
   >
     <aside
       class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
+      transition:name="left_sidebar"
     >
       <div class="mb-4 w-full">
         <Search client:media="(min-width: 768px)" />
@@ -179,6 +176,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 
     <aside
       class="sticky top-[var(--docs-navbar-height)] z-10 ml-4 hidden w-full place-self-start justify-self-end pt-6 lg:z-0 lg:block"
+      transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
