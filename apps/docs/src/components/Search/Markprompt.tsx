@@ -1,6 +1,5 @@
 import { searchActive } from './searchStore'
 import { Markprompt } from '@markprompt/react'
-import { h, Component } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import hljs from 'highlight.js'
 //@ts-ignore
@@ -39,7 +38,7 @@ function Search({ visible }: { visible: boolean }) {
     }
 
     return () => observer.disconnect()
-  }, [container.current])
+  }, [])
 
   return (
     visible && (
@@ -91,13 +90,12 @@ function Search({ visible }: { visible: boolean }) {
 }
 
 export default function SearchDialog() {
-  // Visibility
   const [visible, setVisible] = useState(false)
 
-  const unsubscribe = searchActive.subscribe((v) => {
-    setVisible(v)
-  })
   useEffect(() => {
+    const unsubscribe = searchActive.subscribe((v) => {
+      setVisible(v)
+    })
     return () => unsubscribe()
   })
 
