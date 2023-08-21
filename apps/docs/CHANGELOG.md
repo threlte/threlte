@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.4.0
+
+### Minor Changes
+
+- 25755e3: Added playground for extras, made `<Text>` component suspense-ready
+
 ## 0.3.1
 
 ### Patch Changes

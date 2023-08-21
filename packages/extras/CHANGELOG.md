@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.3.0
+
+### Minor Changes
+
+- 25755e3: Added playground for extras, made `<Text>` component suspense-ready
+
 ## 5.2.0
 
 ### Minor Changes
