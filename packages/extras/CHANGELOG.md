@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.4.0
+
+### Minor Changes
+
+- b29f2ec: Add the ability to provide a custom DRACOLoader in useGltf hook.
+
 ## 5.3.0
 
 ### Minor Changes
