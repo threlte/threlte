@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.4.1
+
+### Patch Changes
+
+- d0745b9: Removed my own testimonial and added Aria's instead
+
 ## 0.4.0
 
 ### Minor Changes
