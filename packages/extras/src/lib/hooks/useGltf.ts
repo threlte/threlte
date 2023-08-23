@@ -1,5 +1,4 @@
 import { useLoader, useThrelte, type AsyncWritable } from '@threlte/core'
-import { createEventDispatcher } from 'svelte'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
@@ -10,12 +9,12 @@ import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
 import type { ThrelteGltf } from '../types/types'
 
 type UseGltfOptions = {
-  useDraco?: boolean | string
+  useDraco?: boolean | string | DRACOLoader
   useMeshopt?: boolean
   ktxTranscoderPath?: string
 }
 
-createEventDispatcher
+let defaultDracoLoaderInstances: Record<string, DRACOLoader> = {}
 
 export function useGltf(options?: UseGltfOptions): {
   load: <
@@ -58,13 +57,21 @@ export function useGltf<
   const loader = useLoader(GLTFLoader, {
     extend(loader) {
       if (opts?.useDraco) {
-        const dracoDecoderPath =
-          typeof opts.useDraco === 'string'
-            ? opts.useDraco
-            : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
+        if (typeof opts.useDraco === 'string' || typeof opts.useDraco === 'boolean') {
+          // default draco
+          const path =
+            typeof opts.useDraco === 'string'
+              ? opts.useDraco
+              : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
 
-        const dracoLoader = new DRACOLoader().setDecoderPath(dracoDecoderPath)
-        loader.setDRACOLoader(dracoLoader)
+          if (!defaultDracoLoaderInstances[path]) {
+            defaultDracoLoaderInstances[path] = new DRACOLoader().setDecoderPath(path)
+          }
+          loader.setDRACOLoader(defaultDracoLoaderInstances[path])
+        } else {
+          // user's draco
+          loader.setDRACOLoader(opts.useDraco)
+        }
       }
 
       if (opts?.useMeshopt) {

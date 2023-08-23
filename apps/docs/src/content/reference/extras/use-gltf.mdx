@@ -56,13 +56,25 @@ const gltf = useGltf('/path/to/model.glb', {
 })
 ```
 
-You can also provide custom DRACO decoder binaries.
+You can set a custom path to DRACO decoder binaries.
 
 ```ts
 import { useGltf } from '@threlte/extras'
 
 const gltf = useGltf('/path/to/model.glb', {
   useDraco: '/custom/draco/decoders/path'
+})
+```
+
+You can also provide your own instance of `DRACOLoader`
+
+```ts
+import { useGltf } from '@threlte/extras'
+
+const myLoader = new DRACOLoader().setDecoderPath(path)
+
+const gltf = useGltf('/path/to/model.glb', {
+  useDraco: myLoader
 })
 ```
 
