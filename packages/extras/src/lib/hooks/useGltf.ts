@@ -14,15 +14,7 @@ type UseGltfOptions = {
   ktxTranscoderPath?: string
 }
 
-let defaultDracoLoaderInstance: DRACOLoader | undefined
-
-const useDefaultDracoLoader = (dracoDecoderPath?: string) => {
-  const path = dracoDecoderPath || 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
-  console.log('using draco')
-  if (!defaultDracoLoaderInstance)
-    defaultDracoLoaderInstance = new DRACOLoader().setDecoderPath(path)
-  return defaultDracoLoaderInstance
-}
+let defaultDracoLoaderInstances: Record<string, DRACOLoader> = {}
 
 export function useGltf(options?: UseGltfOptions): {
   load: <
@@ -67,10 +59,15 @@ export function useGltf<
       if (opts?.useDraco) {
         if (typeof opts.useDraco === 'string' || typeof opts.useDraco === 'boolean') {
           // default draco
-          const dracoLoader = useDefaultDracoLoader(
-            typeof opts.useDraco === 'string' ? opts.useDraco : undefined
-          )
-          loader.setDRACOLoader(dracoLoader)
+          const path =
+            typeof opts.useDraco === 'string'
+              ? opts.useDraco
+              : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
+
+          if (!defaultDracoLoaderInstances[path]) {
+            defaultDracoLoaderInstances[path] = new DRACOLoader().setDecoderPath(path)
+          }
+          loader.setDRACOLoader(defaultDracoLoaderInstances[path])
         } else {
           // user's draco
           loader.setDRACOLoader(opts.useDraco)
