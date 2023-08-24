@@ -3,7 +3,7 @@
   import { Grid, OrbitControls } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
 
-  import { DoubleSide, PlaneGeometry, ShaderMaterial, Vector3 } from 'three'
+  import { DoubleSide, PlaneGeometry, Vector3 } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import fragmentShader from './fragment.glsl?raw'
   import vertexShader from './vertex.glsl?raw'
@@ -12,7 +12,7 @@
   import { tweened } from 'svelte/motion'
   interactivity()
 
-  const terrainSize = 20
+  const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
   const noise = createNoise2D()
   const vertices = geometry.getAttribute('position').array
@@ -20,38 +20,24 @@
     const x = vertices[i]
     const y = vertices[i + 1]
     // @ts-ignore
-    vertices[i + 2] = noise(x / 4, y / 4)
+    vertices[i + 2] = noise(x / 5, y / 5) * 2 + noise(x / 40, y / 40) * 3
   }
   // needed for lighting
   geometry.computeVertexNormals()
 
   const pulsePosition = new Vector3()
   const pulseTimer = tweened(0)
-
-  const shaderMaterial = new ShaderMaterial({
-    uniforms: {
-      time: { value: 0 },
-      pulsePosition: {
-        value: pulsePosition
-      },
-      pulseTimer: { value: 0 }
-    },
-    vertexShader,
-    fragmentShader,
-    side: DoubleSide
-  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[-30, 30, 30]}
+  position={[-50, 30, 10]}
   fov={15}
 >
   <OrbitControls
     autoRotate
     target.y={1.5}
     autoRotateSpeed={0.2}
-    enabled={false}
   />
 </T.PerspectiveCamera>
 
@@ -86,8 +72,18 @@
     })
   }}
 >
-  <T
-    is={shaderMaterial}
+  <T.ShaderMaterial
+    {fragmentShader}
+    {vertexShader}
+    uniforms={{
+      pulseTimer: {
+        value: 0
+      },
+      pulsePosition: {
+        value: pulsePosition
+      }
+    }}
+    side={DoubleSide}
     uniforms.pulseTimer.value={$pulseTimer}
   />
 </T.Mesh>
