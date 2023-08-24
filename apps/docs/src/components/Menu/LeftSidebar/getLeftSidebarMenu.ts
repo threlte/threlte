@@ -96,7 +96,8 @@ const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
   'Animation',
   'Camera',
   'Geometry',
-  'Postprocessing'
+  'Postprocessing',
+  'Shaders'
 ]
 
 const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
