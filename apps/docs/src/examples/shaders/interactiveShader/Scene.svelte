@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls } from '@threlte/extras'
+  import { OrbitControls } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
 
   import { DoubleSide, PlaneGeometry, Vector3 } from 'three'
@@ -22,7 +22,6 @@
     // @ts-ignore
     vertices[i + 2] = noise(x / 5, y / 5) * 2 + noise(x / 40, y / 40) * 3
   }
-  // needed for lighting
   geometry.computeVertexNormals()
 
   const pulsePosition = new Vector3()
@@ -40,22 +39,6 @@
     autoRotateSpeed={0.2}
   />
 </T.PerspectiveCamera>
-
-<T.DirectionalLight
-  intensity={0.8}
-  position.x={5}
-  position.y={10}
-/>
-<T.AmbientLight intensity={0.2} />
-
-<Grid
-  position.y={-0.001}
-  cellColor="#ffffff"
-  sectionColor="#ffffff"
-  sectionThickness={0}
-  fadeDistance={25}
-  cellSize={2}
-/>
 
 <T.Mesh
   position.y={1.2}
