@@ -3,12 +3,13 @@
   import { OrbitControls } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
 
-  import { DoubleSide, PlaneGeometry, Vector3 } from 'three'
+  import { PlaneGeometry, Vector3 } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import fragmentShader from './fragment.glsl?raw'
   import vertexShader from './vertex.glsl?raw'
 
   import { interactivity } from '@threlte/extras'
+  import { quadOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   interactivity()
 
@@ -25,12 +26,14 @@
   geometry.computeVertexNormals()
 
   const pulsePosition = new Vector3()
-  const pulseTimer = tweened(0)
+  const pulseTimer = tweened(0, {
+    easing: quadOut
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[-50, 30, 10]}
+  position={[-70, 50, 10]}
   fov={15}
 >
   <OrbitControls
@@ -41,17 +44,15 @@
 </T.PerspectiveCamera>
 
 <T.Mesh
-  position.y={1.2}
-  position.z={-0.75}
   {geometry}
-  rotation.x={DEG2RAD * 90}
+  rotation.x={DEG2RAD * -90}
   on:click={({ point }) => {
     pulsePosition.set(point.x, point.y, point.z)
     pulseTimer.set(0, {
       duration: 0
     })
     pulseTimer.set(1, {
-      duration: 500
+      duration: 2000
     })
   }}
 >
@@ -66,7 +67,6 @@
         value: pulsePosition
       }
     }}
-    side={DoubleSide}
     uniforms.pulseTimer.value={$pulseTimer}
   />
 </T.Mesh>
