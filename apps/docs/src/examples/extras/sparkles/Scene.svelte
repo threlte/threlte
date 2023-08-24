@@ -1,12 +1,11 @@
 <script lang="ts">
   import Sphere from './Sphere.svelte'
-	import { Environment, ContactShadows } from '@threlte/extras'
-  import { OrbitControls, T } from '@threlte/core'
+  import { T } from '@threlte/core'
+	import { ContactShadows, Environment, OrbitControls } from '@threlte/extras'
 
 </script>
 
 <T.PerspectiveCamera
-	let:ref
 	makeDefault
 	position={[0,0, 12]}
 	fov={30}

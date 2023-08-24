@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Three, useFrame } from '@threlte/core'
+	import { T, useFrame } from '@threlte/core'
 	import {
 	  BufferAttribute, BufferGeometry, Color, Points, ShaderMaterial, Vector2,
 	  Vector3,
@@ -87,12 +87,11 @@
 
 </script>
 
-<Three
-type={Points}
+<T.Points
 {material}
 {geometry}
 {...$$restProps}
 let:ref
 >
 	<slot {ref} />
-</Three>
+</T.Points>
