@@ -1,13 +1,36 @@
 import { getContext, onDestroy } from 'svelte'
-import { readable, writable } from 'svelte/store'
+import { readable, writable, type Readable } from 'svelte/store'
 import { browser } from '../lib/browser'
-import type {
-  ThrelteContext,
-  ThrelteFrameHandler,
-  ThrelteRenderContext,
-  ThrelteUseFrame,
-  ThrelteUseFrameOptions
-} from '../types/types'
+import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+
+export type ThrelteUseFrame = {
+  stop: () => void
+  start: () => void
+  started: Readable<boolean>
+}
+
+export type ThrelteUseFrameOptions = {
+  autostart?: boolean
+  order?: number
+  /**
+   * Optionally provide a message to use with the property
+   * `debugFrameloop` of the `<Canvas>` component.
+   */
+  debugFrameloopMessage?: string
+  /**
+   * If false, the frame handler will not automatically invalidate the frame.
+   * This is useful if you want to manually invalidate the frame. Defaults to
+   * true.
+   */
+  invalidate?: boolean
+}
+
+export type ThrelteFrameHandler = {
+  fn: (ctx: ThrelteContext, delta: number) => void
+  order?: number
+  debugFrameloopMessage?: string
+  invalidate: boolean
+}
 
 /**
  * Adds a handler to threltes unified render loop.
@@ -33,23 +56,40 @@ export const useFrame = (
     }
   }
 
-  const renderCtx = getContext<ThrelteRenderContext>('threlte-render-context')
+  const invalidate = options?.invalidate ?? true
+
+  const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
 
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
-    debugFrameloopMessage: options?.debugFrameloopMessage
+    debugFrameloopMessage: options?.debugFrameloopMessage,
+    invalidate
   }
 
   const started = writable(false)
 
   const stop = () => {
-    renderCtx.frameHandlers.delete(handler)
+    if (invalidate) {
+      renderCtx.autoFrameHandlers.delete(handler)
+    } else {
+      renderCtx.manualFrameHandlers.delete(handler)
+    }
+    renderCtx.allFrameHandlers.delete(handler)
+
     started.set(false)
   }
 
   const start = () => {
-    renderCtx.frameHandlers.add(handler)
+    if (invalidate) {
+      renderCtx.autoFrameHandlers.add(handler)
+    } else {
+      renderCtx.manualFrameHandlers.add(handler)
+    }
+
+    renderCtx.allFrameHandlers.add(handler)
+    renderCtx.allFrameHandlersNeedSortCheck = true
+
     started.set(true)
   }
 

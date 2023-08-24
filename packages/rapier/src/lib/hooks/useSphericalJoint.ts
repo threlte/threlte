@@ -1,15 +1,18 @@
 import type { SphericalImpulseJoint } from '@dimforge/rapier3d-compat'
-import type { Position } from '@threlte/core'
-import { positionToVector3 } from '../lib/positionToVector3'
+import { Vector3 } from 'three'
 import { useJoint } from './useJoint'
+import { isVector3 } from './utils'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useSphericalJoint = (anchorA: Position, anchorB: Position) => {
+export const useSphericalJoint = (
+  anchorA: Parameters<Vector3['set']> | Vector3,
+  anchorB: Parameters<Vector3['set']> | Vector3
+) => {
   return useJoint((rbA, rbB, { world, rapier }) => {
-    const params = rapier.JointData.spherical(
-      positionToVector3(anchorA),
-      positionToVector3(anchorB)
-    )
+    const jaA = isVector3(anchorA) ? anchorA : new Vector3(...anchorA)
+    const jaB = isVector3(anchorB) ? anchorB : new Vector3(...anchorB)
+
+    const params = rapier.JointData.spherical(jaA, jaB)
     return world.createImpulseJoint(params, rbA, rbB, true) as SphericalImpulseJoint
   })
 }

@@ -1,86 +1,91 @@
 <script lang="ts">
-	import { useThrelte } from '@threlte/core'
-	import {
-		BloomEffect,
-		BrightnessContrastEffect,
-		ChromaticAberrationEffect,
-		EffectComposer,
-		EffectPass,
-		KernelSize,
-		RenderPass,
-		SMAAEffect,
-		SMAAPreset
-	} from 'postprocessing'
-	import { onDestroy } from 'svelte'
-	import { tweened } from 'svelte/motion'
-	import { Vector2 } from 'three'
-	import { gameState } from './game/state'
+  import { useRender, useThrelte } from '@threlte/core'
+  import {
+    BloomEffect,
+    BrightnessContrastEffect,
+    ChromaticAberrationEffect,
+    EffectComposer,
+    EffectPass,
+    KernelSize,
+    RenderPass,
+    SMAAEffect,
+    SMAAPreset
+  } from 'postprocessing'
+  import { onDestroy } from 'svelte'
+  import { tweened } from 'svelte/motion'
+  import { Vector2 } from 'three'
+  import { gameState } from './game/state'
 
-	const ctx = useThrelte()
+  const ctx = useThrelte()
 
-	const { state, arcadeMachineScene } = gameState
-	const { camera, renderer } = ctx
+  const { state, arcadeMachineScene } = gameState
+  const { camera, renderer } = ctx
 
-	let bloomEffect: BloomEffect | undefined = undefined
+  let bloomEffect: BloomEffect | undefined = undefined
 
-	const bloomIntensity = tweened($state === 'off' ? 0 : 1, {
-		duration: 3e3
-	})
-	$: bloomIntensity.set($state === 'off' ? 0 : 1)
-	$: if (bloomEffect) bloomEffect.intensity = $bloomIntensity
+  const bloomIntensity = tweened($state === 'off' ? 0 : 1, {
+    duration: 3e3
+  })
+  $: bloomIntensity.set($state === 'off' ? 0 : 1)
+  $: if (bloomEffect) bloomEffect.intensity = $bloomIntensity
 
-	const composer = new EffectComposer(renderer)
-	ctx.composer = composer as any
+  const composer = new EffectComposer(renderer)
 
-	const addComposerAndPasses = () => {
-		composer.removeAllPasses()
+  const addComposerAndPasses = () => {
+    composer.removeAllPasses()
 
-		composer.addPass(new RenderPass($arcadeMachineScene, $camera))
-		bloomEffect = new BloomEffect({
-			intensity: $bloomIntensity,
-			luminanceThreshold: 0.15,
-			height: 512,
-			width: 512,
-			luminanceSmoothing: 0.08,
-			mipmapBlur: true,
-			kernelSize: KernelSize.MEDIUM
-		})
-		bloomEffect.luminancePass.enabled = true
-		;(bloomEffect as any).ignoreBackground = true
-		composer.addPass(new EffectPass($camera, bloomEffect))
-		composer.addPass(
-			new EffectPass(
-				$camera,
-				new ChromaticAberrationEffect({
-					offset: new Vector2(0.0005, 0.0005),
-					modulationOffset: 0,
-					radialModulation: false
-				})
-			)
-		)
-		composer.addPass(
-			new EffectPass(
-				$camera,
-				new BrightnessContrastEffect({
-					brightness: 0,
-					contrast: 0.1
-				})
-			)
-		)
-		composer.addPass(
-			new EffectPass(
-				$camera,
-				new SMAAEffect({
-					preset: SMAAPreset.LOW
-				})
-			)
-		)
-	}
+    composer.addPass(new RenderPass($arcadeMachineScene, $camera))
+    bloomEffect = new BloomEffect({
+      intensity: $bloomIntensity,
+      luminanceThreshold: 0.15,
+      height: 512,
+      width: 512,
+      luminanceSmoothing: 0.08,
+      mipmapBlur: true,
+      kernelSize: KernelSize.MEDIUM
+    })
+    bloomEffect.luminancePass.enabled = true
+    ;(bloomEffect as any).ignoreBackground = true
+    composer.addPass(new EffectPass($camera, bloomEffect))
+    composer.addPass(
+      new EffectPass(
+        $camera,
+        new ChromaticAberrationEffect({
+          offset: new Vector2(0.0005, 0.0005),
+          modulationOffset: 0,
+          radialModulation: false
+        })
+      )
+    )
+    composer.addPass(
+      new EffectPass(
+        $camera,
+        new BrightnessContrastEffect({
+          brightness: 0,
+          contrast: 0.1
+        })
+      )
+    )
+    composer.addPass(
+      new EffectPass(
+        $camera,
+        new SMAAEffect({
+          preset: SMAAPreset.LOW
+        })
+      )
+    )
+  }
 
-	$: if (renderer && $camera && $arcadeMachineScene) {
-		addComposerAndPasses()
-	}
-	onDestroy(() => {
-		composer.removeAllPasses()
-	})
+  $: if ($camera && $arcadeMachineScene) {
+    addComposerAndPasses()
+  }
+  onDestroy(() => {
+    composer.removeAllPasses()
+  })
+
+  let i = 0
+
+  useRender((_, delta) => {
+    composer.render(delta)
+  })
 </script>

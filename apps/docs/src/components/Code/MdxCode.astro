@@ -1,0 +1,124 @@
+---
+import Code from '$components/Code/Code.astro'
+import { parse, type HTMLElement } from 'node-html-parser'
+import type { HtmlRendererOptions } from 'shiki'
+
+interface Props {
+  className?: string
+  metastring?: string
+}
+
+const isHTMLElement = (node: any): node is HTMLElement => {
+  return 'attributes' in node
+}
+
+const content = await Astro.slots.render('default')
+const parsed = parse(content)
+const codeEl = parsed.firstChild
+
+if (!codeEl || !isHTMLElement(codeEl)) {
+  throw new Error('No code element found')
+}
+
+const props: Record<string, any> = {}
+
+const codeComponentProps = ['title', 'class'] as const
+
+const propFormatters: Partial<
+  Record<(typeof codeComponentProps)[number] & string, (value: string) => string>
+> = {
+  // "title of file" => title of file
+  title: (value) => value.replace(/['"]+/g, ''),
+  class: (value) => value.replace(/['"]+/g, '')
+}
+
+const language = (codeEl.attributes as any).class?.split(' ')[0].replace('language-', '')
+const metastring = (codeEl.attributes as any).metastring as string | undefined
+
+const lineOptions: HtmlRendererOptions['lineOptions'] = []
+
+if (metastring) {
+  const elements = metastring.split(' ')
+  for (const element of elements) {
+    const keyElementPair = element.split('=')
+
+    if (keyElementPair.length === 2) {
+      // it's likely an assignment
+
+      let [key, value] = keyElementPair
+
+      if (!key || !value) {
+        // sanity check
+        continue
+      }
+
+      if (codeComponentProps.includes(key as any)) {
+        // run formatter if it exists
+        const formatter = propFormatters[key as keyof typeof propFormatters]
+        if (formatter) {
+          value = formatter(value)
+        }
+        props[key] = value
+      }
+    } else {
+      /**
+       * it can be a line highlight, e.g. {1,2,3-5,6}, or {2}+ or {2}- or {2}m
+       * to indicate if the lines are added, removed or modified.
+       * Regex: ^{[\d-,]+}[+-m]*$
+       */
+      const lineHighlightRegex = /^{[\d-,]+}[+\-m]*$/
+      const lineHighlightMatch = element.match(lineHighlightRegex)
+      const lineHighlightString = lineHighlightMatch?.[0]
+
+      if (lineHighlightString) {
+        const classes = []
+        if (lineHighlightString.endsWith('+')) {
+          classes.push('highlighted-add')
+        } else if (lineHighlightString.endsWith('-')) {
+          classes.push('highlighted-remove')
+        } else if (lineHighlightString.endsWith('m')) {
+          classes.push('highlighted-modified')
+        } else {
+          classes.push('highlighted')
+        }
+        // separate by comma
+        const groups = lineHighlightString.split(',')
+
+        // trim whitespace and {, }, -, +
+        const trimmedGroups = groups.map((group) =>
+          group.trim().replace(/^\D*/g, '').replace(/\D*$/g, '')
+        )
+
+        for (const group of trimmedGroups) {
+          // separate by dash
+          const range = group.split('-')
+
+          if (range.length === 2) {
+            // it's a range
+
+            const [start, end] = range.map((num) => parseInt(num, 10))
+            if (!start || !end) {
+              // sanity check
+              continue
+            }
+            for (let i = start; i <= end; i++) {
+              lineOptions.push({ line: i, classes })
+            }
+          } else {
+            // it's a single line
+            const line = parseInt(group, 10)
+            lineOptions.push({ line, classes })
+          }
+        }
+      }
+    }
+  }
+}
+---
+
+<Code
+  code={codeEl.text}
+  lang={language}
+  lineOptions={lineOptions}
+  {...props}
+/>

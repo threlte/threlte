@@ -1,0 +1,37 @@
+---
+{ order: 14.76, 'category': '@threlte/extras', 'name': 'onReveal', 'type': 'hook' }
+---
+
+`onReveal` invokes a callback when the component is revealed (i.e., no
+longer suspended in the context of a [`<Suspense>`](/docs/reference/extras/suspense) boundary). It mimics Svelte's
+lifecycle method `onMount`. If there is no `<Suspense>` component, the callback
+will be executed with Svelte's `onMount` as the component will never suspend.
+
+## Example
+
+The following component loads a model with the hook `useGltf` and is potentially
+wrapped in a `<Suspense>` boundary.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { onReveal, useGltf } from '@threlte/extras'
+
+  const gltf = useGltf('model.gltf')
+
+  onReveal(() => {
+    console.log('The component has been revealed')
+  })
+</script>
+
+{#await gltf then { scene }}
+  <T is={scene}>
+{/await}
+```
+
+<Tip type="tip">
+	`onReveal` is mimicking Svelte's `onMount` and can
+	be used in its place for triggering animations, etc., within the boundaries
+	of a `<Suspense>` component. If it's used outside of a `<Suspense>` component,
+	it will behave just like Svelte's `onMount`.
+</Tip>

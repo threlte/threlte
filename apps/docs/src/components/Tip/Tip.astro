@@ -1,0 +1,123 @@
+---
+import { c } from '$lib/classes'
+import TipIcon from '$components/Icons/Tip.astro'
+import DangerIcon from '$components/Icons/Danger.astro'
+import NoteIcon from '$components/Icons/Note.astro'
+import InfoIcon from '$components/Icons/Info.astro'
+import ExperimentalIcon from '$components/Icons/Experimental.astro'
+import WarningIcon from '$components/Icons/Warning.astro'
+
+interface Props {
+  color?: 'orange' | 'blue' | 'green' | 'dark'
+  glow?: boolean
+  class?: string
+  type?: 'note' | 'info' | 'tip' | 'warning' | 'danger' | 'experimental'
+  title?: string
+}
+
+const colorStyles: Record<NonNullable<Props['color']>, string> = {
+  orange: 'bg-orange-800/30 border-orange-500 [&_a]:text-orange-500 [&_a_code]:text-orange-500',
+  blue: 'bg-blue-800/90 border-blue-500 [&_a]:text-blue-500 [&_a_code]:text-blue-500',
+  green: 'bg-green-800/30 border-green-500 [&_a]:text-green-500 [&_a_code]:text-green-500',
+  dark: 'bg-blue-800/20 border-blue-500/50 [&_a]:text-blue-500 [&_a_code]:text-blue-500'
+}
+
+const iconStyles: Record<
+  NonNullable<Props['color']> | NonNullable<Props['type']> | 'transparent',
+  string
+> = {
+  transparent: 'bg-transparent',
+  orange: 'bg-orange-800/20',
+  blue: 'bg-blue-800/20',
+  green: 'bg-green-800/20',
+  dark: 'bg-blue-800/20',
+  danger: 'bg-red-800/60',
+  experimental: 'bg-purple-800/50',
+  info: 'bg-blue-700/60',
+  note: 'bg-blue-700/40',
+  tip: 'bg-green-800/80',
+  warning: 'bg-yellow-800/50'
+}
+
+const glowStyles: Record<
+  NonNullable<Props['color']> | NonNullable<Props['type']> | 'transparent',
+  string
+> = {
+  orange: 'glow-orange/80',
+  blue: 'glow-blue',
+  green: 'glow-green/70',
+  dark: 'glow-blue/80',
+  danger: 'glow-red-500/80',
+  experimental: 'glow-purple-500/80',
+  info: 'glow-blue',
+  note: 'glow-blue',
+  tip: 'glow-green/70',
+  warning: 'glow-yellow-500/60',
+  transparent: ''
+}
+
+const typeClasses: Record<NonNullable<Props['type']>, string> = {
+  warning: 'bg-yellow-800/30 border-yellow-500 [&_a]:text-yellow-600 [&_a_code]:text-yellow-600',
+  tip: colorStyles.green,
+  info: 'bg-blue-800/30 border-blue-500 [&_a]:text-blue-500 [&_a_code]:text-blue-500',
+  note: colorStyles.dark,
+  danger: 'bg-red-800/30 border-red-500 [&_a]:text-red-500 [&_a_code]:text-red-500',
+  experimental:
+    'bg-purple-800/30 border-purple-500 [&_a]:text-purple-500 [&_a_code]:text-purple-500'
+}
+
+const typeIcons: Record<NonNullable<Props['type']>, any> = {
+  warning: WarningIcon,
+  tip: TipIcon,
+  info: InfoIcon,
+  note: NoteIcon,
+  danger: DangerIcon,
+  experimental: ExperimentalIcon
+}
+
+const getClasses = (): string => {
+  if (!Astro.props.type) {
+    return c(
+      colorStyles[Astro.props.color ?? 'blue'],
+      !!Astro.props.glow && glowStyles[Astro.props.color ?? 'blue'],
+      Astro.props.class ?? ''
+    )
+  } else {
+    return c(
+      typeClasses[Astro.props.type],
+      !!Astro.props.glow && glowStyles[Astro.props.type ?? 'transparent'],
+      Astro.props.class ?? ''
+    )
+  }
+}
+
+const Icon = Astro.props.type && typeIcons[Astro.props.type]
+---
+
+<div
+  class={c(
+    'flex w-full flex-row items-stretch gap-0 border rounded-md overflow-hidden tip',
+    getClasses()
+  )}
+>
+  <!-- prettier-ignore -->
+  <div class={c("flex text-white empty:hidden flex-col items-center justify-center px-2 py-2", iconStyles[Astro.props.type ?? Astro.props.color ?? 'transparent'])}>{Icon ? <Icon class="h-[20px] w-auto" /> : <slot name="Icon" />}</div>
+
+  {
+    Astro.props.title && (
+      <div class="py-2 px-3 [&>*]:!text-white [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <h4 class="!mb-1 empty:hidden">{Astro.props.title}</h4>
+        <div class="overflow-x-auto text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
+          <slot />
+        </div>
+      </div>
+    )
+  }
+  {
+    !Astro.props.title && (
+      <div class="overflow-x-auto py-2 px-3 text-sm [&>*:first-child]:!mt-0 [&>*:last-child]:!mb-0">
+        <slot />
+      </div>
+    )
+  }
+</div>

@@ -1,5 +1,187 @@
 # @threlte/extras
 
+## 2.1.1
+
+### Patch Changes
+
+- ef17718: fix: imported theatre/core from own named exports
+
+## 2.1.0
+
+### Minor Changes
+
+- 82ee149: Added capturing in <Sync> component
+
+## 2.0.0
+
+### Patch Changes
+
+- a6c4a56: Fix: dynamically import studio component instead of npm package
+- Updated dependencies [9c0035e]
+  - @threlte/extras@5.1.0
+
+## 1.0.5
+
+### Patch Changes
+
+- dfa5cbd: Use peer dependencies for svelte and three
+
+Note: We're considering this a bug fix, but it might be a breaking change for you depending on your setup. If you run into dependency issues, reinstall the packages following the [installation guide](https://threlte.xyz/docs/learn/getting-started/installation).
+
+- Updated dependencies [dfa5cbd]
+  - @threlte/extras@5.0.5
+  - @threlte/core@6.0.3
+
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [7424123]
+  - @threlte/extras@5.0.4
+  - @threlte/core@6.0.2
+
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [5b74e1a]
+  - @threlte/extras@5.0.3
+
+## 1.0.2
+
+### Patch Changes
+
+- ee1d319: Update package READMEs to fix banners.
+- Updated dependencies [ee1d319]
+- Updated dependencies [5bb6746]
+  - @threlte/core@6.0.1
+  - @threlte/extras@5.0.2
+
+## 1.0.1
+
+### Patch Changes
+
+- 3a68dcf: fix: Replaced instances of "instanceof" with checks that are cross-source compatible
+- Updated dependencies [3a68dcf]
+  - @threlte/extras@5.0.1
+
+## 1.0.0
+
+### Major Changes
+
+- a764739: Renamed slotted components of <SheetObject> to <Sync>, <Declare> and <Transform>, added change event on <SheetObject>
+- 3756ba2: Removed <Editable> component
+
+### Minor Changes
+
+- 3f0ce85: Added Sequence component and SequenceController store
+- 4b67b473: The hook useStudio exposes Theatre.js' studio instance.
+- df6ca2d: Added snap settings to <Transform>
+
+### Patch Changes
+
+- d4612fc: unsubscribe in createSheetObjectAction
+- 3868395: Updated prettier
+- d41cb6cf: Adapted theatre package to new TransformControls syntax
+- 1ef92b9: fixed frame invalidation after values changed
+- 5238844: Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+- Updated dependencies [f0065c38]
+- Updated dependencies [f9f8e61]
+- Updated dependencies [33c37682]
+- Updated dependencies [300cbe4e]
+- Updated dependencies [9526d5d]
+- Updated dependencies [4b67b473]
+- Updated dependencies [bd4a4b76]
+- Updated dependencies [151cdc08]
+- Updated dependencies [dd686a7]
+- Updated dependencies [e58cb58]
+- Updated dependencies [3868395]
+- Updated dependencies [5df4ca0]
+- Updated dependencies [1f4e3e0]
+- Updated dependencies [fef242de]
+- Updated dependencies [fcfcc0e4]
+- Updated dependencies [1505665]
+- Updated dependencies [eb0dc69f]
+- Updated dependencies [ae514436]
+- Updated dependencies [0620502]
+- Updated dependencies [b14aa99]
+- Updated dependencies [2720cd4]
+- Updated dependencies [e28b8ada]
+- Updated dependencies [fef242de]
+- Updated dependencies [a27edc5f]
+- Updated dependencies [8ed809b2]
+- Updated dependencies [8734041]
+- Updated dependencies [d649e237]
+- Updated dependencies [9291b0c]
+- Updated dependencies [45821797]
+- Updated dependencies [71f5efa]
+- Updated dependencies [feab5e8]
+- Updated dependencies [848af1ae]
+- Updated dependencies [5238844]
+- Updated dependencies [4b67b473]
+- Updated dependencies [d9647fdc]
+- Updated dependencies [aac59eb1]
+- Updated dependencies [4bcf0ee]
+- Updated dependencies [3a9a26c]
+- Updated dependencies [a764739]
+- Updated dependencies [23049766]
+- Updated dependencies [15309755]
+- Updated dependencies [b71145ea]
+- Updated dependencies [2943cb3]
+- Updated dependencies [4b67b473]
+- Updated dependencies [b845685]
+- Updated dependencies [d9fdbd7]
+- Updated dependencies [4b383b0a]
+- Updated dependencies [5ba62e2]
+- Updated dependencies [a39ccd68]
+- Updated dependencies [df4b307b]
+  - @threlte/core@6.0.0
+  - @threlte/extras@5.0.0
+
+## 1.0.0-next.3
+
+### Major Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`a764739`](https://github.com/threlte/threlte/commit/a764739674a9d97c9f43fe40cee2f0893116b5ac) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Renamed slotted components of <SheetObject> to <Sync>, <Declare> and <Transform>, added change event on <SheetObject>
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`3756ba2`](https://github.com/threlte/threlte/commit/3756ba2a866a898dbd85ad506ed5f63477f2c21c) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Removed <Editable> component
+
+### Minor Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`3f0ce85`](https://github.com/threlte/threlte/commit/3f0ce85b965422f4d87496fb3b3be0cdfe33fd9e) Thanks [@ixxie](https://github.com/ixxie)! - Added Sequence component and SequenceController store
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`df6ca2d`](https://github.com/threlte/threlte/commit/df6ca2d89af8c5df11bfa26a21ad5b321c852dbe) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Added snap settings to <Transform>
+
+### Patch Changes
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`d4612fc`](https://github.com/threlte/threlte/commit/d4612fc02c4587c2f1fc9fe46738c2c340c2a0d0) Thanks [@grischaerbe](https://github.com/grischaerbe)! - unsubscribe in createSheetObjectAction
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`1ef92b9`](https://github.com/threlte/threlte/commit/1ef92b9aac89fbefdc23d3b25e59068b482d13f5) Thanks [@grischaerbe](https://github.com/grischaerbe)! - fixed frame invalidation after values changed
+
+- [#380](https://github.com/threlte/threlte/pull/380) [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf) Thanks [@grischaerbe](https://github.com/grischaerbe)! - Updated all packages to use Svelte 4, minimal Svelte version is 4.1.1
+
+- Updated dependencies [[`9526d5d`](https://github.com/threlte/threlte/commit/9526d5d2d6285b8ddb8c81dc9e6ce819a90db193), [`e58cb58`](https://github.com/threlte/threlte/commit/e58cb5842e9a77240376c30827f046ad75afa17f), [`0620502`](https://github.com/threlte/threlte/commit/0620502ba9d9fbd0fc15100c298816130ed526d7), [`5238844`](https://github.com/threlte/threlte/commit/523884441ec8d7d2894f7ab3dbde2aecc68cf2bf), [`a764739`](https://github.com/threlte/threlte/commit/a764739674a9d97c9f43fe40cee2f0893116b5ac)]:
+  - @threlte/extras@5.0.0-next.17
+  - @threlte/core@6.0.0-next.12
+
+## 0.1.0-next.2
+
+### Patch Changes
+
+- 3868395: Updated prettier
+
+## 0.1.0-next.1
+
+### Minor Changes
+
+- 4b67b473: The hook useStudio exposes Theatre.js' studio instance.
+
+## 0.0.3-next.0
+
+### Patch Changes
+
+- d41cb6cf: Adapted theatre package to new TransformControls syntax
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,0 +1,32 @@
+:root {
+  --left-sidebar-width: 250px;
+  --right-sidebar-width: 250px;
+  --docs-navbar-height: 70px;
+
+  /* The intrinsic width of the underline stroke (in pixels). This is
+   * the same as the height of the cap images. Don't specify the
+   * units! This is because of some of the calculations we do later on. */
+  --underline-intrinsic-width: 8;
+
+  /* The actual width of the underline stroke we want to render (in pixels).
+		* You can modify this, and the sizing and positioning should be calculated
+		* accordingly. Again, Don't specify the units! */
+  --underline-width: 12;
+
+  /* The color used to draw the underline. It should match the color
+		* used in the cap images... unfortunately we can't modify the SVG
+		* fill via CSS because it's a background image. */
+  --underline-color: #f1a1e3;
+
+  /* We need to know the width of the cap images so that we
+ * can position everything on the x axis accordingly. */
+  --underline-cap-width: 4px;
+
+  /* The border is positioned relative to the bottom of the line.
+ * We can move it upwards a little to create an overlap effect. */
+  --underline-offset-y: -2px;
+
+  /* The padding to add to the x axis. By default, the caps would be
+ * aligned with the beginning and end of the line. */
+  --underline-padding-x: 0.12em;
+}

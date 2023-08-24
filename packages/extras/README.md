@@ -1,19 +1,69 @@
-![Threlte Logo](https://user-images.githubusercontent.com/46897060/178455971-434f4c5d-6c26-4d34-acdc-b4b50e2a8a2c.png)
+<div align="right">
+ <a href="https://www.npmjs.com/package/@threlte/extras">
+  <img alt="npm" src="https://img.shields.io/npm/v/@threlte/extras?color=fe4100&labelColor=171d27&logo=npm&logoColor=white"/>
+ </a>
+ <a href="https://github.com/threlte/threlte/blob/main/LICENSE.md">
+  <img alt="license" src="https://img.shields.io/npm/l/@threlte/core?color=fe4100&labelColor=171d27&logo=git&logoColor=white"/>
+ </a>
+ <a href="https://discord.com/channels/985983540804091964">
+  <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
+ </a>
+ <a href="https://threlte.xyz">
+  <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
+ </a>
+</div>
 
-<h1 align="center">@threlte/extras</h1>
+<a href="https://threlte.xyz">
+ <img src="https://threlte.xyz/logo/threlte-banner.jpg"/>
+</a>
 
-Provides useful abstractions and utilities over existing `three.js` objects.
+## Rapidly Build Interactive 3D Apps for the Web
 
-## Official Documentation
+Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D apps for the web. It provides a **declarative**, **type-safe**, **reactive** and **interactive** API out-of-the-box.
 
-Visit [threlte.xyz](https://threlte.xyz)
+Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
 
-## Support
+Check out our **[documentation](https://threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
 
-Join the [Discord server](https://discord.gg/EqUBCfCaGm)
+## @threlte/extras
+
+[@threlte/extras](https://threlte.xyz/docs/reference/extras/getting-started) boosts productivity with assorted enhancements that extend Threlte's functionality.
+
+This provides assorted components, hooks and plugins that address common usecases for Threlte applications. Many are ports of code from battle-tested, well established Three.js libraries.
+
+## Quickstart
+
+### Installation
+
+For a quick interactive setup of a fresh Threlte project, run:
+
+```sh
+npm create threlte my-project
+```
+
+Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+
+### Tutorial
+
+To get a hang of the basics, we recommend following our [introductory tutorial](https://threlte.xyz/docs/learn/getting-started/your-first-scene).
+
+### Support
+
+Have questions? Feel free to ask in our [Discord support forum](https://discord.com/channels/985983540804091964/1031843197963477002).
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+- **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
+- **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
+
+## Sponsors
+
+[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
 
 ---
 
 ### License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see the [License File](LICENSE.md) for more information.

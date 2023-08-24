@@ -2,51 +2,70 @@ import { onDestroy } from 'svelte'
 import type { Writable } from 'svelte/store'
 import { writable } from 'svelte/store'
 import { browser } from '../lib/browser'
-import type { Size } from '../types/types'
+import type { Size } from '../types'
 
 export const useParentSize = (): {
   parentSizeAction: (node: HTMLElement) => void
   parentSize: Writable<Size>
 } => {
-  const parentSizeStore = writable({ width: 0, height: 0 })
-  let parentSize = { width: 0, height: 0 }
-  const unsubscribeParentSize = parentSizeStore.subscribe((s) => (parentSize = s))
-  onDestroy(unsubscribeParentSize)
-
-  let el: HTMLElement | undefined
-
-  const proxy = () => {
-    const currentParentSize = parentSize
-    if (!el) return
-    if (!el.parentElement) return
-    const { clientWidth, clientHeight } = el.parentElement
-    if (clientWidth !== currentParentSize.width || clientHeight !== currentParentSize.height) {
-      parentSizeStore.set({
-        width: clientWidth,
-        height: clientHeight
-      })
-    }
-  }
-
-  const parentSizeAction = (node: HTMLElement) => {
-    el = node
-    proxy()
-    window.addEventListener('resize', proxy)
-  }
+  const parentSize = writable({ width: 0, height: 0 })
 
   if (!browser) {
     return {
-      parentSize: parentSizeStore,
-      parentSizeAction
+      parentSize,
+      parentSizeAction: () => {
+        /* do nothing */
+      }
     }
   }
 
+  // Only observe childList changes of the parent
+  const mutationOptions = { childList: true, subtree: false, attributes: false }
+
+  let el: HTMLElement | undefined
+
+  const observeParent = (parent: HTMLElement) => {
+    resizeObserver.disconnect()
+    mutationObserver.disconnect()
+    resizeObserver.observe(parent)
+    mutationObserver.observe(parent, mutationOptions)
+  }
+
+  // The canvas should match the contentRect of its parent
+  const resizeObserver = new ResizeObserver(([entry]) => {
+    const { contentRect } = entry
+
+    parentSize.set({
+      width: contentRect.width,
+      height: contentRect.height
+    })
+  })
+
+  // Use a mutation observer to detect reparenting
+  const mutationObserver = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      for (const node of mutation.removedNodes) {
+        if (el === node && el.parentElement) {
+          observeParent(el.parentElement)
+          return
+        }
+      }
+    }
+  })
+
+  const parentSizeAction = (node: HTMLElement) => {
+    el = node
+    if (!el.parentElement) return
+    observeParent(el.parentElement)
+  }
+
   onDestroy(() => {
-    window.removeEventListener('resize', proxy)
+    resizeObserver.disconnect()
+    mutationObserver.disconnect()
   })
 
   return {
-    parentSizeAction,
-    parentSize: parentSizeStore
+    parentSize,
+    parentSizeAction
   }
 }

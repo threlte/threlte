@@ -1,0 +1,21 @@
+﻿name: Markprompt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  train-markprompt:    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Zip markdown
+        uses: vimtor/action-zip@v1
+        with:
+            files: apps/docs/src/content
+            dest: trainingData.zip
+      - name: Train markprompt
+        run: | 
+          curl --location 'https://api.markprompt.com/v1/train' -X POST -H "Authorization: Bearer ${{secrets.MARKPROMPT_TOKEN}}" -H "Content-Type: application/zip" --data-binary @trainingData.zip    

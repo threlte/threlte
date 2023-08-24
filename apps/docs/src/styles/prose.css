@@ -1,0 +1,68 @@
+html {
+  scroll-padding-top: calc(70px + 1.5rem);
+}
+
+.prose {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply relative transition-transform;
+
+    a {
+      &::before {
+        content: '#';
+        @apply absolute inline-block -translate-x-full pr-2 text-white/50 opacity-0 transition-opacity;
+      }
+    }
+
+    &:hover {
+      a {
+        &::before {
+          @apply opacity-100;
+        }
+      }
+    }
+  }
+
+  a strong {
+    @apply !text-inherit;
+  }
+
+  .tip {
+    @apply my-5;
+  }
+
+  div.code {
+    @apply my-5;
+  }
+
+  details {
+    @apply rounded-md bg-blue-700/20 px-4 py-2;
+
+    summary {
+      @apply cursor-pointer select-none text-white;
+
+      & > * {
+        @apply !mb-0 ml-2 inline !font-bold text-white;
+      }
+    }
+
+    &[open] {
+      @apply !pb-4;
+
+      summary {
+        @apply pb-2;
+      }
+    }
+
+    & > *:last-child {
+      @apply !mb-2;
+    }
+
+    & > .code {
+      @apply !mb-0 mt-2;
+    }
+  }
+}

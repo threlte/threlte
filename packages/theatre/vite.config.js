@@ -1,11 +1,11 @@
-import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
+import { sveltekit } from '@sveltejs/kit/vite'
 
 /**
  * @type {import('vite').UserConfig}
  */
 const config = {
-  plugins: [{ ...threeMinifier(), enforce: 'pre' }],
+  plugins: [sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
   ssr: {
     noExternal: ['three']
   }

@@ -1,55 +1,53 @@
 <script lang="ts">
-	import { BoxBufferGeometry, Color, MeshStandardMaterial } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
-	import {
-		AmbientLight,
-		DirectionalLight,
-		Mesh,
-		OrthographicCamera,
-		useThrelte
-	} from '@threlte/core'
-	import { useCursor, Text } from '@threlte/extras'
+  import { T, useThrelte } from '@threlte/core'
+  import { interactivity, Text, useCursor } from '@threlte/extras'
+  import { DEG2RAD } from 'three/src/math/MathUtils'
 
-	const material = new MeshStandardMaterial({
-		color: 0xc62004
-	})
+  const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 
-	const { hovering, onPointerEnter, onPointerLeave } = useCursor()
+  $: color = $hovering ? '#dddddd' : '#FE3D00'
 
-	$: if ($hovering) {
-		material.color = new Color(0xdddddd)
-	} else {
-		material.color = new Color(0xc62004)
-	}
+  const { size } = useThrelte()
 
-	const { size } = useThrelte()
+  let zoom = $size.width / 7
+  $: zoom = $size.width / 7
 
-	let zoom = $size.width / 7
-	$: zoom = $size.width / 7
+  interactivity()
 </script>
 
-<OrthographicCamera {zoom} position={{ x: 5, y: 5, z: 5 }} lookAt={{}} />
+<T.OrthographicCamera
+  {zoom}
+  position={[5, 5, 5]}
+  on:create={({ ref }) => {
+    ref.lookAt(0, 0, 0)
+  }}
+  makeDefault
+/>
 
-<DirectionalLight position={{ y: 10, x: 5 }} />
-<AmbientLight intensity={0.2} />
+<T.DirectionalLight
+  position.y={10}
+  position.x={5}
+/>
+<T.AmbientLight intensity={0.2} />
 
 <Text
-	text="HOVER"
-	interactive
-	on:pointerenter={onPointerEnter}
-	on:pointerleave={onPointerLeave}
-	fontSize={0.5}
-	anchorY="100%"
-	anchorX="50%"
-	rotation={{ y: 90 * DEG2RAD }}
-	position={{ y: 1, x: -1 }}
-	{material}
+  text="HOVER"
+  interactive
+  on:pointerenter={onPointerEnter}
+  on:pointerleave={onPointerLeave}
+  fontSize={0.5}
+  anchorY="100%"
+  anchorX="50%"
+  rotation.y={90 * DEG2RAD}
+  position.y={1}
+  position.x={-1}
+  {color}
 />
 
-<Mesh
-	interactive
-	on:pointerenter={onPointerEnter}
-	on:pointerleave={onPointerLeave}
-	geometry={new BoxBufferGeometry(2, 2, 2)}
-	{material}
-/>
+<T.Mesh
+  on:pointerenter={onPointerEnter}
+  on:pointerleave={onPointerLeave}
+>
+  <T.MeshStandardMaterial {color} />
+  <T.BoxGeometry args={[2, 2, 2]} />
+</T.Mesh>

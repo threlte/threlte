@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - next
 
 jobs:
   release:
@@ -20,7 +21,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2.2.2
         with:
-          version: 7.5.0
+          version: 8.3.1
 
       - name: Install deps
         run: pnpm run install:packages

@@ -1,33 +1,32 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
-  import type { GridProps } from './Grid.svelte'
-  import { useThrelte, T } from '@threlte/core'
-  import { Color, ShaderMaterial, DoubleSide, Mesh } from 'three'
+  import type { GridProps, GridEvents, GridSlots } from './Grid.svelte'
+  import { useThrelte, T, forwardEventHandlers } from '@threlte/core'
+  import { Color, ShaderMaterial, DoubleSide, type Mesh } from 'three'
 
-  type Props = Required<GridProps>
+  type $$Props = Required<GridProps>
+  type $$Events = GridEvents
+  type $$Slots = GridSlots
 
-  export let cellColor: Props['cellColor'] = '#000000'
-  export let sectionColor: Props['sectionColor'] = '#0000ee'
-  export let cellSize: Props['cellSize'] = 1
-  export let sectionSize: Props['sectionSize'] = 10
+  export let cellColor: $$Props['cellColor'] = '#000000'
+  export let sectionColor: $$Props['sectionColor'] = '#0000ee'
+  export let cellSize: $$Props['cellSize'] = 1
+  export let sectionSize: $$Props['sectionSize'] = 10
+  export let axes: $$Props['axes'] = 'xzy'
+  export let gridSize: $$Props['gridSize'] = [20, 20]
+  export let followCamera: $$Props['followCamera'] = false
+  export let infiniteGrid: $$Props['infiniteGrid'] = false
+  export let fadeDistance: $$Props['fadeDistance'] = 100
+  export let fadeStrength: $$Props['fadeStrength'] = 1
+  export let cellThickness: $$Props['cellThickness'] = 1
+  export let sectionThickness: $$Props['sectionThickness'] = 2
 
-  export let axes: Props['axes'] = 'xzy'
-
-  export let gridSize: Props['gridSize'] = [20, 20]
-
-  export let followCamera: Props['followCamera'] = false
-  export let infiniteGrid: Props['infiniteGrid'] = false
-  export let fadeDistance: Props['fadeDistance'] = 100
-  export let fadeStrength: Props['fadeStrength'] = 1
-
-  export let cellThickness: Props['cellThickness'] = 1
-  export let sectionThickness: Props['sectionThickness'] = 2
-
+  // forward ref binding
   export let ref: Mesh
 
   const { invalidate } = useThrelte()
 
-  const makeGridMaterial = (axes: Props['axes']) => {
+  const makeGridMaterial = (axes: $$Props['axes']) => {
     return new ShaderMaterial({
       side: DoubleSide,
 
@@ -147,15 +146,11 @@
     material.uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
     invalidate('Grid uniforms changed')
   }
+
+  const component = forwardEventHandlers()
 </script>
 
-<T.Mesh
-  bind:ref
-  {material}
-  frustumCulled={false}
-  {...$$restProps}
-  let:ref
->
+<T.Mesh bind:this={$component} bind:ref {material} frustumCulled={false} {...$$restProps} let:ref>
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
 
   <slot {ref} />

@@ -3,6 +3,8 @@
   import Scene from './Scene.svelte'
 </script>
 
-<Canvas>
-  <Scene />
-</Canvas>
+<div class="relative w-full h-full bg-white">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
