@@ -13,7 +13,7 @@
   const { action, mounted } = useElementMounted()
 </script>
 
-<div class="fixed top-0 left-0 z-50 flex max-h-screen w-full flex-col md:hidden">
+<div class="fixed top-0 left-0 z-40 flex max-h-screen w-full flex-col md:hidden">
   <header
     class={c(
       'flex h-[70px] w-full flex-shrink-0 flex-row items-center justify-between border-b bg-[#0A0F19] px-6 py-2',
