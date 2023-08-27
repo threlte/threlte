@@ -1,18 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
+  import { OrbitControls, HTML } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
-
   import { PlaneGeometry, Vector3 } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import fragmentShader from './fragment.glsl?raw'
   import vertexShader from './vertex.glsl?raw'
-
   import { interactivity } from '@threlte/extras'
   import { quadOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
-  interactivity()
 
+  // Terrain setup
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
   const noise = createNoise2D()
@@ -25,6 +23,8 @@
   }
   geometry.computeVertexNormals()
 
+  // Interactivity and shader variables
+  interactivity()
   const pulsePosition = new Vector3()
   const pulseTimer = tweened(0, {
     easing: quadOut
@@ -36,6 +36,9 @@
   position={[-70, 50, 10]}
   fov={15}
 >
+  <HTML>
+    <span class="whitespace-nowrap pl-4">Click on the terrain mesh</span>
+  </HTML>
   <OrbitControls
     autoRotate
     target.y={1.5}
