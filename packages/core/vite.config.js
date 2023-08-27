@@ -14,6 +14,9 @@ const config = {
   },
   ssr: {
     noExternal: ['three']
+  },
+  test: {
+    include: ['src/**/*.{test,spec}.{js,ts}']
   }
 }
 

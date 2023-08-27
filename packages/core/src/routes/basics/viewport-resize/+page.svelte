@@ -2,7 +2,7 @@
   import { T, Canvas } from '$lib'
 </script>
 
-<main>
+<div id="parent">
   <Canvas>
     <T.PerspectiveCamera
       makeDefault
@@ -16,10 +16,11 @@
     <T.DirectionalLight />
     <T.AmbientLight />
   </Canvas>
-</main>
+</div>
 
 <style>
-  main {
+  div {
+    width: 100vw;
     height: 100vh;
   }
 </style>
