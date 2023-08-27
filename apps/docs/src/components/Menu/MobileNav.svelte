@@ -39,7 +39,7 @@
         duration: 200
       }}
       in:customSlide={{ duration: 200 }}
-      class="border-b-orange/25 -z-10 min-h-0 w-full overflow-visible border-b bg-[#0D1421]"
+      class="border-b-orange/25 -z-10 min-h-0 w-full overflow-auto border-b bg-[#0D1421]"
     >
       <div
         class="px-6 pt-2 pb-6"
