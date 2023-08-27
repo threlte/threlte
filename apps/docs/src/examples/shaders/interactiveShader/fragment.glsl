@@ -21,7 +21,7 @@ void main() {
   vec3 color = vec3(vPosition.y * 1.5, vUv.x, vUv.y) * 2.5;
   vec3 coloredLines = (color * colorFadeTimer * lineFill);
 
-  vec3 final = coloredLines = mix(coloredLines, vec3(lineFill * 0.05), 1. - circle * colorFadeTimer);
+  vec3 final = coloredLines = mix(coloredLines, vec3(lineFill * 0.1), 1. - circle * colorFadeTimer);
 
   gl_FragColor = vec4(final, 1.);
 
