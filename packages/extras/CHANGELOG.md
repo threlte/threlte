@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.4.1
+
+### Patch Changes
+
+- de3341f: Fixed a bug where the component `<Text>` would not render custom fonts, character sets or SDF glyph sizes
+
 ## 5.4.0
 
 ### Minor Changes
