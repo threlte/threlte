@@ -8,7 +8,7 @@
 - [Understanding Changesets](#understanding-changesets)
 - [Git Branches](#git-branches)
 - [Getting Started Locally](#get-started-with-threlte-locally)
-- 
+  
 ## Ways to Contribute
 
 1. **Improve Documentation**: Fix incomplete or missing documentation, wording, examples, or explanations.
