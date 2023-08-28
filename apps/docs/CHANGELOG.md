@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.4.2
+
+### Patch Changes
+
+- 616bf1e: fix broken doc links and 404s: core/utilities, core/use-render, core/use-frame, extras/instance, extras/instanced-mesh
+
 ## 0.4.1
 
 ### Patch Changes

@@ -38,6 +38,9 @@
   is={ref}
   let:ref
   {...$$restProps}
+  {font}
+  {characters}
+  {sdfGlyphSize}
   bind:this={$component}
 >
   <slot {ref} />
