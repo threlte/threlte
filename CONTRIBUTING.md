@@ -43,9 +43,24 @@ Commit messages should be clear to maintain a clean git history. This repository
 - `organisation`: Pertains to Threlte organization and community issues.
 - `support`: When asking for help.
 
-## Understanding Changesets
+# Understanding Changesets
 
-Changesets help us document the changes made in commits and guide versioning during releases.
+Changesets are an integral part of how we handle versioning in Threlte, especially as we operate in a monorepo environment. A changeset is essentially an 'intent to change', holding key information such as what needs to be released, which version we are releasing at (based on semver), and a changelog entry for the released packages.
+
+## How to Add a Changeset
+
+1. **Run the Changeset Command**: Execute `npx changeset` or `yarn changeset` in your terminal.
+2. **Package Selection**: If in a monorepo, you'll be prompted to select the packages affected by your changes.
+3. **Versioning**: Choose an appropriate semver bump type (major, minor, or patch) for each selected package.
+4. **Changelog Entry**: Write a concise message to accompany the changeset, detailing WHAT the change is, WHY it was made, and HOW it affects the users.
+5. **Commit**: Commit the generated changeset file to your branch.
+
+A detailed guide on adding changesets can be [found here](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md).
+
+## Why Changesets are Important
+
+Changesets ensure that you capture all the necessary information about a change when it is fresh in your mind. This is especially useful for contributors and maintainers when they go to batch and release these changes. For an in-depth understanding, refer to [this document](https://github.com/changesets/changesets/blob/main/docs/detailed-explanation.md).
+
 
 ## Git Branches
 
