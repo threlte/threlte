@@ -19,7 +19,8 @@ export const getShiki = () => {
       'md',
       'json',
       'html',
-      'bash'
+      'bash',
+      'glsl'
     ]
   })
   return highlighter

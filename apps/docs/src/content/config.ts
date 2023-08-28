@@ -89,7 +89,7 @@ export const learnCollection = defineCollection({
 
 export const examplesCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Animation', 'Camera', 'Geometry', 'Postprocessing']).optional(),
+    category: z.enum(['Animation', 'Camera', 'Geometry', 'Shaders', 'Postprocessing']).optional(),
     title: z.string(),
     order: z.number().optional()
   })
