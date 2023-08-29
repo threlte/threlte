@@ -24,14 +24,44 @@
       events:
         [
           {
-            name: 'click',
-            payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
-            description: 'Fires when a user clicks the VR button.'
+            name: 'connected',
+            payload: "XRControllerEvent<'connected'>",
+            description: 'Fired when a controller connects.'
           },
           {
-            name: 'error',
-            payload: 'CustomEvent<Error>',
-            description: 'Fires when an enter / exit session error occurs.'
+            name: 'disconnected',
+            payload: "XRControllerEvent<'disconnected'>",
+            description: 'Fired when a controller disconnects.'
+          },
+          {
+            name: 'select',
+            payload: "XRControllerEvent<'select'>",
+            description: 'Fired when a the user has completed a primary action.'
+          },
+          {
+            name: 'selectstart',
+            payload: "XRControllerEvent<'selectstart'>",
+            description: 'Fired when a the user begins a primary action.'
+          },
+          {
+            name: 'selectend',
+            payload: "XRControllerEvent<'selectend'>",
+            description: 'Fired when a the user ends a primary action or when a controller that is in the process of handling an ongoing primary action is disconnected without successfully completing the action.'
+          },
+          {
+            name: 'squeeze',
+            payload: "XRControllerEvent<'squeeze'>",
+            description: 'Fired when a controller has completed a primary squeeze action.'
+          },
+          {
+            name: 'squeezestart',
+            payload: "XRControllerEvent<'squeezestart'>",
+            description: 'Fired when the user begins a primary squeeze action on one of its input sources.'
+          },
+          {
+            name: 'squeezeend',
+            payload: "XRControllerEvent<'squeezeend'>",
+            description: 'Fired when a the user ends a primary squeeze action or when a controller that is in the process of handling an ongoing primary squeeeze action is disconnected without successfully completing the action.'
           },
         ],
     }
