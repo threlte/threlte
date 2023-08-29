@@ -17,14 +17,14 @@ const title = Astro.props.title
   <!-- Desktop Nav -->
 
   <header
-    class="fixed z-10 hidden h-[70px] w-screen flex-row items-center justify-between bg-[#0A0F19] px-6 md:flex"
+    class="fixed z-10 hidden h-[70px] w-screen flex-row items-center justify-between border-b border-blue-900/0 bg-[#0A0F19] px-6 md:flex"
   >
     <!-- bottom gradient -->
     <div class="absolute top-full h-[10svh] w-full bg-gradient-to-b from-[#0A0F19] to-transparent">
     </div>
 
     <!-- Header Left -->
-    <div class="flex flex-row items-end gap-12">
+    <div class="flex flex-row items-center gap-12">
       <a href="/">
         <Image
           src={LogoWithText}
