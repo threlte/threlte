@@ -7,7 +7,10 @@
 
 {#if browser && enabled}
   {#await import('./InnerStudio.svelte') then Component}
-    <svelte:component this={Component.default} {hide}>
+    <svelte:component
+      this={Component.default}
+      {hide}
+    >
       <slot />
     </svelte:component>
   {/await}

@@ -870,9 +870,7 @@
   --transparent: rgb(255 255 255 / 0%);
   --shadow-size: 0.5rem;
   --shadow-color: var(--markprompt-border);
-
   display: flex;
-  flex-flow: row wrap;
   align-items: center;
   gap: 0.5rem;
   padding-inline: 2rem !important;
@@ -883,7 +881,7 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   background-color: var(--markprompt-muted);
-  @apply !pb-2;
+  @apply !pb-2 md:flex-wrap;
 }
 
 .MarkpromptReferences ul::-webkit-scrollbar {

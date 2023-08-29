@@ -24,7 +24,7 @@
       position.y={0.5}
     >
       <T.BoxGeometry />
-      <T.MeshStandardMaterial color='hotpink' >
+      <T.MeshStandardMaterial color="hotpink">
         <Sync
           color
           roughness

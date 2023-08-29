@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { IProjectConfig } from '@theatre/core'
-
   import { Project, Sheet, Studio } from '..'
 
   export let studio: {

@@ -1,4 +1,5 @@
-import { get_current_component, onDestroy, onMount } from 'svelte/internal'
+import { onDestroy, onMount } from 'svelte'
+import { get_current_component } from 'svelte/internal'
 import { writable } from 'svelte/store'
 import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
 

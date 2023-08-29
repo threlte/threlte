@@ -9,6 +9,7 @@ It can optionally accept children in `left` and `right` slots, which will be par
 
 import { createRawEventDispatcher } from '@threlte/core'
 import Controller from './controller.svelte'
+import TeleportControls from './teleport-controls.svelte';
 import type { XRControllerEvent } from '../types'
 
 /** An optional model for the left controller. If 'none' is passed, no controller model will render.  */
@@ -75,3 +76,5 @@ $: models = {
     {/if}
   </Controller>
 {/each}
+
+<TeleportControls />

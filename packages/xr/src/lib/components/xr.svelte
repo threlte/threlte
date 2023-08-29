@@ -18,7 +18,7 @@ and interaction. This should be placed within a Threlte `<Canvas />`.
 
 <script lang='ts'>
 
-import { onDestroy } from 'svelte';
+import { onDestroy } from 'svelte'
 import { useThrelte, createRawEventDispatcher } from '@threlte/core'
 import type { XRSessionEvent } from '$lib/types'
 import { session, referenceSpaceType, isPresenting, isHandTracking, initialized, xr as xrStore } from '$lib/internal/stores'
@@ -109,16 +109,26 @@ const updateSession = async (currentSession?: XRSession) => {
   updateTargetFrameRate(frameRate)
 }
 
+let lastSession: XRSession | undefined
+
+$initialized = true
+$xrStore = xr
 xr.enabled = true
 xr.addEventListener('sessionstart', handleSessionStart)
 xr.addEventListener('sessionend', handleSessionEnd)
+
+onDestroy(() => {
+  $initialized = false
+  $xrStore = undefined
+  xr.enabled = false
+  xr.removeEventListener('sessionstart', handleSessionStart)
+  xr.removeEventListener('sessionend', handleSessionEnd)
+})
 
 $: {
   xr.setReferenceSpaceType(referenceSpace)
   $referenceSpaceType = referenceSpace
 }
-
-let lastSession: XRSession | undefined
 
 $: if (lastSession !== $session) {
   cleanupSession(lastSession)
@@ -128,16 +138,6 @@ $: if (lastSession !== $session) {
 
 $: updateTargetFrameRate(frameRate)
 $: xr.setFoveation(foveation)
-
-$xrStore = xr
-$initialized = true
-
-onDestroy(() => {
-  $initialized = false
-  xr.enabled = false
-  xr.removeEventListener('sessionstart', handleSessionStart)
-  xr.removeEventListener('sessionend', handleSessionEnd)
-})
 
 </script>
 

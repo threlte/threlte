@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store'
 import {
-  REVISION,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   ColorManagement,
@@ -12,6 +11,7 @@ import {
   type TextureEncoding,
   type WebGLRendererParameters
 } from 'three'
+import { revision } from './revision'
 import type { ThrelteContext } from '../lib/contexts'
 import { watch } from './storeUtils'
 
@@ -110,8 +110,6 @@ export const useRenderer = (ctx: ThrelteContext) => {
         renderer.shadowMap.type = PCFSoftShadowMap
       }
 
-      // REVISION can be '{number}' or '{number}dev'
-      const revision = Number.parseInt(REVISION.replace('dev', ''))
       const cm = ColorManagement as any
       if (revision >= 150) {
         // since three.js r150 the color management prop is

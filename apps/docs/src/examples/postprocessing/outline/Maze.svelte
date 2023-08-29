@@ -1,5 +1,5 @@
 <script>
-	import { T } from '@threlte/core';
+	import { T } from '@threlte/core'
 </script>
 
 <T.Mesh position={[6, 2, 4]} rotation.y={Math.PI / 2}>

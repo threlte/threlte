@@ -23,6 +23,12 @@
           { name: 'curveRadius', type: 'number', required: false },
           { name: 'direction', type: "'auto' | 'ltr' | 'rtl'", required: false },
           { name: 'font', type: 'string', required: false },
+          {
+            name: 'characters',
+            type: 'string',
+            required: false,
+            description: 'The set of characters `<Text>` will preload while suspended.'
+          },
           { name: 'fontSize', type: 'number', required: false },
           { name: 'letterSpacing', type: 'number', required: false },
           { name: 'lineHeight', type: 'number | string', required: false },
@@ -69,4 +75,23 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
   bind:value
 />
 <Text text={value} />
+```
+
+`<Text>` is [suspense-ready](/docs/reference/extras/suspense) and will suspend while the font is loading. You can use the `characters` prop to preload a specific set of characters to prevent [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content).
+
+```svelte
+<script>
+  import { Text, Suspense } from '@threlte/extras'
+</script>
+
+<Suspense>
+  <Text
+    text="HELLO WORLD"
+    characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  />
+
+  <svelte:fragment slot="fallback">
+    <!-- show fallback content while font data is loading -->
+  </svelte:fragment>
+</Suspense>
 ```

@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 2.1.1
+
+### Patch Changes
+
+- ef17718: fix: imported theatre/core from own named exports
+
+## 2.1.0
+
+### Minor Changes
+
+- 82ee149: Added capturing in <Sync> component
+
 ## 2.0.0
 
 ### Patch Changes

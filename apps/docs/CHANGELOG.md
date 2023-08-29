@@ -1,5 +1,41 @@
 # @threlte/docs-next
 
+## 0.4.2
+
+### Patch Changes
+
+- 616bf1e: fix broken doc links and 404s: core/utilities, core/use-render, core/use-frame, extras/instance, extras/instanced-mesh
+
+## 0.4.1
+
+### Patch Changes
+
+- d0745b9: Removed my own testimonial and added Aria's instead
+
+## 0.4.0
+
+### Minor Changes
+
+- 25755e3: Added playground for extras, made `<Text>` component suspense-ready
+
+## 0.3.1
+
+### Patch Changes
+
+- 6f49729: Fix: bad link in Rapier terrain example
+
+## 0.3.0
+
+### Minor Changes
+
+- 0dbdd65: Added `<Center>` component
+
+## 0.2.1
+
+### Patch Changes
+
+- 5b7363b: Fix: docs text and outline examples
+
 ## 0.2.0
 
 ### Minor Changes

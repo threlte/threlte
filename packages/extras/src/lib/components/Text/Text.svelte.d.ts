@@ -223,7 +223,14 @@ export interface TextMesh extends Mesh {
 
   sync: (cb: () => void) => void
 
-  dispose: () => void
+  /**
+   * A string or array of string character sequences for which to pre-generate
+   * glyph SDF textures. Note that this will honor ligature substitution, so you
+   * may need to specify ligature sequences in addition to their individual
+   * characters to get all possible glyphs, e.g. ["t", "h", "th"] to get the "t"
+   * and "h" glyphs plus the "th" glyph.
+   */
+  characters?: string | string[] | null
 }
 
 export type TextProps = Props<TextMesh>

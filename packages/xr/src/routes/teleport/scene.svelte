@@ -42,13 +42,19 @@ const cylinders = Array.from({ length: 14 }).map((_, index) => {
 </XR>
 
 <TeleportControls handedness='left'>
-  <T.Mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+  <T.Mesh
+    teleportSurface
+    receiveShadow
+    rotation={[-Math.PI / 2, 0, 0]}
+  >
     <T.CircleGeometry args={[20]} />
     <T.MeshStandardMaterial color={randomColor()} />
   </T.Mesh>
 
   {#each cylinders as { point, color }, index}
     <T.Mesh
+      name='cylinder {index}'
+      teleportSurface
       position={[point.x, index / 2, point.y]}
       castShadow
       receiveShadow

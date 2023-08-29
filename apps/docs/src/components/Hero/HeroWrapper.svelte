@@ -68,7 +68,8 @@
           powerPreference: 'high-performance',
           antialias: false,
           stencil: false,
-          depth: false
+          depth: false,
+          premultipliedAlpha: false
         }}
       >
         <App />

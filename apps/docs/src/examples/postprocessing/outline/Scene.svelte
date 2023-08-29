@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { quadInOut } from 'svelte/easing';
-	import { tweened } from 'svelte/motion';
+	import { onMount } from 'svelte'
+	import { quadInOut } from 'svelte/easing'
+	import { tweened } from 'svelte/motion'
 
   import { T } from '@threlte/core'
-  import { OrbitControls, Grid, ContactShadows } from '@threlte/extras'
-
-  import { PlaneGeometry } from 'three'
+  import { OrbitControls, Grid } from '@threlte/extras'
 
   import Maze from './Maze.svelte'
   import CustomRenderer from './CustomRenderer.svelte'
@@ -20,30 +18,30 @@
 		[2, 1, 9],
 		[8, 1, 9],
 		[8, 1, -3]
-	];
-	let routeIndex = 0;
+	]
+	let routeIndex = 0
 	let cubePosition = tweened(route[routeIndex], {
 		duration: 400,
 		easing: quadInOut,
-	});
-	let outlinedCube;
+	})
+	let outlinedCube: THREE.Mesh
 
 	onMount(() => {
-		const interval = setInterval(nextCubePosition, 500);
+		const interval = setInterval(nextCubePosition, 500)
 
 		return () => {
-			clearInterval(interval);
-		};
-	});
+			clearInterval(interval)
+		}
+	})
 
 	const nextCubePosition = () => {
 		if (routeIndex < route.length - 1) {
-			routeIndex++;
+			routeIndex++
 		} else {
-			routeIndex = 0;
+			routeIndex = 0
 		}
-		cubePosition.set(route[routeIndex]);
-	};
+		cubePosition.set(route[routeIndex])
+	}
 </script>
 
 <Maze />

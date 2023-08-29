@@ -1,5 +1,29 @@
 # @threlte/extras
 
+## 5.4.1
+
+### Patch Changes
+
+- de3341f: Fixed a bug where the component `<Text>` would not render custom fonts, character sets or SDF glyph sizes
+
+## 5.4.0
+
+### Minor Changes
+
+- b29f2ec: Add the ability to provide a custom DRACOLoader in useGltf hook.
+
+## 5.3.0
+
+### Minor Changes
+
+- 25755e3: Added playground for extras, made `<Text>` component suspense-ready
+
+## 5.2.0
+
+### Minor Changes
+
+- 0dbdd65: Added `<Center>` component
+
 ## 5.1.0
 
 ### Minor Changes

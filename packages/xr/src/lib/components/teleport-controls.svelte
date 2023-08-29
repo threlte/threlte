@@ -14,18 +14,22 @@
     handedness={'left' | 'right'}
     maxDistance={10}
     on:teleport={(event) => {}} 
-  />
+  >
+    <T.Mesh teleportSurface>
+      ...
+    </T.Mesh>
+  </TeleportControls>
 ```
 -->
 
 <script lang='ts'>
 
 import * as THREE from 'three'
-import { onMount, afterUpdate } from 'svelte'
 import { T, useFrame, createRawEventDispatcher } from '@threlte/core'
 import { activeTeleportController, pendingTeleportDestination } from '$lib/internal/stores'
 import { useTeleport, useController, useGamepad } from '$lib/hooks'
 import Ray from '$lib/components/ray.svelte'
+import { navMeshes, teleportPlugin } from '../plugins/teleport-controls'
 
 /**
  * The raycaster used for teleportation.
@@ -45,13 +49,12 @@ export let handedness: 'left' | 'right' = 'right'
 export let maxDistance = 20
 
 type $$Events = {
+  /** Fired when a teleportation occurs with the new location as the payload. */
   teleport: THREE.Vector3
 }
 
 const dispatch = createRawEventDispatcher<$$Events>()
 
-let navmeshParent: THREE.Group
-let navMeshes: THREE.Object3D[] = []
 let destination: THREE.Vector3 | undefined
 let activeController: THREE.XRTargetRaySpace | undefined
 
@@ -75,13 +78,11 @@ const calculateRayMidpoint = (vector1: THREE.Vector3, vector2: THREE.Vector3) =>
 }
 
 const { start, stop } = useFrame(() => {
-  if (activeController === undefined) return
-
-  matrix4.identity().extractRotation(activeController.matrixWorld)
-  raycaster.ray.origin.setFromMatrixPosition(activeController.matrixWorld)
+  matrix4.identity().extractRotation(activeController!.matrixWorld)
+  raycaster.ray.origin.setFromMatrixPosition(activeController!.matrixWorld)
   raycaster.ray.direction.set(0, 0, -1).applyMatrix4(matrix4)
 
-  const [intersect] = raycaster.intersectObjects(navMeshes)
+  const [intersect] = raycaster.intersectObjects(navMeshes, true)
 
   if (intersect === undefined) {
     destination = undefined
@@ -92,7 +93,7 @@ const { start, stop } = useFrame(() => {
   destination = intersect.point
   $pendingTeleportDestination = destination
 
-  activeController.getWorldPosition(controllerPosition)
+  activeController!.getWorldPosition(controllerPosition)
 
   calculateRayMidpoint(controllerPosition, destination)
 
@@ -142,39 +143,36 @@ useFrame(() => {
   }
 })
 
-afterUpdate(() => {
-  navMeshes = navmeshParent.children
-})
-
-onMount(() => {
-  navMeshes = navmeshParent.children
-})
+teleportPlugin()
 
 </script>
 
-<T.Group bind:ref={navmeshParent}>
-  <slot />
-</T.Group>
+<slot />
 
-<Ray
-  visible={activeController !== undefined && destination !== undefined}
-  positions={activeController !== undefined && destination !== undefined ? positions : undefined}
-/>
+<slot name='ray'>
+  <Ray
+    visible={activeController !== undefined && destination !== undefined}
+    positions={activeController !== undefined && destination !== undefined ? positions : undefined}
+  />
+</slot>
 
-<T.Mesh
-  name='Teleport Marker'
-  visible={activeController !== undefined && destination !== undefined}
-  renderOrder={9999}
-  position.x={destination?.x}
-  position.y={destination?.y}
-  position.z={destination?.z}
->
-  <T.RingGeometry
-    args={[0.175, 0.2, 32]}
-    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
-  />
-  <T.MeshBasicMaterial
-    polygonOffset
-    polygonOffsetFactor={-1}
-  />
-</T.Mesh>
+<slot name='cursor'>
+  <T.Mesh
+    visible={activeController !== undefined && destination !== undefined}
+    position.x={destination?.x}
+    position.y={destination?.y}
+    position.z={destination?.z}
+  >
+    {@const innerRadius = 0.175}
+    {@const outerRadius = 0.2}
+    {@const thetaSegments = 32}
+    <T.RingGeometry
+      args={[innerRadius, outerRadius, thetaSegments]}
+      on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+    />
+    <T.MeshBasicMaterial
+      polygonOffset
+      polygonOffsetFactor={-1}
+    />
+  </T.Mesh>
+</slot>

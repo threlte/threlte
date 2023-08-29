@@ -26,7 +26,7 @@
 
 <div use:action />
 
-<div class="w-full h-full -z-10 relative bg-orange-500/20">
+<div class="w-full h-full relative bg-orange-500/20">
   <Canvas>
     <Scene
       text={$text}

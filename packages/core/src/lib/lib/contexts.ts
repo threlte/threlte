@@ -3,10 +3,10 @@ import { derived, type Readable, type Writable } from 'svelte/store'
 import {
   Clock,
   Scene,
+  type Camera,
   type ColorSpace,
   type ShadowMapType,
   type ToneMapping,
-  type Camera,
   type WebGLRenderer
 } from 'three'
 import type { ThrelteFrameHandler } from '../hooks/useFrame'

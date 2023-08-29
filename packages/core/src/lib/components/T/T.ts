@@ -1,4 +1,4 @@
-import type { ComponentConstructorOptions, ComponentProps, SvelteComponentTyped } from 'svelte'
+import type { ComponentConstructorOptions, ComponentProps, SvelteComponent } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
 import type { Events, Props, Slots } from './types'
@@ -81,9 +81,9 @@ export const T = new Proxy(class {}, {
     return proxyTConstructor(is)
   }
 }) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: typeof SvelteComponentTyped<
-    Props<typeof THREE[Key]>,
-    Events<typeof THREE[Key]>,
-    Slots<typeof THREE[Key]>
+  [Key in keyof typeof THREE]: typeof SvelteComponent<
+    Props<(typeof THREE)[Key]>,
+    Events<(typeof THREE)[Key]>,
+    Slots<(typeof THREE)[Key]>
   >
-} & Record<string, typeof SvelteComponentTyped>
+} & Record<string, typeof SvelteComponent>

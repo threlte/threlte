@@ -12,7 +12,7 @@ const __dirname = dirname(__filename)
 const cli = meow(
   `
   Usage
-    $ npx @threlte/gltf [Model.glb] [options]
+    $ npx @threlte/gltf@latest [Model.glb] [options]
 
   Options
     --output, -o        Output file name/path

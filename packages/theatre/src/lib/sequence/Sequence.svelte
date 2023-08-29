@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { IRafDriver, ISequence } from '@theatre/core'
-  import { getContext, onDestroy, onMount, setContext } from 'svelte'
+  import { getContext, onDestroy, setContext } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import type {
     Autoreset,

@@ -1,6 +1,6 @@
-import { types } from '@theatre/core'
 import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils'
 import { createTransformer } from '../createTransformer'
+import { types } from '../../../theatre'
 
 export const euler = createTransformer({
   transform(value) {
