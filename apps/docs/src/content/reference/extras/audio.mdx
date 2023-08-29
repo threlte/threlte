@@ -23,7 +23,12 @@
           },
           { name: 'autoplay', type: 'boolean', required: false },
           { name: 'loop', type: 'boolean', required: false },
-          { name: 'volume', type: 'number', required: false },
+				 	{
+						name: 'volume',
+						type: 'number',
+						required: false,
+						description: 'The value should range between 0 to 1. Be cautious, values outside this range might cause unintended loudness.'
+					},
           { name: 'playbackRate', type: 'number', required: false },
           { name: 'detune', type: 'number', required: false }
         ],
