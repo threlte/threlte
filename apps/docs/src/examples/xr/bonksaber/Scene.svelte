@@ -1,13 +1,12 @@
 <script lang='ts'>
-
-import { T } from '@threlte/core'
-import { XR } from '$lib'
-import Sabers from './sabers.svelte'
-import Blocks from './blocks.svelte'
+  import { T } from '@threlte/core'
+  import { XR } from '@threlte/xr'
+  import Sabers from './Sabers.svelte'
+  import Blocks from './Blocks.svelte'
 
 </script>
 
-<XR foveation={0.5}>
+<XR foveation={1}>
   <Sabers />
   <Blocks />
 </XR>

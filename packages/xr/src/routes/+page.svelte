@@ -1,28 +1,30 @@
-<script lang='ts'>
-
-import { onMount } from 'svelte'
-import { base } from '$app/paths'
-import * as THREE from 'three'
-
-const demos = [
-  ['Events', 'events'],
-  ['Custom controller models', 'models'],
-  ['Hands', 'hands'],
-  ['Teleporting', 'teleport'],
-  ['Immersive AR', 'ar'],
-  ['BonkSaber', 'bonksaber'],
-  ['Hand Physics', 'hand-physics'],
-] as const
-
-onMount(() => {
-  window.THREE = THREE
-})
-
+<script lang="ts">
+  import { T, Canvas } from '@threlte/core'
+  import { XR, VRButton } from '$lib'
 </script>
 
-<main class='p-4'>
-  <h1 class='font-bold text-xl'>Demos</h1>
-  {#each demos as [text, href] (href)}
-    <a href='{base}/{href}' class='block hover:underline'>{text}</a>
-  {/each}
+<main>
+  <Canvas>
+    <XR />
+
+    <T.PerspectiveCamera
+      makeDefault
+      position={[3, 3, 3]}
+      on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+    />
+    <T.Mesh>
+      <T.MeshStandardMaterial color="hotpink" />
+      <T.BoxGeometry />
+    </T.Mesh>
+    <T.DirectionalLight />
+    <T.AmbientLight />
+  </Canvas>
+
+  <VRButton />
 </main>
+
+<style>
+  main {
+    height: 100vh;
+  }
+</style>

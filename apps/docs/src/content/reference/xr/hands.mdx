@@ -43,7 +43,7 @@
 }
 ---
 
-`<Hands />` creates XRHand inputs for devices that allow hand tracking.
+`<Hands />` creates [XRHand](https://developer.mozilla.org/en-US/docs/Web/API/XRHand) inputs for devices that allow hand tracking.
 
 This component can accept children in `left` and `right` slots, which will be parented to the hand of the respective handedness.
 
@@ -53,3 +53,7 @@ This component can accept children in `left` and `right` slots, which will be pa
   <T slot='right' is={$gltf2.scene} />
 </Hands>
 ```
+
+Hand tracking can serve as a powerful input device, as any joint position can be read from in real time:
+
+<Example path="xr/hands" />

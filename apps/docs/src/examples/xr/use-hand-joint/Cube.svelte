@@ -1,12 +1,10 @@
 <script lang='ts'>
+  import { T } from '@threlte/core'
+  import { InstancedMesh, Instance } from '@threlte/extras'
+  import { Collider, RigidBody } from '@threlte/rapier'
 
-import { T } from '@threlte/core'
-import { InstancedMesh, Instance } from '@threlte/extras'
-import { Collider, RigidBody } from '@threlte/rapier'
-
-const size = 0.02
-const limit = 100
-
+  const size = 0.02
+  const limit = 100
 </script>
 
 <T.Group position={[0, 1.7, 0]}>
