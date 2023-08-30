@@ -23,7 +23,7 @@ export const useController = (handedness: XRHandedness): CurrentWritable<XRContr
 }
 
 /**
- * Provides a reference to the gamepad attadched to a current XRController.
+ * Provides a reference to the gamepad attached to a current XRController.
  */
 export const useGamepad = (handedness: 'left' | 'right'): CurrentWritable<Gamepad | undefined> => {
   switch (handedness) {

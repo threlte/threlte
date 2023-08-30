@@ -1,0 +1,16 @@
+---
+order: 17
+category: '@threlte/xr'
+name: 'useHandJoint'
+type: 'hook'
+---
+
+Provides a reference to a requested hand joint, once available.
+
+```svelte
+<script>
+  import { useHandJoint } from '@threlte/xr'
+
+  const wristJoint = useHandJoint('left', 'wrist')
+</script>
+```

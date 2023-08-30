@@ -1,0 +1,21 @@
+---
+order: 17
+category: '@threlte/xr'
+name: 'useTeleport'
+type: 'hook'
+---
+
+Provides a callback to teleport the player to a reference frame.
+
+```svelte
+<script>
+  import { useTeleport } from '@threlte/xr'
+
+  const teleport = useTeleport()
+  const vec3 = new THREE.Vector3()
+
+  vec3.set(5, 0, 5)
+
+  teleport(vec3)
+</script>
+```

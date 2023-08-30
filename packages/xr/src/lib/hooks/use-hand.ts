@@ -7,7 +7,7 @@ export const right = currentWritable<undefined | XRHand>(undefined)
 /**
  * Provides a reference to a current XRHand, filtered by handedness.
  */
-export const useXrHand = (handedness: 'left' | 'right'): CurrentWritable<undefined | XRHand> => {
+export const useHand = (handedness: 'left' | 'right'): CurrentWritable<undefined | XRHand> => {
   switch (handedness) {
     case 'left': return left
     case 'right': return right

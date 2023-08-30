@@ -1,0 +1,60 @@
+---
+{
+  category: '@threlte/xr',
+  name: '<TeleportControls>',
+  order: 3,
+  type: 'component',
+  componentSignature:
+    {
+      props:
+        [
+          {
+            name: 'handedness',
+            type: "'left' | 'right'",
+            required: false,
+            default: "'right'",
+            description: 'The controller handedness that the teleport controls is linked to.'
+          },
+          {
+            name: 'raycaster',
+            type: "THREE.Raycaster",
+            required: false,
+            default: 'new THREE.Raycaster()',
+            description: 'The raycaster used for teleportation.'
+          },
+          {
+            name: 'maxDistance',
+            type: "number",
+            required: false,
+            default: '20',
+            description: "The maximum radial teleporting distance from the user's current origin, in meters."
+          },
+        ],
+      events:
+        [
+          {
+            name: 'teleport',
+            payload: 'THREE.Vector3',
+            description: 'Fired after a teleportation occurs with the new location as the payload.'
+          },
+        ],
+    }
+}
+---
+
+`<TeleportControls />` creates teleportation controls similar to many XR experiences or the Quest home environment.
+
+```svelte
+  <TeleportControls
+    handedness={'left' | 'right'}
+    maxDistance={10}
+    on:teleport={(event) => {}} 
+  >
+    <T.Mesh teleportSurface>
+      <T.CylinderGeometry args={[20, 0.01]} />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  </TeleportControls>
+```
+
+`<TeleportControls />` can have an arbitrary number of children, but any child mesh with a `teleportSurface` attribute will be registered as a navigation mesh that can be teleported to.

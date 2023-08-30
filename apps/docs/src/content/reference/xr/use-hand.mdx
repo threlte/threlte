@@ -1,0 +1,20 @@
+---
+order: 16
+category: '@threlte/xr'
+name: 'useHand'
+type: 'hook'
+---
+
+Provides a reference to a current XRHand, filtered by handedness.
+
+```svelte
+<script>
+  import { useHand } from '@threlte/xr'
+
+  const leftHand = useHand('left')
+  const rightHand = useHand('right')
+
+  console.log(leftHand.current)
+  console.log(rightHand.current)
+</script>
+```

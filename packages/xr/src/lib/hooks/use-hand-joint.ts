@@ -2,10 +2,10 @@ import { onDestroy } from 'svelte'
 import { currentWritable } from '@threlte/core'
 import type { HandJoints } from '../lib/hand-joints'
 import type * as THREE from 'three'
-import { useXrHand } from './use-hand'
+import { useHand } from './use-hand'
 
 const onHandReady = (handedness: 'left' | 'right', joint: HandJoints, callback: (jointSpace: THREE.XRJointSpace) => void) => {
-  const xrhand = useXrHand(handedness)
+  const xrhand = useHand(handedness)
 
   let id: number
 
@@ -13,7 +13,7 @@ const onHandReady = (handedness: 'left' | 'right', joint: HandJoints, callback: 
     const jointSpace = xrhand.current?.hand.joints[joint]
 
     if (jointSpace?.jointRadius === undefined) {
-      id = setTimeout(tick, 100)
+      id = window.setTimeout(tick, 100)
       return
     }
 

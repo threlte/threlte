@@ -5,7 +5,7 @@
 
 @param handedness - Which hands to allow teleportation from.
 
-@param maxDistance - The maximum radial teleportation distance in meters.
+@param maxDistance - The maximum radial teleporting distance from the user's current origin, in meters.
 
 @event teleport - Fires after a teleport event.
 
@@ -33,23 +33,24 @@ import { navMeshes, teleportPlugin } from '../plugins/teleport-controls'
 
 /**
  * The raycaster used for teleportation.
+ * @default new THREE.Raycaster()
  */
 export let raycaster = new THREE.Raycaster()
 
 /**
- * The controller handedness that the teleport controls can originate from.
- * @default right
+ * The controller handedness that the teleport controls is linked to.
+ * @default 'right'
  */
 export let handedness: 'left' | 'right' = 'right'
 
 /**
- * The maximum teleporting distance from the user's current origin, in meters.
+ * The maximum radial teleporting distance from the user's current origin, in meters.
  * @default 20
  */
 export let maxDistance = 20
 
 type $$Events = {
-  /** Fired when a teleportation occurs with the new location as the payload. */
+  /** Fired after a teleportation occurs with the new location as the payload. */
   teleport: THREE.Vector3
 }
 
