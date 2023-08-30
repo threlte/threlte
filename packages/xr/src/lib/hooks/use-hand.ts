@@ -9,7 +9,9 @@ export const right = currentWritable<undefined | XRHand>(undefined)
  */
 export const useHand = (handedness: 'left' | 'right'): CurrentWritable<undefined | XRHand> => {
   switch (handedness) {
-    case 'left': return left
-    case 'right': return right
+    case 'left':
+      return left
+    case 'right':
+      return right
   }
 }

@@ -32,24 +32,27 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
     }
   })
 
-  const { start, stop } = useFrame(() => {
-    if (hitTestSource === undefined) return
+  const { start, stop } = useFrame(
+    () => {
+      if (hitTestSource === undefined) return
 
-    const [hit] = xr.getFrame().getHitTestResults(hitTestSource)
+      const [hit] = xr.getFrame().getHitTestResults(hitTestSource)
 
-    if (hit === undefined) return
-    
-    const referenceSpace = xr.getReferenceSpace()
+      if (hit === undefined) return
 
-    if (referenceSpace === null) return
+      const referenceSpace = xr.getReferenceSpace()
 
-    const pose = hit.getPose(referenceSpace)
+      if (referenceSpace === null) return
 
-    if (pose === undefined) return
+      const pose = hit.getPose(referenceSpace)
 
-    hitMatrix.fromArray(pose.transform.matrix)
-    hitTestCallback(hitMatrix, hit)
-  }, { autostart: false })
+      if (pose === undefined) return
+
+      hitMatrix.fromArray(pose.transform.matrix)
+      hitTestCallback(hitMatrix, hit)
+    },
+    { autostart: false }
+  )
 
   onDestroy(() => {
     stop()

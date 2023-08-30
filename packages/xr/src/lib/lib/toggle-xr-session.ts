@@ -7,7 +7,7 @@ import { getXRSessionOptions } from './get-xr-session-options'
  * @param sessionMode an XR session mode: 'inline' | 'immersive-vr' | 'immersive-ar'
  * @param sessionInit an XRSessionInit object
  * @param force Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways
- * @returns 
+ * @returns
  */
 export const toggleXRSession = async (
   sessionMode: XRSessionMode,

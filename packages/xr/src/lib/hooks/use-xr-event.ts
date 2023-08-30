@@ -4,7 +4,7 @@ import type {
   XRControllerEventType,
   XRHandEventType,
   XRControllerEvent,
-  XRHandEvent,
+  XRHandEvent
 } from '$lib/types'
 
 /**

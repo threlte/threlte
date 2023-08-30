@@ -26,4 +26,4 @@ export const handJoints = [
   'pinky-finger-tip'
 ] as const
 
-export type HandJoints = typeof handJoints[number]
+export type HandJoints = (typeof handJoints)[number]

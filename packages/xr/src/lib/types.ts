@@ -1,6 +1,18 @@
-export type XRSessionEventType = 'sessionstart' | 'sessionend' | 'visibilitychange' | 'frameratechange'
+export type XRSessionEventType =
+  | 'sessionstart'
+  | 'sessionend'
+  | 'visibilitychange'
+  | 'frameratechange'
 
-export type XRControllerEventType = 'select' | 'selectstart' | 'selectend' | 'squeeze' | 'squeezeend' | 'squeezestart' | 'disconnected' | 'connected'
+export type XRControllerEventType =
+  | 'select'
+  | 'selectstart'
+  | 'selectend'
+  | 'squeeze'
+  | 'squeezeend'
+  | 'squeezestart'
+  | 'disconnected'
+  | 'connected'
 
 export type XRHandEventType = 'pinchstart' | 'pinchend' | 'connected' | 'disconnected'
 

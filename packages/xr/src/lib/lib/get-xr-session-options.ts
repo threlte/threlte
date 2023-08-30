@@ -1,4 +1,3 @@
-
 export const getXRSessionOptions = (
   referenceSpaceType: XRReferenceSpaceType | undefined,
   sessionInit: XRSessionInit | undefined
@@ -14,10 +13,7 @@ export const getXRSessionOptions = (
   if (referenceSpaceType && sessionInit) {
     return {
       ...sessionInit,
-      optionalFeatures: [
-        ...new Set([...(sessionInit.optionalFeatures ?? []),
-        referenceSpaceType])
-      ]
+      optionalFeatures: [...new Set([...(sessionInit.optionalFeatures ?? []), referenceSpaceType])]
     }
   }
 

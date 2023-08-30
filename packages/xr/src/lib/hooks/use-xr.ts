@@ -1,10 +1,5 @@
 import type { CurrentWritable } from '@threlte/core'
-import {
-  isPresenting,
-  isHandTracking,
-  session,
-  xr
-} from '$lib/internal/stores'
+import { isPresenting, isHandTracking, session, xr } from '$lib/internal/stores'
 
 const stores = {
   isPresenting,
@@ -13,8 +8,8 @@ const stores = {
   xrFrame: {
     get current() {
       return xr.current!.getFrame()
-    },
-  },
+    }
+  }
 }
 
 /**

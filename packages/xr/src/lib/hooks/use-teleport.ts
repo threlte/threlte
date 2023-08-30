@@ -8,18 +8,18 @@ const offset = { x: 0, y: 0, z: 0 }
 
 /**
  * Returns a callback to teleport the player to a position.
- * 
+ *
  * @example
  * const teleport = useTeleport()
  * const vec3 = new THREE.Vector3()
- * 
+ *
  * vec3.set(5, 0, 5)
- * 
+ *
  * teleport(vec3)
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
-  
+
   let baseReferenceSpace: XRReferenceSpace | null | undefined
 
   const unsub = session.subscribe((value) => {
@@ -36,10 +36,12 @@ export const useTeleport = () => {
   return (position: THREE.Vector3 | THREE.Vector3Tuple, direction = quaternion) => {
     if (baseReferenceSpace === null || baseReferenceSpace === undefined) return
 
-    let x = 0, y = 0, z = 0
+    let x = 0,
+      y = 0,
+      z = 0
 
     if (Array.isArray(position)) {
-      [x, y, z] = position
+      ;[x, y, z] = position
     } else {
       x = position.x
       y = position.y

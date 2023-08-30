@@ -22,7 +22,7 @@ const removeSurface = (mesh: THREE.Mesh) => {
   }
 }
 
-export const teleportPlugin = () => 
+export const teleportPlugin = () =>
   injectPlugin<Props>('teleport-controls', ({ ref, props }) => {
     let currentRef: THREE.Mesh = ref
     let currentProps = props
@@ -53,6 +53,6 @@ export const teleportPlugin = () =>
         } else {
           removeSurface(currentRef)
         }
-      },
+      }
     }
   })

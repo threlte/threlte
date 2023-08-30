@@ -1,19 +1,19 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		"target": "ESNext",
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
     "module": "ESNext",
-		"resolveJsonModule": true,
-		"moduleResolution": "node",
-	
-		"allowJs": true,
-		"checkJs": true,
-		"verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
 
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"allowUnreachableCode": false,
+    "allowJs": true,
+    "checkJs": true,
+    "verbatimModuleSyntax": true,
+
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
@@ -25,6 +25,6 @@
     "noUnusedParameters": true,
     "declaration": true,
     "removeComments": false,
-    "lib": ["ESNext", "DOM", "DOM.iterable", "scripthost"],
-	}
+    "lib": ["ESNext", "DOM", "DOM.iterable", "scripthost"]
+  }
 }

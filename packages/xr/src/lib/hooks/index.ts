@@ -3,7 +3,7 @@ export { useTeleport } from './use-teleport'
 export { useController, useGamepad } from './use-controller'
 export { useControllerEvent, useHandEvent } from './use-xr-event'
 export { useHand } from './use-hand'
-export { useHandJoint } from './use-hand-joint' 
+export { useHandJoint } from './use-hand-joint'
 export { useXR } from './use-xr'
 
 import { useController, useGamepad } from './use-controller'

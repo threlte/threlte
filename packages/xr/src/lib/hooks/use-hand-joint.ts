@@ -4,7 +4,11 @@ import type { HandJoints } from '../lib/hand-joints'
 import type * as THREE from 'three'
 import { useHand } from './use-hand'
 
-const onHandReady = (handedness: 'left' | 'right', joint: HandJoints, callback: (jointSpace: THREE.XRJointSpace) => void) => {
+const onHandReady = (
+  handedness: 'left' | 'right',
+  joint: HandJoints,
+  callback: (jointSpace: THREE.XRJointSpace) => void
+) => {
   const xrhand = useHand(handedness)
 
   let id: number

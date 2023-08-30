@@ -1,10 +1,11 @@
-
 /**
  * Gets the support state of requested session mode.
  * @param mode Session mode: 'inline' | 'immersive-vr' | 'immersive-ar'
  * @returns The current support state
  */
-export const getXRSupportState = async (mode: XRSessionMode): Promise<'unsupported' | 'insecure' | 'blocked' | 'supported'> => {
+export const getXRSupportState = async (
+  mode: XRSessionMode
+): Promise<'unsupported' | 'insecure' | 'blocked' | 'supported'> => {
   if (navigator?.xr === undefined) {
     return 'unsupported'
   }
