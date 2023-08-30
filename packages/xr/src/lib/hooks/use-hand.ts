@@ -1,5 +1,5 @@
 import { currentWritable, type CurrentWritable } from '@threlte/core'
-import type { XRHand } from '$lib/types'
+import type { XRHand } from '../types'
 
 export const left = currentWritable<undefined | XRHand>(undefined)
 export const right = currentWritable<undefined | XRHand>(undefined)

@@ -3,9 +3,9 @@
 import { onMount, onDestroy } from 'svelte'
 import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
-import type { XRHandEvent } from '$lib/types'
-import { fire } from '$lib/internal/events'
-import { left, right } from '$lib/hooks/use-hand'
+import type { XRHandEvent } from '../types'
+import { fire } from '../internal/events'
+import { left, right } from '../hooks/use-hand'
 
 const handModelFactory = new XRHandModelFactory()
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { useThrelte } from '@threlte/core'
-import { session } from '$lib/internal/stores'
+import { session } from '../internal/stores'
 import { onDestroy } from 'svelte'
 
 const quaternion = new THREE.Quaternion()

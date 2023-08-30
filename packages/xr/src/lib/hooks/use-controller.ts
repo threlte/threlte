@@ -1,5 +1,5 @@
 import { currentWritable, type CurrentWritable } from '@threlte/core'
-import type { XRController } from '$lib/types'
+import type { XRController } from '../types'
 
 export const left = currentWritable<XRController | undefined>(undefined)
 export const right = currentWritable<XRController | undefined>(undefined)

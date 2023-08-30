@@ -26,9 +26,9 @@
 
 import * as THREE from 'three'
 import { T, useFrame, createRawEventDispatcher } from '@threlte/core'
-import { activeTeleportController, pendingTeleportDestination } from '$lib/internal/stores'
-import { useTeleport, useController, useGamepad } from '$lib/hooks'
-import Ray from '$lib/components/ray.svelte'
+import { activeTeleportController, pendingTeleportDestination } from '../internal/stores'
+import { useTeleport, useController, useGamepad } from '../hooks'
+import Ray from '../components/ray.svelte'
 import { navMeshes, teleportPlugin } from '../plugins/teleport-controls'
 
 /**

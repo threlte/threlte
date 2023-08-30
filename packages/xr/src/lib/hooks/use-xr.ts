@@ -1,5 +1,5 @@
 import type { CurrentWritable } from '@threlte/core'
-import { isPresenting, isHandTracking, session, xr } from '$lib/internal/stores'
+import { isPresenting, isHandTracking, session, xr } from '../internal/stores'
 
 const stores = {
   isPresenting,

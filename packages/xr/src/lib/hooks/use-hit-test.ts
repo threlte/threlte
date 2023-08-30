@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { onDestroy } from 'svelte'
-import { session } from '$lib/internal/stores'
-import type { HitTestCallback } from '$lib/types'
+import { session } from '../internal/stores'
+import type { HitTestCallback } from '../types'
 import { useThrelte, useFrame } from '@threlte/core'
 
 /**

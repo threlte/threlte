@@ -9,11 +9,11 @@
 import { onMount, onDestroy } from 'svelte'
 import { T, useThrelte, createRawEventDispatcher } from '@threlte/core'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-import { fire } from '$lib/internal/events'
-import type { XRController, XRControllerEvent } from '$lib/types'
-import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '$lib/internal/stores'
-import { left, right, gaze } from '$lib/hooks/use-controller'
-import ShortRay from '$lib/components/ray-short.svelte'
+import { fire } from '../internal/events'
+import type { XRController, XRControllerEvent } from '../types'
+import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '../internal/stores'
+import { left, right, gaze } from '../hooks/use-controller'
+import ShortRay from '../components/ray-short.svelte'
 
 const controllerModelFactory = new XRControllerModelFactory()
 
