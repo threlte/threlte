@@ -1,5 +1,6 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
+  "include": ["./src/**/*"],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -8,7 +9,8 @@
 
     "allowJs": true,
     "checkJs": true,
-    "verbatimModuleSyntax": true,
+    // @TODO(mp) - Uncomment when everything else is upgraded to Typescript 5
+    // "verbatimModuleSyntax": true,
 
     "skipLibCheck": true,
     "sourceMap": true,

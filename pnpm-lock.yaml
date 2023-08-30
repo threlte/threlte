@@ -142,8 +142,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
+        specifier: ^0.155.1
+        version: 0.155.1
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -155,7 +155,7 @@ importers:
         version: 6.1.4
       postprocessing:
         specifier: ^6.32.2
-        version: 6.33.0(three@0.153.0)
+        version: 6.33.0(three@0.155.0)
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
@@ -178,8 +178,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.4(@babel/core@7.22.9)(postcss@8.4.28)(svelte@3.55.1)(typescript@5.1.6)
       three:
-        specifier: 0.153.0
-        version: 0.153.0
+        specifier: 0.155.0
+        version: 0.155.0
       tweakpane:
         specifier: ^3.1.0
         version: 3.1.0
@@ -199,8 +199,8 @@ importers:
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
+        specifier: ^0.155.1
+        version: 0.155.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.45.0
         version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
@@ -244,8 +244,8 @@ importers:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
       three:
-        specifier: ^0.153.0
-        version: 0.153.0
+        specifier: ^0.155.0
+        version: 0.155.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -315,7 +315,7 @@ importers:
         version: 4.17.21
       troika-three-text:
         specifier: ^0.47.2
-        version: 0.47.2(three@0.153.0)
+        version: 0.47.2(three@0.155.0)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
@@ -336,8 +336,8 @@ importers:
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
+        specifier: ^0.155.1
+        version: 0.155.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.45.0
         version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
@@ -381,8 +381,8 @@ importers:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
       three:
-        specifier: ^0.153.0
-        version: 0.153.0
+        specifier: ^0.155.0
+        version: 0.155.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -494,8 +494,8 @@ importers:
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
+        specifier: ^0.155.1
+        version: 0.155.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.45.0
         version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
@@ -576,8 +576,8 @@ importers:
         specifier: ^18.0.3
         version: 18.0.3
       '@types/three':
-        specifier: ^0.152.1
-        version: 0.152.1
+        specifier: ^0.155.1
+        version: 0.155.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.45.0
         version: 5.45.0(@typescript-eslint/parser@5.45.0)(eslint@8.28.0)(typescript@5.0.2)
@@ -621,8 +621,8 @@ importers:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
       three:
-        specifier: ^0.153.0
-        version: 0.153.0
+        specifier: ^0.155.0
+        version: 0.155.0
       tslib:
         specifier: ^2.4.1
         version: 2.5.0
@@ -651,8 +651,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/three':
-        specifier: ^0.154.0
-        version: 0.154.0
+        specifier: ^0.155.1
+        version: 0.155.1
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.27)
@@ -3278,18 +3278,8 @@ packages:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
     dev: true
 
-  /@types/three@0.152.1:
-    resolution: {integrity: sha512-PMOCQnx9JRmq+2OUGTPoY9h1hTWD2L7/nmuW/SyNq1Vbq3Lwt3MNdl3wYSa4DvLTGv62NmIXD9jYdAOwohwJyw==}
-    dependencies:
-      '@tweenjs/tween.js': 18.6.4
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.0
-      fflate: 0.6.10
-      lil-gui: 0.17.0
-    dev: true
-
-  /@types/three@0.154.0:
-    resolution: {integrity: sha512-IioqpGhch6FdLDh4zazRn3rXHj6Vn2nVOziJdXVbJFi9CaI65LtP9qqUtpzbsHK2Ezlox8NtsLNHSw3AQzucjA==}
+  /@types/three@0.155.1:
+    resolution: {integrity: sha512-uNUwnz/wWRxahjIqTtDYQ1qdE1R1py21obxfuILkT+kKrjocMwRLQQA1l8nMxfQU7VXb7CXu04ucMo8OqZt4ZA==}
     dependencies:
       '@tweenjs/tween.js': 18.6.4
       '@types/stats.js': 0.17.0
@@ -8698,13 +8688,13 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /postprocessing@6.33.0(three@0.153.0):
+  /postprocessing@6.33.0(three@0.155.0):
     resolution: {integrity: sha512-W6KGnF8OVyPtB9f5o2z8abJOefDeT9aoOrI/HmMmJM6/gXTKRc66MrL+qNoGmeeA3moWWsTk0mc9M+shN3vXaA==}
     engines: {node: '>= 0.13.2'}
     peerDependencies:
       three: '>= 0.138.0 < 0.156.0'
     dependencies:
-      three: 0.153.0
+      three: 0.155.0
     dev: true
 
   /potpack@1.0.2:
@@ -10473,10 +10463,14 @@ packages:
 
   /three@0.153.0:
     resolution: {integrity: sha512-OCP2/uQR6GcDpSLnJt/3a4mdS0kNWcbfUXIwLoEMgLzEUIVIYsSDwskpmOii/AkDM+BBwrl6+CKgrjX9+E2aWg==}
+    dev: false
 
   /three@0.154.0:
     resolution: {integrity: sha512-Uzz8C/5GesJzv8i+Y2prEMYUwodwZySPcNhuJUdsVMH2Yn4Nm8qlbQe6qRN5fOhg55XB0WiLfTPBxVHxpE60ug==}
     dev: true
+
+  /three@0.155.0:
+    resolution: {integrity: sha512-sNgCYmDijnIqkD/bMfk+1pHg3YzsxW7V2ChpuP6HCQ8NiZr3RufsXQr8M3SSUMjW4hG+sUk7YbyuY0DncaDTJQ==}
 
   /through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
@@ -10561,24 +10555,24 @@ packages:
     resolution: {integrity: sha512-GJtWyq9InR/2HRiLZgpIKv+ufIKrVrvjQWEj7PxAXNc5dwbNJkqhAUoAGgzRmULAnoOM5EIpveYd3J2VeSAIew==}
     engines: {node: '>=12'}
 
-  /troika-three-text@0.47.2(three@0.153.0):
+  /troika-three-text@0.47.2(three@0.155.0):
     resolution: {integrity: sha512-qylT0F+U7xGs+/PEf3ujBdJMYWbn0Qci0kLqI5BJG2kW1wdg4T1XSxneypnF05DxFqJhEzuaOR9S2SjiyknMng==}
     peerDependencies:
       three: '>=0.125.0'
     dependencies:
       bidi-js: 1.0.2
-      three: 0.153.0
-      troika-three-utils: 0.47.2(three@0.153.0)
+      three: 0.155.0
+      troika-three-utils: 0.47.2(three@0.155.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
     dev: false
 
-  /troika-three-utils@0.47.2(three@0.153.0):
+  /troika-three-utils@0.47.2(three@0.155.0):
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
     peerDependencies:
       three: '>=0.125.0'
     dependencies:
-      three: 0.153.0
+      three: 0.155.0
     dev: false
 
   /troika-worker-utils@0.47.2:
