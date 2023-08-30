@@ -14,7 +14,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
   let started = false
   let hitTestSource: XRHitTestSource | undefined
 
-  const unsub = session.subscribe(async (value) => {
+  onDestroy(session.subscribe(async (value) => {
     if (value === undefined) {
       hitTestSource = undefined
       if (started) {
@@ -30,7 +30,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
       start()
       started = true
     }
-  })
+  }))
 
   const { start, stop } = useFrame(
     () => {
@@ -53,9 +53,4 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
     },
     { autostart: false }
   )
-
-  onDestroy(() => {
-    stop()
-    unsub()
-  })
 }
