@@ -11,16 +11,10 @@
 -->
 
 <script lang='ts'>
+  import type { ComponentProps } from 'svelte'
+  import XRButton from './button-xr.svelte'
 
-import XRButton from './button-xr.svelte'
-
-type $$Events = {
-  /** Fires when a user clicks the VR button. */
-  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
-  /** Fires when an enter / exit session error occurs. */
-  error: Error
-}
-
+  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
 </script>
 
 <XRButton

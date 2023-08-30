@@ -11,14 +11,10 @@
 -->
 
 <script lang='ts'>
+  import type { ComponentProps } from 'svelte'
+  import XRButton from './button-xr.svelte'
 
-import XRButton from './button-xr.svelte'
-
-type $$Events = {
-  click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
-  error: Error
-}
-
+  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
 </script>
 
 <XRButton

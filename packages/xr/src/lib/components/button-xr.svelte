@@ -24,30 +24,37 @@ import { createEventDispatcher } from 'svelte'
 import { getXRSupportState } from '../lib/get-xr-support-state'
 import { toggleXRSession } from '../lib/toggle-xr-session'
 import { session, initialized } from '../internal/stores'
+import type { HTMLButtonAttributes } from 'svelte/elements'
+
+interface $$Props extends HTMLButtonAttributes {
+  mode: XRSessionMode
+  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }
+  force?: 'enter' | 'exit'
+  styled?: boolean
+}
 
 /** The type of `XRSession` to create */
-export let mode: XRSessionMode
+export let mode: $$Props['mode']
 
 /**
  * `XRSession` configuration options
  * @see https://immersive-web.github.io/webxr/#feature-dependencies
  */
-export let sessionInit: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined } | undefined
+export let sessionInit: $$Props['sessionInit'] = undefined
 
 /** Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways */
-export let force: 'enter' | 'exit' | undefined = undefined
+export let force: $$Props['force'] = undefined
 
 /** Whether to apply automatic styling to the button. Set false to apply custom styles. Default is true. */
-export let styled = true
+export let styled: $$Props['styled'] = true
 
-type $$Events = {
+const dispatch = createEventDispatcher<{
   /** Fires when a user clicks the VR button. */
   click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
+
   /** Fires when an enter / exit session error occurs. */
   error: Error
-}
-
-const dispatch = createEventDispatcher<$$Events>()
+}>()
 
 const handleButtonClick = async (state: 'unsupported' | 'insecure' | 'blocked' | 'supported') => {
   if (!$initialized) {
@@ -83,7 +90,7 @@ $: if (styled) {
     background: rgba(0, 0, 0, 0.1);
     color: white;
     outline: none;
-    z-index: 99999;
+    z-index: 10;
     ${($$restProps.style ?? '')}
   `
 }
