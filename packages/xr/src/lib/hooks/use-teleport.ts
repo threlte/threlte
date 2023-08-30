@@ -28,7 +28,7 @@ export const useTeleport = () => {
     baseReferenceSpace = xr.getReferenceSpace()
   })
 
-  onDestroy(() => unsub())
+  onDestroy(unsub)
 
   /**
    * Teleports a player to a position - and optionally a direction.
