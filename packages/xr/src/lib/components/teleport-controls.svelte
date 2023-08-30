@@ -29,7 +29,7 @@ import { T, useFrame, createRawEventDispatcher } from '@threlte/core'
 import { activeTeleportController, pendingTeleportDestination } from '../internal/stores'
 import { useTeleport, useController, useGamepad } from '../hooks'
 import Ray from '../components/ray.svelte'
-import { navMeshes, teleportPlugin } from '../plugins/teleport-controls'
+import { teleportPlugin } from '../plugins/teleport-controls'
 
 /**
  * The raycaster used for teleportation.
@@ -60,6 +60,7 @@ let destination: THREE.Vector3 | undefined
 let activeController: THREE.XRTargetRaySpace | undefined
 
 const teleport = useTeleport()
+const navMeshes: THREE.Mesh[] = []
 const controllerPosition = new THREE.Vector3()
 const matrix4 = new THREE.Matrix4()
 const rayMidpoint = new THREE.Vector3()
@@ -144,7 +145,7 @@ useFrame(() => {
   }
 })
 
-teleportPlugin()
+teleportPlugin(navMeshes)
 
 </script>
 
