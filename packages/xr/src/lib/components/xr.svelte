@@ -1,4 +1,5 @@
 <!--
+
 @component
 `<XR />` is a WebXR manager that configures your scene for XR rendering
 and interaction. This should be placed within a Threlte `<Canvas />`.
@@ -14,6 +15,7 @@ and interaction. This should be placed within a Threlte `<Canvas />`.
     on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
   />
 ```
+
 -->
 
 <script lang='ts'>

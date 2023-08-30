@@ -14,9 +14,13 @@ Provides a reference to a current XRController, filtered by handedness.
   const leftController = useController('left')
   const rightController = useController('right')
   const gazeController = useController('gaze')
-
-  console.log(leftController.current)
-  console.log(rightController.current)
-  console.log(gazeController.current)
 </script>
 ```
+
+### Signature
+
+```ts
+// CurrentWritable<XRController | undefined> - The current XRController
+const controller = useController('left') 
+```
+

@@ -5,7 +5,7 @@ name: 'useTeleport'
 type: 'hook'
 ---
 
-Provides a callback to teleport the player to a reference frame.
+Provides a function to teleport the player to a reference frame.
 
 ```svelte
 <script>
@@ -18,4 +18,13 @@ Provides a callback to teleport the player to a reference frame.
 
   teleport(vec3)
 </script>
+```
+
+This function can be used within `useFrame` for smooth movement.
+
+```ts
+useFrame(() => {
+  vec3.z += 0.1
+  teleport(vec3)
+})
 ```

@@ -5,7 +5,7 @@ name: 'useXR'
 type: 'hook'
 ---
 
-Use this hook to get context about the current WebXR session.
+Provides context about the current WebXR session.
 
 ```svelte
 <script>
@@ -18,8 +18,6 @@ Use this hook to get context about the current WebXR session.
 ### Signature
 
 ```ts
-import { useXR } from 'threlte-xr'
-
 const {
   isPresenting, // CurrentWritable<boolean> - Whether the XR device is presenting in an XR session
   isHandTracking, // CurrentWritable<boolean> - Whether hand tracking inputs are active

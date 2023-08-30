@@ -13,8 +13,12 @@ Provides a reference to a current XRHand, filtered by handedness.
 
   const leftHand = useHand('left')
   const rightHand = useHand('right')
-
-  console.log(leftHand.current)
-  console.log(rightHand.current)
 </script>
+```
+
+### Signature
+
+```ts
+// CurrentWritable<XRHand | undefined> - The current XRHand
+const hand = useHand('left') 
 ```

@@ -13,8 +13,12 @@ Provides a reference to the gamepad attached to a current XRController.
 
   const leftPad = useGamepad('left')
   const rightPad = useGamepad('right')
-
-  console.log(leftPad.current)
-  console.log(rightPad.current)
 </script>
+```
+
+### Signature
+
+```ts
+// CurrentWritable<Gamepad | undefined> - The current Gamepad
+const controller = useController('left') 
 ```

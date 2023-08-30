@@ -56,4 +56,19 @@
 }
 ---
 
-The `<XR>` component prepares your scene for a WebXR session. It sets up a context that is accessible via the `useXR` hook.
+The `<XR>` component prepares your scene for a WebXR session. It sets up context that is provided by the [`useXR`](/docs/reference/xr/use-xr) hook.
+
+```svelte
+<script>
+  import { XR } from '@threlte/xr'
+  import { Text } from '@threlte/extras'
+</script>
+
+<XR>
+  <Text text='I have entered another realm!' />
+</XR>
+```
+
+Any children of the `<XR>` component will not mount until the user enters an immersive session. 
+
+This is useful for adding controllers, hands, or entire scenes that should only start when the user has begun their session.
