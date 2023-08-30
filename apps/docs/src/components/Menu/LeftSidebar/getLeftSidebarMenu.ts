@@ -52,6 +52,7 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
   'Advanced',
+	'More',
   'Preprocessing'
 ]
 
