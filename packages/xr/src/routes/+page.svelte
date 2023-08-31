@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, Canvas } from '@threlte/core'
-  import { XR, VRButton, Controllers, Hands } from '$lib'
+  import { XR, VRButton, Controllers, Hands, TeleportControls } from '$lib'
 </script>
 
 <main>
@@ -9,6 +9,13 @@
       <Controllers />
       <Hands />
     </XR>
+
+    <TeleportControls>
+      <T.Mesh receiveShadow teleportSurface>
+        <T.CylinderGeometry args={[2, 2, 0.1]} />
+        <T.MeshStandardMaterial />
+      </T.Mesh>
+    </TeleportControls>
 
     <T.PerspectiveCamera
       makeDefault
@@ -19,11 +26,6 @@
     <T.Mesh position.y={0.5} castShadow receiveShadow>
       <T.MeshStandardMaterial color="hotpink" />
       <T.BoxGeometry />
-    </T.Mesh>
-
-    <T.Mesh receiveShadow>
-      <T.CylinderGeometry args={[2, 2, 0.1]} />
-      <T.MeshStandardMaterial />
     </T.Mesh>
 
     <T.DirectionalLight castShadow />
