@@ -35,7 +35,7 @@
   const saberLength = 1.4
 </script>
 
-<Controllers modelLeft='none' modelRight='none'>
+<Controllers>
   <T.Mesh
     slot='left'
     rotation.x={Math.PI / 2}
