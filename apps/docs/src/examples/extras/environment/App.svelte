@@ -2,7 +2,7 @@
 	import { Canvas } from '@threlte/core'
 	import { Environment } from '@threlte/extras'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 
 	const { pane, action, addInput } = useTweakpane({
 		title: 'Environment',

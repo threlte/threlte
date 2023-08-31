@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'
@@ -18,11 +18,17 @@
 
 <Canvas>
 	<World>
-		<Debug depthTest={false} depthWrite={false} />
+		<Debug
+			depthTest={false}
+			depthWrite={false}
+		/>
 
 		<Scene />
 
-		<HTML slot="fallback" transform>
+		<HTML
+			slot="fallback"
+			transform
+		>
 			<p>
 				It seems your browser<br />
 				doesn't support WASM.<br />

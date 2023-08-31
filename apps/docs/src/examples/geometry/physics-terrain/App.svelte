@@ -2,7 +2,7 @@
 	import { Canvas } from '@threlte/core'
 	import { World } from '@threlte/rapier'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 
 	let reset: (() => void) | undefined
 	let toggleDebug: (() => void) | undefined
@@ -27,6 +27,9 @@
 
 <Canvas>
 	<World>
-		<Scene bind:reset bind:toggleDebug />
+		<Scene
+			bind:reset
+			bind:toggleDebug
+		/>
 	</World>
 </Canvas>
