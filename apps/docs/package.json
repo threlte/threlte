@@ -61,7 +61,8 @@
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
     "three": "0.155.0",
-    "tweakpane": "^3.1.0"
+    "tweakpane": "^3.1.0",
+    "vite-plugin-mkcert": "^1.16.0"
   },
   "overrides": {
     "react": "npm:@preact/compat@latest",

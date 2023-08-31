@@ -4,6 +4,7 @@ import { resolve } from 'path'
 import preprocess from 'svelte-preprocess'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import mkcert from 'vite-plugin-mkcert'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
@@ -62,6 +63,10 @@ export default defineConfig({
         $hooks: resolve('./src/hooks')
       }
     },
+    server: {
+      https: true
+    },
+    plugins: import.meta.env.DEV ? [ mkcert()] : [],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
