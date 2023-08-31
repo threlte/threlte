@@ -1,5 +1,5 @@
 ---
-import { Image } from '@astrojs/image/components'
+import { Image } from 'astro:assets'
 import AppLayout from './AppLayout.astro'
 import LogoWithText from '$assets/logo/threlte-logo.png'
 import Socials from '$components/Socials/Socials.astro'
@@ -53,13 +53,13 @@ const title = Astro.props.title
 
   <!-- Mobile Nav -->
   <MobileMainNav client:load>
-    <Image
+    <!-- <Image
       slot="logo"
       src={LogoWithText}
       alt="threlte logo"
       width={200}
       class="h-[37px] w-auto"
-    />
+    /> -->
     <Socials slot="after" />
   </MobileMainNav>
 
