@@ -1,5 +1,5 @@
 import { session, referenceSpaceType, xr } from '../internal/stores'
-import { getXRSessionOptions } from './get-xr-session-options'
+import { getXRSessionOptions } from './getXRSessionOptions'
 
 /**
  * Starts / ends an XR session.

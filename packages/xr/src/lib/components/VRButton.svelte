@@ -12,7 +12,7 @@
 
 <script lang='ts'>
   import type { ComponentProps } from 'svelte'
-  import XRButton from './button-xr.svelte'
+  import XRButton from './XRButton.svelte'
 
   type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
 </script>

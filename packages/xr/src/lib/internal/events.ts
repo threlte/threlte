@@ -1,4 +1,4 @@
-export const events: Record<string, ((event: any) => void)[]> = {}
+const events: Record<string, ((event: any) => void)[]> = {}
 
 export const on = <Type>(name: string, cb: (event: Type) => void): void => {
   const fns = events[name]
@@ -26,5 +26,5 @@ export const fire = <Type>(name: string, payload: Type): void => {
 
   if (fns === undefined) return
 
-  fns.forEach((fn) => fn(payload))
+  for (const fn of fns) fn(payload)
 }

@@ -1,8 +1,8 @@
 import { onDestroy } from 'svelte'
 import { currentWritable } from '@threlte/core'
-import type { HandJoints } from '../lib/hand-joints'
+import type { HandJoints } from '../lib/handJoints'
 import type * as THREE from 'three'
-import { useHand } from './use-hand'
+import { useHand } from './useHand'
 
 const onHandReady = (
   handedness: 'left' | 'right',
@@ -35,9 +35,7 @@ const onHandReady = (
 export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) => {
   const jointSpace = currentWritable<THREE.XRJointSpace | undefined>(undefined)
 
-  const unsub = onHandReady(handedness, joint, (joint) => jointSpace.set(joint))
-
-  onDestroy(() => unsub())
+  onDestroy(onHandReady(handedness, joint, (joint) => jointSpace.set(joint)))
 
   return jointSpace
 }
