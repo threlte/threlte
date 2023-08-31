@@ -23,6 +23,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  build: {
+    inlineStylesheets: 'never'
+  },
   integrations: [
     AutoImport({
       imports: [
