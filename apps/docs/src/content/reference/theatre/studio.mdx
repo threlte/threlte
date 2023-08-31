@@ -1,17 +1,12 @@
 ---
 order: 1.5
 category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/studio/Studio.svelte'
 name: '<Studio>'
 type: 'component'
 componentSignature:
-  {
-    props:
-      [
-        {name: 'enabled', type: 'boolean', default: 'true', required: false},
-      ]
-  }
+  { props: [{ name: 'enabled', type: 'boolean', default: 'true', required: false }] }
 ---
-
 
 The `<Studio>` component enables the Theatre.js studio interface in your browser. It is intended for use in development.
 
@@ -19,9 +14,9 @@ See the Theatre.js docs for extended instructions for using the studio interface
 
 #### Theatre.js Docs
 
-|&nbsp;|&nbsp;|&nbsp;|&nbsp;|
-|---|---|---|---|
-| **Studio** | [Studio Manual](https://www.theatrejs.com/docs/latest/manual/Studio)  | [Studio keyboard Shortcuts](https://www.theatrejs.com/docs/latest/manual/keyboard-shortcuts) | [Studio API Reference](https://www.theatrejs.com/docs/latest/api/studio)  |
+| &nbsp;     | &nbsp;                                                               | &nbsp;                                                                                       | &nbsp;                                                                   |
+| ---------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **Studio** | [Studio Manual](https://www.theatrejs.com/docs/latest/manual/Studio) | [Studio keyboard Shortcuts](https://www.theatrejs.com/docs/latest/manual/keyboard-shortcuts) | [Studio API Reference](https://www.theatrejs.com/docs/latest/api/studio) |
 
 ### Example
 
@@ -29,18 +24,18 @@ In most cases, you want the interface while editing animations or laying out sce
 
 ```svelte
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import { Studio } from '@threlte/theatre'
-	import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { Studio } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
 
-	// Using SvelteKit
-	import { dev } from '$app/environment';
+  // Using SvelteKit
+  import { dev } from '$app/environment'
 </script>
 
 <Studio enabled={dev} />
 
 <Canvas>
-	<Scene />
+  <Scene />
 </Canvas>
 ```
 

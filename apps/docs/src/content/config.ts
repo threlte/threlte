@@ -68,6 +68,9 @@ export const referenceCollection = defineCollection({
   schema: z.object({
     type: z.enum(['component', 'hook', 'plugin']).optional(),
     name: z.string(),
+    /**
+     * Path to the source file or directory, relative to the root of the repository.
+     */
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
@@ -79,7 +82,7 @@ export const referenceCollection = defineCollection({
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More','Preprocessing']),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
