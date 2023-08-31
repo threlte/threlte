@@ -20,7 +20,7 @@
 
 <button
   aria-label="Search"
-  class="text-faded relative flex w-full min-w-[200px] max-w-[14rem] flex-row items-center justify-start gap-2 rounded-md bg-blue-900 px-3 py-2 hover:text-white hover:brightness-110 md:mx-6"
+  class="text-faded relative flex w-full min-w-[50px] max-w-[14rem] md:max-w-none flex-row items-center justify-start gap-2 rounded-md bg-blue-900 px-3 py-2 hover:text-white hover:brightness-110 md:mx-6 border border-blue-500/10"
   on:click={toggleSearch}
 >
   <svg
@@ -28,7 +28,7 @@
     width="20"
     height="20"
     fill="#000000"
-    class="fill-current"
+    class="fill-current hidden lg:block"
     viewBox="0 0 256 256"
     ><path
       d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"
