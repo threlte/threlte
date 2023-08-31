@@ -2,6 +2,7 @@
 {
   order: 2,
   category: '@threlte/extras',
+  sourcePath: 'packages/extras/src/lib/components/RoundedBoxGeometry/RoundedBoxGeometry.svelte',
   name: <RoundedBoxGeometry>,
   type: 'component',
   componentSignature:
@@ -43,7 +44,7 @@
             default: '1',
             description: 'Number of points used for subdividing segments along the depth of the extruded spline.'
           }
-        ],
+        ]
     }
 }
 ---
@@ -67,7 +68,7 @@ Creates a rounded box geometry with a Three.js ExtrudeGeometry.
 
   <T.Mesh>
     <RoundedBoxGeometry />
-    <T.MeshPhongMaterial color='hotpink' />
+    <T.MeshPhongMaterial color="hotpink" />
   </T.Mesh>
 </Canvas>
 ```
