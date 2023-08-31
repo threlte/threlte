@@ -123,6 +123,7 @@
             href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
             referrerpolicy="no-referrer"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <svg
               class="icon"
@@ -149,6 +150,7 @@
               href={sourceUrl}
               referrerpolicy="no-referrer"
               rel="noopener noreferrer"
+              target="_blank"
             >
               <svg
                 class="icon"
@@ -174,9 +176,9 @@
             <a
               class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
               href={editUrl}
-              target="_blank"
               referrerpolicy="no-referrer"
               rel="noopener noreferrer"
+              target="_blank"
             >
               <svg
                 class="icon"
@@ -214,6 +216,7 @@
           href="http://chat.threlte.xyz"
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
+          target="_blank"
         >
           <svg
             class="icon"
@@ -237,9 +240,9 @@
         <a
           class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
           href="https://twitter.com/threlte"
-          target="_blank"
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
+          target="_blank"
         >
           <svg
             class="icon"
