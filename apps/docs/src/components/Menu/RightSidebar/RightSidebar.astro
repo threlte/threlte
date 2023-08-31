@@ -1,16 +1,29 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import RightSidebar from './RightSidebar.svelte'
+import RightSidebarInner from './RightSidebar.svelte'
 
 interface Props {
-  entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+  entry: CollectionEntry<'learn'> & CollectionEntry<'reference'>
 }
 
-const { entry } = Astro.props
+const { entry } = Astro.props as any
+
 const content = await entry.render()
+
+const headings = [...content.headings]
+
+if (entry.data.componentSignature) {
+  const hasEvents = !!entry.data.componentSignature.events?.length
+  const hasProps = !!entry.data.componentSignature.props?.length
+  const hasBindings = !!entry.data.componentSignature.bindings?.length
+
+  if (hasEvents || hasProps || hasBindings) {
+    headings.push({ depth: 3, slug: 'component-signature', text: 'Component Signature' })
+  }
+}
 ---
 
-<RightSidebar
+<RightSidebarInner
   client:idle
-  headings={content.headings}
+  {headings}
 />
