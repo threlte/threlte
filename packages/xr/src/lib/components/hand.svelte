@@ -12,7 +12,7 @@
 <script lang='ts'>
   export let index: number
 
-  export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
+  export let profile: 'mesh' | 'spheres' | 'boxes' | undefined
 
   type $$Events = {
     connected: XRHandEvent<'connected', null>
@@ -25,7 +25,8 @@
   const { xr } = useThrelte().renderer
   const hand = xr.getHand(index)
   const space = xr.getReferenceSpace()
-  const model = handModelFactory.createHandModel(hand, profile === 'none' ? 'mesh' : profile)
+  
+  $: model = handModelFactory.createHandModel(hand, profile)
 
   let connected = false
   let inputSource: XRHand | undefined
@@ -99,7 +100,7 @@
   name='XR Hand {index}'
   visible={connected}
 >
-  {#if profile !== 'none'}
+  {#if profile !== undefined}
     <T is={model} name='XR Hand Model {index}' />
   {/if}
 

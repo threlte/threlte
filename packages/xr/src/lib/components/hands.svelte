@@ -7,7 +7,7 @@
   import Hand from './Hand.svelte'
   import type { XRHandEvent } from '../types'
 
-  export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
+  export let profile: 'mesh' | 'spheres' | 'boxes' | undefined = 'mesh'
 
   type $$Events = {
     connected: XRHandEvent<'connected', null>
