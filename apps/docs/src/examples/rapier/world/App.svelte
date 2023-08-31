@@ -2,7 +2,7 @@
 	import { Canvas } from '@threlte/core'
 	import { HTML } from '@threlte/extras'
 	import { World } from '@threlte/rapier'
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 	import Scene from './Scene.svelte'
 
 	const { pane, action } = useTweakpane()
@@ -20,7 +20,10 @@
 	<World>
 		<Scene />
 
-		<HTML slot="fallback" transform>
+		<HTML
+			slot="fallback"
+			transform
+		>
 			<p>
 				It seems your browser<br />
 				doesn't support WASM.<br />

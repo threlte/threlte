@@ -4,7 +4,7 @@
 	import { World } from '@threlte/rapier'
 	import { muted } from './Particle.svelte'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 
 	const { addButton, action } = useTweakpane()
 
@@ -20,7 +20,10 @@
 	<World>
 		<Scene />
 
-		<HTML slot="fallback" transform>
+		<HTML
+			slot="fallback"
+			transform
+		>
 			<p>
 				It seems your browser<br />
 				doesn't support WASM.<br />
