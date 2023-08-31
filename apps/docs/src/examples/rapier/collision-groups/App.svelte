@@ -3,7 +3,7 @@
 	import { HTML } from '@threlte/extras'
 	import { Debug, World } from '@threlte/rapier'
 	import Scene from './Scene.svelte'
-	import { useTweakpane } from '../../utils/useTweakpane'
+	import { useTweakpane } from '$lib/useTweakpane'
 
 	let reset: (() => void) | undefined
 
@@ -24,7 +24,10 @@
 		<Debug />
 		<Scene bind:reset />
 
-		<HTML slot="fallback" transform>
+		<HTML
+			slot="fallback"
+			transform
+		>
 			<p>
 				It seems your browser<br />
 				doesn't support WASM.<br />

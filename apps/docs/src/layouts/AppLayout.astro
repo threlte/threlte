@@ -23,7 +23,7 @@ const title = Astro.props.title
       content="width=device-width"
     />
     <title>{title ?? 'Threlte'}</title>
-    <ViewTransitions fallback="none" />
+    <ViewTransitions fallback="none" transition:animate="initial"/>
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"

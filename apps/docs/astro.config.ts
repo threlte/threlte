@@ -9,8 +9,6 @@ import mkcert from 'vite-plugin-mkcert'
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
 
-// https://astro.build/config
-import image from '@astrojs/image'
 
 // https://astro.build/config
 import svelte from '@astrojs/svelte'
@@ -26,8 +24,8 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
-  experimental: {
-    viewTransitions: true
+  build: {
+    inlineStylesheets: 'never'
   },
   integrations: [
     AutoImport({
@@ -38,7 +36,7 @@ export default defineConfig({
       ]
     }),
     tailwind(),
-    image(),
+
     svelte({
       preprocess: preprocess({
         postcss: true
@@ -47,7 +45,7 @@ export default defineConfig({
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
-    preact({ compat: true })
+    preact({ compat: true, include: ['**/*.tsx'] })
   ],
   output: 'static',
   vite: {

@@ -2,6 +2,7 @@
 {
   'order': 4.3,
   'category': '@threlte/theatre',
+  sourcePath: 'packages/theatre/src/lib/sheetObject/transform/Transform.svelte',
   'name': '<Transform>',
   'type': 'component',
   'componentSignature':
@@ -10,12 +11,17 @@
         [
           { 'name': 'label', 'type': 'string', 'required': false },
           { 'name': 'key', 'type': 'string', 'required': false },
-          { 'name': 'mode', 'type': 'translate | rotate | scale', 'required': false, default: 'translate' },
+          {
+            'name': 'mode',
+            'type': 'translate | rotate | scale',
+            'required': false,
+            default: 'translate'
+          },
           { 'name': 'space', 'type': 'world | local', 'required': false, default: 'world' },
           { 'name': 'translationSnap', 'type': 'number', 'required': false },
           { 'name': 'rotationSnap', 'type': 'number', 'required': false },
-          { 'name': 'scaleSnap', 'type': 'number', 'required': false },
-        ],
+          { 'name': 'scaleSnap', 'type': 'number', 'required': false }
+        ]
     }
 }
 ---
@@ -31,4 +37,3 @@ Use the component `<Transform>` from the [`<SheetObject>`](./sheet-object) slot 
   </Transform>
 </SheetObject>
 ```
-
