@@ -1,6 +1,5 @@
 ---
-
-import {Image} from 'astro:assets'
+import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import AppLayout from './AppLayout.astro'
 import Logo from '$assets/logo/threlte-logo.png'
@@ -176,7 +175,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     </div>
 
     <aside
-      class="sticky top-[var(--docs-navbar-height)] z-10 ml-4 hidden w-full place-self-start justify-self-end pt-6 lg:z-0 lg:block"
+      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] w-full place-self-start justify-self-stretch overflow-hidden lg:sticky lg:top-[var(--docs-navbar-height)] lg:block lg:w-auto"
       transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry} />
