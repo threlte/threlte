@@ -47,6 +47,10 @@
 
 This component can accept children in `left` and `right` slots, which will be parented to the hand of the respective handedness.
 
+<Tip type="warning">
+  Default hand models are fetched from the immersive web group's [webxr input profile repo](https://github.com/immersive-web/webxr-input-profiles). If you are developing an offline app, you should download and provide any anticipated models.
+</Tip>
+
 ```svelte
 <Hands>
   <T slot='left' is={$gltf1.scene} />
