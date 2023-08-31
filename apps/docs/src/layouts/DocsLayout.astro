@@ -1,5 +1,6 @@
 ---
-import { Image } from '@astrojs/image/components'
+
+import {Image} from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import AppLayout from './AppLayout.astro'
 import Logo from '$assets/logo/threlte-logo.png'
@@ -37,7 +38,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
 ---
 
 <AppLayout title={title}>
-  <Markprompt client:idle />
+  <Markprompt client:only="preact" />
   <header
     class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
@@ -140,13 +141,13 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     activeSidebarTab={activeSidebarTab}
     activeUrlPathName={activeUrlPathName}
   >
-    <Image
+    <!-- <Image
       slot="logo"
       src={Logo}
       alt="threlte logo"
       width={200}
       class="h-[37px] w-auto"
-    />
+    /> -->
 
     <Socials slot="after-navigation" />
   </MobileDocsNav>
