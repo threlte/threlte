@@ -6,21 +6,6 @@
   type: 'component',
   componentSignature:
     {
-      props:
-        [
-          {
-            name: 'modelLeft',
-            type: "THREE.Object3D | 'none' | undefined",
-            required: false,
-            description: 'An optional model for the left controller. If "none" is passed, no controller model will render.'
-          },
-          {
-            name: 'modelRight',
-            type: "THREE.Object3D | 'none' | undefined",
-            required: false,
-            description: 'An optional model for the right controller. If "none" is passed, no controller model will render.'
-          },
-        ],
       events:
         [
           {
@@ -70,9 +55,7 @@
 
 `<Controllers />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model per each hand.
 
-You can specify custom models, or no models to be rendered for these controllers.
-
-This component can accept children in `left` and `right` slots, which will be parented to the controller of the respective handedness.
+It can optionally accept children in `left` and `right` slots, which will replace the default controller model of the respective handedness.
 
 ```svelte
 <Controllers>

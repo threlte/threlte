@@ -1,20 +1,17 @@
 <!--
 @component
 `<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
-
 -->
 
 <script lang='ts' context='module'>
   import { onMount, onDestroy } from 'svelte'
   import { T, useThrelte, createRawEventDispatcher } from '@threlte/core'
-  import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
   import { fire } from '../internal/events'
   import type { XRController, XRControllerEvent } from '../types'
   import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '../internal/stores'
   import { left, right, gaze } from '../hooks/useController'
+  import ControllerModel from '../components/ControllerModel.svelte'
   import ShortRay from '../components/ShortRay.svelte'
-
-  const controllerModelFactory = new XRControllerModelFactory()
 
   const xrEvents = [
     'select',
@@ -30,7 +27,6 @@
   <script lang='ts'>
 
   export let index: number
-  export let model: THREE.Object3D | 'none' | undefined = undefined
 
   type $$Events = {
     connected: XRControllerEvent<'connected'>
@@ -97,8 +93,6 @@
     controller.removeEventListener('disconnected', handleDisconnected)
     xrEvents.forEach((event) => controller.removeEventListener(event, handleXrEvent))
   })
-
-  $: controllerModel = model ?? controllerModelFactory.createControllerModel(grip)
 </script>
 
 <T
@@ -106,10 +100,9 @@
   name='XR Controller Grip {index}'
   visible={connected && !$isHandTracking}
 >
-  {#if model !== 'none'}
-    <T is={controllerModel} name='XR Controller Grip Model {index}' />
-  {/if}
-  <slot />
+  <slot>
+    <ControllerModel {index} />
+  </slot>
 </T>
 
 <T
