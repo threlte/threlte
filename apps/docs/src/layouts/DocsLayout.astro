@@ -39,13 +39,11 @@ const activeLinkStyles = '!text-orange'
 <AppLayout title={title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex "
+    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 lg:gap-12">
-      <a
-        href="/"
-      >
+      <a href="/">
         <Image
           src={Logo}
           alt="threlte logo"
@@ -67,20 +65,19 @@ const activeLinkStyles = '!text-orange'
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
         >
-          <Book class="h-[16px] hidden lg:block"/>Learn
+          <Book class="h-[16px] hidden lg:block" />Learn
         </a>
 
         <a
           href="/docs/examples/intro"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
         >
-          <Circles class="h-[16px] hidden lg:block"/>Examples
+          <Circles class="h-[16px] hidden lg:block" />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
 
-        <div class="flex items-center gap-6 relative">
-
+        <div class="relative flex items-center gap-6">
           <a
             href="/docs/reference/core/getting-started"
             class={c(
@@ -88,7 +85,7 @@ const activeLinkStyles = '!text-orange'
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
           >
-            <Package class="h-[16px] hidden md:block"/>core</a
+            <Package class="h-[16px] hidden md:block" />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
@@ -97,7 +94,7 @@ const activeLinkStyles = '!text-orange'
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
           >
-            <Package class="h-[16px] hidden md:block"/>extras</a
+            <Package class="h-[16px] hidden md:block" />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
@@ -106,7 +103,7 @@ const activeLinkStyles = '!text-orange'
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
           >
-            <Package class="h-[16px] hidden md:block"/>gltf</a
+            <Package class="h-[16px] hidden md:block" />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
@@ -115,7 +112,7 @@ const activeLinkStyles = '!text-orange'
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
           >
-            <Package class="h-[16px] hidden md:block"/>rapier</a
+            <Package class="h-[16px] hidden md:block" />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
@@ -124,14 +121,18 @@ const activeLinkStyles = '!text-orange'
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
           >
-            <Package class="h-[16px] hidden md:block"/>theatre</a
+            <Package class="h-[16px] hidden md:block" />theatre</a
           >
         </div>
       </div>
     </div>
-    <div class="gap-5 max-w-[500px] flex-1 hidden lg:flex">
-			<Search client:media="(min-width: 1024px)" />
-      <!-- <Socials /> -->
+    <div class="hidden max-w-[500px] flex-1 gap-5 lg:flex">
+      <Search client:media="(min-width: 1024px)" />
+      <Socials
+        github
+        discord
+        small
+      />
     </div>
   </header>
 
@@ -159,10 +160,10 @@ const activeLinkStyles = '!text-orange'
       class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch overflow-hidden md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
       transition:name="left_sidebar"
     >
-		<div class="flex-1 flex lg:hidden mb-6">
-			<Search client:media="(min-width: 1024px)" />
-      <!-- <Socials /> -->
-    </div>
+      <div class="mb-6 flex flex-1 lg:hidden">
+        <Search client:media="(min-width: 1024px)" />
+        <!-- <Socials /> -->
+      </div>
       <LeftSidebar />
     </aside>
 
