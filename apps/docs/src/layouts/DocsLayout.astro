@@ -154,19 +154,19 @@ const activeLinkStyles = '!text-orange'
   </MobileDocsNav>
 
   <main
-    class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
+    class="grid min-h-[66vh] md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch overflow-hidden md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
+      class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch md:top-[70px] md:block md:pt-6 lg:row-span-1"
       transition:name="left_sidebar"
     >
       <div class="mb-6 flex flex-1 lg:hidden">
-        <Search client:media="(min-width: 1024px)" />
-        <!-- <Socials /> -->
+        <Search client:media="(min-width: 768px) and (max-width: 1024px)" />
       </div>
       <LeftSidebar />
     </aside>
 
+    <div></div>
     <div
       class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
@@ -178,12 +178,11 @@ const activeLinkStyles = '!text-orange'
     </div>
 
     <aside
-      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] w-full place-self-start justify-self-stretch overflow-hidden lg:sticky lg:top-[var(--docs-navbar-height)] lg:block lg:w-auto"
+      class="fixed top-0 right-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] place-self-start justify-self-stretch overflow-hidden lg:top-[var(--docs-navbar-height)] lg:block lg:w-[var(--right-sidebar-width)]"
       transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
   </main>
-
   <Footer class="w-full px-6 mx-auto py-12 border-t border-white/20" />
 </AppLayout>
