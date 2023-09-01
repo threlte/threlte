@@ -57,9 +57,7 @@
   /**
    * Events setup
    */
-  type $$Events = {
-    [key in keyof ColliderEventMap]: CustomEvent<ColliderEventMap[key]>
-  }
+  type $$Events = ColliderEventMap
   const dispatcher = createRawEventDispatcher<ColliderEventMap>()
 
   /**
