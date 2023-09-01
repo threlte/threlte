@@ -49,10 +49,8 @@
   /**
    * Events setup
    */
-  type $$Events = {
-    [key in keyof ColliderEventMap]: CustomEvent<ColliderEventMap[key]>
-  }
-  const dispatcher = createRawEventDispatcher<ColliderEventMap>()
+  type $$Events = ColliderEventMap
+  const dispatcher = createRawEventDispatcher<$$Events>()
 
   const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
@@ -118,5 +116,8 @@
 </script>
 
 <SceneGraphObject object={group}>
-  <slot {colliders} {refresh} />
+  <slot
+    {colliders}
+    {refresh}
+  />
 </SceneGraphObject>
