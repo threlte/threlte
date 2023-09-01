@@ -42,7 +42,7 @@ const activeLinkStyles = '!text-orange'
     class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
-    <div class="justify flex items-center justify-start gap-6 lg:gap-12">
+    <div class="justify flex items-center justify-start gap-6 xl:gap-12">
       <a href="/">
         <Image
           src={Logo}
@@ -157,7 +157,7 @@ const activeLinkStyles = '!text-orange'
     class="grid min-h-[66vh] md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch md:top-[70px] md:block md:pt-6 lg:row-span-1"
+      class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block md:pt-6 lg:row-span-1"
       transition:name="left_sidebar"
     >
       <div class="mb-6 flex flex-1 lg:hidden">
@@ -166,9 +166,8 @@ const activeLinkStyles = '!text-orange'
       <LeftSidebar />
     </aside>
 
-    <div></div>
     <div
-      class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
+      class="col-start-2 w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
