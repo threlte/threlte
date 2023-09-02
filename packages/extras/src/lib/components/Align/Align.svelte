@@ -62,7 +62,7 @@
       z === false ? 0 : -align.z + dAlign
     )
 
-    dispatch('align', {
+    const eventData = {
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,
@@ -73,19 +73,13 @@
       verticalAlignment: vAlign,
       width,
       horizontalAlignment: hAlign
-    })
-    dispatch('center', {
-      boundingBox: box3,
-      center: outerGroup.position.clone(),
-      boundingSphere: sphere,
-      container: containerGroup,
-      depth,
-      depthAlignment: dAlign,
-      height,
-      verticalAlignment: vAlign,
-      width,
-      horizontalAlignment: hAlign
-    })
+    }
+
+    dispatch('align', eventData)
+
+    // Will be emitted as the event is marked as deprecated and will only be
+    // removed in the next major version.
+    dispatch('center', eventData)
   }
 
   /**
