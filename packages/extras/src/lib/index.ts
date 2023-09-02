@@ -1,3 +1,5 @@
+import Align from './components/Align/Align.svelte'
+
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
@@ -20,9 +22,14 @@ export { default as InstancedMesh } from './components/Instancing/InstancedMesh.
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
-export { default as Align } from './components/Align/Align.svelte'
-/** @deprecated Please use <Align> */
-export { default as Center } from './components/Align/Align.svelte'
+export { Align }
+
+/**
+ * @component Center
+ * @deprecated Please use `<Align>` instead.
+ */
+const Center = Align
+export { Center }
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
