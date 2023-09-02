@@ -11,7 +11,7 @@
 
   const joint = useHandJoint(hand, handJoints[jointIndex]!)
 
-  $: radius = joint.current?.jointRadius ?? 0.0001
+  $: radius = $joint?.jointRadius ?? 0.0001
 
   useFrame(() => {
     if (joint.current === undefined || body === undefined) return
