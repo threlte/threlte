@@ -1,17 +1,20 @@
-const events: Record<string, ((event: any) => void)[]> = {}
+type Callback<T = any> = (event: T) => void
 
-export const on = <Type>(name: string, cb: (event: Type) => void): void => {
+const events: Record<string, Callback[]> = {}
+
+export const on = <T>(name: string, cb: Callback<T>): () => void => {
   const fns = events[name]
 
   if (fns === undefined) {
     events[name] = [cb]
-    return
+  } else {
+    fns.push(cb)
   }
 
-  fns.push(cb)
+  return () => off(name, cb)
 }
 
-export const off = <Type>(name: string, cb: (event: Type) => void): void => {
+export const off = <T>(name: string, cb: Callback<T>): void => {
   const arr = events[name]
 
   if (arr === undefined) return
@@ -21,7 +24,7 @@ export const off = <Type>(name: string, cb: (event: Type) => void): void => {
   if (arr.length === 0) delete events[name]
 }
 
-export const fire = <Type>(name: string, payload: Type): void => {
+export const fire = <T>(name: string, payload: T): void => {
   const fns = events[name]
 
   if (fns === undefined) return

@@ -1,7 +1,7 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { XR, TeleportControls, Controllers, Hands, useTeleport } from '@threlte/xr'
+  import { XR, TeleportControls, Controller, useTeleport } from '@threlte/xr'
   import { colorOptions } from './colors'
 
   const { camera, renderer } = useThrelte()
@@ -34,11 +34,11 @@
 </script>
 
 <XR>
-  <Controllers />
-  <Hands />
+  <Controller left />
+  <Controller right />
 </XR>
 
-<TeleportControls handedness='left'>
+<TeleportControls>
   <T.Mesh
     teleportSurface
     receiveShadow

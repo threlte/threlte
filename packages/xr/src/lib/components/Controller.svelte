@@ -4,16 +4,26 @@
 -->
 
 <script lang='ts' context='module'>
-  import { onMount, onDestroy } from 'svelte'
+  import { onMount } from 'svelte'
   import { T, useThrelte, createRawEventDispatcher } from '@threlte/core'
-  import { fire } from '../internal/events'
-  import type { XRController, XRControllerEvent } from '../types'
+  import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
+  import { fire, on } from '../internal/events'
+  import type { XRControllerEvent } from '../types'
   import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '../internal/stores'
-  import { left, right, gaze } from '../hooks/useController'
-  import ControllerModel from '../components/ControllerModel.svelte'
+  import { left as leftStore, right as rightStore, gaze } from '../hooks/useController'
   import ShortRay from '../components/ShortRay.svelte'
 
-  const xrEvents = [
+  const factory = new XRControllerModelFactory()
+
+  const stores = {
+    left: leftStore,
+    right: rightStore,
+    none: gaze,
+  } as const
+
+  let initialized = false
+
+  const events = [
     'select',
     'selectstart',
     'selectend',
@@ -22,11 +32,39 @@
     'squeezestart'
   ] as const
 
-  </script>
+  const handleConnected = (controller: THREE.XRTargetRaySpace, grip: THREE.XRGripSpace, model: THREE.XRControllerModel) =>
+    (event: XRControllerEvent<'connected'>) => {
+      const data = event.data!
+      fire('connected', event)
+      stores[data.handedness].set({ controller, grip, model, inputSource: data })
+    }
 
-  <script lang='ts'>
+  const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
+    const data = event.data!
+    fire('disconnected', event)
+    stores[data.handedness].set(undefined)
+  }
 
-  export let index: number
+  const initialize = (xr: THREE.WebXRManager) => {
+    for (const index of [0, 1]) {
+      const controller = xr.getController(index)
+      const grip = xr.getControllerGrip(index)
+
+      // "createControllerModel" currently only will attach a model if the "connected" event is fired,
+      // so it must be called immediately before a controller connects.
+      const model = factory.createControllerModel(grip)
+      controller.addEventListener('connected', handleConnected(controller, grip, model))
+      controller.addEventListener('disconnected', handleDisconnected)
+      events.forEach((name) => controller.addEventListener(name, (event) => fire(event.type, event)))
+    }
+
+    initialized = true
+  }
+</script>
+
+<script lang='ts'>
+  export let left = false
+  export let right = false
 
   type $$Events = {
     connected: XRControllerEvent<'connected'>
@@ -39,79 +77,56 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
+  type ControllerEvents = XRControllerEvent<typeof events[number]>
+
   const dispatch = createRawEventDispatcher<$$Events>()
-  const { xr } =  useThrelte().renderer
-  const controller = xr.getController(index)
-  const grip = xr.getControllerGrip(index)
+  const { xr } = useThrelte().renderer
 
-  let connected = false
+  if (!initialized) initialize(xr)
 
-  const handleConnected = (event: XRControllerEvent<'connected'>) => {
-    const data = event.data!
-    const xrController: XRController = { controller, grip, inputSource: data }
-
-    connected = true
-
-    fire('connected', event)
-    dispatch('connected', event)
-
-    switch (data.handedness) {
-      case 'left': return left.set(xrController)
-      case 'right': return right.set(xrController)
-      case 'none': return gaze.set(xrController)
-    }
+  $: if (left && right) {
+    throw new Error('A <Controller> component can only specify one hand.')
   }
-
-  const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-    const data = event.data!
-
-    connected = false
-
-    fire('disconnected', event)
-    dispatch('disconnected', event)
-
-    switch (data.handedness) {
-      case 'left': return left.set(undefined)
-      case 'right': return right.set(undefined)
-      case 'none': return gaze.set(undefined)
-    }
+  $: if (!left && !right) {
+    throw new Error('A <Controller> component must specify a hand.')
   }
+ 
+  $: store = left ? stores.left : stores.right
+  $: grip = $store?.grip
+  $: controller = $store?.controller
+  $: model = $store?.model
+  $: handedness = left ? 'left' : 'right'
 
-  const handleXrEvent = (event: XRControllerEvent<typeof xrEvents[number]>) => {
-    fire(event.type, event)
+  onMount(() => events.map((name) => on<ControllerEvents>(name, (event) => {
     dispatch(event.type, event)
-  }
-
-  onMount(() => {
-    controller.addEventListener('connected', handleConnected)
-    controller.addEventListener('disconnected', handleDisconnected)
-    xrEvents.forEach((event) => controller.addEventListener(event, handleXrEvent))
-  })
-
-  onDestroy(() => {
-    controller.removeEventListener('connected', handleConnected)
-    controller.removeEventListener('disconnected', handleDisconnected)
-    xrEvents.forEach((event) => controller.removeEventListener(event, handleXrEvent))
-  })
+  })))
 </script>
 
-<T
-  is={grip}
-  name='XR Controller Grip {index}'
-  visible={connected && !$isHandTracking}
->
-  <slot>
-    <ControllerModel {index} />
-  </slot>
-</T>
+{#if !$isHandTracking}
+  {#if grip}
+    <T
+      is={grip}
+      name='XR controller grip {handedness}'
+    >
+      <slot>
+        <T is={model} />
+      </slot>
 
-<T
-  is={controller}
-  name='XR Controller {index}'
-  visible={connected && !$isHandTracking}
->
-  <ShortRay visible={
-    $activeTeleportController === controller &&
-    $pendingTeleportDestination === undefined
-  } />
-</T>
+      <slot name='grip' />
+    </T>
+  {/if}
+
+  {#if controller}
+    <T
+      is={controller}
+      name='XR controller {handedness}'
+      visible={!$isHandTracking}
+    >
+      <slot name='controller' />
+      <ShortRay visible={
+        $activeTeleportController === controller &&
+        $pendingTeleportDestination === undefined
+      } />
+    </T>
+  {/if}
+{/if}

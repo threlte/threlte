@@ -1,8 +1,7 @@
 <script lang='ts'>
-
   import * as THREE from 'three'
   import { T } from '@threlte/core'
-  import { XR, Controllers, Hands, useHitTest } from '@threlte/xr'
+  import { XR, Controller, Hand, useHitTest } from '@threlte/xr'
   
   const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0);
   const meshes: THREE.Mesh[] = []
@@ -30,9 +29,11 @@
   
   </script>
   
-  <XR foveation={1}>
-    <Controllers on:select={handleSelect} />
-    <Hands on:pinchend={handleSelect} />
+  <XR>
+    <Controller left on:select={handleSelect} />
+    <Controller right on:select={handleSelect} />
+    <Hand left on:pinchend={handleSelect} />
+    <Hand right on:pinchend={handleSelect} />
   </XR>
   
   <T.HemisphereLight

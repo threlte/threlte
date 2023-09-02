@@ -1,7 +1,7 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T } from '@threlte/core'
-  import { XR, Hands } from '@threlte/xr'
+  import { XR, Hand } from '@threlte/xr'
 
   let boxes: THREE.Object3D[] = []
 
@@ -20,8 +20,9 @@
   }
 </script>
 
-<XR foveation={1}>
-  <Hands on:pinchstart={handlePinchStart} />
+<XR>
+  <Hand left on:pinchstart={handlePinchStart} />
+  <Hand right on:pinchstart={handlePinchStart} />
 </XR>
 
 <T.Mesh rotation={[-Math.PI / 2, 0, 0]}>

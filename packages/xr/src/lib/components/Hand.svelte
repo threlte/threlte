@@ -1,18 +1,52 @@
 <script lang='ts' context='module'>
-  import { onMount, onDestroy } from 'svelte'
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
   import { fire } from '../internal/events'
-  import { left, right } from '../hooks/useHand'
+  import { left as leftStore, right as rightStore } from '../hooks/useHand'
+  import { useHandJoint } from '../hooks/useHandJoint'
 
-  const handModelFactory = new XRHandModelFactory()
+  const factory = new XRHandModelFactory()
+
+  const stores = {
+    left: leftStore,
+    right: rightStore,
+  } as const
+
+  let initialized = false
+
+  const handleConnected = (hand: THREE.XRHandSpace, model) => (event: XRHandEvent<'connected', null>) => {
+    const inputSource = event.data.hand as globalThis.XRHand
+    fire('connected', event)
+    stores[event.data.handedness].set({ hand, model, inputSource })
+  }
+
+  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
+    fire('disconnected', event)
+    stores[event.data.handedness].set(undefined)
+  }
+
+  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
+    fire(event.type, event)
+  }
+
+  const initialize = (xr: THREE.WebXRManager) => {
+    for (const index of [0, 1]) {
+      const hand = xr.getHand(index)
+      const model = factory.createHandModel(hand, 'mesh')
+      hand.addEventListener('connected', handleConnected(hand, model))
+      hand.addEventListener('disconnected', handleDisconnected)
+      hand.addEventListener('pinchstart', handlePinchEvent)
+      hand.addEventListener('pinchend', handlePinchEvent)
+    }
+
+    initialized = true
+  }
 </script>
 
 <script lang='ts'>
-  export let index: number
-
-  export let profile: 'mesh' | 'spheres' | 'boxes' | 'none' = 'mesh'
+  export let left = false
+  export let right = false
 
   type $$Events = {
     connected: XRHandEvent<'connected', null>
@@ -23,43 +57,22 @@
 
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
-  const hand = xr.getHand(index)
   const space = xr.getReferenceSpace()
-  const model = handModelFactory.createHandModel(hand, profile === 'none' ? 'mesh' : profile)
 
-  let connected = false
-  let inputSource: XRHand | undefined
+  if (!initialized) initialize(xr)
+
+  $: if (left && right) {
+    throw new Error('A <Hand> component can only specify one hand.')
+  }
+  $: if (!left && !right) {
+    throw new Error('A <Hand> component must specify a hand.')
+  }
+ 
   let children: THREE.Group
-
-  const handleConnected = (event: XRHandEvent<'connected', null>) => {
-    inputSource = event.data.hand as globalThis.XRHand
-    connected = true
-
-    dispatch(event.type, event)
-
-    const xrHand = { hand, inputSource }
-
-    switch (event.data.handedness) {
-      case 'left': return left.set(xrHand)
-      case 'right': return right.set(xrHand)
-    }
-  }
-
-  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
-    inputSource = event.data.hand
-    connected = false
-
-    dispatch(event.type, event)
-  }
-
-  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
-    dispatch(event.type, event)
-    fire(event.type, event)
-  }
 
   const { start, stop } = useFrame(() => {
     const frame = xr.getFrame()
-    const joint = inputSource?.get('wrist' as unknown as number)
+    const joint = inputSource!.get('wrist' as unknown as number)
 
     if (joint === undefined || space === null) return 
 
@@ -73,37 +86,30 @@
     children.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
   }, { autostart: false })
 
-  $: if ($$slots.default) {
+  $: if ($$slots.wrist && inputSource) {
     start()
   } else {
     stop()
   }
 
-  onMount(() => {
-    hand.addEventListener('connected', handleConnected)
-    hand.addEventListener('disconnected', handleDisconnected)
-    hand.addEventListener('pinchstart', handlePinchEvent)
-    hand.addEventListener('pinchend', handlePinchEvent)
-  })
-
-  onDestroy(() => {
-    hand.removeEventListener('connected', handleConnected)
-    hand.removeEventListener('disconnected', handleDisconnected)
-    hand.removeEventListener('pinchstart', handlePinchEvent)
-    hand.removeEventListener('pinchend', handlePinchEvent)
-  })
+  $: store = left ? stores.left : stores.right
+  $: hand = $store?.hand
+  $: inputSource = $store?.inputSource
+  $: model = $store?.model
+  $: handedness = left ? 'left' : 'right'
 </script>
 
-<T
-  is={hand}
-  name='XR Hand {index}'
-  visible={connected}
->
-  {#if profile !== 'none'}
-    <T is={model} name='XR Hand Model {index}' />
-  {/if}
+{#if hand}
+  <T
+    is={hand}
+    name='XR hand {handedness}'
+  >
+    <slot>
+      <T is={model} />
+    </slot>
 
-  <T.Group bind:ref={children}>
-    <slot />
-  </T.Group>
-</T>
+    <T.Group bind:ref={children}>
+      <slot name='wrist' />
+    </T.Group>
+  </T>
+{/if}

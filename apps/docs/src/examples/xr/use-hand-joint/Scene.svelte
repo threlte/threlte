@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { T } from '@threlte/core'
-  import { Hands, XR, useXR } from '@threlte/xr'
+  import { Hand, XR, useXR } from '@threlte/xr'
   import { Attractor } from '@threlte/rapier'
   import JointCollider from './JointBody.svelte'
   import Cubes from './Cube.svelte'
@@ -9,7 +9,8 @@
 </script>
 
 <XR>
-  <Hands />
+  <Hand left />
+  <Hand right />
 
   {#if $isHandTracking}
     {#each { length: 25 } as _, jointIndex}

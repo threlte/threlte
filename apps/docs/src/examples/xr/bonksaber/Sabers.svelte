@@ -3,7 +3,7 @@
   import { T, useFrame } from '@threlte/core'
   import { Collider, RigidBody } from '@threlte/rapier'
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Controllers, Hands, useXR } from '@threlte/xr'
+  import { Controller, Hand, useXR } from '@threlte/xr'
 
   const { isHandTracking } = useXR()
 
@@ -35,9 +35,8 @@
   const saberLength = 1.4
 </script>
 
-<Controllers>
+<Controller left>
   <T.Mesh
-    slot='left'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (sabers.left = ref)}
@@ -45,8 +44,10 @@
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshPhongMaterial color='red' />
   </T.Mesh>
+</Controller>
+
+<Controller right>
   <T.Mesh
-    slot='right'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (sabers.right = ref)}
@@ -54,11 +55,10 @@
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshStandardMaterial roughness={0} color='red' />
   </T.Mesh>
-</Controllers>
+</Controller>
 
-<Hands>
+<Hand left>
   <T.Mesh
-    slot='left'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (handSabers.left = ref)}
@@ -66,8 +66,10 @@
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshStandardMaterial roughness={0} color='red' />
   </T.Mesh>
+</Hand>
+
+<Hand right>
   <T.Mesh
-    slot='right'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (handSabers.right = ref)}
