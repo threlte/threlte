@@ -1,13 +1,13 @@
 <script lang="ts">
   import { searchActive } from './searchStore'
-  const toggleSearch = () => {
-    searchActive.set(!$searchActive)
-  }
-
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault()
-      toggleSearch()
+      if (!$searchActive) searchActive.set(true)
+    }
+
+    if (e.key === '/' && !$searchActive) {
+      if (!$searchActive) searchActive.set(true)
     }
 
     if (e.key === 'Escape') {
@@ -21,7 +21,9 @@
 <button
   aria-label="Search"
   class="text-faded relative flex w-full min-w-[50px] max-w-[14rem] flex-row items-center justify-start gap-2 rounded-md border border-blue-500/10 bg-blue-900 px-3 py-2 hover:text-white hover:brightness-110 md:mx-6 md:max-w-none"
-  on:click={toggleSearch}
+  on:click={() => {
+    searchActive.set(true)
+  }}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
