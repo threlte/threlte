@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.5.1
+
+### Patch Changes
+
+- 6c18d9cc: Properly deprecate `<Center>`
+
 ## 5.5.0
 
 ### Minor Changes
