@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 5.5.0
+
+### Minor Changes
+
+- 144b55a: Deprecated the component `<Center>` as it's being renamed to `<Align>`. Renamed the prop `autoCenter` to `auto`, renamed events and slot props accordingly.
+
+### Patch Changes
+
+- 8a037ec: Deduped `<Align>` event data
+
 ## 5.4.1
 
 ### Patch Changes
