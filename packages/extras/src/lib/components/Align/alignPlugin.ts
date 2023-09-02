@@ -4,23 +4,23 @@ import type { Object3D } from 'three'
 
 const isObject3D = (object: any): object is Object3D => object.isObject3D
 
-export const injectCenterPlugin = (center: () => void) => {
-  injectPlugin('center-plugin', ({ ref }) => {
+export const injectAlignPlugin = (align: () => void) => {
+  injectPlugin('align-plugin', ({ ref }) => {
     if (!isObject3D(ref)) return
 
     onMount(() => {
-      center()
-      return center
+      align()
+      return align
     })
 
-    const waitForTickAndCenter = async () => {
+    const waitForTickAndAlign = async () => {
       await tick()
-      center()
+      align()
     }
 
     return {
       onRefChange() {
-        waitForTickAndCenter()
+        waitForTickAndAlign()
       }
     }
   })
