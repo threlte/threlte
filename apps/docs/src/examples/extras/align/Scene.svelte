@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useRender } from '@threlte/core'
-  import { Center, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
+  import { Align, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
   import { tick } from 'svelte'
   import type { Box3, Vector3 } from 'three'
 
@@ -9,7 +9,7 @@
   export let z: number = 0
   export let precise: boolean = false
   export let showSphere: boolean = false
-  export let autoCenter: boolean = false
+  export let autoAlign: boolean = false
 
   let boundingBox: Box3 | undefined
   let center: Vector3 | undefined
@@ -27,19 +27,19 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<!-- The property autoCenter is not reactive, therefore we need to key it here. -->
-{#key autoCenter}
-  <Center
+<!-- The property autoAlign is not reactive, therefore we need to key it here. -->
+{#key autoAlign}
+  <Align
     {x}
     {y}
     {z}
     {precise}
-    {autoCenter}
-    on:center={({ boundingBox: newBoundingBox, center: newCenter }) => {
+    auto={autoAlign}
+    on:align={({ boundingBox: newBoundingBox, center: newCenter }) => {
       center = newCenter
       boundingBox = newBoundingBox
     }}
-    let:center
+    let:align
   >
     <T.Mesh
       position.x={-1}
@@ -47,7 +47,7 @@
     >
       <TransformControls
         object={ref}
-        on:objectChange={center}
+        on:objectChange={align}
       />
       <RoundedBoxGeometry args={[1, 2, 1]} />
       <T.MeshStandardMaterial color="white" />
@@ -70,7 +70,7 @@
         <T.MeshStandardMaterial color="white" />
       </T.Mesh>
     {/if}
-  </Center>
+  </Align>
 {/key}
 
 {#if boundingBox && center}
