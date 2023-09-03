@@ -60,12 +60,12 @@ It will by default load a hand model.
 A named slot, `wrist`, will place any children within the wrist space of the hand:
 
 ```svelte
-<Controller left>
+<Hand left>
   <T.Mesh slot='wrist'>
     <T.IcosahedronGeometry args={[0.2]} />
     <T.MeshStandardMaterial color='hotpink' />
   </T.Mesh>
-</Controller>
+</Hand>
 ```
 
 To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](https://localhost:4321/docs/reference/core/utilities#currentwritable) store:
