@@ -16,8 +16,8 @@ export const useControllerEvent = (
   handler: (event: XRControllerEvent) => void,
   { handedness }: { handedness?: XRHandedness } = {}
 ): void => {
-  const listener = (event: XRControllerEvent, metadata: { input: 'hand' | 'controller'}) => {
-    if (metadata.input === 'hand') return
+  const listener = (event: XRControllerEvent, metadata?: { input: 'hand' | 'controller'}) => {
+    if (metadata?.input === 'hand') return
     if (handedness !== undefined && event.data?.handedness !== handedness) {
       return
     }
@@ -38,8 +38,8 @@ export const useHandEvent = (
   handler: (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>) => void,
   { handedness }: { handedness?: 'left' | 'right' } = {}
 ): void => {
-  const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>, metadata: { input: 'hand' | 'controller'}) => {
-    if (metadata.input === 'controller') return
+  const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>, metadata?: { input: 'hand' | 'controller'}) => {
+    if (metadata?.input === 'controller') return
     if (handedness !== undefined && event.data.handedness !== handedness) {
       return
     }
