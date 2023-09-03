@@ -40,7 +40,8 @@ export const useHandEvent = (
 ): void => {
   const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>, metadata?: { input: 'hand' | 'controller'}) => {
     if (metadata?.input === 'controller') return
-    if (handedness !== undefined && event.data.handedness !== handedness) {
+    const eventHandedness = event.handedness ?? event.data?.handedness
+    if (handedness !== undefined && eventHandedness !== handedness) {
       return
     }
 
