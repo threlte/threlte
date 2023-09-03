@@ -39,12 +39,14 @@ The following adds a button to start your session and controllers inside an XR m
 Then, in `scene.svelte`:
 ```svelte
 <script>
-  import { XR, Controllers, Hands } from '@threlte/xr'
+  import { XR, Controller, Hand } from '@threlte/xr'
 </script>
 
 <XR />
-<Controllers />
-<Hands />
+<Controller left />
+<Controller right />
+<Hand left />
+<Hand right />
 ```
 
 This will set up your project to be able to enter a VR session with controllers and hand inputs added.
@@ -53,17 +55,19 @@ If you want hands, controllers, or any other objects to be added to your `THREE.
 
 ```svelte
 <script>
-  import { XR, Controllers, Hands } from 'threlte-xr'
+  import { XR, Controller, Hand } from 'threlte-xr'
 </script>
 
 <XR>
-  <Controllers />
-  <Hands />
+  <Controller left />
+  <Controller right />
+  <Hand left />
+  <Hand right />
 </XR>
 ```
 
-The `<XR>`, `<Controllers>`, and `<Hands>` components can provide a powerful foundation when composed with other Threlte components.
+The `<XR>`, `<Controller>`, and `<Hand>` components can provide a powerful foundation when composed with other Threlte components.
 
-For example, it doesn't take much more to get to the point of a primitive BeatSaber-inspired experience:
+For example, it doesn't take much more to get to the point of a simple BeatSaber-inspired experience:
 
 <Example path="xr/bonksaber" />
