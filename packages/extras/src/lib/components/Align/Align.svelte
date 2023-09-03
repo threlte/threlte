@@ -2,22 +2,24 @@
   import { T, createRawEventDispatcher, forwardEventHandlers, useFrame } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
-  import type { CenterEvents, CenterProps, CenterSlots } from './Center.svelte'
-  import { injectCenterPlugin } from './centerPlugin'
+  import type { AlignEvents, AlignProps, AlignSlots } from './Align.svelte'
+  import { injectAlignPlugin } from './alignPlugin'
 
-  type $$Props = CenterProps
-  type $$Events = CenterEvents
-  type $$Slots = CenterSlots
+  type $$Props = AlignProps
+  type $$Events = AlignEvents
+  type $$Slots = AlignSlots
 
-  /** Center the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. */
+  /** Align the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. */
   export let x: $$Props['x'] = 0
-  /** Center the object on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. */
+  /** Align the object on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. */
   export let y: $$Props['y'] = 0
-  /** Center the object on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. */
+  /** Align the object on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. */
   export let z: $$Props['z'] = 0
   /** See https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject */
   export let precise: $$Props['precise'] = false
-  /** Injects a plugin in all child `<T>` components to automatically center whenever a component mounts or unmounts, defaults to false */
+  /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
+  export let auto: $$Props['auto'] = false
+  /** @deprecated Please use the prop "auto" */
   export let autoCenter: $$Props['autoCenter'] = false
 
   const dispatch = createRawEventDispatcher<$$Events>()
@@ -32,7 +34,7 @@
   })
 
   export const calculate = () => {
-    // we're only centering when the component mounted, meaning all child
+    // we're only aligning when the component mounted, meaning all child
     // component have been mounted as well.
     if (!mounted) return
 
@@ -41,13 +43,13 @@
 
     outerGroup.matrixWorld.identity()
     const box3 = new Box3().setFromObject(innerGroup, precise)
-    const center = new Vector3()
+    const align = new Vector3()
     const sphere = new Sphere()
     const width = box3.max.x - box3.min.x
     const height = box3.max.y - box3.min.y
     const depth = box3.max.z - box3.min.z
 
-    box3.getCenter(center)
+    box3.getCenter(align)
     box3.getBoundingSphere(sphere)
 
     const vAlign = ((y || 0) * height) / 2
@@ -55,12 +57,12 @@
     const dAlign = ((z || 0) * depth) / 2
 
     outerGroup.position.set(
-      x === false ? 0 : -center.x + hAlign,
-      y === false ? 0 : -center.y + vAlign,
-      z === false ? 0 : -center.z + dAlign
+      x === false ? 0 : -align.x + hAlign,
+      y === false ? 0 : -align.y + vAlign,
+      z === false ? 0 : -align.z + dAlign
     )
 
-    dispatch('center', {
+    const eventData = {
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,
@@ -71,14 +73,20 @@
       verticalAlignment: vAlign,
       width,
       horizontalAlignment: hAlign
-    })
+    }
+
+    dispatch('align', eventData)
+
+    // Will be emitted as the event is marked as deprecated and will only be
+    // removed in the next major version.
+    dispatch('center', eventData)
   }
 
   /**
-   * We're only centering at most *once* per frame, so even if a lot of child
-   * components request centering, it's only done *once*.
+   * We're only aligning at most *once* per frame, so even if a lot of child
+   * components request aligning, it's only done *once*.
    */
-  const { start: scheduleCentering, stop } = useFrame(
+  const { start: scheduleAligning, stop } = useFrame(
     ({ invalidate }) => {
       calculate()
       invalidate()
@@ -91,21 +99,21 @@
   )
 
   /** Force a recalculation of the bounding box. */
-  export const center = () => {
-    scheduleCentering()
+  export const align = () => {
+    scheduleAligning()
   }
 
   /**
    * We're only recalculating when the props change and the component is
    * mounted.
    */
-  $: mounted === true && x, y, z, precise, scheduleCentering()
+  $: mounted === true && x, y, z, precise, scheduleAligning()
 
   /**
-   * Inject the center plugin if autoCenter is true. This will automatically
-   * center the object whenever a child component mounts or unmounts.
+   * Inject the align plugin if autoAlign is true. This will automatically
+   * align the object whenever a child component mounts or unmounts.
    */
-  if (autoCenter) injectCenterPlugin(scheduleCentering)
+  if (auto || autoCenter) injectAlignPlugin(scheduleAligning)
 
   const component = forwardEventHandlers()
 </script>
@@ -119,7 +127,8 @@
   <T is={outerGroup}>
     <T is={innerGroup}>
       <slot
-        center={scheduleCentering}
+        align={scheduleAligning}
+        center={scheduleAligning}
         {ref}
       />
     </T>
