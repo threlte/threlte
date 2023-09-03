@@ -42,7 +42,7 @@
 }
 ---
 
-`<TeleportControls />` creates teleportation controls similar to many XR experiences or the Quest home environment.
+`<TeleportControls />` creates teleportation controls similar to many native XR experiences.
 
 ```svelte
   <TeleportControls
@@ -56,6 +56,8 @@
     </T.Mesh>
   </TeleportControls>
 ```
+
+This component will set up a raycasting-based teleport behavior once the user pressed a thumbstick forward on the designated controller.
 
 `<TeleportControls />` can have an arbitrary number of children, but any child mesh with a `teleportSurface` attribute will be registered as a navigation mesh that can be teleported to.
 
