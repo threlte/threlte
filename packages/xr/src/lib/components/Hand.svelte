@@ -1,10 +1,10 @@
 <script lang='ts' context='module'>
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
-  import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+  import { type XRHandModel, XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
   import { fire } from '../internal/events'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import { useHandJoint } from '../hooks/useHandJoint'
+  import { useHandEvent } from '../hooks/useEvent'
 
   const factory = new XRHandModelFactory()
 
@@ -15,15 +15,17 @@
 
   let initialized = false
 
-  const handleConnected = (hand: THREE.XRHandSpace, model) => (event: XRHandEvent<'connected', null>) => {
+  const handleConnected = (hand: THREE.XRHandSpace, model: XRHandModel) => (event: XRHandEvent<'connected', null>) => {
     const inputSource = event.data.hand as globalThis.XRHand
-    fire('connected', event)
-    stores[event.data.handedness].set({ hand, model, inputSource })
+    const handedness = event.data.handedness as 'left' | 'right'
+    fire('connected', event, { input: 'hand' })
+    stores[handedness].set({ hand, model, inputSource })
   }
 
   const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
-    fire('disconnected', event)
-    stores[event.data.handedness].set(undefined)
+    const handedness = event.data.handedness as 'left' | 'right'
+    fire('disconnected', event, { input: 'hand' })
+    stores[handedness].set(undefined)
   }
 
   const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
@@ -97,6 +99,19 @@
   $: inputSource = $store?.inputSource
   $: model = $store?.model
   $: handedness = left ? 'left' : 'right'
+
+  const handEvents = [
+    'connected',
+    'disconnected',
+    'pinchstart',
+    'pinchend'
+  ] as const
+
+  for (const name of handEvents) {
+    useHandEvent(name, (event) => dispatch(name, event), {
+      handedness: left ? 'left' : 'right'
+    })
+  }
 </script>
 
 {#if hand}

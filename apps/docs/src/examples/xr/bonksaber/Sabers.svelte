@@ -77,7 +77,7 @@
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshPhongMaterial color='red' />
   </T.Mesh>
-</Hands>
+</Hand>
 
 <RigidBody type='kinematicPosition' bind:rigidBody={rigidBodyLeft}>
   <Collider shape='capsule' args={[saberLength / 2, saberRadius]} />

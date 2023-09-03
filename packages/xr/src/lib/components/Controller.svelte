@@ -4,13 +4,13 @@
 -->
 
 <script lang='ts' context='module'>
-  import { onMount } from 'svelte'
   import { T, useThrelte, createRawEventDispatcher } from '@threlte/core'
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-  import { fire, on } from '../internal/events'
+  import { fire } from '../internal/events'
   import type { XRControllerEvent } from '../types'
   import { isHandTracking, activeTeleportController, pendingTeleportDestination } from '../internal/stores'
   import { left as leftStore, right as rightStore, gaze } from '../hooks/useController'
+  import { useControllerEvent } from '../hooks/useEvent'
   import ShortRay from '../components/ShortRay.svelte'
 
   const factory = new XRControllerModelFactory()
@@ -35,13 +35,13 @@
   const handleConnected = (controller: THREE.XRTargetRaySpace, grip: THREE.XRGripSpace, model: THREE.XRControllerModel) =>
     (event: XRControllerEvent<'connected'>) => {
       const data = event.data!
-      fire('connected', event)
+      fire('connected', event, { input: 'controller' })
       stores[data.handedness].set({ controller, grip, model, inputSource: data })
     }
 
   const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
     const data = event.data!
-    fire('disconnected', event)
+    fire('disconnected', event, { input: 'controller' })
     stores[data.handedness].set(undefined)
   }
 
@@ -77,8 +77,6 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  type ControllerEvents = XRControllerEvent<typeof events[number]>
-
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
 
@@ -97,9 +95,11 @@
   $: model = $store?.model
   $: handedness = left ? 'left' : 'right'
 
-  onMount(() => events.map((name) => on<ControllerEvents>(name, (event) => {
-    dispatch(event.type, event)
-  })))
+  for (const type of ['connected', 'disconnected', ...events] as const) {
+    useControllerEvent(type, (event) => dispatch(type, event), {
+      handedness: left ? 'left' : 'right'
+    })
+  }
 </script>
 
 {#if !$isHandTracking}
@@ -122,7 +122,7 @@
       name='XR controller {handedness}'
       visible={!$isHandTracking}
     >
-      <slot name='controller' />
+      <slot name='target-ray' />
       <ShortRay visible={
         $activeTeleportController === controller &&
         $pendingTeleportDestination === undefined

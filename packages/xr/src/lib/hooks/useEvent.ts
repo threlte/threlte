@@ -1,4 +1,5 @@
 import { onDestroy } from 'svelte'
+import { isHandTracking } from '../internal/stores'
 import { on, off } from '../internal/events'
 import type {
   XRControllerEventType,
@@ -15,7 +16,8 @@ export const useControllerEvent = (
   handler: (event: XRControllerEvent) => void,
   { handedness }: { handedness?: XRHandedness } = {}
 ): void => {
-  const listener = (event: XRControllerEvent) => {
+  const listener = (event: XRControllerEvent, metadata: { input: 'hand' | 'controller'}) => {
+    if (metadata.input === 'hand') return
     if (handedness !== undefined && event.data?.handedness !== handedness) {
       return
     }
@@ -36,15 +38,16 @@ export const useHandEvent = (
   handler: (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>) => void,
   { handedness }: { handedness?: 'left' | 'right' } = {}
 ): void => {
-  const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>) => {
-    if (handedness !== undefined && event.handedness !== handedness) {
+  const listener = (event: XRHandEvent<XRHandEventType, null | THREE.XRHandSpace>, metadata: { input: 'hand' | 'controller'}) => {
+    if (metadata.input === 'controller') return
+    if (handedness !== undefined && event.data.handedness !== handedness) {
       return
     }
 
     handler(event)
   }
 
-  on(event, listener)
+  on<XRHandEvent>(event, listener)
 
   onDestroy(() => off(event, listener))
 }

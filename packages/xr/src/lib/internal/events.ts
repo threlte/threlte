@@ -1,8 +1,8 @@
-type Callback<T = any> = (event: T) => void
+type Callback<T = any, O = any> = (event: T, metadata?: O) => void
 
 const events: Record<string, Callback[]> = {}
 
-export const on = <T>(name: string, cb: Callback<T>): () => void => {
+export const on = <T, O = any>(name: string, cb: Callback<T, O>): () => void => {
   const fns = events[name]
 
   if (fns === undefined) {
@@ -24,10 +24,10 @@ export const off = <T>(name: string, cb: Callback<T>): void => {
   if (arr.length === 0) delete events[name]
 }
 
-export const fire = <T>(name: string, payload: T): void => {
+export const fire = <T, O = any>(name: string, payload: T, metadata?: O): void => {
   const fns = events[name]
 
   if (fns === undefined) return
 
-  for (const fn of fns) fn(payload)
+  for (const fn of fns) fn(payload, metadata)
 }
