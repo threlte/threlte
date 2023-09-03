@@ -1,9 +1,9 @@
 <script lang="ts">
   /*
-		A stripped down version of THREE.MeshLine:
-		https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
-		With peformance inporvements inspired by:
-		https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
+    A stripped down version of THREE.MeshLine:
+    https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
+    With peformance improvements inspired by:
+    https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
 	*/
   import type {
     MeshLineGeometryEvents,
@@ -66,11 +66,11 @@
     }
 
     const bg = new BufferGeometry()
-    // we create these buffer attributes at the correct length but leave them empty for now
+    // create these buffer attributes at the correct length but leave them empty for now
     bg.setAttribute('position', new BufferAttribute(new Float32Array(pointCount * 6), 3))
     bg.setAttribute('previous', new BufferAttribute(new Float32Array(pointCount * 6), 3))
     bg.setAttribute('next', new BufferAttribute(new Float32Array(pointCount * 6), 3))
-    // we create and populate these buffer attributes
+    // create and populate these buffer attributes
     bg.setAttribute('counters', new BufferAttribute(new Float32Array(counters), 1))
     bg.setAttribute('side', new BufferAttribute(new Float32Array(side), 1))
     bg.setAttribute('width', new BufferAttribute(new Float32Array(widthArray), 1))

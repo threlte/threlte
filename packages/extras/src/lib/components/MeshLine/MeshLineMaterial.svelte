@@ -43,10 +43,10 @@
     }
   })
 
-	$ : {
-		material.uniforms.resolution.value = new Vector2($size.height, $size.width)
-		invalidate('Canvas size changed')
-	}
+  $: {
+    material.uniforms.resolution.value = new Vector2($size.height, $size.width)
+    invalidate('Canvas size changed')
+  }
 
   $: {
     material.uniforms.dashRatio.value = dashRatio
