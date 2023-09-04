@@ -47,20 +47,29 @@ const title = Astro.props.title
 
     <!-- Header Right -->
     <div class="flex flex-row gap-5">
-      <Socials />
+      <Socials
+        twitter
+        github
+        discord
+      />
     </div>
   </header>
 
   <!-- Mobile Nav -->
   <MobileMainNav client:load>
-    <!-- <Image
+    <Image
       slot="logo"
       src={LogoWithText}
       alt="threlte logo"
       width={200}
       class="h-[37px] w-auto"
-    /> -->
-    <Socials slot="after" />
+    />
+    <Socials
+      slot="after"
+      twitter
+      github
+      discord
+    />
   </MobileMainNav>
 
   <main class="mx-auto max-w-7xl px-6 pb-12">

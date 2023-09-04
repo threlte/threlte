@@ -1,5 +1,32 @@
 # @threlte/extras
 
+## 5.6.0
+
+### Minor Changes
+
+- 59607f3: Added the component `<Sky>` which renders the Three.js Sky object, creates a cubemap from it and applies it to the scene env.
+- 0ab9c29: Added the option `setEnvironment` to the component `<Sky>`
+
+### Patch Changes
+
+- 7974f0e: Cleanup import in `<OrbitControls>`
+
+## 5.5.1
+
+### Patch Changes
+
+- 6c18d9cc: Properly deprecate `<Center>`
+
+## 5.5.0
+
+### Minor Changes
+
+- 144b55a: Deprecated the component `<Center>` as it's being renamed to `<Align>`. Renamed the prop `autoCenter` to `auto`, renamed events and slot props accordingly.
+
+### Patch Changes
+
+- 8a037ec: Deduped `<Align>` event data
+
 ## 5.4.1
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "@threlte/docs",
   "type": "module",
-  "version": "0.4.2",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "dev": "astro dev --host",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.11.2",
     "@macfja/svelte-persistent-store": "^2.2.1",
+    "@pmndrs/vanilla": "^1.9.6",
     "@stackblitz/sdk": "^1.8.2",
     "@tailwindcss/typography": "^0.5.3",
     "@theatre/core": "^0.6.2",

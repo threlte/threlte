@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.1.1
+
+### Patch Changes
+
+- 204838b: Added proper event types to `<RigidBody>` components, updated from `SvelteComponentTyped` to `SvelteComponent`
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,22 @@
 # @threlte/docs-next
 
+## 0.6.0
+
+### Minor Changes
+
+- 144b55a: Deprecated the component `<Center>` as it's being renamed to `<Align>`. Renamed the prop `autoCenter` to `auto`, renamed events and slot props accordingly.
+
+## 0.5.0
+
+### Minor Changes
+
+- eb08fe3: Added right sidebar content: contribute (go to source, edit this page, …) & community (join our discord, twitter)
+- e6daae5: Enhanced documentation structure and clarity by adding new categories and pages. Included improvements for category ordering in the sidebar. Renamed sections for brevity.
+
+### Patch Changes
+
+- 22b2e12: Added Tailwind to Stackblitz template via CDN for minimal Tailwind support
+
 ## 0.4.2
 
 ### Patch Changes

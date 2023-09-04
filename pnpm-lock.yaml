@@ -102,6 +102,9 @@ importers:
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@4.2.0)
+      '@pmndrs/vanilla':
+        specifier: ^1.9.6
+        version: 1.9.6(three@0.153.0)
       '@stackblitz/sdk':
         specifier: ^1.8.2
         version: 1.8.2
@@ -2645,6 +2648,14 @@ packages:
       picocolors: 1.0.0
       tiny-glob: 0.2.9
       tslib: 2.6.1
+    dev: true
+
+  /@pmndrs/vanilla@1.9.6(three@0.153.0):
+    resolution: {integrity: sha512-hCUK1l5aBVwCHc4OSzQlUUTtWEZknBgzXntzf646RXlz2SZUTCPsLsjmAcMCHVM5DvfM5eFzBvQhqjaTh6tC6A==}
+    peerDependencies:
+      three: '>=0.137'
+    dependencies:
+      three: 0.153.0
     dev: true
 
   /@polka/url@1.0.0-next.21:
