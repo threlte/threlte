@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.8
+
+### Patch Changes
+
+- b08a992d: Add error messages to context-based hooks
+
 ## 6.0.7
 
 ### Patch Changes
