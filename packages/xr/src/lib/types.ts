@@ -1,5 +1,5 @@
-import type { XRControllerModel } from "three/examples/jsm/webxr/XRControllerModelFactory"
-import type { XRHandModel } from "three/examples/jsm/webxr/XRHandModelFactory"
+import type { XRControllerModel } from 'three/examples/jsm/webxr/XRControllerModelFactory'
+import type { XRHandModel } from 'three/examples/jsm/webxr/XRHandModelFactory'
 
 export type XRSessionEventType =
   | 'sessionstart'
