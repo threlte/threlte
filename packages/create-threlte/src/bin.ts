@@ -188,6 +188,8 @@ const create = async () => {
   }
   if (options.threltePackages.includes('@threlte/xr')) {
     threltePackageJson.devDependencies['@threlte/xr'] = 'latest'
+    threltePackageJson.devDependencies['vite-plugin-mkcert'] = '^1.16.0'
+    threltePackageJson.scripts['dev'] = 'vite dev --host'
   }
   if (options.threltePackages.includes('model-pipeline')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
@@ -207,11 +209,17 @@ const create = async () => {
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
     }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+typescript'), cwd, { overwrite: true })
+    }
   } else {
     // handle javascript templates
     await copy(path.join(templatesDir, 'javascript'), cwd)
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
+    }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+javascript'), cwd, { overwrite: true })
     }
   }
 
@@ -302,7 +310,7 @@ const create = async () => {
   }
   if (options.threltePackages.includes('@threlte/xr')) {
     print(bold('✔ @threlte/xr'))
-    print(cyan('  https://threlte.xyz/docs/reference/xr/getting-started'))
+    print(cyan('  https://threlte.xyz/docs/reference/xr/getting-started\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
