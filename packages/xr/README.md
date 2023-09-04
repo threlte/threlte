@@ -1,13 +1,64 @@
-<h1>threlte-xr</h1>
+<div align="right">
+ <a href="https://www.npmjs.com/package/@threlte/xr">
+  <img alt="npm" src="https://img.shields.io/npm/v/@threlte/xr?color=fe4100&labelColor=171d27&logo=npm&logoColor=white"/>
+ </a>
+ <a href="https://github.com/threlte/threlte/blob/main/LICENSE.md">
+  <img alt="license" src="https://img.shields.io/npm/l/@threlte/core?color=fe4100&labelColor=171d27&logo=git&logoColor=white"/>
+ </a>
+ <a href="https://discord.com/channels/985983540804091964">
+  <img alt="discord" src="https://img.shields.io/discord/985983540804091964?label=discord&color=fe4100&labelColor=171d27&logo=discord&logoColor=white"/>
+ </a>
+ <a href="https://threlte.xyz">
+  <img alt="docs" src="https://img.shields.io/website?down_color=red&down_message=offline&label=docs&color=fe4100&labelColor=171d27&up_message=online&url=https%3A%2F%2Fthrelte.xyz&logo=svelte&logoColor=white"/>
+ </a>
+</div>
 
-[![Version](https://img.shields.io/npm/v/threlte-xr?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/threlte-xr)
-[![Downloads](https://img.shields.io/npm/dt/threlte-xr.svg?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/threlte-xr)
+<a href="https://threlte.xyz">
+ <img src="https://threlte.xyz/logo/threlte-banner.jpg"/>
+</a>
 
-Svelte components and hooks for creating VR/AR applications with [threlte (v6)](https://next.threlte.xyz/), inspired by the design of [react-xr](https://github.com/pmndrs/react-xr).
+## Rapidly Build Interactive 3D Apps for the Web
 
-> **Warning**
-> `threlte-xr` is early in development. There will likely be frequent breaking changes until it reaches 0.1.0. It will only work with Threlte v6 onward.
+Threlte is a [Svelte](https://svelte.dev/) library that simplifies creating 3D apps for the web. It provides a **declarative**, **type-safe**, **reactive** and **interactive** API out-of-the-box.
 
-```bash
-npm install threlte-xr
+Threlte's **3D rendering** is powered by [Three.js](https://threejs.org/), and it also provides a **physics engine** through [Rapier](https://rapier.rs/) and an **animation studio** via [Theatre.js](https://www.theatrejs.com/); see [packages](#packages) for details.
+
+Check out our **[documentation](https://threlte.xyz)** and our **[Discord community](https://discord.gg/EqUBCfCaGm)**.
+
+## @threlte/xr
+
+[@threlte/xr](https://threlte.xyz/docs/reference/xr/getting-started) provides a set of components and hooks that make it easy to create XR experiences.
+
+## Quickstart
+
+### Installation
+
+For a quick interactive setup of a fresh Threlte project, run:
+
+```sh
+npm create threlte my-project
 ```
+and select the `@threlte/xr` option.
+
+Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+
+### Support
+
+Have questions? Feel free to ask in our [Discord support forum](https://discord.com/channels/985983540804091964/1031843197963477002).
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+- **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
+- **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
+
+## Sponsors
+
+[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
+
+---
+
+### License
+
+The MIT License (MIT). Please see the [License File](LICENSE.md) for more information.
