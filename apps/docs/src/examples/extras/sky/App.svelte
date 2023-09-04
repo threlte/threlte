@@ -57,7 +57,7 @@
 
   const turbidity = addInput({
     label: 'Turbidity',
-    value: 10,
+    value: presets.sunset.turbidity,
     params: {
       min: 0,
       max: 20
@@ -66,7 +66,7 @@
 
   const rayleigh = addInput({
     label: 'Rayleigh',
-    value: 3,
+    value: presets.sunset.rayleigh,
     params: {
       min: 0,
       max: 4
@@ -75,7 +75,7 @@
 
   const azimuth = addInput({
     label: 'Azimuth',
-    value: 180,
+    value: presets.sunset.azimuth,
     params: {
       min: -180,
       max: 180
@@ -84,7 +84,7 @@
 
   const elevation = addInput({
     label: 'Elevation',
-    value: 1.5,
+    value: presets.sunset.elevation,
     params: {
       min: -5,
       max: 90
@@ -93,7 +93,7 @@
 
   const mieCoefficient = addInput({
     label: 'Mie Coefficient',
-    value: 0.005,
+    value: presets.sunset.mieCoefficient,
     params: {
       min: 0,
       max: 0.1
@@ -102,7 +102,7 @@
 
   const mieDirectionalG = addInput({
     label: 'Mie Directional G',
-    value: 0.7,
+    value: presets.sunset.mieDirectionalG,
     params: {
       min: 0,
       max: 1
@@ -111,7 +111,7 @@
 
   const exposure = addInput({
     label: 'Exposure',
-    value: 0.37,
+    value: presets.sunset.exposure,
     params: {
       min: 0,
       max: 2
