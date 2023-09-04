@@ -1,5 +1,16 @@
 # @threlte/extras
 
+## 5.6.0
+
+### Minor Changes
+
+- 59607f3: Added the component `<Sky>` which renders the Three.js Sky object, creates a cubemap from it and applies it to the scene env.
+- 0ab9c29: Added the option `setEnvironment` to the component `<Sky>`
+
+### Patch Changes
+
+- 7974f0e: Cleanup import in `<OrbitControls>`
+
 ## 5.5.1
 
 ### Patch Changes
