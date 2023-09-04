@@ -1,18 +1,17 @@
 import AutoImport from 'astro-auto-import'
 import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
-import preprocess from 'svelte-preprocess'
-import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
+import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
 
-
 // https://astro.build/config
-import svelte from '@astrojs/svelte'
 import preact from '@astrojs/preact'
+import svelte from '@astrojs/svelte'
 
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
@@ -63,9 +62,9 @@ export default defineConfig({
     },
     // Use https and generate a cert to allow XR debugging.
     server: {
-      https: true,
+      https: process.argv.includes('--https')
     },
-    plugins: import.meta.env.DEV ? [mkcert()] : [],
+    plugins: process.argv.includes('--https') ? [mkcert()] : [],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
