@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.1.2
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
 ## 1.1.1
 
 ### Patch Changes
