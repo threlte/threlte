@@ -16,12 +16,14 @@ export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) =>
       const jointSpace = xrhand.current?.hand.joints[joint]
       // The joint radius is a good indicator that the joint is ready
       if (jointSpace?.jointRadius !== undefined) {
+        
+        console.log('good!')
         jointSpaceStore.set(jointSpace)
         invalidate()
         stop()
       }
     },
-    { autostart: false, invalidate: false }
+    { invalidate: false }
   )
 
   return jointSpaceStore

@@ -1,10 +1,11 @@
 <script lang='ts' context='module'>
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
-  import { type XRHandModel, XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+  import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
   import { fire } from '../internal/events'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
   import { useHandEvent } from '../hooks/useEvent'
+  import { onDestroy } from 'svelte'
 
   const factory = new XRHandModelFactory()
 
@@ -13,41 +14,14 @@
     right: rightStore,
   } as const
 
-  let initialized = false
-
-  const handleConnected = (hand: THREE.XRHandSpace, model: XRHandModel) => (event: XRHandEvent<'connected', null>) => {
-    const inputSource = event.data.hand as globalThis.XRHand
-    const handedness = event.data.handedness as 'left' | 'right'
-    stores[handedness].set({ hand, model, inputSource })
-    fire('connected', event, { input: 'hand' })
-  }
-
-  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
-    const handedness = event.data.handedness as 'left' | 'right'
-    stores[handedness].set(undefined)
-    fire('disconnected', event, { input: 'hand' })
-  }
-
-  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
-    fire(event.type, event)
-  }
-
-  const initialize = (xr: THREE.WebXRManager) => {
-    for (const index of [0, 1]) {
-      const hand = xr.getHand(index)
-      const model = factory.createHandModel(hand, 'mesh')
-      hand.addEventListener('connected', handleConnected(hand, model))
-      hand.addEventListener('disconnected', handleDisconnected)
-      hand.addEventListener('pinchstart', handlePinchEvent)
-      hand.addEventListener('pinchend', handlePinchEvent)
-    }
-
-    initialized = true
-  }
+  const eventMap = new WeakMap()
 </script>
 
 <script lang='ts'>
+  /** Whether the XRHand should be matched with the left hand. */
   export let left = false
+
+  /** Whether the XRHand should be matched with the right hand. */
   export let right = false
 
   type $$Events = {
@@ -61,13 +35,43 @@
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  if (!initialized) initialize(xr)
-
   $: if (left && right) {
     throw new Error('A <Hand> component can only specify one hand.')
   }
   $: if (!left && !right) {
     throw new Error('A <Hand> component must specify a hand.')
+  }
+  $: handedness = left ? 'left' : 'right'
+
+  const handleConnected = (event: XRHandEvent<'connected', null>) => {
+    const inputSource = event.data.hand as globalThis.XRHand
+    const eventHandedness = event.data.handedness as 'left' | 'right'
+    if (eventHandedness !== handedness) return
+    stores[handedness].set({ ...eventMap.get(event.target), inputSource })
+    fire('connected', event, { input: 'hand' })
+  }
+
+  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
+    const eventHandedness = event.data.handedness as 'left' | 'right'
+    if (eventHandedness !== handedness) return
+    stores[handedness].set(undefined)
+    fire('disconnected', event, { input: 'hand' })
+  }
+
+  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
+    fire(event.type, event)
+  }
+
+  for (const index of [0, 1]) {
+    const hand = xr.getHand(index)
+    const model = factory.createHandModel(hand, 'mesh')
+
+    eventMap.set(hand, { hand, model })
+
+    hand.addEventListener('connected', handleConnected)
+    hand.addEventListener('disconnected', handleDisconnected)
+    hand.addEventListener('pinchstart', handlePinchEvent)
+    hand.addEventListener('pinchend', handlePinchEvent)
   }
  
   let children: THREE.Group
@@ -84,7 +88,6 @@
     const frame = xr.getFrame()
     const joint = inputSource!.get('wrist' as unknown as number)
 
-    console.log(joint)
     if (joint === undefined || space === null) return 
 
     const pose = frame.getJointPose?.(joint, space)
@@ -107,7 +110,6 @@
   $: hand = $store?.hand
   $: inputSource = $store?.inputSource
   $: model = $store?.model
-  $: handedness = left ? 'left' : 'right'
 
   const handEvents = [
     'connected',
@@ -121,6 +123,16 @@
       handedness: left ? 'left' : 'right'
     })
   }
+
+  onDestroy(() => {
+    for (const index of [0, 1]) {
+      const hand = xr.getHand(index)
+      hand.removeEventListener('connected', handleConnected)
+      hand.removeEventListener('disconnected', handleDisconnected)
+      hand.removeEventListener('pinchstart', handlePinchEvent)
+      hand.removeEventListener('pinchend', handlePinchEvent)
+    }
+  })
 </script>
 
 {#if hand}

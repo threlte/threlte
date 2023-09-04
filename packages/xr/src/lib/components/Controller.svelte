@@ -12,6 +12,7 @@
   import { left as leftStore, right as rightStore, gaze } from '../hooks/useController'
   import { useControllerEvent } from '../hooks/useEvent'
   import ShortRay from '../components/ShortRay.svelte'
+  import { onDestroy } from 'svelte'
 
   const factory = new XRControllerModelFactory()
 
@@ -20,8 +21,6 @@
     right: rightStore,
     none: gaze,
   } as const
-
-  let initialized = false
 
   const events = [
     'select',
@@ -32,37 +31,14 @@
     'squeezestart'
   ] as const
 
-  const handleConnected = (controller: THREE.XRTargetRaySpace, grip: THREE.XRGripSpace, model: THREE.XRControllerModel) =>
-    (event: XRControllerEvent<'connected'>) => {
-      const data = event.data!
-      stores[data.handedness].set({ controller, grip, model, inputSource: data })
-      fire('connected', event, { input: 'controller' })
-    }
-
-  const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-    stores[event.data!.handedness].set(undefined)
-    fire('disconnected', event, { input: 'controller' })
-  }
-
-  const initialize = (xr: THREE.WebXRManager) => {
-    for (const index of [0, 1]) {
-      const controller = xr.getController(index)
-      const grip = xr.getControllerGrip(index)
-
-      // "createControllerModel" currently only will attach a model if the "connected" event is fired,
-      // so it must be called immediately before a controller connects.
-      const model = factory.createControllerModel(grip)
-      controller.addEventListener('connected', handleConnected(controller, grip, model))
-      controller.addEventListener('disconnected', handleDisconnected)
-      events.forEach((name) => controller.addEventListener(name, (event) => fire(event.type, event)))
-    }
-
-    initialized = true
-  }
+  const eventMap = new WeakMap()
 </script>
 
 <script lang='ts'>
+  /** Whether the controller should be matched with the left hand. */
   export let left = false
+
+  /** Whether the controller should be matched with the right hand. */
   export let right = false
 
   type $$Events = {
@@ -76,29 +52,68 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  const dispatch = createRawEventDispatcher<$$Events>()
-  const { xr } = useThrelte().renderer
-
-  if (!initialized) initialize(xr)
-
   $: if (left && right) {
     throw new Error('A <Controller> component can only specify one hand.')
   }
   $: if (!left && !right) {
     throw new Error('A <Controller> component must specify a hand.')
   }
+  $: handedness = left ? 'left' : 'right'
+
+  const dispatch = createRawEventDispatcher<$$Events>()
+  const { xr } = useThrelte().renderer
+
+  const handleConnected = (event: XRControllerEvent<'connected'>) => {
+    const data = event.data!
+    if (data.handedness !== handedness) return
+  
+    stores[data.handedness].set({ ...eventMap.get(event.target), inputSource: data })
+    fire('connected', event, { input: 'controller' })
+  }
+
+  const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
+    console.log('disconnected')
+    if (event.data!.handedness !== handedness) return
+
+    stores[event.data!.handedness].set(undefined)
+    fire('disconnected', event, { input: 'controller' })
+  }
+
+  const handleEvent = (event: THREE.Event) => fire(event.type, event)
+  for (const index of [0, 1]) {
+    const controller = xr.getController(index)
+    const grip = xr.getControllerGrip(index)
+
+    // "createControllerModel" currently only will attach a model if the "connected" event is fired,
+    // so it must be called immediately before a controller connects.
+    const model = factory.createControllerModel(grip)
+
+    eventMap.set(controller, { controller, model, grip })
+
+    controller.addEventListener('connected', handleConnected)
+    controller.addEventListener('disconnected', handleDisconnected)
+    events.forEach((name) => controller.addEventListener(name, handleEvent))
+  }
  
   $: store = left ? stores.left : stores.right
   $: grip = $store?.grip
   $: controller = $store?.controller
   $: model = $store?.model
-  $: handedness = left ? 'left' : 'right'
-
+  
   for (const type of ['connected', 'disconnected', ...events] as const) {
     useControllerEvent(type, (event) => dispatch(type, event), {
       handedness: left ? 'left' : 'right'
     })
   }
+
+  onDestroy(() => {
+    for (const index of [0, 1]) {
+      const controller = xr.getController(index)
+      controller.removeEventListener('connected', handleConnected)
+      controller.removeEventListener('disconnected', handleDisconnected)
+      events.forEach((name) => controller.removeEventListener(name, handleEvent))
+    }
+  })
 </script>
 
 {#if !$isHandTracking}
