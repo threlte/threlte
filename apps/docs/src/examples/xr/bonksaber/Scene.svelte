@@ -3,10 +3,9 @@
   import { XR } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
-
 </script>
 
-<XR foveation={1}>
+<XR>
   <Sabers />
   <Blocks />
 </XR>

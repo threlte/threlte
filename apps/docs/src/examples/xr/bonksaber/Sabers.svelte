@@ -59,6 +59,7 @@
 
 <Hand left>
   <T.Mesh
+    slot='wrist'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (handSabers.left = ref)}
@@ -70,6 +71,7 @@
 
 <Hand right>
   <T.Mesh
+    slot='wrist'
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
     on:create={({ ref }) => (handSabers.right = ref)}

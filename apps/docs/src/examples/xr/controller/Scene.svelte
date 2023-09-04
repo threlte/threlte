@@ -1,7 +1,6 @@
 <script lang='ts'>
-  import { T, useThrelte } from '@threlte/core'
+  import { T, useFrame, useThrelte } from '@threlte/core'
   import { XR, Hand, Controller } from '@threlte/xr'
-  import { Text } from '@threlte/extras'
 
   const { renderer } = useThrelte()
 

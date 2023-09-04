@@ -59,7 +59,8 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const dispatch = createRawEventDispatcher<$$Events>()
-  const { xr } = useThrelte().renderer
+  const { renderer, frameloop } = useThrelte()
+  const { xr } = renderer
 
   const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
     $isPresenting = true
@@ -138,6 +139,17 @@ This should be placed within a Threlte `<Canvas />`.
     cleanupSession(lastSession)
     updateSession($session)
     lastSession = $session
+  }
+
+  let originalFrameloop = $frameloop
+
+  $frameloop = 'always'
+
+  $: if ($isPresenting) {
+    originalFrameloop = $frameloop
+    $frameloop = 'always'
+  } else {
+    $frameloop = originalFrameloop
   }
 
   $: updateTargetFrameRate(frameRate)

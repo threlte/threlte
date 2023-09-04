@@ -61,10 +61,11 @@ export default defineConfig({
         $hooks: resolve('./src/hooks')
       }
     },
+    // Use https and generate a cert to allow XR debugging.
     server: {
-      https: true
+      https: true,
     },
-    plugins: import.meta.env.DEV ? [ mkcert()] : [],
+    plugins: import.meta.env.DEV ? [mkcert()] : [],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
