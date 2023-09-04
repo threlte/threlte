@@ -28,6 +28,10 @@ export const useRender = (
 
   const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
 
+  if (renderCtx === undefined) {
+    throw new Error('No Threlte context found, are you using this hook inside of <Canvas>?')
+  }
+
   const handler: ThrelteRenderHandler = {
     fn,
     order: options?.order
