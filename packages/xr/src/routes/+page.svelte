@@ -13,7 +13,7 @@
           <T.CylinderGeometry args={[radius, radius, length]} />
           <T.MeshStandardMaterial color='orange' />
         </T.Mesh>
-        <T.Mesh slot='controller'>
+        <T.Mesh slot='target-ray'>
           {@const size = 0.05}
           <T.BoxGeometry args={[size, size, size]} />
           <T.MeshStandardMaterial color='turquoise' />
@@ -35,7 +35,13 @@
         </T.Mesh>
       </Hand>
 
-      <Hand right />
+      <Hand right>
+        <T.Mesh>
+          {@const size = 0.05}
+          <T.BoxGeometry args={[size, size, size]} />
+          <T.MeshStandardMaterial color='skyblue' />
+        </T.Mesh>
+      </Hand>
     </XR>
 
     <TeleportControls>
@@ -51,10 +57,10 @@
       on:create={({ ref }) => ref.lookAt(0, 0, 0)}
     />
 
-    <!-- <T.Mesh position.y={0.5} castShadow receiveShadow>
+    <T.Mesh position.y={0.5} castShadow receiveShadow>
       <T.MeshStandardMaterial color="hotpink" />
       <T.BoxGeometry />
-    </T.Mesh> -->
+    </T.Mesh>
 
     <T.DirectionalLight castShadow />
     <T.AmbientLight />

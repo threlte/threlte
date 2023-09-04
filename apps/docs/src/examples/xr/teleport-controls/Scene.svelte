@@ -1,7 +1,7 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { XR, TeleportControls, Controller, useTeleport } from '@threlte/xr'
+  import { XR, TeleportControls, Controller, Hand, useTeleport } from '@threlte/xr'
   import { colorOptions } from './colors'
 
   const { camera, renderer } = useThrelte()
@@ -36,6 +36,8 @@
 <XR>
   <Controller left />
   <Controller right />
+  <Hand left />
+  <Hand right />
 </XR>
 
 <TeleportControls>

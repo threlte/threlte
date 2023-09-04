@@ -35,14 +35,13 @@
   const handleConnected = (controller: THREE.XRTargetRaySpace, grip: THREE.XRGripSpace, model: THREE.XRControllerModel) =>
     (event: XRControllerEvent<'connected'>) => {
       const data = event.data!
-      fire('connected', event, { input: 'controller' })
       stores[data.handedness].set({ controller, grip, model, inputSource: data })
+      fire('connected', event, { input: 'controller' })
     }
 
   const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-    const data = event.data!
+    stores[event.data!.handedness].set(undefined)
     fire('disconnected', event, { input: 'controller' })
-    stores[data.handedness].set(undefined)
   }
 
   const initialize = (xr: THREE.WebXRManager) => {

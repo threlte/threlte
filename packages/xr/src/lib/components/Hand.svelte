@@ -18,14 +18,14 @@
   const handleConnected = (hand: THREE.XRHandSpace, model: XRHandModel) => (event: XRHandEvent<'connected', null>) => {
     const inputSource = event.data.hand as globalThis.XRHand
     const handedness = event.data.handedness as 'left' | 'right'
-    fire('connected', event, { input: 'hand' })
     stores[handedness].set({ hand, model, inputSource })
+    fire('connected', event, { input: 'hand' })
   }
 
   const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
     const handedness = event.data.handedness as 'left' | 'right'
-    fire('disconnected', event, { input: 'hand' })
     stores[handedness].set(undefined)
+    fire('disconnected', event, { input: 'hand' })
   }
 
   const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
@@ -76,6 +76,7 @@
     const frame = xr.getFrame()
     const joint = inputSource!.get('wrist' as unknown as number)
 
+    console.log(joint)
     if (joint === undefined || space === null) return 
 
     const pose = frame.getJointPose?.(joint, space)
@@ -88,7 +89,7 @@
     children.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
   }, { autostart: false })
 
-  $: if ($$slots.wrist && inputSource) {
+  $: if (($$slots.wrist || $$slots.default) && inputSource) {
     start()
   } else {
     stop()
@@ -119,12 +120,12 @@
     is={hand}
     name='XR hand {handedness}'
   >
-    <slot>
+    {#if $$slots.default === undefined}
       <T is={model} />
-    </slot>
-
+    {/if}
     <T.Group bind:ref={children}>
       <slot name='wrist' />
+      <slot />
     </T.Group>
   </T>
 {/if}
