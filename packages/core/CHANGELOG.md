@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.7
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
 ## 6.0.6
 
 ### Patch Changes

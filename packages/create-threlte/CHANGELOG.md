@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.1.0
+
+### Minor Changes
+
+- 7520191: Added `@threlte/xr` to create-threlte
+
 ## 1.0.1
 
 ### Patch Changes
