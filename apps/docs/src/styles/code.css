@@ -38,7 +38,7 @@ pre code span.line {
 pre code span.line:before {
   content: counter(line) !important;
   display: inline-block;
-  width: calc(1ch + 1rem);
+  width: calc(2ch + 1rem);
   text-align: right;
   color: #ccc;
   user-select: none;
