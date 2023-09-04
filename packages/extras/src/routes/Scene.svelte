@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Suspense, Text } from '../lib'
+  import { Grid, OrbitControls, Sky } from '../lib'
 </script>
 
 <T.PerspectiveCamera
@@ -10,23 +10,15 @@
 >
   <OrbitControls />
 </T.PerspectiveCamera>
-<T.DirectionalLight />
-<T.AmbientLight />
 
-<Suspense>
-  <Text
-    text="Hello World"
-    anchorX="50%"
-    anchorY="50%"
-    color="black"
+<Sky />
+
+<Grid />
+
+<T.Mesh position.y={1}>
+  <T.MeshStandardMaterial
+    transparent
+    color="white"
   />
-  <svelte:fragment slot="fallback">
-    <T.Mesh>
-      <T.MeshStandardMaterial
-        transparent
-        color="hotpink"
-      />
-      <T.BoxGeometry />
-    </T.Mesh>
-  </svelte:fragment>
-</Suspense>
+  <T.SphereGeometry />
+</T.Mesh>
