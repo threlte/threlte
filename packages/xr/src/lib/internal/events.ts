@@ -2,7 +2,7 @@ type Callback<T = any, O = any> = (event: T, metadata?: O) => void
 
 const events: Record<string, Callback[]> = {}
 
-export const on = <T, O = any>(name: string, cb: Callback<T, O>): () => void => {
+export const on = <T, O = any>(name: string, cb: Callback<T, O>): (() => void) => {
   const fns = events[name]
 
   if (fns === undefined) {

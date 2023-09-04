@@ -14,23 +14,25 @@ export const useHitTest = (hitTestCallback: HitTestCallback): void => {
   let started = false
   let hitTestSource: XRHitTestSource | undefined
 
-  onDestroy(session.subscribe(async (value) => {
-    if (value === undefined) {
-      hitTestSource = undefined
-      if (started) {
-        stop()
-        started = false
+  onDestroy(
+    session.subscribe(async (value) => {
+      if (value === undefined) {
+        hitTestSource = undefined
+        if (started) {
+          stop()
+          started = false
+        }
+        return
       }
-      return
-    }
 
-    const space = await value.requestReferenceSpace('viewer')
-    hitTestSource = await value.requestHitTestSource?.({ space })
-    if (!started) {
-      start()
-      started = true
-    }
-  }))
+      const space = await value.requestReferenceSpace('viewer')
+      hitTestSource = await value.requestHitTestSource?.({ space })
+      if (!started) {
+        start()
+        started = true
+      }
+    })
+  )
 
   const { start, stop } = useFrame(
     () => {

@@ -14,12 +14,12 @@ export const teleportPlugin = (navMeshes: THREE.Mesh[]) =>
 
     const addSurface = (mesh: THREE.Mesh) => {
       const registered = navMeshes.some((navMesh) => navMesh.uuid === mesh.uuid)
-    
+
       if (!registered) {
         navMeshes.push(mesh)
       }
     }
-    
+
     const removeSurface = (mesh: THREE.Mesh) => {
       const index = navMeshes.indexOf(mesh)
       if (index > -1) {
