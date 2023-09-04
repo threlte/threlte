@@ -72,6 +72,14 @@
  
   let children: THREE.Group
 
+  /**
+   * Currently children of a hand XRSpace or model will not
+   * move relative to their parent, so this hack of checking wrist position
+   * and syncing any slots is used.
+   * 
+   * @todo(mp) investigate why this is happening and see if there's
+   * a way to just parent to the hand to avoid this.
+   */
   const { start, stop } = useFrame(() => {
     const frame = xr.getFrame()
     const joint = inputSource!.get('wrist' as unknown as number)
