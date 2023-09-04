@@ -36,7 +36,7 @@
         <li class="last:mb-0">
           <a
             class={c(
-              'group relative block border-l-2 py-1 pl-4 hover:text-white',
+              'group relative block border-l-2 py-1 pl-4 pr-4 hover:text-white',
               isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
                 ? 'text-orange border-orange font-bold'
                 : 'border-white/20 hover:border-white'
