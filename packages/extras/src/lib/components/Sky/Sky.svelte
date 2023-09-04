@@ -27,6 +27,8 @@
   /** Azimuthal angle, default: 180 */
   export let azimuth = 180
 
+  /** Render the sky to the scene environment */
+  export let setEnvironment = true
   /** The size of the cube map, default: 128 */
   export let cubeMapSize = 128
   /** The options for the WebGLCubeRenderTarget, default: {} */
@@ -39,16 +41,26 @@
 
   const { renderer, scene } = useThrelte()
 
-  const renderTarget = new WebGLCubeRenderTarget(cubeMapSize, {
-    type: HalfFloatType,
-    generateMipmaps: true,
-    minFilter: LinearMipmapLinearFilter,
-    ...webGLRenderTargetOptions
-  })
+  let renderTarget: WebGLCubeRenderTarget | undefined
+  let cubeCamera: CubeCamera | undefined
 
-  const cubeCamera = new CubeCamera(1, 1.1, renderTarget)
+  const init = () => {
+    renderTarget = new WebGLCubeRenderTarget(cubeMapSize, {
+      type: HalfFloatType,
+      generateMipmaps: true,
+      minFilter: LinearMipmapLinearFilter,
+      ...webGLRenderTargetOptions
+    })
+    cubeCamera = new CubeCamera(1, 1.1, renderTarget)
+  }
 
-  scene.environment = renderTarget.texture
+  const originalEnvironment = scene.environment
+
+  $: if (setEnvironment && renderTarget) {
+    scene.environment = renderTarget.texture
+  } else if (!setEnvironment) {
+    scene.environment = originalEnvironment
+  }
 
   const { start: scheduleUpdate, stop } = useFrame(
     ({ invalidate }) => {
@@ -64,7 +76,11 @@
 
       sunPosition.setFromSphericalCoords(1, phi, theta)
       uniforms.sunPosition.value.copy(sunPosition)
-      cubeCamera.update(renderer, sky as any)
+
+      if (setEnvironment) {
+        if (!renderTarget || !cubeCamera) init()
+        cubeCamera?.update(renderer, sky as any)
+      }
 
       invalidate()
       stop()
@@ -85,7 +101,8 @@
 
   onDestroy(() => {
     sky.material.dispose()
-    renderTarget.dispose()
+    renderTarget?.dispose()
+    scene.environment = originalEnvironment
   })
 </script>
 

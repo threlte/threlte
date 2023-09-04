@@ -55,6 +55,11 @@
     expanded: true
   })
 
+  const setEnvironment = addInput({
+    label: 'Set Environment',
+    value: true
+  })
+
   const turbidity = addInput({
     label: 'Turbidity',
     value: presets.sunset.turbidity,
@@ -129,14 +134,6 @@
   }
 
   addButton({
-    title: 'Sunset',
-    label: 'Preset',
-    onClick() {
-      applyPreset('sunset')
-    }
-  })
-
-  addButton({
     title: 'Noon',
     label: 'Preset',
     onClick() {
@@ -149,6 +146,14 @@
     label: 'Preset',
     onClick() {
       applyPreset('afternoon')
+    }
+  })
+
+  addButton({
+    title: 'Sunset',
+    label: 'Preset',
+    onClick() {
+      applyPreset('sunset')
     }
   })
 
@@ -177,6 +182,7 @@
 
 <Canvas>
   <Sky
+    setEnvironment={$setEnvironment}
     turbidity={$springValues.turbidity}
     rayleigh={$springValues.rayleigh}
     azimuth={$springValues.azimuth}

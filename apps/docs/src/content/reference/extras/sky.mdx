@@ -59,6 +59,13 @@
             required: false
           },
           {
+            name: 'setEnvironment',
+            type: 'boolean',
+            default: 'true',
+            descriptions: 'Render the sky to the scene environment',
+            required: false
+          },
+          {
             name: 'cubeMapSize',
             type: 'number',
             default: '128',
@@ -104,6 +111,14 @@ This component adds a [Three.js `Sky` object](https://github.com/mrdoob/three.js
     }}
   />
 </Canvas>
+```
+
+## Environment
+
+By default, this component will render the sky to the scene environment. This can be disabled by setting the `setEnvironment` prop to `false`.
+
+```svelte
+<Sky setEnvironment={false} />
 ```
 
 ## Performance
