@@ -4,7 +4,6 @@
   import {
     CubeCamera,
     DirectionalLight,
-    FloatType,
     Group,
     HalfFloatType,
     LinearMipmapLinearFilter,
@@ -15,15 +14,24 @@
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky'
 
-  export let scale: number = 1000
+  /** The scale of the cuboid skybox along every axis, default: 1000 */
+  export let scale = 1000
+  /** Relative clarity of the sky, default: 10 */
   export let turbidity = 10
+  /** Amount of rayleigh scattering, default: 3 */
   export let rayleigh = 3
+  /** Mie scattering coefficient, default: 0.005 */
   export let mieCoefficient = 0.005
+  /** Mie scattering directionality, default: 0.7 */
   export let mieDirectionalG = 0.7
+  /** Elevation angle, default: 2 */
   export let elevation = 2
+  /** Azimuthal angle, default: 180 */
   export let azimuth = 180
 
+  /** The size of the cube map, default: 128 */
   export let cubeMapSize = 128
+  /** The options for the WebGLCubeRenderTarget, default: {} */
   export let webGLRenderTargetOptions: WebGLRenderTargetOptions = {}
 
   const sky = new Sky()
@@ -48,6 +56,8 @@
 
   const { start: scheduleUpdate, stop } = useFrame(
     ({ invalidate }) => {
+      sky.scale.setScalar(scale)
+
       uniforms.turbidity.value = turbidity
       uniforms.rayleigh.value = rayleigh
       uniforms.mieCoefficient.value = mieCoefficient
@@ -77,7 +87,14 @@
     }
   )
 
-  $: turbidity, rayleigh, mieCoefficient, mieDirectionalG, elevation, azimuth, scheduleUpdate()
+  $: scale,
+    turbidity,
+    rayleigh,
+    mieCoefficient,
+    mieDirectionalG,
+    elevation,
+    azimuth,
+    scheduleUpdate()
 
   const sunGroup = new Group()
 
@@ -87,10 +104,7 @@
   })
 </script>
 
-<T
-  is={sky}
-  {scale}
-/>
+<T is={sky} />
 
 <T is={sunGroup}>
   <slot />
