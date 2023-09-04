@@ -3,8 +3,6 @@
   import { onDestroy } from 'svelte'
   import {
     CubeCamera,
-    DirectionalLight,
-    Group,
     HalfFloatType,
     LinearMipmapLinearFilter,
     MathUtils,
@@ -35,7 +33,7 @@
   export let webGLRenderTargetOptions: WebGLRenderTargetOptions = {}
 
   const sky = new Sky()
-  const sun = new Vector3()
+  const sunPosition = new Vector3()
 
   const uniforms = sky.material.uniforms
 
@@ -52,8 +50,6 @@
 
   scene.environment = renderTarget.texture
 
-  const isDirectionalLight = (light: any): light is DirectionalLight => light.isDirectionalLight
-
   const { start: scheduleUpdate, stop } = useFrame(
     ({ invalidate }) => {
       sky.scale.setScalar(scale)
@@ -66,18 +62,9 @@
       const phi = MathUtils.degToRad(90 - elevation)
       const theta = MathUtils.degToRad(azimuth)
 
-      sun.setFromSphericalCoords(1, phi, theta)
-      uniforms.sunPosition.value.copy(sun)
+      sunPosition.setFromSphericalCoords(1, phi, theta)
+      uniforms.sunPosition.value.copy(sunPosition)
       cubeCamera.update(renderer, sky as any)
-
-      sunGroup.position.copy(sun)
-      if (sunGroup.children.length) {
-        const light = sunGroup.children[0]
-        if (isDirectionalLight(light)) {
-          light.position.copy(sun)
-          light.target.position.setFromMatrixPosition(sky.matrixWorld)
-        }
-      }
 
       invalidate()
       stop()
@@ -96,16 +83,15 @@
     azimuth,
     scheduleUpdate()
 
-  const sunGroup = new Group()
-
   onDestroy(() => {
     sky.material.dispose()
     renderTarget.dispose()
   })
 </script>
 
-<T is={sky} />
-
-<T is={sunGroup}>
-  <slot />
+<T is={sky}>
+  <slot
+    {sunPosition}
+    {renderTarget}
+  />
 </T>

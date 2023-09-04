@@ -33,7 +33,6 @@
 
 <T.Mesh
   castShadow
-  receiveShadow
   position.x={3}
   position.y={2.5}
 >
@@ -47,7 +46,6 @@
 <T.Mesh
   position.x={-3}
   castShadow
-  receiveShadow
   position.y={2.5}
 >
   <T is={sphereGeo} />

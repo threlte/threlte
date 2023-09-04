@@ -118,11 +118,21 @@
     }
   })
 
+  const applyPreset = (preset: keyof typeof presets) => {
+    turbidity.set(presets[preset].turbidity)
+    rayleigh.set(presets[preset].rayleigh)
+    azimuth.set(presets[preset].azimuth)
+    elevation.set(presets[preset].elevation)
+    mieCoefficient.set(presets[preset].mieCoefficient)
+    mieDirectionalG.set(presets[preset].mieDirectionalG)
+    exposure.set(presets[preset].exposure)
+  }
+
   addButton({
     title: 'Sunset',
     label: 'Preset',
     onClick() {
-      springValues.set(presets['sunset'])
+      applyPreset('sunset')
     }
   })
 
@@ -130,7 +140,7 @@
     title: 'Noon',
     label: 'Preset',
     onClick() {
-      springValues.set(presets['noon'])
+      applyPreset('noon')
     }
   })
 
@@ -138,7 +148,7 @@
     title: 'Afternoon',
     label: 'Preset',
     onClick() {
-      springValues.set(presets['afternoon'])
+      applyPreset('afternoon')
     }
   })
 
@@ -146,7 +156,7 @@
     title: 'Night',
     label: 'Preset',
     onClick() {
-      springValues.set(presets['night'])
+      applyPreset('night')
     }
   })
 
