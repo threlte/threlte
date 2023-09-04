@@ -4,7 +4,8 @@
   "version": "0.6.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
+    "dev:https": "astro dev --host --https",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -44,9 +45,10 @@
     "@threlte/extras": "workspace:*",
     "@threlte/rapier": "workspace:*",
     "@threlte/theatre": "workspace:*",
+    "@threlte/xr": "workspace:*",
     "@tweakpane/core": "^1.1.0",
     "@types/animejs": "^3.1.7",
-    "@types/three": "^0.152.1",
+    "@types/three": "^0.155.1",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.3.1",
     "node-html-parser": "^6.1.4",
@@ -59,8 +61,9 @@
     "shiki": "^0.14.3",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
-    "three": "0.153.0",
-    "tweakpane": "^3.1.0"
+    "three": "0.155.0",
+    "tweakpane": "^3.1.0",
+    "vite-plugin-mkcert": "^1.16.0"
   },
   "overrides": {
     "react": "npm:@preact/compat@latest",

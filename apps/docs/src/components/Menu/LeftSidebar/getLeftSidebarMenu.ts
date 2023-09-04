@@ -8,6 +8,7 @@ const referenceSidebarMenuCategoryOrder: ReferenceCategoryKey[] = [
   '@threlte/gltf',
   '@threlte/rapier',
   '@threlte/theatre',
+  '@threlte/xr',
   'Documentation'
 ]
 

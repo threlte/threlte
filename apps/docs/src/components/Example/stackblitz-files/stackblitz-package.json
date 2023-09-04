@@ -18,6 +18,7 @@
 		"@threlte/extras": "latest",
 		"@threlte/rapier": "latest",
 		"@threlte/theatre": "latest",
+		"@threlte/xr": "latest",
 		"@tsconfig/svelte": "*",
 		"@tweakpane/core": "^1.1.0",
 		"@types/three": "*",

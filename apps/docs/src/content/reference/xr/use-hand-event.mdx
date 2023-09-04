@@ -1,0 +1,36 @@
+---
+order: 17
+category: '@threlte/xr'
+name: 'useHandEvent'
+type: 'hook'
+---
+
+Adds event listeners for one or more hands.
+
+Any event listener that can be added to a [`<Hands>`](/docs/reference/xr/hands) component can be added here.
+
+```svelte
+<script>
+  import { useHandEvent } from '@threlte/xr'
+
+  useHandEvent('pinchstart', (event: XRHandEvent) => {
+
+  })
+</script>
+```
+
+An optional third parameter can be provided for filtering by handedness.
+
+By default, no filtering occurs.
+
+```svelte
+<script>
+  import { useHandEvent } from '@threlte/xr'
+
+  useHandEvent('pinchend', (event: XRControllerEvent) => {
+
+  }, {
+    handedness: 'left' | 'right',
+  })
+</script>
+```

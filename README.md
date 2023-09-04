@@ -69,6 +69,8 @@ Threlte is comprised of five distinct packages to allow you to import only what 
 
 - [@threlte/theatre](https://threlte.xyz/docs/reference/theatre/getting-started) lets you animate in your Threlte app through the [Theatre.js studio](https://www.theatrejs.com/)
 
+- [`@threlte/xr`](https://github.com/threlte/threlte/tree/main/packages/xr)** - components and hooks for VR and AR environments
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.

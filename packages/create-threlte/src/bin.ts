@@ -116,6 +116,11 @@ const create = async () => {
               hint: 'Components and hooks to use the animation library Theatre.js in Threlte'
             },
             {
+              value: '@threlte/xr',
+              label: '@threlte/xr',
+              hint: 'Components and hooks to easily create WebXR apps with Threlte'
+            },
+            {
               value: 'model-pipeline',
               label: 'Model Pipeline',
               hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
@@ -180,6 +185,9 @@ const create = async () => {
     threltePackageJson.devDependencies['@threlte/theatre'] = 'latest'
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
+  }
+  if (options.threltePackages.includes('@threlte/xr')) {
+    threltePackageJson.devDependencies['@threlte/xr'] = 'latest'
   }
   if (options.threltePackages.includes('model-pipeline')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
@@ -291,6 +299,10 @@ const create = async () => {
     print(bold('✔ @threlte/theatre'))
     print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
+  }
+  if (options.threltePackages.includes('@threlte/xr')) {
+    print(bold('✔ @threlte/xr'))
+    print(cyan('  https://threlte.xyz/docs/reference/xr/getting-started'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))
