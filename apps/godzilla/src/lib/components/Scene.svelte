@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { T, useFrame } from '@threlte/core';
-	import { Grid, OrbitControls, Sky } from '@threlte/extras';
-	import { Controller, Hand, TeleportControls, XR, useGamepad } from '@threlte/xr';
-	import Driveway from './models/Driveway.svelte';
-	import Breakable from './Breakable.svelte';
-	import { BoxGeometry } from 'three';
-	import { RigidBody } from '@threlte/rapier';
-	import ConcreteGlove from './ConcreteGlove.svelte';
-	import { onMount } from 'svelte';
+	import { T } from '@threlte/core'
+	import { AudioListener, Grid, OrbitControls, PositionalAudio, Sky } from '@threlte/extras'
+	import { Controller, Hand, TeleportControls, XR } from '@threlte/xr'
+	import { onMount } from 'svelte'
+	import Bullet from './Bullet.svelte'
+	import Floor from './Floor.svelte'
+	import Head from './Head.svelte'
+	import Quarks from './Quarks/Quarks.svelte'
+	import QuarksRenderer from './Quarks/QuarksRenderer.svelte'
 
-	let xr = false;
+	let xr = false
 
 	const presets = {
 		sunset: {
@@ -48,30 +48,70 @@
 			mieDirectionalG: 0,
 			exposure: 0.26
 		}
-	};
+	}
 
-	let minBreakForce = 9999;
+	let minBreakForce = 9999
 	onMount(() => {
 		const timeout = setTimeout(() => {
-			minBreakForce = 100;
-		}, 2e3);
-		return () => clearTimeout(timeout);
-	});
+			minBreakForce = 100
+		}, 2e3)
+		return () => clearTimeout(timeout)
+	})
+
+	let show
+
+	let playExplosion = false
+	let timeout: ReturnType<typeof setTimeout>
+
+	let bullets: string[] = []
+	const addBullet = () => {
+		const randomId = Math.random().toString(36).slice(2)
+		bullets.push(randomId)
+		bullets = bullets
+	}
+	const removeBullet = (id: string) => {
+		bullets.splice(bullets.indexOf(id), 1)
+		bullets = bullets
+	}
 </script>
 
-<XR on:sessionstart={() => (xr = true)} on:sessionend={() => (xr = false)}>
-	<Controller left />
-	<Controller right>
+<QuarksRenderer />
+
+<XR on:sessionstart={() => (xr = true)} on:sessionend={() => (xr = false)} foveation={0}>
+	<Head>
+		<AudioListener />
+	</Head>
+
+	<Controller left>
+		<Quarks url="/scene.json" scale={0.02} />
+		<PositionalAudio src="/neon.wav" autoplay loop rolloffFactor={2} volume={0.3} />
+	</Controller>
+
+	<Controller
+		right
+		on:select={async () => {
+			addBullet()
+		}}
+	>
 		<svelte:fragment slot="grip">
-			<ConcreteGlove />
+			{#each bullets as bullet}
+				<Bullet
+					on:eol={() => {
+						removeBullet(bullet)
+					}}
+				/>
+			{/each}
+			<!-- <ConcreteGlove /> -->
 		</svelte:fragment>
 	</Controller>
 	<Hand left />
 	<Hand right />
+
+	<T.Group position.x={5} position.y={1} />
 </XR>
 
-<TeleportControls handedness="right">
-	<Driveway />
+<TeleportControls>
+	<Floor />
 </TeleportControls>
 
 {#if !xr}
@@ -80,21 +120,14 @@
 	</T.PerspectiveCamera>
 {/if}
 
-<Sky {...presets.sunset} />
-
-<T.Group position.y={1.1} position.z={-2}>
-	<Breakable {minBreakForce} maxDepth={3}>
-		<T.Mesh>
-			<T.BoxGeometry args={[1, 2, 1]} />
-			<T.MeshStandardMaterial />
-		</T.Mesh>
-	</Breakable>
-</T.Group>
-
 <Grid
+	position.y={0.01}
 	cellColor="#ffffff"
 	sectionColor="#ffffff"
-	sectionThickness={0}
-	fadeDistance={25}
-	cellSize={2}
+	sectionThickness={1}
+	cellSize={0.25}
+	sectionSize={1}
+	gridSize={10}
 />
+
+<Sky {...presets.sunset} />

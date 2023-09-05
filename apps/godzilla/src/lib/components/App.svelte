@@ -6,10 +6,10 @@
 </script>
 
 <Canvas>
-	<!-- <World>
+	<World>
 		<Debug />
 		<Scene />
-	</World> -->
+	</World>
 </Canvas>
 
-<!-- <VRButton /> -->
+<VRButton />
