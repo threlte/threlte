@@ -1,5 +1,6 @@
 :root {
   --left-sidebar-width: 250px;
+  --footer-visible-height: 0px;
   --right-sidebar-width: 250px;
   --docs-navbar-height: 70px;
 

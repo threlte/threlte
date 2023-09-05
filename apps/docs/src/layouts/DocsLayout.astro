@@ -32,55 +32,52 @@ const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/
 
 const activeUrlPathName = Astro.url.pathname
 
-const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white'
-const activeLinkStyles = '!text-orange bg-blue-900/50'
+const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white group'
+const activeLinkStyles = '!text-orange'
 ---
 
 <AppLayout title={title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-50 mx-auto hidden h-[70px] w-full flex-row items-center justify-between border-b bg-[#0A0F19] px-6 md:flex"
+    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
-    <div class="justify flex items-center justify-start gap-6 lg:gap-12">
-      <a
-        href="/"
-        class="flex flex-row items-center gap-4"
-      >
+    <div class="justify flex items-center justify-start gap-6 xl:gap-12">
+      <a href="/">
         <Image
           src={Logo}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-auto md:hidden lg:block"
+          class="h-[37px] w-auto md:hidden lg:block object-contain"
           loading="eager"
         />
         <Image
           src={LogoOnly}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-auto hidden md:block lg:hidden"
+          class="h-[37px] w-[37px] hidden md:block lg:hidden object-contain"
           loading="lazy"
         />
       </a>
 
-      <div class="flex h-[30px] flex-row items-center justify-start gap-6">
+      <div class="flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6">
         <a
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
         >
-          <Book />Learn
+          <Book class="h-[16px] hidden lg:block" />Learn
         </a>
 
         <a
           href="/docs/examples/intro"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
         >
-          <Circles />Examples
+          <Circles class="h-[16px] hidden lg:block" />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
 
-        <div class="flex items-center gap-6">
+        <div class="relative flex items-center gap-6">
           <a
             href="/docs/reference/core/getting-started"
             class={c(
@@ -88,7 +85,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
           >
-            <Package />core</a
+            <Package class="h-[16px] hidden md:block" />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
@@ -97,7 +94,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
           >
-            <Package />extras</a
+            <Package class="h-[16px] hidden md:block" />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
@@ -106,7 +103,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
           >
-            <Package />gltf</a
+            <Package class="h-[16px] hidden md:block" />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
@@ -115,7 +112,7 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
           >
-            <Package />rapier</a
+            <Package class="h-[16px] hidden md:block" />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
@@ -124,13 +121,34 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
           >
-            <Package />theatre</a
+            <Package class="h-[16px] hidden md:block" />theatre</a
           >
+          <a
+            href="/docs/reference/xr/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
+            )}
+          >
+            <Package class="h-[16px] hidden md:block" />xr&nbsp;
+            <sup
+              class="text-3xs rounded-sm border border-purple-500 bg-purple-900/30 p-0.5 uppercase leading-none text-purple-500 group-hover:border-purple-400 group-hover:bg-purple-900/40 group-hover:text-purple-400"
+            >
+              ALPHA
+            </sup>
+          </a>
         </div>
       </div>
     </div>
-    <div class="flex flex-row gap-5">
-      <Socials />
+
+    <div class="flex flex-1 flex-row items-center justify-end gap-6">
+      <div class="hidden max-w-[280px] flex-1 xl:flex">
+        <Search client:media="(min-width: 1280px)" />
+      </div>
+      <Socials
+        github
+        small
+      />
     </div>
   </header>
 
@@ -140,32 +158,32 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     activeSidebarTab={activeSidebarTab}
     activeUrlPathName={activeUrlPathName}
   >
-    <!-- <Image
+    <Image
       slot="logo"
       src={Logo}
       alt="threlte logo"
       width={200}
       class="h-[37px] w-auto"
-    /> -->
+    />
 
     <Socials slot="after-navigation" />
   </MobileDocsNav>
 
   <main
-    class="grid md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
+    class="grid min-h-[66vh] md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] w-full place-self-start justify-self-stretch overflow-hidden md:sticky md:top-[70px] md:block md:w-auto md:pt-6 lg:row-span-1"
+      class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block lg:row-span-1"
       transition:name="left_sidebar"
     >
-      <div class="mb-4 w-full">
-        <Search client:media="(min-width: 768px)" />
+      <div class="mx-6 mb-6 mt-6 flex flex-1 xl:hidden">
+        <Search client:media="(min-width: 768px) and (max-width: 1280px)" />
       </div>
       <LeftSidebar />
     </aside>
 
     <div
-      class="w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
+      class="col-start-2 w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
       <article
         class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
@@ -175,12 +193,11 @@ const activeLinkStyles = '!text-orange bg-blue-900/50'
     </div>
 
     <aside
-      class="fixed bottom-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] w-full place-self-start justify-self-stretch overflow-hidden lg:sticky lg:top-[var(--docs-navbar-height)] lg:block lg:w-auto"
+      class="fixed top-0 right-0 z-10 row-span-2 hidden h-[calc(100vh-70px-var(--footer-visible-height))] place-self-start justify-self-stretch overflow-hidden lg:top-[var(--docs-navbar-height)] lg:block lg:w-[var(--right-sidebar-width)]"
       transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry} />
     </aside>
   </main>
-
   <Footer class="w-full px-6 mx-auto py-12 border-t border-white/20" />
 </AppLayout>

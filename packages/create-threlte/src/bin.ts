@@ -116,6 +116,11 @@ const create = async () => {
               hint: 'Components and hooks to use the animation library Theatre.js in Threlte'
             },
             {
+              value: '@threlte/xr',
+              label: '@threlte/xr',
+              hint: 'Components and hooks to easily create WebXR apps with Threlte'
+            },
+            {
               value: 'model-pipeline',
               label: 'Model Pipeline',
               hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
@@ -181,6 +186,11 @@ const create = async () => {
     threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
     threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
   }
+  if (options.threltePackages.includes('@threlte/xr')) {
+    threltePackageJson.devDependencies['@threlte/xr'] = 'latest'
+    threltePackageJson.devDependencies['vite-plugin-mkcert'] = '^1.16.0'
+    threltePackageJson.scripts['dev'] = 'vite dev --host'
+  }
   if (options.threltePackages.includes('model-pipeline')) {
     threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
     threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
@@ -199,11 +209,17 @@ const create = async () => {
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
     }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+typescript'), cwd, { overwrite: true })
+    }
   } else {
     // handle javascript templates
     await copy(path.join(templatesDir, 'javascript'), cwd)
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
+    }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+javascript'), cwd, { overwrite: true })
     }
   }
 
@@ -291,6 +307,10 @@ const create = async () => {
     print(bold('✔ @threlte/theatre'))
     print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
+  }
+  if (options.threltePackages.includes('@threlte/xr')) {
+    print(bold('✔ @threlte/xr'))
+    print(cyan('  https://threlte.xyz/docs/reference/xr/getting-started\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))

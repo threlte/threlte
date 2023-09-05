@@ -20,6 +20,6 @@
 
 <style>
   main {
-    height: 100vh;
+    height: 100dvh;
   }
 </style>

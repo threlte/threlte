@@ -1,7 +1,8 @@
 import { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Euler, Vector3 } from 'three'
 import type { RigidBodyTypeString } from '../../lib/parseRigidBodyType'
+import type { RigidBodyEventMap } from '../../types/types'
 
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
@@ -96,4 +97,16 @@ export type RigidBodyProps = {
   userData?: Record<string, any>
 }
 
-export default class RigidBody extends SvelteComponentTyped<RigidBodyProps> {}
+type RigidBodyEvents = RigidBodyEventMap
+
+type RigidBodySlots = {
+  default: {
+    rigidBody: RapierRigidBody
+  }
+}
+
+export default class RigidBody extends SvelteComponent<
+  RigidBodyProps,
+  RigidBodyEvents,
+  RigidBodySlots
+> {}

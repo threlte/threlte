@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 1.1.2
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
+## 1.1.1
+
+### Patch Changes
+
+- 204838b: Added proper event types to `<RigidBody>` components, updated from `SvelteComponentTyped` to `SvelteComponent`
+
 ## 1.1.0
 
 ### Minor Changes

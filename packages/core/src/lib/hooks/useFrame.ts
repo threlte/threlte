@@ -56,9 +56,13 @@ export const useFrame = (
     }
   }
 
-  const invalidate = options?.invalidate ?? true
-
   const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
+
+  if (renderCtx === undefined) {
+    throw new Error('No Threlte context found, are you using this hook inside of <Canvas>?')
+  }
+
+  const invalidate = options?.invalidate ?? true
 
   const handler: ThrelteFrameHandler = {
     fn,

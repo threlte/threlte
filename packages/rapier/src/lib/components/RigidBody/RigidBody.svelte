@@ -35,10 +35,8 @@
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = {
-    [key in keyof RigidBodyEventMap]: CustomEvent<RigidBodyEventMap[key]>
-  }
-  const dispatcher = createRawEventDispatcher<RigidBodyEventMap>()
+  type $$Events = RigidBodyEventMap
+  const dispatcher = createRawEventDispatcher<$$Events>()
 
   const object = new Object3D()
 
@@ -143,5 +141,5 @@
 </script>
 
 <SceneGraphObject {object}>
-  <slot />
+  <slot {rigidBody} />
 </SceneGraphObject>
