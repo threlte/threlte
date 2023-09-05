@@ -1,16 +1,54 @@
 <script lang="ts">
-	import { T, useLoader } from '@threlte/core';
-	import { BatchedParticleRenderer, QuarksLoader } from 'three.quarks';
+	import { T, forwardEventHandlers, useLoader } from '@threlte/core'
+	import { useQuarks } from './useQuarks'
+	import { ParticleSystem, QuarksLoader } from 'three.quarks'
+	import { onDestroy } from 'svelte'
 
-	const batchSystem = new BatchedParticleRenderer();
+	export let url: string
+	export let autoplay = true
 
-	const loader = useLoader(QuarksLoader);
+	const { addObject, removeObject } = useQuarks()
 
-	const system = loader.load('/scene.json');
+	const loader = useLoader(QuarksLoader)
+	const object = loader.load(url)
+
+	let systems: ParticleSystem[] = []
+
+	onDestroy(() => {
+		if (!$object) return
+		removeObject($object)
+	})
+
+	const component = forwardEventHandlers()
+
+	export const play = () => {
+		if (!systems.length) return
+		systems.forEach((system) => system.play())
+	}
+	export const restart = () => {
+		if (!systems.length) return
+		systems.forEach((system) => system.restart())
+	}
+	export const pause = () => {
+		if (!systems.length) return
+		systems.forEach((system) => system.pause())
+	}
+
+	$: if ($object) {
+		systems = addObject($object)
+		systems.forEach((system) => {
+			system.restart()
+		})
+		if (!autoplay) {
+			pause()
+		}
+	}
 </script>
 
-<T is={batchSystem} />
-
-{#await system then obj}
-	<T is={obj} />
-{/await}
+<T.Group {...$$restProps} bind:this={$component}>
+	{#if $object}
+		<T is={$object} let:ref>
+			<slot {ref} />
+		</T>
+	{/if}
+</T.Group>
