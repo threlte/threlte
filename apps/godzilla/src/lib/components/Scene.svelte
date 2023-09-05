@@ -1,47 +1,100 @@
 <script lang="ts">
-	import { T } from '@threlte/core';
-	import { ContactShadows, Float, Grid } from '@threlte/extras';
-	import { XR, Controller, Hand } from '@threlte/xr';
+	import { T, useFrame } from '@threlte/core';
+	import { Grid, OrbitControls, Sky } from '@threlte/extras';
+	import { Controller, Hand, TeleportControls, XR, useGamepad } from '@threlte/xr';
+	import Driveway from './models/Driveway.svelte';
+	import Breakable from './Breakable.svelte';
+	import { BoxGeometry } from 'three';
+	import { RigidBody } from '@threlte/rapier';
+	import ConcreteGlove from './ConcreteGlove.svelte';
+	import { onMount } from 'svelte';
+
+	let xr = false;
+
+	const presets = {
+		sunset: {
+			turbidity: 10,
+			rayleigh: 3,
+			azimuth: 180,
+			elevation: 0.5,
+			mieCoefficient: 0.005,
+			mieDirectionalG: 0.7,
+			exposure: 0.37
+		},
+		noon: {
+			turbidity: 0.65,
+			rayleigh: 0.17,
+			azimuth: 180,
+			elevation: 85,
+			mieCoefficient: 0.013,
+			mieDirectionalG: 0.7,
+			exposure: 1
+		},
+		afternoon: {
+			turbidity: 4.78,
+			rayleigh: 0.3,
+			azimuth: 180,
+			elevation: 30,
+			mieCoefficient: 0.002,
+			mieDirectionalG: 0.86,
+			exposure: 0.65
+		},
+		night: {
+			turbidity: 20,
+			rayleigh: 0.57,
+			azimuth: 180,
+			elevation: -5,
+			mieCoefficient: 0.038,
+			mieDirectionalG: 0,
+			exposure: 0.26
+		}
+	};
+
+	let minBreakForce = 9999;
+	onMount(() => {
+		const timeout = setTimeout(() => {
+			minBreakForce = 100;
+		}, 2e3);
+		return () => clearTimeout(timeout);
+	});
 </script>
 
-<XR>
+<XR on:sessionstart={() => (xr = true)} on:sessionend={() => (xr = false)}>
 	<Controller left />
-	<Controller right />
+	<Controller right>
+		<svelte:fragment slot="grip">
+			<ConcreteGlove />
+		</svelte:fragment>
+	</Controller>
 	<Hand left />
 	<Hand right />
 </XR>
 
-<T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
-<T.AmbientLight intensity={0.2} />
+<TeleportControls handedness="right">
+	<Driveway />
+</TeleportControls>
+
+{#if !xr}
+	<T.PerspectiveCamera makeDefault position={[10, 10, 10]}>
+		<OrbitControls />
+	</T.PerspectiveCamera>
+{/if}
+
+<Sky {...presets.sunset} />
+
+<T.Group position.y={1.1} position.z={-2}>
+	<Breakable {minBreakForce} maxDepth={3}>
+		<T.Mesh>
+			<T.BoxGeometry args={[1, 2, 1]} />
+			<T.MeshStandardMaterial />
+		</T.Mesh>
+	</Breakable>
+</T.Group>
 
 <Grid
-	position.y={-0.001}
 	cellColor="#ffffff"
 	sectionColor="#ffffff"
 	sectionThickness={0}
 	fadeDistance={25}
 	cellSize={2}
 />
-
-<ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} />
-
-<Float floatIntensity={1} floatingRange={[0, 1]}>
-	<T.Mesh position.y={1.2} position.z={-0.75}>
-		<T.BoxGeometry />
-		<T.MeshStandardMaterial color="#0059BA" />
-	</T.Mesh>
-</Float>
-
-<Float floatIntensity={1} floatingRange={[0, 1]}>
-	<T.Mesh position={[1.2, 1.5, 0.75]} rotation.x={5} rotation.y={71}>
-		<T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
-		<T.MeshStandardMaterial color="#F85122" />
-	</T.Mesh>
-</Float>
-
-<Float floatIntensity={1} floatingRange={[0, 1]}>
-	<T.Mesh position={[-1.4, 1.5, 0.75]} rotation={[-5, 128, 10]}>
-		<T.IcosahedronGeometry />
-		<T.MeshStandardMaterial color="#F8EBCE" />
-	</T.Mesh>
-</Float>
