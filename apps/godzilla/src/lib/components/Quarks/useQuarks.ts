@@ -26,16 +26,23 @@ export const useQuarks = (createContext = false) => {
 			removeSystem: (system: ParticleSystem) => {
 				context.systems.delete(system)
 				context.renderer.deleteSystem(system)
+				system.dispose()
 			},
 			addObject: (object: Object3D) => {
 				const systems: ParticleSystem[] = []
 				object.traverse((child) => {
 					if (isParticleEmitter(child)) {
+						if (systems.includes(child.system)) {
+							child.system = child.system.clone()
+						}
 						context.addSystem(child.system)
 						systems.push(child.system)
 					}
 				})
 				if (isParticleEmitter(object)) {
+					if (systems.includes(object.system)) {
+						object.system = object.system.clone()
+					}
 					context.addSystem(object.system)
 					systems.push(object.system)
 				}

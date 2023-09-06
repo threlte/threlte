@@ -36,12 +36,7 @@
 
 	$: if ($object) {
 		systems = addObject($object)
-		systems.forEach((system) => {
-			system.restart()
-		})
-		if (!autoplay) {
-			pause()
-		}
+		if (!autoplay) pause()
 	}
 </script>
 

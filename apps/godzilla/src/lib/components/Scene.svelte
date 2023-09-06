@@ -1,13 +1,26 @@
 <script lang="ts">
 	import { T } from '@threlte/core'
-	import { AudioListener, Grid, OrbitControls, PositionalAudio, Sky } from '@threlte/extras'
-	import { Controller, Hand, TeleportControls, XR } from '@threlte/xr'
+	import { AudioListener, OrbitControls, Sky, interactivity } from '@threlte/extras'
+	import { TeleportControls, XR } from '@threlte/xr'
 	import { onMount } from 'svelte'
-	import Bullet from './Bullet.svelte'
-	import Floor from './Floor.svelte'
+	import Bow from './Archery/Bow.svelte'
 	import Head from './Head.svelte'
-	import Quarks from './Quarks/Quarks.svelte'
 	import QuarksRenderer from './Quarks/QuarksRenderer.svelte'
+	import TheatrePlacer from './Theatre/TheatrePlacer.svelte'
+	import ArcheryTarget from './models/ArcheryTarget.svelte'
+	import BellTower from './models/Bell_Tower.svelte'
+	import Blacksmith from './models/Blacksmith.svelte'
+	import Ground from './models/Ground.svelte'
+	import House_1 from './models/House_1.svelte'
+	import House_2 from './models/House_2.svelte'
+	import House_3 from './models/House_3.svelte'
+	import House_4 from './models/House_4.svelte'
+	import Inn from './models/Inn.svelte'
+	import Mill from './models/Mill.svelte'
+	import Sawmill from './models/Sawmill.svelte'
+	import Stable from './models/Stable.svelte'
+
+	interactivity()
 
 	let xr = false
 
@@ -49,69 +62,28 @@
 			exposure: 0.26
 		}
 	}
-
-	let minBreakForce = 9999
-	onMount(() => {
-		const timeout = setTimeout(() => {
-			minBreakForce = 100
-		}, 2e3)
-		return () => clearTimeout(timeout)
-	})
-
-	let show
-
-	let playExplosion = false
-	let timeout: ReturnType<typeof setTimeout>
-
-	let bullets: string[] = []
-	const addBullet = () => {
-		const randomId = Math.random().toString(36).slice(2)
-		bullets.push(randomId)
-		bullets = bullets
-	}
-	const removeBullet = (id: string) => {
-		bullets.splice(bullets.indexOf(id), 1)
-		bullets = bullets
-	}
 </script>
 
-<QuarksRenderer />
+<!-- <QuarksRenderer /> -->
 
 <XR on:sessionstart={() => (xr = true)} on:sessionend={() => (xr = false)} foveation={0}>
 	<Head>
 		<AudioListener />
 	</Head>
 
-	<Controller left>
-		<Quarks url="/scene.json" scale={0.02} />
-		<PositionalAudio src="/neon.wav" autoplay loop rolloffFactor={2} volume={0.3} />
-	</Controller>
-
-	<Controller
-		right
-		on:select={async () => {
-			addBullet()
-		}}
-	>
-		<svelte:fragment slot="grip">
-			{#each bullets as bullet}
-				<Bullet
-					on:eol={() => {
-						removeBullet(bullet)
-					}}
-				/>
-			{/each}
-			<!-- <ConcreteGlove /> -->
-		</svelte:fragment>
-	</Controller>
-	<Hand left />
-	<Hand right />
-
-	<T.Group position.x={5} position.y={1} />
+	<Bow />
 </XR>
 
+<TheatrePlacer key="Archery Target A">
+	<ArcheryTarget />
+</TheatrePlacer>
+
+<TheatrePlacer key="Archery Target B">
+	<ArcheryTarget />
+</TheatrePlacer>
+
 <TeleportControls>
-	<Floor />
+	<Ground />
 </TeleportControls>
 
 {#if !xr}
@@ -120,14 +92,44 @@
 	</T.PerspectiveCamera>
 {/if}
 
-<Grid
-	position.y={0.01}
-	cellColor="#ffffff"
-	sectionColor="#ffffff"
-	sectionThickness={1}
-	cellSize={0.25}
-	sectionSize={1}
-	gridSize={10}
-/>
-
 <Sky {...presets.sunset} />
+
+<TheatrePlacer key="Mill">
+	<Mill />
+</TheatrePlacer>
+
+<TheatrePlacer key="Sawmill">
+	<Sawmill />
+</TheatrePlacer>
+
+<TheatrePlacer key="House_1 A">
+	<House_1 />
+</TheatrePlacer>
+
+<TheatrePlacer key="House_2 A">
+	<House_2 />
+</TheatrePlacer>
+
+<TheatrePlacer key="House_3 A">
+	<House_3 />
+</TheatrePlacer>
+
+<TheatrePlacer key="House_4 A">
+	<House_4 />
+</TheatrePlacer>
+
+<TheatrePlacer key="Inn A">
+	<Inn />
+</TheatrePlacer>
+
+<TheatrePlacer key="Blacksmith A">
+	<Blacksmith />
+</TheatrePlacer>
+
+<TheatrePlacer key="Bell_Tower A">
+	<BellTower />
+</TheatrePlacer>
+
+<TheatrePlacer key="Stable A">
+	<Stable />
+</TheatrePlacer>
