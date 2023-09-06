@@ -9,7 +9,7 @@
   import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-  import ShortRay from '../components/ShortRay.svelte'
+  import ShortRay from './ShortRay.svelte'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { useControllerEvent } from '../hooks/useEvent'
   import { fire } from '../internal/events'
@@ -41,6 +41,14 @@
 </script>
 
 <script lang="ts">
+  type $$Props =
+    | {
+        left: true
+      }
+    | {
+        right: true
+      }
+
   /** Whether the controller should be matched with the left hand. */
   export let left = false
 
