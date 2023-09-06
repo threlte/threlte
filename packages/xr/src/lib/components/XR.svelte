@@ -1,7 +1,6 @@
 <!--
 
-@component
-`<XR />` is a WebXR manager that configures your scene for XR rendering and interaction.
+@component `<XR />` is a WebXR manager that configures your scene for XR rendering and interaction.
 
 This should be placed within a Threlte `<Canvas />`.
 
@@ -18,12 +17,18 @@ This should be placed within a Threlte `<Canvas />`.
 ```
 
 -->
-
-<script lang='ts'>
+<script lang="ts">
   import { onDestroy } from 'svelte'
   import { useThrelte, createRawEventDispatcher } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
-  import { session, referenceSpaceType, isPresenting, isHandTracking, initialized, xr as xrStore } from '../internal/stores'
+  import {
+    session,
+    referenceSpaceType,
+    isPresenting,
+    isHandTracking,
+    initialized,
+    xr as xrStore
+  } from '../internal/stores'
 
   /**
    * Enables foveated rendering. Default is `1`, the three.js default.
@@ -110,7 +115,7 @@ This should be placed within a Threlte `<Canvas />`.
     currentSession.addEventListener('frameratechange', handleFramerateChange)
 
     xr.setFoveation(foveation)
-    
+
     updateTargetFrameRate(frameRate)
   }
 
