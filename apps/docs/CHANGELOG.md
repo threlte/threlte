@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.6.2
+
+### Patch Changes
+
+- 348294f6: Added MeshLineMaterial and MeshLineGeometry to extras
+
 ## 0.6.1
 
 ### Patch Changes

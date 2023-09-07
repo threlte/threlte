@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 5.6.2
+
+### Patch Changes
+
+- 348294f6: Added MeshLineMaterial and MeshLineGeometry to extras
+- 1e550a62: Include proper colorspace shader chunk via Three.js revision in `<Grid>`
+
 ## 5.6.1
 
 ### Patch Changes
