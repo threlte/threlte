@@ -1,0 +1,27 @@
+---
+{
+  category: '@threlte/xr',
+  name: '<Headset>',
+  order: 2,
+  type: 'component',
+  componentSignature:
+    {}
+}
+---
+
+`<Headset />` provides the ability to attach objects to the pose of the user's headset.
+
+```svelte
+<script>
+  import { Headset } from '@threlte/xr'
+  import { AudioListener } from '@threlte/extras'
+</script>
+
+<Headset>
+  <AudioListener />
+</Headset>
+```
+
+Like a Portal, it can exist anywhere in your Threlte application, as many times as you need.
+
+<Example path="xr/headset" />
