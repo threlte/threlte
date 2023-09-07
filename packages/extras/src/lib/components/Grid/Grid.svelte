@@ -3,6 +3,7 @@
   import type { GridProps, GridEvents, GridSlots } from './Grid.svelte'
   import { useThrelte, T, forwardEventHandlers } from '@threlte/core'
   import { Color, ShaderMaterial, DoubleSide, type Mesh } from 'three'
+  import { revision } from '../../lib/revision'
 
   type $$Props = Required<GridProps>
   type $$Events = GridEvents
@@ -119,7 +120,7 @@
         if(gl_FragColor.a <= 0.0)
           discard;
         #include <tonemapping_fragment>
-        #include <encodings_fragment>
+        #include <${revision < 154 ? 'encodings_fragment' : 'colorspace_fragment'}>
       }
        `,
 
@@ -150,7 +151,14 @@
   const component = forwardEventHandlers()
 </script>
 
-<T.Mesh bind:this={$component} bind:ref {material} frustumCulled={false} {...$$restProps} let:ref>
+<T.Mesh
+  bind:this={$component}
+  bind:ref
+  {material}
+  frustumCulled={false}
+  {...$$restProps}
+  let:ref
+>
   <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
 
   <slot {ref} />
