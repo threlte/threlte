@@ -138,7 +138,7 @@
     const selecting = (teleportGamepad.current?.axes[3] ?? 0) < -0.9
 
     if (selecting && activeController === undefined) {
-      handleSelectStart(teleportController.current!.controller)
+      handleSelectStart(teleportController.current!.targetRay)
     } else if (!selecting && activeController !== undefined) {
       handleSelectEnd()
     }
