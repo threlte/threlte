@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { useThrelte } from '@threlte/core'
-import { session } from '../internal/stores'
-import { onDestroy } from 'svelte'
+import { useBaseReferenceSpace } from '../internal/useBaseReferenceSpace'
 
 const quaternion = new THREE.Quaternion()
 const offset = { x: 0, y: 0, z: 0 }
@@ -19,22 +18,15 @@ const offset = { x: 0, y: 0, z: 0 }
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
-
-  let baseReferenceSpace: XRReferenceSpace | null | undefined
-
-  const unsub = session.subscribe((value) => {
-    if (value === undefined) return
-
-    baseReferenceSpace = xr.getReferenceSpace()
-  })
-
-  onDestroy(unsub)
+  const baseReferenceSpace = useBaseReferenceSpace()
 
   /**
    * Teleports a player to a position - and optionally a direction.
    */
   return (position: THREE.Vector3 | THREE.Vector3Tuple, direction = quaternion) => {
-    if (baseReferenceSpace === null || baseReferenceSpace === undefined) return
+    const space = baseReferenceSpace.current
+
+    if (space === null || space === undefined) return
 
     let x = 0,
       y = 0,
@@ -52,13 +44,13 @@ export const useTeleport = () => {
     offset.y = -y
     offset.z = -z
 
-    const pose = xr.getFrame().getViewerPose(baseReferenceSpace)
+    const pose = xr.getFrame().getViewerPose(space)
     if (pose !== undefined) {
       offset.x += pose.transform.position.x
       offset.z += pose.transform.position.z
     }
 
     const teleportOffset = new XRRigidTransform(offset, direction)
-    xr.setReferenceSpace(baseReferenceSpace.getOffsetReferenceSpace(teleportOffset))
+    xr.setReferenceSpace(space.getOffsetReferenceSpace(teleportOffset))
   }
 }
