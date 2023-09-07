@@ -2,4 +2,4 @@
 '@threlte/xr': patch
 ---
 
-Add `<Headset />` component to allow parenting to viewer headset.
+Add `<Headset />` component to allow attaching to viewer headset.
