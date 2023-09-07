@@ -1,5 +1,17 @@
 # create-threlte
 
+## 1.2.0
+
+### Minor Changes
+
+- a8b97d48: Added setup to xr template: vite mkcert plugin and --host options
+
+## 1.1.0
+
+### Minor Changes
+
+- 7520191: Added `@threlte/xr` to create-threlte
+
 ## 1.0.1
 
 ### Patch Changes

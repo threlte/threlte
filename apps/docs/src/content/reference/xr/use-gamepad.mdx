@@ -1,0 +1,24 @@
+---
+order: 16
+category: '@threlte/xr'
+name: 'useGamepad'
+type: 'hook'
+---
+
+Provides a reference to the gamepad attached to a current XRController.
+
+```svelte
+<script>
+  import { useGamepad } from '@threlte/xr'
+
+  const leftPad = useGamepad('left')
+  const rightPad = useGamepad('right')
+</script>
+```
+
+### Signature
+
+```ts
+// CurrentWritable<Gamepad | undefined> - The current Gamepad
+const controller = useController('left') 
+```

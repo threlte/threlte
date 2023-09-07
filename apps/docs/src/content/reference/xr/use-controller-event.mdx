@@ -1,0 +1,37 @@
+---
+order: 16
+category: '@threlte/xr'
+name: 'useControllerEvent'
+type: 'hook'
+---
+
+Adds event listeners for one or more controllers.
+
+Any event listener that can be added to a [`<Controller>`](/docs/reference/xr/controller) component can be added here.
+
+```svelte
+<script>
+  import { useControllerEvent } from '@threlte/xr'
+
+  useControllerEvent('squeeze', (event: XRControllerEvent) => {
+
+  })
+</script>
+```
+
+An optional third parameter can be provided for filtering by handedness or input.
+
+By default, no filtering occurs.
+
+```svelte
+<script>
+  import { useControllerEvent } from '@threlte/xr'
+
+  useControllerEvent('select', (event: XRControllerEvent) => {
+
+  }, {
+    handedness: 'left' | 'right' | 'none',
+  })
+</script>
+```
+

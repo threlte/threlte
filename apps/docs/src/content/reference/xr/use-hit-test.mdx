@@ -1,0 +1,20 @@
+---
+order: 17
+category: '@threlte/xr'
+name: 'useHitTest'
+type: 'hook'
+---
+
+Provides a [hit test result](https://developer.mozilla.org/en-US/docs/Web/API/XRHitTestResult) on each frame during an `immersive-ar` session.
+
+```svelte
+<script>
+  useHitTest((hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => {
+
+  })
+</script>
+```
+
+Hit testing can be useful for placing virtual objects relative to real world objects.
+
+<Example path="xr/use-hit-test" />

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/rapier",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -19,7 +19,7 @@
     "@sveltejs/package": "^2.1.0",
     "@threlte/core": "workspace:*",
     "@types/node": "^18.0.3",
-    "@types/three": "^0.152.1",
+    "@types/three": "^0.155.1",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@yushijinhun/three-minifier-rollup": "^0.3.1",

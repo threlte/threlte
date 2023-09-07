@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.6.1
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
 ## 0.6.0
 
 ### Minor Changes
