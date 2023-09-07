@@ -1,8 +1,8 @@
-<script lang='ts'>
+<script lang="ts">
   import { T } from '@threlte/core'
 
   const vertexShader = `
-  uniform mat4 modelViewMatrix;                                                                                                                                                                                                  
+  uniform mat4 modelViewMatrix;
   uniform mat4 projectionMatrix;
   attribute vec2 uv;
   attribute vec3 position;
@@ -27,5 +27,9 @@
   {@const heightSegments = 1}
   {@const openEnded = false}
   <T.CylinderGeometry args={[radius, radius, height, radialSegments, heightSegments, openEnded]} />
-  <T.RawShaderMaterial transparent {vertexShader} {fragmentShader} />
+  <T.RawShaderMaterial
+    transparent
+    {vertexShader}
+    {fragmentShader}
+  />
 </T.Mesh>

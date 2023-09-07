@@ -1,11 +1,10 @@
 import { onDestroy } from 'svelte'
-import { isHandTracking } from '../internal/stores'
-import { on, off } from '../internal/events'
+import { off, on } from '../internal/events'
 import type {
-  XRControllerEventType,
-  XRHandEventType,
   XRControllerEvent,
-  XRHandEvent
+  XRControllerEventType,
+  XRHandEvent,
+  XRHandEventType
 } from '../types'
 
 /**

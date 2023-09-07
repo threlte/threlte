@@ -18,8 +18,8 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
-  import { createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import type { XRSessionEvent } from '../types'
   import {
     initialized,
     isHandTracking,
@@ -28,7 +28,6 @@ This should be placed within a Threlte `<Canvas />`.
     session,
     xr as xrStore
   } from '../internal/stores'
-  import type { XRSessionEvent } from '../types'
 
   /**
    * Enables foveated rendering. Default is `1`, the three.js default.
