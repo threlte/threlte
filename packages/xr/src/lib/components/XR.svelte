@@ -21,11 +21,11 @@ This should be placed within a Threlte `<Canvas />`.
   import { onDestroy } from 'svelte'
   import type { XRSessionEvent } from '../types'
   import {
-    session,
-    referenceSpaceType,
-    isPresenting,
-    isHandTracking,
     initialized,
+    isHandTracking,
+    isPresenting,
+    referenceSpaceType,
+    session,
     xr as xrStore
   } from '../internal/stores'
 
