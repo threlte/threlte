@@ -57,6 +57,8 @@
     material.uniforms.color.value = new Color(color)
     invalidate('MeshLineMaterial uniforms changed')
   }
+
+  const component = forwardEventHandlers()
 </script>
 
 <T

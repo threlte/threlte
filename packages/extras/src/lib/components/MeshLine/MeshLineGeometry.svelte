@@ -10,7 +10,7 @@
     MeshLineGeometryProps,
     MeshLineGeometrySlots
   } from './MeshLineGeometry.svelte'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
   import { setXY, setXYZ, setXYZW, setXYZXYZ } from './utils'
 
@@ -125,9 +125,14 @@
   }
 
   $: setPoints(points)
+  
+  const component = forwardEventHandlers()
 </script>
 
 <T
   is={geometry}
+  bind:this={$component}
   {...$$restProps}
-/>
+>
+  <slot ref={geometry} />
+</T>
