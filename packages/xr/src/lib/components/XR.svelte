@@ -19,6 +19,7 @@ This should be placed within a Threlte `<Canvas />`.
 -->
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { createRawEventDispatcher, useThrelte } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
     initialized,
