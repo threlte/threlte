@@ -4,7 +4,7 @@
     MeshLineMaterialProps,
     MeshLineMaterialSlots
   } from './MeshLineMaterial.svelte'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
