@@ -6,7 +6,12 @@
 <main>
   <Canvas>
     <XR>
-      <Controller left>
+      <Controller
+        left
+        on:connected={event => console.log('connected', event)}
+        on:disconnected={event => console.log('disconnected', event)}
+        on:select={event => console.log('select', event)}
+      >
         <T.Mesh>
           {@const radius = 0.01}
           {@const length = 0.08}

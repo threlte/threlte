@@ -11,7 +11,7 @@ import type {
  * Adds listeners for controller events.
  */
 export const useControllerEvent = (
-  event: XRControllerEventType,
+  eventType: XRControllerEventType,
   handler: (event: XRControllerEvent) => void,
   { handedness }: { handedness?: XRHandedness } = {}
 ): void => {
@@ -24,9 +24,7 @@ export const useControllerEvent = (
     handler(event)
   }
 
-  on<XRControllerEvent>(event, listener)
-
-  onDestroy(() => off(event, listener))
+  onDestroy(on<XRControllerEvent>(eventType, listener))
 }
 
 /**
@@ -50,7 +48,5 @@ export const useHandEvent = (
     handler(event)
   }
 
-  on<XRHandEvent>(event, listener)
-
-  onDestroy(() => off(event, listener))
+  onDestroy(on<XRHandEvent>(event, listener))
 }
