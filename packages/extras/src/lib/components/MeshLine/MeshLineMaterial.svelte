@@ -61,7 +61,10 @@
 
 <T
   is={material}
+  bind:this={$component}
   {...$$restProps}
   {fragmentShader}
   {vertexShader}
-/>
+>
+  <slot ref={material} />
+</T>
