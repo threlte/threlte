@@ -26,8 +26,8 @@
             type: 'string',
             required: false,
             default: "'local-floor'",
-            description: 'Type of WebXR reference space to use.',
-          },
+            description: 'Type of WebXR reference space to use.'
+          }
         ],
       events:
         [
@@ -51,12 +51,14 @@
             payload: 'THREE.Event & { target: XRSession }',
             description: 'Fired when available inputsources change.'
           }
-        ],
+        ]
     }
 }
 ---
 
 The `<XR>` component prepares your scene for a WebXR session. It sets up context that is provided by the [`useXR`](/docs/reference/xr/use-xr) hook.
+
+## Usage
 
 ```svelte
 <script>
@@ -65,7 +67,7 @@ The `<XR>` component prepares your scene for a WebXR session. It sets up context
 </script>
 
 <XR>
-  <Text text='I have entered another realm!' />
+  <Text text="I have entered another realm!" />
 </XR>
 ```
 
@@ -73,6 +75,30 @@ The `<XR>` component prepares your scene for a WebXR session. It sets up context
   The `<XR>` component will set the [`<Canvas>`](/docs/reference/core/canvas) property `frameloop="always"` when the user enters an XR session, due to being incompatible with `demand` or `never`. It will set the original value once the session has ended.
 </Tip>
 
-Any children of the `<XR>` component will not mount until the user enters an immersive session. 
+Any children of the `<XR>` component will not mount until the user enters an immersive session. This is useful for adding controllers, hands, or entire scenes that should only start when the user has begun their session.
 
-This is useful for adding controllers, hands, or entire scenes that should only start when the user has begun their session.
+## Fallback
+
+XR sessions have to be requested actively and you might want to show contents to the user before they have entered an immersive session. You can use the `fallback` slot to show a fallback scene to the user.
+
+```svelte
+<script>
+  import { XR } from '@threlte/xr'
+  import { t } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
+  import Scene from './Scene.svelte'
+</script>
+
+<Scene />
+
+<XR>
+  <Controller left>
+  <Controller right>
+
+  <svelte:fragment slot="fallback">
+    <T.PerspectiveCamera>
+      <OrbitControls />
+    </T.PerspectiveCamera>
+  </svelte:fragment>
+</XR>
+```

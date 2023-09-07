@@ -19,7 +19,6 @@ This should be placed within a Threlte `<Canvas />`.
 -->
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { useThrelte, createRawEventDispatcher } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
     session,
@@ -163,4 +162,6 @@ This should be placed within a Threlte `<Canvas />`.
 
 {#if $isPresenting}
   <slot />
+{:else}
+  <slot name="fallback" />
 {/if}
