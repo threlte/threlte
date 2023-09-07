@@ -22,7 +22,10 @@
 
 <XR>
   <Headset>
-    <Microphone />
+    <Microphone
+      position={[-0.1, -0.05, -0.1]}
+      rotation.x={Math.PI / 3}
+    />
   </Headset>
 </XR>
 
@@ -30,7 +33,7 @@
   <AudioListener />
 </Headset>
 
-<T.Group scale={0.1}>
+<T.Group position={[0, 0.6, -0.5]} scale={0.08}>
   <Turntable
     bind:toggle
     bind:volume
@@ -49,7 +52,8 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[0, 0.5, 2]}
+  near={0.001}
+  position={[0, 1, 2]}
 />
 
 <T.AmbientLight />
