@@ -1,0 +1,71 @@
+{
+  "name": "@threlte/flex",
+  "version": "0.0.1",
+  "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite dev",
+    "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "format": "prettier --write --plugin-search-dir=. .",
+    "cleanup": "rimraf node_modules .svelte-kit dist"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/kit": "^1.20.4",
+    "@sveltejs/package": "^2.1.0",
+    "@threlte/core": "workspace:*",
+    "@types/node": "^18.0.3",
+    "@types/three": "^0.155.1",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@yushijinhun/three-minifier-rollup": "^0.3.1",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-svelte": "^2.30.0",
+    "prettier": "^2.8.8",
+    "prettier-plugin-svelte": "^2.10.1",
+    "publint": "^0.1.12",
+    "rimraf": "^5.0.1",
+    "svelte": "^4.1.1",
+    "svelte-check": "^3.4.3",
+    "svelte-preprocess": "^5.0.4",
+    "svelte2tsx": "^0.6.19",
+    "three": "^0.155.0",
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^4.3.6"
+  },
+  "dependencies": {
+    "yoga-layout": "^2.0.0"
+  },
+  "peerDependencies": {
+    "svelte": ">=4",
+    "three": ">=0.133"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/lib/index.ts",
+      "svelte": "./src/lib/index.ts"
+    }
+  },
+  "types": "./src/lib/index.ts",
+  "svelte": "./src/lib/index.ts",
+  "publishOverrides": {
+    "files": [
+      "dist"
+    ],
+    "svelte": "./dist/index.js",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "svelte": "./dist/index.js"
+      }
+    },
+    "types": "./dist/index.d.ts"
+  }
+}
