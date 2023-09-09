@@ -15,7 +15,7 @@
   "dependencies": {
     "@astrojs/mdx": "^1.0.0",
     "@astrojs/preact": "^3.0.0",
-    "@astrojs/svelte": "^4.0.0",
+    "@astrojs/svelte": "^4.0.2",
     "@astrojs/tailwind": "^5.0.0",
     "@markprompt/css": "^0.10.0",
     "@markprompt/react": "^0.18.0",
@@ -23,7 +23,7 @@
     "@preact/signals": "^1.1.5",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@vercel/analytics": "^1.0.1",
-    "astro": "^3.0.3",
+    "astro": "^3.0.12",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
     "install": "^0.13.0",
