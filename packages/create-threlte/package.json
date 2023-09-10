@@ -6,7 +6,7 @@
   "bin": "./dist/bin.js",
   "scripts": {
     "dev": "node --loader ts-node/esm src/bin.ts",
-    "build": "rimraf dist/ && tsc && cpy ./templates '../dist/' --cwd=src",
+    "build": "rimraf dist/ && tsc && cpy ./templates \"../dist/\" --cwd=src",
     "package": "pnpm build",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. .",
