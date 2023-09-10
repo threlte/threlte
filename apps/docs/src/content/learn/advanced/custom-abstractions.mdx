@@ -15,7 +15,7 @@ in multiple places. As an example, let's create a component that is made up from
 ```svelte title="Tile.svelte"
 <script>
   import { T } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 </script>
 
 <T.Group>
@@ -74,7 +74,7 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
 ```svelte title="Tile.svelte" {6}m
 <script>
   import { T } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 </script>
 
 <T.Group {...$$restProps}>
@@ -114,7 +114,7 @@ to forward event handlers defined on `<Tile>` internally to our cubes `<T.Mesh>`
 ```svelte title="Tile.svelte" {2}m {5,12}+
 <script>
   import { T, forwardEventHandlers } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const component = forwardEventHandlers()
 </script>
@@ -200,7 +200,7 @@ pass the slot prop `ref` to our `<slot />`, let's add that:
 ```svelte title="Tile.svelte" {1,13,30}m {4,6-8}+
 <script lang="ts">
   import { T, forwardEventHandlers } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { TileProps, TileEvents, TileSlots } from './Tile.svelte'
 
   type $$Props = TileProps

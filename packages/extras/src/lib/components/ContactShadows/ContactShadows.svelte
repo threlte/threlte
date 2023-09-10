@@ -11,8 +11,8 @@
     ShaderMaterial,
     WebGLRenderTarget
   } from 'three'
-  import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader'
-  import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader'
+  import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
+  import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
   import { useMemo } from '../../lib/useMemo'
   import type {
     ContactShadowsProps,

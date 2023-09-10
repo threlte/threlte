@@ -1,6 +1,6 @@
 <script lang='ts' context='module'>
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
-  import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+  import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
   import type { XRHandEvent } from '../types'
   import { fire } from '../internal/events'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'

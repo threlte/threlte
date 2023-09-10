@@ -70,7 +70,7 @@ Sometimes you need to add a component as a child to another object than its pare
 ```svelte
 <script>
   import { HierarchicalObject, useThrelte } from '@threlte/core'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { otherMesh } from '$stores/app' // let's say this is a store with a mesh
 
   const { scene } = useThrelte()

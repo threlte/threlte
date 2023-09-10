@@ -99,7 +99,7 @@ If you want to use a class that is not available at Three.js' main namespace `'t
 ```svelte title="Camera.svelte" {5-7}
 <script>
   import { T, extend, useThrelte } from '@threlte/core'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   extend({
     OrbitControls
@@ -148,7 +148,7 @@ Using the property `is` comes in handy when using classes that are not exported 
 ```svelte
 <script>
   import { T } from '@threlte/core'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 </script>
 
 <T is={OrbitControls} />
@@ -434,7 +434,7 @@ are available elsewhere (like `OrbitControls`), you can extend the default catal
 <script>
   import { extend, T } from '@threlte/core'
   import { CustomMesh } from './MyCustomMesh.ts'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   extend({
     CustomMesh

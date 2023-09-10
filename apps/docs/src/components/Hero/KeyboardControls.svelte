@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
 	export let translationSnap = 1
 	export let rotationSnap = 15 * DEG2RAD

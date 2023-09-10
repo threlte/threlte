@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createRawEventDispatcher, forwardEventHandlers, T } from '@threlte/core'
   // @ts-ignore
-  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
   import { useGltf } from '../../hooks/useGltf'
   import type { ThrelteGltf } from '../../types/types'
   import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
@@ -95,7 +95,12 @@
 </script>
 
 {#if scene}
-  <T is={scene} {...$$restProps} let:ref bind:this={$component}>
+  <T
+    is={scene}
+    {...$$restProps}
+    let:ref
+    bind:this={$component}
+  >
     <slot {ref} />
   </T>
 {/if}

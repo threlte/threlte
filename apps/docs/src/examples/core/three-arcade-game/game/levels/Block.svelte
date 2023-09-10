@@ -9,7 +9,7 @@
   import { cubicIn } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import type { Writable } from 'svelte/store'
-  import { clamp } from 'three/src/math/MathUtils'
+  import { clamp } from 'three/src/math/MathUtils.js'
   import { playFromGroup } from '../../sound'
   import { blinkClock } from '../state'
 

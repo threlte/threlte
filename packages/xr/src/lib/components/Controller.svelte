@@ -7,7 +7,7 @@
 >
   import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
+  import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
   import ShortRay from './ShortRay.svelte'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { useControllerEvent } from '../hooks/useEvent'

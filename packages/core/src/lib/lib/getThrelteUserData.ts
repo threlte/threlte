@@ -1,5 +1,5 @@
 import type { Object3D } from 'three'
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export type ThrelteUserData = {
   orbitControls?: OrbitControls

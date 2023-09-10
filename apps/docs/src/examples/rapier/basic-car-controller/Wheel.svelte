@@ -8,7 +8,7 @@
 	import { Collider, RigidBody, useRevoluteJoint } from '@threlte/rapier'
 	import type { Vector3 } from 'three'
 	import { CylinderGeometry, MeshStandardMaterial } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { DEG2RAD } from 'three/src/math/MathUtils.js'
 	import { useWasd } from './useWasd'
 
 	export let position: Parameters<Vector3['set']>

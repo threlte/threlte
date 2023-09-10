@@ -2,7 +2,7 @@
   import { T, useFrame } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let rotation = 0
   useFrame(() => {

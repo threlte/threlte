@@ -1,7 +1,7 @@
 <script lang="ts">
   import { forwardEventHandlers, T, useFrame, useParent, useThrelte } from '@threlte/core'
   import type { Camera } from 'three'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type {
     OrbitControlsEvents,

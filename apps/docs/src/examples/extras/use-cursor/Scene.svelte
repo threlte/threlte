@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { interactivity, Text, useCursor } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 

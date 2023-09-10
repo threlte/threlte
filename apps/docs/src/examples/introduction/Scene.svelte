@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useFrame } from '@threlte/core'
   import { GLTF } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let rotation = 0
 

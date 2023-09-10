@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useFrame } from '@threlte/core'
   import { Grid, OrbitControls, Portal, PortalTarget } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let posX = Math.sin(Date.now() / 1000) * 4
 

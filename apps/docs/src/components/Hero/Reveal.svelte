@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { clamp, mapLinear } from 'three/src/math/MathUtils'
+	import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
 	export let progress: number
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Collider } from '@threlte/rapier'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Emitter from './Emitter.svelte'
   import TestBed from './TestBed.svelte'
 </script>

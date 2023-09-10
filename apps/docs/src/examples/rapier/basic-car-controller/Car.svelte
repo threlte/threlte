@@ -6,7 +6,7 @@
 	import { onDestroy, setContext } from 'svelte'
 	import { writable } from 'svelte/store'
 	import { BoxGeometry, MeshStandardMaterial, Vector3 } from 'three'
-	import { DEG2RAD } from 'three/src/math/MathUtils'
+	import { DEG2RAD } from 'three/src/math/MathUtils.js'
 	import Axle from './Axle.svelte'
 
 	import type { CarProps } from './Car.svelte'

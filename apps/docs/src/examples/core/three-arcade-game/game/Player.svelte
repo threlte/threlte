@@ -5,7 +5,7 @@
   import { AutoColliders } from '@threlte/rapier'
   import { writable } from 'svelte/store'
   import { Group, Mesh, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from './config'
   import { gameState } from './state'
 

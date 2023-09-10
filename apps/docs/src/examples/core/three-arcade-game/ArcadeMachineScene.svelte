@@ -10,8 +10,8 @@
     PerspectiveCamera,
     PointLight
   } from 'three'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { gameState } from './game/state'
 
   const gltf = useGltf<{

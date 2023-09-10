@@ -12,8 +12,8 @@
     Texture,
     TextureLoader
   } from 'three'
-  import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
-  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+  import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
+  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import type { EnvironmentProps } from './Environment.svelte'
   import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
 
@@ -114,5 +114,8 @@
 </script>
 
 {#if groundProjection}
-  <GroundProjectedSkybox {...groundProjection} envMap={previousEnvMap} />
+  <GroundProjectedSkybox
+    {...groundProjection}
+    envMap={previousEnvMap}
+  />
 {/if}

@@ -10,7 +10,7 @@
   import { omit, pick } from 'lodash-es'
   import { derived, writable } from 'svelte/store'
   import { Group } from 'three'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type {
     TransformControlsEvents,

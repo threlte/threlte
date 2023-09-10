@@ -6,7 +6,7 @@
 	import { T } from '@threlte/core'
 	import { Collider, RigidBody, useFixedJoint, useRevoluteJoint } from '@threlte/rapier'
 	import { spring } from 'svelte/motion'
-	import { clamp, DEG2RAD, mapLinear } from 'three/src/math/MathUtils'
+	import { clamp, DEG2RAD, mapLinear } from 'three/src/math/MathUtils.js'
 	import type { AxleProps } from './Axle.svelte'
 	import { useCar } from './useCar'
 	import { useWasd } from './useWasd'

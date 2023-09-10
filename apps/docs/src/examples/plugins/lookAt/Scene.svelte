@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useFrame } from '@threlte/core'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { injectLookAtPlugin } from './lookAtPlugin'
 
   const cubePos = [0, 0.8, 0] as [number, number, number]

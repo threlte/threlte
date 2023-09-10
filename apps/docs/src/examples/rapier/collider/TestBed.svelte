@@ -4,7 +4,7 @@
   import { HTML } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let title: string
   export let useGround = true
@@ -30,7 +30,7 @@
   pointerEvents={'none'}
   scale={0.6}
 >
-  <div class="transform -translate-y-1/2 text-black w-[500px]">
+  <div class="w-[500px] -translate-y-1/2 transform text-black">
     <h2>{title}</h2>
     <div class="leading-normal">
       <slot name="text" />

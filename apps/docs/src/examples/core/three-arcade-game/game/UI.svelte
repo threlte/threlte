@@ -5,7 +5,7 @@
   import { tweened } from 'svelte/motion'
   import { derived } from 'svelte/store'
   import { Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { gameState } from './state'
 
   const { state, score, levelIndex, baseColor } = gameState
