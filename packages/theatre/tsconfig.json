@@ -2,6 +2,7 @@
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "noErrorTruncation": true,
-    "strict": true
+    "strict": true,
+    "moduleResolution": "bundler"
   }
 }

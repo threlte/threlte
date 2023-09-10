@@ -3,6 +3,7 @@
   "compilerOptions": {
 		"noErrorTruncation": true,
     "strict": true,
+    "moduleResolution": "bundler",
     "paths": {
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"],
