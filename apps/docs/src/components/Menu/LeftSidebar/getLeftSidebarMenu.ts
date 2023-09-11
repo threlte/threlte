@@ -98,6 +98,7 @@ const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
   'Animation',
   'Camera',
   'Geometry',
+	'MeshLine',
   'Postprocessing',
   'Shaders'
 ]

@@ -31,7 +31,7 @@ export type XRControllerEvent<Type = XRControllerEventType> = THREE.Event & {
 }
 
 export type XRController = {
-  controller: THREE.XRTargetRaySpace
+  targetRay: THREE.XRTargetRaySpace
   grip: THREE.XRGripSpace
   model?: XRControllerModel
   inputSource: XRInputSource

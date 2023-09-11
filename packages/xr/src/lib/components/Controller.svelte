@@ -1,6 +1,5 @@
 <!--
-@component
-`<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
+@component `<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
 -->
 <script
   lang="ts"
@@ -9,7 +8,7 @@
   import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-  import ShortRay from '../components/ShortRay.svelte'
+  import ShortRay from './ShortRay.svelte'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { useControllerEvent } from '../hooks/useEvent'
   import { fire } from '../internal/events'
@@ -18,7 +17,8 @@
     isHandTracking,
     pendingTeleportDestination
   } from '../internal/stores'
-  import type { XRControllerEvent } from '../types'
+  import type { XRController, XRControllerEvent } from '../types'
+  import type { XRTargetRaySpace } from 'three'
 
   const factory = new XRControllerModelFactory()
 
@@ -37,10 +37,18 @@
     'squeezestart'
   ] as const
 
-  const eventMap = new WeakMap()
+  const eventMap = new WeakMap<XRTargetRaySpace, Omit<XRController, 'inputSource'>>()
 </script>
 
 <script lang="ts">
+  type $$Props =
+    | {
+        left: true
+      }
+    | {
+        right: true
+      }
+
   /** Whether the controller should be matched with the left hand. */
   export let left = false
 
@@ -71,9 +79,9 @@
 
   const handleConnected = (event: XRControllerEvent<'connected'>) => {
     const data = event.data!
-    if (data.handedness !== handedness) return
-
-    stores[data.handedness].set({ ...eventMap.get(event.target), inputSource: data })
+    const targetData = eventMap.get(event.target)
+    if (data.handedness !== handedness || !targetData) return
+    stores[data.handedness].set({ ...targetData, inputSource: data })
     fire('connected', event, { input: 'controller' })
   }
 
@@ -93,7 +101,7 @@
     // so it must be called immediately before a controller connects.
     const model = factory.createControllerModel(grip)
 
-    eventMap.set(controller, { controller, model, grip })
+    eventMap.set(controller, { targetRay: controller, model, grip })
 
     controller.addEventListener('connected', handleConnected)
     controller.addEventListener('disconnected', handleDisconnected)
@@ -102,7 +110,7 @@
 
   $: store = left ? stores.left : stores.right
   $: grip = $store?.grip
-  $: controller = $store?.controller
+  $: targetRay = $store?.targetRay
   $: model = $store?.model
 
   for (const type of ['connected', 'disconnected', ...events] as const) {
@@ -135,15 +143,15 @@
     </T>
   {/if}
 
-  {#if controller}
+  {#if targetRay}
     <T
-      is={controller}
+      is={targetRay}
       name="XR controller {handedness}"
       visible={!$isHandTracking}
     >
       <slot name="target-ray" />
       <ShortRay
-        visible={$activeTeleportController === controller &&
+        visible={$activeTeleportController === targetRay &&
           $pendingTeleportDestination === undefined}
       />
     </T>
