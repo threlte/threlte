@@ -420,6 +420,9 @@ importers:
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
+      '@threlte/extras':
+        specifier: workspace:*
+        version: link:../extras
       '@types/node':
         specifier: ^18.0.3
         version: 18.0.3

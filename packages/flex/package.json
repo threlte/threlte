@@ -18,6 +18,7 @@
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.1.0",
     "@threlte/core": "workspace:*",
+    "@threlte/extras": "workspace:*",
     "@types/node": "^18.0.3",
     "@types/three": "^0.155.1",
     "@typescript-eslint/eslint-plugin": "^5.45.0",

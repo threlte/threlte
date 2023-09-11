@@ -12,6 +12,7 @@
 <style>
   main {
     height: 100vh;
+    background: #000;
   }
 
   :global(body) {
