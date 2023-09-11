@@ -69,6 +69,12 @@
     },
     uCoord2: {
       value: 1
+    },
+    uCircleGridMaxRadius: {
+      value: 9
+    },
+    uPolarDividers: {
+      value: 10
     }
   }
 
