@@ -6,18 +6,23 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[3, 3, 3]}
+  position={[10, 10, 10]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
+<T.DirectionalLight />
+
 <Flex>
   <Box>
-    <T.Mesh position.y={1}>
+    <T.Mesh
+      position.y={1}
+      scale={2}
+    >
+      <T.BoxGeometry />
       <T.MeshStandardMaterial
         transparent
         color="white"
       />
-      <T.SphereGeometry />
     </T.Mesh>
   </Box>
 </Flex>

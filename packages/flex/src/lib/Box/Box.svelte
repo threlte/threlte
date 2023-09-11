@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { useFlex } from '../hooks/useFlex'
   import { Group, Box3, Vector3 } from 'three'
   import { T } from '@threlte/core'
 
-  const { node, addChild, yoga } = useFlex()
+  const { addChild, yoga, removeChild } = useFlex()
 
   const boxNode = yoga.Node.create()
 
@@ -18,6 +18,11 @@
     boxNode.setWidth(size.x)
     boxNode.setHeight(size.y)
     addChild(boxNode)
+  })
+
+  onDestroy(() => {
+    removeChild(boxNode)
+    boxNode.freeRecursive()
   })
 </script>
 

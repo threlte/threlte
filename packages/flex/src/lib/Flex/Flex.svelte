@@ -4,6 +4,7 @@
   import { T } from '@threlte/core'
   import { Direction, type Yoga } from 'yoga-layout'
   import { createFlexContext } from '../context/createFlexContext'
+  import { onDestroy } from 'svelte'
 
   const { yoga } = useYoga()
 
@@ -36,6 +37,10 @@
   }
 
   $: $yoga && initNode($yoga)
+
+  onDestroy(() => {
+    context.node?.freeRecursive()
+  })
 </script>
 
 <T is={group}>
