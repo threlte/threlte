@@ -40,6 +40,9 @@ const fragmentShader = /*glsl*/ `
 	uniform int uCoord1;
 	uniform int uCoord2;
 
+	// 0 - default;
+	uniform int gridType;
+
 	float getGrid(float size, float thickness) {
 
 		vec2 r = vec2(worldPosition[uCoord0], worldPosition[uCoord1]) / size;
@@ -52,18 +55,31 @@ const fragmentShader = /*glsl*/ `
 
 	void main() {
 
-		float g1 = getGrid(uSize1, uThickness1);
-		float g2 = getGrid(uSize2, uThickness2);
+		float g1 = 0.;
+		float g2 = 0.;
 
-		float d = 1.0 - min(distance(vec2(cameraPosition[uCoord0],cameraPosition[uCoord1]), vec2(worldPosition[uCoord0],worldPosition[uCoord1])) / uFadeDistance, 1.);
+		if(gridType == 0){
+			g1 = getGrid(uSize1, uThickness1);
+			g2 = getGrid(uSize2, uThickness2);
+		}
+
 		vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
+		float d = 1.0 - min(distance(vec2(cameraPosition[uCoord0],cameraPosition[uCoord1]), vec2(worldPosition[uCoord0],worldPosition[uCoord1])) / uFadeDistance, 1.);
 		gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
-		gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
+		// gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
 
-		if(gl_FragColor.a <= 0.0)
-			discard;
+		if(gl_FragColor.a <= 0.0) discard;
+
 		#include <tonemapping_fragment>
+
+		#ifdef USE_COLORSPACE_FRAGMENT
+			#include <colorspace_fragment>
+		#else
+			#include <encodings_fragment>
+		#endif
+
+
 	}
 `
 

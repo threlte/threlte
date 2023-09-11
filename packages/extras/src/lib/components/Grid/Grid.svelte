@@ -110,13 +110,17 @@
   {...$$restProps}
   let:ref
 >
-  <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
   <T.ShaderMaterial
     {fragmentShader}
     {vertexShader}
     {uniforms}
     transparent
     side={DoubleSide}
+    defines={{
+      USE_COLORSPACE_FRAGMENT: revision >= 154 ? '' : undefined
+    }}
   />
-  <slot {ref} />
+  <slot {ref}>
+    <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+  </slot>
 </T.Mesh>
