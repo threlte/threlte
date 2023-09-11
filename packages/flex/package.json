@@ -40,6 +40,7 @@
     "vite": "^4.3.6"
   },
   "dependencies": {
+    "mitt": "^3.0.1",
     "yoga-layout": "^2.0.0"
   },
   "peerDependencies": {

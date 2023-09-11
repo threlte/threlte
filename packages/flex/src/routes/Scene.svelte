@@ -12,7 +12,21 @@
 
 <T.DirectionalLight />
 
-<Flex>
+<!-- OUTLINE -->
+<T.Mesh>
+  <T.BoxGeometry args={[10, 10, 10]} />
+  <T.MeshBasicMaterial
+    color="black"
+    wireframe
+  />
+</T.Mesh>
+
+<Flex
+  size={{
+    width: 10,
+    height: 10
+  }}
+>
   <Box>
     <T.Mesh
       position.y={1}
