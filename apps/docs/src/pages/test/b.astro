@@ -1,0 +1,13 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro'
+
+const dummyElements = new Array(1000).fill(0)
+---
+
+<MainLayout title="Welcome to Threlte.">
+  <div class="mt-24 text-white">PAGE: B</div>
+
+  <a href="/test/a">NAVIGATE TO: A</a>
+
+  {dummyElements.map((_, i) => <div class="mt-4 text-white">{`Dummy element ${i}`}</div>)}
+</MainLayout>
