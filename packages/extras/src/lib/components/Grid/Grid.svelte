@@ -141,8 +141,8 @@
     if (type.type === 'polar') {
       uniforms.uGridType = { value: 3 }
       uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
-      uniforms.uPolarCellDividers = { value: type.cellDividers || 6 }
-      uniforms.uPolarSectionDividers = { value: type.sectionDividers || 2 }
+      uniforms.uPolarCellDividers = { value: type.cellDividers || 0 }
+      uniforms.uPolarSectionDividers = { value: type.sectionDividers || 0 }
     }
     invalidate('Grid uniforms changed')
   }
