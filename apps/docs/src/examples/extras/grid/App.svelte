@@ -26,7 +26,7 @@
   })
   const cellColor = addInput({
     label: 'Cell color',
-    value: `#260000`,
+    value: `#ccc`,
     parent: cellFolder
   })
 
@@ -137,6 +137,23 @@
     parent: generalFolder
   })
 
+  const backGroundColor = addInput({
+    label: 'Background color',
+    value: `#003Eff`,
+    parent: generalFolder
+  })
+  const backgroundOpacity = addInput({
+    label: 'Background opacity',
+    value: 0.0,
+    params: {
+      step: 0.01,
+      min: 0,
+      max: 1
+    },
+
+    parent: generalFolder
+  })
+
   const fadeStregth = addInput({
     label: 'fadeStregth',
     value: 1,
@@ -149,6 +166,79 @@
     parent: generalFolder
   })
 
+  const gridGeometry = addInput({
+    label: 'gridGeometry',
+    value: 'default',
+    params: {
+      options: {
+        plane: 'default',
+        terrain: 'Terrain'
+      }
+    },
+    parent: generalFolder
+  })
+
+  const typeFolder = pane.addFolder({
+    title: 'Types of grid'
+  })
+
+  const gridType = addInput({
+    label: 'gridtype',
+    value: 'grid',
+    params: {
+      options: {
+        grid: 'grid',
+        lines: 'lines',
+        circular: 'circular',
+        polar: 'polar'
+      }
+    },
+    parent: typeFolder
+  })
+
+  const linesAxis = addInput({
+    label: 'linesAxis (lines)',
+    value: 'x',
+    params: {
+      options: {
+        x: 'x',
+        y: 'y',
+        z: 'z'
+      }
+    },
+
+    parent: typeFolder
+  })
+
+  const maxRadius = addInput({
+    label: 'maxRadius (cirular & polar)',
+    value: 10,
+    params: {
+      step: 1,
+      min: 0,
+      max: 15
+    },
+
+    parent: typeFolder
+  })
+
+  let type: any = { type: 'grid' }
+
+  $: {
+    if ($gridType == 'grid') {
+      type = { type: 'grid' }
+    }
+    if ($gridType == 'lines') {
+      type = { type: 'lines', axis: $linesAxis }
+    }
+    if ($gridType == 'circular') {
+      type = { type: 'circular', maxRadius: $maxRadius }
+    }
+    if ($gridType == 'polar') {
+      type = { type: 'polar', maxRadius: $maxRadius }
+    }
+  }
+
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
   const noise = createNoise2D()
@@ -157,54 +247,58 @@
     const x = vertices[i]
     const y = vertices[i + 1]
     // @ts-ignore
-    vertices[i + 2] = noise(x / 5, y / 5) * 2 + noise(x / 40, y / 40) * 6
+    vertices[i + 2] = noise(x / 5, y / 5) * 1 + noise(x / 40, y / 40) * 2
   }
   geometry.computeVertexNormals()
+
+  $: console.log($gridGeometry)
 </script>
 
 <div use:action />
 
-<div class="relative h-full w-full bg-orange-500/20">
+<div class="relative h-full w-full ">
   <Canvas>
-    <Grid
-      position.z={-30}
-      position.y={-3}
-      axes={axisTyped}
-      cellColor={$cellColor}
-      cellSize={$cellSize}
-      cellThickness={$cellThickness}
-      sectionColor={$sectionColor}
-      sectionSize={$sectionSize}
-      sectionThickness={$sectionThickness}
-      followCamera={$followCamera}
-      infiniteGrid={$infiniteGrid}
-      fadeDistance={$fadeDistance}
-      fadeStrength={$fadeStregth}
-      gridSize={[$gridSize1, $gridSize2]}
-      type={{
-        type: 'topology',
-        axis: 'y'
-      }}
-    >
-      <T is={geometry} />
-    </Grid>
+    {#if $gridGeometry == 'Terrain'}
+      <Grid
+        position.y={-2}
+        axes={axisTyped}
+        cellColor={$cellColor}
+        cellSize={$cellSize}
+        cellThickness={$cellThickness}
+        sectionColor={$sectionColor}
+        sectionSize={$sectionSize}
+        sectionThickness={$sectionThickness}
+        followCamera={$followCamera}
+        infiniteGrid={$infiniteGrid}
+        fadeDistance={$fadeDistance}
+        fadeStrength={$fadeStregth}
+        gridSize={[$gridSize1, $gridSize2]}
+        backgroundColor={$backGroundColor}
+        backgroundOpacity={$backgroundOpacity}
+        {type}
+      >
+        <T is={geometry} />
+      </Grid>
+    {:else}
+      <Grid
+        axes={axisTyped}
+        cellColor={$cellColor}
+        cellSize={$cellSize}
+        cellThickness={$cellThickness}
+        sectionColor={$sectionColor}
+        sectionSize={$sectionSize}
+        sectionThickness={$sectionThickness}
+        followCamera={$followCamera}
+        infiniteGrid={$infiniteGrid}
+        fadeDistance={$fadeDistance}
+        fadeStrength={$fadeStregth}
+        gridSize={[$gridSize1, $gridSize2]}
+        backgroundColor={$backGroundColor}
+        backgroundOpacity={$backgroundOpacity}
+        {type}
+      />
+    {/if}
 
-    <Grid
-      axes={axisTyped}
-      cellColor={$cellColor}
-      cellSize={$cellSize}
-      cellThickness={$cellThickness}
-      sectionColor={$sectionColor}
-      sectionSize={$sectionSize}
-      sectionThickness={$sectionThickness}
-      followCamera={$followCamera}
-      infiniteGrid={$infiniteGrid}
-      fadeDistance={$fadeDistance}
-      fadeStrength={$fadeStregth}
-      gridSize={[$gridSize1, $gridSize2]}
-    />
-
-    <!-- Example scene with boxes -->
     <Scene />
   </Canvas>
 </div>
