@@ -13,6 +13,8 @@
   export let cellColor: $$Props['cellColor'] = '#000000'
   export let sectionColor: $$Props['sectionColor'] = '#0000ee'
   export let cellSize: $$Props['cellSize'] = 1
+  export let backgroundColor: $$Props['backgroundColor'] = '#dadada'
+  export let backgroundOpacity: $$Props['backgroundOpacity'] = 0
   export let sectionSize: $$Props['sectionSize'] = 10
   export let axes: $$Props['axes'] = 'xzy'
   export let gridSize: $$Props['gridSize'] = [20, 20]
@@ -44,6 +46,12 @@
     },
     uColor2: {
       value: new Color(sectionColor)
+    },
+    uBackgroundColor: {
+      value: new Color('#aaaaaa')
+    },
+    uBackgroundOpacity: {
+      value: 0.7
     },
     uFadeDistance: {
       value: fadeDistance
@@ -106,6 +114,8 @@
     uniforms.uSize2 = { value: sectionSize }
     uniforms.uColor1 = { value: new Color(cellColor) }
     uniforms.uColor2 = { value: new Color(sectionColor) }
+    uniforms.uBackgroundColor = { value: new Color(backgroundColor) }
+    uniforms.uBackgroundOpacity = { value: backgroundOpacity }
     uniforms.uFadeDistance = { value: fadeDistance }
     uniforms.uFadeStrength = { value: fadeStrength }
     uniforms.uThickness1 = { value: cellThickness }

@@ -10,6 +10,8 @@ export type GridProps = Props<Mesh> & {
   sectionColor?: ColorRepresentation
   sectionSize?: number
   sectionThickness?: number
+  backgroundColor?: ColorRepresentation
+  backgroundOpacity?: number
   gridSize?: number | [number, number]
   followCamera?: boolean
   infiniteGrid?: boolean

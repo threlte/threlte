@@ -29,6 +29,8 @@ const fragmentShader = /*glsl*/ `
 	uniform float uSize2;
 	uniform vec3 uColor1;
 	uniform vec3 uColor2;
+	uniform vec3 uBackgroundColor;
+	uniform float uBackgroundOpacity;
 	uniform float uFadeDistance;
 	uniform float uFadeStrength;
 	uniform float uThickness1;
@@ -128,8 +130,13 @@ const fragmentShader = /*glsl*/ `
 		vec3 color = mix(uColor1, uColor2, min(1.,uThickness2*g2));
 
 		float d = 1.0 - min(distance(vec2(cameraPosition[uCoord0],cameraPosition[uCoord1]), vec2(worldPosition[uCoord0],worldPosition[uCoord1])) / uFadeDistance, 1.);
-		gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
-		// gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
+
+		float linesAlpha = clamp((g1 + g2) * pow(d,uFadeStrength), 0.,1.);
+		vec3 finalColor = mix(uBackgroundColor, color, linesAlpha);
+
+		float blendedAlpha = max(linesAlpha, uBackgroundOpacity);
+
+		gl_FragColor = vec4(finalColor, blendedAlpha);
 
 		if(gl_FragColor.a <= 0.0) discard;
 
