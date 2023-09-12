@@ -184,7 +184,7 @@
 
   const gridType = addInput({
     label: 'gridtype',
-    value: 'grid',
+    value: 'polar',
     params: {
       options: {
         grid: 'grid',
@@ -211,12 +211,36 @@
   })
 
   const maxRadius = addInput({
-    label: 'maxRadius (cirular & polar)',
+    label: 'maxRadius (circular & polar)',
     value: 10,
     params: {
       step: 1,
       min: 0,
       max: 15
+    },
+
+    parent: typeFolder
+  })
+
+  const cellDividers = addInput({
+    label: 'cell dividers (polar)',
+    value: 6,
+    params: {
+      step: 1,
+      min: 0,
+      max: 18
+    },
+
+    parent: typeFolder
+  })
+
+  const sectionDividers = addInput({
+    label: 'section dividers (polar)',
+    value: 2,
+    params: {
+      step: 1,
+      min: 0,
+      max: 18
     },
 
     parent: typeFolder
@@ -235,7 +259,12 @@
       type = { type: 'circular', maxRadius: $maxRadius }
     }
     if ($gridType == 'polar') {
-      type = { type: 'polar', maxRadius: $maxRadius }
+      type = {
+        type: 'polar',
+        maxRadius: $maxRadius,
+        cellDividers: $cellDividers,
+        sectionDividers: $sectionDividers
+      }
     }
   }
 

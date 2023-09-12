@@ -50,7 +50,8 @@ const fragmentShader = /*glsl*/ `
 	uniform float uCircleGridMaxRadius;
 
 	// polar grid dividers
-	uniform float uPolarDividers;
+	uniform float uPolarCellDividers;
+	uniform float uPolarSectionDividers;
 
 	const float pi = 3.141592653589793;
 
@@ -79,16 +80,21 @@ const fragmentShader = /*glsl*/ `
 		return 1.0 - min(line, 1.);
 	}
 
-	float getPolarGrid(float size, float thickness) {
-		const float uPolarDividers = 18.0;
-		float rad = length(worldPosition.xz);
-		vec2 coord = vec2(rad, atan(worldPosition.x, worldPosition.z) * uPolarDividers / pi) / size;
+	float getPolarGrid(float size, float thickness, float polarDividers) {
+
+		float rad = length(worldPosition.xz) / size;
+		vec2 coord = vec2(rad, atan(worldPosition.x, worldPosition.z) * polarDividers / pi) ;
 
 
-		vec2 wrapped = vec2(coord.x, fract(coord.y / (2.0 * uPolarDividers)) * (2.0 * uPolarDividers));
-		vec2 coordWidth = fwidth(coord) * (1.+thickness/2.);
-		vec2 wrappedWidth = fwidth(wrapped) + thickness / 100.;
-		vec2 width = (coord.y < -uPolarDividers * 0.5 || coord.y > uPolarDividers * 0.5 ? wrappedWidth : coordWidth) ;
+		vec2 wrapped = vec2(coord.x, fract(coord.y / (2.0 * polarDividers)) * (2.0 * polarDividers));
+		// vec2 coordWidth = fwidth(coord) * (1.+thickness/2.);
+		// vec2 wrappedWidth = fwidth(wrapped) + thickness / 100.;
+
+
+
+		vec2 coordWidth = fwidth(coord);
+		vec2 wrappedWidth = fwidth(wrapped);
+		vec2 width = (coord.y < -polarDividers * 0.5 || coord.y > polarDividers * 0.5 ? wrappedWidth : coordWidth) ;
 
 		// Compute anti-aliased world-space grid lines
 		vec2 grid = abs(fract(coord - 0.5) - 0.5) / width;
@@ -121,8 +127,8 @@ const fragmentShader = /*glsl*/ `
 		}
 
 		if(uGridType==3){
-			g1 = getPolarGrid(uSize1, uThickness1);
-			g2 = getPolarGrid(uSize2, uThickness2);
+			g1 = getPolarGrid(uSize1, uThickness1, uPolarCellDividers);
+			g2 = getPolarGrid(uSize2, uThickness2, uPolarSectionDividers);
 		}
 
 

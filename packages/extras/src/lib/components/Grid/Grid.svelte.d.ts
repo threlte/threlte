@@ -37,7 +37,8 @@ type CircularParams = {
 type PolarParams = {
   type: 'polar'
   maxRadius?: number
-  dividers?: number
+  cellDividers?: number
+  sectionDividers?: number
 }
 
 export type GridEvents = Events<Mesh>
