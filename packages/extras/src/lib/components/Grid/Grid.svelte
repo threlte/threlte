@@ -23,6 +23,8 @@
   export let cellThickness: $$Props['cellThickness'] = 1
   export let sectionThickness: $$Props['sectionThickness'] = 2
 
+  export let type: $$Props['type'] = { type: 'grid' }
+
   // forward ref binding
   export let ref: Mesh
 
@@ -70,6 +72,12 @@
     uCoord2: {
       value: 1
     },
+    uGridType: {
+      value: 0
+    },
+    uLineGridCoord: {
+      value: 0
+    },
     uCircleGridMaxRadius: {
       value: 9
     },
@@ -78,7 +86,7 @@
     }
   }
 
-  const axisLetterToInt = {
+  const axisCharToInt = {
     x: 0,
     y: 1,
     z: 2
@@ -89,10 +97,11 @@
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
     const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
     const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
-    uniforms.uCoord0.value = axisLetterToInt[c0]
-    uniforms.uCoord1.value = axisLetterToInt[c1]
-    uniforms.uCoord2.value = axisLetterToInt[c2]
+    uniforms.uCoord0.value = axisCharToInt[c0]
+    uniforms.uCoord1.value = axisCharToInt[c1]
+    uniforms.uCoord2.value = axisCharToInt[c2]
 
+    // common options
     uniforms.uSize1 = { value: cellSize }
     uniforms.uSize2 = { value: sectionSize }
     uniforms.uColor1 = { value: new Color(cellColor) }
@@ -103,6 +112,24 @@
     uniforms.uThickness2 = { value: sectionThickness }
     uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
     uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
+
+    // grid type specific
+    if (type.type == 'grid') {
+      uniforms.uGridType = { value: 0 }
+    }
+    if (type.type === 'topology') {
+      uniforms.uGridType = { value: 1 }
+      uniforms.uLineGridCoord = { value: axisCharToInt[type.axis] }
+    }
+    if (type.type === 'cicular') {
+      uniforms.uGridType = { value: 2 }
+      uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
+    }
+    if (type.type === 'polar') {
+      uniforms.uGridType = { value: 3 }
+      uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
+      uniforms.uPolarDividers = { value: type.dividers || 6 }
+    }
     invalidate('Grid uniforms changed')
   }
 

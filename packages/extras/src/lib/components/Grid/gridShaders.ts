@@ -40,7 +40,7 @@ const fragmentShader = /*glsl*/ `
 	uniform int uCoord2;
 
 	// 0 - default; 1 - lines; 2 - circles; 3 - polar
-	// uniform int gridType;
+	uniform int uGridType;
 
   // lineGrid coord for lines
 	uniform int uLineGridCoord;
@@ -101,27 +101,25 @@ const fragmentShader = /*glsl*/ `
 	}
 
 	void main() {
-		int gridType = 3;
-
 		float g1 = 0.;
 		float g2 = 0.;
 
-		if(gridType == 0){
+		if(uGridType == 0){
 			g1 = getSquareGrid(uSize1, uThickness1);
 			g2 = getSquareGrid(uSize2, uThickness2);
 		}
 
-		if(gridType == 1){
+		if(uGridType == 1){
 			g1 = getLinesGrid(uSize1, uThickness1);
 			g2 = getLinesGrid(uSize2, uThickness2);
 		}
 
-		if(gridType==2){
+		if(uGridType==2){
 			g1 = getCirclesGrid(uSize1, uThickness1);
 			g2 = getCirclesGrid(uSize2, uThickness2);
 		}
 
-		if(gridType==3){
+		if(uGridType==3){
 			g1 = getPolarGrid(uSize1, uThickness1);
 			g2 = getPolarGrid(uSize2, uThickness2);
 		}
