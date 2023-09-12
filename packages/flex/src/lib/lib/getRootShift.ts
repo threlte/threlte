@@ -3,12 +3,12 @@ import { isTopLevelChildNode } from './isTopLevelChildNode'
 
 /** @returns [mainAxisShift, crossAxisShift] */
 export const getRootShift = (
-  rootCenterAnchor: boolean | undefined,
+  centerAnchor: boolean | undefined,
   rootWidth: number,
   rootHeight: number,
   node: Node
 ) => {
-  if (!rootCenterAnchor || !isTopLevelChildNode(node)) {
+  if (!centerAnchor || !isTopLevelChildNode(node)) {
     return [0, 0]
   }
   const mainAxisShift = -rootWidth / 2

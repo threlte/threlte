@@ -1,17 +1,45 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Text, TransformControls } from '@threlte/extras'
-  import Box from '../lib/Box/Box.svelte'
-  import Flex from '../lib/Flex/Flex.svelte'
+  import { T, useRender } from '@threlte/core'
+  import { Grid, OrbitControls, Suspense, Text } from '@threlte/extras'
+  import { tick } from 'svelte'
+  import { MOUSE } from 'three'
+  import Node from '../lib/Node/Node.svelte'
+  import Root from '../lib/Root/Root.svelte'
+  import Gizmo from './Gizmo.svelte'
+  import Sphere from './Sphere.svelte'
+  import Box from './Box.svelte'
+
+  useRender(async ({ renderer, scene, camera }) => {
+    await tick()
+    renderer.render(scene, camera.current)
+  })
+
+  let boxes = 0
 </script>
+
+<svelte:window
+  on:keypress={(e) => {
+    if (e.key === '+') {
+      boxes += 1
+    } else if (e.key === '-') {
+      boxes -= 1
+    }
+  }}
+/>
 
 <T.OrthographicCamera
   makeDefault
   position={[0, 0, 10]}
-  zoom={80}
+  zoom={160}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
-  <OrbitControls />
+  <OrbitControls
+    mouseButtons={{
+      LEFT: MOUSE.PAN,
+      RIGHT: MOUSE.ROTATE
+    }}
+    zoomToCursor
+  />
 </T.OrthographicCamera>
 
 <T.DirectionalLight />
@@ -19,105 +47,44 @@
 <Grid
   sectionSize={1}
   cellSize={0.1}
-  cellColor="#292A2D"
-  sectionColor="#292A2D"
+  cellColor="#838383"
+  sectionColor="#838383"
   axes="xyz"
 />
 
-<T.AxesHelper args={[4]} />
+<Gizmo arrows />
 
-<T.Mesh position={[2.5, -1.5, 1]}>
-  <T.BoxGeometry args={[5, 3, 0]} />
-  <T.MeshBasicMaterial wireframe />
-</T.Mesh>
+<Suspense>
+  <Root
+    flexDirection="Row"
+    flexWrap="Wrap"
+    width={50}
+    scaleFactor={10000}
+    gap={0.1}
+  >
+    <Node centerAnchor>
+      <Sphere />
+    </Node>
 
-<Flex
-  root={{
-    size: {
-      width: 5,
-      height: 3
-    },
-    plane: 'xy',
-    scaleFactor: 1000
-  }}
-  flexDirection="row"
-  gap={0.1}
-  wrap="wrap"
-  let:reflow
->
-  <Box centerAnchor>
-    <TransformControls
-      mode="scale"
-      on:objectChange={reflow}
+    <Node
+      flexDirection="Column"
+      flexWrap="NoWrap"
+      gap={0.1}
     >
-      <T.AxesHelper args={[0.1]} />
-      <T.Mesh scale={0.5}>
-        <T.SphereGeometry />
-        <T.MeshBasicMaterial
-          transparent
-          opacity={0.7}
-          color="blue"
-        />
-      </T.Mesh>
-    </TransformControls>
-  </Box>
+      <Node centerAnchor>
+        <Sphere />
+      </Node>
 
-  <Box centerAnchor>
-    <Text
-      fontSize={0.3}
-      text="Works great with <Text>"
-      color="white"
-      anchorX="50%"
-      anchorY="50%"
-      on:sync={reflow}
-    />
-  </Box>
-
-  <Box centerAnchor>
-    <T.AxesHelper args={[0.1]} />
-    <T.Mesh scale={0.4}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={0.7}
-        color="green"
-      />
-    </T.Mesh>
-  </Box>
-
-  <Box centerAnchor>
-    <T.AxesHelper args={[0.1]} />
-    <T.Mesh scale={2}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={0.7}
-        color="red"
-      />
-    </T.Mesh>
-  </Box>
-
-  <Box centerAnchor>
-    <T.AxesHelper args={[0.1]} />
-    <T.Mesh scale={1}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={0.7}
-        color="orange"
-      />
-    </T.Mesh>
-  </Box>
-
-  <Box centerAnchor>
-    <T.AxesHelper args={[0.1]} />
-    <T.Mesh scale={2}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={0.7}
-        color="pink"
-      />
-    </T.Mesh>
-  </Box>
-</Flex>
+      <Node
+        dir="Row"
+        gap={0.1}
+      >
+        {#each new Array(boxes) as _, i (i)}
+          <Node centerAnchor>
+            <Box />
+          </Node>
+        {/each}
+      </Node>
+    </Node>
+  </Root>
+</Suspense>

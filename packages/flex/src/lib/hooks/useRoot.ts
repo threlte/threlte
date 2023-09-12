@@ -1,6 +1,6 @@
 import { getContext } from 'svelte'
-import { rootContextName, type RootContextData } from '../context/createRootContext'
+import { rootContextName, type RootContext } from '../context/createRootContext'
 
 export const useRoot = () => {
-  return getContext<RootContextData>(rootContextName)
+  return getContext<RootContext>(rootContextName)
 }

@@ -9,7 +9,12 @@ import { Matrix4, type Box3, type Object3D, type Vector3 } from 'three'
  *
  * NB: This doesn't work when object itself is rotated (well, for now)
  */
-export const getOBBSize = (object: Object3D, root: Object3D, bb: Box3, size: Vector3) => {
+export const getOrientedBoundingBoxSize = (
+  object: Object3D,
+  root: Object3D,
+  bb: Box3,
+  size: Vector3
+) => {
   object.updateMatrix()
   const oldMatrix = object.matrix
   const oldMatrixAutoUpdate = object.matrixAutoUpdate
