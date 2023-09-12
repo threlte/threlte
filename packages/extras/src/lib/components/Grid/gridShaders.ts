@@ -87,14 +87,9 @@ const fragmentShader = /*glsl*/ `
 
 
 		vec2 wrapped = vec2(coord.x, fract(coord.y / (2.0 * polarDividers)) * (2.0 * polarDividers));
-		// vec2 coordWidth = fwidth(coord) * (1.+thickness/2.);
-		// vec2 wrappedWidth = fwidth(wrapped) + thickness / 100.;
-
-
-
 		vec2 coordWidth = fwidth(coord);
 		vec2 wrappedWidth = fwidth(wrapped);
-		vec2 width = (coord.y < -polarDividers * 0.5 || coord.y > polarDividers * 0.5 ? wrappedWidth : coordWidth) ;
+		vec2 width = (coord.y < -polarDividers * 0.5 || coord.y > polarDividers * 0.5 ? wrappedWidth : coordWidth) * (1.+thickness*0.25);
 
 		// Compute anti-aliased world-space grid lines
 		vec2 grid = abs(fract(coord - 0.5) - 0.5) / width;
