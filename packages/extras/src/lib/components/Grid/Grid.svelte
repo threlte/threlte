@@ -127,11 +127,11 @@
     if (type.type == 'grid') {
       uniforms.uGridType = { value: 0 }
     }
-    if (type.type === 'topology') {
+    if (type.type === 'lines') {
       uniforms.uGridType = { value: 1 }
       uniforms.uLineGridCoord = { value: axisCharToInt[type.axis] }
     }
-    if (type.type === 'cicular') {
+    if (type.type === 'circular') {
       uniforms.uGridType = { value: 2 }
       uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
     }

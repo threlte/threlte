@@ -12,10 +12,9 @@ const vertexShader = /*glsl*/ `
 
 		vec3 pos = vec3(position[uCoord0],position[uCoord1],position[uCoord2]) * (1. + uFadeDistance * uInfiniteGrid);
 
-		vec3 cameraFollowOffset = vec3(cameraPosition[uCoord0],cameraPosition[uCoord1],cameraPosition[uCoord2]) * uFollowCamera;
-		pos[uCoord0] += cameraFollowOffset.x;
-		pos[uCoord1] += cameraFollowOffset.z;
-		// pos[uCoord2] += cameraFollowOffset[uCoord2];
+		vec3 cameraFollowOffset = cameraPosition * uFollowCamera;
+		pos[uCoord0] += cameraFollowOffset[uCoord0];
+		pos[uCoord1] += cameraFollowOffset[uCoord1];
 
 		worldPosition = pos;
 
@@ -131,12 +130,19 @@ const fragmentShader = /*glsl*/ `
 
 		float d = 1.0 - min(distance(vec2(cameraPosition[uCoord0],cameraPosition[uCoord1]), vec2(worldPosition[uCoord0],worldPosition[uCoord1])) / uFadeDistance, 1.);
 
-		float linesAlpha = clamp((g1 + g2) * pow(d,uFadeStrength), 0.,1.);
-		vec3 finalColor = mix(uBackgroundColor, color, linesAlpha);
 
-		float blendedAlpha = max(linesAlpha, uBackgroundOpacity);
 
-		gl_FragColor = vec4(finalColor, blendedAlpha);
+
+		if(uBackgroundOpacity> 0.0){
+			float linesAlpha = clamp((g1 + g2) * pow(d,uFadeStrength) * 3., 0.,1.);
+			vec3 finalColor = mix(uBackgroundColor, color, linesAlpha);
+			float blendedAlpha = max(linesAlpha, uBackgroundOpacity);
+			gl_FragColor = vec4(finalColor, blendedAlpha);
+		} else {
+			gl_FragColor = vec4(color, (g1 + g2) * pow(d,uFadeStrength));
+			gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
+		}
+
 
 		if(gl_FragColor.a <= 0.0) discard;
 

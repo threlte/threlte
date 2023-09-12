@@ -25,12 +25,12 @@ type GridParams = {
 }
 
 type TopologyParams = {
-  type: 'topology'
+  type: 'lines'
   axis: 'x' | 'y' | 'z'
 }
 
 type CircularParams = {
-  type: 'cicular'
+  type: 'circular'
   maxRadius?: number
 }
 
