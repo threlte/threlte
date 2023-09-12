@@ -135,7 +135,7 @@ const fragmentShader = /*glsl*/ `
 
 
 		if(uBackgroundOpacity> 0.0){
-			float linesAlpha = clamp((g1 + g2) * pow(d,uFadeStrength) * 3., 0.,1.);
+			float linesAlpha = clamp((g1 + g2) * pow(d,uFadeStrength) * 0.95, 0.,1.);
 			vec3 finalColor = mix(uBackgroundColor, color, linesAlpha);
 			float blendedAlpha = max(linesAlpha, uBackgroundOpacity);
 			gl_FragColor = vec4(finalColor, blendedAlpha);
