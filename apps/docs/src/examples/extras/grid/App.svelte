@@ -182,7 +182,7 @@
     title: 'Types of grid'
   })
 
-  const gridType = addInput({
+  const gridType: any = addInput({
     label: 'gridtype',
     value: 'polar',
     params: {
@@ -246,28 +246,6 @@
     parent: typeFolder
   })
 
-  let type: any = { type: 'grid' }
-
-  $: {
-    if ($gridType == 'grid') {
-      type = { type: 'grid' }
-    }
-    if ($gridType == 'lines') {
-      type = { type: 'lines', axis: $linesAxis }
-    }
-    if ($gridType == 'circular') {
-      type = { type: 'circular', maxRadius: $maxRadius }
-    }
-    if ($gridType == 'polar') {
-      type = {
-        type: 'polar',
-        maxRadius: $maxRadius,
-        cellDividers: $cellDividers,
-        sectionDividers: $sectionDividers
-      }
-    }
-  }
-
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
   const noise = createNoise2D()
@@ -279,13 +257,11 @@
     vertices[i + 2] = noise(x / 5, y / 5) * 1 + noise(x / 40, y / 40) * 2
   }
   geometry.computeVertexNormals()
-
-  $: console.log($gridGeometry)
 </script>
 
 <div use:action />
 
-<div class="relative h-full w-full ">
+<div class="relative h-full w-full bg-blue-900">
   <Canvas>
     {#if $gridGeometry == 'Terrain'}
       <Grid
@@ -304,7 +280,11 @@
         gridSize={[$gridSize1, $gridSize2]}
         backgroundColor={$backGroundColor}
         backgroundOpacity={$backgroundOpacity}
-        {type}
+        type={$gridType}
+        axis={$linesAxis}
+        maxRadius={$maxRadius}
+        cellDividers={$cellDividers}
+        sectionDividers={$sectionDividers}
       >
         <T is={geometry} />
       </Grid>
@@ -324,7 +304,11 @@
         gridSize={[$gridSize1, $gridSize2]}
         backgroundColor={$backGroundColor}
         backgroundOpacity={$backgroundOpacity}
-        {type}
+        type={$gridType}
+        axis={$linesAxis}
+        maxRadius={$maxRadius}
+        cellDividers={$cellDividers}
+        sectionDividers={$sectionDividers}
       />
     {/if}
 

@@ -25,7 +25,11 @@
   export let cellThickness: $$Props['cellThickness'] = 1
   export let sectionThickness: $$Props['sectionThickness'] = 2
 
-  export let type: $$Props['type'] = { type: 'grid' }
+  export let type: $$Props['type'] = 'grid'
+  export let axis: $$Props['axis'] = 'x'
+  export let maxRadius: $$Props['maxRadius'] = 0
+  export let cellDividers: $$Props['cellDividers'] = 6
+  export let sectionDividers: $$Props['sectionDividers'] = 6
 
   // forward ref binding
   export let ref: Mesh
@@ -127,22 +131,22 @@
     uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
 
     // grid type specific
-    if (type.type == 'grid') {
+    if (type == 'grid') {
       uniforms.uGridType = { value: 0 }
     }
-    if (type.type === 'lines') {
+    if (type === 'lines') {
       uniforms.uGridType = { value: 1 }
-      uniforms.uLineGridCoord = { value: axisCharToInt[type.axis] }
+      uniforms.uLineGridCoord = { value: axisCharToInt[axis as 'x'] }
     }
-    if (type.type === 'circular') {
+    if (type === 'circular') {
       uniforms.uGridType = { value: 2 }
-      uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
+      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
     }
-    if (type.type === 'polar') {
+    if (type === 'polar') {
       uniforms.uGridType = { value: 3 }
-      uniforms.uCircleGridMaxRadius = { value: type.maxRadius || 0 }
-      uniforms.uPolarCellDividers = { value: type.cellDividers || 0 }
-      uniforms.uPolarSectionDividers = { value: type.sectionDividers || 0 }
+      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
+      uniforms.uPolarCellDividers = { value: cellDividers || 0 }
+      uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
     }
     invalidate('Grid uniforms changed')
   }
