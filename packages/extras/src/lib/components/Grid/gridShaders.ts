@@ -1,3 +1,5 @@
+// Credits to Evan Wallace https://madebyevan.com/shaders/grid/ //
+
 const vertexShader = /*glsl*/ `
 	varying vec3 worldPosition;
 	uniform float uFadeDistance;
