@@ -5,12 +5,14 @@
   export let size = 1
   export let thickness = 0.02
   export let arrows = false
-  export let showX = true
-  export let showY = true
-  export let showZ = true
+  export let hideX = false
+  export let hideY = false
+  export let hideZ = false
+
+  $: showAny = !hideX || !hideY || !hideZ
 </script>
 
-{#if showX || showY || showZ}
+{#if showAny}
   <T.Mesh>
     <T.SphereGeometry args={[thickness * 2]} />
     <T.MeshBasicMaterial color="white" />
@@ -18,7 +20,7 @@
 {/if}
 
 <!-- X Axis -->
-{#if showX}
+{#if !hideX}
   <T.Mesh position.x={size / 2}>
     <T.CylinderGeometry
       args={[thickness, thickness, size]}
@@ -43,7 +45,7 @@
 {/if}
 
 <!-- Y Axis -->
-{#if showY}
+{#if !hideY}
   <T.Mesh position.y={size / 2}>
     <T.CylinderGeometry args={[thickness, thickness, size]} />
     <T.MeshBasicMaterial color="green" />
@@ -58,7 +60,7 @@
 {/if}
 
 <!-- Z Axis -->
-{#if showZ}
+{#if !hideZ}
   <T.Mesh position.z={size / 2}>
     <T.CylinderGeometry
       args={[thickness, thickness, size]}

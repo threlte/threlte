@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { createNodeContext } from '$lib/Node/createNodeContext'
-  import { T, currentWritable, useFrame } from '@threlte/core'
-  import { createEventDispatcher, onDestroy } from 'svelte'
-  import { Group } from 'three'
+  import { createNodeContext } from '$lib/nodes/createNodeContext'
+  import { T, createRawEventDispatcher, currentWritable, useFrame } from '@threlte/core'
+  import { onDestroy } from 'svelte'
+  import { Box3, Group, Vector3 } from 'three'
   import { Direction, type Yoga } from 'yoga-layout'
-  import { createRootContext } from '../context/createRootContext'
   import { getDepthAxis } from '../lib/getDepthAxis'
-  import type { Axis, FlexPlane } from '../types/types'
+  import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
+  import { getRootShift } from '../lib/getRootShift'
   import { applyNodeProps, type NodeProps } from '../lib/props'
+  import type { Axis, FlexPlane } from '../types/types'
+  import { createRootContext } from './createRootContext'
+  import { alignFlexProps } from '../lib/alignFlexProps'
 
   type $$Props = NodeProps & {
     yoga: Yoga
@@ -25,11 +28,20 @@
   export let direction: Required<$$Props>['direction'] = 'LTR'
   export let scaleFactor: Required<$$Props>['scaleFactor'] = 1000
 
-  const dispatch = createEventDispatcher<{
-    reflow: void
-  }>()
+  type $$Events = {
+    reflow: {
+      width: number
+      height: number
+    }
+  }
+
+  const dispatch = createRawEventDispatcher<$$Events>()
 
   const rootGroup = new Group()
+  rootGroup.userData.isItem = true
+
+  const boundingBox = new Box3()
+  const vec3 = new Vector3()
 
   /**
    * Reflowing inside useFrame automatically batches reflows to 1 per frame.
@@ -37,10 +49,63 @@
   const { start: reflow, stop } = useFrame(
     () => {
       rootContext.emit('reflow:before')
+
+      for (const { node, group, props } of rootContext.nodes.values()) {
+        const scaledWidth =
+          typeof props.width === 'number' ? props.width * scaleFactor : props.width
+        const scaledHeight =
+          typeof props.height === 'number' ? props.height * scaleFactor : props.height
+
+        if (scaledWidth !== undefined && scaledHeight !== undefined) {
+          // Forced size, no need to calculate bounding box
+          node.setWidth(scaledWidth)
+          node.setHeight(scaledHeight)
+        } else if (node.getChildCount() === 0) {
+          // No size specified, calculate size
+          if (rootGroup) {
+            getOrientedBoundingBoxSize(group, rootGroup, boundingBox, vec3)
+          } else {
+            // rootGroup ref is missing for some reason, let's just use usual bounding box
+            boundingBox.setFromObject(group).getSize(vec3)
+          }
+
+          node.setWidth(scaledWidth || vec3[$mainAxis] * scaleFactor)
+          node.setHeight(scaledHeight || vec3[$crossAxis] * scaleFactor)
+        }
+      }
+
       rootNode.calculateLayout(width * scaleFactor, height * scaleFactor, Direction[direction])
+
+      const rootWidth = rootNode.getComputedWidth()
+      const rootHeight = rootNode.getComputedHeight()
+
+      let minX = 0
+      let maxX = 0
+      let minY = 0
+      let maxY = 0
+
+      // Reposition after recalculation
+      for (const { node, group } of rootContext.nodes.values()) {
+        const { left, top, width, height } = node.getComputedLayout()
+        const [mainAxisShift, crossAxisShift] = getRootShift(rootWidth, rootHeight, node)
+
+        group.position[$mainAxis] = (mainAxisShift + left) / scaleFactor
+        group.position[$crossAxis] = -(crossAxisShift + top) / scaleFactor
+        group.position[$depthAxis] = 0
+
+        minX = Math.min(minX, left)
+        minY = Math.min(minY, top)
+        maxX = Math.max(maxX, left + width)
+        maxY = Math.max(maxY, top + height)
+      }
+
       rootContext.emit('reflow:after')
 
-      dispatch('reflow')
+      dispatch('reflow', {
+        width: (maxX - minX) / scaleFactor,
+        height: (maxY - minY) / scaleFactor
+      })
+
       stop()
     },
     { autostart: false }
@@ -48,6 +113,41 @@
 
   const rootContext = createRootContext({
     yoga,
+    nodes: new Map(),
+    addNode(node, group, props, type) {
+      rootContext.nodes.set(node, { node, group, props, type })
+      reflow()
+    },
+    updateNodeProps(node, props, force = false) {
+      const nodeData = rootContext.nodes.get(node)
+      if (!nodeData) return
+
+      // Updating the props can be forced and is done so on the initial call.
+      if (!force) {
+        // Because all NodeProps are primitive types, we can make a simple
+        // comparison and only request a reflow when necessary. We do that by
+        // checking the length of the props object and then checking if all keys
+        // are the same and all values are the same.
+        const previousKeys = Object.keys(nodeData.props) as (keyof NodeProps)[]
+        const currentKeys = Object.keys(props) as (keyof NodeProps)[]
+        if (
+          previousKeys.length === currentKeys.length &&
+          currentKeys.every((key) => previousKeys.includes(key)) &&
+          previousKeys.every((key) => nodeData.props[key] === props[key])
+        ) {
+          return
+        }
+      }
+
+      applyNodeProps(node, props, scaleFactor)
+
+      nodeData.props = props
+      reflow()
+    },
+    removeNode(node) {
+      rootContext.nodes.delete(node)
+      reflow()
+    },
     rootWidth: currentWritable(width),
     rootHeight: currentWritable(height),
     scaleFactor: currentWritable(scaleFactor ?? 1000),
@@ -58,15 +158,18 @@
     reflow
   })
 
-  const { node: rootNode } = createNodeContext()
-  $: applyNodeProps(rootNode, $$restProps as NodeProps, scaleFactor), reflow()
+  const { mainAxis, crossAxis, depthAxis } = rootContext
 
-  $: rootContext.rootWidth.set(width)
-  $: rootContext.rootHeight.set(height)
-  $: rootContext.mainAxis.set(plane[0] as Axis)
-  $: rootContext.crossAxis.set(plane[1] as Axis)
-  $: rootContext.depthAxis.set(getDepthAxis(plane))
-  $: rootContext.scaleFactor.set(scaleFactor)
+  const { node: rootNode } = createNodeContext()
+  $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
+  $: applyNodeProps(rootNode, $$restProps, scaleFactor), reflow()
+
+  $: rootContext.rootWidth.set(width), rootContext.reflow('Updated root width')
+  $: rootContext.rootHeight.set(height), rootContext.reflow('Updated root height')
+  $: rootContext.mainAxis.set(plane[0] as Axis), rootContext.reflow('Updated main axis')
+  $: rootContext.crossAxis.set(plane[1] as Axis), rootContext.reflow('Updated cross axis')
+  $: rootContext.depthAxis.set(getDepthAxis(plane)), rootContext.reflow('Updated depth axis')
+  $: rootContext.scaleFactor.set(scaleFactor), rootContext.reflow('Updated scale factor')
 
   onDestroy(() => {
     rootNode.free()

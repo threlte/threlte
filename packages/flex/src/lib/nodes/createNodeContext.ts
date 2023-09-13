@@ -1,7 +1,7 @@
 import { onDestroy, setContext, tick } from 'svelte'
 import type { Group } from 'three'
 import type { Node } from 'yoga-layout'
-import { useRoot } from '../hooks/useRoot'
+import { useRoot } from '../Root/useRoot'
 import { useNode } from './useNode'
 
 export type NodeContext = {
@@ -13,7 +13,7 @@ export type NodeContext = {
 export const nodeContextName = '__threlte-node'
 
 export const createNodeContext = (order?: number): NodeContext => {
-  const { reflow, yoga } = useRoot()
+  const { yoga } = useRoot()
 
   const node = yoga.Node.create()
 
@@ -32,11 +32,9 @@ export const createNodeContext = (order?: number): NodeContext => {
       } else {
         data.node.insertChild(child, data.node.getChildCount())
       }
-      reflow()
     },
     removeChild(child) {
       data.node.removeChild(child)
-      reflow()
     }
   }
 

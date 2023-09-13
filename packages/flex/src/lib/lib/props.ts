@@ -1,9 +1,17 @@
 import type { Align, FlexDirection, Justify, Node, PositionType, Wrap } from 'yoga-layout'
 import * as Yoga from 'yoga-layout'
+import { alignFlexProps } from './alignFlexProps'
 
 export type FlexPlane = 'xy' | 'yz' | 'xz'
 
 // prettier-ignore
+/**
+ * This map provides the prop setters as well as the types for the props. The
+ * first input of a setter is used as the prop value. The second input is the
+ * node to apply the prop to. The value of a prop needs to be a primitive type,
+ * so that it can be trivially compared to the previous value. This is used to
+ * prevent unnecessary reflows.
+ */
 export const propSetter = {
   alignItems: (align: keyof typeof Align, node: Node) => node.setAlignItems(Yoga.Align[align]),
   /** Shorthand for alignItems */
@@ -23,6 +31,8 @@ export const propSetter = {
   flexWrap: (wrap: keyof typeof Wrap, node: Node) => node.setFlexWrap(Yoga.Wrap[wrap]),
   /** Shorthand for flexWrap */
   wrap: (wrap: keyof typeof Wrap, node: Node) => node.setFlexWrap(Yoga.Wrap[wrap]),
+
+	flex: (flex: Parameters<Node['setFlex']>[0], node: Node) => node.setFlex(flex),
 
   flexBasis: (basis: Parameters<Node['setFlexBasis']>[0], node: Node) => node.setFlexBasis(basis),
   /** Shorthand for flexBasis */
@@ -63,13 +73,19 @@ export const propSetter = {
 
   gap: (gap: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.All, gap),
   gapColumn: (gapColumn: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.Column, gapColumn),
-  gapRow: (gapRow: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.Row, gapRow)
+  gapRow: (gapRow: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.Row, gapRow),
+
 }
 
 export type NodeProps = {
   [Key in keyof typeof propSetter]?: Parameters<(typeof propSetter)[Key]>[0]
 }
 
+/**
+ * Applies scale factor to props that are numbers. This is used to scale the
+ * props to the current scale factor of the root node because yoga-layout
+ * is made to work with integer values.
+ */
 const applyScaleFactor = (prop: any, scaleFactor: number) => {
   if (typeof prop === 'number') {
     return prop * scaleFactor
@@ -78,7 +94,7 @@ const applyScaleFactor = (prop: any, scaleFactor: number) => {
 }
 
 export const applyNodeProps = (node: Node, props: NodeProps, scaleFactor: number) => {
-  return Object.entries(props).forEach(([key, value]) => {
+  return Object.entries(alignFlexProps(props)).forEach(([key, value]) => {
     const scaledValue = applyScaleFactor(value, scaleFactor)
     propSetter[key as keyof typeof propSetter](scaledValue as never, node)
   })

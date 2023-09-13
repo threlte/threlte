@@ -4,22 +4,34 @@ import { onDestroy, setContext } from 'svelte'
 import type { Axis } from '../types/types'
 import type { Direction, Node, Yoga } from 'yoga-layout'
 import type { Group } from 'three'
+import type { NodeProps } from '../lib/props'
 
 type RootContextEvents = {
   'reflow:before': void
   'reflow:after': void
 }
 
+type RootContextNode = {
+  node: Node
+  group: THREE.Group
+  props: NodeProps
+  type: 'container' | 'item'
+}
+
 export type RootContextData = {
   yoga: Yoga
+  nodes: Map<Node, RootContextNode>
+  addNode: (node: Node, group: Group, props: NodeProps, type: 'container' | 'item') => void
+  updateNodeProps: (node: Node, props: NodeProps, force?: boolean) => void
+  removeNode: (node: Node) => void
   scaleFactor: CurrentWritable<number>
   mainAxis: CurrentWritable<Axis>
   crossAxis: CurrentWritable<Axis>
   depthAxis: CurrentWritable<Axis>
+  rootGroup: Group
   rootWidth: CurrentWritable<number>
   rootHeight: CurrentWritable<number>
-  rootGroup: Group
-  reflow: () => void
+  reflow: (msg?: string) => void
 }
 
 export type RootContext = RootContextData &

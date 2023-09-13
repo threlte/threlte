@@ -2,13 +2,8 @@ import type { Node } from 'yoga-layout'
 import { isTopLevelChildNode } from './isTopLevelChildNode'
 
 /** @returns [mainAxisShift, crossAxisShift] */
-export const getRootShift = (
-  centerAnchor: boolean | undefined,
-  rootWidth: number,
-  rootHeight: number,
-  node: Node
-) => {
-  if (!centerAnchor || !isTopLevelChildNode(node)) {
+export const getRootShift = (rootWidth: number, rootHeight: number, node: Node) => {
+  if (!isTopLevelChildNode(node)) {
     return [0, 0]
   }
   const mainAxisShift = -rootWidth / 2

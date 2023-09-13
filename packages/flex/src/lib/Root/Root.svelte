@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { forwardEventHandlers } from '@threlte/core'
+  import type { ComponentEvents, ComponentProps } from 'svelte'
   import { loadYoga, type Yoga } from 'yoga-layout'
   import InnerRoot from './InnerRoot.svelte'
-  import type { ComponentProps } from 'svelte'
 
   type $$Props = Omit<ComponentProps<InnerRoot>, 'yoga'>
+  type $$Events = ComponentEvents<InnerRoot>
 
   let yoga: Yoga | undefined
 
@@ -12,13 +14,15 @@
   }
 
   initialize()
+
+  const component = forwardEventHandlers()
 </script>
 
 {#if yoga}
   <InnerRoot
     {yoga}
     {...$$restProps}
-    on:reflow
+    bind:this={$component}
     let:reflow
   >
     <slot {reflow} />
