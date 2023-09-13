@@ -1,4 +1,5 @@
 import { ShaderChunk } from 'three'
+
 export const vertexShader = `
     ${ShaderChunk.logdepthbuf_pars_vertex}
     ${ShaderChunk.fog_pars_vertex}
@@ -20,62 +21,72 @@ export const vertexShader = `
     varying vec4 vColor;
     varying float vCounters;
 
-    vec2 fix( vec4 i, float aspect ) {
-        vec2 res = i.xy / i.w;
-        res.x *= aspect;
-        vCounters = counters;
-        return res;
+    vec2 intoScreen(vec4 i) {
+        return resolution * (0.5 * i.xy / i.w + 0.5);
     }
 
-    void main()	{
-
-        float aspect = resolution.x / resolution.y;
-
-        vColor = vec4( color, opacity );
-        vUV = uv;
+    void main() {
+        float aspect = resolution.y / resolution.x;
 
         mat4 m = projectionMatrix * modelViewMatrix;
-        vec4 finalPosition = m * vec4( position, 1.0 );
-        vec4 prevPos = m * vec4( previous, 1.0 );
-        vec4 nextPos = m * vec4( next, 1.0 );
 
-        vec2 currentP = fix( finalPosition, aspect );
-        vec2 prevP = fix( prevPos, aspect );
-        vec2 nextP = fix( nextPos, aspect );
+        vec4 currentClip = m * vec4( position, 1.0 );
+        vec4 prevClip = m * vec4( previous, 1.0 );
+        vec4 nextClip = m * vec4( next, 1.0 );
 
-        float w = lineWidth * width;
+        vec4 currentNormed = currentClip / currentClip.w;
+        vec4 prevNormed = prevClip / prevClip.w;
+        vec4 nextNormed = nextClip / nextClip.w;
+
+        vec2 currentScreen = intoScreen(currentNormed);
+        vec2 prevScreen = intoScreen(prevNormed);
+        vec2 nextScreen = intoScreen(nextNormed);
+
+        float actualWidth = lineWidth * width;
 
         vec2 dir;
-        if( nextP == currentP ) dir = normalize( currentP - prevP );
-        else if( prevP == currentP ) dir = normalize( nextP - currentP );
-        else {
-            vec2 dir1 = normalize( currentP - prevP );
-            vec2 dir2 = normalize( nextP - currentP );
-            dir = normalize( dir1 + dir2 );
+        if(nextScreen == currentScreen) {
+            dir = normalize( currentScreen - prevScreen );
+        } else if(prevScreen == currentScreen) {
+            dir = normalize( nextScreen - currentScreen );
+        } else {
+            vec2 inDir = currentScreen - prevScreen;
+            vec2 outDir = nextScreen - currentScreen;
+            vec2 fullDir = nextScreen - prevScreen;
 
-            vec2 perp = vec2( -dir1.y, dir1.x );
-            vec2 miter = vec2( -dir.y, dir.x );
+            if(length(fullDir) > 0.0) {
+                dir = normalize(fullDir);
+            } else if(length(inDir) > 0.0){
+                dir = normalize(inDir);
+            } else {
+                dir = normalize(outDir);
+            }
         }
 
-        vec4 normal = vec4( -dir.y, dir.x, 0., 1. );
-        normal.xy *= .5 * w;
-        normal *= projectionMatrix;
+        vec2 normal = vec2(-dir.y, dir.x);
 
-        if( scaleDown > 0. ) {
-            float dist = length(currentP - prevP);
+        if(sizeAttenuation != 0.0) {
+            normal /= currentClip.w;
+            normal *= min(resolution.x, resolution.y)*0.05;
+        }
+
+        if (scaleDown > 0.0) {
+            float dist = length(nextNormed - prevNormed);
             normal *= smoothstep(0.0, scaleDown, dist);
         }
 
-        if( sizeAttenuation == 0. ) {
-            normal.xy *= finalPosition.w;
-            normal.xy /= ( vec4( resolution, 0., 1. ) * projectionMatrix ).xy;
-        }
+        vec2 offsetInScreen = actualWidth * normal * side;
 
-        finalPosition.xy += normal.xy * side;
+        vec2 withOffsetScreen = currentScreen + offsetInScreen;
+        vec3 withOffsetNormed = vec3((2.0 * withOffsetScreen/resolution - 1.0), currentNormed.z);
 
-        gl_Position = finalPosition;
+        vCounters = counters;
+        vColor = vec4( color, opacity );
+        vUV = uv;
+
+        gl_Position = currentClip.w * vec4(withOffsetNormed, 1.0);
 
         ${ShaderChunk.logdepthbuf_vertex}
         ${ShaderChunk.fog_vertex}
     }
-`
+`;

@@ -44,7 +44,7 @@
   })
 
   $: {
-    material.uniforms.resolution.value = new Vector2($size.height, $size.width)
+    material.uniforms.resolution.value = new Vector2($size.width, $size.height)
     invalidate('Canvas size changed')
   }
 
