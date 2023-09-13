@@ -29,7 +29,7 @@
   export let axis: $$Props['axis'] = 'x'
   export let maxRadius: $$Props['maxRadius'] = 0
   export let cellDividers: $$Props['cellDividers'] = 6
-  export let sectionDividers: $$Props['sectionDividers'] = 6
+  export let sectionDividers: $$Props['sectionDividers'] = 2
 
   // forward ref binding
   export let ref: Mesh
