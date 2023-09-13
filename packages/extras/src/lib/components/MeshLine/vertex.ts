@@ -75,7 +75,7 @@ export const vertexShader = `
             normal *= smoothstep(0.0, scaleDown, dist);
         }
 
-        vec2 offsetInScreen = actualWidth * normal * side;
+        vec2 offsetInScreen = actualWidth * normal * side * 0.5;
 
         vec2 withOffsetScreen = currentScreen + offsetInScreen;
         vec3 withOffsetNormed = vec3((2.0 * withOffsetScreen/resolution - 1.0), currentNormed.z);
