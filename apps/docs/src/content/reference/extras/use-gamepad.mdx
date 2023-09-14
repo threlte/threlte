@@ -26,3 +26,45 @@ One or more gamepads can be connected at any given time, so an optional `index` 
   const { gamepad: gamepad2 } = useGamepad({ index: 1 })
 </script>
 ```
+
+Another `currentWritable`, `connected` will provide connection status.
+
+```svelte
+<script lang="ts">
+  import { useFrame } from '@threlte/core'
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad, connected } = useGamepad()
+  
+  useFrame(() => {
+    if (connected.current) {
+      console.log(gamepad.current.axes)
+    }
+  })
+</script>
+```
+
+If a gamepad is using the [standard web gamepad mapping](https://w3c.github.io/gamepad/#remapping), a more convienent `mapped` object with events can be used.
+
+```svelte
+<script lang="ts">
+  import { useFrame } from '@threlte/core'
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad, mapped, connected } = useGamepad()
+  
+  useFrame(() => {
+    // Axes are mapped...
+    console.log(mapped.leftStickX, mapped.leftStickY)
+
+    // ...as well as buttons
+    console.log(mapped.rightTrigger.value)
+  })
+
+  mapped.leftTrigger.on('down', () => {
+    console.log('Left trigger is down!')
+  })
+</script>
+```
+
+The available events for mapped buttons are `press`, `down`, `up`, `touch`, `touchstart` and `touchend`.
