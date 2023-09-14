@@ -14,7 +14,6 @@ type Events = { [K in GamepadEvents]?: Fn[] }[]
 
 const createButton = (events: Events, index: number) => {
   const on = (name: GamepadEvents, fn: Fn) => {
-    events[index] ??= {}
     events[index][name] ??= []
     events[index][name]!.push(fn)
   }
@@ -82,9 +81,9 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     mapping = 'standard'
   } = options
 
-  const events: Events = []
+  const events: Events = Array.from({ length: 17 }).map(() => ({}))
   const connected = currentWritable(false)
-  const gamepad = currentWritable<Gamepad | undefined>(undefined)
+  const gamepad = currentWritable<Gamepad | null>(null)
   const mapped: MappedGamepad = createdMapped(events)
 
   const processButton = (mappedButton: MappedGamepadButton, buttons: readonly GamepadButton[], index: number) => {
@@ -112,7 +111,10 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
   }
   
   const processStandard = () => {
-    const { buttons = [], axes = [] } = gamepad.current ?? {}
+    const pad = navigator.getGamepads()[index]
+    const { buttons = [], axes = [] } = pad ?? {}
+
+    gamepad.set(pad)
   
     processButton(mapped.clusterBottom, buttons, 0)
     processButton(mapped.clusterRight, buttons, 1)
@@ -142,7 +144,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (id === gamepad.current?.id) {
       connected.set(false)
-      gamepad.set(undefined)
+      gamepad.set(null)
     }
   }
   
@@ -151,7 +153,6 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (pad) {
       connected.set(true)
-      gamepad.set(pad)
     }
   }
 
