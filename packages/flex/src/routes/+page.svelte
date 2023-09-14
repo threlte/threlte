@@ -15,8 +15,10 @@
   // import Dom from './examples/f/Dom.svelte'
   // import Threlte from './examples/g/Threlte.svelte'
   // import Dom from './examples/g/Dom.svelte'
-  import Threlte from './examples/h/Threlte.svelte'
-  import Dom from './examples/h/Dom.svelte'
+  // import Threlte from './examples/h/Threlte.svelte'
+  // import Dom from './examples/h/Dom.svelte'
+  import Threlte from './examples/i/Threlte.svelte'
+  import Dom from './examples/i/Dom.svelte'
 </script>
 
 <div class="dom">

@@ -3,7 +3,7 @@ import mitt, { type Emitter } from 'mitt'
 import { getContext, onDestroy, setContext } from 'svelte'
 import type { Group } from 'three'
 import type { Node, Yoga } from 'yoga-layout'
-import type { Axis, NodeProps } from '../lib/props'
+import type { Axis, ClassParser, NodeProps } from '../lib/props'
 
 type FlexContextEvents = {
   'reflow:before': void
@@ -30,6 +30,7 @@ export type FlexContextData = {
   rootWidth: CurrentWritable<number>
   rootHeight: CurrentWritable<number>
   reflow: (msg?: string) => void
+  classParser?: ClassParser
 }
 
 export type FlexContext = FlexContextData &

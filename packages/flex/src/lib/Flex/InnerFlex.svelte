@@ -6,9 +6,15 @@
   import { getDepthAxis } from '../lib/getDepthAxis'
   import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
   import { getRootShift } from '../lib/getRootShift'
-  import { applyNodeProps, type Axis, type FlexPlane, type NodeProps } from '../lib/props'
-  import { createFlexContext } from './context'
+  import {
+    applyNodeProps,
+    type Axis,
+    type ClassParser,
+    type FlexPlane,
+    type NodeProps
+  } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
+  import { createFlexContext } from './context'
 
   type $$Props = NodeProps & {
     yoga: Yoga
@@ -17,6 +23,8 @@
     plane?: FlexPlane
     direction?: keyof typeof Direction
     scaleFactor?: number
+    class?: string
+    classParser?: ClassParser
   }
 
   export let yoga: Required<$$Props>['yoga']
@@ -25,6 +33,9 @@
   export let plane: Required<$$Props>['plane'] = 'xy'
   export let direction: Required<$$Props>['direction'] = 'LTR'
   export let scaleFactor: Required<$$Props>['scaleFactor'] = 1000
+  export let classParser: $$Props['classParser'] = undefined
+  let _class: Required<$$Props>['class'] = ''
+  export { _class as class }
 
   type $$Events = {
     reflow: {
@@ -152,14 +163,15 @@
     crossAxis: currentWritable(plane[1] as Axis),
     depthAxis: currentWritable(getDepthAxis(plane)),
     rootGroup: rootGroup,
-    reflow
+    reflow,
+    classParser
   })
 
   const { mainAxis, crossAxis, depthAxis } = flexContext
 
   const { node: rootNode } = createNodeContext()
   $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
-  $: applyNodeProps(rootNode, $$restProps, scaleFactor), reflow()
+  $: applyNodeProps(rootNode, { ...classParser?.(_class), ...$$restProps }, scaleFactor), reflow()
 
   $: flexContext.rootWidth.set(width), flexContext.reflow('Updated root width')
   $: flexContext.rootHeight.set(height), flexContext.reflow('Updated root height')
