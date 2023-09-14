@@ -2,7 +2,9 @@ import { onDestroy } from 'svelte'
 import { currentWritable, useFrame } from '@threlte/core'
 
 type UseGamepadOptions = {
+  /** An optional gamepad index, if multiple gamepads are used. */
   index?: number
+  /** The mapping strategy for the gamepad. Default is 'standard'. Choose 'none' to disable. */
   mapping?: 'none' | 'standard' // 'standard-xr'
 }
 

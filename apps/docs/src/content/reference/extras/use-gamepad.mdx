@@ -67,4 +67,22 @@ If a gamepad is using the [standard web gamepad mapping](https://w3c.github.io/g
 </script>
 ```
 
+The mapped object re-maps the 17 standard gamepad buttons to:
+
+* The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`
+* The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`
+* The center buttons: `select`, `start`, `center`
+* The joysticks: `leftStickButton`, `leftStickX`, `leftStickY`, `rightStickButton`, `rightStickX`, `rightStickY`,
+* The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`
+
 The available events for mapped buttons are `press`, `down`, `up`, `touch`, `touchstart` and `touchend`.
+
+The gamepad will re-map on every frame by default, so if mapping is undesired it can be disabled.
+
+```svelte
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad } = useGamepad({ mapping: 'none' })
+</script>
+```
