@@ -3,7 +3,7 @@ import { currentWritable, useFrame } from '@threlte/core'
 
 type UseGamepadOptions = {
   index?: number
-  mapping?: 'none' | 'standard' | 'standard-xr'
+  mapping?: 'none' | 'standard' // 'standard-xr'
 }
 
 const gamepadEvents = ['press', 'down', 'up', 'touch', 'touchstart', 'touchend'] as const
@@ -137,10 +137,6 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     mapped.rightStickY = axes[3] ?? 0
   }
 
-  const processStandardXR = (mapped: MappedGamepad, gamepad?: Gamepad) => {
-    
-  }
-
   const handleGamepadDisconnected = (event: GamepadEvent): void => {
     const { id } = event.gamepad
 
@@ -173,11 +169,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
   if (mapping === 'standard') {
     useFrame(processStandard)
-  } else if (mapping === 'standard-xr') {
-    useFrame(() => processStandardXR(mapped, gamepad.current))
   }
 
   return { gamepad, mapped, connected }  
 }
-
-const { mapped } = useGamepad()
