@@ -6,6 +6,7 @@ export { useGltf } from './hooks/useGltf'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
 export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
+export { useGamepad } from './hooks/useGamepad'
 
 // abstractions
 export { default as Edges } from './components/Edges/Edges.svelte'

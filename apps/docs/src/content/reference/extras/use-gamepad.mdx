@@ -1,0 +1,28 @@
+---
+order: 13
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useGamepad.ts'
+name: useGamepad
+type: 'hook'
+---
+
+A hook that will provide a `currentWritable` reference to a [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) when connected.
+
+```svelte
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad } = useGamepad()
+</script>
+```
+
+One or more gamepads can be connected at any given time, so an optional `index` option can be provided.
+
+```svelte
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad } = useGamepad({ index: 0 })
+  const { gamepad: gamepad2 } = useGamepad({ index: 1 })
+</script>
+```
