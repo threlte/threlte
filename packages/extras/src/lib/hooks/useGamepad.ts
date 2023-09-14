@@ -155,6 +155,8 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (id === gamepad.current?.id) {
       connected.set(false)
+      gamepad.set(null)
+      stop()
     }
   }
 
@@ -163,6 +165,8 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (pad) {
       connected.set(true)
+      gamepad.set(pad)
+      start()
     }
   }
 
@@ -178,7 +182,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     }
   })
 
-  useFrame(processSnapshot)
+  const { start, stop } = useFrame(processSnapshot, { autostart: false })
 
   return { gamepad, mapped, connected }  
 }
