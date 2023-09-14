@@ -29,48 +29,48 @@ const createButton = (events: Events, index: number) => {
 }
 
 const createdMapped = (events: Events) => ({
-  // buttons[0] Botton button in right cluster
+  /** buttons[0] - Botton button in right cluster */
   clusterBottom: createButton(events, 0),
-  // buttons[1] Right button in right cluster
+  /** buttons[1] - Right button in right cluster */
   clusterRight: createButton(events, 1),
-  // buttons[2] Left button in right cluster
+  /** buttons[2] - Left button in right cluster */
   clusterLeft: createButton(events, 2),
-  // buttons[3] Top button in right cluster
+  /** buttons[3] - Top button in right cluster */
   clusterTop: createButton(events, 3),
-  // buttons[4] Top left front button
+  /** buttons[4] - Top left front button */
   leftBumper: createButton(events, 4),
-  // buttons[5] Top right front button
+  /** buttons[5] - Top right front button */
   rightBumper: createButton(events, 5),
-  // buttons[6] Bottom left front button
+  /** buttons[6] - Bottom left front button */
   leftTrigger: createButton(events, 6),
-  // buttons[7] Bottom right front button
+  /** buttons[7] - Bottom right front button */
   rightTrigger: createButton(events, 7),
-  // buttons[8] Left button in center cluster
+  /** buttons[8] - Left button in center cluster */
   select: createButton(events, 8),
-  // buttons[9] Right button in center cluster
+  /** buttons[9] - Right button in center cluster */
   start: createButton(events, 9),
-  // buttons[10] Left stick pressed button
+  /** buttons[10] - Left stick pressed button */
   leftStickButton: createButton(events, 10),
-  // buttons[11]	Right stick pressed button
+  /** buttons[11] -	Right stick pressed button */
   rightStickButton: createButton(events, 11),
-  // buttons[12]	Top button in left cluster
+  /** buttons[12] -	Top button in left cluster */
   directionalTop: createButton(events, 12),
-  // buttons[13]	Bottom button in left cluster
+  /** buttons[13] -	Bottom button in left cluster */
   directionalBottom: createButton(events, 13),
-  // buttons[14]	Left button in left cluster
+  /** buttons[14] -	Left button in left cluster */
   directionalLeft: createButton(events, 14),
-  // buttons[15]	Right button in left cluster
+  /** buttons[15] -	Right button in left cluster */
   directionalRight: createButton(events, 15),
-  // buttons[16]	Center button in center cluster
+  /** buttons[16] -	Center button in center cluster */
   center: createButton(events, 16),
 
-  // axes[0] Horizontal axis for left stick (negative left/positive right)
+  /** axes[0] - Horizontal axis for left stick (negative left/positive right) */
   leftStickX: 0,
-  // axes[1] Vertical axis for left stick (negative up/positive down)
+  /** axes[1] - Vertical axis for left stick (negative up/positive down) */
   leftStickY: 0,
-  // axes[2] Horizontal axis for right stick (negative left/positive right)
+  /** axes[2] - Horizontal axis for right stick (negative left/positive right) */
   rightStickX: 0,
-  // axes[3] Vertical axis for right stick (negative up/positive down)
+  /** axes[3] - Vertical axis for right stick (negative up/positive down) */
   rightStickY: 0,
 })
 
