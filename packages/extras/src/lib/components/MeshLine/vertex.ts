@@ -67,6 +67,7 @@ export const vertexShader = `
 
         if(sizeAttenuation != 0.0) {
             normal /= currentClip.w;
+						normal *= min(resolution.x, resolution.y) / 2.0;
         }
 
         if (scaleDown > 0.0) {
