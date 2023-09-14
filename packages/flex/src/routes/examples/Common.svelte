@@ -22,20 +22,3 @@
 </T.OrthographicCamera>
 
 <T.DirectionalLight />
-
-<!-- <Grid
-  sectionSize={100}
-  cellSize={10}
-  cellColor="#838383"
-  sectionColor="#838383"
-  axes="xyz"
-  infiniteGrid
-  fadeStrength={0}
-/> -->
-
-<!-- <Gizmo
-  size={100}
-  thickness={2}
-  arrows
-  hideZ
-/> -->

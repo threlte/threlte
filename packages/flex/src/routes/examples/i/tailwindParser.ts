@@ -10,15 +10,27 @@ export const tailwindParser = createClassParser((string) => {
       return value as 'auto'
     } else if (value.endsWith('%')) {
       return value as `${number}%`
+    } else if (value === 'full') {
+      return '100%'
+    } else if (value.match(/^\d+\/\d+$/)) {
+      const [width, height] = value.split('/')
+      const percentage = Math.round((Number(width) / Number(height)) * 100)
+      return `${percentage}%`
     }
-    return parseInt(value)
+    return Number(value)
   }
 
   const parseNumericOrPercentageValue = (value: string): number | `${number}%` => {
     if (value.endsWith('%')) {
       return value as `${number}%`
+    } else if (value === 'full') {
+      return '100%'
+    } else if (value.match(/^\d+\/\d+$/)) {
+      const [width, height] = value.split('/')
+      const percentage = Math.round((Number(width) / Number(height)) * 100)
+      return `${percentage}%`
     }
-    return parseInt(value)
+    return Number(value)
   }
 
   classes.forEach((className) => {
@@ -107,13 +119,13 @@ export const tailwindParser = createClassParser((string) => {
     // flex-grow
     if (className.startsWith('grow-')) {
       const [, value] = className.split('-')
-      styles.flexGrow = parseInt(value)
+      styles.flexGrow = Number(value)
     }
 
     // flex-shrink
     if (className.startsWith('shrink-')) {
       const [, value] = className.split('-')
-      styles.flexShrink = parseInt(value)
+      styles.flexShrink = Number(value)
     }
 
     // flex-direction
@@ -138,7 +150,7 @@ export const tailwindParser = createClassParser((string) => {
         default:
           // flex shorthand
           const [, value] = className.split('-')
-          styles.flex = parseInt(value)
+          styles.flex = Number(value)
       }
     }
 
@@ -219,13 +231,13 @@ export const tailwindParser = createClassParser((string) => {
     // Gaps
     if (className.startsWith('gap-x-')) {
       const [, value] = className.split('-')
-      styles.gapColumn = parseInt(value)
+      styles.gapColumn = Number(value)
     } else if (className.startsWith('gap-y-')) {
       const [, value] = className.split('-')
-      styles.gapRow = parseInt(value)
+      styles.gapRow = Number(value)
     } else if (className.startsWith('gap-')) {
       const [, value] = className.split('-')
-      styles.gap = parseInt(value)
+      styles.gap = Number(value)
     }
 
     // Position
@@ -258,7 +270,7 @@ export const tailwindParser = createClassParser((string) => {
         default:
           const [, value] = className.split('-')
           const [width, height] = value.split('/')
-          styles.aspectRatio = parseInt(width) / parseInt(height)
+          styles.aspectRatio = Number(width) / Number(height)
       }
     }
   })
