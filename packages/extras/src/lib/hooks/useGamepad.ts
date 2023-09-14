@@ -3,13 +3,11 @@ import { currentWritable } from '@threlte/core'
 
 type UseGamepadOptions = {
   index?: number
-  mapping?: 'none' | 'standard' | 'standard-vr'
 }
 
 export const useGamepad = (options: UseGamepadOptions = {}) => {
   const {
-    index = 0,
-    mapping = 'none',
+    index = 0
   } = options
 
   const gamepad = currentWritable<Gamepad | undefined>(undefined)
