@@ -112,12 +112,21 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     mappedButton.value = buttons[index]?.value ?? 0
   }
   
-  const processStandard = () => {
+  const processSnapshot = () => {
+    /**
+     * getGamepads() will return a snapshot of a gamepad that will never change,
+     * so it must be polled continuously to recieve new values.
+     */
     const pad = navigator.getGamepads()[index]
+    gamepad.set(pad)
+
+    if (mapping === 'none') {
+      return
+    }
+  
+    // Handle standard mapping
     const { buttons = [], axes = [] } = pad ?? {}
 
-    gamepad.set(pad)
-  
     processButton(mapped.clusterBottom, buttons, 0)
     processButton(mapped.clusterRight, buttons, 1)
     processButton(mapped.clusterLeft, buttons, 2)
@@ -146,10 +155,9 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (id === gamepad.current?.id) {
       connected.set(false)
-      gamepad.set(null)
     }
   }
-  
+
   const handleGamepadConnected = (): void => {
     const pad = navigator.getGamepads()[index]
 
@@ -170,9 +178,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     }
   })
 
-  if (mapping === 'standard') {
-    useFrame(processStandard)
-  }
+  useFrame(processSnapshot)
 
   return { gamepad, mapped, connected }  
 }
