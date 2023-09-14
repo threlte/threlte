@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createNodeContext } from '$lib/nodes/createNodeContext'
   import { T, createRawEventDispatcher, currentWritable, useFrame } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
@@ -7,10 +6,9 @@
   import { getDepthAxis } from '../lib/getDepthAxis'
   import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
   import { getRootShift } from '../lib/getRootShift'
-  import { applyNodeProps, type NodeProps } from '../lib/props'
-  import type { Axis, FlexPlane } from '../types/types'
-  import { createRootContext } from './createRootContext'
-  import { alignFlexProps } from '../lib/alignFlexProps'
+  import { applyNodeProps, type Axis, type FlexPlane, type NodeProps } from '../lib/props'
+  import { createFlexContext } from './context'
+  import { createNodeContext } from '../nodes/context'
 
   type $$Props = NodeProps & {
     yoga: Yoga
@@ -38,7 +36,7 @@
   const dispatch = createRawEventDispatcher<$$Events>()
 
   const rootGroup = new Group()
-  rootGroup.userData.isItem = true
+  rootGroup.userData.isNode = true
 
   const boundingBox = new Box3()
   const vec3 = new Vector3()
@@ -48,9 +46,9 @@
    */
   const { start: reflow, stop } = useFrame(
     () => {
-      rootContext.emit('reflow:before')
+      flexContext.emit('reflow:before')
 
-      for (const { node, group, props } of rootContext.nodes.values()) {
+      for (const { node, group, props } of flexContext.nodes.values()) {
         const scaledWidth =
           typeof props.width === 'number' ? props.width * scaleFactor : props.width
         const scaledHeight =
@@ -85,7 +83,7 @@
       let maxY = 0
 
       // Reposition after recalculation
-      for (const { node, group } of rootContext.nodes.values()) {
+      for (const { node, group } of flexContext.nodes.values()) {
         const { left, top, width, height } = node.getComputedLayout()
         const [mainAxisShift, crossAxisShift] = getRootShift(rootWidth, rootHeight, node)
 
@@ -99,7 +97,7 @@
         maxY = Math.max(maxY, top + height)
       }
 
-      rootContext.emit('reflow:after')
+      flexContext.emit('reflow:after')
 
       dispatch('reflow', {
         width: (maxX - minX) / scaleFactor,
@@ -111,15 +109,15 @@
     { autostart: false }
   )
 
-  const rootContext = createRootContext({
+  const flexContext = createFlexContext({
     yoga,
     nodes: new Map(),
-    addNode(node, group, props, type) {
-      rootContext.nodes.set(node, { node, group, props, type })
+    addNode(node, group, props) {
+      flexContext.nodes.set(node, { node, group, props })
       reflow()
     },
     updateNodeProps(node, props, force = false) {
-      const nodeData = rootContext.nodes.get(node)
+      const nodeData = flexContext.nodes.get(node)
       if (!nodeData) return
 
       // Updating the props can be forced and is done so on the initial call.
@@ -140,12 +138,11 @@
       }
 
       applyNodeProps(node, props, scaleFactor)
-
       nodeData.props = props
       reflow()
     },
     removeNode(node) {
-      rootContext.nodes.delete(node)
+      flexContext.nodes.delete(node)
       reflow()
     },
     rootWidth: currentWritable(width),
@@ -158,18 +155,18 @@
     reflow
   })
 
-  const { mainAxis, crossAxis, depthAxis } = rootContext
+  const { mainAxis, crossAxis, depthAxis } = flexContext
 
   const { node: rootNode } = createNodeContext()
   $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
   $: applyNodeProps(rootNode, $$restProps, scaleFactor), reflow()
 
-  $: rootContext.rootWidth.set(width), rootContext.reflow('Updated root width')
-  $: rootContext.rootHeight.set(height), rootContext.reflow('Updated root height')
-  $: rootContext.mainAxis.set(plane[0] as Axis), rootContext.reflow('Updated main axis')
-  $: rootContext.crossAxis.set(plane[1] as Axis), rootContext.reflow('Updated cross axis')
-  $: rootContext.depthAxis.set(getDepthAxis(plane)), rootContext.reflow('Updated depth axis')
-  $: rootContext.scaleFactor.set(scaleFactor), rootContext.reflow('Updated scale factor')
+  $: flexContext.rootWidth.set(width), flexContext.reflow('Updated root width')
+  $: flexContext.rootHeight.set(height), flexContext.reflow('Updated root height')
+  $: flexContext.mainAxis.set(plane[0] as Axis), flexContext.reflow('Updated main axis')
+  $: flexContext.crossAxis.set(plane[1] as Axis), flexContext.reflow('Updated cross axis')
+  $: flexContext.depthAxis.set(getDepthAxis(plane)), flexContext.reflow('Updated depth axis')
+  $: flexContext.scaleFactor.set(scaleFactor), flexContext.reflow('Updated scale factor')
 
   onDestroy(() => {
     rootNode.free()

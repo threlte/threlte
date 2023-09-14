@@ -2,9 +2,9 @@
   import { HierarchicalObject, T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group } from 'three'
-  import { useRoot } from '../../Root/useRoot'
-  import type { NodeProps } from '../../lib/props'
-  import { createNodeContext } from '../createNodeContext'
+  import type { NodeProps } from '../lib/props'
+  import { useFlex } from '../Flex/context'
+  import { createNodeContext } from '../nodes/context'
 
   type $$Props = NodeProps & {
     order?: number
@@ -21,17 +21,16 @@
     mainAxis,
     crossAxis,
     depthAxis
-  } = useRoot()
+  } = useFlex()
 
   export const group = new Group()
   export const contentGroup = new Group()
 
-  // identify this node as an item
-  group.userData.isItem = true
+  group.userData.isNode = true
 
   export const { node } = createNodeContext(order)
 
-  addNode(node, group, $$restProps as NodeProps, 'item')
+  addNode(node, group, $$restProps as NodeProps)
   updateNodeProps(node, $$restProps as NodeProps, true)
   $: updateNodeProps(node, $$restProps as NodeProps)
   onDestroy(() => {
@@ -65,14 +64,14 @@
 
 <HierarchicalObject
   onChildMount={(child) => {
-    if (child.userData.isItem) {
+    if (child.userData.isNode) {
       group.add(child)
     } else {
       contentGroup.add(child)
     }
   }}
   onChildDestroy={(child) => {
-    if (child.userData.isItem) {
+    if (child.userData.isNode) {
       group.remove(child)
     } else {
       contentGroup.remove(child)

@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import Root from '../../../lib/Root/Root.svelte'
-  import Item from '../../../lib/nodes/Item/Item.svelte'
+  import Box from '../../../lib/Box/Box.svelte'
+  import Flex from '../../../lib/Flex/Flex.svelte'
   import Plane from '../../Plane.svelte'
-  import Test from '../../Test.svelte'
   import Common from '../Common.svelte'
-  import Container from '../../../lib/nodes/Container/Container.svelte'
-  import Gizmo from '../../Gizmo.svelte'
 </script>
 
 <Common />
@@ -17,7 +13,7 @@
   color="red"
 />
 
-<Root
+<Flex
   width={500}
   height={500}
   justifyContent="Center"
@@ -25,7 +21,7 @@
   gap={20}
   padding={20}
 >
-  <Item
+  <Box
     width="auto"
     height="auto"
     flex={1}
@@ -37,9 +33,9 @@
       {width}
       {height}
     />
-  </Item>
+  </Box>
 
-  <Item
+  <Box
     width="auto"
     height="auto"
     flex={0.5}
@@ -54,7 +50,7 @@
       {height}
     />
 
-    <Item
+    <Box
       flex={1}
       width="auto"
       height={100}
@@ -66,9 +62,9 @@
         {width}
         {height}
       />
-    </Item>
+    </Box>
 
-    <Item
+    <Box
       flex={1}
       width="auto"
       height={100}
@@ -81,6 +77,6 @@
         {width}
         {height}
       />
-    </Item>
-  </Item>
-</Root>
+    </Box>
+  </Box>
+</Flex>

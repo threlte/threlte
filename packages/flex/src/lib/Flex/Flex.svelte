@@ -2,10 +2,10 @@
   import { forwardEventHandlers } from '@threlte/core'
   import type { ComponentEvents, ComponentProps } from 'svelte'
   import { loadYoga, type Yoga } from 'yoga-layout'
-  import InnerRoot from './InnerRoot.svelte'
+  import InnerFlex from './InnerFlex.svelte'
 
-  type $$Props = Omit<ComponentProps<InnerRoot>, 'yoga'>
-  type $$Events = ComponentEvents<InnerRoot>
+  type $$Props = Omit<ComponentProps<InnerFlex>, 'yoga'>
+  type $$Events = ComponentEvents<InnerFlex>
 
   let yoga: Yoga | undefined
 
@@ -19,12 +19,12 @@
 </script>
 
 {#if yoga}
-  <InnerRoot
+  <InnerFlex
     {yoga}
     {...$$restProps}
     bind:this={$component}
     let:reflow
   >
     <slot {reflow} />
-  </InnerRoot>
+  </InnerFlex>
 {/if}

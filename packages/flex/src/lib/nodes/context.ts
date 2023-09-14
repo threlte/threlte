@@ -1,8 +1,6 @@
-import { onDestroy, setContext, tick } from 'svelte'
-import type { Group } from 'three'
+import { getContext, onDestroy, setContext } from 'svelte'
 import type { Node } from 'yoga-layout'
-import { useRoot } from '../Root/useRoot'
-import { useNode } from './useNode'
+import { useFlex } from '../Flex/context'
 
 export type NodeContext = {
   node: Node
@@ -12,8 +10,12 @@ export type NodeContext = {
 
 export const nodeContextName = '__threlte-node'
 
+export const useNode = () => {
+  return getContext<NodeContext>(nodeContextName)
+}
+
 export const createNodeContext = (order?: number): NodeContext => {
-  const { yoga } = useRoot()
+  const { yoga } = useFlex()
 
   const node = yoga.Node.create()
 

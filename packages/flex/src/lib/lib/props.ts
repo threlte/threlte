@@ -4,6 +4,8 @@ import { alignFlexProps } from './alignFlexProps'
 
 export type FlexPlane = 'xy' | 'yz' | 'xz'
 
+export type Axis = 'x' | 'y' | 'z'
+
 // prettier-ignore
 /**
  * This map provides the prop setters as well as the types for the props. The
@@ -14,37 +16,19 @@ export type FlexPlane = 'xy' | 'yz' | 'xz'
  */
 export const propSetter = {
   alignItems: (align: keyof typeof Align, node: Node) => node.setAlignItems(Yoga.Align[align]),
-  /** Shorthand for alignItems */
-  align: (align: keyof typeof Align, node: Node) => node.setAlignItems(Yoga.Align[align]),
   alignSelf: (align: keyof typeof Align, node: Node) => node.setAlignSelf(Yoga.Align[align]),
   alignContent: (align: keyof typeof Align, node: Node) => node.setAlignContent(Yoga.Align[align]),
 
   justifyContent: (justify: keyof typeof Justify, node: Node) => node.setJustifyContent(Yoga.Justify[justify]),
-  /** Shorthand for justifyContent */
-  justify: (justify: keyof typeof Justify, node: Node) => node.setJustifyContent(Yoga.Justify[justify]),
-  flexDirection: (dir: keyof typeof FlexDirection, node: Node) => node.setFlexDirection(Yoga.FlexDirection[dir]),
-  /** Shorthand for flexDirection */
-  flexDir: (dir: keyof typeof FlexDirection, node: Node) => node.setFlexDirection(Yoga.FlexDirection[dir]),
-  /** Shorthand for flexDirection */
-  dir: (dir: keyof typeof FlexDirection, node: Node) => node.setFlexDirection(Yoga.FlexDirection[dir]),
+
+	flexDirection: (dir: keyof typeof FlexDirection, node: Node) => node.setFlexDirection(Yoga.FlexDirection[dir]),
 
   flexWrap: (wrap: keyof typeof Wrap, node: Node) => node.setFlexWrap(Yoga.Wrap[wrap]),
-  /** Shorthand for flexWrap */
-  wrap: (wrap: keyof typeof Wrap, node: Node) => node.setFlexWrap(Yoga.Wrap[wrap]),
 
 	flex: (flex: Parameters<Node['setFlex']>[0], node: Node) => node.setFlex(flex),
-
   flexBasis: (basis: Parameters<Node['setFlexBasis']>[0], node: Node) => node.setFlexBasis(basis),
-  /** Shorthand for flexBasis */
-  basis: (basis: Parameters<Node['setFlexBasis']>[0], node: Node) => node.setFlexBasis(basis),
-
   flexGrow: (grow: Parameters<Node['setFlexGrow']>[0], node: Node) => node.setFlexGrow(grow),
-  /** Shorthand for flexGrow */
-  grow: (grow: Parameters<Node['setFlexGrow']>[0], node: Node) => node.setFlexGrow(grow),
-
   flexShrink: (shrink: Parameters<Node['setFlexShrink']>[0], node: Node) => node.setFlexShrink(shrink),
-  /** Shorthand for flexShrink */
-  shrink: (shrink: Parameters<Node['setFlexShrink']>[0], node: Node) => node.setFlexShrink(shrink),
 
   height: (height: Parameters<Node['setHeight']>[0], node: Node) => node.setHeight(height),
   width: (width: Parameters<Node['setWidth']>[0], node: Node) => node.setWidth(width),
@@ -53,7 +37,8 @@ export const propSetter = {
   minHeight: (minHeight: Parameters<Node['setMinHeight']>[0], node: Node) => node.setMinHeight(minHeight),
   minWidth: (minWidth: Parameters<Node['setMinWidth']>[0], node: Node) => node.setMinWidth(minWidth),
 
-  position: (positionType: keyof typeof PositionType, node: Node) => node.setPositionType(Yoga.PositionType[positionType]),
+	/** As of now, this won't work since the bounding box is still computed by nodes marked as absolutely positioned  */
+  // position: (positionType: keyof typeof PositionType, node: Node) => node.setPositionType(Yoga.PositionType[positionType]),
   top: (top: Parameters<Node['setPosition']>[1], node: Node) => node.setPosition(Yoga.Edge.Top, top),
   right: (right: Parameters<Node['setPosition']>[1], node: Node) => node.setPosition(Yoga.Edge.Right, right),
   bottom: (bottom: Parameters<Node['setPosition']>[1], node: Node) => node.setPosition(Yoga.Edge.Bottom, bottom),
@@ -75,6 +60,7 @@ export const propSetter = {
   gapColumn: (gapColumn: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.Column, gapColumn),
   gapRow: (gapRow: Parameters<Node['setGap']>[1], node: Node) => node.setGap(Yoga.Gutter.Row, gapRow),
 
+	aspectRatio: (aspectRatio: Parameters<Node['setAspectRatio']>[0], node: Node) => node.setAspectRatio(aspectRatio),
 }
 
 export type NodeProps = {

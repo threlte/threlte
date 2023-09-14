@@ -1,11 +1,10 @@
-import { writable } from 'svelte/store'
+import { currentWritable } from '@threlte/core'
 import { loadYoga } from 'yoga-layout'
 
 let loading = false
 let loaded = false
 
-export const yoga = writable<Awaited<ReturnType<typeof loadYoga>> | undefined>(undefined)
-export const scaleFactor = writable(100)
+export const yoga = currentWritable<Awaited<ReturnType<typeof loadYoga>> | undefined>(undefined)
 
 const load = async () => {
   if (loading || loaded) return
