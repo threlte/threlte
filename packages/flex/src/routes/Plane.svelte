@@ -1,7 +1,5 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { DoubleSide } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let color: string = 'white'
   export let height = 1
