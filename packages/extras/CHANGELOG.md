@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.6.3
+
+### Patch Changes
+
+- 8b490b8: Fix MeshLineMaterial shader to calculate normals and offsets correctly
+
 ## 5.6.2
 
 ### Patch Changes
