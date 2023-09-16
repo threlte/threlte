@@ -80,6 +80,7 @@ To give each line a different color and with we export these propertys to be set
     {width}
     {color}
     scaleDown={0.1}
+    attenuate={false}
   />
 </T.Mesh>
 ```
@@ -146,7 +147,7 @@ We use the index to give each line slightly different position, stiffness, dampe
 
 ```svelte
 <script lang="ts">
-	let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f79', '#1e165c']
+  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f79', '#1e165c']
 </script>
 
 {#each colors as color, i}
@@ -156,7 +157,7 @@ We use the index to give each line slightly different position, stiffness, dampe
     position.y={5 - i}
     stiffness={0.02 * i + 0.02}
     damping={0.25 - 0.04 * i}
-    width={0.3 + i / 5}
+    width={15 + i * 10}
   />
 {/each}
 ```

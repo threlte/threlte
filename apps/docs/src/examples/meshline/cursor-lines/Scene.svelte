@@ -17,7 +17,7 @@
     position.y={5 - i}
     stiffness={0.02 * i + 0.02}
     damping={0.25 - 0.04 * i}
-    width={0.3 + i / 5}
+    width={15 + i * 10}
   />
 {/each}
 

@@ -7,7 +7,7 @@
     OrbitControls,
     useTexture
   } from '@threlte/extras'
-  import { Vector3, CubicBezierCurve3, Color } from 'three'
+  import { Vector3, CubicBezierCurve3, Color, DoubleSide } from 'three'
 
   const texture = useTexture('/brush-texture.png')
 
@@ -42,7 +42,7 @@
     scale={2}
   >
     <T.PlaneGeometry />
-    <T.MeshBasicMaterial {map} />
+    <T.MeshBasicMaterial {map} side={DoubleSide}/>
   </T.Mesh>
 {/await}
 
