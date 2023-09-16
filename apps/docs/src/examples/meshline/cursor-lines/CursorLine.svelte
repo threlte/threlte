@@ -55,5 +55,6 @@
     {width}
     {color}
     scaleDown={0.1}
+    attenuate={false}
   />
 </T.Mesh>
