@@ -6,7 +6,6 @@
     "build": "turbo run build",
     "build:docs": "turbo run build --filter='@threlte/docs'",
     "preview": "turbo run preview",
-    "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "install:all": "pnpm install --filter='!@threlte/gltf'",
     "install:packages": "pnpm install --filter='!./apps/*'",
