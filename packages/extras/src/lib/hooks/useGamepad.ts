@@ -182,7 +182,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     }
   })
 
-  const { start, stop } = useFrame(processSnapshot, { autostart: false })
+  const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
 
   return { gamepad, mapped, connected }  
 }
