@@ -15,14 +15,17 @@ const title = Astro.props.title
 
 <AppLayout title={title}>
   <!-- Desktop Nav -->
+  <div class="fixed top-0 left-0 z-[5] h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
+    <!-- bottom gradient -->
+    <div
+      class="pointer-events-none absolute top-full left-0 h-[10svh] w-full bg-gradient-to-b from-[#0A0F19] to-transparent"
+    >
+    </div>
+  </div>
 
   <header
-    class="fixed z-10 hidden h-[70px] w-screen flex-row items-center justify-between border-b border-blue-900/0 bg-[#0A0F19] px-6 md:flex"
+    class="fixed z-10 hidden h-[70px] w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 md:flex"
   >
-    <!-- bottom gradient -->
-    <div class="absolute top-full h-[10svh] w-full bg-gradient-to-b from-[#0A0F19] to-transparent">
-    </div>
-
     <!-- Header Left -->
     <div class="flex flex-row items-center gap-12">
       <a href="/">
@@ -41,6 +44,11 @@ const title = Astro.props.title
           class="hover:text-white"
           href="/docs/learn/getting-started/introduction"
           >Documentation</a
+        >
+        <a
+          class="hover:text-white"
+          href="/hackathon"
+          >Hackathon</a
         >
       </nav>
     </div>
@@ -72,7 +80,9 @@ const title = Astro.props.title
     />
   </MobileMainNav>
 
-  <main class="mx-auto max-w-7xl px-6 pb-12">
+  <slot name="external" />
+
+  <main class="mx-auto max-w-7xl px-6 pb-12 pt-[10svh]">
     <slot />
   </main>
 
