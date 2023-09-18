@@ -62,7 +62,7 @@
         delay={1000}
       >
         <div
-          class="absolute inset-0 bottom-[10lvh] flex flex-col items-center justify-center gap-24 px-4"
+          class="absolute inset-0 bottom-[10lvh] flex flex-col items-center justify-center gap-16 px-4"
         >
           <TheatreTextBox key="warp">
             <div class="flex flex-col items-center justify-center gap-3">
@@ -142,7 +142,7 @@
           </TheatreTextBox>
 
           <TheatreTextBox key="title">
-            <h2 class="text-center text-2xl">
+            <h2 class="text-center text-3xl">
               The first official<br />
               Threlte hackathon<br />
               15-22 October 2023
