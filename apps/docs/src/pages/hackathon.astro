@@ -1,6 +1,7 @@
 ---
 import Intro from '../components/hackathon/Intro.svelte'
 import MainLayout from '../layouts/MainLayout.astro'
+import DiscordIcon from '../components/Icons/inline/Discord.svelte'
 ---
 
 <MainLayout title="Threlte Hackathon">
@@ -8,21 +9,25 @@ import MainLayout from '../layouts/MainLayout.astro'
     <Intro client:load />
   </Fragment>
 
+  <div class="flex flex-col items-center justify-center gap-0">
   <div class="prose prose-invert mt-[100lvh]">
-    <h1>Threlte Hackathon - 15-19 October 2023</h1>
+    <h1 class="text-xl uppercase">Join Us For the<br/><span class="text-3xl">First Threlte Hackathon</span><br/>on 15-19 October 2023</h1>
 
     <p>The Threlte team is happy to announce the first official Threlte Hackathon!</p>
 
     <ul>
-      <li>The 🚀 kickoff event is on Sonntag, 15. Oktober 2023 17:00</li>
+      <li>The <b>🚀 kickoff event</b> is on <b>Sunday, 15 October 2023 16:00 UTC</b></li>
       <li>This is when we will reveal the themes and rules of the hackathon</li>
-      <li>You will have ⌛ one week to hack at your entry</li>
-      <li>You will get 🙌 support from the team and peers in a dedicated hackathon channel</li>
-      <li>🏁 Deadline for submission will be Sonntag, 22. Oktober 2023 12:00 via GitHub</li>
-      <li>The 🏆 awards ceremony will be on Sonntag, 22. Oktober 2023 17:00</li>
-      <li>Expect some very 🎁 cool prizes and 🎉 lots of fun</li>
+      <li>You will have <b>⌛ one week to hack</b> at your entry</li>
+      <li>You will get <b>🙌 support from the team</b> in a dedicated <a href="https://discord.com/channels/985983540804091964/1152997301980250243"><DiscordIcon/> hackathon channel</a></li>
+      <li><b>🏁 Deadline for submission</b> will be <b>Sunday, 22 October 2023 10:00 UTC</b></li>
+      <li>The <b>🏆 awards ceremony</b> will be on <b>Sunday, 22 October 2023 16:00 UTC</b></li>
+      <li>Expect some very <b>🎁 awesome prizes</b> and <b>🎉 lots of fun</b></li>
     </ul>
 
     <p>More details in the coming weeks....but pin the dates!</p>
+
+    <p>Interested in joining? Please <a href="https://discord.com/channels/985983540804091964/1152999817568591943"><DiscordIcon/> enroll in this thread</a> - this is <i>optional</i> but helps us plan.</p>
   </div>
+</div>
 </MainLayout>
