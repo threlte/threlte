@@ -27,9 +27,19 @@ One or more gamepads can be connected at any given time, so an optional `index` 
 </script>
 ```
 
-`gamepad.current` will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
+The `gamepad` store value will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
 
-If a gamepad is using the [standard web gamepad mapping](https://w3c.github.io/gamepad/#remapping), a more convienent `standardGamepad` object is available.
+```svelte
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepad } = useGamepad()
+
+  $: if ($gamepad) console.log('A gamepad has connected!')
+</script>
+```
+
+If the button and axis layout of the gamepad corresponds with the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), a more convienent `standardGamepad` object can be used if a `{ mapping: 'standard' }` option is passed to the hook.
 
 The `standardGamepad` provides properties to more easily access button or joystick values.
 
@@ -41,7 +51,8 @@ The `standardGamepad` provides properties to more easily access button or joysti
   const { standardGamepad } = useGamepad({ mapping: 'standard' })
   
   useFrame(() => {
-    console.log(standardGamepad.leftStickX.value, standardGamepad.leftStickY.value)
+    console.log(standardGamepad.leftStick.x, standardGamepad.leftStick.y)
+    console.log(standardGamepad.leftBumper.value)
     console.log(standardGamepad.rightTrigger.value)
   })
 </script>
@@ -70,7 +81,7 @@ Events can also be attached to buttons or joysticks, or the gamepad itself.
 </script>
 ```
 
-The `standardGamepad` re-maps the 17 standard gamepad buttons and 4 axes to:
+The `standardGamepad` object maps the 17 standard gamepad buttons and 4 axes to:
 
 * The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`.
 * The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`.
