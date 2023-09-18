@@ -8,36 +8,6 @@ interface Props {
 }
 ---
 
-<script>
-  // Find our component DOM on the page.
-
-  const cssRoot: HTMLElement | null = document.querySelector(':root')
-  document.addEventListener('scroll', () => {
-    adjustHeight()
-  })
-
-  adjustHeight()
-
-  function adjustHeight() {
-    const footerQuery = document.querySelectorAll('footer')
-    const footer = footerQuery[0]
-    if (footer) {
-      const rect = footer.getBoundingClientRect()
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight
-      const windowWidth = window.innerWidth || document.documentElement.clientWidth
-
-      // Check if the element is not visible at all
-      if (rect.bottom < 0 || rect.top > windowHeight || rect.right < 0 || rect.left > windowWidth) {
-        // return { width: 0, height: 0 };
-      }
-
-      // Calculate visible dimensions
-      const visibleHeight = Math.max(Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0), 0)
-      cssRoot?.style.setProperty('--footer-visible-height', `${visibleHeight}px`)
-    }
-  }
-</script>
-
 <footer class={c('grid grid-cols-1 md:grid-cols-3 text-sm gap-6', Astro.props.class ?? '')}>
   <div class="flex flex-col gap-6">
     <Image
