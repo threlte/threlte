@@ -6,7 +6,7 @@ type UseGamepadOptions = {
   index?: number
   /** The mapping strategy for the gamepad. Default is 'none'. Choose 'standard' to enable mapping. */
   mapping?: 'none' | 'standard' // 'standard-xr'
-  /** The threshold value of an axis before change events are fired. Default is 0.01. */
+  /** The threshold value of an axis before change events are fired. Default is 0.05. */
   axisChangeThreshold?: number
 }
 
@@ -30,10 +30,8 @@ const standardButtons = [
 ] as const
 
 const standardSticks = [
-  'leftStickX',
-  'leftStickY',
-  'rightStickX',
-  'rightStickY',
+  'leftStick',
+  'rightStick',
 ] as const
 
 const gamepadEvents = [
@@ -52,8 +50,15 @@ type StandardGamepadSticks = typeof standardSticks[number]
 
 export type StandardGamepadEvent = {
   type: StandardGamepadEvents
-  target: StandardGamepadButtons | StandardGamepadSticks
+  target: StandardGamepadButtons
   value: number
+} | {
+  type: 'change'
+  target: StandardGamepadSticks
+  value: {
+    x: number
+    y: number
+  }
 }
 
 type Fn = (event: StandardGamepadEvent) => void
@@ -80,7 +85,8 @@ const createStick = (events: Events[], index: number) => {
   }
 
   return {
-    value: 0,
+    x: 0,
+    y: 0,
     on,
   }
 }
@@ -127,14 +133,10 @@ const createStandard = (allEvents: Events, events: Events[]) => {
     /** buttons[16] -	Center button in center cluster */
     center: createButton(events, 16),
 
-    /** axes[0] - Horizontal axis for left stick (negative left/positive right) */
-    leftStickX: createStick(events, 17),
-    /** axes[1] - Vertical axis for left stick (negative up/positive down) */
-    leftStickY: createStick(events, 18),
-    /** axes[2] - Horizontal axis for right stick (negative left/positive right) */
-    rightStickX: createStick(events, 19),
-    /** axes[3] - Vertical axis for right stick (negative up/positive down) */
-    rightStickY: createStick(events, 20),
+    /** axes[0], axes[1] - Horizontal / vertical axis for left stick (negative left/positive right) */
+    leftStick: createStick(events, 17),
+    /** axes[2], axes[3] - Horizontal / vertical axis for right stick (negative left/positive right) */
+    rightStick: createStick(events, 18),
 
     on,
   }
@@ -146,9 +148,9 @@ type StandardGamepad = ReturnType<typeof createStandard>
 
 export const useGamepad = (options: UseGamepadOptions = {}) => {
   const {
-    index = 0,
+    index: gamepadIndex = 0,
     mapping = 'none',
-    axisChangeThreshold = 0.01,
+    axisChangeThreshold = 0.05,
   } = options
 
   const allEvents: Events = {}
@@ -200,14 +202,21 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     target: StandardGamepadSticks,
     mappedStick: StandardGamepadStick,
     stickEvents: Events,
-    source: number
+    rawX = 0,
+    rawY = 0
   ) => {
-    const lastValue = mappedStick.value
-    const value = mappedStick.value = source;
+    const lastValueX = mappedStick.x
+    const lastValueY = mappedStick.y
 
-    if (lastValue !== mappedStick.value && Math.abs(mappedStick.value) > axisChangeThreshold) {
-      allEvents.change?.forEach(fn => fn({ type: 'change', target, value }))
-      stickEvents.change?.forEach(fn => fn({ type: 'change', target, value }))
+    const x = Math.abs(rawX) < axisChangeThreshold ? 0 : rawX
+    const y = Math.abs(rawY) < axisChangeThreshold ? 0 : rawY
+  
+    mappedStick.x = x
+    mappedStick.y = y
+
+    if (lastValueX !== x || lastValueY !== y) {
+      allEvents.change?.forEach(fn => fn({ type: 'change', target, value: { x, y } }))
+      stickEvents.change?.forEach(fn => fn({ type: 'change', target, value: { x, y } }))
     }
   }
   
@@ -216,7 +225,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
      * getGamepads() will return a snapshot of a gamepad that will never change,
      * so it must be polled continuously to recieve new values.
      */
-    const pad = navigator.getGamepads()[index]
+    const pad = navigator.getGamepads()[gamepadIndex]
     gamepad.set(pad)
 
     if (mapping === 'none') return
@@ -227,10 +236,9 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     standardButtons.forEach((name, index) =>
       processButton(name, standardGamepad[name], events[index], buttons[index])
     )
-    
-    standardSticks.forEach((name, index) =>
-      processStick(name, standardGamepad[name], events[index + 16], axes[index] ?? 0)
-    )
+
+    processStick('leftStick', standardGamepad.leftStick, events[17], axes[0], axes[1])
+    processStick('rightStick', standardGamepad.rightStick, events[18], axes[2], axes[3])
   }
 
   const handleGamepadDisconnected = (event: GamepadEvent): void => {
@@ -243,7 +251,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
   }
 
   const handleGamepadConnected = (): void => {
-    const pad = navigator.getGamepads()[index]
+    const pad = navigator.getGamepads()[gamepadIndex]
 
     if (pad) {
       gamepad.set(pad)

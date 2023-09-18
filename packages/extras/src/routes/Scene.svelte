@@ -1,14 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
-
-  const { standardGamepad } = useGamepad({ mapping: 'standard' })
-
-  const logEvent = (event) => console.log(event.type, event.target, event.value)
-  
-  for (let type of ['change', 'down', 'up', 'press', 'touchstart', 'touchend', 'touch'] as const) {
-    standardGamepad.on(type, logEvent)
-  }
+  import { Grid, OrbitControls, Sky } from '../lib'
 </script>
 
 <T.PerspectiveCamera

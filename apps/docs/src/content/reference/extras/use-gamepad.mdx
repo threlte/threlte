@@ -16,7 +16,7 @@ A hook that will provide a [`currentWritable`](/docs/reference/core/utilities#cu
 </script>
 ```
 
-One or more gamepads can be connected at any given time, so an optional `index` option can be provided.
+One or more gamepads can be connected at any given time, so an optional `index` can be provided.
 
 ```svelte
 <script lang="ts">
@@ -27,62 +27,63 @@ One or more gamepads can be connected at any given time, so an optional `index` 
 </script>
 ```
 
-Another `currentWritable`, `connected` will provide connection status.
+`gamepad.current` will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
+
+If a gamepad is using the [standard web gamepad mapping](https://w3c.github.io/gamepad/#remapping), a more convienent `standardGamepad` object is available.
+
+The `standardGamepad` provides properties to more easily access button or joystick values.
 
 ```svelte
 <script lang="ts">
   import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepad, connected } = useGamepad()
+  const { standardGamepad } = useGamepad({ mapping: 'standard' })
   
   useFrame(() => {
-    if (connected.current) {
-      console.log(gamepad.current.axes)
-    }
+    console.log(standardGamepad.leftStickX.value, standardGamepad.leftStickY.value)
+    console.log(standardGamepad.rightTrigger.value)
   })
 </script>
 ```
 
-If a gamepad is using the [standard web gamepad mapping](https://w3c.github.io/gamepad/#remapping), a more convienent `mapped` object with events can be used.
+Events can also be attached to buttons or joysticks, or the gamepad itself.
 
 ```svelte
 <script lang="ts">
   import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepad, mapped, connected } = useGamepad()
+  const { standardGamepad } = useGamepad({ mapping: 'standard' })
   
-  useFrame(() => {
-    // Axes are mapped...
-    console.log(mapped.leftStickX, mapped.leftStickY)
-
-    // ...as well as buttons
-    console.log(mapped.rightTrigger.value)
+  standardGamepad.leftTrigger.on('down', (event) => {
+    console.log('The left trigger has just been pressed!')
   })
 
-  mapped.leftTrigger.on('down', () => {
-    console.log('Left trigger is down!')
+  standardGamepad.leftStick.on('change', (event) => {
+    console.log(`Left stick moved: ${event.value.x}`,${event.value.y}`)
+  })
+  
+  standardGamepad.on('press', (event) => {
+    console.log(`A ${event.type} event on ${event.target} occurred: ${event.value}`)
   })
 </script>
 ```
 
-The mapped object re-maps the 17 standard gamepad buttons to:
+The `standardGamepad` re-maps the 17 standard gamepad buttons and 4 axes to:
 
-* The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`
-* The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`
-* The center buttons: `select`, `start`, `center`
-* The joysticks: `leftStickButton`, `leftStickX`, `leftStickY`, `rightStickButton`, `rightStickX`, `rightStickY`,
-* The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`
+* The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`.
+* The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`.
+* The center buttons: `select`, `start`, `center`.
+* The joystick axes and buttons: `leftStickButton`, `leftStick`, `rightStickButton`, `rightStick`.
+* The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`.
 
-The available events for mapped buttons are `press`, `down`, `up`, `touch`, `touchstart` and `touchend`.
+The available events for mapped buttons are the following:
 
-The gamepad will re-map on every frame by default, so if mapping is undesired it can be disabled.
-
-```svelte
-<script lang="ts">
-  import { useGamepad } from '@threlte/extras'
-
-  const { gamepad } = useGamepad({ mapping: 'none' })
-</script>
-```
+* `change` will fire whenever the `value` of the stick or button changes. This is helpful for buttons or joysticks that can have continuous values.
+* `press` will fire if a button is pressed.
+* `down` will fire when a button press begins.
+* `up` will fire when a button press ends. 
+* `touch` is supported by some gamepads, and will fire if a small amount of pressure on a button is detected.
+* `touchstart` will fire when a touch begins,
+* and `touchend` will fire when a touch ends.
