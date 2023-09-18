@@ -27,6 +27,7 @@ const standardButtons = [
   'directionalBottom',
   'directionalLeft',
   'directionalRight',
+  'center',
 ] as const
 
 const standardSticks = [
@@ -154,7 +155,9 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
   } = options
 
   const allEvents: Events = {}
-  const events: Events[] = Array.from({ length: 21 }).map(() => ({}))
+  const events: Events[] = Array
+    .from({ length: standardButtons.length + standardSticks.length })
+    .map(() => ({}))
   const gamepad = currentWritable<Gamepad | null>(null)
   const standardGamepad: StandardGamepad = createStandard(allEvents, events)
 
