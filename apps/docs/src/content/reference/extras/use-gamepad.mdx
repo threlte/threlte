@@ -61,7 +61,7 @@ Events can also be attached to buttons or joysticks, or the gamepad itself.
   })
 
   standardGamepad.leftStick.on('change', (event) => {
-    console.log(`Left stick moved: ${event.value.x}`,${event.value.y}`)
+    console.log(`Left stick moved: ${event.value.x}, ${event.value.y}`)
   })
   
   standardGamepad.on('press', (event) => {
