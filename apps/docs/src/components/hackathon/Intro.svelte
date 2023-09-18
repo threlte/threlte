@@ -56,7 +56,7 @@
 
     <div class="gradient absolute bottom-0 left-0 h-[10lvh] w-full" />
 
-    {#if !debug && started}
+    {#if !debug && (started || $reducedMotion)}
       <Sequence
         autoplay
         delay={1000}
