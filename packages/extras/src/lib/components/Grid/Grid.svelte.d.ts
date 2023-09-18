@@ -18,20 +18,19 @@ export type GridProps = Props<Mesh> & {
   fadeDistance?: number
   fadeStrength?: number
 } & (
-    | {}
     | {
-        type: 'grid'
+        type?: 'grid'
       }
     | {
-        type: 'lines'
+        type?: 'lines'
         axis: 'x' | 'y' | 'z'
       }
     | {
-        type: 'circular'
+        type?: 'circular'
         maxRadius?: number
       }
     | {
-        type: 'polar'
+        type?: 'polar'
         maxRadius?: number
         cellDividers?: number
         sectionDividers?: number
