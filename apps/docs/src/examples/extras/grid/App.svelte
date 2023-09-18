@@ -98,8 +98,8 @@
     parent: generalFolder
   })
 
-  const axes = addInput({
-    label: 'axes',
+  const plane = addInput({
+    label: 'plane',
     value: 'xzy',
     params: {
       options: {
@@ -110,7 +110,7 @@
     },
     parent: generalFolder
   })
-  $: axisTyped = $axes as 'xzy' | 'xyz' | 'zyx'
+  $: planeTyped = $plane as 'xzy' | 'xyz' | 'zyx'
 
   const followCamera = addInput({
     label: 'followCamera',
@@ -266,7 +266,7 @@
     {#if $gridGeometry == 'Terrain'}
       <Grid
         position.y={-2}
-        axes={axisTyped}
+        plane={planeTyped}
         cellColor={$cellColor}
         cellSize={$cellSize}
         cellThickness={$cellThickness}
@@ -290,7 +290,7 @@
       </Grid>
     {:else}
       <Grid
-        axes={axisTyped}
+        plane={planeTyped}
         cellColor={$cellColor}
         cellSize={$cellSize}
         cellThickness={$cellThickness}

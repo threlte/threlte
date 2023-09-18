@@ -16,7 +16,7 @@
   export let backgroundColor: $$Props['backgroundColor'] = '#dadada'
   export let backgroundOpacity: $$Props['backgroundOpacity'] = 0
   export let sectionSize: $$Props['sectionSize'] = 10
-  export let axes: $$Props['axes'] = 'xzy'
+  export let plane: $$Props['plane'] = 'xzy'
   export let gridSize: $$Props['gridSize'] = [20, 20]
   export let followCamera: $$Props['followCamera'] = false
   export let infiniteGrid: $$Props['infiniteGrid'] = false
@@ -109,9 +109,9 @@
 
   $: {
     // convert axis string to int indexes xzy = [0,2,1]
-    const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
-    const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
-    const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
+    const c0 = plane.charAt(0) as 'x' | 'y' | 'z'
+    const c1 = plane.charAt(1) as 'x' | 'y' | 'z'
+    const c2 = plane.charAt(2) as 'x' | 'y' | 'z'
     uniforms.uCoord0.value = axisCharToInt[c0]
     uniforms.uCoord1.value = axisCharToInt[c1]
     uniforms.uCoord2.value = axisCharToInt[c2]

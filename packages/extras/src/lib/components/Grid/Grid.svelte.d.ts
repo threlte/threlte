@@ -3,7 +3,7 @@ import { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, Mesh, Shape } from 'three'
 
 export type GridProps = Props<Mesh> & {
-  axes?: 'xzy' | 'xyz' | 'zyx'
+  plane?: 'xzy' | 'xyz' | 'zyx'
   cellColor?: ColorRepresentation
   cellSize?: number
   cellThickness?: number
