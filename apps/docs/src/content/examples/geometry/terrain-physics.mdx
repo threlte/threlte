@@ -15,18 +15,18 @@ This is an adaption of Rapier's [own demo](https://rapier.rs/demos3d/index.html)
 1. Similar to the [3D noise example](/docs/examples/geometry/terrain), loop over the vertices of a PlaneGeometry, and use a noise map to create a heightfield array `heights`.
 2. Attach the heightfield to a rapier `<Collider>`
 
-```
+```svelte
 <Collider
-	shape={'heightfield'}
-	args={[nsubdivs, nsubdivs, heights, scale]}
+  shape={'heightfield'}
+  args={[nsubdivs, nsubdivs, heights, scale]}
 />
 ```
 
 3. Wrap in a fixed `<RigidBody>`. We don't want this terrain to respond to gravity and fall downwards when rapier physics simulation begins.
 
-```
+```svelte
 <RigidBody type={'fixed'}>
-  <Collider .../>
+  <Collider ... />
 </RigidBody>
 ```
 
