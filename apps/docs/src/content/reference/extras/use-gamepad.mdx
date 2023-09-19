@@ -16,7 +16,7 @@ A hook that will provide a [`currentWritable`](/docs/reference/core/utilities#cu
 </script>
 ```
 
-One or more gamepads can be connected at any given time, so an optional `index` can be provided.
+More than one gamepad can be connected at any given time, so an optional `index` can be specified.
 
 ```svelte
 <script lang="ts">
@@ -29,15 +29,38 @@ One or more gamepads can be connected at any given time, so an optional `index` 
 
 The `gamepad` store value will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
 
+The hook also provides a `gamepadConnected` boolean store to react to gamepad connection.
+
+```
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepadConnected } = useGamepad()
+  
+  $: console.log(`A gamepad ${$gamepadConnected ? 'connected' : 'disconnected'}!`)
+</script>
+```
+
 ```svelte
 <script lang="ts">
+  import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
   const { gamepad } = useGamepad()
 
-  $: if ($gamepad) console.log('A gamepad has connected!')
+  useFrame(() => {
+    if (gamepad.current) {
+      // A gamepad is connected!
+    }
+  })
 </script>
 ```
+
+<Tip type="warning">
+  Gamepad data is fetched as an immutable snapshot on every frame, so a reference to `$gamepad` or `gamepad.current` will become stale on the next frame.
+</Tip>
+
+### Standard gamepad layout
 
 If the button and axis layout of the gamepad corresponds with the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), a more convienent `standardGamepad` object can be used if a `{ mapping: 'standard' }` option is passed to the hook.
 
@@ -58,7 +81,7 @@ The `standardGamepad` provides properties to more easily access button or joysti
 </script>
 ```
 
-Events can also be attached to buttons or joysticks, or the gamepad itself.
+Event listeners can also be attached to buttons or joysticks, or the gamepad itself.
 
 ```svelte
 <script lang="ts">
@@ -80,6 +103,8 @@ Events can also be attached to buttons or joysticks, or the gamepad itself.
   })
 </script>
 ```
+
+### Button mapping and events
 
 The `standardGamepad` object maps the 17 standard gamepad buttons and 4 axes to:
 

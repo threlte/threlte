@@ -27,40 +27,31 @@ const standardButtons = [
   'directionalBottom',
   'directionalLeft',
   'directionalRight',
-  'center',
+  'center'
 ] as const
 
-const standardSticks = [
-  'leftStick',
-  'rightStick',
-] as const
+const standardSticks = ['leftStick', 'rightStick'] as const
 
-const gamepadEvents = [
-  'change',
-  'press',
-  'down',
-  'up',
-  'touch',
-  'touchstart',
-  'touchend'
-] as const
+const gamepadEvents = ['change', 'press', 'down', 'up', 'touch', 'touchstart', 'touchend'] as const
 
-type StandardGamepadEvents = typeof gamepadEvents[number]
-type StandardGamepadButtons = typeof standardButtons[number]
-type StandardGamepadSticks = typeof standardSticks[number]
+type StandardGamepadEvents = (typeof gamepadEvents)[number]
+type StandardGamepadButtons = (typeof standardButtons)[number]
+type StandardGamepadSticks = (typeof standardSticks)[number]
 
-export type StandardGamepadEvent = {
-  type: StandardGamepadEvents
-  target: StandardGamepadButtons
-  value: number
-} | {
-  type: 'change'
-  target: StandardGamepadSticks
-  value: {
-    x: number
-    y: number
-  }
-}
+export type StandardGamepadEvent =
+  | {
+      type: StandardGamepadEvents
+      target: StandardGamepadButtons
+      value: number
+    }
+  | {
+      type: 'change'
+      target: StandardGamepadSticks
+      value: {
+        x: number
+        y: number
+      }
+    }
 
 type Fn = (event: StandardGamepadEvent) => void
 type Events = { [K in StandardGamepadEvents]?: Fn[] }
@@ -75,7 +66,7 @@ const createButton = (events: Events[], index: number) => {
     pressed: false,
     touched: false,
     value: 0,
-    on,
+    on
   }
 }
 
@@ -88,7 +79,7 @@ const createStick = (events: Events[], index: number) => {
   return {
     x: 0,
     y: 0,
-    on,
+    on
   }
 }
 
@@ -139,7 +130,7 @@ const createStandard = (allEvents: Events, events: Events[]) => {
     /** axes[2], axes[3] - Horizontal / vertical axis for right stick (negative left/positive right) */
     rightStick: createStick(events, 18),
 
-    on,
+    on
   }
 }
 
@@ -148,17 +139,14 @@ type StandardGamepadStick = ReturnType<typeof createStick>
 type StandardGamepad = ReturnType<typeof createStandard>
 
 export const useGamepad = (options: UseGamepadOptions = {}) => {
-  const {
-    index: gamepadIndex = 0,
-    mapping = 'none',
-    axisChangeThreshold = 0.05,
-  } = options
+  const { index: gamepadIndex = 0, mapping = 'none', axisChangeThreshold = 0.05 } = options
 
   const allEvents: Events = {}
-  const events: Events[] = Array
-    .from({ length: standardButtons.length + standardSticks.length })
-    .map(() => ({}))
+  const events: Events[] = Array.from({
+    length: standardButtons.length + standardSticks.length
+  }).map(() => ({}))
   const gamepad = currentWritable<Gamepad | null>(null)
+  const gamepadConnected = currentWritable(false)
   const standardGamepad: StandardGamepad = createStandard(allEvents, events)
 
   const processButton = (
@@ -173,31 +161,31 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     mappedButton.touched = source?.touched ?? false
     mappedButton.pressed = source?.pressed ?? false
-    const value = mappedButton.value = source?.value ?? 0
+    const value = (mappedButton.value = source?.value ?? 0)
 
     if (!lastTouched && mappedButton.touched) {
-      allEvents.touchstart?.forEach(fn => fn({ type: 'touchstart', target, value }))
-      buttonEvents.touchstart?.forEach(fn => fn({ type: 'touchstart', target, value }))
+      allEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
+      buttonEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
     } else if (lastTouched && !mappedButton.touched) {
-      allEvents.touch?.forEach(fn => fn({ type: 'touch', target, value }))
-      buttonEvents.touch?.forEach(fn => fn({ type: 'touch', target, value }))
-      allEvents.touchend?.forEach(fn => fn({ type: 'touchend', target, value }))
-      buttonEvents.touchend?.forEach(fn => fn({ type: 'touchend', target, value }))
+      allEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
+      buttonEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
+      allEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
+      buttonEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
     }
 
     if (!lastPressed && mappedButton.pressed) {
-      allEvents.down?.forEach(fn => fn({ type: 'down', target, value }))
-      buttonEvents.down?.forEach(fn => fn({ type: 'down', target, value }))
+      allEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
+      buttonEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
     } else if (lastPressed && !mappedButton.pressed) {
-      allEvents.press?.forEach(fn => fn({ type: 'press', target, value }))
-      buttonEvents.press?.forEach(fn => fn({ type: 'press', target, value }))
-      allEvents.up?.forEach(fn => fn({ type: 'up', target, value }))
-      buttonEvents.up?.forEach(fn => fn({ type: 'up', target, value }))
+      allEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
+      buttonEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
+      allEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
+      buttonEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
     }
 
     if (lastValue !== mappedButton.value) {
-      allEvents.change?.forEach(fn => fn({ type: 'change', target, value }))
-      buttonEvents.change?.forEach(fn => fn({ type: 'change', target, value }))
+      allEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
+      buttonEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
     }
   }
 
@@ -213,16 +201,16 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     const x = Math.abs(rawX) < axisChangeThreshold ? 0 : rawX
     const y = Math.abs(rawY) < axisChangeThreshold ? 0 : rawY
-  
+
     mappedStick.x = x
     mappedStick.y = y
 
     if (lastValueX !== x || lastValueY !== y) {
-      allEvents.change?.forEach(fn => fn({ type: 'change', target, value: { x, y } }))
-      stickEvents.change?.forEach(fn => fn({ type: 'change', target, value: { x, y } }))
+      allEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
+      stickEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
     }
   }
-  
+
   const processSnapshot = () => {
     /**
      * getGamepads() will return a snapshot of a gamepad that will never change,
@@ -249,6 +237,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (id === gamepad.current?.id) {
       gamepad.set(null)
+      gamepadConnected.set(false)
       stop()
     }
   }
@@ -258,6 +247,7 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
     if (pad) {
       gamepad.set(pad)
+      gamepadConnected.set(true)
       start()
     }
   }
@@ -276,5 +266,5 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
   const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
 
-  return { gamepad, standardGamepad }  
+  return { gamepad, gamepadConnected, standardGamepad }
 }
