@@ -36,13 +36,13 @@ i.e. they extend in the x and y directions, and the z value of each vertex is 0
 
 4. Loop over the vertices, setting each `z` value, using our noise map
 
-```
+```ts
 for (let i = 0; i < vertices.length; i += 3) {
-		const x = vertices[i]
-    const y = vertices[i + 1]
-    // @ts-ignore
-    vertices[i + 2] = noise(x/4, y/4)
-  }
+  const x = vertices[i]
+  const y = vertices[i + 1]
+  // @ts-ignore
+  vertices[i + 2] = noise(x / 4, y / 4)
+}
 ```
 
 <Tip type="tip">
@@ -55,12 +55,11 @@ So if we want to set each vertex's z value from it's x and y, we need to loop in
 
 5. Attach the plane geometry to a mesh, and rotate
 
-```
+```svelte
 <T.Mesh
 	{geometry}
 	rotation.x={DEG2RAD * -90}
 >
-...
 ```
 
 <Tip type="tip">
