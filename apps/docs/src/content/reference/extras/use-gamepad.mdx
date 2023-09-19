@@ -29,18 +29,6 @@ More than one gamepad can be connected at any given time, so an optional `index`
 
 The `gamepad` store value will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
 
-The hook also provides a `gamepadConnected` boolean store to react to gamepad connection.
-
-```
-<script lang="ts">
-  import { useGamepad } from '@threlte/extras'
-
-  const { gamepadConnected } = useGamepad()
-  
-  $: console.log(`A gamepad ${$gamepadConnected ? 'connected' : 'disconnected'}!`)
-</script>
-```
-
 ```svelte
 <script lang="ts">
   import { useFrame } from '@threlte/core'
@@ -59,6 +47,20 @@ The hook also provides a `gamepadConnected` boolean store to react to gamepad co
 <Tip type="warning">
   Gamepad data is fetched as an immutable snapshot on every frame, so a reference to `$gamepad` or `gamepad.current` will become stale on the next frame.
 </Tip>
+
+### Connection status
+
+The hook provides a `gamepadConnected` boolean store to react to gamepad connection.
+
+```svelte
+<script lang="ts">
+  import { useGamepad } from '@threlte/extras'
+
+  const { gamepadConnected } = useGamepad()
+  
+  $: console.log(`A gamepad ${$gamepadConnected ? 'connected' : 'disconnected'}!`)
+</script>
+```
 
 ### Standard gamepad layout
 
