@@ -50,6 +50,7 @@
   on:change={invalidate}
   on:create={({ ref, cleanup }) => {
     orbitControls.set(ref)
+    ref.update()
     cleanup(() => {
       orbitControls.set(undefined)
     })
