@@ -103,9 +103,9 @@
     value: 'xz',
     params: {
       options: {
-        xzy: 'xz',
-        xyz: 'xy',
-        zyx: 'zy'
+        xz: 'xz',
+        xy: 'xy',
+        zy: 'zy'
       }
     },
     parent: generalFolder
