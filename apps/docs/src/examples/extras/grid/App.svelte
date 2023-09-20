@@ -100,17 +100,17 @@
 
   const plane = addInput({
     label: 'plane',
-    value: 'xzy',
+    value: 'xz',
     params: {
       options: {
-        xzy: 'xzy',
-        xyz: 'xyz',
-        zyx: 'zyx'
+        xzy: 'xz',
+        xyz: 'xy',
+        zyx: 'zy'
       }
     },
     parent: generalFolder
   })
-  $: planeTyped = $plane as 'xzy' | 'xyz' | 'zyx'
+  $: planeTyped = $plane as 'xz' | 'xy' | 'zy'
 
   const followCamera = addInput({
     label: 'followCamera',
