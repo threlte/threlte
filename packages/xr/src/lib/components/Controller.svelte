@@ -74,12 +74,11 @@
   }
 
   const handleConnected = (event: XRControllerEvent<'connected'>) => {
-    const data = event.data as XRInputSource
     const targetData = eventMap.get(event.target)
 
-    if (data.handedness !== handedness || !targetData) return
+    if (event.data.handedness !== handedness || !targetData) return
 
-    stores[data.handedness].set({ ...targetData, inputSource: data })
+    stores[handedness].set({ ...targetData, inputSource: event.data })
 
     if (!handTrackingNow()) {
       dispatch('connected', event)
