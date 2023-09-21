@@ -26,8 +26,8 @@ export type XRSessionEvent<Type = XRSessionEventType> = THREE.Event & {
 
 export type XRControllerEvent<Type = XRControllerEventType> = THREE.Event & {
   type: Type
-  target: any
-  data?: XRInputSource
+  target: THREE.Group
+  data: XRInputSource
 }
 
 export type XRController = {

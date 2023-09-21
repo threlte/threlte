@@ -83,7 +83,7 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
-    $isHandTracking = Object.values($session!.inputSources).some((source) => source.hand)
+    $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
     dispatch('inputsourceschange', { ...event, target: $session! })
   }
 

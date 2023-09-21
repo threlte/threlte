@@ -2,9 +2,8 @@
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
-  import { fire } from '../internal/events'
+  import { isHandTracking } from '../internal/stores'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import { useHandEvent } from '../hooks/useEvent'
   import { onDestroy } from 'svelte'
 
   const factory = new XRHandModelFactory()
@@ -15,13 +14,29 @@
   } as const
 
   const eventMap = new WeakMap()
+
+  const handEvents = [
+    'connected',
+    'disconnected',
+    'pinchstart',
+    'pinchend'
+  ] as const
+
 </script>
 
 <script lang='ts'>
-  /** Whether the XRHand should be matched with the left hand. */
-  export let left = false
+  type $$Props =
+    | {
+        /** Whether the XRHand should be matched with the left hand. */
+        left: true
+      }
+    | {
+        /** Whether the XRHand should be matched with the right hand. */
+        right: true
+      }
 
-  /** Whether the XRHand should be matched with the right hand. */
+  
+  export let left = false
   export let right = false
 
   type $$Events = {
@@ -41,25 +56,53 @@
   $: if (!left && !right) {
     throw new Error('A <Hand> component must specify a hand.')
   }
-  $: handedness = left ? 'left' : 'right'
+
+  $: handedness = (left ? 'left' : 'right') as 'left' | 'right'
 
   const handleConnected = (event: XRHandEvent<'connected', null>) => {
+    console.log('handdyyyyyy')
     const inputSource = event.data.hand as globalThis.XRHand
     const eventHandedness = event.data.handedness as 'left' | 'right'
+
     if (eventHandedness !== handedness) return
+
     stores[handedness].set({ ...eventMap.get(event.target), inputSource })
-    fire('connected', event, { input: 'hand' })
+
+    let hands = false
+    xr.getSession()?.inputSources.forEach((value) => {
+      console.log(value.hand)
+      if (value.hand) {
+        hands = true
+      }
+    })
+
+    console.log('hand', event, hands)
+
+    if (hands) {
+      dispatch('connected', event)
+    }
+  
+    event.target.addEventListener('pinchstart', handlePinchEvent)
+    event.target.addEventListener('pinchend', handlePinchEvent)
   }
 
   const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
     const eventHandedness = event.data.handedness as 'left' | 'right'
+
     if (eventHandedness !== handedness) return
+
     stores[handedness].set(undefined)
-    fire('disconnected', event, { input: 'hand' })
+
+    // if ($isHandTracking) {
+    //   fire('disconnected', event, { input: 'hand' })
+    // }
+
+    event.target.removeEventListener('pinchstart', handlePinchEvent)
+    event.target.removeEventListener('pinchend', handlePinchEvent)
   }
 
   const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
-    fire(event.type, event)
+    dispatch(event.type, event)
   }
 
   for (const index of [0, 1]) {
@@ -70,8 +113,6 @@
 
     hand.addEventListener('connected', handleConnected)
     hand.addEventListener('disconnected', handleDisconnected)
-    hand.addEventListener('pinchstart', handlePinchEvent)
-    hand.addEventListener('pinchend', handlePinchEvent)
   }
  
   let children: THREE.Group
@@ -111,18 +152,17 @@
   $: inputSource = $store?.inputSource
   $: model = $store?.model
 
-  const handEvents = [
-    'connected',
-    'disconnected',
-    'pinchstart',
-    'pinchend'
-  ] as const
+  let wasHandTracking = false
 
-  for (const name of handEvents) {
-    useHandEvent(name, (event) => dispatch(name, event), {
-      handedness: left ? 'left' : 'right'
-    })
-  }
+  isHandTracking.subscribe((isNowHandTracking) => {
+    if (wasHandTracking && !isNowHandTracking) {
+      dispatch('disconnected', { type: 'disconnected' })
+    } else if (!wasHandTracking && isNowHandTracking) {
+      dispatch('connected', { type: 'connected' })
+    }
+
+    wasHandTracking = isNowHandTracking
+  })
 
   onDestroy(() => {
     for (const index of [0, 1]) {

@@ -10,13 +10,7 @@
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
   import ShortRay from './ShortRay.svelte'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { useControllerEvent } from '../hooks/useEvent'
-  import { fire } from '../internal/events'
-  import {
-    activeTeleportController,
-    isHandTracking,
-    pendingTeleportDestination
-  } from '../internal/stores'
+  import { activeTeleportController, pendingTeleportDestination, isHandTracking } from '../internal/stores'
   import type { XRController, XRControllerEvent } from '../types'
   import type { XRTargetRaySpace } from 'three'
 
@@ -43,16 +37,15 @@
 <script lang="ts">
   type $$Props =
     | {
+        /** Whether the controller should be matched with the left hand. */
         left: true
       }
     | {
+        /** Whether the controller should be matched with the right hand. */
         right: true
       }
 
-  /** Whether the controller should be matched with the left hand. */
   export let left = false
-
-  /** Whether the controller should be matched with the right hand. */
   export let right = false
 
   type $$Events = {
@@ -72,27 +65,45 @@
   $: if (!left && !right) {
     throw new Error('A <Controller> component must specify a hand.')
   }
-  $: handedness = left ? 'left' : 'right'
+
+  $: handedness = (left ? 'left' : 'right') as 'left' | 'right'
 
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
 
+  const handleEvent = (event: XRControllerEvent) => dispatch(event.type, event)
+
   const handleConnected = (event: XRControllerEvent<'connected'>) => {
     const data = event.data!
     const targetData = eventMap.get(event.target)
+
     if (data.handedness !== handedness || !targetData) return
+
     stores[data.handedness].set({ ...targetData, inputSource: data })
-    fire('connected', event, { input: 'controller' })
+
+    let hands = false
+    xr.getSession()?.inputSources.forEach((value) => {
+      if (value.hand) {
+        hands = true
+      }
+    })
+
+    if (hands) {
+      dispatch('connected', event)
+    }
+
+    events.forEach((name) => event.target.addEventListener(name, handleEvent))
   }
 
   const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
     if (event.data!.handedness !== handedness) return
 
     stores[event.data!.handedness].set(undefined)
-    fire('disconnected', event, { input: 'controller' })
+    dispatch('disconnected', event)
+    
+    events.forEach((name) => event.target.removeEventListener(name, handleEvent))
   }
 
-  const handleEvent = (event: THREE.Event) => fire(event.type, event)
   for (const index of [0, 1]) {
     const controller = xr.getController(index)
     const grip = xr.getControllerGrip(index)
@@ -105,7 +116,6 @@
 
     controller.addEventListener('connected', handleConnected)
     controller.addEventListener('disconnected', handleDisconnected)
-    events.forEach((name) => controller.addEventListener(name, handleEvent))
   }
 
   $: store = left ? stores.left : stores.right
@@ -113,19 +123,17 @@
   $: targetRay = $store?.targetRay
   $: model = $store?.model
 
-  for (const type of ['connected', 'disconnected', ...events] as const) {
-    useControllerEvent(type, (event) => dispatch(type, event), {
-      handedness: left ? 'left' : 'right'
-    })
-  }
-
   onDestroy(() => {
     for (const index of [0, 1]) {
       const controller = xr.getController(index)
       controller.removeEventListener('connected', handleConnected)
       controller.removeEventListener('disconnected', handleDisconnected)
-      events.forEach((name) => controller.removeEventListener(name, handleEvent))
     }
+
+    const controller = $store?.targetRay
+    events.forEach((name) => controller?.removeEventListener(name, handleEvent))
+
+    store.set(undefined)
   })
 </script>
 
