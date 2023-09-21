@@ -1,12 +1,14 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T, useFrame } from '@threlte/core'
+  import { Text } from '@threlte/extras'
   import { Controller, type XRControllerEvent, useController } from '@threlte/xr'
 
   type $$Props = { left: true } | { right: true }
 
   let state = 'disconnected'
   let cursor = 0
+  let text = ''
 
   const count = 100
   const positions = new Float32Array(count * 3)
@@ -37,8 +39,7 @@
   } as const
 
   const handleEvent = (event: XRControllerEvent) => {
-    console.log('Controller', event.data?.handedness, event.type, event.target)
-
+    text = `${event.data.handedness} ${event.type}`
     state = event.type
   }
 
@@ -102,7 +103,8 @@
   on:select={handleEvent}
   on:squeezestart={handleEvent}
   on:squeezeend={handleEvent}
-  on:squeeze={handleEvent}
-/>
+  on:squeeze={handleEvent}>
+  <Text slot='target-ray' fontSize={0.05} {text} position.x={0.1} />
+</Controller>
 
 <T is={instancedMesh} frustumCulled={false} />
