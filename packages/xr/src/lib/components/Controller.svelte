@@ -88,9 +88,9 @@
   }
 
   const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-    if (event.data!.handedness !== handedness) return
+    if (event.data.handedness !== handedness) return
 
-    stores[event.data!.handedness].set(undefined)
+    stores[handedness].set(undefined)
 
     if (!$isHandTracking) {
       dispatch('disconnected', event)
