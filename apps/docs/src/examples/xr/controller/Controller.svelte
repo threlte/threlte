@@ -9,7 +9,6 @@
   let cursor = 0
 
   const count = 100
-  const colors: string[] = []
   const positions = new Float32Array(count * 3)
   const velocities = new Float32Array(count * 3)
   const vec3 = new THREE.Vector3()
@@ -37,8 +36,8 @@
     pinchend: 'lightblue',
   } as const
 
-  const handleEvent = (source: string) => (event: XRControllerEvent) => {
-    console.log(source, event.data?.handedness, event.type, event.target)
+  const handleEvent = (event: XRControllerEvent) => {
+    console.log('Controller', event.data?.handedness, event.type, event.target)
 
     state = event.type
   }
@@ -96,15 +95,14 @@
 <Controller
   left={$$props.left}
   right={$$props.right}
-  on:connected={handleEvent('Controller')}
-  on:disconnected={handleEvent('Controller')}
-  on:selectstart={handleEvent('Controller')}
-  on:selectend={handleEvent('Controller')}
-  on:select={handleEvent('Controller')}
-  on:squeezestart={handleEvent('Controller')}
-  on:squeezeend={handleEvent('Controller')}
-  on:squeeze={handleEvent('Controller')}
+  on:connected={handleEvent}
+  on:disconnected={handleEvent}
+  on:selectstart={handleEvent}
+  on:selectend={handleEvent}
+  on:select={handleEvent}
+  on:squeezestart={handleEvent}
+  on:squeezeend={handleEvent}
+  on:squeeze={handleEvent}
 />
 
 <T is={instancedMesh} frustumCulled={false} />
-

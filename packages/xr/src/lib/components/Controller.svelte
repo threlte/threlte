@@ -11,6 +11,7 @@
   import ShortRay from './ShortRay.svelte'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { activeTeleportController, pendingTeleportDestination, isHandTracking } from '../internal/stores'
+  import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
   import type { XRTargetRaySpace } from 'three'
 
@@ -70,25 +71,23 @@
 
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
+  const handTrackingNow = useHandTrackingState()
 
-  const handleEvent = (event: XRControllerEvent) => dispatch(event.type, event)
+  const handleEvent = (event: XRControllerEvent) => {
+    if (!handTrackingNow()) {
+      dispatch(event.type, event)
+    }
+  }
 
   const handleConnected = (event: XRControllerEvent<'connected'>) => {
-    const data = event.data!
+    const data = event.data as XRInputSource
     const targetData = eventMap.get(event.target)
 
     if (data.handedness !== handedness || !targetData) return
 
     stores[data.handedness].set({ ...targetData, inputSource: data })
 
-    let hands = false
-    xr.getSession()?.inputSources.forEach((value) => {
-      if (value.hand) {
-        hands = true
-      }
-    })
-
-    if (hands) {
+    if (!handTrackingNow()) {
       dispatch('connected', event)
     }
 
@@ -99,8 +98,11 @@
     if (event.data!.handedness !== handedness) return
 
     stores[event.data!.handedness].set(undefined)
-    dispatch('disconnected', event)
-    
+
+    if (!$isHandTracking) {
+      dispatch('disconnected', event)
+    }
+
     events.forEach((name) => event.target.removeEventListener(name, handleEvent))
   }
 
@@ -114,8 +116,11 @@
 
     eventMap.set(controller, { targetRay: controller, model, grip })
 
-    controller.addEventListener('connected', handleConnected)
-    controller.addEventListener('disconnected', handleDisconnected)
+    /**
+     * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
+    */
+    controller.addEventListener('connected', handleConnected as any)
+    controller.addEventListener('disconnected', handleDisconnected as any)
   }
 
   $: store = left ? stores.left : stores.right
@@ -126,12 +131,12 @@
   onDestroy(() => {
     for (const index of [0, 1]) {
       const controller = xr.getController(index)
-      controller.removeEventListener('connected', handleConnected)
-      controller.removeEventListener('disconnected', handleDisconnected)
+      controller.removeEventListener('connected', handleConnected as any)
+      controller.removeEventListener('disconnected', handleDisconnected as any)
     }
 
     const controller = $store?.targetRay
-    events.forEach((name) => controller?.removeEventListener(name, handleEvent))
+    events.forEach((name) => controller?.removeEventListener(name, handleEvent as any))
 
     store.set(undefined)
   })

@@ -1,11 +1,19 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T } from '@threlte/core'
-  import { XR, Hand } from '@threlte/xr'
+  import { XR, Hand, Controller, type XRHandEvent, type XRControllerEvent } from '@threlte/xr'
 
   let boxes: THREE.Object3D[] = []
 
-  const handlePinchStart = (event: any) => {
+  const handleEvent = (event: XRHandEvent) => {
+    console.log('Hand', event)
+  }
+
+  const handleControllerEvent = (event: XRControllerEvent) => {
+    console.log('Controller', event)
+  }
+
+  const handlePinchStart = (event: XRHandEvent) => {
     const controller = event.target
     const size = 0.05
     const geometry = new THREE.BoxGeometry(size, size, size)
@@ -18,11 +26,53 @@
     boxes.push(spawn)
     boxes = boxes
   }
+
+  const indices = [0, 1] as const
 </script>
 
 <XR>
-  <Hand left on:pinchstart={handlePinchStart} />
-  <Hand right on:pinchstart={handlePinchStart} />
+  <Hand
+    left
+    on:pinchstart={handlePinchStart}
+    on:connected={handleEvent}
+    on:disconnected={handleEvent}
+    on:pinchstart={handleEvent}
+    on:pinchend={handleEvent}
+  />
+
+  <Hand
+    right
+    on:pinchstart={handlePinchStart}
+    on:connected={handleEvent}
+    on:disconnected={handleEvent}
+    on:pinchstart={handleEvent}
+    on:pinchend={handleEvent}
+  />
+
+  <Controller
+    left
+    on:connected={handleControllerEvent}
+    on:disconnected={handleControllerEvent}
+    on:select={handleControllerEvent}
+    on:squeeze={handleControllerEvent}
+    on:selectstart={handleControllerEvent}
+    on:selectend={handleControllerEvent}
+    on:squeezestart={handleControllerEvent}
+    on:squeezeend={handleControllerEvent}
+  />
+
+  <Controller
+    right
+    on:connected={handleControllerEvent}
+    on:disconnected={handleControllerEvent}
+    on:select={handleControllerEvent}
+    on:squeeze={handleControllerEvent}
+    on:selectstart={handleControllerEvent}
+    on:selectend={handleControllerEvent}
+    on:squeezestart={handleControllerEvent}
+    on:squeezeend={handleControllerEvent}
+  />
+  
 </XR>
 
 <T.Mesh rotation={[-Math.PI / 2, 0, 0]}>

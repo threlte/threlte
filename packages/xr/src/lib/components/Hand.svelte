@@ -3,6 +3,7 @@
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
   import { isHandTracking } from '../internal/stores'
+  import { useHandTrackingState } from '../internal/useHandTrackingState'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
   import { onDestroy } from 'svelte'
 
@@ -40,12 +41,13 @@
   export let right = false
 
   type $$Events = {
-    connected: XRHandEvent<'connected', null>
-    disconnected: XRHandEvent<'disconnected', null>
-    pinchstart: XRHandEvent<'pinchstart', THREE.XRHandSpace>
-    pinchend: XRHandEvent<'pinchend', THREE.XRHandSpace>
+    connected: XRHandEvent<'connected'>
+    disconnected: XRHandEvent<'disconnected'>
+    pinchstart: XRHandEvent<'pinchstart'>
+    pinchend: XRHandEvent<'pinchend'>
   }
 
+  const handTrackingNow = useHandTrackingState()
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
@@ -59,8 +61,7 @@
 
   $: handedness = (left ? 'left' : 'right') as 'left' | 'right'
 
-  const handleConnected = (event: XRHandEvent<'connected', null>) => {
-    console.log('handdyyyyyy')
+  const handleConnected = (event: XRHandEvent<'connected'>) => {
     const inputSource = event.data.hand as globalThis.XRHand
     const eventHandedness = event.data.handedness as 'left' | 'right'
 
@@ -68,17 +69,7 @@
 
     stores[handedness].set({ ...eventMap.get(event.target), inputSource })
 
-    let hands = false
-    xr.getSession()?.inputSources.forEach((value) => {
-      console.log(value.hand)
-      if (value.hand) {
-        hands = true
-      }
-    })
-
-    console.log('hand', event, hands)
-
-    if (hands) {
+    if (handTrackingNow()) {
       dispatch('connected', event)
     }
   
@@ -86,35 +77,25 @@
     event.target.addEventListener('pinchend', handlePinchEvent)
   }
 
-  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
+  const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
     const eventHandedness = event.data.handedness as 'left' | 'right'
 
     if (eventHandedness !== handedness) return
 
     stores[handedness].set(undefined)
 
-    // if ($isHandTracking) {
-    //   fire('disconnected', event, { input: 'hand' })
-    // }
+    if ($isHandTracking) {
+      dispatch('disconnected', event)
+    }
 
     event.target.removeEventListener('pinchstart', handlePinchEvent)
     event.target.removeEventListener('pinchend', handlePinchEvent)
   }
 
-  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
+  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend'>) => {
     dispatch(event.type, event)
   }
 
-  for (const index of [0, 1]) {
-    const hand = xr.getHand(index)
-    const model = factory.createHandModel(hand, 'mesh')
-
-    eventMap.set(hand, { hand, model })
-
-    hand.addEventListener('connected', handleConnected)
-    hand.addEventListener('disconnected', handleDisconnected)
-  }
- 
   let children: THREE.Group
 
   /**
@@ -152,17 +133,15 @@
   $: inputSource = $store?.inputSource
   $: model = $store?.model
 
-  let wasHandTracking = false
+  for (const index of [0, 1]) {
+    const hand = xr.getHand(index)
+    const model = factory.createHandModel(hand, 'mesh')
 
-  isHandTracking.subscribe((isNowHandTracking) => {
-    if (wasHandTracking && !isNowHandTracking) {
-      dispatch('disconnected', { type: 'disconnected' })
-    } else if (!wasHandTracking && isNowHandTracking) {
-      dispatch('connected', { type: 'connected' })
-    }
+    eventMap.set(hand, { hand, model })
 
-    wasHandTracking = isNowHandTracking
-  })
+    hand.addEventListener('connected', handleConnected)
+    hand.addEventListener('disconnected', handleDisconnected)
+  }
 
   onDestroy(() => {
     for (const index of [0, 1]) {

@@ -43,9 +43,9 @@ export type XRHand = {
   inputSource: globalThis.XRHand
 }
 
-export type XRHandEvent<Type = XRHandEventType, Target = null | THREE.XRHandSpace> = THREE.Event & {
+export type XRHandEvent<Type = XRHandEventType> = THREE.Event & {
   type: Type
-  target: Target
+  target: THREE.XRHandSpace
 }
 
 export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => void
