@@ -45,9 +45,10 @@
         /** Whether the controller should be matched with the right hand. */
         right: true
       }
-
-  export let left = false
-  export let right = false
+    | {
+        /** Whether the controller should be matched with the left or right hand. */
+        hand: 'left' | 'right'
+      }
 
   type $$Events = {
     connected: XRControllerEvent<'connected'>
@@ -60,14 +61,7 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  $: if (left && right) {
-    throw new Error('A <Controller> component can only specify one hand.')
-  }
-  $: if (!left && !right) {
-    throw new Error('A <Controller> component must specify a hand.')
-  }
-
-  $: handedness = (left ? 'left' : 'right') as 'left' | 'right'
+  $: handedness = ($$props.left ? 'left' : $$props.right ? 'right' : $$props.hand) as 'left' | 'right'
 
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
@@ -123,7 +117,7 @@
     controller.addEventListener('disconnected', handleDisconnected as any)
   }
 
-  $: store = left ? stores.left : stores.right
+  $: store = stores[handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model

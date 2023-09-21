@@ -15,14 +15,6 @@
   } as const
 
   const eventMap = new WeakMap()
-
-  const handEvents = [
-    'connected',
-    'disconnected',
-    'pinchstart',
-    'pinchend'
-  ] as const
-
 </script>
 
 <script lang='ts'>
@@ -35,10 +27,10 @@
         /** Whether the XRHand should be matched with the right hand. */
         right: true
       }
-
-  
-  export let left = false
-  export let right = false
+    | {
+        /** Whether the XRHand should be matched with the left or right hand. */
+        hand: 'left' | 'right'
+      }
 
   type $$Events = {
     connected: XRHandEvent<'connected'>
@@ -52,35 +44,26 @@
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  $: if (left && right) {
-    throw new Error('A <Hand> component can only specify one hand.')
-  }
-  $: if (!left && !right) {
-    throw new Error('A <Hand> component must specify a hand.')
-  }
-
-  $: handedness = (left ? 'left' : 'right') as 'left' | 'right'
+  $: handedness = ($$props.left ? 'left' : $$props.right ? 'right' : $$props.hand) as 'left' | 'right'
 
   const handleConnected = (event: XRHandEvent<'connected'>) => {
-    const inputSource = event.data.hand as globalThis.XRHand
-    const eventHandedness = event.data.handedness as 'left' | 'right'
+    if (event.data.handedness !== handedness) return
 
-    if (eventHandedness !== handedness) return
-
-    stores[handedness].set({ ...eventMap.get(event.target), inputSource })
+    stores[handedness].set({ ...eventMap.get(event.target), inputSource: event.data.hand })
 
     if (handTrackingNow()) {
       dispatch('connected', event)
     }
   
-    event.target.addEventListener('pinchstart', handlePinchEvent)
-    event.target.addEventListener('pinchend', handlePinchEvent)
+    /**
+     * @todo(mp) event.handedness is missing from @three/types. Need to make a PR there.
+    */
+    event.target.addEventListener('pinchstart', handlePinchEvent as any)
+    event.target.addEventListener('pinchend', handlePinchEvent as any)
   }
 
   const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
-    const eventHandedness = event.data.handedness as 'left' | 'right'
-
-    if (eventHandedness !== handedness) return
+    if (event.data.handedness !== handedness) return
 
     stores[handedness].set(undefined)
 
@@ -88,8 +71,8 @@
       dispatch('disconnected', event)
     }
 
-    event.target.removeEventListener('pinchstart', handlePinchEvent)
-    event.target.removeEventListener('pinchend', handlePinchEvent)
+    event.target.removeEventListener('pinchstart', handlePinchEvent as any)
+    event.target.removeEventListener('pinchend', handlePinchEvent as any)
   }
 
   const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend'>) => {
@@ -128,7 +111,7 @@
     stop()
   }
 
-  $: store = left ? stores.left : stores.right
+  $: store = stores[handedness]
   $: hand = $store?.hand
   $: inputSource = $store?.inputSource
   $: model = $store?.model
@@ -139,18 +122,26 @@
 
     eventMap.set(hand, { hand, model })
 
-    hand.addEventListener('connected', handleConnected)
-    hand.addEventListener('disconnected', handleDisconnected)
+    /**
+     * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
+    */
+    hand.addEventListener('connected', handleConnected as any)
+    hand.addEventListener('disconnected', handleDisconnected as any)
   }
 
   onDestroy(() => {
     for (const index of [0, 1]) {
       const hand = xr.getHand(index)
-      hand.removeEventListener('connected', handleConnected)
-      hand.removeEventListener('disconnected', handleDisconnected)
-      hand.removeEventListener('pinchstart', handlePinchEvent)
-      hand.removeEventListener('pinchend', handlePinchEvent)
+      hand.removeEventListener('connected', handleConnected as any)
+      hand.removeEventListener('disconnected', handleDisconnected as any)
     }
+
+    const hand = stores[handedness].current?.hand
+
+    hand?.removeEventListener('pinchstart', handlePinchEvent as any)
+    hand?.removeEventListener('pinchend', handlePinchEvent as any)
+
+    stores[handedness].set(undefined)
   })
 </script>
 

@@ -27,52 +27,32 @@
     boxes = boxes
   }
 
-  const indices = [0, 1] as const
+  const hands = ['left', 'right'] as const
 </script>
 
 <XR>
-  <Hand
-    left
-    on:pinchstart={handlePinchStart}
-    on:connected={handleEvent}
-    on:disconnected={handleEvent}
-    on:pinchstart={handleEvent}
-    on:pinchend={handleEvent}
-  />
+  {#each hands as hand (hand)}
+    <Hand
+      {hand}
+      on:pinchstart={handlePinchStart}
+      on:connected={handleEvent}
+      on:disconnected={handleEvent}
+      on:pinchstart={handleEvent}
+      on:pinchend={handleEvent}
+    />
 
-  <Hand
-    right
-    on:pinchstart={handlePinchStart}
-    on:connected={handleEvent}
-    on:disconnected={handleEvent}
-    on:pinchstart={handleEvent}
-    on:pinchend={handleEvent}
-  />
-
-  <Controller
-    left
-    on:connected={handleControllerEvent}
-    on:disconnected={handleControllerEvent}
-    on:select={handleControllerEvent}
-    on:squeeze={handleControllerEvent}
-    on:selectstart={handleControllerEvent}
-    on:selectend={handleControllerEvent}
-    on:squeezestart={handleControllerEvent}
-    on:squeezeend={handleControllerEvent}
-  />
-
-  <Controller
-    right
-    on:connected={handleControllerEvent}
-    on:disconnected={handleControllerEvent}
-    on:select={handleControllerEvent}
-    on:squeeze={handleControllerEvent}
-    on:selectstart={handleControllerEvent}
-    on:selectend={handleControllerEvent}
-    on:squeezestart={handleControllerEvent}
-    on:squeezeend={handleControllerEvent}
-  />
-  
+    <Controller
+      {hand}
+      on:connected={handleControllerEvent}
+      on:disconnected={handleControllerEvent}
+      on:select={handleControllerEvent}
+      on:squeeze={handleControllerEvent}
+      on:selectstart={handleControllerEvent}
+      on:selectend={handleControllerEvent}
+      on:squeezestart={handleControllerEvent}
+      on:squeezeend={handleControllerEvent}
+    />
+  {/each}
 </XR>
 
 <T.Mesh rotation={[-Math.PI / 2, 0, 0]}>
