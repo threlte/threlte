@@ -87,6 +87,16 @@ export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCame
   : Record<string, unknown>
 
 /**
+ * ### Material Props
+ */
+export type MaterialProps<Type extends any> = MaybeInstance<Type> extends { isMaterial: true }
+    // This overload is necessary since types changed in r153.
+  ? {
+      color?: THREE.ColorRepresentation
+    }
+  : Record<string, unknown>
+
+/**
  * ### Instance Props
  *
  * Enables the use of props that are infered from the provided type.
@@ -129,7 +139,8 @@ export type Props<Type extends any> = AnyProps &
   BaseProps<Type> &
   ClassProps<Type> &
   CameraProps<Type> &
-  InstanceProps<Type>
+  InstanceProps<Type> |
+  MaterialProps<Type>
 
 // –––––––––––––––––––––––– SLOTS ––––––––––––––––––––––––
 
