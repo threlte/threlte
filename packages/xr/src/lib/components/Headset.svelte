@@ -3,7 +3,7 @@
 	import { Group } from 'three'
   import { useXR } from '../hooks'
 
-  /** If true, the headset with sync with the current camera outside an immersive session. */
+  /** If true, the headset will sync with the current camera outside an immersive session. */
   export let syncCamera = false
 
   const { isPresenting } = useXR()
