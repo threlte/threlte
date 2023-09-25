@@ -24,4 +24,12 @@
 
 Like a Portal, it can exist anywhere in your Threlte application.
 
+`<Headset>` can sync with the current camera when not in an immersive XR session if the `syncCamera` property is added.
+
+```svelte
+<Headset syncCamera>
+  <AudioListener />
+</Headset>
+```
+
 <Example path="xr/headset" />
