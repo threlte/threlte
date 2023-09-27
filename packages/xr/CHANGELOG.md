@@ -1,5 +1,13 @@
 # @threlte/xr
 
+## 0.0.5
+
+### Patch Changes
+
+- 3df22efc: - Stop duplicate events from firing for XR controllers.
+  - Remove `useControllerEvent` and `useHandEvent` hooks.
+- 38f95de5: Fix ` <Headset>`` position when teleporting and sync  `<Headset>` with current camera when not presenting.
+
 ## 0.0.4
 
 ### Patch Changes
