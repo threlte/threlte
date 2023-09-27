@@ -2,9 +2,9 @@
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
-  import { fire } from '../internal/events'
+  import { isHandTracking } from '../internal/stores'
+  import { useHandTrackingState } from '../internal/useHandTrackingState'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import { useHandEvent } from '../hooks/useEvent'
   import { onDestroy } from 'svelte'
 
   const factory = new XRHandModelFactory()
@@ -18,62 +18,77 @@
 </script>
 
 <script lang='ts'>
-  /** Whether the XRHand should be matched with the left hand. */
-  export let left = false
-
-  /** Whether the XRHand should be matched with the right hand. */
-  export let right = false
+  type $$Props =
+    | {
+        /** Whether the XRHand should be matched with the left hand. */
+        left: true
+        right?: undefined
+        hand?: undefined
+      }
+    | {
+        /** Whether the XRHand should be matched with the right hand. */
+        right: true
+        left?: undefined
+        hand?: undefined
+      }
+    | {
+        /** Whether the XRHand should be matched with the left or right hand. */
+        hand: 'left' | 'right'
+        left?: undefined
+        right?: undefined
+      }
+  
+  export let left: $$Props['left'] = undefined
+  export let right: $$Props['right'] = undefined
+  export let hand: $$Props['hand'] = undefined
 
   type $$Events = {
-    connected: XRHandEvent<'connected', null>
-    disconnected: XRHandEvent<'disconnected', null>
-    pinchstart: XRHandEvent<'pinchstart', THREE.XRHandSpace>
-    pinchend: XRHandEvent<'pinchend', THREE.XRHandSpace>
+    connected: XRHandEvent<'connected'>
+    disconnected: XRHandEvent<'disconnected'>
+    pinchstart: XRHandEvent<'pinchstart'>
+    pinchend: XRHandEvent<'pinchend'>
   }
 
+  const handTrackingNow = useHandTrackingState()
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  $: if (left && right) {
-    throw new Error('A <Hand> component can only specify one hand.')
-  }
-  $: if (!left && !right) {
-    throw new Error('A <Hand> component must specify a hand.')
-  }
-  $: handedness = left ? 'left' : 'right'
+  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
 
-  const handleConnected = (event: XRHandEvent<'connected', null>) => {
-    const inputSource = event.data.hand as globalThis.XRHand
-    const eventHandedness = event.data.handedness as 'left' | 'right'
-    if (eventHandedness !== handedness) return
-    stores[handedness].set({ ...eventMap.get(event.target), inputSource })
-    fire('connected', event, { input: 'hand' })
+  const handleConnected = (event: XRHandEvent<'connected'>) => {
+    if (event.data.handedness !== handedness) return
+
+    stores[handedness].set({ ...eventMap.get(event.target), inputSource: event.data.hand })
+
+    if (handTrackingNow()) {
+      dispatch('connected', event)
+    }
+  
+    /**
+     * @todo(mp) event.handedness is missing from @three/types. Need to make a PR there.
+    */
+    event.target.addEventListener('pinchstart', handlePinchEvent as any)
+    event.target.addEventListener('pinchend', handlePinchEvent as any)
   }
 
-  const handleDisconnected = (event: XRHandEvent<'disconnected', null>) => {
-    const eventHandedness = event.data.handedness as 'left' | 'right'
-    if (eventHandedness !== handedness) return
+  const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
+    if (event.data.handedness !== handedness) return
+
     stores[handedness].set(undefined)
-    fire('disconnected', event, { input: 'hand' })
+
+    if ($isHandTracking) {
+      dispatch('disconnected', event)
+    }
+
+    event.target.removeEventListener('pinchstart', handlePinchEvent as any)
+    event.target.removeEventListener('pinchend', handlePinchEvent as any)
   }
 
-  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend', THREE.XRHandSpace>) => {
-    fire(event.type, event)
+  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend'>) => {
+    dispatch(event.type, event)
   }
 
-  for (const index of [0, 1]) {
-    const hand = xr.getHand(index)
-    const model = factory.createHandModel(hand, 'mesh')
-
-    eventMap.set(hand, { hand, model })
-
-    hand.addEventListener('connected', handleConnected)
-    hand.addEventListener('disconnected', handleDisconnected)
-    hand.addEventListener('pinchstart', handlePinchEvent)
-    hand.addEventListener('pinchend', handlePinchEvent)
-  }
- 
   let children: THREE.Group
 
   /**
@@ -106,32 +121,37 @@
     stop()
   }
 
-  $: store = left ? stores.left : stores.right
+  $: store = stores[handedness]
   $: hand = $store?.hand
   $: inputSource = $store?.inputSource
   $: model = $store?.model
 
-  const handEvents = [
-    'connected',
-    'disconnected',
-    'pinchstart',
-    'pinchend'
-  ] as const
+  for (const index of [0, 1]) {
+    const hand = xr.getHand(index)
+    const model = factory.createHandModel(hand, 'mesh')
 
-  for (const name of handEvents) {
-    useHandEvent(name, (event) => dispatch(name, event), {
-      handedness: left ? 'left' : 'right'
-    })
+    eventMap.set(hand, { hand, model })
+
+    /**
+     * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
+    */
+    hand.addEventListener('connected', handleConnected as any)
+    hand.addEventListener('disconnected', handleDisconnected as any)
   }
 
   onDestroy(() => {
     for (const index of [0, 1]) {
       const hand = xr.getHand(index)
-      hand.removeEventListener('connected', handleConnected)
-      hand.removeEventListener('disconnected', handleDisconnected)
-      hand.removeEventListener('pinchstart', handlePinchEvent)
-      hand.removeEventListener('pinchend', handlePinchEvent)
+      hand.removeEventListener('connected', handleConnected as any)
+      hand.removeEventListener('disconnected', handleDisconnected as any)
     }
+
+    const hand = stores[handedness].current?.hand
+
+    hand?.removeEventListener('pinchstart', handlePinchEvent as any)
+    hand?.removeEventListener('pinchend', handlePinchEvent as any)
+
+    stores[handedness].set(undefined)
   })
 </script>
 
