@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.6.3
+
+### Patch Changes
+
+- bbdd2109: Adjusted widths of lines in Cursor Lines example
+
 ## 0.6.2
 
 ### Patch Changes
