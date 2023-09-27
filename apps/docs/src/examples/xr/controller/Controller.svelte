@@ -17,7 +17,8 @@
   const matrix = new THREE.Matrix4()
   const color = new THREE.Color()
 
-  const controller = useController($$props.left ? 'left' : 'right')
+  const controller = useController($$restProps.left ? 'left' : 'right')
+  
 
   const instancedMesh = new THREE.InstancedMesh(
     new THREE.IcosahedronGeometry(0.01),
