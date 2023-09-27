@@ -22,15 +22,25 @@
     | {
         /** Whether the XRHand should be matched with the left hand. */
         left: true
+        right?: undefined
+        hand?: undefined
       }
     | {
         /** Whether the XRHand should be matched with the right hand. */
         right: true
+        left?: undefined
+        hand?: undefined
       }
     | {
         /** Whether the XRHand should be matched with the left or right hand. */
         hand: 'left' | 'right'
+        left?: undefined
+        right?: undefined
       }
+  
+  export let left: $$Props['left'] = undefined
+  export let right: $$Props['right'] = undefined
+  export let hand: $$Props['hand'] = undefined
 
   type $$Events = {
     connected: XRHandEvent<'connected'>
@@ -44,7 +54,7 @@
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  $: handedness = ($$restProps.left ? 'left' : $$restProps.right ? 'right' : $$restProps.hand) as 'left' | 'right'
+  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
 
   const handleConnected = (event: XRHandEvent<'connected'>) => {
     if (event.data.handedness !== handedness) return
