@@ -61,7 +61,7 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  $: handedness = ($$props.left ? 'left' : $$props.right ? 'right' : $$props.hand) as 'left' | 'right'
+  $: handedness = ($$restProps.left ? 'left' : $$restProps.right ? 'right' : $$restProps.hand) as 'left' | 'right'
 
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
