@@ -44,7 +44,7 @@
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  $: handedness = ($$props.left ? 'left' : $$props.right ? 'right' : $$props.hand) as 'left' | 'right'
+  $: handedness = ($$restProps.left ? 'left' : $$restProps.right ? 'right' : $$restProps.hand) as 'left' | 'right'
 
   const handleConnected = (event: XRHandEvent<'connected'>) => {
     if (event.data.handedness !== handedness) return
