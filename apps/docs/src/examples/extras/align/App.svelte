@@ -51,7 +51,7 @@
 
 <div use:action />
 
-<div class="relative h-full w-full bg-orange-500/20">
+<div class="relative h-full w-full ">
   <Canvas>
     <Scene
       x={$x}

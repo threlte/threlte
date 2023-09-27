@@ -7,7 +7,7 @@
   interactivity()
 
   let cursorPosition = { x: 0, z: 0 }
-  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f79', '#1e165c']
+  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f9a', '#1e168d']
 </script>
 
 {#each colors as color, i}

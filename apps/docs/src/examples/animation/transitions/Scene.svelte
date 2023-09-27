@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { injectLookAtPlugin } from '../../plugins/lookAt/lookAtPlugin'
-  import { DoubleSide } from 'three'
   import Character from './Character.svelte'
 
   injectLookAtPlugin()
@@ -20,8 +19,5 @@
 
 <T.Mesh rotation.x={-90 * (Math.PI / 180)}>
   <T.CircleGeometry args={[3, 72]} />
-  <T.MeshStandardMaterial
-    side={DoubleSide}
-    color={'white'}
-  />
+  <T.MeshStandardMaterial color={'white'} />
 </T.Mesh>

@@ -46,3 +46,5 @@
   position.y={10}
   position.z={5}
 />
+
+<T.AmbientLight />
