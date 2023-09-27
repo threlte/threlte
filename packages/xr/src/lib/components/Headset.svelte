@@ -3,9 +3,6 @@
 	import { Group } from 'three'
   import { useXR } from '../hooks'
 
-  /** If true, the headset will sync with the current camera outside an immersive session. */
-  export let syncCamera = false
-
   const { isPresenting } = useXR()
 	const { renderer, scene, camera } = useThrelte()
   const { xr } = renderer
@@ -38,7 +35,7 @@
     group.quaternion.copy(camera.current.quaternion)
   }, { autostart: false })
 
-  $: if (syncCamera && $isPresenting === false) {
+  $: if ($isPresenting === false) {
     nonImmersiveFrame.start()
   } else {
     nonImmersiveFrame.stop()
