@@ -1,15 +1,15 @@
 <div
   class="red"
-  style="width: 500px; height: 500px; display: flex; justify-content: center; align-items: stretch; gap: 20px"
+  style="width: 300px; height: 300px; display: flex; justify-content: center; align-items: stretch; gap: 20px"
 >
   <div
     class="yellow"
-    style="width: 100px;"
+    style="width: 44px;"
   />
 
   <div
     class="blue"
-    style="width: 100px;"
+    style="width: 44px;"
   />
 </div>
 

@@ -4,19 +4,19 @@
 </script>
 
 <Plane
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   color="red"
 />
 
 <Flex
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   classParser={tailwindParser}
   class="gap-10 p-10"
 >
   <Box
-    class="w-100 h-100"
+    class="h-44 w-44"
     let:width
     let:height
   >
@@ -35,7 +35,7 @@
     <Plane
       color="blue"
       {width}
-      height={100}
+      height={44}
       depth={1}
     />
   </Box>

@@ -4,14 +4,14 @@
 </script>
 
 <Plane
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   color="red"
 />
 
 <Flex
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   justifyContent="Center"
   alignItems="Center"
   gap={20}
@@ -19,8 +19,8 @@
   <Box>
     <Plane
       color="yellow"
-      width={100}
-      height={100}
+      width={44}
+      height={44}
       depth={1}
     />
   </Box>
@@ -28,8 +28,8 @@
   <Box>
     <Plane
       color="blue"
-      width={100}
-      height={100}
+      width={44}
+      height={44}
       depth={1}
     />
   </Box>
