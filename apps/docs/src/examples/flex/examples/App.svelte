@@ -64,7 +64,7 @@
 {#if example}
   <div class="example-view split-view">
     <div class="dom">
-      <div class="container">
+      <div>
         <svelte:component this={example.dom} />
       </div>
     </div>
@@ -121,11 +121,9 @@
 
   .threlte {
     height: 100%;
-    flex: 1;
   }
 
   .dom {
-    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: center;
