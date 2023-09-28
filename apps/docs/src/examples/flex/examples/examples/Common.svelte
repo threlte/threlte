@@ -5,9 +5,9 @@
 
 <T.OrthographicCamera
   makeDefault
-  near={100}
-  far={10000}
-  position={[0, 0, 5000]}
+  near={44}
+  far={4400}
+  position={[0, 0, 3000]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls zoomToCursor />

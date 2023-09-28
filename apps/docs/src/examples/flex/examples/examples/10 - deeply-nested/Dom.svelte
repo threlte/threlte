@@ -1,6 +1,6 @@
 <div
   class="red"
-  style="width: 500px; height: 500px; display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 20px; box-sizing: border-box;"
+  style="width: 300px; height: 300px; display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 20px; box-sizing: border-box;"
 >
   <div
     class="yellow"
@@ -17,7 +17,7 @@
     >
       <div
         class="red"
-        style="height: 100px; width: 100px;"
+        style="height: 44px; width: 44px;"
       />
     </div>
   </div>
@@ -28,11 +28,11 @@
   >
     <div
       class="pink"
-      style="height: 100px; width: auto; flex: 1;"
+      style="height: 44px; width: auto; flex: 1;"
     />
     <div
       class="hotpink"
-      style="height: 100px; width: auto; flex: 1; align-self: flex-end;"
+      style="height: 44px; width: auto; flex: 1; align-self: flex-end;"
     />
   </div>
 </div>

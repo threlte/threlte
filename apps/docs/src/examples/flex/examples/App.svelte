@@ -9,9 +9,7 @@
   type Example = {
     name: string
     dom: ConstructorOfATypedSvelteComponent
-    domRaw: string
     threlte: ConstructorOfATypedSvelteComponent
-    threlteRaw: string
   }
 
   let selected: string = browser ? sessionStorage.selected || '' : ''
@@ -22,32 +20,22 @@
       string,
       any
     >
-    const rawModules = (import.meta as any).glob('./examples/*/*.svelte', {
-      eager: true,
-      as: 'raw'
-    }) as Record<string, string>
     components = Object.entries(modules).reduce((acc, [key, module]) => {
       const name = key.split('/')[2]
       if (!name) throw new Error(`No name for ${key}`)
       const isDom = key.includes('Dom')
-      const raw = rawModules[key]
-      if (!raw) throw new Error(`No raw module for ${key}`)
       const example = acc.find((e) => e.name === name)
       if (example) {
         if (isDom) {
           example.dom = (module as any).default
-          example.domRaw = raw
         } else {
           example.threlte = (module as any).default
-          example.threlteRaw = raw
         }
       } else {
         acc.push({
           name,
           dom: isDom ? (module as any).default : undefined,
-          domRaw: isDom ? raw : '',
-          threlte: isDom ? undefined : (module as any).default,
-          threlteRaw: isDom ? '' : raw
+          threlte: isDom ? undefined : (module as any).default
         })
       }
       return acc
@@ -97,21 +85,10 @@
       </Canvas>
     </div>
   </div>
-
-  <div class="split-view">
-    <div class="code">
-      {example.domRaw}
-    </div>
-
-    <div class="code">
-      {example.threlteRaw}
-    </div>
-  </div>
 {/if}
 
 <style>
   :global(body) {
-    background: #333333;
     margin: 0;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
       Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -136,7 +113,7 @@
   }
 
   .example-view {
-    height: 600px;
+    height: 350px;
   }
 
   .threlte {
@@ -150,11 +127,5 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-  }
-
-  .code {
-    padding: 20px;
-    white-space: pre-wrap;
-    color: white;
   }
 </style>

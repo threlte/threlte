@@ -4,14 +4,14 @@
 </script>
 
 <Plane
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   color="red"
 />
 
 <Flex
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   justifyContent="Center"
   alignItems="Stretch"
   gap={20}
@@ -66,8 +66,8 @@
       />
 
       <Box
-        width={100}
-        height={100}
+        width={44}
+        height={44}
         let:width
         let:height
       >
@@ -100,7 +100,7 @@
     <Box
       flex={1}
       width="auto"
-      height={100}
+      height={44}
       let:width
       let:height
     >
@@ -115,7 +115,7 @@
     <Box
       flex={1}
       width="auto"
-      height={100}
+      height={44}
       alignSelf="FlexEnd"
       let:width
       let:height

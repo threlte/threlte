@@ -4,20 +4,20 @@
 </script>
 
 <Plane
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   color="red"
 />
 
 <Flex
-  width={500}
-  height={500}
+  width={300}
+  height={300}
   justifyContent="Center"
   alignItems="Stretch"
   gap={20}
 >
   <Box
-    width={100}
+    width={44}
     height="auto"
     let:width
     let:height
@@ -31,7 +31,7 @@
   </Box>
 
   <Box
-    width={100}
+    width={44}
     height="auto"
     let:width
     let:height

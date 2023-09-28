@@ -1,6 +1,6 @@
 <div
   class="red"
-  style="width: 500px; height: 500px; display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 20px; box-sizing: border-box;"
+  style="width: 300px; height: 300px; display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 20px; box-sizing: border-box;"
 >
   <div
     class="yellow"
