@@ -1,6 +1,14 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky } from '../lib'
+  import { T, useFrame } from '@threlte/core'
+  import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
+
+  const gamepad = useGamepad()
+
+  $: gamepad.connected ? console.log('connected') : console.log('disconnected')
+
+  gamepad.leftStick.on('change', (event) => {
+    console.log('x:', gamepad.leftStick.x, 'y:', gamepad.leftStick.y)
+  })
 </script>
 
 <T.PerspectiveCamera

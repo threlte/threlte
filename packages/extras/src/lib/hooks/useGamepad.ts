@@ -4,10 +4,8 @@ import { currentWritable, useFrame } from '@threlte/core'
 type UseGamepadOptions = {
   /** An optional gamepad index, if multiple gamepads are used. */
   index?: number
-  /** The mapping strategy for the gamepad. Default is 'none'. Choose 'standard' to enable mapping. */
-  mapping?: 'none' | 'standard' // 'standard-xr'
-  /** The threshold value of an axis before change events are fired. Default is 0.05. */
-  axisChangeThreshold?: number
+  /** The threshold value of any axis before change events are fired. Default is 0.05. */
+  axisDeadzone?: number
 }
 
 const standardButtons = [
@@ -90,6 +88,12 @@ const createStandard = (allEvents: Events, events: Events[]) => {
   }
 
   return {
+    /** The Gamepad connection status */
+    connected: currentWritable(false),
+
+    /** The raw Gamepad object */
+    raw: null as Gamepad | null,
+
     /** buttons[0] - Botton button in right cluster */
     clusterBottom: createButton(events, 0),
     /** buttons[1] - Right button in right cluster */
@@ -139,15 +143,13 @@ type StandardGamepadStick = ReturnType<typeof createStick>
 type StandardGamepad = ReturnType<typeof createStandard>
 
 export const useGamepad = (options: UseGamepadOptions = {}) => {
-  const { index: gamepadIndex = 0, mapping = 'none', axisChangeThreshold = 0.05 } = options
+  const { index: gamepadIndex = 0, axisDeadzone = 0.05 } = options
 
   const allEvents: Events = {}
   const events: Events[] = Array.from({
     length: standardButtons.length + standardSticks.length
   }).map(() => ({}))
-  const gamepad = currentWritable<Gamepad | null>(null)
-  const gamepadConnected = currentWritable(false)
-  const standardGamepad: StandardGamepad = createStandard(allEvents, events)
+  const gamepad: StandardGamepad = createStandard(allEvents, events)
 
   const processButton = (
     target: StandardGamepadButtons,
@@ -199,8 +201,8 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     const lastValueX = mappedStick.x
     const lastValueY = mappedStick.y
 
-    const x = Math.abs(rawX) < axisChangeThreshold ? 0 : rawX
-    const y = Math.abs(rawY) < axisChangeThreshold ? 0 : rawY
+    const x = Math.abs(rawX) < axisDeadzone ? 0 : rawX
+    const y = Math.abs(rawY) < axisDeadzone ? 0 : rawY
 
     mappedStick.x = x
     mappedStick.y = y
@@ -217,27 +219,25 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
      * so it must be polled continuously to recieve new values.
      */
     const pad = navigator.getGamepads()[gamepadIndex]
-    gamepad.set(pad)
-
-    if (mapping === 'none') return
+    gamepad.raw = pad
 
     const { buttons = [], axes = [] } = pad ?? {}
 
     // Handle standard mapping
     standardButtons.forEach((name, index) =>
-      processButton(name, standardGamepad[name], events[index], buttons[index])
+      processButton(name, gamepad[name], events[index], buttons[index])
     )
 
-    processStick('leftStick', standardGamepad.leftStick, events[17], axes[0], axes[1])
-    processStick('rightStick', standardGamepad.rightStick, events[18], axes[2], axes[3])
+    processStick('leftStick', gamepad.leftStick, events[17], axes[0], axes[1])
+    processStick('rightStick', gamepad.rightStick, events[18], axes[2], axes[3])
   }
 
   const handleGamepadDisconnected = (event: GamepadEvent): void => {
     const { id } = event.gamepad
 
-    if (id === gamepad.current?.id) {
-      gamepad.set(null)
-      gamepadConnected.set(false)
+    if (id === gamepad.raw?.id) {
+      gamepad.raw = null
+      gamepad.connected.set(false)
       stop()
     }
   }
@@ -246,8 +246,8 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
     const pad = navigator.getGamepads()[gamepadIndex]
 
     if (pad) {
-      gamepad.set(pad)
-      gamepadConnected.set(true)
+      gamepad.raw = pad
+      gamepad.connected.set(true)
       start()
     }
   }
@@ -266,5 +266,5 @@ export const useGamepad = (options: UseGamepadOptions = {}) => {
 
   const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
 
-  return { gamepad, gamepadConnected, standardGamepad }
+  return gamepad
 }

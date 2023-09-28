@@ -6,13 +6,13 @@ name: useGamepad
 type: 'hook'
 ---
 
-A hook that will provide a [`currentWritable`](/docs/reference/core/utilities#currentwritable) reference to a [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) when connected.
+A hook that will provide a reference to an object that maps [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) values using the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping) when connected.
 
 ```svelte
 <script lang="ts">
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepad } = useGamepad()
+  const gamepad = useGamepad()
 </script>
 ```
 
@@ -22,11 +22,12 @@ More than one gamepad can be connected at any given time, so an optional `index`
 <script lang="ts">
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepad } = useGamepad({ index: 0 })
-  const { gamepad: gamepad2 } = useGamepad({ index: 1 })
+  const gamepad1 = useGamepad({ index: 0 })
+  const gamepad2 = useGamepad({ index: 1 })
 </script>
 ```
 
+The raw unmapped [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) can be accessed via the `raw` prop.
 The `gamepad` store value will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
 
 ```svelte
@@ -34,10 +35,10 @@ The `gamepad` store value will be `null` until a gamepad connects, and will beco
   import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepad } = useGamepad()
+  const gamepad = useGamepad()
 
   useFrame(() => {
-    if (gamepad.current) {
+    if (gamepad.raw) {
       // A gamepad is connected!
     }
   })
@@ -45,40 +46,40 @@ The `gamepad` store value will be `null` until a gamepad connects, and will beco
 ```
 
 <Tip type="warning">
-  Gamepad data is fetched as an immutable snapshot on every frame, so a reference to `$gamepad` or `gamepad.current` will become stale on the next frame.
+  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches `gamepad.raw` will become stale on the next frame.
 </Tip>
 
 ### Connection status
 
-The hook provides a `gamepadConnected` boolean store to react to gamepad connection.
+The `connected` property provides a `currentWritable` that will update when a gamepad connects.
 
 ```svelte
 <script lang="ts">
   import { useGamepad } from '@threlte/extras'
 
-  const { gamepadConnected } = useGamepad()
+  const gamepad = useGamepad()
   
-  $: console.log(`A gamepad ${$gamepadConnected ? 'connected' : 'disconnected'}!`)
+  $: console.log(`A gamepad ${$gamepad.connected ? 'connected' : 'disconnected'}!`)
 </script>
 ```
 
 ### Standard gamepad layout
 
-If the button and axis layout of the gamepad corresponds with the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), a more convienent `standardGamepad` object can be used if a `{ mapping: 'standard' }` option is passed to the hook.
+If the button and axis layout of the gamepad corresponds with the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), the gamepad object may be used to read and subscribe to input values.
 
-The `standardGamepad` provides properties to more easily access button or joystick values.
+Properties are given to more easily access button or joystick values.
 
 ```svelte
 <script lang="ts">
   import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
-  const { standardGamepad } = useGamepad({ mapping: 'standard' })
+  const gamepad = useGamepad()
   
   useFrame(() => {
-    console.log(standardGamepad.leftStick.x, standardGamepad.leftStick.y)
-    console.log(standardGamepad.leftBumper.value)
-    console.log(standardGamepad.rightTrigger.value)
+    console.log(gamepad.leftStick.x, gamepad.leftStick.y)
+    console.log(gamepad.leftBumper.value)
+    console.log(gamepad.rightTrigger.value)
   })
 </script>
 ```
@@ -90,17 +91,17 @@ Event listeners can also be attached to buttons or joysticks, or the gamepad its
   import { useFrame } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
-  const { standardGamepad } = useGamepad({ mapping: 'standard' })
+  const gamepad = useGamepad()
   
-  standardGamepad.leftTrigger.on('down', (event) => {
+  gamepad.leftTrigger.on('down', (event) => {
     console.log('The left trigger has just been pressed!')
   })
 
-  standardGamepad.leftStick.on('change', (event) => {
+  gamepad.leftStick.on('change', (event) => {
     console.log(`Left stick moved: ${event.value.x}, ${event.value.y}`)
   })
   
-  standardGamepad.on('press', (event) => {
+  gamepad.on('press', (event) => {
     console.log(`A ${event.type} event on ${event.target} occurred: ${event.value}`)
   })
 </script>
@@ -108,7 +109,7 @@ Event listeners can also be attached to buttons or joysticks, or the gamepad its
 
 ### Button mapping and events
 
-The `standardGamepad` object maps the 17 standard gamepad buttons and 4 axes to:
+The `gamepad` object maps the 17 standard gamepad buttons and 4 axes to:
 
 * The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`.
 * The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`.
