@@ -107,7 +107,6 @@
 
   .split-view > * {
     flex: 1;
-    width: 100%;
   }
 
   .split-view > :nth-child(2) {
