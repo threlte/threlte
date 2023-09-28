@@ -1,13 +1,26 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
 
   const gamepad = useGamepad()
+  const { connected } = gamepad
 
-  $: gamepad.connected ? console.log('connected') : console.log('disconnected')
+  connected.subscribe((value) => {
+    if (value) {
+      console.log(gamepad.raw)
+    }
+  })
+
+  $: console.log($connected ? 'connected' : 'disconnected')
 
   gamepad.leftStick.on('change', (event) => {
-    console.log('x:', gamepad.leftStick.x, 'y:', gamepad.leftStick.y)
+    if (event.type === 'change') {
+      console.log(event.value.x, event.value.y)
+    }
+  })
+
+  gamepad.on('press', (event) => {
+
   })
 </script>
 

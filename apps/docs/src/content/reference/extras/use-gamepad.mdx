@@ -58,8 +58,9 @@ The `connected` property provides a `currentWritable` that will update when a ga
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()
+  const { connected } = gamepad
   
-  $: console.log(`A gamepad ${$gamepad.connected ? 'connected' : 'disconnected'}!`)
+  $: console.log(`A gamepad ${$connected ? 'connected' : 'disconnected'}!`)
 </script>
 ```
 
