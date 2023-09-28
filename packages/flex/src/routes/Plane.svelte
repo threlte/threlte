@@ -4,9 +4,13 @@
   export let color: string = 'white'
   export let height = 1
   export let width = 1
+  export let depth = 0
 </script>
 
-<T.Mesh>
+<T.Mesh
+  position.z={depth * 20}
+  renderOrder={depth}
+>
   <T.PlaneGeometry args={[width, height]} />
   <T.MeshBasicMaterial
     {color}

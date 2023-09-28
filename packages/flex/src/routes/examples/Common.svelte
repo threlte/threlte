@@ -1,8 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls } from '@threlte/extras'
-  import Gizmo from '../Gizmo.svelte'
-  import { MOUSE } from 'three'
+  import { OrbitControls } from '@threlte/extras'
 </script>
 
 <T.OrthographicCamera
@@ -12,13 +10,7 @@
   position={[0, 0, 5000]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
-  <OrbitControls
-    mouseButtons={{
-      LEFT: MOUSE.PAN,
-      RIGHT: MOUSE.ROTATE
-    }}
-    zoomToCursor
-  />
+  <OrbitControls zoomToCursor />
 </T.OrthographicCamera>
 
 <T.DirectionalLight />

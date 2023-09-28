@@ -1,67 +1,151 @@
 <script lang="ts">
+  import { Canvas } from '@threlte/core'
   import { NoToneMapping } from 'three'
-  import { T, Canvas } from '@threlte/core'
-  // import Threlte from './examples/a/Threlte.svelte'
-  // import Dom from './examples/a/Dom.svelte'
-  // import Threlte from './examples/b/Threlte.svelte'
-  // import Dom from './examples/b/Dom.svelte'
-  // import Threlte from './examples/c/Threlte.svelte'
-  // import Dom from './examples/c/Dom.svelte'
-  // import Threlte from './examples/d/Threlte.svelte'
-  // import Dom from './examples/d/Dom.svelte'
-  // import Threlte from './examples/e/Threlte.svelte'
-  // import Dom from './examples/e/Dom.svelte'
-  // import Threlte from './examples/f/Threlte.svelte'
-  // import Dom from './examples/f/Dom.svelte'
-  // import Threlte from './examples/g/Threlte.svelte'
-  // import Dom from './examples/g/Dom.svelte'
-  // import Threlte from './examples/h/Threlte.svelte'
-  // import Dom from './examples/h/Dom.svelte'
-  // import Threlte from './examples/i/Threlte.svelte'
-  // import Dom from './examples/i/Dom.svelte'
-  import Threlte from './examples/j/Threlte.svelte'
-  import Dom from './examples/j/Dom.svelte'
+  import { onMount } from 'svelte'
+  import { browser } from '$app/environment'
+  import Common from './examples/Common.svelte'
+
+  type Example = {
+    name: string
+    dom: ConstructorOfATypedSvelteComponent
+    domRaw: string
+    threlte: ConstructorOfATypedSvelteComponent
+    threlteRaw: string
+  }
+
+  let selected: string = browser ? sessionStorage.selected || '' : ''
+  let components: Example[] = []
+
+  const load = () => {
+    const modules = import.meta.glob('./examples/*/*.svelte', { eager: true })
+    const rawModules = import.meta.glob('./examples/*/*.svelte', { eager: true, as: 'raw' })
+    components = Object.entries(modules).reduce((acc, [key, module]) => {
+      const name = key.split('/')[2]
+      const isDom = key.includes('Dom')
+      const raw = rawModules[key]
+      const example = acc.find((e) => e.name === name)
+      if (example) {
+        if (isDom) {
+          example.dom = (module as any).default
+          example.domRaw = raw
+        } else {
+          example.threlte = (module as any).default
+          example.threlteRaw = raw
+        }
+      } else {
+        acc.push({
+          name,
+          dom: isDom ? (module as any).default : undefined,
+          domRaw: isDom ? raw : '',
+          threlte: isDom ? undefined : (module as any).default,
+          threlteRaw: isDom ? '' : raw
+        })
+      }
+      return acc
+    }, [] as unknown as typeof components)
+    selected ||= components[0].name
+  }
+
+  onMount(load)
+
+  $: example = components.find((e) => e.name === selected)
+  $: if (browser && selected.length) sessionStorage.selected = selected
 </script>
 
-<div class="dom">
-  <div class="container">
-    <Dom />
-  </div>
-</div>
+<svelte:window
+  on:keydown={(event) => {
+    if (event.key === 'ArrowLeft') {
+      const index = components.findIndex((e) => e.name === selected)
+      selected = components[index - 1]?.name || selected
+    } else if (event.key === 'ArrowRight') {
+      const index = components.findIndex((e) => e.name === selected)
+      selected = components[index + 1]?.name || selected
+    }
+  }}
+/>
 
-<main>
-  <Canvas toneMapping={NoToneMapping}>
-    <Threlte />
-  </Canvas>
-</main>
+<nav>
+  <select bind:value={selected}>
+    {#each components as { name }}
+      <option value={name}>{name}</option>
+    {/each}
+  </select>
+</nav>
+
+{#if example}
+  <div class="example-view split-view">
+    <div class="dom">
+      <div class="container">
+        <svelte:component this={example.dom} />
+      </div>
+    </div>
+
+    <div class="threlte">
+      <Canvas toneMapping={NoToneMapping}>
+        <Common />
+
+        <svelte:component this={example.threlte} />
+      </Canvas>
+    </div>
+  </div>
+
+  <div class="split-view">
+    <div class="code">
+      {example.domRaw}
+    </div>
+
+    <div class="code">
+      {example.threlteRaw}
+    </div>
+  </div>
+{/if}
 
 <style>
   :global(body) {
+    background: #333333;
     margin: 0;
-    overflow: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
       Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  main {
-    position: absolute;
-    height: 100vh;
-    width: 50vw;
-    left: 50vw;
-    background: #333333;
+  nav {
+    padding: 20px;
+  }
+
+  .split-view {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+  }
+  .split-view > * {
+    flex: 1;
+    width: 100%;
+  }
+
+  .split-view > :nth-child(2) {
     border-left: 1px solid white;
   }
 
+  .example-view {
+    height: 600px;
+  }
+
+  .threlte {
+    height: 100%;
+    flex: 1;
+  }
+
   .dom {
-    color: white;
-    left: 0;
-    position: absolute;
-    height: 100vh;
-    width: 50vw;
-    background: #333;
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+  }
+
+  .code {
+    padding: 20px;
+    white-space: pre-wrap;
+    color: white;
   }
 </style>

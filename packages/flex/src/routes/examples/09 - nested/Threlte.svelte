@@ -2,10 +2,7 @@
   import Box from '../../../lib/Box/Box.svelte'
   import Flex from '../../../lib/Flex/Flex.svelte'
   import Plane from '../../Plane.svelte'
-  import Common from '../Common.svelte'
 </script>
-
-<Common />
 
 <Plane
   width={500}
@@ -25,9 +22,6 @@
     width="auto"
     height="auto"
     flex={1}
-    gap={20}
-    padding={20}
-    flexDirection="Column"
     let:width
     let:height
   >
@@ -35,50 +29,8 @@
       color="yellow"
       {width}
       {height}
+      depth={1}
     />
-
-    <Box
-      flex={1}
-      width="auto"
-      height="auto"
-      let:width
-      let:height
-    >
-      <Plane
-        color="fuchsia"
-        {width}
-        {height}
-      />
-    </Box>
-
-    <Box
-      flex={1}
-      width="auto"
-      height="auto"
-      justifyContent="Center"
-      alignItems="Center"
-      let:width
-      let:height
-    >
-      <Plane
-        color="orange"
-        {width}
-        {height}
-      />
-
-      <Box
-        width={100}
-        height={100}
-        let:width
-        let:height
-      >
-        <Plane
-          color="red"
-          {width}
-          {height}
-        />
-      </Box>
-    </Box>
   </Box>
 
   <Box
@@ -94,6 +46,7 @@
       color="blue"
       {width}
       {height}
+      depth={1}
     />
 
     <Box
@@ -107,6 +60,7 @@
         color="pink"
         {width}
         {height}
+        depth={2}
       />
     </Box>
 
@@ -122,6 +76,7 @@
         color="hotpink"
         {width}
         {height}
+        depth={2}
       />
     </Box>
   </Box>

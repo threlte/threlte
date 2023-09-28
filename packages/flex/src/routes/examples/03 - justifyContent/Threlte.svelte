@@ -2,11 +2,7 @@
   import Box from '../../../lib/Box/Box.svelte'
   import Flex from '../../../lib/Flex/Flex.svelte'
   import Plane from '../../Plane.svelte'
-  import Common from '../Common.svelte'
-  import { tailwindParser } from './tailwindParser'
 </script>
-
-<Common />
 
 <Plane
   width={500}
@@ -17,29 +13,23 @@
 <Flex
   width={500}
   height={500}
-  classParser={tailwindParser}
-  class="p-10 gap-10"
+  justifyContent="FlexEnd"
 >
-  <Box
-    class="w-100 h-100"
-    let:width
-    let:height
-  >
+  <Box>
     <Plane
-      {width}
-      {height}
       color="yellow"
+      width={100}
+      height={100}
+      depth={1}
     />
   </Box>
 
-  <Box
-    class="flex-1"
-    let:width
-  >
+  <Box>
     <Plane
       color="blue"
-      {width}
+      width={100}
       height={100}
+      depth={1}
     />
   </Box>
 </Flex>
