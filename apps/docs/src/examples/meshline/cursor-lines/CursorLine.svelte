@@ -7,7 +7,7 @@
   export let cursorPosition: { x: number; z: number }
   export let color: string
   export let width: number
-	export let stiffness: number
+  export let stiffness: number
   export let damping: number
 
   let sprungCursor = spring(
@@ -34,11 +34,11 @@
     }
   }
 
-  useFrame(() => {
+  useFrame((_ctx, delta) => {
     let previousPoint = points[0]
     points.forEach((point, i) => {
       if (previousPoint && i > 0) {
-        point.lerp(previousPoint, 0.75)
+        point.lerp(previousPoint, delta * 75)
         previousPoint = point
       }
     })
@@ -55,5 +55,6 @@
     {width}
     {color}
     scaleDown={0.1}
+    attenuate={false}
   />
 </T.Mesh>

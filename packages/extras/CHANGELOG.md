@@ -1,5 +1,18 @@
 # @threlte/extras
 
+## 5.6.4
+
+### Patch Changes
+
+- a79ef10d: Orbit controls - now calls `update` on initialization to set a correct camera position.
+- 8296c7aa: ContactShadows: use WebGLRenderTarget#colorSpace when available
+
+## 5.6.3
+
+### Patch Changes
+
+- 8b490b8: Fix MeshLineMaterial shader to calculate normals and offsets correctly
+
 ## 5.6.2
 
 ### Patch Changes

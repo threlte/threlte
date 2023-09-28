@@ -7,7 +7,7 @@
   interactivity()
 
   let cursorPosition = { x: 0, z: 0 }
-  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f79', '#1e165c']
+  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f9a', '#1e168d']
 </script>
 
 {#each colors as color, i}
@@ -17,7 +17,7 @@
     position.y={5 - i}
     stiffness={0.02 * i + 0.02}
     damping={0.25 - 0.04 * i}
-    width={0.3 + i / 5}
+    width={15 + i * 10}
   />
 {/each}
 

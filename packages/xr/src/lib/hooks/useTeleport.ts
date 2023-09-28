@@ -1,12 +1,11 @@
 import * as THREE from 'three'
 import { useThrelte } from '@threlte/core'
-import { useBaseReferenceSpace } from '../internal/useBaseReferenceSpace'
 
 const quaternion = new THREE.Quaternion()
 const offset = { x: 0, y: 0, z: 0 }
 
 /**
- * Returns a callback to teleport the player to a position.
+ * Returns a callback to teleport the player from the world origin to a position and optional orientation.
  *
  * @example
  * const teleport = useTeleport()
@@ -15,42 +14,40 @@ const offset = { x: 0, y: 0, z: 0 }
  * vec3.set(5, 0, 5)
  *
  * teleport(vec3)
+ * 
+ * const quat = new THREE.Quaternion()
+ * 
+ * teleport(vec3, quat)
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
-  const baseReferenceSpace = useBaseReferenceSpace()
+  let space = xr.getReferenceSpace()
 
   /**
-   * Teleports a player to a position - and optionally a direction.
+   * Teleports a player from the world origin to a position and optional orientation.
    */
-  return (position: THREE.Vector3 | THREE.Vector3Tuple, direction = quaternion) => {
-    const space = baseReferenceSpace.current
+  return (position: THREE.Vector3 | THREE.Vector3Tuple, orientation = quaternion) => {
+    space ??= xr.getReferenceSpace()
 
-    if (space === null || space === undefined) return
-
-    let x = 0,
-      y = 0,
-      z = 0
+    if (space === null) return
 
     if (Array.isArray(position)) {
-      ;[x, y, z] = position
+      offset.x = -position[0]
+      offset.y = -position[1]
+      offset.z = -position[2]
     } else {
-      x = position.x
-      y = position.y
-      z = position.z
+      offset.x = -position.x
+      offset.y = -position.y
+      offset.z = -position.z
     }
 
-    offset.x = -x
-    offset.y = -y
-    offset.z = -z
-
-    const pose = xr.getFrame().getViewerPose(space)
+    const pose = xr.getFrame()?.getViewerPose(space)
     if (pose !== undefined) {
       offset.x += pose.transform.position.x
       offset.z += pose.transform.position.z
     }
 
-    const teleportOffset = new XRRigidTransform(offset, direction)
+    const teleportOffset = new XRRigidTransform(offset, orientation)
     xr.setReferenceSpace(space.getOffsetReferenceSpace(teleportOffset))
   }
 }

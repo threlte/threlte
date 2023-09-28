@@ -1,7 +1,7 @@
 {
   "name": "@threlte/docs",
   "type": "module",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": true,
   "scripts": {
     "dev": "astro dev --host",
@@ -52,6 +52,7 @@
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.3.1",
     "node-html-parser": "^6.1.4",
+    "postcss-easing-gradients": "^3.0.1",
     "postprocessing": "^6.32.2",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-pretty-code": "^0.9.2",
@@ -61,6 +62,7 @@
     "shiki": "^0.14.3",
     "simplex-noise": "^4.0.0",
     "svelte-preprocess": "^5.0.1",
+    "svelte-reduced-motion": "^1.1.1",
     "three": "0.155.0",
     "tweakpane": "^3.1.0",
     "vite-plugin-mkcert": "^1.16.0"

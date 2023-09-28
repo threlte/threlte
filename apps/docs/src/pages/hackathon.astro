@@ -1,0 +1,47 @@
+---
+import Intro from '../components/hackathon/Intro.svelte'
+import MainLayout from '../layouts/MainLayout.astro'
+import DiscordIcon from '../components/Icons/inline/Discord.svelte'
+---
+
+<MainLayout title="Threlte Hackathon">
+  <Fragment slot="external">
+    <Intro client:load />
+  </Fragment>
+
+  <div class="flex flex-col items-center justify-center gap-0">
+    <div class="prose prose-invert mt-[100lvh] py-12">
+      <h5 class="text-faded">Join Us For Threlte Warp</h5>
+      <h1 class="mb-0">
+        The First Threlte Hackathon<br />
+      </h1>
+      <h4 class="mt-0 mb-6">15-22 October 2023</h4>
+
+      <p>The Threlte team is happy to announce the first official Threlte Hackathon!</p>
+
+      <ul>
+        <li>The <b>🚀 kickoff event</b> is on <b>Sunday, 15 October 2023 16:00 UTC</b></li>
+        <li>This is when we will reveal the themes and rules of the hackathon</li>
+        <li>You will have <b>⌛ one week to hack</b> at your entry</li>
+        <li>
+          You will get <b>🙌 support from the team</b> in a dedicated <a
+            href="https://discord.com/channels/985983540804091964/1152997301980250243"
+            ><DiscordIcon /> hackathon channel</a
+          >
+        </li>
+        <li><b>🏁 Deadline for submission</b> will be <b>Sunday, 22 October 2023 10:00 UTC</b></li>
+        <li>The <b>🏆 awards ceremony</b> will be on <b>Sunday, 22 October 2023 16:00 UTC</b></li>
+        <li>Expect some very <b>🎁 awesome prizes</b> and <b>🎉 lots of fun</b></li>
+      </ul>
+
+      <p>More details in the coming weeks....but pin the dates!</p>
+
+      <p>
+        Interested in joining? Please <a
+          href="https://discord.com/channels/985983540804091964/1152999817568591943"
+          ><DiscordIcon /> enroll in this thread</a
+        > - this is <i>optional</i> but helps us plan.
+      </p>
+    </div>
+  </div>
+</MainLayout>

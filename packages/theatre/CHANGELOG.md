@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.3
+
+### Patch Changes
+
+- c5cf4080: Fix color management of Theatre.js color picker
+
 ## 2.1.2
 
 ### Patch Changes

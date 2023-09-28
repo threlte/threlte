@@ -26,8 +26,8 @@ export type XRSessionEvent<Type = XRSessionEventType> = THREE.Event & {
 
 export type XRControllerEvent<Type = XRControllerEventType> = THREE.Event & {
   type: Type
-  target: any
-  data?: XRInputSource
+  target: THREE.Group
+  data: XRInputSource
 }
 
 export type XRController = {
@@ -42,10 +42,18 @@ export type XRHand = {
   model?: XRHandModel
   inputSource: globalThis.XRHand
 }
-
-export type XRHandEvent<Type = XRHandEventType, Target = null | THREE.XRHandSpace> = THREE.Event & {
-  type: Type
-  target: Target
-}
+export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'
+  ? {
+      type: Type;
+      target: THREE.XRHandSpace;
+      data: XRInputSource;
+    }
+  : Type extends 'pinchstart' | 'pinchend'
+  ? {
+      type: Type;
+      handedness: 'left' | 'right';
+      target: null;
+    }
+  : never;
 
 export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => void
