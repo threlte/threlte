@@ -8,25 +8,39 @@
   let installRapier = false
   let installTheatre = false
   let installXR = false
+  let installFlex = false
   let installTypes = false
 
   let divider = ' \\'
   let merger = '\n'
   let space = '            '
 
+  const useDivider = (...args: boolean[]) => {
+    return args.some(Boolean) ? divider : ''
+  }
+
+  $: coreDivider = useDivider(
+    installExtras,
+    useGltf,
+    installRapier,
+    installTheatre,
+    installXR,
+    installFlex,
+    installTypes
+  )
+  $: extrasDivider = useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
+  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes)
+  $: theatreDivider = useDivider(installXR, installFlex, installTypes)
+  $: xrDivider = useDivider(installFlex, installTypes)
+  $: flexDivider = useDivider(installTypes)
+
   $: installCode = [
-    `npm install three @threlte/core${
-      installExtras || useGltf || installRapier || installTheatre || installXR || installTypes ? divider : ''
-    }`,
-    (installExtras || useGltf || installTheatre) &&
-      `${space}@threlte/extras${installRapier || installTheatre || installXR || installTypes ? divider : ''}`,
-    installRapier &&
-      `${space}@threlte/rapier @dimforge/rapier3d-compat${
-        installTypes || installTheatre || installXR ? divider : ''
-      }`,
-    installTheatre &&
-      `${space}@threlte/theatre @theatre/core @theatre/studio${installXR || installTypes ? divider : ''}`,
-    installXR && `${space}@threlte/xr${installTypes ? divider : ''}`,
+    `npm install three @threlte/core${coreDivider}`,
+    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${extrasDivider}`,
+    installRapier && `${space}@threlte/rapier @dimforge/rapier3d-compat${rapierDivider}`,
+    installTheatre && `${space}@threlte/theatre @theatre/core @theatre/studio${theatreDivider}`,
+    installXR && `${space}@threlte/xr${xrDivider}`,
+    installFlex && `${space}@threlte/flex${flexDivider}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -134,12 +148,26 @@
     active={installXR}>@threlte/xr</InstallButton
   >
 
-  <p class="my-0 text-sm md:text-base self-center">
-    Components and hooks for VR and AR.
+  <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
+
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+
+  <InstallButton
+    on:click={() => {
+      installFlex = !installFlex
+    }}
+    active={installFlex}>@threlte/flex</InstallButton
+  >
+
+  <p class="my-0 self-center text-sm md:text-base">
+    Components and hooks to use the flex engine <a
+      href="https://yogalayout.com/"
+      target="_blank"
+      rel="noreferrer">Yoga</a
+    > in Threlte.
   </p>
 
-  <hr class="md:col-span-2 p-0 m-0 opacity-50 w-full max-md:my-3" />
-
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     on:click={() => {

@@ -1,4 +1,4 @@
-import { getCollection, CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 type ReferenceCategoryKey = NonNullable<CollectionEntry<'reference'>['data']['category']>
 
@@ -9,6 +9,7 @@ const referenceSidebarMenuCategoryOrder: ReferenceCategoryKey[] = [
   '@threlte/rapier',
   '@threlte/theatre',
   '@threlte/xr',
+  '@threlte/flex',
   'Documentation'
 ]
 
@@ -53,7 +54,7 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
   'Advanced',
-	'More',
+  'More',
   'Preprocessing'
 ]
 
@@ -98,7 +99,7 @@ const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
   'Animation',
   'Camera',
   'Geometry',
-	'MeshLine',
+  'MeshLine',
   'Postprocessing',
   'Shaders'
 ]
