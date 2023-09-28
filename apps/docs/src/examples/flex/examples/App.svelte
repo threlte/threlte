@@ -61,14 +61,6 @@
   }}
 />
 
-<nav>
-  <select bind:value={selected}>
-    {#each components as { name }}
-      <option value={name}>{name}</option>
-    {/each}
-  </select>
-</nav>
-
 {#if example}
   <div class="example-view split-view">
     <div class="dom">
@@ -87,6 +79,14 @@
   </div>
 {/if}
 
+<nav>
+  <select bind:value={selected}>
+    {#each components as { name }}
+      <option value={name}>{name}</option>
+    {/each}
+  </select>
+</nav>
+
 <style>
   :global(body) {
     margin: 0;
@@ -96,6 +96,7 @@
 
   nav {
     padding: 20px;
+    position: relative;
   }
 
   .split-view {
@@ -103,17 +104,20 @@
     display: flex;
     flex-direction: row;
   }
+
   .split-view > * {
     flex: 1;
     width: 100%;
   }
 
   .split-view > :nth-child(2) {
-    border-left: 1px solid white;
+    border-left: 1px solid #404550;
   }
 
   .example-view {
-    height: 350px;
+    position: absolute;
+    top: 0;
+    height: 100vh;
   }
 
   .threlte {
