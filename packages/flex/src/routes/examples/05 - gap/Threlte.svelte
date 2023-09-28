@@ -1,6 +1,5 @@
 <script lang="ts">
-  import Box from '../../../lib/Box/Box.svelte'
-  import Flex from '../../../lib/Flex/Flex.svelte'
+  import { Flex, Box } from '$lib'
   import Plane from '../../Plane.svelte'
 </script>
 

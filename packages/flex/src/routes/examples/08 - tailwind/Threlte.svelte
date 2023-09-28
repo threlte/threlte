@@ -1,8 +1,6 @@
 <script lang="ts">
-  import Box from '../../../lib/Box/Box.svelte'
-  import Flex from '../../../lib/Flex/Flex.svelte'
+  import { Flex, Box, tailwindParser } from '$lib'
   import Plane from '../../Plane.svelte'
-  import { tailwindParser } from './tailwindParser'
 </script>
 
 <Plane

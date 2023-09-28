@@ -1,5 +1,5 @@
-import { createClassParser } from '../../../lib/lib/createClassParser'
-import type { NodeProps } from '../../../lib/lib/props'
+import { createClassParser } from './createClassParser'
+import type { NodeProps } from '../lib/props'
 
 export const tailwindParser = createClassParser((string) => {
   const styles: NodeProps = {}

@@ -1,4 +1,4 @@
-import type { NodeProps } from './props'
+import type { NodeProps } from '../lib/props'
 
 /**
  * This function is a type helper for creating a class parser. A class parser is
