@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 5.7.0
+
+### Minor Changes
+
+- f4b7d2d2: Add useGamepad hook
+
 ## 5.6.4
 
 ### Patch Changes
