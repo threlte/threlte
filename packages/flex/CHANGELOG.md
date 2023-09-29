@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.0.6
+
+### Patch Changes
+
+- 38fb44fa: Changed signature of `createClassParser`
+
 ## 0.0.5
 
 ### Patch Changes
