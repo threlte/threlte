@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.0.4
+
+### Patch Changes
+
+- 19345c5d: Added handcrafted types to include Yoga types and updated lockfile
+
 ## 0.0.3
 
 ### Patch Changes
