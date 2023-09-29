@@ -2,7 +2,7 @@
   import { forwardEventHandlers } from '@threlte/core'
   import { loadYoga, type Yoga } from 'yoga-layout'
   import type { FlexEvents, FlexProps, FlexSlots } from './Flex.svelte'
-  import InnerFlex from './Innerflex.svelte'
+  import InnerFlex from './InnerFlex.svelte'
 
   type $$Props = FlexProps
   type $$Events = FlexEvents

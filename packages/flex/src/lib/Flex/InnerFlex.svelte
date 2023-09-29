@@ -8,7 +8,7 @@
   import { getRootShift } from '../lib/getRootShift'
   import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './Innerflex.svelte'
+  import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
 
   type $$Props = InnerFlexProps
