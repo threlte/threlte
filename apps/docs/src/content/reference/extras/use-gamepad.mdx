@@ -6,7 +6,8 @@ name: useGamepad
 type: 'hook'
 ---
 
-A hook that will provide a reference to an object that maps [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) values using the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping) when connected.
+A hook that will provide a reference to an object that maps [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) 
+values using the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping) when connected.
 
 ```svelte
 <script lang="ts">
@@ -28,7 +29,7 @@ More than one gamepad can be connected at any given time, so an optional `index`
 ```
 
 The raw unmapped [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) can be accessed via the `raw` prop.
-The `gamepad` store value will be `null` until a gamepad connects, and will become `null` again once a gamepad disconnects.
+This prop will be `null` unless a gamepad is connected.
 
 ```svelte
 <script lang="ts">
@@ -46,7 +47,8 @@ The `gamepad` store value will be `null` until a gamepad connects, and will beco
 ```
 
 <Tip type="warning">
-  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches `gamepad.raw` will become stale on the next frame.
+  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches `gamepad.raw` 
+  will become stale on the next frame.
 </Tip>
 
 ### Connection status
@@ -66,7 +68,9 @@ The `connected` property provides a `currentWritable` that will update when a ga
 
 ### Standard gamepad layout
 
-If the button and axis layout of the gamepad corresponds with the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), the gamepad object may be used to read and subscribe to input values.
+If the button and axis layout of the gamepad corresponds with the 
+[Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), the gamepad object may be used 
+to read and subscribe to input values.
 
 Properties are given to more easily access button or joystick values.
 
@@ -108,6 +112,21 @@ Event listeners can also be attached to buttons or joysticks, or the gamepad its
 </script>
 ```
 
+### XR-Standard gamepad layout
+
+To create a mapped object for a gamepad representing WebXR controller with the [`xr-standard` gamepad layout](https://immersive-web.github.io/webxr-gamepads-module/#xr-standard-heading), 
+set the `xr` flag to `true` when calling the hook:
+
+```svelte
+const leftGamepad = useGamepad({ xr: true, hand: 'left' })
+const rightGamepad = useGamepad({ xr: true, hand: 'right' })
+
+leftGamepad.trigger.on('change', (event) => console.log(event))
+rightGamepad.trigger.on('change', (event) => console.log(event))
+```
+
+This will create a similar mapped object once XR controllers are connected.
+
 ### Button mapping and events
 
 The `gamepad` object maps the 17 standard gamepad buttons and 4 axes to:
@@ -117,6 +136,12 @@ The `gamepad` object maps the 17 standard gamepad buttons and 4 axes to:
 * The center buttons: `select`, `start`, `center`.
 * The joystick axes and buttons: `leftStickButton`, `leftStick`, `rightStickButton`, `rightStick`.
 * The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`.
+
+In a WebXR context, the following buttons and axes are mapped:
+
+* Two cluster buttons per hand: `clusterBottom`, `clusterTop`.
+* The `trigger` and `squeeze` buttons.
+* The `touchpad` and `thumbstick` axes.
 
 The available events for mapped buttons are the following:
 

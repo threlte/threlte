@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { T, Canvas } from '@threlte/core'
-  import { OrbitControls, Suspense, Text } from '../lib'
+  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
 </script>
 

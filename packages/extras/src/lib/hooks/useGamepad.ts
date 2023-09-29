@@ -1,12 +1,16 @@
 import { onDestroy } from 'svelte'
-import { currentWritable, useFrame } from '@threlte/core'
+import { currentWritable, useFrame, useThrelte } from '@threlte/core'
 
 type UseGamepadOptions = {
-  /** An optional gamepad index, if multiple gamepads are used. */
-  index?: number
   /** The threshold value of any axis before change events are fired. Default is 0.05. */
   axisDeadzone?: number
-}
+} & ({
+  /** An optional gamepad index, if multiple gamepads are used. */
+  index?: number
+} | {
+  xr: true
+  hand: 'left' | 'right'
+})
 
 const standardButtons = [
   'clusterBottom',
@@ -28,13 +32,26 @@ const standardButtons = [
   'center'
 ] as const
 
-const standardSticks = ['leftStick', 'rightStick'] as const
+const xrButtons = [
+  'trigger',
+  'squeeze',
+  'touchpadButton',
+  'thumbstickButton',
+  'clusterBottom',
+  'clusterTop'
+] as const
+
+const standardAxes = ['leftStick', 'rightStick'] as const
+const xrAxes = ['touchpad', 'thumbstick'] as const
 
 const gamepadEvents = ['change', 'press', 'down', 'up', 'touch', 'touchstart', 'touchend'] as const
 
 type StandardGamepadEvents = (typeof gamepadEvents)[number]
 type StandardGamepadButtons = (typeof standardButtons)[number]
-type StandardGamepadSticks = (typeof standardSticks)[number]
+type StandardGamepadAxes = (typeof standardAxes)[number]
+
+type XRGamepadButtons = (typeof xrButtons)[number]
+type XRGamepadAxes = (typeof xrAxes)[number]
 
 export type StandardGamepadEvent =
   | {
@@ -44,7 +61,20 @@ export type StandardGamepadEvent =
     }
   | {
       type: 'change'
-      target: StandardGamepadSticks
+      target: StandardGamepadAxes
+      value: {
+        x: number
+        y: number
+      }
+    }
+  | {
+      type: StandardGamepadEvents
+      target: XRGamepadButtons
+      value: number
+    }
+  | {
+      type: 'change'
+      target: XRGamepadAxes
       value: {
         x: number
         y: number
@@ -68,7 +98,7 @@ const createButton = (events: Events[], index: number) => {
   }
 }
 
-const createStick = (events: Events[], index: number) => {
+const createAxis = (events: Events[], index: number) => {
   const on = (name: 'change', fn: Fn) => {
     events[index][name] ??= []
     events[index][name]!.push(fn)
@@ -81,6 +111,41 @@ const createStick = (events: Events[], index: number) => {
   }
 }
 
+const createXrStandard = (allEvents: Events, events: Events[]) => {
+  const on = (name: StandardGamepadEvents, fn: Fn) => {
+    allEvents[name] ??= []
+    allEvents[name]!.push(fn)
+  }
+
+  return {
+    on,
+  
+    /** The Gamepad connection status */
+    connected: currentWritable(false),
+
+    /** The raw Gamepad object */
+    raw: null as Gamepad | null,
+
+    /** buttons[0] - Primary trigger */
+    trigger: createButton(events, 0),
+    /** buttons[1] - Primary squeeze button */
+    squeeze: createButton(events, 1),
+    /** buttons[2] - Primary touchpad */
+    touchpadButton: createButton(events, 2),
+    /** buttons[3] - Primary thumbstick */
+    thumbstickButton: createButton(events, 3),
+    /** buttons[4] - Bottom cluster button */
+    clusterBottom: createButton(events, 4),
+    /** buttons[5] - Top cluster button */
+    clusterTop: createButton(events, 5),
+
+    /** axes[0], axes[1] - Horizontal / vertical axis for the primary touchpad */
+    touchpad: createAxis(events, 6),
+    /** axes[2], axes[3] - Horizontal / vertical axis for the primary thumbstick */
+    thumbstick: createAxis(events, 7)
+  }
+}
+
 const createStandard = (allEvents: Events, events: Events[]) => {
   const on = (name: StandardGamepadEvents, fn: Fn) => {
     allEvents[name] ??= []
@@ -88,6 +153,8 @@ const createStandard = (allEvents: Events, events: Events[]) => {
   }
 
   return {
+    on,
+
     /** The Gamepad connection status */
     connected: currentWritable(false),
 
@@ -130,141 +197,215 @@ const createStandard = (allEvents: Events, events: Events[]) => {
     center: createButton(events, 16),
 
     /** axes[0], axes[1] - Horizontal / vertical axis for left stick (negative left/positive right) */
-    leftStick: createStick(events, 17),
+    leftStick: createAxis(events, 17),
     /** axes[2], axes[3] - Horizontal / vertical axis for right stick (negative left/positive right) */
-    rightStick: createStick(events, 18),
+    rightStick: createAxis(events, 18)
+  }
+}
 
-    on
+const processButton = (
+  target: StandardGamepadButtons | XRGamepadButtons,
+  mappedButton: StandardGamepadButton,
+  allEvents: Events,
+  buttonEvents: Events,
+  source?: GamepadButton
+) => {
+  const lastTouched = mappedButton.touched
+  const lastPressed = mappedButton.pressed
+  const lastValue = mappedButton.value
+
+  mappedButton.touched = source?.touched ?? false
+  mappedButton.pressed = source?.pressed ?? false
+  const value = (mappedButton.value = source?.value ?? 0)
+
+  if (!lastTouched && mappedButton.touched) {
+    allEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
+    buttonEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
+  } else if (lastTouched && !mappedButton.touched) {
+    allEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
+    buttonEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
+    allEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
+    buttonEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
+  }
+
+  if (!lastPressed && mappedButton.pressed) {
+    allEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
+    buttonEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
+  } else if (lastPressed && !mappedButton.pressed) {
+    allEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
+    buttonEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
+    allEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
+    buttonEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
+  }
+
+  if (lastValue !== mappedButton.value) {
+    allEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
+    buttonEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
+  }
+}
+
+const processAxis = (
+  target: StandardGamepadAxes | XRGamepadAxes,
+  mappedStick: StandardGamepadStick,
+  allEvents: Events,
+  axisEvents: Events,
+  axisDeadzone: number,
+  rawX = 0,
+  rawY = 0
+) => {
+  const lastValueX = mappedStick.x
+  const lastValueY = mappedStick.y
+
+  const x = Math.abs(rawX) < axisDeadzone ? 0 : rawX
+  const y = Math.abs(rawY) < axisDeadzone ? 0 : rawY
+
+  mappedStick.x = x
+  mappedStick.y = y
+
+  if (lastValueX !== x || lastValueY !== y) {
+    allEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
+    axisEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
   }
 }
 
 type StandardGamepadButton = ReturnType<typeof createButton>
-type StandardGamepadStick = ReturnType<typeof createStick>
+type StandardGamepadStick = ReturnType<typeof createAxis>
 type StandardGamepad = ReturnType<typeof createStandard>
+type StandardXRGamepad = ReturnType<typeof createXrStandard>
 
-export const useGamepad = (options: UseGamepadOptions = {}) => {
-  const { index: gamepadIndex = 0, axisDeadzone = 0.05 } = options
-
+export function useGamepad(): StandardGamepad
+export function useGamepad(options: UseGamepadOptions): StandardGamepad
+export function useGamepad(options: UseGamepadOptions & { xr: true; hand: 'left' | 'right' }): StandardXRGamepad
+export function useGamepad (options: UseGamepadOptions = {}) {
+  const { axisDeadzone = 0.05 } = options
   const allEvents: Events = {}
-  const events: Events[] = Array.from({
-    length: standardButtons.length + standardSticks.length
-  }).map(() => ({}))
-  const gamepad: StandardGamepad = createStandard(allEvents, events)
+  const events: Events[] = []
 
-  const processButton = (
-    target: StandardGamepadButtons,
-    mappedButton: StandardGamepadButton,
-    buttonEvents: Events,
-    source?: GamepadButton
-  ) => {
-    const lastTouched = mappedButton.touched
-    const lastPressed = mappedButton.pressed
-    const lastValue = mappedButton.value
-
-    mappedButton.touched = source?.touched ?? false
-    mappedButton.pressed = source?.pressed ?? false
-    const value = (mappedButton.value = source?.value ?? 0)
-
-    if (!lastTouched && mappedButton.touched) {
-      allEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
-      buttonEvents.touchstart?.forEach((fn) => fn({ type: 'touchstart', target, value }))
-    } else if (lastTouched && !mappedButton.touched) {
-      allEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
-      buttonEvents.touch?.forEach((fn) => fn({ type: 'touch', target, value }))
-      allEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
-      buttonEvents.touchend?.forEach((fn) => fn({ type: 'touchend', target, value }))
+  if ('xr' in options) {
+    for (let i = 0; i < xrButtons.length + xrAxes.length; i += 1) {
+      events.push({})
     }
 
-    if (!lastPressed && mappedButton.pressed) {
-      allEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
-      buttonEvents.down?.forEach((fn) => fn({ type: 'down', target, value }))
-    } else if (lastPressed && !mappedButton.pressed) {
-      allEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
-      buttonEvents.press?.forEach((fn) => fn({ type: 'press', target, value }))
-      allEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
-      buttonEvents.up?.forEach((fn) => fn({ type: 'up', target, value }))
+    const gamepad = createXrStandard(allEvents, events)
+    const { xr } = useThrelte().renderer
+
+    const processSnapshot = () => {
+      xr.getSession()?.inputSources.forEach((source) => {
+        if (source.handedness !== options.hand) {
+          return
+        }
+
+        gamepad.raw = source.gamepad ?? null
+
+        const { buttons = [], axes = [] } = gamepad.raw ?? {}
+
+        xrButtons.forEach((name, index) =>
+          processButton(name, gamepad[name], allEvents, events[index], buttons[index])
+        )
+  
+        processAxis('touchpad', gamepad.touchpad, allEvents, events[6], axisDeadzone, axes[0], axes[1])
+        processAxis('thumbstick', gamepad.thumbstick, allEvents, events[7], axisDeadzone, axes[2], axes[3])
+      })
     }
 
-    if (lastValue !== mappedButton.value) {
-      allEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
-      buttonEvents.change?.forEach((fn) => fn({ type: 'change', target, value }))
+    const handleConnected = (event: THREE.Event) => {
+      if (event.data.handedness !== options.hand) return
+
+      const pad = event.data.gamepad
+
+      if (pad) {
+        gamepad.raw = pad
+        gamepad.connected.set(true)
+        start()
+      }
     }
-  }
 
-  const processStick = (
-    target: StandardGamepadSticks,
-    mappedStick: StandardGamepadStick,
-    stickEvents: Events,
-    rawX = 0,
-    rawY = 0
-  ) => {
-    const lastValueX = mappedStick.x
-    const lastValueY = mappedStick.y
-
-    const x = Math.abs(rawX) < axisDeadzone ? 0 : rawX
-    const y = Math.abs(rawY) < axisDeadzone ? 0 : rawY
-
-    mappedStick.x = x
-    mappedStick.y = y
-
-    if (lastValueX !== x || lastValueY !== y) {
-      allEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
-      stickEvents.change?.forEach((fn) => fn({ type: 'change', target, value: { x, y } }))
-    }
-  }
-
-  const processSnapshot = () => {
-    /**
-     * getGamepads() will return a snapshot of a gamepad that will never change,
-     * so it must be polled continuously to recieve new values.
-     */
-    const pad = navigator.getGamepads()[gamepadIndex]
-    gamepad.raw = pad
-
-    const { buttons = [], axes = [] } = pad ?? {}
-
-    // Handle standard mapping
-    standardButtons.forEach((name, index) =>
-      processButton(name, gamepad[name], events[index], buttons[index])
-    )
-
-    processStick('leftStick', gamepad.leftStick, events[17], axes[0], axes[1])
-    processStick('rightStick', gamepad.rightStick, events[18], axes[2], axes[3])
-  }
-
-  const handleGamepadDisconnected = (event: GamepadEvent): void => {
-    const { id } = event.gamepad
-
-    if (id === gamepad.raw?.id) {
+    const handleDisconnected = (event: THREE.Event) => {
+      if (event.data.handedness !== options.hand) return
+      
       gamepad.raw = null
       gamepad.connected.set(false)
       stop()
     }
-  }
 
-  const handleGamepadConnected = (): void => {
-    const pad = navigator.getGamepads()[gamepadIndex]
+    for (const index of [0, 1]) {
+      const controller = xr.getController(index)
+      controller.addEventListener('connected', handleConnected as any)
+      controller.addEventListener('disconnected', handleDisconnected as any)
+    }
 
-    if (pad) {
+    onDestroy(() => {
+      for (const index of [0, 1]) {
+        const controller = xr.getController(index)
+        controller.removeEventListener('connected', handleConnected as any)
+        controller.removeEventListener('disconnected', handleDisconnected as any)
+      }
+    })
+
+    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+
+    return gamepad
+  } else {
+
+    for (let i = 0; i < standardButtons.length + standardAxes.length; i += 1) {
+      events.push({})
+    }
+
+    const { index: gamepadIndex = 0 } = options
+    const gamepad = createStandard(allEvents, events)
+
+    const processSnapshot = () => {
+      /**
+       * getGamepads() will return a snapshot of a gamepad that will never change,
+       * so it must be polled continuously to recieve new values.
+       */
+      const pad = navigator.getGamepads()[gamepadIndex]
       gamepad.raw = pad
-      gamepad.connected.set(true)
-      start()
+  
+      const { buttons = [], axes = [] } = pad ?? {}
+  
+      standardButtons.forEach((name, index) =>
+        processButton(name, gamepad[name], allEvents, events[index], buttons[index])
+      )
+  
+      processAxis('leftStick', gamepad.leftStick, allEvents, events[17], axisDeadzone, axes[0], axes[1])
+      processAxis('rightStick', gamepad.rightStick, allEvents, events[18], axisDeadzone, axes[2], axes[3])
     }
-  }
 
-  if (typeof window !== undefined) {
-    window.addEventListener('gamepadconnected', handleGamepadConnected)
-    window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
-  }
-
-  onDestroy(() => {
-    if (typeof window !== undefined) {
-      window.removeEventListener('gamepadconnected', handleGamepadConnected)
-      window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
+    const handleGamepadDisconnected = (event: GamepadEvent): void => {
+      const { id } = event.gamepad
+  
+      if (id === gamepad.raw?.id) {
+        gamepad.raw = null
+        gamepad.connected.set(false)
+        stop()
+      }
     }
-  })
 
-  const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+    const handleGamepadConnected = (): void => {
+      const pad = navigator.getGamepads()[gamepadIndex]
+  
+      if (pad) {
+        gamepad.raw = pad
+        gamepad.connected.set(true)
+        start()
+      }
+    }
 
-  return gamepad
+    if (typeof window !== 'undefined') {
+      window.addEventListener('gamepadconnected', handleGamepadConnected)
+      window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
+    }
+  
+    onDestroy(() => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('gamepadconnected', handleGamepadConnected)
+        window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
+      }
+    })
+
+    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+
+    return gamepad
+  }
 }

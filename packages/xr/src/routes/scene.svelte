@@ -1,12 +1,20 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import * as THREE from 'three'
+  import { T, useThrelte } from '@threlte/core'
   import { XR, Controller, Hand, Headset, TeleportControls, useTeleport, useXR } from '$lib'
+  import { useGamepad } from '../../../extras/src/lib/index'
 
+  const leftPad = useGamepad({ xr: true, hand: 'left' })
+  const rightPad = useGamepad({ xr: true, hand: 'right' })
+
+  leftPad.on('change', (event) => console.log('left', event))
+  rightPad.on('change', (event) => console.log('right', event))
+
+  useThrelte().scene.background = new THREE.Color('#000')
   const { isPresenting } = useXR()
   const teleport = useTeleport()
   
   $: if ($isPresenting) teleport([0, 0, 5])
-
 </script>
 
 <Headset>
@@ -18,7 +26,7 @@
   </T.Mesh>
 </Headset>
 
-<XR >
+<XR>
   <Controller left>
     <T.Mesh>
       {@const radius = 0.01}

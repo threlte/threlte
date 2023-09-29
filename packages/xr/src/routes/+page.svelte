@@ -13,6 +13,9 @@
 </main>
 
 <style>
+  :global(body) {
+    margin: 0;
+  }
   main {
     height: 100dvh;
   }
