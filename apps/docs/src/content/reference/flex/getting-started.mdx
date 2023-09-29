@@ -212,3 +212,21 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
   </Flex>
 </Align>
 ```
+
+### Using the Prop `class`
+
+The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
+flexbox with predefined class names just as you would do in CSS. In order to use
+the prop, you need to create a `ClassParser` which accepts a single string and returns `NodeProps`. Let's assume, you want to create a
+flex container with the following configuration:
+
+```css
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: stretch;
+}
+```
+
+
