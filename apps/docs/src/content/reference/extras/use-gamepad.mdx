@@ -6,7 +6,7 @@ name: useGamepad
 type: 'hook'
 ---
 
-A hook that will provide a reference to an object that maps [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad) 
+A hook that will provide a reference to an object that maps [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad)
 values using the [Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping) when connected.
 
 ```svelte
@@ -47,8 +47,8 @@ This prop will be `null` unless a gamepad is connected.
 ```
 
 <Tip type="warning">
-  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches `gamepad.raw` 
-  will become stale on the next frame.
+  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches
+  `gamepad.raw` will become stale on the next frame.
 </Tip>
 
 ### Connection status
@@ -61,15 +61,15 @@ The `connected` property provides a `currentWritable` that will update when a ga
 
   const gamepad = useGamepad()
   const { connected } = gamepad
-  
+
   $: console.log(`A gamepad ${$connected ? 'connected' : 'disconnected'}!`)
 </script>
 ```
 
 ### Standard gamepad layout
 
-If the button and axis layout of the gamepad corresponds with the 
-[Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), the gamepad object may be used 
+If the button and axis layout of the gamepad corresponds with the
+[Standard Gamepad layout](https://w3c.github.io/gamepad/#remapping), the gamepad object may be used
 to read and subscribe to input values.
 
 Properties are given to more easily access button or joystick values.
@@ -80,7 +80,7 @@ Properties are given to more easily access button or joystick values.
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()
-  
+
   useFrame(() => {
     console.log(gamepad.leftStick.x, gamepad.leftStick.y)
     console.log(gamepad.leftBumper.value)
@@ -97,24 +97,33 @@ Event listeners can also be attached to buttons or joysticks, or the gamepad its
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()
-  
-  gamepad.leftTrigger.on('down', (event) => {
+
+  const off = gamepad.leftTrigger.on('down', (event) => {
     console.log('The left trigger has just been pressed!')
+    // Unsubscribe from the event after it has fired once.
+    off()
   })
 
   gamepad.leftStick.on('change', (event) => {
     console.log(`Left stick moved: ${event.value.x}, ${event.value.y}`)
   })
-  
+
   gamepad.on('press', (event) => {
     console.log(`A ${event.type} event on ${event.target} occurred: ${event.value}`)
   })
+
+  const onPress = () => {
+    console.log('A button was pressed!')
+  }
+  gamepad.on('press', onPress)
+  // Some time later...
+  gamepad.off('press', onPress)
 </script>
 ```
 
 ### XR-Standard gamepad layout
 
-To create a mapped object for a gamepad representing WebXR controller with the [`xr-standard` gamepad layout](https://immersive-web.github.io/webxr-gamepads-module/#xr-standard-heading), 
+To create a mapped object for a gamepad representing WebXR controller with the [`xr-standard` gamepad layout](https://immersive-web.github.io/webxr-gamepads-module/#xr-standard-heading),
 set the `xr` flag to `true` when calling the hook:
 
 ```svelte
@@ -131,24 +140,24 @@ This will create a similar mapped object once XR controllers are connected.
 
 The `gamepad` object maps the 17 standard gamepad buttons and 4 axes to:
 
-* The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`.
-* The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`.
-* The center buttons: `select`, `start`, `center`.
-* The joystick axes and buttons: `leftStickButton`, `leftStick`, `rightStickButton`, `rightStick`.
-* The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`.
+- The four right cluster buttons: `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`.
+- The four top buttons: `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`.
+- The center buttons: `select`, `start`, `center`.
+- The joystick axes and buttons: `leftStickButton`, `leftStick`, `rightStickButton`, `rightStick`.
+- The directional pad: `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`.
 
 In a WebXR context, the following buttons and axes are mapped:
 
-* Two cluster buttons per hand: `clusterBottom`, `clusterTop`.
-* The `trigger` and `squeeze` buttons.
-* The `touchpad` and `thumbstick` axes.
+- Two cluster buttons per hand: `clusterBottom`, `clusterTop`.
+- The `trigger` and `squeeze` buttons.
+- The `touchpad` and `thumbstick` axes.
 
 The available events for mapped buttons are the following:
 
-* `change` will fire whenever the `value` of the stick or button changes. This is helpful for buttons or joysticks that can have continuous values.
-* `press` will fire if a button is pressed.
-* `down` will fire when a button press begins.
-* `up` will fire when a button press ends. 
-* `touch` is supported by some gamepads, and will fire if a small amount of pressure on a button is detected.
-* `touchstart` will fire when a touch begins,
-* and `touchend` will fire when a touch ends.
+- `change` will fire whenever the `value` of the stick or button changes. This is helpful for buttons or joysticks that can have continuous values.
+- `press` will fire if a button is pressed.
+- `down` will fire when a button press begins.
+- `up` will fire when a button press ends.
+- `touch` is supported by some gamepads, and will fire if a small amount of pressure on a button is detected.
+- `touchstart` will fire when a touch begins,
+- and `touchend` will fire when a touch ends.
