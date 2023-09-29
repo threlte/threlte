@@ -41,6 +41,13 @@
    */
   export let order: $$Props['order'] = undefined
 
+  /**
+   * The rapier world updates at a fixed step with a default of 1/60, representing a target of 60FPS.
+   * 
+   * Change this value to modify the world update rate.
+   */
+  export let fixedStep: $$Props['fixedStep'] = undefined
+
   let error = false
 
   const init = async () => {
@@ -73,6 +80,7 @@
     {rawSerializationPipeline}
     {rawDebugRenderPipeline}
 		{order}
+    {fixedStep}
   >
     <slot />
   </InnerWorld>

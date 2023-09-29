@@ -28,6 +28,7 @@
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { startFrameloop } from './lib/startFrameloop'
   import { useRenderer } from './lib/useRenderer'
+  import { timer } from './lib/timer'
   import type { Size } from './types'
 
   /**
@@ -109,16 +110,19 @@
   const { createRenderer } = useRenderer(ctx)
 
   onMount(() => {
+    document.addEventListener('visibilitychange', timer.reset, false)
     createRenderer(canvas, rendererParameters)
     startFrameloop(contexts.ctx, contexts.internalCtx)
     initialized = true
+
+    return () => {
+      document.removeEventListener('visibilitychange', timer.reset)
+      contexts.ctx.renderer.dispose()
+    }
   })
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-
-    // Renderer is marked as optional because it is never defined in SSR
-    contexts.ctx.renderer?.dispose()
   })
 </script>
 

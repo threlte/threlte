@@ -29,6 +29,7 @@
   export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
   export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
   export let order: $$Props['order'] = undefined
+  export let fixedStep: $$Props['fixedStep'] = undefined
 
   const rapierContext = createRapierContext(
     { x: gravity[0], y: gravity[1], z: gravity[2] },
@@ -53,7 +54,7 @@
     rapierContext.world.gravity = { x: gravity[0], y: gravity[1], z: gravity[2] }
   }
 
-  useFrameHandler(rapierContext, order)
+  useFrameHandler(rapierContext, order, fixedStep)
 
   onDestroy(async () => {
     await tick()

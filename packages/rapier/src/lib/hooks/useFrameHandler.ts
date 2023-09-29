@@ -30,7 +30,7 @@ const getEventDispatchers = (ctx: RapierContext, collider1: Collider, collider2:
   }
 }
 
-export const useFrameHandler = (ctx: RapierContext, order?: number) => {
+export const useFrameHandler = (ctx: RapierContext, order?: number, fixedStep = 1/60) => {
   const eventQueue = new EventQueue(false)
 
   const { start, started, stop } = useFrame(
@@ -274,7 +274,11 @@ export const useFrameHandler = (ctx: RapierContext, order?: number) => {
         }
       })
     },
-    { order }
+    {
+      order,
+      stage: 'fixed',
+      fixedStep,
+    }
   )
 
   // replacing the original pause and resume functions as well as the paused property
