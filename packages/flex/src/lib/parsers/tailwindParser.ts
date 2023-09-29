@@ -1,8 +1,6 @@
 import { createClassParser } from './createClassParser'
-import type { NodeProps } from '../lib/props'
 
-export const tailwindParser = createClassParser((string) => {
-  const styles: NodeProps = {}
+export const tailwindParser = createClassParser((string, props) => {
   const classes = string.split(' ').map((className) => className.trim())
 
   const parseNumericOrAutoOrPercentageValue = (value: string): number | 'auto' | `${number}%` => {
@@ -37,95 +35,95 @@ export const tailwindParser = createClassParser((string) => {
     // padding
     if (className.startsWith('p-')) {
       const [, value] = className.split('-')
-      styles.padding = parseNumericOrPercentageValue(value)
+      props.padding = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('px-')) {
       const [, value] = className.split('-')
-      styles.paddingLeft = parseNumericOrPercentageValue(value)
-      styles.paddingRight = parseNumericOrPercentageValue(value)
+      props.paddingLeft = parseNumericOrPercentageValue(value)
+      props.paddingRight = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('py-')) {
       const [, value] = className.split('-')
-      styles.paddingTop = parseNumericOrPercentageValue(value)
-      styles.paddingBottom = parseNumericOrPercentageValue(value)
+      props.paddingTop = parseNumericOrPercentageValue(value)
+      props.paddingBottom = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('pt-')) {
       const [, value] = className.split('-')
-      styles.paddingTop = parseNumericOrPercentageValue(value)
+      props.paddingTop = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('pr-')) {
       const [, value] = className.split('-')
-      styles.paddingRight = parseNumericOrPercentageValue(value)
+      props.paddingRight = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('pb-')) {
       const [, value] = className.split('-')
-      styles.paddingBottom = parseNumericOrPercentageValue(value)
+      props.paddingBottom = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('pl-')) {
       const [, value] = className.split('-')
-      styles.paddingLeft = parseNumericOrPercentageValue(value)
+      props.paddingLeft = parseNumericOrPercentageValue(value)
     }
 
     // margin
     if (className.startsWith('m-')) {
       const [, value] = className.split('-')
-      styles.margin = parseNumericOrAutoOrPercentageValue(value)
+      props.margin = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('mx-')) {
       const [, value] = className.split('-')
-      styles.marginLeft = parseNumericOrAutoOrPercentageValue(value)
-      styles.marginRight = parseNumericOrAutoOrPercentageValue(value)
+      props.marginLeft = parseNumericOrAutoOrPercentageValue(value)
+      props.marginRight = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('my-')) {
       const [, value] = className.split('-')
-      styles.marginTop = parseNumericOrAutoOrPercentageValue(value)
-      styles.marginBottom = parseNumericOrAutoOrPercentageValue(value)
+      props.marginTop = parseNumericOrAutoOrPercentageValue(value)
+      props.marginBottom = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('mt-')) {
       const [, value] = className.split('-')
-      styles.marginTop = parseNumericOrAutoOrPercentageValue(value)
+      props.marginTop = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('mr-')) {
       const [, value] = className.split('-')
-      styles.marginRight = parseNumericOrAutoOrPercentageValue(value)
+      props.marginRight = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('mb-')) {
       const [, value] = className.split('-')
-      styles.marginBottom = parseNumericOrAutoOrPercentageValue(value)
+      props.marginBottom = parseNumericOrAutoOrPercentageValue(value)
     }
     if (className.startsWith('ml-')) {
       const [, value] = className.split('-')
-      styles.marginLeft = parseNumericOrAutoOrPercentageValue(value)
+      props.marginLeft = parseNumericOrAutoOrPercentageValue(value)
     }
 
     // width
     if (className.startsWith('w-')) {
       const [, value] = className.split('-')
-      styles.width = parseNumericOrAutoOrPercentageValue(value)
+      props.width = parseNumericOrAutoOrPercentageValue(value)
     }
 
     // height
     if (className.startsWith('h-')) {
       const [, value] = className.split('-')
-      styles.height = parseNumericOrAutoOrPercentageValue(value)
+      props.height = parseNumericOrAutoOrPercentageValue(value)
     }
 
     // flex-basis
     if (className.startsWith('basis-')) {
       const [, value] = className.split('-')
-      styles.flexBasis = parseNumericOrAutoOrPercentageValue(value)
+      props.flexBasis = parseNumericOrAutoOrPercentageValue(value)
     }
 
     // flex-grow
     if (className.startsWith('grow-')) {
       const [, value] = className.split('-')
-      styles.flexGrow = Number(value)
+      props.flexGrow = Number(value)
     }
 
     // flex-shrink
     if (className.startsWith('shrink-')) {
       const [, value] = className.split('-')
-      styles.flexShrink = Number(value)
+      props.flexShrink = Number(value)
     }
 
     // flex-direction
@@ -133,30 +131,30 @@ export const tailwindParser = createClassParser((string) => {
       // first the flex direction
       switch (className) {
         case 'flex-row':
-          styles.flexDirection = 'Row'
+          props.flexDirection = 'Row'
           break
         case 'flex-row-reverse':
-          styles.flexDirection = 'RowReverse'
+          props.flexDirection = 'RowReverse'
           break
         case 'flex-col':
-          styles.flexDirection = 'Column'
+          props.flexDirection = 'Column'
           break
         case 'flex-col-reverse':
-          styles.flexDirection = 'ColumnReverse'
+          props.flexDirection = 'ColumnReverse'
           break
         case 'flex-wrap':
-          styles.flexWrap = 'Wrap'
+          props.flexWrap = 'Wrap'
           break
         case 'flex-wrap-reverse':
-          styles.flexWrap = 'WrapReverse'
+          props.flexWrap = 'WrapReverse'
           break
         case 'flex-nowrap':
-          styles.flexWrap = 'NoWrap'
+          props.flexWrap = 'NoWrap'
           break
         default:
           // flex shorthand
           const [, value] = className.split('-')
-          styles.flex = Number(value)
+          props.flex = Number(value)
       }
     }
 
@@ -164,22 +162,22 @@ export const tailwindParser = createClassParser((string) => {
     if (className.startsWith('justify-')) {
       switch (className) {
         case 'justify-start':
-          styles.justifyContent = 'FlexStart'
+          props.justifyContent = 'FlexStart'
           break
         case 'justify-end':
-          styles.justifyContent = 'FlexEnd'
+          props.justifyContent = 'FlexEnd'
           break
         case 'justify-center':
-          styles.justifyContent = 'Center'
+          props.justifyContent = 'Center'
           break
         case 'justify-between':
-          styles.justifyContent = 'SpaceBetween'
+          props.justifyContent = 'SpaceBetween'
           break
         case 'justify-around':
-          styles.justifyContent = 'SpaceAround'
+          props.justifyContent = 'SpaceAround'
           break
         case 'justify-evenly':
-          styles.justifyContent = 'SpaceEvenly'
+          props.justifyContent = 'SpaceEvenly'
           break
       }
     }
@@ -188,19 +186,19 @@ export const tailwindParser = createClassParser((string) => {
     if (className.startsWith('items-')) {
       switch (className) {
         case 'items-start':
-          styles.alignItems = 'FlexStart'
+          props.alignItems = 'FlexStart'
           break
         case 'items-end':
-          styles.alignItems = 'FlexEnd'
+          props.alignItems = 'FlexEnd'
           break
         case 'items-center':
-          styles.alignItems = 'Center'
+          props.alignItems = 'Center'
           break
         case 'items-baseline':
-          styles.alignItems = 'Baseline'
+          props.alignItems = 'Baseline'
           break
         case 'items-stretch':
-          styles.alignItems = 'Stretch'
+          props.alignItems = 'Stretch'
           break
       }
     }
@@ -209,28 +207,28 @@ export const tailwindParser = createClassParser((string) => {
     if (className.startsWith('content-')) {
       switch (className) {
         case 'content-normal':
-          styles.alignContent = 'Auto'
+          props.alignContent = 'Auto'
           break
         case 'content-start':
-          styles.alignContent = 'FlexStart'
+          props.alignContent = 'FlexStart'
           break
         case 'content-end':
-          styles.alignContent = 'FlexEnd'
+          props.alignContent = 'FlexEnd'
           break
         case 'content-center':
-          styles.alignContent = 'Center'
+          props.alignContent = 'Center'
           break
         case 'content-between':
-          styles.alignContent = 'SpaceBetween'
+          props.alignContent = 'SpaceBetween'
           break
         case 'content-around':
-          styles.alignContent = 'SpaceAround'
+          props.alignContent = 'SpaceAround'
           break
         case 'content-stretch':
-          styles.alignContent = 'Stretch'
+          props.alignContent = 'Stretch'
           break
         case 'content-baseline':
-          styles.alignContent = 'Baseline'
+          props.alignContent = 'Baseline'
           break
       }
     }
@@ -239,22 +237,22 @@ export const tailwindParser = createClassParser((string) => {
     if (className.startsWith('self-')) {
       switch (className) {
         case 'self-auto':
-          styles.alignSelf = 'Auto'
+          props.alignSelf = 'Auto'
           break
         case 'self-start':
-          styles.alignSelf = 'FlexStart'
+          props.alignSelf = 'FlexStart'
           break
         case 'self-end':
-          styles.alignSelf = 'FlexEnd'
+          props.alignSelf = 'FlexEnd'
           break
         case 'self-center':
-          styles.alignSelf = 'Center'
+          props.alignSelf = 'Center'
           break
         case 'self-stretch':
-          styles.alignSelf = 'Stretch'
+          props.alignSelf = 'Stretch'
           break
         case 'self-baseline':
-          styles.alignSelf = 'Baseline'
+          props.alignSelf = 'Baseline'
           break
       }
     }
@@ -262,52 +260,52 @@ export const tailwindParser = createClassParser((string) => {
     // Gaps
     if (className.startsWith('gap-x-')) {
       const [, value] = className.split('-')
-      styles.gapColumn = Number(value)
+      props.gapColumn = Number(value)
     } else if (className.startsWith('gap-y-')) {
       const [, value] = className.split('-')
-      styles.gapRow = Number(value)
+      props.gapRow = Number(value)
     } else if (className.startsWith('gap-')) {
       const [, value] = className.split('-')
-      styles.gap = Number(value)
+      props.gap = Number(value)
     }
 
     // Position
     if (className.startsWith('top-')) {
       const [, value] = className.split('-')
-      styles.top = parseNumericOrPercentageValue(value)
+      props.top = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('right-')) {
       const [, value] = className.split('-')
-      styles.right = parseNumericOrPercentageValue(value)
+      props.right = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('bottom-')) {
       const [, value] = className.split('-')
-      styles.bottom = parseNumericOrPercentageValue(value)
+      props.bottom = parseNumericOrPercentageValue(value)
     }
     if (className.startsWith('left-')) {
       const [, value] = className.split('-')
-      styles.left = parseNumericOrPercentageValue(value)
+      props.left = parseNumericOrPercentageValue(value)
     }
 
     // aspect ratio
     if (className.startsWith('aspect-')) {
       switch (className) {
         case 'aspect-square':
-          styles.aspectRatio = 1
+          props.aspectRatio = 1
           break
         case 'aspect-landscape':
-          styles.aspectRatio = 16 / 9
+          props.aspectRatio = 16 / 9
           break
         case 'aspect-portrait':
-          styles.aspectRatio = 9 / 16
+          props.aspectRatio = 9 / 16
           break
         default:
           const [, value] = className.split('-')
           const [width, height] = value.split('/')
-          styles.aspectRatio = Number(width) / Number(height)
+          props.aspectRatio = Number(width) / Number(height)
       }
     }
   })
 
-  return styles
+  return props
 })

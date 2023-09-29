@@ -152,7 +152,8 @@
 
   const { node: rootNode } = createNodeContext()
   $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
-  $: applyNodeProps(rootNode, { ...classParser?.(_class), ...$$restProps }, scaleFactor), reflow()
+  $: applyNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps }, scaleFactor),
+    reflow()
 
   $: flexContext.rootWidth.set(width), flexContext.reflow('Updated root width')
   $: flexContext.rootHeight.set(height), flexContext.reflow('Updated root height')

@@ -1,4 +1,4 @@
-import type { NodeProps } from '../lib/props'
+import type { ClassParser } from '../lib/props'
 
 /**
  * This function is a type helper for creating a class parser. A class parser is
@@ -6,6 +6,6 @@ import type { NodeProps } from '../lib/props'
  * be used to create Tailwind-like class names that resolve to yoga-layout
  * props.
  */
-export const createClassParser = (callback: (className: string) => NodeProps) => {
+export const createClassParser = (callback: ClassParser) => {
   return callback
 }
