@@ -1,11 +1,12 @@
 <script lang="ts">
   import { forwardEventHandlers } from '@threlte/core'
-  import type { ComponentEvents, ComponentProps } from 'svelte'
   import { loadYoga, type Yoga } from 'yoga-layout'
-  import InnerFlex from './InnerFlex.svelte'
+  import type { FlexEvents, FlexProps, FlexSlots } from './Flex.svelte'
+  import InnerFlex from './Innerflex.svelte'
 
-  type $$Props = Omit<ComponentProps<InnerFlex>, 'yoga'>
-  type $$Events = ComponentEvents<InnerFlex>
+  type $$Props = FlexProps
+  type $$Events = FlexEvents
+  type $$Slots = FlexSlots
 
   let yoga: Yoga | undefined
 

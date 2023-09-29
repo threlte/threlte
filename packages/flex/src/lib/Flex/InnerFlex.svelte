@@ -2,30 +2,18 @@
   import { T, createRawEventDispatcher, currentWritable, useFrame } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
-  import { Direction, type Yoga } from 'yoga-layout'
+  import { Direction } from 'yoga-layout'
   import { getDepthAxis } from '../lib/getDepthAxis'
   import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
   import { getRootShift } from '../lib/getRootShift'
-  import {
-    applyNodeProps,
-    type Axis,
-    type ClassParser,
-    type FlexPlane,
-    type NodeProps
-  } from '../lib/props'
+  import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
+  import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './Innerflex.svelte'
   import { createFlexContext } from './context'
 
-  type $$Props = NodeProps & {
-    yoga: Yoga
-    width?: number
-    height?: number
-    plane?: FlexPlane
-    direction?: keyof typeof Direction
-    scaleFactor?: number
-    class?: string
-    classParser?: ClassParser
-  }
+  type $$Props = InnerFlexProps
+  type $$Events = InnerFlexEvents
+  type $$Slots = InnerFlexSlots
 
   export let yoga: Required<$$Props>['yoga']
   export let width: Required<$$Props>['width'] = 1
@@ -36,13 +24,6 @@
   export let classParser: $$Props['classParser'] = undefined
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
-
-  type $$Events = {
-    reflow: {
-      width: number
-      height: number
-    }
-  }
 
   const dispatch = createRawEventDispatcher<$$Events>()
 

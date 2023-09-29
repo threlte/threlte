@@ -5,11 +5,11 @@
   import type { NodeProps } from '../lib/props'
   import { useFlex } from '../Flex/context'
   import { createNodeContext } from '../nodes/context'
+  import type { BoxProps, BoxSlots, BoxEvents } from './Box.svelte'
 
-  type $$Props = NodeProps & {
-    order?: number
-    class?: string
-  }
+  type $$Props = BoxProps
+  type $$Events = BoxEvents
+  type $$Slots = BoxSlots
 
   export let order: $$Props['order'] = undefined
   let _class: Required<$$Props>['class'] = ''

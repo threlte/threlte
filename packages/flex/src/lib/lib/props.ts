@@ -1,4 +1,4 @@
-import type { Align, FlexDirection, Justify, Node, PositionType, Wrap } from 'yoga-layout'
+import type { Align, FlexDirection, Justify, Node, Wrap } from 'yoga-layout'
 import * as Yoga from 'yoga-layout'
 import { alignFlexProps } from './alignFlexProps'
 
