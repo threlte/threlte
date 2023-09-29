@@ -44,11 +44,17 @@ container. Add flex items with the component [`<Box>`](/docs/reference/flex/box)
   height={100}
 >
   <Box>
-    <Plane width={20} height={20} />
+    <Plane
+      width={20}
+      height={20}
+    />
   </Box>
 
   <Box>
-    <Plane width={20} height={20} />
+    <Plane
+      width={20}
+      height={20}
+    />
   </Box>
 </Flex>
 ```
@@ -171,4 +177,38 @@ allows you to create complex layouts.
     />
   </Box>
 </Flex>
+```
+
+### Align Flex Container
+
+The component [`<Align>`](/docs/reference/extras/align) can be used to align the resulting flex container.
+
+```svelte
+<script lang="ts">
+  import { Align } from '@threlte/extras'
+  import { Flex } from '@threlte/flex'
+  import Plane from './Plane.svelte'
+</script>
+
+<Align let:align>
+  <Flex
+    width={100}
+    height={100}
+    on:reflow={align}
+  >
+    <Box>
+      <Plane
+        width={20}
+        height={20}
+      />
+    </Box>
+
+    <Box>
+      <Plane
+        width={20}
+        height={20}
+      />
+    </Box>
+  </Flex>
+</Align>
 ```
