@@ -217,16 +217,75 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
 
 The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
 flexbox with predefined class names just as you would do in CSS. In order to use
-the prop, you need to create a `ClassParser` which accepts a single string and returns `NodeProps`. Let's assume, you want to create a
-flex container with the following configuration:
+the prop, you need to create a `ClassParser` which accepts a single string and
+returns `NodeProps`. Let's assume, you want to create a parser that supports the
+following class names:
 
 ```css
 .container {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+.item {
+  flex: 1;
+  shrink: 0;
 }
 ```
 
+You then need to create a `ClassParser` which returns the corresponding props:
 
+```ts
+import type { createClassParser } from '@threlte/flex'
+
+const classParser = createClassParser((string, props) => {
+  // First we need to split the string into an array of class names
+  const classNames = string.split(' ')
+  // We then loop over each class name …
+  for (const className of classNames) {
+    // … and check if it matches one of the predefined class names
+    switch (className) {
+      case 'container':
+        // If it matches, we assign the corresponding props.
+        // We don't need to set display: flex, since that is the default.
+        props.flexDirection = 'Column'
+        props.justifyContent = 'SpaceEvenly'
+        props.alignItems = 'Stretch'
+      case 'item':
+        props.flex = 1
+        props.shrink = 0
+    }
+  }
+  // finally we return the props
+  return props
+})
+```
+
+Now you can use the prop `class` on `<Flex>` and `<Box>` to configure the flexbox:
+
+```svelte
+<Flex
+  width={100}
+  height={100}
+  {classParser}
+  class="container"
+>
+  <Box class="item">
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+
+  <Box class="item">
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+</Flex>
+```
+
+`@threlte/flex` ships with a [default `ClassParser` which supports Tailwind-like
+class names](/docs/reference/flex/tailwind-parser).
