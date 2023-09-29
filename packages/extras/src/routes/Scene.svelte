@@ -1,7 +1,33 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky } from '../lib'
+  import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
+  import { browser } from '$app/environment'
+  import Gamepad from './Gamepad.svelte'
+  import MountedGamepad from './MountedGamepad.svelte'
+
+  let listenToGamepad = true
+  let mountGamepad = false
 </script>
+
+<svelte:window
+  on:keydown={(e) => {
+    if (e.key === 'g') {
+      listenToGamepad = !listenToGamepad
+    }
+
+    if (e.key === 'm') {
+      mountGamepad = !mountGamepad
+    }
+  }}
+/>
+
+{#if browser && mountGamepad}
+  <Gamepad />
+{/if}
+
+{#if listenToGamepad}
+  <MountedGamepad />
+{/if}
 
 <T.PerspectiveCamera
   makeDefault

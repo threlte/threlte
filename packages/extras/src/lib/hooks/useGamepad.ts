@@ -4,13 +4,16 @@ import { currentWritable, useFrame, useThrelte } from '@threlte/core'
 type UseGamepadOptions = {
   /** The threshold value of any axis before change events are fired. Default is 0.05. */
   axisDeadzone?: number
-} & ({
-  /** An optional gamepad index, if multiple gamepads are used. */
-  index?: number
-} | {
-  xr: true
-  hand: 'left' | 'right'
-})
+} & (
+  | {
+      /** An optional gamepad index, if multiple gamepads are used. */
+      index?: number
+    }
+  | {
+      xr: true
+      hand: 'left' | 'right'
+    }
+)
 
 const standardButtons = [
   'clusterBottom',
@@ -85,41 +88,65 @@ type Fn = (event: StandardGamepadEvent) => void
 type Events = { [K in StandardGamepadEvents]?: Fn[] }
 
 const createButton = (events: Events[], index: number) => {
+  const off = (name: StandardGamepadEvents, fn: Fn) => {
+    if (!(index in events) || !(name in events[index])) return
+    const arrayIndex = events[index][name]!.indexOf(fn)
+    if (arrayIndex > -1) events[index][name]!.splice(arrayIndex, 1)
+  }
+
   const on = (name: StandardGamepadEvents, fn: Fn) => {
     events[index][name] ??= []
     events[index][name]!.push(fn)
+    return () => off(name, fn)
   }
 
   return {
     pressed: false,
     touched: false,
     value: 0,
-    on
+    on,
+    off
   }
 }
 
 const createAxis = (events: Events[], index: number) => {
+  const off = (name: 'change', fn: Fn) => {
+    if (!(index in events) || !(name in events[index])) return
+    const arrayIndex = events[index][name]!.indexOf(fn)
+    if (arrayIndex > -1) events[index][name]!.splice(arrayIndex, 1)
+  }
+
   const on = (name: 'change', fn: Fn) => {
     events[index][name] ??= []
     events[index][name]!.push(fn)
+    return () => off(name, fn)
   }
 
   return {
     x: 0,
     y: 0,
-    on
+    on,
+    off
   }
 }
 
 const createXrStandard = (allEvents: Events, events: Events[]) => {
+  const off = (name: StandardGamepadEvents, fn: Fn) => {
+    if (!allEvents[name]) return
+    const index = allEvents[name]!.indexOf(fn)
+    if (index > -1) allEvents[name]!.splice(index, 1)
+  }
+
   const on = (name: StandardGamepadEvents, fn: Fn) => {
     allEvents[name] ??= []
     allEvents[name]!.push(fn)
+    return () => off(name, fn)
   }
 
   return {
     on,
-  
+    off,
+
     /** The Gamepad connection status */
     connected: currentWritable(false),
 
@@ -147,13 +174,21 @@ const createXrStandard = (allEvents: Events, events: Events[]) => {
 }
 
 const createStandard = (allEvents: Events, events: Events[]) => {
+  const off = (name: StandardGamepadEvents, fn: Fn) => {
+    if (!allEvents[name]) return
+    const index = allEvents[name]!.indexOf(fn)
+    if (index > -1) allEvents[name]!.splice(index, 1)
+  }
+
   const on = (name: StandardGamepadEvents, fn: Fn) => {
     allEvents[name] ??= []
     allEvents[name]!.push(fn)
+    return () => off(name, fn)
   }
 
   return {
     on,
+    off,
 
     /** The Gamepad connection status */
     connected: currentWritable(false),
@@ -275,8 +310,10 @@ type StandardXRGamepad = ReturnType<typeof createXrStandard>
 
 export function useGamepad(): StandardGamepad
 export function useGamepad(options: UseGamepadOptions): StandardGamepad
-export function useGamepad(options: UseGamepadOptions & { xr: true; hand: 'left' | 'right' }): StandardXRGamepad
-export function useGamepad (options: UseGamepadOptions = {}) {
+export function useGamepad(
+  options: UseGamepadOptions & { xr: true; hand: 'left' | 'right' }
+): StandardXRGamepad
+export function useGamepad(options: UseGamepadOptions = {}) {
   const { axisDeadzone = 0.05 } = options
   const allEvents: Events = {}
   const events: Events[] = []
@@ -302,11 +339,31 @@ export function useGamepad (options: UseGamepadOptions = {}) {
         xrButtons.forEach((name, index) =>
           processButton(name, gamepad[name], allEvents, events[index], buttons[index])
         )
-  
-        processAxis('touchpad', gamepad.touchpad, allEvents, events[6], axisDeadzone, axes[0], axes[1])
-        processAxis('thumbstick', gamepad.thumbstick, allEvents, events[7], axisDeadzone, axes[2], axes[3])
+
+        processAxis(
+          'touchpad',
+          gamepad.touchpad,
+          allEvents,
+          events[6],
+          axisDeadzone,
+          axes[0],
+          axes[1]
+        )
+        processAxis(
+          'thumbstick',
+          gamepad.thumbstick,
+          allEvents,
+          events[7],
+          axisDeadzone,
+          axes[2],
+          axes[3]
+        )
       })
     }
+
+    // useFrame automatically stops whenever the host component unmounts, so we
+    // don't need to clean up here.
+    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
 
     const handleConnected = (event: THREE.Event) => {
       if (event.data.handedness !== options.hand) return
@@ -322,10 +379,30 @@ export function useGamepad (options: UseGamepadOptions = {}) {
 
     const handleDisconnected = (event: THREE.Event) => {
       if (event.data.handedness !== options.hand) return
-      
+
       gamepad.raw = null
       gamepad.connected.set(false)
       stop()
+    }
+
+    // Check if gamepads are already connected. Since XR controllers do not show
+    // up in the regular navigator.getGamepads() array, we have to check the
+    // XRSession's inputSources array.
+    const session = xr.getSession()
+    if (session) {
+      session.inputSources.forEach((source) => {
+        if (source.handedness !== options.hand) {
+          return
+        }
+
+        const pad = source.gamepad
+        // we could be dealing with hands here, so we need to check if the gamepad is null
+        if (pad) {
+          gamepad.raw = pad
+          gamepad.connected.set(true)
+          start()
+        }
+      })
     }
 
     for (const index of [0, 1]) {
@@ -342,11 +419,8 @@ export function useGamepad (options: UseGamepadOptions = {}) {
       }
     })
 
-    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
-
     return gamepad
   } else {
-
     for (let i = 0; i < standardButtons.length + standardAxes.length; i += 1) {
       events.push({})
     }
@@ -361,20 +435,40 @@ export function useGamepad (options: UseGamepadOptions = {}) {
        */
       const pad = navigator.getGamepads()[gamepadIndex]
       gamepad.raw = pad
-  
+
       const { buttons = [], axes = [] } = pad ?? {}
-  
+
       standardButtons.forEach((name, index) =>
         processButton(name, gamepad[name], allEvents, events[index], buttons[index])
       )
-  
-      processAxis('leftStick', gamepad.leftStick, allEvents, events[17], axisDeadzone, axes[0], axes[1])
-      processAxis('rightStick', gamepad.rightStick, allEvents, events[18], axisDeadzone, axes[2], axes[3])
+
+      processAxis(
+        'leftStick',
+        gamepad.leftStick,
+        allEvents,
+        events[17],
+        axisDeadzone,
+        axes[0],
+        axes[1]
+      )
+      processAxis(
+        'rightStick',
+        gamepad.rightStick,
+        allEvents,
+        events[18],
+        axisDeadzone,
+        axes[2],
+        axes[3]
+      )
     }
+
+    // useFrame automatically stops whenever the host component unmounts, so we
+    // don't need to clean up here.
+    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
 
     const handleGamepadDisconnected = (event: GamepadEvent): void => {
       const { id } = event.gamepad
-  
+
       if (id === gamepad.raw?.id) {
         gamepad.raw = null
         gamepad.connected.set(false)
@@ -384,7 +478,7 @@ export function useGamepad (options: UseGamepadOptions = {}) {
 
     const handleGamepadConnected = (): void => {
       const pad = navigator.getGamepads()[gamepadIndex]
-  
+
       if (pad) {
         gamepad.raw = pad
         gamepad.connected.set(true)
@@ -392,19 +486,16 @@ export function useGamepad (options: UseGamepadOptions = {}) {
       }
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('gamepadconnected', handleGamepadConnected)
-      window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
-    }
-  
-    onDestroy(() => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('gamepadconnected', handleGamepadConnected)
-        window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
-      }
-    })
+    // Check if gamepads are already connected.
+    handleGamepadConnected()
 
-    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+    window.addEventListener('gamepadconnected', handleGamepadConnected)
+    window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
+
+    onDestroy(() => {
+      window.removeEventListener('gamepadconnected', handleGamepadConnected)
+      window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
+    })
 
     return gamepad
   }
