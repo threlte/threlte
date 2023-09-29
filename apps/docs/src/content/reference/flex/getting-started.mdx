@@ -4,9 +4,51 @@ category: '@threlte/flex'
 name: Getting Started
 ---
 
-The package `@threlte/flex` provides a set of components to use the flex engine [`yoga-layout`](https://yogalayout.com/) in Threlte.
+<Tip type="experimental">
+  `@threlte/flex` is early in development. It is possible there will be frequent breaking changes
+  until it reaches 0.1.0.
+</Tip>
+
+Placing content and making layouts in 3D is hard. The flexbox engine
+[`Yoga`](https://yogalayout.com/) is a cross-platform layout engine which
+implements the flexbox spec. The package `@threlte/flex` provides components to
+easily use `Yoga` in Threlte.
 
 <Example
   path="flex/examples"
   iframe
 />
+
+## Installation
+
+```bash
+npm install @threlte/flex
+```
+
+## Usage
+
+### Basic Example
+
+Use the component [`<Flex>`](/docs/reference/flex/flex) to create a flexbox
+container. Since there's no viewport to fill, you must specify the size of the
+container. Add flex items with the component `<Box>`.
+
+```svelte
+<script lang="ts">
+  import { Flex } from '@threlte/flex'
+  import Plane from './Plane.svelte'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+>
+  <Box>
+    <Plane />
+  </Box>
+
+  <Box>
+    <Plane />
+  </Box>
+</Flex>
+```
