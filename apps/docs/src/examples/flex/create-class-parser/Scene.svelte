@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Box, Flex, createClassParser } from '@threlte/flex'
-  import Plane from './Plane.svelte'
+  import RoundedPlane from './RoundedPlane.svelte'
 
   const classParser = createClassParser((string, props) => {
     const classNames = string.split(' ')
@@ -25,22 +25,23 @@
 
 <Flex
   width={300}
-  height={300}
+  height={150}
   {classParser}
   class="container"
 >
-  <Plane
-    color="white"
+  <RoundedPlane
+    radius={15}
+    color="#FE3D00"
     width={300}
-    height={300}
+    height={150}
   />
   <Box
     class="item"
     let:width
     let:height
   >
-    <Plane
-      color="green"
+    <RoundedPlane
+      color="#EB1688"
       {width}
       {height}
       depth={1}
@@ -51,8 +52,20 @@
     let:width
     let:height
   >
-    <Plane
-      color="blue"
+    <RoundedPlane
+      color="#113BFA"
+      {width}
+      {height}
+      depth={1}
+    />
+  </Box>
+  <Box
+    class="item"
+    let:width
+    let:height
+  >
+    <RoundedPlane
+      color="#590C65"
       {width}
       {height}
       depth={1}
