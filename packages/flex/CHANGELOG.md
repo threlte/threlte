@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.0.5
+
+### Patch Changes
+
+- 24cdb1e2: Casing fix
+
 ## 0.0.4
 
 ### Patch Changes
