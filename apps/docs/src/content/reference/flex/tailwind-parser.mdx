@@ -1,0 +1,327 @@
+---
+order: 11
+category: '@threlte/flex'
+name: tailwindParser
+---
+
+`@threlte/flex` ships with a default parser for Tailwind-like classes on
+[`<Flex>`](/docs/reference/flex/flex) and [`<Box>`](/docs/reference/flex/box)
+components. If you are familiar with Tailwind, you will feel right at home.
+
+```svelte
+<Flex
+  width={300}
+  height={300}
+  classParser={tailwindParser}
+  class="flex-col items-center justify-center gap-10 p-10"
+>
+  <Box
+    class="w-100 h-full shrink-0"
+    let:width
+    let:height
+  >
+    <Plane
+      {width}
+      {height}
+      color="yellow"
+      depth={1}
+    />
+  </Box>
+
+  <Box
+    class="flex-1"
+    let:width
+  >
+    <Plane
+      color="blue"
+      {width}
+      height={44}
+      depth={1}
+    />
+  </Box>
+</Flex>
+```
+
+## Usage
+
+Add the `classParser` prop to your `<Flex>` or `<Box>` component and pass in the `tailwindParser` function.
+
+```svelte {2}m {8}+
+<script>
+  import { Flex, Box, Plane, tailwindParser } from '@threlte/flex'
+</script>
+
+<Flex
+  width={300}
+  height={300}
+  classParser={tailwindParser}
+  class="flex-col items-center justify-center gap-10 p-10"
+>
+  <Box
+    class="h-100 w-100"
+    let:width
+    let:height
+  >
+    <!-- … -->
+  </Box>
+</Flex>
+```
+
+## Supported Props
+
+The following props are supported by the Tailwind parser:
+
+### Flex Direction
+
+`value` can be `"row"`, `"row-reverse"`, `"col"`, `"col-reverse"`
+
+| Class          | Properties       |
+| -------------- | ---------------- |
+| `flex-{value}` | `flex-direction` |
+
+#### Examples
+
+`flex-row`, `flex-col`
+
+---
+
+### Flex Wrap
+
+`value` can be `"wrap"`, `"wrap-reverse"`, `"nowrap"`
+
+| Class          | Properties  |
+| -------------- | ----------- |
+| `flex-{value}` | `flex-wrap` |
+
+#### Examples
+
+`flex-wrap`, `flex-nowrap`
+
+---
+
+### Justify Content
+
+`value` can be `"start"`, `"end"`, `"center"`, `"between"`, `"around"`, `"evenly"`
+
+| Class             | Properties        |
+| ----------------- | ----------------- |
+| `justify-{value}` | `justify-content` |
+
+#### Examples
+
+`justify-start`, `justify-center`, `justify-between`
+
+---
+
+### Align Items
+
+`value` can be `"start"`, `"end"`, `"center"`, `"baseline"`, `"stretch"`
+
+| Class           | Properties    |
+| --------------- | ------------- |
+| `items-{value}` | `align-items` |
+
+#### Examples
+
+`items-start`, `items-center`, `items-stretch`
+
+---
+
+### Align Content
+
+`value` can be `"normal"`, `"start"`, `"end"`, `"center"`, `"between"`, `"around"`, `"stretch"`, `"baseline"`
+
+| Class             | Properties      |
+| ----------------- | --------------- |
+| `content-{value}` | `align-content` |
+
+#### Examples
+
+`content-start`, `content-center`, `content-stretch`
+
+---
+
+### Gap
+
+`value` is a `number` (e.g. `"10"`)
+
+| Class           | Properties   |
+| --------------- | ------------ |
+| `gap-{value}`   | `gap`        |
+| `gap-x-{value}` | `column-gap` |
+| `gap-y-{value}` | `row-gap`    |
+
+#### Examples
+
+`gap-10`, `gap-x-10`, `gap-y-10`
+
+---
+
+### Flex Grow
+
+`value` is a `number` (e.g. `"1"`)
+
+| Class          | Properties  |
+| -------------- | ----------- |
+| `grow-{value}` | `flex-grow` |
+
+#### Examples
+
+`grow-1`, `grow-0`
+
+---
+
+### Flex Shrink
+
+`value` is a `number` (e.g. `"1"`)
+
+| Class            | Properties    |
+| ---------------- | ------------- |
+| `shrink-{value}` | `flex-shrink` |
+
+#### Examples
+
+`shrink-1`, `shrink-0`
+
+---
+
+### Flex Basis
+
+`value` can be `"auto"`, `"full"`, a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class           | Properties   |
+| --------------- | ------------ |
+| `basis-{value}` | `flex-basis` |
+
+#### Examples
+
+`basis-10`, `basis-full`, `basis-55%`, `basis-auto`
+
+---
+
+### Flex
+
+`value` is a `number` (e.g. `"1"`)
+
+| Class          | Properties |
+| -------------- | ---------- |
+| `flex-{value}` | `flex`     |
+
+#### Examples
+
+`flex-1`, `flex-0`
+
+---
+
+### Align Self
+
+`value` can be `"auto"`, `"start"`, `"end"`, `"center"`, `"stretch"`, `"baseline"`
+
+| Class          | Properties   |
+| -------------- | ------------ |
+| `self-{value}` | `align-self` |
+
+#### Examples
+
+`self-start`, `self-center`, `self-stretch`
+
+---
+
+### Padding
+
+`value` can be `"full"`, a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class        | Properties                          |
+| ------------ | ----------------------------------- |
+| `p-{value}`  | `padding`                           |
+| `pt-{value}` | `padding-top`                       |
+| `pr-{value}` | `padding-right`                     |
+| `pb-{value}` | `padding-bottom`                    |
+| `pl-{value}` | `padding-left`                      |
+| `px-{value}` | `padding-left`<br />`padding-right` |
+| `py-{value}` | `padding-top`<br />`padding-bottom` |
+
+#### Examples
+
+`p-10`, `pb-full`, `px-55%`
+
+---
+
+### Margin
+
+`value` can be `"full"`, a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class        | Properties                        |
+| ------------ | --------------------------------- |
+| `m-{value}`  | `margin`                          |
+| `mt-{value}` | `margin-top`                      |
+| `mr-{value}` | `margin-right`                    |
+| `mb-{value}` | `margin-bottom`                   |
+| `ml-{value}` | `margin-left`                     |
+| `mx-{value}` | `margin-left`<br />`margin-right` |
+| `my-{value}` | `margin-top`<br />`margin-bottom` |
+
+#### Examples
+
+`m-10`, `mb-full`, `mx-55%`
+
+---
+
+### Width
+
+`value` can be `"auto"`, `"full"`, a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class       | Properties |
+| ----------- | ---------- |
+| `w-{value}` | `width`    |
+
+#### Examples
+
+`w-10`, `w-full`, `w-55%`, `w-auto`
+
+---
+
+### Height
+
+`value` can be `"auto"`, `"full"`, a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class       | Properties |
+| ----------- | ---------- |
+| `h-{value}` | `height`   |
+
+#### Examples
+
+`h-10`, `h-full`, `h-55%`, `h-auto`
+
+---
+
+### Top, Right, Bottom, Left
+
+`value` can be a percentage (e.g. `"55%"`) or a `number` (e.g. `"10"`).
+
+| Class            | Properties |
+| ---------------- | ---------- |
+| `top-{value}`    | `top`      |
+| `right-{value}`  | `right`    |
+| `bottom-{value}` | `bottom`   |
+| `left-{value}`   | `left`     |
+
+#### Examples
+
+`top-10`, `right-55%`, `bottom-10`, `left-55%`
+
+---
+
+### Aspect Ratio
+
+`value` can be `"square"`, `"portrait"`, `"landscape"` or an arbitrary ratio (e.g. `"16/9"`).
+
+| Class            | Properties     |
+| ---------------- | -------------- |
+| `aspect-{value}` | `aspect-ratio` |
+
+#### Examples
+
+`aspect-square`, `aspect-21/9`
+
+---
