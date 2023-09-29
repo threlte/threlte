@@ -38,7 +38,7 @@
     <iframe
       src="/examples/{path}"
       title={path}
-      class="w-full h-full border-none"
+      class="h-full w-full border-none"
     />
   {:else if mounted && AppModule}
     {#await AppModule() then Mod}
