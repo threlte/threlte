@@ -41,6 +41,19 @@ const config = {
 }
 ```
 
+#### Adapt `tsconfig.json`
+
+If you are using TypeScript, you need to add the following to your `tsconfig.json` to make sure that
+the types of the Threlte components are available:
+
+```json title=tsconfig.json {3}+
+{
+  "compilerOptions": {
+    "moduleResolution": "Bundler"
+  }
+}
+```
+
 <Tip type="tip">
   [See this comment](https://github.com/threlte/threlte/issues/8#issuecomment-1024085864) for tips
   on how to reduce bundle size when working with bundlers like vite and three.js.
