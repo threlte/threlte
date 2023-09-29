@@ -37,10 +37,10 @@ export const useRender = (
     order: options?.order
   }
 
-  renderCtx.renderHandlers.add(handler)
-  renderCtx.renderHandlersNeedSortCheck = true
+  renderCtx.handlers.render.add(handler)
+  renderCtx.handlersNeedSort.render = true
 
   onDestroy(() => {
-    renderCtx.renderHandlers.delete(handler)
+    renderCtx.handlers.render.delete(handler)
   })
 }

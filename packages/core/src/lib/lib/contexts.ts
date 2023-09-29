@@ -66,10 +66,18 @@ export type ThrelteInternalContext = {
   invalidations: Record<string, number>
   manualFrameHandlers: Set<ThrelteFrameHandler>
   autoFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlersNeedSortCheck: boolean
-  renderHandlers: Set<ThrelteRenderHandler>
-  renderHandlersNeedSortCheck: boolean
+  handlers: {
+    render: Set<ThrelteRenderHandler>
+    fixed: Set<ThrelteFrameHandler>
+    before: Set<ThrelteFrameHandler>
+    after: Set<ThrelteFrameHandler>
+  }
+  handlersNeedSort: {
+    fixed: boolean
+    before: boolean
+    render: boolean
+    after: boolean
+  }
   advance: boolean
 
   /**
@@ -148,10 +156,18 @@ export const createContexts = (options: {
     invalidations: {},
     manualFrameHandlers: new Set(),
     autoFrameHandlers: new Set(),
-    allFrameHandlers: new Set(),
-    allFrameHandlersNeedSortCheck: false,
-    renderHandlers: new Set(),
-    renderHandlersNeedSortCheck: false,
+    handlers: {
+      fixed: new Set(),
+      before: new Set(),
+      render: new Set(),
+      after: new Set()
+    },
+    handlersNeedSort: {
+      fixed: false,
+      before: false,
+      render: false,
+      after: false,
+    },
     advance: false,
     dispose: async (force = false) => {
       await tick()

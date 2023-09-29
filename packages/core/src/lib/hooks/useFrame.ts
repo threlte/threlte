@@ -2,6 +2,7 @@ import { getContext, onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
 import { browser } from '../lib/browser'
 import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+import { timer } from '../lib/timer'
 
 export type ThrelteUseFrame = {
   stop: () => void
@@ -23,11 +24,22 @@ export type ThrelteUseFrameOptions = {
    * true.
    */
   invalidate?: boolean
-}
+  /**
+   *
+   */
+  stage?: 'before' | 'after'
+  /**
+   * 
+   */
+  fixedStep?: number
+} 
 
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
+  stage?: 'before' | 'after'
+  fixedStep: number
+  lastUpdateTimestamp: number
   debugFrameloopMessage?: string
   invalidate: boolean
 }
@@ -63,11 +75,16 @@ export const useFrame = (
   }
 
   const invalidate = options?.invalidate ?? true
+  const fixedStep = options?.fixedStep
+  const stage = options?.stage ?? 'before'
 
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
+    fixedStep: options?.fixedStep ?? 0,
+    lastUpdateTimestamp: timer.now,
     debugFrameloopMessage: options?.debugFrameloopMessage,
+    stage,
     invalidate
   }
 
@@ -79,7 +96,12 @@ export const useFrame = (
     } else {
       renderCtx.manualFrameHandlers.delete(handler)
     }
-    renderCtx.allFrameHandlers.delete(handler)
+
+    if (fixedStep !== undefined) {
+      renderCtx.handlers.fixed.delete(handler)
+    } else {
+      renderCtx.handlers[stage].delete(handler)
+    }
 
     started.set(false)
   }
@@ -91,8 +113,13 @@ export const useFrame = (
       renderCtx.manualFrameHandlers.add(handler)
     }
 
-    renderCtx.allFrameHandlers.add(handler)
-    renderCtx.allFrameHandlersNeedSortCheck = true
+    if (fixedStep !== undefined) {
+      renderCtx.handlers.fixed.add(handler)
+      renderCtx.handlersNeedSort.fixed = true
+    } else {
+      renderCtx.handlers[stage].add(handler)
+      renderCtx.handlersNeedSort[stage] = true
+    }
 
     started.set(true)
   }

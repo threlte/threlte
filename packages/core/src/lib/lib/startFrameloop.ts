@@ -1,69 +1,36 @@
 import type { ThrelteContext, ThrelteInternalContext } from './contexts'
+import type { ThrelteFrameHandler } from '../hooks/useFrame'
+import type { ThrelteRenderHandler } from '../hooks/useRender'
+import { timer } from './timer'
 
-const runUseFrameCallbacks = (
-  ctx: ThrelteContext,
-  internalCtx: ThrelteInternalContext,
-  delta: number
-): void => {
-  if (internalCtx.allFrameHandlers.size === 0) return
+const sortHandlers = (handlers: Set<ThrelteFrameHandler | ThrelteRenderHandler>): void => {
+  const arr = Array.from(handlers)
+  const needsSort = arr.some((h) => h.order)
 
-  if (internalCtx.allFrameHandlersNeedSortCheck) {
-    const arr = Array.from(internalCtx.allFrameHandlers)
-    const needsSort = arr.some((h) => h.order)
-
-    if (needsSort) {
-      const sorted = arr.sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-      internalCtx.allFrameHandlers.clear()
-      sorted.forEach((h) => internalCtx.allFrameHandlers.add(h))
-    }
-
-    internalCtx.allFrameHandlersNeedSortCheck = false
+  if (needsSort) {
+    const sorted = arr.sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
+    handlers.clear()
+    sorted.forEach((h) => handlers.add(h))
   }
-
-  if (internalCtx.debugFrameloop) {
-    let genericFrameHandlers = 0
-    internalCtx.autoFrameHandlers.forEach((h) => {
-      if (h.debugFrameloopMessage) {
-        internalCtx.invalidations[h.debugFrameloopMessage] =
-          h.debugFrameloopMessage in internalCtx.invalidations
-            ? internalCtx.invalidations[h.debugFrameloopMessage] + 1
-            : 1
-      } else {
-        ++genericFrameHandlers
-      }
-    })
-    if (genericFrameHandlers > 0)
-      internalCtx.invalidations['useFrame'] = internalCtx.autoFrameHandlers.size
-  }
-
-  internalCtx.allFrameHandlers.forEach((h) => h.fn(ctx, delta))
 }
 
-const runUseRenderCallbacks = (
-  ctx: ThrelteContext,
-  internalCtx: ThrelteInternalContext,
-  delta: number
-): void => {
-  if (internalCtx.renderHandlers.size === 0) return
-
-  if (internalCtx.renderHandlersNeedSortCheck) {
-    const arr = Array.from(internalCtx.renderHandlers)
-    const needsSort = arr.some((h) => h.order)
-
-    if (needsSort) {
-      const sorted = arr.sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
-      internalCtx.renderHandlers.clear()
-      sorted.forEach((h) => internalCtx.renderHandlers.add(h))
+const runDebugUseFrameCallbacks = (internalCtx: ThrelteInternalContext): void => {
+  let genericFrameHandlers = 0
+  internalCtx.autoFrameHandlers.forEach((h) => {
+    if (h.debugFrameloopMessage) {
+      internalCtx.invalidations[h.debugFrameloopMessage] =
+        h.debugFrameloopMessage in internalCtx.invalidations
+          ? internalCtx.invalidations[h.debugFrameloopMessage] + 1
+          : 1
+    } else {
+      ++genericFrameHandlers
     }
-
-    internalCtx.renderHandlersNeedSortCheck = false
-  }
-
-  internalCtx.renderHandlers.forEach((h) => h.fn(ctx, delta))
+  })
+  if (genericFrameHandlers > 0)
+    internalCtx.invalidations['useFrame'] = internalCtx.autoFrameHandlers.size
 }
 
 const debugFrame = (internalCtx: ThrelteInternalContext): void => {
-  if (!internalCtx.debugFrameloop) return
   internalCtx.frame += 1
   // prettier-ignore
   console.log(`frame: ${internalCtx.frame}${Object.keys(internalCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`)
@@ -79,9 +46,9 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
     (ctx.frameloop.current === 'never' && internalCtx.advance)
   )
 }
-
+  
 /**
- * ### `useFrameloop`
+ * ### `startFrameloop`
  *
  * This function is responsible for starting all `useFrame` and `useRender`
  * callbacks, and for rendering the scene if no `useRender` callbacks are
@@ -97,29 +64,79 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
     // dispose all objects that are due to be disposed
     internalCtx.dispose()
 
-    // get a global delta
-    const delta = ctx.clock.getDelta()
+    timer.update()
 
-    // run all useFrame callbacks
-    runUseFrameCallbacks(ctx, internalCtx, delta)
+    const shouldRenderFrame = shouldRender(ctx, internalCtx)
+    const { fixed, before, render, after } = internalCtx.handlers
+    const { delta } = timer
 
-    // if we're not rendering, return
-    if (!shouldRender(ctx, internalCtx)) return
+    if (internalCtx.debugFrameloop) {
+      runDebugUseFrameCallbacks(internalCtx)
+    }
 
-    if (internalCtx.renderHandlers.size > 0) {
-      // run all useRender callbacks, or …
-      runUseRenderCallbacks(ctx, internalCtx, delta)
-    } else if (ctx.camera.current) {
-      // … render the scene with the default renderer
-      ctx.renderer.render(ctx.scene, ctx.camera.current)
+    // run all fixed useFrame callbacks
+    if (fixed.size > 0) {
+      if (internalCtx.handlersNeedSort.fixed) {
+        sortHandlers(fixed)
+        internalCtx.handlersNeedSort.fixed = false
+      }
+
+      const { now } = timer
+
+      fixed.forEach((h) => {
+        const then = h.lastUpdateTimestamp
+        const handlerDelta = (now - then) / 1000
+         if (handlerDelta < h.fixedStep) return
+        h.lastUpdateTimestamp = now
+        h.fn(ctx, handlerDelta)
+      })
+    }
+
+    // run all before render useFrame callbacks
+    if (before.size > 0) {
+      if (internalCtx.handlersNeedSort.before) {
+        sortHandlers(before)
+        internalCtx.handlersNeedSort.before = false
+      }
+
+      before.forEach((h) => h.fn(ctx, delta))
+    }
+
+    if (shouldRenderFrame) {
+      if (render.size > 0) {
+        // run all useRender callbacks, or …
+        if (internalCtx.handlersNeedSort.render) {
+          sortHandlers(render)
+          internalCtx.handlersNeedSort.render = false
+        }
+
+        render.forEach((h) => h.fn(ctx, timer.delta))
+      } else if (ctx.camera.current) {
+        // … render the scene with the default renderer
+        ctx.renderer.render(ctx.scene, ctx.camera.current)
+      }
+    }
+
+    // run all after render useFrame callbacks
+    if (after.size > 0) {
+      if (internalCtx.handlersNeedSort.after) {
+        sortHandlers(after)
+        internalCtx.handlersNeedSort.after = false
+      }
+
+      after.forEach((h) => h.fn(ctx, delta))
     }
 
     // if we're debugging, log the frame
-    debugFrame(internalCtx)
+    if (internalCtx.debugFrameloop) {
+      debugFrame(internalCtx)
+    }
 
-    // reset the frameInvalidated flag
-    internalCtx.frameInvalidated = false
-    // reset the advance flag
-    internalCtx.advance = false
+    if (shouldRenderFrame) {
+      // reset the frameInvalidated flag
+      internalCtx.frameInvalidated = false
+      // reset the advance flag
+      internalCtx.advance = false
+    }
   })
 }
