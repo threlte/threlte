@@ -180,6 +180,9 @@ const create = async () => {
 
   const svelteKitPkg = JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf-8'))
 
+  const spinner = p.spinner()
+  spinner.start('Resolving package versions')
+
   const threltePackageJson = {
     devDependencies: {
       three: await resolvePackageVersion('three', '^0.156.0'),
@@ -216,6 +219,8 @@ const create = async () => {
 	}
 
   const mergedPkg = merger.mergeObjects([svelteKitPkg, threltePackageJson])
+
+  spinner.stop('Resolved package versions')
 
   fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(mergedPkg, null, 2))
 
@@ -268,14 +273,14 @@ const create = async () => {
   }
 
   if (options.install) {
-    const s = p.spinner()
+    const spinner = p.spinner()
     try {
       // Install dependencies
-      s.start(`Installing dependencies using ${pkgManager}`)
+      spinner.start(`Installing dependencies using ${pkgManager}`)
       await execa(pkgManager, ['install'], { cwd, stdio: 'ignore' })
-      s.stop(`Installed dependencies using ${pkgManager}`)
+      spinner.stop(`Installed dependencies using ${pkgManager}`)
     } catch (error) {
-      s.stop(red('Failed to install dependencies'))
+      spinner.stop(red('Failed to install dependencies'))
       p.note('You can install them manually.')
       // This will show install instructions later on
       options.install = false
