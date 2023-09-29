@@ -134,19 +134,25 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'flex-row':
           styles.flexDirection = 'Row'
+          break
         case 'flex-row-reverse':
           styles.flexDirection = 'RowReverse'
+          break
         case 'flex-col':
           styles.flexDirection = 'Column'
+          break
         case 'flex-col-reverse':
           styles.flexDirection = 'ColumnReverse'
-        // flex-wrap
+          break
         case 'flex-wrap':
           styles.flexWrap = 'Wrap'
+          break
         case 'flex-wrap-reverse':
           styles.flexWrap = 'WrapReverse'
+          break
         case 'flex-nowrap':
           styles.flexWrap = 'NoWrap'
+          break
         default:
           // flex shorthand
           const [, value] = className.split('-')
@@ -159,16 +165,22 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'justify-start':
           styles.justifyContent = 'FlexStart'
+          break
         case 'justify-end':
           styles.justifyContent = 'FlexEnd'
+          break
         case 'justify-center':
           styles.justifyContent = 'Center'
+          break
         case 'justify-between':
           styles.justifyContent = 'SpaceBetween'
+          break
         case 'justify-around':
           styles.justifyContent = 'SpaceAround'
+          break
         case 'justify-evenly':
           styles.justifyContent = 'SpaceEvenly'
+          break
       }
     }
 
@@ -177,14 +189,19 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'items-start':
           styles.alignItems = 'FlexStart'
+          break
         case 'items-end':
           styles.alignItems = 'FlexEnd'
+          break
         case 'items-center':
           styles.alignItems = 'Center'
+          break
         case 'items-baseline':
           styles.alignItems = 'Baseline'
+          break
         case 'items-stretch':
           styles.alignItems = 'Stretch'
+          break
       }
     }
 
@@ -193,20 +210,28 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'content-normal':
           styles.alignContent = 'Auto'
+          break
         case 'content-start':
           styles.alignContent = 'FlexStart'
+          break
         case 'content-end':
           styles.alignContent = 'FlexEnd'
+          break
         case 'content-center':
           styles.alignContent = 'Center'
+          break
         case 'content-between':
           styles.alignContent = 'SpaceBetween'
+          break
         case 'content-around':
           styles.alignContent = 'SpaceAround'
+          break
         case 'content-stretch':
           styles.alignContent = 'Stretch'
+          break
         case 'content-baseline':
           styles.alignContent = 'Baseline'
+          break
       }
     }
 
@@ -215,16 +240,22 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'self-auto':
           styles.alignSelf = 'Auto'
+          break
         case 'self-start':
           styles.alignSelf = 'FlexStart'
+          break
         case 'self-end':
           styles.alignSelf = 'FlexEnd'
+          break
         case 'self-center':
           styles.alignSelf = 'Center'
+          break
         case 'self-stretch':
           styles.alignSelf = 'Stretch'
+          break
         case 'self-baseline':
           styles.alignSelf = 'Baseline'
+          break
       }
     }
 
@@ -263,10 +294,13 @@ export const tailwindParser = createClassParser((string) => {
       switch (className) {
         case 'aspect-square':
           styles.aspectRatio = 1
+          break
         case 'aspect-landscape':
           styles.aspectRatio = 16 / 9
+          break
         case 'aspect-portrait':
           styles.aspectRatio = 9 / 16
+          break
         default:
           const [, value] = className.split('-')
           const [width, height] = value.split('/')
