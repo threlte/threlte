@@ -27,7 +27,7 @@ export type ThrelteUseFrameOptions = {
   /**
    *
    */
-  stage?: 'before' | 'after'
+  stage?: 'fixed' | 'before' | 'after'
   /**
    * 
    */
@@ -37,7 +37,7 @@ export type ThrelteUseFrameOptions = {
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
-  stage?: 'before' | 'after'
+  stage: 'fixed' | 'before' | 'after'
   fixedStep: number
   lastUpdateTimestamp: number
   debugFrameloopMessage?: string
@@ -81,7 +81,7 @@ export const useFrame = (
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
-    fixedStep: options?.fixedStep ?? 0,
+    fixedStep: options?.fixedStep ?? 1/60,
     lastUpdateTimestamp: timer.now,
     debugFrameloopMessage: options?.debugFrameloopMessage,
     stage,
@@ -97,11 +97,7 @@ export const useFrame = (
       renderCtx.manualFrameHandlers.delete(handler)
     }
 
-    if (fixedStep !== undefined) {
-      renderCtx.handlers.fixed.delete(handler)
-    } else {
-      renderCtx.handlers[stage].delete(handler)
-    }
+    renderCtx.handlers[stage].delete(handler)
 
     started.set(false)
   }
@@ -113,14 +109,8 @@ export const useFrame = (
       renderCtx.manualFrameHandlers.add(handler)
     }
 
-    if (fixedStep !== undefined) {
-      renderCtx.handlers.fixed.add(handler)
-      renderCtx.handlersNeedSort.fixed = true
-    } else {
-      renderCtx.handlers[stage].add(handler)
-      renderCtx.handlersNeedSort[stage] = true
-    }
-
+    renderCtx.handlers[stage].add(handler)
+    renderCtx.handlersNeedSort[stage] = true
     started.set(true)
   }
 
