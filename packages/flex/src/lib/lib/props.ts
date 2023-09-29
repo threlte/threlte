@@ -4,7 +4,7 @@ import { alignFlexProps } from './alignFlexProps'
 
 export type FlexPlane = 'xy' | 'yz' | 'xz'
 
-export type ClassParser = (className: string) => NodeProps
+export type ClassParser = (className: string, props: NodeProps) => NodeProps
 
 export type Axis = 'x' | 'y' | 'z'
 

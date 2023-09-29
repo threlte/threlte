@@ -35,8 +35,8 @@
   export const { node } = createNodeContext(order)
 
   addNode(node, group, $$restProps as NodeProps)
-  updateNodeProps(node, { ...classParser?.(_class), ...$$restProps } as NodeProps, true)
-  $: updateNodeProps(node, { ...classParser?.(_class), ...$$restProps } as NodeProps)
+  updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
+  $: updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps)
   onDestroy(() => {
     removeNode(node)
   })
