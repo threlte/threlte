@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.3.0
+
+### Minor Changes
+
+- eba2939: Dynamic version resolution of dependencies, added tsconfig
+
 ## 1.2.0
 
 ### Minor Changes
