@@ -119,7 +119,12 @@ const create = async () => {
             {
               value: '@threlte/xr',
               label: '@threlte/xr',
-              hint: 'Components and hooks to easily create WebXR apps with Threlte'
+              hint: 'ALPHA – Components and hooks to easily create WebXR apps with Threlte'
+            },
+            {
+              value: '@threlte/flex',
+              label: '@threlte/flex',
+              hint: 'ALPHA – Components to integrate the flexbox layout engine Yoga in Threlte'
             },
             {
               value: 'model-pipeline',
@@ -212,6 +217,9 @@ const create = async () => {
 			threltePackageJson.devDependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
 			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.16.0')
 			threltePackageJson.scripts['dev'] = 'vite dev --host'
+		}
+		if (options.threltePackages.includes('@threlte/flex')) {
+			threltePackageJson.devDependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex')
 		}
 		if (options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
