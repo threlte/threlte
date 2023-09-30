@@ -1,8 +1,7 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T } from '@threlte/core'
-  import { Text } from '@threlte/extras'
-  import { XR, Controller, Hand, EstimatedLight, useHitTest } from '@threlte/xr'
+  import { XR, Controller, Hand, useHitTest } from '@threlte/xr'
   
   const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0);
   
@@ -28,8 +27,6 @@
       reticle.visible = false
     }
   })
-
-  let estimating = false
 </script>
 
 <XR>
@@ -39,23 +36,12 @@
   <Hand right on:pinchend={handleSelect} />
 </XR>
 
-<EstimatedLight
-  on:estimationstart={() => (estimating = true)}
-  on:estimationend={() => (estimating = false)}
->
-  <T.HemisphereLight
-    args={[0xffffff, 0xbbbbff, 1]}
-    position={[0.5, 1, 0.25]}
-  />
+<T.HemisphereLight
+  args={[0xffffff, 0xbbbbff, 1]}
+  position={[0.5, 1, 0.25]}
+/>
 
-  <T.AmbientLight intensity={0.5} />
-</EstimatedLight>
-
-{#if estimating}
-<Text position={[0, 1.7, -1]} text='Estimating' />
-{:else}
-<Text position={[0, 1.7, -1]} text='Not estimating' />
-{/if}
+<T.AmbientLight intensity={0.5} />
 
 <T.Mesh
   bind:ref={reticle}
