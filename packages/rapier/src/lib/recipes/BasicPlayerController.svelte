@@ -64,17 +64,21 @@
   })
 
   const onKeyDown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
+    switch (e.key.toLowerCase()) {
+      case 's':
+      case 'arrowdown':
         keys.down = true
         break
-      case 'ArrowUp':
+      case 'w':
+      case 'arrowup':
         keys.up = true
         break
-      case 'ArrowLeft':
+      case 'a':
+      case 'arrowleft':
         keys.left = true
         break
-      case 'ArrowRight':
+      case 'd':
+      case 'arrowright':
         keys.right = true
         break
       case ' ':
@@ -86,17 +90,21 @@
   }
 
   const onKeyUp = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
+    switch (e.key.toLowerCase()) {
+      case 's':
+      case 'arrowdown':
         keys.down = false
         break
-      case 'ArrowUp':
+      case 'w':
+      case 'arrowup':
         keys.up = false
         break
-      case 'ArrowLeft':
+      case 'a':
+      case 'arrowleft':
         keys.left = false
         break
-      case 'ArrowRight':
+      case 'd':
+      case 'arrowright':
         keys.right = false
         break
       default:

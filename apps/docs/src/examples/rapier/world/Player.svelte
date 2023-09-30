@@ -29,6 +29,8 @@
     const f = diff.clamp(min, max)
 
     rigidBody.applyImpulse(f, true)
+  }, {
+    stage: 'fixed'
   })
 </script>
 

@@ -11,7 +11,7 @@
   useFrame(() => {
 
   }, {
-    stage: 'before',
+    stage: 'fixed',
     fixedStep: 1/10
   })
 

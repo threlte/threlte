@@ -169,16 +169,16 @@ export const createContexts = (options: {
       after: false,
     },
     advance: false,
-    dispose: async (force = false) => {
-      await tick()
-      if (!internalCtx.shouldDispose && !force) return
-      internalCtx.disposableObjects.forEach((mounted, object) => {
-        if (mounted === 0 || force) {
-          object?.dispose?.()
-          internalCtx.disposableObjects.delete(object)
-        }
+    dispose: (force = false) => {
+      tick().then(() => {
+        internalCtx.disposableObjects.forEach((mounted, object) => {
+          if (mounted === 0 || force) {
+            object?.dispose?.()
+            internalCtx.disposableObjects.delete(object)
+          }
+        })
+        internalCtx.shouldDispose = false
       })
-      internalCtx.shouldDispose = false
     },
     collectDisposableObjects: (object, objects) => {
       const disposables: DisposableThreeObject[] = objects ?? []

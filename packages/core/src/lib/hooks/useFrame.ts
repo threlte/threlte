@@ -75,14 +75,13 @@ export const useFrame = (
   }
 
   const invalidate = options?.invalidate ?? true
-  const fixedStep = options?.fixedStep
   const stage = options?.stage ?? 'before'
 
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
     fixedStep: options?.fixedStep ?? 1/60,
-    lastUpdateTimestamp: timer.now,
+    lastUpdateTimestamp: 0,
     debugFrameloopMessage: options?.debugFrameloopMessage,
     stage,
     invalidate

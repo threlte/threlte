@@ -40,7 +40,7 @@ export const useFrameHandler = (ctx: RapierContext, order?: number, fixedStep = 
 
       // Set timestep to current delta, to allow for variable frame rates
       // We cap the delta at 100, so that the physics simulation doesn't get wild
-      world.timestep = Math.min(0.1, delta)
+      world.timestep = delta // Math.min(0.1, delta)
       world.step(eventQueue)
 
       // Update meshes

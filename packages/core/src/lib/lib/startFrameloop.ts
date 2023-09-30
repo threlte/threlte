@@ -46,7 +46,7 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
     (ctx.frameloop.current === 'never' && internalCtx.advance)
   )
 }
-  
+
 /**
  * ### `startFrameloop`
  *
@@ -62,7 +62,9 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
 export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
   ctx.renderer.setAnimationLoop(() => {
     // dispose all objects that are due to be disposed
-    internalCtx.dispose()
+    if (internalCtx.shouldDispose) {
+      internalCtx.dispose()
+    }
 
     timer.update()
 
@@ -81,14 +83,14 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
         internalCtx.handlersNeedSort.fixed = false
       }
 
-      const { now } = timer
-
+      // From: https://gafferongames.com/post/fix_your_timestep/
       fixed.forEach((h) => {
-        const then = h.lastUpdateTimestamp
-        const handlerDelta = (now - then) / 1000
-         if (handlerDelta < h.fixedStep) return
-        h.lastUpdateTimestamp = now
-        h.fn(ctx, handlerDelta)
+        h.lastUpdateTimestamp += delta
+
+        while (h.lastUpdateTimestamp >= h.fixedStep) {
+          h.lastUpdateTimestamp -= h.fixedStep
+          h.fn(ctx, h.fixedStep)
+        }
       })
     }
 
