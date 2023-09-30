@@ -122,7 +122,6 @@
   }
 
   $: store = stores[handedness]
-  $: hand = $store?.hand
   $: inputSource = $store?.inputSource
   $: model = $store?.model
 
@@ -155,9 +154,9 @@
   })
 </script>
 
-{#if hand}
+{#if $store?.hand}
   <T
-    is={hand}
+    is={$store.hand}
     name='XR hand {handedness}'
   >
     {#if $$slots.default === undefined}

@@ -11,16 +11,24 @@
 
   const joint = useHandJoint(hand, handJoints[jointIndex]!)
 
-  $: radius = $joint?.jointRadius ?? 0.0001
-
-  useFrame(() => {
+  const { start, stop } = useFrame(() => {
     if (joint.current === undefined || body === undefined) return
 
     const { x, y, z } = joint.current.position
     body.setNextKinematicTranslation({ x, y, z })
-  })
+  }, { autostart: false })
+
+  $: radius = $joint?.jointRadius
+
+  $: if (body && radius && $joint) {
+    start()
+  } else {
+    stop()
+  }
 </script>
 
-<RigidBody bind:rigidBody={body} type='kinematicPosition'>
-  <Collider shape='ball' args={[radius]} />
-</RigidBody>
+{#if radius}
+  <RigidBody bind:rigidBody={body} type='kinematicPosition'>
+    <Collider shape='ball' args={[radius]} />
+  </RigidBody>
+{/if}
