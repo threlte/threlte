@@ -218,47 +218,49 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
 
 The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
 flexbox with predefined class names just as you would do in CSS. In order to use
-the prop, you need to create a `ClassParser` which accepts a single string and
-returns `NodeProps`. Let's assume, you want to create a parser that supports the
-following class names:
+the prop, you need to create a `ClassParser` using the utility
+[`createClassParser`](/docs/reference/flex/create-class-parser) which accepts a
+single string and returns `NodeProps`. Let's assume, you want to create a parser
+that supports the following class names:
 
 ```css
 .container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: center;
   align-items: stretch;
+  gap: 10px;
+  padding: 10px;
 }
 .item {
+  width: auto;
+  height: auto;
   flex: 1;
-  shrink: 0;
 }
 ```
 
 You then need to create a `ClassParser` which returns the corresponding props:
 
 ```ts
-import type { createClassParser } from '@threlte/flex'
+import { createClassParser } from '@threlte/flex'
 
 const classParser = createClassParser((string, props) => {
-  // First we need to split the string into an array of class names
   const classNames = string.split(' ')
-  // We then loop over each class name …
   for (const className of classNames) {
-    // … and check if it matches one of the predefined class names
     switch (className) {
       case 'container':
-        // If it matches, we assign the corresponding props.
-        // We don't need to set display: flex, since that is the default.
-        props.flexDirection = 'Column'
-        props.justifyContent = 'SpaceEvenly'
+        props.flexDirection = 'Row'
+        props.justifyContent = 'Center'
         props.alignItems = 'Stretch'
+        props.gap = 10
+        props.padding = 10
+        break
       case 'item':
+        props.width = 'auto'
+        props.height = 'auto'
         props.flex = 1
-        props.shrink = 0
     }
   }
-  // finally we return the props
   return props
 })
 ```
