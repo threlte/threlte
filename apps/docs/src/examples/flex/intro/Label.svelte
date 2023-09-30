@@ -6,15 +6,15 @@
   export let color: ColorRepresentation = 'white'
   export let z = 0
   export let fontStyle:
-    | 'Black'
-    | 'Bold'
-    | 'ExtraBold'
-    | 'ExtraLight'
-    | 'Light'
-    | 'Medium'
-    | 'Regular'
-    | 'SemiBold'
-    | 'Thin' = 'Regular'
+    | 'black'
+    | 'bold'
+    | 'extra-bold'
+    | 'extra-light'
+    | 'light'
+    | 'medium'
+    | 'regular'
+    | 'semi-bold'
+    | 'thin' = 'regular'
   export let anchorX = '50%'
   export let anchorY = '50%'
   export let fontSize: 'xs' | 's' | 'm' | 'l' | 'xl' = 'm'
@@ -27,7 +27,7 @@
     xl: 12
   }
 
-  $: fontUrl = `/fonts/Inter-${fontStyle}.ttf`
+  $: fontUrl = `/fonts/inter/inter-${fontStyle}.ttf`
 </script>
 
 <Text
