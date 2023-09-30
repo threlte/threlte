@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { useRender } from '@threlte/core'
-  import { Grid } from '@threlte/extras'
   import { Box } from '@threlte/flex'
-  import { tick } from 'svelte'
   import Matcap from './Matcap.svelte'
   import Window from './Window.svelte'
   import { matcaps } from './matcaps'
@@ -17,23 +14,7 @@
   for (let i = 0; i < matcaps.length; i += matcapsPerRow) {
     rows.push(matcaps.slice(i, i + matcapsPerRow))
   }
-
-  useRender(async ({ renderer, scene, camera }) => {
-    await tick()
-    renderer.render(scene, camera.current)
-  })
 </script>
-
-<Grid
-  position.z={-10.1}
-  axes="xyz"
-  gridSize={800}
-  cellColor="#0A0F19"
-  sectionColor="#481D1A"
-  sectionSize={100}
-  cellSize={10}
-  fadeStrength={0}
-/>
 
 <Window
   title="Matcaps"
