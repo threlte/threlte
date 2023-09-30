@@ -14,7 +14,7 @@ const sortHandlers = (handlers: Set<ThrelteFrameHandler | ThrelteRenderHandler>)
   }
 }
 
-const runDebugUseFrameCallbacks = (internalCtx: ThrelteInternalContext): void => {
+const debugFrame = (internalCtx: ThrelteInternalContext): void => {
   let genericFrameHandlers = 0
   internalCtx.autoFrameHandlers.forEach((h) => {
     if (h.debugFrameloopMessage) {
@@ -28,9 +28,7 @@ const runDebugUseFrameCallbacks = (internalCtx: ThrelteInternalContext): void =>
   })
   if (genericFrameHandlers > 0)
     internalCtx.invalidations['useFrame'] = internalCtx.autoFrameHandlers.size
-}
 
-const debugFrame = (internalCtx: ThrelteInternalContext): void => {
   internalCtx.frame += 1
   // prettier-ignore
   console.log(`frame: ${internalCtx.frame}${Object.keys(internalCtx.invalidations).length > 0 ? ', requested by ↴' : ''}`)
@@ -71,10 +69,6 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
     const shouldRenderFrame = shouldRender(ctx, internalCtx)
     const { fixed, before, render, after } = internalCtx.handlers
     const { delta } = timer
-
-    if (internalCtx.debugFrameloop) {
-      runDebugUseFrameCallbacks(internalCtx)
-    }
 
     // run all fixed useFrame callbacks
     if (fixed.size > 0) {

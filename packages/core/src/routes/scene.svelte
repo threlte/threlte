@@ -4,23 +4,23 @@
   let ref: THREE.Mesh
   let elapsed = 0
 
-  useFrame(() => {
+  useFrame((_, delta) => {
+    elapsed += (delta)
     ref.rotation.x += 0.05
   })
 
   useFrame(() => {
-
+    ref.position.y = Math.sin(elapsed * 2)
   }, {
     stage: 'fixed',
-    fixedStep: 1/10
+    fixedStep: 1/2
   })
 
   useRender((ctx) => {
     ctx.renderer.render(ctx.scene, ctx.camera.current)
   })
 
-  useFrame((ctx, delta) => {
-    elapsed += (delta / 1000)
+  useFrame(() => {
     ref.position.x = Math.sin(elapsed)
   }, {
     stage: 'after'
