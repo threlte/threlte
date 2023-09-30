@@ -63,7 +63,7 @@
       <Label
         text={title}
         z={30.01}
-        fontStyle="SemiBold"
+        fontStyle="semi-bold"
         fontSize="l"
         color="#454649"
       />
