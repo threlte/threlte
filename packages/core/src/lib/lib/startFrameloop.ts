@@ -85,10 +85,10 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
 
       // From: https://gafferongames.com/post/fix_your_timestep/
       fixed.forEach((h) => {
-        h.lastUpdateTimestamp += delta
+        h.fixedStepTimeAccumulator += delta
 
-        while (h.lastUpdateTimestamp >= h.fixedStep) {
-          h.lastUpdateTimestamp -= h.fixedStep
+        while (h.fixedStepTimeAccumulator >= h.fixedStep) {
+          h.fixedStepTimeAccumulator -= h.fixedStep
           h.fn(ctx, h.fixedStep)
         }
       })

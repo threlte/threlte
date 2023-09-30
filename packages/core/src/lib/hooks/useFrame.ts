@@ -39,7 +39,7 @@ export type ThrelteFrameHandler = {
   order?: number
   stage: 'fixed' | 'before' | 'after'
   fixedStep: number
-  lastUpdateTimestamp: number
+  fixedStepTimeAccumulator: number
   debugFrameloopMessage?: string
   invalidate: boolean
 }
@@ -80,8 +80,8 @@ export const useFrame = (
   const handler: ThrelteFrameHandler = {
     fn,
     order: options?.order,
-    fixedStep: options?.fixedStep ?? 1/60,
-    lastUpdateTimestamp: 0,
+    fixedStep: options?.fixedStep ?? 1 / 60,
+    fixedStepTimeAccumulator: 0,
     debugFrameloopMessage: options?.debugFrameloopMessage,
     stage,
     invalidate
