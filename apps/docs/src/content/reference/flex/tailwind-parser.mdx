@@ -43,6 +43,19 @@ components. If you are familiar with Tailwind, you will feel right at home.
 </Flex>
 ```
 
+<Tip type="warning" title="Differences to Tailwind">
+
+The syntax is very similar to Tailwind, with a few differences:
+
+- If a value is a number, it is interpreted as a unit in Three.js. For example,
+  `gap-10` will set the gap to 10 Three.js units, `p-66%` will set the
+  padding to 66% of the parent's width. It is **not necessary** to wrap the
+  value in brackets.
+- As opposed to Tailwind, you are not limited to the default set of values. You
+  can use any value: `gap-17.5` will set the gap to 17.5 Three.js units.
+
+</Tip>
+
 ## Usage
 
 Add the `classParser` prop to your `<Flex>` or `<Box>` component and pass in the `tailwindParser` function.
