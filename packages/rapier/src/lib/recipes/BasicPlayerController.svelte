@@ -61,9 +61,6 @@
     const linVel = rigidBody.linvel()
     t.y = linVel.y
     rigidBody.setLinvel(t, true)
-  }, {
-    stage: 'fixed',
-    order: Infinity
   })
 
   const onKeyDown = (e: KeyboardEvent) => {
