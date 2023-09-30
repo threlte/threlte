@@ -1,7 +1,5 @@
 import { writable } from 'svelte/store'
 import {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   ColorManagement,
   LinearEncoding,
   PCFSoftShadowMap,
@@ -40,12 +38,13 @@ const rendererHasOutputColorSpaceProperty = (
  * update the renderer accordingly.
  *
  * It listens to the following context properties:
- * - `size`
- * - `toneMapping`
+ * - `colorManagementEnabled`
  * - `colorSpace`
  * - `dpr`
+ * - `size`
  * - `shadows`
- * - `colorManagementEnabled`
+ * - `toneMapping`
+ * - `useLegacyLights`
  */
 export const useRenderer = (ctx: ThrelteContext) => {
   const renderer = writable<WebGLRenderer | undefined>(undefined)
@@ -64,69 +63,65 @@ export const useRenderer = (ctx: ThrelteContext) => {
     renderer.set(ctx.renderer)
   }
 
-  watch(
-    [
-      renderer,
-      ctx.size,
-      ctx.toneMapping,
-      ctx.colorSpace,
-      ctx.dpr,
-      ctx.shadows,
-      ctx.colorManagementEnabled,
-      ctx.useLegacyLights
-    ],
-    ([
-      renderer,
-      size,
-      toneMapping,
-      colorSpace,
-      dpr,
-      shadows,
-      colorManagementEnabled,
-      useLegacyLights
-    ]) => {
-      if (!renderer) return
-      renderer.setSize(size.width, size.height)
-      renderer.setPixelRatio(dpr)
+  watch([ctx.colorManagementEnabled], ([colorManagementEnabled]) => {
+    if (revision >= 150) {
+      ColorManagement.enabled = colorManagementEnabled
+    } else {
+      (ColorManagement as any).legacyMode = !colorManagementEnabled
+    }
+  })
 
-      // check if the renderer has a colorSpace property, if so, use that
-      // otherwise, use the old encoding property
-      if (rendererHasOutputColorSpaceProperty(renderer)) {
-        renderer.outputColorSpace = colorSpace
+  watch([renderer, ctx.colorSpace], ([renderer, colorSpace]) => {
+    if (!renderer) return
+
+    // check if the renderer has a colorSpace property, if so, use that
+    // otherwise, use the old encoding property
+    if (rendererHasOutputColorSpaceProperty(renderer)) {
+      renderer.outputColorSpace = colorSpace
+    } else {
+      const encoding = colorSpaceToEncoding[colorSpace]
+      if (!encoding) {
+        console.warn('No encoding found for colorSpace', colorSpace)
       } else {
-        const encoding = colorSpaceToEncoding[colorSpace]
-        if (!encoding) {
-          console.warn('No encoding found for colorSpace', colorSpace)
-        } else {
-          renderer.outputEncoding = encoding
-        }
-      }
-
-      renderer.toneMapping = toneMapping
-      renderer.shadowMap.enabled = !!shadows
-      if (shadows && shadows !== true) {
-        renderer.shadowMap.type = shadows
-      } else if (shadows === true) {
-        renderer.shadowMap.type = PCFSoftShadowMap
-      }
-
-      const cm = ColorManagement as any
-      if (revision >= 150) {
-        // since three.js r150 the color management prop is
-        // called "enabled", but the types are not up to date :/
-        cm.enabled = colorManagementEnabled
-      } else {
-        cm.legacyMode = !colorManagementEnabled
-      }
-
-      const anyRenderer = renderer as any
-      if (revision >= 150 && useLegacyLights) {
-        anyRenderer.useLegacyLights = useLegacyLights
-      } else if (revision < 150) {
-        anyRenderer.physicallyCorrectLights = !useLegacyLights
+        (renderer as any).outputEncoding = encoding
       }
     }
-  )
+  })
+
+  watch([renderer, ctx.dpr], ([renderer, dpr]) => {
+    renderer?.setPixelRatio(dpr)
+  })
+
+  watch([renderer, ctx.size], ([renderer, size]) => {
+    renderer?.setSize(size.width, size.height)
+  })
+
+  watch([renderer, ctx.shadows], ([renderer, shadows]) => {
+    if (!renderer) return
+
+    renderer.shadowMap.enabled = !!shadows
+    if (shadows && shadows !== true) {
+      renderer.shadowMap.type = shadows
+    } else if (shadows === true) {
+      renderer.shadowMap.type = PCFSoftShadowMap
+    }
+  })
+
+  watch([renderer, ctx.toneMapping], ([renderer, toneMapping]) => {
+    if (!renderer) return
+
+    renderer.toneMapping = toneMapping
+  })
+
+  watch([renderer, ctx.useLegacyLights], ([renderer, useLegacyLights]) => {
+    if (!renderer) return
+
+    if (revision >= 150 && useLegacyLights) {
+      renderer.useLegacyLights = useLegacyLights
+    } else if (revision < 150) {
+      (renderer as any).physicallyCorrectLights = !useLegacyLights
+    }
+  })
 
   return {
     createRenderer
