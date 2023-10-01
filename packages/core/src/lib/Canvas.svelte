@@ -31,37 +31,61 @@
   import type { Size } from './types'
 
   /**
-   * @default window.devicePixelRatio
+   * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources — 
+   * each have an associated color space. Those not already in the Linear-sRGB working color
+   * space must be converted, and textures be given the correct texture.colorSpace assignment. 
+   * 
+   * Set to true for certain conversions (for hexadecimal and CSS colors in sRGB) to be made automatically.
+   * 
+   * This property is not reactive and must be enabled before initializing colors.
+   *
+   * @default true
    */
-  export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
-  /**
-   * @default ACESFilmicToneMapping
-   */
-  export let toneMapping: ToneMapping = ACESFilmicToneMapping
+  export let colorManagementEnabled: boolean = true
+
   /**
    * @default 'srgb'
    */
   export let colorSpace: ColorSpace = 'srgb'
-  /**
-   * @default 'demand'
-   */
-  export let frameloop: 'always' | 'demand' | 'never' = 'demand'
+
   /**
    * @default false
    */
   export let debugFrameloop: boolean = false
+
+  /**
+   * @default window.devicePixelRatio
+   */
+  export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
+
+  /**
+   * @default 'demand'
+   */
+  export let frameloop: 'always' | 'demand' | 'never' = 'demand'
+
+  /**
+   * Parameters sent to the WebGLRenderer when created.
+   *
+   * This property can only be set when creating a `<Canvas>` and is not reactive.
+   */
+  export let rendererParameters: WebGLRendererParameters | undefined = undefined
+
   /**
    * @default PCFSoftShadowMap
    */
   export let shadows: boolean | ShadowMapType = PCFSoftShadowMap
+
   export let size: Size | undefined = undefined
-  export let rendererParameters: WebGLRendererParameters | undefined = undefined
+
   /**
-   * @default true
+   * @default ACESFilmicToneMapping
    */
-  export let colorManagementEnabled: boolean = true
+   export let toneMapping: ToneMapping = ACESFilmicToneMapping
+
   /**
    * @default false if greater than or equal to r155, true if less than 155
+   *
+   * This property is not reactive and must be set at initialization.
    *
    * @see https://github.com/mrdoob/three.js/pull/26392
    */
@@ -79,17 +103,24 @@
 
   // creating and setting the contexts
   const contexts = createContexts({
-    colorSpace,
-    toneMapping,
-    dpr,
-    userSize,
-    parentSize,
-    debugFrameloop,
-    frameloop,
-    shadows,
     colorManagementEnabled,
-    useLegacyLights
+    colorSpace,
+    debugFrameloop,
+    dpr,
+    frameloop,
+    parentSize,
+    shadows,
+    toneMapping,
+    useLegacyLights,
+    userSize
   })
+
+  $: contexts.ctx.colorSpace.set(colorSpace)
+  $: contexts.internalCtx.debugFrameloop = debugFrameloop
+  $: contexts.ctx.dpr.set(dpr)
+  $: contexts.ctx.frameloop.set(frameloop)
+  $: contexts.ctx.shadows.set(shadows)
+  $: contexts.ctx.toneMapping.set(toneMapping)
 
   // create cache context for caching assets
   createCache()
