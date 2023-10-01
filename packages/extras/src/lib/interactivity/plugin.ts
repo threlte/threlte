@@ -1,6 +1,6 @@
 import { injectPlugin, watch } from '@threlte/core'
 import { writable } from 'svelte/store'
-import { Object3D } from 'three'
+import type { Object3D } from 'three'
 import { useInteractivity } from './hook'
 import type { ThrelteEvents } from './types'
 import { useComponentHasEventHandlers } from './useComponentHasEventHandlers'

@@ -3,8 +3,8 @@ import { getContext } from 'svelte'
 import type { Object3D } from 'three'
 import type { State } from './types'
 
-export const useInteractivity = () => {
-  const state = getContext<State>('threlte-interactivity-context')
+export const usePointerControls = () => {
+  const state = getContext<State>('threlte-pointer-controls-context')
 
   const eventDispatcher = createRawEventDispatcher()
 

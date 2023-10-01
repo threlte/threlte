@@ -1,0 +1,127 @@
+---
+{
+  category: '@threlte/xr',
+  name: 'pointerControls',
+  order: 3,
+  type: 'plugin',
+  componentSignature:
+    {
+      props:
+        [
+          {
+            name: 'handedness',
+            type: "'left' | 'right'",
+            required: false,
+            default: "'right'",
+            description: 'The controller handedness that the teleport controls is linked to.'
+          },
+          {
+            name: 'raycaster',
+            type: "THREE.Raycaster",
+            required: false,
+            default: 'new THREE.Raycaster()',
+            description: 'The raycaster used for teleportation.'
+          },
+          {
+            name: 'maxDistance',
+            type: "number",
+            required: false,
+            default: '20',
+            description: "The maximum radial teleporting distance from the user's current origin, in meters."
+          },
+        ],
+      events:
+        [
+          {
+            name: 'teleport',
+            payload: 'THREE.Vector3',
+            description: 'Fired after a teleportation occurs with the new location as the payload.'
+          },
+        ],
+    }
+}
+---
+
+The `pointerControls` plugin adds pointer events to an immersive XR session.
+
+To get started, import and call it in a component within your app.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  pointerControls()
+</script>
+```
+
+Any mesh within this component and all child components will now receive events if a controller or hand points at it.
+
+```svelte
+<T.Mesh
+  on:click={() => {
+    console.log('clicked')
+  }}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial color="red" />
+</T.Mesh>
+```
+
+### Available Events
+
+The following events are available:
+
+```svelte
+<T.Mesh
+  on:click={(e) => console.log('click')}
+  on:contextmenu={(e) => console.log('context menu')}
+  on:pointerup={(e) => console.log('up')}
+  on:pointerdown={(e) => console.log('down')}
+  on:pointerover={(e) => console.log('over')}
+  on:pointerout={(e) => console.log('out')}
+  on:pointerenter={(e) => console.log('enter')}
+  on:pointerleave={(e) => console.log('leave')}
+  on:pointermove={(e) => console.log('move')}
+/>
+```
+
+While a controller or hand is pointed at this mesh...
+
+* `click` fires when a user selects the primary action input. This usually means pulling a primary trigger with a controller or pinching with a hand.
+* `contextmenu` fires when a user selects and holds the primary action input for more than 2 seconds.
+* `pointerdown` fires when a primary action begins, and `pointerup` fires when it ends.
+* `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
+* `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.
+
+To replace the default ray and cursor that are created by the plugin, the following slots can be added to a `<Controller>` or a `<Hand>`:
+
+```svelte
+<script>
+  import { Hand, Controller } from '@threlte/xr'
+  import CustomRay from './CustomRay.svelte'
+  import CustomCursor from './CustomCursor.svelte'
+</script>
+
+<Controller left>
+  <CustomRay slot='pointer-ray'>
+  <CustomCursor slot='pointer-cursor'>
+</Controller>
+
+<Hand left>
+  <CustomRay slot='pointer-ray'>
+  <CustomCursor slot='pointer-cursor'>
+</Hand>
+```
+
+This plugin can be composed with the `teleportControls` plugin to allow both teleporting and interaction.
+
+```svelte
+<script>
+  import { pointerControls, teleportControls } from '@threlte/xr'
+  pointerControls()
+  teleportControls()
+</script>
+```
+
+This will result in `pointerControls` taking over when pointing at a mesh with events, and `teleportControls` taking over otherwise.
+
+<Example path="xr/pointer-controls" />

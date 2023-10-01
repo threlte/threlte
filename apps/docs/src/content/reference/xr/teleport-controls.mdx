@@ -1,9 +1,9 @@
 ---
 {
   category: '@threlte/xr',
-  name: '<TeleportControls>',
+  name: 'teleportControls',
   order: 3,
-  type: 'component',
+  type: 'plugin',
   componentSignature:
     {
       props:
@@ -42,23 +42,38 @@
 }
 ---
 
-`<TeleportControls />` creates teleportation controls similar to many native XR experiences.
+The `teleportControls` plugin creates teleportation controls similar to many native XR experiences.
 
 ```svelte
-  <TeleportControls
-    handedness={'left' | 'right'}
-    maxDistance={10}
-    on:teleport={(event) => {}} 
-  >
-    <T.Mesh teleportSurface>
-      <T.CylinderGeometry args={[20, 0.01]} />
-      <T.MeshStandardMaterial />
-    </T.Mesh>
-  </TeleportControls>
+<script>
+  import { teleportControls } from '@threlte/xr'
+  teleportControls()
+</script>
 ```
 
-This component will set up a raycasting-based teleport behavior once the user pressed a thumbstick forward on the designated controller.
+Any mesh within this component and all child components can now be treated as a navigation mesh to which the user can teleport to.
 
-`<TeleportControls />` can have an arbitrary number of children, but any child mesh with a `teleportSurface` attribute will be registered as a navigation mesh that can be teleported to.
+To register a mesh with `teleportControls`, add a `teleportSurface` property.
+
+```svelte
+<T.Mesh teleportSurface>
+  <T.CylinderGeometry args={[20, 0.01]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+A teleport will occur once a user presses the thumbstick forward on a controller while pointed at a `teleportSurface`.
+
+This plugin can be composed with the `teleportControls` plugin to allow both teleporting and interaction.
+
+```svelte
+<script>
+  import { pointerControls, teleportControls } from '@threlte/xr'
+  pointerControls()
+  teleportControls()
+</script>
+```
+
+This will result in `pointerControls` taking over when pointing at a mesh with events, and `teleportControls` taking over otherwise.
 
 <Example path="xr/teleport-controls" />
