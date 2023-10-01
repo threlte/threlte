@@ -137,7 +137,7 @@ It can also be composed with `interactivity` to allow pointer events within and 
 
 The will be a few subtle differences between the two environments:
 
-* Pointers / cursors will be `THREE.Vector3`s instead of `THREE.Vector2`s. In XR, the plane that you interact with can be anywhere within a 3d space.
+* Pointers / cursors will be `THREE.Vector3`s instead of `THREE.Vector2`s. In XR, the cursor that intersects with the object that you interact with can be anywhere within a 3d space.
 * The `nativeEvent` property on event objects will be a `XRControllerEvent` or `XRHandEvent` rather than a `DomEvent`.
 
 <Example path="xr/pointer-controls" />
