@@ -1,11 +1,11 @@
-import { memoize, watch, type createRawEventDispatcher } from '@threlte/core'
+import { memoize, watch, type createRawEventDispatcher, useFrame } from '@threlte/core'
 import type * as THREE from 'three'
-import type { Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
+import type { Intersection, IntersectionEvent, State, ThrelteXREvents } from './types'
 import { useXR } from '../../hooks'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
-    | ReturnType<typeof createRawEventDispatcher<ThrelteEvents>>
+    | ReturnType<typeof createRawEventDispatcher<ThrelteXREvents>>
     | undefined
 }
 
@@ -14,20 +14,22 @@ function getIntersectionId(event: Intersection) {
 }
 
 const POINTER_EVENTS = [
-  ['click', false],
-  ['contextmenu', false],
-  ['dblclick', false],
-  ['pointerdown', true],
-  ['pointerup', true],
-  ['pointerleave', true],
-  ['pointerenter', true],
-  ['pointermove', true],
-  ['pointercancel', true]
+  'click',
+  'contextmenu',
+  'pointerdown',
+  'pointerup',
+  'pointerleave',
+  'pointerenter',
+  'pointermove',
+  'pointercancel',
+  'pointermissed'
 ] as const
 
-type PointerEventName = typeof POINTER_EVENTS[number][0]
+type PointerEventName = typeof POINTER_EVENTS[number]
 
 export const setupPointerControls = (state: State) => {
+  const xrState = useXR()
+
   function calculateDistance(event: THREE.Event) {
     const dx = event.offsetX - state.initialClick[0]
     const dy = event.offsetY - state.initialClick[1]
@@ -35,20 +37,18 @@ export const setupPointerControls = (state: State) => {
   }
 
   function cancelPointer(intersections: Intersection[]) {
-    for (const hoveredObj of state.hovered.values()) {
+    for (const [, hoveredObj] of state.hovered) {
       // When no objects were hit or the the hovered object wasn't found underneath the cursor
       // we call pointerout and delete the object from the hovered elements map
       if (
-        !intersections.length ||
-        !intersections.find((hit) => {
-          return (
-            hit.object === hoveredObj.object &&
-            hit.index === hoveredObj.index &&
-            hit.instanceId === hoveredObj.instanceId
-          )
-        })
+        intersections.length === 0 ||
+        !intersections.some((hit) => (
+          hit.object === hoveredObj.object &&
+          hit.index === hoveredObj.index &&
+          hit.instanceId === hoveredObj.instanceId
+        ))
       ) {
-        const eventObject = hoveredObj.eventObject
+        const { eventObject } = hoveredObj
         state.hovered.delete(getIntersectionId(hoveredObj))
         const eventDispatcher = getRawEventDispatcher(eventObject)
         if (eventDispatcher) {
@@ -61,33 +61,20 @@ export const setupPointerControls = (state: State) => {
     }
   }
 
-  const enabled = memoize(state.enabled)
-
   const getHits = (): Intersection[] => {
-    const duplicates = new Set<string>()
-
     const intersections: Intersection[] = []
-
-    let hits = state.interactiveObjects
-      .flatMap((obj) => (enabled.current ? state.raycaster.intersectObject(obj, true) : []))
-      // Sort by distance
-      .sort((a, b) => a.distance - b.distance)
-      // Filter out duplicates
-      .filter((item) => {
-        const id = getIntersectionId(item as Intersection)
-        if (duplicates.has(id)) return false
-        duplicates.add(id)
-        return true
-      })
-
-    if (state.filter) hits = state.filter(hits, state)
+    const hits = state.raycaster.intersectObjects(state.interactiveObjects, true)
+    const filtered = state.filter === undefined ? hits : state.filter(hits, state)
 
     // Bubble up the events, find the event source (eventObject)
-    for (const hit of hits) {
+    for (const hit of filtered) {
       let eventObject: THREE.Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
-        if (getRawEventDispatcher(eventObject)) intersections.push({ ...hit, eventObject })
+        if (getRawEventDispatcher(eventObject)) {
+          intersections.push({ ...hit, eventObject })
+        }
+
         eventObject = eventObject.parent
       }
     }
@@ -95,15 +82,19 @@ export const setupPointerControls = (state: State) => {
     return intersections
   }
 
-  function pointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
-    for (let i = 0; i < objects.length; i++) {
-      const eventDispatcher = getRawEventDispatcher(objects[i])
+  function pointerMissed(event: IntersectionEvent, objects: THREE.Object3D[]) {
+    for (const object of objects) {
+      const eventDispatcher = getRawEventDispatcher(object)
       if (!eventDispatcher) continue
       eventDispatcher('pointermissed', event)
     }
   }
 
-  const getEventHandler = (name: PointerEventName): ((event: DomEvent) => void) => {
+  function processHits () {
+    const hits = getHits()
+  }
+
+  const getEventHandler = (name: PointerEventName): ((event: THREE.Event) => void) => {
     // Deal with cancelation
     if (name === 'pointerleave' || name === 'pointercancel') {
       return () => {
@@ -120,7 +111,7 @@ export const setupPointerControls = (state: State) => {
 
     return (event: THREE.Event) => {
       const isPointerMove = name === 'pointermove'
-      const isClickEvent = name === 'click' || name === 'contextmenu' || name === 'dblclick'
+      const isClickEvent = name === 'click' || name === 'contextmenu'
 
       /**
        * Will set up the raycaster. The default implementation will use the
@@ -128,12 +119,11 @@ export const setupPointerControls = (state: State) => {
        */
       state.compute(event, state)
 
-      const hits = getHits()
       const delta = isClickEvent ? calculateDistance(event) : 0
 
       // Save initial coordinates on pointer-down
       if (name === 'pointerdown') {
-        state.initialClick = [event.offsetX, event.offsetY]
+        state.initialClick = [event.offsetX, event.offsetY, 0]
         state.initialHits = hits.map((hit) => hit.eventObject)
       }
 
@@ -168,7 +158,6 @@ export const setupPointerControls = (state: State) => {
               cancelPointer([...higher, hit])
             }
           },
-          camera: state.raycaster.camera,
           delta,
           nativeEvent: event,
           pointer: state.pointer.current,
@@ -192,8 +181,8 @@ export const setupPointerControls = (state: State) => {
             if (!hoveredItem) {
               // If the object wasn't previously hovered, book it and call its handler
               state.hovered.set(id, intersectionEvent)
-              eventDispatcher('pointerover', intersectionEvent as IntersectionEvent<PointerEvent>)
-              eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent<PointerEvent>)
+              eventDispatcher('pointerover', intersectionEvent as IntersectionEvent)
+              eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent)
             } else if (hoveredItem.stopped) {
               // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
               intersectionEvent.stopPropagation()
@@ -201,7 +190,7 @@ export const setupPointerControls = (state: State) => {
           }
 
           // Call pointer move
-          eventDispatcher('pointermove', intersectionEvent as IntersectionEvent<PointerEvent>)
+          eventDispatcher('pointermove', intersectionEvent as IntersectionEvent)
         } else {
           // All other events
 
@@ -234,27 +223,13 @@ export const setupPointerControls = (state: State) => {
     }
   }
 
-  const disconnect = () => {
-    POINTER_EVENTS.forEach(([eventName]) => {
-      // target.removeEventListener(eventName, getEventHandler(eventName))
-    })
-  }
+  const { start, stop } = useFrame(processHits, { autostart: false })
 
-  const connect = () => {
-    POINTER_EVENTS.forEach(([eventName, passive]) => {
-      // target.addEventListener(eventName, getEventHandler(eventName), { passive })
-    })
-  }
-
-  const { isPresenting } = useXR()
-
-  watch(isPresenting, (isPresenting) => {
-    if (isPresenting) {
-      connect()
+  watch([xrState.isPresenting, state.enabled], ([isPresenting, enabled]) => {
+    if (isPresenting && enabled) {
+      start()
     } else {
-      disconnect()
+      stop()
     }
-
-    return () => disconnect()
   })
 }

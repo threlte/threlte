@@ -51,7 +51,7 @@ export type State = {
   hovered: Map<string, IntersectionEvent>
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
-  filter?: FilterFunction
+  filter?: FilterFunction | undefined
 }
 
 export type ThrelteXREvents = {
@@ -64,6 +64,7 @@ export type ThrelteXREvents = {
   pointerenter: IntersectionEvent
   pointerleave: IntersectionEvent
   pointermove: IntersectionEvent
+  pointermissed: IntersectionEvent
 }
 
 export type PointerControlsOptions = {

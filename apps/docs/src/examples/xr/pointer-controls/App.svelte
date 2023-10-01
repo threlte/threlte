@@ -1,7 +1,6 @@
 <script lang='ts'>
   import { T, Canvas } from '@threlte/core'
   import { XR, Controller, VRButton } from '@threlte/xr'
-  import { OrbitControls } from '@threlte/extras'
   import Scene from './Scene.svelte'
 </script>
 
@@ -12,13 +11,16 @@
     <Controller left />
     <Controller right />
 
-    <T.PerspectiveCamera slot='fallback' makeDefault position={[5, 5, 5]}>
-      <OrbitControls />
-    </T.PerspectiveCamera>
+    <T.PerspectiveCamera
+      slot='fallback'
+      makeDefault
+      position={[0, 1, 5]}
+      on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+    />
   </XR>
 
   <T.AmbientLight />
-  <T.DirectionalLight />
+  <T.DirectionalLight intensity={1.5} position={[1, 1, 1]} />
 </Canvas>
 
 <VRButton />

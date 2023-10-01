@@ -7,29 +7,29 @@ import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setupPointerControls'
 import type { PointerControlsOptions, State } from './types'
 
-export const pointerControls = (hand: 'left' | 'right', options?: PointerControlsOptions) => {
-  const state: State = {
-    hand: readable(hand),
-    enabled: currentWritable(options?.enabled ?? true),
-    pointer: currentWritable(new Vector3()),
-    pointerOverTarget: currentWritable(false),
-    lastEvent: undefined,
-    raycaster: new Raycaster(),
-    initialClick: [0, 0, 0],
-    initialHits: [],
-    hovered: new Map(),
-    interactiveObjects: [],
-    compute: () => { /* will be replaced by the default or the user-provided function */ }, 
-    filter: options?.filter
-  }
-
-  state.compute = options?.compute ?? getDefaultComputeFunction(state)
-
-  setContext<State>('threlte-pointer-controls-context', state)
-
+export const pointerControls = (options?: PointerControlsOptions) => {
   injectPointerControlsPlugin()
-  setupPointerControls(state)
 
-  return state
+  return (['left', 'right'] as const).map((hand) => {
+    const state: State = {
+      hand: readable(hand),
+      enabled: currentWritable(options?.enabled ?? true),
+      pointer: currentWritable(new Vector3()),
+      pointerOverTarget: currentWritable(false),
+      lastEvent: undefined,
+      raycaster: new Raycaster(),
+      initialClick: [0, 0, 0],
+      initialHits: [],
+      hovered: new Map(),
+      interactiveObjects: [],
+      compute: options?.compute ?? getDefaultComputeFunction(),
+      filter: options?.filter
+    }
+  
+    setContext<State>(`threlte-pointer-controls-context-${hand}`, state)
+
+    setupPointerControls(state)  
+
+    return state
+  }) as [left: State, right: State]
 }
-
