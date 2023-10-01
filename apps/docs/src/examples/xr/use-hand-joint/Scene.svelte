@@ -1,23 +1,35 @@
 <script lang='ts'>
   import { T } from '@threlte/core'
   import { Hand, XR, useXR } from '@threlte/xr'
-  import { Attractor } from '@threlte/rapier'
+  import { Text } from '@threlte/extras'
+  import { Attractor, Debug } from '@threlte/rapier'
   import JointCollider from './JointBody.svelte'
   import Cubes from './Cube.svelte'
 
   const { isHandTracking } = useXR()
+
+  let debug = false
 </script>
 
+{#if debug}
+  <Debug />
+{/if}
+
 <XR>
-  <Hand left />
-  <Hand right />
+  <Hand left on:pinchend={() => (debug = !debug)} />
+  <Hand right on:pinchend={() => (debug = !debug)} />
 
   {#if $isHandTracking}
     {#each { length: 25 } as _, jointIndex}
       <JointCollider {jointIndex} hand='left' />
       <JointCollider {jointIndex} hand='right' />
     {/each}
-  {/if}  
+  {/if}
+
+  <Text
+    position={[0, 1.7, -1]}
+    text='Pinch to toggle physics debug.'
+  />
 </XR>
 
 <Cubes />

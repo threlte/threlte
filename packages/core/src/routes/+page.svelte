@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, Canvas } from '$lib'
+  import { Canvas } from '$lib'
   import Scene from './scene.svelte'
 </script>
 
