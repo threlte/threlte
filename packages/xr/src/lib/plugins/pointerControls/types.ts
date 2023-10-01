@@ -43,6 +43,7 @@ export type ComputeFunction = (event: THREE.Event, state: State) => void
 
 export type State = {
   enabled: CurrentWritable<boolean>
+  pointer: CurrentWritable<THREE.Vector3>
   pointerOverTarget: CurrentWritable<boolean>
   lastEvent: THREE.Event | undefined
   raycaster: Raycaster

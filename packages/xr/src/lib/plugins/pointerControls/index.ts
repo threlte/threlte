@@ -1,40 +1,33 @@
-import { injectPlugin } from '@threlte/core'
+import { currentWritable } from '@threlte/core'
+import { setContext } from 'svelte'
+import { Raycaster, Vector3 } from 'three'
+import { getDefaultComputeFunction } from './defaults'
+import { injectPointerControlsPlugin } from './plugin'
+import { setupPointerControls } from './setupPointerControls'
+import type { PointerControlsOptions, State } from './types'
 
-export type PointerControlsOptions = {}
+export const pointerControls = (options?: PointerControlsOptions) => {
+  const state: State = {
+    enabled: currentWritable(options?.enabled ?? true),
+    pointer: currentWritable(new Vector3()),
+    pointerOverTarget: currentWritable(false),
+    lastEvent: undefined,
+    raycaster: new Raycaster(),
+    initialClick: [0, 0, 0],
+    initialHits: [],
+    hovered: new Map(),
+    interactiveObjects: [],
+    compute: () => { /* will be replaced by the default or the user-provided function */ }, 
+    filter: options?.filter
+  }
 
-const pluginProps = [
-  'on:click',
-  'on:'
-]
+  state.compute = options?.compute ?? getDefaultComputeFunction(state)
 
-export const pointerControls = (options: PointerControlsOptions = {}) => {
-  injectPlugin('pointer-controls', ({ ref, props }) => {
-    let currentRef: THREE.Mesh = ref
-    let currentProps = props
+  setContext<State>('threlte-pointer-controls-context', state)
 
-    if (!(currentRef as THREE.Mesh).isMesh) return
+  injectPointerControlsPlugin()
+  setupPointerControls(state)
 
-    console.log(currentRef)
-
-    if (!pluginProps.some((prop) => {
-      for (const key in currentProps) {
-        if (key === prop) return true
-      }
-      return false
-    })) return
-
-    console.log('match', ref)
-
-    return {
-      pluginProps,
-      onRefChange(ref) {
-        currentRef = ref
-        console.log('ref change')
-      },
-      onPropsChange(props) {
-        currentProps = props
-        console.log('props change')
-      },
-    }
-  })
+  return state
 }
+
