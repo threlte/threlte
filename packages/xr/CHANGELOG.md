@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.0.6
+
+### Patch Changes
+
+- fca15c2: Fix hands, hand joints, and useHitTest docs examples
+
 ## 0.0.5
 
 ### Patch Changes

@@ -2,21 +2,11 @@
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { BoxGeometry } from 'three'
-  const boxColors = [
-    '#3c42c4',
-    '#6e51c8',
-    '#a065cd',
-    '#ce79d2',
-    '#d68fb8',
-    '#dda2a3',
-    '#eac4ae',
-    '#f4dfbe'
-  ]
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[0, 10, 20]}
+  position={[15, 15, 15]}
   fov={36}
   target={[0, 0, 0]}
 >
@@ -27,14 +17,14 @@
 
 {#each { length: 10 } as _h, x}
   {#each { length: 10 } as _v, y}
-    {#if x % 2 == 0 && y % 2 == 0}
+    {#if x % 3 == 0 && y % 3 == 0}
       <T.Group position={[x - 4.5, 0.5, y - 4.5]}>
         <T.Mesh>
           <T.BoxGeometry />
           <T.MeshBasicMaterial
             args={[
               {
-                color: boxColors[Math.floor(Math.random() * boxColors.length)],
+                color: '#ffffff',
                 opacity: 0.9,
                 transparent: true
               }

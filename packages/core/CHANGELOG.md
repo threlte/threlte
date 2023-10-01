@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.0.9
+
+### Patch Changes
+
+- 17f938b: Make canvas properties reactive and document non-reactive properties
+
 ## 6.0.8
 
 ### Patch Changes
