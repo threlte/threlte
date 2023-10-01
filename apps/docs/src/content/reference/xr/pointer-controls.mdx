@@ -42,9 +42,9 @@
 }
 ---
 
-The `pointerControls` plugin adds pointer events to an immersive XR session.
+The `pointerControls` plugin adds pointer events to an immersive XR session. This means that pointing at any mesh with your hand or a controller will trigger DOM-like pointer events.
 
-To get started, import and call it in a component within your app.
+To get started, import and call the plugin in a component within your app.
 
 ```svelte
 <script>
@@ -53,7 +53,7 @@ To get started, import and call it in a component within your app.
 </script>
 ```
 
-Any mesh within this component and all child components will now receive events if a controller or hand points at it.
+Any mesh **within this component and all child components** will now receive events if a controller or hand points at it.
 
 ```svelte
 <T.Mesh
