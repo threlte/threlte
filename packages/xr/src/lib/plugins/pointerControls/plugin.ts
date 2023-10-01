@@ -2,12 +2,12 @@ import { injectPlugin, watch } from '@threlte/core'
 import { writable } from 'svelte/store'
 import type { Mesh } from 'three'
 import { usePointerControls } from './hook'
-import type { ThrelteEvents } from './types'
+import type { ThrelteXREvents } from './types'
 import { useComponentHasEventHandlers } from './useComponentEventHandlers'
 
 export type PointerControlsOptions = {}
 
-export const eventNames: (keyof ThrelteEvents)[] = [
+export const eventNames: (keyof ThrelteXREvents)[] = [
   'click',
   'contextmenu',
   'pointerup',
@@ -16,8 +16,7 @@ export const eventNames: (keyof ThrelteEvents)[] = [
   'pointerout',
   'pointerenter',
   'pointerleave',
-  'pointermove',
-  'pointermissed'
+  'pointermove'
 ]
 
 export const injectPointerControlsPlugin = (): void => {

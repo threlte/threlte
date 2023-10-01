@@ -1,5 +1,5 @@
 import type { CurrentWritable } from '@threlte/core'
-import type { Camera, Raycaster, Vector2 } from 'three'
+import type { Readable } from 'svelte/store'
 
 export interface Intersection extends THREE.Intersection {
   /** The event source (the object which registered the handler) */
@@ -12,17 +12,15 @@ export interface IntersectionEvent extends Intersection {
   /** An array of intersections */
   intersections: Intersection[]
   /** Normalized event coordinates */
-  pointer: THREE.Vector2
+  pointer: THREE.Vector3
   /** Delta between first click and this event */
   delta: number
   /** The ray that pierced it */
   ray: THREE.Ray
-  /** The camera that was used by the raycaster */
-  camera: Camera
-  /** The original host event */
-  nativeEvent: THREE.Event
   /** stopPropagation will stop underlying handlers from firing */
   stopPropagation: () => void
+  /** The original host event */
+  nativeEvent: THREE.Event
   /** If the event was stopped by calling stopPropagation */
   stopped: boolean
 }
@@ -42,11 +40,12 @@ export type FilterFunction = (items: THREE.Intersection[], state: State) => THRE
 export type ComputeFunction = (event: THREE.Event, state: State) => void
 
 export type State = {
+  hand: Readable<'left' | 'right'>
   enabled: CurrentWritable<boolean>
   pointer: CurrentWritable<THREE.Vector3>
   pointerOverTarget: CurrentWritable<boolean>
   lastEvent: THREE.Event | undefined
-  raycaster: Raycaster
+  raycaster: THREE.Raycaster
   initialClick: [x: number, y: number, z: number]
   initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent>
@@ -55,7 +54,7 @@ export type State = {
   filter?: FilterFunction
 }
 
-export type ThrelteEvents = {
+export type ThrelteXREvents = {
   click: IntersectionEvent
   contextmenu: IntersectionEvent
   pointerup: IntersectionEvent
@@ -65,7 +64,6 @@ export type ThrelteEvents = {
   pointerenter: IntersectionEvent
   pointerleave: IntersectionEvent
   pointermove: IntersectionEvent
-  pointermissed: MouseEvent
 }
 
 export type PointerControlsOptions = {

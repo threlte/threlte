@@ -1,13 +1,15 @@
 import { currentWritable } from '@threlte/core'
 import { setContext } from 'svelte'
+import { readable } from 'svelte/store'
 import { Raycaster, Vector3 } from 'three'
 import { getDefaultComputeFunction } from './defaults'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setupPointerControls'
 import type { PointerControlsOptions, State } from './types'
 
-export const pointerControls = (options?: PointerControlsOptions) => {
+export const pointerControls = (hand: 'left' | 'right', options?: PointerControlsOptions) => {
   const state: State = {
+    hand: readable(hand),
     enabled: currentWritable(options?.enabled ?? true),
     pointer: currentWritable(new Vector3()),
     pointerOverTarget: currentWritable(false),
