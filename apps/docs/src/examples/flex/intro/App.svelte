@@ -38,7 +38,7 @@
   <Canvas toneMapping={NoToneMapping}>
     <Grid
       position.z={-10.1}
-      axes="xyz"
+      plane="xy"
       gridSize={800}
       cellColor="#0A0F19"
       sectionColor="#481D1A"
