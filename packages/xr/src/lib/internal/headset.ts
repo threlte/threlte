@@ -27,7 +27,7 @@ export const useUpdateHeadset = () => {
   const nonImmersiveFrame = useFrame(() => {
     headset.position.copy(camera.current.position)
     headset.quaternion.copy(camera.current.quaternion)
-  }, { autostart: false })
+  }, { autostart: false, invalidate: false })
 
   watch(xrState.isPresenting, (isPresenting) => {
     if (isPresenting) {
