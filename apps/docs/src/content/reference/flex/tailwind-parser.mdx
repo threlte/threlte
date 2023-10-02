@@ -43,19 +43,6 @@ components. If you are familiar with Tailwind, you will feel right at home.
 </Flex>
 ```
 
-<Tip type="warning" title="Differences to Tailwind">
-
-The syntax is very similar to Tailwind, with a few differences:
-
-- If a value is a number, it is interpreted as a unit in Three.js. For example,
-  `gap-10` will set the gap to 10 Three.js units, `p-66%` will set the
-  padding to 66% of the parent's width. It is **not necessary** to wrap the
-  value in brackets.
-- As opposed to Tailwind, you are not limited to the default set of values. You
-  can use any value: `gap-17.5` will set the gap to 17.5 Three.js units.
-
-</Tip>
-
 ## Usage
 
 Add the `classParser` prop to your `<Flex>` or `<Box>` component and pass in the `tailwindParser` function.
@@ -80,6 +67,17 @@ Add the `classParser` prop to your `<Flex>` or `<Box>` component and pass in the
   </Box>
 </Flex>
 ```
+
+## Differences to Tailwind
+
+The syntax is very similar to Tailwind, with a few differences:
+
+- If a value is a number, it is interpreted as a unit in Three.js. For example,
+  `gap-10` will set the gap to 10 Three.js units.
+- As opposed to Tailwind, you are not limited to the default set of values. You
+  can use any value: `gap-17.5` will set the gap to 17.5 Three.js units. `p-56%`
+  will set the padding to 56% of the parent's width. **Do not wrap the value in
+  brackets** as you would do with custom values in Tailwind CSS.
 
 ## Supported Props
 
@@ -312,13 +310,13 @@ The following props are supported by the Tailwind parser:
 
 ### Aspect Ratio
 
-`value` can be `square`, `portrait`, `landscape` or an arbitrary ratio (e.g. `16/9`).
+`value` can be `square`, `portrait`, `landscape` or an arbitrary ratio (e.g. `32/9`).
 
-| Class              | CSS Properties          |
-| ------------------ | ----------------------- |
+| Class              | CSS Properties          | Examples                    |
+| ------------------ | ----------------------- | --------------------------- |
 | `aspect-square `   | `aspect-ratio: 1 / 1`   |
 | `aspect-portrait`  | `aspect-ratio: 9 / 16`  |
 | `aspect-landscape` | `aspect-ratio: 16 / 9`  |
-| `aspect-{value}`   | `aspect-ratio: {value}` |
+| `aspect-{value}`   | `aspect-ratio: {value}` | `aspect-32/9`, `aspect-2/1` |
 
 </Card>

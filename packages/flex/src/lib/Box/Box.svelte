@@ -6,6 +6,7 @@
   import { useFlex } from '../Flex/context'
   import { createNodeContext } from '../nodes/context'
   import type { BoxProps, BoxSlots, BoxEvents } from './Box.svelte'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
 
   type $$Props = BoxProps
   type $$Events = BoxEvents
@@ -14,6 +15,11 @@
   export let order: $$Props['order'] = undefined
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
+
+  /**
+   * Create the context for `useDimensions`
+   */
+  const dimensionsContext = createUseDimensionsContext()
 
   const {
     scaleFactor,
@@ -66,6 +72,9 @@
     getContentGroup().position[$mainAxis] = computedWidth / 2
     getContentGroup().position[$crossAxis] = -computedHeight / 2
     getContentGroup().position[$depthAxis] = 0
+
+    dimensionsContext.width.set(computedWidth)
+    dimensionsContext.height.set(computedHeight)
   })
 </script>
 

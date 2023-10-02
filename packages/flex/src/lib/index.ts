@@ -6,3 +6,7 @@ export type { NodeProps } from './lib/props'
 // parsers
 export { createClassParser } from './parsers/createClassParser'
 export { tailwindParser } from './parsers/tailwindParser'
+
+// hooks
+export { useReflow } from './hooks/useReflow'
+export { useDimensions } from './hooks/useDimensions'
