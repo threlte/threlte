@@ -93,7 +93,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
   })
 
   watch([renderer, ctx.size], ([renderer, size]) => {
-    if (renderer?.xr.isPresenting) return
+    if (renderer?.xr?.isPresenting) return
     renderer?.setSize(size.width, size.height)
   })
 
