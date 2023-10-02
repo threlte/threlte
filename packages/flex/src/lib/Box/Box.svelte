@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HierarchicalObject, T } from '@threlte/core'
+  import { HierarchicalObject, T, createRawEventDispatcher } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group } from 'three'
   import type { NodeProps } from '../lib/props'
@@ -16,6 +16,8 @@
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
 
+  const dispatch = createRawEventDispatcher<$$Events>()
+
   /**
    * Create the context for `useDimensions`
    */
@@ -30,7 +32,8 @@
     mainAxis,
     crossAxis,
     depthAxis,
-    classParser
+    classParser,
+    reflow
   } = useFlex()
 
   export const group = new Group()
@@ -75,6 +78,11 @@
 
     dimensionsContext.width.set(computedWidth)
     dimensionsContext.height.set(computedHeight)
+
+    dispatch('reflow', {
+      width: computedWidth,
+      height: computedHeight
+    })
   })
 </script>
 
@@ -99,6 +107,7 @@
   }}
 >
   <slot
+    {reflow}
     width={computedWidth}
     height={computedHeight}
   />

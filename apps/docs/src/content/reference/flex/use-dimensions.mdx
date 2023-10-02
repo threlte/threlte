@@ -13,8 +13,8 @@ stores.
 
 <Tip type="tip">
 	The computed width and height is also available as slot props
-	on the components [`<Flex>`](/docs/reference/flex/flex) and
-	[`<Box>`](/docs/reference/flex/box).
+	on the components [`<Flex>`](/docs/reference/flex/flex#content-dimensions) and
+	[`<Box>`](/docs/reference/flex/box#content-sizing).
 </Tip>
 
 ## In a `<Flex>` component
@@ -27,15 +27,35 @@ can be retrieved using `useDimensions` in a direct child component to
 
 ## In a `<Box>` component
 
-By default `@threlte/flex` controls elements position only. In some cases you
-may want to control element sizing too. Since `@threlte/flex` has no
-information about how the inner content size works, you need to set your
-content size manually. You can do this by using `useDimensions` hook in a
-direct child component to `<Box>`.
+The `<Box>` component controls element positions only. However, if you wish to
+handle element dimensions based on the layout calculated by Yoga, you'll need to
+manually adapt the content's size. This is because `@threlte/flex` lacks
+knowledge about the inner content's sizing mechanisms. You can do this by using
+`useDimensions` hook in a direct child component to `<Box>`.
 
-@example
+```svelte title="Parent.svelte"
+<script>
+  import { Flex, Box } from '@threlte/flex'
+  import Model from './Model.svelte'
+</script>
 
-```svelte
+<Flex
+  width={100}
+  height={100}
+  justifyContent="Center"
+  alignItems="Stretch"
+>
+  <Box
+    width="auto"
+    height="auto"
+    flex={1}
+  >
+    <Model />
+  </Box>
+</Flex>
+```
+
+```svelte title="Model.svelte"
 <script>
   import { useDimensions } from '@threlte/flex'
 

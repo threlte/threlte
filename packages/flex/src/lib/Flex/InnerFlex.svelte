@@ -174,7 +174,7 @@
   $: flexContext.scaleFactor.set(scaleFactor), flexContext.reflow()
 
   onDestroy(() => {
-    rootNode.freeRecursive()
+    rootNode.free()
   })
 </script>
 

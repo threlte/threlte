@@ -75,4 +75,92 @@
 }
 ---
 
-The component `<Box>` creates a flexbox item. It can be used as a direct child of `<Flex>` or as a child of another `<Box>`.
+The component `<Box>` creates a flexbox item. It can be used as a direct child
+of [`<Flex>`](/docs/reference/flex/flex) or as a child of another `<Box>` to
+create a nested flex layout.
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Flex, Box } from '@threlte/flex'
+  import Model from './Model.svelte'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+  justifyContent="Center"
+>
+  <Box
+    flex={1}
+    width="auto"
+    let:width
+  >
+    <Model {width} />
+  </Box>
+</Flex>
+```
+
+### Content Sizing
+
+The `<Box>` component controls element positions only. However, if you wish to
+handle element dimensions based on the layout calculated by Yoga, you'll need to
+manually adapt the content's size. This is because `@threlte/flex` lacks
+knowledge about the inner content's sizing mechanisms. For this purpose,
+`@threlte/flex` offers the _computed dimensions_ in three ways:
+
+- Using the `width` and `height` slot props
+
+```svelte
+<Box
+  let:width
+  let:height
+>
+  <T.Mesh
+    scale.x={width}
+    scale.y={height}
+  />
+</Box>
+```
+
+- Using the [`useDimensions`](/docs/reference/flex/use-dimensions) hook in a child component to `<Box>`:
+
+```svelte title="Child.svelte"
+<script lang="ts">
+  import { useDimensions } from '@threlte/flex'
+  const { width, height } = useDimensions()
+</script>
+
+<T.Mesh
+  scale.x={$width}
+  scale.y={$height}
+/>
+```
+
+- Using the `reflow` event
+
+```svelte
+<Box
+  on:reflow={({ width, height }) => {
+    console.log(width, height)
+  }}
+>
+  <!-- … -->
+</Box>
+```
+
+### Layout Reflow
+
+To trigger a [layout reflow](/docs/reference/flex/flex#layout-reflow), you can use the `reflow` slot prop:
+
+```svelte
+<script lang="ts">
+  import { Box } from '@threlte/flex'
+  import { Text } from '@threlte/extras'
+</script>
+
+<Box let:reflow>
+  <Text text="Hello World" on:sync={reflow}>
+</Box>
+```
