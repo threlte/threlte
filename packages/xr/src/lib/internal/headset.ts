@@ -22,7 +22,7 @@ export const useUpdateHeadset = () => {
 
     headset.position.set(position.x, position.y, position.z)
     headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
-  }, { autostart: false })
+  }, { autostart: false, invalidate: false })
 
   const nonImmersiveFrame = useFrame(() => {
     headset.position.copy(camera.current.position)
