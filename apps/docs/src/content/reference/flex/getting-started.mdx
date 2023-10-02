@@ -191,7 +191,10 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
   import Plane from './Plane.svelte'
 </script>
 
-<Align let:align>
+<Align
+  y={1}
+  let:align
+>
   <Flex
     width={100}
     height={100}
