@@ -7,14 +7,44 @@ type: 'hook'
 
 Provides a [hit test result](https://developer.mozilla.org/en-US/docs/Web/API/XRHitTestResult) on each frame during an `immersive-ar` session.
 
+Hit testing lets you position virtual items in a real-world view.
+
 ```svelte
 <script>
-  useHitTest((hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => {
+  import { useHitTest } from '@threlte/xr'
 
+  let ref
+
+  useHitTest((hitMatrix, hit) => {
+    if (hit) {
+      ref.visible = true
+      ref.matrix.copy(hitMatrix)
+    } else {
+      ref.visible = false
+    }
   })
 </script>
+
+<T.Mesh bind:ref>
+  <T.SphereGeometry args={[0.1]}>
+  <T.MeshBasicMaterial />
+</T.Mesh>
 ```
 
-Hit testing can be useful for placing virtual objects relative to real world objects.
+This hook can specify three origins from which to cast the hit test ray: `viewer` (the default), `leftInput` and `rightInput`.
+
+```ts
+useHitTest((hitMatrix, hit) => {
+  // Perform a hit test from the left controller or hand.
+}, { source: 'leftInput' })
+```
+
+In the following example, hit testing is set up from both controllers and hands.
 
 <Example path="xr/use-hit-test" />
+
+### Signature
+
+```ts
+useHitTest((hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {})
+```

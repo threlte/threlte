@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import { useThrelte, useFrame, watch, currentWritable } from '@threlte/core'
-import type { HitTestCallback } from '../types'
 import { useXR } from './useXR'
 import { useController } from './useController'
+
+export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => void
 
 export type UseHitTestOptions = {
   /**
@@ -18,9 +19,9 @@ export type UseHitTestOptions = {
  * 
  * ```ts
  * useHitTest((hitMatrix, hit) => {
- * 
+ *   mesh.matrix.copy(hitMatrix)
  * }, {
- *  source: 'viewer' | 'leftInput' | 'rightInput'
+ *   source: 'viewer' | 'leftInput' | 'rightInput' // Default 'viewer'
  * })
  * ```
  */
@@ -59,17 +60,16 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
     () => {
       const referenceSpace = xr.getReferenceSpace()
 
-      if (referenceSpace === null) return
-
-      if (hitTestSource.current === undefined) return
+      if (referenceSpace === null || hitTestSource.current === undefined) {
+        return hitTestCallback(hitMatrix, undefined)
+      }
 
       const [hit] = xr.getFrame().getHitTestResults(hitTestSource.current)
+      const pose = hit?.getPose(referenceSpace)
 
-      if (hit === undefined) return
-
-      const pose = hit.getPose(referenceSpace)
-
-      if (pose === undefined) return
+      if (pose === undefined) {
+        return hitTestCallback(hitMatrix, undefined)
+      }
 
       hitMatrix.fromArray(pose.transform.matrix)
       hitTestCallback(hitMatrix, hit)
@@ -80,6 +80,8 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
   watch(hitTestSource, (testSource) => {
     if (testSource === undefined) {
       stop()
+      // Execute callback one last time to inform consumers of no hits.
+      hitTestCallback(hitMatrix, undefined)
     } else {
       start()
     }

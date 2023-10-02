@@ -6,17 +6,17 @@
   const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0);
   
   let meshes: THREE.Mesh[] = []
-  let reticles = { left: undefined! as THREE.Mesh, right: undefined! as THREE.Mesh }
+  let cursors = { left: undefined! as THREE.Mesh, right: undefined! as THREE.Mesh }
 
   const hands = ['left', 'right'] as const
   type Hands = (typeof hands)[number]
   
   const handleSelect = (hand: Hands) => () => {
-    if (!reticles[hand].visible) return
+    if (!cursors[hand].visible) return
 
     const material = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() })
     const mesh = new THREE.Mesh(geometry, material)
-    reticles[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
+    cursors[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
     mesh.scale.y = Math.random() * 2 + 1
     meshes.push(mesh)
     meshes = meshes
@@ -24,10 +24,10 @@
 
   const handleHitTest = (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => {
     if (hit) {
-      reticles[hand].visible = true
-      reticles[hand].matrix.copy(hitMatrix)
+      cursors[hand].visible = true
+      cursors[hand].matrix.copy(hitMatrix)
     } else {
-      reticles[hand].visible = false
+      cursors[hand].visible = false
     }
   }
 
@@ -41,7 +41,7 @@
     <Hand {hand} on:pinchend={handleSelect(hand)} />
 
     <T.Mesh
-      bind:ref={reticles[hand]}
+      bind:ref={cursors[hand]}
       matrixAutoUpdate={false}
       visible={false}
     >

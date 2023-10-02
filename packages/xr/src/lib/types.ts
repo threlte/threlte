@@ -55,5 +55,3 @@ export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'di
       target: null;
     }
   : never;
-
-export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => void
