@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.0.7
+
+### Patch Changes
+
+- 1a872d57: Add useHeadset hook
+
 ## 0.0.6
 
 ### Patch Changes
