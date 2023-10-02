@@ -1,11 +1,12 @@
 import { Group } from 'three'
-import { useThrelte, useFrame } from '@threlte/core'
-import { isPresenting } from '../internal/stores'
+import { useThrelte, useFrame, watch } from '@threlte/core'
+import { useXR } from '../hooks'
 
 export const headset = new Group()
 
 export const useUpdateHeadset = () => {
   const { renderer, camera } = useThrelte()
+  const xrState = useXR()
   const { xr } = renderer
 
   const immersiveFrame = useFrame(() => {
@@ -28,8 +29,8 @@ export const useUpdateHeadset = () => {
     headset.quaternion.copy(camera.current.quaternion)
   }, { autostart: false })
 
-  isPresenting.subscribe((value) => {
-    if (value) {
+  watch(xrState.isPresenting, (isPresenting) => {
+    if (isPresenting) {
       immersiveFrame.start()
       nonImmersiveFrame.stop()
     } else {
