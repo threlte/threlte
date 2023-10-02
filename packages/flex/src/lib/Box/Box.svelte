@@ -2,11 +2,11 @@
   import { HierarchicalObject, T, createRawEventDispatcher } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group } from 'three'
-  import type { NodeProps } from '../lib/props'
   import { useFlex } from '../Flex/context'
-  import { createNodeContext } from '../nodes/context'
-  import type { BoxProps, BoxSlots, BoxEvents } from './Box.svelte'
   import { createUseDimensionsContext } from '../hooks/useDimensions'
+  import type { NodeProps } from '../lib/props'
+  import { createNodeContext } from '../nodes/context'
+  import type { BoxEvents, BoxProps, BoxSlots } from './Box.svelte'
 
   type $$Props = BoxProps
   type $$Events = BoxEvents
@@ -36,12 +36,19 @@
     reflow
   } = useFlex()
 
-  export const group = new Group()
-  export const contentGroup = new Group()
-
+  const group = new Group()
   group.userData.isNode = true
+  const contentGroup = new Group()
 
-  export const { node } = createNodeContext(order)
+  const { yoga } = useFlex()
+
+  const node = yoga.Node.create()
+
+  const parentNodeContext = createNodeContext(node)
+  parentNodeContext?.insertNode(node, order)
+  onDestroy(() => {
+    parentNodeContext?.removeNode(node)
+  })
 
   addNode(node, group, $$restProps as NodeProps)
   updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)

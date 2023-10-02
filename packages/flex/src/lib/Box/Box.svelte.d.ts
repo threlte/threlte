@@ -2,7 +2,7 @@ import { SvelteComponent } from 'svelte'
 import type { NodeProps } from '../lib/props'
 
 type BoxProps = NodeProps & {
-  order?: number
+  order?: number | undefined
   class?: string
 }
 

@@ -7,25 +7,59 @@
 
   let innerWidth = 0
   const { action, addInput } = useTweakpane({
-    title: 'Align',
+    title: 'Flex',
     expanded: true
   })
 
   const width = addInput({
     label: 'Window Width',
-    value: 600,
+    value: 800,
     params: {
-      min: 300,
-      max: 600
+      min: 450,
+      max: 800
     }
   })
 
   const height = addInput({
     label: 'Window Height',
-    value: 600,
+    value: 800,
     params: {
-      min: 300,
-      max: 600
+      min: 450,
+      max: 800
+    }
+  })
+
+  const rows = addInput({
+    label: 'Rows',
+    value: 5,
+    params: {
+      step: 1,
+      min: 3,
+      max: 8
+    }
+  })
+
+  const columns = addInput({
+    label: 'Columns',
+    value: 5,
+    params: {
+      step: 1,
+      min: 3,
+      max: 8
+    }
+  })
+
+  const size = addInput({
+    label: 'MatCap Size',
+    value: 128,
+    params: {
+      options: {
+        '64px': 64,
+        '128px': 128,
+        '256px': 256,
+        '512px': 512,
+        '1024px': 1024
+      }
     }
   })
 </script>
@@ -60,6 +94,9 @@
     <Scene
       windowWidth={$width}
       windowHeight={$height}
+      rows={$rows}
+      columns={$columns}
+      size={$size}
     />
   </Canvas>
 </div>
