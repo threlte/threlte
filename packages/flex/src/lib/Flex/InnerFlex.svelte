@@ -3,14 +3,15 @@
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
   import { Direction } from 'yoga-layout'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
   import { getDepthAxis } from '../lib/getDepthAxis'
   import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
   import { getRootShift } from '../lib/getRootShift'
   import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
+  import { propsChanged } from '../lib/propsChanged'
   import { createNodeContext } from '../nodes/context'
   import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
-  import { createUseDimensionsContext } from '../hooks/useDimensions'
 
   type $$Props = InnerFlexProps
   type $$Events = InnerFlexEvents
@@ -30,6 +31,9 @@
 
   const rootGroup = new Group()
   rootGroup.userData.isNode = true
+
+  const rootNode = yoga.Node.create()
+  createNodeContext(rootNode)
 
   const boundingBox = new Box3()
   const vec3 = new Vector3()
@@ -119,28 +123,13 @@
     },
     updateNodeProps(node, props, force = false) {
       const nodeData = flexContext.nodes.get(node)
-      if (!nodeData) return
 
       // Updating the props can be forced and is done so on the initial call.
-      if (!force) {
-        // Because all NodeProps are primitive types, we can make a simple
-        // comparison and only request a reflow when necessary. We do that by
-        // checking the length of the props object and then checking if all keys
-        // are the same and all values are the same.
-        const previousKeys = Object.keys(nodeData.props) as (keyof NodeProps)[]
-        const currentKeys = Object.keys(props) as (keyof NodeProps)[]
-        if (
-          previousKeys.length === currentKeys.length &&
-          currentKeys.every((key) => previousKeys.includes(key)) &&
-          previousKeys.every((key) => nodeData.props[key] === props[key])
-        ) {
-          return
-        }
+      if (force || propsChanged(node, props)) {
+        applyNodeProps(node, props, scaleFactor)
+        reflow()
+        if (nodeData) nodeData.props = props
       }
-
-      applyNodeProps(node, props, scaleFactor)
-      nodeData.props = props
-      reflow()
     },
     removeNode(node) {
       flexContext.nodes.delete(node)
@@ -159,12 +148,11 @@
 
   const { mainAxis, crossAxis, depthAxis } = flexContext
 
-  const { node: rootNode } = createNodeContext()
   $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
-  $: {
-    applyNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps }, scaleFactor)
-    reflow()
-  }
+  // prettier-ignore
+  flexContext.updateNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
+  // prettier-ignore
+  $: flexContext.updateNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps)
 
   $: flexContext.rootWidth.set(width), flexContext.reflow()
   $: flexContext.rootHeight.set(height), flexContext.reflow()
