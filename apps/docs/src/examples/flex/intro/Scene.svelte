@@ -3,6 +3,9 @@
   import Matcap from './Matcap.svelte'
   import Window from './Window.svelte'
   import { matcaps } from './matcaps'
+  import { interactivity } from '@threlte/extras'
+  import { useRender } from '@threlte/core'
+  import { tick } from 'svelte'
 
   export let windowWidth: number
   export let windowHeight: number
@@ -14,6 +17,13 @@
   for (let i = 0; i < matcaps.length; i += matcapsPerRow) {
     rows.push(matcaps.slice(i, i + matcapsPerRow))
   }
+
+  interactivity()
+
+  useRender(async ({ camera, scene, renderer }) => {
+    await tick()
+    renderer.render(scene, camera.current)
+  })
 </script>
 
 <Window
@@ -32,7 +42,8 @@
           >
             <Matcap
               z={10}
-              radius={Math.min(width, height) / 2}
+              {width}
+              {height}
               matcapUrl={item}
             />
           </Box>
