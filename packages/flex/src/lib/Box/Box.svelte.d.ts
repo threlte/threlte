@@ -6,10 +6,16 @@ type BoxProps = NodeProps & {
   class?: string
 }
 
-type BoxEvents = {}
+type BoxEvents = {
+  reflow: {
+    width: number
+    height: number
+  }
+}
 
 type BoxSlots = {
   default: {
+    reflow: () => void
     width: number
     height: number
   }

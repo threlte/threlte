@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { HierarchicalObject, T } from '@threlte/core'
+  import { HierarchicalObject, T, createRawEventDispatcher } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group } from 'three'
   import type { NodeProps } from '../lib/props'
   import { useFlex } from '../Flex/context'
   import { createNodeContext } from '../nodes/context'
   import type { BoxProps, BoxSlots, BoxEvents } from './Box.svelte'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
 
   type $$Props = BoxProps
   type $$Events = BoxEvents
@@ -14,6 +15,13 @@
   export let order: $$Props['order'] = undefined
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
+
+  const dispatch = createRawEventDispatcher<$$Events>()
+
+  /**
+   * Create the context for `useDimensions`
+   */
+  const dimensionsContext = createUseDimensionsContext()
 
   const {
     scaleFactor,
@@ -24,7 +32,8 @@
     mainAxis,
     crossAxis,
     depthAxis,
-    classParser
+    classParser,
+    reflow
   } = useFlex()
 
   export const group = new Group()
@@ -66,6 +75,14 @@
     getContentGroup().position[$mainAxis] = computedWidth / 2
     getContentGroup().position[$crossAxis] = -computedHeight / 2
     getContentGroup().position[$depthAxis] = 0
+
+    dimensionsContext.width.set(computedWidth)
+    dimensionsContext.height.set(computedHeight)
+
+    dispatch('reflow', {
+      width: computedWidth,
+      height: computedHeight
+    })
   })
 </script>
 
@@ -90,6 +107,7 @@
   }}
 >
   <slot
+    {reflow}
     width={computedWidth}
     height={computedHeight}
   />

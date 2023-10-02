@@ -24,6 +24,8 @@ type InnerFlexEvents = {
 type InnerFlexSlots = {
   default: {
     reflow: () => void
+    width: number
+    height: number
   }
 }
 

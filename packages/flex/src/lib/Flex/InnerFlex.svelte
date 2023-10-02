@@ -10,6 +10,7 @@
   import { createNodeContext } from '../nodes/context'
   import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
 
   type $$Props = InnerFlexProps
   type $$Events = InnerFlexEvents
@@ -32,6 +33,11 @@
 
   const boundingBox = new Box3()
   const vec3 = new Vector3()
+
+  /**
+   * Create the context for `useDimensions`
+   */
+  const { width: computedWidth, height: computedHeight } = createUseDimensionsContext()
 
   /**
    * Reflowing inside useFrame automatically batches reflows to 1 per frame.
@@ -91,9 +97,12 @@
 
       flexContext.emit('reflow:after')
 
+      computedWidth.set((maxX - minX) / scaleFactor)
+      computedHeight.set((maxY - minY) / scaleFactor)
+
       dispatch('reflow', {
-        width: (maxX - minX) / scaleFactor,
-        height: (maxY - minY) / scaleFactor
+        width: computedWidth.current,
+        height: computedHeight.current
       })
 
       stop()
@@ -152,15 +161,17 @@
 
   const { node: rootNode } = createNodeContext()
   $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
-  $: applyNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps }, scaleFactor),
+  $: {
+    applyNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps }, scaleFactor)
     reflow()
+  }
 
-  $: flexContext.rootWidth.set(width), flexContext.reflow('Updated root width')
-  $: flexContext.rootHeight.set(height), flexContext.reflow('Updated root height')
-  $: flexContext.mainAxis.set(plane[0] as Axis), flexContext.reflow('Updated main axis')
-  $: flexContext.crossAxis.set(plane[1] as Axis), flexContext.reflow('Updated cross axis')
-  $: flexContext.depthAxis.set(getDepthAxis(plane)), flexContext.reflow('Updated depth axis')
-  $: flexContext.scaleFactor.set(scaleFactor), flexContext.reflow('Updated scale factor')
+  $: flexContext.rootWidth.set(width), flexContext.reflow()
+  $: flexContext.rootHeight.set(height), flexContext.reflow()
+  $: flexContext.mainAxis.set(plane[0] as Axis), flexContext.reflow()
+  $: flexContext.crossAxis.set(plane[1] as Axis), flexContext.reflow()
+  $: flexContext.depthAxis.set(getDepthAxis(plane)), flexContext.reflow()
+  $: flexContext.scaleFactor.set(scaleFactor), flexContext.reflow()
 
   onDestroy(() => {
     rootNode.free()
@@ -168,5 +179,9 @@
 </script>
 
 <T is={rootGroup}>
-  <slot {reflow} />
+  <slot
+    {reflow}
+    width={$computedWidth}
+    height={$computedHeight}
+  />
 </T>
