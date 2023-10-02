@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.0.8
+
+### Patch Changes
+
+- c7d5455e: Fixed the prop `order` on `<Box>`, cleaned up the Node Context
+
 ## 0.0.7
 
 ### Patch Changes
