@@ -22,7 +22,9 @@
     meshes = meshes
   }
 
-  const handleHitTest = (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult) => {
+  const handleHitTest = (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {
+    if (!cursors[hand]) return
+  
     if (hit) {
       cursors[hand].visible = true
       cursors[hand].matrix.copy(hitMatrix)

@@ -16,6 +16,8 @@ Hit testing lets you position virtual items in a real-world view.
   let ref
 
   useHitTest((hitMatrix, hit) => {
+    if (!ref) return
+  
     if (hit) {
       ref.visible = true
       ref.matrix.copy(hitMatrix)
