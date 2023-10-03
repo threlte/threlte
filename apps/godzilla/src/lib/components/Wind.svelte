@@ -93,7 +93,7 @@
 				dashOffset={line.dashOffset}
 				depthWrite={false}
 				width={0.04}
-				color="white"
+				color="#DFD4B4"
 			/>
 		</T.Mesh>
 	{/each}

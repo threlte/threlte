@@ -8,6 +8,7 @@
 
 	useFrame(
 		() => {
+			helper.range = ($parent as any).getRefDistance()
 			helper.update()
 		},
 		{
