@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.0.9
+
+### Patch Changes
+
+- d9edba52: Added reactivity to the prop `order` on `<Box>`
+
 ## 0.0.8
 
 ### Patch Changes
