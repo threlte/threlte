@@ -50,6 +50,9 @@
     parentNodeContext?.removeNode(node)
   })
 
+  // update the order of the node
+  $: parentNodeContext?.updateNodeOrder(node, order)
+
   addNode(node, group, $$restProps as NodeProps)
   updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
   $: updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps)
