@@ -78,12 +78,7 @@
           args={[100, 100, 20]}
           radius={2}
         />
-        <T.MeshMatcapMaterial
-          {matcap}
-          on:create={() => {
-            matcap.colorSpace = 'srgb'
-          }}
-        />
+        <T.MeshMatcapMaterial {matcap} />
       </T.Mesh>
     </T.Group>
   {/await}
