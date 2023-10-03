@@ -23,7 +23,7 @@ export const useTexture = <Input extends UseLoaderLoadInput>(
 
       for (const prop in textureProps) {
         //@ts-ignore todo type this
-        texture[prop] = textureProps[prop]
+        res[prop] = textureProps[prop]
       }
 
       res.needsUpdate = true
