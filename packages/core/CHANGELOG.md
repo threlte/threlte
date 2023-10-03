@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 6.0.10
+
+### Patch Changes
+
+- 34741ea7: \* (xr) - useHitTest: Allow hit testing from controllers / hands
+  - (core) - Do not attempt to resize renderer when in an immersive xr session
+
 ## 6.0.9
 
 ### Patch Changes

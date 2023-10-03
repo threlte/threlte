@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 7.0.0
+
+### Major Changes
+
+- 30e87470: `useTexture` is assigning the correct `colorSpace` based on the renderer. Migration: If you rely on a different `colorSpace` in your texture than the renderer is set to, use the option [`transform`](https://threlte.xyz/docs/reference/extras/use-texture#transforming-the-texture) to transform the texture to THREE.NoColorSpace, which used to be the default.
+- ca47ae2a: Remove deprecated props, events and slot props on `<Align>`, remove `<Center>` export. Migration: Replace `<Center>` with `<Align>`, replace the prop `autoCenter` with `auto`, replace the event `on:center` with `on:align`, replace the slot prop `let:center` with `let:align`.
+
 ## 6.0.0
 
 ### Major Changes

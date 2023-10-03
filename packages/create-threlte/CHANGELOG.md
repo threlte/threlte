@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.4.0
+
+### Minor Changes
+
+- e2f16366: Model Pipeline: Do not process a file if it's already present.
+
 ## 1.3.0
 
 ### Minor Changes
