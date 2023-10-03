@@ -32,9 +32,6 @@
   const rootGroup = new Group()
   rootGroup.userData.isNode = true
 
-  const rootNode = yoga.Node.create()
-  createNodeContext(rootNode)
-
   const boundingBox = new Box3()
   const vec3 = new Vector3()
 
@@ -145,6 +142,9 @@
     reflow,
     classParser
   })
+
+  const rootNode = yoga.Node.create()
+  createNodeContext(rootNode)
 
   const { mainAxis, crossAxis, depthAxis } = flexContext
 

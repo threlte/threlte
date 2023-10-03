@@ -164,3 +164,24 @@ To trigger a [layout reflow](/docs/reference/flex/flex#layout-reflow), you can u
   <Text text="Hello World" on:sync={reflow}>
 </Box>
 ```
+
+### Item Ordering
+
+By default, the order of a flex item is determined by the order of insertion in
+the component tree. If for any reason you need to change the order of a flex
+item manually, you can use the `order` prop:
+
+```svelte
+<script lang="ts">
+  import { Box } from '@threlte/flex'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+>
+  <Box order={2} />
+  <Box order={1} />
+  <Box order={3} />
+</Flex>
+```
