@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.0.8
+
+### Patch Changes
+
+- 052f0345: fix: Add missing useHeadset export
+
 ## 0.0.7
 
 ### Patch Changes
