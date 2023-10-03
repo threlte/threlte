@@ -42,7 +42,7 @@
 
 <T.Group {...$$restProps} bind:this={$component}>
 	{#if $object}
-		<T is={$object} let:ref>
+		<T is={$object} let:ref dispose={false}>
 			<slot {ref} />
 		</T>
 	{/if}

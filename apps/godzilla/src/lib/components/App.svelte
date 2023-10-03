@@ -2,13 +2,14 @@
 	import { Canvas } from '@threlte/core'
 	import { World } from '@threlte/rapier'
 	import { Theatre } from '@threlte/theatre'
-	import { VRButton } from '@threlte/xr'
+	import { VRButton, XR } from '@threlte/xr'
 	import Scene from './Scene.svelte'
 	import state from './state.json'
+	import Scene2 from './Scene2.svelte'
 </script>
 
 <Canvas>
-	<World>
+	<!-- <World>
 		<Theatre
 			config={{ state }}
 			studio={{
@@ -17,7 +18,9 @@
 		>
 			<Scene />
 		</Theatre>
-	</World>
+	</World> -->
+
+	<Scene2 />
 </Canvas>
 
 <VRButton />
