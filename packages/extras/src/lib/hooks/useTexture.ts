@@ -14,42 +14,19 @@ export const useTexture = <Input extends UseLoaderLoadInput>(
   textureProps: Props<Texture> = {}
 ): UseLoaderLoadResult<TextureLoader, Input> => {
   const loader = useLoader(TextureLoader, options)
-  const texture = loader.load(input)
 
   const { renderer } = useThrelte()
-  const rendererColorSpace = renderer.outputColorSpace
 
-  const assignOptions = (texture: Texture) => {
-    console.log(texture)
-    texture.colorSpace = rendererColorSpace
+  return loader.load(input, {
+    transform: (res) => {
+      res.colorSpace = renderer.outputColorSpace
 
-    for (const prop in textureProps) {
-      //@ts-ignore todo type this
-      texture[prop] = textureProps[prop]
-    }
+      for (const prop in textureProps) {
+        //@ts-ignore todo type this
+        texture[prop] = textureProps[prop]
+      }
 
-    texture.needsUpdate = true
-  }
-
-  texture.then((textureResult) => {
-    console.log({ textureResult })
-    if (textureResult?.constructor?.name == '_Texture') {
-      console.log('Texture')
-      assignOptions(textureResult as Texture)
-      return
-    }
-    if (Array.isArray(textureResult)) {
-      console.log('TextureArr')
-      textureResult.map((texture) => assignOptions(texture))
-      return
-    }
-    if (typeof textureResult === 'object') {
-      console.log('TextureMap')
-      Object.values(textureResult).map((texture) => {
-        assignOptions(texture)
-      })
-      return
+      res.needsUpdate = true
     }
   })
-  return texture
 }
