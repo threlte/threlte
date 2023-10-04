@@ -25,6 +25,7 @@ export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeome
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
 export { default as Align } from './components/Align/Align.svelte'
+export { default as CSM } from './components/CSM/CSM.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
