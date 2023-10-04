@@ -123,6 +123,9 @@ importers:
       '@threlte/extras':
         specifier: workspace:*
         version: link:../../packages/extras
+      '@threlte/flex':
+        specifier: workspace:*
+        version: link:../../packages/flex
       '@threlte/rapier':
         specifier: workspace:*
         version: link:../../packages/rapier

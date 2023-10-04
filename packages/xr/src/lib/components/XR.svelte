@@ -29,6 +29,7 @@ This should be placed within a Threlte `<Canvas />`.
     session,
     xr as xrStore
   } from '../internal/stores'
+  import { useUpdateHeadset } from '../internal/headset'
 
   /**
    * Enables foveated rendering. Default is `1`, the three.js default.
@@ -126,6 +127,8 @@ This should be placed within a Threlte `<Canvas />`.
   xr.enabled = true
   xr.addEventListener('sessionstart', handleSessionStart)
   xr.addEventListener('sessionend', handleSessionEnd)
+
+  useUpdateHeadset()
 
   onDestroy(() => {
     $initialized = false

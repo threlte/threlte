@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Center, OrbitControls } from '@threlte/extras'
+  import { Align, OrbitControls } from '@threlte/extras'
   import { BufferGeometry, Vector3 } from 'three'
 
   const size = 30
@@ -44,9 +44,9 @@
   position.z={10}
 />
 
-<Center>
+<Align>
   <T.Points>
     <T is={pointsBufferGeometry} />
     <T.PointsMaterial size={0.25} />
   </T.Points>
-</Center>
+</Align>

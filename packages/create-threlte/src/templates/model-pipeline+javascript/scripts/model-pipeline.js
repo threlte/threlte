@@ -1,13 +1,14 @@
 import { execSync } from 'node:child_process'
 import { readdirSync, copyFileSync, unlinkSync, mkdirSync, existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
+import { exit } from 'node:process'
 
 /**
  * This script is used to transform gltf and glb files into Threlte components.
  * It uses the `@threlte/gltf` package to do so.
  * It works in two steps:
  * 1. Transform the gltf/glb files located in the sourceDir directory
- * 2. Move the svelte components to the targetDir directory
+ * 2. Move the Threlte components to the targetDir directory
  */
 const configuration = {
   sourceDir: resolve(join('static', 'models')),
@@ -55,7 +56,29 @@ const gltfFiles = readdirSync(configuration.sourceDir).filter((file) => {
   )
 })
 
-gltfFiles.forEach((file) => {
+if (gltfFiles.length === 0) {
+  console.log('No gltf or glb files found.')
+  exit()
+}
+
+const filteredGltfFiles = gltfFiles.filter((file) => {
+  if (!configuration.overwrite) {
+    const componentFilename = file.split('.').slice(0, -1).join('.') + '.svelte'
+    const componentPath = join(configuration.targetDir, componentFilename)
+    if (existsSync(componentPath)) {
+      console.error(`File ${componentPath} already exists, skipping.`)
+      return false
+    }
+  }
+  return true
+})
+
+if (filteredGltfFiles.length === 0) {
+  console.log('No gltf or glb files to process.')
+  exit()
+}
+
+filteredGltfFiles.forEach((file) => {
   // run the gltf transform command on every file
   const path = join(configuration.sourceDir, file)
 
@@ -102,18 +125,21 @@ svelteFiles.forEach((file) => {
   // now move every file to /src/components/models
   const path = join(configuration.sourceDir, file)
   const newPath = join(configuration.targetDir, file)
-  try {
+  copyFile: try {
+    // Sanity check, we checked earlier if the file exists. Still, the CLI takes
+    // a while, so who knows what happens in the meantime.
     if (!configuration.overwrite) {
       // check if file already exists
       if (existsSync(newPath)) {
         console.error(`File ${newPath} already exists, skipping.`)
-        return
+        break copyFile
       }
     }
     copyFileSync(path, newPath)
   } catch (error) {
     console.error(`Error copying file: ${error}`)
   }
+
   // remove the file from /static/models
   try {
     unlinkSync(path)

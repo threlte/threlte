@@ -13,16 +13,34 @@ export async function getStaticPaths() {
   })
 }
 
-// const AppComponent = import.meta.glob('../../../examples/' + Astro.params.slug + '/App.svelte', {
-//   eager: true
-// })
-
 const slug = Astro.params.slug
 ---
 
-<div class="absolute h-full w-full">
-  <Loader
-    client:load
-    slug={slug}
-  />
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <div>
+      <Loader
+        client:load
+        slug={slug}
+      />
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

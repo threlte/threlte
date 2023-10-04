@@ -1,14 +1,7 @@
 <script>
   import { T } from '@threlte/core'
-  import {
-    MeshLineMaterial,
-    MeshLineGeometry,
-    Grid,
-    OrbitControls,
-    useTexture
-  } from '@threlte/extras'
-  import { constrainColorComponents } from '@tweakpane/core/dist/cjs/input-binding/color/model/color-model'
-  import { Vector3, CatmullRomCurve3 } from 'three'
+  import { Grid, MeshLineGeometry, MeshLineMaterial, OrbitControls } from '@threlte/extras'
+  import { CatmullRomCurve3, Vector3 } from 'three'
 
   // create a smooth curve from 4 points
   const curve = new CatmullRomCurve3([

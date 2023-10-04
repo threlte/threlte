@@ -6,34 +6,54 @@
   const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0);
   
   let meshes: THREE.Mesh[] = []
-  let reticle: THREE.Mesh
+  let cursors = { left: undefined! as THREE.Mesh, right: undefined! as THREE.Mesh }
+
+  const hands = ['left', 'right'] as const
+  type Hands = (typeof hands)[number]
   
-  const handleSelect = () => {
-    if (!reticle.visible) return
+  const handleSelect = (hand: Hands) => () => {
+    if (!cursors[hand].visible) return
 
     const material = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() })
     const mesh = new THREE.Mesh(geometry, material)
-    reticle.matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
+    cursors[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
     mesh.scale.y = Math.random() * 2 + 1
     meshes.push(mesh)
     meshes = meshes
   }
+
+  const handleHitTest = (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {
+    if (!cursors[hand]) return
   
-  useHitTest((hitMatrix, hit) => {
     if (hit) {
-      reticle.visible = true
-      reticle.matrix.copy(hitMatrix)
+      cursors[hand].visible = true
+      cursors[hand].matrix.copy(hitMatrix)
     } else {
-      reticle.visible = false
+      cursors[hand].visible = false
     }
-  })
+  }
+
+  useHitTest(handleHitTest('left'), { source: 'leftInput' })
+  useHitTest(handleHitTest('right'), { source: 'rightInput' })
 </script>
 
 <XR>
-  <Controller left on:select={handleSelect} />
-  <Controller right on:select={handleSelect} />
-  <Hand left on:pinchend={handleSelect} />
-  <Hand right on:pinchend={handleSelect} />
+  {#each hands as hand}
+    <Controller {hand} on:select={handleSelect(hand)} />
+    <Hand {hand} on:pinchend={handleSelect(hand)} />
+
+    <T.Mesh
+      bind:ref={cursors[hand]}
+      matrixAutoUpdate={false}
+      visible={false}
+    >
+      <T.RingGeometry
+        args={[0.15, 0.2, 32]}
+        on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+      />
+      <T.MeshBasicMaterial />
+    </T.Mesh>
+  {/each}
 </XR>
 
 <T.HemisphereLight
@@ -42,18 +62,6 @@
 />
 
 <T.AmbientLight intensity={0.5} />
-
-<T.Mesh
-  bind:ref={reticle}
-  matrixAutoUpdate={false}
-  visible={false}
->
-  <T.RingGeometry
-    args={[0.15, 0.2, 32]}
-    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
-  />
-  <T.MeshBasicMaterial />
-</T.Mesh>
 
 {#each meshes as mesh, index (index)}
   <T is={mesh} />

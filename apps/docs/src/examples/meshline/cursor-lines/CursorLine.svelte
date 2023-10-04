@@ -38,7 +38,7 @@
     let previousPoint = points[0]
     points.forEach((point, i) => {
       if (previousPoint && i > 0) {
-        point.lerp(previousPoint, delta * 75)
+        point.lerp(previousPoint, Math.pow(0.000001, delta))
         previousPoint = point
       }
     })

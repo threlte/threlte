@@ -1,5 +1,24 @@
 # @threlte/xr
 
+## 0.0.9
+
+### Patch Changes
+
+- 34741ea7: \* (xr) - useHitTest: Allow hit testing from controllers / hands
+  - (core) - Do not attempt to resize renderer when in an immersive xr session
+
+## 0.0.8
+
+### Patch Changes
+
+- 052f0345: fix: Add missing useHeadset export
+
+## 0.0.7
+
+### Patch Changes
+
+- 1a872d57: Add useHeadset hook
+
 ## 0.0.6
 
 ### Patch Changes

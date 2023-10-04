@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { HierarchicalObject, T } from '@threlte/core'
+  import { HierarchicalObject, T, createRawEventDispatcher } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group } from 'three'
-  import type { NodeProps } from '../lib/props'
   import { useFlex } from '../Flex/context'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
+  import type { NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { BoxProps, BoxSlots, BoxEvents } from './Box.svelte'
+  import type { BoxEvents, BoxProps, BoxSlots } from './Box.svelte'
 
   type $$Props = BoxProps
   type $$Events = BoxEvents
@@ -14,6 +15,13 @@
   export let order: $$Props['order'] = undefined
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
+
+  const dispatch = createRawEventDispatcher<$$Events>()
+
+  /**
+   * Create the context for `useDimensions`
+   */
+  const dimensionsContext = createUseDimensionsContext()
 
   const {
     scaleFactor,
@@ -24,15 +32,26 @@
     mainAxis,
     crossAxis,
     depthAxis,
-    classParser
+    classParser,
+    reflow
   } = useFlex()
 
-  export const group = new Group()
-  export const contentGroup = new Group()
-
+  const group = new Group()
   group.userData.isNode = true
+  const contentGroup = new Group()
 
-  export const { node } = createNodeContext(order)
+  const { yoga } = useFlex()
+
+  const node = yoga.Node.create()
+
+  const parentNodeContext = createNodeContext(node)
+  parentNodeContext?.insertNode(node, order)
+  onDestroy(() => {
+    parentNodeContext?.removeNode(node)
+  })
+
+  // update the order of the node
+  $: parentNodeContext?.updateNodeOrder(node, order)
 
   addNode(node, group, $$restProps as NodeProps)
   updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
@@ -66,6 +85,14 @@
     getContentGroup().position[$mainAxis] = computedWidth / 2
     getContentGroup().position[$crossAxis] = -computedHeight / 2
     getContentGroup().position[$depthAxis] = 0
+
+    dimensionsContext.width.set(computedWidth)
+    dimensionsContext.height.set(computedHeight)
+
+    dispatch('reflow', {
+      width: computedWidth,
+      height: computedHeight
+    })
   })
 </script>
 
@@ -90,6 +117,7 @@
   }}
 >
   <slot
+    {reflow}
     width={computedWidth}
     height={computedHeight}
   />
