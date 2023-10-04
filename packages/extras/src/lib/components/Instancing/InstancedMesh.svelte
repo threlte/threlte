@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, forwardEventHandlers } from '@threlte/core'
   import Api from './Api.svelte'
-  import type { InstancedMesh } from 'three'
+  import { InstancedMesh } from 'three'
 
   import type {
     InstancedMeshProps,
@@ -30,7 +30,7 @@
   raycast={() => null}
   matrixAutoUpdate={false}
   {args}
-  bind:ref
+  {ref}
   let:ref
   {...$$restProps}
   bind:bind={$dispatchingComponent}
