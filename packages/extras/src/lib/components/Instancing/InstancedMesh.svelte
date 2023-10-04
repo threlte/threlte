@@ -19,7 +19,7 @@
   export let update = true
 
   // forward ref binding
-  export let ref: InstancedMesh | undefined = undefined
+  export const ref = new InstancedMesh(null as any, null as any, 0)
 
   const dispatchingComponent = forwardEventHandlers()
 
