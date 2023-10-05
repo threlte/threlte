@@ -86,7 +86,18 @@
   export let alphaTest: $$Props['alphaTest'] = 0
   export let asSprite: $$Props['asSprite'] = true
 
-  let tex = useTexture(image)
+  let tex = useTexture(image, {
+    transform: (texture: THREE.Texture) => {
+      texture.matrixAutoUpdate = false
+      texture.premultiplyAlpha = false
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+      texture.magFilter = THREE.NearestFilter
+      texture.minFilter = THREE.NearestFilter
+      texture.repeat = new THREE.Vector2(1.0 / animations.totalFrames, 1.0)
+
+      return texture
+    }
+  })
 
   let materialRef: THREE.Material | undefined
 
@@ -107,8 +118,7 @@
   }
 
   const parseSpriteData = (json: null | SpriteJsonHashData, texture: THREE.Texture): void => {
-    texture.premultiplyAlpha = false
-
+    
     spriteTexture = texture
 
     return
@@ -166,8 +176,7 @@
 
     const { w: frameW, h: frameH } = frames[frameName ?? '']?.sourceSize ?? { w: 0, h: 0 }
 
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-
+    
     // texture.center.set(0, 0)
     // texture.repeat.set((1 * flipOffset) / (metaInfo.w / frameW), 1 / (metaInfo.h / frameH))
 
@@ -238,6 +247,7 @@
     texture.offset.y = finalValY
 
     currentFrame += 1
+    texture.updateMatrix()
   }
 
   const { start, stop } = useFrame(() => {
@@ -283,7 +293,7 @@
       <T.MeshBasicMaterial
         toneMapped={false}
         transparent={true}
-        side={THREE.DoubleSide}
+        side={THREE.FrontSide}
         map={$tex}
         {alphaTest}
       />
