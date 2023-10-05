@@ -4,8 +4,9 @@
   import { T, useFrame } from '@threlte/core'
   import { spring } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
-  import { pointerControls } from '@threlte/xr'
+  import { pointerControls, useXR } from '@threlte/xr'
 
+  const { isPresenting } = useXR()
   const scale = spring(1)
   const eyeScale = spring(1, { stiffness: 0.5 })
 
@@ -72,7 +73,7 @@
   })
 </script>
 
-<T.Group>
+<T.Group position.y={1.5} scale={$isPresenting ? 0.1 : 1}>
   <T.Mesh
     bind:ref
     on:click={handleEvent('click')}

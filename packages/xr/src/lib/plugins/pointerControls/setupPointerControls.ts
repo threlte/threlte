@@ -1,8 +1,7 @@
 import { getContext } from 'svelte'
-import { get } from 'svelte/store'
 import type * as THREE from 'three'
 import { watch, type createRawEventDispatcher, useFrame } from '@threlte/core'
-import type { Intersection, IntersectionEvent, State, ThrelteXREvents } from './types'
+import type { HandState, Intersection, IntersectionEvent, State, ThrelteXREvents, events } from './types'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
@@ -17,57 +16,48 @@ function getIntersectionId(event: Intersection) {
   return (event.eventObject || event.object).uuid + '/' + event.index + event.instanceId
 }
 
-const POINTER_EVENTS = [
-  'click',
-  'contextmenu',
-  'pointerdown',
-  'pointerup',
-  'pointerleave',
-  'pointerenter',
-  'pointermove',
-  'pointercancel',
-  'pointermissed'
-] as const
+type PointerEventName = typeof events[number]
 
-type PointerEventName = typeof POINTER_EVENTS[number]
+export const setupPointerControls = (state: State, handState: HandState) => {
+  const handedness = handState.hand
 
-export const setupPointerControls = (handState: State) => {
-  const state = getContext('threlte-pointer-controls-context')
-  const handedness = get(handState.hand)
+  const xrState = useXR()
   const controller = useController(handedness)
   const hand = useHand(handedness)
-  const xrState = useXR()
+
+  let hits: Intersection[]
 
   const handlePointerDown = (event: THREE.Event) => {
-    console.log('selectstart', event)
+    hits = processHits()
+
+    // Save initial coordinates on pointer-down
+    console.log(hits)
+    // handState.initialClick[0] = [event.offsetX, event.offsetY, 0]
+    handState.initialHits = hits.map((hit) => hit.eventObject)
   }
 
   const handlePointerUp = (event: THREE.Event) => {
-    
+    hits = processHits()
   }
 
-  watch(controller, (input) => {
-    input?.targetRay.addEventListener('selectstart', handlePointerDown)
-    input?.targetRay.addEventListener('selectend', handlePointerUp)
-    return () => {
-      input?.targetRay.removeEventListener('selectstart', handlePointerDown)
-      input?.targetRay.removeEventListener('selectend', handlePointerUp)
-    }
-  })
+  const handleClick = (event) => {
+    // const delta = calculateDistance(event)
+    const delta = 1
 
-  watch(hand, (input) => {
-    input?.hand.addEventListener('pinchstart', handlePointerDown)
-    input?.hand.addEventListener('pinchend', handlePointerUp)
-    return () => {
-      input?.hand.removeEventListener('pinchstart', handlePointerDown)
-      input?.hand.removeEventListener('pinchend', handlePointerUp)
+    // If a click yields no results, pass it back to the user as a miss
+    // Missed events have to come first in order to establish user-land side-effect clean up
+    if (hits.length === 0 && delta <= 2) {
+      pointerMissed(event, state.interactiveObjects)
     }
-  })
 
-  function calculateDistance(event: THREE.Event) {
-    const dx = event.offsetX - handState.initialClick[0]
-    const dy = event.offsetY - handState.initialClick[1]
-    return Math.round(Math.hypot(dx, dy))
+    handleEvent(event, 'click')
+  }
+
+  function calculateDistance(intersection: THREE.Intersection) {
+    const dx = intersection.point.x - handState.initialClick[0]
+    const dy = intersection.point.y - handState.initialClick[1]
+    const dz = intersection.point.z - handState.initialClick[2]
+    return Math.round(Math.hypot(dx, dy, dz))
   }
 
   function cancelPointer(intersections: Intersection[]) {
@@ -97,8 +87,8 @@ export const setupPointerControls = (handState: State) => {
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = handState.raycaster.intersectObjects(state.interactiveObjects, true)
-    const filtered = handState.filter === undefined ? hits : handState.filter(hits, handState)
+    const hits = state.raycaster.intersectObjects(state.interactiveObjects, true)
+    const filtered = state.filter === undefined ? hits : state.filter(hits, state, handState)
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -124,137 +114,137 @@ export const setupPointerControls = (handState: State) => {
   }
 
   function processHits () {
-    handState.compute(handState)
+    state.compute(state, handState)
 
     const hits = getHits()
 
-    if (hits.length > 0) console.log(hits)
+    return hits
   }
 
-  const getEventHandler = (name: PointerEventName): ((event: THREE.Event) => void) => {
+  const handlePointerEnter = () => {
+    handState.pointerOverTarget.set(true)
+  }
+
+  const handlePointerLeave = () => {
     // Deal with cancelation
-    if (name === 'pointerleave' || name === 'pointercancel') {
-      return () => {
-        handState.pointerOverTarget.set(false)
-        cancelPointer([])
-      }
-    }
+    handState.pointerOverTarget.set(false)
+    cancelPointer([])
+  }
 
-    if (name === 'pointerenter') {
-      return () => {
-        handState.pointerOverTarget.set(true)
-      }
-    }
+  const handleEvent = (event: THREE.Event, name: PointerEventName) => {
+    const isPointerMove = name === 'pointermove'
+    const isClickEvent = name === 'click' || name === 'contextmenu'
 
-    return (event: THREE.Event) => {
-      const isPointerMove = name === 'pointermove'
-      const isClickEvent = name === 'click' || name === 'contextmenu'
+    // Take care of unhover
+    if (isPointerMove) cancelPointer(hits)
 
-      const delta = isClickEvent ? calculateDistance(event) : 0
+    let stopped = false
 
-      // Save initial coordinates on pointer-down
-      if (name === 'pointerdown') {
-        handState.initialClick = [event.offsetX, event.offsetY, 0]
-        handState.initialHits = hits.map((hit) => hit.eventObject)
-      }
-
-      // If a click yields no results, pass it back to the user as a miss
-      // Missed events have to come first in order to establish user-land side-effect clean up
-      if (isClickEvent && !hits.length) {
-        if (delta <= 2) {
-          pointerMissed(event, state.interactiveObjects)
-        }
-      }
-
-      // Take care of unhover
-      if (isPointerMove) cancelPointer(hits)
-
-      let stopped = false
-
-      // loop through all hits and dispatch events
-      dispatchEvents: for (const hit of hits) {
-        const intersectionEvent: IntersectionEvent = {
-          stopped,
-          ...hit,
-          intersections: hits,
-          stopPropagation() {
-            stopped = true
-            intersectionEvent.stopped = true
-            if (
-              handState.hovered.size &&
-              Array.from(handState.hovered.values()).find((i) => i.eventObject === hit.eventObject)
-            ) {
-              // Objects cannot flush out higher up objects that have already caught the event
-              const higher = hits.slice(0, hits.indexOf(hit))
-              cancelPointer([...higher, hit])
-            }
-          },
-          delta,
-          nativeEvent: event,
-          pointer: handState.pointer.current,
-          ray: handState.raycaster.ray
-        }
-
-        const eventDispatcher = getRawEventDispatcher(hit.eventObject)
-        if (!eventDispatcher) return
-
-        if (isPointerMove) {
-          // Move event ...
-
+    // loop through all hits and dispatch events
+    dispatchEvents: for (const hit of hits) {
+      const intersectionEvent: IntersectionEvent = {
+        stopped,
+        ...hit,
+        intersections: hits,
+        stopPropagation() {
+          stopped = true
+          intersectionEvent.stopped = true
           if (
-            eventDispatcher.hasEventListener('pointerover') ||
-            eventDispatcher.hasEventListener('pointerenter') ||
-            eventDispatcher.hasEventListener('pointerout') ||
-            eventDispatcher.hasEventListener('pointerleave')
+            handState.hovered.size > 0 &&
+            Array.from(handState.hovered.values()).some((i) => i.eventObject === hit.eventObject)
           ) {
-            const id = getIntersectionId(intersectionEvent)
-            const hoveredItem = handState.hovered.get(id)
-            if (!hoveredItem) {
-              // If the object wasn't previously hovered, book it and call its handler
-              handState.hovered.set(id, intersectionEvent)
-              eventDispatcher('pointerover', intersectionEvent as IntersectionEvent)
-              eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent)
-            } else if (hoveredItem.stopped) {
-              // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
-              intersectionEvent.stopPropagation()
-            }
+            // Objects cannot flush out higher up objects that have already caught the event
+            const higher = hits.slice(0, hits.indexOf(hit))
+            cancelPointer([...higher, hit])
           }
+        },
+        // delta,
+        nativeEvent: event,
+        // pointer: handState.pointer.current,
+        ray: state.raycaster.ray
+      }
 
-          // Call pointer move
-          eventDispatcher('pointermove', intersectionEvent as IntersectionEvent)
-        } else {
-          // All other events
+      const eventDispatcher = getRawEventDispatcher(hit.eventObject)
+      if (!eventDispatcher) return
 
-          const hasEventListener = eventDispatcher.hasEventListener(name)
+      if (isPointerMove) {
+        // Move event ...
 
-          if (hasEventListener) {
-            if (!isClickEvent || handState.initialHits.includes(hit.eventObject)) {
-              // Missed events have to come first
-              pointerMissed(
-                event,
-                handState.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
-              )
-
-              // Call the event
-              eventDispatcher(name, intersectionEvent)
-            }
-          } else {
-            // "Real" click event
-            if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
-              pointerMissed(
-                event,
-                handState.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
-              )
-            }
+        if (
+          eventDispatcher.hasEventListener('pointerover') ||
+          eventDispatcher.hasEventListener('pointerenter') ||
+          eventDispatcher.hasEventListener('pointerout') ||
+          eventDispatcher.hasEventListener('pointerleave')
+        ) {
+          const id = getIntersectionId(intersectionEvent)
+          const hoveredItem = handState.hovered.get(id)
+          if (!hoveredItem) {
+            // If the object wasn't previously hovered, book it and call its handler
+            handState.hovered.set(id, intersectionEvent)
+            eventDispatcher('pointerover', intersectionEvent as IntersectionEvent)
+            eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent)
+          } else if (hoveredItem.stopped) {
+            // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
+            intersectionEvent.stopPropagation()
           }
         }
 
-        if (stopped) break dispatchEvents
+        // Call pointer move
+        eventDispatcher('pointermove', intersectionEvent as IntersectionEvent)
+      } else {
+        // All other events
+
+        const hasEventListener = eventDispatcher.hasEventListener(name)
+
+        if (hasEventListener) {
+          if (!isClickEvent || handState.initialHits.includes(hit.eventObject)) {
+            // Missed events have to come first
+            pointerMissed(
+              event,
+              state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+            )
+
+            // Call the event
+            eventDispatcher(name, intersectionEvent)
+          }
+        } else {
+          // "Real" click event
+          if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
+            pointerMissed(
+              event,
+              state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+            )
+          }
+        }
       }
+
+      if (stopped) break dispatchEvents
     }
   }
 
-  const { start, stop } = useFrame(processHits, { autostart: false })
+  const { start, stop } = useFrame(() => {}, { autostart: false })
+
+  watch(controller, (input) => {
+    input?.targetRay.addEventListener('selectstart', handlePointerDown)
+    input?.targetRay.addEventListener('selectend', handlePointerUp)
+    input?.targetRay.addEventListener('select', handleClick)
+    return () => {
+      input?.targetRay.removeEventListener('selectstart', handlePointerDown)
+      input?.targetRay.removeEventListener('selectend', handlePointerUp)
+      input?.targetRay.removeEventListener('select', handleClick)
+    }
+  })
+
+  watch(hand, (input) => {
+    input?.hand.addEventListener('pinchstart', handlePointerDown)
+    input?.hand.addEventListener('pinchend', handlePointerUp)
+    input?.hand.addEventListener('pinchend', handleClick)
+    return () => {
+      input?.hand.removeEventListener('pinchstart', handlePointerDown)
+      input?.hand.removeEventListener('pinchend', handlePointerUp)
+      input?.hand.removeEventListener('pinchend', handleClick)
+    }
+  })
 
   watch([xrState.isPresenting, handState.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {

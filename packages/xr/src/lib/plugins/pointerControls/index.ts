@@ -1,4 +1,4 @@
-import { Raycaster, Vector3 } from 'three'
+import { Raycaster } from 'three'
 import { setContext } from 'svelte'
 import { readable } from 'svelte/store'
 import { currentWritable, watch } from '@threlte/core'
@@ -6,41 +6,46 @@ import { getDefaultComputeFunction } from './defaults'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setupPointerControls'
 import { hasPointerControls } from '../../internal/stores'
-import type { PointerControlsOptions, State } from './types'
+import type { PointerControlsOptions, HandState, State } from './types'
 
 export const pointerControls = (options?: PointerControlsOptions) => {
   injectPointerControlsPlugin()
-  setContext(`threlte-pointer-controls-context`, { interactiveObjects: [] })
+
+  const state = {
+    interactiveObjects: [],
+    raycaster: new Raycaster(),
+    compute: options?.compute ?? getDefaultComputeFunction(),
+    filter: options?.filter
+  }
+
+  setContext<State>(`threlte-pointer-controls-context`, state)
 
   const createHandState = (hand: 'left' | 'right') => {
-    const handState: State = {
-      hand: readable(hand),
+    const handState: HandState = {
+      hand,
       enabled: currentWritable(options?.enabled ?? true),
       pointerOverTarget: currentWritable(false),
       lastEvent: undefined,
-      raycaster: new Raycaster(),
       initialClick: [0, 0, 0],
       initialHits: [],
       hovered: new Map(),
-      compute: options?.compute ?? getDefaultComputeFunction(hand),
-      filter: options?.filter
     }
   
-    setContext<State>(`threlte-pointer-controls-context-${hand}`, handState)
+    setContext<HandState>(`threlte-pointer-controls-context-${hand}`, handState)
 
-    setupPointerControls(handState)  
+    setupPointerControls(state, handState)  
 
     return handState
   }
 
-  const state = {
-    left: createHandState('left'),
-    right: createHandState('right')
-  }
+  console.log('hi')
 
-  watch([state.left.enabled, state.right.enabled], ([leftEnabled, rightEnabled]) => {
+  const left = createHandState('left')
+  const right = createHandState('right')
+
+  watch([left.enabled, right.enabled], ([leftEnabled, rightEnabled]) => {
     hasPointerControls.set(leftEnabled || rightEnabled)
   })
 
-  return state
+  return { left, right }
 }

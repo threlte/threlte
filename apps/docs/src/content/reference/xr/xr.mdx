@@ -98,8 +98,10 @@ XR sessions have to be requested actively and you might want to show contents to
   <Controller left>
   <Controller right>
 
-  <T.PerspectiveCamera slot='fallback' makeDefault position.z={5}>
-    <OrbitControls />
-  </T.PerspectiveCamera>
+  <svelte:fragment slot="fallback">
+    <T.PerspectiveCamera makeDefault position.z={5}>
+      <OrbitControls />
+    </T.PerspectiveCamera>
+  </svelte:fragment>
 </XR>
 ```

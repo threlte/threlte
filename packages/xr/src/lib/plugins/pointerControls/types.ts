@@ -35,23 +35,28 @@ export interface PointerCaptureTarget {
   target: Element
 }
 
-export type FilterFunction = (items: THREE.Intersection[], state: State) => THREE.Intersection[]
+export type FilterFunction = (items: THREE.Intersection[], state: State, handState: HandState) => THREE.Intersection[]
 
-export type ComputeFunction = (state: State) => void
+export type ComputeFunction = (state: State, handState: HandState) => void
 
+// State that can be shared among hands / controllers
 export type State = {
-  hand: Readable<'left' | 'right'>
+  interactiveObjects: THREE.Object3D[],
+  raycaster: THREE.Raycaster,
+  compute: ComputeFunction
+  filter?: FilterFunction | undefined
+}
+
+// State attached to a left / right hand or controller
+export type HandState = {
+  hand: 'left' | 'right'
   enabled: CurrentWritable<boolean>
   // pointer: CurrentWritable<THREE.Vector3>
   pointerOverTarget: CurrentWritable<boolean>
   lastEvent: THREE.Event | undefined
-  raycaster: THREE.Raycaster
   initialClick: [x: number, y: number, z: number]
   initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent>
-  // interactiveObjects: THREE.Object3D[]
-  compute: ComputeFunction
-  filter?: FilterFunction | undefined
 }
 
 export type ThrelteXREvents = {
@@ -66,6 +71,18 @@ export type ThrelteXREvents = {
   pointermove: IntersectionEvent
   pointermissed: IntersectionEvent
 }
+
+export const events: (keyof ThrelteXREvents)[] = [
+  'click',
+  'contextmenu',
+  'pointerup',
+  'pointerdown',
+  'pointerover',
+  'pointerout',
+  'pointerenter',
+  'pointerleave',
+  'pointermove'
+]
 
 export type PointerControlsOptions = {
   enabled?: boolean

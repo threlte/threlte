@@ -14,8 +14,8 @@
     <T.PerspectiveCamera
       slot='fallback'
       makeDefault
-      position={[0, 1, 5]}
-      on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+      position={[0, 1.5, 5]}
+      on:create={({ ref }) => ref.lookAt(0, 1.5, 0)}
     />
   </XR>
 
