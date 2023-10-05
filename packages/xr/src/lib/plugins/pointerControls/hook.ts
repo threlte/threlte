@@ -10,9 +10,10 @@ export const usePointerControls = () => {
 
   const addInteractiveObject = (object: Object3D) => {
     if (!state) {
-      console.warn('No interactivity context found. Did you forget to implement interactivity()?')
+      console.warn('No pointerControls context found. Did you forget to implement pointerControls()?')
       return
     }
+  
     object.userData._threlte_interactivity_dispatcher = eventDispatcher
 
     // check if the object is already in the list
@@ -23,10 +24,13 @@ export const usePointerControls = () => {
 
   const removeInteractiveObject = (object: Object3D) => {
     if (!state) {
-      console.warn('No interactivity context found. Did you forget to implement interactivity()?')
+      console.warn('No pointerControls context found. Did you forget to implement pointerControls()?')
       return
     }
-    state.interactiveObjects = state.interactiveObjects.filter((obj) => obj.uuid !== object.uuid)
+
+    const index = state.interactiveObjects.findIndex((value) => value.uuid === object.uuid)
+    state.interactiveObjects.splice(index, 1)
+    
     delete object.userData._threlte_interactivity_dispatcher
   }
 

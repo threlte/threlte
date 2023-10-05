@@ -5,6 +5,9 @@ export const initialized = writable(false)
 export const isPresenting = currentWritable(false)
 export const isHandTracking = currentWritable(false)
 
+export const hasTeleportControls = currentWritable(false)
+export const hasPointerControls = currentWritable(false)
+
 export const session = currentWritable<XRSession | undefined>(undefined)
 export const referenceSpaceType = currentWritable<XRReferenceSpaceType | undefined>(undefined)
 export const activeTeleportController = currentWritable<THREE.XRTargetRaySpace | undefined>(

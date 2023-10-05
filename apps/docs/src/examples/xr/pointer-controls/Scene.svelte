@@ -4,7 +4,7 @@
   import { T, useFrame } from '@threlte/core'
   import { spring } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
-  // import { pointerControls } from '@threlte/xr'
+  import { pointerControls } from '@threlte/xr'
 
   const scale = spring(1)
   const eyeScale = spring(1, { stiffness: 0.5 })
@@ -56,7 +56,7 @@
   })
 
   interactivity()
-  // pointerControls()
+  pointerControls()
 
   $: if (happy) {
     clearInterval(lookIntervalId)

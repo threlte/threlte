@@ -16,5 +16,14 @@ export { handJoints } from './lib/handJoints'
 // Plugins
 export { pointerControls } from './plugins/pointerControls'
 
-export * from './hooks'
+// Hooks
+export { useController } from './hooks/useController'
+export { useHand } from './hooks/useHand'
+export { useHandJoint } from './hooks/useHandJoint'
+export { useHeadset } from './hooks/useHeadset'
+export { useHitTest } from './hooks/useHitTest'
+export { useTeleport } from './hooks/useTeleport'
+export { useXR } from './hooks/useXR'
+
+// Types
 export type * from './types'

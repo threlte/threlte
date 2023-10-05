@@ -2,22 +2,9 @@ import { injectPlugin, watch } from '@threlte/core'
 import { writable } from 'svelte/store'
 import type { Mesh } from 'three'
 import { usePointerControls } from './hook'
-import type { ThrelteXREvents } from './types'
 import { useComponentHasEventHandlers } from './useComponentEventHandlers'
 
 export type PointerControlsOptions = {}
-
-export const eventNames: (keyof ThrelteXREvents)[] = [
-  'click',
-  'contextmenu',
-  'pointerup',
-  'pointerdown',
-  'pointerover',
-  'pointerout',
-  'pointerenter',
-  'pointerleave',
-  'pointermove'
-]
 
 export const injectPointerControlsPlugin = (): void => {
   injectPlugin('threlte-pointer-controls', ({ ref }) => {
@@ -27,7 +14,7 @@ export const injectPointerControlsPlugin = (): void => {
 
     const refStore = writable<Mesh>(ref)
 
-    const { hasEventHandlers } = useComponentHasEventHandlers(eventNames)
+    const { hasEventHandlers } = useComponentHasEventHandlers()
 
     watch([hasEventHandlers, refStore], ([hasEventHandlers, ref]) => {
       // Because hasEventHandlers will only be set from false to true in the

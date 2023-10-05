@@ -26,7 +26,8 @@
   import * as THREE from 'three'
   import { T, useFrame, createRawEventDispatcher } from '@threlte/core'
   import { activeTeleportController, pendingTeleportDestination } from '../internal/stores'
-  import { useTeleport, useController, useGamepad } from '../hooks'
+  import { useTeleport } from '../hooks/useTeleport'
+  import { useController } from '../hooks/useController'
   import Ray from '../components/Ray.svelte'
   import { teleportPlugin } from '../plugins/teleportPlugin'
 
@@ -70,7 +71,7 @@
 
   $: raycaster.far = maxDistance
   $: teleportController = useController(handedness)
-  $: teleportGamepad = useGamepad(handedness)
+  $: teleportGamepad = teleportController.current?.inputSource.gamepad
 
   const calculateRayMidpoint = (vector1: THREE.Vector3, vector2: THREE.Vector3) => {
     rayMidpoint.x = (vector1.x + vector2.x) / 2;
@@ -135,7 +136,7 @@
   }
 
   useFrame(() => {
-    const selecting = (teleportGamepad.current?.axes[3] ?? 0) < -0.9
+    const selecting = (teleportGamepad?.axes[3] ?? 0) < -0.9
 
     if (selecting && activeController === undefined) {
       handleSelectStart(teleportController.current!.targetRay)

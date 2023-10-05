@@ -1,12 +1,12 @@
 <script lang='ts' context='module'>
-  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
+  import { onDestroy } from 'svelte'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import type { XRHandEvent } from '../types'
   import { isHandTracking } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import { onDestroy } from 'svelte'
-
+  
   const factory = new XRHandModelFactory()
 
   const stores = {

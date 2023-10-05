@@ -37,19 +37,19 @@ export interface PointerCaptureTarget {
 
 export type FilterFunction = (items: THREE.Intersection[], state: State) => THREE.Intersection[]
 
-export type ComputeFunction = (event: THREE.Event, state: State) => void
+export type ComputeFunction = (state: State) => void
 
 export type State = {
   hand: Readable<'left' | 'right'>
   enabled: CurrentWritable<boolean>
-  pointer: CurrentWritable<THREE.Vector3>
+  // pointer: CurrentWritable<THREE.Vector3>
   pointerOverTarget: CurrentWritable<boolean>
   lastEvent: THREE.Event | undefined
   raycaster: THREE.Raycaster
   initialClick: [x: number, y: number, z: number]
   initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent>
-  interactiveObjects: THREE.Object3D[]
+  // interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
   filter?: FilterFunction | undefined
 }
@@ -70,7 +70,7 @@ export type ThrelteXREvents = {
 export type PointerControlsOptions = {
   enabled?: boolean
   /**
-   * The compute function is responsible for updating the state of the interactivity plugin.
+   * The compute function is responsible for updating the state of the pointerControls plugin.
    * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
    * the plugin will use the default compute function.
    */
