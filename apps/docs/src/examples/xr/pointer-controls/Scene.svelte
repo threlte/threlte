@@ -48,7 +48,7 @@
   }
 
   const lookForCursor = () => {
-    point.set(Math.random() - 0.5, Math.random() - 0.5, 1)
+    point.set(Math.random() - 0.5, 1.5 + Math.random() - 0.5, 1)
   }
 
   useFrame(() => {
