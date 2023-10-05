@@ -4,6 +4,9 @@
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
+  import SpriteAnimator from '$lib/components/SpriteAnimator/SpriteAnimator.svelte'
+  import textureData from '$lib/assets/punk.json?url'
+  import image from '$lib/assets/punk.png'
 
   let listenToGamepad = true
   let mountGamepad = false
@@ -41,10 +44,15 @@
 
 <Grid />
 
-<T.Mesh position.y={1}>
+<!-- <T.Mesh position.y={1}>
   <T.MeshStandardMaterial
     transparent
     color="white"
   />
   <T.SphereGeometry />
-</T.Mesh>
+</T.Mesh> -->
+
+<SpriteAnimator
+  {textureData}
+  {image}
+/>

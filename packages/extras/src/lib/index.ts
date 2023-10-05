@@ -26,6 +26,7 @@ export { default as SoftShadows } from './components/SoftShadows/SoftShadows.sve
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
+export { default as AnimatedSprite } from './components/SpriteAnimator/SpriteAnimator.svelte'
 export { Align }
 
 /**
