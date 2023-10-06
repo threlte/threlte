@@ -95,7 +95,9 @@ const shouldRender = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext) 
 export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternalContext): void => {
   ctx.renderer.setAnimationLoop(() => {
     // dispose all objects that are due to be disposed
-    internalCtx.dispose()
+    if (internalCtx.shouldDispose) {
+      internalCtx.dispose()
+    }
 
     // get a global delta
     const delta = ctx.clock.getDelta()
