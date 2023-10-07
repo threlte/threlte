@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.0.10
+
+### Patch Changes
+
+- 6d5e8339: Allow sessionInit overrides and fix useHeadset android chrome bug"
+
 ## 0.0.9
 
 ### Patch Changes
