@@ -18,11 +18,11 @@
 </script>
 
 <XRButton
-  {...$$restProps}
-  mode='immersive-vr'
   sessionInit={{
     optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
   }}
+  {...$$restProps}
+  mode='immersive-vr'
   on:click
   on:error
 />
