@@ -153,16 +153,16 @@ export const createContexts = (options: {
     renderHandlers: new Set(),
     renderHandlersNeedSortCheck: false,
     advance: false,
-    dispose: (force = false) => {
-      queueMicrotask(() => {
-        internalCtx.disposableObjects.forEach((mounted, object) => {
-          if (mounted === 0 || force) {
-            object?.dispose?.()
-            internalCtx.disposableObjects.delete(object)
-          }
-        })
-        internalCtx.shouldDispose = false
+    dispose: async (force = false) => {
+      await tick()
+      if (!internalCtx.shouldDispose && !force) return
+      internalCtx.disposableObjects.forEach((mounted, object) => {
+        if (mounted === 0 || force) {
+          object?.dispose?.()
+          internalCtx.disposableObjects.delete(object)
+        }
       })
+      internalCtx.shouldDispose = false
     },
     collectDisposableObjects: (object, objects) => {
       const disposables: DisposableThreeObject[] = objects ?? []
