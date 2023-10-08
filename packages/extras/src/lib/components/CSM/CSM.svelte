@@ -18,10 +18,14 @@
 
   let csm: CSM | undefined
 
+  let frustumUpdateNeeded = false
+
   useFrame(
     () => {
       if (!csm) return
       csm.update()
+      if (!frustumUpdateNeeded) return
+      csm.updateFrustums()
     },
     { invalidate: false }
   )
@@ -49,6 +53,8 @@
 
   // set the default camera
   $: if (csm) csm.camera = camera ?? $defaultCamera
+
+  $: if (camera || params) frustumUpdateNeeded = true
 
   watch([enabledStore], ([enabled]) => {
     if (!enabled) {
