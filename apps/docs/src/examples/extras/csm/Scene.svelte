@@ -12,7 +12,7 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[40, 40, 30]}
+  position={[45, 40, -45]}
   fov={90}
 >
   <OrbitControls
