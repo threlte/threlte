@@ -1,5 +1,4 @@
 import type { CurrentWritable } from '@threlte/core'
-import type { Readable } from 'svelte/store'
 
 export interface Intersection extends THREE.Intersection {
   /** The event source (the object which registered the handler) */

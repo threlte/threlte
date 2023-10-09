@@ -1,4 +1,3 @@
-import { getContext } from 'svelte'
 import type * as THREE from 'three'
 import { watch, type createRawEventDispatcher, useFrame } from '@threlte/core'
 import type { HandState, Intersection, IntersectionEvent, State, ThrelteXREvents, events } from './types'

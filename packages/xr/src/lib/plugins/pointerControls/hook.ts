@@ -1,11 +1,9 @@
 import { createRawEventDispatcher } from '@threlte/core'
-import { getContext } from 'svelte'
+import { getControlsContext } from './context'
 import type { Object3D } from 'three'
-import type { State } from './types'
 
 export const usePointerControls = () => {
-  const state = getContext<State>('threlte-pointer-controls-context')
-
+  const state = getControlsContext()
   const eventDispatcher = createRawEventDispatcher()
 
   const addInteractiveObject = (object: Object3D) => {

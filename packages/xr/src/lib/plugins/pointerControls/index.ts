@@ -1,12 +1,11 @@
 import { Raycaster } from 'three'
-import { setContext } from 'svelte'
-import { readable } from 'svelte/store'
 import { currentWritable, watch } from '@threlte/core'
 import { getDefaultComputeFunction } from './defaults'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setupPointerControls'
+import { setControlsContext, setHandContext } from './context'
 import { hasPointerControls } from '../../internal/stores'
-import type { PointerControlsOptions, HandState, State } from './types'
+import type { PointerControlsOptions, HandState } from './types'
 
 export const pointerControls = (options?: PointerControlsOptions) => {
   injectPointerControlsPlugin()
@@ -18,7 +17,7 @@ export const pointerControls = (options?: PointerControlsOptions) => {
     filter: options?.filter
   }
 
-  setContext<State>(`threlte-pointer-controls-context`, state)
+  setControlsContext(state)
 
   const createHandState = (hand: 'left' | 'right') => {
     const handState: HandState = {
@@ -30,15 +29,13 @@ export const pointerControls = (options?: PointerControlsOptions) => {
       initialHits: [],
       hovered: new Map(),
     }
-  
-    setContext<HandState>(`threlte-pointer-controls-context-${hand}`, handState)
 
+    setHandContext(hand, handState)
+  
     setupPointerControls(state, handState)  
 
     return handState
   }
-
-  console.log('hi')
 
   const left = createHandState('left')
   const right = createHandState('right')
