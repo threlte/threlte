@@ -3,7 +3,7 @@ import { onDestroy, onMount } from 'svelte'
 import type { Mesh, Material, SkinnedMesh } from 'three'
 
 export const useMaterials = () => {
-  let callbacks: ((material: Material) => void)[] = []
+  let callback: null | ((material: Material) => void) = null
 
   const allMaterials: Set<Material> = new Set()
 
@@ -18,10 +18,9 @@ export const useMaterials = () => {
   const addMaterial = (material: Material) => {
     if (allMaterials.has(material)) return
     allMaterials.add(material)
-    callbacks.forEach((callback) => callback(material))
+    callback?.(material)
   }
 
-  
   const extractMaterials = (ref: any) => {
     // first check if it's a material
     if (isMaterial(ref)) {
@@ -40,8 +39,8 @@ export const useMaterials = () => {
     }
   }
 
-  const onNewMaterial = (fn: (material: THREE.Material) => void) => {
-    callbacks.push(fn)
+  const onNewMaterial = (fn: null | ((material: THREE.Material) => void)) => {
+    callback = fn
   }
 
   /**
@@ -58,7 +57,7 @@ export const useMaterials = () => {
     })
   })
 
-  onDestroy(() => callbacks.splice(0, callbacks.length))
+  onDestroy(() => (callback = null))
 
   return { onNewMaterial, allMaterials }
 }
