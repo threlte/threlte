@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.0.1
+
+### Patch Changes
+
+- 62d3f395: Add ref binding to `<InstancedMesh>`
+
 ## 7.0.0
 
 ### Major Changes
