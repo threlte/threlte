@@ -20,10 +20,7 @@
 
   let csm: CSM | undefined
 
-  const { start, stop } = useFrame(() => csm!.update(), {
-    invalidate: false,
-    autostart: false
-  })
+  useFrame(() => csm?.update(), { invalidate: false })
 
   const { onNewMaterial, allMaterials } = useMaterials()
 
@@ -35,7 +32,7 @@
 
   $: $size, csm?.updateFrustums()
 
-  // set the default camera
+  // set any CSM props that require frustum updates
   $: if (csm) {
     csm.camera = camera ?? $defaultCamera
 
@@ -56,10 +53,8 @@
         csm.setupMaterial(material)
       }
       onNewMaterial((material) => csm?.setupMaterial(material))
-      start()
     } else {
       onNewMaterial(null)
-      stop()
       disposeCSM()
     }
   })
