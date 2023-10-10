@@ -1,15 +1,32 @@
 <script lang='ts'>
   import { T, Canvas } from '@threlte/core'
+  import { BufferGeometry, Vector3 } from 'three'
   import { XR, Controller, VRButton } from '@threlte/xr'
   import Scene from './Scene.svelte'
+  
 </script>
 
 <Canvas>
   <Scene />
 
   <XR>
-    <Controller left />
-    <Controller right />
+    <Controller left>
+      <T.Line slot='pointer-ray'>
+        <T is={new BufferGeometry().setFromPoints([
+          new Vector3(0, 0, 0),
+          new Vector3(0, 0, -1000)
+        ])} />
+      </T.Line>
+    </Controller>
+
+    <Controller right>
+      <T.Line slot='pointer-ray'>
+        <T is={new BufferGeometry().setFromPoints([
+          new Vector3(0, 0, 0),
+          new Vector3(0, 0, -1000)
+        ])} />
+      </T.Line>
+    </Controller>
 
     <T.PerspectiveCamera
       slot='fallback'

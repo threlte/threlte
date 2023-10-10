@@ -17,6 +17,7 @@
   let point = new THREE.Vector3()
 
   const handleEvent = (type: string) => (event: any): any => {
+    console.log(type, event)
     switch (type) {
       case 'pointermove': {
         point.copy(event.point)

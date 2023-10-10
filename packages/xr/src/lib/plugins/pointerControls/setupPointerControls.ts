@@ -1,9 +1,10 @@
 import type * as THREE from 'three'
-import { watch, type createRawEventDispatcher, useFrame } from '@threlte/core'
+import { watch, type createRawEventDispatcher } from '@threlte/core'
 import type { HandState, Intersection, IntersectionEvent, State, ThrelteXREvents, events } from './types'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
+import { useFixed } from '../../internal/useFixed'
 
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
@@ -19,7 +20,6 @@ type PointerEventName = typeof events[number]
 
 export const setupPointerControls = (state: State, handState: HandState) => {
   const handedness = handState.hand
-
   const xrState = useXR()
   const controller = useController(handedness)
   const hand = useHand(handedness)
@@ -27,19 +27,18 @@ export const setupPointerControls = (state: State, handState: HandState) => {
   let hits: Intersection[]
 
   const handlePointerDown = (event: THREE.Event) => {
-    hits = processHits()
-
     // Save initial coordinates on pointer-down
-    console.log(hits)
     // handState.initialClick[0] = [event.offsetX, event.offsetY, 0]
     handState.initialHits = hits.map((hit) => hit.eventObject)
+
+    handleEvent('pointerdown', event)
   }
 
   const handlePointerUp = (event: THREE.Event) => {
-    hits = processHits()
+    handleEvent('pointerup', event)
   }
 
-  const handleClick = (event) => {
+  const handleClick = (event: THREE.Event) => {
     // const delta = calculateDistance(event)
     const delta = 1
 
@@ -49,7 +48,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
       pointerMissed(event, state.interactiveObjects)
     }
 
-    handleEvent(event, 'click')
+    handleEvent('click', event)
   }
 
   function calculateDistance(intersection: THREE.Intersection) {
@@ -114,9 +113,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
 
   function processHits () {
     state.compute(state, handState)
-
     const hits = getHits()
-
     return hits
   }
 
@@ -130,7 +127,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
     cancelPointer([])
   }
 
-  const handleEvent = (event: THREE.Event, name: PointerEventName) => {
+  const handleEvent = (name: PointerEventName, event: THREE.Event) => {
     const isPointerMove = name === 'pointermove'
     const isClickEvent = name === 'click' || name === 'contextmenu'
 
@@ -192,7 +189,6 @@ export const setupPointerControls = (state: State, handState: HandState) => {
         eventDispatcher('pointermove', intersectionEvent as IntersectionEvent)
       } else {
         // All other events
-
         const hasEventListener = eventDispatcher.hasEventListener(name)
 
         if (hasEventListener) {
@@ -221,7 +217,13 @@ export const setupPointerControls = (state: State, handState: HandState) => {
     }
   }
 
-  const { start, stop } = useFrame(() => {}, { autostart: false })
+  const { start, stop } = useFixed((ctx, dt) => {
+    hits = processHits()
+    handleEvent('pointermove', null);
+  }, {
+    fixedStep: 1 / 24,
+    autostart: false,
+  })
 
   watch(controller, (input) => {
     input?.targetRay.addEventListener('selectstart', handlePointerDown)
