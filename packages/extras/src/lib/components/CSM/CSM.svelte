@@ -55,14 +55,14 @@
       for (const material of allMaterials) {
         csm.setupMaterial(material)
       }
+      onNewMaterial((material) => csm?.setupMaterial(material))
       start()
     } else {
+      onNewMaterial(null)
       stop()
       disposeCSM()
     }
   })
-
-  onNewMaterial((material) => csm?.setupMaterial(material))
 
   onDestroy(disposeCSM)
 </script>
