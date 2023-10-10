@@ -1,52 +1,47 @@
 import { injectPlugin } from '@threlte/core'
-import { onMount } from 'svelte'
-import type { Mesh, MeshPhongMaterial, MeshStandardMaterial, SkinnedMesh } from 'three'
+import { onDestroy, onMount } from 'svelte'
+import type { Mesh, Material, SkinnedMesh } from 'three'
 
 export const useMaterials = () => {
-  const isSupportedMaterial = (
-    material: any
-  ): material is MeshStandardMaterial | MeshPhongMaterial => {
-    return material.isMeshStandardMaterial || material.isMeshPhongMaterial
-  }
+  let callbacks: ((material: Material) => void)[] = []
 
-  const materialsQueue: Set<MeshStandardMaterial | MeshPhongMaterial> = new Set()
-  const allMaterials: Set<MeshStandardMaterial | MeshPhongMaterial> = new Set()
+  const allMaterials: Set<Material> = new Set()
 
-  const addMaterial = (material: MeshStandardMaterial | MeshPhongMaterial) => {
-    materialsQueue.add(material)
-    allMaterials.add(material)
-  }
-
-  const removeMaterial = (material: MeshStandardMaterial | MeshPhongMaterial) => {
-    materialsQueue.delete(material)
-    allMaterials.delete(material)
+  const isMaterial = (material: any): material is Material => {
+    return material.isMaterial
   }
 
   const isMesh = (ref: any): ref is Mesh | SkinnedMesh => {
     return ref.isMesh || ref.isSkinnedMesh
   }
 
+  const addMaterial = (material: Material) => {
+    if (allMaterials.has(material)) return
+    allMaterials.add(material)
+    callbacks.forEach((callback) => callback(material))
+  }
+
+  
   const extractMaterials = (ref: any) => {
-    let materials: (MeshStandardMaterial | MeshPhongMaterial)[] = []
     // first check if it's a material
-    if (isSupportedMaterial(ref)) {
-      materials.push(ref)
+    if (isMaterial(ref)) {
+      addMaterial(ref)
     }
+
     // then check if it's a mesh
-    if (isMesh(ref)) {
+    else if (isMesh(ref)) {
       if (Array.isArray(ref.material)) {
         ref.material.forEach((material) => {
-          if (isSupportedMaterial(material)) {
-            materials.push(material)
-          }
+          addMaterial(material)
         })
       } else {
-        if (isSupportedMaterial(ref.material)) {
-          materials.push(ref.material)
-        }
+        addMaterial(ref.material)
       }
     }
-    return materials
+  }
+
+  const onNewMaterial = (fn: (material: THREE.Material) => void) => {
+    callbacks.push(fn)
   }
 
   /**
@@ -59,13 +54,11 @@ export const useMaterials = () => {
     // we need to wait for mounting since otherwise the meshes probably have
     // default materials applied
     onMount(() => {
-      const materials = extractMaterials(ref)
-      materials.forEach((material) => addMaterial(material))
-      return () => {
-        materials.forEach((material) => removeMaterial(material))
-      }
+      extractMaterials(ref)
     })
   })
 
-  return { materialsQueue, allMaterials }
+  onDestroy(() => callbacks.splice(0, callbacks.length))
+
+  return { onNewMaterial, allMaterials }
 }
