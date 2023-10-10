@@ -16,6 +16,7 @@
   {enabled}
   camera={$camera}
   {params}
+  fade
 >
   <slot />
 </CSM>

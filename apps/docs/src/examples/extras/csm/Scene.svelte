@@ -53,7 +53,7 @@
     position.y={height / 2}
     position.z={posY}
   >
-    <T.BoxGeometry args={[3, height, 3]} />
-    <T.MeshStandardMaterial color={'#45c1ff'} />
+    <T.CapsuleGeometry args={[3, height, 12, 32]} />
+    <T.MeshToonMaterial color={'#45c1ff'} />
   </T.Mesh>
 {/each}
