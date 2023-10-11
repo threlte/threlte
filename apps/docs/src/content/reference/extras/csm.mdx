@@ -9,26 +9,59 @@
     {
       'props':
         [
-          { name: 'enabled', type: '', required: false },
-          { name: 'params', type: '', required: false },
-          { name: 'camera', type: '', required: false },
-          { name: 'transform', type: '', required: false }
+          { name: 'enabled', type: 'boolean', required: false },
+          { name: 'camera', type: 'THREE.Camera | undefined', required: false },
+          { name: 'configure', type: '(csm: CSM) => CSM', required: false },
+          { name: 'params', type: 'CSMParameters', required: false }
         ]
     }
 }
 ---
 
-- Abstract on top of three's examples/csm
-- which is based on work by https://github.com/StrandedKitty/three-csm
-- what is csm?
-- performance
-- notice about hooking into materials
-- use cases
+The `<CSM/>` component offers a streamlined convenience integration of the Cascaded Shadow Maps technique, sourced from the Three.js addon.
 
 <Example path="extras/csm" />
 
-### Example
+Cascaded Shadow Maps (CSM) are a technique employed to render shadows with varying levels of
+detail based on their distance from the camera. CSMs utilize multiple shadow maps to produce
+higher resolution shadows closer to the camera and gradually decrease this resolution for
+shadows farther away. This method is especially beneficial when rendering sun-cast
+shadows over vast terrains, ensuring detailed and performance-optimized shadow renderings.
+
+## Usage
+
+<Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
 
 ```svelte
+<script lang="ts">
+  import { useThrelte } from '@threlte/core'
+  import { CSM } from '@threlte/extras'
+  import { PCFSoftShadowMap, Vector3 } from 'three'
 
+  const { renderer } = useThrelte()
+
+  let params = {
+    lightDirection: new Vector3()
+  }
+
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = PCFSoftShadowMap
+</script>
+
+<CSM
+  enabled
+  {params}
+  configure={(csm) => {
+    // advanced CSM configuration can be handle here. configure has to return csm
+    return csm
+  }}
+>
+  <!-- Your scene goes here -->
+</CSM>
 ```
+
+## Updating light direction
+
+## Custom configuration
+
+For the original implementation, refer to [this github repository](https://github.com/StrandedKitty/three-csm).
