@@ -13,12 +13,14 @@
 
   const dispatch = createEventDispatcher<{
     load: void
+    suspend: void
   }>()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $: setFinal(final)
 
   $: if (!$suspended) dispatch('load')
+  $: if ($suspended) dispatch('suspend')
 
   const group = new Group()
   const parent = useParent()
@@ -41,12 +43,18 @@
 <!-- Block the graph from mounting to the parent -->
 <HierarchicalObject>
   <T is={group}>
-    <slot suspended={$suspended} errors={$errors} />
+    <slot
+      suspended={$suspended}
+      errors={$errors}
+    />
   </T>
 </HierarchicalObject>
 
 {#if $errors.length}
-  <slot name="error" errors={$errors} />
+  <slot
+    name="error"
+    errors={$errors}
+  />
 {:else if $suspended}
   <slot name="fallback" />
 {/if}
