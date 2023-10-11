@@ -1,22 +1,16 @@
 import { Vector3 } from 'three'
-import type { ComputeFunction, State, HandState } from './types'
 import { useController } from '../../hooks/useController'
-import { useHand } from '../../hooks/useHand'
+import type { Context, HandContext } from './types'
 
-export const getDefaultComputeFunction = (): ComputeFunction => {
+export const getDefaultComputeFunction = () => {
   const controllers = {
     left: useController('left'),
     right: useController('right')
   }
 
-  const hands = {
-    left: useHand('left'),
-    right: useHand('right')
-  }
-
   const forward = new Vector3()
 
-  return (context: State, handContext: HandState) => {
+  return (context: Context, handContext: HandContext) => {
     const origin = controllers[handContext.hand].current?.targetRay
 
     if (origin === undefined) return

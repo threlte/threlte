@@ -15,6 +15,7 @@ export { handJoints } from './lib/handJoints'
 
 // Plugins
 export { pointerControls } from './plugins/pointerControls'
+export { teleportControls } from './plugins/teleportControls'
 
 // Hooks
 export { useController } from './hooks/useController'

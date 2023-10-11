@@ -7,32 +7,36 @@ export const useTeleportControls = () => {
   
   const addSurface = (mesh: THREE.Mesh) => {
     // check if the object is already in the list
-    if (context.surfaces.indexOf(mesh) > -1) {
+    if (context.interactiveObjects.indexOf(mesh) > -1) {
       return
     }
 
+    context.interactiveObjects.push(mesh)
+    context.surfaces.set(mesh.uuid, mesh)
     context.dispatchers.set(mesh, eventDispatcher)
-    context.surfaces.push(mesh)
   }
 
   const removeSurface = (mesh: THREE.Mesh) => {
-    const index = context.surfaces.indexOf(mesh)
-    context.surfaces.splice(index, 1)
+    const index = context.interactiveObjects.indexOf(mesh)
+    context.interactiveObjects.splice(index, 1)
+    context.surfaces.delete(mesh.uuid)
     context.dispatchers.delete(mesh)
   }
 
   const addBlocker = (mesh: THREE.Mesh) => {
     // check if the object is already in the list
-    if (context.surfaces.indexOf(mesh) > -1) {
+    if (context.interactiveObjects.indexOf(mesh) > -1) {
       return
     }
 
-    context.blockers.push(mesh)
+    context.interactiveObjects.push(mesh)
+    context.blockers.set(mesh.uuid, mesh)
   }
 
   const removeBlocker = (mesh: THREE.Mesh) => {
-    const index = context.blockers.indexOf(mesh)
-    context.blockers.splice(index, 1)
+    const index = context.interactiveObjects.indexOf(mesh)
+    context.interactiveObjects.splice(index, 1)
+    context.blockers.delete(mesh.uuid)
   }
 
   return { addSurface, removeSurface, addBlocker, removeBlocker }

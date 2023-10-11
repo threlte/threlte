@@ -12,6 +12,10 @@ export const getHandContext = (hand: 'left' | 'right') => {
   return getContext<HandContext>(handContextKeys[hand])
 }
 
+export const setHandContext = (hand: 'left' | 'right', context: HandContext) => {
+  setContext(handContextKeys[hand], context)
+}
+
 export const getTeleportContext = () => {
   return getContext<Context>(contextKey)
 }

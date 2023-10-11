@@ -1,11 +1,13 @@
 <script lang='ts'>
   import * as THREE from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { XR, TeleportControls, Controller, Hand, useTeleport } from '@threlte/xr'
+  import { XR, Controller, Hand, teleportControls, useTeleport } from '@threlte/xr'
   import { colorOptions } from './colors'
 
   const { camera, renderer } = useThrelte()
   const teleport = useTeleport()
+
+  teleportControls()
 
   renderer.setClearColor(0x000000)
 
@@ -40,29 +42,27 @@
   <Hand right />
 </XR>
 
-<TeleportControls>
-  <T.Mesh
-    teleportSurface
-    receiveShadow
-    rotation={[-Math.PI / 2, 0, 0]}
-  >
-    <T.CircleGeometry args={[20]} />
-    <T.MeshStandardMaterial color='#BDC3C7' />
-  </T.Mesh>
+<T.Mesh
+  teleportSurface
+  receiveShadow
+  rotation={[-Math.PI / 2, 0, 0]}
+>
+  <T.CircleGeometry args={[20]} />
+  <T.MeshStandardMaterial color='#BDC3C7' />
+</T.Mesh>
 
-  {#each cylinders as { point, color }, index}
-    <T.Mesh
-      name='cylinder {index}'
-      teleportSurface
-      position={[point.x, index / 2, point.y]}
-      castShadow
-      receiveShadow
-    >
-      <T.CylinderGeometry args={[1, 1, 0.1]} />
-      <T.MeshStandardMaterial {color} />
-    </T.Mesh>
-  {/each}
-</TeleportControls>
+{#each cylinders as { point, color }, index}
+  <T.Mesh
+    name='cylinder {index}'
+    teleportSurface
+    position={[point.x, index / 2, point.y]}
+    castShadow
+    receiveShadow
+  >
+    <T.CylinderGeometry args={[1, 1, 0.1]} />
+    <T.MeshStandardMaterial {color} />
+  </T.Mesh>
+{/each}
 
 <T.AmbientLight />
 
