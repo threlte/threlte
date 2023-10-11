@@ -49,6 +49,6 @@
     position.z={posY}
   >
     <T.CapsuleGeometry args={[3, height, 12, 32]} />
-    <T.MeshToonMaterial color={'#45c1ff'} />
+    <T.MeshStandardMaterial color={'#45c1ff'} />
   </T.Mesh>
 {/each}
