@@ -9,9 +9,8 @@
   export let enabled = true
   export let params: Partial<ConstructorParameters<typeof CSM>[0]> = {}
   export let camera: Camera | undefined = undefined
-  export let transform: ((csm: CSM) => CSM) = (csm: CSM) => csm
-  export let fade: boolean | undefined
-  export let maxFar: number | undefined
+  export let fade: boolean | undefined = true
+  export let transform: (csm: CSM) => CSM = (csm: CSM) => csm
 
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
@@ -35,20 +34,22 @@
   // set any CSM props that require frustum updates
   $: if (csm) {
     csm.camera = camera ?? $defaultCamera
-
+    if (params.maxFar !== undefined) csm.maxFar = params.maxFar
+    if (params.mode !== undefined) csm.mode = params.mode
     if (fade !== undefined) csm.fade = fade
-    if (maxFar !== undefined) csm.maxFar = maxFar
 
     csm.updateFrustums()
   }
 
   watch(enabledStore, (enabled) => {
-    if (enabled) { 
-      csm = transform(new CSM({
-        camera: camera ?? $defaultCamera,
-        parent: scene,
-        ...params
-      }))
+    if (enabled) {
+      csm = transform(
+        new CSM({
+          camera: camera ?? $defaultCamera,
+          parent: scene,
+          ...params
+        })
+      )
       for (const material of allMaterials) {
         csm.setupMaterial(material)
       }
