@@ -17,11 +17,6 @@
   />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight
-  position.y={10}
-  position.z={10}
-/>
-
 <T.AmbientLight intensity={1} />
 
 <T.Mesh

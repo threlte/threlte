@@ -13,13 +13,21 @@
     label: 'CSM enabled',
     value: true
   })
+
+  const lightDirection = addInput({
+    label: 'lightDirection',
+    value: { x: 1, y: -1, z: 1 }
+  })
 </script>
 
 <div use:action />
 
 <div class="relative h-full w-full ">
   <Canvas>
-    <CSMWrapper enabled={$enabled}>
+    <CSMWrapper
+      enabled={$enabled}
+      lightDirection={$lightDirection}
+    >
       <Scene />
     </CSMWrapper>
   </Canvas>
