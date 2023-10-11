@@ -18,8 +18,8 @@ export const pointerControls = (options?: PointerControlsOptions) => {
   setControlsContext(context)
   injectPointerControlsPlugin()
 
-  const createHandState = (hand: 'left' | 'right') => {
-    const handState: HandState = {
+  const createHandContext = (hand: 'left' | 'right') => {
+    const handContext: HandState = {
       hand,
       enabled: currentWritable(options?.enabled ?? true),
       pointerOverTarget: currentWritable(false),
@@ -29,14 +29,14 @@ export const pointerControls = (options?: PointerControlsOptions) => {
       hovered: new Map(),
     }
 
-    setHandContext(hand, handState)
-    setupPointerControls(context, handState)  
+    setHandContext(hand, handContext)
+    setupPointerControls(context, handContext)  
 
-    return handState
+    return handContext
   }
 
-  const left = createHandState('left')
-  const right = createHandState('right')
+  const left = createHandContext('left')
+  const right = createHandContext('right')
 
   watch([left.enabled, right.enabled], ([leftEnabled, rightEnabled]) => {
     hasPointerControls.set(leftEnabled || rightEnabled)
