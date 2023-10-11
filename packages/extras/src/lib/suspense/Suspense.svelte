@@ -1,26 +1,24 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
-  import { createSuspenseContext } from './context'
-  import { HierarchicalObject, T, useParent, watch } from '@threlte/core'
+  import { HierarchicalObject, T, createRawEventDispatcher, useParent, watch } from '@threlte/core'
   import { Group } from 'three'
+  import { createSuspenseContext } from './context'
 
   type $$Events = {
     load: void
-    error: Error
+    suspend: void
+    error: Error[]
   }
 
   export let final = false
 
-  const dispatch = createEventDispatcher<{
-    load: void
-    suspend: void
-  }>()
+  const dispatch = createRawEventDispatcher<$$Events>()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $: setFinal(final)
 
   $: if (!$suspended) dispatch('load')
   $: if ($suspended) dispatch('suspend')
+  $: if ($errors.length) dispatch('error', $errors)
 
   const group = new Group()
   const parent = useParent()
