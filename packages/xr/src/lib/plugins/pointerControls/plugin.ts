@@ -4,8 +4,6 @@ import type { Mesh } from 'three'
 import { usePointerControls } from './hook'
 import { useComponentHasEventHandlers } from './useComponentEventHandlers'
 
-export type PointerControlsOptions = {}
-
 export const injectPointerControlsPlugin = (): void => {
   injectPlugin('threlte-pointer-controls', ({ ref }) => {
     if (!ref.isMesh) return

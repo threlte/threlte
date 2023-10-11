@@ -8,16 +8,15 @@ import { hasPointerControls } from '../../internal/stores'
 import type { PointerControlsOptions, HandState } from './types'
 
 export const pointerControls = (options?: PointerControlsOptions) => {
-  injectPointerControlsPlugin()
-
-  const state = {
+  const context = {
     interactiveObjects: [],
     raycaster: new Raycaster(),
     compute: options?.compute ?? getDefaultComputeFunction(),
     filter: options?.filter
   }
 
-  setControlsContext(state)
+  setControlsContext(context)
+  injectPointerControlsPlugin()
 
   const createHandState = (hand: 'left' | 'right') => {
     const handState: HandState = {
@@ -31,8 +30,7 @@ export const pointerControls = (options?: PointerControlsOptions) => {
     }
 
     setHandContext(hand, handState)
-  
-    setupPointerControls(state, handState)  
+    setupPointerControls(context, handState)  
 
     return handState
   }
@@ -44,5 +42,5 @@ export const pointerControls = (options?: PointerControlsOptions) => {
     hasPointerControls.set(leftEnabled || rightEnabled)
   })
 
-  return { left, right }
+  return { left, right, state: context }
 }

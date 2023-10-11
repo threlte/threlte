@@ -1,4 +1,4 @@
-import { useFrame, type ThrelteUseFrameOptions, type ThrelteContext } from "@threlte/core";
+import { useFrame, type ThrelteUseFrameOptions, type ThrelteContext } from '@threlte/core'
 
 type UseFixedOptions = ThrelteUseFrameOptions & {
   fixedStep?: number

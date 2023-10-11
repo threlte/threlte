@@ -177,8 +177,8 @@ export const setupPointerControls = (state: State, handState: HandState) => {
           if (!hoveredItem) {
             // If the object wasn't previously hovered, book it and call its handler
             handState.hovered.set(id, intersectionEvent)
-            eventDispatcher('pointerover', intersectionEvent as IntersectionEvent)
-            eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent)
+            eventDispatcher('pointerover', intersectionEvent)
+            eventDispatcher('pointerenter', intersectionEvent)
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -186,7 +186,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
         }
 
         // Call pointer move
-        eventDispatcher('pointermove', intersectionEvent as IntersectionEvent)
+        eventDispatcher('pointermove', intersectionEvent)
       } else {
         // All other events
         const hasEventListener = eventDispatcher.hasEventListener(name)
