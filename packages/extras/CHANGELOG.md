@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.1.0
+
+### Minor Changes
+
+- cd27881c: Added suspend event to `<Suspense>`
+
 ## 7.0.1
 
 ### Patch Changes
