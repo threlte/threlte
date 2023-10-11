@@ -22,8 +22,8 @@
   {enabled}
   camera={$camera}
   {params}
-  transform={(csm) => {
-    // advanced CSM configuration can be handle here. Transform has to return csm
+  configure={(csm) => {
+    // advanced CSM configuration can be handle here. configure has to return csm
     return csm
   }}
 >

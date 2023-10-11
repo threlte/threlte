@@ -9,8 +9,7 @@
   export let enabled = true
   export let params: Partial<ConstructorParameters<typeof CSM>[0]> = {}
   export let camera: Camera | undefined = undefined
-  export let fade: boolean | undefined = true
-  export let transform: (csm: CSM) => CSM = (csm: CSM) => csm
+  export let configure: (csm: CSM) => CSM = (csm: CSM) => csm
 
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
@@ -36,14 +35,13 @@
     csm.camera = camera ?? $defaultCamera
     if (params.maxFar !== undefined) csm.maxFar = params.maxFar
     if (params.mode !== undefined) csm.mode = params.mode
-    if (fade !== undefined) csm.fade = fade
 
     csm.updateFrustums()
   }
 
   watch(enabledStore, (enabled) => {
     if (enabled) {
-      csm = transform(
+      csm = configure(
         new CSM({
           camera: camera ?? $defaultCamera,
           parent: scene,
