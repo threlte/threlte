@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.1.1
+
+### Patch Changes
+
+- 060fbbdf: Changed eventDispatcher to rawEventDispatcher in `<Suspense>`, added type def
+
 ## 7.1.0
 
 ### Minor Changes
