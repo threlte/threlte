@@ -20,14 +20,19 @@
       events:
         [
           {
-            name: 'error',
-            description: 'Fires when an error is thrown in a child component wrapped in `suspend`.',
-            payload: 'Error'
-          },
-          {
             name: 'load',
             description: 'Fires when all child components wrapped in `suspend` have finished loading.',
             payload: 'void'
+          },
+          {
+            name: 'suspend',
+            description: 'Fires when a child component suspends.',
+            payload: 'void'
+          },
+          {
+            name: 'error',
+            description: 'Fires when an error is thrown in a child component wrapped in `suspend`.',
+            payload: 'Error'
           }
         ]
     }
