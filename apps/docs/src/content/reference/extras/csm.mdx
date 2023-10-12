@@ -30,8 +30,6 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 
 ## Usage
 
-<Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
-
 ```svelte
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
@@ -60,14 +58,30 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 </CSM>
 ```
 
-## Updating light direction
+To enable CSM, it's essential to set `renderer.shadowMap.enabled` to `true`,
+which can be done via renderer.shadowMap.enabled = true.
 
-## Custom configuration
+Then, wrap all of the objects that you wish to use CSM on (typically your entire scene) with the `<CSM>` component.
+Making a CSM wrapper, as demonstrated in our example, is recommended, particularly for more advanced configurations.
+Making a wrapper nested inside of `<Canvas>`, enables the use of Threlte hooks, such as `useThrelte`.
 
-## Parameters
+Internally, the `<CSM>` component modifies the shader code of all materials inside the component.
+Currently, support is limited only to `THREE.MeshStandardMaterial` and `THREE.MeshPhongMaterial`.
 
-The `<CSM>` component exposes an optional `params` prop. Below is a comprehensive
-table detailing each parameter. Please note that these parameters are only invoked when `<CSM>` is enabled.
+<Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
+
+## CSM Parameters
+
+The `<CSM>` component exposes an optional `params` prop. Parameters are not reactive
+and are only updated when CSM is enabled.
+
+### Updating light direction
+
+To modify the light's direction, utilize the `lightDirection` param,
+which should be of the type `THREE.Vector3`. After setting this parameter, any subsequent
+adjustments should be made directly to this vector. Light direction vector hast o be normalized.
+
+### Parameters explained
 
 | Name                 | Type                                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -86,3 +100,28 @@ table detailing each parameter. Please note that these parameters are only invok
 | customSplitsCallback | `(cascades: number, cameraNear: number, cameraFar: number, breaks: number[]) => void;` | A callback to compute custom cascade splits when mode is set to `"custom"`. Callback should accept three number parameters: `cascadeCount`, `nearDistance`, `farDistance` and return an array of split distances ranging from 0 to 1, where 0 is equal to `nearDistance` and 1 is equal to `farDistance`.                                                                                                        |
 
 For the original implementation, refer to [this github repository](https://github.com/StrandedKitty/three-csm).
+
+## Custom configuration
+
+The `<CSM>` component offers a configure callback, which is triggered when CSM is activated.
+This callback facilitates advanced configurations, such as enabling the fade feature.
+
+```svelte
+<CSM
+  configure={(csm) => {
+    // advanced CSM configuration can be handle here. configure has to return csm
+    csm.fade = true
+    return csm
+  }}
+>
+  <!-- Your scene goes here -->
+</CSM>
+```
+
+<Tip type="tip">
+  With fade enabled, shadows subtly diminish close to `maxFar` distance, presenting a more aesthetic
+  transition compared to an abrupt cut-off. It may be more visually pleasing, but it's important to
+  consider potential performance implications. While typically minimal, the computational complexity
+  can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
+  default.
+</Tip>
