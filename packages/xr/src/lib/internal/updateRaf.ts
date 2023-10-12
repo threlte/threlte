@@ -1,3 +1,4 @@
+// @ts-expect-error svelte/internal is untyped.
 import { set_raf } from 'svelte/internal'
 import { onDestroy } from 'svelte'
 import { watch } from '@threlte/core'
@@ -6,19 +7,19 @@ import { session } from './stores'
 export const updateRaf = () => {
   if (typeof window === 'undefined') return
 
-  const currentRaf = { fn: window.requestAnimationFrame }
+  const browserRaf = (fn: FrameRequestCallback) => requestAnimationFrame(fn)
+  const currentRaf = { fn: browserRaf }
   set_raf((fn: FrameRequestCallback) => currentRaf.fn(fn))
 
   watch(session, (session) => {
     if (session) {
-      currentRaf.fn = session.requestAnimationFrame
+      currentRaf.fn = (fn: XRFrameRequestCallback) => (
+        session.requestAnimationFrame(fn)
+      )
     } else {
-      currentRaf.fn = window.requestAnimationFrame
+      currentRaf.fn = browserRaf
     }
-    console.log(currentRaf.fn)
   })
 
-	// set_now(() => Date.now())
-
-	onDestroy(() => (currentRaf.fn = window.requestAnimationFrame))
+	onDestroy(() => (currentRaf.fn = browserRaf))
 }
