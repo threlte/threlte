@@ -1,30 +1,23 @@
 <script lang="ts">
-  import { useThrelte } from '@threlte/core'
   import { CSM } from '@threlte/extras'
-  import { PCFSoftShadowMap, Vector3 } from 'three'
-
-  const { camera, renderer } = useThrelte()
+  import { Vector3 } from 'three'
 
   export let enabled = true
   export let lightDirection: { x: number; y: number; z: number }
 
-  let params = {
+  let args = {
     lightDirection: new Vector3()
   }
 
-  $: params.lightDirection.set(lightDirection.x, lightDirection.y, lightDirection.z).normalize()
-
-  renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = PCFSoftShadowMap
+  $: args.lightDirection.set(lightDirection.x, lightDirection.y, lightDirection.z).normalize()
 </script>
 
 <CSM
   {enabled}
-  camera={$camera}
-  {params}
+  {args}
   configure={(csm) => {
-    // advanced CSM configuration can be handle here. configure has to return csm
-    return csm
+    // advanced CSM configuration callback
+    csm.fade = true
   }}
 >
   <slot />
