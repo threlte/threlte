@@ -28,7 +28,6 @@
   import { activeTeleportController, pendingTeleportDestination } from '../internal/stores'
   import { useTeleport } from '../hooks/useTeleport'
   import { useController } from '../hooks/useController'
-  import Ray from '../components/Ray.svelte'
   import { teleportPlugin } from '../plugins/teleportPlugin'
 
   /**
@@ -149,13 +148,6 @@
 </script>
 
 <slot />
-
-<slot name='ray'>
-  <Ray
-    visible={activeController !== undefined && destination !== undefined}
-    positions={activeController !== undefined && destination !== undefined ? positions : undefined}
-  />
-</slot>
 
 <slot name='cursor'>
   <T.Mesh
