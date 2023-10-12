@@ -3,13 +3,29 @@
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
   import type { Camera } from 'three'
+  import type { CSMParameters } from 'three/examples/jsm/csm/CSM'
   import { CSM } from 'three/examples/jsm/csm/CSM'
   import { useMaterials } from './useMaterials'
 
+  /**
+   * Whether or not CSM is enabled. If `enabled={false}`, a slot named
+   * `"disabled"` will be rendered.
+   */
   export let enabled = true
-  export let params: Partial<ConstructorParameters<typeof CSM>[0]> = {}
+  /**
+   * The arguments to pass to the CSM constructor.
+   */
+  export let args: Partial<CSMParameters> = {}
+  /**
+   * The camera to use for CSM. Defaults to the camera set by `makeDefault`.
+   */
   export let camera: Camera | undefined = undefined
-  export let configure: (csm: CSM) => CSM = (csm: CSM) => csm
+  /**
+   * A configuration callback, which is triggered when CSM is activated. This
+   * callback facilitates advanced configurations, such as enabling the fade
+   * feature.
+   */
+  export let configure: ((csm: CSM) => void) | undefined = undefined
 
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
@@ -22,7 +38,7 @@
 
   const { onNewMaterial, allMaterials } = useMaterials()
 
-  const disposeCSM = () => {
+  const disposeCsm = () => {
     csm?.remove()
     csm?.dispose()
     csm = undefined
@@ -33,32 +49,31 @@
   // set any CSM props that require frustum updates
   $: if (csm) {
     csm.camera = camera ?? $defaultCamera
-    if (params.maxFar !== undefined) csm.maxFar = params.maxFar
-    if (params.mode !== undefined) csm.mode = params.mode
+    if (args.maxFar !== undefined) csm.maxFar = args.maxFar
+    if (args.mode !== undefined) csm.mode = args.mode
 
     csm.updateFrustums()
   }
 
   watch(enabledStore, (enabled) => {
     if (enabled) {
-      csm = configure(
-        new CSM({
-          camera: camera ?? $defaultCamera,
-          parent: scene,
-          ...params
-        })
-      )
+      csm = new CSM({
+        camera: camera ?? $defaultCamera,
+        parent: scene,
+        ...args
+      })
+      configure?.(csm)
       for (const material of allMaterials) {
         csm.setupMaterial(material)
       }
       onNewMaterial((material) => csm?.setupMaterial(material))
     } else {
-      onNewMaterial(null)
-      disposeCSM()
+      onNewMaterial(undefined)
+      disposeCsm()
     }
   })
 
-  onDestroy(disposeCSM)
+  onDestroy(disposeCsm)
 </script>
 
 <slot />

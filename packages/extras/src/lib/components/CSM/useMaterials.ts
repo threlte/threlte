@@ -1,29 +1,31 @@
 import { injectPlugin } from '@threlte/core'
 import { onDestroy, onMount } from 'svelte'
-import type { Mesh, Material, SkinnedMesh } from 'three'
+import type { Mesh, MeshPhongMaterial, MeshStandardMaterial } from 'three'
+
+type SupportedMaterial = MeshStandardMaterial | MeshPhongMaterial
 
 export const useMaterials = () => {
-  let callback: null | ((material: Material) => void) = null
+  let setupCallback: undefined | ((material: SupportedMaterial) => void) = undefined
 
-  const allMaterials: Set<Material> = new Set()
+  const allMaterials: Set<SupportedMaterial> = new Set()
 
-  const isMaterial = (material: any): material is Material => {
-    return material.isMaterial
+  const isSupportedMaterial = (material: any): material is SupportedMaterial => {
+    return material.isMeshStandardMaterial || material.isMeshPhongMaterial
   }
 
-  const isMesh = (ref: any): ref is Mesh | SkinnedMesh => {
-    return ref.isMesh || ref.isSkinnedMesh
+  const isMesh = (ref: any): ref is Mesh => {
+    return ref.isMesh
   }
 
-  const addMaterial = (material: Material) => {
+  const addMaterial = (material: SupportedMaterial) => {
     if (allMaterials.has(material)) return
     allMaterials.add(material)
-    callback?.(material)
+    setupCallback?.(material)
   }
 
   const extractMaterials = (ref: any) => {
     // first check if it's a material
-    if (isMaterial(ref)) {
+    if (isSupportedMaterial(ref)) {
       addMaterial(ref)
     }
 
@@ -31,16 +33,23 @@ export const useMaterials = () => {
     else if (isMesh(ref)) {
       if (Array.isArray(ref.material)) {
         ref.material.forEach((material) => {
-          addMaterial(material)
+          if (isSupportedMaterial(material)) {
+            addMaterial(material)
+          }
         })
       } else {
-        addMaterial(ref.material)
+        if (isSupportedMaterial(ref.material)) {
+          addMaterial(ref.material)
+        }
       }
     }
   }
 
-  const onNewMaterial = (fn: null | ((material: THREE.Material) => void)) => {
-    callback = fn
+  /**
+   * Callback to set up a material for CSM
+   */
+  const onNewMaterial = (callback: undefined | ((material: THREE.Material) => void)) => {
+    setupCallback = callback
   }
 
   /**
@@ -57,7 +66,7 @@ export const useMaterials = () => {
     })
   })
 
-  onDestroy(() => (callback = null))
+  onDestroy(() => (setupCallback = undefined))
 
   return { onNewMaterial, allMaterials }
 }
