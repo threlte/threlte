@@ -38,7 +38,7 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 
   const { renderer } = useThrelte()
 
-  let params = {
+  const params = {
     lightDirection: new Vector3()
   }
 
@@ -49,10 +49,6 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 <CSM
   enabled
   {params}
-  configure={(csm) => {
-    // advanced CSM configuration can be handle here. configure has to return csm
-    return csm
-  }}
 >
   <!-- Your scene goes here -->
 </CSM>
