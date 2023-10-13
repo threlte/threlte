@@ -7,6 +7,8 @@
   import textureData from '$lib/assets/punk.json?url'
   import image from '$lib/assets/punk.png'
 
+  console.log(textureData)
+
   let listenToGamepad = true
   let mountGamepad = false
 </script>
@@ -51,7 +53,12 @@
   <T.SphereGeometry />
 </T.Mesh> -->
 
+{#each { length: 100 } as _, index}
 <AnimatedSprite
+  position.x={index % 10}
+  position.y={index / 10 % 10}
   {textureData}
   {image}
+  asSprite={false}
 />
+{/each}
