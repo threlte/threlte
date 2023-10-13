@@ -10,12 +10,28 @@
   let isRevealed = false
   const opacity = tweened(0, { duration: 3e3, easing: cubicInOut })
   $: opacity.set(isRevealed ? 1 : 0)
+
+  let isInView = false
+
+  const inview = (el: HTMLElement) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries?.[0]?.isIntersecting) {
+          isInView = true
+        }
+      },
+      { threshold: 0.8 }
+    )
+
+    observer.observe(el)
+  }
 </script>
 
 <div class="wrapper">
   <div
     class="inner"
     style="opacity: {$opacity};"
+    use:inview
   >
     <Canvas>
       <Suspense on:load={() => (isRevealed = true)}>
@@ -23,7 +39,9 @@
           studio={{ enabled: false }}
           config={{ state }}
         >
-          <Scene />
+          {#if isInView}
+            <Scene />
+          {/if}
         </Theatre>
       </Suspense>
     </Canvas>

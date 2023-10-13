@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useFrame } from '@threlte/core'
-  import { GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
+  import { Environment, GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { cubicOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
@@ -29,7 +29,7 @@
 
   const pointerSpring = spring(
     { x: $pointer.x, y: $pointer.y },
-    { precision: 0.00001, damping: 0.97, stiffness: 0.05 }
+    { precision: 0.00001, damping: 0.98, stiffness: 0.02 }
   )
   $: pointerSpring.set({ x: $pointer.x, y: $pointer.y })
 
@@ -50,13 +50,15 @@
   fov={20}
 />
 
-<T.Mesh
+<GLTF
+  url="/models/wave-ring/Pedestal.glb"
   position.y={-16.5}
-  receiveShadow
->
-  <T.CylinderGeometry args={[3, 3, 30, 64, 1]} />
-  <T.MeshStandardMaterial color="#0F1625" />
-</T.Mesh>
+  on:create={({ ref }) => {
+    ref.children.forEach((child) => {
+      child.receiveShadow = true
+    })
+  }}
+/>
 
 <SheetObject
   key="fill-light"
@@ -92,7 +94,37 @@
 </SheetObject>
 
 <SheetObject
+  key="key-fill-light"
+  let:Transform
+  let:Sync
+>
+  <Transform>
+    <T.DirectionalLight target.position={[0]}>
+      <Sync
+        color
+        intensity
+      />
+    </T.DirectionalLight>
+  </Transform>
+</SheetObject>
+
+<SheetObject
   key="rim-light"
+  let:Transform
+  let:Sync
+>
+  <Transform>
+    <T.DirectionalLight target.position={[0]}>
+      <Sync
+        color
+        intensity
+      />
+    </T.DirectionalLight>
+  </Transform>
+</SheetObject>
+
+<SheetObject
+  key="counter-light"
   let:Transform
   let:Sync
 >
