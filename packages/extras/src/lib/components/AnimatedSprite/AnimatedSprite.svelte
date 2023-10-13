@@ -1,95 +1,46 @@
 <script lang='ts'>
   import * as THREE from 'three'
-  import { T, asyncWritable, type AsyncWritable, createRawEventDispatcher, useFrame, useThrelte, watch } from '@threlte/core'
+  import {
+    T,
+    asyncWritable,
+    type AsyncWritable,
+    createRawEventDispatcher,
+    useFrame,
+    useThrelte,
+    watch,
+    forwardEventHandlers
+  } from '@threlte/core'
+  import type {
+    AnimatedSpriteProps,
+    AnimatedSpriteEvents,
+    AnimatedSpriteSlots,
+    SpriteJsonHashData,
+    FrameTag
+  } from './AnimatedSprite'
   import { useTexture } from '../../hooks/useTexture'
   import { useLoader } from '@threlte/core'
 
-  type Frame = {
-    frame: { x: number, y: number, w: number, h: number },
-    spriteSourceSize: { x: number, y: number, w: number, h: number },
-    sourceSize: { w: number, h: number },
-    duration: number
-  }
+  type $$Props = Required<AnimatedSpriteProps>
+  type $$Events = AnimatedSpriteEvents
+  type $$Slots = AnimatedSpriteSlots
 
-  type FrameTag = {
-    name: string
-    from: number
-    to: number
-    direction: string
-  }
-
-  type SpriteJsonHashData = {
-    frames: Record<string, Frame>
-    meta: {
-      app: string,
-      image: string,
-      version: string,
-      format: string,
-      size: { w: number, h: number },
-      scale: number
-      frameTags: FrameTag[]
-    }
-  }
-
-  type $$Props = {
-    /** The current playing animation */
-    animation?: string
-
-    /** The URL of the texture image */
-    image: string
-
-    /** The start frame of the animation */
-    startFrame?: number
-    /** The end frame of the animation */
-    endFrame?: number
-    /** The desired frames per second of the animaiton */
-    fps?: number
-    /** The URL of the texture JSON (if using JSON-Array or JSON-Hash) */
-    textureData?: string
-    /** Whether or not the animation should loop */
-    loop?: boolean
-    /** The number of frames of the animation (required if using plain spritesheet without JSON) */
-    numberOfFrames?: number
-    /** The animation names of the spritesheet */
-    animationNames?: Array<string>
-    /** Control when the animation runs */
-    playing?: boolean
-    /** Whether or not the Sprite should flip sides on the x-axis */
-    flipX?: boolean
-    /** Sets the alpha value to be used when running an alpha test. https://threejs.org/docs/#api/en/materials/Material.alphaTest */
-    alphaTest?: number
-    /** Displays the texture on a SpriteGeometry always facing the camera, if set to false, it renders on a PlaneGeometry */
-    asSprite?: boolean
-    
-    transparent?: boolean
-  }
-
-  export let animation: Required<$$Props>['animation'] = ''
-  export let startFrame: Required<$$Props>['startFrame'] = 0
+  export let animation: $$Props['animation'] = ''
+  export let startFrame: $$Props['startFrame'] = 0
   export let endFrame: $$Props['endFrame'] = 0
-  export let fps: Required<$$Props>['fps'] = 30
-  export let textureData: $$Props['textureData'] = undefined
+  export let fps: $$Props['fps'] = 30
+  export let textureData: $$Props['textureData'] = ''
   export let image: $$Props['image']
-  export let loop: Required<$$Props>['loop'] = true
-  export let numberOfFrames: $$Props['numberOfFrames'] = undefined
-  export let playing: Required<$$Props>['playing'] = true
-  export let animationNames: $$Props['animationNames'] = undefined
-  export let flipX: $$Props['flipX'] = undefined
-  export let alphaTest: Required<$$Props>['alphaTest'] = 0
-  export let asSprite: Required<$$Props>['asSprite'] = true
-  export let transparent: Required<$$Props>['transparent'] = true
+  export let loop: $$Props['loop'] = true
+  export let numberOfFrames: $$Props['numberOfFrames'] = 0
+  export let playing: $$Props['playing'] = true
+  export let flipX: $$Props['flipX'] = false
+  export let alphaTest: $$Props['alphaTest'] = 0
+  export let asSprite: $$Props['asSprite'] = true
+  export let transparent: $$Props['transparent'] = true
 
   export const ref = asSprite ? new THREE.Sprite() : new THREE.Mesh()
 
-  type $$Events = {
-    /** Fires when an animation starts */
-    start: void
-    /** Fires when an animation ends */
-    end: void
-    /** Fires when an animation loop completes */
-    loop: void
-  }
-
+  const component = forwardEventHandlers()
   const dispatch = createRawEventDispatcher<$$Events>()
   const { renderer } = useThrelte()
 
@@ -174,18 +125,17 @@
 
   const setFrame = (name: string) => {
     const { frame } = json!.frames[name]
-    const spritesheetSize = json!.meta.size
-    const framesH = (spritesheetSize.w) / frameWidth
-    const framesV = (spritesheetSize.h) / frameHeight
+    const framesH = spritesheetSize.w / frameWidth
+    const framesV = spritesheetSize.h / frameHeight
     const frameOffsetX = 1 / framesH
     const frameOffsetY = 1 / framesV
 
-    const finalValX = flipOffset > 0
+    const x = flipOffset > 0
       ? frameOffsetX * (frame.x / frameWidth)
       : frameOffsetX * (frame.x / frameHeight) - texture.repeat.x
-    const finalValY = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
+    const y = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
 
-    texture?.offset.set(finalValX, finalValY)
+    texture?.offset.set(x, y)
     texture?.updateMatrix()
   }
 
@@ -200,7 +150,7 @@
 
     const start = frameTag?.from ?? startFrame
     const end = frameTag?.to ?? endFrame ?? totalFrames - 1
-    
+  
     if (currentFrame > end) {
       currentFrame = loop ? start : 0
   
@@ -244,23 +194,12 @@
     frameHeight = sourceSize.h
     aspect = frameHeight / frameWidth
 
-    texture.center.set(0, 0)
+    // texture.center.set(0, 0)
     // texture.repeat.set(1.0 / totalFrames, 1.0)
     texture.repeat.set((1 * flipOffset) / (spritesheetSize.w / frameWidth), 1 / (spritesheetSize.h / frameHeight))
-
-    
     
     setAnimation()
   })
-
-  $: if (json && texture) {
-    
-    // 
-    
-    // 
-
-    
-  }
 
   $: if (playing && json && texture) {
     start()
@@ -269,7 +208,13 @@
   }
 </script>
 
-<T is={ref} scale.y={aspect} {...$$restProps}>
+<T
+  is={ref}
+  bind:this={$component}
+  scale.y={aspect}
+  {...$$restProps}
+  let:ref
+>
   {#if texture}
     {#if asSprite}
       <T.SpriteMaterial
@@ -290,5 +235,5 @@
     {/if}
   {/if}
 
-  <slot />
+  <slot {ref} />
 </T>

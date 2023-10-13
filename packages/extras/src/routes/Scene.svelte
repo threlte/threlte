@@ -6,11 +6,12 @@
   import MountedGamepad from './MountedGamepad.svelte'
   import textureData from '$lib/assets/punk.json?url'
   import image from '$lib/assets/punk.png'
+  import { OrthographicCamera } from 'three'
 
   let listenToGamepad = true
   let mountGamepad = false
 
-  let animations = Array.from({ length: 10 }).fill('Idle_Left')
+  let animations = Array.from({ length: 10 }).fill('Idle_Left') as string[]
 </script>
 
 <svelte:window
@@ -33,13 +34,16 @@
   <MountedGamepad />
 {/if}
 
-<T.PerspectiveCamera
+<T.OrthographicCamera
   makeDefault
-  position={[3, 3, 3]}
+  near={-100}
+  far={100}
+  zoom={150}
+  position={[3, 1.5, 3]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls />
-</T.PerspectiveCamera>
+</T.OrthographicCamera>
 
 <Sky />
 
@@ -61,6 +65,7 @@
       {textureData}
       {image}
       asSprite={true}
+      on:create={}
       on:loop={() => (animations[x] = animation === 'Idle_Left' ? 'Idle_Right' : 'Idle_Left')}
     />
 {/each}
