@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.0.11
+
+### Patch Changes
+
+- 8ebaa97b: Force svelte/motion to use session.requestAnimationFrame when presenting
+
 ## 0.0.10
 
 ### Patch Changes
