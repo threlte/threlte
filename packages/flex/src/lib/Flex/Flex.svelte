@@ -25,7 +25,13 @@
     {...$$restProps}
     bind:this={$component}
     let:reflow
+    let:width
+    let:height
   >
-    <slot {reflow} />
+    <slot
+      {reflow}
+      {width}
+      {height}
+    />
   </InnerFlex>
 {/if}

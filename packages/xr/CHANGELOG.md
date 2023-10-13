@@ -1,5 +1,36 @@
 # @threlte/xr
 
+## 0.0.11
+
+### Patch Changes
+
+- 8ebaa97b: Force svelte/motion to use session.requestAnimationFrame when presenting
+
+## 0.0.10
+
+### Patch Changes
+
+- 6d5e8339: Allow sessionInit overrides and fix useHeadset android chrome bug"
+
+## 0.0.9
+
+### Patch Changes
+
+- 34741ea7: \* (xr) - useHitTest: Allow hit testing from controllers / hands
+  - (core) - Do not attempt to resize renderer when in an immersive xr session
+
+## 0.0.8
+
+### Patch Changes
+
+- 052f0345: fix: Add missing useHeadset export
+
+## 0.0.7
+
+### Patch Changes
+
+- 1a872d57: Add useHeadset hook
+
 ## 0.0.6
 
 ### Patch Changes

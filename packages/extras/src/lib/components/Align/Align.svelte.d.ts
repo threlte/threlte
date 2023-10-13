@@ -15,8 +15,6 @@ export type AlignProps = Props<Group> & {
   align?: () => void
   /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
   auto?: boolean
-  /** @deprecated Please use the prop "auto" */
-  autoCenter?: boolean
 }
 
 type AlignEventData = {
@@ -38,15 +36,11 @@ type AlignEventData = {
 
 export type AlignEvents = Events<Group> & {
   align: AlignEventData
-  /** @deprecated Please use the event "align" */
-  center: AlignEventData
 }
 
 export type AlignSlots = Slots<Group> & {
   default: {
     align: () => void
-    /** @deprecated Please use the slot prop "align" */
-    center: () => void
   }
 }
 

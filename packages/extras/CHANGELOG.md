@@ -1,5 +1,30 @@
 # @threlte/extras
 
+## 7.1.1
+
+### Patch Changes
+
+- 060fbbdf: Changed eventDispatcher to rawEventDispatcher in `<Suspense>`, added type def
+
+## 7.1.0
+
+### Minor Changes
+
+- cd27881c: Added suspend event to `<Suspense>`
+
+## 7.0.1
+
+### Patch Changes
+
+- 62d3f395: Add ref binding to `<InstancedMesh>`
+
+## 7.0.0
+
+### Major Changes
+
+- 30e87470: `useTexture` is assigning the correct `colorSpace` based on the renderer. Migration: If you rely on a different `colorSpace` in your texture than the renderer is set to, use the option [`transform`](https://threlte.xyz/docs/reference/extras/use-texture#transforming-the-texture) to transform the texture to THREE.NoColorSpace, which used to be the default.
+- ca47ae2a: Remove deprecated props, events and slot props on `<Align>`, remove `<Center>` export. Migration: Replace `<Center>` with `<Align>`, replace the prop `autoCenter` with `auto`, replace the event `on:center` with `on:align`, replace the slot prop `let:center` with `let:align`.
+
 ## 6.0.0
 
 ### Major Changes

@@ -65,26 +65,6 @@ const cli = meow(
 
 const { packageJson } = readPackageUpSync({ cwd: __dirname, normalize: false })
 
-function toPascalCase(str) {
-  return (
-    str
-      .replace(/(\w)(\w*)/g, function (g0, g1, g2) {
-        // capitalize first letter of g1, leave the reset as-is and return the result
-        return g1.toUpperCase() + g2
-      })
-      // replace every non-word character with an empty string and capitalize the first following letter
-      .replace(/\W+(.)/g, function (g0, g1) {
-        return g1.toUpperCase()
-      })
-      // replace every non-word character with an empty string
-      .replace(/\s+/g, '')
-      // make first letter uppercase
-      .replace(/^\w/, function (g0) {
-        return g0.toUpperCase()
-      })
-  )
-}
-
 if (cli.input.length === 0) {
   console.log(cli.help)
 } else {
@@ -96,13 +76,12 @@ Command: npx @threlte/gltf@${packageJson.version} ${process.argv.slice(2).join('
   const file = cli.input[0]
   let nameExt = file.match(/[-_\w]+[.][\w]+$/i)[0]
   let name = nameExt.split('.').slice(0, -1).join('.')
-  const baseName = toPascalCase(name.charAt(0).toUpperCase() + name.slice(1))
-  const output = baseName + '.svelte'
+  const output = name + '.svelte'
   const showLog = (log) => {
     console.info('log:', log)
   }
   try {
-    const response = await gltf(file, output, {
+    await gltf(file, output, {
       ...config,
       showLog,
       timeout: 0,

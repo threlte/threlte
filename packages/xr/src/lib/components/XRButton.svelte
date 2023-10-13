@@ -49,18 +49,24 @@ display info about your WebXR session. This is aliased by `ARButton` and
 
   const dispatch = createEventDispatcher<{
     /** Fires when a user clicks the VR button. */
-    click: { state: 'unsupported' | 'insecure' | 'blocked' | 'supported' }
+    click: {
+      state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
+      nativeEvent: MouseEvent
+    }
 
     /** Fires when an enter / exit session error occurs. */
     error: Error
   }>()
 
-  const handleButtonClick = async (state: 'unsupported' | 'insecure' | 'blocked' | 'supported') => {
+  const handleButtonClick = async (
+    nativeEvent: MouseEvent,
+    state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
+  ) => {
     if (!$initialized) {
       throw new Error('The <XR> component was not created. This is required to start an XR session.')
     }
 
-    dispatch('click', { state })
+    dispatch('click', { state, nativeEvent })
 
     if (state !== 'supported') return
 
@@ -96,7 +102,10 @@ display info about your WebXR session. This is aliased by `ARButton` and
 </script>
 
 {#await getXRSupportState(mode) then state}
-  <button {...$$restProps} on:click={() => handleButtonClick(state)}>
+  <button
+    {...$$restProps}
+    on:click={(event) => handleButtonClick(event, state)}
+  >
     {#if state === 'unsupported'}
       {modeText} unsupported
     {:else if state === 'insecure'}

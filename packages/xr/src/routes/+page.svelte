@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { VRButton } from '$lib'
+  import { ARButton } from '$lib'
   import Scene from './scene.svelte'
 </script>
 
@@ -9,7 +9,12 @@
     <Scene />
   </Canvas>
 
-  <VRButton />
+  <ARButton
+    sessionInit={{
+      domOverlay: typeof document !== 'undefined' ? { root: document.body } : undefined,
+      optionalFeatures: ['dom-overlay', 'light-estimation', 'dom-overlay-for-handheld-ar']
+    }}
+  />
 </main>
 
 <style>
