@@ -14,7 +14,8 @@ interface Props {
   iframe?: boolean
   showFile?: string
   expandCode?: boolean
-  height?: string
+  codeClass?: string
+  hideStackblitz?: boolean
 }
 
 const allModules = import.meta.glob('../../examples/**/*', {
@@ -45,7 +46,8 @@ const hidePreview = Astro.props.hidePreview ?? false
   {
     !hidePreview && (
       <SvelteWrapper
-        height={Astro.props.height}
+        hideStackblitz={Astro.props.hideStackblitz}
+        class={Astro.props.codeClass}
         hideCode={hideCode}
         path={Astro.props.path}
         client:load
