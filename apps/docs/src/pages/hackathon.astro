@@ -2,6 +2,7 @@
 import Intro from '../components/hackathon/Intro.svelte'
 import MainLayout from '../layouts/MainLayout.astro'
 import DiscordIcon from '../components/Icons/inline/Discord.svelte'
+import Example from '../components/Example/Example.astro'
 ---
 
 <MainLayout title="Threlte Hackathon">
@@ -133,6 +134,14 @@ import DiscordIcon from '../components/Icons/inline/Discord.svelte'
 
       <span class="mt-2 text-sm">* Max 200w</span>
       <span class="text-sm">** This will be public (but pseudonyms allowed)</span>
+
+      <div class="my-8">
+        <Example
+          path="other/hackathon-ring"
+          iframe
+          height="50vh"
+        />
+      </div>
     </div>
   </div>
 </MainLayout>

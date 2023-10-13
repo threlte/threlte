@@ -7,6 +7,7 @@
   export let files: Record<string, string>
   export let hideCode: boolean
   export let iframe: boolean
+  export let height: string = '80vh'
 
   const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
     string,
@@ -29,10 +30,11 @@
 
 <div
   class={c(
-    'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
+    'relative w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
     hideCode && '!rounded-md',
     _class
   )}
+  style="height: {height};"
 >
   {#if iframe}
     <iframe
