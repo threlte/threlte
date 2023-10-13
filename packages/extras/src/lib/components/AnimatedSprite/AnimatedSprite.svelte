@@ -1,47 +1,49 @@
 <script lang='ts'>
   import * as THREE from 'three'
-  import { T, asyncWritable, type AsyncWritable, createRawEventDispatcher, useFrame } from '@threlte/core'
+  import { T, asyncWritable, type AsyncWritable, createRawEventDispatcher, useFrame, useThrelte, watch } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
   import { useLoader } from '@threlte/core'
 
   type Frame = {
     frame: { x: number, y: number, w: number, h: number },
-    rotated: boolean,
-    trimmed: boolean,
     spriteSourceSize: { x: number, y: number, w: number, h: number },
     sourceSize: { w: number, h: number },
     duration: number
+  }
+
+  type FrameTag = {
+    name: string
+    from: number
+    to: number
+    direction: string
   }
 
   type SpriteJsonHashData = {
     frames: Record<string, Frame>
     meta: {
       app: string,
-      version: string,
       image: string,
+      version: string,
       format: string,
       size: { w: number, h: number },
       scale: number
-      frameTags: Array<{
-        name: string
-        from: number
-        to: number
-        direction: string
-      }>
+      frameTags: FrameTag[]
     }
   }
 
   type $$Props = {
+    /** The current playing animation */
+    animation?: string
+
     /** The URL of the texture image */
     image: string
+
     /** The start frame of the animation */
     startFrame?: number
     /** The end frame of the animation */
     endFrame?: number
     /** The desired frames per second of the animaiton */
     fps?: number
-    /** The frame identifier to use, has to be one of animationNames */
-    frameName?: string
     /** The URL of the texture JSON (if using JSON-Array or JSON-Hash) */
     textureData?: string
     /** Whether or not the animation should loop */
@@ -51,7 +53,7 @@
     /** The animation names of the spritesheet */
     animationNames?: Array<string>
     /** Control when the animation runs */
-    autoPlay?: boolean
+    playing?: boolean
     /** Whether or not the Sprite should flip sides on the x-axis */
     flipX?: boolean
     /** Sets the alpha value to be used when running an alpha test. https://threejs.org/docs/#api/en/materials/Material.alphaTest */
@@ -62,22 +64,23 @@
     transparent?: boolean
   }
 
+  export let animation: Required<$$Props>['animation'] = ''
   export let startFrame: Required<$$Props>['startFrame'] = 0
   export let endFrame: $$Props['endFrame'] = 0
   export let fps: Required<$$Props>['fps'] = 30
-  export let frameName: Required<$$Props>['frameName'] = ''
   export let textureData: $$Props['textureData'] = undefined
   export let image: $$Props['image']
   export let loop: Required<$$Props>['loop'] = true
-  export let numberOfFrames: $$Props['numberOfFrames']
-  export let autoPlay: Required<$$Props>['autoPlay'] = true
-  export let animationNames: $$Props['animationNames']
-  export let flipX: $$Props['flipX']
+  export let numberOfFrames: $$Props['numberOfFrames'] = undefined
+  export let playing: Required<$$Props>['playing'] = true
+  export let animationNames: $$Props['animationNames'] = undefined
+  export let flipX: $$Props['flipX'] = undefined
   export let alphaTest: Required<$$Props>['alphaTest'] = 0
   export let asSprite: Required<$$Props>['asSprite'] = true
   export let transparent: Required<$$Props>['transparent'] = true
 
-  
+  export const ref = asSprite ? new THREE.Sprite() : new THREE.Mesh()
+
   type $$Events = {
     /** Fires when an animation starts */
     start: void
@@ -88,6 +91,7 @@
   }
 
   const dispatch = createRawEventDispatcher<$$Events>()
+  const { renderer } = useThrelte()
 
   const textureStore = useTexture(image, {
     transform: (texture: THREE.Texture) => {
@@ -96,27 +100,22 @@
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping
       texture.magFilter = THREE.NearestFilter
       texture.minFilter = THREE.NearestFilter
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
       return texture
     }
   })
 
-  const jsonStore = textureData
+  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = textureData
     ? useLoader(THREE.FileLoader).load(textureData, {
       transform: (file) => {
-        if (typeof file !== 'string') return undefined
-        try {
-          return JSON.parse(file)
-        } catch {
-          return undefined
-        }
+        if (typeof file !== 'string') return
+        try { return JSON.parse(file) } catch { return }
       }
     })
-    : asyncWritable(Promise.resolve())
+    : asyncWritable(Promise.resolve(undefined))
 
-  let hasEnded = false
   let timerOffset = performance.now()
   let currentFrame = startFrame
-  let currentFrameName = frameName
   let fpsInterval = 1000 / fps
   let totalFrames = 0
   let aspect = 1
@@ -149,8 +148,6 @@
       for (let i = 0; i < numberOfFrames; i += 1) {
         data.frames[`${i}`] = {
           frame: { x: i * frameWidth, y: 0, w: frameWidth, h: height },
-          rotated: false,
-          trimmed: false,
           spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: height },
           sourceSize: { w: frameWidth, h: height },
           duration: 100,
@@ -165,7 +162,7 @@
   const modifySpritePosition = () => {
     if (!json) return
 
-    const spritesheetSize = json.meta.size 
+    
     const framesH = (spritesheetSize.w) / frameWidth
     const framesV = (spritesheetSize.h) / frameHeight
     const frameOffsetY = 1 / framesV
@@ -175,96 +172,113 @@
     }
   }
 
-  const { start, stop } = useFrame(() => {
-    const now = performance.now()
-    const diff = now - timerOffset
-    const spritesheetSize = json.meta.size
-    const { frames } = json
-    const _endFrame = endFrame || totalFrames - 1
-    
-    const key = Object.keys(frames)[currentFrame]
-    const { frame } = frames[key]
-
-    let finalValX = 0
-    let finalValY = 0
-
-    if (currentFrame >= _endFrame) {
-      currentFrame = loop ? startFrame ?? 0 : 0
-      if (loop && dispatch.hasEventListener('loop')) {
-        dispatch('loop')
-      } else if (dispatch.hasEventListener('end')) {
-        dispatch('end')
-        hasEnded = true
-      }
-      if (!loop) return
-    }
-
-    if (diff <= fpsInterval) return
-    timerOffset = now - (diff % fpsInterval)
-
+  const setFrame = (name: string) => {
+    const { frame } = json!.frames[name]
+    const spritesheetSize = json!.meta.size
     const framesH = (spritesheetSize.w) / frameWidth
     const framesV = (spritesheetSize.h) / frameHeight
     const frameOffsetX = 1 / framesH
     const frameOffsetY = 1 / framesV
 
-    finalValX = flipOffset > 0
+    const finalValX = flipOffset > 0
       ? frameOffsetX * (frame.x / frameWidth)
       : frameOffsetX * (frame.x / frameHeight) - texture.repeat.x
-    finalValY = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
+    const finalValY = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
 
     texture?.offset.set(finalValX, finalValY)
     texture?.updateMatrix()
+  }
+
+  const { start, stop } = useFrame(() => {
+    const now = performance.now()
+    const diff = now - timerOffset
+    const name = frameNames[currentFrame]
+    const interval = json!.frames[name].duration ?? fpsInterval
+
+    if (diff <= interval) return
+    timerOffset = now - (diff % interval)
+
+    const start = frameTag?.from ?? startFrame
+    const end = frameTag?.to ?? endFrame ?? totalFrames - 1
+    
+    if (currentFrame > end) {
+      currentFrame = loop ? start : 0
+  
+      if (loop && dispatch.hasEventListener('loop')) {
+        dispatch('loop')
+      } else if (dispatch.hasEventListener('end')) {
+        dispatch('end')
+      }
+
+      if (!loop) return
+    }
+
+    setFrame(name)
 
     currentFrame += 1
   }, { autostart: false })
 
+  let texture: THREE.Texture
+  let json: SpriteJsonHashData
+  let frameNames: string[] = []
+  let frameTag: FrameTag | undefined
+  let spritesheetSize = { w: 0, h: 0 }
 
-  $: if (currentFrameName !== frameName && frameName) {
-    currentFrame = 0
-    currentFrameName = frameName
-    hasEnded = false
+  const setAnimation = () => {
+    frameTag = json?.meta.frameTags.find(({ name }) => name === animation)
+    currentFrame = frameTag?.from ?? 0
+    setFrame(frameNames[currentFrame])
   }
 
-  $: texture = $textureStore
-  $: json = textureData ? $jsonStore : createData()
-  $: flipX, json && texture && modifySpritePosition()
-
-  $: if (autoPlay && !hasEnded && json && texture) {
-    start()
-  } else {
-    stop()
-  }
-
-
-  $: if (json && texture) {
-    totalFrames = Object.keys(json.frames).length
-    texture.center.set(0, 0)
-    texture.repeat.set(1.0 / totalFrames, 1.0)
-    // texture.repeat.set((1 * flipOffset) / (metaInfo.w / frameW), 1 / (metaInfo.h / frameH))
+  watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
+    if (nextTexture === undefined || nextJson === undefined) return
+  
+    texture = nextTexture
+    json = nextJson
+    frameNames = Object.keys(json.frames)
+    totalFrames = frameNames.length
+    spritesheetSize = json.meta.size 
 
     const { sourceSize } = Object.values(json.frames)[0]
     frameWidth = sourceSize.w
     frameHeight = sourceSize.h
     aspect = frameHeight / frameWidth
+
+    texture.center.set(0, 0)
+    // texture.repeat.set(1.0 / totalFrames, 1.0)
+    texture.repeat.set((1 * flipOffset) / (spritesheetSize.w / frameWidth), 1 / (spritesheetSize.h / frameHeight))
+
+    
+    
+    setAnimation()
+  })
+
+  $: if (json && texture) {
+    
+    // 
+    
+    // 
+
+    
+  }
+
+  $: if (playing && json && texture) {
+    start()
+  } else {
+    stop()
   }
 </script>
 
-{#if asSprite}
-  <T.Sprite scale.y={aspect} {...$$restProps}>
-    {#if texture}
+<T is={ref} scale.y={aspect} {...$$restProps}>
+  {#if texture}
+    {#if asSprite}
       <T.SpriteMaterial
         map={texture}
         toneMapped={false}
         {transparent}
         {alphaTest}
       />
-    {/if}
-
-    <slot />
-  </T.Sprite>
-{:else}
-  <T.Mesh scale.y={aspect} {...$$restProps}>
-    {#if texture}
+    {:else}
       <T.MeshBasicMaterial
         map={texture}
         toneMapped={false}
@@ -272,9 +286,9 @@
         {transparent}
         {alphaTest}
       />
+      <T.PlaneGeometry />
     {/if}
-    <T.PlaneGeometry />
+  {/if}
 
-    <slot />
-  </T.Mesh>
-{/if}
+  <slot />
+</T>

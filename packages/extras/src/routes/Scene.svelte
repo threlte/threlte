@@ -1,16 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, useGamepad, AnimatedSprite } from '../lib'
+  import { Grid, OrbitControls, Sky, AnimatedSprite } from '../lib'
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
   import textureData from '$lib/assets/punk.json?url'
   import image from '$lib/assets/punk.png'
 
-  console.log(textureData)
-
   let listenToGamepad = true
   let mountGamepad = false
+
+  let animations = Array.from({ length: 10 }).fill('Idle_Left')
 </script>
 
 <svelte:window
@@ -53,12 +53,14 @@
   <T.SphereGeometry />
 </T.Mesh> -->
 
-{#each { length: 100 } as _, index}
-<AnimatedSprite
-  position.x={index % 10}
-  position.y={index / 10 % 10}
-  {textureData}
-  {image}
-  asSprite={false}
-/>
+{#each animations as animation, x}
+    <AnimatedSprite
+      {animation}
+      position.z={x}
+      position.y={0.5}
+      {textureData}
+      {image}
+      asSprite={true}
+      on:loop={() => (animations[x] = animation === 'Idle_Left' ? 'Idle_Right' : 'Idle_Left')}
+    />
 {/each}
