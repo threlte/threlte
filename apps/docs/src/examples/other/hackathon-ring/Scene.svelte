@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Environment, GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
-  import { cubicOut } from 'svelte/easing'
+  import { cubicOut, quintInOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import CameraFade from './CameraFade.svelte'
@@ -11,7 +11,7 @@
 
   const opacity = tweened(1, {
     duration: 3e3,
-    easing: cubicOut
+    easing: quintInOut
   })
 
   const scale = tweened(0.9, {
@@ -25,9 +25,12 @@
   })
 
   onReveal(() => {
-    rotationY.set(150 * DEG2RAD)
-    scale.set(1)
-    opacity.set(0)
+    const timeout = setTimeout(() => {
+      rotationY.set(150 * DEG2RAD)
+      scale.set(1)
+      opacity.set(0)
+    }, 300)
+    return () => clearTimeout(timeout)
   })
 
   const pointerSpring = spring({ x: $pointer.x, y: $pointer.y })
@@ -44,7 +47,7 @@
 >
   <CameraFade
     opacity={$opacity}
-    color="black"
+    color="#0B0B08"
   />
 </T.PerspectiveCamera>
 
