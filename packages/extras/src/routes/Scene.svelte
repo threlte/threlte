@@ -1,10 +1,9 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
+  import { Grid, OrbitControls, Sky, useGamepad, AnimatedSprite } from '../lib'
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
-  import SpriteAnimator from '$lib/components/SpriteAnimator/SpriteAnimator.svelte'
   import textureData from '$lib/assets/punk.json?url'
   import image from '$lib/assets/punk.png'
 
@@ -52,7 +51,7 @@
   <T.SphereGeometry />
 </T.Mesh> -->
 
-<SpriteAnimator
+<AnimatedSprite
   {textureData}
   {image}
 />

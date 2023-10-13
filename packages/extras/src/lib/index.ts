@@ -9,6 +9,7 @@ export { useTexture } from './hooks/useTexture'
 export { useGamepad } from './hooks/useGamepad'
 
 // abstractions
+export { default as AnimatedSprite } from './components/AnimatedSprite/AnimatedSprite.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as Float } from './components/Float/Float.svelte'
@@ -26,7 +27,6 @@ export { default as SoftShadows } from './components/SoftShadows/SoftShadows.sve
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
-export { default as AnimatedSprite } from './components/SpriteAnimator/SpriteAnimator.svelte'
 export { Align }
 
 /**
