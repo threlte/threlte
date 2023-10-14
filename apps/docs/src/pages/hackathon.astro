@@ -42,42 +42,6 @@ import Example from '../components/Example/Example.astro'
         > - this is <i>optional</i> but helps us plan.
       </p>
 
-      <h2 class="mb-2">Choose your path</h2>
-
-      <p>
-        As a participant you will need to choose between two tracks: "wow!" and "aha!". Both tracks 
-        welcome participants of all levels, coming as individuals or teams. Both tracks will have
-        the same prizes.
-      </p>
-
-      <div class="mb-2 grid gap-4 lg:grid-cols-2">
-        <!--  -->
-        <div
-          class="flex flex-col rounded-md border border-white/10 bg-white/5 p-4 shadow-xl duration-200 hover:bg-white/10 hover:shadow-2xl"
-        >
-          <h2 class="my-6">Wow! Track</h2>
-
-          <p class="text-faded text-base font-normal">
-            The "Wow! Track" is a playground for innovation, creativity, and jaw-dropping visuals.
-            We invite your to wow us with anything from games, immersive ui/ux prototypes, or a tech
-            or business prototypes. The sky is the limit so we expect you to surprise and delight
-            us!
-          </p>
-        </div>
-
-        <div
-          class="flex flex-col rounded-md border border-white/10 bg-white/5 p-4 shadow-xl duration-200 hover:bg-white/10 hover:shadow-2xl"
-        >
-          <h2 class="my-6">Aha! Track</h2>
-          <p class="text-faded text-base font-normal">
-            The "Aha! Track" is where you share the knowledge with the community. What did you miss
-            when you were learning Threlte? Add that example that delights and explains, or a
-            tutorial that gets you set up with the skills for your next project. Let's make Threlte
-            easy and fun to learn!
-          </p>
-        </div>
-      </div>
-
       <h2>Judging</h2>
       <p>
         The Threlte core team members will act as judges. Your entries will be scored between 1 and 5 stars 
@@ -91,8 +55,8 @@ import Example from '../components/Example/Example.astro'
 
       <h3>Criteria</h3>
       <ul>
-        <li>✨ Awesomeness - the wow factor (so counts double for Wow! track)</li>
-        <li>💡 Enlightenment - the aha factor (so counts double for Aha! track)</li>
+        <li>✨ Awesomeness - the wow factor</li>
+        <li>💡 Enlightenment - the aha factor</li>
         <li>🌈 Creativity - inventiveness, originality and playfulness</li>
         <li>🎨 Aesthetics - design, art and elegance</li>
         <li>🛠️ Technique - engineering, architecture and communication</li>
@@ -112,20 +76,6 @@ import Example from '../components/Example/Example.astro'
         </li>
       </ul>
 
-      <h3>Wow! Track Rules</h3>
-      <ul>
-        <li>Easily available public repo w/ MIT license</li>
-        <li>Clear README.md following template</li>
-        <li>Deployed version or package easily available</li>
-      </ul>
-
-      <h3>Aha! Track Rules</h3>
-      <ul>
-        <li>Submitted as a PR to Threlte repo</li>
-        <li>Follows Threlte repo conventions and standards</li>
-        <li>Discussed with maintainer team</li>
-      </ul>
-
       <h3>Submission</h3>
       <p>
         Submissions are made in a thread in the #hackathon channel. You need to fill out the
@@ -142,16 +92,6 @@ import Example from '../components/Example/Example.astro'
 
       <span class="mt-2 text-sm">* Max 200w</span>
       <span class="text-sm">** This will be public (but pseudonyms allowed)</span>
-
-      <div class="not-prose my-8">
-        <Example
-          path="other/hackathon-ring"
-          previewClass="border-none"
-          iframe
-          hideCode
-          hideStackblitz
-        />
-      </div>
     </div>
   </div>
 </MainLayout>
