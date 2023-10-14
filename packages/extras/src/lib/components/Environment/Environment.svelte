@@ -16,6 +16,7 @@
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
   import type { EnvironmentProps } from './Environment.svelte'
   import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
+  import { useSuspense } from '../../suspense/useSuspense'
 
   type Props = EnvironmentProps
 
@@ -56,6 +57,8 @@
 
   const { remember } = useCache()
 
+  const suspend = useSuspense()
+
   const loadEnvironment = async () => {
     const LoaderType = pickLoader()
     const loader: any = new LoaderType()
@@ -65,11 +68,13 @@
     const cacheKey = [LoaderType, path, filesKey]
 
     const texture = (await remember(async () => {
-      return new Promise((resolve, reject) => {
-        loader.setPath(path).load(files, (texture: any) => {
-          resolve(texture)
+      return suspend(
+        new Promise((resolve, reject) => {
+          loader.setPath(path).load(files, (texture: any) => {
+            resolve(texture)
+          })
         })
-      })
+      )
     }, cacheKey)) as any
 
     texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
@@ -114,5 +119,8 @@
 </script>
 
 {#if groundProjection}
-  <GroundProjectedSkybox {...groundProjection} envMap={previousEnvMap} />
+  <GroundProjectedSkybox
+    {...groundProjection}
+    envMap={previousEnvMap}
+  />
 {/if}
