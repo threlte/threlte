@@ -1,7 +1,7 @@
 ---
+import MdxCode from '$components/Code/MdxCode.astro'
 import DocsLayout from '$layouts/DocsLayout.astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
-import MdxCode from '$components/Code/MdxCode.astro'
 import QuickNav from '../../../../components/QuickNav/QuickNav.astro'
 
 export async function getStaticPaths() {
@@ -19,8 +19,10 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { category, title } = entry.data
+const { category } = entry.data
 const { Content } = await entry.render()
+
+const title = entry.id.split('/').pop()?.split('.')[0]
 ---
 
 <DocsLayout

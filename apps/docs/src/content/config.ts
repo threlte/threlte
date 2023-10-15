@@ -97,8 +97,6 @@ export const learnCollection = defineCollection({
 export const examplesCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('examples'),
-    category: z.string().optional(),
-    title: z.string(),
     order: z.number().optional()
   })
 })
