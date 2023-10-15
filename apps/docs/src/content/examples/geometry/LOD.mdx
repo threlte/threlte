@@ -1,7 +1,6 @@
 ---
 category: Geometry
 title: LOD in Threlte
-showInSidebar: false
 ---
 
 This is a practical example showing a best-practice method of implementing LOD in Threlte. The example is a great demonstration of the power of [ref](../../reference/core/t) bindings.
@@ -20,14 +19,17 @@ This is an adaption of Three.js [own documentation](https://threejs.org/docs/#ap
 
 ```svelte
 <T.LOD let:ref={lod}>
-  {#each ["red","green","blue"] as color, i}
+  {#each ['red', 'green', 'blue'] as color, i}
     <T.Mesh
-      on:create={ ({ref}) => {
+      on:create={({ ref }) => {
         lod.addLevel(ref, i * 75) // i * 75 = distance
       }}
     >
-      <T.IcosahedronGeometry args={[10, 3-i]} />
-      <T.MeshStandardMaterial {color} wireframe />
+      <T.IcosahedronGeometry args={[10, 3 - i]} />
+      <T.MeshStandardMaterial
+        {color}
+        wireframe
+      />
     </T.Mesh>
   {/each}
 </T.LOD>

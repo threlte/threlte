@@ -93,17 +93,6 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   }
 }
 
-type ExamplesCategoryKey = Exclude<CollectionEntry<'examples'>['data']['category'], undefined>
-
-const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
-  'Animation',
-  'Camera',
-  'Geometry',
-  'MeshLine',
-  'Postprocessing',
-  'Shaders'
-]
-
 const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const learnCollection = await getCollection('examples')
 
@@ -130,13 +119,6 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
         title: category as Exclude<typeof category, undefined>
       }
     })
-
-  categories.sort((a, b) => {
-    return (
-      examplesSidebarMenuCategoryOrder.indexOf(a.title as ExamplesCategoryKey) -
-      examplesSidebarMenuCategoryOrder.indexOf(b.title as ExamplesCategoryKey)
-    )
-  })
 
   return {
     categories
