@@ -1,17 +1,26 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, AnimatedSprite } from '../lib'
+  import { Grid, OrbitControls, Sky, AnimatedSpriteMaterial } from '../lib'
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
-  import textureData from '$lib/assets/punk.json?url'
-  import image from '$lib/assets/punk.png'
-  import { OrthographicCamera } from 'three'
+  import dataUrl from '$lib/assets/punk.json?url'
+  import textureUrl from '$lib/assets/punk.png'
+  import flameTextureUrl from '$lib/assets/flame.png'
 
   let listenToGamepad = true
   let mountGamepad = false
+  let index = 0
+  let sequence = ['Idle_Left', 'Idle_Left', 'Idle_Left', 'Idle_Right', 'Idle_Right', 'Idle_Right']
+  let animation = sequence[0]
 
-  let animations = Array.from({ length: 10 }).fill('Idle_Left') as string[]
+  const sprites = Array.from({ length: 10 }).map(() => {
+    const index = Math.trunc(Math.random() * sequence.length)
+    return {
+      index,
+      animation: sequence[index],
+    }
+  })
 </script>
 
 <svelte:window
@@ -47,25 +56,65 @@
 
 <Sky />
 
-<Grid />
+<Grid position.y={0.001} type='polar' />
 
-<!-- <T.Mesh position.y={1}>
-  <T.MeshStandardMaterial
-    transparent
-    color="white"
-  />
+<T.Mesh position.y={1} position.x={-2} castShadow receiveShadow>
+  <T.MeshStandardMaterial color="white" />
   <T.SphereGeometry />
-</T.Mesh> -->
+</T.Mesh>
 
-{#each animations as animation, x}
-    <AnimatedSprite
-      {animation}
-      position.z={x}
-      position.y={0.5}
-      {textureData}
-      {image}
-      asSprite={true}
-      on:create={}
-      on:loop={() => (animations[x] = animation === 'Idle_Left' ? 'Idle_Right' : 'Idle_Left')}
+<T.Mesh receiveShadow rotation.x={-Math.PI / 2}>
+  <T.PlaneGeometry args={[10, 10]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+
+<!-- {#each sprites as sprite, x}
+  <T.Sprite
+    position.z={x}
+    position.y={0.5}
+  >
+    <AnimatedSpriteMaterial
+      {textureUrl}
+      {dataUrl}
+      animation={sprite.animation}
+      fps={x + 1}
+      on:loop={() => {
+        sprite.index += 1
+        sprite.index %= sequence.length
+        sprite.animation = sequence[index]
+      }}
     />
-{/each}
+  </T.Sprite>
+{/each} -->
+
+<T.Sprite
+  position.z={-3}
+  position.y={0.5}
+>
+  <AnimatedSpriteMaterial
+    textureUrl={flameTextureUrl}
+    fps={40}
+    columns={9}
+    rows={6}
+    totalFrames={51}
+    filter='linear'
+  />
+</T.Sprite>
+
+<T.Mesh
+  position.z={-1}
+  position.y={0.5}
+  rotation.y={Math.PI / 2}
+  castShadow
+  receiveShadow
+>
+  <AnimatedSpriteMaterial
+    {textureUrl}
+    {dataUrl}
+    {animation}
+    fps={5}
+  />
+  <T.PlaneGeometry />
+</T.Mesh>
+
+<T.DirectionalLight intensity={2} castShadow position={[1, 1, 1]} />
