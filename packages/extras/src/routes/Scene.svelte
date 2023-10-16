@@ -7,6 +7,8 @@
   import dataUrl from '$lib/assets/punk.json?url'
   import textureUrl from '$lib/assets/punk.png'
   import flameTextureUrl from '$lib/assets/flame.png'
+  import fireTextureUrl from '$lib/assets/fire.png'
+  import Player from './Player.svelte'
 
   let listenToGamepad = true
   let mountGamepad = false
@@ -68,7 +70,7 @@
   <T.MeshStandardMaterial />
 </T.Mesh>
 
-<!-- {#each sprites as sprite, x}
+{#each sprites as sprite, x}
   <T.Sprite
     position.z={x}
     position.y={0.5}
@@ -85,7 +87,7 @@
       }}
     />
   </T.Sprite>
-{/each} -->
+{/each}
 
 <T.Sprite
   position.z={-3}
@@ -116,5 +118,23 @@
   />
   <T.PlaneGeometry />
 </T.Mesh>
+
+<T.Mesh
+  position.z={-2}
+  position.y={0.5}
+  rotation.y={Math.PI / 2}
+  castShadow
+  receiveShadow
+>
+  <AnimatedSpriteMaterial
+    textureUrl={fireTextureUrl}
+    columns={8}
+    totalFrames={8}
+    fps={10}
+  />
+  <T.PlaneGeometry />
+</T.Mesh>
+
+<Player />
 
 <T.DirectionalLight intensity={2} castShadow position={[1, 1, 1]} />

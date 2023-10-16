@@ -69,6 +69,14 @@ export type AnimatedSpriteProps = Props<Material> & {
   /** The URL of the texture JSON (if using JSON-Hash) */
   dataUrl: string
 
+  /**
+   * The desired frames per second of the animation
+   * 
+   * This will override any frame durations specified in JSON
+   */
+  fps?: number
+
+
 // Otherwise...
 } | {
   /**

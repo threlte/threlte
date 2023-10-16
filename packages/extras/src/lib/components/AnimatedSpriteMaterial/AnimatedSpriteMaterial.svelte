@@ -6,7 +6,6 @@
     type AsyncWritable,
     createRawEventDispatcher,
     useFrame,
-    useThrelte,
     watch,
     useLoader,
     useParent
@@ -30,10 +29,11 @@
   export let animation: $$Props['animation'] = ''
   export let startFrame: $$Props['startFrame'] = 0
   export let endFrame: $$Props['endFrame'] = undefined
+  export let delay = 0
   export let fps: $$Props['fps'] = 30
   export let loop: $$Props['loop'] = true
-  export let rows: $$Props['rows'] = 0
-  export let columns: $$Props['columns'] = 0
+  export let rows: $$Props['rows'] = 1
+  export let columns: $$Props['columns'] = undefined
   export let totalFrames: $$Props['totalFrames'] = 0
   export let playing: $$Props['playing'] = true
   export let flipX: $$Props['flipX'] = false
@@ -42,13 +42,10 @@
 
   const parent = useParent()
   const dispatch = createRawEventDispatcher<$$Events>()
-  const { renderer } = useThrelte()
 
-  let timerOffset = performance.now()
+  let timerOffset = 0
   let currentFrame = startFrame
-  let fpsInterval = 1000 / fps
   let numFrames = 0
-  let aspect = 1
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
@@ -60,6 +57,7 @@
 
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
+  $: fpsInterval = 1000 / fps
 
   export let is: THREE.Material = isMesh ? new THREE.MeshBasicMaterial() : new THREE.SpriteMaterial()
   export let ref = is
@@ -73,7 +71,6 @@
       value.magFilter = value.minFilter = filter === 'nearest'
         ? THREE.NearestFilter
         : THREE.LinearFilter
-      value.anisotropy = renderer.capabilities.getMaxAnisotropy()
       return value
     }
   })
@@ -95,9 +92,10 @@
 
   const createData = (texture: THREE.Texture) => {
     const { width, height } = texture.image
+    const cols = columns ?? totalFrames
 
     numFrames = totalFrames
-    const frameWidth = width / columns
+    const frameWidth = width / cols
     const frameHeight = height / rows
     const data: SpriteJsonHashData = {
       frames: {},
@@ -114,8 +112,8 @@
 
     for (let i = 0; i < numFrames; i += 1) {
       // Calculate the row and column for the current frame
-      const row = Math.floor(i / columns);
-      const col = i % columns;
+      const row = Math.floor(i / cols);
+      const col = i % cols;
 
       // Calculate the x, y coordinates of the frame within the sprite sheet
       const x = col * frameWidth;
@@ -125,7 +123,6 @@
         frame: { x, y, w: frameWidth, h: frameHeight },
         spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },
         sourceSize: { w: frameWidth, h: frameHeight },
-        duration: 100,
       }
     }
 
@@ -159,11 +156,11 @@
     }
   }
 
-  const { start, stop } = useFrame(() => {
+  const { start, stop, started } = useFrame(() => {
     const now = performance.now()
     const diff = now - timerOffset
     const name = frameNames[currentFrame]
-    const interval = fpsInterval ?? json?.frames[name].duration ?? 100
+    const interval = json?.frames[name].duration ?? fpsInterval
 
     if (diff <= interval) return
     timerOffset = now - (diff % interval)
@@ -178,17 +175,22 @@
     if (currentFrame > end) {
       currentFrame = start
   
-      if (loop && dispatch.hasEventListener('loop')) {
-        dispatch('loop')
-      } else if (dispatch.hasEventListener('end')) {
-        dispatch('end')
+      if (loop) {
+        if (dispatch.hasEventListener('loop')) {
+          dispatch('loop')
+        }
+      } else {
+        stop()
+        if (dispatch.hasEventListener('end')) {
+          dispatch('end')
+        }
       }
     }
   }, { autostart: false })
 
   watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
     if (nextTexture === undefined || nextJson === undefined) return
-  
+
     texture = nextTexture.clone()
     json = nextJson
     frameNames = Object.keys(json.frames)
@@ -198,7 +200,6 @@
     const { sourceSize } = Object.values(json.frames)[0]
     frameWidth = sourceSize.w
     frameHeight = sourceSize.h
-    aspect = frameHeight / frameWidth
 
     texture.repeat.set(
       (1 * flipOffset) / (spritesheetSize.w / frameWidth),
@@ -210,7 +211,12 @@
 
   $: setAnimation(animation)
 
+  $: if (loop && !$started && json && texture) {
+    start()
+  }
+
   $: if (playing && json && texture) {
+    timerOffset = performance.now() - delay
     start()
   } else {
     stop()
