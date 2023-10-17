@@ -15,7 +15,8 @@
     AnimatedSpriteEvents,
     AnimatedSpriteSlots,
     SpriteJsonHashData,
-    FrameTag
+    FrameTag,
+    Frame
   } from './AnimatedSpriteMaterial.svelte'
   import { useTexture } from '../../hooks/useTexture'
 
@@ -29,7 +30,7 @@
   export let animation: $$Props['animation'] = ''
   export let startFrame: $$Props['startFrame'] = 0
   export let endFrame: $$Props['endFrame'] = undefined
-  export let delay = 0
+  export let delay: $$Props['delay'] = 0
   export let fps: $$Props['fps'] = 30
   export let loop: $$Props['loop'] = true
   export let rows: $$Props['rows'] = 1
@@ -49,8 +50,8 @@
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
-  let texture: THREE.Texture
-  let json: SpriteJsonHashData
+  let texture: THREE.Texture | undefined
+  let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
@@ -95,6 +96,7 @@
     const cols = columns ?? totalFrames
 
     numFrames = totalFrames
+
     const frameWidth = width / cols
     const frameHeight = height / rows
     const data: SpriteJsonHashData = {
@@ -129,9 +131,7 @@
     return data
   }
 
-  const setFrame = (name: string) => {
-    if (json === undefined) return
-    const { frame } = json.frames[name]
+  const setFrame = (frame: Frame['frame']) => {
     const horizontalFrames = spritesheetSize.w / frameWidth
     const verticalFrames = spritesheetSize.h / frameHeight
     const frameOffsetX = 1 / horizontalFrames
@@ -147,9 +147,12 @@
   }
 
   const setAnimation = (name: string) => {
+    if (!json) return
+
     frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
     currentFrame = frameTag?.from ?? 0
-    setFrame(frameNames[currentFrame])
+
+    setFrame(json.frames[frameNames[currentFrame]].frame)
 
     if (dispatch.hasEventListener('start')) {
       dispatch('start')
@@ -160,7 +163,8 @@
     const now = performance.now()
     const diff = now - timerOffset
     const name = frameNames[currentFrame]
-    const interval = json?.frames[name].duration ?? fpsInterval
+    const { frame, duration } = json!.frames[name]
+    const interval = duration ?? fpsInterval
 
     if (diff <= interval) return
     timerOffset = now - (diff % interval)
@@ -168,7 +172,7 @@
     const start = frameTag?.from ?? startFrame
     const end = frameTag?.to ?? endFrame ?? numFrames - 1
 
-    setFrame(name)
+    setFrame(frame)
 
     currentFrame += 1
   

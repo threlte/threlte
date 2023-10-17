@@ -6,7 +6,7 @@ export type Frame = {
   frame: { x: number, y: number, w: number, h: number },
   spriteSourceSize: { x: number, y: number, w: number, h: number },
   sourceSize: { w: number, h: number },
-  duration: number
+  duration?: number
 }
 
 export type FrameTag = {
@@ -61,6 +61,9 @@ export type AnimatedSpriteProps = Props<Material> & {
 
   /** Control when the animation runs */
   playing?: boolean
+  
+  /** Delay the start of the animation in ms */
+  delay?: number
 
   transparent?: boolean
 
