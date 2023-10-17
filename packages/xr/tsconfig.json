@@ -9,19 +9,11 @@
 
     "allowJs": true,
     "checkJs": true,
-    // @TODO(mp) - Uncomment when everything else is upgraded to Typescript 5
-    // "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true,
 
-    "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

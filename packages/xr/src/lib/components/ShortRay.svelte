@@ -14,6 +14,12 @@
   varying mediump vec2 vUv;
   void main() { gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.)); }
   `
+
+  const radius = 0.002
+  const height = 0.2
+  const radialSegments = 16
+  const heightSegments = 1
+  const openEnded = false
 </script>
 
 <T.Mesh
@@ -21,11 +27,6 @@
   rotation.x={-Math.PI / 2}
   position.z={-0.1}
 >
-  {@const radius = 0.002}
-  {@const height = 0.2}
-  {@const radialSegments = 16}
-  {@const heightSegments = 1}
-  {@const openEnded = false}
   <T.CylinderGeometry args={[radius, radius, height, radialSegments, heightSegments, openEnded]} />
   <T.RawShaderMaterial
     transparent

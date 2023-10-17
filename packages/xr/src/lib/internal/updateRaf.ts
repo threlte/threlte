@@ -13,13 +13,11 @@ export const updateRaf = () => {
 
   watch(session, (session) => {
     if (session) {
-      currentRaf.fn = (fn: XRFrameRequestCallback) => (
-        session.requestAnimationFrame(fn)
-      )
+      currentRaf.fn = (fn: XRFrameRequestCallback) => session.requestAnimationFrame(fn)
     } else {
       currentRaf.fn = browserRaf
     }
   })
 
-	onDestroy(() => (currentRaf.fn = browserRaf))
+  onDestroy(() => (currentRaf.fn = browserRaf))
 }

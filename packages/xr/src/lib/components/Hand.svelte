@@ -1,4 +1,5 @@
 <script lang='ts' context='module'>
+  import type { Group } from 'three'
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
   import type { XRHandEvent } from '../types'
@@ -89,7 +90,7 @@
     dispatch(event.type, event)
   }
 
-  let children: THREE.Group
+  let children: Group
 
   /**
    * Currently children of a hand XRSpace or model will not

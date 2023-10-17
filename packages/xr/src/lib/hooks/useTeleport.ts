@@ -14,9 +14,9 @@ const offset = { x: 0, y: 0, z: 0 }
  * vec3.set(5, 0, 5)
  *
  * teleport(vec3)
- * 
+ *
  * const quat = new THREE.Quaternion()
- * 
+ *
  * teleport(vec3, quat)
  */
 export const useTeleport = () => {

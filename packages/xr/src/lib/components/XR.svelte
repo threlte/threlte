@@ -101,7 +101,9 @@ This should be placed within a Threlte `<Canvas />`.
 
     try {
       $session?.updateTargetFrameRate(frameRate)
-    } catch {}
+    } catch {
+      // Do nothing
+    }
   }
 
   const cleanupSession = (currentSession?: XRSession) => {

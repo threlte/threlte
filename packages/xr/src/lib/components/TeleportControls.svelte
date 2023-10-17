@@ -145,6 +145,10 @@
   })
 
   teleportPlugin(navMeshes)
+
+  const innerRadius = 0.175
+  const outerRadius = 0.2
+  const thetaSegments = 32
 </script>
 
 <slot />
@@ -163,9 +167,6 @@
     position.y={destination?.y}
     position.z={destination?.z}
   >
-    {@const innerRadius = 0.175}
-    {@const outerRadius = 0.2}
-    {@const thetaSegments = 32}
     <T.RingGeometry
       args={[innerRadius, outerRadius, thetaSegments]}
       on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
