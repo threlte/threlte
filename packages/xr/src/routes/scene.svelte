@@ -25,9 +25,7 @@
 
 <Headset>
   <T.Mesh position.z={-0.5}>
-    {@const radius = 0.01}
-    {@const length = 0.08}
-    <T.CylinderGeometry args={[radius, radius, length]} />
+    <T.CylinderGeometry args={[0.01, 0.01, 0.08]} />
     <T.MeshStandardMaterial color="orange" />
   </T.Mesh>
 </Headset>
@@ -35,19 +33,15 @@
 <XR>
   <Controller left>
     <T.Mesh>
-      {@const radius = 0.01}
-      {@const length = 0.08}
-      <T.CylinderGeometry args={[radius, radius, length]} />
+      <T.CylinderGeometry args={[0.01, 0.01, 0.08]} />
       <T.MeshStandardMaterial color="orange" />
     </T.Mesh>
     <T.Mesh slot="target-ray">
-      {@const size = 0.05}
-      <T.BoxGeometry args={[size, size, size]} />
+      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
       <T.MeshStandardMaterial color="turquoise" />
     </T.Mesh>
     <T.Mesh slot="grip">
-      {@const radius = 0.02}
-      <T.IcosahedronGeometry args={[radius]} />
+      <T.IcosahedronGeometry args={[0.02]} />
       <T.MeshStandardMaterial color="skyblue" />
     </T.Mesh>
   </Controller>
@@ -56,16 +50,14 @@
 
   <Hand left>
     <T.Mesh slot="wrist">
-      {@const size = 0.05}
-      <T.BoxGeometry args={[size, size, size]} />
+      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
       <T.MeshStandardMaterial color="turquoise" />
     </T.Mesh>
   </Hand>
 
   <Hand right>
     <T.Mesh>
-      {@const size = 0.05}
-      <T.BoxGeometry args={[size, size, size]} />
+      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
       <T.MeshStandardMaterial color="skyblue" />
     </T.Mesh>
   </Hand>

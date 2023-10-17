@@ -18,7 +18,7 @@
     "@sveltejs/kit": "^1.25.2",
     "@sveltejs/package": "^2.2.2",
     "@threlte/core": "workspace:*",
-    "@types/three": "^0.157.0",
+    "@types/three": "^0.155.0",
     "@types/webxr": "^0.5.5",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
@@ -28,7 +28,7 @@
     "publint": "^0.1.16",
     "svelte": "^4.1.1",
     "svelte-check": "^3.5.2",
-    "three": "^0.154.0",
+    "three": "^0.155.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.6",
     "vite-plugin-mkcert": "^1.16.0"

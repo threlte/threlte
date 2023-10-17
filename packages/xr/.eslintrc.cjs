@@ -4,7 +4,8 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
-    extraFileExtensions: ['.svelte']
+    extraFileExtensions: ['.svelte'],
+    project: ['./tsconfig.json']
   },
   plugins: ['@typescript-eslint'],
   extends: [
@@ -14,7 +15,7 @@ module.exports = {
     'plugin:svelte/recommended',
     'plugin:svelte/prettier'
   ],
-  ignorePatterns: ['*.cjs'],
+  ignorePatterns: ['*.cjs', '*.js', 'vite.config.ts'],
   overrides: [
     {
       files: ['*.svelte'],
@@ -25,8 +26,6 @@ module.exports = {
     }
   ],
   env: {
-    browser: true,
-    es2020: true,
-    node: true
+    browser: true
   }
 }
