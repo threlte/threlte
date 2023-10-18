@@ -1,6 +1,7 @@
 import { getContext } from 'svelte'
-import { suspenseContextIdentifier, type SuspenseContext } from './context'
 import { get_current_component, onDestroy } from 'svelte/internal'
+import { derived, readable } from 'svelte/store'
+import { suspenseContextIdentifier, type SuspenseContext } from './context'
 
 /**
  * This hook is used to suspend the component until the promise is resolved.
@@ -16,9 +17,13 @@ export const useSuspense = () => {
     return promise
   }
 
+  const state = {
+    suspended: derived(ctx?.suspended ?? readable(false), (suspended) => suspended)
+  }
+
   onDestroy(() => {
     ctx?.onComponentDestroy(component)
   })
 
-  return suspend
+  return Object.assign(suspend, state)
 }
