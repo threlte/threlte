@@ -2,7 +2,6 @@
   import { writable } from 'svelte/store'
   import { T } from '@threlte/core'
   import { OrbitControls, Grid } from '@threlte/extras'
-  import { useTweakpane } from '$lib/useTweakpane'
   import BirchTree_1 from '../birch1.svelte'
   import Bush1 from '../bush1.svelte'
   import Rock1 from '../rock1.svelte'
@@ -27,23 +26,17 @@
       $randomRocks.push([Math.random(), Math.random(), Math.random(), Math.random()])
     }
   }
-
-  const { action, addButton } = useTweakpane()
-
-  addButton({
-    title: 'regenerate',
-    label: 'Randomness',
-    onClick: () => {
-      generateRandomNumbers()
-    }
-  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
 >
-  <OrbitControls maxPolarAngle={1.57} />
+  <OrbitControls
+    maxPolarAngle={1.57}
+    autoRotate
+    autoRotateSpeed={0.1}
+  />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight position={[3, 10, 7]} />

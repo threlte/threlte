@@ -1,6 +1,17 @@
 <script>
   import { Canvas } from '@threlte/core'
+  import { useTweakpane } from '$lib/useTweakpane'
   import Scene from './Scene.svelte'
+
+  const { action, addButton } = useTweakpane()
+
+  addButton({
+    title: 'regenerate',
+    label: 'Randomness',
+    onClick: () => {
+      generateRandomNumbers()
+    }
+  })
 </script>
 
 <div>
