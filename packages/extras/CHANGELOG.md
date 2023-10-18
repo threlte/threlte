@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.3.0
+
+### Minor Changes
+
+- c2ddef77: Added `suspended` store to return type of `useSuspense`
+
 ## 7.2.0
 
 ### Minor Changes
