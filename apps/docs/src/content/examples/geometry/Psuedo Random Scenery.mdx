@@ -10,24 +10,30 @@ Examples of psudeo scenery and how to accomplish that in Threlte.
 
 Within your scene, suppose you've decided you'd like some randomly generated objects. Here we're going to explore some of the ways you could do that and hopefully give you a place you can build from on your own.
 
-<Tip type="note">Explicitly placing objects is also a good enough approach in many projects.</Tip>
+<Tip type="note">
+  Explicitly placing objects is also a good enough approach in many projects. You could even start
+  from a random scene then save all the object properties and create a svelte file representing the
+  randomly generated scene.
+</Tip>
 
-A simple starting point is complete randomness. Below is a flat plane, a couple of `{#each ... as ...}` blocks and a function call to create a bunch of random numbers which sets up the objects within the scene.
+A simple starting point is complete randomness. Below is a flat plane, a couple of `{#each ... as ...}` blocks and a function call to create a bunch of random numbers to pass onto the objects within the scene.
 
 <Example path="geometry/psuedo-random-scenery/starting-with-random" />
 
-If you play around with regenerating the scene above you'll start to notice an issue.
+This could be all you need for your project.
 
-- Sometimes some trees are placed too close to one-another, or maybe a tree looks like its growing from a rock. This is especially true with a high number of objects.
+If not and you noticed some placement issues i.e. sometimes some trees are placed too close to one-another, or maybe a tree looks like its growing from a rock; then you need a better solution.
 
-A solution for this is to use Poisson Disk Sampling.
+[Poisson Disk Sampling](https://medium.com/@hemalatha.psna/implementation-of-poisson-disc-sampling-in-javascript-17665e406ce1) is an algorithm we can use to solve this.
+
+<Example path="geometry/psuedo-random-scenery/poisson-disc-sampling" />
+
+alksnhd
 
 - Technically, the `Math.random()` function is completely random. So if you ever wanted multiplayer your players will see different scenery.
 
 - generate some random numbers from Math.random() and save them into a js file
   This follows along after creating some terrain. The motivation here is that I want to add things to my terrain.
-
-<Example path="geometry/psuedo-random-scenery/regenerating-the-random" />
 
 ### How is this done?
 

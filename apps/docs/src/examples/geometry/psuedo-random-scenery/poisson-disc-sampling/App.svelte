@@ -5,7 +5,7 @@
   import { regen, numberOfObjects } from './state'
 
   const { action, addButton, addInput } = useTweakpane({
-    title: 'Completely Random'
+    title: 'Poisson Disc Sampling'
   })
 
   addButton({
