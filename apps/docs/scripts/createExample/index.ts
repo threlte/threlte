@@ -43,7 +43,7 @@ const init = async () => {
 
   mkdirSync(directory, { recursive: true })
 
-  const templateDirectory = './scripts/createExample/template'
+  const templateDirectory = './scripts/example-template'
   const files = readdirSync(templateDirectory)
   for (const file of files) {
     copyFileSync(`${templateDirectory}/${file}`, `${directory}/${file}`)

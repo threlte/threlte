@@ -1,5 +1,21 @@
 # @threlte/extras
 
+## 7.3.0
+
+### Minor Changes
+
+- c2ddef77: Added `suspended` store to return type of `useSuspense`
+
+## 7.2.0
+
+### Minor Changes
+
+- 206fbc83: Added suspense support to `<GLTF>` and `<Environment>`
+
+### Patch Changes
+
+- 79a7fa4f: Aligned `onReveal` with `onMount` in that you may return a cleanup function that runs whenever a component is resuspended or unmounted
+
 ## 7.1.1
 
 ### Patch Changes
