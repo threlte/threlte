@@ -766,11 +766,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/three':
-        specifier: ^0.157.2
-        version: 0.157.2
-      '@types/webxr':
-        specifier: ^0.5.5
-        version: 0.5.5
+        specifier: ^0.155.0
+        version: 0.155.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.8.0
         version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
@@ -796,8 +793,8 @@ importers:
         specifier: ^3.5.2
         version: 3.5.2(postcss@8.4.27)(svelte@4.1.1)
       three:
-        specifier: ^0.157.0
-        version: 0.157.0
+        specifier: ^0.155.0
+        version: 0.155.0
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -4023,15 +4020,6 @@ packages:
       '@types/webxr': 0.5.5
       fflate: 0.6.10
       lil-gui: 0.17.0
-      meshoptimizer: 0.18.1
-    dev: true
-
-  /@types/three@0.157.2:
-    resolution: {integrity: sha512-2kykrMgvO5LTAiahadM6ijoER+GcbEJ61pQVOyGxIJTCASoUnzwJvfhilsLxvEw4+glzhLYUDvvTvNjx+58Vzw==}
-    dependencies:
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.5
-      fflate: 0.6.10
       meshoptimizer: 0.18.1
     dev: true
 
@@ -12030,10 +12018,6 @@ packages:
 
   /three@0.155.0:
     resolution: {integrity: sha512-sNgCYmDijnIqkD/bMfk+1pHg3YzsxW7V2ChpuP6HCQ8NiZr3RufsXQr8M3SSUMjW4hG+sUk7YbyuY0DncaDTJQ==}
-
-  /three@0.157.0:
-    resolution: {integrity: sha512-CeAwQrf4x3z0/e+MC4F+nXLW5t0gh3pw+L6CCBqpHvOq3bGYIgRYub7Pv0j/9wR+d++OiEglyZzWyuSYbwWGOA==}
-    dev: true
 
   /through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
