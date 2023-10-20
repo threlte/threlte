@@ -185,27 +185,10 @@ If no metadata file is provided, additional props must be passed to run an anima
 ```svelte {4-6}+
 <T.Sprite>
   <AnimatedSpriteMaterial
-    textureUrl='./player.png'
+    textureUrl='./fire.png'
     totalFrames={14}
     rows={4}
     columns={4}
   />
 </T.Sprite>
-```
-
-### Example
-
-```svelte
-<script>
-  import { AnimatedSpriteMaterial } from '@threlte/extras'
-</script>
-
-<T.Mesh>
-  <AnimatedSpriteMaterial
-    textureUrl='./fire.png'
-    totalFrames={8}
-    fps={10}
-  />
-  <T.PlaneGeometry />
-</T.Mesh>
 ```
