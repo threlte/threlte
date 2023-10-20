@@ -30,25 +30,51 @@ export type SpriteJsonHashData = {
 }
 
 export type AnimatedSpriteProps = Props<Material> & {
-  /** The current playing animation */
-  animation?: string
-
-  /** The URL of the texture image */
+  /** The URL of the spritesheet texture image. */
   textureUrl: string
 
-  /**
-   * The texture filtering
-   * 
-   * @default 'nearest'
-   */
-  filter?: 'nearest' | 'linear'
+  /** The URL of the spritesheet JSON. */
+  dataUrl?: string
+
+  /** The current playing animation name. */
+  animation?: string
 
   /** 
-   * Whether or not the current animation should loop 
+   * Whether or not the current animation should loop.
    * 
    * @default true
    */
   loop?: boolean
+
+  /**
+   * Controls whether or not to automatically run an animation on load.
+   * 
+   * @default true
+   */
+  autoplay?: boolean
+
+  /**
+   * Wait until current animation loop ends to transition to another animation.
+   * 
+   * If false, will immediately switch animations on the next frame.
+   * 
+   * @default true
+   */
+  transitionOnLoopEnd?: boolean
+
+  /**
+   * The desired frames per second of the animation
+   * 
+   * This will override any frame durations specified in JSON
+   */
+  fps?: number
+
+  /**
+   * The texture filtering applied to the spritesheet.
+   * 
+   * @default 'nearest'
+   */
+  filter?: 'nearest' | 'linear'
 
   /**
    * Sets the alpha value to be used when running an alpha test. 
@@ -59,52 +85,44 @@ export type AnimatedSpriteProps = Props<Material> & {
    */
   alphaTest?: number
 
-  /** Control when the animation runs */
-  playing?: boolean
-  
-  /** Delay the start of the animation in ms */
+  /**
+   * Delay the start of the animation in ms.
+   * 
+   * @default 0
+   */
   delay?: number
 
+  /**
+   * Whether or not the material should be transparent.
+   * 
+   * @default true
+   */
   transparent?: boolean
 
-// If a metadata file is supplied...
-} & ({
-  /** The URL of the texture JSON (if using JSON-Hash) */
-  dataUrl: string
-
   /**
-   * The desired frames per second of the animation
+   * Whether or not the Sprite should flip sides on the x-axis.
    * 
-   * This will override any frame durations specified in JSON
+   * @default false
    */
-  fps?: number
+  flipX?: boolean
 
 
-// Otherwise...
-} | {
   /**
-   * The start frame of the animation
+   * The start frame of the current animation.
    * 
    * @default 0
    */
   startFrame?: number
 
   /** 
-   * The end frame of the animation
+   * The end frame of the current animation.
    * 
    * @default rows * columns - 1
    */
   endFrame?: number
 
   /**
-   * The desired frames per second of the animation
-   * 
-   * @default 10
-   */
-  fps?: number
-
-  /**
-   * The number of frames of the animation (required if using plain spritesheet without JSON)
+   * The total number of frames in the spritesheet.
    */
   totalFrames?: number
 
@@ -122,15 +140,21 @@ export type AnimatedSpriteProps = Props<Material> & {
    */
   columns?: number
 
-  /** Whether or not the Sprite should flip sides on the x-axis */
-  flipX?: boolean
-})
+  readonly play?: () => void
+  readonly pause?: () => void
+}
 
 export type AnimatedSpriteEvents = Events<Material> & {
-  /** Fires when an animation ends */
+  /** Fires when all resources have loaded. */
+  load: void
+
+  /** Fires when an animation starts. */
+  start: void
+
+  /** Fires when an animation ends. */
   end: void
 
-  /** Fires when an animation loop completes */
+  /** Fires when an animation loop completes. */
   loop: void
 }
 

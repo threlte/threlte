@@ -29,6 +29,9 @@
     pressed.delete(e.key)
     handleKey(e.key, 0)
     pressed.forEach((key) => handleKey(key, 1))
+
+    if (e.key === 'q') play()
+    if (e.key === 'e') pause()
   }
 
   let ref: THREE.Mesh
@@ -44,6 +47,9 @@
       animation = animation.replace('Run', 'Idle')
     }
   })
+
+  let play: () => void
+  let pause: () => void
 </script>
 
 <svelte:window
@@ -54,9 +60,12 @@
 <T.Mesh
   bind:ref
   position.y={-2.75}
+  position.x={0.5}
 >
   <AnimatedSpriteMaterial
     is={new THREE.MeshStandardMaterial()}
+    bind:play
+    bind:pause
     {animation}
     textureUrl='/textures/sprites/player.png'
     dataUrl='/textures/sprites/player.json'

@@ -10,40 +10,149 @@
       props:
         [
           {
-            name: 'args',
-            type: '[number, number, number]',
-            required: false,
-            default: '[1, 1, 1]',
-            description: 'Width, height, depth'
+            name: 'textureUrl',
+            type: 'string',
+            required: true,
+            description: 'The URL of the spritesheet texture image.'
           },
           {
-            name: 'radius',
-            type: 'number',
+            name: 'dataUrl',
+            type: 'string',
             required: false,
-            default: '0.05',
-            description: 'Radius of the rounded corners.'
+            description: 'The URL of the spritesheet JSON.'
           },
           {
-            name: 'smoothness',
-            type: 'number',
+            name: 'animation',
+            type: 'string',
             required: false,
-            default: '4',
-            description: 'The number of curve segments.'
+            description: 'The current playing animation name.'
           },
           {
-            name: 'creaseAngle',
-            type: 'number',
+            name: 'loop',
+            type: 'boolean',
             required: false,
-            default: '0.4',
-            description: 'Smooth normals everywhere except faces that meet at an angle greater than the crease angle.'
+            default: 'true',
+            description: 'Whether or not the current animation should loop.'
           },
           {
-            name: 'steps',
+            name: 'playing',
+            type: 'boolean',
+            required: false,
+            default: 'true',
+            description: 'Controls whether or not the animation is running.'
+          },
+          {
+            name: 'filter',
+            type: '"nearest" | "linear"',
+            required: false,
+            description: 'The texture filtering applied to the spritesheet.'
+          },
+          {
+            name: 'alphaTest',
             type: 'number',
             required: false,
-            default: '1',
-            description: 'Number of points used for subdividing segments along the depth of the extruded spline.'
+            default: '0.1',
+            description: 'Sets the alpha value to be used when running an alpha test.'
+          },
+          {
+            name: 'delay',
+            type: 'number',
+            required: false,
+            default: '0',
+            description: 'Delay the start of the animation in ms.'
+          },
+          {
+            name: 'transparent',
+            type: 'boolean',
+            required: false,
+            default: 'true',
+            description: 'Whether or not the material should be transparent.'
+          },
+          {
+            name: 'flipX',
+            type: 'boolean',
+            required: false,
+            default: 'false',
+            description: 'Whether or not the Sprite should flip sides on the x-axis.'
+          },
+          {
+            name: 'fps',
+            type: 'boolean',
+            required: false,
+            default: '10',
+            description: 'The desired frames per second of the animation.'
+          },
+          {
+            name: 'fps',
+            type: 'boolean',
+            required: false,
+            default: '10',
+            description: 'The desired frames per second of the animation.'
+          }, 
+          {
+            name: 'startFrame',
+            type: 'number',
+            required: false,
+            default: '0',
+            description: 'The start frame of the current animation.'
+          },
+          {
+            name: 'endFrame',
+            type: 'number',
+            required: false,
+            default: 'rows * columns - 1',
+            description: 'The end frame of the current animation.'
+          },
+          {
+            name: 'totalFrames',
+            type: 'number',
+            required: false,
+            default: 'rows * columns - 1',
+            description: 'The total number of frames in the spritesheet.'
+          },
+          {
+            name: 'rows',
+            type: 'number',
+            required: false,
+            default: 'rows * columns - 1',
+            description: 'The number of rows in the spritesheet.'
+          },
+          {
+            name: 'columns',
+            type: 'number',
+            required: false,
+            default: 'rows * columns - 1',
+            description: 'The number of columns in the spritesheet.'
+          },
+        ],
+      events:
+        [
+          {
+            name: 'load',
+            payload: 'void',
+            description: 'Fires when all resources have loaded.'
+          },
+          {
+            name: 'start',
+            payload: 'void',
+            description: 'Fires when an animation starts.'
+          },
+          {
+            name: 'end',
+            payload: 'void',
+            description: 'Fires when an animation ends.'
+          },
+          {
+            name: 'loop',
+            payload: 'void',
+            description: 'Fires when an animation loop completes.'
           }
+        ],
+      bindings:
+        [
+          { name: play, type: '(delay?: number) => void' },
+          { name: pause, type: '() => void' },
+          { name: stop, type: '() => void' }
         ]
     }
 }
@@ -52,6 +161,37 @@
 Provides animation tools for spritesheets.
 
 <Example path="extras/animated-sprite-material" />
+
+This material is most easily used by passing it a [spritesheet](https://www.aseprite.org/docs/sprite-sheet/) URL and a [JSON metadata file](https://gist.github.com/dacap/db18e5747a4b6e208d3c) URL.
+
+Currently, JSON metadata using [Aseprite's](https://www.aseprite.org/) [hash export format](https://www.aseprite.org/docs/cli/#data) is supported.
+
+Animation names [created in tags](https://www.aseprite.org/docs/tags) can be used to transition to specific animations in the spritesheet.
+
+```svelte {4,5}+
+<T.Sprite>
+  <AnimatedSpriteMaterial
+    animation='Idle'
+    textureUrl='./player.png'
+    dataUrl='./player.json'
+  />
+</T.Sprite>
+```
+
+If no metadata file is provided, additional props must be passed to run an animation:
+* `totalFrames`, if the spritesheet is only a single row.
+* `totalFrames`, `rows`, and `columns`, otherwise.
+
+```svelte {4-6}+
+<T.Sprite>
+  <AnimatedSpriteMaterial
+    textureUrl='./player.png'
+    totalFrames={14}
+    rows={4}
+    columns={4}
+  />
+</T.Sprite>
+```
 
 ### Example
 

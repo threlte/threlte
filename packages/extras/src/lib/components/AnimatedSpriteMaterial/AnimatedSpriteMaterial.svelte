@@ -26,20 +26,21 @@
 
   export let textureUrl: $$Props['textureUrl']
   export let dataUrl: $$Props['dataUrl'] = ''
-  export let filter: $$Props['filter'] = 'nearest'
   export let animation: $$Props['animation'] = ''
-  export let startFrame: $$Props['startFrame'] = 0
-  export let endFrame: $$Props['endFrame'] = undefined
-  export let delay: $$Props['delay'] = 0
-  export let fps: $$Props['fps'] = 30
   export let loop: $$Props['loop'] = true
-  export let rows: $$Props['rows'] = 1
-  export let columns: $$Props['columns'] = undefined
-  export let totalFrames: $$Props['totalFrames'] = 0
-  export let playing: $$Props['playing'] = true
-  export let flipX: $$Props['flipX'] = false
+  export let autoplay: $$Props['autoplay'] = true
+  export let transitionOnLoopEnd: $$Props['transitionOnLoopEnd'] = true
+  export let fps: $$Props['fps'] = 10
+  export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
+  export let delay: $$Props['delay'] = 0
   export let transparent: $$Props['transparent'] = true
+  export let flipX: $$Props['flipX'] = false
+  export let startFrame: $$Props['startFrame'] = 0
+  export let endFrame: $$Props['endFrame'] | undefined = undefined
+  export let rows: $$Props['rows'] = 1
+  export let columns: $$Props['columns'] | undefined = undefined
+  export let totalFrames: $$Props['totalFrames'] = 0
 
   const parent = useParent()
   const dispatch = createRawEventDispatcher<$$Events>()
@@ -55,6 +56,10 @@
   let frameNames: string[] = []
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
+  let playing = true
+
+  let currentAnimation: string | undefined
+  let nextAnimation: string | undefined
 
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
@@ -78,19 +83,22 @@
 
   const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = dataUrl
     ? useLoader(THREE.FileLoader).load(dataUrl, {
-      transform: (file) => {
-        if (typeof file !== 'string') return
-        try { return JSON.parse(file) } catch { return }
-      }
-    })
-    : asyncWritable(new Promise<SpriteJsonHashData>((resolve) => {
-      const unsub = textureStore.subscribe((value) => {
-        if (!value) return
-        unsub()
-        resolve(createData(value))
+        transform: (file) => {
+          if (typeof file !== 'string') return
+          try { return JSON.parse(file) } catch { return }
+        }
       })
-    }))
+    : asyncWritable<SpriteJsonHashData>(new Promise((resolve) => {
+        const unsub = textureStore.subscribe((value) => {
+          if (!value) return
+          unsub()
+          resolve(createData(value))
+        })
+      }))
 
+  /**
+   * Creates metadata if no JSON file is supplied.
+   */
   const createData = (texture: THREE.Texture) => {
     const { width, height } = texture.image
     const cols = columns ?? totalFrames
@@ -139,7 +147,7 @@
 
     const x = flipOffset > 0
       ? frameOffsetX * (frame.x / frameWidth)
-      : frameOffsetX * (frame.x / frameHeight) - texture.repeat.x
+      : frameOffsetX * (frame.x / frameHeight) - texture!.repeat.x
     const y = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
 
     texture?.offset.set(x, y)
@@ -159,7 +167,18 @@
     }
   }
 
-  const { start, stop, started } = useFrame(() => {
+  export const play = () => {
+    timerOffset = performance.now() - delay
+    playing = true
+    start()
+  }
+
+  export const pause = () => {
+    playing = false
+    stop()
+  }
+
+  const { start, stop } = useFrame(() => {
     const now = performance.now()
     const diff = now - timerOffset
     const name = frameNames[currentFrame]
@@ -185,6 +204,7 @@
         }
       } else {
         stop()
+        playing = false
         if (dispatch.hasEventListener('end')) {
           dispatch('end')
         }
@@ -211,20 +231,13 @@
     )
 
     setAnimation(animation)
+    dispatch('load')
+    if (autoplay) {
+      play()
+    }
   })
 
   $: setAnimation(animation)
-
-  $: if (loop && !$started && json && texture) {
-    start()
-  }
-
-  $: if (playing && json && texture) {
-    timerOffset = performance.now() - delay
-    start()
-  } else {
-    stop()
-  }
 </script>
 
 {#if texture && isMesh}
