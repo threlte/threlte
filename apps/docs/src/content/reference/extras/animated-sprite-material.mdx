@@ -200,3 +200,21 @@ Additionally, if a sheet with no JSON supplied has multiple animations, start an
   />
 </T.Sprite>
 ```
+
+`<AnimatedSpriteMaterial>` can be attached to not only a `<T.Sprite>`, but also a `<T.Mesh>`.
+
+<Example path="extras/animated-sprite-material-mesh" />
+
+In this case, the sprite will use a `MeshBasicMaterial` by default. It will also create a custom depth material to support shadows.
+
+Any other material type can be used as well.
+
+```svelte {3}+
+<T.Mesh>
+  <AnimatedSpriteMaterial
+    is={THREE.MeshStandardMaterial}
+    textureUrl='./fire.png'
+    totalFrames={14}
+  />
+</T.Mesh>
+```

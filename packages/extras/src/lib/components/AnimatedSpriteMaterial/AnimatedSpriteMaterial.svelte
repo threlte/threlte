@@ -58,12 +58,13 @@
   let spritesheetSize = { w: 0, h: 0 }
   let playing = true
 
+
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
   $: fpsInterval = 1000 / fps
 
   export let is: THREE.Material = isMesh ? new THREE.MeshBasicMaterial() : new THREE.SpriteMaterial()
-  export let ref = is
+  export let ref: THREE.Material
 
   const textureStore = useTexture(textureUrl, {
     transform: (value: THREE.Texture) => {
@@ -239,7 +240,8 @@
 
 {#if texture && isMesh}
   <T 
-    is={ref}
+    {is}
+    bind:ref
     map={texture}
     toneMapped={false}
     side={THREE.DoubleSide}
@@ -256,7 +258,8 @@
   />
 {:else if texture}
   <T
-    is={ref}
+    {is}
+    bind:ref
     map={texture}
     toneMapped={false}
     {transparent}
