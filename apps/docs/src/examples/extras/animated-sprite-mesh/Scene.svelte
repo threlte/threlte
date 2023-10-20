@@ -12,7 +12,13 @@
   position={[5, 1.5, 3]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enablePan={false}
+    enableZoom={false}
+    maxPolarAngle={Math.PI / 2.5}
+    minPolarAngle={Math.PI / 6}
+  />
 </T.OrthographicCamera>
 
 <Sky />

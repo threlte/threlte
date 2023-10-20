@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Sky, Grid } from '../lib'
+  import { Grid, OrbitControls, Sky, useGamepad } from '../lib'
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
@@ -21,8 +21,6 @@
   }}
 />
 
-<Grid />
-
 {#if browser && mountGamepad}
   <Gamepad />
 {/if}
@@ -33,7 +31,7 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[3, 1.5, 3]}
+  position={[3, 3, 3]}
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls />
@@ -41,9 +39,12 @@
 
 <Sky />
 
-<T.Mesh position.y={1} castShadow receiveShadow>
-  <T.MeshStandardMaterial color="white" />
+<Grid />
+
+<T.Mesh position.y={1}>
+  <T.MeshStandardMaterial
+    transparent
+    color="white"
+  />
   <T.SphereGeometry />
 </T.Mesh>
-
-<T.DirectionalLight intensity={2} castShadow position={[1, 1, 1]} />
