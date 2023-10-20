@@ -35,16 +35,24 @@
             description: 'Whether or not the current animation should loop.'
           },
           {
-            name: 'playing',
+            name: 'autoplay',
             type: 'boolean',
             required: false,
             default: 'true',
-            description: 'Controls whether or not the animation is running.'
+            description: 'Controls whether or not to automatically run an animation on load.'
+          },
+          {
+            name: 'fps',
+            type: 'boolean',
+            required: false,
+            default: '10',
+            description: 'The desired frames per second of the animation.'
           },
           {
             name: 'filter',
             type: '"nearest" | "linear"',
             required: false,
+            default: '"nearest"',
             description: 'The texture filtering applied to the spritesheet.'
           },
           {
@@ -75,20 +83,14 @@
             default: 'false',
             description: 'Whether or not the Sprite should flip sides on the x-axis.'
           },
+          
           {
-            name: 'fps',
-            type: 'boolean',
+            name: 'totalFrames',
+            type: 'number',
             required: false,
-            default: '10',
-            description: 'The desired frames per second of the animation.'
+            default: 'rows * columns - 1',
+            description: 'The total number of frames in the spritesheet.'
           },
-          {
-            name: 'fps',
-            type: 'boolean',
-            required: false,
-            default: '10',
-            description: 'The desired frames per second of the animation.'
-          }, 
           {
             name: 'startFrame',
             type: 'number',
@@ -100,28 +102,20 @@
             name: 'endFrame',
             type: 'number',
             required: false,
-            default: 'rows * columns - 1',
+            default: 'totalFrames',
             description: 'The end frame of the current animation.'
-          },
-          {
-            name: 'totalFrames',
-            type: 'number',
-            required: false,
-            default: 'rows * columns - 1',
-            description: 'The total number of frames in the spritesheet.'
           },
           {
             name: 'rows',
             type: 'number',
             required: false,
-            default: 'rows * columns - 1',
+            default: '1',
             description: 'The number of rows in the spritesheet.'
           },
           {
             name: 'columns',
             type: 'number',
             required: false,
-            default: 'rows * columns - 1',
             description: 'The number of columns in the spritesheet.'
           },
         ],
@@ -150,9 +144,8 @@
         ],
       bindings:
         [
-          { name: play, type: '(delay?: number) => void' },
-          { name: pause, type: '() => void' },
-          { name: stop, type: '() => void' }
+          { name: play, type: '() => void' },
+          { name: pause, type: '() => void' }
         ]
     }
 }
@@ -166,7 +159,7 @@ This material is most easily used by passing it a [spritesheet](https://www.asep
 
 Currently, JSON metadata using [Aseprite's](https://www.aseprite.org/) [hash export format](https://www.aseprite.org/docs/cli/#data) is supported.
 
-Animation names [created in tags](https://www.aseprite.org/docs/tags) can be used to transition to specific animations in the spritesheet.
+Animation names [from tags](https://www.aseprite.org/docs/tags) can be used to transition to specific animations in the spritesheet.
 
 ```svelte {4,5}+
 <T.Sprite>
@@ -189,6 +182,21 @@ If no metadata file is provided, additional props must be passed to run an anima
     totalFrames={14}
     rows={4}
     columns={4}
+  />
+</T.Sprite>
+```
+
+Additionally, if a sheet with no JSON supplied has multiple animations, start and end frames must be passed to run an animation within the sheet.
+
+```svelte {7-8}+
+<T.Sprite>
+  <AnimatedSpriteMaterial
+    textureUrl='./fire.png'
+    totalFrames={14}
+    rows={4}
+    columns={4}
+    startFrame={4}
+    endFrame={8}
   />
 </T.Sprite>
 ```

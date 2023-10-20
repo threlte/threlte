@@ -61,6 +61,7 @@
   bind:ref
   position.y={-2.75}
   position.x={0.5}
+  position.z={0.01}
 >
   <AnimatedSpriteMaterial
     is={new THREE.MeshStandardMaterial()}

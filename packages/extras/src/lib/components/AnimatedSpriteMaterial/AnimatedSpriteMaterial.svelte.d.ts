@@ -54,15 +54,6 @@ export type AnimatedSpriteProps = Props<Material> & {
   autoplay?: boolean
 
   /**
-   * Wait until current animation loop ends to transition to another animation.
-   * 
-   * If false, will immediately switch animations on the next frame.
-   * 
-   * @default true
-   */
-  transitionOnLoopEnd?: boolean
-
-  /**
    * The desired frames per second of the animation
    * 
    * This will override any frame durations specified in JSON
@@ -105,7 +96,6 @@ export type AnimatedSpriteProps = Props<Material> & {
    * @default false
    */
   flipX?: boolean
-
 
   /**
    * The start frame of the current animation.

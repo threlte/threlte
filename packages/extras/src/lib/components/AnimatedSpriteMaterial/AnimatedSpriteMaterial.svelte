@@ -58,9 +58,6 @@
   let spritesheetSize = { w: 0, h: 0 }
   let playing = true
 
-  let currentAnimation: string | undefined
-  let nextAnimation: string | undefined
-
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
   $: fpsInterval = 1000 / fps
