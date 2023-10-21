@@ -24,11 +24,17 @@ This could be all you need for your project.
 
 If not and you noticed some placement issues i.e. sometimes some trees are placed too close to one-another, or maybe a tree looks like its growing from a rock; then you need a better solution.
 
-[Poisson Disk Sampling](https://medium.com/@hemalatha.psna/implementation-of-poisson-disc-sampling-in-javascript-17665e406ce1) is an algorithm we can use to solve this.
+[Poisson Disk Sampling](https://medium.com/@hemalatha.psna/implementation-of-poisson-disc-sampling-in-javascript-17665e406ce1) is an algorithm we can use to solve this but I'm not going into the details of it here.
 
 <Example path="geometry/psuedo-random-scenery/poisson-disc-sampling" />
 
-alksnhd
+Excellent, now you have a bunch of points that are a minimum distance apart.
+
+- Get the forest back! Maybe create layers/meta data during algorithm point creation?
+
+<Example path="geometry/psuedo-random-scenery/layered-samples" />
+
+- Make the randomness consistent?
 
 - Technically, the `Math.random()` function is completely random. So if you ever wanted multiplayer your players will see different scenery.
 

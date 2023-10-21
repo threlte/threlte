@@ -5,7 +5,7 @@
   import { regen, radius } from './state'
 
   const { action, addButton, addInput } = useTweakpane({
-    title: 'Poisson Disc Sampling'
+    title: 'Layered Sampling'
   })
 
   addButton({
