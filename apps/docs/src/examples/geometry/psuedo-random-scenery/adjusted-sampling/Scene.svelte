@@ -3,23 +3,33 @@
   import { T, watch } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { radius, regen } from './state'
-  import { AdjustedPoissonDiscSample as Sampler, type Point } from './poissonDiscSampling'
+  import { PoissonDiscSample as Sampler, type Point } from './poissonDiscSampling'
   // The following components are copies from https://fun-bit.vercel.app/
-  // import BirchTree1 from '../birch1.svelte'
-  // import Tree1 from '../tree1.svelte'
+  import Tree1 from '../tree1.svelte'
   import Bush1 from '../bush1.svelte'
-  // import Rock1 from '../rock1.svelte'
+  import Rock1 from '../rock1.svelte'
 
   const width = 20
   const height = 20
 
-  let sampler = new Sampler($radius, [width, height], undefined, Math.random, { 0: 6, 1: 2 })
-  let points: Point[] = sampler.GeneratePoints()
+  const pointsMatrix = [
+    { radius: 6, desription: 'large', density: 15 },
+    { radius: 4, desription: 'medium', density: 35 },
+    { radius: 2, desription: 'small', density: 50 }
+  ]
+
+  let sampler = new Sampler(pointsMatrix, { width, height }, undefined, Math.random)
+  let points: Point[] = sampler.generatePoints()
+  let smallObjects = points.filter((obj) => obj.desription == 'small')
+  let mediumObjects = points.filter((obj) => obj.desription == 'medium')
+  let largeObjects = points.filter((obj) => obj.desription == 'large')
 
   watch([regen, radius], () => {
-    sampler = new Sampler($radius, [width, height], undefined, Math.random, { 0: 6, 1: 2 })
-    points = sampler.GeneratePoints()
-    console.log(points)
+    sampler = new Sampler(pointsMatrix, { width, height }, undefined, Math.random)
+    points = sampler.generatePoints()
+    smallObjects = points.filter((obj) => obj.desription == 'small')
+    mediumObjects = points.filter((obj) => obj.desription == 'medium')
+    largeObjects = points.filter((obj) => obj.desription == 'large')
   })
 </script>
 
@@ -42,12 +52,36 @@
   <T.MeshStandardMaterial color="green" />
 </T.Mesh>
 
-{#each points as pos}
+{#each smallObjects as pos}
   {@const x = pos.x - 10}
   {@const z = pos.y - 10}
   {@const rot = Math.random() * Math.PI * 2}
   {@const scale = Math.random() * 2 + 0.5}
   <Bush1
+    position.x={x}
+    position.z={z}
+    rotation.y={rot}
+    {scale}
+  />
+{/each}
+{#each mediumObjects as pos}
+  {@const x = pos.x - 10}
+  {@const z = pos.y - 10}
+  {@const rot = Math.random() * Math.PI * 2}
+  {@const scale = Math.random() * 1.5 + 2}
+  <Tree1
+    position.x={x}
+    position.z={z}
+    rotation.y={rot}
+    {scale}
+  />
+{/each}
+{#each largeObjects as pos}
+  {@const x = pos.x - 10}
+  {@const z = pos.y - 10}
+  {@const rot = Math.random() * Math.PI * 2}
+  {@const scale = Math.random() * 2 + 1}
+  <Rock1
     position.x={x}
     position.z={z}
     rotation.y={rot}

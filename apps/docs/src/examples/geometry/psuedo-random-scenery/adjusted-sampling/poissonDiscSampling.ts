@@ -4,130 +4,192 @@
 export type Point = {
   x: number
   y: number
-  layer: number
+  desription: string
 }
 
-export class AdjustedPoissonDiscSample {
+export class PoissonDiscSample {
   random
-  radius: number
+  radiiMatrix: { desription: string; density: number; radius: number }[]
+  radiiMap: { [key: string]: number }
+  maxRadius: number
+  customRanges: { start: number; end: number; desription: string }[] = []
   cellSize: number
-  radiusMap: {
-    [key: number]: number
-  }
-  cellSizeMap: {
-    [key: number]: number
-  }
+  cellSizeMatrix: { [key: string]: number }
   maxCandidates: number
+  windowSize: number
   width = 1
   height = 1
+  /** 2D array of indices of points */
   grid: number[][] = []
-  gridWidth: number | undefined
-  gridHeight: number | undefined
+  gridWidth: number
+  gridHeight: number
+
   points: Point[] = []
   spawnPoints: Point[] = []
-  /**
-   * @param radius
-   * @param region even numbered width/height vector
-   * @param maxCandidates default 30
-   * @param random a random (or pusedo-random) number generator (0, 1) - defaults to Math.random
-   * @param radiusMap WIP
-   */
+
   constructor(
-    radius: number,
-    region: number[],
+    radiiMatrix: { desription: string; density: number; radius: number }[],
+    region: { width: number; height: number },
     maxCandidates = 30,
-    random = Math.random,
-    radiusMap: { [key: number]: number }
+    random = Math.random
   ) {
     this.random = random
 
-    this.radius = radius
-    this.cellSize = radius / Math.SQRT2
+    this.radiiMatrix = radiiMatrix
+    // make sure the density sums to 1 so we can use it later
+    const densityTotal = this.radiiMatrix.reduce((total, obj) => {
+      return total + obj.density
+    }, 0)
+    if (densityTotal > 1 || densityTotal < 1) {
+      this.radiiMatrix = this.radiiMatrix.map((obj) => {
+        return {
+          ...obj,
+          density: obj.density / densityTotal
+        }
+      }, 0)
+    }
+    let currentTotal = 0
+    this.customRanges = this.radiiMatrix.map((obj) => {
+      let range = {
+        start: currentTotal,
+        end: currentTotal + obj.density,
+        desription: obj.desription
+      }
+      currentTotal += obj.density
+      return range
+    })
 
-    console.log(radiusMap)
-    if (!radiusMap) throw 'Opps'
-    this.radiusMap = radiusMap
-    this.cellSizeMap = Object.fromEntries(
-      Object.keys(this.radiusMap).map((key) => [key, this.radiusMap[key] / Math.SQRT2])
-    )
-    console.log(this.cellSizeMap)
+    this.maxRadius = this.radiiMatrix.reduce((max, obj) => {
+      return obj.radius > max ? obj.radius : max
+    }, -Infinity)
+
+    this.radiiMap = this.radiiMatrix.reduce((obj, value) => {
+      obj[value.desription] = value.radius
+      return obj
+    }, {})
+
+    this.cellSizeMatrix = this.radiiMatrix.reduce((obj, value) => {
+      obj[value.desription] = value.radius / Math.SQRT2
+      return obj
+    }, {})
+    this.cellSize = Infinity
+    for (const key in this.cellSizeMatrix) {
+      if (this.cellSizeMatrix[key] < this.cellSize) {
+        this.cellSize = this.cellSizeMatrix[key]
+      }
+    }
+    this.windowSize = Math.ceil(this.maxRadius / this.cellSize)
 
     this.maxCandidates = maxCandidates
 
-    this.width = region[0]
-    this.height = region[1]
+    this.width = region.width
+    this.height = region.height
+
+    this.gridHeight = Math.ceil(this.height / this.cellSize)
+    this.gridWidth = Math.ceil(this.width / this.cellSize)
+
+    this.grid = new Array(this.gridHeight)
+    for (let i = 0; i < this.gridHeight; i++) {
+      this.grid[i] = [...new Array(this.gridWidth)].map((_) => 0)
+    }
+
+    this.points = []
+    this.spawnPoints = []
 
     const x = Math.floor(this.random() * this.width)
     const y = Math.floor(this.random() * this.height)
-    // TODO-DefinitelyMaybe: don't hardcode the layer
-    this.spawnPoints.push({ x, y, layer: 0 })
+
+    this.spawnPoints.push({ x, y, desription: this.createPointType() })
   }
 
-  GeneratePoints() {
-    const layers = Object.keys(this.radiusMap)
-    layers.forEach((layer) => {
-      // TODO-DefinitelyMaybe: reset the grid before spawning more points
-      // might look something like
-      // resetGrid(layer)
-      // the points should already be there and if not then it's a blank reset
-      while (this.spawnPoints.length > 0) {
-        // choose one of the spawn points at random
-        const spawnIndex = Math.floor(this.random() * this.spawnPoints.length)
-        const spawnCentre = this.spawnPoints[spawnIndex]!
-        let candidateAccepted = false
+  generatePoints(): Point[] {
+    while (this.spawnPoints.length > 0) {
+      // choose one of the spawn points at random
+      const spawnIndex = Math.floor(this.random() * this.spawnPoints.length)
+      const spawnCentre = this.spawnPoints[spawnIndex]
+      let candidateAccepted = false
 
-        // then generate k candidates around it
-        for (let k = 0; k < this.maxCandidates; k++) {
-          const angle = this.random() * Math.PI * 2
-          const dir = [Math.sin(angle), Math.cos(angle)]
-          this.radiusMap[spawnCentre.layer]
-          const disp = Math.floor(this.random() * (this.radius + 1)) + this.radius
-          const candidate: Point = {
-            x: spawnCentre.x + dir[0] * disp,
-            y: spawnCentre.y + dir[1] * disp,
-            layer: 0
-          }
+      // then generate k candidates around it
+      for (let k = 0; k < this.maxCandidates; k++) {
+        const angle = this.random() * Math.PI * 2
+        const dir = [Math.sin(angle), Math.cos(angle)]
+        // TODO-DefinitelyMaybe: select a point and calc it's displacement
+        const candidateType = this.createPointType()
 
-          // check if the candidate is valid
-          if (this.IsValid(candidate)) {
-            this.points.push(candidate)
-            this.spawnPoints.push(candidate)
-            const gridX = Math.ceil(candidate[0] / this.cellSize) - 1
-            const gridY = Math.ceil(candidate[1] / this.cellSize) - 1
-            this.grid[gridY][gridX] = this.points.length
-            candidateAccepted = true
-            break
-          }
+        // const disp = Math.floor(this.random() * (this.radius + 1)) + this.radius
+        const dispScalar = Math.max(
+          this.radiiMap[candidateType],
+          this.radiiMap[spawnCentre.desription]
+        )
+        const disp = Math.floor(this.random() * (dispScalar + 1)) + dispScalar
+        const candidate = {
+          x: spawnCentre.x + dir[0] * disp,
+          y: spawnCentre.y + dir[1] * disp,
+          desription: candidateType
         }
-        // If no candidates around it were valid
-        if (!candidateAccepted) {
-          // Remove it from the spawnpoints list
-          this.spawnPoints.splice(spawnIndex, 1)
+        // spawnCentre.map((val, i) => val + dir[i] * disp)
+
+        // check if the candidate is valid
+        if (this.isValid(candidate)) {
+          this.points.push(candidate)
+          this.spawnPoints.push(candidate)
+          const gridX = Math.ceil(candidate.x / this.cellSize) - 1
+          const gridY = Math.ceil(candidate.y / this.cellSize) - 1
+          this.grid[gridY][gridX] = this.points.length
+          candidateAccepted = true
+          break
         }
       }
-    })
+      // If no candidates around it were valid
+      if (!candidateAccepted) {
+        // Remove it from the spawnpoints list
+        this.spawnPoints.splice(spawnIndex, 1)
+      }
+    }
     return this.points
   }
 
-  IsValid(candidate: Point) {
-    const cX = candidate[0]
-    const cY = candidate[1]
+  createPointType(): string {
+    const number = this.random()
+    for (let i = 0; i < this.customRanges.length; i++) {
+      const { start, end, desription } = this.customRanges[i]
+      if (number > start && number <= end) {
+        return desription
+      }
+    }
+  }
+
+  isValid(candidate: Point) {
+    const cX = candidate.x
+    const cY = candidate.y
     if (cX >= 0 && cX < this.width && cY >= 0 && cY < this.height) {
       const cellX = Math.ceil(cX / this.cellSize)
       const cellY = Math.ceil(cY / this.cellSize)
-      const searchStartX = Math.max(0, cellX - 2)
-      const searchEndX = Math.min(cellX + 2, this.gridWidth - 1)
-      const searchStartY = Math.max(0, cellY - 2)
-      const searchEndY = Math.min(cellY + 2, this.gridHeight - 1)
+      const searchStartX = Math.max(0, cellX - this.windowSize)
+      const searchEndX = Math.min(cellX + this.windowSize, this.gridWidth - 1)
+      const searchStartY = Math.max(0, cellY - this.windowSize)
+      const searchEndY = Math.min(cellY + this.windowSize, this.gridHeight - 1)
 
       for (let x = searchStartX; x <= searchEndX; x++) {
         for (let y = searchStartY; y <= searchEndY; y++) {
           const pointIndex = this.grid[y][x]
           if (pointIndex != 0) {
-            const diff = candidate.map((val, i) => val - this.points[pointIndex - 1][i])
+            const diff = [
+              candidate.x - this.points[pointIndex - 1]?.x,
+              candidate.y - this.points[pointIndex - 1]?.y
+            ]
             // we're not worried about the actual distance, just the equality
             const sqrdDst = Math.pow(diff[0], 2) + Math.pow(diff[1], 2)
-            if (sqrdDst < Math.pow(this.radius, 2)) {
+            if (
+              sqrdDst <
+              Math.pow(
+                Math.max(
+                  this.radiiMap[this.points[pointIndex - 1]?.desription],
+                  this.radiiMap[candidate.desription]
+                ),
+                2
+              )
+            ) {
               return false
             }
           }
@@ -136,28 +198,5 @@ export class AdjustedPoissonDiscSample {
       return true
     }
     return false
-  }
-
-  resetGrid(layer: number) {
-    this.gridHeight = Math.ceil(this.height / this.cellSizeMap[layer])
-    this.gridWidth = Math.ceil(this.width / this.cellSizeMap[layer])
-
-    // Setup the initial map with 0's everywhere
-    this.grid = new Array(this.gridHeight)
-    for (let i = 0; i < this.gridHeight; i++) {
-      this.grid[i] = [...new Array(this.gridWidth)].map((_) => 0)
-    }
-
-    if (this.points.length != 0) {
-      // then fill in the map where needed
-      for (let i = 0; i < this.points.length; i++) {
-        const point = this.points[i]
-        this.invalidateGridCells(point)
-      }
-    }
-  }
-
-  invalidateGridCells(point: Point) {
-    // todo
   }
 }

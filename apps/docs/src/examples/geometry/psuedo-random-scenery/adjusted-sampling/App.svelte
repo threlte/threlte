@@ -15,20 +15,6 @@
       $regen = !$regen
     }
   })
-
-  const { subscribe } = addInput({
-    value: 4,
-    label: 'Min Distance Between Objects',
-    params: {
-      min: 1,
-      max: 6,
-      step: 0.5
-    }
-  })
-
-  subscribe((value) => {
-    $radius = value
-  })
 </script>
 
 <div use:action />
