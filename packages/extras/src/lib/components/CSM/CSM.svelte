@@ -86,8 +86,8 @@
   $: lightColorStore.set(lightColor)
 
   watch([lightIntensityStore, lightColorStore], () => {
-    csm?.lights.map((light) => {
-      if ($lightIntensityStore !== undefined) light.intensity = $lightIntensityStore
+    csm?.lights.forEach((light) => {
+      if ($lightIntensityStore !== undefined) light.intensity = $lightIntensityStore / Math.PI
       if ($lightColorStore !== undefined) light.color.set($lightColorStore)
     })
   })
