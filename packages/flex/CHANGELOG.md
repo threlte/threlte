@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.1.0
+
+### Minor Changes
+
+- 7212d9d8: Tailwind parser fix
+
 ## 0.0.9
 
 ### Patch Changes

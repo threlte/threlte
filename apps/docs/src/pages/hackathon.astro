@@ -2,6 +2,7 @@
 import Intro from '../components/hackathon/Intro.svelte'
 import MainLayout from '../layouts/MainLayout.astro'
 import DiscordIcon from '../components/Icons/inline/Discord.svelte'
+import GithubIcon from '../components/Icons/inline/Github.svelte'
 import Example from '../components/Example/Example.astro'
 ---
 
@@ -20,31 +21,43 @@ import Example from '../components/Example/Example.astro'
 
       <h4 class="mt-0 mb-6">15-22 October 2023</h4>
 
-      <p>The Threlte team is happy to announce the first official Threlte Hackathon!</p>
+      <p>Threlte Warp 23 Hackathon has been concluded. The Threlte team was delighted to see some excellent entries, and we had a hard time choosing the winners.</p>
+
+      <h2 class="mt-2">Wow! Track Winners</h2>
 
       <ul>
-        <li>The <b>🚀 kickoff event</b> is on <b>Sunday, 15 October 2023 16:00 UTC</b></li>
-        <!-- <li>This is when we will reveal the themes and rules of the hackathon</li> -->
-        <li>You will have <b>⌛ one week to hack</b> at your entry</li>
         <li>
-          You will get <b>🙌 support from the team</b> in a dedicated <a
-            href="https://discord.com/channels/985983540804091964/1152997301980250243"
-            ><DiscordIcon /> hackathon channel</a
-          >
+          <b>🥇 1st Place</b>
+          <p><a href="https://warpspeed.vercel.app/">Warpspeed</a> - @Ed Sunman impressed us with an anti-gravity racer based on Wipeout, this game impressed us with its level of polish: refined mechanics, clean code and slick audio and visuals. Checkout the <a href="https://github.com/edsunman/warpspeed"><GithubIcon/> repo</a>.</p>
         </li>
-        <li><b>🏁 Deadline for submission</b> will be <b>Sunday, 22 October 2023 10:00 UTC</b></li>
-        <li>The <b>🏆 awards ceremony</b> will be on <b>Sunday, 22 October 2023 16:00 UTC</b></li>
-        <!-- <li>Expect some very <b>🎁 awesome prizes</b> and <b>🎉 lots of fun</b></li> -->
+        <li>
+          <b>🥈 2nd Place</b>
+          <p><a href="https://wonderful-indonesia-rho.vercel.app/">Wonderful Indonesia</a> - @Peculiarnewbie showed off an interactive 3D data viz map of Indonesia, showing off data loading and nifty interactive storytelling. Checkout the <a href="https://github.com/peculiarnewbie/wonderful-indonesia"><GithubIcon/> repo</a>.</p>
+          <p><a href="https://github.com/idlesseby/zoetrope-warp2023">Halloween Zoetrope</a> - @idlesseby wowed us a classic optical illusion of animation by spinning a wheel. We loved the aesthetics and simplicity of this entry! Checkout the <a href="https://github.com/idlesseby/zoetrope-warp2023"><GithubIcon/> repo</a>.<p>
+        </li>
+        <li>
+          <b>🥉 3rd Place</b>
+          <p><a href="https://aurasphere.vercel.app/">Aurasphere</a> - @mayari grounded us with an immersive, cosmic and visually cohesive relaxation experience. Checkout the <a href="https://github.com/mayariii/aurasphere/"><GithubIcon/> repo</a>.</p>
+          <p><a href="https://mateerial.world/">mateerial.world</a> - @el-schneider impressed us with a neat material explorer, allowing you to explore the thousands of material effects. Checkout the <a href="https://github.com/el-schneider/mateerial.world"><GithubIcon/> repo</a>.</p>
+        </li>
       </ul>
 
-      <p>
-        Interested in joining? Please
-        <a href="https://discord.com/channels/985983540804091964/1152999817568591943">
-          <DiscordIcon />
-          enroll in this thread
-        </a>
-        - this is <i>optional</i> but helps us plan.
-      </p>
+      <h2 class="mt-2">Aha! Track Winner</h2>
+      <ul>
+        <li>
+          <b>🥇 1st Place</b>
+          <p><a href="https://threlte-git-fork-definitelymaybe-psuedo-random-s-7db0d6-threlte.vercel.app/docs/examples/geometry/psuedo-random-scenery">Pseudo Random Scenary</a> - @DefinitelyMaybe enlightened us with an educational, useful and beautiful example how to create generative terrains in Threlte. Checkout the <a href="https://github.com/threlte/threlte/pull/702"><GithubIcon/> PR</a>.
+        </li>
+      </ul>
+
+      <p class="mt-0"><b>Congratulations to the winners 🎉 and thank you to everyone who participated 🙏</b></p>
+
+      <h2 class="mt-2">We hope your entries will go live</h2>
+
+      <p>If the participants agree, your Wow! 
+      track entries will be highlighted in the Threlte site's upcoming 
+      showcase section. Meanwhile, Aha! track entries will be merged 
+      as PRs to our docs.</p>
 
      <h2 class="mb-2">Choose your path</h2>
 
@@ -184,7 +197,7 @@ import Example from '../components/Example/Example.astro'
       <h3>Wow! Track Rules</h3>
       <ul>
         <li>Easily available public repo w/ MIT license</li>
-        <li>Clear README.md following template</li>
+        <li>Clear README.md</li>
         <li>Deployed version or package easily available</li>
       </ul>
 
@@ -194,33 +207,6 @@ import Example from '../components/Example/Example.astro'
         <li>Follows Threlte repo conventions and standards</li>
         <li>Discussed with maintainer team</li>
       </ul>
-
-      <h3>Submission</h3>
-
-      <p>
-        Submissions are made in a thread in the #hackathon channel. You need to fill out the
-        following template:
-      </p>
-
-      <ul class="my-0 font-bold">
-        <li>Title:</li>
-        <li>Short* Description:</li>
-        <li>Team members**:</li>
-        <li>Repo / PR link:</li>
-        <li>Preview link:</li>
-      </ul>
-
-      <small>
-        * Max 200w<br />
-        ** This will be public (but pseudonyms allowed)
-      </small>
-
-      <h2>We hope your entries will go live</h2>
-
-      <p>In the end, if the team and the participants agrees, your Wow! 
-      track entries will be highlighted in the Threlte site's upcoming 
-      showcase section. Meanwhile, Aha! track entries will be merged 
-      as PRs to our docs.</p>
     </div>
   </div>
 </MainLayout>

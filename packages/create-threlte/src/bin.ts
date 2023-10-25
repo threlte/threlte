@@ -124,7 +124,7 @@ const create = async () => {
             {
               value: '@threlte/flex',
               label: '@threlte/flex',
-              hint: 'ALPHA – Components to integrate the flexbox layout engine Yoga in Threlte'
+              hint: 'Components to integrate the flexbox layout engine Yoga in Threlte'
             },
             {
               value: 'model-pipeline',
@@ -190,7 +190,7 @@ const create = async () => {
 
   const threltePackageJson = {
     devDependencies: {
-      three: await resolvePackageVersion('three', '^0.156.0'),
+      three: await resolvePackageVersion('three', '^0.157.0'),
       '@threlte/core': await resolvePackageVersion('@threlte/core')
     },
     scripts: {}
@@ -199,7 +199,7 @@ const create = async () => {
   // prettier-ignore
   {
 		if (options.types === 'typescript') {
-			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.156.0')
+			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.157.0')
 		}
 		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.devDependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
