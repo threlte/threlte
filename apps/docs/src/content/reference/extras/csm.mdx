@@ -110,3 +110,21 @@ This callback facilitates advanced configurations, such as enabling the fade fea
   can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
   default.
 </Tip>
+
+## Providing a fallback
+
+You may want to use a regular `<T.DirectionalLight>` when CSM is not enabled,
+for instance if you are developing a game and want to support low-end devices by
+disabling shadows altogehter. You can do this by using the `enabled` prop and
+the `disabled` slot:
+
+```svelte title="Scene.svelte"
+<CSM enabled={settings.shadows}>
+  <!-- Your scene goes here -->
+
+  <slot name="disabled">
+    <!-- Will be mounted if settings.shadows is false -->
+    <T.DirectionalLight castShadow={false} />
+  </slot>
+</CSM>
+```
