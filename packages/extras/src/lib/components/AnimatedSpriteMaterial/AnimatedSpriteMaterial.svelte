@@ -1,5 +1,16 @@
-<script lang='ts'>
-  import * as THREE from 'three'
+<script lang="ts">
+  import {
+    type Texture,
+    type Material,
+    DoubleSide,
+    FileLoader,
+    LinearFilter,
+    MeshBasicMaterial,
+    NearestFilter,
+    RepeatWrapping,
+    RGBADepthPacking,
+    SpriteMaterial
+  } from 'three'
   import {
     T,
     asyncWritable,
@@ -18,6 +29,7 @@
     FrameTag,
     Frame
   } from './AnimatedSpriteMaterial.svelte'
+  import { useSuspense } from '../../suspense/useSuspense'
   import { useTexture } from '../../hooks/useTexture'
 
   type $$Props = Required<AnimatedSpriteProps>
@@ -51,53 +63,62 @@
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
-  let texture: THREE.Texture | undefined
+  let texture: Texture | undefined
   let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
   let playing = true
 
-
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
   $: fpsInterval = 1000 / fps
 
-  export let is: THREE.Material = isMesh ? new THREE.MeshBasicMaterial() : new THREE.SpriteMaterial()
-  export let ref: THREE.Material
+  export let is: Material = isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
+  export let ref: Material
 
-  const textureStore = useTexture(textureUrl, {
-    transform: (value: THREE.Texture) => {
-      value.matrixAutoUpdate = false
-      value.generateMipmaps = false
-      value.premultiplyAlpha = false
-      value.wrapS = value.wrapT = THREE.RepeatWrapping
-      value.magFilter = value.minFilter = filter === 'nearest'
-        ? THREE.NearestFilter
-        : THREE.LinearFilter
-      return value
-    }
-  })
+  const suspend = useSuspense()
 
-  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = dataUrl
-    ? useLoader(THREE.FileLoader).load(dataUrl, {
-        transform: (file) => {
-          if (typeof file !== 'string') return
-          try { return JSON.parse(file) } catch { return }
-        }
-      })
-    : asyncWritable<SpriteJsonHashData>(new Promise((resolve) => {
-        const unsub = textureStore.subscribe((value) => {
-          if (!value) return
-          unsub()
-          resolve(createData(value))
+  const textureStore = suspend(
+    useTexture(textureUrl, {
+      transform: (value: Texture) => {
+        value.matrixAutoUpdate = false
+        value.generateMipmaps = false
+        value.premultiplyAlpha = false
+        value.wrapS = value.wrapT = RepeatWrapping
+        value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
+        return value
+      }
+    })
+  )
+
+  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = suspend(
+    dataUrl
+      ? useLoader(FileLoader).load(dataUrl, {
+          transform: (file) => {
+            if (typeof file !== 'string') return
+            try {
+              return JSON.parse(file)
+            } catch {
+              return
+            }
+          }
         })
-      }))
+      : asyncWritable<SpriteJsonHashData>(
+          new Promise((resolve) => {
+            const unsub = textureStore.subscribe((value) => {
+              if (!value) return
+              unsub()
+              resolve(createData(value))
+            })
+          })
+        )
+  )
 
   /**
    * Creates metadata if no JSON file is supplied.
    */
-  const createData = (texture: THREE.Texture) => {
+  const createData = (texture: Texture) => {
     const { width, height } = texture.image
     const cols = columns ?? totalFrames
 
@@ -114,23 +135,23 @@
         frameTags: [],
         version: '1.0',
         size: { w: width, h: height },
-        scale: 1,
-      },
+        scale: 1
+      }
     }
 
     for (let i = 0; i < numFrames; i += 1) {
       // Calculate the row and column for the current frame
-      const row = Math.floor(i / cols);
-      const col = i % cols;
+      const row = Math.floor(i / cols)
+      const col = i % cols
 
       // Calculate the x, y coordinates of the frame within the sprite sheet
-      const x = col * frameWidth;
-      const y = row * frameHeight;
+      const x = col * frameWidth
+      const y = row * frameHeight
 
       data.frames[`${i}`] = {
         frame: { x, y, w: frameWidth, h: frameHeight },
         spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },
-        sourceSize: { w: frameWidth, h: frameHeight },
+        sourceSize: { w: frameWidth, h: frameHeight }
       }
     }
 
@@ -143,9 +164,10 @@
     const frameOffsetX = 1 / horizontalFrames
     const frameOffsetY = 1 / verticalFrames
 
-    const x = flipOffset > 0
-      ? frameOffsetX * (frame.x / frameWidth)
-      : frameOffsetX * (frame.x / frameHeight) - texture!.repeat.x
+    const x =
+      flipOffset > 0
+        ? frameOffsetX * (frame.x / frameWidth)
+        : frameOffsetX * (frame.x / frameHeight) - texture!.repeat.x
     const y = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frameHeight)
 
     texture?.offset.set(x, y)
@@ -176,39 +198,42 @@
     stop()
   }
 
-  const { start, stop } = useFrame(() => {
-    const now = performance.now()
-    const diff = now - timerOffset
-    const name = frameNames[currentFrame]
-    const { frame, duration } = json!.frames[name]
-    const interval = duration ?? fpsInterval
+  const { start, stop } = useFrame(
+    () => {
+      const now = performance.now()
+      const diff = now - timerOffset
+      const name = frameNames[currentFrame]
+      const { frame, duration } = json!.frames[name]
+      const interval = duration ?? fpsInterval
 
-    if (diff <= interval) return
-    timerOffset = now - (diff % interval)
+      if (diff <= interval) return
+      timerOffset = now - (diff % interval)
 
-    const start = frameTag?.from ?? startFrame
-    const end = frameTag?.to ?? endFrame ?? numFrames - 1
+      const start = frameTag?.from ?? startFrame
+      const end = frameTag?.to ?? endFrame ?? numFrames - 1
 
-    setFrame(frame)
+      setFrame(frame)
 
-    currentFrame += 1
-  
-    if (currentFrame > end) {
-      currentFrame = start
-  
-      if (loop) {
-        if (dispatch.hasEventListener('loop')) {
-          dispatch('loop')
-        }
-      } else {
-        stop()
-        playing = false
-        if (dispatch.hasEventListener('end')) {
-          dispatch('end')
+      currentFrame += 1
+
+      if (currentFrame > end) {
+        currentFrame = start
+
+        if (loop) {
+          if (dispatch.hasEventListener('loop')) {
+            dispatch('loop')
+          }
+        } else {
+          stop()
+          playing = false
+          if (dispatch.hasEventListener('end')) {
+            dispatch('end')
+          }
         }
       }
-    }
-  }, { autostart: false })
+    },
+    { autostart: false }
+  )
 
   watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
     if (nextTexture === undefined || nextJson === undefined) return
@@ -217,7 +242,7 @@
     json = nextJson
     frameNames = Object.keys(json.frames)
     numFrames = frameNames.length
-    spritesheetSize = json.meta.size 
+    spritesheetSize = json.meta.size
 
     const { sourceSize } = Object.values(json.frames)[0]
     frameWidth = sourceSize.w
@@ -239,20 +264,20 @@
 </script>
 
 {#if texture && isMesh}
-  <T 
+  <T
     {is}
     bind:ref
     map={texture}
     toneMapped={false}
-    side={THREE.DoubleSide}
-    shadowSide={THREE.DoubleSide}
+    side={DoubleSide}
+    shadowSide={DoubleSide}
     {transparent}
     {alphaTest}
     {...$$restProps}
   />
   <T.MeshDepthMaterial
-    attach='customDepthMaterial'
-    depthPacking={THREE.RGBADepthPacking}
+    attach="customDepthMaterial"
+    depthPacking={RGBADepthPacking}
     map={texture}
     {alphaTest}
   />
