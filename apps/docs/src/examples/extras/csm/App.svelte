@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import Scene from './Scene.svelte'
   import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas } from '@threlte/core'
   import { CSM } from '@threlte/extras'
+  import Scene from './Scene.svelte'
 
   const { addInput, action } = useTweakpane({
     title: 'Csm',
@@ -21,7 +21,7 @@
 
   const lightIntensity = addInput({
     label: 'lightIntensity',
-    value: 3
+    value: Math.PI
   })
 
   const lightColor = addInput({
@@ -36,7 +36,7 @@
   <Canvas>
     <CSM
       enabled={$enabled}
-      lightDirection={$lightDirection}
+      lightDirection={[$lightDirection.x, $lightDirection.y, $lightDirection.z]}
       lightIntensity={$lightIntensity}
       lightColor={$lightColor}
     >

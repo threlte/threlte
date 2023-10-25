@@ -12,7 +12,15 @@
           { name: 'enabled', type: 'boolean', required: false },
           { name: 'camera', type: 'THREE.Camera | undefined', required: false },
           { name: 'configure', type: '(csm: CSM) => void', required: false },
-          { name: 'args', type: 'CSMParameters', required: false }
+          { name: 'args', type: 'CSMParameters', required: false },
+          { name: 'lightIntensity', type: 'number', required: false },
+          { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
+          {
+            name: 'lightDirection',
+            type: 'THREE.Vector3Tuple',
+            required: false,
+            default: '[1, -1, 1]'
+          }
         ]
     }
 }
@@ -59,12 +67,6 @@ Currently, support is limited only to `THREE.MeshStandardMaterial` and `THREE.Me
 
 The `<CSM>` component exposes an optional `args` prop which is used to instantiate the class `CSM`. These arguments are not reactive and are only updated when CSM is enabled.
 
-### Updating light direction
-
-To modify the light's direction, utilize the `lightDirection` parameter,
-which should be of the type `THREE.Vector3`. After setting this parameter, any subsequent
-adjustments should be made directly to this vector. The light direction vector hast to be normalized.
-
 ### Parameters explained
 
 | Name                 | Type                                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -76,8 +78,8 @@ adjustments should be made directly to this vector. The light direction vector h
 | mode                 | `"uniform" \| "logarithmic" \| "practical" \| "custom"`                                | Defines a split scheme (~ how the large frustum is splitted into smaller ones). Can be `'uniform'`(linear), `'logarithmic'`, `'practical'` or `'custom'`. For most cases `'practical'` may be the best choice. Equations used for each scheme can be found in [GPU Gems 3. Chapter 10.](https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html) If mode is set to `'custom'`, you'll need to define your own `customSplitsCallback` |
 | shadowMapSize        | number                                                                                 | Resolution of shadow maps (one per cascade).                                                                                                                                                                                                                                                                                                                                                                                                  |
 | shadowBias           | number                                                                                 | Serves the same purpose as `THREE.LightShadow.bias`, but most likely you will need to use much smaller values.                                                                                                                                                                                                                                                                                                                                |
-| lightDirection       | `THREE.Vector3`                                                                        | Normalized `THREE.Vector3`.                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| lightIntensity       | number                                                                                 | Same as `THREE.DirectionalLight.intensity`.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| lightDirection       | `THREE.Vector3`                                                                        | Normalized `THREE.Vector3`. Should be set by the prop `lightDirection`                                                                                                                                                                                                                                                                                                                                                                        |
+| lightIntensity       | number                                                                                 | Same as `THREE.DirectionalLight.intensity`. Should be set by the prop `lightIntensity`                                                                                                                                                                                                                                                                                                                                                        |
 | lightNear            | number                                                                                 | Shadow camera frustum near plane.                                                                                                                                                                                                                                                                                                                                                                                                             |
 | lightFar             | number                                                                                 | Shadow camera frustum far plane.                                                                                                                                                                                                                                                                                                                                                                                                              |
 | lightMargin          | number                                                                                 | Defines how far the shadow camera is moved along the z-axis in cascade frustum space. The larger the value is, the more space `LightShadow` will be able to cover. Should be set to a higher values for larger scenes.                                                                                                                                                                                                                        |
@@ -87,13 +89,13 @@ For implementation details, refer to [the Three.js GitHub repository](https://gi
 
 ## Custom configuration
 
-The `<CSM>` component offers a configuration callback, which is triggered when CSM is activated.
+The `<CSM>` component offers a configuration callback, which is called when CSM is activated.
 This callback facilitates advanced configurations, such as enabling the fade feature.
 
 ```svelte title="Scene.svelte"
 <CSM
   configure={(csm) => {
-    // advanced CSM configuration can be handle here. configure has to return csm
+    // advanced CSM configuration can be handle here.
     csm.fade = true
   }}
 >

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { useFrame, useThrelte, watch } from '@threlte/core'
+  import { currentWritable, useFrame, useThrelte, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { Camera, ColorRepresentation } from 'three'
+  import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
   import type { CSMParameters } from 'three/examples/jsm/csm/CSM'
   import { CSM } from 'three/examples/jsm/csm/CSM'
   import { useMaterials } from './useMaterials'
@@ -28,51 +28,55 @@
   export let configure: ((csm: CSM) => void) | undefined = undefined
 
   export let lightIntensity: number | undefined = undefined
-
   export let lightColor: ColorRepresentation | undefined = undefined
-
-  export let lightDirection: { x: number; y: number; z: number } = { x: 1, y: -1, z: 1 }
+  export let lightDirection: Vector3Tuple = [1, -1, 1]
 
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
 
-  const { camera: defaultCamera, scene, size, renderer } = useThrelte()
+  const { camera: defaultCamera, scene, size, useLegacyLights } = useThrelte()
 
-  let csm: CSM | undefined
+  const csm = currentWritable<CSM | undefined>(undefined)
 
-  useFrame(() => csm?.update(), { invalidate: false })
+  useFrame(() => $csm?.update(), { invalidate: false })
 
   const { onNewMaterial, allMaterials } = useMaterials()
 
   const disposeCsm = () => {
-    csm?.remove()
-    csm?.dispose()
-    csm = undefined
+    $csm?.remove()
+    $csm?.dispose()
+    $csm = undefined
   }
 
-  $: $size, csm?.updateFrustums()
+  watch([size, csm], ([_, csm]) => {
+    if (!csm) return
+    csm.updateFrustums()
+  })
+
+  const cameraStore = writable<Camera | undefined>(camera)
+  $: cameraStore.set(camera)
 
   // set any CSM props that require frustum updates
-  $: if (csm) {
-    csm.camera = camera ?? $defaultCamera
+  watch([defaultCamera, cameraStore, csm], ([defaultCamera, camera, csm]) => {
+    if (!csm) return
+    csm.camera = camera ?? defaultCamera
     if (args.maxFar !== undefined) csm.maxFar = args.maxFar
     if (args.mode !== undefined) csm.mode = args.mode
-
     csm.updateFrustums()
-  }
+  })
 
   watch(enabledStore, (enabled) => {
     if (enabled) {
-      csm = new CSM({
+      $csm = new CSM({
         camera: camera ?? $defaultCamera,
         parent: scene,
         ...args
       })
-      configure?.(csm)
+      configure?.($csm)
       for (const material of allMaterials) {
-        csm.setupMaterial(material)
+        $csm.setupMaterial(material)
       }
-      onNewMaterial((material) => csm?.setupMaterial(material))
+      onNewMaterial((material) => $csm?.setupMaterial(material))
     } else {
       onNewMaterial(undefined)
       disposeCsm()
@@ -85,20 +89,25 @@
   const lightColorStore = writable<typeof lightColor>(lightColor)
   $: lightColorStore.set(lightColor)
 
-  watch([lightIntensityStore, lightColorStore], () => {
-    csm?.lights.forEach((light) => {
-      if ($lightIntensityStore !== undefined)
-        light.intensity = $lightIntensityStore / (renderer.useLegacyLights ? 1 : Math.PI)
-      if ($lightColorStore !== undefined) light.color.set($lightColorStore)
-    })
-  })
+  watch(
+    [csm, lightIntensityStore, lightColorStore, useLegacyLights],
+    ([csm, intensity, color, useLegacyLights]) => {
+      csm?.lights.forEach((light) => {
+        if (intensity !== undefined) {
+          light.intensity = intensity / (useLegacyLights ? 1 : Math.PI)
+        }
+        if (color !== undefined) {
+          light.color.set(color)
+        }
+      })
+    }
+  )
 
-  const lightDirectionStore = writable<typeof lightDirection>(lightDirection)
+  const lightDirectionStore = writable(lightDirection)
   $: lightDirectionStore.set(lightDirection)
 
-  watch([lightDirectionStore], () => {
-    const { x, y, z } = $lightDirectionStore
-    csm?.lightDirection.set(x, y, z).normalize()
+  watch([csm, lightDirectionStore], ([csm, direction]) => {
+    csm?.lightDirection.set(...direction).normalize()
   })
 
   onDestroy(disposeCsm)
