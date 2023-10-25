@@ -2,7 +2,7 @@
   import { useFrame, useThrelte, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { Camera } from 'three'
+  import type { Camera, ColorRepresentation } from 'three'
   import type { CSMParameters } from 'three/examples/jsm/csm/CSM'
   import { CSM } from 'three/examples/jsm/csm/CSM'
   import { useMaterials } from './useMaterials'
@@ -26,6 +26,12 @@
    * feature.
    */
   export let configure: ((csm: CSM) => void) | undefined = undefined
+
+  export let lightIntensity: number | undefined = undefined
+
+  export let lightColor: ColorRepresentation | undefined = undefined
+
+  export let lightDirection: { x: number; y: number; z: number } = { x: 1, y: -1, z: 1 }
 
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
@@ -71,6 +77,27 @@
       onNewMaterial(undefined)
       disposeCsm()
     }
+  })
+
+  const lightIntensityStore = writable<typeof lightIntensity>(lightIntensity)
+  $: lightIntensityStore.set(lightIntensity)
+
+  const lightColorStore = writable<typeof lightColor>(lightColor)
+  $: lightColorStore.set(lightColor)
+
+  watch([lightIntensityStore, lightColorStore], () => {
+    csm?.lights.map((light) => {
+      if ($lightIntensityStore !== undefined) light.intensity = $lightIntensityStore
+      if ($lightColorStore !== undefined) light.color.set($lightColorStore)
+    })
+  })
+
+  const lightDirectionStore = writable<typeof lightDirection>(lightDirection)
+  $: lightDirectionStore.set(lightDirection)
+
+  watch([lightDirectionStore], () => {
+    const { x, y, z } = $lightDirectionStore
+    csm?.lightDirection.set(x, y, z).normalize()
   })
 
   onDestroy(disposeCsm)
