@@ -36,7 +36,7 @@
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
 
-  const { camera: defaultCamera, scene, size } = useThrelte()
+  const { camera: defaultCamera, scene, size, renderer } = useThrelte()
 
   let csm: CSM | undefined
 
@@ -87,7 +87,8 @@
 
   watch([lightIntensityStore, lightColorStore], () => {
     csm?.lights.forEach((light) => {
-      if ($lightIntensityStore !== undefined) light.intensity = $lightIntensityStore / Math.PI
+      if ($lightIntensityStore !== undefined)
+        light.intensity = $lightIntensityStore / (renderer.useLegacyLights ? 1 : Math.PI)
       if ($lightColorStore !== undefined) light.color.set($lightColorStore)
     })
   })
