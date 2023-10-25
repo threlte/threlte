@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.4.0
+
+### Minor Changes
+
+- 20e8711a: Added `<CSM>` to extras
+
 ## 7.3.0
 
 ### Minor Changes
