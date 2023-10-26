@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.5.0
+
+### Minor Changes
+
+- bcc96f23: Added `<AnimatedSpriteMaterial>`
+
 ## 7.4.0
 
 ### Minor Changes
