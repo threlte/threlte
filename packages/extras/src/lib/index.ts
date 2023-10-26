@@ -7,6 +7,7 @@ export { useTexture } from './hooks/useTexture'
 export { useGamepad } from './hooks/useGamepad'
 
 // abstractions
+export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as Float } from './components/Float/Float.svelte'
