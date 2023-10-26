@@ -41,7 +41,6 @@
   export let animation: $$Props['animation'] = ''
   export let loop: $$Props['loop'] = true
   export let autoplay: $$Props['autoplay'] = true
-  export let transitionOnLoopEnd: $$Props['transitionOnLoopEnd'] = true
   export let fps: $$Props['fps'] = 10
   export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
