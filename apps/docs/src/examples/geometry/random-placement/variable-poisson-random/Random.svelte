@@ -1,16 +1,11 @@
 <script lang="ts">
-  // import { writable } from 'svelte/store'
-  import { T, watch } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { radius, regen } from './state'
-  import { PoissonDiscSample as Sampler, type Point } from './poissonDiscSampling'
+  import { watch } from '@threlte/core'
+  import { radius, regen, width, height } from './stores'
+  import { PoissonDiscSample as Sampler, type Point } from './sampling'
   // The following components are copies from https://fun-bit.vercel.app/
-  import Tree1 from '../tree1.svelte'
-  import Bush1 from '../bush1.svelte'
-  import Rock1 from '../rock1.svelte'
-
-  const width = 20
-  const height = 20
+  import Tree from './assets/tree.svelte'
+  import Bush from './assets/bush.svelte'
+  import Rock from './assets/rock.svelte'
 
   const pointsMatrix = [
     { radius: 6, desription: 'large', density: 15 },
@@ -33,31 +28,12 @@
   })
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[20, 20, 20]}
->
-  <OrbitControls
-    maxPolarAngle={1.56}
-    autoRotate
-    autoRotateSpeed={0.1}
-  />
-</T.PerspectiveCamera>
-
-<T.DirectionalLight position={[3, 10, 7]} />
-<T.AmbientLight />
-
-<T.Mesh rotation.x={-Math.PI / 2}>
-  <T.PlaneGeometry args={[width, height, 1, 1]} />
-  <T.MeshStandardMaterial color="green" />
-</T.Mesh>
-
 {#each smallObjects as pos}
   {@const x = pos.x - 10}
   {@const z = pos.y - 10}
   {@const rot = Math.random() * Math.PI * 2}
   {@const scale = Math.random() * 2 + 0.5}
-  <Bush1
+  <Bush
     position.x={x}
     position.z={z}
     rotation.y={rot}
@@ -69,7 +45,7 @@
   {@const z = pos.y - 10}
   {@const rot = Math.random() * Math.PI * 2}
   {@const scale = Math.random() * 1.5 + 2}
-  <Tree1
+  <Tree
     position.x={x}
     position.z={z}
     rotation.y={rot}
@@ -81,7 +57,7 @@
   {@const z = pos.y - 10}
   {@const rot = Math.random() * Math.PI * 2}
   {@const scale = Math.random() * 2 + 1}
-  <Rock1
+  <Rock
     position.x={x}
     position.z={z}
     rotation.y={rot}

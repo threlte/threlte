@@ -1,21 +1,19 @@
-<script>
-  import { writable } from 'svelte/store'
-  import { T, watch } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { regen, numberOfObjects } from './state'
+<script lang="ts">
+  import { watch } from '@threlte/core'
+  import { regen, numberOfObjects } from './stores'
   // The following components are copies from https://fun-bit.vercel.app/
-  import BirchTree1 from '../birch1.svelte'
-  import Tree1 from '../tree1.svelte'
-  import Bush1 from '../bush1.svelte'
-  import Rock1 from '../rock1.svelte'
+  import BirchTree from './assets/birch.svelte'
+  import Tree from './assets/tree.svelte'
+  import Bush from './assets/bush.svelte'
+  import Rock from './assets/rock.svelte'
 
   const distinctObjects = 4
   const commonRatio = 0.5
 
-  let randomBushes = []
-  let randomTrees = []
-  let randomBirchTrees = []
-  let randomRocks = []
+  let randomBushes: number[][] = []
+  let randomTrees: number[][] = []
+  let randomBirchTrees: number[][] = []
+  let randomRocks: number[][] = []
 
   watch([regen, numberOfObjects], () => {
     generateRandomNumbers()
@@ -53,7 +51,11 @@
     }
   }
 
-  function calculateExponentialSumValues(total, numberOfValues, commonRatio) {
+  function calculateExponentialSumValues(
+    total: number,
+    numberOfValues: number,
+    commonRatio: number
+  ): number[] {
     let result = []
     let remainingTotal = total
 
@@ -70,31 +72,12 @@
   }
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[20, 20, 20]}
->
-  <OrbitControls
-    maxPolarAngle={1.56}
-    autoRotate
-    autoRotateSpeed={0.1}
-  />
-</T.PerspectiveCamera>
-
-<T.DirectionalLight position={[3, 10, 7]} />
-<T.AmbientLight />
-
-<T.Mesh rotation.x={-Math.PI / 2}>
-  <T.PlaneGeometry args={[20, 20, 1, 1]} />
-  <T.MeshStandardMaterial color="green" />
-</T.Mesh>
-
 {#each randomBushes as randomValues}
   {@const x = randomValues[0] * 20 - 10}
   {@const z = randomValues[1] * 20 - 10}
   {@const rot = randomValues[2] * Math.PI * 2}
   {@const scale = randomValues[3] * 2 + 0.5}
-  <Bush1
+  <Bush
     position.x={x}
     position.z={z}
     rotation.y={rot}
@@ -107,7 +90,7 @@
   {@const z = randomValues[1] * 20 - 10}
   {@const rot = randomValues[2] * Math.PI * 2}
   {@const scale = randomValues[3] * 2 + 1}
-  <BirchTree1
+  <BirchTree
     position.x={x}
     position.z={z}
     rotation.y={rot}
@@ -120,7 +103,7 @@
   {@const z = randomValues[1] * 20 - 10}
   {@const rot = randomValues[2] * Math.PI * 2}
   {@const scale = randomValues[3] * 2 + 1}
-  <Tree1
+  <Tree
     position.x={x}
     position.z={z}
     rotation.y={rot}
@@ -133,7 +116,7 @@
   {@const z = randomValues[1] * 20 - 10}
   {@const rot = randomValues[2] * Math.PI * 2}
   {@const scale = randomValues[3] + 0.5}
-  <Rock1
+  <Rock
     position.x={x}
     position.z={z}
     rotation.y={rot}

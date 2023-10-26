@@ -2,7 +2,7 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { useTweakpane } from '$lib/useTweakpane'
-  import { regen, radius } from './state'
+  import { regen, radius } from './stores'
 
   const { action, addButton, addInput } = useTweakpane({
     title: 'Poisson Disc Sampling'

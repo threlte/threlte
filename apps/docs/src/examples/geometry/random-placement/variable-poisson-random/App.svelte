@@ -2,10 +2,10 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { useTweakpane } from '$lib/useTweakpane'
-  import { regen, numberOfObjects } from './state'
+  import { regen, radius } from './stores'
 
   const { action, addButton, addInput } = useTweakpane({
-    title: 'Completely Random'
+    title: 'Adjusted Sampling'
   })
 
   addButton({
@@ -14,20 +14,6 @@
     onClick: () => {
       $regen = !$regen
     }
-  })
-
-  const { subscribe } = addInput({
-    value: 50,
-    label: 'Number of Objects',
-    params: {
-      min: 20,
-      max: 100,
-      step: 10
-    }
-  })
-
-  subscribe((value) => {
-    $numberOfObjects = value
   })
 </script>
 
