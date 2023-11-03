@@ -1,7 +1,6 @@
 import { Raycaster } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { setTeleportContext } from './context'
-import type { Context, HandContext } from './types'
+import { setTeleportContext, type Context, type HandContext } from './context'
 import { injectTeleportControlsPlugin } from './plugin'
 import { hasTeleportControls } from '../../internal/stores'
 import { getDefaultComputeFunction } from './defaults'
@@ -27,12 +26,12 @@ export const handContext: {
 } = {
   left: {
     hand: 'left',
-    enabled: currentWritable(false),
+    enabled: currentWritable(true),
     hovered: currentWritable(undefined),
   },
   right: {
     hand: 'right',
-    enabled: currentWritable(false),
+    enabled: currentWritable(true),
     hovered: currentWritable(undefined),
   }
 }
@@ -54,5 +53,9 @@ export const teleportControls = (options?: TeleportControlsOptions) => {
     hasTeleportControls.set(leftEnabled || rightEnabled)
   })
 
-  return { left, right, state: context }
+  return {
+    left,
+    right,
+    state: context,
+  }
 }

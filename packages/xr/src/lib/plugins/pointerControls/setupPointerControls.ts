@@ -6,17 +6,17 @@ import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
 import { useFixed } from '../../internal/useFixed'
 
+type PointerEventName = typeof events[number]
+
 const getRawEventDispatcher = (object: THREE.Object3D) => {
   return object.userData._threlte_interactivity_dispatcher as
     | ReturnType<typeof createRawEventDispatcher<ThrelteXREvents>>
     | undefined
 }
 
-function getIntersectionId(event: Intersection) {
-  return (event.eventObject || event.object).uuid + '/' + event.index + event.instanceId
+const getIntersectionId = (event: Intersection) => {
+  return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
 }
-
-type PointerEventName = typeof events[number]
 
 export const setupPointerControls = (state: State, handState: HandState) => {
   const handedness = handState.hand
@@ -217,7 +217,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
     }
   }
 
-  const { start, stop } = useFixed((ctx, dt) => {
+  const { start, stop } = useFixed(() => {
     hits = processHits()
     handleEvent('pointermove', null);
   }, {

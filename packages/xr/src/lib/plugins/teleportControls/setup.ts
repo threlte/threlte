@@ -1,7 +1,7 @@
 import { watch } from '@threlte/core'
 import { useXR } from '../../hooks/useXR'
 import { useFixed } from '../../internal/useFixed'
-import type { Context, HandContext } from './types'
+import type { Context, HandContext } from './context'
 
 export const setupTeleportControls = (context: Context, handContext: HandContext) => {
   const xrState = useXR()
@@ -11,6 +11,7 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
 
     const [intersect] = context.raycaster.intersectObjects(context.interactiveObjects, true)
     
+    console.log(intersect)
     if (intersect === undefined) return
 
     if (context.blockers.has(intersect.object.uuid)) {
@@ -24,6 +25,7 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
   })
 
   watch([xrState.isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
+    console.log(isPresenting, enabled)
     if (isPresenting && enabled) {
       start()
     } else {

@@ -39,5 +39,10 @@ export const useTeleportControls = () => {
     context.blockers.delete(mesh.uuid)
   }
 
-  return { addSurface, removeSurface, addBlocker, removeBlocker }
+  return {
+    addSurface,
+    removeSurface,
+    addBlocker,
+    removeBlocker
+  }
 }

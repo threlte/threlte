@@ -3,9 +3,9 @@ import { watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
 import { useTeleportControls } from './hook'
 
-const noop = () => {}
-
 export const injectTeleportControlsPlugin = (): void => {
+  const noop = () => {}
+
   injectPlugin('threlte-pointer-controls', ({ ref, props }) => {
     if (!ref.isMesh) return
 
@@ -17,23 +17,25 @@ export const injectTeleportControlsPlugin = (): void => {
     const refStore = writable<THREE.Mesh>(ref)
     const propsStore = writable(props)
 
-    watch([refStore, propsStore], ([ref, props]) => {
+    watch([refStore, propsStore], ([nextRef, nextProps]) => {
       if (isSurface) {
-        if (props.teleportSurface === false) {
-          removeSurface(ref)
+        if (nextProps.teleportSurface === false) {
+          removeSurface(nextRef)
           return noop
         } else {
-          addSurface(ref)
-          return () => removeSurface(ref)
+          addSurface(nextRef)
+          return () => removeSurface(nextRef)
         }
       } else if (isBlocker) {
         if (props.teleportBlocker === false) {
-          removeBlocker(ref)
+          removeBlocker(nextRef)
           return noop
         } else {
-          addBlocker(ref)
-          return () => removeBlocker(ref)
+          addBlocker(nextRef)
+          return () => removeBlocker(nextRef)
         }
+      } else {
+        return noop
       }
     })
 

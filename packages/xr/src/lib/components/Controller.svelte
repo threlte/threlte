@@ -6,19 +6,17 @@
   context="module"
 >
   import type { XRTargetRaySpace } from 'three'
-  import { Line2 } from 'three/examples/jsm/lines/Line2'
-  import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
   import { onDestroy } from 'svelte'
-  import { T, createRawEventDispatcher, useThrelte, useFrame } from '@threlte/core'
+  import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { activeTeleportController, pendingTeleportDestination, isHandTracking, hasPointerControls, hasTeleportControls } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
-  import { handContext } from '../plugins/teleportControls'
-  import Cursor from './Cursor.svelte'
-  import ShortRay from './ShortRay.svelte'
+  import Cursor from './internal/Cursor.svelte'
+  import ShortRay from './internal/ShortRay.svelte'
+  import ScenePortal from './internal/ScenePortal.svelte'
+  import TeleportCursor from "./internal/TeleportCursor.svelte"
   
   const factory = new XRControllerModelFactory()
 
@@ -41,6 +39,8 @@
 </script>
 
 <script lang="ts">
+  import TeleportRay from "./internal/TeleportRay.svelte"
+
   type $$Props =
     | {
         /** Whether the controller should be matched with the left hand. */
@@ -81,8 +81,6 @@
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
   const handTrackingNow = useHandTrackingState()
-
-  let lineGeometry = new LineGeometry()
 
   const handleEvent = (event: XRControllerEvent) => {
     if (!handTrackingNow()) {
@@ -141,11 +139,6 @@
     $activeTeleportController === targetRay &&
     $pendingTeleportDestination === undefined
   )
-  $: teleportSurface = handContext[handedness].hovered
-
-  const { start, stop } = useFrame(() => {
-    lineGeometry.setPositions(positions)
-  }, { autostart: false })
 
   onDestroy(() => {
     for (const index of [0, 1]) {
@@ -182,55 +175,33 @@
     >
       <slot name="target-ray" />
 
-      <slot name="pointer-ray">
-        <ShortRay
-          visible={$hasPointerControls || isControllerTeleporting}
-        />
-      </slot>
+      {#if $hasPointerControls || $hasTeleportControls}
+        <slot name="pointer-ray">
+          <ShortRay
+            visible={$hasPointerControls || isControllerTeleporting}
+          />
+        </slot>
+      {/if}
     </T>
   {/if}
 {/if}
 
-{#if $hasPointerControls}
-  <T.Group>
-    <slot name='pointer-cursor'>
-      <Cursor />
-    </slot>
-  </T.Group>
-{/if}
+<ScenePortal>
+  {#if $hasPointerControls}
+    <T.Group>
+      <slot name='pointer-cursor'>
+        <Cursor />
+      </slot>
+    </T.Group>
+  {/if}
 
-{#if $hasTeleportControls}
-  <slot name='teleport-ray'>
-    <T is={Line2}
-      {...$$restProps}
-      position.z={-0.01}
-    >
-      <T is={lineGeometry} />
-      <T is={LineMaterial}
-        color='white'
-        linewidth={0.004}
-      />
-    </T>    
-  </slot>
+  {#if targetRay && $hasTeleportControls}
+    <TeleportRay {targetRay} {handedness}>
+      <slot name='teleport-ray' />
+    </TeleportRay>
 
-  <slot name='teleport-cursor'>
-    <T.Mesh
-      visible={$teleportSurface !== undefined}
-      position.x={$teleportSurface?.point.x}
-      position.y={$teleportSurface?.point.y}
-      position.z={$teleportSurface?.point.z}
-    >
-      {@const innerRadius = 0.175}
-      {@const outerRadius = 0.2}
-      {@const thetaSegments = 32}
-      <T.RingGeometry
-        args={[innerRadius, outerRadius, thetaSegments]}
-        on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
-      />
-      <T.MeshBasicMaterial
-        polygonOffset
-        polygonOffsetFactor={-1}
-      />
-    </T.Mesh>
-  </slot>
-{/if}
+    <TeleportCursor {handedness}>
+      <slot name='teleport-cursor' />
+    </TeleportCursor>
+  {/if}
+</ScenePortal>
