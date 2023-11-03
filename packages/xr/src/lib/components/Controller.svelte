@@ -13,7 +13,7 @@
   import { activeTeleportController, pendingTeleportDestination, isHandTracking, hasPointerControls, hasTeleportControls } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
-  import Cursor from './internal/Cursor.svelte'
+  import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import ScenePortal from './internal/ScenePortal.svelte'
   import TeleportCursor from "./internal/TeleportCursor.svelte"
@@ -188,11 +188,9 @@
 
 <ScenePortal>
   {#if $hasPointerControls}
-    <T.Group>
-      <slot name='pointer-cursor'>
-        <Cursor />
-      </slot>
-    </T.Group>
+    <PointerCursor {handedness}>
+      <slot name='pointer-cursor' />
+    </PointerCursor>
   {/if}
 
   {#if targetRay && $hasTeleportControls}

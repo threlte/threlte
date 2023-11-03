@@ -50,7 +50,7 @@ export type State = {
 export type HandState = {
   hand: 'left' | 'right'
   enabled: CurrentWritable<boolean>
-  // pointer: CurrentWritable<THREE.Vector3>
+  pointer: CurrentWritable<THREE.Vector3>
   pointerOverTarget: CurrentWritable<boolean>
   lastEvent: THREE.Event | undefined
   initialClick: [x: number, y: number, z: number]

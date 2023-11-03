@@ -165,6 +165,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
 
       if (isPointerMove) {
         // Move event ...
+        handState.pointer.update(value => value.copy(intersectionEvent.point))
 
         if (
           eventDispatcher.hasEventListener('pointerover') ||

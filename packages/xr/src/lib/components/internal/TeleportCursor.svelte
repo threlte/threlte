@@ -1,22 +1,22 @@
 <script lang='ts'>
+  import { Group } from 'three'
   import { T, useFrame } from '@threlte/core'
   import { handContext } from '../../plugins/teleportControls'
-  import { Group } from 'three'
 
   export let handedness: 'left' | 'right'
 
   let ref = new Group()
 
-  $: teleportSurface = handContext[handedness].hovered
-  $: point = $teleportSurface?.point
+  $: hovered = handContext[handedness].hovered
+  $: intersectPoint = $hovered?.point
 
   const { start, stop } = useFrame(() => {
-    ref.position.lerp(point!, 0.3)
+    ref.position.lerp(intersectPoint!, 0.3)
   }, {
     autostart: false,
   })
 
-  $: if (point === undefined) {
+  $: if (intersectPoint === undefined) {
     stop()
   } else {
     start()
@@ -25,7 +25,7 @@
 
 <T
   is={ref}
-  visible={point !== undefined}
+  visible={intersectPoint !== undefined}
 >
   <slot name='teleport-cursor'>
     <T.Mesh>
