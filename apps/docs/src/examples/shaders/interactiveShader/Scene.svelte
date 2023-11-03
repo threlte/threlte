@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, HTML } from '@threlte/extras'
+  import { OrbitControls } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
   import { PlaneGeometry, Vector3 } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
@@ -36,9 +36,6 @@
   position={[-70, 50, 10]}
   fov={15}
 >
-  <HTML>
-    <span class="whitespace-nowrap pl-4">Click on the terrain mesh</span>
-  </HTML>
   <OrbitControls
     autoRotate
     target.y={1.5}

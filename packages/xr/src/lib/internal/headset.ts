@@ -16,7 +16,9 @@ export const useUpdateHeadset = () => {
 
     const pose = xr.getFrame().getViewerPose(space)
 
-    if (pose === undefined) return
+    // Although pose is only typed as possibly undefined,
+    // It can be null on android chrome when using phone AR.
+    if (pose === undefined || pose === null) return
 
     const { position, orientation } = pose.transform
 

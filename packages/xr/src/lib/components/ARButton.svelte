@@ -14,17 +14,20 @@
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
 
-  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
+  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'> & {
+    sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }
+  }
 </script>
 
 <XRButton
-  {...$$restProps}
-  mode='immersive-ar'
   sessionInit={{
     domOverlay: typeof document !== 'undefined' ? { root: document.body } : undefined,
     requiredFeatures: ['plane-detection'],
     optionalFeatures: ['hit-test', 'light-estimation', 'dom-overlay', 'dom-overlay-for-handheld-ar']
   }}
+  {...$$restProps}
+  mode='immersive-ar'
+  
   on:click
   on:error
 />

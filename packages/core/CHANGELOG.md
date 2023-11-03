@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.1.0
+
+### Minor Changes
+
+- 8b55284e: Added `loader.load` support to `useLoader`
+
 ## 6.0.10
 
 ### Patch Changes

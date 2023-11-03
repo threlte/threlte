@@ -2,15 +2,30 @@ import type { Loader as ThreeLoader } from 'three'
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
 
-export interface Loader extends ThreeLoader {
-  loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any>
+export interface AsyncLoader extends ThreeLoader {
+  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
 }
+
+export interface SyncLoader extends ThreeLoader {
+  load: (
+    url: string,
+    success: (data: any) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (event: ErrorEvent) => void
+  ) => void
+}
+
+export type Loader = AsyncLoader | SyncLoader
 
 type LoaderProto = { new (): Loader }
 
 export type UseLoaderLoadInput = string | string[] | Record<string, string>
 
-type LoaderResultType<TLoader extends Loader> = Awaited<ReturnType<TLoader['loadAsync']>>
+type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
+  ? Awaited<ReturnType<TLoader['loadAsync']>>
+  : TLoader extends SyncLoader
+  ? Awaited<ReturnType<TLoader['load']>>
+  : never
 
 export type UseLoaderLoadResult<
   TLoader extends Loader,
@@ -70,13 +85,27 @@ export const useLoader = <
   options.extend?.(loader as InstanceType<Proto>)
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
+    // Allow Async and Sync loaders
+    const loadResource = async (url: string) => {
+      if ('loadAsync' in loader) {
+        const result = await loader.loadAsync(url, options?.onProgress)
+        return options?.transform?.(result) ?? result
+      } else {
+        return new Promise((resolve, reject) => {
+          loader.load(
+            url,
+            (data) => resolve(options?.transform?.(data) ?? data),
+            (event) => options?.onProgress?.(event),
+            reject
+          )
+        })
+      }
+    }
+
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
       const promises = input.map((url) => {
-        return remember(async () => {
-          const result = await loader.loadAsync(url, options?.onProgress)
-          return options?.transform?.(result) ?? result
-        }, [Proto, url])
+        return remember(() => loadResource(url), [Proto, url])
       })
 
       // return an AsyncWritable that resolves to the array of promises
@@ -84,10 +113,7 @@ export const useLoader = <
       return store as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
       // debugger
-      const promise = remember(async () => {
-        const result = await loader.loadAsync(input, options?.onProgress)
-        return options?.transform?.(result) ?? result
-      }, [Proto, input])
+      const promise = remember(() => loadResource(input), [Proto, input])
 
       // return an AsyncWritable that resolves to the promise
       const store = asyncWritable(promise)
@@ -95,10 +121,7 @@ export const useLoader = <
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return remember(async () => {
-          const result = await loader.loadAsync(url, options?.onProgress)
-          return options?.transform?.(result) ?? result
-        }, [Proto, url])
+        return remember(() => loadResource(url), [Proto, url])
       })
       // return an AsyncWritable that resolves to the object of promises
       const store = asyncWritable(

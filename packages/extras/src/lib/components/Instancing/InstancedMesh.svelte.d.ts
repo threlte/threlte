@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { InstancedMesh as ThreeInstancedMesh } from 'three'
 
 export type InstancedMeshProps = Props<ThreeInstancedMesh> & {
@@ -12,7 +12,7 @@ export type InstancedMeshProps = Props<ThreeInstancedMesh> & {
 export type InstancedMeshEvents = Events<ThreeInstancedMesh>
 export type InstancedMeshSlots = Slots<ThreeInstancedMesh>
 
-export default class InstancedMesh extends SvelteComponentTyped<
+export default class InstancedMesh extends SvelteComponent<
   InstancedMeshProps,
   InstancedMeshEvents,
   InstancedMeshSlots
