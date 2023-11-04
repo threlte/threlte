@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.5.1
+
+### Patch Changes
+
+- 56330979: Fixed prop defaults of `<Text>`
+
 ## 7.5.0
 
 ### Minor Changes
