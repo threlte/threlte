@@ -1,4 +1,10 @@
 import type { CurrentWritable } from '@threlte/core'
+import type { ComputeFunction } from './compute'
+
+export type Properties<T> = Pick<
+  T,
+  { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
+>
 
 export interface Intersection extends THREE.Intersection {
   /** The event source (the object which registered the handler) */
@@ -24,22 +30,11 @@ export interface IntersectionEvent extends Intersection {
   stopped: boolean
 }
 
-export type Properties<T> = Pick<
-  T,
-  { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
->
+export type FilterFunction = (items: THREE.Intersection[], state: ControlsContext, handState: HandContext) => THREE.Intersection[]
 
-export interface PointerCaptureTarget {
-  intersection: Intersection
-  target: Element
-}
-
-export type FilterFunction = (items: THREE.Intersection[], state: State, handState: HandState) => THREE.Intersection[]
-
-export type ComputeFunction = (state: State, handState: HandState) => void
 
 // State that can be shared among hands / controllers
-export type State = {
+export type ControlsContext = {
   interactiveObjects: THREE.Object3D[],
   raycaster: THREE.Raycaster,
   compute: ComputeFunction
@@ -47,7 +42,7 @@ export type State = {
 }
 
 // State attached to a left / right hand or controller
-export type HandState = {
+export type HandContext = {
   hand: 'left' | 'right'
   enabled: CurrentWritable<boolean>
   pointer: CurrentWritable<THREE.Vector3>
@@ -56,6 +51,11 @@ export type HandState = {
   initialClick: [x: number, y: number, z: number]
   initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent>
+}
+
+export interface PointerCaptureTarget {
+  intersection: Intersection
+  target: Element
 }
 
 export type ThrelteXREvents = {

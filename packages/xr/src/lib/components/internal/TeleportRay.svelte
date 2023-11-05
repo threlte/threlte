@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace } from 'three'
+  import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace, Vector2 } from 'three'
   import { Line2 } from 'three/examples/jsm/lines/Line2'
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
@@ -18,26 +18,28 @@
   const positions = new Float32Array(rayDivisions * 3)
   const vec3 = new Vector3()
 
+  const v2_1 = new Vector2()
+  const v2_2 = new Vector2()
+
   $: teleportSurface = handContext[handedness].hovered
   $: intersectionPoint = $teleportSurface?.point
 
-  const setRayMidpoint = (end: Vector3) => {
+  const setCurvePoints = (alpha = 0.2) => {
+    const end = intersectionPoint!
+    targetRay.getWorldPosition(rayStart)
+
     rayMidpoint.x = (rayStart.x + end.x) / 2
     rayMidpoint.y = (rayStart.y + end.y) / 2
     rayMidpoint.z = (rayStart.z + end.z) / 2
-  }
 
-  const { start, stop } = useFrame(() => {
-    targetRay.getWorldPosition(rayStart)
-
-    setRayMidpoint(intersectionPoint!)
+    const arc = Math.log1p(v2_1.set(rayStart.x, rayStart.z).distanceTo(v2_2.set(end.x, end.z)))
 
     // Create an arc
-    rayMidpoint.y += 0.8
+    rayMidpoint.y += arc
 
-    curve.v0.lerp(rayStart, 0.3)
-    curve.v1.lerp(rayMidpoint, 0.3)
-    curve.v2.lerp(intersectionPoint!, 0.3)
+    curve.v0.lerp(rayStart, alpha)
+    curve.v1.lerp(rayMidpoint, alpha)
+    curve.v2.lerp(intersectionPoint!, alpha)
 
     for (let i = 0, j = 0; i < rayDivisions; i += 1, j += 3) {
       const t = i / rayDivisions
@@ -48,19 +50,25 @@
     }
 
     lineGeometry.setPositions(positions)
+  }
+
+  const { start, stop } = useFrame(() => {
+    setCurvePoints()
   }, { autostart: false })
 
   $: if (intersectionPoint === undefined) {
     stop()
   } else {
+    setCurvePoints(1)
     start()
   }
 
 </script>
 
 <slot name='teleport-ray'>
-  <T is={Line2}
-    {...$$restProps}
+  <T
+    is={Line2}
+    visible={intersectionPoint !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />

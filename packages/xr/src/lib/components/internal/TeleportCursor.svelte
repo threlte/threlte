@@ -5,13 +5,13 @@
 
   export let handedness: 'left' | 'right'
 
-  let ref = new Group()
+  const ref = new Group()
 
   $: hovered = handContext[handedness].hovered
   $: intersectPoint = $hovered?.point
 
   const { start, stop } = useFrame(() => {
-    ref.position.lerp(intersectPoint!, 0.3)
+    ref.position.lerp(intersectPoint!, 0.4)
   }, {
     autostart: false,
   })
@@ -19,6 +19,7 @@
   $: if (intersectPoint === undefined) {
     stop()
   } else {
+    ref.position.copy(intersectPoint)
     start()
   }
 </script>

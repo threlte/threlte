@@ -1,22 +1,22 @@
 import { Raycaster, Vector3 } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { getDefaultComputeFunction } from './defaults'
+import { defaultComputeFunction } from './compute'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setup'
 import { setControlsContext, setHandContext } from './context'
 import { hasPointerControls } from '../../internal/stores'
-import type { PointerControlsOptions, HandState, State } from './types'
+import type { PointerControlsOptions, ControlsContext, HandContext } from './types'
 
-export const context: State = {
+export const context: ControlsContext = {
   interactiveObjects: [],
   raycaster: new Raycaster(),
-  compute: getDefaultComputeFunction(),
+  compute: defaultComputeFunction,
   filter: undefined,
 }
 
 export const handContext: {
-  left: HandState
-  right: HandState
+  left: HandContext
+  right: HandContext
 } = {
   left: {
     hand: 'left',
@@ -41,8 +41,8 @@ export const handContext: {
 }
 
 export const pointerControls = (options?: PointerControlsOptions) => {
-  if (options?.compute) context.compute = options.compute
-  if (options?.filter) context.filter = options.filter
+  if (options?.compute !== undefined) context.compute = options.compute
+  if (options?.filter !== undefined) context.filter = options.filter
 
   setControlsContext(context)
   injectPointerControlsPlugin()
@@ -55,6 +55,11 @@ export const pointerControls = (options?: PointerControlsOptions) => {
 
   const left = createHandContext('left')
   const right = createHandContext('right')
+
+  if (options?.enabled !== undefined) {
+    left.enabled.set(options.enabled)
+    right.enabled.set(options.enabled)
+  }
 
   watch([left.enabled, right.enabled], ([leftEnabled, rightEnabled]) => {
     hasPointerControls.set(leftEnabled || rightEnabled)

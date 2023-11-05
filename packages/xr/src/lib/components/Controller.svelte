@@ -10,7 +10,7 @@
   import { onDestroy } from 'svelte'
   import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { activeTeleportController, pendingTeleportDestination, isHandTracking, hasPointerControls, hasTeleportControls } from '../internal/stores'
+  import { isHandTracking, hasPointerControls, hasTeleportControls } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
@@ -135,10 +135,6 @@
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model
-  $: isControllerTeleporting = (
-    $activeTeleportController === targetRay &&
-    $pendingTeleportDestination === undefined
-  )
 
   onDestroy(() => {
     for (const index of [0, 1]) {
@@ -176,11 +172,9 @@
       <slot name="target-ray" />
 
       {#if $hasPointerControls || $hasTeleportControls}
-        <slot name="pointer-ray">
-          <ShortRay
-            visible={$hasPointerControls || isControllerTeleporting}
-          />
-        </slot>
+        <ShortRay {handedness}>
+          <slot name="pointer-ray" />
+        </ShortRay>
       {/if}
     </T>
   {/if}

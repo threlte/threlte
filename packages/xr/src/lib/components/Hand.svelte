@@ -18,6 +18,8 @@
 </script>
 
 <script lang='ts'>
+  import ScenePortal from "./internal/ScenePortal.svelte"
+
   type $$Props =
     | {
         /** Whether the XRHand should be matched with the left hand. */
@@ -162,9 +164,12 @@
     {#if $$slots.default === undefined}
       <T is={model} />
     {/if}
-    <T.Group bind:ref={children}>
-      <slot name='wrist' />
-      <slot />
-    </T.Group>
   </T>
 {/if}
+
+<ScenePortal>
+  <T.Group bind:ref={children}>
+    <slot name='wrist' />
+    <slot />
+  </T.Group>
+</ScenePortal>

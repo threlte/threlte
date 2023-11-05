@@ -26,7 +26,13 @@ export { useTeleport } from './hooks/useTeleport'
 export { useXR } from './hooks/useXR'
 
 // Types
-export type * from './types'
-
-// Deprecated
-export { default as TeleportControls } from './components/TeleportControls.svelte'
+export type {
+  XRSessionEventType,
+  XRControllerEventType,
+  XRHandEventType,
+  XRSessionEvent,
+  XRControllerEvent,
+  XRController,
+  XRHand,
+  XRHandEvent,
+} from './types'

@@ -1,6 +1,6 @@
 import type * as THREE from 'three'
 import { watch, type createRawEventDispatcher } from '@threlte/core'
-import type { HandState, Intersection, IntersectionEvent, State, ThrelteXREvents, events } from './types'
+import type { ControlsContext, HandContext, Intersection, IntersectionEvent, ThrelteXREvents, events } from './types'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
@@ -18,7 +18,7 @@ const getIntersectionId = (event: Intersection) => {
   return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
 }
 
-export const setupPointerControls = (state: State, handState: HandState) => {
+export const setupPointerControls = (state: ControlsContext, handState: HandContext) => {
   const handedness = handState.hand
   const xrState = useXR()
   const controller = useController(handedness)
@@ -165,7 +165,7 @@ export const setupPointerControls = (state: State, handState: HandState) => {
 
       if (isPointerMove) {
         // Move event ...
-        handState.pointer.update(value => value.copy(intersectionEvent.point))
+        handState.pointer.update((value) => value.copy(intersectionEvent.point))
 
         if (
           eventDispatcher.hasEventListener('pointerover') ||

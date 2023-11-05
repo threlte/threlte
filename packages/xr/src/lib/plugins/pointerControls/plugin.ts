@@ -6,7 +6,7 @@ import { useComponentHasEventHandlers } from './useComponentEventHandlers'
 
 export const injectPointerControlsPlugin = (): void => {
   injectPlugin('threlte-pointer-controls', ({ ref }) => {
-    if (!ref.isMesh) return
+    if (ref.isMesh !== true) return
 
     const { addInteractiveObject, removeInteractiveObject } = usePointerControls()
 

@@ -3,10 +3,13 @@ import { watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
 import { useTeleportControls } from './hook'
 
+/**
+ * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
+ */
 export const injectTeleportControlsPlugin = (): void => {
   const noop = () => {}
 
-  injectPlugin('threlte-pointer-controls', ({ ref, props }) => {
+  injectPlugin('threlte-teleport-controls', ({ ref, props }) => {
     if (!ref.isMesh) return
 
     const isSurface = 'teleportSurface' in props

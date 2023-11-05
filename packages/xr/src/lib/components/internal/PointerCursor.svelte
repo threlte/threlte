@@ -21,9 +21,7 @@
   })
 </script>
 
-<T
-  is={ref}
->
+<T is={ref}>
   <slot name='pointer-cursor'>
     <T.Mesh>
       <T.SphereGeometry args={[0.01]} />

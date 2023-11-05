@@ -1,38 +1,45 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { hasPointerControls } from '../../internal/stores'
+  import { handContext } from '../../plugins/teleportControls'
 
-  const vertexShader = `
-  uniform mat4 modelViewMatrix;
-  uniform mat4 projectionMatrix;
-  attribute vec2 uv;
-  attribute vec3 position;
-  varying vec2 vUv;
-  void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }
-  `
+  export let handedness: 'left' | 'right'
 
-  const fragmentShader = `
-  varying mediump vec2 vUv;
-  void main() { gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.)); }
-  `
-
-  const radius = 0.002
-  const height = 0.2
-  const radialSegments = 16
-  const heightSegments = 1
-  const openEnded = false
+  $: selecting = handContext[handedness].selecting
+  $: hovered = handContext[handedness].hovered
+  $: visible = $hasPointerControls || ($selecting && !$hovered)
 </script>
 
-<T.Mesh
-  {...$$restProps}
-  rotation.x={-Math.PI / 2}
-  position.z={-0.1}
->
-  <T.CylinderGeometry
-    args={[radius, radius, height, radialSegments, heightSegments, openEnded]}
-  />
-  <T.RawShaderMaterial
-    transparent
-    {vertexShader}
-    {fragmentShader}
-  />
-</T.Mesh>
+<T.Group {visible}>
+  <slot name="pointer-ray">
+    <T.Mesh
+      rotation.x={-Math.PI / 2}
+      position.z={-0.1}
+    >
+      <T.CylinderGeometry
+        args={[0.002, 0.002, 0.2, 16, 1, false]}
+      />
+      <T.RawShaderMaterial
+        transparent
+        vertexShader={`
+          uniform mat4 modelViewMatrix;
+          uniform mat4 projectionMatrix;
+          attribute vec2 uv;
+          attribute vec3 position;
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
+          }
+        `}
+        fragmentShader={`
+          varying mediump vec2 vUv;
+          void main() {
+            gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.));
+          }
+        `}
+      />
+    </T.Mesh>
+  </slot>
+</T.Group>
+

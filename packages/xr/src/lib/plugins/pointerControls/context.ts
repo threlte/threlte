@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import type { HandState, State } from './types'
+import type { ControlsContext, HandContext } from './types'
 
 const handContextKeys = {
   left: Symbol('pointer-controls-context-left'),
@@ -9,17 +9,17 @@ const handContextKeys = {
 const contextKey = Symbol('pointer-controls-context')
 
 export const getHandContext = (hand: 'left' | 'right') => {
-  return getContext<HandState>(handContextKeys[hand])
+  return getContext<HandContext>(handContextKeys[hand])
 }
 
-export const setHandContext = (hand: 'left' | 'right', context: HandState) => {
+export const setHandContext = (hand: 'left' | 'right', context: HandContext) => {
   setContext(handContextKeys[hand], context)
 }
 
 export const getControlsContext = () => {
-  return getContext<State>(contextKey)
+  return getContext<ControlsContext>(contextKey)
 }
 
-export const setControlsContext = (context: State) => {
+export const setControlsContext = (context: ControlsContext) => {
   setContext(contextKey, context)
 }
