@@ -1,5 +1,29 @@
 # @threlte/extras
 
+## 7.5.1
+
+### Patch Changes
+
+- 56330979: Fixed prop defaults of `<Text>`
+
+## 7.5.0
+
+### Minor Changes
+
+- bcc96f23: Added `<AnimatedSpriteMaterial>`
+
+## 7.4.0
+
+### Minor Changes
+
+- 20e8711a: Added `<CSM>` to extras
+
+## 7.3.0
+
+### Minor Changes
+
+- c2ddef77: Added `suspended` store to return type of `useSuspense`
+
 ## 7.2.0
 
 ### Minor Changes

@@ -1,129 +1,148 @@
 import { createClassParser } from './createClassParser'
 
+const parseNumericOrAutoOrPercentageValue = (value: string): number | 'auto' | `${number}%` => {
+  if (value === 'auto') {
+    return value as 'auto'
+  } else if (value.endsWith('%')) {
+    return value as `${number}%`
+  } else if (value === 'full') {
+    return '100%'
+  } else if (value.match(/^\d+\/\d+$/)) {
+    const [width, height] = value.split('/')
+    const percentage = Math.round((Number(width) / Number(height)) * 100)
+    return `${percentage}%`
+  }
+  return Number(value)
+}
+
+const parseNumericOrPercentageValue = (value: string): number | `${number}%` => {
+  if (value.endsWith('%')) {
+    return value as `${number}%`
+  } else if (value === 'full') {
+    return '100%'
+  } else if (value.match(/^\d+\/\d+$/)) {
+    const [width, height] = value.split('/')
+    const percentage = Math.round((Number(width) / Number(height)) * 100)
+    return `${percentage}%`
+  }
+  return Number(value)
+}
+
 export const tailwindParser = createClassParser((string, props) => {
   const classes = string.split(' ').map((className) => className.trim())
-
-  const parseNumericOrAutoOrPercentageValue = (value: string): number | 'auto' | `${number}%` => {
-    if (value === 'auto') {
-      return value as 'auto'
-    } else if (value.endsWith('%')) {
-      return value as `${number}%`
-    } else if (value === 'full') {
-      return '100%'
-    } else if (value.match(/^\d+\/\d+$/)) {
-      const [width, height] = value.split('/')
-      const percentage = Math.round((Number(width) / Number(height)) * 100)
-      return `${percentage}%`
-    }
-    return Number(value)
-  }
-
-  const parseNumericOrPercentageValue = (value: string): number | `${number}%` => {
-    if (value.endsWith('%')) {
-      return value as `${number}%`
-    } else if (value === 'full') {
-      return '100%'
-    } else if (value.match(/^\d+\/\d+$/)) {
-      const [width, height] = value.split('/')
-      const percentage = Math.round((Number(width) / Number(height)) * 100)
-      return `${percentage}%`
-    }
-    return Number(value)
-  }
 
   classes.forEach((className) => {
     // padding
     if (className.startsWith('p-')) {
       const [, value] = className.split('-')
       props.padding = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('px-')) {
       const [, value] = className.split('-')
       props.paddingLeft = parseNumericOrPercentageValue(value)
       props.paddingRight = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('py-')) {
       const [, value] = className.split('-')
       props.paddingTop = parseNumericOrPercentageValue(value)
       props.paddingBottom = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('pt-')) {
       const [, value] = className.split('-')
       props.paddingTop = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('pr-')) {
       const [, value] = className.split('-')
       props.paddingRight = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('pb-')) {
       const [, value] = className.split('-')
       props.paddingBottom = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('pl-')) {
       const [, value] = className.split('-')
       props.paddingLeft = parseNumericOrPercentageValue(value)
+      return
     }
 
     // margin
     if (className.startsWith('m-')) {
       const [, value] = className.split('-')
       props.margin = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('mx-')) {
       const [, value] = className.split('-')
       props.marginLeft = parseNumericOrAutoOrPercentageValue(value)
       props.marginRight = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('my-')) {
       const [, value] = className.split('-')
       props.marginTop = parseNumericOrAutoOrPercentageValue(value)
       props.marginBottom = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('mt-')) {
       const [, value] = className.split('-')
       props.marginTop = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('mr-')) {
       const [, value] = className.split('-')
       props.marginRight = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('mb-')) {
       const [, value] = className.split('-')
       props.marginBottom = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
     if (className.startsWith('ml-')) {
       const [, value] = className.split('-')
       props.marginLeft = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
 
     // width
     if (className.startsWith('w-')) {
       const [, value] = className.split('-')
       props.width = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
 
     // height
     if (className.startsWith('h-')) {
       const [, value] = className.split('-')
       props.height = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
 
     // flex-basis
     if (className.startsWith('basis-')) {
       const [, value] = className.split('-')
       props.flexBasis = parseNumericOrAutoOrPercentageValue(value)
+      return
     }
 
     // flex-grow
     if (className.startsWith('grow-')) {
       const [, value] = className.split('-')
       props.flexGrow = Number(value)
+      return
     }
 
     // flex-shrink
     if (className.startsWith('shrink-')) {
       const [, value] = className.split('-')
       props.flexShrink = Number(value)
+      return
     }
 
     // flex-direction
@@ -156,6 +175,7 @@ export const tailwindParser = createClassParser((string, props) => {
           const [, value] = className.split('-')
           props.flex = Number(value)
       }
+      return
     }
 
     // justify-content
@@ -180,6 +200,7 @@ export const tailwindParser = createClassParser((string, props) => {
           props.justifyContent = 'SpaceEvenly'
           break
       }
+      return
     }
 
     // align-items
@@ -201,6 +222,7 @@ export const tailwindParser = createClassParser((string, props) => {
           props.alignItems = 'Stretch'
           break
       }
+      return
     }
 
     // align-content
@@ -231,6 +253,7 @@ export const tailwindParser = createClassParser((string, props) => {
           props.alignContent = 'Baseline'
           break
       }
+      return
     }
 
     // align-self
@@ -255,36 +278,44 @@ export const tailwindParser = createClassParser((string, props) => {
           props.alignSelf = 'Baseline'
           break
       }
+      return
     }
 
     // Gaps
     if (className.startsWith('gap-x-')) {
       const [, value] = className.split('-')
       props.gapColumn = Number(value)
+      return
     } else if (className.startsWith('gap-y-')) {
       const [, value] = className.split('-')
       props.gapRow = Number(value)
+      return
     } else if (className.startsWith('gap-')) {
       const [, value] = className.split('-')
       props.gap = Number(value)
+      return
     }
 
     // Position
     if (className.startsWith('top-')) {
       const [, value] = className.split('-')
       props.top = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('right-')) {
       const [, value] = className.split('-')
       props.right = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('bottom-')) {
       const [, value] = className.split('-')
       props.bottom = parseNumericOrPercentageValue(value)
+      return
     }
     if (className.startsWith('left-')) {
       const [, value] = className.split('-')
       props.left = parseNumericOrPercentageValue(value)
+      return
     }
 
     // aspect ratio
