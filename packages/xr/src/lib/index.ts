@@ -5,7 +5,6 @@ export { default as XRButton } from './components/XRButton.svelte'
 export { default as Controller } from './components/Controller.svelte'
 export { default as Hand } from './components/Hand.svelte'
 export { default as Headset } from './components/Headset.svelte'
-export { default as TeleportControls } from './components/TeleportControls.svelte'
 export { default as XR } from './components/XR.svelte'
 
 // Utilities
@@ -28,3 +27,6 @@ export { useXR } from './hooks/useXR'
 
 // Types
 export type * from './types'
+
+// Deprecated
+export { default as TeleportControls } from './components/TeleportControls.svelte'

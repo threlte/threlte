@@ -2,22 +2,19 @@ import { Vector3 } from 'three'
 import { useController } from '../../hooks/useController'
 import type { Context, HandContext } from './context'
 
-export const getDefaultComputeFunction = () => {
-  const controllers = {
-    left: useController('left'),
-    right: useController('right')
-  }
+const controllers = {
+  left: useController('left'),
+  right: useController('right')
+}
 
-  const forward = new Vector3()
+const forward = new Vector3()
 
-  return (context: Context, handContext: HandContext) => {
-    const origin = controllers[handContext.hand].current?.targetRay
+export const defaultComputeFunction = (context: Context, handContext: HandContext) => {
+  const targetRay = controllers[handContext.hand].current?.targetRay
 
-    if (origin === undefined) return
+  if (targetRay === undefined) return
 
-    forward.set(0, 0, -1)
-    forward.applyQuaternion(origin.quaternion)
+  forward.set(0, 0, -1).applyQuaternion(targetRay.quaternion)
 
-    context.raycaster.set(origin.position, forward)
-  }
+  context.raycaster.set(targetRay.position, forward)
 }

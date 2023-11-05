@@ -1,27 +1,11 @@
 <!--
-@component
+  @component
+  @deprecated
+  Use the `teleportControls` plugin instead. 
+  This component will be removed in the next release.
 
-`<TeleportControls />` creates a teleportation experience similar to that on the Quest home environment.
-
-@param handedness - Which hands to allow teleportation from.
-
-@param maxDistance - The maximum radial teleporting distance from the user's current origin, in meters.
-
-@event teleport - Fires after a teleport event.
-
-```svelte
-  <TeleportControls
-    handedness={'left' | 'right'}
-    maxDistance={10}
-    on:teleport={(event) => {}} 
-  >
-    <T.Mesh teleportSurface>
-      ...
-    </T.Mesh>
-  </TeleportControls>
-```
+  @see https://threlte.xyz/docs/reference/xr/pointer-controls
 -->
-
 <script lang='ts'>
   import * as THREE from 'three'
   import { T, useFrame, createRawEventDispatcher } from '@threlte/core'

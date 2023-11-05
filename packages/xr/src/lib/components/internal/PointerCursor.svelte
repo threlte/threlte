@@ -9,8 +9,6 @@
 
   $: pointer = handContext[handedness].pointer
   $: hovered = handContext[handedness].hovered
-  // $: intersectPoint = $hovered?.point
-  // $: console.log($hovered)
 
   useFrame(() => {
     if (hovered.size === 0) {
@@ -20,15 +18,7 @@
   
     ref.visible = true
     ref.position.lerp(pointer.current, 0.3)
-  }, {
-    // autostart: false,
   })
-
-  // $: if (intersectPoint === undefined) {
-  //   stop()
-  // } else {
-  //   start()
-  // }
 </script>
 
 <T

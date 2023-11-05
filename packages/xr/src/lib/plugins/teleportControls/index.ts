@@ -3,7 +3,7 @@ import { currentWritable, watch } from '@threlte/core'
 import { setTeleportContext, type Context, type HandContext } from './context'
 import { injectTeleportControlsPlugin } from './plugin'
 import { hasTeleportControls } from '../../internal/stores'
-import { getDefaultComputeFunction } from './defaults'
+import { defaultComputeFunction } from './defaults'
 import { setHandContext } from './context'
 import { setupTeleportControls } from './setup'
 
@@ -17,7 +17,7 @@ export const context: Context = {
   blockers: new Map(),
   dispatchers: new WeakMap(),
   raycaster: new Raycaster(),
-  compute: getDefaultComputeFunction()
+  compute: defaultComputeFunction
 }
 
 export const handContext: {

@@ -4,6 +4,9 @@ type Props = {
   teleportSurface: boolean
 }
 
+/**
+ * Part of <TeleportControls. Will be removed in the next release.
+ */
 export const teleportPlugin = (navMeshes: THREE.Mesh[]) =>
   injectPlugin<Props>('teleport-controls', ({ ref, props }) => {
     let currentRef: THREE.Mesh = ref
