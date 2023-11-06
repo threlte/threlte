@@ -47,7 +47,6 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
   })
 
   watch([xrState.isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
-    console.log(isPresenting, enabled)
     if (isPresenting && enabled) {
       start()
     } else {

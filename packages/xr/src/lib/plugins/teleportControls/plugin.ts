@@ -14,6 +14,7 @@ export const injectTeleportControlsPlugin = (): void => {
 
     const isSurface = 'teleportSurface' in props
     const isBlocker = 'teleportBlocker' in props
+
     if (!isSurface && !isBlocker) return
 
     const { addBlocker, addSurface, removeBlocker, removeSurface } = useTeleportControls()

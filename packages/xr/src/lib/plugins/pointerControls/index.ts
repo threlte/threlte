@@ -3,7 +3,7 @@ import { currentWritable, watch } from '@threlte/core'
 import { defaultComputeFunction } from './compute'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setup'
-import { setControlsContext, setHandContext } from './context'
+import { setControlsContext, setHandContext, setInternalContext } from './context'
 import { hasPointerControls } from '../../internal/stores'
 import type { PointerControlsOptions, ControlsContext, HandContext } from './types'
 
@@ -44,6 +44,7 @@ export const pointerControls = (options?: PointerControlsOptions) => {
   if (options?.compute !== undefined) context.compute = options.compute
   if (options?.filter !== undefined) context.filter = options.filter
 
+  setInternalContext()
   setControlsContext(context)
   injectPointerControlsPlugin()
 

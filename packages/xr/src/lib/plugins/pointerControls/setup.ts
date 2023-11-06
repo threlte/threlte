@@ -1,34 +1,37 @@
-import type * as THREE from 'three'
-import { watch, type createRawEventDispatcher } from '@threlte/core'
-import type { ControlsContext, HandContext, Intersection, IntersectionEvent, ThrelteXREvents, events } from './types'
+import { Vector3 } from 'three'
+import { watch } from '@threlte/core'
+import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
 import { useFixed } from '../../internal/useFixed'
+import { getInternalContext } from './context'
 
 type PointerEventName = typeof events[number]
 
-const getRawEventDispatcher = (object: THREE.Object3D) => {
-  return object.userData._threlte_interactivity_dispatcher as
-    | ReturnType<typeof createRawEventDispatcher<ThrelteXREvents>>
-    | undefined
+const getIntersectionId = (intersection: Intersection) => {
+  return `${(intersection.eventObject || intersection.object).uuid}/${intersection.index}${intersection.instanceId ?? ''}`
 }
 
-const getIntersectionId = (event: Intersection) => {
-  return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
-}
+const EPSILON = 0.001
 
-export const setupPointerControls = (state: ControlsContext, handState: HandContext) => {
+export const setupPointerControls = (state: ControlsContext, handState: HandContext, fixedStep = 1 / 30) => {
   const handedness = handState.hand
   const xrState = useXR()
   const controller = useController(handedness)
   const hand = useHand(handedness)
+  const { dispatchers } = getInternalContext()
 
-  let hits: Intersection[]
+  let hits: Intersection[] = []
+  let lastPosition = new Vector3()
 
   const handlePointerDown = (event: THREE.Event) => {
     // Save initial coordinates on pointer-down
-    // handState.initialClick[0] = [event.offsetX, event.offsetY, 0]
+    const [hit] = hits
+
+    if (!hit) return
+
+    handState.initialClick = [hit.point.x, hit.point.y, hit.point.z]
     handState.initialHits = hits.map((hit) => hit.eventObject)
 
     handleEvent('pointerdown', event)
@@ -39,23 +42,13 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
   }
 
   const handleClick = (event: THREE.Event) => {
-    // const delta = calculateDistance(event)
-    const delta = 1
-
     // If a click yields no results, pass it back to the user as a miss
     // Missed events have to come first in order to establish user-land side-effect clean up
-    if (hits.length === 0 && delta <= 2) {
+    if (hits.length === 0) {
       pointerMissed(event, state.interactiveObjects)
     }
 
     handleEvent('click', event)
-  }
-
-  function calculateDistance(intersection: THREE.Intersection) {
-    const dx = intersection.point.x - handState.initialClick[0]
-    const dy = intersection.point.y - handState.initialClick[1]
-    const dz = intersection.point.z - handState.initialClick[2]
-    return Math.round(Math.hypot(dx, dy, dz))
   }
 
   function cancelPointer(intersections: Intersection[]) {
@@ -72,7 +65,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
       ) {
         const { eventObject } = hoveredObj
         handState.hovered.delete(getIntersectionId(hoveredObj))
-        const eventDispatcher = getRawEventDispatcher(eventObject)
+        const eventDispatcher = dispatchers.get(eventObject)
         if (eventDispatcher) {
           // Clear out intersects, they are outdated by now
           const data = { ...hoveredObj, intersections }
@@ -93,7 +86,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
       let eventObject: THREE.Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
-        if (getRawEventDispatcher(eventObject)) {
+        if (dispatchers.has(eventObject)) {
           intersections.push({ ...hit, eventObject })
         }
 
@@ -106,15 +99,13 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
   function pointerMissed(event: IntersectionEvent, objects: THREE.Object3D[]) {
     for (const object of objects) {
-      const eventDispatcher = getRawEventDispatcher(object)
-      eventDispatcher?.('pointermissed', event)
+      dispatchers.get(object)?.('pointermissed', event)
     }
   }
 
   function processHits () {
     state.compute(state, handState)
-    const hits = getHits()
-    return hits
+    return getHits()
   }
 
   const handlePointerEnter = () => {
@@ -127,7 +118,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     cancelPointer([])
   }
 
-  const handleEvent = (name: PointerEventName, event: THREE.Event) => {
+  const handleEvent = (name: PointerEventName, event: THREE.Event | null) => {
     const isPointerMove = name === 'pointermove'
     const isClickEvent = name === 'click' || name === 'contextmenu'
 
@@ -154,14 +145,15 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
             cancelPointer([...higher, hit])
           }
         },
-        // delta,
+        delta: 0,
         nativeEvent: event,
-        // pointer: handState.pointer.current,
+        pointer: handState.pointer.current,
         ray: state.raycaster.ray
       }
 
-      const eventDispatcher = getRawEventDispatcher(hit.eventObject)
-      if (!eventDispatcher) return
+      const eventDispatcher = dispatchers.get(hit.eventObject)
+
+      if (eventDispatcher === undefined) return
 
       if (isPointerMove) {
         // Move event ...
@@ -175,7 +167,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
         ) {
           const id = getIntersectionId(intersectionEvent)
           const hoveredItem = handState.hovered.get(id)
-          if (!hoveredItem) {
+          if (hoveredItem === undefined) {
             // If the object wasn't previously hovered, book it and call its handler
             handState.hovered.set(id, intersectionEvent)
             eventDispatcher('pointerover', intersectionEvent)
@@ -188,30 +180,24 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
         // Call pointer move
         eventDispatcher('pointermove', intersectionEvent)
-      } else {
-        // All other events
-        const hasEventListener = eventDispatcher.hasEventListener(name)
 
-        if (hasEventListener) {
-          if (!isClickEvent || handState.initialHits.includes(hit.eventObject)) {
-            // Missed events have to come first
-            pointerMissed(
-              event,
-              state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
-            )
+      } else if ((!isClickEvent || handState.initialHits.includes(hit.eventObject)) && eventDispatcher.hasEventListener(name)) {
 
-            // Call the event
-            eventDispatcher(name, intersectionEvent)
-          }
-        } else {
-          // "Real" click event
-          if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
-            pointerMissed(
-              event,
-              state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
-            )
-          }
-        }
+        // Missed events have to come first
+        pointerMissed(
+          event,
+          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+        )
+
+        // Call the event
+        eventDispatcher(name, intersectionEvent)
+
+      } else if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
+
+        pointerMissed(
+          event,
+          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+        )
       }
 
       if (stopped) break dispatchEvents
@@ -220,33 +206,44 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
   const { start, stop } = useFixed(() => {
     hits = processHits()
-    handleEvent('pointermove', null);
+
+    const targetRay = controller.current?.targetRay
+
+    if (targetRay === undefined) return
+
+    if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+      handleEvent('pointermove', null)
+    }
+
+    lastPosition.copy(targetRay.position)
   }, {
-    fixedStep: 1 / 24,
+    fixedStep,
     autostart: false,
   })
 
   watch(controller, (input) => {
-    input?.targetRay.addEventListener('selectstart', handlePointerDown)
-    input?.targetRay.addEventListener('selectend', handlePointerUp)
-    input?.targetRay.addEventListener('select', handleClick)
+    if (input === undefined) return
+    input.targetRay.addEventListener('selectstart', handlePointerDown)
+    input.targetRay.addEventListener('selectend', handlePointerUp)
+    input.targetRay.addEventListener('select', handleClick)
     return () => {
-      input?.targetRay.removeEventListener('selectstart', handlePointerDown)
-      input?.targetRay.removeEventListener('selectend', handlePointerUp)
-      input?.targetRay.removeEventListener('select', handleClick)
+      input.targetRay.removeEventListener('selectstart', handlePointerDown)
+      input.targetRay.removeEventListener('selectend', handlePointerUp)
+      input.targetRay.removeEventListener('select', handleClick)
     }
   })
 
-  watch(hand, (input) => {
-    input?.hand.addEventListener('pinchstart', handlePointerDown)
-    input?.hand.addEventListener('pinchend', handlePointerUp)
-    input?.hand.addEventListener('pinchend', handleClick)
-    return () => {
-      input?.hand.removeEventListener('pinchstart', handlePointerDown)
-      input?.hand.removeEventListener('pinchend', handlePointerUp)
-      input?.hand.removeEventListener('pinchend', handleClick)
-    }
-  })
+  // watch(hand, (input) => {
+  //   if (input === undefined) return
+  //   input.hand.addEventListener('pinchstart', handlePointerDown)
+  //   input.hand.addEventListener('pinchend', handlePointerUp)
+  //   input.hand.addEventListener('pinchend', handleClick)
+  //   return () => {
+  //     input.hand.removeEventListener('pinchstart', handlePointerDown)
+  //     input.hand.removeEventListener('pinchend', handlePointerUp)
+  //     input.hand.removeEventListener('pinchend', handleClick)
+  //   }
+  // })
 
   watch([xrState.isPresenting, handState.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {
