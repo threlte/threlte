@@ -88,11 +88,16 @@
   let transformProps: Props<TransformControls> = {}
   let objectProps: Props<Group> = {}
 
-  $: for (let [key, value] of Object.entries($$restProps)) {
-    if (transformOnlyPropNames.includes(key)) {
-      transformProps[key] = value
-    } else {
-      objectProps[key] = value
+  $: {
+    transformProps = {}
+    objectProps = {}
+
+    for (let [key, value] of Object.entries($$restProps)) {
+      if (transformOnlyPropNames.includes(key)) {
+        transformProps[key] = value
+      } else {
+        objectProps[key] = value
+      }
     }
   }
 
