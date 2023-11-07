@@ -1,24 +1,49 @@
 <script lang='ts'>
-  import * as THREE from 'three'
+  import { BufferGeometry, Vector3 } from 'three'
   import { onDestroy } from 'svelte'
   import { T, useFrame } from '@threlte/core'
+  import { Text } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
-  import { pointerControls, useXR } from '@threlte/xr'
+  import { pointerControls, useXR, Controller, Hand } from '@threlte/xr'
 
   const { isPresenting } = useXR()
   const scale = spring(1)
   const eyeScale = spring(1, { stiffness: 0.5 })
-
+  const points = [new Vector3(0, 0, 0), new Vector3(0, 0, -1000)]
+  
+  let debug = false
   let ref: THREE.Mesh
   let lookIntervalId: number | undefined
   let happy = false
-  let lookAt = new THREE.Vector3()
-  let point = new THREE.Vector3()
+  let lookAt = new Vector3()
+  let point = new Vector3()
+  let text = ''
 
   const handleEvent = (type: string) => (event: any): any => {
+    text = type
     console.log(type, event)
     switch (type) {
+      case 'click': {
+        scale.set(1.5)
+        return
+      }
+      case 'contextmenu': {
+        // @todo
+        return
+      }
+      case 'dblclick': {
+        // @todo
+        return
+      }
+      case 'wheel': {
+        // @todo
+        return
+      }
+      case 'pointerdown': {
+        // @todo
+        return
+      }
       case 'pointermove': {
         point.copy(event.point)
         return
@@ -31,10 +56,6 @@
       case 'pointerleave': {
         happy = false
         scale.set(1)
-        return
-      }
-      case 'click': {
-        scale.set(1.5)
         return
       }
       case 'pointermissed': {
@@ -74,6 +95,29 @@
   })
 </script>
 
+<svelte:window
+  on:keyup={(e) => e.key === 'd' && (debug = !debug)}
+/>
+
+<Controller left>
+  <svelte:fragment slot='target-ray'>
+    <Text fontSize={0.05} {text} position.x={0.1} />
+    <T.Line visible={debug}>
+      <T is={new BufferGeometry().setFromPoints(points)} />
+    </T.Line>
+  </svelte:fragment>
+  
+</Controller>
+
+<Controller right>
+<T.Line slot='target-ray' visible={debug}>
+  <T is={new BufferGeometry().setFromPoints(points)} />
+</T.Line>
+</Controller>
+
+<Hand left />
+<Hand right />
+
 <T.Group position.y={1.5} scale={$isPresenting ? 0.1 : 1}>
   <T.Mesh
     bind:ref
@@ -81,8 +125,8 @@
     on:contextmenu={handleEvent('contextmenu')}
     on:dblclick={handleEvent('dblclick')}
     on:wheel={handleEvent('wheel')}
-    on:pointerup={handleEvent('pointerup')}
     on:pointerdown={handleEvent('pointerdown')}
+    on:pointerup={handleEvent('pointerup')}
     on:pointerover={handleEvent('pointerover')}
     on:pointerout={handleEvent('pointerout')}
     on:pointerenter={handleEvent('pointerenter')}
