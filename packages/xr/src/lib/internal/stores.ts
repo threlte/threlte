@@ -5,6 +5,15 @@ export const initialized = writable(false)
 export const isPresenting = currentWritable(false)
 export const isHandTracking = currentWritable(false)
 
+export const teleportState = currentWritable({
+  enabled: false,
+  selecting: false,
+  intersection: {
+    left: undefined as undefined | THREE.Intersection,
+    right: undefined as undefined | THREE.Intersection
+  },
+})
+
 export const hasTeleportControls = currentWritable(false)
 export const hasPointerControls = currentWritable(false)
 

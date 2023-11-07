@@ -4,7 +4,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
   import { T, useFrame } from '@threlte/core'
-  import { handContext } from '../../plugins/teleportControls'
+  import { teleportState } from '../../internal/stores'
 
   export let handedness: 'left' | 'right'
   export let targetRay: XRTargetRaySpace
@@ -21,25 +21,25 @@
   const v2_1 = new Vector2()
   const v2_2 = new Vector2()
 
-  $: teleportSurface = handContext[handedness].hovered
-  $: intersectionPoint = $teleportSurface?.point
+  $: intersection = $teleportState.intersection[handedness]
+  $: point = intersection?.point
 
   const setCurvePoints = (alpha = 0.2) => {
-    const end = intersectionPoint!
+    const rayEnd = point!
     targetRay.getWorldPosition(rayStart)
 
-    rayMidpoint.x = (rayStart.x + end.x) / 2
-    rayMidpoint.y = (rayStart.y + end.y) / 2
-    rayMidpoint.z = (rayStart.z + end.z) / 2
+    rayMidpoint.x = (rayStart.x + rayEnd.x) / 2
+    rayMidpoint.y = (rayStart.y + rayEnd.y) / 2
+    rayMidpoint.z = (rayStart.z + rayEnd.z) / 2
 
-    const arc = Math.log1p(v2_1.set(rayStart.x, rayStart.z).distanceTo(v2_2.set(end.x, end.z)))
+    const arc = Math.log1p(v2_1.set(rayStart.x, rayStart.z).distanceTo(v2_2.set(rayEnd.x, rayEnd.z)))
 
     // Create an arc
     rayMidpoint.y += arc
 
     curve.v0.lerp(rayStart, alpha)
     curve.v1.lerp(rayMidpoint, alpha)
-    curve.v2.lerp(intersectionPoint!, alpha)
+    curve.v2.lerp(rayEnd, alpha)
 
     for (let i = 0, j = 0; i < rayDivisions; i += 1, j += 3) {
       const t = i / rayDivisions
@@ -56,7 +56,7 @@
     setCurvePoints()
   }, { autostart: false })
 
-  $: if (intersectionPoint === undefined) {
+  $: if (point === undefined) {
     stop()
   } else {
     setCurvePoints(1)
@@ -68,7 +68,7 @@
 <slot name='teleport-ray'>
   <T
     is={Line2}
-    visible={intersectionPoint !== undefined}
+    visible={point !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />

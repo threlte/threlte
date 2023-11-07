@@ -5,7 +5,7 @@ import { useTeleport } from '../../hooks/useTeleport'
 import { useFixed } from '../../internal/useFixed'
 import type { Context, HandContext } from './context'
 
-export const setupTeleportControls = (context: Context, handContext: HandContext, fixedStep = 1 / 30) => {
+export const setupTeleportControls = (context: Context, handContext: HandContext, fixedStep = 1 / 40) => {
   const xrState = useXR()
   const controller = useController(handContext.hand)
   const teleport = useTeleport()

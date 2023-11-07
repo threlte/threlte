@@ -15,7 +15,7 @@ const getIntersectionId = (intersection: Intersection) => {
 
 const EPSILON = 0.001
 
-export const setupPointerControls = (state: ControlsContext, handState: HandContext, fixedStep = 1 / 30) => {
+export const setupPointerControls = (state: ControlsContext, handState: HandContext, fixedStep = 1 / 40) => {
   const handedness = handState.hand
   const xrState = useXR()
   const controller = useController(handedness)

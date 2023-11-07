@@ -1,11 +1,11 @@
 import { Raycaster } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { setTeleportContext, type Context, type HandContext, type ComputeFunction } from './context'
+import { setTeleportContext, getTeleportContext, type ComputeFunction, getHandContext } from './context'
 import { injectTeleportControlsPlugin } from './plugin'
-import { hasTeleportControls } from '../../internal/stores'
 import { defaultComputeFunction } from './compute'
 import { setHandContext } from './context'
 import { setupTeleportControls } from './setup'
+import { teleportState } from '../../internal/stores'
 
 export interface TeleportControlsOptions {
   enabled?: boolean
@@ -16,60 +16,62 @@ export interface TeleportControlsOptions {
   fixedStep?: number
 }
 
-export const context: Context = {
-  interactiveObjects: [],
-  surfaces: new Map(),
-  blockers: new Map(),
-  dispatchers: new WeakMap(),
-  raycaster: new Raycaster(),
-  compute: defaultComputeFunction,
-}
+let controlsCounter = 0
 
-export const handContext: {
-  left: HandContext
-  right: HandContext
-} = {
-  left: {
-    hand: 'left',
-    selecting: currentWritable(false),
-    enabled: currentWritable(true),
-    hovered: currentWritable(undefined),
-  },
-  right: {
-    hand: 'right',
-    selecting: currentWritable(false),
-    enabled: currentWritable(true),
-    hovered: currentWritable(undefined),
-  }
-}
+export const teleportControls = (handedness: 'left' | 'right', options?: TeleportControlsOptions) => {
+  if (getTeleportContext() === undefined) {
+    injectTeleportControlsPlugin()
 
-export const teleportControls = (options?: TeleportControlsOptions) => {
-  if (options?.compute !== undefined) context.compute = options.compute
+    setTeleportContext({
+      interactiveObjects: [],
+      surfaces: new Map(),
+      blockers: new Map(),
+      dispatchers: new WeakMap(),
+      raycaster: new Raycaster(),
+      compute: options?.compute ?? defaultComputeFunction,
+    })
+  } 
 
-  setTeleportContext(context)
-  injectTeleportControlsPlugin()
+  const context = getTeleportContext()
 
-  const createHandContext = (hand: 'left' | 'right') => {
-    setHandContext(hand, handContext[hand])
-    setupTeleportControls(context, handContext[hand], options?.fixedStep)
-    return handContext[hand]
+  if (getHandContext(handedness) === undefined) {
+    const enabled = options?.enabled ?? true
+
+    controlsCounter += (enabled ? 1 : -1)
+  
+    setHandContext(handedness, {
+      hand: 'left',
+      selecting: currentWritable(false),
+      enabled: currentWritable(enabled),
+      hovered: currentWritable(undefined),
+    })
   }
 
-  const left = createHandContext('left')
-  const right = createHandContext('right')
+  const handContext = getHandContext(handedness)
 
-  if (options?.enabled !== undefined) {
-    left.enabled.set(options.enabled)
-    right.enabled.set(options.enabled)
-  }
+  setupTeleportControls(context, handContext, options?.fixedStep)
 
-  watch([left.enabled, right.enabled], ([leftEnabled, rightEnabled]) => {
-    hasTeleportControls.set(leftEnabled || rightEnabled)
+  watch(handContext.enabled, (enabled) => {
+    controlsCounter += (enabled ? 1 : -1)
+    teleportState.update((value) => {
+      value.enabled = controlsCounter > 0
+      return value
+    })
   })
 
-  return {
-    left,
-    right,
-    state: context,
-  }
+  watch(handContext.hovered, (hovered) => {
+    teleportState.update((value) => {
+      value.intersection[handedness] = hovered
+      return value
+    })
+  })
+
+  watch(handContext.selecting, (selecting) => {
+    teleportState.update((value) => {
+      value.selecting = selecting
+      return value
+    })
+  })
+
+  return { context, handContext }
 }
