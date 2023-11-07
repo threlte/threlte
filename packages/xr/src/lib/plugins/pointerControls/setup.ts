@@ -71,6 +71,10 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
           const data = { ...hoveredObj, intersections }
           eventDispatcher('pointerout', data as IntersectionEvent)
           eventDispatcher('pointerleave', data as IntersectionEvent)
+
+          // Deal with cancelation
+          handState.pointerOverTarget.set(false)
+          cancelPointer([])
         }
       }
     }
@@ -106,16 +110,6 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
   function processHits () {
     state.compute(state, handState)
     return getHits()
-  }
-
-  const handlePointerEnter = () => {
-    handState.pointerOverTarget.set(true)
-  }
-
-  const handlePointerLeave = () => {
-    // Deal with cancelation
-    handState.pointerOverTarget.set(false)
-    cancelPointer([])
   }
 
   const handleEvent = (name: PointerEventName, event: THREE.Event | null) => {
@@ -171,7 +165,10 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
             // If the object wasn't previously hovered, book it and call its handler
             handState.hovered.set(id, intersectionEvent)
             eventDispatcher('pointerover', intersectionEvent)
+
             eventDispatcher('pointerenter', intersectionEvent)
+            handState.pointerOverTarget.set(true)
+
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()

@@ -1,70 +1,88 @@
 import { Raycaster, Vector3 } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { defaultComputeFunction } from './compute'
+import { defaultComputeFunction, type ComputeFunction } from './compute'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setup'
-import { setControlsContext, setHandContext, setInternalContext } from './context'
-import { hasPointerControls } from '../../internal/stores'
-import type { PointerControlsOptions, ControlsContext, HandContext } from './types'
+import { getControlsContext, getHandContext, setControlsContext, setHandContext, setInternalContext } from './context'
+import type { FilterFunction, HandContext } from './types'
+import { pointerState } from '../../internal/stores'
 
-export const context: ControlsContext = {
-  interactiveObjects: [],
-  raycaster: new Raycaster(),
-  compute: defaultComputeFunction,
-  filter: undefined,
+let controlsCounter = 0
+
+export type PointerControlsOptions = {
+  enabled?: boolean
+  /**
+   * The compute function is responsible for updating the state of the pointerControls plugin.
+   * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
+   * the plugin will use the default compute function.
+   */
+  compute?: ComputeFunction
+  /**
+   * The filter function is responsible for filtering and sorting the
+   * intersections. By default, the intersections are sorted by distance. If no
+   * filter function is provided, the plugin will use the default filter function.
+   */
+  filter?: FilterFunction
 }
 
-export const handContext: {
-  left: HandContext
-  right: HandContext
-} = {
-  left: {
-    hand: 'left',
-    enabled: currentWritable(true),
-    pointer: currentWritable(new Vector3()),
-    pointerOverTarget: currentWritable(false),
-    lastEvent: undefined,
-    initialClick: [0, 0, 0],
-    initialHits: [],
-    hovered: new Map(),
-  },
-  right: {
-    hand: 'right',
-    enabled: currentWritable(true),
-    pointer: currentWritable(new Vector3()),
-    pointerOverTarget: currentWritable(false),
-    lastEvent: undefined,
-    initialClick: [0, 0, 0],
-    initialHits: [],
-    hovered: new Map(),
-  },
-}
+export const pointerControls = (handedness: 'left' | 'right', options?: PointerControlsOptions) => {
+  if (getControlsContext() === undefined) {
+    injectPointerControlsPlugin()
 
-export const pointerControls = (options?: PointerControlsOptions) => {
-  if (options?.compute !== undefined) context.compute = options.compute
-  if (options?.filter !== undefined) context.filter = options.filter
+    setInternalContext()
 
-  setInternalContext()
-  setControlsContext(context)
-  injectPointerControlsPlugin()
-
-  const createHandContext = (hand: 'left' | 'right') => {
-    setHandContext(hand, handContext[hand])
-    setupPointerControls(context, handContext[hand])  
-    return handContext[hand]
+    setControlsContext({
+      interactiveObjects: [],
+      raycaster: new Raycaster(),
+      compute: options?.compute ?? defaultComputeFunction,
+      filter: options?.filter,
+    })
   }
 
-  const left = createHandContext('left')
-  const right = createHandContext('right')
+  const context = getControlsContext()
 
-  if (options?.enabled !== undefined) {
-    left.enabled.set(options.enabled)
-    right.enabled.set(options.enabled)
+  if (getHandContext(handedness) === undefined) {
+    const enabled = options?.enabled ?? true
+
+    const ctx: HandContext = {
+      hand: handedness,
+      enabled: currentWritable(enabled),
+      pointer: currentWritable(new Vector3()),
+      pointerOverTarget: currentWritable(false),
+      lastEvent: undefined,
+      initialClick: [0, 0, 0],
+      initialHits: [],
+      hovered: new Map(),
+    }
+
+    setHandContext(handedness, ctx)
+
+    setupPointerControls(context, ctx) 
   }
+  
+  const handContext = getHandContext(handedness)
 
-  watch([left.enabled, right.enabled], ([leftEnabled, rightEnabled]) => {
-    hasPointerControls.set(leftEnabled || rightEnabled)
+  watch(handContext.enabled, (enabled) => {
+    controlsCounter += (enabled ? 1 : -1)
+    pointerState.update((value) => {
+      value[handedness].enabled = controlsCounter > 0
+      return value
+    })
   })
 
-  return { left, right, state: context }
+  watch(handContext.pointerOverTarget, (hovering) => {
+    pointerState.update((value) => {
+      value[handedness].hovering = hovering
+      return value
+    })
+  })
+
+  watch(handContext.pointer, (pointer) => {
+    pointerState.update((value) => {
+      value[handedness].pointer.copy(pointer)
+      return value
+    })
+  })
+
+  return { context, handContext }
 }

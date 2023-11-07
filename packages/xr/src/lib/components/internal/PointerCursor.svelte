@@ -1,27 +1,33 @@
 <script lang='ts'>
   import { Group } from 'three'
   import { T, useFrame } from '@threlte/core'
-  import { handContext } from '../../plugins/pointerControls'
+  import { pointerState } from '../../internal/stores';
 
   export let handedness: 'left' | 'right'
 
   let ref = new Group()
 
-  $: pointer = handContext[handedness].pointer
-  $: hovered = handContext[handedness].hovered
+  $: pointer = $pointerState[handedness].pointer
+  $: hovering = $pointerState[handedness].hovering
 
-  useFrame(() => {
-    if (hovered.size === 0) {
-      ref.visible = false
-      return
-    }
-  
-    ref.visible = true
-    ref.position.lerp(pointer.current, 0.3)
+  const { start, stop } = useFrame(() => {
+    ref.position.lerp(pointer, 0.3)
+  }, {
+    autostart: false
   })
+
+  $: if (hovering) {
+    ref.position.copy(pointer)
+    start()
+  } else {
+    stop()
+  }
 </script>
 
-<T is={ref}>
+<T
+  is={ref}
+  visible={hovering}
+>
   <slot name='pointer-cursor'>
     <T.Mesh>
       <T.SphereGeometry args={[0.01]} />

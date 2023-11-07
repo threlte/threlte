@@ -10,13 +10,14 @@
   import { onDestroy } from 'svelte'
   import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { isHandTracking, hasPointerControls, hasTeleportControls } from '../internal/stores'
+  import { isHandTracking, pointerState, teleportState } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import ScenePortal from './internal/ScenePortal.svelte'
-  import TeleportCursor from "./internal/TeleportCursor.svelte"
+  import TeleportCursor from './internal/TeleportCursor.svelte'
+  import TeleportRay from './internal/TeleportRay.svelte'
   
   const factory = new XRControllerModelFactory()
 
@@ -39,8 +40,6 @@
 </script>
 
 <script lang="ts">
-  import TeleportRay from "./internal/TeleportRay.svelte"
-
   type $$Props =
     | {
         /** Whether the controller should be matched with the left hand. */
@@ -135,6 +134,8 @@
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model
+  $: hasPointerControls = $pointerState[handedness].enabled
+  $: hasTeleportControls = $teleportState[handedness].enabled
 
   onDestroy(() => {
     for (const index of [0, 1]) {
@@ -171,7 +172,7 @@
     >
       <slot name="target-ray" />
 
-      {#if $hasPointerControls || $hasTeleportControls}
+      {#if hasPointerControls || hasTeleportControls}
         <ShortRay {handedness}>
           <slot name="pointer-ray" />
         </ShortRay>
@@ -181,13 +182,13 @@
 {/if}
 
 <ScenePortal>
-  {#if $hasPointerControls}
+  {#if hasPointerControls}
     <PointerCursor {handedness}>
       <slot name='pointer-cursor' />
     </PointerCursor>
   {/if}
 
-  {#if targetRay && $hasTeleportControls}
+  {#if hasTeleportControls && targetRay !== undefined}
     <TeleportRay {targetRay} {handedness}>
       <slot name='teleport-ray' />
     </TeleportRay>

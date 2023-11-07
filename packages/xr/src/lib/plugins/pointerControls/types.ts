@@ -82,19 +82,3 @@ export const events: (keyof ThrelteXREvents)[] = [
   'pointerleave',
   'pointermove'
 ]
-
-export type PointerControlsOptions = {
-  enabled?: boolean
-  /**
-   * The compute function is responsible for updating the state of the pointerControls plugin.
-   * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
-   * the plugin will use the default compute function.
-   */
-  compute?: ComputeFunction
-  /**
-   * The filter function is responsible for filtering and sorting the
-   * intersections. By default, the intersections are sorted by distance. If no
-   * filter function is provided, the plugin will use the default filter function.
-   */
-  filter?: FilterFunction
-}

@@ -7,7 +7,7 @@
 
   const ref = new Group()
 
-  $: intersection = $teleportState.intersection[handedness]
+  $: intersection = $teleportState[handedness].intersection
   $: point = intersection?.point
 
   const { start, stop } = useFrame(() => {

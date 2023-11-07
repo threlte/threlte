@@ -1,11 +1,13 @@
 import { Raycaster } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { setTeleportContext, getTeleportContext, type ComputeFunction, getHandContext } from './context'
+import { setTeleportContext, getTeleportContext, type ComputeFunction, getHandContext, type HandContext } from './context'
 import { injectTeleportControlsPlugin } from './plugin'
 import { defaultComputeFunction } from './compute'
 import { setHandContext } from './context'
 import { setupTeleportControls } from './setup'
 import { teleportState } from '../../internal/stores'
+
+let controlsCounter = 0
 
 export interface TeleportControlsOptions {
   enabled?: boolean
@@ -15,8 +17,6 @@ export interface TeleportControlsOptions {
    */
   fixedStep?: number
 }
-
-let controlsCounter = 0
 
 export const teleportControls = (handedness: 'left' | 'right', options?: TeleportControlsOptions) => {
   if (getTeleportContext() === undefined) {
@@ -38,37 +38,39 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
     const enabled = options?.enabled ?? true
 
     controlsCounter += (enabled ? 1 : -1)
-  
-    setHandContext(handedness, {
-      hand: 'left',
+
+    const ctx: HandContext = {
+      hand: handedness,
       selecting: currentWritable(false),
       enabled: currentWritable(enabled),
       hovered: currentWritable(undefined),
-    })
+    }
+  
+    setHandContext(handedness, ctx)
+
+    setupTeleportControls(context, ctx, options?.fixedStep)
   }
 
   const handContext = getHandContext(handedness)
 
-  setupTeleportControls(context, handContext, options?.fixedStep)
-
   watch(handContext.enabled, (enabled) => {
     controlsCounter += (enabled ? 1 : -1)
     teleportState.update((value) => {
-      value.enabled = controlsCounter > 0
+      value[handedness].enabled = controlsCounter > 0
       return value
     })
   })
 
   watch(handContext.hovered, (hovered) => {
     teleportState.update((value) => {
-      value.intersection[handedness] = hovered
+      value[handedness].intersection = hovered
       return value
     })
   })
 
   watch(handContext.selecting, (selecting) => {
     teleportState.update((value) => {
-      value.selecting = selecting
+      value[handedness].selecting = selecting
       return value
     })
   })

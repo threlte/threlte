@@ -79,7 +79,8 @@
   })
 
   interactivity()
-  pointerControls()
+  pointerControls('left')
+  pointerControls('right')
 
   $: if (happy) {
     clearInterval(lookIntervalId)

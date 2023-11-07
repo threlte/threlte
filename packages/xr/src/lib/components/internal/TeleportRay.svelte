@@ -21,7 +21,7 @@
   const v2_1 = new Vector2()
   const v2_2 = new Vector2()
 
-  $: intersection = $teleportState.intersection[handedness]
+  $: intersection = $teleportState[handedness].intersection
   $: point = intersection?.point
 
   const setCurvePoints = (alpha = 0.2) => {
