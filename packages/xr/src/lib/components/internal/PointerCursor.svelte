@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { Group } from 'three'
+  import { Group, Color } from 'three'
   import { T, useFrame } from '@threlte/core'
   import { pointerState } from '../../internal/stores';
 
@@ -22,6 +22,20 @@
   } else {
     stop()
   }
+
+  useFrame((ctx) => {
+    // save previous rotation in case we're locking an axis
+    const prevRotation = ref.rotation.clone()
+
+    // always face the camera
+    ctx.camera.current.getWorldQuaternion(ref.quaternion)
+
+    // readjust any axis that is locked
+    ref.rotation.x = prevRotation.x
+    ref.rotation.y = prevRotation.y
+    ref.rotation.z = prevRotation.z
+  })
+
 </script>
 
 <T
@@ -29,9 +43,35 @@
   visible={hovering}
 >
   <slot name='pointer-cursor'>
-    <T.Mesh>
-      <T.SphereGeometry args={[0.01]} />
-      <T.MeshBasicMaterial />
-    </T.Mesh>
+    <T.Sprite scale={0.025}>
+      <T.ShaderMaterial
+        depthTest={false}
+        transparent
+        vertexShader={`
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `}
+        fragmentShader={`
+          uniform float thickness;
+          uniform vec3 color;
+      
+          varying vec2 vUv;
+      
+          void main() {
+            float radius = 0.5;
+            float dist = length(vUv - vec2(0.5));
+            float alpha = 1.0 - step(thickness, abs(distance(vUv, vec2(0.5)) - 0.25));
+            gl_FragColor = vec4(color, alpha);
+          }
+        `}
+        uniforms={{
+          thickness: { value: 0.05 },
+          color: { value: new Color('white') },
+        }}
+      />
+    </T.Sprite>
   </slot>
 </T>

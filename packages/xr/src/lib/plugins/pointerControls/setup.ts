@@ -13,7 +13,7 @@ const getIntersectionId = (intersection: Intersection) => {
   return `${(intersection.eventObject || intersection.object).uuid}/${intersection.index}${intersection.instanceId ?? ''}`
 }
 
-const EPSILON = 0.001
+const EPSILON = 0.0001
 
 export const setupPointerControls = (state: ControlsContext, handState: HandContext, fixedStep = 1 / 40) => {
   const handedness = handState.hand

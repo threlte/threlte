@@ -1,5 +1,4 @@
 <script lang='ts'>
-  import * as THREE from 'three'
   import { PointLight } from 'three'
   import { T, useThrelte, useFrame } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
@@ -57,6 +56,8 @@
   >
     <OrbitControls
       target={[0, 1.8, 0]}
+      enablePan={false}
+      enableZoom={false}
     />
   </T.PerspectiveCamera>
 </XR>
@@ -65,27 +66,27 @@
   <T is={$gltf.scene} />
   <T
     is={light1}
-    castShadow
-    intensity={10}
+    intensity={8}
     color='red'
     shadow.radius={5}
     shadow.bias={-0.00001}
     shadow.normalBias={0.00001}
     shadow.mapSize.width={256}
     shadow.mapSize.height={256}
+    shadow.camera.far={10}
     position.y={$gltf.nodes.Torch1.position.y + 0.45}
   />
 
   <T
     is={light2}
-    castShadow
-    intensity={5}
+    intensity={4}
     color='red'
     shadow.radius={5}
     shadow.bias={-0.00001}
     shadow.normalBias={0.00001}
-    shadow.mapSize.width={256}
-    shadow.mapSize.height={256}
+    shadow.mapSize.width={128}
+    shadow.mapSize.height={128}
+    shadow.camera.far={10}
     position.y={$gltf.nodes.Candles1.position.y + 0.45}
   />
 {/if}
@@ -98,10 +99,10 @@
 
 <Surfaces />
 
-<T.AmbientLight intensity={0.5} />
+<T.AmbientLight intensity={0.25} />
 
-<!-- 
 <T.DirectionalLight
+  intensity={0.5}
   position={[5, 5, 1]}
   castShadow
   shadow.camera.top={50}
@@ -110,4 +111,5 @@
   shadow.camera.bottom={-50}
   shadow.mapSize.width={1024}
   shadow.mapSize.height={1024}
-/> -->
+  shadow.camera.far={10}
+/>
