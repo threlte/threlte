@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import * as THREE from 'three'
   import { PointLight } from 'three'
   import { T, useThrelte, useFrame } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
@@ -67,8 +68,11 @@
     castShadow
     intensity={10}
     color='red'
+    shadow.radius={5}
     shadow.bias={-0.00001}
-    shadow.normalBias={-0.00001}
+    shadow.normalBias={0.00001}
+    shadow.mapSize.width={256}
+    shadow.mapSize.height={256}
     position.y={$gltf.nodes.Torch1.position.y + 0.45}
   />
 
@@ -77,8 +81,11 @@
     castShadow
     intensity={5}
     color='red'
+    shadow.radius={5}
     shadow.bias={-0.00001}
-    shadow.normalBias={-0.00001}
+    shadow.normalBias={0.00001}
+    shadow.mapSize.width={256}
+    shadow.mapSize.height={256}
     position.y={$gltf.nodes.Candles1.position.y + 0.45}
   />
 {/if}
