@@ -11,7 +11,14 @@ let controlsCounter = 0
 
 export interface TeleportControlsOptions {
   enabled?: boolean
+
+  /**
+   * The compute function is responsible for updating the state of the pointerControls plugin.
+   * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
+   * the plugin will use the default compute function.
+   */
   compute?: ComputeFunction
+
   /**
    * @default 1 / 30
    */

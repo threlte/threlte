@@ -37,6 +37,7 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
     }
 
     if (context.blockers.has(intersect.object.uuid)) {
+      handContext.hovered.set(undefined)
       return
     }
 

@@ -23,6 +23,11 @@ export type PointerControlsOptions = {
    * filter function is provided, the plugin will use the default filter function.
    */
   filter?: FilterFunction
+
+  /**
+   * @default 1 / 30
+   */
+  fixedStep?: number
 }
 
 export const pointerControls = (handedness: 'left' | 'right', options?: PointerControlsOptions) => {
@@ -57,7 +62,7 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
 
     setHandContext(handedness, ctx)
 
-    setupPointerControls(context, ctx) 
+    setupPointerControls(context, ctx, options?.fixedStep) 
   }
   
   const handContext = getHandContext(handedness)

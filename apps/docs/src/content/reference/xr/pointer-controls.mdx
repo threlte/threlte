@@ -14,11 +14,11 @@ To get started, import and call the plugin in a component within your app.
 ```svelte
 <script>
   import { pointerControls } from '@threlte/xr'
-  pointerControls()
+  pointerControls('left' | 'right')
 </script>
 ```
 
-Any mesh **within this component and all child components** will now receive events if a controller or hand points at it.
+Any mesh **within this component and all child components** will now receive events if the controller or hand with the specified handedness points at it.
 
 ```svelte
 <T.Mesh
@@ -29,6 +29,16 @@ Any mesh **within this component and all child components** will now receive eve
   <T.BoxGeometry />
   <T.MeshStandardMaterial color="red" />
 </T.Mesh>
+```
+
+If you wish to add pointer controls for both hands / controllers, simply call the plugin for both hands.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  pointerControls('left')
+  pointerControls('right')
+</script>
 ```
 
 ### Available Events
@@ -77,26 +87,28 @@ To replace the default ray and cursor that are created by the plugin, the follow
 </Hand>
 ```
 
-This plugin can be composed with the `teleportControls` plugin to allow both teleporting and interaction.
+This plugin can be used with the `teleportControls` plugin to allow both teleporting and interaction.
 
 ```svelte
 <script>
   import { pointerControls, teleportControls } from '@threlte/xr'
-  pointerControls()
-  teleportControls()
+  teleportControls('left')
+  pointerControls('right')
 </script>
 ```
 
-This will result in `pointerControls` taking over when pointing at a mesh with events, and `teleportControls` taking over otherwise.
+Since the default behavior of pointer and teleport controls have no overlap, they can be added to the same hand.
 
-It can also be composed with `interactivity` to allow pointer events within and outside an immersive session.
+If these two plugins are added to the same hand, `pointerControls` will take over when pointing at a mesh with events, and `teleportControls` will take over otherwise.
+
+`pointerControls` can also be used with `interactivity` to allow pointer events within and outside an immersive session.
 
 ```svelte
 <script>
   import { interactivity } from '@threlte/extras'
   import { pointerControls, teleportControls } from '@threlte/xr'
   interactivity()
-  pointerControls()
+  pointerControls('left')
 </script>
 ```
 
@@ -104,6 +116,6 @@ The will be a few subtle differences when events are fired within an immersive s
 
 * Pointers / cursors will be `THREE.Vector3`s instead of `THREE.Vector2`s. In XR, the cursor that intersects with the object that you interact with can be anywhere within a 3d space.
 * There will be no `camera` property on the event, since raycasting will originate from hands or controllers.
-* The `nativeEvent` property on event objects will be a `XRControllerEvent` or `XRHandEvent` rather than a `DomEvent`.
+* The `nativeEvent` property on event objects will be a `XRControllerEvent` or `XRHandEvent` rather than a `DomEvent`. In the case of hover events such as `pointerMove`, there will be no native event.
 
 <Example path="xr/pointer-controls" />

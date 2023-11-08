@@ -7,12 +7,12 @@
 }
 ---
 
-The `teleportControls` plugin creates teleportation controls similar to many native XR experiences: pressing the thumbstick forward on a controller will create a visible ray, and when the the thumbstick is released the user will be teleported to the end of the ray.
+The `teleportControls` plugin creates teleportation controls similar to many native XR experiences: **pressing the thumbstick forward** on a controller will create a visible ray to a teleport destination, and when the the thumbstick is released the user will be teleported to the end of the ray.
 
 ```svelte
 <script>
   import { teleportControls } from '@threlte/xr'
-  teleportControls()
+  teleportControls('left' | 'right')
 </script>
 ```
 
@@ -25,6 +25,16 @@ To register a mesh with `teleportControls`, add a `teleportSurface` property.
   <T.CylinderGeometry args={[20, 0.01]} />
   <T.MeshStandardMaterial />
 </T.Mesh>
+```
+
+If you wish to add teleport controls for both hands / controllers, simply call the plugin for both hands.
+
+```svelte
+<script>
+  import { teleportControls } from '@threlte/xr'
+  teleportControls('left')
+  teleportControls('right')
+</script>
 ```
 
 A mesh can also be registered as a `teleportBlocker`, meaning that it will prevent teleportation through it. 
@@ -42,8 +52,8 @@ This plugin can be composed with the `teleportControls` plugin to allow both tel
 ```svelte
 <script>
   import { pointerControls, teleportControls } from '@threlte/xr'
-  pointerControls()
-  teleportControls()
+  teleportControls('left')
+  pointerControls('right')
 </script>
 ```
 

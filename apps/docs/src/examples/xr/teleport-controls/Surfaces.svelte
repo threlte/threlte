@@ -1,48 +1,36 @@
 <script lang='ts'>
   import { T } from '@threlte/core'
   import { teleportControls } from '@threlte/xr'
-  import { colorOptions } from './colors'
+  import { useGltf } from '@threlte/extras'
 
   teleportControls('left')
   teleportControls('right')
 
-  const pointOnCircle = (radius: number, theta: number) => {
-    const x = radius * Math.cos(theta)
-    const y = radius * Math.sin(theta)
-
-    return { x, y }
-  }
-
-  const randomColor = () => {
-    return colorOptions[Math.trunc(Math.random() * colorOptions.length)]!
-  }
-
-  const cylinders = Array.from({ length: 14 }).map((_, index) => {
-    return {
-      point: pointOnCircle(5, index / 2),
-      color: randomColor(),
-    }
+  const gltf = useGltf('/models/xr/ruins.glb', {
+    useDraco: true
   })
 </script>
 
-<T.Mesh
-  teleportSurface
-  receiveShadow
-  rotation={[-Math.PI / 2, 0, 0]}
->
-  <T.CircleGeometry args={[20]} />
-  <T.MeshStandardMaterial color='#BDC3C7' />
-</T.Mesh>
+<slot />
 
-{#each cylinders as { point, color }, index}
-  <T.Mesh
-    name='cylinder {index}'
+{#if $gltf}
+  {#each [1, 2, 3, 4, 5] as n}
+    <T
+      is={$gltf.nodes[`teleportBlocker${n}`]}
+      visible={false}
+      teleportBlocker
+    />
+  {/each}
+
+  <T
+    is={$gltf.nodes.teleportSurface1}
+    visible={false}
     teleportSurface
-    position={[point.x, index / 2, point.y]}
-    castShadow
-    receiveShadow
-  >
-    <T.CylinderGeometry args={[1, 1, 0.1]} />
-    <T.MeshStandardMaterial {color} />
-  </T.Mesh>
-{/each}
+  />
+
+  <T
+    is={$gltf.nodes.teleportSurface2}
+    visible={false}
+    teleportSurface
+  />
+{/if}
