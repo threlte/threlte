@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { Group, Color } from 'three'
+  import { Group } from 'three'
   import { T, useFrame } from '@threlte/core'
   import { pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
@@ -23,19 +23,6 @@
   } else {
     stop()
   }
-
-  useFrame((ctx) => {
-    // save previous rotation in case we're locking an axis
-    const prevRotation = ref.rotation.clone()
-
-    // always face the camera
-    ctx.camera.current.getWorldQuaternion(ref.quaternion)
-
-    // readjust any axis that is locked
-    ref.rotation.x = prevRotation.x
-    ref.rotation.y = prevRotation.y
-    ref.rotation.z = prevRotation.z
-  })
 
 </script>
 
