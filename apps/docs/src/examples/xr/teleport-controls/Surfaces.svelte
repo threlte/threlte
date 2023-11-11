@@ -14,7 +14,7 @@
 <slot />
 
 {#if $gltf}
-  {#each [1, 2, 3, 4, 5] as n}
+  {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as n}
     <T
       is={$gltf.nodes[`teleportBlocker${n}`]}
       visible={false}
@@ -30,6 +30,12 @@
 
   <T
     is={$gltf.nodes.teleportSurface2}
+    visible={false}
+    teleportSurface
+  />
+
+  <T
+    is={$gltf.nodes.teleportSurface3}
     visible={false}
     teleportSurface
   />

@@ -1,15 +1,12 @@
 <script lang='ts'>
   import { PointLight } from 'three'
-  import { T, useThrelte, useFrame } from '@threlte/core'
+  import { T, useFrame } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
   import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
   import { createNoise2D } from 'simplex-noise'
 
-  const { renderer } = useThrelte()
   const noise = createNoise2D()
-
-  renderer.setClearColor(0x000000)
 
   const light1 = new PointLight()
   const light2 = new PointLight()
@@ -68,12 +65,6 @@
     is={light1}
     intensity={8}
     color='red'
-    shadow.radius={5}
-    shadow.bias={-0.00001}
-    shadow.normalBias={0.00001}
-    shadow.mapSize.width={256}
-    shadow.mapSize.height={256}
-    shadow.camera.far={10}
     position.y={$gltf.nodes.Torch1.position.y + 0.45}
   />
 
@@ -81,12 +72,6 @@
     is={light2}
     intensity={4}
     color='red'
-    shadow.radius={5}
-    shadow.bias={-0.00001}
-    shadow.normalBias={0.00001}
-    shadow.mapSize.width={128}
-    shadow.mapSize.height={128}
-    shadow.camera.far={10}
     position.y={$gltf.nodes.Candles1.position.y + 0.45}
   />
 {/if}
@@ -99,7 +84,9 @@
 
 <Surfaces />
 
-<T.AmbientLight intensity={0.25} />
+<T.AmbientLight
+  intensity={0.25}
+/>
 
 <T.DirectionalLight
   intensity={0.5}

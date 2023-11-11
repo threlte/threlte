@@ -1,7 +1,8 @@
 <script lang='ts'>
   import { Group, Color } from 'three'
   import { T, useFrame } from '@threlte/core'
-  import { pointerState } from '../../internal/stores';
+  import { pointerState } from '../../internal/stores'
+  import Cursor from './Cursor.svelte'
 
   export let handedness: 'left' | 'right'
 
@@ -43,35 +44,6 @@
   visible={hovering}
 >
   <slot name='pointer-cursor'>
-    <T.Sprite scale={0.025}>
-      <T.ShaderMaterial
-        depthTest={false}
-        transparent
-        vertexShader={`
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `}
-        fragmentShader={`
-          uniform float thickness;
-          uniform vec3 color;
-      
-          varying vec2 vUv;
-      
-          void main() {
-            float radius = 0.5;
-            float dist = length(vUv - vec2(0.5));
-            float alpha = 1.0 - step(thickness, abs(distance(vUv, vec2(0.5)) - 0.25));
-            gl_FragColor = vec4(color, alpha);
-          }
-        `}
-        uniforms={{
-          thickness: { value: 0.05 },
-          color: { value: new Color('white') },
-        }}
-      />
-    </T.Sprite>
+    <Cursor />
   </slot>
 </T>

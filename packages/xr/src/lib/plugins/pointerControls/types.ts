@@ -25,13 +25,12 @@ export interface IntersectionEvent extends Intersection {
   /** stopPropagation will stop underlying handlers from firing */
   stopPropagation: () => void
   /** The original host event */
-  nativeEvent: THREE.Event
+  nativeEvent: THREE.Event | undefined
   /** If the event was stopped by calling stopPropagation */
   stopped: boolean
 }
 
 export type FilterFunction = (items: THREE.Intersection[], state: ControlsContext, handState: HandContext) => THREE.Intersection[]
-
 
 // State that can be shared among hands / controllers
 export type ControlsContext = {

@@ -45,7 +45,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     // If a click yields no results, pass it back to the user as a miss
     // Missed events have to come first in order to establish user-land side-effect clean up
     if (hits.length === 0) {
-      pointerMissed(event, state.interactiveObjects)
+      pointerMissed(state.interactiveObjects, event)
     }
 
     handleEvent('click', event)
@@ -101,7 +101,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     return intersections
   }
 
-  function pointerMissed(event: IntersectionEvent, objects: THREE.Object3D[]) {
+  function pointerMissed(objects: THREE.Object3D[], event?: IntersectionEvent | undefined) {
     for (const object of objects) {
       dispatchers.get(object)?.('pointermissed', event)
     }
@@ -112,7 +112,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     return getHits()
   }
 
-  const handleEvent = (name: PointerEventName, event: THREE.Event | null) => {
+  const handleEvent = (name: PointerEventName, event?: THREE.Event | undefined) => {
     const isPointerMove = name === 'pointermove'
     const isClickEvent = name === 'click' || name === 'contextmenu'
 
@@ -182,8 +182,8 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
         // Missed events have to come first
         pointerMissed(
-          event,
-          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          event
         )
 
         // Call the event
@@ -192,8 +192,8 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
       } else if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
 
         pointerMissed(
-          event,
-          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object))
+          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          event
         )
       }
 
@@ -209,7 +209,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     if (targetRay === undefined) return
 
     if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
-      handleEvent('pointermove', null)
+      handleEvent('pointermove')
     }
 
     lastPosition.copy(targetRay.position)
