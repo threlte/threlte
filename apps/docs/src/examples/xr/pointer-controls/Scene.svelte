@@ -29,10 +29,6 @@
           scale.set(1.5)
           return
         }
-        case 'pointerdown': {
-          // @todo
-          return
-        }
         case 'pointermove': {
           point.copy(event.point)
           return
