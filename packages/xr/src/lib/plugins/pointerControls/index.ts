@@ -25,7 +25,9 @@ export type PointerControlsOptions = {
   filter?: FilterFunction
 
   /**
-   * @default 1 / 30
+   * Sets the interval at which raycasting occurs.
+   * 
+   * @default 1 / 40
    */
   fixedStep?: number
 }
@@ -82,12 +84,8 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
     })
   })
 
-  watch(handContext.pointer, (pointer) => {
-    pointerState.update((value) => {
-      value[handedness].pointer.copy(pointer)
-      return value
-    })
-  })
-
-  return { context, handContext }
+  return {
+    enabled: handContext.enabled,
+    hovered: handContext.hovered,
+  }
 }

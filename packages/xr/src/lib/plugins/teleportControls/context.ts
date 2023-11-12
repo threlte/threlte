@@ -15,7 +15,7 @@ export interface Context {
 export interface HandContext {
   hand: 'left' | 'right'
   enabled: CurrentWritable<boolean>
-  selecting: CurrentWritable<boolean>
+  hovering: CurrentWritable<boolean>
   hovered: CurrentWritable<THREE.Intersection | undefined>
 }
 

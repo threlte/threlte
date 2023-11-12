@@ -41,6 +41,19 @@ If you wish to add pointer controls for both hands / controllers, simply call th
 </script>
 ```
 
+Pointer controls can be enabled or disabled when initialized or during runtime.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  // "enabled" is a currentWritable
+  const { enabled } = pointerControls('left', { enabled: false })
+
+  // At some later time...
+  enabled.set(true)
+</script>
+```
+
 ### Available Events
 
 The following events are available:

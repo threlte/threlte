@@ -45,7 +45,7 @@
   $: shaderMaterial.uniforms.color!.value = color
 </script>
 
-<T.Mesh scale={size} {rotation}>
+<T.Mesh scale={size} rotation={[-Math.PI / 2, 0, 0]}>
   <T.PlaneGeometry />
   <T is={shaderMaterial} />
 </T.Mesh>

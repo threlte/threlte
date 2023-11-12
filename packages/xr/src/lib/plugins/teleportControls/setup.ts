@@ -1,13 +1,14 @@
 import { watch } from '@threlte/core'
 import { useXR } from '../../hooks/useXR'
+import type { Context, HandContext } from './context'
 import { useController } from '../../hooks/useController'
 import { useTeleport } from '../../hooks/useTeleport'
 import { useFixed } from '../../internal/useFixed'
-import type { Context, HandContext } from './context'
+import { teleportIntersection } from '../../internal/stores'
 
 export const setupTeleportControls = (context: Context, handContext: HandContext, fixedStep = 1 / 40) => {
-  const xrState = useXR()
-  const controller = useController(handContext.hand)
+  const handedness = handContext.hand
+  const controller = useController(handedness)
   const teleport = useTeleport()
 
   const { start, stop } = useFixed(() => {
@@ -17,9 +18,9 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
       return
     }
 
-    handContext.selecting.set((gamepad.axes[3] ?? 0) < -0.8)
+    handContext.hovering.set((gamepad.axes[3] ?? 0) < -0.8)
 
-    if (!handContext.selecting.current) {
+    if (!handContext.hovering.current) {
       if (handContext.hovered.current !== undefined) {
         teleport(handContext.hovered.current.point)
         handContext.hovered.set(undefined)
@@ -31,6 +32,8 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
 
     const [intersect] = context.raycaster.intersectObjects(context.interactiveObjects, true)
 
+    teleportIntersection[handedness].set(intersect)
+  
     if (intersect === undefined) {
       handContext.hovered.set(undefined)
       return
@@ -47,7 +50,7 @@ export const setupTeleportControls = (context: Context, handContext: HandContext
     autostart: false,
   })
 
-  watch([xrState.isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
+  watch([useXR().isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {
       start()
     } else {

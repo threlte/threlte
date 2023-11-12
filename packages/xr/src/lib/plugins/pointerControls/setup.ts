@@ -1,11 +1,12 @@
 import { Vector3 } from 'three'
 import { watch } from '@threlte/core'
 import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
+import { getInternalContext } from './context'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
 import { useFixed } from '../../internal/useFixed'
-import { getInternalContext } from './context'
+import { pointerIntersection } from '../../internal/stores'
 
 type PointerEventName = typeof events[number]
 
@@ -15,9 +16,8 @@ const getIntersectionId = (intersection: Intersection) => {
 
 const EPSILON = 0.0001
 
-export const setupPointerControls = (state: ControlsContext, handState: HandContext, fixedStep = 1 / 40) => {
+export const setupPointerControls = (context: ControlsContext, handState: HandContext, fixedStep = 1 / 40) => {
   const handedness = handState.hand
-  const xrState = useXR()
   const controller = useController(handedness)
   const hand = useHand(handedness)
   const { dispatchers } = getInternalContext()
@@ -45,7 +45,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
     // If a click yields no results, pass it back to the user as a miss
     // Missed events have to come first in order to establish user-land side-effect clean up
     if (hits.length === 0) {
-      pointerMissed(state.interactiveObjects, event)
+      pointerMissed(context.interactiveObjects, event)
     }
 
     handleEvent('click', event)
@@ -82,8 +82,10 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = state.raycaster.intersectObjects(state.interactiveObjects, true)
-    const filtered = state.filter === undefined ? hits : state.filter(hits, state, handState)
+    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const filtered = context.filter === undefined ? hits : context.filter(hits, context, handState)
+
+    pointerIntersection[handedness].set(filtered[0])
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -108,7 +110,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
   }
 
   function processHits () {
-    state.compute(state, handState)
+    context.compute(context, handState)
     return getHits()
   }
 
@@ -142,7 +144,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
         delta: 0,
         nativeEvent: event,
         pointer: handState.pointer.current,
-        ray: state.raycaster.ray
+        ray: context.raycaster.ray
       }
 
       const eventDispatcher = dispatchers.get(hit.eventObject)
@@ -182,7 +184,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
         // Missed events have to come first
         pointerMissed(
-          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          context.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
           event
         )
 
@@ -192,7 +194,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
       } else if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
 
         pointerMissed(
-          state.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          context.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
           event
         )
       }
@@ -220,6 +222,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
 
   watch(controller, (input) => {
     if (input === undefined) return
+    console.log(input.hand)
     input.targetRay.addEventListener('selectstart', handlePointerDown)
     input.targetRay.addEventListener('selectend', handlePointerUp)
     input.targetRay.addEventListener('select', handleClick)
@@ -242,7 +245,7 @@ export const setupPointerControls = (state: ControlsContext, handState: HandCont
   //   }
   // })
 
-  watch([xrState.isPresenting, handState.enabled], ([isPresenting, enabled]) => {
+  watch([useXR().isPresenting, handState.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {
       start()
     } else {

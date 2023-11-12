@@ -48,7 +48,7 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
 
     const ctx: HandContext = {
       hand: handedness,
-      selecting: currentWritable(false),
+      hovering: currentWritable(false),
       enabled: currentWritable(enabled),
       hovered: currentWritable(undefined),
     }
@@ -68,19 +68,16 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
     })
   })
 
-  watch(handContext.hovered, (hovered) => {
+  watch(handContext.hovering, (hovering) => {
     teleportState.update((value) => {
-      value[handedness].intersection = hovered
+      value[handedness].hovering = hovering
       return value
     })
   })
 
-  watch(handContext.selecting, (selecting) => {
-    teleportState.update((value) => {
-      value[handedness].selecting = selecting
-      return value
-    })
-  })
-
-  return { context, handContext }
+  return {
+    enabled: handContext.enabled,
+    hovered: handContext.hovered,
+    hovering: handContext.hovering,
+  }
 }

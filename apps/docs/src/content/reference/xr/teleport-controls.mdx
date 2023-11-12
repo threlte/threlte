@@ -37,6 +37,19 @@ If you wish to add teleport controls for both hands / controllers, simply call t
 </script>
 ```
 
+Teleport controls can be enabled or disabled when initialized or during runtime.
+
+```svelte
+<script>
+  import { teleportControls } from '@threlte/xr'
+  // "enabled" is a currentWritable
+  const { enabled } = teleportControls('left', { enabled: false })
+
+  // At some later time...
+  enabled.set(true)
+</script>
+```
+
 A mesh can also be registered as a `teleportBlocker`, meaning that it will prevent teleportation through it. 
 This can be useful when creating walls and doors that the user must navigate around.
 

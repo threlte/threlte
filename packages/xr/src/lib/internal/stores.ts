@@ -12,25 +12,31 @@ export const xr = currentWritable<THREE.WebXRManager | undefined>(undefined)
 export const teleportState = currentWritable({
   left: {
     enabled: false,
-    selecting: false,
-    intersection: undefined as undefined | THREE.Intersection,
+    hovering: false,
   },
   right: {
     enabled: false,
-    selecting: false,
-    intersection: undefined as undefined | THREE.Intersection,
+    hovering: false,
   },
 })
+
+export const teleportIntersection = {
+  left: currentWritable<undefined | THREE.Intersection>(undefined),
+  right: currentWritable<undefined | THREE.Intersection>(undefined),
+}
 
 export const pointerState = currentWritable({
   left: {
     enabled: false,
     hovering: false,
-    pointer: new Vector3(),
   },
   right: {
     enabled: false,
     hovering: false,
-    pointer: new Vector3(),
   }
 })
+
+export const pointerIntersection = {
+  left: currentWritable<undefined | THREE.Intersection>(undefined),
+  right: currentWritable<undefined | THREE.Intersection>(undefined),
+}
