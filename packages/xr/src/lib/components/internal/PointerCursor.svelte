@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { Group } from 'three'
+  import { Group, Vector3 } from 'three'
   import { T, useFrame } from '@threlte/core'
   import { pointerIntersection, pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
   export let handedness: 'left' | 'right'
 
-  let ref = new Group()
+  const ref = new Group()
+  const vec3 = new Vector3()
 
   $: hovering = $pointerState[handedness].hovering
   $: intersection = pointerIntersection[handedness]
@@ -15,8 +16,11 @@
     () => {
       if (intersection.current === undefined) return
       const { point, face } = intersection.current
-      ref.position.lerp(point, 0.3)
-      if (face) ref.lookAt(face.normal)
+      ref.position.lerp(point, 0.4)
+
+      if (face) {
+        ref.lookAt(vec3.addVectors(point, face.normal))
+      }
     },
     {
       autostart: false
@@ -35,7 +39,7 @@
   is={ref}
   visible={hovering}
 >
-  <slot name="pointer-cursor">
+  <slot>
     <Cursor />
   </slot>
 </T>

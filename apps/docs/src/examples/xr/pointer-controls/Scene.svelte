@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { BufferGeometry, Vector3 } from 'three'
   import { onDestroy } from 'svelte'
   import { T, useFrame } from '@threlte/core'
@@ -11,7 +11,7 @@
   const scale = spring(1)
   const eyeScale = spring(1, { stiffness: 0.5 })
   const points = [new Vector3(0, 0, 0), new Vector3(0, 0, -1000)]
-  
+
   let debug = false
   let ref: THREE.Mesh
   let lookIntervalId: number | undefined
@@ -20,37 +20,39 @@
   let point = new Vector3()
   let text = ''
 
-  const handleEvent = (type: string) => (event: any): any => {
-    text = type
-    switch (type) {
-      case 'click': {
-        scale.set(1.5)
-        return
-      }
-      case 'pointerdown': {
-        // @todo
-        return
-      }
-      case 'pointermove': {
-        point.copy(event.point)
-        return
-      }
-      case 'pointerenter': {
-        happy = true
-        scale.set(1.1)
-        return
-      }
-      case 'pointerleave': {
-        happy = false
-        scale.set(1)
-        return
-      }
-      case 'pointermissed': {
-        scale.set(0.5)
-        return
+  const handleEvent =
+    (type: string) =>
+    (event: any): any => {
+      text = type
+      switch (type) {
+        case 'click': {
+          scale.set(1.5)
+          return
+        }
+        case 'pointerdown': {
+          // @todo
+          return
+        }
+        case 'pointermove': {
+          point.copy(event.point)
+          return
+        }
+        case 'pointerenter': {
+          happy = true
+          scale.set(1.1)
+          return
+        }
+        case 'pointerleave': {
+          happy = false
+          scale.set(1)
+          return
+        }
+        case 'pointermissed': {
+          scale.set(0.5)
+          return
+        }
       }
     }
-  }
 
   const blink = () => {
     eyeScale.set(0.1).then(() => eyeScale.set(1))
@@ -83,13 +85,15 @@
   })
 </script>
 
-<svelte:window
-  on:keyup={(e) => e.key === 'd' && (debug = !debug)}
-/>
+<svelte:window on:keyup={(e) => e.key === 'd' && (debug = !debug)} />
 
 <Controller left>
-  <svelte:fragment slot='target-ray'>
-    <Text fontSize={0.05} {text} position.x={0.1} />
+  <svelte:fragment slot="target-ray">
+    <Text
+      fontSize={0.05}
+      {text}
+      position.x={0.1}
+    />
     <T.Line visible={debug}>
       <T is={new BufferGeometry().setFromPoints(points)} />
     </T.Line>
@@ -97,7 +101,10 @@
 </Controller>
 
 <Controller right>
-  <T.Line slot='target-ray' visible={debug}>
+  <T.Line
+    slot="target-ray"
+    visible={debug}
+  >
     <T is={new BufferGeometry().setFromPoints(points)} />
   </T.Line>
 </Controller>
@@ -105,7 +112,11 @@
 <Hand left />
 <Hand right />
 
-<T.Group position.y={1.5} scale={$isPresenting ? 0.1 : 1}>
+<T.Group
+  position.y={1.5}
+  position.z={-0.5}
+  scale={$isPresenting ? 0.1 : 1}
+>
   <T.Mesh
     bind:ref
     on:click={handleEvent('click')}
@@ -119,16 +130,24 @@
     on:pointermissed={handleEvent('pointermissed')}
     scale={$scale}
   >
-    <T.MeshStandardMaterial color='hotpink' />
+    <T.MeshStandardMaterial color="hotpink" />
     <T.BoxGeometry />
 
-    <T.Mesh scale.y={$eyeScale} position={[-0.3, 0.25, 0.5]}>
-      <T.MeshStandardMaterial color='#444' />
+    <T.Mesh
+      scale.y={$eyeScale}
+      position={[-0.3, 0.25, 0.5]}
+      raycast={() => false}
+    >
+      <T.MeshStandardMaterial color="#444" />
       <T.BoxGeometry args={[0.1, 0.325, 0.1]} />
     </T.Mesh>
 
-    <T.Mesh scale.y={$eyeScale} position={[0.05, 0.25, 0.5]}>
-      <T.MeshStandardMaterial color='#444' />
+    <T.Mesh
+      scale.y={$eyeScale}
+      position={[0.05, 0.25, 0.5]}
+      raycast={() => false}
+    >
+      <T.MeshStandardMaterial color="#444" />
       <T.BoxGeometry args={[0.1, 0.325, 0.1]} />
     </T.Mesh>
 
@@ -137,8 +156,9 @@
       position.y={-0.15}
       position.z={0.5}
       rotation.x={Math.PI / 2}
+      raycast={() => false}
     >
-      <T.MeshStandardMaterial color='#444' />
+      <T.MeshStandardMaterial color="#444" />
       <T.CylinderGeometry args={[0.3, 0.3, 0.1, 3]} />
     </T.Mesh>
 
@@ -147,8 +167,9 @@
       position.y={-0.15}
       position.z={0.5}
       rotation.x={Math.PI / 2}
+      raycast={() => false}
     >
-      <T.MeshStandardMaterial color='#444' />
+      <T.MeshStandardMaterial color="#444" />
       <T.CylinderGeometry args={[0.15, 0.15, 0.1]} />
     </T.Mesh>
   </T.Mesh>

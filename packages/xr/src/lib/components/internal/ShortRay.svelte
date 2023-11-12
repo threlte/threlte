@@ -10,7 +10,7 @@
 </script>
 
 <T.Group {visible}>
-  <slot name="pointer-ray">
+  <slot>
     <T.Mesh
       rotation.x={-Math.PI / 2}
       position.z={-0.1}
@@ -28,13 +28,14 @@
           varying vec2 vUv;
           void main() {
             vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `}
         fragmentShader={`
-          varying mediump vec2 vUv;
+          precision mediump float;
+          varying vec2 vUv;
           void main() {
-            gl_FragColor = vec4(1., 1., 1., pow(vUv.y - 1., 2.));
+            gl_FragColor = vec4(1.0, 1.0, 1.0, pow(vUv.y - 1.0, 2.0));
           }
         `}
       />

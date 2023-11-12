@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Color, DoubleSide, ShaderMaterial, type ColorRepresentation } from 'three'
+  import { Color, DoubleSide, RawShaderMaterial, type ColorRepresentation } from 'three'
   import { T } from '@threlte/core'
 
   export let color: ColorRepresentation = new Color('white')
@@ -7,6 +7,10 @@
   export let thickness = 0.035
 
   const vertexShader = `
+    uniform mat4 projectionMatrix;
+    uniform mat4 modelViewMatrix;
+    attribute vec2 uv;
+    attribute vec3 position;
     varying vec2 vUv;
     void main() {
       vUv = uv;
@@ -15,6 +19,7 @@
   `
 
   const fragmentShader = `
+    precision mediump float;
     uniform float thickness;
     uniform vec3 color;
     varying vec2 vUv;
@@ -26,15 +31,13 @@
     }
   `
 
-  const uniforms = {
-    thickness: { value: thickness },
-    color: { value: color }
-  }
-
-  const shaderMaterial = new ShaderMaterial({
+  const shaderMaterial = new RawShaderMaterial({
     vertexShader,
     fragmentShader,
-    uniforms,
+    uniforms: {
+      thickness: { value: thickness },
+      color: { value: color }
+    },
     side: DoubleSide,
     transparent: true,
     depthTest: false
@@ -46,7 +49,6 @@
 
 <T.Mesh
   scale={size}
-  rotation={[-Math.PI / 2, 0, 0]}
 >
   <T.PlaneGeometry />
   <T is={shaderMaterial} />

@@ -57,7 +57,7 @@ export const teleportControls = (
 
     const ctx: HandContext = {
       hand: handedness,
-      hovering: currentWritable(false),
+      active: currentWritable(false),
       enabled: currentWritable(enabled),
       hovered: currentWritable(undefined)
     }
@@ -77,7 +77,7 @@ export const teleportControls = (
     })
   })
 
-  watch(handContext.hovering, (hovering) => {
+  watch(handContext.active, (hovering) => {
     teleportState.update((value) => {
       value[handedness].hovering = hovering
       return value
@@ -87,6 +87,6 @@ export const teleportControls = (
   return {
     enabled: handContext.enabled,
     hovered: handContext.hovered,
-    hovering: handContext.hovering
+    active: handContext.active
   }
 }

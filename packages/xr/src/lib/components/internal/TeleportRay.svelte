@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace, Vector2 } from 'three'
   import { Line2 } from 'three/examples/jsm/lines/Line2'
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
@@ -22,17 +22,20 @@
   const v2_2 = new Vector2()
 
   $: intersection = teleportIntersection[handedness]
-  $: point = $intersection?.point
 
-  const setCurvePoints = (alpha = 0.2) => {
-    const rayEnd = point!
+  const setCurvePoints = (alpha = 0.3) => {
+    if (intersection.current === undefined) return
+
+    const rayEnd = intersection.current.point
     targetRay.getWorldPosition(rayStart)
 
     rayMidpoint.x = (rayStart.x + rayEnd.x) / 2
     rayMidpoint.y = (rayStart.y + rayEnd.y) / 2
     rayMidpoint.z = (rayStart.z + rayEnd.z) / 2
 
-    const arc = Math.log1p(v2_1.set(rayStart.x, rayStart.z).distanceTo(v2_2.set(rayEnd.x, rayEnd.z)))
+    const arc = Math.log1p(
+      v2_1.set(rayStart.x, rayStart.z).distanceTo(v2_2.set(rayEnd.x, rayEnd.z))
+    )
 
     // Create an arc
     rayMidpoint.y += arc
@@ -52,26 +55,31 @@
     lineGeometry.setPositions(positions)
   }
 
-  const { start, stop } = useFrame(() => {
-    setCurvePoints()
-  }, { autostart: false })
+  const { start, stop } = useFrame(
+    () => {
+      setCurvePoints()
+    },
+    { autostart: false }
+  )
 
-  $: if (point === undefined) {
+  $: if ($intersection === undefined) {
     stop()
   } else {
     setCurvePoints(1)
     start()
   }
-
 </script>
 
-<slot name='teleport-ray'>
+<slot>
   <T
     is={Line2}
-    visible={point !== undefined}
+    visible={$intersection !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />
-    <T is={LineMaterial} linewidth={0.004} />
+    <T
+      is={LineMaterial}
+      linewidth={0.004}
+    />
   </T>
 </slot>

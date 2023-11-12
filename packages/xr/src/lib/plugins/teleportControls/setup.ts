@@ -15,6 +15,11 @@ export const setupTeleportControls = (
   const controller = useController(handedness)
   const teleport = useTeleport()
 
+  const handleHoverEnd = () => {
+    handContext.hovered.set(undefined)
+    teleportIntersection[handedness].set(undefined)
+  }
+
   const { start, stop } = useFixed(
     () => {
       const gamepad = controller.current?.inputSource.gamepad
@@ -23,12 +28,18 @@ export const setupTeleportControls = (
         return
       }
 
-      handContext.hovering.set((gamepad.axes[3] ?? 0) < -0.8)
+      const selecting = (gamepad.axes[3] ?? 0) < -0.8
 
-      if (!handContext.hovering.current) {
+      if (handContext.active.current && !selecting) {
+        handContext.active.set(false)
+      } else if (!handContext.active.current && selecting) {
+        handContext.active.set(true)
+      }
+
+      if (!handContext.active.current) {
         if (handContext.hovered.current !== undefined) {
           teleport(handContext.hovered.current.point)
-          handContext.hovered.set(undefined)
+          handleHoverEnd()
         }
         return
       }
@@ -37,18 +48,21 @@ export const setupTeleportControls = (
 
       const [intersect] = context.raycaster.intersectObjects(context.interactiveObjects, true)
 
-      teleportIntersection[handedness].set(intersect)
-
       if (intersect === undefined) {
-        handContext.hovered.set(undefined)
+        if (handContext.hovered.current !== undefined) {
+          handleHoverEnd()
+        }
         return
       }
 
-      if (context.blockers.has(intersect.object.uuid)) {
-        handContext.hovered.set(undefined)
+      if (intersect !== undefined && context.blockers.has(intersect.object.uuid)) {
+        if (handContext.hovered.current !== undefined) {
+          handleHoverEnd()
+        }
         return
       }
 
+      teleportIntersection[handedness].set(intersect)
       handContext.hovered.set(intersect)
     },
     {

@@ -18,7 +18,7 @@
   import ScenePortal from './internal/ScenePortal.svelte'
   import TeleportCursor from './internal/TeleportCursor.svelte'
   import TeleportRay from './internal/TeleportRay.svelte'
-  
+
   const factory = new XRControllerModelFactory()
 
   const stores = {
@@ -125,7 +125,7 @@
 
     /**
      * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
-    */
+     */
     targetRay.addEventListener('connected', handleConnected as any)
     targetRay.addEventListener('disconnected', handleDisconnected as any)
   }
@@ -173,9 +173,13 @@
       <slot name="target-ray" />
 
       {#if hasPointerControls || hasTeleportControls}
-        <ShortRay {handedness}>
-          <slot name="pointer-ray" />
-        </ShortRay>
+        {#if $$slots['pointer-ray']}
+          <ShortRay {handedness}>
+            <slot name="pointer-ray" />
+          </ShortRay>
+        {:else}
+          <ShortRay {handedness} />
+        {/if}
       {/if}
     </T>
   {/if}
@@ -183,18 +187,36 @@
 
 <ScenePortal>
   {#if hasPointerControls}
-    <PointerCursor {handedness}>
-      <slot name='pointer-cursor' />
-    </PointerCursor>
+    {#if $$slots['pointer-cursor']}
+      <PointerCursor {handedness}>
+        <slot name="pointer-cursor" />
+      </PointerCursor>
+    {:else}
+      <PointerCursor {handedness} />
+    {/if}
   {/if}
 
   {#if hasTeleportControls && targetRay !== undefined}
-    <TeleportRay {targetRay} {handedness}>
-      <slot name='teleport-ray' />
-    </TeleportRay>
+    {#if $$slots['teleport-ray']}
+      <TeleportRay
+        {targetRay}
+        {handedness}
+      >
+        <slot name="teleport-ray" />
+      </TeleportRay>
+    {:else}
+      <TeleportRay
+        {targetRay}
+        {handedness}
+      />
+    {/if}
 
-    <TeleportCursor {handedness}>
-      <slot name='teleport-cursor' />
-    </TeleportCursor>
+    {#if $$slots['teleport-ray']}
+      <TeleportCursor {handedness}>
+        <slot name="teleport-cursor" />
+      </TeleportCursor>
+    {:else}
+      <TeleportCursor {handedness} />
+    {/if}
   {/if}
 </ScenePortal>
