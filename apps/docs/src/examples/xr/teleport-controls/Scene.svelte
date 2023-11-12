@@ -1,10 +1,14 @@
 <script lang='ts'>
+  import type { Writable } from 'svelte/store'
   import { PointLight } from 'three'
   import { T, useFrame } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
   import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
   import { createNoise2D } from 'simplex-noise'
+
+  export let showSurfaces: Writable<boolean>
+  export let showBlockers: Writable<boolean>
 
   const noise = createNoise2D()
 
@@ -82,7 +86,10 @@
   azimuth={-90}
 />
 
-<Surfaces />
+<Surfaces
+  {showSurfaces}
+  {showBlockers}
+/>
 
 <T.AmbientLight
   intensity={0.25}

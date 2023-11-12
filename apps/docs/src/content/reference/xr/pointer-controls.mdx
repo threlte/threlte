@@ -61,7 +61,6 @@ The following events are available:
 ```svelte
 <T.Mesh
   on:click={(e) => console.log('click')}
-  on:contextmenu={(e) => console.log('context menu')}
   on:pointerup={(e) => console.log('up')}
   on:pointerdown={(e) => console.log('down')}
   on:pointerover={(e) => console.log('over')}
@@ -75,7 +74,6 @@ The following events are available:
 While a controller or hand is pointed at this mesh...
 
 * `click` fires when a user selects the primary action input. This usually means pulling a primary trigger with a controller or pinching with a hand.
-* `contextmenu` fires when a user selects and holds the primary action input for more than 2 seconds.
 * `pointerdown` fires when a primary action begins, and `pointerup` fires when it ends.
 * `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
 * `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.

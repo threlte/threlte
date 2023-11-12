@@ -231,10 +231,11 @@ export const setupPointerControls = (
 
   watch(controller, (input) => {
     if (input === undefined) return
-    console.log(input.hand)
+
     input.targetRay.addEventListener('selectstart', handlePointerDown)
     input.targetRay.addEventListener('selectend', handlePointerUp)
     input.targetRay.addEventListener('select', handleClick)
+
     return () => {
       input.targetRay.removeEventListener('selectstart', handlePointerDown)
       input.targetRay.removeEventListener('selectend', handlePointerUp)

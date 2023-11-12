@@ -1,7 +1,11 @@
 <script lang='ts'>
+  import type { Writable } from 'svelte/store'
   import { T } from '@threlte/core'
   import { teleportControls } from '@threlte/xr'
   import { useGltf } from '@threlte/extras'
+
+  export let showSurfaces: Writable<boolean>
+  export let showBlockers: Writable<boolean>
 
   teleportControls('left')
   teleportControls('right')
@@ -17,26 +21,16 @@
   {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as n}
     <T
       is={$gltf.nodes[`teleportBlocker${n}`]}
-      visible={false}
+      visible={$showBlockers}
       teleportBlocker
     />
   {/each}
 
-  <T
-    is={$gltf.nodes.teleportSurface1}
-    visible={false}
-    teleportSurface
-  />
-
-  <T
-    is={$gltf.nodes.teleportSurface2}
-    visible={false}
-    teleportSurface
-  />
-
-  <T
-    is={$gltf.nodes.teleportSurface3}
-    visible={false}
-    teleportSurface
-  />
+  {#each [1, 2, 3] as n}
+    <T
+      is={$gltf.nodes[`teleportSurface${n}`]}
+      visible={$showSurfaces}
+      teleportSurface
+    />
+  {/each}
 {/if}
