@@ -22,22 +22,9 @@
 
   const handleEvent = (type: string) => (event: any): any => {
     text = type
-    console.log(type, event)
     switch (type) {
       case 'click': {
         scale.set(1.5)
-        return
-      }
-      case 'contextmenu': {
-        // @todo
-        return
-      }
-      case 'dblclick': {
-        // @todo
-        return
-      }
-      case 'wheel': {
-        // @todo
         return
       }
       case 'pointerdown': {
@@ -107,13 +94,12 @@
       <T is={new BufferGeometry().setFromPoints(points)} />
     </T.Line>
   </svelte:fragment>
-  
 </Controller>
 
 <Controller right>
-<T.Line slot='target-ray' visible={debug}>
-  <T is={new BufferGeometry().setFromPoints(points)} />
-</T.Line>
+  <T.Line slot='target-ray' visible={debug}>
+    <T is={new BufferGeometry().setFromPoints(points)} />
+  </T.Line>
 </Controller>
 
 <Hand left />
@@ -123,9 +109,6 @@
   <T.Mesh
     bind:ref
     on:click={handleEvent('click')}
-    on:contextmenu={handleEvent('contextmenu')}
-    on:dblclick={handleEvent('dblclick')}
-    on:wheel={handleEvent('wheel')}
     on:pointerdown={handleEvent('pointerdown')}
     on:pointerup={handleEvent('pointerup')}
     on:pointerover={handleEvent('pointerover')}
