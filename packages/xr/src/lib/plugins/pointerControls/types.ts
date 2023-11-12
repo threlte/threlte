@@ -30,12 +30,16 @@ export interface IntersectionEvent extends Intersection {
   stopped: boolean
 }
 
-export type FilterFunction = (items: THREE.Intersection[], state: ControlsContext, handState: HandContext) => THREE.Intersection[]
+export type FilterFunction = (
+  items: THREE.Intersection[],
+  state: ControlsContext,
+  handState: HandContext
+) => THREE.Intersection[]
 
 // State that can be shared among hands / controllers
 export type ControlsContext = {
-  interactiveObjects: THREE.Object3D[],
-  raycaster: THREE.Raycaster,
+  interactiveObjects: THREE.Object3D[]
+  raycaster: THREE.Raycaster
   compute: ComputeFunction
   filter?: FilterFunction | undefined
 }

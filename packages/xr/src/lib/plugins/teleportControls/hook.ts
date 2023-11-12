@@ -4,7 +4,7 @@ import { getTeleportContext } from './context'
 export const useTeleportControls = () => {
   const context = getTeleportContext()
   const eventDispatcher = createRawEventDispatcher()
-  
+
   const addSurface = (mesh: THREE.Mesh) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(mesh) > -1) {

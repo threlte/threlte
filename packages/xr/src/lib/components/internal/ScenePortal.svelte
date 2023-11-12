@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { useThrelte, HierarchicalObject } from '@threlte/core'
 
   const { scene } = useThrelte()

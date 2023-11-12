@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { spring } from 'svelte/motion'
   import { Group } from 'three'
   import { T, useFrame } from '@threlte/core'
@@ -12,15 +12,18 @@
   $: intersection = teleportIntersection[handedness]
   $: point = $intersection?.point
 
-  const { start, stop } = useFrame(() => {
-    const { point, normal } = intersection.current!
-    ref.position.lerp(point, 0.4)
+  const { start, stop } = useFrame(
+    () => {
+      const { point, normal } = intersection.current!
+      ref.position.lerp(point, 0.4)
 
-    const { x, y, z } = normal!
-    ref.rotation.set(x, y, z)
-  }, {
-    autostart: false,
-  })
+      const { x, y, z } = normal!
+      ref.rotation.set(x, y, z)
+    },
+    {
+      autostart: false
+    }
+  )
 
   const size = spring(0.1, { stiffness: 0.2 })
 
@@ -38,11 +41,10 @@
   is={ref}
   visible={point !== undefined}
 >
-  <slot name='teleport-cursor'>
+  <slot name="teleport-cursor">
     <Cursor
       size={$size}
       thickness={0.015}
-      rotation={[-Math.PI / 2, 0, 0]}
     />
   </slot>
 </T>

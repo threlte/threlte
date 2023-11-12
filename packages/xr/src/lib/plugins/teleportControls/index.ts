@@ -1,6 +1,12 @@
 import { Raycaster } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { setTeleportContext, getTeleportContext, type ComputeFunction, getHandContext, type HandContext } from './context'
+import {
+  setTeleportContext,
+  getTeleportContext,
+  type ComputeFunction,
+  getHandContext,
+  type HandContext
+} from './context'
 import { injectTeleportControlsPlugin } from './plugin'
 import { defaultComputeFunction } from './compute'
 import { setHandContext } from './context'
@@ -25,7 +31,10 @@ export interface TeleportControlsOptions {
   fixedStep?: number
 }
 
-export const teleportControls = (handedness: 'left' | 'right', options?: TeleportControlsOptions) => {
+export const teleportControls = (
+  handedness: 'left' | 'right',
+  options?: TeleportControlsOptions
+) => {
   if (getTeleportContext() === undefined) {
     injectTeleportControlsPlugin()
 
@@ -35,24 +44,24 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
       blockers: new Map(),
       dispatchers: new WeakMap(),
       raycaster: new Raycaster(),
-      compute: options?.compute ?? defaultComputeFunction,
+      compute: options?.compute ?? defaultComputeFunction
     })
-  } 
+  }
 
   const context = getTeleportContext()
 
   if (getHandContext(handedness) === undefined) {
     const enabled = options?.enabled ?? true
 
-    controlsCounter += (enabled ? 1 : -1)
+    controlsCounter += enabled ? 1 : -1
 
     const ctx: HandContext = {
       hand: handedness,
       hovering: currentWritable(false),
       enabled: currentWritable(enabled),
-      hovered: currentWritable(undefined),
+      hovered: currentWritable(undefined)
     }
-  
+
     setHandContext(handedness, ctx)
 
     setupTeleportControls(context, ctx, options?.fixedStep)
@@ -61,7 +70,7 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
   const handContext = getHandContext(handedness)
 
   watch(handContext.enabled, (enabled) => {
-    controlsCounter += (enabled ? 1 : -1)
+    controlsCounter += enabled ? 1 : -1
     teleportState.update((value) => {
       value[handedness].enabled = controlsCounter > 0
       return value
@@ -78,6 +87,6 @@ export const teleportControls = (handedness: 'left' | 'right', options?: Telepor
   return {
     enabled: handContext.enabled,
     hovered: handContext.hovered,
-    hovering: handContext.hovering,
+    hovering: handContext.hovering
   }
 }

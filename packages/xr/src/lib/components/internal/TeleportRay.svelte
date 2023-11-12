@@ -4,7 +4,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
   import { T, useFrame } from '@threlte/core'
-  import { teleportState } from '../../internal/stores'
+  import { teleportIntersection } from '../../internal/stores'
 
   export let handedness: 'left' | 'right'
   export let targetRay: XRTargetRaySpace
@@ -21,8 +21,8 @@
   const v2_1 = new Vector2()
   const v2_2 = new Vector2()
 
-  $: intersection = $teleportState[handedness].intersection
-  $: point = intersection?.point
+  $: intersection = teleportIntersection[handedness]
+  $: point = $intersection?.point
 
   const setCurvePoints = (alpha = 0.2) => {
     const rayEnd = point!

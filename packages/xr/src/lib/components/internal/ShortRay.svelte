@@ -1,12 +1,12 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { pointerState, teleportState } from '../../internal/stores'
+  import { pointerState, teleportState, teleportIntersection } from '../../internal/stores'
 
   export let handedness: 'left' | 'right'
 
-  $: selecting = $teleportState[handedness].selecting
-  $: intersection = $teleportState[handedness].intersection
-  $: visible = $pointerState[handedness].enabled || (selecting && intersection === undefined)
+  $: hovering = $teleportState[handedness].hovering
+  $: intersection = teleportIntersection[handedness]
+  $: visible = $pointerState[handedness].enabled || (hovering && $intersection === undefined)
 </script>
 
 <T.Group {visible}>

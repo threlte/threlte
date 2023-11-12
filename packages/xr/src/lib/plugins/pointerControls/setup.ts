@@ -8,16 +8,22 @@ import { useXR } from '../../hooks/useXR'
 import { useFixed } from '../../internal/useFixed'
 import { pointerIntersection } from '../../internal/stores'
 
-type PointerEventName = typeof events[number]
+type PointerEventName = (typeof events)[number]
 
 const getIntersectionId = (intersection: Intersection) => {
-  return `${(intersection.eventObject || intersection.object).uuid}/${intersection.index}${intersection.instanceId ?? ''}`
+  return `${(intersection.eventObject || intersection.object).uuid}/${intersection.index}${
+    intersection.instanceId ?? ''
+  }`
 }
 
 const EPSILON = 0.0001
 
-export const setupPointerControls = (context: ControlsContext, handState: HandContext, fixedStep = 1 / 40) => {
-  const handedness = handState.hand
+export const setupPointerControls = (
+  context: ControlsContext,
+  handContext: HandContext,
+  fixedStep = 1 / 40
+) => {
+  const handedness = handContext.hand
   const controller = useController(handedness)
   const hand = useHand(handedness)
   const { dispatchers } = getInternalContext()
@@ -31,8 +37,8 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
 
     if (!hit) return
 
-    handState.initialClick = [hit.point.x, hit.point.y, hit.point.z]
-    handState.initialHits = hits.map((hit) => hit.eventObject)
+    handContext.initialClick = [hit.point.x, hit.point.y, hit.point.z]
+    handContext.initialHits = hits.map((hit) => hit.eventObject)
 
     handleEvent('pointerdown', event)
   }
@@ -52,19 +58,20 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
   }
 
   function cancelPointer(intersections: Intersection[]) {
-    for (const [, hoveredObj] of handState.hovered) {
+    for (const [, hoveredObj] of handContext.hovered) {
       // When no objects were hit or the the hovered object wasn't found underneath the cursor
       // we call pointerout and delete the object from the hovered elements map
       if (
         intersections.length === 0 ||
-        !intersections.some((hit) => (
-          hit.object === hoveredObj.object &&
-          hit.index === hoveredObj.index &&
-          hit.instanceId === hoveredObj.instanceId
-        ))
+        !intersections.some(
+          (hit) =>
+            hit.object === hoveredObj.object &&
+            hit.index === hoveredObj.index &&
+            hit.instanceId === hoveredObj.instanceId
+        )
       ) {
         const { eventObject } = hoveredObj
-        handState.hovered.delete(getIntersectionId(hoveredObj))
+        handContext.hovered.delete(getIntersectionId(hoveredObj))
         const eventDispatcher = dispatchers.get(eventObject)
         if (eventDispatcher) {
           // Clear out intersects, they are outdated by now
@@ -73,7 +80,7 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
           eventDispatcher('pointerleave', data as IntersectionEvent)
 
           // Deal with cancelation
-          handState.pointerOverTarget.set(false)
+          handContext.pointerOverTarget.set(false)
           cancelPointer([])
         }
       }
@@ -83,7 +90,8 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
     const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
-    const filtered = context.filter === undefined ? hits : context.filter(hits, context, handState)
+    const filtered =
+      context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
     pointerIntersection[handedness].set(filtered[0])
 
@@ -109,8 +117,8 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
     }
   }
 
-  function processHits () {
-    context.compute(context, handState)
+  function processHits() {
+    context.compute(context, handContext)
     return getHits()
   }
 
@@ -133,8 +141,8 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
           stopped = true
           intersectionEvent.stopped = true
           if (
-            handState.hovered.size > 0 &&
-            Array.from(handState.hovered.values()).some((i) => i.eventObject === hit.eventObject)
+            handContext.hovered.size > 0 &&
+            Array.from(handContext.hovered.values()).some((i) => i.eventObject === hit.eventObject)
           ) {
             // Objects cannot flush out higher up objects that have already caught the event
             const higher = hits.slice(0, hits.indexOf(hit))
@@ -143,7 +151,7 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
         },
         delta: 0,
         nativeEvent: event,
-        pointer: handState.pointer.current,
+        pointer: handContext.pointer.current,
         ray: context.raycaster.ray
       }
 
@@ -153,7 +161,7 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
 
       if (isPointerMove) {
         // Move event ...
-        handState.pointer.update((value) => value.copy(intersectionEvent.point))
+        handContext.pointer.update((value) => value.copy(intersectionEvent.point))
 
         if (
           eventDispatcher.hasEventListener('pointerover') ||
@@ -162,15 +170,14 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
           eventDispatcher.hasEventListener('pointerleave')
         ) {
           const id = getIntersectionId(intersectionEvent)
-          const hoveredItem = handState.hovered.get(id)
+          const hoveredItem = handContext.hovered.get(id)
           if (hoveredItem === undefined) {
             // If the object wasn't previously hovered, book it and call its handler
-            handState.hovered.set(id, intersectionEvent)
+            handContext.hovered.set(id, intersectionEvent)
             eventDispatcher('pointerover', intersectionEvent)
 
             eventDispatcher('pointerenter', intersectionEvent)
-            handState.pointerOverTarget.set(true)
-
+            handContext.pointerOverTarget.set(true)
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -179,22 +186,21 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
 
         // Call pointer move
         eventDispatcher('pointermove', intersectionEvent)
-
-      } else if ((!isClickEvent || handState.initialHits.includes(hit.eventObject)) && eventDispatcher.hasEventListener(name)) {
-
+      } else if (
+        (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) &&
+        eventDispatcher.hasEventListener(name)
+      ) {
         // Missed events have to come first
         pointerMissed(
-          context.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
           event
         )
 
         // Call the event
         eventDispatcher(name, intersectionEvent)
-
-      } else if (isClickEvent && handState.initialHits.includes(hit.eventObject)) {
-
+      } else if (isClickEvent && handContext.initialHits.includes(hit.eventObject)) {
         pointerMissed(
-          context.interactiveObjects.filter((object) => !handState.initialHits.includes(object)),
+          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
           event
         )
       }
@@ -203,22 +209,25 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
     }
   }
 
-  const { start, stop } = useFixed(() => {
-    hits = processHits()
+  const { start, stop } = useFixed(
+    () => {
+      hits = processHits()
 
-    const targetRay = controller.current?.targetRay
+      const targetRay = controller.current?.targetRay
 
-    if (targetRay === undefined) return
+      if (targetRay === undefined) return
 
-    if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
-      handleEvent('pointermove')
+      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+        handleEvent('pointermove')
+      }
+
+      lastPosition.copy(targetRay.position)
+    },
+    {
+      fixedStep,
+      autostart: false
     }
-
-    lastPosition.copy(targetRay.position)
-  }, {
-    fixedStep,
-    autostart: false,
-  })
+  )
 
   watch(controller, (input) => {
     if (input === undefined) return
@@ -245,7 +254,7 @@ export const setupPointerControls = (context: ControlsContext, handState: HandCo
   //   }
   // })
 
-  watch([useXR().isPresenting, handState.enabled], ([isPresenting, enabled]) => {
+  watch([useXR().isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {
       start()
     } else {

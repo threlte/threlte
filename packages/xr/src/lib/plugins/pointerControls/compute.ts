@@ -11,7 +11,10 @@ const controllers = {
 
 const forward = new Vector3()
 
-export const defaultComputeFunction: ComputeFunction = (context: ControlsContext, handContext: HandContext) => {
+export const defaultComputeFunction: ComputeFunction = (
+  context: ControlsContext,
+  handContext: HandContext
+) => {
   const targetRay = controllers[handContext.hand].current?.targetRay
 
   if (targetRay === undefined) return

@@ -1,11 +1,10 @@
-<script lang='ts'>
+<script lang="ts">
   import { Color, DoubleSide, ShaderMaterial, type ColorRepresentation } from 'three'
   import { T } from '@threlte/core'
 
   export let color: ColorRepresentation = new Color('white')
   export let size = 0.03
   export let thickness = 0.035
-  export let rotation: [number, number, number] = [0, 0, 0]
 
   const vertexShader = `
     varying vec2 vUv;
@@ -29,7 +28,7 @@
 
   const uniforms = {
     thickness: { value: thickness },
-    color: { value: color },
+    color: { value: color }
   }
 
   const shaderMaterial = new ShaderMaterial({
@@ -38,14 +37,17 @@
     uniforms,
     side: DoubleSide,
     transparent: true,
-    depthTest: false,
+    depthTest: false
   })
 
   $: shaderMaterial.uniforms.thickness!.value = thickness
   $: shaderMaterial.uniforms.color!.value = color
 </script>
 
-<T.Mesh scale={size} rotation={[-Math.PI / 2, 0, 0]}>
+<T.Mesh
+  scale={size}
+  rotation={[-Math.PI / 2, 0, 0]}
+>
   <T.PlaneGeometry />
   <T is={shaderMaterial} />
 </T.Mesh>

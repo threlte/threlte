@@ -8,9 +8,7 @@ export const useComponentHasEventHandlers = () => {
   const hasEventHandlers = writable(false)
 
   onMount(() => {
-    const match = Object.keys(component.$$.callbacks).some((callback) =>
-      events.includes(callback)
-    )
+    const match = Object.keys(component.$$.callbacks).some((callback) => events.includes(callback))
     hasEventHandlers.set(match)
   })
 
