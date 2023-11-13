@@ -54,7 +54,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
     rendererParameters: WebGLRendererParameters | undefined
   ): void => {
     ctx.renderer = new WebGLRenderer({
-      powerPreference: 'high-performance',
+      powerPreference: 'default',
       canvas,
       antialias: true,
       alpha: true,
