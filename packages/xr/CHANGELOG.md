@@ -1,5 +1,13 @@
 # @threlte/xr
 
+## 0.0.12
+
+### Patch Changes
+
+- 038107fd: - Added the `pointerControls` plugin.
+  - Added the `teleportControls` plugin.
+  - **breaking**: Removed `<TeleportControls>`. Use the `teleportControls` plugin instead.
+
 ## 0.0.11
 
 ### Patch Changes
