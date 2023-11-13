@@ -5,15 +5,19 @@
   lang="ts"
   context="module"
 >
-  import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import type { XRTargetRaySpace } from 'three'
   import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-  import ShortRay from './ShortRay.svelte'
+  import { onDestroy } from 'svelte'
+  import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { activeTeleportController, pendingTeleportDestination, isHandTracking } from '../internal/stores'
+  import { isHandTracking, pointerState, teleportState } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import type { XRController, XRControllerEvent } from '../types'
-  import type { XRTargetRaySpace } from 'three'
+  import PointerCursor from './internal/PointerCursor.svelte'
+  import ShortRay from './internal/ShortRay.svelte'
+  import ScenePortal from './internal/ScenePortal.svelte'
+  import TeleportCursor from './internal/TeleportCursor.svelte'
+  import TeleportRay from './internal/TeleportRay.svelte'
 
   const factory = new XRControllerModelFactory()
 
@@ -110,26 +114,28 @@
   }
 
   for (const index of [0, 1]) {
-    const controller = xr.getController(index)
+    const targetRay = xr.getController(index)
     const grip = xr.getControllerGrip(index)
 
     // "createControllerModel" currently only will attach a model if the "connected" event is fired,
     // so it must be called immediately before a controller connects.
     const model = factory.createControllerModel(grip)
 
-    eventMap.set(controller, { targetRay: controller, model, grip })
+    eventMap.set(targetRay, { targetRay, model, grip })
 
     /**
      * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
-    */
-    controller.addEventListener('connected', handleConnected as any)
-    controller.addEventListener('disconnected', handleDisconnected as any)
+     */
+    targetRay.addEventListener('connected', handleConnected as any)
+    targetRay.addEventListener('disconnected', handleDisconnected as any)
   }
 
   $: store = stores[handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model
+  $: hasPointerControls = $pointerState[handedness].enabled
+  $: hasTeleportControls = $teleportState[handedness].enabled
 
   onDestroy(() => {
     for (const index of [0, 1]) {
@@ -163,13 +169,54 @@
     <T
       is={targetRay}
       name="XR controller {handedness}"
-      visible={!$isHandTracking}
     >
       <slot name="target-ray" />
-      <ShortRay
-        visible={$activeTeleportController === targetRay &&
-          $pendingTeleportDestination === undefined}
-      />
+
+      {#if hasPointerControls || hasTeleportControls}
+        {#if $$slots['pointer-ray']}
+          <ShortRay {handedness}>
+            <slot name="pointer-ray" />
+          </ShortRay>
+        {:else}
+          <ShortRay {handedness} />
+        {/if}
+      {/if}
     </T>
   {/if}
 {/if}
+
+<ScenePortal>
+  {#if hasPointerControls}
+    {#if $$slots['pointer-cursor']}
+      <PointerCursor {handedness}>
+        <slot name="pointer-cursor" />
+      </PointerCursor>
+    {:else}
+      <PointerCursor {handedness} />
+    {/if}
+  {/if}
+
+  {#if hasTeleportControls && targetRay !== undefined}
+    {#if $$slots['teleport-ray']}
+      <TeleportRay
+        {targetRay}
+        {handedness}
+      >
+        <slot name="teleport-ray" />
+      </TeleportRay>
+    {:else}
+      <TeleportRay
+        {targetRay}
+        {handedness}
+      />
+    {/if}
+
+    {#if $$slots['teleport-ray']}
+      <TeleportCursor {handedness}>
+        <slot name="teleport-cursor" />
+      </TeleportCursor>
+    {:else}
+      <TeleportCursor {handedness} />
+    {/if}
+  {/if}
+</ScenePortal>

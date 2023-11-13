@@ -1,6 +1,6 @@
 import { Group } from 'three'
 import { useThrelte, useFrame, watch } from '@threlte/core'
-import { useXR } from '../hooks'
+import { useXR } from '../hooks/useXR'
 
 export const headset = new Group()
 
