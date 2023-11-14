@@ -50,7 +50,7 @@
 
 <style>
   button {
-    background: rgb(226 232 240);
+    background: rgb(41, 43, 45);
     border-color: rgb(71 85 105);
     border-radius: 0.25rem;
     padding: 0.25rem 0.5rem;
