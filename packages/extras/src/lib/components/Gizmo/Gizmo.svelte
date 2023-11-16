@@ -164,13 +164,17 @@
   })
 
   // Used to test which axis (pos or neg) are closer to the camera.
-  let point = new Vector3()
+  const point = new Vector3()
+  let p = [0, 0, 0]
   // The rotation of the main camera, used to rotate the gizmo.
-  let quaternion = new Quaternion()
+  const quaternion = new Quaternion()
+  let q: [number, number, number, number] = [0, 0, 0, 0]
 
   useFrame(({ camera }, delta) => {
-    point = new Vector3(0, 0, 1).applyQuaternion(camera.current.quaternion)
-    quaternion = new Quaternion().copy(camera.current.quaternion).invert()
+    point.set(0, 0, 1).applyQuaternion(camera.current.quaternion)
+    p = [point.x, point.y, point.z]
+    quaternion.copy(camera.current.quaternion).invert()
+    q = [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
 
     if (animating) {
       const step = delta * turnRate
@@ -220,7 +224,7 @@
 <HierarchicalObject>
   <T.Scene
     bind:ref={root}
-    quaternion={[quaternion.x, quaternion.y, quaternion.z, quaternion.w]}
+    quaternion={q}
   >
     <!-- xAxis -->
     <T.Sprite
@@ -231,7 +235,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(xColor, 'X') }]}
-        opacity={point.x >= 0 ? 1 : 0.5}
+        opacity={p[0] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
@@ -254,7 +258,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(xColor) }]}
-        opacity={point.x >= 0 ? 0.5 : 1}
+        opacity={p[0] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
 
@@ -267,7 +271,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(yColor, 'Y') }]}
-        opacity={point.y >= 0 ? 1 : 0.5}
+        opacity={p[1] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
@@ -293,7 +297,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(yColor) }]}
-        opacity={point.y >= 0 ? 0.5 : 1}
+        opacity={p[1] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
 
@@ -306,7 +310,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(zColor, 'Z') }]}
-        opacity={point.z >= 0 ? 1 : 0.5}
+        opacity={p[2] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
@@ -332,7 +336,7 @@
     >
       <T.SpriteMaterial
         args={[{ map: getSpriteTexture(zColor) }]}
-        opacity={point.z >= 0 ? 0.5 : 1}
+        opacity={p[2] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
   </T.Scene>
