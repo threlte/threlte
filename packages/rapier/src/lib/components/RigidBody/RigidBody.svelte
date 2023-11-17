@@ -9,6 +9,7 @@
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
   import type { RigidBodyProps } from './RigidBody.svelte'
+  import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -39,11 +40,6 @@
   const dispatcher = createRawEventDispatcher<$$Events>()
 
   const object = new Object3D()
-
-  /**
-   * Used to traverseAncestors to restore transform
-   */
-  object.userData.isRigidBody = true
 
   /**
    * isSleeping used for events "sleep" and "wake" in `useFrameHandler`
@@ -125,6 +121,11 @@
    * hook onto.
    */
   setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBodyTemp)
+
+  /**
+   * Used by child colliders to restore transform
+   */
+  setParentRigidbodyObject(object)
 
   /**
    * Add the mesh to the context

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
+
   import {
     ActiveCollisionTypes,
     CoefficientCombineRule,
@@ -39,6 +41,7 @@
   const group = new Group()
 
   const rigidBody = useRigidBody()
+  const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
@@ -65,7 +68,7 @@
 
   export const create = () => {
     cleanup()
-    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody)
+    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody, rigidBodyParentObject)
     colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
 
     collisionGroups.registerColliders(colliders)

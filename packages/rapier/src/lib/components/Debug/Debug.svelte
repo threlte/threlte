@@ -35,7 +35,10 @@
   })
 </script>
 
-<T.LineSegments renderOrder={Infinity}>
+<T.LineSegments
+  frustumCulled={false}
+  renderOrder={Infinity}
+>
   <T
     is={geometry}
     attach="geometry"
