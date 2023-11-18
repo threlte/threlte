@@ -154,7 +154,7 @@
 </script>
 
 <canvas
-  use:parentSizeAction={contexts.ctx.renderer}
+  use:parentSizeAction
   bind:this={canvas}
 >
   {#if initialized}
