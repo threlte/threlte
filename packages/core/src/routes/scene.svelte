@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte } from '$lib'
+  import { T, useFrame } from '$lib'
   
   let ref: THREE.Mesh
 
