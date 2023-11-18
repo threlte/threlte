@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useFrame } from '$lib'
-  
+
   let ref: THREE.Mesh
 
   useFrame(() => {
