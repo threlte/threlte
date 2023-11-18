@@ -14,6 +14,7 @@
   <Collider
     shape={'cuboid'}
     args={[1, 1, 1]}
+    on:create={({ref}) => console.log(ref)}
   />
 </T.Group>
 

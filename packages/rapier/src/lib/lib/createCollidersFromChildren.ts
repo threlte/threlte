@@ -8,6 +8,9 @@ const worldQuaternion = new Quaternion()
 const worldScale = new Vector3()
 const size = new Vector3()
 
+const rigidBodyWorldPos = new Vector3()
+const rigidBodyWorldQuatInversed = new Quaternion()
+
 /**
  *
  * Creates collider descriptions including default translations
@@ -37,11 +40,11 @@ export const createCollidersFromChildren = (
    * the Colliders are created on the world positions
    * of the meshes they resemble.
    */
-  const rigidBodyWorldPos = new Vector3()
-  const rigidBodyWorldQuatInversed = new Quaternion()
+  rigidBodyWorldPos.set(0, 0, 0)
+  rigidBodyWorldQuatInversed.set(0, 0, 0, 1)
+
   rigidBodyParentObject?.getWorldPosition(rigidBodyWorldPos)
-  rigidBodyParentObject?.getWorldQuaternion(rigidBodyWorldQuatInversed)
-  rigidBodyWorldQuatInversed.invert()
+  rigidBodyParentObject?.getWorldQuaternion(rigidBodyWorldQuatInversed).invert()
 
   object.traverse((child: Object3D | Mesh) => {
     if ('isMesh' in child) {
@@ -50,14 +53,11 @@ export const createCollidersFromChildren = (
       const translation = worldPos.sub(rigidBodyWorldPos)
 
       const worldQuat = child.getWorldQuaternion(worldQuaternion)
-      const {
-        x: rx,
-        y: ry,
-        z: rz,
-        w: rw
-      } = worldQuat.clone().premultiply(rigidBodyWorldQuatInversed)
+      const rotation = worldQuat.clone().premultiply(rigidBodyWorldQuatInversed)
 
       const scale = child.getWorldScale(worldScale)
+
+      offset.set(0, 0, 0)
 
       switch (collidersType) {
         case 'cuboid':
@@ -126,7 +126,7 @@ export const createCollidersFromChildren = (
           translation.y + offset.y,
           translation.z + offset.z
         )
-        .setRotation({ x: rx, y: ry, z: rz, w: rw })
+        .setRotation(rotation)
         .setActiveEvents(ActiveEvents.COLLISION_EVENTS)
 
       const collider = world.createCollider(description, rigidBody)

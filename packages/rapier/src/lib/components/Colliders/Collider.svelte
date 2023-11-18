@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
-
   import {
     ActiveCollisionTypes,
     CoefficientCombineRule,
@@ -14,6 +12,8 @@
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
+  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
+  import { useCreateEvent } from '../../lib/useCreateEvent'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
@@ -46,6 +46,7 @@
 
   const object = new Object3D()
 
+  const { updateRef } = useCreateEvent<Collider>()
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
@@ -77,9 +78,8 @@
     const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
 
     collider = world.createCollider(colliderDesc, rigidBody)
-
     collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
-    collider.setContactForceEventThreshold(1)
+    updateRef(collider)
 
     /**
      * Add collider to context
