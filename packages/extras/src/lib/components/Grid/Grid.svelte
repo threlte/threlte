@@ -166,6 +166,7 @@
   bind:ref
   frustumCulled={false}
   {...$$restProps}
+  let:ref
 >
   <T.ShaderMaterial
     {fragmentShader}
