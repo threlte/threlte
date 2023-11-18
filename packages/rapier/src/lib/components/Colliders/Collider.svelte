@@ -70,6 +70,7 @@
    */
   onMount(async () => {
     await tick()
+
     const scale = object.getWorldScale(new Vector3())
 
     const scaledArgs = scaleColliderArgs(shape, args, scale)
@@ -94,13 +95,16 @@
     if (hasRigidBodyParent) {
       const rigidBodyWorldPos = new Vector3()
       const rigidBodyWorldQuatInversed = new Quaternion()
+  
       parentRigidBodyObject?.getWorldPosition(rigidBodyWorldPos)
       parentRigidBodyObject?.getWorldQuaternion(rigidBodyWorldQuatInversed)
       rigidBodyWorldQuatInversed.invert()
+
       const worldPosition = object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
       const worldRotation = object
         .getWorldQuaternion(new Quaternion())
         .premultiply(rigidBodyWorldQuatInversed)
+
       collider.setTranslationWrtParent(worldPosition)
       collider.setRotationWrtParent(worldRotation)
     } else {

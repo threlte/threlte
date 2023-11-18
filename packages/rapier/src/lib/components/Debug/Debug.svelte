@@ -7,11 +7,10 @@
 
   type $$Props = DebugProps
 
-  export let renderOrder: number | undefined = undefined
-
   const { world, debug } = useRapier()
-  const geometry = new BufferGeometry()
 
+  const geometry = new BufferGeometry()
+ 
   debug.set(true)
 
   useFrame(() => {
@@ -25,14 +24,13 @@
   })
 
   onDestroy(() => {
-    geometry.dispose()
     debug.set(false)
   })
 </script>
 
 <T.LineSegments
   frustumCulled={false}
-  {renderOrder}
+  renderOrder={Infinity}
 >
   <T is={geometry} />
   <T.LineBasicMaterial
