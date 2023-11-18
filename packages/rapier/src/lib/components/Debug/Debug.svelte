@@ -9,14 +9,8 @@
 
   const { world, debug } = useRapier()
 
-  const buffers = world.debugRender()
-  const vertices = new BufferAttribute(buffers.vertices, 3)
-  const colors = new BufferAttribute(buffers.colors, 4)
-
   const geometry = new BufferGeometry()
-  geometry.setAttribute('position', vertices)
-  geometry.setAttribute('color', colors)
-
+ 
   debug.set(true)
 
   useFrame(() => {
@@ -30,16 +24,15 @@
   })
 
   onDestroy(() => {
-    geometry.dispose()
     debug.set(false)
   })
 </script>
 
-<T.LineSegments renderOrder={Infinity}>
-  <T
-    is={geometry}
-    attach="geometry"
-  />
+<T.LineSegments
+  frustumCulled={false}
+  renderOrder={Infinity}
+>
+  <T is={geometry} />
   <T.LineBasicMaterial
     vertexColors
     {...$$restProps}
