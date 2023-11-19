@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 6.1.1
+
+### Patch Changes
+
+- f026619b: Eagerly set canvas size on start
+
 ## 6.1.0
 
 ### Minor Changes
