@@ -20,6 +20,10 @@
   <T.BoxGeometry />
 </T.Mesh>
 
+<T.Mesh receiveShadow position.y={-1}>
+  <T.MeshStandardMaterial color="turquoise" />
+  <T.CylinderGeometry args={[1, 1, 0.1]} />
+</T.Mesh>
 
 <T.AmbientLight />
 <T.DirectionalLight
