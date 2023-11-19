@@ -1,9 +1,8 @@
-import { watch } from '@threlte/core'
+import { watch, useFrame } from '@threlte/core'
 import { useXR } from '../../hooks/useXR'
 import type { Context, HandContext } from './context'
 import { useController } from '../../hooks/useController'
 import { useTeleport } from '../../hooks/useTeleport'
-import { useFixed } from '../../internal/useFixed'
 import { teleportIntersection } from '../../internal/stores'
 
 export const setupTeleportControls = (
@@ -20,7 +19,7 @@ export const setupTeleportControls = (
     teleportIntersection[handedness].set(undefined)
   }
 
-  const { start, stop } = useFixed(
+  const { start, stop } = useFrame(
     () => {
       const gamepad = controller.current?.inputSource.gamepad
 
@@ -66,6 +65,7 @@ export const setupTeleportControls = (
       handContext.hovered.set(intersect)
     },
     {
+      stage: 'fixed',
       fixedStep,
       autostart: false
     }

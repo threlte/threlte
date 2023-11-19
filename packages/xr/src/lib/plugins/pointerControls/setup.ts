@@ -1,11 +1,10 @@
 import { Vector3 } from 'three'
-import { watch } from '@threlte/core'
+import { watch, useFrame } from '@threlte/core'
 import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
 import { getInternalContext } from './context'
 import { useController } from '../../hooks/useController'
 import { useHand } from '../../hooks/useHand'
 import { useXR } from '../../hooks/useXR'
-import { useFixed } from '../../internal/useFixed'
 import { pointerIntersection } from '../../internal/stores'
 
 type PointerEventName = (typeof events)[number]
@@ -209,7 +208,7 @@ export const setupPointerControls = (
     }
   }
 
-  const { start, stop } = useFixed(
+  const { start, stop } = useFrame(
     () => {
       hits = processHits()
 
@@ -224,6 +223,7 @@ export const setupPointerControls = (
       lastPosition.copy(targetRay.position)
     },
     {
+      stage: 'fixed',
       fixedStep,
       autostart: false
     }
