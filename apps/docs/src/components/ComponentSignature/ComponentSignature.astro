@@ -40,9 +40,10 @@ const shiki = await getShiki()
 
 {showComponentSignature && (
 
+	<h2 class="mt-0" id="component-signature">Component Signature</h2>
+
 	<div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
 
-		<h2 class="mt-0" id="component-signature">Component Signature</h2>
 
 		{
 			Astro.props.signature.extends && (

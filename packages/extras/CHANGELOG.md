@@ -1,5 +1,78 @@
 # @threlte/extras
 
+## 7.5.1
+
+### Patch Changes
+
+- 56330979: Fixed prop defaults of `<Text>`
+
+## 7.5.0
+
+### Minor Changes
+
+- bcc96f23: Added `<AnimatedSpriteMaterial>`
+
+## 7.4.0
+
+### Minor Changes
+
+- 20e8711a: Added `<CSM>` to extras
+
+## 7.3.0
+
+### Minor Changes
+
+- c2ddef77: Added `suspended` store to return type of `useSuspense`
+
+## 7.2.0
+
+### Minor Changes
+
+- 206fbc83: Added suspense support to `<GLTF>` and `<Environment>`
+
+### Patch Changes
+
+- 79a7fa4f: Aligned `onReveal` with `onMount` in that you may return a cleanup function that runs whenever a component is resuspended or unmounted
+
+## 7.1.1
+
+### Patch Changes
+
+- 060fbbdf: Changed eventDispatcher to rawEventDispatcher in `<Suspense>`, added type def
+
+## 7.1.0
+
+### Minor Changes
+
+- cd27881c: Added suspend event to `<Suspense>`
+
+## 7.0.1
+
+### Patch Changes
+
+- 62d3f395: Add ref binding to `<InstancedMesh>`
+
+## 7.0.0
+
+### Major Changes
+
+- 30e87470: `useTexture` is assigning the correct `colorSpace` based on the renderer. Migration: If you rely on a different `colorSpace` in your texture than the renderer is set to, use the option [`transform`](https://threlte.xyz/docs/reference/extras/use-texture#transforming-the-texture) to transform the texture to THREE.NoColorSpace, which used to be the default.
+- ca47ae2a: Remove deprecated props, events and slot props on `<Align>`, remove `<Center>` export. Migration: Replace `<Center>` with `<Align>`, replace the prop `autoCenter` with `auto`, replace the event `on:center` with `on:align`, replace the slot prop `let:center` with `let:align`.
+
+## 6.0.0
+
+### Major Changes
+
+- be722cf: ## Grid component update:
+
+  - New types of grid: lines, circular and polar.
+  - Added background option to to the Grid
+  - **breaking**: renamed `axes` property to `plane`. It now accepts two letter prop `'xz' | 'xy' | 'zy'` instead of 3 letter prop `'xzy' | 'xyz' | 'zyx'`
+
+  **Migration:**
+
+  - change `axes` to `plane` in all of your `<Grid/>` components and use the new two-letter values (for example, `xzy` would become `xz`).
+
 ## 5.7.0
 
 ### Minor Changes

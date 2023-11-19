@@ -10,7 +10,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "cleanup": "rimraf .astro node_modules"
+    "cleanup": "rimraf .astro node_modules",
+    "create:example": "tsx ./scripts/createExample",
+    "create:example-page": "tsx ./scripts/createExamplePage"
   },
   "dependencies": {
     "@astrojs/mdx": "^1.0.0",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.11.2",
+    "@inquirer/prompts": "^3.2.0",
     "@macfja/svelte-persistent-store": "^2.2.1",
     "@pmndrs/vanilla": "^1.9.6",
     "@stackblitz/sdk": "^1.8.2",
@@ -43,6 +46,7 @@
     "@theatre/studio": "^0.6.2",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
+    "@threlte/flex": "workspace:*",
     "@threlte/rapier": "workspace:*",
     "@threlte/theatre": "workspace:*",
     "@threlte/xr": "workspace:*",
@@ -51,7 +55,11 @@
     "@types/three": "^0.155.1",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.3.1",
+    "chalk": "^4.1.1",
+    "github-slugger": "^2.0.0",
+    "launch-editor": "^2.6.1",
     "node-html-parser": "^6.1.4",
+    "open": "^9.1.0",
     "postcss-easing-gradients": "^3.0.1",
     "postprocessing": "^6.32.2",
     "rehype-autolink-headings": "^6.1.1",
@@ -64,6 +72,7 @@
     "svelte-preprocess": "^5.0.1",
     "svelte-reduced-motion": "^1.1.1",
     "three": "0.155.0",
+    "tsx": "^3.13.0",
     "tweakpane": "^3.1.0",
     "vite-plugin-mkcert": "^1.16.0"
   },

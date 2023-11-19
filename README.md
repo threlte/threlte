@@ -71,6 +71,8 @@ Threlte is comprised of six distinct packages to allow you to import only what y
 
 - [@threlte/xr](https://github.com/threlte/threlte/tree/main/packages/xr)** - components and hooks for VR and AR environments
 
+- [@threlte/flex](https://github.com/threlte/threlte/tree/main/packages/flex)** - components to easily use the flex engine [`yoga-layout`](https://yogalayout.com/) with Threlte.
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.

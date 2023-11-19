@@ -29,7 +29,7 @@ export type FlexContextData = {
   rootGroup: Group
   rootWidth: CurrentWritable<number>
   rootHeight: CurrentWritable<number>
-  reflow: (msg?: string) => void
+  reflow: () => void
   classParser?: ClassParser
 }
 

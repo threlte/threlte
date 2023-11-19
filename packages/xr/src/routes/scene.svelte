@@ -1,10 +1,8 @@
 <script lang="ts">
-  import * as THREE from 'three'
-  import { T, useThrelte } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { XR, Controller, Hand, Headset, TeleportControls, useTeleport, useXR } from '$lib'
   import Gamepad from './Gamepad.svelte'
 
-  useThrelte().scene.background = new THREE.Color('#000')
   const { isPresenting } = useXR()
   const teleport = useTeleport()
 

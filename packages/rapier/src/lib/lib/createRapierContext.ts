@@ -5,7 +5,6 @@ import type {
   RigidBodyHandle
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import { currentWritable } from '@threlte/core'
 import { readable, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type {

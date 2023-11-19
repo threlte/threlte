@@ -1,5 +1,3 @@
-import Align from './components/Align/Align.svelte'
-
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
@@ -9,6 +7,7 @@ export { useTexture } from './hooks/useTexture'
 export { useGamepad } from './hooks/useGamepad'
 
 // abstractions
+export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as Float } from './components/Float/Float.svelte'
@@ -26,14 +25,8 @@ export { default as SoftShadows } from './components/SoftShadows/SoftShadows.sve
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
-export { Align }
-
-/**
- * @component Center
- * @deprecated Please use `<Align>` instead.
- */
-const Center = Align
-export { Center }
+export { default as Align } from './components/Align/Align.svelte'
+export { default as CSM } from './components/CSM/CSM.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'

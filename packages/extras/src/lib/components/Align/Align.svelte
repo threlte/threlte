@@ -19,8 +19,6 @@
   export let precise: $$Props['precise'] = false
   /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
   export let auto: $$Props['auto'] = false
-  /** @deprecated Please use the prop "auto" */
-  export let autoCenter: $$Props['autoCenter'] = false
 
   const dispatch = createRawEventDispatcher<$$Events>()
 
@@ -76,10 +74,6 @@
     }
 
     dispatch('align', eventData)
-
-    // Will be emitted as the event is marked as deprecated and will only be
-    // removed in the next major version.
-    dispatch('center', eventData)
   }
 
   /**
@@ -113,7 +107,7 @@
    * Inject the align plugin if autoAlign is true. This will automatically
    * align the object whenever a child component mounts or unmounts.
    */
-  if (auto || autoCenter) injectAlignPlugin(scheduleAligning)
+  if (auto) injectAlignPlugin(scheduleAligning)
 
   const component = forwardEventHandlers()
 </script>
@@ -128,7 +122,6 @@
     <T is={innerGroup}>
       <slot
         align={scheduleAligning}
-        center={scheduleAligning}
         {ref}
       />
     </T>

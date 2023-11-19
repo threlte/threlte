@@ -2,14 +2,20 @@ import { SvelteComponent } from 'svelte'
 import type { NodeProps } from '../lib/props'
 
 type BoxProps = NodeProps & {
-  order?: number
+  order?: number | undefined
   class?: string
 }
 
-type BoxEvents = {}
+type BoxEvents = {
+  reflow: {
+    width: number
+    height: number
+  }
+}
 
 type BoxSlots = {
   default: {
+    reflow: () => void
     width: number
     height: number
   }

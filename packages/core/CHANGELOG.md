@@ -1,5 +1,30 @@
 # @threlte/core
 
+## 6.1.1
+
+### Patch Changes
+
+- f026619b: Eagerly set canvas size on start
+
+## 6.1.0
+
+### Minor Changes
+
+- 8b55284e: Added `loader.load` support to `useLoader`
+
+## 6.0.10
+
+### Patch Changes
+
+- 34741ea7: \* (xr) - useHitTest: Allow hit testing from controllers / hands
+  - (core) - Do not attempt to resize renderer when in an immersive xr session
+
+## 6.0.9
+
+### Patch Changes
+
+- 17f938b: Make canvas properties reactive and document non-reactive properties
+
 ## 6.0.8
 
 ### Patch Changes

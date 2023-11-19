@@ -10,6 +10,8 @@ type FlexEvents = ComponentEvents<InnerFlex>
 type FlexSlots = {
   default: {
     reflow: () => void
+    width: number
+    height: number
   }
 }
 

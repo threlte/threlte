@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 2.0.0
+
+### Major Changes
+
+- 15a15873: Removed pascal-casing of output file in favor of more reliable output file naming for automation purposes. The output file will now be 1:1 filename.glb -> filename.svelte.
+
 ## 1.0.1
 
 ### Patch Changes

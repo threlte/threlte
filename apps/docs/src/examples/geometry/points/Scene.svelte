@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Center, OrbitControls } from '@threlte/extras'
+  import { Align, OrbitControls } from '@threlte/extras'
 
   const size = 30
   const count = size ** 3
@@ -46,7 +46,7 @@
   position.z={10}
 />
 
-<Center>
+<Align>
   <T.Points>
     <T.BufferGeometry>
       <T.BufferAttribute
@@ -62,4 +62,4 @@
     </T.BufferGeometry>
     <T.PointsMaterial size={0.25} />
   </T.Points>
-</Center>
+</Align>

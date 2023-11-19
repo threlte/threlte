@@ -1,12 +1,12 @@
 <script lang='ts' context='module'>
-  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
+  import { onDestroy } from 'svelte'
   import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import type { XRHandEvent } from '../types'
   import { isHandTracking } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import { onDestroy } from 'svelte'
-
+  
   const factory = new XRHandModelFactory()
 
   const stores = {
@@ -18,6 +18,8 @@
 </script>
 
 <script lang='ts'>
+  import ScenePortal from "./internal/ScenePortal.svelte"
+
   type $$Props =
     | {
         /** Whether the XRHand should be matched with the left hand. */
@@ -122,7 +124,6 @@
   }
 
   $: store = stores[handedness]
-  $: hand = $store?.hand
   $: inputSource = $store?.inputSource
   $: model = $store?.model
 
@@ -155,17 +156,20 @@
   })
 </script>
 
-{#if hand}
+{#if $store?.hand}
   <T
-    is={hand}
+    is={$store.hand}
     name='XR hand {handedness}'
   >
     {#if $$slots.default === undefined}
       <T is={model} />
     {/if}
-    <T.Group bind:ref={children}>
-      <slot name='wrist' />
-      <slot />
-    </T.Group>
   </T>
 {/if}
+
+<ScenePortal>
+  <T.Group bind:ref={children}>
+    <slot name='wrist' />
+    <slot />
+  </T.Group>
+</ScenePortal>
