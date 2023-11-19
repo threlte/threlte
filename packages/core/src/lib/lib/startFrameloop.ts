@@ -1,7 +1,6 @@
 import type { ThrelteContext, ThrelteInternalContext } from './contexts'
 import type { ThrelteFrameHandler } from '../hooks/useFrame'
 import type { ThrelteRenderHandler } from '../hooks/useRender'
-import { timer } from './timer'
 
 const sortHandlers = (handlers: Set<ThrelteFrameHandler | ThrelteRenderHandler>): void => {
   const arr = Array.from(handlers)
@@ -64,11 +63,11 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
       internalCtx.dispose()
     }
 
-    timer.update()
+    // get a global delta
+    const delta = ctx.clock.getDelta()
 
     const shouldRenderFrame = shouldRender(ctx, internalCtx)
     const { fixed, before, render, after } = internalCtx.handlers
-    const { delta } = timer
 
     // run all fixed useFrame callbacks
     if (fixed.size > 0) {
@@ -106,7 +105,7 @@ export const startFrameloop = (ctx: ThrelteContext, internalCtx: ThrelteInternal
           internalCtx.handlersNeedSort.render = false
         }
 
-        render.forEach((h) => h.fn(ctx, timer.delta))
+        render.forEach((h) => h.fn(ctx, delta))
       } else if (ctx.camera.current) {
         // … render the scene with the default renderer
         ctx.renderer.render(ctx.scene, ctx.camera.current)

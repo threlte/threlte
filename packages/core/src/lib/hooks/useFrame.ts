@@ -2,7 +2,6 @@ import { getContext, onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
 import { browser } from '../lib/browser'
 import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
-import { timer } from '../lib/timer'
 
 export type ThrelteUseFrame = {
   stop: () => void
