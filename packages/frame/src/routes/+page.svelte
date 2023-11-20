@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { Runner } from '../lib/Runner'
+  import { Stage } from '../lib/Stage'
 
   onMount(() => {
     // Create a new runner
@@ -15,11 +16,12 @@
     })
 
     // // create the stages
-    const defaultStage = frameloop.createStage({
-      base: 'default'
+    const defaultStage = frameloop.createStage()
+    const contextStage = frameloop.createStage({
+      helo: 'world'
     })
 
-    defaultStage.addHandler((rctx, lctx, sctx, delta) => {})
+    defaultStage.addHandler((ctx) => {})
 
     runner.start()
 

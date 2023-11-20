@@ -20,13 +20,32 @@ export class Loop<RunnerContext extends {}, LoopContext extends {}> extends DAG<
     if (callback) this.callback = callback.bind(this)
   }
 
-  public createStage<StageContext extends {}>(
+  public createStage(
+    options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
+  ): Stage<RunnerContext, LoopContext, undefined>
+  public createStage<StageContext extends Record<string, any>>(
     stageContext?: StageContext,
     options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
+  ): Stage<RunnerContext, LoopContext, StageContext>
+  public createStage<StageContext extends Record<string, any>>(
+    stageContextOrOptions?: StageContext | Parameters<Loop<RunnerContext, LoopContext>['add']>[1],
+    options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
   ) {
-    const stage = new Stage<RunnerContext, LoopContext, StageContext>(stageContext)
-    this.add(stage, options)
-    return stage
+    if (options) {
+      // A StageContext is defined
+      const context = stageContextOrOptions as StageContext
+      const stage = new Stage<RunnerContext, LoopContext, StageContext>(context)
+      this.add(stage, options)
+      return stage
+    } else {
+      // A StageContext is not defined
+      const options = stageContextOrOptions as Parameters<
+        Loop<RunnerContext, LoopContext>['add']
+      >[1]
+      const stage = new Stage<RunnerContext, LoopContext, undefined>()
+      this.add(stage, options)
+      return stage
+    }
   }
 
   public addStage = this.add.bind(this)
