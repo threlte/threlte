@@ -1,29 +1,23 @@
+type Handler = (...args: any[]) => void
+
 /**
  * A Node is a stage in a graph. It can have handlers that are run when the
  * graph is run. The handlers of a stage are run in an arbitrary order.
  */
 export class Node {
-  private handlers: Set<(...args: any[]) => void> = new Set()
+  private handlers: Set<Handler> = new Set()
 
-  public readonly before: Set<Node> = new Set()
-  public readonly after: Set<Node> = new Set()
-
-  constructor(options: { before?: Node; after?: Node }) {
-    if (options?.before) {
-      options.before.before.add(this)
-      this.after.add(options.before)
-    }
-    if (options?.after) {
-      options.after.after.add(this)
-      this.before.add(options.after)
+  constructor(handlers?: Handler[]) {
+    if (handlers) {
+      handlers.forEach((handler) => this.addHandler(handler))
     }
   }
 
-  public addHandler(handler: (...args: any[]) => void) {
+  public addHandler(handler: Handler) {
     this.handlers.add(handler)
   }
 
-  public removeHandler(handler: (...args: any[]) => void) {
+  public removeHandler(handler: Handler) {
     this.handlers.delete(handler)
   }
 
@@ -32,50 +26,67 @@ export class Node {
   }
 }
 
+type GraphNode = { node: Node; previousNodes: Set<Node>; nextNodes: Set<Node> }
+
 /**
  * A Graph is a collection of nodes. The nodes are run in a topological sort
  * order.
  */
 export class Graph {
   runx: (delta: number, run: () => void) => void
-  private _nodes: Set<Node> = new Set()
+  private _nodes: Array<GraphNode> = []
   private sorted: Node[] = []
   constructor(run: (delta: number, run: () => void) => void) {
     this.runx = run.bind(this)
   }
 
-  public addDefaultNode(): Node {
-    const node = new Node({})
-    this._nodes.add(node)
-    return node
-  }
-
-  public addNode(options: ConstructorParameters<typeof Node>[0]): Node
-  public addNode(node: Node): Node
-  public addNode(nodeOrOptions: Node | ConstructorParameters<typeof Node>[0]) {
-    if (nodeOrOptions instanceof Node) {
-      this._nodes.add(nodeOrOptions)
-      this.sort()
-      return nodeOrOptions
-    } else {
-      const node = new Node(nodeOrOptions)
-      this._nodes.add(node)
-      this.sort()
-      return node
+  public addNode(
+    node: Node,
+    options?: {
+      before?: Node
+      after?: Node
     }
+  ) {
+    const graphNode: GraphNode = {
+      node,
+      previousNodes: new Set(),
+      nextNodes: new Set()
+    }
+    if (options?.before) {
+      const nextNode = this._nodes.find(({ node }) => node === options.before)
+      if (!nextNode) {
+        throw new Error('next node not found')
+      }
+      nextNode.previousNodes.add(node)
+      graphNode.nextNodes.add(nextNode.node)
+    }
+    if (options?.after) {
+      const prevNode = this._nodes.find(({ node }) => node === options.after)
+      if (!prevNode) {
+        throw new Error('previous node not found')
+      }
+      prevNode.nextNodes.add(node)
+      graphNode.previousNodes.add(prevNode.node)
+    }
+    this._nodes.push(graphNode)
+    this.sort()
   }
 
   public removeNode(node: Node) {
-    this._nodes.delete(node)
+    const index = this._nodes.findIndex(({ node: n }) => n === node)
+    if (index === -1) return
+    this._nodes.splice(index, 1)
     this.sort()
   }
 
   private sort() {
-    this.sorted = Array.from(this._nodes).sort((a, b) => {
-      if (a.before.has(b) || b.after.has(a)) return 1
-      if (a.after.has(b) || b.before.has(a)) return -1
-      return 0
-    })
+    this.sorted = this._nodes
+      .sort((a, b) => {
+        if (a.previousNodes.has(b.node) || b.nextNodes.has(a.node)) return 1
+        if (a.nextNodes.has(b.node) || b.previousNodes.has(a.node)) return -1
+        return 0
+      })
+      .map(({ node }) => node)
   }
 
   public run() {
@@ -128,45 +139,77 @@ export const init = () => {
     run()
   })
 
-  const defaultNode = graph.addDefaultNode()
+  const defaultNode = new Node()
+  graph.addNode(defaultNode)
 
-  const renderNode = graph.addNode({
+  const renderNode = new Node()
+
+  graph.addNode(renderNode, {
     after: defaultNode
   })
 
   runner.addGraph(graph)
 
   defaultNode.addHandler(() => {
-    // console.log('defaultNode')
+    console.log('defaultNode')
   })
 
   renderNode.addHandler(() => {
-    // console.log('renderNode')
+    console.log('renderNode')
   })
 
-  let fixedStepTimeAccumulator = 0
-  const fixedLoop = new Graph((delta, run) => {
-    fixedStepTimeAccumulator += delta / 1000
-
-    while (fixedStepTimeAccumulator >= 1 / 1) {
-      fixedStepTimeAccumulator -= 1 / 1
-      run()
-    }
+  const inBetweenNode = new Node()
+  graph.addNode(inBetweenNode, {
+    before: renderNode,
+    after: defaultNode
   })
 
-  const physics = fixedLoop.addNode({})
-  physics.addHandler(() => {
-    console.log('physics')
+  inBetweenNode.addHandler(() => {
+    console.log('inBetweenNode')
   })
 
-  const afterPhysics = fixedLoop.addNode({
-    after: physics
+  const beforeRenderNode = new Node()
+  graph.addNode(beforeRenderNode, {
+    before: renderNode
   })
-  afterPhysics.addHandler(() => {
-    console.log('afterPhysics')
+  beforeRenderNode.addHandler(() => {
+    console.log('beforeRenderNode')
   })
 
-  runner.addGraph(fixedLoop)
+  const beforeDefaultNode = new Node()
+  graph.addNode(beforeDefaultNode, {
+    before: defaultNode
+  })
+  beforeDefaultNode.addHandler(() => {
+    console.log('beforeDefaultNode')
+  })
+
+  // let fixedStepTimeAccumulator = 0
+  // const fixedLoop = new Graph((delta, run) => {
+  //   fixedStepTimeAccumulator += delta / 1000
+
+  //   while (fixedStepTimeAccumulator >= 1 / 1) {
+  //     fixedStepTimeAccumulator -= 1 / 1
+  //     run()
+  //   }
+  // })
+
+  // const physics = fixedLoop.addNode({})
+  // physics.addHandler(() => {
+  //   console.log('physics')
+  // })
+
+  // const afterPhysics = fixedLoop.addNode({
+  //   after: physics
+  // })
+  // afterPhysics.addHandler(() => {
+  //   console.log('afterPhysics')
+  // })
+
+  // runner.addGraph(fixedLoop)
 
   runner.start()
+  setTimeout(() => {
+    runner.stop()
+  }, 100)
 }
