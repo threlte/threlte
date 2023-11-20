@@ -6,8 +6,7 @@ import { DAG } from './DAG'
  * order.
  */
 export class Loop<RunnerContext> extends DAG<Stage<RunnerContext>> {
-  private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (delta, run) =>
-    run()
+  private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
 
   constructor(callback?: (delta: number, run: (deltaOverride?: number) => void) => void) {
     super()
