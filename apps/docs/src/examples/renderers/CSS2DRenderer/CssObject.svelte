@@ -6,7 +6,7 @@
 
   let element
 
-  const cssobject = (node) => {
+  const cssObject = (node) => {
     element = node
     return {
       destroy() { element = undefined }
@@ -15,7 +15,7 @@
 </script>
 
 <div
-  use:cssobject
+  use:cssObject
   style:pointer-events={pointerEvents ? 'auto' : 'none !important'}
   style:will-change="transform"
 >

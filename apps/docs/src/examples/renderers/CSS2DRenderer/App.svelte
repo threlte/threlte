@@ -3,7 +3,16 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div id="css-renderer-target" class="absolute top-0 left-0" style="pointer-events: none;" />
+<div id="css-renderer-target" />
 <Canvas>
   <Scene />
 </Canvas>
+
+<style>
+  #css-renderer-target {
+    left: 0;
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+  }
+</style>

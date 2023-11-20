@@ -4,25 +4,35 @@
   import { OrbitControls } from '@threlte/extras'
   import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
   import CssObject from './CssObject.svelte'
+  import CounterLabel from './CounterLabel.svelte'
+
+  const { scene, size } = useThrelte()
 
   // Set up the CSS2DRenderer to run in a div placed atop the <Canvas>
   const element = document.querySelector('#css-renderer-target')
   const cssRenderer = new CSS2DRenderer({ element })
-
-  const { size } = useThrelte()
   $: cssRenderer.setSize($size.width, $size.height)
 
-  useRender(async (ctx) => {
+  // Tell ThreeJS renderers not to call scene.updateMatrixWorld() with every
+  // render. Since we're running two renderers, this would result in double
+  // updates.
+  scene.matrixWorldAutoUpdate = false
+
+  useRender(async ({ renderer, scene, camera }) => {
+    // 1. Flush any pending svelte changes and element updates, especially tweening.
+    // https://svelte.dev/tutorial/tick
     await tick()
-    ctx.renderer?.render(ctx.scene, ctx.camera.current)
-    cssRenderer.render(ctx.scene, ctx.camera.current)
+
+    // 2. Tell ThreeJS to update the state of its components based on this new information.
+    // Normally this happens as part of a .render() call, but we set matrixWorldAutoUpdate = false
+    // in order to avoid both render calls triggering it.
+    // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
+    scene.updateMatrixWorld()
+
+    // 3. Tell both renderers to update the canvas and DOM elements on screen.
+    renderer.render(scene, camera.current)
+    cssRenderer.render(scene, camera.current)
   })
-
-  let helloCount = 0;
-  let worldCount = 0;
-
-  function clickHello() { helloCount++ }
-  function clickWorld() { worldCount++ }
 </script>
 
 <T.PerspectiveCamera makeDefault position={[5, 5, 5]}>
@@ -33,27 +43,17 @@
 
 <T.Mesh position.y={1}>
   <T.BoxGeometry args={[2, 2, 2]} />
-  <T.MeshStandardMaterial color="hotpink" />
+  <T.MeshStandardMaterial color="#F64F6F" />
 </T.Mesh>
 
 <CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
-  <button on:click={clickHello}>
-    Hello - {helloCount}
-  </button>
+  <CounterLabel label="Hello" />
 </CssObject>
 
 <CssObject position={[1, 2, 1]} center={[0, 0.5]}>
-  <button on:click={clickWorld}>
-    World - {worldCount}
-  </button>
+  <CounterLabel label="CSS" />
 </CssObject>
 
-<style>
-  button {
-    background: rgb(41, 43, 45);
-    border-color: rgb(71 85 105);
-    border-radius: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    pointer-events: auto;
-  }
-</style>
+<CssObject position={[1, 2, -1]} center={[0, 0.5]}>
+  <CounterLabel label="Renderer" />
+</CssObject>
