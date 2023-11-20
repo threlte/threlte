@@ -1,4 +1,4 @@
-type Handler<Context> = (context: Context, delta: number) => void
+type Handler<RunnerContext> = (context: RunnerContext, delta: number) => void
 
 /**
  * A Stage is a stage in a loop. It can have handlers that are run when the

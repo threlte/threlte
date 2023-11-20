@@ -5,11 +5,11 @@ import { Loop } from './Loop'
  * A Runner is responsible for running loops. It runs the loops in a
  * requestAnimationFrame loop.
  */
-export class Runner<RunnerContext extends {}> extends DAG<Loop<RunnerContext>> {
+export class Runner<RunnerContext> extends DAG<Loop<RunnerContext>> {
   private animationFrameHandle?: number
   private lastTime = 0
 
-  private context: RunnerContext = {} as RunnerContext
+  private context: RunnerContext = undefined as RunnerContext
 
   constructor(context?: RunnerContext) {
     super()
