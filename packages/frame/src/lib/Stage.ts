@@ -1,27 +1,23 @@
-type Handler = (...args: any[]) => void
+type Handler<Context> = (context: Context, delta: number) => void
 
 /**
  * A Stage is a stage in a loop. It can have handlers that are run when the
  * loop is run. The handlers of a stage are run in an arbitrary order.
  */
-export class Stage {
-  private handlers: Set<Handler> = new Set()
+export class Stage<RunnerContext> {
+  private handlers: Set<Handler<RunnerContext>> = new Set()
 
-  constructor(handlers?: Handler[]) {
-    if (handlers) {
-      handlers.forEach((handler) => this.addHandler(handler))
-    }
-  }
+  constructor() {}
 
-  public addHandler(handler: Handler) {
+  public addHandler(handler: Handler<RunnerContext>) {
     this.handlers.add(handler)
   }
 
-  public removeHandler(handler: Handler) {
+  public removeHandler(handler: Handler<RunnerContext>) {
     this.handlers.delete(handler)
   }
 
-  run(...args: any[]) {
-    this.handlers.forEach((handler) => handler(...args))
+  run(runnerContext: RunnerContext, delta: number) {
+    this.handlers.forEach((handler) => handler(runnerContext, delta))
   }
 }
