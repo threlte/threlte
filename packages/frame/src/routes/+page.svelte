@@ -9,14 +9,17 @@
     })
 
     // Create the default frame loop. It "just runs".
-    const frameloop = runner.createLoop()
+    const frameloop = runner.createLoop({
+      name: 'default',
+      fps: 60
+    })
 
     // // create the stages
-    const defaultStage = frameloop.createStage()
-
-    defaultStage.addHandler((ctx, delta) => {
-      ctx.foo
+    const defaultStage = frameloop.createStage({
+      base: 'default'
     })
+
+    defaultStage.addHandler((rctx, lctx, sctx, delta) => {})
 
     runner.start()
 
