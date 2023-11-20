@@ -128,115 +128,20 @@ export class Node {
   }
 }
 
-type NodeWithEdges = { node: Node; previousNodes: Set<Node>; nextNodes: Set<Node> }
-
 /**
  * A Graph is a collection of nodes. The nodes are run in a topological sort
  * order.
  */
-export class Graph {
+export class Graph extends DAG<Node> {
   private callback: (delta: number, run: () => void) => void
-  private _nodes: Array<NodeWithEdges> = []
-  private sorted: Node[] = []
 
   constructor(callback: (delta: number, run: () => void) => void) {
+    super()
     this.callback = callback.bind(this)
   }
-  public addNode(
-    node: Node,
-    options?: {
-      before?: Node
-      after?: Node
-    }
-  ) {
-    const graphNode: NodeWithEdges = {
-      node,
-      previousNodes: new Set(),
-      nextNodes: new Set()
-    }
-    if (options?.before) {
-      const nextNode = this._nodes.find(({ node }) => node === options.before)
-      if (!nextNode) {
-        throw new Error('next node not found')
-      }
-      nextNode.previousNodes.add(node)
-      graphNode.nextNodes.add(nextNode.node)
-    }
-    if (options?.after) {
-      const prevNode = this._nodes.find(({ node }) => node === options.after)
-      if (!prevNode) {
-        throw new Error('previous node not found')
-      }
-      prevNode.nextNodes.add(node)
-      graphNode.previousNodes.add(prevNode.node)
-    }
-    this._nodes.push(graphNode)
-    this.sort()
-  }
 
-  public removeNode(node: Node) {
-    const index = this._nodes.findIndex(({ node: n }) => n === node)
-    if (index === -1) return
-    const graphNode = this._nodes[index]
-    graphNode.previousNodes.forEach((prevNode) => {
-      const gn = this._nodes.find(({ node }) => node === prevNode)
-      gn?.nextNodes.delete(node)
-    })
-    graphNode.nextNodes.forEach((nextNode) => {
-      const gn = this._nodes.find(({ node }) => node === nextNode)
-      gn?.previousNodes.delete(node)
-    })
-    this._nodes.splice(index, 1)
-    this.sort()
-  }
-
-  private sort() {
-    const inDegree: Map<Node, number> = new Map()
-    const zeroInDegreeQueue: Node[] = []
-    const result: Node[] = []
-
-    // Initialize inDegree (count of incoming edges) for each node
-    this._nodes.forEach((graphNode) => {
-      inDegree.set(graphNode.node, 0)
-    })
-
-    // Calculate inDegree for each node
-    this._nodes.forEach((graphNode) => {
-      graphNode.nextNodes.forEach((nextNode) => {
-        inDegree.set(nextNode, (inDegree.get(nextNode) || 0) + 1)
-      })
-    })
-
-    // Enqueue nodes with inDegree 0
-    inDegree.forEach((degree, node) => {
-      if (degree === 0) {
-        zeroInDegreeQueue.push(node)
-      }
-    })
-
-    // Process nodes with inDegree 0 and decrease inDegree of adjacent nodes
-    while (zeroInDegreeQueue.length) {
-      const node = zeroInDegreeQueue.shift()!
-      result.push(node)
-
-      this._nodes
-        .find(({ node: n }) => n === node)
-        ?.nextNodes.forEach((adjNode) => {
-          const adjNodeInDegree = (inDegree.get(adjNode) || 0) - 1
-          inDegree.set(adjNode, adjNodeInDegree)
-          if (adjNodeInDegree === 0) {
-            zeroInDegreeQueue.push(adjNode)
-          }
-        })
-    }
-
-    // Check for cycles in the graph
-    if (result.length !== this._nodes.length) {
-      throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
-    }
-
-    this.sorted = result
-  }
+  public addNode = this.add.bind(this)
+  public removeNode = this.remove.bind(this)
 
   public runNodes(delta: number) {
     this.callback(delta, () => this.sorted.forEach((node) => node.run()))
@@ -247,30 +152,16 @@ export class Graph {
  * The runner is responsible for running the graphs. It runs the graphs in a
  * requestAnimationFrame loop.
  */
-export class Runner {
-  private _graphs: Array<NodeWithEdges> = []
-
-  private sorted: Node[] = []
-
-  graphs: Set<Graph> = new Set()
+export class Runner extends DAG<Graph> {
   animationFrameHandle?: number
   lastTime = 0
 
-  constructor() {}
-
-  addGraph(
-    graph: Graph,
-    options?: {
-      before?: Node
-      after?: Node
-    }
-  ) {
-    this.graphs.add(graph)
+  constructor() {
+    super()
   }
 
-  removeGraph(graph: Graph) {
-    this.graphs.delete(graph)
-  }
+  public addGraph = this.add.bind(this)
+  public removeGraph = this.remove.bind(this)
 
   start() {
     this.animationFrameHandle = window.requestAnimationFrame(this.runGraphs.bind(this))
@@ -282,7 +173,7 @@ export class Runner {
 
   runGraphs(time: DOMHighResTimeStamp) {
     const delta = time - this.lastTime
-    this.graphs.forEach((graph) => {
+    this.sorted.forEach((graph) => {
       graph.runNodes(delta)
     })
     this.lastTime = time
@@ -291,43 +182,38 @@ export class Runner {
 }
 
 export const init = () => {
+  // Create a new runner
   const runner = new Runner()
 
-  // the default frame loop always runs
+  // Create the default frame loop. It "just runs".
   const frameloop = new Graph((delta, run) => {
     run()
   })
 
   const defaultNode = new Node()
   const renderNode = new Node()
-  const beforeDefaultNode = new Node()
-  const beforeRenderAndAfterDefaultNode = new Node()
+  const afterRender = new Node()
 
   frameloop.addNode(defaultNode)
   frameloop.addNode(renderNode, {
     after: defaultNode
   })
-  frameloop.addNode(beforeDefaultNode, {
-    before: defaultNode
-  })
-  frameloop.addNode(beforeRenderAndAfterDefaultNode, {
-    before: renderNode,
-    after: defaultNode
+  frameloop.addNode(afterRender, {
+    after: renderNode
   })
 
-  // renderNode.addHandler(() => {
-  //   console.log('renderNode')
-  // })
-  // defaultNode.addHandler(() => {
-  //   console.log('defaultNode')
-  // })
-  // beforeDefaultNode.addHandler(() => {
-  //   console.log('beforeDefaultNode')
-  // })
-  // beforeRenderAndAfterDefaultNode.addHandler(() => {
-  //   console.log('beforeRenderAndAfterDefaultNode')
-  // })
+  defaultNode.addHandler(() => {
+    // do stuff here
+  })
+  renderNode.addHandler(() => {
+    // render here
+  })
+  afterRender.addHandler(() => {
+    // do stuff here
+  })
 
+  // A fixed loop. The loop is updated by the runner, but the loop ultimately
+  // decides when and how many times to run the nodes.
   let rate = 1 / 2
   let fixedStepTimeAccumulator = 0
   const physicsLoop = new Graph((delta, run) => {
@@ -353,13 +239,10 @@ export const init = () => {
     console.log('afterPhysics')
   })
 
-  // runner.addGraph(fixedLoop)
-
-  runner.addGraph(physicsLoop)
   runner.addGraph(frameloop)
-  runner.start()
+  runner.addGraph(physicsLoop, {
+    before: frameloop
+  })
 
-  setTimeout(() => {
-    runner.stop()
-  }, 100000)
+  runner.start()
 }
