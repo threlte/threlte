@@ -1,32 +1,21 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { Runner } from '../lib/Runner'
-  import { Stage } from '../lib/Stage'
 
   onMount(() => {
-    // Create a new runner
-    const runner = new Runner({
-      foo: 'bar'
+    // Create a new runner without context
+    const runner = Runner.create({
+      context: {}
     })
 
-    // Create the default frame loop. It "just runs".
-    const frameloop = runner.createLoop({
-      name: 'default',
-      fps: 60
+    // Create the default frame loop with some context
+    const frameloop = runner.createLoop()
+
+    // Create a stage with some context
+    const defaultStage = frameloop.createStage({
+      context: {}
     })
 
-    // // create the stages
-    const defaultStage = frameloop.createStage()
-    const contextStage = frameloop.createStage({
-      helo: 'world'
-    })
-
-    defaultStage.addHandler((ctx) => {})
-
-    runner.start()
-
-    return () => {
-      runner.stop()
-    }
+    defaultStage.addHandler((...args) => {})
   })
 </script>

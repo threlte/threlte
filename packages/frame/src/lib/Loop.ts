@@ -1,15 +1,16 @@
+import { DAG, type AddNodeOptions } from './DAG'
 import { Stage } from './Stage'
-import { DAG } from './DAG'
+import type { AnyContext, DefinedContext } from './types'
 
 /**
  * A Loop is a collection of stages. The stages are run in a topological sort
  * order.
  */
-export class Loop<RunnerContext extends {}, LoopContext extends {}> extends DAG<
+export class Loop<RunnerContext extends AnyContext, LoopContext extends AnyContext> extends DAG<
   Stage<RunnerContext, LoopContext, any>
 > {
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
-  private context: LoopContext = {} as LoopContext
+  private context?: LoopContext
 
   constructor(
     context?: LoopContext,
@@ -21,15 +22,15 @@ export class Loop<RunnerContext extends {}, LoopContext extends {}> extends DAG<
   }
 
   public createStage(
-    options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
+    options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
   ): Stage<RunnerContext, LoopContext, undefined>
-  public createStage<StageContext extends Record<string, any>>(
+  public createStage<StageContext extends DefinedContext>(
     stageContext?: StageContext,
-    options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
+    options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
   ): Stage<RunnerContext, LoopContext, StageContext>
-  public createStage<StageContext extends Record<string, any>>(
-    stageContextOrOptions?: StageContext | Parameters<Loop<RunnerContext, LoopContext>['add']>[1],
-    options?: Parameters<Loop<RunnerContext, LoopContext>['add']>[1]
+  public createStage<StageContext extends DefinedContext>(
+    stageContextOrOptions?: StageContext | AddNodeOptions<Stage<RunnerContext, LoopContext, any>>,
+    options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
   ) {
     if (options) {
       // A StageContext is defined
@@ -51,9 +52,9 @@ export class Loop<RunnerContext extends {}, LoopContext extends {}> extends DAG<
   public addStage = this.add.bind(this)
   public removeStage = this.remove.bind(this)
 
-  public runStages(runnerContext: RunnerContext, delta: number) {
+  public runStages(delta: number, runnerContext?: RunnerContext) {
     this.callback(delta, (deltaOverride) =>
-      this.sorted.forEach((stage) => stage.run(runnerContext, this.context, deltaOverride ?? delta))
+      this.sorted.forEach((stage) => stage.run(deltaOverride ?? delta, runnerContext, this.context))
     )
   }
 }

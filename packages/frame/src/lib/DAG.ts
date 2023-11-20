@@ -1,17 +1,16 @@
 type VertexWithEdges<T> = { value: T; previous: Set<T>; next: Set<T> }
 
+export type AddNodeOptions<T> = {
+  before?: T
+  after?: T
+}
+
 export class DAG<T> {
   private vertices: Array<VertexWithEdges<T>> = []
   protected sorted: T[] = []
   constructor() {}
 
-  protected add(
-    value: T,
-    options?: {
-      before?: T
-      after?: T
-    }
-  ) {
+  protected add(value: T, options?: AddNodeOptions<T>) {
     const vertex: VertexWithEdges<T> = {
       value,
       previous: new Set(),
