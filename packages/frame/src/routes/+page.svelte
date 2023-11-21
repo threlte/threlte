@@ -4,26 +4,54 @@
 
   onMount(() => {
     // Create a new runner with context. This would be the place where the main
-    // Threlte context is used.
+    // Threlte context is used. Every Threlte app probably only has a single runner.
     const runner = Runner.create({
       context: {
         foo: 'bar'
       }
     })
 
-    // Create the default frame loop
+    // Create the default frame loop. Loops, just like stages, can be scheduled to run
+    // before or after other loops. The first loop is not scheduled before or after
+    // any other loop, so it will "just run".
     const frameloop = runner.createLoop()
 
-    // Create a default stage, adding handlers to this stage will be the case in
-    //  most applications.
+    // Create a default stage. Stages are the main organizational unit of a
+    // frame loop. Stages can be scheduled to run before or after other stages.
+    // The first stage – just like the first loop – is not scheduled before or
+    // after any other stage. To actually run code in a stage, you need to add
+    // a handler to it.
     const defaultStage = frameloop.createStage()
-    // create a stage that will be used to render the frame
+
+    // For example you might want to add a handler that rotates an object
+    // around the y axis. The handler will receive the runner context and the delta
+    // time since the last frame.
+    defaultStage.addHandler((runnerCtx, delta) => {
+      // do stuff
+    })
+
+    // We probably want to create a stage that will be used to render the frame
+    // to the screen. This stage should run after the default stage, so we pass
+    // it as the `after` option.
     const renderStage = frameloop.createStage({
       after: defaultStage
     })
-    // create a stage for frame analytics
+
+    // Now we can add a handler that will render the frame. The handler will
+    // receive the runner context and the delta time since the last frame.
+    renderStage.addHandler((runnerCtx, delta) => {
+      // do rendering stuff
+    })
+
+    // Optionally, we may want to create a stage for frame analytics or other
+    // things that should run after the frame has been rendered.
     const afterRenderStage = frameloop.createStage({
       after: renderStage
+    })
+
+    // Now we can add a handler that will run after the frame has been rendered.
+    afterRenderStage.addHandler((runnerCtx, delta) => {
+      // do stuff
     })
 
     // The resulting execution order of the frameloop:
@@ -33,12 +61,13 @@
     // requestAnimationFrame, but the loop ultimately decides when and how many
     // times to run the nodes.
 
-    // Because a fixed frameloop may be running multiple times per frame or just
-    // once every few frames, the loop context may provide a coefficient that
-    // can be used to interpolate values that are view dependent, such as a mesh
-    // that is being displaced by a physics operation.
+    // Because a fixed frameloop may be running multiple times per frame (rate <
+    // framerate) or just once every few frames (rate > framerate), the loop
+    // context may provide a coefficient that can be used to interpolate values
+    // that are view dependent, such as a mesh that is being displaced by a
+    // physics operation.
     const physicsContext = {
-      t: 0 // todo: calculate this
+      t: 0 // todo: calculate this coefficient
     }
 
     let rate = 1 / 2
@@ -52,16 +81,24 @@
           fixedStepTimeAccumulator -= rate
           // calculate the coefficient, for now just a random number
           physicsContext.t = Math.random()
+
+          // See how we pass the rate to the run function. This is the fixed
+          // step rate that the loop is running at. The handlers will receive
+          // this rate as the delta argument.
           run(rate)
         }
       }
     })
 
-    // because the physicsLoop's callback is running `run(rate)`, the handlers
-    // receive the delta passed to `run`. This is especially useful for fixed
-    // step loops. Also, the coefficient is available in the context for easy
-    // interpolation.
+    // Because the physicsLoop's callback is running `run(rate)`, the handlers
+    // receive the fixed delta passed to `run`. This is especially useful for
+    // fixed step loops. Also, the coefficient is available in the context for
+    // easy interpolation. We need to create a stage for the physics loop, too.
     const physicsStage = physicsLoop.createStage()
+
+    // Now we can add a handler that will run when the stage is invoked by the
+    // physics loop. The handler will receive the runner context, the loop
+    // context and the fixd delta.
     physicsStage.addHandler((ctx, { t }, delta) => {
       console.log('physics', delta)
       // do physics stuff
