@@ -1,3 +1,4 @@
+import { Color } from 'three'
 import { useThrelte } from '../../../hooks/useThrelte'
 import { resolvePropertyPath } from './resolvePropertyPath'
 
@@ -67,7 +68,8 @@ export const useProps = () => {
     if (
       !Array.isArray(value) &&
       typeof value === 'number' &&
-      typeof target[key]?.setScalar === 'function'
+      typeof target[key]?.setScalar === 'function' &&
+      !(target[key] instanceof Color)
     ) {
       // edge case of setScalar setters
       target[key].setScalar(value)

@@ -15,12 +15,19 @@
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
-<T.Mesh castShadow receiveShadow bind:ref>
-  <T.MeshStandardMaterial color="hotpink" />
+<T.Mesh
+  castShadow
+  receiveShadow
+  bind:ref
+>
+  <T.MeshStandardMaterial color={0xff69b4} />
   <T.BoxGeometry />
 </T.Mesh>
 
-<T.Mesh receiveShadow position.y={-1}>
+<T.Mesh
+  receiveShadow
+  position.y={-1}
+>
   <T.MeshStandardMaterial color="turquoise" />
   <T.CylinderGeometry args={[1, 1, 0.1]} />
 </T.Mesh>
