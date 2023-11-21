@@ -166,15 +166,11 @@
   // Used to test which axis (pos or neg) are closer to the camera.
   const point = new Vector3()
   let p = [0, 0, 0]
-  // The rotation of the main camera, used to rotate the gizmo.
-  const quaternion = new Quaternion()
-  let q: [number, number, number, number] = [0, 0, 0, 0]
 
   useFrame(({ camera }, delta) => {
     point.set(0, 0, 1).applyQuaternion(camera.current.quaternion)
     p = [point.x, point.y, point.z]
-    quaternion.copy(camera.current.quaternion).invert()
-    q = [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
+    root.quaternion.copy(camera.current.quaternion).invert()
 
     if (animating) {
       const step = delta * turnRate
@@ -222,10 +218,7 @@
 </script>
 
 <HierarchicalObject>
-  <T.Scene
-    bind:ref={root}
-    quaternion={q}
-  >
+  <T.Scene bind:ref={root}>
     <!-- xAxis -->
     <T.Sprite
       bind:ref={posX}
@@ -234,7 +227,7 @@
       userData.targetEuler={[0, Math.PI * 0.5, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(xColor, 'X') }]}
+        map={getSpriteTexture(xColor, 'X')}
         opacity={p[0] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
@@ -257,7 +250,7 @@
       userData.targetEuler={[0, -Math.PI * 0.5, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(xColor) }]}
+        map={getSpriteTexture(xColor)}
         opacity={p[0] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
@@ -270,7 +263,7 @@
       userData.targetEuler={[-Math.PI * 0.5, 0, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(yColor, 'Y') }]}
+        map={getSpriteTexture(yColor, 'Y')}
         opacity={p[1] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
@@ -296,7 +289,7 @@
       userData.targetEuler={[Math.PI * 0.5, 0, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(yColor) }]}
+        map={getSpriteTexture(yColor)}
         opacity={p[1] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
@@ -309,7 +302,7 @@
       userData.targetEuler={[0, 0, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(zColor, 'Z') }]}
+        map={getSpriteTexture(zColor, 'Z')}
         opacity={p[2] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
@@ -335,7 +328,7 @@
       userData.targetEuler={[0, Math.PI, 0]}
     >
       <T.SpriteMaterial
-        args={[{ map: getSpriteTexture(zColor) }]}
+        map={getSpriteTexture(zColor)}
         opacity={p[2] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
