@@ -3,65 +3,67 @@ import { Loop } from './Loop'
 import type { AnyContext, DefinedContext } from './types'
 
 /**
- * A Runner is responsible for running loops. It runs the loops in a
+ * A Scheduler is responsible for running loops. It runs the loops in a
  * requestAnimationFrame loop.
  */
-export class Runner<RunnerContext extends AnyContext> extends DAG<Loop<RunnerContext, any>> {
+export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
+  Loop<SchedulerContext, any>
+> {
   private animationFrameHandle?: number
   private lastTime = 0
 
-  private context?: RunnerContext
+  private context?: SchedulerContext
 
-  private constructor(context?: RunnerContext) {
+  private constructor(context?: SchedulerContext) {
     super()
     if (context) this.context = context
   }
 
-  public static create(): Runner<undefined>
-  public static create<RunnerContext extends DefinedContext>(options: {
-    context: RunnerContext
-  }): Runner<RunnerContext>
-  public static create<RunnerContext extends DefinedContext>(options?: {
-    context?: RunnerContext
+  public static create(): Scheduler<undefined>
+  public static create<SchedulerContext extends DefinedContext>(options: {
+    context: SchedulerContext
+  }): Scheduler<SchedulerContext>
+  public static create<SchedulerContext extends DefinedContext>(options?: {
+    context?: SchedulerContext
   }) {
     if (options?.context) {
-      return new Runner<RunnerContext>(options?.context)
+      return new Scheduler<SchedulerContext>(options?.context)
     } else {
-      return new Runner<undefined>()
+      return new Scheduler<undefined>()
     }
   }
 
   public createLoop(
     options?: {
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<RunnerContext, any>>
-  ): Loop<RunnerContext, undefined>
+    } & AddNodeOptions<Loop<SchedulerContext, any>>
+  ): Loop<SchedulerContext, undefined>
   public createLoop<LoopContext extends DefinedContext>(
     options?: {
       context: LoopContext
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<RunnerContext, any>>
-  ): Loop<RunnerContext, LoopContext>
+    } & AddNodeOptions<Loop<SchedulerContext, any>>
+  ): Loop<SchedulerContext, LoopContext>
   public createLoop<LoopContext extends DefinedContext>(
     options?: {
       context: LoopContext
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<RunnerContext, any>>
+    } & AddNodeOptions<Loop<SchedulerContext, any>>
   ) {
     if (options?.context) {
-      const loop = new Loop<RunnerContext, LoopContext>(options.context, options.callback)
+      const loop = new Loop<SchedulerContext, LoopContext>(options.context, options.callback)
       this.add(loop, {
         after: options.after,
         before: options.before
       })
-      return loop as Loop<RunnerContext, LoopContext>
+      return loop as Loop<SchedulerContext, LoopContext>
     } else {
-      const loop = new Loop<RunnerContext, LoopContext>(options?.context, options?.callback)
+      const loop = new Loop<SchedulerContext, LoopContext>(options?.context, options?.callback)
       this.add(loop, {
         after: options?.after,
         before: options?.before
       })
-      return loop as any as Loop<RunnerContext, undefined>
+      return loop as any as Loop<SchedulerContext, undefined>
     }
   }
   public removeLoop = this.remove.bind(this)

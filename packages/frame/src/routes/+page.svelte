@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { Runner } from '../lib/Runner'
+  import { Scheduler } from '../lib/Scheduler'
 
   onMount(() => {
-    // Create a new runner with context. This would be the place where the main
-    // Threlte context is used. Every Threlte app probably only has a single runner.
-    const runner = Runner.create({
+    // Create a new scheduler with context. This would be the place where the main
+    // Threlte context is used. Every Threlte app probably only has a single scheduler.
+    const scheduler = Scheduler.create({
       context: {
         foo: 'bar'
       }
@@ -14,7 +14,7 @@
     // Create the default frame loop. Loops, just like stages, can be scheduled to run
     // before or after other loops. The first loop is not scheduled before or after
     // any other loop, so it will "just run".
-    const frameloop = runner.createLoop()
+    const frameloop = scheduler.createLoop()
 
     // Create a default stage. Stages are the main organizational unit of a
     // frame loop. Stages can be scheduled to run before or after other stages.
@@ -24,9 +24,9 @@
     const defaultStage = frameloop.createStage()
 
     // For example you might want to add a handler that rotates an object
-    // around the y axis. The handler will receive the runner context and the delta
+    // around the y axis. The handler will receive the scheduler context and the delta
     // time since the last frame.
-    defaultStage.addHandler((runnerCtx, delta) => {
+    defaultStage.addHandler((schedulerCtx, delta) => {
       // do stuff
     })
 
@@ -38,8 +38,8 @@
     })
 
     // Now we can add a handler that will render the frame. The handler will
-    // receive the runner context and the delta time since the last frame.
-    renderStage.addHandler((runnerCtx, delta) => {
+    // receive the scheduler context and the delta time since the last frame.
+    renderStage.addHandler((schedulerCtx, delta) => {
       // do rendering stuff
     })
 
@@ -50,14 +50,14 @@
     })
 
     // Now we can add a handler that will run after the frame has been rendered.
-    afterRenderStage.addHandler((runnerCtx, delta) => {
+    afterRenderStage.addHandler((schedulerCtx, delta) => {
       // do stuff
     })
 
     // The resulting execution order of the frameloop:
     // defaultStage -> renderStage -> afterRenderStage
 
-    // Now, a fixed physics loop. The loop is *invoked* by the runner on every
+    // Now, a fixed physics loop. The loop is *invoked* by the scheduler on every
     // requestAnimationFrame, but the loop ultimately decides when and how many
     // times to run the nodes.
 
@@ -72,7 +72,7 @@
 
     let rate = 1 / 2
     let fixedStepTimeAccumulator = 0
-    const physicsLoop = runner.createLoop({
+    const physicsLoop = scheduler.createLoop({
       before: frameloop,
       context: physicsContext,
       callback: (delta, run) => {
@@ -97,21 +97,21 @@
     const physicsStage = physicsLoop.createStage()
 
     // Now we can add a handler that will run when the stage is invoked by the
-    // physics loop. The handler will receive the runner context, the loop
+    // physics loop. The handler will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
-    physicsStage.addHandler((runnerCtx, { t }, delta) => {
+    physicsStage.addHandler((schedulerCtx, { t }, delta) => {
       const viewDelta = delta * t
       console.log('physics', viewDelta)
       // do physics stuff
     })
 
-    // The resulting execution order of the whole runner:
+    // The resulting execution order of the whole scheduler:
     // physicsStage -> defaultStage -> renderStage -> afterRenderStage
 
-    runner.start()
+    scheduler.start()
 
     return () => {
-      runner.stop()
+      scheduler.stop()
     }
   })
 </script>
