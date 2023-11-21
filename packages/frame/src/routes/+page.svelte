@@ -9,7 +9,9 @@
     // Threlte context is used. Every Threlte app probably only has a single scheduler.
     const scheduler = Scheduler.create({
       context: {
-        foo: 'bar'
+        camera: 'camera',
+        scene: 'scene',
+        renderer: 'renderer'
       }
     })
 
@@ -17,10 +19,7 @@
     // before or after other loops. The first loop is not scheduled before or after
     // any other loop, so it will "just run".
     const frameloop = scheduler.createLoop({
-      label: 'default',
-      context: {
-        bar: 'baz'
-      }
+      label: 'default'
     })
 
     // Create a default stage. Stages are the main organizational unit of a
@@ -35,7 +34,7 @@
     // For example you might want to add a task that rotates an object
     // around the y axis. The task will receive the scheduler context and the delta
     // time since the last frame.
-    defaultStage.createTask((schedulerCtx, delta) => {
+    defaultStage.createTask((delta, { camera, renderer, scene }) => {
       // do stuff
     })
 
@@ -49,7 +48,7 @@
 
     // Now we can add a task that will render the frame. The task will
     // receive the scheduler context and the delta time since the last frame.
-    renderStage.createTask((schedulerCtx, delta) => {
+    renderStage.createTask((delta, { camera, renderer, scene }) => {
       // do rendering stuff
     })
 
@@ -121,7 +120,7 @@
     // Now we can add a task that will run when the stage is invoked by the
     // physics loop. The task will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
-    physicsStage.createTask((schedulerCtx, { t, world }, _, delta) => {
+    physicsStage.createTask((delta, { camera, renderer, scene }, { t, world }) => {
       const viewDelta = delta * t
       // console.log('physics', delta)
       // do physics stuff
@@ -148,13 +147,13 @@
     const frameAnalyticsStartStage = frameAnalyticsStart.createStage({
       label: 'frame-analytics-start'
     })
-    frameAnalyticsStartStage.createTask((schedulerCtx, delta) => {
+    frameAnalyticsStartStage.createTask((delta, schedulerCtx) => {
       // console.time('frame-analytics')
     })
     const frameAnalyticsEndStage = frameAnalyticsEnd.createStage({
       label: 'frame-analytics-end'
     })
-    frameAnalyticsEndStage.createTask((schedulerCtx, delta) => {
+    frameAnalyticsEndStage.createTask((delta, schedulerCtx) => {
       // console.timeEnd('frame-analytics')
     })
 

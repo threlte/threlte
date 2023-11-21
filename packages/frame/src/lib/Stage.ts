@@ -5,10 +5,10 @@ type Task<
   LoopContext extends AnyContext,
   StageContext extends AnyContext
 > = (
+  delta: number,
   schedulerContext: SchedulerContext,
   loopContext: LoopContext,
-  stageContext: StageContext,
-  delta: number
+  stageContext: StageContext
 ) => void
 
 /**
@@ -39,7 +39,7 @@ export class Stage<
 
   run(delta: number, schedulerContext: SchedulerContext, loopContext: LoopContext) {
     this.tasks.forEach((task) => {
-      task(schedulerContext, loopContext, this.context, delta)
+      task(delta, schedulerContext, loopContext, this.context)
     })
   }
 }
