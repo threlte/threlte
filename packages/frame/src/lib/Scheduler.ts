@@ -1,5 +1,5 @@
 import { DAG, type AddNodeOptions } from './DAG'
-import { Loop } from './LoopXXX'
+import { Loop } from './Loop'
 import type { AnyContext, DefinedContext } from './types'
 
 /**

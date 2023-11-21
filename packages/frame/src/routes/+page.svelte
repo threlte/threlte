@@ -169,7 +169,7 @@
     // debugging and understanding the execution order.
     plan = scheduler.plan({
       stages: true,
-      tasks: false
+      tasks: true
     })
 
     return () => {
@@ -179,7 +179,8 @@
 </script>
 
 <div>
-  Execution plan:<br />
+  Execution plan:<br /><br />
+
   {#if plan}
     {#each plan.loops as loop}
       <div style="margin-bottom: 10px;">
