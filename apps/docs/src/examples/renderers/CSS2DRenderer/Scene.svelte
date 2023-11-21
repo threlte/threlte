@@ -42,14 +42,29 @@
   <T.MeshStandardMaterial color="#F64F6F" />
 </T.Mesh>
 
-<CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
+<CssObject position={[-1, 2, 1]} center={[-0.2, 0.5]}>
   <CounterLabel label="Hello" />
+
+  <T.Mesh slot="three">
+    <T.SphereGeometry args={[0.25]} />
+    <T.MeshStandardMaterial color="#4F6FF6" />
+  </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, 1]} center={[0, 0.5]}>
+<CssObject position={[1, 2, 1]} center={[-0.2, 0.5]}>
   <CounterLabel label="CSS" />
+
+  <T.Mesh slot="three">
+    <T.SphereGeometry args={[0.25]} />
+    <T.MeshStandardMaterial color="#6FF64F" />
+  </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, -1]} center={[0, 0.5]}>
+<CssObject position={[1, 2, -1]} center={[-0.2, 0.5]}>
   <CounterLabel label="Renderer" />
+
+  <T.Mesh slot="three">
+    <T.SphereGeometry args={[0.25]} />
+    <T.MeshStandardMaterial color="#F64F6F" />
+  </T.Mesh>
 </CssObject>

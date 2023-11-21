@@ -69,12 +69,17 @@ The other integral part is a component that accepts DOM contents in the default 
 {/if}
 ```
 
-This component renders children into a div, and hooks that into Threlte's internals by using `<T is={CSS2DObject}>`. It passes all other properties through, letting us use it like so:
+This component renders children into a div, and allows nested Threlte components via the `three` slot. It passes all other properties through, letting us use it like so:
 
 ```svelte
-<CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
+<CssObject position={[-1, 2, 1]} center={[-0.2, 0.5]}>
   <CounterLabel label="Hello" />
+
+  <T.Mesh slot="three">
+    <T.SphereGeometry args={[0.25]} />
+    <T.MeshStandardMaterial color="#4F6FF6" />
+  </T.Mesh>
 </CssObject>
 ```
 
-where `<CounterLabel>` is a normal Svelte component outside Threlte's control.
+where `<CounterLabel>` is a normal Svelte component outside Threlte's control, but the mesh is a component inside the scene hooked in with `slot="three"`.
