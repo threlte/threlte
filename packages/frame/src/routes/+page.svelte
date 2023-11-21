@@ -17,7 +17,10 @@
     // before or after other loops. The first loop is not scheduled before or after
     // any other loop, so it will "just run".
     const frameloop = scheduler.createLoop({
-      label: 'default'
+      label: 'default',
+      context: {
+        bar: 'baz'
+      }
     })
 
     // Create a default stage. Stages are the main organizational unit of a
@@ -28,6 +31,11 @@
     const defaultStage = frameloop.createStage({
       label: 'default'
     })
+
+    const ds = frameloop.getStage()
+    ds.createTask((schedulerCtx, loopCtx, stageCtx, delta) => {})
+
+    defaultStage.createTask((schedulerCtx, loopCtx, stageCtx, delta) => {})
 
     // For example you might want to add a task that rotates an object
     // around the y axis. The task will receive the scheduler context and the delta
@@ -76,7 +84,8 @@
     // that are view dependent, such as a mesh that is being displaced by a
     // physics operation.
     const physicsContext = {
-      t: 0 // todo: calculate this coefficient
+      t: 0, // todo: calculate this coefficient
+      world: {}
     }
 
     let rate = 1 / 2
@@ -117,7 +126,7 @@
     // Now we can add a task that will run when the stage is invoked by the
     // physics loop. The task will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
-    physicsStage.createTask((schedulerCtx, { t }, delta) => {
+    physicsStage.createTask((schedulerCtx, { t, world }, _, delta) => {
       const viewDelta = delta * t
       // console.log('physics', delta)
       // do physics stuff

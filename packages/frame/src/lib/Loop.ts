@@ -10,7 +10,7 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
   Stage<SchedulerContext, LoopContext, any>
 > {
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
-  private context?: LoopContext
+  private context: LoopContext = undefined as LoopContext
   public label?: string
 
   constructor(
@@ -66,12 +66,16 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
   public addStage = this.add.bind(this)
   public removeStage = this.remove.bind(this)
 
-  public runStages(delta: number, schedulerContext?: SchedulerContext) {
+  public runStages(delta: number, schedulerContext: SchedulerContext) {
     this.callback(delta, (deltaOverride) =>
       this.sorted.forEach((stage) =>
         stage.run(deltaOverride ?? delta, schedulerContext, this.context)
       )
     )
+  }
+
+  getStage() {
+    return this.sorted[0]
   }
 
   get executionPlan() {

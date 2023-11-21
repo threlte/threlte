@@ -4,26 +4,12 @@ type Task<
   SchedulerContext extends AnyContext,
   LoopContext extends AnyContext,
   StageContext extends AnyContext
-> = SchedulerContext extends Record<string, any>
-  ? LoopContext extends Record<string, any>
-    ? StageContext extends Record<string, any>
-      ? (
-          schedulerCtx: SchedulerContext,
-          loopCtx: LoopContext,
-          stageCtx: StageContext,
-          delta: number
-        ) => void
-      : (schedulerCtx: SchedulerContext, loopCtx: LoopContext, delta: number) => void
-    : StageContext extends Record<string, any>
-    ? (schedulerCtx: SchedulerContext, stageCtx: StageContext, delta: number) => void
-    : (schedulerCtx: SchedulerContext, delta: number) => void
-  : LoopContext extends Record<string, any>
-  ? StageContext extends Record<string, any>
-    ? (loopCtx: LoopContext, stageCtx: StageContext, delta: number) => void
-    : (loopCtx: LoopContext, delta: number) => void
-  : StageContext extends Record<string, any>
-  ? (stageCtx: StageContext, delta: number) => void
-  : (delta: number) => void
+> = (
+  schedulerContext: SchedulerContext,
+  loopContext: LoopContext,
+  stageContext: StageContext,
+  delta: number
+) => void
 
 /**
  * A Stage is a stage in a loop. It can have tasks that are run when the
@@ -35,11 +21,11 @@ export class Stage<
   StageContext extends AnyContext
 > {
   private tasks: Set<Task<SchedulerContext, LoopContext, StageContext>> = new Set()
-  private context?: StageContext
+  private context: StageContext = undefined as StageContext
   public label?: string
 
   constructor(context?: StageContext, label?: string) {
-    this.context = context
+    if (context) this.context = context
     this.label = label
   }
 
@@ -51,12 +37,9 @@ export class Stage<
     this.tasks.delete(task)
   }
 
-  run(delta: number, schedulerContext?: SchedulerContext, loopContext?: LoopContext) {
-    const contexts = [schedulerContext, loopContext, this.context].filter(
-      (c) => c !== undefined
-    ) as [SchedulerContext, LoopContext, StageContext]
+  run(delta: number, schedulerContext: SchedulerContext, loopContext: LoopContext) {
     this.tasks.forEach((task) => {
-      ;(task as any)(...contexts, delta)
+      task(schedulerContext, loopContext, this.context, delta)
     })
   }
 }

@@ -12,7 +12,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
   private animationFrameHandle?: number
   private lastTime = 0
 
-  private context?: SchedulerContext
+  private context: SchedulerContext = undefined as SchedulerContext
 
   private constructor(context?: SchedulerContext) {
     super()
