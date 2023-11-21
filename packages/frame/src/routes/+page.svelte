@@ -43,6 +43,17 @@
       // do rendering stuff
     })
 
+    // You may also add a stage that runs before or after multiple other stages
+    // by passing an array of stages to the `before` or `after` option.
+    const otherStage = frameloop.createStage({
+      after: defaultStage,
+      before: renderStage
+    })
+    const afterDefaultAndOtherStage = frameloop.createStage({
+      after: [defaultStage, otherStage],
+      before: renderStage
+    })
+
     // Optionally, we may want to create a stage for frame analytics or other
     // things that should run after the frame has been rendered.
     const afterRenderStage = frameloop.createStage({
@@ -51,11 +62,11 @@
 
     // Now we can add a task that will run after the frame has been rendered.
     afterRenderStage.addTask((schedulerCtx, delta) => {
-      // do stuff
+      // do stuff like frame analytics
     })
 
     // The resulting execution order of the frameloop:
-    // defaultStage -> renderStage -> afterRenderStage
+    // defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage -> afterRenderStage
 
     // Now, a fixed physics loop. The loop is *invoked* by the scheduler on every
     // requestAnimationFrame, but the loop ultimately decides when and how many
@@ -107,12 +118,12 @@
     // context and the fixd delta. By that we can calculate the view delta.
     physicsStage.addTask((schedulerCtx, { t }, delta) => {
       const viewDelta = delta * t
-      console.log('physics', viewDelta)
+      console.log('physics', delta)
       // do physics stuff
     })
 
     // The resulting execution order of the whole scheduler:
-    // physicsStage -> defaultStage -> renderStage -> afterRenderStage
+    // physicsStage -> defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage -> afterRenderStage
 
     scheduler.start()
 

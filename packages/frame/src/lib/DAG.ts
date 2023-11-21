@@ -1,36 +1,55 @@
-type VertexWithEdges<T> = { value: T; previous: Set<T>; next: Set<T> }
+type Vertex<T> = { value: T; previous: Set<T>; next: Set<T> }
 
 export type AddNodeOptions<T> = {
-  before?: T
-  after?: T
+  before?: T | T[]
+  after?: T | T[]
 }
 
 export class DAG<T> {
-  private vertices: Array<VertexWithEdges<T>> = []
+  private vertices: Array<Vertex<T>> = []
   protected sorted: T[] = []
+
   constructor() {}
 
+  private getVertex(value: T) {
+    return this.vertices.find(({ value: v }) => v === value)
+  }
+
+  private addBefore(vertex: Vertex<T>, before: T) {
+    const nextVertex = this.getVertex(before)
+    if (!nextVertex) {
+      throw new Error('next vertex not found')
+    }
+    nextVertex.previous.add(vertex.value)
+    vertex.next.add(nextVertex.value)
+  }
+
+  private addAfter(vertex: Vertex<T>, after: T) {
+    const previousVertex = this.vertices.find(({ value }) => value === after)
+    if (!previousVertex) {
+      throw new Error('previous vertex not found')
+    }
+    previousVertex.next.add(vertex.value)
+    vertex.previous.add(previousVertex.value)
+  }
+
   protected add(value: T, options?: AddNodeOptions<T>) {
-    const vertex: VertexWithEdges<T> = {
+    const vertex: Vertex<T> = {
       value,
       previous: new Set(),
       next: new Set()
     }
     if (options?.before) {
-      const nextVertex = this.vertices.find(({ value }) => value === options.before)
-      if (!nextVertex) {
-        throw new Error('next vertex not found')
-      }
-      nextVertex.previous.add(value)
-      vertex.next.add(nextVertex.value)
+      const beforeArr = Array.isArray(options.before) ? options.before : [options.before]
+      beforeArr.forEach((before) => {
+        this.addBefore(vertex, before)
+      })
     }
     if (options?.after) {
-      const previousVertex = this.vertices.find(({ value }) => value === options.after)
-      if (!previousVertex) {
-        throw new Error('previous vertex not found')
-      }
-      previousVertex.next.add(value)
-      vertex.previous.add(previousVertex.value)
+      const afterArr = Array.isArray(options.after) ? options.after : [options.after]
+      afterArr.forEach((after) => {
+        this.addAfter(vertex, after)
+      })
     }
     this.vertices.push(vertex)
     this.sort()
