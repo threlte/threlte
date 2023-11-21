@@ -234,7 +234,10 @@
 
     <T.Mesh position.x={0.4}>
       <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
-      <T.MeshBasicMaterial>
+      <T.MeshBasicMaterial
+        transparent
+        opacity={p[0] >= 0 ? 1 : 0.5}
+      >
         <T.Color
           attach="color"
           args={[xColor]}
@@ -273,7 +276,10 @@
       rotation.z={Math.PI / 2}
     >
       <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
-      <T.MeshBasicMaterial>
+      <T.MeshBasicMaterial
+        transparent
+        opacity={p[1] >= 0 ? 1 : 0.5}
+      >
         <T.Color
           attach="color"
           args={[yColor]}
@@ -312,7 +318,10 @@
       rotation.y={-Math.PI / 2}
     >
       <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
-      <T.MeshBasicMaterial>
+      <T.MeshBasicMaterial
+        transparent
+        opacity={p[2] >= 0 ? 1 : 0.5}
+      >
         <T.Color
           attach="color"
           args={[zColor]}
