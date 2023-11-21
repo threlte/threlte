@@ -98,9 +98,10 @@
 
     // Now we can add a handler that will run when the stage is invoked by the
     // physics loop. The handler will receive the runner context, the loop
-    // context and the fixd delta.
-    physicsStage.addHandler((ctx, { t }, delta) => {
-      console.log('physics', delta)
+    // context and the fixd delta. By that we can calculate the view delta.
+    physicsStage.addHandler((runnerCtx, { t }, delta) => {
+      const viewDelta = delta * t
+      console.log('physics', viewDelta)
       // do physics stuff
     })
 
