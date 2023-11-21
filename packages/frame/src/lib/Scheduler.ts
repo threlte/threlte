@@ -2,6 +2,8 @@ import { DAG, type AddNodeOptions } from './DAG'
 import { Loop } from './Loop'
 import type { AnyContext, DefinedContext } from './types'
 
+export type Schedule = ReturnType<Scheduler<any>['getSchedule']>
+
 /**
  * A Scheduler is responsible for running loops. It runs the loops in a
  * requestAnimationFrame loop.
@@ -99,7 +101,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     this.animationFrameHandle = window.requestAnimationFrame(this.runLoops.bind(this))
   }
 
-  public plan(
+  public getSchedule(
     include: {
       stages?: boolean
       tasks?: boolean
@@ -112,7 +114,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       loops: this.sorted.map((loop) => {
         return {
           label: loop.label ?? 'Unnamed Loop',
-          ...{ stages: include.stages ? loop.plan(include.tasks) : undefined }
+          ...{ stages: include.stages ? loop.getSchedule(include.tasks) : undefined }
         }
       })
     }

@@ -50,7 +50,7 @@ export class Stage<
     })
   }
 
-  public plan() {
+  public getTaskLabels() {
     return Array.from(this.tasks).map((task) => this.taskLabels.get(task) || 'Unnamed Task')
   }
 }
