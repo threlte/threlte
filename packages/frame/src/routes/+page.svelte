@@ -26,7 +26,7 @@
     // For example you might want to add a task that rotates an object
     // around the y axis. The task will receive the scheduler context and the delta
     // time since the last frame.
-    defaultStage.addTask((schedulerCtx, delta) => {
+    defaultStage.createTask((schedulerCtx, delta) => {
       // do stuff
     })
 
@@ -39,7 +39,7 @@
 
     // Now we can add a task that will render the frame. The task will
     // receive the scheduler context and the delta time since the last frame.
-    renderStage.addTask((schedulerCtx, delta) => {
+    renderStage.createTask((schedulerCtx, delta) => {
       // do rendering stuff
     })
 
@@ -61,7 +61,7 @@
     })
 
     // Now we can add a task that will run after the frame has been rendered.
-    afterRenderStage.addTask((schedulerCtx, delta) => {
+    afterRenderStage.createTask((schedulerCtx, delta) => {
       // do stuff like frame analytics
     })
 
@@ -116,7 +116,7 @@
     // Now we can add a task that will run when the stage is invoked by the
     // physics loop. The task will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
-    physicsStage.addTask((schedulerCtx, { t }, delta) => {
+    physicsStage.createTask((schedulerCtx, { t }, delta) => {
       const viewDelta = delta * t
       console.log('physics', delta)
       // do physics stuff

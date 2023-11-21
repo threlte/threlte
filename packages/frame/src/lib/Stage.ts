@@ -41,7 +41,7 @@ export class Stage<
     this.context = context
   }
 
-  public addTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
+  public createTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
     this.tasks.add(task)
   }
 
