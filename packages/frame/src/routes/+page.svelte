@@ -63,20 +63,8 @@
       label: 'afterDefaultAndOther'
     })
 
-    // Optionally, we may want to create a stage for frame analytics or other
-    // things that should run after the frame has been rendered.
-    const afterRenderStage = frameloop.createStage({
-      after: renderStage,
-      label: 'frame-analytics'
-    })
-
-    // Now we can add a task that will run after the frame has been rendered.
-    afterRenderStage.createTask((schedulerCtx, delta) => {
-      // do stuff like frame analytics
-    })
-
     // The resulting execution order of the frameloop:
-    // defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage -> afterRenderStage
+    // defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage
 
     // Now, a fixed physics loop. The loop is *invoked* by the scheduler on every
     // requestAnimationFrame, but the loop ultimately decides when and how many
@@ -136,10 +124,41 @@
     })
 
     // The resulting execution order of the whole scheduler:
-    // physicsStage -> defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage -> afterRenderStage
+    // physicsStage -> defaultStage -> otherStage -> afterDefaultAndOtherStage -> renderStage
+
+    // Additionally, we may want to create two loops for frame analytics where
+    // you need to start a timer before every other loop runs and stop it after
+    // every other loop has run. This is where the `before` and `after` options
+    // come in handy. We can create a loop that runs before the physics loop
+    // and a loop that runs after the default frame loop.
+    const frameAnalyticsStart = scheduler.createLoop({
+      before: physicsLoop,
+      label: 'frame-analytics-start'
+    })
+    const frameAnalyticsEnd = scheduler.createLoop({
+      after: frameloop,
+      label: 'frame-analytics-end'
+    })
+
+    // Now we can add stages and tasks to run the frame analytics.
+    const frameAnalyticsStartStage = frameAnalyticsStart.createStage({
+      label: 'frame-analytics-start'
+    })
+    frameAnalyticsStartStage.createTask((schedulerCtx, delta) => {
+      // console.time('frame-analytics')
+    })
+    const frameAnalyticsEndStage = frameAnalyticsEnd.createStage({
+      label: 'frame-analytics-end'
+    })
+    frameAnalyticsEndStage.createTask((schedulerCtx, delta) => {
+      // console.timeEnd('frame-analytics')
+    })
 
     scheduler.start()
 
+    // The scheduler provides an execution plan that can be used to visualize
+    // the execution order of the loops, stages and tasks. This is useful for
+    // debugging and understanding the execution order.
     executionPlan = scheduler.executionPlan
 
     return () => {
