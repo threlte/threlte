@@ -74,10 +74,6 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
     )
   }
 
-  getStage() {
-    return this.sorted[0]
-  }
-
   get executionPlan() {
     return this.sorted
       .map((stage) => {

@@ -32,11 +32,6 @@
       label: 'default'
     })
 
-    const ds = frameloop.getStage()
-    ds.createTask((schedulerCtx, loopCtx, stageCtx, delta) => {})
-
-    defaultStage.createTask((schedulerCtx, loopCtx, stageCtx, delta) => {})
-
     // For example you might want to add a task that rotates an object
     // around the y axis. The task will receive the scheduler context and the delta
     // time since the last frame.
