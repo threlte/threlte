@@ -42,7 +42,7 @@
   <T.MeshStandardMaterial color="#F64F6F" />
 </T.Mesh>
 
-<CssObject position={[-1, 2, 1]} center={[-0.2, 0.5]}>
+<CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
   <CounterLabel label="Hello" />
 
   <T.Mesh slot="three">
@@ -51,7 +51,7 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, 1]} center={[-0.2, 0.5]}>
+<CssObject position={[1, 2, 1]} center={[0, 0.5]}>
   <CounterLabel label="CSS" />
 
   <T.Mesh slot="three">
@@ -60,7 +60,7 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, -1]} center={[-0.2, 0.5]}>
+<CssObject position={[1, 2, -1]} center={[0, 0.5]}>
   <CounterLabel label="Renderer" />
 
   <T.Mesh slot="three">
