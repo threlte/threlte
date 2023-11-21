@@ -21,30 +21,32 @@ export class Loop<RunnerContext extends AnyContext, LoopContext extends AnyConte
     if (callback) this.callback = callback.bind(this)
   }
 
+  public createStage<StageContext extends DefinedContext>(
+    options: {
+      context: StageContext
+    } & AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
+  ): Stage<RunnerContext, LoopContext, StageContext>
   public createStage(
     options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
   ): Stage<RunnerContext, LoopContext, undefined>
   public createStage<StageContext extends DefinedContext>(
-    stageContext?: StageContext,
-    options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
-  ): Stage<RunnerContext, LoopContext, StageContext>
-  public createStage<StageContext extends DefinedContext>(
-    stageContextOrOptions?: StageContext | AddNodeOptions<Stage<RunnerContext, LoopContext, any>>,
-    options?: AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
+    options?: {
+      context?: StageContext
+    } & AddNodeOptions<Stage<RunnerContext, LoopContext, any>>
   ) {
-    if (options) {
-      // A StageContext is defined
-      const context = stageContextOrOptions as StageContext
-      const stage = new Stage<RunnerContext, LoopContext, StageContext>(context)
-      this.add(stage, options)
+    if (options?.context) {
+      const stage = new Stage<RunnerContext, LoopContext, StageContext>(options.context)
+      this.add(stage, {
+        after: options.after,
+        before: options.before
+      })
       return stage
     } else {
-      // A StageContext is not defined
-      const options = stageContextOrOptions as Parameters<
-        Loop<RunnerContext, LoopContext>['add']
-      >[1]
       const stage = new Stage<RunnerContext, LoopContext, undefined>()
-      this.add(stage, options)
+      this.add(stage, {
+        after: options?.after,
+        before: options?.before
+      })
       return stage
     }
   }

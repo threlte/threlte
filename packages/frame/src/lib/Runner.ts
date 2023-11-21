@@ -31,27 +31,36 @@ export class Runner<RunnerContext extends AnyContext> extends DAG<Loop<RunnerCon
     }
   }
 
-  public createLoop(options?: {
-    callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    options?: AddNodeOptions<Loop<RunnerContext, any>>
-  }): Loop<RunnerContext, undefined>
-  public createLoop<LoopContext extends DefinedContext>(options?: {
-    context: LoopContext
-    callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    options?: AddNodeOptions<Loop<RunnerContext, LoopContext>>
-  }): Loop<RunnerContext, LoopContext>
-  public createLoop<LoopContext extends DefinedContext>(options?: {
-    context: LoopContext
-    callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    options?: AddNodeOptions<Loop<RunnerContext, LoopContext>>
-  }) {
+  public createLoop(
+    options?: {
+      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
+    } & AddNodeOptions<Loop<RunnerContext, any>>
+  ): Loop<RunnerContext, undefined>
+  public createLoop<LoopContext extends DefinedContext>(
+    options?: {
+      context: LoopContext
+      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
+    } & AddNodeOptions<Loop<RunnerContext, any>>
+  ): Loop<RunnerContext, LoopContext>
+  public createLoop<LoopContext extends DefinedContext>(
+    options?: {
+      context: LoopContext
+      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
+    } & AddNodeOptions<Loop<RunnerContext, any>>
+  ) {
     if (options?.context) {
       const loop = new Loop<RunnerContext, LoopContext>(options.context, options.callback)
-      this.add(loop, options.options)
+      this.add(loop, {
+        after: options.after,
+        before: options.before
+      })
       return loop as Loop<RunnerContext, LoopContext>
     } else {
       const loop = new Loop<RunnerContext, LoopContext>(options?.context, options?.callback)
-      this.add(loop, options?.options)
+      this.add(loop, {
+        after: options?.after,
+        before: options?.before
+      })
       return loop as any as Loop<RunnerContext, undefined>
     }
   }

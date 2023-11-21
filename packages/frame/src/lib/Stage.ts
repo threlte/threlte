@@ -50,15 +50,13 @@ export class Stage<
   }
 
   run(delta: number, runnerContext?: RunnerContext, loopContext?: LoopContext) {
+    const contexts = [runnerContext, loopContext, this.context].filter((c) => c !== undefined) as [
+      RunnerContext,
+      LoopContext,
+      StageContext
+    ]
     this.handlers.forEach((handler) => {
-      // Check if context is defined
-      if (this.context) {
-        // If context is defined, call the handler with context and delta
-        ;(handler as (context: StageContext, delta: number) => void)(this.context, delta)
-      } else {
-        // If context is not defined, call the handler with only delta
-        ;(handler as (delta: number) => void)(delta)
-      }
+      ;(handler as any)(...contexts, delta)
     })
   }
 }
