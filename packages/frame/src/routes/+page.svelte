@@ -2,7 +2,9 @@
   import { onMount } from 'svelte'
   import { Scheduler } from '../lib/Scheduler'
 
-  let executionPlan = ''
+  type ExecutionPlan = ReturnType<Scheduler<any>['plan']>
+
+  let plan: ExecutionPlan | undefined
 
   onMount(() => {
     // Create a new scheduler with context. This would be the place where the main
@@ -165,7 +167,10 @@
     // The scheduler provides an execution plan that can be used to visualize
     // the execution order of the loops, stages and tasks. This is useful for
     // debugging and understanding the execution order.
-    executionPlan = scheduler.executionPlan
+    plan = scheduler.plan({
+      stages: true,
+      tasks: false
+    })
 
     return () => {
       scheduler.stop()
@@ -174,6 +179,26 @@
 </script>
 
 <div>
-  Execution plan:
-  {executionPlan}
+  Execution plan:<br />
+  {#if plan}
+    {#each plan.loops as loop}
+      <div style="margin-bottom: 10px;">
+        {loop.label}
+        {#if loop.stages}
+          {#each loop.stages as stage}
+            <div style="margin-left: 10px;">
+              {stage.label}
+              {#if stage.tasks}
+                {#each stage.tasks as task}
+                  <div style="margin-left: 10px;">
+                    {task}
+                  </div>
+                {/each}
+              {/if}
+            </div>
+          {/each}
+        {/if}
+      </div>
+    {/each}
+  {/if}
 </div>

@@ -74,11 +74,12 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
     )
   }
 
-  get executionPlan() {
-    return this.sorted
-      .map((stage) => {
-        return stage.label ?? '[Unnamed Stage]'
-      })
-      .join(' → ')
+  public plan(includeTasks = true) {
+    return this.sorted.map((stage) => {
+      return {
+        label: stage.label ?? 'Unnamed Stage',
+        ...{ tasks: includeTasks ? stage.plan() : undefined }
+      }
+    })
   }
 }

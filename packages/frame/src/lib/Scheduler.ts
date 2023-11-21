@@ -1,5 +1,5 @@
 import { DAG, type AddNodeOptions } from './DAG'
-import { Loop } from './Loop'
+import { Loop } from './LoopXXX'
 import type { AnyContext, DefinedContext } from './types'
 
 /**
@@ -99,12 +99,22 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     this.animationFrameHandle = window.requestAnimationFrame(this.runLoops.bind(this))
   }
 
-  get executionPlan() {
-    return this.sorted
-      .map((loop) => {
-        return `(${loop.label ?? 'Unnamed Loop'} [${loop.executionPlan}])`
+  public plan(
+    include: {
+      stages?: boolean
+      tasks?: boolean
+    } = {
+      stages: true,
+      tasks: true
+    }
+  ) {
+    return {
+      loops: this.sorted.map((loop) => {
+        return {
+          label: loop.label ?? 'Unnamed Loop',
+          ...{ stages: include.stages ? loop.plan(include.tasks) : undefined }
+        }
       })
-      .flat()
-      .join(' → ')
+    }
   }
 }

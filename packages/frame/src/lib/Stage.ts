@@ -22,6 +22,8 @@ export class Stage<
 > {
   private tasks: Set<Task<SchedulerContext, LoopContext, StageContext>> = new Set()
   private context: StageContext = undefined as StageContext
+  private taskLabels: Map<Task<SchedulerContext, LoopContext, StageContext>, string> = new Map()
+
   public label?: string
 
   constructor(context?: StageContext, label?: string) {
@@ -29,17 +31,26 @@ export class Stage<
     this.label = label
   }
 
-  public createTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
+  public createTask(
+    task: Task<SchedulerContext, LoopContext, StageContext>,
+    options?: { label?: string }
+  ) {
     this.tasks.add(task)
+    if (options?.label) this.taskLabels.set(task, options.label)
   }
 
   public removeTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
     this.tasks.delete(task)
+    this.taskLabels.delete(task)
   }
 
   run(delta: number, schedulerContext: SchedulerContext, loopContext: LoopContext) {
     this.tasks.forEach((task) => {
       task(delta, schedulerContext, loopContext, this.context)
     })
+  }
+
+  public plan() {
+    return Array.from(this.tasks).map((task) => this.taskLabels.get(task) || 'Unnamed Task')
   }
 }
