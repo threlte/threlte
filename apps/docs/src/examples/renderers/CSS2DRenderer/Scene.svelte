@@ -13,24 +13,20 @@
   const cssRenderer = new CSS2DRenderer({ element })
   $: cssRenderer.setSize($size.width, $size.height)
 
-  // Tell ThreeJS renderers not to call scene.updateMatrixWorld() with every
-  // render. Since we're running two renderers, this would result in double
-  // updates.
+  // We are running two renderers, and don't want to run
+  // updateMatrixWorld twice; tell the renderers that we'll handle
+  // it manually.
+  // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
   scene.matrixWorldAutoUpdate = false
 
   useRender(async ({ renderer, scene, camera }) => {
-    // 1. Flush any pending svelte changes and element updates, especially tweening.
-    // https://svelte.dev/tutorial/tick
+    // Flush pending Svelte changes, especially tweening
     await tick()
-
-    // 2. Tell ThreeJS to update the state of its components based on this new information.
-    // Normally this happens as part of a .render() call, but we set matrixWorldAutoUpdate = false
-    // in order to avoid both render calls triggering it.
-    // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
+    // Manually update matrixes for the scene
     scene.updateMatrixWorld()
-
-    // 3. Tell both renderers to update the canvas and DOM elements on screen.
+    // Update the Threlte canvas
     renderer.render(scene, camera.current)
+    // Update the DOM
     cssRenderer.render(scene, camera.current)
   })
 </script>

@@ -5,17 +5,10 @@
   export let pointerEvents = false
 
   let element
-
-  const cssObject = (node) => {
-    element = node
-    return {
-      destroy() { element = undefined }
-    }
-  }
 </script>
 
 <div
-  use:cssObject
+  bind:this={element}
   style:pointer-events={pointerEvents ? 'auto' : 'none !important'}
   style:will-change="transform"
 >
@@ -23,7 +16,5 @@
 </div>
 
 {#if element}
-  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref>
-    <slot name="three" {ref} />
-  </T>
+  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref />
 {/if}

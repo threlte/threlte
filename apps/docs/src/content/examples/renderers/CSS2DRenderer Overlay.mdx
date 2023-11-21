@@ -23,24 +23,20 @@ By default, each rendrer traverses the scene and updates every object. We can se
   const cssRenderer = new CSS2DRenderer({ element })
   $: cssRenderer.setSize($size.width, $size.height)
 
-  // Tell ThreeJS renderers not to call scene.updateMatrixWorld() with every
-  // render. Since we're running two renderers, this would result in double
-  // updates.
+  // We are running two renderers, and don't want to run
+  // updateMatrixWorld twice; tell the renderers that we'll handle
+  // it manually.
+  // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
   scene.matrixWorldAutoUpdate = false
 
   useRender(async ({ renderer, scene, camera }) => {
-    // 1. Flush any pending svelte changes and element updates, especially tweening.
-    // https://svelte.dev/tutorial/tick
+    // Flush pending Svelte changes, especially tweening
     await tick()
-
-    // 2. Tell ThreeJS to update the state of its components based on this new information.
-    // Normally this happens as part of a .render() call, but we set matrixWorldAutoUpdate = false
-    // in order to avoid both render calls triggering it.
-    // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
+    // Manually update matrixes for the scene
     scene.updateMatrixWorld()
-
-    // 3. Tell both renderers to update the canvas and DOM elements on screen.
+    // Update the Threlte canvas
     renderer.render(scene, camera.current)
+    // Update the DOM
     cssRenderer.render(scene, camera.current)
   })
 </script>
@@ -58,17 +54,10 @@ The other integral part is a component that accepts DOM contents in the default 
   export let pointerEvents = false
 
   let element
-
-  const cssobject = (node) => {
-    element = node
-    return {
-      destroy() { element = undefined }
-    }
-  }
 </script>
 
 <div
-  use:cssobject
+  bind:this={element}
   style:pointer-events={pointerEvents ? 'auto' : 'none !important'}
   style:will-change="transform"
 >
@@ -76,19 +65,16 @@ The other integral part is a component that accepts DOM contents in the default 
 </div>
 
 {#if element}
-  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref>
-    <slot name="three" {ref} />
-  </T>
+  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref />
 {/if}
 ```
 
 This component renders children into a div, and hooks that into Threlte's internals by using `<T is={CSS2DObject}>`. It passes all other properties through, letting us use it like so:
 
 ```svelte
-
 <CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
-  <button on:click={clickHello}>
-    Hello - {helloCount}
-  </button>
+  <CounterLabel label="Hello" />
 </CssObject>
 ```
+
+where `<CounterLabel>` is a normal Svelte component outside Threlte's control.

@@ -1,4 +1,6 @@
 <script>
+  import { T } from '@threlte/core'
+
   // A normal html svelte component, no relation the Threlte
   export let label = ''
   let count = 0
@@ -17,8 +19,8 @@
     pointer-events: auto;
 
     background-image: linear-gradient(
-      hsl(240deg 100% 20%) 0%,
-      hsl(328deg 50% 50%) 100%
+      #5e6cf4 0%,
+      #1338db 100%
     );
   }
 </style>
