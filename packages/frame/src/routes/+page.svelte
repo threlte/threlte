@@ -11,10 +11,11 @@
       }
     })
 
-    // Create the default frame loop with some context
+    // Create the default frame loop
     const frameloop = runner.createLoop()
 
-    // Create a stage with some context
+    // Create a default stage, adding handlers to this stage will be the case in
+    //  most applications.
     const defaultStage = frameloop.createStage()
     // create a stage that will be used to render the frame
     const renderStage = frameloop.createStage({
@@ -25,7 +26,10 @@
       after: renderStage
     })
 
-    // A fixed physics loop. The loop is *invoked* by the runner on every
+    // The resulting execution order of the frameloop:
+    // defaultStage -> renderStage -> afterRenderStage
+
+    // Now, a fixed physics loop. The loop is *invoked* by the runner on every
     // requestAnimationFrame, but the loop ultimately decides when and how many
     // times to run the nodes.
 
@@ -40,6 +44,7 @@
     let rate = 1 / 2
     let fixedStepTimeAccumulator = 0
     const physicsLoop = runner.createLoop({
+      before: frameloop,
       context: physicsContext,
       callback: (delta, run) => {
         fixedStepTimeAccumulator += delta / 1000
@@ -61,6 +66,9 @@
       console.log('physics', delta)
       // do physics stuff
     })
+
+    // The resulting execution order of the whole runner:
+    // physicsStage -> defaultStage -> renderStage -> afterRenderStage
 
     runner.start()
 
