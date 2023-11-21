@@ -1,6 +1,6 @@
 import type { AnyContext } from './types'
 
-type Handler<
+type Task<
   SchedulerContext extends AnyContext,
   LoopContext extends AnyContext,
   StageContext extends AnyContext
@@ -26,35 +26,35 @@ type Handler<
   : (delta: number) => void
 
 /**
- * A Stage is a stage in a loop. It can have handlers that are run when the
- * loop is run. The handlers of a stage are run in an arbitrary order.
+ * A Stage is a stage in a loop. It can have tasks that are run when the
+ * loop is run. The tasks of a stage are run in an arbitrary order.
  */
 export class Stage<
   SchedulerContext extends AnyContext,
   LoopContext extends AnyContext,
   StageContext extends AnyContext
 > {
-  private handlers: Set<Handler<SchedulerContext, LoopContext, StageContext>> = new Set()
+  private tasks: Set<Task<SchedulerContext, LoopContext, StageContext>> = new Set()
   private context?: StageContext
 
   constructor(context?: StageContext) {
     this.context = context
   }
 
-  public addHandler(handler: Handler<SchedulerContext, LoopContext, StageContext>) {
-    this.handlers.add(handler)
+  public addTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
+    this.tasks.add(task)
   }
 
-  public removeHandler(handler: Handler<SchedulerContext, LoopContext, StageContext>) {
-    this.handlers.delete(handler)
+  public removeTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
+    this.tasks.delete(task)
   }
 
   run(delta: number, schedulerContext?: SchedulerContext, loopContext?: LoopContext) {
     const contexts = [schedulerContext, loopContext, this.context].filter(
       (c) => c !== undefined
     ) as [SchedulerContext, LoopContext, StageContext]
-    this.handlers.forEach((handler) => {
-      ;(handler as any)(...contexts, delta)
+    this.tasks.forEach((task) => {
+      ;(task as any)(...contexts, delta)
     })
   }
 }

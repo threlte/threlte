@@ -20,13 +20,13 @@
     // frame loop. Stages can be scheduled to run before or after other stages.
     // The first stage – just like the first loop – is not scheduled before or
     // after any other stage. To actually run code in a stage, you need to add
-    // a handler to it.
+    // a task to it.
     const defaultStage = frameloop.createStage()
 
-    // For example you might want to add a handler that rotates an object
-    // around the y axis. The handler will receive the scheduler context and the delta
+    // For example you might want to add a task that rotates an object
+    // around the y axis. The task will receive the scheduler context and the delta
     // time since the last frame.
-    defaultStage.addHandler((schedulerCtx, delta) => {
+    defaultStage.addTask((schedulerCtx, delta) => {
       // do stuff
     })
 
@@ -37,9 +37,9 @@
       after: defaultStage
     })
 
-    // Now we can add a handler that will render the frame. The handler will
+    // Now we can add a task that will render the frame. The task will
     // receive the scheduler context and the delta time since the last frame.
-    renderStage.addHandler((schedulerCtx, delta) => {
+    renderStage.addTask((schedulerCtx, delta) => {
       // do rendering stuff
     })
 
@@ -49,8 +49,8 @@
       after: renderStage
     })
 
-    // Now we can add a handler that will run after the frame has been rendered.
-    afterRenderStage.addHandler((schedulerCtx, delta) => {
+    // Now we can add a task that will run after the frame has been rendered.
+    afterRenderStage.addTask((schedulerCtx, delta) => {
       // do stuff
     })
 
@@ -89,23 +89,23 @@
           physicsContext.t = Math.random()
 
           // See how we pass the rate to the run function. This is the fixed
-          // step rate that the loop is running at. The handlers will receive
+          // step rate that the loop is running at. The tasks will receive
           // this rate as the delta argument.
           run(rate)
         }
       }
     })
 
-    // Because the physicsLoop's callback is running `run(rate)`, the handlers
+    // Because the physicsLoop's callback is running `run(rate)`, the tasks
     // receive the fixed delta passed to `run`. This is especially useful for
     // fixed step loops. Also, the coefficient is available in the context for
     // easy interpolation. We need to create a stage for the physics loop, too.
     const physicsStage = physicsLoop.createStage()
 
-    // Now we can add a handler that will run when the stage is invoked by the
-    // physics loop. The handler will receive the scheduler context, the loop
+    // Now we can add a task that will run when the stage is invoked by the
+    // physics loop. The task will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
-    physicsStage.addHandler((schedulerCtx, { t }, delta) => {
+    physicsStage.addTask((schedulerCtx, { t }, delta) => {
       const viewDelta = delta * t
       console.log('physics', viewDelta)
       // do physics stuff
