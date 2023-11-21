@@ -36,29 +36,43 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
   public createLoop(
     options?: {
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>>
+    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+        label?: string
+      }
   ): Loop<SchedulerContext, undefined>
   public createLoop<LoopContext extends DefinedContext>(
     options?: {
       context: LoopContext
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>>
+    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+        label?: string
+      }
   ): Loop<SchedulerContext, LoopContext>
   public createLoop<LoopContext extends DefinedContext>(
     options?: {
       context: LoopContext
       callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>>
+    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+        label?: string
+      }
   ) {
     if (options?.context) {
-      const loop = new Loop<SchedulerContext, LoopContext>(options.context, options.callback)
+      const loop = new Loop<SchedulerContext, LoopContext>(
+        options.context,
+        options.callback,
+        options.label
+      )
       this.add(loop, {
         after: options.after,
         before: options.before
       })
       return loop as Loop<SchedulerContext, LoopContext>
     } else {
-      const loop = new Loop<SchedulerContext, LoopContext>(options?.context, options?.callback)
+      const loop = new Loop<SchedulerContext, LoopContext>(
+        options?.context,
+        options?.callback,
+        options?.label
+      )
       this.add(loop, {
         after: options?.after,
         before: options?.before
@@ -83,5 +97,14 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     })
     this.lastTime = time
     this.animationFrameHandle = window.requestAnimationFrame(this.runLoops.bind(this))
+  }
+
+  get executionPlan() {
+    return this.sorted
+      .map((loop) => {
+        return `(${loop.label ?? 'Unnamed Loop'} [${loop.executionPlan}])`
+      })
+      .flat()
+      .join(' → ')
   }
 }

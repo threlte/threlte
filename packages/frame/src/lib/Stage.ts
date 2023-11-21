@@ -36,9 +36,11 @@ export class Stage<
 > {
   private tasks: Set<Task<SchedulerContext, LoopContext, StageContext>> = new Set()
   private context?: StageContext
+  public label?: string
 
-  constructor(context?: StageContext) {
+  constructor(context?: StageContext, label?: string) {
     this.context = context
+    this.label = label
   }
 
   public createTask(task: Task<SchedulerContext, LoopContext, StageContext>) {

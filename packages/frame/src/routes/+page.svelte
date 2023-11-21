@@ -2,6 +2,8 @@
   import { onMount } from 'svelte'
   import { Scheduler } from '../lib/Scheduler'
 
+  let executionPlan = ''
+
   onMount(() => {
     // Create a new scheduler with context. This would be the place where the main
     // Threlte context is used. Every Threlte app probably only has a single scheduler.
@@ -14,14 +16,18 @@
     // Create the default frame loop. Loops, just like stages, can be scheduled to run
     // before or after other loops. The first loop is not scheduled before or after
     // any other loop, so it will "just run".
-    const frameloop = scheduler.createLoop()
+    const frameloop = scheduler.createLoop({
+      label: 'default'
+    })
 
     // Create a default stage. Stages are the main organizational unit of a
     // frame loop. Stages can be scheduled to run before or after other stages.
     // The first stage – just like the first loop – is not scheduled before or
     // after any other stage. To actually run code in a stage, you need to add
     // a task to it.
-    const defaultStage = frameloop.createStage()
+    const defaultStage = frameloop.createStage({
+      label: 'default'
+    })
 
     // For example you might want to add a task that rotates an object
     // around the y axis. The task will receive the scheduler context and the delta
@@ -34,7 +40,8 @@
     // to the screen. This stage should run after the default stage, so we pass
     // it as the `after` option.
     const renderStage = frameloop.createStage({
-      after: defaultStage
+      after: defaultStage,
+      label: 'render'
     })
 
     // Now we can add a task that will render the frame. The task will
@@ -47,17 +54,20 @@
     // by passing an array of stages to the `before` or `after` option.
     const otherStage = frameloop.createStage({
       after: defaultStage,
-      before: renderStage
+      before: renderStage,
+      label: 'other'
     })
     const afterDefaultAndOtherStage = frameloop.createStage({
       after: [defaultStage, otherStage],
-      before: renderStage
+      before: renderStage,
+      label: 'afterDefaultAndOther'
     })
 
     // Optionally, we may want to create a stage for frame analytics or other
     // things that should run after the frame has been rendered.
     const afterRenderStage = frameloop.createStage({
-      after: renderStage
+      after: renderStage,
+      label: 'frame-analytics'
     })
 
     // Now we can add a task that will run after the frame has been rendered.
@@ -84,6 +94,7 @@
     let rate = 1 / 2
     let fixedStepTimeAccumulator = 0
     const physicsLoop = scheduler.createLoop({
+      label: 'physics',
       before: frameloop,
       context: physicsContext,
       // The callback is invoked by the scheduler on every requestAnimationFrame
@@ -111,14 +122,16 @@
     // receive the fixed delta passed to `run`. This is especially useful for
     // fixed step loops. Also, the coefficient is available in the context for
     // easy interpolation. We need to create a stage for the physics loop, too.
-    const physicsStage = physicsLoop.createStage()
+    const physicsStage = physicsLoop.createStage({
+      label: 'physics'
+    })
 
     // Now we can add a task that will run when the stage is invoked by the
     // physics loop. The task will receive the scheduler context, the loop
     // context and the fixd delta. By that we can calculate the view delta.
     physicsStage.createTask((schedulerCtx, { t }, delta) => {
       const viewDelta = delta * t
-      console.log('physics', delta)
+      // console.log('physics', delta)
       // do physics stuff
     })
 
@@ -127,8 +140,15 @@
 
     scheduler.start()
 
+    executionPlan = scheduler.executionPlan
+
     return () => {
       scheduler.stop()
     }
   })
 </script>
+
+<div>
+  Execution plan:
+  {executionPlan}
+</div>

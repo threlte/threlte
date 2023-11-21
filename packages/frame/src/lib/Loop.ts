@@ -11,38 +11,50 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
 > {
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
   private context?: LoopContext
+  public label?: string
 
   constructor(
     context?: LoopContext,
-    callback?: (delta: number, run: (deltaOverride?: number) => void) => void
+    callback?: (delta: number, run: (deltaOverride?: number) => void) => void,
+    label?: string
   ) {
     super()
     if (context) this.context = context
     if (callback) this.callback = callback.bind(this)
+    if (label) this.label = label
   }
 
   public createStage<StageContext extends DefinedContext>(
     options: {
       context: StageContext
-    } & AddNodeOptions<Stage<SchedulerContext, LoopContext, any>>
+    } & AddNodeOptions<Stage<SchedulerContext, LoopContext, any>> & {
+        label?: string
+      }
   ): Stage<SchedulerContext, LoopContext, StageContext>
   public createStage(
-    options?: AddNodeOptions<Stage<SchedulerContext, LoopContext, any>>
+    options?: AddNodeOptions<Stage<SchedulerContext, LoopContext, any>> & {
+      label?: string
+    }
   ): Stage<SchedulerContext, LoopContext, undefined>
   public createStage<StageContext extends DefinedContext>(
     options?: {
       context?: StageContext
-    } & AddNodeOptions<Stage<SchedulerContext, LoopContext, any>>
+    } & AddNodeOptions<Stage<SchedulerContext, LoopContext, any>> & {
+        label?: string
+      }
   ) {
     if (options?.context) {
-      const stage = new Stage<SchedulerContext, LoopContext, StageContext>(options.context)
+      const stage = new Stage<SchedulerContext, LoopContext, StageContext>(
+        options.context,
+        options.label
+      )
       this.add(stage, {
         after: options.after,
         before: options.before
       })
       return stage
     } else {
-      const stage = new Stage<SchedulerContext, LoopContext, undefined>()
+      const stage = new Stage<SchedulerContext, LoopContext, undefined>(undefined, options?.label)
       this.add(stage, {
         after: options?.after,
         before: options?.before
@@ -60,5 +72,13 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
         stage.run(deltaOverride ?? delta, schedulerContext, this.context)
       )
     )
+  }
+
+  get executionPlan() {
+    return this.sorted
+      .map((stage) => {
+        return stage.label ?? '[Unnamed Stage]'
+      })
+      .join(' → ')
   }
 }
