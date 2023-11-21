@@ -75,6 +75,12 @@
     const physicsLoop = scheduler.createLoop({
       before: frameloop,
       context: physicsContext,
+      // The callback is invoked by the scheduler on every requestAnimationFrame
+      // and receives the delta time since the last frame in milliseconds as
+      // well as the function `run` which is used to run the stages of the loop.
+      // The callback is responsible for deciding when and how many times to run
+      // the stages. If it's omitted, the loop will run once per frame (as shown
+      // in the default frameloop).
       callback: (delta, run) => {
         fixedStepTimeAccumulator += delta / 1000
         while (fixedStepTimeAccumulator >= rate) {
