@@ -25,16 +25,19 @@
     // Create a default stage. Stages are the main organizational unit of a
     // frame loop. Stages can be scheduled to run before or after other stages.
     // The first stage – just like the first loop – is not scheduled before or
-    // after any other stage. To actually run code in a stage, you need to add
-    // a task to it.
+    // after any other stage.
     const defaultStage = frameloop.createStage({
       label: 'default'
     })
 
-    // For example you might want to add a task that rotates an object
-    // around the y axis. The task will receive the scheduler context and the delta
-    // time since the last frame.
-    defaultStage.createTask((delta, { camera, renderer, scene }) => {
+    // To actually run code in a stage, you need to add a task to it. For
+    // example you might want to add a task that rotates an object around the y
+    // axis. A task will always receive these four arguments:
+    // - delta          The delta time since the last frame in milliseconds
+    // - schedulerCtx   The scheduler context
+    // - loopCtx        The loop context
+    // - stageCtx       The stage context
+    defaultStage.createTask((delta, schedulerCtx, loopCtx, stageCtx) => {
       // do stuff
     })
 
