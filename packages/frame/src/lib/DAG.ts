@@ -6,38 +6,19 @@ export type AddNodeOptions<T> = {
 }
 
 export class DAG<T> {
-  private vertices: Array<Vertex<T>> = []
-  protected sorted: T[] = []
-
-  constructor() {}
-
-  private getVertex(value: T) {
-    return this.vertices.find(({ value: v }) => v === value)
-  }
-
-  private addBefore(vertex: Vertex<T>, before: T) {
-    const nextVertex = this.getVertex(before)
-    if (!nextVertex) {
-      throw new Error('next vertex not found')
-    }
-    nextVertex.previous.add(vertex.value)
-    vertex.next.add(nextVertex.value)
-  }
-
-  private addAfter(vertex: Vertex<T>, after: T) {
-    const previousVertex = this.vertices.find(({ value }) => value === after)
-    if (!previousVertex) {
-      throw new Error('previous vertex not found')
-    }
-    previousVertex.next.add(vertex.value)
-    vertex.previous.add(previousVertex.value)
-  }
+  private unlinked: Vertex<T>[] = []
+  private linked: Vertex<T>[] = []
+  private sortedLinked: T[] = []
 
   protected add(value: T, options?: AddNodeOptions<T>) {
     const vertex: Vertex<T> = {
       value,
       previous: new Set(),
       next: new Set()
+    }
+    if (!options?.after && !options?.before) {
+      this.unlinked.push(vertex)
+      return
     }
     if (options?.before) {
       const beforeArr = Array.isArray(options.before) ? options.before : [options.before]
@@ -51,22 +32,84 @@ export class DAG<T> {
         this.addAfter(vertex, after)
       })
     }
-    this.vertices.push(vertex)
+    this.linked.push(vertex)
     this.sort()
   }
 
   protected remove(value: T) {
-    const index = this.vertices.findIndex(({ value: v }) => v === value)
+    const index = this.linked.findIndex(({ value: v }) => v === value)
     if (index === -1) return
-    const vertex = this.vertices[index]
+    const vertex = this.linked[index]
     vertex.previous.forEach((prev) => {
-      this.vertices.find(({ value }) => value === prev)?.next.delete(value)
+      this.linked.find(({ value }) => value === prev)?.next.delete(value)
     })
     vertex.next.forEach((next) => {
-      this.vertices.find(({ value }) => value === next)?.previous.delete(value)
+      this.linked.find(({ value }) => value === next)?.previous.delete(value)
     })
-    this.vertices.splice(index, 1)
+    this.linked.splice(index, 1)
     this.sort()
+  }
+
+  protected mapNodes<U>(callback: (value: T, index: number) => U): U[] {
+    const result: U[] = []
+    for (let i = 0; i < this.sortedLinked.length; i++) {
+      result.push(callback(this.sortedLinked[i], i))
+    }
+    for (let i = 0; i < this.unlinked.length; i++) {
+      result.push(callback(this.unlinked[i].value, i))
+    }
+    return result
+  }
+
+  protected forEachNode(callback: (value: T, index: number) => void) {
+    for (let i = 0; i < this.sortedLinked.length; i++) {
+      callback(this.sortedLinked[i], i)
+    }
+    for (let i = 0; i < this.unlinked.length; i++) {
+      callback(this.unlinked[i].value, i)
+    }
+  }
+
+  private getVertex(value: T) {
+    return this.linked.find(({ value: v }) => v === value)
+  }
+
+  private addBefore(vertex: Vertex<T>, before: T) {
+    let nextVertex = this.getVertex(before)
+    if (!nextVertex) {
+      // is it maybe unlinked?
+      const unlinkedIndex = this.unlinked.findIndex(({ value }) => value === before)
+      if (unlinkedIndex !== -1) {
+        // yes, it is
+        nextVertex = this.unlinked[unlinkedIndex]
+        this.unlinked.splice(unlinkedIndex, 1)
+        this.linked.push(nextVertex)
+      } else {
+        // no, it's not
+        throw new Error('next vertex not found')
+      }
+    }
+    nextVertex.previous.add(vertex.value)
+    vertex.next.add(nextVertex.value)
+  }
+
+  private addAfter(vertex: Vertex<T>, after: T) {
+    let previousVertex = this.linked.find(({ value }) => value === after)
+    if (!previousVertex) {
+      // is it maybe unlinked?
+      const unlinkedIndex = this.unlinked.findIndex(({ value }) => value === after)
+      if (unlinkedIndex !== -1) {
+        // yes, it is
+        previousVertex = this.unlinked[unlinkedIndex]
+        this.unlinked.splice(unlinkedIndex, 1)
+        this.linked.push(previousVertex)
+      } else {
+        // no, it's not
+        throw new Error('previous vertex not found')
+      }
+    }
+    previousVertex.next.add(vertex.value)
+    vertex.previous.add(previousVertex.value)
   }
 
   private sort() {
@@ -75,12 +118,12 @@ export class DAG<T> {
     const result: T[] = []
 
     // Initialize inDegree (count of incoming edges) for each vertex
-    this.vertices.forEach((vertex) => {
+    this.linked.forEach((vertex) => {
       inDegree.set(vertex.value, 0)
     })
 
     // Calculate inDegree for each vertex
-    this.vertices.forEach((vertex) => {
+    this.linked.forEach((vertex) => {
       vertex.next.forEach((next) => {
         inDegree.set(next, (inDegree.get(next) || 0) + 1)
       })
@@ -98,7 +141,7 @@ export class DAG<T> {
       const vertex = zeroInDegreeQueue.shift()!
       result.push(vertex)
 
-      this.vertices
+      this.linked
         .find(({ value: v }) => v === vertex)
         ?.next.forEach((adjVertex) => {
           const adjVertexInDegree = (inDegree.get(adjVertex) || 0) - 1
@@ -110,10 +153,10 @@ export class DAG<T> {
     }
 
     // Check for cycles in the graph
-    if (result.length !== this.vertices.length) {
+    if (result.length !== this.linked.length) {
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 
-    this.sorted = result
+    this.sortedLinked = result
   }
 }

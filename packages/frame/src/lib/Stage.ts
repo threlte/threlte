@@ -82,23 +82,20 @@ export class Stage<
     }
   }
 
-  public addStep = this.add.bind(this)
   public removeStep = this.remove.bind(this)
 
   public runSteps(delta: number, schedulerContext: SchedulerContext) {
     this.callback(
       delta,
       (deltaOverride) => {
-        this.sorted.forEach((step) =>
-          step.run(deltaOverride ?? delta, schedulerContext, this.context)
-        )
+        this.forEachNode((step) => step.run(deltaOverride ?? delta, schedulerContext, this.context))
       },
       schedulerContext
     )
   }
 
   public getSchedule(includeTasks = true) {
-    return this.sorted.map((step) => {
+    return this.mapNodes((step) => {
       return {
         label: step.label ?? 'Unnamed Step',
         ...{ tasks: includeTasks ? step.getTaskLabels() : undefined }

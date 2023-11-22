@@ -111,11 +111,12 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       return stage as any as Stage<SchedulerContext, undefined>
     }
   }
+
   public removeStage = this.remove.bind(this)
 
   run(time: DOMHighResTimeStamp) {
     const delta = time - this.lastTime
-    this.sorted.forEach((stage) => {
+    this.forEachNode((stage) => {
       // we pass the delta as seconds, not milliseconds,
       // this is in line with how Three.js, Unity and
       // other game engines do it. On top of that, it
@@ -137,7 +138,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     }
   ) {
     return {
-      stages: this.sorted.map((stage) => {
+      stages: this.mapNodes((stage) => {
         return {
           label: stage.label ?? 'Unnamed Stage',
           ...{ steps: include.steps ? stage.getSchedule(include.tasks) : undefined }
