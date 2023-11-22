@@ -1,1 +1,3 @@
-import type { Scheduler, Schedule } from './Scheduler'
+export { Scheduler, type Schedule } from './Scheduler'
+export { Loop } from './Loop'
+export { Stage } from './Stage'

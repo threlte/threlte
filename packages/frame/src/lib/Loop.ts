@@ -1,4 +1,5 @@
 import { DAG, type AddNodeOptions } from './DAG'
+import type { Scheduler } from './Scheduler'
 import { Stage } from './Stage'
 import type { AnyContext, DefinedContext } from './types'
 
@@ -11,14 +12,18 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
 > {
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
   private context: LoopContext = undefined as LoopContext
+
+  public scheduler: Scheduler<SchedulerContext>
   public label?: string
 
   constructor(
+    scheduler: Scheduler<SchedulerContext>,
     context?: LoopContext,
     callback?: (delta: number, run: (deltaOverride?: number) => void) => void,
     label?: string
   ) {
     super()
+    this.scheduler = scheduler
     if (context) this.context = context
     if (callback) this.callback = callback.bind(this)
     if (label) this.label = label
@@ -45,6 +50,7 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
   ) {
     if (options?.context) {
       const stage = new Stage<SchedulerContext, LoopContext, StageContext>(
+        this,
         options.context,
         options.label
       )
@@ -54,7 +60,11 @@ export class Loop<SchedulerContext extends AnyContext, LoopContext extends AnyCo
       })
       return stage
     } else {
-      const stage = new Stage<SchedulerContext, LoopContext, undefined>(undefined, options?.label)
+      const stage = new Stage<SchedulerContext, LoopContext, undefined>(
+        this,
+        undefined,
+        options?.label
+      )
       this.add(stage, {
         after: options?.after,
         before: options?.before

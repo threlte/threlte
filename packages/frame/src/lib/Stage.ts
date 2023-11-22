@@ -1,6 +1,7 @@
+import type { Loop } from './Loop'
 import type { AnyContext } from './types'
 
-type Task<
+export type Task<
   SchedulerContext extends AnyContext,
   LoopContext extends AnyContext,
   StageContext extends AnyContext
@@ -24,9 +25,11 @@ export class Stage<
   private context: StageContext = undefined as StageContext
   private taskLabels: Map<Task<SchedulerContext, LoopContext, StageContext>, string> = new Map()
 
+  public loop: Loop<SchedulerContext, LoopContext>
   public label?: string
 
-  constructor(context?: StageContext, label?: string) {
+  constructor(loop: Loop<SchedulerContext, LoopContext>, context?: StageContext, label?: string) {
+    this.loop = loop
     if (context) this.context = context
     this.label = label
   }
