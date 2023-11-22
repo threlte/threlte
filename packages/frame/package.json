@@ -1,5 +1,5 @@
 {
-  "name": "@threlte/extras",
+  "name": "@threlte/frame",
   "version": "7.5.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
@@ -44,12 +44,11 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/lib/index.ts",
-      "svelte": "./src/lib/index.ts"
+      "svelte": "./src/lib/index.ts",
+      "types": "./src/lib/index.ts"
     }
   },
   "types": "./src/lib/index.ts",
-  "svelte": "./src/lib/index.ts",
   "publishOverrides": {
     "files": [
       "dist"

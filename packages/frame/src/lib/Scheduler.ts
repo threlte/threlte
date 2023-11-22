@@ -21,6 +21,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     super()
     if (context) this.context = context
     if (options?.clampDeltaTo) this.clampDeltaTo = options.clampDeltaTo
+    this.run = this.run.bind(this)
   }
 
   public static create(options?: { clampDeltaTo?: number }): Scheduler<undefined>
@@ -100,15 +101,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
   }
   public removeLoop = this.remove.bind(this)
 
-  start() {
-    this.animationFrameHandle = window.requestAnimationFrame(this.runLoops.bind(this))
-  }
-
-  stop() {
-    if (this.animationFrameHandle) window.cancelAnimationFrame(this.animationFrameHandle)
-  }
-
-  runLoops(time: DOMHighResTimeStamp) {
+  run(time: DOMHighResTimeStamp) {
     const delta = time - this.lastTime
     this.sorted.forEach((loop) => {
       // we pass the delta as seconds, not milliseconds,
@@ -120,7 +113,6 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       loop.runStages(Math.min(delta / 1000, this.clampDeltaTo), this.context)
     })
     this.lastTime = time
-    this.animationFrameHandle = window.requestAnimationFrame(this.runLoops.bind(this))
   }
 
   public getSchedule(
