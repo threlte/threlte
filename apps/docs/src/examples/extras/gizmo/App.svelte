@@ -12,7 +12,10 @@
 
   const turnRate = addInput({
     label: 'Turn rate',
-    value: 2 * Math.PI
+    value: 2 * Math.PI,
+    params: {
+      min: 0
+    }
   })
 
   const vert = addInput({
@@ -64,7 +67,7 @@
     value: 128,
     params: {
       min: 0,
-      max: 500,
+      max: 500
     }
   })
 
