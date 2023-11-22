@@ -29,7 +29,7 @@ This should be placed within a Threlte `<Canvas />`.
     session,
     xr as xrStore
   } from '../internal/stores'
-  import { updateRaf } from '../internal/updateRaf'
+  import { setupRaf } from '../internal/setupRaf'
   import { setupHeadset } from '../internal/setupHeadset'
   import { setupControllers } from '../internal/setupControllers'
 
@@ -72,7 +72,7 @@ This should be placed within a Threlte `<Canvas />`.
 
   let originalFrameloop = $frameloop
 
-  updateRaf()
+  setupRaf()
   setupHeadset()
   setupControllers()
 

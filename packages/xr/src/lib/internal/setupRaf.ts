@@ -4,7 +4,7 @@ import { onDestroy } from 'svelte'
 import { watch } from '@threlte/core'
 import { session } from './stores'
 
-export const updateRaf = () => {
+export const setupRaf = () => {
   if (typeof window === 'undefined') return
 
   const browserRaf = (fn: FrameRequestCallback) => requestAnimationFrame(fn)

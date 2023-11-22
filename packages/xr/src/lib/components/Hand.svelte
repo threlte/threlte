@@ -6,6 +6,7 @@
   import { isHandTracking } from '../internal/stores'
   import { useHandTrackingState } from '../internal/useHandTrackingState'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
+  import ScenePortal from "./internal/ScenePortal.svelte"
   
   const factory = new XRHandModelFactory()
 
@@ -18,7 +19,6 @@
 </script>
 
 <script lang='ts'>
-  import ScenePortal from "./internal/ScenePortal.svelte"
 
   type $$Props =
     | {
@@ -117,7 +117,7 @@
     children.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
   }, { autostart: false })
 
-  $: if (($$slots.wrist || $$slots.default) && inputSource) {
+  $: if ($isHandTracking && ($$slots.wrist || $$slots.default) && inputSource) {
     start()
   } else {
     stop()
@@ -156,7 +156,7 @@
   })
 </script>
 
-{#if $store?.hand}
+{#if $store?.hand && $isHandTracking}
   <T
     is={$store.hand}
     name='XR hand {handedness}'
@@ -167,9 +167,12 @@
   </T>
 {/if}
 
-<ScenePortal>
-  <T.Group bind:ref={children}>
-    <slot name='wrist' />
-    <slot />
-  </T.Group>
-</ScenePortal>
+{#if $isHandTracking}
+  <ScenePortal>
+    <T.Group bind:ref={children}>
+      <slot name='wrist' />
+      <slot />
+    </T.Group>
+    
+  </ScenePortal>
+{/if}

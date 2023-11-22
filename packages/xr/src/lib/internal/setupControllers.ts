@@ -46,7 +46,6 @@ export const setupControllers = () => {
     }
 
     const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-      console.log('disconn')
       stores[event.data.handedness].set(undefined)
     }
 
