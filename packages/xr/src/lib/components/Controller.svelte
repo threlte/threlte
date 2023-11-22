@@ -7,7 +7,8 @@
 >
   import { T, createRawEventDispatcher } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { isHandTracking, pointerState, teleportState } from '../internal/stores'
+  import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
+
   import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -58,10 +59,10 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
-
   const dispatch = createRawEventDispatcher<$$Events>()
 
+  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
+  $: controllerDispatchers[handedness].set(dispatch)
   $: store = stores[handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay

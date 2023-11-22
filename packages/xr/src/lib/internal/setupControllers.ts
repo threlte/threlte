@@ -4,6 +4,7 @@ import { useHandTrackingState } from './useHandTrackingState'
 import { createControllerModel } from './controllerModelFactory'
 import type { XRControllerEvent } from '../types'
 import { gaze, left, right } from '../hooks/useController'
+import { controllerDispatchers } from './stores'
 
 const events = [
   'connected',
@@ -22,7 +23,7 @@ export const setupControllers = () => {
   const { xr } = useThrelte().renderer
   const controller0 = xr.getController(0)
   const controller1 = xr.getController(1)
-  const getHandTrackingState = useHandTrackingState()
+  const hasHands = useHandTrackingState()
 
   const indexMap = new Map()
   indexMap.set(controller0, 0)
@@ -34,15 +35,6 @@ export const setupControllers = () => {
       const targetRay = xr.getController(index)
       const grip = xr.getControllerGrip(index)
 
-      console.log(event)
-      console.log({
-        inputSource,
-        targetRay,
-        grip,
-        model: inputSource.targetRayMode === 'tracked-pointer' && inputSource.gamepad !== undefined
-          ? await createControllerModel(event)
-          : undefined
-      })
       stores[event.data.handedness].set({
         inputSource,
         targetRay,
@@ -57,12 +49,13 @@ export const setupControllers = () => {
       stores[event.data.handedness].set(undefined)
     }
 
-    function handleEvent (event: object) {
+    function handleEvent (this: THREE.XRTargetRaySpace, event: XRControllerEvent) {
       const index = indexMap.get(this)
-      if (event.type === 'connected') handleConnected(event, index)
-      if (event.type === 'disconnected') handleDisconnected(event, index)
-      if (!getHandTrackingState()) {
-        // dispatch(event.type, event)
+      if (event.type === 'connected') handleConnected(event as XRControllerEvent<'connected'>, index)
+      if (event.type === 'disconnected') handleDisconnected(event as XRControllerEvent<'disconnected'>)
+      if (!hasHands()) {
+        const hand = event.data.handedness as 'left' | 'right'
+        controllerDispatchers[hand]?.current?.(event.type, event)
       }
     }
 

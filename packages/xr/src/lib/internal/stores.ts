@@ -1,6 +1,5 @@
-import { Vector3 } from 'three'
 import { writable } from 'svelte/store'
-import { currentWritable } from '@threlte/core'
+import { createRawEventDispatcher, currentWritable } from '@threlte/core'
 
 export const initialized = writable(false)
 export const isPresenting = currentWritable(false)
@@ -8,6 +7,13 @@ export const isHandTracking = currentWritable(false)
 export const session = currentWritable<XRSession | undefined>(undefined)
 export const referenceSpaceType = currentWritable<XRReferenceSpaceType | undefined>(undefined)
 export const xr = currentWritable<THREE.WebXRManager | undefined>(undefined)
+
+type RawEventDispatcher = ReturnType<typeof createRawEventDispatcher>
+
+export const controllerDispatchers = {
+  left: currentWritable<undefined | RawEventDispatcher>(undefined),
+  right: currentWritable<undefined | RawEventDispatcher>(undefined),
+}
 
 export const teleportState = currentWritable({
   left: {

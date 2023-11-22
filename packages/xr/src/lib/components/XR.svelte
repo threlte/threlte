@@ -30,7 +30,7 @@ This should be placed within a Threlte `<Canvas />`.
     xr as xrStore
   } from '../internal/stores'
   import { updateRaf } from '../internal/updateRaf'
-  import { useUpdateHeadset } from '../internal/headset'
+  import { setupHeadset } from '../internal/setupHeadset'
   import { setupControllers } from '../internal/setupControllers'
 
   /**
@@ -73,8 +73,8 @@ This should be placed within a Threlte `<Canvas />`.
   let originalFrameloop = $frameloop
 
   updateRaf()
+  setupHeadset()
   setupControllers()
-  useUpdateHeadset()
 
   const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
     $isPresenting = true

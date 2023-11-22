@@ -10,6 +10,12 @@
   $: if ($isPresenting) teleport([0, 0, 5])
 
   let listenToGamepad = false
+
+  let test = false
+
+  setInterval(() => {
+    test = !test
+  }, 5000)
 </script>
 
 <svelte:window
@@ -34,7 +40,11 @@
 </Headset>
 
 <XR>
-  <Controller left>
+  {#if test}
+  <Controller left
+    on:connected={() => console.log('connect')}
+    on:select={() => console.log('select')}
+  >
     <T.Mesh>
       {@const radius = 0.01}
       {@const length = 0.08}
@@ -52,6 +62,7 @@
       <T.MeshStandardMaterial color="skyblue" />
     </T.Mesh>
   </Controller>
+  {/if}
 
   <Controller right />
 
