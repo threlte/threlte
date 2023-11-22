@@ -22,19 +22,13 @@ class XRControllerModel extends Object3D {
 
     this.envMap = envMap
     this.traverse((child) => {
-      if ('isMesh' in child) {
+      if ('material' in child && child.material instanceof Material) {
         child.material.envMap = this.envMap
         child.material.needsUpdate = true
       }
     })
 
     return this
-  }
-
-  dispose() {
-    this.motionController = null
-    this.envMap = null
-    this.clear()
   }
 
   /**

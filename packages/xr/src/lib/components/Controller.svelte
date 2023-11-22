@@ -8,7 +8,6 @@
   import { T, createRawEventDispatcher } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
-
   import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -61,8 +60,12 @@
 
   const dispatch = createRawEventDispatcher<$$Events>()
 
+  let handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
+  controllerDispatchers[handedness].set(dispatch)
+
   $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
   $: controllerDispatchers[handedness].set(dispatch)
+
   $: store = stores[handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
@@ -73,10 +76,7 @@
 
 {#if !$isHandTracking}
   {#if grip}
-    <T
-      is={grip}
-      name="XR controller grip {handedness}"
-    >
+    <T is={grip}>
       <slot>
         <T is={model} />
       </slot>
@@ -86,10 +86,7 @@
   {/if}
 
   {#if targetRay}
-    <T
-      is={targetRay}
-      name="XR controller {handedness}"
-    >
+    <T is={targetRay}>
       <slot name="target-ray" />
 
       {#if hasPointerControls || hasTeleportControls}

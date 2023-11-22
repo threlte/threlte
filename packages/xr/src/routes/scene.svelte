@@ -15,7 +15,7 @@
 
   setInterval(() => {
     test = !test
-  }, 5000)
+  }, 1000)
 </script>
 
 <svelte:window
@@ -62,9 +62,14 @@
       <T.MeshStandardMaterial color="skyblue" />
     </T.Mesh>
   </Controller>
+
+  <Controller
+    right
+    on:connected={() => console.log('connect')}
+    on:select={() => console.log('select')}
+  />
   {/if}
 
-  <Controller right />
 
   <Hand left>
     <T.Mesh slot="wrist">
