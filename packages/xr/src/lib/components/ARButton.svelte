@@ -23,7 +23,7 @@
   sessionInit={{
     domOverlay: typeof document !== 'undefined' ? { root: document.body } : undefined,
     requiredFeatures: ['plane-detection'],
-    optionalFeatures: ['hit-test', 'light-estimation', 'dom-overlay', 'dom-overlay-for-handheld-ar']
+    optionalFeatures: ['hit-test']
   }}
   {...$$restProps}
   mode='immersive-ar'
