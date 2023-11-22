@@ -1,15 +1,15 @@
 import { DAG, type AddNodeOptions } from './DAG'
-import { Loop } from './Loop'
+import { Stage } from './Stage'
 import type { AnyContext, DefinedContext } from './types'
 
 export type Schedule = ReturnType<Scheduler<any>['getSchedule']>
 
 /**
- * A Scheduler is responsible for running loops. It runs the loops in a
- * requestAnimationFrame loop.
+ * A Scheduler is responsible for running stages. It runs the stages in a
+ * requestAnimationFrame stage.
  */
 export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
-  Loop<SchedulerContext, any>
+  Stage<SchedulerContext, any>
 > {
   private animationFrameHandle?: number
   private lastTime = performance.now()
@@ -50,85 +50,97 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     }
   }
 
-  public createLoop(
+  public createStage(
     options?: {
-      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+      callback?: (
+        delta: number,
+        runSteps: (deltaOverride?: number) => void,
+        schedulerContext: SchedulerContext
+      ) => void
+    } & AddNodeOptions<Stage<SchedulerContext, any>> & {
         label?: string
       }
-  ): Loop<SchedulerContext, undefined>
-  public createLoop<LoopContext extends DefinedContext>(
+  ): Stage<SchedulerContext, undefined>
+  public createStage<StageContext extends DefinedContext>(
     options?: {
-      context: LoopContext
-      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+      context: StageContext
+      callback?: (
+        delta: number,
+        runSteps: (deltaOverride?: number) => void,
+        schedulerContext: SchedulerContext
+      ) => void
+    } & AddNodeOptions<Stage<SchedulerContext, any>> & {
         label?: string
       }
-  ): Loop<SchedulerContext, LoopContext>
-  public createLoop<LoopContext extends DefinedContext>(
+  ): Stage<SchedulerContext, StageContext>
+  public createStage<StageContext extends DefinedContext>(
     options?: {
-      context: LoopContext
-      callback?: (delta: number, run: (deltaOverride?: number) => void) => void
-    } & AddNodeOptions<Loop<SchedulerContext, any>> & {
+      context: StageContext
+      callback?: (
+        delta: number,
+        runSteps: (deltaOverride?: number) => void,
+        schedulerContext: SchedulerContext
+      ) => void
+    } & AddNodeOptions<Stage<SchedulerContext, any>> & {
         label?: string
       }
   ) {
     if (options?.context) {
-      const loop = new Loop<SchedulerContext, LoopContext>(
+      const stage = new Stage<SchedulerContext, StageContext>(
         this,
         options.context,
         options.callback,
         options.label
       )
-      this.add(loop, {
+      this.add(stage, {
         after: options.after,
         before: options.before
       })
-      return loop as Loop<SchedulerContext, LoopContext>
+      return stage as Stage<SchedulerContext, StageContext>
     } else {
-      const loop = new Loop<SchedulerContext, LoopContext>(
+      const stage = new Stage<SchedulerContext, StageContext>(
         this,
         options?.context,
         options?.callback,
         options?.label
       )
-      this.add(loop, {
+      this.add(stage, {
         after: options?.after,
         before: options?.before
       })
-      return loop as any as Loop<SchedulerContext, undefined>
+      return stage as any as Stage<SchedulerContext, undefined>
     }
   }
-  public removeLoop = this.remove.bind(this)
+  public removeStage = this.remove.bind(this)
 
   run(time: DOMHighResTimeStamp) {
     const delta = time - this.lastTime
-    this.sorted.forEach((loop) => {
+    this.sorted.forEach((stage) => {
       // we pass the delta as seconds, not milliseconds,
       // this is in line with how Three.js, Unity and
       // other game engines do it. On top of that, it
       // needs to be clamped to prevent large delta
       // values from causing large jumps in the game
       // state.
-      loop.runStages(Math.min(delta / 1000, this.clampDeltaTo), this.context)
+      stage.runSteps(Math.min(delta / 1000, this.clampDeltaTo), this.context)
     })
     this.lastTime = time
   }
 
   public getSchedule(
     include: {
-      stages?: boolean
+      steps?: boolean
       tasks?: boolean
     } = {
-      stages: true,
+      steps: true,
       tasks: true
     }
   ) {
     return {
-      loops: this.sorted.map((loop) => {
+      stages: this.sorted.map((stage) => {
         return {
-          label: loop.label ?? 'Unnamed Loop',
-          ...{ stages: include.stages ? loop.getSchedule(include.tasks) : undefined }
+          label: stage.label ?? 'Unnamed Stage',
+          ...{ steps: include.steps ? stage.getSchedule(include.tasks) : undefined }
         }
       })
     }

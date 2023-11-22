@@ -1,59 +1,108 @@
-import type { Loop } from './Loop'
-import type { AnyContext } from './types'
-
-export type Task<
-  SchedulerContext extends AnyContext,
-  LoopContext extends AnyContext,
-  StageContext extends AnyContext
-> = (
-  delta: number,
-  schedulerContext: SchedulerContext,
-  loopContext: LoopContext,
-  stageContext: StageContext
-) => void
+import { DAG, type AddNodeOptions } from './DAG'
+import type { Scheduler } from './Scheduler'
+import { Step } from './Step'
+import type { AnyContext, DefinedContext } from './types'
 
 /**
- * A Stage is a stage in a loop. It can have tasks that are run when the
- * loop is run. The tasks of a stage are run in an arbitrary order.
+ * A Stage is a collection of steps. The steps are run in a topological sort
+ * order.
  */
 export class Stage<
   SchedulerContext extends AnyContext,
-  LoopContext extends AnyContext,
   StageContext extends AnyContext
-> {
-  private tasks: Set<Task<SchedulerContext, LoopContext, StageContext>> = new Set()
+> extends DAG<Step<SchedulerContext, StageContext, any>> {
+  private callback: (
+    delta: number,
+    runSteps: (deltaOverride?: number) => void,
+    schedulerContext: SchedulerContext
+  ) => void = (_, r) => r()
   private context: StageContext = undefined as StageContext
-  private taskLabels: Map<Task<SchedulerContext, LoopContext, StageContext>, string> = new Map()
 
-  public loop: Loop<SchedulerContext, LoopContext>
+  public scheduler: Scheduler<SchedulerContext>
   public label?: string
 
-  constructor(loop: Loop<SchedulerContext, LoopContext>, context?: StageContext, label?: string) {
-    this.loop = loop
-    if (context) this.context = context
-    this.label = label
-  }
-
-  public createTask(
-    task: Task<SchedulerContext, LoopContext, StageContext>,
-    options?: { label?: string }
+  constructor(
+    scheduler: Scheduler<SchedulerContext>,
+    context?: StageContext,
+    callback?: (
+      delta: number,
+      runSteps: (deltaOverride?: number) => void,
+      schedulerContext: SchedulerContext
+    ) => void,
+    label?: string
   ) {
-    this.tasks.add(task)
-    if (options?.label) this.taskLabels.set(task, options.label)
+    super()
+    this.scheduler = scheduler
+    if (context) this.context = context
+    if (callback) this.callback = callback.bind(this)
+    if (label) this.label = label
   }
 
-  public removeTask(task: Task<SchedulerContext, LoopContext, StageContext>) {
-    this.tasks.delete(task)
-    this.taskLabels.delete(task)
+  public createStep<StepContext extends DefinedContext>(
+    options: {
+      context: StepContext
+    } & AddNodeOptions<Step<SchedulerContext, StageContext, any>> & {
+        label?: string
+      }
+  ): Step<SchedulerContext, StageContext, StepContext>
+  public createStep(
+    options?: AddNodeOptions<Step<SchedulerContext, StageContext, any>> & {
+      label?: string
+    }
+  ): Step<SchedulerContext, StageContext, undefined>
+  public createStep<StepContext extends DefinedContext>(
+    options?: {
+      context?: StepContext
+    } & AddNodeOptions<Step<SchedulerContext, StageContext, any>> & {
+        label?: string
+      }
+  ) {
+    if (options?.context) {
+      const step = new Step<SchedulerContext, StageContext, StepContext>(
+        this,
+        options.context,
+        options.label
+      )
+      this.add(step, {
+        after: options.after,
+        before: options.before
+      })
+      return step
+    } else {
+      const step = new Step<SchedulerContext, StageContext, undefined>(
+        this,
+        undefined,
+        options?.label
+      )
+      this.add(step, {
+        after: options?.after,
+        before: options?.before
+      })
+      return step
+    }
   }
 
-  run(delta: number, schedulerContext: SchedulerContext, loopContext: LoopContext) {
-    this.tasks.forEach((task) => {
-      task(delta, schedulerContext, loopContext, this.context)
+  public addStep = this.add.bind(this)
+  public removeStep = this.remove.bind(this)
+
+  public runSteps(delta: number, schedulerContext: SchedulerContext) {
+    this.callback(
+      delta,
+      (deltaOverride) => {
+        this.sorted.forEach((step) =>
+          step.run(deltaOverride ?? delta, schedulerContext, this.context)
+        )
+      },
+      schedulerContext
+    )
+  }
+
+  public getSchedule(includeTasks = true) {
+    return this.sorted.map((step) => {
+      return {
+        label: step.label ?? 'Unnamed Step',
+        ...{ tasks: includeTasks ? step.getTaskLabels() : undefined }
+      }
     })
-  }
-
-  public getTaskLabels() {
-    return Array.from(this.tasks).map((task) => this.taskLabels.get(task) || 'Unnamed Task')
   }
 }
