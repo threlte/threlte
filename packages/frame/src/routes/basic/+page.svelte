@@ -18,9 +18,15 @@
   const defaultStage = scheduler.createStage({
     label: 'defaultStage'
   })
-  const defaultStep = defaultStage.createStep({
-    label: 'defaultStep'
-  })
+
+  defaultStage.addTask(
+    () => {
+      console.log('defaultStage')
+    },
+    {
+      label: 'defaultTask'
+    }
+  )
 
   const renderStage = scheduler.createStage({
     label: 'renderStage',
@@ -29,21 +35,30 @@
       if (shouldRender()) runSteps()
     }
   })
-  const renderStep = renderStage.createStep({
-    label: 'renderStep'
-  })
-  renderStep.createTask(
-    (_, { renderer, scene, camera }) => {
+
+  const renderTask = renderStage.addTask(
+    (_, { renderer, scene }) => {
       // renderer
     },
-    { label: 'defaultRenderTask' }
+    {
+      label: 'renderTask'
+    }
+  )
+
+  renderStage.addTask(
+    () => {
+      //
+    },
+    {
+      before: renderTask,
+      label: 'beforeRenderTask'
+    }
   )
 
   // The scheduler provides an execution plan that can be used to visualize
   // the execution order of the stages, steps and tasks. This is useful for
   // debugging and understanding the execution order.
   schedule = scheduler.getSchedule({
-    steps: true,
     tasks: true
   })
 </script>
@@ -55,17 +70,10 @@
     {#each schedule.stages as stage}
       <div style="margin-bottom: 0px;">
         ├&nbsp;{stage.label}
-        {#if stage.steps}
-          {#each stage.steps as step}
+        {#if stage.tasks}
+          {#each stage.tasks as task}
             <div style="margin-left: 0px;">
-              ├─&nbsp;{step.label}
-              {#if step.tasks}
-                {#each step.tasks as task}
-                  <div style="margin-left: 0;">
-                    ├──&nbsp;{task}
-                  </div>
-                {/each}
-              {/if}
+              ├─&nbsp;{task}
             </div>
           {/each}
         {/if}

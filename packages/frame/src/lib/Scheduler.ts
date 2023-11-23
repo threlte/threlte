@@ -123,17 +123,15 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       // needs to be clamped to prevent large delta
       // values from causing large jumps in the game
       // state.
-      stage.runSteps(Math.min(delta / 1000, this.clampDeltaTo), this.context)
+      stage.run(Math.min(delta / 1000, this.clampDeltaTo), this.context)
     })
     this.lastTime = time
   }
 
   public getSchedule(
     include: {
-      steps?: boolean
       tasks?: boolean
     } = {
-      steps: true,
       tasks: true
     }
   ) {
@@ -141,7 +139,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       stages: this.mapNodes((stage) => {
         return {
           label: stage.label ?? 'Unnamed Stage',
-          ...{ steps: include.steps ? stage.getSchedule(include.tasks) : undefined }
+          ...{ tasks: include.tasks ? stage.getSchedule() : undefined }
         }
       })
     }

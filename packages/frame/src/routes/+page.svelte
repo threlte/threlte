@@ -13,85 +13,59 @@
     }
   })
 
-  // Create the default stage. Stages, just like their children steps, can be
+  // Create the default stage. Stages, just like their children tasks, can be
   // scheduled to run before or after other stages. The first stage is not
   // scheduled before or after any other stage, so it will "just run". You may
   // optionally provide a label for the stage. This is useful for debugging and
   // understanding the execution order.
-  const framestage = scheduler.createStage({
-    label: 'default'
+  const defaultStage = scheduler.createStage({
+    label: 'defaultStage'
   })
 
-  // Create a default step. Steps are the main organizational unit of a
-  // frame stage. Steps can be scheduled to run before or after other steps.
-  // The first step – just like the first stage – is not scheduled before or
-  // after any other step. You may optionally provide a label for the step.
-  // This is useful for debugging and understanding the execution order.
-  const defaultStep = framestage.createStep({
-    label: 'default'
-  })
-
-  // To actually run code in a step, you need to add a task to it. For
-  // example you might want to add a task that rotates an object around the y
-  // axis. A task will always receive these four arguments:
+  // Create a task. A task is the unit that actually runs code and can be
+  // scheduled to run before or after other tasks. The first task – just like
+  // the first stage – is not scheduled before or after any other task. You may
+  // optionally provide a label for the task. This is useful for debugging and
+  // understanding the execution order. A task will always receive these three
+  // arguments:
   // - delta          The delta time since the last frame in milliseconds
   // - schedulerCtx   The scheduler context
-  // - stageCtx        The stage context
-  // - stepCtx       The step context
-  // You may optionally provide a label for the task. This is useful for
-  // debugging and understanding the execution order.
-  defaultStep.createTask(
-    (delta, schedulerCtx, stageCtx, stepCtx) => {
+  // - stageCtx       The stage context
+  const moveObjectTask = defaultStage.addTask(
+    (delta, schedulerCtx, stageCtx) => {
       // console.log(schedulerCtx)
       // -> { camera: 'camera', scene: 'scene', renderer: 'renderer' }
     },
-    { label: 'move-object' }
+    {
+      label: 'move-object'
+    }
   )
 
-  // We probably want to create a step that will be used to render the frame
-  // to the screen. This step should run after the default step, so we pass
+  // We probably want to create a stage that will be used to render the frame
+  // to the screen. This stage should run after the default stage, so we pass
   // it as the `after` option.
-  const renderStep = framestage.createStep({
-    after: defaultStep,
-    label: 'render'
+  const renderStage = scheduler.createStage({
+    after: defaultStage,
+    label: 'renderStage'
   })
 
   // Now we can add a task that will render the frame. The task will
   // receive the scheduler context and the delta time since the last frame.
-  renderStep.createTask(
+  renderStage.addTask(
     (delta, { camera, renderer, scene }) => {
       // do rendering stuff
     },
     { label: 'render' }
   )
 
-  // Just as schedulers and stages, steps can also have context.
-  const stepWithContext = framestage.createStep({
-    after: defaultStep,
-    before: renderStep,
-    label: 'other',
-    context: {
-      foo: 'bar'
-    }
-  })
-
-  // It is also passed to the tasks of the step as the fourth argument of the
-  // task callback.
-  const otherTask = stepWithContext.createTask(
-    (delta, schedulerCtx, stageCtx, stepCtx) => {
-      // console.log(stepCtx)
-      // -> { foo: 'bar' }
-    },
-    { label: 'other-task' }
-  )
-
-  // You may also add a step that runs before or after multiple other steps
+  // You may also add a task that runs before or after multiple other steps
   // by passing an array of steps to the `before` or `after` option.
-  const afterDefaultAndOtherStep = framestage.createStep({
-    after: [defaultStep, stepWithContext],
-    before: renderStep,
-    label: 'afterDefaultAndOther'
+  /*
+  const afterDefaultAndOtherStep = defaultStage.addTask({
+    after: [someTask, someOtherTask],
+    label: 'afterOtherTasks'
   })
+	*/
 
   // Now, a fixed physics stage. The stage is *invoked* by the scheduler on every
   // requestAnimationFrame, but the stage ultimately decides when and how many
@@ -113,7 +87,7 @@
   let fixedStepTimeAccumulator = 0
   const physicsStage = scheduler.createStage({
     label: 'physics',
-    before: framestage,
+    before: defaultStage,
     context: physicsContext,
     // The callback is invoked by the scheduler on every requestAnimationFrame
     // and receives the delta time since the last frame in milliseconds as
@@ -139,18 +113,14 @@
     }
   })
 
-  // Because the physicsStage's callback is running `run(rate)`, the tasks
-  // receive the fixed delta passed to `run`. This is especially useful for
-  // fixed step stages. Also, the coefficient is available in the context for
-  // easy interpolation. We need to create a step for the physics stage, too.
-  const physicsStep = physicsStage.createStep({
-    label: 'physics'
-  })
-
-  // Now we can add a task that will run when the step is invoked by the
-  // physics stage. The task will receive the scheduler context, the stage
-  // context and the fixd delta. By that we can calculate the view delta.
-  physicsStep.createTask(
+  // Because the physics stage's callback is invoking `run(rate)`, the tasks
+  // receive the fixed delta passed to the function `run`. This is especially
+  // useful for fixed step stages. Also, the coefficient is available in the
+  // context for easy interpolation. We can now add a task that will run when
+  // the step is invoked by the physics stage. The task will receive the
+  // scheduler context, the stage context and the fixed delta. By that we can
+  // calculate the view delta.
+  physicsStage.addTask(
     (delta, { camera, renderer, scene }, stageCtx) => {
       const viewDelta = delta * stageCtx.t
       // console.log(stageCtx)
@@ -164,29 +134,21 @@
   // every other stage has run. This is where the `before` and `after` options
   // come in handy. We can create a stage that runs before the physics stage
   // and a stage that runs after the default frame stage.
-  const frameAnalyticsStart = scheduler.createStage({
+  const frameAnalyticsStartStage = scheduler.createStage({
     before: physicsStage,
     label: 'frame-analytics-start'
   })
-  const frameAnalyticsEnd = scheduler.createStage({
-    after: framestage,
+  const frameAnalyticsEndStage = scheduler.createStage({
+    after: defaultStage,
     label: 'frame-analytics-end'
   })
-
-  // Now we can add steps and tasks to run the frame analytics.
-  const frameAnalyticsStartStep = frameAnalyticsStart.createStep({
-    label: 'frame-analytics-start'
-  })
-  frameAnalyticsStartStep.createTask(
+  frameAnalyticsStartStage.addTask(
     (delta, schedulerCtx) => {
       // console.time('frame-analytics')
     },
     { label: 'frame-analytics-start' }
   )
-  const frameAnalyticsEndStep = frameAnalyticsEnd.createStep({
-    label: 'frame-analytics-end'
-  })
-  frameAnalyticsEndStep.createTask(
+  frameAnalyticsEndStage.addTask(
     (delta, schedulerCtx) => {
       // console.timeEnd('frame-analytics')
       // -> frame-analytics: 0.123ms
@@ -198,29 +160,21 @@
   // the execution order of the stages, steps and tasks. This is useful for
   // debugging and understanding the execution order.
   schedule = scheduler.getSchedule({
-    steps: true,
     tasks: true
   })
 </script>
 
-<div>
+<div style="line-height: 100%;">
   Execution Plan:<br /><br />
 
   {#if schedule}
     {#each schedule.stages as stage}
-      <div style="margin-bottom: 15px;">
-        {stage.label}
-        {#if stage.steps}
-          {#each stage.steps as step}
-            <div style="margin-left: 15px;">
-              {step.label}
-              {#if step.tasks}
-                {#each step.tasks as task}
-                  <div style="margin-left: 15px;">
-                    {task}
-                  </div>
-                {/each}
-              {/if}
+      <div style="margin-bottom: 0px;">
+        ├&nbsp;{stage.label}
+        {#if stage.tasks}
+          {#each stage.tasks as task}
+            <div style="margin-left: 0px;">
+              ├─&nbsp;{task}
             </div>
           {/each}
         {/if}
