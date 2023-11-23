@@ -151,13 +151,13 @@
   // Example: Create a stage that runs after another stage that is not yet
   // created.
   // TODO: BUGGY
-  const someStage = scheduler.createStage('some stage', {
-    after: 'some other stage'
-  })
-  const someOtherStage = scheduler.createStage('some other stage', {
-    after: 'default stage',
-    before: 'render stage'
-  })
+  // const someStage = scheduler.createStage('some stage', {
+  //   after: 'some other stage'
+  // })
+  // const someOtherStage = scheduler.createStage('some other stage', {
+  //   after: 'default stage',
+  //   before: 'render stage'
+  // })
 
   // The scheduler provides an execution plan that can be used to visualize
   // the execution order of the stages, steps and tasks. This is useful for
