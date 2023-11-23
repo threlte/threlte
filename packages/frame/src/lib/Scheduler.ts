@@ -4,6 +4,30 @@ import type { AnyContext, DefinedContext } from './types'
 
 export type Schedule = ReturnType<Scheduler<any>['getSchedule']>
 
+export type CreateStageOptions<
+  SchedulerContext extends AnyContext,
+  StageContext extends AnyContext
+> =
+  | ({
+      callback?: (
+        delta: number,
+        runTasks: (deltaOverride?: number) => void,
+        schedulerContext: SchedulerContext
+      ) => void
+    } & AddNodeOptions<Stage<SchedulerContext, any>> & {
+        label?: string
+      })
+  | ({
+      context: StageContext
+      callback?: (
+        delta: number,
+        runTasks: (deltaOverride?: number) => void,
+        schedulerContext: SchedulerContext
+      ) => void
+    } & AddNodeOptions<Stage<SchedulerContext, any>> & {
+        label?: string
+      })
+
 /**
  * A Scheduler is responsible for running stages. It runs the stages in a
  * requestAnimationFrame stage.
@@ -54,7 +78,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
     options?: {
       callback?: (
         delta: number,
-        runSteps: (deltaOverride?: number) => void,
+        runTasks: (deltaOverride?: number) => void,
         schedulerContext: SchedulerContext
       ) => void
     } & AddNodeOptions<Stage<SchedulerContext, any>> & {
@@ -66,7 +90,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       context: StageContext
       callback?: (
         delta: number,
-        runSteps: (deltaOverride?: number) => void,
+        runTasks: (deltaOverride?: number) => void,
         schedulerContext: SchedulerContext
       ) => void
     } & AddNodeOptions<Stage<SchedulerContext, any>> & {
@@ -78,7 +102,7 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
       context: StageContext
       callback?: (
         delta: number,
-        runSteps: (deltaOverride?: number) => void,
+        runTasks: (deltaOverride?: number) => void,
         schedulerContext: SchedulerContext
       ) => void
     } & AddNodeOptions<Stage<SchedulerContext, any>> & {
@@ -143,5 +167,15 @@ export class Scheduler<SchedulerContext extends AnyContext> extends DAG<
         }
       })
     }
+  }
+
+  public printSchedule(
+    include: {
+      tasks?: boolean
+    } = {
+      tasks: true
+    }
+  ) {
+    console.log(JSON.stringify(this.getSchedule(include), null, 2))
   }
 }

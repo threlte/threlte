@@ -1,12 +1,7 @@
 import { DAG, type AddNodeOptions } from './DAG'
 import type { Scheduler } from './Scheduler'
+import { Task, type TaskCallback } from './Task'
 import type { AnyContext } from './types'
-
-export type Task<SchedulerContext extends AnyContext, StageContext extends AnyContext> = (
-  delta: number,
-  schedulerContext: SchedulerContext,
-  stageContext: StageContext
-) => void
 
 /**
  * A Stage is a collection of steps. The steps are run in a topological sort
@@ -21,9 +16,8 @@ export class Stage<
     run: (deltaOverride?: number) => void,
     schedulerContext: SchedulerContext
   ) => void = (_, r) => r()
-  private context: StageContext = undefined as StageContext
 
-  private taskLabels: Map<Task<SchedulerContext, StageContext>, string> = new Map()
+  private context: StageContext = undefined as StageContext
 
   public scheduler: Scheduler<SchedulerContext>
   public label?: string
@@ -45,28 +39,25 @@ export class Stage<
     if (label) this.label = label
   }
 
-  public addTask(
-    task: Task<SchedulerContext, StageContext>,
+  public createTask(
+    callback: TaskCallback<SchedulerContext, StageContext>,
     options?: AddNodeOptions<Task<SchedulerContext, StageContext>> & { label?: string }
   ): Task<SchedulerContext, StageContext> {
+    const task = new Task(this, callback, options?.label)
     this.add(task, options)
-    if (options?.label) {
-      this.taskLabels.set(task, options.label)
-    }
     return task
   }
 
   public removeTask(task: Task<SchedulerContext, StageContext>) {
     this.remove(task)
-    this.taskLabels.delete(task)
   }
 
   public run(delta: number, schedulerContext: SchedulerContext) {
     this.callback(
       delta,
       (deltaOverride) => {
-        this.forEachNode((step) => {
-          step(deltaOverride ?? delta, schedulerContext, this.context)
+        this.forEachNode((task) => {
+          task.run(deltaOverride ?? delta, schedulerContext, this.context)
         })
       },
       schedulerContext
@@ -74,6 +65,6 @@ export class Stage<
   }
 
   public getSchedule() {
-    return this.mapNodes((task) => this.taskLabels.get(task) ?? 'Unnamed Task')
+    return this.mapNodes((task) => task.label)
   }
 }

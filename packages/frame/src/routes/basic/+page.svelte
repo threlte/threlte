@@ -19,7 +19,7 @@
     label: 'defaultStage'
   })
 
-  defaultStage.addTask(
+  defaultStage.createTask(
     () => {
       console.log('defaultStage')
     },
@@ -31,12 +31,12 @@
   const renderStage = scheduler.createStage({
     label: 'renderStage',
     after: defaultStage,
-    callback(delta, runSteps, { shouldRender }) {
-      if (shouldRender()) runSteps()
+    callback(delta, runTasks, { shouldRender }) {
+      if (shouldRender()) runTasks()
     }
   })
 
-  const renderTask = renderStage.addTask(
+  const renderTask = renderStage.createTask(
     (_, { renderer, scene }) => {
       // renderer
     },
@@ -45,7 +45,7 @@
     }
   )
 
-  renderStage.addTask(
+  renderStage.createTask(
     () => {
       //
     },

@@ -39,7 +39,14 @@ export class DAG<T> {
 
   protected remove(value: T) {
     const index = this.linked.findIndex(({ value: v }) => v === value)
-    if (index === -1) return
+    if (index === -1) {
+      const unlinkedIndex = this.unlinked.findIndex(({ value: v }) => v === value)
+      if (unlinkedIndex !== -1) {
+        this.unlinked.splice(unlinkedIndex, 1)
+        return
+      }
+      throw new Error('Vertex not found')
+    }
     const vertex = this.linked[index]
     vertex.previous.forEach((prev) => {
       this.linked.find(({ value }) => value === prev)?.next.delete(value)
@@ -77,12 +84,8 @@ export class DAG<T> {
     }
   }
 
-  private getVertex(value: T) {
-    return this.linked.find(({ value: v }) => v === value)
-  }
-
   private addBefore(vertex: Vertex<T>, before: T) {
-    let nextVertex = this.getVertex(before)
+    let nextVertex = this.linked.find(({ value: v }) => v === before)
     if (!nextVertex) {
       // is it maybe unlinked?
       const unlinkedIndex = this.unlinked.findIndex(({ value }) => value === before)

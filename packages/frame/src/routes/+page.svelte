@@ -31,7 +31,7 @@
   // - delta          The delta time since the last frame in milliseconds
   // - schedulerCtx   The scheduler context
   // - stageCtx       The stage context
-  const moveObjectTask = defaultStage.addTask(
+  const moveObjectTask = defaultStage.createTask(
     (delta, schedulerCtx, stageCtx) => {
       // console.log(schedulerCtx)
       // -> { camera: 'camera', scene: 'scene', renderer: 'renderer' }
@@ -51,7 +51,7 @@
 
   // Now we can add a task that will render the frame. The task will
   // receive the scheduler context and the delta time since the last frame.
-  renderStage.addTask(
+  renderStage.createTask(
     (delta, { camera, renderer, scene }) => {
       // do rendering stuff
     },
@@ -61,7 +61,7 @@
   // You may also add a task that runs before or after multiple other steps
   // by passing an array of steps to the `before` or `after` option.
   /*
-  const afterDefaultAndOtherStep = defaultStage.addTask({
+  const afterDefaultAndOtherStep = defaultStage.createTask({
     after: [someTask, someOtherTask],
     label: 'afterOtherTasks'
   })
@@ -120,7 +120,7 @@
   // the step is invoked by the physics stage. The task will receive the
   // scheduler context, the stage context and the fixed delta. By that we can
   // calculate the view delta.
-  physicsStage.addTask(
+  physicsStage.createTask(
     (delta, { camera, renderer, scene }, stageCtx) => {
       const viewDelta = delta * stageCtx.t
       // console.log(stageCtx)
@@ -142,13 +142,13 @@
     after: defaultStage,
     label: 'frame-analytics-end'
   })
-  frameAnalyticsStartStage.addTask(
+  frameAnalyticsStartStage.createTask(
     (delta, schedulerCtx) => {
       // console.time('frame-analytics')
     },
     { label: 'frame-analytics-start' }
   )
-  frameAnalyticsEndStage.addTask(
+  frameAnalyticsEndStage.createTask(
     (delta, schedulerCtx) => {
       // console.timeEnd('frame-analytics')
       // -> frame-analytics: 0.123ms
