@@ -1,60 +1,192 @@
-type Vertex<T> = { value: T; previous: Set<T>; next: Set<T> }
+type Vertex<T> = { value: T; previous: Set<string>; next: Set<string> }
 
-export type AddNodeOptions<T> = {
-  before?: T | T[]
-  after?: T | T[]
+export type AddNodeOptions = {
+  before?: string | string[]
+  after?: string | string[]
 }
 
 export class DAG<T> {
-  private unlinked: Vertex<T>[] = []
-  private linked: Vertex<T>[] = []
-  private sortedLinked: T[] = []
-  private needsSort = false
+  /**
+   * inverse links are used to keep track of nodes that reference this node as "before" or "after"
+   */
+  public inverseLinks: Record<
+    string,
+    {
+      /** Nodes in the next set referenced this node as "before" and are stored in linked */
+      next: Set<string>
+      /** Nodes in the previous set referenced this node as "after" and are stored in linked */
+      previous: Set<string>
+    }
+  > = {}
 
-  protected add(value: T, options?: AddNodeOptions<T>) {
+  /** Nodes that are fully unlinked */
+  public unlinked: Record<string, Vertex<T>> = {}
+
+  public linked: Record<string, Vertex<T>> = {}
+
+  public sortedLinked: T[] = []
+  public sortedLabels: string[] = []
+  public needsSort = false
+
+  public add(label: string, value: T, options?: AddNodeOptions) {
+    let inverseLinks = this.inverseLinks[label]
+
+    if (!inverseLinks) {
+      inverseLinks = {
+        next: new Set(),
+        previous: new Set()
+      }
+      this.inverseLinks[label] = inverseLinks
+    }
+
     const vertex: Vertex<T> = {
       value,
-      previous: new Set(),
-      next: new Set()
+      previous: inverseLinks.previous ?? new Set(),
+      next: inverseLinks.next ?? new Set()
     }
-    if (!options?.after && !options?.before) {
-      this.unlinked.push(vertex)
+
+    // if another node referenced this node before, we have inverse links
+    const hasLinks = vertex.next.size > 0 || vertex.previous.size > 0
+
+    if (!options?.after && !options?.before && !hasLinks) {
+      // the node we're about to add is fully unlinked
+      this.unlinked[label] = vertex
       return
+    } else if (this.inverseLinks[label]) {
+      // the node we're about to add needs to be linked to an existing node.
+      const { next, previous } = this.inverseLinks[label]
+      previous.forEach((p) => {
+        vertex.previous.add(p)
+      })
+      next.forEach((n) => {
+        vertex.next.add(n)
+      })
+    }
+
+    if (options?.after) {
+      const afterArr = Array.isArray(options.after) ? options.after : [options.after]
+      vertex.previous = new Set(afterArr)
+      afterArr.forEach((after) => {
+        // the referenced vertex needs to be updated
+        const linkedAfter = this.linked[after]
+        if (linkedAfter) {
+          linkedAfter.next.add(label)
+        } else {
+          // maybe it's unlinked?
+          const unlinkedAfter = this.unlinked[after]
+          if (unlinkedAfter) {
+            unlinkedAfter.next.add(label)
+            // move to linked
+            this.linked[after] = unlinkedAfter
+            delete this.unlinked[after]
+          }
+        }
+
+        // update the inverse links
+        const inverseLinks = this.inverseLinks[after]
+        if (inverseLinks) {
+          inverseLinks.next.add(label)
+        } else {
+          this.inverseLinks[after] = {
+            next: new Set([label]),
+            previous: new Set()
+          }
+        }
+      })
     }
     if (options?.before) {
       const beforeArr = Array.isArray(options.before) ? options.before : [options.before]
+      vertex.next = new Set(beforeArr)
       beforeArr.forEach((before) => {
-        this.addBefore(vertex, before)
+        // the referenced vertex needs to be updated
+        const linkedBefore = this.linked[before]
+        if (linkedBefore) {
+          linkedBefore.previous.add(label)
+        } else {
+          // maybe it's unlinked?
+          const unlinkedBefore = this.unlinked[before]
+          if (unlinkedBefore) {
+            unlinkedBefore.previous.add(label)
+            // move to linked
+            this.linked[before] = unlinkedBefore
+            delete this.unlinked[before]
+          }
+        }
+
+        // update the inverse links
+        const inverseLinks = this.inverseLinks[before]
+        if (inverseLinks) {
+          inverseLinks.previous.add(label)
+        } else {
+          this.inverseLinks[before] = {
+            next: new Set(),
+            previous: new Set([label])
+          }
+        }
       })
     }
-    if (options?.after) {
-      const afterArr = Array.isArray(options.after) ? options.after : [options.after]
-      afterArr.forEach((after) => {
-        this.addAfter(vertex, after)
-      })
-    }
-    this.linked.push(vertex)
+
+    this.linked[label] = vertex
     this.needsSort = true
   }
 
-  protected remove(value: T) {
-    const index = this.linked.findIndex(({ value: v }) => v === value)
-    if (index === -1) {
-      const unlinkedIndex = this.unlinked.findIndex(({ value: v }) => v === value)
-      if (unlinkedIndex !== -1) {
-        this.unlinked.splice(unlinkedIndex, 1)
-        return
-      }
-      throw new Error('Vertex not found')
+  public remove(label: string) {
+    // check if it's an unlinked node
+    const unlinked = this.unlinked[label]
+    if (unlinked) {
+      delete this.unlinked[label]
+      return
     }
-    const vertex = this.linked[index]
-    vertex.previous.forEach((prev) => {
-      this.linked.find(({ value }) => value === prev)?.next.delete(value)
+
+    // if it's not, it's a bit more complicated
+    const linked = this.linked[label]
+
+    if (!linked) {
+      // The node does not exist in the graph.
+      return
+    }
+
+    // Update the 'next' nodes that this node points to
+    linked.next.forEach((nextLabel) => {
+      const nextNode = this.linked[nextLabel]
+      if (nextNode) {
+        nextNode.previous.delete(label)
+        // If the next node has no more previous and next links, it becomes unlinked
+        if (nextNode.previous.size === 0 && nextNode.next.size === 0) {
+          this.unlinked[nextLabel] = nextNode
+          delete this.linked[nextLabel]
+        }
+      }
+
+      // Update inverse links for the next nodes
+      if (this.inverseLinks[nextLabel]) {
+        this.inverseLinks[nextLabel].previous.delete(label)
+      }
     })
-    vertex.next.forEach((next) => {
-      this.linked.find(({ value }) => value === next)?.previous.delete(value)
+
+    // Update the 'previous' nodes that point to this node
+    linked.previous.forEach((prevLabel) => {
+      const prevNode = this.linked[prevLabel]
+      if (prevNode) {
+        prevNode.next.delete(label)
+        // If the prev node has no more next links and no more previous links, it becomes unlinked
+        if (prevNode.next.size === 0 && prevNode.previous.size === 0) {
+          this.unlinked[prevLabel] = prevNode
+          delete this.linked[prevLabel]
+        }
+      }
+
+      // Update inverse links for the previous nodes
+      if (this.inverseLinks[prevLabel]) {
+        this.inverseLinks[prevLabel].next.delete(label)
+      }
     })
-    this.linked.splice(index, 1)
+
+    // Finally, delete the node from linked and inverseLinks
+    delete this.linked[label]
+    delete this.inverseLinks[label]
+
+    // Mark the graph as needing a re-sort
     this.needsSort = true
   }
 
@@ -63,12 +195,9 @@ export class DAG<T> {
       this.sort()
     }
     const result: U[] = []
-    for (let i = 0; i < this.sortedLinked.length; i++) {
-      result.push(callback(this.sortedLinked[i], i))
-    }
-    for (let i = 0; i < this.unlinked.length; i++) {
-      result.push(callback(this.unlinked[i].value, i))
-    }
+    this.forEachNode((value, index) => {
+      result.push(callback(value, index))
+    })
     return result
   }
 
@@ -76,64 +205,62 @@ export class DAG<T> {
     if (this.needsSort) {
       this.sort()
     }
-    for (let i = 0; i < this.sortedLinked.length; i++) {
-      callback(this.sortedLinked[i], i)
+    let index = 0
+    for (; index < this.sortedLinked.length; index++) {
+      callback(this.sortedLinked[index], index)
     }
-    for (let i = 0; i < this.unlinked.length; i++) {
-      callback(this.unlinked[i].value, i)
-    }
+    Object.values(this.unlinked).forEach((vertex) => {
+      callback(vertex.value, index++)
+    })
   }
 
-  private addBefore(vertex: Vertex<T>, before: T) {
-    let nextVertex = this.linked.find(({ value: v }) => v === before)
-    if (!nextVertex) {
-      // is it maybe unlinked?
-      const unlinkedIndex = this.unlinked.findIndex(({ value }) => value === before)
-      if (unlinkedIndex !== -1) {
-        // yes, it is
-        nextVertex = this.unlinked[unlinkedIndex]
-        this.unlinked.splice(unlinkedIndex, 1)
-        this.linked.push(nextVertex)
-      } else {
-        // no, it's not
-        throw new Error('Next vertex not found')
-      }
+  protected mapLabels<U>(callback: (value: string, index: number) => U): U[] {
+    if (this.needsSort) {
+      this.sort()
     }
-    nextVertex.previous.add(vertex.value)
-    vertex.next.add(nextVertex.value)
+    const result: U[] = []
+    this.forEachLabel((value, index) => {
+      result.push(callback(value, index))
+    })
+    return result
   }
 
-  private addAfter(vertex: Vertex<T>, after: T) {
-    let previousVertex = this.linked.find(({ value }) => value === after)
-    if (!previousVertex) {
-      // is it maybe unlinked?
-      const unlinkedIndex = this.unlinked.findIndex(({ value }) => value === after)
-      if (unlinkedIndex !== -1) {
-        // yes, it is
-        previousVertex = this.unlinked[unlinkedIndex]
-        this.unlinked.splice(unlinkedIndex, 1)
-        this.linked.push(previousVertex)
-      } else {
-        // no, it's not
-        throw new Error('Previous vertex not found')
-      }
+  protected forEachLabel(callback: (value: string, index: number) => void) {
+    if (this.needsSort) {
+      this.sort()
     }
-    previousVertex.next.add(vertex.value)
-    vertex.previous.add(previousVertex.value)
+    let index = 0
+    for (; index < this.sortedLabels.length; index++) {
+      callback(this.sortedLabels[index], index)
+    }
+    Object.keys(this.unlinked).forEach((label) => {
+      callback(label, index++)
+    })
   }
 
-  private sort() {
-    const inDegree: Map<T, number> = new Map()
-    const zeroInDegreeQueue: T[] = []
-    const result: T[] = []
+  protected getValueByLabel(label: string): T | undefined {
+    return this.linked[label].value ?? this.unlinked[label]?.value
+  }
+
+  protected getLabelByValue(value: T): string | undefined {
+    return (
+      Object.keys(this.linked).find((label) => this.linked[label].value === value) ??
+      Object.keys(this.unlinked).find((label) => this.unlinked[label].value === value)
+    )
+  }
+
+  public sort() {
+    const inDegree: Map<string, number> = new Map()
+    const zeroInDegreeQueue: string[] = []
+    const result: string[] = []
 
     // Initialize inDegree (count of incoming edges) for each vertex
-    this.linked.forEach((vertex) => {
-      inDegree.set(vertex.value, 0)
+    Object.keys(this.linked).forEach((vertex) => {
+      inDegree.set(vertex, 0)
     })
 
     // Calculate inDegree for each vertex
-    this.linked.forEach((vertex) => {
+    Object.values(this.linked).forEach((vertex) => {
       vertex.next.forEach((next) => {
         inDegree.set(next, (inDegree.get(next) || 0) + 1)
       })
@@ -148,26 +275,29 @@ export class DAG<T> {
 
     // Process vertices with inDegree 0 and decrease inDegree of adjacent vertices
     while (zeroInDegreeQueue.length) {
-      const vertex = zeroInDegreeQueue.shift()!
-      result.push(vertex)
+      const vertexLabel = zeroInDegreeQueue.shift()!
+      result.push(vertexLabel)
 
-      this.linked
-        .find(({ value: v }) => v === vertex)
-        ?.next.forEach((adjVertex) => {
+      const v = Object.keys(this.linked).find((label) => label === vertexLabel)
+
+      if (v) {
+        this.linked[v]?.next.forEach((adjVertex) => {
           const adjVertexInDegree = (inDegree.get(adjVertex) || 0) - 1
           inDegree.set(adjVertex, adjVertexInDegree)
           if (adjVertexInDegree === 0) {
             zeroInDegreeQueue.push(adjVertex)
           }
         })
+      }
     }
 
     // Check for cycles in the graph
-    if (result.length !== this.linked.length) {
+    if (result.length !== Object.keys(this.linked).length) {
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 
-    this.sortedLinked = result
+    this.sortedLinked = result.map((label) => this.linked[label].value)
+    this.sortedLabels = result
     this.needsSort = false
   }
 }

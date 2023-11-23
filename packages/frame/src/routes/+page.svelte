@@ -1,69 +1,69 @@
 <script lang="ts">
+  import { Task } from '../lib'
   import { Scheduler, type Schedule } from '../lib/Scheduler'
 
   let schedule: Schedule | undefined
 
   // Create a new scheduler with context. This would be the place where the main
   // Threlte context is used. Every Threlte app probably only has a single scheduler.
-  const scheduler = Scheduler.create({
-    context: {
-      camera: 'camera',
-      scene: 'scene',
-      renderer: 'renderer'
-    }
+  const scheduler = new Scheduler({
+    clampDeltaTo: 0.1 // in seconds
   })
 
   // Create the default stage. Stages, just like their children tasks, can be
   // scheduled to run before or after other stages. The first stage is not
-  // scheduled before or after any other stage, so it will "just run". You may
-  // optionally provide a label for the stage. This is useful for debugging and
+  // scheduled before or after any other stage, so it will "just run". You must
+  // provide a label for the stage. This is useful for debugging and
   // understanding the execution order.
-  const defaultStage = scheduler.createStage({
-    label: 'defaultStage'
-  })
+  const defaultStage = scheduler.createStage('default stage')
 
   // Create a task. A task is the unit that actually runs code and can be
   // scheduled to run before or after other tasks. The first task – just like
-  // the first stage – is not scheduled before or after any other task. You may
-  // optionally provide a label for the task. This is useful for debugging and
-  // understanding the execution order. A task will always receive these three
-  // arguments:
-  // - delta          The delta time since the last frame in milliseconds
-  // - schedulerCtx   The scheduler context
-  // - stageCtx       The stage context
-  const moveObjectTask = defaultStage.createTask(
-    (delta, schedulerCtx, stageCtx) => {
-      // console.log(schedulerCtx)
-      // -> { camera: 'camera', scene: 'scene', renderer: 'renderer' }
+  // the first stage – is not scheduled before or after any other task. You must
+  // provide a label for the task. A task will always receive the delta time
+  // since the last frame in seconds as the first argument
+  defaultStage.createTask('move object', (delta) => {
+    // console.log(delta)
+    // -> 0.16
+  })
+
+  // Tasks may be scheduled to run before or after other tasks.
+  defaultStage.createTask(
+    'move camera',
+    (delta) => {
+      // do something
     },
     {
-      label: 'move-object'
+      after: 'move object'
     }
   )
 
-  // We probably want to create a stage that will be used to render the frame
-  // to the screen. This stage should run after the default stage, so we pass
-  // it as the `after` option.
-  const renderStage = scheduler.createStage({
-    after: defaultStage,
-    label: 'renderStage'
+  // They may be created on their own …
+  const triggerSounds = new Task(() => {})
+  // … and added to a stage later.
+  defaultStage.addTask('trigger sounds', triggerSounds, {
+    after: 'move camera'
   })
 
-  // Now we can add a task that will render the frame. The task will
-  // receive the scheduler context and the delta time since the last frame.
-  renderStage.createTask(
-    (delta, { camera, renderer, scene }) => {
-      // do rendering stuff
-    },
-    { label: 'render' }
-  )
+  // We probably want to create a stage that will be used to render the frame
+  // to the screen. This stage should run after the default stage, so we pass
+  // its label as the `after` option.
+  const renderStage = scheduler.createStage('render stage', {
+    after: 'default stage'
+  })
+
+  // Now we can add a task that will render the frame.
+  renderStage.createTask('render', (delta) => {
+    // do some rendering
+  })
 
   // You may also add a task that runs before or after multiple other steps
   // by passing an array of steps to the `before` or `after` option.
   /*
-  const afterDefaultAndOtherStep = defaultStage.createTask({
-    after: [someTask, someOtherTask],
-    label: 'afterOtherTasks'
+  const afterDefaultAndOtherStep = defaultStage.createTask('after other tasks', () => {
+		// do something after the other tasks
+	}, {
+    after: ['some task', 'some other task'],
   })
 	*/
 
@@ -85,10 +85,9 @@
 
   let rate = 1 / 2
   let fixedStepTimeAccumulator = 0
-  const physicsStage = scheduler.createStage({
-    label: 'physics',
-    before: defaultStage,
-    context: physicsContext,
+
+  const physicsStage = scheduler.createStage('physics stage', {
+    before: 'default stage',
     // The callback is invoked by the scheduler on every requestAnimationFrame
     // and receives the delta time since the last frame in milliseconds as
     // well as the function `run` which is used to run the steps of the stage.
@@ -120,41 +119,45 @@
   // the step is invoked by the physics stage. The task will receive the
   // scheduler context, the stage context and the fixed delta. By that we can
   // calculate the view delta.
-  physicsStage.createTask(
-    (delta, { camera, renderer, scene }, stageCtx) => {
-      const viewDelta = delta * stageCtx.t
-      // console.log(stageCtx)
-      // -> { t: 0.123456789, world: { gravity: 9.81 } }
-    },
-    { label: 'physics' }
-  )
+  physicsStage.createTask('physics', (delta) => {
+    const viewDelta = delta * physicsContext.t
+    // console.log(stageCtx)
+    // -> { t: 0.123456789, world: { gravity: 9.81 } }
+  })
 
   // Additionally, we may want to create two stages for frame analytics where
   // you need to start a timer before every other stage runs and stop it after
   // every other stage has run. This is where the `before` and `after` options
   // come in handy. We can create a stage that runs before the physics stage
   // and a stage that runs after the default frame stage.
-  const frameAnalyticsStartStage = scheduler.createStage({
-    before: physicsStage,
-    label: 'frame-analytics-start'
+  const frameAnalyticsStartStage = scheduler.createStage('frame analytics start', {
+    before: 'physics stage'
   })
-  const frameAnalyticsEndStage = scheduler.createStage({
-    after: defaultStage,
-    label: 'frame-analytics-end'
+  const frameAnalyticsEndStage = scheduler.createStage('frame analytics end', {
+    after: 'render stage'
   })
-  frameAnalyticsStartStage.createTask(
-    (delta, schedulerCtx) => {
-      // console.time('frame-analytics')
-    },
-    { label: 'frame-analytics-start' }
-  )
-  frameAnalyticsEndStage.createTask(
-    (delta, schedulerCtx) => {
-      // console.timeEnd('frame-analytics')
-      // -> frame-analytics: 0.123ms
-    },
-    { label: 'frame-analytics-end' }
-  )
+  frameAnalyticsStartStage.createTask('frame-analytics-start', (delta) => {
+    // console.time('frame-analytics')
+  })
+  frameAnalyticsEndStage.createTask('frame-analytics-end', (delta) => {
+    // console.timeEnd('frame-analytpics')
+    // -> frame-analytics: 0.123ms
+  })
+
+  // Using strings as the `before` and `after` options is making it possible to
+  // reference stages that are not yet created and generally makes it easier to
+  // create stages and tasks in any order.
+
+  // Example: Create a stage that runs after another stage that is not yet
+  // created.
+  // TODO: BUGGY
+  const someStage = scheduler.createStage('some stage', {
+    after: 'some other stage'
+  })
+  const someOtherStage = scheduler.createStage('some other stage', {
+    after: 'default stage',
+    before: 'render stage'
+  })
 
   // The scheduler provides an execution plan that can be used to visualize
   // the execution order of the stages, steps and tasks. This is useful for

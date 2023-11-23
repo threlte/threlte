@@ -1,17 +1,8 @@
-import type { Stage } from './Stage'
-import type { AnyContext } from './types'
+export type TaskCallback = (delta: number) => void
 
-export type TaskCallback<SchedulerContext extends AnyContext, StageContext extends AnyContext> = (
-  delta: number,
-  schedulerContext: SchedulerContext,
-  stageContext: StageContext
-) => void
-
-export class Task<SchedulerContext extends AnyContext, StageContext extends AnyContext> {
-  private callback: TaskCallback<SchedulerContext, StageContext>
-  public label: string = 'Unnamed Task'
+export class Task {
+  private callback: TaskCallback
   private shouldRun: boolean = true
-  public stage: Stage<SchedulerContext, StageContext>
 
   public stop() {
     this.shouldRun = false
@@ -21,22 +12,12 @@ export class Task<SchedulerContext extends AnyContext, StageContext extends AnyC
     this.shouldRun = true
   }
 
-  constructor(
-    stage: Stage<SchedulerContext, StageContext>,
-    callback: (
-      delta: number,
-      schedulerContext: SchedulerContext,
-      stageContext: StageContext
-    ) => void,
-    label?: string
-  ) {
-    this.stage = stage
+  constructor(callback: (delta: number) => void) {
     this.callback = callback
-    if (label) this.label = label
   }
 
-  public run(delta: number, schedulerContext: SchedulerContext, stageContext: StageContext) {
+  public run(delta: number) {
     if (!this.shouldRun) return
-    this.callback(delta, schedulerContext, stageContext)
+    this.callback(delta)
   }
 }
