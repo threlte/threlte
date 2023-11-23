@@ -9,6 +9,7 @@ export class DAG<T> {
   private unlinked: Vertex<T>[] = []
   private linked: Vertex<T>[] = []
   private sortedLinked: T[] = []
+  private needsSort = false
 
   protected add(value: T, options?: AddNodeOptions<T>) {
     const vertex: Vertex<T> = {
@@ -33,7 +34,7 @@ export class DAG<T> {
       })
     }
     this.linked.push(vertex)
-    this.sort()
+    this.needsSort = true
   }
 
   protected remove(value: T) {
@@ -47,10 +48,13 @@ export class DAG<T> {
       this.linked.find(({ value }) => value === next)?.previous.delete(value)
     })
     this.linked.splice(index, 1)
-    this.sort()
+    this.needsSort = true
   }
 
   protected mapNodes<U>(callback: (value: T, index: number) => U): U[] {
+    if (this.needsSort) {
+      this.sort()
+    }
     const result: U[] = []
     for (let i = 0; i < this.sortedLinked.length; i++) {
       result.push(callback(this.sortedLinked[i], i))
@@ -62,6 +66,9 @@ export class DAG<T> {
   }
 
   protected forEachNode(callback: (value: T, index: number) => void) {
+    if (this.needsSort) {
+      this.sort()
+    }
     for (let i = 0; i < this.sortedLinked.length; i++) {
       callback(this.sortedLinked[i], i)
     }
@@ -86,7 +93,7 @@ export class DAG<T> {
         this.linked.push(nextVertex)
       } else {
         // no, it's not
-        throw new Error('next vertex not found')
+        throw new Error('Next vertex not found')
       }
     }
     nextVertex.previous.add(vertex.value)
@@ -105,7 +112,7 @@ export class DAG<T> {
         this.linked.push(previousVertex)
       } else {
         // no, it's not
-        throw new Error('previous vertex not found')
+        throw new Error('Previous vertex not found')
       }
     }
     previousVertex.next.add(vertex.value)
@@ -158,5 +165,6 @@ export class DAG<T> {
     }
 
     this.sortedLinked = result
+    this.needsSort = false
   }
 }
