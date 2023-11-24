@@ -163,6 +163,9 @@
     pointerEvents
   })
   $: updateStyles(styles.noTransform.div, {
+    pointerEvents
+  })
+  $: updateStyles(styles.noTransform.div, {
     transform: center ? 'translate3d(-50%, -50%, 0)' : 'none'
   })
   $: updateStyles(styles.noTransform.div, {
