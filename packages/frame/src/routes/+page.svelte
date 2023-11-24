@@ -13,14 +13,14 @@
   // Create the default stage. Stages, just like their children tasks, can be
   // scheduled to run before or after other stages. The first stage is not
   // scheduled before or after any other stage, so it will "just run". You must
-  // provide a label for the stage. This is useful for debugging and
+  // provide a key for the stage. This is useful for debugging and
   // understanding the execution order.
   const defaultStage = scheduler.createStage('default stage')
 
   // Create a task. A task is the unit that actually runs code and can be
   // scheduled to run before or after other tasks. The first task – just like
   // the first stage – is not scheduled before or after any other task. You must
-  // provide a label for the task. A task will always receive the delta time
+  // provide a key for the task. A task will always receive the delta time
   // since the last frame in seconds as the first argument
   defaultStage.createTask('move object', (delta) => {
     // console.log(delta)
@@ -47,7 +47,7 @@
 
   // We probably want to create a stage that will be used to render the frame
   // to the screen. This stage should run after the default stage, so we pass
-  // its label as the `after` option.
+  // its key as the `after` option.
   const renderStage = scheduler.createStage('render stage', {
     after: 'default stage'
   })
@@ -173,7 +173,7 @@
   {#if schedule}
     {#each schedule.stages as stage}
       <div style="margin-bottom: 0px;">
-        ├&nbsp;{stage.label}
+        ├&nbsp;{stage.key}
         {#if stage.tasks}
           {#each stage.tasks as task}
             <div style="margin-left: 0px;">

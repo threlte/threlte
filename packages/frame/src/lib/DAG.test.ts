@@ -55,7 +55,7 @@ test('can run multiple tasks', () => {
   expect(i).toBe(2)
 })
 
-test('can use symbols as stage label', () => {
+test('can use symbols as stage key', () => {
   const scheduler = new Scheduler()
   const symbol = Symbol('stage')
   const stage = scheduler.createStage(symbol)
@@ -70,8 +70,8 @@ test('can use symbols as stage label', () => {
   expect(i).toBe(2)
 
   const plan = scheduler.getSchedule()
-  const stages = plan.stages.map((stage) => stage.label)
-  expect(stages).toEqual([symbol])
+  const stages = plan.stages.map((stage) => stage.key)
+  expect(stages).toEqual([symbol.toString()])
 })
 
 test('can run multiple tasks in order', () => {
@@ -196,12 +196,12 @@ test('can add and remove stages', () => {
   })
   const expectedStagesOrder = [Stages.stageA, Stages.stageB, Stages.stageC]
   const plan = scheduler.getSchedule()
-  const actualStagesOrder = plan.stages.map((stage) => stage.label)
+  const actualStagesOrder = plan.stages.map((stage) => stage.key)
   expect(actualStagesOrder).toEqual(expectedStagesOrder)
   scheduler.removeStage(Stages.stageB)
 
   const newPlan = scheduler.getSchedule()
-  const newActualStagesOrder = newPlan.stages.map((stage) => stage.label)
+  const newActualStagesOrder = newPlan.stages.map((stage) => stage.key)
   const newExpectedStagesOrder = [Stages.stageA, Stages.stageC]
   expect(newActualStagesOrder).toEqual(newExpectedStagesOrder)
 })
@@ -225,14 +225,14 @@ test('can add and remove tasks', () => {
   const expectedTasksOrder = [Tasks.taskA, Tasks.taskB, Tasks.taskC]
   const plan = scheduler.getSchedule()
   const actualTasksOrder = plan.stages
-    .find((stage) => stage.label === 'stage')
+    .find((stage) => stage.key === 'stage')
     ?.tasks?.map((task) => task)
   expect(actualTasksOrder).toEqual(expectedTasksOrder)
   stage.removeTask(Tasks.taskB)
 
   const newPlan = scheduler.getSchedule()
   const newActualTasksOrder = newPlan.stages
-    .find((stage) => stage.label === 'stage')
+    .find((stage) => stage.key === 'stage')
     ?.tasks?.map((task) => task)
   const newExpectedStagesOrder = [Tasks.taskA, Tasks.taskC]
   expect(newActualTasksOrder).toEqual(newExpectedStagesOrder)
@@ -261,13 +261,16 @@ test('stress test', () => {
     }
   )
 
-  const triggerSounds = new Task(() => {
-    expect(i).toBe(4)
-    i++
-  })
-  defaultStage.addTask('trigger sounds', triggerSounds, {
-    after: 'move camera'
-  })
+  defaultStage.createTask(
+    'trigger sounds',
+    () => {
+      expect(i).toBe(4)
+      i++
+    },
+    {
+      after: 'move camera'
+    }
+  )
 
   const renderStage = scheduler.createStage('render stage', {
     after: 'default stage'
@@ -352,7 +355,7 @@ test('stress test II', () => {
 
   const schedule = scheduler.getSchedule()
 
-  const stages = schedule.stages.map((stage) => stage.label)
+  const stages = schedule.stages.map((stage) => stage.key)
 
   const expectedStages = [
     Stages.frameStart,

@@ -1,36 +1,29 @@
-import type { Symbol } from 'typescript'
 import { DAG, type AddNodeOptions, type Key } from './DAG'
 import { Task, type TaskCallback } from './Task'
-
-export type CreateTaskOptions = {
-  label: Key
-} & AddNodeOptions
 
 /**
  * A Stage is a collection of steps. The steps are run in a topological sort
  * order.
  */
 export class Stage extends DAG<Task> {
+  public key: Key
+
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
 
-  constructor(callback?: (delta: number, run: (deltaOverride?: number) => void) => void) {
+  constructor(key: Key, callback?: (delta: number, run: (deltaOverride?: number) => void) => void) {
     super()
+    this.key = key
     if (callback) this.callback = callback.bind(this)
   }
 
-  public createTask(label: Key, callback: TaskCallback, options?: AddNodeOptions): Task {
-    const task = new Task(callback)
-    this.add(label, task, options)
+  public createTask(key: Key, callback: TaskCallback, options?: AddNodeOptions<Task>): Task {
+    const task = new Task(key, callback)
+    this.add(key, task, options)
     return task
   }
 
-  public taskByLabel(label: Key) {
-    return this.getValueByLabel(label)
-  }
-
-  public addTask(label: Key, task: Task, options?: AddNodeOptions): Task {
-    this.add(label, task, options)
-    return task
+  public getTask(key: Key) {
+    return this.getValueByKey(key)
   }
 
   public removeTask = this.remove.bind(this)
@@ -44,6 +37,6 @@ export class Stage extends DAG<Task> {
   }
 
   public getSchedule() {
-    return this.mapLabels((l) => l)
+    return this.mapNodes((l) => l.key.toString())
   }
 }

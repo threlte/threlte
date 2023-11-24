@@ -28,7 +28,7 @@
   {#if schedule}
     {#each schedule.stages as stage}
       <div style="margin-bottom: 0px;">
-        ├&nbsp;{stage.label}
+        ├&nbsp;{stage.key}
         {#if stage.tasks}
           {#each stage.tasks as task}
             <div style="margin-left: 0px;">

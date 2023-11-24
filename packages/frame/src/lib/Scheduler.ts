@@ -5,7 +5,7 @@ export type Schedule = ReturnType<Scheduler['getSchedule']>
 
 export type CreateStageOptions = {
   callback?: (delta: number, runTasks: (deltaOverride?: number) => void) => void
-} & AddNodeOptions
+} & AddNodeOptions<Stage>
 
 /**
  * A Scheduler is responsible for running stages. It runs the stages in a
@@ -21,22 +21,17 @@ export class Scheduler extends DAG<Stage> {
     this.run = this.run.bind(this)
   }
 
-  public createStage(label: Key, options?: CreateStageOptions) {
-    const stage = new Stage(options?.callback)
-    this.add(label, stage, {
+  public createStage(key: Key, options?: CreateStageOptions) {
+    const stage = new Stage(key, options?.callback)
+    this.add(key, stage, {
       after: options?.after,
       before: options?.before
     })
     return stage
   }
 
-  public stageByLabel(label: Key) {
-    return this.getValueByLabel(label)
-  }
-
-  public addStage(label: Key, stage: Stage, options?: AddNodeOptions): Stage {
-    this.add(label, stage, options)
-    return stage
+  public getStage(key: Key) {
+    return this.getValueByKey(key)
   }
 
   public removeStage = this.remove.bind(this)
@@ -63,12 +58,10 @@ export class Scheduler extends DAG<Stage> {
     }
   ) {
     return {
-      stages: this.mapLabels((stageLabel) => {
-        console.log(typeof stageLabel)
-        const stage = this.getValueByLabel(stageLabel)
+      stages: this.mapNodes((stage) => {
         if (stage === undefined) throw new Error('Stage not found')
         return {
-          label: stageLabel,
+          key: stage.key.toString(),
           ...{ tasks: include.tasks ? stage.getSchedule() : undefined }
         }
       })
