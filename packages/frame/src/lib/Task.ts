@@ -1,4 +1,5 @@
 import type { Key } from './DAG'
+import type { Stage } from './Stage'
 
 export type TaskCallback = (delta: number) => void
 
@@ -6,6 +7,7 @@ export class Task {
   private callback: TaskCallback
   private shouldRun: boolean = true
   public key: Key
+  public readonly stage: Stage
 
   public stop() {
     this.shouldRun = false
@@ -15,7 +17,8 @@ export class Task {
     this.shouldRun = true
   }
 
-  constructor(key: Key, callback: (delta: number) => void) {
+  constructor(stage: Stage, key: Key, callback: (delta: number) => void) {
+    this.stage = stage
     this.key = key
     this.callback = callback
   }

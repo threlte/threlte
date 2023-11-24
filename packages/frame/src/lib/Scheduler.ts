@@ -22,7 +22,7 @@ export class Scheduler extends DAG<Stage> {
   }
 
   public createStage(key: Key, options?: CreateStageOptions) {
-    const stage = new Stage(key, options?.callback)
+    const stage = new Stage(this, key, options?.callback)
     this.add(key, stage, {
       after: options?.after,
       before: options?.before

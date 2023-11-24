@@ -8,9 +8,10 @@
   // tasks in a stage. Stages can be scheduled to run before or after other
   // stages. The scheduler is designed to be used for scheduling rendering,
   // physics, analytics and other tasks in a game or app. It has been designed
-  // to be framework-agnostic. A major design feature is the ability to
-  // schedule tasks before or after other tasks that are not yet created. This
-  // makes it possible to create stages and tasks in any order at any time.
+  // to be framework-agnostic, so a framework-specific API can sit on top of it.
+  // A major design feature is the ability to schedule tasks before or after
+  // other tasks that are not yet created. This makes it possible to create
+  // stages and tasks in any order at any time.
 
   let schedule: Schedule | undefined
 

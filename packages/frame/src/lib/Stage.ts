@@ -1,4 +1,5 @@
 import { DAG, type AddNodeOptions, type Key } from './DAG'
+import type { Scheduler } from './Scheduler'
 import { Task, type TaskCallback } from './Task'
 
 /**
@@ -7,17 +8,23 @@ import { Task, type TaskCallback } from './Task'
  */
 export class Stage extends DAG<Task> {
   public key: Key
+  public readonly scheduler: Scheduler
 
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
 
-  constructor(key: Key, callback?: (delta: number, run: (deltaOverride?: number) => void) => void) {
+  constructor(
+    scheduler: Scheduler,
+    key: Key,
+    callback?: (delta: number, run: (deltaOverride?: number) => void) => void
+  ) {
     super()
+    this.scheduler = scheduler
     this.key = key
     if (callback) this.callback = callback.bind(this)
   }
 
   public createTask(key: Key, callback: TaskCallback, options?: AddNodeOptions<Task>): Task {
-    const task = new Task(key, callback)
+    const task = new Task(this, key, callback)
     this.add(key, task, options)
     return task
   }
