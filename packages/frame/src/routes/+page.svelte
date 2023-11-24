@@ -173,6 +173,51 @@
   schedule = scheduler.getSchedule({
     tasks: true
   })
+
+  // Result:
+  // {
+  // 	"stages": [
+  // 		{
+  // 			"key": "frame analytics start",
+  // 			"tasks": [
+  // 				"frame-analytics-start"
+  // 			]
+  // 		},
+  // 		{
+  // 			"key": "physics stage",
+  // 			"tasks": [
+  // 				"physics"
+  // 			]
+  // 		},
+  // 		{
+  // 			"key": "default stage",
+  // 			"tasks": [
+  // 				"move object",
+  // 				"move camera"
+  // 			]
+  // 		},
+  // 		{
+  // 			"key": "some other stage",
+  // 			"tasks": []
+  // 		},
+  // 		{
+  // 			"key": "some stage",
+  // 			"tasks": []
+  // 		},
+  // 		{
+  // 			"key": "render stage",
+  // 			"tasks": [
+  // 				"render"
+  // 			]
+  // 		},
+  // 		{
+  // 			"key": "frame analytics end",
+  // 			"tasks": [
+  // 				"frame-analytics-end"
+  // 			]
+  // 		}
+  // 	]
+  // }
 </script>
 
 <div style="line-height: 100%;">
