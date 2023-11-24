@@ -1,4 +1,4 @@
-import { DAG, type AddNodeOptions } from './DAG'
+import { DAG, type AddNodeOptions, type Key } from './DAG'
 import { Stage } from './Stage'
 
 export type Schedule = ReturnType<Scheduler['getSchedule']>
@@ -21,7 +21,7 @@ export class Scheduler extends DAG<Stage> {
     this.run = this.run.bind(this)
   }
 
-  public createStage(label: string, options?: CreateStageOptions) {
+  public createStage(label: Key, options?: CreateStageOptions) {
     const stage = new Stage(options?.callback)
     this.add(label, stage, {
       after: options?.after,
@@ -30,11 +30,11 @@ export class Scheduler extends DAG<Stage> {
     return stage
   }
 
-  public stageByLabel(label: string) {
+  public stageByLabel(label: Key) {
     return this.getValueByLabel(label)
   }
 
-  public addStage(label: string, stage: Stage, options?: AddNodeOptions): Stage {
+  public addStage(label: Key, stage: Stage, options?: AddNodeOptions): Stage {
     this.add(label, stage, options)
     return stage
   }
@@ -64,6 +64,7 @@ export class Scheduler extends DAG<Stage> {
   ) {
     return {
       stages: this.mapLabels((stageLabel) => {
+        console.log(typeof stageLabel)
         const stage = this.getValueByLabel(stageLabel)
         if (stage === undefined) throw new Error('Stage not found')
         return {

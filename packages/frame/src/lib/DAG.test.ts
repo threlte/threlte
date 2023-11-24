@@ -55,6 +55,25 @@ test('can run multiple tasks', () => {
   expect(i).toBe(2)
 })
 
+test('can use symbols as stage label', () => {
+  const scheduler = new Scheduler()
+  const symbol = Symbol('stage')
+  const stage = scheduler.createStage(symbol)
+  let i = 0
+  stage.createTask('task a', () => {
+    i++
+  })
+  stage.createTask('task b', () => {
+    i++
+  })
+  scheduler.run(0)
+  expect(i).toBe(2)
+
+  const plan = scheduler.getSchedule()
+  const stages = plan.stages.map((stage) => stage.label)
+  expect(stages).toEqual([symbol])
+})
+
 test('can run multiple tasks in order', () => {
   const scheduler = new Scheduler()
   const stage = scheduler.createStage('stage')

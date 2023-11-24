@@ -1,38 +1,40 @@
-type Vertex<T> = { value: T | undefined; previous: Set<string>; next: Set<string> }
+type Vertex<T> = { value: T | undefined; previous: Set<Key>; next: Set<Key> }
+
+export type Key = string | symbol
 
 export type AddNodeOptions = {
-  before?: string | string[]
-  after?: string | string[]
+  before?: Key | Key[]
+  after?: Key | Key[]
 }
 
 export class DAG<T> {
-  public allVertices: Record<string, Vertex<T>> = {}
+  public allVertices: Record<Key, Vertex<T>> = {}
 
   /** Nodes that are fully unlinked */
-  public isolatedVertices: Record<string, Vertex<T>> = {}
-  public connectedVertices: Record<string, Vertex<T>> = {}
+  public isolatedVertices: Record<Key, Vertex<T>> = {}
+  public connectedVertices: Record<Key, Vertex<T>> = {}
 
   public sortedConnectedValues: T[] = []
-  public sortedConnectedLabels: string[] = []
+  public sortedConnectedLabels: Key[] = []
   public needsSort = false
 
-  private moveToIsolated(label: string) {
+  private moveToIsolated(label: Key) {
     const vertex = this.connectedVertices[label]
     if (!vertex) return
     this.isolatedVertices[label] = vertex
     delete this.connectedVertices[label]
   }
 
-  private moveToConnected(label: string) {
+  private moveToConnected(label: Key) {
     const vertex = this.isolatedVertices[label]
     if (!vertex) return
     this.connectedVertices[label] = vertex
     delete this.isolatedVertices[label]
   }
 
-  public add(label: string, value: T, options?: AddNodeOptions) {
+  public add(label: Key, value: T, options?: AddNodeOptions) {
     if (this.allVertices[label] && this.allVertices[label].value !== undefined) {
-      throw new Error(`A node with the label ${label} already exists`)
+      throw new Error(`A node with the label ${label.toString()} already exists`)
     }
 
     let vertex = this.allVertices[label]
@@ -115,7 +117,7 @@ export class DAG<T> {
     this.needsSort = true
   }
 
-  public remove(label: string) {
+  public remove(label: Key) {
     // check if it's an unlinked vertex
     const unlinkedVertex = this.isolatedVertices[label]
     if (unlinkedVertex) {
@@ -181,12 +183,13 @@ export class DAG<T> {
     for (; index < this.sortedConnectedValues.length; index++) {
       callback(this.sortedConnectedValues[index], index)
     }
-    Object.values(this.isolatedVertices).forEach((vertex) => {
+    Reflect.ownKeys(this.isolatedVertices).forEach((label) => {
+      const vertex = this.isolatedVertices[label]
       if (vertex.value !== undefined) callback(vertex.value, index++)
     })
   }
 
-  protected mapLabels<U>(callback: (value: string, index: number) => U): U[] {
+  protected mapLabels<U>(callback: (label: Key, index: number) => U): U[] {
     if (this.needsSort) {
       this.sort()
     }
@@ -197,7 +200,7 @@ export class DAG<T> {
     return result
   }
 
-  protected forEachLabel(callback: (value: string, index: number) => void) {
+  protected forEachLabel(callback: (label: Key, index: number) => void) {
     if (this.needsSort) {
       this.sort()
     }
@@ -205,37 +208,37 @@ export class DAG<T> {
     for (; index < this.sortedConnectedLabels.length; index++) {
       callback(this.sortedConnectedLabels[index], index)
     }
-    Object.entries(this.isolatedVertices).forEach(([label, vertex]) => {
+    Reflect.ownKeys(this.isolatedVertices).forEach((label) => {
+      const vertex = this.isolatedVertices[label]
       if (vertex.value !== undefined) callback(label, index++)
     })
   }
 
-  protected getValueByLabel(label: string): T | undefined {
+  protected getValueByLabel(label: Key): T | undefined {
     return this.allVertices[label]?.value
   }
 
-  protected getLabelByValue(value: T): string | undefined {
+  protected getLabelByValue(value: T): Key | undefined {
     return (
-      Object.keys(this.connectedVertices).find(
+      Reflect.ownKeys(this.connectedVertices).find(
         (label) => this.connectedVertices[label].value === value
       ) ??
-      Object.keys(this.isolatedVertices).find(
+      Reflect.ownKeys(this.isolatedVertices).find(
         (label) => this.isolatedVertices[label].value === value
       )
     )
   }
 
   public sort() {
-    const inDegree: Map<string, number> = new Map()
-    const zeroInDegreeQueue: string[] = []
-    const result: string[] = []
+    const inDegree: Map<Key, number> = new Map()
+    const zeroInDegreeQueue: Key[] = []
+    const result: Key[] = []
 
     // we're only interested in vertices that have a value
-    const connectedVertexKeysWithValues = Object.entries(this.connectedVertices)
-      .filter(([_, vertex]) => {
-        return vertex.value !== undefined
-      })
-      .map(([key, _]) => key)
+    const connectedVertexKeysWithValues = Reflect.ownKeys(this.connectedVertices).filter((key) => {
+      const vertex = this.connectedVertices[key]
+      return vertex.value !== undefined
+    })
 
     // Initialize inDegree (count of incoming edges) for each vertex
     connectedVertexKeysWithValues.forEach((vertex) => {
@@ -280,16 +283,6 @@ export class DAG<T> {
 
     // Check for cycles in the graph
     if (result.length !== connectedVertexKeysWithValues.length) {
-      console.log(
-        'result',
-        result.length,
-        'connectedVertexKeysWithValues',
-        connectedVertexKeysWithValues.length,
-        'result',
-        result,
-        'connectedVertexKeysWithValues',
-        connectedVertexKeysWithValues
-      )
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 

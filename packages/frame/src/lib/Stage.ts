@@ -1,8 +1,9 @@
-import { DAG, type AddNodeOptions } from './DAG'
+import type { Symbol } from 'typescript'
+import { DAG, type AddNodeOptions, type Key } from './DAG'
 import { Task, type TaskCallback } from './Task'
 
 export type CreateTaskOptions = {
-  label: string
+  label: Key
 } & AddNodeOptions
 
 /**
@@ -17,17 +18,17 @@ export class Stage extends DAG<Task> {
     if (callback) this.callback = callback.bind(this)
   }
 
-  public createTask(label: string, callback: TaskCallback, options?: AddNodeOptions): Task {
+  public createTask(label: Key, callback: TaskCallback, options?: AddNodeOptions): Task {
     const task = new Task(callback)
     this.add(label, task, options)
     return task
   }
 
-  public taskByLabel(label: string) {
+  public taskByLabel(label: Key) {
     return this.getValueByLabel(label)
   }
 
-  public addTask(label: string, task: Task, options?: AddNodeOptions): Task {
+  public addTask(label: Key, task: Task, options?: AddNodeOptions): Task {
     this.add(label, task, options)
     return task
   }
