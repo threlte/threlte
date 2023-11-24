@@ -23,6 +23,10 @@ export class Stage extends DAG<Task> {
     return task
   }
 
+  public taskByLabel(label: string) {
+    return this.getValueByLabel(label)
+  }
+
   public addTask(label: string, task: Task, options?: AddNodeOptions): Task {
     this.add(label, task, options)
     return task

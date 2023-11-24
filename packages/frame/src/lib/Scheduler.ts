@@ -30,6 +30,10 @@ export class Scheduler extends DAG<Stage> {
     return stage
   }
 
+  public stageByLabel(label: string) {
+    return this.getValueByLabel(label)
+  }
+
   public addStage(label: string, stage: Stage, options?: AddNodeOptions): Stage {
     this.add(label, stage, options)
     return stage

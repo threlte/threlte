@@ -301,4 +301,13 @@ export class DAG<T> {
     this.sortedConnectedLabels = result
     this.needsSort = false
   }
+
+  public clear() {
+    this.allVertices = {}
+    this.isolatedVertices = {}
+    this.connectedVertices = {}
+    this.sortedConnectedValues = []
+    this.sortedConnectedLabels = []
+    this.needsSort = false
+  }
 }
