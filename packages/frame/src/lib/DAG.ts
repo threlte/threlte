@@ -1,4 +1,4 @@
-type Vertex<T> = { value: T; previous: Set<string>; next: Set<string> }
+type Vertex<T> = { value: T | undefined; previous: Set<string>; next: Set<string> }
 
 export type AddNodeOptions = {
   before?: string | string[]
@@ -6,185 +6,157 @@ export type AddNodeOptions = {
 }
 
 export class DAG<T> {
-  /**
-   * inverse links are used to keep track of nodes that reference this node as "before" or "after"
-   */
-  public inverseLinks: Record<
-    string,
-    {
-      /** Nodes in the next set referenced this node as "before" and are stored in linked */
-      next: Set<string>
-      /** Nodes in the previous set referenced this node as "after" and are stored in linked */
-      previous: Set<string>
-    }
-  > = {}
+  public allVertices: Record<string, Vertex<T>> = {}
 
   /** Nodes that are fully unlinked */
-  public unlinked: Record<string, Vertex<T>> = {}
+  public isolatedVertices: Record<string, Vertex<T>> = {}
+  public connectedVertices: Record<string, Vertex<T>> = {}
 
-  public linked: Record<string, Vertex<T>> = {}
-
-  public sortedLinked: T[] = []
-  public sortedLabels: string[] = []
+  public sortedConnectedValues: T[] = []
+  public sortedConnectedLabels: string[] = []
   public needsSort = false
 
-  public add(label: string, value: T, options?: AddNodeOptions) {
-    let inverseLinks = this.inverseLinks[label]
+  private moveToIsolated(label: string) {
+    const vertex = this.connectedVertices[label]
+    if (!vertex) return
+    this.isolatedVertices[label] = vertex
+    delete this.connectedVertices[label]
+  }
 
-    if (!inverseLinks) {
-      inverseLinks = {
-        next: new Set(),
-        previous: new Set()
-      }
-      this.inverseLinks[label] = inverseLinks
+  private moveToConnected(label: string) {
+    const vertex = this.isolatedVertices[label]
+    if (!vertex) return
+    this.connectedVertices[label] = vertex
+    delete this.isolatedVertices[label]
+  }
+
+  public add(label: string, value: T, options?: AddNodeOptions) {
+    if (this.allVertices[label] && this.allVertices[label].value !== undefined) {
+      throw new Error(`A node with the label ${label} already exists`)
     }
 
-    const vertex: Vertex<T> = {
-      value,
-      previous: inverseLinks.previous ?? new Set(),
-      next: inverseLinks.next ?? new Set()
+    let vertex = this.allVertices[label]
+
+    if (!vertex) {
+      vertex = {
+        value: value,
+        previous: new Set(),
+        next: new Set()
+      }
+      // add the vertex to the list of all vertices
+      this.allVertices[label] = vertex
+    } else if (vertex.value === undefined) {
+      vertex.value = value
     }
 
     // if another node referenced this node before, we have inverse links
-    const hasLinks = vertex.next.size > 0 || vertex.previous.size > 0
+    const hasEdges = vertex.next.size > 0 || vertex.previous.size > 0
 
-    if (!options?.after && !options?.before && !hasLinks) {
+    if (!options?.after && !options?.before && !hasEdges) {
       // the node we're about to add is fully unlinked
-      this.unlinked[label] = vertex
+      this.isolatedVertices[label] = vertex
       return
-    } else if (this.inverseLinks[label]) {
-      // the node we're about to add needs to be linked to an existing node.
-      const { next, previous } = this.inverseLinks[label]
-      previous.forEach((p) => {
-        vertex.previous.add(p)
-      })
-      next.forEach((n) => {
-        vertex.next.add(n)
-      })
+    } else {
+      this.connectedVertices[label] = vertex
     }
 
     if (options?.after) {
       const afterArr = Array.isArray(options.after) ? options.after : [options.after]
-      vertex.previous = new Set(afterArr)
+      // we need to update the vertex to include the new "after" nodes
       afterArr.forEach((after) => {
-        // the referenced vertex needs to be updated
-        const linkedAfter = this.linked[after]
-        if (linkedAfter) {
+        vertex.previous.add(after)
+      })
+      afterArr.forEach((after) => {
+        // we get the vertex from the list of all vertices
+        const linkedAfter = this.allVertices[after]
+        if (!linkedAfter) {
+          // if it doesn't exist, we create it
+          this.allVertices[after] = {
+            value: undefined, // uninitialized
+            previous: new Set(),
+            next: new Set([label])
+          }
+          this.connectedVertices[after] = this.allVertices[after]
+        } else {
+          // if it does exist, we update it
           linkedAfter.next.add(label)
-        } else {
-          // maybe it's unlinked?
-          const unlinkedAfter = this.unlinked[after]
-          if (unlinkedAfter) {
-            unlinkedAfter.next.add(label)
-            // move to linked
-            this.linked[after] = unlinkedAfter
-            delete this.unlinked[after]
-          }
-        }
-
-        // update the inverse links
-        const inverseLinks = this.inverseLinks[after]
-        if (inverseLinks) {
-          inverseLinks.next.add(label)
-        } else {
-          this.inverseLinks[after] = {
-            next: new Set([label]),
-            previous: new Set()
-          }
+          // we might need to move the vertex from isolated to connected
+          this.moveToConnected(after)
         }
       })
     }
     if (options?.before) {
       const beforeArr = Array.isArray(options.before) ? options.before : [options.before]
-      vertex.next = new Set(beforeArr)
+      // we need to update the vertex to include the new "before" nodes
       beforeArr.forEach((before) => {
-        // the referenced vertex needs to be updated
-        const linkedBefore = this.linked[before]
-        if (linkedBefore) {
+        vertex.next.add(before)
+      })
+      beforeArr.forEach((before) => {
+        // we get the vertex from the list of all vertices
+        const linkedBefore = this.allVertices[before]
+        if (!linkedBefore) {
+          // if it doesn't exist, we create it
+          this.allVertices[before] = {
+            value: undefined, // uninitialized
+            previous: new Set([label]),
+            next: new Set()
+          }
+          this.connectedVertices[before] = this.allVertices[before]
+        } else {
+          // if it does exist, we update it
           linkedBefore.previous.add(label)
-        } else {
-          // maybe it's unlinked?
-          const unlinkedBefore = this.unlinked[before]
-          if (unlinkedBefore) {
-            unlinkedBefore.previous.add(label)
-            // move to linked
-            this.linked[before] = unlinkedBefore
-            delete this.unlinked[before]
-          }
-        }
-
-        // update the inverse links
-        const inverseLinks = this.inverseLinks[before]
-        if (inverseLinks) {
-          inverseLinks.previous.add(label)
-        } else {
-          this.inverseLinks[before] = {
-            next: new Set(),
-            previous: new Set([label])
-          }
+          // we might need to move the vertex from isolated to connected
+          this.moveToConnected(before)
         }
       })
     }
 
-    this.linked[label] = vertex
+    // Mark the graph as needing a re-sort
     this.needsSort = true
   }
 
   public remove(label: string) {
-    // check if it's an unlinked node
-    const unlinked = this.unlinked[label]
-    if (unlinked) {
-      delete this.unlinked[label]
+    // check if it's an unlinked vertex
+    const unlinkedVertex = this.isolatedVertices[label]
+    if (unlinkedVertex) {
+      delete this.isolatedVertices[label]
+      delete this.allVertices[label]
       return
     }
 
     // if it's not, it's a bit more complicated
-    const linked = this.linked[label]
+    const linkedVertex = this.connectedVertices[label]
 
-    if (!linked) {
+    if (!linkedVertex) {
       // The node does not exist in the graph.
       return
     }
 
     // Update the 'next' nodes that this node points to
-    linked.next.forEach((nextLabel) => {
-      const nextNode = this.linked[nextLabel]
-      if (nextNode) {
-        nextNode.previous.delete(label)
-        // If the next node has no more previous and next links, it becomes unlinked
-        if (nextNode.previous.size === 0 && nextNode.next.size === 0) {
-          this.unlinked[nextLabel] = nextNode
-          delete this.linked[nextLabel]
+    linkedVertex.next.forEach((nextLabel) => {
+      const nextVertex = this.connectedVertices[nextLabel]
+      if (nextVertex) {
+        nextVertex.previous.delete(label)
+        if (nextVertex.previous.size === 0 && nextVertex.next.size === 0) {
+          this.moveToIsolated(nextLabel)
         }
-      }
-
-      // Update inverse links for the next nodes
-      if (this.inverseLinks[nextLabel]) {
-        this.inverseLinks[nextLabel].previous.delete(label)
       }
     })
 
     // Update the 'previous' nodes that point to this node
-    linked.previous.forEach((prevLabel) => {
-      const prevNode = this.linked[prevLabel]
-      if (prevNode) {
-        prevNode.next.delete(label)
-        // If the prev node has no more next links and no more previous links, it becomes unlinked
-        if (prevNode.next.size === 0 && prevNode.previous.size === 0) {
-          this.unlinked[prevLabel] = prevNode
-          delete this.linked[prevLabel]
+    linkedVertex.previous.forEach((prevLabel) => {
+      const prevVertex = this.connectedVertices[prevLabel]
+      if (prevVertex) {
+        prevVertex.next.delete(label)
+        if (prevVertex.previous.size === 0 && prevVertex.next.size === 0) {
+          this.moveToIsolated(prevLabel)
         }
-      }
-
-      // Update inverse links for the previous nodes
-      if (this.inverseLinks[prevLabel]) {
-        this.inverseLinks[prevLabel].next.delete(label)
       }
     })
 
-    // Finally, delete the node from linked and inverseLinks
-    delete this.linked[label]
-    delete this.inverseLinks[label]
+    // Finally, remove the node from the graph
+    delete this.connectedVertices[label]
+    delete this.allVertices[label]
 
     // Mark the graph as needing a re-sort
     this.needsSort = true
@@ -206,11 +178,11 @@ export class DAG<T> {
       this.sort()
     }
     let index = 0
-    for (; index < this.sortedLinked.length; index++) {
-      callback(this.sortedLinked[index], index)
+    for (; index < this.sortedConnectedValues.length; index++) {
+      callback(this.sortedConnectedValues[index], index)
     }
-    Object.values(this.unlinked).forEach((vertex) => {
-      callback(vertex.value, index++)
+    Object.values(this.isolatedVertices).forEach((vertex) => {
+      if (vertex.value !== undefined) callback(vertex.value, index++)
     })
   }
 
@@ -230,22 +202,26 @@ export class DAG<T> {
       this.sort()
     }
     let index = 0
-    for (; index < this.sortedLabels.length; index++) {
-      callback(this.sortedLabels[index], index)
+    for (; index < this.sortedConnectedLabels.length; index++) {
+      callback(this.sortedConnectedLabels[index], index)
     }
-    Object.keys(this.unlinked).forEach((label) => {
-      callback(label, index++)
+    Object.entries(this.isolatedVertices).forEach(([label, vertex]) => {
+      if (vertex.value !== undefined) callback(label, index++)
     })
   }
 
   protected getValueByLabel(label: string): T | undefined {
-    return this.linked[label].value ?? this.unlinked[label]?.value
+    return this.allVertices[label]?.value
   }
 
   protected getLabelByValue(value: T): string | undefined {
     return (
-      Object.keys(this.linked).find((label) => this.linked[label].value === value) ??
-      Object.keys(this.unlinked).find((label) => this.unlinked[label].value === value)
+      Object.keys(this.connectedVertices).find(
+        (label) => this.connectedVertices[label].value === value
+      ) ??
+      Object.keys(this.isolatedVertices).find(
+        (label) => this.isolatedVertices[label].value === value
+      )
     )
   }
 
@@ -254,14 +230,25 @@ export class DAG<T> {
     const zeroInDegreeQueue: string[] = []
     const result: string[] = []
 
+    // we're only interested in vertices that have a value
+    const connectedVertexKeysWithValues = Object.entries(this.connectedVertices)
+      .filter(([_, vertex]) => {
+        return vertex.value !== undefined
+      })
+      .map(([key, _]) => key)
+
     // Initialize inDegree (count of incoming edges) for each vertex
-    Object.keys(this.linked).forEach((vertex) => {
+    connectedVertexKeysWithValues.forEach((vertex) => {
       inDegree.set(vertex, 0)
     })
 
     // Calculate inDegree for each vertex
-    Object.values(this.linked).forEach((vertex) => {
+    connectedVertexKeysWithValues.forEach((vertexKey) => {
+      const vertex = this.connectedVertices[vertexKey]
       vertex.next.forEach((next) => {
+        // check if "next" vertex has a value
+        const nextVertex = this.connectedVertices[next]
+        if (!nextVertex) return
         inDegree.set(next, (inDegree.get(next) || 0) + 1)
       })
     })
@@ -278,10 +265,10 @@ export class DAG<T> {
       const vertexLabel = zeroInDegreeQueue.shift()!
       result.push(vertexLabel)
 
-      const v = Object.keys(this.linked).find((label) => label === vertexLabel)
+      const v = connectedVertexKeysWithValues.find((label) => label === vertexLabel)
 
       if (v) {
-        this.linked[v]?.next.forEach((adjVertex) => {
+        this.connectedVertices[v]?.next.forEach((adjVertex) => {
           const adjVertexInDegree = (inDegree.get(adjVertex) || 0) - 1
           inDegree.set(adjVertex, adjVertexInDegree)
           if (adjVertexInDegree === 0) {
@@ -292,12 +279,26 @@ export class DAG<T> {
     }
 
     // Check for cycles in the graph
-    if (result.length !== Object.keys(this.linked).length) {
+    if (result.length !== connectedVertexKeysWithValues.length) {
+      console.log(
+        'result',
+        result.length,
+        'connectedVertexKeysWithValues',
+        connectedVertexKeysWithValues.length,
+        'result',
+        result,
+        'connectedVertexKeysWithValues',
+        connectedVertexKeysWithValues
+      )
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 
-    this.sortedLinked = result.map((label) => this.linked[label].value)
-    this.sortedLabels = result
+    const filterUndefined = <T>(value: T | undefined): value is T => value !== undefined
+
+    this.sortedConnectedValues = result
+      .map((label) => this.connectedVertices[label].value)
+      .filter(filterUndefined)
+    this.sortedConnectedLabels = result
     this.needsSort = false
   }
 }

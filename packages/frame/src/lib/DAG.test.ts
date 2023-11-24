@@ -161,6 +161,64 @@ test('can run stages in order that have dependencies on other stages that are no
   scheduler.run(0)
 })
 
+test('can add and remove stages', () => {
+  enum Stages {
+    stageA = 'stage a',
+    stageB = 'stage b',
+    stageC = 'stage c'
+  }
+  const scheduler = new Scheduler()
+  scheduler.createStage(Stages.stageA)
+  scheduler.createStage(Stages.stageB, {
+    after: Stages.stageA
+  })
+  scheduler.createStage(Stages.stageC, {
+    after: [Stages.stageA, Stages.stageB]
+  })
+  const expectedStagesOrder = [Stages.stageA, Stages.stageB, Stages.stageC]
+  const plan = scheduler.getSchedule()
+  const actualStagesOrder = plan.stages.map((stage) => stage.label)
+  expect(actualStagesOrder).toEqual(expectedStagesOrder)
+  scheduler.removeStage(Stages.stageB)
+
+  const newPlan = scheduler.getSchedule()
+  const newActualStagesOrder = newPlan.stages.map((stage) => stage.label)
+  const newExpectedStagesOrder = [Stages.stageA, Stages.stageC]
+  expect(newActualStagesOrder).toEqual(newExpectedStagesOrder)
+})
+
+test('can add and remove tasks', () => {
+  enum Tasks {
+    taskA = 'task a',
+    taskB = 'task b',
+    taskC = 'task c'
+  }
+  const scheduler = new Scheduler()
+  const stage = scheduler.createStage('stage')
+  stage.createTask(Tasks.taskA, () => {})
+  stage.createTask(Tasks.taskB, () => {}, {
+    after: Tasks.taskA
+  })
+  stage.createTask(Tasks.taskC, () => {}, {
+    after: [Tasks.taskA, Tasks.taskB]
+  })
+
+  const expectedTasksOrder = [Tasks.taskA, Tasks.taskB, Tasks.taskC]
+  const plan = scheduler.getSchedule()
+  const actualTasksOrder = plan.stages
+    .find((stage) => stage.label === 'stage')
+    ?.tasks?.map((task) => task)
+  expect(actualTasksOrder).toEqual(expectedTasksOrder)
+  stage.removeTask(Tasks.taskB)
+
+  const newPlan = scheduler.getSchedule()
+  const newActualTasksOrder = newPlan.stages
+    .find((stage) => stage.label === 'stage')
+    ?.tasks?.map((task) => task)
+  const newExpectedStagesOrder = [Tasks.taskA, Tasks.taskC]
+  expect(newActualTasksOrder).toEqual(newExpectedStagesOrder)
+})
+
 test('stress test', () => {
   let i = 0
 
