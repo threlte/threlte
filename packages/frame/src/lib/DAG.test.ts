@@ -236,14 +236,58 @@ test('stress test', () => {
     i++
   })
 
-  const someStage = scheduler.createStage('some stage', {
-    after: 'some other stage'
+  scheduler.run(0)
+})
+
+test('stress test II', () => {
+  const scheduler = new Scheduler()
+
+  enum Stages {
+    default = 'default stage',
+    render = 'render stage',
+    physics = 'physics stage',
+    frameStart = 'frame analytics start',
+    frameEnd = 'frame analytics end',
+    some = 'some stage',
+    someOther = 'some other stage'
+  }
+
+  scheduler.createStage(Stages.default)
+  scheduler.createStage(Stages.render, {
+    after: Stages.default
   })
-  const someOtherStage = scheduler.createStage('some other stage', {
-    after: 'default stage',
-    before: 'render stage'
+  scheduler.createStage(Stages.physics, {
+    before: Stages.default
+  })
+  scheduler.createStage(Stages.frameStart, {
+    before: Stages.physics
+  })
+  scheduler.createStage(Stages.frameEnd, {
+    after: Stages.render
+  })
+  scheduler.createStage(Stages.some, {
+    after: Stages.someOther
+  })
+  scheduler.createStage(Stages.someOther, {
+    after: Stages.default,
+    before: Stages.render
   })
 
-  console.log(scheduler.getSchedule())
+  const schedule = scheduler.getSchedule()
+
+  const stages = schedule.stages.map((stage) => stage.label)
+
+  const expectedStages = [
+    Stages.frameStart,
+    Stages.physics,
+    Stages.default,
+    Stages.someOther,
+    Stages.some,
+    Stages.render,
+    Stages.frameEnd
+  ]
+
+  expect(stages).toEqual(expectedStages)
+
   scheduler.run(0)
 })
