@@ -38,13 +38,6 @@
     }
   )
 
-  // They may be created on their own …
-  const triggerSounds = new Task(() => {})
-  // … and added to a stage later.
-  defaultStage.addTask('trigger sounds', triggerSounds, {
-    after: 'move camera'
-  })
-
   // We probably want to create a stage that will be used to render the frame
   // to the screen. This stage should run after the default stage, so we pass
   // its key as the `after` option.
