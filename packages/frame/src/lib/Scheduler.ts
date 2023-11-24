@@ -36,7 +36,12 @@ export class Scheduler extends DAG<Stage> {
 
   public removeStage = this.remove.bind(this)
 
-  run(time: DOMHighResTimeStamp) {
+  /**
+   * Runs all the stages in the scheduler.
+   *
+   * @param time The time in milliseconds since the start of the program.
+   */
+  run(time: number) {
     const delta = time - this.lastTime
     this.forEachNode((stage) => {
       // we pass the delta as seconds, not milliseconds,
