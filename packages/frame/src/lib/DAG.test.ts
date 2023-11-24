@@ -248,8 +248,8 @@ test('stress test II', () => {
     physics = 'physics stage',
     frameStart = 'frame analytics start',
     frameEnd = 'frame analytics end',
-    some = 'some stage',
-    someOther = 'some other stage'
+    someOther = 'some other stage',
+    afterSomeOther = 'after some other stage'
   }
 
   scheduler.createStage(Stages.default)
@@ -265,7 +265,7 @@ test('stress test II', () => {
   scheduler.createStage(Stages.frameEnd, {
     after: Stages.render
   })
-  scheduler.createStage(Stages.some, {
+  scheduler.createStage(Stages.afterSomeOther, {
     after: Stages.someOther
   })
   scheduler.createStage(Stages.someOther, {
@@ -282,7 +282,7 @@ test('stress test II', () => {
     Stages.physics,
     Stages.default,
     Stages.someOther,
-    Stages.some,
+    Stages.afterSomeOther,
     Stages.render,
     Stages.frameEnd
   ]
