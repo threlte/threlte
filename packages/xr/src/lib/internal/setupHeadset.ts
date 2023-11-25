@@ -6,7 +6,6 @@ export const headset = new Group()
 
 export const setupHeadset = () => {
   const { renderer, camera } = useThrelte()
-  const xrState = useXR()
   const { xr } = renderer
 
   const immersiveFrame = useFrame(() => {
@@ -31,7 +30,7 @@ export const setupHeadset = () => {
     headset.quaternion.copy(camera.current.quaternion)
   }, { autostart: false, invalidate: false })
 
-  watch(xrState.isPresenting, (isPresenting) => {
+  watch(useXR().isPresenting, (isPresenting) => {
     if (isPresenting) {
       immersiveFrame.start()
       nonImmersiveFrame.stop()

@@ -5,6 +5,7 @@
   lang="ts"
   context="module"
 >
+  import { writable } from 'svelte/store'
   import { T, createRawEventDispatcher } from '@threlte/core'
   import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
@@ -60,18 +61,18 @@
 
   const dispatch = createRawEventDispatcher<$$Events>()
 
-  let handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
-  controllerDispatchers[handedness].set(dispatch)
+  const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
+  $: handedness.set(left ? 'left' : right ? 'right' : hand as 'left' | 'right')
 
-  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
-  $: controllerDispatchers[handedness].set(dispatch)
+  controllerDispatchers[$handedness].set(dispatch)
+  $: controllerDispatchers[$handedness].set(dispatch)
 
-  $: store = stores[handedness]
+  $: store = stores[$handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model
-  $: hasPointerControls = $pointerState[handedness].enabled
-  $: hasTeleportControls = $teleportState[handedness].enabled
+  $: hasPointerControls = $pointerState[$handedness].enabled
+  $: hasTeleportControls = $teleportState[$handedness].enabled
 </script>
 
 {#if !$isHandTracking}
@@ -91,11 +92,11 @@
 
       {#if hasPointerControls || hasTeleportControls}
         {#if $$slots['pointer-ray']}
-          <ShortRay {handedness}>
+          <ShortRay handedness={$handedness}>
             <slot name="pointer-ray" />
           </ShortRay>
         {:else}
-          <ShortRay {handedness} />
+          <ShortRay handedness={$handedness} />
         {/if}
       {/if}
     </T>
@@ -105,11 +106,11 @@
 <ScenePortal>
   {#if hasPointerControls}
     {#if $$slots['pointer-cursor']}
-      <PointerCursor {handedness}>
+      <PointerCursor handedness={$handedness}>
         <slot name="pointer-cursor" />
       </PointerCursor>
     {:else}
-      <PointerCursor {handedness} />
+      <PointerCursor handedness={$handedness} />
     {/if}
   {/if}
 
@@ -117,23 +118,23 @@
     {#if $$slots['teleport-ray']}
       <TeleportRay
         {targetRay}
-        {handedness}
+        handedness={$handedness}
       >
         <slot name="teleport-ray" />
       </TeleportRay>
     {:else}
       <TeleportRay
         {targetRay}
-        {handedness}
+        handedness={$handedness}
       />
     {/if}
 
     {#if $$slots['teleport-ray']}
-      <TeleportCursor {handedness}>
+      <TeleportCursor handedness={$handedness}>
         <slot name="teleport-cursor" />
       </TeleportCursor>
     {:else}
-      <TeleportCursor {handedness} />
+      <TeleportCursor handedness={$handedness} />
     {/if}
   {/if}
 </ScenePortal>

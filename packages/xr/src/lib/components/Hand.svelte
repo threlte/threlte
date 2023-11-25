@@ -1,21 +1,16 @@
 <script lang='ts' context='module'>
-  import { onDestroy } from 'svelte'
-  import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
-  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
+  import { Group } from 'three'
+  import { T, useThrelte, createRawEventDispatcher, useFrame, watch } from '@threlte/core'
   import type { XRHandEvent } from '../types'
-  import { isHandTracking } from '../internal/stores'
-  import { useHandTrackingState } from '../internal/useHandTrackingState'
+  import { isHandTracking, handDispatchers } from '../internal/stores'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
   import ScenePortal from "./internal/ScenePortal.svelte"
+  import { writable } from 'svelte/store'
   
-  const factory = new XRHandModelFactory()
-
   const stores = {
     left: leftStore,
     right: rightStore,
   } as const
-
-  const eventMap = new WeakMap()
 </script>
 
 <script lang='ts'>
@@ -51,47 +46,27 @@
     pinchend: XRHandEvent<'pinchend'>
   }
 
-  const handTrackingNow = useHandTrackingState()
   const dispatch = createRawEventDispatcher<$$Events>()
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
-  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
-
-  const handleConnected = (event: XRHandEvent<'connected'>) => {
-    if (event.data.handedness !== handedness) return
-
-    stores[handedness].set({ ...eventMap.get(event.target), inputSource: event.data.hand })
-
-    if (handTrackingNow()) {
-      dispatch('connected', event)
-    }
-  
-    /**
-     * @todo(mp) event.handedness is missing from @three/types. Need to make a PR there.
-    */
-    event.target.addEventListener('pinchstart', handlePinchEvent as any)
-    event.target.addEventListener('pinchend', handlePinchEvent as any)
-  }
+  const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
+  $: handedness.set(left ? 'left' : right ? 'right' : hand as 'left' | 'right')
+  $: handDispatchers[$handedness].set(dispatch)
 
   const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
-    if (event.data.handedness !== handedness) return
-
-    stores[handedness].set(undefined)
+    stores[$handedness].set(undefined)
 
     if ($isHandTracking) {
       dispatch('disconnected', event)
     }
-
-    event.target.removeEventListener('pinchstart', handlePinchEvent as any)
-    event.target.removeEventListener('pinchend', handlePinchEvent as any)
   }
 
   const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend'>) => {
     dispatch(event.type, event)
   }
 
-  let children: THREE.Group
+  let children: Group
 
   /**
    * Currently children of a hand XRSpace or model will not
@@ -123,44 +98,29 @@
     stop()
   }
 
-  $: store = stores[handedness]
+  watch([stores.left, stores.right, handedness], ([_, __, handedness]) => {
+    const store = stores[handedness]
+
+    if (!store.current) return
+
+    const { hand } = store.current
+    hand.addEventListener('disconnected', handleDisconnected as any)
+    hand.addEventListener('pinchstart', handlePinchEvent as any)
+    hand.addEventListener('pinchend', handlePinchEvent as any)
+    return () => {
+      hand.removeEventListener('disconnected', handleDisconnected as any)
+      hand.removeEventListener('pinchstart', handlePinchEvent as any)
+      hand.removeEventListener('pinchend', handlePinchEvent as any)
+    }
+  })
+
+  $: store = stores[$handedness]
   $: inputSource = $store?.inputSource
   $: model = $store?.model
-
-  for (const index of [0, 1]) {
-    const hand = xr.getHand(index)
-    const model = factory.createHandModel(hand, 'mesh')
-
-    eventMap.set(hand, { hand, model })
-
-    /**
-     * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
-    */
-    hand.addEventListener('connected', handleConnected as any)
-    hand.addEventListener('disconnected', handleDisconnected as any)
-  }
-
-  onDestroy(() => {
-    for (const index of [0, 1]) {
-      const hand = xr.getHand(index)
-      hand.removeEventListener('connected', handleConnected as any)
-      hand.removeEventListener('disconnected', handleDisconnected as any)
-    }
-
-    const hand = stores[handedness].current?.hand
-
-    hand?.removeEventListener('pinchstart', handlePinchEvent as any)
-    hand?.removeEventListener('pinchend', handlePinchEvent as any)
-
-    stores[handedness].set(undefined)
-  })
 </script>
 
 {#if $store?.hand && $isHandTracking}
-  <T
-    is={$store.hand}
-    name='XR hand {handedness}'
-  >
+  <T is={$store.hand}>
     {#if $$slots.default === undefined}
       <T is={model} />
     {/if}
@@ -173,6 +133,5 @@
       <slot name='wrist' />
       <slot />
     </T.Group>
-    
   </ScenePortal>
 {/if}

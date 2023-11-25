@@ -1,9 +1,9 @@
-import * as THREE from 'three'
+import { Matrix4 } from 'three'
 import { useThrelte, useFrame, watch, currentWritable } from '@threlte/core'
 import { useXR } from './useXR'
 import { useController } from './useController'
 
-export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => void
+export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
 export type UseHitTestOptions = {
   /**
@@ -29,7 +29,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
   const xrState = useXR()
-  const hitMatrix = new THREE.Matrix4()
+  const hitMatrix = new Matrix4()
 
   let hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
 

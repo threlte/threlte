@@ -32,6 +32,7 @@ This should be placed within a Threlte `<Canvas />`.
   import { setupRaf } from '../internal/setupRaf'
   import { setupHeadset } from '../internal/setupHeadset'
   import { setupControllers } from '../internal/setupControllers'
+  import { setupHands } from '../internal/setupHands'
 
   /**
    * Enables foveated rendering. Default is `1`, the three.js default.
@@ -75,6 +76,7 @@ This should be placed within a Threlte `<Canvas />`.
   setupRaf()
   setupHeadset()
   setupControllers()
+  setupHands()
 
   const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
     $isPresenting = true

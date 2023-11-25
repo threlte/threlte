@@ -1,3 +1,4 @@
+import type { Mesh } from 'three'
 import { writable } from 'svelte/store'
 import { watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
@@ -18,7 +19,7 @@ export const injectTeleportControlsPlugin = (): void => {
     if (!isSurface && !isBlocker) return
 
     const { addBlocker, addSurface, removeBlocker, removeSurface } = useTeleportControls()
-    const refStore = writable<THREE.Mesh>(ref)
+    const refStore = writable<Mesh>(ref)
     const propsStore = writable(props)
 
     watch([refStore, propsStore], ([nextRef, nextProps]) => {

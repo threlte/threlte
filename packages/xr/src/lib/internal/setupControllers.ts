@@ -1,3 +1,4 @@
+import type { XRTargetRaySpace } from 'three'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { useHandTrackingState } from './useHandTrackingState'
@@ -49,25 +50,25 @@ export const setupControllers = () => {
       stores[event.data.handedness].set(undefined)
     }
 
-    function handleEvent (this: THREE.XRTargetRaySpace, event: XRControllerEvent) {
+    function handleEvent (this: XRTargetRaySpace, event: XRControllerEvent) {
       const index = indexMap.get(this)
       if (event.type === 'connected') handleConnected(event as XRControllerEvent<'connected'>, index)
       if (event.type === 'disconnected') handleDisconnected(event as XRControllerEvent<'disconnected'>)
       if (!hasHands()) {
-        const hand = event.data.handedness as 'left' | 'right'
-        controllerDispatchers[hand]?.current?.(event.type, event)
+        const handedness = event.data.handedness as 'left' | 'right'
+        controllerDispatchers[handedness]?.current?.(event.type, event)
       }
     }
 
     for (const name of events) {
-      controller0.addEventListener(name, handleEvent)
-      controller1.addEventListener(name, handleEvent)
+      controller0.addEventListener(name, handleEvent as any)
+      controller1.addEventListener(name, handleEvent as any)
     }
   
     return () => {
       for (const name of events) {
-        controller0.removeEventListener(name, handleEvent)
-        controller1.removeEventListener(name, handleEvent)
+        controller0.removeEventListener(name, handleEvent as any)
+        controller1.removeEventListener(name, handleEvent as any)
       }
 
       stores.left.set(undefined)
