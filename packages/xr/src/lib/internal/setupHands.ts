@@ -1,36 +1,39 @@
-import type { XRHandSpace, Group } from 'three'
+import type { XRHandSpace } from 'three'
+import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { left, right } from '../hooks/useHand'
 import { useHandTrackingState } from './useHandTrackingState'
 import type { XRHandEvent } from '../types'
 import { handDispatchers } from './stores'
-import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 
 export const setupHands = () => {
   const factory = new XRHandModelFactory()
   const stores = { left, right } as const
   const { xr } = useThrelte().renderer
-  const handSpace0 = xr.getHand(0)
-  const handSpace1 = xr.getHand(1)
   const hasHands = useHandTrackingState()
-
+  const handSpaces = [xr.getHand(0), xr.getHand(1)]
   const map = new Map()
-  map.set(handSpace0, {
-    index: 0,
-    hand: handSpace0,
-    model: factory.createHandModel(handSpace0 as unknown as Group, 'mesh')
-  })
-  map.set(handSpace1, {
-    index: 1,
-    hand: handSpace1,
-    model: factory.createHandModel(handSpace1 as unknown as Group, 'mesh')
+
+  handSpaces.forEach((handSpace, index) => {
+    map.set(handSpace, {
+      hand: handSpace,
+      targetRay: xr.getController(index),
+      model: factory.createHandModel(handSpace, 'mesh')
+    })
   })
 
   onMount(() => {
+    const dispatch = (event: THREE.Event) => {
+      if (!hasHands()) return
+      console.log(event)
+      const handedness = (event.handedness ?? event.data.handedness) as 'left' | 'right'
+      handDispatchers[handedness]?.current?.(event.type, event)
+    }
+  
     function handleConnected (this: XRHandSpace, event: XRHandEvent) {
       const hand = this
-      const { index, model } = map.get(this)
+      const { model, targetRay } = map.get(this)
       const { data } = event as { data: {
         handedness: 'left' | 'right'
         hand: XRHand
@@ -41,21 +44,32 @@ export const setupHands = () => {
         hand,
         model,
         inputSource,
-        targetRay: xr.getController(index),
-        grip: xr.getControllerGrip(index)
+        targetRay
       })
 
-      if (hasHands()) {
-        handDispatchers[handedness]?.current?.('connected', event)
-      }
+      dispatch(event)
+    }
+
+    const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
+      dispatch(event)
+      stores[event.data.handedness].set(undefined)
     }  
 
-    handSpace0.addEventListener('connected', handleConnected as any)
-    handSpace1.addEventListener('connected', handleConnected as any)
+    for (const handSpace of handSpaces) {
+      handSpace.addEventListener('connected', handleConnected)
+      handSpace.addEventListener('disconnected', handleDisconnected)
+      handSpace.addEventListener('pinchstart', dispatch)
+      handSpace.addEventListener('pinchend', dispatch)
+    }
 
     return () => {
-      handSpace0.removeEventListener('connected', handleConnected as any)
-      handSpace1.removeEventListener('connected', handleConnected as any)
+      for (const handSpace of handSpaces) {
+        handSpace.removeEventListener('connected', handleConnected)
+        handSpace.removeEventListener('disconnected', handleDisconnected)
+        handSpace.removeEventListener('pinchstart', dispatch)
+        handSpace.removeEventListener('pinchend', dispatch)
+      }
+
       stores.left.set(undefined)
       stores.right.set(undefined)
     }

@@ -54,18 +54,6 @@
   $: handedness.set(left ? 'left' : right ? 'right' : hand as 'left' | 'right')
   $: handDispatchers[$handedness].set(dispatch)
 
-  const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
-    stores[$handedness].set(undefined)
-
-    if ($isHandTracking) {
-      dispatch('disconnected', event)
-    }
-  }
-
-  const handlePinchEvent = (event: XRHandEvent<'pinchstart' | 'pinchend'>) => {
-    dispatch(event.type, event)
-  }
-
   let children: Group
 
   /**
@@ -98,22 +86,6 @@
     stop()
   }
 
-  watch([stores.left, stores.right, handedness], ([_, __, handedness]) => {
-    const store = stores[handedness]
-
-    if (!store.current) return
-
-    const { hand } = store.current
-    hand.addEventListener('disconnected', handleDisconnected as any)
-    hand.addEventListener('pinchstart', handlePinchEvent as any)
-    hand.addEventListener('pinchend', handlePinchEvent as any)
-    return () => {
-      hand.removeEventListener('disconnected', handleDisconnected as any)
-      hand.removeEventListener('pinchstart', handlePinchEvent as any)
-      hand.removeEventListener('pinchend', handlePinchEvent as any)
-    }
-  })
-
   $: store = stores[$handedness]
   $: inputSource = $store?.inputSource
   $: model = $store?.model
@@ -126,11 +98,11 @@
     {/if}
   </T>
 
-  <T is={$store.targetRay}>
-    <T.Mesh>
-      <T.CylinderGeometry args={[0.01, 0.01, 0.1]} />
-    </T.Mesh>
-  </T>
+  {#if $$slots['target-ray'] !== undefined}
+    <T is={$store.targetRay}>
+      <slot name='target-ray' />
+    </T>
+  {/if}
 {/if}
 
 {#if $isHandTracking}

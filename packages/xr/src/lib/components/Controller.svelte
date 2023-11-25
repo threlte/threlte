@@ -7,7 +7,7 @@
 >
   import { writable } from 'svelte/store'
   import { T, createRawEventDispatcher } from '@threlte/core'
-  import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
+  import { left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
   import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
@@ -18,8 +18,7 @@
 
   const stores = {
     left: leftStore,
-    right: rightStore,
-    none: gaze
+    right: rightStore
   } as const
 </script>
 

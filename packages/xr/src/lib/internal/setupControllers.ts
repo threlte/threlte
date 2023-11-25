@@ -1,74 +1,75 @@
 import type { XRTargetRaySpace } from 'three'
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { useHandTrackingState } from './useHandTrackingState'
-import { createControllerModel } from './controllerModelFactory'
 import type { XRControllerEvent } from '../types'
 import { gaze, left, right } from '../hooks/useController'
 import { controllerDispatchers } from './stores'
 
-const events = [
-  'connected',
-  'disconnected',
-  'select',
-  'selectstart',
-  'selectend',
-  'squeeze',
-  'squeezeend',
-  'squeezestart'
-] as const
-
-const stores = { left, right, none: gaze } as const
-
 export const setupControllers = () => {
+  const factory = new XRControllerModelFactory()
+  const stores = { left, right, none: gaze } as const
   const { xr } = useThrelte().renderer
-  const controller0 = xr.getController(0)
-  const controller1 = xr.getController(1)
   const hasHands = useHandTrackingState()
-
+  const controllers = [xr.getController(0), xr.getController(1)]
   const indexMap = new Map()
-  indexMap.set(controller0, 0)
-  indexMap.set(controller1, 1)
+
+  controllers.forEach((targetRay, index) => {
+    indexMap.set(targetRay, {
+      targetRay,
+      grip: xr.getControllerGrip(index),
+      model: factory.createControllerModel(targetRay)
+    })
+  })
 
   onMount(() => {
-    const handleConnected = async (event: XRControllerEvent<'connected'>, index: number) => {
+    const dispatch = (event: THREE.Event) => {
+      if (hasHands()) return
+      const handedness = event.data.handedness as 'left' | 'right'
+      controllerDispatchers[handedness]?.current?.(event.type, event)
+    }
+  
+    function handleConnected (this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {
+      const { model, targetRay, grip } = indexMap.get(this)
       const { data: inputSource } = event
-      const targetRay = xr.getController(index)
-      const grip = xr.getControllerGrip(index)
 
       stores[event.data.handedness].set({
         inputSource,
         targetRay,
         grip,
-        model: inputSource.targetRayMode === 'tracked-pointer' && inputSource.gamepad !== undefined
-          ? await createControllerModel(event)
-          : undefined
+        model
       })
+
+      dispatch(event)
     }
 
     const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
+      dispatch(event)
       stores[event.data.handedness].set(undefined)
     }
 
-    function handleEvent (this: XRTargetRaySpace, event: XRControllerEvent) {
-      const index = indexMap.get(this)
-      if (event.type === 'connected') handleConnected(event as XRControllerEvent<'connected'>, index)
-      if (event.type === 'disconnected') handleDisconnected(event as XRControllerEvent<'disconnected'>)
-      if (!hasHands()) {
-        const handedness = event.data.handedness as 'left' | 'right'
-        controllerDispatchers[handedness]?.current?.(event.type, event)
-      }
+    for (const targetRay of controllers) {
+      targetRay.addEventListener('connected', handleConnected)
+      targetRay.addEventListener('disconnected', handleDisconnected)
+      targetRay.addEventListener('select', dispatch)
+      targetRay.addEventListener('selectstart', dispatch)
+      targetRay.addEventListener('selectend', dispatch)
+      targetRay.addEventListener('squeeze', dispatch)
+      targetRay.addEventListener('squeezestart', dispatch)
+      targetRay.addEventListener('squeezeend', dispatch)
     }
 
-    for (const name of events) {
-      controller0.addEventListener(name, handleEvent as any)
-      controller1.addEventListener(name, handleEvent as any)
-    }
-  
     return () => {
-      for (const name of events) {
-        controller0.removeEventListener(name, handleEvent as any)
-        controller1.removeEventListener(name, handleEvent as any)
+      for (const targetRay of controllers) {
+        targetRay.removeEventListener('connected', handleConnected)
+        targetRay.removeEventListener('disconnected', handleDisconnected)
+        targetRay.removeEventListener('select', dispatch)
+        targetRay.removeEventListener('selectstart', dispatch)
+        targetRay.removeEventListener('selectend', dispatch)
+        targetRay.removeEventListener('squeeze', dispatch)
+        targetRay.removeEventListener('squeezestart', dispatch)
+        targetRay.removeEventListener('squeezeend', dispatch)
       }
 
       stores.left.set(undefined)
