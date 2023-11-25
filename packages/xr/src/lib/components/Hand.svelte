@@ -125,6 +125,12 @@
       <T is={model} />
     {/if}
   </T>
+
+  <T is={$store.targetRay}>
+    <T.Mesh>
+      <T.CylinderGeometry args={[0.01, 0.01, 0.1]} />
+    </T.Mesh>
+  </T>
 {/if}
 
 {#if $isHandTracking}
