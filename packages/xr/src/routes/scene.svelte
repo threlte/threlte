@@ -10,12 +10,6 @@
   $: if ($isPresenting) teleport([0, 0, 5])
 
   let listenToGamepad = false
-
-  let test = false
-
-  setInterval(() => {
-    test = !test
-  }, 1000)
 </script>
 
 <svelte:window
@@ -40,7 +34,6 @@
 </Headset>
 
 <XR>
-  {#if test}
   <Controller left
     on:connected={() => console.log('connect')}
     on:select={() => console.log('select')}
@@ -68,8 +61,6 @@
     on:connected={() => console.log('connect')}
     on:select={() => console.log('select')}
   />
-  {/if}
-
 
   <Hand left>
     <T.Mesh slot="wrist">

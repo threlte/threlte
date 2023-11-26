@@ -1,4 +1,4 @@
-import type { XRHandSpace } from 'three'
+import type { Event, XRHandSpace } from 'three'
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
@@ -24,10 +24,10 @@ export const setupHands = () => {
   })
 
   onMount(() => {
-    const dispatch = (event: THREE.Event) => {
+    const dispatch = (event: Event) => {
       if (!hasHands()) return
-      console.log(event)
-      const handedness = (event.handedness ?? event.data.handedness) as 'left' | 'right'
+      const handEvent = event as unknown as { handedness: 'left' | 'right' } | { data: { handedness: 'left' | 'right' }}
+      const handedness = ('handedness' in handEvent) ? handEvent.handedness : handEvent.data.handedness
       handDispatchers[handedness]?.current?.(event.type, event)
     }
   
@@ -52,7 +52,7 @@ export const setupHands = () => {
 
     const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
       dispatch(event)
-      stores[event.data.handedness].set(undefined)
+      stores[event.data.handedness as 'left' | 'right'].set(undefined)
     }  
 
     for (const handSpace of handSpaces) {

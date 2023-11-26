@@ -26,8 +26,8 @@ export const setupControllers = () => {
   onMount(() => {
     const dispatch = (event: THREE.Event) => {
       if (hasHands()) return
-      const handedness = event.data.handedness as 'left' | 'right'
-      controllerDispatchers[handedness]?.current?.(event.type, event)
+      const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
+      controllerDispatchers[data.handedness]?.current?.(event.type, event)
     }
   
     function handleConnected (this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {

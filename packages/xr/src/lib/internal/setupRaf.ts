@@ -14,9 +14,7 @@ export const setupRaf = () => {
 
   watch(session, (session) => {
     if (session) {
-      currentRaf.fn = (fn: XRFrameRequestCallback) => (
-        session.requestAnimationFrame(fn)
-      )
+      currentRaf.fn = (fn: XRFrameRequestCallback) => session.requestAnimationFrame(fn)
     } else {
       currentRaf.fn = browserRaf
     }

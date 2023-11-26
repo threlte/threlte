@@ -1,6 +1,6 @@
 <script lang='ts' context='module'>
   import { Group } from 'three'
-  import { T, useThrelte, createRawEventDispatcher, useFrame, watch } from '@threlte/core'
+  import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import type { XRHandEvent } from '../types'
   import { isHandTracking, handDispatchers } from '../internal/stores'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
