@@ -3984,15 +3984,6 @@ packages:
       meshoptimizer: 0.18.1
     dev: true
 
-  /@types/three@0.158.2:
-    resolution: {integrity: sha512-KPYbdLI8VPhu7qnHqsayfkuk58Qk+20l1U5HBK7uG50EjtrqeCreurNNpnatMZje29XRuTM1A+pGHGdDBHPyUQ==}
-    dependencies:
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.0
-      fflate: 0.6.10
-      meshoptimizer: 0.18.1
-    dev: true
-
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
 
