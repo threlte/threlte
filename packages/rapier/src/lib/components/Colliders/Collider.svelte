@@ -12,6 +12,8 @@
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
+  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
+  import { useCreateEvent } from '../../lib/useCreateEvent'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
@@ -44,7 +46,9 @@
 
   const object = new Object3D()
 
+  const { updateRef } = useCreateEvent<Collider>()
   const rigidBody = useRigidBody()
+  const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
 
   const rapierContext = useRapier()
@@ -66,6 +70,7 @@
    */
   onMount(async () => {
     await tick()
+
     const scale = object.getWorldScale(new Vector3())
 
     const scaledArgs = scaleColliderArgs(shape, args, scale)
@@ -74,6 +79,8 @@
     const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
 
     collider = world.createCollider(colliderDesc, rigidBody)
+    collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
+    updateRef(collider)
 
     /**
      * Add collider to context
@@ -88,17 +95,16 @@
     if (hasRigidBodyParent) {
       const rigidBodyWorldPos = new Vector3()
       const rigidBodyWorldQuatInversed = new Quaternion()
-      object.traverseAncestors((child: Object3D) => {
-        if (child.userData.isRigidBody) {
-          child.getWorldPosition(rigidBodyWorldPos)
-          child.getWorldQuaternion(rigidBodyWorldQuatInversed)
-          rigidBodyWorldQuatInversed.invert()
-        }
-      })
+  
+      parentRigidBodyObject?.getWorldPosition(rigidBodyWorldPos)
+      parentRigidBodyObject?.getWorldQuaternion(rigidBodyWorldQuatInversed)
+      rigidBodyWorldQuatInversed.invert()
+
       const worldPosition = object.getWorldPosition(new Vector3()).sub(rigidBodyWorldPos)
       const worldRotation = object
         .getWorldQuaternion(new Quaternion())
         .premultiply(rigidBodyWorldQuatInversed)
+
       collider.setTranslationWrtParent(worldPosition)
       collider.setRotationWrtParent(worldRotation)
     } else {
@@ -109,39 +115,37 @@
 
   const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
-  $: {
-    if (collider) {
-      applyColliderActiveEvents(
-        collider,
-        colliderHasEventListeners,
-        rigidBody?.userData?.hasEventListeners
+  $: collider?.setRestitution(restitution ?? 0)
+  $: collider?.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
+  $: collider?.setFriction(friction ?? 0.7)
+  $: collider?.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
+  $: collider?.setSensor(sensor ?? false)
+  $: collider?.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
+  $: if (density) collider?.setDensity(density)
+
+  $: if (collider && mass) {
+    if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
+      collider.setMassProperties(
+        mass,
+        { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
+        {
+          x: principalAngularInertia[0],
+          y: principalAngularInertia[1],
+          z: principalAngularInertia[2]
+        },
+        eulerToQuaternion(angularInertiaLocalFrame)
       )
-      collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
-      collider.setRestitution(restitution ?? 0)
-      collider.setContactForceEventThreshold(1)
-      collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
-      collider.setFriction(friction ?? 0.7)
-      collider.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
-      collider.setSensor(sensor ?? false)
-      collider.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
-      if (density) collider.setDensity(density)
-      if (mass) {
-        if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
-          collider.setMassProperties(
-            mass,
-            { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
-            {
-              x: principalAngularInertia[0],
-              y: principalAngularInertia[1],
-              z: principalAngularInertia[2]
-            },
-            eulerToQuaternion(angularInertiaLocalFrame)
-          )
-        } else {
-          collider.setMass(mass)
-        }
-      }
+    } else {
+      collider.setMass(mass)
     }
+  }
+
+  $: if (collider) {
+    applyColliderActiveEvents(
+      collider,
+      colliderHasEventListeners,
+      rigidBody?.userData?.hasEventListeners
+    )
   }
 
   export const refresh = () => {

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -18,7 +18,7 @@
     "@sveltejs/kit": "^1.22.3",
     "@sveltejs/package": "^2.1.0",
     "@types/node": "^18.0.3",
-    "@types/three": "^0.158.2",
+    "@types/three": "^0.158.3",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@yushijinhun/three-minifier-rollup": "^0.3.1",

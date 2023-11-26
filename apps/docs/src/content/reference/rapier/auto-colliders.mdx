@@ -18,12 +18,16 @@
           },
           { name: 'density', required: false, type: 'number' },
           { name: 'mass', required: false, type: 'number' },
-          { name: 'massProperties', required: false, type: '{
-              mass: number
-              centerOfMass: Position
-              principalAngularInertia: Position
-              angularInertiaLocalFrame: Rotation
-              }' },
+          {
+            name: 'massProperties',
+            required: false,
+            type: '{
+              mass: number,
+              centerOfMass: Position,
+              principalAngularInertia: Position,
+              angularInertiaLocalFrame: Rotation,
+              }'
+          },
           { name: 'restitution', required: false, type: 'number' },
           { name: 'restitutionCombineRule', required: false, type: 'CoefficientCombineRule' },
           { name: 'friction', required: false, type: 'number' },
@@ -31,30 +35,57 @@
           { name: 'sensor', required: false, type: 'boolean' },
           { name: 'contactForceEventThreshold', required: false, type: 'number' }
         ],
-      events: [{ name: 'collisionenter', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              manifold: TempContactManifold
-              flipped: boolean
-              }>' }, { name: 'collisionexit', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              }>' }, { name: 'sensorenter', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              }>' }, { name: 'sensorexit', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              }>' }, { name: 'contact', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              manifold: TempContactManifold
-              flipped: boolean
-              maxForceDirection: Vector
-              maxForceMagnitude: number
-              totalForce: Vector
-              totalForceMagnitude: number
-              }>' }],
+      events: [
+        {
+          name: 'create', 
+          payload: '{
+            ref: Collider[],
+            cleanup: (callback: () => void) => void }
+          '
+        },
+        {
+          name: 'collisionenter',
+          payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null,
+            manifold: TempContactManifold,
+            flipped: boolean
+          }'
+        },
+        {
+          name: 'collisionexit',
+          payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+          }'
+        },
+        {
+          name: 'sensorenter',
+          payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+          }'
+        },
+        {
+          name: 'sensorexit',
+          payload: '{
+            targetCollider: Collider
+            targetRigidBody: RigidBody | null
+          }'
+        },
+        {
+          name: 'contact',
+          payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null,
+            manifold: TempContactManifold,
+            flipped: boolean,
+            maxForceDirection: Vector,
+            maxForceMagnitude: number,
+            totalForce: Vector,
+            totalForceMagnitude: number,
+          }'
+        }],
       bindings:
         [
           {
