@@ -55,6 +55,30 @@ export class Scheduler extends DAG<Stage> {
     this.lastTime = time
   }
 
+  runWithTiming(time: number) {
+    const delta = time - this.lastTime
+    const stageTimings: {
+      [key: string]: {
+        duration: number
+        tasks: Record<Key, number>
+      }
+    } = {}
+    const start = performance.now()
+    this.forEachNode((stage) => {
+      const start = performance.now()
+      const taskTimings = stage.runWithTiming(Math.min(delta / 1000, this.clampDeltaTo))
+      const duration = performance.now() - start
+      stageTimings[stage.key.toString()] = {
+        duration,
+        tasks: taskTimings
+      }
+    })
+    return {
+      total: performance.now() - start,
+      stages: stageTimings
+    }
+  }
+
   public getSchedule(
     include: {
       tasks?: boolean

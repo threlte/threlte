@@ -289,4 +289,8 @@ export class DAG<T extends { key: Key }> {
   public static isKey(value: any): value is Key {
     return typeof value === 'string' || typeof value === 'symbol'
   }
+
+  public static isValue<T extends { key: Key }>(value: any): value is T {
+    return typeof value === 'object' && 'key' in value
+  }
 }

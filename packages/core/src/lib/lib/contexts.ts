@@ -9,8 +9,7 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
-import type { ThrelteFrameHandler } from '../hooks/useFrame'
-import type { ThrelteRenderHandler } from '../hooks/useRender'
+import type { Scheduler, Stage } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
 import { createDefaultCamera } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
@@ -36,7 +35,7 @@ export type ThrelteContext = {
   /**
    * Invalidates the current frame when frameloop === 'demand'
    */
-  invalidate: (debugFrameloopMessage?: string) => void
+  invalidate: () => void
   /**
    * Advance one frame when frameloop === 'never'
    */
@@ -49,6 +48,24 @@ export type ThrelteContext = {
 
   // Shadows
   shadows: CurrentWritable<boolean | ShadowMapType>
+
+  /** The scheduler used by this Threlte app */
+  scheduler: Scheduler
+
+  /** The default stage used by useTask */
+  defaultStage: Stage
+
+  /**
+   * The default render stage. Tasks in this stage are ran according to
+   * on-demand rendering.
+   */
+  renderStage: Stage
+
+  /**
+   * Function to determine if a rendering should happen according to on-demand
+   * rendering, resets frame invalidations and advancements
+   */
+  shouldRender: () => boolean
 }
 
 /**
@@ -60,16 +77,7 @@ export type ThrelteInternalContext = {
   /**
    * Render context
    */
-  debugFrameloop: boolean
   frameInvalidated: boolean
-  frame: number
-  invalidations: Record<string, number>
-  manualFrameHandlers: Set<ThrelteFrameHandler>
-  autoFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlersNeedSortCheck: boolean
-  renderHandlers: Set<ThrelteRenderHandler>
-  renderHandlersNeedSortCheck: boolean
   advance: boolean
 
   /**
@@ -114,9 +122,15 @@ export type ThrelteInternalContext = {
    * should actually run.
    */
   shouldDispose: boolean
+
+  /**
+   * If anything is in this set, the frame will be considered invalidated and
+   * the next frame will be rendered.
+   */
+  invalidators: Set<any>
 }
 
-export type ThrelteUserContext = CurrentWritable<Record<string, any>>
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, any>>
 
 /**
  * ### `createContexts`
@@ -130,7 +144,6 @@ export const createContexts = (options: {
   dpr: number
   userSize: Writable<Size | undefined>
   parentSize: Writable<Size>
-  debugFrameloop: boolean
   frameloop: 'always' | 'demand' | 'never'
   shadows: boolean | ShadowMapType
   colorManagementEnabled: boolean
@@ -142,16 +155,7 @@ export const createContexts = (options: {
   getInternalCtx: () => ThrelteInternalContext
 } => {
   const internalCtx: ThrelteInternalContext = {
-    debugFrameloop: options.debugFrameloop,
-    frame: 0,
     frameInvalidated: true,
-    invalidations: {},
-    manualFrameHandlers: new Set(),
-    autoFrameHandlers: new Set(),
-    allFrameHandlers: new Set(),
-    allFrameHandlersNeedSortCheck: false,
-    renderHandlers: new Set(),
-    renderHandlersNeedSortCheck: false,
     advance: false,
     dispose: async (force = false) => {
       await tick()
@@ -203,7 +207,8 @@ export const createContexts = (options: {
       internalCtx.shouldDispose = true
     },
     disposableObjects: new Map(),
-    shouldDispose: false
+    shouldDispose: false,
+    invalidators: new Set()
   }
 
   const ctx: ThrelteContext = {
@@ -214,15 +219,8 @@ export const createContexts = (options: {
     camera: currentWritable(createDefaultCamera()),
     scene: new Scene(),
     renderer: undefined!,
-    invalidate: (debugFrameloopMessage?: string) => {
+    invalidate: () => {
       internalCtx.frameInvalidated = true
-      if (internalCtx.debugFrameloop && debugFrameloopMessage) {
-        internalCtx.invalidations[debugFrameloopMessage] = internalCtx.invalidations[
-          debugFrameloopMessage
-        ]
-          ? internalCtx.invalidations[debugFrameloopMessage] + 1
-          : 1
-      }
     },
     advance: () => {
       internalCtx.advance = true
@@ -233,7 +231,24 @@ export const createContexts = (options: {
     useLegacyLights: currentWritable(options.useLegacyLights),
     shadows: currentWritable(options.shadows),
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
-    frameloop: currentWritable(options.frameloop)
+    frameloop: currentWritable(options.frameloop),
+    scheduler: undefined as any, // will be set later
+    defaultStage: undefined as any, // will be set later
+    renderStage: undefined as any, // will be set later
+    shouldRender: () => {
+      const shouldRender =
+        ctx.frameloop.current === 'always' ||
+        (ctx.frameloop.current === 'demand' &&
+          (internalCtx.frameInvalidated || internalCtx.invalidators.size > 0)) ||
+        (ctx.frameloop.current === 'never' && internalCtx.advance)
+
+      // reset the advance flag
+      internalCtx.advance = false
+      // reset the frameInvalidated flag
+      internalCtx.frameInvalidated = false
+
+      return shouldRender
+    }
   }
 
   const userCtx: ThrelteUserContext = currentWritable({})

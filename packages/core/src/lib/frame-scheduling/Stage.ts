@@ -43,6 +43,19 @@ export class Stage extends DAG<Task> {
     })
   }
 
+  runWithTiming(delta: number) {
+    const taskTimings: Record<Key, number> = {}
+    this.callback(delta, (deltaOverride) => {
+      this.forEachNode((task) => {
+        const start = performance.now()
+        task.run(deltaOverride ?? delta)
+        const duration = performance.now() - start
+        taskTimings[task.key] = duration
+      })
+    })
+    return taskTimings
+  }
+
   public getSchedule() {
     return this.mapNodes((l) => l.key.toString())
   }

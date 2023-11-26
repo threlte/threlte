@@ -20,23 +20,24 @@
     type WebGLRendererParameters
   } from 'three'
   import T from './components/T/T.svelte'
+  import { injectLegacyFrameCompatibilityContext } from './hooks/legacy/utils'
   import { useParentSize } from './hooks/useParentSize'
   import { browser } from './lib/browser'
-  import { revision } from './lib/revision'
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
-  import { startFrameloop } from './lib/startFrameloop'
+  import { revision } from './lib/revision'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
+  import { Scheduler } from './frame-scheduling'
 
   /**
-   * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources — 
+   * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —
    * each have an associated color space. Those not already in the Linear-sRGB working color
-   * space must be converted, and textures be given the correct texture.colorSpace assignment. 
-   * 
+   * space must be converted, and textures be given the correct texture.colorSpace assignment.
+   *
    * Set to true for certain conversions (for hexadecimal and CSS colors in sRGB) to be made automatically.
-   * 
+   *
    * This property is not reactive and must be enabled before initializing colors.
    *
    * @default true
@@ -49,7 +50,9 @@
   export let colorSpace: ColorSpace = 'srgb'
 
   /**
+   * Deprecated.
    * @default false
+   * @deprecated
    */
   export let debugFrameloop: boolean = false
 
@@ -80,16 +83,24 @@
   /**
    * @default ACESFilmicToneMapping
    */
-   export let toneMapping: ToneMapping = ACESFilmicToneMapping
+  export let toneMapping: ToneMapping = ACESFilmicToneMapping
 
   /**
-   * @default false if greater than or equal to r155, true if less than 155
-   *
    * This property is not reactive and must be set at initialization.
    *
+   * @default false if greater than or equal to r155, true if less than 155
    * @see https://github.com/mrdoob/three.js/pull/26392
    */
   export let useLegacyLights: boolean = revision >= 155 ? false : true
+
+  /**
+   * By default, Threlte will automatically render the scene. To implement
+   * custom render pipelines, set this to 'manual'. This prop is currently
+   * not reactive.
+   *
+   * @default 'auto'
+   */
+  export let renderMode: 'auto' | 'manual' = 'auto'
 
   let canvas: HTMLCanvasElement
   let initialized = false
@@ -105,7 +116,6 @@
   const contexts = createContexts({
     colorManagementEnabled,
     colorSpace,
-    debugFrameloop,
     dpr,
     frameloop,
     parentSize,
@@ -116,11 +126,22 @@
   })
 
   $: contexts.ctx.colorSpace.set(colorSpace)
-  $: contexts.internalCtx.debugFrameloop = debugFrameloop
   $: contexts.ctx.dpr.set(dpr)
   $: contexts.ctx.frameloop.set(frameloop)
   $: contexts.ctx.shadows.set(shadows)
   $: contexts.ctx.toneMapping.set(toneMapping)
+
+  const scheduler = new Scheduler()
+  contexts.getCtx().defaultStage = scheduler.createStage(Symbol('threlte-default-stage'))
+  contexts.getCtx().renderStage = scheduler.createStage(Symbol('threlte-render-stage'), {
+    after: contexts.ctx.defaultStage,
+    callback(_, runTasks) {
+      if (contexts.ctx.shouldRender()) runTasks()
+    }
+  })
+
+  // set the scheduler on the context
+  contexts.getCtx().scheduler = scheduler
 
   // create cache context for caching assets
   createCache()
@@ -139,15 +160,29 @@
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)
 
+  // TODO: Remove in Threlte 7
+  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
+
   onMount(() => {
     createRenderer(canvas, rendererParameters)
-    startFrameloop(contexts.ctx, contexts.internalCtx)
+
+    contexts.getCtx().renderer.setAnimationLoop((time) => {
+      contexts.getInternalCtx().dispose()
+      scheduler.run(time)
+    })
+
+    contexts.ctx.renderStage.createTask('threlte-default-render', (_) => {
+      if (useRenderOrders.length === 0 && renderMode === 'auto') {
+        contexts.ctx.renderer.render(ctx.scene, ctx.camera.current)
+      }
+    })
+
     initialized = true
   })
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-
+    contexts.ctx.scheduler.clear()
     // Renderer is marked as optional because it is never defined in SSR
     contexts.ctx.renderer?.dispose()
   })

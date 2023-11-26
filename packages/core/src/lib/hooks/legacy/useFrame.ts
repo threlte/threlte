@@ -1,7 +1,10 @@
 import { getContext, onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
-import { browser } from '../lib/browser'
-import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+import { browser } from '../../lib/browser'
+import type { ThrelteContext, ThrelteInternalContext } from '../../lib/contexts'
+import { useLegacyFrameCompatibilityContext } from './utils'
+import { useThrelte } from '../useThrelte'
+import * as console from 'console'
 
 export type ThrelteUseFrame = {
   stop: () => void
@@ -13,11 +16,6 @@ export type ThrelteUseFrameOptions = {
   autostart?: boolean
   order?: number
   /**
-   * Optionally provide a message to use with the property
-   * `debugFrameloop` of the `<Canvas>` component.
-   */
-  debugFrameloopMessage?: string
-  /**
    * If false, the frame handler will not automatically invalidate the frame.
    * This is useful if you want to manually invalidate the frame. Defaults to
    * true.
@@ -28,9 +26,10 @@ export type ThrelteUseFrameOptions = {
 export type ThrelteFrameHandler = {
   fn: (ctx: ThrelteContext, delta: number) => void
   order?: number
-  debugFrameloopMessage?: string
   invalidate: boolean
 }
+
+const orderToKey = (order: number) => `useFrame-order-${order.toString()}`
 
 /**
  * Adds a handler to threltes unified render loop.
@@ -56,53 +55,56 @@ export const useFrame = (
     }
   }
 
-  const renderCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
-
-  if (renderCtx === undefined) {
-    throw new Error('No Threlte context found, are you using this hook inside of <Canvas>?')
-  }
-
-  const invalidate = options?.invalidate ?? true
-
-  const handler: ThrelteFrameHandler = {
-    fn,
-    order: options?.order,
-    debugFrameloopMessage: options?.debugFrameloopMessage,
-    invalidate
-  }
-
   const started = writable(false)
 
-  const stop = () => {
-    if (invalidate) {
-      renderCtx.autoFrameHandlers.delete(handler)
-    } else {
-      renderCtx.manualFrameHandlers.delete(handler)
-    }
-    renderCtx.allFrameHandlers.delete(handler)
+  const ctx = useThrelte()
+  const { useFrameOrders } = useLegacyFrameCompatibilityContext()
+  const { invalidators } = getContext<ThrelteInternalContext>('threlte-internal-context')
 
-    started.set(false)
+  let order = options?.order ?? 0
+
+  while (useFrameOrders.includes(order)) {
+    order += 0.01
   }
 
+  useFrameOrders.push(order)
+
+  const key = orderToKey(order)
+
+  const proxy = (delta: number) => {
+    fn(ctx, delta)
+  }
+
+  const task = ctx.defaultStage.createTask(key, proxy, {
+    after: useFrameOrders.filter((o) => o < order).map((o) => orderToKey(o)),
+    before: useFrameOrders.filter((o) => o > order).map((o) => orderToKey(o))
+  })
+
   const start = () => {
-    if (invalidate) {
-      renderCtx.autoFrameHandlers.add(handler)
-    } else {
-      renderCtx.manualFrameHandlers.add(handler)
-    }
-
-    renderCtx.allFrameHandlers.add(handler)
-    renderCtx.allFrameHandlersNeedSortCheck = true
-
     started.set(true)
+    if (options?.invalidate ?? true) {
+      invalidators.add(fn)
+    }
+    task.start()
+  }
+
+  const stop = () => {
+    started.set(true)
+    if (options?.invalidate ?? true) {
+      invalidators.delete(fn)
+    }
+    task.stop()
   }
 
   if (options?.autostart ?? true) {
     start()
+  } else {
+    stop()
   }
 
   onDestroy(() => {
-    stop()
+    ctx.defaultStage.removeTask(key)
+    useFrameOrders.splice(useFrameOrders.indexOf(order), 1)
   })
 
   return {

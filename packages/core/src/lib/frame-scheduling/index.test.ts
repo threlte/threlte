@@ -1,6 +1,5 @@
 import { expect, test } from 'bun:test'
 import { Scheduler } from './Scheduler'
-import { Task } from './Task'
 
 test('can run a task', () => {
   const scheduler = new Scheduler()
