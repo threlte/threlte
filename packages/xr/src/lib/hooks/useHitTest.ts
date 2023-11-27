@@ -35,7 +35,11 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
 
   if (source === 'viewer') {
     watch(xrState.session, async (session) => {
-      if (session === undefined) return
+      if (session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+  
       const space = await session.requestReferenceSpace('viewer') 
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
@@ -44,13 +48,21 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
     const hand = useController(source === 'leftInput' ? 'left' : 'right')
 
     watch([xrState.session, controller], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+  
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   
     watch([xrState.session, hand], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
@@ -64,7 +76,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
         return hitTestCallback(hitMatrix, undefined)
       }
 
-      const [hit] = xr.getFrame()?.getHitTestResults(hitTestSource.current)
+      const [hit] = xr.getFrame().getHitTestResults(hitTestSource.current)
       const pose = hit?.getPose(referenceSpace)
 
       if (pose === undefined) {

@@ -42,19 +42,31 @@
     <Controller {hand} on:select={handleSelect(hand)} />
     <Hand {hand} on:pinchend={handleSelect(hand)} />
 
-    <T.Mesh
-      bind:ref={cursors[hand]}
-      matrixAutoUpdate={false}
-      visible={false}
-    >
-      <T.RingGeometry
-        args={[0.15, 0.2, 32]}
-        on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
-      />
-      <T.MeshBasicMaterial />
-    </T.Mesh>
+    
   {/each}
 </XR>
+
+<T.Mesh
+  bind:ref={cursors.left}
+  matrixAutoUpdate={false}
+>
+  <T.RingGeometry
+    args={[0.15, 0.2, 32]}
+    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+  />
+  <T.MeshBasicMaterial />
+</T.Mesh>
+
+<T.Mesh
+  bind:ref={cursors.right}
+  matrixAutoUpdate={false}
+>
+  <T.RingGeometry
+    args={[0.15, 0.2, 32]}
+    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+  />
+  <T.MeshBasicMaterial />
+</T.Mesh>
 
 <T.HemisphereLight
   args={[0xffffff, 0xbbbbff, 1]}
