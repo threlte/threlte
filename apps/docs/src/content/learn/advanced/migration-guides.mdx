@@ -1,38 +1,205 @@
 ---
 category: Advanced
-title: Migration Guide
+title: Migration Guides
 order: 2
 ---
 
-Threlte 6 provides a much more mature and feature-rich APi and developer experience than
+## Migrating from `useFrame` and `useRender` to the Task Scheduling System
+
+Threlte 6 introduces a new task scheduling system that allows you to easily
+orchestrate the task execution order of your Threlte application. For details on
+how to use it, see the [documentation](/docs/learn/basics/scheduling-tasks).
+Before, you had the option to choose between `useFrame` and `useRender` to
+orchestrate your rendering pipeline. These hooks are currently still available
+but will be removed in the next major version of Threlte. This guide will help
+you migrate your application to the new task scheduling system.
+
+### `useFrame`
+
+The hook [`useTask`](/docs/reference/core/use-task) replaces `useFrame`. It has
+a slightly different signature and allows you to to add a `task` to Threlte's
+task scheduling system. A task may have dependencies to other tasks, which you
+can think of as the big brother of the `order` option of `useFrame`.
+
+#### Callback Arguments
+
+The callback to `useTask` now only receives the delta time since the last frame.
+The Threlte context previously available as the first argument to the callback
+of `useFrame` should be retrieved using the hook
+[`useThrelte`](/docs/reference/core/use-threlte).
+
+```ts title="before"
+useFrame(({ camera, scene }, delta) => {
+	// The Threlte context was previously available as the first
+	// argument to the callback, followed by the delta time since the
+	// last frame.
+})
+```
+
+```ts title="after"
+const { camera, scene } = useThrelte()
+useTask((delta) => {
+	// The delta time since the last frame is the only
+	// argument to the callback.
+})
+```
+
+#### If you didn't use the `order` option
+
+Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
+
+```ts title="before"
+useFrame(({ camera, scene }, delta) => {
+	// ...
+})
+```
+
+```ts title="after"
+const { camera, scene } = useThrelte()
+useTask((delta) => {
+	// ...
+})
+```
+
+#### If you used the `order` option
+
+Migrate to `useTask` by referencing the key of the task you want to depend on.
+
+```ts title="before"
+useFrame((_, delta) => {
+	// This task will be executed first
+}, { order: 0 })
+
+useFrame((_, delta) => {
+	// This task will be executed second
+}, { order: 1 })
+```
+
+```ts title="after"
+useTask('first', (delta) => {
+	// ...
+})
+
+useTask('second', (delta) => {
+	// This task will be executed after the task with the
+	// key 'first' has been executed.
+}, { after: 'first' })
+```
+
+### `useRender`
+
+The hook [`useTask`](/docs/reference/core/use-task) also replaces `useRender`.
+Previously, `useRender` allowed you to define a callback that was invoked after
+all `useFrame` callbacks have been invoked to render your scene with a custom
+render pipeline. This is now possible with `useTask` as well. Threlte provides a
+[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) that only
+ever executes its tasks when a re-render is needed.
+
+```ts title="before"
+useRender(() => {
+	// Render your scene here
+})
+```
+
+```ts title="after"
+const { renderStage } = useThrelte()
+useTask('render', () => {
+	// Render your scene here
+}, { stage: renderStage })
+```
+
+#### Callback Arguments
+
+The callback to `useTask` now only receives the delta time since the last frame.
+The Threlte context previously available as the first argument to the callback
+of `useRender` should be retrieved using the hook
+[`useThrelte`](/docs/reference/core/use-threlte).
+
+```ts title="before"
+useRender(({ camera, scene }, delta) => {
+	// The Threlte context was previously available as the first
+	// argument to the callback, followed by the delta time since the
+	// last frame.
+})
+```
+
+```ts title="after"
+const { camera, scene } = useThrelte()
+useTask((delta) => {
+	// The delta time since the last frame is the only
+	// argument to the callback.
+})
+```
+
+#### If you didn't use the `order` option
+
+Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
+
+```ts title="before"
+useRender((_{ camera, scene }_, delta) => {
+	// ...
+})
+```
+
+```ts title="after"
+const { renderStage } = useThrelte()
+useTask((delta) => {
+	// ...
+}, { stage: renderStage })
+```
+
+#### If you used the `order` option
+
+Migrate to `useTask` by referencing the key of the task you want to depend on.
+
+```ts title="before"
+useRender((_, delta) => {
+	// This task will be executed first
+}, { order: 0 })
+
+useRender((_, delta) => {
+	// This task will be executed second
+}, { order: 1 })
+```
+
+```ts title="after"
+const { renderStage } = useThrelte()
+
+useTask('first', (delta) => {
+	// ...
+}, { stage: renderStage })
+
+useTask('second', (delta) => {
+	// This task will be executed after the task with the
+	// key 'first' has been executed.
+}, { after: 'first', stage: renderStage })
+```
+
+## Migrating from Threlte 5 to Threlte 6
+
+Threlte 6 provides a much more mature and feature-rich API and developer experience than
 its predecessor at the cost of a lot of breaking changes. This guide will help you migrate
 your Threlte 5 project to Threlte v6.
 
-<Tip type="danger">
-  This document is a work in progress and will be updated up until the point of the first release of
-  Threlte 6. There are probably more breaking changes than listed here. Your Editor will help you
-  migrating with autocompletions and type checking.
-</Tip>
-
-## Preprocessing
+### Preprocessing
 
 Preprocessing is not needed anymore starting from Threlte 6. This means you
 may remove the preprocessor `@threlte/preprocess` from your project as well as its
 configuration in `svelte.config.js`. You can now use the [component `<T>`](/docs/reference/core/t) directly.
 
-## `<Three>` is now `<T>`
+### `<Three>` is now `<T>`
 
 Threlte 6 merges the `<Three>` and `<T>` components into a single component. The property `type` was renamed to `is`
 to also properly reflect the fact that it can be used with already instantiated objects.
 
-## `@threlte/core` is only about the `<T>` component
+### `@threlte/core` is only about the `<T>` component
 
 The `@threlte/core` package is now only about the `<T>` component. It does not provide any abstractions
 that have been part of the core package before. _Some_ of these abstractions (`<TransformControls>`,
 `<OrbitControls>`, audio components and several hooks) have been moved to `@threlte/extras` as this is the new
 home for commonly used abstractions.
 
-## Prop types
+### Prop types
 
 Threlte 6 heavily relies on prop types that Three.js naturally understands. As such, the prop types you may have
 previously used to define for example the position of an object changed. Threlte v5 provided its own prop types
@@ -40,13 +207,13 @@ previously used to define for example the position of an object changed. Threlte
 abstractions fully make use of the new prop types, we're working on it. Your editor should be able to provide
 you with the correct prop types for the components you're using.
 
-## Interactivity
+### Interactivity
 
 Interactivity is now handled by a plugin that's available at `@threlte/extras`. It's much more mature and flexible
 in terms of event handling. For instance – as some of you requested – you may now define on what object the main
 event listener is placed. Check out [its documentation](/docs/reference/extras/interactivity) to learn more.
 
-## `useLoader` now returns a store
+### `useLoader` now returns a store
 
 The hook [`useLoader`](/docs/reference/core/hooks#useloader) now returns a custom Svelte store called
 [`AsyncWritable`](/docs/reference/core/utilities#asyncwritable). This store allows you to [await](https://svelte.dev/tutorial/await-blocks)
@@ -54,12 +221,12 @@ the loading of the resource while also implementing a regular Svelte store. It a
 of the loader function so that it's not called multiple times for the same resource. You will most likely
 benefit from quite a performance boost in applications that rely heavily on external resources.
 
-## `useThrelteRoot` has been removed
+### `useThrelteRoot` has been removed
 
 The hook `useThrelteRoot` has been removed and its properties have partially been merged into `useThrelte` as well as
 a new internal context which is not exposed. All other contexts (which were used internally) have also been merged or removed.
 
-## `<Pass>` and the default effects rendering are removed
+### `<Pass>` and the default effects rendering are removed
 
 In the effort of clear separation of concerns, the component `<Pass>` as well as the rendering with Three.js default
 `EffectComposer` have been removed. Threlte 6 now provides a hook called [`useRender`](/docs/reference/core/hooks#userender) which
@@ -68,7 +235,7 @@ default render pipeline is disabled. `useRender` callbacks will be invoked _afte
 invoked. This means that you can use `useFrame` to update your objects and `useRender` to render it. `useRender` also has the option of
 ordering callbacks to orchestrate the rendering pipeline across multiple components.
 
-## Threlte's main context types
+### Threlte's main context types
 
 Thelte's main context contains Svelte stores. These stores are now a custom Threlte store called
 [`CurrentWritable`](/docs/reference/core/utilities#currentwritable) which is a store that contains a `current` value with
@@ -87,7 +254,7 @@ useFrame(({ camera, colorSpace }) => {
 
 The full type definition is [currently listed here](/docs/reference/core/hooks#usethrelte).
 
-## `useGltfAnimations` Signature
+### `useGltfAnimations` Signature
 
 The signature of the hook `useGltfAnimations` has changed. It no longer provides a callback that is invoked
 when the `gltf` store has been populated and the `actions` store has been set. This is because it with the option to set
@@ -104,9 +271,9 @@ $: $actions.Greet?.play()
 
 Check out the [hooks documentation](/docs/reference/extras/use-gltf-animations) for more information.
 
-## `@threlte/rapier`
+### `@threlte/rapier`
 
-### Transform props
+#### Transform props
 
 In an effort to clearly separate concerns, the components `<Collider>`, `<AutoColliders>` and `<RigidBody>` **no longer
 offer transform props** (`position`, `rotation`, `scale` and `lookAt`). Instead, you should wrap these components
