@@ -77,7 +77,12 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
     { autostart: false }
   )
 
-  watch(hitTestSource, (testSource) => {
+  watch([xrState.session, hitTestSource], ([session, testSource]) => {
+    if (session === undefined) {
+      stop()
+      return
+    }
+
     if (testSource === undefined) {
       stop()
       // Execute callback one last time to inform consumers of no hits.
