@@ -22,7 +22,6 @@ This should be placed within a Threlte `<Canvas />`.
   import { createRawEventDispatcher, useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
-    initialized,
     isHandTracking,
     isPresenting,
     referenceSpaceType,
@@ -78,15 +77,15 @@ This should be placed within a Threlte `<Canvas />`.
   setupControllers()
   setupHands()
 
-  const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
-    $isPresenting = true
-    dispatch('sessionstart', { ...event, target: $session! })
+  const handleSessionStart = () => {
+    isPresenting.set(true)
+    dispatch('sessionstart', { type: 'sessionstart', target: $session! })
   }
 
-  const handleSessionEnd = (event: XRSessionEvent<'sessionend'>) => {
-    dispatch('sessionend', { ...event, target: $session! })
-    $isPresenting = false
-    $session = undefined
+  const handleSessionEnd = () => {
+    dispatch('sessionend', { type: 'sessionend', target: $session! })
+    isPresenting.set(false)
+    session.set(undefined)
   }
 
   const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
@@ -138,14 +137,12 @@ This should be placed within a Threlte `<Canvas />`.
   })
 
   onMount(() => {
-    $initialized = true
     $xrStore = xr
     xr.enabled = true
     xr.addEventListener('sessionstart', handleSessionStart)
     xr.addEventListener('sessionend', handleSessionEnd)
 
     return () => {
-      $initialized = false
       $xrStore = undefined
       xr.enabled = false
       xr.removeEventListener('sessionstart', handleSessionStart)

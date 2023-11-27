@@ -27,13 +27,13 @@ export const toggleXRSession = async (
     return
   }
 
-  // Otherwise enter a session
-  const options = getXRSessionOptions(referenceSpaceType.current, sessionInit)
-  const nextSession = await navigator.xr!.requestSession(sessionMode, options)
-
   if (xr.current === undefined) {
     throw new Error('An <XR> component was not created when attempting to toggle a session.')
   }
+
+  // Otherwise enter a session
+  const options = getXRSessionOptions(referenceSpaceType.current, sessionInit)
+  const nextSession = await navigator.xr!.requestSession(sessionMode, options)
 
   await xr.current.setSession(nextSession)
 

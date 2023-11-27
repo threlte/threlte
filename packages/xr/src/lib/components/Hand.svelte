@@ -14,7 +14,6 @@
 </script>
 
 <script lang='ts'>
-
   type $$Props =
     | {
         /** Whether the XRHand should be matched with the left hand. */

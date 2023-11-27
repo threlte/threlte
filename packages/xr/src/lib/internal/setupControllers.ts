@@ -1,4 +1,4 @@
-import type { XRTargetRaySpace } from 'three'
+import type { XRTargetRaySpace, Event } from 'three'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
@@ -24,7 +24,7 @@ export const setupControllers = () => {
   })
 
   onMount(() => {
-    const dispatch = (event: THREE.Event) => {
+    const dispatch = (event: Event) => {
       if (hasHands()) return
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
       controllerDispatchers[data.handedness]?.current?.(event.type, event)

@@ -1,8 +1,6 @@
 import type { WebXRManager, Intersection } from 'three'
-import { writable } from 'svelte/store'
 import { createRawEventDispatcher, currentWritable } from '@threlte/core'
 
-export const initialized = writable(false)
 export const isPresenting = currentWritable(false)
 export const isHandTracking = currentWritable(false)
 export const session = currentWritable<XRSession | undefined>(undefined)
