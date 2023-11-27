@@ -9,7 +9,7 @@ export const useHandTrackingState = () => {
 
   return () => {
     let handTracking = false
-    xr.getSession()?.inputSources.forEach((value) => {
+    xr.getSession()?.inputSources?.forEach((value) => {
       if (value.hand) {
         handTracking = true
       }
