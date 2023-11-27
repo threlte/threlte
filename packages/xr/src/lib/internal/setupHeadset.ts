@@ -4,9 +4,8 @@ import { useXR } from '../hooks/useXR'
 
 export const headset = new Group()
 
-export const useUpdateHeadset = () => {
+export const setupHeadset = () => {
   const { renderer, camera } = useThrelte()
-  const xrState = useXR()
   const { xr } = renderer
 
   const immersiveFrame = useFrame(() => {
@@ -31,7 +30,7 @@ export const useUpdateHeadset = () => {
     headset.quaternion.copy(camera.current.quaternion)
   }, { autostart: false, invalidate: false })
 
-  watch(xrState.isPresenting, (isPresenting) => {
+  watch(useXR().isPresenting, (isPresenting) => {
     if (isPresenting) {
       immersiveFrame.start()
       nonImmersiveFrame.stop()

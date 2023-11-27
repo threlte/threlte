@@ -5,38 +5,21 @@
   lang="ts"
   context="module"
 >
-  import type { XRTargetRaySpace } from 'three'
-  import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-  import { onDestroy } from 'svelte'
-  import { T, createRawEventDispatcher, useThrelte } from '@threlte/core'
-  import { gaze, left as leftStore, right as rightStore } from '../hooks/useController'
-  import { isHandTracking, pointerState, teleportState } from '../internal/stores'
-  import { useHandTrackingState } from '../internal/useHandTrackingState'
-  import type { XRController, XRControllerEvent } from '../types'
+  import { writable } from 'svelte/store'
+  import { T, createRawEventDispatcher } from '@threlte/core'
+  import { left as leftStore, right as rightStore } from '../hooks/useController'
+  import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
+  import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import ScenePortal from './internal/ScenePortal.svelte'
   import TeleportCursor from './internal/TeleportCursor.svelte'
   import TeleportRay from './internal/TeleportRay.svelte'
 
-  const factory = new XRControllerModelFactory()
-
   const stores = {
     left: leftStore,
-    right: rightStore,
-    none: gaze
+    right: rightStore
   } as const
-
-  const events = [
-    'select',
-    'selectstart',
-    'selectend',
-    'squeeze',
-    'squeezeend',
-    'squeezestart'
-  ] as const
-
-  const eventMap = new WeakMap<XRTargetRaySpace, Omit<XRController, 'inputSource'>>()
 </script>
 
 <script lang="ts">
@@ -75,88 +58,25 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  $: handedness = (left ? 'left' : right ? 'right' : hand) as 'left' | 'right'
-
   const dispatch = createRawEventDispatcher<$$Events>()
-  const { xr } = useThrelte().renderer
-  const handTrackingNow = useHandTrackingState()
 
-  const handleEvent = (event: XRControllerEvent) => {
-    if (!handTrackingNow()) {
-      dispatch(event.type, event)
-    }
-  }
+  const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
+  $: handedness.set(left ? 'left' : right ? 'right' : hand as 'left' | 'right')
 
-  const handleConnected = (event: XRControllerEvent<'connected'>) => {
-    const targetData = eventMap.get(event.target)
+  controllerDispatchers[$handedness].set(dispatch)
+  $: controllerDispatchers[$handedness].set(dispatch)
 
-    if (event.data.handedness !== handedness || !targetData) return
-
-    stores[handedness].set({ ...targetData, inputSource: event.data })
-
-    if (!handTrackingNow()) {
-      dispatch('connected', event)
-    }
-
-    events.forEach((name) => event.target.addEventListener(name, handleEvent))
-  }
-
-  const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
-    if (event.data.handedness !== handedness) return
-
-    stores[handedness].set(undefined)
-
-    if (!$isHandTracking) {
-      dispatch('disconnected', event)
-    }
-
-    events.forEach((name) => event.target.removeEventListener(name, handleEvent))
-  }
-
-  for (const index of [0, 1]) {
-    const targetRay = xr.getController(index)
-    const grip = xr.getControllerGrip(index)
-
-    // "createControllerModel" currently only will attach a model if the "connected" event is fired,
-    // so it must be called immediately before a controller connects.
-    const model = factory.createControllerModel(grip)
-
-    eventMap.set(targetRay, { targetRay, model, grip })
-
-    /**
-     * @todo(mp) event.data is missing from @three/types. Need to make a PR there.
-     */
-    targetRay.addEventListener('connected', handleConnected as any)
-    targetRay.addEventListener('disconnected', handleDisconnected as any)
-  }
-
-  $: store = stores[handedness]
+  $: store = stores[$handedness]
   $: grip = $store?.grip
   $: targetRay = $store?.targetRay
   $: model = $store?.model
-  $: hasPointerControls = $pointerState[handedness].enabled
-  $: hasTeleportControls = $teleportState[handedness].enabled
-
-  onDestroy(() => {
-    for (const index of [0, 1]) {
-      const controller = xr.getController(index)
-      controller.removeEventListener('connected', handleConnected as any)
-      controller.removeEventListener('disconnected', handleDisconnected as any)
-    }
-
-    const controller = $store?.targetRay
-    events.forEach((name) => controller?.removeEventListener(name, handleEvent as any))
-
-    store.set(undefined)
-  })
+  $: hasPointerControls = $pointerState[$handedness].enabled
+  $: hasTeleportControls = $teleportState[$handedness].enabled
 </script>
 
 {#if !$isHandTracking}
   {#if grip}
-    <T
-      is={grip}
-      name="XR controller grip {handedness}"
-    >
+    <T is={grip}>
       <slot>
         <T is={model} />
       </slot>
@@ -166,19 +86,16 @@
   {/if}
 
   {#if targetRay}
-    <T
-      is={targetRay}
-      name="XR controller {handedness}"
-    >
+    <T is={targetRay}>
       <slot name="target-ray" />
 
       {#if hasPointerControls || hasTeleportControls}
         {#if $$slots['pointer-ray']}
-          <ShortRay {handedness}>
+          <ShortRay handedness={$handedness}>
             <slot name="pointer-ray" />
           </ShortRay>
         {:else}
-          <ShortRay {handedness} />
+          <ShortRay handedness={$handedness} />
         {/if}
       {/if}
     </T>
@@ -188,11 +105,11 @@
 <ScenePortal>
   {#if hasPointerControls}
     {#if $$slots['pointer-cursor']}
-      <PointerCursor {handedness}>
+      <PointerCursor handedness={$handedness}>
         <slot name="pointer-cursor" />
       </PointerCursor>
     {:else}
-      <PointerCursor {handedness} />
+      <PointerCursor handedness={$handedness} />
     {/if}
   {/if}
 
@@ -200,23 +117,23 @@
     {#if $$slots['teleport-ray']}
       <TeleportRay
         {targetRay}
-        {handedness}
+        handedness={$handedness}
       >
         <slot name="teleport-ray" />
       </TeleportRay>
     {:else}
       <TeleportRay
         {targetRay}
-        {handedness}
+        handedness={$handedness}
       />
     {/if}
 
     {#if $$slots['teleport-ray']}
-      <TeleportCursor {handedness}>
+      <TeleportCursor handedness={$handedness}>
         <slot name="teleport-cursor" />
       </TeleportCursor>
     {:else}
-      <TeleportCursor {handedness} />
+      <TeleportCursor handedness={$handedness} />
     {/if}
   {/if}
 </ScenePortal>
