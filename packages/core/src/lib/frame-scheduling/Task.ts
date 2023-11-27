@@ -4,10 +4,11 @@ import type { Stage } from './Stage'
 export type TaskCallback = (delta: number) => void
 
 export class Task {
-  private callback: TaskCallback
-  private shouldRun: boolean = true
-  public key: Key
+  public readonly key: Key
   public readonly stage: Stage
+
+  private callback: TaskCallback
+  private shouldRun = true
 
   public stop() {
     this.shouldRun = false

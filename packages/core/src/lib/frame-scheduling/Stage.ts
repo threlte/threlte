@@ -7,7 +7,7 @@ import { Task, type TaskCallback } from './Task'
  * order.
  */
 export class Stage extends DAG<Task> {
-  public key: Key
+  public readonly key: Key
   public readonly scheduler: Scheduler
 
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
