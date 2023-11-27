@@ -7,18 +7,21 @@ order: -750
 In 3D apps and games, a lot of work is done in functions that run on every frame
 – from rotating an object continously around an axis to reacting to user input.
 Web-based apps rely on the browsers `requestAnimationFrame` that runs a callback
-when a new frame is rendered. When encapsulating logic into smaller parts (i.e.
-*components*), we run into the problem that we need to run multiple callbacks on
-every frame. We also need to make sure that these callbacks are executed in a
-specific order.
+function when a new frame is rendered. When encapsulating logic into smaller
+parts (i.e. *components*), we run into the issue that we need to run multiple
+callbacks on every frame that may be dependent on each other. For instance, we
+may want to update the position of an object based on user input and then render
+the scene with the updated position.
 
 In Threlte, these functions are called **tasks** and may or may not follow a
-specific order. If an order is specified, the respective tasks have a
-**dependency** to another task. Tasks are grouped into **stages** which follow
-the same logic and may or may not have dependencies to other stages to be
-executed in a specific order. A Threlte app is managed by a single
-**scheduler**. In this section, we will learn how to use the easy-to-use tools Threlte
-provides to create and orchestrate stages and tasks.
+specific order. If an order is specified, the respective task has a
+**dependency** to other tasks and vice versa. Tasks are grouped into **stages**
+and follow the same logic: They may or may not have dependencies to other stages
+to be executed in a specific order. A Threlte app is managed by a single
+**scheduler**.
+
+In this section, we will learn how to use the easy-to-use tools
+Threlte provides to create and orchestrate stages and tasks.
 
 <img class="w-full" src="/images/docs/learn/frame-handling.svg" />
 
@@ -136,8 +139,8 @@ create a task and add it to a stage.
 
 In its most basic form, `useTask` takes a function as its first argument. This
 function will be executed on every frame, starting on the next frame. By
-default, the created task is added to Threlte's default stage in an arbitrary
-order.
+default, the created task is added to [Threlte's `mainStage`](#default-stages)
+in an arbitrary order (i.e. without dependencies).
 
 ```ts
 const { start, stop, started, task } = useTask((delta) => {
@@ -152,15 +155,15 @@ It returns an object with the following properties:
   frame.
 - `started`: A boolean Svelte `Readable` store indicating whether the task is
   started or not.
-- `task`: The task itself. You can use it to indicate a dependency of this task
+- `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
 
 ### Creating a Keyed Task
 
-You can key a task by passing it as first argument to `useTask`. This makes
-referencing this task easier across your app. The key can be any `string` or
-`symbol` value or that is unique across all tasks in a stage.
+You can *key* a task by passing it as the first argument to `useTask`. This
+makes referencing this task easier across your app. The key can be any `string`
+or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
 const { start, stop, started, task: someTask } = useTask('some-task', (delta) => {
@@ -227,12 +230,13 @@ Task dependencies **do not need to be created yet** if they are passed by key.
 The declared dependencies will be taken into account when they are created later
 on.
 
+
 <Tip type="warning">
-  If a task is passed by reference to the `before` or `after` option, the task
-  created by `useTask` will automatically be added to the same stage as the
-  task it depends on. If you pass a key instead and the task you want to reference
-  is not in Threlte's default stage, you will also need to pass the stage, either
-  by value or key.
+	If a task is passed by reference to the `before` or `after` option, the task
+	created by `useTask` will automatically be added to the same stage as the task
+	it depends on. If you pass a key instead and the task you want to reference is
+	**not** in [Threlte's `mainStage`](#default-stages), you will also need to pass the
+	stage, either by value or key.
 </Tip>
 
 ## Reviewing the schedule
