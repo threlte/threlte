@@ -6,9 +6,9 @@ order: 5.2
 ---
 
 <Tip type="info">
-	Tasks are part of Threlte's *Task Scheduling System*.
-	For details on how to use stages and tasks, see the [scheduling
-	tasks](/docs/learn/basics/scheduling-tasks) page.
+  Tasks are part of Threlte's *Task Scheduling System*.
+  For details on how to use stages and tasks, see the [scheduling
+  tasks](/docs/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useStage` can be used to create or retrieve a stage.
@@ -31,7 +31,7 @@ const afterRenderStage = useStage('after-render', {
 
 <Tip type="tip">
   Be aware that `useStage` never removes a stage as that's usually not needed. If a stage
-	is created *once* in your Threlte app, it's available throughout the app's lifetime.
+  is created *once* in your Threlte app, it's available throughout the app's lifetime.
 </Tip>
 
 A stage decides **when and how its tasks are executed**. By default, a stage will
@@ -77,32 +77,32 @@ in a task of the first stage and `perf.end()` in a task of the second stage.
 
 ```svelte title="ThreePerf.svelte"
 <script>
-	import { useStage, useTask, useThrelte } from '@threlte/core'
-	import { ThreePerf } from 'three-perf'
+  import { useStage, useTask, useThrelte } from '@threlte/core'
+  import { ThreePerf } from 'three-perf'
 
-	const { renderer, mainStage, renderStage } = useThrelte()
+  const { renderer, mainStage, renderStage } = useThrelte()
 
-	const perf = new ThreePerf({
+  const perf = new ThreePerf({
     anchorX: 'left',
     anchorY: 'top',
     domElement: document.body,
     renderer
-	})
+  })
 
-	const beforeMainStage = useStage('three-perf-begin', {
-		before: mainStage
-	})
+  const beforeMainStage = useStage('three-perf-begin', {
+    before: mainStage
+  })
 
-	useTask(() => {
-		perf.begin()
-	}, { stage: beforeMainStage })
+  useTask(() => {
+    perf.begin()
+  }, { stage: beforeMainStage })
 
-	const afterRenderStage = useStage('three-perf-end', {
-		after: renderStage
-	})
+  const afterRenderStage = useStage('three-perf-end', {
+    after: renderStage
+  })
 
-	useTask(() => {
-		perf.end()
-	}, { stage: afterRenderStage })
+  useTask(() => {
+    perf.end()
+  }, { stage: afterRenderStage })
 </script>
 ```

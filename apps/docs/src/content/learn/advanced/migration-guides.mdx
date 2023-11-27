@@ -30,17 +30,17 @@ of `useFrame` should be retrieved using the hook
 
 ```ts title="before"
 useFrame(({ camera, scene }, delta) => {
-	// The Threlte context was previously available as the first
-	// argument to the callback, followed by the delta time since the
-	// last frame.
+  // The Threlte context was previously available as the first
+  // argument to the callback, followed by the delta time since the
+  // last frame.
 })
 ```
 
 ```ts title="after"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-	// The delta time since the last frame is the only
-	// argument to the callback.
+  // The delta time since the last frame is the only
+  // argument to the callback.
 })
 ```
 
@@ -50,14 +50,14 @@ Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
 ```ts title="before"
 useFrame(({ camera, scene }, delta) => {
-	// ...
+  // ...
 })
 ```
 
 ```ts title="after"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-	// ...
+  // ...
 })
 ```
 
@@ -67,22 +67,22 @@ Migrate to `useTask` by referencing the key of the task you want to depend on.
 
 ```ts title="before"
 useFrame((_, delta) => {
-	// This task will be executed first
+  // This task will be executed first
 }, { order: 0 })
 
 useFrame((_, delta) => {
-	// This task will be executed second
+  // This task will be executed second
 }, { order: 1 })
 ```
 
 ```ts title="after"
 useTask('first', (delta) => {
-	// ...
+  // ...
 })
 
 useTask('second', (delta) => {
-	// This task will be executed after the task with the
-	// key 'first' has been executed.
+  // This task will be executed after the task with the
+  // key 'first' has been executed.
 }, { after: 'first' })
 ```
 
@@ -97,14 +97,14 @@ ever executes its tasks when a re-render is needed.
 
 ```ts title="before"
 useRender(() => {
-	// Render your scene here
+  // Render your scene here
 })
 ```
 
 ```ts title="after"
 const { renderStage } = useThrelte()
 useTask('render', () => {
-	// Render your scene here
+  // Render your scene here
 }, { stage: renderStage })
 ```
 
@@ -117,17 +117,17 @@ of `useRender` should be retrieved using the hook
 
 ```ts title="before"
 useRender(({ camera, scene }, delta) => {
-	// The Threlte context was previously available as the first
-	// argument to the callback, followed by the delta time since the
-	// last frame.
+  // The Threlte context was previously available as the first
+  // argument to the callback, followed by the delta time since the
+  // last frame.
 })
 ```
 
 ```ts title="after"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-	// The delta time since the last frame is the only
-	// argument to the callback.
+  // The delta time since the last frame is the only
+  // argument to the callback.
 })
 ```
 
@@ -137,14 +137,14 @@ Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
 ```ts title="before"
 useRender((_{ camera, scene }_, delta) => {
-	// ...
+  // ...
 })
 ```
 
 ```ts title="after"
 const { renderStage } = useThrelte()
 useTask((delta) => {
-	// ...
+  // ...
 }, { stage: renderStage })
 ```
 
@@ -154,11 +154,11 @@ Migrate to `useTask` by referencing the key of the task you want to depend on.
 
 ```ts title="before"
 useRender((_, delta) => {
-	// This task will be executed first
+  // This task will be executed first
 }, { order: 0 })
 
 useRender((_, delta) => {
-	// This task will be executed second
+  // This task will be executed second
 }, { order: 1 })
 ```
 
@@ -166,12 +166,12 @@ useRender((_, delta) => {
 const { renderStage } = useThrelte()
 
 useTask('first', (delta) => {
-	// ...
+  // ...
 }, { stage: renderStage })
 
 useTask('second', (delta) => {
-	// This task will be executed after the task with the
-	// key 'first' has been executed.
+  // This task will be executed after the task with the
+  // key 'first' has been executed.
 }, { after: 'first', stage: renderStage })
 ```
 

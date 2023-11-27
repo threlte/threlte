@@ -7,9 +7,9 @@ order: 5.21
 
 
 <Tip type="info">
-	Tasks are part of Threlte's *Task Scheduling System*.
-	For details on how to use stages and tasks, see the [scheduling
-	tasks](/docs/learn/basics/scheduling-tasks) page.
+  Tasks are part of Threlte's *Task Scheduling System*.
+  For details on how to use stages and tasks, see the [scheduling
+  tasks](/docs/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useTask` is used to create a
@@ -82,11 +82,11 @@ The declared dependencies will be taken into account when they are created later
 on.
 
 <Tip type="warning">
-	If a task is passed by reference to the `before` or `after` option, the task
-	created by `useTask` will automatically be added to the same stage as the task
-	it depends on. If you pass a key instead and the task you want to reference is
-	**not** in [Threlte's `mainStage`](#default-stages), you will also need to pass the
-	stage, either by value or key.
+  If a task is passed by reference to the `before` or `after` option, the task
+  created by `useTask` will automatically be added to the same stage as the task
+  it depends on. If you pass a key instead and the task you want to reference is
+  **not** in [Threlte's `mainStage`](#default-stages), you will also need to pass the
+  stage, either by value or key.
 </Tip>
 
 ## Examples
@@ -99,19 +99,19 @@ to make animations frame rate independent.
 
 ```svelte
 <script>
-	import { T, useTask } from '@threlte/core'
-	import { Mesh } from 'svelte-three'
+  import { T, useTask } from '@threlte/core'
+  import { Mesh } from 'svelte-three'
 
-	let mesh
+  let mesh
 
-	useTask((delta) => {
-		if (!mesh) return
-		mesh.rotation.y += delta * 0.5
-	})
+  useTask((delta) => {
+    if (!mesh) return
+    mesh.rotation.y += delta * 0.5
+  })
 </script>
 
 <T.Mesh bind:ref={mesh}>
-	<T.BoxGeometry />
+  <T.BoxGeometry />
 </T.Mesh>
 ```
 
@@ -123,12 +123,79 @@ property `renderMode` to `'manual'` on the `<Canvas>` component.
 
 ```svelte title="CustomRenderer.svelte"
 <script>
-	import { useTask } from '@threlte/core'
+  import { useTask } from '@threlte/core'
 
-	const { renderStage } = useThrelte()
+  const { renderStage } = useThrelte()
 
-	useTask((delta) => {
-		// render your scene here
-	}, { stage: renderStage })
+  useTask((delta) => {
+    // render your scene here
+  }, { stage: renderStage })
+</script>
+```
+
+### Post Processing
+
+This example demonstrates how to use `useTask` to implement post processing
+effects using the library
+[`postprocessing`](https://github.com/pmndrs/postprocessing).
+
+<Tip type="warning">
+  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
+</Tip>
+
+```svelte title="Renderer.svelte"
+<script>
+  import { useThrelte, useRender } from '@threlte/core'
+  import {
+    EffectComposer,
+    EffectPass,
+    RenderPass,
+    SMAAEffect,
+    SMAAPreset,
+    BloomEffect,
+    KernelSize
+  } from 'postprocessing'
+
+  const { scene, renderer, camera, size } = useThrelte()
+
+  // Adapt the default WebGLRenderer: https://github.com/pmndrs/postprocessing#usage
+  const composer = new EffectComposer(renderer)
+
+  const setupEffectComposer = (camera) => {
+    composer.removeAllPasses()
+    composer.addPass(new RenderPass(scene, camera))
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new BloomEffect({
+          intensity: 1,
+          luminanceThreshold: 0.15,
+          height: 512,
+          width: 512,
+          luminanceSmoothing: 0.08,
+          mipmapBlur: true,
+          kernelSize: KernelSize.MEDIUM
+        })
+      )
+    )
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new SMAAEffect({
+          preset: SMAAPreset.LOW
+        })
+      )
+    )
+  }
+
+  // We need to set up the passes according to the camera in use
+  $: setupEffectComposer($camera)
+  $: composer.setSize($size.width, $size.height)
+
+  const { renderStage } = useThrelte()
+
+  useTask((delta) => {
+    composer.render(delta)
+  }, { stage: renderStage })
 </script>
 ```
