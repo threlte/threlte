@@ -8,14 +8,14 @@ export class Task {
   public readonly stage: Stage
 
   private callback: TaskCallback
-  private shouldRun = true
+  private runTask = true
 
   public stop() {
-    this.shouldRun = false
+    this.runTask = false
   }
 
   public start() {
-    this.shouldRun = true
+    this.runTask = true
   }
 
   constructor(stage: Stage, key: Key, callback: (delta: number) => void) {
@@ -25,7 +25,7 @@ export class Task {
   }
 
   public run(delta: number) {
-    if (!this.shouldRun) return
+    if (!this.runTask) return
     this.callback(delta)
   }
 }
