@@ -2,8 +2,13 @@
 category: '@threlte/core'
 name: useRender
 sourcePath: 'packages/core/src/lib/hooks/legacy/useRender.ts'
-order: 5.3
+order: 5.7
 ---
+
+<Tip type="danger">
+	This hook is deprecated and will be removed in the next major release.
+	Please use [`useTask`](/docs/reference/core/use-task) instead.
+</Tip>
 
 This hook allows you to execute code on every **invalidated** frame and after all `useFrame` hooks have been executed.
 You receive the state (the same as [`useThrelte`](/docs/reference/core/use-threlte)) and a clock delta in seconds.

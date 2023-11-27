@@ -2,8 +2,13 @@
 category: '@threlte/core'
 name: useFrame
 sourcePath: 'packages/core/src/lib/hooks/legacy/useFrame.ts'
-order: 5.2
+order: 5.6
 ---
+
+<Tip type="danger">
+	This hook is deprecated and will be removed in the next major release.
+	Please use [`useTask`](/docs/reference/core/use-task) instead.
+</Tip>
 
 This hook allows you to execute code on every frame as part of the unified frameloop.
 You receive the state (the same as [`useThrelte`](/docs/reference/core/use-threlte)) and a clock delta in seconds.

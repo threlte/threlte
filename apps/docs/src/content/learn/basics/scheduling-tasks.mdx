@@ -27,7 +27,7 @@ Threlte provides to create and orchestrate stages and tasks.
 
 
 <small>
-	Figure: A schedule of multiple stages with tasks
+  Figure: A schedule of multiple stages with tasks
 </small>
 
 ## Scheduler
@@ -41,7 +41,7 @@ const { scheduler } = useThrelte()
 <Tip type="info">
   Usually you won't need to interact with the scheduler directly. It is
   used internally by Threlte. However, you can use it to create stages and run tasks
-	manually for more advanced use cases.
+  manually for more advanced use cases.
 </Tip>
 
 ## Stages
@@ -126,8 +126,8 @@ scheduler.removeStage(afterRenderStage)
 ```
 
 <Tip>
-	Be aware that removing a stage will also remove all the tasks in that stage. Usually, you
-	won't need to remove a stage.
+  Be aware that removing a stage will also remove all the tasks in that stage. Usually, you
+  won't need to remove a stage.
 </Tip>
 
 ## Tasks
@@ -197,6 +197,10 @@ called **dependencies** and can be a task itself, the key of a task or an array
 of tasks or keys. The referenced tasks must be in the same stage as the task you
 are creating.
 
+Task dependencies **do not need to be created yet** if they are passed by key.
+The declared dependencies will be taken into account when they are created later
+on.
+
 #### Examples
 
 ```ts
@@ -227,17 +231,25 @@ useTask((delta) => {
 }, { after: someTask, before: someOtherTask })
 ```
 
-Task dependencies **do not need to be created yet** if they are passed by key.
-The declared dependencies will be taken into account when they are created later
-on.
+```ts
+// Reference a task as a dependency that hasn't been created yet
+useTask((delta) => {
+  // If a task with the key `some-task` is created later on,
+  // this task will be executed after it.
+}, { before: 'some-task' })
+
+useTask('some-task', (delta) => {
+  // …
+})
+```
 
 
 <Tip type="warning">
-	If a task is passed by reference to the `before` or `after` option, the task
-	created by `useTask` will automatically be added to the same stage as the task
-	it depends on. If you pass a key instead and the task you want to reference is
-	**not** in [Threlte's `mainStage`](#default-stages), you will also need to pass the
-	stage, either by value or key.
+  If a task is passed by reference to the `before` or `after` option, the task
+  created by `useTask` will automatically be added to the same stage as the task
+  it depends on. If you pass a key instead and the task you want to reference is
+  **not** in [Threlte's `mainStage`](#default-stages), you will also need to pass the
+  stage, either by value or key.
 </Tip>
 
 ## Reviewing the schedule
@@ -249,35 +261,33 @@ time.
 const { scheduler } = useThrelte()
 
 scheduler.getSchedule({
-	tasks: true
+  tasks: true
 })
 ```
 
-Result:
-
-```json
+```json title="Result"
 {
-	"stages": [
-		{
-			"key": "physics stage",
-			"tasks": [
-				"physics"
-			]
-		},
-		{
-			"key": "default stage",
-			"tasks": [
-				"move object",
-				"move camera"
-			]
-		},
-		{
-			"key": "render stage",
-			"tasks": [
-				"render"
-			]
-		}
-	]
+  "stages": [
+    {
+      "key": "physics stage",
+      "tasks": [
+        "physics"
+      ]
+    },
+    {
+      "key": "default stage",
+      "tasks": [
+        "move object",
+        "move camera"
+      ]
+    },
+    {
+      "key": "render stage",
+      "tasks": [
+        "render"
+      ]
+    }
+  ]
 }
 ```
 
