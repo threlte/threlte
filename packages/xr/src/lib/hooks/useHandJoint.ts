@@ -1,5 +1,5 @@
+import type { XRJointSpace } from 'three'
 import { currentWritable, useFrame } from '@threlte/core'
-import type * as THREE from 'three'
 import type { HandJoints } from '../lib/handJoints'
 import { useHand } from './useHand'
 
@@ -7,7 +7,7 @@ import { useHand } from './useHand'
  * Provides a reference to a requested hand joint, once available.
  */
 export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) => {
-  const jointSpaceStore = currentWritable<THREE.XRJointSpace | undefined>(undefined)
+  const jointSpaceStore = currentWritable<XRJointSpace | undefined>(undefined)
 
   const xrhand = useHand(handedness)
 

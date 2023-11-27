@@ -1,3 +1,11 @@
+import type {
+  Intersection as ThreeIntersection,
+  Object3D,
+  Vector3,
+  Ray,
+  Raycaster,
+  Event
+} from 'three'
 import type { CurrentWritable } from '@threlte/core'
 import type { ComputeFunction } from './compute'
 
@@ -6,40 +14,40 @@ export type Properties<T> = Pick<
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
 >
 
-export interface Intersection extends THREE.Intersection {
+export interface Intersection extends ThreeIntersection {
   /** The event source (the object which registered the handler) */
-  eventObject: THREE.Object3D
+  eventObject: Object3D
 }
 
 export interface IntersectionEvent extends Intersection {
   /** The event source (the object which registered the handler) */
-  eventObject: THREE.Object3D
+  eventObject: Object3D
   /** An array of intersections */
   intersections: Intersection[]
   /** Normalized event coordinates */
-  pointer: THREE.Vector3
+  pointer: Vector3
   /** Delta between first click and this event */
   delta: number
   /** The ray that pierced it */
-  ray: THREE.Ray
+  ray: Ray
   /** stopPropagation will stop underlying handlers from firing */
   stopPropagation: () => void
   /** The original host event */
-  nativeEvent: THREE.Event | undefined
+  nativeEvent: Event | undefined
   /** If the event was stopped by calling stopPropagation */
   stopped: boolean
 }
 
 export type FilterFunction = (
-  items: THREE.Intersection[],
+  items: Intersection[],
   state: ControlsContext,
   handState: HandContext
-) => THREE.Intersection[]
+) => Intersection[]
 
 // State that can be shared among hands / controllers
 export type ControlsContext = {
-  interactiveObjects: THREE.Object3D[]
-  raycaster: THREE.Raycaster
+  interactiveObjects: Object3D[]
+  raycaster: Raycaster
   compute: ComputeFunction
   filter?: FilterFunction | undefined
 }
@@ -48,11 +56,11 @@ export type ControlsContext = {
 export type HandContext = {
   hand: 'left' | 'right'
   enabled: CurrentWritable<boolean>
-  pointer: CurrentWritable<THREE.Vector3>
+  pointer: CurrentWritable<Vector3>
   pointerOverTarget: CurrentWritable<boolean>
-  lastEvent: THREE.Event | undefined
+  lastEvent: Event | undefined
   initialClick: [x: number, y: number, z: number]
-  initialHits: THREE.Object3D[]
+  initialHits: Object3D[]
   hovered: Map<string, IntersectionEvent>
 }
 

@@ -13,5 +13,7 @@ export const useHand = (handedness: 'left' | 'right'): CurrentWritable<undefined
       return left
     case 'right':
       return right
+    default:
+      throw new Error('useHand handedness must be left or right.')
   }
 }

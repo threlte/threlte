@@ -1,7 +1,8 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { XR, Controller, Hand, Headset, TeleportControls, useTeleport, useXR } from '$lib'
+  import { XR, Controller, Hand, Headset, useTeleport, useXR } from '$lib'
   import Gamepad from './Gamepad.svelte'
+  import Teleport from './Teleport.svelte'
 
   const { isPresenting } = useXR()
   const teleport = useTeleport()
@@ -33,7 +34,10 @@
 </Headset>
 
 <XR>
-  <Controller left>
+  <Controller left
+    on:connected={() => console.log('connect')}
+    on:select={() => console.log('select')}
+  >
     <T.Mesh>
       {@const radius = 0.01}
       {@const length = 0.08}
@@ -52,7 +56,11 @@
     </T.Mesh>
   </Controller>
 
-  <Controller right />
+  <Controller
+    right
+    on:connected={() => console.log('connect')}
+    on:select={() => console.log('select')}
+  />
 
   <Hand left>
     <T.Mesh slot="wrist">
@@ -71,16 +79,7 @@
   </Hand>
 </XR>
 
-<TeleportControls>
-  <T.Mesh
-    receiveShadow
-    teleportSurface
-    position.y={-0.05}
-  >
-    <T.CylinderGeometry args={[2, 2, 0.1]} />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-</TeleportControls>
+<Teleport />
 
 <T.PerspectiveCamera
   makeDefault
