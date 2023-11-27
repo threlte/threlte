@@ -53,7 +53,7 @@ export type ThrelteContext = {
   scheduler: Scheduler
 
   /** The default stage used by useTask */
-  defaultStage: Stage
+  mainStage: Stage
 
   /**
    * The default render stage. Tasks in this stage are ran according to
@@ -233,7 +233,7 @@ export const createContexts = (options: {
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
     frameloop: currentWritable(options.frameloop),
     scheduler: undefined as any, // will be set later
-    defaultStage: undefined as any, // will be set later
+    mainStage: undefined as any, // will be set later
     renderStage: undefined as any, // will be set later
     shouldRender: () => {
       const shouldRender =

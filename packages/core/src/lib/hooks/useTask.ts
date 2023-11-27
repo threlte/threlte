@@ -77,7 +77,7 @@ export function useTask(
 
   const ctx = useThrelte()
 
-  let stage: Stage = ctx.defaultStage
+  let stage: Stage = ctx.mainStage
 
   if (opts) {
     if ('stage' in opts && !!opts.stage) {

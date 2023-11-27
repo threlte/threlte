@@ -132,9 +132,9 @@
   $: contexts.ctx.toneMapping.set(toneMapping)
 
   const scheduler = new Scheduler()
-  contexts.getCtx().defaultStage = scheduler.createStage(Symbol('threlte-default-stage'))
+  contexts.getCtx().mainStage = scheduler.createStage(Symbol('threlte-default-stage'))
   contexts.getCtx().renderStage = scheduler.createStage(Symbol('threlte-render-stage'), {
-    after: contexts.ctx.defaultStage,
+    after: contexts.ctx.mainStage,
     callback(_, runTasks) {
       if (contexts.ctx.shouldRender()) runTasks()
     }

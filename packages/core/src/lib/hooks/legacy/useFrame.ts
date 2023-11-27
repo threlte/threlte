@@ -75,7 +75,7 @@ export const useFrame = (
     fn(ctx, delta)
   }
 
-  const task = ctx.defaultStage.createTask(key, proxy, {
+  const task = ctx.mainStage.createTask(key, proxy, {
     after: useFrameOrders.filter((o) => o < order).map((o) => orderToKey(o)),
     before: useFrameOrders.filter((o) => o > order).map((o) => orderToKey(o))
   })
@@ -103,7 +103,7 @@ export const useFrame = (
   }
 
   onDestroy(() => {
-    ctx.defaultStage.removeTask(key)
+    ctx.mainStage.removeTask(key)
     useFrameOrders.splice(useFrameOrders.indexOf(order), 1)
   })
 

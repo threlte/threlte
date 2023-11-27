@@ -47,16 +47,17 @@ Stages are **groups of tasks**. They are executed in a specific order.
 ### Default Stages
 
 By default, Threlte will create two stages for you:
-- A default stage: This stage holds all the tasks that are not assigned to any other stage.
-- A render stage: This stage will be executed after the default stage. It is
-  used to render the scene and only ever executes its tasks when the a re-render
-  is needed.
+- **`mainStage`**: This stage holds all the tasks that are not assigned to any
+  other stage.
+- **`renderStage`**: This stage will be executed after the default stage. It is
+  used to render the scene and only ever executes its tasks when a re-render is
+  needed.
 
 These two stages are created automatically and are accessible via
 [`useThrelte()`](/docs/reference/core/use-threlte):
 
 ```ts
-const { defaultStage, renderStage } = useThrelte()
+const { mainStage, renderStage } = useThrelte()
 ```
 
 ### Creating a Stage
@@ -234,3 +235,50 @@ on.
   by value or key.
 </Tip>
 
+## Reviewing the schedule
+
+To debug the execution order, you can use the `getSchedule` method of the scheduler at any
+time.
+
+```ts
+const { scheduler } = useThrelte()
+
+scheduler.getSchedule({
+	tasks: true
+})
+```
+
+Result:
+
+```json
+{
+	"stages": [
+		{
+			"key": "physics stage",
+			"tasks": [
+				"physics"
+			]
+		},
+		{
+			"key": "default stage",
+			"tasks": [
+				"move object",
+				"move camera"
+			]
+		},
+		{
+			"key": "render stage",
+			"tasks": [
+				"render"
+			]
+		}
+	]
+}
+```
+
+In this example, the effective task execution order is:
+
+1. `physics`
+2. `move object`
+3. `move camera`
+4. `render`
