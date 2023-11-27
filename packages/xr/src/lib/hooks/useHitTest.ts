@@ -64,7 +64,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
         return hitTestCallback(hitMatrix, undefined)
       }
 
-      const [hit] = xr.getFrame().getHitTestResults(hitTestSource.current)
+      const [hit] = xr.getFrame()?.getHitTestResults(hitTestSource.current)
       const pose = hit?.getPose(referenceSpace)
 
       if (pose === undefined) {
@@ -77,8 +77,8 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
     { autostart: false }
   )
 
-  watch([xrState.session, hitTestSource], ([session, testSource]) => {
-    if (session === undefined) {
+  watch([xrState.isPresenting, hitTestSource], ([isPresenting, testSource]) => {
+    if (!isPresenting) {
       stop()
       return
     }
