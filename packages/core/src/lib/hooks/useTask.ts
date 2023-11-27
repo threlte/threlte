@@ -83,42 +83,40 @@ export function useTask(
 
   let stage: Stage = ctx.mainStage
 
-  getStage: {
-    if (opts) {
-      if ('stage' in opts && !!opts.stage) {
-        if (DAG.isValue(opts.stage)) {
-          stage = opts.stage
-        } else {
-          const maybeStage = ctx.scheduler.getStage(opts.stage)
-          if (!maybeStage) {
-            throw new Error(`No stage found with key ${opts.stage.toString()}`)
-          }
-          stage = maybeStage
+  if (opts) {
+    if ('stage' in opts && !!opts.stage) {
+      if (DAG.isValue(opts.stage)) {
+        stage = opts.stage
+      } else {
+        const maybeStage = ctx.scheduler.getStage(opts.stage)
+        if (!maybeStage) {
+          throw new Error(`No stage found with key ${opts.stage.toString()}`)
         }
-      } else if ('after' in opts && opts.after) {
-        if (Array.isArray(opts.after)) {
-          for (let index = 0; index < opts.after.length; index++) {
-            const element = opts.after[index]
-            if (DAG.isValue(element)) {
-              stage = element.stage
-              break
-            }
+        stage = maybeStage
+      }
+    } else if ('after' in opts && opts.after) {
+      if (Array.isArray(opts.after)) {
+        for (let index = 0; index < opts.after.length; index++) {
+          const element = opts.after[index]
+          if (DAG.isValue(element)) {
+            stage = element.stage
+            break
           }
-        } else if (DAG.isValue(opts.after)) {
-          stage = opts.after.stage
         }
-      } else if ('before' in opts && opts.before) {
-        if (Array.isArray(opts.before)) {
-          for (let index = 0; index < opts.before.length; index++) {
-            const element = opts.before[index]
-            if (DAG.isValue(element)) {
-              stage = element.stage
-              break
-            }
+      } else if (DAG.isValue(opts.after)) {
+        stage = opts.after.stage
+      }
+    } else if ('before' in opts && opts.before) {
+      if (Array.isArray(opts.before)) {
+        for (let index = 0; index < opts.before.length; index++) {
+          const element = opts.before[index]
+          if (DAG.isValue(element)) {
+            stage = element.stage
+            break
           }
-        } else if (DAG.isValue(opts.before)) {
-          stage = opts.before.stage
         }
+      } else if (DAG.isValue(opts.before)) {
+        stage = opts.before.stage
       }
     }
   }
