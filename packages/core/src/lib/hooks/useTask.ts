@@ -2,7 +2,7 @@ import { getContext, onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
 import { browser } from '../lib/browser'
-import type { ThrelteContext, ThrelteInternalContext } from '../lib/contexts'
+import type { ThrelteInternalContext } from '../lib/contexts'
 import { useThrelte } from './useThrelte'
 
 export type ThrelteUseTask = {
@@ -66,57 +66,70 @@ export function useTask(
     }
   }
 
-  let key = typeof keyOrFn === 'string' ? keyOrFn : Symbol('useTask')
-  let fn = typeof keyOrFn === 'function' ? keyOrFn : (fnOrOptions as (delta: number) => void)
-
-  let opts =
-    typeof fnOrOptions === 'function' ? options : (fnOrOptions as ThrelteUseTaskOptions | undefined)
+  let key: Key
+  let fn: (delta: number) => void
+  let opts: ThrelteUseTaskOptions | undefined
+  if (typeof keyOrFn === 'string') {
+    key = keyOrFn
+    fn = fnOrOptions as (delta: number) => void
+    opts = options
+  } else {
+    key = Symbol('useTask')
+    fn = keyOrFn
+    opts = fnOrOptions as ThrelteUseTaskOptions | undefined
+  }
 
   const ctx = useThrelte()
 
   let stage: Stage = ctx.mainStage
 
-  if (opts) {
-    if ('stage' in opts && !!opts.stage) {
-      if (DAG.isValue(opts.stage)) {
-        stage = opts.stage
-      } else {
-        const maybeStage = ctx.scheduler.getStage(opts.stage)
-        if (!maybeStage) {
-          throw new Error(`No stage found with key ${opts.stage.toString()}`)
+  getStage: {
+    if (opts) {
+      if ('stage' in opts && !!opts.stage) {
+        if (DAG.isValue(opts.stage)) {
+          stage = opts.stage
+        } else {
+          const maybeStage = ctx.scheduler.getStage(opts.stage)
+          if (!maybeStage) {
+            throw new Error(`No stage found with key ${opts.stage.toString()}`)
+          }
+          stage = maybeStage
         }
-        stage = maybeStage
-      }
-    } else if ('after' in opts && opts.after) {
-      if (Array.isArray(opts.after)) {
-        if (DAG.isValue(opts.after[0])) {
-          stage = opts.after[0].stage
+      } else if ('after' in opts && opts.after) {
+        if (Array.isArray(opts.after)) {
+          for (let index = 0; index < opts.after.length; index++) {
+            const element = opts.after[index]
+            if (DAG.isValue(element)) {
+              stage = element.stage
+              break
+            }
+          }
+        } else if (DAG.isValue(opts.after)) {
+          stage = opts.after.stage
         }
-      } else if (DAG.isValue(opts.after)) {
-        stage = opts.after.stage
-      }
-    } else if ('before' in opts && opts.before) {
-      if (Array.isArray(opts.before)) {
-        if (DAG.isValue(opts.before[0])) {
-          stage = opts.before[0].stage
+      } else if ('before' in opts && opts.before) {
+        if (Array.isArray(opts.before)) {
+          for (let index = 0; index < opts.before.length; index++) {
+            const element = opts.before[index]
+            if (DAG.isValue(element)) {
+              stage = element.stage
+              break
+            }
+          }
+        } else if (DAG.isValue(opts.before)) {
+          stage = opts.before.stage
         }
-      } else if (DAG.isValue(opts.before)) {
-        stage = opts.before.stage
       }
     }
   }
 
   const internalCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
 
-  if (internalCtx === undefined) {
-    throw new Error('No Threlte context found, are you using this hook inside of <Canvas>?')
-  }
-
   const started = writable(false)
 
   const task = stage.createTask(key, fn, {
-    after: opts && 'after' in opts ? opts?.after : undefined,
-    before: opts && 'before' in opts ? opts?.before : undefined
+    after: (opts as any).after,
+    before: (opts as any).before
   })
 
   const start = () => {
