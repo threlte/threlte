@@ -44,17 +44,17 @@ export type ThrelteUseTaskOptions = {
  * @returns {ThrelteUseTask}
  */
 export function useTask(
-  fn: (delta: number, ctx: ThrelteContext) => void,
+  fn: (delta: number) => void,
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask
 export function useTask(
   key: string,
-  fn: (delta: number, ctx: ThrelteContext) => void,
+  fn: (delta: number) => void,
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask
 export function useTask(
-  keyOrFn: string | ((delta: number, ctx: ThrelteContext) => void),
-  fnOrOptions?: ((delta: number, ctx: ThrelteContext) => void) | ThrelteUseTaskOptions,
+  keyOrFn: string | ((delta: number) => void),
+  fnOrOptions?: ((delta: number) => void) | ThrelteUseTaskOptions,
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask {
   if (!browser) {
@@ -67,10 +67,7 @@ export function useTask(
   }
 
   let key = typeof keyOrFn === 'string' ? keyOrFn : Symbol('useTask')
-  let fn =
-    typeof keyOrFn === 'function'
-      ? keyOrFn
-      : (fnOrOptions as (delta: number, ctx: ThrelteContext) => void)
+  let fn = typeof keyOrFn === 'function' ? keyOrFn : (fnOrOptions as (delta: number) => void)
 
   let opts =
     typeof fnOrOptions === 'function' ? options : (fnOrOptions as ThrelteUseTaskOptions | undefined)
@@ -117,11 +114,7 @@ export function useTask(
 
   const started = writable(false)
 
-  const proxy = (delta: number) => {
-    fn(delta, ctx)
-  }
-
-  const task = stage.createTask(key, proxy, {
+  const task = stage.createTask(key, fn, {
     after: opts && 'after' in opts ? opts?.after : undefined,
     before: opts && 'before' in opts ? opts?.before : undefined
   })
