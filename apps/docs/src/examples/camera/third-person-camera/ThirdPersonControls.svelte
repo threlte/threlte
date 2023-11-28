@@ -104,7 +104,7 @@
     rotateDelta.subVectors(rotateEnd, rotateStart).multiplyScalar(rotateSpeed)
     rotateStart.copy(rotateEnd)
 
-    invalidate('PointerLockcontrols: change event')
+    invalidate()
     dispatch('change')
   }
 

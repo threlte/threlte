@@ -125,7 +125,7 @@ export function useTask(
     }
   }
 
-  const internalCtx = getContext<ThrelteInternalContext>('threlte-internal-context')
+  const { autoInvalidations } = getContext<ThrelteInternalContext>('threlte-internal-context')
 
   const started = writable(false)
 
@@ -136,21 +136,21 @@ export function useTask(
 
   const start = () => {
     started.set(true)
-    if (opts?.invalidate ?? true) {
-      internalCtx.invalidators.add(fn)
+    if (opts?.autoInvalidate ?? true) {
+      autoInvalidations.add(fn)
     }
     task.start()
   }
 
   const stop = () => {
     started.set(true)
-    if (opts?.invalidate ?? true) {
-      internalCtx.invalidators.delete(fn)
+    if (opts?.autoInvalidate ?? true) {
+      autoInvalidations.delete(fn)
     }
     task.stop()
   }
 
-  if (options?.autostart ?? true) {
+  if (options?.autoStart ?? true) {
     start()
   } else {
     stop()

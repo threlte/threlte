@@ -1,13 +1,3 @@
-<script
-  context="module"
-  lang="ts"
->
-  const invalidationHandlers: Set<(debugFrameloopMessage?: string) => void> = new Set()
-  export const invalidateGlobally = (debugFrameloopMessage?: string) => {
-    invalidationHandlers.forEach((fn) => fn(debugFrameloopMessage))
-  }
-</script>
-
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
   import { writable } from 'svelte/store'
@@ -20,6 +10,7 @@
     type WebGLRendererParameters
   } from 'three'
   import T from './components/T/T.svelte'
+  import { Scheduler } from './frame-scheduling'
   import { injectLegacyFrameCompatibilityContext } from './hooks/legacy/utils'
   import { useParentSize } from './hooks/useParentSize'
   import { browser } from './lib/browser'
@@ -27,9 +18,10 @@
   import { createContexts } from './lib/contexts'
   import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { revision } from './lib/revision'
+  import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
-  import { Scheduler } from './frame-scheduling'
+  import SceneGraphObject from './internal/SceneGraphObject.svelte'
 
   /**
    * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —
@@ -50,21 +42,14 @@
   export let colorSpace: ColorSpace = 'srgb'
 
   /**
-   * Deprecated.
-   * @default false
-   * @deprecated
-   */
-  export let debugFrameloop: boolean = false
-
-  /**
    * @default window.devicePixelRatio
    */
   export let dpr: typeof devicePixelRatio = browser ? window.devicePixelRatio : 1
 
   /**
-   * @default 'demand'
+   * @default 'on-demand'
    */
-  export let frameloop: 'always' | 'demand' | 'never' = 'demand'
+  export let renderMode: 'always' | 'on-demand' | 'manual' = 'on-demand'
 
   /**
    * Parameters sent to the WebGLRenderer when created.
@@ -95,15 +80,14 @@
 
   /**
    * By default, Threlte will automatically render the scene. To implement
-   * custom render pipelines, set this to 'manual'. This prop is currently
-   * not reactive.
+   * custom render pipelines, set this to `false`.
    *
-   * @default 'auto'
+   * @default true
    */
-  export let renderMode: 'auto' | 'manual' = 'auto'
+  export let autoRender: boolean = true
 
   let canvas: HTMLCanvasElement
-  let initialized = false
+  let initialized = writable(false)
 
   // user size as a store
   const userSize = writable<Size | undefined>(size)
@@ -112,13 +96,17 @@
   // in case the user didn't define a fixed size, use the parent elements size
   const { parentSize, parentSizeAction } = useParentSize()
 
+  // TODO: Remove in Threlte 7
+  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
+
   // creating and setting the contexts
   const contexts = createContexts({
     colorManagementEnabled,
     colorSpace,
     dpr,
-    frameloop,
+    renderMode,
     parentSize,
+    autoRender,
     shadows,
     toneMapping,
     useLegacyLights,
@@ -127,7 +115,8 @@
 
   $: contexts.ctx.colorSpace.set(colorSpace)
   $: contexts.ctx.dpr.set(dpr)
-  $: contexts.ctx.frameloop.set(frameloop)
+  $: contexts.ctx.renderMode.set(renderMode)
+  $: contexts.ctx.autoRender.set(autoRender)
   $: contexts.ctx.shadows.set(shadows)
   $: contexts.ctx.toneMapping.set(toneMapping)
 
@@ -137,6 +126,28 @@
     after: contexts.ctx.mainStage,
     callback(_, runTasks) {
       if (contexts.ctx.shouldRender()) runTasks()
+    }
+  })
+  contexts.getCtx().autoRenderTask = contexts.ctx.renderStage.createTask(
+    Symbol('threlte-auto-render-task'),
+    (_) => {
+      // we're in here when autoRender is true In Threlte 7 we still have to
+      // check for the existence of `useRender` instances
+      if (useRenderOrders.length > 0) return
+
+      // if there are no useRender instances, we can render the scene
+      contexts.ctx.renderer.render(ctx.scene, ctx.camera.current)
+    }
+  )
+
+  watch([initialized, contexts.ctx.autoRender], ([initialized, autoRender]) => {
+    if (initialized && autoRender) {
+      contexts.getCtx().autoRenderTask.start()
+    } else {
+      contexts.getCtx().autoRenderTask.stop()
+    }
+    return () => {
+      contexts.getCtx().autoRenderTask.stop()
     }
   })
 
@@ -151,17 +162,8 @@
 
   setDefaultCameraAspectOnSizeChange(ctx)
 
-  // add invalidation handler to global invalidation handler set
-  invalidationHandlers.add(ctx.invalidate)
-  onDestroy(() => {
-    invalidationHandlers.delete(ctx.invalidate)
-  })
-
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)
-
-  // TODO: Remove in Threlte 7
-  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
 
   onMount(() => {
     createRenderer(canvas, rendererParameters)
@@ -171,13 +173,7 @@
       scheduler.run(time)
     })
 
-    contexts.ctx.renderStage.createTask('threlte-default-render', (_) => {
-      if (useRenderOrders.length === 0 && renderMode === 'auto') {
-        contexts.ctx.renderer.render(ctx.scene, ctx.camera.current)
-      }
-    })
-
-    initialized = true
+    initialized.set(true)
   })
 
   onDestroy(() => {
@@ -192,10 +188,10 @@
   use:parentSizeAction
   bind:this={canvas}
 >
-  {#if initialized}
-    <T is={contexts.ctx.scene}>
+  {#if $initialized}
+    <SceneGraphObject object={contexts.ctx.scene}>
       <slot />
-    </T>
+    </SceneGraphObject>
   {/if}
 </canvas>
 

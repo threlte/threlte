@@ -59,7 +59,7 @@ export const useFrame = (
 
   const ctx = useThrelte()
   const { useFrameOrders } = useLegacyFrameCompatibilityContext()
-  const { invalidators } = getContext<ThrelteInternalContext>('threlte-internal-context')
+  const { autoInvalidations } = getContext<ThrelteInternalContext>('threlte-internal-context')
 
   let order = options?.order ?? 0
 
@@ -83,7 +83,7 @@ export const useFrame = (
   const start = () => {
     started.set(true)
     if (options?.invalidate ?? true) {
-      invalidators.add(fn)
+      autoInvalidations.add(fn)
     }
     task.start()
   }
@@ -91,7 +91,7 @@ export const useFrame = (
   const stop = () => {
     started.set(true)
     if (options?.invalidate ?? true) {
-      invalidators.delete(fn)
+      autoInvalidations.delete(fn)
     }
     task.stop()
   }

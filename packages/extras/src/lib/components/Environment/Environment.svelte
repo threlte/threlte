@@ -100,12 +100,12 @@
 
     if (!isBackground && scene.background) {
       scene.background = null
-      invalidate('Removing Environment as scene.background')
+      invalidate()
     }
 
     if (isBackground && !scene.background && previousEnvMap) {
       scene.background = previousEnvMap
-      invalidate('Adding Environment as scene.background')
+      invalidate()
     }
   }
 
@@ -114,7 +114,7 @@
     scene.background = previousSceneBackground
     if (previousEnvMap) previousEnvMap.dispose()
     groundProjection = undefined
-    invalidate('Environment destroyed')
+    invalidate()
   })
 </script>
 

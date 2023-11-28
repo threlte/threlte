@@ -31,7 +31,9 @@ const afterRenderStage = useStage('after-render', {
 
 <Tip type="tip">
   Be aware that `useStage` never removes a stage as that's usually not needed. If a stage
-  is created *once* in your Threlte app, it's available throughout the app's lifetime.
+  is created *once* in your Threlte app, it's available throughout the app's lifetime. If
+  you want to remove a stage, you can do so by calling `removeStage` on the scheduler instance
+  returned by `useThrelte`.
 </Tip>
 
 A stage decides **when and how its tasks are executed**. By default, a stage will

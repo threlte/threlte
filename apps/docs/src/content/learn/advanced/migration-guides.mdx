@@ -4,15 +4,53 @@ title: Migration Guides
 order: 2
 ---
 
-## Migrating from `useFrame` and `useRender` to the Task Scheduling System
+## Threlte 7
 
-Threlte 6 introduces a new task scheduling system that allows you to easily
+Threlte 7 introduces a new task scheduling system that allows you to easily
 orchestrate the task execution order of your Threlte application. For details on
 how to use it, see the [documentation](/docs/learn/basics/scheduling-tasks).
 Before, you had the option to choose between `useFrame` and `useRender` to
 orchestrate your rendering pipeline. These hooks are currently still available
 but will be removed in the next major version of Threlte. This guide will help
 you migrate your application to the new task scheduling system.
+
+It also cleans up some props available on `<Canvas>`.
+
+### Threlte context
+
+### `<Canvas>` props
+
+#### `frameloop`
+
+`frameloop` is now called `renderMode` as it only affects the rendering of your
+Threlte application. It accepts nearly the same values as before:
+
+```ts title="before"
+<Canvas frameloop="always" />
+<Canvas frameloop="demand" />
+<Canvas frameloop="never" />
+```
+
+```ts title="after"
+<Canvas renderMode="always" />
+<Canvas renderMode="on-demand" />
+<Canvas renderMode="manual" />
+```
+
+If the value is `always`, Threlte will render your scene on every frame. If the
+value is `on-demand`, Threlte will only render your scene when a re-render is
+needed. If the value is `manual`, Threlte will never render your scene
+automatically and you have to trigger a re-render by calling `advance()` on the
+Threlte context available via `useThrelte()`.
+
+#### `autoRender`
+
+When `autoRender` is `false`, Threlte will not render your scene automatically
+and will enable you to implement a custom render pipeline using the hook
+[`useTask`](/docs/reference/core/use-task). If adding a task to render the scene
+to Threlte's
+[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages), the task
+will only be called in respect to the `renderMode` prop.
 
 ### `useFrame`
 

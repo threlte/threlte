@@ -136,6 +136,21 @@ Tasks are functions that are executed on every frame. They are grouped in
 stages. You can add a task to a stage by using the hook `useTask`. The hook will
 create a task and add it to a stage.
 
+### Default Tasks
+
+By default, Threlte will create a single task for you:
+
+- **`autoRenderTask`**: This task is part of [Threlte's
+	`renderStage`](#default-stages) and will render the scene if
+	[`autoRender`](/docs/reference/core/canvas) is set to `true`.
+
+This task is created automatically and is accessible via
+[`useThrelte()`](/docs/reference/core/use-threlte):
+
+```ts
+const { autoRenderTask } = useThrelte()
+```
+
 ### Creating an Anonymous Task
 
 In its most basic form, `useTask` takes a function as its first argument. This
