@@ -77,8 +77,9 @@ of tasks or keys. The referenced tasks must be in the same stage as the task you
 are creating.
 
 Task dependencies **can be created in any order** if they are passed by key.
-The declared dependencies will be taken into account when they are created later
-on.
+This means that you can declare a dependency (with `before` or `after`) on a
+task that is created later in your code. The declared dependencies will be taken
+into account when they are created later on.
 
 <Tip type="warning">
   If a task is passed by reference to the `before` or `after` option, the task
