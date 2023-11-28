@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     CubeCamera,
@@ -64,7 +64,7 @@
     invalidate()
   }
 
-  const { start: scheduleUpdate, stop } = useFrame(
+  const { start: scheduleUpdate, stop } = useTask(
     () => {
       sky.scale.setScalar(scale)
 
@@ -88,8 +88,8 @@
       stop()
     },
     {
-      autostart: false,
-      invalidate: false
+      autoStart: false,
+      autoInvalidate: false
     }
   )
 

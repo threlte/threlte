@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentWritable, useFrame, useThrelte, watch } from '@threlte/core'
+  import { currentWritable, useTask, useThrelte, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
   import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
@@ -38,7 +38,7 @@
 
   const csm = currentWritable<CSM | undefined>(undefined)
 
-  useFrame(() => $csm?.update(), { invalidate: false })
+  useTask(() => $csm?.update(), { autoInvalidate: false })
 
   const { onNewMaterial, allMaterials } = useMaterials()
 

@@ -16,7 +16,7 @@
     asyncWritable,
     type AsyncWritable,
     createRawEventDispatcher,
-    useFrame,
+    useTask,
     watch,
     useLoader,
     useParent
@@ -197,12 +197,13 @@
     stop()
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
+      if (!json) return
       const now = performance.now()
       const diff = now - timerOffset
       const name = frameNames[currentFrame]
-      const { frame, duration } = json!.frames[name]
+      const { frame, duration } = json.frames[name]
       const interval = duration ?? fpsInterval
 
       if (diff <= interval) return
@@ -231,7 +232,7 @@
         }
       }
     },
-    { autostart: false }
+    { autoStart: false }
   )
 
   watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
