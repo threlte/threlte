@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.1
+
+### Patch Changes
+
+- ac981216: Fixed useTask options
+
 ## 7.0.0
 
 ### Major Changes
