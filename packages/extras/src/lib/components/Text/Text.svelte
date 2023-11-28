@@ -23,7 +23,7 @@
   const onUpdate = async () => {
     await tick()
     ref.sync(() => {
-      invalidate('Text: sync finished')
+      invalidate()
       dispatch('sync')
     })
   }

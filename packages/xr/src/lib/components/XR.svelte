@@ -67,10 +67,10 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const dispatch = createRawEventDispatcher<$$Events>()
-  const { renderer, frameloop } = useThrelte()
+  const { renderer, renderMode } = useThrelte()
   const { xr } = renderer
 
-  let originalFrameloop = $frameloop
+  let originalRenderMode = $renderMode
 
   setupRaf()
   setupHeadset()
@@ -129,10 +129,10 @@ This should be placed within a Threlte `<Canvas />`.
 
   watch(isPresenting, (presenting) => {
     if (presenting) {
-      originalFrameloop = frameloop.current
-      frameloop.set('always')
+      originalRenderMode = renderMode.current
+      renderMode.set('always')
     } else {
-      frameloop.set(originalFrameloop)
+      renderMode.set(originalRenderMode)
     }
   })
 

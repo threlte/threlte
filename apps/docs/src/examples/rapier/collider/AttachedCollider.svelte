@@ -58,9 +58,5 @@
       Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively attaches
       the colliders to the rigid body and allow the rigid body to be affected by contact forces and gravity.
     </p>
-
-    <p>
-      If a collider is attached to a {'<RigidBody>'} its transform properties are applied once on initialization.
-    </p>
   </div>
 </TestBed>

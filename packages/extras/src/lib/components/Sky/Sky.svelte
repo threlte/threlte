@@ -39,7 +39,7 @@
 
   const uniforms = sky.material.uniforms
 
-  const { renderer, scene } = useThrelte()
+  const { renderer, scene, invalidate } = useThrelte()
 
   let renderTarget: WebGLCubeRenderTarget | undefined
   let cubeCamera: CubeCamera | undefined
@@ -58,12 +58,14 @@
 
   $: if (setEnvironment && renderTarget) {
     scene.environment = renderTarget.texture
+    invalidate()
   } else if (!setEnvironment) {
     scene.environment = originalEnvironment
+    invalidate()
   }
 
   const { start: scheduleUpdate, stop } = useFrame(
-    ({ invalidate }) => {
+    () => {
       sky.scale.setScalar(scale)
 
       uniforms.turbidity.value = turbidity
@@ -86,7 +88,8 @@
       stop()
     },
     {
-      autostart: false
+      autostart: false,
+      invalidate: false
     }
   )
 

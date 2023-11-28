@@ -28,8 +28,7 @@
   export const ref = new ThreeOrbitControls($parent, renderer.domElement)
 
   const { start, stop } = useFrame(() => ref.update(), {
-    autostart: false,
-    debugFrameloopMessage: 'OrbitControls: updating controls'
+    autostart: false
   })
 
   $: {

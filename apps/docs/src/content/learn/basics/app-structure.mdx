@@ -1,0 +1,94 @@
+---
+category: Basics
+title: App Structure
+order: -900
+---
+
+Threlte is making heavy use of [Svelte's Context
+API](https://svelte.dev/tutorial/context-api) as a way to pass data through the
+component tree without having to pass props down manually at every level:
+
+```svelte title="SomeComponent.svelte"
+<script>
+  const { camera, renderer } = useThrelte()
+</script>
+```
+
+To let Threlte do its magic, we recommend to follow our best practices for
+structuring your app.
+
+## Recommended App Structure
+
+The recommended app structure is to implement the component
+[`<Canvas>`](/docs/reference/core/canvas) that provides all basic contexts and
+use a single child component (typically named "Scene.svelte" in examples) for
+your Threlte app. This way, you don't need to worry about the presence of
+contexts in your components.
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+```svelte title="Scene.svelte"
+<script>
+  import { T, useFrame } from '@threlte/core'
+  import { interactivity } from '@threlte/extras'
+  import Player from './Player.svelte'
+  import World from './World.svelte'
+
+  let rotation = 0
+
+  // useFrame is relying on a context provided
+  // by <Canvas>. Because we are definitely *inside*
+  // <Canvas>, we can safely use it.
+  useFrame((_, delta) => {
+    rotation += delta
+  })
+
+  // This file is also typically the place to
+  // inject plugins
+  interactivity()
+</script>
+
+<T.Mesh rotation.y={rotation}>
+  <T.BoxGeometry />
+  <T.MeshBasicMaterial color="red" />
+</T.Mesh>
+
+<Player />
+<World />
+```
+
+## Context Not Available
+
+<Tip type="danger">
+	The following app structure is deceiving. It looks like it should work, but **it
+	will not**. The problem is that the `useFrame` hook is called *outside* of the
+	`<Canvas>` component, so the main Threlte context is not available. Usually hooks
+	relying on some context will tell you with descriptive error messages when they
+	are used outside of their context.
+</Tip>
+
+  ```svelte title="App.svelte"
+  <script>
+    import { Canvas, useFrame, T } from '@threlte/core'
+
+    let rotation = 0
+
+    // This won't work, we're not inside <Canvas>^
+    useFrame(() => {
+      rotation += 0.01
+    })
+  </script>
+
+  <Canvas>
+    <T.Mesh rotation.y={rotation} />
+  </Canvas>
+  ```
