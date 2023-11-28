@@ -53,7 +53,7 @@ Stages are **groups of tasks**. They are executed in a specific order.
 By default, Threlte will create two stages for you:
 - **`mainStage`**: This stage holds all the tasks that are not assigned to any
   other stage.
-- **`renderStage`**: This stage will be executed after the default stage. It is
+- **`renderStage`**: This stage will be executed after the `mainStage`. It is
   used to render the scene and only ever executes its tasks when a re-render is
   needed.
 
@@ -290,7 +290,7 @@ scheduler.getSchedule({
       ]
     },
     {
-      "key": "default stage",
+      "key": "main stage",
       "tasks": [
         "move object",
         "move camera"

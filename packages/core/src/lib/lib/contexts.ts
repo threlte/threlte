@@ -49,7 +49,7 @@ export type ThrelteContext = {
   advance: () => void
   /** The scheduler used by this Threlte app */
   scheduler: Scheduler
-  /** The default stage used by useTask */
+  /** The stage which useTask defaults to */
   mainStage: Stage
   /**
    * The default render stage. Tasks in this stage are ran according to
