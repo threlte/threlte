@@ -71,9 +71,11 @@ This component will implement
 function `perf.begin()` before any frame callbacks are executed and `perf.end()`
 after all frame callbacks have been executed, including rendering. Assuming our
 app didn't add any other stages, we add a stage that runs before Threlte's
-`mainStage` (making it the first stage) and another stage that runs after
-Threlte's `renderStage` (making it the last stage). We then call `perf.begin()`
-in a task of the first stage and `perf.end()` in a task of the second stage.
+[`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it the
+first stage) and another stage that runs after Threlte's
+[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it
+the last stage). We then call `perf.begin()` in a task of the first stage and
+`perf.end()` in a task of the second stage.
 
 ```svelte title="ThreePerf.svelte"
 <script>
