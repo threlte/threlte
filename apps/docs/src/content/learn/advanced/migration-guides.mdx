@@ -28,13 +28,13 @@ component. See this example:
 
 ```svelte title="Threlte&nbsp;6"
 <script>
-	import { T } from '@threlte/core'
+  import { T } from '@threlte/core'
 
-	let position = [0, 0, 0]
+  let position = [0, 0, 0]
 
-	const changePosition = () => {
-		position = 1
-	}
+  const changePosition = () => {
+    position = 1
+  }
 </script>
 
 <T.Mesh {position} />
@@ -49,13 +49,13 @@ migrate the above example:
 
 ```svelte title="Threlte&nbsp;7" {7}m
 <script>
-	import { T } from '@threlte/core'
+  import { T } from '@threlte/core'
 
-	let position = [0, 0, 0]
+  let position = [0, 0, 0]
 
-	const changePosition = () => {
-		position = [1, 1, 1]
-	}
+  const changePosition = () => {
+    position = [1, 1, 1]
+  }
 </script>
 
 <T.Mesh {position} />
