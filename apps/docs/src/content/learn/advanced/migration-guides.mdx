@@ -17,6 +17,50 @@ you migrate your application to the new Task Scheduling System.
 This update also slightly changes the signature of the `<Canvas>` component as
 well as the Threlte context.
 
+Also, to increase performance we're enforcing the use of constant prop types
+on the `<T>` component.
+
+### Constant prop types on `<T>`
+
+The `<T>` component now enforces the use of *constant prop types*. This means
+that the type of a certain prop value must not change in the lifetime of a
+component. See this example:
+
+```svelte title="Threlte 6"
+<script>
+	import { T } from '@threlte/core'
+
+	let position = [0, 0, 0]
+
+	const changePosition = () => {
+		position = 1
+	}
+</script>
+
+<T.Mesh {position} />
+```
+
+When `changePosition` is invoked, the prop type of the prop `position` changes
+from an array of numbers to a number. This is not allowed anymore in Threlte 7.
+Prop types must be constant. It's a highly unlikely scenario that rarely occurs
+and a rather bad practice to start with, which allows us to optimize the
+performance of the `<T>` component by enforcing this rule. This is how you would
+migrate the above example:
+
+```svelte title="Threlte 7" {7}m
+<script>
+	import { T } from '@threlte/core'
+
+	let position = [0, 0, 0]
+
+	const changePosition = () => {
+		position = [1, 1, 1]
+	}
+</script>
+
+<T.Mesh {position} />
+```
+
 ### Threlte context
 
 ### `<Canvas>` props
@@ -26,13 +70,13 @@ well as the Threlte context.
 `frameloop` is now called `renderMode` as it only affects the rendering of your
 Threlte application. It accepts nearly the same values as before:
 
-```ts title="before"
+```ts title="Threlte 6"
 <Canvas frameloop="always" />
 <Canvas frameloop="demand" />
 <Canvas frameloop="never" />
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 <Canvas renderMode="always" />
 <Canvas renderMode="on-demand" />
 <Canvas renderMode="manual" />
@@ -69,7 +113,7 @@ The Threlte context previously available as the first argument to the callback
 of `useFrame` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="before"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -77,7 +121,7 @@ useFrame(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -95,13 +139,13 @@ The options of `useTask` have been renamed to better reflect their purpose. The
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="before"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // ...
 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // ...
@@ -112,7 +156,7 @@ useTask((delta) => {
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="before"
+```ts title="Threlte 6"
 useFrame((_, delta) => {
   // This task will be executed first
 }, { order: 0 })
@@ -122,7 +166,7 @@ useFrame((_, delta) => {
 }, { order: 1 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 useTask('first', (delta) => {
   // ...
 })
@@ -142,13 +186,13 @@ render pipeline. This is now possible with `useTask` as well. Threlte provides a
 [`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) that only
 ever executes its tasks when a re-render is needed.
 
-```ts title="before"
+```ts title="Threlte 6"
 useRender(() => {
   // Render your scene here
 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 useTask('render', () => {
   // Render your scene here
@@ -162,7 +206,7 @@ The Threlte context previously available as the first argument to the callback
 of `useRender` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="before"
+```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -170,7 +214,7 @@ useRender(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -182,13 +226,13 @@ useTask((delta) => {
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="before"
+```ts title="Threlte 6"
 useRender((_{ camera, scene }_, delta) => {
   // ...
 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 useTask((delta) => {
   // ...
@@ -199,7 +243,7 @@ useTask((delta) => {
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="before"
+```ts title="Threlte 6"
 useRender((_, delta) => {
   // This task will be executed first
 }, { order: 0 })
@@ -209,7 +253,7 @@ useRender((_, delta) => {
 }, { order: 1 })
 ```
 
-```ts title="after"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 
 useTask('first', (delta) => {
