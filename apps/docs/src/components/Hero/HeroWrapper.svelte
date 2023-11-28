@@ -164,7 +164,7 @@
       in={2.7}
       out={3.9}
     >
-      <div
+      <h2
         class="fixed top-[66svh] top-[66vh] left-0 flex w-screen flex-col items-center justify-center"
       >
         <TextEffect
@@ -199,7 +199,7 @@
         >
           Threlte 7
         </TextEffect>
-      </div>
+      </h2>
     </Trigger>
   </Theatre>
 </div>

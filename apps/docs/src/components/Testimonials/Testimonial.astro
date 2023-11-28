@@ -21,10 +21,12 @@ const testimonial = Astro.props.testimonial.data
         class="h-12 w-12 rounded-full object-cover"
       />
       <div class="grow">
-        <h4 class="mb-0">{testimonial.name}</h4>
+        <p class="mb-0">{testimonial.name}</p>
         <p class="text-faded text-sm font-normal">{testimonial.title}</p>
       </div>
     </div>
-    <p class="text-faded mt-0 text-base font-normal">{testimonial.contents}</p>
+    <blockquote cite={testimonial.link}>
+      <p class="text mt-0 text-base font-normal">{testimonial.contents}</p>
+    </blockquote>
   </div>
 </a>
