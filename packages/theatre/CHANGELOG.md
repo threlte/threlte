@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.4
+
+### Patch Changes
+
+- 2ae76e18: Threlte 7 compatibility
+
 ## 2.1.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.5.2
+
+### Patch Changes
+
+- 2ae76e18: Threlte 7 compatibility
+
 ## 7.5.1
 
 ### Patch Changes
