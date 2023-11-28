@@ -51,7 +51,9 @@ and will enable you to implement a custom render pipeline using the hook
 [`useTask`](/docs/reference/core/use-task). If adding a task to render the scene
 to Threlte's
 [`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages), the task
-will only be called in respect to the `renderMode` prop.
+will only be called in respect to the `renderMode` prop. Previously, this
+behavior was inferred from the usage of the `useRender` hook, but we think being
+explicit here is better.
 
 ### `useFrame`
 

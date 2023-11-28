@@ -184,9 +184,7 @@ This example demonstrates how to use `useTask` to implement post processing
 effects using the library
 [`postprocessing`](https://github.com/pmndrs/postprocessing).
 
-<Tip type="warning">
-  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
-</Tip>
+1. Create a `<Renderer>` component.
 
 ```svelte title="Renderer.svelte"
 <script>
@@ -244,3 +242,21 @@ effects using the library
   }, { stage: renderStage })
 </script>
 ```
+
+2. Use the `<Renderer>` component in your app. To disable automatic rendering of
+your scene, Set `autoRender` to `false` on the `<Canvas>` component.
+
+```svelte title="App.svelte"
+<script>
+	import { Canvas } from '@threlte/svelte'
+	import Renderer from './Renderer.svelte'
+</script>
+
+<Canvas autoRender={false}>
+	<Renderer />
+</Canvas>
+```
+
+<Tip type="warning">
+  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
+</Tip>
