@@ -14,6 +14,7 @@ const { small, twitter, github, discord } = Astro.props
   {
     github && (
       <a
+        aria-label="Threlte Github"
         href="https://github.com/threlte/threlte"
         target="_blank"
       >
@@ -36,6 +37,7 @@ const { small, twitter, github, discord } = Astro.props
   {
     discord && (
       <a
+        aria-label="Threlte Discord"
         href="https://discord.gg/EqUBCfCaGm"
         target="_blank"
       >
@@ -57,7 +59,11 @@ const { small, twitter, github, discord } = Astro.props
   <!-- TWITTER -->
   {
     twitter && (
-      <a href="https://twitter.com/threlte">
+      <a
+        aria-label="Threlte Twitter"
+        href="https://twitter.com/threlte"
+        target="_blank"
+      >
         <svg
           height={small ? '20' : '26'}
           viewBox="0 0 30 26"

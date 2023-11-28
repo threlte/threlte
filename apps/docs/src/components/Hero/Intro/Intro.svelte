@@ -26,7 +26,7 @@
       </TheatreTextBox>
 
       <TheatreTextBox key="statement">
-        <div class="max-w-[450px] text-center text-4xl font-bold text-white/90">
+        <h1 class="max-w-[450px] text-center text-4xl font-bold text-white/90">
           Rapidly build interactive
           <span class="relative inline-block"
             ><div
@@ -45,7 +45,7 @@
             />
             3D apps
           </span> for the web.
-        </div>
+        </h1>
       </TheatreTextBox>
     </div>
 

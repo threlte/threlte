@@ -4,7 +4,7 @@ title: App Structure
 order: -900
 ---
 
-Threlte is making heavy use of [Svelte's Context
+Threlte makes heavy use of [Svelte's Context
 API](https://svelte.dev/tutorial/context-api) as a way to pass data through the
 component tree without having to pass props down manually at every level:
 
@@ -19,11 +19,9 @@ structuring your app.
 
 ## Recommended App Structure
 
-The recommended app structure is to implement the component
-[`<Canvas>`](/docs/reference/core/canvas) that provides all basic contexts and
-use a single child component (typically named "Scene.svelte" in examples) for
-your Threlte app. This way, you don't need to worry about the presence of
-contexts in your components.
+The [`<Canvas>`](/docs/reference/core/canvas) component provides all basic contexts in a Threlte application.
+The recommended app structure is to have a single child component of `<Canvas>` (typically named "Scene.svelte" in examples) for
+your Threlte app. This will allow contexts provided by `useThrelte` and other hooks to be used.
 
 ```svelte title="App.svelte"
 <script>
@@ -38,17 +36,17 @@ contexts in your components.
 
 ```svelte title="Scene.svelte"
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import Player from './Player.svelte'
   import World from './World.svelte'
 
   let rotation = 0
 
-  // useFrame is relying on a context provided
+  // useTask is relying on a context provided
   // by <Canvas>. Because we are definitely *inside*
   // <Canvas>, we can safely use it.
-  useFrame((_, delta) => {
+  useTask((delta) => {
     rotation += delta
   })
 
@@ -70,7 +68,7 @@ contexts in your components.
 
 <Tip type="danger">
 	The following app structure is deceiving. It looks like it should work, but **it
-	will not**. The problem is that the `useFrame` hook is called *outside* of the
+	will not**. The problem is that the `useTask` hook is called *outside* of the
 	`<Canvas>` component, so the main Threlte context is not available. Usually hooks
 	relying on some context will tell you with descriptive error messages when they
 	are used outside of their context.
@@ -78,12 +76,12 @@ contexts in your components.
 
   ```svelte title="App.svelte"
   <script>
-    import { Canvas, useFrame, T } from '@threlte/core'
+    import { Canvas, useTask, T } from '@threlte/core'
 
     let rotation = 0
 
     // This won't work, we're not inside <Canvas>^
-    useFrame(() => {
+    useTask(() => {
       rotation += 0.01
     })
   </script>
