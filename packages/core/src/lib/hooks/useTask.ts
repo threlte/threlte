@@ -13,13 +13,17 @@ export type ThrelteUseTask = {
 }
 
 export type ThrelteUseTaskOptions = {
-  autostart?: boolean
+  /**
+   * If false, the task will not be started automatically and must be started
+   * by invoking the `start` function. Defaults to true.
+   */
+  autoStart?: boolean
   /**
    * If false, the task handler will not automatically invalidate the task.
    * This is useful if you want to manually invalidate the task. Defaults to
    * true.
    */
-  invalidate?: boolean
+  autoInvalidate?: boolean
 } & (
   | {
       after?: (Key | Task) | (Key | Task)[]

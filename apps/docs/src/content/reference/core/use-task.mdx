@@ -91,6 +91,49 @@ on.
 
 ## Examples
 
+### Starting and Stopping Tasks
+
+By default, a task is started automatically. You can set it to not start
+automatically by passing `autoStart: false` as an option to `useTask`. You can
+then start and stop the task manually using the `start` and `stop` functions:
+
+```ts
+const { start, stop, started } = useTask((delta) => {
+  // do something
+}, { autoStart: false })
+
+// start the task
+start()
+
+// stop the task
+stop()
+
+// check if the task is started
+$: console.log($started)
+```
+
+### `useTask` and On-Demand Rendering
+
+By default, `useTask` will automatically invalidate the current frame and
+thereby request a re-render on the next frame. Most of the times, this is what
+you want. However, if you want more control over when things are re-rendered,
+you can pass `autoInvalidate: false` as an option to `useTask`. This will prevent
+the task from automatically invalidating the current frame. You can then
+invalidate the frame manually using the `invalidate` function returned by
+`useThrelte`:
+
+```ts
+const { invalidate } = useThrelte()
+
+const { start, stop, started } = useTask((delta) => {
+  // do something
+  // invalidate the current frame
+  if (someCondition) {
+    invalidate()
+  }
+}, { autoInvalidate: false })
+```
+
 ### Update Objects
 
 To update objects in your scene, you can use the `useTask` hook to create a task

@@ -44,6 +44,12 @@ useTask((delta) => {
 })
 ```
 
+#### `autostart` and `invalidate`
+
+The options of `useTask` have been renamed to better reflect their purpose. The
+`autostart` option is now called `autoStart` (note the **capital 'S'**),
+`invalidate` is now called `autoInvalidate`.
+
 #### If you didn't use the `order` option
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
