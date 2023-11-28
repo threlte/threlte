@@ -248,7 +248,7 @@ export class DAG<T extends { key: Key }> {
     })
 
     // Process vertices with inDegree 0 and decrease inDegree of adjacent vertices
-    while (zeroInDegreeQueue.length) {
+    while (zeroInDegreeQueue.length > 0) {
       const vertexKey = zeroInDegreeQueue.shift()!
       result.push(vertexKey)
 
