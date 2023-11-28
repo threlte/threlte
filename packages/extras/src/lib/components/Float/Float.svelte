@@ -1,6 +1,6 @@
 <script lang="ts">
   import { MathUtils, type EulerOrder } from 'three'
-  import { useFrame, T } from '@threlte/core'
+  import { useTask, T } from '@threlte/core'
   import type { FloatEvents, FloatProps, FloatSlots } from './Float.svelte'
 
   type $$Props = Required<FloatProps>
@@ -31,7 +31,7 @@
     ? rotation
     : [rotation, rotation, rotation]
 
-  useFrame((_, delta) => {
+  useTask((delta) => {
     t += delta
 
     // Floating
