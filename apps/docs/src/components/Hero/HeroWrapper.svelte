@@ -197,7 +197,7 @@
             end: 4
           }}
         >
-          Threlte 6
+          Threlte 7
         </TextEffect>
       </div>
     </Trigger>
