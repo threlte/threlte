@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils'
 
   let rotation = 0
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.01
   })
 

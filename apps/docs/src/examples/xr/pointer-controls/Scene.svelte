@@ -1,7 +1,7 @@
 <script lang="ts">
   import { BufferGeometry, Vector3 } from 'three'
   import { onDestroy } from 'svelte'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Text } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
@@ -58,7 +58,7 @@
     point.set(Math.random() - 0.5, 1.5 + Math.random() - 0.5, 1)
   }
 
-  useFrame(() => {
+  useTask(() => {
     lookAt.lerp(point, happy ? 0.5 : 0.2)
     ref.lookAt(lookAt.x, lookAt.y, 1)
   })

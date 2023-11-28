@@ -1,5 +1,5 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import {
     MeshLineMaterial,
     MeshLineGeometry,
@@ -42,7 +42,10 @@
     scale={2}
   >
     <T.PlaneGeometry />
-    <T.MeshBasicMaterial {map} side={DoubleSide}/>
+    <T.MeshBasicMaterial
+      {map}
+      side={DoubleSide}
+    />
   </T.Mesh>
 {/await}
 

@@ -188,7 +188,7 @@ By default, Three.js is automatically updating the `matrix` and `matrixWorld` pr
 ```svelte
 <script lang="ts">
   import { Object3D } from 'three'
-  import { injectPlugin, useFrame } from '@threlte/core'
+  import { injectPlugin, useTask } from '@threlte/core'
 
   const isObject3D = (obj: any): obj is Object3D => {
     return obj.isObject3D
@@ -241,7 +241,7 @@ By default, Three.js is automatically updating the `matrix` and `matrixWorld` pr
     }
   })
 
-  useFrame(
+  useTask(
     ({ invalidate }) => {
       if (!objectsToUpdate.size) return
       objectsToUpdate.forEach((obj) => obj.updateMatrix())

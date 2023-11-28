@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame, useRender, useThrelte } from '@threlte/core'
+  import { T, useTask, useRender, useThrelte } from '@threlte/core'
   import { GLTF } from '@threlte/extras'
   import {
     DotScreenEffect,
@@ -30,7 +30,7 @@
 
   let rotation = 0
 
-  useFrame(
+  useTask(
     () => {
       rotation -= 0.002
     },

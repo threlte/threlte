@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
 
   // your script goes here
 
@@ -15,7 +15,7 @@
   // random element from array
   const color = new Color(colors[Math.floor(Math.random() * colors.length)])
 
-  useFrame(() => {
+  useTask(() => {
     positionZ -= 10
   })
 </script>

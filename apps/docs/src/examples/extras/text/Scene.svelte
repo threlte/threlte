@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Grid, Text } from '@threlte/extras'
 
   let rotation = 0
@@ -7,7 +7,7 @@
   export let text: string
   export let fontSize: number
 
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.002
   })
 </script>

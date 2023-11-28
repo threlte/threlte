@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Align, OrbitControls, useTexture } from '@threlte/extras'
   import { createEventDispatcher, onMount, tick } from 'svelte'
   import { MeshBasicMaterial, MirroredRepeatWrapping, PlaneGeometry, Texture } from 'three'
@@ -41,7 +41,7 @@
   const getWarpTexture = () => $warpTexture
   const getClonedTexture = () => clonedTexture
 
-  useFrame((_, delta) => {
+  useTask((delta) => {
     const speed = 0.1
     const wt = getWarpTexture()
     if (wt) wt.offset.x += speed * delta

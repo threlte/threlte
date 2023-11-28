@@ -38,17 +38,17 @@ contexts in your components.
 
 ```svelte title="Scene.svelte"
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import Player from './Player.svelte'
   import World from './World.svelte'
 
   let rotation = 0
 
-  // useFrame is relying on a context provided
+  // useTask is relying on a context provided
   // by <Canvas>. Because we are definitely *inside*
   // <Canvas>, we can safely use it.
-  useFrame((_, delta) => {
+  useTask((delta) => {
     rotation += delta
   })
 
@@ -70,25 +70,25 @@ contexts in your components.
 
 <Tip type="danger">
 	The following app structure is deceiving. It looks like it should work, but **it
-	will not**. The problem is that the `useFrame` hook is called *outside* of the
+	will not**. The problem is that the `useTask` hook is called *outside* of the
 	`<Canvas>` component, so the main Threlte context is not available. Usually hooks
 	relying on some context will tell you with descriptive error messages when they
 	are used outside of their context.
 </Tip>
 
-  ```svelte title="App.svelte"
-  <script>
-    import { Canvas, useFrame, T } from '@threlte/core'
+```svelte title="App.svelte"
+<script>
+  import { Canvas, useTask, T } from '@threlte/core'
 
-    let rotation = 0
+  let rotation = 0
 
-    // This won't work, we're not inside <Canvas>^
-    useFrame(() => {
-      rotation += 0.01
-    })
-  </script>
+  // This won't work, we're not inside <Canvas>^
+  useTask(() => {
+    rotation += 0.01
+  })
+</script>
 
-  <Canvas>
-    <T.Mesh rotation.y={rotation} />
-  </Canvas>
-  ```
+<Canvas>
+  <T.Mesh rotation.y={rotation} />
+</Canvas>
+```

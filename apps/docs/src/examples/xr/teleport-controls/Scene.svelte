@@ -1,7 +1,7 @@
-<script lang='ts'>
+<script lang="ts">
   import type { Writable } from 'svelte/store'
   import { PointLight } from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
   import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
@@ -30,11 +30,11 @@
   $: candlesX = $gltf?.nodes.Candles1.position.x ?? 0
   $: candlesZ = $gltf?.nodes.Candles1.position.z ?? 0
 
-  useFrame((_, delta) => {
-    time += (delta / 5)
+  useTask((delta) => {
+    time += delta / 5
     const x = noise(time, 0) / 10
     const y = noise(0, time) / 10
-  
+
     light1.position.x = torchX + x
     light1.position.z = torchZ + y
 
@@ -50,7 +50,7 @@
   <Hand right />
 
   <T.PerspectiveCamera
-    slot='fallback'
+    slot="fallback"
     makeDefault
     position.y={1.8}
     position.z={1.5}
@@ -68,14 +68,14 @@
   <T
     is={light1}
     intensity={8}
-    color='red'
+    color="red"
     position.y={$gltf.nodes.Torch1.position.y + 0.45}
   />
 
   <T
     is={light2}
     intensity={4}
-    color='red'
+    color="red"
     position.y={$gltf.nodes.Candles1.position.y + 0.45}
   />
 {/if}
@@ -91,9 +91,7 @@
   {showBlockers}
 />
 
-<T.AmbientLight
-  intensity={0.25}
-/>
+<T.AmbientLight intensity={0.25} />
 
 <T.DirectionalLight
   intensity={0.5}

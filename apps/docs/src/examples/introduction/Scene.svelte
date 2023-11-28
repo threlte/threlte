@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { GLTF } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils'
 
   let rotation = 0
 
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.002
   })
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CapsuleGeometry, Euler, Vector3 } from 'three'
-  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
   import { createEventDispatcher } from 'svelte'
   import Controller from './ThirdPersonControls.svelte'
@@ -28,7 +28,7 @@
   let grounded = false
   $: grounded ? dispatch('groundenter') : dispatch('groundexit')
 
-  useFrame(() => {
+  useTask(() => {
     if (!rigidBody || !capsule) return
     // get direction
     const velVec = temp.fromArray([0, 0, forward - backward]) // left - right
