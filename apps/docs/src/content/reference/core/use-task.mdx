@@ -18,9 +18,8 @@ every frame.
 
 ## Creating an Anonymous Task
 
-In its most basic form, `useTask` takes a function as its first argument. This
-function will be executed on every frame, starting on the next frame and
-receives the delta time representing the time since the last frame as its first
+In its most basic form, `useTask` takes a callback function as its argument. This
+function will be executed on every frame, starting on the next frame. It receives a `delta`, representing the time since the last frame as its
 argument. By default, the created task is added to [Threlte's
 `mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
 
@@ -77,7 +76,7 @@ called **dependencies** and can be a task itself, the key of a task or an array
 of tasks or keys. The referenced tasks must be in the same stage as the task you
 are creating.
 
-Task dependencies **do not need to be created yet** if they are passed by key.
+Task dependencies **can be created in any order** if they are passed by key.
 The declared dependencies will be taken into account when they are created later
 on.
 
