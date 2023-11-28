@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.1.0
+
+### Minor Changes
+
+- 44488636: Declared beta
+
 ## 0.0.13
 
 ### Patch Changes

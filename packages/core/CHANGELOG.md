@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.0
+
+### Major Changes
+
+- 44488636: See the [migration guide](https://threlte.xyz/docs/learn/advanced/migration-guides#threlte-7)
+
 ## 6.1.1
 
 ### Patch Changes
