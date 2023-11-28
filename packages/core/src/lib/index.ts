@@ -21,7 +21,7 @@ export { useStage } from './hooks/useStage'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 
-// scheduling system types
+// task scheduling system types
 export type { Key, Stage, Task, Scheduler, Schedule, TaskCallback } from './frame-scheduling'
 
 // legacy hooks

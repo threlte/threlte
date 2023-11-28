@@ -6,13 +6,13 @@ order: 2
 
 ## Threlte 7
 
-Threlte 7 introduces a new task scheduling system that allows you to easily
+Threlte 7 introduces a new *Task Scheduling System* that allows you to easily
 orchestrate the task execution order of your Threlte application. For details on
 how to use it, see the [documentation](/docs/learn/basics/scheduling-tasks).
 Before, you had the option to choose between `useFrame` and `useRender` to
 orchestrate your rendering pipeline. These hooks are currently still available
 but will be removed in the next major version of Threlte. This guide will help
-you migrate your application to the new task scheduling system.
+you migrate your application to the new Task Scheduling System.
 
 It also cleans up some props available on `<Canvas>`.
 
@@ -56,7 +56,7 @@ will only be called in respect to the `renderMode` prop.
 
 The hook [`useTask`](/docs/reference/core/use-task) replaces `useFrame`. It has
 a slightly different signature and allows you to to add a `task` to Threlte's
-task scheduling system. A task may have dependencies to other tasks, which you
+*Task Scheduling System*. A task may have dependencies to other tasks, which you
 can think of as the big brother of the `order` option of `useFrame`.
 
 #### Callback Arguments

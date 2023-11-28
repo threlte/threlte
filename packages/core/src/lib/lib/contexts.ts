@@ -69,7 +69,7 @@ export type ThrelteContext = {
 }
 
 /**
- * The internal context is used to store the state of the scheduling system and
+ * The internal context is used to store the state of the task scheduling system and
  * the disposal methods. It is not exposed to the user.
  */
 export type ThrelteInternalContext = {
