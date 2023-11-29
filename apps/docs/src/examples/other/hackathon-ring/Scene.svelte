@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { Environment, GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
+  import { GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { cubicOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
