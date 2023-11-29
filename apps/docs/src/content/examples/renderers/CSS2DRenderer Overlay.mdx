@@ -1,25 +1,48 @@
-This example shows how to run an additional Three.js renderer in parallel with Threlte's `<Canvas>`, while still leveraging Threlte's built-in elements. Specifically, we'll run [CSS2DRenderer](https://threejs.org/docs/index.html#examples/en/renderers/CSS2DRenderer) to add flat labels to objects in a three-dimensional scene.
+---
+title: CSS2DRenderer Overlay
+---
 
-This example can be easily adapted to use [CSS3DRenderer](https://threejs.org/docs/index.html#examples/en/renderers/CSS3DRenderer) instead, if you want the elements to live "inside" the scene, rather than flat across the surface.
+This example shows how to run an additional Three.js renderer in parallel with
+Threlte's `<Canvas>`, while still leveraging Threlte's built-in elements.
+Specifically, we'll run
+[CSS2DRenderer](https://threejs.org/docs/index.html#examples/en/renderers/CSS2DRenderer)
+to add flat labels to objects in a three-dimensional scene.
+
+This example can be easily adapted to use
+[CSS3DRenderer](https://threejs.org/docs/index.html#examples/en/renderers/CSS3DRenderer)
+instead, if you want the elements to live "inside" the scene, rather than flat
+across the surface.
 
 <Example path="renderers/CSS2DRenderer" />
 
 ## How does it work?
 
-In this scene, we run two renderers - the default one provided by Threlte, and a new CSS2DRenderer which we initialize manually. Threlte's renderer runs on a canvas element as normal, while our new renderer runs in a `<div>` with absolute positioning on top of it.
+In this scene, we run two renderers - the default one provided by Threlte, and a
+new CSS2DRenderer which we initialize manually. Threlte's renderer runs on a
+canvas element as usual, while our new renderer runs in a `<div>` with absolute
+positioning on top of it.
 
 ### The render loop
 
-To integrate the a new renderer into svelte's loop, we call it inside `useRender()` after the tick.
+To integrate the a new renderer into svelte's loop, we call it inside a task
+added right *after* [Threlte's
+`autoRenderTask`](/docs/learn/basics/scheduling-tasks#default-tasks). For
+details on how to use the *Threlte Task Scheduling System*, see the
+[documentation](/docs/learn/basics/scheduling-tasks).
 
-By default, each rendrer traverses the scene and updates every object. We can set [scene.matrixWorldAutoUpdate](https://threejs.org/docs/#api/en/core/Object3D.matrixAutoUpdate) to false and manually call `scene.updateMatrixWorld()` each tick in order to avoid duplicating the work, since we're running two renderers.
+By default, each renderer traverses the scene and updates every object. We can
+set
+[scene.matrixWorldAutoUpdate](https://threejs.org/docs/#api/en/core/Object3D.matrixAutoUpdate)
+to false and manually call `scene.updateMatrixWorld()` each tick in order to
+avoid duplicating the work, since we're running two renderers. To do that, we're
+adding a task that runs right *before* Threlte's `autoRenderTask`.
 
 ```svelte title="Scene.svelte"
 <script>
-  const { scene, size } = useThrelte()
+  const { scene, size, autoRenderTask, camera } = useThrelte()
 
   // Set up the CSS2DRenderer to run in a div placed atop the <Canvas>
-  const element = document.querySelector('#css-renderer-target')
+  const element = document.querySelector('#css-renderer-target') as HTMLElement
   const cssRenderer = new CSS2DRenderer({ element })
   $: cssRenderer.setSize($size.width, $size.height)
 
@@ -29,22 +52,36 @@ By default, each rendrer traverses the scene and updates every object. We can se
   // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
   scene.matrixWorldAutoUpdate = false
 
-  useRender(async ({ renderer, scene, camera }) => {
-    // Flush pending Svelte changes, especially tweening
-    await tick()
-    // Manually update matrixes for the scene
-    scene.updateMatrixWorld()
-    // Update the Threlte canvas
-    renderer.render(scene, camera.current)
-    // Update the DOM
-    cssRenderer.render(scene, camera.current)
-  })
+  // To update the matrices *once* per frame, we'll use a task that is added
+  // right before the autoRenderTask. This way, we can be sure that the
+  // matrices are updated before the renderers run.
+  useTask(
+    () => {
+      scene.updateMatrixWorld()
+    },
+    { before: autoRenderTask }
+  )
+
+  // The CSS2DRenderer needs to be updated after the autoRenderTask, so we
+  // add a task that runs after it.
+  useTask(
+    () => {
+      // Update the DOM
+      cssRenderer.render(scene, camera.current)
+    },
+    {
+      after: autoRenderTask,
+      autoInvalidate: false
+    }
+  )
 </script>
 ```
 
 ### Setting up CssObject
 
-The other integral part is a component that accepts DOM contents in the default slot and places them in the scene and renders them with the ThreeJS `CSS2DRenderer`:
+The other integral part is a component that accepts DOM contents in the default
+slot and places them in the scene and renders them with the ThreeJS
+`CSS2DRenderer`:
 
 ```svelte title="CssObject.svelte"
 <script>
@@ -69,7 +106,9 @@ The other integral part is a component that accepts DOM contents in the default 
 {/if}
 ```
 
-This component renders children into a div, and allows nested Threlte components via the `three` slot. It passes all other properties through, letting us use it like so:
+This component renders children into a div, and allows nested Threlte components
+via the `three` slot. It passes all other properties through, letting us use it
+like so:
 
 ```svelte
 <CssObject position={[-1, 2, 1]} center={[-0.2, 0.5]}>
@@ -82,4 +121,5 @@ This component renders children into a div, and allows nested Threlte components
 </CssObject>
 ```
 
-where `<CounterLabel>` is a normal Svelte component outside Threlte's control, but the mesh is a component inside the scene hooked in with `slot="three"`.
+where `<CounterLabel>` is a normal Svelte component outside Threlte's control,
+but the mesh is a component inside the scene hooked in with `slot="three"`.

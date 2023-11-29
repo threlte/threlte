@@ -4,8 +4,8 @@
   import { XR } from '@threlte/xr'
 
   let rotation = 0
-  useTask(() => {
-    rotation += 0.01
+  useTask((delta) => {
+    rotation += delta
   })
 </script>
 

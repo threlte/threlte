@@ -1,19 +1,20 @@
 <script lang="ts">
-  import { useThrelte, useRender } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import {
+    BlendFunction,
     EffectComposer,
     EffectPass,
-    RenderPass,
     OutlineEffect,
-    BlendFunction
+    RenderPass
   } from 'postprocessing'
+  import { onMount } from 'svelte'
 
   export let selectedMesh: THREE.Mesh
 
-  const { scene, renderer, camera, size } = useThrelte()
+  const { scene, renderer, camera, size, autoRender, renderStage } = useThrelte()
 
   const composer = new EffectComposer(renderer)
-  
+
   const setupEffectComposer = (camera: THREE.Camera, selectedMesh: THREE.Mesh) => {
     composer.removeAllPasses()
     composer.addPass(new RenderPass(scene, camera))
@@ -36,7 +37,18 @@
   $: setupEffectComposer($camera, selectedMesh)
   $: composer.setSize($size.width, $size.height)
 
-  useRender((_, delta) => {
-    composer.render(delta)
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => {
+      autoRender.set(before)
+    }
   })
+
+  useTask(
+    (delta) => {
+      composer.render(delta)
+    },
+    { stage: renderStage, autoInvalidate: false }
+  )
 </script>

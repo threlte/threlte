@@ -26,8 +26,8 @@
 
   let rotationY = 0
   let dir = 1
-  useTask(() => {
-    rotationY += 0.01 * dir
+  useTask((delta) => {
+    rotationY += delta * dir
   })
 </script>
 

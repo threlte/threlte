@@ -15,8 +15,9 @@
   // random element from array
   const color = new Color(colors[Math.floor(Math.random() * colors.length)])
 
-  useTask(() => {
-    positionZ -= 10
+  useTask((delta) => {
+    const f = 1 / 60 / delta
+    positionZ -= 10 * f
   })
 </script>
 

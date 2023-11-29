@@ -23,8 +23,8 @@ Provides a function to teleport the player to a reference frame.
 This function can be used within `useTask` for smooth movement.
 
 ```ts
-useTask(() => {
-  vec3.z += 0.1
+useTask((delta) => {
+  vec3.z += delta
   teleport(vec3)
 })
 ```

@@ -80,9 +80,9 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 
   let rotation = 0
 
-  // This won't work, we're not inside <Canvas>^
-  useTask(() => {
-    rotation += 0.01
+  // This won't work, we're not inside <Canvas>
+  useTask((delta) => {
+    rotation += delta
   })
 </script>
 

@@ -5,8 +5,9 @@
 
   let rotation = 0
 
-  useTask(() => {
-    rotation += 0.002
+  useTask((delta) => {
+    const f = 1 / 60 / delta // ~1 at 60fps
+    rotation += 0.002 * f
   })
 </script>
 

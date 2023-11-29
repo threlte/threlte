@@ -36,8 +36,8 @@
 
   let ref: THREE.Mesh
 
-  useTask(() => {
-    ref.position.x += -keyboard.x * 0.03
+  useTask((delta) => {
+    ref.position.x += -keyboard.x * (delta * 2)
 
     if (keyboard.x > 0) {
       animation = 'RunLeft'

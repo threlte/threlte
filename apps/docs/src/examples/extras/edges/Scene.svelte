@@ -5,8 +5,8 @@
   import { DEG2RAD } from 'three/src/math/MathUtils'
 
   let rotation = 0
-  useTask(() => {
-    rotation += 0.01
+  useTask((delta) => {
+    rotation += delta
   })
 
   const gltf = useGltf<{

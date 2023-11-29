@@ -164,17 +164,27 @@ to make animations frame rate independent.
 To create a custom render pipeline, add a task to Threlte's
 [`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) which by
 default only runs its tasks when a re-render is needed. Be sure to set the
-property `renderMode` to `'manual'` on the `<Canvas>` component.
+property `autoRender` to `false` on the `<Canvas>` component **or inside the
+`<Renderer>` component** to prevent Threlte from automatically rendering your
+scene.
 
 ```svelte title="CustomRenderer.svelte"
 <script>
-  import { useTask } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
+  import { onMount } from 'svelte'
 
-  const { renderStage } = useThrelte()
+  const { renderStage, autoRender } = useThrelte()
+
+  // disable auto rendering
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => autoRender.set(before)
+  })
 
   useTask((delta) => {
     // render your scene here
-  }, { stage: renderStage })
+  }, { stage: renderStage, autoInvalidate: false })
 </script>
 ```
 
@@ -184,11 +194,14 @@ This example demonstrates how to use `useTask` to implement post processing
 effects using the library
 [`postprocessing`](https://github.com/pmndrs/postprocessing).
 
-1. Create a `<Renderer>` component.
+1. Create a `<Renderer>` component. Be sure to set the option `autoInvalidate`
+of `useTask` to `false` to prevent Threlte from automatically invalidating the
+render stage.
 
 ```svelte title="Renderer.svelte"
 <script>
-  import { useThrelte, useRender } from '@threlte/core'
+  import { useThrelte, useTask } from '@threlte/core'
+  import { onMount } from 'svelte'
   import {
     EffectComposer,
     EffectPass,
@@ -235,11 +248,19 @@ effects using the library
   $: setupEffectComposer($camera)
   $: composer.setSize($size.width, $size.height)
 
-  const { renderStage } = useThrelte()
+  const { renderStage, autoRender } = useThrelte()
+
+  // We need to disable auto rendering as soon as this component is
+  // mounted and restore the previous state when it is unmounted.
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => autoRender.set(before)
+  })
 
   useTask((delta) => {
     composer.render(delta)
-  }, { stage: renderStage })
+  }, { stage: renderStage, autoInvalidate: false })
 </script>
 ```
 
@@ -248,12 +269,12 @@ your scene, Set `autoRender` to `false` on the `<Canvas>` component.
 
 ```svelte title="App.svelte"
 <script>
-	import { Canvas } from '@threlte/svelte'
-	import Renderer from './Renderer.svelte'
+  import { Canvas } from '@threlte/svelte'
+  import Renderer from './Renderer.svelte'
 </script>
 
-<Canvas autoRender={false}>
-	<Renderer />
+<Canvas>
+  <Renderer />
 </Canvas>
 ```
 

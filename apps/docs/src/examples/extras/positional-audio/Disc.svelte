@@ -8,8 +8,8 @@
 
   let discRotation = 0
   const { start, stop, started } = useTask(
-    () => {
-      discRotation += 0.02 * discSpeed
+    (delta) => {
+      discRotation += delta * discSpeed
     },
     {
       autoStart: false

@@ -184,7 +184,9 @@ Previously, `useRender` allowed you to define a callback that was invoked after
 all `useFrame` callbacks have been invoked to render your scene with a custom
 render pipeline. This is now possible with `useTask` as well. Threlte provides a
 [`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) that only
-ever executes its tasks when a re-render is needed.
+ever executes its tasks when a re-render is needed. A task added to this stage
+can be used to render your scene. Be sure to set the option `autoInvalidate` to
+`false` to prevent Threlte from automatically invalidating the render stage.
 
 ```ts title="Threlte&nbsp;6"
 useRender(() => {
@@ -196,7 +198,7 @@ useRender(() => {
 const { renderStage } = useThrelte()
 useTask('render', () => {
   // Render your scene here
-}, { stage: renderStage })
+}, { stage: renderStage, autoInvalidate: false })
 ```
 
 #### Callback Arguments
@@ -236,7 +238,7 @@ useRender((_{ camera, scene }_, delta) => {
 const { renderStage } = useThrelte()
 useTask((delta) => {
   // ...
-}, { stage: renderStage })
+}, { stage: renderStage, autoInvalidate: false })
 ```
 
 #### If you used the `order` option
@@ -258,12 +260,12 @@ const { renderStage } = useThrelte()
 
 useTask('first', (delta) => {
   // ...
-}, { stage: renderStage })
+}, { stage: renderStage, autoInvalidate: false })
 
 useTask('second', (delta) => {
   // This task will be executed after the task with the
   // key 'first' has been executed.
-}, { after: 'first', stage: renderStage })
+}, { after: 'first', stage: renderStage, autoInvalidate: false })
 ```
 
 ## Migrating from Threlte 5 to Threlte 6

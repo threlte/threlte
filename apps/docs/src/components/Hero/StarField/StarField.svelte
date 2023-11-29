@@ -107,8 +107,8 @@
 
   material.onBeforeCompile = onBeforeCompile
 
-  useTask(() => {
-    settings.elapsedTime += 0.01
+  useTask((delta) => {
+    settings.elapsedTime += delta
   })
 </script>
 
