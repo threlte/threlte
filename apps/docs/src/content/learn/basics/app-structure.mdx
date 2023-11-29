@@ -4,7 +4,7 @@ title: App Structure
 order: -900
 ---
 
-Threlte is making heavy use of [Svelte's Context
+Threlte makes heavy use of [Svelte's Context
 API](https://svelte.dev/tutorial/context-api) as a way to pass data through the
 component tree without having to pass props down manually at every level:
 
@@ -19,11 +19,9 @@ structuring your app.
 
 ## Recommended App Structure
 
-The recommended app structure is to implement the component
-[`<Canvas>`](/docs/reference/core/canvas) that provides all basic contexts and
-use a single child component (typically named "Scene.svelte" in examples) for
-your Threlte app. This way, you don't need to worry about the presence of
-contexts in your components.
+The [`<Canvas>`](/docs/reference/core/canvas) component provides all basic contexts in a Threlte application.
+The recommended app structure is to have a single child component of `<Canvas>` (typically named "Scene.svelte" in examples) for
+your Threlte app. This will allow contexts provided by `useThrelte` and other hooks to be used.
 
 ```svelte title="App.svelte"
 <script>

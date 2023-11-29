@@ -24,24 +24,29 @@ export type ThrelteUseTaskOptions = {
    * true.
    */
   autoInvalidate?: boolean
-} & (
-  | {
-      after?: (Key | Task) | (Key | Task)[]
-      before?: (Key | Task) | (Key | Task)[]
-    }
-  | {
-      stage?: Key | Stage
-    }
-)
+  /**
+   * The task will be added to the stage after the specified task.
+   */
+  after?: (Key | Task) | (Key | Task)[]
+  /**
+   * The task will be added to the stage before the specified task.
+   */
+  before?: (Key | Task) | (Key | Task)[]
+  /**
+   * The stage to add the task to. Defaults to the main stage. If a task object
+   * is provided to `after` or `before`, the stage of that task will be used.
+   */
+  stage?: Key | Stage
+}
 
 /**
  * Adds a handler to threltes unified render loop.∏
  *
- * `start` and `stop` functions are returned and the options allow
- * setting the handler to not start automatically.
+ * `start` and `stop` functions are returned and the options allow setting the
+ * handler to not start automatically.
  *
- * Use the options `after` and `before` to control the order of execution.
- * Add the task to a specific stage with the option `stage`.
+ * Use the options `after` and `before` to control the order of execution. Add
+ * the task to a specific stage with the option `stage`.
  *
  * @param {(ctx: ThrelteContext, delta: number) => void} fn callback function
  * @param {ThrelteUseTaskOptions} options options
@@ -88,7 +93,7 @@ export function useTask(
   let stage: Stage = ctx.mainStage
 
   if (opts) {
-    if ('stage' in opts && !!opts.stage) {
+    if (!!opts.stage) {
       if (DAG.isValue(opts.stage)) {
         stage = opts.stage
       } else {
@@ -98,7 +103,7 @@ export function useTask(
         }
         stage = maybeStage
       }
-    } else if ('after' in opts && opts.after) {
+    } else if (opts.after) {
       if (Array.isArray(opts.after)) {
         for (let index = 0; index < opts.after.length; index++) {
           const element = opts.after[index]
@@ -110,7 +115,7 @@ export function useTask(
       } else if (DAG.isValue(opts.after)) {
         stage = opts.after.stage
       }
-    } else if ('before' in opts && opts.before) {
+    } else if (opts.before) {
       if (Array.isArray(opts.before)) {
         for (let index = 0; index < opts.before.length; index++) {
           const element = opts.before[index]
@@ -129,10 +134,7 @@ export function useTask(
 
   const started = writable(false)
 
-  const task = stage.createTask(key, fn, {
-    after: (opts as any).after,
-    before: (opts as any).before
-  })
+  const task = stage.createTask(key, fn, opts)
 
   const start = () => {
     started.set(true)

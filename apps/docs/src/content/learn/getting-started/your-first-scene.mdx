@@ -344,7 +344,7 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 
 ## Adding Animation
 
-Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/reference/core/hooks#useTask) hook to tap
+Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/reference/core/use-task) hook to tap
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 
@@ -390,9 +390,7 @@ cube rotate around its y-axis.
   hideCode
 />
 
-`useTask` registers a callback that will be invoked on every frame. The function receives two arguments: the
-current state of the Threlte application (the same context available via the
-[`useThrelte`](/docs/reference/core/hooks#useTask)) and the time delta since the last frame. We use
+`useTask` registers a callback that will be invoked on every frame. The callback receives the time delta since the last frame as an argument. We use
 the delta to update the rotation
 [independent of the frame rate](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
 – the cube will rotate at the same speed regardless of the frame rate.
