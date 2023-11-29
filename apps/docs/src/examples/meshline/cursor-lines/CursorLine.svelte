@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
   import { Vector3 } from 'three'
   import { spring } from 'svelte/motion'
@@ -34,7 +34,7 @@
     }
   }
 
-  useFrame((_ctx, delta) => {
+  useTask((delta) => {
     let previousPoint = points[0]
     points.forEach((point, i) => {
       if (previousPoint && i > 0) {

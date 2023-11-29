@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Environment, useGltf } from '@threlte/extras'
   import type { Material, Object3D } from 'three'
 
   let rotation = 0
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.005
   })
 

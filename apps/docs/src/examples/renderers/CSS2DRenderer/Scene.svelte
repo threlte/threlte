@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from 'svelte'
-  import { T, useFrame, useRender, useThrelte } from '@threlte/core'
+  import { T, useTask, useRender, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
   import CssObject from './CssObject.svelte'
@@ -31,7 +31,10 @@
   })
 </script>
 
-<T.PerspectiveCamera makeDefault position={[5, 5, 5]}>
+<T.PerspectiveCamera
+  makeDefault
+  position={[5, 5, 5]}
+>
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
@@ -42,7 +45,10 @@
   <T.MeshStandardMaterial color="#F64F6F" />
 </T.Mesh>
 
-<CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
+<CssObject
+  position={[-1, 2, 1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="Hello" />
 
   <T.Mesh slot="three">
@@ -51,7 +57,10 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, 1]} center={[0, 0.5]}>
+<CssObject
+  position={[1, 2, 1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="CSS" />
 
   <T.Mesh slot="three">
@@ -60,7 +69,10 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, -1]} center={[0, 0.5]}>
+<CssObject
+  position={[1, 2, -1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="Renderer" />
 
   <T.Mesh slot="three">

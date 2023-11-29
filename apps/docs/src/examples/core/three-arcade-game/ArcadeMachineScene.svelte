@@ -1,15 +1,11 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { Environment, useCursor, useGltf, useInteractivity, useTexture } from '@threlte/extras'
   import { onMount } from 'svelte'
   import { cubicInOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
   import { derived } from 'svelte/store'
-  import {
-    Color, Object3D,
-    PerspectiveCamera,
-    PointLight
-  } from 'three'
+  import { Color, Object3D, PerspectiveCamera, PointLight } from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import { gameState } from './game/state'
@@ -66,7 +62,7 @@
 
   let pointlight: PointLight
   let pointLightIntensity = $basePointLightIntensity
-  useFrame(() => {
+  useTask(() => {
     if ($state === 'off') {
       pointLightIntensity = 1
     } else {
@@ -199,7 +195,7 @@
 
   let cameraTarget: Object3D | undefined = undefined
   let camera: PerspectiveCamera | undefined = undefined
-  useFrame(() => {
+  useTask(() => {
     if (!camera || !cameraTarget) return
     camera.lookAt(cameraTarget.position)
   })
@@ -216,7 +212,7 @@
   $: backgroundColor.set($machineIsOff ? new Color('#020203') : new Color('#020203'))
 
   const { scene, renderer } = useThrelte()
-  
+
   renderer.useLegacyLights = false
 
   $: scene.background = new Color($backgroundColor)
@@ -443,11 +439,7 @@
 
   <!-- Floor -->
   <T.Mesh>
-    <T.CylinderGeometry
-      args={[1, 1, 0.04, 64]}
-    />
-    <T.MeshStandardMaterial
-      color={'#0f0f0f'}
-    />
+    <T.CylinderGeometry args={[1, 1, 0.04, 64]} />
+    <T.MeshStandardMaterial color={'#0f0f0f'} />
   </T.Mesh>
 </T.Scene>

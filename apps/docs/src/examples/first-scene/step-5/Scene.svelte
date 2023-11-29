@@ -1,5 +1,5 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
@@ -7,7 +7,7 @@
   const scale = spring(1)
 
   let rotation = 0
-  useFrame((state, delta) => {
+  useTask((delta) => {
     rotation += delta
   })
 </script>

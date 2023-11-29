@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { onDestroy } from 'svelte'
   import { tweened } from 'svelte/motion'
@@ -59,7 +59,7 @@
 
   let rotationY = 0
   let dir = 1
-  useFrame(() => {
+  useTask(() => {
     rotationY += 0.01 * dir
   })
 </script>

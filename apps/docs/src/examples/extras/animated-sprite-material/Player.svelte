@@ -1,6 +1,6 @@
-<script lang='ts'>
+<script lang="ts">
   import * as THREE from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { AnimatedSpriteMaterial } from '@threlte/extras'
 
   const keyboard = { x: 0 }
@@ -36,8 +36,8 @@
 
   let ref: THREE.Mesh
 
-  useFrame(() => {
-    ref.position.x += (-keyboard.x * 0.03)
+  useTask(() => {
+    ref.position.x += -keyboard.x * 0.03
 
     if (keyboard.x > 0) {
       animation = 'RunLeft'
@@ -68,8 +68,8 @@
     bind:play
     bind:pause
     {animation}
-    textureUrl='/textures/sprites/player.png'
-    dataUrl='/textures/sprites/player.json'
+    textureUrl="/textures/sprites/player.png"
+    dataUrl="/textures/sprites/player.json"
   />
   <T.PlaneGeometry args={[0.5, 0.5]} />
 </T.Mesh>
