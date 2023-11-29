@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.2
+
+### Patch Changes
+
+- cc4085d2: Fixes a bug where calling `useThrelte().shouldRender()` resets the invalidation flags and makes it impossible to invoke more than once per frame.
+
 ## 7.0.1
 
 ### Patch Changes
