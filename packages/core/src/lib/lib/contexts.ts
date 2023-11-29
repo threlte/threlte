@@ -59,7 +59,8 @@ export type ThrelteContext = {
   autoRenderTask: Task
   /**
    * Function to determine if a rendering should happen according to on-demand
-   * rendering, resets frame invalidations and advancements
+   * rendering. The value of this function is valid for the duration of the
+   * current frame.
    */
   shouldRender: () => boolean
   colorManagementEnabled: CurrentWritable<boolean>
@@ -75,14 +76,17 @@ export type ThrelteContext = {
 export type ThrelteInternalContext = {
   // ------- Scheduling context -------
 
+  /** A flag to indicate whether the current frame has been invalidated */
   frameInvalidated: boolean
+
+  /** A flag to indicate whether the frame should be advanced in the manual renderMode */
   advance: boolean
 
-  /**
-   * If anything is in this set, the frame will be considered invalidated and
-   * the next frame will be rendered.
-   */
+  /** If anything is in this set, the frame will be considered invalidated */
   autoInvalidations: Set<any>
+
+  /** A function to be called at the end of the frame loop that resets the invalidation flags */
+  resetFrameInvalidation: () => void
 
   // ------- Disposal context -------
 
@@ -154,6 +158,11 @@ export const createContexts = (options: {
   const internalCtx: ThrelteInternalContext = {
     frameInvalidated: true,
     advance: false,
+    autoInvalidations: new Set(),
+    resetFrameInvalidation: () => {
+      internalCtx.frameInvalidated = false
+      internalCtx.advance = false
+    },
     dispose: async (force = false) => {
       await tick()
       if (!internalCtx.shouldDispose && !force) return
@@ -204,8 +213,7 @@ export const createContexts = (options: {
       internalCtx.shouldDispose = true
     },
     disposableObjects: new Map(),
-    shouldDispose: false,
-    autoInvalidations: new Set()
+    shouldDispose: false
   }
 
   const ctx: ThrelteContext = {
@@ -239,11 +247,6 @@ export const createContexts = (options: {
         (ctx.renderMode.current === 'on-demand' &&
           (internalCtx.frameInvalidated || internalCtx.autoInvalidations.size > 0)) ||
         (ctx.renderMode.current === 'manual' && internalCtx.advance)
-
-      // reset the advance flag
-      internalCtx.advance = false
-      // reset the frameInvalidated flag
-      internalCtx.frameInvalidated = false
 
       return shouldRender
     }
