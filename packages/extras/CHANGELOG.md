@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.5.3
+
+### Patch Changes
+
+- 050a7128: Set `pointerEvents` for `noTransform` divs
+
 ## 7.5.2
 
 ### Patch Changes
