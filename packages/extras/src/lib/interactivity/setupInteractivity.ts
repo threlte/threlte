@@ -25,7 +25,7 @@ const DOM_EVENTS = [
   ['pointercancel', true]
 ] as const
 
-type DomEventName = typeof DOM_EVENTS[number][0]
+type DomEventName = (typeof DOM_EVENTS)[number][0]
 
 export const setupInteractivity = (state: State) => {
   function calculateDistance(event: DomEvent) {

@@ -26,18 +26,23 @@ export const setupHands = () => {
   onMount(() => {
     const dispatch = (event: Event) => {
       if (!hasHands()) return
-      const handEvent = event as unknown as { handedness: 'left' | 'right' } | { data: { handedness: 'left' | 'right' }}
-      const handedness = ('handedness' in handEvent) ? handEvent.handedness : handEvent.data.handedness
+      const handEvent = event as unknown as
+        | { handedness: 'left' | 'right' }
+        | { data: { handedness: 'left' | 'right' } }
+      const handedness =
+        'handedness' in handEvent ? handEvent.handedness : handEvent.data.handedness
       handDispatchers[handedness]?.current?.(event.type, event)
     }
-  
-    function handleConnected (this: XRHandSpace, event: XRHandEvent) {
+
+    function handleConnected(this: XRHandSpace, event: XRHandEvent) {
       const hand = this
       const { model, targetRay } = map.get(this)
-      const { data } = event as { data: {
-        handedness: 'left' | 'right'
-        hand: XRHand
-      } }
+      const { data } = event as {
+        data: {
+          handedness: 'left' | 'right'
+          hand: XRHand
+        }
+      }
       const { handedness, hand: inputSource } = data
 
       stores[handedness].set({
@@ -53,7 +58,7 @@ export const setupHands = () => {
     const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
       dispatch(event)
       stores[event.data.handedness as 'left' | 'right'].set(undefined)
-    }  
+    }
 
     for (const handSpace of handSpaces) {
       handSpace.addEventListener('connected', handleConnected)

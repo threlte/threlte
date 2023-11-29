@@ -89,4 +89,4 @@ export const vertexShader = `
         ${ShaderChunk.logdepthbuf_vertex}
         ${ShaderChunk.fog_vertex}
     }
-`;
+`

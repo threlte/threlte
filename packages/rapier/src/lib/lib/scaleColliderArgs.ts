@@ -16,25 +16,25 @@ export const scaleVertices = (vertices: ArrayLike<number>, scale: Vector3): numb
 
 export const scaleColliderArgs = <Shape extends ColliderShapes>(
   shape: Shape,
-  args: Parameters<typeof ColliderDesc[Shape]>,
+  args: Parameters<(typeof ColliderDesc)[Shape]>,
   scale: Vector3
-): Parameters<typeof ColliderDesc[Shape]> => {
+): Parameters<(typeof ColliderDesc)[Shape]> => {
   // Heightfield only scales the last arg
   const newArgs = args.slice()
   if (shape === 'heightfield') {
     // Is this for auto scaling heightfield to THREE scale of the object?
     // ;(newArgs[3] as number) = scale.x
-    return newArgs as Parameters<typeof ColliderDesc[Shape]>
+    return newArgs as Parameters<(typeof ColliderDesc)[Shape]>
   }
 
   // Trimesh and convex scale the vertices
   if (shape === 'trimesh' || shape === 'convexHull') {
     newArgs[0] = new Float32Array(scaleVertices(newArgs[0] as ArrayLike<number>, scale))
-    return newArgs as Parameters<typeof ColliderDesc[Shape]>
+    return newArgs as Parameters<(typeof ColliderDesc)[Shape]>
   }
 
   const scaleArray = [scale.x, scale.y, scale.z]
   return newArgs.map((arg, index) => (scaleArray[index] ?? 1) * (arg as number)) as Parameters<
-    typeof ColliderDesc[Shape]
+    (typeof ColliderDesc)[Shape]
   >
 }
