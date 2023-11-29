@@ -1,13 +1,13 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T } from '@threlte/core'
   import {
-    MeshLineMaterial,
-    MeshLineGeometry,
     Grid,
+    MeshLineGeometry,
+    MeshLineMaterial,
     OrbitControls,
     useTexture
   } from '@threlte/extras'
-  import { Vector3, CubicBezierCurve3, Color, DoubleSide } from 'three'
+  import { CubicBezierCurve3, DoubleSide, Vector3 } from 'three'
 
   const texture = useTexture('/brush-texture.png')
 
@@ -42,7 +42,10 @@
     scale={2}
   >
     <T.PlaneGeometry />
-    <T.MeshBasicMaterial {map} side={DoubleSide}/>
+    <T.MeshBasicMaterial
+      {map}
+      side={DoubleSide}
+    />
   </T.Mesh>
 {/await}
 

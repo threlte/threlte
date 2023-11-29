@@ -170,7 +170,10 @@
 
     contexts.getCtx().renderer.setAnimationLoop((time) => {
       contexts.getInternalCtx().dispose()
+
       scheduler.run(time)
+
+      contexts.getInternalCtx().resetFrameInvalidation()
     })
 
     initialized.set(true)

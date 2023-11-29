@@ -53,7 +53,7 @@ This is useful for using stores in a non-reactive way e.g. in loops.
 const numberStore = writable(0)
 const memoized = memoize(numberStore) // { current: 0 }
 
-useFrame(() => {
+useTask(() => {
   numberStore.update((n) => n + 1)
   console.log(memoized.current) // 1, 2, 3, ...
 })
@@ -71,7 +71,7 @@ You can also pass a transform function to transform the values:
 const store = writable(0)
 const doubled = memoize(store, (n) => n * 2) // { current: 0 }
 
-useFrame(() => {
+useTask(() => {
   store.update((n) => n + 1)
   console.log(doubled.current) // 2, 4, 6, ...
 })
@@ -135,7 +135,7 @@ For use in non-reactive contexts e.g. loops where unwrapping a store every frame
 ```ts
 const store = currentWritable(0)
 
-useFrame(() => {
+useTask(() => {
   console.log(store.current) // 0
 })
 ```

@@ -9,12 +9,12 @@ Provides a reference to the user's headset pose.
 
 ```svelte
 <script>
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
   import { useHeadset } from '@threlte/xr'
 
   const headset = useHeadset()
 
-  useFrame(() => {
+  useTask(() => {
     // Read the current headset position and rotation.
     console.log(headset.position, headset.quaternion)
   })
@@ -27,5 +27,5 @@ If you would like to attach objects to the headset, the [`<Headset>`](/docs/refe
 
 ```ts
 // THREE.Group - A group representing the headset pose.
-const headset = useHeadset() 
+const headset = useHeadset()
 ```

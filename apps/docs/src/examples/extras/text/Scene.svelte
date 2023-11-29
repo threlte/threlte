@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Grid, Text } from '@threlte/extras'
 
   let rotation = 0
@@ -7,8 +7,9 @@
   export let text: string
   export let fontSize: number
 
-  useFrame(() => {
-    rotation += 0.002
+  useTask((delta) => {
+    const f = 1 / 60 / delta // ~1 at 60fps
+    rotation += 0.002 * f
   })
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Environment } from '@threlte/extras'
   import { AutoColliders, CollisionGroups } from '@threlte/rapier'
   import { spring } from 'svelte/motion'
@@ -14,7 +14,7 @@
   const smoothPlayerPosZ = spring(0)
   const t3 = new Vector3()
 
-  useFrame(() => {
+  useTask(() => {
     if (!playerMesh) return
     playerMesh.getWorldPosition(t3)
     smoothPlayerPosX.set(t3.x, {

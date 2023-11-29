@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { T, useRender } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Align, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
-  import { tick } from 'svelte'
   import type { Box3, Vector3 } from 'three'
 
   export let x: number = 0
@@ -13,11 +12,6 @@
 
   let boundingBox: Box3 | undefined
   let center: Vector3 | undefined
-
-  useRender(async ({ renderer, scene, camera }) => {
-    await tick()
-    renderer.render(scene, camera.current)
-  })
 </script>
 
 <T.PerspectiveCamera

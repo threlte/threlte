@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { DEG2RAD } from 'three/src/math/MathUtils'
   import { injectLookAtPlugin } from './lookAtPlugin'
 
   const cubePos = [0, 0.8, 0] as [number, number, number]
 
-  useFrame(() => {
+  useTask(() => {
     cubePos[0] = Math.sin(Date.now() / 1000) * 2
     cubePos[2] = Math.cos(Date.now() / 1000) * 2
   })

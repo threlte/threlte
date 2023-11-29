@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { tick } from 'svelte'
-  import { T, useFrame, useRender, useThrelte } from '@threlte/core'
+  import { T, useStage, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
-  import CssObject from './CssObject.svelte'
   import CounterLabel from './CounterLabel.svelte'
+  import CssObject from './CssObject.svelte'
 
-  const { scene, size } = useThrelte()
+  const { scene, size, autoRenderTask, camera } = useThrelte()
 
   // Set up the CSS2DRenderer to run in a div placed atop the <Canvas>
-  const element = document.querySelector('#css-renderer-target')
+  const element = document.querySelector('#css-renderer-target') as HTMLElement
   const cssRenderer = new CSS2DRenderer({ element })
   $: cssRenderer.setSize($size.width, $size.height)
 
@@ -19,19 +18,34 @@
   // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
   scene.matrixWorldAutoUpdate = false
 
-  useRender(async ({ renderer, scene, camera }) => {
-    // Flush pending Svelte changes, especially tweening
-    await tick()
-    // Manually update matrixes for the scene
-    scene.updateMatrixWorld()
-    // Update the Threlte canvas
-    renderer.render(scene, camera.current)
-    // Update the DOM
-    cssRenderer.render(scene, camera.current)
-  })
+  // To update the matrices *once* per frame, we'll use a task that is added
+  // right before the autoRenderTask. This way, we can be sure that the
+  // matrices are updated before the renderers run.
+  useTask(
+    () => {
+      scene.updateMatrixWorld()
+    },
+    { before: autoRenderTask }
+  )
+
+  // The CSS2DRenderer needs to be updated after the autoRenderTask, so we
+  // add a task that runs after it.
+  useTask(
+    () => {
+      // Update the DOM
+      cssRenderer.render(scene, camera.current)
+    },
+    {
+      after: autoRenderTask,
+      autoInvalidate: false
+    }
+  )
 </script>
 
-<T.PerspectiveCamera makeDefault position={[5, 5, 5]}>
+<T.PerspectiveCamera
+  makeDefault
+  position={[5, 5, 5]}
+>
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
@@ -42,7 +56,10 @@
   <T.MeshStandardMaterial color="#F64F6F" />
 </T.Mesh>
 
-<CssObject position={[-1, 2, 1]} center={[0, 0.5]}>
+<CssObject
+  position={[-1, 2, 1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="Hello" />
 
   <T.Mesh slot="three">
@@ -51,7 +68,10 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, 1]} center={[0, 0.5]}>
+<CssObject
+  position={[1, 2, 1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="CSS" />
 
   <T.Mesh slot="three">
@@ -60,7 +80,10 @@
   </T.Mesh>
 </CssObject>
 
-<CssObject position={[1, 2, -1]} center={[0, 0.5]}>
+<CssObject
+  position={[1, 2, -1]}
+  center={[0, 0.5]}
+>
   <CounterLabel label="Renderer" />
 
   <T.Mesh slot="three">

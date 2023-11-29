@@ -74,19 +74,19 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 	are used outside of their context.
 </Tip>
 
-  ```svelte title="App.svelte"
-  <script>
-    import { Canvas, useTask, T } from '@threlte/core'
+```svelte title="App.svelte"
+<script>
+  import { Canvas, useTask, T } from '@threlte/core'
 
-    let rotation = 0
+  let rotation = 0
 
-    // This won't work, we're not inside <Canvas>^
-    useTask(() => {
-      rotation += 0.01
-    })
-  </script>
+  // This won't work, we're not inside <Canvas>
+  useTask((delta) => {
+    rotation += delta
+  })
+</script>
 
-  <Canvas>
-    <T.Mesh rotation.y={rotation} />
-  </Canvas>
-  ```
+<Canvas>
+  <T.Mesh rotation.y={rotation} />
+</Canvas>
+```

@@ -3,7 +3,7 @@
     CoefficientCombineRule,
     type RigidBody as RapierRigidBody
   } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { derived } from 'svelte/store'
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
@@ -40,7 +40,7 @@
     }
   }
 
-  useFrame(() => {
+  useTask(() => {
     if (!ballIsSpawned && rigidBody) {
       spawnBall()
       stop()
