@@ -1,6 +1,6 @@
-<script lang='ts'>
+<script lang="ts">
   import * as THREE from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Text } from '@threlte/extras'
   import { Controller, type XRControllerEvent, useController } from '@threlte/xr'
 
@@ -18,7 +18,6 @@
   const color = new THREE.Color()
 
   const controller = useController($$restProps.left ? 'left' : 'right')
-  
 
   const instancedMesh = new THREE.InstancedMesh(
     new THREE.IcosahedronGeometry(0.01),
@@ -36,7 +35,7 @@
     squeezeend: 'indianred',
     squeeze: 'indianred',
     pinchstart: 'lightcyan',
-    pinchend: 'lightblue',
+    pinchend: 'lightblue'
   } as const
 
   const handleEvent = (event: XRControllerEvent) => {
@@ -66,7 +65,7 @@
     velocities[i] = vec3.x
     velocities[i + 1] = vec3.y
     velocities[i + 2] = vec3.z
-  
+
     cursor += 1
     cursor %= count
   }
@@ -83,7 +82,7 @@
     instancedMesh.instanceMatrix.needsUpdate = true
   }
 
-  useFrame(() => {
+  useTask(() => {
     updateParticles()
 
     switch (state) {
@@ -104,8 +103,17 @@
   on:select={handleEvent}
   on:squeezestart={handleEvent}
   on:squeezeend={handleEvent}
-  on:squeeze={handleEvent}>
-  <Text slot='target-ray' fontSize={0.05} {text} position.x={0.1} />
+  on:squeeze={handleEvent}
+>
+  <Text
+    slot="target-ray"
+    fontSize={0.05}
+    {text}
+    position.x={0.1}
+  />
 </Controller>
 
-<T is={instancedMesh} frustumCulled={false} />
+<T
+  is={instancedMesh}
+  frustumCulled={false}
+/>

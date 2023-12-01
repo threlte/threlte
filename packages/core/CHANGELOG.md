@@ -1,5 +1,29 @@
 # @threlte/core
 
+## 7.0.2
+
+### Patch Changes
+
+- cc4085d2: Fixes a bug where calling `useThrelte().shouldRender()` resets the invalidation flags and makes it impossible to invoke more than once per frame.
+
+## 7.0.1
+
+### Patch Changes
+
+- ac981216: Fixed useTask options
+
+## 7.0.0
+
+### Major Changes
+
+- 44488636: See the [migration guide](https://threlte.xyz/docs/learn/advanced/migration-guides#threlte-7)
+
+## 6.1.1
+
+### Patch Changes
+
+- f026619b: Eagerly set canvas size on start
+
 ## 6.1.0
 
 ### Minor Changes

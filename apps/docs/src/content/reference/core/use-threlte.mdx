@@ -31,42 +31,44 @@ toneMapping.set(THREE.LinearToneMapping)
 ### Usage
 
 <Tip type="info">
-	This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
+  This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
 </Tip>
 
 ```ts
 const {
-  size, // Readable<Size>
-  clock, // Clock
-  camera, // CurrentWritable<THREE.Camera>
-  scene, // THREE.Scene
-  renderer, // THREE.WebGLRenderer
-  invalidate, // (debugFrameloopMessage?: string) => void
-  advance, // () => void
-  colorSpace, // CurrentWritable<THREE.ColorSpace>
-  toneMapping, // CurrentWritable<THREE.ToneMapping>
-  dpr, // CurrentWritable<number>
-  shadows, // CurrentWritable<boolean | THREE.ShadowMapType>
-  colorManagementEnabled, // CurrentWritable<boolean>
-  useLegacyLights, // CurrentWritable<boolean>
-  frameloop // CurrentWritable<'always' | 'demand' | 'never'>
+  size,                    // Readable<Size>
+  camera,                  // CurrentWritable<Camera>
+  scene,                   // Scene
+  dpr,                     // CurrentWritable<number>
+  useLegacyLights,         // CurrentWritable<boolean>
+  renderer,                // WebGLRenderer
+  renderMode,              // CurrentWritable<'always' | 'on-demand' | 'manual'>
+  autoRender,              // CurrentWritable<boolean>
+  invalidate,              // () => void
+  advance,                 // () => void
+  scheduler,               // Scheduler
+  mainStage,               // Stage
+  renderStage,             // Stage
+  autoRenderTask,          // Task
+  shouldRender,            // () => boolean
+  colorManagementEnabled,  // CurrentWritable<boolean>
+  colorSpace,              // CurrentWritable<ColorSpace>
+  toneMapping,             // CurrentWritable<ToneMapping>
+  shadows                  // CurrentWritable<boolean | ShadowMapType>
 } = useThrelte()
 ```
 
-### Frameloop
+### `renderMode`
 
-If the [frameloop is set to `'demand'`](/docs/reference/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+If the [renderMode is set to `'on-demand'`](/docs/reference/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()
 
 invalidate()
-
-// Optionally provide a debugFrameloopMessage to debug the frame loop
-invalidate('changed material color')
 ```
 
-If the [frameloop is set to `'never'`](/docs/reference/core/canvas) you must manually advance the frameloop to request a new render:
+If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
 
 ```ts
 const { advance } = useThrelte()

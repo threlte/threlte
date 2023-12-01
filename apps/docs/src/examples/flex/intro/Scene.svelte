@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useRender } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import { interactivity, transitions } from '@threlte/extras'
   import { Box } from '@threlte/flex'
   import { tick } from 'svelte'
@@ -20,10 +20,17 @@
   interactivity()
   transitions()
 
-  useRender(async ({ camera, scene, renderer }) => {
-    await tick()
-    renderer.render(scene, camera.current)
-  })
+  const { renderStage, autoRender, renderer, scene, camera } = useThrelte()
+
+  autoRender.set(false)
+
+  useTask(
+    async () => {
+      await tick()
+      renderer.render(scene, camera.current)
+    },
+    { stage: renderStage, autoInvalidate: false }
+  )
 </script>
 
 <Window

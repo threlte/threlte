@@ -1,35 +1,45 @@
-<script lang='ts'>
-  import * as THREE from 'three'
-  import { T, useThrelte } from '@threlte/core'
-  import { XR, TeleportControls, Controller, Hand, useTeleport } from '@threlte/xr'
-  import { colorOptions } from './colors'
+<script lang="ts">
+  import type { Writable } from 'svelte/store'
+  import { PointLight } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import { OrbitControls, Sky, useGltf } from '@threlte/extras'
+  import { XR, Controller, Hand } from '@threlte/xr'
+  import Surfaces from './Surfaces.svelte'
+  import { createNoise2D } from 'simplex-noise'
 
-  const { camera, renderer } = useThrelte()
-  const teleport = useTeleport()
+  export let showSurfaces: Writable<boolean>
+  export let showBlockers: Writable<boolean>
 
-  renderer.setClearColor(0x000000)
+  const noise = createNoise2D()
 
-  camera.current.position.z = 1.75
-  camera.current.lookAt(0, 1.75, 1)
+  const light1 = new PointLight()
+  const light2 = new PointLight()
 
-  teleport(new THREE.Vector3(0.5, 0, 0.5))
+  const gltf = useGltf('/models/xr/ruins.glb', {
+    useDraco: true
+  })
 
-  const pointOnCircle = (radius: number, theta: number) => {
-    const x = radius * Math.cos(theta)
-    const y = radius * Math.sin(theta)
+  $: $gltf?.scene.traverse((node) => {
+    node.castShadow = node.receiveShadow = true
+  })
 
-    return { x, y }
-  }
+  let time = 0
 
-  const randomColor = () => {
-    return colorOptions[Math.trunc(Math.random() * colorOptions.length)]!
-  }
+  $: torchX = $gltf?.nodes.Torch1.position.x ?? 0
+  $: torchZ = $gltf?.nodes.Torch1.position.z ?? 0
+  $: candlesX = $gltf?.nodes.Candles1.position.x ?? 0
+  $: candlesZ = $gltf?.nodes.Candles1.position.z ?? 0
 
-  const cylinders = Array.from({ length: 14 }).map((_, index) => {
-    return {
-      point: pointOnCircle(5, index / 2),
-      color: randomColor(),
-    }
+  useTask((delta) => {
+    time += delta / 5
+    const x = noise(time, 0) / 10
+    const y = noise(0, time) / 10
+
+    light1.position.x = torchX + x
+    light1.position.z = torchZ + y
+
+    light2.position.x = candlesX + x
+    light2.position.z = candlesZ + y
   })
 </script>
 
@@ -38,35 +48,53 @@
   <Controller right />
   <Hand left />
   <Hand right />
+
+  <T.PerspectiveCamera
+    slot="fallback"
+    makeDefault
+    position.y={1.8}
+    position.z={1.5}
+  >
+    <OrbitControls
+      target={[0, 1.8, 0]}
+      enablePan={false}
+      enableZoom={false}
+    />
+  </T.PerspectiveCamera>
 </XR>
 
-<TeleportControls>
-  <T.Mesh
-    teleportSurface
-    receiveShadow
-    rotation={[-Math.PI / 2, 0, 0]}
-  >
-    <T.CircleGeometry args={[20]} />
-    <T.MeshStandardMaterial color='#BDC3C7' />
-  </T.Mesh>
+{#if $gltf}
+  <T is={$gltf.scene} />
+  <T
+    is={light1}
+    intensity={8}
+    color="red"
+    position.y={$gltf.nodes.Torch1.position.y + 0.45}
+  />
 
-  {#each cylinders as { point, color }, index}
-    <T.Mesh
-      name='cylinder {index}'
-      teleportSurface
-      position={[point.x, index / 2, point.y]}
-      castShadow
-      receiveShadow
-    >
-      <T.CylinderGeometry args={[1, 1, 0.1]} />
-      <T.MeshStandardMaterial {color} />
-    </T.Mesh>
-  {/each}
-</TeleportControls>
+  <T
+    is={light2}
+    intensity={4}
+    color="red"
+    position.y={$gltf.nodes.Candles1.position.y + 0.45}
+  />
+{/if}
 
-<T.AmbientLight />
+<Sky
+  elevation={-3}
+  rayleigh={8}
+  azimuth={-90}
+/>
+
+<Surfaces
+  {showSurfaces}
+  {showBlockers}
+/>
+
+<T.AmbientLight intensity={0.25} />
 
 <T.DirectionalLight
+  intensity={0.5}
   position={[5, 5, 1]}
   castShadow
   shadow.camera.top={50}
@@ -75,10 +103,5 @@
   shadow.camera.bottom={-50}
   shadow.mapSize.width={1024}
   shadow.mapSize.height={1024}
-/>
-
-<T.PerspectiveCamera
-  makeDefault
-  position.y={1.8}
-  position.z={15}
+  shadow.camera.far={10}
 />

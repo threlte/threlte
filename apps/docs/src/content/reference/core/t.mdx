@@ -20,7 +20,7 @@ are built on top of `<T>` and may provide a more convenient API for specific thr
 
 <details>
 <summary>
-	Primer on Terminology
+  Primer on Terminology
 </summary>
 
 ```ts
@@ -243,6 +243,14 @@ We only changed the `y` coordinate of the position, so we can use a **pierced pr
 
 This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value. Unfortunately with pierced props we miss out on the type hints and auto-completion.
 
+<Tip type="warning" title="Constant prop types">
+  The type of an inferred prop (or "auto prop") must be constant. This means that
+  the type of a prop must not change for the lifetime of the component. For
+  instance you can't use a variable as a prop that is an array of numbers and then
+  later on change the value of that variable to a single number. This is
+  considered a type change and therefore not allowed.
+</Tip>
+
 ### args
 
 Three.js objects are **class instances**. When Instantiating these objects, they can receive one-time constructor arguments (`new THREE.SphereGeometry(1, 32)`). In Threlte, constructor arguments are always passed as an array via the property `args`. If `args` change later on, the object must naturally get reconstructed from scratch!
@@ -290,10 +298,10 @@ The following attaches a material to the material property of a mesh and a geome
 ```svelte
 <T is={DirectionalLight}>
   <!--
-		Attaches an instance of a THREE.OrthographicCamera
-		to the property camera of the property shadow of the
-		parent THREE.DirectionalLight
-	-->
+    Attaches an instance of a THREE.OrthographicCamera
+    to the property camera of the property shadow of the
+    parent THREE.DirectionalLight
+  -->
   <T
     is={OrthographicCamera}
     args={[-1, 1, 1, -1, 0.1, 100]}
@@ -307,10 +315,10 @@ The following attaches a material to the material property of a mesh and a geome
 ```svelte
 <T is={DirectionalLight}>
   <!--
-		Attaches an instance of a THREE.OrthographicCamera
-		to the property camera of the property shadow of the
-		parent THREE.DirectionalLight
-	-->
+    Attaches an instance of a THREE.OrthographicCamera
+    to the property camera of the property shadow of the
+    parent THREE.DirectionalLight
+  -->
   <T
     is={OrthographicCamera}
     args={[-1, 1, 1, -1, 0.1, 100]}
@@ -356,8 +364,8 @@ Adding an event listener to a component will also add the corresponding event li
 instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
 
 <Tip type="info">
-	For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
-	`CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
+  For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
+  `CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
 </Tip>
 
 This will listen to the "change" event on the `THREE.OrbitControls`:
@@ -394,9 +402,9 @@ The value infered from the property `is` is available as the slot prop `ref`:
 ```svelte
 <T.PerspectiveCamera let:ref={camera}>
   <!--
-		The slot prop "ref" is used to reference the
-		camera and instantiate the OrbitControls
-	-->
+    The slot prop "ref" is used to reference the
+    camera and instantiate the OrbitControls
+  -->
   <T
     is={OrbitControls}
     args={[camera, renderer.domElement]}
@@ -445,7 +453,7 @@ are available elsewhere (like `OrbitControls`), you can extend the default catal
 ```
 
 <Tip type="tip">
-	Be aware that in this case `<T>` can't provide type-safety on properties and events.
-	If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
-	This way, Threlte can infer the type of the object and provide type-safety on properties and events.
+  Be aware that in this case `<T>` can't provide type-safety on properties and events.
+  If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
+  This way, Threlte can infer the type of the object and provide type-safety on properties and events.
 </Tip>

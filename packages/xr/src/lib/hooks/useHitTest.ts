@@ -1,9 +1,9 @@
-import * as THREE from 'three'
+import { Matrix4 } from 'three'
 import { useThrelte, useFrame, watch, currentWritable } from '@threlte/core'
 import { useXR } from './useXR'
 import { useController } from './useController'
 
-export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => void
+export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
 export type UseHitTestOptions = {
   /**
@@ -32,14 +32,18 @@ export const useHitTest = (
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
   const xrState = useXR()
-  const hitMatrix = new THREE.Matrix4()
+  const hitMatrix = new Matrix4()
 
   const hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
 
   if (source === 'viewer') {
     watch(xrState.session, async (session) => {
-      if (session === undefined) return
-      const space = await session.requestReferenceSpace('viewer')
+      if (session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+  
+      const space = await session.requestReferenceSpace('viewer') 
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   } else {
@@ -47,13 +51,21 @@ export const useHitTest = (
     const hand = useController(source === 'leftInput' ? 'left' : 'right')
 
     watch([xrState.session, controller], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+  
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
 
     watch([xrState.session, hand], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
@@ -80,7 +92,12 @@ export const useHitTest = (
     { autostart: false }
   )
 
-  watch(hitTestSource, (testSource) => {
+  watch([xrState.isPresenting, hitTestSource], ([isPresenting, testSource]) => {
+    if (!isPresenting) {
+      stop()
+      return
+    }
+
     if (testSource === undefined) {
       stop()
       // Execute callback one last time to inform consumers of no hits.

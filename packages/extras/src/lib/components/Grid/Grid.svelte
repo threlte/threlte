@@ -155,7 +155,7 @@
       uniforms.uPolarCellDividers = { value: cellDividers || 0 }
       uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
     }
-    invalidate('Grid uniforms changed')
+    invalidate()
   }
 
   const component = forwardEventHandlers()

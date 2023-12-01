@@ -1,21 +1,25 @@
 ---
 category: '@threlte/core'
 name: useFrame
-sourcePath: 'packages/core/src/lib/hooks/useFrame.ts'
-order: 5.2
+sourcePath: 'packages/core/src/lib/hooks/legacy/useFrame.ts'
+order: 7.1
 ---
 
-This hook allows you to execute code on every frame as part of the unified frameloop.
+<Tip type="danger">
+	This hook is deprecated and will be removed in the next major release.
+	Please use [`useTask`](/docs/reference/core/use-task) instead. See the [migration guide](/docs/learn/advanced/migration-guides#migrating-from-useframe-and-userender-to-the-task-scheduling-system) for more information.
+</Tip>
+
+This hook allows you to execute code on every frame as part of the Threlte *Task Scheduling System*.
 You receive the state (the same as [`useThrelte`](/docs/reference/core/use-threlte)) and a clock delta in seconds.
 Your callback function will be invoked just before a frame is rendered. When the component unmounts it is unsubscribed automatically from the frame loop.
 
-You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high. To debug your frameloop, provide a `debugFrameloopMessage` and add `debugFrameloop` to your [`<Canvas>`](/docs/reference/core/canvas) component.
+You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useFrame` callbacks across the component tree where callbacks are ordered from low to high.
 
 ```ts
 type ThrelteUseFrameOptions = {
   autostart?: boolean
   order?: number
-  debugFrameloopMessage?: string
   invalidate?: boolean
 }
 ```
@@ -24,7 +28,7 @@ type ThrelteUseFrameOptions = {
 
 ### Example
 
-Starting and stopping the execution of a frameloop handler:
+Starting and stopping the execution of a handler:
 
 ```ts
 const { start, stop, started } = useFrame(
@@ -45,7 +49,7 @@ const toggleUseFrame = () => {
 }
 ```
 
-Accessing the context and the global clocks delta inside a frameloop handler:
+Accessing the context and the global clocks delta inside a handler:
 
 ```ts
 useFrame(({ camera }, delta) => {

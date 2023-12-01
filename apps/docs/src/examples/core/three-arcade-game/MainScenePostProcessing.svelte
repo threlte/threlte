@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useRender, useThrelte } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import {
     BloomEffect,
     BrightnessContrastEffect,
@@ -11,7 +11,7 @@
     SMAAEffect,
     SMAAPreset
   } from 'postprocessing'
-  import { onDestroy } from 'svelte'
+  import { onMount } from 'svelte'
   import { tweened } from 'svelte/motion'
   import { Vector2 } from 'three'
   import { gameState } from './game/state'
@@ -79,13 +79,21 @@
   $: if ($camera && $arcadeMachineScene) {
     addComposerAndPasses()
   }
-  onDestroy(() => {
-    composer.removeAllPasses()
+
+  // When using PostProcessing, we need to disable autoRender
+  onMount(() => {
+    let before = ctx.autoRender.current
+    ctx.autoRender.set(false)
+    return () => {
+      ctx.autoRender.set(before)
+      composer.removeAllPasses()
+    }
   })
 
-  let i = 0
-
-  useRender((_, delta) => {
-    composer.render(delta)
-  })
+  useTask(
+    (delta) => {
+      composer.render(delta)
+    },
+    { stage: ctx.renderStage }
+  )
 </script>

@@ -39,6 +39,43 @@ type PropOptions = {
   pluginsProps?: string[]
 }
 
+type PropSetter = (target: any, key: any, value: any) => void
+
+const createSetter = (target: any, key: any, value: any): PropSetter => {
+  if (
+    !Array.isArray(value) &&
+    typeof value === 'number' &&
+    typeof target[key]?.setScalar === 'function' &&
+    // colors do have a setScalar function, but we don't want to use it, because
+    // the hex notation (i.e. 0xff0000) is very popular and matches the number
+    // type. So we exclude colors here.
+    !target[key]?.isColor
+  ) {
+    // edge case of setScalar setters
+    return (target: any, key: any, value: any) => {
+      target[key].setScalar(value)
+    }
+  } else {
+    if (typeof target[key]?.set === 'function') {
+      // if the property has a "set" function, we can use it
+      if (Array.isArray(value)) {
+        return (target: any, key: any, value: any) => {
+          target[key].set(...value)
+        }
+      } else {
+        return (target: any, key: any, value: any) => {
+          target[key].set(value)
+        }
+      }
+    } else {
+      // otherwise, we just set the value
+      return (target: any, key: any, value: any) => {
+        target[key] = value
+      }
+    }
+  }
+}
+
 export const useProps = () => {
   const { invalidate } = useThrelte()
 
@@ -49,6 +86,7 @@ export const useProps = () => {
       value: any
     }
   >()
+  const memoizedSetters = new Map<string, PropSetter>()
 
   const setProp = <T>(instance: T, propertyPath: string, value: any, options: PropOptions) => {
     if (memoizeProp(value)) {
@@ -64,32 +102,26 @@ export const useProps = () => {
 
     const { key, target } = resolvePropertyPath(instance, propertyPath)
 
-    if (
-      !Array.isArray(value) &&
-      typeof value === 'number' &&
-      typeof target[key]?.setScalar === 'function'
-    ) {
-      // edge case of setScalar setters
-      target[key].setScalar(value)
-    } else {
-      if (typeof target[key]?.set === 'function') {
-        // if the property has a "set" function, we can use it
-        if (Array.isArray(value)) {
-          target[key].set(...value)
-        } else {
-          target[key].set(value)
-        }
+    if (value !== undefined && value !== null) {
+      const memoizedSetter = memoizedSetters.get(propertyPath)
+      if (memoizedSetter) {
+        memoizedSetter(target, key, value)
       } else {
-        // otherwise, we just set the value
-        target[key] = value
-        if (options.manualCamera) return
-        if (
-          updateProjectionMatrixKeys.has(key) &&
-          (target.isPerspectiveCamera || target.isOrthographicCamera)
-        ) {
-          target.updateProjectionMatrix()
-        }
+        const setter = createSetter(target, key, value)
+        memoizedSetters.set(propertyPath, setter)
+        setter(target, key, value)
       }
+    } else {
+      createSetter(target, key, value)(target, key, value)
+    }
+
+    if (options.manualCamera) return
+
+    if (
+      updateProjectionMatrixKeys.has(key) &&
+      (target.isPerspectiveCamera || target.isOrthographicCamera)
+    ) {
+      target.updateProjectionMatrix()
     }
   }
 

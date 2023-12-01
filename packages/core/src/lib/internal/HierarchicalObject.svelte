@@ -67,23 +67,23 @@
   const parentCallbacks = useHierarchicalObject()
   if (object) {
     parentCallbacks.onChildMount?.(object)
-    invalidate('HierarchicalObject: object added')
+    invalidate()
   }
   const objectStore = createObjectStore(object, (newObject, oldObject) => {
     if (oldObject) {
       parentCallbacks.onChildDestroy?.(oldObject)
-      invalidate('HierarchicalObject: object added')
+      invalidate()
     }
     if (newObject) {
       parentCallbacks.onChildMount?.(newObject)
-      invalidate('HierarchicalObject: object removed')
+      invalidate()
     }
   })
   $: objectStore.set(object)
   onDestroy(() => {
     if (object) {
       parentCallbacks.onChildDestroy?.(object)
-      invalidate('HierarchicalObject: object removed')
+      invalidate()
     }
   })
 

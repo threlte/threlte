@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Instance, InstancedMesh } from '@threlte/extras'
 
   let dn = Date.now()
-  useFrame(() => (dn = Date.now()))
+  useTask(() => (dn = Date.now()))
 </script>
 
 <InstancedMesh>

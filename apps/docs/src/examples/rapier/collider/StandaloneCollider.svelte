@@ -26,6 +26,5 @@
       It will participate in contacts and collisions but is not affected by gravity or external forces.
       This can be useful for the environment.
     </p>
-    <p>Standalone colliders have reactive transform properties.</p>
   </div>
 </TestBed>

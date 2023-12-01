@@ -83,7 +83,7 @@ export const watch = <S extends Stores>(stores: S, callback: CallbackFn<StoresVa
  * const store = writable(0)
  * const memoized = memoize(store) // { current: 0 }
  *
- * useFrame(() => {
+ * useTask(() => {
  * 	store.update(n => n + 1)
  * 	console.log(memoized.current) // 1, 2, 3, ...
  * })
@@ -95,7 +95,7 @@ export const watch = <S extends Stores>(stores: S, callback: CallbackFn<StoresVa
  * const store = writable(0)
  * const doubled = memoize(store, n => n * 2) // { current: 0 }
  *
- * useFrame(() => {
+ * useTask(() => {
  * 	store.update(n => n + 1)
  * 	console.log(doubled.current) // 2, 4, 6, ...
  * })
@@ -135,7 +135,7 @@ export type CurrentWritable<T = unknown> = Writable<T> & { current: T }
  * ```ts
  * const store = currentWritable(0)
  *
- * useFrame(() => {
+ * useTask(() => {
  * 	console.log(store.current) // 0
  * })
  *

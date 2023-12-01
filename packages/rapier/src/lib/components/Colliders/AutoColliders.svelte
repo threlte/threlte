@@ -11,6 +11,8 @@
   import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
+  import { useCreateEvent } from '../../lib/useCreateEvent'
+  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
@@ -38,7 +40,9 @@
 
   const group = new Group()
 
+  const { updateRef } = useCreateEvent<Collider[]>()
   const rigidBody = useRigidBody()
+  const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
@@ -65,7 +69,7 @@
 
   export const create = () => {
     cleanup()
-    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody)
+    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody, rigidBodyParentObject)
     colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
 
     collisionGroups.registerColliders(colliders)
@@ -99,6 +103,8 @@
         else collider.setMass(mass)
       }
     })
+
+    updateRef(colliders)
   }
 
   onMount(() => {

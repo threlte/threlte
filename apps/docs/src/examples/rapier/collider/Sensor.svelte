@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
   import { Color, MeshStandardMaterial, SphereGeometry } from 'three'
   import TestBed from './TestBed.svelte'
@@ -18,7 +18,7 @@
   let positionX = 0
   const offset = Date.now()
 
-  useFrame(() => {
+  useTask(() => {
     if (!rigidBody) return
     positionZ = Math.sin(Date.now() / 2000) * 2.5
     positionX = Math.sin((Date.now() + offset) / 1500) * 1.2

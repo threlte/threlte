@@ -23,7 +23,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
   import type { HTMLButtonAttributes } from 'svelte/elements'
   import { getXRSupportState } from '../lib/getXRSupportState'
   import { toggleXRSession } from '../lib/toggleXRSession'
-  import { session, initialized } from '../internal/stores'
+  import { session, xr } from '../internal/stores'
 
   interface $$Props extends HTMLButtonAttributes {
     mode: XRSessionMode
@@ -62,7 +62,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     nativeEvent: MouseEvent,
     state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
   ) => {
-    if (!$initialized) {
+    if (!$xr) {
       throw new Error('The <XR> component was not created. This is required to start an XR session.')
     }
 

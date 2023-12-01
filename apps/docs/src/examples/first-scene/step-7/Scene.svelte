@@ -1,12 +1,12 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
   interactivity()
   const scale = spring(1)
   let rotation = 0
-  useFrame((state, delta) => {
+  useTask((delta) => {
     rotation += delta
   })
 </script>
@@ -19,7 +19,10 @@
   }}
 />
 
-<T.DirectionalLight position={[0, 10, 10]} castShadow/>
+<T.DirectionalLight
+  position={[0, 10, 10]}
+  castShadow
+/>
 
 <T.Mesh
   rotation.y={rotation}
@@ -33,7 +36,10 @@
   <T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
 
-<T.Mesh rotation.x={-Math.PI/2} receiveShadow>
-  <T.CircleGeometry args={[4, 40]}/>
+<T.Mesh
+  rotation.x={-Math.PI / 2}
+  receiveShadow
+>
+  <T.CircleGeometry args={[4, 40]} />
   <T.MeshStandardMaterial color="white" />
 </T.Mesh>

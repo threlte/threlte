@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useRender, useThrelte } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import {
     BlendFunction,
     BloomEffect,
@@ -13,6 +13,7 @@
     ToneMappingMode
   } from 'postprocessing'
   import { StaticNoiseEffect } from './StaticNoise/StaticNoise'
+  import { onMount } from 'svelte'
 
   /**
    * Chromatic Aberration
@@ -58,7 +59,7 @@
     intensity: 8
   })
 
-  const { renderer, scene, camera } = useThrelte()
+  const { renderer, scene, camera, renderStage, autoRender } = useThrelte()
 
   const composer = new EffectComposer(renderer)
 
@@ -71,9 +72,21 @@
 
   $: $camera && setup()
 
-  useRender(() => {
-    composer.render()
+  // When using PostProcessing, we need to disable autoRender
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => {
+      autoRender.set(before)
+    }
   })
+
+  useTask(
+    () => {
+      composer.render()
+    },
+    { stage: renderStage, autoInvalidate: false }
+  )
 
   const { size } = useThrelte()
   $: composer.setSize($size.width, $size.height)

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
-  import { Environment, GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
+  import { T, useTask } from '@threlte/core'
+  import { GLTF, interactivity, onReveal, useInteractivity } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { cubicOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
@@ -34,7 +34,7 @@
   $: pointerSpring.set({ x: $pointer.x, y: $pointer.y })
 
   let autoRotation = 0
-  useFrame((_, delta) => {
+  useTask((delta) => {
     autoRotation += 0.2 * delta
   })
 </script>

@@ -45,7 +45,7 @@
 
   $: {
     material.uniforms.resolution.value = new Vector2($size.width, $size.height)
-    invalidate('Canvas size changed')
+    invalidate()
   }
 
   $: {
@@ -55,7 +55,7 @@
     material.uniforms.lineWidth.value = width
     material.uniforms.opacity.value = opacity
     material.uniforms.color.value = new Color(color)
-    invalidate('MeshLineMaterial uniforms changed')
+    invalidate()
   }
 
   const component = forwardEventHandlers()

@@ -1,5 +1,5 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import {
     MeshLineMaterial,
     MeshLineGeometry,
@@ -26,7 +26,7 @@
   const orange = new Color('#fe3d00')
   const purple = new Color('#9800fe')
 
-  useFrame((state, delta) => {
+  useTask((delta) => {
     // every frame we:
     // increase the dash offset
     dashOffset += delta / 2

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { Camera, Vector2, Vector3, Quaternion } from 'three'
-  import { useThrelte, useParent, useFrame } from '@threlte/core'
+  import { useThrelte, useParent, useTask } from '@threlte/core'
 
   export let object
   export let rotateSpeed = 1.0
@@ -66,7 +66,7 @@
   })
 
   // This is basically your update function
-  useFrame((_, delta) => {
+  useTask((delta) => {
     // the object's position is bound to the prop
     if (!object) return
 
@@ -104,7 +104,7 @@
     rotateDelta.subVectors(rotateEnd, rotateStart).multiplyScalar(rotateSpeed)
     rotateStart.copy(rotateEnd)
 
-    invalidate('PointerLockcontrols: change event')
+    invalidate()
     dispatch('change')
   }
 

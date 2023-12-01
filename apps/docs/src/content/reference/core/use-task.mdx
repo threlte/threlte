@@ -1,0 +1,283 @@
+---
+category: '@threlte/core'
+name: useTask
+sourcePath: 'packages/core/src/lib/hooks/useTask.ts'
+order: 5.21
+---
+
+
+<Tip type="info">
+  Tasks are part of Threlte's *Task Scheduling System*.
+  For details on how to use stages and tasks, see the [scheduling
+  tasks](/docs/learn/basics/scheduling-tasks) page.
+</Tip>
+
+The hook `useTask` is used to create a
+[task](/docs/learn/basics/scheduling-tasks#tasks) that is used to run code on
+every frame.
+
+## Creating an Anonymous Task
+
+In its most basic form, `useTask` takes a callback function as its argument. This
+function will be executed on every frame, starting on the next frame. It receives a `delta`, representing the time since the last frame as its
+argument. By default, the created task is added to [Threlte's
+`mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
+
+```ts
+const { start, stop, started, task } = useTask((delta) => {
+  // This function will be executed on every frame
+})
+```
+
+It returns an object with the following properties:
+- `start`: A function that starts the task. It will be executed on the next
+  frame. Note that by default a task is started automatically.
+- `stop`: A function that stops the task. It will not be executed on the next
+  frame.
+- `started`: A boolean Svelte `Readable` store indicating whether the task is
+  started or not.
+- `task`: The task itself. You can use it to indicate a dependency to this task
+  on another task.
+
+## Creating a Keyed Task
+
+You can *key* a task by passing it as the first argument to `useTask`. This
+makes referencing this task easier across your app. The key can be any `string`
+or `symbol` value that is unique across all tasks in the stage it is added to.
+
+```ts
+const { start, stop, started, task: someTask } = useTask('some-task', (delta) => {
+  // This function will be executed on every frame
+})
+```
+
+## Creating a Task in a Stage
+
+You can pass a stage that the task should be added to as an option to `useTask`,
+the stage can be passed by value or key. If no stage is passed, the task will be
+added to [Threlte's
+`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages).
+
+```ts
+useTask((delta) => {
+  // This function will be executed on every frame as a
+  // task in the stage `afterRenderStage`.
+}, { stage: afterRenderStage })
+```
+
+## Task Dependencies
+
+A common use case for tasks is to run code after another task has been executed. Imagine
+a game where an object is transformed by user input in one task and a camera follows that
+object in another task. The camera task should be executed after the object has been
+transformed.
+
+To control the order in which tasks are executed in a stage, you can pass a
+`before` and `after` option to `useTask`. The tasks passed to these options are
+called **dependencies** and can be a task itself, the key of a task or an array
+of tasks or keys. The referenced tasks must be in the same stage as the task you
+are creating.
+
+Task dependencies **can be created in any order** if they are passed by key.
+This means that you can declare a dependency (with `before` or `after`) on a
+task that is created later in your code. The declared dependencies will be taken
+into account when they are created later on.
+
+<Tip type="warning"> If a task is passed by reference to the `before` or `after`
+  option, the task created by `useTask` will automatically be added to the same
+  stage as the task it depends on. If you pass a key instead and the task you
+  want to reference is **not** in [Threlte's
+  `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will
+  also need to pass the stage, either by value or key. </Tip>
+
+## Examples
+
+### Starting and Stopping Tasks
+
+By default, a task is started automatically. You can set it to not start
+automatically by passing `autoStart: false` as an option to `useTask`. You can
+then start and stop the task manually using the `start` and `stop` functions:
+
+```ts
+const { start, stop, started } = useTask((delta) => {
+  // do something
+}, { autoStart: false })
+
+// start the task
+start()
+
+// stop the task
+stop()
+
+// check if the task is started
+$: console.log($started)
+```
+
+### `useTask` and On-Demand Rendering
+
+By default, `useTask` will automatically invalidate the current frame and
+thereby request a re-render on the next frame. Most of the times, this is what
+you want. However, if you want more control over when things are re-rendered,
+you can pass `autoInvalidate: false` as an option to `useTask`. This will prevent
+the task from automatically invalidating the current frame. You can then
+invalidate the frame manually using the `invalidate` function returned by
+`useThrelte`:
+
+```ts
+const { invalidate } = useThrelte()
+
+const { start, stop, started } = useTask((delta) => {
+  // do something
+  // invalidate the current frame
+  if (someCondition) {
+    invalidate()
+  }
+}, { autoInvalidate: false })
+```
+
+### Update Objects
+
+To update objects in your scene, you can use the `useTask` hook to create a task
+that is executed on every frame. The delta time is passed as the first argument
+to make animations frame rate independent.
+
+```svelte
+<script>
+  import { T, useTask } from '@threlte/core'
+  import { Mesh } from 'svelte-three'
+
+  let mesh
+
+  useTask((delta) => {
+    if (!mesh) return
+    mesh.rotation.y += delta * 0.5
+  })
+</script>
+
+<T.Mesh bind:ref={mesh}>
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+### Custom Render Pipeline
+
+To create a custom render pipeline, add a task to Threlte's
+[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) which by
+default only runs its tasks when a re-render is needed. Be sure to set the
+property `autoRender` to `false` on the `<Canvas>` component **or inside the
+`<Renderer>` component** to prevent Threlte from automatically rendering your
+scene.
+
+```svelte title="CustomRenderer.svelte"
+<script>
+  import { useTask, useThrelte } from '@threlte/core'
+  import { onMount } from 'svelte'
+
+  const { renderStage, autoRender } = useThrelte()
+
+  // disable auto rendering
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => autoRender.set(before)
+  })
+
+  useTask((delta) => {
+    // render your scene here
+  }, { stage: renderStage, autoInvalidate: false })
+</script>
+```
+
+### Post Processing
+
+This example demonstrates how to use `useTask` to implement post processing
+effects using the library
+[`postprocessing`](https://github.com/pmndrs/postprocessing).
+
+1. Create a `<Renderer>` component. Be sure to set the option `autoInvalidate`
+of `useTask` to `false` to prevent Threlte from automatically invalidating the
+render stage.
+
+```svelte title="Renderer.svelte"
+<script>
+  import { useThrelte, useTask } from '@threlte/core'
+  import { onMount } from 'svelte'
+  import {
+    EffectComposer,
+    EffectPass,
+    RenderPass,
+    SMAAEffect,
+    SMAAPreset,
+    BloomEffect,
+    KernelSize
+  } from 'postprocessing'
+
+  const { scene, renderer, camera, size } = useThrelte()
+
+  // Adapt the default WebGLRenderer: https://github.com/pmndrs/postprocessing#usage
+  const composer = new EffectComposer(renderer)
+
+  const setupEffectComposer = (camera) => {
+    composer.removeAllPasses()
+    composer.addPass(new RenderPass(scene, camera))
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new BloomEffect({
+          intensity: 1,
+          luminanceThreshold: 0.15,
+          height: 512,
+          width: 512,
+          luminanceSmoothing: 0.08,
+          mipmapBlur: true,
+          kernelSize: KernelSize.MEDIUM
+        })
+      )
+    )
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new SMAAEffect({
+          preset: SMAAPreset.LOW
+        })
+      )
+    )
+  }
+
+  // We need to set up the passes according to the camera in use
+  $: setupEffectComposer($camera)
+  $: composer.setSize($size.width, $size.height)
+
+  const { renderStage, autoRender } = useThrelte()
+
+  // We need to disable auto rendering as soon as this component is
+  // mounted and restore the previous state when it is unmounted.
+  onMount(() => {
+    let before = autoRender.current
+    autoRender.set(false)
+    return () => autoRender.set(before)
+  })
+
+  useTask((delta) => {
+    composer.render(delta)
+  }, { stage: renderStage, autoInvalidate: false })
+</script>
+```
+
+2. Use the `<Renderer>` component in your app. To disable automatic rendering of
+your scene, Set `autoRender` to `false` on the `<Canvas>` component.
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas } from '@threlte/svelte'
+  import Renderer from './Renderer.svelte'
+</script>
+
+<Canvas>
+  <Renderer />
+</Canvas>
+```
+
+<Tip type="warning">
+  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
+</Tip>

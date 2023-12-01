@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { AutoColliders, BasicPlayerController, RigidBody } from '@threlte/rapier'
   import { CapsuleGeometry, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
 
@@ -17,7 +17,7 @@
   const min = new Vector3(-maxF, 0, -maxF)
   const max = new Vector3(maxF, 0, maxF)
 
-  useFrame(() => {
+  useTask(() => {
     if (!playerMesh || !ballMesh || !rigidBody) return
 
     playerMesh.getWorldPosition(playerPos)

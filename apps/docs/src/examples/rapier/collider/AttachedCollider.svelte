@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
   import { BoxGeometry, Color, MeshStandardMaterial, SphereGeometry } from 'three'
   import TestBed from './TestBed.svelte'
@@ -12,7 +12,7 @@
   let positionX = 0
   const offset = Date.now()
 
-  useFrame(() => {
+  useTask(() => {
     if (!rigidBody) return
     positionZ = Math.sin(Date.now() / 2000) * 2.5
     positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
@@ -57,10 +57,6 @@
     <p>
       Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively attaches
       the colliders to the rigid body and allow the rigid body to be affected by contact forces and gravity.
-    </p>
-
-    <p>
-      If a collider is attached to a {'<RigidBody>'} its transform properties are applied once on initialization.
     </p>
   </div>
 </TestBed>
