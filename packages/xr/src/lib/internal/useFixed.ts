@@ -9,10 +9,7 @@ type UseFixedOptions = ThrelteUseTaskOptions & {
  *
  * @Todo Can be removed if this or a similar feature is merged.
  */
-export const useFixed = (
-  fn: (delta: number) => void,
-  options: UseFixedOptions
-) => {
+export const useFixed = (fn: (delta: number) => void, options: UseFixedOptions) => {
   let fixedStepTimeAccumulator = 0
   let fixedStep = options.fixedStep ?? 1 / 60
 
