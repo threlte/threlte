@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 7.5.4
+
+### Patch Changes
+
+- fa8c1677: Added support for reverse animation direction in `<AnimatedSpriteMaterial>`
+
 ## 7.5.3
 
 ### Patch Changes
