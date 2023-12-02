@@ -11,7 +11,7 @@
      */
     "preserveValueImports": false,
     "importsNotUsedAsValues": "remove",
- 
+
     "target": "ESNext",
     "module": "ESNext",
     "resolveJsonModule": true,

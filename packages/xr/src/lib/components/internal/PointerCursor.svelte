@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Group, Vector3, Matrix3 } from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { pointerIntersection, pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
@@ -14,7 +14,7 @@
   $: hovering = $pointerState[handedness].hovering
   $: intersection = pointerIntersection[handedness]
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       if (intersection.current === undefined) return
       const { point, face, object } = intersection.current
@@ -27,7 +27,7 @@
       }
     },
     {
-      autostart: false
+      autoStart: false
     }
   )
 

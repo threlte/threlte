@@ -1,7 +1,7 @@
 <script lang="ts">
   import { spring } from 'svelte/motion'
   import { Group, Matrix3, Vector3 } from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
@@ -14,7 +14,7 @@
 
   $: intersection = teleportIntersection[handedness]
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       if (intersection.current === undefined) return
 
@@ -28,7 +28,7 @@
       }
     },
     {
-      autostart: false
+      autoStart: false
     }
   )
 

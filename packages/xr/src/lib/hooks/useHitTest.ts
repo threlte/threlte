@@ -1,5 +1,5 @@
 import { Matrix4 } from 'three'
-import { useThrelte, useFrame, watch, currentWritable } from '@threlte/core'
+import { useThrelte, useTask, watch, currentWritable } from '@threlte/core'
 import { useXR } from './useXR'
 import { useController } from './useController'
 
@@ -42,8 +42,8 @@ export const useHitTest = (
         hitTestSource.set(undefined)
         return
       }
-  
-      const space = await session.requestReferenceSpace('viewer') 
+
+      const space = await session.requestReferenceSpace('viewer')
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   } else {
@@ -55,7 +55,7 @@ export const useHitTest = (
         hitTestSource.set(undefined)
         return
       }
-  
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
@@ -71,7 +71,7 @@ export const useHitTest = (
     })
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       const referenceSpace = xr.getReferenceSpace()
 
@@ -89,7 +89,7 @@ export const useHitTest = (
       hitMatrix.fromArray(pose.transform.matrix)
       hitTestCallback(hitMatrix, hit)
     },
-    { autostart: false }
+    { autoStart: false }
   )
 
   watch([xrState.isPresenting, hitTestSource], ([isPresenting, testSource]) => {

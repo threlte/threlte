@@ -3,7 +3,7 @@
   import { Line2 } from 'three/examples/jsm/lines/Line2'
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
 
   export let handedness: 'left' | 'right'
@@ -55,11 +55,11 @@
     lineGeometry.setPositions(positions)
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       setCurvePoints()
     },
-    { autostart: false }
+    { autoStart: false }
   )
 
   $: if ($intersection === undefined) {
