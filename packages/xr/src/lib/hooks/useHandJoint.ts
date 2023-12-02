@@ -3,12 +3,12 @@ import { currentWritable, useTask, useThrelte } from '@threlte/core'
 import type { HandJoints } from '../lib/handJoints'
 import { useHand } from './useHand'
 
-const { invalidate } = useThrelte()
-
 /**
  * Provides a reference to a requested hand joint, once available.
  */
 export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) => {
+  const { invalidate } = useThrelte()
+
   const jointSpaceStore = currentWritable<XRJointSpace | undefined>(undefined)
 
   const xrhand = useHand(handedness)
