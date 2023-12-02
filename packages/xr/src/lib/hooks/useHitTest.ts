@@ -42,8 +42,8 @@ export const useHitTest = (
         hitTestSource.set(undefined)
         return
       }
-  
-      const space = await session.requestReferenceSpace('viewer') 
+
+      const space = await session.requestReferenceSpace('viewer')
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   } else {
@@ -55,7 +55,7 @@ export const useHitTest = (
         hitTestSource.set(undefined)
         return
       }
-  
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })

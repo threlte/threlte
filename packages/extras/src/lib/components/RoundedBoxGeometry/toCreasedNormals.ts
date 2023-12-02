@@ -8,10 +8,13 @@ const hashVertex = (v: Vector3) => {
 /**
  * Creates a new, non-indexed geometry with smooth normals everywhere except faces that meet at
  * an angle greater than the crease angle.
- * 
+ *
  * Adapted from https://github.com/mrdoob/three.js/blob/master/src/core/BufferGeometry.js but removed unnecessary steps and warnings.
  */
-export const toCreasedNormals = (geometry: BufferGeometry, creaseAngle = Math.PI): BufferGeometry => {
+export const toCreasedNormals = (
+  geometry: BufferGeometry,
+  creaseAngle = Math.PI
+): BufferGeometry => {
   const creaseDot = Math.cos(creaseAngle)
   const verts = [new Vector3(), new Vector3(), new Vector3()] as const
   const tempVec1 = new Vector3()

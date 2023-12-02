@@ -4,16 +4,16 @@ import { levels } from './levels'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
 
 export type GameState =
-	| 'off'
-	| 'intro'
-	| 'await-intro-skip'
-	| 'menu'
-	| 'game-over'
-	| 'await-ball-spawn'
-	| 'playing'
-	| 'level-loading'
-	| 'level-complete'
-	| 'outro'
+  | 'off'
+  | 'intro'
+  | 'await-intro-skip'
+  | 'menu'
+  | 'game-over'
+  | 'await-ball-spawn'
+  | 'playing'
+  | 'level-loading'
+  | 'level-complete'
+  | 'outro'
 
 const state = writable<GameState>('off')
 const levelIndex = writable<number>(0)
@@ -21,12 +21,12 @@ const score = writable(0)
 const gameOver = writable(false)
 const playerPosition = writable(0)
 const ballPosition = writable({
-	x: 0,
-	z: 0
+  x: 0,
+  z: 0
 })
 const baseColor = derived(state, (state) => {
-	if (state === 'outro') return 'green'
-	return 'red'
+  if (state === 'outro') return 'green'
+  return 'red'
 })
 const muted = writable(false)
 export const blinkClock = writable<0 | 1>(0)
@@ -40,65 +40,65 @@ const debug = writable(false)
 const orbitControls = writable(false)
 
 export const gameState = {
-	state,
-	levelIndex,
-	score,
-	gameOver,
-	playerPosition,
-	ballPosition,
-	baseColor,
-	muted,
-	gameScene,
-	gameCamera,
-	averageScreenColor,
-	arcadeMachineScene,
-	gameTexture,
-	ballRigidBody,
-	debug,
-	orbitControls
+  state,
+  levelIndex,
+  score,
+  gameOver,
+  playerPosition,
+  ballPosition,
+  baseColor,
+  muted,
+  gameScene,
+  gameCamera,
+  averageScreenColor,
+  arcadeMachineScene,
+  gameTexture,
+  ballRigidBody,
+  debug,
+  orbitControls
 }
 
 // ------------- METHODS -------------
 export const restart = () => {
-	reset()
-	gameState.state.set('menu')
+  reset()
+  gameState.state.set('menu')
 }
 
 export const reset = () => {
-	gameState.state.set('intro')
-	gameState.levelIndex.set(0)
-	gameState.gameOver.set(false)
-	gameState.score.set(0)
-	gameState.playerPosition.set(0)
-	gameState.ballPosition.set({
-		x: 0,
-		z: 0
-	})
+  gameState.state.set('intro')
+  gameState.levelIndex.set(0)
+  gameState.gameOver.set(false)
+  gameState.score.set(0)
+  gameState.playerPosition.set(0)
+  gameState.ballPosition.set({
+    x: 0,
+    z: 0
+  })
 }
 
 state.subscribe((state) => {
-	console.log('state', state)
+  console.log('state', state)
 })
 
 export const nextLevel = () => {
-	if (get(gameState.levelIndex) < levels.length - 1) {
-		gameState.levelIndex.update((levelIndex) => levelIndex + 1)
-		gameState.state.set('level-loading')
-	} else {
-		gameState.state.set('outro')
-	}
+  if (get(gameState.levelIndex) < levels.length - 1) {
+    gameState.levelIndex.update((levelIndex) => levelIndex + 1)
+    gameState.state.set('level-loading')
+  } else {
+    gameState.state.set('outro')
+  }
 }
 
 export const switchOff = () => {
-	reset()
-	state.set('off')
+  reset()
+  state.set('off')
 }
 
 /**
  * Optionally resets the game and starts it again
  */
 export const startGame = () => {
-	gameState.state.set('level-loading')
+  gameState.state.set('level-loading')
 }
 
 export const debugValue = writable(0.5)

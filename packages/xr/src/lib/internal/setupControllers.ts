@@ -29,8 +29,8 @@ export const setupControllers = () => {
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
       controllerDispatchers[data.handedness]?.current?.(event.type, event)
     }
-  
-    function handleConnected (this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {
+
+    function handleConnected(this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {
       const { model, targetRay, grip } = indexMap.get(this)
       const { data: inputSource } = event
 

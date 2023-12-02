@@ -3,7 +3,13 @@ import { currentWritable, watch } from '@threlte/core'
 import { defaultComputeFunction, type ComputeFunction } from './compute'
 import { injectPointerControlsPlugin } from './plugin'
 import { setupPointerControls } from './setup'
-import { getControlsContext, getHandContext, setControlsContext, setHandContext, setInternalContext } from './context'
+import {
+  getControlsContext,
+  getHandContext,
+  setControlsContext,
+  setHandContext,
+  setInternalContext
+} from './context'
 import type { FilterFunction, HandContext } from './types'
 import { pointerState } from '../../internal/stores'
 
@@ -26,7 +32,7 @@ export type PointerControlsOptions = {
 
   /**
    * Sets the interval at which raycasting occurs.
-   * 
+   *
    * @default 1 / 40
    */
   fixedStep?: number
@@ -42,7 +48,7 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
       interactiveObjects: [],
       raycaster: new Raycaster(),
       compute: options?.compute ?? defaultComputeFunction,
-      filter: options?.filter,
+      filter: options?.filter
     })
   }
 
@@ -59,18 +65,18 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
       lastEvent: undefined,
       initialClick: [0, 0, 0],
       initialHits: [],
-      hovered: new Map(),
+      hovered: new Map()
     }
 
     setHandContext(handedness, ctx)
 
-    setupPointerControls(context, ctx, options?.fixedStep) 
+    setupPointerControls(context, ctx, options?.fixedStep)
   }
-  
+
   const handContext = getHandContext(handedness)
 
   watch(handContext.enabled, (enabled) => {
-    controlsCounter += (enabled ? 1 : -1)
+    controlsCounter += enabled ? 1 : -1
     pointerState.update((value) => {
       value[handedness].enabled = controlsCounter > 0
       return value
@@ -86,6 +92,6 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
 
   return {
     enabled: handContext.enabled,
-    hovered: handContext.hovered,
+    hovered: handContext.hovered
   }
 }
