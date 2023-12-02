@@ -53,7 +53,7 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
   const gltf = useGltf('/path/to/model.glb')
 
   // Provide that store to the hook useGltfAnimations
-  useGltfAnimations<'All Animations'>(gltf)
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
 
   // play the animation as soon as it's loaded
   $: $actions['All Animations']?.play()
