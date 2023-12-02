@@ -1,5 +1,5 @@
 <script lang='ts' context='module'>
-  import { Group } from 'three'
+  import type { Group } from 'three'
   import { T, useThrelte, createRawEventDispatcher, useFrame } from '@threlte/core'
   import type { XRHandEvent } from '../types'
   import { isHandTracking, handDispatchers } from '../internal/stores'

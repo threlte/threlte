@@ -7,7 +7,6 @@
     watch,
     type Props
   } from '@threlte/core'
-  import { omit, pick } from 'lodash-es'
   import { derived, writable } from 'svelte/store'
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
@@ -86,8 +85,21 @@
     'visible'
   ]
 
-  $: transformProps = pick($$restProps, transformOnlyPropNames) as Props<TransformControls>
-  $: objectProps = omit($$restProps, transformOnlyPropNames) as Props<Group>
+  let transformProps: Props<TransformControls> = {}
+  let objectProps: Props<Group> = {}
+
+  $: {
+    transformProps = {}
+    objectProps = {}
+
+    for (let [key, value] of Object.entries($$restProps)) {
+      if (transformOnlyPropNames.includes(key)) {
+        transformProps[key] = value
+      } else {
+        objectProps[key] = value
+      }
+    }
+  }
 
   const component = forwardEventHandlers()
 </script>

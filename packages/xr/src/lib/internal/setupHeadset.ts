@@ -8,27 +8,33 @@ export const setupHeadset = () => {
   const { renderer, camera } = useThrelte()
   const { xr } = renderer
 
-  const immersiveFrame = useFrame(() => {
-    const space = xr.getReferenceSpace()
+  const immersiveFrame = useFrame(
+    () => {
+      const space = xr.getReferenceSpace()
 
-    if (space === null) return
+      if (space === null) return
 
-    const pose = xr.getFrame().getViewerPose(space)
+      const pose = xr.getFrame().getViewerPose(space)
 
-    // Although pose is only typed as possibly undefined,
-    // It can be null on android chrome when using phone AR.
-    if (pose === undefined || pose === null) return
+      // Although pose is only typed as possibly undefined,
+      // It can be null on android chrome when using phone AR.
+      if (pose === undefined || pose === null) return
 
-    const { position, orientation } = pose.transform
+      const { position, orientation } = pose.transform
 
-    headset.position.set(position.x, position.y, position.z)
-    headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
-  }, { autostart: false, invalidate: false })
+      headset.position.set(position.x, position.y, position.z)
+      headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
+    },
+    { autostart: false, invalidate: false }
+  )
 
-  const nonImmersiveFrame = useFrame(() => {
-    headset.position.copy(camera.current.position)
-    headset.quaternion.copy(camera.current.quaternion)
-  }, { autostart: false, invalidate: false })
+  const nonImmersiveFrame = useFrame(
+    () => {
+      headset.position.copy(camera.current.position)
+      headset.quaternion.copy(camera.current.quaternion)
+    },
+    { autostart: false, invalidate: false }
+  )
 
   watch(useXR().isPresenting, (isPresenting) => {
     if (isPresenting) {

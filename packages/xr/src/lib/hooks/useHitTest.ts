@@ -8,7 +8,7 @@ export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefi
 export type UseHitTestOptions = {
   /**
    * The ray source when performing hit testing.
-   * 
+   *
    * @default 'viewer'
    */
   source?: 'viewer' | 'leftInput' | 'rightInput'
@@ -16,7 +16,7 @@ export type UseHitTestOptions = {
 
 /**
  * Use this hook to perform a hit test per frame in an AR environment.
- * 
+ *
  * ```ts
  * useHitTest((hitMatrix, hit) => {
  *   mesh.matrix.copy(hitMatrix)
@@ -25,13 +25,16 @@ export type UseHitTestOptions = {
  * })
  * ```
  */
-export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTestOptions = {}): void => {
+export const useHitTest = (
+  hitTestCallback: HitTestCallback,
+  options: UseHitTestOptions = {}
+): void => {
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
   const xrState = useXR()
   const hitMatrix = new Matrix4()
 
-  let hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
+  const hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
 
   if (source === 'viewer') {
     watch(xrState.session, async (session) => {
@@ -56,7 +59,7 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
-  
+
     watch([xrState.session, hand], async ([session, input]) => {
       if (input === undefined || session === undefined) {
         hitTestSource.set(undefined)

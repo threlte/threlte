@@ -42,7 +42,6 @@
     "vite": "^4.3.6"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
     "troika-three-text": "^0.47.2"
   },
   "peerDependencies": {

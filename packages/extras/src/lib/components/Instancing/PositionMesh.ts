@@ -43,7 +43,7 @@ export class PositionMesh extends Group {
   }
 
   // And this will allow the virtual instance to receive events
-  raycast(raycaster: Raycaster, intersects: Intersection[]): void {
+  override raycast(raycaster: Raycaster, intersects: Intersection[]): void {
     const parent = this.instancedMesh.current
     if (!parent) return
     if (!parent.geometry || !parent.material) return
