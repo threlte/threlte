@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.3
+
+### Patch Changes
+
+- 407640a8: hotfix: remove console import
+
 ## 7.0.2
 
 ### Patch Changes
