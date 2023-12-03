@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import { currentWritable, useFrame, useThrelte } from '@threlte/core'
+import { currentWritable, useTask, useThrelte } from '@threlte/core'
 
 type UseGamepadOptions = {
   /** The threshold value of any axis before change events are fired. Default is 0.05. */
@@ -361,9 +361,9 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       })
     }
 
-    // useFrame automatically stops whenever the host component unmounts, so we
+    // useTask automatically stops whenever the host component unmounts, so we
     // don't need to clean up here.
-    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+    const { start, stop } = useTask(processSnapshot, { autoStart: false, autoInvalidate: false })
 
     const handleConnected = (event: THREE.Event) => {
       if (event.data.handedness !== options.hand) return
@@ -462,9 +462,9 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       )
     }
 
-    // useFrame automatically stops whenever the host component unmounts, so we
+    // useTask automatically stops whenever the host component unmounts, so we
     // don't need to clean up here.
-    const { start, stop } = useFrame(processSnapshot, { autostart: false, invalidate: false })
+    const { start, stop } = useTask(processSnapshot, { autoStart: false, autoInvalidate: false })
 
     const handleGamepadDisconnected = (event: GamepadEvent): void => {
       const { id } = event.gamepad

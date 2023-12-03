@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useFrame, useParent, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
   import type { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { useControlsContext } from '../useControlsContext'
@@ -27,8 +27,8 @@
 
   export const ref = new ThreeOrbitControls($parent, renderer.domElement)
 
-  const { start, stop } = useFrame(() => ref.update(), {
-    autostart: false
+  const { start, stop } = useTask(() => ref.update(), {
+    autoStart: false
   })
 
   $: {

@@ -3,7 +3,7 @@
     createRawEventDispatcher,
     forwardEventHandlers,
     T,
-    useFrame,
+    useTask,
     useThrelte
   } from '@threlte/core'
   import { derived, writable, type Writable } from 'svelte/store'
@@ -204,7 +204,7 @@
 
   let showEl = getAncestorVisibility()
 
-  useFrame(async () => {
+  useTask(async () => {
     showEl = getAncestorVisibility()
 
     const camera = getCamera()

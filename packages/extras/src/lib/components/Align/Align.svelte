@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { T, createRawEventDispatcher, forwardEventHandlers, useFrame } from '@threlte/core'
+  import {
+    T,
+    createRawEventDispatcher,
+    forwardEventHandlers,
+    useTask,
+    useThrelte
+  } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
   import type { AlignEvents, AlignProps, AlignSlots } from './Align.svelte'
@@ -21,6 +27,7 @@
   export let auto: $$Props['auto'] = false
 
   const dispatch = createRawEventDispatcher<$$Events>()
+  const { invalidate } = useThrelte()
 
   const containerGroup = new Group()
   const innerGroup = new Group()
@@ -80,16 +87,13 @@
    * We're only aligning at most *once* per frame, so even if a lot of child
    * components request aligning, it's only done *once*.
    */
-  const { start: scheduleAligning, stop } = useFrame(
-    ({ invalidate }) => {
+  const { start: scheduleAligning, stop } = useTask(
+    () => {
       calculate()
       invalidate()
       stop()
     },
-    {
-      autostart: false,
-      invalidate: false
-    }
+    { autoStart: false, autoInvalidate: false }
   )
 
   /** Force a recalculation of the bounding box. */
