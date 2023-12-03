@@ -4,7 +4,6 @@ import { browser } from '../../lib/browser'
 import type { ThrelteContext, ThrelteInternalContext } from '../../lib/contexts'
 import { useLegacyFrameCompatibilityContext } from './utils'
 import { useThrelte } from '../useThrelte'
-import * as console from 'console'
 
 export type ThrelteUseFrame = {
   stop: () => void
