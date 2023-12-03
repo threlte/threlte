@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.0
+
+### Major Changes
+
+- 33367cbf: @threlte/core ^7 is now required as useTask is used by default
+
 ## 7.5.4
 
 ### Patch Changes

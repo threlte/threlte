@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.1.1
+
+### Patch Changes
+
+- 56b5fee5: Replace useFrame with useTask internally
+
 ## 0.1.0
 
 ### Minor Changes
