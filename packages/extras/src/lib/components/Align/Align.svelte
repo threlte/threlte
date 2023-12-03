@@ -93,7 +93,7 @@
       invalidate()
       stop()
     },
-    { autoStart: false }
+    { autoStart: false, autoInvalidate: false }
   )
 
   /** Force a recalculation of the bounding box. */
