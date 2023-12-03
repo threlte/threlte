@@ -5,7 +5,7 @@ type UseFixedOptions = ThrelteUseTaskOptions & {
 }
 
 /**
- * A fixed useFrame, based on https://github.com/threlte/threlte/pull/654
+ * A fixed useTask, based on https://github.com/threlte/threlte/pull/654
  *
  * @Todo Can be removed if this or a similar feature is merged.
  */
