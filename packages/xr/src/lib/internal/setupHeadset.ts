@@ -1,5 +1,5 @@
 import { Group } from 'three'
-import { useThrelte, useFrame, watch } from '@threlte/core'
+import { useThrelte, useTask, watch } from '@threlte/core'
 import { useXR } from '../hooks/useXR'
 
 export const headset = new Group()
@@ -8,7 +8,7 @@ export const setupHeadset = () => {
   const { renderer, camera } = useThrelte()
   const { xr } = renderer
 
-  const immersiveFrame = useFrame(
+  const immersiveFrame = useTask(
     () => {
       const space = xr.getReferenceSpace()
 
@@ -25,15 +25,15 @@ export const setupHeadset = () => {
       headset.position.set(position.x, position.y, position.z)
       headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
     },
-    { autostart: false, invalidate: false }
+    { autoStart: false, autoInvalidate: false }
   )
 
-  const nonImmersiveFrame = useFrame(
+  const nonImmersiveFrame = useTask(
     () => {
       headset.position.copy(camera.current.position)
       headset.quaternion.copy(camera.current.quaternion)
     },
-    { autostart: false, invalidate: false }
+    { autoStart: false, autoInvalidate: false }
   )
 
   watch(useXR().isPresenting, (isPresenting) => {
