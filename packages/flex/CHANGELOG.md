@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 0.1.1
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
 ## 0.1.0
 
 ### Minor Changes
