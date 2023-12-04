@@ -8,7 +8,7 @@
     throw new Error('<PortalTarget> must be used within a <Canvas> component.')
   }
 
-  export let id: string = 'default'
+  export let id = 'default'
 
   const { addPortal, removePortal } = usePortalContext()
 

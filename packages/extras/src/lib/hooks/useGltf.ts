@@ -14,7 +14,7 @@ type UseGltfOptions = {
   ktxTranscoderPath?: string
 }
 
-let defaultDracoLoaderInstances: Record<string, DRACOLoader> = {}
+const defaultDracoLoaderInstances: Record<string, DRACOLoader> = {}
 
 export function useGltf(options?: UseGltfOptions): {
   load: <
