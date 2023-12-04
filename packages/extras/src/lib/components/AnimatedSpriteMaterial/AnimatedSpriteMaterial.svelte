@@ -48,7 +48,7 @@
   export let transparent: $$Props['transparent'] = true
   export let flipX: $$Props['flipX'] = false
   export let startFrame: $$Props['startFrame'] = 0
-  export let endFrame: $$Props['endFrame'] | undefined = undefined
+  export const endFrame: $$Props['endFrame'] | undefined = undefined
   export let rows: $$Props['rows'] = 1
   export let columns: $$Props['columns'] | undefined = undefined
   export let totalFrames: $$Props['totalFrames'] = 0
