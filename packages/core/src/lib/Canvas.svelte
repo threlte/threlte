@@ -9,10 +9,10 @@
     type ToneMapping,
     type WebGLRendererParameters
   } from 'three'
-  import T from './components/T/T.svelte'
   import { Scheduler } from './frame-scheduling'
   import { injectLegacyFrameCompatibilityContext } from './hooks/legacy/utils'
   import { useParentSize } from './hooks/useParentSize'
+  import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
   import { createCache } from './lib/cache'
   import { createContexts } from './lib/contexts'
@@ -21,7 +21,6 @@
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
-  import SceneGraphObject from './internal/SceneGraphObject.svelte'
 
   /**
    * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —

@@ -1,30 +1,38 @@
-import type { Loader as ThreeLoader } from 'three'
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
 
-export interface AsyncLoader extends ThreeLoader {
-  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
-}
-
-export interface SyncLoader extends ThreeLoader {
-  load: (
-    url: string,
-    success: (data: any) => void,
-    onProgress?: (event: ProgressEvent) => void,
-    onError?: (event: ErrorEvent) => void
-  ) => void
-}
-
-export type Loader = AsyncLoader | SyncLoader
+export type Loader =
+  | {
+      loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
+    }
+  | {
+      load: (
+        url: string,
+        success: (data: any) => void,
+        onProgress?: (event: ProgressEvent) => void,
+        onError?: (event: ErrorEvent) => void
+      ) => void
+    }
 
 type LoaderProto = { new (): Loader }
 
 export type UseLoaderLoadInput = string | string[] | Record<string, string>
 
-type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
+type LoaderResultType<TLoader extends Loader> = TLoader extends {
+  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
+}
   ? Awaited<ReturnType<TLoader['loadAsync']>>
-  : TLoader extends SyncLoader
-  ? Awaited<ReturnType<TLoader['load']>>
+  : TLoader extends {
+      load: (
+        url: string,
+        success: (data: any) => void,
+        onProgress?: (event: ProgressEvent) => void,
+        onError?: (event: ErrorEvent) => void
+      ) => void
+    }
+  ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
+    ? Result
+    : never
   : never
 
 export type UseLoaderLoadResult<
