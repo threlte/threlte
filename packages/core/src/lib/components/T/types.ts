@@ -24,7 +24,7 @@ export type AnyFn = (...args: any) => any
  * This type returns an InstanceType if the provided type is a class, otherwise
  * it returns the type itself.
  */
-export type MaybeInstance<Type extends any> = Type extends AnyClass ? InstanceType<Type> : Type
+export type MaybeInstance<Type> = Type extends AnyClass ? InstanceType<Type> : Type
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
@@ -38,7 +38,7 @@ export type AnyProps = Record<string, any>
 /**
  * ### Base Props
  */
-export type BaseProps<Type extends any> = {
+export type BaseProps<Type> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
 }
 
@@ -55,21 +55,21 @@ export type DisposableProps = {
 /**
  * ### Class Props
  */
-export type ClassProps<Type extends any> = Type extends AnyClass
+export type ClassProps<Type> = Type extends AnyClass
   ? {
       args?: any[] | ConstructorParameters<Type>
     }
   : Record<string, unknown>
 
 // Ref Props
-export type RefProps<Type extends any> = {
+export type RefProps<Type> = {
   ref?: MaybeInstance<Type>
 }
 
 /**
  * ### Camera Props
  */
-export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCamera: true }
+export type CameraProps<Type> = MaybeInstance<Type> extends { isCamera: true }
   ? {
       /**
        * By default, Threlte will update the cameras aspect ratio or frustum
@@ -96,7 +96,7 @@ export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCame
  * // { fov: number, aspect: number, etc… }
  * ```
  */
-export type InstanceProps<Type extends any> = Partial<
+export type InstanceProps<Type> = Partial<
   Omit<
     MaybeInstance<Type> extends Primitive
       ? Record<string, unknown>
@@ -123,7 +123,7 @@ export type InstanceProps<Type extends any> = Partial<
  * @example Props<typeof PerspectiveCamera>
  * // { position: [number, number, number], fov: number, etc… }
  */
-export type Props<Type extends any> = AnyProps &
+export type Props<Type> = AnyProps &
   DisposableProps &
   RefProps<Type> &
   BaseProps<Type> &
@@ -140,7 +140,7 @@ export type Props<Type extends any> = AnyProps &
  * @example Slots<typeof PerspectiveCamera>
  * // { default: { ref: PerspectiveCamera } }
  */
-export type Slots<Type extends any> = {
+export type Slots<Type> = {
   default: {
     ref: MaybeInstance<Type>
   }
@@ -156,7 +156,7 @@ export type Slots<Type extends any> = {
  * implementing an event map with the event name as the key and the event
  * payload as the value with a `type` property that matches the key.
  */
-export type ObjectEvents<Type extends any> = MaybeInstance<Type> extends {
+export type ObjectEvents<Type> = MaybeInstance<Type> extends {
   addEventListener: (...args: any[]) => any
 }
   ? {
@@ -167,7 +167,7 @@ export type ObjectEvents<Type extends any> = MaybeInstance<Type> extends {
     }
   : Record<string, unknown>
 
-export type CreateEvent<Type extends any> = {
+export type CreateEvent<Type> = {
   create: {
     ref: MaybeInstance<Type>
     cleanup: (callback: () => void) => void
@@ -181,4 +181,4 @@ export type CreateEvent<Type extends any> = {
  * @example Events<typeof PerspectiveCamera>
  * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
  */
-export type Events<Type extends any> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
+export type Events<Type> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>

@@ -21,7 +21,7 @@ import { watch } from './storeUtils'
  * supported in older versions of three.
  */
 
-// @ts-expect-error
+// @ts-expect-error P3 is not supported in older versions of three
 const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
   srgb: sRGBEncoding,
   'srgb-linear': LinearEncoding,

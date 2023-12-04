@@ -1,35 +1,28 @@
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
 
-export type Loader =
-  | {
-      loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
-    }
-  | {
-      load: (
-        url: string,
-        success: (data: any) => void,
-        onProgress?: (event: ProgressEvent) => void,
-        onError?: (event: ErrorEvent) => void
-      ) => void
-    }
+type AsyncLoader = {
+  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
+}
+
+type SyncLoader = {
+  load: (
+    url: string,
+    success: (data: any) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (event: ErrorEvent) => void
+  ) => void
+}
+
+export type Loader = AsyncLoader | SyncLoader
 
 type LoaderProto = { new (): Loader }
 
 export type UseLoaderLoadInput = string | string[] | Record<string, string>
 
-type LoaderResultType<TLoader extends Loader> = TLoader extends {
-  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
-}
+type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
   ? Awaited<ReturnType<TLoader['loadAsync']>>
-  : TLoader extends {
-      load: (
-        url: string,
-        success: (data: any) => void,
-        onProgress?: (event: ProgressEvent) => void,
-        onError?: (event: ErrorEvent) => void
-      ) => void
-    }
+  : TLoader extends SyncLoader
   ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
     ? Result
     : never

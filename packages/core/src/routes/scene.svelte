@@ -1,7 +1,8 @@
 <script lang="ts">
   import { T, useTask } from '$lib'
+  import type { Mesh } from 'three'
 
-  let ref: THREE.Mesh
+  let ref: Mesh
 
   useTask(() => {
     ref.rotation.x += 0.01

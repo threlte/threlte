@@ -93,7 +93,7 @@ export function useTask(
   let stage: Stage = ctx.mainStage
 
   if (opts) {
-    if (!!opts.stage) {
+    if (opts.stage) {
       if (DAG.isValue(opts.stage)) {
         stage = opts.stage
       } else {

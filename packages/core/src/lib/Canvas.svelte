@@ -33,7 +33,7 @@
    *
    * @default true
    */
-  export let colorManagementEnabled: boolean = true
+  export let colorManagementEnabled = true
 
   /**
    * @default 'srgb'
@@ -83,7 +83,7 @@
    *
    * @default true
    */
-  export let autoRender: boolean = true
+  export let autoRender = true
 
   let canvas: HTMLCanvasElement
   let initialized = writable(false)
