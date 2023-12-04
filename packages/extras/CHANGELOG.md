@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.3
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
 ## 8.0.2
 
 ### Patch Changes

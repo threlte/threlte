@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.5
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
 ## 7.0.4
 
 ### Patch Changes
