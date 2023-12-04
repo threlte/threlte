@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 8.0.1
+
+### Patch Changes
+
+- 8b62e472: useTexture release fix
+- ea50d08f: Fixed frame guards of `<AnimatedSpriteMaterial>`
+
 ## 8.0.0
 
 ### Major Changes
