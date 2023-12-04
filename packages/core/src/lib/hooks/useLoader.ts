@@ -30,7 +30,9 @@ type LoaderResultType<TLoader extends Loader> = TLoader extends {
         onError?: (event: ErrorEvent) => void
       ) => void
     }
-  ? Awaited<ReturnType<TLoader['load']>>
+  ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
+    ? Result
+    : never
   : never
 
 export type UseLoaderLoadResult<
