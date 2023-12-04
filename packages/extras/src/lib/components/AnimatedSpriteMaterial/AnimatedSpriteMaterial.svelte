@@ -225,9 +225,13 @@
 
       // start and end are the first and last frames of the animation respectively
       const start =
-        direction === 'forward' ? frameTag?.from ?? startFrame : frameTag?.to ?? numFrames - 1
+        direction === 'forward'
+          ? frameTag?.from ?? startFrame ?? 0
+          : frameTag?.to ?? endFrame ?? numFrames - 1
       const end =
-        direction === 'forward' ? frameTag?.to ?? numFrames - 1 : frameTag?.from ?? startFrame
+        direction === 'forward'
+          ? frameTag?.to ?? endFrame ?? numFrames - 1
+          : frameTag?.from ?? startFrame ?? 0
 
       setFrame(frame)
 
