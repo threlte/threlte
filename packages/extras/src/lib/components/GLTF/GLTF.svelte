@@ -1,6 +1,5 @@
 <script lang="ts">
   import { createRawEventDispatcher, forwardEventHandlers, T } from '@threlte/core'
-  // @ts-ignore
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { useGltf } from '../../hooks/useGltf'
   import type { ThrelteGltf } from '../../types/types'

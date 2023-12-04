@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 
-export const useMemo = <U extends any>(callback: () => U) => {
+export const useMemo = <U>(callback: () => U) => {
   let initialCallDone = false
   const memoized = writable<U>(callback())
   const memoize = (..._args: any[]) => {
