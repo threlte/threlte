@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 1.1.4
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
 ## 1.1.3
 
 ### Patch Changes
