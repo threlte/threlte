@@ -1,7 +1,7 @@
+import type { Stage } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Direction, Yoga } from 'yoga-layout'
-import type { NodeProps } from '../lib/props'
-import type { ClassParser, FlexPlane } from '../lib/props'
+import type { ClassParser, FlexPlane, NodeProps } from '../lib/props'
 
 type InnerFlexProps = NodeProps & {
   yoga: Yoga
@@ -12,6 +12,7 @@ type InnerFlexProps = NodeProps & {
   scaleFactor?: number
   class?: string
   classParser?: ClassParser
+  reflowStage?: Stage
 }
 
 type InnerFlexEvents = {
