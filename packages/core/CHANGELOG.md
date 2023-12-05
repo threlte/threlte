@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.6
+
+### Patch Changes
+
+- 60b78f27: useTask: key can be an actual Key type
+
 ## 7.0.5
 
 ### Patch Changes
