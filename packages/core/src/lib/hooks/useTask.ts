@@ -57,12 +57,12 @@ export function useTask(
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask
 export function useTask(
-  key: string,
+  key: Key,
   fn: (delta: number) => void,
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask
 export function useTask(
-  keyOrFn: string | ((delta: number) => void),
+  keyOrFn: Key | ((delta: number) => void),
   fnOrOptions?: ((delta: number) => void) | ThrelteUseTaskOptions,
   options?: ThrelteUseTaskOptions
 ): ThrelteUseTask {
@@ -78,7 +78,7 @@ export function useTask(
   let key: Key
   let fn: (delta: number) => void
   let opts: ThrelteUseTaskOptions | undefined
-  if (typeof keyOrFn === 'string') {
+  if (DAG.isKey(keyOrFn)) {
     key = keyOrFn
     fn = fnOrOptions as (delta: number) => void
     opts = options

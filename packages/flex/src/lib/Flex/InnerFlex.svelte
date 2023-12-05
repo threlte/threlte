@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, createRawEventDispatcher, currentWritable, useFrame } from '@threlte/core'
+  import { T, createRawEventDispatcher, currentWritable, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
   import { Direction } from 'yoga-layout'
@@ -26,6 +26,7 @@
   export let classParser: $$Props['classParser'] = undefined
   let _class: Required<$$Props>['class'] = ''
   export { _class as class }
+  export let reflowStage: $$Props['reflowStage'] = undefined
 
   const dispatch = createRawEventDispatcher<$$Events>()
 
@@ -43,7 +44,8 @@
   /**
    * Reflowing inside useFrame automatically batches reflows to 1 per frame.
    */
-  const { start: reflow, stop } = useFrame(
+  const { start: reflow, stop } = useTask(
+    Symbol('threlte-flex-reflow'),
     () => {
       flexContext.emit('reflow:before')
 
@@ -108,7 +110,10 @@
 
       stop()
     },
-    { autostart: false }
+    {
+      stage: reflowStage,
+      autoStart: false
+    }
   )
 
   const flexContext = createFlexContext({
