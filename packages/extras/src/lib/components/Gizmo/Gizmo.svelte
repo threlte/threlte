@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HierarchicalObject, T, useFrame, useRender, useThrelte } from '@threlte/core'
+  import { HierarchicalObject, T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import {
     CanvasTexture,
@@ -17,51 +17,54 @@
   } from 'three'
   import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
 
-  type $$Props = Required<GizmoProps>
+  type $$Props = GizmoProps
   type $$Events = GizmoEvents
   type $$Slots = GizmoSlots
 
-  export let turnRate: $$Props['turnRate'] = 2 * Math.PI
-  export let center: $$Props['center'] = [0, 0, 0]
-  export let verticalPlacement: $$Props['verticalPlacement'] = 'bottom'
-  export let horizontalPlacement: $$Props['horizontalPlacement'] = 'right'
-  export let size: $$Props['size'] = 128
-  export let xColor: $$Props['xColor'] = 0xff3653
-  export let yColor: $$Props['yColor'] = 0x8adb00
-  export let zColor: $$Props['zColor'] = 0x2c8fff
+  export let renderTask: $$Props['renderTask'] = undefined
+  export let animationTask: $$Props['animationTask'] = undefined
+
+  export let turnRate: Required<$$Props>['turnRate'] = 2 * Math.PI
+  export let center: Required<$$Props>['center'] = [0, 0, 0]
+  export let verticalPlacement: Required<$$Props>['verticalPlacement'] = 'bottom'
+  export let horizontalPlacement: Required<$$Props>['horizontalPlacement'] = 'right'
+  export let size: Required<$$Props>['size'] = 128
+  export let xColor: Required<$$Props>['xColor'] = 0xff3653
+  export let yColor: Required<$$Props>['yColor'] = 0x8adb00
+  export let zColor: Required<$$Props>['zColor'] = 0x2c8fff
 
   $: centerVec = new Vector3(...center)
 
-  const { renderer, camera } = useThrelte()
+  const { autoRenderTask, renderer, camera } = useThrelte()
 
   const orthoCam = new OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0, 4)
   orthoCam.position.set(0, 0, 2)
 
   let root: Scene
 
-  // The scene is manually rendered such that the gizmo
-  // can be rendered on top of the existing scene using
-  // an orthographic camera. The gizmo itself is not in
-  // the main scene.
-  useRender(({ camera, renderer, scene }) => {
-    renderer.render(scene, camera.current)
+  useTask(
+    renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
+    () => {
+      const autoClear = renderer.autoClear
+      renderer.autoClear = false
 
-    const autoClear = renderer.autoClear
-    renderer.autoClear = false
+      const viewport = new Vector4()
+      renderer.getViewport(viewport)
 
-    const viewport = new Vector4()
-    renderer.getViewport(viewport)
+      const x = horizontalPlacement === 'left' ? 0 : renderer.domElement.offsetWidth - size
+      const y = verticalPlacement === 'bottom' ? 0 : renderer.domElement.offsetHeight - size
+      renderer.setViewport(x, y, size, size)
 
-    const x = horizontalPlacement === 'left' ? 0 : renderer.domElement.offsetWidth - size
-    const y = verticalPlacement === 'bottom' ? 0 : renderer.domElement.offsetHeight - size
-    renderer.setViewport(x, y, size, size)
+      renderer.render(root, orthoCam)
 
-    renderer.render(root, orthoCam)
+      renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w)
 
-    renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w)
-
-    renderer.autoClear = autoClear
-  })
+      renderer.autoClear = autoClear
+    },
+    renderTask ?? {
+      after: autoRenderTask
+    }
+  )
 
   // User interaction must be handled manually because
   // the gizmo is not in the main scene. The click
@@ -167,32 +170,36 @@
   const point = new Vector3()
   let p = [0, 0, 0]
 
-  useFrame(({ camera }, delta) => {
-    point.set(0, 0, 1).applyQuaternion(camera.current.quaternion)
-    p = [point.x, point.y, point.z]
-    root.quaternion.copy(camera.current.quaternion).invert()
+  useTask(
+    animationTask?.key ?? Symbol('threlte-extras-gizmo-animation'),
+    (delta) => {
+      point.set(0, 0, 1).applyQuaternion(camera.current.quaternion)
+      p = [point.x, point.y, point.z]
+      root.quaternion.copy(camera.current.quaternion).invert()
 
-    if (animating) {
-      const step = delta * turnRate
+      if (animating) {
+        const step = delta * turnRate
 
-      // animate position by doing a slerp and then scaling the position on the unit sphere
+        // animate position by doing a slerp and then scaling the position on the unit sphere
 
-      currentQuaternion.rotateTowards(finalQuaternion, step)
-      camera.current.position
-        .set(0, 0, 1)
-        .applyQuaternion(currentQuaternion)
-        .multiplyScalar(radius)
-        .add(centerVec)
+        currentQuaternion.rotateTowards(finalQuaternion, step)
+        camera.current.position
+          .set(0, 0, 1)
+          .applyQuaternion(currentQuaternion)
+          .multiplyScalar(radius)
+          .add(centerVec)
 
-      // animate orientation
+        // animate orientation
 
-      camera.current.quaternion.rotateTowards(targetQuaternion, step)
+        camera.current.quaternion.rotateTowards(targetQuaternion, step)
 
-      if (currentQuaternion.angleTo(finalQuaternion) === 0) {
-        animating = false
+        if (currentQuaternion.angleTo(finalQuaternion) === 0) {
+          animating = false
+        }
       }
-    }
-  })
+    },
+    animationTask
+  )
 
   const getSpriteTexture = (color: number, text = '') => {
     const canvas = document.createElement('canvas')

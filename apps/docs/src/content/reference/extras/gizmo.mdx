@@ -10,6 +10,18 @@
       'props':
         [
           {
+            name: 'renderTask',
+            required: false,
+            type: 'TaskOptions',
+            description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
+          },
+          {
+            name: 'animationTask',
+            required: false,
+            type: 'TaskOptions',
+            description: 'Options for the task to animate the gizmo when the user clicks one of the handles. By default, this task is added to the `mainStage`.'
+          },
+          {
             name: 'turnRate',
             type: 'number',
             default: '2 * Math.PI',

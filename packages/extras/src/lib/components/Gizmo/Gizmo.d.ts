@@ -1,7 +1,12 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Key, ThrelteUseTaskOptions } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 
+type TaskOptions = Pick<ThrelteUseTaskOptions, 'after' | 'before' | 'stage'> & { key?: Key }
+
 export type GizmoProps = {
+  renderTask?: TaskOptions
+  animationTask?: TaskOptions
+
   turnRate?: number
   center?: [number, number, number]
   verticalPlacement?: 'top' | 'bottom'
@@ -12,8 +17,8 @@ export type GizmoProps = {
   zColor?: number
 }
 
-export type GizmoEvents = {}
+export type GizmoEvents = Record<string, never>
 
-export type GizmoSlots = {}
+export type GizmoSlots = Record<string, never>
 
 export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> {}
