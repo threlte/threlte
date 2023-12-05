@@ -1,12 +1,11 @@
-import type { Loader as ThreeLoader } from 'three'
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
 
-export interface AsyncLoader extends ThreeLoader {
+type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
 }
 
-export interface SyncLoader extends ThreeLoader {
+type SyncLoader = {
   load: (
     url: string,
     success: (data: any) => void,
@@ -24,7 +23,9 @@ export type UseLoaderLoadInput = string | string[] | Record<string, string>
 type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
   ? Awaited<ReturnType<TLoader['loadAsync']>>
   : TLoader extends SyncLoader
-  ? Awaited<ReturnType<TLoader['load']>>
+  ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
+    ? Result
+    : never
   : never
 
 export type UseLoaderLoadResult<

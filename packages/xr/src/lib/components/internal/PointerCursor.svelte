@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Group, Vector3 } from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { Group, Vector3, Matrix3 } from 'three'
+  import { T, useTask } from '@threlte/core'
   import { pointerIntersection, pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
@@ -8,22 +8,26 @@
 
   const ref = new Group()
   const vec3 = new Vector3()
+  const normalMatrix = new Matrix3()
+  const worldNormal = new Vector3()
 
   $: hovering = $pointerState[handedness].hovering
   $: intersection = pointerIntersection[handedness]
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       if (intersection.current === undefined) return
-      const { point, face } = intersection.current
+      const { point, face, object } = intersection.current
       ref.position.lerp(point, 0.4)
 
       if (face) {
-        ref.lookAt(vec3.addVectors(point, face.normal))
+        normalMatrix.getNormalMatrix(object.matrixWorld)
+        worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
+        ref.lookAt(vec3.addVectors(point, worldNormal))
       }
     },
     {
-      autostart: false
+      autoStart: false
     }
   )
 

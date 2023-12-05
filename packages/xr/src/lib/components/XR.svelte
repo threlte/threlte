@@ -18,19 +18,20 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
-  import { onDestroy } from 'svelte'
-  import { createRawEventDispatcher, useThrelte } from '@threlte/core'
+  import { onMount } from 'svelte'
+  import { createRawEventDispatcher, useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
-    initialized,
     isHandTracking,
     isPresenting,
     referenceSpaceType,
     session,
     xr as xrStore
   } from '../internal/stores'
-  import { updateRaf } from '../internal/updateRaf'
-  import { useUpdateHeadset } from '../internal/headset'
+  import { setupRaf } from '../internal/setupRaf'
+  import { setupHeadset } from '../internal/setupHeadset'
+  import { setupControllers } from '../internal/setupControllers'
+  import { setupHands } from '../internal/setupHands'
 
   /**
    * Enables foveated rendering. Default is `1`, the three.js default.
@@ -66,21 +67,25 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const dispatch = createRawEventDispatcher<$$Events>()
-
-  updateRaf()
-
-  const { renderer, frameloop } = useThrelte()
+  const { renderer, renderMode } = useThrelte()
   const { xr } = renderer
 
-  const handleSessionStart = (event: XRSessionEvent<'sessionstart'>) => {
-    $isPresenting = true
-    dispatch('sessionstart', { ...event, target: $session! })
+  let originalRenderMode = $renderMode
+
+  setupRaf()
+  setupHeadset()
+  setupControllers()
+  setupHands()
+
+  const handleSessionStart = () => {
+    isPresenting.set(true)
+    dispatch('sessionstart', { type: 'sessionstart', target: $session! })
   }
 
-  const handleSessionEnd = (event: XRSessionEvent<'sessionend'>) => {
-    dispatch('sessionend', { ...event, target: $session! })
-    $isPresenting = false
-    $session = undefined
+  const handleSessionEnd = () => {
+    dispatch('sessionend', { type: 'sessionend', target: $session! })
+    isPresenting.set(false)
+    session.set(undefined)
   }
 
   const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
@@ -101,18 +106,12 @@ This should be placed within a Threlte `<Canvas />`.
 
     try {
       $session?.updateTargetFrameRate(frameRate)
-    } catch {}
+    } catch {
+      // Do nothing
+    }
   }
 
-  const cleanupSession = (currentSession?: XRSession) => {
-    if (currentSession === undefined) return
-
-    currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
-    currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
-    currentSession.removeEventListener('frameratechange', handleFramerateChange)
-  }
-
-  const updateSession = async (currentSession?: XRSession) => {
+  watch(session, (currentSession) => {
     if (currentSession === undefined) return
 
     currentSession.addEventListener('visibilitychange', handleVisibilityChange)
@@ -122,50 +121,43 @@ This should be placed within a Threlte `<Canvas />`.
     xr.setFoveation(foveation)
 
     updateTargetFrameRate(frameRate)
-  }
 
-  let lastSession: XRSession | undefined
-
-  $initialized = true
-  $xrStore = xr
-  xr.enabled = true
-  xr.addEventListener('sessionstart', handleSessionStart)
-  xr.addEventListener('sessionend', handleSessionEnd)
-
-  useUpdateHeadset()
-
-  onDestroy(() => {
-    $initialized = false
-    $xrStore = undefined
-    xr.enabled = false
-    xr.removeEventListener('sessionstart', handleSessionStart)
-    xr.removeEventListener('sessionend', handleSessionEnd)
+    return () => {
+      currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
+      currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
+      currentSession.removeEventListener('frameratechange', handleFramerateChange)
+    }
   })
 
+  watch(isPresenting, (presenting) => {
+    if (presenting) {
+      originalRenderMode = renderMode.current
+      renderMode.set('always')
+    } else {
+      renderMode.set(originalRenderMode)
+    }
+  })
+
+  onMount(() => {
+    $xrStore = xr
+    xr.enabled = true
+    xr.addEventListener('sessionstart', handleSessionStart)
+    xr.addEventListener('sessionend', handleSessionEnd)
+
+    return () => {
+      $xrStore = undefined
+      xr.enabled = false
+      xr.removeEventListener('sessionstart', handleSessionStart)
+      xr.removeEventListener('sessionend', handleSessionEnd)
+    }
+  })
+
+  $: updateTargetFrameRate(frameRate)
+  $: xr.setFoveation(foveation)
   $: {
     xr.setReferenceSpaceType(referenceSpace)
     $referenceSpaceType = referenceSpace
   }
-
-  $: if (lastSession !== $session) {
-    cleanupSession(lastSession)
-    updateSession($session)
-    lastSession = $session
-  }
-
-  let originalFrameloop = $frameloop
-
-  $frameloop = 'always'
-
-  $: if ($isPresenting) {
-    originalFrameloop = $frameloop
-    $frameloop = 'always'
-  } else {
-    $frameloop = originalFrameloop
-  }
-
-  $: updateTargetFrameRate(frameRate)
-  $: xr.setFoveation(foveation)
 </script>
 
 {#if $isPresenting}

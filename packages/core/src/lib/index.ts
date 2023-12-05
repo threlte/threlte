@@ -16,10 +16,18 @@ export { createPlugin } from './plugins/createPlugin'
 export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
 
 // hooks
-export { useFrame, type ThrelteUseFrameOptions } from './hooks/useFrame'
-export { useRender } from './hooks/useRender'
+export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask'
+export { useStage } from './hooks/useStage'
 export { useThrelte } from './hooks/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
+
+// task scheduling system types
+export type { Key, Stage, Task, Scheduler, Schedule, TaskCallback } from './frame-scheduling'
+
+// legacy hooks
+// TODO: remove in Threlte 7
+export { useFrame, type ThrelteUseFrameOptions } from './hooks/legacy/useFrame'
+export { useRender } from './hooks/legacy/useRender'
 
 // useLoader
 export {

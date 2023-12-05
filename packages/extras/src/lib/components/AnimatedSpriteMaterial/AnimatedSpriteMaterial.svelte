@@ -16,7 +16,7 @@
     asyncWritable,
     type AsyncWritable,
     createRawEventDispatcher,
-    useFrame,
+    useTask,
     watch,
     useLoader,
     useParent
@@ -56,6 +56,15 @@
   const parent = useParent()
   const dispatch = createRawEventDispatcher<$$Events>()
 
+  const supportedDirections = ['forward', 'reverse'] as const
+  const isSupportedDirection = (value: any): value is (typeof supportedDirections)[number] => {
+    const isSupported = supportedDirections.includes(value as any)
+    if (!isSupported) {
+      console.warn(`Unsupported sprite animation direction "${value}"`)
+    }
+    return isSupported
+  }
+
   let timerOffset = 0
   let currentFrame = startFrame
   let numFrames = 0
@@ -65,9 +74,9 @@
   let texture: Texture | undefined
   let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
+  let direction: (typeof supportedDirections)[number] = 'forward'
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
-  let playing = true
 
   let isMesh = 'isMesh' in $parent!
   $: isMesh = 'isMesh' in $parent!
@@ -177,7 +186,9 @@
     if (!json) return
 
     frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
-    currentFrame = frameTag?.from ?? 0
+    direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+
+    currentFrame = direction === 'forward' ? frameTag?.from ?? 0 : frameTag?.to ?? numFrames - 1
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
@@ -186,36 +197,59 @@
     }
   }
 
-  export const play = () => {
+  let playQueued = false
+  export const play = async () => {
+    playQueued = true
+    await Promise.all([textureStore, jsonStore])
+    if (!playQueued) return
     timerOffset = performance.now() - delay
-    playing = true
     start()
   }
 
   export const pause = () => {
-    playing = false
+    playQueued = false
     stop()
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
+      if (!json) return
       const now = performance.now()
       const diff = now - timerOffset
       const name = frameNames[currentFrame]
-      const { frame, duration } = json!.frames[name]
+      const { frame, duration } = json.frames[name]
       const interval = duration ?? fpsInterval
 
       if (diff <= interval) return
       timerOffset = now - (diff % interval)
 
-      const start = frameTag?.from ?? startFrame
-      const end = frameTag?.to ?? endFrame ?? numFrames - 1
+      // start and end are the first and last frames of the animation respectively
+      const start =
+        direction === 'forward'
+          ? frameTag?.from ?? startFrame ?? 0
+          : frameTag?.to ?? endFrame ?? numFrames - 1
+      const end =
+        direction === 'forward'
+          ? frameTag?.to ?? endFrame ?? numFrames - 1
+          : frameTag?.from ?? startFrame ?? 0
 
       setFrame(frame)
 
-      currentFrame += 1
+      switch (direction) {
+        case 'forward':
+          currentFrame += 1
+          break
+        case 'reverse':
+          currentFrame -= 1
+          break
+        default:
+          break
+      }
 
-      if (currentFrame > end) {
+      if (
+        (direction === 'forward' && currentFrame > end) ||
+        (direction === 'reverse' && currentFrame < end)
+      ) {
         currentFrame = start
 
         if (loop) {
@@ -223,15 +257,14 @@
             dispatch('loop')
           }
         } else {
-          stop()
-          playing = false
+          pause()
           if (dispatch.hasEventListener('end')) {
             dispatch('end')
           }
         }
       }
     },
-    { autostart: false }
+    { autoStart: false }
   )
 
   watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
@@ -259,7 +292,12 @@
     }
   })
 
-  $: setAnimation(animation)
+  $: {
+    setAnimation(animation)
+    if (autoplay) {
+      play()
+    }
+  }
 </script>
 
 {#if texture && isMesh}

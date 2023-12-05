@@ -17,8 +17,11 @@ import { watch } from './storeUtils'
  * March 2023: Three.js is making a transition to a new color management system. Part of
  * that is that the renderer will accept a `colorSpace` property rather than a
  * property `encoding`. As a fallback for older three versions, we need to map
- * the new `colorSpace` to the old `encoding`.
+ * the new `colorSpace` to the old `encoding`. We're expecting a TS error because P3 wasn't
+ * supported in older versions of three.
  */
+
+// @ts-expect-error P3 is not supported in older versions of three
 const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
   srgb: sRGBEncoding,
   'srgb-linear': LinearEncoding,
@@ -67,7 +70,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (revision >= 150) {
       ColorManagement.enabled = colorManagementEnabled
     } else {
-      (ColorManagement as any).legacyMode = !colorManagementEnabled
+      ;(ColorManagement as any).legacyMode = !colorManagementEnabled
     }
   })
 
@@ -83,7 +86,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
       if (!encoding) {
         console.warn('No encoding found for colorSpace', colorSpace)
       } else {
-        (renderer as any).outputEncoding = encoding
+        ;(renderer as any).outputEncoding = encoding
       }
     }
   })
@@ -120,7 +123,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (revision >= 150 && useLegacyLights) {
       renderer.useLegacyLights = useLegacyLights
     } else if (revision < 150) {
-      (renderer as any).physicallyCorrectLights = !useLegacyLights
+      ;(renderer as any).physicallyCorrectLights = !useLegacyLights
     }
   })
 

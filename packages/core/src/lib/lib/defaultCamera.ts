@@ -19,7 +19,7 @@ export const setDefaultCameraAspectOnSizeChange = (ctx: ThrelteContext): void =>
         const cam = c as PerspectiveCamera
         cam.aspect = size.width / size.height
         cam.updateProjectionMatrix()
-        ctx.invalidate('Default camera: aspect ratio changed')
+        ctx.invalidate()
         return cam
       })
     }

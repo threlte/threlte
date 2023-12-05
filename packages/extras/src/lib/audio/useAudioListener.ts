@@ -18,11 +18,11 @@ export function useAudioListener(id?: string): { listener: AudioListener; contex
  * @param callback
  * @param id
  */
-export function useAudioListener<T extends unknown>(
+export function useAudioListener<T>(
   callback: (args: { listener: AudioListener; context: AudioContext }) => T,
   id?: string
 ): T
-export function useAudioListener<T extends unknown>(
+export function useAudioListener<T>(
   callbackOrId?: ((args: { listener: AudioListener; context: AudioContext }) => T) | string,
   id?: string
 ): T | { listener: AudioListener; context: AudioContext } {

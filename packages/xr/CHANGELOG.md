@@ -1,5 +1,42 @@
 # @threlte/xr
 
+## 0.1.2
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 0.1.1
+
+### Patch Changes
+
+- 56b5fee5: Replace useFrame with useTask internally
+
+## 0.1.0
+
+### Minor Changes
+
+- 44488636: Declared beta
+
+## 0.0.13
+
+### Patch Changes
+
+- 02802bf3: - Fix teleport cursor rotation when hovering on rotated objects.
+  - Fix useController and useHand did not populate store values if a <Controller> / <Hand> component was not created.
+  - Fix XR Controllers not rendering default models if unmounted and remounted.
+  - Fix XR Hands not properly unmounting objects in the wrist slot if they lost connnection.
+  - Fix hit tests not stopping when a session is exited.
+  - Removed some uncommon optional features from the ARButton to prevent console warnings appearing in most apps.
+
+## 0.0.12
+
+### Patch Changes
+
+- 038107fd: - Added the `pointerControls` plugin.
+  - Added the `teleportControls` plugin.
+  - **breaking**: Removed `<TeleportControls>`. Use the `teleportControls` plugin instead.
+
 ## 0.0.11
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 import { onDestroy } from 'svelte'
 import type { Writable } from 'svelte/store'
-import { writable } from 'svelte/store'
+import { currentWritable } from '../lib/storeUtils'
 import { browser } from '../lib/browser'
 import type { Size } from '../types'
 
@@ -8,7 +8,7 @@ export const useParentSize = (): {
   parentSizeAction: (node: HTMLElement) => void
   parentSize: Writable<Size>
 } => {
-  const parentSize = writable({ width: 0, height: 0 })
+  const parentSize = currentWritable({ width: 0, height: 0 })
 
   if (!browser) {
     return {
@@ -33,12 +33,11 @@ export const useParentSize = (): {
 
   // The canvas should match the contentRect of its parent
   const resizeObserver = new ResizeObserver(([entry]) => {
-    const { contentRect } = entry
+    const { width, height } = entry.contentRect
 
-    parentSize.set({
-      width: contentRect.width,
-      height: contentRect.height
-    })
+    if (width === parentSize.current.width && height === parentSize.current.height) return
+
+    parentSize.set({ width, height })
   })
 
   // Use a mutation observer to detect reparenting
@@ -55,8 +54,17 @@ export const useParentSize = (): {
 
   const parentSizeAction = (node: HTMLElement) => {
     el = node
-    if (!el.parentElement) return
-    observeParent(el.parentElement)
+
+    const parent = el.parentElement
+
+    if (!parent) return
+
+    parentSize.set({
+      width: parent.clientWidth,
+      height: parent.clientHeight
+    })
+
+    observeParent(parent)
   }
 
   onDestroy(() => {

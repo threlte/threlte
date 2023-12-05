@@ -1,24 +1,24 @@
-import { useFrame, type ThrelteUseFrameOptions, type ThrelteContext } from '@threlte/core'
+import { useTask, type ThrelteUseTaskOptions } from '@threlte/core'
 
-type UseFixedOptions = ThrelteUseFrameOptions & {
+type UseFixedOptions = ThrelteUseTaskOptions & {
   fixedStep?: number
 }
 
 /**
- * A fixed useFrame, based on https://github.com/threlte/threlte/pull/654
- * 
+ * A fixed useTask, based on https://github.com/threlte/threlte/pull/654
+ *
  * @Todo Can be removed if this or a similar feature is merged.
  */
-export const useFixed = (fn: (ctx: ThrelteContext, delta: number) => void, options: UseFixedOptions) => {
+export const useFixed = (fn: (delta: number) => void, options: UseFixedOptions) => {
   let fixedStepTimeAccumulator = 0
   let fixedStep = options.fixedStep ?? 1 / 60
 
-  return useFrame((ctx, delta) => {
+  return useTask((delta) => {
     fixedStepTimeAccumulator += delta
 
     while (fixedStepTimeAccumulator >= fixedStep) {
       fixedStepTimeAccumulator -= fixedStep
-      fn(ctx, fixedStep)
+      fn(fixedStep)
     }
   }, options)
 }

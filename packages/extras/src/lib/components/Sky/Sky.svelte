@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     CubeCamera,
@@ -39,7 +39,7 @@
 
   const uniforms = sky.material.uniforms
 
-  const { renderer, scene } = useThrelte()
+  const { renderer, scene, invalidate } = useThrelte()
 
   let renderTarget: WebGLCubeRenderTarget | undefined
   let cubeCamera: CubeCamera | undefined
@@ -58,12 +58,14 @@
 
   $: if (setEnvironment && renderTarget) {
     scene.environment = renderTarget.texture
+    invalidate()
   } else if (!setEnvironment) {
     scene.environment = originalEnvironment
+    invalidate()
   }
 
-  const { start: scheduleUpdate, stop } = useFrame(
-    ({ invalidate }) => {
+  const { start: scheduleUpdate, stop } = useTask(
+    () => {
       sky.scale.setScalar(scale)
 
       uniforms.turbidity.value = turbidity
@@ -86,7 +88,8 @@
       stop()
     },
     {
-      autostart: false
+      autoStart: false,
+      autoInvalidate: false
     }
   )
 

@@ -11,7 +11,7 @@ export type InstancedMeshesProps<T extends Meshes> = Props<InstancedMesh> & {
 export type InstancedMeshesEvents = Events<InstancedMesh>
 export type InstancedMeshesSlots<T extends Meshes> = {
   default: {
-    components: T extends Mesh[] ? typeof Instance[] : { [key in keyof T]: typeof Instance }
+    components: T extends Mesh[] ? (typeof Instance)[] : { [key in keyof T]: typeof Instance }
   }
 }
 

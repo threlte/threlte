@@ -1,5 +1,17 @@
 # @threlte/flex
 
+## 1.0.0
+
+### Major Changes
+
+- 1b87e2e2: @threlte/flex now uses the Threlte 7 task API.
+
+## 0.1.1
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
 ## 0.1.0
 
 ### Minor Changes

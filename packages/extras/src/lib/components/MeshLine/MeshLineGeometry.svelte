@@ -121,11 +121,11 @@
     previousAttribute.needsUpdate = true
     nextAttribute.needsUpdate = true
     geometry.computeBoundingSphere()
-    invalidate('Meshline points changed')
+    invalidate()
   }
 
   $: setPoints(points)
-  
+
   const component = forwardEventHandlers()
 </script>
 

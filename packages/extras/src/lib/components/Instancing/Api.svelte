@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
   import { createApi } from './api'
@@ -26,7 +26,7 @@
   const scale = new Vector3()
 
   let initialUpdateDone = false
-  useFrame(() => {
+  useTask(() => {
     instancedMesh.updateMatrix()
     if (update || !initialUpdateDone) {
       instancedMesh.updateMatrixWorld()

@@ -3,7 +3,7 @@
   import type { Object3D } from 'three'
   import { usePortalContext } from '../usePortalContext'
 
-  export let id: string = 'default'
+  export let id = 'default'
   export let object: Object3D | undefined = undefined
 
   const { getPortal } = usePortalContext()

@@ -1,4 +1,4 @@
-import { Vector3 } from 'three'
+import { Vector3, type Event, type Object3D } from 'three'
 import { watch } from '@threlte/core'
 import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
 import { getInternalContext } from './context'
@@ -31,7 +31,7 @@ export const setupPointerControls = (
   let hits: Intersection[] = []
   let lastPosition = new Vector3()
 
-  const handlePointerDown = (event: THREE.Event) => {
+  const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
     const [hit] = hits
 
@@ -43,11 +43,11 @@ export const setupPointerControls = (
     handleEvent('pointerdown', event)
   }
 
-  const handlePointerUp = (event: THREE.Event) => {
+  const handlePointerUp = (event: Event) => {
     handleEvent('pointerup', event)
   }
 
-  const handleClick = (event: THREE.Event) => {
+  const handleClick = (event: Event) => {
     // If a click yields no results, pass it back to the user as a miss
     // Missed events have to come first in order to establish user-land side-effect clean up
     if (hits.length === 0) {
@@ -97,7 +97,7 @@ export const setupPointerControls = (
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
-      let eventObject: THREE.Object3D | null = hit.object
+      let eventObject: Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
         if (dispatchers.has(eventObject)) {
@@ -111,7 +111,7 @@ export const setupPointerControls = (
     return intersections
   }
 
-  function pointerMissed(objects: THREE.Object3D[], event?: IntersectionEvent | undefined) {
+  function pointerMissed(objects: Object3D[], event?: IntersectionEvent | undefined) {
     for (const object of objects) {
       dispatchers.get(object)?.('pointermissed', event)
     }
@@ -122,7 +122,7 @@ export const setupPointerControls = (
     return getHits()
   }
 
-  const handleEvent = (name: PointerEventName, event?: THREE.Event | undefined) => {
+  const handleEvent = (name: PointerEventName, event?: Event | undefined) => {
     const isPointerMove = name === 'pointermove'
     const isClickEvent = name === 'click' || name === 'contextmenu'
 

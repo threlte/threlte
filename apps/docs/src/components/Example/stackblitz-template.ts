@@ -10,16 +10,16 @@ import useTweakpaneTs from '../../lib/useTweakpane.ts?raw'
 import svelteConfigJs from './stackblitz-files/stackblitz-svelte.config.js?raw'
 
 export const files = {
-	'package.json': packageJson,
-	'index.html': indexHtml,
-	'tsconfig.json': tsconfigJson,
-	'tsconfig.node.json': tsconfigNodeJson,
-	'vite.config.ts': viteConfigTs,
-	'svelte.config.js': svelteConfigJs,
-	//src
-	'src/Layout.svelte': layoutSvelte,
-	'src/main.ts': mainTs,
-	'src/vite-env.d.ts': viteEnvDTs,
-	//$lib
-	'src/lib/useTweakpane.ts': useTweakpaneTs
+  'package.json': packageJson,
+  'index.html': indexHtml,
+  'tsconfig.json': tsconfigJson,
+  'tsconfig.node.json': tsconfigNodeJson,
+  'vite.config.ts': viteConfigTs,
+  'svelte.config.js': svelteConfigJs,
+  //src
+  'src/Layout.svelte': layoutSvelte,
+  'src/main.ts': mainTs,
+  'src/vite-env.d.ts': viteEnvDTs,
+  //$lib
+  'src/lib/useTweakpane.ts': useTweakpaneTs
 }

@@ -25,7 +25,7 @@ const DOM_EVENTS = [
   ['pointercancel', true]
 ] as const
 
-type DomEventName = typeof DOM_EVENTS[number][0]
+type DomEventName = (typeof DOM_EVENTS)[number][0]
 
 export const setupInteractivity = (state: State) => {
   function calculateDistance(event: DomEvent) {
@@ -96,8 +96,8 @@ export const setupInteractivity = (state: State) => {
   }
 
   function pointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
-    for (let i = 0; i < objects.length; i++) {
-      const eventDispatcher = getRawEventDispatcher(objects[i])
+    for (const object of objects) {
+      const eventDispatcher = getRawEventDispatcher(object)
       if (!eventDispatcher) continue
       eventDispatcher('pointermissed', event)
     }

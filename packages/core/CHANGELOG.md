@@ -1,5 +1,53 @@
 # @threlte/core
 
+## 7.0.6
+
+### Patch Changes
+
+- 60b78f27: useTask: key can be an actual Key type
+
+## 7.0.5
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
+## 7.0.4
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 7.0.3
+
+### Patch Changes
+
+- 407640a8: hotfix: remove console import
+
+## 7.0.2
+
+### Patch Changes
+
+- cc4085d2: Fixes a bug where calling `useThrelte().shouldRender()` resets the invalidation flags and makes it impossible to invoke more than once per frame.
+
+## 7.0.1
+
+### Patch Changes
+
+- ac981216: Fixed useTask options
+
+## 7.0.0
+
+### Major Changes
+
+- 44488636: See the [migration guide](https://threlte.xyz/docs/learn/advanced/migration-guides#threlte-7)
+
+## 6.1.1
+
+### Patch Changes
+
+- f026619b: Eagerly set canvas size on start
+
 ## 6.1.0
 
 ### Minor Changes

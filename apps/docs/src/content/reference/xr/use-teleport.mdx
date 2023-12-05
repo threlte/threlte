@@ -20,11 +20,11 @@ Provides a function to teleport the player to a reference frame.
 </script>
 ```
 
-This function can be used within `useFrame` for smooth movement.
+This function can be used within `useTask` for smooth movement.
 
 ```ts
-useFrame(() => {
-  vec3.z += 0.1
+useTask((delta) => {
+  vec3.z += delta
   teleport(vec3)
 })
 ```

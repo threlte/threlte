@@ -1,7 +1,7 @@
 <script lang="ts">
   import { spring } from 'svelte/motion'
-  import { Group, Vector3 } from 'three'
-  import { T, useFrame } from '@threlte/core'
+  import { Group, Matrix3, Vector3 } from 'three'
+  import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
@@ -9,22 +9,26 @@
 
   const ref = new Group()
   const vec3 = new Vector3()
+  const normalMatrix = new Matrix3()
+  const worldNormal = new Vector3()
 
   $: intersection = teleportIntersection[handedness]
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       if (intersection.current === undefined) return
 
-      const { point, face } = intersection.current
+      const { point, face, object } = intersection.current
       ref.position.lerp(point, 0.4)
 
       if (face) {
-        ref.lookAt(vec3.addVectors(point, face.normal))
+        normalMatrix.getNormalMatrix(object.matrixWorld)
+        worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
+        ref.lookAt(vec3.addVectors(point, worldNormal))
       }
     },
     {
-      autostart: false
+      autoStart: false
     }
   )
 

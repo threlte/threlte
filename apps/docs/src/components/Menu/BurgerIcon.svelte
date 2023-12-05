@@ -1,8 +1,14 @@
 <script lang="ts">
   export let showMenu = false
+
+  $: text = showMenu ? 'Hide' : 'Show'
 </script>
 
-<button on:click={() => (showMenu = !showMenu)}>
+<button
+  aria-label="{text} navigation menu"
+  aria-expanded={showMenu}
+  on:click={() => (showMenu = !showMenu)}
+>
   {#if showMenu}
     <svg
       xmlns="http://www.w3.org/2000/svg"

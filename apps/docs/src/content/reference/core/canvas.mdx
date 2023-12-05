@@ -1,89 +1,92 @@
 ---
 {
-  'category': '@threlte/core',
-  'name': '<Canvas>',
-  'sourcePath': 'packages/core/src/lib/Canvas.svelte',
-  'order': 0,
-  'type': 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          {
-            'name': 'dpr',
-            'type': 'number',
-            'default': 'window.devicePixelRatio',
-            'required': false
-          },
-          {
-            'name': 'toneMapping',
-            'type':
-              {
-                name: 'THREE.ToneMapping',
-                url: 'https://threejs.org/docs/index.html#api/en/constants/Renderer'
-              },
-            'default': 'THREE.ACESFilmicToneMapping',
-            'required': false,
-            'description': 'renderer.toneMapping'
-          },
-          {
-            'name': 'colorSpace',
-            'type':
-              {
-                name: 'THREE.ColorSpace',
-                url: 'https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153'
-              },
-            'default': "'srgb'",
-            'required': false
-          },
-          {
-            'name': 'colorManagementEnabled',
-            'type':
-              {
-                name: 'boolean',
-                url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
-              },
-            'default': 'true',
-            'required': false
-          },
-          {
-            'name': 'useLegacyLights',
-            'type': 'boolean',
-            'default': 'true',
-            'required': false,
-            description: 'Whether to use legacy lighting mode or physically correct lighting mode. Physically correct lighting mode is more physically accurate, but legacy lighting mode may be more intuitive.'
-          },
-          {
-            'name': 'frameloop',
-            'type': { 'name': '"always" | "demand" | "never"', 'url': 'https://google.com' },
-            'default': '"demand"',
-            'required': false
-          },
-          { 'name': 'debugFrameloop', 'type': 'boolean', 'default': 'false', 'required': false },
-          {
-            'name': 'shadows',
-            'type': 'boolean | THREE.ShadowMapType',
-            'default': 'THREE.PCFSoftShadowMap',
-            'required': false
-          },
-          {
-            'name': 'size',
-            'type': '{ width: number, height: number }',
-            'required': false,
-            'description': 'If not provided, the dimensions of the parent element will be used.'
-          },
-          {
-            'name': 'rendererParameters',
-            'type': 'THREE.WebGLRendererParameters',
-            'required': false
-          }
+    "category": "@threlte/core",
+    "name": "<Canvas>",
+    "sourcePath": "packages/core/src/lib/Canvas.svelte",
+    "order": 0,
+    "type": "component",
+    "componentSignature": {
+        "props": [
+            {
+                "name": "dpr",
+                "type": "number",
+                "default": "window.devicePixelRatio",
+                "required": false
+            },
+            {
+                "name": "toneMapping",
+                "type": {
+                    "name": "THREE.ToneMapping",
+                    "url": "https://threejs.org/docs/index.html#api/en/constants/Renderer"
+                },
+                "default": "THREE.ACESFilmicToneMapping",
+                "required": false,
+                "description": "renderer.toneMapping"
+            },
+            {
+                "name": "colorSpace",
+                "type": {
+                    "name": "THREE.ColorSpace",
+                    "url": "https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153"
+                },
+                "default": "srgb",
+                "required": false
+            },
+            {
+                "name": "colorManagementEnabled",
+                "type": {
+                    "name": "boolean",
+                    "url": "https://threejs.org/docs/#manual/en/introduction/Color-management"
+                },
+                "default": "true",
+                "required": false
+            },
+            {
+                "name": "useLegacyLights",
+                "type": "boolean",
+                "default": "true",
+                "required": false,
+                "description": "Whether to use legacy lighting mode or physically correct lighting mode. Physically correct lighting mode is more physically accurate, but legacy lighting mode may be more intuitive."
+            },
+            {
+                "name": "renderMode",
+                "type": "'always' | 'on-demand' | 'manual'",
+                "default": "'on-demand'",
+                "required": false
+            },
+            {
+                "name": "autoRender",
+                "type": "boolean",
+                "default": "true",
+                "required": false,
+								"description": "Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines."
+            },
+            {
+                "name": "shadows",
+                "type": "boolean | THREE.ShadowMapType",
+                "default": "THREE.PCFSoftShadowMap",
+                "required": false
+            },
+            {
+                "name": "size",
+                "type": "{ width: number, height: number }",
+                "required": false,
+                "description": "If not provided, the dimensions of the parent element will be used."
+            },
+            {
+                "name": "rendererParameters",
+                "type": "THREE.WebGLRendererParameters",
+                "required": false
+            }
         ],
-      'bindings':
-        [
-          {
-            'name': 'ctx',
-            'type': { 'name': 'ThrelteContext', 'url': '/docs/reference/core/hooks#usethrelte' }
-          }
+        "bindings": [
+            {
+                "name": "ctx",
+                "type": {
+                    "name": "ThrelteContext",
+                    "url": "/docs/reference/core/hooks#usethrelte"
+                }
+            }
         ]
     }
 }
@@ -105,6 +108,6 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 
 `<Canvas>` also provides a default camera, located at `{ z: 5 }`.
 
-If `frameloop` is set to `demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.
-If `frameloop` is set to `always` the frameloop always renders.
-If `frameloop` is set to `never` the frameloop must manually be advanced with `useThrelte().advance()`. This is especially useful if you want to debug the frameloop with `debugFrameloop` set to `true`.
+If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.
+If `renderMode` is set to `always` a re-render is automatically scheduled every frame.
+If `renderMode` is set to `never` a re-render must manually be triggered with `useThrelte().advance()`.

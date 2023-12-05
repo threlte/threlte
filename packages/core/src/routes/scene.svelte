@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { T, useFrame } from '$lib'
+  import { T, useTask } from '$lib'
+  import type { Mesh } from 'three'
 
-  let ref: THREE.Mesh
+  let ref: Mesh
 
-  useFrame(() => {
+  useTask(() => {
     ref.rotation.x += 0.01
     ref.rotation.y += 0.01
   })
@@ -15,12 +16,19 @@
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
-<T.Mesh castShadow receiveShadow bind:ref>
+<T.Mesh
+  castShadow
+  receiveShadow
+  bind:ref
+>
   <T.MeshStandardMaterial color="hotpink" />
   <T.BoxGeometry />
 </T.Mesh>
 
-<T.Mesh receiveShadow position.y={-1}>
+<T.Mesh
+  receiveShadow
+  position.y={-1}
+>
   <T.MeshStandardMaterial color="turquoise" />
   <T.CylinderGeometry args={[1, 1, 0.1]} />
 </T.Mesh>

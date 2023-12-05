@@ -9,6 +9,7 @@
     {
       props:
         [
+          { name: 'reflowStage', type: 'Stage', required: false, description: "The stage used for reflowing the layout." },
           { name: 'width', type: 'number', required: false },
           { name: 'height', type: 'number', required: false },
           { name: 'plane', type: 'FlexPlane', required: false },
@@ -219,12 +220,36 @@ reflow, you can use the slot prop `reflow`:
 ```
 
 <Tip type="tip">
-	The `reflow` slot prop is also available on `<Box>` components to enable
-	encapsulated child components to easily request a reflow.
+  The `reflow` slot prop is also available on `<Box>` components to enable
+  encapsulated child components to easily request a reflow.
 </Tip>
 
 You may also use the hook [`useReflow`](/docs/reference/flex/use-reflow) to request
 a reflow.
+
+### Reflow Stage
+
+By default, the reflow of the layout is happening in [Threlte's
+mainStage](/docs/learn/basics/scheduling-tasks#default-stages). To change in
+what stage the layout should reflow, use the prop `reflowStage`:
+
+```svelte
+<script lang="ts">
+  import { useStage, useThrelte } from '@threlte/core'
+  import { Flex } from '@threlte/flex'
+
+  const { mainStage, renderStage } = useThrelte()
+
+  const reflowStage = useStage('reflow-stage', {
+    after: mainStage,
+    before: renderStage
+  })
+</script>
+
+<Flex {reflowStage}>
+  <!-- ... -->
+</Flex>
+```
 
 ### Content Dimensions
 

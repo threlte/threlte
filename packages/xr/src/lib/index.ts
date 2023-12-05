@@ -34,5 +34,5 @@ export type {
   XRControllerEvent,
   XRController,
   XRHand,
-  XRHandEvent,
+  XRHandEvent
 } from './types'

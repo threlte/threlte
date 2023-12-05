@@ -1,14 +1,14 @@
-import * as THREE from 'three'
-import { useThrelte, useFrame, watch, currentWritable } from '@threlte/core'
+import { Matrix4 } from 'three'
+import { useThrelte, useTask, watch, currentWritable } from '@threlte/core'
 import { useXR } from './useXR'
 import { useController } from './useController'
 
-export type HitTestCallback = (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => void
+export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
 export type UseHitTestOptions = {
   /**
    * The ray source when performing hit testing.
-   * 
+   *
    * @default 'viewer'
    */
   source?: 'viewer' | 'leftInput' | 'rightInput'
@@ -16,7 +16,7 @@ export type UseHitTestOptions = {
 
 /**
  * Use this hook to perform a hit test per frame in an AR environment.
- * 
+ *
  * ```ts
  * useHitTest((hitMatrix, hit) => {
  *   mesh.matrix.copy(hitMatrix)
@@ -25,18 +25,25 @@ export type UseHitTestOptions = {
  * })
  * ```
  */
-export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTestOptions = {}): void => {
+export const useHitTest = (
+  hitTestCallback: HitTestCallback,
+  options: UseHitTestOptions = {}
+): void => {
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
   const xrState = useXR()
-  const hitMatrix = new THREE.Matrix4()
+  const hitMatrix = new Matrix4()
 
-  let hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
+  const hitTestSource = currentWritable<XRHitTestSource | undefined>(undefined)
 
   if (source === 'viewer') {
     watch(xrState.session, async (session) => {
-      if (session === undefined) return
-      const space = await session.requestReferenceSpace('viewer') 
+      if (session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+
+      const space = await session.requestReferenceSpace('viewer')
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   } else {
@@ -44,19 +51,27 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
     const hand = useController(source === 'leftInput' ? 'left' : 'right')
 
     watch([xrState.session, controller], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
-  
+
     watch([xrState.session, hand], async ([session, input]) => {
-      if (input === undefined || session === undefined) return
+      if (input === undefined || session === undefined) {
+        hitTestSource.set(undefined)
+        return
+      }
+
       const space = input.inputSource.targetRaySpace
       hitTestSource.set(await session.requestHitTestSource?.({ space }))
     })
   }
 
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       const referenceSpace = xr.getReferenceSpace()
 
@@ -74,10 +89,15 @@ export const useHitTest = (hitTestCallback: HitTestCallback, options: UseHitTest
       hitMatrix.fromArray(pose.transform.matrix)
       hitTestCallback(hitMatrix, hit)
     },
-    { autostart: false }
+    { autoStart: false }
   )
 
-  watch(hitTestSource, (testSource) => {
+  watch([xrState.isPresenting, hitTestSource], ([isPresenting, testSource]) => {
+    if (!isPresenting) {
+      stop()
+      return
+    }
+
     if (testSource === undefined) {
       stop()
       // Execute callback one last time to inform consumers of no hits.

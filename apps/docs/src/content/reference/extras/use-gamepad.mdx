@@ -33,12 +33,12 @@ This prop will be `null` unless a gamepad is connected.
 
 ```svelte
 <script lang="ts">
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()
 
-  useFrame(() => {
+  useTask(() => {
     if (gamepad.raw) {
       // A gamepad is connected!
     }
@@ -76,12 +76,12 @@ Properties are given to more easily access button or joystick values.
 
 ```svelte
 <script lang="ts">
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()
 
-  useFrame(() => {
+  useTask(() => {
     console.log(gamepad.leftStick.x, gamepad.leftStick.y)
     console.log(gamepad.leftBumper.value)
     console.log(gamepad.rightTrigger.value)
@@ -93,7 +93,7 @@ Event listeners can also be attached to buttons or joysticks, or the gamepad its
 
 ```svelte
 <script lang="ts">
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
   import { useGamepad } from '@threlte/extras'
 
   const gamepad = useGamepad()

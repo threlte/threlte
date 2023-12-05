@@ -1,14 +1,25 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Environment, useGltf } from '@threlte/extras'
   import { derived } from 'svelte/store'
+  import type { Material, Mesh } from 'three'
 
   let rotation = 0
-  useFrame(() => {
-    rotation += 0.01
+  useTask((delta) => {
+    const f = 1 / 60 / delta // ~1 at 60fps
+    rotation += 0.01 * f
   })
 
-  const gltf = useGltf<'node_damagedHelmet_-6514', 'Material_MR'>(
+  type GLTFResult = {
+    nodes: {
+      'node_damagedHelmet_-6514': Mesh
+    }
+    materials: {
+      Material_MR: Material
+    }
+  }
+
+  const gltf = useGltf<GLTFResult>(
     '/models/helmet/DamagedHelmet.gltf?v=' + Math.random().toString() // force a reload on every pageload
   )
 

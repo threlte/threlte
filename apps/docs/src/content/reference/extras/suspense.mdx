@@ -145,18 +145,18 @@ The `<Suspense>` component is a great tool to improve the user experience of you
 
 1. It's important to keep in mind that while the contents of the default slot are not visible, they
    are still mounted and the component is otherwise fully functional. This means that any side
-   effects (for instance `useFrame` hooks) that are invoked in a _suspense-ready_ child component will be
+   effects (for instance `useTask` hooks) that are invoked in a _suspense-ready_ child component will be
    executed immediately.
 
 ```svelte title="Model.svelte"
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { useGltf, useSuspense } from '@threlte/extras'
 
   const suspend = useSuspense()
   const gltf = suspend(useGltf('model.gltf'))
 
-  useFrame(() => {
+  useTask(() => {
     // This will be executed immediately
   })
 </script>

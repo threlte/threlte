@@ -65,8 +65,7 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
-    are required.
+    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer dependency.
   </p>
 
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
@@ -176,7 +175,7 @@
     active={installTypes}>@types/three</InstallButton
   >
 
-  <p class="my-0 self-center text-sm md:text-base">TypeScript types for three.js.</p>
+  <p class="my-0 self-center text-sm md:text-base">TypeScript types for Three.js.</p>
 </div>
 
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>

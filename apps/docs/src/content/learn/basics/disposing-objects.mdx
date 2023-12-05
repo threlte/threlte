@@ -1,0 +1,63 @@
+---
+title: Disposing Objects
+category: Basics
+order: -400
+---
+
+Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects), but Svelte is aware of component lifecycles, hence Threlte will attempt to free resources for you by calling `dispose`, if present, on all unmounted objects and recursively on all properties that are not being used anywhere else in your scene.
+
+## Automatic Disposal
+
+```svelte
+<script>
+  import { Mesh } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const map = useTexture('/some/texture')
+</script>
+
+<!--
+	The geometry, material and the associated texture will
+	be disposed as soon as the <Mesh> component unmounts.
+-->
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial map={$map} />
+</T.Mesh>
+```
+
+<Tip>
+  Be aware that calling `dispose` on a three.js buffer, material or geometry is merely deallocating
+  it from the GPU memory. If an object is used after it's disposed it will be allocated again,
+  resulting in a performance drop for a single frame. It will **not produce a runtime error**.
+</Tip>
+
+## Manual Disposal
+
+You can switch off automatic disposal by placing `dispose={false}` onto components, it is now valid for the entire tree.
+
+```svelte
+<script>
+  import { Mesh, useTexture } from '@threlte/core'
+  import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+
+  const map = useTexture('/some/texture')
+  const material = new MeshStandardMaterial({ map })
+</script>
+
+<!-- will not be disposed -->
+<T.Mesh dispose={false}>
+  <!-- will not be disposed -->
+  <T.BoxGeometry />
+  <!-- will not be disposed -->
+  <T.MeshStandardMaterial map={$map} />
+
+  <!-- will be disposed -->
+  <T.Mesh dispose>
+    <!-- will be disposed -->
+    <T.BoxGeometry />
+    <!-- will be disposed -->
+    <T.MeshStandardMaterial map={$map} />
+  </T.Mesh>
+</T.Mesh>
+```

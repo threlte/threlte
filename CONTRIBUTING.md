@@ -8,7 +8,6 @@ The Threlte project is open to different kinds of support:
 4. **Proposals**: well researched and thought out ideas are welcome in our [Proposals Forums in Discord](https://discord.com/channels/985983540804091964/1098301342239432784).
 5. **Contributing PRs**: read about [how to contribute PRs](#how-to-contribute-prs) if you wanna start hacking at our code or docs.
 
-
 # How to contribute PRs
 
 ## Deciding what to contribute
@@ -31,7 +30,7 @@ Setting up the repo:
 2. **Install** the packages by running `pnpm install:all` in the root of the repo
 3. **Develop** by going to `/apps/docs` and running `pnpm run dev`
 
-*Note:* we practice **docs-driven development**: building the docs page for a feature while developing it. This allows us to test functionality through examples and feel out the API: if its hard to explain well, its probably flawed.
+_Note:_ we practice **docs-driven development**: building the docs page for a feature while developing it. This allows us to test functionality through examples and feel out the API: if its hard to explain well, its probably flawed.
 
 Some editor tooling:
 
@@ -45,6 +44,7 @@ Threlte uses Git for version control and [Changesets](https://github.com/changes
 ### Git commits
 
 We don't have a strict commit message policy. Here are some best practices:
+
 - **Use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)** to make it easier to read your commit message.
 - **Go into technical details** if necessary to allow maintainers to understand the context of the change.
 - **Use present tense exclusively** to describe the changes in the commit.
@@ -54,6 +54,7 @@ We don't have a strict commit message policy. Here are some best practices:
 [Changesets](https://github.com/changesets/changesets) is a tool that helps us keep a changelog for all the packages in the monorepo and aggregate them into release notes.
 
 To add a changeset:
+
 1. **Run the command** `npx changeset` in your terminal
 2. **Select packages** affected by your change; we have a dedicated package for the docs.
 3. **Classify the change** as major, minor, or patch for each selected package.

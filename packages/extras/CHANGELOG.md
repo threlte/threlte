@@ -1,5 +1,48 @@
 # @threlte/extras
 
+## 8.0.3
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
+## 8.0.2
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 8.0.1
+
+### Patch Changes
+
+- 8b62e472: useTexture release fix
+- ea50d08f: Fixed frame guards of `<AnimatedSpriteMaterial>`
+
+## 8.0.0
+
+### Major Changes
+
+- 33367cbf: @threlte/core ^7 is now required as useTask is used by default
+
+## 7.5.4
+
+### Patch Changes
+
+- fa8c1677: Added support for reverse animation direction in `<AnimatedSpriteMaterial>`
+
+## 7.5.3
+
+### Patch Changes
+
+- 050a7128: Set `pointerEvents` for `noTransform` divs
+
+## 7.5.2
+
+### Patch Changes
+
+- 2ae76e18: Threlte 7 compatibility
+
 ## 7.5.1
 
 ### Patch Changes
