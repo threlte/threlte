@@ -36,7 +36,7 @@
 
   $: centerVec = new Vector3(...center)
 
-  const { autoRenderTask, renderer, camera } = useThrelte()
+  const { autoRenderTask, renderer, camera, invalidate } = useThrelte()
 
   const orthoCam = new OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0, 4)
   orthoCam.position.set(0, 0, 2)
@@ -62,8 +62,9 @@
 
       renderer.autoClear = autoClear
     },
-    renderTask ?? {
-      after: autoRenderTask
+    {
+      ...(renderTask ?? { after: autoRenderTask }),
+      autoInvalidate: false
     }
   )
 
@@ -204,8 +205,11 @@
     animationTask?.key ?? Symbol('threlte-extras-gizmo-animation'),
     (delta) => {
       point.set(0, 0, 1).applyQuaternion(camera.current.quaternion)
-      p = [point.x, point.y, point.z]
-      root.quaternion.copy(camera.current.quaternion).invert()
+      if (point.x !== p[0] || point.y !== p[1] || point.z !== p[2]) {
+        p = [point.x, point.y, point.z]
+        root.quaternion.copy(camera.current.quaternion).invert()
+        invalidate()
+      }
 
       if (animating) {
         const step = delta * turnRate
@@ -224,9 +228,14 @@
         if (currentQuaternion.angleTo(finalQuaternion) === 0) {
           animating = false
         }
+
+        invalidate()
       }
     },
-    animationTask
+    {
+      ...animationTask,
+      autoInvalidate: false
+    }
   )
 
   const getSpriteTexture = (color: number, text = '') => {
