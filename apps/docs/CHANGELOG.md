@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.6.4
+
+### Patch Changes
+
+- 2df1367f: Add a gizmo component for heads-up camera control
+
 ## 0.6.3
 
 ### Patch Changes

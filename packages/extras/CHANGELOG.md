@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 8.0.4
+
+### Patch Changes
+
+- 018ee0c5: Improved Gizmo visuals
+- 97f2e889: Allow reactive <Portal> ids
+- 2df1367f: Add a gizmo component for heads-up camera control
+
 ## 8.0.3
 
 ### Patch Changes
