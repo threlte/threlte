@@ -13,7 +13,8 @@
     Sprite,
     Vector2,
     Vector3,
-    Vector4
+    Vector4,
+    type Intersection
   } from 'three'
   import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
 
@@ -110,6 +111,54 @@
   const mouse = new Vector2()
   const raycaster = new Raycaster()
 
+  /**
+   * Floating point operations make it hard to compare quaternions, controls
+   * (such as the OrbitControls) may also restrict the rotation of the camera on
+   * certain axes. To allow for loose equality checks, we use a sensible
+   * threshold to compare quaternions.
+   *
+   * @param a - Quaternion a
+   * @param b - Quaternion b
+   * @param threshold - Threshold to use for comparison
+   */
+  const quaternionsAreEqual = (a: Quaternion, b: Quaternion, threshold: number) => {
+    const delta =
+      Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z) + Math.abs(a.w - b.w)
+    return delta < threshold
+  }
+
+  /**
+   * @returns boolean that indicates if the target and the current rotation are equal.
+   */
+  const handleIntersection = (intersection: Intersection<Object3D>): boolean => {
+    const object = intersection.object
+    const targetPos = object.userData.targetPosition as [number, number, number]
+    const targetEuler = object.userData.targetEuler as [number, number, number]
+
+    radius = camera.current.position.distanceTo(centerVec)
+    targetPosition
+      .set(...targetPos)
+      .multiplyScalar(radius)
+      .add(centerVec)
+    targetQuaternion.setFromEuler(new Euler(...targetEuler))
+
+    const dummy = new Object3D()
+    dummy.position.copy(centerVec)
+
+    dummy.lookAt(camera.current.position)
+    currentQuaternion.copy(dummy.quaternion)
+
+    dummy.lookAt(targetPosition)
+    finalQuaternion.copy(dummy.quaternion)
+
+    if (quaternionsAreEqual(finalQuaternion, currentQuaternion, 0.0001)) {
+      return true
+    }
+
+    animating = true
+    return false
+  }
+
   const handleClick = (event: MouseEvent) => {
     if (animating) {
       return
@@ -127,32 +176,13 @@
     const intersects = raycaster.intersectObjects([posX, posY, posZ, negX, negY, negZ])
 
     if (intersects.length > 0) {
-      const intersection = intersects[0]
-      const object = intersection.object
-      const targetPos = object.userData.targetPosition as [number, number, number]
-      const targetEuler = object.userData.targetEuler as [number, number, number]
-
-      radius = camera.current.position.distanceTo(centerVec)
-      targetPosition
-        .set(...targetPos)
-        .multiplyScalar(radius)
-        .add(centerVec)
-      targetQuaternion.setFromEuler(new Euler(...targetEuler))
-
-      const dummy = new Object3D()
-      dummy.position.copy(centerVec)
-
-      dummy.lookAt(camera.current.position)
-      currentQuaternion.copy(dummy.quaternion)
-
-      dummy.lookAt(targetPosition)
-      finalQuaternion.copy(dummy.quaternion)
-
-      animating = true
-
-      return true
-    } else {
-      return false
+      const alreadyReached = handleIntersection(intersects[0])
+      if (alreadyReached) {
+        // get the second closest intersection
+        if (intersects.length > 1) {
+          handleIntersection(intersects[1])
+        }
+      }
     }
   }
 
@@ -181,7 +211,6 @@
         const step = delta * turnRate
 
         // animate position by doing a slerp and then scaling the position on the unit sphere
-
         currentQuaternion.rotateTowards(finalQuaternion, step)
         camera.current.position
           .set(0, 0, 1)
@@ -190,7 +219,6 @@
           .add(centerVec)
 
         // animate orientation
-
         camera.current.quaternion.rotateTowards(targetQuaternion, step)
 
         if (currentQuaternion.angleTo(finalQuaternion) === 0) {
