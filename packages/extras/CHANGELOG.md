@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.7
+
+### Patch Changes
+
+- 5c07b714: `<Gizmo>` div position fix
+
 ## 8.0.6
 
 ### Patch Changes
