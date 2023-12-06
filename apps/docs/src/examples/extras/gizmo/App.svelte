@@ -81,7 +81,7 @@
     value: 128,
     params: {
       min: 0,
-      max: 1000
+      max: 400
     }
   })
 
