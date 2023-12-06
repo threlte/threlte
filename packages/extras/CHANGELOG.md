@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.5
+
+### Patch Changes
+
+- aaa94569: Perf bug fixed in `<Gizmo>`
+
 ## 8.0.4
 
 ### Patch Changes
