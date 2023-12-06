@@ -210,7 +210,7 @@
     context.beginPath()
     context.arc(32, 32, 16, 0, 2 * Math.PI)
     context.closePath()
-    context.fillStyle = new Color(color).getStyle()
+    context.fillStyle = new Color(color).convertSRGBToLinear().getStyle()
     context.fill()
 
     if (text) {
@@ -228,6 +228,7 @@
   <T.Scene bind:ref={root}>
     <!-- xAxis -->
     <T.Sprite
+      renderOrder={1}
       bind:ref={posX}
       position.x={1}
       userData.targetPosition={[1, 0, 0]}
@@ -253,6 +254,7 @@
     </T.Mesh>
 
     <T.Sprite
+      renderOrder={1}
       bind:ref={negX}
       position.x={-1}
       scale={0.8}
@@ -267,6 +269,7 @@
 
     <!-- yAxis -->
     <T.Sprite
+      renderOrder={1}
       bind:ref={posY}
       position.y={1}
       userData.targetPosition={[0, 1, 0]}
@@ -295,6 +298,7 @@
     </T.Mesh>
 
     <T.Sprite
+      renderOrder={1}
       bind:ref={negY}
       position.y={-1}
       scale={0.8}
@@ -309,6 +313,7 @@
 
     <!-- zAxis -->
     <T.Sprite
+      renderOrder={1}
       bind:ref={posZ}
       position.z={1}
       userData.targetPosition={[0, 0, 1]}
@@ -337,6 +342,7 @@
     </T.Mesh>
 
     <T.Sprite
+      renderOrder={1}
       bind:ref={negZ}
       position.z={-1}
       scale={0.8}
