@@ -1,7 +1,16 @@
 <script lang="ts">
   import { Canvas, T, currentWritable, type CurrentWritable } from '@threlte/core'
   import { Gizmo, OrbitControls } from '@threlte/extras'
-  import { Checkbox, Color, Folder, List, Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui'
+  import {
+    Checkbox,
+    Color,
+    Folder,
+    List,
+    Pane,
+    Ring,
+    Slider,
+    ThemeUtils
+  } from 'svelte-tweakpane-ui'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import Scene from './Scene.svelte'
 
@@ -21,17 +30,17 @@
 </script>
 
 <Pane
-  width={350}
   theme={ThemeUtils.presets.standard}
   position="fixed"
   title="Gizmo"
 >
   <Folder title="Mechanics">
-    <Slider
+    <Ring
       label="turnRate"
       bind:value={turnRate}
       min={0}
       max={20}
+      wide
     />
   </Folder>
 
