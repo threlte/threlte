@@ -1,5 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { Grid } from '@threlte/extras'
 
   export let center: [number, number, number]
 
@@ -35,7 +36,15 @@
   ])
 </script>
 
-<T.AxesHelper args={[5]} />
+<T.AxesHelper
+  args={[5]}
+  renderOrder={1}
+/>
+
+<Grid
+  sectionSize={0}
+  cellColor="#eee"
+/>
 
 <T.Mesh position={center}>
   <T.BoxGeometry>

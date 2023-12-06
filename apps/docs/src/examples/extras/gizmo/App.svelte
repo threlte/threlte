@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { Canvas, T, type CurrentWritable, currentWritable } from '@threlte/core'
-  import { Gizmo, OrbitControls } from '@threlte/extras'
   import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas, T, currentWritable, type CurrentWritable } from '@threlte/core'
+  import { Gizmo, OrbitControls } from '@threlte/extras'
+  import type { Writable } from 'svelte/store'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import Scene from './Scene.svelte'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
   const { action, addInput } = useTweakpane({
     title: 'Gizmo',
@@ -18,19 +19,27 @@
     }
   })
 
-  const vert = addInput({
+  const verticalPlacement = addInput({
     label: 'Vertical placement (top or bottom)',
-    value: 'bottom'
-  })
-  let verticalPlacement: 'top' | 'bottom'
-  $: verticalPlacement = $vert === 'top' ? 'top' : 'bottom'
+    value: 'bottom',
+    params: {
+      options: {
+        top: 'top',
+        bottom: 'bottom'
+      }
+    }
+  }) as Writable<'top' | 'bottom'>
 
-  const horiz = addInput({
+  const horizontalPlacement = addInput({
     label: 'Horizontal placement (left or right)',
-    value: 'right'
-  })
-  let horizontalPlacement: 'left' | 'right'
-  $: horizontalPlacement = $horiz === 'left' ? 'left' : 'right'
+    params: {
+      options: {
+        left: 'left',
+        right: 'right'
+      }
+    },
+    value: 'left'
+  }) as Writable<'left' | 'right'>
 
   const xColor = addInput({
     label: 'X color',
@@ -98,8 +107,8 @@
     <Gizmo
       center={$center}
       turnRate={$turnRate}
-      {verticalPlacement}
-      {horizontalPlacement}
+      verticalPlacement={$verticalPlacement}
+      horizontalPlacement={$horizontalPlacement}
       xColor={$xColor}
       yColor={$yColor}
       zColor={$zColor}
