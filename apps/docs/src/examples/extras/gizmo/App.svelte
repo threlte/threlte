@@ -1,113 +1,99 @@
 <script lang="ts">
-  import { useTweakpane } from '$lib/useTweakpane'
   import { Canvas, T, currentWritable, type CurrentWritable } from '@threlte/core'
   import { Gizmo, OrbitControls } from '@threlte/extras'
-  import type { Writable } from 'svelte/store'
+  import { Checkbox, Color, Folder, List, Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import Scene from './Scene.svelte'
 
-  const { action, addInput } = useTweakpane({
-    title: 'Gizmo',
-    expanded: false
-  })
-
-  const turnRate = addInput({
-    label: 'Turn rate',
-    value: 2 * Math.PI,
-    params: {
-      min: 0
-    }
-  })
-
-  const verticalPlacement = addInput({
-    label: 'Vertical placement (top or bottom)',
-    value: 'bottom',
-    params: {
-      options: {
-        top: 'top',
-        bottom: 'bottom'
-      }
-    }
-  }) as Writable<'top' | 'bottom'>
-
-  const horizontalPlacement = addInput({
-    label: 'Horizontal placement (left or right)',
-    params: {
-      options: {
-        left: 'left',
-        right: 'right'
-      }
-    },
-    value: 'left'
-  }) as Writable<'left' | 'right'>
-
-  const xColor = addInput({
-    label: 'X color',
-    value: 0xff3653,
-    params: {
-      color: {
-        type: 'float'
-      }
-    }
-  })
-
-  const yColor = addInput({
-    label: 'Y color',
-    value: 0x8adb00,
-    params: {
-      color: {
-        type: 'float'
-      }
-    }
-  })
-
-  const zColor = addInput({
-    label: 'Z color',
-    value: 0x2c8fff,
-    params: {
-      color: {
-        type: 'float'
-      }
-    }
-  })
-
-  const toneMapped = addInput({
-    label: 'toneMapped',
-    value: false
-  })
-
-  const size = addInput({
-    label: 'Size',
-    value: 128,
-    params: {
-      min: 0,
-      max: 400
-    }
-  })
-
-  const paddingX = addInput({
-    label: 'Padding X',
-    value: 20,
-    params: {
-      min: 0,
-      max: 50
-    }
-  })
-
-  const paddingY = addInput({
-    label: 'Padding Y',
-    value: 20,
-    params: {
-      min: 0,
-      max: 50
-    }
-  })
+  let turnRate = 2 * Math.PI
+  let verticalPlacement: 'top' | 'bottom' = 'bottom'
+  let horizontalPlacement: 'left' | 'right' = 'left'
+  let xColor = '#ff3653'
+  let yColor = '#8adb00'
+  let zColor = '#2c8fff'
+  let toneMapped = false
+  let size = 128
+  let paddingX = 20
+  let paddingY = 20
 
   let orbitControls: ThreeOrbitControls
   let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
 </script>
 
-<div use:action />
+<Pane
+  width={350}
+  theme={ThemeUtils.presets.standard}
+  position="fixed"
+  title="Gizmo"
+>
+  <Folder title="Mechanics">
+    <Slider
+      label="turnRate"
+      bind:value={turnRate}
+      min={0}
+      max={20}
+    />
+  </Folder>
+
+  <Folder title="Colors">
+    <Color
+      bind:value={xColor}
+      label="xColor"
+    />
+    <Color
+      bind:value={yColor}
+      label="yColor"
+    />
+    <Color
+      bind:value={zColor}
+      label="zColor"
+    />
+    <Checkbox
+      bind:value={toneMapped}
+      label="toneMapped"
+    />
+  </Folder>
+
+  <Folder title="Placement">
+    <List
+      label="verticalPlacement"
+      bind:value={verticalPlacement}
+      options={{
+        top: 'top',
+        bottom: 'bottom'
+      }}
+    />
+    <List
+      label="horizontalPlacement"
+      bind:value={horizontalPlacement}
+      options={{
+        left: 'left',
+        right: 'right'
+      }}
+    />
+    <Slider
+      label="size"
+      bind:value={size}
+      min={20}
+      max={350}
+      step={1}
+    />
+    <Slider
+      label="paddingX"
+      bind:value={paddingX}
+      min={0}
+      max={50}
+      step={1}
+    />
+    <Slider
+      label="paddingY"
+      bind:value={paddingY}
+      min={0}
+      max={50}
+      step={1}
+    />
+  </Folder>
+</Pane>
 
 <div class="relative h-full w-full bg-blue-900">
   <Canvas>
@@ -128,17 +114,17 @@
     <Scene center={$center} />
 
     <Gizmo
-      paddingX={$paddingX}
-      paddingY={$paddingY}
-      toneMapped={$toneMapped}
       center={$center}
-      turnRate={$turnRate}
-      verticalPlacement={$verticalPlacement}
-      horizontalPlacement={$horizontalPlacement}
-      xColor={$xColor}
-      yColor={$yColor}
-      zColor={$zColor}
-      size={$size}
+      {turnRate}
+      {verticalPlacement}
+      {horizontalPlacement}
+      {xColor}
+      {yColor}
+      {zColor}
+      {toneMapped}
+      {size}
+      {paddingX}
+      {paddingY}
     />
   </Canvas>
 </div>

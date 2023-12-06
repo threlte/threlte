@@ -201,6 +201,9 @@ importers:
       svelte-reduced-motion:
         specifier: ^1.1.1
         version: 1.1.1(svelte@4.2.0)
+      svelte-tweakpane-ui:
+        specifier: ^1.0.0
+        version: 1.0.0(svelte@4.2.0)
       three:
         specifier: 0.158.0
         version: 0.158.0
@@ -815,6 +818,22 @@ importers:
         version: 1.16.0(vite@4.4.8)
 
 packages:
+
+  /@0b5vr/tweakpane-plugin-profiler@0.4.1(tweakpane@4.0.1):
+    resolution: {integrity: sha512-jgkPbT24eQ7isj8F7/IsbdqrwvBoWBmwjqxdP35smD2D6xsx+9viR57SKBxi9PxTZDEayicmCzBk++0PTqRnBg==}
+    peerDependencies:
+      tweakpane: ^4.0.0
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
+
+  /@0b5vr/tweakpane-plugin-rotation@0.2.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-LK+84kNTusEepVwiKH6ib/Pd+5RxI3UC4rHxn5c14GO58QS49Hh0ft3hFXt/NDzYEST17Q9qg96BcpclhCzYYQ==}
+    peerDependencies:
+      tweakpane: ^4.0.0
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
 
   /@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
@@ -2635,6 +2654,22 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
+  /@kitschpatrol/tweakpane-image-plugin@2.0.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-BzEZqIhD/dM7AW0Ebv+309L4k8ZZJ5fC9Zks4sozVK3FwJooviE6JzaFAuB7k0M5oX45Wyn59tQXdHafgsP3YA==}
+    peerDependencies:
+      tweakpane: ^4.0.0
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
+
+  /@kitschpatrol/tweakpane-textarea-plugin@2.0.1(tweakpane@4.0.1):
+    resolution: {integrity: sha512-vS8jRQ+SNp7C5E/x+SEO7aF5+qnCtzS2jysiiZlqH5loeXtt7xEklDAhkDU4teikILTOejvBip1umBHH6VkpSg==}
+    peerDependencies:
+      tweakpane: ^4.0.0
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
+
   /@macfja/serializer@1.1.2:
     resolution: {integrity: sha512-kqEg3Zu5/g3ivdeb+jP4rBVVdmtKXVsRwH+x9KdM2Y7d2mKLq54g+YLSgTQ4KwJvWmyHFvRq0ouX5Dr4H1Hw3Q==}
     dev: true
@@ -3811,6 +3846,26 @@ packages:
 
   /@tweakpane/core@1.1.0:
     resolution: {integrity: sha512-vbbiQb+aoFI13lIbE7DJvhHZVE1YlUpGoaAamSpU6wLp2jA3VowS1wfRJBBB8IBCYm7nF6ULl7zfJKxl1XdyfA==}
+    dev: true
+
+  /@tweakpane/core@2.0.1:
+    resolution: {integrity: sha512-iJNrLrLffQR0I8mWgAWcMVO9ZPNdNeXZl66WNT+Op5L9FW7BSF6lwG3izR6Ki9CaI3HzIownwjzYS5xWUaokTA==}
+    dev: true
+
+  /@tweakpane/plugin-camerakit@0.3.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-6UwgwDKU+oaAgXJ2D/pOoIpEAZts0RyeLmVzBJGs+VVNqSfkiHzL0i5XD+XnmSL2PaLXBne0dlz0bYOrjmeELw==}
+    peerDependencies:
+      tweakpane: ^4.0.0-beta.2
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
+
+  /@tweakpane/plugin-essentials@0.2.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-/kO90nfm0y0CYJPUvoNrjXhjNoqr+RaoySIdJmy++pb5vrSHi/DXdxG/sPszUPZggDY9M31RTacnxXi6Dv7r8Q==}
+    peerDependencies:
+      tweakpane: ^4.0.0-beta.2
+    dependencies:
+      tweakpane: 4.0.1
     dev: true
 
   /@types/acorn@4.0.6:
@@ -9014,6 +9069,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /nanoid@5.0.4:
+    resolution: {integrity: sha512-vAjmBf13gsmhXSgBrtIclinISzFFy22WwCYoyilZlsrRXNIHSwgFQ1bEdjRwMT3aoadeIF6HMuDRlOxzfXV8ig==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    dev: true
+
   /napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
 
@@ -11501,6 +11562,15 @@ packages:
       svelte: 4.2.0
     dev: false
 
+  /svelte-local-storage-store@0.6.4(svelte@4.2.0):
+    resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || >4.0.0
+    dependencies:
+      svelte: 4.2.0
+    dev: true
+
   /svelte-preprocess@5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2):
     resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
     engines: {node: '>= 14.10.0'}
@@ -11796,6 +11866,27 @@ packages:
       svelte: ^3.55.0 || ^4.0.0
     dependencies:
       svelte: 4.2.0
+    dev: true
+
+  /svelte-tweakpane-ui@1.0.0(svelte@4.2.0):
+    resolution: {integrity: sha512-Zcdeyy7KodnX4Wln7zGknGybmdYVR+MV9MWfk3W3Kipb6+96J2HWfrOp8002qHtFXLAcjt8HCafX+SNCuLYtvw==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      '@0b5vr/tweakpane-plugin-profiler': 0.4.1(tweakpane@4.0.1)
+      '@0b5vr/tweakpane-plugin-rotation': 0.2.0(tweakpane@4.0.1)
+      '@kitschpatrol/tweakpane-image-plugin': 2.0.0(tweakpane@4.0.1)
+      '@kitschpatrol/tweakpane-textarea-plugin': 2.0.1(tweakpane@4.0.1)
+      '@tweakpane/core': 2.0.1
+      '@tweakpane/plugin-camerakit': 0.3.0(tweakpane@4.0.1)
+      '@tweakpane/plugin-essentials': 0.2.0(tweakpane@4.0.1)
+      esm-env: 1.0.0
+      nanoid: 5.0.4
+      svelte: 4.2.0
+      svelte-local-storage-store: 0.6.4(svelte@4.2.0)
+      tweakpane: 4.0.1
+      tweakpane-plugin-waveform: 1.0.0(tweakpane@4.0.1)
     dev: true
 
   /svelte2tsx@0.6.19(svelte@4.1.1)(typescript@5.0.2):
@@ -12338,8 +12429,20 @@ packages:
       turbo-windows-arm64: 1.10.16
     dev: true
 
+  /tweakpane-plugin-waveform@1.0.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-fyTRe6Emt7YpgHC5iiTZgk6RHflNm5VIOAsl2+l3mm96+KE8I+7sNPeyADxKcfcQF23c7/R3La5WNhaHNyeJag==}
+    peerDependencies:
+      tweakpane: ^4.0.0
+    dependencies:
+      tweakpane: 4.0.1
+    dev: true
+
   /tweakpane@3.1.0:
     resolution: {integrity: sha512-PGAp/LPQdHwzL7/iAW4lV1p9iPQTti7YMjMWO48CoYjvZRS59RmgQnhEGzKzqST1JnmOYmQUjTe8bdhlZRJs5A==}
+    dev: true
+
+  /tweakpane@4.0.1:
+    resolution: {integrity: sha512-1JmmGbF4h2zuFbpN1XfIWcV0kLbBUgSXpR1QtW19vJFx44asnCrufRSvd69OItOFMEWgbVtoiWM2uDPUEUKcMQ==}
     dev: true
 
   /tweetnacl@0.14.5:

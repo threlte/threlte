@@ -15,6 +15,7 @@
     Vector2,
     Vector3,
     Vector4,
+    type ColorRepresentation,
     type Intersection
   } from 'three'
   import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
@@ -271,8 +272,10 @@
    */
   const textures: Record<string, CanvasTexture> = {}
 
-  const getSpriteTexture = (size: number, color: number, text = '') => {
-    const key = `${color.toString()}-${text}`
+  const color = new Color()
+  const getSpriteTexture = (size: number, colorRepresentation: ColorRepresentation, text = '') => {
+    color.set(colorRepresentation)
+    const key = `${color.getHexString()}-${text}`
     if (textures[key]) {
       textures[key].dispose()
     }
@@ -284,7 +287,7 @@
     context.beginPath()
     context.arc(size / 2, size / 2, size / 4, 0, 2 * Math.PI)
     context.closePath()
-    context.fillStyle = new Color(color).convertSRGBToLinear().getStyle()
+    context.fillStyle = color.convertSRGBToLinear().getStyle()
     context.fill()
 
     if (text) {
