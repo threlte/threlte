@@ -3,6 +3,7 @@
   import { onDestroy, onMount } from 'svelte'
   import {
     CanvasTexture,
+    CapsuleGeometry,
     Color,
     Euler,
     Object3D,
@@ -33,18 +34,21 @@
   export let xColor: Required<$$Props>['xColor'] = 0xff3653
   export let yColor: Required<$$Props>['yColor'] = 0x8adb00
   export let zColor: Required<$$Props>['zColor'] = 0x2c8fff
+  export let toneMapped: Required<$$Props>['toneMapped'] = false
+  export let paddingX: Required<$$Props>['paddingX'] = 0
+  export let paddingY: Required<$$Props>['paddingY'] = 0
 
   $: centerVec = new Vector3(...center)
 
   const { autoRenderTask, renderer, camera, invalidate } = useThrelte()
 
   // invalidate the frame when any of the following values change
-  $: size, horizontalPlacement, verticalPlacement, invalidate()
+  $: size, horizontalPlacement, verticalPlacement, toneMapped, paddingX, paddingY, invalidate()
 
-  const orthoCam = new OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0, 4)
+  const orthoCam = new OrthographicCamera(-1.25, 1.25, 1.25, -1.25, 0, 4)
   orthoCam.position.set(0, 0, 2)
 
-  let root: Scene
+  const root = new Scene()
 
   const viewport = new Vector4()
 
@@ -54,14 +58,23 @@
       const autoClear = renderer.autoClear
       renderer.autoClear = false
       renderer.getViewport(viewport)
+      const toneMapping = renderer.toneMapping
+      renderer.toneMapping = toneMapped ? renderer.toneMapping : 0
 
-      const x = horizontalPlacement === 'left' ? 0 : renderer.domElement.offsetWidth - size
-      const y = verticalPlacement === 'bottom' ? 0 : renderer.domElement.offsetHeight - size
+      const x =
+        horizontalPlacement === 'left'
+          ? paddingX
+          : renderer.domElement.offsetWidth - size - paddingX
+      const y =
+        verticalPlacement === 'bottom'
+          ? paddingY
+          : renderer.domElement.offsetHeight - size - paddingY
 
       renderer.setViewport(x, y, size, size)
       renderer.render(root, orthoCam)
       renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w)
       renderer.autoClear = autoClear
+      renderer.toneMapping = toneMapping
     },
     {
       ...(renderTask ?? { after: autoRenderTask }),
@@ -77,19 +90,19 @@
   clickTarget.style.position = 'absolute'
   $: {
     if (horizontalPlacement === 'right') {
-      clickTarget.style.right = '0'
+      clickTarget.style.right = `${paddingX}px}`
       clickTarget.style.left = ''
     } else {
       clickTarget.style.right = ''
-      clickTarget.style.left = '0'
+      clickTarget.style.left = `${paddingX}px`
     }
 
     if (verticalPlacement === 'bottom') {
-      clickTarget.style.bottom = '0'
+      clickTarget.style.bottom = `${paddingY}px`
       clickTarget.style.top = ''
     } else {
       clickTarget.style.bottom = ''
-      clickTarget.style.top = '0'
+      clickTarget.style.top = `${paddingY}px`
     }
 
     clickTarget.style.height = `${size}px`
@@ -239,31 +252,67 @@
     }
   )
 
-  const getSpriteTexture = (color: number, text = '') => {
+  const findClosestPow2LargerThan = (x: number) => {
+    if (x <= 0) {
+      return 1
+    }
+    let pow2 = 1
+    while (pow2 < x) {
+      pow2 <<= 1
+    }
+    return pow2
+  }
+
+  $: textureSize = findClosestPow2LargerThan(size * 0.3 * renderer.getPixelRatio())
+
+  /**
+   * Keep track of the textures to be able to dispose them when they are no
+   * longer needed.
+   */
+  const textures: Record<string, CanvasTexture> = {}
+
+  const getSpriteTexture = (size: number, color: number, text = '') => {
+    const key = `${color.toString()}-${text}`
+    if (textures[key]) {
+      textures[key].dispose()
+    }
     const canvas = document.createElement('canvas')
-    canvas.width = 64
-    canvas.height = 64
+    canvas.width = size
+    canvas.height = size
 
     const context = canvas.getContext('2d')!
     context.beginPath()
-    context.arc(32, 32, 16, 0, 2 * Math.PI)
+    context.arc(size / 2, size / 2, size / 4, 0, 2 * Math.PI)
     context.closePath()
     context.fillStyle = new Color(color).convertSRGBToLinear().getStyle()
     context.fill()
 
     if (text) {
-      context.font = '24px Arial'
+      const textSize = Math.abs(size * (24 / 64))
+      context.font = `${textSize}px Arial`
       context.textAlign = 'center'
       context.fillStyle = '#000000'
-      context.fillText(text, 32, 41)
+      const textY = size * (41 / 64)
+      context.fillText(text, size / 2, textY)
     }
 
-    return new CanvasTexture(canvas)
+    const texture = new CanvasTexture(canvas)
+    textures[key] = texture
+    return texture
   }
+
+  const stemGeometry = new CapsuleGeometry(0.025, 0.78)
+  stemGeometry.rotateZ(Math.PI / 2)
+
+  // Used to decrease atifacts of intersecting axis stems.
+  $: frontMostAxisIndex = p.indexOf(Math.max(...p))
+  $: usePolygonOffset = p.some((v) => v < 0)
 </script>
 
 <HierarchicalObject>
-  <T.Scene bind:ref={root}>
+  <T is={root}>
+    {@const polygonOffsetFactor = -20}
+
     <!-- xAxis -->
     <T.Sprite
       renderOrder={1}
@@ -273,22 +322,23 @@
       userData.targetEuler={[0, Math.PI * 0.5, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(xColor, 'X')}
+        map={getSpriteTexture(textureSize, xColor, 'X')}
         opacity={p[0] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
-    <T.Mesh position.x={0.4}>
-      <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
+    <T.Mesh
+      position.x={0.39}
+      renderOrder={frontMostAxisIndex === 0 ? -1 : 0}
+    >
+      <T is={stemGeometry} />
       <T.MeshBasicMaterial
         transparent
         opacity={p[0] >= 0 ? 1 : 0.5}
-      >
-        <T.Color
-          attach="color"
-          args={[xColor]}
-        />
-      </T.MeshBasicMaterial>
+        color={xColor}
+        polygonOffset={usePolygonOffset && frontMostAxisIndex === 0 && p[0] < 0.75}
+        {polygonOffsetFactor}
+      />
     </T.Mesh>
 
     <T.Sprite
@@ -300,7 +350,7 @@
       userData.targetEuler={[0, -Math.PI * 0.5, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(xColor)}
+        map={getSpriteTexture(textureSize, xColor)}
         opacity={p[0] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
@@ -314,25 +364,24 @@
       userData.targetEuler={[-Math.PI * 0.5, 0, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(yColor, 'Y')}
+        map={getSpriteTexture(textureSize, yColor, 'Y')}
         opacity={p[1] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
     <T.Mesh
-      position.y={0.4}
+      position.y={0.39}
       rotation.z={Math.PI / 2}
+      renderOrder={frontMostAxisIndex === 1 ? -1 : 0}
     >
-      <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
+      <T is={stemGeometry} />
       <T.MeshBasicMaterial
         transparent
         opacity={p[1] >= 0 ? 1 : 0.5}
-      >
-        <T.Color
-          attach="color"
-          args={[yColor]}
-        />
-      </T.MeshBasicMaterial>
+        color={yColor}
+        polygonOffset={usePolygonOffset && frontMostAxisIndex === 1 && p[1] < 0.75}
+        {polygonOffsetFactor}
+      />
     </T.Mesh>
 
     <T.Sprite
@@ -344,7 +393,7 @@
       userData.targetEuler={[Math.PI * 0.5, 0, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(yColor)}
+        map={getSpriteTexture(textureSize, yColor)}
         opacity={p[1] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
@@ -358,25 +407,24 @@
       userData.targetEuler={[0, 0, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(zColor, 'Z')}
+        map={getSpriteTexture(textureSize, zColor, 'Z')}
         opacity={p[2] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
 
     <T.Mesh
-      position.z={0.4}
+      position.z={0.39}
       rotation.y={-Math.PI / 2}
+      renderOrder={frontMostAxisIndex === 2 ? -1 : 0}
     >
-      <T.BoxGeometry args={[0.8, 0.05, 0.05]} />
+      <T is={stemGeometry} />
       <T.MeshBasicMaterial
         transparent
         opacity={p[2] >= 0 ? 1 : 0.5}
-      >
-        <T.Color
-          attach="color"
-          args={[zColor]}
-        />
-      </T.MeshBasicMaterial>
+        color={zColor}
+        polygonOffset={usePolygonOffset && frontMostAxisIndex === 2 && p[2] < 0.75}
+        {polygonOffsetFactor}
+      />
     </T.Mesh>
 
     <T.Sprite
@@ -388,9 +436,9 @@
       userData.targetEuler={[0, Math.PI, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(zColor)}
+        map={getSpriteTexture(textureSize, zColor)}
         opacity={p[2] >= 0 ? 0.5 : 1}
       />
     </T.Sprite>
-  </T.Scene>
+  </T>
 </HierarchicalObject>

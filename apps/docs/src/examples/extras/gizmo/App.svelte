@@ -71,12 +71,35 @@
     }
   })
 
+  const toneMapped = addInput({
+    label: 'toneMapped',
+    value: false
+  })
+
   const size = addInput({
     label: 'Size',
     value: 128,
     params: {
       min: 0,
-      max: 500
+      max: 1000
+    }
+  })
+
+  const paddingX = addInput({
+    label: 'Padding X',
+    value: 20,
+    params: {
+      min: 0,
+      max: 50
+    }
+  })
+
+  const paddingY = addInput({
+    label: 'Padding Y',
+    value: 20,
+    params: {
+      min: 0,
+      max: 50
     }
   })
 
@@ -105,6 +128,9 @@
     <Scene center={$center} />
 
     <Gizmo
+      paddingX={$paddingX}
+      paddingY={$paddingY}
+      toneMapped={$toneMapped}
       center={$center}
       turnRate={$turnRate}
       verticalPlacement={$verticalPlacement}

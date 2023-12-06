@@ -6,7 +6,6 @@ type TaskOptions = Pick<ThrelteUseTaskOptions, 'after' | 'before' | 'stage'> & {
 export type GizmoProps = {
   renderTask?: TaskOptions
   animationTask?: TaskOptions
-
   turnRate?: number
   center?: [number, number, number]
   verticalPlacement?: 'top' | 'bottom'
@@ -15,6 +14,9 @@ export type GizmoProps = {
   xColor?: number
   yColor?: number
   zColor?: number
+  toneMapped?: boolean
+  paddingX?: number
+  paddingY?: number
 }
 
 export type GizmoEvents = Record<string, never>
