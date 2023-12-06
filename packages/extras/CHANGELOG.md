@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 8.0.6
+
+### Patch Changes
+
+- 514824bf: Performance improvements on `<Gizmo>`
+- 430e89cf: Added tonemapping and padding as well as visual optimizations to `<Gizmo>`
+
 ## 8.0.5
 
 ### Patch Changes
