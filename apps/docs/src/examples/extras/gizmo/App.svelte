@@ -38,7 +38,7 @@
     <Ring
       label="turnRate"
       bind:value={turnRate}
-      min={0}
+      min={0.1}
       max={20}
       wide
     />
