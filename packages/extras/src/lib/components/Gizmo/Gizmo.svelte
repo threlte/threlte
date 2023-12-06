@@ -90,7 +90,7 @@
   clickTarget.style.position = 'absolute'
   $: {
     if (horizontalPlacement === 'right') {
-      clickTarget.style.right = `${paddingX}px}`
+      clickTarget.style.right = `${paddingX}px`
       clickTarget.style.left = ''
     } else {
       clickTarget.style.right = ''
