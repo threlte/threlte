@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.8
+
+### Patch Changes
+
+- 87c45a86: Changed color interface from number to THREE.ColorRepresentation in `<Gizmo>`
+
 ## 8.0.7
 
 ### Patch Changes
