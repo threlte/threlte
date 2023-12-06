@@ -38,28 +38,29 @@
 
   const { autoRenderTask, renderer, camera, invalidate } = useThrelte()
 
+  // invalidate the frame when any of the following values change
+  $: size, horizontalPlacement, verticalPlacement, invalidate()
+
   const orthoCam = new OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0, 4)
   orthoCam.position.set(0, 0, 2)
 
   let root: Scene
+
+  const viewport = new Vector4()
 
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
       const autoClear = renderer.autoClear
       renderer.autoClear = false
-
-      const viewport = new Vector4()
       renderer.getViewport(viewport)
 
       const x = horizontalPlacement === 'left' ? 0 : renderer.domElement.offsetWidth - size
       const y = verticalPlacement === 'bottom' ? 0 : renderer.domElement.offsetHeight - size
+
       renderer.setViewport(x, y, size, size)
-
       renderer.render(root, orthoCam)
-
       renderer.setViewport(viewport.x, viewport.y, viewport.z, viewport.w)
-
       renderer.autoClear = autoClear
     },
     {
