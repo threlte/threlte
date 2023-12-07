@@ -30,7 +30,6 @@ export class DAG<T extends { key: Key }> {
   public off: Emitter<Events<T>>['off'] = this.emitter.off.bind(this.emitter)
 
   protected get sortedVertices(): T[] {
-    if (!this.needsSort) this.sort()
     return this.mapNodes((value) => value)
   }
 
