@@ -108,6 +108,6 @@ By default, the `<canvas>` element and the renderer will resize to fit the paren
 
 `<Canvas>` also provides a default camera, located at `{ z: 5 }`.
 
-If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.
-If `renderMode` is set to `always` a re-render is automatically scheduled every frame.
-If `renderMode` is set to `never` a re-render must manually be triggered with `useThrelte().advance()`.
+If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.<br />
+If `renderMode` is set to `always` a re-render is automatically scheduled every frame.<br />
+If `renderMode` is set to `manual` a re-render must manually be triggered with `useThrelte().advance()`.
