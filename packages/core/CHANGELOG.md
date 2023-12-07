@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.8
+
+### Patch Changes
+
+- 1c8f29bb: Fixed sorting flag check on DAG
+
 ## 7.0.7
 
 ### Patch Changes
