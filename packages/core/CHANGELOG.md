@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.9
+
+### Patch Changes
+
+- 22373297: Remove mitt from peer dependencies
+
 ## 7.0.8
 
 ### Patch Changes
