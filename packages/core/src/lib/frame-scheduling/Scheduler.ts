@@ -15,6 +15,10 @@ export class Scheduler extends DAG<Stage> {
   private lastTime = performance.now()
   private clampDeltaTo = 0.1
 
+  public get stages() {
+    return this.sortedVertices
+  }
+
   constructor(options?: { clampDeltaTo?: number }) {
     super()
     if (options?.clampDeltaTo) this.clampDeltaTo = options.clampDeltaTo
@@ -95,5 +99,9 @@ export class Scheduler extends DAG<Stage> {
         }
       })
     }
+  }
+
+  dispose() {
+    this.clear()
   }
 }
