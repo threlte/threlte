@@ -213,10 +213,13 @@ test('can add and remove tasks', () => {
   }
   const scheduler = new Scheduler()
   const stage = scheduler.createStage('stage')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   stage.createTask(Tasks.taskA, () => {})
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   stage.createTask(Tasks.taskB, () => {}, {
     after: Tasks.taskA
   })
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   stage.createTask(Tasks.taskC, () => {}, {
     after: [Tasks.taskA, Tasks.taskB]
   })
@@ -369,4 +372,34 @@ test('stress test II', () => {
   expect(stages).toEqual(expectedStages)
 
   scheduler.run(0)
+})
+
+test('receives event notitifactions on stages and tasks', () => {
+  const scheduler = new Scheduler()
+
+  let receivedStageAdded = false
+  let receivedStageRemoved = false
+  scheduler.on('node:added', () => {
+    receivedStageAdded = true
+  })
+  scheduler.on('node:removed', () => {
+    receivedStageRemoved = true
+  })
+  const stage = scheduler.createStage('stage')
+  let receivedTaskAdded = false
+  let receivedTaskRemoved = false
+  stage.on('node:added', () => {
+    receivedTaskAdded = true
+  })
+  stage.on('node:removed', () => {
+    receivedTaskRemoved = true
+  })
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  stage.createTask('task', () => {})
+  stage.removeTask('task')
+  scheduler.removeStage('stage')
+  expect(receivedStageAdded).toBe(true)
+  expect(receivedStageRemoved).toBe(true)
+  expect(receivedTaskAdded).toBe(true)
+  expect(receivedTaskRemoved).toBe(true)
 })

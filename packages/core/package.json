@@ -26,6 +26,7 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte": "^2.30.0",
+    "mitt": "^3.0.1",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.1",
     "publint": "^0.1.12",
@@ -42,7 +43,8 @@
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.133"
+    "three": ">=0.133",
+    "mitt": ">=3.0.0"
   },
   "type": "module",
   "exports": {

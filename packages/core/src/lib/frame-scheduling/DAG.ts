@@ -1,3 +1,5 @@
+import mitt, { type Emitter } from 'mitt'
+
 type Vertex<T> = { value: T | undefined; previous: Set<Key>; next: Set<Key> }
 
 export type Key = string | symbol
@@ -7,15 +9,30 @@ export type AddNodeOptions<T> = {
   after?: (Key | T) | (Key | T)[]
 }
 
+type Events<T> = {
+  'node:added': { key: Key; value: T; type: 'isolated' | 'connected' }
+  'node:removed': { key: Key; type: 'isolated' | 'connected' }
+}
+
 export class DAG<T extends { key: Key }> {
-  public allVertices: Record<Key, Vertex<T>> = {}
+  private allVertices: Record<Key, Vertex<T>> = {}
 
   /** Nodes that are fully unlinked */
-  public isolatedVertices: Record<Key, Vertex<T>> = {}
-  public connectedVertices: Record<Key, Vertex<T>> = {}
+  private isolatedVertices: Record<Key, Vertex<T>> = {}
+  private connectedVertices: Record<Key, Vertex<T>> = {}
 
-  public sortedConnectedValues: T[] = []
-  public needsSort = false
+  private sortedConnectedValues: T[] = []
+  private needsSort = false
+
+  private emitter: Emitter<Events<T>> = mitt<Events<T>>()
+  private emit: Emitter<Events<T>>['emit'] = this.emitter.emit.bind(this.emitter)
+  public on: Emitter<Events<T>>['on'] = this.emitter.on.bind(this.emitter)
+  public off: Emitter<Events<T>>['off'] = this.emitter.off.bind(this.emitter)
+
+  protected get sortedVertices(): T[] {
+    if (!this.needsSort) this.sort()
+    return this.mapNodes((value) => value)
+  }
 
   private moveToIsolated(key: Key) {
     const vertex = this.connectedVertices[key]
@@ -38,7 +55,7 @@ export class DAG<T extends { key: Key }> {
     return v
   }
 
-  public add(key: Key, value: T, options?: AddNodeOptions<T>) {
+  protected add(key: Key, value: T, options?: AddNodeOptions<T>) {
     if (this.allVertices[key] && this.allVertices[key].value !== undefined) {
       throw new Error(`A node with the key ${key.toString()} already exists`)
     }
@@ -63,6 +80,11 @@ export class DAG<T extends { key: Key }> {
     if (!options?.after && !options?.before && !hasEdges) {
       // the node we're about to add is fully unlinked
       this.isolatedVertices[key] = vertex
+      this.emit('node:added', {
+        key,
+        type: 'isolated',
+        value
+      })
       return
     } else {
       this.connectedVertices[key] = vertex
@@ -121,17 +143,27 @@ export class DAG<T extends { key: Key }> {
       })
     }
 
+    this.emit('node:added', {
+      key,
+      type: 'connected',
+      value
+    })
+
     // Mark the graph as needing a re-sort
     this.needsSort = true
   }
 
-  public remove(key: Key | T) {
+  protected remove(key: Key | T) {
     const removeKey = this.getKey(key)
     // check if it's an unlinked vertex
     const unlinkedVertex = this.isolatedVertices[removeKey]
     if (unlinkedVertex) {
       delete this.isolatedVertices[removeKey]
       delete this.allVertices[removeKey]
+      this.emit('node:removed', {
+        key: removeKey,
+        type: 'isolated'
+      })
       return
     }
 
@@ -168,6 +200,11 @@ export class DAG<T extends { key: Key }> {
     // Finally, remove the node from the graph
     delete this.connectedVertices[removeKey]
     delete this.allVertices[removeKey]
+
+    this.emit('node:removed', {
+      key: removeKey,
+      type: 'connected'
+    })
 
     // Mark the graph as needing a re-sort
     this.needsSort = true
@@ -213,7 +250,7 @@ export class DAG<T extends { key: Key }> {
     )
   }
 
-  public sort() {
+  private sort() {
     const inDegree: Map<Key, number> = new Map()
     const zeroInDegreeQueue: Key[] = []
     const result: Key[] = []
@@ -278,7 +315,7 @@ export class DAG<T extends { key: Key }> {
     this.needsSort = false
   }
 
-  public clear() {
+  protected clear() {
     this.allVertices = {}
     this.isolatedVertices = {}
     this.connectedVertices = {}

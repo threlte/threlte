@@ -10,6 +10,10 @@ export class Stage extends DAG<Task> {
   public readonly key: Key
   public readonly scheduler: Scheduler
 
+  public get tasks() {
+    return this.sortedVertices
+  }
+
   private callback: (delta: number, run: (deltaOverride?: number) => void) => void = (_, r) => r()
 
   constructor(

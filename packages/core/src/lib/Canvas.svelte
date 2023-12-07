@@ -180,7 +180,7 @@
 
   onDestroy(() => {
     contexts.internalCtx.dispose(true)
-    contexts.ctx.scheduler.clear()
+    contexts.ctx.scheduler.dispose()
     // Renderer is marked as optional because it is never defined in SSR
     contexts.ctx.renderer?.dispose()
   })
