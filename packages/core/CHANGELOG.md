@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.7
+
+### Patch Changes
+
+- 71797f73: Minor optimizations to internal frame scheduling classes (preparations for devtools)
+
 ## 7.0.6
 
 ### Patch Changes
