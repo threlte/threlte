@@ -1,35 +1,44 @@
 <script lang="ts">
-	import { useTweakpane } from '$lib/useTweakpane'
-	import { Canvas } from '@threlte/core'
-	import Scene from './Scene.svelte'
-	import { buttonIdle, buttonWalk, buttonRun } from './state'
-
-	const { addButton, action } = useTweakpane()
-
-	addButton({
-		title: 'Idle',
-		onClick: () => {
-			$buttonIdle = !$buttonIdle
-		}
-	})
-
-	addButton({
-		title: 'Walk',
-		onClick: () => {
-			$buttonWalk = !$buttonWalk
-		}
-	})
-
-	addButton({
-		title: 'Run',
-		onClick: () => {
-			$buttonRun = !$buttonRun
-		}
-	})
+  import { Pane, Button } from 'svelte-tweakpane-ui'
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+  import { buttonIdle, buttonWalk, buttonRun } from './state'
 </script>
 
-<div use:action />
+<Pane
+  title="Transitions"
+  position="fixed"
+>
+  <Button
+    title="Idle"
+    on:click={() => {
+      $buttonIdle = !$buttonIdle
+    }}
+  />
+  <Button
+    title="Walk"
+    on:click={() => {
+      $buttonWalk = !$buttonWalk
+    }}
+  />
+  <Button
+    title="Run"
+    on:click={() => {
+      $buttonRun = !$buttonRun
+    }}
+  />
+</Pane>
 
-<Canvas>
-	<Scene />
-</Canvas>
+<div>
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+</style>
