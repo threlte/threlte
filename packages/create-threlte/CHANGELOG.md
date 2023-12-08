@@ -1,5 +1,11 @@
 # create-threlte
 
+## 1.5.0
+
+### Minor Changes
+
+- 0799312: Ensure filenames start with uppercase in /src/components/models folder
+
 ## 1.4.1
 
 ### Patch Changes
