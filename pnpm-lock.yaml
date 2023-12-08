@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -153,6 +149,9 @@ importers:
       astro-auto-import:
         specifier: ^0.3.1
         version: 0.3.1(astro@3.0.5)
+      camera-controls:
+        specifier: ^2.7.3
+        version: 2.7.3(three@0.158.0)
       chalk:
         specifier: ^4.1.1
         version: 4.1.2
@@ -279,7 +278,7 @@ importers:
         version: 3.4.3(postcss@8.4.27)(svelte@4.1.1)
       svelte-preprocess:
         specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.0.2)
+        version: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
@@ -416,7 +415,7 @@ importers:
         version: 3.4.3(postcss@8.4.27)(svelte@4.1.1)
       svelte-preprocess:
         specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.0.2)
+        version: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
@@ -504,7 +503,7 @@ importers:
         version: 3.4.6(postcss@8.4.27)(svelte@4.2.0)
       svelte-preprocess:
         specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.27)(svelte@4.2.0)(typescript@5.1.6)
+        version: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.2.0)(typescript@5.1.6)
@@ -656,7 +655,7 @@ importers:
         version: 3.4.3(postcss@8.4.27)(svelte@4.1.1)
       svelte-preprocess:
         specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.0.2)
+        version: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
@@ -741,7 +740,7 @@ importers:
         version: 3.4.3(postcss@8.4.27)(svelte@4.1.1)
       svelte-preprocess:
         specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.0.2)
+        version: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       svelte2tsx:
         specifier: ^0.6.19
         version: 0.6.19(svelte@4.1.1)(typescript@5.0.2)
@@ -5161,6 +5160,14 @@ packages:
   /camelcase@7.0.1:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
+
+  /camera-controls@2.7.3(three@0.158.0):
+    resolution: {integrity: sha512-L4mxjBd3u8qiOLozdWrH2P8ZybSsDXBF7iyNyqNEFJhPUkovmuARWR8JTc1B/qlclOIg6FvZZA/0uAZMMim0mw==}
+    peerDependencies:
+      three: '>=0.126.1'
+    dependencies:
+      three: 0.158.0
+    dev: true
 
   /caniuse-lite@1.0.30001525:
     resolution: {integrity: sha512-/3z+wB4icFt3r0USMwxujAqRvaD/B7rvGTsKhbhSQErVrJvkZCLhgNLJxU8MevahQVH6hCU9FsHdNUFbiwmE7Q==}
@@ -11415,7 +11422,7 @@ packages:
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 4.1.1
-      svelte-preprocess: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.1.6)
+      svelte-preprocess: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       typescript: 5.1.6
     transitivePeerDependencies:
       - '@babel/core'
@@ -11442,7 +11449,7 @@ packages:
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 4.2.0
-      svelte-preprocess: 5.0.4(postcss@8.4.27)(svelte@4.2.0)(typescript@5.2.2)
+      svelte-preprocess: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
       - '@babel/core'
@@ -11469,7 +11476,7 @@ packages:
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 4.1.1
-      svelte-preprocess: 5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.2.2)
+      svelte-preprocess: 5.0.4(@babel/core@7.22.11)(postcss@8.4.31)(svelte@4.2.0)(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
       - '@babel/core'
@@ -11618,246 +11625,6 @@ packages:
       detect-indent: 6.1.0
       magic-string: 0.27.0
       postcss: 8.4.31
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 4.2.0
-      typescript: 5.2.2
-    dev: true
-
-  /svelte-preprocess@5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.0.2):
-    resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
-    engines: {node: '>= 14.10.0'}
-    requiresBuild: true
-    peerDependencies:
-      '@babel/core': ^7.10.2
-      coffeescript: ^2.5.1
-      less: ^3.11.3 || ^4.0.0
-      postcss: ^7 || ^8
-      postcss-load-config: ^2.1.0 || ^3.0.0 || ^4.0.0
-      pug: ^3.0.0
-      sass: ^1.26.8
-      stylus: ^0.55.0
-      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
-      svelte: ^3.23.0 || ^4.0.0-next.0 || ^4.0.0
-      typescript: '>=3.9.5 || ^4.0.0 || ^5.0.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      coffeescript:
-        optional: true
-      less:
-        optional: true
-      postcss:
-        optional: true
-      postcss-load-config:
-        optional: true
-      pug:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.27.0
-      postcss: 8.4.27
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 4.1.1
-      typescript: 5.0.2
-    dev: true
-
-  /svelte-preprocess@5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.1.6):
-    resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
-    engines: {node: '>= 14.10.0'}
-    requiresBuild: true
-    peerDependencies:
-      '@babel/core': ^7.10.2
-      coffeescript: ^2.5.1
-      less: ^3.11.3 || ^4.0.0
-      postcss: ^7 || ^8
-      postcss-load-config: ^2.1.0 || ^3.0.0 || ^4.0.0
-      pug: ^3.0.0
-      sass: ^1.26.8
-      stylus: ^0.55.0
-      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
-      svelte: ^3.23.0 || ^4.0.0-next.0 || ^4.0.0
-      typescript: '>=3.9.5 || ^4.0.0 || ^5.0.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      coffeescript:
-        optional: true
-      less:
-        optional: true
-      postcss:
-        optional: true
-      postcss-load-config:
-        optional: true
-      pug:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.27.0
-      postcss: 8.4.27
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 4.1.1
-      typescript: 5.1.6
-    dev: true
-
-  /svelte-preprocess@5.0.4(postcss@8.4.27)(svelte@4.1.1)(typescript@5.2.2):
-    resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
-    engines: {node: '>= 14.10.0'}
-    requiresBuild: true
-    peerDependencies:
-      '@babel/core': ^7.10.2
-      coffeescript: ^2.5.1
-      less: ^3.11.3 || ^4.0.0
-      postcss: ^7 || ^8
-      postcss-load-config: ^2.1.0 || ^3.0.0 || ^4.0.0
-      pug: ^3.0.0
-      sass: ^1.26.8
-      stylus: ^0.55.0
-      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
-      svelte: ^3.23.0 || ^4.0.0-next.0 || ^4.0.0
-      typescript: '>=3.9.5 || ^4.0.0 || ^5.0.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      coffeescript:
-        optional: true
-      less:
-        optional: true
-      postcss:
-        optional: true
-      postcss-load-config:
-        optional: true
-      pug:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.27.0
-      postcss: 8.4.27
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 4.1.1
-      typescript: 5.2.2
-    dev: true
-
-  /svelte-preprocess@5.0.4(postcss@8.4.27)(svelte@4.2.0)(typescript@5.1.6):
-    resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
-    engines: {node: '>= 14.10.0'}
-    requiresBuild: true
-    peerDependencies:
-      '@babel/core': ^7.10.2
-      coffeescript: ^2.5.1
-      less: ^3.11.3 || ^4.0.0
-      postcss: ^7 || ^8
-      postcss-load-config: ^2.1.0 || ^3.0.0 || ^4.0.0
-      pug: ^3.0.0
-      sass: ^1.26.8
-      stylus: ^0.55.0
-      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
-      svelte: ^3.23.0 || ^4.0.0-next.0 || ^4.0.0
-      typescript: '>=3.9.5 || ^4.0.0 || ^5.0.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      coffeescript:
-        optional: true
-      less:
-        optional: true
-      postcss:
-        optional: true
-      postcss-load-config:
-        optional: true
-      pug:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.27.0
-      postcss: 8.4.27
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 4.2.0
-      typescript: 5.1.6
-    dev: true
-
-  /svelte-preprocess@5.0.4(postcss@8.4.27)(svelte@4.2.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
-    engines: {node: '>= 14.10.0'}
-    requiresBuild: true
-    peerDependencies:
-      '@babel/core': ^7.10.2
-      coffeescript: ^2.5.1
-      less: ^3.11.3 || ^4.0.0
-      postcss: ^7 || ^8
-      postcss-load-config: ^2.1.0 || ^3.0.0 || ^4.0.0
-      pug: ^3.0.0
-      sass: ^1.26.8
-      stylus: ^0.55.0
-      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
-      svelte: ^3.23.0 || ^4.0.0-next.0 || ^4.0.0
-      typescript: '>=3.9.5 || ^4.0.0 || ^5.0.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      coffeescript:
-        optional: true
-      less:
-        optional: true
-      postcss:
-        optional: true
-      postcss-load-config:
-        optional: true
-      pug:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.27.0
-      postcss: 8.4.27
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 4.2.0
@@ -13235,3 +13002,7 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
