@@ -121,10 +121,15 @@ filteredGltfFiles.forEach((file) => {
 // read dir again, but search for .svelte files only.
 const svelteFiles = readdirSync(configuration.sourceDir).filter((file) => file.endsWith('.svelte'))
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 svelteFiles.forEach((file) => {
   // now move every file to /src/components/models
   const path = join(configuration.sourceDir, file)
-  const newPath = join(configuration.targetDir, file)
+  const capitalizedFilename = capitalizeFirstLetter(file)
+  const newPath = join(configuration.targetDir, capitalizedFilename)
   copyFile: try {
     // Sanity check, we checked earlier if the file exists. Still, the CLI takes
     // a while, so who knows what happens in the meantime.
