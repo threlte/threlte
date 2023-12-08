@@ -13,10 +13,10 @@
 
   <div class="description">
     <p>
-      <em>Click and drag</em> to rotate the camera.
+      <strong>Click and drag</strong> to rotate the camera.
     </p>
     <p>
-      <em>Hover</em> over the sphere to scale it up.
+      <strong>Hover</strong> over the sphere to scale it up.
     </p>
   </div>
 </div>
