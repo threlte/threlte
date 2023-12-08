@@ -26,10 +26,10 @@ way of working with Threlte.
 
 ### Automatic Invalidation
 
-Threlte is able to automatically invalidate the current frame by observing the
-mounting and unmounting of components and component props. This means that when
-you e.g. change the position of a `<T.Mesh>` via component properties, Threlte
-will automatically invalidate the current frame and request a new frame.
+Threlte is able to automatically invalidate the current frame by observing
+component props and the mounting and unmounting of components. This means that
+when you e.g. change the position of a `<T.Mesh>` via component properties,
+Threlte will automatically invalidate the current frame and request a new frame.
 
 ```svelte
 <script>
