@@ -1,15 +1,8 @@
 <script>
   import { T, useTask } from '@threlte/core'
   import { Grid } from '@threlte/extras'
-  // import { spring } from 'svelte/motion'
   import CameraControls from './CameraControls.svelte'
-
-  // interactivity()
-  // const scale = spring(1)
-  // let rotation = 0
-  // useTask((delta) => {
-  //   rotation += delta
-  // })
+  import { cameraControls, mesh } from './stores'
 </script>
 
 <T.PerspectiveCamera
@@ -19,12 +12,21 @@
     ref.lookAt(0, 1, 0)
   }}
 >
-  <CameraControls />
+  <CameraControls
+    on:create={({ ref }) => {
+      $cameraControls = ref
+    }}
+  />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight position={[3, 10, 7]} />
 
-<T.Mesh position.y={1}>
+<T.Mesh
+  position.y={1}
+  on:create={({ ref }) => {
+    $mesh = ref
+  }}
+>
   <T.BoxGeometry args={[1, 1, 1]} />
   <T.MeshBasicMaterial
     color="red"
