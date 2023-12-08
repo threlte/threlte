@@ -1,17 +1,18 @@
 <script lang="ts">
   import { useStage, useTask, useThrelte } from '@threlte/core'
-  import { rendering } from './state'
-  import { onDestroy } from 'svelte'
+  import { Pane, WaveformMonitor } from 'svelte-tweakpane-ui'
 
-  const { shouldRender, renderStage, renderer } = useThrelte()
+  const { shouldRender, renderStage } = useThrelte()
 
   const afterRenderStage = useStage('after-render', {
     after: renderStage
   })
 
+  let log = Array(100).fill(0)
+
   useTask(
     () => {
-      rendering.set(shouldRender())
+      log = update(log)
     },
     {
       autoInvalidate: false,
@@ -19,31 +20,20 @@
     }
   )
 
-  const div = document.createElement('div')
-
-  if (renderer.domElement.parentElement) {
-    renderer.domElement.parentElement.appendChild(div)
-
-    renderer.domElement.parentElement.style.position = 'relative'
-    div.style.position = 'absolute'
-    div.style.top = '0'
-    div.style.left = '0'
-    div.style.width = '100%'
-    div.style.height = '30px'
-    div.style.display = 'flex'
-    div.style.alignItems = 'center'
-    div.style.justifyContent = 'center'
-    div.style.textAlign = 'center'
-    div.style.fontFamily = 'monospace'
-    div.style.color = 'white'
-
-    onDestroy(() => {
-      div.remove()
-    })
-  } else {
-    console.warn('Renderer has no parent element')
+  function update(log: number[]) {
+    log.shift()
+    log.push(shouldRender() ? 1 : 0)
+    return log
   }
-
-  $: div.style.backgroundColor = $rendering ? '#2AC944' : '#FE3D00'
-  $: div.innerText = $rendering ? 'rendering' : ''
 </script>
+
+<Pane
+  title="Rendering Activity"
+  position="fixed"
+>
+  <WaveformMonitor
+    value={log}
+    min={-1}
+    max={2}
+  />
+</Pane>
