@@ -45,5 +45,5 @@
   }
 
   $: div.style.backgroundColor = $rendering ? '#2AC944' : '#FE3D00'
-  $: div.innerHTML = $rendering ? 'rendering' : '<strike>rendering</strike>'
+  $: div.innerText = $rendering ? 'rendering' : ''
 </script>
