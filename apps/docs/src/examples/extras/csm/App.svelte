@@ -1,46 +1,54 @@
 <script lang="ts">
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Slider, Checkbox, Color, Point } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { CSM } from '@threlte/extras'
   import Scene from './Scene.svelte'
 
-  const { addInput, action } = useTweakpane({
-    title: 'Csm',
-    expanded: true
-  })
-
-  const enabled = addInput({
-    label: 'CSM enabled',
-    value: true
-  })
-
-  const lightDirection = addInput({
-    label: 'lightDirection',
-    value: { x: 1, y: -1, z: 1 }
-  })
-
-  const lightIntensity = addInput({
-    label: 'lightIntensity',
-    value: Math.PI
-  })
-
-  const lightColor = addInput({
-    label: 'lightColor',
-    value: '#fffceb'
-  })
+  let enabled = true
+  let lightDirection = { x: 1, y: -1, z: 1 }
+  let lightIntensity = Math.PI
+  let lightColor = '#fffceb'
 </script>
 
-<div use:action />
+<Pane
+  title="CSM"
+  position="fixed"
+>
+  <Checkbox
+    label="CSM enabled"
+    bind:value={enabled}
+  />
+  <Point
+    bind:value={lightDirection}
+    label="lightDirection"
+  />
+  <Slider
+    bind:value={lightIntensity}
+    label="lightIntensity"
+    min={0}
+    max={10}
+  />
+  <Color
+    bind:value={lightColor}
+    label="lightColor"
+  />
+</Pane>
 
-<div class="relative h-full w-full ">
+<div>
   <Canvas>
     <CSM
-      enabled={$enabled}
-      lightDirection={[$lightDirection.x, $lightDirection.y, $lightDirection.z]}
-      lightIntensity={$lightIntensity}
-      lightColor={$lightColor}
+      {enabled}
+      lightDirection={[lightDirection.x, lightDirection.y, lightDirection.z]}
+      {lightIntensity}
+      {lightColor}
     >
       <Scene />
     </CSM>
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>
