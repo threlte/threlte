@@ -1,34 +1,35 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import { World } from '@threlte/rapier'
-	import Scene from './Scene.svelte'
-	import { useTweakpane } from '$lib/useTweakpane'
-	import { showCollider, autoRotate } from './state'
-
-	// add tweakpane to show or hide the terrain collision mesh
-	const { action, addButton } = useTweakpane()
-
-	addButton({
-		title: 'toggle',
-		label: 'Show Collider',
-		onClick: () => {
-			$showCollider = !$showCollider
-		}
-	})
-
-	addButton({
-		title: 'toggle',
-		label: 'AutoRotate',
-		onClick: () => {
-			$autoRotate = !$autoRotate
-		}
-	})
+  import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
+  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
+  import { showCollider, autoRotate } from './state'
 </script>
 
-<div use:action />
+<Pane
+  title=""
+  position="fixed"
+>
+  <Checkbox
+    label="Show Collider"
+    bind:value={$showCollider}
+  />
+  <Checkbox
+    label="AutoRotate"
+    bind:value={$autoRotate}
+  />
+</Pane>
 
-<Canvas>
-	<World>
-		<Scene />
-	</World>
-</Canvas>
+<div>
+  <Canvas>
+    <World>
+      <Scene />
+    </World>
+  </Canvas>
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

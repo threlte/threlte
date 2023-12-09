@@ -1,22 +1,32 @@
 <script lang="ts">
-	import { useTweakpane } from '$lib/useTweakpane'
-	import { Canvas } from '@threlte/core'
-	import { World } from '@threlte/rapier'
-	import Scene from './Scene.svelte'
-
-	const { pane, action } = useTweakpane()
-
-	pane.addBlade({
-		view: 'text',
-		text: "Use the 'wasd' keys to move around",
-		lineCount: 3
-	})
+  import { Pane, Text } from 'svelte-tweakpane-ui'
+  import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
 </script>
 
-<div use:action />
+<Pane
+  position="fixed"
+  title="pointer-lock"
+>
+  <Text
+    value="Use the 'wasd' keys to move around"
+    disabled
+  />
+</Pane>
 
-<Canvas>
-	<World>
-		<Scene />
-	</World>
-</Canvas>
+<div>
+  <Canvas>
+    <World>
+      <Scene />
+    </World>
+  </Canvas>
+</div>
+
+<style>
+  div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+</style>

@@ -1,65 +1,67 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Slider, Checkbox } from 'svelte-tweakpane-ui'
 
-  const { action, addInput } = useTweakpane({
-    title: 'Align',
-    expanded: true
-  })
-
-  const x = addInput({
-    label: 'X',
-    value: 0,
-    params: {
-      min: -1,
-      max: 1
-    }
-  })
-  const y = addInput({
-    label: 'Y',
-    value: 0,
-    params: {
-      min: -1,
-      max: 1
-    }
-  })
-  const z = addInput({
-    label: 'Z',
-    value: 0,
-    params: {
-      min: -1,
-      max: 1
-    }
-  })
-
-  const precise = addInput({
-    label: 'Precise',
-    value: false
-  })
-
-  const showSphere = addInput({
-    label: 'Show Sphere',
-    value: true
-  })
-
-  const autoAlign = addInput({
-    label: 'Auto Align',
-    value: true
-  })
+  let x = 0
+  let y = 0
+  let z = 0
+  let precise = false
+  let showSphere = true
+  let autoAlign = true
 </script>
 
-<div use:action />
+<Pane
+  title="Align"
+  position="fixed"
+>
+  <Slider
+    bind:value={x}
+    label="X"
+    min={-1}
+    max={1}
+  />
+  <Slider
+    bind:value={y}
+    label="Y"
+    min={-1}
+    max={1}
+  />
+  <Slider
+    bind:value={z}
+    label="Z"
+    min={-1}
+    max={1}
+  />
+  <Checkbox
+    label="Precise"
+    bind:value={precise}
+  />
+  <Checkbox
+    label="Show Sphere"
+    bind:value={showSphere}
+  />
+  <Checkbox
+    label="Auto Align"
+    bind:value={autoAlign}
+  />
+</Pane>
 
-<div class="relative h-full w-full ">
+<div>
   <Canvas>
     <Scene
-      x={$x}
-      y={$y}
-      z={$z}
-      precise={$precise}
-      showSphere={$showSphere}
-      autoAlign={$autoAlign}
+      {x}
+      {y}
+      {z}
+      {precise}
+      {showSphere}
+      {autoAlign}
     />
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

@@ -1,37 +1,28 @@
 <script>
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Button, Slider } from 'svelte-tweakpane-ui'
   import { regen, radius } from './stores'
-
-  const { action, addButton, addInput } = useTweakpane({
-    title: 'Poisson Disc Sampling'
-  })
-
-  addButton({
-    title: 'regenerate',
-    label: 'Randomness',
-    onClick: () => {
-      $regen = !$regen
-    }
-  })
-
-  const { subscribe } = addInput({
-    value: 4,
-    label: 'Min Distance Between Objects',
-    params: {
-      min: 1,
-      max: 6,
-      step: 0.5
-    }
-  })
-
-  subscribe((value) => {
-    $radius = value
-  })
 </script>
 
-<div use:action />
+<Pane
+  title="Poisson Disc Sampling"
+  position="fixed"
+>
+  <Button
+    title="regenerate"
+    on:click={() => {
+      $regen = !$regen
+    }}
+  />
+  <Slider
+    bind:value={$radius}
+    label="Min Distance Between Objects"
+    min={1}
+    max={6}
+    step={0.5}
+  />
+</Pane>
 
 <div>
   <Canvas>
@@ -40,12 +31,7 @@
 </div>
 
 <style>
-  :global(body) {
-    margin: 0;
-  }
-
   div {
-    width: 100%;
     height: 100%;
   }
 </style>
