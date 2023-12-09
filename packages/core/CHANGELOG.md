@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.10
+
+### Patch Changes
+
+- 94f687ec: fix: respect useTask autoStart
+
 ## 7.0.9
 
 ### Patch Changes
