@@ -1,36 +1,36 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import Scene from './Scene.svelte'
-	import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+  import { Pane, Slider, Text } from 'svelte-tweakpane-ui'
 
-	const { action, addInput } = useTweakpane({
-		title: 'Text',
-		expanded: false
-	})
-
-	const text = addInput({
-		label: 'Text',
-		value: 'hello world'
-	})
-
-	const fontSize = addInput({
-		label: 'Font Size',
-		value: 1,
-		params: {
-			step: 0.1,
-			min: 0.1,
-			max: 2
-		}
-	})
+  let text = 'hello world'
+  let fontSize = 1
 </script>
 
-<div use:action />
+<Pane
+  title="Text"
+  position="fixed"
+>
+  <Text bind:value={text} />
+  <Slider
+    bind:value={fontSize}
+    min={0.1}
+    max={2}
+  />
+</Pane>
 
-<div class="relative h-full w-full bg-orange-500/20">
-	<Canvas>
-		<Scene
-			text={$text}
-			fontSize={$fontSize}
-		/>
-	</Canvas>
+<div>
+  <Canvas>
+    <Scene
+      {text}
+      {fontSize}
+    />
+  </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+    background-color: rgb(254 61 0 / 0.2);
+  }
+</style>

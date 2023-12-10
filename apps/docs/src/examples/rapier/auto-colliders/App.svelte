@@ -1,39 +1,48 @@
 <script lang="ts">
-	import { useTweakpane } from '$lib/useTweakpane'
-	import { Canvas } from '@threlte/core'
-	import { HTML } from '@threlte/extras'
-	import { Debug, World } from '@threlte/rapier'
-	import Scene from './Scene.svelte'
+  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
+  import { Canvas } from '@threlte/core'
+  import { HTML } from '@threlte/extras'
+  import { Debug, World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
 
-	const { action, addInput } = useTweakpane({
-		title: 'Auto Colliders'
-	})
-
-	const debug = addInput({
-		label: 'Debug',
-		value: true
-	})
+  let debug = true
 </script>
 
-<div use:action />
+<Pane
+  title="Auto Colliders"
+  position="fixed"
+>
+  <Checkbox
+    bind:value={debug}
+    label="Debug"
+  />
+</Pane>
 
-<Canvas>
-	<World>
-		{#if $debug}
-			<Debug />
-		{/if}
+<div>
+  <Canvas>
+    <World>
+      {#if debug}
+        <Debug />
+      {/if}
 
-		<Scene />
+      <Scene />
 
-		<HTML
-			slot="fallback"
-			transform
-		>
-			<p class="text-xs">
-				It seems your browser<br />
-				doesn't support WASM.<br />
-				I'm sorry.
-			</p>
-		</HTML>
-	</World>
-</Canvas>
+      <HTML
+        slot="fallback"
+        transform
+      >
+        <p class="text-xs">
+          It seems your browser<br />
+          doesn't support WASM.<br />
+          I'm sorry.
+        </p>
+      </HTML>
+    </World>
+  </Canvas>
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

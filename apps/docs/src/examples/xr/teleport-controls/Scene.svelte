@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Writable } from 'svelte/store'
   import { PointLight } from 'three'
   import { T, useTask } from '@threlte/core'
   import { OrbitControls, Sky, useGltf } from '@threlte/extras'
@@ -7,8 +6,8 @@
   import Surfaces from './Surfaces.svelte'
   import { createNoise2D } from 'simplex-noise'
 
-  export let showSurfaces: Writable<boolean>
-  export let showBlockers: Writable<boolean>
+  export let showSurfaces: boolean
+  export let showBlockers: boolean
 
   const noise = createNoise2D()
 

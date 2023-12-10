@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Slider, Checkbox, Button, Folder } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { Sky } from '@threlte/extras'
   import { spring } from 'svelte/motion'
@@ -50,146 +50,134 @@
     stiffness: 0.05
   })
 
-  const { addInput, action, addButton } = useTweakpane({
-    title: 'Sky',
-    expanded: true
-  })
-
-  const setEnvironment = addInput({
-    label: 'Set Environment',
-    value: true
-  })
-
-  const turbidity = addInput({
-    label: 'Turbidity',
-    value: presets.sunset.turbidity,
-    params: {
-      min: 0,
-      max: 20
-    }
-  })
-
-  const rayleigh = addInput({
-    label: 'Rayleigh',
-    value: presets.sunset.rayleigh,
-    params: {
-      min: 0,
-      max: 4
-    }
-  })
-
-  const azimuth = addInput({
-    label: 'Azimuth',
-    value: presets.sunset.azimuth,
-    params: {
-      min: -180,
-      max: 180
-    }
-  })
-
-  const elevation = addInput({
-    label: 'Elevation',
-    value: presets.sunset.elevation,
-    params: {
-      min: -5,
-      max: 90
-    }
-  })
-
-  const mieCoefficient = addInput({
-    label: 'Mie Coefficient',
-    value: presets.sunset.mieCoefficient,
-    params: {
-      min: 0,
-      max: 0.1
-    }
-  })
-
-  const mieDirectionalG = addInput({
-    label: 'Mie Directional G',
-    value: presets.sunset.mieDirectionalG,
-    params: {
-      min: 0,
-      max: 1
-    }
-  })
-
-  const exposure = addInput({
-    label: 'Exposure',
-    value: presets.sunset.exposure,
-    params: {
-      min: 0,
-      max: 2
-    }
-  })
+  let setEnvironment = true
+  let turbidity = presets.sunset.turbidity
+  let rayleigh = presets.sunset.rayleigh
+  let azimuth = presets.sunset.azimuth
+  let elevation = presets.sunset.elevation
+  let mieCoefficient = presets.sunset.mieCoefficient
+  let mieDirectionalG = presets.sunset.mieDirectionalG
+  let exposure = presets.sunset.exposure
 
   const applyPreset = (preset: keyof typeof presets) => {
-    turbidity.set(presets[preset].turbidity)
-    rayleigh.set(presets[preset].rayleigh)
-    azimuth.set(presets[preset].azimuth)
-    elevation.set(presets[preset].elevation)
-    mieCoefficient.set(presets[preset].mieCoefficient)
-    mieDirectionalG.set(presets[preset].mieDirectionalG)
-    exposure.set(presets[preset].exposure)
+    turbidity = presets[preset].turbidity
+    rayleigh = presets[preset].rayleigh
+    azimuth = presets[preset].azimuth
+    elevation = presets[preset].elevation
+    mieCoefficient = presets[preset].mieCoefficient
+    mieDirectionalG = presets[preset].mieDirectionalG
+    exposure = presets[preset].exposure
   }
-
-  addButton({
-    title: 'Noon',
-    label: 'Preset',
-    onClick() {
-      applyPreset('noon')
-    }
-  })
-
-  addButton({
-    title: 'Afternoon',
-    label: 'Preset',
-    onClick() {
-      applyPreset('afternoon')
-    }
-  })
-
-  addButton({
-    title: 'Sunset',
-    label: 'Preset',
-    onClick() {
-      applyPreset('sunset')
-    }
-  })
-
-  addButton({
-    title: 'Night',
-    label: 'Preset',
-    onClick() {
-      applyPreset('night')
-    }
-  })
 
   $: {
     springValues.set({
-      turbidity: $turbidity,
-      rayleigh: $rayleigh,
-      azimuth: $azimuth,
-      elevation: $elevation,
-      mieCoefficient: $mieCoefficient,
-      mieDirectionalG: $mieDirectionalG,
-      exposure: $exposure
+      turbidity: turbidity,
+      rayleigh: rayleigh,
+      azimuth: azimuth,
+      elevation: elevation,
+      mieCoefficient: mieCoefficient,
+      mieDirectionalG: mieDirectionalG,
+      exposure: exposure
     })
   }
 </script>
 
-<div use:action />
-
-<Canvas>
-  <Sky
-    setEnvironment={$setEnvironment}
-    turbidity={$springValues.turbidity}
-    rayleigh={$springValues.rayleigh}
-    azimuth={$springValues.azimuth}
-    elevation={$springValues.elevation}
-    mieCoefficient={$springValues.mieCoefficient}
-    mieDirectionalG={$springValues.mieDirectionalG}
+<Pane
+  title="Sky"
+  position="fixed"
+>
+  <Checkbox
+    bind:value={setEnvironment}
+    label="Set Environment"
   />
+  <Slider
+    bind:value={turbidity}
+    label="Turbidity"
+    min={0}
+    max={20}
+  />
+  <Slider
+    bind:value={rayleigh}
+    label="Rayleigh"
+    min={0}
+    max={4}
+  />
+  <Slider
+    bind:value={azimuth}
+    label="Azimuth"
+    min={-180}
+    max={180}
+  />
+  <Slider
+    bind:value={elevation}
+    label="Elevation"
+    min={-5}
+    max={90}
+  />
+  <Slider
+    bind:value={mieCoefficient}
+    label="Mie Coefficient"
+    min={0}
+    max={0.1}
+  />
+  <Slider
+    bind:value={mieDirectionalG}
+    label="Mie Directional G"
+    min={0}
+    max={1}
+  />
+  <Slider
+    bind:value={exposure}
+    label="Exposure"
+    min={0}
+    max={2}
+  />
+  <Folder title="Presets">
+    <Button
+      title="Noon"
+      on:click={() => {
+        applyPreset('noon')
+      }}
+    />
+    <Button
+      title="Afternoon"
+      on:click={() => {
+        applyPreset('afternoon')
+      }}
+    />
+    <Button
+      title="Sunset"
+      on:click={() => {
+        applyPreset('sunset')
+      }}
+    />
+    <Button
+      title="Night"
+      on:click={() => {
+        applyPreset('night')
+      }}
+    />
+  </Folder>
+</Pane>
 
-  <Scene exposure={$springValues.exposure} />
-</Canvas>
+<div>
+  <Canvas>
+    <Sky
+      {setEnvironment}
+      turbidity={$springValues.turbidity}
+      rayleigh={$springValues.rayleigh}
+      azimuth={$springValues.azimuth}
+      elevation={$springValues.elevation}
+      mieCoefficient={$springValues.mieCoefficient}
+      mieDirectionalG={$springValues.mieDirectionalG}
+    />
+
+    <Scene exposure={$springValues.exposure} />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

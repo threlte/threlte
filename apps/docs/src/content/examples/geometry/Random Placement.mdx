@@ -17,10 +17,7 @@ This example explores several simple ways to automatically position objects in y
 The simplest starting point is using [Math.random](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random) as is. Every object will be independently placed, this is called a [uniform distribution](https://en.wikipedia.org/wiki/Continuous_uniform_distribution).
 Starting with a plane, a couple of svelte's `{#each ... as ...}` blocks and some random numbers; you can position objects like in the simple scene below.
 
-<Example
-  path="geometry/random-placement/basic-random"
-  iframe
-/>
+<Example path="geometry/random-placement/basic-random" />
 
 ## Preventing Object Overlap
 
@@ -30,7 +27,7 @@ In order to prevent this you can use [Poisson disk sampling](https://medium.com/
 
 <Example
   path="geometry/random-placement/poisson-random"
-  iframe
+
 />
 
 If you reduce the minimum distance to something smaller than your objects size then there will _look_ like there's collisions. For the bushes in this example, even a distance of 1 still looks good.
@@ -41,7 +38,7 @@ In many scenes this approach works well. However, sometimes you'll want differen
 
 <Example
   path="geometry/random-placement/variable-poisson-random"
-  iframe
+
 />
 
 <Tip type="info">
