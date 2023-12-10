@@ -7,7 +7,7 @@
 </script>
 
 <Pane
-  title=""
+  title="LOD"
   position="fixed"
 >
   <Button

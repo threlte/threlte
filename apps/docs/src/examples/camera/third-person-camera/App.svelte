@@ -7,7 +7,7 @@
 
 <Pane
   position="fixed"
-  title="pointer-lock"
+  title="third-person"
 >
   <Text
     value="Use the 'wasd' keys to move around"
