@@ -9,7 +9,7 @@ import { TextureLoader } from 'three'
 
 export const useTexture = <Input extends UseLoaderLoadInput>(
   input: Input,
-  options?: UseLoaderOptions<TextureLoader> &
+  options?: UseLoaderOptions<typeof TextureLoader> &
     Parameters<ReturnType<typeof useLoader<typeof TextureLoader>>['load']>[1]
 ): UseLoaderLoadResult<TextureLoader, Input> => {
   const loader = useLoader(TextureLoader, options)
