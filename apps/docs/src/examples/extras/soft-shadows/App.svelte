@@ -5,10 +5,16 @@
   import state from './state.json'
 </script>
 
-<div class="relative h-full w-full">
+<div>
   <Canvas>
     <Theatre config={{ state }}>
       <Scene />
     </Theatre>
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

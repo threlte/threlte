@@ -15,7 +15,8 @@ npm install @threlte/xr
 ## Usage
 
 <Tip type="experimental">
-  `@threlte/xr` is in beta. Major API changes at this point are not expected, but some breaking changes may occur before it reaches 1.0.0.
+  `@threlte/xr` is in beta. Major API changes at this point are not expected, but some breaking
+  changes may occur before it reaches 1.0.0.
 </Tip>
 
 ### Setup
@@ -29,11 +30,18 @@ The following adds a button to start your session and controllers inside an XR m
   import Scene from './scene.svelte'
 </script>
 
-<Canvas>
-  <Scene />
-</Canvas>
+<div>
+  <Canvas>
+    <Scene />
+  </Canvas>
+  <VRButton />
+</div>
 
-<VRButton />
+<style>
+  div {
+    height: 100%;
+  }
+</style>
 ```
 
 Then, in `scene.svelte`:

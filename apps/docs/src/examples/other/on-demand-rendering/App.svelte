@@ -22,12 +22,7 @@
 </div>
 
 <style>
-  :global(body) {
-    margin: 0;
-  }
-
   div.wrapper {
-    width: 100%;
     height: 100%;
   }
 

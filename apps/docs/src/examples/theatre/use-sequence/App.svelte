@@ -6,16 +6,18 @@
   import state from './state.json'
 </script>
 
-<Canvas>
-  <Project config={{ state }}>
-    <Sheet>
-      <Scene />
-    </Sheet>
-  </Project>
-</Canvas>
+<div>
+  <Canvas>
+    <Project config={{ state }}>
+      <Sheet>
+        <Scene />
+      </Sheet>
+    </Project>
+  </Canvas>
+</div>
 
 <style>
-  :global(canvas) {
+  div {
     height: 100%;
   }
 </style>

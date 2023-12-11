@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { Project, Sequence, Sheet, type SequenceController, Studio } from '@threlte/theatre'
+  import { Project, Sequence, Sheet, type SequenceController } from '@threlte/theatre'
   import Controller from './Controller.svelte'
   import Scene from './Scene.svelte'
   import state from './state.json'
@@ -14,36 +14,37 @@
   let rate: number = 1
 </script>
 
-<Canvas>
-  <Project config={{ state }}>
-    <Sheet>
-      <Scene />
-      <Sequence
-        bind:sequence
-        bind:playing
-        bind:position
-        bind:play
-        bind:pause
-        iterationCount={3}
-        direction="alternate"
-        autoplay
-        delay={1000}
-        {rate}
-      />
-    </Sheet>
-  </Project>
-</Canvas>
-
-<Controller
-  bind:position
-  bind:playing
-  bind:rate
-  {play}
-  {pause}
-/>
+<div>
+  <Canvas>
+    <Project config={{ state }}>
+      <Sheet>
+        <Scene />
+        <Sequence
+          bind:sequence
+          bind:playing
+          bind:position
+          bind:play
+          bind:pause
+          iterationCount={3}
+          direction="alternate"
+          autoplay
+          delay={1000}
+          {rate}
+        />
+      </Sheet>
+    </Project>
+  </Canvas>
+  <Controller
+    bind:position
+    bind:playing
+    bind:rate
+    {play}
+    {pause}
+  />
+</div>
 
 <style>
-  :global(canvas) {
+  div {
     height: 100%;
   }
 </style>
