@@ -96,17 +96,6 @@ export type UseLoaderOptions<Proto extends LoaderProtoWithoutArgs> =
     ? UseLoaderOptionsWithoutArgs<Proto>
     : UseLoaderOptionsWithArgs<Proto>
 
-/**
- * This works only with ES6 classes.
- */
-function isClass(t: any): t is { new (): any } {
-  try {
-    return Boolean(class extends t {})
-  } catch {
-    return false
-  }
-}
-
 export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,
   options?: UseLoaderOptions<Proto>
