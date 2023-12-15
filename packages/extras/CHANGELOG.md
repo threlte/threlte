@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.0.10
+
+### Patch Changes
+
+- 722f8c27: Fix instancedMesh deprecation warning
+
 ## 8.0.9
 
 ### Patch Changes
