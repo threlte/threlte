@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.12
+
+### Patch Changes
+
+- 722f8c27: Export Three.js revision int
+
 ## 7.0.11
 
 ### Patch Changes
