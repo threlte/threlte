@@ -56,6 +56,7 @@ export { watch, memoize, type CurrentWritable, currentWritable } from './lib/sto
 export { forwardEventHandlers } from './lib/forwardEventHandlers'
 export { useCache } from './lib/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
+export { revision } from './lib/revision'
 
 // internal components
 // NOTE: for some reason TS seems to be confusing the types exposed from the .svelte and .svelte.d.ts files
