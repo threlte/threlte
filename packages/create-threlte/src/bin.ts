@@ -119,7 +119,7 @@ const create = async () => {
             {
               value: '@threlte/xr',
               label: '@threlte/xr',
-              hint: 'ALPHA – Components and hooks to easily create WebXR apps with Threlte'
+              hint: 'Components and hooks to easily create WebXR apps with Threlte'
             },
             {
               value: '@threlte/flex',
@@ -190,7 +190,7 @@ const create = async () => {
 
   const threltePackageJson = {
     devDependencies: {
-      three: await resolvePackageVersion('three', '^0.157.0'),
+      three: await resolvePackageVersion('three', '^0.159.0'),
       '@threlte/core': await resolvePackageVersion('@threlte/core')
     },
     scripts: {}
@@ -199,7 +199,7 @@ const create = async () => {
   // prettier-ignore
   {
 		if (options.types === 'typescript') {
-			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.157.0')
+			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.159.0')
 		}
 		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.devDependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
@@ -215,7 +215,7 @@ const create = async () => {
 		}
 		if (options.threltePackages.includes('@threlte/xr')) {
 			threltePackageJson.devDependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
-			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.16.0')
+			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.17.1')
 			threltePackageJson.scripts['dev'] = 'vite dev --host'
 		}
 		if (options.threltePackages.includes('@threlte/flex')) {
@@ -238,20 +238,32 @@ const create = async () => {
   if (options.types === 'typescript') {
     // handle typescript templates
     await copy(path.join(templatesDir, 'typescript'), cwd)
+    if (options.features.includes('vitest')) {
+      await copy(path.join(templatesDir, 'typescript+vitest'), cwd, { overwrite: true })
+    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
     }
     if (options.threltePackages.includes('@threlte/xr')) {
       await copy(path.join(templatesDir, 'xr+typescript'), cwd, { overwrite: true })
+      if (options.features.includes('vitest')) {
+        await copy(path.join(templatesDir, 'xr+typescript+vitest'), cwd, { overwrite: true })
+      }
     }
   } else {
     // handle javascript templates
     await copy(path.join(templatesDir, 'javascript'), cwd)
+    if (options.features.includes('vitest')) {
+      await copy(path.join(templatesDir, 'javascript+vitest'), cwd, { overwrite: true })
+    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
     }
     if (options.threltePackages.includes('@threlte/xr')) {
       await copy(path.join(templatesDir, 'xr+javascript'), cwd, { overwrite: true })
+      if (options.features.includes('vitest')) {
+        await copy(path.join(templatesDir, 'xr+javascript+vitest'), cwd, { overwrite: true })
+      }
     }
   }
 
