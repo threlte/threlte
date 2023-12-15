@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.0.11
+
+### Patch Changes
+
+- 04ac53aa: Added args to useLoader options
+
 ## 7.0.10
 
 ### Patch Changes
