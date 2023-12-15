@@ -119,7 +119,7 @@ const create = async () => {
             {
               value: '@threlte/xr',
               label: '@threlte/xr',
-              hint: 'ALPHA – Components and hooks to easily create WebXR apps with Threlte'
+              hint: 'Components and hooks to easily create WebXR apps with Threlte'
             },
             {
               value: '@threlte/flex',
