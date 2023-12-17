@@ -1,3 +1,19 @@
-<!-- Chirping -->
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { World } from '$lib'
+  import Scene from './Scene.svelte'
+</script>
 
-<h1>Hello World</h1>
+<main>
+  <Canvas>
+    <World>
+      <Scene />
+    </World>
+  </Canvas>
+</main>
+
+<style>
+  main {
+    height: 100dvh;
+  }
+</style>

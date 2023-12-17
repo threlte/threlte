@@ -5,7 +5,7 @@
     Collider,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, SceneGraphObject, useFrame } from '@threlte/core'
+  import { createRawEventDispatcher, SceneGraphObject, useTask } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
@@ -95,7 +95,7 @@
     if (hasRigidBodyParent) {
       const rigidBodyWorldPos = new Vector3()
       const rigidBodyWorldQuatInversed = new Quaternion()
-  
+
       parentRigidBodyObject?.getWorldPosition(rigidBodyWorldPos)
       parentRigidBodyObject?.getWorldQuaternion(rigidBodyWorldQuatInversed)
       rigidBodyWorldQuatInversed.invert()
@@ -158,12 +158,12 @@
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
    * transforms on every frame.
    */
-  const { start, stop } = useFrame(
+  const { start, stop } = useTask(
     () => {
       refresh()
     },
     {
-      autostart: !hasRigidBodyParent && type === 'dynamic'
+      autoStart: !hasRigidBodyParent && type === 'dynamic'
     }
   )
 

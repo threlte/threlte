@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { BufferAttribute, BufferGeometry } from 'three'
   import { useRapier } from '../../hooks/useRapier'
@@ -13,7 +13,7 @@
  
   debug.set(true)
 
-  useFrame(() => {
+  useTask(() => {
     const buffers = world.debugRender()
 
     const vertices = new BufferAttribute(buffers.vertices, 3)

@@ -15,6 +15,7 @@ import type {
 } from '../types/types'
 
 export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
+  window.rapier = RAPIER
   const world = new RAPIER.World(...args)
 
   const colliderObjects = new Map<ColliderHandle, Object3D>()
