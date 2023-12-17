@@ -83,7 +83,6 @@
         keys.right = true
         break
       case ' ':
-        console.log(rigidBody, grounded)
         if (!rigidBody || !grounded) break
         rigidBody.applyImpulse({ x: 0, y: jumpStrength, z: 0 }, true)
       default:
