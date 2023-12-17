@@ -19,7 +19,9 @@
 `<TrackballControls>` TrackballControls is similar to OrbitControls. However, it does not maintain a constant camera up vector. That means if the camera orbits over the “north” and “south” poles, it does not flip to stay "right side up"
 
 The component `<TrackballControls>` must be a direct child of a camera component and will mount itself to that camera.
-If the properties `autoRotate` or `enableDamping` are set to true, the frame loop will run continously.
+By default, damping is enabled. You can disable this by setting `staticMoving` to true.
+
+When using TrackballControls, the frame loop will run continously. Note that unlike OrbitControls, TrackballControls does not support `autoRotate`.
 
 <Example path="extras/trackball-controls" />
 
@@ -37,10 +39,10 @@ If the properties `autoRotate` or `enableDamping` are set to true, the frame loo
   makeDefault
   fov={50}
 >
-  <TrackballControls enableDamping />
+  <TrackballControls />
 </T.PerspectiveCamera>
 ```
 
 `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element
 the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop
-and will run the frame loop continuously if the `autoRotate` or `enableDamping` properties are set to `true`.
+and will run the frame loop continuously.

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, TransformControls } from '@threlte/extras'
+  import { TrackballControls, TransformControls } from '@threlte/extras'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
 </script>
 
@@ -9,16 +9,14 @@
   position={[10, 5, 10]}
   lookAt.y={0.5}
 >
-  <OrbitControls />
+  <TrackballControls />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight
   position.y={10}
   position.z={10}
 />
-<T.AmbientLight
-intensity={0.3}
-/>
+<T.AmbientLight intensity={0.3} />
 
 <T.GridHelper args={[10, 10]} />
 

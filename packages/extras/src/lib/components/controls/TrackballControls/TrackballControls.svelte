@@ -28,13 +28,8 @@
   export const ref = new ThreeTrackballControls($parent, renderer.domElement)
 
   const { start, stop } = useTask(() => ref.update(), {
-    autoStart: false
+    autoStart: true
   })
-
-  $: {
-    if ($$restProps.autoRotate || $$restProps.enableDamping) start()
-    else stop()
-  }
 
   const component = forwardEventHandlers()
 

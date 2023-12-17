@@ -22,14 +22,17 @@
   type $$Slots = TransformControlsSlots
 
   export let autoPauseOrbitControls: $$Props['autoPauseOrbitControls'] = true
+  export let autoPauseTrackballControls: $$Props['autoPauseTrackballControls'] = true
   export let object: $$Props['object'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
 
-  const { orbitControls } = useControlsContext()
+  const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = writable(false)
   const useAutoPauseOrbitControls = writable(autoPauseOrbitControls) ?? true
   $: useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true)
+  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls) ?? true
+  $: useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true)
 
   const onDraggingChanged = (e: { value: boolean }) => {
     isDragging.set(e.value)
@@ -46,6 +49,21 @@
         // we know they were enabled before, so we can
         // safely re-enable them
         orbitControls.enabled = true
+      }
+    }
+  )
+
+  watch(
+    [trackballControls, isDragging, useAutoPauseTrackballControls],
+    ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
+      // if there are no trackballcontrols or we're not even
+      // dragging, or the trackballcontrols are disabled, return
+      if (!trackballControls || (!trackballControls.enabled && isDragging)) return
+      trackballControls.enabled = !(isDragging && useAutoPausetrackballControls)
+      return () => {
+        // we know they were enabled before, so we can
+        // safely re-enable them
+        trackballControls.enabled = true
       }
     }
   )

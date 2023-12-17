@@ -9,7 +9,7 @@
   position={[10, 5, 10]}
   lookAt.y={0.5}
 >
-  <OrbitControls />
+  <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight
