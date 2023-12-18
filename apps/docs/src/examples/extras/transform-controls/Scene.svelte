@@ -1,15 +1,28 @@
 <script lang="ts">
+  export let controls: 'trackball' | 'orbit' = 'orbit'
   import { T } from '@threlte/core'
-  import { TrackballControls, TransformControls } from '@threlte/extras'
+  import { OrbitControls, TrackballControls, TransformControls } from '@threlte/extras'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
+  import { PerspectiveCamera } from 'three'
+  let camera: PerspectiveCamera
+
+  $: if (camera && controls === 'orbit') {
+    // This snaps the camera back into a position that makes sense for OrbitControls
+    camera.up.set(0, 1, 0)
+  }
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 5, 10]}
   lookAt.y={0.5}
+  bind:ref={camera}
 >
-  <TrackballControls />
+  {#if controls === 'trackball'}
+    <TrackballControls />
+  {:else if controls === 'orbit'}
+    <OrbitControls />
+  {/if}
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

@@ -1,16 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
 </script>
-
-<T.PerspectiveCamera
-  makeDefault
-  position={[10, 5, 10]}
-  lookAt.y={0.5}
->
-  <OrbitControls enableDamping />
-</T.PerspectiveCamera>
 
 <T.DirectionalLight
   position.y={10}
