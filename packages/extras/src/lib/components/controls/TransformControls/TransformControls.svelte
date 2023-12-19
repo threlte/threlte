@@ -7,9 +7,12 @@
     watch,
     type Props
   } from '@threlte/core'
-  import { derived, writable } from 'svelte/store'
+
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+
+  import { derived, writable } from 'svelte/store'
+
   import { useControlsContext } from '../useControlsContext'
   import type {
     TransformControlsEvents,

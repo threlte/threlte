@@ -1,7 +1,11 @@
 <script lang="ts">
   import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
+
   import type { Camera } from 'three'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+
+  import { onDestroy } from 'svelte'
+
   import { useControlsContext } from '../useControlsContext'
   import type {
     TrackballControlsEvents,
@@ -27,13 +31,13 @@
 
   export const ref = new ThreeTrackballControls($parent, renderer.domElement)
 
-  const { start, stop } = useTask(() => ref.update(), {
-    autoStart: true
-  })
+  useTask(ref.update)
 
   const component = forwardEventHandlers()
 
   const { trackballControls } = useControlsContext()
+  trackballControls.set(ref)
+  onDestroy(() => trackballControls.set(undefined))
 </script>
 
 <T
@@ -42,13 +46,6 @@
   {...$$restProps}
   bind:this={$component}
   on:change={invalidate}
-  on:create={({ ref, cleanup }) => {
-    trackballControls.set(ref)
-    ref.update()
-    cleanup(() => {
-      trackballControls.set(undefined)
-    })
-  }}
 >
   <slot {ref} />
 </T>
