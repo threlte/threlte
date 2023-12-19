@@ -12,8 +12,9 @@
 </script>
 
 <Pane
-  theme={ThemeUtils.presets.standard}
+  theme={ThemeUtils.presets.light}
   position="fixed"
+  scale={0.9}
   title="OrbitControls"
 >
   <Checkbox

@@ -5,7 +5,7 @@
 </script>
 
 <Pane
-  theme={ThemeUtils.presets.standard}
+  theme={ThemeUtils.presets.light}
   position="fixed"
   title="TransformControls"
 >
