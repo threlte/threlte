@@ -11,6 +11,7 @@
       'props':
         [
           { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
+          { name: 'autoPauseTrackballControls', type: 'boolean', required: false },
           { name: 'object', type: 'THREE.Object3D', required: false }
         ],
       bindings:
@@ -26,9 +27,12 @@ This component can be used to transform objects in 3D space by adapting a simila
 
 The component `<TransformControls>` needs to be the parent of the component to be transformed.
 
-To accommodate `<OrbitControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` to `false`.
+To accommodate `<OrbitControls>` or `<TrackballControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` or `<TrackballControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` or `autoPauseTrackballControls` to `false`.
 
-<Example path="extras/transform-controls" />
+<Example
+  path="extras/transform-controls"
+  iframe
+/>
 
 ### Examples
 

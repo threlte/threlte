@@ -5,7 +5,25 @@ sourcePath: 'packages/core/src/lib/hooks/useLoader.ts'
 order: 5.4
 ---
 
-A hook to load data with an arbitrary `THREE` loader class. The result of `load` is cached and subsequent calls will return the same result.
+A hook to load data with an arbitrary `THREE` loader class. The result of `load`
+is cached and subsequent calls with the same arguments will yield the same
+return value (i.e. the same reference) across the entire Threlte app. The hook
+can use async loaders (using `loader.loadAsync`) as well as sync/callback-based
+loaders (using `loader.load`) and will default to the async version if
+available.
+
+```typescript
+const loader = useLoader(AudioLoader)
+const soundA = loader.load('audio/ambient_ocean.ogg')
+// -> `soundA` is an AsyncWritable<AudioBuffer> that
+// resolves/is populated once the asset is loaded.
+
+// somewhere else …
+const soundB = loader.load('audio/ambient_ocean.ogg')
+// -> `soundB` is also an AsyncWritable<AudioBuffer>
+// that resolves/is populated with the same reference
+// as `soundA` once the asset is loaded.
+```
 
 ### Instantiating A Loader
 
@@ -36,6 +54,25 @@ A loader can be **extended**, to add custom features:
 </script>
 ```
 
+If the constructor of a particular loader accepts arguments, they must be passed
+as an array to the option `args` of the second argument to `useLoader`:
+
+```svelte
+<script>
+  import { useLoader, useThrelte } from '@threlte/core'
+  import { SplatLoader } from '@pmndrs/vanilla'
+
+  const { renderer } = useThrelte()
+
+  const loader = useLoader(SplatLoader, {
+    args: [renderer]
+  })
+  // This resembles the following:
+  // const loader = new SplatLoader(renderer)
+</script>
+```
+
+
 ### Loading An Asset
 
 ```svelte
@@ -54,8 +91,10 @@ A loader can be **extended**, to add custom features:
 </script>
 ```
 
-The return type of `load` is a custom Threlte store called `AsyncWritable` and can be used as a regular Svelte store.
-Its initial value is `undefined` and will be updated once the asset is loaded.
+The return type of `load` is a [custom Threlte store called
+`AsyncWritable`](/docs/reference/core/utilities#asyncwritable) and can be used
+as a regular Svelte store. Its initial value is `undefined` and will be updated
+once the asset is loaded.
 
 The store also exposes the underlying promise methods `then` and `catch` and can therefore be directly awaited:
 

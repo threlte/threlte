@@ -30,7 +30,7 @@
 </script>
 
 <Pane
-  theme={ThemeUtils.presets.standard}
+  theme={ThemeUtils.presets.light}
   position="fixed"
   title="Gizmo"
 >
@@ -104,7 +104,7 @@
   </Folder>
 </Pane>
 
-<div class="relative h-full w-full bg-blue-900">
+<div style="position:relative; height:100%; width:100%; background-color: rgb(14,22,37)">
   <Canvas>
     <T.PerspectiveCamera
       makeDefault

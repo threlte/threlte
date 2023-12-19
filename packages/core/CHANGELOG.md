@@ -1,5 +1,23 @@
 # @threlte/core
 
+## 7.0.12
+
+### Patch Changes
+
+- 722f8c27: Export Three.js revision int
+
+## 7.0.11
+
+### Patch Changes
+
+- 04ac53aa: Added args to useLoader options
+
+## 7.0.10
+
+### Patch Changes
+
+- 94f687ec: fix: respect useTask autoStart
+
 ## 7.0.9
 
 ### Patch Changes

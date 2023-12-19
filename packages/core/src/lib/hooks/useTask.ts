@@ -152,7 +152,7 @@ export function useTask(
     task.stop()
   }
 
-  if (options?.autoStart ?? true) {
+  if (opts?.autoStart ?? true) {
     start()
   } else {
     stop()

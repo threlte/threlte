@@ -153,6 +153,9 @@ importers:
       astro-auto-import:
         specifier: ^0.3.1
         version: 0.3.1(astro@3.0.5)
+      camera-controls:
+        specifier: ^2.7.3
+        version: 2.7.3(three@0.158.0)
       chalk:
         specifier: ^4.1.1
         version: 4.1.2
@@ -308,8 +311,8 @@ importers:
         specifier: ^1.7.2
         version: 1.7.2
       create-svelte:
-        specifier: ^5.1.0
-        version: 5.1.0
+        specifier: ^6.0.0
+        version: 6.0.0
       execa:
         specifier: ^7.1.1
         version: 7.1.1
@@ -5162,6 +5165,14 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
+  /camera-controls@2.7.3(three@0.158.0):
+    resolution: {integrity: sha512-L4mxjBd3u8qiOLozdWrH2P8ZybSsDXBF7iyNyqNEFJhPUkovmuARWR8JTc1B/qlclOIg6FvZZA/0uAZMMim0mw==}
+    peerDependencies:
+      three: '>=0.126.1'
+    dependencies:
+      three: 0.158.0
+    dev: true
+
   /caniuse-lite@1.0.30001525:
     resolution: {integrity: sha512-/3z+wB4icFt3r0USMwxujAqRvaD/B7rvGTsKhbhSQErVrJvkZCLhgNLJxU8MevahQVH6hCU9FsHdNUFbiwmE7Q==}
 
@@ -5481,8 +5492,8 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /create-svelte@5.1.0:
-    resolution: {integrity: sha512-u9gzqN9g37XdL0l+XALTOQzD+Ln1F00dH5GDa6mnOEj1TbTczSkQqUNFH0c9UDPxB5co6i4gmma91pAFWu1BYg==}
+  /create-svelte@6.0.0:
+    resolution: {integrity: sha512-Fj/LHJRo9OTP9hm0ugDEjKcEQuvzs1vCDIkgEMcnRhOs/xq8QK0Q8BJceR67dxpOBbuoGF3y9KBbq10Kqm/3Aw==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.7.0

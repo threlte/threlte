@@ -1,5 +1,11 @@
 # create-threlte
 
+## 2.0.0
+
+### Major Changes
+
+- d5312133: Updated to SvelteKit 2, updated dependencies
+
 ## 1.4.1
 
 ### Patch Changes
