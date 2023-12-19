@@ -1,12 +1,13 @@
 <script lang="ts">
-  export let controls: 'trackball' | 'orbit' = 'orbit'
+  let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
   import { T } from '@threlte/core'
   import { OrbitControls, TrackballControls, TransformControls } from '@threlte/extras'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
   import { PerspectiveCamera } from 'three'
+  import Settings from './Settings.svelte'
   let camera: PerspectiveCamera
 
-  $: if (camera && controls === 'orbit') {
+  $: if (camera && controls === '<OrbitControls>') {
     // This snaps the camera back into a position that makes sense for OrbitControls
     camera.up.set(0, 1, 0)
   }
@@ -18,9 +19,9 @@
   lookAt.y={0.5}
   bind:ref={camera}
 >
-  {#if controls === 'trackball'}
+  {#if controls === '<TrackballControls>'}
     <TrackballControls />
-  {:else if controls === 'orbit'}
+  {:else if controls === '<OrbitControls>'}
     <OrbitControls />
   {/if}
 </T.PerspectiveCamera>
@@ -42,3 +43,5 @@
     material={new MeshStandardMaterial()}
   />
 </TransformControls>
+
+<Settings bind:controls />
