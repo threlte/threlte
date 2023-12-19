@@ -52,7 +52,7 @@ const hidePreview = Astro.props.hidePreview ?? false
         path={Astro.props.path}
         client:load
         files={files}
-        iframe={Astro.props.iframe ?? false}
+        iframe={Astro.props.iframe ?? true}
       />
     )
   }

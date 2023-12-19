@@ -1,250 +1,55 @@
 <script lang="ts">
   import { Canvas, T } from '@threlte/core'
   import { Grid } from '@threlte/extras'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Slider, Checkbox, Folder, List, Color } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
   import { PlaneGeometry } from 'three'
   import { createNoise2D } from 'simplex-noise'
 
-  const { pane, action, addInput } = useTweakpane({
-    title: 'Grid',
-    expanded: false
-  })
+  let cellSize = 1
+  let cellColor = '#cccccc'
+  let cellThickness = 1.4
+  let sectionSize = 5
+  let sectionColor = '#ff3e00'
+  let sectionThickness = 2
 
-  const cellFolder = pane.addFolder({
-    title: 'Cell settings'
-  })
-  const cellSize = addInput({
-    label: 'Cell size',
-    value: 1,
-    params: {
-      step: 1,
-      min: 1,
-      max: 5
-    },
-    parent: cellFolder
-  })
-  const cellColor = addInput({
-    label: 'Cell color',
-    value: `#ccc`,
-    parent: cellFolder
-  })
+  let gridSize1 = 20
+  let gridSize2 = 20
+  let plane: 'xz' | 'xy' | 'zy' = 'xz'
+  let planeOptions = {
+    xz: 'xz',
+    xy: 'xy',
+    zy: 'zy'
+  }
 
-  const cellThickness = addInput({
-    label: 'Cell thickness',
-    value: 1.4,
-    params: {
-      step: 0.1,
-      min: 1,
-      max: 10
-    },
-    parent: cellFolder
-  })
+  let followCamera = false
+  let infiniteGrid = false
+  let fadeDistance = 100
+  let backGroundColor = '#003eff'
+  let backgroundOpacity = 0
+  let fadeStrength = 1
+  let gridGeometry = 'default'
+  let gridGeometryOptions = {
+    plane: 'default',
+    terrain: 'Terrain'
+  }
 
-  const sectionFolder = pane.addFolder({
-    title: 'Section settings'
-  })
-
-  const sectionSize = addInput({
-    label: 'Section size',
-    value: 5,
-    params: {
-      step: 1,
-      min: 1,
-      max: 50
-    },
-    parent: sectionFolder
-  })
-  const sectionColor = addInput({
-    label: 'Section color',
-    value: `#FF3E00`,
-    parent: sectionFolder
-  })
-  const sectionThickness = addInput({
-    label: 'Section thickness',
-    value: 2,
-    params: {
-      step: 0.1,
-      min: 1,
-      max: 10
-    },
-
-    parent: sectionFolder
-  })
-
-  const generalFolder = pane.addFolder({
-    title: 'General settings'
-  })
-
-  const gridSize1 = addInput({
-    label: 'Grid size1',
-    value: 20,
-    params: {
-      step: 1,
-      min: 1,
-      max: 100
-    },
-
-    parent: generalFolder
-  })
-  const gridSize2 = addInput({
-    label: 'Grid size2',
-    value: 20,
-    params: {
-      step: 1,
-      min: 1,
-      max: 100
-    },
-    parent: generalFolder
-  })
-
-  const plane = addInput({
-    label: 'plane',
-    value: 'xz',
-    params: {
-      options: {
-        xz: 'xz',
-        xy: 'xy',
-        zy: 'zy'
-      }
-    },
-    parent: generalFolder
-  })
-  $: planeTyped = $plane as 'xz' | 'xy' | 'zy'
-
-  const followCamera = addInput({
-    label: 'followCamera',
-    value: false,
-
-    parent: generalFolder
-  })
-
-  const infiniteGrid = addInput({
-    label: 'infiniteGrid',
-    value: false,
-    parent: generalFolder
-  })
-
-  const fadeDistance = addInput({
-    label: 'fadeDistance',
-    value: 100,
-    params: {
-      step: 10,
-      min: 10,
-      max: 400
-    },
-
-    parent: generalFolder
-  })
-
-  const backGroundColor = addInput({
-    label: 'Background color',
-    value: `#003Eff`,
-    parent: generalFolder
-  })
-  const backgroundOpacity = addInput({
-    label: 'Background opacity',
-    value: 0.0,
-    params: {
-      step: 0.01,
-      min: 0,
-      max: 1
-    },
-
-    parent: generalFolder
-  })
-
-  const fadeStregth = addInput({
-    label: 'fadeStregth',
-    value: 1,
-    params: {
-      step: 0.1,
-      min: 0,
-      max: 20
-    },
-
-    parent: generalFolder
-  })
-
-  const gridGeometry = addInput({
-    label: 'gridGeometry',
-    value: 'default',
-    params: {
-      options: {
-        plane: 'default',
-        terrain: 'Terrain'
-      }
-    },
-    parent: generalFolder
-  })
-
-  const typeFolder = pane.addFolder({
-    title: 'Types of grid'
-  })
-
-  const gridType: any = addInput({
-    label: 'gridtype',
-    value: 'polar',
-    params: {
-      options: {
-        grid: 'grid',
-        lines: 'lines',
-        circular: 'circular',
-        polar: 'polar'
-      }
-    },
-    parent: typeFolder
-  })
-
-  const linesAxis = addInput({
-    label: 'linesAxis (lines)',
-    value: 'x',
-    params: {
-      options: {
-        x: 'x',
-        y: 'y',
-        z: 'z'
-      }
-    },
-
-    parent: typeFolder
-  })
-
-  const maxRadius = addInput({
-    label: 'maxRadius (circular & polar)',
-    value: 10,
-    params: {
-      step: 1,
-      min: 0,
-      max: 15
-    },
-
-    parent: typeFolder
-  })
-
-  const cellDividers = addInput({
-    label: 'cell dividers (polar)',
-    value: 6,
-    params: {
-      step: 1,
-      min: 0,
-      max: 18
-    },
-
-    parent: typeFolder
-  })
-
-  const sectionDividers = addInput({
-    label: 'section dividers (polar)',
-    value: 2,
-    params: {
-      step: 1,
-      min: 0,
-      max: 18
-    },
-
-    parent: typeFolder
-  })
+  let gridType: 'polar' | 'grid' | 'lines' | 'circular' = 'polar'
+  let gridTypeOptions = {
+    polar: 'polar',
+    grid: 'grid',
+    lines: 'lines',
+    circular: 'circular'
+  }
+  let linesAxis = 'x'
+  let linesAxisOptions = {
+    x: 'x',
+    y: 'y',
+    z: 'z'
+  }
+  let maxRadius = 10
+  let cellDividers = 6
+  let sectionDividers = 2
 
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
@@ -259,59 +64,208 @@
   geometry.computeVertexNormals()
 </script>
 
-<div use:action />
+<Pane
+  title="Grid"
+  position="fixed"
+  expanded={false}
+>
+  <Folder title="Cells">
+    <Slider
+      bind:value={cellSize}
+      label="size"
+      step={1}
+      min={1}
+      max={5}
+    />
+    <Color
+      bind:value={cellColor}
+      label="color"
+    />
+    <Slider
+      bind:value={cellThickness}
+      label="thickness"
+      step={0.1}
+      min={1}
+      max={10}
+    />
+  </Folder>
+  <Folder title="Sections">
+    <Slider
+      bind:value={sectionSize}
+      label="size"
+      step={1}
+      min={1}
+      max={50}
+    />
+    <Color
+      bind:value={sectionColor}
+      label="color"
+    />
+    <Slider
+      bind:value={sectionThickness}
+      label="thickness"
+      step={0.1}
+      min={1}
+      max={10}
+    />
+  </Folder>
+  <Folder title="General">
+    <Slider
+      bind:value={gridSize1}
+      label="size 1"
+      step={1}
+      min={1}
+      max={100}
+    />
+    <Slider
+      bind:value={gridSize2}
+      label="size 2"
+      step={1}
+      min={1}
+      max={100}
+    />
+    <List
+      bind:value={plane}
+      label="plane"
+      options={planeOptions}
+    />
+    <Checkbox
+      bind:value={followCamera}
+      label="follow camera"
+    />
+    <Checkbox
+      bind:value={infiniteGrid}
+      label="infinite Grid"
+    />
+    <Slider
+      bind:value={fadeDistance}
+      label="fade distance"
+      step={10}
+      min={10}
+      max={400}
+    />
+    <Color
+      bind:value={backGroundColor}
+      label="background color"
+    />
+    <Slider
+      bind:value={backgroundOpacity}
+      label="background opacity"
+      step={0.01}
+      min={0}
+      max={1}
+    />
+    <Slider
+      bind:value={fadeStrength}
+      label="fade strength"
+      step={0.1}
+      min={0}
+      max={20}
+    />
+    <List
+      bind:value={gridGeometry}
+      options={gridGeometryOptions}
+      label="grid geometry"
+    />
+  </Folder>
+  <Folder title="Types of Grid">
+    <List
+      bind:value={gridType}
+      options={gridTypeOptions}
+      label="type"
+    />
+    {#if gridType == 'lines'}
+      <List
+        bind:value={linesAxis}
+        options={linesAxisOptions}
+        label="axis"
+      />
+    {/if}
+    {#if gridType == 'polar' || gridType == 'circular'}
+      <Slider
+        bind:value={maxRadius}
+        label="max radius"
+        step={1}
+        min={0}
+        max={15}
+      />
+    {/if}
+    {#if gridType == 'polar'}
+      <Slider
+        bind:value={cellDividers}
+        label="cell dividers"
+        step={1}
+        min={0}
+        max={18}
+      />
+      <Slider
+        bind:value={sectionDividers}
+        label="section dividers"
+        step={1}
+        min={0}
+        max={18}
+      />
+    {/if}
+  </Folder>
+</Pane>
 
-<div class="relative h-full w-full bg-blue-900">
+<div>
   <Canvas>
-    {#if $gridGeometry == 'Terrain'}
+    {#if gridGeometry == 'Terrain'}
       <Grid
         position.y={-2}
-        plane={planeTyped}
-        cellColor={$cellColor}
-        cellSize={$cellSize}
-        cellThickness={$cellThickness}
-        sectionColor={$sectionColor}
-        sectionSize={$sectionSize}
-        sectionThickness={$sectionThickness}
-        followCamera={$followCamera}
-        infiniteGrid={$infiniteGrid}
-        fadeDistance={$fadeDistance}
-        fadeStrength={$fadeStregth}
-        gridSize={[$gridSize1, $gridSize2]}
-        backgroundColor={$backGroundColor}
-        backgroundOpacity={$backgroundOpacity}
-        type={$gridType}
-        axis={$linesAxis}
-        maxRadius={$maxRadius}
-        cellDividers={$cellDividers}
-        sectionDividers={$sectionDividers}
+        {plane}
+        {cellColor}
+        {cellSize}
+        {cellThickness}
+        {sectionColor}
+        {sectionSize}
+        {sectionThickness}
+        {followCamera}
+        {infiniteGrid}
+        {fadeDistance}
+        {fadeStrength}
+        gridSize={[gridSize1, gridSize2]}
+        backgroundColor={backGroundColor}
+        {backgroundOpacity}
+        type={gridType}
+        axis={linesAxis}
+        {maxRadius}
+        {cellDividers}
+        {sectionDividers}
       >
         <T is={geometry} />
       </Grid>
     {:else}
       <Grid
-        plane={planeTyped}
-        cellColor={$cellColor}
-        cellSize={$cellSize}
-        cellThickness={$cellThickness}
-        sectionColor={$sectionColor}
-        sectionSize={$sectionSize}
-        sectionThickness={$sectionThickness}
-        followCamera={$followCamera}
-        infiniteGrid={$infiniteGrid}
-        fadeDistance={$fadeDistance}
-        fadeStrength={$fadeStregth}
-        gridSize={[$gridSize1, $gridSize2]}
-        backgroundColor={$backGroundColor}
-        backgroundOpacity={$backgroundOpacity}
-        type={$gridType}
-        axis={$linesAxis}
-        maxRadius={$maxRadius}
-        cellDividers={$cellDividers}
-        sectionDividers={$sectionDividers}
+        {plane}
+        {cellColor}
+        {cellSize}
+        {cellThickness}
+        {sectionColor}
+        {sectionSize}
+        {sectionThickness}
+        {followCamera}
+        {infiniteGrid}
+        {fadeDistance}
+        {fadeStrength}
+        gridSize={[gridSize1, gridSize2]}
+        backgroundColor={backGroundColor}
+        {backgroundOpacity}
+        type={gridType}
+        axis={linesAxis}
+        {maxRadius}
+        {cellDividers}
+        {sectionDividers}
       />
     {/if}
 
     <Scene />
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

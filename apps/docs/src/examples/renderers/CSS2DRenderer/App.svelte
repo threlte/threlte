@@ -4,11 +4,17 @@
 </script>
 
 <div id="css-renderer-target" />
-<Canvas>
-  <Scene />
-</Canvas>
+
+<div id="main">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
 
 <style>
+  div#main {
+    height: 100%;
+  }
   #css-renderer-target {
     left: 0;
     position: absolute;

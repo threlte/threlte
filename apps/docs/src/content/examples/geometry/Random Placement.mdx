@@ -25,7 +25,10 @@ There is a limitation in using _just_ `Math.random`: it does not prevent objects
 
 In order to prevent this you can use [Poisson disk sampling](https://medium.com/@hemalatha.psna/implementation-of-poisson-disc-sampling-in-javascript-17665e406ce1). This algorithm guarantees a minimum distance between your objects.
 
-<Example path="geometry/random-placement/poisson-random" />
+<Example
+  path="geometry/random-placement/poisson-random"
+
+/>
 
 If you reduce the minimum distance to something smaller than your objects size then there will _look_ like there's collisions. For the bushes in this example, even a distance of 1 still looks good.
 
@@ -33,7 +36,10 @@ If you reduce the minimum distance to something smaller than your objects size t
 
 In many scenes this approach works well. However, sometimes you'll want different spacing for different objects: a large tree needs more space than a small bush. Below is a variation of poisson disc sampling, but this time it allows for some different spacing, depending on the object type.
 
-<Example path="geometry/random-placement/variable-poisson-random" />
+<Example
+  path="geometry/random-placement/variable-poisson-random"
+
+/>
 
 <Tip type="info">
   An important parameter to play with when generating scenes with this last approach is the *window

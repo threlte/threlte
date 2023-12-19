@@ -12,6 +12,7 @@
 >
   <OrbitControls
     autoRotate={true}
+    autoRotateSpeed={0.4}
     enableZoom={true}
   />
 </T.PerspectiveCamera>

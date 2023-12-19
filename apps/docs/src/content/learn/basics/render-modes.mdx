@@ -18,7 +18,7 @@ re-render. You can tell Threlte to continuously render the scene in the
 
 ## Mode `'on-demand'`
 
-<Example path="other/on-demand-rendering" iframe />
+<Example path="other/on-demand-rendering" />
 
 In the mode `'on-demand'`, Threlte renders the scene only when the current frame
 is **invalidated**. This may happen [automatically when changes are
@@ -60,7 +60,7 @@ function from the [`useThrelte`](/docs/reference/core/use-threlte) hook.
 
   const { invalidate } = useThrelte()
 
-  const mesh = new Mesh
+  const mesh = new Mesh()
 
   export const moveMesh = () => {
     // moving the mesh manually
@@ -99,12 +99,15 @@ import { useTask, useThrelte } from '@threlte/core'
 
 const { invalidate } = useThrelte()
 
-useTask(() => {
-  // Because `autoInvalidate` is set to `false`, the current
-  // frame will not be invalidated automatically and you can
-  // conditionally invalidate the current frame.
-  invalidate()
-}, { autoInvalidate: false })
+useTask(
+  () => {
+    // Because `autoInvalidate` is set to `false`, the current
+    // frame will not be invalidated automatically and you can
+    // conditionally invalidate the current frame.
+    invalidate()
+  },
+  { autoInvalidate: false }
+)
 ```
 
 ## Mode `'manual'`
@@ -148,8 +151,8 @@ renderMode.set('on-demand')
 ```
 
 <Tip type="tip">
-  The renderMode property can be changed at any time, but it will only
-  take effect on the next frame.
+  The renderMode property can be changed at any time, but it will only take effect on the next
+  frame.
 </Tip>
 
 ## Render Modes and Custom Rendering
@@ -168,38 +171,43 @@ processing](/docs/examples/postprocessing/outlines).
 
 2. Set up a task that renders the scene. There are two ways to do this:
 
-  - Add a task to [Threlte's default
-    `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages). Tasks in
-    that stage will be executed after tasks in Threlte's `mainStage` and only
-    when a re-render is necessary based on the current render mode. This is the
-    recommended approach.
+- Add a task to [Threlte's default
+  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages). Tasks in
+  that stage will be executed after tasks in Threlte's `mainStage` and only
+  when a re-render is necessary based on the current render mode. This is the
+  recommended approach.
 
-  ```ts
-  import { useTask, useThrelte } from '@threlte/core'
+```ts
+import { useTask, useThrelte } from '@threlte/core'
 
-  const { renderStage } = useThrelte()
+const { renderStage } = useThrelte()
 
-  useTask(() => {
+useTask(
+  () => {
     // render here
-  }, { stage: renderStage, autoInvalidate: false })
-  ```
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
+```
 
+- Use `shouldRender` from the hook
+  [`useThrelte`](/docs/reference/core/use-threlte). This function will evaluate
+  to `true` based on the current render mode. This allows for more fine-grained
+  control over when to render and is useful when you want to render in a task
+  that is not in [Threlte's default
+  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages).
 
-  - Use `shouldRender` from the hook
-    [`useThrelte`](/docs/reference/core/use-threlte). This function will evaluate
-    to `true` based on the current render mode. This allows for more fine-grained
-    control over when to render and is useful when you want to render in a task
-    that is not in [Threlte's default
-    `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages).
+```ts
+import { useThrelte, useTask } from '@threlte/core'
 
-  ```ts
-  import { useThrelte, useTask } from '@threlte/core'
+const { shouldRender } = useThrelte()
 
-  const { shouldRender } = useThrelte()
-
-  useTask(() => {
+useTask(
+  () => {
     if (shouldRender()) {
       // render here
     }
-  }, { autoInvalidate: false })
-  ```
+  },
+  { autoInvalidate: false }
+)
+```

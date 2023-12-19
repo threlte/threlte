@@ -1,33 +1,39 @@
-<script lang='ts'>
+<script lang="ts">
   import { Canvas } from '@threlte/core'
   import { VRButton } from '@threlte/xr'
   import Scene from './Scene.svelte'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
 
-  const { action, addInput } = useTweakpane({
-    title: 'Teleport objects',
-		expanded: true
-	})
-
-  const showSurfaces = addInput({
-		label: 'Show teleport surfaces',
-		value: false,
-	})
-
-  const showBlockers = addInput({
-		label: 'Show teleport blockers',
-		value: false,
-	})
-
+  let showSurfaces = false
+  let showBlockers = false
 </script>
 
-<div use:action />
-
-<Canvas>
-  <Scene
-    {showSurfaces}
-    {showBlockers}
+<Pane
+  title="Teleport objects"
+  position="fixed"
+>
+  <Checkbox
+    bind:value={showSurfaces}
+    label="Show teleport surfaces"
   />
-</Canvas>
+  <Checkbox
+    bind:value={showBlockers}
+    label="Show teleport blockers"
+  />
+</Pane>
 
-<VRButton />
+<div>
+  <Canvas>
+    <Scene
+      {showSurfaces}
+      {showBlockers}
+    />
+  </Canvas>
+  <VRButton />
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

@@ -3,8 +3,20 @@
   import Scene from './Scene.svelte'
 </script>
 
-<Canvas>
-  <Scene />
+<div>
+  <Canvas>
+    <Scene />
 
-  <T.DirectionalLight intensity={2} castShadow position={[1, 1, 1]} />
-</Canvas>
+    <T.DirectionalLight
+      intensity={2}
+      castShadow
+      position={[1, 1, 1]}
+    />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

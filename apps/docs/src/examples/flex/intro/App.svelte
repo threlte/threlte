@@ -3,72 +3,63 @@
   import Scene from './Scene.svelte'
   import { NoToneMapping } from 'three'
   import { Grid, OrbitControls } from '@threlte/extras'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Slider, List } from 'svelte-tweakpane-ui'
 
   let innerWidth = 0
-  const { action, addInput } = useTweakpane({
-    title: 'Flex',
-    expanded: true
-  })
-
-  const width = addInput({
-    label: 'Window Width',
-    value: 800,
-    params: {
-      min: 450,
-      max: 800
-    }
-  })
-
-  const height = addInput({
-    label: 'Window Height',
-    value: 800,
-    params: {
-      min: 450,
-      max: 800
-    }
-  })
-
-  const rows = addInput({
-    label: 'Rows',
-    value: 5,
-    params: {
-      step: 1,
-      min: 3,
-      max: 8
-    }
-  })
-
-  const columns = addInput({
-    label: 'Columns',
-    value: 5,
-    params: {
-      step: 1,
-      min: 3,
-      max: 8
-    }
-  })
-
-  const size = addInput({
-    label: 'MatCap Size',
-    value: 128,
-    params: {
-      options: {
-        '64px': 64,
-        '128px': 128,
-        '256px': 256,
-        '512px': 512,
-        '1024px': 1024
-      }
-    }
-  })
+  let width = 800
+  let height = 800
+  let rows = 5
+  let columns = 5
+  let size = 128
+  let sizeOptions = {
+    '64px': 64,
+    '128px': 128,
+    '256px': 256,
+    '512px': 512,
+    '1024px': 1024
+  }
 </script>
 
-<div use:action />
+<Pane
+  title="Flex"
+  position="fixed"
+>
+  <Slider
+    bind:value={width}
+    label="Window Width"
+    min={450}
+    max={800}
+  />
+  <Slider
+    bind:value={height}
+    label="Window Height"
+    min={450}
+    max={800}
+  />
+  <Slider
+    bind:value={rows}
+    label="Rows"
+    step={1}
+    min={3}
+    max={8}
+  />
+  <Slider
+    bind:value={columns}
+    label="Columns"
+    step={1}
+    min={3}
+    max={8}
+  />
+  <List
+    bind:value={size}
+    label="MatCap Size"
+    options={sizeOptions}
+  />
+</Pane>
 
 <svelte:window bind:innerWidth />
 
-<div class="relative h-screen w-screen">
+<div>
   <Canvas toneMapping={NoToneMapping}>
     <Grid
       position.z={-10.1}
@@ -92,11 +83,17 @@
     </T.OrthographicCamera>
 
     <Scene
-      windowWidth={$width}
-      windowHeight={$height}
-      rows={$rows}
-      columns={$columns}
-      size={$size}
+      windowWidth={width}
+      windowHeight={height}
+      {rows}
+      {columns}
+      {size}
     />
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

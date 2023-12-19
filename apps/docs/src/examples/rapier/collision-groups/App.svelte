@@ -1,45 +1,49 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import { HTML } from '@threlte/extras'
-	import { Debug, World } from '@threlte/rapier'
-	import Scene from './Scene.svelte'
-	import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas } from '@threlte/core'
+  import { HTML } from '@threlte/extras'
+  import { Debug, World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
+  import { Pane, Button } from 'svelte-tweakpane-ui'
 
-	let reset: (() => void) | undefined
-
-	const { action, addButton } = useTweakpane()
-
-	addButton({
-		title: 'Reset',
-		onClick: () => {
-			reset?.()
-		}
-	})
+  let reset: () => void | undefined
 </script>
 
-<div use:action />
+<Pane
+  title="Collision Groups"
+  position="fixed"
+>
+  <Button
+    title="Reset"
+    on:click={reset}
+  />
+</Pane>
 
-<Canvas>
-	<World>
-		<Debug />
-		<Scene bind:reset />
+<div>
+  <Canvas>
+    <World>
+      <Debug />
+      <Scene bind:reset />
 
-		<HTML
-			slot="fallback"
-			transform
-		>
-			<p>
-				It seems your browser<br />
-				doesn't support WASM.<br />
-				I'm sorry.
-			</p>
-		</HTML>
-	</World>
-</Canvas>
+      <HTML
+        slot="fallback"
+        transform
+      >
+        <p>
+          It seems your browser<br />
+          doesn't support WASM.<br />
+          I'm sorry.
+        </p>
+      </HTML>
+    </World>
+  </Canvas>
+</div>
 
 <style>
-	p {
-		font-size: 0.75rem;
-		line-height: 1rem;
-	}
+  div {
+    height: 100%;
+  }
+  p {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
 </style>

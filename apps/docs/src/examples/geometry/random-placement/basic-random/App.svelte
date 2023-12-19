@@ -1,37 +1,28 @@
 <script>
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Button, Slider } from 'svelte-tweakpane-ui'
   import { regen, numberOfObjects } from './stores'
-
-  const { action, addButton, addInput } = useTweakpane({
-    title: 'Completely Random'
-  })
-
-  addButton({
-    title: 'regenerate',
-    label: 'Randomness',
-    onClick: () => {
-      $regen = !$regen
-    }
-  })
-
-  const { subscribe } = addInput({
-    value: 50,
-    label: 'Number of Objects',
-    params: {
-      min: 20,
-      max: 100,
-      step: 10
-    }
-  })
-
-  subscribe((value) => {
-    $numberOfObjects = value
-  })
 </script>
 
-<div use:action />
+<Pane
+  title="Completely Random"
+  position="fixed"
+>
+  <Button
+    title="regenerate"
+    on:click={() => {
+      $regen = !$regen
+    }}
+  />
+  <Slider
+    bind:value={$numberOfObjects}
+    label="Number of Objects"
+    min={20}
+    max={100}
+    step={10}
+  />
+</Pane>
 
 <div>
   <Canvas>
@@ -40,12 +31,7 @@
 </div>
 
 <style>
-  :global(body) {
-    margin: 0;
-  }
-
   div {
-    width: 100%;
     height: 100%;
   }
 </style>

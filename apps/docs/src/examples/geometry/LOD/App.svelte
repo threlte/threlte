@@ -1,22 +1,31 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import Scene from './Scene.svelte'
-	import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+  import { Pane, Button } from 'svelte-tweakpane-ui'
 
-	let reset: (() => void) | undefined
-
-	const { action, addButton } = useTweakpane()
-
-	addButton({
-		title: 'Reset Camera',
-		onClick: () => {
-			reset?.()
-		}
-	})
+  let reset: () => any | undefined
 </script>
 
-<div use:action />
+<Pane
+  title="LOD"
+  position="fixed"
+>
+  <Button
+    title="Reset Camera"
+    on:click={reset}
+  />
+</Pane>
 
-<Canvas>
-	<Scene bind:reset />
-</Canvas>
+<div>
+  <Canvas>
+    <Scene bind:reset />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+</style>

@@ -9,7 +9,7 @@
 
 <div>
   <Canvas>
-    <Scene {controls} />
+    <Scene />
   </Canvas>
 </div>
 

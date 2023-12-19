@@ -1,35 +1,40 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core'
-	import { World } from '@threlte/rapier'
-	import Scene from './Scene.svelte'
-	import { useTweakpane } from '$lib/useTweakpane'
+  import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
+  import { Pane, Button } from 'svelte-tweakpane-ui'
 
-	let reset: (() => void) | undefined
-	let toggleDebug: (() => void) | undefined
-
-	const { action, addButton } = useTweakpane()
-
-	addButton({
-		title: 'Reset',
-		onClick: () => {
-			reset?.()
-		}
-	})
-	addButton({
-		title: 'Toggle Debug',
-		onClick: () => {
-			toggleDebug?.()
-		}
-	})
+  let reset: () => any | undefined
+  let toggleDebug: () => any | undefined
 </script>
 
-<div use:action />
+<Pane
+  title=""
+  position="fixed"
+>
+  <Button
+    title="Reset"
+    on:click={reset}
+  />
+  <Button
+    title="Toggle Debug"
+    on:click={toggleDebug}
+  />
+</Pane>
 
-<Canvas>
-	<World>
-		<Scene
-			bind:reset
-			bind:toggleDebug
-		/>
-	</World>
-</Canvas>
+<div>
+  <Canvas>
+    <World>
+      <Scene
+        bind:reset
+        bind:toggleDebug
+      />
+    </World>
+  </Canvas>
+</div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>
