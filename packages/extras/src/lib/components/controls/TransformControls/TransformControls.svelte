@@ -29,9 +29,9 @@
 
   const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = writable(false)
-  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls) ?? true
+  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
   $: useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true)
-  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls) ?? true
+  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
   $: useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true)
 
   const onDraggingChanged = (e: { value: boolean }) => {

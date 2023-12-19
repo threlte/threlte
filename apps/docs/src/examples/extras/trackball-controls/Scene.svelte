@@ -1,17 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Gizmo } from '@threlte/extras'
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { TrackballControls } from '@threlte/extras'
-  import Settings from './Settings.svelte'
+  import { Gizmo, TrackballControls } from '@threlte/extras'
 
-  let staticMoving: boolean = false
-  let noRotate: boolean = false
-  let rotateSpeed: number = 1
-  let noZoom: boolean = false
-  let zoomSpeed: number = 1.2
-  let noPan: boolean = false
-  let panSpeed: number = 0.3
+  import { BoxGeometry, MeshStandardMaterial } from 'three'
+
+  export let staticMoving: boolean
+  export let noRotate: boolean
+  export let rotateSpeed: number
+  export let noZoom: boolean
+  export let zoomSpeed: number
+  export let noPan: boolean
+  export let panSpeed: number
 </script>
 
 <T.PerspectiveCamera
@@ -48,14 +47,4 @@
   position.y={1}
   geometry={new BoxGeometry(2, 2, 2)}
   material={new MeshStandardMaterial()}
-/>
-
-<Settings
-  bind:staticMoving
-  bind:noRotate
-  bind:rotateSpeed
-  bind:noZoom
-  bind:zoomSpeed
-  bind:noPan
-  bind:panSpeed
 />

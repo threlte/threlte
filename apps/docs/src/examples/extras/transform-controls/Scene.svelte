@@ -1,10 +1,11 @@
 <script lang="ts">
-  let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
   import { T } from '@threlte/core'
   import { OrbitControls, TrackballControls, TransformControls } from '@threlte/extras'
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { PerspectiveCamera } from 'three'
-  import Settings from './Settings.svelte'
+
+  import { BoxGeometry, MeshStandardMaterial, PerspectiveCamera } from 'three'
+
+  export let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
+
   let camera: PerspectiveCamera
 
   $: if (camera && controls === '<OrbitControls>') {
@@ -43,5 +44,3 @@
     material={new MeshStandardMaterial()}
   />
 </TransformControls>
-
-<Settings bind:controls />
