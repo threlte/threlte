@@ -14,7 +14,6 @@
 <Pane
   theme={ThemeUtils.presets.light}
   position="fixed"
-  scale={0.9}
   title="OrbitControls"
 >
   <Checkbox
