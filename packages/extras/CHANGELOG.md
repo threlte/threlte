@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.1.0
+
+### Minor Changes
+
+- b9f5db5c: Add TrackballControls
+
 ## 8.0.10
 
 ### Patch Changes

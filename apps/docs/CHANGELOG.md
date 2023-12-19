@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.7.0
+
+### Minor Changes
+
+- b9f5db5c: Add TrackballControls
+
 ## 0.6.4
 
 ### Patch Changes
