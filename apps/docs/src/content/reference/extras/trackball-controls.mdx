@@ -21,7 +21,9 @@
 The component `<TrackballControls>` must be a direct child of a camera component and will mount itself to that camera.
 By default, damping is enabled. You can disable this by setting `staticMoving` to true.
 
-When using `<TrackballControls>`, the frame loop will run continously. Note that unlike `<OrbitControls>`, `<TrackballControls>` does not support `autoRotate`.
+<Tip type="info">
+	Unlike `<OrbitControls>`, `<TrackballControls>` does not support `autoRotate`.
+</Tip>
 
 <Example
   path="extras/trackball-controls"
@@ -47,5 +49,4 @@ This example shows off just a few of the configurable properties of `<TrackballC
 ```
 
 `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element
-the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop
-and will run the frame loop continuously.
+the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
