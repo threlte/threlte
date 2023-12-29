@@ -31,7 +31,9 @@
 
   export const ref = new ThreeTrackballControls($parent, renderer.domElement)
 
-  useTask(ref.update)
+  useTask(ref.update, {
+    autoInvalidate: false
+  })
 
   const component = forwardEventHandlers()
 
