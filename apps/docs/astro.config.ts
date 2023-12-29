@@ -16,7 +16,7 @@ import svelte from '@astrojs/svelte'
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
 
-const noExternal = ['three', 'troika-three-text', 'postprocessing']
+const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
 }

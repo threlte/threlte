@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Splat, SplatLoader } from '@pmndrs/vanilla/core/Splat'
+  import { Splat, SplatLoader } from '@pmndrs/vanilla'
   import { T, useLoader, useTask, useThrelte } from '@threlte/core'
   export let src: string
   export let alphaHash = false
@@ -8,7 +8,9 @@
 
   const { renderer, camera } = useThrelte()
 
-  const loader = useLoader(() => new SplatLoader(renderer))
+  const loader = useLoader(SplatLoader, {
+    args: [renderer]
+  })
 
   let framesRendered = 0
   const { start, stop } = useTask(

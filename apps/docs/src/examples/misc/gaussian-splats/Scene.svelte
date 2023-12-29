@@ -1,11 +1,12 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Gizmo, OrbitControls, TransformControls, interactivity } from '@threlte/extras'
+  import { Gizmo, OrbitControls, TransformControls, interactivity, GLTF } from '@threlte/extras'
   import { Checkbox, Folder, FpsGraph, List, Pane, Slider } from 'svelte-tweakpane-ui'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import LumaSplats from './LumaSplatsThree/LumaSplatsThree.svelte'
   import RenderIndicator from './RenderIndicator.svelte'
   import Splat from './Splat/Splat.svelte'
+  import type { Material, MeshStandardMaterial } from 'three'
 
   interactivity()
 
@@ -16,9 +17,18 @@
   // <Splat>
   let showSplat = true
   let transformSplat = false
-  let alphaHash = true
-  let alphaTest = 0
+  let alphaHash = false
+  let alphaTest = 0.06
   let toneMapped = true
+
+  // Car
+  let showPorsche = true
+
+  let gltfMaterials: Record<string, MeshStandardMaterial> | undefined
+  $: if (gltfMaterials)
+    Object.values(gltfMaterials).forEach((material) => {
+      material.envMapIntensity = 6
+    })
 </script>
 
 <Pane
@@ -82,34 +92,48 @@
     {/if}
   </Folder>
 
+  <Folder title="Porsche">
+    <Checkbox
+      bind:value={showPorsche}
+      label="Show Porsche"
+    />
+  </Folder>
+
   <Folder title="Rendering Activity">
     <RenderIndicator />
     <FpsGraph />
   </Folder>
 </Pane>
 
-{#if showLumaSplats}
-  <LumaSplats
-    source="https://lumalabs.ai/capture/4c15c22e-8655-4423-aeac-b08f017dda22"
-    mode={lumaSplatsMode}
-  />
-{/if}
+<GLTF
+  visible={showPorsche}
+  position={[-1.48, -0.51, 2.15]}
+  rotation.y={57 * DEG2RAD}
+  scale={0.7}
+  bind:materials={gltfMaterials}
+  url="/models/splat-example/porsche_959.glb"
+/>
 
-{#if showSplat}
-  <Splat
-    position={[1.08, 2.21, -1.99]}
-    rotation={[-32.3 * DEG2RAD, -18.5 * DEG2RAD, -6.4 * DEG2RAD]}
-    src="https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat"
-    {alphaHash}
-    alphaTest={alphaTest > 0 ? alphaTest : undefined}
-    {toneMapped}
-    let:ref
-  >
-    {#if transformSplat}
-      <TransformControls object={ref} />
-    {/if}
-  </Splat>
-{/if}
+<LumaSplats
+  visible={showLumaSplats}
+  source="https://lumalabs.ai/capture/4c15c22e-8655-4423-aeac-b08f017dda22"
+  mode={lumaSplatsMode}
+/>
+
+<Splat
+  visible={showSplat}
+  position={[1.08, 2.21, -1.99]}
+  rotation={[-32.3 * DEG2RAD, -18.5 * DEG2RAD, -6.4 * DEG2RAD]}
+  src="https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat"
+  {alphaHash}
+  alphaTest={alphaTest > 0 ? alphaTest : undefined}
+  {toneMapped}
+  let:ref
+>
+  {#if transformSplat}
+    <TransformControls object={ref} />
+  {/if}
+</Splat>
 
 <Gizmo
   paddingX={15}
