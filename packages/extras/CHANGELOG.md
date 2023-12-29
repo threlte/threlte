@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.1.1
+
+### Patch Changes
+
+- aa6e2ce4: On-demand rendering for the `<TrackballControls>` as well as JSDoc test for tsdocs.dev
+
 ## 8.1.0
 
 ### Minor Changes
