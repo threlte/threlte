@@ -88,22 +88,26 @@
   // target is added as a sibling of the renderer's
   // dom element.
   const clickTarget = document.createElement('div')
+  // We need to know the bounding rect of the renderer's dom element
+  const renderTarget = renderer.domElement
+  const boundingRect = renderTarget.getBoundingClientRect()
+
   clickTarget.style.position = 'absolute'
   $: {
     if (horizontalPlacement === 'right') {
-      clickTarget.style.right = `${paddingX}px`
-      clickTarget.style.left = ''
+      clickTarget.style.right = ''
+      clickTarget.style.left = `${boundingRect.right - size - paddingX}px`
     } else {
       clickTarget.style.right = ''
-      clickTarget.style.left = `${paddingX}px`
+      clickTarget.style.left = `${paddingX + boundingRect.left}px`
     }
 
     if (verticalPlacement === 'bottom') {
-      clickTarget.style.bottom = `${paddingY}px`
-      clickTarget.style.top = ''
+      clickTarget.style.bottom = ''
+      clickTarget.style.top = `${boundingRect.bottom - size - paddingY}px`
     } else {
       clickTarget.style.bottom = ''
-      clickTarget.style.top = `${paddingY}px`
+      clickTarget.style.top = `${paddingY + boundingRect.top}px`
     }
 
     clickTarget.style.height = `${size}px`
