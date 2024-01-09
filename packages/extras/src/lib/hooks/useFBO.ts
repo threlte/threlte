@@ -22,8 +22,8 @@ export function useFBO(
 ): THREE.WebGLRenderTarget {
   const { dpr, size } = useThrelte()
 
-  const _width = typeof width === 'number' ? width : 0
-  const _height = typeof height === 'number' ? height : 0
+  const _width = typeof width === 'number' ? width : 1 * (dpr.current ?? 1)
+  const _height = typeof height === 'number' ? height : 1 * (dpr.current ?? 1)
   const _options = (typeof width === 'number' ? options : (width as UseFBOOptions)) || {}
   const { samples = 0, depth, ...targetOptions } = _options
 
