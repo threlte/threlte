@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
   import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
@@ -26,15 +26,18 @@
       (G * s * m2) / Math.pow(d, 2)
   }
 
+  const impulseVector = new Vector3()
+  const bodyV3 = new Vector3()
+
   function applyImpulseToBodiesInRange() {
-    const impulseVector = new Vector3()
     obj.getWorldPosition(gravitySource)
 
     world.forEachRigidBody((body: RigidBody) => {
       const { x, y, z } = body.translation()
-      const bodyV3: Vector3 = new Vector3(x, y, z)
-      const distance: number = gravitySource.distanceTo(bodyV3)
-      if (distance < range) {
+      bodyV3.set(x, y, z)
+
+      const distance = gravitySource.distanceToSquared(bodyV3)
+      if (distance < range ** 2) {
         let force = calcForceByType[gravityType](
           strength,
           body.mass(),
@@ -50,7 +53,7 @@
     })
   }
 
-  useFrame(() => {
+  useTask(() => {
     applyImpulseToBodiesInRange()
   })
 </script>

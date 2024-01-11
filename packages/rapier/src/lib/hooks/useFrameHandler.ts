@@ -1,5 +1,5 @@
 import { Collider, EventQueue } from '@dimforge/rapier3d-compat'
-import { useFrame } from '@threlte/core'
+import { type Stage, type Key, useTask } from '@threlte/core'
 import { derived } from 'svelte/store'
 import { Object3D, Quaternion, Vector3 } from 'three'
 import type { RapierContext } from '../types/types'
@@ -30,11 +30,11 @@ const getEventDispatchers = (ctx: RapierContext, collider1: Collider, collider2:
   }
 }
 
-export const useFrameHandler = (ctx: RapierContext, order?: number) => {
+export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
   const eventQueue = new EventQueue(false)
 
-  const { start, started, stop } = useFrame(
-    (_, delta) => {
+  const { start, started, stop } = useTask(
+    (delta) => {
       // if (!eventQueue) return
       const { world } = ctx
 
@@ -160,6 +160,15 @@ export const useFrameHandler = (ctx: RapierContext, order?: number) => {
           rigidBodyDispatcher2
         } = getEventDispatchers(ctx, collider1, collider2)
 
+        if (
+          !colliderDispatcher1 &&
+          !colliderDispatcher2 &&
+          !rigidBodyDispatcher1 &&
+          !rigidBodyDispatcher2
+        ) {
+          return
+        }
+
         const rigidBody1 = collider1.parent()
         const rigidBody2 = collider2.parent()
 
@@ -274,7 +283,7 @@ export const useFrameHandler = (ctx: RapierContext, order?: number) => {
         }
       })
     },
-    { order }
+    { stage }
   )
 
   // replacing the original pause and resume functions as well as the paused property
