@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.1.2
+
+### Patch Changes
+
+- e7b24a2f: fix Gizmo click events when the Canvas is not taking up the full viewport
+
 ## 8.1.1
 
 ### Patch Changes
