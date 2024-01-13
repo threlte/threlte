@@ -38,8 +38,9 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.11.2",
     "@inquirer/prompts": "^3.2.0",
+    "@lumaai/luma-web": "^0.1.15",
     "@macfja/svelte-persistent-store": "^2.2.1",
-    "@pmndrs/vanilla": "^1.9.6",
+    "@pmndrs/vanilla": "^1.14.1",
     "@stackblitz/sdk": "^1.8.2",
     "@tailwindcss/typography": "^0.5.3",
     "@theatre/core": "^0.6.2",
