@@ -1,14 +1,12 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Gizmo, OrbitControls, interactivity, GLTF } from '@threlte/extras'
+  import { GLTF, OrbitControls } from '@threlte/extras'
   import { Checkbox, Folder, FpsGraph, List, Pane, Slider } from 'svelte-tweakpane-ui'
+  import type { MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import LumaSplats from './LumaSplatsThree/LumaSplatsThree.svelte'
   import RenderIndicator from './RenderIndicator.svelte'
   import Splat from './Splat/Splat.svelte'
-  import type { MeshStandardMaterial } from 'three'
-
-  interactivity()
 
   // <LumaSplatsThree>
   let showLumaSplats = true
