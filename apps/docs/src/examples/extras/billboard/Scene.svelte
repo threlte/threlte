@@ -6,7 +6,7 @@
 <Billboard>
   <T.Mesh position={[3, 1, 0]}>
     <T.MeshBasicMaterial color="red" />
-    <T.PlaneGeometry args={[2, 3]}/>
+    <T.PlaneGeometry args={[2, 3]} />
   </T.Mesh>
 
   <T.Mesh position={[-4, 3, 0]}>

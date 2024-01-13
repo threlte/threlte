@@ -1,50 +1,61 @@
 <script lang="ts">
-	import { Group, Quaternion } from 'three';
-	import { T, useTask, useThrelte } from '@threlte/core';
-	import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte';
+  import { Euler, Group, Quaternion } from 'three'
+  import { T, useTask, useThrelte } from '@threlte/core'
+  import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte'
 
-	type $$Props = Required<BillboardProps>;
-	type $$Events = BillboardEvents;
-	type $$Slots = BillboardSlots;
+  type $$Props = Required<BillboardProps>
+  type $$Events = BillboardEvents
+  type $$Slots = BillboardSlots
 
-	export let follow: $$Props['follow'] = true;
-	export let lockX: $$Props['lockX'] = false;
-	export let lockY: $$Props['lockY'] = false;
-	export let lockZ: $$Props['lockZ'] = false;
+  export let follow: $$Props['follow'] = true
+  export let lockX: $$Props['lockX'] = false
+  export let lockY: $$Props['lockY'] = false
+  export let lockZ: $$Props['lockZ'] = false
 
-	let inner: Group;
-	let localRef: Group;
+  let inner: Group
+  let localRef: Group
 
-	const { camera } = useThrelte();
+  const { camera } = useThrelte()
 
-	const q = new Quaternion();
+  const q = new Quaternion()
 
-	useTask(() => {
-		if (!follow || !localRef) return;
+  const prevRotation = new Euler()
 
-		// save previous rotation in case we're locking an axis
-		const prevRotation = localRef.rotation.clone();
+  const { start, stop } = useTask(
+    () => {
+      if (!follow || !localRef) return
 
-		// always face the camera
-		localRef.updateMatrix();
-		localRef.updateWorldMatrix(false, false);
-		localRef.getWorldQuaternion(q);
-		$camera.getWorldQuaternion(inner.quaternion).premultiply(q.invert());
+      // save previous rotation in case we're locking an axis
+      prevRotation.copy(localRef.rotation)
 
-		// readjust any axis that is locked
-		if (lockX) localRef.rotation.x = prevRotation.x;
-		if (lockY) localRef.rotation.y = prevRotation.y;
-		if (lockZ) localRef.rotation.z = prevRotation.z;
-	});
+      // always face the camera
+      localRef.updateMatrix()
+      localRef.updateWorldMatrix(false, false)
+      localRef.getWorldQuaternion(q)
+      $camera.getWorldQuaternion(inner.quaternion).premultiply(q.invert())
+
+      // readjust any axis that is locked
+      if (lockX) localRef.rotation.x = prevRotation.x
+      if (lockY) localRef.rotation.y = prevRotation.y
+      if (lockZ) localRef.rotation.z = prevRotation.z
+    },
+    { autoStart: false }
+  )
+
+  $: if (follow && localRef) {
+    start()
+  } else {
+    stop()
+  }
 </script>
 
 <T.Group
-	bind:ref={localRef}
-	matrixAutoUpdate={false}
-	matrixWorldAutoUpdate={false}
-	{...$$restProps}
+  bind:ref={localRef}
+  matrixAutoUpdate={false}
+  matrixWorldAutoUpdate={false}
+  {...$$restProps}
 >
-	<T.Group bind:ref={inner}>
-		<slot ref={localRef}/>
-	</T.Group>
+  <T.Group bind:ref={inner}>
+    <slot ref={localRef} />
+  </T.Group>
 </T.Group>
