@@ -23,8 +23,6 @@
 
   const { start, stop } = useTask(
     () => {
-      if (!follow || !localRef) return
-
       // save previous rotation in case we're locking an axis
       prevRotation.copy(localRef.rotation)
 
