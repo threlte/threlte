@@ -1,11 +1,11 @@
 <script lang="ts">
   import { watch } from '@threlte/core'
   import { regen, numberOfObjects } from './stores'
-  // The following components are copies from https://fun-bit.vercel.app/
-  import BirchTree from './assets/birch.svelte'
-  import Tree from './assets/tree.svelte'
-  import Bush from './assets/bush.svelte'
-  import Rock from './assets/rock.svelte'
+  // The following components started as copies from https://fun-bit.vercel.app/
+  import BirchTrees from './assets/birch.svelte'
+  import Trees from './assets/tree.svelte'
+  import Bushes from './assets/bush.svelte'
+  import Rocks from './assets/rock.svelte'
 
   const distinctObjects = 4
   const commonRatio = 0.5
@@ -72,54 +72,10 @@
   }
 </script>
 
-{#each randomBushes as randomValues}
-  {@const x = randomValues[0] * 20 - 10}
-  {@const z = randomValues[1] * 20 - 10}
-  {@const rot = randomValues[2] * Math.PI * 2}
-  {@const scale = randomValues[3] * 2 + 0.5}
-  <Bush
-    position.x={x}
-    position.z={z}
-    rotation.y={rot}
-    {scale}
-  />
-{/each}
+<Bushes transformData={randomBushes} />
 
-{#each randomBirchTrees as randomValues}
-  {@const x = randomValues[0] * 20 - 10}
-  {@const z = randomValues[1] * 20 - 10}
-  {@const rot = randomValues[2] * Math.PI * 2}
-  {@const scale = randomValues[3] * 2 + 1}
-  <BirchTree
-    position.x={x}
-    position.z={z}
-    rotation.y={rot}
-    {scale}
-  />
-{/each}
+<BirchTrees transformData={randomBirchTrees} />
 
-{#each randomTrees as randomValues}
-  {@const x = randomValues[0] * 20 - 10}
-  {@const z = randomValues[1] * 20 - 10}
-  {@const rot = randomValues[2] * Math.PI * 2}
-  {@const scale = randomValues[3] * 2 + 1}
-  <Tree
-    position.x={x}
-    position.z={z}
-    rotation.y={rot}
-    {scale}
-  />
-{/each}
+<Trees transformData={randomTrees} />
 
-{#each randomRocks as randomValues}
-  {@const x = randomValues[0] * 20 - 10}
-  {@const z = randomValues[1] * 20 - 10}
-  {@const rot = randomValues[2] * Math.PI * 2}
-  {@const scale = randomValues[3] + 0.5}
-  <Rock
-    position.x={x}
-    position.z={z}
-    rotation.y={rot}
-    {scale}
-  />
-{/each}
+<Rocks transformData={randomRocks} />
