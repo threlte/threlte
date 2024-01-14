@@ -9,11 +9,7 @@
   makeDefault
   position={[20, 20, 20]}
 >
-  <OrbitControls
-    maxPolarAngle={1.56}
-    autoRotate
-    autoRotateSpeed={0.1}
-  />
+  <OrbitControls maxPolarAngle={1.56} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight position={[3, 10, 7]} />
