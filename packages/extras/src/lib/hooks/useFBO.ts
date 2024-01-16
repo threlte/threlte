@@ -54,10 +54,6 @@ export function useFBO(
     const _height = typeof height === 'number' ? height : val.height * dpr.current
     if (target.width !== _width && target.height !== _height) {
       target.setSize(_width, _height)
-      if (depth) {
-        target.depthTexture?.dispose()
-        target.depthTexture = new THREE.DepthTexture(_width, _height, THREE.FloatType)
-      }
     }
   })
 
