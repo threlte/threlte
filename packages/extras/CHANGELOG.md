@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.2.1
+
+### Patch Changes
+
+- 0214300f: On-demand rendering for damped OrbitControls
+
 ## 8.2.0
 
 ### Minor Changes
