@@ -31,8 +31,9 @@
 
   export const ref = new ThreeOrbitControls($parent, renderer.domElement)
 
-  const { start, stop } = useTask(() => ref.update(), {
-    autoStart: false
+  const { start, stop } = useTask(ref.update, {
+    autoStart: false,
+    autoInvalidate: false
   })
 
   $: {
