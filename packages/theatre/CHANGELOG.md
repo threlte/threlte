@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.6
+
+### Patch Changes
+
+- 4f7de350: Theatre module fix
+
 ## 2.1.5
 
 ### Patch Changes
