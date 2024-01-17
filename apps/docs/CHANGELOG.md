@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.8.0
+
+### Minor Changes
+
+- dce129b4: Add port of Billboard component from drei
+
 ## 0.7.0
 
 ### Minor Changes

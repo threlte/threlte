@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.2.0
+
+### Minor Changes
+
+- dce129b4: Add port of Billboard component from drei
+
 ## 8.1.2
 
 ### Patch Changes
