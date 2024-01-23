@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.3.0
+
+### Minor Changes
+
+- e6f83529: Bumped version of troika-three-text, added prop `colorRanges` to `<Text>`
+
 ## 8.2.1
 
 ### Patch Changes
