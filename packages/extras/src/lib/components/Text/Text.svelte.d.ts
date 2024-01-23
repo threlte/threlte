@@ -231,6 +231,16 @@ export interface TextMesh extends Mesh {
    * and "h" glyphs plus the "th" glyph.
    */
   characters?: string | string[] | null
+
+  /**
+   * WARNING: This API is experimental and may change.
+   * This allows more fine-grained control of colors for individual or ranges of characters,
+   * taking precedence over the material's `color`. Its format is an Object whose keys each
+   * define a starting character index for a range, and whose values are the color for each
+   * range. The color value can be a numeric hex color value, a `THREE.Color` object, or
+   * any of the strings accepted by `THREE.Color`.
+   */
+  colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
 }
 
 export type TextProps = Props<TextMesh>
