@@ -2,7 +2,7 @@
 import ShowcaseEntry from '$components/Sections/ShowcaseEntry.astro'
 import Tip from '$components/Tip/Tip.astro'
 import MainLayout from '$layouts/MainLayout.astro'
-import { CollectionEntry, getCollection } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 const showcaseCollection = await getCollection('showcase')
 
