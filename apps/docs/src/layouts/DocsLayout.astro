@@ -12,7 +12,6 @@ import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarM
 import Package from './Package.astro'
 import { c } from '../lib/classes'
 import Book from './Book.astro'
-import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Markprompt from '$components/Search/Markprompt'
 
@@ -65,13 +64,6 @@ const activeLinkStyles = '!text-orange'
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
         >
           <Book class="h-[16px] hidden lg:block" />Learn
-        </a>
-
-        <a
-          href="/docs/examples/examples"
-          class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
-        >
-          <Circles class="h-[16px] hidden lg:block" />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
