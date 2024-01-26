@@ -42,7 +42,10 @@ const activeLinkStyles = '!text-orange'
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
-      <a href="/">
+      <a
+        href="/"
+        data-astro-prefetch
+      >
         <Image
           src={Logo}
           alt="threlte logo"
@@ -63,6 +66,7 @@ const activeLinkStyles = '!text-orange'
         <a
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
+          data-astro-prefetch
         >
           <Book class="h-[16px] hidden lg:block" />Learn
         </a>
@@ -70,6 +74,7 @@ const activeLinkStyles = '!text-orange'
         <a
           href="/docs/examples/examples"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
+          data-astro-prefetch
         >
           <Circles class="h-[16px] hidden lg:block" />Examples
         </a>
@@ -83,6 +88,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />core</a
           >
@@ -92,6 +98,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />extras</a
           >
@@ -101,6 +108,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />gltf</a
           >
@@ -110,6 +118,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />rapier</a
           >
@@ -119,6 +128,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />theatre</a
           >
@@ -128,6 +138,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />xr
           </a>
@@ -137,6 +148,7 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
             )}
+            data-astro-prefetch
           >
             <Package class="h-[16px] hidden md:block" />flex
           </a>
