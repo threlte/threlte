@@ -5,12 +5,10 @@ import Sidebar from './LeftSidebar.svelte'
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
+const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith(
   '/docs/learn'
 )
   ? 'learn'
-  : Astro.url.pathname.startsWith('/docs/examples')
-  ? 'examples'
   : 'reference'
 
 const activeUrlPathName = Astro.url.pathname
