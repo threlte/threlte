@@ -52,10 +52,9 @@ type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
+  'Tutorials',
   'Basics',
-  'Advanced',
-  'More',
-  'Preprocessing'
+  'More'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
@@ -94,14 +93,14 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 }
 
 const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
-  const learnCollection = await getCollection('examples')
+  const examplesCollection = await getCollection('examples')
 
   // Trying to find the category names by looking at the directory structure. An
   // example in the dir 'src/content/examples/Animation System/transitions.mdx'
   // would have a category name of "Animation System".
   const categoryNames = [
     ...new Set(
-      learnCollection
+      examplesCollection
         .filter((item) => {
           // only use items that are nested in a subdirectory
           return item.id.split('/').length > 1
@@ -139,15 +138,13 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 }
 
 export const getLeftSidebarMenu = async (): Promise<
-  Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
+  Record<'learn' | 'reference', LeftSidebarMenu>
 > => {
   const reference = await getReferenceSidebarMenu()
   const learn = await getLearnSidebarMenu()
-  const examples = await getExamplesSidebarMenu()
 
   return {
     reference,
-    learn,
-    examples
+    learn
   }
 }

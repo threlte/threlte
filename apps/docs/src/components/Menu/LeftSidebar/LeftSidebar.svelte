@@ -2,8 +2,8 @@
   import { c } from '$lib/classes'
   import LeftSidebarCategory from './LeftSidebarCategory.svelte'
 
-  export let menu: Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
-  export let activeSidebarTab: 'learn' | 'reference' | 'examples'
+  export let menu: Record<'learn' | 'reference', LeftSidebarMenu>
+  export let activeSidebarTab: 'learn' | 'reference'
 
   export let activeUrlPathName: string
 </script>
