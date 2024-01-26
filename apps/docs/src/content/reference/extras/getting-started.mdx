@@ -1,10 +1,10 @@
 ---
 order: -2
 category: '@threlte/extras'
-name: Getting Started
+name: Start Here
 ---
 
-The package `'@threlte/extras'` provides useful utilities, abstractions and plugins for your Threlte application.
+The package `'@threlte/extras'` provides components, plugins, hooks and utilities.
 
 ## Installation
 
@@ -19,139 +19,133 @@ npm install @threlte/extras
   your own abstractions and plugins depending on your use case.
 </Tip>
 
-### Components
+## Overview
 
-Most components are [**abstractions**](/docs/learn/advanced/custom-abstractions) of one or more `<T>` components and forward all props and event listeners to it.
+#### [Shapes, Assets, Sound and Async](#shapes-assets-sound-and-async)
 
-Let's look at an example, the [`<OrbitControls>`](/docs/reference/extras/orbit-controls). They are a common component in Three.js applications and can be used to easily manipulate the camera. Let's implement it:
+how to load/await models, textures, sounds, display text, insert DOM and adjust the scene hirearchy.
 
-```svelte title="Scene.svelte" {10}+
-<script>
-  import { OrbitControls } from '@threlte/extras'
-  import { T } from '@threlte/core'
-</script>
+#### [Helpers, Visual guides and Controls](#helpers-visual-guides-and-controls)
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[5, 5, 5]}
->
-  <OrbitControls />
-</T.PerspectiveCamera>
-```
+Components that
 
-In a regular Three.js application, you would have to create a `OrbitControls` instance by
-passing the camera and a DOM element to it. In Threlte, you can just use the `<OrbitControls>`
-component and it will automatically use the default camera and the `<canvas>` element the
-renderer is rendering to. It will also automatically invalidate the frame on demand.
+#### [Visual Effects, Materials, Shaders and Post-Processing](#visual-effects-materials-shaders-and-post-processing)
 
-Under the hood though, there's still a regular `<T>` component that is doing the work of
-applying props and registering event listeners. Internally, `<OrbitControls>` is
-forwarding all props and event listeners, so you can use it just like a regular `<T>` component.
+blah
 
-Let's add an event listener that's called when the camera is moved:
+#### [Transitions, Interactivity, Animation and Staging](#transitions-interactivity-animation-and-staging)
 
-```svelte title="Scene.svelte" {11-13}+
-<script>
-  import { OrbitControls } from '@threlte/extras'
-  import { T } from '@threlte/core'
-</script>
+blah
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[5, 5, 5]}
->
-  <OrbitControls
-    on:change={(e) => {
-      console.log(e)
-    }}
-  />
-</T.PerspectiveCamera>
-```
+#### [Performance, Shadows and Rendering](#performance-shadows-and-rendering)
 
-The event listener is forwarded to the `<T>` component and will be called when the camera is moved.
-Keep in mind that these events are not hand-wired in the component, but are forwarded to the
-underlying `<T>` component which in turn forwards them to the Three.js object. So you can use any
-event listener that is supported by the `<T>` component.
+dailing in performance, components that reduce draw calls
 
-### Plugins
+## Shapes, Assets, Sound and Async
 
-The package also provides a few [plugins](/docs/learn/advanced/plugins) that can be used to extend the functionality of Threlte and `<T>` components.
-The most notable one is probably the plugin [`interactivity`](/docs/reference/extras/interactivity) that provides a way to interact with the scene. We can
-extend our example from above and implement `interactivity`:
+Components
 
-```svelte title="Scene.svelte" {5}+
-<script>
-  import { OrbitControls, interactivity } from '@threlte/extras'
-  import { T } from '@threlte/core'
+- GLTF
+- RoundedBoxGeometry
+- MeshLineGeometry
+- Text
+- HTML
+- Align
+- AudioListener
+- Audio
+- PositionalAudio
+- Portal
+- PortalTarget
+- Suspense
 
-  interactivity()
-</script>
+Hooks
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[5, 5, 5]}
->
-  <OrbitControls />
-</T.PerspectiveCamera>
+- useGltf
+- useGltfAnimations
+- useTexture
+- useAudioListener
+- useThrelteAudio
+- useSuspense
+- useProgress
 
-<T.Mesh
-  on:click={() => {
-    console.log('clicked')
-  }}
->
-  <T.BoxGeometry />
-  <T.MeshBasicMaterial color="red" />
-</T.Mesh>
-```
+Plugins
 
-Now, when we click on the box, we will see a message in the console. The `interactivity` plugin
-registers a global event listener on the `<canvas>` element and forwards all events to the
-respective `<T>` components. Check out the [guide on events](/docs/learn/basics/events) for more
-information on how to use events in Threlte.
+- Layers
 
-<Tip type="tip">
-  Plugins are injected via context and therefore need to be implement at the root of your
-  application, this is typically your `Scene.svelte` component. Check out our [recommended app
-  structure](/docs/learn/basics/context).
-</Tip>
+Lifecycle
 
-### Hooks
+- onSuspend
+- onReveal
 
-Hooks are regular functions with the limitation that they can only be invoked from the top level of
-a component. `'@threlte/extras'` provides useful hooks for loading assets, creating animations
-and more. Let's look at an example where we use the hook [`useGltf`](/docs/reference/extras/use-gltf)
-to load an asset:
+Examples
 
-```svelte title="Scene.svelte"
-<script>
-  import { useGltf } from '@threlte/extras'
-  import { T } from '@threlte/core'
+- Rendering Points
+- Cursor Lines
+- Terrain with 3D noise
+- Terrain with Rapier physics
 
-  // Place the model in your public folder
-  const model = useGltf('/model.glb')
-</script>
-```
+## Helpers, Visual guides and Controls
 
-The hook will return the special Threlte store `AsyncWritable` that makes it easy to consume the
-result of the loader. The store will be updated once the asset is loaded and can be used in the
-template either with the `{#await}` or the `{#if}` block. Let's use the `{#await}` block to
-display a loading message:
+- Gizmo
+- Grid
+- OrbitControls
+- TrackballControls
+- TransformControls
 
-```svelte title="Scene.svelte"
-<script>
-  import { useGltf } from '@threlte/extras'
-  import { T } from '@threlte/core'
-  import LoadingPlaceholder from './LoadingPlaceholder.svelte'
+Hooks
 
-  const model = useGltf('/model.glb')
-</script>
+- useCursor
+- useGamepad
 
-{#await model}
-  <LoadingPlaceholder />
-{:then value}
-  <T is={value} />
-{/await}
-```
+Examples
 
-Keep in mind that the hook `useGltf` caches the result as it's using
-[`useLoader`](/docs/reference/core/use-loader) internally.
+- camera-controls
+- Pointer Lock Controls
+- ThirdPersonCamera
+
+## Visual Effects, Materials, Shaders and Post-Processing
+
+- Edges
+- MeshLineMaterial
+- AnimatedSpriteMaterial
+
+Examples
+
+- Outlines
+- Interactive shader
+
+## Transitions, Interactivity, Animation and Staging
+
+Components
+
+- Float
+- Sky
+- Environment
+
+Plugins
+
+- transitions
+- interactivity
+
+Examples
+
+- Animating a Spaceship
+- Animation Transitions
+
+## Performance, Shadows and Rendering
+
+Components
+
+- InstancedMesh
+- Instance
+- InstancedMeshes
+- CSM
+- ContactShadows
+- SoftShadows
+
+Examples
+
+- LOD
+- Random Placement
+- Gaussian Splatting
+- CSS2DRenderer Overlay

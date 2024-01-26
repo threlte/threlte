@@ -1,12 +1,12 @@
 ---
-category: Advanced
+category: Getting Started
 title: Migration Guides
 order: 2
 ---
 
 ## Threlte 7
 
-Threlte 7 introduces a new *Task Scheduling System* that allows you to easily
+Threlte 7 introduces a new _Task Scheduling System_ that allows you to easily
 orchestrate the task execution order of your Threlte application. For details on
 how to use it, see the [documentation](/docs/learn/basics/scheduling-tasks).
 Before, you had the option to choose between `useFrame` and `useRender` to
@@ -22,11 +22,11 @@ on the `<T>` component.
 
 ### Constant prop types on `<T>`
 
-The `<T>` component now enforces the use of *constant prop types*. This means
+The `<T>` component now enforces the use of _constant prop types_. This means
 that the type of a certain prop value must not change in the lifetime of a
 component. See this example:
 
-```svelte title="Threlte&nbsp;6"
+```svelte title="Threlte 6"
 <script>
   import { T } from '@threlte/core'
 
@@ -47,7 +47,7 @@ and a rather bad practice to start with, which allows us to optimize the
 performance of the `<T>` component by enforcing this rule. This is how you would
 migrate the above example:
 
-```svelte title="Threlte&nbsp;7" {7}m
+```svelte title="Threlte 7" {7}m
 <script>
   import { T } from '@threlte/core'
 
@@ -70,13 +70,13 @@ migrate the above example:
 `frameloop` is now called `renderMode` as it only affects the rendering of your
 Threlte application. It accepts nearly the same values as before:
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 <Canvas frameloop="always" />
 <Canvas frameloop="demand" />
 <Canvas frameloop="never" />
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 <Canvas renderMode="always" />
 <Canvas renderMode="on-demand" />
 <Canvas renderMode="manual" />
@@ -103,7 +103,7 @@ explicit here is better.
 
 The hook [`useTask`](/docs/reference/core/use-task) replaces `useFrame`. It has
 a slightly different signature and allows you to to add a `task` to Threlte's
-*Task Scheduling System*. A task may have dependencies to other tasks, which you
+_Task Scheduling System_. A task may have dependencies to other tasks, which you
 can think of as the big brother of the `order` option of `useFrame`.
 
 #### Callback Arguments
@@ -113,7 +113,7 @@ The Threlte context previously available as the first argument to the callback
 of `useFrame` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -121,7 +121,7 @@ useFrame(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -139,13 +139,13 @@ The options of `useTask` have been renamed to better reflect their purpose. The
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // ...
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // ...
@@ -156,25 +156,35 @@ useTask((delta) => {
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="Threlte&nbsp;6"
-useFrame((_, delta) => {
-  // This task will be executed first
-}, { order: 0 })
+```ts title="Threlte 6"
+useFrame(
+  (_, delta) => {
+    // This task will be executed first
+  },
+  { order: 0 }
+)
 
-useFrame((_, delta) => {
-  // This task will be executed second
-}, { order: 1 })
+useFrame(
+  (_, delta) => {
+    // This task will be executed second
+  },
+  { order: 1 }
+)
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 useTask('first', (delta) => {
   // ...
 })
 
-useTask('second', (delta) => {
-  // This task will be executed after the task with the
-  // key 'first' has been executed.
-}, { after: 'first' })
+useTask(
+  'second',
+  (delta) => {
+    // This task will be executed after the task with the
+    // key 'first' has been executed.
+  },
+  { after: 'first' }
+)
 ```
 
 ### `useRender`
@@ -188,17 +198,21 @@ ever executes its tasks when a re-render is needed. A task added to this stage
 can be used to render your scene. Be sure to set the option `autoInvalidate` to
 `false` to prevent Threlte from automatically invalidating the render stage.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender(() => {
   // Render your scene here
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
-useTask('render', () => {
-  // Render your scene here
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  'render',
+  () => {
+    // Render your scene here
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 ```
 
 #### Callback Arguments
@@ -208,7 +222,7 @@ The Threlte context previously available as the first argument to the callback
 of `useRender` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -216,7 +230,7 @@ useRender(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -228,44 +242,61 @@ useTask((delta) => {
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender((_{ camera, scene }_, delta) => {
   // ...
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
-useTask((delta) => {
-  // ...
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  (delta) => {
+    // ...
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 ```
 
 #### If you used the `order` option
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="Threlte&nbsp;6"
-useRender((_, delta) => {
-  // This task will be executed first
-}, { order: 0 })
+```ts title="Threlte 6"
+useRender(
+  (_, delta) => {
+    // This task will be executed first
+  },
+  { order: 0 }
+)
 
-useRender((_, delta) => {
-  // This task will be executed second
-}, { order: 1 })
+useRender(
+  (_, delta) => {
+    // This task will be executed second
+  },
+  { order: 1 }
+)
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 
-useTask('first', (delta) => {
-  // ...
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  'first',
+  (delta) => {
+    // ...
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 
-useTask('second', (delta) => {
-  // This task will be executed after the task with the
-  // key 'first' has been executed.
-}, { after: 'first', stage: renderStage, autoInvalidate: false })
+useTask(
+  'second',
+  (delta) => {
+    // This task will be executed after the task with the
+    // key 'first' has been executed.
+  },
+  { after: 'first', stage: renderStage, autoInvalidate: false }
+)
 ```
 
 ## Migrating from Threlte 5 to Threlte 6
