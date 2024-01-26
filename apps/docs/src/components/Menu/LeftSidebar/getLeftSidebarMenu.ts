@@ -112,7 +112,7 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   ]
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
-    const menuItems = learnCollection
+    const menuItems = examplesCollection
       .filter((item) => item.id.startsWith(category))
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
