@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.9.0
+
+### Minor Changes
+
+- 2b11b030: Add port of FakeGlowMaterial r3f component from ektogamat
+
 ## 0.8.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.4.0
+
+### Minor Changes
+
+- 2b11b030: Add port of FakeGlowMaterial r3f component from ektogamat
+
 ## 8.3.0
 
 ### Minor Changes
