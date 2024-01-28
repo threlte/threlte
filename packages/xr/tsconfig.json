@@ -2,13 +2,6 @@
   "extends": "./.svelte-kit/tsconfig.json",
   "include": ["./src/**/*"],
   "compilerOptions": {
-    /**
-     * Sveltekit currently sets deprecated settings for TS for compatibility reasons.
-     * It will remove them in v2.0, at which point these two resets
-     *
-     * see https://github.com/sveltejs/kit/issues/8650
-     */
-
     "target": "ESNext",
     "module": "ESNext",
     "resolveJsonModule": true,
