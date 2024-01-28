@@ -30,6 +30,7 @@ export { default as Sky } from './components/Sky/Sky.svelte'
 export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
 export { default as Billboard } from './components/Billboard/Billboard.svelte'
+export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
