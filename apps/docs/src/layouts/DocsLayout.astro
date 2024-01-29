@@ -141,8 +141,10 @@ const activeLinkStyles = '!text-orange'
         <Search client:media="(min-width: 1280px)" />
       </div>
       <Socials
-        github
-        small
+			small
+			twitter
+			github
+			discord
       />
     </div>
   </header>
@@ -161,7 +163,9 @@ const activeLinkStyles = '!text-orange'
       class="h-[37px] w-auto"
     />
 
-    <Socials slot="after-navigation" />
+    <Socials slot="socials" twitter
+		github
+		discord />
   </MobileDocsNav>
 
   <main

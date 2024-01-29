@@ -6,7 +6,7 @@
   import MobileNav from './MobileNav.svelte'
 
   export let sidebarMenu: Awaited<ReturnType<typeof getLeftSidebarMenu>>
-  const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference', 'examples']
+  const keys: (keyof typeof sidebarMenu)[] = ['learn', 'reference']
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
@@ -42,8 +42,6 @@
                 Learn
               {:else if key === 'reference'}
                 Reference
-              {:else if key === 'examples'}
-                Examples
               {/if}
             </div>
             {#each sidebarMenu[key].categories as category}
@@ -61,11 +59,6 @@
 
     <hr />
 
-    <!-- Implement as soon as there are showcase entries -->
-    <!-- <div class="flex flex-col gap-2">
-      <a href="/showcase"> Showcase </a>
-    </div> -->
-
-    <slot name="after-navigation" />
+    <slot name="socials" />
   </div>
 </MobileNav>

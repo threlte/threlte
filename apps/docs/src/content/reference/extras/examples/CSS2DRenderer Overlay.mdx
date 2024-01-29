@@ -1,5 +1,8 @@
 ---
 title: CSS2DRenderer Overlay
+category: '@threlte/extras'
+name: 'Animation Transitions'
+type: 'example'
 ---
 
 This example shows how to run an additional Three.js renderer in parallel with
@@ -25,9 +28,9 @@ positioning on top of it.
 ### The render loop
 
 To integrate the a new renderer into svelte's loop, we call it inside a task
-added right *after* [Threlte's
+added right _after_ [Threlte's
 `autoRenderTask`](/docs/learn/basics/scheduling-tasks#default-tasks). For
-details on how to use the *Threlte Task Scheduling System*, see the
+details on how to use the _Threlte Task Scheduling System_, see the
 [documentation](/docs/learn/basics/scheduling-tasks).
 
 By default, each renderer traverses the scene and updates every object. We can
@@ -35,7 +38,7 @@ set
 [scene.matrixWorldAutoUpdate](https://threejs.org/docs/#api/en/core/Object3D.matrixAutoUpdate)
 to false and manually call `scene.updateMatrixWorld()` each tick in order to
 avoid duplicating the work, since we're running two renderers. To do that, we're
-adding a task that runs right *before* Threlte's `autoRenderTask`.
+adding a task that runs right _before_ Threlte's `autoRenderTask`.
 
 ```svelte title="Scene.svelte"
 <script>
@@ -102,7 +105,12 @@ slot and places them in the scene and renders them with the ThreeJS
 </div>
 
 {#if element}
-  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref />
+  <T
+    {...$$restProps}
+    is={CSS2DObject}
+    args={[element]}
+    let:ref
+  />
 {/if}
 ```
 
@@ -111,7 +119,10 @@ via the `three` slot. It passes all other properties through, letting us use it
 like so:
 
 ```svelte
-<CssObject position={[-1, 2, 1]} center={[-0.2, 0.5]}>
+<CssObject
+  position={[-1, 2, 1]}
+  center={[-0.2, 0.5]}
+>
   <CounterLabel label="Hello" />
 
   <T.Mesh slot="three">

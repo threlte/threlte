@@ -51,6 +51,7 @@ const title = Astro.props.title
     <!-- Header Right -->
     <div class="flex flex-row gap-5">
       <Socials
+			slot="socials"
         twitter
         github
         discord
@@ -68,7 +69,7 @@ const title = Astro.props.title
       class="h-[37px] w-auto"
     />
     <Socials
-      slot="after"
+      slot="socials"
       twitter
       github
       discord
