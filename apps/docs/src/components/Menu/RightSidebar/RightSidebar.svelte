@@ -68,8 +68,6 @@
 <div
   class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm "
 >
-  <slot />
-
   {#if headings.length}
     <span
       class="ml-[calc(1rem+2px)] mt-3 mb-3 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
@@ -201,6 +199,8 @@
       </li>
     {/if}
   </ul>
+
+  <slot />
 </div>
 
 <style lang="postcss">
