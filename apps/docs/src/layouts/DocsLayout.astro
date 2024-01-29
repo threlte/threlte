@@ -148,10 +148,6 @@ const activeLinkStyles = '!text-orange'
       <div class="hidden max-w-[280px] flex-1 xl:flex">
         <Search client:media="(min-width: 1280px)" />
       </div>
-      <Socials
-        github
-        small
-      />
     </div>
   </header>
 
@@ -169,7 +165,7 @@ const activeLinkStyles = '!text-orange'
       class="h-[37px] w-auto"
     />
 
-    <Socials slot="after-navigation" />
+    <Socials slot="after-navigation" github discord twitter />
   </MobileDocsNav>
 
   <main
@@ -179,7 +175,10 @@ const activeLinkStyles = '!text-orange'
       class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block lg:row-span-1"
       transition:name="left_sidebar"
     >
-      <div class="mx-6 mb-6 mt-6 flex flex-1 xl:hidden">
+      <div class="mx-6 mb-6 mt-6 flex flex-1 xl:hidden flex-col gap-3">
+				<div class="lg:hidden">
+					<Socials github discord twitter/>
+				</div>
         <Search client:media="(min-width: 768px) and (max-width: 1280px)" />
       </div>
       <LeftSidebar />
@@ -199,7 +198,9 @@ const activeLinkStyles = '!text-orange'
       class="fixed top-0 right-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] place-self-start justify-self-stretch overflow-hidden lg:top-[var(--docs-navbar-height)] lg:block lg:w-[var(--right-sidebar-width)]"
       transition:name="right_sidebar"
     >
-      <RightSidebar entry={Astro.props.entry} />
+      <RightSidebar entry={Astro.props.entry} >
+				<Socials github discord twitter/>
+			</RightSidebar>
     </aside>
   </main>
 </AppLayout>
