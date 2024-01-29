@@ -200,7 +200,9 @@
     {/if}
   </ul>
 
-  <slot />
+  <div class="ml-[-9px]">
+    <slot />
+  </div>
 </div>
 
 <style lang="postcss">
