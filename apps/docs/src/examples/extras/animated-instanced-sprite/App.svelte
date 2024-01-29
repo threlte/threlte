@@ -1,11 +1,14 @@
 <script lang="ts">
   import { Canvas, T } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import Settings from './Settings.svelte'
+
+  let billboarding = false
 </script>
 
 <div>
   <Canvas>
-    <Scene />
+    <Scene {billboarding} />
 
     <T.DirectionalLight
       intensity={2}
@@ -13,6 +16,8 @@
       position={[1, 1, 1]}
     />
   </Canvas>
+
+  <Settings bind:billboarding />
 </div>
 
 <style>

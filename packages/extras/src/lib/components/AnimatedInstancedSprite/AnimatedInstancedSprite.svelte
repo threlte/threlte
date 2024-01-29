@@ -4,28 +4,44 @@
     parseAseprite,
     type SpritesheetFormat
   } from '@threejs-kit/instanced-sprite-mesh'
-  import { T, useFrame, useLoader, useThrelte, watch } from '@threlte/core'
+  import { T, useLoader, useTask, useThrelte, watch } from '@threlte/core'
   import {
     DoubleSide,
     FileLoader,
     LinearFilter,
+    Material,
     Matrix4,
     MeshBasicMaterial,
+    MeshLambertMaterial,
+    MeshPhongMaterial,
+    MeshStandardMaterial,
     NearestFilter,
     RepeatWrapping,
     type Texture,
+    type Vector2Tuple,
     type Vector3Tuple
   } from 'three'
 
-  import { useTexture } from '../../hooks/useTexture'
-  import { onDestroy, setContext } from 'svelte'
+  import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
+  import { useTexture } from '../../hooks/useTexture'
+  import type {
+    AnimatedInstancedSpriteEvents,
+    AnimatedInstancedSpriteProps,
+    AnimatedInstancedSpriteSlots
+  } from './AnimatedInstancedSprite.svelte'
+
+  type $$Props = Required<AnimatedInstancedSpriteProps>
+  type $$Events = AnimatedInstancedSpriteEvents
+  type $$Slots = AnimatedInstancedSpriteSlots
+
+  export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
+  export let fps: $$Props['fps'] = 15
+  export let billboarding: $$Props['billboarding']
 
   export let textureUrl: $$Props['textureUrl']
   export let dataUrl: $$Props['dataUrl'] = ''
-  // export let autoplay: $$Props['autoplay'] = true;
   export let count: $$Props['count'] = 1000
-  export let fps: $$Props['fps'] = 15
   export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
   export let transparent: $$Props['transparent'] = true
@@ -33,9 +49,7 @@
   export let texture: Texture | undefined = undefined
   export let spritesheet: SpritesheetFormat | undefined = undefined
 
-  $: console.log({ spritesheet })
-
-  const baseMaterial = new MeshBasicMaterial({
+  const spriteBaseMaterial = new baseMaterial({
     transparent: transparent,
     alphaTest: alphaTest,
     // needs to be double side for shading
@@ -55,7 +69,7 @@
   const { renderer } = useThrelte()
 
   const mesh: InstancedSpriteMesh<MeshBasicMaterial, SpriteAnimations> = new InstancedSpriteMesh(
-    baseMaterial,
+    spriteBaseMaterial,
     count,
     renderer,
     {
@@ -63,9 +77,6 @@
       spritesheet
     }
   )
-
-  $: mesh.material.alphaTest = alphaTest
-  $: mesh.material.transparent = transparent
 
   const textureStore = texture
     ? writable(texture)
@@ -113,24 +124,41 @@
     }
   })
 
+  //
+  // REACTIVE PROPS
+  //
+
+  // VANILLA
+  $: mesh.material.alphaTest = alphaTest
+  $: mesh.material.transparent = transparent
+  // FPS
   $: mesh.fps = fps
 
-  let initialized = false
-
-  $: {
-    if ($textureStore && mesh.material && !initialized && mesh) {
-      mesh.castShadow = true
+  // BILLBOARDING
+  const billboardingStore = writable<boolean | undefined>(undefined)
+  $: billboardingStore.set(billboarding)
+  watch([billboardingStore], () => {
+    if ($billboardingStore === undefined) {
+      mesh.billboarding.unsetAll()
+      return
+    } else {
+      mesh.billboarding.setAll($billboardingStore)
     }
-  }
+  })
 
-  let dirtyInstanceMatrix = false
+  //
+  // MATRIX UPDATE - POSITION AND SCALE
+  //
 
+  let instanceMatrixNeedsUpdate = false
   const tempMatrix = new Matrix4()
 
-  const updatePosition = (id: number, position: Vector3Tuple) => {
+  // Since this uses matrix updates, position and scale have to be updated at the same.
+  const updatePosition = (id: number, position: Vector3Tuple, scale: Vector2Tuple = [1, 1]) => {
+    tempMatrix.makeScale(scale[0], scale[1], 1)
     tempMatrix.setPosition(...position)
     mesh.setMatrixAt(id, tempMatrix)
-    dirtyInstanceMatrix = true
+    instanceMatrixNeedsUpdate = true
   }
 
   const setAnimation = (instanceId: number, animationId: SpriteAnimations) => {
@@ -145,18 +173,13 @@
     setAnimation
   })
 
-  useFrame(() => {
+  useTask(() => {
     mesh.update()
-  })
-
-  useFrame(({ clock }) => {
-    if (dirtyInstanceMatrix) {
+    if (instanceMatrixNeedsUpdate) {
       mesh.instanceMatrix.needsUpdate = true
-      dirtyInstanceMatrix = false
+      instanceMatrixNeedsUpdate = false
     }
   })
-
-  let j = 0
 </script>
 
 <T is={mesh} />

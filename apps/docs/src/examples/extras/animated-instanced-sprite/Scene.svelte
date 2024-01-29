@@ -3,6 +3,8 @@
   import { Grid, OrbitControls, Sky, AnimatedInstancedSprite } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import PlayerUpdater from './PlayerUpdater.svelte'
+
+  export let billboarding = false
 </script>
 
 <T.PerspectiveCamera
@@ -20,6 +22,7 @@
   dataUrl="/textures/sprites/player.json"
   fps={10}
   count={50000}
+  {billboarding}
 >
   <PlayerUpdater />
 </AnimatedInstancedSprite>
