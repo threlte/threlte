@@ -1,0 +1,40 @@
+---
+{
+  order: 3,
+  category: '@threlte/extras',
+  sourcePath: 'packages/extras/src/lib/components/AnimatedInstancedSprite/AnimatedInstancedSprite.svelte',
+  name: <AnimatedInstancedSprite>,
+  type: 'component',
+  componentSignature:
+    {
+      props:
+        [
+          {
+            name: 'fps',
+            type: 'boolean',
+            required: false,
+            default: '10',
+            description: 'The desired frames per second of the animation.'
+          }
+        ],
+      events:
+        [
+          {
+            name: 'load',
+            payload: 'void',
+            description: 'Fires when all resources have loaded.'
+          }
+        ],
+      bindings:
+        [
+          { name: ref, type: 'Mesh' }
+        ]
+    }
+}
+---
+
+
+Animated instanced Sprite
+
+
+<Example path="extras/animated-instanced-sprite" />
