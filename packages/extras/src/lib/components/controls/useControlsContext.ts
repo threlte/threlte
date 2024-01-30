@@ -4,8 +4,8 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 
 type ControlsContext = {
-  orbitControls: Writable<OrbitControls | undefined>,
-	trackballControls: Writable<TrackballControls | undefined>,
+  orbitControls: Writable<OrbitControls | undefined>
+  trackballControls: Writable<TrackballControls | undefined>
 }
 
 /**
@@ -18,6 +18,6 @@ type ControlsContext = {
 export const useControlsContext = (): ControlsContext => {
   return useThrelteUserContext<ControlsContext>('threlte-controls', {
     orbitControls: writable<OrbitControls | undefined>(undefined),
-		trackballControls: writable<TrackballControls | undefined>(undefined),
+    trackballControls: writable<TrackballControls | undefined>(undefined)
   })
 }
