@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { FileLoader, LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
-  import { writable } from 'svelte/store'
-  import { useTexture } from '../../hooks/useTexture'
-  import { useLoader, watch } from '@threlte/core'
   import { parseAseprite, type SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
-  import type { SpritesheetEvents, SpritesheetProps, SpritesheetSlots } from './Spritesheet'
+  import { watch } from '@threlte/core'
   import { getContext, onMount } from 'svelte'
+  import { writable } from 'svelte/store'
+  import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
+  import { useTexture } from '../../hooks/useTexture'
   import type { AnimatedInstancedSpriteInternalCtx } from './AnimatedInstancedSprite.svelte'
+  import type { SpritesheetEvents, SpritesheetProps, SpritesheetSlots } from './Spritesheet'
 
   type $$Props = SpritesheetProps
   type $$Events = SpritesheetEvents
@@ -16,7 +16,9 @@
   export let dataUrl: $$Props['dataUrl'] = undefined
   export let filter: $$Props['filter'] = 'nearest'
 
-  const spriteCtx = getContext<AnimatedInstancedSpriteInternalCtx>('internal-instanced-sprite-ctx')
+  const spriteCtx = getContext<AnimatedInstancedSpriteInternalCtx | undefined>(
+    'internal-instanced-sprite-ctx'
+  )
 
   let texture: Texture | undefined = undefined
   let spritesheet: SpritesheetFormat | undefined = undefined
@@ -29,14 +31,10 @@
 
   const spritesheetStore = writable<SpritesheetFormat | undefined>()
   watch([spritesheetStore], () => {
-    console.log('spritesheet changed')
     if ($spritesheetStore) {
-      console.log('setting spritesheet in sprite')
-      spriteCtx.setSpritesheet($spritesheetStore)
+      spriteCtx?.setSpritesheet($spritesheetStore)
     }
   })
-
-  $: console.log({ spritesheet })
 
   $: spritesheetStore.set(spritesheet)
 
@@ -63,8 +61,6 @@
   $: jsonStore.set(jsonData)
 
   watch([jsonStore], ([json]) => {
-    console.log('Parsing json to spritesheet')
-    console.log({ json })
     if (json) {
       spritesheet = parseAseprite(json)
       spritesheetStore.set(spritesheet)
