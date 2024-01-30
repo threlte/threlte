@@ -7,5 +7,9 @@
 </script>
 
 {#if envMap}
-  <T is={GroundProjectedSkybox} args={[envMap]} {...$$restProps} />
+  <T
+    is={GroundProjectedSkybox}
+    args={[envMap]}
+    {...$$restProps}
+  />
 {/if}

@@ -47,7 +47,7 @@
               {/if}
             </div>
             {#each sidebarMenu[key].categories as category}
-              <li class="ml-4 mt-2 mb-0 text-sm">
+              <li class="mb-0 ml-4 mt-2 text-sm">
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}

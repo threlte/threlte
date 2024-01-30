@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Grid, OrbitControls, Sky, AnimatedSpriteMaterial } from '@threlte/extras'
-
 </script>
 
 <T.OrthographicCamera
@@ -23,14 +22,27 @@
 
 <Sky />
 
-<Grid position.y={0.001} type='polar' fadeDistance={10} infiniteGrid />
+<Grid
+  position.y={0.001}
+  type="polar"
+  fadeDistance={10}
+  infiniteGrid
+/>
 
-<T.Mesh position.y={1} position.x={-2} castShadow receiveShadow>
+<T.Mesh
+  position.y={1}
+  position.x={-2}
+  castShadow
+  receiveShadow
+>
   <T.MeshStandardMaterial color="white" />
   <T.SphereGeometry />
 </T.Mesh>
 
-<T.Mesh receiveShadow rotation.x={-Math.PI / 2}>
+<T.Mesh
+  receiveShadow
+  rotation.x={-Math.PI / 2}
+>
   <T.PlaneGeometry args={[1000, 1000]} />
   <T.MeshStandardMaterial />
 </T.Mesh>
@@ -42,9 +54,9 @@
   receiveShadow
 >
   <AnimatedSpriteMaterial
-    animation='Idle_Left'
-    textureUrl='/textures/sprites/punk.png'
-    dataUrl='/textures/sprites/punk.json'
+    animation="Idle_Left"
+    textureUrl="/textures/sprites/punk.png"
+    dataUrl="/textures/sprites/punk.json"
   />
   <T.PlaneGeometry />
 </T.Mesh>

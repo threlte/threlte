@@ -1,11 +1,31 @@
-<script lang='ts'>
+<script lang="ts">
   import * as THREE from 'three'
   import { T } from '@threlte/core'
   import { InstancedMesh, Instance, RoundedBoxGeometry } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
 
-  const colors = ['#ff5252', '#ff4081', '#d500f9', '#3d5afe', '#40c4ff', '#18ffff', '#f9a825', '#ffd740', '#bf360c'] as const
-  const positions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]] as const
+  const colors = [
+    '#ff5252',
+    '#ff4081',
+    '#d500f9',
+    '#3d5afe',
+    '#40c4ff',
+    '#18ffff',
+    '#f9a825',
+    '#ffd740',
+    '#bf360c'
+  ] as const
+  const positions = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 0],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1]
+  ] as const
 
   type Block = {
     position: THREE.Vector3
@@ -33,8 +53,14 @@
 </script>
 
 <InstancedMesh limit={numCubes}>
-  <RoundedBoxGeometry radius={boxRadius} args={[boxSize, boxSize, boxSize]} />
-  <T.MeshStandardMaterial roughness={0} metalness={0.2} />
+  <RoundedBoxGeometry
+    radius={boxRadius}
+    args={[boxSize, boxSize, boxSize]}
+  />
+  <T.MeshStandardMaterial
+    roughness={0}
+    metalness={0.2}
+  />
 
   {#each cubes as { position, color }, index (index)}
     <T.Group
@@ -43,7 +69,11 @@
       position.z={position.z - offsetZ}
     >
       <RigidBody linearVelocity={[0, 0, speed]}>
-        <Collider shape='cuboid' mass={0.5} args={[boxSize / 2, boxSize / 2, boxSize / 2]} />
+        <Collider
+          shape="cuboid"
+          mass={0.5}
+          args={[boxSize / 2, boxSize / 2, boxSize / 2]}
+        />
         <Instance {color} />
       </RigidBody>
     </T.Group>

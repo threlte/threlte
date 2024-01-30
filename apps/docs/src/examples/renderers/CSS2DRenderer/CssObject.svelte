@@ -16,7 +16,15 @@
 </div>
 
 {#if element}
-  <T {...$$restProps} is={CSS2DObject} args={[element]} let:ref>
-    <slot name="three" {ref} />
+  <T
+    {...$$restProps}
+    is={CSS2DObject}
+    args={[element]}
+    let:ref
+  >
+    <slot
+      name="three"
+      {ref}
+    />
   </T>
 {/if}

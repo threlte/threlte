@@ -69,7 +69,13 @@
 
   export const create = () => {
     cleanup()
-    colliders = createCollidersFromChildren(group, shape ?? 'convexHull', world, rigidBody, rigidBodyParentObject)
+    colliders = createCollidersFromChildren(
+      group,
+      shape ?? 'convexHull',
+      world,
+      rigidBody,
+      rigidBodyParentObject
+    )
     colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
 
     collisionGroups.registerColliders(colliders)

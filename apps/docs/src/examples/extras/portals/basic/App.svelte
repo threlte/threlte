@@ -3,7 +3,7 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div class="w-full h-full relative bg-blue-500/20">
+<div class="relative h-full w-full bg-blue-500/20">
   <Canvas>
     <Scene />
   </Canvas>

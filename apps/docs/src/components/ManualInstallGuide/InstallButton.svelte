@@ -12,7 +12,7 @@
   {...$$restProps}
   on:click
   class={c(
-    'px-3 pr-4 py-1 gap-2 rounded-md flex flex-row items-center border-white/20 border justify-start group',
+    'group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4',
     active
       ? 'bg-green-500/70 text-white'
       : passivelyActive
@@ -26,7 +26,7 @@
       xmlns="http://www.w3.org/2000/svg"
       width="76"
       height="76"
-      class="fill-current h-[1.5em] w-auto group-hover:text-white"
+      class="h-[1.5em] w-auto fill-current group-hover:text-white"
       viewBox="0 0 256 256"
       ><path
         d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z"
@@ -40,7 +40,7 @@
       xmlns="http://www.w3.org/2000/svg"
       width="76"
       height="76"
-      class="fill-current h-[1.5em] w-auto group-hover:text-white"
+      class="h-[1.5em] w-auto fill-current group-hover:text-white"
       viewBox="0 0 256 256"
       ><path
         d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z"
@@ -52,7 +52,7 @@
   {/if}
   <code
     class={c(
-      'bg-transparent mx-0 px-0',
+      'mx-0 bg-transparent px-0',
       active || passivelyActive ? 'text-white' : 'text-faded group-hover:text-white'
     )}
   >

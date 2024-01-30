@@ -52,5 +52,5 @@
   depthTest={false}
   {...$$restProps}
 >
-	<slot ref={material} />
+  <slot ref={material} />
 </T>
