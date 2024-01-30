@@ -2,22 +2,20 @@ import type { PLAY_MODE, SpritesheetFormat } from '@threejs-kit/instanced-sprite
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import {
-  Material,
+  InstancedMesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
   MeshPhongMaterial,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  Texture
 } from 'three'
 
-export type AnimatedInstancedSpriteProps = Props<Material> & {
+export type AnimatedInstancedSpriteProps = Props<InstancedMesh> & {
   /** Number of instances */
   count: number
 
   /** The URL of the spritesheet texture image. */
-  textureUrl: string
-
-  /** The URL of the spritesheet JSON. */
-  // dataUrl?: string
+  textureUrl?: string
 
   /**
    * Base material used to construct the sprite material. MeshBasicMaterial by default.
@@ -131,6 +129,7 @@ export type AnimatedInstancedSpriteSlots = any
 
 export type AnimatedInstancedSpriteInternalCtx = {
   setSpritesheet: (spritesheet: SpritesheetFormat) => void
+  setTexture: (texture: Texture) => void
 }
 
 export default class AnimatedInstancedSprite extends SvelteComponent<

@@ -39,7 +39,6 @@
   export let playmode: $$Props['playmode'] = 'FORWARD'
 
   export let textureUrl: $$Props['textureUrl']
-  export let dataUrl: $$Props['dataUrl'] = ''
   export let count: $$Props['count'] = 1000
   export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
@@ -83,8 +82,11 @@
     mesh.spritesheet = spritesheet
     // todo upstream types
     animationMap.set(mesh.animationMap)
+  }
 
-    console.log('setting spritesheet')
+  const setTexture = (texture: Texture) => {
+    mesh.material.map = $textureStore
+    mesh.material.needsUpdate = true
   }
 
   const textureStore = texture
@@ -101,8 +103,7 @@
       })
 
   watch(textureStore, () => {
-    mesh.material.map = $textureStore
-    mesh.material.needsUpdate = true
+    setTexture($textureStore)
   })
 
   //
@@ -168,7 +169,8 @@
   })
 
   setContext<AnimatedInstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
-    setSpritesheet
+    setSpritesheet,
+    setTexture
   })
 
   useTask(() => {

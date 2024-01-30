@@ -1,8 +1,7 @@
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { Events, Props, Slots } from '@threlte/core'
-import type { Mesh } from 'three'
 
-export type SpritesheetProps = Props<Mesh> & {
+export type SpritesheetProps = Props<any> & {
   /** The URL of the spritesheet texture image. */
   textureUrl?: string
 
@@ -17,12 +16,4 @@ export type SpritesheetProps = Props<Mesh> & {
   filter?: 'nearest' | 'linear'
 }
 
-export type SpritesheetEvents = Events<Mesh>
-
-export type SpritesheetSlots = Slots<Mesh>
-
-export default class Spritesheet extends SvelteComponent<
-  SpritesheetProps,
-  SpritesheetEvents,
-  SpritesheetSlots
-> {}
+export default class Spritesheet extends SvelteComponent<SpritesheetProps> {}

@@ -6,11 +6,9 @@
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import type { AnimatedInstancedSpriteInternalCtx } from './AnimatedInstancedSprite.svelte'
-  import type { SpritesheetEvents, SpritesheetProps, SpritesheetSlots } from './Spritesheet'
+  import type { SpritesheetProps } from './Spritesheet'
 
   type $$Props = SpritesheetProps
-  type $$Events = SpritesheetEvents
-  type $$Slots = SpritesheetSlots
 
   export let textureUrl: $$Props['textureUrl'] = undefined
   export let dataUrl: $$Props['dataUrl'] = undefined
@@ -25,8 +23,8 @@
   let jsonData: any = undefined
 
   const textureStore = writable<Texture | undefined>(texture)
-  watch([textureStore], () => {
-    // if texture store changes, send to parent via ctx/event
+  watch([textureStore], ([texture]) => {
+    if (texture) spriteCtx?.setTexture(texture)
   })
 
   const spritesheetStore = writable<SpritesheetFormat | undefined>()
@@ -79,9 +77,14 @@
   })
 
   onMount(() => {
+    // check if within instanced sprite context
     if (spriteCtx === undefined)
       console.error(
         'Internal sprite context is undefined. <Spritesheet/> component should be a child of <AnimatedInstancedSprite/>'
       )
+
+    //
   })
 </script>
+
+<slot />

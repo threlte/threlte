@@ -83,5 +83,7 @@ export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
 // instanced sprites
 export { default as AnimatedInstancedSprite } from './components/AnimatedInstancedSprite/AnimatedInstancedSprite.svelte'
 export { default as Spritesheet } from './components/AnimatedInstancedSprite/Spritesheet.svelte'
+export { default as SpriteAnimation } from './components/AnimatedInstancedSprite/SpriteAnimation.svelte'
+export { default as SpriteFile } from './components/AnimatedInstancedSprite/SpriteFile.svelte'
 
 export type { ThrelteGltf } from './types/types'
