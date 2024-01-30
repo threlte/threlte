@@ -3,9 +3,9 @@ import { setContext } from 'svelte'
 import { derived, writable, type Readable } from 'svelte/store'
 
 export type SuspenseContext = {
-  suspend: (id: string, promise: Promise<any>) => void
+  suspend: (promise: Promise<any>) => void
   suspended: Readable<boolean>
-  onComponentDestroy: (id: string) => void
+  onComponentDestroy: (promise: Promise<any>) => void
 }
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
@@ -16,14 +16,14 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   }>()
 
   /**
-   * This map contains all the promises that are currently being suspended.
+   * This set contains all the promises that are currently being suspended.
    */
-  const promises = currentWritable<Map<string, Set<Promise<any>>>>(new Map())
+  const promises = currentWritable<Set<Promise<any>>>(new Set())
 
   /**
-   * This map contains all the errors that were thrown during the suspension.
+   * This set contains all the errors that were thrown during the suspension.
    */
-  const errors = currentWritable<Map<string, Error[]>>(new Map())
+  const errors = currentWritable<Map<Promise<any>, Error>>(new Map())
 
   const finalized = writable<boolean>(false)
   const checkFinalized = () => {
@@ -32,34 +32,30 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
 
   const finalStore = writable<boolean>(options?.final ?? false)
 
-  const addPromise = (id: string, promise: Promise<any>) => {
-    promises.update((map) => {
-      if (map.has(id)) {
-        map.get(id)?.add(promise)
-      } else {
-        map.set(id, new Set([promise]))
-      }
-      return map
+  const addPromise = (promise: Promise<any>) => {
+    promises.update((set) => {
+      set.add(promise)
+      return set
     })
   }
-  const removePromise = (id: string, promise: Promise<any>) => {
-    promises.update((map) => {
-      if (map.has(id)) {
-        map.get(id)?.delete(promise)
-      }
-      if (map.get(id)?.size === 0) {
-        map.delete(id)
-      }
-      return map
+
+  const removePromise = (promise: Promise<any>) => {
+    promises.update((set) => {
+      set.delete(promise)
+      return set
     })
   }
-  const addError = (id: string, error: Error) => {
+
+  const addError = (promise: Promise<any>, error: Error) => {
     errors.update((map) => {
-      if (map.has(id)) {
-        map.get(id)?.push(error)
-      } else {
-        map.set(id, [error])
-      }
+      map.set(promise, error)
+      return map
+    })
+  }
+
+  const removeError = (promise: Promise<any>) => {
+    errors.update((map) => {
+      map.delete(promise)
       return map
     })
   }
@@ -89,40 +85,28 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   )
 
   const context: SuspenseContext = {
-    suspend(id: string, promise: Promise<any>) {
-      addPromise(id, promise)
+    suspend(promise: Promise<any>) {
+      addPromise(promise)
+
       promise
-        .then(() => {
-          if (promises.current.get(id)?.has(promise)) {
-            removePromise(id, promise)
-          }
-        })
         .catch((error) => {
-          if (promises.current.get(id)?.has(promise)) {
-            removePromise(id, promise)
-            addError(id, error)
-            dispatch('error', error)
-          }
+          addError(promise, error)
+          dispatch('error', error)
         })
         .finally(() => {
+          removePromise(promise)
           checkFinalized()
         })
     },
-    onComponentDestroy(id: string) {
-      promises.update((map) => {
-        map.delete(id)
-        return map
-      })
-      errors.update((map) => {
-        map.delete(id)
-        return map
-      })
+    onComponentDestroy(promise: Promise<any>) {
+      removePromise(promise)
+      removeError(promise)
       checkFinalized()
     },
     suspended
   }
 
-  const errorsArray = derived(errors, (errors) => Array.from(errors.values()).flat())
+  const errorsArray = derived(errors, (errors) => Array.from(errors.values()))
 
   setContext<SuspenseContext>(suspenseContextIdentifier, context)
 
