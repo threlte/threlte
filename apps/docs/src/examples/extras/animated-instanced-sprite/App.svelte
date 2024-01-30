@@ -4,11 +4,15 @@
   import Settings from './Settings.svelte'
 
   let billboarding = false
+  let fps = 10
 </script>
 
 <div>
   <Canvas>
-    <Scene {billboarding} />
+    <Scene
+      {billboarding}
+      {fps}
+    />
 
     <T.DirectionalLight
       intensity={2}
@@ -17,7 +21,10 @@
     />
   </Canvas>
 
-  <Settings bind:billboarding />
+  <Settings
+    bind:billboarding
+    bind:fps
+  />
 </div>
 
 <style>

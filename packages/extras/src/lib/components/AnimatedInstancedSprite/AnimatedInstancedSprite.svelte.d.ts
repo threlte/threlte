@@ -1,3 +1,4 @@
+import type { PLAY_MODE } from '@threejs-kit/instanced-sprite-mesh'
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import {
@@ -18,16 +19,6 @@ export type AnimatedInstancedSpriteProps = Props<Material> & {
   /** The URL of the spritesheet JSON. */
   // dataUrl?: string
 
-  /** The current playing animation name. */
-  // animation?: string
-
-  /**
-   * Controls whether or not to automatically run an animation on load.
-   *
-   * @default true
-   */
-  // autoplay?: boolean
-
   /**
    * Base material used to construct the sprite material. MeshBasicMaterial by default.
    *
@@ -44,6 +35,14 @@ export type AnimatedInstancedSpriteProps = Props<Material> & {
    * @default true
    */
   billboarding?: boolean
+
+  /**
+   * changes playmode for all instances
+   * `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"`
+   *
+   * @default true
+   */
+  playmode?: keyof typeof PLAY_MODE
 
   /**
    * The desired frames per second of the animation

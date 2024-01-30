@@ -9,7 +9,6 @@ export { useGamepad } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
 
 // abstractions
-export { default as AnimatedInstancedSprite } from './components/AnimatedInstancedSprite/AnimatedInstancedSprite.svelte'
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
@@ -80,5 +79,9 @@ export { createTransition } from './transitions/createTransition'
 
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
+
+// instanced sprites
+export { default as AnimatedInstancedSprite } from './components/AnimatedInstancedSprite/AnimatedInstancedSprite.svelte'
+export { default as Spritesheet } from './components/AnimatedInstancedSprite/Spritesheet.svelte'
 
 export type { ThrelteGltf } from './types/types'

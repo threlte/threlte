@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { Checkbox, Pane, ThemeUtils, Slider } from 'svelte-tweakpane-ui'
+  import { Checkbox, Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui'
 
   export let billboarding: boolean
+  export let fps: number
 </script>
 
 <Pane
@@ -12,5 +13,13 @@
   <Checkbox
     bind:value={billboarding}
     label="billboarding"
+  />
+
+  <Slider
+    label="fps"
+    min={1}
+    max={30}
+    step={1}
+    bind:value={fps}
   />
 </Pane>

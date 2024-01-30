@@ -2,6 +2,7 @@
   import {
     InstancedSpriteMesh,
     parseAseprite,
+    PLAY_MODE,
     type SpritesheetFormat
   } from '@threejs-kit/instanced-sprite-mesh'
   import { T, useLoader, useTask, useThrelte, watch } from '@threlte/core'
@@ -9,12 +10,8 @@
     DoubleSide,
     FileLoader,
     LinearFilter,
-    Material,
     Matrix4,
     MeshBasicMaterial,
-    MeshLambertMaterial,
-    MeshPhongMaterial,
-    MeshStandardMaterial,
     NearestFilter,
     RepeatWrapping,
     type Texture,
@@ -38,6 +35,7 @@
   export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
   export let fps: $$Props['fps'] = 15
   export let billboarding: $$Props['billboarding']
+  export let playmode: $$Props['playmode'] = 'FORWARD'
 
   export let textureUrl: $$Props['textureUrl']
   export let dataUrl: $$Props['dataUrl'] = ''
@@ -146,6 +144,18 @@
     }
   })
 
+  // PLAYMODE
+  const playmodeStore = writable<keyof typeof PLAY_MODE | undefined>(undefined)
+  $: playmodeStore.set(playmode)
+  watch([playmodeStore], () => {
+    if ($playmodeStore === undefined) {
+      mesh.playmode.setAll('PAUSE')
+      return
+    } else {
+      mesh.playmode.setAll($playmodeStore)
+    }
+  })
+
   //
   // MATRIX UPDATE - POSITION AND SCALE
   //
@@ -162,7 +172,7 @@
   }
 
   const setAnimation = (instanceId: number, animationId: SpriteAnimations) => {
-    mesh.play(animationId, true, 'REVERSE').at(instanceId)
+    mesh.animation.setAt(instanceId, animationId)
   }
 
   setContext('instanced-sprite-ctx', {
