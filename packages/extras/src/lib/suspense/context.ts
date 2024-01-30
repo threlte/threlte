@@ -1,12 +1,11 @@
 import { createRawEventDispatcher, currentWritable } from '@threlte/core'
 import { setContext } from 'svelte'
-import type { SvelteComponentDev } from 'svelte/internal'
 import { derived, writable, type Readable } from 'svelte/store'
 
 export type SuspenseContext = {
-  suspend: (component: SvelteComponentDev, promise: Promise<any>) => void
+  suspend: (id: string, promise: Promise<any>) => void
   suspended: Readable<boolean>
-  onComponentDestroy: (component: SvelteComponentDev) => void
+  onComponentDestroy: (id: string) => void
 }
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
@@ -19,12 +18,12 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   /**
    * This map contains all the promises that are currently being suspended.
    */
-  const promises = currentWritable<Map<SvelteComponentDev, Set<Promise<any>>>>(new Map())
+  const promises = currentWritable<Map<string, Set<Promise<any>>>>(new Map())
 
   /**
    * This map contains all the errors that were thrown during the suspension.
    */
-  const errors = currentWritable<Map<SvelteComponentDev, Error[]>>(new Map())
+  const errors = currentWritable<Map<string, Error[]>>(new Map())
 
   const finalized = writable<boolean>(false)
   const checkFinalized = () => {
@@ -33,33 +32,33 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
 
   const finalStore = writable<boolean>(options?.final ?? false)
 
-  const addPromise = (component: SvelteComponentDev, promise: Promise<any>) => {
+  const addPromise = (id: string, promise: Promise<any>) => {
     promises.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.add(promise)
+      if (map.has(id)) {
+        map.get(id)?.add(promise)
       } else {
-        map.set(component, new Set([promise]))
+        map.set(id, new Set([promise]))
       }
       return map
     })
   }
-  const removePromise = (component: SvelteComponentDev, promise: Promise<any>) => {
+  const removePromise = (id: string, promise: Promise<any>) => {
     promises.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.delete(promise)
+      if (map.has(id)) {
+        map.get(id)?.delete(promise)
       }
-      if (map.get(component)?.size === 0) {
-        map.delete(component)
+      if (map.get(id)?.size === 0) {
+        map.delete(id)
       }
       return map
     })
   }
-  const addError = (component: SvelteComponentDev, error: Error) => {
+  const addError = (id: string, error: Error) => {
     errors.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.push(error)
+      if (map.has(id)) {
+        map.get(id)?.push(error)
       } else {
-        map.set(component, [error])
+        map.set(id, [error])
       }
       return map
     })
@@ -90,18 +89,18 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   )
 
   const context: SuspenseContext = {
-    suspend(component: SvelteComponentDev, promise: Promise<any>) {
-      addPromise(component, promise)
+    suspend(id: string, promise: Promise<any>) {
+      addPromise(id, promise)
       promise
         .then(() => {
-          if (promises.current.get(component)?.has(promise)) {
-            removePromise(component, promise)
+          if (promises.current.get(id)?.has(promise)) {
+            removePromise(id, promise)
           }
         })
         .catch((error) => {
-          if (promises.current.get(component)?.has(promise)) {
-            removePromise(component, promise)
-            addError(component, error)
+          if (promises.current.get(id)?.has(promise)) {
+            removePromise(id, promise)
+            addError(id, error)
             dispatch('error', error)
           }
         })
@@ -109,13 +108,13 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
           checkFinalized()
         })
     },
-    onComponentDestroy(component: SvelteComponentDev) {
+    onComponentDestroy(id: string) {
       promises.update((map) => {
-        map.delete(component)
+        map.delete(id)
         return map
       })
       errors.update((map) => {
-        map.delete(component)
+        map.delete(id)
         return map
       })
       checkFinalized()
