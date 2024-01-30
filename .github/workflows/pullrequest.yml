@@ -1,0 +1,25 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches:
+      -main
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install 🔧
+        run: npm ci --audit=false
+      
+      - name: Prettier 💅
+        run: npm run prettier
