@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.10.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
 ## 0.9.0
 
 ### Minor Changes

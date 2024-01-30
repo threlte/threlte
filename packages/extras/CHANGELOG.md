@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.5.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
 ## 8.4.0
 
 ### Minor Changes
