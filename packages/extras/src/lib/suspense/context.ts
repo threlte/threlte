@@ -21,7 +21,7 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   const promises = currentWritable<Set<Promise<any>>>(new Set())
 
   /**
-   * This set contains all the errors that were thrown during the suspension.
+   * This map contains all the errors that were thrown during the suspension.
    */
   const errors = currentWritable<Map<Promise<any>, Error>>(new Map())
 
