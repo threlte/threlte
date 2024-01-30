@@ -1,7 +1,6 @@
 <script lang="ts">
   import { types } from '@theatre/core'
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
@@ -55,12 +54,12 @@
           <span class="text-orange mr-2 select-none font-bold">{'>'}</span>npm create threlte
         </code>
 
-        <Button
+        <a
           href="/docs/learn/getting-started/introduction"
-          color="orange"
+          class="bg-orange flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-orange-400"
         >
           Start Building →
-        </Button>
+        </a>
       </div>
     </TheatreTextBox>
 

@@ -10,7 +10,6 @@ import RapierExampleRaw from '$components/Intro/RapierExample.txt?raw'
 import ExtrasExampleRaw from '$components/Intro/ExtrasExample.txt?raw'
 import PluginsExample from '$components/Intro/PluginsExample.txt?raw'
 
-import Button from '$components/Button/Button.astro'
 import Testimonials from '$components/Testimonials/Testimonials.astro'
 ---
 
@@ -159,13 +158,12 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       Leverage the <span class="text-highlight">lifecycle</span> of Svelte components to subscribe to
       events, handle state changes and more.
 
-      <Button
-        class="mt-8"
+      <a
         href="/docs/learn/getting-started/your-first-scene"
-        color="blue"
+				class="bg-blue flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-blue-400 mt-8"
       >
         Make Your First Scene
-      </Button>
+		</a>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -232,13 +230,12 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       On top of that <code>@threlte/extras</code> provides a collection of useful components and utilities
       to get you started.
 
-      <Button
-        class="mt-8"
+      <a
         href="/docs/reference/extras/getting-started"
-        color="orange"
+				class="bg-orange flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-orange-400 mt-8"
       >
         Documentation
-      </Button>
+				</a>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -295,13 +292,12 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       A single component is at the core of Threlte: <code>{'<'}T{'>'}</code>. But sometimes you need
       more. Add custom props and custom events to <code>{'<'}T{'>'}</code> with <i>Plugins</i>.
 
-      <Button
-        class="mt-8"
+      <a
         href="/docs/learn/advanced/plugins"
-        color="green"
+				class="bg-green flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-green-400 mt-8"
       >
         Documentation
-      </Button>
+				</a>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -329,22 +325,21 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
         <Testimonials class="w-full mb-12" />
       </div>
 
-      <Button
-        color="orange"
+      <a
         href="/docs/learn/getting-started/introduction"
-        class="glow-orange"
+				class="bg-orange flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-orange-400 mt-8 glow-orange"
       >
         Getting Started
-      </Button>
+				</a>
     </div>
   </FeatureSection>
 
   <div class="my-12 flex flex-col items-center justify-center">
     <h2 class="text-glow-white mb-8 text-center text-5xl font-bold">Join the Threlte Community.</h2>
 
-    <Button
-      color="blue"
+    <a
       href="https://discord.gg/EqUBCfCaGm"
+			class="bg-blue flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center text-lg text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] hover:bg-blue-400 mt-8"
     >
       <svg
         slot="icon-before"
@@ -363,6 +358,6 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
         </g>
       </svg>
       Discord
-    </Button>
+    </a>
   </div>
 </MainLayout>
