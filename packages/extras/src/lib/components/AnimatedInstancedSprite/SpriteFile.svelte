@@ -1,20 +1,28 @@
 <script lang="ts">
-  import { onMount, setContext } from 'svelte'
-  import { writable } from 'svelte/store'
+  import { getContext, onMount, setContext } from 'svelte'
 
-  const instances: any[] = []
+  export let path: string
+  export let options: any = {}
+
+  const animations: any[] = []
 
   const registerAnimation = (animation: any) => {
     console.log({ animation })
-    instances.push(animation)
+    animations.push(animation)
   }
 
   setContext('instanced-animation-spritesheet-file-level-ctx', {
     registerAnimation
   })
 
+  const { registerSpriteFile } = getContext<any | undefined>(
+    'instanced-animation-spritesheet-root-level-ctx'
+  )
+
   onMount(() => {
-    console.log({ instances })
+    if (registerSpriteFile) {
+      registerSpriteFile({ path, options, animations })
+    }
   })
 </script>
 

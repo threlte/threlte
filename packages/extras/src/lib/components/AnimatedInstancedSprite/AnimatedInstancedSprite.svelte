@@ -85,13 +85,15 @@
   }
 
   const setTexture = (texture: Texture) => {
-    mesh.material.map = $textureStore
+    mesh.material.map = texture
     mesh.material.needsUpdate = true
   }
 
+  // todo refactor
   const textureStore = texture
     ? writable(texture)
-    : useTexture(textureUrl, {
+    : textureUrl
+    ? useTexture(textureUrl, {
         transform: (value: Texture) => {
           value.matrixAutoUpdate = false
           value.generateMipmaps = false
@@ -101,9 +103,10 @@
           return value
         }
       })
+    : writable(undefined)
 
-  watch(textureStore, () => {
-    setTexture($textureStore)
+  watch(textureStore, (texture) => {
+    if (texture) setTexture(texture)
   })
 
   //

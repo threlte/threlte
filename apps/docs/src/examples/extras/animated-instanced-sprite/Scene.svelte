@@ -3,6 +3,7 @@
   import { Grid, OrbitControls, Sky, AnimatedInstancedSprite, SpriteFile } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import PlayerUpdater from './PlayerUpdater.svelte'
+  import FlyerUpdater from './FlyerUpdater.svelte'
   import Spritesheet from 'node_modules/@threlte/extras/src/lib/components/AnimatedInstancedSprite/Spritesheet.svelte'
   import SpriteAnimation from 'node_modules/@threlte/extras/src/lib/components/AnimatedInstancedSprite/SpriteAnimation.svelte'
 
@@ -22,7 +23,7 @@
 
 <AnimatedInstancedSprite
   textureUrl="/textures/sprites/player.png"
-  count={10000}
+  count={500}
   playmode={'FORWARD'}
   {fps}
   {billboarding}
@@ -30,14 +31,44 @@
   <Spritesheet
     textureUrl="/textures/sprites/player.png"
     dataUrl="/textures/sprites/player.json"
-  >
-    <SpriteFile>
-      <SpriteAnimation name="fly" />
-      <SpriteAnimation name="walk" />
-      <SpriteAnimation name="idle" />
+  />
+  <PlayerUpdater />
+</AnimatedInstancedSprite>
+
+<AnimatedInstancedSprite
+  count={30000}
+  playmode={'REVERSE'}
+  {fps}
+  {billboarding}
+>
+  <Spritesheet>
+    <SpriteFile
+      path="/textures/sprites/cacodaemon.png"
+      options={{
+        type: 'rowColumn',
+        w: 8,
+        h: 4
+      }}
+    >
+      <SpriteAnimation
+        name="fly"
+        frameRange={[0, 6]}
+      />
+      <SpriteAnimation
+        name="attack"
+        frameRange={[8, 14]}
+      />
+      <SpriteAnimation
+        name="idle"
+        frameRange={[16, 20]}
+      />
+      <SpriteAnimation
+        name="death"
+        frameRange={[24, 32]}
+      />
     </SpriteFile>
   </Spritesheet>
-  <PlayerUpdater />
+  <FlyerUpdater />
 </AnimatedInstancedSprite>
 
 <Sky elevation={0.15} />

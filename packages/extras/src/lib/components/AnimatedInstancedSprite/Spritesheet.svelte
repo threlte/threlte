@@ -1,7 +1,11 @@
 <script lang="ts">
-  import { parseAseprite, type SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
+  import {
+    createSpritesheet,
+    parseAseprite,
+    type SpritesheetFormat
+  } from '@threejs-kit/instanced-sprite-mesh'
   import { watch } from '@threlte/core'
-  import { getContext, onMount } from 'svelte'
+  import { getContext, onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
@@ -76,12 +80,36 @@
     }
   })
 
-  onMount(() => {
+  const animationFiles: any[] = []
+
+  const registerSpriteFile = (fileMeta: any) => {
+    animationFiles.push(fileMeta)
+  }
+
+  setContext('instanced-animation-spritesheet-root-level-ctx', {
+    registerSpriteFile
+  })
+
+  onMount(async () => {
     // check if within instanced sprite context
     if (spriteCtx === undefined)
       console.error(
         'Internal sprite context is undefined. <Spritesheet/> component should be a child of <AnimatedInstancedSprite/>'
       )
+
+    if (animationFiles.length > 0) {
+      const spritesheet = createSpritesheet()
+
+      for (const file of animationFiles) {
+        spritesheet.add(file.path, file.options, file.animations)
+      }
+      const built = await spritesheet.build()
+
+      spritesheetStore.set(built.spritesheet)
+      textureStore.set(built.texture)
+
+      console.log({ built })
+    }
 
     //
   })
