@@ -9,7 +9,7 @@
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
-<RigidBody type='kinematicPosition'>
+<RigidBody type='dynamic'>
   <AutoColliders>
     <T.Mesh
       castShadow
