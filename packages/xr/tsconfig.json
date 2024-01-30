@@ -2,20 +2,10 @@
   "extends": "./.svelte-kit/tsconfig.json",
   "include": ["./src/**/*"],
   "compilerOptions": {
-    /**
-     * Sveltekit currently sets deprecated settings for TS for compatibility reasons.
-     * It will remove them in v2.0, at which point these two resets
-     * - preserveValueImports and importsNotUsedAsValues - can be removed.
-     *
-     * see https://github.com/sveltejs/kit/issues/8650
-     */
-    "preserveValueImports": false,
-    "importsNotUsedAsValues": "remove",
-
     "target": "ESNext",
     "module": "ESNext",
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
 
     "allowJs": true,
     "checkJs": true,
