@@ -11,7 +11,8 @@
     "install:packages": "pnpm install --filter='!./apps/*'",
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,svelte,md}\"",
+    "prettier": "prettier --check \"**/*.{ts,svelte,md}\"",
     "release": "changeset publish",
     "cleanup": "turbo run cleanup && rimraf node_modules"
   },

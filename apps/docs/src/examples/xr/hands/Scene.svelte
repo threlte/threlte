@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import * as THREE from 'three'
   import { T } from '@threlte/core'
   import { XR, Hand, Controller, type XRHandEvent, type XRControllerEvent } from '@threlte/xr'

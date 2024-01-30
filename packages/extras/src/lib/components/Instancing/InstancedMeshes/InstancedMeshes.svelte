@@ -33,7 +33,7 @@
     })
   }
 
-  const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): typeof Instance[] => {
+  const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): (typeof Instance)[] => {
     return meshes.filter((mesh) => mesh.isMesh).map((mesh) => getInstance(mesh.uuid))
   }
 

@@ -1,16 +1,16 @@
-<script lang='ts'>
+<script lang="ts">
   import * as THREE from 'three'
   import { T } from '@threlte/core'
   import { XR, Controller, Hand, useHitTest } from '@threlte/xr'
-  
-  const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0);
-  
+
+  const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0)
+
   let meshes: THREE.Mesh[] = []
   let cursors = { left: undefined! as THREE.Mesh, right: undefined! as THREE.Mesh }
 
   const hands = ['left', 'right'] as const
   type Hands = (typeof hands)[number]
-  
+
   const handleSelect = (hand: Hands) => () => {
     if (!cursors[hand].visible) return
 
@@ -22,16 +22,17 @@
     meshes = meshes
   }
 
-  const handleHitTest = (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {
-    if (!cursors[hand]) return
-  
-    if (hit) {
-      cursors[hand].visible = true
-      cursors[hand].matrix.copy(hitMatrix)
-    } else {
-      cursors[hand].visible = false
+  const handleHitTest =
+    (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {
+      if (!cursors[hand]) return
+
+      if (hit) {
+        cursors[hand].visible = true
+        cursors[hand].matrix.copy(hitMatrix)
+      } else {
+        cursors[hand].visible = false
+      }
     }
-  }
 
   useHitTest(handleHitTest('left'), { source: 'leftInput' })
   useHitTest(handleHitTest('right'), { source: 'rightInput' })
@@ -39,10 +40,14 @@
 
 <XR>
   {#each hands as hand}
-    <Controller {hand} on:select={handleSelect(hand)} />
-    <Hand {hand} on:pinchend={handleSelect(hand)} />
-
-    
+    <Controller
+      {hand}
+      on:select={handleSelect(hand)}
+    />
+    <Hand
+      {hand}
+      on:pinchend={handleSelect(hand)}
+    />
   {/each}
 </XR>
 

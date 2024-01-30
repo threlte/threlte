@@ -65,7 +65,8 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer dependency.
+    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer
+    dependency.
   </p>
 
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />

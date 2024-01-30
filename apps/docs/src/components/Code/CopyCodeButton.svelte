@@ -9,7 +9,7 @@
 
 <button
   class={c(
-    'absolute right-0 flex items-center gap-1 p-1 group/copybtn max-md:hidden top-0',
+    'group/copybtn absolute right-0 top-0 flex items-center gap-1 p-1 max-md:hidden',
     success ? 'text-green-300' : 'text-white/30 hover:text-orange-400',
     copying && 'scale-90'
   )}

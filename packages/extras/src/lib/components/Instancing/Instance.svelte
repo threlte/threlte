@@ -23,6 +23,10 @@
   const dispatchingComponent = forwardEventHandlers()
 </script>
 
-<T is={ref} bind:this={$dispatchingComponent} {...$$restProps}>
+<T
+  is={ref}
+  bind:this={$dispatchingComponent}
+  {...$$restProps}
+>
   <slot {ref} />
 </T>

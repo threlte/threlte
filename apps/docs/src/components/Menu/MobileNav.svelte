@@ -13,7 +13,7 @@
   const { action, mounted } = useElementMounted()
 </script>
 
-<div class="fixed top-0 left-0 z-40 flex max-h-screen w-full flex-col md:hidden">
+<div class="fixed left-0 top-0 z-40 flex max-h-screen w-full flex-col md:hidden">
   <header
     class={c(
       'flex h-[70px] w-full flex-shrink-0 flex-row items-center justify-between border-b bg-[#0A0F19] px-6 py-2',
@@ -42,12 +42,12 @@
       class="border-b-orange/25 -z-10 min-h-0 w-full overflow-auto border-b bg-[#0a0F19]"
     >
       <div
-        class="px-6 pt-2 pb-6"
+        class="px-6 pb-6 pt-2"
         in:fade={{ delay: 200, duration: 200 }}
         out:fade={{ duration: 200 }}
       >
         {#if search}
-          <div class="relative w-full pt-4 pb-8">
+          <div class="relative w-full pb-8 pt-4">
             <Search />
           </div>
         {/if}
