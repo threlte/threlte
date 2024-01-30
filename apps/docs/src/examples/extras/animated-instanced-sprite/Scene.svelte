@@ -22,7 +22,7 @@
 <AnimatedInstancedSprite
   textureUrl="/textures/sprites/player.png"
   dataUrl="/textures/sprites/player.json"
-  count={50000}
+  count={5}
   playmode={'FORWARD'}
   {fps}
   {billboarding}

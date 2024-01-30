@@ -1,4 +1,4 @@
-import type { PLAY_MODE } from '@threejs-kit/instanced-sprite-mesh'
+import type { PLAY_MODE, SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import {
@@ -128,6 +128,10 @@ export type AnimatedInstancedSpriteProps = Props<Material> & {
 export type AnimatedInstancedSpriteEvents = any
 
 export type AnimatedInstancedSpriteSlots = any
+
+export type AnimatedInstancedSpriteInternalCtx = {
+  setSpritesheet: (spritesheet: SpritesheetFormat) => void
+}
 
 export default class AnimatedInstancedSprite extends SvelteComponent<
   AnimatedInstancedSpriteProps,

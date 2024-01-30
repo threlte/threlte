@@ -24,6 +24,7 @@
   import { useTexture } from '../../hooks/useTexture'
   import type {
     AnimatedInstancedSpriteEvents,
+    AnimatedInstancedSpriteInternalCtx,
     AnimatedInstancedSpriteProps,
     AnimatedInstancedSpriteSlots
   } from './AnimatedInstancedSprite.svelte'
@@ -66,15 +67,25 @@
 
   const { renderer } = useThrelte()
 
-  const mesh: InstancedSpriteMesh<MeshBasicMaterial, SpriteAnimations> = new InstancedSpriteMesh(
+  // todo upstream types
+  let mesh: InstancedSpriteMesh<MeshBasicMaterial, SpriteAnimations> = new InstancedSpriteMesh(
     spriteBaseMaterial,
     count,
     renderer,
     {
-      triGeometry: true,
-      spritesheet
+      triGeometry: false
     }
   )
+
+  const animationMap = writable<Map<SpriteAnimations, number>>(new Map())
+
+  const setSpritesheet = (spritesheet: SpritesheetFormat) => {
+    mesh.spritesheet = spritesheet
+    // todo upstream types
+    animationMap.set(mesh.animationMap)
+
+    console.log('setting spritesheet')
+  }
 
   const textureStore = texture
     ? writable(texture)
@@ -94,34 +105,6 @@
     mesh.material.needsUpdate = true
   })
 
-  const jsonStore = spritesheet
-    ? writable(spritesheet)
-    : useLoader(FileLoader).load(dataUrl, {
-        transform: (file) => {
-          if (typeof file !== 'string') return
-          try {
-            return JSON.parse(file)
-          } catch {
-            return
-          }
-        }
-      })
-
-  const animationMap = writable<Map<SpriteAnimations, number>>(new Map())
-
-  watch(jsonStore, (rawSpritesheet) => {
-    if (rawSpritesheet && !spritesheet) {
-      const spritesheet = parseAseprite(rawSpritesheet)
-      mesh.spritesheet = spritesheet
-      animationMap.set(mesh.animationMap)
-    }
-
-    if (spritesheet) {
-      mesh.spritesheet = spritesheet
-      animationMap.set(mesh.animationMap)
-    }
-  })
-
   //
   // REACTIVE PROPS
   //
@@ -129,6 +112,7 @@
   // VANILLA
   $: mesh.material.alphaTest = alphaTest
   $: mesh.material.transparent = transparent
+
   // FPS
   $: mesh.fps = fps
 
@@ -183,6 +167,10 @@
     setAnimation
   })
 
+  setContext<AnimatedInstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
+    setSpritesheet
+  })
+
   useTask(() => {
     mesh.update()
     if (instanceMatrixNeedsUpdate) {
@@ -192,6 +180,8 @@
   })
 </script>
 
-<T is={mesh} />
+{#if mesh}
+  <T is={mesh} />
+{/if}
 
 <slot />
