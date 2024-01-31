@@ -9,10 +9,11 @@ import { suspenseContextIdentifier, type SuspenseContext } from './context'
 export const useSuspense = () => {
   const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
 
-  let _promise: Promise<any> | undefined
+  const promises = new Set<Promise<any>>()
 
   const suspend = <T extends Promise<any>>(promise: T): T => {
     ctx?.suspend(promise)
+    promises.add(promise)
     return promise
   }
 
@@ -21,9 +22,10 @@ export const useSuspense = () => {
   }
 
   onDestroy(() => {
-    if (_promise) {
-      ctx?.onComponentDestroy(_promise)
+    for (const promise of promises) {
+      ctx?.onComponentDestroy(promise)
     }
+    promises.clear()
   })
 
   return Object.assign(suspend, state)
