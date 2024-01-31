@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { Headset, XR, useXR } from '@threlte/xr'
   import { AudioListener } from '@threlte/extras'
@@ -33,7 +33,10 @@
   <AudioListener />
 </Headset>
 
-<T.Group position={[0, 0.6, -0.5]} scale={0.08}>
+<T.Group
+  position={[0, 0.6, -0.5]}
+  scale={0.08}
+>
   <Turntable
     bind:toggle
     bind:volume

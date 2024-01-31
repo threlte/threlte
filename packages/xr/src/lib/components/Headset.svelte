@@ -1,4 +1,3 @@
-
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useHeadset } from '../hooks/useHeadset'
@@ -8,7 +7,7 @@
 </script>
 
 <ScenePortal>
-	<T is={headset}>
-		<slot />
-	</T>
+  <T is={headset}>
+    <slot />
+  </T>
 </ScenePortal>

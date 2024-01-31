@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { Hand, XR, useXR } from '@threlte/xr'
   import { Text } from '@threlte/extras'
@@ -16,19 +16,31 @@
 {/if}
 
 <XR>
-  <Hand left on:pinchend={() => (debug = !debug)} />
-  <Hand right on:pinchend={() => (debug = !debug)} />
+  <Hand
+    left
+    on:pinchend={() => (debug = !debug)}
+  />
+  <Hand
+    right
+    on:pinchend={() => (debug = !debug)}
+  />
 
   {#if $isHandTracking}
     {#each { length: 25 } as _, jointIndex}
-      <JointCollider {jointIndex} hand='left' />
-      <JointCollider {jointIndex} hand='right' />
+      <JointCollider
+        {jointIndex}
+        hand="left"
+      />
+      <JointCollider
+        {jointIndex}
+        hand="right"
+      />
     {/each}
   {/if}
 
   <Text
     position={[0, 1.7, -1]}
-    text='Pinch to toggle physics debug.'
+    text="Pinch to toggle physics debug."
   />
 </XR>
 

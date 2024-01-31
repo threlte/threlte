@@ -34,6 +34,11 @@
   const component = forwardEventHandlers()
 </script>
 
-<T is={ref} {...$$restProps} let:ref bind:this={$component}>
+<T
+  is={ref}
+  {...$$restProps}
+  let:ref
+  bind:this={$component}
+>
   <slot {ref} />
 </T>

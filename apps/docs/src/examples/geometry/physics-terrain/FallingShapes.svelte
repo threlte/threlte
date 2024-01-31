@@ -1,30 +1,30 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Collider, RigidBody, AutoColliders } from '@threlte/rapier'
-	import { BoxGeometry, SphereGeometry, CylinderGeometry, ConeGeometry} from 'three'
+  import { BoxGeometry, SphereGeometry, CylinderGeometry, ConeGeometry } from 'three'
 
   const radius = 0.25
   const shapes = [
     {
-			geometry: new BoxGeometry(radius, radius, radius),
-			autoCollider: 'cuboid',
-			color: 'hotpink',
-		},
-    {
-			geometry: new SphereGeometry(radius),
-			autoCollider: 'ball',
-			color: 'cyan',
-		},
-			{
-			geometry: new CylinderGeometry(radius, radius, radius * 2),
-      autoCollider: 'convexHull',
-      color: 'green',
+      geometry: new BoxGeometry(radius, radius, radius),
+      autoCollider: 'cuboid',
+      color: 'hotpink'
     },
     {
-			geometry: new ConeGeometry(radius, radius * 3, 10),
-			autoCollider: 'convexHull',
-			color: 'orange',
-		}
+      geometry: new SphereGeometry(radius),
+      autoCollider: 'ball',
+      color: 'cyan'
+    },
+    {
+      geometry: new CylinderGeometry(radius, radius, radius * 2),
+      autoCollider: 'convexHull',
+      color: 'green'
+    },
+    {
+      geometry: new ConeGeometry(radius, radius * 3, 10),
+      autoCollider: 'convexHull',
+      color: 'orange'
+    }
   ]
 
   const bodies = new Array(50).fill(0).map((_, index) => {
@@ -59,7 +59,7 @@
         <T.Mesh
           castShadow
           receiveShadow
-					geometry={body.geometry}
+          geometry={body.geometry}
         >
           <T.MeshStandardMaterial color={body.color} />
         </T.Mesh>

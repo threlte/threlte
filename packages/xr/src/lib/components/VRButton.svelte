@@ -9,8 +9,7 @@
   />
 ```
 -->
-
-<script lang='ts'>
+<script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
 
@@ -22,7 +21,7 @@
     optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
   }}
   {...$$restProps}
-  mode='immersive-vr'
+  mode="immersive-vr"
   on:click
   on:error
 />

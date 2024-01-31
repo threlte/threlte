@@ -5,11 +5,13 @@
   export let label = ''
   let count = 0
 
-  function click() { count++ }
+  function click() {
+    count++
+  }
 </script>
 
 <button on:click={click}>
-	{label} - {count}
+  {label} - {count}
 </button>
 
 <style>
@@ -19,9 +21,6 @@
     padding: 0.25rem 0.5rem;
     pointer-events: auto;
 
-    background-image: linear-gradient(
-      #5e6cf4 0%,
-      #1338db 100%
-    );
+    background-image: linear-gradient(#5e6cf4 0%, #1338db 100%);
   }
 </style>

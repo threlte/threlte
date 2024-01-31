@@ -29,7 +29,7 @@
 
   useTask(() => {
     instancedMesh.updateMatrix()
-  
+
     if (update || !initialUpdateDone) {
       instancedMesh.updateMatrixWorld()
       parentMatrix.copy(instancedMesh.matrixWorld).invert()

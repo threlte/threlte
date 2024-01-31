@@ -1,13 +1,4 @@
 <!--
-	@component
-	This component injects Percentage-Closer Soft Shadows (PCSS) into
-	Three.js' shader chunk. Mounting and unmounting this component will lead to
-	all shaders being be re-compiled, although it will only cause overhead if
-	`<SoftShadows>` is mounted after the scene has already rendered, if it mounts
-	with everything else in your scene shaders will compile naturally.
--->
-
-<!--
 	This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx)
 	Original comment:
 		Integration and compilation: @N8Programs
@@ -172,3 +163,12 @@
     recompile()
   })
 </script>
+
+<!--
+	@component
+	This component injects Percentage-Closer Soft Shadows (PCSS) into
+	Three.js' shader chunk. Mounting and unmounting this component will lead to
+	all shaders being be re-compiled, although it will only cause overhead if
+	`<SoftShadows>` is mounted after the scene has already rendered, if it mounts
+	with everything else in your scene shaders will compile naturally.
+-->

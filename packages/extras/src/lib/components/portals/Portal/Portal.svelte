@@ -22,7 +22,7 @@
       if (target.children.includes(child)) continue
       target.add(child)
     }
-    
+
     return () => {
       for (const child of children) {
         if (target.children.includes(child)) {
@@ -35,14 +35,16 @@
 
 {#if $target}
   <HierarchicalObject
-    onChildMount={(child) => children.update((array) => {
-      array.push(child)
-      return array
-    })}
-    onChildDestroy={(child) => children.update((array) => {
-      array.splice(array.indexOf(child), 1)
-      return array
-    })}
+    onChildMount={(child) =>
+      children.update((array) => {
+        array.push(child)
+        return array
+      })}
+    onChildDestroy={(child) =>
+      children.update((array) => {
+        array.splice(array.indexOf(child), 1)
+        return array
+      })}
   >
     <slot />
   </HierarchicalObject>

@@ -1,0 +1,30 @@
+---
+order: 14.55
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useFBO.ts'
+name: useFBO
+type: 'hook'
+---
+
+useFBO (Framebuffer Object) is a hook that creates a `THREE.WebGLRenderTarget`. This is a port of [drei's useFBO hook](https://github.com/pmndrs/drei#usefbo).
+
+Framebuffer objects are useful for cases where you want to render a scene but not display it. For example, rendering a scene to a framebuffer then passing that to a fragment shader as a uniform. You can read more about `WebGLRenderTarget`'s [here](https://threejs.org/docs/index.html?q=render%20target#api/en/renderers/WebGLRenderTarget).
+
+## Options
+```ts
+type UseFBOOptions = {
+  /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
+  samples?: number
+  /** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
+  depth?: boolean
+} & THREE.WebGLRenderTargetOptions
+
+export function useFBO(
+  /** Width in pixels, or options (will render fullscreen by default) */
+  width?: number | UseFBOOptions,
+  /** Height in pixels */
+  height?: number,
+  /**Options */
+  options?: UseFBOOptions
+): THREE.WebGLRenderTarget;
+```
