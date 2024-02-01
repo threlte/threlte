@@ -12,5 +12,7 @@ interface Props {
 ---
 
 <Button {...Astro.props}>
-	<slot/>
+	<slot name="icon-before" />
+  <slot />
+  <slot name="icon-after" />
 </Button>
