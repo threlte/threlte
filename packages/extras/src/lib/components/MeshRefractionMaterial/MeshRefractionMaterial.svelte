@@ -104,6 +104,6 @@
 	uniforms.fresnel.value={fresnel}
   uniforms.aberrationStrength.value={aberrationStrength}
 	uniforms.color.value={new Color(color)}
-	resolution={[$size.width, $size.height]}
+	uniforms.resolution.value={[$size.width, $size.height]}
   defines={defines}
 />
