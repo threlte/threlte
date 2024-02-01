@@ -6,7 +6,6 @@
   import TheatreTextBox from './TheatreTextBox.svelte'
 
   const sheetObject = createSheetObjectAction()
-	// random comment
 </script>
 
 <Sequence autoplay />
