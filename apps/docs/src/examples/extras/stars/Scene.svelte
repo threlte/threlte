@@ -23,11 +23,8 @@
 </T.PerspectiveCamera>
 
 <Grid
-  position.y={0}
-  sectionThickness={1}
+  sectionThickness={0}
   infiniteGrid
   cellColor="#dddddd"
-  sectionColor="#ffffff"
-  sectionSize={10}
   cellSize={2}
 />

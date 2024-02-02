@@ -18,6 +18,7 @@
 	export let lightness: $$Props['lightness'] = 0.8
   export let speed: $$Props['speed'] = 1
   export let fade: $$Props['fade'] = true
+  export let opacity: $$Props['opacity'] = 1.0
 
   const genStar = (r: number) => {
     return new Vector3().setFromSpherical(
@@ -61,7 +62,7 @@
 	}
 
   const material = new ShaderMaterial({
-    uniforms: { time: { value: 0.0 }, fade: { value: 1.0 } },
+    uniforms: { time: { value: 0.0 }, fade: { value: 1.0 }, opacity: { value: 1.0 } },
     vertexShader,
     fragmentShader
   })
@@ -100,6 +101,7 @@
     blending={AdditiveBlending}
     uniforms.fade.value={fade ? 1.0 : 0.0}
     uniforms.time.value={time}
+		uniforms.opacity.value={opacity}
     depthWrite={false}
     transparent
     vertexColors

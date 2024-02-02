@@ -11,6 +11,7 @@ export type StarsProps = Props<Points> & {
   lightness?: number
   fade?: boolean
   speed?: number
+  opacity?: number
 }
 
 export type StarsEvents = Events<Points>
