@@ -91,8 +91,8 @@
   const { camera } = useThrelte()
 
   useTask(() => {
-    material.uniforms.viewMatrixInverse.value = $camera.matrixWorld
-    material.uniforms.projectionMatrixInverse.value = $camera.projectionMatrixInverse
+    material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
+    material.uniforms.projectionMatrixInverse.value = camera.current.projectionMatrixInverse
   })
 </script>
 
