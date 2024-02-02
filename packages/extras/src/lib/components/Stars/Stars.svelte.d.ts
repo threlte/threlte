@@ -8,12 +8,12 @@ export type StarsProps = Props<Points> & {
   count?: number
   factor?: number
   saturation?: number
+  lightness?: number
   fade?: boolean
   speed?: number
-  lightness?: number
 }
 
 export type StarsEvents = Events<Points>
 export type StarsSlots = Slots<Points>
 
-export default class Stars extends SvelteComponent<StarsSlots, StarsEvents, StarsSlots> {}
+export default class Stars extends SvelteComponent<StarsProps, StarsEvents, StarsSlots> {}

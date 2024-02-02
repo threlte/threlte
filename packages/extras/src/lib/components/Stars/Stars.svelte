@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AdditiveBlending, Color, Points, ShaderMaterial, Spherical, Vector3 } from 'three'
+  import { AdditiveBlending, Color, ShaderMaterial, Spherical, Vector3 } from 'three'
   import { T, forwardEventHandlers, useTask } from '@threlte/core'
   import type { StarsEvents, StarsProps, StarsSlots } from './Stars.svelte'
 
@@ -13,11 +13,11 @@
   export let count: $$Props['count'] = 5000
   export let radius: $$Props['radius'] = 50
   export let depth: $$Props['depth'] = 50
-  export let factor: $$Props['factor'] = 2
+  export let factor: $$Props['factor'] = 6
   export let saturation: $$Props['saturation'] = 1.0
 	export let lightness: $$Props['lightness'] = 0.8
-  export let speed: $$Props['speed'] = 0.1
-  export let fade: $$Props['fade'] = false
+  export let speed: $$Props['speed'] = 1
+  export let fade: $$Props['fade'] = true
 
   const genStar = (r: number) => {
     return new Vector3().setFromSpherical(
@@ -25,40 +25,49 @@
     )
   }
 
-  const positions: any[] = []
-  const colors: any[] = []
-  const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
-  const color = new Color()
-  let r = radius + depth
-  const increment = depth / count
-  for (let i = 0; i < count; i++) {
-    r -= increment * Math.random()
-    positions.push(...genStar(r).toArray())
-    color.setHSL(i / count, saturation, lightness)
-    colors.push(color.r, color.g, color.b)
-  }
-  const positionsArray = new Float32Array(positions)
-  const colorsArray = new Float32Array(colors)
-  const sizesArray = new Float32Array(sizes)
+	let positionsArray: Float32Array
+	let colorsArray: Float32Array
+	let sizesArray: Float32Array
+
+	$: {
+		const positions: any[] = []
+		const colors: any[] = []
+		const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
+		const color = new Color()
+		let r = radius + depth
+		const increment = depth / count
+		for (let i = 0; i < count; i++) {
+			r -= increment * Math.random()
+			positions.push(...genStar(r).toArray())
+			color.setHSL(i / count, saturation, lightness)
+			colors.push(color.r, color.g, color.b)
+		}
+		positionsArray = new Float32Array(positions)
+		colorsArray = new Float32Array(colors)
+		sizesArray = new Float32Array(sizes)
+	}
 
   const component = forwardEventHandlers()
 
   let time = 0
-  useTask((dt) => {
+  const { stop, start } = useTask((dt) => {
     time += dt * speed
   })
+
+	$: if (speed !== 0) {
+		start()
+	} else {
+		stop()
+	}
 
   const material = new ShaderMaterial({
     uniforms: { time: { value: 0.0 }, fade: { value: 1.0 } },
     vertexShader,
     fragmentShader
   })
-
-  export let ref: Points
 </script>
 
 <T.Points
-  bind:ref
   bind:this={$component}
   {...$$restProps}
   let:ref
