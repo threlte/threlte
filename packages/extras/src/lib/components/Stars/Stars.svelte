@@ -53,7 +53,7 @@
   let time = 0
   const { stop, start } = useTask((dt) => {
     time += dt * speed
-  })
+  }, { autoStart: false })
 
 	$: if (speed !== 0) {
 		start()
