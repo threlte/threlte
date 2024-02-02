@@ -9,8 +9,7 @@
   import { writable } from 'svelte/store'
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
-  import type { AnimatedInstancedSpriteInternalCtx } from './AnimatedInstancedSprite.svelte'
-  import type { SpritesheetProps } from './Spritesheet'
+  import type { SpritesheetContext, SpritesheetProps } from './Spritesheet'
 
   type $$Props = SpritesheetProps
 
@@ -18,25 +17,13 @@
   export let dataUrl: $$Props['dataUrl'] = undefined
   export let filter: $$Props['filter'] = 'nearest'
 
-  const spriteCtx = getContext<AnimatedInstancedSpriteInternalCtx | undefined>(
-    'internal-instanced-sprite-ctx'
-  )
-
   let texture: Texture | undefined = undefined
   let spritesheet: SpritesheetFormat | undefined = undefined
   let jsonData: any = undefined
 
   const textureStore = writable<Texture | undefined>(texture)
-  watch([textureStore], ([texture]) => {
-    if (texture) spriteCtx?.setTexture(texture)
-  })
 
   const spritesheetStore = writable<SpritesheetFormat | undefined>()
-  watch([spritesheetStore], () => {
-    if ($spritesheetStore) {
-      spriteCtx?.setSpritesheet($spritesheetStore)
-    }
-  })
 
   $: spritesheetStore.set(spritesheet)
 
@@ -86,17 +73,16 @@
     animationFiles.push(fileMeta)
   }
 
+  setContext<SpritesheetContext>('instanced-spritesheet-top-level-stores-ctx', {
+    textureStore,
+    spritesheetStore
+  })
+
   setContext('instanced-animation-spritesheet-root-level-ctx', {
     registerSpriteFile
   })
 
   onMount(async () => {
-    // check if within instanced sprite context
-    if (spriteCtx === undefined)
-      console.error(
-        'Internal sprite context is undefined. <Spritesheet/> component should be a child of <AnimatedInstancedSprite/>'
-      )
-
     if (animationFiles.length > 0) {
       const spritesheet = createSpritesheet()
 
@@ -107,11 +93,7 @@
 
       spritesheetStore.set(built.spritesheet)
       textureStore.set(built.texture)
-
-      console.log({ built })
     }
-
-    //
   })
 </script>
 

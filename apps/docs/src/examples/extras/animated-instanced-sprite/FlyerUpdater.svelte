@@ -1,36 +1,23 @@
 <script lang="ts">
-  import { useFrame, watch } from '@threlte/core'
+  import { useFrame } from '@threlte/core'
   import { getContext } from 'svelte'
   import { Vector2 } from 'three'
 
   const spriteCtx: any = getContext('instanced-sprite-ctx')
   const { updatePosition, count, animationMap, setAnimation, mesh } = spriteCtx
 
-  //@ts-ignore
-  watch(animationMap, (anims: Map<string, number>) => {
-    // console.log(anims.keys());
-  })
-
-  // mesh.material.uniforms.animationId.value = 0;
-
-  // mesh.animation.setGlobal('fly');
-
   mesh.offset.randomizeAll()
-
-  console.log(mesh)
 
   const posX: number[] = new Array(count).fill(0)
   const posY: number[] = new Array(count).fill(0)
   const posZ: number[] = new Array(count).fill(0)
 
-  const spread = 150
-  const minCenterDistance = 10
+  const spread = 500
+  const minCenterDistance = 5
   const maxCenterDistance = spread
   const rndPosition: any = () => {
     const x = Math.random() * spread - spread / 2
     const y = Math.random() * spread - spread / 2
-
-    /** min distance from 0,0. Recursive reroll if too close */
 
     if (Math.sqrt(x ** 2 + y ** 2) < minCenterDistance) {
       return rndPosition()
@@ -39,7 +26,6 @@
     return { x, y }
   }
 
-  /** update from 1 because 0 is user controlled and set at 0,0 */
   for (let i = 1; i < count; i++) {
     const pos = rndPosition()
     posX[i] = pos.x
@@ -67,6 +53,7 @@
   const updateAgents = (delta: number) => {
     for (let i = 0; i < agents.length; i++) {
       // timer
+
       agents[i].timer -= delta
 
       // apply velocity
@@ -86,7 +73,7 @@
             velocityHelper
               .set(Math.random() - 0.5, Math.random() - 0.5)
               .normalize()
-              .multiplyScalar(0.1)
+              .multiplyScalar(2.1)
             agents[i].velocity = velocityHelper.toArray()
           }
         }

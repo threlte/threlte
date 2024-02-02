@@ -21,55 +21,57 @@
 
 <slot />
 
-<AnimatedInstancedSprite
+<Spritesheet
   textureUrl="/textures/sprites/player.png"
-  count={500}
-  playmode={'FORWARD'}
-  {fps}
-  {billboarding}
+  dataUrl="/textures/sprites/player.json"
 >
-  <Spritesheet
+  <AnimatedInstancedSprite
     textureUrl="/textures/sprites/player.png"
-    dataUrl="/textures/sprites/player.json"
-  />
-  <PlayerUpdater />
-</AnimatedInstancedSprite>
+    count={500}
+    playmode={'FORWARD'}
+    {fps}
+    {billboarding}
+  >
+    <PlayerUpdater />
+  </AnimatedInstancedSprite>
+</Spritesheet>
 
-<AnimatedInstancedSprite
-  count={30000}
-  playmode={'REVERSE'}
-  {fps}
-  {billboarding}
->
-  <Spritesheet>
-    <SpriteFile
-      path="/textures/sprites/cacodaemon.png"
-      options={{
-        type: 'rowColumn',
-        w: 8,
-        h: 4
-      }}
-    >
-      <SpriteAnimation
-        name="fly"
-        frameRange={[0, 6]}
-      />
-      <SpriteAnimation
-        name="attack"
-        frameRange={[8, 14]}
-      />
-      <SpriteAnimation
-        name="idle"
-        frameRange={[16, 20]}
-      />
-      <SpriteAnimation
-        name="death"
-        frameRange={[24, 32]}
-      />
-    </SpriteFile>
-  </Spritesheet>
-  <FlyerUpdater />
-</AnimatedInstancedSprite>
+<Spritesheet>
+  <SpriteFile
+    path="/textures/sprites/cacodaemon.png"
+    options={{
+      type: 'rowColumn',
+      w: 8,
+      h: 4
+    }}
+  >
+    <SpriteAnimation
+      name="fly"
+      frameRange={[0, 6]}
+    />
+    <SpriteAnimation
+      name="attack"
+      frameRange={[8, 14]}
+    />
+    <SpriteAnimation
+      name="idle"
+      frameRange={[16, 20]}
+    />
+    <SpriteAnimation
+      name="death"
+      frameRange={[24, 32]}
+    />
+  </SpriteFile>
+
+  <AnimatedInstancedSprite
+    count={30000}
+    playmode={'REVERSE'}
+    {fps}
+    {billboarding}
+  >
+    <FlyerUpdater />
+  </AnimatedInstancedSprite>
+</Spritesheet>
 
 <Sky elevation={0.15} />
 

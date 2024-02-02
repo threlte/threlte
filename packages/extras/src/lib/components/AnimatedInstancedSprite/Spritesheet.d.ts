@@ -1,7 +1,10 @@
+import type { SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
 import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
+import type { Writable } from 'svelte/store'
+import type { Texture } from 'three'
 
-export type SpritesheetProps = Props<any> & {
+export type SpritesheetProps = {
   /** The URL of the spritesheet texture image. */
   textureUrl?: string
 
@@ -17,3 +20,8 @@ export type SpritesheetProps = Props<any> & {
 }
 
 export default class Spritesheet extends SvelteComponent<SpritesheetProps> {}
+
+export type SpritesheetContext = {
+  textureStore: Writable<Texture | undefined>
+  spritesheetStore: Writable<SpritesheetFormat | undefined>
+}

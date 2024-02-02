@@ -10,7 +10,7 @@ import {
   Texture
 } from 'three'
 
-export type AnimatedInstancedSpriteProps = Props<InstancedMesh> & {
+export type AnimatedInstancedSpriteProps = {
   /** Number of instances */
   count: number
 
@@ -63,7 +63,9 @@ export type AnimatedInstancedSpriteProps = Props<InstancedMesh> & {
    *
    * @default 0.1
    */
-  // alphaTest?: number
+  alphaTest?: number
+
+  transparent?: boolean
 
   /**
    * Delay the start of the animation in ms.
@@ -119,8 +121,8 @@ export type AnimatedInstancedSpriteProps = Props<InstancedMesh> & {
    */
   columns?: number
 
-  readonly play?: () => void
-  readonly pause?: () => void
+  texture?: Texture | undefined
+  spritesheet?: SpritesheetFormat | undefined
 }
 
 export type AnimatedInstancedSpriteEvents = any
