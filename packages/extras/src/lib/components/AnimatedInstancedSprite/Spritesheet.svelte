@@ -91,6 +91,8 @@
       }
       const built = await spritesheet.build()
 
+      console.log(built)
+
       spritesheetStore.set(built.spritesheet)
       textureStore.set(built.texture)
     }

@@ -120,7 +120,7 @@
     for (let i = 0; i < count; i++) {
       // $camera.position.set(0 + (posX[0] || 0), 7, 15 + (posZ[0] || 0))
 
-      updatePosition(i, [posX[i] || 0, 1, posZ[i] || 0])
+      updatePosition(i, [posX[i] || 0, 0.5, posZ[i] || 0])
     }
   })
 

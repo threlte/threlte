@@ -7,7 +7,6 @@
   const animations: any[] = []
 
   const registerAnimation = (animation: any) => {
-    console.log({ animation })
     animations.push(animation)
   }
 

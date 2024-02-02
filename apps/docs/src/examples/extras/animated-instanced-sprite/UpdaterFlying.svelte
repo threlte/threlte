@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useFrame } from '@threlte/core'
+  import { useTask } from '@threlte/core'
   import { getContext } from 'svelte'
   import { Vector2 } from 'three'
 
@@ -7,6 +7,23 @@
   const { updatePosition, count, animationMap, setAnimation, mesh } = spriteCtx
 
   mesh.offset.randomizeAll()
+
+  type FlyingAgent = {
+    action: 'Idle' | 'Run'
+    velocity: [number, number]
+    timer: number
+    baseHeight: number
+  }
+
+  const agents: FlyingAgent[] = []
+  for (let i = 0; i < count; i++) {
+    agents.push({
+      action: 'Run',
+      timer: 0.1,
+      velocity: [0, 1],
+      baseHeight: 2 + Math.random() * 15
+    })
+  }
 
   const posX: number[] = new Array(count).fill(0)
   const posY: number[] = new Array(count).fill(0)
@@ -26,38 +43,27 @@
     return { x, y }
   }
 
-  for (let i = 1; i < count; i++) {
+  for (let i = 0; i < agents.length; i++) {
     const pos = rndPosition()
     posX[i] = pos.x
-    posY[i] = 5 + Math.random() * 30
+    posY[i] = agents[i].baseHeight
     posZ[i] = pos.y
   }
 
-  type Agent = {
-    action: 'Idle' | 'Run'
-    velocity: [number, number]
-    timer: number
-  }
-
-  const agents: Agent[] = []
-  for (let i = 0; i < count; i++) {
-    agents.push({
-      action: 'Run',
-      timer: 0.1,
-      velocity: [0, 1]
-    })
-  }
-
   const velocityHelper = new Vector2(0, 0)
+
+  let totalTime = 0
 
   const updateAgents = (delta: number) => {
     for (let i = 0; i < agents.length; i++) {
       // timer
 
       agents[i].timer -= delta
+      totalTime += delta
 
       // apply velocity
       posX[i] += agents[i].velocity[0] * delta
+      posY[i] = agents[i]?.baseHeight + Math.sin(totalTime * 0.00005 + i)
       posZ[i] += agents[i].velocity[1] * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
@@ -87,15 +93,13 @@
     }
   }
 
-  useFrame((_, _delta) => {
+  useTask((_delta) => {
     if ($animationMap.size > 0) {
       updateAgents(_delta)
     }
 
     for (let i = 0; i < count; i++) {
-      // $camera.position.set(0 + (posX[0] || 0), 7, 15 + (posZ[0] || 0))
-
-      updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0])
+      updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0], [5, 5])
       setAnimation(i, 0)
     }
   })
