@@ -3481,8 +3481,8 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.0.0(three@0.158.0):
-    resolution: {integrity: sha512-hLUDJ8Z/QmyDR0fznfPVbLQk8nqlaVJFSteTHszXyNafTD8fLs7BUrXpOEsxmff1vFgw8tBAKnK95MqAuk+Qzg==}
+  /@threejs-kit/instanced-sprite-mesh@2.1.0(three@0.158.0):
+    resolution: {integrity: sha512-LPMlK2a1RrM5e6XVWkL+xvZLDrDUvpNBpvnJpV8ll+QaciVk9takh+GnfaJZzsuXYumsuj0e2+oo5kCN7UbbVA==}
     peerDependencies:
       three: '>=0.158.0'
     dependencies:
@@ -7404,7 +7404,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.11
+      graceful-fs: 4.2.10
 
   /jsonpath@1.1.1:
     resolution: {integrity: sha512-l6Cg7jRpixfbgoWgkrl77dgEj8RPvND0wMH6TwQmi9Qs4TFfS9u5cUFnbeKTwj5ga5Y3BTGGNI28k117LJ009w==}
