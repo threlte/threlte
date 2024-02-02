@@ -19,10 +19,12 @@
   export let speed: $$Props['speed'] = 1
   export let fade: $$Props['fade'] = true
   export let opacity: $$Props['opacity'] = 1.0
+const vec3 = new Vector3()
+const spherical = new Spherical()
 
   const genStar = (r: number) => {
-    return new Vector3().setFromSpherical(
-      new Spherical(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
+    return vec3.setFromSpherical(
+      spherical.set(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
     )
   }
 
