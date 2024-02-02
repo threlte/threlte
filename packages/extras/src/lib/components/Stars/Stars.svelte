@@ -33,8 +33,8 @@ const spherical = new Spherical()
 	let sizesArray: Float32Array
 
 	$: {
-		const positions: any[] = []
-		const colors: any[] = []
+		const positions: number[] = []
+		const colors: number[] = []
 		const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
 		const color = new Color()
 		let r = radius + depth
