@@ -75,6 +75,12 @@
               .normalize()
               .multiplyScalar(2.1)
             agents[i].velocity = velocityHelper.toArray()
+
+            if (velocityHelper.x > 0) {
+              mesh.flipX.setAt(i, false)
+            } else {
+              mesh.flipX.setAt(i, true)
+            }
           }
         }
       }
