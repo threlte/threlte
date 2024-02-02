@@ -41,7 +41,8 @@ const spherical = new Spherical()
 		const increment = depth / count
 		for (let i = 0; i < count; i++) {
 			r -= increment * Math.random()
-			positions.push(...genStar(r).toArray())
+      const position = genStar(r)
+			positions.push(position.x, position.y, position.z)
 			color.setHSL(i / count, saturation, lightness)
 			colors.push(color.r, color.g, color.b)
 		}
