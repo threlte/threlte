@@ -20,7 +20,8 @@
     AnimatedInstancedSpriteEvents,
     AnimatedInstancedSpriteInternalCtx,
     AnimatedInstancedSpriteProps,
-    AnimatedInstancedSpriteSlots
+    AnimatedInstancedSpriteSlots,
+    AnimatedInstancedSpriteUserCtx
   } from './AnimatedInstancedSprite.svelte'
   import type { SpritesheetContext } from './Spritesheet'
 
@@ -28,6 +29,7 @@
   type $$Events = AnimatedInstancedSpriteEvents
   type $$Slots = AnimatedInstancedSpriteSlots
 
+  export let autoUpdate: $$Props['autoUpdate'] = true
   export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
   export let fps: $$Props['fps'] = 15
   export let billboarding: $$Props['billboarding']
@@ -61,7 +63,7 @@
   const { renderer } = useThrelte()
 
   // todo upstream types
-  let mesh: InstancedSpriteMesh<MeshBasicMaterial, SpriteAnimations> = new InstancedSpriteMesh(
+  export let mesh: InstancedSpriteMesh<any, any> = new InstancedSpriteMesh(
     spriteBaseMaterial,
     count,
     renderer,
@@ -117,6 +119,7 @@
   $: mesh.fps = fps
 
   // BILLBOARDING
+  // TODO: Billboarding is broken for scale different than [1,1] - vertex shader upstream
   const billboardingStore = writable<boolean | undefined>(undefined)
   $: billboardingStore.set(billboarding)
   watch([billboardingStore], () => {
@@ -159,7 +162,7 @@
     mesh.animation.setAt(instanceId, animationId)
   }
 
-  setContext('instanced-sprite-ctx', {
+  setContext<AnimatedInstancedSpriteUserCtx>('instanced-sprite-ctx', {
     mesh,
     count,
     animationMap,
@@ -173,7 +176,9 @@
   })
 
   useTask(() => {
-    mesh.update()
+    if (autoUpdate) {
+      mesh.update()
+    }
     if (instanceMatrixNeedsUpdate) {
       mesh.instanceMatrix.needsUpdate = true
       instanceMatrixNeedsUpdate = false

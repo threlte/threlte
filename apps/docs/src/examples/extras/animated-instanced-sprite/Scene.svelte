@@ -13,7 +13,7 @@
   const grass = useTexture('/textures/sprites/pixel_grass.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(200, 200)
+      texture.repeat.set(500, 500)
       texture.minFilter = NearestFilter
       texture.magFilter = NearestFilter
       texture.needsUpdate = true
@@ -43,6 +43,7 @@
   {fps}
 />
 
+<!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas -->
 <Trees {billboarding} />
 
 <Sky elevation={0.15} />
@@ -54,9 +55,9 @@
   </T.Mesh>
 {/if}
 
-<!-- <Grid
+<Grid
   infiniteGrid
   type={'grid'}
   sectionThickness={0.0}
   position.y={0.01}
-/> -->
+/>

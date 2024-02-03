@@ -13,9 +13,5 @@
 
   $: updatePosition(id, position, scale)
 
-  $: {
-    if (animationName) {
-      setAnimation(id, animationName)
-    }
-  }
+  $: animationName && setAnimation(id, animationName)
 </script>

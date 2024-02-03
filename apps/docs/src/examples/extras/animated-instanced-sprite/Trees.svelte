@@ -3,12 +3,12 @@
     AnimatedInstancedSprite,
     SpriteAnimation,
     SpriteFile,
+    SpriteInstance,
     Spritesheet
   } from '@threlte/extras'
 
   import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
 
-  import SpriteInstance from './SpriteInstance.svelte'
   import type { Vector3Tuple } from 'three'
 
   export let billboarding = false
@@ -21,8 +21,8 @@
     }
   }
 
-  const REGION_W = 300
-  const REGION_Z = 300
+  const REGION_W = 500
+  const REGION_Z = 500
 
   const greenTrees = [0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 15]
   const redTrees = [8, 9, 10, 11, 20, 21, 22, 23]
@@ -31,17 +31,32 @@
   const sampler = new Sampler(1.5, [REGION_W, REGION_Z], undefined, Math.random)
   const points = sampler.GeneratePoints()
 
+  console.log(points.length)
+
   const pickRandomTreeType = () => {
     const rnd = Math.random()
 
-    if (rnd > 0.95) {
+    if (rnd > 0.97) {
       return `deadTree_${Math.floor(deadTrees.length * Math.random())}`
     }
-    if (rnd > 0.75) {
+    if (rnd > 0.9) {
       return `redTree_${Math.floor(redTrees.length * Math.random())}`
     }
 
     return `greenTree_${Math.floor(greenTrees.length * Math.random())}`
+  }
+
+  let sprite: any
+
+  $: {
+    // manually update once to apply tree atlas
+    // also, flip random trees on X axis for more variety
+    if (sprite) {
+      for (let i = 0; i < points.length; i++) {
+        sprite.flipX.setAt(i, Math.random() > 0.6 ? true : false)
+      }
+      sprite.update()
+    }
   }
 </script>
 
@@ -78,6 +93,8 @@
     count={points.length}
     playmode={'FORWARD'}
     {billboarding}
+    autoUpdate={false}
+    bind:ref={sprite}
   >
     {#each points as [x, z], i}
       <SpriteInstance

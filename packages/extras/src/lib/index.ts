@@ -85,5 +85,6 @@ export { default as AnimatedInstancedSprite } from './components/AnimatedInstanc
 export { default as Spritesheet } from './components/AnimatedInstancedSprite/Spritesheet.svelte'
 export { default as SpriteAnimation } from './components/AnimatedInstancedSprite/SpriteAnimation.svelte'
 export { default as SpriteFile } from './components/AnimatedInstancedSprite/SpriteFile.svelte'
+export { default as SpriteInstance } from './components/AnimatedInstancedSprite/SpriteInstance.svelte'
 
 export type { ThrelteGltf } from './types/types'

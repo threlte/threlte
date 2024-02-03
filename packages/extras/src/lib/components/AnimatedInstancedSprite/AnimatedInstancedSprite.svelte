@@ -28,11 +28,16 @@
       if (t && s) ready = true
     })
   }
+
+  export let ref: any
 </script>
 
 {#if ready}
   <!-- todo, how to deal with types for inner/outer? -->
-  <InnerAnimatedInstancedSprite {...$$restProps}>
+  <InnerAnimatedInstancedSprite
+    {...$$restProps}
+    bind:mesh={ref}
+  >
     <slot />
   </InnerAnimatedInstancedSprite>
 {/if}

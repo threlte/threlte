@@ -1,4 +1,8 @@
-import type { PLAY_MODE, SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
+import type {
+  InstancedSpriteMesh,
+  PLAY_MODE,
+  SpritesheetFormat
+} from '@threejs-kit/instanced-sprite-mesh'
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import {
@@ -11,6 +15,13 @@ import {
 } from 'three'
 
 export type AnimatedInstancedSpriteProps = {
+  /**
+   * update animations automatically
+   *
+   * @default true
+   */
+  autoUpdate?: boolean
+
   /** Number of instances */
   count: number
 
@@ -123,6 +134,8 @@ export type AnimatedInstancedSpriteProps = {
 
   texture?: Texture | undefined
   spritesheet?: SpritesheetFormat | undefined
+
+  ref?: any
 }
 
 export type AnimatedInstancedSpriteEvents = any
@@ -132,6 +145,14 @@ export type AnimatedInstancedSpriteSlots = any
 export type AnimatedInstancedSpriteInternalCtx = {
   setSpritesheet: (spritesheet: SpritesheetFormat) => void
   setTexture: (texture: Texture) => void
+}
+
+export type AnimatedInstancedSpriteUserCtx = {
+  mesh: InstancedSpriteMesh<any, any>
+  count: number
+  animationMap: any
+  updatePosition: any
+  setAnimation: any
 }
 
 export default class AnimatedInstancedSprite extends SvelteComponent<
