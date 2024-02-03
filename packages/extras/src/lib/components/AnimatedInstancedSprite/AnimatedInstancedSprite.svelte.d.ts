@@ -5,13 +5,15 @@ import type {
 } from '@threejs-kit/instanced-sprite-mesh'
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
+import type { Writable } from 'svelte/store'
 import {
-  InstancedMesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
   MeshPhongMaterial,
   MeshStandardMaterial,
-  Texture
+  Texture,
+  type Vector2Tuple,
+  type Vector3Tuple
 } from 'three'
 
 export type AnimatedInstancedSpriteProps = {
@@ -78,12 +80,7 @@ export type AnimatedInstancedSpriteProps = {
 
   transparent?: boolean
 
-  /**
-   * Delay the start of the animation in ms.
-   *
-   * @default 0
-   */
-  // delay?: number
+  randomPlaybackOffset?: boolean | number
 
   /**
    * Whether or not the material should be transparent.
@@ -150,9 +147,8 @@ export type AnimatedInstancedSpriteInternalCtx = {
 export type AnimatedInstancedSpriteUserCtx = {
   mesh: InstancedSpriteMesh<any, any>
   count: number
-  animationMap: any
-  updatePosition: any
-  setAnimation: any
+  animationMap: Writable<Map<string, number>>
+  updatePosition: (id: number, position: Vector3Tuple, scale: Vector2Tuple) => void
 }
 
 export default class AnimatedInstancedSprite extends SvelteComponent<

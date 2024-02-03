@@ -40,6 +40,8 @@
   export let alphaTest: $$Props['alphaTest'] = 0.1
   export let transparent: $$Props['transparent'] = true
 
+  export let randomPlaybackOffset: $$Props['randomPlaybackOffset'] = false
+
   export let texture: Texture | undefined = undefined
   export let spritesheet: SpritesheetFormat | undefined = undefined
 
@@ -143,6 +145,24 @@
     }
   })
 
+  // RANDOM PLAYBACK OFFSET
+  const rndOffsetStore = writable(randomPlaybackOffset)
+  $: rndOffsetStore.set(randomPlaybackOffset)
+  let previousRndOffset = false
+  watch([rndOffsetStore], ([offset]) => {
+    // going from no offset to random
+    if (previousRndOffset === false && offset) {
+      mesh.offset.randomizeAll(offset === true ? undefined : offset)
+    }
+    // going from random offset to none
+    if (previousRndOffset === true && !offset) {
+      for (let i = 0; i < count; i++) {
+        mesh.offset.setAt(i, 0)
+      }
+    }
+    previousRndOffset = offset ? true : false
+  })
+
   //
   // MATRIX UPDATE - POSITION AND SCALE
   //
@@ -158,18 +178,15 @@
     instanceMatrixNeedsUpdate = true
   }
 
-  const setAnimation = (instanceId: number, animationId: SpriteAnimations) => {
-    mesh.animation.setAt(instanceId, animationId)
-  }
-
+  // Context for user facing components and hooks
   setContext<AnimatedInstancedSpriteUserCtx>('instanced-sprite-ctx', {
     mesh,
     count,
     animationMap,
-    updatePosition,
-    setAnimation
+    updatePosition
   })
 
+  // Internal context used for building spritesheet etc
   setContext<AnimatedInstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
     setSpritesheet,
     setTexture

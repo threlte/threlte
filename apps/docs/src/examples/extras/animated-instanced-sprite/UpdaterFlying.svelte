@@ -4,7 +4,7 @@
   import { Vector2 } from 'three'
 
   const spriteCtx: any = getContext('instanced-sprite-ctx')
-  const { updatePosition, count, animationMap, setAnimation, mesh } = spriteCtx
+  const { updatePosition, count, animationMap, mesh } = spriteCtx
 
   mesh.offset.randomizeAll()
 
@@ -100,7 +100,7 @@
 
     for (let i = 0; i < count; i++) {
       updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0], [5, 5])
-      setAnimation(i, 0)
+      mesh.animation.setAt(i, 0)
     }
   })
 </script>

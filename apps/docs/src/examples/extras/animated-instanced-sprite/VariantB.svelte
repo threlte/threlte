@@ -40,6 +40,7 @@
     playmode={'FORWARD'}
     {fps}
     {billboarding}
+    randomPlaybackOffset={1}
   >
     <UpdaterFlying />
   </AnimatedInstancedSprite>

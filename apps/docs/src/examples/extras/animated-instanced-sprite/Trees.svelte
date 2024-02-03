@@ -21,14 +21,14 @@
     }
   }
 
-  const REGION_W = 500
-  const REGION_Z = 500
+  const REGION_W = 200
+  const REGION_Z = 200
 
   const greenTrees = [0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 15]
   const redTrees = [8, 9, 10, 11, 20, 21, 22, 23]
   const deadTrees = [16, 17, 18, 19]
 
-  const sampler = new Sampler(1.5, [REGION_W, REGION_Z], undefined, Math.random)
+  const sampler = new Sampler(1.7, [REGION_W, REGION_Z], undefined, Math.random)
   const points = sampler.GeneratePoints()
 
   console.log(points.length)
