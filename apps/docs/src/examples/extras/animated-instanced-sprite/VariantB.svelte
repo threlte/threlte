@@ -1,7 +1,10 @@
 <script lang="ts">
-  import { AnimatedInstancedSprite, SpriteFile } from '@threlte/extras'
-  import SpriteAnimation from 'node_modules/@threlte/extras/src/lib/components/AnimatedInstancedSprite/SpriteAnimation.svelte'
-  import Spritesheet from 'node_modules/@threlte/extras/src/lib/components/AnimatedInstancedSprite/Spritesheet.svelte'
+  import {
+    AnimatedInstancedSprite,
+    SpriteFile,
+    SpriteAnimation,
+    Spritesheet
+  } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
 
   export let billboarding = false

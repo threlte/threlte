@@ -5,7 +5,7 @@
   import Trees from './Trees.svelte'
   import VariantA from './VariantA.svelte'
   import VariantB from './VariantB.svelte'
-  import { NearestFilter, RepeatWrapping } from 'three'
+  import { DoubleSide, NearestFilter, RepeatWrapping } from 'three'
 
   export let billboarding = false
   export let fps: number
@@ -20,12 +20,23 @@
       return texture
     }
   })
+
+  const sky = useTexture('/textures/sprites/demo01_PixelSky_1920x1080.png', {
+    transform: (texture) => {
+      texture.wrapS = texture.wrapT = RepeatWrapping
+      texture.repeat.set(10, 1)
+      texture.minFilter = NearestFilter
+      texture.magFilter = NearestFilter
+      texture.needsUpdate = true
+      return texture
+    }
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position.z={15}
-  position.y={7}
+  position.z={14}
+  position.y={6}
 >
   <OrbitControls />
 </T.PerspectiveCamera>
@@ -38,15 +49,26 @@
   {fps}
 />
 
+<!-- Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
 <VariantB
   {billboarding}
   {fps}
 />
 
-<!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas -->
+<!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
 <Trees {billboarding} />
 
-<Sky elevation={0.15} />
+<Sky elevation={13.35} />
+
+{#if $sky}
+  <T.Mesh position.y={30}>
+    <T.CylinderGeometry args={[200, 200, 150]} />
+    <T.MeshBasicMaterial
+      map={$sky}
+      side={DoubleSide}
+    />
+  </T.Mesh>
+{/if}
 
 {#if $grass}
   <T.Mesh rotation.x={-DEG2RAD * 90}>
