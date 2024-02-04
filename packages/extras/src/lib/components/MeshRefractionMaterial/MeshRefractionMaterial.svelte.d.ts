@@ -2,6 +2,11 @@ import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, CubeTexture, ShaderMaterial, Texture } from 'three'
 
+/*
+  To use this component you need to install the seperate library `three-mesh-bhv`
+	please run `npm install three-mesh-bhv` before adding this component to your project.
+*/
+
 export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
   envMap?: CubeTexture | Texture
   /** Number of ray-cast bounces, it can be expensive to have too many, 2 */
