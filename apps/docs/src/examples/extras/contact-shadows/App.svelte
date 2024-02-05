@@ -12,6 +12,6 @@
 <style>
   div {
     height: 100%;
-		background-color: rgb(255 255 255 / 0.9)
+    background-color: rgb(255 255 255 / 0.9);
   }
 </style>

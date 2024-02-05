@@ -1,5 +1,5 @@
 ---
-"@threlte/docs": minor
+'@threlte/docs': minor
 ---
 
 Remove tailwind classes from examples
