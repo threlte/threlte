@@ -35,6 +35,6 @@
 <Grid
   cellColor={'#46536b'}
   sectionThickness={0}
-	infiniteGrid
-	cellSize={5}
+  infiniteGrid
+  cellSize={5}
 />

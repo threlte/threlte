@@ -18,12 +18,12 @@
   type $$Events = MeshRefractionMaterialEvents
   type $$Slots = MeshRefractionMaterialSlots
 
-  export let envMap: $$Props['envMap'];
-	export let bounces: $$Props['bounces'] = 2
-	export let ior: $$Props['ior'] = 2.4
-	export let fresnel: $$Props['fresnel'] = 0
+  export let envMap: $$Props['envMap']
+  export let bounces: $$Props['bounces'] = 2
+  export let ior: $$Props['ior'] = 2.4
+  export let fresnel: $$Props['fresnel'] = 0
   export let aberrationStrength: $$Props['aberrationStrength'] = 0
-	export let color: $$Props['color'] = 'white'
+  export let color: $$Props['color'] = 'white'
   export let fastChroma: $$Props['fastChroma'] = true
 
   let material = new ShaderMaterial({
@@ -44,7 +44,7 @@
     }
   })
 
-	const { size } = useThrelte();
+  const { size } = useThrelte()
   const parent = useParent()
 
   const isCubeTexture = (def: THREE.CubeTexture | THREE.Texture): def is THREE.CubeTexture =>
@@ -99,11 +99,11 @@
 <T
   is={material}
   uniforms.envMap.value={envMap}
-	uniforms.bounces.value={bounces}
-	uniforms.ior.value={ior}
-	uniforms.fresnel.value={fresnel}
+  uniforms.bounces.value={bounces}
+  uniforms.ior.value={ior}
+  uniforms.fresnel.value={fresnel}
   uniforms.aberrationStrength.value={aberrationStrength}
-	uniforms.color.value={new Color(color)}
-	uniforms.resolution.value={[$size.width, $size.height]}
-  defines={defines}
+  uniforms.color.value={new Color(color)}
+  uniforms.resolution.value={[$size.width, $size.height]}
+  {defines}
 />

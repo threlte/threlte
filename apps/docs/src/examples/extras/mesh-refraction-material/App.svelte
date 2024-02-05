@@ -8,6 +8,7 @@
     <Scene />
   </Canvas>
 </div>
+
 <style>
   div {
     height: 100%;

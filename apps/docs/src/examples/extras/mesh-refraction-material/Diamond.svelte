@@ -46,7 +46,14 @@
       geometry={gltf.nodes.Diamond_1_0.geometry}
     >
       {#await env then e}
-        <MeshRefractionMaterial envMap={e} fresnel={0.5} ior={2.75} aberrationStrength={0.04} bounces={3} color={'#ffdddd'}/>
+        <MeshRefractionMaterial
+          envMap={e}
+          fresnel={0.5}
+          ior={2.75}
+          aberrationStrength={0.04}
+          bounces={3}
+          color={'#ffdddd'}
+        />
       {/await}
     </T.Mesh>
   {:catch error}
