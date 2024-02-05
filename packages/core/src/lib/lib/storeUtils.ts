@@ -3,11 +3,12 @@ import { derived, writable, type Readable, type Writable } from 'svelte/store'
 
 type Stores = Readable<any> | [Readable<any>, ...Array<Readable<any>>] | Array<Readable<any>>
 
-type StoresValues<T> = T extends Readable<infer U>
-  ? U
-  : {
-      [K in keyof T]: T[K] extends Readable<infer U> ? U : never
-    }
+type StoresValues<T> =
+  T extends Readable<infer U>
+    ? U
+    : {
+        [K in keyof T]: T[K] extends Readable<infer U> ? U : never
+      }
 
 type MaybePromise<T> = T | Promise<T>
 

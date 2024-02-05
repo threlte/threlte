@@ -52,9 +52,9 @@ export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'di
       data: XRInputSource
     }
   : Type extends 'pinchstart' | 'pinchend'
-  ? {
-      type: Type
-      handedness: 'left' | 'right'
-      target: null
-    }
-  : never
+    ? {
+        type: Type
+        handedness: 'left' | 'right'
+        target: null
+      }
+    : never
