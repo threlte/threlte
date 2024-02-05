@@ -73,7 +73,7 @@
   {#if !expanded}
     <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">
       <button
-        class="text-orange border-orange/10 z-10 flex flex-row items-center justify-center	gap-3 rounded-sm border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
+        class="text-orange border-orange/10 z-10 flex flex-row items-center justify-center gap-3 rounded-sm border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
         on:click={() => (expanded = true)}
       >
         <svg

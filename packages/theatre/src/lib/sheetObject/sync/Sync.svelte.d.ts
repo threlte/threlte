@@ -30,8 +30,8 @@ type InstanceProps<Type extends any> = Partial<
                 | Parameters<MaybeInstance<Type>[K]['set']>
                 | Parameters<MaybeInstance<Type>[K]['set']>[0]
             : MaybeInstance<Type>[K] extends AnyFn
-            ? never
-            : MaybeInstance<Type>[K]
+              ? never
+              : MaybeInstance<Type>[K]
         },
     ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
   >

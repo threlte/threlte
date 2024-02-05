@@ -9,7 +9,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="relative h-screen w-screen ">
+<div class="relative h-screen w-screen">
   <Canvas toneMapping={NoToneMapping}>
     <T.OrthographicCamera
       makeDefault

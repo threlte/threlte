@@ -84,14 +84,14 @@
     typeof occlude === 'boolean' && occlude === true
       ? [scene]
       : Array.isArray(occlude)
-      ? occlude
-      : undefined
+        ? occlude
+        : undefined
   $: raytraceTarget =
     typeof occlude === 'boolean' && occlude === true
       ? [scene]
       : Array.isArray(occlude)
-      ? occlude
-      : undefined
+        ? occlude
+        : undefined
 
   const widthHalf = derived(size, (size) => size.width / 2)
   const heightHalf = derived(size, (size) => size.height / 2)
