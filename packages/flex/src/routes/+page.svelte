@@ -19,30 +19,33 @@
   const load = () => {
     const modules = import.meta.glob('./examples/*/*.svelte', { eager: true })
     const rawModules = import.meta.glob('./examples/*/*.svelte', { eager: true, as: 'raw' })
-    components = Object.entries(modules).reduce((acc, [key, module]) => {
-      const name = key.split('/')[2]
-      const isDom = key.includes('Dom')
-      const raw = rawModules[key]
-      const example = acc.find((e) => e.name === name)
-      if (example) {
-        if (isDom) {
-          example.dom = (module as any).default
-          example.domRaw = raw
+    components = Object.entries(modules).reduce(
+      (acc, [key, module]) => {
+        const name = key.split('/')[2]
+        const isDom = key.includes('Dom')
+        const raw = rawModules[key]
+        const example = acc.find((e) => e.name === name)
+        if (example) {
+          if (isDom) {
+            example.dom = (module as any).default
+            example.domRaw = raw
+          } else {
+            example.threlte = (module as any).default
+            example.threlteRaw = raw
+          }
         } else {
-          example.threlte = (module as any).default
-          example.threlteRaw = raw
+          acc.push({
+            name,
+            dom: isDom ? (module as any).default : undefined,
+            domRaw: isDom ? raw : '',
+            threlte: isDom ? undefined : (module as any).default,
+            threlteRaw: isDom ? '' : raw
+          })
         }
-      } else {
-        acc.push({
-          name,
-          dom: isDom ? (module as any).default : undefined,
-          domRaw: isDom ? raw : '',
-          threlte: isDom ? undefined : (module as any).default,
-          threlteRaw: isDom ? '' : raw
-        })
-      }
-      return acc
-    }, [] as unknown as typeof components)
+        return acc
+      },
+      [] as unknown as typeof components
+    )
     selected ||= components[0].name
   }
 
@@ -104,8 +107,18 @@
   :global(body) {
     background: #333333;
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-      Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Open Sans',
+      'Helvetica Neue',
+      sans-serif;
   }
 
   nav {

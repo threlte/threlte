@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 8.5.1
+
+### Patch Changes
+
+- a31b5a3: Fix GroundedSkybox import for r161
+
+## 8.5.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
 ## 8.4.0
 
 ### Minor Changes

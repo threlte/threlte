@@ -16,10 +16,5 @@ export type PluginContext = Record<string, Plugin<AnyProps>>
 
 export type PluginContextName = 'threlte-plugin-context'
 
-export type PluginProps<P extends NamedPlugin<any> | Plugin<any>> = P extends NamedPlugin<
-  infer Props
->
-  ? Props
-  : P extends Plugin<infer Props>
-  ? Props
-  : never
+export type PluginProps<P extends NamedPlugin<any> | Plugin<any>> =
+  P extends NamedPlugin<infer Props> ? Props : P extends Plugin<infer Props> ? Props : never

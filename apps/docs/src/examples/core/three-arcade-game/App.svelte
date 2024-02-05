@@ -15,9 +15,9 @@
   })
 </script>
 
-<div class="w-full h-full absolute overflow-hidden">
+<div class="absolute h-full w-full overflow-hidden">
   <div
-    class="absolute w-full h-full transition-all duration-1000 delay-500"
+    class="absolute h-full w-full transition-all delay-500 duration-1000"
     class:opacity-0={!$finishedOnce}
   >
     <Canvas
@@ -35,29 +35,29 @@
   </div>
   {#if !$finishedOnce}
     <div
-      class="flex flex-row items-center justify-center w-full h-full absolute top-0 left-0 pointer-events-none p-12 text-white text-2xl"
+      class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
     >
       {$progress.toFixed()} %
     </div>
   {:else if $state === 'off'}
     <div
-      class="flex flex-row items-center justify-center w-full h-full absolute top-0 left-0 pointer-events-none p-12"
+      class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12"
     >
       <button
         on:click={() => {
           resumeContext()
           state.set('intro')
         }}
-        class="bg-white text-black px-8 py-4 rounded-full text-2xl pointer-events-auto"
+        class="pointer-events-auto rounded-full bg-white px-8 py-4 text-2xl text-black"
       >
         Insert Coin
       </button>
     </div>
   {/if}
 
-  <div class="absolute top-6 right-6">
+  <div class="absolute right-6 top-6">
     <button
-      class="bg-white rounded-full [&>*]:w-7 [&>*]:h-7 p-2"
+      class="rounded-full bg-white p-2 [&>*]:h-7 [&>*]:w-7"
       on:click={() => ($muted = !$muted)}
     >
       {#if $muted}

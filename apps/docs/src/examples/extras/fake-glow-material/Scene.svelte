@@ -3,7 +3,10 @@
   import { OrbitControls, Grid, FakeGlowMaterial } from '@threlte/extras'
 </script>
 
-<T.Group position.y={2} position.x={-3}>
+<T.Group
+  position.y={2}
+  position.x={-3}
+>
   <T.Mesh>
     <T.MeshBasicMaterial color="green" />
     <T.IcosahedronGeometry args={[2, 4]} />
@@ -15,7 +18,10 @@
   </T.Mesh>
 </T.Group>
 
-<T.Group position.y={3} position.x={3}>
+<T.Group
+  position.y={3}
+  position.x={3}
+>
   <T.Mesh>
     <T.MeshBasicMaterial color="blue" />
     <T.BoxGeometry args={[2, 2, 2]} />
@@ -27,7 +33,10 @@
   </T.Mesh>
 </T.Group>
 
-<T.Group position.y={6} position.x={0}>
+<T.Group
+  position.y={6}
+  position.x={0}
+>
   <T.Mesh>
     <T.MeshBasicMaterial color="red" />
     <T.TorusKnotGeometry args={[1, 0.25, 128]} />

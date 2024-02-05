@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { gameState } from '../state'
-	import BallOut from './BallOut.svelte'
-	import DynamicBall from './DynamicBall.svelte'
-	import StaticBall from './StaticBall.svelte'
+  import { gameState } from '../state'
+  import BallOut from './BallOut.svelte'
+  import DynamicBall from './DynamicBall.svelte'
+  import StaticBall from './StaticBall.svelte'
 
-	const { state } = gameState
+  const { state } = gameState
 </script>
 
 {#if $state === 'playing'}
-	<DynamicBall />
+  <DynamicBall />
 {:else if $state === 'game-over'}
-	<BallOut />
+  <BallOut />
 {:else}
-	<StaticBall />
+  <StaticBall />
 {/if}

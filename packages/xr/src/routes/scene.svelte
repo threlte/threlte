@@ -32,7 +32,8 @@
 </Headset>
 
 <XR>
-  <Controller left
+  <Controller
+    left
     on:connected={() => console.log('connect')}
     on:select={() => console.log('select')}
   >
