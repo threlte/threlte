@@ -47,9 +47,7 @@
   $: shaderMaterial.uniforms.color!.value = color
 </script>
 
-<T.Mesh
-  scale={size}
->
+<T.Mesh scale={size}>
   <T.PlaneGeometry />
   <T is={shaderMaterial} />
 </T.Mesh>

@@ -1,11 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import type { Texture } from 'three'
-  import { GroundProjectedSkybox } from 'three/examples/jsm/objects/GroundProjectedSkybox'
+  import { revision } from '../../lib/revision'
+  import * as Addons from 'three/examples/jsm/Addons'
 
   export let envMap: Texture
 </script>
 
 {#if envMap}
-  <T is={GroundProjectedSkybox} args={[envMap]} {...$$restProps} />
+  <T
+    is={revision > 160 ? Addons.GroundedSkybox : Addons.GroundProjectedSkybox}
+    args={[envMap]}
+    {...$$restProps}
+  />
 {/if}

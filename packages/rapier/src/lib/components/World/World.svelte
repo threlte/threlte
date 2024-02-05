@@ -34,7 +34,7 @@
   export let rawPhysicsPipeline: $$Props['rawPhysicsPipeline'] = undefined
   export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
   export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
-	/**
+  /**
    * This is passed to the useTask handler.
    * Use this to control when the rapier physics engine is updating the scene.
    * @default undefined
@@ -72,7 +72,7 @@
     {rawPhysicsPipeline}
     {rawSerializationPipeline}
     {rawDebugRenderPipeline}
-		{stage}
+    {stage}
   >
     <slot />
   </InnerWorld>

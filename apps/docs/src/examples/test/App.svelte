@@ -14,10 +14,10 @@
   </Canvas>
 
   <div
-    class=" absolute top-0 left-0 h-full w-full [&>*]:pointer-events-none"
+    class=" absolute left-0 top-0 h-full w-full [&>*]:pointer-events-none"
     id="int-target"
   >
-    <div class="relative top-6 left-6">
+    <div class="relative left-6 top-6">
       <div class="text-orange text-sm font-bold uppercase">Custom Event Target</div>
       <div class="text-orange text-3xl font-bold">Event Handling on Foreground Element</div>
     </div>

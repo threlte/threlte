@@ -24,9 +24,6 @@ if (process.env.NODE_ENV === 'production') {
 // https://astro.build/config
 export default defineConfig({
   prefetch: true,
-  experimental: {
-    clientPrerender: true
-  },
   build: {
     inlineStylesheets: 'never'
   },

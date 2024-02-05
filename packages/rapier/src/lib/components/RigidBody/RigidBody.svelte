@@ -11,7 +11,7 @@
   import type { RigidBodyProps } from './RigidBody.svelte'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
-  
+
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
   type $$Props = Required<RigidBodyProps>

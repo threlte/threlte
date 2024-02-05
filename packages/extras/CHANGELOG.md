@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 8.5.1
+
+### Patch Changes
+
+- a31b5a3: Fix GroundedSkybox import for r161
+
+## 8.5.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
 ## 8.4.0
 
 ### Minor Changes
@@ -573,7 +585,10 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
+  const { gltf } = useGltf<
+    "MeshA" | "MeshB" | "Object3DA",
+    "MaterialA" | "MaterialB"
+  >("/some/url");
   ```
 
   - After:
@@ -581,15 +596,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh
-      MeshB: THREE.Mesh
-      Object3DA: THREE.Object3D
-    }
+      MeshA: THREE.Mesh;
+      MeshB: THREE.Mesh;
+      Object3DA: THREE.Object3D;
+    };
     materials: {
-      MaterialA: THREE.MeshStandardMaterial
-      MaterialB: THREE.MeshBasicMaterial
-    }
-  }>('/some/url')
+      MaterialA: THREE.MeshStandardMaterial;
+      MaterialB: THREE.MeshBasicMaterial;
+    };
+  }>("/some/url");
   ```
 
 ## 4.4.1

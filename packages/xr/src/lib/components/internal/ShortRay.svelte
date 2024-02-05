@@ -15,9 +15,7 @@
       rotation.x={-Math.PI / 2}
       position.z={-0.1}
     >
-      <T.CylinderGeometry
-        args={[0.002, 0.002, 0.2, 16, 1, false]}
-      />
+      <T.CylinderGeometry args={[0.002, 0.002, 0.2, 16, 1, false]} />
       <T.RawShaderMaterial
         transparent
         vertexShader={`
@@ -42,4 +40,3 @@
     </T.Mesh>
   </slot>
 </T.Group>
-

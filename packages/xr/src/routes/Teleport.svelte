@@ -1,10 +1,11 @@
-<script lang='ts'>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { teleportControls } from '$lib'
 
   teleportControls('left')
   teleportControls('right')
 </script>
+
 <!-- 
 <T.Mesh
   receiveShadow
@@ -22,5 +23,5 @@
   rotation.x={-90 * (Math.PI / 180)}
 >
   <T.PlaneGeometry args={[10, 10]} />
-  <T.MeshStandardMaterial/>
+  <T.MeshStandardMaterial />
 </T.Mesh>
