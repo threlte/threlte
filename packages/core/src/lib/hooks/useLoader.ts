@@ -122,7 +122,11 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
     // Allow Async and Sync loaders
-    const loadResource = async (url: string) => {
+    const loadResource = 
+    
+    
+    
+    async (url: string) => {
       if (!loader) {
         loader = initializeLoader()
       }
