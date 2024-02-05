@@ -19,10 +19,12 @@
   export let speed: $$Props['speed'] = 1
   export let fade: $$Props['fade'] = true
   export let opacity: $$Props['opacity'] = 1.0
+const vec3 = new Vector3()
+const spherical = new Spherical()
 
   const genStar = (r: number) => {
-    return new Vector3().setFromSpherical(
-      new Spherical(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
+    return vec3.setFromSpherical(
+      spherical.set(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
     )
   }
 
@@ -31,15 +33,16 @@
 	let sizesArray: Float32Array
 
 	$: {
-		const positions: any[] = []
-		const colors: any[] = []
+		const positions: number[] = []
+		const colors: number[] = []
 		const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
 		const color = new Color()
 		let r = radius + depth
 		const increment = depth / count
 		for (let i = 0; i < count; i++) {
 			r -= increment * Math.random()
-			positions.push(...genStar(r).toArray())
+      const position = genStar(r)
+			positions.push(position.x, position.y, position.z)
 			color.setHSL(i / count, saturation, lightness)
 			colors.push(color.r, color.g, color.b)
 		}
@@ -53,7 +56,7 @@
   let time = 0
   const { stop, start } = useTask((dt) => {
     time += dt * speed
-  })
+  }, { autoStart: false })
 
 	$: if (speed !== 0) {
 		start()
