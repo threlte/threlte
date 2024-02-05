@@ -66,7 +66,7 @@
 </script>
 
 <div
-  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm "
+  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm"
 >
   {#if headings.length}
     <span

@@ -89,10 +89,10 @@ export type MassDef = Density | Mass | MassProperties | NoMassProperties
 type MassProps<TMassDef extends MassDef> = TMassDef extends Density
   ? Density
   : TMassDef extends MassProperties
-  ? MassProperties
-  : TMassDef extends Mass
-  ? Mass
-  : NoMassProperties
+    ? MassProperties
+    : TMassDef extends Mass
+      ? Mass
+      : NoMassProperties
 
 // ------------------ COLLIDER ------------------
 

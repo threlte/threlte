@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.5.1
+
+### Patch Changes
+
+- a31b5a3: Fix GroundedSkybox import for r161
+
 ## 8.5.0
 
 ### Minor Changes

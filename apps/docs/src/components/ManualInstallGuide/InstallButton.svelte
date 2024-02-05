@@ -16,8 +16,8 @@
     active
       ? 'bg-green-500/70 text-white'
       : passivelyActive
-      ? 'bg-green-500/20 text-white'
-      : 'bg-blue-900 hover:bg-blue-700/30',
+        ? 'bg-green-500/20 text-white'
+        : 'bg-blue-900 hover:bg-blue-700/30',
     _class
   )}
 >
