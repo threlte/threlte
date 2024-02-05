@@ -45,10 +45,13 @@ const randomLimits: [min: number, max: number] = [-20, 150]
 
 const audioLoader = new AudioLoader()
 
-const lastPlayed: Record<Groups, number> = Object.keys(groups).reduce((acc, key) => {
-  acc[key as Groups] = 0
-  return acc
-}, {} as Record<Groups, number>)
+const lastPlayed: Record<Groups, number> = Object.keys(groups).reduce(
+  (acc, key) => {
+    acc[key as Groups] = 0
+    return acc
+  },
+  {} as Record<Groups, number>
+)
 
 export const resumeContext = () => {
   if (context) context.resume()

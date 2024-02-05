@@ -48,8 +48,8 @@
     isClass(is) && argsIsConstructorParameters(args)
       ? new is(...(args as any)) // TODO: fix this any
       : isClass(is)
-      ? new is()
-      : is
+        ? new is()
+        : is
   ) as MaybeInstance<Type>
   // The ref is created, emit the event
   createEvent.updateRef(ref)
@@ -66,8 +66,8 @@
       isClass(is) && argsIsConstructorParameters(args)
         ? new is(...(args as any)) // TODO: fix this any
         : isClass(is)
-        ? new is()
-        : is
+          ? new is()
+          : is
     ) as MaybeInstance<Type>
     // The ref is recreated, emit the event
     createEvent.updateRef(ref)

@@ -3,7 +3,7 @@ name: Pull Request Checks
 on:
   pull_request:
     branches:
-      -main
+      - main
 
 jobs:
   prettier:
@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install 🔧
-        run: npm ci --audit=false
-      
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
+
       - name: Prettier 💅
-        run: npm run prettier
+        run: pnpm run prettier

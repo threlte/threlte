@@ -43,7 +43,10 @@
       translAccelleration *= 0.95 // damping
       translY += translAccelleration
 
-      const dir = intersectionPoint.clone().sub(new Vector3(0, translY, 0)).normalize()
+      const dir = intersectionPoint
+        .clone()
+        .sub(new Vector3(0, translY, 0))
+        .normalize()
       const dirCos = dir.dot(new Vector3(0, 1, 0))
       const angle = Math.acos(dirCos) - Math.PI * 0.5
       angleAccelleration += (angle - angleZ) * 0.01 // stiffness
