@@ -15,12 +15,12 @@
   export let depth: $$Props['depth'] = 50
   export let factor: $$Props['factor'] = 6
   export let saturation: $$Props['saturation'] = 1.0
-	export let lightness: $$Props['lightness'] = 0.8
+  export let lightness: $$Props['lightness'] = 0.8
   export let speed: $$Props['speed'] = 1
   export let fade: $$Props['fade'] = true
   export let opacity: $$Props['opacity'] = 1.0
-const vec3 = new Vector3()
-const spherical = new Spherical()
+  const vec3 = new Vector3()
+  const spherical = new Spherical()
 
   const genStar = (r: number) => {
     return vec3.setFromSpherical(
@@ -28,41 +28,44 @@ const spherical = new Spherical()
     )
   }
 
-	let positionsArray: Float32Array
-	let colorsArray: Float32Array
-	let sizesArray: Float32Array
+  let positionsArray: Float32Array
+  let colorsArray: Float32Array
+  let sizesArray: Float32Array
 
-	$: {
-		const positions: number[] = []
-		const colors: number[] = []
-		const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
-		const color = new Color()
-		let r = radius + depth
-		const increment = depth / count
-		for (let i = 0; i < count; i++) {
-			r -= increment * Math.random()
+  $: {
+    const positions: number[] = []
+    const colors: number[] = []
+    const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
+    const color = new Color()
+    let r = radius + depth
+    const increment = depth / count
+    for (let i = 0; i < count; i++) {
+      r -= increment * Math.random()
       const position = genStar(r)
-			positions.push(position.x, position.y, position.z)
-			color.setHSL(i / count, saturation, lightness)
-			colors.push(color.r, color.g, color.b)
-		}
-		positionsArray = new Float32Array(positions)
-		colorsArray = new Float32Array(colors)
-		sizesArray = new Float32Array(sizes)
-	}
+      positions.push(position.x, position.y, position.z)
+      color.setHSL(i / count, saturation, lightness)
+      colors.push(color.r, color.g, color.b)
+    }
+    positionsArray = new Float32Array(positions)
+    colorsArray = new Float32Array(colors)
+    sizesArray = new Float32Array(sizes)
+  }
 
   const component = forwardEventHandlers()
 
   let time = 0
-  const { stop, start } = useTask((dt) => {
-    time += dt * speed
-  }, { autoStart: false })
+  const { stop, start } = useTask(
+    (dt) => {
+      time += dt * speed
+    },
+    { autoStart: false }
+  )
 
-	$: if (speed !== 0) {
-		start()
-	} else {
-		stop()
-	}
+  $: if (speed !== 0) {
+    start()
+  } else {
+    stop()
+  }
 
   const material = new ShaderMaterial({
     uniforms: { time: { value: 0.0 }, fade: { value: 1.0 }, opacity: { value: 1.0 } },
@@ -104,7 +107,7 @@ const spherical = new Spherical()
     blending={AdditiveBlending}
     uniforms.fade.value={fade ? 1.0 : 0.0}
     uniforms.time.value={time}
-		uniforms.opacity.value={opacity}
+    uniforms.opacity.value={opacity}
     depthWrite={false}
     transparent
     vertexColors
