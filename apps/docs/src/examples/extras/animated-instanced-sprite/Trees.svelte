@@ -28,7 +28,7 @@
   const redTrees = [8, 9, 10, 11, 20, 21, 22, 23]
   const deadTrees = [16, 17, 18, 19]
 
-  const sampler = new Sampler(1.7, [REGION_W, REGION_Z], undefined, Math.random)
+  const sampler = new Sampler(2, [REGION_W, REGION_Z], undefined, Math.random)
   const points = sampler.GeneratePoints()
 
   console.log(points.length)

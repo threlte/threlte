@@ -5,6 +5,7 @@
   import Trees from './Trees.svelte'
   import VariantA from './VariantA.svelte'
   import VariantB from './VariantB.svelte'
+  import VariantC from './VariantC.svelte'
   import { DoubleSide, NearestFilter, RepeatWrapping } from 'three'
 
   export let billboarding = false
@@ -43,14 +44,21 @@
 
 <slot />
 
-<!-- Michael's Aseprite loader -->
+<!-- Dudes - Michael's Aseprite loader -->
+<!-- one is wasd player controlled  -->
 <VariantA
   {billboarding}
   {fps}
 />
 
-<!-- Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
+<!-- Flyers - Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
 <VariantB
+  {billboarding}
+  {fps}
+/>
+
+<!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
+<VariantC
   {billboarding}
   {fps}
 />
@@ -61,7 +69,7 @@
 <Sky elevation={13.35} />
 
 {#if $sky}
-  <T.Mesh position.y={30}>
+  <T.Mesh position.y={50}>
     <T.CylinderGeometry args={[200, 200, 150]} />
     <T.MeshBasicMaterial
       map={$sky}
