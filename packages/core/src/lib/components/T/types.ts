@@ -69,22 +69,23 @@ export type RefProps<Type> = {
 /**
  * ### Camera Props
  */
-export type CameraProps<Type> = MaybeInstance<Type> extends { isCamera: true }
-  ? {
-      /**
-       * By default, Threlte will update the cameras aspect ratio or frustum
-       * when the canvas is resized. If you want to manually control the
-       * camera, set this to true.
-       * @default true
-       */
-      manual?: boolean
-      /**
-       * Sets the camera as the default camera for the scene.
-       * @default false
-       */
-      makeDefault?: boolean
-    }
-  : Record<string, unknown>
+export type CameraProps<Type> =
+  MaybeInstance<Type> extends { isCamera: true }
+    ? {
+        /**
+         * By default, Threlte will update the cameras aspect ratio or frustum
+         * when the canvas is resized. If you want to manually control the
+         * camera, set this to true.
+         * @default true
+         */
+        manual?: boolean
+        /**
+         * Sets the camera as the default camera for the scene.
+         * @default false
+         */
+        makeDefault?: boolean
+      }
+    : Record<string, unknown>
 
 /**
  * ### Instance Props
@@ -108,8 +109,8 @@ export type InstanceProps<Type> = Partial<
                 | Parameters<MaybeInstance<Type>[K]['set']>
                 | Parameters<MaybeInstance<Type>[K]['set']>[0]
             : MaybeInstance<Type>[K] extends AnyFn
-            ? never
-            : MaybeInstance<Type>[K]
+              ? never
+              : MaybeInstance<Type>[K]
         },
     ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
   >
@@ -156,16 +157,17 @@ export type Slots<Type> = {
  * implementing an event map with the event name as the key and the event
  * payload as the value with a `type` property that matches the key.
  */
-export type ObjectEvents<Type> = MaybeInstance<Type> extends {
-  addEventListener: (...args: any[]) => any
-}
-  ? {
-      [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
-        Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
-        { type: Key }
-      >
-    }
-  : Record<string, unknown>
+export type ObjectEvents<Type> =
+  MaybeInstance<Type> extends {
+    addEventListener: (...args: any[]) => any
+  }
+    ? {
+        [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
+          Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
+          { type: Key }
+        >
+      }
+    : Record<string, unknown>
 
 export type CreateEvent<Type> = {
   create: {

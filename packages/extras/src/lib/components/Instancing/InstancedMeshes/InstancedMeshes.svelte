@@ -40,12 +40,15 @@
   const getInstanceComponentsObject = <T extends Record<string, Mesh>>(
     meshes: T
   ): { [key in keyof T]: typeof Instance } => {
-    return Object.entries(meshes).reduce((acc, [id, mesh]) => {
-      // filter out non-mesh objects
-      if (!mesh.isMesh) return acc
-      acc[id as any as keyof T] = getInstance(mesh.uuid)
-      return acc
-    }, {} as Record<keyof T, typeof Instance>)
+    return Object.entries(meshes).reduce(
+      (acc, [id, mesh]) => {
+        // filter out non-mesh objects
+        if (!mesh.isMesh) return acc
+        acc[id as any as keyof T] = getInstance(mesh.uuid)
+        return acc
+      },
+      {} as Record<keyof T, typeof Instance>
+    )
   }
 
   $: components = Array.isArray(meshes)
