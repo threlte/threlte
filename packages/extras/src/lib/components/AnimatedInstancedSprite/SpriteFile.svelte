@@ -1,8 +1,11 @@
 <script lang="ts">
   import { getContext, onMount, setContext } from 'svelte'
+  import type { SpriteFileProps } from './SpriteFile'
 
-  export let path: string
-  export let options: any = {}
+  type $$Props = SpriteFileProps
+
+  export let textureUrl: $$Props['textureUrl']
+  export let options: $$Props['options']
 
   const animations: any[] = []
 
@@ -20,7 +23,7 @@
 
   onMount(() => {
     if (registerSpriteFile) {
-      registerSpriteFile({ path, options, animations })
+      registerSpriteFile({ path: textureUrl, options, animations })
     }
   })
 </script>

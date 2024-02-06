@@ -5,7 +5,7 @@
     type SpritesheetFormat
   } from '@threejs-kit/instanced-sprite-mesh'
   import { watch } from '@threlte/core'
-  import { getContext, onMount, setContext } from 'svelte'
+  import { onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
@@ -22,11 +22,9 @@
   let jsonData: any = undefined
 
   const textureStore = writable<Texture | undefined>(texture)
-
   const spritesheetStore = writable<SpritesheetFormat | undefined>()
 
   $: spritesheetStore.set(spritesheet)
-
   const textureUrlStore = writable<string | undefined>(textureUrl)
   $: textureUrlStore.set(textureUrl)
 
@@ -83,6 +81,8 @@
   })
 
   onMount(async () => {
+    // if child components that contain a spritesheet definition
+    // were mounted, build a spritesheet and set texture&spritesheet on mesh
     if (animationFiles.length > 0) {
       const spritesheet = createSpritesheet()
 
@@ -90,8 +90,6 @@
         spritesheet.add(file.path, file.options, file.animations)
       }
       const built = await spritesheet.build()
-
-      console.log(built)
 
       spritesheetStore.set(built.spritesheet)
       textureStore.set(built.texture)
