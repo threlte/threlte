@@ -9,17 +9,35 @@ import type { ColorRepresentation, CubeTexture, ShaderMaterial, Texture } from '
 
 export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
   envMap?: CubeTexture | Texture
-  /** Number of ray-cast bounces, it can be expensive to have too many, 2 */
+  /**
+   * Number of ray-cast bounces, it can be expensive to have too many
+   * @default 2
+   */
   bounces?: number
-  /** Refraction index, 2.4 */
+  /**
+   * Refraction index
+   * @default 2.4
+   */
   ior?: number
-  /** Fresnel (strip light), 0 */
+  /**
+   * Fresnel (strip light)
+   * @default 0
+   */
   fresnel?: number
-  /** RGB shift intensity, can be expensive, 0 */
+  /**
+   * RGB shift intensity, can be expensive
+   * @default 0
+   */
   aberrationStrength?: number
-  /** Color, white */
+  /**
+   * Color
+   * @default white
+   */
   color?: ColorRepresentation
-  /** If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy, true */
+  /**
+   * If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy
+   * @default true
+   */
   fastChroma?: boolean
 }
 
