@@ -1,11 +1,11 @@
 import type { Camera } from 'three'
 
+export type DomEvent = PointerEvent | MouseEvent | WheelEvent
+
 export interface Intersection extends THREE.Intersection {
   /** The event source (the object which registered the handler) */
   eventObject: THREE.Object3D
 }
-
-export type DomEvent = PointerEvent | MouseEvent | WheelEvent
 
 export interface IntersectionEvent<NativeEvent> extends Intersection {
   /** The event source (the object which registered the handler) */
