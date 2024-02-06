@@ -28,7 +28,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
   const calculateDistance = (event: DomEvent) => {
     const dx = event.offsetX - context.initialClick[0]
     const dy = event.offsetY - context.initialClick[1]
-    return Math.hypot(dx, dy)
+    return Math.round(Math.hypot(dx, dy))
   }
 
   const cancelPointer = (intersections: Intersection[]) => {

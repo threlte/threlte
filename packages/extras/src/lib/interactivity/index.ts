@@ -1,8 +1,9 @@
 import { injectInteractivityPlugin } from './plugin'
 import { setupInteractivity } from './setupInteractivity'
-import { setInteractivityContext, type InteractivityOptions } from './context'
+import { setInteractivityContext, type InteractivityOptions, setHandlerContext } from './context'
 
 const interactivity = (options?: InteractivityOptions) => {
+  setHandlerContext()
   const context = setInteractivityContext(options)
 
   injectInteractivityPlugin()
