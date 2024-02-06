@@ -96,6 +96,12 @@
     material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
     material.uniforms.projectionMatrixInverse.value = camera.current.projectionMatrixInverse
   }, { autoInvalidate: false })
+  
+  const colorObj = new Color(color)
+  $: {
+    colorObj.set(color)
+    invalidate()
+  }
 </script>
 
 <T
@@ -105,7 +111,7 @@
   uniforms.ior.value={ior}
   uniforms.fresnel.value={fresnel}
   uniforms.aberrationStrength.value={aberrationStrength}
-  uniforms.color.value={new Color(color)}
+  uniforms.color.value={colorObj}
   uniforms.resolution.value={[$size.width, $size.height]}
   {defines}
 />
