@@ -10,7 +10,7 @@
       extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
       'props':
         [
-					{ name: 'font', type: 'THREE.Font | string', required: true },
+					{ name: 'font', type: 'Font | string', required: true },
           { name: 'text', type: 'string', required: true },
 					{ name: 'size', type: 'number', required: false, default: '100' },
 					{ name: 'height', type: 'number', required: false, default: '50' },
@@ -53,8 +53,7 @@ You can also load the font yourself and pass it to the component, like so:
 <script lang="ts">
 	import { T, useLoader } from '@threlte/core'
 	import { Text3D } from '@threlte/extras'
-
-  import { FontLoader } from 'three/examples/jsm/Addons.js'
+	import { FontLoader } from 'three/examples/jsm/Addons.js'
 
 	let font = useLoader(FontLoader).load('path-to-your-font')
 </script>
