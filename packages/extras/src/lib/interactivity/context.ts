@@ -56,7 +56,6 @@ export const getInteractivityContext = () => {
 
 export const setInteractivityContext = (options?: InteractivityOptions) => {
   const target = currentWritable(options?.target ?? useThrelte().renderer.domElement)
-  const compute = options?.compute ?? getDefaultComputeFunction(target)
 
   const context: InteractivityContext = {
     enabled: currentWritable(options?.enabled ?? true),
@@ -69,7 +68,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
     hovered: new Map(),
     interactiveObjects: [],
     target,
-    compute,
+    compute: options?.compute ?? getDefaultComputeFunction(target),
     filter: options?.filter
   }
 
