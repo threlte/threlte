@@ -7,7 +7,7 @@ export type Text3DProps = Props<Mesh> & {
   /**
    * The loaded font
    */
-  font: Font
+  font: Font | string
   /**
    * The text to display
    */

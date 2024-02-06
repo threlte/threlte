@@ -10,7 +10,7 @@
       extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
       'props':
         [
-					{ name: 'font', type: 'THREE.Font', required: true },
+					{ name: 'font', type: 'THREE.Font | string', required: true },
           { name: 'text', type: 'string', required: true },
 					{ name: 'size', type: 'number', required: false, default: '100' },
 					{ name: 'height', type: 'number', required: false, default: '50' },
@@ -33,14 +33,30 @@ Render 3D text using threejs's [TextGeometry](https://threejs.org/docs/index.htm
 
 ### Basic Example
 
-```svelte title="Billboard.svelte"
+```svelte title="Text3D.svelte"
 <script lang="ts">
-  import { T, useLoader } from '@threlte/core'
+  import { T } from '@threlte/core'
 
   import { Text3D } from '@threlte/extras'
-  import { FontLoader } from 'three/addons/loaders/FontLoader.js'
+</script>
 
-  let font = useLoader(FontLoader).load('path-to-your-font')
+<Text3D font={'path-to-your-font'} text={'Hello'}>
+	<T.MeshStandardMaterial />
+</Text3D>
+```
+
+### Loading a font yourself
+
+You can also load the font yourself and pass it to the component, like so:
+
+```svelte title="Text3D.svelte"
+<script lang="ts">
+	import { T, useLoader } from '@threlte/core'
+	import { Text3D } from '@threlte/extras'
+
+  import { FontLoader } from 'three/examples/jsm/Addons.js'
+
+	let font = useLoader(FontLoader).load('path-to-your-font')
 </script>
 
 {#await $font then loadedFont}

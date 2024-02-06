@@ -1,7 +1,13 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import {
+    T,
+    forwardEventHandlers,
+    useLoader,
+    type AsyncWritable,
+    asyncWritable
+  } from '@threlte/core'
   import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3D.svelte'
-  import { TextGeometry } from 'three/examples/jsm/Addons.js'
+  import { TextGeometry, FontLoader, Font } from 'three/examples/jsm/Addons.js'
 
   type $$Props = Required<Text3DProps>
   type $$Events = Text3DEvents
@@ -19,31 +25,37 @@
   export let bevelOffset: $$Props['bevelOffset'] = 0
   export let bevelSegments: $$Props['bevelSegments'] = 3
 
+  let loadedFont: AsyncWritable<Font> =
+    typeof font === 'string'
+      ? useLoader(FontLoader).load(font)
+      : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
+
   const component = forwardEventHandlers()
 </script>
 
-<T.Mesh
-  let:ref
-  bind:this={$component}
-  {...$$restProps}
->
-  <T
-    is={TextGeometry}
-    args={[
-      text,
-      {
-        font,
-        size,
-        height,
-        curveSegments,
-        bevelEnabled,
-        bevelThickness,
-        bevelSize,
-        bevelOffset,
-        bevelSegments
-      }
-    ]}
-  />
-
-  <slot {ref} />
-</T.Mesh>
+{#await $loadedFont then f}
+  <T.Mesh
+    let:ref
+    bind:this={$component}
+    {...$$restProps}
+  >
+    <T
+      is={TextGeometry}
+      args={[
+        text,
+        {
+          font: f,
+          size,
+          height,
+          curveSegments,
+          bevelEnabled,
+          bevelThickness,
+          bevelSize,
+          bevelOffset,
+          bevelSegments
+        }
+      ]}
+    />
+    <slot {ref} />
+  </T.Mesh>
+{/await}
