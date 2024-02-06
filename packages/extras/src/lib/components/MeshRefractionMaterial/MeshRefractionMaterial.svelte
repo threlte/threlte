@@ -1,16 +1,13 @@
 <script lang="ts">
-  import { T, useTask, useThrelte, useParent } from '@threlte/core'
-  import { Color, Vector2, Matrix4, ShaderMaterial, Mesh } from 'three'
-
-  import { MeshBVHUniformStruct, MeshBVH, SAH } from 'three-mesh-bvh'
+  import { T, useParent, useTask, useThrelte } from '@threlte/core'
+  import { Color, CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { onMount } from 'svelte'
-
+  import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
   import type {
     MeshRefractionMaterialEvents,
     MeshRefractionMaterialProps,
     MeshRefractionMaterialSlots
   } from './MeshRefractionMaterial.svelte'
-
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
@@ -47,8 +44,8 @@
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
 
-  const isCubeTexture = (def: THREE.CubeTexture | THREE.Texture): def is THREE.CubeTexture =>
-    def && (def as THREE.CubeTexture).isCubeTexture
+  const isCubeTexture = (def: CubeTexture | Texture): def is CubeTexture =>
+    def && (def as CubeTexture).isCubeTexture
 
   let defines = {} as { [key: string]: string }
 
@@ -57,23 +54,23 @@
     aberrationStrength: $$Props['aberrationStrength'],
     fastChroma: $$Props['fastChroma']
   ) => {
-    const tempDefines = {} as { [key: string]: string }
+    const temp = {} as { [key: string]: string }
     // Sampler2D and SamplerCube need different defines
     const isCubeMap = isCubeTexture(envMap)
     const w = (isCubeMap ? envMap.image[0]?.width : envMap.image.width) ?? 1024
     const cubeSize = w / 4
     const lodMax = Math.floor(Math.log2(cubeSize))
-    const cubeSize = Math.pow(2, lodMax)
-    const width = 3 * Math.max(cubeSize, 16 * 7)
-    const height = 4 * cubeSize
-    if (isCubeMap) tempDefines.ENVMAP_TYPE_CUBEM = ''
-    tempDefines.CUBEUV_TEXEL_WIDTH = `${1.0 / width}`
-    tempDefines.CUBEUV_TEXEL_HEIGHT = `${1.0 / height}`
-    tempDefines.CUBEUV_MAX_MIP = `${lodMax}.0`
+    const _cubeSize = Math.pow(2, lodMax)
+    const width = 3 * Math.max(_cubeSize, 16 * 7)
+    const height = 4 * _cubeSize
+    if (isCubeMap) temp.ENVMAP_TYPE_CUBEM = ''
+    temp.CUBEUV_TEXEL_WIDTH = `${1.0 / width}`
+    temp.CUBEUV_TEXEL_HEIGHT = `${1.0 / height}`
+    temp.CUBEUV_MAX_MIP = `${lodMax}.0`
     // Add defines from chromatic aberration
-    if (aberrationStrength > 0) tempDefines.CHROMATIC_ABERRATIONS = ''
-    if (fastChroma) tempDefines.FAST_CHROMA = ''
-    return tempDefines
+    if (aberrationStrength > 0) temp.CHROMATIC_ABERRATIONS = ''
+    if (fastChroma) temp.FAST_CHROMA = ''
+    return temp
   }
 
   $: defines = updateDefines(envMap, aberrationStrength, fastChroma)
@@ -90,12 +87,14 @@
     }
   })
 
+  useTask(
+    () => {
+      material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
+      material.uniforms.projectionMatrixInverse.value = camera.current.projectionMatrixInverse
+    },
+    { autoInvalidate: false }
+  )
 
-  useTask(() => {
-    material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
-    material.uniforms.projectionMatrixInverse.value = camera.current.projectionMatrixInverse
-  }, { autoInvalidate: false })
-  
   const colorObj = new Color(color)
   $: {
     colorObj.set(color)
