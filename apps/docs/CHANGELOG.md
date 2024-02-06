@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.11.0
+
+### Minor Changes
+
+- 85b9332: Add port of drei's MeshRefractionMaterial
+
 ## 0.10.0
 
 ### Minor Changes
