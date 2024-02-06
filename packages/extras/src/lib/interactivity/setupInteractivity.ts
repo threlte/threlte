@@ -1,15 +1,10 @@
-import { memoize, watch, type createRawEventDispatcher } from '@threlte/core'
+import { memoize, watch } from '@threlte/core'
 import type * as THREE from 'three'
-import type { DomEvent, Intersection, IntersectionEvent, State, ThrelteEvents } from './types'
-
-const getRawEventDispatcher = (object: THREE.Object3D) => {
-  return object.userData._threlte_interactivity_dispatcher as
-    | ReturnType<typeof createRawEventDispatcher<ThrelteEvents>>
-    | undefined
-}
+import { getHandlerContext, type InteractivityContext } from './context'
+import type { DomEvent, Intersection, IntersectionEvent } from './types'
 
 function getIntersectionId(event: Intersection) {
-  return (event.eventObject || event.object).uuid + '/' + event.index + event.instanceId
+  return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
 }
 
 const DOM_EVENTS = [
@@ -27,20 +22,22 @@ const DOM_EVENTS = [
 
 type DomEventName = (typeof DOM_EVENTS)[number][0]
 
-export const setupInteractivity = (state: State) => {
-  function calculateDistance(event: DomEvent) {
-    const dx = event.offsetX - state.initialClick[0]
-    const dy = event.offsetY - state.initialClick[1]
-    return Math.round(Math.sqrt(dx * dx + dy * dy))
+export const setupInteractivity = (context: InteractivityContext) => {
+  const { dispatchers } = getHandlerContext()
+  
+  const calculateDistance = (event: DomEvent) => {
+    const dx = event.offsetX - context.initialClick[0]
+    const dy = event.offsetY - context.initialClick[1]
+    return Math.hypot(dx, dy)
   }
 
-  function cancelPointer(intersections: Intersection[]) {
-    for (const hoveredObj of state.hovered.values()) {
+  const cancelPointer = (intersections: Intersection[]) => {
+    for (const hoveredObj of context.hovered.values()) {
       // When no objects were hit or the the hovered object wasn't found underneath the cursor
       // we call pointerout and delete the object from the hovered elements map
       if (
-        !intersections.length ||
-        !intersections.find((hit) => {
+        intersections.length === 0 ||
+        !intersections.some((hit) => {
           return (
             hit.object === hoveredObj.object &&
             hit.index === hoveredObj.index &&
@@ -48,9 +45,9 @@ export const setupInteractivity = (state: State) => {
           )
         })
       ) {
-        const eventObject = hoveredObj.eventObject
-        state.hovered.delete(getIntersectionId(hoveredObj))
-        const eventDispatcher = getRawEventDispatcher(eventObject)
+        const { eventObject } = hoveredObj
+        context.hovered.delete(getIntersectionId(hoveredObj))
+        const eventDispatcher = dispatchers.get(eventObject)
         if (eventDispatcher) {
           // Clear out intersects, they are outdated by now
           const data = { ...hoveredObj, intersections }
@@ -61,33 +58,21 @@ export const setupInteractivity = (state: State) => {
     }
   }
 
-  const enabled = memoize(state.enabled)
+  const enabled = memoize(context.enabled)
 
   const getHits = (): Intersection[] => {
-    const duplicates = new Set<string>()
-
+    if (!enabled) return []
+  
     const intersections: Intersection[] = []
-
-    let hits = state.interactiveObjects
-      .flatMap((obj) => (enabled.current ? state.raycaster.intersectObject(obj, true) : []))
-      // Sort by distance
-      .sort((a, b) => a.distance - b.distance)
-      // Filter out duplicates
-      .filter((item) => {
-        const id = getIntersectionId(item as Intersection)
-        if (duplicates.has(id)) return false
-        duplicates.add(id)
-        return true
-      })
-
-    if (state.filter) hits = state.filter(hits, state)
+    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const filtered = context.filter === undefined ? hits : context.filter(hits, context)
 
     // Bubble up the events, find the event source (eventObject)
-    for (const hit of hits) {
+    for (const hit of filtered) {
       let eventObject: THREE.Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
-        if (getRawEventDispatcher(eventObject)) intersections.push({ ...hit, eventObject })
+        if (dispatchers.has(eventObject)) intersections.push({ ...hit, eventObject })
         eventObject = eventObject.parent
       }
     }
@@ -95,11 +80,9 @@ export const setupInteractivity = (state: State) => {
     return intersections
   }
 
-  function pointerMissed(event: MouseEvent, objects: THREE.Object3D[]) {
+  const pointerMissed = (event: MouseEvent, objects: THREE.Object3D[]) => {
     for (const object of objects) {
-      const eventDispatcher = getRawEventDispatcher(object)
-      if (!eventDispatcher) continue
-      eventDispatcher('pointermissed', event)
+      dispatchers.get(object)?.('pointermissed', event)
     }
   }
 
@@ -107,14 +90,14 @@ export const setupInteractivity = (state: State) => {
     // Deal with cancelation
     if (name === 'pointerleave' || name === 'pointercancel') {
       return () => {
-        state.pointerOverTarget.set(false)
+        context.pointerOverTarget.set(false)
         cancelPointer([])
       }
     }
 
     if (name === 'pointerenter') {
       return () => {
-        state.pointerOverTarget.set(true)
+        context.pointerOverTarget.set(true)
       }
     }
 
@@ -126,22 +109,22 @@ export const setupInteractivity = (state: State) => {
        * Will set up the raycaster. The default implementation will use the
        * mouse position on the renderers domElement.
        */
-      state.compute(event, state)
+      context.compute(event, context)
 
       const hits = getHits()
       const delta = isClickEvent ? calculateDistance(event) : 0
 
       // Save initial coordinates on pointer-down
       if (name === 'pointerdown') {
-        state.initialClick = [event.offsetX, event.offsetY]
-        state.initialHits = hits.map((hit) => hit.eventObject)
+        context.initialClick = [event.offsetX, event.offsetY]
+        context.initialHits = hits.map((hit) => hit.eventObject)
       }
 
       // If a click yields no results, pass it back to the user as a miss
       // Missed events have to come first in order to establish user-land side-effect clean up
-      if (isClickEvent && !hits.length) {
+      if (isClickEvent && hits.length === 0) {
         if (delta <= 2) {
-          pointerMissed(event, state.interactiveObjects)
+          pointerMissed(event, context.interactiveObjects)
         }
       }
 
@@ -160,22 +143,22 @@ export const setupInteractivity = (state: State) => {
             stopped = true
             intersectionEvent.stopped = true
             if (
-              state.hovered.size &&
-              Array.from(state.hovered.values()).find((i) => i.eventObject === hit.eventObject)
+              context.hovered.size > 0 &&
+              Array.from(context.hovered.values()).some((i) => i.eventObject === hit.eventObject)
             ) {
               // Objects cannot flush out higher up objects that have already caught the event
               const higher = hits.slice(0, hits.indexOf(hit))
               cancelPointer([...higher, hit])
             }
           },
-          camera: state.raycaster.camera,
+          camera: context.raycaster.camera,
           delta,
           nativeEvent: event,
-          pointer: state.pointer.current,
-          ray: state.raycaster.ray
+          pointer: context.pointer.current,
+          ray: context.raycaster.ray
         }
 
-        const eventDispatcher = getRawEventDispatcher(hit.eventObject)
+        const eventDispatcher = dispatchers.get(hit.eventObject)
         if (!eventDispatcher) return
 
         if (isPointerMove) {
@@ -188,10 +171,10 @@ export const setupInteractivity = (state: State) => {
             eventDispatcher.hasEventListener('pointerleave')
           ) {
             const id = getIntersectionId(intersectionEvent)
-            const hoveredItem = state.hovered.get(id)
+            const hoveredItem = context.hovered.get(id)
             if (!hoveredItem) {
               // If the object wasn't previously hovered, book it and call its handler
-              state.hovered.set(id, intersectionEvent)
+              context.hovered.set(id, intersectionEvent)
               eventDispatcher('pointerover', intersectionEvent as IntersectionEvent<PointerEvent>)
               eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent<PointerEvent>)
             } else if (hoveredItem.stopped) {
@@ -208,11 +191,11 @@ export const setupInteractivity = (state: State) => {
           const hasEventListener = eventDispatcher.hasEventListener(name)
 
           if (hasEventListener) {
-            if (!isClickEvent || state.initialHits.includes(hit.eventObject)) {
+            if (!isClickEvent || context.initialHits.includes(hit.eventObject)) {
               // Missed events have to come first
               pointerMissed(
                 event,
-                state.interactiveObjects.filter((object) => !state.initialHits.includes(object))
+                context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
               )
 
               // Call the event
@@ -220,10 +203,10 @@ export const setupInteractivity = (state: State) => {
             }
           } else {
             // "Real" click event
-            if (isClickEvent && state.initialHits.includes(hit.eventObject)) {
+            if (isClickEvent && context.initialHits.includes(hit.eventObject)) {
               pointerMissed(
                 event,
-                state.interactiveObjects.filter((object) => !state.initialHits.includes(object))
+                context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
               )
             }
           }
@@ -246,7 +229,7 @@ export const setupInteractivity = (state: State) => {
     })
   }
 
-  watch(state.target, (target) => {
+  watch(context.target, (target) => {
     if (target) connect(target)
     return () => {
       if (target) disconnect(target)

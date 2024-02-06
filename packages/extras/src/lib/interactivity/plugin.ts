@@ -22,7 +22,7 @@ export const interactivityEventNames: (keyof ThrelteEvents)[] = [
 
 export const injectInteractivityPlugin = (): void => {
   injectPlugin('interactivity', ({ ref }) => {
-    if (!ref.isObject3D) return
+    if (!ref.isMesh) return
 
     const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
 
