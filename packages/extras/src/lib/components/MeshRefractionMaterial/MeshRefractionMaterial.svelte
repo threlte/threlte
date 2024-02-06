@@ -44,7 +44,7 @@
     }
   })
 
-  const { size } = useThrelte()
+  const { size, invalidate } = useThrelte()
   const parent = useParent()
 
   const isCubeTexture = (def: THREE.CubeTexture | THREE.Texture): def is THREE.CubeTexture =>
