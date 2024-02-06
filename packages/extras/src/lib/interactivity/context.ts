@@ -6,8 +6,15 @@ import {
 } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster } from 'three'
-import type { IntersectionEvent, ThrelteEvents } from './types'
+import type { IntersectionEvent, ThrelteEvents, DomEvent } from './types'
 import { getDefaultComputeFunction } from './defaults'
+
+export type FilterFunction = (
+  items: THREE.Intersection[],
+  context: InteractivityContext
+) => THREE.Intersection[]
+
+export type ComputeFunction = (event: DomEvent, context: InteractivityContext) => void
 
 export type InteractivityOptions = {
   enabled?: boolean
@@ -25,15 +32,6 @@ export type InteractivityOptions = {
    */
   filter?: FilterFunction
 }
-
-export type DomEvent = PointerEvent | MouseEvent | WheelEvent
-
-export type FilterFunction = (
-  items: THREE.Intersection[],
-  context: InteractivityContext
-) => THREE.Intersection[]
-
-export type ComputeFunction = (event: DomEvent, context: InteractivityContext) => void
 
 export type InteractivityContext = {
   enabled: CurrentWritable<boolean>

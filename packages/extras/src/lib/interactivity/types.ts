@@ -1,12 +1,11 @@
-import type { CurrentWritable } from '@threlte/core'
-import type { Camera, Raycaster, Vector2 } from 'three'
-
-export type DomEvent = PointerEvent | MouseEvent | WheelEvent
+import type { Camera } from 'three'
 
 export interface Intersection extends THREE.Intersection {
   /** The event source (the object which registered the handler) */
   eventObject: THREE.Object3D
 }
+
+export type DomEvent = PointerEvent | MouseEvent | WheelEvent
 
 export interface IntersectionEvent<NativeEvent> extends Intersection {
   /** The event source (the object which registered the handler) */
@@ -29,33 +28,9 @@ export interface IntersectionEvent<NativeEvent> extends Intersection {
   stopped: boolean
 }
 
-export type Properties<T> = Pick<
-  T,
-  { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
->
-
 export interface PointerCaptureTarget {
   intersection: Intersection
   target: Element
-}
-
-export type FilterFunction = (items: THREE.Intersection[], state: State) => THREE.Intersection[]
-
-export type ComputeFunction = (event: DomEvent, state: State) => void
-
-export type State = {
-  enabled: CurrentWritable<boolean>
-  target: CurrentWritable<HTMLElement | undefined>
-  pointer: CurrentWritable<Vector2>
-  pointerOverTarget: CurrentWritable<boolean>
-  lastEvent: DomEvent | undefined
-  raycaster: Raycaster
-  initialClick: [x: number, y: number]
-  initialHits: THREE.Object3D[]
-  hovered: Map<string, IntersectionEvent<DomEvent>>
-  interactiveObjects: THREE.Object3D[]
-  compute: ComputeFunction
-  filter?: FilterFunction
 }
 
 export type ThrelteEvents = {
@@ -73,19 +48,3 @@ export type ThrelteEvents = {
   pointermissed: MouseEvent
 }
 
-export type InteractivityOptions = {
-  enabled?: boolean
-  /**
-   * The compute function is responsible for updating the state of the interactivity plugin.
-   * It needs to set up the raycaster and the pointer vector. If no compute function is provided,
-   * the plugin will use the default compute function.
-   */
-  compute?: ComputeFunction
-  target?: HTMLElement
-  /**
-   * The filter function is responsible for filtering and sorting the
-   * intersections. By default, the intersections are sorted by distance. If no
-   * filter function is provided, the plugin will use the default filter function.
-   */
-  filter?: FilterFunction
-}
