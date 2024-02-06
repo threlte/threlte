@@ -95,7 +95,7 @@
   useTask(() => {
     material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
     material.uniforms.projectionMatrixInverse.value = camera.current.projectionMatrixInverse
-  })
+  }, { autoInvalidate: false })
 </script>
 
 <T
