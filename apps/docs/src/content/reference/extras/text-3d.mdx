@@ -1,0 +1,55 @@
+---
+{
+  order: 11.5,
+  category: '@threlte/extras',
+  name: '<Text3D>',
+  sourcePath: 'packages/extras/src/lib/components/Text3D/Text3D.svelte',
+  type: 'component',
+  'componentSignature':
+    {
+      extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+      'props':
+        [
+					{ name: 'font', type: 'THREE.Font', required: true },
+          { name: 'text', type: 'string', required: true },
+					{ name: 'size', type: 'number', required: false, default: '100' },
+					{ name: 'height', type: 'number', required: false, default: '50' },
+					{ name: 'curveSegments', type: 'number', required: false, default: '12' },
+					{ name: 'bevelEnabled', type: 'boolean', required: false, default: 'false' },
+					{ name: 'bevelThickness', type: 'number', required: false, default: '10' },
+					{ name: 'bevelSize', type: 'number', required: false, default: '8' },
+					{ name: 'bevelOffset', type: 'number', required: false, default: '0' },
+					{ name: 'bevelSegments', type: 'number', required: false, default: '3' }
+        ]
+    }
+}
+---
+
+Render 3D text using threejs's [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).
+
+<Example path="extras/text-3d" />
+
+## Examples
+
+### Basic Example
+
+```svelte title="Billboard.svelte"
+<script lang="ts">
+  import { T, useLoader } from '@threlte/core'
+
+  import { Text3D } from '@threlte/extras'
+  import { FontLoader } from 'three/addons/loaders/FontLoader.js'
+
+  let font = useLoader(FontLoader).load('path-to-your-font')
+</script>
+
+{#await $font then loadedFont}
+	<Text3D font={loadedFont} text={'Hello'}>
+		<T.MeshStandardMaterial />
+	</Text3D>
+{/await}
+```
+
+### Generate a font
+
+You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/).
