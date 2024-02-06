@@ -52,29 +52,31 @@
 
   let defines = {} as { [key: string]: string }
 
-  const updateDefines = () => {
-    const temp = {} as { [key: string]: string }
+  const updateDefines = (
+    envMap: $$Props['envMap'],
+    aberrationStrength: $$Props['aberrationStrength'],
+    fastChroma: $$Props['fastChroma']
+  ) => {
+    const tempDefines = {} as { [key: string]: string }
     // Sampler2D and SamplerCube need different defines
     const isCubeMap = isCubeTexture(envMap)
     const w = (isCubeMap ? envMap.image[0]?.width : envMap.image.width) ?? 1024
     const cubeSize = w / 4
-    const _lodMax = Math.floor(Math.log2(cubeSize))
-    const _cubeSize = Math.pow(2, _lodMax)
-    const width = 3 * Math.max(_cubeSize, 16 * 7)
-    const height = 4 * _cubeSize
-    if (isCubeMap) temp.ENVMAP_TYPE_CUBEM = ''
-    temp.CUBEUV_TEXEL_WIDTH = `${1.0 / width}`
-    temp.CUBEUV_TEXEL_HEIGHT = `${1.0 / height}`
-    temp.CUBEUV_MAX_MIP = `${_lodMax}.0`
+    const lodMax = Math.floor(Math.log2(cubeSize))
+    const cubeSize = Math.pow(2, lodMax)
+    const width = 3 * Math.max(cubeSize, 16 * 7)
+    const height = 4 * cubeSize
+    if (isCubeMap) tempDefines.ENVMAP_TYPE_CUBEM = ''
+    tempDefines.CUBEUV_TEXEL_WIDTH = `${1.0 / width}`
+    tempDefines.CUBEUV_TEXEL_HEIGHT = `${1.0 / height}`
+    tempDefines.CUBEUV_MAX_MIP = `${lodMax}.0`
     // Add defines from chromatic aberration
-    if (aberrationStrength > 0) temp.CHROMATIC_ABERRATIONS = ''
-    if (fastChroma) temp.FAST_CHROMA = ''
-    return temp
+    if (aberrationStrength > 0) tempDefines.CHROMATIC_ABERRATIONS = ''
+    if (fastChroma) tempDefines.FAST_CHROMA = ''
+    return tempDefines
   }
 
-  $: if (envMap && aberrationStrength != null && fastChroma != null) {
-    defines = updateDefines()
-  }
+  $: defines = updateDefines(envMap, aberrationStrength, fastChroma)
 
   onMount(() => {
     // Update the BVH
