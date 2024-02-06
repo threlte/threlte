@@ -44,7 +44,7 @@
     }
   })
 
-  const { size, invalidate } = useThrelte()
+  const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
 
   const isCubeTexture = (def: THREE.CubeTexture | THREE.Texture): def is THREE.CubeTexture =>
@@ -90,7 +90,6 @@
     }
   })
 
-  const { camera } = useThrelte()
 
   useTask(() => {
     material.uniforms.viewMatrixInverse.value = camera.current.matrixWorld
