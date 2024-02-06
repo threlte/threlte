@@ -47,4 +47,3 @@ export type ThrelteEvents = {
   pointermove: IntersectionEvent<PointerEvent>
   pointermissed: MouseEvent
 }
-
