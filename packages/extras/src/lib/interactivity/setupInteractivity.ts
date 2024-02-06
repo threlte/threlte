@@ -24,7 +24,7 @@ type DomEventName = (typeof DOM_EVENTS)[number][0]
 
 export const setupInteractivity = (context: InteractivityContext) => {
   const { dispatchers } = getHandlerContext()
-  
+
   const calculateDistance = (event: DomEvent) => {
     const dx = event.offsetX - context.initialClick[0]
     const dy = event.offsetY - context.initialClick[1]
@@ -62,7 +62,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
   const getHits = (): Intersection[] => {
     if (!enabled) return []
-  
+
     const intersections: Intersection[] = []
     const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
     const filtered = context.filter === undefined ? hits : context.filter(hits, context)

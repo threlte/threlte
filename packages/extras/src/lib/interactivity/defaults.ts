@@ -1,7 +1,9 @@
 import { useThrelte, watch, type CurrentWritable } from '@threlte/core'
 import type { ComputeFunction } from './context'
 
-export const getDefaultComputeFunction = (target: CurrentWritable<HTMLElement>): ComputeFunction => {
+export const getDefaultComputeFunction = (
+  target: CurrentWritable<HTMLElement>
+): ComputeFunction => {
   const { camera } = useThrelte()
 
   let width = 0

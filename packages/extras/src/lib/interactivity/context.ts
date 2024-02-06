@@ -1,4 +1,9 @@
-import { currentWritable, type CurrentWritable, type createRawEventDispatcher, useThrelte } from '@threlte/core'
+import {
+  currentWritable,
+  type CurrentWritable,
+  type createRawEventDispatcher,
+  useThrelte
+} from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster } from 'three'
 import type { IntersectionEvent, ThrelteEvents } from './types'
@@ -23,7 +28,10 @@ export type InteractivityOptions = {
 
 export type DomEvent = PointerEvent | MouseEvent | WheelEvent
 
-export type FilterFunction = (items: THREE.Intersection[], context: InteractivityContext) => THREE.Intersection[]
+export type FilterFunction = (
+  items: THREE.Intersection[],
+  context: InteractivityContext
+) => THREE.Intersection[]
 
 export type ComputeFunction = (event: DomEvent, context: InteractivityContext) => void
 
@@ -81,7 +89,6 @@ const handlerContextKey = Symbol('interactivity-handler-context')
 export const getHandlerContext = () => {
   return getContext<HandlerContext>(handlerContextKey)
 }
-
 
 export const setHandlerContext = () => {
   setContext<HandlerContext>(handlerContextKey, {
