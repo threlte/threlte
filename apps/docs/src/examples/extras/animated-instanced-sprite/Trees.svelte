@@ -62,7 +62,7 @@
 
 <Spritesheet>
   <SpriteFile
-    path="/textures/sprites/trees-pixelart.png"
+    textureUrl="/textures/sprites/trees-pixelart.png"
     options={{
       type: 'rowColumn',
       w: 8,

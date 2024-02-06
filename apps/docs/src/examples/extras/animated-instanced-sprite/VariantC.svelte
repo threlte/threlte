@@ -58,7 +58,7 @@
 
 <Spritesheet>
   <SpriteFile
-    path="/textures/sprites/goblin/Attack.png"
+    textureUrl="/textures/sprites/goblin/Attack.png"
     options={{
       type: 'rowColumn',
       w: 8,
@@ -72,7 +72,7 @@
   </SpriteFile>
 
   <SpriteFile
-    path="/textures/sprites/goblin/Death.png"
+    textureUrl="/textures/sprites/goblin/Death.png"
     options={{
       type: 'rowColumn',
       w: 4,
@@ -86,7 +86,7 @@
   </SpriteFile>
   <!-- Idle, Run, TakeHit -->
   <SpriteFile
-    path="/textures/sprites/goblin/Idle.png"
+    textureUrl="/textures/sprites/goblin/Idle.png"
     options={{
       type: 'rowColumn',
       w: 4,
@@ -100,7 +100,7 @@
   </SpriteFile>
 
   <SpriteFile
-    path="/textures/sprites/goblin/Run.png"
+    textureUrl="/textures/sprites/goblin/Run.png"
     options={{
       type: 'rowColumn',
       w: 8,
@@ -114,7 +114,7 @@
   </SpriteFile>
 
   <SpriteFile
-    path="/textures/sprites/goblin/TakeHit.png"
+    textureUrl="/textures/sprites/goblin/TakeHit.png"
     options={{
       type: 'rowColumn',
       w: 4,

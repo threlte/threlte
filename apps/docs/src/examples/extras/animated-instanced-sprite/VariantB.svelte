@@ -13,7 +13,7 @@
 
 <Spritesheet>
   <SpriteFile
-    path="/textures/sprites/cacodaemon.png"
+    textureUrl="/textures/sprites/cacodaemon.png"
     options={{
       type: 'rowColumn',
       w: 8,
