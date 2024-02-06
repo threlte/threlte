@@ -148,7 +148,7 @@ export type AnimatedInstancedSpriteUserCtx = {
   mesh: InstancedSpriteMesh<any, any>
   count: number
   animationMap: Writable<Map<string, number>>
-  updatePosition: (id: number, position: Vector3Tuple, scale: Vector2Tuple) => void
+  updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void
 }
 
 export default class AnimatedInstancedSprite extends SvelteComponent<
