@@ -6,8 +6,13 @@
     type AsyncWritable,
     asyncWritable
   } from '@threlte/core'
-  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3D.svelte'
+  import { createEventDispatcher } from 'svelte'
+
+  import type { Mesh } from 'three'
   import { TextGeometry, FontLoader, Font } from 'three/examples/jsm/Addons.js'
+  import { toCreasedNormals } from '../RoundedBoxGeometry/toCreasedNormals'
+
+  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3D.svelte'
 
   type $$Props = Required<Text3DProps>
   type $$Events = Text3DEvents
@@ -25,26 +30,43 @@
   export let bevelOffset: $$Props['bevelOffset'] = 0
   export let bevelSegments: $$Props['bevelSegments'] = 3
 
+  export let smooth: $$Props['smooth'] = 0.0
+
   let loadedFont: AsyncWritable<Font> =
     typeof font === 'string'
       ? useLoader(FontLoader).load(font)
       : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
 
   const component = forwardEventHandlers()
+
+  let geometryRef: TextGeometry
+
+  let ref: Mesh<TextGeometry>
+
+  $: if (smooth > 0 && geometryRef) {
+    geometryRef = toCreasedNormals(geometryRef, smooth) as TextGeometry
+  }
+
+  const dispatch = createEventDispatcher()
+
+  $: if (geometryRef) {
+    dispatch('rendered', ref)
+  }
 </script>
 
-{#await $loadedFont then f}
+{#await $loadedFont then _font}
   <T.Mesh
-    let:ref
+    bind:ref
     bind:this={$component}
     {...$$restProps}
   >
     <T
+      bind:ref={geometryRef}
       is={TextGeometry}
       args={[
         text,
         {
-          font: f,
+          font: _font,
           size,
           height,
           curveSegments,

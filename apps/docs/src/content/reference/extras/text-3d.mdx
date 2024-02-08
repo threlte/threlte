@@ -10,8 +10,8 @@
       extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
       'props':
         [
-					{ name: 'font', type: 'Font | string', required: true },
-          { name: 'text', type: 'string', required: true },
+					{ name: 'font', type: 'Font | string', required: true, description: 'Either a loaded font or a path to a font file.' },
+          { name: 'text', type: 'string', required: true, description: 'The text to display.' },
 					{ name: 'size', type: 'number', required: false, default: '100' },
 					{ name: 'height', type: 'number', required: false, default: '50' },
 					{ name: 'curveSegments', type: 'number', required: false, default: '12' },
@@ -19,7 +19,8 @@
 					{ name: 'bevelThickness', type: 'number', required: false, default: '10' },
 					{ name: 'bevelSize', type: 'number', required: false, default: '8' },
 					{ name: 'bevelOffset', type: 'number', required: false, default: '0' },
-					{ name: 'bevelSegments', type: 'number', required: false, default: '3' }
+					{ name: 'bevelSegments', type: 'number', required: false, default: '3' },
+					{ name: 'smooth', type: 'number', required: false, default: '0', description: 'Smooth all edges where the angle between faces is less than value' },
         ]
     }
 }
@@ -45,6 +46,10 @@ Render 3D text using threejs's [TextGeometry](https://threejs.org/docs/index.htm
 </Text3D>
 ```
 
+### Generate a font
+
+You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/).
+
 ### Loading a font yourself
 
 You can also load the font yourself and pass it to the component, like so:
@@ -65,6 +70,22 @@ You can also load the font yourself and pass it to the component, like so:
 {/await}
 ```
 
-### Generate a font
+### Centering text
 
-You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/).
+You can center a text by using the `<Align>` component and calling the align slot prop when the text is rendered.
+
+```svelte title="Text3DCentered.svelte"
+<Align let:align>
+  <Text3D
+    font={'path-to-your-font'}
+    text={`Hello!`}
+    on:rendered={align}
+  >
+    <T.MeshStandardMaterial />
+  </Text3D>
+</Align>
+```
+
+### Smoothing text
+
+You can smooth the text by setting the `smooth` prop to a value above 0 to smooth all edges where the angle between faces is less than the `smooth` value.
