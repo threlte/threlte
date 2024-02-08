@@ -58,7 +58,10 @@
   {fps}
 />
 <!-- same as Variant B but testing <Component.Subcomponent/> api -->
-<DottedComponentTest />
+<DottedComponentTest
+  {billboarding}
+  {fps}
+/>
 
 <!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
 <VariantC
