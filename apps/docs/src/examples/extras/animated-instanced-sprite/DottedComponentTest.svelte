@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { InstancedSprite } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
 
@@ -42,4 +42,4 @@
   >
     <UpdaterFlying />
   </InstancedSprite.Core>
-</InstancedSprite.Sheet>
+</InstancedSprite.Sheet> -->

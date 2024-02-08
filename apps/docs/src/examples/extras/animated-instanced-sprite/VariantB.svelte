@@ -39,7 +39,7 @@
   </SpriteFile>
 
   <AnimatedInstancedSprite
-    count={1}
+    count={10000}
     playmode={'FORWARD'}
     {fps}
     {billboarding}

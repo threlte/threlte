@@ -87,6 +87,6 @@ export { default as SpriteAnimation } from './components/AnimatedInstancedSprite
 export { default as SpriteFile } from './components/AnimatedInstancedSprite/SpriteFile.svelte'
 export { default as SpriteInstance } from './components/AnimatedInstancedSprite/SpriteInstance.svelte'
 
-export { InstancedSprite } from './components/AnimatedInstancedSprite/dotted'
+// export { InstancedSprite } from './components/AnimatedInstancedSprite/dotted'
 
 export type { ThrelteGltf } from './types/types'
