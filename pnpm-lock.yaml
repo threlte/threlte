@@ -3481,8 +3481,8 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.2.0(three@0.158.0):
-    resolution: {integrity: sha512-qJnxTRDyKDoaNb8R7yCEIA8OwAGygwGZzLSANitkAeH4B4ezopSmNIuTJrIvPXfIneoiLgn7ZKhumHxlljv2Uw==}
+  /@threejs-kit/instanced-sprite-mesh@2.3.0(three@0.158.0):
+    resolution: {integrity: sha512-MfCkXByNtLtfmHzcFN7xFvNjEQWT+CCQGAB4Dz6aIRH+/l9x8sDF1UGh5U417N8jc0BZUGYV0P8kJk0JmEdpJw==}
     peerDependencies:
       three: '>=0.158.0'
     dependencies:
