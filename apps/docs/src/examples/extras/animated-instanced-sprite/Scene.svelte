@@ -7,6 +7,7 @@
   import VariantB from './VariantB.svelte'
   import VariantC from './VariantC.svelte'
   import { DoubleSide, NearestFilter, RepeatWrapping } from 'three'
+  import DottedComponentTest from './DottedComponentTest.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -56,6 +57,8 @@
   {billboarding}
   {fps}
 />
+<!-- same as Variant B but testing <Component.Subcomponent/> api -->
+<DottedComponentTest />
 
 <!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
 <VariantC

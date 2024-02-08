@@ -1,18 +1,13 @@
 <script lang="ts">
-  import {
-    AnimatedInstancedSprite,
-    SpriteFile,
-    SpriteAnimation,
-    Spritesheet
-  } from '@threlte/extras'
+  import { InstancedSprite } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
 
   export let billboarding = false
   export let fps: number
 </script>
 
-<Spritesheet>
-  <SpriteFile
+<InstancedSprite.Sheet>
+  <InstancedSprite.File
     textureUrl="/textures/sprites/cacodaemon.png"
     options={{
       type: 'rowColumn',
@@ -20,31 +15,31 @@
       h: 4
     }}
   >
-    <SpriteAnimation
+    <InstancedSprite.Animation
       name="fly"
       frameRange={[0, 6]}
     />
-    <SpriteAnimation
+    <InstancedSprite.Animation
       name="attack"
       frameRange={[8, 14]}
     />
-    <SpriteAnimation
+    <InstancedSprite.Animation
       name="idle"
       frameRange={[16, 20]}
     />
-    <SpriteAnimation
+    <InstancedSprite.Animation
       name="death"
       frameRange={[24, 32]}
     />
-  </SpriteFile>
+  </InstancedSprite.File>
 
-  <AnimatedInstancedSprite
-    count={1}
+  <InstancedSprite.Core
+    count={2000}
     playmode={'FORWARD'}
     {fps}
     {billboarding}
     randomPlaybackOffset={1}
   >
     <UpdaterFlying />
-  </AnimatedInstancedSprite>
-</Spritesheet>
+  </InstancedSprite.Core>
+</InstancedSprite.Sheet>

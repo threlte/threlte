@@ -3,7 +3,6 @@ import type {
   PLAY_MODE,
   SpritesheetFormat
 } from '@threejs-kit/instanced-sprite-mesh'
-import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Writable } from 'svelte/store'
 import {
