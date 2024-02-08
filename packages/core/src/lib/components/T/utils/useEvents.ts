@@ -1,7 +1,8 @@
-import { onDestroy, onMount } from 'svelte'
+import { onMount } from 'svelte'
 import { get_current_component } from 'svelte/internal'
 import { writable } from 'svelte/store'
 import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
+import { watch } from '../../../lib/storeUtils'
 
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher
@@ -47,28 +48,12 @@ export const useEvents = () => {
     }
   }
 
-  let currentEventNames: string[] = []
-  let currentRef: any | undefined
-
-  const eventNames = writable<string[]>([])
-  const unsubscribeEventNames = eventNames.subscribe((eventNames) => {
-    cleanupEventListeners(currentRef, currentEventNames)
-    addEventListeners(currentRef, eventNames)
-    currentEventNames = eventNames
-  })
-  onDestroy(unsubscribeEventNames)
-
   const ref = writable<any>()
-  const unsubscribeRef = ref.subscribe((value) => {
-    cleanupEventListeners(currentRef, currentEventNames)
-    addEventListeners(value, currentEventNames)
-    currentRef = value
-  })
-  onDestroy(unsubscribeRef)
+  const eventNames = writable<string[]>([])
 
-  // cleanup all event listeners
-  onDestroy(() => {
-    cleanupEventListeners(currentRef, currentEventNames)
+  watch([ref, eventNames], ([$ref, $eventNames]) => {
+    addEventListeners($ref, $eventNames)
+    return () => cleanupEventListeners($ref, $eventNames)
   })
 
   // get all event callbacks from component

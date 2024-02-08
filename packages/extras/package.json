@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "8.5.1",
+  "version": "8.7.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -40,11 +40,13 @@
     "tslib": "^2.6.2",
     "type-fest": "^4.10.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.0.12",
+    "three-mesh-bvh": "^0.7.1"
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.133"
+    "three": ">=0.133",
+    "three-mesh-bvh": "^0.7.1"
   },
   "type": "module",
   "exports": {

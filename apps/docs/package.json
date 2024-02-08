@@ -1,7 +1,7 @@
 {
   "name": "@threlte/docs",
   "type": "module",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "scripts": {
     "dev": "astro dev --host",
@@ -34,7 +34,8 @@
     "npm": "^9.8.1",
     "preact": "^10.16.0",
     "svelte": "^4.2.0",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "three-mesh-bvh": "^0.7.1"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.11.2",
