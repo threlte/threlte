@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.7.2
+
+### Patch Changes
+
+- 3c29bc9: Remove three-mesh-bvh from peer dependencies
+
 ## 8.7.1
 
 ### Patch Changes
