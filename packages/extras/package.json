@@ -48,6 +48,11 @@
     "three": ">=0.133",
     "three-mesh-bvh": "^0.7.1"
   },
+  "peerDependenciesMeta": {
+    "three-mesh-bvh": {
+      "optional": true
+    }
+  },
   "type": "module",
   "exports": {
     ".": {
