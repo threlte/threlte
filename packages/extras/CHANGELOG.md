@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.7.1
+
+### Patch Changes
+
+- 7f04878: Mark three-mesh-bvh as an optional dependency in package.json"
+
 ## 8.7.0
 
 ### Minor Changes
