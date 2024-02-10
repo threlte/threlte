@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InstancedSprite, SpriteInstance, Spritesheet } from '@threlte/extras'
+  import { InstancedSprite, Spritesheet } from '@threlte/extras'
 
   import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
 
@@ -92,9 +92,10 @@
     {billboarding}
     autoUpdate={false}
     bind:ref={sprite}
+    let:Instance
   >
     {#each points as [x, z], i}
-      <SpriteInstance
+      <Instance
         position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
         id={i}
         animationName={pickRandomTreeType()}

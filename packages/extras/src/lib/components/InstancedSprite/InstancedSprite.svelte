@@ -9,6 +9,7 @@
     InstancedSpriteProps,
     InstancedSpriteSlots
   } from './InstancedSprite.svelte'
+  import SpriteInstance from './SpriteInstance.svelte'
 
   type $$Props = Required<InstancedSpriteProps>
   type $$Events = InstancedSpriteEvents
@@ -30,6 +31,12 @@
   }
 
   export let ref: any
+
+  const proxySpritefileComponent = new Proxy(SpriteInstance, {
+    construct(_target, [args]) {
+      return new SpriteInstance(args)
+    }
+  })
 </script>
 
 <!--
@@ -44,6 +51,6 @@
     {...$$restProps}
     bind:mesh={ref}
   >
-    <slot />
+    <slot Instance={proxySpritefileComponent} />
   </InnerInstancedSprite>
 {/if}
