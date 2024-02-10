@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.7.3
+
+### Patch Changes
+
+- 392a14f: Remove svelte/internal dependency from <Suspense>
+
 ## 8.7.2
 
 ### Patch Changes
