@@ -3,9 +3,9 @@ import { setContext } from 'svelte'
 import { derived, writable, type Readable } from 'svelte/store'
 
 export type SuspenseContext = {
-  suspend: (promise: Promise<any>) => void
+  suspend: (promise: Promise<unknown>) => void
   suspended: Readable<boolean>
-  onComponentDestroy: (promise: Promise<any>) => void
+  onComponentDestroy: (promise: Promise<unknown>) => void
 }
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
@@ -18,12 +18,12 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   /**
    * This set contains all the promises that are currently being suspended.
    */
-  const promises = currentWritable<Set<Promise<any>>>(new Set())
+  const promises = currentWritable<Set<Promise<unknown>>>(new Set())
 
   /**
    * This map contains all the errors that were thrown during the suspension.
    */
-  const errors = currentWritable<Map<Promise<any>, Error>>(new Map())
+  const errors = currentWritable<Map<Promise<unknown>, Error>>(new Map())
 
   const finalized = writable<boolean>(false)
   const checkFinalized = () => {
@@ -32,28 +32,28 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
 
   const finalStore = writable<boolean>(options?.final ?? false)
 
-  const addPromise = (promise: Promise<any>) => {
+  const addPromise = (promise: Promise<unknown>) => {
     promises.update((set) => {
       set.add(promise)
       return set
     })
   }
 
-  const removePromise = (promise: Promise<any>) => {
+  const removePromise = (promise: Promise<unknown>) => {
     promises.update((set) => {
       set.delete(promise)
       return set
     })
   }
 
-  const addError = (promise: Promise<any>, error: Error) => {
+  const addError = (promise: Promise<unknown>, error: Error) => {
     errors.update((map) => {
       map.set(promise, error)
       return map
     })
   }
 
-  const removeError = (promise: Promise<any>) => {
+  const removeError = (promise: Promise<unknown>) => {
     errors.update((map) => {
       map.delete(promise)
       return map
@@ -85,7 +85,7 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   )
 
   const context: SuspenseContext = {
-    suspend(promise: Promise<any>) {
+    suspend(promise: Promise<unknown>) {
       addPromise(promise)
 
       promise
@@ -98,7 +98,7 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
           checkFinalized()
         })
     },
-    onComponentDestroy(promise: Promise<any>) {
+    onComponentDestroy(promise: Promise<unknown>) {
       removePromise(promise)
       removeError(promise)
       checkFinalized()
