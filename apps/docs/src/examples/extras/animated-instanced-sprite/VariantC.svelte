@@ -1,11 +1,6 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import {
-    AnimatedInstancedSprite,
-    SpriteFile,
-    SpriteAnimation,
-    Spritesheet
-  } from '@threlte/extras'
+  import { InstancedSprite, Spritesheet } from '@threlte/extras'
   import { Matrix4 } from 'three'
 
   export let billboarding = false
@@ -56,8 +51,11 @@
   })
 </script>
 
-<Spritesheet>
-  <SpriteFile
+<Spritesheet
+  let:File
+  let:Animation
+>
+  <File
     textureUrl="/textures/sprites/goblin/Attack.png"
     options={{
       type: 'rowColumn',
@@ -65,13 +63,13 @@
       h: 1
     }}
   >
-    <SpriteAnimation
+    <Animation
       name="attack"
       frameRange={[0, 8]}
     />
-  </SpriteFile>
+  </File>
 
-  <SpriteFile
+  <File
     textureUrl="/textures/sprites/goblin/Death.png"
     options={{
       type: 'rowColumn',
@@ -79,13 +77,13 @@
       h: 1
     }}
   >
-    <SpriteAnimation
+    <Animation
       name="death"
       frameRange={[0, 4]}
     />
-  </SpriteFile>
+  </File>
   <!-- Idle, Run, TakeHit -->
-  <SpriteFile
+  <File
     textureUrl="/textures/sprites/goblin/Idle.png"
     options={{
       type: 'rowColumn',
@@ -93,13 +91,13 @@
       h: 1
     }}
   >
-    <SpriteAnimation
+    <Animation
       name="idle"
       frameRange={[0, 4]}
     />
-  </SpriteFile>
+  </File>
 
-  <SpriteFile
+  <File
     textureUrl="/textures/sprites/goblin/Run.png"
     options={{
       type: 'rowColumn',
@@ -107,13 +105,13 @@
       h: 1
     }}
   >
-    <SpriteAnimation
+    <Animation
       name="run"
       frameRange={[0, 4]}
     />
-  </SpriteFile>
+  </File>
 
-  <SpriteFile
+  <File
     textureUrl="/textures/sprites/goblin/TakeHit.png"
     options={{
       type: 'rowColumn',
@@ -121,13 +119,13 @@
       h: 1
     }}
   >
-    <SpriteAnimation
+    <Animation
       name="takeHit"
       frameRange={[0, 4]}
     />
-  </SpriteFile>
+  </File>
 
-  <AnimatedInstancedSprite
+  <InstancedSprite
     count={goblinCount}
     playmode={'FORWARD'}
     {fps}

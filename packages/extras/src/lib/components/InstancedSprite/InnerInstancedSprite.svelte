@@ -17,17 +17,17 @@
   import { getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type {
-    AnimatedInstancedSpriteEvents,
-    AnimatedInstancedSpriteInternalCtx,
-    AnimatedInstancedSpriteProps,
-    AnimatedInstancedSpriteSlots,
-    AnimatedInstancedSpriteUserCtx
-  } from './AnimatedInstancedSprite.svelte'
+    InstancedSpriteEvents,
+    InstancedSpriteInternalCtx,
+    InstancedSpriteProps,
+    InstancedSpriteSlots,
+    InstancedSpriteUserCtx
+  } from './InstancedSprite.svelte'
   import type { SpritesheetContext } from './Spritesheet'
 
-  type $$Props = Required<AnimatedInstancedSpriteProps>
-  type $$Events = AnimatedInstancedSpriteEvents
-  type $$Slots = AnimatedInstancedSpriteSlots
+  type $$Props = Required<InstancedSpriteProps>
+  type $$Events = InstancedSpriteEvents
+  type $$Slots = InstancedSpriteSlots
 
   export let autoUpdate: $$Props['autoUpdate'] = true
   export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
@@ -79,15 +79,17 @@
   const setSpritesheet = (spritesheet: SpritesheetFormat) => {
     mesh.spritesheet = spritesheet
     // todo upstream types
-    animationMap.set(mesh.animationMap)
+    animationMap.set(mesh.animationMap as any)
   }
 
   const setTexture = (texture: Texture) => {
+    // todo upstream types
+    //@ts-ignore
     mesh.material.map = texture
+    //@ts-ignore
     mesh.material.needsUpdate = true
   }
 
-  // todo refactor
   const textureStore = writable(undefined)
 
   watch(textureStore, (texture) => {
@@ -109,19 +111,14 @@
     setTexture(t)
   })
 
-  //
-  // REACTIVE PROPS
-  //
-
-  // VANILLA
+  // todo upstream types
+  //@ts-ignore
   $: mesh.material.alphaTest = alphaTest
+  //@ts-ignore
   $: mesh.material.transparent = transparent
-
-  // FPS
   $: mesh.fps = fps
 
   // BILLBOARDING
-  // TODO: Billboarding is broken for scale different than [1,1] - vertex shader upstream
   const billboardingStore = writable<boolean | undefined>(undefined)
   $: billboardingStore.set(billboarding)
   watch([billboardingStore], () => {
@@ -163,15 +160,11 @@
     previousRndOffset = offset ? true : false
   })
 
-  //
   // MATRIX UPDATE - POSITION AND SCALE
-  //
-
   let instanceMatrixNeedsUpdate = false
   const tempMatrix = new Matrix4()
-
-  // Since this uses matrix updates, position and scale have to be updated at the same.
   const updatePosition = (id: number, position: Vector3Tuple, scale: Vector2Tuple = [1, 1]) => {
+    // Since this uses matrix updates, position and scale have to be updated at the same.
     tempMatrix.makeScale(scale[0], scale[1], 1)
     tempMatrix.setPosition(...position)
     mesh.setMatrixAt(id, tempMatrix)
@@ -179,7 +172,7 @@
   }
 
   // Context for user facing components and hooks
-  setContext<AnimatedInstancedSpriteUserCtx>('instanced-sprite-ctx', {
+  setContext<InstancedSpriteUserCtx>('instanced-sprite-ctx', {
     mesh,
     count,
     animationMap,
@@ -187,7 +180,7 @@
   })
 
   // Internal context used for building spritesheet etc
-  setContext<AnimatedInstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
+  setContext<InstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
     setSpritesheet,
     setTexture
   })

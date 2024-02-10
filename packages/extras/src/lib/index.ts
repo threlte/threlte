@@ -81,12 +81,8 @@ export { createTransition } from './transitions/createTransition'
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
 
 // instanced sprites
-export { default as AnimatedInstancedSprite } from './components/AnimatedInstancedSprite/AnimatedInstancedSprite.svelte'
-export { default as Spritesheet } from './components/AnimatedInstancedSprite/Spritesheet.svelte'
-export { default as SpriteAnimation } from './components/AnimatedInstancedSprite/SpriteAnimation.svelte'
-export { default as SpriteFile } from './components/AnimatedInstancedSprite/SpriteFile.svelte'
-export { default as SpriteInstance } from './components/AnimatedInstancedSprite/SpriteInstance.svelte'
-
-// export { InstancedSprite } from './components/AnimatedInstancedSprite/dotted'
+export { default as InstancedSprite } from './components/InstancedSprite/InstancedSprite.svelte'
+export { default as Spritesheet } from './components/InstancedSprite/Spritesheet.svelte'
+export { default as SpriteInstance } from './components/InstancedSprite/SpriteInstance.svelte'
 
 export type { ThrelteGltf } from './types/types'

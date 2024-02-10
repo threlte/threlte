@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AnimatedInstancedSprite, Spritesheet } from '@threlte/extras'
+  import { InstancedSprite, Spritesheet } from '@threlte/extras'
   import UpdaterWalking from './UpdaterWalking.svelte'
 
   export let billboarding = false
@@ -10,12 +10,12 @@
   textureUrl="/textures/sprites/player.png"
   dataUrl="/textures/sprites/player.json"
 >
-  <AnimatedInstancedSprite
+  <InstancedSprite
     count={500}
     playmode={'FORWARD'}
     {fps}
     {billboarding}
   >
     <UpdaterWalking />
-  </AnimatedInstancedSprite>
+  </InstancedSprite>
 </Spritesheet>

@@ -1,18 +1,18 @@
 <script lang="ts">
   import { watch } from '@threlte/core'
   import { getContext } from 'svelte'
-  import InnerAnimatedInstancedSprite from './InnerAnimatedInstancedSprite.svelte'
+  import InnerInstancedSprite from './InnerInstancedSprite.svelte'
   import type { SpritesheetContext } from './Spritesheet'
 
   import type {
-    AnimatedInstancedSpriteEvents,
-    AnimatedInstancedSpriteProps,
-    AnimatedInstancedSpriteSlots
-  } from './AnimatedInstancedSprite.svelte'
+    InstancedSpriteEvents,
+    InstancedSpriteProps,
+    InstancedSpriteSlots
+  } from './InstancedSprite.svelte'
 
-  type $$Props = Required<AnimatedInstancedSpriteProps>
-  type $$Events = AnimatedInstancedSpriteEvents
-  type $$Slots = AnimatedInstancedSpriteSlots
+  type $$Props = Required<InstancedSpriteProps>
+  type $$Events = InstancedSpriteEvents
+  type $$Slots = InstancedSpriteSlots
 
   const spritesheetCtx = getContext<SpritesheetContext>(
     'instanced-spritesheet-top-level-stores-ctx'
@@ -40,10 +40,10 @@
  -->
 {#if ready}
   <!-- todo, how to deal with types for inner/outer? -->
-  <InnerAnimatedInstancedSprite
+  <InnerInstancedSprite
     {...$$restProps}
     bind:mesh={ref}
   >
     <slot />
-  </InnerAnimatedInstancedSprite>
+  </InnerInstancedSprite>
 {/if}

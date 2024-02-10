@@ -387,6 +387,9 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.0.0
         version: 3.0.1(svelte@4.2.9)(vite@5.0.12)
+      '@threejs-kit/instanced-sprite-mesh':
+        specifier: ^2.3.0
+        version: 2.3.0(three@0.160.1)
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
@@ -3481,12 +3484,12 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.3.0(three@0.158.0):
+  /@threejs-kit/instanced-sprite-mesh@2.3.0(three@0.160.1):
     resolution: {integrity: sha512-MfCkXByNtLtfmHzcFN7xFvNjEQWT+CCQGAB4Dz6aIRH+/l9x8sDF1UGh5U417N8jc0BZUGYV0P8kJk0JmEdpJw==}
     peerDependencies:
       three: '>=0.158.0'
     dependencies:
-      three: 0.158.0
+      three: 0.160.1
     dev: true
 
   /@tootallnate/once@2.0.0:
@@ -7404,7 +7407,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
 
   /jsonpath@1.1.1:
     resolution: {integrity: sha512-l6Cg7jRpixfbgoWgkrl77dgEj8RPvND0wMH6TwQmi9Qs4TFfS9u5cUFnbeKTwj5ga5Y3BTGGNI28k117LJ009w==}

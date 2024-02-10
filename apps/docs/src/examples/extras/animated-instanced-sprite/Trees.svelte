@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    AnimatedInstancedSprite,
-    SpriteAnimation,
-    SpriteFile,
-    SpriteInstance,
-    Spritesheet
-  } from '@threlte/extras'
+  import { InstancedSprite, SpriteInstance, Spritesheet } from '@threlte/extras'
 
   import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
 
@@ -60,8 +54,11 @@
   }
 </script>
 
-<Spritesheet>
-  <SpriteFile
+<Spritesheet
+  let:File
+  let:Animation
+>
+  <File
     textureUrl="/textures/sprites/trees-pixelart.png"
     options={{
       type: 'rowColumn',
@@ -70,26 +67,26 @@
     }}
   >
     {#each greenTrees as frame, i}
-      <SpriteAnimation
+      <Animation
         name={`greenTree_${i}`}
         frameRange={[frame, frame + 1]}
       />
     {/each}
     {#each redTrees as frame, i}
-      <SpriteAnimation
+      <Animation
         name={`redTree_${i}`}
         frameRange={[frame, frame + 1]}
       />
     {/each}
     {#each deadTrees as frame, i}
-      <SpriteAnimation
+      <Animation
         name={`deadTree_${i}`}
         frameRange={[frame, frame + 1]}
       />
     {/each}
-  </SpriteFile>
+  </File>
 
-  <AnimatedInstancedSprite
+  <InstancedSprite
     count={points.length}
     playmode={'FORWARD'}
     {billboarding}
@@ -104,5 +101,5 @@
         scale={[3, 3]}
       />
     {/each}
-  </AnimatedInstancedSprite>
+  </InstancedSprite>
 </Spritesheet>

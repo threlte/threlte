@@ -10,6 +10,8 @@
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import type { SpritesheetContext, SpritesheetProps } from './Spritesheet'
+  import SpriteFile from './SpriteFile.svelte'
+  import SpriteAnimation from './SpriteAnimation.svelte'
 
   type $$Props = SpritesheetProps
 
@@ -95,6 +97,21 @@
       textureStore.set(built.texture)
     }
   })
+
+  const proxySpritefileComponent = new Proxy(SpriteFile, {
+    construct(_target, [args]) {
+      return new SpriteFile(args)
+    }
+  })
+
+  const proxySpriteanimationComponent = new Proxy(SpriteAnimation, {
+    construct(_target, [args]) {
+      return new SpriteAnimation(args)
+    }
+  })
 </script>
 
-<slot />
+<slot
+  File={proxySpritefileComponent}
+  Animation={SpriteAnimation}
+/>

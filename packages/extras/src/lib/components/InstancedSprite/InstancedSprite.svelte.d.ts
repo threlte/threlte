@@ -15,7 +15,7 @@ import {
   type Vector3Tuple
 } from 'three'
 
-export type AnimatedInstancedSpriteProps = {
+export type InstancedSpriteProps = {
   /**
    * update animations automatically
    *
@@ -134,24 +134,24 @@ export type AnimatedInstancedSpriteProps = {
   ref?: any
 }
 
-export type AnimatedInstancedSpriteEvents = any
+export type InstancedSpriteEvents = any
 
-export type AnimatedInstancedSpriteSlots = any
+export type InstancedSpriteSlots = any
 
-export type AnimatedInstancedSpriteInternalCtx = {
+export type InstancedSpriteInternalCtx = {
   setSpritesheet: (spritesheet: SpritesheetFormat) => void
   setTexture: (texture: Texture) => void
 }
 
-export type AnimatedInstancedSpriteUserCtx = {
+export type InstancedSpriteUserCtx = {
   mesh: InstancedSpriteMesh<any, any>
   count: number
   animationMap: Writable<Map<string, number>>
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void
 }
 
-export default class AnimatedInstancedSprite extends SvelteComponent<
-  AnimatedInstancedSpriteProps,
-  AnimatedInstancedSpriteEvents,
-  AnimatedInstancedSpriteSlots
+export default class InstancedSprite extends SvelteComponent<
+  InstancedSpriteProps,
+  InstancedSpriteEvents,
+  InstancedSpriteSlots
 > {}

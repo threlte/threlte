@@ -1,11 +1,11 @@
 <script lang="ts">
   import { getContext } from 'svelte'
-  import type { AnimatedInstancedSpriteUserCtx } from './AnimatedInstancedSprite.svelte'
+  import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
   import type { SpriteInstanceProps } from './SpriteInstance'
 
   type $$Props = SpriteInstanceProps
 
-  const spriteCtx = getContext<AnimatedInstancedSpriteUserCtx>('instanced-sprite-ctx')
+  const spriteCtx = getContext<InstancedSpriteUserCtx>('instanced-sprite-ctx')
   const { updatePosition, count, animationMap, mesh } = spriteCtx
   //
   export let id: $$Props['id'] = 0

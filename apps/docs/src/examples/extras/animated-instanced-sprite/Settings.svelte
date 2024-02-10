@@ -8,7 +8,7 @@
 <Pane
   theme={ThemeUtils.presets.light}
   position="fixed"
-  title="AnimatedInstancedSprite"
+  title="InstancedSprite"
 >
   <Checkbox
     bind:value={billboarding}

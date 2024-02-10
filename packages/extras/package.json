@@ -18,6 +18,7 @@
     "@sveltejs/kit": "^2.4.3",
     "@sveltejs/package": "^2.2.6",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@threejs-kit/instanced-sprite-mesh": "^2.3.0",
     "@threlte/core": "workspace:*",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.6",
