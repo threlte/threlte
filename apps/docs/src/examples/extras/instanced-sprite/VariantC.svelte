@@ -82,7 +82,6 @@
       frameRange={[0, 4]}
     />
   </File>
-  <!-- Idle, Run, TakeHit -->
   <File
     textureUrl="/textures/sprites/goblin/Idle.png"
     options={{

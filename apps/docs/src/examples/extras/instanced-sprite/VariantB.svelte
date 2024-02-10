@@ -31,7 +31,7 @@
       frameRange={[16, 20]}
     />
     <Animation
-      name="death"
+      name="defeated"
       frameRange={[24, 32]}
     />
   </File>
