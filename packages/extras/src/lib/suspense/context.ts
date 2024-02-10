@@ -1,12 +1,11 @@
 import { createRawEventDispatcher, currentWritable } from '@threlte/core'
 import { setContext } from 'svelte'
-import type { SvelteComponentDev } from 'svelte/internal'
 import { derived, writable, type Readable } from 'svelte/store'
 
 export type SuspenseContext = {
-  suspend: (component: SvelteComponentDev, promise: Promise<any>) => void
+  suspend: (promise: Promise<unknown>) => void
   suspended: Readable<boolean>
-  onComponentDestroy: (component: SvelteComponentDev) => void
+  onComponentDestroy: (promise: Promise<unknown>) => void
 }
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
@@ -17,14 +16,14 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   }>()
 
   /**
-   * This map contains all the promises that are currently being suspended.
+   * This set contains all the promises that are currently being suspended.
    */
-  const promises = currentWritable<Map<SvelteComponentDev, Set<Promise<any>>>>(new Map())
+  const promises = currentWritable<Set<Promise<unknown>>>(new Set())
 
   /**
    * This map contains all the errors that were thrown during the suspension.
    */
-  const errors = currentWritable<Map<SvelteComponentDev, Error[]>>(new Map())
+  const errors = currentWritable<Map<Promise<unknown>, Error>>(new Map())
 
   const finalized = writable<boolean>(false)
   const checkFinalized = () => {
@@ -33,34 +32,30 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
 
   const finalStore = writable<boolean>(options?.final ?? false)
 
-  const addPromise = (component: SvelteComponentDev, promise: Promise<any>) => {
-    promises.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.add(promise)
-      } else {
-        map.set(component, new Set([promise]))
-      }
-      return map
+  const addPromise = (promise: Promise<unknown>) => {
+    promises.update((set) => {
+      set.add(promise)
+      return set
     })
   }
-  const removePromise = (component: SvelteComponentDev, promise: Promise<any>) => {
-    promises.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.delete(promise)
-      }
-      if (map.get(component)?.size === 0) {
-        map.delete(component)
-      }
-      return map
+
+  const removePromise = (promise: Promise<unknown>) => {
+    promises.update((set) => {
+      set.delete(promise)
+      return set
     })
   }
-  const addError = (component: SvelteComponentDev, error: Error) => {
+
+  const addError = (promise: Promise<unknown>, error: Error) => {
     errors.update((map) => {
-      if (map.has(component)) {
-        map.get(component)?.push(error)
-      } else {
-        map.set(component, [error])
-      }
+      map.set(promise, error)
+      return map
+    })
+  }
+
+  const removeError = (promise: Promise<unknown>) => {
+    errors.update((map) => {
+      map.delete(promise)
       return map
     })
   }
@@ -90,40 +85,28 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
   )
 
   const context: SuspenseContext = {
-    suspend(component: SvelteComponentDev, promise: Promise<any>) {
-      addPromise(component, promise)
+    suspend(promise: Promise<unknown>) {
+      addPromise(promise)
+
       promise
-        .then(() => {
-          if (promises.current.get(component)?.has(promise)) {
-            removePromise(component, promise)
-          }
-        })
         .catch((error) => {
-          if (promises.current.get(component)?.has(promise)) {
-            removePromise(component, promise)
-            addError(component, error)
-            dispatch('error', error)
-          }
+          addError(promise, error)
+          dispatch('error', error)
         })
         .finally(() => {
+          removePromise(promise)
           checkFinalized()
         })
     },
-    onComponentDestroy(component: SvelteComponentDev) {
-      promises.update((map) => {
-        map.delete(component)
-        return map
-      })
-      errors.update((map) => {
-        map.delete(component)
-        return map
-      })
+    onComponentDestroy(promise: Promise<unknown>) {
+      removePromise(promise)
+      removeError(promise)
       checkFinalized()
     },
     suspended
   }
 
-  const errorsArray = derived(errors, (errors) => Array.from(errors.values()).flat())
+  const errorsArray = derived(errors, (errors) => Array.from(errors.values()))
 
   setContext<SuspenseContext>(suspenseContextIdentifier, context)
 
