@@ -32,25 +32,14 @@
 <script lang="ts">
   export let object: HierarchicalObjectProperties['object'] = undefined
 
-  export let children: Object3D[] = []
-
   export let onChildMount: HierarchicalObjectProperties['onChildMount'] = undefined
   const onChildMountProxy: HierarchicalObjectProperties['onChildMount'] = (child) => {
-    // keep track of children
-    children.push(child)
-    children = children
-
     // maybe call provided method
     onChildMount?.(child)
   }
 
   export let onChildDestroy: HierarchicalObjectProperties['onChildDestroy'] = undefined
   const onChildDestroyProxy: HierarchicalObjectProperties['onChildDestroy'] = (child) => {
-    // keep track of children
-    const index = children.findIndex((c) => c.uuid === child.uuid)
-    if (index !== -1) children.splice(index, 1)
-    children = children
-
     // maybe call provided method
     onChildDestroy?.(child)
   }
