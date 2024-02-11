@@ -5,9 +5,10 @@
 
   export let envMap: Texture
 
-  const url = revision > 160
-    ? 'three/examples/jsm/objects/GroundedSkybox'
-    : 'three/examples/jsm/objects/GroundProjectedSkybox'
+  const url =
+    revision > 160
+      ? 'three/examples/jsm/objects/GroundedSkybox'
+      : 'three/examples/jsm/objects/GroundProjectedSkybox'
 
   const module = import(/* @vite-ignore */ url)
 </script>
