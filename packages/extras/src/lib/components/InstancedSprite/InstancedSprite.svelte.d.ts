@@ -143,8 +143,8 @@ export type InstancedSpriteInternalCtx = {
   setTexture: (texture: Texture) => void
 }
 
-export type InstancedSpriteUserCtx = {
-  mesh: InstancedSpriteMesh<any, any>
+export type InstancedSpriteUserCtx<T> = {
+  mesh: InstancedSpriteMesh<any, T>
   count: number
   animationMap: Writable<Map<string, number>>
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void

@@ -100,16 +100,25 @@
     'instanced-spritesheet-top-level-stores-ctx'
   )
 
-  watch(spritesheetContext.spritesheetStore, (s) => {
-    if (s) {
-      console.log(s)
-      setSpritesheet(s)
-    }
-  })
+  if (spritesheetContext) {
+    watch(spritesheetContext.spritesheetStore, (s) => {
+      if (s) {
+        console.log(s)
+        setSpritesheet(s)
+      }
+    })
 
-  watch(spritesheetContext.textureStore, (t) => {
-    setTexture(t)
-  })
+    watch(spritesheetContext.textureStore, (t) => {
+      setTexture(t)
+    })
+  }
+
+  $: {
+    if (!spritesheetContext && spritesheet && texture) {
+      setSpritesheet(spritesheet)
+      setTexture(texture)
+    }
+  }
 
   // todo upstream types
   //@ts-ignore

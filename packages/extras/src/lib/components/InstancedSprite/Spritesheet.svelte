@@ -4,20 +4,22 @@
     parseAseprite,
     type SpritesheetFormat
   } from '@threejs-kit/instanced-sprite-mesh'
-  import { watch } from '@threlte/core'
+  import { createRawEventDispatcher, watch } from '@threlte/core'
   import { onMount, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import { LinearFilter, NearestFilter, RepeatWrapping, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
-  import type { SpritesheetContext, SpritesheetProps } from './Spritesheet'
+  import type { SpritesheetContext, SpritesheetProps, SpritesheetEvents } from './Spritesheet'
   import SpriteFile from './SpriteFile.svelte'
   import SpriteAnimation from './SpriteAnimation.svelte'
 
   type $$Props = SpritesheetProps
+  type $$Events = SpritesheetEvents
 
   export let textureUrl: $$Props['textureUrl'] = undefined
   export let dataUrl: $$Props['dataUrl'] = undefined
   export let filter: $$Props['filter'] = 'nearest'
+  export let aseprite: $$Props['aseprite'] = undefined
 
   let texture: Texture | undefined = undefined
   let spritesheet: SpritesheetFormat | undefined = undefined
@@ -63,7 +65,12 @@
     if (url) {
       const res = await fetch(url)
       const json = await res.json()
-      jsonStore.set(json)
+
+      if (aseprite) {
+        jsonStore.set(json)
+      } else {
+        spritesheetStore.set(json)
+      }
     }
   })
 
@@ -80,6 +87,13 @@
 
   setContext('instanced-animation-spritesheet-root-level-ctx', {
     registerSpriteFile
+  })
+
+  const dispatch = createRawEventDispatcher<$$Events>()
+  watch([spritesheetStore, textureStore], ([spritesheet, texture]) => {
+    if (spritesheet && texture) {
+      dispatch('load')
+    }
   })
 
   onMount(async () => {
@@ -113,5 +127,5 @@
 
 <slot
   File={proxySpritefileComponent}
-  Animation={SpriteAnimation}
+  Animation={proxySpriteanimationComponent}
 />
