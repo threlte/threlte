@@ -365,6 +365,9 @@ importers:
 
   packages/extras:
     dependencies:
+      '@threejs-kit/instanced-sprite-mesh':
+        specifier: ^2.3.2
+        version: 2.3.2(three@0.160.1)
       three-mesh-bvh:
         specifier: ^0.7.1
         version: 0.7.1(three@0.160.1)
@@ -387,9 +390,6 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.0.0
         version: 3.0.1(svelte@4.2.9)(vite@5.0.12)
-      '@threejs-kit/instanced-sprite-mesh':
-        specifier: ^2.3.0
-        version: 2.3.0(three@0.160.1)
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
@@ -3484,13 +3484,13 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.3.0(three@0.160.1):
-    resolution: {integrity: sha512-MfCkXByNtLtfmHzcFN7xFvNjEQWT+CCQGAB4Dz6aIRH+/l9x8sDF1UGh5U417N8jc0BZUGYV0P8kJk0JmEdpJw==}
+  /@threejs-kit/instanced-sprite-mesh@2.3.2(three@0.160.1):
+    resolution: {integrity: sha512-80tOlVuR+eFtK0dh8cpHt5UywVNOSrGXr+MelhWgIRKOIWfXfa4t9bPJJOY8ifOZw5SeT8qsAuDEdz7ldHkJvQ==}
     peerDependencies:
-      three: '>=0.158.0'
+      three: '>=0.159.0'
     dependencies:
       three: 0.160.1
-    dev: true
+    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
