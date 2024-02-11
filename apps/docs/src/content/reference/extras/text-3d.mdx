@@ -58,7 +58,7 @@ You can also load the font yourself and pass it to the component, like so:
 <script lang="ts">
 	import { T, useLoader } from '@threlte/core'
 	import { Text3D } from '@threlte/extras'
-	import { FontLoader } from 'three/examples/jsm/Addons.js'
+	import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 	let font = useLoader(FontLoader).load('path-to-your-font')
 </script>

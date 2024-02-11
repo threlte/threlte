@@ -9,8 +9,10 @@
   import { createEventDispatcher } from 'svelte'
 
   import type { Mesh } from 'three'
-  import { TextGeometry, FontLoader, Font } from 'three/examples/jsm/Addons.js'
-  import { toCreasedNormals } from '../RoundedBoxGeometry/toCreasedNormals'
+  import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+  import { FontLoader, Font } from 'three/addons/loaders/FontLoader.js'
+
+  import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
   import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3D.svelte'
 
