@@ -58,7 +58,7 @@ export type RigidBodyProps = {
   enabledRotations?: Boolean3Array
 
   /**
-   * Allow rotation of this rigid-body only along specific axes.
+   * Allow translations of this rigid-body only along specific axes.
    */
   enabledTranslations?: Boolean3Array
 

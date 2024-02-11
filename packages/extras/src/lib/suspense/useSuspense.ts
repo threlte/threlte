@@ -1,5 +1,4 @@
-import { getContext } from 'svelte'
-import { get_current_component, onDestroy } from 'svelte/internal'
+import { getContext, onDestroy } from 'svelte'
 import { derived, readable } from 'svelte/store'
 import { suspenseContextIdentifier, type SuspenseContext } from './context'
 
@@ -10,10 +9,13 @@ import { suspenseContextIdentifier, type SuspenseContext } from './context'
 export const useSuspense = () => {
   const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
 
-  const component = get_current_component()
+  const promises = new Set<Promise<unknown>>()
 
-  const suspend = <T extends Promise<any>>(promise: T): T => {
-    ctx?.suspend(component, promise)
+  const suspend = <T>(promise: Promise<T>): Promise<T> => {
+    if (ctx) {
+      ctx.suspend(promise)
+      promises.add(promise)
+    }
     return promise
   }
 
@@ -22,7 +24,11 @@ export const useSuspense = () => {
   }
 
   onDestroy(() => {
-    ctx?.onComponentDestroy(component)
+    if (!ctx) return
+    for (const promise of promises) {
+      ctx.onComponentDestroy(promise)
+    }
+    promises.clear()
   })
 
   return Object.assign(suspend, state)

@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.1.0
+
+### Minor Changes
+
+- 127c03f: Remove children binding from HierarchicalObject component
+
 ## 7.0.12
 
 ### Patch Changes
