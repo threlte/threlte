@@ -18,7 +18,6 @@
   let animationNames: string[] = []
   $: {
     if (spriteMesh) {
-      console.log({ spriteMesh })
       // randomize goblin positions by directly accessing the instanced sprite api without any helpers
       for (let i = 0; i < goblinCount; i++) {
         tempMatrix.makeScale(5, 5, 1)

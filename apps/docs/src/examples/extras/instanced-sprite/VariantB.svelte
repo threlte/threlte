@@ -37,7 +37,7 @@
   </File>
 
   <InstancedSprite
-    count={10000}
+    count={5000}
     playmode={'FORWARD'}
     {fps}
     {billboarding}

@@ -38,6 +38,11 @@
     {billboarding}
     {spritesheet}
     {texture}
+    hueShift={{
+      h: 0.3,
+      s: 1.5,
+      v: 1.5
+    }}
   >
     <UpdaterFlyingHook />
   </InstancedSprite>

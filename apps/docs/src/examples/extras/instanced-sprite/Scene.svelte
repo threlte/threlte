@@ -48,27 +48,22 @@
 
 <!-- Dudes - Michael's Aseprite loader -->
 <!-- one is wasd player controlled  -->
-<!-- <VariantA
+<VariantA
   {billboarding}
   {fps}
-/> -->
+/>
 
 <!-- Flyers - Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
-<!-- <VariantB
+<VariantB
   {billboarding}
   {fps}
-/> -->
-<!-- same as Variant B but testing <Component.Subcomponent/> api -->
-<!-- <DottedComponentTest
-  {billboarding}
-  {fps}
-/> -->
+/>
 
 <!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
-<!-- <VariantC
+<VariantC
   {billboarding}
   {fps}
-/> -->
+/>
 
 <VariantD
   {billboarding}
