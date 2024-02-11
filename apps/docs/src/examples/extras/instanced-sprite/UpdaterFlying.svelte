@@ -21,7 +21,7 @@
       action: 'Run',
       timer: 0.1,
       velocity: [0, 1],
-      baseHeight: 2 + Math.random() * 15
+      baseHeight: 3 + Math.random() * 60
     })
   }
 
@@ -29,7 +29,7 @@
   const posY: number[] = new Array(count).fill(0)
   const posZ: number[] = new Array(count).fill(0)
 
-  const spread = 500
+  const spread = 350
   const minCenterDistance = 5
   const maxCenterDistance = spread
   const rndPosition: any = () => {

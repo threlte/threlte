@@ -6,6 +6,7 @@
   import VariantA from './VariantA.svelte'
   import VariantB from './VariantB.svelte'
   import VariantC from './VariantC.svelte'
+  import VariantD from './VariantD.svelte'
   import { DoubleSide, NearestFilter, RepeatWrapping } from 'three'
   // import DottedComponentTest from './DottedComponentTest.svelte'
 
@@ -47,16 +48,16 @@
 
 <!-- Dudes - Michael's Aseprite loader -->
 <!-- one is wasd player controlled  -->
-<VariantA
+<!-- <VariantA
   {billboarding}
   {fps}
-/>
+/> -->
 
 <!-- Flyers - Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
-<VariantB
+<!-- <VariantB
   {billboarding}
   {fps}
-/>
+/> -->
 <!-- same as Variant B but testing <Component.Subcomponent/> api -->
 <!-- <DottedComponentTest
   {billboarding}
@@ -64,10 +65,15 @@
 /> -->
 
 <!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
-<VariantC
+<!-- <VariantC
   {billboarding}
   {fps}
-/>
+/> -->
+
+<!-- <VariantD
+  {billboarding}
+  {fps}
+/> -->
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
 <Trees {billboarding} />

@@ -1,3 +1,4 @@
+import { useInstancedSprite } from './components/InstancedSprite/instancedSpriteUtils'
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
@@ -83,5 +84,9 @@ export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
 // instanced sprites
 export { default as InstancedSprite } from './components/InstancedSprite/InstancedSprite.svelte'
 export { default as Spritesheet } from './components/InstancedSprite/Spritesheet.svelte'
+export {
+  useInstancedSprite,
+  buildSpritesheet
+} from './components/InstancedSprite/instancedSpriteUtils'
 
 export type { ThrelteGltf } from './types/types'

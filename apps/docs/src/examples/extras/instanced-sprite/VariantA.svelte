@@ -9,6 +9,7 @@
 <Spritesheet
   textureUrl="/textures/sprites/player.png"
   dataUrl="/textures/sprites/player.json"
+	aseprite
 >
   <InstancedSprite
     count={500}
