@@ -39,6 +39,13 @@
   export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
   export let transparent: $$Props['transparent'] = true
+  export let hueShift:
+    | {
+        h: number
+        s: number
+        v: number
+      }
+    | undefined = undefined
 
   export let randomPlaybackOffset: $$Props['randomPlaybackOffset'] = false
 
@@ -103,7 +110,6 @@
   if (spritesheetContext) {
     watch(spritesheetContext.spritesheetStore, (s) => {
       if (s) {
-        console.log(s)
         setSpritesheet(s)
       }
     })
@@ -126,6 +132,7 @@
   //@ts-ignore
   $: mesh.material.transparent = transparent
   $: mesh.fps = fps
+  $: mesh.hueShift.setGlobal(hueShift)
 
   // BILLBOARDING
   const billboardingStore = writable<boolean | undefined>(undefined)

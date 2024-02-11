@@ -77,57 +77,26 @@ export type InstancedSpriteProps = {
    */
   alphaTest?: number
 
-  transparent?: boolean
-
-  randomPlaybackOffset?: boolean | number
-
   /**
    * Whether or not the material should be transparent.
    *
    * @default true
    */
-  // transparent?: boolean
+  transparent?: boolean
 
   /**
-   * Whether or not the Sprite should flip sides on the x-axis.
+   * Hue shift
    *
-   * @default false
    */
-  // flipX?: boolean
+  hueShift?:
+    | {
+        h: number
+        s: number
+        v: number
+      }
+    | undefined
 
-  /**
-   * The start frame of the current animation.
-   *
-   * @default 0
-   */
-  // startFrame?: number
-
-  /**
-   * The end frame of the current animation.
-   *
-   * @default rows * columns - 1
-   */
-  endFrame?: number
-
-  /**
-   * The total number of frames in the spritesheet.
-   */
-  totalFrames?: number
-
-  /**
-   * The number of rows in the spritesheet.
-   *
-   * @default 1
-   */
-  rows?: number
-
-  /**
-   * The number of columns in the spritesheet.
-   *
-   * @default 1
-   */
-  columns?: number
-
+  randomPlaybackOffset?: boolean | number
   texture?: Texture | undefined
   spritesheet?: SpritesheetFormat | undefined
 
