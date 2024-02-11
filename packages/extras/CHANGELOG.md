@@ -1,5 +1,29 @@
 # @threlte/extras
 
+## 8.7.4
+
+### Patch Changes
+
+- 6c3807f: Remove three/addons import for compatibility with older Three versions
+
+## 8.7.3
+
+### Patch Changes
+
+- 392a14f: Remove svelte/internal dependency from <Suspense>
+
+## 8.7.2
+
+### Patch Changes
+
+- 3c29bc9: Remove three-mesh-bvh from peer dependencies
+
+## 8.7.1
+
+### Patch Changes
+
+- 7f04878: Mark three-mesh-bvh as an optional dependency in package.json"
+
 ## 8.7.0
 
 ### Minor Changes

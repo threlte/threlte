@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "8.7.0",
+  "version": "8.7.4",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -40,13 +40,16 @@
     "tslib": "^2.6.2",
     "type-fest": "^4.10.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "three-mesh-bvh": "^0.7.1"
+    "vite": "^5.0.12"
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.133",
-    "three-mesh-bvh": "^0.7.1"
+    "three": ">=0.133"
+  },
+  "peerDependenciesMeta": {
+    "three-mesh-bvh": {
+      "optional": true
+    }
   },
   "type": "module",
   "exports": {
@@ -71,6 +74,7 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "troika-three-text": "^0.49.0"
+    "troika-three-text": "^0.49.0",
+    "three-mesh-bvh": "^0.7.1"
   }
 }
