@@ -52,10 +52,9 @@ type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
+  'Tutorials',
   'Basics',
-  'Advanced',
-  'More',
-  'Preprocessing'
+  'More'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
