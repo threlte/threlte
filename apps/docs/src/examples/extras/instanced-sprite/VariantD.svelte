@@ -1,12 +1,7 @@
-<script lang="ts">
-  import { InstancedSprite, Spritesheet } from '@threlte/extras'
-  import UpdaterFlying from './UpdaterFlying.svelte'
-
-  export let billboarding = false
-  export let fps: number
-  const count = 5000
-  import { buildSpritesheet } from '@threlte/extras'
-
+<script
+  context="module"
+  lang="ts"
+>
   const def = [
     {
       url: '/textures/sprites/cacodaemon.png',
@@ -23,15 +18,27 @@
   ] as const
 
   const cacodaemonSpritesheet = buildSpritesheet<typeof def>(def)
+
+  export const useDemonSprite = cacodaemonSpritesheet.useInstancedSprite
 </script>
 
-{#await cacodaemonSpritesheet then { spritesheet, texture }}
+<script lang="ts">
+  import { InstancedSprite } from '@threlte/extras'
+  import UpdaterFlyingHook from './UpdaterFlyingHook.svelte'
+
+  export let billboarding = false
+  export let fps: number
+  const count = 5000
+  import { buildSpritesheet } from '@threlte/extras'
+</script>
+
+{#await cacodaemonSpritesheet.sheet then { spritesheet, texture }}
   <InstancedSprite
     {count}
     {billboarding}
     {spritesheet}
     {texture}
   >
-    <UpdaterFlying />
+    <UpdaterFlyingHook />
   </InstancedSprite>
 {/await}

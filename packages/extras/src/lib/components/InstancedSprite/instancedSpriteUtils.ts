@@ -1,7 +1,6 @@
+import { createSpritesheet } from '@threejs-kit/instanced-sprite-mesh'
 import { getContext } from 'svelte'
 import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
-import { createSpritesheet, type SpritesheetFormat } from '@threejs-kit/instanced-sprite-mesh'
-import type { Texture } from 'three'
 
 export const useInstancedSprite = <T>(): InstancedSpriteUserCtx<T> => {
   return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
@@ -23,13 +22,12 @@ type SpriteMetaConfig = readonly Pick<SpriteMetaEntry, 'animations'>[]
 export type UseSpriteMetaConfig<T extends SpriteMetaConfig> =
   T[number]['animations'][number]['name']
 
-export const buildSpritesheet = async <T extends SpriteMetaEntry[]>(
+export const buildSpritesheet = <T extends SpriteMetaEntry[]>(
   meta: SpriteMetaEntry[]
-): Promise<{
-  animations: UseSpriteMetaConfig<T>
-  spritesheet: SpritesheetFormat
-  texture: Texture
-}> => {
+): {
+  useInstancedSprite: () => InstancedSpriteUserCtx<UseSpriteMetaConfig<T>>
+  sheet: typeof builder.build
+} => {
   const builder = createSpritesheet()
 
   const animationsList: string[] = []
@@ -50,6 +48,9 @@ export const buildSpritesheet = async <T extends SpriteMetaEntry[]>(
     )
   }
 
-  const { spritesheet, texture } = await builder.build()
-  return { spritesheet, texture, animations: animationsList }
+  const sheet = builder.build()
+
+  const typedHook = useInstancedSprite<UseSpriteMetaConfig<T>>
+
+  return { sheet, useInstancedSprite: typedHook }
 }

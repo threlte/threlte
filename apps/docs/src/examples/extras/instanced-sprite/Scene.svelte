@@ -70,10 +70,10 @@
   {fps}
 /> -->
 
-<!-- <VariantD
+<VariantD
   {billboarding}
   {fps}
-/> -->
+/>
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
 <Trees {billboarding} />
