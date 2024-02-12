@@ -159,7 +159,6 @@
           <SheetObject
             key="Composite"
             let:Transform
-            let:Sync
             props={{
               floatIntensity: types.number(1, {
                 range: [0, 10]

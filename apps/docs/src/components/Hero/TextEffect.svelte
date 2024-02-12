@@ -16,8 +16,6 @@
         end: number
       }
     | undefined = undefined
-  export let useSpring = true
-
   export { _in as in, _out as out }
 
   let timeline: anime.AnimeTimelineInstance | undefined

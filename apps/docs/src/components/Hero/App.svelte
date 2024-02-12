@@ -1,11 +1,9 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
   import { transitions, useGltf, useTexture } from '@threlte/extras'
-  import { Theatre } from '@threlte/theatre'
   import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
   import Scene from './Scene.svelte'
   import { cubeGeometry } from './state'
-  import state from './state.json'
 
   type CubeGltf = {
     nodes: {
