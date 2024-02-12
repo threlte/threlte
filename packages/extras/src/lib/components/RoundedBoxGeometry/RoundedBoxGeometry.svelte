@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Shape } from 'three'
   import { T, forwardEventHandlers } from '@threlte/core'
-  import { toCreasedNormals } from './toCreasedNormals'
+  import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils'
 
   const component = forwardEventHandlers()
 

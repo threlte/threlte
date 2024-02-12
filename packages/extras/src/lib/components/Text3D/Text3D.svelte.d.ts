@@ -2,8 +2,8 @@ import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Mesh } from 'three'
 
-import type { TextGeometryParameters } from 'three/examples/jsm/geometries/TextGeometry.js'
-import type { Font } from 'three/addons/loaders/FontLoader.js'
+import type { TextGeometryParameters } from 'three/examples/jsm/geometries/TextGeometry'
+import type { Font } from 'three/examples/jsm/loaders/FontLoader'
 
 export type Text3DProps = Props<Mesh> &
   Omit<TextGeometryParameters, 'font'> & {
