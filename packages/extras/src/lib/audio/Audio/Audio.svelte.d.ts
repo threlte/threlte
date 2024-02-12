@@ -1,5 +1,5 @@
 import type { Props, Events, Slots } from '@threlte/core'
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { Audio as ThreeAudio } from 'three'
 import type {
   AudioProps as CommonAudioProps,
@@ -15,4 +15,4 @@ export type AudioEvents = Events<ThreeAudio<GainNode>> & CommonAudioEvents
 
 export type AudioSlots = Slots<ThreeAudio<GainNode>>
 
-export default class Audio extends SvelteComponentTyped<AudioProps, AudioEvents, AudioSlots> {}
+export default class Audio extends SvelteComponent<AudioProps, AudioEvents, AudioSlots> {}

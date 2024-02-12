@@ -1,4 +1,4 @@
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Props } from '@threlte/core'
 import type { TextureEncoding } from 'three'
 import type { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
@@ -30,4 +30,4 @@ export type EnvironmentProps = {
   encoding?: TextureEncoding
 }
 
-export default class Environment extends SvelteComponentTyped<EnvironmentProps> {}
+export default class Environment extends SvelteComponent<EnvironmentProps> {}
