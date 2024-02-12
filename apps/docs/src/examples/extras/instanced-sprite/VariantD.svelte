@@ -2,6 +2,7 @@
   context="module"
   lang="ts"
 >
+  import type { SpritesheetMetadata } from '@threlte/extras'
   const demonSpriteMeta = [
     {
       url: '/textures/sprites/cacodaemon.png',
@@ -15,7 +16,7 @@
         { name: 'death', frameRange: [24, 32] }
       ]
     }
-  ] as const
+  ] as const satisfies SpritesheetMetadata
 
   const cacodaemonSpritesheet = buildSpritesheet<typeof demonSpriteMeta>(demonSpriteMeta)
 

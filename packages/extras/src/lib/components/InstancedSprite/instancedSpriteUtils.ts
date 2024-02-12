@@ -6,27 +6,27 @@ export const useInstancedSprite = <T>(): InstancedSpriteUserCtx<T> => {
   return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
 }
 
-export type SpriteMetaEntry = {
-  readonly url: string
-  readonly type: 'rowColumn' | 'frameSize'
-  readonly width: number
-  readonly height: number
-  readonly animations: {
-    readonly name: string
-    readonly frameRange: [number, number]
+export type SpritesheetMetadata = {
+  url: string
+  type: 'rowColumn' | 'frameSize'
+  width: number
+  height: number
+  animations: {
+    name: string
+    frameRange: [number, number]
   }[]
-}
+}[]
 
-type SpriteMetaConfig = readonly Pick<SpriteMetaEntry, 'animations'>[]
+type SpriteMetaConfig = readonly Pick<SpritesheetMetadata[number], 'animations'>[]
 
 export type UseSpriteMetaConfig<T extends SpriteMetaConfig> =
   T[number]['animations'][number]['name']
 
-export const buildSpritesheet = <T extends SpriteMetaEntry[]>(
-  meta: SpriteMetaEntry[]
+export const buildSpritesheet = <T extends SpritesheetMetadata>(
+  meta: Readonly<SpritesheetMetadata>
 ): {
   useInstancedSprite: () => InstancedSpriteUserCtx<UseSpriteMetaConfig<T>>
-  sheet: typeof builder.build
+  sheet: ReturnType<typeof builder.build>
 } => {
   const builder = createSpritesheet()
 

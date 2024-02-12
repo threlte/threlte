@@ -1,4 +1,3 @@
-import { useInstancedSprite } from './components/InstancedSprite/instancedSpriteUtils'
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
@@ -86,7 +85,8 @@ export { default as InstancedSprite } from './components/InstancedSprite/Instanc
 export { default as Spritesheet } from './components/InstancedSprite/Spritesheet.svelte'
 export {
   useInstancedSprite,
-  buildSpritesheet
+  buildSpritesheet,
+  type SpritesheetMetadata
 } from './components/InstancedSprite/instancedSpriteUtils'
 
 export type { ThrelteGltf } from './types/types'
