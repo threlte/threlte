@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.7.5
+
+### Patch Changes
+
+- 5d9ca58: Fixed a bug where `<Sky>`'s renderTarget wasn't able to be disposed because the canvas context did not exist anymore.
+
 ## 8.7.4
 
 ### Patch Changes
