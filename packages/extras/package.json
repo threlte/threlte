@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "troika-three-text": "^0.49.0",
-    "three-mesh-bvh": "^0.7.1"
-    "three-perf": "^1.0.10",
+    "three-mesh-bvh": "^0.7.1",
+    "three-perf": "^1.0.10"
   }
 }
