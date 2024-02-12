@@ -11711,7 +11711,6 @@ packages:
       troika-three-utils: 0.47.2(three@0.158.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
-    dev: true
 
   /troika-three-text@0.49.0(three@0.160.1):
     resolution: {integrity: sha512-sn9BNC6eIX8OO3iAkPwjecJ7Pn21Ve8P1UNFMNeQzXx759rrqS4i4pSZs7FLMYdWyCKVXBFGimBySFwRKLjq/Q==}
@@ -11731,7 +11730,6 @@ packages:
       three: '>=0.125.0'
     dependencies:
       three: 0.158.0
-    dev: true
 
   /troika-three-utils@0.49.0(three@0.160.1):
     resolution: {integrity: sha512-umitFL4cT+Fm/uONmaQEq4oZlyRHWwVClaS6ZrdcueRvwc2w+cpNQ47LlJKJswpqtMFWbEhOLy0TekmcPZOdYA==}
@@ -11743,7 +11741,6 @@ packages:
 
   /troika-worker-utils@0.47.2:
     resolution: {integrity: sha512-mzss4MeyzUkYBppn4x5cdAqrhBHFEuVmMMgLMTyFV23x6GvQMyo+/R5E5Lsbrt7WSt5RfvewjcwD1DChRTA9lA==}
-    dev: true
 
   /troika-worker-utils@0.49.0:
     resolution: {integrity: sha512-1xZHoJrG0HFfCvT/iyN41DvI/nRykiBtHqFkGaGgJwq5iXfIZFBiPPEHFpPpgyKM3Oo5ITHXP5wM2TNQszYdVg==}
@@ -11934,6 +11931,10 @@ packages:
   /tweakpane@3.1.0:
     resolution: {integrity: sha512-PGAp/LPQdHwzL7/iAW4lV1p9iPQTti7YMjMWO48CoYjvZRS59RmgQnhEGzKzqST1JnmOYmQUjTe8bdhlZRJs5A==}
     dev: true
+
+  /tweakpane@3.1.10:
+    resolution: {integrity: sha512-rqwnl/pUa7+inhI2E9ayGTqqP0EPOOn/wVvSWjZsRbZUItzNShny7pzwL3hVlaN4m9t/aZhsP0aFQ9U5VVR2VQ==}
+    dev: false
 
   /tweakpane@4.0.1:
     resolution: {integrity: sha512-1JmmGbF4h2zuFbpN1XfIWcV0kLbBUgSXpR1QtW19vJFx44asnCrufRSvd69OItOFMEWgbVtoiWM2uDPUEUKcMQ==}
