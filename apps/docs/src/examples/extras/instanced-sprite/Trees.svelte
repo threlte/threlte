@@ -62,8 +62,8 @@
     textureUrl="/textures/sprites/trees-pixelart.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 3
+      width: 8,
+      height: 3
     }}
   >
     {#each greenTrees as frame, i}

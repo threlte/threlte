@@ -366,8 +366,8 @@ importers:
   packages/extras:
     dependencies:
       '@threejs-kit/instanced-sprite-mesh':
-        specifier: ^2.3.2
-        version: 2.3.3(three@0.160.1)
+        specifier: ^2.3.4
+        version: 2.3.4(three@0.160.1)
       three-mesh-bvh:
         specifier: ^0.7.1
         version: 0.7.1(three@0.160.1)
@@ -3484,8 +3484,8 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.3.3(three@0.160.1):
-    resolution: {integrity: sha512-DbGnBTBiPPMMKxlB7wXvCHk/WOfo8pT4j25PRQZo2VNYf5+/K0BHfDPI/BrQgcL6g9OwKzQ6WAu+pJZEUeecMg==}
+  /@threejs-kit/instanced-sprite-mesh@2.3.4(three@0.160.1):
+    resolution: {integrity: sha512-4o0/3J+MY7fMDL8U3T5d8rw243DUHs6DSONwzF2g/MmJ/H6BeE9m/aH05wKwbEGrkt3XstCpmPE5O25MdaVneQ==}
     peerDependencies:
       three: '>=0.151.0'
     dependencies:

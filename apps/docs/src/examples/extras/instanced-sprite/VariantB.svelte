@@ -14,8 +14,8 @@
     textureUrl="/textures/sprites/cacodaemon.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 4
+      width: 8,
+      height: 4
     }}
   >
     <Animation

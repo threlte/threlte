@@ -9,8 +9,8 @@ export const useInstancedSprite = <T>(): InstancedSpriteUserCtx<T> => {
 export type SpriteMetaEntry = {
   readonly url: string
   readonly type: 'rowColumn' | 'frameSize'
-  readonly w: number
-  readonly h: number
+  readonly width: number
+  readonly height: number
   readonly animations: {
     readonly name: string
     readonly frameRange: [number, number]
@@ -32,7 +32,7 @@ export const buildSpritesheet = <T extends SpriteMetaEntry[]>(
 
   const animationsList: string[] = []
 
-  for (const { url, type, w, h, animations } of meta) {
+  for (const { url, type, width, height, animations } of meta) {
     for (const animation of animations) {
       animationsList.push(animation.name)
     }
@@ -41,8 +41,8 @@ export const buildSpritesheet = <T extends SpriteMetaEntry[]>(
       url,
       {
         type,
-        w,
-        h
+        width,
+        height
       },
       animations
     )

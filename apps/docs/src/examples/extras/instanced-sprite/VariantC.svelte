@@ -58,8 +58,8 @@
     textureUrl="/textures/sprites/goblin/Attack.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 1
+      width: 8,
+      height: 1
     }}
   >
     <Animation
@@ -72,8 +72,8 @@
     textureUrl="/textures/sprites/goblin/Death.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation
@@ -85,8 +85,8 @@
     textureUrl="/textures/sprites/goblin/Idle.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation
@@ -99,8 +99,8 @@
     textureUrl="/textures/sprites/goblin/Run.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 1
+      width: 8,
+      height: 1
     }}
   >
     <Animation
@@ -113,8 +113,8 @@
     textureUrl="/textures/sprites/goblin/TakeHit.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation

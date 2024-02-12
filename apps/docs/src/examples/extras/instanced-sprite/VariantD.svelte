@@ -2,12 +2,12 @@
   context="module"
   lang="ts"
 >
-  const def = [
+  const demonSpriteMeta = [
     {
       url: '/textures/sprites/cacodaemon.png',
       type: 'rowColumn',
-      w: 8,
-      h: 4,
+      width: 8,
+      height: 4,
       animations: [
         { name: 'fly', frameRange: [0, 6] },
         { name: 'attack', frameRange: [8, 14] },
@@ -17,7 +17,7 @@
     }
   ] as const
 
-  const cacodaemonSpritesheet = buildSpritesheet<typeof def>(def)
+  const cacodaemonSpritesheet = buildSpritesheet<typeof demonSpriteMeta>(demonSpriteMeta)
 
   export const useDemonSprite = cacodaemonSpritesheet.useInstancedSprite
 </script>

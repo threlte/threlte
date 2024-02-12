@@ -54,8 +54,8 @@
 ## Spritesheet
 
 Spritesheet declaration, two modes:
-- `rowColumn` where `w` is number of columns and `h` number of rows
-- `frameSize` where `w` is width and `h` is height of a **single frame in the spritesheet**
+- `rowColumn` where `width` is number of columns and `height` number of rows
+- `frameSize` where `width` is width and `height` is height of a **single frame in the spritesheet**
 
 {/* I'll center it later, don't yell at me */}
 Preview of row and column numbering (orange, outside) and frame numbering (blue, inside)
@@ -71,8 +71,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/cacodaemon.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 4
+      width: 8,
+      height: 4
     }}
   >
     <Animation
@@ -99,8 +99,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/cacodaemon.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 4
+      width: 8,
+      height: 4
     }}
   >
     <Animation
@@ -149,8 +149,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/goblin/Attack.png"
     options={{
       type: 'rowColumn',
-      w: 8,
-      h: 1
+      width: 8,
+      height: 1
     }}
   >
     <Animation
@@ -163,8 +163,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/goblin/Death.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation
@@ -176,8 +176,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/goblin/Idle.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation
@@ -191,7 +191,7 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     options={{
       type: 'rowColumn',
       w: 8,
-      h: 1
+      height: 1
     }}
   >
     <Animation
@@ -204,8 +204,8 @@ Animations are declared as a range of frameIds, for example the `attack` animati
     textureUrl="/textures/sprites/goblin/TakeHit.png"
     options={{
       type: 'rowColumn',
-      w: 4,
-      h: 1
+      width: 4,
+      height: 1
     }}
   >
     <Animation
@@ -222,9 +222,9 @@ Animations are declared as a range of frameIds, for example the `attack` animati
 
 ```ts
 type SpritesheetFormat = {
-  frames: [x: number, y: number, w: number, h: number][];
+  frames: [x: number, y: number, width: number, height: number][];
   animations: Record<string, [frameId: number, duration: number][]>;
-  sheetSize: [w: number, h: number][];
+  sheetSize: [width: number, height: number][];
   animationLengths: number[];
 };
 ```
