@@ -66,11 +66,11 @@
 </script>
 
 <div
-  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm "
+  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm"
 >
   {#if headings.length}
     <span
-      class="ml-[calc(1rem+2px)] mt-3 mb-3 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
+      class="mb-3 ml-[calc(1rem+2px)] mt-3 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
       >On this page</span
     >
 
@@ -107,7 +107,7 @@
   {/if}
 
   <span
-    class="ml-[calc(1rem+2px)] mb-2 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white {headings.length !=
+    class="mb-2 ml-[calc(1rem+2px)] block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white {headings.length !=
     0
       ? ''
       : 'mt-3'}">Contribute</span

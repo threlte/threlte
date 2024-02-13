@@ -13,7 +13,7 @@
   width={500}
   height={500}
   classParser={tailwindParser}
-  class="p-10 gap-10"
+  class="gap-10 p-10"
 >
   <Box
     class="w-100 h-100"

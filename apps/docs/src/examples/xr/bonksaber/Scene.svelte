@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { XR } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
@@ -22,5 +22,5 @@
 <!-- floor -->
 <T.Mesh position.y={-50}>
   <T.CylinderGeometry args={[2, 2, 100]} />
-  <T.MeshStandardMaterial color='white' />
+  <T.MeshStandardMaterial color="white" />
 </T.Mesh>

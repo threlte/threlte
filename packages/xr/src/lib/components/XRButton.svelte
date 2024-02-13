@@ -17,8 +17,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
   />
 ```
 -->
-
-<script lang='ts'>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import type { HTMLButtonAttributes } from 'svelte/elements'
   import { getXRSupportState } from '../lib/getXRSupportState'
@@ -63,7 +62,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
     state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
   ) => {
     if (!$xr) {
-      throw new Error('The <XR> component was not created. This is required to start an XR session.')
+      throw new Error(
+        'The <XR> component was not created. This is required to start an XR session.'
+      )
     }
 
     dispatch('click', { state, nativeEvent })
@@ -96,7 +97,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       color: white;
       outline: none;
       z-index: 10;
-      ${($$restProps.style ?? '')}
+      ${$$restProps.style ?? ''}
     `
   }
 </script>

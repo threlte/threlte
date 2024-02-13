@@ -42,8 +42,8 @@
         const customKey = isComplexProp(propertyValue)
           ? propertyValue.key
           : isStringProp(propertyValue)
-          ? propertyValue
-          : undefined
+            ? propertyValue
+            : undefined
 
         const key = customKey ?? makeAlphanumeric(propertyPath)
 

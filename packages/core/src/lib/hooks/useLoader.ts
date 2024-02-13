@@ -26,10 +26,10 @@ export type UseLoaderLoadInput = string | string[] | Record<string, string>
 type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
   ? Awaited<ReturnType<TLoader['loadAsync']>>
   : TLoader extends SyncLoader
-  ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
-    ? Result
+    ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
+      ? Result
+      : never
     : never
-  : never
 
 export type UseLoaderLoadResult<
   TLoader extends Loader,
@@ -38,8 +38,8 @@ export type UseLoaderLoadResult<
 > = Input extends string
   ? AsyncWritable<ResultType>
   : Input extends string[]
-  ? AsyncWritable<ResultType[]>
-  : AsyncWritable<Record<keyof Input, ResultType>>
+    ? AsyncWritable<ResultType[]>
+    : AsyncWritable<Record<keyof Input, ResultType>>
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
@@ -93,8 +93,8 @@ export type UseLoaderOptions<Proto extends LoaderProtoWithoutArgs> =
   ConstructorParameters<Proto> extends []
     ? UseLoaderOptionsWithoutArgs<Proto>
     : undefined extends ConstructorParameters<Proto>[0]
-    ? UseLoaderOptionsWithoutArgs<Proto>
-    : UseLoaderOptionsWithArgs<Proto>
+      ? UseLoaderOptionsWithoutArgs<Proto>
+      : UseLoaderOptionsWithArgs<Proto>
 
 export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,

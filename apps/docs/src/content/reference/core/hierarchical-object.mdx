@@ -52,17 +52,6 @@ In this example the component is responsible for
 - adding children to the scene graph (i.e. as children to the mesh)
 - removing children from the scene graph
 
-```svelte
-@@ -86,23 +117,41 @@ The component `<HierarchicalObject>` also provides a useful binding to collect a
-
-<HierarchicalObject
-  object={mesh}
-  bind:children
->
-  <slot />
-</HierarchicalObject>
-```
-
 ### Mounting a component to a different parent
 
 Sometimes you need to add a component as a child to another object than its parent. Let's say we want to transform a `THREE.Mesh` object with `TransformControls`. In this case, Three.js wants you to mount the `TransformControls` as a child to the `scene` and `attach` it to the `THREE.Mesh`. We can use the `<HierarchicalObject>` component to add an object to an arbitrary parent object:

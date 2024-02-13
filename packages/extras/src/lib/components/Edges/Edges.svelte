@@ -22,7 +22,11 @@
   const component = forwardEventHandlers()
 </script>
 
-<T.LineSegments let:ref {...$$restProps} bind:this={$component}>
+<T.LineSegments
+  let:ref
+  {...$$restProps}
+  bind:this={$component}
+>
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
   <slot {ref} />

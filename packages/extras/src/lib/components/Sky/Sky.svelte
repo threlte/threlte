@@ -104,8 +104,12 @@
 
   onDestroy(() => {
     sky.material.dispose()
-    renderTarget?.dispose()
     scene.environment = originalEnvironment
+    try {
+      renderTarget?.dispose()
+    } catch (error) {
+      console.warn('Could not dispose renderTarget:', error)
+    }
   })
 </script>
 

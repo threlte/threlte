@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
-	import { quadInOut } from 'svelte/easing'
-	import { tweened } from 'svelte/motion'
+  import { onMount } from 'svelte'
+  import { quadInOut } from 'svelte/easing'
+  import { tweened } from 'svelte/motion'
 
   import { T } from '@threlte/core'
   import { OrbitControls, Grid } from '@threlte/extras'
@@ -10,43 +10,46 @@
   import CustomRenderer from './CustomRenderer.svelte'
 
   const route = [
-		[0, 1, -3],
-		[0, 1, 1.5],
-		[4.7, 1, 1.5],
-		[4.7, 1, 5],
-		[2, 1, 5],
-		[2, 1, 9],
-		[8, 1, 9],
-		[8, 1, -3]
-	]
-	let routeIndex = 0
-	let cubePosition = tweened(route[routeIndex], {
-		duration: 400,
-		easing: quadInOut,
-	})
-	let outlinedCube: THREE.Mesh
+    [0, 1, -3],
+    [0, 1, 1.5],
+    [4.7, 1, 1.5],
+    [4.7, 1, 5],
+    [2, 1, 5],
+    [2, 1, 9],
+    [8, 1, 9],
+    [8, 1, -3]
+  ]
+  let routeIndex = 0
+  let cubePosition = tweened(route[routeIndex], {
+    duration: 400,
+    easing: quadInOut
+  })
+  let outlinedCube: THREE.Mesh
 
-	onMount(() => {
-		const interval = setInterval(nextCubePosition, 500)
+  onMount(() => {
+    const interval = setInterval(nextCubePosition, 500)
 
-		return () => {
-			clearInterval(interval)
-		}
-	})
+    return () => {
+      clearInterval(interval)
+    }
+  })
 
-	const nextCubePosition = () => {
-		if (routeIndex < route.length - 1) {
-			routeIndex++
-		} else {
-			routeIndex = 0
-		}
-		cubePosition.set(route[routeIndex])
-	}
+  const nextCubePosition = () => {
+    if (routeIndex < route.length - 1) {
+      routeIndex++
+    } else {
+      routeIndex = 0
+    }
+    cubePosition.set(route[routeIndex])
+  }
 </script>
 
 <Maze />
 
-<T.Mesh position={$cubePosition} bind:ref={outlinedCube}>
+<T.Mesh
+  position={$cubePosition}
+  bind:ref={outlinedCube}
+>
   <T.MeshToonMaterial color="gold" />
   <T.BoxGeometry />
 </T.Mesh>
@@ -59,7 +62,11 @@
   fov={15}
   zoom={0.2}
 >
-  <OrbitControls enableZoom={true} enableDamping target={[0, 0, 5]}/>
+  <OrbitControls
+    enableZoom={true}
+    enableDamping
+    target={[0, 0, 5]}
+  />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

@@ -8,7 +8,12 @@
   import { writable } from 'svelte/store'
   import { T, createRawEventDispatcher } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
-  import { isHandTracking, pointerState, teleportState, controllerDispatchers } from '../internal/stores'
+  import {
+    isHandTracking,
+    pointerState,
+    teleportState,
+    controllerDispatchers
+  } from '../internal/stores'
   import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -61,7 +66,7 @@
   const dispatch = createRawEventDispatcher<$$Events>()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
-  $: handedness.set(left ? 'left' : right ? 'right' : hand as 'left' | 'right')
+  $: handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right'))
 
   controllerDispatchers[$handedness].set(dispatch)
   $: controllerDispatchers[$handedness].set(dispatch)

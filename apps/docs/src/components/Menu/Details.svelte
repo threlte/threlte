@@ -32,7 +32,7 @@
   class={c('block', _class)}
 >
   <summary class={c('cursor-pointer select-none list-none font-bold')}>
-    <div class="flex flex-row items-center mb-0">
+    <div class="mb-0 flex flex-row items-center">
       <slot name="summary" />
       <div>
         <svg

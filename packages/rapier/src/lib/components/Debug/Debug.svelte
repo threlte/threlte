@@ -10,7 +10,7 @@
   const { world, debug } = useRapier()
 
   const geometry = new BufferGeometry()
- 
+
   debug.set(true)
 
   useTask(() => {

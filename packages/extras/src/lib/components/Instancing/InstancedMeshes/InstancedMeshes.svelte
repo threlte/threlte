@@ -33,19 +33,22 @@
     })
   }
 
-  const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): typeof Instance[] => {
+  const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): (typeof Instance)[] => {
     return meshes.filter((mesh) => mesh.isMesh).map((mesh) => getInstance(mesh.uuid))
   }
 
   const getInstanceComponentsObject = <T extends Record<string, Mesh>>(
     meshes: T
   ): { [key in keyof T]: typeof Instance } => {
-    return Object.entries(meshes).reduce((acc, [id, mesh]) => {
-      // filter out non-mesh objects
-      if (!mesh.isMesh) return acc
-      acc[id as any as keyof T] = getInstance(mesh.uuid)
-      return acc
-    }, {} as Record<keyof T, typeof Instance>)
+    return Object.entries(meshes).reduce(
+      (acc, [id, mesh]) => {
+        // filter out non-mesh objects
+        if (!mesh.isMesh) return acc
+        acc[id as any as keyof T] = getInstance(mesh.uuid)
+        return acc
+      },
+      {} as Record<keyof T, typeof Instance>
+    )
   }
 
   $: components = Array.isArray(meshes)
