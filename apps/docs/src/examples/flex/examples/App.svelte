@@ -20,26 +20,29 @@
       string,
       any
     >
-    components = Object.entries(modules).reduce((acc, [key, module]) => {
-      const name = key.split('/')[2]
-      if (!name) throw new Error(`No name for ${key}`)
-      const isDom = key.includes('Dom')
-      const example = acc.find((e) => e.name === name)
-      if (example) {
-        if (isDom) {
-          example.dom = (module as any).default
+    components = Object.entries(modules).reduce(
+      (acc, [key, module]) => {
+        const name = key.split('/')[2]
+        if (!name) throw new Error(`No name for ${key}`)
+        const isDom = key.includes('Dom')
+        const example = acc.find((e) => e.name === name)
+        if (example) {
+          if (isDom) {
+            example.dom = (module as any).default
+          } else {
+            example.threlte = (module as any).default
+          }
         } else {
-          example.threlte = (module as any).default
+          acc.push({
+            name,
+            dom: isDom ? (module as any).default : undefined,
+            threlte: isDom ? undefined : (module as any).default
+          })
         }
-      } else {
-        acc.push({
-          name,
-          dom: isDom ? (module as any).default : undefined,
-          threlte: isDom ? undefined : (module as any).default
-        })
-      }
-      return acc
-    }, [] as unknown as typeof components)
+        return acc
+      },
+      [] as unknown as typeof components
+    )
     selected ||= components[0]!.name
   }
 
@@ -90,8 +93,18 @@
 <style>
   :global(body) {
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-      Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Open Sans',
+      'Helvetica Neue',
+      sans-serif;
   }
 
   nav {

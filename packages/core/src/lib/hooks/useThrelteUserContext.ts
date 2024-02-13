@@ -93,8 +93,8 @@ export function useThrelteUserContext<
   Result = UCorUCT extends UserContext
     ? Readable<UCorUCT>
     : Value extends UserContextEntry
-    ? UserContextEntry
-    : Readable<UserContextEntry>
+      ? UserContextEntry
+      : Readable<UserContextEntry>
 >(namespace?: string, value?: Value, options?: SetThrelteUserContextOptions): Result {
   const userCtxStore = getContext<ThrelteUserContext>('threlte-user-context')
   if (!userCtxStore) {

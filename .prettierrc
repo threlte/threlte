@@ -6,7 +6,6 @@
   "semi": false,
   "singleAttributePerLine": true,
   "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-  "pluginSearchDirs": ["."],
   "overrides": [
     {
       "files": "*.astro",

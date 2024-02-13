@@ -1,5 +1,47 @@
 # @threlte/extras
 
+## 8.7.4
+
+### Patch Changes
+
+- 6c3807f: Remove three/addons import for compatibility with older Three versions
+
+## 8.7.3
+
+### Patch Changes
+
+- 392a14f: Remove svelte/internal dependency from <Suspense>
+
+## 8.7.2
+
+### Patch Changes
+
+- 3c29bc9: Remove three-mesh-bvh from peer dependencies
+
+## 8.7.1
+
+### Patch Changes
+
+- 7f04878: Mark three-mesh-bvh as an optional dependency in package.json"
+
+## 8.7.0
+
+### Minor Changes
+
+- 9036f10: Add port of drei's Stars component
+
+## 8.6.0
+
+### Minor Changes
+
+- 85b9332: Add port of drei's MeshRefractionMaterial
+
+## 8.5.1
+
+### Patch Changes
+
+- a31b5a3: Fix GroundedSkybox import for r161
+
 ## 8.5.0
 
 ### Minor Changes
@@ -579,7 +621,10 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
+  const { gltf } = useGltf<
+    "MeshA" | "MeshB" | "Object3DA",
+    "MaterialA" | "MaterialB"
+  >("/some/url");
   ```
 
   - After:
@@ -587,15 +632,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh
-      MeshB: THREE.Mesh
-      Object3DA: THREE.Object3D
-    }
+      MeshA: THREE.Mesh;
+      MeshB: THREE.Mesh;
+      Object3DA: THREE.Object3D;
+    };
     materials: {
-      MaterialA: THREE.MeshStandardMaterial
-      MaterialB: THREE.MeshBasicMaterial
-    }
-  }>('/some/url')
+      MaterialA: THREE.MeshStandardMaterial;
+      MaterialB: THREE.MeshBasicMaterial;
+    };
+  }>("/some/url");
   ```
 
 ## 4.4.1
