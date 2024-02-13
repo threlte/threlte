@@ -6,19 +6,20 @@
   import { writable } from 'svelte/store'
 
   type $$Props = PerfMonitorProps
+  type $$PropsWithDefaults = Required<$$Props>
 
-  export let domElement: $$Props['domElement'] = undefined
-  export let logsPerSecond: $$Props['logsPerSecond'] = 10
-  export let showGraph: $$Props['showGraph'] = true
-  export let memory: $$Props['memory'] = true
-  export let enabled: $$Props['enabled'] = true
-  export let visible: $$Props['visible'] = true
-  export let actionToCallUI: $$Props['actionToCallUI'] = ''
-  export let guiVisible: $$Props['guiVisible'] = false
-  export let backgroundOpacity: $$Props['backgroundOpacity'] = 0.7
-  export let scale: $$Props['scale'] = 1
-  export let anchorX: $$Props['anchorX'] = 'left'
-  export let anchorY: $$Props['anchorY'] = 'top'
+  export let domElement: $$PropsWithDefaults['domElement'] = document.body
+  export let logsPerSecond: $$PropsWithDefaults['logsPerSecond'] = 10
+  export let showGraph: $$PropsWithDefaults['showGraph'] = true
+  export let memory: $$PropsWithDefaults['memory'] = true
+  export let enabled: $$PropsWithDefaults['enabled'] = true
+  export let visible: $$PropsWithDefaults['visible'] = true
+  export let actionToCallUI: $$PropsWithDefaults['actionToCallUI'] = ''
+  export let guiVisible: $$PropsWithDefaults['guiVisible'] = false
+  export let backgroundOpacity: $$PropsWithDefaults['backgroundOpacity'] = 0.7
+  export let scale: $$PropsWithDefaults['scale'] = 1
+  export let anchorX: $$PropsWithDefaults['anchorX'] = 'left'
+  export let anchorY: $$PropsWithDefaults['anchorY'] = 'top'
 
   const { renderer, renderStage, mainStage } = useThrelte()
 
@@ -28,34 +29,24 @@
   const domElementStore = writable<typeof domElement>(domElement)
   $: domElementStore.set(domElement)
   watch([domElementStore], ([domElement]) => {
+    if (perf) perf.dispose()
     perf = new ThreePerf({
-      anchorX,
-      anchorY,
       domElement: domElement || document.body,
-      renderer: renderer,
-      logsPerSecond,
-      showGraph,
-      memory,
-      enabled,
-      visible,
-      actionToCallUI,
-      guiVisible,
-      backgroundOpacity,
-      scale
+      renderer: renderer
     })
   })
 
-  $: perf && (perf.logsPerSecond = logsPerSecond || 10)
-  $: perf && (perf.showGraph = showGraph ? true : false)
-  $: perf && (perf.memory = memory ? true : false)
-  $: perf && (perf.enabled = enabled ? true : false)
-  $: perf && (perf.visible = visible ? true : false)
-  $: perf && (perf.actionToCallUI = actionToCallUI || '')
-  $: perf && (perf.guiVisible = guiVisible ? true : false)
-  $: perf && (perf.backgroundOpacity = backgroundOpacity || 0.7)
-  $: perf && (perf.scale = scale !== undefined ? scale : 1)
-  $: perf && (perf.anchorX = anchorX || 'left')
-  $: perf && (perf.anchorY = anchorY || 'top')
+  $: perf.logsPerSecond = logsPerSecond
+  $: perf.showGraph = showGraph
+  $: perf.memory = memory
+  $: perf.enabled = enabled
+  $: perf.visible = visible
+  $: perf.actionToCallUI = actionToCallUI
+  $: perf.guiVisible = guiVisible
+  $: perf.backgroundOpacity = backgroundOpacity
+  $: perf.scale = scale
+  $: perf.anchorX = anchorX
+  $: perf.anchorY = anchorY
 
   useTask(
     () => {
