@@ -25,7 +25,8 @@
   let perf: ThreePerf
 
   // Has to be fully re-initialized if dom element changes
-  const domElementStore = writable(domElement)
+  const domElementStore = writable<typeof domElement>(domElement)
+  $: domElementStore.set(domElement)
   watch([domElementStore], ([domElement]) => {
     perf = new ThreePerf({
       anchorX,
