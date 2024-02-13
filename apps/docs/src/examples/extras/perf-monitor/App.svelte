@@ -6,7 +6,6 @@
 
 <div>
   <Canvas>
-    <!-- todo why is TS erroring here? Using Required wrong? -->
     <PerfMonitor />
     <Scene />
   </Canvas>
