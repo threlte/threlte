@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.7.4
+
+### Patch Changes
+
+- 6c3807f: Remove three/addons import for compatibility with older Three versions
+
 ## 8.7.3
 
 ### Patch Changes

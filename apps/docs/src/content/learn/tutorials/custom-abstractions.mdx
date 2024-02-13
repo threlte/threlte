@@ -164,7 +164,7 @@ We will create a `Tile.d.ts` file next to the `Tile.svelte` file and add the fol
 
 ```ts title="Tile.d.ts"
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 
 export type TileProps = Props<Group> & {
@@ -179,7 +179,7 @@ export type TileSlots = Slots<Mesh> & {
   // Define extra slots here.
 }
 
-export default class Tile extends SvelteComponentTyped<TileProps, TileEvents, TileSlots> {}
+export default class Tile extends SvelteComponent<TileProps, TileEvents, TileSlots> {}
 ```
 
 Now we can use the `<Tile>` component in our scene and get autocompletion and type checking:
