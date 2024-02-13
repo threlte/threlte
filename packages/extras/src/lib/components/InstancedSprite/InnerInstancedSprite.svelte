@@ -213,7 +213,11 @@
 </script>
 
 {#if mesh}
-  <T is={mesh} />
+  <T
+    is={mesh}
+    frustumCulled={false}
+    {...$$restProps}
+  />
 {/if}
 
 <slot />

@@ -3,9 +3,11 @@ import type {
   PLAY_MODE,
   SpritesheetFormat
 } from '@threejs-kit/instanced-sprite-mesh'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Writable } from 'svelte/store'
 import {
+  InstancedMesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
   MeshPhongMaterial,
@@ -15,7 +17,7 @@ import {
   type Vector3Tuple
 } from 'three'
 
-export type InstancedSpriteProps = {
+export type InstancedSpriteProps = Props<InstancedMesh> & {
   /**
    * update animations automatically
    *
