@@ -42,6 +42,7 @@
     {fps}
     {billboarding}
     randomPlaybackOffset={1}
+    castShadow
   >
     <UpdaterFlying />
   </InstancedSprite>

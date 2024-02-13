@@ -75,6 +75,8 @@
 
 <Sky elevation={13.35} />
 
+<T.DirectionalLight position.y={5} />
+
 {#if $sky}
   <T.Mesh position.y={50}>
     <T.CylinderGeometry args={[200, 200, 150]} />
@@ -86,9 +88,12 @@
 {/if}
 
 {#if $grass}
-  <T.Mesh rotation.x={-DEG2RAD * 90}>
+  <T.Mesh
+    rotation.x={-DEG2RAD * 90}
+    receiveShadow
+  >
     <T.PlaneGeometry args={[500, 500]} />
-    <T.MeshBasicMaterial map={$grass} />
+    <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}
 

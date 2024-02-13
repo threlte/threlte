@@ -93,6 +93,7 @@
     autoUpdate={false}
     bind:ref={sprite}
     let:Instance
+    castShadow
   >
     {#each points as [x, z], i}
       <Instance

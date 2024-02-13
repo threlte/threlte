@@ -9,13 +9,14 @@
 <Spritesheet
   textureUrl="/textures/sprites/player.png"
   dataUrl="/textures/sprites/player.json"
-	aseprite
+  aseprite
 >
   <InstancedSprite
     count={500}
     playmode={'FORWARD'}
     {fps}
     {billboarding}
+    castShadow
   >
     <UpdaterWalking />
   </InstancedSprite>

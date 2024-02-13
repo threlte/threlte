@@ -129,5 +129,6 @@
     {fps}
     {billboarding}
     bind:ref={spriteMesh}
+    castShadow
   />
 </Spritesheet>

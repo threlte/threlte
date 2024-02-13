@@ -39,6 +39,7 @@
     {billboarding}
     {spritesheet}
     {texture}
+    castShadow
     hueShift={{
       h: 0.3,
       s: 1.5,
