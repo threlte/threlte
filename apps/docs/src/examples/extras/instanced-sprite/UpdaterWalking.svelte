@@ -170,17 +170,3 @@
   <T.SphereGeometry args={[0.15, 3, 2]} />
   <T.MeshBasicMaterial color="lime" />
 </T.Mesh>
-
-<T.DirectionalLight
-  shadow.mapSize={[2048, 2048]}
-  shadow.camera.far={128}
-  shadow.camera.near={0.01}
-  shadow.camera.left={-20}
-  shadow.camera.right={20}
-  shadow.camera.top={20}
-  shadow.camera.bottom={-20}
-  shadow.bias={-0.001}
-  position={[0, 4, -10]}
-  intensity={3}
-  castShadow
-/>
