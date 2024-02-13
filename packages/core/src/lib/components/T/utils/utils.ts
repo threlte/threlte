@@ -7,15 +7,13 @@ const classRegex = /^\s*class\s+/
 // Type Guards
 const isClass = (input: unknown): input is AnyClass => {
   if (typeof input !== 'function') {
-    return false;
+    return false
   }
 
   return classRegex.test(input.toString())
 }
 
-const argsIsConstructorParameters = (
-  args: unknown
-): args is ConstructorParameters<AnyClass> => {
+const argsIsConstructorParameters = (args: unknown): args is ConstructorParameters<AnyClass> => {
   return Array.isArray(args)
 }
 
