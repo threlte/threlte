@@ -2,9 +2,15 @@ import type { Object3D } from 'three'
 import type { AnyClass, MaybeInstance } from '../types'
 import type { DisposableThreeObject } from '../../../types'
 
+const classRegex = /^\s*class\s+/
+
 // Type Guards
-const isClass = (type: unknown): type is AnyClass => {
-  return typeof type === 'function' && /^\s*class\s+/.test(type.toString())
+const isClass = (input: unknown): input is AnyClass => {
+  if (typeof input !== 'function') {
+    return false;
+  }
+
+  return classRegex.test(input.toString())
 }
 
 const argsIsConstructorParameters = (
