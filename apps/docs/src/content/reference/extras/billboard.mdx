@@ -1,22 +1,20 @@
 ---
-{
-  order: 11.5,
-  category: '@threlte/extras',
-  name: '<Billboard>',
-  sourcePath: 'packages/extras/src/lib/components/Billboard/Billboard.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      'props':
-        [
-          { name: 'follow', type: 'boolean', default: 'true', required: false },
-          { name: 'lockX', type: 'boolean', default: 'false', required: false },
-          { name: 'lockY', type: 'boolean', default: 'false', required: false },
-          { name: 'lockZ', type: 'boolean', default: 'false', required: false }
-        ]
-    }
-}
+order: 11.5
+category: '@threlte/extras'
+name: '<Billboard>'
+sourcePath: 'packages/extras/src/lib/components/Billboard/Billboard.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'follow', type: 'boolean', default: 'true', required: false },
+        { name: 'lockX', type: 'boolean', default: 'false', required: false },
+        { name: 'lockY', type: 'boolean', default: 'false', required: false },
+        { name: 'lockZ', type: 'boolean', default: 'false', required: false }
+      ]
+  }
 ---
 
 This component is a port of [drei's `<Billboard>`

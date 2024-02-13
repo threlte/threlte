@@ -1,44 +1,42 @@
 ---
-{
-  order: -0.3,
-  category: '@threlte/extras',
-  name: '<InstancedMeshes>',
-  sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
+order: -0.3
+category: '@threlte/extras'
+name: '<InstancedMeshes>'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'InstancedMesh',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+      },
+    props:
+      [
         {
-          type: 'InstancedMesh',
-          url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+          name: 'limit',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of possible <Instance> components.'
         },
-      'props':
-        [
-          {
-            name: 'limit',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of possible <Instance> components.'
-          },
-          {
-            name: 'range',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of drawn <Instance> components.'
-          },
-          {
-            name: 'update',
-            type: 'boolean',
-            default: 'true',
-            required: false,
-            description: 'Whether the THREE.InstancedMesh should be updated.'
-          },
-          { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
-        ]
-    }
-}
+        {
+          name: 'range',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of drawn <Instance> components.'
+        },
+        {
+          name: 'update',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether the THREE.InstancedMesh should be updated.'
+        },
+        { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
+      ]
+  }
 ---
 
 The component `<InstancedMeshes>` takes existing `THREE.Mesh` instances and creates a `THREE.InstancedMesh` per `THREE.Mesh`. This is especially useful if you want to instantiate a lot of meshes that have been loaded with hooks like [`useGltf`](/docs/reference/extras/use-gltf).
