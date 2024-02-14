@@ -13,6 +13,7 @@ export type SpriteInstanceProps = {
   loop?: boolean
   flipX?: boolean
   flipY?: boolean
+	frameId?: number
 }
 
 export default class SpriteInstance extends SvelteComponent<SpriteInstanceProps> {}
