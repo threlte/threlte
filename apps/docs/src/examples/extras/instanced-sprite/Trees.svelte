@@ -88,20 +88,31 @@
 
   <InstancedSprite
     count={points.length}
-    playmode={'FORWARD'}
-    {billboarding}
     autoUpdate={false}
+    playmode={'PAUSE'}
+    {billboarding}
     bind:ref={sprite}
     let:Instance
     castShadow
   >
     {#each points as [x, z], i}
-      <Instance
-        position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
-        id={i}
-        animationName={pickRandomTreeType()}
-        scale={[3, 3]}
-      />
+      {#if i < points.length / 2}
+        <!-- Pick a random tree from atlas via animation name -->
+        <Instance
+          position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
+          id={i}
+          animationName={pickRandomTreeType()}
+          scale={[3, 3]}
+        />
+      {:else}
+        <!-- Set and freeze a random frame from the spritesheet -->
+        <Instance
+          position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
+          id={i}
+          scale={[3, 3]}
+          frameId={Math.floor(Math.random() * 24)}
+        />
+      {/if}
     {/each}
   </InstancedSprite>
 </Spritesheet>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { Grid, OrbitControls, Sky, useTexture } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Trees from './Trees.svelte'
@@ -7,7 +7,7 @@
   import VariantB from './VariantB.svelte'
   import VariantC from './VariantC.svelte'
   import VariantD from './VariantD.svelte'
-  import { DoubleSide, NearestFilter, RepeatWrapping } from 'three'
+  import { BackSide, DoubleSide, NearestFilter, RepeatWrapping } from 'three'
   // import DottedComponentTest from './DottedComponentTest.svelte'
 
   export let billboarding = false
@@ -27,13 +27,15 @@
   const sky = useTexture('/textures/sprites/demo01_PixelSky_1920x1080.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(10, 1)
+      texture.repeat.set(10, 2)
       texture.minFilter = NearestFilter
       texture.magFilter = NearestFilter
       texture.needsUpdate = true
       return texture
     }
   })
+
+  const { camera } = useThrelte()
 </script>
 
 <T.PerspectiveCamera
@@ -75,16 +77,28 @@
 
 <Sky elevation={13.35} />
 
-<T.DirectionalLight position.y={5} />
+<!-- <T.DirectionalLight position.y={5} /> -->
 
 {#if $sky}
-  <T.Mesh position.y={50}>
+  <T.Mesh
+    position.y={-10}
+    scale.y={0.5}
+  >
+    <T.SphereGeometry args={[400]} />
+    <T.MeshBasicMaterial
+      map={$sky}
+      side={BackSide}
+    />
+  </T.Mesh>
+
+  <!--
+	<T.Mesh position.y={50}>
     <T.CylinderGeometry args={[200, 200, 150]} />
     <T.MeshBasicMaterial
       map={$sky}
       side={DoubleSide}
     />
-  </T.Mesh>
+  </T.Mesh> -->
 {/if}
 
 {#if $grass}
@@ -92,7 +106,7 @@
     rotation.x={-DEG2RAD * 90}
     receiveShadow
   >
-    <T.PlaneGeometry args={[500, 500]} />
+    <T.PlaneGeometry args={[1000, 1000]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}
@@ -102,4 +116,22 @@
   type={'grid'}
   sectionThickness={0.0}
   position.y={0.01}
+/>
+
+<T.AmbientLight intensity={1} />
+
+<T.DirectionalLight
+  shadow.mapSize={[2048, 2048]}
+  shadow.camera.far={128}
+  shadow.camera.near={0.01}
+  shadow.camera.left={-20}
+  shadow.camera.right={20}
+  shadow.camera.top={20}
+  shadow.camera.bottom={-20}
+  shadow.bias={-0.0001}
+  position.x={0}
+  position.y={50}
+  position.z={30}
+  intensity={3}
+  castShadow
 />

@@ -13,12 +13,6 @@
       {billboarding}
       {fps}
     />
-
-    <T.DirectionalLight
-      intensity={2}
-      castShadow
-      position={[1, 1, 1]}
-    />
   </Canvas>
 
   <Settings
