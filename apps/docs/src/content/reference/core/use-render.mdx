@@ -24,7 +24,9 @@ Typically this hook is used to implement advanced rendering techniques such as p
 You may pass additional options to this hook. The property `order` is useful if you need to order the sequence of `useRender` callbacks across the component tree where callbacks are ordered from low to high.
 
 ```ts
-type ThrelteUseRenderOptions = order?: number
+type ThrelteUseRenderOptions = {
+  order?: number
+}
 }
 ```
 
