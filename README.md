@@ -57,7 +57,7 @@ Have questions? Feel free to ask in our [Discord support forum](https://discord.
 
 ## Packages
 
-Threlte is comprised of five distinct packages to allow you to import only what you need:
+Threlte is comprised of six distinct packages to allow you to import only what you need:
 
 - [@threlte/core](https://threlte.xyz/docs/reference/core/getting-started) provides declarative and transparent Svelte binding to [Three.js](https://threejs.org/).
 
@@ -68,6 +68,10 @@ Threlte is comprised of five distinct packages to allow you to import only what 
 - [@threlte/rapier](https://threlte.xyz/docs/reference/rapier/getting-started) enables performant physics in your Threlte app through the [Rapier engine](https://rapier.rs/)
 
 - [@threlte/theatre](https://threlte.xyz/docs/reference/theatre/getting-started) lets you animate in your Threlte app through the [Theatre.js studio](https://www.theatrejs.com/)
+
+- [@threlte/xr](https://github.com/threlte/threlte/tree/main/packages/xr)** - components and hooks for VR and AR environments
+
+- [@threlte/flex](https://github.com/threlte/threlte/tree/main/packages/flex)** - components to easily use the flex engine [`yoga-layout`](https://yogalayout.com/) with Threlte.
 
 ## Contributing
 

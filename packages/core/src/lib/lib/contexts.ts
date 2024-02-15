@@ -1,5 +1,5 @@
 import { setContext, tick } from 'svelte'
-import { derived, type Readable, type Writable } from 'svelte/store'
+import { derived, type Readable, type Updater, type Writable } from 'svelte/store'
 import {
   Clock,
   Scene,
@@ -9,8 +9,7 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
-import type { ThrelteFrameHandler } from '../hooks/useFrame'
-import type { ThrelteRenderHandler } from '../hooks/useRender'
+import type { Scheduler, Stage, Task } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
 import { createDefaultCamera } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
@@ -22,59 +21,74 @@ import { currentWritable, type CurrentWritable } from './storeUtils'
  * It's exposed to the user via the hook `useThrelte`.
  */
 export type ThrelteContext = {
-  // Basics
   size: Readable<Size>
-  clock: Clock
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
   useLegacyLights: CurrentWritable<boolean>
-
-  // Rendering Management
   renderer: WebGLRenderer
-  frameloop: CurrentWritable<'always' | 'demand' | 'never'>
   /**
-   * Invalidates the current frame when frameloop === 'demand'
+   * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
+   * If set to 'manual', the scene will only be rendered when advance() is called
+   * If set to 'always', the scene will be rendered every frame
    */
-  invalidate: (debugFrameloopMessage?: string) => void
+  renderMode: CurrentWritable<'always' | 'on-demand' | 'manual'>
   /**
-   * Advance one frame when frameloop === 'never'
+   * By default, Threlte will automatically render the scene when necessary.
+   * If you want to implement a custom render pipeline, you can set this to
+   * false.
+   */
+  autoRender: CurrentWritable<boolean>
+  /**
+   * Invalidates the current frame when renderMode === 'on-demand'
+   */
+  invalidate: () => void
+  /**
+   * Advance one frame when renderMode === 'manual'
    */
   advance: () => void
-
-  // Color Management
+  /** The scheduler used by this Threlte app */
+  scheduler: Scheduler
+  /** The stage which useTask defaults to */
+  mainStage: Stage
+  /**
+   * The default render stage. Tasks in this stage are ran according to
+   * on-demand rendering.
+   */
+  renderStage: Stage
+  autoRenderTask: Task
+  /**
+   * Function to determine if a rendering should happen according to on-demand
+   * rendering. The value of this function is valid for the duration of the
+   * current frame.
+   */
+  shouldRender: () => boolean
   colorManagementEnabled: CurrentWritable<boolean>
   colorSpace: CurrentWritable<ColorSpace>
   toneMapping: CurrentWritable<ToneMapping>
-
-  // Shadows
   shadows: CurrentWritable<boolean | ShadowMapType>
 }
 
 /**
- * The internal context is used to store the state of the
- * frameloop and the disposal methods. It is not exposed
- * to the user.
+ * The internal context is used to store the state of the task scheduling system and
+ * the disposal methods. It is not exposed to the user.
  */
 export type ThrelteInternalContext = {
-  /**
-   * Render context
-   */
-  debugFrameloop: boolean
+  // ------- Scheduling context -------
+
+  /** A flag to indicate whether the current frame has been invalidated */
   frameInvalidated: boolean
-  frame: number
-  invalidations: Record<string, number>
-  manualFrameHandlers: Set<ThrelteFrameHandler>
-  autoFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlers: Set<ThrelteFrameHandler>
-  allFrameHandlersNeedSortCheck: boolean
-  renderHandlers: Set<ThrelteRenderHandler>
-  renderHandlersNeedSortCheck: boolean
+
+  /** A flag to indicate whether the frame should be advanced in the manual renderMode */
   advance: boolean
 
-  /**
-   * Disposal context
-   */
+  /** If anything is in this set, the frame will be considered invalidated */
+  autoInvalidations: Set<any>
+
+  /** A function to be called at the end of the frame loop that resets the invalidation flags */
+  resetFrameInvalidation: () => void
+
+  // ------- Disposal context -------
 
   /**
    * Disposes all disposable objects from disposableObjects
@@ -116,7 +130,7 @@ export type ThrelteInternalContext = {
   shouldDispose: boolean
 }
 
-export type ThrelteUserContext = CurrentWritable<Record<string, any>>
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, any>>
 
 /**
  * ### `createContexts`
@@ -130,8 +144,8 @@ export const createContexts = (options: {
   dpr: number
   userSize: Writable<Size | undefined>
   parentSize: Writable<Size>
-  debugFrameloop: boolean
-  frameloop: 'always' | 'demand' | 'never'
+  renderMode: 'always' | 'on-demand' | 'manual'
+  autoRender: boolean
   shadows: boolean | ShadowMapType
   colorManagementEnabled: boolean
   useLegacyLights: boolean
@@ -142,17 +156,13 @@ export const createContexts = (options: {
   getInternalCtx: () => ThrelteInternalContext
 } => {
   const internalCtx: ThrelteInternalContext = {
-    debugFrameloop: options.debugFrameloop,
-    frame: 0,
     frameInvalidated: true,
-    invalidations: {},
-    manualFrameHandlers: new Set(),
-    autoFrameHandlers: new Set(),
-    allFrameHandlers: new Set(),
-    allFrameHandlersNeedSortCheck: false,
-    renderHandlers: new Set(),
-    renderHandlersNeedSortCheck: false,
     advance: false,
+    autoInvalidations: new Set(),
+    resetFrameInvalidation: () => {
+      internalCtx.frameInvalidated = false
+      internalCtx.advance = false
+    },
     dispose: async (force = false) => {
       await tick()
       if (!internalCtx.shouldDispose && !force) return
@@ -210,19 +220,11 @@ export const createContexts = (options: {
     size: derived([options.userSize, options.parentSize], ([uSize, pSize]) => {
       return uSize ? uSize : pSize
     }),
-    clock: new Clock(),
     camera: currentWritable(createDefaultCamera()),
     scene: new Scene(),
     renderer: undefined!,
-    invalidate: (debugFrameloopMessage?: string) => {
+    invalidate: () => {
       internalCtx.frameInvalidated = true
-      if (internalCtx.debugFrameloop && debugFrameloopMessage) {
-        internalCtx.invalidations[debugFrameloopMessage] = internalCtx.invalidations[
-          debugFrameloopMessage
-        ]
-          ? internalCtx.invalidations[debugFrameloopMessage] + 1
-          : 1
-      }
     },
     advance: () => {
       internalCtx.advance = true
@@ -233,7 +235,21 @@ export const createContexts = (options: {
     useLegacyLights: currentWritable(options.useLegacyLights),
     shadows: currentWritable(options.shadows),
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
-    frameloop: currentWritable(options.frameloop)
+    renderMode: currentWritable(options.renderMode),
+    autoRender: currentWritable(options.autoRender),
+    scheduler: undefined as any, // will be set later
+    mainStage: undefined as any, // will be set later
+    renderStage: undefined as any, // will be set later
+    autoRenderTask: undefined as any, // will be set later
+    shouldRender: () => {
+      const shouldRender =
+        ctx.renderMode.current === 'always' ||
+        (ctx.renderMode.current === 'on-demand' &&
+          (internalCtx.frameInvalidated || internalCtx.autoInvalidations.size > 0)) ||
+        (ctx.renderMode.current === 'manual' && internalCtx.advance)
+
+      return shouldRender
+    }
   }
 
   const userCtx: ThrelteUserContext = currentWritable({})

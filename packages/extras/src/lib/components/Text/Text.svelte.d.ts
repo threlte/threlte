@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Color, ColorRepresentation, Material, Mesh } from 'three'
 
 export interface TextMesh extends Mesh {
@@ -61,7 +61,7 @@ export interface TextMesh extends Mesh {
 
   /**
    * Sets the height of each line of text, as a multiple of the `fontSize`. Defaults to 'normal'
-   * which chooses a debugFrameloopMessageable height based on the chosen font's ascender/descender metrics.
+   * which chooses a reasonable height based on the chosen font's ascender/descender metrics.
    */
   lineHeight: number | string
 
@@ -231,6 +231,16 @@ export interface TextMesh extends Mesh {
    * and "h" glyphs plus the "th" glyph.
    */
   characters?: string | string[] | null
+
+  /**
+   * WARNING: This API is experimental and may change.
+   * This allows more fine-grained control of colors for individual or ranges of characters,
+   * taking precedence over the material's `color`. Its format is an Object whose keys each
+   * define a starting character index for a range, and whose values are the color for each
+   * range. The color value can be a numeric hex color value, a `THREE.Color` object, or
+   * any of the strings accepted by `THREE.Color`.
+   */
+  colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
 }
 
 export type TextProps = Props<TextMesh>
@@ -239,4 +249,4 @@ export type TextEvents = Events<TextMesh>
 
 export type TextSlots = Slots<TextMesh>
 
-export default class Text extends SvelteComponentTyped<TextProps, TextEvents, TextSlots> {}
+export default class Text extends SvelteComponent<TextProps, TextEvents, TextSlots> {}

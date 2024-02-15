@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask, revision } from '@threlte/core'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
   import { createApi } from './api'
@@ -17,7 +17,7 @@
   const matrices = new Float32Array(limit * 16)
   for (let i = 0; i < limit; i++) tempMatrix.identity().toArray(matrices, i * 16)
 
-  const colors = new Float32Array([...new Array(limit * 3)].map(() => 1))
+  const colors = new Float32Array(limit * 3).fill(1)
 
   const parentMatrix = new Matrix4()
   const instanceMatrix = new Matrix4()
@@ -26,18 +26,13 @@
   const scale = new Vector3()
 
   let initialUpdateDone = false
-  useFrame(() => {
+
+  useTask(() => {
     instancedMesh.updateMatrix()
+
     if (update || !initialUpdateDone) {
       instancedMesh.updateMatrixWorld()
       parentMatrix.copy(instancedMesh.matrixWorld).invert()
-
-      const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
-      instancedMesh.count = updateRange
-      instancedMesh.instanceMatrix.updateRange.count = updateRange * 16
-      if (instancedMesh.instanceColor) {
-        instancedMesh.instanceColor.updateRange.count = updateRange * 3
-      }
 
       // update the transform matrices and colors
       if (instancedMesh.instanceColor) {
@@ -58,6 +53,27 @@
       initialUpdateDone = true
     }
   })
+
+  $: {
+    const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
+    instancedMesh.count = updateRange
+
+    if (revision >= 159) {
+      instancedMesh.instanceMatrix.clearUpdateRanges()
+      instancedMesh.instanceMatrix.addUpdateRange(0, updateRange * 16)
+    } else {
+      instancedMesh.instanceMatrix.updateRange.count = updateRange * 16
+    }
+
+    if (instancedMesh.instanceColor) {
+      if (revision >= 159) {
+        instancedMesh.instanceColor.clearUpdateRanges()
+        instancedMesh.instanceColor.addUpdateRange(0, updateRange * 3)
+      } else {
+        instancedMesh.instanceColor.updateRange.count = updateRange * 3
+      }
+    }
+  }
 </script>
 
 <T.InstancedBufferAttribute

@@ -7,10 +7,12 @@
     watch,
     type Props
   } from '@threlte/core'
-  import { omit, pick } from 'lodash-es'
-  import { derived, writable } from 'svelte/store'
+
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+
+  import { derived, writable } from 'svelte/store'
+
   import { useControlsContext } from '../useControlsContext'
   import type {
     TransformControlsEvents,
@@ -23,14 +25,17 @@
   type $$Slots = TransformControlsSlots
 
   export let autoPauseOrbitControls: $$Props['autoPauseOrbitControls'] = true
+  export let autoPauseTrackballControls: $$Props['autoPauseTrackballControls'] = true
   export let object: $$Props['object'] = undefined
 
   const { camera, renderer, invalidate, scene } = useThrelte()
 
-  const { orbitControls } = useControlsContext()
+  const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = writable(false)
-  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls) ?? true
+  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
   $: useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true)
+  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
+  $: useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true)
 
   const onDraggingChanged = (e: { value: boolean }) => {
     isDragging.set(e.value)
@@ -47,6 +52,21 @@
         // we know they were enabled before, so we can
         // safely re-enable them
         orbitControls.enabled = true
+      }
+    }
+  )
+
+  watch(
+    [trackballControls, isDragging, useAutoPauseTrackballControls],
+    ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
+      // if there are no trackballcontrols or we're not even
+      // dragging, or the trackballcontrols are disabled, return
+      if (!trackballControls || (!trackballControls.enabled && isDragging)) return
+      trackballControls.enabled = !(isDragging && useAutoPausetrackballControls)
+      return () => {
+        // we know they were enabled before, so we can
+        // safely re-enable them
+        trackballControls.enabled = true
       }
     }
   )
@@ -86,8 +106,21 @@
     'visible'
   ]
 
-  $: transformProps = pick($$restProps, transformOnlyPropNames) as Props<TransformControls>
-  $: objectProps = omit($$restProps, transformOnlyPropNames) as Props<Group>
+  let transformProps: Props<TransformControls> = {}
+  let objectProps: Props<Group> = {}
+
+  $: {
+    transformProps = {}
+    objectProps = {}
+
+    for (let [key, value] of Object.entries($$restProps)) {
+      if (transformOnlyPropNames.includes(key)) {
+        transformProps[key] = value
+      } else {
+        objectProps[key] = value
+      }
+    }
+  }
 
   const component = forwardEventHandlers()
 </script>

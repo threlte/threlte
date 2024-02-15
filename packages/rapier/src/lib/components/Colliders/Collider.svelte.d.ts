@@ -3,7 +3,7 @@ import type {
   Collider as RapierCollider,
   ColliderDesc
 } from '@dimforge/rapier3d-compat'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Euler, Vector3 } from 'three'
 import type { ColliderEventMap } from '../../types/types'
 
@@ -45,7 +45,7 @@ export type Shape =
   | 'roundConvexHull'
   | 'roundConvexMesh'
 
-type Args<TShape extends Shape> = Parameters<typeof ColliderDesc[TShape]>
+type Args<TShape extends Shape> = Parameters<(typeof ColliderDesc)[TShape]>
 
 type ShapeProps<TShape extends Shape> = {
   shape: TShape
@@ -89,10 +89,10 @@ export type MassDef = Density | Mass | MassProperties | NoMassProperties
 type MassProps<TMassDef extends MassDef> = TMassDef extends Density
   ? Density
   : TMassDef extends MassProperties
-  ? MassProperties
-  : TMassDef extends Mass
-  ? Mass
-  : NoMassProperties
+    ? MassProperties
+    : TMassDef extends Mass
+      ? Mass
+      : NoMassProperties
 
 // ------------------ COLLIDER ------------------
 
@@ -109,4 +109,4 @@ export type ColliderSlots = {
 export default class Collider<
   TShape extends Shape,
   TMassDef extends MassDef
-> extends SvelteComponentTyped<ColliderProps<TShape, TMassDef>, ColliderEventMap, ColliderSlots> {}
+> extends SvelteComponent<ColliderProps<TShape, TMassDef>, ColliderEventMap, ColliderSlots> {}

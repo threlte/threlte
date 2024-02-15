@@ -1,0 +1,82 @@
+---
+{
+  order: 6,
+  category: '@threlte/extras',
+  name: <Gizmo>,
+  sourcePath: 'packages/extras/src/lib/components/Gizmo/Gizmo.svelte',
+  type: 'component',
+  'componentSignature':
+    {
+      'props':
+        [
+          {
+            name: 'renderTask',
+            required: false,
+            type: 'TaskOptions',
+            description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
+          },
+          {
+            name: 'animationTask',
+            required: false,
+            type: 'TaskOptions',
+            description: 'Options for the task to animate the gizmo when the user clicks one of the handles. By default, this task is added to the `mainStage`.'
+          },
+          {
+            name: 'turnRate',
+            type: 'number',
+            default: '2 * Math.PI',
+            required: false,
+            description: 'Turn animation rate in angles per second'
+          },
+          {
+            name: 'center',
+            type: '[number, number, number]',
+            default: '[0, 0, 0]',
+            required: false,
+            description: 'The center or target of the control (such as an orbit controller), if it exists.'
+          },
+          {
+            name: 'verticalPlacement',
+            type: "'top' | 'bottom'",
+            default: "'bottom'",
+            required: false
+          },
+          {
+            name: 'horizontalPlacement',
+            type: "'left' | 'right'",
+            default: "'right'",
+            required: false
+          },
+          { name: 'size', type: 'number', default: '128', required: false },
+          { name: 'xColor', type: 'number', default: '0xff3653', required: false },
+          { name: 'yColor', type: 'number', default: '0x8adb00', required: false },
+          { name: 'zColor', type: 'number', default: '0x2c8fff', required: false },
+          {
+            name: 'toneMapped',
+            type: 'boolean',
+            default: 'false',
+            required: false,
+            description: 'Whether the gizmo should be rendered with tone mapping applied. If set to `true`, the tone mapping declared on `<Canvas>` is used.'
+          },
+          {
+            name: 'paddingX',
+            type: 'number',
+            default: '0',
+            required: false,
+            description: 'The padding to the edge defined by `horizontalPlacement`.'
+          },
+          {
+            name: 'paddingY',
+            type: 'number',
+            default: '0',
+            required: false,
+            description: 'The padding to the edge defined by `verticalPlacement`.'
+          }
+        ]
+    }
+}
+---
+
+A gizmo for snap-to camera controls. The gizmo is rendered on top of the scene using an orthographic camera and controls the camera when clicked.
+
+<Example path="extras/gizmo" />

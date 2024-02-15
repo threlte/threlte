@@ -1,5 +1,88 @@
 # @threlte/docs-next
 
+## 0.11.0
+
+### Minor Changes
+
+- 85b9332: Add port of drei's MeshRefractionMaterial
+
+## 0.10.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
+## 0.9.0
+
+### Minor Changes
+
+- 2b11b030: Add port of FakeGlowMaterial r3f component from ektogamat
+
+## 0.8.0
+
+### Minor Changes
+
+- dce129b4: Add port of Billboard component from drei
+
+## 0.7.0
+
+### Minor Changes
+
+- b9f5db5c: Add TrackballControls
+
+## 0.6.4
+
+### Patch Changes
+
+- 2df1367f: Add a gizmo component for heads-up camera control
+
+## 0.6.3
+
+### Patch Changes
+
+- bbdd2109: Adjusted widths of lines in Cursor Lines example
+
+## 0.6.2
+
+### Patch Changes
+
+- 348294f6: Added MeshLineMaterial and MeshLineGeometry to extras
+
+## 0.6.1
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
+## 0.6.0
+
+### Minor Changes
+
+- 144b55a: Deprecated the component `<Center>` as it's being renamed to `<Align>`. Renamed the prop `autoCenter` to `auto`, renamed events and slot props accordingly.
+
+## 0.5.0
+
+### Minor Changes
+
+- eb08fe3: Added right sidebar content: contribute (go to source, edit this page, …) & community (join our discord, twitter)
+- e6daae5: Enhanced documentation structure and clarity by adding new categories and pages. Included improvements for category ordering in the sidebar. Renamed sections for brevity.
+
+### Patch Changes
+
+- 22b2e12: Added Tailwind to Stackblitz template via CDN for minimal Tailwind support
+
+## 0.4.2
+
+### Patch Changes
+
+- 616bf1e: fix broken doc links and 404s: core/utilities, core/use-render, core/use-frame, extras/instance, extras/instanced-mesh
+
+## 0.4.1
+
+### Patch Changes
+
+- d0745b9: Removed my own testimonial and added Aria's instead
+
 ## 0.4.0
 
 ### Minor Changes

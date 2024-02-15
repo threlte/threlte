@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
   import { spring, tweened } from 'svelte/motion'
   import {
@@ -45,7 +45,7 @@
   $: if (audio) audio.getOutput().connect(analyser)
   const pcmData = new Float32Array(analyser.fftSize)
   export let volume = 0
-  useFrame(() => {
+  useTask(() => {
     if (!audio) return
     analyser.getFloatTimeDomainData(pcmData)
     let sumSquares = 0.0

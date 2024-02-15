@@ -1,5 +1,333 @@
 # @threlte/extras
 
+## 8.7.5
+
+### Patch Changes
+
+- 5d9ca58: Fixed a bug where `<Sky>`'s renderTarget wasn't able to be disposed because the canvas context did not exist anymore.
+
+## 8.7.4
+
+### Patch Changes
+
+- 6c3807f: Remove three/addons import for compatibility with older Three versions
+
+## 8.7.3
+
+### Patch Changes
+
+- 392a14f: Remove svelte/internal dependency from <Suspense>
+
+## 8.7.2
+
+### Patch Changes
+
+- 3c29bc9: Remove three-mesh-bvh from peer dependencies
+
+## 8.7.1
+
+### Patch Changes
+
+- 7f04878: Mark three-mesh-bvh as an optional dependency in package.json"
+
+## 8.7.0
+
+### Minor Changes
+
+- 9036f10: Add port of drei's Stars component
+
+## 8.6.0
+
+### Minor Changes
+
+- 85b9332: Add port of drei's MeshRefractionMaterial
+
+## 8.5.1
+
+### Patch Changes
+
+- a31b5a3: Fix GroundedSkybox import for r161
+
+## 8.5.0
+
+### Minor Changes
+
+- e702d7e9: Added a new useFBO hook to extras
+
+## 8.4.0
+
+### Minor Changes
+
+- 2b11b030: Add port of FakeGlowMaterial r3f component from ektogamat
+
+## 8.3.0
+
+### Minor Changes
+
+- e6f83529: Bumped version of troika-three-text, added prop `colorRanges` to `<Text>`
+
+## 8.2.1
+
+### Patch Changes
+
+- 0214300f: On-demand rendering for damped OrbitControls
+
+## 8.2.0
+
+### Minor Changes
+
+- dce129b4: Add port of Billboard component from drei
+
+## 8.1.2
+
+### Patch Changes
+
+- e7b24a2f: fix Gizmo click events when the Canvas is not taking up the full viewport
+
+## 8.1.1
+
+### Patch Changes
+
+- aa6e2ce4: On-demand rendering for the `<TrackballControls>` as well as JSDoc test for tsdocs.dev
+
+## 8.1.0
+
+### Minor Changes
+
+- b9f5db5c: Add TrackballControls
+
+## 8.0.10
+
+### Patch Changes
+
+- 722f8c27: Fix instancedMesh deprecation warning
+
+## 8.0.9
+
+### Patch Changes
+
+- 04ac53aa: fixed useTexture signature
+
+## 8.0.8
+
+### Patch Changes
+
+- 87c45a86: Changed color interface from number to THREE.ColorRepresentation in `<Gizmo>`
+
+## 8.0.7
+
+### Patch Changes
+
+- 5c07b714: `<Gizmo>` div position fix
+
+## 8.0.6
+
+### Patch Changes
+
+- 514824bf: Performance improvements on `<Gizmo>`
+- 430e89cf: Added tonemapping and padding as well as visual optimizations to `<Gizmo>`
+
+## 8.0.5
+
+### Patch Changes
+
+- aaa94569: Perf bug fixed in `<Gizmo>`
+
+## 8.0.4
+
+### Patch Changes
+
+- 018ee0c5: Improved Gizmo visuals
+- 97f2e889: Allow reactive <Portal> ids
+- 2df1367f: Add a gizmo component for heads-up camera control
+
+## 8.0.3
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
+## 8.0.2
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 8.0.1
+
+### Patch Changes
+
+- 8b62e472: useTexture release fix
+- ea50d08f: Fixed frame guards of `<AnimatedSpriteMaterial>`
+
+## 8.0.0
+
+### Major Changes
+
+- 33367cbf: @threlte/core ^7 is now required as useTask is used by default
+
+## 7.5.4
+
+### Patch Changes
+
+- fa8c1677: Added support for reverse animation direction in `<AnimatedSpriteMaterial>`
+
+## 7.5.3
+
+### Patch Changes
+
+- 050a7128: Set `pointerEvents` for `noTransform` divs
+
+## 7.5.2
+
+### Patch Changes
+
+- 2ae76e18: Threlte 7 compatibility
+
+## 7.5.1
+
+### Patch Changes
+
+- 56330979: Fixed prop defaults of `<Text>`
+
+## 7.5.0
+
+### Minor Changes
+
+- bcc96f23: Added `<AnimatedSpriteMaterial>`
+
+## 7.4.0
+
+### Minor Changes
+
+- 20e8711a: Added `<CSM>` to extras
+
+## 7.3.0
+
+### Minor Changes
+
+- c2ddef77: Added `suspended` store to return type of `useSuspense`
+
+## 7.2.0
+
+### Minor Changes
+
+- 206fbc83: Added suspense support to `<GLTF>` and `<Environment>`
+
+### Patch Changes
+
+- 79a7fa4f: Aligned `onReveal` with `onMount` in that you may return a cleanup function that runs whenever a component is resuspended or unmounted
+
+## 7.1.1
+
+### Patch Changes
+
+- 060fbbdf: Changed eventDispatcher to rawEventDispatcher in `<Suspense>`, added type def
+
+## 7.1.0
+
+### Minor Changes
+
+- cd27881c: Added suspend event to `<Suspense>`
+
+## 7.0.1
+
+### Patch Changes
+
+- 62d3f395: Add ref binding to `<InstancedMesh>`
+
+## 7.0.0
+
+### Major Changes
+
+- 30e87470: `useTexture` is assigning the correct `colorSpace` based on the renderer. Migration: If you rely on a different `colorSpace` in your texture than the renderer is set to, use the option [`transform`](https://threlte.xyz/docs/reference/extras/use-texture#transforming-the-texture) to transform the texture to THREE.NoColorSpace, which used to be the default.
+- ca47ae2a: Remove deprecated props, events and slot props on `<Align>`, remove `<Center>` export. Migration: Replace `<Center>` with `<Align>`, replace the prop `autoCenter` with `auto`, replace the event `on:center` with `on:align`, replace the slot prop `let:center` with `let:align`.
+
+## 6.0.0
+
+### Major Changes
+
+- be722cf: ## Grid component update:
+
+  - New types of grid: lines, circular and polar.
+  - Added background option to to the Grid
+  - **breaking**: renamed `axes` property to `plane`. It now accepts two letter prop `'xz' | 'xy' | 'zy'` instead of 3 letter prop `'xzy' | 'xyz' | 'zyx'`
+
+  **Migration:**
+
+  - change `axes` to `plane` in all of your `<Grid/>` components and use the new two-letter values (for example, `xzy` would become `xz`).
+
+## 5.7.0
+
+### Minor Changes
+
+- f4b7d2d2: Add useGamepad hook
+
+## 5.6.4
+
+### Patch Changes
+
+- a79ef10d: Orbit controls - now calls `update` on initialization to set a correct camera position.
+- 8296c7aa: ContactShadows: use WebGLRenderTarget#colorSpace when available
+
+## 5.6.3
+
+### Patch Changes
+
+- 8b490b8: Fix MeshLineMaterial shader to calculate normals and offsets correctly
+
+## 5.6.2
+
+### Patch Changes
+
+- 348294f6: Added MeshLineMaterial and MeshLineGeometry to extras
+- 1e550a62: Include proper colorspace shader chunk via Three.js revision in `<Grid>`
+
+## 5.6.1
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
+## 5.6.0
+
+### Minor Changes
+
+- 59607f3: Added the component `<Sky>` which renders the Three.js Sky object, creates a cubemap from it and applies it to the scene env.
+- 0ab9c29: Added the option `setEnvironment` to the component `<Sky>`
+
+### Patch Changes
+
+- 7974f0e: Cleanup import in `<OrbitControls>`
+
+## 5.5.1
+
+### Patch Changes
+
+- 6c18d9cc: Properly deprecate `<Center>`
+
+## 5.5.0
+
+### Minor Changes
+
+- 144b55a: Deprecated the component `<Center>` as it's being renamed to `<Align>`. Renamed the prop `autoCenter` to `auto`, renamed events and slot props accordingly.
+
+### Patch Changes
+
+- 8a037ec: Deduped `<Align>` event data
+
+## 5.4.1
+
+### Patch Changes
+
+- de3341f: Fixed a bug where the component `<Text>` would not render custom fonts, character sets or SDF glyph sizes
+
+## 5.4.0
+
+### Minor Changes
+
+- b29f2ec: Add the ability to provide a custom DRACOLoader in useGltf hook.
+
 ## 5.3.0
 
 ### Minor Changes
@@ -299,7 +627,10 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
+  const { gltf } = useGltf<
+    "MeshA" | "MeshB" | "Object3DA",
+    "MaterialA" | "MaterialB"
+  >("/some/url");
   ```
 
   - After:
@@ -307,15 +638,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh
-      MeshB: THREE.Mesh
-      Object3DA: THREE.Object3D
-    }
+      MeshA: THREE.Mesh;
+      MeshB: THREE.Mesh;
+      Object3DA: THREE.Object3D;
+    };
     materials: {
-      MaterialA: THREE.MeshStandardMaterial
-      MaterialB: THREE.MeshBasicMaterial
-    }
-  }>('/some/url')
+      MaterialA: THREE.MeshStandardMaterial;
+      MaterialB: THREE.MeshBasicMaterial;
+    };
+  }>("/some/url");
   ```
 
 ## 4.4.1

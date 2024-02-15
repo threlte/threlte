@@ -19,10 +19,8 @@
   })
 </script>
 
-<div class="w-full h-full absolute">
-  {#if mounted && AppModule}
-    {#await AppModule() then Mod}
-      <Mod.default />
-    {/await}
-  {/if}
-</div>
+{#if mounted && AppModule}
+  {#await AppModule() then Mod}
+    <Mod.default />
+  {/await}
+{/if}

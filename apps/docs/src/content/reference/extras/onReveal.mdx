@@ -1,11 +1,26 @@
 ---
-{ order: 14.76, 'category': '@threlte/extras', 'name': 'onReveal', 'type': 'hook' }
+{
+  order: 14.76,
+  'category': '@threlte/extras',
+  'name': 'onReveal',
+  'type': 'hook',
+  sourcePath: 'packages/extras/src/lib/suspense/onReveal.ts'
+}
 ---
 
 `onReveal` invokes a callback when the component is revealed (i.e., no
-longer suspended in the context of a [`<Suspense>`](/docs/reference/extras/suspense) boundary). It mimics Svelte's
+longer suspended in the context of a
+[`<Suspense>`](/docs/reference/extras/suspense) boundary). It mimics Svelte's
 lifecycle method `onMount`. If there is no `<Suspense>` component, the callback
 will be executed with Svelte's `onMount` as the component will never suspend.
+
+<Tip type="tip">
+	`onReveal` is mimicking Svelte's `onMount` and can be used in
+	its place for triggering animations, etc., within the boundaries of a
+	`<Suspense>` component. If it's used outside of a `<Suspense>` component, it
+	will behave just like Svelte's `onMount`.
+	This means that
+</Tip>
 
 ## Example
 
@@ -29,9 +44,15 @@ wrapped in a `<Suspense>` boundary.
 {/await}
 ```
 
-<Tip type="tip">
-	`onReveal` is mimicking Svelte's `onMount` and can
-	be used in its place for triggering animations, etc., within the boundaries
-	of a `<Suspense>` component. If it's used outside of a `<Suspense>` component,
-	it will behave just like Svelte's `onMount`.
-</Tip>
+You may also return a function from the callback to be executed when the
+component is unmounted or the component is suspended again.
+
+```ts
+onReveal(() => {
+  console.log('The component has been revealed')
+
+  return () => {
+    console.log('The component has been unmounted or suspended again')
+  }
+})
+```

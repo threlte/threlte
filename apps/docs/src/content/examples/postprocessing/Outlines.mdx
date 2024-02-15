@@ -1,0 +1,17 @@
+Implements the Outline postprocessing pass. [Vanilla threejs example here](https://threejs.org/examples/?q=outline#webgl_postprocessing_outline)
+
+An outlined cube loops through a maze, with a different outline color when the object is hidden.
+
+<Example path="postprocessing/outline" />
+
+### How it works
+
+- In `Scene.svelte`
+  - Bind the mesh we want to outline, and pass it as prop `selectedMesh` to `CustomRenderer` component
+- Postprocessing is performed within `CustomRenderer` component
+  - We use the ['postprocessing' library](https://github.com/pmndrs/postprocessing)
+  - Create a new `EffectComposer` with Threlte's `renderer`
+  - Then run our own render loop with this new render function, using `useTask` from threlte, make sure to set `autoRender` to `false`
+  - Our function `setupEffectComposer` adds the required `RenderPass`, and `OutlinePass` to the `EffectComposer`, specifically to our `Mesh` object
+  - This function will re-run if `selectedMesh` changes
+- Animation of the cube is done with `svelte/motion` in `Scene.svelte`

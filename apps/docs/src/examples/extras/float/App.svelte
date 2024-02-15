@@ -3,8 +3,14 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div class="w-full h-full relative bg-orange-500/20">
+<div>
   <Canvas>
     <Scene />
   </Canvas>
 </div>
+
+<style>
+  div {
+    height: 100%;
+  }
+</style>

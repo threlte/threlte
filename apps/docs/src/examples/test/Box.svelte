@@ -3,7 +3,7 @@
   import { useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
-  let color = 'blue'
+  let color = 'white'
 
   const scale = spring(1)
   const component = forwardEventHandlers()
@@ -22,11 +22,11 @@
     on:pointerleave={onPointerLeave}
     on:pointerenter={() => {
       $scale = 2
-      color = 'red'
+      color = '#FE3D00'
     }}
     on:pointerleave={() => {
       $scale = 1
-      color = 'blue'
+      color = 'white'
     }}
   >
     <T.BoxGeometry />

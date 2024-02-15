@@ -2,7 +2,7 @@
   import type { File } from './types'
 
   import CodeExplorer from './CodeExplorer.svelte'
-  import { writable, Writable } from 'svelte/store'
+  import { writable, type Writable } from 'svelte/store'
   import { c } from '../../lib/classes'
   import { fade } from 'svelte/transition'
 
@@ -59,21 +59,21 @@
 
 <div
   class={c(
-    'not-prose flex md:max-h-[80vh] w-full flex-col md:flex-row items-stretch transition-all ease-in-out duration-700 will-change-[max-height] relative !rounded-b-md overflow-hidden border-b border-x border-white/20',
+    'not-prose relative flex w-full flex-col items-stretch overflow-hidden !rounded-b-md border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
     !expanded && '!max-h-[100px] overflow-hidden',
-    hidePreview && 'border-t !rounded-md'
+    hidePreview && '!rounded-md border-t'
   )}
 >
   {#if !expanded}
     <div
       transition:fade
-      class="bg-gradient-to-t from-blue-900 to-blue-900/50 absolute top-0 left-0 w-full h-full z-10"
+      class="absolute left-0 top-0 z-10 h-full w-full bg-gradient-to-t from-blue-900 to-blue-900/50"
     />
   {/if}
   {#if !expanded}
-    <div class="flex flex-row justify-center items-center absolute top-0 left-0 w-full h-full">
+    <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">
       <button
-        class="z-10 flex flex-row gap-3 items-center justify-center text-orange	hover:text-orange-400 text-sm focus:outline-none border bg-orange-800/50 border-orange/10 px-2 rounded-sm py-1 hover:bg-orange-800/70 backdrop-blur-md"
+        class="text-orange border-orange/10 z-10 flex flex-row items-center justify-center gap-3 rounded-sm border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
         on:click={() => (expanded = true)}
       >
         <svg
@@ -81,7 +81,7 @@
           width="76"
           height="76"
           viewBox="0 0 256 256"
-          class="w-5 h-5 fill-current"
+          class="h-5 w-5 fill-current"
         >
           <path
             d="M240,128l-48,40H64L16,128,64,88H192Z"
@@ -98,7 +98,7 @@
   <CodeExplorer
     {currentlySelectedFile}
     class={c(
-      'overflow-y-auto px-4 py-3 max-md:flex-shrink-0 border-white/20 border-b scrollbar-hide md:border-r md:border-b-0'
+      'scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 max-md:flex-shrink-0 md:border-b-0 md:border-r'
     )}
     {filePaths}
     on:fileSelected={(e) => {

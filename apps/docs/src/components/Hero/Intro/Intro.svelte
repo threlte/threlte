@@ -17,7 +17,7 @@
   to={0.6}
 >
   <div
-    class="fixed top-0 left-0 mt-[18vh] flex w-screen flex-col items-center justify-center gap-12 px-8 sm:mt-[25vh] md:mt-[30vh]"
+    class="fixed left-0 top-0 mt-[18vh] flex w-screen flex-col items-center justify-center gap-12 px-8 sm:mt-[25vh] md:mt-[30vh]"
     style="transform: translateY({$springScrollPos * -50}px)"
   >
     <div>
@@ -26,7 +26,7 @@
       </TheatreTextBox>
 
       <TheatreTextBox key="statement">
-        <div class="max-w-[450px] text-center text-4xl font-bold text-white/90">
+        <h1 class="max-w-[450px] text-center text-4xl font-bold text-white/90">
           Rapidly build interactive
           <span class="relative inline-block"
             ><div
@@ -45,13 +45,13 @@
             />
             3D apps
           </span> for the web.
-        </div>
+        </h1>
       </TheatreTextBox>
     </div>
 
     <TheatreTextBox key="start-building">
       <div class="flex flex-col-reverse items-center justify-center gap-6 md:flex-row md:gap-3">
-        <code class="px-7 py-4 text-sm text-[1em] md:text-base">
+        <code class="px-7 py-4 text-[1em] text-sm md:text-base">
           <span class="text-orange mr-2 select-none font-bold">{'>'}</span>npm create threlte
         </code>
 

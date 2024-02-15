@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { derived } from 'svelte/store'
   import { Color, type Mesh } from 'three'
@@ -7,12 +7,12 @@
   export let discSpeed = 0
 
   let discRotation = 0
-  const { start, stop, started } = useFrame(
-    () => {
-      discRotation += 0.02 * discSpeed
+  const { start, stop, started } = useTask(
+    (delta) => {
+      discRotation += delta * discSpeed
     },
     {
-      autostart: false
+      autoStart: false
     }
   )
   $: {

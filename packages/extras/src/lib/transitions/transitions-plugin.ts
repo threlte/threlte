@@ -4,10 +4,9 @@ import {
   create_bidirectional_transition,
   create_in_transition,
   get_current_component,
-  onMount
+  onMount,
+  create_out_transition
 } from 'svelte/internal'
-
-import { create_out_transition } from 'svelte/internal'
 import type { TransitionConfig } from 'svelte/transition'
 import type { ThrelteTransition } from './types'
 
@@ -179,7 +178,7 @@ export const transitions = () => {
             intro.start()
           })
 
-          appendToFragmentFunction(comp, 'outro', (...args: any) => {
+          appendToFragmentFunction(comp, 'outro', () => {
             intro?.end()
           })
         })
@@ -187,11 +186,11 @@ export const transitions = () => {
       if (props.out) {
         let outro: ReturnType<typeof create_out_transition>
         onMount(() => {
-          appendToFragmentFunction(comp, 'outro', (...args: any) => {
+          appendToFragmentFunction(comp, 'outro', () => {
             if (!props.out) return
             outro = create_out_transition(el, convertTransition(props.out), {})
           })
-          appendToFragmentFunction(comp, 'intro', (...args: any) => {
+          appendToFragmentFunction(comp, 'intro', () => {
             outro?.end(1)
           })
           appendToFragmentFunction(comp, 'destroy', (...args: any) => {

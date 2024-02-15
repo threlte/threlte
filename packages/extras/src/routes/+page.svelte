@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { T, Canvas } from '@threlte/core'
-  import { OrbitControls, Suspense, Text } from '../lib'
+  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
 </script>
 
@@ -13,5 +12,10 @@
 <style>
   main {
     height: 100vh;
+  }
+
+  :global(body) {
+    margin: 0;
+    overflow: hidden;
   }
 </style>

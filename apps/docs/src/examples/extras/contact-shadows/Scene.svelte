@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { ContactShadows, Environment, Float, OrbitControls } from '@threlte/extras'
   import {
     BoxGeometry,
@@ -12,7 +12,7 @@
   let pos = {
     x: 0
   }
-  useFrame(() => {
+  useTask(() => {
     pos.x = Math.sin(Date.now() / 2000)
   })
 </script>

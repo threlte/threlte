@@ -20,6 +20,7 @@
 
 <Camera />
 
+<T.AmbientLight intensity={0.4} />
 <T.DirectionalLight position={[1, 2, 5]} />
 
 <Box

@@ -1,0 +1,93 @@
+This tutorial demonstrates how to load and animate a spaceship model, as well as using Threlte's InstancedMesh to efficiently animate hundreds of stars. We'll also cover raycaster intersections, post-processing effects, and dynamically generated reflection maps.
+
+<Example
+  path="tutorials/animating-a-spaceship"
+  iframe
+/>
+
+## Part I
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
+  <iframe
+    width="560"
+    height="315"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/soa_KP8QfjM?si=GDsjj8VFm9Zfejtq"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+</div>
+
+## Part II
+
+The second part of the tutorial focuses on applying a spring-based animation to the spaceship model by
+leveraging `useFrame`, a Threlte 6 hook used to run a callback on every frame.
+Threlte 7 improved the task scheduling API by introducing [useTask](/docs/reference/core/use-task),
+for newer Threlte projects it's recommended to replace the `useFrame` line shown in the video
+with the updated API.
+
+```ts title="Threlte 6"
+useFrame(() => {
+  ...
+})
+```
+
+```ts title="Threlte 7"
+useTask(() => {
+  ...
+})
+```
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
+  <iframe
+    width="560"
+    height="315"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/wIW9HCHRyRw?si=yy8Qm7LeuGhins6G"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+</div>
+
+## Part III
+
+In this last portion of the tutorial we'll introduce post-processing effects that
+require control over the render loop, and similiarly to episode 2 the video relies
+on `useRender`, a Threlte 6 hook used to manually render a scene.
+The equivalent Threlte 7 logic adds a task to [Threlte's default `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages)
+
+```ts title="Threlte 6"
+const { scene, camera, renderer } = useThrelte()
+
+useRender(() => {
+  // render here
+})
+```
+
+```ts title="Threlte 7"
+const { scene, camera, renderer, renderStage } = useThrelte()
+
+useTask(
+  () => {
+    // render here
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
+```
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
+  <iframe
+    width="560"
+    height="315"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/pcKVlKGWov4?si=mInLqfpZqE26RTPi"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+</div>

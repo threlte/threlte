@@ -1,6 +1,5 @@
 import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
-import { useThrelte } from '@threlte/core'
 import type { LiteralUnion } from 'type-fest'
 
 type Cursor = LiteralUnion<

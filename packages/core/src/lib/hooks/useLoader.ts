@@ -1,16 +1,35 @@
-import type { Loader as ThreeLoader } from 'three'
 import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
 import { useCache } from '../lib/cache'
 
-export interface Loader extends ThreeLoader {
-  loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any>
+type AsyncLoader = {
+  loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
 }
 
-type LoaderProto = { new (): Loader }
+type SyncLoader = {
+  load: (
+    url: string,
+    onLoad: (data: any) => void,
+    onProgress?: (event: ProgressEvent) => void,
+    onError?: (event: unknown) => void
+  ) => unknown
+}
+
+export type Loader = AsyncLoader | SyncLoader
+
+// Some loaders may not have any constructor arguments …
+type LoaderProtoWithoutArgs = { new (): Loader }
+// … but some other loaders do.
+type LoaderProtoWithArgs = { new (...args: any[]): Loader }
 
 export type UseLoaderLoadInput = string | string[] | Record<string, string>
 
-type LoaderResultType<TLoader extends Loader> = Awaited<ReturnType<TLoader['loadAsync']>>
+type LoaderResultType<TLoader extends Loader> = TLoader extends AsyncLoader
+  ? Awaited<ReturnType<TLoader['loadAsync']>>
+  : TLoader extends SyncLoader
+    ? Parameters<TLoader['load']>[1] extends (data: infer Result) => void
+      ? Result
+      : never
+    : never
 
 export type UseLoaderLoadResult<
   TLoader extends Loader,
@@ -19,8 +38,8 @@ export type UseLoaderLoadResult<
 > = Input extends string
   ? AsyncWritable<ResultType>
   : Input extends string[]
-  ? AsyncWritable<ResultType[]>
-  : AsyncWritable<Record<keyof Input, ResultType>>
+    ? AsyncWritable<ResultType[]>
+    : AsyncWritable<Record<keyof Input, ResultType>>
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
@@ -46,48 +65,93 @@ type ThrelteUseLoader<TLoader extends Loader> = {
   clear: <Input extends string | string[] | Record<string, string>>(input: Input) => void
 }
 
-export type UseLoaderOptions<TLoader extends Loader> = {
+type UseLoaderOptionsWithoutArgs<Proto extends LoaderProtoWithoutArgs> = {
   /**
    * A loader can be extended to add custom
    * functionality, e.g. add DRACO support.
    */
-  extend?: (loader: TLoader) => void
+  extend?: (loader: InstanceType<Proto>) => void
+  /**
+   * Arguments to pass to the loader.
+   */
+  args?: ConstructorParameters<Proto>
 }
 
-export const useLoader = <
-  Proto extends LoaderProto,
-  UseLoaderResult = ThrelteUseLoader<InstanceType<Proto>>
->(
+type UseLoaderOptionsWithArgs<Proto extends LoaderProtoWithArgs> = {
+  /**
+   * A loader can be extended to add custom
+   * functionality, e.g. add DRACO support.
+   */
+  extend?: (loader: InstanceType<Proto>) => void
+  /**
+   * Arguments to pass to the loader.
+   */
+  args: ConstructorParameters<Proto>
+}
+
+export type UseLoaderOptions<Proto extends LoaderProtoWithoutArgs> =
+  ConstructorParameters<Proto> extends []
+    ? UseLoaderOptionsWithoutArgs<Proto>
+    : undefined extends ConstructorParameters<Proto>[0]
+      ? UseLoaderOptionsWithoutArgs<Proto>
+      : UseLoaderOptionsWithArgs<Proto>
+
+export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,
-  options: UseLoaderOptions<InstanceType<Proto>> = {}
-): UseLoaderResult => {
+  options?: UseLoaderOptions<Proto>
+): ThrelteUseLoader<InstanceType<Proto>>
+export function useLoader<Proto extends LoaderProtoWithArgs>(
+  Proto: Proto,
+  options: UseLoaderOptions<Proto>
+): ThrelteUseLoader<InstanceType<Proto>>
+export function useLoader<Proto extends LoaderProtoWithoutArgs>(
+  Proto: Proto,
+  options?: UseLoaderOptions<Proto>
+): ThrelteUseLoader<InstanceType<Proto>> {
   const { remember, clear: clearCacheItem } = useCache()
 
-  // instantiate the loader
-  const loader = new Proto()
+  let loader: InstanceType<Proto> | undefined
 
-  // extend the loader if necessary
-  options.extend?.(loader as InstanceType<Proto>)
+  const initializeLoader = (): InstanceType<Proto> => {
+    // Type-wrestling galore
+    const lazyLoader = new Proto(...(((options as any)?.args as []) ?? [])) as InstanceType<Proto>
+    // extend the loader if necessary
+    options?.extend?.(lazyLoader)
+    return lazyLoader
+  }
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
+    // Allow Async and Sync loaders
+    const loadResource = async (url: string) => {
+      if (!loader) {
+        loader = initializeLoader()
+      }
+      if ('loadAsync' in loader) {
+        const result = await loader.loadAsync(url, options?.onProgress)
+        return options?.transform?.(result) ?? result
+      } else {
+        return new Promise((resolve, reject) => {
+          ;(loader as SyncLoader).load(
+            url,
+            (data) => resolve(options?.transform?.(data) ?? data),
+            (event) => options?.onProgress?.(event),
+            reject
+          )
+        })
+      }
+    }
+
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
       const promises = input.map((url) => {
-        return remember(async () => {
-          const result = await loader.loadAsync(url, options?.onProgress)
-          return options?.transform?.(result) ?? result
-        }, [Proto, url])
+        return remember(() => loadResource(url), [Proto, url])
       })
 
       // return an AsyncWritable that resolves to the array of promises
       const store = asyncWritable(Promise.all(promises))
       return store as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
-      // debugger
-      const promise = remember(async () => {
-        const result = await loader.loadAsync(input, options?.onProgress)
-        return options?.transform?.(result) ?? result
-      }, [Proto, input])
+      const promise = remember(() => loadResource(input), [Proto, input])
 
       // return an AsyncWritable that resolves to the promise
       const store = asyncWritable(promise)
@@ -95,10 +159,7 @@ export const useLoader = <
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return remember(async () => {
-          const result = await loader.loadAsync(url, options?.onProgress)
-          return options?.transform?.(result) ?? result
-        }, [Proto, url])
+        return remember(() => loadResource(url), [Proto, url])
       })
       // return an AsyncWritable that resolves to the object of promises
       const store = asyncWritable(
@@ -128,5 +189,83 @@ export const useLoader = <
     load,
     clear,
     loader
-  } as UseLoaderResult
+  } as ThrelteUseLoader<InstanceType<Proto>>
 }
+
+// Type tests
+
+// class WithConstructorParameters {
+//   constructor(hello: 'abc' | 'def') {
+//     console.log(hello)
+//   }
+
+//   loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any> {
+//     return new Promise((r) => r('hello'))
+//   }
+// }
+
+// class WithOptionalConstructorParameters {
+//   constructor(hello?: string) {
+//     console.log(hello)
+//   }
+
+//   loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any> {
+//     return new Promise((r) => r('hello'))
+//   }
+// }
+
+// class WithoutConstructorParameters {
+//   constructor() {
+//     console.log('without')
+//   }
+
+//   loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<any> {
+//     return new Promise((r) => r('hello'))
+//   }
+// }
+
+// const shouldFail = () => {
+//   useLoader(WithConstructorParameters)
+//   useLoader(WithoutConstructorParameters, {
+//     args: ['hello']
+//   })
+// }
+
+// const shouldSucceed = () => {
+//   useLoader(WithConstructorParameters, {
+//     args: ['abc']
+//   })
+//   useLoader(WithConstructorParameters, {
+//     args: ['abc'],
+//     extend(loader) {
+//       // …
+//     }
+//   })
+//   useLoader(WithOptionalConstructorParameters)
+//   useLoader(WithOptionalConstructorParameters, {
+//     extend(loader) {
+//       // …
+//     }
+//   })
+//   useLoader(WithOptionalConstructorParameters, {
+//     args: [],
+//     extend(loader) {
+//       // …
+//     }
+//   })
+//   useLoader(WithOptionalConstructorParameters, {
+//     args: ['hello'],
+//     extend(loader) {
+//       // …
+//     }
+//   })
+//   useLoader(WithOptionalConstructorParameters, {
+//     args: ['hello']
+//   })
+//   useLoader(WithoutConstructorParameters)
+//   useLoader(WithoutConstructorParameters, {
+//     extend(loader) {
+//       // …
+//     }
+//   })
+// }

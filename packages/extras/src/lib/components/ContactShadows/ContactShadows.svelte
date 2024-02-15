@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useFrame, useThrelte } from '@threlte/core'
+  import { forwardEventHandlers, T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     Color,
@@ -52,7 +52,12 @@
   const renderTarget = useMemo(() => {
     const rt = new WebGLRenderTarget(resolution, resolution)
     rt.texture.generateMipmaps = false
-    rt.texture.encoding = renderer.outputEncoding
+    if ('colorSpace' in rt.texture) {
+      rt.texture.colorSpace = renderer.outputColorSpace
+    } else {
+      // deprecated in three.js r152
+      rt.texture.encoding = renderer.outputEncoding
+    }
     return rt
   })
   $: renderTarget.memoize(resolution)
@@ -188,7 +193,7 @@
   }
 
   let count = 0
-  useFrame(() => {
+  useTask(() => {
     if (frames === Infinity || count < frames) {
       renderShadows()
       count += 1
@@ -208,7 +213,11 @@
   const components = forwardEventHandlers()
 </script>
 
-<T.Group {...$$restProps} let:ref bind:this={$components}>
+<T.Group
+  {...$$restProps}
+  let:ref
+  bind:this={$components}
+>
   <T.Group rotation.x={Math.PI / 2}>
     <T.Mesh
       scale.y={-1}
@@ -217,7 +226,10 @@
       geometry={$planeGeometry}
     />
 
-    <T is={shadowCamera} manual />
+    <T
+      is={shadowCamera}
+      manual
+    />
 
     <slot {ref} />
   </T.Group>

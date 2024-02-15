@@ -30,7 +30,7 @@
   pointerEvents={'none'}
   scale={0.6}
 >
-  <div class="transform -translate-y-1/2 text-black w-[500px]">
+  <div class="w-[500px] -translate-y-1/2 transform text-black">
     <h2>{title}</h2>
     <div class="leading-normal">
       <slot name="text" />

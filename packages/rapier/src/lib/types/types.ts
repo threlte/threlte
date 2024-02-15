@@ -34,6 +34,10 @@ export type ColliderShapes =
 export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
 
 export type ColliderEventMap = {
+  create: {
+    ref: Collider
+    cleanup: (callback: () => void) => void
+  }
   collisionenter: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
@@ -62,11 +66,11 @@ export type ColliderEventMap = {
   }
 }
 
-export type CollisionEnterEvent = CustomEvent<ColliderEventMap['collisionenter']>
-export type CollisionExitEvent = CustomEvent<ColliderEventMap['collisionexit']>
-export type SensorEnterEvent = CustomEvent<ColliderEventMap['sensorenter']>
-export type SensorExitEvent = CustomEvent<ColliderEventMap['sensorexit']>
-export type ContactEvent = CustomEvent<ColliderEventMap['contact']>
+export type CollisionEnterEvent = ColliderEventMap['collisionenter']
+export type CollisionExitEvent = ColliderEventMap['collisionexit']
+export type SensorEnterEvent = ColliderEventMap['sensorenter']
+export type SensorExitEvent = ColliderEventMap['sensorexit']
+export type ContactEvent = ColliderEventMap['contact']
 
 export type RigidBodyEventMap = ColliderEventMap & {
   sleep: void

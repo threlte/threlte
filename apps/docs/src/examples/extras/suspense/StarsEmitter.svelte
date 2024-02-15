@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { InstancedMesh } from '@threlte/extras'
   import Star from './Star.svelte'
 
@@ -20,7 +20,7 @@
   const lifetimeInFrames = 40
 
   let frame = 0
-  useFrame(() => {
+  useTask(() => {
     frame += 1
     for (let i = 0; i < spawnRate; i++) {
       stars.push({

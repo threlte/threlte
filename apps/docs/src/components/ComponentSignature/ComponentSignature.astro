@@ -40,9 +40,10 @@ const shiki = await getShiki()
 
 {showComponentSignature && (
 
+	<h2 class="mt-0" id="component-signature">Component Signature</h2>
+
 	<div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
 
-		<h2 class="mt-0">Component Signature</h2>
 
 		{
 			Astro.props.signature.extends && (
@@ -100,9 +101,9 @@ const shiki = await getShiki()
 														set:html={shiki
 															.codeToHtml(prop.type, {
 																lang: 'typescript',
-																theme: 'dracula-soft'
+																theme: 'dracula-soft',
 															})
-															.replace('<pre class="shiki" style="background-color: #282A36">', '')
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 															.replace('</pre>', '')}
 														/>
 													) : (
@@ -116,7 +117,7 @@ const shiki = await getShiki()
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
-																.replace('<pre class="shiki" style="background-color: #282A36">', '')
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 																.replace('</pre>', '')} />
 														</a>
 													)
@@ -134,7 +135,7 @@ const shiki = await getShiki()
 																			lang: 'typescript',
 																			theme: 'dracula-soft'
 																		})
-																		.replace('<pre class="shiki" style="background-color: #282A36">', '')
+																		.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 																		.replace('</pre>', '')
 																: ''
 														}
@@ -190,7 +191,7 @@ const shiki = await getShiki()
 																lang: 'typescript',
 																theme: 'dracula-soft'
 															})
-															.replace('<pre class="shiki" style="background-color: #282A36">', '')
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 															.replace('</pre>', '')}
 														/>
 													) : (
@@ -204,7 +205,7 @@ const shiki = await getShiki()
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
-																.replace('<pre class="shiki" style="background-color: #282A36">', '')
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 																.replace('</pre>', '')} />
 														</a>
 													)
@@ -254,7 +255,7 @@ const shiki = await getShiki()
 																lang: 'typescript',
 																theme: 'dracula-soft'
 															})
-															.replace('<pre class="shiki" style="background-color: #282A36">', '')
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 															.replace('</pre>', '')}
 														/>
 													) : (
@@ -268,7 +269,7 @@ const shiki = await getShiki()
 																	lang: 'typescript',
 																	theme: 'dracula-soft'
 																})
-																.replace('<pre class="shiki" style="background-color: #282A36">', '')
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
 																.replace('</pre>', '')} />
 														</a>
 													)

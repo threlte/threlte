@@ -8,6 +8,7 @@ import { bold, cyan, grey, red } from 'kleur/colors'
 import fs from 'node:fs'
 import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { request } from 'undici'
 import detectPackageManager from 'which-pm-runs'
 
 const print = console.log
@@ -116,6 +117,16 @@ const create = async () => {
               hint: 'Components and hooks to use the animation library Theatre.js in Threlte'
             },
             {
+              value: '@threlte/xr',
+              label: '@threlte/xr',
+              hint: 'Components and hooks to easily create WebXR apps with Threlte'
+            },
+            {
+              value: '@threlte/flex',
+              label: '@threlte/flex',
+              hint: 'Components to integrate the flexbox layout engine Yoga in Threlte'
+            },
+            {
               value: 'model-pipeline',
               label: 'Model Pipeline',
               hint: 'A simple model pipeline that automatically transforms GLTF models into declarative and re-usable Threlte components using @threlte/gltf'
@@ -138,6 +149,22 @@ const create = async () => {
     { onCancel: () => process.exit(1) }
   )
 
+  const resolvePackageVersion = async (packageName: string, range = 'latest') => {
+    try {
+      const response = await request(
+        `https://cdn.jsdelivr.net/npm/${packageName}@${range}/package.json`
+      )
+      const packageJson = (await response.body.json()) as { version: string }
+      return `^${packageJson.version}`
+    } catch (error) {
+      print(
+        bold(red(`✘ Failed to resolve package version for ${packageName}, using ${range} instead`))
+      )
+      return range
+    } finally {
+    }
+  }
+
   const types = (options.types === 'null' ? null : options.types) as Parameters<
     typeof createSvelteKitApp
   >[1]['types']
@@ -158,35 +185,50 @@ const create = async () => {
 
   const svelteKitPkg = JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf-8'))
 
+  const spinner = p.spinner()
+  spinner.start('Resolving package versions')
+
   const threltePackageJson = {
     devDependencies: {
-      three: '^0.153.0',
-      '@threlte/core': 'latest'
+      three: await resolvePackageVersion('three', '^0.159.0'),
+      '@threlte/core': await resolvePackageVersion('@threlte/core')
     },
     scripts: {}
   }
 
-  if (options.types === 'typescript') {
-    threltePackageJson.devDependencies['@types/three'] = '^0.152.1'
-  }
-  if (options.threltePackages.includes('@threlte/extras')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
-  }
-  if (options.threltePackages.includes('@threlte/rapier')) {
-    threltePackageJson.devDependencies['@threlte/rapier'] = 'latest'
-    threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = '^0.11.2'
-  }
-  if (options.threltePackages.includes('@threlte/theatre')) {
-    threltePackageJson.devDependencies['@threlte/theatre'] = 'latest'
-    threltePackageJson.devDependencies['@theatre/core'] = '^0.6.1'
-    threltePackageJson.devDependencies['@theatre/studio'] = '^0.6.1'
-  }
-  if (options.threltePackages.includes('model-pipeline')) {
-    threltePackageJson.devDependencies['@threlte/extras'] = 'latest'
-    threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
-  }
+  // prettier-ignore
+  {
+		if (options.types === 'typescript') {
+			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.159.0')
+		}
+		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
+			threltePackageJson.devDependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
+		}
+		if (options.threltePackages.includes('@threlte/rapier')) {
+			threltePackageJson.devDependencies['@threlte/rapier'] = await resolvePackageVersion('@threlte/rapier')
+			threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = await resolvePackageVersion('@dimforge/rapier3d-compat', '^0.11.2')
+		}
+		if (options.threltePackages.includes('@threlte/theatre')) {
+			threltePackageJson.devDependencies['@threlte/theatre'] = await resolvePackageVersion('@threlte/theatre')
+			threltePackageJson.devDependencies['@theatre/core'] = await resolvePackageVersion('@theatre/core', '^0.7.0')
+			threltePackageJson.devDependencies['@theatre/studio'] = await resolvePackageVersion('@theatre/studio', '^0.7.0')
+		}
+		if (options.threltePackages.includes('@threlte/xr')) {
+			threltePackageJson.devDependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
+			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.17.1')
+			threltePackageJson.scripts['dev'] = 'vite dev --host'
+		}
+		if (options.threltePackages.includes('@threlte/flex')) {
+			threltePackageJson.devDependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex')
+		}
+		if (options.threltePackages.includes('model-pipeline')) {
+			threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'
+		}
+	}
 
   const mergedPkg = merger.mergeObjects([svelteKitPkg, threltePackageJson])
+
+  spinner.stop('Resolved package versions')
 
   fs.writeFileSync(path.join(cwd, 'package.json'), JSON.stringify(mergedPkg, null, 2))
 
@@ -196,14 +238,32 @@ const create = async () => {
   if (options.types === 'typescript') {
     // handle typescript templates
     await copy(path.join(templatesDir, 'typescript'), cwd)
+    if (options.features.includes('vitest')) {
+      await copy(path.join(templatesDir, 'typescript+vitest'), cwd, { overwrite: true })
+    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
+    }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+typescript'), cwd, { overwrite: true })
+      if (options.features.includes('vitest')) {
+        await copy(path.join(templatesDir, 'xr+typescript+vitest'), cwd, { overwrite: true })
+      }
     }
   } else {
     // handle javascript templates
     await copy(path.join(templatesDir, 'javascript'), cwd)
+    if (options.features.includes('vitest')) {
+      await copy(path.join(templatesDir, 'javascript+vitest'), cwd, { overwrite: true })
+    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
+    }
+    if (options.threltePackages.includes('@threlte/xr')) {
+      await copy(path.join(templatesDir, 'xr+javascript'), cwd, { overwrite: true })
+      if (options.features.includes('vitest')) {
+        await copy(path.join(templatesDir, 'xr+javascript+vitest'), cwd, { overwrite: true })
+      }
     }
   }
 
@@ -233,14 +293,14 @@ const create = async () => {
   }
 
   if (options.install) {
-    const s = p.spinner()
+    const spinner = p.spinner()
     try {
       // Install dependencies
-      s.start(`Installing dependencies using ${pkgManager}`)
+      spinner.start(`Installing dependencies using ${pkgManager}`)
       await execa(pkgManager, ['install'], { cwd, stdio: 'ignore' })
-      s.stop(`Installed dependencies using ${pkgManager}`)
+      spinner.stop(`Installed dependencies using ${pkgManager}`)
     } catch (error) {
-      s.stop(red('Failed to install dependencies'))
+      spinner.stop(red('Failed to install dependencies'))
       p.note('You can install them manually.')
       // This will show install instructions later on
       options.install = false
@@ -291,6 +351,10 @@ const create = async () => {
     print(bold('✔ @threlte/theatre'))
     print(cyan('  https://threlte.xyz/docs/reference/theatre/getting-started'))
     print(cyan('  https://www.theatrejs.com/\n'))
+  }
+  if (options.threltePackages.includes('@threlte/xr')) {
+    print(bold('✔ @threlte/xr'))
+    print(cyan('  https://threlte.xyz/docs/reference/xr/getting-started\n'))
   }
   if (options.threltePackages.includes('model-pipeline')) {
     print(bold('✔ Model Pipeline'))

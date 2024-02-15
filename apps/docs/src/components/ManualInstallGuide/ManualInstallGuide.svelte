@@ -7,24 +7,40 @@
   let installExtras = false
   let installRapier = false
   let installTheatre = false
+  let installXR = false
+  let installFlex = false
   let installTypes = false
 
   let divider = ' \\'
   let merger = '\n'
   let space = '            '
 
+  const useDivider = (...args: boolean[]) => {
+    return args.some(Boolean) ? divider : ''
+  }
+
+  $: coreDivider = useDivider(
+    installExtras,
+    useGltf,
+    installRapier,
+    installTheatre,
+    installXR,
+    installFlex,
+    installTypes
+  )
+  $: extrasDivider = useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
+  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes)
+  $: theatreDivider = useDivider(installXR, installFlex, installTypes)
+  $: xrDivider = useDivider(installFlex, installTypes)
+  $: flexDivider = useDivider(installTypes)
+
   $: installCode = [
-    `npm install three @threlte/core${
-      installExtras || useGltf || installRapier || installTheatre || installTypes ? divider : ''
-    }`,
-    (installExtras || useGltf || installTheatre) &&
-      `${space}@threlte/extras${installRapier || installTheatre || installTypes ? divider : ''}`,
-    installRapier &&
-      `${space}@threlte/rapier @dimforge/rapier3d-compat${
-        installTypes || installTheatre ? divider : ''
-      }`,
-    installTheatre &&
-      `${space}@threlte/theatre @theatre/core @theatre/studio${installTypes ? divider : ''}`,
+    `npm install three @threlte/core${coreDivider}`,
+    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${extrasDivider}`,
+    installRapier && `${space}@threlte/rapier @dimforge/rapier3d-compat${rapierDivider}`,
+    installTheatre && `${space}@threlte/theatre @theatre/core @theatre/studio${theatreDivider}`,
+    installXR && `${space}@threlte/xr${xrDivider}`,
+    installFlex && `${space}@threlte/flex${flexDivider}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -49,8 +65,8 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose three.js scenes declaratively and state-driven. Three.js and Threlte's core the library
-    are required.
+    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer
+    dependency.
   </p>
 
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
@@ -127,12 +143,40 @@
 
   <InstallButton
     on:click={() => {
+      installXR = !installXR
+    }}
+    active={installXR}>@threlte/xr</InstallButton
+  >
+
+  <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
+
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+
+  <InstallButton
+    on:click={() => {
+      installFlex = !installFlex
+    }}
+    active={installFlex}>@threlte/flex</InstallButton
+  >
+
+  <p class="my-0 self-center text-sm md:text-base">
+    Components and hooks to use the flex engine <a
+      href="https://yogalayout.com/"
+      target="_blank"
+      rel="noreferrer">Yoga</a
+    > in Threlte.
+  </p>
+
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+
+  <InstallButton
+    on:click={() => {
       installTypes = !installTypes
     }}
     active={installTypes}>@types/three</InstallButton
   >
 
-  <p class="my-0 self-center text-sm md:text-base">TypeScript types for three.js.</p>
+  <p class="my-0 self-center text-sm md:text-base">TypeScript types for Three.js.</p>
 </div>
 
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>

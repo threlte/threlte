@@ -1,7 +1,11 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useFrame, useParent, useThrelte } from '@threlte/core'
-  import { Camera } from 'three'
+  import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
+
+  import type { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
+  import { onDestroy } from 'svelte'
+
   import { useControlsContext } from '../useControlsContext'
   import type {
     OrbitControlsEvents,
@@ -27,9 +31,9 @@
 
   export const ref = new ThreeOrbitControls($parent, renderer.domElement)
 
-  const { start, stop } = useFrame(() => ref.update(), {
-    autostart: false,
-    debugFrameloopMessage: 'OrbitControls: updating controls'
+  const { start, stop } = useTask(ref.update, {
+    autoStart: false,
+    autoInvalidate: false
   })
 
   $: {
@@ -40,6 +44,8 @@
   const component = forwardEventHandlers()
 
   const { orbitControls } = useControlsContext()
+  orbitControls.set(ref)
+  onDestroy(() => orbitControls.set(undefined))
 </script>
 
 <T
@@ -48,12 +54,6 @@
   {...$$restProps}
   bind:this={$component}
   on:change={invalidate}
-  on:create={({ ref, cleanup }) => {
-    orbitControls.set(ref)
-    cleanup(() => {
-      orbitControls.set(undefined)
-    })
-  }}
 >
   <slot {ref} />
 </T>

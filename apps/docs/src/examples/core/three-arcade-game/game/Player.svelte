@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Collider } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
   import { writable } from 'svelte/store'
@@ -21,7 +21,7 @@
   $: playerCanMove =
     $state === 'playing' || $state === 'await-ball-spawn' || $state === 'level-loading'
   $: centerPlayer = $state === 'menu' || $state === 'level-loading'
-  useFrame((_, delta) => {
+  useTask((delta) => {
     if (!playerCanMove) {
       if (centerPlayer) {
         positionX.set(0)
@@ -69,7 +69,7 @@
 
   let colliders: Collider[] = []
 
-  useFrame(() => {
+  useTask(() => {
     if (colliders.length) {
       const collider = colliders[0]!
       collider.setTranslation({ x: $positionX, y: 0, z: positionZ })

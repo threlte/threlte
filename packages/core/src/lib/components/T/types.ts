@@ -24,7 +24,7 @@ export type AnyFn = (...args: any) => any
  * This type returns an InstanceType if the provided type is a class, otherwise
  * it returns the type itself.
  */
-export type MaybeInstance<Type extends any> = Type extends AnyClass ? InstanceType<Type> : Type
+export type MaybeInstance<Type> = Type extends AnyClass ? InstanceType<Type> : Type
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
@@ -38,7 +38,7 @@ export type AnyProps = Record<string, any>
 /**
  * ### Base Props
  */
-export type BaseProps<Type extends any> = {
+export type BaseProps<Type> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
 }
 
@@ -55,36 +55,37 @@ export type DisposableProps = {
 /**
  * ### Class Props
  */
-export type ClassProps<Type extends any> = Type extends AnyClass
+export type ClassProps<Type> = Type extends AnyClass
   ? {
       args?: any[] | ConstructorParameters<Type>
     }
   : Record<string, unknown>
 
 // Ref Props
-export type RefProps<Type extends any> = {
+export type RefProps<Type> = {
   ref?: MaybeInstance<Type>
 }
 
 /**
  * ### Camera Props
  */
-export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCamera: true }
-  ? {
-      /**
-       * By default, Threlte will update the cameras aspect ratio or frustum
-       * when the canvas is resized. If you want to manually control the
-       * camera, set this to true.
-       * @default true
-       */
-      manual?: boolean
-      /**
-       * Sets the camera as the default camera for the scene.
-       * @default false
-       */
-      makeDefault?: boolean
-    }
-  : Record<string, unknown>
+export type CameraProps<Type> =
+  MaybeInstance<Type> extends { isCamera: true }
+    ? {
+        /**
+         * By default, Threlte will update the cameras aspect ratio or frustum
+         * when the canvas is resized. If you want to manually control the
+         * camera, set this to true.
+         * @default true
+         */
+        manual?: boolean
+        /**
+         * Sets the camera as the default camera for the scene.
+         * @default false
+         */
+        makeDefault?: boolean
+      }
+    : Record<string, unknown>
 
 /**
  * ### Instance Props
@@ -96,7 +97,7 @@ export type CameraProps<Type extends any> = MaybeInstance<Type> extends { isCame
  * // { fov: number, aspect: number, etc… }
  * ```
  */
-export type InstanceProps<Type extends any> = Partial<
+export type InstanceProps<Type> = Partial<
   Omit<
     MaybeInstance<Type> extends Primitive
       ? Record<string, unknown>
@@ -108,8 +109,8 @@ export type InstanceProps<Type extends any> = Partial<
                 | Parameters<MaybeInstance<Type>[K]['set']>
                 | Parameters<MaybeInstance<Type>[K]['set']>[0]
             : MaybeInstance<Type>[K] extends AnyFn
-            ? never
-            : MaybeInstance<Type>[K]
+              ? never
+              : MaybeInstance<Type>[K]
         },
     ConditionalKeys<MaybeInstance<Type>, AnyFn> | OmittedPropKeys
   >
@@ -123,7 +124,7 @@ export type InstanceProps<Type extends any> = Partial<
  * @example Props<typeof PerspectiveCamera>
  * // { position: [number, number, number], fov: number, etc… }
  */
-export type Props<Type extends any> = AnyProps &
+export type Props<Type> = AnyProps &
   DisposableProps &
   RefProps<Type> &
   BaseProps<Type> &
@@ -140,7 +141,7 @@ export type Props<Type extends any> = AnyProps &
  * @example Slots<typeof PerspectiveCamera>
  * // { default: { ref: PerspectiveCamera } }
  */
-export type Slots<Type extends any> = {
+export type Slots<Type> = {
   default: {
     ref: MaybeInstance<Type>
   }
@@ -156,18 +157,19 @@ export type Slots<Type extends any> = {
  * implementing an event map with the event name as the key and the event
  * payload as the value with a `type` property that matches the key.
  */
-export type ObjectEvents<Type extends any> = MaybeInstance<Type> extends {
-  addEventListener: (...args: any[]) => any
-}
-  ? {
-      [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
-        Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
-        { type: Key }
-      >
-    }
-  : Record<string, unknown>
+export type ObjectEvents<Type> =
+  MaybeInstance<Type> extends {
+    addEventListener: (...args: any[]) => any
+  }
+    ? {
+        [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
+          Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
+          { type: Key }
+        >
+      }
+    : Record<string, unknown>
 
-export type CreateEvent<Type extends any> = {
+export type CreateEvent<Type> = {
   create: {
     ref: MaybeInstance<Type>
     cleanup: (callback: () => void) => void
@@ -181,4 +183,4 @@ export type CreateEvent<Type extends any> = {
  * @example Events<typeof PerspectiveCamera>
  * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
  */
-export type Events<Type extends any> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
+export type Events<Type> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>

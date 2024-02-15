@@ -2,6 +2,7 @@
 {
   order: 2,
   category: '@threlte/rapier',
+  sourcePath: 'packages/rapier/src/lib/components/RigidBody/RigidBody.svelte',
   name: '<RigidBody>',
   type: 'component',
   componentSignature:
@@ -40,36 +41,64 @@
         ],
       events:
         [
-          { name: 'sleep', payload: 'void' },
-          { name: 'wake', payload: 'void' },
-          { name: 'collisionenter', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              manifold: TempContactManifold
+          {
+            name: 'create', 
+            payload: '{
+              ref: RigidBody,
+              cleanup: (callback: () => void) => void }
+            '
+          },
+          {
+            name: 'sleep',
+            payload: 'void'
+          },
+          {
+            name: 'wake',
+            payload: 'void'
+          },
+          {
+            name: 'collisionenter',
+            payload: '{
+              targetCollider: Collider,
+              targetRigidBody: RigidBody | null,
+              manifold: TempContactManifold,
               flipped: boolean
-              }>' },
-          { name: 'collisionexit', payload: 'CustomEvent<{
-              targetCollider: Collider
+            }'
+          },
+          {
+            name: 'collisionexit',
+            payload: '{
+              targetCollider: Collider,
               targetRigidBody: RigidBody | null
-              }>' },
-          { name: 'sensorenter', payload: 'CustomEvent<{
-              targetCollider: Collider
+              }'
+          },
+          { 
+            name: 'sensorenter', 
+            payload: '{
+              targetCollider: Collider,
               targetRigidBody: RigidBody | null
-              }>' },
-          { name: 'sensorexit', payload: 'CustomEvent<{
-              targetCollider: Collider
+            }'
+          },
+          {
+            name: 'sensorexit',
+            payload: '{
+              targetCollider: Collider,
               targetRigidBody: RigidBody | null
-              }>' },
-          { name: 'contact', payload: 'CustomEvent<{
-              targetCollider: Collider
-              targetRigidBody: RigidBody | null
-              manifold: TempContactManifold
-              flipped: boolean
-              maxForceDirection: Vector
-              maxForceMagnitude: number
-              totalForce: Vector
+            }'
+          },
+          {
+            name: 'contact',
+            payload: '{
+              targetCollider: Collider,
+              targetRigidBody: RigidBody | null,
+              manifold: TempContactManifold,
+              flipped: boolean,
+              maxForceDirection: Vector,
+              maxForceMagnitude: number,
+              totalForce: Vector,
               totalForceMagnitude: number
-              }>' }
+            }'
+          }
         ],
       bindings:
         [

@@ -5,10 +5,9 @@ import '$styles/app.css'
 import '$styles/prose.css'
 import '$styles/markprompt.css'
 import '$styles/dracula.css'
-import { ViewTransitions } from 'astro:transitions'
 
 export interface Props {
-  title?: string | undefined
+  title: string
 }
 
 const title = Astro.props.title
@@ -22,8 +21,7 @@ const title = Astro.props.title
       name="viewport"
       content="width=device-width"
     />
-    <title>{title ?? 'Threlte'}</title>
-    <ViewTransitions />
+    <title>{title}</title>
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -78,7 +76,7 @@ const title = Astro.props.title
     />
     <meta
       name="theme-color"
-      content="#ffffff"
+      content="#0a0F19"
     />
     <meta
       name="viewport"
@@ -94,8 +92,12 @@ const title = Astro.props.title
       content="website"
     />
     <meta
+      name="description"
+      content="Threlte – Rapidly build interactive 3D apps for the web"
+    />
+    <meta
       property="og:description"
-      content="A Three.js component library for Svelte."
+      content="Threlte – Rapidly build interactive 3D apps for the web"
     />
     <meta
       property="og:image"
@@ -115,10 +117,26 @@ const title = Astro.props.title
     />
     <meta
       property="og:image:alt"
-      content="Threlte - rapidly build interactive 3D apps for the web."
+      content="Threlte – Rapidly build interactive 3D apps for the web"
+    />
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    />
+    <meta
+      name="twitter:title"
+      content="Threlte – Rapidly build interactive 3D apps for the web"
+    />
+    <meta
+      name="twitter:description"
+      content="Threlte is a 3D framework for Svelte that lets you rapidly build interactive 3D apps for the web"
+    />
+    <meta
+      property="og:site_name"
+      content="Threlte"
     />
   </head>
-  <body transition:animate="morph">
+  <body transition:animate="initial">
     <slot />
     <style>
       html {

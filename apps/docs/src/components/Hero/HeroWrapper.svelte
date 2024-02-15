@@ -61,7 +61,7 @@
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="fixed top-0 left-0 z-10 h-[100lvh] w-screen">
+    <div class="fixed left-0 top-0 z-10 h-[100lvh] w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         rendererParameters={{
@@ -164,8 +164,8 @@
       in={2.7}
       out={3.9}
     >
-      <div
-        class="fixed top-[66svh] top-[66vh] left-0 flex w-screen flex-col items-center justify-center"
+      <h2
+        class="fixed left-0 top-[66svh] top-[66vh] flex w-screen flex-col items-center justify-center"
       >
         <TextEffect
           id="intro"
@@ -197,9 +197,9 @@
             end: 4
           }}
         >
-          Threlte 6
+          Threlte 7
         </TextEffect>
-      </div>
+      </h2>
     </Trigger>
   </Theatre>
 </div>

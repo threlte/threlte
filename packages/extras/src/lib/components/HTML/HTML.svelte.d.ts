@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Camera, Group, Object3D } from 'three'
 
 export type HTMLProps = Props<Group> & {
@@ -40,4 +40,4 @@ export type HTMLSlots = {
   default: {}
 }
 
-export default class HTML extends SvelteComponentTyped<HTMLProps, HTMLEvents, HTMLSlots> {}
+export default class HTML extends SvelteComponent<HTMLProps, HTMLEvents, HTMLSlots> {}

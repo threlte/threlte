@@ -6,9 +6,9 @@
   import type { TextMesh } from './Text.svelte'
   import type { TextProps } from './Text.svelte'
 
-  export let font: TextProps['font']
-  export let characters: TextProps['characters']
-  export let sdfGlyphSize: TextProps['sdfGlyphSize']
+  export let font: TextProps['font'] = undefined
+  export let characters: TextProps['characters'] = undefined
+  export let sdfGlyphSize: TextProps['sdfGlyphSize'] = undefined
 
   export const ref = new Text() as TextMesh
 
@@ -23,7 +23,7 @@
   const onUpdate = async () => {
     await tick()
     ref.sync(() => {
-      invalidate('Text: sync finished')
+      invalidate()
       dispatch('sync')
     })
   }
@@ -38,6 +38,9 @@
   is={ref}
   let:ref
   {...$$restProps}
+  {font}
+  {characters}
+  {sdfGlyphSize}
   bind:this={$component}
 >
   <slot {ref} />

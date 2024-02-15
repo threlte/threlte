@@ -33,11 +33,14 @@
   }
 
   const onChange = () => {
-    invalidate('PointerLockControls: change event')
+    invalidate()
     dispatch('change')
   }
 
-  export const lock = () => domElement.requestPointerLock()
+  export const lock = () =>
+    domElement.requestPointerLock({
+      unadjustedMovement: true
+    })
   export const unlock = () => document.exitPointerLock()
 
   domElement.addEventListener('mousemove', onMouseMove)

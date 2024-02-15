@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createRawEventDispatcher, forwardEventHandlers, T } from '@threlte/core'
-  // @ts-ignore
   import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
   import { useGltf } from '../../hooks/useGltf'
   import type { ThrelteGltf } from '../../types/types'
   import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
+  import { useSuspense } from '../../suspense/useSuspense'
 
   type $$Props = GltfProps
   type $$Events = GltfEvents
@@ -82,9 +82,11 @@
     dispatch('error', error.message)
   }
 
+  const suspend = useSuspense()
+
   const loadGltf = async (url: string) => {
     try {
-      const model = await loader.load(url)
+      const model = await suspend(loader.load(url))
       onLoad(model)
     } catch (error: any) {
       onError(error)
@@ -95,7 +97,12 @@
 </script>
 
 {#if scene}
-  <T is={scene} {...$$restProps} let:ref bind:this={$component}>
+  <T
+    is={scene}
+    {...$$restProps}
+    let:ref
+    bind:this={$component}
+  >
     <slot {ref} />
   </T>
 {/if}

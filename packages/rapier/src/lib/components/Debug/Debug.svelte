@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { BufferAttribute, BufferGeometry } from 'three'
   import { useRapier } from '../../hooks/useRapier'
@@ -9,17 +9,11 @@
 
   const { world, debug } = useRapier()
 
-  const buffers = world.debugRender()
-  const vertices = new BufferAttribute(buffers.vertices, 3)
-  const colors = new BufferAttribute(buffers.colors, 4)
-
   const geometry = new BufferGeometry()
-  geometry.setAttribute('position', vertices)
-  geometry.setAttribute('color', colors)
 
   debug.set(true)
 
-  useFrame(() => {
+  useTask(() => {
     const buffers = world.debugRender()
 
     const vertices = new BufferAttribute(buffers.vertices, 3)
@@ -30,16 +24,15 @@
   })
 
   onDestroy(() => {
-    geometry.dispose()
     debug.set(false)
   })
 </script>
 
-<T.LineSegments renderOrder={Infinity}>
-  <T
-    is={geometry}
-    attach="geometry"
-  />
+<T.LineSegments
+  frustumCulled={false}
+  renderOrder={Infinity}
+>
+  <T is={geometry} />
   <T.LineBasicMaterial
     vertexColors
     {...$$restProps}

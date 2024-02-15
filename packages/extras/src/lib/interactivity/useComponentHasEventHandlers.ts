@@ -4,13 +4,11 @@ import { writable } from 'svelte/store'
 
 export const useComponentHasEventHandlers = (eventNames: string[]) => {
   const component = get_current_component()
-  const hasEventHandlers = writable<boolean>(false)
+  const hasEventHandlers = writable(false)
 
   onMount(() => {
     hasEventHandlers.set(
-      !!Object.keys(component.$$.callbacks).filter((value) =>
-        eventNames ? eventNames.includes(value) : true
-      ).length
+      Object.keys(component.$$.callbacks).some((value) => eventNames.includes(value))
     )
   })
 

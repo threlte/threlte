@@ -1,5 +1,126 @@
 # @threlte/core
 
+## 7.1.0
+
+### Minor Changes
+
+- 127c03f: Remove children binding from HierarchicalObject component
+
+## 7.0.12
+
+### Patch Changes
+
+- 722f8c27: Export Three.js revision int
+
+## 7.0.11
+
+### Patch Changes
+
+- 04ac53aa: Added args to useLoader options
+
+## 7.0.10
+
+### Patch Changes
+
+- 94f687ec: fix: respect useTask autoStart
+
+## 7.0.9
+
+### Patch Changes
+
+- 22373297: Remove mitt from peer dependencies
+
+## 7.0.8
+
+### Patch Changes
+
+- 1c8f29bb: Fixed sorting flag check on DAG
+
+## 7.0.7
+
+### Patch Changes
+
+- 71797f73: Minor optimizations to internal frame scheduling classes (preparations for devtools)
+
+## 7.0.6
+
+### Patch Changes
+
+- 60b78f27: useTask: key can be an actual Key type
+
+## 7.0.5
+
+### Patch Changes
+
+- 6729814b: Fixed eslint config and fixed some linting errors
+
+## 7.0.4
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 7.0.3
+
+### Patch Changes
+
+- 407640a8: hotfix: remove console import
+
+## 7.0.2
+
+### Patch Changes
+
+- cc4085d2: Fixes a bug where calling `useThrelte().shouldRender()` resets the invalidation flags and makes it impossible to invoke more than once per frame.
+
+## 7.0.1
+
+### Patch Changes
+
+- ac981216: Fixed useTask options
+
+## 7.0.0
+
+### Major Changes
+
+- 44488636: See the [migration guide](https://threlte.xyz/docs/learn/advanced/migration-guides#threlte-7)
+
+## 6.1.1
+
+### Patch Changes
+
+- f026619b: Eagerly set canvas size on start
+
+## 6.1.0
+
+### Minor Changes
+
+- 8b55284e: Added `loader.load` support to `useLoader`
+
+## 6.0.10
+
+### Patch Changes
+
+- 34741ea7: \* (xr) - useHitTest: Allow hit testing from controllers / hands
+  - (core) - Do not attempt to resize renderer when in an immersive xr session
+
+## 6.0.9
+
+### Patch Changes
+
+- 17f938b: Make canvas properties reactive and document non-reactive properties
+
+## 6.0.8
+
+### Patch Changes
+
+- b08a992d: Add error messages to context-based hooks
+
+## 6.0.7
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
 ## 6.0.6
 
 ### Patch Changes

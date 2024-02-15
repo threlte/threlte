@@ -1,5 +1,35 @@
 # @threlte/extras
 
+## 2.1.6
+
+### Patch Changes
+
+- 4f7de350: Theatre module fix
+
+## 2.1.5
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 2.1.4
+
+### Patch Changes
+
+- 2ae76e18: Threlte 7 compatibility
+
+## 2.1.3
+
+### Patch Changes
+
+- c5cf4080: Fix color management of Theatre.js color picker
+
+## 2.1.2
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
 ## 2.1.1
 
 ### Patch Changes

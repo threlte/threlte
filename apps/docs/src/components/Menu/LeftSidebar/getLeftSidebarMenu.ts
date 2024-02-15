@@ -1,4 +1,4 @@
-import { getCollection, CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 type ReferenceCategoryKey = NonNullable<CollectionEntry<'reference'>['data']['category']>
 
@@ -8,6 +8,8 @@ const referenceSidebarMenuCategoryOrder: ReferenceCategoryKey[] = [
   '@threlte/gltf',
   '@threlte/rapier',
   '@threlte/theatre',
+  '@threlte/xr',
+  '@threlte/flex',
   'Documentation'
 ]
 
@@ -52,6 +54,7 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
   'Advanced',
+  'More',
   'Preprocessing'
 ]
 
@@ -90,47 +93,44 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   }
 }
 
-type ExamplesCategoryKey = Exclude<CollectionEntry<'examples'>['data']['category'], undefined>
-
-const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
-  'Animation',
-  'Camera',
-  'Geometry',
-  'Postprocessing'
-]
-
 const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const learnCollection = await getCollection('examples')
 
-  const categoryNames = [...new Set(learnCollection.map((item) => item.data.category))]
-
-  const categories = categoryNames
-    .filter((category) => {
-      return !!category
-    })
-    .map((category): LeftSidebarMenuCategory => {
-      const menuItems = learnCollection
-        .filter((item) => item.data.category && item.data.category === category)
-        .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-        .map((item): LeftSidebarMenuItem => {
-          return {
-            title: item.data.title,
-            slug: item.slug,
-            isDivider: false
-          }
+  // Trying to find the category names by looking at the directory structure. An
+  // example in the dir 'src/content/examples/Animation System/transitions.mdx'
+  // would have a category name of "Animation System".
+  const categoryNames = [
+    ...new Set(
+      learnCollection
+        .filter((item) => {
+          // only use items that are nested in a subdirectory
+          return item.id.split('/').length > 1
         })
-      return {
-        urlPrefix: '/docs/examples',
-        menuItems,
-        title: category as Exclude<typeof category, undefined>
-      }
-    })
-
-  categories.sort((a, b) => {
-    return (
-      examplesSidebarMenuCategoryOrder.indexOf(a.title as ExamplesCategoryKey) -
-      examplesSidebarMenuCategoryOrder.indexOf(b.title as ExamplesCategoryKey)
+        .map((item) => {
+          return item.id.split('/')[0] as string
+        })
     )
+  ]
+
+  const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
+    const menuItems = learnCollection
+      .filter((item) => item.id.startsWith(category))
+      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+      .map((item): LeftSidebarMenuItem => {
+        // Removes the file extension from item.id and finds last item in array
+        // when splitting on '/'. This is the title of the example.
+        const title = item.id.split('/').pop()?.split('.')[0] as string
+        return {
+          title,
+          slug: item.slug,
+          isDivider: false
+        }
+      })
+    return {
+      urlPrefix: '/docs/examples',
+      menuItems,
+      title: category as Exclude<typeof category, undefined>
+    }
   })
 
   return {

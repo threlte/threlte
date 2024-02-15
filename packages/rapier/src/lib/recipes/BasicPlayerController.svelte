@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, T, useFrame } from '@threlte/core'
+  import { createRawEventDispatcher, T, useTask } from '@threlte/core'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
   import CollisionGroups from '../components/CollisionGroups/CollisionGroups.svelte'
@@ -42,9 +42,8 @@
   }
   $: grounded ? dispatch('groundenter') : dispatch('groundexit')
 
-  useFrame(() => {
-    if (!rigidBody) return
-    t.fromArray([0, 0, 0])
+  const { start } = useTask(() => {
+    t.set(0, 0, 0)
     if (keys.down) t.x += 1
     if (keys.up) t.x -= 1
     if (keys.left) t.z += 1
@@ -63,18 +62,24 @@
     rigidBody.setLinvel(t, true)
   })
 
+  $: if (rigidBody) start()
+
   const onKeyDown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
+    switch (e.key.toLowerCase()) {
+      case 's':
+      case 'arrowdown':
         keys.down = true
         break
-      case 'ArrowUp':
+      case 'w':
+      case 'arrowup':
         keys.up = true
         break
-      case 'ArrowLeft':
+      case 'a':
+      case 'arrowleft':
         keys.left = true
         break
-      case 'ArrowRight':
+      case 'd':
+      case 'arrowright':
         keys.right = true
         break
       case ' ':
@@ -86,17 +91,21 @@
   }
 
   const onKeyUp = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
+    switch (e.key.toLowerCase()) {
+      case 's':
+      case 'arrowdown':
         keys.down = false
         break
-      case 'ArrowUp':
+      case 'w':
+      case 'arrowup':
         keys.up = false
         break
-      case 'ArrowLeft':
+      case 'a':
+      case 'arrowleft':
         keys.left = false
         break
-      case 'ArrowRight':
+      case 'd':
+      case 'arrowright':
         keys.right = false
         break
       default:
@@ -105,7 +114,10 @@
   }
 </script>
 
-<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup|preventDefault={onKeyUp} />
+<svelte:window
+  on:keydown|preventDefault={onKeyDown}
+  on:keyup|preventDefault={onKeyUp}
+/>
 
 <T.Group {position}>
   <RigidBody
@@ -115,7 +127,10 @@
     type={'dynamic'}
   >
     <CollisionGroups groups={playerCollisionGroups}>
-      <Collider shape={'capsule'} args={[height / 2 - radius, radius]} />
+      <Collider
+        shape={'capsule'}
+        args={[height / 2 - radius, radius]}
+      />
     </CollisionGroups>
 
     <CollisionGroups groups={groundCollisionGroups}>

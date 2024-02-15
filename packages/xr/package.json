@@ -1,0 +1,66 @@
+{
+  "name": "@threlte/xr",
+  "version": "0.1.2",
+  "author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite dev --host",
+    "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "format": "prettier --write --plugin-search-dir=. .",
+    "cleanup": "rimraf node_modules .svelte-kit dist"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^3.1.1",
+    "@sveltejs/kit": "^2.4.3",
+    "@sveltejs/package": "^2.2.6",
+    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "@threlte/core": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-svelte": "^2.35.1",
+    "svelte-check": "^3.6.3",
+    "typescript": "^5.3.3",
+    "@types/three": "^0.160.0",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33",
+    "publint": "^0.2.7",
+    "svelte": "^4.2.9",
+    "three": "^0.160.1",
+    "tslib": "^2.6.2",
+    "vite": "^5.0.12",
+    "vite-plugin-mkcert": "^1.17.3"
+  },
+  "peerDependencies": {
+    "svelte": ">=4",
+    "three": ">=0.133"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/lib/index.ts",
+      "svelte": "./src/lib/index.ts"
+    }
+  },
+  "types": "./src/lib/index.ts",
+  "svelte": "./src/lib/index.ts",
+  "publishOverrides": {
+    "files": [
+      "dist",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*"
+    ],
+    "svelte": "./dist/index.js",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "svelte": "./dist/index.js"
+      }
+    },
+    "types": "./dist/index.d.ts"
+  }
+}

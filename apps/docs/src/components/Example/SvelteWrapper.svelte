@@ -6,6 +6,7 @@
   export let path: string
   export let files: Record<string, string>
   export let hideCode: boolean
+  export let hideStackblitz: boolean = false
   export let iframe: boolean
 
   const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
@@ -38,7 +39,7 @@
     <iframe
       src="/examples/{path}"
       title={path}
-      class="w-full h-full border-none"
+      class="h-full w-full border-none"
     />
   {:else if mounted && AppModule}
     {#await AppModule() then Mod}
@@ -46,7 +47,9 @@
     {/await}
   {/if}
 
-  <div class="absolute right-4 bottom-4">
-    <OpenInStackblitz {files} />
-  </div>
+  {#if !hideStackblitz}
+    <div class="absolute bottom-4 right-4">
+      <OpenInStackblitz {files} />
+    </div>
+  {/if}
 </div>

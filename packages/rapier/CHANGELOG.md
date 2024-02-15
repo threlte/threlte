@@ -1,5 +1,41 @@
 # @threlte/extras
 
+## 2.0.0
+
+### Major Changes
+
+- 04c9e7df: Replace internal usage of useFrame with useTask.
+
+  ### Note
+
+  `@threlte/core@7` is now required.
+
+## 1.1.4
+
+### Patch Changes
+
+- 3cc3fdcc: Removed bun types from @threlte/core tsconfig to fix useLoader type export (affects possibly other packages)
+
+## 1.1.3
+
+### Patch Changes
+
+- a3f9cc43: \* Add create event for RigidBody, Collider, and AutoCollider
+  - Set `frustumCulled = true` on `<Debug>`
+  - Minor performance improvements
+
+## 1.1.2
+
+### Patch Changes
+
+- e05c73a: Add @threlte/xr package and bump three to 155
+
+## 1.1.1
+
+### Patch Changes
+
+- 204838b: Added proper event types to `<RigidBody>` components, updated from `SvelteComponentTyped` to `SvelteComponent`
+
 ## 1.1.0
 
 ### Minor Changes

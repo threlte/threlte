@@ -3,6 +3,7 @@
   order: 11,
   category: '@threlte/extras',
   name: <GLTF>,
+  sourcePath: 'packages/extras/src/lib/components/GLTF/GLTF.svelte',
   type: 'component',
   'componentSignature':
     {
@@ -63,9 +64,14 @@ Use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse a glTF model 
 
 ### Interaction
 
-The `<GLTF>` component supports interaction:
+The `<GLTF>` component supports interaction events with the use of `interactivity` plugin.
 
 ```svelte
+<script>
+  import { interactivity } from '@threlte/extras'
+  interactivity()
+</script>
+
 <GLTF
   url="/models/helmet/DamagedHelmet.gltf"
   interactive

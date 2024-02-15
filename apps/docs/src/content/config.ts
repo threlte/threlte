@@ -60,14 +60,20 @@ export const referenceCategories = [
   '@threlte/rapier',
   '@threlte/theatre',
   '@threlte/gltf',
+  '@threlte/xr',
+  '@threlte/flex',
   'Documentation'
 ] as const
 
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
   schema: z.object({
+    schemaType: z.string().default('reference'),
     type: z.enum(['component', 'hook', 'plugin']).optional(),
     name: z.string(),
+    /**
+     * Path to the source file or directory, relative to the root of the repository.
+     */
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
@@ -79,7 +85,8 @@ export const referenceCollection = defineCollection({
 
 export const learnCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'Preprocessing']),
+    schemaType: z.string().default('learn'),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
@@ -89,14 +96,14 @@ export const learnCollection = defineCollection({
 
 export const examplesCollection = defineCollection({
   schema: z.object({
-    category: z.enum(['Animation', 'Camera', 'Geometry', 'Postprocessing']).optional(),
-    title: z.string(),
+    schemaType: z.string().default('examples'),
     order: z.number().optional()
   })
 })
 
 export const testimonialsCollection = defineCollection({
   schema: z.object({
+    schemaType: z.string().default('testimonials'),
     image: z.string(),
     name: z.string(),
     title: z.string(),
@@ -107,6 +114,7 @@ export const testimonialsCollection = defineCollection({
 
 export const showcaseCollection = defineCollection({
   schema: z.object({
+    schemaType: z.string().default('showcase'),
     image: z.string(),
     name: z.string(),
     live: z.string().optional(),

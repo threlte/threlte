@@ -1,5 +1,42 @@
 # create-threlte
 
+## 2.0.0
+
+### Major Changes
+
+- d5312133: Updated to SvelteKit 2, updated dependencies
+
+## 1.4.1
+
+### Patch Changes
+
+- 7212d9d8: Removed Alpha state from flex package in create-threlte
+- 7212d9d8: Bumped create-threlte template dependency versions
+
+## 1.4.0
+
+### Minor Changes
+
+- e2f16366: Model Pipeline: Do not process a file if it's already present.
+
+## 1.3.0
+
+### Minor Changes
+
+- eba2939: Dynamic version resolution of dependencies, added tsconfig
+
+## 1.2.0
+
+### Minor Changes
+
+- a8b97d48: Added setup to xr template: vite mkcert plugin and --host options
+
+## 1.1.0
+
+### Minor Changes
+
+- 7520191: Added `@threlte/xr` to create-threlte
+
 ## 1.0.1
 
 ### Patch Changes

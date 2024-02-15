@@ -140,7 +140,7 @@
       values = newValues
       // this invalidation also invalidates changes catched by slotted
       // components such as <Sync> or <Declare>.
-      invalidate('<SheetObject>: props updated')
+      invalidate()
     })
   })
 

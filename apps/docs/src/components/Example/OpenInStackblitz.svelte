@@ -29,7 +29,7 @@
 </script>
 
 <button
-  class="text-sm hover:underline focus:outline-none border bg-orange-800/50 border-orange/5 text-orange px-2 rounded-sm py-1 hover:text-orange-400 hover:bg-orange-800/70"
+  class="border-orange/5 text-orange rounded-sm border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-none"
   on:click={onClick}
 >
   <svg

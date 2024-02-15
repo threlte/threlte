@@ -68,7 +68,7 @@
         isHovering = false
       }}
       on:click={onClick}
-      class="bg-orange-500 rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
+      class="rounded-full bg-orange-500 px-3 text-white hover:opacity-90 active:opacity-70"
     >
       I'm a regular HTML button
     </button>
@@ -80,7 +80,7 @@
     pointerEvents="none"
   >
     <p
-      class="text-xs w-auto translate-x-1/2 drop-shadow-lg"
+      class="w-auto translate-x-1/2 text-xs drop-shadow-lg"
       style="color: #{material.color.getHexString()}"
     >
       color: #{material.color.getHexString()}
