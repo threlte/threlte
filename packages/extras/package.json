@@ -69,7 +69,7 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "@threejs-kit/instanced-sprite-mesh": "^2.4.1",
+    "@threejs-kit/instanced-sprite-mesh": "^2.4.2",
     "three-mesh-bvh": "^0.7.1",
     "three-perf": "^1.0.10"
   }

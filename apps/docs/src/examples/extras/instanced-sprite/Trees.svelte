@@ -1,11 +1,46 @@
 <script lang="ts">
-  import { InstancedSprite, Spritesheet } from '@threlte/extras'
-
+  import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
   import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
-
   import type { Vector3Tuple } from 'three'
 
   export let billboarding = false
+
+  const treeAtlasMeta = [
+    {
+      url: '/textures/sprites/trees-pixelart.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 3,
+      animations: [
+        { name: 'green_0', frameRange: [0, 1] },
+        { name: 'green_1', frameRange: [1, 1] },
+        { name: 'green_2', frameRange: [2, 2] },
+        { name: 'green_3', frameRange: [3, 3] },
+        { name: 'green_4', frameRange: [4, 4] },
+        { name: 'green_5', frameRange: [5, 5] },
+        { name: 'green_6', frameRange: [6, 6] },
+        { name: 'green_7', frameRange: [7, 7] },
+        { name: 'green_8', frameRange: [12, 12] },
+        { name: 'green_9', frameRange: [13, 13] },
+        { name: 'green_10', frameRange: [14, 14] },
+        { name: 'green_11', frameRange: [15, 15] },
+        { name: 'red_0', frameRange: [8, 8] },
+        { name: 'red_1', frameRange: [9, 9] },
+        { name: 'red_2', frameRange: [10, 10] },
+        { name: 'red_3', frameRange: [11, 11] },
+        { name: 'red_4', frameRange: [20, 20] },
+        { name: 'red_5', frameRange: [21, 21] },
+        { name: 'red_6', frameRange: [22, 22] },
+        { name: 'red_7', frameRange: [23, 23] },
+        { name: 'dead_0', frameRange: [16, 16] },
+        { name: 'dead_1', frameRange: [17, 17] },
+        { name: 'dead_2', frameRange: [18, 18] },
+        { name: 'dead_3', frameRange: [19, 19] }
+      ]
+    }
+  ] as const satisfies SpritesheetMetadata
+
+  const treeAtlas = buildSpritesheet.from<typeof treeAtlasMeta>(treeAtlasMeta)
 
   const treePositions: Vector3Tuple[] = []
 
@@ -18,26 +53,22 @@
   const REGION_W = 200
   const REGION_Z = 200
 
-  const greenTrees = [0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 15]
-  const redTrees = [8, 9, 10, 11, 20, 21, 22, 23]
-  const deadTrees = [16, 17, 18, 19]
+  const greenTrees = 11
+  const redTrees = 7
+  const deadTrees = 3
 
   const sampler = new Sampler(2, [REGION_W, REGION_Z], undefined, Math.random)
   const points = sampler.GeneratePoints()
 
-  console.log(points.length)
-
   const pickRandomTreeType = () => {
     const rnd = Math.random()
-
     if (rnd > 0.97) {
-      return `deadTree_${Math.floor(deadTrees.length * Math.random())}`
+      return `dead_${Math.floor(deadTrees * Math.random())}`
     }
     if (rnd > 0.9) {
-      return `redTree_${Math.floor(redTrees.length * Math.random())}`
+      return `red_${Math.floor(redTrees * Math.random())}`
     }
-
-    return `greenTree_${Math.floor(greenTrees.length * Math.random())}`
+    return `green_${Math.floor(greenTrees * Math.random())}`
   }
 
   let sprite: any
@@ -54,43 +85,14 @@
   }
 </script>
 
-<Spritesheet
-  let:File
-  let:Animation
->
-  <File
-    textureUrl="/textures/sprites/trees-pixelart.png"
-    options={{
-      type: 'rowColumn',
-      width: 8,
-      height: 3
-    }}
-  >
-    {#each greenTrees as frame, i}
-      <Animation
-        name={`greenTree_${i}`}
-        frameRange={[frame, frame + 1]}
-      />
-    {/each}
-    {#each redTrees as frame, i}
-      <Animation
-        name={`redTree_${i}`}
-        frameRange={[frame, frame + 1]}
-      />
-    {/each}
-    {#each deadTrees as frame, i}
-      <Animation
-        name={`deadTree_${i}`}
-        frameRange={[frame, frame + 1]}
-      />
-    {/each}
-  </File>
-
+{#await treeAtlas.result then { spritesheet, texture }}
   <InstancedSprite
     count={points.length}
     autoUpdate={false}
     playmode={'PAUSE'}
     {billboarding}
+    {spritesheet}
+    {texture}
     bind:ref={sprite}
     let:Instance
     castShadow
@@ -115,4 +117,4 @@
       {/if}
     {/each}
   </InstancedSprite>
-</Spritesheet>
+{/await}

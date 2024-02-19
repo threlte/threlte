@@ -1,4 +1,4 @@
-import { createSpritesheet } from '@threejs-kit/instanced-sprite-mesh'
+import { createSpritesheet, parseAseprite } from '@threejs-kit/instanced-sprite-mesh'
 import { getContext } from 'svelte'
 import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
 
@@ -22,11 +22,11 @@ type SpriteMetaConfig = readonly Pick<SpritesheetMetadata[number], 'animations'>
 export type UseSpriteMetaConfig<T extends SpriteMetaConfig> =
   T[number]['animations'][number]['name']
 
-export const buildSpritesheet = <T extends SpritesheetMetadata>(
+const from = <T extends SpritesheetMetadata>(
   meta: Readonly<SpritesheetMetadata>
 ): {
   useInstancedSprite: () => InstancedSpriteUserCtx<UseSpriteMetaConfig<T>>
-  sheet: ReturnType<typeof builder.build>
+  result: ReturnType<typeof builder.build>
 } => {
   const builder = createSpritesheet()
 
@@ -48,9 +48,23 @@ export const buildSpritesheet = <T extends SpritesheetMetadata>(
     )
   }
 
-  const sheet = builder.build()
+  const result = builder.build()
 
   const typedHook = useInstancedSprite<UseSpriteMetaConfig<T>>
 
-  return { sheet, useInstancedSprite: typedHook }
+  return { result, useInstancedSprite: typedHook }
 }
+
+const fromAseprite = (asepriteDataUrl: string) => {
+  const parse = async () => {
+    const res = await fetch(asepriteDataUrl)
+    const json = await res.json()
+    return { spritesheet: parseAseprite(json) }
+  }
+
+  return {
+    result: parse()
+  }
+}
+
+export const buildSpritesheet = { from, fromAseprite }

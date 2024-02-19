@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, useTexture } from '@threlte/extras'
+  import { T, useThrelte } from '@threlte/core'
+  import { OrbitControls, Sky, useTexture } from '@threlte/extras'
+  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Trees from './Trees.svelte'
   import VariantA from './VariantA.svelte'
   import VariantB from './VariantB.svelte'
   import VariantC from './VariantC.svelte'
   import VariantD from './VariantD.svelte'
-  import { BackSide, DoubleSide, NearestFilter, RepeatWrapping } from 'three'
-  // import DottedComponentTest from './DottedComponentTest.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -34,8 +33,6 @@
       return texture
     }
   })
-
-  const { camera } = useThrelte()
 </script>
 
 <T.PerspectiveCamera
@@ -73,7 +70,7 @@
 />
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
-<Trees {billboarding} />
+<!-- <Trees {billboarding} /> -->
 
 <Sky elevation={13.35} />
 
@@ -90,15 +87,6 @@
       side={BackSide}
     />
   </T.Mesh>
-
-  <!--
-	<T.Mesh position.y={50}>
-    <T.CylinderGeometry args={[200, 200, 150]} />
-    <T.MeshBasicMaterial
-      map={$sky}
-      side={DoubleSide}
-    />
-  </T.Mesh> -->
 {/if}
 
 {#if $grass}
@@ -110,13 +98,6 @@
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}
-
-<Grid
-  infiniteGrid
-  type={'grid'}
-  sectionThickness={0.0}
-  position.y={0.01}
-/>
 
 <T.AmbientLight intensity={1} />
 

@@ -1,41 +1,29 @@
 <script lang="ts">
-  import { InstancedSprite, Spritesheet } from '@threlte/extras'
+  import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
+  import type { SpritesheetMetadata } from '@threlte/extras'
+  const demonSpriteMeta = [
+    {
+      url: '/textures/sprites/cacodaemon.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 4,
+      animations: [
+        { name: 'fly', frameRange: [0, 5] },
+        { name: 'attack', frameRange: [8, 13] },
+        { name: 'idle', frameRange: [16, 19] },
+        { name: 'death', frameRange: [24, 31] }
+      ]
+    }
+  ] as const satisfies SpritesheetMetadata
+
+  const cacodaemonSpritesheet = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
 
   export let billboarding = false
   export let fps: number
 </script>
 
-<Spritesheet
-  let:File
-  let:Animation
->
-  <File
-    textureUrl="/textures/sprites/cacodaemon.png"
-    options={{
-      type: 'rowColumn',
-      width: 8,
-      height: 4
-    }}
-  >
-    <Animation
-      name="fly"
-      frameRange={[0, 6]}
-    />
-    <Animation
-      name="attack"
-      frameRange={[8, 14]}
-    />
-    <Animation
-      name="idle"
-      frameRange={[16, 20]}
-    />
-    <Animation
-      name="defeated"
-      frameRange={[24, 32]}
-    />
-  </File>
-
+{#await cacodaemonSpritesheet.result then { spritesheet, texture }}
   <InstancedSprite
     count={5000}
     playmode={'FORWARD'}
@@ -43,7 +31,9 @@
     {billboarding}
     randomPlaybackOffset={1}
     castShadow
+    {spritesheet}
+    {texture}
   >
     <UpdaterFlying />
   </InstancedSprite>
-</Spritesheet>
+{/await}

@@ -1,24 +1,65 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import { InstancedSprite, Spritesheet } from '@threlte/extras'
+  import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
   import { Matrix4 } from 'three'
 
   export let billboarding = false
   export let fps: number
 
-  // TODO - export types for instanced mesh + typed animation names??
+  // DECLARE SPRIRESHEET META & BUILD IT
+  const goblinSpriteMeta = [
+    {
+      url: '/textures/sprites/goblin/Attack.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 1,
+      animations: [{ name: 'attack', frameRange: [0, 7] }]
+    },
+    {
+      url: '/textures/sprites/goblin/Death.png',
+      type: 'rowColumn',
+      width: 4,
+      height: 1,
+      animations: [{ name: 'death', frameRange: [0, 3] }]
+    },
+    {
+      url: '/textures/sprites/goblin/Idle.png',
+      type: 'rowColumn',
+      width: 4,
+      height: 1,
+      animations: [{ name: 'idle', frameRange: [0, 3] }]
+    },
+    {
+      url: '/textures/sprites/goblin/Run.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 1,
+      animations: [{ name: 'run', frameRange: [0, 8] }]
+    },
+    {
+      url: '/textures/sprites/goblin/TakeHit.png',
+      type: 'rowColumn',
+      width: 4,
+      height: 1,
+      animations: [{ name: 'takeHit', frameRange: [0, 3] }]
+    }
+  ] as const satisfies SpritesheetMetadata
+
+  const goblinSpritesheet = buildSpritesheet.from(goblinSpriteMeta)
+
   let spriteMesh: any
-
-  const goblinCount = 50
-
-  const goblinPositionSpread = 40
-
+  const goblinCount = 80
+  const goblinPositionSpread = 50
   const tempMatrix = new Matrix4()
-
   let animationNames: string[] = []
+
+  /**
+   * GOBLIN LOGIC -
+   * randomize positions by directly accessing the instanced sprite api without any helpers
+   */
   $: {
     if (spriteMesh) {
-      // randomize goblin positions by directly accessing the instanced sprite api without any helpers
+      //
       for (let i = 0; i < goblinCount; i++) {
         tempMatrix.makeScale(5, 5, 1)
         tempMatrix.setPosition(
@@ -28,8 +69,6 @@
         )
         spriteMesh.setMatrixAt(i, tempMatrix)
       }
-
-      // get animation names
       animationNames = Object.keys(spriteMesh.spritesheet.animations)
     }
   }
@@ -50,85 +89,15 @@
   })
 </script>
 
-<Spritesheet
-  let:File
-  let:Animation
->
-  <File
-    textureUrl="/textures/sprites/goblin/Attack.png"
-    options={{
-      type: 'rowColumn',
-      width: 8,
-      height: 1
-    }}
-  >
-    <Animation
-      name="attack"
-      frameRange={[0, 8]}
-    />
-  </File>
-
-  <File
-    textureUrl="/textures/sprites/goblin/Death.png"
-    options={{
-      type: 'rowColumn',
-      width: 4,
-      height: 1
-    }}
-  >
-    <Animation
-      name="death"
-      frameRange={[0, 4]}
-    />
-  </File>
-  <File
-    textureUrl="/textures/sprites/goblin/Idle.png"
-    options={{
-      type: 'rowColumn',
-      width: 4,
-      height: 1
-    }}
-  >
-    <Animation
-      name="idle"
-      frameRange={[0, 4]}
-    />
-  </File>
-
-  <File
-    textureUrl="/textures/sprites/goblin/Run.png"
-    options={{
-      type: 'rowColumn',
-      width: 8,
-      height: 1
-    }}
-  >
-    <Animation
-      name="run"
-      frameRange={[0, 4]}
-    />
-  </File>
-
-  <File
-    textureUrl="/textures/sprites/goblin/TakeHit.png"
-    options={{
-      type: 'rowColumn',
-      width: 4,
-      height: 1
-    }}
-  >
-    <Animation
-      name="takeHit"
-      frameRange={[0, 4]}
-    />
-  </File>
-
+{#await goblinSpritesheet.result then { spritesheet, texture }}
   <InstancedSprite
     count={goblinCount}
     playmode={'FORWARD'}
+    {spritesheet}
+    {texture}
     {fps}
     {billboarding}
     bind:ref={spriteMesh}
     castShadow
   />
-</Spritesheet>
+{/await}
