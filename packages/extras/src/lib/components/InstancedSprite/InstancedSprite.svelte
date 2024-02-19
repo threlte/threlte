@@ -104,24 +104,8 @@
     if (texture) setTexture(texture)
   })
 
-  const spritesheetContext = getContext<SpritesheetContext>(
-    'instanced-spritesheet-top-level-stores-ctx'
-  )
-
-  if (spritesheetContext) {
-    watch(spritesheetContext.spritesheetStore, (s) => {
-      if (s) {
-        setSpritesheet(s)
-      }
-    })
-
-    watch(spritesheetContext.textureStore, (t) => {
-      setTexture(t)
-    })
-  }
-
   $: {
-    if (!spritesheetContext && spritesheet && texture) {
+    if (spritesheet && texture) {
       setSpritesheet(spritesheet)
       setTexture(texture)
     }
