@@ -58,41 +58,21 @@
     side: DoubleSide
   })
 
-  type SpriteAnimations =
-    | 'RunRight'
-    | 'RunLeft'
-    | 'RunForward'
-    | 'IdleRight'
-    | 'IdleLeft'
-    | 'IdleForward'
-    | 'RunBackward'
-    | 'IdleBackward'
-
   const { renderer } = useThrelte()
 
-  // todo upstream types
-  export let ref: InstancedSpriteMesh<any, any> = new InstancedSpriteMesh(
-    spriteBaseMaterial,
-    count,
-    renderer,
-    {
-      triGeometry: false
-    }
-  )
+  export let ref = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer, {
+    triGeometry: false
+  })
 
-  const animationMap = writable<Map<SpriteAnimations, number>>(new Map())
+  const animationMap = writable<Map<string, number>>(new Map())
 
   const setSpritesheet = (spritesheet: SpritesheetFormat) => {
     ref.spritesheet = spritesheet
-    // todo upstream types
     animationMap.set(ref.animationMap as any)
   }
 
   const setTexture = (texture: Texture) => {
-    // todo upstream types
-    //@ts-ignore
     ref.material.map = texture
-    //@ts-ignore
     ref.material.needsUpdate = true
   }
 
@@ -103,10 +83,7 @@
     }
   }
 
-  // todo upstream types
-  //@ts-ignore
   $: ref.material.alphaTest = alphaTest
-  //@ts-ignore
   $: ref.material.transparent = transparent
   $: ref.fps = fps
   $: ref.hueShift.setGlobal(hueShift)
@@ -165,7 +142,7 @@
   }
 
   // Context for user facing components and hooks
-  setContext<InstancedSpriteUserCtx>('instanced-sprite-ctx', {
+  setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     mesh: ref,
     count,
     animationMap,
