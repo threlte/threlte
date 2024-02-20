@@ -14,7 +14,7 @@
     type Vector3Tuple
   } from 'three'
 
-  import { getContext, setContext } from 'svelte'
+  import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type {
     InstancedSpriteEvents,
@@ -23,7 +23,6 @@
     InstancedSpriteSlots,
     InstancedSpriteUserCtx
   } from './InstancedSprite.svelte'
-  import type { SpritesheetContext } from './Spritesheet'
   import SpriteInstance from './SpriteInstance.svelte'
 
   type $$Props = Required<InstancedSpriteProps>
@@ -50,8 +49,7 @@
 
   export let randomPlaybackOffset: $$Props['randomPlaybackOffset'] = false
 
-  export let texture: Texture | undefined = undefined
-  export let spritesheet: SpritesheetFormat | undefined = undefined
+  export let spritesheet: $$Props['spritesheet']
 
   const spriteBaseMaterial = new baseMaterial({
     transparent: transparent,
@@ -73,7 +71,7 @@
   const { renderer } = useThrelte()
 
   // todo upstream types
-  export let mesh: InstancedSpriteMesh<any, any> = new InstancedSpriteMesh(
+  export let ref: InstancedSpriteMesh<any, any> = new InstancedSpriteMesh(
     spriteBaseMaterial,
     count,
     renderer,
@@ -85,49 +83,43 @@
   const animationMap = writable<Map<SpriteAnimations, number>>(new Map())
 
   const setSpritesheet = (spritesheet: SpritesheetFormat) => {
-    mesh.spritesheet = spritesheet
+    ref.spritesheet = spritesheet
     // todo upstream types
-    animationMap.set(mesh.animationMap as any)
+    animationMap.set(ref.animationMap as any)
   }
 
   const setTexture = (texture: Texture) => {
     // todo upstream types
     //@ts-ignore
-    mesh.material.map = texture
+    ref.material.map = texture
     //@ts-ignore
-    mesh.material.needsUpdate = true
+    ref.material.needsUpdate = true
   }
 
-  const textureStore = writable(undefined)
-
-  watch(textureStore, (texture) => {
-    if (texture) setTexture(texture)
-  })
-
   $: {
-    if (spritesheet && texture) {
-      setSpritesheet(spritesheet)
-      setTexture(texture)
+    if (spritesheet) {
+      setSpritesheet(spritesheet.spritesheet)
+      setTexture(spritesheet.texture)
     }
   }
 
   // todo upstream types
   //@ts-ignore
-  $: mesh.material.alphaTest = alphaTest
+  $: ref.material.alphaTest = alphaTest
   //@ts-ignore
-  $: mesh.material.transparent = transparent
-  $: mesh.fps = fps
-  $: mesh.hueShift.setGlobal(hueShift)
+  $: ref.material.transparent = transparent
+  $: ref.fps = fps
+  $: ref.hueShift.setGlobal(hueShift)
 
   // BILLBOARDING
   const billboardingStore = writable<boolean | undefined>(undefined)
   $: billboardingStore.set(billboarding)
   watch([billboardingStore], () => {
     if ($billboardingStore === undefined) {
-      mesh.billboarding.unsetAll()
+      ref.billboarding.unsetAll()
       return
     } else {
-      mesh.billboarding.setAll($billboardingStore)
+      ref.billboarding.setAll($billboardingStore)
     }
   })
 
@@ -136,10 +128,10 @@
   $: playmodeStore.set(playmode)
   watch([playmodeStore], () => {
     if ($playmodeStore === undefined) {
-      mesh.playmode.setAll('PAUSE')
+      ref.playmode.setAll('PAUSE')
       return
     } else {
-      mesh.playmode.setAll($playmodeStore)
+      ref.playmode.setAll($playmodeStore)
     }
   })
 
@@ -150,12 +142,12 @@
   watch([rndOffsetStore], ([offset]) => {
     // going from no offset to random
     if (previousRndOffset === false && offset) {
-      mesh.offset.randomizeAll(offset === true ? undefined : offset)
+      ref.offset.randomizeAll(offset === true ? undefined : offset)
     }
     // going from random offset to none
     if (previousRndOffset === true && !offset) {
       for (let i = 0; i < count; i++) {
-        mesh.offset.setAt(i, 0)
+        ref.offset.setAt(i, 0)
       }
     }
     previousRndOffset = offset ? true : false
@@ -168,13 +160,13 @@
     // Since this uses matrix updates, position and scale have to be updated at the same.
     tempMatrix.makeScale(scale[0], scale[1], 1)
     tempMatrix.setPosition(...position)
-    mesh.setMatrixAt(id, tempMatrix)
+    ref.setMatrixAt(id, tempMatrix)
     instanceMatrixNeedsUpdate = true
   }
 
   // Context for user facing components and hooks
   setContext<InstancedSpriteUserCtx>('instanced-sprite-ctx', {
-    mesh,
+    mesh: ref,
     count,
     animationMap,
     updatePosition
@@ -188,10 +180,10 @@
 
   useTask(() => {
     if (autoUpdate) {
-      mesh.update()
+      ref.update()
     }
     if (instanceMatrixNeedsUpdate) {
-      mesh.instanceMatrix.needsUpdate = true
+      ref.instanceMatrix.needsUpdate = true
       instanceMatrixNeedsUpdate = false
     }
   })
@@ -204,7 +196,7 @@
 </script>
 
 <T
-  is={mesh}
+  is={ref}
   frustumCulled={false}
   {...$$restProps}
 >

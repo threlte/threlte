@@ -1,8 +1,15 @@
 import { createSpritesheet, parseAseprite } from '@threejs-kit/instanced-sprite-mesh'
 import { getContext } from 'svelte'
 import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
+import { NearestFilter, RepeatWrapping, SRGBColorSpace, TextureLoader } from 'three'
+
+// todo move some of the types upstream to @threejs-kit
 
 export const useInstancedSprite = <T>(): InstancedSpriteUserCtx<T> => {
+  return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
+}
+
+export const useMetaTypedHook = <T>(): InstancedSpriteUserCtx<T> => {
   return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
 }
 
@@ -26,7 +33,7 @@ const from = <T extends SpritesheetMetadata>(
   meta: Readonly<SpritesheetMetadata>
 ): {
   useInstancedSprite: () => InstancedSpriteUserCtx<UseSpriteMetaConfig<T>>
-  result: ReturnType<typeof builder.build>
+  spritesheet: ReturnType<typeof builder.build>
 } => {
   const builder = createSpritesheet()
 
@@ -48,23 +55,32 @@ const from = <T extends SpritesheetMetadata>(
     )
   }
 
-  const result = builder.build()
+  const spritesheet = builder.build()
 
   const typedHook = useInstancedSprite<UseSpriteMetaConfig<T>>
 
-  return { result, useInstancedSprite: typedHook }
+  return { spritesheet, useInstancedSprite: typedHook }
 }
 
-const fromAseprite = (asepriteDataUrl: string) => {
+// todo refactor. Loader reuse, awaits, colorspace stuff
+const fromAseprite = (asepriteDataUrl: string, spriteImageUrl: string) => {
+  const texture = new TextureLoader().load(spriteImageUrl, (t) => {
+    t.matrixAutoUpdate = false
+    t.generateMipmaps = false
+    t.premultiplyAlpha = false
+    t.wrapS = texture.wrapT = RepeatWrapping
+    t.magFilter = texture.minFilter = NearestFilter
+    t.colorSpace = SRGBColorSpace
+    t.needsUpdate = true
+  })
+
   const parse = async () => {
     const res = await fetch(asepriteDataUrl)
     const json = await res.json()
-    return { spritesheet: parseAseprite(json) }
+    return { spritesheet: parseAseprite(json), texture }
   }
 
-  return {
-    result: parse()
-  }
+  return parse()
 }
 
 export const buildSpritesheet = { from, fromAseprite }

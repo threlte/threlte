@@ -89,12 +89,11 @@
   })
 </script>
 
-{#await goblinSpritesheet.result then { spritesheet, texture }}
+{#await goblinSpritesheet.spritesheet then spritesheet}
   <InstancedSprite
     count={goblinCount}
     playmode={'FORWARD'}
     {spritesheet}
-    {texture}
     {fps}
     {billboarding}
     bind:ref={spriteMesh}

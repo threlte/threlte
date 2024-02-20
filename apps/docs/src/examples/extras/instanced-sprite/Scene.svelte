@@ -47,22 +47,26 @@
 
 <!-- Dudes - Michael's Aseprite loader -->
 <!-- one is wasd player controlled  -->
-<VariantA
+<!-- <VariantA
   {billboarding}
   {fps}
-/>
+/> -->
 
 <!-- Flyers - Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
-<VariantB
+<!-- <VariantB
   {billboarding}
   {fps}
-/>
+/> -->
 
-<!-- Goblins -  Assemble a spritesheet out of multiple .png files. -->
-<VariantC
+<!--
+	Goblins:
+	- Assemble a spritesheet out of multiple .png files.
+-->
+
+<!-- <VariantC
   {billboarding}
   {fps}
-/>
+/> -->
 
 <VariantD
   {billboarding}
@@ -76,7 +80,7 @@
 
 <!-- <T.DirectionalLight position.y={5} /> -->
 
-{#if $sky}
+<!-- {#if $sky}
   <T.Mesh
     position.y={-10}
     scale.y={0.5}
@@ -97,7 +101,7 @@
     <T.PlaneGeometry args={[1000, 1000]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
-{/if}
+{/if} -->
 
 <T.AmbientLight intensity={1} />
 

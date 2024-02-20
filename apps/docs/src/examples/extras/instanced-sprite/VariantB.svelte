@@ -17,13 +17,13 @@
     }
   ] as const satisfies SpritesheetMetadata
 
-  const cacodaemonSpritesheet = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
+  const demonSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
 
   export let billboarding = false
   export let fps: number
 </script>
 
-{#await cacodaemonSpritesheet.result then { spritesheet, texture }}
+{#await demonSheetbuilder.spritesheet then spritesheet}
   <InstancedSprite
     count={5000}
     playmode={'FORWARD'}
@@ -32,7 +32,6 @@
     randomPlaybackOffset={1}
     castShadow
     {spritesheet}
-    {texture}
   >
     <UpdaterFlying />
   </InstancedSprite>

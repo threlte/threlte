@@ -33,12 +33,11 @@
   import { buildSpritesheet } from '@threlte/extras'
 </script>
 
-{#await cacodaemonSpritesheet.result then { spritesheet, texture }}
+{#await cacodaemonSpritesheet.spritesheet then spritesheet}
   <InstancedSprite
     {count}
     {billboarding}
     {spritesheet}
-    {texture}
     castShadow
     hueShift={{
       h: 0.3,
