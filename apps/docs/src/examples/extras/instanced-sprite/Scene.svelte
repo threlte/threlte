@@ -45,42 +45,50 @@
 
 <slot />
 
-<!-- Dudes - Michael's Aseprite loader -->
-<!-- one is wasd player controlled  -->
-<!-- <VariantA
+<!--
+	Dudes:
+	- Michael's Aseprite loader
+	- One WASD controlled
+-->
+<VariantA
   {billboarding}
   {fps}
-/> -->
+/>
 
-<!-- Flyers - Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -->
-<!-- <VariantB
+<!--
+	Flyers:
+	- Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -
+-->
+<VariantB
   {billboarding}
   {fps}
-/> -->
+/>
 
 <!--
 	Goblins:
 	- Assemble a spritesheet out of multiple .png files.
 -->
-
-<!-- <VariantC
+<VariantC
   {billboarding}
   {fps}
-/> -->
+/>
 
+<!--
+	Flyers:
+-->
 <VariantD
   {billboarding}
   {fps}
 />
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
-<!-- <Trees {billboarding} /> -->
+<Trees {billboarding} />
 
 <Sky elevation={13.35} />
 
-<!-- <T.DirectionalLight position.y={5} /> -->
+<T.DirectionalLight position.y={5} />
 
-<!-- {#if $sky}
+{#if $sky}
   <T.Mesh
     position.y={-10}
     scale.y={0.5}
@@ -101,7 +109,7 @@
     <T.PlaneGeometry args={[1000, 1000]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
-{/if} -->
+{/if}
 
 <T.AmbientLight intensity={1} />
 

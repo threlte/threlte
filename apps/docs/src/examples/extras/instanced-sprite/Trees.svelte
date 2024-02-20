@@ -85,14 +85,13 @@
   }
 </script>
 
-{#await treeAtlas.result then { spritesheet, texture }}
+{#await treeAtlas.spritesheet then spritesheet}
   <InstancedSprite
     count={points.length}
     autoUpdate={false}
     playmode={'PAUSE'}
     {billboarding}
     {spritesheet}
-    {texture}
     bind:ref={sprite}
     let:Instance
     castShadow
