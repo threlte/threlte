@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.8.0
+
+### Minor Changes
+
+- 34a35f5: <PerfMonitor/> component - easy access to rendering stats like draw calls, triangles, fps etc.
+
 ## 8.7.5
 
 ### Patch Changes
