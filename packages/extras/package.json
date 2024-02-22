@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "8.7.4",
+  "version": "8.8.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -75,6 +75,7 @@
   },
   "dependencies": {
     "troika-three-text": "^0.49.0",
-    "three-mesh-bvh": "^0.7.1"
+    "three-mesh-bvh": "^0.7.1",
+    "three-perf": "^1.0.10"
   }
 }
