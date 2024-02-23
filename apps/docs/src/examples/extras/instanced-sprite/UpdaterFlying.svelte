@@ -1,15 +1,14 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import { getContext } from 'svelte'
+  import { useInstancedSprite } from '@threlte/extras'
   import { Vector2 } from 'three'
 
-  const spriteCtx: any = getContext('instanced-sprite-ctx')
-  const { updatePosition, count, animationMap, mesh } = spriteCtx
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
 
-  mesh.offset.randomizeAll()
+  sprite.offset.randomizeAll()
 
   type FlyingAgent = {
-    action: 'Idle' | 'Run'
+    action: 'Idle' | 'Fly'
     velocity: [number, number]
     timer: number
     baseHeight: number
@@ -18,7 +17,7 @@
   const agents: FlyingAgent[] = []
   for (let i = 0; i < count; i++) {
     agents.push({
-      action: 'Run',
+      action: 'Fly',
       timer: 0.1,
       velocity: [0, 1],
       baseHeight: 3 + Math.random() * 60
@@ -46,7 +45,7 @@
   for (let i = 0; i < agents.length; i++) {
     const pos = rndPosition()
     posX[i] = pos.x
-    posY[i] = agents[i].baseHeight
+    posY[i] = agents[i]?.baseHeight || 10
     posZ[i] = pos.y
   }
 
@@ -57,35 +56,37 @@
   const updateAgents = (delta: number) => {
     for (let i = 0; i < agents.length; i++) {
       // timer
+      const agent = agents[i]
+      if (!agent) return
 
-      agents[i].timer -= delta
+      agent.timer -= delta
       totalTime += delta
 
       // apply velocity
-      posX[i] += agents[i].velocity[0] * delta
-      posY[i] = agents[i]?.baseHeight + Math.sin(totalTime * 0.00005 + i)
-      posZ[i] += agents[i].velocity[1] * delta
+      posX[i] += agent.velocity[0] * delta
+      posY[i] = agent.baseHeight + Math.sin(totalTime * 0.00005 + i)
+      posZ[i] += agent.velocity[1] * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
       if (i > 0) {
         const dist = Math.sqrt((posX[i] || 0) ** 2 + (posZ[i] || 0) ** 2)
-        if (agents[i].timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
-          const runChance = 0.6 + (agents[i].action === 'Idle' ? 0.3 : 0)
-          agents[i].action = Math.random() < runChance ? 'Run' : 'Idle'
+        if (agent.timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
+          const FlyChance = 0.6 + (agent.action === 'Idle' ? 0.3 : 0)
+          agent.action = Math.random() < FlyChance ? 'Fly' : 'Idle'
 
-          agents[i].timer = 5 + Math.random() * 5
+          agent.timer = 5 + Math.random() * 5
 
-          if (agents[i].action === 'Run') {
+          if (agent.action === 'Fly') {
             velocityHelper
               .set(Math.random() - 0.5, Math.random() - 0.5)
               .normalize()
-              .multiplyScalar(2.1)
-            agents[i].velocity = velocityHelper.toArray()
+              .multiplyScalar(4.5)
+            agent.velocity = velocityHelper.toArray()
 
             if (velocityHelper.x > 0) {
-              mesh.flipX.setAt(i, false)
+              sprite.flipX.setAt(i, false)
             } else {
-              mesh.flipX.setAt(i, true)
+              sprite.flipX.setAt(i, true)
             }
           }
         }
@@ -100,7 +101,7 @@
 
     for (let i = 0; i < count; i++) {
       updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0], [5, 5])
-      mesh.animation.setAt(i, 0)
+      sprite.animation.setAt(i, 0)
     }
   })
 </script>

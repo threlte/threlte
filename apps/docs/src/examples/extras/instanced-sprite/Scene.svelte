@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Sky, useTexture } from '@threlte/extras'
-  import { BackSide, BasicShadowMap, NearestFilter, RepeatWrapping } from 'three'
+  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import SpriteAtlasTrees from './SpriteAtlasTrees.svelte'
   import SpriteDudes from './SpriteDudes.svelte'
@@ -11,8 +11,6 @@
 
   export let billboarding = false
   export let fps: number
-
-  useThrelte().renderer.shadowMap.type = BasicShadowMap
 
   const grass = useTexture('/textures/sprites/pixel_grass.png', {
     transform: (texture) => {

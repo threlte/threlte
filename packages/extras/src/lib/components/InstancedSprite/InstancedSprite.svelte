@@ -143,7 +143,7 @@
 
   // Context for user facing components and hooks
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
-    mesh: ref,
+    sprite: ref,
     count,
     animationMap,
     updatePosition

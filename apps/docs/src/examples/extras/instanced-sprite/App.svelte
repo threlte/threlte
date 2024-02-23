@@ -19,6 +19,7 @@
     >
       <OrbitControls />
     </T.PerspectiveCamera>
+
     <Scene
       {billboarding}
       {fps}

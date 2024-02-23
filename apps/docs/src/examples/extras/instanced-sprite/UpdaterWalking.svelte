@@ -4,7 +4,7 @@
   import { Vector2 } from 'three'
 
   const spriteCtx: any = getContext('instanced-sprite-ctx')
-  const { updatePosition, count, animationMap, mesh } = spriteCtx
+  const { updatePosition, count, animationMap, sprite } = spriteCtx
 
   //@ts-ignore
   watch(animationMap, (anims: Map<string, number>) => {
@@ -101,7 +101,7 @@
           if (agents[i].action === 'Idle') {
             agents[i].velocity = [0, 0]
           }
-          mesh.animation.setAt(i, animIndex)
+          sprite.animation.setAt(i, animIndex)
         }
       }
     }
@@ -140,7 +140,7 @@
     if (e.key === 's' || e.key === 'ArrowDown') dirs.down = false
 
     const animIndex = pickAnimation(0)
-    mesh.animation.setAt(0, animIndex)
+    sprite.animation.setAt(0, animIndex)
   }
 
   const playerMoveVector = new Vector2(0, 0)
@@ -152,7 +152,7 @@
 
       agents[0].velocity = playerMoveVector.normalize().multiplyScalar(3).toArray()
       const animIndex = pickAnimation(0)
-      mesh.animation.setAt(0, animIndex)
+      sprite.animation.setAt(0, animIndex)
     }
   }
 </script>

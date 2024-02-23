@@ -4,9 +4,9 @@
   import { Vector2 } from 'three'
   import { useDemonSprite } from './SpriteFlyersTyped.svelte'
 
-  const { updatePosition, count, animationMap, mesh } = useDemonSprite()
+  const { updatePosition, count, animationMap, sprite } = useDemonSprite()
 
-  mesh.offset.randomizeAll()
+  sprite.offset.randomizeAll()
 
   type FlyingAgent = {
     action: 'Idle' | 'Run'
@@ -83,9 +83,9 @@
             agents[i].velocity = velocityHelper.toArray()
 
             if (velocityHelper.x > 0) {
-              mesh.flipX.setAt(i, false)
+              sprite.flipX.setAt(i, false)
             } else {
-              mesh.flipX.setAt(i, true)
+              sprite.flipX.setAt(i, true)
             }
           }
         }
@@ -100,7 +100,7 @@
 
     for (let i = 0; i < count; i++) {
       updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0], [5, 5])
-      mesh.animation.setAt(i, 0)
+      sprite.animation.setAt(i, 0)
     }
   })
 </script>

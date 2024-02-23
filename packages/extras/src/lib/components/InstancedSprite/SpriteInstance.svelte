@@ -6,7 +6,7 @@
   type $$Props = SpriteInstanceProps
 
   const spriteCtx = getContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx')
-  const { updatePosition, mesh } = spriteCtx
+  const { updatePosition, sprite } = spriteCtx
   //
   export let id: $$Props['id'] = 0
 
@@ -23,12 +23,12 @@
   export let frameId: $$Props['frameId'] = undefined
 
   $: position !== undefined && updatePosition(id, position, scale)
-  $: animationName !== undefined && mesh.animation.setAt(id, animationName)
-  $: playmode !== undefined && mesh.playmode.setAt(id, playmode)
-  $: billboarding !== undefined && mesh.billboarding.setAt(id, billboarding)
-  $: offset !== undefined && mesh.offset.setAt(id, offset)
-  $: loop !== undefined && mesh.loop.setAt(id, loop)
-  $: flipX !== undefined && mesh.flipX.setAt(id, flipX)
-  $: flipY !== undefined && mesh.flipY.setAt(id, flipY)
-  $: frameId !== undefined && mesh.frame.setAt(id, frameId, animationName)
+  $: animationName !== undefined && sprite.animation.setAt(id, animationName)
+  $: playmode !== undefined && sprite.playmode.setAt(id, playmode)
+  $: billboarding !== undefined && sprite.billboarding.setAt(id, billboarding)
+  $: offset !== undefined && sprite.offset.setAt(id, offset)
+  $: loop !== undefined && sprite.loop.setAt(id, loop)
+  $: flipX !== undefined && sprite.flipX.setAt(id, flipX)
+  $: flipY !== undefined && sprite.flipY.setAt(id, flipY)
+  $: frameId !== undefined && sprite.frame.setAt(id, frameId, animationName)
 </script>

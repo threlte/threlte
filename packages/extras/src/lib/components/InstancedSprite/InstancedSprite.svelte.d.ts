@@ -8,6 +8,7 @@ import { SvelteComponent } from 'svelte'
 import type { Writable } from 'svelte/store'
 import {
   InstancedMesh,
+  Material,
   MeshBasicMaterial,
   MeshLambertMaterial,
   MeshPhongMaterial,
@@ -27,9 +28,6 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
 
   /** Number of instances */
   count: number
-
-  /** The URL of the spritesheet texture image. */
-  textureUrl?: string
 
   /**
    * Base material used to construct the sprite material. MeshBasicMaterial by default.
@@ -52,7 +50,7 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
    * changes playmode for all instances
    * `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"`
    *
-   * @default true
+   * @default "FORWARD"
    */
   playmode?: keyof typeof PLAY_MODE
 
@@ -105,7 +103,7 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
     texture: Texture
   }
 
-  ref?: any
+  ref?: InstancedSpriteMesh<Material, unknown>
 }
 
 export type InstancedSpriteEvents = any
@@ -118,7 +116,7 @@ export type InstancedSpriteInternalCtx = {
 }
 
 export type InstancedSpriteUserCtx<T> = {
-  mesh: InstancedSpriteMesh<any, T>
+  sprite: InstancedSpriteMesh<Material, T>
   count: number
   animationMap: Writable<Map<string, number>>
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void

@@ -21,10 +21,10 @@
     }
   ] as const satisfies SpritesheetMetadata
 
-  const demonSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
+  const flyerSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
 </script>
 
-{#await demonSheetbuilder.spritesheet then spritesheet}
+{#await flyerSheetbuilder.spritesheet then spritesheet}
   <InstancedSprite
     count={5000}
     playmode={'FORWARD'}
