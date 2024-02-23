@@ -1,16 +1,18 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { OrbitControls, Sky, useTexture } from '@threlte/extras'
-  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
+  import { Sky, useTexture } from '@threlte/extras'
+  import { BackSide, BasicShadowMap, NearestFilter, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import Trees from './Trees.svelte'
-  import VariantA from './VariantA.svelte'
-  import VariantB from './VariantB.svelte'
-  import VariantC from './VariantC.svelte'
-  import VariantD from './VariantD.svelte'
+  import SpriteAtlasTrees from './SpriteAtlasTrees.svelte'
+  import SpriteDudes from './SpriteDudes.svelte'
+  import SpriteFlyers from './SpriteFlyers.svelte'
+  import SpriteFlyersTyped from './SpriteFlyersTyped.svelte'
+  import SpriteGoblin from './SpriteGoblin.svelte'
 
   export let billboarding = false
   export let fps: number
+
+  useThrelte().renderer.shadowMap.type = BasicShadowMap
 
   const grass = useTexture('/textures/sprites/pixel_grass.png', {
     transform: (texture) => {
@@ -35,31 +37,23 @@
   })
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position.z={14}
-  position.y={6}
->
-  <OrbitControls />
-</T.PerspectiveCamera>
-
 <slot />
 
 <!--
 	Dudes:
 	- Michael's Aseprite loader
-	- One WASD controlled
+	- One is WASD controlled
 -->
-<VariantA
+<SpriteDudes
   {billboarding}
   {fps}
 />
 
 <!--
 	Flyers:
-	- Loading .png file with multiple animations and using <Spritesheet/> <SpriteFile/> and <SpriteAnimation/> -
+	- Loading .png file with multiple animations
 -->
-<VariantB
+<SpriteFlyers
   {billboarding}
   {fps}
 />
@@ -68,25 +62,25 @@
 	Goblins:
 	- Assemble a spritesheet out of multiple .png files.
 -->
-<VariantC
+<SpriteGoblin
   {billboarding}
   {fps}
 />
 
 <!--
 	Flyers:
+	- Loading .png file with multiple animations
+	- uses a typed utility hook for animation name autocomplete etc.
 -->
-<VariantD
+<SpriteFlyersTyped
   {billboarding}
   {fps}
 />
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
-<Trees {billboarding} />
+<SpriteAtlasTrees {billboarding} />
 
-<Sky elevation={13.35} />
-
-<T.DirectionalLight position.y={5} />
+<!-- SCENE SETUP: grass, sky, lights -->
 
 {#if $sky}
   <T.Mesh
@@ -110,6 +104,8 @@
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}
+
+<Sky elevation={13.35} />
 
 <T.AmbientLight intensity={1} />
 

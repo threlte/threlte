@@ -2,6 +2,10 @@
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
   import type { SpritesheetMetadata } from '@threlte/extras'
+
+  export let billboarding = false
+  export let fps: number
+
   const demonSpriteMeta = [
     {
       url: '/textures/sprites/cacodaemon.png',
@@ -18,9 +22,6 @@
   ] as const satisfies SpritesheetMetadata
 
   const demonSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
-
-  export let billboarding = false
-  export let fps: number
 </script>
 
 {#await demonSheetbuilder.spritesheet then spritesheet}
