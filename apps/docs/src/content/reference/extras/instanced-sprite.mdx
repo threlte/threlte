@@ -250,7 +250,6 @@ ready for use in `<InstancedSprite>`.
 Other than `spritesheet` promise, it also returns a `useInstancedSprite` hook. This hook can be enhanced with
 extra typescript support for autocompletion of animation names as such:
 
-![Tree sprite atlas](/images/docs/extras/instanced-sprite/useInstancedSpriteAutocomplete.png)
 
 ```ts
  const meta = [
@@ -270,6 +269,8 @@ extra typescript support for autocompletion of animation names as such:
 
   const result = buildSpritesheet.from<typeof meta>(meta)
 ```
+
+![Tree sprite atlas](/images/docs/extras/instanced-sprite/useInstancedSpriteAutocomplete.png)
 
 #### buildSpritesheet().fromAseprite(asepriteDataUrl: string, spriteImageUrl: string)
 
@@ -326,22 +327,85 @@ const goblinSpriteMeta = [
 
 ## Updating instances
 
+Instances can be updated by using methods provided by the `InstancedSpriteMesh`. You can access it in two primary ways:
+
+- Utilizing the `useInstancedSprite()` hook (recommended approach).
+- Directly with the `ref` prop binding on the component.
+
+
 ### `useInstancedSprite()`
+
+```ts
+	import { useInstancedSprite } from '@threlte/extras'
+
+  const hook = useInstancedSprite()
+	// it's useful to immediately destructure it like this
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
+```
+
+	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
+	- `count`: Total number of instances.
+	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
+	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
+	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
+
+#### Typescript support
+
+The useInstancedSprite hook supports typing for autocompletion of animation names:
+
+```ts
+	type AnimationNames = 'walk' | 'run' | 'idle' | 'fly'
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
+```
+
+This is how the [buildSpritesheet.from](#buildspritesheet) utility works. It processes animation names from a complex
+object structure into a simplified type like the one above.
+
 
 ### `<Instance>`
 
+Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
+Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
 
-## Properties
+Other than this, it as other properties that you can find in the `InstancedSpriteMesh`, so: `animationName`, `playmode`, `billboarding`, `offset`, `loop`,
+`flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](#instancedspritemesh) section
 
-You can update instances by calling the below functions of the underlying `InstancedSpriteMesh`. You can access it via:
-- [useInstancedSprite() hook](#instanced-sprite#useinstancedsprite) (recommended)
-- `ref` prop of the component
+The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
+`InstancedSprite` component. You can access through the `let:Instance` directive.
+
+*Example: Set a position, scale and flipX for every instance.*
+```svelte
+<InstancedSprite
+  count={10000}
+  {spritesheet}
+  let:Instance
+>
+  {#each { length: 10000 } as _, i}
+    <Instance
+      position={[Math.random()*100, Math.random()*100, Math.random()*100]}
+      scale={[3, 3]}
+			flipX
+      id={i}
+    />
+  {/each}
+</InstancedSprite>
+```
+
+
+## InstancedSpriteMesh
+
+The `InstancedSpriteMesh` is the foundation behind the `<InstancedSprite>` component, written to enableefficient instancing of animated sprites within a
+Three.js environment. By extending the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/).
+For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at
+[InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
+
+`InstancedSpriteMesh` provides a suite of methods designed to offer granular control over the
+animation and properties of sprite instances:
 
 ### animation
   - **.animation.setAt( instanceId: number, animation: string )** - sets animation (by name) on instanceId
 
 ### playmode
-
 ```ts
 type PLAY_MODE = "FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"
 
