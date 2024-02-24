@@ -88,21 +88,17 @@
 }
 ---
 
-<Tip type="experimental">Experimental warning. The api may change significantly, performance and compatiblity untested on various hardware/OS.</Tip>
+<Tip type="experimental">Early version. Features and API might change significantly over time. Please report any issues you encounter on Discord or Github.</Tip>
 
 <Example path="extras/instanced-sprite" />
 
 
 ## Basic example
-The `<InstancedSprite>` component requries a spritesheet metadata and texture to be provided. It's recommended to use a [`buildSpritesheet()`](#buildSpritesheet) utility but you can also use your own custom solution. The most common setup will look something similar to the code below.
+To use the `<InstancedSprite>` you must provide it with sprite metadata and a texture. While we recommend utilizing the
+[`buildSpritesheet()`](#buildSpritesheet) utility for this purpose, you are also free to implement your own
+custom solution, provided it meets the component's input requirements.
 
 **1. Sprite metadata object**
-
-In this example, there is a single sprite image containing 4 different animations. In `demonSpriteMeta` we declare the metadata of the spritesheet. In this case the file is made out of 4 rows and 8 columns of equal sized images, so we say that the spritesheet
-type is `'rowColumn'`, `height` (rows) is 4 and `width` (columns) is 8.
-Then we declare our `animations` array. Each animation has a `name` and a `frameRange`. You can learn more about this in the [Spritesheet](#spritesheet) section of this page. After the object is ready, we use it as an argument in the `buildSpritesheet.from` utility function, which
-returns a Promise with a spritesheet ready to be put into our component.
-
 
 ```svelte title=Flyer.svelte
 <script lang="ts">
@@ -130,9 +126,16 @@ returns a Promise with a spritesheet ready to be put into our component.
 </script>
 ```
 
-**2. Adding component to the scene**
+In this example, there is a single sprite image containing 4 different animations. The metadata is contained within the
+`demonSpriteMeta` object, which describes the layout and animation details of the spritesheet.
 
-We add `<InstancedSprite>` to the scene with a `count` `spritesheet` - the only required props. Spritesheet is a result of the promise from the previous step.
+In this case, the spritesheet image is arranged in a grid of 4 rows and 8 columns, so the `type` is set to `'rowColumn'`,
+`height` to `4` (indicating the number of rows), and `width` to `8` (representing the number of columns).
+The `animations` property is an array, where each element represents a separate animation with a `name` and a `frameRange`.
+
+For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](#spritesheetmetadata-object)
+
+**2. Adding component to the scene**
 
 ```svelte title=Flyer.svelte
 {#await flyerSheetbuilder.spritesheet then spritesheet}
@@ -147,14 +150,23 @@ We add `<InstancedSprite>` to the scene with a `count` `spritesheet` - the only 
 {/await}
 ```
 
+We add `<InstancedSprite>` to the scene with a `count` `spritesheet` - the only required props. Spritesheet is a result of the promise from the previous step.
+
+To add the `<InstancedSprite>` component to the scene, you need to specify at least two essential properties:
+`count` and `spritesheet`. The `spritesheet` property is the object obtained as the result of awaiting the Promise of the `buildSpritesheet` function called earlier.
+
+
 **3. Updating instances**
 
-In our example, the user made `<UpdaterFlying>` component is responsible for updating sprites. It makes use of `useInstancedSprite()` hook,
-which makes it easy to update position, animations etc. Then, inside of a `useTask` we loop over all instance `id`s and update their
-position and set animation to `fly`. This is simplified for brevity, but you can see a full implementation of basic random movement
-in the main example on top of this page.
-This is not the only way to update instances. There is also an `<InstanceComponent>` and a typed version of `useInstancedSprite` -
-see how to use them in [Updating instances](#updating-instances)
+In our example, the user made `<UpdaterFlying>` component is responsible for updating sprites.
+This component leverages the `useInstancedSprite()` hook, which makes it easy to access and
+adjust sprite properties such as position and animation.
+
+To update sprite instances, we utilize the `useTask` hook. Inside, a loop iterates over the IDs
+of all instances, applying updates to their positions and assigning the fly animation to each.
+This description is simplified for brevity, this is where you'd have your complex movement or game logic.
+A working example, demonstrating basic random movement, is available in the source of the live example for this component
+(UpdaterFlying.svelte, UpdaterWalking.svelte, UpdaterFlyingHook.svelte).
 
 
 ```svelte title=UpdaterFlying.svelte
@@ -174,13 +186,12 @@ see how to use them in [Updating instances](#updating-instances)
 ```
 
 
-
-
 ## Spritesheet builder
 
 ### SpritesheetMetadata object
 
-Object used in `buildSpritesheet` function has to be compliant with the `SpritesheetMetadata` type format:
+Object used in `buildSpritesheet` function has to be compliant with the `SpritesheetMetadata` type format. This type is structured to
+accommodate the metadata for one or multiple sprite files within a single spritesheet.
 
 ```ts
 type SpritesheetMetadata = {
@@ -196,64 +207,40 @@ type SpritesheetMetadata = {
 
 ```
 
-Since our utility function can combine multiple files into a same spritesheet, the `SpritesheetMetadata` is an Array of declarations, each for one file.
-So if we use one sprite image, the array will have a length of one and if we use multiple files the array will have multiple entries.
+#### Understanding SpritesheetMetadata:
+
+- **Array Structure**: Given that the utility function is designed to combine multiple sprite files into a single spritesheet,
+`SpritesheetMetadata` is an array. Each element in this array corresponds to a separate file's metadata.
+For a single sprite image, the array will contain only one item. For multiple images, the array will include an entry for each.
+
+- **Metadata Fields**. Each sprite file entry in the array needs:
+	- `url`: Specifies the path or URL to the sprite image file.
+	- `type`: Determines the method of defining the spritesheet dimensions. Type `"rowColumn"` specifies the layout in terms of rows
+	and columns within the image, and type `"frameSize"` instead defines the size of each frame, allowing the utility to calculate the layout.
+	- `width` and `height`: Depending on type, these refer to the number of `columns` and `rows` (`"rowColumn"`) or the dimensions of a single frame (`"frameSize"`).
+	- `animations`: An array detailing the animations, where each animation has a name and a `frameRange`. The `frameRange` is a tuple
+	marking the start and end frames of the animation.
+
+Since our utility function can combine multiple files into a same spritesheet, the `SpritesheetMetadata` is an Array of declarations,
+each for one file. So if we use one sprite image, the array will have a length of one and if we use multiple files the array will have
+multiple entries.
 
 Each sprite file entry in the array needs:
 - **`url`** - The URL or path to the image file.
-- **`type`** - choose whether you’re providing how many rows and columns are in an image `"rowColumn"` or giving the size of a single frame for the builder to interpolate from `"frameSize"`
+- **`type`** - choose whether you’re providing how many rows and columns are in an image `"rowColumn"` or giving the size of a single
+ frame for the builder to interpolate from `"frameSize"`
 - `width` and `height` that refer to either column and row or imageWidth and imageHeight depending on what you chose in `type`
-- `animations` - an array of animations with `name` string and `frameRange` - an array of two number that declares from which frameId animation starts and to which frameId the animation runs.
+- `animations` - an array of animations with `name` string and `frameRange` - an array of two number that declares from which
+frameId animation starts and to which frameId the animation runs.
 
-Instead of making the object type `SpritesheetMetadata` you can use `as const satisfies SpritesheetMetadata` which will allow for animation name autocompletion in utility hook (recommended).
+#### Understanding SpritesheetMetadata:
 
-**Example: one sprite file with multiple animations.**
-```ts
-const demonSpriteMeta = [
-    {
-      url: '/textures/sprites/cacodaemon.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 4,
-      animations: [
-        { name: 'fly', frameRange: [0, 5] },
-        { name: 'attack', frameRange: [8, 13] },
-        { name: 'idle', frameRange: [16, 19] },
-        { name: 'death', frameRange: [24, 31] }
-      ]
-    }
-  ] as const satisfies SpritesheetMetadata
-```
-
-**Example: Multiple sprite files with one animation each.**
-```ts
-const goblinSpriteMeta = [
-    {
-      url: '/textures/sprites/goblin/Attack.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 1,
-      animations: [{ name: 'attack', frameRange: [0, 7] }]
-    },
-    {
-      url: '/textures/sprites/goblin/Death.png',
-      type: 'rowColumn',
-      width: 4,
-      height: 1,
-      animations: [{ name: 'death', frameRange: [0, 3] }]
-    },
-    {
-      url: '/textures/sprites/goblin/Idle.png',
-      type: 'rowColumn',
-      width: 4,
-      height: 1,
-      animations: [{ name: 'idle', frameRange: [0, 3] }]
-    }
-  ] as const satisfies SpritesheetMetadata
-```
+For improved developer experience when working with TypeScript, it is strongly recommended to use `as const` assertion in
+combination with `satisfies SpritesheetMetadata`. This approach not only ensures compliance with the `SpritesheetMetadata`
+type but also enables autocompletion for animation names within utility functions, which is highly recommended:
 
 
-### Builder
+### `buildSpritesheet()`
 
 `buildSpritesheet()` is a utility function for building a final texture and spritesheet object from a provided `SpritesheetMetadata` object or external source.
 Each `buildSpritesheet` method return an Promise that and has to be awaited. Promise returned by each method contains an object with a `spritesheet`
@@ -289,11 +276,62 @@ extra typescript support for autocompletion of animation names as such:
 Similar to above, but it parses the Aseprite metadata json into the correct format.
 Does not provide any additional utilities.
 
-## `useInstancedSprite()`
+### Examples
 
-## `<Instance>`
+**Example A: one sprite file with multiple animations.**
+
+```ts
+const demonSpriteMeta = [
+    {
+      url: '/textures/sprites/cacodaemon.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 4,
+      animations: [
+        { name: 'fly', frameRange: [0, 5] },
+        { name: 'attack', frameRange: [8, 13] },
+        { name: 'idle', frameRange: [16, 19] },
+        { name: 'death', frameRange: [24, 31] }
+      ]
+    }
+  ] as const satisfies SpritesheetMetadata
+```
+
+**Example B: multiple sprite files with one animation each.**
+```ts
+const goblinSpriteMeta = [
+    {
+      url: '/textures/sprites/goblin/Attack.png',
+      type: 'rowColumn',
+      width: 8,
+      height: 1,
+      animations: [{ name: 'attack', frameRange: [0, 7] }]
+    },
+    {
+      url: '/textures/sprites/goblin/Death.png',
+      type: 'rowColumn',
+      width: 4,
+      height: 1,
+      animations: [{ name: 'death', frameRange: [0, 3] }]
+    },
+    {
+      url: '/textures/sprites/goblin/Idle.png',
+      type: 'rowColumn',
+      width: 4,
+      height: 1,
+      animations: [{ name: 'idle', frameRange: [0, 3] }]
+    }
+  ] as const satisfies SpritesheetMetadata
+```
 
 ## Updating instances
+
+### `useInstancedSprite()`
+
+### `<Instance>`
+
+
+## Properties
 
 You can update instances by calling the below functions of the underlying `InstancedSpriteMesh`. You can access it via:
 - [useInstancedSprite() hook](#instanced-sprite#useinstancedsprite) (recommended)
@@ -374,3 +412,6 @@ GPGPU, Data texture for user commands
 
 ### Triangle geometry
 Triangle vs Plane mode - triangle saves vertices but a larger area of the geometry is unused. Fragment discards, z sorting tradeoffs?
+
+### Base material
+GPGPU, Data texture for user commands
