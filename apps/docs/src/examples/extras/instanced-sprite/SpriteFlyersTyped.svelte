@@ -1,3 +1,14 @@
+<!--
+	-	builds spritesheet from the SpritesheetMetadata object with buildSpritesheet.from
+		utility. Multiple animations in one sprite file. Set up for typescript
+		animation name autocomplete.
+	- notice that it's built in a script with context="module". This allows for exporting the built
+		spritesheet and a typed hook. You could also have it somewhere else in a .ts file for example.
+	- object has `as const satisfies SpritesheetMetadata`, necessary for autocomplete
+	- a typed hook with animation name autocomplete is provided by buildSpritesheet.from
+		then, this hook is used in UpdaterFlyingHook component instead of untyped useInstancedSprite
+ -->
+
 <script
   context="module"
   lang="ts"

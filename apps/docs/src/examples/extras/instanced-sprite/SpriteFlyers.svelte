@@ -1,3 +1,10 @@
+<!--
+	-	builds spritesheet from the SpritesheetMetadata object with buildSpritesheet.from
+		utility. Multiple animations in one sprite file. Not set up for typescript
+		animation name autocomplete. For that check SpriteFlyersTyped.svelte file
+	- uses an untyped useInstancedSprie() hook in UpdaterFlying component
+ -->
+
 <script lang="ts">
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
@@ -6,7 +13,7 @@
   export let billboarding = false
   export let fps: number
 
-  const demonSpriteMeta = [
+  const demonSpriteMeta: SpritesheetMetadata = [
     {
       url: '/textures/sprites/cacodaemon.png',
       type: 'rowColumn',
@@ -19,9 +26,9 @@
         { name: 'death', frameRange: [24, 31] }
       ]
     }
-  ] as const satisfies SpritesheetMetadata
+  ]
 
-  const flyerSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
+  const flyerSheetbuilder = buildSpritesheet.from(demonSpriteMeta)
 </script>
 
 {#await flyerSheetbuilder.spritesheet then spritesheet}

@@ -1,3 +1,9 @@
+<!--
+	-	uses aseprite json loader
+	- one sprite is WASD controlled
+	- uses an untyped useInstancedSprie() hook in UpdaterWalking component
+ -->
+
 <script lang="ts">
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import UpdaterWalking from './UpdaterWalking.svelte'

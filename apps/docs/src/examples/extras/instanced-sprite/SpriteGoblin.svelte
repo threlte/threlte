@@ -1,3 +1,12 @@
+<!--
+	-	builds spritesheet from the SpritesheetMetadata object with buildSpritesheet.from
+		utility. Multiple files, each with a single animation. Not set up for typescript
+		animation name autocomplete. For that check SpriteFlyersTyped.svelte file
+	- these sprites are stationary, but change their animation randomly very often
+	- animation update is done directly on the underlying InstancedSpriteMesh exposed
+		by a `ref` binding
+ -->
+
 <script lang="ts">
   import { useTask } from '@threlte/core'
   import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
@@ -7,7 +16,7 @@
   export let fps: number
 
   // DECLARE SPRIRESHEET META & BUILD IT
-  const goblinSpriteMeta = [
+  const goblinSpriteMeta: SpritesheetMetadata = [
     {
       url: '/textures/sprites/goblin/Attack.png',
       type: 'rowColumn',
@@ -43,7 +52,7 @@
       height: 1,
       animations: [{ name: 'takeHit', frameRange: [0, 3] }]
     }
-  ] as const satisfies SpritesheetMetadata
+  ]
 
   const goblinSpritesheet = buildSpritesheet.from(goblinSpriteMeta)
 

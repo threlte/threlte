@@ -1,3 +1,12 @@
+<!--
+	-	Example of using animations as a static sprite atlas
+	- each frame is named and used as a different tree randomly
+	- to achieve this playmode is "PAUSE" and autoUpdate={false}
+	- the instanced sprite has to be updated once when initialized
+		and then, each time the atlas changes
+	- uses <Instance/> component instead of hook to set positions and frames
+ -->
+
 <script lang="ts">
   import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
   import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
@@ -12,7 +21,7 @@
       width: 8,
       height: 3,
       animations: [
-        { name: 'green_0', frameRange: [0, 1] },
+        { name: 'green_0', frameRange: [0, 0] },
         { name: 'green_1', frameRange: [1, 1] },
         { name: 'green_2', frameRange: [2, 2] },
         { name: 'green_3', frameRange: [3, 3] },
