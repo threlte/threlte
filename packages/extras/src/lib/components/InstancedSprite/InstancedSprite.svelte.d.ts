@@ -110,11 +110,6 @@ export type InstancedSpriteEvents = any
 
 export type InstancedSpriteSlots = any
 
-export type InstancedSpriteInternalCtx = {
-  setSpritesheet: (spritesheet: SpritesheetFormat) => void
-  setTexture: (texture: Texture) => void
-}
-
 export type InstancedSpriteUserCtx<T> = {
   sprite: InstancedSpriteMesh<Material, T>
   count: number

@@ -1,15 +1,10 @@
 <script lang="ts">
-  import {
-    InstancedSpriteMesh,
-    PLAY_MODE,
-    type SpritesheetFormat
-  } from '@threejs-kit/instanced-sprite-mesh'
+  import { InstancedSpriteMesh, PLAY_MODE } from '@threejs-kit/instanced-sprite-mesh'
   import { T, useTask, useThrelte, watch } from '@threlte/core'
   import {
     DoubleSide,
     Matrix4,
     MeshBasicMaterial,
-    type Texture,
     type Vector2Tuple,
     type Vector3Tuple
   } from 'three'
@@ -18,7 +13,6 @@
   import { writable } from 'svelte/store'
   import type {
     InstancedSpriteEvents,
-    InstancedSpriteInternalCtx,
     InstancedSpriteProps,
     InstancedSpriteSlots,
     InstancedSpriteUserCtx
@@ -66,20 +60,12 @@
 
   const animationMap = writable<Map<string, number>>(new Map())
 
-  const setSpritesheet = (spritesheet: SpritesheetFormat) => {
-    ref.spritesheet = spritesheet
-    animationMap.set(ref.animationMap as any)
-  }
-
-  const setTexture = (texture: Texture) => {
-    ref.material.map = texture
-    ref.material.needsUpdate = true
-  }
-
   $: {
     if (spritesheet) {
-      setSpritesheet(spritesheet.spritesheet)
-      setTexture(spritesheet.texture)
+      ref.spritesheet = spritesheet.spritesheet
+      animationMap.set(ref.animationMap as any)
+      ref.material.map = spritesheet.texture
+      ref.material.needsUpdate = true
     }
   }
 
@@ -147,12 +133,6 @@
     count,
     animationMap,
     updatePosition
-  })
-
-  // Internal context used for building spritesheet etc
-  setContext<InstancedSpriteInternalCtx>('internal-instanced-sprite-ctx', {
-    setSpritesheet,
-    setTexture
   })
 
   useTask(() => {
