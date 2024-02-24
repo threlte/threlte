@@ -4,12 +4,7 @@ import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
 import { NearestFilter, RepeatWrapping, SRGBColorSpace, TextureLoader } from 'three'
 
 // todo move some of the types upstream to @threejs-kit
-
 export const useInstancedSprite = <T>(): InstancedSpriteUserCtx<T> => {
-  return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
-}
-
-export const useMetaTypedHook = <T>(): InstancedSpriteUserCtx<T> => {
   return getContext('instanced-sprite-ctx') as InstancedSpriteUserCtx<T>
 }
 
