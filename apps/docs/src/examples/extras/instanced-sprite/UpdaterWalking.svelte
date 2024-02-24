@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { T, useFrame, watch } from '@threlte/core'
-  import { getContext } from 'svelte'
+  import { T, useTask, watch } from '@threlte/core'
+  import { useInstancedSprite } from '@threlte/extras'
   import { Vector2 } from 'three'
 
-  const spriteCtx: any = getContext('instanced-sprite-ctx')
-  const { updatePosition, count, animationMap, sprite } = spriteCtx
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
 
   //@ts-ignore
   watch(animationMap, (anims: Map<string, number>) => {
@@ -54,52 +53,53 @@
 
   const velocityHelper = new Vector2(0, 0)
 
-  const pickAnimation = (i) => {
+  const pickAnimation = (i: number) => {
     const dirWords = ['Forward', 'Backward', 'Left', 'Right']
+    const agent = agents[i] as Agent
 
-    const isHorizontal =
-      Math.abs(agents[i].velocity[0] * 2) > Math.abs(agents[i].velocity[1]) ? 2 : 0
-    const isLeft = agents[i].velocity[0] > 0 ? 1 : 0
-    const isUp = agents[i].velocity[1] > 0 ? 0 : 1
+    const isHorizontal = Math.abs(agent.velocity[0] * 2) > Math.abs(agent.velocity[1]) ? 2 : 0
+    const isLeft = agent.velocity[0] > 0 ? 1 : 0
+    const isUp = agent.velocity[1] > 0 ? 0 : 1
 
     const secondMod = isHorizontal ? isLeft : isUp
     const chosenWord = dirWords.slice(0 + isHorizontal, 2 + isHorizontal)
 
-    const animationName = `${agents[i].action}${chosenWord[secondMod]}`
-    const animIndex = $animationMap.get(animationName)
+    const animationName = `${agent.action}${chosenWord[secondMod]}`
 
     return animationName
   }
 
   const updateAgents = (delta: number) => {
     for (let i = 0; i < agents.length; i++) {
+      const agent = agents[i] as Agent
+
       // timer
-      agents[i].timer -= delta
+      agent.timer -= delta
 
       // apply velocity
-      posX[i] += agents[i].velocity[0] * delta
-      posZ[i] += agents[i].velocity[1] * delta
+      posX[i] += agent.velocity[0] * delta
+      posZ[i] += agent.velocity[1] * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
       if (i > 0) {
         const dist = Math.sqrt((posX[i] || 0) ** 2 + (posZ[i] || 0) ** 2)
-        if (agents[i].timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
-          const runChance = 0.6 + (agents[i].action === 'Idle' ? 0.3 : 0)
-          agents[i].action = Math.random() < runChance ? 'Run' : 'Idle'
+        if (agent.timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
+          const runChance = 0.6 + (agent.action === 'Idle' ? 0.3 : 0)
+          agent.action = Math.random() < runChance ? 'Run' : 'Idle'
 
-          agents[i].timer = 5 + Math.random() * 5
+          agent.timer = 5 + Math.random() * 5
 
-          if (agents[i].action === 'Run') {
+          if (agent.action === 'Run') {
             velocityHelper
               .set(Math.random() - 0.5, Math.random() - 0.5)
               .normalize()
               .multiplyScalar(3)
-            agents[i].velocity = velocityHelper.toArray()
+            agent.velocity = velocityHelper.toArray()
           }
 
           const animIndex = pickAnimation(i)
-          if (agents[i].action === 'Idle') {
-            agents[i].velocity = [0, 0]
+          if (agent.action === 'Idle') {
+            agent.velocity = [0, 0]
           }
           sprite.animation.setAt(i, animIndex)
         }
@@ -107,14 +107,10 @@
     }
   }
 
-  useFrame((_, _delta) => {
-    if ($animationMap.size > 0) {
-      updateAgents(_delta)
-    }
+  useTask((delta) => {
+    updateAgents(delta)
 
     for (let i = 0; i < count; i++) {
-      // $camera.position.set(0 + (posX[0] || 0), 7, 15 + (posZ[0] || 0))
-
       updatePosition(i, [posX[i] || 0, 0.5, posZ[i] || 0])
     }
   })
@@ -149,8 +145,7 @@
     if (dirs) {
       playerMoveVector.setX((dirs.left ? -1 : 0) + (dirs.right ? 1 : 0))
       playerMoveVector.setY((dirs.up ? -1 : 0) + (dirs.down ? 1 : 0))
-
-      agents[0].velocity = playerMoveVector.normalize().multiplyScalar(3).toArray()
+      ;(agents[0] as Agent).velocity = playerMoveVector.normalize().multiplyScalar(3).toArray()
       const animIndex = pickAnimation(0)
       sprite.animation.setAt(0, animIndex)
     }
