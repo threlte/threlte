@@ -88,10 +88,13 @@
 }
 ---
 
-<Tip type="experimental">This is an early version - features and API might change significantly over time. Please report any issues you encounter on Discord or Github.</Tip>
+<Tip type="experimental">
+  This is an early version - features and API might change significantly over time. Please report any issues you encounter on Discord or Github.
+</Tip>
+
+The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated [sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. It supports the open SpritesheetMetadata format, but we offer a convenience `buildSpritesheet` utility to easily build your spritesheet.
 
 <Example path="extras/instanced-sprite" />
-
 
 ## Basic example
 To use the `<InstancedSprite>` you must provide it with sprite metadata and a texture. While we recommend utilizing the
@@ -186,9 +189,9 @@ A working example, demonstrating basic random movement, is available in the sour
 ```
 
 
-## Spritesheet builder
+## Spritesheets
 
-### SpritesheetMetadata object
+### SpritesheetMetadata
 
 Object used in `buildSpritesheet` function has to be compliant with the `SpritesheetMetadata` type format. This type is structured to
 accommodate the metadata for one or multiple sprite files within a single spritesheet.
@@ -207,13 +210,10 @@ type SpritesheetMetadata = {
 
 ```
 
-#### Understanding SpritesheetMetadata:
+#### Understanding SpritesheetMetadata
 
-- **Array Structure**: Given that the utility function is designed to combine multiple sprite files into a single spritesheet,
-`SpritesheetMetadata` is an array. Each element in this array corresponds to a separate file's metadata.
-For a single sprite image, the array will contain only one item. For multiple images, the array will include an entry for each.
+A `SpritesheetMetadata` is an array, with each entry representing metadata fields for one sprite:
 
-- **Metadata Fields**. Each sprite file entry in the array needs:
 	- `url`: Specifies the path or URL to the sprite image file.
 	- `type`: Determines the method of defining the spritesheet dimensions. Type `"rowColumn"` specifies the layout in terms of rows
 	and columns within the image, and type `"frameSize"` instead defines the size of each frame, allowing the utility to calculate the layout.
@@ -221,19 +221,7 @@ For a single sprite image, the array will contain only one item. For multiple im
 	- `animations`: An array detailing the animations, where each animation has a name and a `frameRange`. The `frameRange` is a tuple
 	marking the start and end frames of the animation.
 
-Since our utility function can combine multiple files into a same spritesheet, the `SpritesheetMetadata` is an Array of declarations,
-each for one file. So if we use one sprite image, the array will have a length of one and if we use multiple files the array will have
-multiple entries.
-
-Each sprite file entry in the array needs:
-- **`url`** - The URL or path to the image file.
-- **`type`** - choose whether you’re providing how many rows and columns are in an image `"rowColumn"` or giving the size of a single
- frame for the builder to interpolate from `"frameSize"`
-- `width` and `height` that refer to either column and row or imageWidth and imageHeight depending on what you chose in `type`
-- `animations` - an array of animations with `name` string and `frameRange` - an array of two number that declares from which
-frameId animation starts and to which frameId the animation runs.
-
-#### Understanding SpritesheetMetadata:
+#### Typesafety
 
 For improved developer experience when working with TypeScript, it is strongly recommended to use `as const` assertion in
 combination with `satisfies SpritesheetMetadata`. This approach not only ensures compliance with the `SpritesheetMetadata`
@@ -279,7 +267,7 @@ Does not provide any additional utilities.
 
 ### Examples
 
-**Example A: one sprite file with multiple animations.**
+#### Multiple animations
 
 ```ts
 const demonSpriteMeta = [
@@ -298,7 +286,8 @@ const demonSpriteMeta = [
   ] as const satisfies SpritesheetMetadata
 ```
 
-**Example B: multiple sprite files with one animation each.**
+#### Multiple files
+
 ```ts
 const goblinSpriteMeta = [
     {
@@ -358,9 +347,6 @@ The useInstancedSprite hook supports typing for autocompletion of animation name
   const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
 ```
 
-This is how the [buildSpritesheet.from](#buildspritesheet) utility works. It processes animation names from a complex
-object structure into a simplified type like the one above.
-
 
 ### `<Instance>`
 
@@ -391,21 +377,31 @@ The `<Instance>` component serves as a declarative alternative to `useInstancedS
 </InstancedSprite>
 ```
 
+## Static sprites & Atlassing
+
+This component focuses on targetting animated sprites, but it's possible to use it for static images as well. If each frame of the spritesheet is a separate animation, then it effectively acts as an [atlas](https://en.wikipedia.org/wiki/Texture_atlas) with named sprites.
+
+The `<Tree/>` component in the example above does this.
+![Tree sprite atlas](/textures/sprites/trees-pixelart.png)
+
+Set `autoUpdate={false}` on static components and only update it manually with `sprite.update()`. This has to be done when the InstancedSprite is initiated or when spritesheet or atlas change.
+If you don't do it, then the spritesheet will run animation updates each frame to run animations that don't really exist.
 
 ## InstancedSpriteMesh
 
-The `InstancedSpriteMesh` is the foundation behind the `<InstancedSprite>` component, written to enableefficient instancing of animated sprites within a
-Three.js environment. By extending the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/).
-For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at
-[InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
+The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>` component, written to enable efficient instancing of animated sprites within a
+Three.js environment. 
 
-`InstancedSpriteMesh` provides a suite of methods designed to offer granular control over the
-animation and properties of sprite instances:
+The class extends the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/). For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at [InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
 
-### animation
+`InstancedSpriteMesh` provides a suite of methods designed to offer granular control over the animation and properties of sprite instances:
+
+**animation**
+
   - **.animation.setAt( instanceId: number, animation: string )** - sets animation (by name) on instanceId
 
-### playmode
+**playmode**
+
 ```ts
 type PLAY_MODE = "FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"
 
@@ -413,37 +409,44 @@ type PLAY_MODE = "FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"
 	- **.playmode.setAt(instanceId: number, playmode: PLAY_MODE)** - set playmode for one instance
 	- **.playmode.setAll(playmode: PLAY_MODE)** - set playmode for all instances
 
-### billboarding
+**billboarding**
+
   Set of methods to toggle billboarding
   - **.billboarding.setAt( instanceId: number, enable: boolean )** - enables billboarding on instance
   - **.billboarding.setAll( enable: boolean )** - sets default global billboarding state that is used unless the `setAt` was called on the instance
   - **.billboarding.unsetAll()** - removes all instance specific billboarding settings
 
-### offset
+**offset**
+
   Offset sprite animation time by a given number of milliseconds
   - **.offset.setAt: (instanceId: number, offset: number)**
   - **.offset.randomizeAll: (scalar: number = 1)** - offset all sprites by a random value (0-1) multiplied by scalar
 
-### frame
+**frame**
+
   - **.frame.setAt: (instanceId: number, frameId: number, animation?: string)** - Set the instance at a specific frame. FrameID is an n-th frame in the animation if the name is provided, otherwise if not set, it's an n-th frameId of the entire spritesheet.
 
-### loop
+**loop**
+
   methods to control whether sprite animation should be looped
   - **.loop.setAt( instanceId: number, enable: boolean )** - sets per instance loop mode
   - **.loop.setAll( enable: boolean )** - changes looping mode in all instances
 
 
-### flipX
+**flipX**
+
   - **.flipX.setAt(instanceId: number, flipX: boolean)**
   - **.flipX.setGlobal(flipX: boolean)**
   - **.flipX.unsetAll()**
 
-### flipY
+**flipY**
+
   - **.flipY.setAt(instanceId: number, flipY: boolean)**
   - **.flipY.setGlobal(flipY: boolean)**
   - **.flipY.unsetAll()**
 
-### play
+**play**
+
 Utility function that combines `.animation`, `.loop` and `.playmode`
 ```ts
 play(
@@ -454,17 +457,7 @@ play(
 
 ```
 
-### update
+**update**
+
  - **.update()** - manually updates instanced spritesheet animation based on fps and time. Not necessary unless `autoUpdate` is set to `false` on the `<InstancedSprite>` component
 
-
-## Static sprites
-
-This component focuses on targetting animated sprites, but it's possible to use it for static images as well.
-If each frame of the spritesheet is a separate animation, then it effectively acts as an atlas with named sprites.
-
-The `<Tree/>` component in the example above does this.
-![Tree sprite atlas](/textures/sprites/trees-pixelart.png)
-
-Set `autoUpdate={false}` on static components and only update it manually with `sprite.update()`. This has to be done when the InstancedSprite is initiated or when spritesheet or atlas change.
-If you don't do it, then the spritesheet will run animation updates each frame to run animations that don't really exist.
