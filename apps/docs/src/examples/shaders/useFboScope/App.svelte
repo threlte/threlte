@@ -4,7 +4,9 @@
 </script>
 
 <div>
-  <span class="absolute left-0 top-0 z-20 whitespace-nowrap pl-4">Right click to enable zoom</span>
+  <span class="absolute left-0 top-0 z-20 whitespace-nowrap pl-4"
+    >Press any key to toggle scope mode. Mousewheel to adjust zoom level.</span
+  >
   <Canvas>
     <Scene />
   </Canvas>
