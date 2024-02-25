@@ -12,7 +12,6 @@ import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarM
 import Package from './Package.astro'
 import { c } from '../lib/classes'
 import Book from './Book.astro'
-import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Markprompt from '$components/Search/Markprompt'
 
@@ -33,12 +32,15 @@ const activeUrlPathName = Astro.url.pathname
 
 const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white group'
 const activeLinkStyles = '!text-orange'
+
+const linkTextStyles = 'flex flex-col gap-0.5';
+const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
 ---
 
 <AppLayout title={title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
+    class="border-b-orange/25 fixed z-40 mx-auto hidden md:flex h-[70px] w-full flex-row items-center justify-between gap-12 border-b bg-[#0A0F19] px-6"
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
@@ -50,25 +52,30 @@ const activeLinkStyles = '!text-orange'
           src={Logo}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-auto md:hidden lg:block object-contain"
+          class="h-[37px] w-auto sm:hidden md:block object-contain"
           loading="eager"
         />
         <Image
           src={LogoOnly}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-[37px] hidden md:block lg:hidden object-contain"
+          class="h-[37px] w-[37px] hidden sm:block md:hidden object-contain"
           loading="lazy"
         />
       </a>
-
-      <div class="flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6">
+    </div>
+      <!-- guide -->
+      <div class="hidden lg:flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6 ">
+        <Book class="h-[16px] hidden lg:block" />
         <a
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
           data-astro-prefetch
         >
-          <Book class="h-[16px] hidden lg:block" />Learn
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>Start here</span>
+            <span>Overview</span>
+          </div>
         </a>
 
         <a
@@ -76,12 +83,15 @@ const activeLinkStyles = '!text-orange'
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
           data-astro-prefetch
         >
-          <Circles class="h-[16px] hidden lg:block" />Examples
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>Tutorials &</span>
+            <span>Examples</span>
+          </div>
         </a>
-
-        <div class="h-full w-px bg-gray-500/70"></div>
-
-        <div class="relative flex items-center gap-6">
+      </div>
+      <!-- packages -->
+      <div class="relative hidden lg:flex items-center gap-6">
+          <Package class="h-[16px] hidden md:block" />
           <a
             href="/docs/reference/core/getting-started"
             class={c(
@@ -90,81 +100,99 @@ const activeLinkStyles = '!text-orange'
             )}
             data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />core</a
-          >
-          <a
-            href="/docs/reference/extras/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />extras</a
-          >
-          <a
-            href="/docs/reference/gltf/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />gltf</a
-          >
-          <a
-            href="/docs/reference/rapier/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />rapier</a
-          >
-          <a
-            href="/docs/reference/theatre/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />theatre</a
-          >
-          <a
-            href="/docs/reference/xr/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />xr
+            <div class={c(linkTextStyles)}>
+              <span class={c(linkAliasStyles)}>3D</span>
+              <span>core</span>
+            </div>
           </a>
-          <a
-            href="/docs/reference/flex/getting-started"
-            class={c(
-              linkStyles,
-              activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
-            )}
-            data-astro-prefetch
-          >
-            <Package class="h-[16px] hidden md:block" />flex
-          </a>
+        <a
+          href="/docs/reference/rapier/getting-started"
+          class={c(
+            linkStyles,
+            activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
+          )}
+          data-astro-prefetch
+        >
+        <div class={c(linkTextStyles)}>
+          <span class={c(linkAliasStyles)}>Physics</span>
+          <span>rapier</span>
         </div>
-      </div>
+          </a
+        >
+        <a
+          href="/docs/reference/theatre/getting-started"
+          class={c(
+            linkStyles,
+            activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
+          )}
+          data-astro-prefetch
+        >
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>Animation</span>
+            <span>theatre</span>
+          </div>
+        </a>
+        <a
+          href="/docs/reference/xr/getting-started"
+          class={c(
+            linkStyles,
+            activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
+          )}
+          data-astro-prefetch
+        >
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>AR/VR</span>
+            <span>xr</span>
+          </div>
+        </a>
+        <a
+          href="/docs/reference/flex/getting-started"
+          class={c(
+            linkStyles,
+            activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
+          )}
+          data-astro-prefetch
+        >
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>Layout</span>
+            flex
+          </div>
+        </a>
+        <a
+          href="/docs/reference/gltf/getting-started"
+          class={c(
+            linkStyles,
+            activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
+          )}
+          data-astro-prefetch
+        >
+        <div class={c(linkTextStyles)}>
+          <span class={c(linkAliasStyles)}>Pipelines</span>
+          gltf
+        </div>  
+        </a>
+        <a
+        href="/docs/reference/extras/getting-started"
+        class={c(
+          linkStyles,
+          activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
+        )}
+        data-astro-prefetch
+        >
+          <div class={c(linkTextStyles)}>
+            <span class={c(linkAliasStyles)}>Extensions</span>
+            extras
+          </div>
+        </a>
     </div>
-
+    <!-- search -->
     <div class="flex flex-1 flex-row items-center justify-end gap-6">
-      <div class="hidden max-w-[280px] flex-1 xl:flex">
-        <Search client:media="(min-width: 1280px)" />
-      </div>
+      <Search client:media="(min-width: 900px)" />
     </div>
   </header>
 
   <MobileDocsNav
-    client:media="(max-width: 768px)"
+    client:media="(max-width: 1200px)"
     sidebarMenu={sidebarMenu}
     activeSidebarTab={activeSidebarTab}
     activeUrlPathName={activeUrlPathName}
@@ -187,12 +215,6 @@ const activeLinkStyles = '!text-orange'
       class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block lg:row-span-1"
       transition:name="left_sidebar"
     >
-      <div class="mx-6 mb-6 mt-6 flex flex-1 xl:hidden flex-col gap-3">
-				<div class="lg:hidden">
-					<Socials github discord twitter/>
-				</div>
-        <Search client:media="(min-width: 768px) and (max-width: 1280px)" />
-      </div>
       <LeftSidebar />
     </aside>
 

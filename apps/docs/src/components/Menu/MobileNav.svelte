@@ -13,7 +13,7 @@
   const { action, mounted } = useElementMounted()
 </script>
 
-<div class="fixed left-0 top-0 z-40 flex max-h-screen w-full flex-col md:hidden">
+<div class="fixed left-0 top-0 z-40 flex max-h-screen w-full flex-col lg:hidden">
   <header
     class={c(
       'flex h-[70px] w-full flex-shrink-0 flex-row items-center justify-between border-b bg-[#0A0F19] px-6 py-2',
@@ -28,6 +28,7 @@
       <div>
         <slot name="topbar-right" />
       </div>
+      <Search />
       <BurgerIcon bind:showMenu />
     </div>
   </header>
