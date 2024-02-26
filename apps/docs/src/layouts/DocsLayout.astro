@@ -43,7 +43,7 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
     class="border-0 fixed z-40 mx-auto hidden md:flex h-[70px] w-full flex-row items-center justify-between gap-12 bg-[#0A0F19] px-6"
     transition:name="desktop_nav"
   >
-    <div class="justify flex items-center justify-start gap-12 xl:gap-12">
+    <div class="justify flex items-end justify-start gap-12 xl:gap-12">
       <a
         href="/"
         data-astro-prefetch
@@ -65,8 +65,8 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
       </a>
     </div>
       <!-- guide -->
-      <div class="hidden lg:flex h-[30px] flex-row items-center justify-start gap-6 lg:gap-8">
-        <Book class="h-[20px] hidden lg:block opacity-70" />
+      <div class="hidden lg:flex h-[30px] flex-row items-end justify-start gap-6 lg:gap-8 mt-2">
+        <Book class="h-[20px] hidden lg:block opacity-70  mb-0.5" />
         <a
           href="/docs/learn/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
@@ -74,7 +74,7 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
         >
           <div class={c(linkTextStyles)}>
             <span class={c(linkAliasStyles)}>Get started</span>
-            <span>Overview</span>
+            <span>overview</span>
           </div>
         </a>
 
@@ -85,13 +85,10 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
         >
           <div class={c(linkTextStyles)}>
             <span class={c(linkAliasStyles)}>Tutorials &</span>
-            <span>Examples</span>
+            <span>examples</span>
           </div>
         </a>
-      </div>
-      <!-- packages -->
-      <div class="relative hidden lg:flex items-center gap-6 lg:gap-8">
-          <Package class="h-[20px] hidden md:block opacity-70" />
+          <Package class="h-[20px] hidden md:block opacity-70 mb-0.5" />
           <a
             href="/docs/reference/core/getting-started"
             class={c(
