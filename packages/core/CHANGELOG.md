@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.1.1
+
+### Patch Changes
+
+- 7b90778: Small `<T>` optimizations
+
 ## 7.1.0
 
 ### Minor Changes

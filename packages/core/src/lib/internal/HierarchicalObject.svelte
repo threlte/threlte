@@ -12,7 +12,7 @@
 >
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Object3D } from 'three'
-  import { type ThrelteParentContext, useParent } from '../hooks/useParent'
+  import { useParent, setParent } from '../hooks/useParent'
   import { useThrelte } from '../hooks/useThrelte'
   import { createObjectStore } from '../lib/createObjectStore'
   import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
@@ -89,7 +89,7 @@
     onChildDestroyProxy
   )
 
-  setContext<ThrelteParentContext>('threlte-hierarchical-parent-context', objectStore)
+  setParent(objectStore)
 </script>
 
 <slot />
