@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 2.0.2
+
+### Patch Changes
+
+- 4fbfab2: updating sharp dependency
+
 ## 2.0.1
 
 ### Patch Changes
