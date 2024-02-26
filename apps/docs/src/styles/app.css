@@ -17,8 +17,10 @@
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* width */
@@ -40,4 +42,9 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #2f7dc6aa;
+}
+
+/* firefox */
+* {
+  scrollbar-width: thin;
 }
