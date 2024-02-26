@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.8.1
+
+### Patch Changes
+
+- b039ee4: Small interactivity internals improvements
+
 ## 8.8.0
 
 ### Minor Changes
