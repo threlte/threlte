@@ -1,28 +1,29 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Text3D, Environment, Align, Float } from '@threlte/extras'
+  import { OrbitControls, Text3DGeometry, Environment, Align, Float } from '@threlte/extras'
 </script>
 
 <Align let:align>
-  <Text3D
-    font={'/fonts/Inter-semibold.blob'}
-    text={`hello\nthere!`}
-    rotation.x={-0.28}
-    size={5}
-    height={1}
-    bevelEnabled={true}
-    bevelThickness={0.1}
-    bevelSize={0.2}
-    bevelSegments={20}
-    smooth={0.1}
-    on:rendered={align}
-  >
+  <T.Mesh>
+    <Text3DGeometry
+      font={'/fonts/Inter-semibold.blob'}
+      text={`hello\nthere!`}
+      rotation.x={-0.28}
+      size={5}
+      height={1}
+      bevelEnabled={true}
+      bevelThickness={0.1}
+      bevelSize={0.2}
+      bevelSegments={20}
+      smooth={0.1}
+      on:rendered={align}
+    />
     <T.MeshStandardMaterial
       color="#515151"
       metalness={1.0}
       roughness={0.1}
     />
-  </Text3D>
+  </T.Mesh>
 </Align>
 
 <Environment files="/hdr/shanghai_riverside_1k.hdr" />

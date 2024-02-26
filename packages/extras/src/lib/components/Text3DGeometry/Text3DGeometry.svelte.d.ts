@@ -1,11 +1,14 @@
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { Mesh } from 'three'
+import type { BufferGeometry } from 'three'
 
-import type { TextGeometryParameters } from 'three/examples/jsm/geometries/TextGeometry'
+import type {
+  TextGeometryParameters,
+  TextGeometry
+} from 'three/examples/jsm/geometries/TextGeometry'
 import type { Font } from 'three/examples/jsm/loaders/FontLoader'
 
-export type Text3DProps = Props<Mesh> &
+export type Text3DProps = Props<BufferGeometry> &
   Omit<TextGeometryParameters, 'font'> & {
     /**
      * The loaded font or path to font file
@@ -23,10 +26,10 @@ export type Text3DProps = Props<Mesh> &
     smooth?: number
   }
 
-export type Text3DEvents = Events<Mesh> & {
-  rendered: (mesh: Mesh) => void
+export type Text3DEvents = Events<BufferGeometry> & {
+  rendered: (mesh: TextGeometry) => void
 }
 
-export type Text3DSlots = Slots<Mesh>
+export type Text3DSlots = Slots<BufferGeometry>
 
 export default class Text3D extends SvelteComponent<Text3DProps, Text3DEvents, Text3DSlots> {}

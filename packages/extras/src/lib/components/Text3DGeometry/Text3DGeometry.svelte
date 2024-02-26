@@ -8,13 +8,12 @@
   } from '@threlte/core'
   import { createEventDispatcher } from 'svelte'
 
-  import type { Mesh } from 'three'
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
   import { FontLoader, Font } from 'three/examples/jsm/loaders/FontLoader'
 
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils'
 
-  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3D.svelte'
+  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3DGeometry.svelte'
 
   type $$Props = Required<Text3DProps>
   type $$Events = Text3DEvents
@@ -43,8 +42,6 @@
 
   let geometryRef: TextGeometry
 
-  let ref: Mesh<TextGeometry>
-
   $: if (smooth > 0 && geometryRef) {
     geometryRef = toCreasedNormals(geometryRef, smooth) as TextGeometry
   }
@@ -52,34 +49,30 @@
   const dispatch = createEventDispatcher()
 
   $: if (geometryRef) {
-    dispatch('rendered', ref)
+    dispatch('rendered', geometryRef)
   }
 </script>
 
 {#await $loadedFont then _font}
-  <T.Mesh
-    bind:ref
+  <T
+    bind:ref={geometryRef}
     bind:this={$component}
-    {...$$restProps}
+    is={TextGeometry}
+    args={[
+      text,
+      {
+        font: _font,
+        size,
+        height,
+        curveSegments,
+        bevelEnabled,
+        bevelThickness,
+        bevelSize,
+        bevelOffset,
+        bevelSegments
+      }
+    ]}
   >
-    <T
-      bind:ref={geometryRef}
-      is={TextGeometry}
-      args={[
-        text,
-        {
-          font: _font,
-          size,
-          height,
-          curveSegments,
-          bevelEnabled,
-          bevelThickness,
-          bevelSize,
-          bevelOffset,
-          bevelSegments
-        }
-      ]}
-    />
-    <slot {ref} />
-  </T.Mesh>
+    <slot ref={geometryRef} />
+  </T>
 {/await}

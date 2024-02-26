@@ -2,12 +2,12 @@
 {
   order: 11.4,
   category: '@threlte/extras',
-  name: '<Text3D>',
-  sourcePath: 'packages/extras/src/lib/components/Text3D/Text3D.svelte',
+  name: '<Text3DGeometry>',
+  sourcePath: 'packages/extras/src/lib/components/Text3DGeometry/Text3DGeometry.svelte',
   type: 'component',
   'componentSignature':
     {
-      extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+      extends: { type: 'BufferGeometry', url: 'https://threejs.org/docs/index.html#api/en/core/BufferGeometry' },
       'props':
         [
 					{ name: 'font', type: 'Font | string', required: true, description: 'Either a loaded font or a path to a font file.' },
@@ -26,24 +26,25 @@
 }
 ---
 
-Render 3D text using threejs's [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).
+Render 3D text as a geometry using threejs's [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).
 
-<Example path="extras/text-3d" />
+<Example path="extras/text-3d-geometry" />
 
 ## Examples
 
 ### Basic Example
 
-```svelte title="Text3D.svelte"
+```svelte title="Text3DGeometry.svelte"
 <script lang="ts">
   import { T } from '@threlte/core'
 
-  import { Text3D } from '@threlte/extras'
+  import { Text3DGeometry } from '@threlte/extras'
 </script>
 
-<Text3D font={'path-to-your-font'} text={'Hello'}>
+<T.Mesh>
+	<Text3DGeometry font={'path-to-your-font'} text={'Hello'} />
 	<T.MeshStandardMaterial />
-</Text3D>
+</T.Mesh>
 ```
 
 ### Generate a font
@@ -54,20 +55,20 @@ You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/
 
 You can also load the font yourself and pass it to the component, like so:
 
-```svelte title="Text3D.svelte"
+```svelte title="Text3DGeometry.svelte"
 <script lang="ts">
 	import { T, useLoader } from '@threlte/core'
-	import { Text3D } from '@threlte/extras'
+	import { Text3DGeometry } from '@threlte/extras'
 	import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
-
 
 	let font = useLoader(FontLoader).load('path-to-your-font')
 </script>
 
 {#await $font then loadedFont}
-	<Text3D font={loadedFont} text={'Hello'}>
+	<T.Mesh>
+		<Text3DGeometry font={loadedFont} text={'Hello'} />
 		<T.MeshStandardMaterial />
-	</Text3D>
+	</T.Mesh>
 {/await}
 ```
 
@@ -77,13 +78,14 @@ You can center a text by using the `<Align>` component and calling the align slo
 
 ```svelte title="Text3DCentered.svelte"
 <Align let:align>
-  <Text3D
-    font={'path-to-your-font'}
-    text={`Hello!`}
-    on:rendered={align}
-  >
-    <T.MeshStandardMaterial />
-  </Text3D>
+	<T.Mesh>
+		<Text3DGeometry
+			font={'path-to-your-font'}
+			text={`Hello!`}
+			on:rendered={align}
+		/>
+		<T.MeshStandardMaterial />
+	</T.Mesh>
 </Align>
 ```
 
