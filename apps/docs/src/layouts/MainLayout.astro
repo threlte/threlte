@@ -50,11 +50,7 @@ const title = Astro.props.title
 
     <!-- Header Right -->
     <div class="flex flex-row gap-5">
-      <Socials
-        twitter
-        github
-        discord
-      />
+      <Socials/>
     </div>
   </header>
 
@@ -67,12 +63,7 @@ const title = Astro.props.title
       width={200}
       class="h-[37px] w-auto"
     />
-    <Socials
-      slot="after"
-      twitter
-      github
-      discord
-    />
+    <Socials slot="after"/>
   </MobileMainNav>
 
   <slot name="external" />
