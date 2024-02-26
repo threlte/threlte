@@ -62,13 +62,13 @@
   // Toggle scope, reset position to 0 when not scoping
   window.addEventListener('keydown', (e) => {
     if (e.key === 's') scoping.set(!$scoping)
-    if (e.key === 'a') zoomedFov.set($zoomedFov + 1)
-    if (e.key === 'd') zoomedFov.set($zoomedFov - 1)
+    if (e.key === 'a') zoomedFov.set($zoomedFov + 2)
+    if (e.key === 'd') zoomedFov.set($zoomedFov - 2)
   })
 
   // Zoom in and out with mousewheel
-  window.addEventListener('wheel', ({ deltaY }) => {
-    zoomedFov.set($zoomedFov + deltaY * 0.05)
+  document.addEventListener('wheel', (e) => {
+    zoomedFov.set($zoomedFov + e.deltaY * 0.05)
   })
 
   const mouseSensitivity = 0.0012

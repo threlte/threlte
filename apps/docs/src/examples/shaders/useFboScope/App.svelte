@@ -5,9 +5,10 @@
 </script>
 
 <div>
-  <span class="absolute left-0 top-0 z-20 whitespace-nowrap pl-4"
-    >Press <b>S</b> to toggle scope mode. <b>Mousewheel</b> or <b>A/D</b> to adjust zoom level.</span
-  >
+  <ul>
+    <li>Press <b>S</b> to toggle scope mode.</li>
+    <li><b>Mousewheel</b> or <b>A/D</b> to adjust zoom level.</li>
+  </ul>
   <Canvas>
     <Controls />
     <Scene />
@@ -15,6 +16,11 @@
 </div>
 
 <style>
+  ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   div {
     height: 100%;
   }
