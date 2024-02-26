@@ -45,6 +45,8 @@
 }
 
 /* firefox */
-* {
-  scrollbar-width: thin;
+@supports (-moz-appearance:none) {
+  * {
+    scrollbar-width: thin;
+  }
 }
