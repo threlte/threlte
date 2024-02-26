@@ -7,13 +7,12 @@ Source: https://sketchfab.com/3d-models/sniper-scope-nightforce-v2-907abe0a96e24
 Title: Sniper Scope NightForce_V2
 -->
 
-<script lang="ts">
-  import { CircleGeometry, DoubleSide, Group, MeshBasicMaterial, Texture } from 'three'
+<script>
   import { T, forwardEventHandlers } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
+  import { Group } from 'three'
 
   export const ref = new Group()
-  export let scopeViewMap: Texture
 
   const gltf = useGltf('/models/scope.glb')
 
@@ -35,16 +34,7 @@ Title: Sniper Scope NightForce_V2
       material={gltf.materials.initialShadingGroup}
       rotation={[-Math.PI / 2, 0, 0]}
     />
-    <T.Mesh
-      position.z={19.5}
-      position.y={-0.1}
-    >
-      <T.CircleGeometry args={[1.8]} />
-      <T.MeshBasicMaterial
-        side={DoubleSide}
-        map={scopeViewMap}
-      />
-    </T.Mesh>
+    <slot />
   {:catch error}
     <slot
       name="error"
