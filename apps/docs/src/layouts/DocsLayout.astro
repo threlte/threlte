@@ -33,8 +33,8 @@ const activeUrlPathName = Astro.url.pathname
 const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white group'
 const activeLinkStyles = '!text-orange'
 
-const linkTextStyles = 'flex flex-col gap-0.5';
-const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
+const linkTextStyles = 'flex flex-col gap-0.5 font-medium';
+const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
 ---
 
 <AppLayout title={title}>
@@ -43,7 +43,7 @@ const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
     class="border-0 fixed z-40 mx-auto hidden md:flex h-[70px] w-full flex-row items-center justify-between gap-12 bg-[#0A0F19] px-6"
     transition:name="desktop_nav"
   >
-    <div class="justify flex items-center justify-start gap-6 xl:gap-12">
+    <div class="justify flex items-center justify-start gap-12 xl:gap-12">
       <a
         href="/"
         data-astro-prefetch
@@ -65,7 +65,7 @@ const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
       </a>
     </div>
       <!-- guide -->
-      <div class="hidden lg:flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6 ">
+      <div class="hidden lg:flex h-[30px] flex-row items-center justify-start gap-6 lg:gap-8">
         <Book class="h-[20px] hidden lg:block opacity-70" />
         <a
           href="/docs/learn/getting-started/introduction"
@@ -90,7 +90,7 @@ const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
         </a>
       </div>
       <!-- packages -->
-      <div class="relative hidden lg:flex items-center gap-6">
+      <div class="relative hidden lg:flex items-center gap-6 lg:gap-8">
           <Package class="h-[20px] hidden md:block opacity-70" />
           <a
             href="/docs/reference/core/getting-started"
@@ -186,7 +186,7 @@ const linkAliasStyles = 'text-xs opacity-50 whitespace-nowrap'
         </a>
     </div>
     <!-- search -->
-    <div class="flex flex-1 flex-row items-center justify-end gap-6">
+    <div class="flex flex-1 flex-row items-center justify-end gap-6 lg:gap-8">
       <Search client:media="(min-width: 900px)" />
     </div>
   </header>
