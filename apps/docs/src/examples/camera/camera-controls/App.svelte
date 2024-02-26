@@ -1,7 +1,7 @@
 <script>
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { useTweakpane } from '$lib/useTweakpane'
+  import { Pane, Button, Separator } from 'svelte-tweakpane-ui'
   import { cameraControls, mesh } from './stores'
   import { DEG2RAD } from 'three/src/math/MathUtils'
 
@@ -10,186 +10,148 @@
   $: if ($cameraControls) {
     camera = $cameraControls._camera
   }
-
-  const { action, addButton, addSeparator } = useTweakpane({
-    title: 'Camera Controls',
-    expanded: false
-  })
-
-  addButton({
-    title: 'rotate theta 45deg',
-    label: '',
-    onClick: () => {
-      $cameraControls.rotate(45 * DEG2RAD, 0, true)
-    }
-  })
-
-  addButton({
-    title: 'rotate theta -90deg',
-    label: '',
-    onClick: () => {
-      $cameraControls.rotate(-90 * DEG2RAD, 0, true)
-    }
-  })
-  addButton({
-    title: 'rotate theta 360deg',
-    label: '',
-    onClick: () => {
-      $cameraControls.rotate(360 * DEG2RAD, 0, true)
-    }
-  })
-  addButton({
-    title: 'rotate phi 20deg',
-    label: '',
-    onClick: () => {
-      $cameraControls.rotate(0, 20 * DEG2RAD, true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'truck(1, 0)',
-    label: '',
-    onClick: () => {
-      $cameraControls.truck(1, 0, true)
-    }
-  })
-  addButton({
-    title: 'truck(0, 1)',
-    label: '',
-    onClick: () => {
-      $cameraControls.truck(0, 1, true)
-    }
-  })
-  addButton({
-    title: 'truck(-1, -1)',
-    label: '',
-    onClick: () => {
-      $cameraControls.truck(-1, -1, true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'dolly 1',
-    label: '',
-    onClick: () => {
-      $cameraControls.dolly(1, true)
-    }
-  })
-  addButton({
-    title: 'dolly -1',
-    label: '',
-    onClick: () => {
-      $cameraControls.dolly(-1, true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'zoom `camera.zoom / 2`',
-    label: '',
-    onClick: () => {
-      $cameraControls.zoom(camera.zoom / 2, true)
-    }
-  })
-  addButton({
-    title: 'zoom `- camera.zoom / 2`',
-    label: '',
-    onClick: () => {
-      $cameraControls.zoom(-camera.zoom / 2, true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'move to ( 3, 5, 2)',
-    label: '',
-    onClick: () => {
-      $cameraControls.moveTo(3, 5, 2, true)
-    }
-  })
-  addButton({
-    title: 'fit to the bounding box of the mesh',
-    label: '',
-    onClick: () => {
-      $cameraControls.fitToBox($mesh, true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'move to ( -5, 2, 1 )',
-    label: '',
-    onClick: () => {
-      $cameraControls.setPosition(-5, 2, 1, true)
-    }
-  })
-  addButton({
-    title: 'look at ( 3, 0, -3 )',
-    label: '',
-    onClick: () => {
-      $cameraControls.setTarget(3, 0, -3, true)
-    }
-  })
-  addButton({
-    title: 'move to ( 1, 2, 3 ), look at ( 1, 1, 0 )',
-    label: '',
-    onClick: () => {
-      $cameraControls.setLookAt(1, 2, 3, 1, 1, 0, true)
-    }
-  })
-  addSeparator()
-
-  addButton({
-    title: 'move to somewhere between ( -2, 0, 0 ) -> ( 1, 1, 0 ) and ( 0, 2, 5 ) -> ( -1, 0, 0 )',
-    label: '',
-    onClick: () => {
-      $cameraControls.lerpLookAt(-2, 0, 0, 1, 1, 0, 0, 2, 5, -1, 0, 0, Math.random(), true)
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'reset',
-    label: '',
-    onClick: () => {
-      $cameraControls.reset(true)
-    }
-  })
-  addButton({
-    title: 'saveState',
-    label: '',
-    onClick: () => {
-      $cameraControls.saveState()
-    }
-  })
-
-  addSeparator()
-
-  addButton({
-    title: 'disable mouse/touch controls',
-    label: '',
-    onClick: () => {
-      $cameraControls.enabled = false
-    }
-  })
-  addButton({
-    title: 'enable mouse/touch controls',
-    label: '',
-    onClick: () => {
-      $cameraControls.enabled = true
-    }
-  })
 </script>
 
-<div use:action />
+<Pane
+  title="Camera Controls"
+  position="fixed"
+  expanded={false}
+>
+  <Button
+    title="rotate theta 45deg"
+    on:click={() => {
+      $cameraControls.rotate(45 * DEG2RAD, 0, true)
+    }}
+  />
+  <Button
+    title="rotate theta -90deg"
+    on:click={() => {
+      $cameraControls.rotate(-90 * DEG2RAD, 0, true)
+    }}
+  />
+  <Button
+    title="rotate theta 360deg"
+    on:click={() => {
+      $cameraControls.rotate(360 * DEG2RAD, 0, true)
+    }}
+  />
+  <Button
+    title="rotate phi 20deg"
+    on:click={() => {
+      $cameraControls.rotate(0, 20 * DEG2RAD, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="truck(1, 0)"
+    on:click={() => {
+      $cameraControls.truck(1, 0, true)
+    }}
+  />
+  <Button
+    title="truck(0, 1)"
+    on:click={() => {
+      $cameraControls.truck(0, 1, true)
+    }}
+  />
+  <Button
+    title="truck(-1, -1)"
+    on:click={() => {
+      $cameraControls.truck(-1, -1, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="dolly 1"
+    on:click={() => {
+      $cameraControls.dolly(1, true)
+    }}
+  />
+  <Button
+    title="dolly -1"
+    on:click={() => {
+      $cameraControls.dolly(-1, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="zoom `camera.zoom / 2`"
+    on:click={() => {
+      $cameraControls.zoom(camera.zoom / 2, true)
+    }}
+  />
+  <Button
+    title="zoom `- camera.zoom / 2`"
+    on:click={() => {
+      $cameraControls.zoom(-camera.zoom / 2, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="move to ( 3, 5, 2)"
+    on:click={() => {
+      $cameraControls.moveTo(3, 5, 2, true)
+    }}
+  />
+  <Button
+    title="fit to the bounding box of the mesh"
+    on:click={() => {
+      $cameraControls.fitToBox($mesh, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="move to ( -5, 2, 1 )"
+    on:click={() => {
+      $cameraControls.setPosition(-5, 2, 1, true)
+    }}
+  />
+  <Button
+    title="look at ( 3, 0, -3 )"
+    on:click={() => {
+      $cameraControls.setTarget(3, 0, -3, true)
+    }}
+  />
+  <Button
+    title="move to ( 1, 2, 3 ), look at ( 1, 1, 0 )"
+    on:click={() => {
+      $cameraControls.setLookAt(1, 2, 3, 1, 1, 0, true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="move to somewhere between ( -2, 0, 0 ) -> ( 1, 1, 0 ) and ( 0, 2, 5 ) -> ( -1, 0, 0 )"
+    on:click={() => {
+      $cameraControls.lerpLookAt(-2, 0, 0, 1, 1, 0, 0, 2, 5, -1, 0, 0, Math.random(), true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="reset"
+    on:click={() => {
+      $cameraControls.reset(true)
+    }}
+  />
+  <Button
+    title="saveState"
+    on:click={() => {
+      $cameraControls.saveState(true)
+    }}
+  />
+  <Separator />
+  <Button
+    title="disable mouse/touch controls"
+    on:click={() => {
+      $cameraControls.enabled = false
+    }}
+  />
+  <Button
+    title="enable mouse/touch controls"
+    on:click={() => {
+      $cameraControls.enabled = true
+    }}
+  />
+</Pane>
 
 <div>
   <Canvas>
@@ -198,12 +160,7 @@
 </div>
 
 <style>
-  :global(body) {
-    margin: 0;
-  }
-
   div {
-    width: 100%;
     height: 100%;
   }
 </style>
