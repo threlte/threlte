@@ -9,6 +9,15 @@
   export const zoomedFov = tweened(5, {
     duration: 200
   })
+</script>
+
+<script lang="ts">
+  import { useTask, useThrelte } from '@threlte/core'
+  import { onDestroy } from 'svelte'
+
+  import { Quaternion, Vector3 } from 'three'
+
+  const { renderer, camera } = useThrelte()
 
   const requestPointerLockWithUnadjustedMovement = (myTargetElement: HTMLElement) => {
     //@ts-ignore
@@ -33,15 +42,6 @@
         })
     )
   }
-</script>
-
-<script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-
-  import { Quaternion, Vector3 } from 'three'
-
-  const { renderer, camera } = useThrelte()
 
   let pointerLocked = false
 
