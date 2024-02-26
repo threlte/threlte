@@ -67,8 +67,13 @@
 
   // Toggle scope, reset position to 0 when not scoping
   const scopePosition: Vector3Tuple = [0, 0, 0]
-  window.addEventListener('keydown', () => {
-    scoping.set(!$scoping)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 's') scoping.set(!$scoping)
+    if (e.key === 'a') zoomedFov += 1
+    if (e.key === 'd') zoomedFov -= 1
+
+    zoomedFov = Math.max(zoomedFov, 0.5)
+    zoomedFov = Math.min(zoomedFov, 30)
   })
 
   // Move scope on mousemove

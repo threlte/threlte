@@ -5,7 +5,7 @@
 
 <div>
   <span class="absolute left-0 top-0 z-20 whitespace-nowrap pl-4"
-    >Press any key to toggle scope mode. Mousewheel to adjust zoom level.</span
+    >Press <b>S</b> to toggle scope mode. <b>Mousewheel</b> or <b>A/D</b> to adjust zoom level.</span
   >
   <Canvas>
     <Scene />
