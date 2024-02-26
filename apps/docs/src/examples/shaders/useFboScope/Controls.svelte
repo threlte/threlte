@@ -1,10 +1,16 @@
-<script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-  import { Quaternion, Vector3 } from 'three'
-  import { clamp } from 'three/src/math/MathUtils.js'
+<script
+  lanng="ts"
+  context="module"
+>
+  import { writable } from 'svelte/store'
+  import { tweened } from 'svelte/motion'
+  export const scoping = writable(false)
 
-  export const requestPointerLockWithUnadjustedMovement = (myTargetElement: HTMLElement) => {
+  export const zoomedFov = tweened(5, {
+    duration: 200
+  })
+
+  const requestPointerLockWithUnadjustedMovement = (myTargetElement: HTMLElement) => {
     //@ts-ignore
     const promise = myTargetElement.requestPointerLock({
       unadjustedMovement: true
@@ -27,10 +33,17 @@
         })
     )
   }
+</script>
 
-  let pointerLocked = false
+<script lang="ts">
+  import { useTask, useThrelte } from '@threlte/core'
+  import { onDestroy } from 'svelte'
+
+  import { Quaternion, Vector3 } from 'three'
 
   const { renderer, camera } = useThrelte()
+
+  let pointerLocked = false
 
   renderer?.domElement.addEventListener('click', async () => {
     if (!pointerLocked) {
@@ -46,23 +59,35 @@
     false
   )
 
-  const mouseSensitivity = 0.0006
+  // Toggle scope, reset position to 0 when not scoping
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 's') scoping.set(!$scoping)
+    if (e.key === 'a') zoomedFov.set($zoomedFov + 1)
+    if (e.key === 'd') zoomedFov.set($zoomedFov - 1)
+  })
+
+  // Zoom in and out with mousewheel
+  window.addEventListener('wheel', ({ deltaY }) => {
+    zoomedFov.set($zoomedFov + deltaY * 0.05)
+  })
+
+  const mouseSensitivity = 0.0012
 
   let phi = 0
-  let theta = 0
+  let theta = -0.33
 
   const handleMouseMove = ({ movementX, movementY }: MouseEvent) => {
     phi += movementX * mouseSensitivity
-    theta = clamp(theta - movementY * mouseSensitivity, -Math.PI / 3, Math.PI / 3)
+    theta -= movementY * mouseSensitivity * 1.5
   }
 
-  document.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('mousemove', handleMouseMove)
+
+  const qx = new Quaternion()
+  const qz = new Quaternion()
 
   useTask(() => {
-    const qx = new Quaternion()
     qx.setFromAxisAngle(new Vector3(0, -1, 0), phi)
-
-    const qz = new Quaternion()
     qz.setFromAxisAngle(new Vector3(1, 0, 0), theta)
 
     const cameraQuaternion = new Quaternion()
