@@ -1,14 +1,17 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
 
-  import { interactivity, Sky, useFBO } from '@threlte/extras'
+  import { interactivity, Sky, useFBO, useTexture } from '@threlte/extras'
 
   import { tweened } from 'svelte/motion'
   import { writable } from 'svelte/store'
-  import { DoubleSide, Group, PerspectiveCamera, Vector2, type Vector3Tuple } from 'three'
+  import { Group, PerspectiveCamera, Vector2, type Vector3Tuple } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import DeathValley from './deathValley.svelte'
   import Scope from './scope.svelte'
+
+  import fragmentShader from './scope_fs.glsl?raw'
+  import vertexShader from './scope_vs.glsl?raw'
 
   interactivity()
 
@@ -25,15 +28,18 @@
 
   let scope: Group | undefined
 
-  let zoomedFov = 5
   const baseFov = 60
+
+  const zoomedFov = tweened(5, {
+    duration: 200
+  })
 
   useTask(() => {
     if (!scope || !$scoping) return
     const cam = $camera as PerspectiveCamera
 
     scope.visible = false
-    cam.fov = zoomedFov
+    cam.fov = $zoomedFov
     cam.updateMatrix()
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
@@ -46,7 +52,7 @@
     renderer.setRenderTarget(null)
   })
 
-  const scoping = writable(false)
+  const scoping = writable(true)
 
   // Stores and reactivity to animate scope toggling
   const rotationX = tweened(90)
@@ -57,7 +63,7 @@
     if ($scoping) {
       rotationX.set(0)
       positionY.set(0)
-      positionZ.set(-0.53)
+      positionZ.set(-0.5)
     } else {
       rotationX.set(90)
       positionY.set(-0.3)
@@ -69,27 +75,24 @@
   const scopePosition: Vector3Tuple = [0, 0, 0]
   window.addEventListener('keydown', (e) => {
     if (e.key === 's') scoping.set(!$scoping)
-    if (e.key === 'a') zoomedFov += 1
-    if (e.key === 'd') zoomedFov -= 1
-
-    zoomedFov = Math.max(zoomedFov, 0.5)
-    zoomedFov = Math.min(zoomedFov, 30)
+    if (e.key === 'a') zoomedFov.set($zoomedFov + 1)
+    if (e.key === 'd') zoomedFov.set($zoomedFov - 1)
   })
 
   // Move scope on mousemove
   window.addEventListener('mousemove', ({ movementX, movementY }) => {
     if ($scoping) {
-      scopePosition[0] = scopePosition[0] + movementX * ((zoomedFov * 1.5) / baseFov) * 0.01
-      scopePosition[1] = scopePosition[1] - movementY * ((zoomedFov * 1.5) / baseFov) * 0.01
+      scopePosition[0] = scopePosition[0] + movementX * (($zoomedFov * 1.5) / baseFov) * 0.01
+      scopePosition[1] = scopePosition[1] - movementY * (($zoomedFov * 1.5) / baseFov) * 0.01
     }
   })
 
   // Zoom in and out with mousewheel
   window.addEventListener('wheel', ({ deltaY }) => {
-    zoomedFov += deltaY * 0.01
-    zoomedFov = Math.max(zoomedFov, 0.5)
-    zoomedFov = Math.min(zoomedFov, 30)
+    zoomedFov.set($zoomedFov + deltaY * 0.05)
   })
+
+  const reticleTexture = useTexture('/textures/NightforceScopeReticle.png')
 </script>
 
 <T.Group
@@ -117,9 +120,19 @@
         position.y={-0.1}
       >
         <T.CircleGeometry args={[1.8]} />
-        <T.MeshBasicMaterial
-          side={DoubleSide}
-          map={renderTarget.texture}
+
+        <T.ShaderMaterial
+          {fragmentShader}
+          {vertexShader}
+          uniforms={{
+            viewTexture: {
+              value: renderTarget.texture
+            },
+            reticleTexture: {
+              value: null
+            }
+          }}
+          uniforms.reticleTexture.value={$reticleTexture}
         />
       </T.Mesh>
     </Scope>
@@ -127,4 +140,4 @@
 </T.Group>
 
 <Sky />
-<DeathValley scale={5} />
+<DeathValley scale={6} />
