@@ -77,7 +77,7 @@ export const referenceCollection = defineCollection({
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
-    category: z.enum(referenceCategories),
+    category: z.string(), //z.enum(referenceCategories),
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true)
   })
@@ -86,7 +86,7 @@ export const referenceCollection = defineCollection({
 export const learnCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('learn'),
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
+    category: z.enum(['Start Here', 'Basics', 'Advanced', 'More', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),

@@ -12,7 +12,7 @@
   export let activeUrlPathName: string
 </script>
 
-<MobileNav search>
+<MobileNav>
   <svelte:fragment slot="topbar-left">
     <a
       class="flex flex-row gap-3"
