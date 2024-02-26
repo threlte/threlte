@@ -4,7 +4,10 @@
 >
   import { writable } from 'svelte/store'
   import { tweened } from 'svelte/motion'
-  export const scoping = writable(false)
+
+  export const baseFov = 60
+
+  export const scoping = writable(true)
 
   export const zoomedFov = tweened(5, {
     duration: 200
@@ -16,6 +19,7 @@
   import { onDestroy } from 'svelte'
 
   import { Quaternion, Vector3 } from 'three'
+  import { clamp } from 'svelte-tweakpane-ui/Utils.js'
 
   const { renderer, camera } = useThrelte()
 
@@ -62,16 +66,16 @@
   // Toggle scope, reset position to 0 when not scoping
   window.addEventListener('keydown', (e) => {
     if (e.key === 's') scoping.set(!$scoping)
-    if (e.key === 'a') zoomedFov.set($zoomedFov + 2)
-    if (e.key === 'd') zoomedFov.set($zoomedFov - 2)
+    if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
+    if (e.key === 'd') zoomedFov.set(Math.max(2, $zoomedFov - 2))
   })
 
   // Zoom in and out with mousewheel
   document.addEventListener('wheel', (e) => {
-    zoomedFov.set($zoomedFov + e.deltaY * 0.05)
+    zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 2, baseFov * 0.5))
   })
 
-  const mouseSensitivity = 0.0012
+  $: mouseSensitivity = 0.00008 * clamp($zoomedFov * 0.5, 1, 20)
 
   let phi = 0
   let theta = -0.33

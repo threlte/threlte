@@ -11,24 +11,20 @@
 
   import fragmentShader from './scope_fs.glsl?raw'
   import vertexShader from './scope_vs.glsl?raw'
-  import { scoping, zoomedFov } from './Controls.svelte'
+  import { baseFov, scoping, zoomedFov } from './Controls.svelte'
 
   interactivity()
 
   const { camera, renderer, scene, size } = useThrelte()
 
-  // render scene at a lower resolution
-  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5)
+  // render scene at a lower resolution but multiple samples for antialiasing
+  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+    samples: 8
+  })
 
-  // change aspect ratio of the texture because we are putting it on a circle so w and h are the same
-  const aspect = new Vector2($size.height / $size.width, 1).normalize()
-  renderTarget.texture.repeat.set(aspect.x, aspect.y)
-  renderTarget.texture.offset.x = -0.5 * (aspect.x - 1)
-  renderTarget.texture.offset.y = -0.5 * (aspect.y - 1)
+  $: aspect = $size.width / $size.height
 
   let scope: Group | undefined
-
-  const baseFov = 60
 
   useTask(() => {
     if (!scope || !$scoping) return
@@ -57,7 +53,7 @@
     if ($scoping) {
       rotationX.set(0)
       positionY.set(0)
-      positionZ.set(-0.5)
+      positionZ.set(-0.496)
     } else {
       rotationX.set(90)
       positionY.set(-0.3)
@@ -65,7 +61,7 @@
     }
   }
 
-  const reticleTexture = useTexture('/textures/NightforceScopeReticle.png')
+  const reticleTexture = useTexture('/textures/NightforceScopeReticle2.png')
 </script>
 
 <T.PerspectiveCamera
@@ -95,9 +91,13 @@
           },
           reticleTexture: {
             value: null
+          },
+          aspect: {
+            value: 1
           }
         }}
         uniforms.reticleTexture.value={$reticleTexture}
+        uniforms.aspect.value={aspect}
       />
     </T.Mesh>
   </Scope>
