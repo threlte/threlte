@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import Controls from './Controls.svelte'
 </script>
 
 <div>
@@ -8,6 +9,7 @@
     >Press <b>S</b> to toggle scope mode. <b>Mousewheel</b> or <b>A/D</b> to adjust zoom level.</span
   >
   <Canvas>
+    <Controls />
     <Scene />
   </Canvas>
 </div>

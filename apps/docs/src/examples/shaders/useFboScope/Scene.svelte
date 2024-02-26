@@ -82,8 +82,8 @@
   // Move scope on mousemove
   window.addEventListener('mousemove', ({ movementX, movementY }) => {
     if ($scoping) {
-      scopePosition[0] = scopePosition[0] + movementX * (($zoomedFov * 1.5) / baseFov) * 0.01
-      scopePosition[1] = scopePosition[1] - movementY * (($zoomedFov * 1.5) / baseFov) * 0.01
+      // scopePosition[0] = scopePosition[0] + movementX * (($zoomedFov * 1.5) / baseFov) * 0.01
+      // scopePosition[1] = scopePosition[1] - movementY * (($zoomedFov * 1.5) / baseFov) * 0.01
     }
   })
 
