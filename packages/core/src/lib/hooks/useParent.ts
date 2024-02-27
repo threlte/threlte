@@ -1,7 +1,7 @@
-import { createObjectStore } from '../../lib'
 import { getContext, setContext } from 'svelte'
 import { type Writable } from 'svelte/store'
 import type { Object3D } from 'three'
+import { createObjectStore } from '../lib/createObjectStore'
 
 export type ThrelteParentContext = Writable<Object3D | undefined>
 
