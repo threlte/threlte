@@ -96,98 +96,12 @@ The `<InstancedSprite>` component allows you to efficiently spawn large numbers 
 
 <Example path="extras/instanced-sprite" />
 
-## Basic example
+## Usage
 To use the `<InstancedSprite>` you must provide it with sprite metadata and a texture. While we recommend utilizing the
 [`buildSpritesheet()`](#buildSpritesheet) utility for this purpose, you are also free to implement your own
 custom solution, provided it meets the component's input requirements.
 
-**1. Sprite metadata object**
-
-```svelte title=Flyer.svelte
-<script lang="ts">
-  import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
-  import UpdaterFlying from './UpdaterFlying.svelte'
-  import type { SpritesheetMetadata } from '@threlte/extras'
-
-
-  const demonSpriteMeta = [
-    {
-      url: '/textures/sprites/cacodaemon.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 4,
-      animations: [
-        { name: 'fly', frameRange: [0, 5] },
-        { name: 'attack', frameRange: [8, 13] },
-        { name: 'idle', frameRange: [16, 19] },
-        { name: 'death', frameRange: [24, 31] }
-      ]
-    }
-  ] as const satisfies SpritesheetMetadata
-
-  const flyerSheetbuilder = buildSpritesheet.from<typeof demonSpriteMeta>(demonSpriteMeta)
-</script>
-```
-
-In this example, there is a single sprite image containing 4 different animations. The metadata is contained within the
-`demonSpriteMeta` object, which describes the layout and animation details of the spritesheet.
-
-In this case, the spritesheet image is arranged in a grid of 4 rows and 8 columns, so the `type` is set to `'rowColumn'`,
-`height` to `4` (indicating the number of rows), and `width` to `8` (representing the number of columns).
-The `animations` property is an array, where each element represents a separate animation with a `name` and a `frameRange`.
-
-For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](#spritesheetmetadata-object)
-
-**2. Adding component to the scene**
-
-```svelte title=Flyer.svelte
-{#await flyerSheetbuilder.spritesheet then spritesheet}
-  <InstancedSprite
-    count={20000}
-    {spritesheet}
-  >
-	<!-- User component for updating instances -->
-    <UpdaterFlying /> /
-	<!-- -->
-  </InstancedSprite>
-{/await}
-```
-
-We add `<InstancedSprite>` to the scene with a `count` `spritesheet` - the only required props. Spritesheet is a result of the promise from the previous step.
-
-To add the `<InstancedSprite>` component to the scene, you need to specify at least two essential properties:
-`count` and `spritesheet`. The `spritesheet` property is the object obtained as the result of awaiting the Promise of the `buildSpritesheet` function called earlier.
-
-
-**3. Updating instances**
-
-In our example, the user made `<UpdaterFlying>` component is responsible for updating sprites.
-This component leverages the `useInstancedSprite()` hook, which makes it easy to access and
-adjust sprite properties such as position and animation.
-
-To update sprite instances, we utilize the `useTask` hook. Inside, a loop iterates over the IDs
-of all instances, applying updates to their positions and assigning the fly animation to each.
-This description is simplified for brevity, this is where you'd have your complex movement or game logic.
-A working example, demonstrating basic random movement, is available in the source of the live example for this component
-(UpdaterFlying.svelte, UpdaterWalking.svelte, UpdaterFlyingHook.svelte).
-
-
-```svelte title=UpdaterFlying.svelte
-<script lang="ts">
-	import { useTask } from '@threlte/core'
-	import { useInstancedSprite } from '@threlte/extras'
-
-	const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
-
-	useTask(()=>{
-		for(let i=0; i<count;i++){
-			updatePosition(i, [0,0,0])
-			sprite.animation.setAt(i, 'fly')
-		}
-	})
-</script>
-```
-
+{/* TODO add explanation of the component props etc */}
 
 ## Spritesheets
 
@@ -324,19 +238,44 @@ Instances can be updated by using methods provided by the `InstancedSpriteMesh`.
 
 ### `useInstancedSprite()`
 
+	{/* TODO hook returns object with following properties: */}
+
+	- `count`: Total number of instances.
+	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
+	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
+	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
+	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
+
 ```ts
 	import { useInstancedSprite } from '@threlte/extras'
 
   const hook = useInstancedSprite()
 	// it's useful to immediately destructure it like this
   const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
-```
 
-	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
-	- `count`: Total number of instances.
-	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
-	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
-	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
+	// Examples of using the InstancedSpriteMesh API:
+
+  // play animation on instance id 0 - loops by defualt
+  sprite.play('IdleBackward').at(0)
+  // play animation without looping
+  sprite.play('RunLeft', false).at(1);
+  // play animation backwards with looping
+  sprite.play('RunLeft', true, 'REVERSE').at(2);
+
+
+  // mesh.play is a utility that combines the use of these functions:
+
+  // animation by name
+  sprite.animation.setAt(0, 'RunBackward');
+  // looping y/n
+  sprite.loop.setAt(0, false);
+  // animation direction - FORWARD (default) / REVERSE / PAUSE
+  sprite.playmode.setAt(0, 'REVERSE')
+
+  // billboarding
+  sprite.billboarding.setAll(true);
+  sprite.billboarding.setAt(0, true);
+```
 
 #### Typescript support
 
@@ -349,7 +288,7 @@ The useInstancedSprite hook supports typing for autocompletion of animation name
 
 
 ### `<Instance>`
-
+{/* TODO some sort of Instance component signature */}
 Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
 Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
 
@@ -390,74 +329,6 @@ If you don't do it, then the spritesheet will run animation updates each frame t
 ## InstancedSpriteMesh
 
 The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>` component, written to enable efficient instancing of animated sprites within a
-Three.js environment. 
+Three.js environment.
 
 The class extends the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/). For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at [InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
-
-`InstancedSpriteMesh` provides a suite of methods designed to offer granular control over the animation and properties of sprite instances:
-
-**animation**
-
-  - **.animation.setAt( instanceId: number, animation: string )** - sets animation (by name) on instanceId
-
-**playmode**
-
-```ts
-type PLAY_MODE = "FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"
-
-```
-	- **.playmode.setAt(instanceId: number, playmode: PLAY_MODE)** - set playmode for one instance
-	- **.playmode.setAll(playmode: PLAY_MODE)** - set playmode for all instances
-
-**billboarding**
-
-  Set of methods to toggle billboarding
-  - **.billboarding.setAt( instanceId: number, enable: boolean )** - enables billboarding on instance
-  - **.billboarding.setAll( enable: boolean )** - sets default global billboarding state that is used unless the `setAt` was called on the instance
-  - **.billboarding.unsetAll()** - removes all instance specific billboarding settings
-
-**offset**
-
-  Offset sprite animation time by a given number of milliseconds
-  - **.offset.setAt: (instanceId: number, offset: number)**
-  - **.offset.randomizeAll: (scalar: number = 1)** - offset all sprites by a random value (0-1) multiplied by scalar
-
-**frame**
-
-  - **.frame.setAt: (instanceId: number, frameId: number, animation?: string)** - Set the instance at a specific frame. FrameID is an n-th frame in the animation if the name is provided, otherwise if not set, it's an n-th frameId of the entire spritesheet.
-
-**loop**
-
-  methods to control whether sprite animation should be looped
-  - **.loop.setAt( instanceId: number, enable: boolean )** - sets per instance loop mode
-  - **.loop.setAll( enable: boolean )** - changes looping mode in all instances
-
-
-**flipX**
-
-  - **.flipX.setAt(instanceId: number, flipX: boolean)**
-  - **.flipX.setGlobal(flipX: boolean)**
-  - **.flipX.unsetAll()**
-
-**flipY**
-
-  - **.flipY.setAt(instanceId: number, flipY: boolean)**
-  - **.flipY.setGlobal(flipY: boolean)**
-  - **.flipY.unsetAll()**
-
-**play**
-
-Utility function that combines `.animation`, `.loop` and `.playmode`
-```ts
-play(
-  animation: V,
-  loop: boolean = true,
-  playmode: PLAY_MODE = "FORWARD")
-.at(instanceId: number)
-
-```
-
-**update**
-
- - **.update()** - manually updates instanced spritesheet animation based on fps and time. Not necessary unless `autoUpdate` is set to `false` on the `<InstancedSprite>` component
-

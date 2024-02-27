@@ -5,6 +5,9 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import SpriteAtlasTrees from './SpriteAtlasTrees.svelte'
   import SpriteDudes from './SpriteDudes.svelte'
+  import SpriteFlyers from './SpriteFlyers.svelte'
+  import SpriteFlyersTyped from './SpriteFlyersTyped.svelte'
+  import SpriteGoblin from './SpriteGoblin.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -12,7 +15,7 @@
   const grass = useTexture('/textures/sprites/pixel_grass.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(100, 100)
+      texture.repeat.set(500, 500)
       texture.minFilter = NearestFilter
       texture.magFilter = NearestFilter
       texture.needsUpdate = true
@@ -44,6 +47,34 @@
   {fps}
 />
 
+<!--
+	Flyers:
+	- Loading .png file with multiple animations
+-->
+<SpriteFlyers
+  {billboarding}
+  {fps}
+/>
+
+<!--
+	Goblins:
+	- Assemble a spritesheet out of multiple .png files.
+-->
+<SpriteGoblin
+  {billboarding}
+  {fps}
+/>
+
+<!--
+	Flyers:
+	- Loading .png file with multiple animations
+	- uses a typed utility hook for animation name autocomplete etc.
+-->
+<SpriteFlyersTyped
+  {billboarding}
+  {fps}
+/>
+
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
 <SpriteAtlasTrees {billboarding} />
 
@@ -54,7 +85,7 @@
     position.y={-10}
     scale.y={0.5}
   >
-    <T.SphereGeometry args={[110]} />
+    <T.SphereGeometry args={[400]} />
     <T.MeshBasicMaterial
       map={$sky}
       side={BackSide}
@@ -67,7 +98,7 @@
     rotation.x={-DEG2RAD * 90}
     receiveShadow
   >
-    <T.PlaneGeometry args={[150, 150]} />
+    <T.PlaneGeometry args={[1000, 1000]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}

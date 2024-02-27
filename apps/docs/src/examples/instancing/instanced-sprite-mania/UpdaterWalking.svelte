@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T, useTask, watch } from '@threlte/core'
   import { useInstancedSprite } from '@threlte/extras'
   import { Vector2 } from 'three'
 
@@ -16,6 +16,7 @@
     const y = Math.random() * spread - spread / 2
 
     /** min distance from 0,0. Recursive reroll if too close */
+
     if (Math.sqrt(x ** 2 + y ** 2) < minCenterDistance) {
       return rndPosition()
     }

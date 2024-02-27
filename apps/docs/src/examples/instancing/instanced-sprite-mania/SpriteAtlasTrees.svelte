@@ -66,7 +66,7 @@
   const redTrees = 7
   const deadTrees = 3
 
-  const sampler = new Sampler(2.2, [REGION_W, REGION_Z], undefined, Math.random)
+  const sampler = new Sampler(2, [REGION_W, REGION_Z], undefined, Math.random)
   const points = sampler.GeneratePoints()
 
   const pickRandomTreeType = () => {
@@ -87,7 +87,7 @@
     // also, flip random trees on X axis for more variety
     if (sprite) {
       for (let i = 0; i < points.length; i++) {
-        sprite.flipX.setAt(i, Math.random() > 0.85 ? true : false)
+        sprite.flipX.setAt(i, Math.random() > 0.6 ? true : false)
       }
       sprite.update()
     }
