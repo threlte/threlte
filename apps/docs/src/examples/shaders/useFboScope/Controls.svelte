@@ -7,7 +7,7 @@
 
   export const baseFov = 60
 
-  export const scoping = writable(true)
+  export const scoping = writable(false)
 
   export const zoomedFov = tweened(5, {
     duration: 200

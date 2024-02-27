@@ -10,7 +10,9 @@
   const { camera, renderer, scene, size } = useThrelte()
 
   // render scene at a lower resolution
-  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5)
+  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+    samples: 4
+  })
 
   // change aspect ratio of the texture because we are putting it on a circle so w and h are the same
   const aspect = new Vector2($size.height / $size.width, 1).normalize()
