@@ -32,16 +32,15 @@
 
     scope.visible = false
     cam.fov = $zoomedFov
-    cam.updateMatrix()
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
     renderer.setRenderTarget(renderTarget)
     renderer.render(scene, cam)
+
+    renderer.setRenderTarget(null)
     cam.fov = baseFov
     cam.updateProjectionMatrix()
-
     scope.visible = true
-    renderer.setRenderTarget(null)
   })
 
   // Stores and reactivity to animate scope toggling
