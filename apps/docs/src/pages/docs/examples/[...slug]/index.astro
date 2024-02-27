@@ -15,20 +15,15 @@ export async function getStaticPaths() {
 }
 
 interface Props {
-  entry: CollectionEntry<'learn'>
+  entry: CollectionEntry<'examples'>
 }
 
 const { entry } = Astro.props
-const { category } = entry.data
+const { category, title } = entry.data
 const { Content } = await entry.render()
-
-const title = entry.id.split('/').pop()?.split('.')[0]
 ---
 
-<DocsLayout
-  entry={entry}
-  title={`${title} | Threlte Example`}
->
+<DocsLayout entry={entry} title={`${title} | Learn Threlte`}>
   <h6 class="text-faded text-sm font-bold">
     {category}
   </h6>

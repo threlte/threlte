@@ -1,19 +1,20 @@
 ---
-category: Getting Started
+category: Tutorials
 title: Your First Scene
+order: 1001
 ---
 
-<Tip type="info">
+<Tip type="info" >
   You should be versed in both Svelte and Three.js before rushing into Threlte. If you are unsure
   about Svelte, consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for
   Threejs, make sure you at least glance over its [official documentation](https://threejs.org).
-</Tip>
+< /Tip>
 
 ## Structuring Your App
 
 As a first step we're creating a new Svelte file called `App.svelte` where we are importing the [`<Canvas>` component](/docs/reference/core/canvas).
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="App.svelte"
 <script>
   import { Canvas } from '@threlte/core'
@@ -24,12 +25,12 @@ As a first step we're creating a new Svelte file called `App.svelte` where we ar
   <Scene />
 </Canvas>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 The `<Canvas>` component is the root component of your Threlte application. It creates a
 renderer and sets up some sensible defaults for you like antialiasing and color management.
 It also creates a default camera and provides the context in which your Threlte application
-will run. For improving access to this runtime context, it's <a href="/docs/learn/basics/context">best practice</a>
+will run. For improving access to this runtime context, it's <a href="/docs/learn/basics/context" >best practice< /a>
 to create a seperate component called `Scene.svelte` and including it in our `App.svelte` file.
 
 ## Creating Objects
@@ -45,7 +46,7 @@ a [`THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materia
 
 We should now be looking at a white cube on a transparent background.
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {1-8}+
 <script>
   import { T } from '@threlte/core'
@@ -56,31 +57,31 @@ We should now be looking at a white cube on a transparent background.
   <T.MeshBasicMaterial />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-1"
   hideCode
-/>
+    />
 
-<Tip type="info">
+<Tip type="info" >
   #### attach
 
 Behind the scenes we're using the property `attach` available on `<T>` to **attach an object to a property of
 its parent**. Binding geometries to the property `geometry` and materials to the property `material` is a common
 pattern so Threlte takes care of it for you.
 
-  <details>
+  < details >
 	<summary>
       Learn more
-    </summary>
+    < /summary>
 
     We're using the property `attach` available on `<T>` to
     **attach an object to a property of its parent**. In our case we're **attaching** the underlying Three.js
     object of `<T.BoxGeometry>` to the property `geometry` of the `<T.Mesh>` component. We're also attaching
     the underlying Three.js object of `<T.MeshBasicMaterial>` to the property `material` of the `<T.Mesh>` component.
 
-    {/* prettier-ignore-start */}
+    { /* prettier-ignore-start */}
     ```svelte title="Scene.svelte"
     <script>
       import { T } from '@threlte/core'
@@ -91,19 +92,19 @@ pattern so Threlte takes care of it for you.
       <T.MeshBasicMaterial attach="material" />
     </T.Mesh>
     ```
-    {/* prettier-ignore-end */}
+    { /* prettier-ignore-end */}
 
     Binding geometries to the property `geometry` and materials to the property `material` is a common
     pattern so Threlte will take care of it. It checks for the properties `isMaterial` and `isGeometry` on
     the underlying Three.js object and attaches it to the correct property.
 
-  </details>
-</Tip>
+  < /details>
+< /Tip>
 
-<details>
+< details >
 	<summary>
 		Three.js equivalent
-	</summary>
+	< /summary>
   ```ts
   // creating the objects
   const geometry = new THREE.BoxGeometry()
@@ -115,7 +116,7 @@ mesh.geometry = geometry
 mesh.material = material
 
 ````
-</details>
+< /details>
 
 ## Modifying Objects
 
@@ -123,7 +124,7 @@ mesh.material = material
 That cube is still a bit boring. Let's add some color to it, and make it a bit bigger! We also want to move it up a little to highlight it. We can do this by passing props to the
 `<T>` component.
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {5-7}m
 <script>
 import { T } from '@threlte/core'
@@ -135,20 +136,20 @@ import { T } from '@threlte/core'
 </T.Mesh>
 ````
 
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-2"
   hideCode
-/>
+    />
 
 Threlte automatically generates props for `<T>` based on the underlying Three.js object. This means you can easily guess most `<T>` props
-based on the <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">Three.js docs</a> for the class you are using.
+based on the <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene" >Three.js docs< /a> for the class you are using.
 
-<details>
+< details >
   <summary>
     Three.js equivalent
-  </summary>
+  < /summary>
 
 ```ts
 const mesh = new THREE.Mesh()
@@ -158,7 +159,7 @@ mesh.position.y = 1
 material.color.set('hotpink')
 ```
 
-</details>
+< /details>
 
 The special **args** prop we use in `<T.BoxGeometry>` corresponds to the
 object's constructor arguments. Props interpreted from the underlying Three.js
@@ -166,10 +167,10 @@ object are called **auto props**, like `color` in our `<T.MeshBasicMaterial>`.
 Leveraging Threlte's **Pierced Props** you can directly assigned to attributes
 of props like `position.y` in our `<T.Mesh>`.
 
-<details>
+< details >
 	<summary>
 		Learn more
-	</summary>
+	< /summary>
 	#### `args`
 
     In Three.js objects are classes that are instantiated. These classes can
@@ -211,33 +212,33 @@ of props like `position.y` in our `<T.Mesh>`.
     also has `x`, `y` and `z` properties which we can set directly via
     dot-notation, we call this **Pierced Props**.
 
-</details>
+< /details>
 
-<Tip
-  type="tip"
-  title="Primitive Values"
->
+< Tip
+  type = "tip"
+  title = "Primitive Values"
+    >
   From a performance perspective, it's often better to use pierced props because
   [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) prop values can safely be
   compared for equality. This means that if the value of a prop doesn't change, Threlte will skip
   any updates to the underlying Three.js object.
-</Tip>
+< /Tip>
 
-<Tip
-  type="warning"
-  title="Constant prop types"
->
+< Tip
+  type = "warning"
+  title = "Constant prop types"
+    >
   The type of an inferred prop (or "auto prop") must be constant. This means that the type of a prop
   must not change for the lifetime of the component. For instance you can't use a variable as a prop
   that is an array of numbers and then later on change the value of that variable to a single
   number. This is considered a type change and therefore not allowed.
-</Tip>
+< /Tip>
 
 ## Pointing the Camera
 
 We're still staring at the side of a cube, let's add a camera and offset it from the center:
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {5-11}+
 <script>
   import { T } from '@threlte/core'
@@ -256,24 +257,24 @@ We're still staring at the side of a cube, let's add a camera and offset it from
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-3"
   hideCode
-/>
+    />
 
 We're again using the `<T>` component to create a [`THREE.PerspectiveCamera`](https://threejs.org/docs/index.html#api/en/cameras/PerspectiveCamera).
 We're also passing a `makeDefault` prop which will make this camera the default camera of our application.
 The renderer now uses this camera to render our scene.
 
-<Tip type="info">
+< Tip type = "info" >
   #### Events
 
-Threlte supports listening to certain <a href="/docs/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
+Threlte supports listening to certain <a href="/docs/reference/core/t#events" >events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
 
-</Tip>
+< /Tip>
 
 ## Enabling Interactivity
 
@@ -284,7 +285,7 @@ We can now add interaction event listeners to our `<T>` components. We will add 
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a Svelte spring store
 and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {3-4,6-7,20-22}+
 <script>
   import { T } from '@threlte/core'
@@ -313,34 +314,34 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-4"
   hideCode
-/>
+    />
 
-<Tip type="info" title="Automatic Vector & Scalar Detection">
+<Tip type="info" title = "Automatic Vector & Scalar Detection" >
   You might have noticed that we're only passing a single number to the prop `scale` on `<T.Mesh>`. Threlte automatically
   figures out whether you are passing an array or a number and uses the appropriate underlying Three.js method.
 
-  <details>
+  < details >
     <summary>
       Learn more
-    </summary>
+    < /summary>
     The component `<T>` will first look for a property `setScalar` on	the underlying Three.js object and use that method if
     only a single number is passed. This is equivalent to calling `scale.setScalar($scale)`.
-  </details>
-</Tip>
+  < /details>
+< /Tip>
 
-<Tip
-  type="tip"
-  title="Realtime Variables"
->
+< Tip
+  type = "tip"
+  title = "Realtime Variables"
+    >
   When working with realtime apps where variables e.g. position and rotation change constantly, an
   easy way observe the values is with [live
   expressions](https://developer.chrome.com/docs/devtools/console/live-expressions/).
-</Tip>
+< /Tip>
 
 ## Adding Animation
 
@@ -348,7 +349,7 @@ Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/refer
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {2}m {9-12,24}+
 <script>
   import { T, useTask } from '@threlte/core'
@@ -383,12 +384,12 @@ cube rotate around its y-axis.
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-5"
   hideCode
-/>
+    />
 
 `useTask` registers a callback that will be invoked on every frame. The callback receives the time delta since the last frame as an argument. We use
 the delta to update the rotation
@@ -400,7 +401,7 @@ the delta to update the rotation
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {32}m {22}+
 <script>
   import { T, useTask } from '@threlte/core'
@@ -436,12 +437,12 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
   <T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
+{ /* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-6"
   hideCode
-/>
+    />
 
 ## Casting Shadows
 
@@ -449,7 +450,7 @@ We would like our cube to cast a shadow. To do so, we need a floor for it to cas
 so we add a new `<T.Mesh>` but this time with `<T.CircleGeometry>`. To enable shadows, we need to
 set `castShadow` on both the light and our cube, and set `receiveShadow` on our new floor:
 
-{/* prettier-ignore-start */}
+{ /* prettier-ignore-start */}
 
 ```svelte title="Scene.svelte" {22}m {24,33,39-45}+
 <script>
@@ -499,10 +500,10 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
 </T.Mesh>
 ```
 
-<Example
-  path="first-scene/step-7"
+< Example
+  path = "first-scene/step-7"
   hideCode
-/>
+    />
 
 ## Conclusion
 

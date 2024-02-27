@@ -17,16 +17,21 @@ import Markprompt from '$components/Search/Markprompt'
 
 export interface Props {
   title: string
-  entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+  entry: CollectionEntry<'learn'> | CollectionEntry<'examples'> |  CollectionEntry<'reference'>
 }
 
 const title = Astro.props.title
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
+const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
+  '/docs/learn'
+)
   ? 'learn'
+  : Astro.url.pathname.startsWith('/docs/examples')
+  ? 'examples'
   : 'reference'
+;
 
 const activeUrlPathName = Astro.url.pathname
 
@@ -79,7 +84,7 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
         </a>
 
         <a
-          href="/docs/examples/examples"
+          href="/docs/examples/getting-started/examples"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
           data-astro-prefetch
         >

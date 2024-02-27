@@ -53,9 +53,7 @@ type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
-  'Advanced',
-  'More',
-  'Preprocessing'
+  'Advanced'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
@@ -93,50 +91,49 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   }
 }
 
-const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
-  const learnCollection = await getCollection('examples')
+type ExamplesCategoryKey = CollectionEntry<'examples'>['data']['category']
 
-  // Trying to find the category names by looking at the directory structure. An
-  // example in the dir 'src/content/examples/Animation System/transitions.mdx'
-  // would have a category name of "Animation System".
-  const categoryNames = [
-    ...new Set(
-      learnCollection
-        .filter((item) => {
-          // only use items that are nested in a subdirectory
-          return item.id.split('/').length > 1
-        })
-        .map((item) => {
-          return item.id.split('/')[0] as string
-        })
-    )
-  ]
+const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
+  'Getting started',
+  'Tutorials',
+  'Examples'
+]
+
+const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
+  const examplesCollection = await getCollection('examples')
+
+  const categoryNames = [...new Set(examplesCollection.map((item) => item.data.category))]
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
-    const menuItems = learnCollection
-      .filter((item) => item.id.startsWith(category))
+    const menuItems = examplesCollection
+      .filter((item) => item.data.showInSidebar && item.data.category === category)
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
-        // Removes the file extension from item.id and finds last item in array
-        // when splitting on '/'. This is the title of the example.
-        const title = item.id.split('/').pop()?.split('.')[0] as string
         return {
-          title,
+          title: item.data.title,
           slug: item.slug,
-          isDivider: false
+          isDivider: item.data.isDivider ?? false
         }
       })
     return {
       urlPrefix: '/docs/examples',
       menuItems,
-      title: category as Exclude<typeof category, undefined>
+      title: category
     }
+  })
+
+  categories.sort((a, b) => {
+    return (
+      examplesSidebarMenuCategoryOrder.indexOf(a.title as ExamplesCategoryKey) -
+      examplesSidebarMenuCategoryOrder.indexOf(b.title as ExamplesCategoryKey)
+    )
   })
 
   return {
     categories
   }
 }
+
 
 export const getLeftSidebarMenu = async (): Promise<
   Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
