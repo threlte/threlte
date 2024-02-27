@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.1.2
+
+### Patch Changes
+
+- 36f8eef: Import fix
+
 ## 7.1.1
 
 ### Patch Changes
