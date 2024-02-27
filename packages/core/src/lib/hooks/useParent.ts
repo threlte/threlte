@@ -1,4 +1,4 @@
-import { createObjectStore } from '$lib'
+import { createObjectStore } from '../index'
 import { getContext, setContext } from 'svelte'
 import { type Writable } from 'svelte/store'
 import type { Object3D } from 'three'
