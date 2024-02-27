@@ -11,7 +11,7 @@
 <nav class={c('relative hidden h-full w-full pl-6 pr-2 md:block')}>
   <ul
     id="sidebar-scrollwindow"
-    class={c('mt-0 block h-full overflow-x-hidden overflow-y-scroll pb-24 lg:pt-6')}
+    class={c('mt-0 block h-full overflow-x-hidden overflow-y-scroll pb-24 pr-4')}
   >
     {#each menu[activeSidebarTab].categories as category}
       <li class="mb-6 text-sm">

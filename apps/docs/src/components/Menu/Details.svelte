@@ -60,6 +60,10 @@
 </details>
 
 <style>
+  details {
+    margin: 0.5rem 0;
+  }
+
   details > summary {
     list-style: none;
   }
