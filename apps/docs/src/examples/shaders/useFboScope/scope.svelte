@@ -7,10 +7,15 @@ Source: https://sketchfab.com/3d-models/sniper-scope-nightforce-v2-907abe0a96e24
 Title: Sniper Scope NightForce_V2
 -->
 
-<script>
-  import { T, forwardEventHandlers } from '@threlte/core'
-  import { useGltf } from '@threlte/extras'
+<script lang="ts">
+  import type * as THREE from 'three'
   import { Group } from 'three'
+  import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
+  import { useGltf } from '@threlte/extras'
+
+  type $$Props = Props<THREE.Group>
+  type $$Events = Events<THREE.Group>
+  type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any }; inner: any }
 
   export const ref = new Group()
 
@@ -34,7 +39,7 @@ Title: Sniper Scope NightForce_V2
       material={gltf.materials.initialShadingGroup}
       rotation={[-Math.PI / 2, 0, 0]}
     />
-    <slot />
+    <slot name="inner" />
   {:catch error}
     <slot
       name="error"

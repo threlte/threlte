@@ -9,7 +9,7 @@
 
   export const scoping = writable(false)
 
-  export const zoomedFov = tweened(5, {
+  export const zoomedFov = tweened(25, {
     duration: 200
   })
 </script>
@@ -67,7 +67,7 @@
   window.addEventListener('keydown', (e) => {
     if (e.key === 's') scoping.set(!$scoping)
     if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
-    if (e.key === 'd') zoomedFov.set(Math.max(2, $zoomedFov - 2))
+    if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
   })
 
   // Zoom in and out with mousewheel
@@ -78,7 +78,7 @@
   $: mouseSensitivity = 0.00008 * clamp($zoomedFov * 0.5, 1, 20)
 
   let phi = 0
-  let theta = -0.33
+  let theta = -0.16
 
   const handleMouseMove = ({ movementX, movementY }: MouseEvent) => {
     phi += movementX * mouseSensitivity

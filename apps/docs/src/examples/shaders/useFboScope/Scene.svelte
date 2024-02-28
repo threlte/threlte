@@ -4,14 +4,16 @@
   import { interactivity, Sky, useFBO, useTexture } from '@threlte/extras'
 
   import { tweened } from 'svelte/motion'
-  import { Group, PerspectiveCamera, Vector2 } from 'three'
+  import { Group, PerspectiveCamera } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import DeathValley from './deathValley.svelte'
   import Scope from './scope.svelte'
 
+  import { baseFov, scoping, zoomedFov } from './Controls.svelte'
+  import Island from './Island.svelte'
   import fragmentShader from './scope_fs.glsl?raw'
   import vertexShader from './scope_vs.glsl?raw'
-  import { baseFov, scoping, zoomedFov } from './Controls.svelte'
+  import Water from './Water.svelte'
+  import Duck from './Duck.svelte'
 
   interactivity()
 
@@ -24,7 +26,7 @@
 
   $: aspect = $size.width / $size.height
 
-  let scope: Group | undefined
+  let scope: Group
 
   useTask(() => {
     if (!scope || !$scoping) return
@@ -65,8 +67,7 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[0, 3.5, 9]}
-  rotation.x={DEG2RAD * -25}
+  position={[0, 1.5, 20]}
   fov={baseFov}
 >
   <Scope
@@ -102,5 +103,17 @@
   </Scope>
 </T.PerspectiveCamera>
 
-<Sky />
-<DeathValley scale={6} />
+<Sky
+  elevation={0.5}
+  azimuth={130}
+/>
+<Water />
+
+<Island
+  scale={0.2}
+  position.x={-5}
+  position.y={-0.01}
+  position.z={0}
+/>
+
+<Duck />
