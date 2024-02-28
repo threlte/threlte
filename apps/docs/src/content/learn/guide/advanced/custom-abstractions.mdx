@@ -100,10 +100,10 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
 
 ## Events
 
-< Tip type = "info" >
+<Tip type = "info" >
   The following section assumes you use the plugin
   [interactivity](/docs/reference/extras/interactivity) to listen to pointer events.
-< /Tip>
+</Tip>
 
 We successfully forwarded all props and are able to move the `<Tile>` component around in the scene.
 However, we may also need to listen to events on objects inside `<Tile>`. Threlte provides the
@@ -157,7 +157,7 @@ When we now add an `on:click` event handler to the `<Tile>` component, we can se
 
 ## Types
 
-<Tip type="info" >The following section assumes you use TypeScript.< /Tip>
+<Tip type="info" >The following section assumes you use TypeScript.</Tip>
 
 The last thing we need to do is to add types to our custom abstraction so that editors like VSCode can provide us with autocompletion and type checking.
 We will create a `Tile.d.ts` file next to the `Tile.svelte` file and add the following content:
