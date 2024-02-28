@@ -20,9 +20,12 @@
   renderTarget.texture.offset.x = -0.5 * (aspect.x - 1)
   renderTarget.texture.offset.y = -0.5 * (aspect.y - 1)
 
-  let fboPreviewMesh: Mesh | undefined
+  let fboPreviewMesh: Mesh
 
-  useTask(() => {
+  let knotRotation = 0
+
+  useTask((delta) => {
+    knotRotation += delta
     if (!fboPreviewMesh) return
     const cam = $camera as PerspectiveCamera
 
@@ -39,15 +42,15 @@
   makeDefault
   position={[5, 1, 5]}
 >
-  <OrbitControls
-    autoRotate
-    autoRotateSpeed={1}
-  />
+  <OrbitControls />
 </T.PerspectiveCamera>
 
 <Sky />
 
-<T.Mesh>
+<T.Mesh
+  rotation.x={knotRotation}
+  rotation.z={knotRotation}
+>
   <T.TorusKnotGeometry />
   <T.MeshStandardMaterial />
 </T.Mesh>
