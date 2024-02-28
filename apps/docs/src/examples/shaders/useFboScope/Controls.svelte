@@ -6,10 +6,8 @@
   import { tweened } from 'svelte/motion'
 
   export const baseFov = 60
-
   export const scoping = writable(false)
-
-  export const zoomedFov = tweened(25, {
+  export const zoomedFov = tweened(18, {
     duration: 200
   })
 </script>
@@ -17,9 +15,8 @@
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-
   import { Quaternion, Vector3 } from 'three'
-  import { clamp } from 'svelte-tweakpane-ui/Utils.js'
+  import { clamp } from 'three/src/math/MathUtils.js'
 
   const { renderer, camera } = useThrelte()
 
@@ -49,28 +46,6 @@
 
   let pointerLocked = false
 
-  document.addEventListener('click', async () => {
-    if (!pointerLocked) {
-      requestPointerLockWithUnadjustedMovement(renderer?.domElement)
-    }
-  })
-
-  document.addEventListener(
-    'pointerlockchange',
-    () => {
-      console.log('pointer lock changed')
-      pointerLocked = document.pointerLockElement ? true : false
-    },
-    false
-  )
-
-  // Toggle scope, reset position to 0 when not scoping
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 's') scoping.set(!$scoping)
-    if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
-    if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
-  })
-
   // Zoom in and out with mousewheel
   renderer?.domElement.addEventListener(
     'wheel',
@@ -91,14 +66,6 @@
 
   let phi = 0
   let theta = -0.16
-
-  const handleMouseMove = ({ movementX, movementY }: MouseEvent) => {
-    if (!pointerLocked) return
-    phi += movementX * mouseSensitivity
-    theta -= movementY * mouseSensitivity * 1.5
-  }
-
-  document.addEventListener('mousemove', handleMouseMove)
 
   const qx = new Quaternion()
   const qz = new Quaternion()
@@ -126,12 +93,16 @@
     if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
   }}
   on:pointerlockchange={() => {
-    console.log('pointer lock changed')
     pointerLocked = document.pointerLockElement ? true : false
   }}
   on:click={async () => {
     if (!pointerLocked) {
       requestPointerLockWithUnadjustedMovement(renderer?.domElement)
     }
+  }}
+  on:mousemove={({ movementX, movementY }) => {
+    if (!pointerLocked) return
+    phi += movementX * mouseSensitivity
+    theta -= movementY * mouseSensitivity * 1.5
   }}
 />
