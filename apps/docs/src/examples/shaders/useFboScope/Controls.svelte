@@ -93,6 +93,7 @@
   let theta = -0.16
 
   const handleMouseMove = ({ movementX, movementY }: MouseEvent) => {
+    if (!pointerLocked) return
     phi += movementX * mouseSensitivity
     theta -= movementY * mouseSensitivity * 1.5
   }
@@ -117,3 +118,20 @@
     document.exitPointerLock()
   })
 </script>
+
+<svelte:document
+  on:keydown={(e) => {
+    if (e.key === 's') scoping.set(!$scoping)
+    if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
+    if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
+  }}
+  on:pointerlockchange={() => {
+    console.log('pointer lock changed')
+    pointerLocked = document.pointerLockElement ? true : false
+  }}
+  on:click={async () => {
+    if (!pointerLocked) {
+      requestPointerLockWithUnadjustedMovement(renderer?.domElement)
+    }
+  }}
+/>
