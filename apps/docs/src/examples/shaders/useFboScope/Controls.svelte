@@ -49,7 +49,7 @@
 
   let pointerLocked = false
 
-  renderer?.domElement.addEventListener('click', async () => {
+  document.addEventListener('click', async () => {
     if (!pointerLocked) {
       requestPointerLockWithUnadjustedMovement(renderer?.domElement)
     }
@@ -58,22 +58,34 @@
   document.addEventListener(
     'pointerlockchange',
     () => {
+      console.log('pointer lock changed')
       pointerLocked = document.pointerLockElement ? true : false
     },
     false
   )
 
   // Toggle scope, reset position to 0 when not scoping
-  window.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 's') scoping.set(!$scoping)
     if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
     if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
   })
 
   // Zoom in and out with mousewheel
-  document.addEventListener('wheel', (e) => {
-    zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 2, baseFov * 0.5))
-  })
+  renderer?.domElement.addEventListener(
+    'wheel',
+    (e) => {
+      if (pointerLocked) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+        zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 2, baseFov * 0.5))
+      }
+    },
+    {
+      passive: false
+    }
+  )
 
   $: mouseSensitivity = 0.00008 * clamp($zoomedFov * 0.5, 1, 20)
 
@@ -85,7 +97,7 @@
     theta -= movementY * mouseSensitivity * 1.5
   }
 
-  window.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mousemove', handleMouseMove)
 
   const qx = new Quaternion()
   const qz = new Quaternion()
