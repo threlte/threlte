@@ -29,9 +29,9 @@
 <details
   bind:open
   {id}
-  class={c('block', _class)}
+  class="block {_class}"
 >
-  <summary class={c('cursor-pointer select-none list-none font-bold')}>
+  <summary class="cursor-pointer select-none list-none font-bold">
     <div class="mb-0 flex flex-row items-center">
       <slot name="summary" />
       <div>

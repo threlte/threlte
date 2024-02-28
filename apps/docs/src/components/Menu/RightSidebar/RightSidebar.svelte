@@ -95,7 +95,7 @@
         >
           <a
             data-depth={heading.depth}
-            class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
+            class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
           >
@@ -117,9 +117,9 @@
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     on:transitionend={focusFirstDropdownLink}
   >
-    <li class={c('list-item')}>
+    <li class="list-item">
       <a
-        class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+        class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
         referrerpolicy="no-referrer"
         rel="noopener noreferrer"
@@ -144,9 +144,9 @@
     </li>
 
     {#if sourceUrl}
-      <li class={c('list-item')}>
+      <li class="list-item">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
@@ -172,9 +172,9 @@
     {/if}
 
     {#if editUrl}
-      <li class={c('list-item')}>
+      <li class="list-item">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
