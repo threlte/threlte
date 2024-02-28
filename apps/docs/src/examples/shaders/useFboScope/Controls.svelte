@@ -79,7 +79,7 @@
         e.preventDefault()
         e.stopPropagation()
         e.stopImmediatePropagation()
-        zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 2, baseFov * 0.5))
+        zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 0.5, baseFov * 0.5))
       }
     },
     {
