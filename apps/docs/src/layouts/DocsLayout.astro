@@ -54,15 +54,13 @@ const linkAliasStyles = 'text-xs opacity-20 whitespace-nowrap font-light'
         <Image
           src={Logo}
           alt="threlte logo"
-          width={200}
-          class="h-[37px] w-auto sm:hidden md:block object-contain mt-2"
+          class="h-[37px] w-auto logo object-contain mt-2"
           loading="eager"
         />
         <Image
           src={LogoOnly}
           alt="threlte logo"
-          width={200}
-          class="h-[37px] w-[37px] hidden sm:block md:hidden object-contain mt-2"
+          class="h-[37px] w-[37px] minilogo object-contain mt-2"
           loading="lazy"
         />
       </a>
@@ -72,7 +70,7 @@ const linkAliasStyles = 'text-xs opacity-20 whitespace-nowrap font-light'
         <Book class="h-[20px] hidden lg:block opacity-70 ml-6 mb-0.5" />
         <a
           href="/docs/guide/getting-started/introduction"
-          class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
+          class={c(linkStyles, activeUrlPathName.includes('/docs/guide') && activeLinkStyles)}
           data-astro-prefetch
         >
           <div class={c(linkTextStyles)}>
@@ -83,7 +81,7 @@ const linkAliasStyles = 'text-xs opacity-20 whitespace-nowrap font-light'
 
         <a
           href="/docs/resources/getting-started/resources"
-          class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
+          class={c(linkStyles, activeUrlPathName.includes('/docs/resources') && activeLinkStyles)}
           data-astro-prefetch
         >
           <div class={c(linkTextStyles)}>
@@ -238,3 +236,23 @@ const linkAliasStyles = 'text-xs opacity-20 whitespace-nowrap font-light'
     </aside>
   </main>
 </AppLayout>
+
+<style>
+  .logo {
+    display: block
+  }
+
+  .minilogo {
+    display: none;
+  }
+
+  @media (min-width: 800px) and (max-width: 1200px) {
+    .logo {
+      display: none;
+    }
+
+    .minilogo {
+      display: block;
+    }
+  }
+</style>
