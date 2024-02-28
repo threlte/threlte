@@ -6,12 +6,10 @@ import Sidebar from './LeftSidebar.svelte'
 const sidebarMenu = await getLeftSidebarMenu()
 
 const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
-  '/docs/learn'
+  '/docs/reference'
 )
-  ? 'learn'
-  : Astro.url.pathname.startsWith('/docs/examples')
-  ? 'examples'
-  : 'reference'
+  ? 'reference'
+  : 'learn'
 
 const activeUrlPathName = Astro.url.pathname
 
@@ -32,6 +30,10 @@ const referenceCategory = Object.keys(referenceUrlMap).find((category) =>
 
 sidebarMenu.reference.categories = sidebarMenu.reference.categories.filter((category) => {
   return category.title === referenceCategory
+})
+
+sidebarMenu.learn.categories = sidebarMenu.learn.categories.filter((category) => {
+  return activeUrlPathName.includes(category.title.toLowerCase())
 })
 ---
 

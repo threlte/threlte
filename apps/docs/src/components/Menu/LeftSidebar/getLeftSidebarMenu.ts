@@ -51,9 +51,8 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
 type LearnCategoryKey = CollectionEntry<'learn'>['data']['category']
 
 const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
-  'Getting Started',
-  'Basics',
-  'Advanced'
+  'Guide',
+  'Resources'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
@@ -73,7 +72,7 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
         }
       })
     return {
-      urlPrefix: '/docs/learn',
+      urlPrefix: `/docs`,
       menuItems,
       title: category
     }
@@ -91,60 +90,15 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   }
 }
 
-type ExamplesCategoryKey = CollectionEntry<'examples'>['data']['category']
-
-const examplesSidebarMenuCategoryOrder: ExamplesCategoryKey[] = [
-  'Getting started',
-  'Tutorials',
-  'Examples'
-]
-
-const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
-  const examplesCollection = await getCollection('examples')
-
-  const categoryNames = [...new Set(examplesCollection.map((item) => item.data.category))]
-
-  const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
-    const menuItems = examplesCollection
-      .filter((item) => item.data.showInSidebar && item.data.category === category)
-      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-      .map((item): LeftSidebarMenuItem => {
-        return {
-          title: item.data.title,
-          slug: item.slug,
-          isDivider: item.data.isDivider ?? false
-        }
-      })
-    return {
-      urlPrefix: '/docs/examples',
-      menuItems,
-      title: category
-    }
-  })
-
-  categories.sort((a, b) => {
-    return (
-      examplesSidebarMenuCategoryOrder.indexOf(a.title as ExamplesCategoryKey) -
-      examplesSidebarMenuCategoryOrder.indexOf(b.title as ExamplesCategoryKey)
-    )
-  })
-
-  return {
-    categories
-  }
-}
-
 
 export const getLeftSidebarMenu = async (): Promise<
-  Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
+  Record<'learn' | 'reference', LeftSidebarMenu>
 > => {
   const reference = await getReferenceSidebarMenu()
   const learn = await getLearnSidebarMenu()
-  const examples = await getExamplesSidebarMenu()
 
   return {
     reference,
-    learn,
-    examples
+    learn
   }
 }

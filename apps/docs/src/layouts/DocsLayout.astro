@@ -17,20 +17,18 @@ import Markprompt from '$components/Search/Markprompt'
 
 export interface Props {
   title: string
-  entry: CollectionEntry<'learn'> | CollectionEntry<'examples'> |  CollectionEntry<'reference'>
+  entry: CollectionEntry<'learn'> |  CollectionEntry<'reference'>
 }
 
 const title = Astro.props.title
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
-  '/docs/learn'
-)
-  ? 'learn'
-  : Astro.url.pathname.startsWith('/docs/examples')
-  ? 'examples'
-  : 'reference'
+const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith(
+  '/docs/reference'
+) 
+  ? 'reference'
+  : 'learn'
 ;
 
 const activeUrlPathName = Astro.url.pathname
@@ -38,8 +36,8 @@ const activeUrlPathName = Astro.url.pathname
 const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white group'
 const activeLinkStyles = '!text-orange'
 
-const linkTextStyles = 'flex flex-col gap-0.5 font-medium';
-const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
+const linkTextStyles = 'flex flex-col gap-0.5 font-normal';
+const linkAliasStyles = 'text-xs opacity-20 whitespace-nowrap font-light'
 ---
 
 <AppLayout title={title}>
@@ -57,40 +55,40 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
           src={Logo}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-auto sm:hidden md:block object-contain"
+          class="h-[37px] w-auto sm:hidden md:block object-contain mt-2"
           loading="eager"
         />
         <Image
           src={LogoOnly}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-[37px] hidden sm:block md:hidden object-contain"
+          class="h-[37px] w-[37px] hidden sm:block md:hidden object-contain mt-2"
           loading="lazy"
         />
       </a>
     </div>
       <!-- guide -->
       <div class="hidden lg:flex h-[30px] flex-row items-end justify-start gap-6 lg:gap-8 mt-2">
-        <Book class="h-[20px] hidden lg:block opacity-70  mb-0.5" />
+        <Book class="h-[20px] hidden lg:block opacity-70 ml-6 mb-0.5" />
         <a
-          href="/docs/learn/getting-started/introduction"
+          href="/docs/guide/getting-started/introduction"
           class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
           data-astro-prefetch
         >
           <div class={c(linkTextStyles)}>
-            <span class={c(linkAliasStyles)}>Get started</span>
-            <span>overview</span>
+            <span class={c(linkAliasStyles)}>Concepts</span>
+            <span>guide</span>
           </div>
         </a>
 
         <a
-          href="/docs/examples/getting-started/examples"
+          href="/docs/resources/getting-started/resources"
           class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
           data-astro-prefetch
         >
           <div class={c(linkTextStyles)}>
-            <span class={c(linkAliasStyles)}>Tutorials &</span>
-            <span>examples</span>
+            <span class={c(linkAliasStyles)}>Examples</span>
+            <span>resources</span>
           </div>
         </a>
           <Package class="h-[20px] hidden md:block opacity-70 mb-0.5" />
@@ -188,7 +186,7 @@ const linkAliasStyles = 'text-xs opacity-30 whitespace-nowrap font-light'
         </a>
     </div>
     <!-- search -->
-    <div class="flex flex-1 flex-row items-center justify-end gap-6 lg:gap-8">
+    <div class="flex flex-1 flex-row items-center justify-end gap-6 lg:gap-8  mt-4">
       <Search client:media="(min-width: 900px)" />
     </div>
   </header>

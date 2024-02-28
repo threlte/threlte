@@ -86,18 +86,7 @@ export const referenceCollection = defineCollection({
 export const learnCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('learn'),
-    category: z.enum(['Getting Started', 'Basics', 'Advanced']),
-    isDivider: z.boolean().optional(),
-    title: z.string(),
-    order: z.number().optional(),
-    showInSidebar: z.boolean().optional().default(true)
-  })
-})
-
-export const examplesCollection = defineCollection({
-  schema: z.object({
-    schemaType: z.string().default('examples'),
-    category: z.enum(['Getting started', 'Tutorials', 'Examples']),
+    category: z.enum(['Guide', 'Resources']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
@@ -133,6 +122,5 @@ export const collections = {
   reference: referenceCollection,
   learn: learnCollection,
   testimonials: testimonialsCollection,
-  showcase: showcaseCollection,
-  examples: examplesCollection
+  showcase: showcaseCollection
 }

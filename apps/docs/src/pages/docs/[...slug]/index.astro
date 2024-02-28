@@ -1,0 +1,39 @@
+---
+import DocsLayout from '$layouts/DocsLayout.astro'
+import { getCollection, type CollectionEntry } from 'astro:content'
+import MdxCode from '$components/Code/MdxCode.astro'
+import QuickNav from '$components/QuickNav/QuickNav.astro'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('learn')
+  return entries
+    .map((entry) => {
+      const slug = entry.slug;
+      return {
+        params: { slug },
+        props: { entry }
+      }
+    })
+}
+
+interface Props {
+  entry: CollectionEntry<'learn'>
+}
+
+const { entry } = Astro.props
+const { category, title } = entry.data
+const { Content } = await entry.render()
+---
+
+<DocsLayout entry={entry} title={`${title} | Learn Threlte`}>
+  <h6 class="text-faded text-sm font-bold">
+    {category}
+  </h6>
+  <h1>
+    {title}
+  </h1>
+
+  <Content components={{ pre: MdxCode }} />
+
+  <QuickNav />
+</DocsLayout>

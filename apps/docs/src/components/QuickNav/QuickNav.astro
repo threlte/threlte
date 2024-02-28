@@ -11,7 +11,7 @@ pathname = pathname.replace('docs/', '')
 
 const pathnameItems = pathname.split('/')
 
-const section = pathnameItems[0] as 'learn' | 'reference'
+const section = pathnameItems[0] == 'reference' ? 'reference' : 'learn';
 
 const allMenuItems = sidebarMenu[section].categories
 	.flat()
