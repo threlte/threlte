@@ -1,4 +1,7 @@
 
+This example demonstrates [`<InstancedSprites>`](/docs/reference/extras/instanced-sprite), showing
+a few different approaches for instancing and updating large numbers of sprites in your scene.
+
 <Example
   path="instancing/instanced-sprite-mania"
   iframe
@@ -7,7 +10,7 @@
 
 {/* copied from other entry */}
 
-**1. Sprite metadata object**
+## 1. Sprite metadata object
 
 ```svelte title=Flyer.svelte
 <script lang="ts">
@@ -42,9 +45,9 @@ In this case, the spritesheet image is arranged in a grid of 4 rows and 8 column
 `height` to `4` (indicating the number of rows), and `width` to `8` (representing the number of columns).
 The `animations` property is an array, where each element represents a separate animation with a `name` and a `frameRange`.
 
-For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](#spritesheetmetadata-object)
+For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](/docs/reference/extras/instanced-sprite#spritesheetmetadata)
 
-**2. Adding component to the scene**
+## 2. Adding component to the scene
 
 ```svelte title=Flyer.svelte
 {#await flyerSheetbuilder.spritesheet then spritesheet}
@@ -65,7 +68,7 @@ To add the `<InstancedSprite>` component to the scene, you need to specify at le
 `count` and `spritesheet`. The `spritesheet` property is the object obtained as the result of awaiting the Promise of the `buildSpritesheet` function called earlier.
 
 
-**3. Updating instances**
+## 3. Updating instances
 
 In our example, the user made `<UpdaterFlying>` component is responsible for updating sprites.
 This component leverages the `useInstancedSprite()` hook, which makes it easy to access and

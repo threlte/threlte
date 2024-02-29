@@ -102,12 +102,16 @@ import ComponentSignature from '../../../components/ComponentSignature/Component
 </Tip>
 
 The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated
-[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. It supports the
-open SpritesheetMetadata format, but we offer a convenience `buildSpritesheet` utility to easily build your spritesheet.
+[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. You can instance
+sprites using the `useInstancedSprite` hook, or with a `<Instance>` component available through a slot prop.
+
+The component lets you configure your sprites in an
+open data format, which you can build yourself or a convenience `buildSpritesheet` utility.
 
 <Example path="extras/instanced-sprite" />
 
-## Usage
+## `<InstancedSprite>`
+
 To use the `<InstancedSprite>` you must provide it with sprite metadata and a texture. While we recommend utilizing the
 [`buildSpritesheet()`](#buildSpritesheet) utility for this purpose, you are also free to implement your own
 custom solution, provided it meets the component's input requirements.
@@ -151,9 +155,178 @@ Other than it's own props, `<InstanedSprite/>` extends and accepts all propertie
   />
 	```
 
+ You create and update instances in three ways:
 
-Binding:
-- **ref**
+1. Utilizing the `useInstancedSprite()` hook (recommended approach).
+2. Using the `<Instance>` component offered through a slot prop.
+3. Directly with the underlying class using the `ref` binding.
+
+
+### `useInstancedSprite`
+
+	The hook has to be used in a child component of `<InstancedSprite>` and returns an object with following properties:
+	- `count`: Total number of instances.
+	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
+	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
+	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
+	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
+
+```ts
+	import { useInstancedSprite } from '@threlte/extras'
+
+  const hook = useInstancedSprite()
+	// it's useful to immediately destructure it like this
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
+
+	// Examples of using the InstancedSpriteMesh API:
+
+  // play animation on instance id 0 - loops by defualt
+  sprite.play('IdleBackward').at(0)
+  // play animation without looping
+  sprite.play('RunLeft', false).at(1);
+  // play animation backwards with looping
+  sprite.play('RunLeft', true, 'REVERSE').at(2);
+
+
+  // mesh.play is a utility that combines the use of these functions:
+
+  // animation by name
+  sprite.animation.setAt(0, 'RunBackward');
+  // looping y/n
+  sprite.loop.setAt(0, false);
+  // animation direction - FORWARD (default) / REVERSE / PAUSE
+  sprite.playmode.setAt(0, 'REVERSE')
+
+  // billboarding
+  sprite.billboarding.setAll(true);
+  sprite.billboarding.setAt(0, true);
+```
+
+#### Typescript support
+
+The useInstancedSprite hook supports typing for autocompletion of animation names:
+
+```ts
+	type AnimationNames = 'walk' | 'run' | 'idle' | 'fly'
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
+```
+
+
+### `<Instance>`
+
+Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
+Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
+
+Other than this, it as other properties that you can find in the `InstancedSpriteMesh`, so: `animationName`, `playmode`, `billboarding`, `offset`, `loop`,
+`flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](#instancedspritemesh) section
+
+The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
+`InstancedSprite` component. You can access through the `let:Instance` directive.
+
+
+*Example: Set a position, scale and flipX for every instance.*
+```svelte
+<InstancedSprite
+  count={10000}
+  {spritesheet}
+  let:Instance
+>
+  {#each { length: 10000 } as _, i}
+    <Instance
+      position={[Math.random()*100, Math.random()*100, Math.random()*100]}
+      scale={[3, 3]}
+			flipX
+      id={i}
+    />
+  {/each}
+</InstancedSprite>
+```
+
+
+<ComponentSignature
+	titleOverride={` `}
+  idOverride="instance-component-signature"
+	componentName={'<Instance/>'}
+	signature={{
+      props:
+        [
+					{
+            name: 'id',
+            type: 'number',
+            required: true,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'animationName',
+            type: 'string',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'position',
+            type: 'Vector3Tuple',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'scale',
+            type: 'Vector2Tuple',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'playmode',
+            type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'billboarding',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'offset',
+            type: 'number',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'loop',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'flipX',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'flipY',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'frameId',
+            type: 'number',
+            required: false,
+            description: 'lorem ipsum dolor'
+          }
+        ]
+    }}
+	/>
+
+  
+### binding
+
+The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>` component, written to enable efficient instancing of animated sprites within a
+Three.js environment. The `<InstancedSprite>` component lets you bind to it through `ref`.
+
+The class extends the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/). For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at [InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
 
 
 ## Spritesheets
@@ -281,169 +454,6 @@ const goblinSpriteMeta = [
   ] as const satisfies SpritesheetMetadata
 ```
 
-## Updating instances
-
-Instances can be updated by using methods provided by the `InstancedSpriteMesh`. You can access it in two primary ways:
-
-- Utilizing the `useInstancedSprite()` hook (recommended approach).
-- Directly with the `ref` prop binding on the component.
-
-
-### `useInstancedSprite()`
-
-	The hook has to be used in a child component of `<InstancedSprite>` and returns an object with following properties:
-	- `count`: Total number of instances.
-	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
-	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
-	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
-	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
-
-```ts
-	import { useInstancedSprite } from '@threlte/extras'
-
-  const hook = useInstancedSprite()
-	// it's useful to immediately destructure it like this
-  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
-
-	// Examples of using the InstancedSpriteMesh API:
-
-  // play animation on instance id 0 - loops by defualt
-  sprite.play('IdleBackward').at(0)
-  // play animation without looping
-  sprite.play('RunLeft', false).at(1);
-  // play animation backwards with looping
-  sprite.play('RunLeft', true, 'REVERSE').at(2);
-
-
-  // mesh.play is a utility that combines the use of these functions:
-
-  // animation by name
-  sprite.animation.setAt(0, 'RunBackward');
-  // looping y/n
-  sprite.loop.setAt(0, false);
-  // animation direction - FORWARD (default) / REVERSE / PAUSE
-  sprite.playmode.setAt(0, 'REVERSE')
-
-  // billboarding
-  sprite.billboarding.setAll(true);
-  sprite.billboarding.setAt(0, true);
-```
-
-#### Typescript support
-
-The useInstancedSprite hook supports typing for autocompletion of animation names:
-
-```ts
-	type AnimationNames = 'walk' | 'run' | 'idle' | 'fly'
-  const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
-```
-
-
-### `<Instance>`
-
-Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
-Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
-
-Other than this, it as other properties that you can find in the `InstancedSpriteMesh`, so: `animationName`, `playmode`, `billboarding`, `offset`, `loop`,
-`flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](#instancedspritemesh) section
-
-The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
-`InstancedSprite` component. You can access through the `let:Instance` directive.
-
-<ComponentSignature
-	titleOverride={` `}
-	componentName={'<Instance/>'}
-	signature={{
-      props:
-        [
-					{
-            name: 'id',
-            type: 'number',
-            required: true,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'animationName',
-            type: 'string',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'position',
-            type: 'Vector3Tuple',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'scale',
-            type: 'Vector2Tuple',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'playmode',
-            type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'billboarding',
-            type: 'boolean',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'offset',
-            type: 'number',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'loop',
-            type: 'boolean',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'flipX',
-            type: 'boolean',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'flipY',
-            type: 'boolean',
-            required: false,
-            description: 'lorem ipsum dolor'
-          },
-					{
-            name: 'frameId',
-            type: 'number',
-            required: false,
-            description: 'lorem ipsum dolor'
-          }
-        ]
-    }}
-	/>
-
-*Example: Set a position, scale and flipX for every instance.*
-```svelte
-<InstancedSprite
-  count={10000}
-  {spritesheet}
-  let:Instance
->
-  {#each { length: 10000 } as _, i}
-    <Instance
-      position={[Math.random()*100, Math.random()*100, Math.random()*100]}
-      scale={[3, 3]}
-			flipX
-      id={i}
-    />
-  {/each}
-</InstancedSprite>
-```
-
 ## Static sprites & Atlassing
 
 This component focuses on targetting animated sprites, but it's possible to use it for static images as well. If each frame of the spritesheet is a separate animation, then it effectively acts as an [atlas](https://en.wikipedia.org/wiki/Texture_atlas) with named sprites.
@@ -453,10 +463,3 @@ The `<Tree/>` component in the example above does this.
 
 Set `autoUpdate={false}` on static components and only update it manually with `sprite.update()`. This has to be done when the InstancedSprite is initiated or when spritesheet or atlas change.
 If you don't do it, then the spritesheet will run animation updates each frame to run animations that don't really exist.
-
-## InstancedSpriteMesh
-
-The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>` component, written to enable efficient instancing of animated sprites within a
-Three.js environment.
-
-The class extends the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/). For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at [InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
