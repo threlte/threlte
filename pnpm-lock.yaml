@@ -181,7 +181,7 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       postprocessing:
-        specifier: 6.32.2
+        specifier: ^6.32.2
         version: 6.32.2(three@0.158.0)
       rehype-autolink-headings:
         specifier: ^6.1.1
