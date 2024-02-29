@@ -366,8 +366,8 @@ importers:
   packages/extras:
     dependencies:
       '@threejs-kit/instanced-sprite-mesh':
-        specifier: ^2.4.3
-        version: 2.4.3(three-instanced-uniforms-mesh@0.49.0)(three@0.160.1)
+        specifier: ^2.4.5
+        version: 2.4.5(@types/three@0.160.0)(three-instanced-uniforms-mesh@0.49.0)(three@0.160.1)
       three-mesh-bvh:
         specifier: ^0.7.1
         version: 0.7.1(three@0.160.1)
@@ -3590,14 +3590,19 @@ packages:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  /@threejs-kit/instanced-sprite-mesh@2.4.3(three-instanced-uniforms-mesh@0.49.0)(three@0.160.1):
-    resolution: {integrity: sha512-C9kHbq8RngyjHQn7N1CAmQKbxg40IXkzmbqw7+worxV/kZ7jVNtdNxrKWOJZcOvMln1klJd+ZO9cat+vVOghXQ==}
+  /@threejs-kit/instanced-sprite-mesh@2.4.5(@types/three@0.160.0)(three-instanced-uniforms-mesh@0.49.0)(three@0.160.1):
+    resolution: {integrity: sha512-34+QR9wBhjHDKnbKkeDOJOyvqEOwqL0lFyEZ4RbrUYMMH/esHRAZ83WOVCj8PbBapkZMsLsy5PNR5qd9sfucxA==}
     peerDependencies:
       three: '>=0.151.0'
       three-instanced-uniforms-mesh: ^0.49.0
     dependencies:
+      diet-sprite: 0.0.1
+      earcut: 2.2.4
+      maath: 0.10.7(@types/three@0.160.0)(three@0.160.1)
       three: 0.160.1
       three-instanced-uniforms-mesh: 0.49.0(three@0.160.1)
+    transitivePeerDependencies:
+      - '@types/three'
     dev: false
 
   /@tootallnate/once@2.0.0:
@@ -3839,7 +3844,6 @@ packages:
 
   /@types/stats.js@0.17.0:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
-    dev: true
 
   /@types/three@0.160.0:
     resolution: {integrity: sha512-jWlbUBovicUKaOYxzgkLlhkiEQJkhCVvg4W2IYD2trqD2om3VK4DGLpHH5zQHNr7RweZK/5re/4IVhbhvxbV9w==}
@@ -3848,7 +3852,6 @@ packages:
       '@types/webxr': 0.5.5
       fflate: 0.6.10
       meshoptimizer: 0.18.1
-    dev: true
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -3861,7 +3864,6 @@ packages:
 
   /@types/webxr@0.5.5:
     resolution: {integrity: sha512-HVOsSRTQYx3zpVl0c0FBmmmcY/60BkQLzVnpE9M1aG4f2Z0aKlBWfj4XZ2zr++XNBfkQWYcwhGlmuu44RJPDqg==}
-    dev: true
 
   /@types/which-pm-runs@1.0.0:
     resolution: {integrity: sha512-BXfdlYLWvRhngJbih4N57DjO+63Z7AxiFiip8yq3rD46U7V4I2W538gngPvBsZiMehhD8sfGf4xLI6k7TgXvNw==}
@@ -5372,6 +5374,10 @@ packages:
   /didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
 
+  /diet-sprite@0.0.1:
+    resolution: {integrity: sha512-zSHI2WDAn1wJqJYxcmjWfJv3Iw8oL9reQIbEyx2x2/EZ4/qmUTIo8/5qOCurnAcq61EwtJJaZ0XTy2NRYqpB5A==}
+    dev: false
+
   /diff@4.0.2:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
     engines: {node: '>=0.3.1'}
@@ -5451,6 +5457,10 @@ packages:
   /dset@3.1.3:
     resolution: {integrity: sha512-20TuZZHCEZ2O71q9/+8BwKwZ0QtD9D8ObhrihJPr+vLLYlSuAU3/zL4cSlgbfeoGHTjCSJBa7NGcrF9/Bx/WJQ==}
     engines: {node: '>=4'}
+
+  /earcut@2.2.4:
+    resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
+    dev: false
 
   /easing-coordinates@2.0.2:
     resolution: {integrity: sha512-uQpJaLQX2CKVnN27YvN4sL4pXyEFGAv00y4zgrC46H0EBHrDhJc/8OsT2CQ5/6yz6+d+u8ACGd9bo4v83FNVlg==}
@@ -7811,6 +7821,16 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /maath@0.10.7(@types/three@0.160.0)(three@0.160.1):
+    resolution: {integrity: sha512-zQ2xd7dNOIVTjAS+hj22fyj1EFYmOJX6tzKjZ92r6WDoq8hyFxjuGA2q950tmR4iC/EKXoMQdSipkaJVuUHDTg==}
+    peerDependencies:
+      '@types/three': '>=0.144.0'
+      three: '>=0.144.0'
+    dependencies:
+      '@types/three': 0.160.0
+      three: 0.160.1
     dev: false
 
   /magic-string@0.26.7:
