@@ -2,16 +2,7 @@
   import { useCache, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { Scene } from 'three'
-  import {
-    CubeReflectionMapping,
-    CubeTextureLoader,
-    EquirectangularReflectionMapping,
-    FloatType,
-    LinearEncoding,
-    sRGBEncoding,
-    Texture,
-    TextureLoader
-  } from 'three'
+  import * as THREE from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
   import type { EnvironmentProps } from './Environment.svelte'
@@ -41,18 +32,18 @@
   $: envPath = `${path}${files}`
 
   let previousEnvPath: string = envPath
-  let previousEnvMap: Texture
+  let previousEnvMap: THREE.Texture
   let previousFormat: string | undefined
 
   const pickLoader = (): new () => any => {
     const inferredFormat =
       format || (Array.isArray(files) ? files[0] : files).split('.').pop() == 'hdr' ? 'hdr' : 'ldr'
 
-    if (isCubeMap && inferredFormat == 'ldr') return CubeTextureLoader
-    if (!isCubeMap && inferredFormat == 'ldr') return TextureLoader
+    if (isCubeMap && inferredFormat == 'ldr') return THREE.CubeTextureLoader
+    if (!isCubeMap && inferredFormat == 'ldr') return THREE.TextureLoader
     if (isCubeMap && inferredFormat == 'hdr') return HDRCubeTextureLoader
     if (!isCubeMap && inferredFormat == 'hdr') return RGBELoader
-    return TextureLoader
+    return THREE.TextureLoader
   }
 
   const { remember } = useCache()
@@ -62,7 +53,7 @@
   const loadEnvironment = async () => {
     const LoaderType = pickLoader()
     const loader: any = new LoaderType()
-    loader.setDataType?.(FloatType)
+    loader.setDataType?.(THREE.FloatType)
 
     const filesKey = Array.isArray(files) ? files.join(',') : files
     const cacheKey = [LoaderType, path, filesKey]
@@ -77,8 +68,11 @@
       )
     }, cacheKey)) as any
 
-    texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
-    texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
+    texture.mapping = isCubeMap
+      ? THREE.CubeReflectionMapping
+      : THREE.EquirectangularReflectionMapping
+
+    texture.encoding = encoding || isCubeMap ? THREE.LinearEncoding : sRGBEncoding
     previousEnvMap = texture
     scene.environment = previousEnvMap
     if (isBackground) scene.background = previousEnvMap

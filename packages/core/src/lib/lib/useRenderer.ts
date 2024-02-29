@@ -1,14 +1,5 @@
 import { writable } from 'svelte/store'
-import {
-  ColorManagement,
-  LinearEncoding,
-  PCFSoftShadowMap,
-  sRGBEncoding,
-  WebGLRenderer,
-  type ColorSpace,
-  type TextureEncoding,
-  type WebGLRendererParameters
-} from 'three'
+import * as THREE from 'three'
 import { revision } from './revision'
 import type { ThrelteContext } from '../lib/contexts'
 import { watch } from './storeUtils'
@@ -23,9 +14,9 @@ import { watch } from './storeUtils'
 
 // @ts-expect-error P3 is not supported in older versions of three
 const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
-  srgb: sRGBEncoding,
-  'srgb-linear': LinearEncoding,
-  '': LinearEncoding
+  srgb: THREE.sRGBEncoding,
+  'srgb-linear': THREE.LinearEncoding,
+  '': THREE.LinearEncoding
 }
 
 const rendererHasOutputColorSpaceProperty = (
@@ -50,13 +41,13 @@ const rendererHasOutputColorSpaceProperty = (
  * - `useLegacyLights`
  */
 export const useRenderer = (ctx: ThrelteContext) => {
-  const renderer = writable<WebGLRenderer | undefined>(undefined)
+  const renderer = writable<THREE.WebGLRenderer | undefined>(undefined)
 
   const createRenderer = (
     canvas: HTMLCanvasElement,
-    rendererParameters: WebGLRendererParameters | undefined
+    rendererParameters: THREE.WebGLRendererParameters | undefined
   ): void => {
-    ctx.renderer = new WebGLRenderer({
+    ctx.renderer = new THREE.WebGLRenderer({
       powerPreference: 'high-performance',
       canvas,
       antialias: true,
@@ -68,9 +59,9 @@ export const useRenderer = (ctx: ThrelteContext) => {
 
   watch([ctx.colorManagementEnabled], ([colorManagementEnabled]) => {
     if (revision >= 150) {
-      ColorManagement.enabled = colorManagementEnabled
+      THREE.ColorManagement.enabled = colorManagementEnabled
     } else {
-      ;(ColorManagement as any).legacyMode = !colorManagementEnabled
+      ;(THREE.ColorManagement as any).legacyMode = !colorManagementEnabled
     }
   })
 
@@ -107,7 +98,7 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (shadows && shadows !== true) {
       renderer.shadowMap.type = shadows
     } else if (shadows === true) {
-      renderer.shadowMap.type = PCFSoftShadowMap
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap
     }
   })
 
