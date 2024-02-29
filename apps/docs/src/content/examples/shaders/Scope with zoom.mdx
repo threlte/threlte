@@ -33,6 +33,12 @@ the texture's resolution is appropriately downscaled to conserve resources.
 A `useTask` hook is used to render the scene onto this target:
 
 ```ts
+const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+  samples: 8
+})
+
+let scope: Group
+
 useTask(() => {
     if (!scope || !$scoping) return
     const cam = $camera as PerspectiveCamera
