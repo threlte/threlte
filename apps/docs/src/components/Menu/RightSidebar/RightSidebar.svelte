@@ -206,6 +206,10 @@
 </div>
 
 <style lang="postcss">
+  .text-faded {
+    @apply text-white/60;
+  }
+
   .nav-list-item {
     @apply text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
   }
