@@ -488,8 +488,8 @@ importers:
         specifier: ^20.11.6
         version: 20.11.6
       '@types/three':
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.0
+        version: 0.160.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.19.1
         version: 6.19.1(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -533,8 +533,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(svelte@4.2.9)(typescript@5.3.3)
       three:
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.1
+        version: 0.160.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -639,8 +639,8 @@ importers:
         specifier: ^20.11.6
         version: 20.11.6
       '@types/three':
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.0
+        version: 0.160.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.19.1
         version: 6.19.1(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -684,8 +684,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(svelte@4.2.9)(typescript@5.3.3)
       three:
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.1
+        version: 0.160.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -730,8 +730,8 @@ importers:
         specifier: ^20.11.6
         version: 20.11.6
       '@types/three':
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.0
+        version: 0.160.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.19.1
         version: 6.19.1(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -775,8 +775,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(svelte@4.2.9)(typescript@5.3.3)
       three:
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.1
+        version: 0.160.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
