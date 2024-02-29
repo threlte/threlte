@@ -808,8 +808,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/three':
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.0
+        version: 0.160.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.19.1
         version: 6.19.1(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -838,8 +838,8 @@ importers:
         specifier: ^3.6.3
         version: 3.6.3(postcss@8.4.33)(svelte@4.2.9)
       three:
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.160.1
+        version: 0.160.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -3526,10 +3526,6 @@ packages:
       tweakpane: 4.0.1
     dev: true
 
-  /@tweenjs/tween.js@23.1.1:
-    resolution: {integrity: sha512-ZpboH7pCPPeyBWKf8c7TJswtCEQObFo3bOBYalm99NzZarATALYCo5OhbCa/n4RQyJyHfhkdx+hNrdL5ByFYDw==}
-    dev: true
-
   /@types/acorn@4.0.6:
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
     dependencies:
@@ -3734,16 +3730,6 @@ packages:
   /@types/three@0.160.0:
     resolution: {integrity: sha512-jWlbUBovicUKaOYxzgkLlhkiEQJkhCVvg4W2IYD2trqD2om3VK4DGLpHH5zQHNr7RweZK/5re/4IVhbhvxbV9w==}
     dependencies:
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.5
-      fflate: 0.6.10
-      meshoptimizer: 0.18.1
-    dev: true
-
-  /@types/three@0.162.0:
-    resolution: {integrity: sha512-0j5yZcVukVIhrhSIC7+LmBPkkMoMuEJ1AfYBZfgNytdYqYREMuiyXWhYOMeZLBElTEAlJIZn7r2W3vqTIgjWlg==}
-    dependencies:
-      '@tweenjs/tween.js': 23.1.1
       '@types/stats.js': 0.17.0
       '@types/webxr': 0.5.5
       fflate: 0.6.10
@@ -11626,10 +11612,6 @@ packages:
 
   /three@0.160.1:
     resolution: {integrity: sha512-Bgl2wPJypDOZ1stAxwfWAcJ0WQf7QzlptsxkjYiURPz+n5k4RBDLsq+6f9Y75TYxn6aHLcWz+JNmwTOXWrQTBQ==}
-
-  /three@0.162.0:
-    resolution: {integrity: sha512-xfCYj4RnlozReCmUd+XQzj6/5OjDNHBy5nT6rVwrOKGENAvpXe2z1jL+DZYaMu4/9pNsjH/4Os/VvS9IrH7IOQ==}
-    dev: true
 
   /through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
