@@ -97,7 +97,6 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
     | undefined
 
   randomPlaybackOffset?: boolean | number
-  texture?: Texture | undefined
   spritesheet: {
     spritesheet: SpritesheetFormat
     texture: Texture

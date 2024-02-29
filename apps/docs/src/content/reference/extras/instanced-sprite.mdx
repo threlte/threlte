@@ -71,6 +71,13 @@
             default: 'true',
             description: 'Whether or not the material should be transparent.'
           },
+					{
+            name: 'randomPlaybackOffset',
+						type: 'boolean | number',
+            required: false,
+            default: 'true',
+            description: 'Offset sprite animation time by a random number of milliseconds.'
+          },
         ],
       events:
         [
@@ -88,11 +95,15 @@
 }
 ---
 
+import ComponentSignature from '../../../components/ComponentSignature/ComponentSignature.astro'
+
 <Tip type="experimental">
   This is an early version - features and API might change significantly over time. Please report any issues you encounter on Discord or Github.
 </Tip>
 
-The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated [sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. It supports the open SpritesheetMetadata format, but we offer a convenience `buildSpritesheet` utility to easily build your spritesheet.
+The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated
+[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. It supports the
+open SpritesheetMetadata format, but we offer a convenience `buildSpritesheet` utility to easily build your spritesheet.
 
 <Example path="extras/instanced-sprite" />
 
@@ -101,7 +112,49 @@ To use the `<InstancedSprite>` you must provide it with sprite metadata and a te
 [`buildSpritesheet()`](#buildSpritesheet) utility for this purpose, you are also free to implement your own
 custom solution, provided it meets the component's input requirements.
 
-{/* TODO add explanation of the component props etc */}
+Other than it's own props, `<InstanedSprite/>` extends and accepts all properties of
+[Three.js instanced mesh](https://threejs.org/docs/#api/en/objects/InstancedMesh), such as `castShadow`, `frustumCulled` etc.
+
+#### Required props
+
+| Prop| description |
+| ---- | --- |
+| `count` | number of instances |
+| `spritesheet` | Object with `spritesheet` metadata and a `texture` `{spritesheet: SpritesheetFormat, texture: Texture}` |
+
+
+#### Optional props
+
+| Prop| description |
+| ---- | --- |
+| `autoUpdate` | Update animations automatically. It should stay `true` for most usecases. Setting to `false` is most commonly used in case of [static sprites](#static-sprites--atlassing) but it can also be used for advanced manual animation updates. |
+| `billboarding` | Sets the default global billboarding (sprites always facing the camera) state that is used unless the setAt was called on the instance. |
+| `playmode` | Sets playmode for all instances. `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"` |
+| `fps` | The desired frames per second of the animation |
+| `filter` | The texture filtering applied to the spritesheet. |
+| `alphaTest` | Sets the alpha value to be used when running an alpha test |
+| `transparent` | Whether or not the material should be transparent |
+| `randomPlaybackOffset` | Offset each sprite's animation timer by a random number of milliseconds. If `true`, randomness is within 0-100ms range. Providing the prop with a number sets the upper range of the offset - `randomPlaybackOffset={2000}` means that the animation will be offset by 0-2000ms  |
+| `hueShift` | Changes sprite look by tweaking the material's output color by a provided hueShift, saturation and vibrance `{h: number, s: number, v:number}`|
+
+```svelte
+ <InstancedSprite
+    {spritesheet}
+    count={500}
+    playmode={'FORWARD'}
+    {fps}
+    {billboarding}
+		bind:ref
+		hueShift={{h:1.5, s:0.9, v:1}}
+		randomPlaybackOffset={2000}
+    castShadow
+  />
+	```
+
+
+Binding:
+- **ref**
+
 
 ## Spritesheets
 
@@ -238,8 +291,7 @@ Instances can be updated by using methods provided by the `InstancedSpriteMesh`.
 
 ### `useInstancedSprite()`
 
-	{/* TODO hook returns object with following properties: */}
-
+	The hook has to be used in a child component of `<InstancedSprite>` and returns an object with following properties:
 	- `count`: Total number of instances.
 	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
 	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
@@ -288,7 +340,7 @@ The useInstancedSprite hook supports typing for autocompletion of animation name
 
 
 ### `<Instance>`
-{/* TODO some sort of Instance component signature */}
+
 Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
 Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
 
@@ -297,6 +349,82 @@ Other than this, it as other properties that you can find in the `InstancedSprit
 
 The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
 `InstancedSprite` component. You can access through the `let:Instance` directive.
+
+<ComponentSignature
+	titleOverride={` `}
+	componentName={'<Instance/>'}
+	signature={{
+      props:
+        [
+					{
+            name: 'id',
+            type: 'number',
+            required: true,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'animationName',
+            type: 'string',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'position',
+            type: 'Vector3Tuple',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'scale',
+            type: 'Vector2Tuple',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'playmode',
+            type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'billboarding',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'offset',
+            type: 'number',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'loop',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'flipX',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'flipY',
+            type: 'boolean',
+            required: false,
+            description: 'lorem ipsum dolor'
+          },
+					{
+            name: 'frameId',
+            type: 'number',
+            required: false,
+            description: 'lorem ipsum dolor'
+          }
+        ]
+    }}
+	/>
 
 *Example: Set a position, scale and flipX for every instance.*
 ```svelte

@@ -105,7 +105,7 @@
   watch([rndOffsetStore], ([offset]) => {
     // going from no offset to random
     if (previousRndOffset === false && offset) {
-      ref.offset.randomizeAll(offset === true ? undefined : offset)
+      ref.offset.randomizeAll(offset === true ? 100 : offset)
     }
     // going from random offset to none
     if (previousRndOffset === true && !offset) {
