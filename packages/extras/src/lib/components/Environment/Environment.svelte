@@ -1,7 +1,6 @@
 <script lang="ts">
   import { useCache, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import type { Scene } from 'three'
   import * as THREE from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
@@ -18,7 +17,7 @@
   export let format: Props['format'] = undefined
   export let encoding: Props['encoding'] = undefined
 
-  const isScene = (obj: any): obj is Scene => !!obj.isScene
+  const isScene = (obj: any): obj is THREE.Scene => !!obj.isScene
 
   const { scene: globalScene, invalidate } = useThrelte()
   const parent = useParent()

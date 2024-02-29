@@ -73,7 +73,7 @@ importers:
         version: 4.2.4(typescript@5.3.3)
       camera-controls:
         specifier: ^2.7.3
-        version: 2.7.3(three@0.162.0)
+        version: 2.7.3(three@0.158.0)
       highlight.js:
         specifier: ^11.8.0
         version: 11.8.0
@@ -100,7 +100,7 @@ importers:
         version: 3.4.1
       three-mesh-bvh:
         specifier: ^0.7.1
-        version: 0.7.1(three@0.162.0)
+        version: 0.7.1(three@0.158.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.11.2
@@ -110,13 +110,13 @@ importers:
         version: 3.2.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.162.0)(three@0.162.0)
+        version: 0.1.15(@types/three@0.158.3)(three@0.158.0)
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@4.2.0)
       '@pmndrs/vanilla':
         specifier: ^1.14.1
-        version: 1.14.1(three@0.162.0)
+        version: 1.14.1(three@0.158.0)
       '@stackblitz/sdk':
         specifier: ^1.8.2
         version: 1.8.2
@@ -154,8 +154,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.162.0
-        version: 0.162.0
+        specifier: ^0.158.3
+        version: 0.158.3
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -181,8 +181,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       postprocessing:
-        specifier: ^6.32.2
-        version: 6.33.0(three@0.162.0)
+        specifier: ^6.34.3
+        version: 6.34.3(three@0.158.0)
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
@@ -214,8 +214,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(svelte@4.2.0)
       three:
-        specifier: 0.162.0
-        version: 0.162.0
+        specifier: 0.158.0
+        version: 0.158.0
       tsx:
         specifier: ^3.13.0
         version: 3.13.0
@@ -2378,14 +2378,14 @@ packages:
       tweakpane: 4.0.1
     dev: true
 
-  /@lumaai/luma-web@0.1.15(@types/three@0.162.0)(three@0.162.0):
+  /@lumaai/luma-web@0.1.15(@types/three@0.158.3)(three@0.158.0):
     resolution: {integrity: sha512-gNI7qhwSDdvS6+IVFe9QpD2E/9VXRfO2dUn5CUVgvw+Ldus057ghBKdZ1AYO8Mgi/7J+OI4Nxd7r8YwzRf8/Pg==}
     peerDependencies:
       '@types/three': ^0.157.2
       three: ^0.157.0
     dependencies:
-      '@types/three': 0.162.0
-      three: 0.162.0
+      '@types/three': 0.158.3
+      three: 0.158.0
     dev: true
 
   /@macfja/serializer@1.1.2:
@@ -2761,13 +2761,13 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@pmndrs/vanilla@1.14.1(three@0.162.0):
+  /@pmndrs/vanilla@1.14.1(three@0.158.0):
     resolution: {integrity: sha512-I2gdXETqRIpD6crb5QdbhtU0A2WygqHG7KJGZUI1VLmImEAnFFWz9qGZeo+a9WVSL9t5LT4Hw6A9xzyJOqQ9lA==}
     peerDependencies:
       three: '>=0.137'
     dependencies:
-      three: 0.162.0
-      troika-three-text: 0.47.2(three@0.162.0)
+      three: 0.158.0
+      troika-three-text: 0.47.2(three@0.158.0)
     dev: true
 
   /@polka/url@1.0.0-next.24:
@@ -3722,6 +3722,15 @@ packages:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
     dev: true
 
+  /@types/three@0.158.3:
+    resolution: {integrity: sha512-6Qs1rUvLSbkJ4hlIe6/rdwIf61j1x2UKvGJg7s8KjswYsz1C1qDTs6voVXXB8kYaI0hgklgZgbZUupfL1l9xdA==}
+    dependencies:
+      '@types/stats.js': 0.17.0
+      '@types/webxr': 0.5.5
+      fflate: 0.6.10
+      meshoptimizer: 0.18.1
+    dev: true
+
   /@types/three@0.162.0:
     resolution: {integrity: sha512-0j5yZcVukVIhrhSIC7+LmBPkkMoMuEJ1AfYBZfgNytdYqYREMuiyXWhYOMeZLBElTEAlJIZn7r2W3vqTIgjWlg==}
     dependencies:
@@ -4617,12 +4626,12 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
-  /camera-controls@2.7.3(three@0.162.0):
+  /camera-controls@2.7.3(three@0.158.0):
     resolution: {integrity: sha512-L4mxjBd3u8qiOLozdWrH2P8ZybSsDXBF7iyNyqNEFJhPUkovmuARWR8JTc1B/qlclOIg6FvZZA/0uAZMMim0mw==}
     peerDependencies:
       three: '>=0.126.1'
     dependencies:
-      three: 0.162.0
+      three: 0.158.0
     dev: false
 
   /caniuse-lite@1.0.30001579:
@@ -9701,13 +9710,13 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /postprocessing@6.33.0(three@0.162.0):
-    resolution: {integrity: sha512-W6KGnF8OVyPtB9f5o2z8abJOefDeT9aoOrI/HmMmJM6/gXTKRc66MrL+qNoGmeeA3moWWsTk0mc9M+shN3vXaA==}
+  /postprocessing@6.34.3(three@0.158.0):
+    resolution: {integrity: sha512-AjsxAGWeHMKlCTuWLeahNnPyFwR0c/pEmveq5mBz767lFBc1+HHYzk0aRGBCE9PZIjiA27oRL7lATd+fVOscRA==}
     engines: {node: '>= 0.13.2'}
     peerDependencies:
-      three: '>= 0.138.0 < 0.156.0'
+      three: '>= 0.138.0 < 0.162.0'
     dependencies:
-      three: 0.162.0
+      three: 0.158.0
     dev: true
 
   /potpack@1.0.2:
@@ -11554,6 +11563,14 @@ packages:
     dependencies:
       any-promise: 1.3.0
 
+  /three-mesh-bvh@0.7.1(three@0.158.0):
+    resolution: {integrity: sha512-63xvjnmK3FpA41klHfVvTMi2JRFdKeu3b4STBcLvGyDMYRpkBIyJ2d77CnNvKBZl9bed4sdEyrqE3AOsGorjUA==}
+    peerDependencies:
+      three: '>= 0.151.0'
+    dependencies:
+      three: 0.158.0
+    dev: false
+
   /three-mesh-bvh@0.7.1(three@0.162.0):
     resolution: {integrity: sha512-63xvjnmK3FpA41klHfVvTMi2JRFdKeu3b4STBcLvGyDMYRpkBIyJ2d77CnNvKBZl9bed4sdEyrqE3AOsGorjUA==}
     peerDependencies:
@@ -11594,6 +11611,9 @@ packages:
   /three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
     dev: false
+
+  /three@0.158.0:
+    resolution: {integrity: sha512-TALj4EOpdDPF1henk2Q+s17K61uEAAWQ7TJB68nr7FKxqwyDr3msOt5IWdbGm4TaWKjrtWS8DJJWe9JnvsWOhQ==}
 
   /three@0.162.0:
     resolution: {integrity: sha512-xfCYj4RnlozReCmUd+XQzj6/5OjDNHBy5nT6rVwrOKGENAvpXe2z1jL+DZYaMu4/9pNsjH/4Os/VvS9IrH7IOQ==}
@@ -11687,6 +11707,18 @@ packages:
     resolution: {integrity: sha512-GJtWyq9InR/2HRiLZgpIKv+ufIKrVrvjQWEj7PxAXNc5dwbNJkqhAUoAGgzRmULAnoOM5EIpveYd3J2VeSAIew==}
     engines: {node: '>=12'}
 
+  /troika-three-text@0.47.2(three@0.158.0):
+    resolution: {integrity: sha512-qylT0F+U7xGs+/PEf3ujBdJMYWbn0Qci0kLqI5BJG2kW1wdg4T1XSxneypnF05DxFqJhEzuaOR9S2SjiyknMng==}
+    peerDependencies:
+      three: '>=0.125.0'
+    dependencies:
+      bidi-js: 1.0.2
+      three: 0.158.0
+      troika-three-utils: 0.47.2(three@0.158.0)
+      troika-worker-utils: 0.47.2
+      webgl-sdf-generator: 1.1.1
+    dev: true
+
   /troika-three-text@0.47.2(three@0.162.0):
     resolution: {integrity: sha512-qylT0F+U7xGs+/PEf3ujBdJMYWbn0Qci0kLqI5BJG2kW1wdg4T1XSxneypnF05DxFqJhEzuaOR9S2SjiyknMng==}
     peerDependencies:
@@ -11697,6 +11729,7 @@ packages:
       troika-three-utils: 0.47.2(three@0.162.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
+    dev: false
 
   /troika-three-text@0.49.0(three@0.162.0):
     resolution: {integrity: sha512-sn9BNC6eIX8OO3iAkPwjecJ7Pn21Ve8P1UNFMNeQzXx759rrqS4i4pSZs7FLMYdWyCKVXBFGimBySFwRKLjq/Q==}
@@ -11710,12 +11743,21 @@ packages:
       webgl-sdf-generator: 1.1.1
     dev: false
 
+  /troika-three-utils@0.47.2(three@0.158.0):
+    resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
+    peerDependencies:
+      three: '>=0.125.0'
+    dependencies:
+      three: 0.158.0
+    dev: true
+
   /troika-three-utils@0.47.2(three@0.162.0):
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
     peerDependencies:
       three: '>=0.125.0'
     dependencies:
       three: 0.162.0
+    dev: false
 
   /troika-three-utils@0.49.0(three@0.162.0):
     resolution: {integrity: sha512-umitFL4cT+Fm/uONmaQEq4oZlyRHWwVClaS6ZrdcueRvwc2w+cpNQ47LlJKJswpqtMFWbEhOLy0TekmcPZOdYA==}
