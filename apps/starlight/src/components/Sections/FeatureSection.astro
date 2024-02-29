@@ -1,0 +1,86 @@
+---
+import { c } from '$lib/classes'
+
+interface Props {
+  class?: string
+  color?: 'orange' | 'blue' | 'green'
+}
+
+const color = Astro.props.color ?? 'orange'
+
+const glowClasses: Record<NonNullable<Props['color']>, string> = {
+  orange:
+    '[background-image:radial-gradient(closest-side,rgba(255,146,112,0.1)_0%,transparent_100%)]',
+  blue: '[background-image:radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]',
+  green:
+    '[background-image:radial-gradient(closest-side,rgba(135,230,151,0.12)_0%,transparent_100%)]'
+}
+
+/*
+Leave this in to force Tailwind to include the classes
+bg-orange
+bg-blue
+bg-green
+glow-orange
+glow-blue
+glow-green
+text-orange-400
+text-blue-400
+text-green-400
+*/
+---
+
+<div class={c('border-y border-white/20 pt-10 pb-16 relative', Astro.props.class ?? '')}>
+  <div
+    class="pointer-events-none absolute top-0 left-[00%] h-40 w-[100%] select-none overflow-hidden"
+  >
+    <div class={c('absolute top-40 -translate-y-full left-0 w-full h-96', glowClasses[color])}>
+    </div>
+  </div>
+
+  {
+    Astro.slots.has('icon') && (
+      <div
+        class={c(
+          'mb-10 flex h-16 w-16 items-center justify-center rounded-full empty:hidden [&>*]:w-[60%]',
+          `bg-${color}`,
+          `glow-${color}`
+        )}
+      >
+        <slot name="icon" />
+      </div>
+    )
+  }
+
+  {
+    Astro.slots.has('subline') && (
+      <sup class={c('mb-1 text-base empty:hidden', `text-${color}-400`)}>
+        <slot name="subline" />
+      </sup>
+    )
+  }
+
+  <h2 class="text-5xl font-bold">
+    <slot name="headline" />
+  </h2>
+
+  <div class="mt-12 flex flex-col gap-8 text-xl text-white/60 md:flex-row">
+    <slot name="body" />
+
+    {
+      Astro.slots.has('body-left') && (
+        <div class="flex-1 empty:hidden">
+          <slot name="body-left" />
+        </div>
+      )
+    }
+
+    {
+      Astro.slots.has('body-right') && (
+        <div class="flex-1 empty:hidden">
+          <slot name="body-right" />
+        </div>
+      )
+    }
+  </div>
+</div>

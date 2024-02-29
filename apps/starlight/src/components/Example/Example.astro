@@ -1,0 +1,86 @@
+---
+import SvelteWrapper from './SvelteWrapper.svelte'
+import Code from '../Code/Code.astro'
+import CodeWrapper from './CodeWrapper.svelte'
+import { c } from '../../lib/classes'
+
+interface Props {
+  /**
+   * The path to the entry App.svelte file relative to src/examples
+   */
+  path: string
+  hideCode?: boolean
+  hidePreview?: boolean
+  iframe?: boolean
+  showFile?: string
+  expandCode?: boolean
+  previewClass?: string
+  hideStackblitz?: boolean
+}
+
+const allModules = import.meta.glob('../../examples/**/*', {
+  as: 'raw',
+  eager: true
+}) as Record<string, string>
+
+for (const path in allModules) {
+  if (!path.replace('../../examples/', '').startsWith(Astro.props.path)) {
+    delete allModules[path]
+  }
+}
+
+const files: Record<string, string> = {}
+for (const path in allModules) {
+  let relativePath = path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
+  if (relativePath.startsWith('/')) {
+    relativePath = relativePath.slice(1)
+  }
+  files[relativePath] = allModules[path] as string
+}
+
+const hideCode = Astro.props.hideCode ?? false
+const hidePreview = Astro.props.hidePreview ?? false
+---
+
+<>
+  {
+    !hidePreview && (
+      <SvelteWrapper
+        hideStackblitz={Astro.props.hideStackblitz}
+        class={Astro.props.previewClass}
+        hideCode={hideCode}
+        path={Astro.props.path}
+        client:load
+        files={files}
+        iframe={Astro.props.iframe ?? true}
+      />
+    )
+  }
+
+  {
+    !hideCode && (
+      <CodeWrapper
+        showFile={Astro.props.showFile}
+        expanded={hidePreview || Astro.props.expandCode}
+        hidePreview={hidePreview}
+        client:load
+        filePaths={Object.keys(allModules).map((path) =>
+          path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
+        )}
+      >
+        {Object.entries(allModules).map(([path, mod]) => (
+          <div
+            data-path={path}
+            class="h-full"
+          >
+            <Code
+              code={mod}
+              lang={(path.split('.').pop() ?? 'svelte') as any}
+              class={c('!mt-0 !mb-0 h-full rounded-none border-none')}
+            />
+          </div>
+        ))}
+      </CodeWrapper>
+    )
+  }
+</>

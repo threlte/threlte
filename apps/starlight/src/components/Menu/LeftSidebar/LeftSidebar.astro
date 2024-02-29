@@ -1,0 +1,57 @@
+---
+import type { referenceCategories } from '../../../content/config'
+import { getLeftSidebarMenu } from './getLeftSidebarMenu'
+import Sidebar from './LeftSidebar.svelte'
+
+const sidebarMenu = await getLeftSidebarMenu()
+
+const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
+  '/docs/learn'
+)
+  ? 'learn'
+  : Astro.url.pathname.startsWith('/docs/examples')
+  ? 'examples'
+  : 'reference'
+
+const activeUrlPathName = Astro.url.pathname
+
+const referenceUrlMap: Record<(typeof referenceCategories)[number], string> = {
+  '@threlte/core': '/docs/reference/core',
+  '@threlte/extras': '/docs/reference/extras',
+  '@threlte/gltf': '/docs/reference/gltf',
+  '@threlte/rapier': '/docs/reference/rapier',
+  '@threlte/theatre': '/docs/reference/theatre',
+  '@threlte/xr': '/docs/reference/xr',
+  '@threlte/flex': '/docs/reference/flex',
+  Documentation: '/docs/reference/docs'
+}
+
+const referenceCategory = Object.keys(referenceUrlMap).find((category) =>
+  activeUrlPathName.includes(referenceUrlMap[category])
+)
+
+sidebarMenu.reference.categories = sidebarMenu.reference.categories.filter((category) => {
+  return category.title === referenceCategory
+})
+---
+
+<Sidebar
+  client:load
+  menu={sidebarMenu}
+  activeSidebarTab={activeSidebarTab}
+  activeUrlPathName={activeUrlPathName}
+/>
+
+<!-- Preserve sidebar scroll across page loads -->
+<script is:inline>
+{
+	const leftSidebar = document.querySelector('#sidebar-scrollwindow')
+	const leftSidebarScroll = localStorage.getItem('sidebar-scroll')
+	if (leftSidebarScroll !== null) {
+		leftSidebar.scrollTop = parseInt(leftSidebarScroll, 10)
+	}
+	window.addEventListener('beforeunload', () => {
+		localStorage.setItem('sidebar-scroll', leftSidebar.scrollTop)
+	})
+}
+</script>

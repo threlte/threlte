@@ -1,0 +1,292 @@
+---
+import type { TypeOf } from 'astro/zod'
+import type { componentSignature } from '../../content/config'
+import { c } from '../../lib/classes'
+import { getShiki } from '../../lib/highlighter'
+
+interface Props {
+	componentName: string
+  signature: TypeOf<typeof componentSignature>
+}
+
+// sort by required and name
+const props = Astro.props.signature.props?.sort((a, b) => {
+  if (a.required && !b.required) return -1
+  if (!a.required && b.required) return 1
+  return a.name.localeCompare(b.name)
+}) ?? []
+const anyPropHasDescription = props.some((prop) => prop.description)
+const anyPropHasDefault = props.some((prop) => prop.default)
+
+const events = Astro.props.signature.events ?? []
+const anyEventHasDescription = events.some((event) => event.description)
+
+
+const hasEvents = !!Astro.props.signature.events?.length
+const hasProps = !!Astro.props.signature.props?.length
+const hasBindings = !!Astro.props.signature.bindings?.length
+
+const hasAnySignature = hasEvents || hasProps || hasBindings
+
+const propsGridCols = anyPropHasDescription &&
+anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto_auto]' :anyPropHasDescription ||
+anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto]' : 'grid-cols-[auto_auto_auto]'
+
+const showComponentSignature = hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
+
+const shiki = await getShiki()
+---
+
+
+{showComponentSignature && (
+
+	<h2 class="mt-0" id="component-signature">Component Signature</h2>
+
+	<div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
+
+
+		{
+			Astro.props.signature.extends && (
+				<p class={c("text-faded", !hasAnySignature && '!mb-0')}>
+					<code>{Astro.props.componentName}</code> extends
+					<!-- prettier-ignore -->
+					<code>{'<'}<a class="!text-white" href="/docs/reference/core/t">{'T'}</a>.<a class="!text-white" target="_blank" rel="noopener noreferrer" href={Astro.props.signature.extends.url}>{Astro.props.signature.extends.type}</a>{'>'}</code>
+					and supports all its props, slot props, bindings and events.
+				</p>
+			)
+		}
+
+		{
+			Astro.props.signature.pretext && (
+				<p class={c("text-faded", !hasAnySignature && '!mb-0')} set:html={Astro.props.signature.pretext}>
+				</p>
+			)
+		}
+
+		{ (hasEvents || hasProps || hasBindings) && (
+			<div class="flex flex-col gap-6">
+				{
+					hasProps && (
+						<div>
+							<h3 class="mt-0">Props</h3>
+
+							<div
+								class={c(
+									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent',
+									propsGridCols
+								)}
+							>
+								<div class="font-bold">name</div>
+
+								<div class="font-bold">type</div>
+
+								<div class="font-bold">required</div>
+
+								{anyPropHasDefault && <div class="font-bold">default</div>}
+
+								{anyPropHasDescription && <div class="font-bold">description</div>}
+
+								<hr class="col-span-full my-1" />
+
+								{
+									props.map((prop, index, arr) => {
+										return (
+											<>
+												<div class="text-faded">{prop.name}</div>
+
+												{
+													typeof prop.type === 'string' ? (
+														<div
+														class="text-faded"
+														set:html={shiki
+															.codeToHtml(prop.type, {
+																lang: 'typescript',
+																theme: 'dracula-soft',
+															})
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+															.replace('</pre>', '')}
+														/>
+													) : (
+														<a
+															class="text-faded no-underline"
+															href={prop.type.url}
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
+																.codeToHtml(prop.type.name, {
+																	lang: 'typescript',
+																	theme: 'dracula-soft'
+																})
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+																.replace('</pre>', '')} />
+														</a>
+													)
+												}
+
+												<div class="text-faded">{prop.required ? 'yes' : 'no'}</div>
+
+												{anyPropHasDefault && (
+													<div
+														class="text-faded"
+														set:html={
+															prop.default
+																? shiki
+																		.codeToHtml(prop.default, {
+																			lang: 'typescript',
+																			theme: 'dracula-soft'
+																		})
+																		.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+																		.replace('</pre>', '')
+																: ''
+														}
+													/>
+												)}
+
+												{anyPropHasDescription && <div class="text-faded text-xs my-[0.2em]">{prop.description}</div>}
+
+
+												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+											</>
+										)
+									})
+								}
+							</div>
+						</div>
+					)
+				}
+
+				{
+					hasEvents && (
+						<div>
+							<h3 class="mt-0">Events</h3>
+
+							<div
+								class={c(
+									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent',
+									anyEventHasDescription
+										? 'grid-cols-[auto_auto_auto]'
+										: 'grid-cols-[auto_auto]'
+								)}
+							>
+								<div class="font-bold">name</div>
+
+								<div class="font-bold">payload</div>
+
+								{anyEventHasDescription && <div class="font-bold">description</div>}
+
+								<hr class="col-span-full my-1" />
+
+								{
+									events.map((event, index, arr) => {
+										return (
+											<>
+												<div class="text-faded">{event.name}</div>
+
+												{
+													typeof event.payload === 'string' ? (
+														<div
+														class="text-faded"
+														set:html={shiki
+															.codeToHtml(event.payload, {
+																lang: 'typescript',
+																theme: 'dracula-soft'
+															})
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+															.replace('</pre>', '')}
+														/>
+													) : (
+													<a
+															class="text-faded no-underline"
+															href={event.payload.url}
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
+																.codeToHtml(event.payload.name, {
+																	lang: 'typescript',
+																	theme: 'dracula-soft'
+																})
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+																.replace('</pre>', '')} />
+														</a>
+													)
+												}
+
+												{event.description && (
+													<div class="text-faded">{event.description}</div>
+												)}
+
+												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+											</>
+										)
+									})
+								}
+							</div>
+						</div>
+					)
+				}
+
+				{ hasBindings && (
+						<div>
+							<h3 class="mt-0">Bindings</h3>
+
+							<div
+								class={c(
+									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent grid-cols-[auto_auto]',
+								)}
+							>
+								<div class="font-bold">name</div>
+
+								<div class="font-bold">type</div>
+
+								<hr class="col-span-full my-1" />
+
+								{
+									(Astro.props.signature.bindings ?? []).map((binding, index, arr) => {
+										return (
+											<>
+												<div class="text-faded">{binding.name}</div>
+
+												{
+													typeof binding.type === 'string' ? (
+														<div
+														class="text-faded"
+														set:html={shiki
+															.codeToHtml(binding.type, {
+																lang: 'typescript',
+																theme: 'dracula-soft'
+															})
+															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+															.replace('</pre>', '')}
+														/>
+													) : (
+													<a
+															class="text-faded no-underline"
+															href={binding.type.url}
+
+														>
+															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
+																.codeToHtml(binding.type.name, {
+																	lang: 'typescript',
+																	theme: 'dracula-soft'
+																})
+																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+																.replace('</pre>', '')} />
+														</a>
+													)
+												}
+
+												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+											</>
+										)
+									})
+								}
+							</div>
+						</div>
+					)
+				}
+			</div>
+		)}
+
+	</div>
+)}
+
