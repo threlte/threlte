@@ -71,7 +71,12 @@
       ? THREE.CubeReflectionMapping
       : THREE.EquirectangularReflectionMapping
 
-    texture.encoding = encoding || isCubeMap ? THREE.LinearEncoding : THREE.sRGBEncoding
+    texture.encoding =
+      encoding || isCubeMap
+        ? // @ts-expect-error Handle legacy revisions
+          THREE.LinearEncoding
+        : // @ts-expect-error Handle legacy revisions
+          THREE.sRGBEncoding
     previousEnvMap = texture
     scene.environment = previousEnvMap
     if (isBackground) scene.background = previousEnvMap

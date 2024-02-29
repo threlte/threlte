@@ -19,12 +19,6 @@ const colorSpaceToEncoding: Record<ColorSpace, TextureEncoding> = {
   '': THREE.LinearEncoding
 }
 
-const rendererHasOutputColorSpaceProperty = (
-  renderer: any
-): renderer is { outputColorSpace: string } => {
-  return renderer.outputColorSpace !== undefined
-}
-
 /**
  * ### `useRenderer`
  *
@@ -61,7 +55,8 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (revision >= 150) {
       THREE.ColorManagement.enabled = colorManagementEnabled
     } else {
-      ;(THREE.ColorManagement as any).legacyMode = !colorManagementEnabled
+      // @ts-expect-error Handle legacy revisions
+      THREE.ColorManagement.legacyMode = !colorManagementEnabled
     }
   })
 
@@ -70,14 +65,15 @@ export const useRenderer = (ctx: ThrelteContext) => {
 
     // check if the renderer has a colorSpace property, if so, use that
     // otherwise, use the old encoding property
-    if (rendererHasOutputColorSpaceProperty(renderer)) {
+    if (revision >= 152) {
       renderer.outputColorSpace = colorSpace
     } else {
       const encoding = colorSpaceToEncoding[colorSpace]
       if (!encoding) {
         console.warn('No encoding found for colorSpace', colorSpace)
       } else {
-        ;(renderer as any).outputEncoding = encoding
+        // @ts-expect-error Handle legacy revisions
+        renderer.outputEncoding = encoding
       }
     }
   })
@@ -114,7 +110,8 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (revision >= 150 && useLegacyLights) {
       renderer.useLegacyLights = useLegacyLights
     } else if (revision < 150) {
-      ;(renderer as any).physicallyCorrectLights = !useLegacyLights
+      // @ts-expect-error Handle legacy revisions
+      renderer.physicallyCorrectLights = !useLegacyLights
     }
   })
 
