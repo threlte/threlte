@@ -12,6 +12,9 @@ Title: Sniper Scope NightForce_V2
   import { Group } from 'three'
   import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
+  import { tweened } from 'svelte/motion'
+  import { scoping } from '../Controls.svelte'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   type $$Props = Props<THREE.Group>
   type $$Events = Events<THREE.Group>
@@ -22,6 +25,22 @@ Title: Sniper Scope NightForce_V2
   const gltf = useGltf('/models/scope.glb')
 
   const component = forwardEventHandlers()
+
+  const rotationX = tweened(90)
+  const positionY = tweened(-0.3)
+  const positionZ = tweened(-1)
+
+  $: {
+    if ($scoping) {
+      rotationX.set(0)
+      positionY.set(0)
+      positionZ.set(-0.496)
+    } else {
+      rotationX.set(90)
+      positionY.set(-0.3)
+      positionZ.set(-1)
+    }
+  }
 </script>
 
 <T
@@ -30,6 +49,9 @@ Title: Sniper Scope NightForce_V2
   {...$$restProps}
   bind:this={$component}
   scale={0.02}
+  position.y={$positionY}
+  position.z={$positionZ}
+  rotation.y={DEG2RAD * $rotationX}
 >
   {#await gltf}
     <slot name="fallback" />
