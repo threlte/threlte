@@ -6,20 +6,39 @@ import Search from '@astrojs/starlight/components/Search.astro'
 import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro'
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
+
+// import Package from '../Icons/Package.astro'
+import Book from '../Icons/Bookv2.astro'
+// import Circles from '../Icons/Circles.astro'
 ---
 
-<div class="header sl-flex">
+<div class="header sl-flex relative">
   <div class="title-wrapper sl-flex">
     <SiteTitle {...Astro.props} />
   </div>
-  <div class="sl-flex">hello world</div>
+  <div class="sl-flex">
+		hello
+		<Book class="test" />
+		hello
+    <Search {...Astro.props} />
+    <!-- <Search {...Astro.props} /> -->
+    <!-- <Search {...Astro.props} />
+    <Search {...Astro.props} /> -->
+
+    <!-- <a
+        href="/docs/examples/examples"
+        class:list={['flex items-center gap-1 rounded-md text-faded hover:text-white group flex-row-reverse', activeUrlPathName.includes('/docs/examples') && activeLinkStyles]}
+      >
+        <Circles class="hidden h-[16px] lg:block" />Examples
+      </a> -->
+  </div>
   <div class="sl-hidden md:sl-flex right-group">
     <Search {...Astro.props} />
     <div class="sl-flex social-icons">
       <SocialIcons {...Astro.props} />
     </div>
-    <ThemeSelect {...Astro.props} />
-    <LanguageSelect {...Astro.props} />
+    <!-- <ThemeSelect {...Astro.props} /> -->
+    <!-- <LanguageSelect {...Astro.props} /> -->
   </div>
 </div>
 
@@ -77,4 +96,210 @@ import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
       align-content: center;
     }
   }
+
+	.test {
+		-webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+    color-scheme: dark;
+    accent-color: var(--sl-color-accent);
+    --sl-color-white: hsl(0, 0%, 100%);
+    --sl-color-gray-1: hsl(224, 20%, 94%);
+    --sl-color-gray-2: hsl(224, 6%, 77%);
+    --sl-color-gray-3: hsl(224, 6%, 56%);
+    --sl-color-gray-4: hsl(224, 7%, 36%);
+    --sl-color-gray-5: hsl(224, 10%, 23%);
+    --sl-color-gray-6: hsl(224, 14%, 16%);
+    --sl-color-black: hsl(224, 10%, 10%);
+    --sl-hue-orange: 41;
+    --sl-color-orange-low: hsl(var(--sl-hue-orange), 39%, 22%);
+    --sl-color-orange: hsl(var(--sl-hue-orange), 82%, 63%);
+    --sl-color-orange-high: hsl(var(--sl-hue-orange), 82%, 87%);
+    --sl-hue-green: 101;
+    --sl-color-green-low: hsl(var(--sl-hue-green), 39%, 22%);
+    --sl-color-green: hsl(var(--sl-hue-green), 82%, 63%);
+    --sl-color-green-high: hsl(var(--sl-hue-green), 82%, 80%);
+    --sl-hue-blue: 234;
+    --sl-color-blue-low: hsl(var(--sl-hue-blue), 54%, 20%);
+    --sl-color-blue: hsl(var(--sl-hue-blue), 100%, 60%);
+    --sl-color-blue-high: hsl(var(--sl-hue-blue), 100%, 87%);
+    --sl-hue-purple: 281;
+    --sl-color-purple-low: hsl(var(--sl-hue-purple), 39%, 22%);
+    --sl-color-purple: hsl(var(--sl-hue-purple), 82%, 63%);
+    --sl-color-purple-high: hsl(var(--sl-hue-purple), 82%, 89%);
+    --sl-hue-red: 339;
+    --sl-color-red-low: hsl(var(--sl-hue-red), 39%, 22%);
+    --sl-color-red: hsl(var(--sl-hue-red), 82%, 63%);
+    --sl-color-red-high: hsl(var(--sl-hue-red), 82%, 87%);
+    --sl-color-accent-low: hsl(224, 54%, 20%);
+    --sl-color-accent: hsl(224, 100%, 60%);
+    --sl-color-accent-high: hsl(224, 100%, 85%);
+    --sl-color-text: var(--sl-color-gray-2);
+    --sl-color-text-accent: var(--sl-color-accent-high);
+    --sl-color-text-invert: var(--sl-color-accent-low);
+    --sl-color-bg: var(--sl-color-black);
+    --sl-color-bg-nav: var(--sl-color-gray-6);
+    --sl-color-bg-sidebar: var(--sl-color-gray-6);
+    --sl-color-bg-inline-code: var(--sl-color-gray-5);
+    --sl-color-bg-accent: var(--sl-color-accent-high);
+    --sl-color-hairline-light: var(--sl-color-gray-5);
+    --sl-color-hairline: var(--sl-color-gray-6);
+    --sl-color-hairline-shade: var(--sl-color-black);
+    --sl-color-backdrop-overlay: hsla(223, 13%, 10%, 0.66);
+    --sl-shadow-sm: 0px 1px 1px hsla(0, 0%, 0%, 0.12), 0px 2px 1px hsla(0, 0%, 0%, 0.24);
+    --sl-shadow-md: 0px 8px 4px hsla(0, 0%, 0%, 0.08), 0px 5px 2px hsla(0, 0%, 0%, 0.08),
+		0px 3px 2px hsla(0, 0%, 0%, 0.12), 0px 1px 1px hsla(0, 0%, 0%, 0.15);
+    --sl-shadow-lg: 0px 25px 7px hsla(0, 0%, 0%, 0.03), 0px 16px 6px hsla(0, 0%, 0%, 0.1),
+		0px 9px 5px hsla(223, 13%, 10%, 0.33), 0px 4px 4px hsla(0, 0%, 0%, 0.75),
+		0px 4px 2px hsla(0, 0%, 0%, 0.25);
+    --sl-text-xs: 0.8125rem;
+    --sl-text-sm: 0.875rem;
+    --sl-text-base: 1rem;
+    --sl-text-lg: 1.125rem;
+    --sl-text-xl: 1.25rem;
+    --sl-text-2xl: 1.5rem;
+    --sl-text-3xl: 1.8125rem;
+    --sl-text-4xl: 2.1875rem;
+    --sl-text-5xl: 2.625rem;
+    --sl-text-6xl: 4rem;
+    --sl-text-body: var(--sl-text-base);
+    --sl-text-body-sm: var(--sl-text-xs);
+    --sl-text-code: var(--sl-text-sm);
+    --sl-text-code-sm: var(--sl-text-xs);
+    --sl-text-h5: var(--sl-text-lg);
+    --sl-line-height: 1.8;
+    --sl-line-height-headings: 1.2;
+    --sl-font-system: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Segoe UI Symbol', 'Noto Color Emoji';
+    --sl-font-system-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+		'Courier New', monospace;
+    --__sl-font: var(--sl-font, var(--sl-font-system)), var(--sl-font-system);
+    --__sl-font-mono: var(--sl-font-mono, var(--sl-font-system-mono)), var(--sl-font-system-mono);
+    --sl-nav-pad-y: 0.75rem;
+    --sl-mobile-toc-height: 3rem;
+    --sl-sidebar-width: 18.75rem;
+    --sl-sidebar-pad-x: 1rem;
+    --sl-content-width: 45rem;
+    --sl-content-pad-x: 1rem;
+    --sl-menu-button-size: 2rem;
+    --sl-nav-gap: var(--sl-content-pad-x);
+    --sl-outline-offset-inside: -0.1875rem;
+    --sl-z-index-toc: 4;
+    --sl-z-index-menu: 5;
+    --sl-z-index-navbar: 10;
+    --sl-z-index-skiplink: 20;
+    --sl-nav-height: 4rem;
+    --sl-nav-pad-x: 1.5rem;
+    --sl-text-h1: var(--sl-text-5xl);
+    --sl-text-h2: var(--sl-text-4xl);
+    --sl-text-h3: var(--sl-text-3xl);
+    --sl-text-h4: var(--sl-text-2xl);
+    --astro-code-color-text: var(--sl-color-white);
+    --astro-code-color-background: var(--sl-color-gray-6);
+    --astro-code-token-constant: var(--sl-color-blue-high);
+    --astro-code-token-string: var(--sl-color-green-high);
+    --astro-code-token-comment: var(--sl-color-gray-2);
+    --astro-code-token-keyword: var(--sl-color-purple-high);
+    --astro-code-token-parameter: var(--sl-color-red-high);
+    --astro-code-token-function: var(--sl-color-red-high);
+    --astro-code-token-string-expression: var(--sl-color-green-high);
+    --astro-code-token-punctuation: var(--sl-color-gray-2);
+    --astro-code-token-link: var(--sl-color-blue-high);
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: #393939;
+    --pagefind-ui-text: #393939;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #eeeeee;
+    --pagefind-ui-tag: #eeeeee;
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: system,
+    -apple-system,
+    "BlinkMacSystemFont",
+    ".SFNSText-Regular",
+    "San Francisco",
+    "Roboto",
+    "Segoe UI",
+    "Helvetica Neue",
+    "Lucida Grande",
+    "Ubuntu",
+    "arial",
+    sans-serif;
+    --sl-content-inline-start: var(--sl-sidebar-width);
+    --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
+    -webkit-font-smoothing: antialiased;
+    --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+    --__main-column-fr: calc( ( 100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) - (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) - var(--sl-content-width) ) / 2 );
+    --tw-border-spacing-x: 0;
+    --tw-border-spacing-y: 0;
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    --tw-pan-x: ;
+    --tw-pan-y: ;
+    --tw-pinch-zoom: ;
+    --tw-scroll-snap-strictness: proximity;
+    --tw-gradient-from-position: ;
+    --tw-gradient-via-position: ;
+    --tw-gradient-to-position: ;
+    --tw-ordinal: ;
+    --tw-slashed-zero: ;
+    --tw-numeric-figure: ;
+    --tw-numeric-spacing: ;
+    --tw-numeric-fraction: ;
+    --tw-ring-inset: ;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgb(59 130 246 / 0.5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    --tw-blur: ;
+    --tw-brightness: ;
+    --tw-contrast: ;
+    --tw-grayscale: ;
+    --tw-hue-rotate: ;
+    --tw-invert: ;
+    --tw-saturate: ;
+    --tw-sepia: ;
+    --tw-drop-shadow: ;
+    --tw-backdrop-blur: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-grayscale: ;
+    --tw-backdrop-hue-rotate: ;
+    --tw-backdrop-invert: ;
+    --tw-backdrop-opacity: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-sepia: ;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-transform: none;
+    -webkit-appearance: button;
+    background-image: none;
+    font: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    height: 2.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 1rem;
+    background-color: var(--sl-color-black);
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    width: 100%;
+    max-width: 22rem;
+	}
 </style>
