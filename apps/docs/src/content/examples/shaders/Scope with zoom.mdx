@@ -1,15 +1,13 @@
-
 This example shows how to utilize useFBO hook to create a sniper scope zoom effect, complete
-with lens distortion and crosshairs. 
-
+with lens distortion and crosshairs.
 
 <Example path="shaders/useFboScope" />
-
 
 ## How does it work?
 
 The hook is used to render a scene onto a texture, using
- it in a shader. The webglrendertarget texture from useFBO hook is used in the scope where a
+it in a shader. The [WebGLRenderTarget](https://threejs.org/docs/#api/en/renderers/WebGLRenderTarget) texture
+from [useFBO](/docs/reference/extras/use-fbo) hook is used in the scope where a
 vignette and lens distortion effects are applied and a reticle is added.
 
 ### Scene setup
@@ -40,21 +38,21 @@ const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
 let scope: Group
 
 useTask(() => {
-    if (!scope || !$scoping) return
-    const cam = $camera as PerspectiveCamera
+  if (!scope || !$scoping) return
+  const cam = $camera as PerspectiveCamera
 
-    scope.visible = false
-    cam.fov = $zoomedFov
-    cam.updateProjectionMatrix()
-    cam.matrixWorldNeedsUpdate = true
-    renderer.setRenderTarget(renderTarget)
-    renderer.render(scene, cam)
+  scope.visible = false
+  cam.fov = $zoomedFov
+  cam.updateProjectionMatrix()
+  cam.matrixWorldNeedsUpdate = true
+  renderer.setRenderTarget(renderTarget)
+  renderer.render(scene, cam)
 
-    renderer.setRenderTarget(null)
-    cam.fov = baseFov
-    cam.updateProjectionMatrix()
-    scope.visible = true
-  })
+  renderer.setRenderTarget(null)
+  cam.fov = baseFov
+  cam.updateProjectionMatrix()
+  scope.visible = true
+})
 ```
 
 Here's what happens step by step:
@@ -64,13 +62,14 @@ Here's what happens step by step:
 3. The renderer's target is switched to the one created by the useFBO hook.
 4. The scene is rendered from the perspective of the adjusted camera.
 5. The renderer's target is reset to `null` for rendering to the screen again, and the camera's FOV is restored to its
-original setting, with the scope becoming visible again.
+   original setting, with the scope becoming visible again.
 
 ### Scope shader
 
 The shader for the scope's view employs two textures: the rendered scene texture and a reticle image.
 
 Inside the shader:
+
 - **UV adjustment**: To accommodate different screen sizes and the circular shape of the scope, UV coordinates are adjusted for proper mapping of the view texture onto the scope.
 - **Cubic lens distortion**: The scene texture is distorted using a cubic lens effect to simulate the optical characteristics of a real scope.
 - **Vignetting**: A vignette effect is applied to the distorted scene texture, darkening the edges around the scope.
