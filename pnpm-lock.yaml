@@ -616,10 +616,6 @@ importers:
         version: 5.0.1
 
   packages/rapier:
-    dependencies:
-      three:
-        specifier: '>=0.133'
-        version: 0.153.0
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.11.2
@@ -687,6 +683,9 @@ importers:
       svelte2tsx:
         specifier: ^0.7.0
         version: 0.7.0(svelte@4.2.9)(typescript@5.3.3)
+      three:
+        specifier: ^0.160.1
+        version: 0.160.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -11606,10 +11605,6 @@ packages:
 
   /three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
-    dev: false
-
-  /three@0.153.0:
-    resolution: {integrity: sha512-OCP2/uQR6GcDpSLnJt/3a4mdS0kNWcbfUXIwLoEMgLzEUIVIYsSDwskpmOii/AkDM+BBwrl6+CKgrjX9+E2aWg==}
     dev: false
 
   /three@0.158.0:
