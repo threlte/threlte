@@ -1,7 +1,7 @@
 import { SvelteComponent } from 'svelte'
 import type { Props } from '@threlte/core'
-import type { TextureEncoding } from 'three'
 import type { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
+import { ColorSpace } from 'three'
 
 export type EnvironmentProps = {
   /**
@@ -25,9 +25,9 @@ export type EnvironmentProps = {
    */
   format?: 'ldr' | 'hdr'
   /**
-   * Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular
+   * Envmap color space. If not provided it defaults to `srgb` for cubemap and `srgb-linear` for equirectangular
    */
-  encoding?: TextureEncoding
+  colorSpace?: ColorSpace
 }
 
 export default class Environment extends SvelteComponent<EnvironmentProps> {}

@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.133",
+    "three": ">=0.152",
     "@threlte/core": ">=6.0.3",
     "@threlte/extras": ">=5.1.0",
     "@theatre/core": ">=0.6",
@@ -60,9 +60,7 @@
   "types": "./src/lib/index.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
-    "files": [
-      "dist"
-    ],
+    "files": ["dist"],
     "svelte": "./dist/index.js",
     "exports": {
       ".": {

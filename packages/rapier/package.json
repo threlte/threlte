@@ -44,7 +44,7 @@
   "peerDependencies": {
     "@dimforge/rapier3d-compat": ">=0.11",
     "svelte": ">=4",
-    "three": ">=0.133"
+    "three": ">=0.152"
   },
   "type": "module",
   "exports": {
@@ -56,9 +56,7 @@
   "types": "./src/lib/index.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
-    "files": [
-      "dist"
-    ],
+    "files": ["dist"],
     "svelte": "./dist/index.js",
     "exports": {
       ".": {

@@ -7,10 +7,10 @@
     CubeTextureLoader,
     EquirectangularReflectionMapping,
     FloatType,
-    LinearEncoding,
-    sRGBEncoding,
     Texture,
-    TextureLoader
+    TextureLoader,
+    SRGBColorSpace,
+    LinearSRGBColorSpace
   } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
@@ -25,7 +25,7 @@
   export let isBackground: Props['isBackground'] = undefined
   export let groundProjection: Props['groundProjection'] = undefined
   export let format: Props['format'] = undefined
-  export let encoding: Props['encoding'] = undefined
+  export let colorSpace: Props['colorSpace'] = undefined
 
   const isScene = (obj: any): obj is Scene => !!obj.isScene
 
@@ -75,10 +75,10 @@
           })
         })
       )
-    }, cacheKey)) as any
+    }, cacheKey)) as Texture
 
     texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
-    texture.encoding = encoding || isCubeMap ? LinearEncoding : sRGBEncoding
+    texture.colorSpace = colorSpace ?? isCubeMap ? LinearSRGBColorSpace : SRGBColorSpace
     previousEnvMap = texture
     scene.environment = previousEnvMap
     if (isBackground) scene.background = previousEnvMap
