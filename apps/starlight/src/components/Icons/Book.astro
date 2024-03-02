@@ -1,7 +1,12 @@
+---
+interface Props {
+	class?: string
+}
+---
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 256 256"
-	class="!w-10 !h-10"
+	class:list={["w-6 h-6", Astro.props.class ?? '']}
 	><rect
 		width="256"
 		height="256"
