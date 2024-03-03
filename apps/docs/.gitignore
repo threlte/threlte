@@ -1,6 +1,5 @@
 # build output
 dist/
-.output/
 # generated types
 .astro/
 
@@ -13,8 +12,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Blender
-.blend1
 
 # environment variables
 .env
