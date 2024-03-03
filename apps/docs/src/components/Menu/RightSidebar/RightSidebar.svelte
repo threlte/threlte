@@ -81,7 +81,7 @@
       {#each headings as heading}
         <li
           class={c(
-            'nav-list-item',
+            'nav-list-item text-faded',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
               '!border-orange !text-orange font-bold'
@@ -117,7 +117,7 @@
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     on:transitionend={focusFirstDropdownLink}
   >
-    <li class="list-item">
+    <li class="text-faded list-item">
       <a
         class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
@@ -144,7 +144,7 @@
     </li>
 
     {#if sourceUrl}
-      <li class="list-item">
+      <li class="text-faded list-item">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
@@ -172,7 +172,7 @@
     {/if}
 
     {#if editUrl}
-      <li class="list-item">
+      <li class="text-faded list-item">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
@@ -207,11 +207,11 @@
 
 <style lang="postcss">
   .nav-list-item {
-    @apply text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
+    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
   }
 
   .list-item {
-    @apply text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
+    @apply relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
   }
 
   .list-item .icon {
