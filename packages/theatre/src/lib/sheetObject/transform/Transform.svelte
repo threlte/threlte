@@ -6,7 +6,7 @@
   import { TransformControls } from '@threlte/extras'
   import { onMount, type ComponentProps } from 'svelte'
   import { Group } from 'three'
-  import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls'
+  import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { RAD2DEG } from 'three/src/math/MathUtils'
   import { useStudio } from '../../studio/useStudio'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
