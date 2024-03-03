@@ -48,17 +48,16 @@ Render 3D text as a geometry using threejs's [TextGeometry](https://threejs.org/
 
 ### Basic Example
 
-```svelte title="Text3DGeometry.svelte"
+```svelte title="Scene.svelte"
 <script lang="ts">
   import { T } from '@threlte/core'
-
   import { Text3DGeometry } from '@threlte/extras'
 </script>
 
 <T.Mesh>
   <Text3DGeometry
     font={'path-to-your-font'}
-    text={'Hello'}
+    text={'Hello World'}
   />
   <T.MeshStandardMaterial />
 </T.Mesh>
@@ -68,11 +67,37 @@ Render 3D text as a geometry using threejs's [TextGeometry](https://threejs.org/
 
 You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/).
 
+### Suspense-ready
+
+The component `<Text3DGeometry>` is _suspense-ready_, can be used in a
+[`<Suspense>` boundary](/docs/reference/extras/suspense) and will suspend
+rendering until the provided font is loaded:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Text3DGeometry, Suspense } from '@threlte/extras'
+  import Fallback from './Fallback.svelte'
+</script>
+
+<Suspense>
+  <T.Mesh>
+    <Text3DGeometry
+      font={'path-to-your-font'}
+      text={'Hello World'}
+    />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+
+  <Fallback slot="fallback" />
+</Suspense>
+```
+
 ### Loading a font yourself
 
 You can also load the font yourself and pass it to the component, like so:
 
-```svelte title="Text3DGeometry.svelte"
+```svelte title="Scene.svelte"
 <script lang="ts">
   import { T, useLoader } from '@threlte/core'
   import { Text3DGeometry } from '@threlte/extras'
@@ -85,7 +110,7 @@ You can also load the font yourself and pass it to the component, like so:
   <T.Mesh>
     <Text3DGeometry
       font={$font}
-      text={'Hello'}
+      text={'Hello World'}
     />
     <T.MeshStandardMaterial />
   </T.Mesh>
@@ -96,7 +121,7 @@ You can also load the font yourself and pass it to the component, like so:
 
 You can center a text by using the [`<Align>` component](/docs/reference/extras/align) and calling the align slot prop when the text geometry is created.
 
-```svelte title="Text3DCentered.svelte"
+```svelte title="Scene.svelte"
 <Align let:align>
   <T.Mesh>
     <Text3DGeometry
