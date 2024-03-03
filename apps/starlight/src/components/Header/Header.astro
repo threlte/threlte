@@ -1,52 +1,88 @@
 ---
 import type { Props } from '@astrojs/starlight/props'
 
-import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro'
+// import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro'
 import Search from '@astrojs/starlight/components/Search.astro'
 import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro'
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
-import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
+// import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
 
-// import Package from '../Icons/Package.astro'
+import Package from '../Icons/Package.astro'
 import Book from '../Icons/Book.astro'
-// import Circles from '../Icons/Circles.astro'
+import Circles from '../Icons/Circles.astro'
 
-// activeUrlPathName.includes('/docs/examples') && activeHeader
-const activeHeader = Astro.url.pathname.split("/")[1]
+const activeHeader = Astro.url.pathname.split('/')[2]
 ---
 
 <div class="header sl-flex">
   <div class="title-wrapper sl-flex">
     <SiteTitle {...Astro.props} />
   </div>
-  <div class="sl-flex overflow-scroll-x">
-		<a
-        href="/guides/example"
-        class:list={['threlte-header', activeHeader && 'activeHeader']}
-      >
-			<Book />
-			Learn
-      </a>
-
-    <Search {...Astro.props} />
-    <!-- <Search {...Astro.props} /> -->
-    <!-- <Search {...Astro.props} />
-    <Search {...Astro.props} /> -->
-
-    <!-- <a
-        href="/docs/examples/examples"
-        class:list={['flex items-center gap-1 rounded-md text-faded hover:text-white group flex-row-reverse', activeUrlPathName.includes('/docs/examples') && activeHeader]}
-      >
-        <Circles class="hidden h-[16px] lg:block" />Examples
-      </a> -->
+  <div class="sl-flex gap-6">
+    <a
+      href="/guides/example"
+      class:list={['threlte-header', activeHeader == 'learn' && 'activeHeader']}
+    >
+      <Book class="hidden h-[16px] md:block" />Learn
+    </a>
+    <a
+      href="/guides/example"
+      class:list={['threlte-header', activeHeader == 'example' && 'activeHeader']}
+    >
+      <Circles class="hidden h-[16px] md:block" />Examples
+    </a>
+    <!-- <div class="h-full w-px bg-gray-500/70"></div> -->
+    <a
+      href="/docs/reference/core/getting-started"
+      class:list={['threlte-header', activeHeader == 'core' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />core
+    </a>
+    <a
+      href="/docs/reference/extras/getting-started"
+      class:list={['threlte-header', activeHeader == 'extras' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />extras</a
+    >
+    <a
+      href="/docs/reference/gltf/getting-started"
+      class:list={['threlte-header', activeHeader == 'gltf' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />gltf</a
+    >
+    <a
+      href="/docs/reference/rapier/getting-started"
+      class:list={['threlte-header', activeHeader == 'rapier' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />rapier</a
+    >
+    <a
+      href="/docs/reference/theatre/getting-started"
+      class:list={['threlte-header', activeHeader == 'theatre' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />theatre</a
+    >
+    <a
+      href="/docs/reference/xr/getting-started"
+      class:list={['threlte-header', activeHeader == 'xr' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />xr
+    </a>
+    <a
+      href="/docs/reference/flex/getting-started"
+      class:list={['threlte-header', activeHeader == 'flex' && 'activeHeader']}
+    >
+      <Package class="hidden h-[16px] md:block" />flex
+    </a>
   </div>
   <div class="sl-hidden md:sl-flex right-group">
     <Search {...Astro.props} />
-    <div class="sl-flex social-icons">
-      <SocialIcons {...Astro.props} />
+    <SocialIcons {...Astro.props} />
+    <!-- <div class="sl-flex social-icons">
+			<SocialIcons {...Astro.props} />
     </div>
-    <!-- <ThemeSelect {...Astro.props} /> -->
-    <!-- <LanguageSelect {...Astro.props} /> -->
+    <ThemeSelect {...Astro.props} />
+    <LanguageSelect {...Astro.props} /> -->
   </div>
 </div>
 
