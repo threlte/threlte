@@ -4,7 +4,7 @@
   import { HTML } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let title: string
   export let useGround = true

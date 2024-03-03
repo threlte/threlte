@@ -3,7 +3,7 @@
   import Scene from './Scene.svelte'
   import { Pane, Button, Separator } from 'svelte-tweakpane-ui'
   import { cameraControls, mesh } from './stores'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let camera
 

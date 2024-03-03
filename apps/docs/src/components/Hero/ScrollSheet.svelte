@@ -2,7 +2,7 @@
   import type { ISheet } from '@theatre/core'
   import { Sheet } from '@threlte/theatre'
   import { scrollPos, springScrollPos } from './scrollPos'
-  import { clamp, mapLinear } from 'three/src/math/MathUtils'
+  import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
   export let useSpring = true
   export let name: string

@@ -2,7 +2,7 @@
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { DoubleSide } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 </script>
 
 <T.PerspectiveCamera

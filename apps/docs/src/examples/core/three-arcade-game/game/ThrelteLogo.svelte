@@ -2,7 +2,7 @@
   import { T, useTask } from '@threlte/core'
   import { Edges } from '@threlte/extras'
   import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { gameState } from './state'
 
   const { baseColor } = gameState

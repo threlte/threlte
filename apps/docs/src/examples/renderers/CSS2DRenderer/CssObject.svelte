@@ -1,6 +1,6 @@
 <script>
   import { T } from '@threlte/core'
-  import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
+  import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
 
   export let pointerEvents = false
 

@@ -3,7 +3,7 @@
   import { Edges } from '@threlte/extras'
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let volume: number = 0
 

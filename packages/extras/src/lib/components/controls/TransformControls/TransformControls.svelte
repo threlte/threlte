@@ -9,7 +9,7 @@
   } from '@threlte/core'
 
   import { Group } from 'three'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 
   import { derived, writable } from 'svelte/store'
 
