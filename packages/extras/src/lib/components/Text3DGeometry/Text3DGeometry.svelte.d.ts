@@ -1,30 +1,28 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Events, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { BufferGeometry } from 'three'
-
 import type {
-  TextGeometryParameters,
-  TextGeometry
+  TextGeometry,
+  TextGeometryParameters
 } from 'three/examples/jsm/geometries/TextGeometry'
 import type { Font } from 'three/examples/jsm/loaders/FontLoader'
 
-export type Text3DProps = Props<BufferGeometry> &
-  Omit<TextGeometryParameters, 'font'> & {
-    /**
-     * The loaded font or path to font file
-     */
-    font: Font | string
-    /**
-     * The text to display
-     */
-    text: string
+export type Text3DProps = Omit<TextGeometryParameters, 'font'> & {
+  /**
+   * The loaded font or path to font file
+   */
+  font: Font | string
+  /**
+   * The text to display
+   */
+  text: string
 
-    /**
-     * Smooth shading
-     * @default 0
-     */
-    smooth?: number
-  }
+  /**
+   * Smooth shading
+   * @default 0
+   */
+  smooth?: number
+}
 
 export type Text3DEvents = Events<BufferGeometry> & {
   rendered: (mesh: TextGeometry) => void

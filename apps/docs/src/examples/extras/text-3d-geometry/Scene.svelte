@@ -1,25 +1,38 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Text3DGeometry, Environment, Align, Float } from '@threlte/extras'
+  import { Align, Environment, Float, OrbitControls, Text3DGeometry } from '@threlte/extras'
+
+  export let text: string
+  export let bevelEnabled: boolean
+  export let bevelOffset: number
+  export let bevelSegments: number
+  export let bevelSize: number
+  export let bevelThickness: number
+  export let curveSegments: number
+  export let height: number
+  export let size: number
+  export let smooth: number
 </script>
 
 <Align let:align>
   <T.Mesh>
     <Text3DGeometry
       font={'/fonts/Inter-semibold.blob'}
-      text={`hello\nthere!`}
-      rotation.x={-0.28}
-      size={5}
-      height={1}
-      bevelEnabled={true}
-      bevelThickness={0.1}
-      bevelSize={0.2}
-      bevelSegments={20}
-      smooth={0.1}
-      on:rendered={align}
+      {text}
+      {bevelEnabled}
+      {bevelOffset}
+      {bevelSegments}
+      {bevelSize}
+      {bevelThickness}
+      {curveSegments}
+      {height}
+      {size}
+      {smooth}
+      on:create={align}
     />
     <T.MeshStandardMaterial
-      color="#515151"
+      color="#FD3F00"
+      toneMapped={false}
       metalness={1.0}
       roughness={0.1}
     />
@@ -27,12 +40,6 @@
 </Align>
 
 <Environment files="/hdr/shanghai_riverside_1k.hdr" />
-
-<T.DirectionalLight
-  position={[0, 5, 10]}
-  intensity={0}
-  color="red"
-/>
 
 <Float
   rotationIntensity={[0, 3, 0]}
