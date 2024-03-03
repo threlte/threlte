@@ -4,8 +4,8 @@ import type { BufferGeometry } from 'three'
 import type {
   TextGeometry,
   TextGeometryParameters
-} from 'three/examples/jsm/geometries/TextGeometry'
-import type { Font } from 'three/examples/jsm/loaders/FontLoader'
+} from 'three/examples/jsm/geometries/TextGeometry.js'
+import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 
 export type Text3DProps = Omit<TextGeometryParameters, 'font'> & {
   /**

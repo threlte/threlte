@@ -1,6 +1,6 @@
 import { SvelteComponent } from 'svelte'
 import type { Props } from '@threlte/core'
-import type { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv'
+import type { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv.js'
 import { ColorSpace } from 'three'
 
 export type EnvironmentProps = {

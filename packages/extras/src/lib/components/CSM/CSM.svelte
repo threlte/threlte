@@ -3,8 +3,8 @@
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
   import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
-  import type { CSMParameters } from 'three/examples/jsm/csm/CSM'
-  import { CSM } from 'three/examples/jsm/csm/CSM'
+  import type { CSMParameters } from 'three/examples/jsm/csm/CSM.js'
+  import { CSM } from 'three/examples/jsm/csm/CSM.js'
   import { useMaterials } from './useMaterials'
 
   /**
