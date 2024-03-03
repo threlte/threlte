@@ -4,7 +4,7 @@
   import { BoxGeometry } from 'three'
   import { Mesh } from 'three'
   import { Group } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { useTimeout } from '../hooks/useTimeout'
   import { blinkClock, gameState } from '../state'
 

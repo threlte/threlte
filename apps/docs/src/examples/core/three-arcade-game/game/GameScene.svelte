@@ -3,7 +3,7 @@
   import { tweened } from 'svelte/motion'
   import { derived } from 'svelte/store'
   import { BackSide, Color, PerspectiveCamera } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Arena from './Arena.svelte'
   import Ball from './Ball/Ball.svelte'
   import GameSceneRendering from './GameSceneRendering.svelte'
