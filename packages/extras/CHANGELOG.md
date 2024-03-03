@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.10.0
+
+### Minor Changes
+
+- 07af192: Add Text3D component
+
 ## 8.9.0
 
 ### Minor Changes
