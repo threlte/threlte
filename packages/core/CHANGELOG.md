@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 7.2.1
+
+### Patch Changes
+
+- 6ed92af: Cleaned up default camera creation and removed unused ThrelteUserData type
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
 ## 7.2.0
 
 ### Minor Changes
