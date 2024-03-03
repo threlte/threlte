@@ -49,7 +49,11 @@
   "types": "./src/lib/index.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
-    "files": ["dist", "!dist/**/*.test.*", "!dist/**/*.spec.*"],
+    "files": [
+      "dist",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*"
+    ],
     "svelte": "./dist/index.js",
     "exports": {
       ".": {

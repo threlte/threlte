@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 8.9.0
+
+### Minor Changes
+
+- cd5f31d: Remove deprecated encoding-related code to allow compatibility with r162.
+
+  ### Migration
+
+  Three.js r152 or later is now required.
+
 ## 8.8.1
 
 ### Patch Changes

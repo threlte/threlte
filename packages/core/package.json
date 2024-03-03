@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "7.1.2",
+  "version": "7.2.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -58,7 +58,9 @@
   "types": "./src/lib/index.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
-    "files": ["dist"],
+    "files": [
+      "dist"
+    ],
     "svelte": "./dist/index.js",
     "exports": {
       ".": {
