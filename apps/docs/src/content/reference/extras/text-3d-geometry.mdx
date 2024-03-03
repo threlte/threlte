@@ -104,7 +104,7 @@ You can also load the font yourself and pass it to the component, like so:
 <script lang="ts">
   import { T, useLoader } from '@threlte/core'
   import { Text3DGeometry } from '@threlte/extras'
-  import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+  import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 
   let font = useLoader(FontLoader).load('path-to-your-font')
 </script>
