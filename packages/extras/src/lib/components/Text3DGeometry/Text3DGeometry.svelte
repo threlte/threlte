@@ -17,8 +17,9 @@
   type $$Events = Text3DEvents
   type $$Slots = Text3DSlots
 
-  export let font: $$Props['font']
   export let text: $$Props['text']
+  export let font: $$Props['font'] =
+    'https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json'
   export let size: $$Props['size'] = undefined
   export let height: $$Props['height'] = undefined
   export let curveSegments: $$Props['curveSegments'] = undefined

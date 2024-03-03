@@ -9,13 +9,15 @@ import type { Font } from 'three/examples/jsm/loaders/FontLoader'
 
 export type Text3DProps = Omit<TextGeometryParameters, 'font'> & {
   /**
-   * The loaded font or path to font file
-   */
-  font: Font | string
-  /**
    * The text to display
    */
   text: string
+
+  /**
+   * The loaded font or path to font file
+   * @default 'https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json'
+   */
+  font?: Font | string
 
   /**
    * Smooth shading

@@ -55,22 +55,25 @@ Render 3D text as a geometry using threejs's [TextGeometry](https://threejs.org/
 </script>
 
 <T.Mesh>
-  <Text3DGeometry
-    font={'path-to-your-font'}
-    text={'Hello World'}
-  />
+  <Text3DGeometry text={'Hello World'} />
   <T.MeshStandardMaterial />
 </T.Mesh>
 ```
 
-### Generate a font
+### Using a Custom Font
 
-You can generate a font using [typeface.js](https://gero3.github.io/facetype.js/).
+If no `font` property is provided, the default font "Helvetiker" will be used
+and loaded from the CDN
+[JSDeliver](https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json).
 
-### Suspense-ready
+If you want to use a custom font, you can generate a font using
+[typeface.js](https://gero3.github.io/facetype.js/). Provide the path to the
+resulting JSON file using the prop `font`.
 
-The component `<Text3DGeometry>` is _suspense-ready_, can be used in a
-[`<Suspense>` boundary](/docs/reference/extras/suspense) and will suspend
+### Suspense-Ready
+
+The component `<Text3DGeometry>` is _suspense-ready_. Using it in a
+[`<Suspense>` boundary](/docs/reference/extras/suspense) will suspend
 rendering until the provided font is loaded:
 
 ```svelte title="Scene.svelte"
@@ -93,7 +96,7 @@ rendering until the provided font is loaded:
 </Suspense>
 ```
 
-### Loading a font yourself
+### Loading a Font Yourself
 
 You can also load the font yourself and pass it to the component, like so:
 
@@ -117,7 +120,7 @@ You can also load the font yourself and pass it to the component, like so:
 {/await}
 ```
 
-### Centering text
+### Centering Text
 
 You can center a text by using the [`<Align>` component](/docs/reference/extras/align) and calling the align slot prop when the text geometry is created.
 
@@ -134,6 +137,6 @@ You can center a text by using the [`<Align>` component](/docs/reference/extras/
 </Align>
 ```
 
-### Smoothing text
+### Smoothing Text
 
 You can smooth the text by setting the `smooth` prop to a value above 0 to smooth all edges where the angle between faces is less than the `smooth` value.
