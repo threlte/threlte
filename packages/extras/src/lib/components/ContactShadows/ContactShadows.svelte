@@ -52,12 +52,7 @@
   const renderTarget = useMemo(() => {
     const rt = new WebGLRenderTarget(resolution, resolution)
     rt.texture.generateMipmaps = false
-    if ('colorSpace' in rt.texture) {
-      rt.texture.colorSpace = renderer.outputColorSpace
-    } else {
-      // deprecated in three.js r152
-      rt.texture.encoding = renderer.outputEncoding
-    }
+    rt.texture.colorSpace = renderer.outputColorSpace
     return rt
   })
   $: renderTarget.memoize(resolution)
