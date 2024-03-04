@@ -18,65 +18,10 @@ const activeHeader = Astro.url.pathname.split('/')[2]
   <div class="title-wrapper sl-flex">
     <SiteTitle {...Astro.props} />
   </div>
-  <div class="sl-flex gap-6">
-    <a
-      href="/guides/example"
-      class:list={['threlte-header', activeHeader == 'learn' && 'activeHeader']}
-    >
-      <Book class="hidden h-[16px] md:block" />Learn
-    </a>
-    <a
-      href="/guides/example"
-      class:list={['threlte-header', activeHeader == 'example' && 'activeHeader']}
-    >
-      <Circles class="hidden h-[16px] md:block" />Examples
-    </a>
-    <!-- <div class="h-full w-px bg-gray-500/70"></div> -->
-    <a
-      href="/docs/reference/core/getting-started"
-      class:list={['threlte-header', activeHeader == 'core' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />core
-    </a>
-    <a
-      href="/docs/reference/extras/getting-started"
-      class:list={['threlte-header', activeHeader == 'extras' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />extras</a
-    >
-    <a
-      href="/docs/reference/gltf/getting-started"
-      class:list={['threlte-header', activeHeader == 'gltf' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />gltf</a
-    >
-    <a
-      href="/docs/reference/rapier/getting-started"
-      class:list={['threlte-header', activeHeader == 'rapier' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />rapier</a
-    >
-    <a
-      href="/docs/reference/theatre/getting-started"
-      class:list={['threlte-header', activeHeader == 'theatre' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />theatre</a
-    >
-    <a
-      href="/docs/reference/xr/getting-started"
-      class:list={['threlte-header', activeHeader == 'xr' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />xr
-    </a>
-    <a
-      href="/docs/reference/flex/getting-started"
-      class:list={['threlte-header', activeHeader == 'flex' && 'activeHeader']}
-    >
-      <Package class="hidden h-[16px] md:block" />flex
-    </a>
+  <div class="sl-flex">
+    <Search {...Astro.props} />
   </div>
   <div class="sl-hidden md:sl-flex right-group">
-    <Search {...Astro.props} />
     <SocialIcons {...Astro.props} />
     <!-- <div class="sl-flex social-icons">
 			<SocialIcons {...Astro.props} />

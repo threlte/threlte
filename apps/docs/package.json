@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.6",
-    "@astrojs/starlight": "^0.20.1",
+    "@astrojs/starlight": "^0.21.0",
+    "@astrojs/svelte": "^5.0.3",
     "@astrojs/tailwind": "^5.1.0",
-    "astro": "^4.3.5",
+    "astro": "^4.4.9",
+    "astro-auto-import": "^0.4.2",
     "sharp": "^0.32.5",
     "starlight-links-validator": "^0.5.3",
+    "svelte": "^4.2.12",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }
