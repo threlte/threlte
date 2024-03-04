@@ -1,0 +1,31 @@
+[3D Gaussian Splatting](https://huggingface.co/blog/gaussian-splatting) is a
+rasterization technique that allows to render 3D objects with a high level of
+detail. It's currently quickly gaining popularity because of the photorealistic
+rendering of 3D scan data. This example shows how to implement 3D Gaussian
+Splatting with the help of two libraries:
+
+- [`@lumaai/luma-web`](https://lumalabs.ai/luma-web-library) by [Luma](https://lumalabs.ai/)
+- [`@pmndrs/vanilla`](https://github.com/pmndrs/drei-vanilla)
+
+<Tip type="experimental">
+  The technology presented in this example is rapidly developing and therefore the components are
+  not part of the [`@threlte/extras`](/docs/reference/extras/getting-started) package *as of now*.
+  You may however copy and paste them into your project and use them as you wish.
+</Tip>
+
+<Example
+  path="misc/gaussian-splatting"
+  iframe
+  showFile="Scene.svelte"
+  expandCode
+/>
+
+<small>
+
+    Models:
+
+    - Scene: https://lumalabs.ai/capture/4c15c22e-8655-4423-aeac-b08f017dda22
+    - Shoe: https://huggingface.co/cakewalk
+    - Porsche: https://sketchfab.com/3d-models/porsche-959-0530aa8fa4b74427a71c961a5bdd7087
+
+</small>
