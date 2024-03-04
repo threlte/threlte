@@ -29,17 +29,40 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Start Here',
-          autogenerate: {
-            directory: 'getting-started'
-          }
+          items: [
+            {
+              label: 'Getting Started',
+              link: '/getting-started/'
+            },
+            {
+              label: 'Introduction',
+              link: '/getting-started/introduction'
+            },
+            {
+              label: 'Installation',
+              link: '/getting-started/installation'
+            }
+          ]
         },
         {
-          label: 'Guides',
+          label: 'Core Concepts',
           items: [
-            // Each item here is one entry in the navigation menu.
             {
-              label: 'Example Guide',
-              link: '/guides/example/'
+              label: 'Why Threlte?',
+              link: 'concepts/threlte'
+            }
+          ]
+        },
+        {
+          label: 'Tutorials',
+          link: 'tutorials'
+        },
+        {
+          label: 'Basics',
+          items: [
+            {
+              label: 'App Structure',
+              link: 'basics/structure'
             }
           ]
         },
