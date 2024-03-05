@@ -20,7 +20,8 @@
 
   const { renderer, camera } = useThrelte()
 
-  const requestPointerLockWithUnadjustedMovement = (myTargetElement: HTMLElement) => {
+  // Pointer lock with unadjusted movement: https://github.com/slightlyoff/unadjusted_pointer_lock_explainer
+  const requestPointerLock = (myTargetElement: HTMLElement) => {
     //@ts-ignore
     const promise = myTargetElement.requestPointerLock({
       unadjustedMovement: true
@@ -97,7 +98,7 @@
   }}
   on:click={async () => {
     if (!pointerLocked) {
-      requestPointerLockWithUnadjustedMovement(renderer?.domElement)
+      requestPointerLock(renderer?.domElement)
     }
   }}
   on:mousemove={({ movementX, movementY }) => {
