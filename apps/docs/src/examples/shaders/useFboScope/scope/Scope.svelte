@@ -26,18 +26,21 @@ Title: Sniper Scope NightForce_V2
 
   const component = forwardEventHandlers()
 
-  const rotationX = tweened(90)
-  const positionY = tweened(-0.3)
-  const positionZ = tweened(-1)
+  const rotationX = tweened(-3)
+  const positionX = tweened(0.4)
+  const positionY = tweened(-0.15)
+  const positionZ = tweened(-0.496)
 
   $: {
     if ($scoping) {
       rotationX.set(0)
+      positionX.set(0)
       positionY.set(0)
       positionZ.set(-0.496)
     } else {
-      rotationX.set(90)
-      positionY.set(-0.3)
+      rotationX.set(-3)
+      positionX.set(0.4)
+      positionY.set(-0.15)
       positionZ.set(-1)
     }
   }
@@ -49,6 +52,7 @@ Title: Sniper Scope NightForce_V2
   {...$$restProps}
   bind:this={$component}
   scale={0.02}
+  position.x={$positionX}
   position.y={$positionY}
   position.z={$positionZ}
   rotation.y={DEG2RAD * $rotationX}

@@ -6,7 +6,7 @@
   import { tweened } from 'svelte/motion'
 
   export const baseFov = 60
-  export const scoping = writable(true)
+  export const scoping = writable(false)
   export const zoomedFov = tweened(18, {
     duration: 200
   })

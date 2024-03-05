@@ -3,7 +3,7 @@
   import { useFBO, useTexture } from '@threlte/extras'
   import { Group, PerspectiveCamera } from 'three'
 
-  import { baseFov, scoping, zoomedFov } from './Controls.svelte'
+  import { baseFov, scoping, zoomedFov } from '../Controls.svelte'
   import fragmentShader from './scope_fs.glsl?raw'
   import vertexShader from './scope_vs.glsl?raw'
 
