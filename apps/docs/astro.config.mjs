@@ -18,9 +18,46 @@ export default defineConfig({
         // '$components/Card/Card.astro'
       ]
     }),
+    tailwind(),
     svelte(),
     starlight({
       title: 'Threlte',
+      favicon: '/icons/favicon.ico',
+      head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            type: 'image/png',
+            href: '/icons/favicon-32x32.png',
+            sizes: '32x32'
+          }
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            type: 'image/png',
+            href: '/icons/favicon-16x16.png',
+            sizes: '16x16'
+          }
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'mask-icon',
+            href: '/icons/safari-pinned-tab.svg',
+            color: '#fe3d00'
+          }
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'shortcut icon',
+            href: '/icons/favicon.ico'
+          }
+        }
+      ],
       social: {
         github: 'https://github.com/threlte/threlte',
         discord: 'https://discord.gg/EqUBCfCaGm',
@@ -109,7 +146,6 @@ export default defineConfig({
         PageFrame: './src/layouts/PageFrame.astro'
       },
       plugins: [starlightLinksValidator()]
-    }),
-    tailwind()
+    })
   ]
 })
