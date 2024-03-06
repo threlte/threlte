@@ -5,15 +5,60 @@ description: A reference page.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 
-## List a bunch of categories for tutorials here
+Introduce the page and set the exceptations.
 
-<CardGrid stagger>
+## Quick Start
+
+<Card
+  title="Your First Scene"
+  icon="pencil"
+>
+  A quick introduction to [threlte](/tutorials/firstscene)
+</Card>
+
+## Basics
+
+<CardGrid>
   <Card
-    title="Your First Scene"
+    title="Shapes, Assets, Sound and Async"
     icon="pencil"
   >
-    intro to [threlte](/tutorials/firstscene)
+    how to load/await models, textures, sounds, display text, insert DOM-like components and adjust
+    the scene hirearchy.
   </Card>
+  <Card
+    title="Helpers, Visual guides and Controls"
+    icon="add-document"
+  >
+    Components that create visual aids, change how the camera moves or enable objects to be moved
+    around.
+  </Card>
+  <Card
+    title="Visual Effects, Materials, Shaders and Post-Processing"
+    icon="setting"
+  >
+    These components change how an object looks, getting effects not possible with standard meshes &
+    lighting.
+  </Card>
+  <Card
+    title="Transitions, Interactivity, Animation and Staging"
+    icon="open-book"
+  >
+    Components to help setup the stage to show off particular objects as well as plugins to bring
+    objects to life and make them user interactive.
+  </Card>
+  <Card
+    title="Performance, Shadows and Rendering"
+    icon="open-book"
+  >
+    Dailing in performance with components that reduce draw calls as well as some different
+    solutions for shadows.
+  </Card>
+</CardGrid>
+
+## More complex tutorials later on
+
+<CardGrid stagger>
   <Card
     title="Make pacman"
     icon="add-document"
