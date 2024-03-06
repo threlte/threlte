@@ -99,10 +99,7 @@ export default defineConfig({
         },
         {
           label: 'Tutorials',
-          items: [
-            { label: 'Overview', link: 'tutorials/overview' },
-            { label: 'Basics', link: 'tutorials/' }
-          ]
+          link: 'tutorials/'
         },
         {
           label: 'Basics',
