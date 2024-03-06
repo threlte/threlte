@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { Canvas, T } from '@threlte/core'
-  import { Sky } from '@threlte/extras'
+  import { T } from '@threlte/core'
 
-  import Duck from './world/Duck.svelte'
+  // world
+  import { Sky } from '@threlte/extras'
+  import Ducks from './world/Ducks.svelte'
   import Island from './world/Island.svelte'
   import Water from './world/Water.svelte'
 
-  import Controls from './Controls.svelte'
-
-  import { baseFov } from './Controls.svelte'
+  // scope
+  import Controls, { baseFov } from './Controls.svelte'
   import LensView from './scope/LensView.svelte'
   import Scope from './scope/Scope.svelte'
 </script>
@@ -24,10 +24,12 @@
 </T.PerspectiveCamera>
 <Controls />
 
+<!-- World setup -->
 <Sky
   elevation={0.5}
   azimuth={130}
 />
+
 <Water />
 
 <Island
@@ -37,4 +39,4 @@
   position.z={0}
 />
 
-<Duck />
+<Ducks />

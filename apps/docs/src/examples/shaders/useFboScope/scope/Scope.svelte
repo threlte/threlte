@@ -8,11 +8,11 @@ Title: Sniper Scope NightForce_V2
 -->
 
 <script lang="ts">
-  import type * as THREE from 'three'
-  import { Group } from 'three'
+  import * as THREE from 'three'
+
   import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
-  import { tweened } from 'svelte/motion'
+  import { tweened, type Tweened } from 'svelte/motion'
   import { scoping } from '../Controls.svelte'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
@@ -20,28 +20,22 @@ Title: Sniper Scope NightForce_V2
   type $$Events = Events<THREE.Group>
   type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any }; inner: any }
 
-  export const ref = new Group()
+  export const ref = new THREE.Group()
 
   const gltf = useGltf('/models/scope.glb')
 
   const component = forwardEventHandlers()
 
   const rotationX = tweened(-3)
-  const positionX = tweened(0.4)
-  const positionY = tweened(-0.15)
-  const positionZ = tweened(-0.496)
+  const position: Tweened<THREE.Vector3Tuple> = tweened([0.4, -0.15, -1])
 
   $: {
     if ($scoping) {
       rotationX.set(0)
-      positionX.set(0)
-      positionY.set(0)
-      positionZ.set(-0.496)
+      position.set([0, 0, -0.496])
     } else {
       rotationX.set(-3)
-      positionX.set(0.4)
-      positionY.set(-0.15)
-      positionZ.set(-1)
+      position.set([0.4, -0.15, -1])
     }
   }
 </script>
@@ -52,9 +46,7 @@ Title: Sniper Scope NightForce_V2
   {...$$restProps}
   bind:this={$component}
   scale={0.02}
-  position.x={$positionX}
-  position.y={$positionY}
-  position.z={$positionZ}
+  position={$position}
   rotation.y={DEG2RAD * $rotationX}
 >
   {#await gltf}

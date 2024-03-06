@@ -47,7 +47,12 @@
 
   let pointerLocked = false
 
-  // Zoom in and out with mousewheel
+  /*
+		Zoom in and out with mousewheel.
+		I used a passive listener on the renderer dom element because in the docs we show
+		examples as an iframe. Its interaction with lockng pointer was causing the page
+		to scroll etc.
+	*/
   renderer?.domElement.addEventListener(
     'wheel',
     (e) => {
