@@ -1,6 +1,83 @@
 ---
-title: Core
+title: Extras
 description: A reference page.
 ---
 
-Extras index page
+import Tip from '$components/Tip/Tip.astro'
+
+Extras build ontop of the core package.
+
+## Installation
+
+```bash title="Terminal"
+npm install @threlte/extras
+```
+
+## Usage
+
+<Tip type="experimental">
+  The content of this package can be used directly but it's also meant to be a recipe for creating
+  your own abstractions and plugins depending on your use case.
+</Tip>
+
+## Components
+
+- [InstancedMesh](./components/instancedmesh)
+- Instance
+- InstancedMeshes
+- AudioListener
+- Audio
+- PositionalAudio
+- RoundedBoxGeometry
+- AnimatedSpriteMaterial
+- ContactShadows
+- Float
+- CSM
+- Edges
+- Gizmo
+- Grid
+- Text
+- HTML
+- Environment
+- OrbitControls
+- TrackballControls
+- TransformControls
+- PerfMonitor
+- Portal
+- PortalTarget
+- GLTF
+- Align
+- Sky
+- SoftShadows
+- Suspense
+- MeshLineGeometry
+- MeshLineMaterial
+- MeshRefractionMaterial
+- Text3DGeometry
+- Stars
+- Billboard
+- FakeGlowMaterial
+
+## Hooks
+
+- useGltf
+- useCursor
+- useGamepad
+- useGltfAnimations
+- useProgress
+- useTexture
+- useFBO
+- useAudioListener
+- useThrelteAudio
+- useSuspense
+
+## Lifecycle
+
+- onReveal
+- onSuspend
+
+## Plugins
+
+- layers
+- interactivity
+- transitions

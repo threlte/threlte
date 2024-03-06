@@ -3,22 +3,29 @@ import { resolve } from 'path'
 import starlight from '@astrojs/starlight'
 import starlightLinksValidator from 'starlight-links-validator'
 
-import AutoImport from 'astro-auto-import'
+// import AutoImport from 'astro-auto-import'
 import tailwind from '@astrojs/tailwind'
 import svelte from '@astrojs/svelte'
+
+const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
+if (process.env.NODE_ENV === 'production') {
+  noExternal.push('@theatre/core')
+}
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    AutoImport({
-      imports: [
-        // '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro'
-        // '$components/ManualInstallGuide/ManualInstallGuide.svelte',
-        // '$components/Card/Card.astro'
-      ]
+    // AutoImport({
+    //   imports: [
+    //     // '$components/Example/Example.astro',
+    //     './src/components/Tip/Tip.astro'
+    //     // '$components/ManualInstallGuide/ManualInstallGuide.svelte',
+    //     // '$components/Card/Card.astro'
+    //   ]
+    // }),
+    tailwind({
+      nesting: true
     }),
-    tailwind(),
     svelte(),
     starlight({
       title: 'Threlte',
@@ -92,7 +99,10 @@ export default defineConfig({
         },
         {
           label: 'Tutorials',
-          link: 'tutorials'
+          items: [
+            { label: 'Overview', link: 'tutorials/overview' },
+            { label: 'Basics', link: 'tutorials/' }
+          ]
         },
         {
           label: 'Basics',
@@ -147,5 +157,33 @@ export default defineConfig({
       },
       plugins: [starlightLinksValidator()]
     })
-  ]
+  ],
+  vite: {
+    resolve: {
+      alias: {
+        $lib: resolve('./src/lib'),
+        $components: resolve('./src/components'),
+        $layouts: resolve('./src/layouts'),
+        $pages: resolve('./src/pages'),
+        $styles: resolve('./src/styles'),
+        $assets: resolve('./src/assets'),
+        $examples: resolve('./src/examples'),
+        $hooks: resolve('./src/hooks')
+      }
+    },
+    // Use https and generate a cert to allow XR debugging.
+    // server: {
+    //   https: process.argv.includes('--https')
+    // },
+    // plugins: process.argv.includes('--https') ? [mkcert()] : [],
+    ssr: {
+      // "@theatre/core" needs to be externalized in development mode but not in production!
+      noExternal: noExternal
+    }
+    // legacy: {
+    //   // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
+    //   // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
+    //   proxySsrExternalModules: true
+    // }
+  }
 })
