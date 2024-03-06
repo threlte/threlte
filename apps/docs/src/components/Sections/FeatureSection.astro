@@ -4,9 +4,22 @@ import { c } from '$lib/classes'
 interface Props {
   class?: string
   color?: 'orange' | 'blue' | 'green'
+  reverse?: boolean
+  center?: boolean
 }
 
 const color = Astro.props.color ?? 'orange'
+
+const reverse = Astro.props.reverse ?? false;
+const row = reverse 
+  ? 'md:flex md:flex-row-reverse' 
+  : 'md:flex-row';
+const align = reverse
+  ? 'text-right'
+  : '';
+const end = reverse
+  ? 'flex flex-col items-end'
+  : '';
 
 const glowClasses: Record<NonNullable<Props['color']>, string> = {
   orange:
@@ -30,7 +43,7 @@ text-green-400
 */
 ---
 
-<div class={c('border-y border-white/20 pt-10 pb-16 relative', Astro.props.class ?? '')}>
+<div class={c('border-y border-white/20 pt-10 pb-16 relative', end, Astro.props.class ?? '')}>
   <div
     class="pointer-events-none absolute top-0 left-[00%] h-40 w-[100%] select-none overflow-hidden"
   >
@@ -60,11 +73,11 @@ text-green-400
     )
   }
 
-  <h2 class="text-5xl font-bold">
+  <h2 class={c('text-5xl', 'font-bold', align)}>
     <slot name="headline" />
   </h2>
 
-  <div class="mt-12 flex flex-col gap-8 text-xl text-white/60 md:flex-row">
+  <div class={c('mt-12','flex','flex-col', 'gap-8', 'text-xl', 'text-white/60', row)}>
     <slot name="body" />
 
     {
