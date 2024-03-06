@@ -53,6 +53,24 @@ importers:
       '@stackblitz/sdk':
         specifier: ^1.8.2
         version: 1.8.2
+      '@threlte/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@threlte/extras':
+        specifier: workspace:*
+        version: link:../../packages/extras
+      '@threlte/flex':
+        specifier: workspace:*
+        version: link:../../packages/flex
+      '@threlte/rapier':
+        specifier: workspace:*
+        version: link:../../packages/rapier
+      '@threlte/theatre':
+        specifier: workspace:*
+        version: link:../../packages/theatre
+      '@threlte/xr':
+        specifier: workspace:*
+        version: link:../../packages/xr
       astro:
         specifier: ^4.4.9
         version: 4.4.9(typescript@5.3.3)
@@ -267,33 +285,6 @@ importers:
       vite-plugin-mkcert:
         specifier: ^1.16.0
         version: 1.17.3(vite@5.1.4)
-
-  apps/starlight:
-    dependencies:
-      '@astrojs/check':
-        specifier: ^0.5.6
-        version: 0.5.6(prettier-plugin-astro@0.13.0)(prettier@3.2.4)(typescript@5.3.3)
-      '@astrojs/starlight':
-        specifier: ^0.20.1
-        version: 0.20.1(astro@4.4.6)
-      '@astrojs/tailwind':
-        specifier: ^5.1.0
-        version: 5.1.0(astro@4.4.6)(tailwindcss@3.4.1)
-      astro:
-        specifier: ^4.3.5
-        version: 4.4.6(typescript@5.3.3)
-      sharp:
-        specifier: ^0.32.5
-        version: 0.32.6
-      starlight-links-validator:
-        specifier: ^0.5.3
-        version: 0.5.3(@astrojs/starlight@0.20.1)(astro@4.4.6)
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.1
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
 
   packages/core:
     dependencies:
@@ -1120,34 +1111,6 @@ packages:
     dependencies:
       sitemap: 7.1.1
       zod: 3.22.4
-    dev: false
-
-  /@astrojs/starlight@0.20.1(astro@4.4.6):
-    resolution: {integrity: sha512-MRkX937Q50H6Ly2QnYn+VmG2O+RjsdZl4gAXpfknWpDcxhB8pdUdddgTVAKfrc0czlhm9kzd/sF05CRB9nakqQ==}
-    peerDependencies:
-      astro: ^4.2.7
-    dependencies:
-      '@astrojs/mdx': 2.1.1(astro@4.4.6)
-      '@astrojs/sitemap': 3.1.1
-      '@pagefind/default-ui': 1.0.4
-      '@types/hast': 3.0.3
-      '@types/mdast': 4.0.3
-      astro: 4.4.6(typescript@5.3.3)
-      astro-expressive-code: 0.33.4(astro@4.4.6)
-      bcp-47: 2.1.0
-      hast-util-select: 6.0.2
-      hastscript: 8.0.0
-      mdast-util-directive: 3.0.0
-      mdast-util-to-markdown: 2.1.0
-      pagefind: 1.0.4
-      rehype: 13.0.1
-      remark-directive: 3.0.0
-      unified: 11.0.4
-      unist-util-remove: 4.0.0
-      unist-util-visit: 5.0.0
-      vfile: 6.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /@astrojs/starlight@0.21.0(astro@4.4.9):
@@ -4356,16 +4319,6 @@ packages:
       '@types/node': 18.17.1
       acorn: 8.11.3
       astro: 4.4.9(typescript@5.3.3)
-    dev: false
-
-  /astro-expressive-code@0.33.4(astro@4.4.6):
-    resolution: {integrity: sha512-PtXLjd89WBA1WsDYlt3V1LZs9Pa8FFoXilaGDSyfxtbYJ2OPHjWh2JJvCiXmfXmY3HkPJ2oW9Jjo6om5vUlVcg==}
-    peerDependencies:
-      astro: ^3.3.0 || ^4.0.0-beta
-    dependencies:
-      astro: 4.4.6(typescript@5.3.3)
-      hast-util-to-html: 8.0.4
-      remark-expressive-code: 0.33.4
     dev: false
 
   /astro-expressive-code@0.33.4(astro@4.4.9):
@@ -11361,24 +11314,6 @@ packages:
       jsbn: 0.1.1
       safer-buffer: 2.1.2
       tweetnacl: 0.14.5
-    dev: false
-
-  /starlight-links-validator@0.5.3(@astrojs/starlight@0.20.1)(astro@4.4.6):
-    resolution: {integrity: sha512-v79rwmzjQlEMVL8sZ4dalD/jhFOUvGZ2/f4CvxCySZ9KbEN9nDmgV8zJgfpmTzhbcYQ35wzyUinF4QNxgKVA4g==}
-    engines: {node: '>=18.14.1'}
-    peerDependencies:
-      '@astrojs/starlight': '>=0.15.0'
-      astro: '>=4.0.0'
-    dependencies:
-      '@astrojs/starlight': 0.20.1(astro@4.4.6)
-      astro: 4.4.6(typescript@5.3.3)
-      github-slugger: 2.0.0
-      hast-util-from-html: 2.0.1
-      hast-util-has-property: 3.0.0
-      is-absolute-url: 4.0.1
-      kleur: 4.1.5
-      mdast-util-to-string: 4.0.0
-      unist-util-visit: 5.0.0
     dev: false
 
   /starlight-links-validator@0.5.3(@astrojs/starlight@0.21.0)(astro@4.4.9):
