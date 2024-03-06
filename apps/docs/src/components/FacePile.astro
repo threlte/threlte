@@ -1,0 +1,84 @@
+---
+import type { Contributor } from '$lib/getContributors'
+
+export interface Props {
+  contributors: Contributor[]
+}
+
+const { contributors } = Astro.props as Props
+---
+
+<!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
+<div>
+  <ul class="avatar-list">
+    {
+      contributors.map((item) => (
+        <li>
+          <a href={`https://github.com/${item.login}`}>
+            <img
+              alt={item.login}
+              title={item.login}
+              width="3rem"
+              height="3rem"
+              src={`https://avatars.githubusercontent.com/u/${item.id}?s=64`}
+              loading="lazy"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .avatar-list {
+    --avatar-size: 3rem;
+    --avatar-overlap: -0.125em;
+    --avatar-row-spacing: 0.125em;
+    --avatar-outline-width: 1px;
+    --avatar-outline-offset: 0.08em;
+
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: var(--avatar-border);
+    font-size: var(--avatar-size);
+  }
+
+  .avatar-list li {
+    --avatar-row-margin: calc(
+      var(--avatar-outline-offset) + var(--avatar-outline-width) + var(--avatar-row-spacing) / 2
+    );
+    margin: var(--avatar-row-margin) var(--avatar-overlap) var(--avatar-row-margin) 0;
+  }
+
+  .avatar-list img,
+  .avatar-list a {
+    display: block;
+    border-radius: 50%;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    /* Hide alt/title if Avatar image fails to load. */
+    text-decoration: none;
+    color: transparent;
+  }
+
+  .avatar-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: var(--theme-bg);
+    box-shadow:
+      0 0 0 var(--avatar-outline-width) var(--theme-divider),
+      0 0 0 var(--avatar-outline-offset) var(--theme-bg),
+      0 0 0 calc(var(--avatar-outline-offset) + var(--avatar-outline-width)) var(--theme-divider),
+      0 0 calc(var(--theme-glow-blur) + var(--avatar-outline-offset)) var(--theme-glow-diffuse);
+    /* Indicates the contributor image boundaries for forced colors users, transparent is changed to a solid color */
+    outline: 1px solid transparent;
+  }
+
+  .avatar-list a:focus {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: var(--avatar-outline-offset);
+  }
+</style>
