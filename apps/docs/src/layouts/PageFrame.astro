@@ -4,7 +4,7 @@ import MobileMenuToggle from '@astrojs/starlight/components/MobileMenuToggle.ast
 const { hasSidebar, labels } = Astro.props
 ---
 
-<div class="page sl-flex">
+<div class="page sl-flex bg-[#0A0F19]">
   <header class="header border-b-orange/25 border-b bg-[#0A0F19]"><slot name="header" /></header>
   {
     hasSidebar && (
@@ -17,7 +17,7 @@ const { hasSidebar, labels } = Astro.props
           id="starlight__sidebar"
           class="sidebar-pane"
         >
-          <div class="sidebar-content sl-flex">
+          <div class="sidebar-content sl-flex bg-[#0A0F19]">
             <slot name="sidebar" />
           </div>
         </div>

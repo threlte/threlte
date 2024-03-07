@@ -3,9 +3,12 @@ title: Tutorials
 description: A reference page.
 ---
 
+import Tip from '$components/Tip/Tip.astro'
 import { Card, CardGrid } from '@astrojs/starlight/components'
 
-Introduce the page and set the exceptations.
+Considering merging olddocs/examples into this page.
+
+There are a ton of different challenges and things to consider when creating a 3D project. Here you will find tutorials, guides and how-to's. If your looking for specific recipes and inspiration then browsing through Examples might be for you
 
 ## Quick Start
 
@@ -56,7 +59,7 @@ Introduce the page and set the exceptations.
   </Card>
 </CardGrid>
 
-## More complex tutorials later on
+## More Categories of tutorials
 
 <CardGrid stagger>
   <Card
@@ -78,3 +81,33 @@ Introduce the page and set the exceptations.
     Not everything fits into a neat category
   </Card>
 </CardGrid>
+
+## How tos?
+
+<CardGrid stagger>
+  <Card
+    title="From three.js to threlte"
+    icon="open-book"
+  >
+    A cheatsheet on how to transform three.js concepts/code into threlte components/code
+  </Card>
+  <Card
+    title="Community Creators"
+    icon="add-document"
+  >
+    A Template for building thrid-party sites/modules which extend threlte
+  </Card>
+</CardGrid>
+
+<Tip
+  type="note"
+  title="Help Wanted"
+>
+  We'd love your help to make, add to and edit our tutorials and examples. There lots of examples
+  from [three.js](https://threejs.org/examples/#webgl_animation_keyframes) and
+  [r3f](https://docs.pmnd.rs/react-three-fiber/getting-started/examples) that could serve as
+  inspiration. Read through the [contributing
+  guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) and [Examples
+  README](https://github.com/threlte/threlte/blob/main/apps/docs/src/examples/README.md) to get
+  started.
+</Tip>

@@ -79,10 +79,6 @@ export default defineConfig({
               link: '/getting-started/'
             },
             {
-              label: 'Introduction',
-              link: '/getting-started/introduction'
-            },
-            {
               label: 'Installation',
               link: '/getting-started/installation'
             }
@@ -106,6 +102,10 @@ export default defineConfig({
           items: [
             {
               label: 'App Structure',
+              link: 'basics/structure'
+            },
+            {
+              label: 'etc...',
               link: 'basics/structure'
             }
           ]
@@ -151,7 +151,19 @@ export default defineConfig({
       components: {
         Header: './src/components/Header/Header.astro',
         PageFrame: './src/layouts/PageFrame.astro'
+        // MobileTableOfContents: './src/components/MobileTableOfContents.astro'
       },
+      // customCss: [
+      //   // Relative path to your custom CSS file
+      //   './src/styles/app.css',
+      //   './src/styles/code.css',
+      //   './src/styles/dracula.css',
+      //   './src/styles/markprompt.css',
+      //   './src/styles/prose.css',
+      //   './src/styles/variables.css'
+      // ],
+
+      // links validator is there but not 100% yet
       plugins: [starlightLinksValidator()]
     })
   ],

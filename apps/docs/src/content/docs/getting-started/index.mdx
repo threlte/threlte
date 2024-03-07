@@ -5,16 +5,18 @@ description: Get started building your docs site with Starlight.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 
-Make a cool powered by communitty section like on astro's [getting started page](https://docs.astro.build/en/getting-started/)
+Make a cool FacePile "powered by community" section like on astro's [getting started page](https://docs.astro.build/en/getting-started/)
 
-## Who are our audiences & What problems do they want solved
+## Our Audience
+
+how could we describe options they'll self select
 
 <CardGrid stagger>
   <Card
-    title="Web designers"
+    title="3D Web scrollers"
     icon="pencil"
   >
-    Someone wants a complex 3D scene presented to mobile uers, help
+    Web designers making complex 3D scenes that're presentable to mobile users
   </Card>
   <Card
     title="Game Devs"
@@ -32,6 +34,31 @@ Make a cool powered by communitty section like on astro's [getting started page]
     title="Other?"
     icon="open-book"
   >
-    Who?
+    hello world
   </Card>
 </CardGrid>
+
+## What is threlte?
+
+Threlte is a renderer and component library for using Three.js in a **declarative** and **state-driven** way in Svelte apps. It provides strictly typed components for deep **reactivity** and **interactivity** out-of-the-box.
+
+Threlte is comprised of six distinct packages to allow you to import only what you need:
+
+- [@threlte/core](/docs/reference/core/getting-started) is the heart of Threlte, providing simple transparent Svelte binding to Three.js:
+
+  - [`<T>`](/docs/reference/core/t) is the **main building block** of any Threlte application. It is a thin wrapper around any Three.js
+    object and provides a declarative API to build and render your Threlte app.
+
+  - [Plugins](/docs/learn/advanced/plugins) make it easy to extend Threlte with custom code and logic. Whether you want to implement an ECS or add a single property to every instance of `<T>`, plugins are the way to go.
+
+- [@threlte/extras](/docs/reference/extras/getting-started) is a collection of plugins and components that extend Threlte with additional functionality.
+
+- [@threlte/gltf](/docs/reference/gltf/getting-started) is a command-line tool that turns GLTF assets into declarative and re-usable Threlte components.
+
+- [@threlte/rapier](/docs/reference/rapier/getting-started) provides components to enable performant physics in your Threlte application through the [Rapier engine](https://rapier.rs/)
+
+- [@threlte/theatre](/docs/reference/theatre/getting-started) provides components to enable animations in your Threlte application through the [Theatre.js animation library](https://www.theatrejs.com/)
+
+- [@threlte/xr](/docs/reference/xr/getting-started) provides components for VR and AR.
+
+- [@threlte/flex](/docs/reference/flex/getting-started) provides components to easily use the flex engine [`yoga-layout`](https://yogalayout.com/) with Threlte.
