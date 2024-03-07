@@ -1,0 +1,60 @@
+code {
+  display: inline;
+  @apply rounded-sm bg-white/10 px-1 py-0.5 text-[0.85em] !font-normal text-white;
+}
+.prose a code {
+  @apply text-orange rounded-sm px-1 py-0.5 text-[0.85em] !font-normal;
+}
+pre > code {
+  display: grid;
+  @apply border-0 bg-transparent text-[1em];
+}
+.highlighted {
+  position: relative;
+  @apply bg-blue-700/50;
+}
+.highlighted-add {
+  position: relative;
+  @apply bg-green-700/50;
+}
+.highlighted-modified {
+  position: relative;
+  @apply bg-yellow-500/30;
+}
+.highlighted-remove {
+  position: relative;
+  @apply bg-red-700/50;
+}
+pre code span.line:empty::before {
+  content: ' ';
+}
+pre {
+  counter-reset: line;
+}
+pre code span.line {
+  counter-increment: line;
+  padding-right: 1ch;
+}
+pre code span.line:before {
+  content: counter(line) !important;
+  display: inline-block;
+  width: calc(2ch + 1rem);
+  text-align: right;
+  color: #ccc;
+  user-select: none;
+  opacity: 0.3;
+  margin-left: 0.3ch;
+  @apply mr-2 h-full border-r border-[#ccc]/50 pl-0 pr-2 text-[0.9em];
+}
+pre code span.line.highlighted-add:before {
+  content: '+' !important;
+  opacity: 1;
+}
+pre code span.line.highlighted-remove:before {
+  content: '-' !important;
+  opacity: 1;
+}
+pre code span.line.highlighted-modified:before {
+  content: 'M' !important;
+  opacity: 1;
+}
