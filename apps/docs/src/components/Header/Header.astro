@@ -6,12 +6,6 @@ import Search from '@astrojs/starlight/components/Search.astro'
 import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro'
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
 // import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
-
-import Package from '../Icons/Package.astro'
-import Book from '../Icons/Book.astro'
-import Circles from '../Icons/Circles.astro'
-
-const activeHeader = Astro.url.pathname.split('/')[2]
 ---
 
 <div class="header sl-flex">
@@ -19,7 +13,8 @@ const activeHeader = Astro.url.pathname.split('/')[2]
     <SiteTitle {...Astro.props} />
   </div>
   <div class="sl-flex">
-    <Search {...Astro.props} />
+    {Astro.url.pathname == '/' && <a href="/getting-started/">Documentation</a>}
+    {Astro.url.pathname != '/' && <Search {...Astro.props} />}
   </div>
   <div class="sl-hidden md:sl-flex right-group">
     <SocialIcons {...Astro.props} />
