@@ -81,34 +81,58 @@ export default defineConfig({
             {
               label: 'Installation',
               link: '/getting-started/installation'
+            },
+            {
+              label: 'Migration Guides',
+              link: 'getting-started/migration-guides'
             }
           ]
         },
+        // {
+        //   label: 'Core Concepts',
+        //   items: [
+        //     {
+        //       label: 'Why Threlte?',
+        //       link: 'concepts/threlte'
+        //     }
+        //   ]
+        // },
         {
-          label: 'Core Concepts',
+          label: 'Basics',
           items: [
             {
-              label: 'Why Threlte?',
-              link: 'concepts/threlte'
+              label: 'App Structure',
+              link: 'basics/app-structure'
+            },
+            {
+              label: 'Scheduling Tasks',
+              link: 'basics/scheduling-tasks'
+            },
+            {
+              label: 'Handling Events',
+              link: 'basics/handling-events'
+            },
+            {
+              label: 'Loading Assets',
+              link: 'basics/loading-assets'
+            },
+            {
+              label: 'Render Modes',
+              link: 'basics/render-modes'
+            },
+            {
+              label: 'Disposing Objects',
+              link: 'basics/disposing-objects'
+            },
+            {
+              label: 'Plugins',
+              link: 'basics/plugins'
             }
           ]
         },
         {
           label: 'Tutorials',
           link: 'tutorials/'
-        },
-        {
-          label: 'Basics',
-          items: [
-            {
-              label: 'App Structure',
-              link: 'basics/structure'
-            },
-            {
-              label: 'etc...',
-              link: 'basics/structure'
-            }
-          ]
         },
         {
           label: 'Reference',
