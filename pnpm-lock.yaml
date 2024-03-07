@@ -89,9 +89,15 @@ importers:
       svelte:
         specifier: ^4.2.12
         version: 4.2.12
+      svelte-tweakpane-ui:
+        specifier: ^1.0.0
+        version: 1.0.0(svelte@4.2.12)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.1
+      three:
+        specifier: 0.158.0
+        version: 0.158.0
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -922,7 +928,6 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@0b5vr/tweakpane-plugin-rotation@0.2.0(tweakpane@4.0.1):
     resolution: {integrity: sha512-LK+84kNTusEepVwiKH6ib/Pd+5RxI3UC4rHxn5c14GO58QS49Hh0ft3hFXt/NDzYEST17Q9qg96BcpclhCzYYQ==}
@@ -930,7 +935,6 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
@@ -2423,7 +2427,6 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@kitschpatrol/tweakpane-textarea-plugin@2.0.1(tweakpane@4.0.1):
     resolution: {integrity: sha512-vS8jRQ+SNp7C5E/x+SEO7aF5+qnCtzS2jysiiZlqH5loeXtt7xEklDAhkDU4teikILTOejvBip1umBHH6VkpSg==}
@@ -2432,7 +2435,6 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@lumaai/luma-web@0.1.15(@types/three@0.158.3)(three@0.158.0):
     resolution: {integrity: sha512-gNI7qhwSDdvS6+IVFe9QpD2E/9VXRfO2dUn5CUVgvw+Ldus057ghBKdZ1AYO8Mgi/7J+OI4Nxd7r8YwzRf8/Pg==}
@@ -3513,7 +3515,6 @@ packages:
 
   /@tweakpane/core@2.0.1:
     resolution: {integrity: sha512-iJNrLrLffQR0I8mWgAWcMVO9ZPNdNeXZl66WNT+Op5L9FW7BSF6lwG3izR6Ki9CaI3HzIownwjzYS5xWUaokTA==}
-    dev: true
 
   /@tweakpane/plugin-camerakit@0.3.0(tweakpane@4.0.1):
     resolution: {integrity: sha512-6UwgwDKU+oaAgXJ2D/pOoIpEAZts0RyeLmVzBJGs+VVNqSfkiHzL0i5XD+XnmSL2PaLXBne0dlz0bYOrjmeELw==}
@@ -3521,7 +3522,6 @@ packages:
       tweakpane: ^4.0.0-beta.2
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@tweakpane/plugin-essentials@0.2.0(tweakpane@4.0.1):
     resolution: {integrity: sha512-/kO90nfm0y0CYJPUvoNrjXhjNoqr+RaoySIdJmy++pb5vrSHi/DXdxG/sPszUPZggDY9M31RTacnxXi6Dv7r8Q==}
@@ -3529,7 +3529,6 @@ packages:
       tweakpane: ^4.0.0-beta.2
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /@types/acorn@4.0.6:
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
@@ -6043,7 +6042,6 @@ packages:
 
   /esm-env@1.0.0:
     resolution: {integrity: sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==}
-    dev: true
 
   /espree@9.6.1:
     resolution: {integrity: sha512-oruZaFkjorTpF32kDSI5/75ViwGeZginGGy2NoOSg3Q9bnwlnmDm4HLnkl0RE3n+njDXR037aY1+x58Z/zFdwQ==}
@@ -9142,7 +9140,6 @@ packages:
     resolution: {integrity: sha512-vAjmBf13gsmhXSgBrtIclinISzFFy22WwCYoyilZlsrRXNIHSwgFQ1bEdjRwMT3aoadeIF6HMuDRlOxzfXV8ig==}
     engines: {node: ^18 || >=20}
     hasBin: true
-    dev: true
 
   /napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
@@ -11616,6 +11613,15 @@ packages:
     dependencies:
       svelte: 4.2.9
 
+  /svelte-local-storage-store@0.6.4(svelte@4.2.12):
+    resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || >4.0.0
+    dependencies:
+      svelte: 4.2.12
+    dev: false
+
   /svelte-local-storage-store@0.6.4(svelte@4.2.9):
     resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
     engines: {node: '>=0.14'}
@@ -11729,6 +11735,27 @@ packages:
     dependencies:
       svelte: 4.2.9
     dev: true
+
+  /svelte-tweakpane-ui@1.0.0(svelte@4.2.12):
+    resolution: {integrity: sha512-Zcdeyy7KodnX4Wln7zGknGybmdYVR+MV9MWfk3W3Kipb6+96J2HWfrOp8002qHtFXLAcjt8HCafX+SNCuLYtvw==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      '@0b5vr/tweakpane-plugin-profiler': 0.4.1(tweakpane@4.0.1)
+      '@0b5vr/tweakpane-plugin-rotation': 0.2.0(tweakpane@4.0.1)
+      '@kitschpatrol/tweakpane-image-plugin': 2.0.0(tweakpane@4.0.1)
+      '@kitschpatrol/tweakpane-textarea-plugin': 2.0.1(tweakpane@4.0.1)
+      '@tweakpane/core': 2.0.1
+      '@tweakpane/plugin-camerakit': 0.3.0(tweakpane@4.0.1)
+      '@tweakpane/plugin-essentials': 0.2.0(tweakpane@4.0.1)
+      esm-env: 1.0.0
+      nanoid: 5.0.4
+      svelte: 4.2.12
+      svelte-local-storage-store: 0.6.4(svelte@4.2.12)
+      tweakpane: 4.0.1
+      tweakpane-plugin-waveform: 1.0.0(tweakpane@4.0.1)
+    dev: false
 
   /svelte-tweakpane-ui@1.0.0(svelte@4.2.9):
     resolution: {integrity: sha512-Zcdeyy7KodnX4Wln7zGknGybmdYVR+MV9MWfk3W3Kipb6+96J2HWfrOp8002qHtFXLAcjt8HCafX+SNCuLYtvw==}
@@ -12313,14 +12340,12 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.1
-    dev: true
 
   /tweakpane@3.1.10:
     resolution: {integrity: sha512-rqwnl/pUa7+inhI2E9ayGTqqP0EPOOn/wVvSWjZsRbZUItzNShny7pzwL3hVlaN4m9t/aZhsP0aFQ9U5VVR2VQ==}
 
   /tweakpane@4.0.1:
     resolution: {integrity: sha512-1JmmGbF4h2zuFbpN1XfIWcV0kLbBUgSXpR1QtW19vJFx44asnCrufRSvd69OItOFMEWgbVtoiWM2uDPUEUKcMQ==}
-    dev: true
 
   /tweetnacl@0.14.5:
     resolution: {integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==}
