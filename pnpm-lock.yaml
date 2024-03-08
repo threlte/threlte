@@ -50,9 +50,21 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.0
         version: 5.1.0(astro@4.4.9)(tailwindcss@3.4.1)
+      '@dimforge/rapier3d-compat':
+        specifier: ^0.11.2
+        version: 0.11.2
+      '@lumaai/luma-web':
+        specifier: ^0.2.2
+        version: 0.2.2(@types/three@0.157.2)(three@0.158.0)
+      '@pmndrs/vanilla':
+        specifier: ^1.14.3
+        version: 1.14.3(three@0.158.0)
       '@stackblitz/sdk':
         specifier: ^1.8.2
         version: 1.8.2
+      '@theatre/core':
+        specifier: ^0.7.0
+        version: 0.7.0
       '@threlte/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -77,12 +89,21 @@ importers:
       astro-auto-import:
         specifier: ^0.4.2
         version: 0.4.2(astro@4.4.9)
+      camera-controls:
+        specifier: ^2.8.3
+        version: 2.8.3(three@0.158.0)
+      postprocessing:
+        specifier: ^6.35.1
+        version: 6.35.1(three@0.158.0)
       sharp:
         specifier: ^0.32.5
         version: 0.32.6
       shiki:
         specifier: ^0.14.3
         version: 0.14.3
+      simplex-noise:
+        specifier: ^4.0.1
+        version: 4.0.1
       starlight-links-validator:
         specifier: ^0.5.3
         version: 0.5.3(@astrojs/starlight@0.21.0)(astro@4.4.9)
@@ -1731,7 +1752,6 @@ packages:
 
   /@dimforge/rapier3d-compat@0.11.2:
     resolution: {integrity: sha512-vdWmlkpS3G8nGAzLuK7GYTpNdrkn/0NKCe0l1Jqxc7ZZOB3N0q9uG/Ap9l9bothWuAvxscIt0U97GVLr0lXWLg==}
-    dev: true
 
   /@emmetio/abbreviation@2.3.3:
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -2446,6 +2466,16 @@ packages:
       three: 0.158.0
     dev: true
 
+  /@lumaai/luma-web@0.2.2(@types/three@0.157.2)(three@0.158.0):
+    resolution: {integrity: sha512-NTzVK36cfeNVRuBAof6ghMITaVKGggLGp/BXNhx7jyhp5PpBFX9Q46ibw5Caxy+Kvm5xlCkG7ASCboO/ZHy05w==}
+    peerDependencies:
+      '@types/three': ^0.157.2
+      three: ^0.157.0
+    dependencies:
+      '@types/three': 0.157.2
+      three: 0.158.0
+    dev: false
+
   /@macfja/serializer@1.1.2:
     resolution: {integrity: sha512-kqEg3Zu5/g3ivdeb+jP4rBVVdmtKXVsRwH+x9KdM2Y7d2mKLq54g+YLSgTQ4KwJvWmyHFvRq0ouX5Dr4H1Hw3Q==}
     dev: true
@@ -2750,6 +2780,15 @@ packages:
       three: 0.158.0
       troika-three-text: 0.47.2(three@0.158.0)
     dev: true
+
+  /@pmndrs/vanilla@1.14.3(three@0.158.0):
+    resolution: {integrity: sha512-+Sm1t0QeT7+Jk2UByI7/JV2kQNGGuVzlUa6QriHDXkdyrN8WHySsE27QgSmn+oyEo7YW592hxChAdOmD6o8NZQ==}
+    peerDependencies:
+      three: '>=0.137'
+    dependencies:
+      three: 0.158.0
+      troika-three-text: 0.47.2(three@0.158.0)
+    dev: false
 
   /@polka/url@1.0.0-next.24:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
@@ -3475,10 +3514,22 @@ packages:
     dependencies:
       '@theatre/dataverse': 0.6.2
 
+  /@theatre/core@0.7.0:
+    resolution: {integrity: sha512-CXRUxOaKQtb4biQa6+I6PW8wPsFj9NsZgr7VdosSB20WxlanQ8/ZR0xH/A3A3oCHdCXKaZxQlNcEOeByk4Yf/g==}
+    dependencies:
+      '@theatre/dataverse': 0.7.0
+    dev: false
+
   /@theatre/dataverse@0.6.2:
     resolution: {integrity: sha512-wcnl6QuOVhNFzYL2rmu4lbVRR4t5A6a5ZBjZ4To+J/pKQ5MozPZtWJVPguMAa+rgoxAwVh7sZ0SNEpfYXajgaQ==}
     dependencies:
       lodash-es: 4.17.21
+
+  /@theatre/dataverse@0.7.0:
+    resolution: {integrity: sha512-NbhTZYOqETp9g0II7R9GypErnZ47TmoT6yzyQ0vGfgVLD1a+dsPG+CLvvyzssbGG/gfDDoMzkXNwWJAwNkqFvQ==}
+    dependencies:
+      lodash-es: 4.17.21
+    dev: false
 
   /@theatre/studio@0.6.2(@theatre/core@0.6.2):
     resolution: {integrity: sha512-jX5m7aYMIuXXZXIqc5ZJPIlgP4QnU1lc3sDRcjoNantz47Qzq3/JjRt5MIrahsKKONZwgEvl5WA57qCo7IW+hA==}
@@ -3721,7 +3772,15 @@ packages:
 
   /@types/stats.js@0.17.0:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
-    dev: true
+
+  /@types/three@0.157.2:
+    resolution: {integrity: sha512-2kykrMgvO5LTAiahadM6ijoER+GcbEJ61pQVOyGxIJTCASoUnzwJvfhilsLxvEw4+glzhLYUDvvTvNjx+58Vzw==}
+    dependencies:
+      '@types/stats.js': 0.17.0
+      '@types/webxr': 0.5.5
+      fflate: 0.6.10
+      meshoptimizer: 0.18.1
+    dev: false
 
   /@types/three@0.158.3:
     resolution: {integrity: sha512-6Qs1rUvLSbkJ4hlIe6/rdwIf61j1x2UKvGJg7s8KjswYsz1C1qDTs6voVXXB8kYaI0hgklgZgbZUupfL1l9xdA==}
@@ -3749,7 +3808,6 @@ packages:
 
   /@types/webxr@0.5.5:
     resolution: {integrity: sha512-HVOsSRTQYx3zpVl0c0FBmmmcY/60BkQLzVnpE9M1aG4f2Z0aKlBWfj4XZ2zr++XNBfkQWYcwhGlmuu44RJPDqg==}
-    dev: true
 
   /@types/which-pm-runs@1.0.0:
     resolution: {integrity: sha512-BXfdlYLWvRhngJbih4N57DjO+63Z7AxiFiip8yq3rD46U7V4I2W538gngPvBsZiMehhD8sfGf4xLI6k7TgXvNw==}
@@ -4794,6 +4852,14 @@ packages:
 
   /camera-controls@2.7.3(three@0.158.0):
     resolution: {integrity: sha512-L4mxjBd3u8qiOLozdWrH2P8ZybSsDXBF7iyNyqNEFJhPUkovmuARWR8JTc1B/qlclOIg6FvZZA/0uAZMMim0mw==}
+    peerDependencies:
+      three: '>=0.126.1'
+    dependencies:
+      three: 0.158.0
+    dev: false
+
+  /camera-controls@2.8.3(three@0.158.0):
+    resolution: {integrity: sha512-zFjqUR6onLkG+z1A6vAWfzovxZxWVSvp6e5t3lfZgfgPZtX3n74aykNAUaoRbq8Y3tOxadHkDjbfGDOP9hFf2w==}
     peerDependencies:
       three: '>=0.126.1'
     dependencies:
@@ -10035,6 +10101,15 @@ packages:
       three: 0.158.0
     dev: true
 
+  /postprocessing@6.35.1(three@0.158.0):
+    resolution: {integrity: sha512-qr6U0LfO1gZmbS52hTMvFdH6iQrcaNr9PsOyI2lTrCoG3+S8XTOMvZtgpBsN/WpRKSnA6x9KYmzMndFbcQEUaw==}
+    engines: {node: '>= 0.13.2'}
+    peerDependencies:
+      three: '>= 0.152.0 < 0.163.0'
+    dependencies:
+      three: 0.158.0
+    dev: false
+
   /potpack@1.0.2:
     resolution: {integrity: sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==}
     dev: false
@@ -11144,6 +11219,10 @@ packages:
     resolution: {integrity: sha512-ciRAxJnRdQhFhZ7+yZKxk8bQJoIq2J2UPO2pbzy1vcrWFq70P4hNCCmcCTkBKDCIeXZVd/yKjL8Fmh8Aeu5+6g==}
     dev: true
 
+  /simplex-noise@4.0.1:
+    resolution: {integrity: sha512-zl/+bdSqW7HJOQ0oDbxrNYaF4F5ik0i7M6YOYmEoIJNtg16NpvWaTTM1Y7oV/7T0jFljawLgYPS81Uu2rsfo1A==}
+    dev: false
+
   /sirv@2.0.4:
     resolution: {integrity: sha512-94Bdh3cC2PKrbgSOUqTiGPWVZeSiXfKOVZNJniWoqrWrRkB1CJzBU3NEbiTsPcYy1lDsANA/THzS+9WBiy5nfQ==}
     engines: {node: '>= 10'}
@@ -12103,7 +12182,6 @@ packages:
       troika-three-utils: 0.47.2(three@0.158.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
-    dev: true
 
   /troika-three-text@0.47.2(three@0.160.1):
     resolution: {integrity: sha512-qylT0F+U7xGs+/PEf3ujBdJMYWbn0Qci0kLqI5BJG2kW1wdg4T1XSxneypnF05DxFqJhEzuaOR9S2SjiyknMng==}
@@ -12135,7 +12213,6 @@ packages:
       three: '>=0.125.0'
     dependencies:
       three: 0.158.0
-    dev: true
 
   /troika-three-utils@0.47.2(three@0.160.1):
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { c } from '../../lib/classes'
+  import { c } from '$lib/classes'
 
   export let code: string = ''
 
