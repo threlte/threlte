@@ -1,84 +1,146 @@
 ---
-import type { Contributor } from '$lib/getContributors'
+import { Image } from 'astro:assets'
+import data from '../data/contributors.json'
 
 export interface Props {
-  contributors: Contributor[]
+  tagline: string
+  link: string
+  linkText: string
 }
 
-const { contributors } = Astro.props as Props
+const {
+  tagline = 'Powered by Coffee and our open-source contributors.',
+  link = 'https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md',
+  linkText = 'Join us!'
+} = Astro.props
+
+type Contributor = {
+  avatar_url: string
+}
+
+const allContributors: Contributor[] = data.data
+
+const arrangement = [3, 4, 3, 3, 6, 4, 6, 3, 3, 3]
+const circles = [1, 0, 2, 2, -1, 2, -1, -1, 3, -1]
+const spaces = [-1, -1, -1, 1, -1, -1, -1, -1, -1]
+
+const contributorArrangement = arrangement.map((i) => allContributors.splice(0, i))
 ---
 
-<!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
-<div>
-  <ul class="avatar-list">
-    {
-      contributors.map((item) => (
-        <li>
-          <a href={`https://github.com/${item.login}`}>
-            <img
-              alt={item.login}
-              title={item.login}
-              width="3rem"
-              height="3rem"
-              src={`https://avatars.githubusercontent.com/u/${item.id}?s=64`}
-              loading="lazy"
-            />
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+<div class="mobile-only not-content">
+  <p class="tagline">{tagline} <a href={link}>{linkText}</a></p>
+</div>
+<div class="facepile not-content">
+  {
+    contributorArrangement.map((contributors: (Contributor | number)[], i) => {
+      if (circles[i] !== -1) contributors.splice(circles[i], 0, 1)
+      if (spaces[i] !== -1) contributors.splice(spaces[i], 0, 2)
+      return (
+        <div class="row">
+          {i === 7 && (
+            <p class="tagline">
+              {tagline} <a href={link}>{linkText}</a>
+            </p>
+          )}
+          {contributors.map((cell) =>
+            typeof cell === 'number' ? (
+              <span class:list={[cell === 1 && 'circle']} />
+            ) : (
+              <Image
+                width="84"
+                height="84"
+                quality="low"
+                loading="eager"
+                src={cell.avatar_url}
+                alt=""
+              />
+            )
+          )}
+        </div>
+      )
+    })
+  }
 </div>
 
 <style>
-  .avatar-list {
-    --avatar-size: 3rem;
-    --avatar-overlap: -0.125em;
-    --avatar-row-spacing: 0.125em;
-    --avatar-outline-width: 1px;
-    --avatar-outline-offset: 0.08em;
+  .facepile {
+    /* Size grid fluidly so on mobile 6 avatars fit in the viewport and size is capped at 56px. */
+    --cell-size: min(3.5rem, 13vw);
+    --grid-gap: min(1rem, 3vw);
 
+    margin-block: calc(-0.5 * var(--cell-size));
+    padding: 0 var(--grid-gap);
     display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: var(--avatar-border);
-    font-size: var(--avatar-size);
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--grid-gap);
+    overflow: hidden;
+    /* Cap at 6 rows of avatars on mobile. */
+    max-height: calc(6 * var(--cell-size) + 5 * var(--grid-gap));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black, transparent);
+    pointer-events: none;
+
+    background: radial-gradient(closest-side, var(--sl-color-red-low), transparent) no-repeat
+      calc(100% + var(--cell-size) * 5) 50% / calc(var(--cell-size) * 8) calc(var(--cell-size) * 15);
   }
 
-  .avatar-list li {
-    --avatar-row-margin: calc(
-      var(--avatar-outline-offset) + var(--avatar-outline-width) + var(--avatar-row-spacing) / 2
-    );
-    margin: var(--avatar-row-margin) var(--avatar-overlap) var(--avatar-row-margin) 0;
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--grid-gap);
   }
 
-  .avatar-list img,
-  .avatar-list a {
-    display: block;
-    border-radius: 50%;
-    width: var(--avatar-size);
-    height: var(--avatar-size);
-    /* Hide alt/title if Avatar image fails to load. */
-    text-decoration: none;
-    color: transparent;
+  .row > :not(.tagline) {
+    border-radius: 100%;
+    width: var(--cell-size);
+    height: var(--cell-size);
   }
 
-  .avatar-list img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background-color: var(--theme-bg);
-    box-shadow:
-      0 0 0 var(--avatar-outline-width) var(--theme-divider),
-      0 0 0 var(--avatar-outline-offset) var(--theme-bg),
-      0 0 0 calc(var(--avatar-outline-offset) + var(--avatar-outline-width)) var(--theme-divider),
-      0 0 calc(var(--theme-glow-blur) + var(--avatar-outline-offset)) var(--theme-glow-diffuse);
-    /* Indicates the contributor image boundaries for forced colors users, transparent is changed to a solid color */
-    outline: 1px solid transparent;
+  .circle {
+    border: 1px solid var(--sl-color-white);
+    opacity: 0.2;
   }
 
-  .avatar-list a:focus {
-    outline: 2px solid var(--theme-accent);
-    outline-offset: var(--avatar-outline-offset);
+  .tagline {
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-sm);
+    text-wrap: balance;
+    pointer-events: all;
+  }
+
+  .tagline a {
+    color: var(--sl-color-text-accent);
+    white-space: nowrap;
+  }
+
+  .row > .tagline {
+    text-align: right;
+    max-width: 15rem;
+    padding-inline-end: 0.5rem;
+    /* Negative vertical margin prevents the tagline forcing the grid row wider if text wraps onto three lines. */
+    margin-block: -1rem;
+  }
+
+  .mobile-only {
+    padding: 0 1rem;
+    text-align: center;
+    color: var(--sl-color-white);
+  }
+
+  @media (min-width: 78rem) {
+    .mobile-only {
+      display: none;
+    }
+    .facepile {
+      display: flex;
+      padding: var(--grid-gap);
+      margin-block: 0;
+
+      max-height: unset;
+      -webkit-mask-image: unset;
+      mask-image: unset;
+      background: none;
+    }
   }
 </style>
