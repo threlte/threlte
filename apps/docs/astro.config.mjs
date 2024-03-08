@@ -88,15 +88,6 @@ export default defineConfig({
             }
           ]
         },
-        // {
-        //   label: 'Core Concepts',
-        //   items: [
-        //     {
-        //       label: 'Why Threlte?',
-        //       link: 'concepts/threlte'
-        //     }
-        //   ]
-        // },
         {
           label: 'Basics',
           items: [
