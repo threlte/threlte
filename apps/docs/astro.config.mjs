@@ -7,10 +7,10 @@ import starlightLinksValidator from 'starlight-links-validator'
 import tailwind from '@astrojs/tailwind'
 import svelte from '@astrojs/svelte'
 
-const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
-if (process.env.NODE_ENV === 'production') {
-  noExternal.push('@theatre/core')
-}
+// const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
+// if (process.env.NODE_ENV === 'production') {
+//   noExternal.push('@theatre/core')
+// }
 
 // https://astro.build/config
 export default defineConfig({
@@ -192,22 +192,24 @@ export default defineConfig({
         $styles: resolve('./src/styles'),
         $assets: resolve('./src/assets'),
         $examples: resolve('./src/examples'),
-        $hooks: resolve('./src/hooks')
+        $hooks: resolve('./src/hooks'),
+        $data: resolve('./src/data')
       }
-    },
-    // Use https and generate a cert to allow XR debugging.
-    // server: {
-    //   https: process.argv.includes('--https')
-    // },
-    // plugins: process.argv.includes('--https') ? [mkcert()] : [],
-    ssr: {
-      // "@theatre/core" needs to be externalized in development mode but not in production!
-      noExternal: noExternal
     }
-    // legacy: {
-    //   // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
-    //   // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
-    //   proxySsrExternalModules: true
-    // }
   }
+  //   // Use https and generate a cert to allow XR debugging.
+  //   // server: {
+  //   //   https: process.argv.includes('--https')
+  //   // },
+  //   // plugins: process.argv.includes('--https') ? [mkcert()] : [],
+  //   ssr: {
+  //     // "@theatre/core" needs to be externalized in development mode but not in production!
+  //     noExternal: noExternal
+  //   }
+  //   // legacy: {
+  //   //   // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
+  //   //   // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
+  //   //   proxySsrExternalModules: true
+  //   // }
+  // }
 })
