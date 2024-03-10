@@ -44,7 +44,30 @@
 
   const { invalidate, camera } = useThrelte()
 
-  let uniforms = {
+  const gridPlane = new Plane()
+  const upVector = new Vector3(0, 1, 0)
+  const zeroVector = new Vector3(0, 0, 0)
+
+  const axisToInt = {
+    x: 0,
+    y: 1,
+    z: 2
+  } as const
+
+  const planeToAxes = {
+    xz: 'xzy',
+    xy: 'xyz',
+    zy: 'zyx'
+  } as const
+
+  const gridType = {
+    grid: 0,
+    lines: 1,
+    circular: 2,
+    polar: 3
+  } as const
+
+  const uniforms = {
     cellSize: {
       value: cellSize
     },
@@ -70,7 +93,7 @@
       value: fadeStrength
     },
     cellThickness: {
-      value: 1
+      value: cellThickness
     },
     sectionThickness: {
       value: sectionThickness
@@ -91,10 +114,10 @@
       value: 1
     },
     gridType: {
-      value: 0
+      value: gridType.grid as number
     },
     lineGridCoord: {
-      value: 0
+      value: axisToInt[axis as 'x' | 'y' | 'z']
     },
     circleGridMaxRadius: {
       value: maxRadius
@@ -112,18 +135,6 @@
       value: new Vector3()
     }
   }
-
-  const axisToInt = {
-    x: 0,
-    y: 1,
-    z: 2
-  } as const
-
-  const planeToAxes = {
-    xz: 'xzy',
-    xy: 'xyz',
-    zy: 'zyx'
-  } as const
 
   $: {
     // convert axis string to int indexes xzy = [0,2,1]
@@ -152,21 +163,21 @@
   $: {
     switch (type) {
       case 'grid': {
-        uniforms.gridType.value = 0
+        uniforms.gridType.value = gridType.grid
         break
       }
       case 'lines': {
-        uniforms.gridType.value = 1
+        uniforms.gridType.value = gridType.lines
         uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
         break
       }
       case 'circular': {
-        uniforms.gridType.value = 2
+        uniforms.gridType.value = gridType.circular
         uniforms.circleGridMaxRadius.value = maxRadius
         break
       }
       case 'polar': {
-        uniforms.gridType.value = 3
+        uniforms.gridType.value = gridType.polar
         uniforms.circleGridMaxRadius.value = maxRadius
         uniforms.polarCellDividers.value = cellDividers
         uniforms.polarSectionDividers.value = sectionDividers
@@ -175,10 +186,6 @@
     }
     invalidate()
   }
-
-  const gridPlane = new Plane()
-  const upVector = new Vector3(0, 1, 0)
-  const zeroVector = new Vector3(0, 0, 0)
 
   useTask(() => {
     gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
