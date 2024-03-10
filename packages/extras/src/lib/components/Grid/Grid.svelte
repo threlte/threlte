@@ -1,7 +1,7 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
-  import { T, forwardEventHandlers, useThrelte } from '@threlte/core'
-  import { Color, DoubleSide, type Mesh } from 'three'
+  import { T, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
+  import { Color, DoubleSide, Plane, type Mesh, Vector3 } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { gridComponentShaders } from './gridShaders'
 
@@ -23,6 +23,7 @@
   export let fadeStrength: $$Props['fadeStrength'] = 1
   export let cellThickness: $$Props['cellThickness'] = 1
   export let sectionThickness: $$Props['sectionThickness'] = 2
+  export let side: $$Props['side'] = DoubleSide
 
   export let type: $$Props['type'] = 'grid'
   export let axis: $$Props['axis'] = 'x'
@@ -69,10 +70,10 @@
       value: 1
     },
     uInfiniteGrid: {
-      value: infiniteGrid ? 1 : 0
+      value: infiniteGrid
     },
     uFollowCamera: {
-      value: 0
+      value: followCamera
     },
     uCoord0: {
       value: 0
@@ -97,6 +98,12 @@
     },
     uPolarSectionDividers: {
       value: 2
+    },
+    uWorldCamProjPosition: {
+      value: new Vector3()
+    },
+    uWorldPlanePosition: {
+      value: new Vector3()
     }
   }
 
@@ -121,41 +128,65 @@
     uniforms.uCoord0.value = axisCharToInt[c0]
     uniforms.uCoord1.value = axisCharToInt[c1]
     uniforms.uCoord2.value = axisCharToInt[c2]
+  }
 
-    // common options
-    uniforms.uSize1 = { value: cellSize }
-    uniforms.uSize2 = { value: sectionSize }
-    uniforms.uColor1 = { value: new Color(cellColor) }
-    uniforms.uColor2 = { value: new Color(sectionColor) }
-    uniforms.uBackgroundColor = { value: new Color(backgroundColor) }
-    uniforms.uBackgroundOpacity = { value: backgroundOpacity }
-    uniforms.uFadeDistance = { value: fadeDistance }
-    uniforms.uFadeStrength = { value: fadeStrength }
-    uniforms.uThickness1 = { value: cellThickness }
-    uniforms.uThickness2 = { value: sectionThickness }
-    uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
-    uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
+  $: uniforms.uSize1 = { value: cellSize }
+  $: uniforms.uSize2 = { value: sectionSize }
+  $: uniforms.uColor1.value.set(cellColor)
+  $: uniforms.uColor2.value.set(sectionColor)
+  $: uniforms.uBackgroundColor.value.set(backgroundColor)
+  $: uniforms.uBackgroundOpacity = { value: backgroundOpacity }
+  $: uniforms.uFadeDistance = { value: fadeDistance }
+  $: uniforms.uFadeStrength = { value: fadeStrength }
+  $: uniforms.uThickness1 = { value: cellThickness }
+  $: uniforms.uThickness2 = { value: sectionThickness }
+  $: uniforms.uFollowCamera = { value: followCamera }
+  $: uniforms.uInfiniteGrid = { value: infiniteGrid }
 
-    // grid type specific
-    if (type == 'grid') {
-      uniforms.uGridType = { value: 0 }
-    }
-    if (type === 'lines') {
-      uniforms.uGridType = { value: 1 }
-      uniforms.uLineGridCoord = { value: axisCharToInt[axis as 'x'] }
-    }
-    if (type === 'circular') {
-      uniforms.uGridType = { value: 2 }
-      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
-    }
-    if (type === 'polar') {
-      uniforms.uGridType = { value: 3 }
-      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
-      uniforms.uPolarCellDividers = { value: cellDividers || 0 }
-      uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
+  $: {
+    switch (type) {
+      case 'grid': {
+        uniforms.uGridType = { value: 0 }
+        break
+      }
+      case 'lines': {
+        uniforms.uGridType = { value: 1 }
+        uniforms.uLineGridCoord = { value: axisCharToInt[axis as 'x'] }
+        break
+      }
+      case 'circular': {
+        uniforms.uGridType = { value: 2 }
+        uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
+        break
+      }
+      case 'polar': {
+        uniforms.uGridType = { value: 3 }
+        uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
+        uniforms.uPolarCellDividers = { value: cellDividers || 0 }
+        uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
+      }
     }
     invalidate()
   }
+
+  const gridPlane = new Plane()
+  const upVector = new Vector3(0, 1, 0)
+  const zeroVector = new Vector3(0, 0, 0)
+
+  const { camera } = useThrelte()
+
+  useTask(() => {
+    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
+
+    const gridMaterial = ref.material as THREE.ShaderMaterial
+    const worldCamProjPosition = gridMaterial.uniforms
+      .uWorldCamProjPosition as THREE.Uniform<THREE.Vector3>
+    const worldPlanePosition = gridMaterial.uniforms
+      .uWorldPlanePosition as THREE.Uniform<THREE.Vector3>
+
+    gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
+    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
+  })
 
   const component = forwardEventHandlers()
 </script>
@@ -172,7 +203,7 @@
     {vertexShader}
     {uniforms}
     transparent
-    side={DoubleSide}
+    {side}
   />
   <slot {ref}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
