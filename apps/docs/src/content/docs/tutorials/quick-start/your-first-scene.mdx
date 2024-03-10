@@ -4,7 +4,6 @@ title: Your First Scene
 ---
 
 import Tip from '$components/Tip/Tip.astro'
-import Example from '$components/Example/Example.astro'
 
 <Tip type="info">
   You should be versed in both Svelte and Three.js before rushing into Threlte. If you are unsure
@@ -49,6 +48,7 @@ a [`THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materia
 We should now be looking at a white cube on a transparent background.
 
 {/* prettier-ignore-start */}
+
 ```svelte title="Scene.svelte" {1-8}+
 <script>
   import { T } from '@threlte/core'
@@ -59,12 +59,6 @@ We should now be looking at a white cube on a transparent background.
   <T.MeshBasicMaterial />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-1"
-  hideCode
-/>
 
 <Tip type="info">
   #### attach
@@ -137,13 +131,6 @@ import { T } from '@threlte/core'
 <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ````
-
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-2"
-  hideCode
-/>
 
 Threlte automatically generates props for `<T>` based on the underlying Three.js object. This means you can easily guess most `<T>` props
 based on the <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">Three.js docs</a> for the class you are using.
@@ -241,6 +228,7 @@ of props like `position.y` in our `<T.Mesh>`.
 We're still staring at the side of a cube, let's add a camera and offset it from the center:
 
 {/* prettier-ignore-start */}
+
 ```svelte title="Scene.svelte" {5-11}+
 <script>
   import { T } from '@threlte/core'
@@ -259,12 +247,6 @@ We're still staring at the side of a cube, let's add a camera and offset it from
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-3"
-  hideCode
-/>
 
 We're again using the `<T>` component to create a [`THREE.PerspectiveCamera`](https://threejs.org/docs/index.html#api/en/cameras/PerspectiveCamera).
 We're also passing a `makeDefault` prop which will make this camera the default camera of our application.
@@ -288,6 +270,7 @@ We can now add interaction event listeners to our `<T>` components. We will add 
 and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 
 {/* prettier-ignore-start */}
+
 ```svelte title="Scene.svelte" {3-4,6-7,20-22}+
 <script>
   import { T } from '@threlte/core'
@@ -316,12 +299,6 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-4"
-  hideCode
-/>
 
 <Tip type="info" title="Automatic Vector & Scalar Detection">
   You might have noticed that we're only passing a single number to the prop `scale` on `<T.Mesh>`. Threlte automatically
@@ -352,6 +329,7 @@ into Threlte's **unified frame loop** and run a function on every frame. We agai
 cube rotate around its y-axis.
 
 {/* prettier-ignore-start */}
+
 ```svelte title="Scene.svelte" {2}m {9-12,24}+
 <script>
   import { T, useTask } from '@threlte/core'
@@ -386,12 +364,6 @@ cube rotate around its y-axis.
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-5"
-  hideCode
-/>
 
 `useTask` registers a callback that will be invoked on every frame. The callback receives the time delta since the last frame as an argument. We use
 the delta to update the rotation
@@ -404,6 +376,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
 
 {/* prettier-ignore-start */}
+
 ```svelte title="Scene.svelte" {32}m {22}+
 <script>
   import { T, useTask } from '@threlte/core'
@@ -439,12 +412,6 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
   <T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
-
-<Example
-  path="first-scene/step-6"
-  hideCode
-/>
 
 ## Casting Shadows
 
@@ -501,11 +468,6 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
   <T.MeshStandardMaterial color="white" />
 </T.Mesh>
 ```
-
-<Example
-  path="first-scene/step-7"
-  hideCode
-/>
 
 ## Conclusion
 

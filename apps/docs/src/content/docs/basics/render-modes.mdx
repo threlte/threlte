@@ -3,7 +3,6 @@ title: Render Modes
 ---
 
 import Tip from '$components/Tip/Tip.astro'
-import Example from '$components/Example/Example.astro'
 
 Threlte offers three different render modes to optimize the performance and
 power usage of your Threlte app. Ideally, you only want to render the scene
@@ -19,7 +18,7 @@ re-render. You can tell Threlte to continuously render the scene in the
 
 ## Mode `'on-demand'`
 
-<Example path="other/on-demand-rendering" />
+{/* <Example path="other/on-demand-rendering" /> */}
 
 In the mode `'on-demand'`, Threlte renders the scene only when the current frame
 is **invalidated**. This may happen [automatically when changes are

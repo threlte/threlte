@@ -3,7 +3,6 @@ title: Handling Events
 ---
 
 import Tip from '$components/Tip/Tip.astro'
-import Example from '$components/Example/Example.astro'
 
 Events are a way to listen for changes in the state of the application.
 Listening to events is as easy as adding a regular Svelte event listener to `<T>` components:
@@ -62,7 +61,7 @@ The following example uses the [`change` event from `OrbitControls`](https://thr
 
 ## Click, Pointer and Wheel Events
 
-<Example path="test" />
+{/* <Example path="test" /> */}
 
 To add click, pointer and wheel events to your Threlte app, import the plugin `interactivity` from
 `'@threlte/extras'` and call it in your main scene component.

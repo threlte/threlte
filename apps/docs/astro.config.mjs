@@ -168,7 +168,8 @@ export default defineConfig({
         Header: './src/components/Header/Header.astro',
         PageFrame: './src/layouts/PageFrame.astro'
         // MobileTableOfContents: './src/components/MobileTableOfContents.astro'
-      },
+      }
+
       // customCss: [
       //   // Relative path to your custom CSS file
       //   './src/styles/app.css',
@@ -179,8 +180,8 @@ export default defineConfig({
       //   './src/styles/variables.css'
       // ],
 
-      // links validator is there but not 100% yet
-      plugins: [starlightLinksValidator()]
+      // links validator needs work to complete and should be turned on at the end
+      // plugins: [starlightLinksValidator()]
     })
   ],
   vite: {
@@ -198,7 +199,12 @@ export default defineConfig({
       }
     },
     ssr: {
-      noExternal
+      noExternal: noExternal
+    },
+    legacy: {
+      // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
+      // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
+      proxySsrExternalModules: true
     }
   }
   //   // Use https and generate a cert to allow XR debugging.
@@ -206,10 +212,5 @@ export default defineConfig({
   //   //   https: process.argv.includes('--https')
   //   // },
   //   // plugins: process.argv.includes('--https') ? [mkcert()] : [],
-  //   // legacy: {
-  //   //   // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
-  //   //   // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
-  //   //   proxySsrExternalModules: true
-  //   // }
   // }
 })
