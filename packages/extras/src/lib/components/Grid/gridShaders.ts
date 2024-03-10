@@ -150,7 +150,7 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 		vec3 color = mix(cellColor, sectionColor, min(1.0, sectionThickness * g2));
 
 		if (backgroundOpacity > 0.0) {
-			float linesAlpha = clamp((g1 + g2) * fadeFactor, 0.,1.);
+			float linesAlpha = clamp((g1 + g2) * fadeFactor, 0.0,1.0);
 			vec3 finalColor = mix(backgroundColor, color, linesAlpha);
 			float blendedAlpha = max(linesAlpha, backgroundOpacity * fadeFactor);
 			gl_FragColor = vec4(finalColor, blendedAlpha);
