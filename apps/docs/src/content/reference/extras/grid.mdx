@@ -65,7 +65,8 @@
             default: '2',
             required: false,
             description: "'polar' only. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
-          }
+          },
+          { name: 'side', type: 'THREE.Side', default: 'THREE.DoubleSide', required: false }
         ]
     }
 }
