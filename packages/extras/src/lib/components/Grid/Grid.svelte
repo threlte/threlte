@@ -1,7 +1,15 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
   import { T, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
-  import { Color, DoubleSide, Plane, type Mesh, Vector3 } from 'three'
+  import {
+    Color,
+    DoubleSide,
+    Plane,
+    Vector3,
+    type Mesh,
+    type ShaderMaterial,
+    type Uniform
+  } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
 
@@ -89,13 +97,13 @@
       value: 0
     },
     circleGridMaxRadius: {
-      value: 9
+      value: maxRadius
     },
     polarCellDividers: {
-      value: 6
+      value: cellDividers
     },
     polarSectionDividers: {
-      value: 2
+      value: sectionDividers
     },
     worldCamProjPosition: {
       value: new Vector3()
@@ -105,13 +113,13 @@
     }
   }
 
-  const axisCharToInt = {
+  const axisToInt = {
     x: 0,
     y: 1,
     z: 2
   } as const
 
-  const mapPlaneToAxes = {
+  const planeToAxes = {
     xz: 'xzy',
     xy: 'xyz',
     zy: 'zyx'
@@ -119,13 +127,13 @@
 
   $: {
     // convert axis string to int indexes xzy = [0,2,1]
-    const axes = mapPlaneToAxes[plane]
+    const axes = planeToAxes[plane]
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
     const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
     const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
-    uniforms.coord0.value = axisCharToInt[c0]
-    uniforms.coord1.value = axisCharToInt[c1]
-    uniforms.coord2.value = axisCharToInt[c2]
+    uniforms.coord0.value = axisToInt[c0]
+    uniforms.coord1.value = axisToInt[c1]
+    uniforms.coord2.value = axisToInt[c2]
   }
 
   $: uniforms.cellSize.value = cellSize
@@ -149,19 +157,20 @@
       }
       case 'lines': {
         uniforms.gridType.value = 1
-        uniforms.lineGridCoord.value = axisCharToInt[axis as 'x' | 'y' | 'z']
+        uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
         break
       }
       case 'circular': {
         uniforms.gridType.value = 2
-        uniforms.circleGridMaxRadius.value = maxRadius ?? 0
+        uniforms.circleGridMaxRadius.value = maxRadius
         break
       }
       case 'polar': {
         uniforms.gridType.value = 3
-        uniforms.circleGridMaxRadius.value = maxRadius ?? 0
-        uniforms.polarCellDividers.value = cellDividers ?? 0
-        uniforms.polarSectionDividers.value = sectionDividers ?? 0
+        uniforms.circleGridMaxRadius.value = maxRadius
+        uniforms.polarCellDividers.value = cellDividers
+        uniforms.polarSectionDividers.value = sectionDividers
+        break
       }
     }
     invalidate()
@@ -174,11 +183,9 @@
   useTask(() => {
     gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
 
-    const gridMaterial = ref.material as THREE.ShaderMaterial
-    const worldCamProjPosition = gridMaterial.uniforms
-      .worldCamProjPosition as THREE.Uniform<THREE.Vector3>
-    const worldPlanePosition = gridMaterial.uniforms
-      .worldPlanePosition as THREE.Uniform<THREE.Vector3>
+    const material = ref.material as ShaderMaterial
+    const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
+    const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
 
     gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
     worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
