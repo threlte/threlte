@@ -3,7 +3,7 @@
   import { T, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, Plane, type Mesh, Vector3 } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
-  import { gridComponentShaders } from './gridShaders'
+  import { fragmentShader, vertexShader } from './gridShaders'
 
   type $$Props = Required<GridProps>
   type $$Events = GridEvents
@@ -34,75 +34,73 @@
   // forward ref binding
   export let ref: Mesh
 
-  const { fragmentShader, vertexShader } = gridComponentShaders
-
-  const { invalidate } = useThrelte()
+  const { invalidate, camera } = useThrelte()
 
   let uniforms = {
-    uSize1: {
+    cellSize: {
       value: cellSize
     },
-    uSize2: {
+    sectionSize: {
       value: sectionSize
     },
-    uColor1: {
+    cellColor: {
       value: new Color(cellColor)
     },
-    uColor2: {
+    sectionColor: {
       value: new Color(sectionColor)
     },
-    uBackgroundColor: {
-      value: new Color('#aaaaaa')
+    backgroundColor: {
+      value: new Color(backgroundColor)
     },
-    uBackgroundOpacity: {
-      value: 0.7
+    backgroundOpacity: {
+      value: backgroundOpacity
     },
-    uFadeDistance: {
+    fadeDistance: {
       value: fadeDistance
     },
-    uFadeStrength: {
+    fadeStrength: {
       value: fadeStrength
     },
-    uThickness1: {
+    cellThickness: {
       value: 1
     },
-    uThickness2: {
-      value: 1
+    sectionThickness: {
+      value: sectionThickness
     },
-    uInfiniteGrid: {
+    infiniteGrid: {
       value: infiniteGrid
     },
-    uFollowCamera: {
+    followCamera: {
       value: followCamera
     },
-    uCoord0: {
+    coord0: {
       value: 0
     },
-    uCoord1: {
+    coord1: {
       value: 2
     },
-    uCoord2: {
+    coord2: {
       value: 1
     },
-    uGridType: {
+    gridType: {
       value: 0
     },
-    uLineGridCoord: {
+    lineGridCoord: {
       value: 0
     },
-    uCircleGridMaxRadius: {
+    circleGridMaxRadius: {
       value: 9
     },
-    uPolarCellDividers: {
+    polarCellDividers: {
       value: 6
     },
-    uPolarSectionDividers: {
+    polarSectionDividers: {
       value: 2
     },
-    uWorldCamProjPosition: {
+    worldCamProjPosition: {
       value: new Vector3()
     },
-    uWorldPlanePosition: {
+    worldPlanePosition: {
       value: new Vector3()
     }
   }
@@ -125,45 +123,45 @@
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
     const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
     const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
-    uniforms.uCoord0.value = axisCharToInt[c0]
-    uniforms.uCoord1.value = axisCharToInt[c1]
-    uniforms.uCoord2.value = axisCharToInt[c2]
+    uniforms.coord0.value = axisCharToInt[c0]
+    uniforms.coord1.value = axisCharToInt[c1]
+    uniforms.coord2.value = axisCharToInt[c2]
   }
 
-  $: uniforms.uSize1 = { value: cellSize }
-  $: uniforms.uSize2 = { value: sectionSize }
-  $: uniforms.uColor1.value.set(cellColor)
-  $: uniforms.uColor2.value.set(sectionColor)
-  $: uniforms.uBackgroundColor.value.set(backgroundColor)
-  $: uniforms.uBackgroundOpacity = { value: backgroundOpacity }
-  $: uniforms.uFadeDistance = { value: fadeDistance }
-  $: uniforms.uFadeStrength = { value: fadeStrength }
-  $: uniforms.uThickness1 = { value: cellThickness }
-  $: uniforms.uThickness2 = { value: sectionThickness }
-  $: uniforms.uFollowCamera = { value: followCamera }
-  $: uniforms.uInfiniteGrid = { value: infiniteGrid }
+  $: uniforms.cellSize.value = cellSize
+  $: uniforms.sectionSize.value = sectionSize
+  $: uniforms.cellColor.value.set(cellColor)
+  $: uniforms.sectionColor.value.set(sectionColor)
+  $: uniforms.backgroundColor.value.set(backgroundColor)
+  $: uniforms.backgroundOpacity.value = backgroundOpacity
+  $: uniforms.fadeDistance.value = fadeDistance
+  $: uniforms.fadeStrength.value = fadeStrength
+  $: uniforms.cellThickness.value = cellThickness
+  $: uniforms.sectionThickness.value = sectionThickness
+  $: uniforms.followCamera.value = followCamera
+  $: uniforms.infiniteGrid.value = infiniteGrid
 
   $: {
     switch (type) {
       case 'grid': {
-        uniforms.uGridType = { value: 0 }
+        uniforms.gridType.value = 0
         break
       }
       case 'lines': {
-        uniforms.uGridType = { value: 1 }
-        uniforms.uLineGridCoord = { value: axisCharToInt[axis as 'x'] }
+        uniforms.gridType.value = 1
+        uniforms.lineGridCoord.value = axisCharToInt[axis as 'x' | 'y' | 'z']
         break
       }
       case 'circular': {
-        uniforms.uGridType = { value: 2 }
-        uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
+        uniforms.gridType.value = 2
+        uniforms.circleGridMaxRadius.value = maxRadius ?? 0
         break
       }
       case 'polar': {
-        uniforms.uGridType = { value: 3 }
-        uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
-        uniforms.uPolarCellDividers = { value: cellDividers || 0 }
-        uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
+        uniforms.gridType.value = 3
+        uniforms.circleGridMaxRadius.value = maxRadius ?? 0
+        uniforms.polarCellDividers.value = cellDividers ?? 0
+        uniforms.polarSectionDividers.value = sectionDividers ?? 0
       }
     }
     invalidate()
@@ -173,19 +171,18 @@
   const upVector = new Vector3(0, 1, 0)
   const zeroVector = new Vector3(0, 0, 0)
 
-  const { camera } = useThrelte()
-
   useTask(() => {
     gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
 
     const gridMaterial = ref.material as THREE.ShaderMaterial
     const worldCamProjPosition = gridMaterial.uniforms
-      .uWorldCamProjPosition as THREE.Uniform<THREE.Vector3>
+      .worldCamProjPosition as THREE.Uniform<THREE.Vector3>
     const worldPlanePosition = gridMaterial.uniforms
-      .uWorldPlanePosition as THREE.Uniform<THREE.Vector3>
+      .worldPlanePosition as THREE.Uniform<THREE.Vector3>
 
     gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
     worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
+    invalidate()
   })
 
   const component = forwardEventHandlers()
