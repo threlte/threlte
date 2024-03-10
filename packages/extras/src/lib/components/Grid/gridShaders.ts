@@ -113,7 +113,7 @@ export const fragmentShader = /*glsl*/ `
 		vec2 grid = abs(fract(coord - 0.5) - 0.5) / width;
 		float line = min(grid.x, grid.y);
 
-		if (!infiniteGrid && circleGridMaxRadius > 0. && rad > circleGridMaxRadius + thickness * 0.05) {
+if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + thickness * 0.05) {
 		  discard;
 		}
 
