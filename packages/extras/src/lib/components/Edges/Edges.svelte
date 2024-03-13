@@ -14,10 +14,8 @@
   if (!$parent || $parent.type !== 'Mesh')
     throw new Error('Edges: component must be a child of a Mesh')
 
-  const parentMesh = $parent as Mesh
-
-  const geometry =
-    'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
+  $: parentMesh = $parent as Mesh
+  $: geometry = 'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
 
   const component = forwardEventHandlers()
 </script>
