@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.10.2
+
+### Patch Changes
+
+- 345035c: Add `<Outlines>` component
+
 ## 8.10.1
 
 ### Patch Changes
