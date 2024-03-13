@@ -1,5 +1,45 @@
 # @threlte/extras
 
+## 8.10.1
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
+## 8.10.0
+
+### Minor Changes
+
+- 07af192: Add Text3D component
+
+## 8.9.0
+
+### Minor Changes
+
+- cd5f31d: Remove deprecated encoding-related code to allow compatibility with r162.
+
+  ### Migration
+
+  Three.js r152 or later is now required.
+
+## 8.8.1
+
+### Patch Changes
+
+- b039ee4: Small interactivity internals improvements
+
+## 8.8.0
+
+### Minor Changes
+
+- 34a35f5: <PerfMonitor/> component - easy access to rendering stats like draw calls, triangles, fps etc.
+
+## 8.7.5
+
+### Patch Changes
+
+- 5d9ca58: Fixed a bug where `<Sky>`'s renderTarget wasn't able to be disposed because the canvas context did not exist anymore.
+
 ## 8.7.4
 
 ### Patch Changes

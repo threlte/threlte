@@ -1,4 +1,5 @@
 // Credits to Evan Wallace https://madebyevan.com/shaders/grid/ //
+import { revision } from '../../lib/revision'
 
 const vertexShader = /*glsl*/ `
 	varying vec3 worldPosition;
@@ -147,14 +148,7 @@ const fragmentShader = /*glsl*/ `
 		if(gl_FragColor.a <= 0.0) discard;
 
 		#include <tonemapping_fragment>
-
-		#ifdef USE_COLORSPACE_FRAGMENT
-			#include <colorspace_fragment>
-		#else
-			#include <encodings_fragment>
-		#endif
-
-
+		#include <${revision < 154 ? 'encodings_fragment' : 'colorspace_fragment'}>
 	}
 `
 

@@ -2,7 +2,7 @@
   import { T, forwardEventHandlers } from '@threlte/core'
   import { Edges, Text, useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let text: string
 

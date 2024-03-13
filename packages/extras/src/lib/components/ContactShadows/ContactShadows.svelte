@@ -11,8 +11,8 @@
     ShaderMaterial,
     WebGLRenderTarget
   } from 'three'
-  import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader'
-  import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader'
+  import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
+  import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
   import { useMemo } from '../../lib/useMemo'
   import type {
     ContactShadowsProps,
@@ -52,12 +52,7 @@
   const renderTarget = useMemo(() => {
     const rt = new WebGLRenderTarget(resolution, resolution)
     rt.texture.generateMipmaps = false
-    if ('colorSpace' in rt.texture) {
-      rt.texture.colorSpace = renderer.outputColorSpace
-    } else {
-      // deprecated in three.js r152
-      rt.texture.encoding = renderer.outputEncoding
-    }
+    rt.texture.colorSpace = renderer.outputColorSpace
     return rt
   })
   $: renderTarget.memoize(resolution)

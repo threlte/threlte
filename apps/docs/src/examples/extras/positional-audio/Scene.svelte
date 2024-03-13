@@ -2,7 +2,7 @@
   import { T, useThrelte } from '@threlte/core'
   import { AudioListener, Environment, interactivity, OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Speaker from './Speaker.svelte'
   import Turntable from './Turntable.svelte'
 

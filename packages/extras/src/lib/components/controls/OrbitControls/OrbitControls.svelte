@@ -2,7 +2,7 @@
   import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
 
   import type { Camera } from 'three'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   import { onDestroy } from 'svelte'
 
