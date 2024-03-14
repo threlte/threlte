@@ -34,6 +34,9 @@ export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeometry.svelte'
+export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
+export { default as Outlines } from './components/Outlines/Outlines.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'

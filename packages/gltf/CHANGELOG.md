@@ -1,5 +1,17 @@
 # @threlte/gltf
 
+## 2.0.3
+
+### Patch Changes
+
+- f7f561d: Downgraded sharp
+
+## 2.0.2
+
+### Patch Changes
+
+- 4fbfab2: updating sharp dependency
+
 ## 2.0.1
 
 ### Patch Changes

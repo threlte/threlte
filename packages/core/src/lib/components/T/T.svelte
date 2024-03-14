@@ -1,15 +1,15 @@
 <script lang="ts">
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import { useParent, createParent } from '../../hooks/useParent'
+  import { useParent, createParentContext } from '../../hooks/useParent'
+  import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots, MaybeInstance } from './types'
-  import { isClass, argsIsConstructorParameters, isDisposableObject, extendsObject3D } from './utils/utils'
+  import type { Props, Events, Slots } from './types'
 
   type Type = $$Generic
 
@@ -28,21 +28,14 @@
   export let dispose: AllProps['dispose'] = undefined as unknown as AllProps['dispose']
 
   const parent = useParent()
-  const refStore = createParent()
+
+  // Create Event
   const createEvent = useCreateEvent()
 
   // We can't create the object in a reactive statement due to providing context
-  let ref = (
-    isClass(is) && argsIsConstructorParameters(args)
-      ? new is(...(args as any)) // TODO: fix this any
-      : isClass(is)
-        ? new is()
-        : is
-  ) as MaybeInstance<Type>
+  let ref = determineRef(is, args)
   // The ref is created, emit the event
   createEvent.updateRef(ref)
-
-  $: refStore.set(ref)
 
   let initialized = false
 
@@ -53,13 +46,7 @@
       initialized = true
       return
     }
-    ref = (
-      isClass(is) && argsIsConstructorParameters(args)
-        ? new is(...(args as any)) // TODO: fix this any
-        : isClass(is)
-          ? new is()
-          : is
-    ) as MaybeInstance<Type>
+    ref = determineRef(is, args)
     // The ref is recreated, emit the event
     createEvent.updateRef(ref)
   }
@@ -70,6 +57,9 @@
   let publicRef = ref
   $: publicRef = ref
   export { publicRef as ref }
+
+  const parentContext = createParentContext(ref)
+  $: parentContext.set(ref)
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update

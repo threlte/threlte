@@ -10,7 +10,7 @@
     MeshStandardMaterial,
     PositionalAudio as ThreePositionalAudio
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
 

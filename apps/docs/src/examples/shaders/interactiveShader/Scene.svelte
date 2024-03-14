@@ -3,7 +3,7 @@
   import { OrbitControls } from '@threlte/extras'
   import { createNoise2D } from 'simplex-noise'
   import { PlaneGeometry, Vector3 } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import fragmentShader from './fragment.glsl?raw'
   import vertexShader from './vertex.glsl?raw'
   import { interactivity } from '@threlte/extras'

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { PlaneGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { createNoise2D } from 'simplex-noise'
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'

@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Color, ColorRepresentation, Material, Mesh } from 'three'
 
 export interface TextMesh extends Mesh {
@@ -249,4 +249,4 @@ export type TextEvents = Events<TextMesh>
 
 export type TextSlots = Slots<TextMesh>
 
-export default class Text extends SvelteComponentTyped<TextProps, TextEvents, TextSlots> {}
+export default class Text extends SvelteComponent<TextProps, TextEvents, TextSlots> {}

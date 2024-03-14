@@ -1,7 +1,7 @@
 import type { Props, Events, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Group, Object3D } from 'three'
-import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls'
+import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
 
 export type TransformControlsProps = Props<Group> &
   Props<TC> & {

@@ -1,6 +1,6 @@
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+import type { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
 export type TrackballControlsProps = Props<ThreeTrackballControls>
 export type TrackballControlsEvents = Events<ThreeTrackballControls>

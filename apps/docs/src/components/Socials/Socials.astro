@@ -6,7 +6,7 @@ interface Props {
   discord?: boolean
 }
 
-const { small, twitter, github, discord } = Astro.props
+const { small, twitter = true, github = true, discord = true } = Astro.props
 ---
 
 <div class="flex flex-row items-center gap-3 text-white">

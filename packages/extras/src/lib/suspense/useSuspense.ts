@@ -11,7 +11,7 @@ export const useSuspense = () => {
 
   const promises = new Set<Promise<unknown>>()
 
-  const suspend = <T>(promise: Promise<T>): Promise<T> => {
+  const suspend = <T extends Promise<unknown>>(promise: T): T => {
     if (ctx) {
       ctx.suspend(promise)
       promises.add(promise)

@@ -10,7 +10,7 @@
     WebGLCubeRenderTarget,
     type WebGLRenderTargetOptions
   } from 'three'
-  import { Sky } from 'three/examples/jsm/objects/Sky'
+  import { Sky } from 'three/examples/jsm/objects/Sky.js'
 
   /** The scale of the cuboid skybox along every axis, default: 1000 */
   export let scale = 1000
@@ -104,8 +104,12 @@
 
   onDestroy(() => {
     sky.material.dispose()
-    renderTarget?.dispose()
     scene.environment = originalEnvironment
+    try {
+      renderTarget?.dispose()
+    } catch (error) {
+      console.warn('Could not dispose renderTarget:', error)
+    }
   })
 </script>
 

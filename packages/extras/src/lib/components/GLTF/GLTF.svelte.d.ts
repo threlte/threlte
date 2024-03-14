@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponentTyped } from 'svelte'
+import { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 
 export type GltfProps = Props<Group> & {
@@ -12,4 +12,4 @@ export type GltfProps = Props<Group> & {
 export type GltfEvents = Events<Group>
 export type GltfSlots = Slots<Group>
 
-export default class Gltf extends SvelteComponentTyped<GltfProps, GltfEvents, GltfSlots> {}
+export default class Gltf extends SvelteComponent<GltfProps, GltfEvents, GltfSlots> {}

@@ -14,7 +14,7 @@
   import { writable } from 'svelte/store'
   import type { Euler, Vector3 } from 'three'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { clamp } from 'three/src/math/MathUtils'
+  import { clamp } from 'three/src/math/MathUtils.js'
 
   export let position: Vector3 | undefined = undefined
   export let rotation: Euler | undefined = undefined

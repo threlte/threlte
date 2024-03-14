@@ -1,5 +1,11 @@
 # create-threlte
 
+## 2.0.1
+
+### Patch Changes
+
+- b77feb0: Moved some devDependencies to dependencies for clarity
+
 ## 2.0.0
 
 ### Major Changes

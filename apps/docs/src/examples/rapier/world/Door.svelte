@@ -7,7 +7,7 @@
   import { tweened } from 'svelte/motion'
   import { blur } from 'svelte/transition'
   import { BoxGeometry, Euler, type Group, MeshStandardMaterial, Quaternion } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let open = false
   let objectsInSensor = 0

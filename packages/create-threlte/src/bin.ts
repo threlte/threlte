@@ -189,7 +189,8 @@ const create = async () => {
   spinner.start('Resolving package versions')
 
   const threltePackageJson = {
-    devDependencies: {
+    devDependencies: {},
+    dependencies: {
       three: await resolvePackageVersion('three', '^0.159.0'),
       '@threlte/core': await resolvePackageVersion('@threlte/core')
     },
@@ -202,24 +203,24 @@ const create = async () => {
 			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.159.0')
 		}
 		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
-			threltePackageJson.devDependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
+			threltePackageJson.dependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
 		}
 		if (options.threltePackages.includes('@threlte/rapier')) {
-			threltePackageJson.devDependencies['@threlte/rapier'] = await resolvePackageVersion('@threlte/rapier')
-			threltePackageJson.devDependencies['@dimforge/rapier3d-compat'] = await resolvePackageVersion('@dimforge/rapier3d-compat', '^0.11.2')
+			threltePackageJson.dependencies['@threlte/rapier'] = await resolvePackageVersion('@threlte/rapier')
+			threltePackageJson.dependencies['@dimforge/rapier3d-compat'] = await resolvePackageVersion('@dimforge/rapier3d-compat', '^0.11.2')
 		}
 		if (options.threltePackages.includes('@threlte/theatre')) {
-			threltePackageJson.devDependencies['@threlte/theatre'] = await resolvePackageVersion('@threlte/theatre')
-			threltePackageJson.devDependencies['@theatre/core'] = await resolvePackageVersion('@theatre/core', '^0.7.0')
+			threltePackageJson.dependencies['@threlte/theatre'] = await resolvePackageVersion('@threlte/theatre')
+			threltePackageJson.dependencies['@theatre/core'] = await resolvePackageVersion('@theatre/core', '^0.7.0')
 			threltePackageJson.devDependencies['@theatre/studio'] = await resolvePackageVersion('@theatre/studio', '^0.7.0')
 		}
 		if (options.threltePackages.includes('@threlte/xr')) {
-			threltePackageJson.devDependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
+			threltePackageJson.dependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
 			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.17.1')
 			threltePackageJson.scripts['dev'] = 'vite dev --host'
 		}
 		if (options.threltePackages.includes('@threlte/flex')) {
-			threltePackageJson.devDependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex')
+			threltePackageJson.dependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex')
 		}
 		if (options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'

@@ -2,7 +2,7 @@
   import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
 
   import type { Camera } from 'three'
-  import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+  import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
   import { onDestroy } from 'svelte'
 

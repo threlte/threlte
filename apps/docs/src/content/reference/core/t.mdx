@@ -99,7 +99,7 @@ If you want to use a class that is not available at Three.js' main namespace `'t
 ```svelte title="Camera.svelte" {5-7}
 <script>
   import { T, extend, useThrelte } from '@threlte/core'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   extend({
     OrbitControls
@@ -148,7 +148,7 @@ Using the property `is` comes in handy when using classes that are not exported 
 ```svelte
 <script>
   import { T } from '@threlte/core'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 </script>
 
 <T is={OrbitControls} />
@@ -243,12 +243,14 @@ We only changed the `y` coordinate of the position, so we can use a **pierced pr
 
 This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value. Unfortunately with pierced props we miss out on the type hints and auto-completion.
 
-<Tip type="warning" title="Constant prop types">
-  The type of an inferred prop (or "auto prop") must be constant. This means that
-  the type of a prop must not change for the lifetime of the component. For
-  instance you can't use a variable as a prop that is an array of numbers and then
-  later on change the value of that variable to a single number. This is
-  considered a type change and therefore not allowed.
+<Tip
+  type="warning"
+  title="Constant prop types"
+>
+  The type of an inferred prop (or "auto prop") must be constant. This means that the type of a prop
+  must not change for the lifetime of the component. For instance you can't use a variable as a prop
+  that is an array of numbers and then later on change the value of that variable to a single
+  number. This is considered a type change and therefore not allowed.
 </Tip>
 
 ### args
@@ -442,7 +444,7 @@ are available elsewhere (like `OrbitControls`), you can extend the default catal
 <script>
   import { extend, T } from '@threlte/core'
   import { CustomMesh } from './MyCustomMesh.ts'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   extend({
     CustomMesh

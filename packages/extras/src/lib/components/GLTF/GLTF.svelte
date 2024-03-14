@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createRawEventDispatcher, forwardEventHandlers, T } from '@threlte/core'
-  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
   import { useGltf } from '../../hooks/useGltf'
+  import { useSuspense } from '../../suspense/useSuspense'
   import type { ThrelteGltf } from '../../types/types'
   import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
-  import { useSuspense } from '../../suspense/useSuspense'
 
   type $$Props = GltfProps
   type $$Events = GltfEvents

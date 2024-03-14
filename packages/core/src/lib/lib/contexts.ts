@@ -1,7 +1,6 @@
 import { setContext, tick } from 'svelte'
-import { derived, type Readable, type Updater, type Writable } from 'svelte/store'
+import { derived, type Readable, type Writable } from 'svelte/store'
 import {
-  Clock,
   Scene,
   type Camera,
   type ColorSpace,
@@ -11,7 +10,7 @@ import {
 } from 'three'
 import type { Scheduler, Stage, Task } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
-import { createDefaultCamera } from './defaultCamera'
+import { getDefaultCamera } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
 
 /**
@@ -220,7 +219,7 @@ export const createContexts = (options: {
     size: derived([options.userSize, options.parentSize], ([uSize, pSize]) => {
       return uSize ? uSize : pSize
     }),
-    camera: currentWritable(createDefaultCamera()),
+    camera: currentWritable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined!,
     invalidate: () => {

@@ -1,5 +1,5 @@
 import type { Props } from '@threlte/core'
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 
 export type SpaceshipProps = Props<Group> & {
@@ -17,4 +17,4 @@ export type SpaceshipProps = Props<Group> & {
     | 'Zenith'
 }
 
-export default class Spaceship extends SvelteComponentTyped<SpaceshipProps, {}, {}> {}
+export default class Spaceship extends SvelteComponent<SpaceshipProps, {}, {}> {}

@@ -3,7 +3,6 @@
   import { T, forwardEventHandlers, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, type Mesh } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
-  import { revision } from '../../lib/revision'
   import { gridComponentShaders } from './gridShaders'
 
   type $$Props = Required<GridProps>
@@ -174,9 +173,6 @@
     {uniforms}
     transparent
     side={DoubleSide}
-    defines={{
-      USE_COLORSPACE_FRAGMENT: revision >= 154 ? '' : undefined
-    }}
   />
   <slot {ref}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />

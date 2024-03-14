@@ -4,7 +4,7 @@
   import { onDestroy } from 'svelte'
   import { tweened } from 'svelte/motion'
   import { Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { play, type ArcadeAudio } from '../sound'
   import { useTimeout } from './hooks/useTimeout'
   import { gameState } from './state'

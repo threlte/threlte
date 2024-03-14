@@ -2,7 +2,7 @@
   import { T } from '@threlte/core'
   import { RoundedBoxGeometry, interactivity, useCursor } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   interactivity()
 
