@@ -2,7 +2,7 @@
   import { getContext, setContext, untrack } from 'svelte'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import { useParent, createParent } from '../../hooks/useParent'
+  import { createParentContext, useParent } from '../../hooks/useParent'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
@@ -10,7 +10,7 @@
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
   import type { Props, Events, Slots, MaybeInstance } from './types'
-  import { isClass, argsIsConstructorParameters, isDisposableObject, extendsObject3D } from './utils/utils'
+  import { isDisposableObject, extendsObject3D, determineRef } from './utils/utils'
 
   type Type = $$Generic
 
@@ -18,7 +18,6 @@
     is: Type
   } & Props<Type>
   type $$Props = AllProps
-  type $$Events = Events<Type>
   type $$Slots = Slots<Type>
 
   let {
@@ -31,27 +30,16 @@
     dispose,
     children,
     ...restProps
-  } = $props<{ is: Type } & Props<Type>>()
+  }: AllProps = $props()
 
   const parent = useParent()
-  const refStore = createParent()
+
   const createEvent = useCreateEvent(restProps.$$events)
 
-  const setRef = () => {
-    ref = (
-      isClass(is) && argsIsConstructorParameters(args)
-        ? new is(...(args as any)) // TODO: fix this any
-        : isClass(is)
-          ? new is()
-          : is
-    ) as MaybeInstance<Type>
+  ref = determineRef<Type>(is, args)
 
-    // The ref is created, emit the event
-    createEvent.updateRef(ref)
-    refStore.set(ref)
-  }
-
-  setRef()
+  // The ref is created, emit the event
+  createEvent.updateRef(ref)
 
   let localRef = $state(ref)
 
@@ -61,12 +49,12 @@
     if (ref === localRef) {
       return
     }
-  
+
     localRef = ref
   })
 
   let initialized = false
-  
+
   // When "is" or "args" change, we need to create a new ref.
   $effect(() => {
     // Because reactive statements run immediately, we need to ignore the first run.
@@ -75,8 +63,14 @@
       return
     }
 
-    setRef()
+    ref = determineRef<Type>(is, args)
+
+    // The ref is created, emit the event
+    createEvent.updateRef(ref)
   })
+
+  const parentContext = createParentContext(ref)
+  $effect(() => parentContext.set(ref))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update

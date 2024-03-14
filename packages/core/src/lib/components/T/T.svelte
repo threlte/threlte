@@ -1,7 +1,7 @@
 <script lang="ts">
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import { useParent, createParentContext } from '../../hooks/useParent'
+  import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
@@ -33,12 +33,11 @@
   const createEvent = useCreateEvent()
 
   // We can't create the object in a reactive statement due to providing context
-  let ref = determineRef(is, args)
+  let ref = determineRef<Type>(is, args)
   // The ref is created, emit the event
   createEvent.updateRef(ref)
 
   let initialized = false
-
   // When "is" or "args" change, we need to create a new ref.
   const maybeSetRef = () => {
     // Because reactive statements run immediately, we need to ignore the first run.
@@ -46,7 +45,7 @@
       initialized = true
       return
     }
-    ref = determineRef(is, args)
+    ref = determineRef<Type>(is, args)
     // The ref is recreated, emit the event
     createEvent.updateRef(ref)
   }
@@ -63,7 +62,7 @@
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({ ref, props: $$props })
+  const plugins = usePlugins({ ref: ref, props: $$props })
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
