@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { getContext, setContext, untrack } from 'svelte'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
+  import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots, MaybeInstance } from './types'
-  import { isDisposableObject, extendsObject3D, determineRef } from './utils/utils'
+  import type { Props, Events, Slots } from './types'
 
   type Type = $$Generic
 
@@ -34,6 +33,7 @@
 
   const parent = useParent()
 
+  // Create Event
   const createEvent = useCreateEvent(restProps.$$events)
 
   ref = determineRef<Type>(is, args)
@@ -90,7 +90,6 @@
 
   // Props
   const { updateProps } = useProps()
-
   $effect(() => updateProps(localRef, restProps, {
     manualCamera: manual,
     pluginsProps
@@ -118,9 +117,17 @@
     manual,
     makeDefault,
     dispose,
+    ...restProps
   }))
   $effect(() => plugins?.updateRestProps(restProps))
 </script>
+
+{#if isDisposableObject(ref)}
+  <DisposableObject
+    object={ref}
+    {dispose}
+  />
+{/if}
 
 {#if extendsObject3D(localRef)}
   <SceneGraphObject object={localRef}>
