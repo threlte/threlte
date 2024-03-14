@@ -45,7 +45,7 @@ const augmentConstructorArgs = (
 }
 
 const proxyTConstructor = (is: keyof typeof THREE) => {
-  return new Proxy(function() {}, {
+  return new Proxy(function () {}, {
     construct(_, [args]) {
       const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
       return new TComp(augmentConstructorArgs(castedArgs, is))
@@ -53,7 +53,7 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
     apply(_target, _thisArg, argArray) {
       const module = catalogue[is] || THREE[is]
 
-      if (!module) {
+      if (module === undefined) {
         throw new Error(
           `No Three.js module found for ${is}. Did you forget to extend the catalogue?`
         )
@@ -87,7 +87,7 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
  * </T.Mesh>
  * ```
  */
-export const T = new Proxy(function() {}, {
+export const T = new Proxy(function () {}, {
   construct(_, [args]) {
     const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
     return new TComp(castedArgs)

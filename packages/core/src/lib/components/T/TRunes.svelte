@@ -20,7 +20,7 @@
   type $$Slots = Slots<Type>
 
   let {
-    ref,
+    ref: publicRef,
     is,
     args,
     attach,
@@ -36,25 +36,14 @@
   // Create Event
   const createEvent = useCreateEvent(restProps.$$events)
 
-  ref = determineRef<Type>(is, args)
-
+  // We can't create the object in a reactive statement due to providing context
+  let ref = $state(determineRef<Type>(is, args))
   // The ref is created, emit the event
   createEvent.updateRef(ref)
 
-  let localRef = $state(ref)
-
-  // In order to prevent updates by outside mutations on ref,
-  // we need to create a local ref.
-  $effect(() => {
-    if (ref === localRef) {
-      return
-    }
-
-    localRef = ref
-  })
+  console.log(ref === undefined, is)
 
   let initialized = false
-
   // When "is" or "args" change, we need to create a new ref.
   $effect(() => {
     // Because reactive statements run immediately, we need to ignore the first run.
@@ -62,12 +51,14 @@
       initialized = true
       return
     }
-
     ref = determineRef<Type>(is, args)
-
-    // The ref is created, emit the event
+    // The ref is recreated, emit the event
     createEvent.updateRef(ref)
   })
+
+  // In order to prevent updates by outside mutations on ref,
+  // we need to create a publicly exposed ref.
+  $effect(() => publicRef = ref)
 
   const parentContext = createParentContext(ref)
   $effect(() => parentContext.set(ref))
@@ -90,26 +81,26 @@
 
   // Props
   const { updateProps } = useProps()
-  $effect(() => updateProps(localRef, restProps, {
+  $effect(() => updateProps(ref, restProps, {
     manualCamera: manual,
     pluginsProps
   }))
 
   // Camera
   const camera = useCamera()
-  $effect(() => camera.update(localRef, manual))
-  $effect(() => camera.makeDefaultCamera(localRef, makeDefault))
+  $effect(() => camera.update(ref, manual))
+  $effect(() => camera.makeDefaultCamera(ref, makeDefault))
 
   // Attachment
   const attachment = useAttach()
-  $effect(() => attachment.update(localRef, $parent, attach))
+  $effect(() => attachment.update(ref, $parent, attach))
 
   // Events
   const events = useEvents(restProps.$$events)
-  $effect(() => events.updateRef(localRef))
+  $effect(() => events.updateRef(ref))
 
   // update plugins after all other updates
-  $effect(() => plugins?.updateRef(localRef))
+  $effect(() => plugins?.updateRef(ref))
   $effect(() => plugins?.updateProps({
     is,
     args,
@@ -129,12 +120,12 @@
   />
 {/if}
 
-{#if extendsObject3D(localRef)}
-  <SceneGraphObject object={localRef}>
+{#if extendsObject3D(ref)}
+  <SceneGraphObject object={ref}>
     {#if children}
-      {@render children(localRef)}
+      {@render children(ref)}
     {/if}
   </SceneGraphObject>
 {:else if children}
-  {@render children(localRef)}
+  {@render children(ref)}
 {/if}
