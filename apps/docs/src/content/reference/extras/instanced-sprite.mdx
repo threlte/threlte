@@ -143,19 +143,19 @@ Other than it's own props, `<InstanedSprite/>` extends and accepts all propertie
 
 ```svelte
  <InstancedSprite
-    {spritesheet}
-    count={500}
-    playmode={'FORWARD'}
-    {fps}
-    {billboarding}
-		bind:ref
-		hueShift={{h:1.5, s:0.9, v:1}}
-		randomPlaybackOffset={2000}
-    castShadow
+	bind:ref
+	{spritesheet}
+	count={500}
+	playmode={'FORWARD'}
+	fps={9}
+	billboarding
+	hueShift={{h:1.5, s:0.9, v:1}}
+	randomPlaybackOffset={2000}
+	castShadow
   />
 	```
 
- You create and update instances in three ways:
+You create and update instances in three ways:
 
 1. Utilizing the `useInstancedSprite()` hook (recommended approach).
 2. Using the `<Instance>` component offered through a slot prop.
@@ -187,9 +187,7 @@ Other than it's own props, `<InstanedSprite/>` extends and accepts all propertie
   // play animation backwards with looping
   sprite.play('RunLeft', true, 'REVERSE').at(2);
 
-
   // mesh.play is a utility that combines the use of these functions:
-
   // animation by name
   sprite.animation.setAt(0, 'RunBackward');
   // looping y/n
@@ -232,16 +230,15 @@ The `<Instance>` component serves as a declarative alternative to `useInstancedS
   let:Instance
 >
   {#each { length: 10000 } as _, i}
-    <Instance
+	  <Instance
       position={[Math.random()*100, Math.random()*100, Math.random()*100]}
       scale={[3, 3]}
-			flipX
+      flipX
       id={i}
     />
   {/each}
 </InstancedSprite>
 ```
-
 
 <ComponentSignature
 	titleOverride={` `}
@@ -254,73 +251,73 @@ The `<Instance>` component serves as a declarative alternative to `useInstancedS
             name: 'id',
             type: 'number',
             required: true,
-            description: 'lorem ipsum dolor'
+            description: 'Instance id. Ranges between 0 and the `count` value of InstacedSpriteMesh.'
           },
 					{
             name: 'animationName',
             type: 'string',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Sets an active animation by name.'
           },
 					{
             name: 'position',
             type: 'Vector3Tuple',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Sets the position of an instance.'
           },
 					{
             name: 'scale',
             type: 'Vector2Tuple',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Sets the scale of an instance.'
           },
 					{
             name: 'playmode',
             type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Sets the playmode of an instance.'
           },
 					{
             name: 'billboarding',
             type: 'boolean',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Toggles billboarding on/off.'
           },
 					{
             name: 'offset',
             type: 'number',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Sets the exact time value in ms by which the animation playback is offset.'
           },
 					{
             name: 'loop',
             type: 'boolean',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Toggles looping of the animation on/off. If off, the last played frame is displayed when the animation completes.'
           },
 					{
             name: 'flipX',
             type: 'boolean',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Toggles flipping the sprite horizontally.'
           },
 					{
             name: 'flipY',
             type: 'boolean',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: 'Toggles flipping the sprite vertically.'
           },
 					{
             name: 'frameId',
             type: 'number',
             required: false,
-            description: 'lorem ipsum dolor'
+            description: `Sets an exact frame to display. If animationName is set, it's the id of the frame in that given animation, otherwise it's a spritesheet frame id.`
           }
         ]
     }}
 	/>
 
-  
+
 ### binding
 
 The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>` component, written to enable efficient instancing of animated sprites within a
