@@ -8,9 +8,11 @@ a few different approaches for instancing and updating large numbers of sprites 
 />
 
 
-{/* copied from other entry */}
+## How it works?
 
-## 1. Sprite metadata object
+This covers step-by-step how you can configure `<InstancedSprite/>` component, starting from defining a spritesheet, then adding it to the scene and finally updating the instances in real time.
+
+### Sprite metadata object
 
 ```svelte title=Flyer.svelte
 <script lang="ts">
@@ -47,7 +49,7 @@ The `animations` property is an array, where each element represents a separate 
 
 For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](/docs/reference/extras/instanced-sprite#spritesheetmetadata)
 
-## 2. Adding component to the scene
+### Adding component to the scene
 
 ```svelte title=Flyer.svelte
 {#await flyerSheetbuilder.spritesheet then spritesheet}
@@ -68,7 +70,7 @@ To add the `<InstancedSprite>` component to the scene, you need to specify at le
 `count` and `spritesheet`. The `spritesheet` property is the object obtained as the result of awaiting the Promise of the `buildSpritesheet` function called earlier.
 
 
-## 3. Updating instances
+### Updating instances
 
 In our example, the user made `<UpdaterFlying>` component is responsible for updating sprites.
 This component leverages the `useInstancedSprite()` hook, which makes it easy to access and
@@ -96,3 +98,35 @@ A working example, demonstrating basic random movement, is available in the sour
 	})
 </script>
 ```
+
+## Various approaches
+
+This section goes over each component used in the scene and provides a short explanation of different approaches used with `<InstancedSprite/>` component.
+Every component is designed differently, aimed to present varied approaches to updating instance properties, loading and defining spritesheets.
+
+### From json (people)
+
+`SpriteDudes.svelte` adds sprites with random walk to the scene. One of them is controlled by the player with the use of `WASD` keys.
+This example uses an untyped `useInstancedSprite()` hook within the `UpdaterWalking.svelte` component to update the sprites.
+
+### One file, many animations (flyers)
+
+`SpriteFlyers.svelte` is the sprite from the first section where we went over step by step how to work with the component.
+Here, the spritesheet is constructed using the `buildSpritesheet.from` utility, defining multiple animations within a single sprite file.
+
+Although this setup does not initially add TypeScript autocompletion of animation names, an alternative version found in
+`SpriteFlyersTyped.svelte` addresses this.
+
+### Multiple files, one animation per (goblins)
+
+`SpriteGoblin.svelte` buildis a spritesheet from multiple files, each of them containing a single animation. Similar to the
+flyers, this example uses the `buildSpritesheet.from` utility.
+Instances remain stationary but frequently change their animation. Direct updates to the animation are made through the `InstancedSpriteMesh`,
+accessed via a `ref` binding.
+
+### Static sprites (trees)
+
+The example in `SpriteAtlasTrees.svelte` demonstrates the setup of static sprites, as outlined in [Static sprites & Atlassing](/docs/reference/extras/instanced-sprite#static-sprites--atlassing).
+
+Each frame is named and used as a different tree sprite, selected at random. Then, the playmode is set to "PAUSE," and auto-updates are disabled,
+ensuring that each sprite remains fixed. In this case, the `<Instance/>` component is used for setting positions and frames.
