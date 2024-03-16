@@ -28,7 +28,7 @@
   export let ref = new Mesh()
 
   const suspend = useSuspense()
-  const textureStore = url ? suspend(useTexture(url)) : asyncWritable(Promise.resolve(texture))
+  $: textureStore = url ? suspend(useTexture(url)) : asyncWritable(Promise.resolve(texture))
 
   let { size } = useThrelte()
 

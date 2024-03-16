@@ -5,7 +5,7 @@
 
   interactivity()
 
-  const urls = [
+  let urls = [
     'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Caravaggio_-_Boy_Bitten_by_a_Lizard.jpg/762px-Caravaggio_-_Boy_Bitten_by_a_Lizard.jpg',
     'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/The_Large_Plane_Trees_%28Road_Menders_at_Saint-R%C3%A9my%29%2C_by_Vincent_van_Gogh%2C_Cleveland_Museum_of_Art%2C_1947.209.jpg/963px-The_Large_Plane_Trees_%28Road_Menders_at_Saint-R%C3%A9my%29%2C_by_Vincent_van_Gogh%2C_Cleveland_Museum_of_Art%2C_1947.209.jpg',
     'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/KlimtDieJungfrau.jpg/803px-KlimtDieJungfrau.jpg',
@@ -16,6 +16,8 @@
   const count = urls.length
   const radius = 1.4
 </script>
+
+<svelte:window on:dblclick={() => urls = urls.reverse()} />
 
 <T.PerspectiveCamera
   makeDefault
@@ -34,7 +36,6 @@
   {#each urls as url, index (url)}
     <Card
       {url}
-      {index}
       position={[
         Math.sin((index / count) * Math.PI * 2) * radius,
         0,

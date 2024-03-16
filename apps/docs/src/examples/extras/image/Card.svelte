@@ -4,7 +4,6 @@
   import BentPlaneGeometry from './BentPlaneGeometry.svelte'
   import { DoubleSide } from 'three'
 
-  export let index = 0
   export let url: string
 
   let hovered = false
