@@ -17,7 +17,7 @@
   const radius = 1.4
 </script>
 
-<svelte:window on:dblclick={() => urls = urls.reverse()} />
+<svelte:window on:dblclick={() => (urls = urls.reverse())} />
 
 <T.PerspectiveCamera
   makeDefault
