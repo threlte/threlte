@@ -36,7 +36,7 @@
 
 <script lang="ts">
   import { InstancedSprite } from '@threlte/extras'
-  import UpdaterFlyingHook from './UpdaterFlyingHook.svelte'
+  import FlyingBehaviourHook from '../behaviours/FlyingBehaviourHook.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -56,6 +56,6 @@
       v: 1.5
     }}
   >
-    <UpdaterFlyingHook />
+    <FlyingBehaviourHook />
   </InstancedSprite>
 {/await}

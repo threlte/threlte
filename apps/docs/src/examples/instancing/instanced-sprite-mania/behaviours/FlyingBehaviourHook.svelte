@@ -2,7 +2,7 @@
   import { useTask } from '@threlte/core'
 
   import { Vector2 } from 'three'
-  import { useDemonSprite } from './SpriteFlyersTyped.svelte'
+  import { useDemonSprite } from '../sprites/FlyerSpritesTyped.svelte'
 
   const { updatePosition, count, animationMap, sprite } = useDemonSprite()
 

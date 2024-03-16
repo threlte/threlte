@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
-  import { AdaptedPoissonDiscSample as Sampler } from '../../geometry/random-placement/poisson-random/sampling'
+  import { AdaptedPoissonDiscSample as Sampler } from './util'
   import type { Vector3Tuple } from 'three'
 
   export let billboarding = false

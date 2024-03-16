@@ -9,7 +9,7 @@
   export let billboarding = false
   export let fps: number
 
-  const grass = useTexture('/textures/sprites/pixel_grass.png', {
+  const grass = useTexture('/textures/sprites/pixel-grass.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
       texture.repeat.set(100, 100)
@@ -20,7 +20,7 @@
     }
   })
 
-  const sky = useTexture('/textures/sprites/demo01_PixelSky_1920x1080.png', {
+  const sky = useTexture('/textures/sprites/pixel-sky.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
       texture.repeat.set(10, 2)

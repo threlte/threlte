@@ -7,8 +7,9 @@
 
 <script lang="ts">
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
-  import UpdaterFlying from './UpdaterFlying.svelte'
+
   import type { SpritesheetMetadata } from '@threlte/extras'
+  import FlyingBehaviour from '../behaviours/FlyingBehaviour.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -41,6 +42,6 @@
     castShadow
     {spritesheet}
   >
-    <UpdaterFlying />
+    <FlyingBehaviour />
   </InstancedSprite>
 {/await}
