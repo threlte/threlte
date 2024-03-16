@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.10.3
+
+### Patch Changes
+
+- d3cd996: Minor grid improvements
+
 ## 8.10.2
 
 ### Patch Changes
