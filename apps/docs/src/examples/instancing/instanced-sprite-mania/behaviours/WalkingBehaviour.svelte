@@ -5,31 +5,16 @@
 
   const { updatePosition, count, sprite } = useInstancedSprite()
 
-  const posX: number[] = new Array(count).fill(0)
-  const posZ: number[] = new Array(count).fill(0)
+  const spread = 80
+  const randomPosition = () => {
+    return Math.random() * spread - spread / 2
+  }
 
-  const spread = 40
+  const posX: number[] = Array.from({ length: count }, randomPosition)
+  const posZ: number[] = Array.from({ length: count }, randomPosition)
+
   const minCenterDistance = 3
   const maxCenterDistance = spread
-  const rndPosition: any = () => {
-    const x = Math.random() * spread - spread / 2
-    const y = Math.random() * spread - spread / 2
-
-    /** min distance from 0,0. Recursive reroll if too close */
-
-    if (Math.sqrt(x ** 2 + y ** 2) < minCenterDistance) {
-      return rndPosition()
-    }
-
-    return { x, y }
-  }
-
-  /** update from 1 because 0 is user controlled and set at 0,0 */
-  for (let i = 1; i < count; i++) {
-    const pos = rndPosition()
-    posX[i] = pos.x
-    posZ[i] = pos.y
-  }
 
   type Agent = {
     action: 'Idle' | 'Run'
