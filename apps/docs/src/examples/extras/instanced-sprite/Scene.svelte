@@ -3,8 +3,8 @@
   import { Sky, useTexture } from '@threlte/extras'
   import { BackSide, NearestFilter, RepeatWrapping } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import SpriteAtlasTrees from './SpriteAtlasTrees.svelte'
-  import SpriteDudes from './SpriteDudes.svelte'
+  import TreeSpriteAtlas from './TreeSpriteAtlas.svelte'
+  import DudeSprites from './DudeSprites.svelte'
 
   export let billboarding = false
   export let fps: number
@@ -39,13 +39,13 @@
 	- Michael's Aseprite loader
 	- One is WASD controlled
 -->
-<SpriteDudes
+<DudeSprites
   {billboarding}
   {fps}
 />
 
 <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
-<SpriteAtlasTrees {billboarding} />
+<TreeSpriteAtlas {billboarding} />
 
 <!-- SCENE SETUP: grass, sky, lights -->
 

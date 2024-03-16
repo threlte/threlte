@@ -94,11 +94,10 @@ import ComponentSignature from '../../../components/ComponentSignature/Component
 </Tip>
 
 The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated
-[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene. You can instance
-sprites using the `useInstancedSprite` hook, or with a `<Instance>` component available through a slot prop.
+[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene and update each instance
+using the `useInstancedSprite` hook, or with a `<Instance>` component available through a slot prop.
 
-The component lets you configure your sprites in an
-open data format, which you can build yourself or a convenience `buildSpritesheet` utility. You can find an example of a [complex scene here](/docs/examples/animation/complex-sprite-scene).
+You can find an example of a [more complex scene here](/docs/examples/animation/complex-sprite-scene).
 
 <Example path="extras/instanced-sprite" />
 
@@ -110,6 +109,20 @@ custom solution, provided it meets the component's input requirements.
 
 Other than it's own props, `<InstanedSprite/>` extends and accepts all properties of
 [Three.js instanced mesh](https://threejs.org/docs/#api/en/objects/InstancedMesh), such as `castShadow`, `frustumCulled` etc.
+
+```svelte
+ <InstancedSprite
+	bind:ref
+	{spritesheet}
+	count={500}
+	playmode={'FORWARD'}
+	fps={9}
+	billboarding
+	hueShift={{h:1.5, s:0.9, v:1}}
+	randomPlaybackOffset={2000}
+	castShadow
+  />
+	```
 
 #### Required props
 
@@ -133,19 +146,7 @@ Other than it's own props, `<InstanedSprite/>` extends and accepts all propertie
 | `randomPlaybackOffset` | Offset each sprite's animation timer by a random number of milliseconds. If `true`, randomness is within 0-100ms range. Providing the prop with a number sets the upper range of the offset - `randomPlaybackOffset={2000}` means that the animation will be offset by 0-2000ms  |
 | `hueShift` | Changes sprite look by tweaking the material's output color by a provided hueShift, saturation and vibrance `{h: number, s: number, v:number}`|
 
-```svelte
- <InstancedSprite
-	bind:ref
-	{spritesheet}
-	count={500}
-	playmode={'FORWARD'}
-	fps={9}
-	billboarding
-	hueShift={{h:1.5, s:0.9, v:1}}
-	randomPlaybackOffset={2000}
-	castShadow
-  />
-	```
+
 
 You create and update instances in three ways:
 

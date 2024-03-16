@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask, watch } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { useInstancedSprite } from '@threlte/extras'
   import { Vector2 } from 'three'
 
