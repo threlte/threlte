@@ -17,6 +17,7 @@ import {
   type Vector2Tuple,
   type Vector3Tuple
 } from 'three'
+import type SpriteInstance from './SpriteInstance'
 
 export type InstancedSpriteProps = Props<InstancedMesh> & {
   /**
@@ -38,6 +39,7 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
     | typeof MeshStandardMaterial
     | typeof MeshLambertMaterial
     | typeof MeshPhongMaterial
+  // todo better typing of this in upstream library
 
   /**
    * sets the default global billboarding state that is used unless the setAt was called on the instance
@@ -105,9 +107,11 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
   ref?: InstancedSpriteMesh<Material, unknown>
 }
 
-export type InstancedSpriteEvents = any
-
-export type InstancedSpriteSlots = any
+export type InstancedSpriteSlots = {
+  default: {
+    Instance: typeof SpriteInstance
+  }
+}
 
 export type InstancedSpriteUserCtx<T> = {
   sprite: InstancedSpriteMesh<Material, T>
@@ -118,6 +122,5 @@ export type InstancedSpriteUserCtx<T> = {
 
 export default class InstancedSprite extends SvelteComponent<
   InstancedSpriteProps,
-  InstancedSpriteEvents,
   InstancedSpriteSlots
 > {}

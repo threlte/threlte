@@ -4,6 +4,7 @@
   import {
     DoubleSide,
     Matrix4,
+    Mesh,
     MeshBasicMaterial,
     type Vector2Tuple,
     type Vector3Tuple
@@ -12,7 +13,6 @@
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import type {
-    InstancedSpriteEvents,
     InstancedSpriteProps,
     InstancedSpriteSlots,
     InstancedSpriteUserCtx
@@ -20,8 +20,11 @@
   import SpriteInstance from './SpriteInstance.svelte'
 
   type $$Props = Required<InstancedSpriteProps>
-  type $$Events = InstancedSpriteEvents
+
   type $$Slots = InstancedSpriteSlots
+
+  const g = new Mesh()
+  g.material
 
   export let autoUpdate: $$Props['autoUpdate'] = true
   export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
@@ -54,9 +57,7 @@
 
   const { renderer } = useThrelte()
 
-  export let ref = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer, {
-    triGeometry: false
-  })
+  export let ref = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
 
   const animationMap = writable<Map<string, number>>(new Map())
 
