@@ -1,28 +1,26 @@
 ---
-{
-  order: 5,
-  category: '@threlte/extras',
-  name: <Image>,
-  sourcePath: 'packages/extras/src/lib/components/Image/Image.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
-      'props':
-        [
-          { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
-          { name: 'segments', type: 'number', default: '1', required: false },
-          { name: 'scale', type: '[number, number] | number', default: '1', required: false },
-          { name: 'radius', type: 'number', default: '0', required: false },
-          { name: 'grayscale', type: 'number', default: '0', required: false },
-          { name: 'zoom', type: 'number', default: '1', required: false },
-          { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
-          { name: 'transparent', type: 'boolean', default: 'false', required: false },
-          { name: 'opacity', type: 'number', default: '1', required: false },
-          { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
-        ]
-    }
-}
+order: 5
+category: '@threlte/extras'
+name: <Image>
+sourcePath: 'packages/extras/src/lib/components/Image/Image.svelte'
+type: 'component'
+'componentSignature':
+  {
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    'props':
+      [
+        { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
+        { name: 'segments', type: 'number', default: '1', required: false },
+        { name: 'scale', type: '[number, number] | number', default: '1', required: false },
+        { name: 'radius', type: 'number', default: '0', required: false },
+        { name: 'grayscale', type: 'number', default: '0', required: false },
+        { name: 'zoom', type: 'number', default: '1', required: false },
+        { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
+        { name: 'transparent', type: 'boolean', default: 'false', required: false },
+        { name: 'opacity', type: 'number', default: '1', required: false },
+        { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
+      ]
+  }
 ---
 
 A port of drei's [`<Image>`](https://github.com/pmndrs/drei?tab=readme-ov-file#image) component.
