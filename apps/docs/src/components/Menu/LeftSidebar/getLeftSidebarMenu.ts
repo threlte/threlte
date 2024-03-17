@@ -26,7 +26,8 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
         return {
           title: item.data.name,
           slug: item.slug,
-          isDivider: item.data.isDivider ?? false
+          isDivider: item.data.isDivider ?? false,
+          isSubDivider: item.data.isSubDivider ?? false
         }
       })
     return {

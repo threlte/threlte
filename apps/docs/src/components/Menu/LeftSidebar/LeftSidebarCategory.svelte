@@ -32,6 +32,10 @@
         >
           {item.title}
         </div>
+      {:else if item.isSubDivider}
+        <li class="block py-2 pl-2 pr-4 text-white/90">
+          {item.title}
+        </li>
       {:else}
         <li class="last:mb-0">
           <a
