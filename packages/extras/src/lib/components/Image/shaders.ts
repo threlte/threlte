@@ -112,10 +112,6 @@ vec3 hslToRgb(vec3 hsl) {
 vec3 monochrome(float x, vec3 col) { return col * exp(4.0 * x - 1.0); }
 
 void processColors(inout vec4 colors){
-	// r - brightness
-	// g - contrast
-	// b - hsl
-	// a - alpha override
 	vec4 strength = vec4(1.);
 
 	if(colorProcessingTextureOverride == 1){

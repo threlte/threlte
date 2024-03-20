@@ -1,4 +1,4 @@
-import { Mesh, ColorRepresentation, Side, Texture } from 'three'
+import { Mesh, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 
@@ -29,8 +29,22 @@ export type ImageProps = Props<Mesh> & {
   monochromeColor?: string
   /** Default: false */
   negative?: boolean
-  /** Default: undefined */
-  colorProcessingTexture?: Texture
+  /**
+   * Can be used to adjust the strength and the pattern of color processing
+   *
+   * Each channel of the texture is responsible for a different color processing function  (multiplicative)
+   *
+   * r - brightness
+   *
+   * g - contrast
+   *
+   * b - hsl
+   *
+   * a - alpha override
+   *
+   * Default: undefined
+   * */
+  colorProcessingTexture?: Texture | VideoTexture
   /** Default: true */
   toneMapped?: boolean
   /** Default: false */
