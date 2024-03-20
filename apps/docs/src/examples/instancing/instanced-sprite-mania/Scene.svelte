@@ -85,7 +85,7 @@
     position.y={-10}
     scale.y={0.5}
   >
-    <T.SphereGeometry args={[400]} />
+    <T.SphereGeometry args={[300, 8, 8]} />
     <T.MeshBasicMaterial
       map={$sky}
       side={BackSide}
@@ -98,7 +98,7 @@
     rotation.x={-DEG2RAD * 90}
     receiveShadow
   >
-    <T.PlaneGeometry args={[1000, 1000]} />
+    <T.PlaneGeometry args={[600, 600]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}

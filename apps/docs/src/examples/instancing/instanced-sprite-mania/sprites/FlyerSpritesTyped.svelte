@@ -40,7 +40,7 @@
 
   export let billboarding = false
   export let fps: number
-  const count = 5000
+  const count = 2000
   import { buildSpritesheet } from '@threlte/extras'
 </script>
 

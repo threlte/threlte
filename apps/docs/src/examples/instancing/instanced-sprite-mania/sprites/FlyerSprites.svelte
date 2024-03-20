@@ -34,7 +34,7 @@
 
 {#await flyerSheetbuilder.spritesheet then spritesheet}
   <InstancedSprite
-    count={5000}
+    count={2000}
     playmode={'FORWARD'}
     {fps}
     {billboarding}

@@ -20,7 +20,7 @@
       action: 'Fly',
       timer: 0.1,
       velocity: [0, 1],
-      baseHeight: 3 + Math.random() * 60
+      baseHeight: 2 + Math.random() * 15
     })
   }
 
@@ -28,7 +28,7 @@
   const posY: number[] = new Array(count).fill(0)
   const posZ: number[] = new Array(count).fill(0)
 
-  const spread = 350
+  const spread = 600
   const minCenterDistance = 5
   const maxCenterDistance = spread
   const rndPosition: any = () => {
