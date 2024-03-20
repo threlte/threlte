@@ -29,7 +29,7 @@
   const posY: number[] = new Array(count).fill(0)
   const posZ: number[] = new Array(count).fill(0)
 
-  const spread = 600
+  const spread = 500
   const minCenterDistance = 5
   const maxCenterDistance = spread
   const rndPosition: any = () => {
