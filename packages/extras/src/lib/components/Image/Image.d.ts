@@ -15,6 +15,22 @@ export type ImageProps = Props<Mesh> & {
   radius?: number
   /** Default: 0 */
   grayscale?: number
+  /** Default: 0 */
+  brightness?: number
+  /** Default: 0 */
+  contrast?: number
+  /** Default: 0 */
+  hue?: number
+  /** Default: 0 */
+  saturation?: number
+  /** Default: 0 */
+  lightness?: number
+  /** Default: #535970 */
+  monochromeColor?: string
+  /** Default: false */
+  negative?: boolean
+  /** Default: undefined */
+  colorProcessingTexture?: Texture
   /** Default: true */
   toneMapped?: boolean
   /** Default: false */

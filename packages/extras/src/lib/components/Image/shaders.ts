@@ -19,26 +19,126 @@ uniform vec2 imageBounds;
 uniform float resolution;
 uniform vec3 color;
 uniform sampler2D map;
+uniform sampler2D colorProccessingTexture;
 uniform float radius;
 uniform float zoom;
+uniform float brightness;
+uniform float contrast;
+uniform float monochromeStrength;
+uniform vec3 monochromeColor;
+uniform float negative;
+uniform vec3 hsl;
 uniform float grayscale;
 uniform float opacity;
+uniform int colorProcessingEnabled;
+uniform int colorProcessingTextureOverride;
 
-const vec3 luma = vec3(.299, 0.587, 0.114);
 
-vec4 toGrayscale(vec4 color, float intensity) {
-  return vec4(mix(color.rgb, vec3(dot(color.rgb, luma)), intensity), color.a);
-}
+// const vec3 luma = vec3(.299, 0.587, 0.114);
+
+// vec4 toGrayscale(vec4 color, float intensity) {
+//   return vec4(mix(color.rgb, vec3(dot(color.rgb, luma)), intensity), color.a);
+// }
 
 vec2 aspect(vec2 size) {
   return size / min(size.x, size.y);
 }
 
 const float PI = 3.14159265;
-  
+
 // from https://iquilezles.org/articles/distfunctions
 float udRoundBox(vec2 p, vec2 b, float r) {
   return length(max(abs(p) - b + r, 0.0)) - r;
+}
+
+float hueToRgb(float p, float q, float t) {
+  if (t < 0.0f)
+    t += 1.0f;
+  if (t > 1.0f)
+    t -= 1.0f;
+  if (t < 1.0f / 6.0f)
+    return p + (q - p) * 6.0f * t;
+  if (t < 1.0f / 2.0f)
+    return q;
+  if (t < 2.0f / 3.0f)
+    return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
+  return p;
+}
+
+vec3 rgbToHsl(vec3 color) {
+  float max = max(max(color.r, color.g), color.b);
+  float min = min(min(color.r, color.g), color.b);
+  float h, s, l = (max + min) / 2.0f;
+
+  if (max == min) {
+    h = s = 0.0f;
+  } else {
+    float d = max - min;
+    s = l > 0.5f ? d / (2.0f - max - min) : d / (max + min);
+    if (max == color.r) {
+      h = (color.g - color.b) / d + (color.g < color.b ? 6.0f : 0.0f);
+    } else if (max == color.g) {
+      h = (color.b - color.r) / d + 2.0f;
+    } else if (max == color.b) {
+      h = (color.r - color.g) / d + 4.0f;
+    }
+    h /= 6.0f;
+  }
+
+  return vec3(h, s, l);
+}
+
+vec3 hslToRgb(vec3 hsl) {
+  float h = hsl.x;
+  float s = hsl.y;
+  float l = hsl.z;
+
+  float r, g, b;
+
+  if (s == 0.0f) {
+    r = g = b = l;
+  } else {
+    float q = l < 0.5f ? l * (1.0f + s) : l + s - l * s;
+    float p = 2.0f * l - q;
+    r = hueToRgb(p, q, h + 1.0f / 3.0f);
+    g = hueToRgb(p, q, h);
+    b = hueToRgb(p, q, h - 1.0f / 3.0f);
+  }
+
+  return vec3(r, g, b);
+}
+
+
+vec3 monochrome(float x, vec3 col) { return col * exp(4.0 * x - 1.0); }
+
+void processColors(inout vec4 colors){
+	// r - brightness
+	// g - contrast
+	// b - hsl
+	// a - alpha override
+	vec4 strength = vec4(1.);
+
+	if(colorProcessingTextureOverride == 1){
+		strength = texture2D(colorProccessingTexture, vUv);
+		colors.a = strength.r;
+	}
+
+
+	// BRIGHTNESS
+	colors.rgb = max(colors.rgb + brightness * strength.r,0.);
+	// CONTRAST
+  colors.rgb = max(((colors.rgb - 0.5) * max(contrast*strength.g + 1.0, 0.0)) + 0.5,0.);
+
+	// HSL
+	vec3 hslColor = rgbToHsl(colors.rgb);
+	hslColor.x = mod(hslColor.x + hsl.x ,1.);
+	hslColor.y *= (1.+hsl.y);
+	hslColor.z += hsl.z;
+	colors.rgb = mix(colors.rgb, max(hslToRgb(hslColor), vec3(0.)), strength.b);
+
+	// MONOCHROME
+	colors.rgb = mix(colors.rgb, monochrome(hslColor.z, monochromeColor), monochromeStrength);
+
 }
 
 void main() {
@@ -53,11 +153,16 @@ void main() {
 
   vec2 res = vec2(scale * resolution);
   vec2 halfRes = 0.5 * res;
-  float b = udRoundBox(vUv.xy * res - halfRes, halfRes, resolution * radius);    
+  float b = udRoundBox(vUv.xy * res - halfRes, halfRes, resolution * radius);
   vec3 a = mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), smoothstep(0.0, 1.0, b));
-  gl_FragColor = toGrayscale(texture2D(map, zUv) * vec4(color, opacity * a), grayscale);
+
+	gl_FragColor = texture2D(map, zUv)* vec4(color, opacity * a);
+
+
+	if(colorProcessingEnabled == 1) processColors(gl_FragColor);
 
   #include <tonemapping_fragment>
   #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.) - gl_FragColor.rgb, negative);
 }
 `

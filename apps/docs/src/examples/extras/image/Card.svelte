@@ -3,6 +3,17 @@
   import { spring } from 'svelte/motion'
   import BentPlaneGeometry from './BentPlaneGeometry.svelte'
   import { DoubleSide } from 'three'
+  import {
+    brightness,
+    contrast,
+    negative,
+    hue,
+    saturation,
+    lightness,
+    monochromeColor,
+    monochromeStrength,
+    colorProcessingTexture
+  } from './App.svelte'
 
   export let url: string
 
@@ -31,6 +42,15 @@
   zoom={$zoom}
   on:pointerover={stopPropagation(() => (hovered = true))}
   on:pointerleave={stopPropagation(() => (hovered = false))}
+  brightness={$brightness}
+  contrast={$contrast}
+  negative={$negative}
+  hue={$hue}
+  saturation={$saturation}
+  lightness={$lightness}
+  monochromeColor={$monochromeColor}
+  monochromeStrength={$monochromeStrength}
+  colorProcessingTexture={$colorProcessingTexture}
   {...$$restProps}
 >
   <BentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />

@@ -15,6 +15,13 @@
   ]
   const count = urls.length
   const radius = 1.4
+
+  // const video = document.getElementById('video')
+  // // video.play()
+  // const videoTexture = new VideoTexture(video)
+  // videoTexture.colorSpace = SRGBColorSpace
+
+  // uniforms.colorProccessingTexture.value = videoTexture
 </script>
 
 <svelte:window on:dblclick={() => (urls = urls.reverse())} />

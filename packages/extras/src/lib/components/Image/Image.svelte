@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Color, Vector2, Mesh, type Texture } from 'three'
-  import { T, asyncWritable, forwardEventHandlers, useThrelte } from '@threlte/core'
+  import { Color, Vector2, Mesh, type Texture, VideoTexture, SRGBColorSpace, Vector3 } from 'three'
+  import { T, asyncWritable, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
   import type { ImageProps, ImageEvents, ImageSlots } from './Image'
   import { useSuspense } from '../../suspense/useSuspense'
@@ -17,7 +17,15 @@
   export let scale: Props['scale'] = 1
   export let zoom: Props['zoom'] = 1
   export let radius: Props['radius'] = 0
-  export let grayscale: Props['grayscale'] = 0
+  export let brightness: Props['brightness'] = 0
+  export let contrast: Props['contrast'] = 0
+  export let hue: Props['hue'] = 0
+  export let saturation: Props['saturation'] = 0
+  export let lightness: Props['lightness'] = 0
+  export let monochromeColor: Props['monochromeColor'] = '#535970'
+  export let monochromeStrength: Props['monochromeStrength'] = 0
+  export let negative: Props['negative'] = false
+  export let colorProcessingTexture: Props['colorProcessingTexture'] = undefined
   export let opacity: Props['opacity'] = 1
   export let texture: Props['texture'] = undefined
   export let toneMapped: Props['toneMapped'] = true
@@ -42,8 +50,16 @@
     map: { value: null as Texture | null },
     zoom: { value: zoom },
     radius: { value: radius },
-    grayscale: { value: grayscale },
-    opacity: { value: opacity }
+    brightness: { value: brightness },
+    contrast: { value: contrast },
+    monochromeColor: { value: new Color(monochromeColor) },
+    monochromeStrength: { value: monochromeStrength },
+    negative: { value: negative ? 1 : 0 },
+    opacity: { value: opacity },
+    hsl: { value: new Vector3(0, 0, 0) },
+    colorProccessingTexture: { value: null as Texture | null },
+    colorProcessingTextureOverride: { value: 0 },
+    colorProcessingEnabled: { value: 1 }
   }
 
   $: uniforms.color.value.set(color)
@@ -59,9 +75,52 @@
   $: uniforms.resolution.value = Math.max($size.width, $size.height)
   $: uniforms.zoom.value = zoom
   $: uniforms.radius.value = radius
-  $: uniforms.grayscale.value = grayscale
   $: uniforms.opacity.value = opacity
+  $: uniforms.brightness.value = brightness
+  $: uniforms.contrast.value = contrast
+  $: uniforms.hsl.value.x = hue
+  $: uniforms.hsl.value.y = saturation
+  $: uniforms.hsl.value.z = lightness
+  $: uniforms.monochromeColor.value.set(monochromeColor)
+  $: uniforms.negative.value = negative ? 1 : 0
   $: uniforms.map.value = $textureStore ?? null
+  $: uniforms.colorProccessingTexture.value = colorProcessingTexture
+  $: uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
+
+  $: {
+    if (monochromeColor && typeof monochromeStrength === undefined) {
+      uniforms.monochromeStrength.value = 1
+    }
+    if (monochromeColor && typeof monochromeStrength === 'number') {
+      uniforms.monochromeStrength.value = monochromeStrength
+    }
+    if (typeof monochromeColor === undefined) {
+      uniforms.monochromeStrength.value = 0
+    }
+  }
+
+  $: {
+    let colorProcessingEnabled = 0
+    const monochromeCheck =
+      (monochromeColor ? 1 : 0) * (typeof monochromeStrength === undefined ? 1 : monochromeStrength)
+    ;[
+      brightness,
+      contrast,
+      hue,
+      saturation,
+      lightness,
+      Number(negative),
+      monochromeCheck,
+      colorProcessingTexture ? 1 : 0
+    ].forEach((value) => {
+      if (value !== 0) {
+        colorProcessingEnabled = 1
+      }
+    })
+    uniforms.colorProcessingEnabled.value = colorProcessingEnabled
+  }
+
+  $: console.log(uniforms.colorProcessingEnabled.value)
 
   // Support arbitrary plane geometries (for instance with rounded corners)
   $: if ('parameters' in ref.geometry) {
