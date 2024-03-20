@@ -109,7 +109,6 @@
       hue,
       saturation,
       lightness,
-      Number(negative),
       monochromeCheck,
       colorProcessingTexture ? 1 : 0
     ].forEach((value) => {
@@ -119,8 +118,6 @@
     })
     uniforms.colorProcessingEnabled.value = colorProcessingEnabled
   }
-
-  $: console.log(uniforms.colorProcessingEnabled.value)
 
   // Support arbitrary plane geometries (for instance with rounded corners)
   $: if ('parameters' in ref.geometry) {
