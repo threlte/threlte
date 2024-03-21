@@ -59,15 +59,20 @@
     }
   }
 
-  const REGION_W = 200
-  const REGION_Z = 200
+  const REGION_W = 600
+  const REGION_Z = 600
 
   const greenTrees = 11
   const redTrees = 7
   const deadTrees = 3
 
-  const sampler = new Sampler(2.2, [REGION_W, REGION_Z], undefined, Math.random)
-  const points = sampler.GeneratePoints()
+  const maxRadius = 107
+
+  const sampler = new Sampler(4, [REGION_W, REGION_Z], undefined, Math.random)
+
+  const points = sampler.GeneratePoints().filter((v) => {
+    return Math.sqrt((v[0] - REGION_W / 2) ** 2 + (v[1] - REGION_Z / 2) ** 2) < maxRadius
+  })
 
   const pickRandomTreeType = () => {
     const rnd = Math.random()
@@ -87,7 +92,7 @@
     // also, flip random trees on X axis for more variety
     if (sprite) {
       for (let i = 0; i < points.length; i++) {
-        sprite.flipX.setAt(i, Math.random() > 0.85 ? true : false)
+        sprite.flipX.setAt(i, Math.random() > 0.6 ? true : false)
       }
       sprite.update()
     }

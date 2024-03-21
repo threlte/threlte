@@ -67,7 +67,7 @@
     rotation.x={-DEG2RAD * 90}
     receiveShadow
   >
-    <T.PlaneGeometry args={[150, 150]} />
+    <T.CircleGeometry args={[110]} />
     <T.MeshLambertMaterial map={$grass} />
   </T.Mesh>
 {/if}

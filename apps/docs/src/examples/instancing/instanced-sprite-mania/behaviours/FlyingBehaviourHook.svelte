@@ -3,6 +3,7 @@
 
   import { Vector2 } from 'three'
   import { useDemonSprite } from '../sprites/FlyerSpritesTyped.svelte'
+  import { randomPosition } from '../util'
 
   const { updatePosition, count, animationMap, sprite } = useDemonSprite()
 
@@ -29,22 +30,12 @@
   const posY: number[] = new Array(count).fill(0)
   const posZ: number[] = new Array(count).fill(0)
 
-  const spread = 500
+  const spawnRadius = 250
   const minCenterDistance = 5
-  const maxCenterDistance = spread
-  const rndPosition: any = () => {
-    const x = Math.random() * spread - spread / 2
-    const y = Math.random() * spread - spread / 2
-
-    if (Math.sqrt(x ** 2 + y ** 2) < minCenterDistance) {
-      return rndPosition()
-    }
-
-    return { x, y }
-  }
+  const maxCenterDistance = spawnRadius
 
   for (let i = 0; i < agents.length; i++) {
-    const pos = rndPosition()
+    const pos = randomPosition(spawnRadius)
     posX[i] = pos.x
     posY[i] = agents[i].baseHeight
     posZ[i] = pos.y
