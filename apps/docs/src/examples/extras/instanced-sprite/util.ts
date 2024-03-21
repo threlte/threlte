@@ -114,3 +114,14 @@ export class AdaptedPoissonDiscSample extends PoissonDiscSample {
     this.spawnPoints.push([x, y])
   }
 }
+
+export const randomPosition: any = (radius = 100) => {
+  const x = (Math.random() - 0.5) * radius * 2
+  const y = (Math.random() - 0.5) * radius * 2
+
+  if (Math.sqrt(x ** 2 + y ** 2) > radius) {
+    return randomPosition()
+  }
+
+  return { x, y }
+}

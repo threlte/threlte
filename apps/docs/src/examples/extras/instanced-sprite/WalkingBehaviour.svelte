@@ -2,16 +2,20 @@
   import { useTask } from '@threlte/core'
   import { useInstancedSprite } from '@threlte/extras'
   import { Vector2 } from 'three'
+  import { randomPosition } from './util'
 
   const { updatePosition, count, sprite } = useInstancedSprite()
 
-  const spread = 40
-  const randomPosition = () => {
-    return Math.random() * spread - spread / 2
-  }
+  const posX: number[] = Array.from({ length: count })
+  const posZ: number[] = Array.from({ length: count })
 
-  const posX: number[] = Array.from({ length: count }, randomPosition)
-  const posZ: number[] = Array.from({ length: count }, randomPosition)
+  const spawnRadius = 100
+
+  for (let i = 0; i < count; i++) {
+    const pos = randomPosition(spawnRadius)
+    posX[i] = pos.x
+    posZ[i] = pos.y
+  }
 
   type Agent = {
     action: 'Idle' | 'Run'
