@@ -122,8 +122,11 @@ void processColors(inout vec4 colors){
 		float smoothedAlpha = smoothstep(1.-alphaProgress-alphaSmoothing, 1.-alphaProgress, strength.a+0.0001);
 		colors.a*=smoothedAlpha;
 
-		if ( gl_FragColor.a == 0.0 ) discard;
-		return;
+		if ( gl_FragColor.a == 0.0 ) {
+			discard;
+			return;
+		}
+
 	}
 
 
