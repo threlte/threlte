@@ -13,7 +13,7 @@
   export const monochromeColor = writable('#ed8922')
   export const monochromeStrength = writable(0)
 
-  export const textureOverrideEnabled = writable(true)
+  export const textureOverrideEnabled = writable(false)
 
   export const colorProcessingTexture = writable<Texture | undefined>()
 </script>
@@ -21,7 +21,7 @@
 <script lang="ts">
   import { Canvas, watch } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Slider, Checkbox, Folder, Element, Color } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, Checkbox, Folder, Color } from 'svelte-tweakpane-ui'
   import { writable } from 'svelte/store'
   import { Texture } from 'three'
 
@@ -95,7 +95,7 @@
       label="negative"
     />
   </Folder>
-  <Folder title="Texture override">
+  <Folder title="Color processing with a texture">
     <Checkbox
       bind:value={$textureOverrideEnabled}
       label="enabled"

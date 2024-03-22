@@ -14,8 +14,6 @@ export type ImageProps = Props<Mesh> & {
   /** Default: 0 */
   radius?: number
   /** Default: 0 */
-  grayscale?: number
-  /** Default: 0 */
   alphaProgress?: number
   /** Default: 0.1 */
   alphaSmoothing?: number
@@ -31,12 +29,15 @@ export type ImageProps = Props<Mesh> & {
   lightness?: number
   /** Default: #535970 */
   monochromeColor?: string
+  /** Default: 0 */
+  monochromeStrength?: number
   /** Default: false */
   negative?: boolean
   /**
    * Can be used to adjust the strength and the pattern of color processing
    *
-   * Each channel of the texture is responsible for a different color processing function  (multiplicative)
+   * Each channel of the texture is responsible for a different color processing function
+   * (multiplicatively with the effect's value set via the other props)
    *
    * r - hue
    *

@@ -121,6 +121,9 @@ void processColors(inout vec4 colors){
 
 		float smoothedAlpha = smoothstep(1.-alphaProgress-alphaSmoothing, 1.-alphaProgress, strength.a+0.0001);
 		colors.a*=smoothedAlpha;
+
+		if ( gl_FragColor.a == 0.0 ) discard;
+		return;
 	}
 
 
@@ -161,11 +164,11 @@ void main() {
 
 
 	if(colorProcessingEnabled == 1) processColors(gl_FragColor);
+	if ( gl_FragColor.a == 0.0 ) discard;
 
   #include <tonemapping_fragment>
   #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
 	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.) - gl_FragColor.rgb, negative);
 
-	if ( gl_FragColor.a == 0.0 ) discard;
 }
 `
