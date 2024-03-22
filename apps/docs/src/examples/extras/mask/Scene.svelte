@@ -70,7 +70,7 @@
   let:ref
 >
   <Mask id={target}>
-    <T.CircleGeometry args={[0.6]} />
+    <T.CircleGeometry args={[0.65]} />
     <T.MeshBasicMaterial />
   </Mask>
   <T.Mesh>
@@ -105,10 +105,7 @@
   floatIntensity={1}
   floatingRange={[0, 1]}
 >
-  <T.Mesh
-    position={[0, 0.3, 0]}
-    on:create={(ref) => console.log(ref)}
-  >
+  <T.Mesh position={[0, 0.3, 0]}>
     <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
     <T.MeshStandardMaterial
       color="#F85122"
