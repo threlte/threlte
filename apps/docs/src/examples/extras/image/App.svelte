@@ -13,7 +13,7 @@
   export const monochromeColor = writable('#ed8922')
   export const monochromeStrength = writable(0)
 
-  export const textureOverrideEnabled = writable(true)
+  export const textureOverrideEnabled = writable(false)
 
   export const colorProcessingTexture = writable<Texture | undefined>()
 </script>
@@ -107,5 +107,6 @@
 <style>
   div {
     height: 100%;
+    background-color: #121212;
   }
 </style>

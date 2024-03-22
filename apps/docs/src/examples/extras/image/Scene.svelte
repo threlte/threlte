@@ -35,6 +35,7 @@
   on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls
+    autoRotate
     enableDamping
     enableZoom={false}
   />
