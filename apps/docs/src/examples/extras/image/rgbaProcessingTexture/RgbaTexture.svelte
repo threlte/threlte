@@ -19,7 +19,7 @@
   import vertexShader from './vertexShader.glsl?raw'
 
   // Multiple render targets to visualize RGBA channels.
-  const rgbaTextureTarget = new WebGLMultipleRenderTargets(512, 512, 5)
+  const rgbaTextureTarget = new WebGLMultipleRenderTargets(256, 256, 5)
 
   const scene = new Scene()
   const orthoCamera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
