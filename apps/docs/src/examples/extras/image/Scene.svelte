@@ -2,6 +2,8 @@
   import { T } from '@threlte/core'
   import { OrbitControls, Suspense, interactivity } from '@threlte/extras'
   import Card from './Card.svelte'
+  import RgbaTexture from './RgbaTexture.svelte'
+  import { textureOverrideEnabled } from './App.svelte'
 
   interactivity()
 
@@ -34,10 +36,13 @@
 >
   <OrbitControls
     enableDamping
-    autoRotate
     enableZoom={false}
   />
 </T.PerspectiveCamera>
+
+{#if $textureOverrideEnabled}
+  <RgbaTexture />
+{/if}
 
 <Suspense>
   {#each urls as url, index (url)}

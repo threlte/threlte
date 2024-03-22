@@ -22,6 +22,8 @@ uniform sampler2D map;
 uniform sampler2D colorProccessingTexture;
 uniform float radius;
 uniform float zoom;
+uniform float alphaProgress;
+uniform float alphaSmoothing;
 uniform float brightness;
 uniform float contrast;
 uniform float monochromeStrength;
@@ -116,21 +118,23 @@ void processColors(inout vec4 colors){
 
 	if(colorProcessingTextureOverride == 1){
 		strength = texture2D(colorProccessingTexture, vUv);
-		colors.a = strength.r;
+
+		float smoothedAlpha = smoothstep(1.-alphaProgress-alphaSmoothing, 1.-alphaProgress, strength.a+0.0001);
+		colors.a*=smoothedAlpha;
 	}
 
 
 	// BRIGHTNESS
-	colors.rgb = max(colors.rgb + brightness * strength.r,0.);
+	colors.rgb = max(colors.rgb + brightness,0.);
 	// CONTRAST
-  colors.rgb = max(((colors.rgb - 0.5) * max(contrast*strength.g + 1.0, 0.0)) + 0.5,0.);
+  colors.rgb = max(((colors.rgb - 0.5) * max(contrast + 1.0, 0.0)) + 0.5,0.);
 
 	// HSL
 	vec3 hslColor = rgbToHsl(colors.rgb);
-	hslColor.x = mod(hslColor.x + hsl.x ,1.);
-	hslColor.y *= (1.+hsl.y);
-	hslColor.z += hsl.z;
-	colors.rgb = mix(colors.rgb, max(hslToRgb(hslColor), vec3(0.)), strength.b);
+	hslColor.x = mod(hslColor.x + hsl.x * strength.r ,1.);
+	hslColor.y *= (1.+hsl.y*strength.g);
+	hslColor.z += hsl.z * strength.b;
+	colors.rgb = max(hslToRgb(hslColor), vec3(0.));
 
 	// MONOCHROME
 	colors.rgb = mix(colors.rgb, monochrome(hslColor.z, monochromeColor), monochromeStrength);

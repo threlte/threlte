@@ -2,6 +2,8 @@
   lang="ts"
   context="module"
 >
+  export const alphaProgress = writable(0)
+  export const alphaSmoothing = writable(0)
   export const brightness = writable(0)
   export const contrast = writable(0)
   export const hue = writable(0)
@@ -11,7 +13,9 @@
   export const monochromeColor = writable('#ed8922')
   export const monochromeStrength = writable(0)
 
-  export const colorProcessingTexture = writable<VideoTexture | undefined>()
+  export const textureOverrideEnabled = writable(true)
+
+  export const colorProcessingTexture = writable<Texture | undefined>()
 </script>
 
 <script lang="ts">
@@ -19,31 +23,7 @@
   import Scene from './Scene.svelte'
   import { Pane, Slider, Checkbox, Folder, Element, Color } from 'svelte-tweakpane-ui'
   import { writable } from 'svelte/store'
-  import { VideoTexture } from 'three'
-
-  let videoTexture: VideoTexture | undefined
-
-  const textureOverrideEnabled = writable(false)
-
-  $: {
-    if ($textureOverrideEnabled && videoTexture) {
-      videoTexture.source.data.play()
-      colorProcessingTexture.set(videoTexture)
-    } else {
-      colorProcessingTexture.set(undefined)
-    }
-  }
-
-  function videoAction(node: any) {
-    videoTexture = new VideoTexture(node)
-    colorProcessingTexture.set(videoTexture)
-    return {
-      destroy() {
-        colorProcessingTexture.set(undefined)
-        videoTexture?.dispose()
-      }
-    }
-  }
+  import { Texture } from 'three'
 </script>
 
 <div>
@@ -108,19 +88,19 @@
       bind:value={$textureOverrideEnabled}
       label="enabled"
     />
-    <Element>
-      <video
-        use:videoAction
-        loop
-        crossOrigin="anonymous"
-        playsinline
-      >
-        <source
-          src="/video/grunge_texture.mp4"
-          type="video/mp4"
-        />
-      </video>
-    </Element>
+    <Slider
+      bind:value={$alphaProgress}
+      label="alphaProgress"
+      min={0}
+      max={1}
+    />
+    <Slider
+      bind:value={$alphaSmoothing}
+      label="alphaSmoothing"
+      min={0}
+      max={1}
+    />
+    <Element></Element>
   </Folder>
 </Pane>
 

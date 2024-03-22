@@ -12,7 +12,9 @@
     lightness,
     monochromeColor,
     monochromeStrength,
-    colorProcessingTexture
+    colorProcessingTexture,
+    alphaProgress,
+    alphaSmoothing
   } from './App.svelte'
 
   export let url: string
@@ -42,6 +44,8 @@
   zoom={$zoom}
   on:pointerover={stopPropagation(() => (hovered = true))}
   on:pointerleave={stopPropagation(() => (hovered = false))}
+  alphaProgress={$alphaProgress}
+  alphaSmoothing={$alphaSmoothing}
   brightness={$brightness}
   contrast={$contrast}
   negative={$negative}

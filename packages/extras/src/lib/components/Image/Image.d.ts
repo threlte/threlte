@@ -16,6 +16,10 @@ export type ImageProps = Props<Mesh> & {
   /** Default: 0 */
   grayscale?: number
   /** Default: 0 */
+  alphaProgress?: number
+  /** Default: 0.1 */
+  alphaSmoothing?: number
+  /** Default: 0 */
   brightness?: number
   /** Default: 0 */
   contrast?: number
@@ -34,11 +38,11 @@ export type ImageProps = Props<Mesh> & {
    *
    * Each channel of the texture is responsible for a different color processing function  (multiplicative)
    *
-   * r - brightness
+   * r - hue
    *
-   * g - contrast
+   * g - saturation
    *
-   * b - hsl
+   * b - lightness
    *
    * a - alpha override
    *
