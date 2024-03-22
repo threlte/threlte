@@ -1,8 +1,7 @@
 varying vec2 vUv;
-uniform sampler2D uVideoTexture;
+uniform sampler2D uAlphaTexture;
 uniform float uTime;
 
-// layout (location = 0) out vec4 gRgba;
 layout (location = 1) out vec4 gR;
 layout (location = 2) out vec4 gG;
 layout (location = 3) out vec4 gB;
@@ -58,7 +57,7 @@ void main() {
 
 	float lightness = clamp(hexGrid(8.f) * pow(distance(0.5f, fract(vUv.x * 16.f + uTime)), 2.f) * 20.f, 0.f, 1.f);
 
-	float alpha = texture2D(uVideoTexture, vUv).r;
+	float alpha = texture2D(uAlphaTexture, vUv).r;
 
 	pc_fragColor = vec4(hue, saturation, lightness, alpha);
 	gR = vec4(hue, 0.f, 0.f, 1.f);

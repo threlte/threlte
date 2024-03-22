@@ -12,16 +12,14 @@
     PlaneGeometry,
     Scene,
     ShaderMaterial,
-    WebGLRenderTarget
+    WebGLMultipleRenderTargets
   } from 'three'
 
   import fragmentShader from './fragmentShader.glsl?raw'
   import vertexShader from './vertexShader.glsl?raw'
 
   // Multiple render targets to visualize RGBA channels.
-  const rgbaTextureTarget = new WebGLRenderTarget($size.width, $size.height, {
-    count: 5
-  })
+  const rgbaTextureTarget = new WebGLMultipleRenderTargets($size.width, $size.height, 5)
 
   const scene = new Scene()
   const orthoCamera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
@@ -29,7 +27,7 @@
   const shaderMaterial = new ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
-      uVideoTexture: { value: null }
+      uAlphaTexture: { value: null }
     },
     vertexShader,
     fragmentShader
@@ -37,7 +35,7 @@
 
   const alphaTexture = useTexture('/textures/alpha.jpg')
 
-  $: shaderMaterial.uniforms.uVideoTexture.value = $alphaTexture
+  $: shaderMaterial.uniforms.uAlphaTexture.value = $alphaTexture
 
   const quad = new Mesh(new PlaneGeometry(2, 2), shaderMaterial)
 
@@ -55,10 +53,8 @@
     }
   )
 
-  console.log(rgbaTextureTarget)
-
   onMount(() => {
-    colorProcessingTexture.set(rgbaTextureTarget.textures[0])
+    colorProcessingTexture.set(rgbaTextureTarget.texture[0])
   })
 
   onDestroy(() => {
@@ -77,7 +73,7 @@
   >
     <T.Mesh>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.textures[1]}
+        map={rgbaTextureTarget.texture[1]}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -88,7 +84,7 @@
 
     <T.Mesh position.x={1}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.textures[2]}
+        map={rgbaTextureTarget.texture[2]}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -98,7 +94,7 @@
     </T.Mesh>
     <T.Mesh position.x={2}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.textures[3]}
+        map={rgbaTextureTarget.texture[3]}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -108,7 +104,7 @@
     </T.Mesh>
     <T.Mesh position.x={3}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.textures[4]}
+        map={rgbaTextureTarget.texture[4]}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
