@@ -142,6 +142,7 @@ void processColors(inout vec4 colors){
 }
 
 void main() {
+
   vec2 s = aspect(scale);
   vec2 i = aspect(imageBounds);
   float rs = s.x / s.y;
@@ -164,5 +165,7 @@ void main() {
   #include <tonemapping_fragment>
   #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
 	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.) - gl_FragColor.rgb, negative);
+
+	if ( gl_FragColor.a == 0.0 ) discard;
 }
 `
