@@ -107,6 +107,5 @@
 <style>
   div {
     height: 100%;
-    background-color: #121212;
   }
 </style>
