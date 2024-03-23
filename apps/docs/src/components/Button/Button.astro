@@ -1,6 +1,4 @@
 ---
-import { c } from '$lib/classes'
-
 type Size = 's' | 'm' | 'l'
 
 interface Props {
@@ -36,14 +34,14 @@ const textSizes: Record<Size, string> = {
 
 <a
   href={Astro.props.href}
-  class={c(
-    'rounded-md shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] text-center flex flex-row gap-3 w-fit text-white',
+  class:list={[
+    'flex w-fit flex-row gap-3 rounded-md text-center text-white shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)]',
     paddings[Astro.props.size ?? 'l'],
     textSizes[Astro.props.size ?? 'l'],
     `bg-${Astro.props.color}`,
     `hover:bg-${Astro.props.color}-400`,
     Astro.props.class ?? ''
-  )}
+  ]}
 >
   <div class="empty:hidden"><slot name="icon-before" /></div>
   <slot />

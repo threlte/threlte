@@ -1,14 +1,13 @@
 ---
 import { Image } from 'astro:assets'
 import LogoOnly from '$assets/logo/threlte-logo-only.png'
-import { c } from '$lib/classes'
 
 interface Props {
   class?: string
 }
 ---
 
-<footer class={c('grid grid-cols-1 md:grid-cols-3 text-sm gap-6', Astro.props.class ?? '')}>
+<footer class:list={['grid grid-cols-1 gap-6 text-sm md:grid-cols-3', Astro.props.class ?? '']}>
   <div class="flex flex-col gap-6">
     <Image
       src={LogoOnly}
@@ -56,21 +55,21 @@ interface Props {
       <li class="mb-4 font-bold uppercase">Get Started</li>
       <li>
         <a
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
           href="/docs/learn/getting-started/installation"
           >Install</a
         >
       </li>
       <li>
         <a
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
           href="/docs/learn/getting-started/your-first-scene"
           >Concepts</a
         >
       </li>
       <li>
         <a
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
           href="/docs/reference/core/getting-started"
           >Reference</a
         >
@@ -83,7 +82,7 @@ interface Props {
           href="https://twitter.com/threlte"
           target="_blank"
           rel="noopener noreferrer"
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
         >
           Twitter
         </a>
@@ -93,7 +92,7 @@ interface Props {
           href="http://chat.threlte.xyz"
           target="_blank"
           rel="noopener noreferrer"
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
         >
           Discord
         </a>
@@ -103,7 +102,7 @@ interface Props {
           href="https://github.com/threlte/threlte"
           target="_blank"
           rel="noopener noreferrer"
-          class="block py-2 text-faded hover:text-white"
+          class="text-faded block py-2 hover:text-white"
         >
           GitHub
         </a>
