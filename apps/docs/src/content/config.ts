@@ -77,7 +77,6 @@ export const referenceCollection = defineCollection({
     sourcePath: z.string().optional(),
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
-    isSubDivider: z.boolean().optional(),
     category: z.enum(referenceCategories),
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true)

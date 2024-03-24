@@ -2,7 +2,6 @@ declare type LeftSidebarMenuItem = {
   title: string
   slug: string
   isDivider?: boolean
-  isSubDivider?: boolean
 }
 
 declare type LeftSidebarMenuCategory = {
