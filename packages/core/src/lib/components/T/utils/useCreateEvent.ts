@@ -1,13 +1,13 @@
 import { onDestroy, onMount } from 'svelte'
 import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
 
-export const useCreateEvent = () => {
+export const useCreateEvent = (events?: any) => {
   const dispatchRaw = createRawEventDispatcher<{
     create: {
       ref: any
       cleanup: (callback: () => void) => void
     }
-  }>()
+  }>(events)
 
   const cleanupFunctions: (() => void)[] = []
 

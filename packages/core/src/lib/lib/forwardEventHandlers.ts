@@ -1,7 +1,8 @@
 import type { SvelteComponent } from 'svelte'
-import { get_current_component } from 'svelte/internal'
 import { writable } from 'svelte/store'
+import { asClassComponent } from 'svelte/legacy'
 import { watch } from './storeUtils'
+import { useGetEvents } from './useGetEvents'
 
 /**
  * ### `forwardEventHandlers`
@@ -37,13 +38,20 @@ import { watch } from './storeUtils'
  * in `Parent.svelte` will be called.
  */
 export const forwardEventHandlers = () => {
-  const component = get_current_component()
+  const getEvents = useGetEvents()
 
   const dispatchingComponent = writable<SvelteComponent | undefined>(undefined)
 
   watch(dispatchingComponent, (dispatchingComponent) => {
     if (!dispatchingComponent) return
-    Object.entries(component.$$.callbacks).forEach((callback) => {
+
+    if (!('$set' in dispatchingComponent)) {
+      dispatchingComponent = asClassComponent(dispatchingComponent)
+    }
+
+    const events = getEvents()
+
+    Object.entries(events).forEach((callback) => {
       const [key, value] = callback as [string, ((...args: any[]) => void)[]]
       if (
         key in dispatchingComponent.$$.callbacks &&

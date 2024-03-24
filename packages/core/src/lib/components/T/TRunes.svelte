@@ -2,7 +2,7 @@
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
-  import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
+  import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
@@ -17,29 +17,35 @@
     is: Type
   } & Props<Type>
   type $$Props = AllProps
-  type $$Events = Events<Type>
   type $$Slots = Slots<Type>
 
-  export let is: Type
-  export let args: AllProps['args'] = undefined as AllProps['args']
-  export let attach: AllProps['attach'] = undefined as AllProps['attach']
-  export let manual: AllProps['manual'] = undefined as unknown as AllProps['manual']
-  export let makeDefault: AllProps['makeDefault'] = undefined as unknown as AllProps['makeDefault']
-  export let dispose: AllProps['dispose'] = undefined as unknown as AllProps['dispose']
+  let {
+    ref: publicRef,
+    is,
+    args,
+    attach,
+    manual,
+    makeDefault,
+    dispose,
+    children,
+    ...restProps
+  }: AllProps = $props()
 
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent()
+  const createEvent = useCreateEvent(restProps.$$events)
 
   // We can't create the object in a reactive statement due to providing context
-  let ref = determineRef<Type>(is, args)
+  let ref = $state(determineRef<Type>(is, args))
   // The ref is created, emit the event
   createEvent.updateRef(ref)
 
+  console.log(ref === undefined, is)
+
   let initialized = false
   // When "is" or "args" change, we need to create a new ref.
-  const maybeSetRef = () => {
+  $effect(() => {
     // Because reactive statements run immediately, we need to ignore the first run.
     if (!initialized) {
       initialized = true
@@ -48,47 +54,63 @@
     ref = determineRef<Type>(is, args)
     // The ref is recreated, emit the event
     createEvent.updateRef(ref)
-  }
-  $: is, args, maybeSetRef()
+  })
 
   // In order to prevent updates by outside mutations on ref,
   // we need to create a publicly exposed ref.
-  let publicRef = ref
-  $: publicRef = ref
-  export { publicRef as ref }
+  $effect(() => publicRef = ref)
 
   const parentContext = createParentContext(ref)
-  $: parentContext.set(ref)
+  $effect(() => parentContext.set(ref))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({ ref: ref, props: $$props })
+  const plugins = usePlugins({
+    ref,
+    props: {
+      is,
+      args,
+      attach,
+      manual,
+      makeDefault,
+      dispose,
+      ...restProps
+    }
+  })
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
-  const props = useProps()
-  $: props.updateProps(ref, $$restProps, {
+  const { updateProps } = useProps()
+  $effect(() => updateProps(ref, restProps, {
     manualCamera: manual,
     pluginsProps
-  })
+  }))
 
   // Camera
   const camera = useCamera()
-  $: camera.update(ref, manual)
-  $: camera.makeDefaultCamera(ref, makeDefault)
+  $effect(() => camera.update(ref, manual))
+  $effect(() => camera.makeDefaultCamera(ref, makeDefault))
 
   // Attachment
   const attachment = useAttach()
-  $: attachment.update(ref, $parent, attach)
+  $effect(() => attachment.update(ref, $parent, attach))
 
   // Events
-  const events = useEvents()
-  $: events.updateRef(ref)
+  const events = useEvents(restProps.$$events)
+  $effect(() => events.updateRef(ref))
 
   // update plugins after all other updates
-  $: plugins?.updateRef(ref)
-  $: plugins?.updateProps($$props)
-  $: plugins?.updateRestProps($$restProps)
+  $effect(() => plugins?.updateRef(ref))
+  $effect(() => plugins?.updateProps({
+    is,
+    args,
+    attach,
+    manual,
+    makeDefault,
+    dispose,
+    ...restProps
+  }))
+  $effect(() => plugins?.updateRestProps(restProps))
 </script>
 
 {#if isDisposableObject(ref)}
@@ -100,8 +122,10 @@
 
 {#if extendsObject3D(ref)}
   <SceneGraphObject object={ref}>
-    <slot {ref} />
+    {#if children}
+      {@render children(ref)}
+    {/if}
   </SceneGraphObject>
-{:else}
-  <slot {ref} />
+{:else if children}
+  {@render children(ref)}
 {/if}

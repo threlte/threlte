@@ -17,7 +17,7 @@ const argsIsConstructorParameters = (args: unknown): args is ConstructorParamete
   return Array.isArray(args)
 }
 
-export const determineRef = <Type>(is: unknown, args: unknown): MaybeInstance<Type> => {
+export const determineRef = <Type,>(is: unknown, args: unknown): MaybeInstance<Type> => {
   if (isClass(is)) {
     if (argsIsConstructorParameters(args)) {
       return new is(...args)
@@ -29,10 +29,10 @@ export const determineRef = <Type>(is: unknown, args: unknown): MaybeInstance<Ty
   return is as MaybeInstance<Type>
 }
 
-export const extendsObject3D = (object: any): object is Object3D => {
+export const extendsObject3D = (object: object): object is Object3D => {
   return 'isObject3D' in object
 }
 
-export const isDisposableObject = (object: any): object is DisposableThreeObject => {
+export const isDisposableObject = (object: object): object is DisposableThreeObject => {
   return 'dispose' in object
 }
