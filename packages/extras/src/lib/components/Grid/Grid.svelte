@@ -1,9 +1,17 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
-  import { T, forwardEventHandlers, useThrelte } from '@threlte/core'
-  import { Color, DoubleSide, type Mesh } from 'three'
+  import { T, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
+  import {
+    Color,
+    DoubleSide,
+    Plane,
+    Vector3,
+    type Mesh,
+    type ShaderMaterial,
+    type Uniform
+  } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
-  import { gridComponentShaders } from './gridShaders'
+  import { fragmentShader, vertexShader } from './gridShaders'
 
   type $$Props = Required<GridProps>
   type $$Events = GridEvents
@@ -23,6 +31,7 @@
   export let fadeStrength: $$Props['fadeStrength'] = 1
   export let cellThickness: $$Props['cellThickness'] = 1
   export let sectionThickness: $$Props['sectionThickness'] = 2
+  export let side: $$Props['side'] = DoubleSide
 
   export let type: $$Props['type'] = 'grid'
   export let axis: $$Props['axis'] = 'x'
@@ -33,129 +42,162 @@
   // forward ref binding
   export let ref: Mesh
 
-  const { fragmentShader, vertexShader } = gridComponentShaders
+  const { invalidate, camera } = useThrelte()
 
-  const { invalidate } = useThrelte()
+  const gridPlane = new Plane()
+  const upVector = new Vector3(0, 1, 0)
+  const zeroVector = new Vector3(0, 0, 0)
 
-  let uniforms = {
-    uSize1: {
-      value: cellSize
-    },
-    uSize2: {
-      value: sectionSize
-    },
-    uColor1: {
-      value: new Color(cellColor)
-    },
-    uColor2: {
-      value: new Color(sectionColor)
-    },
-    uBackgroundColor: {
-      value: new Color('#aaaaaa')
-    },
-    uBackgroundOpacity: {
-      value: 0.7
-    },
-    uFadeDistance: {
-      value: fadeDistance
-    },
-    uFadeStrength: {
-      value: fadeStrength
-    },
-    uThickness1: {
-      value: 1
-    },
-    uThickness2: {
-      value: 1
-    },
-    uInfiniteGrid: {
-      value: infiniteGrid ? 1 : 0
-    },
-    uFollowCamera: {
-      value: 0
-    },
-    uCoord0: {
-      value: 0
-    },
-    uCoord1: {
-      value: 2
-    },
-    uCoord2: {
-      value: 1
-    },
-    uGridType: {
-      value: 0
-    },
-    uLineGridCoord: {
-      value: 0
-    },
-    uCircleGridMaxRadius: {
-      value: 9
-    },
-    uPolarCellDividers: {
-      value: 6
-    },
-    uPolarSectionDividers: {
-      value: 2
-    }
-  }
-
-  const axisCharToInt = {
+  const axisToInt = {
     x: 0,
     y: 1,
     z: 2
   } as const
 
-  const mapPlaneToAxes = {
+  const planeToAxes = {
     xz: 'xzy',
     xy: 'xyz',
     zy: 'zyx'
   } as const
 
+  const gridType = {
+    grid: 0,
+    lines: 1,
+    circular: 2,
+    polar: 3
+  } as const
+
+  const uniforms = {
+    cellSize: {
+      value: cellSize
+    },
+    sectionSize: {
+      value: sectionSize
+    },
+    cellColor: {
+      value: new Color(cellColor)
+    },
+    sectionColor: {
+      value: new Color(sectionColor)
+    },
+    backgroundColor: {
+      value: new Color(backgroundColor)
+    },
+    backgroundOpacity: {
+      value: backgroundOpacity
+    },
+    fadeDistance: {
+      value: fadeDistance
+    },
+    fadeStrength: {
+      value: fadeStrength
+    },
+    cellThickness: {
+      value: cellThickness
+    },
+    sectionThickness: {
+      value: sectionThickness
+    },
+    infiniteGrid: {
+      value: infiniteGrid
+    },
+    followCamera: {
+      value: followCamera
+    },
+    coord0: {
+      value: 0
+    },
+    coord1: {
+      value: 2
+    },
+    coord2: {
+      value: 1
+    },
+    gridType: {
+      value: gridType.grid as number
+    },
+    lineGridCoord: {
+      value: axisToInt[axis as 'x' | 'y' | 'z']
+    },
+    circleGridMaxRadius: {
+      value: maxRadius
+    },
+    polarCellDividers: {
+      value: cellDividers
+    },
+    polarSectionDividers: {
+      value: sectionDividers
+    },
+    worldCamProjPosition: {
+      value: new Vector3()
+    },
+    worldPlanePosition: {
+      value: new Vector3()
+    }
+  }
+
   $: {
     // convert axis string to int indexes xzy = [0,2,1]
-    const axes = mapPlaneToAxes[plane]
+    const axes = planeToAxes[plane]
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
     const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
     const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
-    uniforms.uCoord0.value = axisCharToInt[c0]
-    uniforms.uCoord1.value = axisCharToInt[c1]
-    uniforms.uCoord2.value = axisCharToInt[c2]
+    uniforms.coord0.value = axisToInt[c0]
+    uniforms.coord1.value = axisToInt[c1]
+    uniforms.coord2.value = axisToInt[c2]
+  }
 
-    // common options
-    uniforms.uSize1 = { value: cellSize }
-    uniforms.uSize2 = { value: sectionSize }
-    uniforms.uColor1 = { value: new Color(cellColor) }
-    uniforms.uColor2 = { value: new Color(sectionColor) }
-    uniforms.uBackgroundColor = { value: new Color(backgroundColor) }
-    uniforms.uBackgroundOpacity = { value: backgroundOpacity }
-    uniforms.uFadeDistance = { value: fadeDistance }
-    uniforms.uFadeStrength = { value: fadeStrength }
-    uniforms.uThickness1 = { value: cellThickness }
-    uniforms.uThickness2 = { value: sectionThickness }
-    uniforms.uFollowCamera = { value: followCamera ? 1 : 0 }
-    uniforms.uInfiniteGrid = { value: infiniteGrid ? 1 : 0 }
+  $: uniforms.cellSize.value = cellSize
+  $: uniforms.sectionSize.value = sectionSize
+  $: uniforms.cellColor.value.set(cellColor)
+  $: uniforms.sectionColor.value.set(sectionColor)
+  $: uniforms.backgroundColor.value.set(backgroundColor)
+  $: uniforms.backgroundOpacity.value = backgroundOpacity
+  $: uniforms.fadeDistance.value = fadeDistance
+  $: uniforms.fadeStrength.value = fadeStrength
+  $: uniforms.cellThickness.value = cellThickness
+  $: uniforms.sectionThickness.value = sectionThickness
+  $: uniforms.followCamera.value = followCamera
+  $: uniforms.infiniteGrid.value = infiniteGrid
 
-    // grid type specific
-    if (type == 'grid') {
-      uniforms.uGridType = { value: 0 }
-    }
-    if (type === 'lines') {
-      uniforms.uGridType = { value: 1 }
-      uniforms.uLineGridCoord = { value: axisCharToInt[axis as 'x'] }
-    }
-    if (type === 'circular') {
-      uniforms.uGridType = { value: 2 }
-      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
-    }
-    if (type === 'polar') {
-      uniforms.uGridType = { value: 3 }
-      uniforms.uCircleGridMaxRadius = { value: maxRadius || 0 }
-      uniforms.uPolarCellDividers = { value: cellDividers || 0 }
-      uniforms.uPolarSectionDividers = { value: sectionDividers || 0 }
+  $: {
+    switch (type) {
+      case 'grid': {
+        uniforms.gridType.value = gridType.grid
+        break
+      }
+      case 'lines': {
+        uniforms.gridType.value = gridType.lines
+        uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
+        break
+      }
+      case 'circular': {
+        uniforms.gridType.value = gridType.circular
+        uniforms.circleGridMaxRadius.value = maxRadius
+        break
+      }
+      case 'polar': {
+        uniforms.gridType.value = gridType.polar
+        uniforms.circleGridMaxRadius.value = maxRadius
+        uniforms.polarCellDividers.value = cellDividers
+        uniforms.polarSectionDividers.value = sectionDividers
+        break
+      }
     }
     invalidate()
   }
+
+  useTask(() => {
+    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
+
+    const material = ref.material as ShaderMaterial
+    const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
+    const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
+
+    gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
+    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
+    invalidate()
+  })
 
   const component = forwardEventHandlers()
 </script>
@@ -172,7 +214,7 @@
     {vertexShader}
     {uniforms}
     transparent
-    side={DoubleSide}
+    {side}
   />
   <slot {ref}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />

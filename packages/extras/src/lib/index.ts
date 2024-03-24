@@ -6,6 +6,7 @@ export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
 export { useGamepad } from './hooks/useGamepad'
+export { useMask } from './hooks/useMask'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
@@ -37,6 +38,7 @@ export { default as MeshRefractionMaterial } from './components/MeshRefractionMa
 export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeometry.svelte'
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
 export { default as Outlines } from './components/Outlines/Outlines.svelte'
+export { default as Mask } from './components/Mask/Mask.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
