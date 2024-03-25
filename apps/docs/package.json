@@ -76,7 +76,7 @@
     "svelte-preprocess": "^5.0.1",
     "svelte-reduced-motion": "^1.1.1",
     "svelte-tweakpane-ui": "^1.0.0",
-    "three": "0.158.0",
+    "three": "^0.160.0",
     "tsx": "^3.13.0",
     "tweakpane": "^3.1.0",
     "vite-plugin-mkcert": "^1.16.0"

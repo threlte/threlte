@@ -5,8 +5,10 @@ import { c } from '../../lib/classes'
 import { getShiki } from '../../lib/highlighter'
 
 interface Props {
+	titleOverride?: string
+	idOverride?: string
 	componentName: string
-  signature: TypeOf<typeof componentSignature>
+  	signature: TypeOf<typeof componentSignature>
 }
 
 // sort by required and name
@@ -35,12 +37,14 @@ anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto]' : 'grid-cols-[auto_auto_au
 const showComponentSignature = hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
 
 const shiki = await getShiki()
+
+const id = Astro.props.idOverride ?? 'component-signature';
 ---
 
 
 {showComponentSignature && (
 
-	<h2 class="mt-0" id="component-signature">Component Signature</h2>
+	<h2 class="mt-0" {id}>{Astro.props.titleOverride? Astro.props.titleOverride : `Component Signature`}</h2>
 
 	<div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
 
