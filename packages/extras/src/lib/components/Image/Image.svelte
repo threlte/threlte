@@ -24,7 +24,7 @@
   export let hue: Props['hue'] = 0
   export let saturation: Props['saturation'] = 0
   export let lightness: Props['lightness'] = 0
-  export let monochromeColor: Props['monochromeColor'] = '#535970'
+  export let monochromeColor: ImageProps['monochromeColor'] = undefined
   export let monochromeStrength: ImageProps['monochromeStrength'] = undefined
   export let negative: Props['negative'] = false
   export let colorProcessingTexture: ImageProps['colorProcessingTexture'] = undefined
@@ -89,28 +89,24 @@
   $: uniforms.hsl.value.x = hue
   $: uniforms.hsl.value.y = saturation
   $: uniforms.hsl.value.z = lightness
-  $: uniforms.monochromeColor.value.set(monochromeColor)
+
   $: uniforms.negative.value = negative ? 1 : 0
   $: uniforms.map.value = $textureStore ?? null
   $: uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null
   $: uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
 
-  $: {
-    if (monochromeColor && monochromeStrength === undefined) {
-      uniforms.monochromeStrength.value = 1
-    }
-    if (monochromeColor && typeof monochromeStrength === 'number') {
-      uniforms.monochromeStrength.value = monochromeStrength
-    }
-    if (typeof monochromeColor === undefined) {
-      uniforms.monochromeStrength.value = 0
-    }
+  $: if (monochromeColor !== undefined) {
+    uniforms.monochromeColor.value.set(monochromeColor)
+    uniforms.monochromeStrength.value = monochromeStrength ?? 1
+  } else {
+    uniforms.monochromeStrength.value = 0
   }
 
   $: {
     let colorProcessingEnabled = 0
+
     const monochromeCheck =
-      (monochromeColor ? 1 : 0) * (typeof monochromeStrength === undefined ? 1 : monochromeStrength)
+      (monochromeColor ? 1 : 0) * (monochromeStrength === undefined ? 1 : monochromeStrength)
 
     for (const value of [
       brightness,
