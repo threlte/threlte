@@ -20,7 +20,6 @@
   type Props = Required<ImageMaterialProps>
 
   export let color: Props['color'] = 'white'
-  export let scale: ImageMaterialProps['scale'] = undefined
   export let zoom: Props['zoom'] = 1
   export let radius: Props['radius'] = 0
   export let alphaProgress: Props['alphaProgress'] = 0
@@ -30,16 +29,17 @@
   export let hue: Props['hue'] = 0
   export let saturation: Props['saturation'] = 0
   export let lightness: Props['lightness'] = 0
-  export let monochromeColor: ImageMaterialProps['monochromeColor'] = undefined
-  export let monochromeStrength: ImageMaterialProps['monochromeStrength'] = undefined
   export let negative: Props['negative'] = false
-  export let colorProcessingTexture: ImageMaterialProps['colorProcessingTexture'] = undefined
   export let opacity: Props['opacity'] = 1
-  export let texture: ImageMaterialProps['texture'] = undefined
   export let toneMapped: Props['toneMapped'] = true
   export let transparent: Props['transparent'] = false
-  export let side: ImageMaterialProps['side'] = undefined
-  export let url: ImageMaterialProps['url'] = undefined
+
+  export let texture: $$Props['texture'] = undefined
+  export let monochromeColor: $$Props['monochromeColor'] = undefined
+  export let monochromeStrength: $$Props['monochromeStrength'] = undefined
+  export let colorProcessingTexture: $$Props['colorProcessingTexture'] = undefined
+  export let side: $$Props['side'] = undefined
+  export let url: $$Props['url'] = undefined
 
   export let ref = new ShaderMaterial()
 
@@ -125,38 +125,23 @@
     uniforms.colorProcessingEnabled.value = colorProcessingEnabled
   }
 
-  $: if (typeof scale === 'number') {
-    uniforms.scale.value.set(scale, scale)
-  } else if (Array.isArray(scale)) {
-    uniforms.scale.value.set(scale[0], scale[1])
-  }
+  useTask(() => {
+    const mesh = $parent
 
-  const { start, stop } = useTask(
-    () => {
-      const mesh = $parent
+    if (mesh === undefined) {
+      return
+    }
 
-      if (mesh === undefined || !('isMesh' in mesh)) {
-        return
-      }
+    uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
 
-      uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
+    const geometry = (mesh as Mesh).geometry
 
-      const geometry = (mesh as Mesh).geometry
-
-      // Support arbitrary plane geometries (for instance with rounded corners)
-      if ('parameters' in geometry) {
-        const { width, height } = geometry.parameters as { width: number; height: number }
-        uniforms.scale.value.set(uniforms.scale.value.x * width, uniforms.scale.value.y * height)
-      }
-    },
-    { autoStart: false }
-  )
-
-  $: if (scale === undefined) {
-    start()
-  } else {
-    stop()
-  }
+    // Support arbitrary plane geometries (for instance with rounded corners)
+    if (geometry !== undefined && 'parameters' in geometry) {
+      const { width, height } = geometry.parameters as { width: number; height: number }
+      uniforms.scale.value.set(uniforms.scale.value.x * width, uniforms.scale.value.y * height)
+    }
+  })
 
   const component = forwardEventHandlers()
 </script>

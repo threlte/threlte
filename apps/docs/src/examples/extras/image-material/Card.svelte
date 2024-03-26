@@ -40,6 +40,8 @@
 <T.Mesh
   scale={$scale}
   {...$$restProps}
+  on:pointerover={stopPropagation(() => (hovered = true))}
+  on:pointerleave={stopPropagation(() => (hovered = false))}
 >
   <BentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
   <ImageMaterial
@@ -48,8 +50,6 @@
     {url}
     radius={$radius}
     zoom={$zoom}
-    on:pointerover={stopPropagation(() => (hovered = true))}
-    on:pointerleave={stopPropagation(() => (hovered = false))}
     alphaProgress={$alphaProgress}
     alphaSmoothing={$alphaSmoothing}
     brightness={$brightness}
@@ -61,6 +61,5 @@
     monochromeColor={$monochromeColor}
     monochromeStrength={$monochromeStrength}
     colorProcessingTexture={$colorProcessingTexture}
-    {...$$restProps}
   />
 </T.Mesh>
