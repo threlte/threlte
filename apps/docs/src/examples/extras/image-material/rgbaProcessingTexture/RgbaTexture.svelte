@@ -2,8 +2,8 @@
   import { useTask, useThrelte, T } from '@threlte/core'
   import { useTexture, Portal, HTML } from '@threlte/extras'
 
-  const { renderer, autoRenderTask, size, camera } = useThrelte()
-  import { colorProcessingTexture } from '../App.svelte'
+  const { renderer, autoRenderTask, camera } = useThrelte()
+  import { colorProcessingTexture } from '../props'
   import { onDestroy, onMount } from 'svelte'
   import {
     DoubleSide,

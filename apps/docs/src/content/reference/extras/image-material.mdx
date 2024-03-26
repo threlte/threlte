@@ -1,29 +1,91 @@
 ---
 order: 5
 category: '@threlte/extras'
-name: <Image>
-sourcePath: 'packages/extras/src/lib/components/Image/Image.svelte'
+name: <ImageMaterial>
+sourcePath: 'packages/extras/src/lib/components/ImageMaterial/ImageMaterial.svelte'
 type: 'component'
 'componentSignature':
   {
-    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html?q=shaderm#api/en/materials/ShaderMaterial'
+      },
     'props':
       [
         { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
-        { name: 'segments', type: 'number', default: '1', required: false },
-        { name: 'scale', type: '[number, number] | number', default: '1', required: false },
+        {
+          name: 'scale',
+          type: '[number, number] | number',
+          default: '1',
+          required: false,
+          description: 'Manually scale the image material. By default, the material syncs its scale with the parent mesh.'
+        },
         { name: 'radius', type: 'number', default: '0', required: false },
-        { name: 'brightness', type: 'number', default: '0', required: false, description: 'Modifies brightness. Recommended range from -1 to 1.',},
-        { name: 'contrast', type: 'number', default: '0', required: false, description: 'Modifies contrast. Recommended range from -1 to 1.',},
-        { name: 'hue', type: 'number', default: '0', required: false, description: 'Modifies hue. Range from 0 to 1.',},
-        { name: 'saturation', type: 'number', default: '0', required: false, description: 'Modifies saturation. Recommended range from -1 to 1.',},
-        { name: 'lightness', type: 'number', default: '0', required: false, description: 'Modifies lightness. Recommended range from -1 to 1.',},
-        { name: 'monochromeColor', type: 'THREE.ColorRepresentation', default: '#535970', required: false, description: 'Sets a monochrome tint the image is converted to.',},
-        { name: 'monochromeStrength', type: 'number', default: '0', required: false, description: 'Sets the strength of monochrome effect. Range from 0 to 1.',},
-        { name: 'negative', type: 'boolean', default: 'false', required: false, description: 'Enables/disables negative effect.',},
-        { name: 'colorProcessingTexture', type: 'THREE.Texture | THREE.VideoTexture', required: false, description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.',},
-        { name: 'alphaProgress', type: 'number', default: '0', required: false, description: '',},
-        { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '',},
+        {
+          name: 'brightness',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies brightness. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'contrast',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies contrast. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'hue',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies hue. Range from 0 to 1.'
+        },
+        {
+          name: 'saturation',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies saturation. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'lightness',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies lightness. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'monochromeColor',
+          type: 'THREE.ColorRepresentation',
+          default: '#535970',
+          required: false,
+          description: 'Sets a monochrome tint the image is converted to.'
+        },
+        {
+          name: 'monochromeStrength',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Sets the strength of monochrome effect. Range from 0 to 1.'
+        },
+        {
+          name: 'negative',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          description: 'Enables/disables negative effect.'
+        },
+        {
+          name: 'colorProcessingTexture',
+          type: 'THREE.Texture | THREE.VideoTexture',
+          required: false,
+          description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
+        },
+        { name: 'alphaProgress', type: 'number', default: '0', required: false, description: '' },
+        { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
         { name: 'zoom', type: 'number', default: '1', required: false },
         { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
         { name: 'transparent', type: 'boolean', default: 'false', required: false },
@@ -33,11 +95,11 @@ type: 'component'
   }
 ---
 
-A port of drei's [`<Image>`](https://github.com/pmndrs/drei?tab=readme-ov-file#image) component.
+Adapted from drei's [`<Image>`](https://github.com/pmndrs/drei?tab=readme-ov-file#image) component, with additional color processing extras.
 
-A shader-based image component with auto-cover (similar to css/background: cover).
+A shader-based image material component with auto-cover (similar to css/background: cover).
 
-<Example path="extras/image" />
+<Example path="extras/image-material" />
 
 <small>
   Images from
@@ -50,32 +112,35 @@ A shader-based image component with auto-cover (similar to css/background: cover
 ```svelte
 <script lang="ts">
   import { DoubleSide } from 'three'
-  import { Image } from '@threlte/extras'
+  import { ImageMaterial } from '@threlte/extras'
 </script>
 
-<Image
-  transparent
-  side={DoubleSide}
-  url="KlimtDieJungfrau.jpg"
-  scale={1}
-  radius={0.1}
-  zoom={1.1}
-/>
+<T.Mesh>
+  <T.PlaneGeometry />
+  <ImageMaterial
+    transparent
+    side={DoubleSide}
+    url="KlimtDieJungfrau.jpg"
+    radius={0.1}
+    zoom={1.1}
+  />
+<T.Mesh>
 ```
+
+`<ImageMaterial>` can also be used with instanced or batched meshes.
 
 ## Color processing effects
 
-The `<Image/>` component offers a range of properties for dynamic color processing.
+The `<ImageMaterial />` component offers a range of properties for dynamic color processing.
 
 The properties `brightness`, `contrast`, `hue`, `saturation`, and `lightness` adjust the image's initial values additively.
 To decrease brightness, for instance, you would use a negative value, while a positive value would increase it. The `hue` shift is the only exception,
 its values range from 0 to 1, representing a complete cycle around the color wheel. Notably, values 0 and 1 are equivalent, indicating the same hue position.
 
 For the monochrome effect, specify your preferred tint using the `monochromeColor` property,
-and control the effect's intensity with  `monochromeStrength`.
+and control the effect's intensity with `monochromeStrength`.
 Setting this strength to 0 disables the effect entirely, while a value of 1 applies it fully,
 rendering the image in varying shades of a single color.
-
 
 ### Advanced color processing with a texture
 
@@ -106,8 +171,6 @@ Enable "color processing with a texture" in the example on top of this page to s
 	<img src="/textures/alpha.jpg" class="max-w-[300px]"/>
 	<span>*Alpha image used in the example. The lighter values towards the center are revealed first.*</span>
 </div>
-
-
 
 ### Order of processing effects
 

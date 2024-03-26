@@ -1,29 +1,20 @@
-<script
-  lang="ts"
-  context="module"
->
-  export const alphaProgress = writable(0.5)
-  export const alphaSmoothing = writable(0.15)
-  export const brightness = writable(0)
-  export const contrast = writable(0)
-  export const hue = writable(0)
-  export const saturation = writable(0)
-  export const lightness = writable(0)
-  export const negative = writable(false)
-  export const monochromeColor = writable('#ed8922')
-  export const monochromeStrength = writable(0)
-
-  export const textureOverrideEnabled = writable(false)
-
-  export const colorProcessingTexture = writable<Texture | undefined>()
-</script>
-
 <script lang="ts">
   import { Canvas, watch } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Pane, Slider, Checkbox, Folder, Color } from 'svelte-tweakpane-ui'
-  import { writable } from 'svelte/store'
-  import { Texture } from 'three'
+  import {
+    brightness,
+    contrast,
+    negative,
+    hue,
+    saturation,
+    lightness,
+    monochromeColor,
+    monochromeStrength,
+    textureOverrideEnabled,
+    alphaProgress,
+    alphaSmoothing
+  } from './props'
 
   watch(textureOverrideEnabled, (enabled) => {
     if (enabled) {

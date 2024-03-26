@@ -2,8 +2,7 @@
   import { T } from '@threlte/core'
   import { OrbitControls, Suspense, interactivity } from '@threlte/extras'
   import Card from './Card.svelte'
-  // import RgbaTexture from './rgbaProcessingTexture/RgbaTexture.svelte'
-  import { textureOverrideEnabled } from './App.svelte'
+  import { textureOverrideEnabled } from './props'
   import RgbaTexture from './rgbaProcessingTexture/RgbaTexture.svelte'
 
   interactivity()
@@ -18,16 +17,7 @@
   ]
   const count = urls.length
   const radius = 1.4
-
-  // const video = document.getElementById('video')
-  // // video.play()
-  // const videoTexture = new VideoTexture(video)
-  // videoTexture.colorSpace = SRGBColorSpace
-
-  // uniforms.colorProccessingTexture.value = videoTexture
 </script>
-
-<svelte:window on:dblclick={() => (urls = urls.reverse())} />
 
 <T.PerspectiveCamera
   makeDefault
