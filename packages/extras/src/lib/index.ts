@@ -80,4 +80,12 @@ export { createTransition } from './transitions/createTransition'
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
 
+// instanced sprites
+export { default as InstancedSprite } from './components/InstancedSprite/InstancedSprite.svelte'
+export {
+  useInstancedSprite,
+  buildSpritesheet,
+  type SpritesheetMetadata
+} from './components/InstancedSprite/instancedSpriteUtils'
+
 export type { ThrelteGltf } from './types/types'
