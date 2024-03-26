@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Color, Vector2, Mesh, type Texture, VideoTexture, SRGBColorSpace, Vector3 } from 'three'
-  import { T, asyncWritable, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
+  import { Color, Vector2, Mesh, type Texture, Vector3 } from 'three'
+  import { T, asyncWritable, forwardEventHandlers, useThrelte } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
   import type { ImageProps, ImageEvents, ImageSlots } from './Image'
   import { useSuspense } from '../../suspense/useSuspense'
@@ -25,15 +25,15 @@
   export let saturation: Props['saturation'] = 0
   export let lightness: Props['lightness'] = 0
   export let monochromeColor: Props['monochromeColor'] = '#535970'
-  export let monochromeStrength: Props['monochromeStrength'] = 0
+  export let monochromeStrength: ImageProps['monochromeStrength'] = undefined
   export let negative: Props['negative'] = false
-  export let colorProcessingTexture: Props['colorProcessingTexture'] = undefined
+  export let colorProcessingTexture: ImageProps['colorProcessingTexture'] = undefined
   export let opacity: Props['opacity'] = 1
-  export let texture: Props['texture'] = undefined
+  export let texture: ImageProps['texture'] = undefined
   export let toneMapped: Props['toneMapped'] = true
   export let transparent: Props['transparent'] = false
-  export let side: Props['side'] = undefined
-  export let url: Props['url'] = undefined
+  export let side: ImageProps['side'] = undefined
+  export let url: ImageProps['url'] = undefined
 
   export let ref = new Mesh()
 
@@ -57,7 +57,7 @@
     brightness: { value: brightness },
     contrast: { value: contrast },
     monochromeColor: { value: new Color(monochromeColor) },
-    monochromeStrength: { value: monochromeStrength },
+    monochromeStrength: { value: monochromeStrength ?? 0 },
     negative: { value: negative ? 1 : 0 },
     opacity: { value: opacity },
     hsl: { value: new Vector3(0, 0, 0) },
@@ -67,11 +67,13 @@
   }
 
   $: uniforms.color.value.set(color)
+
   $: if (typeof scale === 'number') {
     uniforms.scale.value.set(scale, scale)
   } else {
     uniforms.scale.value.set(scale[0], scale[1])
   }
+
   $: uniforms.imageBounds.value.set(
     $textureStore?.image.width ?? 0,
     $textureStore?.image.height ?? 0
@@ -90,11 +92,11 @@
   $: uniforms.monochromeColor.value.set(monochromeColor)
   $: uniforms.negative.value = negative ? 1 : 0
   $: uniforms.map.value = $textureStore ?? null
-  $: uniforms.colorProccessingTexture.value = colorProcessingTexture
+  $: uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null
   $: uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
 
   $: {
-    if (monochromeColor && typeof monochromeStrength === undefined) {
+    if (monochromeColor && monochromeStrength === undefined) {
       uniforms.monochromeStrength.value = 1
     }
     if (monochromeColor && typeof monochromeStrength === 'number') {
@@ -109,7 +111,8 @@
     let colorProcessingEnabled = 0
     const monochromeCheck =
       (monochromeColor ? 1 : 0) * (typeof monochromeStrength === undefined ? 1 : monochromeStrength)
-    ;[
+
+    for (const value of [
       brightness,
       contrast,
       hue,
@@ -117,11 +120,13 @@
       lightness,
       monochromeCheck,
       colorProcessingTexture ? 1 : 0
-    ].forEach((value) => {
+    ]) {
       if (value !== 0) {
         colorProcessingEnabled = 1
+        break
       }
-    })
+    }
+
     uniforms.colorProcessingEnabled.value = colorProcessingEnabled
   }
 

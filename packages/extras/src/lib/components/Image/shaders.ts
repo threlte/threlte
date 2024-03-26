@@ -11,7 +11,7 @@ void main () {
 `
 
 export const fragmentShader = /* glsl */ `
-// mostly from https://gist.github.com/statico/df64c5d167362ecf7b34fca0b1459a44
+// Majority from https://gist.github.com/statico/df64c5d167362ecf7b34fca0b1459a44
 varying vec2 vUv;
 varying vec2 vPos;
 uniform vec2 scale;
@@ -35,18 +35,11 @@ uniform float opacity;
 uniform int colorProcessingEnabled;
 uniform int colorProcessingTextureOverride;
 
-
-// const vec3 luma = vec3(.299, 0.587, 0.114);
-
-// vec4 toGrayscale(vec4 color, float intensity) {
-//   return vec4(mix(color.rgb, vec3(dot(color.rgb, luma)), intensity), color.a);
-// }
+#define PI 3.14159265;
 
 vec2 aspect(vec2 size) {
   return size / min(size.x, size.y);
 }
-
-const float PI = 3.14159265;
 
 // from https://iquilezles.org/articles/distfunctions
 float udRoundBox(vec2 p, vec2 b, float r) {
@@ -110,45 +103,43 @@ vec3 hslToRgb(vec3 hsl) {
   return vec3(r, g, b);
 }
 
+vec3 monochrome(float x, vec3 col) {
+  return col * exp(4.0 * x - 1.0);
+}
 
-vec3 monochrome(float x, vec3 col) { return col * exp(4.0 * x - 1.0); }
+void processColors (inout vec4 colors) {
+	vec4 strength = vec4(1.0);
 
-void processColors(inout vec4 colors){
-	vec4 strength = vec4(1.);
-
-	if(colorProcessingTextureOverride == 1){
+	if (colorProcessingTextureOverride == 1) {
 		strength = texture2D(colorProccessingTexture, vUv);
 
-		float smoothedAlpha = smoothstep(1.-alphaProgress-alphaSmoothing, 1.-alphaProgress, strength.a+0.0001);
-		colors.a*=smoothedAlpha;
+		float smoothedAlpha = smoothstep(1.0 - alphaProgress-alphaSmoothing, 1.0 - alphaProgress, strength.a + 0.0001);
+		colors.a *= smoothedAlpha;
 
-		if ( gl_FragColor.a == 0.0 ) {
+		if (gl_FragColor.a == 0.0) {
 			discard;
 			return;
 		}
-
 	}
 
-
 	// BRIGHTNESS
-	colors.rgb = max(colors.rgb + brightness,0.);
+	colors.rgb = max(colors.rgb + brightness, 0.0);
+
 	// CONTRAST
-  colors.rgb = max(((colors.rgb - 0.5) * max(contrast + 1.0, 0.0)) + 0.5,0.);
+  colors.rgb = max(((colors.rgb - 0.5) * max(contrast + 1.0, 0.0)) + 0.5, 0.0);
 
 	// HSL
 	vec3 hslColor = rgbToHsl(colors.rgb);
-	hslColor.x = mod(hslColor.x + hsl.x * strength.r ,1.);
-	hslColor.y *= (1.+hsl.y*strength.g);
+	hslColor.x = mod(hslColor.x + hsl.x * strength.r ,1.0);
+	hslColor.y *= (1.0 + hsl.y * strength.g);
 	hslColor.z += hsl.z * strength.b;
-	colors.rgb = max(hslToRgb(hslColor), vec3(0.));
+	colors.rgb = max(hslToRgb(hslColor), vec3(0.0));
 
 	// MONOCHROME
 	colors.rgb = mix(colors.rgb, monochrome(hslColor.z, monochromeColor), monochromeStrength);
-
 }
 
 void main() {
-
   vec2 s = aspect(scale);
   vec2 i = aspect(imageBounds);
   float rs = s.x / s.y;
@@ -163,15 +154,18 @@ void main() {
   float b = udRoundBox(vUv.xy * res - halfRes, halfRes, resolution * radius);
   vec3 a = mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), smoothstep(0.0, 1.0, b));
 
-	gl_FragColor = texture2D(map, zUv)* vec4(color, opacity * a);
+	gl_FragColor = texture2D(map, zUv) * vec4(color, opacity * a);
 
+	if (colorProcessingEnabled == 1) {
+	  processColors(gl_FragColor);
+	}
 
-	if(colorProcessingEnabled == 1) processColors(gl_FragColor);
-	if ( gl_FragColor.a == 0.0 ) discard;
+	if (gl_FragColor.a == 0.0) {
+	  discard;
+	}
 
   #include <tonemapping_fragment>
   #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
-	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.) - gl_FragColor.rgb, negative);
-
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.0) - gl_FragColor.rgb, negative);
 }
 `
