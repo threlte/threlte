@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.12.0
+
+### Minor Changes
+
+- 842fef9: Added Mask component to Extras
+
 ## 0.11.0
 
 ### Minor Changes
