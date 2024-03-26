@@ -110,7 +110,7 @@ importers:
         version: 3.2.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.160.0)(three@0.160.1)
+        version: 0.1.15(@types/three@0.158.3)(three@0.160.1)
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@4.2.0)
@@ -154,8 +154,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.160.0
-        version: 0.160.0
+        specifier: ^0.158.0
+        version: 0.158.3
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -2396,13 +2396,13 @@ packages:
       tweakpane: 4.0.1
     dev: true
 
-  /@lumaai/luma-web@0.1.15(@types/three@0.160.0)(three@0.160.1):
+  /@lumaai/luma-web@0.1.15(@types/three@0.158.3)(three@0.160.1):
     resolution: {integrity: sha512-gNI7qhwSDdvS6+IVFe9QpD2E/9VXRfO2dUn5CUVgvw+Ldus057ghBKdZ1AYO8Mgi/7J+OI4Nxd7r8YwzRf8/Pg==}
     peerDependencies:
       '@types/three': ^0.157.2
       three: ^0.157.0
     dependencies:
-      '@types/three': 0.160.0
+      '@types/three': 0.158.3
       three: 0.160.1
     dev: true
 
@@ -3844,6 +3844,15 @@ packages:
 
   /@types/stats.js@0.17.0:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
+
+  /@types/three@0.158.3:
+    resolution: {integrity: sha512-6Qs1rUvLSbkJ4hlIe6/rdwIf61j1x2UKvGJg7s8KjswYsz1C1qDTs6voVXXB8kYaI0hgklgZgbZUupfL1l9xdA==}
+    dependencies:
+      '@types/stats.js': 0.17.0
+      '@types/webxr': 0.5.5
+      fflate: 0.6.10
+      meshoptimizer: 0.18.1
+    dev: true
 
   /@types/three@0.160.0:
     resolution: {integrity: sha512-jWlbUBovicUKaOYxzgkLlhkiEQJkhCVvg4W2IYD2trqD2om3VK4DGLpHH5zQHNr7RweZK/5re/4IVhbhvxbV9w==}
@@ -11823,9 +11832,6 @@ packages:
   /three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
     dev: false
-
-  /three@0.158.0:
-    resolution: {integrity: sha512-TALj4EOpdDPF1henk2Q+s17K61uEAAWQ7TJB68nr7FKxqwyDr3msOt5IWdbGm4TaWKjrtWS8DJJWe9JnvsWOhQ==}
 
   /three@0.160.1:
     resolution: {integrity: sha512-Bgl2wPJypDOZ1stAxwfWAcJ0WQf7QzlptsxkjYiURPz+n5k4RBDLsq+6f9Y75TYxn6aHLcWz+JNmwTOXWrQTBQ==}
