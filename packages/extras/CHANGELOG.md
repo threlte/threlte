@@ -1,5 +1,16 @@
 # @threlte/extras
 
+## 8.11.0
+
+### Minor Changes
+
+- 842fef9: Added Mask component to Extras
+- a3866b0: NEW COMPONENT: InstancedSprite
+
+### Patch Changes
+
+- e6c4250: Add `<Image>` component.
+
 ## 8.10.3
 
 ### Patch Changes
