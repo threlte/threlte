@@ -65,6 +65,20 @@ const cli = meow(
 
 const { packageJson } = readPackageUpSync({ cwd: __dirname, normalize: false })
 
+function parseFilePath(filePath) {
+  // Extract the path, filename, and extension
+  const pathComponents = filePath.split(/[/\\]/) // Split by both forward and backward slashes
+  const filenameWithExt = pathComponents.pop() // Extract the filename with extension
+  const path = pathComponents.join('/') // Reconstruct the path
+
+  // Separate the filename and extension
+  const lastDotIndex = filenameWithExt.lastIndexOf('.')
+  const filename = filenameWithExt.substring(0, lastDotIndex)
+  const extension = filenameWithExt.substring(lastDotIndex + 1)
+
+  return { path, filename, extension }
+}
+
 if (cli.input.length === 0) {
   console.log(cli.help)
 } else {
@@ -74,9 +88,11 @@ if (cli.input.length === 0) {
 Command: npx @threlte/gltf@${packageJson.version} ${process.argv.slice(2).join(' ')}`
   }
   const file = cli.input[0]
-  let nameExt = file.match(/[-_\w]+[.][\w]+$/i)[0]
-  let name = nameExt.split('.').slice(0, -1).join('.')
-  const output = name + '.svelte'
+
+  const inputPath = parseFilePath(file)
+  const outputPath = parseFilePath(config.output)
+  const filename = outputPath.filename != '' ? outputPath.filename : inputPath.filename
+  const output = `${outputPath.path}/${filename}.svelte`
   const showLog = (log) => {
     console.info('log:', log)
   }
