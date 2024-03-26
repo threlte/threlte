@@ -77,7 +77,7 @@ type: 'component'
           required: false,
           description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
         },
-        { name: 'alphaProgress', type: 'number', default: '0', required: false, description: '' },
+        { name: 'alphaThreshold', type: 'number', default: '0', required: false, description: '' },
         { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
         { name: 'zoom', type: 'number', default: '1', required: false },
         { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
@@ -151,11 +151,11 @@ Each texture channel controls a different color processing effect:
 Red, green and blue channels are applied multiplicatively to the values of hue, saturation and lightness.
 
 The alpha channel acts differently, providing a flexible alpha override mechanism, that uses a range of values for
-dynamic image reveal effect. With changing the `alphaProgress` property, areas with alpha values approaching 1 are revealed first,
+dynamic image reveal effect. With changing the `alphaThreshold` property, areas with alpha values approaching 1 are revealed first,
 followed by regions with values tending towards 0.
 
 To further control this effect, the `alphaSmoothing` property allows for a gradual fade-in effect within a specified range.
-For instance, with an alphaProgress of 0.5 and an alphaSmoothing set to 0.15, alpha values spanning from 0.5 to 0.65
+For instance, with an alphaThreshold of 0.5 and an alphaSmoothing set to 0.15, alpha values spanning from 0.5 to 0.65
 will smoothly transition into visibility.
 
 Enable "color processing with a texture" in the example on top of this page to see the effect applying RGBA color processing texture can have.

@@ -14,7 +14,7 @@
     monochromeColor,
     monochromeStrength,
     colorProcessingTexture,
-    alphaProgress,
+    alphaThreshold,
     alphaSmoothing
   } from './props'
 
@@ -50,7 +50,7 @@
     {url}
     radius={$radius}
     zoom={$zoom}
-    alphaProgress={$alphaProgress}
+    alphaThreshold={$alphaThreshold}
     alphaSmoothing={$alphaSmoothing}
     brightness={$brightness}
     contrast={$contrast}

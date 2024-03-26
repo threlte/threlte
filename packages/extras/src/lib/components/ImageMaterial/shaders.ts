@@ -22,7 +22,7 @@ uniform sampler2D map;
 uniform sampler2D colorProccessingTexture;
 uniform float radius;
 uniform float zoom;
-uniform float alphaProgress;
+uniform float alphaThreshold;
 uniform float alphaSmoothing;
 uniform float brightness;
 uniform float contrast;
@@ -113,7 +113,7 @@ void processColors (inout vec4 colors) {
 	if (colorProcessingTextureOverride == 1) {
 		strength = texture2D(colorProccessingTexture, vUv);
 
-		float smoothedAlpha = smoothstep(1.0 - alphaProgress-alphaSmoothing, 1.0 - alphaProgress, strength.a + 0.0001);
+		float smoothedAlpha = smoothstep(1.0 - alphaThreshold - alphaSmoothing, 1.0 - alphaThreshold, strength.a + 0.0001);
 		colors.a *= smoothedAlpha;
 
 		if (gl_FragColor.a == 0.0) {

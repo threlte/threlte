@@ -14,7 +14,7 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
   /** Default: 0 */
   radius?: number
   /** Default: 0 */
-  alphaProgress?: number
+  alphaThreshold?: number
   /** Default: 0.1 */
   alphaSmoothing?: number
   /** Default: 0 */

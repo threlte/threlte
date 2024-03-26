@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store'
 import type { Texture } from 'three'
 
-export const alphaProgress = writable(0.5)
+export const alphaThreshold = writable(0.5)
 export const alphaSmoothing = writable(0.15)
 export const brightness = writable(0)
 export const contrast = writable(0)

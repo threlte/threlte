@@ -22,7 +22,7 @@
   export let color: Props['color'] = 'white'
   export let zoom: Props['zoom'] = 1
   export let radius: Props['radius'] = 0
-  export let alphaProgress: Props['alphaProgress'] = 0
+  export let alphaThreshold: Props['alphaThreshold'] = 0
   export let alphaSmoothing: Props['alphaSmoothing'] = 0.1
   export let brightness: Props['brightness'] = 0
   export let contrast: Props['contrast'] = 0
@@ -57,7 +57,7 @@
     map: { value: null as Texture | null },
     zoom: { value: zoom },
     radius: { value: radius },
-    alphaProgress: { value: alphaProgress },
+    alphaThreshold: { value: alphaThreshold },
     alphaSmoothing: { value: alphaSmoothing },
     brightness: { value: brightness },
     contrast: { value: contrast },
@@ -81,7 +81,7 @@
   $: uniforms.zoom.value = zoom
   $: uniforms.radius.value = radius
   $: uniforms.opacity.value = opacity
-  $: uniforms.alphaProgress.value = alphaProgress
+  $: uniforms.alphaThreshold.value = alphaThreshold
   $: uniforms.alphaSmoothing.value = alphaSmoothing
   $: uniforms.brightness.value = brightness
   $: uniforms.contrast.value = contrast

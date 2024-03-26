@@ -12,7 +12,7 @@
     monochromeColor,
     monochromeStrength,
     textureOverrideEnabled,
-    alphaProgress,
+    alphaThreshold,
     alphaSmoothing
   } from './props'
 
@@ -92,8 +92,8 @@
       label="enabled"
     />
     <Slider
-      bind:value={$alphaProgress}
-      label="alphaProgress"
+      bind:value={$alphaThreshold}
+      label="alphaThreshold"
       min={0}
       max={1}
     />
