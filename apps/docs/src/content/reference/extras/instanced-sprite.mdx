@@ -43,13 +43,6 @@
             required: true,
             description: 'Number of instances'
           },
-					{
-            name: 'filter',
-            type: "'nearest' | 'linear'",
-            required: false,
-            default: "'nearest'",
-            description: 'The texture filtering applied to the spritesheet.'
-          },
           {
             name: 'fps',
             type: 'boolean',
@@ -140,7 +133,6 @@ Other than it's own props, `<InstanedSprite/>` extends and accepts all propertie
 | `billboarding` | Sets the default global billboarding (sprites always facing the camera) state that is used unless the setAt was called on the instance. |
 | `playmode` | Sets playmode for all instances. `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"` |
 | `fps` | The desired frames per second of the animation |
-| `filter` | The texture filtering applied to the spritesheet. |
 | `alphaTest` | Sets the alpha value to be used when running an alpha test |
 | `transparent` | Whether or not the material should be transparent |
 | `randomPlaybackOffset` | Offset each sprite's animation timer by a random number of milliseconds. If `true`, randomness is within 0-100ms range. Providing the prop with a number sets the upper range of the offset - `randomPlaybackOffset={2000}` means that the animation will be offset by 0-2000ms  |

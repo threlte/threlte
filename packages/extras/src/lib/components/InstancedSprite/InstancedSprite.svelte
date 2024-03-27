@@ -31,9 +31,7 @@
   export let fps: $$Props['fps'] = 15
   export let billboarding: $$Props['billboarding']
   export let playmode: $$Props['playmode'] = 'FORWARD'
-
   export let count: $$Props['count'] = 1000
-  export let filter: $$Props['filter'] = 'nearest'
   export let alphaTest: $$Props['alphaTest'] = 0.1
   export let transparent: $$Props['transparent'] = true
   export let hueShift:
