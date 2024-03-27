@@ -64,13 +64,6 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
   fps?: number
 
   /**
-   * The texture filtering applied to the spritesheet.
-   *
-   * @default 'nearest'
-   */
-  filter?: 'nearest' | 'linear'
-
-  /**
    * Sets the alpha value to be used when running an alpha test.
    *
    * @see https://threejs.org/docs/#api/en/materials/Material.alphaTest
