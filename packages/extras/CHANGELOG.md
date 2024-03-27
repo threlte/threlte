@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.11.1
+
+### Patch Changes
+
+- 82c93bc: Remove unused 'filter' prop from InstancedSprite
+
 ## 8.11.0
 
 ### Minor Changes
