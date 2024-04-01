@@ -44,7 +44,7 @@
   })
 
   $: {
-    material.uniforms.resolution.value = new Vector2($size.width, $size.height)
+    material.uniforms.resolution.value.set($size.width, $size.height)
     invalidate()
   }
 
@@ -54,7 +54,7 @@
     material.uniforms.dashOffset.value = dashOffset
     material.uniforms.lineWidth.value = width
     material.uniforms.opacity.value = opacity
-    material.uniforms.color.value = new Color(color)
+    material.uniforms.color.value.set(color)
     invalidate()
   }
 

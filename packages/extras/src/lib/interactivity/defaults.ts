@@ -6,14 +6,12 @@ export const getDefaultComputeFunction = (
 ): ComputeFunction => {
   const { camera } = useThrelte()
 
-  let width = 0
-  let height = 0
+  let width = target.current.clientWidth
+  let height = target.current.clientHeight
 
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      width = entry.contentRect.width
-      height = entry.contentRect.height
-    }
+  const resizeObserver = new ResizeObserver(([entry]) => {
+    width = entry.contentRect.width
+    height = entry.contentRect.height
   })
 
   watch(target, (target) => {
