@@ -77,7 +77,7 @@
     if (points.length === 0) return
 
     // The size of the buffer atributes cannot change, so return if the number of points has changed
-    if (points.length != pointCount) return
+    if (points.length !== pointCount) return
 
     let positionIndex = 0
     let previousIndex = 0
