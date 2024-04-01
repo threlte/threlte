@@ -137,7 +137,7 @@
   onMount(() => {
     createRenderer(canvas, rendererParameters)
 
-    context.renderer.setAnimationLoop((time) => {
+    ctx.renderer.setAnimationLoop((time) => {
       internalCtx.dispose()
 
       ctx.scheduler.run(time)
