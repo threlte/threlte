@@ -24,7 +24,6 @@
     points.push(new Vector3(0, 0, 0))
   }
 
-  $: console.log(cursorPosition.x, cursorPosition.z)
   $: sprungCursor.set(cursorPosition)
 
   $: {

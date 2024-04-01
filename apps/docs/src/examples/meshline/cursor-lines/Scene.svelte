@@ -30,8 +30,6 @@
 <T.Mesh
   visible={false}
   on:pointermove={(e) => {
-    console.log(e)
-    debugger
     cursorPosition.x = e.point.x
     cursorPosition.z = e.point.z
   }}
