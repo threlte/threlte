@@ -9,18 +9,16 @@
     type ToneMapping,
     type WebGLRendererParameters
   } from 'three'
-  import { Scheduler } from './frame-scheduling'
-  import { injectLegacyFrameCompatibilityContext } from './hooks/legacy/utils'
+  import { createThrelteContext } from './lib/contexts'
   import { useParentSize } from './hooks/useParentSize'
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
   import { createCache } from './lib/cache'
-  import { createContexts } from './lib/contexts'
-  import { setDefaultCameraAspectOnSizeChange } from './lib/defaultCamera'
   import { revision } from './lib/revision'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
   import type { Size } from './types'
+  import { useThrelteInternal } from './hooks/useThrelteInternal'
 
   /**
    * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —
@@ -95,11 +93,7 @@
   // in case the user didn't define a fixed size, use the parent elements size
   const { parentSize, parentSizeAction } = useParentSize()
 
-  // TODO: Remove in Threlte 7
-  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
-
-  // creating and setting the contexts
-  const contexts = createContexts({
+  const context = createThrelteContext({
     colorManagementEnabled,
     colorSpace,
     dpr,
@@ -111,55 +105,31 @@
     useLegacyLights,
     userSize
   })
+  const internalCtx = useThrelteInternal()
 
-  $: contexts.ctx.colorSpace.set(colorSpace)
-  $: contexts.ctx.dpr.set(dpr)
-  $: contexts.ctx.renderMode.set(renderMode)
-  $: contexts.ctx.autoRender.set(autoRender)
-  $: contexts.ctx.shadows.set(shadows)
-  $: contexts.ctx.toneMapping.set(toneMapping)
+  // context bindings
+  export const ctx = context
 
-  const scheduler = new Scheduler()
-  contexts.getCtx().mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
-  contexts.getCtx().renderStage = scheduler.createStage(Symbol('threlte-render-stage'), {
-    after: contexts.ctx.mainStage,
-    callback(_, runTasks) {
-      if (contexts.ctx.shouldRender()) runTasks()
-    }
-  })
-  contexts.getCtx().autoRenderTask = contexts.ctx.renderStage.createTask(
-    Symbol('threlte-auto-render-task'),
-    (_) => {
-      // we're in here when autoRender is true In Threlte 7 we still have to
-      // check for the existence of `useRender` instances
-      if (useRenderOrders.length > 0) return
+  $: ctx.colorSpace.set(colorSpace)
+  $: ctx.dpr.set(dpr)
+  $: ctx.renderMode.set(renderMode)
+  $: ctx.autoRender.set(autoRender)
+  $: ctx.shadows.set(shadows)
+  $: ctx.toneMapping.set(toneMapping)
 
-      // if there are no useRender instances, we can render the scene
-      contexts.ctx.renderer.render(ctx.scene, ctx.camera.current)
-    }
-  )
-
-  watch([initialized, contexts.ctx.autoRender], ([initialized, autoRender]) => {
+  watch([initialized, ctx.autoRender], ([initialized, autoRender]) => {
     if (initialized && autoRender) {
-      contexts.getCtx().autoRenderTask.start()
+      ctx.autoRenderTask.start()
     } else {
-      contexts.getCtx().autoRenderTask.stop()
+      ctx.autoRenderTask.stop()
     }
     return () => {
-      contexts.getCtx().autoRenderTask.stop()
+      ctx.autoRenderTask.stop()
     }
   })
-
-  // set the scheduler on the context
-  contexts.getCtx().scheduler = scheduler
 
   // create cache context for caching assets
   createCache()
-
-  // context bindings
-  export const ctx = contexts.ctx
-
-  setDefaultCameraAspectOnSizeChange(ctx)
 
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)
@@ -167,22 +137,22 @@
   onMount(() => {
     createRenderer(canvas, rendererParameters)
 
-    contexts.getCtx().renderer.setAnimationLoop((time) => {
-      contexts.getInternalCtx().dispose()
+    context.renderer.setAnimationLoop((time) => {
+      internalCtx.dispose()
 
-      scheduler.run(time)
+      ctx.scheduler.run(time)
 
-      contexts.getInternalCtx().resetFrameInvalidation()
+      internalCtx.resetFrameInvalidation()
     })
 
     initialized.set(true)
   })
 
   onDestroy(() => {
-    contexts.internalCtx.dispose(true)
-    contexts.ctx.scheduler.dispose()
+    internalCtx.dispose(true)
+    ctx.scheduler.dispose()
     // Renderer is marked as optional because it is never defined in SSR
-    contexts.ctx.renderer?.dispose()
+    ctx.renderer?.dispose()
   })
 </script>
 
@@ -191,7 +161,7 @@
   bind:this={canvas}
 >
   {#if $initialized}
-    <SceneGraphObject object={contexts.ctx.scene}>
+    <SceneGraphObject object={ctx.scene}>
       <slot />
     </SceneGraphObject>
   {/if}
