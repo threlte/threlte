@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.13.1
+
+### Patch Changes
+
+- 761fc37: Removed font-family property
+
 ## 0.13.0
 
 ### Minor Changes
