@@ -25,36 +25,36 @@
 
   let { invalidate, size } = useThrelte()
 
-  const material = new ShaderMaterial({
-    uniforms: {
-      lineWidth: { value: width },
-      color: { value: new Color(color) },
-      opacity: { value: opacity },
-      resolution: { value: new Vector2(1, 1) },
-      sizeAttenuation: { value: attenuate ? 1 : 0 },
-      dashArray: { value: dashArray },
-      dashOffset: { value: dashOffset },
-      dashRatio: { value: dashRatio },
-      useDash: { value: dashArray > 0 ? 1 : 0 },
-      scaleDown: { value: scaleDown / 10 },
-      alphaTest: { value: 0 },
-      alphaMap: { value: alphaMap },
-      useAlphaMap: { value: alphaMap ? 1 : 0 }
-    }
-  })
+  const uniforms = {
+    lineWidth: { value: width },
+    color: { value: new Color(color) },
+    opacity: { value: opacity },
+    resolution: { value: new Vector2(1, 1) },
+    sizeAttenuation: { value: attenuate ? 1 : 0 },
+    dashArray: { value: dashArray },
+    dashOffset: { value: dashOffset },
+    dashRatio: { value: dashRatio },
+    useDash: { value: dashArray > 0 ? 1 : 0 },
+    scaleDown: { value: scaleDown / 10 },
+    alphaTest: { value: 0 },
+    alphaMap: { value: alphaMap },
+    useAlphaMap: { value: alphaMap ? 1 : 0 }
+  }
+
+  const material = new ShaderMaterial({ uniforms })
 
   $: {
-    material.uniforms.resolution.value = new Vector2($size.width, $size.height)
+    uniforms.resolution.value.set($size.width, $size.height)
     invalidate()
   }
 
   $: {
-    material.uniforms.dashRatio.value = dashRatio
-    material.uniforms.dashArray.value = dashArray
-    material.uniforms.dashOffset.value = dashOffset
-    material.uniforms.lineWidth.value = width
-    material.uniforms.opacity.value = opacity
-    material.uniforms.color.value = new Color(color)
+    uniforms.dashRatio.value = dashRatio
+    uniforms.dashArray.value = dashArray
+    uniforms.dashOffset.value = dashOffset
+    uniforms.lineWidth.value = width
+    uniforms.opacity.value = opacity
+    uniforms.color.value.set(color)
     invalidate()
   }
 

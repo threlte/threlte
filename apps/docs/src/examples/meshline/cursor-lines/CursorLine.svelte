@@ -27,15 +27,12 @@
   $: sprungCursor.set(cursorPosition)
 
   $: {
-    if (points[0]) {
-      points[0].x = $sprungCursor.x
-      points[0].z = $sprungCursor.z
-      points = points
-    }
+    points[0]?.set($sprungCursor.x, 0, $sprungCursor.z)
+    points = points
   }
 
   useTask((delta) => {
-    let previousPoint = points[0]
+    let [previousPoint] = points
     points.forEach((point, i) => {
       if (previousPoint && i > 0) {
         point.lerp(previousPoint, Math.pow(0.000001, delta))
