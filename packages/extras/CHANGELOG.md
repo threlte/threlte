@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.11.2
+
+### Patch Changes
+
+- 4867f80: Improve MeshLineGeometry performance, fix interactivity NaN bug
+
 ## 8.11.1
 
 ### Patch Changes
