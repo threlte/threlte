@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 1.0.2
+
+### Patch Changes
+
+- 761fc37: Removed font-family property
+
 ## 1.0.1
 
 ### Patch Changes
