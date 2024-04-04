@@ -13,7 +13,10 @@
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  on:create={({ ref }) => {
+    console.log('hi', ref.position)
+    ref.lookAt(0, 0, 0)
+  }}
 />
 
 <T.Mesh
@@ -27,7 +30,7 @@
 
 <T.Mesh
   receiveShadow
-  position.y={-1}
+  position={[0, -1, 0]}
 >
   <T.MeshStandardMaterial color="turquoise" />
   <T.CylinderGeometry args={[1, 1, 0.1]} />

@@ -1,3 +1,5 @@
+import { writable } from 'svelte/store'
+
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
@@ -51,9 +53,7 @@ export type { Size } from './types'
 
 // utils
 export { createObjectStore } from './lib/createObjectStore'
-export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { forwardEventHandlers } from './lib/forwardEventHandlers'
 export { useCache } from './lib/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { revision } from './lib/revision'
@@ -64,3 +64,6 @@ export { revision } from './lib/revision'
 export type { DisposableObjectProperties } from './internal/DisposableObject.svelte.d'
 export type { HierarchicalObjectProperties } from './internal/HierarchicalObject.svelte'
 export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.svelte'
+
+export const createRawEventDispatcher = () => () => undefined
+export const forwardEventHandlers = () => writable()
