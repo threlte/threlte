@@ -1,4 +1,4 @@
-import { createRawEventDispatcher, currentWritable } from '@threlte/core'
+import { currentWritable } from '@threlte/core'
 import { setContext } from 'svelte'
 import { derived, writable, type Readable } from 'svelte/store'
 
@@ -10,11 +10,7 @@ export type SuspenseContext = {
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
 
-export const createSuspenseContext = (options?: { final?: boolean }) => {
-  const dispatch = createRawEventDispatcher<{
-    error: Error
-  }>()
-
+export const createSuspenseContext = (options?: { final?: boolean }, events: any) => {
   /**
    * This set contains all the promises that are currently being suspended.
    */
@@ -91,7 +87,7 @@ export const createSuspenseContext = (options?: { final?: boolean }) => {
       promise
         .catch((error) => {
           addError(promise, error)
-          dispatch('error', error)
+          events?.error?.(error)
         })
         .finally(() => {
           removePromise(promise)

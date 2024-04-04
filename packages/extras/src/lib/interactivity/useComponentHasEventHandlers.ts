@@ -1,15 +1,12 @@
-import { onMount } from 'svelte'
-import { get_current_component } from 'svelte/internal'
+import { onMount, getContext } from 'svelte'
 import { writable } from 'svelte/store'
 
 export const useComponentHasEventHandlers = (eventNames: string[]) => {
-  const component = get_current_component()
+  const events = getContext('threlte-component-events')
   const hasEventHandlers = writable(false)
 
   onMount(() => {
-    hasEventHandlers.set(
-      Object.keys(component.$$.callbacks).some((value) => eventNames.includes(value))
-    )
+    hasEventHandlers.set(Object.keys(events).some((value) => eventNames.includes(value)))
   })
 
   return {

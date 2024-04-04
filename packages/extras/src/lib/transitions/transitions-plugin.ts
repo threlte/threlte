@@ -1,12 +1,12 @@
 import { createRawEventDispatcher, injectPlugin, useThrelte } from '@threlte/core'
-import {
-  add_render_callback,
-  create_bidirectional_transition,
-  create_in_transition,
-  get_current_component,
-  onMount,
-  create_out_transition
-} from 'svelte/internal'
+// import {
+//   add_render_callback,
+//   create_bidirectional_transition,
+//   create_in_transition,
+//   get_current_component,
+//   create_out_transition
+// } from 'svelte/internal'
+import { onMount } from 'svelte'
 import type { TransitionConfig } from 'svelte/transition'
 import type { ThrelteTransition } from './types'
 
@@ -81,6 +81,7 @@ const appendToFragmentFunction = (
  * ```
  */
 export const transitions = () => {
+  return undefined
   injectPlugin<{
     in?: ThrelteTransition<any>
     out?: ThrelteTransition<any>

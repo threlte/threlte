@@ -7,13 +7,7 @@
   import { useStudio } from '../studio/useStudio'
 
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import {
-    createRawEventDispatcher,
-    currentWritable,
-    watch,
-    type CurrentWritable,
-    useThrelte
-  } from '@threlte/core'
+  import { currentWritable, watch, type CurrentWritable, useThrelte } from '@threlte/core'
   import { getContext, onDestroy, onMount } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import Declare from './declare/Declare.svelte'
@@ -38,16 +32,16 @@
     }) as any
   )
 
-  const dispatch = createRawEventDispatcher<{
-    change: ISheetObject<Props>['value']
-  }>()
+  // const dispatch = createRawEventDispatcher<{
+  //   change: ISheetObject<Props>['value']
+  // }>()
 
   onMount(() => {
     // Because the sheet object value subscription is not running before any
     // values change, we're emitting the initial value here. Doing this in
     // onMount also means that child components which might add props to the
     // sheet object have already been mounted.
-    dispatch('change', sheetObject.current.value)
+    // dispatch('change', sheetObject.current.value)
   })
 
   // This flag is used to prevent the sheet object from being created after it
@@ -136,7 +130,7 @@
   let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
     return sheetObject.onValuesChange((newValues) => {
-      dispatch('change', newValues)
+      // dispatch('change', newValues)
       values = newValues
       // this invalidation also invalidates changes catched by slotted
       // components such as <Sync> or <Declare>.

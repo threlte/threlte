@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
@@ -9,13 +9,20 @@
   type $$Events = AudioEvents
   type $$Slots = AudioSlots
 
-  export let src: $$Props['src']
-  export let id: $$Props['id'] = undefined
-  export let volume: $$Props['volume'] = undefined
-  export let playbackRate: $$Props['playbackRate'] = undefined
-  export let autoplay: $$Props['autoplay'] = undefined
-  export let detune: $$Props['detune'] = undefined
-  export let loop: $$Props['loop'] = undefined
+  let {
+    src,
+    id,
+    volume,
+    playbackRate,
+    autoplay,
+    detune,
+    loop,
+    ref = $bindable(),
+    pause = $bindable(),
+    play = $bindable(),
+    stop = $bindable(),
+    ...restProps
+  }: AudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -25,26 +32,26 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const ref = new ThreeAudio<GainNode>(listener)
+  ref = new ThreeAudio<GainNode>(listener)
 
-  const { pause, play, stop, setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume } =
-    useAudio(ref)
-  export { play, pause, stop }
-  $: setAutoPlay(autoplay)
-  $: setSrc(src)
-  $: setVolume(volume)
-  $: setPlaybackRate(playbackRate)
-  $: setLoop(loop)
-  $: setDetune(detune)
+  const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
+    useAudio(ref, restProps.$$events)
 
-  const component = forwardEventHandlers()
+  pause = useAudioProps.pause
+  play = useAudioProps.play
+  stop = useAudioProps.stop
+
+  $effect(() => setAutoPlay(autoplay))
+  $effect(() => void setSrc(src))
+  $effect(() => setVolume(volume))
+  $effect(() => setPlaybackRate(playbackRate))
+  $effect(() => setLoop(loop))
+  $effect(() => setDetune(detune))
 </script>
 
 <T
   is={ref}
-  {...$$restProps}
-  let:ref
-  bind:this={$component}
+  {...restProps}
 >
   <slot {ref} />
 </T>

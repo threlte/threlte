@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
@@ -13,19 +13,24 @@
   type $$Events = PositionalAudioEvents
   type $$Slots = PositionalAudioSlots
 
-  export let src: $$Props['src']
-  export let id: $$Props['id'] = undefined
-  export let volume: $$Props['volume'] = undefined
-  export let playbackRate: $$Props['playbackRate'] = undefined
-  export let autoplay: $$Props['autoplay'] = undefined
-  export let detune: $$Props['detune'] = undefined
-  export let loop: $$Props['loop'] = undefined
-
-  export let directionalCone: $$Props['directionalCone'] = undefined
-  export let refDistance: $$Props['refDistance'] = undefined
-  export let rolloffFactor: $$Props['rolloffFactor'] = undefined
-  export let distanceModel: $$Props['distanceModel'] = undefined
-  export let maxDistance: $$Props['maxDistance'] = undefined
+  let {
+    src,
+    id,
+    volume,
+    playbackRate,
+    autoplay,
+    detune,
+    loop,
+    directionalCone,
+    refDistance,
+    rolloffFactor,
+    distanceModel,
+    maxDistance,
+    play = $bindable(),
+    pause = $bindable(),
+    stop = $bindable(),
+    ...restProps
+  }: PositionalAudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -37,7 +42,7 @@
 
   export const ref = new ThreePositionalAudio(listener)
 
-  $: {
+  $effect(() => {
     if (refDistance !== undefined) ref.setRefDistance(refDistance)
     if (rolloffFactor !== undefined) ref.setRolloffFactor(rolloffFactor)
     if (distanceModel !== undefined) ref.setDistanceModel(distanceModel)
@@ -49,35 +54,33 @@
         directionalCone.coneOuterGain
       )
     }
-  }
+  })
 
   const {
-    pause,
-    play,
-    stop,
     setAutoPlay,
     setDetune,
     setLoop,
     setPlaybackRate,
     setSrc: setSource,
-    setVolume
-  } = useAudio(ref)
-  export { play, pause, stop }
-  $: setAutoPlay(autoplay)
-  $: setSource(src)
-  $: setVolume(volume)
-  $: setPlaybackRate(playbackRate)
-  $: setLoop(loop)
-  $: setDetune(detune)
+    setVolume,
+    ...useAudioProps
+  } = useAudio(ref, restProps.$$events)
 
-  const component = forwardEventHandlers()
+  pause = useAudioProps.pause
+  play = useAudioProps.play
+  stop = useAudioProps.stop
+
+  $effect(() => setAutoPlay(autoplay))
+  $effect(() => void setSource(src))
+  $effect(() => setVolume(volume))
+  $effect(() => setPlaybackRate(playbackRate))
+  $effect(() => setLoop(loop))
+  $effect(() => setDetune(detune))
 </script>
 
 <T
   is={ref}
-  {...$$restProps}
-  let:ref
-  bind:this={$component}
+  {...restProps}
 >
   <slot {ref} />
 </T>
