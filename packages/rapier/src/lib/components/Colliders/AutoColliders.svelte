@@ -22,31 +22,31 @@
   type TMassDef = $$Generic<MassDef>
   type $$Props = AutoCollidersProps<TMassDef>
 
-  export let shape: $$Props['shape'] = 'convexHull' as $$Props['shape']
-  export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
-  export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
-    undefined as $$Props['restitutionCombineRule']
-  export let friction: $$Props['friction'] = undefined as $$Props['friction']
-  export let frictionCombineRule: $$Props['frictionCombineRule'] =
-    undefined as $$Props['frictionCombineRule']
-  export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
-  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
-    undefined as $$Props['contactForceEventThreshold']
-  export let density: $$Props['density'] = undefined
-  export let mass: $$Props['mass'] = undefined
-  export let centerOfMass: $$Props['centerOfMass'] = undefined
-  export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
-  export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
+  let {
+    shape = 'convexHull',
+    restitution,
+    restitutionCombineRule,
+    friction,
+    frictionCombineRule,
+    sensor,
+    contactForceEventThreshold,
+    density,
+    mass,
+    centerOfMass,
+    principalAngularInertia,
+    angularInertiaLocalFrame,
+    refresh = $bindable(() => create()),
+    colliders = $bindable(),
+    ...props
+  }: AutoCollidersProps<TMassDef> = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>()
+  const { updateRef } = useCreateEvent<Collider[]>(props.$$events)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
-
-  export let colliders: Collider[] = []
 
   const collisionGroups = useCollisionGroups()
 
@@ -59,6 +59,8 @@
   const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
   const cleanup = () => {
+    if (colliders === undefined) return
+
     collisionGroups.removeColliders(colliders)
     colliders.forEach((c) => {
       removeColliderFromContext(c)
@@ -67,7 +69,7 @@
     colliders.length = 0
   }
 
-  export const create = () => {
+  const create = () => {
     cleanup()
     colliders = createCollidersFromChildren(
       group,
@@ -116,10 +118,6 @@
   onMount(() => {
     create()
   })
-
-  export const refresh = () => {
-    create()
-  }
 
   /**
    * Cleanup

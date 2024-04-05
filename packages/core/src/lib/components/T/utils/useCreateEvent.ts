@@ -1,9 +1,6 @@
 import { onDestroy, onMount } from 'svelte'
-import { useComponentEvents } from '../utils/useComponentEvents'
 
-export const useCreateEvent = <T>() => {
-  const events = useComponentEvents()
-
+export const useCreateEvent = <T>(events: Record<string, (arg: unknown) => void> = {}) => {
   const cleanupFunctions: (() => void)[] = []
 
   let ref: T | undefined = undefined

@@ -65,7 +65,6 @@
    * Events setup
    */
   type $$Events = ColliderEventMap
-  const dispatcher = createRawEventDispatcher<ColliderEventMap>()
 
   /**
    * Actual collider setup happens onMount as only then
@@ -88,7 +87,7 @@
     /**
      * Add collider to context
      */
-    rapierContext.addColliderToContext(collider, object, dispatcher)
+    rapierContext.addColliderToContext(collider, object, props.$$events)
 
     /**
      * For use in conjunction with component <CollisionGroups>

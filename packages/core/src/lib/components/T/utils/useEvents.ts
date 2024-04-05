@@ -1,7 +1,8 @@
 import { writable } from 'svelte/store'
 import { watch } from '../../../lib/storeUtils'
-import { useComponentEvents, type Events } from './useComponentEvents'
 import type { EventDispatcher } from 'three'
+
+type Events = Record<string, (arg: unknown) => void>
 
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher
@@ -12,9 +13,7 @@ const isEventDispatcher = (value: object): value is EventDispatcher => {
   return 'addEventListener' in value && 'removeEventListener' in value
 }
 
-export const useEvents = () => {
-  const events = useComponentEvents()
-
+export const useEvents = (events: Events = {}) => {
   const eventHandlerProxy = (
     event?: {
       type?: string

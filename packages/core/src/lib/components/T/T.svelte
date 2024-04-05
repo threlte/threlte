@@ -1,11 +1,9 @@
 <script lang="ts">
   import { useIsContext } from './utils/useIsContext'
-
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
-  import { createComponentEventsContext } from './utils/useComponentEvents'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
@@ -35,8 +33,6 @@
     ...props
   }: AllProps = $props()
   
-  createComponentEventsContext(props.$$events)
-
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $state(determineRef<Type>(is, args))
   ref = internalRef
@@ -44,7 +40,7 @@
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent<Type>()
+  const createEvent = useCreateEvent<Type>(props.$$events)
 
   // The ref is created, emit the event
   createEvent.updateRef(internalRef)
@@ -104,7 +100,7 @@
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents()
+  const events = useEvents(props.$$events)
   $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates
