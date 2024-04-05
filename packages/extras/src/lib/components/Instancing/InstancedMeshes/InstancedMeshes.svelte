@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { forwardEventHandlers } from '@threlte/core'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
@@ -57,13 +56,10 @@
 
   $: meshesArray = Array.isArray(meshes) ? meshes : Object.values(meshes)
   $: filteredMeshesArray = meshesArray.filter((mesh) => mesh.isMesh)
-
-  const dispatchingComponent = forwardEventHandlers()
 </script>
 
 <InnerInstancedMeshes
   meshes={filteredMeshesArray}
-  bind:this={$dispatchingComponent}
   {...$$restProps}
 >
   <slot {components} />

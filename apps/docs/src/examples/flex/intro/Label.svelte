@@ -2,7 +2,6 @@
   import { Text } from '@threlte/extras'
   import type { ColorRepresentation } from 'three'
   import { useReflow } from '@threlte/flex'
-  import { forwardEventHandlers } from '@threlte/core'
 
   export let text: string
   export let color: ColorRepresentation = 'white'

@@ -10,7 +10,7 @@ Title: Sniper Scope NightForce_V2
 <script lang="ts">
   import * as THREE from 'three'
 
-  import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
+  import { T, type Props, type Events, type Slots } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { tweened, type Tweened } from 'svelte/motion'
   import { scoping } from '../Controls.svelte'
@@ -23,8 +23,6 @@ Title: Sniper Scope NightForce_V2
   export const ref = new THREE.Group()
 
   const gltf = useGltf('/models/scope.glb')
-
-  const component = forwardEventHandlers()
 
   const rotationX = tweened(-3)
   const position: Tweened<THREE.Vector3Tuple> = tweened([0.4, -0.15, -1])
@@ -44,7 +42,6 @@ Title: Sniper Scope NightForce_V2
   is={ref}
   dispose={false}
   {...$$restProps}
-  bind:this={$component}
   scale={0.02}
   position={$position}
   rotation.y={DEG2RAD * $rotationX}

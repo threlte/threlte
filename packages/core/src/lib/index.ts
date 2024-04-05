@@ -65,11 +65,18 @@ export type { DisposableObjectProperties } from './internal/DisposableObject.sve
 export type { HierarchicalObjectProperties } from './internal/HierarchicalObject.svelte'
 export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.svelte'
 
+/**
+ * @deprecated createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.
+ */
 export const createRawEventDispatcher = () => () => {
   console.error(
     'createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.'
   )
 }
+
+/**
+ * @deprecated forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.
+ */
 export const forwardEventHandlers = () => {
   console.error(
     'forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.'

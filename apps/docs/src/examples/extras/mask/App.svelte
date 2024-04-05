@@ -4,7 +4,7 @@
 </script>
 
 <div>
-  <Canvas>
+  <Canvas rendererParameters={{ stencil: true }}>
     <Scene />
   </Canvas>
 </div>

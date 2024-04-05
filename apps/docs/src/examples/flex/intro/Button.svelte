@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { RoundedBoxGeometry, useCursor } from '@threlte/extras'
   import { Box } from '@threlte/flex'
   import Label from './Label.svelte'
-
-  const component = forwardEventHandlers()
 
   let _class: string
   export { _class as class }
@@ -22,7 +20,6 @@
   {order}
 >
   <T.Mesh
-    bind:this={$component}
     position.z={z}
     on:click={(e) => e.stopPropagation()}
     on:pointerenter={onPointerEnter}

@@ -32,8 +32,6 @@ Title: duck floaty
 
   const gltf = useGltf<GLTFResult>('/models/duck_floaty-transformed.glb', { useDraco: true })
 
-  const component = forwardEventHandlers()
-
   const duckSpread = 200
 </script>
 
@@ -41,7 +39,6 @@ Title: duck floaty
   is={ref}
   dispose={false}
   {...$$restProps}
-  bind:this={$component}
   frustumCulled={false}
 >
   {#await gltf}
