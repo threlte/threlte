@@ -4,11 +4,10 @@
     CoefficientCombineRule,
     type Collider
   } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, SceneGraphObject } from '@threlte/core'
+  import { SceneGraphObject } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { useCreateEvent } from '../../lib/useCreateEvent'
@@ -54,9 +53,6 @@
    * Events setup
    */
   type $$Events = ColliderEventMap
-  const dispatcher = createRawEventDispatcher<$$Events>()
-
-  const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
   const cleanup = () => {
     if (colliders === undefined) return
@@ -78,16 +74,12 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
+    colliders.forEach((c) => addColliderToContext(c, group, props.$$events))
 
     collisionGroups.registerColliders(colliders)
 
     colliders.forEach((collider) => {
-      applyColliderActiveEvents(
-        collider,
-        colliderHasEventListeners,
-        rigidBody?.userData?.hasEventListeners
-      )
+      applyColliderActiveEvents(collider, props.$$events, rigidBody?.userData?.events)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)

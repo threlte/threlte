@@ -5,11 +5,10 @@
     Collider,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, SceneGraphObject, useTask } from '@threlte/core'
+  import { SceneGraphObject, useTask } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
@@ -115,8 +114,6 @@
     }
   })
 
-  const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
-
   $effect.pre(() => {
     collider?.setRestitution(restitution ?? 0)
   })
@@ -156,11 +153,7 @@
 
   $effect.pre(() => {
     if (collider) {
-      applyColliderActiveEvents(
-        collider,
-        colliderHasEventListeners,
-        rigidBody?.userData?.hasEventListeners
-      )
+      applyColliderActiveEvents(collider, props.$$events, rigidBody?.userData?.events)
     }
   })
 

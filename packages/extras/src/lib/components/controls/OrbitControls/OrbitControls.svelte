@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
+  import { T, useTask, useParent, useThrelte } from '@threlte/core'
 
   import type { Camera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -41,8 +41,6 @@
     else stop()
   }
 
-  const component = forwardEventHandlers()
-
   const { orbitControls } = useControlsContext()
   orbitControls.set(ref)
   onDestroy(() => orbitControls.set(undefined))
@@ -52,7 +50,6 @@
   is={ref}
   let:ref
   {...$$restProps}
-  bind:this={$component}
   on:change={invalidate}
 >
   <slot {ref} />

@@ -1,5 +1,4 @@
 import { onDestroy } from 'svelte'
-import { createRawEventDispatcher } from '@threlte/core'
 
 export const useCreateEvent = <T>(events: Record<string, (arg: unknown) => void>) => {
   const cleanupFunctions: (() => void)[] = []

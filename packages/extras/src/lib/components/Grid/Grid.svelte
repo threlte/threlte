@@ -1,6 +1,6 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
-  import { T, forwardEventHandlers, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import {
     Color,
     DoubleSide,
@@ -198,12 +198,9 @@
     worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
     invalidate()
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T.Mesh
-  bind:this={$component}
   bind:ref
   frustumCulled={false}
   {...$$restProps}

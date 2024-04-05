@@ -1,9 +1,7 @@
 <script lang="ts">
   import { Shape } from 'three'
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-
-  const component = forwardEventHandlers()
 
   export let args: [width?: number, height?: number, depth?: number] | [] = []
   export let radius = 0.05
@@ -40,7 +38,6 @@
 
 <T.ExtrudeGeometry
   let:ref
-  bind:this={$component}
   args={[shape, params]}
   on:create={({ ref }) => {
     ref.center()

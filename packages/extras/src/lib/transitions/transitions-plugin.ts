@@ -81,7 +81,9 @@ const appendToFragmentFunction = (
  * ```
  */
 export const transitions = () => {
+  console.error('The transitions plugin is not compatible with Svelte 5.')
   return undefined
+
   injectPlugin<{
     in?: ThrelteTransition<any>
     out?: ThrelteTransition<any>

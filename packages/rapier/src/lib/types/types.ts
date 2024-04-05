@@ -6,9 +6,7 @@ import type {
   TempContactManifold,
   Vector
 } from '@dimforge/rapier3d-compat'
-import type { createRawEventDispatcher } from '@threlte/core'
 import type { Writable } from 'svelte/store'
-import type { useHasEventListeners } from '../hooks/useHasEventListener'
 import type { createRapierContext } from '../lib/createRapierContext'
 
 export type ColliderShapes =
@@ -76,11 +74,6 @@ export type RigidBodyEventMap = ColliderEventMap & {
   sleep: void
   wake: void
 }
-
-export type RigidBodyEventDispatcher = ReturnType<
-  typeof createRawEventDispatcher<RigidBodyEventMap>
->
-export type ColliderEventDispatcher = ReturnType<typeof createRawEventDispatcher<ColliderEventMap>>
 
 export type RigidBodyEventDispatchers = Map<RigidBodyHandle, Record<string, (arg: unknown) => void>>
 export type ColliderEventDispatchers = Map<ColliderHandle, Record<string, (arg: unknown) => void>>
