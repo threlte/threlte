@@ -7,7 +7,7 @@ import type { RigidBodyEventMap } from '../../types/types'
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
 export type RigidBodyProps = {
-  rigidBody?: RapierRigidBody
+  rigidBody: RapierRigidBody
 
   /**
    * Specify the type of this rigid body

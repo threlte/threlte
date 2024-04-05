@@ -25,36 +25,39 @@
   type TMassDef = $$Generic<MassDef>
   type $$Props = ColliderProps<TShape, TMassDef>
 
-  export let shape: $$Props['shape']
-  export let args: $$Props['args']
-  export let type: $$Props['type'] = undefined as $$Props['type']
-  export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
-  export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
-    undefined as $$Props['restitutionCombineRule']
-  export let friction: $$Props['friction'] = undefined as $$Props['friction']
-  export let frictionCombineRule: $$Props['frictionCombineRule'] =
-    undefined as $$Props['frictionCombineRule']
-  export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
-  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
-    undefined as $$Props['contactForceEventThreshold']
-
-  export let density: $$Props['density'] = undefined
-  export let mass: $$Props['mass'] = undefined
-  export let centerOfMass: $$Props['centerOfMass'] = undefined
-  export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
-  export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
+  let {
+    shape,
+    args,
+    type,
+    restitution,
+    restitutionCombineRule,
+    friction,
+    frictionCombineRule,
+    sensor,
+    contactForceEventThreshold,
+    density,
+    mass,
+    centerOfMass,
+    principalAngularInertia,
+    angularInertiaLocalFrame,
+    collider = $bindable(),
+    refresh = $bindable(() => {
+      if (!collider) return
+      collider.setTranslation(getWorldPosition(object))
+      collider.setRotation(getWorldQuaternion(object))
+    }),
+    ...props
+  }: ColliderProps<TShape, TMassDef> = $props()
 
   const object = new Object3D()
 
-  const { updateRef } = useCreateEvent<Collider>()
+  const { updateRef } = useCreateEvent<Collider>(props.$$events)
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
 
   const rapierContext = useRapier()
   const { world } = rapierContext
-
-  export let collider: Collider | undefined = undefined
 
   const collisionGroups = useCollisionGroups()
 
@@ -115,44 +118,52 @@
 
   const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
 
-  $: collider?.setRestitution(restitution ?? 0)
-  $: collider?.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
-  $: collider?.setFriction(friction ?? 0.7)
-  $: collider?.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
-  $: collider?.setSensor(sensor ?? false)
-  $: collider?.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
-  $: if (density) collider?.setDensity(density)
+  $effect.pre(() => {
+    collider?.setRestitution(restitution ?? 0)
+  })
+  $effect.pre(() => {
+    collider?.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
+  })
+  $effect.pre(() => {
+    collider?.setFriction(friction ?? 0.7)
+  })
+  $effect.pre(() => {
+    collider?.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
+  })
+  $effect.pre(() => collider?.setSensor(sensor ?? false))
+  $effect.pre(() => collider?.setContactForceEventThreshold(contactForceEventThreshold ?? 0))
+  $effect.pre(() => {
+    if (density !== undefined) collider?.setDensity(density)
+  })
 
-  $: if (collider && mass) {
-    if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
-      collider.setMassProperties(
-        mass,
-        { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
-        {
-          x: principalAngularInertia[0],
-          y: principalAngularInertia[1],
-          z: principalAngularInertia[2]
-        },
-        eulerToQuaternion(angularInertiaLocalFrame)
-      )
-    } else {
-      collider.setMass(mass)
+  $effect.pre(() => {
+    if (collider && mass) {
+      if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
+        collider.setMassProperties(
+          mass,
+          { x: centerOfMass[0], y: centerOfMass[1], z: centerOfMass[2] },
+          {
+            x: principalAngularInertia[0],
+            y: principalAngularInertia[1],
+            z: principalAngularInertia[2]
+          },
+          eulerToQuaternion(angularInertiaLocalFrame)
+        )
+      } else {
+        collider.setMass(mass)
+      }
     }
-  }
+  })
 
-  $: if (collider) {
-    applyColliderActiveEvents(
-      collider,
-      colliderHasEventListeners,
-      rigidBody?.userData?.hasEventListeners
-    )
-  }
-
-  export const refresh = () => {
-    if (!collider) return
-    collider.setTranslation(getWorldPosition(object))
-    collider.setRotation(getWorldQuaternion(object))
-  }
+  $effect.pre(() => {
+    if (collider) {
+      applyColliderActiveEvents(
+        collider,
+        colliderHasEventListeners,
+        rigidBody?.userData?.hasEventListeners
+      )
+    }
+  })
 
   /**
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
@@ -167,10 +178,10 @@
     }
   )
 
-  $: {
+  $effect.pre(() => {
     if (!hasRigidBodyParent && type === 'dynamic') start()
     else stop()
-  }
+  })
 
   /**
    * Cleanup

@@ -1,14 +1,7 @@
 import { onDestroy } from 'svelte'
 import { createRawEventDispatcher } from '@threlte/core'
 
-export const useCreateEvent = <T>() => {
-  const dispatchRaw = createRawEventDispatcher<{
-    create: {
-      ref: T
-      cleanup: (callback: () => void) => void
-    }
-  }>()
-
+export const useCreateEvent = <T>(events: Record<string, (arg: unknown) => void>) => {
   const cleanupFunctions: (() => void)[] = []
 
   let ref: T | undefined = undefined
@@ -27,7 +20,7 @@ export const useCreateEvent = <T>() => {
 
     if (ref === undefined) return
 
-    dispatchRaw('create', { ref, cleanup })
+    events?.create?.({ ref, cleanup })
   }
 
   const updateRef = (newRef: T) => {

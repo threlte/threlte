@@ -1,7 +1,6 @@
-import { type ComponentConstructorOptions, type ComponentProps, type SvelteComponent } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import TRunesComp from './TRunes.svelte'
 import type { Events, Props, Slots } from './types'
 import { setIsContext } from './utils/useIsContext'
 
@@ -28,31 +27,8 @@ export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
 }
 
-const augmentConstructorArgs = (
-  args: ComponentConstructorOptions<ComponentProps<TComp<any>>>,
-  is: keyof typeof THREE
-) => {
-  const module = THREE[is] || catalogue[is]
-
-  if (!module) {
-    throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
-  }
-
-  return {
-    ...args,
-    props: {
-      ...args.props,
-      is: module
-    }
-  }
-}
-
 const proxyTConstructor = (is: keyof typeof THREE) => {
   return new Proxy(function () {}, {
-    construct(_, [args]) {
-      const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
-      return new TComp(augmentConstructorArgs(castedArgs, is))
-    },
     apply(_target, _thisArg, argArray) {
       const module = THREE[is] || catalogue[is]
 
@@ -64,7 +40,7 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
 
       setIsContext(module)
 
-      return TRunesComp(document.body, argArray[1])
+      return TComp(document.body, argArray[1])
     }
   })
 }
@@ -90,12 +66,8 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
  * ```
  */
 export const T = new Proxy(function () {}, {
-  construct(_, [args]) {
-    const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
-    return new TComp(castedArgs)
-  },
   apply(_target, _thisArg, argArray) {
-    return TRunesComp(document.body, argArray[1])
+    return TComp(document.body, argArray[1])
   },
   get(_, is: keyof typeof THREE) {
     return proxyTConstructor(is)

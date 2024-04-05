@@ -55,10 +55,10 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
   const addRigidBodyToContext = (
     rigidBody: RigidBody,
     object: Object3D,
-    eventDispatcher: RigidBodyEventDispatcher
+    events: Record<string, (arg: unknown) => void>
   ) => {
     rigidBodyObjects.set(rigidBody.handle, object)
-    rigidBodyEventDispatchers.set(rigidBody.handle, eventDispatcher)
+    rigidBodyEventDispatchers.set(rigidBody.handle, events)
   }
 
   /**

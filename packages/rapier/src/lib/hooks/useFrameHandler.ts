@@ -9,24 +9,24 @@ const tempVector3 = new Vector3()
 const tempQuaternion = new Quaternion()
 
 const getEventDispatchers = (ctx: RapierContext, collider1: Collider, collider2: Collider) => {
-  const colliderDispatcher1 = ctx.colliderEventDispatchers.get(collider1.handle)
-  const colliderDispatcher2 = ctx.colliderEventDispatchers.get(collider2.handle)
+  const collider1Events = ctx.colliderEventDispatchers.get(collider1.handle)
+  const collider2Events = ctx.colliderEventDispatchers.get(collider2.handle)
 
   const rigidBody1 = collider1.parent()
   const rigidBody2 = collider2.parent()
 
-  const rigidBodyDispatcher1 = rigidBody1
+  const rigidBody1Events = rigidBody1
     ? ctx.rigidBodyEventDispatchers.get(rigidBody1.handle)
     : undefined
-  const rigidBodyDispatcher2 = rigidBody2
+  const rigidBody2Events = rigidBody2
     ? ctx.rigidBodyEventDispatchers.get(rigidBody2.handle)
     : undefined
 
   return {
-    colliderDispatcher1,
-    colliderDispatcher2,
-    rigidBodyDispatcher1,
-    rigidBodyDispatcher2
+    collider1Events,
+    collider2Events,
+    rigidBody1Events,
+    rigidBody2Events
   }
 }
 
@@ -48,16 +48,16 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
         const rigidBody = world.getRigidBody(handle)
         if (!rigidBody) return
 
-        const dispatcher = ctx.rigidBodyEventDispatchers.get(handle)
+        const events = ctx.rigidBodyEventDispatchers.get(handle)
 
         if (!rigidBody || !rigidBody.isValid()) return
 
-        if (dispatcher) {
+        if (events) {
           if (rigidBody.isSleeping() && !mesh.userData.isSleeping) {
-            dispatcher('sleep')
+            events.sleep?.()
           }
           if (!rigidBody.isSleeping() && mesh.userData.isSleeping) {
-            dispatcher('wake')
+            events.wake?.()
           }
           mesh.userData.isSleeping = rigidBody.isSleeping()
         }
@@ -96,18 +96,14 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           return
         }
 
-        const {
-          colliderDispatcher1,
-          colliderDispatcher2,
-          rigidBodyDispatcher1,
-          rigidBodyDispatcher2
-        } = getEventDispatchers(ctx, collider1, collider2)
+        const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
+          getEventDispatchers(ctx, collider1, collider2)
 
         const rigidBody1 = collider1.parent()
         const rigidBody2 = collider2.parent()
 
         // Collider events
-        colliderDispatcher1?.('contact', {
+        collider1Events?.contact?.({
           targetCollider: collider2,
           targetRigidBody: rigidBody2,
           maxForceDirection: e.maxForceDirection(),
@@ -115,7 +111,7 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           totalForce: e.totalForce(),
           totalForceMagnitude: e.totalForceMagnitude()
         })
-        colliderDispatcher2?.('contact', {
+        collider2Events?.contact?.({
           targetCollider: collider1,
           targetRigidBody: rigidBody1,
           maxForceDirection: e.maxForceDirection(),
@@ -125,7 +121,7 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
         })
 
         // RigidBody Events
-        rigidBodyDispatcher1?.('contact', {
+        rigidBody1Events?.contact?.({
           targetCollider: collider2,
           targetRigidBody: rigidBody2,
           maxForceDirection: e.maxForceDirection(),
@@ -133,7 +129,7 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           totalForce: e.totalForce(),
           totalForceMagnitude: e.totalForceMagnitude()
         })
-        rigidBodyDispatcher2?.('contact', {
+        rigidBody2Events?.contact?.({
           targetCollider: collider1,
           targetRigidBody: rigidBody1,
           maxForceDirection: e.maxForceDirection(),
@@ -153,19 +149,10 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           return
         }
 
-        const {
-          colliderDispatcher1,
-          colliderDispatcher2,
-          rigidBodyDispatcher1,
-          rigidBodyDispatcher2
-        } = getEventDispatchers(ctx, collider1, collider2)
+        const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
+          getEventDispatchers(ctx, collider1, collider2)
 
-        if (
-          !colliderDispatcher1 &&
-          !colliderDispatcher2 &&
-          !rigidBodyDispatcher1 &&
-          !rigidBodyDispatcher2
-        ) {
+        if (!collider1Events && !collider2Events && !rigidBody1Events && !rigidBody2Events) {
           return
         }
 
@@ -177,21 +164,21 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           const isIntersection = world.intersectionPair(collider1, collider2)
           if (isIntersection) {
             // Collider Events
-            colliderDispatcher1?.('sensorenter', {
+            collider1Events?.sensorenter?.({
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            colliderDispatcher2?.('sensorenter', {
+            collider2Events?.sensorenter?.({
               targetCollider: collider1,
               targetRigidBody: rigidBody1
             })
 
             // RigidBody Events
-            rigidBodyDispatcher1?.('sensorenter', {
+            rigidBody1Events?.sensorenter?.({
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            rigidBodyDispatcher2?.('sensorenter', {
+            rigidBody2Events?.sensorenter?.({
               targetCollider: collider1,
               targetRigidBody: rigidBody1
             })
@@ -201,13 +188,13 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
 
           world.contactPair(collider1, collider2, (manifold, flipped) => {
             // Collider events
-            colliderDispatcher1?.('collisionenter', {
+            collider1Events?.collisionenter?.({
               flipped,
               manifold,
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            colliderDispatcher2?.('collisionenter', {
+            collider2Events?.collisionenter?.({
               flipped,
               manifold,
               targetCollider: collider1,
@@ -215,13 +202,13 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
             })
 
             // RigidBody Events
-            rigidBodyDispatcher1?.('collisionenter', {
+            rigidBody1Events?.collisionenter?.({
               flipped,
               manifold,
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            rigidBodyDispatcher2?.('collisionenter', {
+            rigidBody2Events?.collisionenter?.({
               flipped,
               manifold,
               targetCollider: collider1,
@@ -238,21 +225,21 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
             collider2.isSensor()
 
           if (isIntersection) {
-            colliderDispatcher1?.('sensorexit', {
+            collider1Events?.sensorexit?.({
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            colliderDispatcher2?.('sensorexit', {
+            collider2Events?.sensorexit?.({
               targetCollider: collider1,
               targetRigidBody: rigidBody1
             })
 
             // RigidBody Events
-            rigidBodyDispatcher1?.('sensorexit', {
+            rigidBody1Events?.sensorexit?.({
               targetCollider: collider2,
               targetRigidBody: rigidBody2
             })
-            rigidBodyDispatcher2?.('sensorexit', {
+            rigidBody2Events?.sensorexit?.({
               targetCollider: collider1,
               targetRigidBody: rigidBody1
             })
@@ -262,21 +249,21 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           }
 
           // Collider events
-          colliderDispatcher1?.('collisionexit', {
+          collider1Events?.collisionexit?.({
             targetCollider: collider2,
             targetRigidBody: rigidBody2
           })
-          colliderDispatcher2?.('collisionexit', {
+          collider2Events?.collisionexit?.({
             targetCollider: collider1,
             targetRigidBody: rigidBody1
           })
 
           // RigidBody Events
-          rigidBodyDispatcher1?.('collisionexit', {
+          rigidBody1Events?.collisionexit?.({
             targetCollider: collider2,
             targetRigidBody: rigidBody2
           })
-          rigidBodyDispatcher2?.('collisionexit', {
+          rigidBody2Events?.collisionexit?.({
             targetCollider: collider1,
             targetRigidBody: rigidBody1
           })

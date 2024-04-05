@@ -82,17 +82,15 @@ export type RigidBodyEventDispatcher = ReturnType<
 >
 export type ColliderEventDispatcher = ReturnType<typeof createRawEventDispatcher<ColliderEventMap>>
 
-export type RigidBodyEventDispatchers = Map<RigidBodyHandle, RigidBodyEventDispatcher>
-export type ColliderEventDispatchers = Map<ColliderHandle, ColliderEventDispatcher>
+export type RigidBodyEventDispatchers = Map<RigidBodyHandle, Record<string, (arg: unknown) => void>>
+export type ColliderEventDispatchers = Map<ColliderHandle, Record<string, (arg: unknown) => void>>
 
 export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
-  hasEventListeners?: ReturnType<
-    typeof useHasEventListeners<RigidBodyEventDispatcher>
-  >['hasEventListeners']
+  events?: Record<string, (arg: unknown) => void>
 }
 
 export type ThrelteRigidBody = RigidBody & {
