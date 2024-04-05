@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { createInstanceIdContext } from '../useInstanceId'
+
+  import { setContext } from 'svelte'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
@@ -18,18 +21,10 @@
   export let meshes: T
 
   const getInstance = (id: string) => {
-    return new Proxy(Instance, {
-      construct(Instance, args) {
-        const opts = {
-          ...args[0],
-          props: {
-            ...args[0].props,
-            id
-          }
-        } as any
-        return new Instance(opts)
-      }
-    })
+    return (args) => {
+      createInstanceIdContext(id)
+      return Instance(document.body, args)
+    }
   }
 
   const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): (typeof Instance)[] => {

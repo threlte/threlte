@@ -1,15 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { getContext, onDestroy } from 'svelte'
   import { PositionMesh } from './PositionMesh'
   import { useApi } from './api'
   import type { InstanceProps, InstanceEvents, InstanceSlots } from './Instance.svelte'
+  import { useInstanceId } from './useInstanceId'
 
   type $$Props = InstanceProps
   type $$Events = InstanceEvents
   type $$Slots = InstanceSlots
 
-  let { id = 'default', ...props }: InstanceProps = $props()
+  let { id = useInstanceId(), ...props }: InstanceProps = $props()
 
   const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
 
