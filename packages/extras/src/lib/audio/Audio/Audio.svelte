@@ -21,7 +21,7 @@
     pause = $bindable(),
     play = $bindable(),
     stop = $bindable(),
-    ...restProps
+    ...props
   }: AudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
@@ -35,7 +35,7 @@
   ref = new ThreeAudio<GainNode>(listener)
 
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
-    useAudio(ref, restProps.$$events)
+    useAudio(ref, props.$$events)
 
   pause = useAudioProps.pause
   play = useAudioProps.play
@@ -51,7 +51,7 @@
 
 <T
   is={ref}
-  {...restProps}
+  {...props}
 >
   <slot {ref} />
 </T>

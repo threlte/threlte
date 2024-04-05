@@ -139,14 +139,14 @@
   <!-- SIDE BUTTON -->
   <Button
     position={[-2.3, 1.01, 0.8]}
-    on:click={changeSide}
+    onClick={changeSide}
     text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
     position={[-2.3, 1.01, 1.7]}
-    on:click={toggle}
+    onClick={toggle}
     text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
 

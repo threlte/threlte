@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Edges, Text, useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   export let text: string
+  export let onClick: () => void
 
   const buttonOffsetY = spring(0)
 
@@ -12,14 +13,12 @@
   let textColor = '#eedbcb'
 
   const { onPointerEnter, onPointerLeave } = useCursor()
-
-  const component = forwardEventHandlers()
 </script>
 
 <T.Group {...$$restProps}>
   <T.Group position.y={0.05 - $buttonOffsetY}>
     <T.Mesh
-      bind:this={$component}
+      on:click={onClick}
       on:pointerenter={(e) => {
         e.stopPropagation()
         buttonColor = '#eedbcb'

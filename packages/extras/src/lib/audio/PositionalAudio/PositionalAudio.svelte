@@ -29,6 +29,7 @@
     play = $bindable(),
     pause = $bindable(),
     stop = $bindable(),
+    ref = $bindable(),
     ...restProps
   }: PositionalAudioProps = $props()
 
@@ -40,7 +41,7 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const ref = new ThreePositionalAudio(listener)
+  ref = new ThreePositionalAudio(listener)
 
   $effect(() => {
     if (refDistance !== undefined) ref.setRefDistance(refDistance)
