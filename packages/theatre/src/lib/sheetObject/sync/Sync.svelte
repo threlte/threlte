@@ -10,17 +10,12 @@
   import { parsePropLabel } from './utils/parsePropLabel'
   import { isStringProp } from './utils/isStringProp'
   import { useStudio } from '../../studio/useStudio'
+  import { useSheetObject } from '../../useSheetObject'
 
   // used for type hinting auto props
   export let type: any = undefined
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
-
+  const { sheetObject, addProps, removeProps } = useSheetObject()
   const parent = useParent()
 
   // serves as a map to map (custom) prop names to object target properties

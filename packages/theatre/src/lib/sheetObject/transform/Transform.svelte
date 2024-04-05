@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { useSheetObject } from '../../useSheetObject'
   import { types } from '../../theatre'
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
-  import { T, watch, type CurrentWritable } from '@threlte/core'
+  import { T, watch } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
   import { onMount, type ComponentProps } from 'svelte'
   import { Group } from 'three'
@@ -24,12 +24,7 @@
   export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
   export let scaleSnap: Props['scaleSnap'] = undefined as Props['scaleSnap']
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
+  const { sheetObject, addProps, removeProps } = useSheetObject()
 
   let controls: TC | undefined
 

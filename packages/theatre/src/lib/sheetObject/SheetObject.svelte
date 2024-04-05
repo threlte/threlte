@@ -4,8 +4,8 @@
 	- Potentially Providing a sheet object
 -->
 <script lang="ts">
+  import { createSheetObjectContext } from '../../lib/useSheetObject'
   import { useStudio } from '../studio/useStudio'
-
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import {
     createRawEventDispatcher,
@@ -103,35 +103,7 @@
     }
   }
 
-  const augmentConstructorArgs = (args: any) => {
-    return {
-      ...args,
-      props: {
-        ...args.props,
-        sheetObject,
-        addProps,
-        removeProps
-      }
-    }
-  }
-
-  const proxySyncComponent = new Proxy(Sync, {
-    construct(_target, [args]) {
-      return new Sync(augmentConstructorArgs(args))
-    }
-  })
-
-  const proxyTransformComponent = new Proxy(Transform, {
-    construct(_target, [args]) {
-      return new Transform(augmentConstructorArgs(args))
-    }
-  })
-
-  const proxyDeclareComponent = new Proxy(Declare, {
-    construct(_target, [args]) {
-      return new Declare(augmentConstructorArgs(args))
-    }
-  })
+  createSheetObjectContext(sheetObject, addProps, removeProps)
 
   let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
@@ -173,7 +145,7 @@
   {select}
   {deselect}
   sheetObject={$sheetObject}
-  Sync={proxySyncComponent}
-  Transform={proxyTransformComponent}
-  Declare={proxyDeclareComponent}
+  {Sync}
+  {Transform}
+  {Declare}
 />
