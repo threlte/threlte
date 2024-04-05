@@ -32,6 +32,7 @@
 
   onMount(() => {
     mounted = true
+    calculate()
   })
 
   calculate = () => {
