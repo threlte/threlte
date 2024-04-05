@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import Api from './Api.svelte'
   import { InstancedMesh } from 'three'
 
@@ -20,8 +20,6 @@
 
   export const ref = new InstancedMesh(null as any, null as any, 0)
 
-  const dispatchingComponent = forwardEventHandlers()
-
   const args = [null as any, null as any, 0]
 </script>
 
@@ -31,7 +29,6 @@
   matrixAutoUpdate={false}
   {args}
   {...$$restProps}
-  bind:bind={$dispatchingComponent}
 >
   <Api
     instancedMesh={ref}

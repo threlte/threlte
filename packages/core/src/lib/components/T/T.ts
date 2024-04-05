@@ -1,8 +1,9 @@
-import type { ComponentConstructorOptions, ComponentProps, SvelteComponent } from 'svelte'
+import { type ComponentConstructorOptions, type ComponentProps, type SvelteComponent } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
 import TRunesComp from './TRunes.svelte'
 import type { Events, Props, Slots } from './types'
+import { setIsContext } from './utils/useIsContext'
 
 type Extensions = Record<string, any>
 
@@ -31,10 +32,12 @@ const augmentConstructorArgs = (
   args: ComponentConstructorOptions<ComponentProps<TComp<any>>>,
   is: keyof typeof THREE
 ) => {
-  const module = catalogue[is] || THREE[is]
+  const module = THREE[is] || catalogue[is]
+
   if (!module) {
     throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
   }
+
   return {
     ...args,
     props: {
@@ -42,13 +45,6 @@ const augmentConstructorArgs = (
       is: module
     }
   }
-}
-
-const tComponent = (args) => {
-  const component = TRunesComp(document.body, args)
-
-  console.log(component)
-  return component
 }
 
 const proxyTConstructor = (is: keyof typeof THREE) => {
@@ -66,12 +62,9 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
         )
       }
 
-      // This must be mutated and not copied to preserve binding.
-      argArray[1].is = module
+      setIsContext(module)
 
-      console.log(argArray[1])
-
-      return tComponent(argArray[1])
+      return TRunesComp(document.body, argArray[1])
     }
   })
 }
@@ -102,7 +95,7 @@ export const T = new Proxy(function () {}, {
     return new TComp(castedArgs)
   },
   apply(_target, _thisArg, argArray) {
-    return tComponent(argArray[1])
+    return TRunesComp(document.body, argArray[1])
   },
   get(_, is: keyof typeof THREE) {
     return proxyTConstructor(is)

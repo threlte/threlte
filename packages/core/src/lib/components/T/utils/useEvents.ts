@@ -21,7 +21,7 @@ export const useEvents = () => {
     } & Record<string, any>
   ) => {
     if (event?.type) {
-      events[event.type](event)
+      events[event.type]?.(event)
     }
   }
 

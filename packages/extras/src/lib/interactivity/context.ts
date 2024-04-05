@@ -78,7 +78,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
 }
 
 interface HandlerContext {
-  dispatchers: WeakMap<THREE.Object3D, ReturnType<typeof createRawEventDispatcher<ThrelteEvents>>>
+  dispatchers: WeakMap<THREE.Object3D, Record<string, (args: unknown) => void>>
 }
 
 const handlerContextKey = Symbol('interactivity-handler-context')

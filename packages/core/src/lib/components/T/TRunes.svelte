@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { useIsContext } from './utils/useIsContext'
 
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
@@ -23,7 +24,7 @@
   type $$Slots = Slots<Type>
 
   let {
-    is,
+    is = useIsContext(),
     args,
     ref = $bindable(),
     attach,
@@ -36,7 +37,6 @@
   
   createComponentEventsContext(restProps.$$events)
 
-  console.log(is, args)
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $state(determineRef<Type>(is, args))
   ref = internalRef
@@ -107,7 +107,6 @@
   const events = useEvents()
   $effect.pre(() => events.updateRef(internalRef))
 
-  console.log(plugins)
   // update plugins after all other updates
   $effect.pre(() => plugins?.updateRef(internalRef))
   $effect.pre(() => plugins?.updateProps({
