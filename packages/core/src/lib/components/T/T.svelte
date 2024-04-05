@@ -32,7 +32,7 @@
     ref = $bindable(),
     ...props
   }: AllProps = $props()
-  
+
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $state(determineRef<Type>(is, args))
   ref = internalRef
@@ -54,10 +54,10 @@
       initialized = true
       return
     }
-  
+
     internalRef = determineRef<Type>(is, args)
     ref = internalRef
-  
+
     // The ref is recreated, emit the event
     createEvent.updateRef(internalRef)
   })
@@ -83,10 +83,12 @@
 
   // Props
   const { updateProps } = useProps()
-  $effect.pre(() => updateProps(internalRef, props, {
-    manualCamera: manual,
-    pluginsProps
-  }))
+  $effect.pre(() =>
+    updateProps(internalRef, props, {
+      manualCamera: manual,
+      pluginsProps
+    })
+  )
 
   // Camera
   const camera = useCamera()
@@ -105,15 +107,17 @@
 
   // update plugins after all other updates
   $effect.pre(() => plugins?.updateRef(internalRef))
-  $effect.pre(() => plugins?.updateProps({
-    is,
-    args,
-    attach,
-    manual,
-    makeDefault,
-    dispose,
-    ...props
-  }))
+  $effect.pre(() =>
+    plugins?.updateProps({
+      is,
+      args,
+      attach,
+      manual,
+      makeDefault,
+      dispose,
+      ...props
+    })
+  )
   $effect.pre(() => plugins?.updateRestProps(props))
 </script>
 
@@ -127,9 +131,9 @@
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-      {@render children(internalRef)}
+      <slot ref={internalRef} />
     {/if}
   </SceneGraphObject>
 {:else if children}
-  {@render children(internalRef)}
+  <slot ref={internalRef} />
 {/if}

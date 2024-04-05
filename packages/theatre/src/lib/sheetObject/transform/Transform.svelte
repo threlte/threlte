@@ -2,9 +2,9 @@
   import { types } from '../../theatre'
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import type { IScrub } from '@theatre/studio'
-  import { T, watch, type CurrentWritable } from '@threlte/core'
+  import { T, watch, type CurrentWritable, currentWritable } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { onMount, type ComponentProps } from 'svelte'
+  import { onMount, type ComponentProps, getContext } from 'svelte'
   import { Group } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { RAD2DEG } from 'three/src/math/MathUtils.js'
@@ -24,12 +24,7 @@
   export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
   export let scaleSnap: Props['scaleSnap'] = undefined as Props['scaleSnap']
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
+  const { sheetObject, addProps, removeProps } = getContext('threlte-theater-sheet-context')
 
   let controls: TC | undefined
 
@@ -160,13 +155,10 @@
   const groupRef = group as any
 </script>
 
-<T
-  is={groupRef}
-  let:ref
->
+<T is={groupRef}>
   {#if isSelected}
     <TransformControls
-      object={ref}
+      object={groupRef}
       {mode}
       {space}
       bind:controls

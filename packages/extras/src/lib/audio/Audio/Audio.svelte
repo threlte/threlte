@@ -22,7 +22,7 @@
     play = $bindable(),
     stop = $bindable(),
     ...props
-  }: AudioProps = $props()
+  }: AudioProps & { ref: ThreeAudio } = $props()
 
   const { getAudioListener } = useThrelteAudio()
 

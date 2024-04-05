@@ -100,6 +100,6 @@
     {...restProps}
     let:ref
   >
-    {@render children({ ref })}
+    <slot {ref} />
   </T>
 {/if}

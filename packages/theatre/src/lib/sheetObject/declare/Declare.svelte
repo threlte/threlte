@@ -1,18 +1,13 @@
 <script lang="ts">
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { watch, type CurrentWritable } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { watch, type CurrentWritable, currentWritable } from '@threlte/core'
+  import { onDestroy, getContext } from 'svelte'
 
   type P = $$Generic<UnknownShorthandCompoundProps>
 
   export let props: P
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject<P>>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
+  const { sheetObject, addProps, removeProps } = getContext('threlte-theater-sheet-context')
 
   let values = $sheetObject?.value
 
@@ -23,7 +18,7 @@
   })
 
   watch(sheetObject, (sheetObject) => {
-    return sheetObject.onValuesChange((v) => {
+    return sheetObject?.onValuesChange((v) => {
       values = v
     })
   })

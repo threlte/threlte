@@ -80,6 +80,8 @@
   })
 
   const component = forwardEventHandlers()
+
+  $: console.log($creasedGeometry)
 </script>
 
 {#if $creasedGeometry}

@@ -31,7 +31,7 @@
     stop = $bindable(),
     ref = $bindable(),
     ...restProps
-  }: PositionalAudioProps = $props()
+  }: PositionalAudioProps & { ref: ThreePositionalAudio } = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
