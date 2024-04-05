@@ -44,10 +44,10 @@
 <!-- Block the graph from mounting to the parent -->
 <HierarchicalObject>
   <T is={group}>
-    {@render children({
-      suspended: $suspended,
-      errors: $errors
-    })}
+    <slot
+      suspended={$suspended}
+      errors={$errors}
+    />
   </T>
 </HierarchicalObject>
 

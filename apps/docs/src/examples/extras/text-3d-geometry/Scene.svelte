@@ -28,7 +28,10 @@
       {height}
       {size}
       {smooth}
-      on:create={align}
+      on:create={() => {
+        console.log('hi')
+        align()
+      }}
     />
     <T.MeshStandardMaterial
       color="#FD3F00"
