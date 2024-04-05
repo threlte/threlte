@@ -9,7 +9,7 @@
   type $$Events = InstanceEvents
   type $$Slots = InstanceSlots
 
-  export let id = 'default'
+  let { id = 'default', ...props }: InstanceProps = $props()
 
   const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
 
@@ -24,7 +24,7 @@
 
 <T
   is={ref}
-  {...$$restProps}
+  {...props}
 >
   <slot {ref} />
 </T>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
@@ -30,15 +30,12 @@
   onDestroy(() => {
     removeAudioListener(id)
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
   is={ref}
   {...$$restProps}
   let:ref
-  bind:this={$component}
 >
   <slot {ref} />
 </T>
