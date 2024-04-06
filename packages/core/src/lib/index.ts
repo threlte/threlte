@@ -46,7 +46,7 @@ export { useParent } from './hooks/useParent'
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // contexts
-export type { ThrelteContext } from './lib/contexts'
+export { type ThrelteContext, createThrelteContext } from './lib/contexts'
 
 // types
 export type { Size } from './types'
