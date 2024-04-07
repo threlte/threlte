@@ -2,9 +2,9 @@ import type { SvelteComponent } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
 import type { Events, Props, Slots } from './types'
-import { setIsContext } from './utils/useIsContext'
+import { setIsContext, type ThreeObject } from './utils/useIsContext'
 
-type Extensions = Record<string, any>
+type Extensions = Record<string, ThreeObject>
 
 const catalogue: Extensions = {}
 
@@ -25,24 +25,6 @@ const catalogue: Extensions = {}
  */
 export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
-}
-
-const proxyTConstructor = (is: keyof typeof THREE) => {
-  return new Proxy(function () {}, {
-    apply(_target, _thisArg, argArray) {
-      const module = THREE[is] || catalogue[is]
-
-      if (module === undefined) {
-        throw new Error(
-          `No Three.js module found for ${is}. Did you forget to extend the catalogue?`
-        )
-      }
-
-      setIsContext(module)
-
-      return TComp(document.body, argArray[1])
-    }
-  })
 }
 
 /**
@@ -67,10 +49,23 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
  */
 export const T = new Proxy(function () {}, {
   apply(_target, _thisArg, argArray) {
-    return TComp(document.body, argArray[1])
+    return TComp(...argArray)
   },
-  get(_, is: keyof typeof THREE) {
-    return proxyTConstructor(is)
+  get(_target, is: keyof typeof THREE) {
+    // Handle snippets
+    if (typeof is !== 'string') {
+      return TComp
+    }
+
+    const module = THREE[is] || catalogue[is]
+
+    if (module === undefined) {
+      throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
+    }
+
+    setIsContext(module)
+
+    return TComp
   }
 }) as unknown as typeof TComp & {
   [Key in keyof typeof THREE]: typeof SvelteComponent<

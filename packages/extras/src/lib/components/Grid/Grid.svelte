@@ -1,15 +1,7 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import {
-    Color,
-    DoubleSide,
-    Plane,
-    Vector3,
-    type Mesh,
-    type ShaderMaterial,
-    type Uniform
-  } from 'three'
+  import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
 
@@ -17,30 +9,32 @@
   type $$Events = GridEvents
   type $$Slots = GridSlots
 
-  export let cellColor: $$Props['cellColor'] = '#000000'
-  export let sectionColor: $$Props['sectionColor'] = '#0000ee'
-  export let cellSize: $$Props['cellSize'] = 1
-  export let backgroundColor: $$Props['backgroundColor'] = '#dadada'
-  export let backgroundOpacity: $$Props['backgroundOpacity'] = 0
-  export let sectionSize: $$Props['sectionSize'] = 10
-  export let plane: $$Props['plane'] = 'xz'
-  export let gridSize: $$Props['gridSize'] = [20, 20]
-  export let followCamera: $$Props['followCamera'] = false
-  export let infiniteGrid: $$Props['infiniteGrid'] = false
-  export let fadeDistance: $$Props['fadeDistance'] = 100
-  export let fadeStrength: $$Props['fadeStrength'] = 1
-  export let cellThickness: $$Props['cellThickness'] = 1
-  export let sectionThickness: $$Props['sectionThickness'] = 2
-  export let side: $$Props['side'] = DoubleSide
+  let {
+    cellColor = '#000000',
+    sectionColor = '#0000ee',
+    cellSize = 1,
+    backgroundColor = '#dadada',
+    backgroundOpacity = 0,
+    sectionSize = 10,
+    plane = 'xz',
+    gridSize = [20, 20],
+    followCamera = false,
+    infiniteGrid = false,
+    fadeDistance = 100,
+    fadeStrength = 1,
+    cellThickness = 1,
+    sectionThickness = 2,
+    side = DoubleSide,
+    type = 'grid',
+    axis = 'x',
+    maxRadius = 0,
+    cellDividers = 6,
+    sectionDividers = 2,
+    ref = $bindable(),
+    ...props
+  }: GridProps & { ref: Mesh } = $props()
 
-  export let type: $$Props['type'] = 'grid'
-  export let axis: $$Props['axis'] = 'x'
-  export let maxRadius: $$Props['maxRadius'] = 0
-  export let cellDividers: $$Props['cellDividers'] = 6
-  export let sectionDividers: $$Props['sectionDividers'] = 2
-
-  // forward ref binding
-  export let ref: Mesh
+  ref = new Mesh()
 
   const { invalidate, camera } = useThrelte()
 
@@ -136,7 +130,7 @@
     }
   }
 
-  $: {
+  $effect.pre(() => {
     // convert axis string to int indexes xzy = [0,2,1]
     const axes = planeToAxes[plane]
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
@@ -145,22 +139,46 @@
     uniforms.coord0.value = axisToInt[c0]
     uniforms.coord1.value = axisToInt[c1]
     uniforms.coord2.value = axisToInt[c2]
-  }
+  })
 
-  $: uniforms.cellSize.value = cellSize
-  $: uniforms.sectionSize.value = sectionSize
-  $: uniforms.cellColor.value.set(cellColor)
-  $: uniforms.sectionColor.value.set(sectionColor)
-  $: uniforms.backgroundColor.value.set(backgroundColor)
-  $: uniforms.backgroundOpacity.value = backgroundOpacity
-  $: uniforms.fadeDistance.value = fadeDistance
-  $: uniforms.fadeStrength.value = fadeStrength
-  $: uniforms.cellThickness.value = cellThickness
-  $: uniforms.sectionThickness.value = sectionThickness
-  $: uniforms.followCamera.value = followCamera
-  $: uniforms.infiniteGrid.value = infiniteGrid
+  $effect.pre(() => {
+    uniforms.cellSize.value = cellSize
+  })
+  $effect.pre(() => {
+    uniforms.sectionSize.value = sectionSize
+  })
+  $effect.pre(() => {
+    uniforms.cellColor.value.set(cellColor)
+  })
+  $effect.pre(() => {
+    uniforms.sectionColor.value.set(sectionColor)
+  })
+  $effect.pre(() => {
+    uniforms.backgroundColor.value.set(backgroundColor)
+  })
+  $effect.pre(() => {
+    uniforms.backgroundOpacity.value = backgroundOpacity
+  })
+  $effect.pre(() => {
+    uniforms.fadeDistance.value = fadeDistance
+  })
+  $effect.pre(() => {
+    uniforms.fadeStrength.value = fadeStrength
+  })
+  $effect.pre(() => {
+    uniforms.cellThickness.value = cellThickness
+  })
+  $effect.pre(() => {
+    uniforms.sectionThickness.value = sectionThickness
+  })
+  $effect.pre(() => {
+    uniforms.followCamera.value = followCamera
+  })
+  $effect.pre(() => {
+    uniforms.infiniteGrid.value = infiniteGrid
+  })
 
-  $: {
+  $effect.pre(() => {
     switch (type) {
       case 'grid': {
         uniforms.gridType.value = gridType.grid
@@ -185,7 +203,7 @@
       }
     }
     invalidate()
-  }
+  })
 
   useTask(() => {
     gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
@@ -200,11 +218,10 @@
   })
 </script>
 
-<T.Mesh
-  bind:ref
+<T
+  is={ref}
   frustumCulled={false}
-  {...$$restProps}
-  let:ref
+  {...props}
 >
   <T.ShaderMaterial
     {fragmentShader}
@@ -216,4 +233,4 @@
   <slot {ref}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
   </slot>
-</T.Mesh>
+</T>

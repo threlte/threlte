@@ -11,18 +11,21 @@
   type $$Events = MaskEvents
   type $$Slots = MaskSlots
 
-  type Props = Required<MaskProps>
+  let {
+    id = 1,
+    colorWrite = false,
+    depthWrite = false,
+    ref = $bindable(),
+    ...props
+  }: MaskProps & { ref: Mesh } = $props()
 
-  export let id: Props['id'] = 1
-  export let colorWrite: Props['colorWrite'] = false
-  export let depthWrite: Props['depthWrite'] = false
+  ref = new Mesh()
 
-  export let ref: Mesh = new Mesh()
+  $effect(() => {
+    const material = ref.material
 
-  const meshLoaded = (mesh: Mesh) => {
-    if (!mesh) return
-    const material = mesh.material
     if (Array.isArray(material)) return
+
     material.colorWrite = colorWrite
     material.depthWrite = depthWrite
     material.stencilWrite = true
@@ -31,20 +34,13 @@
     material.stencilFail = ReplaceStencilOp
     material.stencilZFail = ReplaceStencilOp
     material.stencilZPass = ReplaceStencilOp
-  }
-
-  $: meshLoaded(ref)
-
-  $: {
-    meshLoaded(ref)
-    id
-  }
+  })
 </script>
 
-<T.Mesh
-  {...$$restProps}
+<T
+  is={ref}
   renderOrder={-id}
-  bind:ref
+  {...props}
 >
   <slot {ref} />
-</T.Mesh>
+</T>

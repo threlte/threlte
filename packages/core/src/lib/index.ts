@@ -67,15 +67,43 @@ export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.sve
 
 /**
  * @deprecated createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.
+ *
+ * To send events, you must migrate your component to runes mode and use the rest props $$events object:
+ *
+ * @example
+ * ```html
+ * <script>
+ *   let { ...props } = $props()
+ *
+ *   // at some point...
+ *   props.$$events.change?.()
+ * </script>
+ * ```
  */
-export const createRawEventDispatcher = () => () => {
+export const createRawEventDispatcher = () => {
   console.error(
     'createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.'
   )
+  return () => {}
 }
 
 /**
  * @deprecated forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.
+ *
+ * To forward events in Svelte 5, you must migrate your component to runes mode and pass the components rest props
+ * to the component you wish to forward events to:
+ *
+ * @example
+ * ```html
+ * <script>
+ *   let { ...props } = $props()
+ * </script>
+ *
+ * <T.Mesh {...props}>
+ *   <T.BoxGeometry />
+ *   <T.MeshBasicMaterial />
+ * </T.Mesh>
+ * ```
  */
 export const forwardEventHandlers = () => {
   console.error(

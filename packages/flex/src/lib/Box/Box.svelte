@@ -61,13 +61,6 @@
   let computedWidth = $state(1)
   let computedHeight = $state(1)
 
-  /**
-   * Untrack contentGroup
-   */
-  const getContentGroup = () => {
-    return contentGroup
-  }
-
   // after the parent has been reflowed, we can use the calculated layout to set the properties of the box
   onEvent('reflow:after', () => {
     computedWidth =
@@ -76,9 +69,9 @@
     computedHeight =
       typeof props.height === 'number' ? props.height : node.getComputedHeight() / $scaleFactor
 
-    getContentGroup().position[$mainAxis] = computedWidth / 2
-    getContentGroup().position[$crossAxis] = -computedHeight / 2
-    getContentGroup().position[$depthAxis] = 0
+    contentGroup.position[$mainAxis] = computedWidth / 2
+    contentGroup.position[$crossAxis] = -computedHeight / 2
+    contentGroup.position[$depthAxis] = 0
 
     dimensionsContext.width.set(computedWidth)
     dimensionsContext.height.set(computedHeight)

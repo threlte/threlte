@@ -1,7 +1,5 @@
 <script lang="ts">
   import { createInstanceIdContext } from '../useInstanceId'
-
-  import { setContext } from 'svelte'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
@@ -21,9 +19,9 @@
   export let meshes: T
 
   const getInstance = (id: string) => {
-    return (args) => {
+    return (...args) => {
       createInstanceIdContext(id)
-      return Instance(document.body, args)
+      return Instance(...args)
     }
   }
 
