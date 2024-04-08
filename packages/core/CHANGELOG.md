@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 7.3.0
 
 ### Minor Changes

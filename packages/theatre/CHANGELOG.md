@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 3.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- Updated dependencies
+  - @threlte/extras@9.0.0-next.0
+  - @threlte/core@8.0.0-next.0
+
 ## 2.1.7
 
 ### Patch Changes

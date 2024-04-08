@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 0.1.3
 
 ### Patch Changes

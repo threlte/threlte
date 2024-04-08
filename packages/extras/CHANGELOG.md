@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 8.11.2
 
 ### Patch Changes
