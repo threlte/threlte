@@ -18,44 +18,26 @@ display info about your WebXR session. This is aliased by `ARButton` and
 ```
 -->
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
   import type { HTMLButtonAttributes } from 'svelte/elements'
   import { getXRSupportState } from '../lib/getXRSupportState'
   import { toggleXRSession } from '../lib/toggleXRSession'
   import { session, xr } from '../internal/stores'
 
-  interface $$Props extends HTMLButtonAttributes {
+  interface Props extends HTMLButtonAttributes {
+    /** The type of `XRSession` to create */
     mode: XRSessionMode
+    /**
+     * `XRSession` configuration options
+     * @see https://immersive-web.github.io/webxr/#feature-dependencies
+     */
     sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }
+    /** Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways */
     force?: 'enter' | 'exit'
+    /** Whether to apply automatic styling to the button. Set false to apply custom styles. Default is true. */
     styled?: boolean
   }
 
-  /** The type of `XRSession` to create */
-  export let mode: $$Props['mode']
-
-  /**
-   * `XRSession` configuration options
-   * @see https://immersive-web.github.io/webxr/#feature-dependencies
-   */
-  export let sessionInit: $$Props['sessionInit'] = undefined
-
-  /** Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways */
-  export let force: $$Props['force'] = undefined
-
-  /** Whether to apply automatic styling to the button. Set false to apply custom styles. Default is true. */
-  export let styled: $$Props['styled'] = true
-
-  const dispatch = createEventDispatcher<{
-    /** Fires when a user clicks the VR button. */
-    click: {
-      state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
-      nativeEvent: MouseEvent
-    }
-
-    /** Fires when an enter / exit session error occurs. */
-    error: Error
-  }>()
+  let { mode, sessionInit, force, styled = true, ...props }: Props = $props()
 
   const handleButtonClick = async (
     nativeEvent: MouseEvent,
@@ -67,7 +49,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       )
     }
 
-    dispatch('click', { state, nativeEvent })
+    props.$$events?.click?.({ state, nativeEvent })
 
     if (state !== 'supported') return
 
@@ -75,18 +57,21 @@ display info about your WebXR session. This is aliased by `ARButton` and
       await toggleXRSession(mode, sessionInit, force)
     } catch (error) {
       /** This callback gets fired if XR initialization fails. */
-      dispatch('error', error as Error)
+      props.$$events?.error?.(error as Error)
     }
   }
 
-  $: modeText = {
-    'immersive-vr': 'VR',
-    'immersive-ar': 'AR',
-    inline: 'inline'
-  }[mode]
+  let modeText = $derived(
+    {
+      'immersive-vr': 'VR',
+      'immersive-ar': 'AR',
+      inline: 'inline'
+    }[mode]
+  )
 
-  $: if (styled) {
-    $$restProps.style = `
+  let style = $derived(
+    styled
+      ? `
       position: absolute;
       bottom: 24px;
       left: 50%;
@@ -97,15 +82,19 @@ display info about your WebXR session. This is aliased by `ARButton` and
       color: white;
       outline: none;
       z-index: 10;
-      ${$$restProps.style ?? ''}
+      ${props.style ?? ''}
     `
-  }
+      : props.style
+  )
 </script>
 
 {#await getXRSupportState(mode) then state}
   <button
-    {...$$restProps}
-    on:click={(event) => handleButtonClick(event, state)}
+    on:click={(event) => {
+      handleButtonClick(event, state)
+    }}
+    {...props}
+    {style}
   >
     {#if state === 'unsupported'}
       {modeText} unsupported

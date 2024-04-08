@@ -5,7 +5,7 @@ import { onMount } from 'svelte'
 import { useHandTrackingState } from './useHandTrackingState'
 import type { XRControllerEvent } from '../types'
 import { gaze, left, right } from '../hooks/useController'
-import { controllerDispatchers } from './stores'
+import { controllerEvents } from './stores'
 
 export const setupControllers = () => {
   const factory = new XRControllerModelFactory()
@@ -27,7 +27,7 @@ export const setupControllers = () => {
     const dispatch = (event: Event) => {
       if (hasHands()) return
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
-      controllerDispatchers[data.handedness]?.current?.(event.type, event)
+      controllerEvents[data.handedness]?.[event.type]?.(event)
     }
 
     function handleConnected(this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {

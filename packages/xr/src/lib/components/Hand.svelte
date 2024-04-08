@@ -2,10 +2,10 @@
   lang="ts"
   context="module"
 >
-  import type { Group } from 'three'
-  import { T, useThrelte, createRawEventDispatcher, useTask } from '@threlte/core'
+  import { Group } from 'three'
+  import { T, useThrelte, useTask } from '@threlte/core'
   import type { XRHandEvent } from '../types'
-  import { isHandTracking, handDispatchers } from '../internal/stores'
+  import { isHandTracking, handEvents } from '../internal/stores'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
   import ScenePortal from './internal/ScenePortal.svelte'
   import { writable } from 'svelte/store'
@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-  type $$Props =
+  type Props =
     | {
         /** Whether the XRHand should be matched with the left hand. */
         left: true
@@ -37,10 +37,6 @@
         right?: undefined
       }
 
-  export let left: $$Props['left'] = undefined
-  export let right: $$Props['right'] = undefined
-  export let hand: $$Props['hand'] = undefined
-
   type $$Events = {
     connected: XRHandEvent<'connected'>
     disconnected: XRHandEvent<'disconnected'>
@@ -48,15 +44,16 @@
     pinchend: XRHandEvent<'pinchend'>
   }
 
-  const dispatch = createRawEventDispatcher<$$Events>()
+  let { left, right, hand, ...props }: Props & { $$events: $$Events } = $props()
+
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
-  $: handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right'))
-  $: handDispatchers[$handedness].set(dispatch)
+  $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
+  $effect.pre(() => handEvents[$handedness].set(props.$$events))
 
-  let children: Group
+  let children = new Group()
 
   /**
    * Currently children of a hand XRSpace or model will not
@@ -85,15 +82,17 @@
     { autoStart: false }
   )
 
-  $: if ($isHandTracking && ($$slots.wrist || $$slots.default) && inputSource) {
-    start()
-  } else {
-    stop()
-  }
+  $effect.pre(() => {
+    if ($isHandTracking && ($$slots.wrist || $$slots.default) && inputSource) {
+      start()
+    } else {
+      stop()
+    }
+  })
 
-  $: store = stores[$handedness]
-  $: inputSource = $store?.inputSource
-  $: model = $store?.model
+  let store = $derived(stores[$handedness])
+  let inputSource = $derived($store?.inputSource)
+  let model = $derived($store?.model)
 </script>
 
 {#if $store?.hand && $isHandTracking}
@@ -112,9 +111,9 @@
 
 {#if $isHandTracking}
   <ScenePortal>
-    <T.Group bind:ref={children}>
+    <T is={children}>
       <slot name="wrist" />
       <slot />
-    </T.Group>
+    </T>
   </ScenePortal>
 {/if}
