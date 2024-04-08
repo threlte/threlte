@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.1
+
+### Patch Changes
+
+- 45fae01: Granular updates on T
+
 ## 8.0.0-next.0
 
 ### Major Changes
