@@ -1,23 +1,24 @@
 <script lang="ts">
+  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { useCamera } from './utils/useCamera'
+  import { isCamera, useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
   import type { Props, Events, Slots } from './types'
+  import Camera from './Camera.svelte'
 
   type Type = $$Generic
 
   type AllProps = {
     is: Type
   } & Props<Type>
-  type $$Props = AllProps
   type $$Events = Events<Type>
   type $$Slots = Slots<Type>
 
@@ -34,7 +35,7 @@
   }: AllProps = $props()
 
   // We can't create the object in a reactive statement due to providing context
-  let internalRef = $state(determineRef<Type>(is, args))
+  let internalRef = $derived(determineRef<Type>(is, args))
   ref = internalRef
 
   const parent = useParent()
@@ -45,17 +46,10 @@
   // The ref is created, emit the event
   createEvent.updateRef(internalRef)
 
-  let initialized = false
-
   // When "is" or "args" change, we need to create a new ref.
   $effect.pre(() => {
-    // Because reactive statements run immediately, we need to ignore the first run.
-    if (!initialized) {
-      initialized = true
-      return
-    }
+    if (ref === internalRef) return
 
-    internalRef = determineRef<Type>(is, args)
     ref = internalRef
 
     // The ref is recreated, emit the event
@@ -90,13 +84,6 @@
     })
   )
 
-  // Camera
-  const camera = useCamera()
-  $effect.pre(() => {
-    camera.update(internalRef, manual)
-    camera.makeDefaultCamera(internalRef, makeDefault)
-  })
-
   // Attachment
   const attachment = useAttach()
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
@@ -125,6 +112,14 @@
   <DisposableObject
     object={internalRef}
     {dispose}
+  />
+{/if}
+
+{#if isCamera(internalRef)}
+  <Camera
+    object={internalRef}
+    {manual}
+    {makeDefault}
   />
 {/if}
 

@@ -29,7 +29,6 @@
       {size}
       {smooth}
       on:create={() => {
-        console.log('hi')
         align()
       }}
     />

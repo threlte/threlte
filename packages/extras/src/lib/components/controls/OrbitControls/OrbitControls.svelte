@@ -50,11 +50,11 @@
 
 <T
   is={ref}
-  {...props}
   on:change={(event) => {
     invalidate()
     props.$$events?.change?.(event)
   }}
+  {...props}
 >
   <slot {ref} />
 </T>

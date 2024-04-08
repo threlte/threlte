@@ -10,7 +10,10 @@ export type SuspenseContext = {
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
 
-export const createSuspenseContext = (options?: { final?: boolean }, events: any) => {
+export const createSuspenseContext = (
+  options?: { final?: boolean },
+  events?: Record<string, (arg: unknown) => void>
+) => {
   /**
    * This set contains all the promises that are currently being suspended.
    */

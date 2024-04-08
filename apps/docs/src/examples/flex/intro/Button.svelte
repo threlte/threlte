@@ -9,6 +9,7 @@
   export let z = 0
   export let text = ''
   export let order: number | undefined = undefined
+  export let onClick: () => void
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 </script>
@@ -21,7 +22,10 @@
 >
   <T.Mesh
     position.z={z}
-    on:click={(e) => e.stopPropagation()}
+    on:click={(e) => {
+      e.stopPropagation()
+      onClick()
+    }}
     on:pointerenter={onPointerEnter}
     on:pointerleave={onPointerLeave}
   >
