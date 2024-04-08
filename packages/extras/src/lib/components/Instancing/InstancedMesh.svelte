@@ -13,12 +13,16 @@
   type $$Events = InstancedMeshEvents
   type $$Slots = InstancedMeshSlots
 
-  export let id = 'default'
-  export let limit = 1000
-  export let range = 1000
-  export let update = true
+  let {
+    id = 'default',
+    limit = 1000,
+    range = 1000,
+    update = true,
+    ref = $bindable(),
+    ...props
+  }: InstancedMeshProps & { ref: InstancedMesh } = $props()
 
-  export const ref = new InstancedMesh(null as any, null as any, 0)
+  ref = new InstancedMesh(null as any, null as any, 0)
 
   const args = [null as any, null as any, 0]
 </script>
@@ -28,7 +32,7 @@
   raycast={() => null}
   matrixAutoUpdate={false}
   {args}
-  {...$$restProps}
+  {...props}
 >
   <Api
     instancedMesh={ref}

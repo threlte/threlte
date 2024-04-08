@@ -9,6 +9,7 @@
     smoothness?: number
     creaseAngle?: number
     steps?: number
+    ref?: ExtrudeGeometry
   }
 
   let {
@@ -19,7 +20,7 @@
     steps = 1,
     ref = $bindable(),
     ...props
-  }: Props & { ref: ExtrudeGeometry } = $props()
+  }: Props = $props()
 
   const eps = 0.00001
 

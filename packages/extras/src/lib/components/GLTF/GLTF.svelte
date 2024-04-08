@@ -32,8 +32,7 @@
     parser = $bindable(),
     materials = $bindable(),
     nodes = $bindable(),
-    children,
-    ...restProps
+    ...props
   }: Props = $props()
 
   const loader = useGltf({
@@ -47,7 +46,7 @@
   })
 
   const onLoad = (data: AnyThrelteGltf) => {
-    if (gltf) restProps.$$events?.unload?.()
+    if (gltf) props.$$events?.unload?.()
 
     gltf = data
     scene = data.scene
@@ -60,7 +59,7 @@
     materials = data.materials
     nodes = data.nodes
 
-    restProps.$$events?.load?.(gltf)
+    props.$$events?.load?.(gltf)
   }
 
   const onError = (error: any) => {
@@ -75,7 +74,7 @@
     parser = undefined
     nodes = undefined
     materials = undefined
-    restProps.$$events?.error?.(error.message)
+    props.$$events?.error?.(error.message)
   }
 
   const suspend = useSuspense()
@@ -97,9 +96,8 @@
 {#if scene}
   <T
     is={scene}
-    {...restProps}
-    let:ref
+    {...props}
   >
-    <slot {ref} />
+    <slot ref={scene} />
   </T>
 {/if}
