@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "mitt": "^3.0.1",
-    "yoga-layout": "^3.0.2"
+    "yoga-layout": "^2.0.1"
   },
   "peerDependencies": {
     "svelte": ">=5",
