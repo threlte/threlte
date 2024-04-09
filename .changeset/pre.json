@@ -13,6 +13,7 @@
     "@threlte/xr": "0.1.3"
   },
   "changesets": [
-    "lucky-news-sleep"
+    "lucky-news-sleep",
+    "mighty-singers-glow"
   ]
 }

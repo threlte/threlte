@@ -76,13 +76,15 @@
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
-  const { updateProps } = useProps()
-  $effect.pre(() =>
-    updateProps(internalRef, props, {
-      manualCamera: manual,
-      pluginsProps
+  const { updateProp } = useProps()
+  Object.keys(props).forEach((key) => {
+    $effect.pre(() => {
+      updateProp(internalRef, key, props[key], {
+        manualCamera: manual,
+        pluginsProps
+      })
     })
-  )
+  })
 
   // Attachment
   const attachment = useAttach()
