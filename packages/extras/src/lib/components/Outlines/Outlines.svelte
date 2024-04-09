@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useParent, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import { T, useParent, useThrelte } from '@threlte/core'
   import {
     Color,
     Vector2,
@@ -18,8 +18,6 @@
   type $$Events = OutlinesEvents
   type $$Slots = OutlinesSlots
 
-  type Props = Required<OutlinesProps>
-
   let {
     color = 'black',
     screenspace = false,
@@ -33,7 +31,7 @@
     renderOrder = 0,
     ref = $bindable(),
     ...props
-  }: OutlinesProps & { ref: Group } = $props()
+  }: OutlinesProps = $props()
 
   const { renderer } = useThrelte()
 
@@ -45,7 +43,9 @@
     size: { value: new Vector2() }
   }
 
-  ref = new Group()
+  let group = new Group()
+
+  ref = group
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -71,7 +71,7 @@
 
         if (mesh) {
           if (angle) mesh.geometry.dispose()
-          ref.remove(mesh)
+          group.remove(mesh)
         }
 
         const geometry = angle ? toCreasedNormals(parentMesh.geometry, angle) : parentMesh.geometry
@@ -126,9 +126,9 @@
 </script>
 
 <T
-  is={ref}
+  is={group}
   {...props}
 >
   <T is={mesh} />
-  <slot {ref} />
+  <slot ref={group} />
 </T>

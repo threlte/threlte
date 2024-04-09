@@ -4,16 +4,20 @@
   import { usePortalContext } from '../usePortalContext'
   import { writable } from 'svelte/store'
 
-  export let id = 'default'
-  export let object: Object3D | undefined = undefined
+  interface Props {
+    id?: string
+    object?: Object3D | undefined
+  }
+
+  let { id = 'default', object }: Props = $props()
 
   const { getPortal } = usePortalContext()
 
   const children = writable<Object3D[]>([])
   const target = writable<Object3D | undefined>()
 
-  $: portal = getPortal(id)
-  $: target.set(object ?? $portal)
+  let portal = $derived(getPortal(id))
+  $effect.pre(() => target.set(object ?? $portal))
 
   watch([children, target], ([children, target]) => {
     if (target === undefined) return

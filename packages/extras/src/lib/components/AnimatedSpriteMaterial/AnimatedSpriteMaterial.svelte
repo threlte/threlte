@@ -95,7 +95,7 @@
     fpsInterval = 1000 / fps
   })
 
-  is = isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
+  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 

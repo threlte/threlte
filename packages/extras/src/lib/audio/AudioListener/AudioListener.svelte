@@ -9,19 +9,29 @@
     AudioListenerSlots
   } from './AudioListener.svelte'
 
-  type $$Props = AudioListenerProps
   type $$Events = AudioListenerEvents
   type $$Slots = AudioListenerSlots
 
-  export let id: $$Props['id'] = undefined
-  export let masterVolume: $$Props['masterVolume'] = undefined
+  let {
+    id,
+    masterVolume,
+    ref = $bindable(),
+    audioContext = $bindable(),
+    resumeContext = $bindable(),
+    ...props
+  }: AudioListenerProps = $props()
 
-  export const ref = new ThreeAudioListener()
+  const listener = new ThreeAudioListener()
 
-  export const audioContext = ref.context
-  export const resumeContext = async () => await ref.context.resume()
+  ref = listener
+  audioContext = listener.context
+  resumeContext = async () => await listener.context.resume()
 
-  $: if (masterVolume !== undefined) ref.setMasterVolume(masterVolume)
+  $effect.pre(() => {
+    if (masterVolume !== undefined) {
+      listener.setMasterVolume(masterVolume)
+    }
+  })
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
@@ -33,9 +43,8 @@
 </script>
 
 <T
-  is={ref}
-  {...$$restProps}
-  let:ref
+  is={listener}
+  {...props}
 >
-  <slot {ref} />
+  <slot ref={listener} />
 </T>

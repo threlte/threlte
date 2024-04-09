@@ -2,7 +2,7 @@
   import HierarchicalObject from './HierarchicalObject.svelte'
   import type { SceneGraphObjectProperties } from './SceneGraphObject.svelte'
 
-  export let object: SceneGraphObjectProperties['object']
+  let { object }: SceneGraphObjectProperties = $props()
 </script>
 
 <HierarchicalObject
