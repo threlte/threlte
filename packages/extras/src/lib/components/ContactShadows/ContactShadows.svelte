@@ -3,6 +3,7 @@
   import { onDestroy } from 'svelte'
   import {
     Color,
+    Group,
     Mesh,
     MeshBasicMaterial,
     MeshDepthMaterial,
@@ -40,6 +41,8 @@
   }: ContactShadowsProps = $props()
 
   const { scene, renderer } = useThrelte()
+
+  const group = new Group()
 
   const scaledWidth = $derived(width * (Array.isArray(scale) ? scale[0] : scale || 1))
   const scaledHeight = $derived(height * (Array.isArray(scale) ? scale[1] : scale || 1))
@@ -211,7 +214,8 @@
   })
 </script>
 
-<T.Group
+<T
+  is={group}
   bind:ref
   {...props}
 >
@@ -228,6 +232,6 @@
       manual
     />
 
-    <slot {ref} />
+    <slot ref={group} />
   </T.Group>
-</T.Group>
+</T>

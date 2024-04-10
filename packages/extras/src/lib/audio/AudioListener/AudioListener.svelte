@@ -23,7 +23,6 @@
 
   const listener = new ThreeAudioListener()
 
-  ref = listener
   audioContext = listener.context
   resumeContext = async () => await listener.context.resume()
 
@@ -35,7 +34,7 @@
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
-  addAudioListener(ref, id)
+  addAudioListener(listener, id)
 
   onDestroy(() => {
     removeAudioListener(id)
@@ -44,6 +43,7 @@
 
 <T
   is={listener}
+  bind:ref
   {...props}
 >
   <slot ref={listener} />

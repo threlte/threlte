@@ -32,11 +32,9 @@
 
   const sky = new Sky()
 
-  ref = sky
-
   const sunPosition = new Vector3()
 
-  const { uniforms } = ref.material
+  const { uniforms } = sky.material
 
   const { renderer, scene, invalidate } = useThrelte()
 
@@ -67,7 +65,7 @@
 
   const { start: scheduleUpdate, stop } = useTask(
     () => {
-      ref.scale.setScalar(scale)
+      sky.scale.setScalar(scale)
 
       uniforms.turbidity.value = turbidity
       uniforms.rayleigh.value = rayleigh
@@ -82,7 +80,7 @@
 
       if (setEnvironment) {
         if (!renderTarget || !cubeCamera) init()
-        cubeCamera?.update(renderer, ref)
+        cubeCamera?.update(renderer, sky)
       }
 
       invalidate()
@@ -106,7 +104,7 @@
   })
 
   onDestroy(() => {
-    ref.material.dispose()
+    sky.material.dispose()
     scene.environment = originalEnvironment
     try {
       renderTarget?.dispose()
@@ -117,11 +115,12 @@
 </script>
 
 <T
-  is={ref}
+  is={sky}
+  bind:ref
   {...props}
 >
   <slot
-    {ref}
+    ref={sky}
     {sunPosition}
     {renderTarget}
   />

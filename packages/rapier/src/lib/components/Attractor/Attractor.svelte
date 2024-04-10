@@ -19,8 +19,7 @@
 
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
-  let obj = new Group()
-  ref = obj
+  const group = new Group()
 
   const calcForceByType = {
     static: (s: number, m2: number, r: number, d: number, G: number): number => s,
@@ -33,7 +32,7 @@
   const bodyV3 = new Vector3()
 
   function applyImpulseToBodiesInRange() {
-    obj.getWorldPosition(gravitySource)
+    group.getWorldPosition(gravitySource)
 
     world.forEachRigidBody((body: RigidBody) => {
       const { x, y, z } = body.translation()
@@ -62,10 +61,11 @@
 </script>
 
 <T
-  is={obj}
+  is={group}
+  bind:ref
   {...props}
 >
-  <slot ref={obj} />
+  <slot ref={group} />
 
   {#if $debug}
     <T.Mesh>

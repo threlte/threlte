@@ -21,7 +21,7 @@
     play = $bindable(),
     stop = $bindable(),
     ...props
-  }: AudioProps & { ref: ThreeAudio } = $props()
+  }: AudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -31,10 +31,10 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  ref = new ThreeAudio<GainNode>(listener)
+  const audio = new ThreeAudio<GainNode>(listener)
 
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
-    useAudio(ref, props.$$events)
+    useAudio(audio, props.$$events)
 
   pause = useAudioProps.pause
   play = useAudioProps.play
@@ -49,8 +49,9 @@
 </script>
 
 <T
-  is={ref}
+  is={audio}
+  bind:ref
   {...props}
 >
-  <slot {ref} />
+  <slot ref={audio} />
 </T>

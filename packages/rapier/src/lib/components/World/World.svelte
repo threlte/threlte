@@ -40,7 +40,7 @@
     stage
   }: WorldProps = $props()
 
-  let error = false
+  let error = $state(false)
 
   const init = async () => {
     if ($initialized) return

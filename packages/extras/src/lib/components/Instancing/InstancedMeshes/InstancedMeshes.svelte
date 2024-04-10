@@ -12,11 +12,10 @@
 
   type T = $$Generic<Meshes>
 
-  type $$Props = InstancedMeshesProps<T>
   type $$Events = InstancedMeshesEvents
   type $$Slots = InstancedMeshesSlots<T>
 
-  let { meshes, ...props }: { meshes: T } = $props()
+  let { meshes, ...props }: InstancedMeshesProps<T> = $props()
 
   const getInstance = (id: string) => {
     return (...args: any) => {

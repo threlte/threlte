@@ -43,9 +43,7 @@
     size: { value: new Vector2() }
   }
 
-  let group = new Group()
-
-  ref = group
+  const group = new Group()
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -62,7 +60,7 @@
   const parent = useParent()
 
   $effect.pre(() => {
-    const parentMesh = $parent as undefined | THREE.Mesh | THREE.InstancedMesh | THREE.SkinnedMesh
+    const parentMesh = $parent as undefined | Mesh | InstancedMesh | SkinnedMesh
 
     if (parentMesh?.geometry !== undefined) {
       if (oldAngle !== angle || oldGeometry !== parentMesh.geometry) {
@@ -127,6 +125,7 @@
 
 <T
   is={group}
+  bind:ref
   {...props}
 >
   <T is={mesh} />

@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     type Texture,
-    type Material,
     DoubleSide,
     FileLoader,
     LinearFilter,
@@ -56,7 +55,7 @@
     play = $bindable(),
     pause = $bindable(),
     ...props
-  }: AnimatedSpriteProps & { ref: Material } = $props()
+  }: AnimatedSpriteProps = $props()
 
   const parent = useParent()
 

@@ -46,8 +46,6 @@
 
   const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
 
-  ref = mesh
-
   const animationMap = writable<Map<string, number>>(new Map())
 
   $effect.pre(() => {
@@ -143,6 +141,7 @@
 
 <T
   is={mesh}
+  bind:ref
   frustumCulled={false}
   {...props}
 >

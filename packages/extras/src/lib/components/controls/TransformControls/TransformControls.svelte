@@ -1,6 +1,5 @@
 <script lang="ts">
   import { HierarchicalObject, T, useThrelte, watch, type Props } from '@threlte/core'
-
   import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { writable } from 'svelte/store'
@@ -11,7 +10,6 @@
     TransformControlsSlots
   } from './TransformControls.svelte'
 
-  type $$Props = TransformControlsProps
   type $$Events = TransformControlsEvents
   type $$Slots = TransformControlsSlots
 
@@ -68,16 +66,13 @@
     }
   )
 
-  group = new Group()
+  const attachGroup = new Group()
 
-  controls = new TransformControls($camera, renderer.domElement)
-  $effect.pre(() => {
-    controls = new TransformControls($camera, renderer.domElement)
-  })
+  let transformControls = $derived(new TransformControls($camera, renderer.domElement))
 
   $effect.pre(() => {
-    controls?.attach(object ?? group)
-    return () => controls?.detach()
+    transformControls?.attach(object ?? attachGroup)
+    return () => transformControls?.detach()
   })
 
   // This component is receiving the props for the controls as well as the props
@@ -124,7 +119,8 @@
   }}
 >
   <T
-    is={controls}
+    is={transformControls}
+    bind:controls
     on:dragging-changed={(e) => {
       onDraggingChanged(e)
       props.$$events?.['dragging-changed']?.()
@@ -141,9 +137,9 @@
 </HierarchicalObject>
 
 <T
-  is={group}
-  let:ref
+  is={attachGroup}
+  bind:group
   {...objectProps}
 >
-  <slot {ref} />
+  <slot ref={attachGroup} />
 </T>

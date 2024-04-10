@@ -10,11 +10,10 @@
     OrbitControlsSlots
   } from './OrbitControls.svelte'
 
-  type $$Props = OrbitControlsProps
   type $$Events = OrbitControlsEvents
   type $$Slots = OrbitControlsSlots
 
-  let { ref = $bindable(), ...props }: OrbitControlsProps & { ref: ThreeOrbitControls } = $props()
+  let { ref = $bindable(), ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
 
@@ -28,9 +27,9 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  ref = new ThreeOrbitControls($parent, renderer.domElement)
+  const controls = new ThreeOrbitControls($parent, renderer.domElement)
 
-  const { start, stop } = useTask(ref.update, {
+  const { start, stop } = useTask(controls.update, {
     autoStart: false,
     autoInvalidate: false
   })
@@ -44,17 +43,18 @@
   })
 
   const { orbitControls } = useControlsContext()
-  orbitControls.set(ref)
+  orbitControls.set(controls)
   onDestroy(() => orbitControls.set(undefined))
 </script>
 
 <T
-  is={ref}
+  is={controls}
+  bind:ref
   on:change={(event) => {
     invalidate()
     props.$$events?.change?.(event)
   }}
   {...props}
 >
-  <slot {ref} />
+  <slot ref={controls} />
 </T>

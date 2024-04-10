@@ -19,7 +19,6 @@
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
   type TMassDef = $$Generic<MassDef>
-  type $$Props = AutoCollidersProps<TMassDef>
 
   let {
     shape = 'convexHull',
