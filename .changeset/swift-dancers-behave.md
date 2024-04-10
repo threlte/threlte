@@ -7,4 +7,4 @@
 "@threlte/xr": patch
 ---
 
-Upgrade dependencies, migrate remaining components to runes
+Migrate additional components to runes mode

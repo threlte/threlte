@@ -16,10 +16,10 @@
   type $$Events = InstancedMeshesEvents
   type $$Slots = InstancedMeshesSlots<T>
 
-  export let meshes: T
+  let { meshes, ...props }: { meshes: T } = $props()
 
   const getInstance = (id: string) => {
-    return (...args) => {
+    return (...args: any) => {
       createInstanceIdContext(id)
       return Instance(...args)
     }
@@ -43,17 +43,19 @@
     )
   }
 
-  $: components = Array.isArray(meshes)
-    ? (getInstanceComponentsArray(meshes) as any)
-    : (getInstanceComponentsObject(meshes) as any)
+  let components = $derived(
+    Array.isArray(meshes)
+      ? (getInstanceComponentsArray(meshes) as any)
+      : (getInstanceComponentsObject(meshes) as any)
+  )
 
-  $: meshesArray = Array.isArray(meshes) ? meshes : Object.values(meshes)
-  $: filteredMeshesArray = meshesArray.filter((mesh) => mesh.isMesh)
+  let meshesArray = $derived(Array.isArray(meshes) ? meshes : Object.values(meshes))
+  let filteredMeshesArray = $derived(meshesArray.filter((mesh) => mesh.isMesh))
 </script>
 
 <InnerInstancedMeshes
   meshes={filteredMeshesArray}
-  {...$$restProps}
+  {...props}
 >
   <slot {components} />
 </InnerInstancedMeshes>

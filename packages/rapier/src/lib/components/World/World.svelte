@@ -16,30 +16,29 @@
   import InnerWorld from './InnerWorld.svelte'
   import type { WorldProps } from './World.svelte'
 
-  // TODO: should this be Required<WorldProps> instead?
-  type $$Props = WorldProps
+  let {
+    gravity,
+    rawIntegrationParameters,
+    rawIslands,
+    rawBroadPhase,
+    rawNarrowPhase,
+    rawBodies,
+    rawColliders,
+    rawImpulseJoints,
+    rawMultibodyJoints,
+    rawCCDSolver,
+    rawQueryPipeline,
+    rawPhysicsPipeline,
+    rawSerializationPipeline,
+    rawDebugRenderPipeline,
 
-  // self
-  export let gravity: $$Props['gravity'] = undefined
-  export let rawIntegrationParameters: $$Props['rawIntegrationParameters'] = undefined
-  export let rawIslands: $$Props['rawIslands'] = undefined
-  export let rawBroadPhase: $$Props['rawBroadPhase'] = undefined
-  export let rawNarrowPhase: $$Props['rawNarrowPhase'] = undefined
-  export let rawBodies: $$Props['rawBodies'] = undefined
-  export let rawColliders: $$Props['rawColliders'] = undefined
-  export let rawImpulseJoints: $$Props['rawImpulseJoints'] = undefined
-  export let rawMultibodyJoints: $$Props['rawMultibodyJoints'] = undefined
-  export let rawCCDSolver: $$Props['rawCCDSolver'] = undefined
-  export let rawQueryPipeline: $$Props['rawQueryPipeline'] = undefined
-  export let rawPhysicsPipeline: $$Props['rawPhysicsPipeline'] = undefined
-  export let rawSerializationPipeline: $$Props['rawSerializationPipeline'] = undefined
-  export let rawDebugRenderPipeline: $$Props['rawDebugRenderPipeline'] = undefined
-  /**
-   * This is passed to the useTask handler.
-   * Use this to control when the rapier physics engine is updating the scene.
-   * @default undefined
-   */
-  export let stage: $$Props['stage'] = undefined
+    /**
+     * This is passed to the useTask handler.
+     * Use this to control when the rapier physics engine is updating the scene.
+     * @default undefined
+     */
+    stage
+  }: WorldProps = $props()
 
   let error = false
 
