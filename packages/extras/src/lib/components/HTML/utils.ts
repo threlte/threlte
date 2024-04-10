@@ -1,4 +1,3 @@
-import type { Writable } from 'svelte/store'
 import {
   Camera,
   Matrix4,
@@ -6,12 +5,14 @@ import {
   OrthographicCamera,
   PerspectiveCamera,
   Raycaster,
+  Vector2,
   Vector3
 } from 'three'
 
 const v1 = new Vector3()
 const v2 = new Vector3()
 const v3 = new Vector3()
+const vec2 = new Vector2()
 
 const isOrthographicCamera = (o: Camera): o is OrthographicCamera => {
   return 'isOrthographicCamera' in o
@@ -19,12 +20,6 @@ const isOrthographicCamera = (o: Camera): o is OrthographicCamera => {
 
 const isPerspectiveCamera = (o: Camera): o is PerspectiveCamera => {
   return 'isPerspectiveCamera' in o
-}
-
-const isOrthographicCameraOrPerspectiveCamera = (
-  o: Camera
-): o is OrthographicCamera | PerspectiveCamera => {
-  return isOrthographicCamera(o) || isPerspectiveCamera(o)
 }
 
 export const defaultCalculatePosition = (

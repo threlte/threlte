@@ -265,7 +265,7 @@
         <T.ShaderMaterial
           side={DoubleSide}
           {vertexShader}
-          fragmentShader={`void main() { gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0); }`}
+          fragmentShader={`void main(){gl_FragColor=vec4(.0,.0,.0,.0);discard;}`}
         />
       {/if}
     </T>
@@ -277,9 +277,7 @@
   id="el"
   use:portalAction
   bind:this={element}
-  style:position="absolute"
-  style:top="0"
-  style:left="0"
+  style="position:absolute; top:0; left:0;"
   style:pointer-events={transform ? 'none' : 'auto'}
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
@@ -287,13 +285,9 @@
   {#if transform}
     <div
       bind:this={transformOuterRef}
-      style:position="absolute"
-      style:top="0"
-      style:left="0"
+      style="position:absolute; top:0; left:0; transform-style:preserve-3d; pointer-events:none;"
       style:width={`${width}px`}
       style:height={`${height}px`}
-      style:transform-style="preserve-3d"
-      style:pointer-events="none"
     >
       <div
         bind:this={transformInnerRef}
