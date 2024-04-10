@@ -13,16 +13,16 @@ const v1 = new Vector3()
 const v2 = new Vector3()
 const v3 = new Vector3()
 
-const isOrthographicCamera = (o: any): o is OrthographicCamera => {
-  return o.isOrthographicCamera
+const isOrthographicCamera = (o: Camera): o is OrthographicCamera => {
+  return 'isOrthographicCamera' in o
 }
 
-const isPerspectiveCamera = (o: any): o is PerspectiveCamera => {
-  return o.isPerspectiveCamera
+const isPerspectiveCamera = (o: Camera): o is PerspectiveCamera => {
+  return 'isPerspectiveCamera' in o
 }
 
 const isOrthographicCameraOrPerspectiveCamera = (
-  o: any
+  o: Camera
 ): o is OrthographicCamera | PerspectiveCamera => {
   return isOrthographicCamera(o) || isPerspectiveCamera(o)
 }

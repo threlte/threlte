@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    createRawEventDispatcher,
-    forwardEventHandlers,
-    T,
-    useTask,
-    useThrelte
-  } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { derived, writable, type Writable } from 'svelte/store'
   import {
     Group,
@@ -14,7 +8,6 @@
     PerspectiveCamera,
     Raycaster
   } from 'three'
-  import { useHasEventListeners } from '../../hooks/useHasEventListeners'
   import {
     compileStyles,
     defaultCalculatePosition,
@@ -30,55 +23,41 @@
 
   import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
 
-  type $$Props = HTMLProps
-  type $$PropsWithDefaults = Required<$$Props>
   type $$Events = HTMLEvents
   type $$Slots = HTMLSlots
 
-  // Group Properties
-  export let transform: $$PropsWithDefaults['transform'] = false
-  export let calculatePosition: $$PropsWithDefaults['calculatePosition'] = defaultCalculatePosition
-  export let eps: $$PropsWithDefaults['eps'] = 0.001
-  export let occlude: $$PropsWithDefaults['occlude'] = false
-  export let zIndexRange: $$PropsWithDefaults['zIndexRange'] = [16777271, 0]
-  export let sprite: $$PropsWithDefaults['sprite'] = false
-  export let pointerEvents: $$PropsWithDefaults['pointerEvents'] = 'auto'
-  export let center: $$PropsWithDefaults['center'] = false
-  export let fullscreen: $$PropsWithDefaults['fullscreen'] = false
-  export let distanceFactor: $$Props['distanceFactor'] | undefined = undefined
-  export let as: $$PropsWithDefaults['as'] = 'div'
-  export let portal: $$Props['portal'] | undefined = undefined
+  let {
+    transform = false,
+    calculatePosition = defaultCalculatePosition,
+    eps = 0.001,
+    occlude = false,
+    zIndexRange = [16777271, 0],
+    sprite = false,
+    pointerEvents = 'auto',
+    center = false,
+    fullscreen = false,
+    distanceFactor,
+    as = 'div',
+    portal,
+    ref = $bindable(),
+    visible = $bindable(),
+    ...props
+  }: HTMLProps = $props()
 
-  const dispatch = createRawEventDispatcher<{
-    visibilitychange: boolean
-  }>()
+  visible = true
 
-  export let ref = new Group()
+  const group = new Group()
 
   const { renderer, camera, scene, size } = useThrelte()
-
-  const isViableCamera = (c: any): c is PerspectiveCamera | OrthographicCamera => {
-    return c.isPerspectiveCamera || c.isOrthographicCamera
-  }
-
-  const getCamera = (): PerspectiveCamera | OrthographicCamera => {
-    if (!isViableCamera($camera)) {
-      throw new Error('Only PerspectiveCamera or OrthographicCamera supported for component <HTML>')
-    }
-    return $camera
-  }
 
   const raycaster = new Raycaster()
 
   let oldPosition = [0, 0]
   let oldZoom = 0
-  export let visible = true
   let el = document.createElement(as)
 
   let transformOuterRef: HTMLDivElement
   let transformInnerRef: HTMLDivElement
-
-  const { hasEventListeners } = useHasEventListeners<typeof dispatch>()
 
   let raytraceTarget =
     typeof occlude === 'boolean' && occlude === true
@@ -191,7 +170,7 @@
    */
   const getAncestorVisibility = (): boolean => {
     let ancestorsAreVisible = true
-    let parent: ThreeeObject3D | null = ref.parent
+    let parent: ThreeeObject3D | null = group.parent
     traverse: while (parent) {
       if ('visible' in parent && !parent.visible) {
         ancestorsAreVisible = false
@@ -207,12 +186,10 @@
   useTask(async () => {
     showEl = getAncestorVisibility()
 
-    const camera = getCamera()
+    camera.current.updateMatrixWorld()
+    group.updateWorldMatrix(true, false)
 
-    camera.updateMatrixWorld()
-    ref.updateWorldMatrix(true, false)
-
-    const vec = transform ? oldPosition : calculatePosition(ref, camera, $size)
+    const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
 
     if (
       transform ||
@@ -220,19 +197,20 @@
       Math.abs(oldPosition[0] - vec[0]) > eps ||
       Math.abs(oldPosition[1] - vec[1]) > eps
     ) {
-      const isBehindCamera = isObjectBehindCamera(ref, camera)
+      const isBehindCamera = isObjectBehindCamera(group, camera.current)
 
       const previouslyVisible = visible
       if (raytraceTarget) {
-        const isvisible = isObjectVisible(ref, camera, raycaster, raytraceTarget)
+        const isvisible = isObjectVisible(group, camera.current, raycaster, raytraceTarget)
         visible = isvisible && !isBehindCamera
       } else {
         visible = !isBehindCamera
       }
 
       if (previouslyVisible !== visible) {
-        if (hasEventListeners('visibilitychange')) dispatch('visibilitychange', visible)
-        else {
+        if (props.$$events.visibilitychange) {
+          props.$$events.visibilitychange?.(visible)
+        } else {
           updateStyles(styles.common.el, {
             display: visible ? 'block' : 'none'
           })
@@ -240,19 +218,20 @@
       }
 
       updateStyles(styles.common.el, {
-        zIndex: `${objectZIndex(ref, camera, zIndexRange)}`
+        zIndex: `${objectZIndex(group, camera.current, zIndexRange)}`
       })
       if (transform) {
-        const fov = camera.projectionMatrix.elements[5] * $heightHalf
-        const { isOrthographicCamera, top, left, bottom, right } = camera as OrthographicCamera
+        const fov = camera.current.projectionMatrix.elements[5] * $heightHalf
+        const { isOrthographicCamera, top, left, bottom, right } =
+          camera.current as OrthographicCamera
 
-        let matrix = ref.matrixWorld
+        let matrix = group.matrixWorld
         if (sprite) {
-          matrix = camera.matrixWorldInverse
+          matrix = camera.current.matrixWorldInverse
             .clone()
             .transpose()
             .copyPosition(matrix)
-            .scale(ref.scale)
+            .scale(group.scale)
           matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0
           matrix.elements[15] = 1
         }
@@ -265,7 +244,7 @@
             ? `scale(${fov}) translate(${epsilon(-(right + left) / 2)}px,${epsilon((top + bottom) / 2)}px)`
             : `translateZ(${fov}px)`
 
-          const cameraMatrix = getCameraCSSMatrix(camera.matrixWorldInverse)
+          const cameraMatrix = getCameraCSSMatrix(camera.current.matrixWorldInverse)
 
           updateStyles(styles.transform.outerRef, {
             transform: `${cameraTransform}${cameraMatrix}translate(${$widthHalf}px, ${$heightHalf}px)`
@@ -275,13 +254,14 @@
           })
         }
       } else {
-        const scale = distanceFactor === undefined ? 1 : objectScale(ref, camera) * distanceFactor
+        const scale =
+          distanceFactor === undefined ? 1 : objectScale(group, camera.current) * distanceFactor
         updateStyles(styles.noTransform.el, {
           transform: `translate3d(${vec[0]}px, ${vec[1]}px, 0) scale(${scale})`
         })
       }
       oldPosition = vec
-      oldZoom = camera.zoom
+      oldZoom = camera.current.zoom
     }
   })
 
@@ -312,19 +292,16 @@
       }
     }
   }
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
-  is={ref}
-  {...$$restProps}
-  let:ref
-  bind:this={$component}
+  is={group}
+  bind:ref
+  {...props}
 >
   <slot
     name="threlte"
-    {ref}
+    ref={group}
   />
 </T>
 
