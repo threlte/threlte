@@ -31,7 +31,6 @@
   import { useSuspense } from '../../suspense/useSuspense'
   import { useTexture } from '../../hooks/useTexture'
 
-  type $$Props = Required<AnimatedSpriteProps>
   type $$Events = AnimatedSpriteEvents
   type $$Slots = AnimatedSpriteSlots
 
@@ -57,7 +56,7 @@
     play = $bindable(),
     pause = $bindable(),
     ...props
-  }: AnimatedSpriteProps = $props()
+  }: AnimatedSpriteProps & { ref: Material } = $props()
 
   const parent = useParent()
 

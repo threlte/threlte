@@ -110,7 +110,7 @@ importers:
         version: 3.2.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.158.3)(three@0.163.0)
+        version: 0.1.15(@types/three@0.163.0)(three@0.163.0)
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@5.0.0-next.95)
@@ -154,8 +154,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.158.0
-        version: 0.158.3
+        specifier: ^0.163.0
+        version: 0.163.0
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -854,7 +854,7 @@ importers:
         version: 5.4.4
       vite:
         specifier: ^5.2.8
-        version: 5.2.8(@types/node@20.12.4)
+        version: 5.2.8(@types/node@20.12.6)
       vite-plugin-mkcert:
         specifier: ^1.17.5
         version: 1.17.5(vite@5.2.8)
@@ -2627,13 +2627,13 @@ packages:
       tweakpane: 4.0.3
     dev: true
 
-  /@lumaai/luma-web@0.1.15(@types/three@0.158.3)(three@0.163.0):
+  /@lumaai/luma-web@0.1.15(@types/three@0.163.0)(three@0.163.0):
     resolution: {integrity: sha512-gNI7qhwSDdvS6+IVFe9QpD2E/9VXRfO2dUn5CUVgvw+Ldus057ghBKdZ1AYO8Mgi/7J+OI4Nxd7r8YwzRf8/Pg==}
     peerDependencies:
       '@types/three': ^0.157.2
       three: ^0.157.0
     dependencies:
-      '@types/three': 0.158.3
+      '@types/three': 0.163.0
       three: 0.163.0
     dev: true
 
@@ -3048,7 +3048,7 @@ packages:
       magic-string: 0.30.5
       node-html-parser: 6.1.12
       resolve: 1.22.8
-      vite: 5.2.8(@types/node@20.12.4)
+      vite: 5.2.8(@types/node@20.12.6)
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -3108,7 +3108,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.16.0
-      vite: 5.2.8(@types/node@20.12.4)
+      vite: 5.2.8(@types/node@20.12.6)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -3722,7 +3722,7 @@ packages:
       sirv: 2.0.4
       svelte: 5.0.0-next.95
       tiny-glob: 0.2.9
-      vite: 5.2.8(@types/node@20.12.6)
+      vite: 5.2.8(@types/node@20.12.4)
     dev: true
 
   /@sveltejs/package@2.3.1(svelte@5.0.0-next.95)(typescript@5.4.4):
@@ -3753,7 +3753,7 @@ packages:
       '@sveltejs/vite-plugin-svelte': 3.0.2(svelte@5.0.0-next.95)(vite@5.2.8)
       debug: 4.3.4
       svelte: 5.0.0-next.95
-      vite: 5.2.8(@types/node@20.12.6)
+      vite: 5.2.8(@types/node@20.12.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -3771,7 +3771,7 @@ packages:
       magic-string: 0.30.7
       svelte: 5.0.0-next.95
       svelte-hmr: 0.15.3(svelte@5.0.0-next.95)
-      vite: 5.2.8(@types/node@20.12.6)
+      vite: 5.2.8(@types/node@20.12.4)
       vitefu: 0.2.5(vite@5.2.8)
     transitivePeerDependencies:
       - supports-color
@@ -4081,15 +4081,6 @@ packages:
 
   /@types/stats.js@0.17.0:
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
-
-  /@types/three@0.158.3:
-    resolution: {integrity: sha512-6Qs1rUvLSbkJ4hlIe6/rdwIf61j1x2UKvGJg7s8KjswYsz1C1qDTs6voVXXB8kYaI0hgklgZgbZUupfL1l9xdA==}
-    dependencies:
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.5
-      fflate: 0.6.10
-      meshoptimizer: 0.18.1
-    dev: true
 
   /@types/three@0.163.0:
     resolution: {integrity: sha512-uIdDhsXRpQiBUkflBS/i1l3JX14fW6Ot9csed60nfbZNXHDTRsnV2xnTVwXcgbvTiboAR4IW+t+lTL5f1rqIqA==}
@@ -6866,6 +6857,7 @@ packages:
 
   /fflate@0.6.10:
     resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
+    dev: false
 
   /fflate@0.8.2:
     resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
@@ -13288,7 +13280,7 @@ packages:
       axios: 1.4.0(debug@4.3.4)
       debug: 4.3.4
       picocolors: 1.0.0
-      vite: 5.2.8(@types/node@20.12.4)
+      vite: 5.2.8(@types/node@20.12.6)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -13304,7 +13296,7 @@ packages:
       axios: 1.6.8(debug@4.3.4)
       debug: 4.3.4
       picocolors: 1.0.0
-      vite: 5.2.8(@types/node@20.12.4)
+      vite: 5.2.8(@types/node@20.12.6)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13431,7 +13423,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.2.8(@types/node@20.12.6)
+      vite: 5.2.8(@types/node@20.12.4)
 
   /vm2@3.9.19:
     resolution: {integrity: sha512-J637XF0DHDMV57R6JyVsTak7nIL8gy5KH4r1HiwWLf/4GBbb5MKL5y7LpmF4A8E2nR6XmzpmMFQ7V7ppPTmUQg==}

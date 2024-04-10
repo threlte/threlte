@@ -5,7 +5,6 @@
   import { useThrelteAudio } from '../useThrelteAudio'
   import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
 
-  type $$Props = AudioProps
   type $$Events = AudioEvents
   type $$Slots = AudioSlots
 
