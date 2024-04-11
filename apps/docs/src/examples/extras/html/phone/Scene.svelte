@@ -3,6 +3,7 @@
   import { Environment, Float, HTML, useGltf, OrbitControls } from '@threlte/extras'
   import { derived } from 'svelte/store'
   import { type Mesh, MathUtils } from 'three'
+  import Geometries from './Geometries.svelte'
 
   const gltf = useGltf<{
     nodes: {
@@ -22,6 +23,7 @@
 <Environment
   path="/hdr/"
   files="shanghai_riverside_1k.hdr"
+  isBackground
 />
 
 <T.PerspectiveCamera
@@ -45,12 +47,15 @@
   files="shanghai_riverside_1k.hdr"
 />
 
-<Float scale={0.7}>
+<Float
+  scale={0.7}
+  floatIntensity={5}
+>
   <HTML
     rotation.y={90 * MathUtils.DEG2RAD}
     position.x={1.2}
     transform
-    occlude
+    occlude="blending"
   >
     <div class="phone-wrapper">
       <iframe
@@ -76,6 +81,8 @@
     </T.Mesh>
   {/if}
 </Float>
+
+<Geometries />
 
 <style>
   .phone-wrapper {

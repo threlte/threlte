@@ -4,7 +4,7 @@
   (make it always face the camera) if "transfrom" 
   is false. 
 */
-export default `/* glsl */
+export default `
 #include <common>
 
 void main() {
@@ -16,9 +16,10 @@ void main() {
   float size = 0.03;
 
   vec4 mvPosition = modelViewMatrix * vec4( 0.0, 0.0, 0.0, 1.0 );
-  vec2 scale;
-  scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
-  scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
+  vec2 scale = vec2(
+    length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) ),
+    length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) )
+  );
 
   bool isPerspective = isPerspectiveMatrix( projectionMatrix );
   if ( isPerspective ) scale *= - mvPosition.z;
