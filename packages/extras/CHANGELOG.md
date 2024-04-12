@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
 ## 9.0.0-next.0
 
 ### Major Changes
