@@ -5,7 +5,6 @@
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
 
-  type $$Props = Required<GridProps>
   type $$Events = GridEvents
   type $$Slots = GridSlots
 
@@ -32,9 +31,9 @@
     sectionDividers = 2,
     ref = $bindable(),
     ...props
-  }: GridProps & { ref: Mesh } = $props()
+  }: GridProps = $props()
 
-  ref = new Mesh()
+  const mesh = new Mesh()
 
   const { invalidate, camera } = useThrelte()
 
@@ -206,20 +205,20 @@
   })
 
   useTask(() => {
-    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
+    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(mesh.matrixWorld)
 
-    const material = ref.material as ShaderMaterial
+    const material = mesh.material as ShaderMaterial
     const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
     const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
 
     gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
-    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
-    invalidate()
+    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
   })
 </script>
 
 <T
-  is={ref}
+  is={mesh}
+  bind:ref
   frustumCulled={false}
   {...props}
 >
@@ -230,7 +229,7 @@
     transparent
     {side}
   />
-  <slot {ref}>
+  <slot ref={mesh}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
   </slot>
 </T>
