@@ -5,7 +5,6 @@
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
 
-  type $$Props = Required<GridProps>
   type $$Events = GridEvents
   type $$Slots = GridSlots
 
@@ -205,17 +204,19 @@
     invalidate()
   })
 
-  useTask(() => {
-    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(mesh.matrixWorld)
+  useTask(
+    () => {
+      gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(mesh.matrixWorld)
 
-    const material = mesh.material as ShaderMaterial
-    const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
-    const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
+      const material = mesh.material as ShaderMaterial
+      const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
+      const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
 
-    gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
-    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
-    invalidate()
-  })
+      gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
+      worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
+    },
+    { autoInvalidate: false }
+  )
 </script>
 
 <T
