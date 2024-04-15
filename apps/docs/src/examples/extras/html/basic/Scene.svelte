@@ -3,7 +3,7 @@
   import { HTML, OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { Color, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
 

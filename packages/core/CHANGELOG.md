@@ -1,5 +1,40 @@
 # @threlte/core
 
+## 7.3.0
+
+### Minor Changes
+
+- e9ae00d: add createThrelteContext export
+
+## 7.2.1
+
+### Patch Changes
+
+- 6ed92af: Cleaned up default camera creation and removed unused ThrelteUserData type
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
+## 7.2.0
+
+### Minor Changes
+
+- cd5f31d: Remove deprecated encoding-related code to allow compatibility with r162.
+
+  ### Migration
+
+  Three.js r152 or later is now required.
+
+## 7.1.2
+
+### Patch Changes
+
+- 36f8eef: Import fix
+
+## 7.1.1
+
+### Patch Changes
+
+- 7b90778: Small `<T>` optimizations
+
 ## 7.1.0
 
 ### Minor Changes

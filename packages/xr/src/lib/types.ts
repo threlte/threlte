@@ -1,6 +1,6 @@
 import type { Event, Group, XRTargetRaySpace, XRGripSpace, XRHandSpace } from 'three'
-import type { XRControllerModel } from 'three/examples/jsm/webxr/XRControllerModelFactory'
-import type { XRHandModel } from 'three/examples/jsm/webxr/XRHandModelFactory'
+import type { XRControllerModel } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
+import type { XRHandModel } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 
 export type XRSessionEventType =
   | 'sessionstart'

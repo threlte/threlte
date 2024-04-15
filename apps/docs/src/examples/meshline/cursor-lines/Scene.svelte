@@ -1,6 +1,5 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Vector3 } from 'three'
   import { interactivity } from '@threlte/extras'
   import CursorLine from './CursorLine.svelte'
 
@@ -25,9 +24,7 @@
   zoom={50}
   makeDefault
   position.y={10}
-  on:create={({ ref }) => {
-    ref.lookAt(new Vector3(0, 0, 0))
-  }}
+  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Mesh

@@ -1,20 +1,20 @@
-import { memoize, useThrelte, watch } from '@threlte/core'
-import type { ComputeFunction, State } from './types'
+import { useThrelte, watch, type CurrentWritable } from '@threlte/core'
+import type { ComputeFunction } from './context'
 
-export const getDefaultComputeFunction = (state: State): ComputeFunction => {
-  const camera = memoize(useThrelte().camera)
+export const getDefaultComputeFunction = (
+  target: CurrentWritable<HTMLElement>
+): ComputeFunction => {
+  const { camera } = useThrelte()
 
-  let width = 0
-  let height = 0
+  let width = target.current.clientWidth
+  let height = target.current.clientHeight
 
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      width = entry.contentRect.width
-      height = entry.contentRect.height
-    }
+  const resizeObserver = new ResizeObserver(([entry]) => {
+    width = entry.contentRect.width
+    height = entry.contentRect.height
   })
 
-  watch(state.target, (target) => {
+  watch(target, (target) => {
     if (target) resizeObserver.observe(target)
     return () => {
       if (target) resizeObserver.unobserve(target)

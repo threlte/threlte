@@ -30,7 +30,7 @@
     Vector4,
     type PerspectiveCamera
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const subsetOfTHREE = {
     Vector2,

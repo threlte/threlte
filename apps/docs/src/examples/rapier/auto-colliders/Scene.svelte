@@ -4,7 +4,7 @@
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { derived } from 'svelte/store'
   import type { MeshStandardMaterial, Mesh } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Ground from './Ground.svelte'
 
   const gltf = useGltf<{

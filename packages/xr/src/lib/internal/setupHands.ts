@@ -1,5 +1,5 @@
 import type { Event, XRHandSpace } from 'three'
-import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
+import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { left, right } from '../hooks/useHand'

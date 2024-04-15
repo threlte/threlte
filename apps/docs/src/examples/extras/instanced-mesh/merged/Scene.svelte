@@ -2,7 +2,7 @@
   import { T } from '@threlte/core'
   import { InstancedMeshes, OrbitControls, useGltf } from '@threlte/extras'
   import { DoubleSide, Mesh } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Flower from './Flower.svelte'
 
   const gltf = useGltf<{

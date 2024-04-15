@@ -1,6 +1,6 @@
 {
   "name": "@threlte/xr",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
   "license": "MIT",
   "scripts": {
@@ -37,7 +37,7 @@
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.133"
+    "three": ">=0.152"
   },
   "type": "module",
   "exports": {

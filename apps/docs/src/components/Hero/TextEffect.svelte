@@ -1,6 +1,6 @@
 <script lang="ts">
   import anime from 'animejs'
-  import { clamp, mapLinear } from 'three/src/math/MathUtils'
+  import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
   export let type: 'fade-up-skew-individual' | 'fade' | 'fade-individual' | 'fade-up' = 'fade'
   export let progress: number

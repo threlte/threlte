@@ -7,8 +7,8 @@
 
   const url =
     revision > 160
-      ? 'three/examples/jsm/objects/GroundedSkybox'
-      : 'three/examples/jsm/objects/GroundProjectedSkybox'
+      ? 'three/examples/jsm/objects/GroundedSkybox.js'
+      : 'three/examples/jsm/objects/GroundProjectedSkybox.js'
 
   const module = import(/* @vite-ignore */ url)
 </script>

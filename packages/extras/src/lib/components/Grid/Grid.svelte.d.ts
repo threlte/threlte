@@ -1,6 +1,6 @@
 import type { Events, Props, Slots } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { ColorRepresentation, Mesh, Shape } from 'three'
+import type { ColorRepresentation, Mesh, Side } from 'three'
 
 export type GridProps = Props<Mesh> & {
   plane?: 'xz' | 'xy' | 'zy'
@@ -17,6 +17,7 @@ export type GridProps = Props<Mesh> & {
   infiniteGrid?: boolean
   fadeDistance?: number
   fadeStrength?: number
+  side?: Side
 } & (
     | {
         type?: 'grid'

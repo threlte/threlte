@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.1.7
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
 ## 2.1.6
 
 ### Patch Changes

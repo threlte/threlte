@@ -1,0 +1,65 @@
+---
+{
+  order: 9.4,
+  category: '@threlte/extras',
+  sourcePath: 'packages/extras/src/lib/components/Mask/Mask.svelte',
+  name: <Mask>,
+  type: 'component',
+  'componentSignature':
+    {
+      extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+      'props':
+        [
+          { name: 'id', type: 'number', required: false,default: '1', 'description': 'Each mask must have an id, you can have compound masks referring to the same id.' },
+					 { name: 'colorWrite', type: 'boolean', required: false,default: 'false', 'description': 'If colors of the masks own material will leak through.' },
+					  { name: 'depthWrite', type: 'boolean', required: false,default: 'false', 'description': 'If depth  of the masks own material will leak through.' }
+        ]
+    }
+}
+---
+
+Masks use the stencil buffer to cut out areas of the screen. This component is a port of [drei's `<Mask>` component](https://github.com/pmndrs/drei#mask).
+
+
+<Example path="extras/mask" />
+
+First you need to define a mask, give it the shape that you want.
+
+```svelte
+<Mask id={1}>
+  <T.PlaneGeometry />
+  <T.MeshBasicMaterial />
+</Mask>
+```
+
+Now refer to it with the `useMask` hook and the same id, your content will now be masked out by the geometry defined above.
+
+```svelte
+<script lang="ts">
+	import { useMask } from '@threlte/extras'
+	const stencil = useMask(1)
+</script>
+
+<T.Mesh>
+  <T.TorusKnotGeometry />
+  <T.MeshStandardMaterial {...stencil} />
+</T.Mesh>
+```
+
+You can build compound masks with multiple shapes by re-using an id. You can also use the mask as a normal mesh by providing colorWrite and depthWrite props.
+
+```svelte
+<Mask position={[-1, 0, 0]} id={1}>
+  <T.PlaneGeometry />
+  <T.MeshBasicMaterial />
+</Mask>
+<Mask colorWrite depthWrite position={[1, 0, 0]} id={1}>
+  <T.CircleGeometry />
+  <T.MeshBasicMaterial />
+</Mask>
+```
+Invert masks individually by providing a 2nd boolean argument to the useMask hook.
+
+```ts
+const stencil = useMask(1, true)
+```

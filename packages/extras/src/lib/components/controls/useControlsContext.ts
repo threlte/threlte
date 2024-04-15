@@ -1,7 +1,7 @@
 import { useThrelteUserContext } from '@threlte/core'
 import { writable, type Writable } from 'svelte/store'
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
 type ControlsContext = {
   orbitControls: Writable<OrbitControls | undefined>
