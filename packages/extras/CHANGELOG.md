@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
 ## 9.0.0-next.1
 
 ### Patch Changes

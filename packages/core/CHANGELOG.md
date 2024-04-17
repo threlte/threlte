@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.2
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
 ## 8.0.0-next.1
 
 ### Patch Changes
