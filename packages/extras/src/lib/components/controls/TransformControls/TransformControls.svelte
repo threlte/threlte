@@ -99,13 +99,15 @@
     transformProps = {}
     objectProps = {}
 
-    for (let [key, value] of Object.entries(props)) {
-      if (transformOnlyPropNames.includes(key)) {
-        transformProps[key] = value
-      } else {
-        objectProps[key] = value
-      }
-    }
+    Object.keys(props).forEach((key) => {
+      $effect.pre(() => {
+        if (transformOnlyPropNames.includes(key)) {
+          transformProps[key] = props[key]
+        } else {
+          objectProps[key] = props[key]
+        }
+      })
+    })
   })
 </script>
 
@@ -120,7 +122,7 @@
 >
   <T
     is={transformControls}
-    bind:controls
+    bind:ref={controls}
     on:dragging-changed={(e) => {
       onDraggingChanged(e)
       props.$$events?.['dragging-changed']?.()
@@ -138,7 +140,7 @@
 
 <T
   is={attachGroup}
-  bind:group
+  bind:ref={group}
   {...objectProps}
 >
   <slot ref={attachGroup} />
