@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
 ## 9.0.0-next.2
 
 ### Patch Changes
