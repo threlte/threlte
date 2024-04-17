@@ -122,7 +122,7 @@
 >
   <T
     is={transformControls}
-    bind:controls
+    bind:ref={controls}
     on:dragging-changed={(e) => {
       onDraggingChanged(e)
       props.$$events?.['dragging-changed']?.()
@@ -140,7 +140,7 @@
 
 <T
   is={attachGroup}
-  bind:group
+  bind:ref={group}
   {...objectProps}
 >
   <slot ref={attachGroup} />
