@@ -3,12 +3,10 @@
   import { useTask, T } from '@threlte/core'
   import type { FloatEvents, FloatProps, FloatSlots } from './Float.svelte'
 
-  type $$Props = Required<FloatProps>
   type $$Events = FloatEvents
   type $$Slots = FloatSlots
 
   let {
-    // Float Properties
     speed = 1,
     floatIntensity = 1,
     floatingRange = [-0.1, 0.1],
@@ -17,9 +15,9 @@
     seed = Math.random() * 10000,
     ref = $bindable(),
     ...props
-  }: FloatProps & { ref: Group } = $props()
+  }: FloatProps = $props()
 
-  ref = new Group()
+  const group = new Group()
 
   let t = seed
 
@@ -47,25 +45,26 @@
   useTask((delta) => {
     t += delta
 
-    ref.position.x =
+    group.position.x =
       map(Math.sin((t / 4) * fSpeed[0]) / 10, -0.1, 0.1, ...fRange[0]) * fIntensity[0]
-    ref.position.y =
+    group.position.y =
       map(Math.sin((t / 4) * fSpeed[1]) / 10, -0.1, 0.1, ...fRange[1]) * fIntensity[1]
-    ref.position.z =
+    group.position.z =
       map(Math.sin((t / 4) * fSpeed[2]) / 10, -0.1, 0.1, ...fRange[2]) * fIntensity[2]
 
-    ref.rotation.x = (Math.cos((t / 4) * rSpeed[0]) / 8) * rIntensity[0]
-    ref.rotation.y = (Math.sin((t / 4) * rSpeed[1]) / 8) * rIntensity[1]
-    ref.rotation.z = (Math.sin((t / 4) * rSpeed[2]) / 20) * rIntensity[2]
-    ref.updateMatrix()
+    group.rotation.x = (Math.cos((t / 4) * rSpeed[0]) / 8) * rIntensity[0]
+    group.rotation.y = (Math.sin((t / 4) * rSpeed[1]) / 8) * rIntensity[1]
+    group.rotation.z = (Math.sin((t / 4) * rSpeed[2]) / 20) * rIntensity[2]
+    group.updateMatrix()
   })
 </script>
 
 <T.Group {...props}>
   <T
-    is={ref}
+    is={group}
+    bind:ref
     matrixAutoUpdate={false}
   >
-    <slot {ref} />
+    <slot ref={group} />
   </T>
 </T.Group>

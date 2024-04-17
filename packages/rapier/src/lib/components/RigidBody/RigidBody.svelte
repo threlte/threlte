@@ -13,8 +13,6 @@
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
-  type $$Props = Required<RigidBodyProps>
-
   let {
     linearVelocity,
     angularVelocity,

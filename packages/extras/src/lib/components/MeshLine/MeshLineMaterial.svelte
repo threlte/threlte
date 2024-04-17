@@ -4,12 +4,11 @@
     MeshLineMaterialProps,
     MeshLineMaterialSlots
   } from './MeshLineMaterial.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<MeshLineMaterialProps>
   type $$Events = MeshLineMaterialEvents
   type $$Slots = MeshLineMaterialSlots
 
@@ -25,7 +24,7 @@
     alphaMap,
     ref = $bindable(),
     ...props
-  }: MeshLineMaterialProps & { ref: ShaderMaterial } = $props()
+  }: MeshLineMaterialProps = $props()
 
   let { invalidate, size } = useThrelte()
 
@@ -45,7 +44,7 @@
     useAlphaMap: { value: alphaMap ? 1 : 0 }
   }
 
-  ref = new ShaderMaterial({ uniforms })
+  const material = new ShaderMaterial({ uniforms })
 
   $effect.pre(() => {
     uniforms.resolution.value.set($size.width, $size.height)
@@ -64,10 +63,11 @@
 </script>
 
 <T
-  is={ref}
+  is={material}
+  bind:ref
   {...props}
   {fragmentShader}
   {vertexShader}
 >
-  <slot {ref} />
+  <slot ref={material} />
 </T>

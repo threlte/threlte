@@ -18,8 +18,8 @@ const _instanceWorldMatrix = new Matrix4()
 const _instanceIntersects: Intersection[] = []
 const _mesh = new Mesh<BufferGeometry, MeshBasicMaterial>()
 
-const isMaterial = (o: any): o is Material => {
-  return o.isMaterial
+const isMaterial = (o: object): o is Material => {
+  return 'isMaterial' in o
 }
 
 export class PositionMesh extends Group {

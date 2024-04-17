@@ -1,6 +1,7 @@
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { LineBasicMaterialParameters } from 'three'
+import type { LineSegments } from 'three'
 
-export type DebugProps = LineBasicMaterialParameters
+export type DebugProps = Props<LineSegments>
 
 export default class Debug extends SvelteComponent<DebugProps> {}

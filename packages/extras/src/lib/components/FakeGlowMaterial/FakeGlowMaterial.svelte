@@ -6,11 +6,9 @@
     FakeGlowMaterialProps,
     FakeGlowMaterialSlots
   } from './FakeGlowMaterial.svelte'
-
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<FakeGlowMaterialProps>
   type $$Events = FakeGlowMaterialEvents
   type $$Slots = FakeGlowMaterialSlots
 

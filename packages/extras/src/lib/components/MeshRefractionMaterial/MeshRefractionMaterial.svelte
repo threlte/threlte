@@ -11,7 +11,6 @@
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<MeshRefractionMaterialProps>
   type $$Events = MeshRefractionMaterialEvents
   type $$Slots = MeshRefractionMaterialSlots
 
@@ -25,7 +24,7 @@
     fastChroma = true,
     ref = $bindable(),
     ...props
-  }: MeshRefractionMaterialProps & { ref: ShaderMaterial } = $props()
+  }: MeshRefractionMaterialProps = $props()
 
   const uniforms = {
     envMap: { value: null },
@@ -41,7 +40,7 @@
     projectionMatrixInverse: { value: new Matrix4() }
   }
 
-  ref = new ShaderMaterial({
+  const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
     uniforms
@@ -50,19 +49,19 @@
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
 
-  const isCubeTexture = (def: CubeTexture | Texture): def is CubeTexture =>
-    def && (def as CubeTexture).isCubeTexture
+  const isCubeTexture = (def: CubeTexture | Texture | undefined): def is CubeTexture =>
+    def !== undefined && (def as CubeTexture).isCubeTexture
 
-  let defines = {} as { [key: string]: string }
+  let defines: Record<string, string> = {}
 
   const updateDefines = (
-    envMap: $$Props['envMap'],
-    aberrationStrength: $$Props['aberrationStrength'],
-    fastChroma: $$Props['fastChroma']
+    envMap: CubeTexture | Texture | undefined,
+    aberrationStrength: number,
+    fastChroma: boolean
   ) => {
     // Sampler2D and SamplerCube need different defines
     const isCubeMap = isCubeTexture(envMap)
-    const w = (isCubeMap ? envMap.image[0]?.width : envMap.image.width) ?? 1024
+    const w = (isCubeMap ? envMap.image[0]?.width : envMap?.image.width) ?? 1024
     const cubeSize = w / 4
     const lodMax = Math.floor(Math.log2(cubeSize))
     const _cubeSize = Math.pow(2, lodMax)
@@ -80,7 +79,9 @@
     if (fastChroma) defines.FAST_CHROMA = ''
   }
 
-  $effect.pre(() => updateDefines(envMap, aberrationStrength, fastChroma))
+  $effect.pre(() => {
+    updateDefines(envMap, aberrationStrength, fastChroma)
+  })
 
   onMount(() => {
     // Update the BVH
@@ -110,7 +111,8 @@
 </script>
 
 <T
-  is={ref}
+  is={material}
+  bind:ref
   uniforms.envMap.value={envMap}
   uniforms.bounces.value={bounces}
   uniforms.ior.value={ior}

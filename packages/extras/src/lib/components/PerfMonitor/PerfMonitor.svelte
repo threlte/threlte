@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { useStage, useTask, useThrelte, watch } from '@threlte/core'
+  import { useStage, useTask, useThrelte } from '@threlte/core'
   import { ThreePerf } from 'three-perf'
   import type { PerfMonitorProps } from './PerfMonitor'
   import { onDestroy } from 'svelte'
-  import { writable } from 'svelte/store'
-
-  type $$Props = PerfMonitorProps
 
   let {
     domElement = document.body,

@@ -6,7 +6,6 @@
   import { useSuspense } from '../../suspense/useSuspense'
   import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3DGeometry.svelte'
 
-  type $$Props = Text3DProps
   type $$Events = Text3DEvents
   type $$Slots = Text3DSlots
 
@@ -26,6 +25,7 @@
     extrudePath,
     steps,
     UVGenerator,
+    ref = $bindable(),
     ...props
   }: Text3DProps = $props()
 
@@ -69,6 +69,7 @@
 {#if creasedGeometry}
   <T
     is={creasedGeometry}
+    bind:ref
     {...props}
   >
     <slot ref={creasedGeometry} />

@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     type Texture,
-    type Material,
     DoubleSide,
     FileLoader,
     LinearFilter,
@@ -31,7 +30,6 @@
   import { useSuspense } from '../../suspense/useSuspense'
   import { useTexture } from '../../hooks/useTexture'
 
-  type $$Props = Required<AnimatedSpriteProps>
   type $$Events = AnimatedSpriteEvents
   type $$Slots = AnimatedSpriteSlots
 
@@ -95,7 +93,7 @@
     fpsInterval = 1000 / fps
   })
 
-  is = isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
+  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 

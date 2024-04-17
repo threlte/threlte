@@ -4,11 +4,15 @@
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
   import { createApi } from './api'
 
-  export let instancedMesh: InstancedMesh
-  export let id: string
-  export let limit: number
-  export let range: number
-  export let update: boolean
+  interface Props {
+    instancedMesh: InstancedMesh
+    id: string
+    limit: number
+    range: number
+    update: boolean
+  }
+
+  let { instancedMesh, id, limit, range, update }: Props = $props()
 
   const { instances } = createApi(instancedMesh, id)
 
@@ -40,7 +44,7 @@
       }
       instancedMesh.instanceMatrix.needsUpdate = true
 
-      for (let i = 0; i < instances.current.length; i++) {
+      for (let i = 0, l = instances.current.length; i < l; i++) {
         const instance = instances.current[i]
         // Multiply the inverse of the InstancedMesh world matrix or else
         // Instances will be double-transformed if <Instances> isn't at identity
@@ -54,7 +58,7 @@
     }
   })
 
-  $: {
+  $effect.pre(() => {
     const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
     instancedMesh.count = updateRange
 
@@ -73,7 +77,7 @@
         instancedMesh.instanceColor.updateRange.count = updateRange * 3
       }
     }
-  }
+  })
 </script>
 
 <T.InstancedBufferAttribute

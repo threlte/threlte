@@ -13,7 +13,6 @@
   import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
 
-  type $$Props = Required<MeshLineGeometryProps>
   type $$Events = MeshLineGeometryEvents
   type $$Slots = MeshLineGeometrySlots
 

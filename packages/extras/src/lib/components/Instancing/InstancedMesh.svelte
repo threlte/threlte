@@ -9,7 +9,6 @@
     InstancedMeshSlots
   } from './InstancedMesh.svelte'
 
-  type $$Props = InstancedMeshProps
   type $$Events = InstancedMeshEvents
   type $$Slots = InstancedMeshSlots
 
@@ -20,27 +19,28 @@
     update = true,
     ref = $bindable(),
     ...props
-  }: InstancedMeshProps & { ref: InstancedMesh } = $props()
+  }: InstancedMeshProps = $props()
 
-  ref = new InstancedMesh(null as any, null as any, 0)
+  const mesh = new InstancedMesh(null as any, null as any, 0)
 
   const args = [null as any, null as any, 0]
 </script>
 
 <T
-  is={ref}
+  is={mesh}
+  bind:ref
   raycast={() => null}
   matrixAutoUpdate={false}
   {args}
   {...props}
 >
   <Api
-    instancedMesh={ref}
+    instancedMesh={mesh}
     {id}
     {limit}
     {range}
     {update}
   >
-    <slot {ref} />
+    <slot ref={mesh} />
   </Api>
 </T>
