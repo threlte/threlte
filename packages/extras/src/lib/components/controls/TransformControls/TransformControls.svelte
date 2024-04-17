@@ -92,8 +92,8 @@
     'visible'
   ]
 
-  let transformProps: Props<TransformControls> = {}
-  let objectProps: Props<Group> = {}
+  let transformProps: Props<TransformControls> = $state({})
+  let objectProps: Props<Group> = $state({})
 
   $effect.pre(() => {
     transformProps = {}
