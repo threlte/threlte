@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.3
+
+### Patch Changes
+
+- ccafaaa: Fix renderer resize flickering
+
 ## 8.0.0-next.2
 
 ### Patch Changes
