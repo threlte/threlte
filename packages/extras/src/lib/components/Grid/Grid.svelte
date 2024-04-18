@@ -138,43 +138,56 @@
     uniforms.coord0.value = axisToInt[c0]
     uniforms.coord1.value = axisToInt[c1]
     uniforms.coord2.value = axisToInt[c2]
+    invalidate()
   })
 
   $effect.pre(() => {
     uniforms.cellSize.value = cellSize
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionSize.value = sectionSize
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.cellColor.value.set(cellColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionColor.value.set(sectionColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.backgroundColor.value.set(backgroundColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.backgroundOpacity.value = backgroundOpacity
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.fadeDistance.value = fadeDistance
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.fadeStrength.value = fadeStrength
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.cellThickness.value = cellThickness
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionThickness.value = sectionThickness
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.followCamera.value = followCamera
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.infiniteGrid.value = infiniteGrid
+    invalidate()
   })
 
   $effect.pre(() => {
