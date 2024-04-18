@@ -33,7 +33,7 @@
     "lucide-react": "^0.263.1",
     "npm": "^9.8.1",
     "preact": "^10.16.0",
-    "svelte": "5.0.0-next.97",
+    "svelte": "5.0.0-next.107",
     "tailwindcss": "^3.4.3",
     "three-mesh-bvh": "^0.7.4"
   },
