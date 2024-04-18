@@ -22,22 +22,22 @@ export const injectTeleportControlsPlugin = (): void => {
     const refStore = writable<Mesh>(ref)
     const propsStore = writable(props)
 
-    watch([refStore, propsStore], ([nextRef, nextProps]) => {
+    watch([refStore, propsStore], ([$refStore, $propsStore]) => {
       if (isSurface) {
-        if (nextProps.teleportSurface === false) {
-          removeSurface(nextRef)
+        if ($propsStore.teleportSurface === false) {
+          removeSurface($refStore)
           return noop
         } else {
-          addSurface(nextRef)
-          return () => removeSurface(nextRef)
+          addSurface($refStore, props.$$events ?? {})
+          return () => removeSurface($refStore)
         }
       } else if (isBlocker) {
         if (props.teleportBlocker === false) {
-          removeBlocker(nextRef)
+          removeBlocker($refStore)
           return noop
         } else {
-          addBlocker(nextRef)
-          return () => removeBlocker(nextRef)
+          addBlocker($refStore)
+          return () => removeBlocker($refStore)
         }
       } else {
         return noop

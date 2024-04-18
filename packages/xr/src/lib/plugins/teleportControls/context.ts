@@ -1,6 +1,6 @@
 import type { Mesh, Raycaster, Intersection } from 'three'
 import { getContext, setContext } from 'svelte'
-import type { CurrentWritable, createRawEventDispatcher } from '@threlte/core'
+import type { CurrentWritable } from '@threlte/core'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
@@ -8,7 +8,7 @@ export interface Context {
   interactiveObjects: Mesh[]
   surfaces: Map<string, Mesh>
   blockers: Map<string, Mesh>
-  dispatchers: WeakMap<Mesh, ReturnType<typeof createRawEventDispatcher>>
+  dispatchers: WeakMap<Mesh, Record<string, (arg: unknown) => void>>
   raycaster: Raycaster
   compute: ComputeFunction
 }
