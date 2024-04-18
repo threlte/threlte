@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- 7cc5701: Remove raw event dispatching
+
 ## 1.0.0-next.1
 
 ### Patch Changes
