@@ -19,7 +19,7 @@ This should be placed within a Threlte `<Canvas />`.
 -->
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { createRawEventDispatcher, useThrelte, watch } from '@threlte/core'
+  import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
     isHandTracking,
@@ -59,13 +59,13 @@ This should be placed within a Threlte `<Canvas />`.
 
   type $$Events = {
     /** Called as an XRSession is requested */
-    sessionstart(): XRSessionEvent<'sessionstart'>
+    sessionstart: (event: XRSessionEvent<'sessionstart'>) => void
     /** Called after an XRSession is terminated */
-    sessionend(): XRSessionEvent<'sessionend'>
+    sessionend: (event: XRSessionEvent<'sessionend'>) => void
     /** Called when an XRSession is hidden or unfocused. */
-    visibilitychange(): globalThis.XRSessionEvent
+    visibilitychange: (event: globalThis.XRSessionEvent) => void
     /** Called when available inputsources change */
-    inputsourceschange(): globalThis.XRSessionEvent
+    inputsourceschange: (event: globalThis.XRSessionEvent) => void
   }
 
   let {
