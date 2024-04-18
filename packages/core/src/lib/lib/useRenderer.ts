@@ -1,12 +1,12 @@
-import { writable } from 'svelte/store'
 import {
   ColorManagement,
   PCFSoftShadowMap,
   WebGLRenderer,
   type WebGLRendererParameters
 } from 'three'
+import { useTask } from '../hooks/useTask'
 import type { ThrelteContext } from '../lib/contexts'
-import { watch } from './storeUtils'
+import { currentWritable, memoize, watch } from './storeUtils'
 
 /**
  * ### `useRenderer`
@@ -24,7 +24,7 @@ import { watch } from './storeUtils'
  * - `useLegacyLights`
  */
 export const useRenderer = (ctx: ThrelteContext) => {
-  const renderer = writable<WebGLRenderer | undefined>(undefined)
+  const renderer = currentWritable<WebGLRenderer | undefined>(undefined)
 
   const createRenderer = (
     canvas: HTMLCanvasElement,
@@ -54,9 +54,24 @@ export const useRenderer = (ctx: ThrelteContext) => {
     renderer?.setPixelRatio(dpr)
   })
 
-  watch([renderer, ctx.size], ([renderer, size]) => {
-    if (renderer?.xr?.isPresenting) return
-    renderer?.setSize(size.width, size.height)
+  const memoized = memoize(ctx.size)
+
+  const { start, stop } = useTask(
+    () => {
+      if (renderer.current?.xr?.isPresenting) return
+      if (!renderer.current) return
+      renderer.current.setSize(memoized.current.width, memoized.current.height)
+      ctx.invalidate()
+      stop()
+    },
+    {
+      before: ctx.autoRenderTask,
+      autoStart: false,
+      autoInvalidate: false
+    }
+  )
+  watch([renderer, ctx.size], () => {
+    start()
   })
 
   watch([renderer, ctx.shadows], ([renderer, shadows]) => {
