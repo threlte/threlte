@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
 ## 9.0.0-next.3
 
 ### Patch Changes
