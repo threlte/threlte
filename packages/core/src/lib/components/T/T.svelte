@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { untrack } from 'svelte'
+  import { isPerspectiveOrOrthographicCamera } from '../../lib/camera'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { isCamera, useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
@@ -117,7 +116,7 @@
   />
 {/if}
 
-{#if isCamera(internalRef)}
+{#if isPerspectiveOrOrthographicCamera(internalRef)}
   <Camera
     object={internalRef}
     {manual}
