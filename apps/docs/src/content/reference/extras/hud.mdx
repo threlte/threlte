@@ -11,8 +11,10 @@ componentSignature:
   }
 ---
 
+Renders a heads-up-display (HUD). Each HUD creates a new scene rendered on top of the main scene with a separate Threlte context and camera. 
+
 <Tip type="warning">
-Testing 1, 2, 3.
+  The HUD reuses parts of the main Threlte context that wouldn't be useful to duplicate, such as the renderer and the task scheduler.
 </Tip>
 
 <Example path="extras/hud" />
@@ -23,10 +25,15 @@ Testing 1, 2, 3.
 
 ```svelte
 <script lang="ts">
-  import { HTML } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { HUD } from '@threlte/extras'
 </script>
 
-<HTML>
-  <h1>Hello World</h1>
-</HTML>
+<HUD>
+  <T.PerspectiveCamera makeDefault>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</HUD>
 ```
