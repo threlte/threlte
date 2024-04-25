@@ -1,4 +1,3 @@
-import type { Intersection, Object3D } from 'three'
 import { currentWritable, type CurrentWritable, useThrelte } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster } from 'three'
@@ -6,11 +5,11 @@ import type { IntersectionEvent, DomEvent } from './types'
 import { getDefaultComputeFunction } from './defaults'
 
 export type FilterFunction = (
-  items: Intersection[],
+  items: THREE.Intersection[],
   context: InteractivityContext
-) => Intersection[]
+) => THREE.Intersection[]
 
-export type ComputeFunction = (event: DomEvent, context: InteractivityContext) => boolean
+export type ComputeFunction = (event: DomEvent, context: InteractivityContext) => void
 
 export type InteractivityOptions = {
   enabled?: boolean
@@ -37,9 +36,9 @@ export type InteractivityContext = {
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]
-  initialHits: Object3D[]
+  initialHits: THREE.Object3D[]
   hovered: Map<string, IntersectionEvent<DomEvent>>
-  interactiveObjects: Object3D[]
+  interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
   filter?: FilterFunction
 }
@@ -74,7 +73,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
 }
 
 interface HandlerContext {
-  dispatchers: WeakMap<Object3D, Record<string, (args: unknown) => void>>
+  dispatchers: WeakMap<THREE.Object3D, Record<string, (args: unknown) => void>>
 }
 
 const handlerContextKey = Symbol('interactivity-handler-context')
