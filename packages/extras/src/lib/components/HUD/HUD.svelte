@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { useThrelte, T, useTask, createThrelteContext, HierarchicalObject } from '@threlte/core'
+  import {
+    useThrelte,
+    T,
+    useTask,
+    createThrelteContext,
+    HierarchicalObject,
+    SceneGraphObject
+  } from '@threlte/core'
   import { writable } from 'svelte/store'
   import type { ColorSpace, ToneMapping } from 'three'
 
@@ -23,7 +30,7 @@
   let context = useThrelte()
   const hudContext = createThrelteContext({
     ...context,
-    useLegacyLights: false,
+    useLegacyLights: context.useLegacyLights.current,
     colorSpace: colorSpace ?? context.colorSpace.current,
     toneMapping: context.toneMapping.current,
     dpr: context.dpr.current,
@@ -44,7 +51,7 @@
 
   hudContext.renderer = context.renderer
 
-  const stage = context.scheduler.createStage(Symbol('hi'), {
+  const stage = context.scheduler.createStage(Symbol('hudStage'), {
     after: context.renderStage
   })
 
@@ -58,7 +65,7 @@
 
   useTask(
     () => {
-      let { autoClear: oldClear } = renderer
+      let { autoClear } = renderer
 
       // Disable clearing and set hud settings
       renderer.autoClear = false
@@ -70,7 +77,7 @@
       renderer.render(scene, camera.current)
 
       // Restore defaults
-      renderer.autoClear = oldClear
+      renderer.autoClear = autoClear
       renderer.outputColorSpace = context.colorSpace.current
       renderer.toneMapping = context.toneMapping.current
       renderer.setPixelRatio(context.dpr.current)

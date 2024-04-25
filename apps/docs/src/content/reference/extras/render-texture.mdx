@@ -1,0 +1,36 @@
+---
+order: 2.2
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/RenderTexture/RenderTexture.svelte'
+name: <RenderTexture>
+type: 'component'
+componentSignature:
+  {
+    props:
+      []
+  }
+---
+
+<Tip type="warning">
+</Tip>
+
+<Example path="extras/render-texture" />
+
+### Examples
+
+#### Basic Example
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { HUD } from '@threlte/extras'
+</script>
+
+<HUD>
+  <T.PerspectiveCamera makeDefault>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</HUD>
+```
