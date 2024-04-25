@@ -15,6 +15,11 @@
   let hovered = $state(false)
 </script>
 
+<T.Color
+  attach="background"
+  args={['orange']}
+/>
+
 <T.OrthographicCamera
   position={[1, 1, 1]}
   makeDefault

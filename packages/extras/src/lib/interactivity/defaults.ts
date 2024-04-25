@@ -1,9 +1,16 @@
 import { useThrelte, watch, type CurrentWritable } from '@threlte/core'
 import type { ComputeFunction } from './context'
+import { getContext } from 'svelte'
 
 export const getDefaultComputeFunction = (
   target: CurrentWritable<HTMLElement>
 ): ComputeFunction => {
+  const computeOverride = getContext<ComputeFunction | undefined>('interactivity-compute-fn')
+
+  if (computeOverride) {
+    return computeOverride
+  }
+
   const { camera } = useThrelte()
 
   let width = target.current.clientWidth
@@ -26,6 +33,9 @@ export const getDefaultComputeFunction = (
       pointer.set((event.offsetX / width) * 2 - 1, -(event.offsetY / height) * 2 + 1)
       return pointer
     })
+
     state.raycaster.setFromCamera(state.pointer.current, camera.current)
+
+    return true
   }
 }

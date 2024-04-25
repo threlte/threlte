@@ -109,7 +109,11 @@ export const setupInteractivity = (context: InteractivityContext) => {
        * Will set up the raycaster. The default implementation will use the
        * mouse position on the renderers domElement.
        */
-      context.compute(event, context)
+      const shouldRaycast = context.compute(event, context)
+
+      if (!shouldRaycast) {
+        return
+      }
 
       const hits = getHits()
       const delta = isClickEvent ? calculateDistance(event) : 0

@@ -1,9 +1,13 @@
+import type * as THREE from 'three'
 import { getContext, setContext } from 'svelte'
 import { type Writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import { createObjectStore } from '../lib/createObjectStore'
+import type { ValueOf } from 'type-fest'
 
-export type ThrelteParentContext = Writable<Object3D | undefined>
+type ThreeObject = ValueOf<typeof THREE>
+
+export type ThrelteParentContext = Writable<ThreeObject | undefined>
 
 const key = Symbol('threlte-hierarchical-parent-context')
 

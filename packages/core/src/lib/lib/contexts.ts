@@ -249,8 +249,6 @@ export const createThrelteContext = (options: {
     viewport.set(getCurrentViewport($camera, [0, 0, 0], $size))
   })
 
-  console.log(options.autoRenderTask)
-
   const ctx: ThrelteContext = {
     size,
     viewport,

@@ -23,11 +23,11 @@
 <T.Mesh position.y={0.5}>
   <T.BoxGeometry />
   <T.MeshStandardMaterial>
-    <RenderTexture anisotropy={16}>
-      <T.Color
-        attach="background"
-        args={['orange']}
-      />
+    <RenderTexture
+      anisotropy={16}
+      width={256}
+      height={256}
+    >
       <TextureScene />
     </RenderTexture>
   </T.MeshStandardMaterial>
