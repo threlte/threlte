@@ -30,7 +30,6 @@ export { default as InstancedMeshes } from './components/Instancing/InstancedMes
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
-export { default as RenderTexture } from './components/RenderTexture/RenderTexture.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
 export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
