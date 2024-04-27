@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
-
+  import { T, useTask, useParent, useThrelte } from '@threlte/core'
   import type { Camera } from 'three'
-  import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls'
-
+  import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { onDestroy } from 'svelte'
-
   import { useControlsContext } from '../useControlsContext'
   import type {
     TrackballControlsEvents,
@@ -13,9 +10,10 @@
     TrackballControlsSlots
   } from './TrackballControls.svelte'
 
-  type $$Props = TrackballControlsProps
   type $$Events = TrackballControlsEvents
   type $$Slots = TrackballControlsSlots
+
+  let { ref = $bindable(), ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
 
@@ -29,25 +27,25 @@
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
-  export const ref = new ThreeTrackballControls($parent, renderer.domElement)
+  const controls = new ThreeTrackballControls($parent, renderer.domElement)
 
-  useTask(ref.update, {
+  useTask(controls.update, {
     autoInvalidate: false
   })
 
-  const component = forwardEventHandlers()
-
   const { trackballControls } = useControlsContext()
-  trackballControls.set(ref)
+  trackballControls.set(controls)
   onDestroy(() => trackballControls.set(undefined))
 </script>
 
 <T
-  is={ref}
-  let:ref
-  {...$$restProps}
-  bind:this={$component}
-  on:change={invalidate}
+  is={controls}
+  bind:ref
+  {...props}
+  on:change={(event) => {
+    invalidate()
+    props.$$events?.change?.(event)
+  }}
 >
-  <slot {ref} />
+  <slot ref={controls} />
 </T>

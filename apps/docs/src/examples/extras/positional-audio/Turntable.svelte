@@ -10,7 +10,7 @@
     MeshStandardMaterial,
     PositionalAudio as ThreePositionalAudio
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
 
@@ -139,14 +139,14 @@
   <!-- SIDE BUTTON -->
   <Button
     position={[-2.3, 1.01, 0.8]}
-    on:click={changeSide}
+    onClick={changeSide}
     text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
     position={[-2.3, 1.01, 1.7]}
-    on:click={toggle}
+    onClick={toggle}
     text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
 

@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import { T, forwardEventHandlers, useTask, useParent, useThrelte } from '@threlte/core'
+  import { T, useTask, useParent, useThrelte } from '@threlte/core'
   import type {
     CameraControlsEvents,
     CameraControlsProps,
@@ -30,7 +30,7 @@
     Vector4,
     type PerspectiveCamera
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const subsetOfTHREE = {
     Vector2,
@@ -78,13 +78,11 @@
       autoInvalidate: false
     }
   )
-
-  const forwardingComponent = forwardEventHandlers()
 </script>
 
 <T
   is={ref}
-  on:controlstart={(e) => {
+  on:controlstart={() => {
     disableAutoRotate = true
   }}
   on:zoom={(e) => {
@@ -94,7 +92,6 @@
     disableAutoRotate = false
   }}
   {...$$restProps}
-  bind:this={$forwardingComponent}
 >
   <slot {ref} />
 </T>

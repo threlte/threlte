@@ -48,12 +48,14 @@
   let scale = { x: 100, y: 100, z: 100 }
   let radius = 100
   let height = 5
+
+  $: scaleArray = [scale.x, scale.y, scale.z]
 </script>
 
 <Pane
   title="Environment"
   position="fixed"
-  expanded={false}
+  expanded={true}
 >
   <Folder title="core">
     <Checkbox
@@ -71,10 +73,11 @@
       label="use ground environment"
       bind:value={useGround}
     />
-    <Point
+    <!-- @TODO: breaks svelte 5 -->
+    <!-- <Point
       bind:value={scale}
       label="scale"
-    />
+    /> -->
     <Slider
       bind:value={radius}
       label="radius"
@@ -96,9 +99,7 @@
       {path}
       {files}
       {isBackground}
-      groundProjection={useGround
-        ? { radius, height, scale: [scale.x, scale.y, scale.z] }
-        : undefined}
+      groundProjection={useGround ? { radius, height, scale: scaleArray } : undefined}
     />
     <Scene />
   </Canvas>

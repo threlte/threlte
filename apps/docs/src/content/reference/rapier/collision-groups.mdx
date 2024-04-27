@@ -1,21 +1,19 @@
 ---
-{
-  order: 5,
-  category: '@threlte/rapier',
-  sourcePath: 'packages/rapier/src/lib/components/CollisionGroups/CollisionGroups.svelte',
-  name: '<CollisionGroups>',
-  type: 'component',
-  componentSignature:
-    {
-      pretext: 'Provide either the shorthand property <code>groups</code> to set both <code>memberships</code> and <code>filter</code> to the same value or set them up individually.',
-      props:
-        [
-          { name: 'groups', type: 'CollisionGroupsBitMask', required: true },
-          { name: 'filter', type: 'CollisionGroupsBitMask', required: true },
-          { name: 'memberships', type: 'CollisionGroupsBitMask', required: true }
-        ]
-    }
-}
+order: 5
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/CollisionGroups/CollisionGroups.svelte'
+name: '<CollisionGroups>'
+type: 'component'
+componentSignature:
+  {
+    pretext: 'Provide either the shorthand property <code>groups</code> to set both <code>memberships</code> and <code>filter</code> to the same value or set them up individually.',
+    props:
+      [
+        { name: 'groups', type: 'CollisionGroupsBitMask', required: true },
+        { name: 'filter', type: 'CollisionGroupsBitMask', required: true },
+        { name: 'memberships', type: 'CollisionGroupsBitMask', required: true }
+      ]
+  }
 ---
 
 The most efficient way of preventing some pairs of colliders from interacting with each other is to use a `<CollisionGroups>` component.

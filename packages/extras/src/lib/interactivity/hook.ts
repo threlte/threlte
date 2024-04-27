@@ -1,4 +1,3 @@
-import { createRawEventDispatcher } from '@threlte/core'
 import type { Object3D } from 'three'
 import { getHandlerContext, getInteractivityContext } from './context'
 
@@ -10,15 +9,16 @@ export const useInteractivity = () => {
     throw new Error('No interactivity context found. Did you forget to implement interactivity()?')
   }
 
-  const eventDispatcher = createRawEventDispatcher()
-
-  const addInteractiveObject = (object: Object3D) => {
+  const addInteractiveObject = (
+    object: Object3D,
+    events: Record<string, (arg: unknown) => void>
+  ) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(object) > -1) {
       return
     }
 
-    dispatchers.set(object, eventDispatcher)
+    dispatchers.set(object, events)
     context.interactiveObjects.push(object)
   }
 

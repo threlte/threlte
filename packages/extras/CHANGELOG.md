@@ -1,5 +1,93 @@
 # @threlte/extras
 
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
+## 9.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 8.11.2
+
+### Patch Changes
+
+- 4867f80: Improve MeshLineGeometry performance, fix interactivity NaN bug
+
+## 8.11.1
+
+### Patch Changes
+
+- 82c93bc: Remove unused 'filter' prop from InstancedSprite
+
+## 8.11.0
+
+### Minor Changes
+
+- 842fef9: Added Mask component to Extras
+- a3866b0: NEW COMPONENT: InstancedSprite
+
+### Patch Changes
+
+- e6c4250: Add `<Image>` component.
+
+## 8.10.3
+
+### Patch Changes
+
+- d3cd996: Minor grid improvements
+
+## 8.10.2
+
+### Patch Changes
+
+- 345035c: Add `<Outlines>` component
+
+## 8.10.1
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
+## 8.10.0
+
+### Minor Changes
+
+- 07af192: Add Text3D component
+
+## 8.9.0
+
+### Minor Changes
+
+- cd5f31d: Remove deprecated encoding-related code to allow compatibility with r162.
+
+  ### Migration
+
+  Three.js r152 or later is now required.
+
 ## 8.8.1
 
 ### Patch Changes

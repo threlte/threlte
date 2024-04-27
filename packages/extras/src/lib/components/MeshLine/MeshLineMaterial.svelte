@@ -4,67 +4,68 @@
     MeshLineMaterialProps,
     MeshLineMaterialSlots
   } from './MeshLineMaterial.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<MeshLineMaterialProps>
   type $$Events = MeshLineMaterialEvents
   type $$Slots = MeshLineMaterialSlots
 
-  export let opacity: $$Props['opacity'] = 1
-  export let color: $$Props['color'] = '#ffffff'
-  export let dashOffset: $$Props['color'] = 0
-  export let dashArray: $$Props['dashArray'] = 0
-  export let dashRatio: $$Props['dashRatio'] = 0
-  export let attenuate: $$Props['attenuate'] = true
-  export let width: $$Props['width'] = 1
-  export let scaleDown: $$Props['scaleDown'] = 0
-  export let alphaMap: $$Props['texture'] = undefined
+  let {
+    opacity = 1,
+    color = '#ffffff',
+    dashOffset = 0,
+    dashArray = 0,
+    dashRatio = 0,
+    attenuate = true,
+    width = 1,
+    scaleDown = 0,
+    alphaMap,
+    ref = $bindable(),
+    ...props
+  }: MeshLineMaterialProps = $props()
 
   let { invalidate, size } = useThrelte()
 
-  const material = new ShaderMaterial({
-    uniforms: {
-      lineWidth: { value: width },
-      color: { value: new Color(color) },
-      opacity: { value: opacity },
-      resolution: { value: new Vector2(1, 1) },
-      sizeAttenuation: { value: attenuate ? 1 : 0 },
-      dashArray: { value: dashArray },
-      dashOffset: { value: dashOffset },
-      dashRatio: { value: dashRatio },
-      useDash: { value: dashArray > 0 ? 1 : 0 },
-      scaleDown: { value: scaleDown / 10 },
-      alphaTest: { value: 0 },
-      alphaMap: { value: alphaMap },
-      useAlphaMap: { value: alphaMap ? 1 : 0 }
-    }
+  const uniforms = {
+    lineWidth: { value: width },
+    color: { value: new Color(color) },
+    opacity: { value: opacity },
+    resolution: { value: new Vector2(1, 1) },
+    sizeAttenuation: { value: attenuate ? 1 : 0 },
+    dashArray: { value: dashArray },
+    dashOffset: { value: dashOffset },
+    dashRatio: { value: dashRatio },
+    useDash: { value: dashArray > 0 ? 1 : 0 },
+    scaleDown: { value: scaleDown / 10 },
+    alphaTest: { value: 0 },
+    alphaMap: { value: alphaMap },
+    useAlphaMap: { value: alphaMap ? 1 : 0 }
+  }
+
+  const material = new ShaderMaterial({ uniforms })
+
+  $effect.pre(() => {
+    uniforms.resolution.value.set($size.width, $size.height)
+    invalidate()
   })
 
-  $: {
-    material.uniforms.resolution.value = new Vector2($size.width, $size.height)
+  $effect.pre(() => {
+    uniforms.dashRatio.value = dashRatio
+    uniforms.dashArray.value = dashArray
+    uniforms.dashOffset.value = dashOffset
+    uniforms.lineWidth.value = width
+    uniforms.opacity.value = opacity
+    uniforms.color.value.set(color)
     invalidate()
-  }
-
-  $: {
-    material.uniforms.dashRatio.value = dashRatio
-    material.uniforms.dashArray.value = dashArray
-    material.uniforms.dashOffset.value = dashOffset
-    material.uniforms.lineWidth.value = width
-    material.uniforms.opacity.value = opacity
-    material.uniforms.color.value = new Color(color)
-    invalidate()
-  }
-
-  const component = forwardEventHandlers()
+  })
 </script>
 
 <T
   is={material}
-  bind:this={$component}
-  {...$$restProps}
+  bind:ref
+  {...props}
   {fragmentShader}
   {vertexShader}
 >

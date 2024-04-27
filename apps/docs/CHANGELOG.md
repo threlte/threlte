@@ -1,5 +1,23 @@
 # @threlte/docs-next
 
+## 0.13.1
+
+### Patch Changes
+
+- 761fc37: Removed font-family property
+
+## 0.13.0
+
+### Minor Changes
+
+- ad7be7f: Added categories to the extras sidebar
+
+## 0.12.0
+
+### Minor Changes
+
+- 842fef9: Added Mask component to Extras
+
 ## 0.11.0
 
 ### Minor Changes

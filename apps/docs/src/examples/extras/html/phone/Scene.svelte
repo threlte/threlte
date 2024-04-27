@@ -4,7 +4,7 @@
   import { derived } from 'svelte/store'
   import type { Mesh } from 'three'
   import { Color, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const gltf = useGltf<{
     nodes: {

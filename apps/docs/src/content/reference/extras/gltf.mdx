@@ -1,47 +1,45 @@
 ---
-{
-  order: 11,
-  category: '@threlte/extras',
-  name: <GLTF>,
-  sourcePath: 'packages/extras/src/lib/components/GLTF/GLTF.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      'props':
-        [
-          { name: 'url', type: 'string', required: true },
-          { name: 'useDraco', type: 'string | boolean', required: false },
-          { name: 'useMeshopt', type: 'boolean', required: false },
-          { name: 'ktxTranscoderPath', type: 'string', required: false }
-        ],
-      events:
-        [
-          {
-            name: 'load',
-            payload: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
-          },
-          { name: 'unload', payload: 'void' },
-          { name: 'error', payload: 'string' }
-        ],
-      bindings:
-        [
-          {
-            name: 'gltf',
-            type: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
-          },
-          { name: 'scene', type: 'THREE.Group' },
-          { name: 'animations', type: 'THREE.AnimationClip[]' },
-          { name: 'asset', type: "GLTF['asset']" },
-          { name: 'cameras', type: 'THREE.Camera[]' },
-          { name: 'scenes', type: 'THREE.Group[]' },
-          { name: 'userData', type: 'any' },
-          { name: 'parser', type: 'GLTFParser' },
-          { name: 'materials', type: 'Record<string, THREE.Material>' },
-          { name: 'nodes', type: 'Record<string, THREE.Object3D>' }
-        ]
-    }
-}
+order: 2.1
+category: '@threlte/extras'
+name: <GLTF>
+sourcePath: 'packages/extras/src/lib/components/GLTF/GLTF.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: url, type: 'string', required: true },
+        { name: 'useDraco', type: 'string | boolean', required: false },
+        { name: 'useMeshopt', type: 'boolean', required: false },
+        { name: 'ktxTranscoderPath', type: 'string', required: false }
+      ],
+    events:
+      [
+        {
+          name: 'load',
+          payload: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+        },
+        { name: 'unload', payload: 'void' },
+        { name: 'error', payload: 'string' }
+      ],
+    bindings:
+      [
+        {
+          name: 'gltf',
+          type: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+        },
+        { name: 'scene', type: 'THREE.Group' },
+        { name: 'animations', type: 'THREE.AnimationClip[]' },
+        { name: 'asset', type: "GLTF['asset']" },
+        { name: 'cameras', type: 'THREE.Camera[]' },
+        { name: 'scenes', type: 'THREE.Group[]' },
+        { name: 'userData', type: 'any' },
+        { name: 'parser', type: 'GLTFParser' },
+        { name: 'materials', type: 'Record<string, THREE.Material>' },
+        { name: 'nodes', type: 'Record<string, THREE.Object3D>' }
+      ]
+  }
 ---
 
 To use DRACO compression, provide a path to the DRACO decoder.

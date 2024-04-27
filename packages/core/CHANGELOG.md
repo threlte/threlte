@@ -1,5 +1,52 @@
 # @threlte/core
 
+## 8.0.0-next.3
+
+### Patch Changes
+
+- ccafaaa: Fix renderer resize flickering
+
+## 8.0.0-next.2
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 8.0.0-next.1
+
+### Patch Changes
+
+- 45fae01: Granular updates on T
+
+## 8.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 7.3.0
+
+### Minor Changes
+
+- e9ae00d: add createThrelteContext export
+
+## 7.2.1
+
+### Patch Changes
+
+- 6ed92af: Cleaned up default camera creation and removed unused ThrelteUserData type
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
+## 7.2.0
+
+### Minor Changes
+
+- cd5f31d: Remove deprecated encoding-related code to allow compatibility with r162.
+
+  ### Migration
+
+  Three.js r152 or later is now required.
+
 ## 7.1.2
 
 ### Patch Changes

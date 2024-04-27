@@ -1,13 +1,17 @@
 <script lang="ts">
   import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace, Vector2 } from 'three'
-  import { Line2 } from 'three/examples/jsm/lines/Line2'
-  import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
+  import { Line2 } from 'three/examples/jsm/lines/Line2.js'
+  import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
+  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
   import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
 
-  export let handedness: 'left' | 'right'
-  export let targetRay: XRTargetRaySpace
+  interface Props {
+    handedness: 'left' | 'right'
+    targetRay: XRTargetRaySpace
+  }
+
+  let { handedness, targetRay }: Props = $props()
 
   let lineGeometry = new LineGeometry()
 
@@ -21,7 +25,7 @@
   const v2_1 = new Vector2()
   const v2_2 = new Vector2()
 
-  $: intersection = teleportIntersection[handedness]
+  let intersection = $derived(teleportIntersection[handedness])
 
   const setCurvePoints = (alpha = 0.3) => {
     if (intersection.current === undefined) return
@@ -62,12 +66,14 @@
     { autoStart: false }
   )
 
-  $: if ($intersection === undefined) {
-    stop()
-  } else {
-    setCurvePoints(1)
-    start()
-  }
+  $effect.pre(() => {
+    if ($intersection === undefined) {
+      stop()
+    } else {
+      setCurvePoints(1)
+      start()
+    }
+  })
 </script>
 
 <slot>

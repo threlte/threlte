@@ -12,7 +12,7 @@
     MeshStandardMaterial,
     PerspectiveCamera
   } from 'three'
-  import { degToRad } from 'three/src/math/MathUtils'
+  import { degToRad } from 'three/src/math/MathUtils.js'
 
   const scale = spring(1)
 </script>

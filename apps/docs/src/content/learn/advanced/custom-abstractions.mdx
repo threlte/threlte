@@ -15,7 +15,7 @@ in multiple places. As an example, let's create a component that is made up from
 ```svelte title="Tile.svelte"
 <script>
   import { T } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 </script>
 
 <T.Group>
@@ -74,7 +74,7 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
 ```svelte title="Tile.svelte" {6}m
 <script>
   import { T } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 </script>
 
 <T.Group {...$$restProps}>
@@ -97,63 +97,6 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
 </T.Group>
 ```
 {/* prettier-ignore-end */}
-
-## Events
-
-<Tip type="info">
-  The following section assumes you use the plugin
-  [interactivity](/docs/reference/extras/interactivity) to listen to pointer events.
-</Tip>
-
-We successfully forwarded all props and are able to move the `<Tile>` component around in the scene.
-However, we may also need to listen to events on objects inside `<Tile>`. Threlte provides the
-[utility function `forwardEventHandlers`](/docs/reference/core/utilities#forwardeventhandlers)
-to forward event handlers defined on `<Tile>` internally to our cubes `<T.Mesh>` component.
-
-{/* prettier-ignore-start */}
-```svelte title="Tile.svelte" {2}m {5,12}+
-<script>
-  import { T, forwardEventHandlers } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
-
-  const component = forwardEventHandlers()
-</script>
-
-<T.Group {...$$restProps}>
-  <!-- 1x1x1 Cube -->
-  <T.Mesh
-    position.y={0.5}
-    bind:this={$component}
-  >
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-
-  <!-- 2x2 Floor -->
-  <T.Mesh rotation.x={-90 * DEG2RAD}>
-    <T.PlaneGeometry args={[2, 2]} />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-
-  <!-- A slot to nest objects in -->
-  <slot />
-</T.Group>
-```
-{/* prettier-ignore-end */}
-
-When we now add an `on:click` event handler to the `<Tile>` component, we can see that the event handler is called when we click on the floor:
-
-```svelte title="Scene.svelte"
-<script>
-  import Tile from './Tile.svelte'
-</script>
-
-<Tile
-  on:click={() => {
-    console.log('clicked')
-  }}
-/>
-```
 
 ## Types
 
@@ -200,7 +143,7 @@ pass the slot prop `ref` to our `<slot />`, let's add that:
 ```svelte title="Tile.svelte" {1,13,30}m {4,6-8}+
 <script lang="ts">
   import { T, forwardEventHandlers } from '@threlte/threlte'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { TileProps, TileEvents, TileSlots } from './Tile.svelte'
 
   type $$Props = TileProps

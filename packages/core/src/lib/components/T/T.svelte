@@ -1,107 +1,136 @@
 <script lang="ts">
+  import { untrack } from 'svelte'
+  import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
-  import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
+  import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { useCamera } from './utils/useCamera'
+  import { isCamera, useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
   import type { Props, Events, Slots } from './types'
+  import Camera from './Camera.svelte'
 
   type Type = $$Generic
 
   type AllProps = {
     is: Type
   } & Props<Type>
-  type $$Props = AllProps
   type $$Events = Events<Type>
   type $$Slots = Slots<Type>
 
-  export let is: Type
-  export let args: AllProps['args'] = undefined as AllProps['args']
-  export let attach: AllProps['attach'] = undefined as AllProps['attach']
-  export let manual: AllProps['manual'] = undefined as unknown as AllProps['manual']
-  export let makeDefault: AllProps['makeDefault'] = undefined as unknown as AllProps['makeDefault']
-  export let dispose: AllProps['dispose'] = undefined as unknown as AllProps['dispose']
+  let {
+    is = useIsContext(),
+    args,
+    attach,
+    manual,
+    makeDefault,
+    dispose,
+    children,
+    ref = $bindable(),
+    ...props
+  }: AllProps = $props()
+
+  // We can't create the object in a reactive statement due to providing context
+  let internalRef = $derived(determineRef<Type>(is, args))
+  ref = internalRef
 
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent()
+  const createEvent = useCreateEvent<Type>(props.$$events)
 
-  // We can't create the object in a reactive statement due to providing context
-  let ref = determineRef(is, args)
   // The ref is created, emit the event
-  createEvent.updateRef(ref)
+  createEvent.updateRef(internalRef)
 
-  let initialized = false
   // When "is" or "args" change, we need to create a new ref.
-  const maybeSetRef = () => {
-    // Because reactive statements run immediately, we need to ignore the first run.
-    if (!initialized) {
-      initialized = true
-      return
-    }
-    ref = determineRef(is, args)
+  $effect.pre(() => {
+    if (ref === internalRef) return
+
+    ref = internalRef
+
     // The ref is recreated, emit the event
-    createEvent.updateRef(ref)
-  }
-  $: is, args, maybeSetRef()
+    createEvent.updateRef(internalRef)
+  })
 
-  // In order to prevent updates by outside mutations on ref,
-  // we need to create a publicly exposed ref.
-  let publicRef = ref
-  $: publicRef = ref
-  export { publicRef as ref }
-
-  const parentContext = createParentContext(ref)
-  $: parentContext.set(ref)
+  const parentContext = createParentContext(internalRef)
+  $effect.pre(() => parentContext.set(internalRef))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({ ref: ref, props: $$props })
+  const plugins = usePlugins({
+    ref: internalRef,
+    props: {
+      is,
+      args,
+      attach,
+      manual,
+      makeDefault,
+      dispose,
+      ...props
+    }
+  })
   const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
-  const props = useProps()
-  $: props.updateProps(ref, $$restProps, {
-    manualCamera: manual,
-    pluginsProps
+  const { updateProp } = useProps()
+  Object.keys(props).forEach((key) => {
+    $effect.pre(() => {
+      updateProp(internalRef, key, props[key], {
+        manualCamera: manual,
+        pluginsProps
+      })
+    })
   })
-
-  // Camera
-  const camera = useCamera()
-  $: camera.update(ref, manual)
-  $: camera.makeDefaultCamera(ref, makeDefault)
 
   // Attachment
   const attachment = useAttach()
-  $: attachment.update(ref, $parent, attach)
+  $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents()
-  $: events.updateRef(ref)
+  const events = useEvents(props.$$events)
+  $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates
-  $: plugins?.updateRef(ref)
-  $: plugins?.updateProps($$props)
-  $: plugins?.updateRestProps($$restProps)
+  $effect.pre(() => plugins?.updateRef(internalRef))
+  $effect.pre(() =>
+    plugins?.updateProps({
+      is,
+      args,
+      attach,
+      manual,
+      makeDefault,
+      dispose,
+      ...props
+    })
+  )
+  $effect.pre(() => plugins?.updateRestProps(props))
 </script>
 
-{#if isDisposableObject(ref)}
+{#if isDisposableObject(internalRef)}
   <DisposableObject
-    object={ref}
+    object={internalRef}
     {dispose}
   />
 {/if}
 
-{#if extendsObject3D(ref)}
-  <SceneGraphObject object={ref}>
-    <slot {ref} />
+{#if isCamera(internalRef)}
+  <Camera
+    object={internalRef}
+    {manual}
+    {makeDefault}
+  />
+{/if}
+
+{#if extendsObject3D(internalRef)}
+  <SceneGraphObject object={internalRef}>
+    {#if children}
+      <slot ref={internalRef} />
+    {/if}
   </SceneGraphObject>
-{:else}
-  <slot {ref} />
+{:else if children}
+  <slot ref={internalRef} />
 {/if}

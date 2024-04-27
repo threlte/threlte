@@ -6,6 +6,7 @@ export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
 export { useGamepad } from './hooks/useGamepad'
+export { useMask } from './hooks/useMask'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
@@ -16,6 +17,7 @@ export { default as GLTF } from './components/GLTF/GLTF.svelte'
 export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
 export { default as Environment } from './components/Environment/Environment.svelte'
+export { default as ImageMaterial } from './components/ImageMaterial/ImageMaterial.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
@@ -34,7 +36,10 @@ export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeometry.svelte'
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
+export { default as Outlines } from './components/Outlines/Outlines.svelte'
+export { default as Mask } from './components/Mask/Mask.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
@@ -75,5 +80,13 @@ export { createTransition } from './transitions/createTransition'
 
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'
+
+// instanced sprites
+export { default as InstancedSprite } from './components/InstancedSprite/InstancedSprite.svelte'
+export {
+  useInstancedSprite,
+  buildSpritesheet,
+  type SpritesheetMetadata
+} from './components/InstancedSprite/instancedSpriteUtils'
 
 export type { ThrelteGltf } from './types/types'

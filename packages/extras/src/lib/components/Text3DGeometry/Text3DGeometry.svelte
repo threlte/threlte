@@ -1,0 +1,77 @@
+<script lang="ts">
+  import { T, asyncWritable, useLoader, type AsyncWritable } from '@threlte/core'
+  import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+  import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
+  import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3DGeometry.svelte'
+
+  type $$Events = Text3DEvents
+  type $$Slots = Text3DSlots
+
+  let {
+    text,
+    font = 'https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json',
+    size,
+    height,
+    curveSegments,
+    bevelEnabled,
+    bevelThickness,
+    bevelSize,
+    bevelOffset,
+    bevelSegments,
+    smooth,
+    depth,
+    extrudePath,
+    steps,
+    UVGenerator,
+    ref = $bindable(),
+    ...props
+  }: Text3DProps = $props()
+
+  const suspend = useSuspense()
+
+  let loadedFont = $derived(
+    suspend<AsyncWritable<Font>>(
+      typeof font === 'string'
+        ? useLoader(FontLoader).load(font)
+        : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
+    )
+  )
+
+  let baseGeometry = $derived.by(() => {
+    if (!$loadedFont) return
+
+    return new TextGeometry(text, {
+      font: $loadedFont,
+      size,
+      height,
+      curveSegments,
+      bevelEnabled,
+      bevelThickness,
+      bevelSize,
+      bevelOffset,
+      bevelSegments,
+      depth,
+      extrudePath,
+      steps,
+      UVGenerator
+    })
+  })
+
+  let creasedGeometry = $derived.by(() => {
+    if (!baseGeometry) return
+    if (smooth === 0) return baseGeometry
+    return toCreasedNormals(baseGeometry, smooth) as TextGeometry
+  })
+</script>
+
+{#if creasedGeometry}
+  <T
+    is={creasedGeometry}
+    bind:ref
+    {...props}
+  >
+    <slot ref={creasedGeometry} />
+  </T>
+{/if}

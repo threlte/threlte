@@ -1,5 +1,29 @@
 # @threlte/extras
 
+## 3.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- Updated dependencies
+  - @threlte/extras@9.0.0-next.0
+  - @threlte/core@8.0.0-next.0
+
+## 2.1.7
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
 ## 2.1.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas, extend } from '@threlte/core'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import Scene from './Scene.svelte'
 
   extend({

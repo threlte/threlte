@@ -47,12 +47,12 @@ export const setupInteractivity = (context: InteractivityContext) => {
       ) {
         const { eventObject } = hoveredObj
         context.hovered.delete(getIntersectionId(hoveredObj))
-        const eventDispatcher = dispatchers.get(eventObject)
-        if (eventDispatcher) {
+        const events = dispatchers.get(eventObject)
+        if (events) {
           // Clear out intersects, they are outdated by now
           const data = { ...hoveredObj, intersections }
-          eventDispatcher('pointerout', data as IntersectionEvent<PointerEvent>)
-          eventDispatcher('pointerleave', data as IntersectionEvent<PointerEvent>)
+          events.pointerout?.(data as IntersectionEvent<PointerEvent>)
+          events.pointerleave?.(data as IntersectionEvent<PointerEvent>)
         }
       }
     }
@@ -82,7 +82,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
   const pointerMissed = (event: MouseEvent, objects: THREE.Object3D[]) => {
     for (const object of objects) {
-      dispatchers.get(object)?.('pointermissed', event)
+      dispatchers.get(object)?.pointermissed?.(event)
     }
   }
 
@@ -158,25 +158,26 @@ export const setupInteractivity = (context: InteractivityContext) => {
           ray: context.raycaster.ray
         }
 
-        const eventDispatcher = dispatchers.get(hit.eventObject)
-        if (!eventDispatcher) return
+        const events = dispatchers.get(hit.eventObject)
+
+        if (!events) return
 
         if (isPointerMove) {
           // Move event ...
 
           if (
-            eventDispatcher.hasEventListener('pointerover') ||
-            eventDispatcher.hasEventListener('pointerenter') ||
-            eventDispatcher.hasEventListener('pointerout') ||
-            eventDispatcher.hasEventListener('pointerleave')
+            events.pointerover ||
+            events.pointerenter ||
+            events.pointerout ||
+            events.pointerleave
           ) {
             const id = getIntersectionId(intersectionEvent)
             const hoveredItem = context.hovered.get(id)
             if (!hoveredItem) {
               // If the object wasn't previously hovered, book it and call its handler
               context.hovered.set(id, intersectionEvent)
-              eventDispatcher('pointerover', intersectionEvent as IntersectionEvent<PointerEvent>)
-              eventDispatcher('pointerenter', intersectionEvent as IntersectionEvent<PointerEvent>)
+              events.pointerover?.(intersectionEvent as IntersectionEvent<PointerEvent>)
+              events.pointerenter?.(intersectionEvent as IntersectionEvent<PointerEvent>)
             } else if (hoveredItem.stopped) {
               // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
               intersectionEvent.stopPropagation()
@@ -184,13 +185,10 @@ export const setupInteractivity = (context: InteractivityContext) => {
           }
 
           // Call pointer move
-          eventDispatcher('pointermove', intersectionEvent as IntersectionEvent<PointerEvent>)
+          events.pointermove?.(intersectionEvent as IntersectionEvent<PointerEvent>)
         } else {
           // All other events
-
-          const hasEventListener = eventDispatcher.hasEventListener(name)
-
-          if (hasEventListener) {
+          if (events[name]) {
             if (!isClickEvent || context.initialHits.includes(hit.eventObject)) {
               // Missed events have to come first
               pointerMissed(
@@ -199,7 +197,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
               )
 
               // Call the event
-              eventDispatcher(name, intersectionEvent)
+              events[name]?.(intersectionEvent)
             }
           } else {
             // "Real" click event

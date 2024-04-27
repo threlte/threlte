@@ -1,6 +1,6 @@
 <script lang="ts">
   import anime from 'animejs'
-  import { clamp, mapLinear } from 'three/src/math/MathUtils'
+  import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
   export let type: 'fade-up-skew-individual' | 'fade' | 'fade-individual' | 'fade-up' = 'fade'
   export let progress: number
@@ -16,8 +16,6 @@
         end: number
       }
     | undefined = undefined
-  export let useSpring = true
-
   export { _in as in, _out as out }
 
   let timeline: anime.AnimeTimelineInstance | undefined

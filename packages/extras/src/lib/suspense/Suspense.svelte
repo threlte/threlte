@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HierarchicalObject, T, createRawEventDispatcher, useParent, watch } from '@threlte/core'
+  import { HierarchicalObject, T, useParent, watch } from '@threlte/core'
   import { Group } from 'three'
   import { createSuspenseContext } from './context'
 
@@ -9,16 +9,19 @@
     error: Error[]
   }
 
-  export let final = false
+  let { final = false, children, ...restProps } = $props()
 
-  const dispatch = createRawEventDispatcher<$$Events>()
-
-  const { suspended, errors, setFinal } = createSuspenseContext({ final })
-  $: setFinal(final)
-
-  $: if (!$suspended) dispatch('load')
-  $: if ($suspended) dispatch('suspend')
-  $: if ($errors.length) dispatch('error', $errors)
+  const { suspended, errors, setFinal } = createSuspenseContext({ final }, restProps.$$events)
+  $effect.pre(() => setFinal(final))
+  $effect.pre(() => {
+    if (!$suspended) restProps.$$events?.load?.()
+  })
+  $effect.pre(() => {
+    if ($suspended) restProps.$$events?.suspend?.()
+  })
+  $effect.pre(() => {
+    if ($errors.length > 0) restProps.$$events?.error($errors)
+  })
 
   const group = new Group()
   const parent = useParent()

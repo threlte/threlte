@@ -1,5 +1,23 @@
 # @threlte/flex
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 2.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 1.0.2
+
+### Patch Changes
+
+- 761fc37: Removed font-family property
+
 ## 1.0.1
 
 ### Patch Changes

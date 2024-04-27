@@ -2,11 +2,17 @@
   import { T } from '@threlte/core'
   import { pointerState, teleportState, teleportIntersection } from '../../internal/stores'
 
-  export let handedness: 'left' | 'right'
+  interface Props {
+    handedness: 'left' | 'right'
+  }
 
-  $: hovering = $teleportState[handedness].hovering
-  $: intersection = teleportIntersection[handedness]
-  $: visible = $pointerState[handedness].enabled || (hovering && $intersection === undefined)
+  let { handedness }: Props = $props()
+
+  let hovering = $derived($teleportState[handedness].hovering)
+  let intersection = $derived(teleportIntersection[handedness])
+  let visible = $derived(
+    $pointerState[handedness].enabled || (hovering && $intersection === undefined)
+  )
 </script>
 
 <T.Group {visible}>

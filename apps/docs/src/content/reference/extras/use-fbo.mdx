@@ -1,5 +1,5 @@
 ---
-order: 14.55
+order: 5.5
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/hooks/useFBO.ts'
 name: useFBO
@@ -9,6 +9,9 @@ type: 'hook'
 useFBO (Framebuffer Object) is a hook that creates a `THREE.WebGLRenderTarget`. This is a port of [drei's useFBO hook](https://github.com/pmndrs/drei#usefbo).
 
 Framebuffer objects are useful for cases where you want to render a scene but not display it. For example, rendering a scene to a framebuffer then passing that to a fragment shader as a uniform. You can read more about `WebGLRenderTarget`'s [here](https://threejs.org/docs/index.html?q=render%20target#api/en/renderers/WebGLRenderTarget).
+
+<Example path="extras/use-fbo" />
+
 
 ## Options
 ```ts

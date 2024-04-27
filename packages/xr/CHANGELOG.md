@@ -1,5 +1,29 @@
 # @threlte/xr
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- 7cc5701: Remove raw event dispatching
+
+## 1.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 1.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 0.1.3
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
 ## 0.1.2
 
 ### Patch Changes

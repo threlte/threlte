@@ -5,7 +5,7 @@
   import { useRapier } from '../../hooks/useRapier'
   import type { DebugProps } from './Debug.svelte'
 
-  type $$Props = DebugProps
+  let { ref = $bindable(), ...props }: DebugProps = $props()
 
   const { world, debug } = useRapier()
 
@@ -29,12 +29,11 @@
 </script>
 
 <T.LineSegments
+  bind:ref
   frustumCulled={false}
   renderOrder={Infinity}
+  {...props}
 >
   <T is={geometry} />
-  <T.LineBasicMaterial
-    vertexColors
-    {...$$restProps}
-  />
+  <T.LineBasicMaterial vertexColors />
 </T.LineSegments>

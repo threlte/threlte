@@ -113,7 +113,7 @@ export interface TextMesh extends Mesh {
    * `material`, this color will only be used for this particuar Text instance, even if
    * that same material instance is shared across multiple Text objects.
    */
-  color: string | number | Color | null
+  color: ColorRepresentation
 
   /**
    * This is a shortcut for setting the material's `polygonOffset` and related properties,

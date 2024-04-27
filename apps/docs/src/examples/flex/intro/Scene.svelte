@@ -69,7 +69,7 @@
         z={15}
         text="← PREVIOUS PAGE"
         order={0}
-        on:click={() => {
+        onClick={() => {
           page = Math.max(1, page - 1)
         }}
       />
@@ -90,7 +90,7 @@
         z={15}
         text="NEXT PAGE →"
         order={2}
-        on:click={() => {
+        onClick={() => {
           page = Math.min(10, page + 1)
         }}
       />

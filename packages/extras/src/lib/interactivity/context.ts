@@ -1,12 +1,7 @@
-import {
-  currentWritable,
-  type CurrentWritable,
-  type createRawEventDispatcher,
-  useThrelte
-} from '@threlte/core'
+import { currentWritable, type CurrentWritable, useThrelte } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster } from 'three'
-import type { IntersectionEvent, ThrelteEvents, DomEvent } from './types'
+import type { IntersectionEvent, DomEvent } from './types'
 import { getDefaultComputeFunction } from './defaults'
 
 export type FilterFunction = (
@@ -78,7 +73,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
 }
 
 interface HandlerContext {
-  dispatchers: WeakMap<THREE.Object3D, ReturnType<typeof createRawEventDispatcher<ThrelteEvents>>>
+  dispatchers: WeakMap<THREE.Object3D, Record<string, (args: unknown) => void>>
 }
 
 const handlerContextKey = Symbol('interactivity-handler-context')

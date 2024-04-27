@@ -1,7 +1,6 @@
 import { setContext, tick } from 'svelte'
-import { derived, type Readable, type Updater, type Writable } from 'svelte/store'
+import { derived, type Readable, type Writable } from 'svelte/store'
 import {
-  Clock,
   Scene,
   type Camera,
   type ColorSpace,
@@ -9,10 +8,11 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
-import type { Scheduler, Stage, Task } from '../frame-scheduling'
+import { Scheduler, type Stage, type Task } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
-import { createDefaultCamera } from './defaultCamera'
+import { getDefaultCamera, setDefaultCameraAspectOnSizeChange } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
+import { injectLegacyFrameCompatibilityContext } from '../hooks/legacy/utils'
 
 /**
  * ### `ThrelteContext`
@@ -133,12 +133,9 @@ export type ThrelteInternalContext = {
 export type ThrelteUserContext = CurrentWritable<Record<string | symbol, any>>
 
 /**
- * ### `createContexts`
- *
- * This function creates the context objects `ThrelteContext` and
- * `ThrelteInternalContext` for a Threlte application.
+ * This function creates the necessary context objects for a Threlte application.
  */
-export const createContexts = (options: {
+export const createThrelteContext = (options: {
   colorSpace: ColorSpace
   toneMapping: ToneMapping
   dpr: number
@@ -149,12 +146,7 @@ export const createContexts = (options: {
   shadows: boolean | ShadowMapType
   colorManagementEnabled: boolean
   useLegacyLights: boolean
-}): {
-  ctx: ThrelteContext
-  internalCtx: ThrelteInternalContext
-  getCtx: () => ThrelteContext
-  getInternalCtx: () => ThrelteInternalContext
-} => {
+}): ThrelteContext => {
   const internalCtx: ThrelteInternalContext = {
     frameInvalidated: true,
     advance: false,
@@ -216,11 +208,31 @@ export const createContexts = (options: {
     shouldDispose: false
   }
 
+  // TODO: Remove in Threlte 7
+  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
+
+  const scheduler = new Scheduler()
+  const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
+  const renderStage = scheduler.createStage(Symbol('threlte-render-stage'), {
+    after: mainStage,
+    callback(_, runTasks) {
+      if (ctx.shouldRender()) runTasks()
+    }
+  })
+  const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), (_) => {
+    // we're in here when autoRender is true In Threlte 7 we still have to
+    // check for the existence of `useRender` instances
+    if (useRenderOrders.length > 0) return
+
+    // if there are no useRender instances, we can render the scene
+    ctx.renderer.render(ctx.scene, ctx.camera.current)
+  })
+
   const ctx: ThrelteContext = {
     size: derived([options.userSize, options.parentSize], ([uSize, pSize]) => {
       return uSize ? uSize : pSize
     }),
-    camera: currentWritable(createDefaultCamera()),
+    camera: currentWritable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined!,
     invalidate: () => {
@@ -237,10 +249,10 @@ export const createContexts = (options: {
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
     renderMode: currentWritable(options.renderMode),
     autoRender: currentWritable(options.autoRender),
-    scheduler: undefined as any, // will be set later
-    mainStage: undefined as any, // will be set later
-    renderStage: undefined as any, // will be set later
-    autoRenderTask: undefined as any, // will be set later
+    scheduler,
+    mainStage,
+    renderStage,
+    autoRenderTask,
     shouldRender: () => {
       const shouldRender =
         ctx.renderMode.current === 'always' ||
@@ -252,19 +264,13 @@ export const createContexts = (options: {
     }
   }
 
+  setDefaultCameraAspectOnSizeChange(ctx)
+
   const userCtx: ThrelteUserContext = currentWritable({})
 
   setContext<ThrelteContext>('threlte', ctx)
   setContext<ThrelteInternalContext>('threlte-internal-context', internalCtx)
   setContext<ThrelteUserContext>('threlte-user-context', userCtx)
 
-  const getCtx = (): ThrelteContext => ctx
-  const getInternalCtx = (): ThrelteInternalContext => internalCtx
-
-  return {
-    ctx,
-    internalCtx,
-    getCtx,
-    getInternalCtx
-  }
+  return ctx
 }

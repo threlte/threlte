@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { resolvePropertyPath, useParent, watch, type CurrentWritable } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { resolvePropertyPath, useParent, watch } from '@threlte/core'
+  import { onDestroy, getContext } from 'svelte'
   import type { Transformer } from '../transfomers/types'
   import type { AnyProp } from './Sync.svelte'
   import { getInitialValue } from './utils/getInitialValue'
@@ -14,12 +13,7 @@
   // used for type hinting auto props
   export let type: any = undefined
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
+  const { sheetObject, addProps, removeProps } = getContext('threlte-theater-sheet-context')
 
   const parent = useParent()
 

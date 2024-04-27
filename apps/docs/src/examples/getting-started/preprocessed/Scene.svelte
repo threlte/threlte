@@ -2,7 +2,7 @@
   import { Canvas, T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-  import { degToRad } from 'three/src/math/MathUtils'
+  import { degToRad } from 'three/src/math/MathUtils.js'
 
   const scale = spring(1)
 </script>

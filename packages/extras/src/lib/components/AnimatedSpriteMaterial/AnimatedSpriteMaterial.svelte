@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     type Texture,
-    type Material,
     DoubleSide,
     FileLoader,
     LinearFilter,
@@ -15,7 +14,6 @@
     T,
     asyncWritable,
     type AsyncWritable,
-    createRawEventDispatcher,
     useTask,
     watch,
     useLoader,
@@ -32,33 +30,40 @@
   import { useSuspense } from '../../suspense/useSuspense'
   import { useTexture } from '../../hooks/useTexture'
 
-  type $$Props = Required<AnimatedSpriteProps>
   type $$Events = AnimatedSpriteEvents
   type $$Slots = AnimatedSpriteSlots
 
-  export let textureUrl: $$Props['textureUrl']
-  export let dataUrl: $$Props['dataUrl'] = ''
-  export let animation: $$Props['animation'] = ''
-  export let loop: $$Props['loop'] = true
-  export let autoplay: $$Props['autoplay'] = true
-  export let fps: $$Props['fps'] = 10
-  export let filter: $$Props['filter'] = 'nearest'
-  export let alphaTest: $$Props['alphaTest'] = 0.1
-  export let delay: $$Props['delay'] = 0
-  export let transparent: $$Props['transparent'] = true
-  export let flipX: $$Props['flipX'] = false
-  export let startFrame: $$Props['startFrame'] = 0
-  export let endFrame: $$Props['endFrame'] | undefined = undefined
-  export let rows: $$Props['rows'] = 1
-  export let columns: $$Props['columns'] | undefined = undefined
-  export let totalFrames: $$Props['totalFrames'] = 0
+  let {
+    textureUrl,
+    dataUrl = '',
+    animation = '',
+    loop = true,
+    autoplay = true,
+    fps = 10,
+    filter = 'nearest',
+    alphaTest = 0.1,
+    delay = 0,
+    transparent = true,
+    flipX = false,
+    startFrame = 0,
+    endFrame = undefined,
+    rows = 1,
+    columns = undefined,
+    totalFrames = 0,
+    is = $bindable(),
+    ref = $bindable(),
+    play = $bindable(),
+    pause = $bindable(),
+    ...props
+  }: AnimatedSpriteProps = $props()
 
   const parent = useParent()
-  const dispatch = createRawEventDispatcher<$$Events>()
 
   const supportedDirections = ['forward', 'reverse'] as const
-  const isSupportedDirection = (value: any): value is (typeof supportedDirections)[number] => {
-    const isSupported = supportedDirections.includes(value as any)
+  const isSupportedDirection = (
+    value: string | undefined
+  ): value is (typeof supportedDirections)[number] => {
+    const isSupported = supportedDirections.includes(value as (typeof supportedDirections)[number])
     if (!isSupported) {
       console.warn(`Unsupported sprite animation direction "${value}"`)
     }
@@ -71,19 +76,24 @@
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
-  let texture: Texture | undefined
+  let texture: Texture | undefined = $state()
   let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
   let direction: (typeof supportedDirections)[number] = 'forward'
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
 
-  let isMesh = 'isMesh' in $parent!
-  $: isMesh = 'isMesh' in $parent!
-  $: fpsInterval = 1000 / fps
+  let fpsInterval = 0
+  let isMesh = $state(false)
 
-  export let is: Material = isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
-  export let ref: Material
+  $effect.pre(() => {
+    isMesh = $parent !== undefined && 'isMesh' in $parent
+  })
+  $effect.pre(() => {
+    fpsInterval = 1000 / fps
+  })
+
+  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 
@@ -192,13 +202,12 @@
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
-    if (dispatch.hasEventListener('start')) {
-      dispatch('start')
-    }
+    props.$$events?.start?.()
   }
 
   let playQueued = false
-  export const play = async () => {
+
+  play = async () => {
     playQueued = true
     await Promise.all([textureStore, jsonStore])
     if (!playQueued) return
@@ -206,7 +215,7 @@
     start()
   }
 
-  export const pause = () => {
+  pause = () => {
     playQueued = false
     stop()
   }
@@ -253,14 +262,10 @@
         currentFrame = start
 
         if (loop) {
-          if (dispatch.hasEventListener('loop')) {
-            dispatch('loop')
-          }
+          props.$$events?.loop?.()
         } else {
           pause()
-          if (dispatch.hasEventListener('end')) {
-            dispatch('end')
-          }
+          props.$$events?.end?.()
         }
       }
     },
@@ -286,18 +291,20 @@
     )
 
     setAnimation(animation)
-    dispatch('load')
+
+    props.$$events?.load?.()
+
     if (autoplay) {
       play()
     }
   })
 
-  $: {
+  $effect.pre(() => {
     setAnimation(animation)
     if (autoplay) {
       play()
     }
-  }
+  })
 </script>
 
 {#if texture && isMesh}
@@ -310,7 +317,7 @@
     shadowSide={DoubleSide}
     {transparent}
     {alphaTest}
-    {...$$restProps}
+    {...props}
   />
   <T.MeshDepthMaterial
     attach="customDepthMaterial"
@@ -326,6 +333,6 @@
     toneMapped={false}
     {transparent}
     {alphaTest}
-    {...$$restProps}
+    {...props}
   />
 {/if}

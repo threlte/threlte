@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import Api from './Api.svelte'
   import { InstancedMesh } from 'three'
 
@@ -9,37 +9,38 @@
     InstancedMeshSlots
   } from './InstancedMesh.svelte'
 
-  type $$Props = InstancedMeshProps
   type $$Events = InstancedMeshEvents
   type $$Slots = InstancedMeshSlots
 
-  export let id = 'default'
-  export let limit = 1000
-  export let range = 1000
-  export let update = true
+  let {
+    id = 'default',
+    limit = 1000,
+    range = 1000,
+    update = true,
+    ref = $bindable(),
+    ...props
+  }: InstancedMeshProps = $props()
 
-  export const ref = new InstancedMesh(null as any, null as any, 0)
-
-  const dispatchingComponent = forwardEventHandlers()
+  const mesh = new InstancedMesh(null as any, null as any, 0)
 
   const args = [null as any, null as any, 0]
 </script>
 
 <T
-  is={ref}
+  is={mesh}
+  bind:ref
   raycast={() => null}
   matrixAutoUpdate={false}
   {args}
-  {...$$restProps}
-  bind:bind={$dispatchingComponent}
+  {...props}
 >
   <Api
-    instancedMesh={ref}
+    instancedMesh={mesh}
     {id}
     {limit}
     {range}
     {update}
   >
-    <slot {ref} />
+    <slot ref={mesh} />
   </Api>
 </T>

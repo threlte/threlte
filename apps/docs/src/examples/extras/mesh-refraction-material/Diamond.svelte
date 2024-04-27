@@ -1,13 +1,6 @@
 <script lang="ts">
   import { Group } from 'three'
-  import {
-    T,
-    type Props,
-    type Events,
-    type Slots,
-    forwardEventHandlers,
-    useLoader
-  } from '@threlte/core'
+  import { T, type Props, type Events, type Slots, useLoader } from '@threlte/core'
   import { useGltf, MeshRefractionMaterial } from '@threlte/extras'
 
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
@@ -27,15 +20,12 @@
 
   const gltf = useGltf<GLTFResult>('/models/diamond/dflat.glb', { useDraco: true })
   const env = useLoader(RGBELoader).load('/hdr/aerodynamics_workshop_1k.hdr')
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
   is={ref}
   dispose={false}
   {...$$restProps}
-  bind:this={$component}
 >
   {#await gltf}
     <slot name="fallback" />

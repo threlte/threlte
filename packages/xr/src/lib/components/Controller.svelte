@@ -6,14 +6,9 @@
   context="module"
 >
   import { writable } from 'svelte/store'
-  import { T, createRawEventDispatcher } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
-  import {
-    isHandTracking,
-    pointerState,
-    teleportState,
-    controllerDispatchers
-  } from '../internal/stores'
+  import { isHandTracking, pointerState, teleportState, controllerEvents } from '../internal/stores'
   import type { XRControllerEvent } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -28,7 +23,7 @@
 </script>
 
 <script lang="ts">
-  type $$Props =
+  type Props =
     | {
         /** Whether the controller should be matched with the left hand. */
         left: true
@@ -48,9 +43,7 @@
         right?: undefined
       }
 
-  export let left: $$Props['left'] = undefined
-  export let right: $$Props['right'] = undefined
-  export let hand: $$Props['hand'] = undefined
+  let { left, right, hand, ...props }: Props = $props()
 
   type $$Events = {
     connected: XRControllerEvent<'connected'>
@@ -63,20 +56,18 @@
     squeezestart: XRControllerEvent<'squeezestart'>
   }
 
-  const dispatch = createRawEventDispatcher<$$Events>()
-
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
-  $: handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right'))
+  $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
 
-  controllerDispatchers[$handedness].set(dispatch)
-  $: controllerDispatchers[$handedness].set(dispatch)
+  controllerEvents[$handedness].set(props.$$events)
+  $effect.pre(() => controllerEvents[$handedness].set(props.$$events))
 
-  $: store = stores[$handedness]
-  $: grip = $store?.grip
-  $: targetRay = $store?.targetRay
-  $: model = $store?.model
-  $: hasPointerControls = $pointerState[$handedness].enabled
-  $: hasTeleportControls = $teleportState[$handedness].enabled
+  let store = $derived(stores[$handedness])
+  let grip = $derived($store?.grip)
+  let targetRay = $derived($store?.targetRay)
+  let model = $derived($store?.model)
+  let hasPointerControls = $derived($pointerState[$handedness].enabled)
+  let hasTeleportControls = $derived($teleportState[$handedness].enabled)
 </script>
 
 {#if !$isHandTracking}

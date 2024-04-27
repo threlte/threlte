@@ -1,47 +1,46 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useThrelte } from '@threlte/core'
-  import { createEventDispatcher, tick } from 'svelte'
+  import { T, useThrelte } from '@threlte/core'
+  import { tick } from 'svelte'
   import { preloadFont, Text } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextMesh } from './Text.svelte'
-  import type { TextProps } from './Text.svelte'
+  import type { TextProps, TextEvents, TextSlots } from './Text.svelte'
 
-  export let font: TextProps['font'] = undefined
-  export let characters: TextProps['characters'] = undefined
-  export let sdfGlyphSize: TextProps['sdfGlyphSize'] = undefined
+  type $$Events = TextEvents
+  type $$Slots = TextSlots
 
-  export const ref = new Text() as TextMesh
+  let { font, characters, sdfGlyphSize, ref = $bindable(), ...props }: TextProps = $props()
+
+  const text = new Text()
 
   const { invalidate } = useThrelte()
 
-  const dispatch = createEventDispatcher<{
-    sync: void
-  }>()
-
-  const component = forwardEventHandlers()
-
   const onUpdate = async () => {
     await tick()
-    ref.sync(() => {
+    text.sync(() => {
       invalidate()
-      dispatch('sync')
+      props.$$events?.sync?.()
     })
   }
 
-  $: $$restProps && onUpdate()
+  $effect.pre(() => {
+    props
+    onUpdate()
+  })
 
   const suspend = useSuspense()
-  $: suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
+
+  $effect.pre(() => {
+    suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
+  })
 </script>
 
 <T
-  is={ref}
-  let:ref
-  {...$$restProps}
+  is={text}
+  bind:ref
+  {...props}
   {font}
   {characters}
   {sdfGlyphSize}
-  bind:this={$component}
 >
-  <slot {ref} />
+  <slot ref={text} />
 </T>
