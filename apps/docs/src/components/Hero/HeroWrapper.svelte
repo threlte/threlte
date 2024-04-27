@@ -164,7 +164,9 @@
       in={2.7}
       out={3.9}
     >
-      <h2 class="fixed left-0 top-[66vh] flex w-screen flex-col items-center justify-center">
+      <h2
+        class="fixed left-0 top-[66svh] top-[66vh] flex w-screen flex-col items-center justify-center"
+      >
         <TextEffect
           id="intro"
           type="fade-up"
