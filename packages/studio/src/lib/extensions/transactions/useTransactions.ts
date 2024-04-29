@@ -53,6 +53,6 @@ export const useTransactions = () => {
     onUndo,
     onRedo,
     openInEditor,
-    openSelectedInEditor,
+    openSelectedInEditor
   }
 }

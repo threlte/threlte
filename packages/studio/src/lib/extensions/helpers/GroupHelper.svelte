@@ -36,7 +36,7 @@
     depthWrite: false,
     sizeAttenuation: false,
     size: 20,
-    transparent: true,
+    transparent: true
   })
 
   const geometry = new BufferGeometry()
@@ -52,7 +52,7 @@
     Points,
     PointsMaterial,
     Texture,
-    type Object3D,
+    type Object3D
   } from 'three'
 
   export let onCreate: (e: {

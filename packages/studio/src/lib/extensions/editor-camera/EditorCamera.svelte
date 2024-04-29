@@ -49,8 +49,8 @@
           object: undefined,
           enabled: persist(true),
           height: persist(240),
-          width: persist(400),
-        },
+          width: persist(400)
+        }
       }
     },
     actions: {
@@ -101,15 +101,15 @@
 
         box.getBoundingSphere(sphere)
         cameraControls.fitToSphere(sphere, true)
-      },
+      }
     },
     keyMap({ shift }) {
       return {
         toggleEnabled: 'c',
         focusSelectedObjects: shift('f'),
-        toggleDefaultCameraEnabled: shift('c'),
+        toggleDefaultCameraEnabled: shift('c')
       }
-    },
+    }
   })
 
   const editorCameraPosition = $derived(state.position)
@@ -118,7 +118,7 @@
   const editorCameraEnabled = $derived(state.enabled)
   const mode = $derived(state.mode)
   const editorCamera = $derived(
-    mode === 'Orthographic' ? editorCameraOrthographic : editorCameraPerspective,
+    mode === 'Orthographic' ? editorCameraOrthographic : editorCameraPerspective
   )
   const defaultCameraObject = $derived(state.defaultCamera.object)
 

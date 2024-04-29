@@ -12,7 +12,7 @@
   import {
     transformControlsScope,
     type TransformControlsActions,
-    type TransformControlsState,
+    type TransformControlsState
   } from './types'
 
   const { createExtension: createExtension } = useStudio()
@@ -22,7 +22,7 @@
     state: ({ persist }) => ({
       enabled: persist(true),
       mode: persist('translate'),
-      inUse: false,
+      inUse: false
     }),
     actions: {
       enable({ state }) {
@@ -52,16 +52,16 @@
       },
       setInUse({ state }, inUse) {
         state.inUse = inUse
-      },
+      }
     },
     keyMap() {
       return {
         translate: 't',
         rotate: 'r',
         scale: 's',
-        toggleInUse: 'z',
+        toggleInUse: 'z'
       }
-    },
+    }
   })
 
   const mode = $derived(state.mode)

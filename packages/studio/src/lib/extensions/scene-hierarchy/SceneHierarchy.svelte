@@ -9,7 +9,7 @@
   import {
     sceneHierarchyScope,
     type SceneHierarchyActions,
-    type SceneHierarchyState,
+    type SceneHierarchyState
   } from './types'
 
   const { createExtension } = useStudio()
@@ -18,7 +18,7 @@
     scope: sceneHierarchyScope,
     state({ persist }) {
       return {
-        enabled: persist(true),
+        enabled: persist(true)
       }
     },
     actions: {
@@ -27,13 +27,13 @@
       },
       setEnabled({ state }, enabled) {
         state.enabled = enabled
-      },
+      }
     },
     keyMap({ meta }) {
       return {
-        toggleEnabled: meta('h'),
+        toggleEnabled: meta('h')
       }
-    },
+    }
   })
 
   let pane = $state<TpPane>()

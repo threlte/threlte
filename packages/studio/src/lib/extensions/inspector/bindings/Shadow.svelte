@@ -19,7 +19,7 @@
       .map((lightShadow) => lightShadow.camera)
       .filter(
         (camera): camera is PerspectiveCamera | OrthographicCamera =>
-          'isPerspectiveCamera' in camera || 'isOrthographicCamera' in camera,
+          'isPerspectiveCamera' in camera || 'isOrthographicCamera' in camera
       )
   }
 </script>
@@ -34,7 +34,7 @@
     512: 512,
     1024: 1024,
     2048: 2048,
-    4096: 4096,
+    4096: 4096
   }}
   on:change={() => {
     objects.forEach((object) => {
@@ -54,7 +54,7 @@
     512: 512,
     1024: 1024,
     2048: 2048,
-    4096: 4096,
+    4096: 4096
   }}
   on:change={() => {
     objects.forEach((object) => {

@@ -43,9 +43,9 @@
         buildTransaction({
           object,
           propertyPath: key,
-          value: e.detail.value,
-        }),
-      ),
+          value: e.detail.value
+        })
+      )
     )
   }}
   on:change

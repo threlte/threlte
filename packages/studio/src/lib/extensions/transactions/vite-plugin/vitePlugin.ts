@@ -22,7 +22,7 @@ const scheduleModuleHmrAbility = (moduleId: string) => {
     moduleId,
     setTimeout(() => {
       HmrIgnoredModuleIds.delete(moduleId)
-    }, 500),
+    }, 500)
   )
 }
 
@@ -41,10 +41,10 @@ export const plugin: () => Plugin = () => {
         magicMarkup,
         script,
         scriptModule,
-        style,
+        style
       )
       return {
-        code: finalComponent,
+        code: finalComponent
       }
     },
     handleHotUpdate({ file }) {
@@ -87,7 +87,7 @@ export const plugin: () => Plugin = () => {
                 transaction.attributeName,
                 transaction.attributeValue,
                 'last',
-                transaction.precision,
+                transaction.precision
               )
 
               currentMarkup = magicMarkup.toString()
@@ -97,7 +97,7 @@ export const plugin: () => Plugin = () => {
               toMagicString(currentMarkup),
               script,
               scriptModule,
-              style,
+              style
             )
             cancelModuleHmrAbility(moduleId)
             HmrIgnoredModuleIds.add(moduleId)
@@ -131,17 +131,17 @@ export const plugin: () => Plugin = () => {
             slice,
             script,
             scriptModule,
-            style,
+            style
           )
           // get the index of the last character
           const index = finalComponent.length - 1
           // convert the index to a position
           const pos = indexToPosition(finalComponent, index, {
-            oneBased: true,
+            oneBased: true
           })
           return { column: pos.column, row: pos.line }
-        },
+        }
       })
-    },
+    }
   }
 }

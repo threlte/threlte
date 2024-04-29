@@ -37,7 +37,7 @@
       update,
       destroy() {
         el.remove()
-      },
+      }
     }
   }
 </script>

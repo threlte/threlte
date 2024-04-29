@@ -5,7 +5,7 @@
   const { shouldRender, renderStage } = useThrelte()
 
   const afterRenderStage = useStage('after-render', {
-    after: renderStage,
+    after: renderStage
   })
 
   let log = Array(100).fill(0)
@@ -16,8 +16,8 @@
     },
     {
       autoInvalidate: false,
-      stage: afterRenderStage,
-    },
+      stage: afterRenderStage
+    }
   )
 
   function update(log: number[]) {

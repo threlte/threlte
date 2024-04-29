@@ -8,7 +8,7 @@
   const fileNames = $derived.by(() => {
     if (!extension.state.queue) return []
     return [
-      ...new Set(extension.state.queue.syncQueue.map((t) => t.moduleId.replace(/^.*[\\/]/, ''))),
+      ...new Set(extension.state.queue.syncQueue.map((t) => t.moduleId.replace(/^.*[\\/]/, '')))
     ]
   })
 </script>

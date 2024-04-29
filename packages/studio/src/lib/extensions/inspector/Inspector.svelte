@@ -19,7 +19,7 @@
     scope: inspectorScope,
     state({ persist }) {
       return {
-        enabled: persist(true),
+        enabled: persist(true)
       }
     },
     actions: {
@@ -28,13 +28,13 @@
       },
       toggleEnabled({ state }) {
         state.enabled = !state.enabled
-      },
+      }
     },
     keyMap({ meta }) {
       return {
-        toggleEnabled: meta('i'),
+        toggleEnabled: meta('i')
       }
-    },
+    }
   })
 
   const objectSelection = useObjectSelection()

@@ -21,7 +21,7 @@ export const buildTransaction = <T>({
   value,
   historicValue,
   noHistory,
-  noSync,
+  noSync
 }: BuildTransactionOptions<T>) => {
   const { target, key } = resolvePropertyPath(object, propertyPath)
 
@@ -48,7 +48,7 @@ export const buildTransaction = <T>({
     },
     ...(historicValue
       ? {
-          historicValue,
+          historicValue
         }
       : {
           read() {
@@ -61,7 +61,7 @@ export const buildTransaction = <T>({
               return target[key].clone()
             }
             return target[key]
-          },
+          }
         }),
     noHistory,
     noSync,
@@ -70,9 +70,9 @@ export const buildTransaction = <T>({
           attributeName: [...(userData.pathItems ?? []), propertyPath].join('.'),
           componentIndex: userData.index,
           moduleId: userData.moduleId,
-          signature: userData.signature,
+          signature: userData.signature
         }
-      : undefined,
+      : undefined
   }
 
   return transaction

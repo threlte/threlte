@@ -81,7 +81,7 @@ const isAttributeWithTextValue = (attribute: Attribute): attribute is TextAttrib
 }
 
 const isAttributeWithMustacheTagValue = (
-  attribute: Attribute,
+  attribute: Attribute
 ): attribute is MustacheTagAttribute => {
   if (!isValueAttribute(attribute)) return false
   if (attribute.value === true) return false
@@ -133,7 +133,7 @@ const isTComponentNode = (node: unknown): node is TComponentNode => {
 
 const isMultiLineNode = (
   markup: MagicString,
-  node: DefinedNode,
+  node: DefinedNode
 ): { isMultiLine: boolean; indent: string } => {
   let isMultiLine = false
   let indent = ''
@@ -150,7 +150,7 @@ const isMultiLineNode = (
   }
   return {
     isMultiLine,
-    indent,
+    indent
   }
 }
 
@@ -163,7 +163,7 @@ export const findNodeByIndex = (markup: MagicString, index: number): TComponentN
       if (!isTComponentNode(node)) return
       currentIndex += 1
       if (currentIndex === index) finalNode = node
-    },
+    }
   })
   return finalNode
 }
@@ -217,7 +217,7 @@ export const markupSignature = (markup: MagicString): string => {
         .join(',')
       nodes.push([name, index, attributes])
       index += 1
-    },
+    }
   })
 
   return createHash('sha256').update(JSON.stringify(nodes)).digest('hex')
@@ -238,7 +238,7 @@ export const upsertAttribute = (
   attributeName: string,
   value: unknown,
   position: 'first' | 'last',
-  precision?: number,
+  precision?: number
 ) => {
   const attribute = node.attributes.find((attr) => attr.name === attributeName)
 
@@ -266,7 +266,7 @@ export const upsertAttribute = (
         markup.overwrite(
           firstValue.start - 1,
           firstValue.end + 1,
-          `{${stringifyAttributeValue(value, precision)}}`,
+          `{${stringifyAttributeValue(value, precision)}}`
         )
       }
     } else if (isAttributeWithMustacheTagValue(attribute)) {
@@ -282,7 +282,7 @@ export const upsertAttribute = (
         markup.overwrite(
           firstValue.start + 1,
           firstValue.end - 1,
-          stringifyAttributeValue(value, precision),
+          stringifyAttributeValue(value, precision)
         )
       }
     } else if (isAttributeWithShorthandValue(attribute)) {
@@ -297,7 +297,7 @@ export const upsertAttribute = (
         markup.overwrite(
           attribute.start,
           attribute.end,
-          `${attributeName}={${stringifyAttributeValue(value, precision)}}`,
+          `${attributeName}={${stringifyAttributeValue(value, precision)}}`
         )
       }
     }
@@ -323,7 +323,7 @@ export const upsertAttribute = (
     } else {
       markup.appendLeft(
         start,
-        `${space}${indent}${attributeName}={${stringifyAttributeValue(value, precision)}}`,
+        `${space}${indent}${attributeName}={${stringifyAttributeValue(value, precision)}}`
       )
     }
   }
@@ -335,7 +335,7 @@ export const upsertAttribute = (
 export const removeAttribute = (
   markup: MagicString,
   node: TComponentNode,
-  attributeName: string,
+  attributeName: string
 ): void => {
   const attribute = node.attributes.find((attr) => attr.name === attributeName)
   if (!attribute) return
@@ -381,6 +381,6 @@ export const addStudioRuntimeProps = (markup: MagicString, id: string): void => 
       const props: StudioProps = { moduleId: id, index, signature }
       upsertAttribute(markup, node, 'threlteStudio', props, 'last')
       index += 1
-    },
+    }
   })
 }

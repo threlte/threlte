@@ -14,42 +14,42 @@
     red: '#dc2626',
     orange: '#f97316',
     green: '#16a34a',
-    transparent: 'transparent',
+    transparent: 'transparent'
   }
 
   const backgroundColors: Record<'active' | 'warn' | 'default' | 'success', string> = {
     active: '#2563eb',
     warn: '#f97316',
     success: '#16a34a',
-    default: 'var(--btn-bg);',
+    default: 'var(--btn-bg);'
   }
 
   const backgroundColorsHover: Record<'active' | 'warn' | 'default' | 'success', string> = {
     active: '#1d4ed8',
     warn: '#ea580c',
     success: '#15803d',
-    default: 'var(--btn-bg-h)',
+    default: 'var(--btn-bg-h)'
   }
 
   const backgroundColorsFocus: Record<'active' | 'warn' | 'default' | 'success', string> = {
     active: '#1d4ed8',
     warn: '#ea580c',
     success: '#15803d',
-    default: 'var(--btn-bg-f);',
+    default: 'var(--btn-bg-f);'
   }
 
   const backgroundColorsActive: Record<'active' | 'warn' | 'default' | 'success', string> = {
     active: '#1d4ed8',
     warn: '#ea580c',
     success: '#15803d',
-    default: 'var(--btn-bg-a);',
+    default: 'var(--btn-bg-a);'
   }
 
   const textColor: Record<'active' | 'warn' | 'default' | 'success', string> = {
     active: 'white',
     warn: 'white',
     success: 'white',
-    default: 'black',
+    default: 'black'
   }
 
   $: state = warn
@@ -65,7 +65,7 @@
     backgroundColorHover: backgroundColorsHover[state],
     backgroundColorFocus: backgroundColorsFocus[state],
     backgroundColorActive: backgroundColorsActive[state],
-    textColor: textColor[state],
+    textColor: textColor[state]
   }
 </script>
 

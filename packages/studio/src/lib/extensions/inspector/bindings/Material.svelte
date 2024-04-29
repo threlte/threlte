@@ -28,7 +28,7 @@
     ConstantColorFactor,
     OneMinusConstantColorFactor,
     ConstantAlphaFactor,
-    OneMinusConstantAlphaFactor,
+    OneMinusConstantAlphaFactor
   } from 'three'
   import TransactionalBinding from './TransactionalBinding.svelte'
   import TransactionalList from './TransactionalList.svelte'
@@ -87,7 +87,7 @@
       key="color"
       label="color"
       options={{
-        color: { type: 'float' },
+        color: { type: 'float' }
       }}
     />
   {/if}
@@ -98,7 +98,7 @@
       key="emissive"
       label="emissive"
       options={{
-        color: { type: 'float' },
+        color: { type: 'float' }
       }}
     />
   {/if}
@@ -204,7 +204,7 @@
       key="attenuationColor"
       label="attenuationColor"
       options={{
-        color: { type: 'float' },
+        color: { type: 'float' }
       }}
     />
     <TransactionalBinding
@@ -212,7 +212,7 @@
       key="sheenColor"
       label="sheenColor"
       options={{
-        color: { type: 'float' },
+        color: { type: 'float' }
       }}
     />
   {/if}
@@ -254,7 +254,7 @@
       key="blendColor"
       label="blendColor"
       options={{
-        color: { type: 'float' },
+        color: { type: 'float' }
       }}
     />
     <TransactionalBinding
@@ -284,7 +284,7 @@
           ConstantColorFactor: ConstantColorFactor,
           OneMinusConstantColorFactor: OneMinusConstantColorFactor,
           ConstantAlphaFactor: ConstantAlphaFactor,
-          OneMinusConstantAlphaFactor: OneMinusConstantAlphaFactor,
+          OneMinusConstantAlphaFactor: OneMinusConstantAlphaFactor
         }}
       />
     {/if}
@@ -300,7 +300,7 @@
           SubtractEquation: SubtractEquation,
           ReverseSubtractEquation: ReverseSubtractEquation,
           MinEquation: MinEquation,
-          MaxEquation: MaxEquation,
+          MaxEquation: MaxEquation
         }}
       />
     {/if}
@@ -337,7 +337,7 @@
           ConstantColorFactor: ConstantColorFactor,
           OneMinusConstantColorFactor: OneMinusConstantColorFactor,
           ConstantAlphaFactor: ConstantAlphaFactor,
-          OneMinusConstantAlphaFactor: OneMinusConstantAlphaFactor,
+          OneMinusConstantAlphaFactor: OneMinusConstantAlphaFactor
         }}
       />
     {/if}
@@ -367,7 +367,7 @@
       options={{
         MultiplyOperation: MultiplyOperation,
         MixOperation: MixOperation,
-        AddOperation: AddOperation,
+        AddOperation: AddOperation
       }}
     />
   {/if}
@@ -477,7 +477,7 @@
     options={{
       FrontSide,
       BackSide,
-      DoubleSide,
+      DoubleSide
     }}
   />
 
@@ -490,7 +490,7 @@
         null: null,
         FrontSide,
         BackSide,
-        DoubleSide,
+        DoubleSide
       }}
     />
   {/if}

@@ -23,7 +23,7 @@
     scope: helpersScope,
     state({ persist }) {
       return {
-        enabled: persist(true),
+        enabled: persist(true)
       }
     },
     actions: {
@@ -32,8 +32,8 @@
       },
       setEnabled({ state }, enabled) {
         state.enabled = enabled
-      },
-    },
+      }
+    }
   })
 
   const objectSelection = useObjectSelection()
@@ -52,8 +52,8 @@
     },
     {
       autoInvalidate: false,
-      before: autoRenderTask,
-    },
+      before: autoRenderTask
+    }
   )
 
   const onCreate = (args: { ref: Object3D; cleanup: (callback: () => void) => void }) => {

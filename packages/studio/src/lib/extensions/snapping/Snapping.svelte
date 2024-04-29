@@ -16,7 +16,7 @@
         enabled: persist(true),
         translate: persist(0.1),
         rotate: persist(15),
-        scale: persist(0.1),
+        scale: persist(0.1)
       }
     },
     actions: {
@@ -34,13 +34,13 @@
       },
       setTranslate({ state }, translate) {
         state.translate = translate
-      },
+      }
     },
     keyMap() {
       return {
-        toggleEnabled: 'm',
+        toggleEnabled: 'm'
       }
-    },
+    }
   })
 </script>
 

@@ -92,8 +92,8 @@
     },
     {
       autoStart: autoUpdate,
-      autoInvalidate: false,
-    },
+      autoInvalidate: false
+    }
   )
 
   $effect(() => {
@@ -141,9 +141,9 @@
           value,
           noHistory: !e.last,
           noSync: !e.last,
-          historicValue,
-        }),
-      ),
+          historicValue
+        })
+      )
     )
 
     // on the last user interaction, e.last is true. We use that to reset the

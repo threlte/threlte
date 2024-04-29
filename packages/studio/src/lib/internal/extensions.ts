@@ -21,9 +21,9 @@ export const createRootContext = () => {
   const useExtension = <
     State extends Record<string, unknown>,
     Actions extends Record<string, (...args: any[]) => Promise<void> | void>,
-    NonPartial extends boolean = false,
+    NonPartial extends boolean = false
   >(
-    scope: string,
+    scope: string
   ) => {
     const run = <K extends keyof Actions>(id: K, ...args: Parameters<Actions[K]>) => {
       actions.runAction(scope, id as string, state.getScopedState<State>(scope).state, ...args)
@@ -33,7 +33,7 @@ export const createRootContext = () => {
       get state() {
         return state.getScopedState<State, NonPartial>(scope).state
       },
-      run,
+      run
     }
   }
 
@@ -46,7 +46,7 @@ export const createRootContext = () => {
 
   const createExtension = <
     State extends Record<string, unknown>,
-    Actions extends Record<string, (...args: any[]) => Promise<void> | void>,
+    Actions extends Record<string, (...args: any[]) => Promise<void> | void>
   >(options: {
     scope: string
     state: (args: { persist: <T>(value: T) => T }) => State
@@ -82,7 +82,7 @@ export const createRootContext = () => {
     state,
     actions,
     createExtension,
-    useExtension,
+    useExtension
   }
 
   setContext('threlte:studio:extensions', context)

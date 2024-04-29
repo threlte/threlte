@@ -21,7 +21,7 @@ export type SyncRequest = {
 const parser = {
   isVector3: (value: Vector3) => [value.x, value.y, value.z],
   isEuler: (value: Euler) => [value.x, value.y, value.z],
-  isColor: (value: Color) => `#${value.getHexString()}`,
+  isColor: (value: Color) => `#${value.getHexString()}`
 } satisfies Record<string, (value: any) => any>
 
 export type Transaction<T, U> = {
@@ -157,7 +157,7 @@ export class TransactionQueue {
             : transaction.read(transaction.object)
         queueItems.push({
           ...transaction,
-          historicValue,
+          historicValue
         })
       }
       transaction.write(transaction.object, transaction.value)
@@ -178,7 +178,7 @@ export class TransactionQueue {
         if (transaction.sync) {
           this.addSyncRequest({
             ...transaction.sync,
-            attributeValue: transaction.value,
+            attributeValue: transaction.value
           })
         }
       })
@@ -209,7 +209,7 @@ export class TransactionQueue {
       if (transaction.sync && !transaction.noSync) {
         this.addSyncRequest({
           ...transaction.sync,
-          attributeValue: transaction.historicValue,
+          attributeValue: transaction.historicValue
         })
       }
     })
@@ -241,7 +241,7 @@ export class TransactionQueue {
       if (transaction.sync && !transaction.noSync) {
         this.addSyncRequest({
           ...transaction.sync,
-          attributeValue: transaction.value,
+          attributeValue: transaction.value
         })
       }
     })
@@ -257,7 +257,7 @@ export class TransactionQueue {
     })
     this.syncQueue.push({
       ...request,
-      attributeValue: value,
+      attributeValue: value
     })
   }
 

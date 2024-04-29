@@ -21,7 +21,7 @@
     vertexColors: true,
     transparent: opacity < 1,
     opacity,
-    ...(overlay ? { depthTest: false, depthWrite: false } : {}),
+    ...(overlay ? { depthTest: false, depthWrite: false } : {})
   })
   const line2 = new Line2(lineGeometry, lineMaterial)
   const color = new THREE.Color()

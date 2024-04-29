@@ -13,7 +13,7 @@
   import {
     transformControlsScope,
     type TransformControlsActions,
-    type TransformControlsState,
+    type TransformControlsState
   } from './types'
   import { getThrelteStudioUserData } from '../transactions/vite-plugin/runtimeUtils'
   import { useTransactions } from '../transactions/useTransactions'
@@ -118,9 +118,9 @@
                 attributeName: [...(userData.pathItems ?? []), 'position'].join('.'),
                 componentIndex: userData.index,
                 moduleId: userData.moduleId,
-                signature: userData.signature,
+                signature: userData.signature
               }
-            : undefined,
+            : undefined
         } satisfies Transaction<any, any>
       })
       commit(transactions)

@@ -95,7 +95,7 @@ const asMagicString = (options: TestComponentOptions): options is { as: 'magic-s
 }
 
 export const buildTestComponent = <Options extends TestComponentOptions>(
-  options: Options,
+  options: Options
 ): BuildTestComponentReturn<Options> => {
   const str = [options.scriptModule, options.script, options.markup, options.style]
     .filter(Boolean)

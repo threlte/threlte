@@ -11,7 +11,7 @@
     scope: spaceScope,
     state({ persist }) {
       return {
-        space: persist('local'),
+        space: persist('local')
       }
     },
     actions: {
@@ -20,13 +20,13 @@
       },
       toggleSpace({ state }) {
         state.space = state.space === 'local' ? 'world' : 'local'
-      },
+      }
     },
     keyMap() {
       return {
-        toggleSpace: 'w',
+        toggleSpace: 'w'
       }
-    },
+    }
   })
 </script>
 

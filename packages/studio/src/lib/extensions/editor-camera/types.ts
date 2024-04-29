@@ -22,7 +22,7 @@ export type EditorCameraActions = {
   setMode: (mode: EditorCameraState['mode']) => void
   setEditorCameraTransform: (
     position: EditorCameraState['position'],
-    target: EditorCameraState['target'],
+    target: EditorCameraState['target']
   ) => void
   setPerspective: () => void
   setOrthographic: () => void

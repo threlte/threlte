@@ -4,10 +4,7 @@ import { getTeleportContext } from './context'
 export const useTeleportControls = () => {
   const context = getTeleportContext()
 
-  const addSurface = (
-    mesh: Mesh,
-    events: Record<string, (arg: unknown) => void>
-  ) => {
+  const addSurface = (mesh: Mesh, events: Record<string, (arg: unknown) => void>) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(mesh) > -1) {
       return

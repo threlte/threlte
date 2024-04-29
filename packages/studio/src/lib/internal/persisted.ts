@@ -40,7 +40,7 @@ const getStorage = (type: 'local' | 'session') => {
 const createPersisted = <T>(
   key: string,
   initialValue: T | null,
-  storage: ReturnType<typeof getStorage>,
+  storage: ReturnType<typeof getStorage>
 ) => {
   const initialOrStoredValue = parse<T>(storage.getItem(key)) ?? initialValue
   const store = writable<T | null>(initialOrStoredValue)
@@ -61,7 +61,7 @@ const createPersisted = <T>(
         return value
       })
     },
-    subscribe,
+    subscribe
   } satisfies Writable<T | null>
 }
 
@@ -75,7 +75,7 @@ const createPersisted = <T>(
 export const persisted = <T>(
   key: string,
   initialValue: T,
-  storageType: 'local' | 'session' = 'local',
+  storageType: 'local' | 'session' = 'local'
 ): Writable<T> => {
   if (!browser) {
     return writable<T>(initialValue)

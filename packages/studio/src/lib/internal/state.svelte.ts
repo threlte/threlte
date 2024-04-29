@@ -7,7 +7,7 @@ const persist = {
   },
   dummy: <T>(): T => {
     return '__threlte-studio-persisted-value__' as unknown as T
-  },
+  }
 }
 
 const persistedDummyValue = '__threlte-studio-persisted-value__'
@@ -40,7 +40,7 @@ export const createState = () => {
 
   const addExtensionState = <T extends Record<string, unknown>>(
     scope: string,
-    createState: (args: { persist: <U>(value: U) => U }) => T,
+    createState: (args: { persist: <U>(value: U) => U }) => T
   ): T => {
     const extensionState = createState({ persist: persist.regular })
     const persistedState = createState({ persist: persist.dummy })
@@ -77,12 +77,12 @@ export const createState = () => {
   }
 
   const getScopedState = <T extends Record<string, unknown>, NonPartial extends boolean = false>(
-    scope: string,
+    scope: string
   ) => {
     return {
       get state() {
         return (state[scope] ?? {}) as NonPartial extends true ? T : Partial<T>
-      },
+      }
     }
   }
 
@@ -117,6 +117,6 @@ export const createState = () => {
     getScopedState,
     removeScopedState,
     persistState,
-    state,
+    state
   }
 }

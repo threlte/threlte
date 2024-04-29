@@ -21,7 +21,7 @@ const resetConsole = () => {
  * grown-ups only.
  */
 export const setStateDangerously = <Setter extends (...args: any[]) => any>(
-  callback: Setter,
+  callback: Setter
 ): ReturnType<Setter> => {
   overrideConsole()
   const result = callback()

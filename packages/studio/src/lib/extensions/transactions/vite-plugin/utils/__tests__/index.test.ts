@@ -5,7 +5,7 @@ import {
   markupSignature,
   readAttribute,
   removeAttribute,
-  upsertAttribute,
+  upsertAttribute
 } from '../componentParser'
 import { assembleComponent, disassembleComponent } from '../componentUtils'
 import { recreateMagicString } from '../magicStringUtils'
@@ -25,7 +25,7 @@ import {
   script,
   scriptModule,
   style,
-  updatePropsMarkup,
+  updatePropsMarkup
 } from './testComponent'
 
 describe('sync utilities', () => {
@@ -34,13 +34,13 @@ describe('sync utilities', () => {
       scriptModule,
       script,
       markup,
-      style,
+      style
     })
     const expectedMarkup = buildTestComponent({
       scriptModule: dummyScriptModule,
       script: dummyScript,
       markup,
-      style: dummyStyle,
+      style: dummyStyle
     })
     const { markup: m, script: s, scriptModule: sm, style: st } = disassembleComponent(input)
     expect(m).toEqual(expectedMarkup)
@@ -55,13 +55,13 @@ describe('sync utilities', () => {
       script: dummyScript,
       markup,
       style: dummyStyle,
-      as: 'magic-string',
+      as: 'magic-string'
     })
     const expectedComponent = buildTestComponent({
       scriptModule,
       script,
       markup,
-      style,
+      style
     })
     const assembledComponent = assembleComponent(input, script, scriptModule, style)
     expect(assembledComponent).toEqual(expectedComponent)
@@ -70,7 +70,7 @@ describe('sync utilities', () => {
   test('find node by index', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     // mesh
@@ -96,7 +96,7 @@ describe('sync utilities', () => {
   test('get markup signature', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const signature = markupSignature(input)
@@ -106,7 +106,7 @@ describe('sync utilities', () => {
 
     const input2 = buildTestComponent({
       markup: markupWithUpdatedProps,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const signature2 = markupSignature(input2)
@@ -117,11 +117,11 @@ describe('sync utilities', () => {
   test('insert attributes', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const expectedMarkup = buildTestComponent({
-      markup: markupWithProps,
+      markup: markupWithProps
     })
 
     const meshNode = findNodeByIndex(input, 0)
@@ -148,11 +148,11 @@ describe('sync utilities', () => {
   test('update attribute', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const expectedMarkup = buildTestComponent({
-      markup: markupWithUpdatedProps,
+      markup: markupWithUpdatedProps
     })
 
     const meshNode = findNodeByIndex(input, 0)
@@ -167,11 +167,11 @@ describe('sync utilities', () => {
   test('remove attribute', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const expectedMarkup = buildTestComponent({
-      markup: markupWithRemovedProps,
+      markup: markupWithRemovedProps
     })
 
     const meshNode = findNodeByIndex(input, 0)
@@ -184,7 +184,7 @@ describe('sync utilities', () => {
   test('read attribute value', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const meshNode = findNodeByIndex(input, 0)
@@ -199,11 +199,11 @@ describe('sync utilities', () => {
   test('add studio runtime props', () => {
     const input = buildTestComponent({
       markup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const expectedMarkup = buildTestComponent({
-      markup: markupWithStudioProps,
+      markup: markupWithStudioProps
     })
 
     addStudioRuntimeProps(input, 'Test.svelte')
@@ -214,7 +214,7 @@ describe('sync utilities', () => {
   test('update attributes', () => {
     const input = buildTestComponent({
       markup: updatePropsMarkup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const meshNode = findNodeByIndex(input, 0)
@@ -225,8 +225,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'mustache1',
-      ),
+        'mustache1'
+      )
     ).toStrictEqual(v1)
 
     const v2 = 'string'
@@ -235,8 +235,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'mustache2',
-      ),
+        'mustache2'
+      )
     ).toStrictEqual(v2)
 
     const v3 = ['mustache value']
@@ -245,8 +245,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'mustache3',
-      ),
+        'mustache3'
+      )
     ).toStrictEqual(v3)
 
     const v4 = true
@@ -255,8 +255,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'bool1',
-      ),
+        'bool1'
+      )
     ).toStrictEqual(v4)
 
     const v5 = false
@@ -265,8 +265,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'bool2',
-      ),
+        'bool2'
+      )
     ).toStrictEqual(v5)
 
     const v6 = 'string in bool prop'
@@ -275,8 +275,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'bool3',
-      ),
+        'bool3'
+      )
     ).toStrictEqual(v6)
 
     const v7 = ['mustache value in bool prop']
@@ -285,8 +285,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'bool4',
-      ),
+        'bool4'
+      )
     ).toStrictEqual(v7)
 
     const v8 = true
@@ -295,8 +295,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'string1',
-      ),
+        'string1'
+      )
     ).toStrictEqual(v8)
 
     const v9 = 'string2'
@@ -305,8 +305,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'string2',
-      ),
+        'string2'
+      )
     ).toStrictEqual(v9)
 
     const v10 = ['mustache value in string prop']
@@ -315,8 +315,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'string3',
-      ),
+        'string3'
+      )
     ).toStrictEqual(v10)
 
     const v11 = true
@@ -325,8 +325,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'shorthand1',
-      ),
+        'shorthand1'
+      )
     ).toStrictEqual(v11)
 
     const v12 = 'string in shorthand prop'
@@ -335,8 +335,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'shorthand2',
-      ),
+        'shorthand2'
+      )
     ).toStrictEqual(v12)
 
     const v13 = ['mustache value in shorthand prop']
@@ -345,8 +345,8 @@ describe('sync utilities', () => {
       readAttribute(
         recreateMagicString(input),
         findNodeByIndex(recreateMagicString(input), 0)!,
-        'shorthand3',
-      ),
+        'shorthand3'
+      )
     ).toStrictEqual(v13)
 
     expect(input.toString()).toEqual(expectedUpdatePropsMarkup)
@@ -355,7 +355,7 @@ describe('sync utilities', () => {
   test('insert props', () => {
     const input = buildTestComponent({
       markup: insertPropsMarkup,
-      as: 'magic-string',
+      as: 'magic-string'
     })
 
     const meshNode = findNodeByIndex(input, 0)

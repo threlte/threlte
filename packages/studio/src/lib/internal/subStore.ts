@@ -22,7 +22,7 @@ type RecordUnknown = Record<symbol, unknown> | Readonly<Record<number, unknown>>
 const makeUpdateProxyImpl = <T extends RecordUnknown, P extends RecordUnknown>(
   obj: T,
   parent: P,
-  parentProp: string | symbol,
+  parentProp: string | symbol
 ) => {
   const handler: ProxyHandler<T> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,7 +32,7 @@ const makeUpdateProxyImpl = <T extends RecordUnknown, P extends RecordUnknown>(
       return immer.isDraft(newTarget)
         ? makeUpdateProxyImpl(newTarget, target, prop)
         : makeUpdateProxyImpl(empty, target, prop)
-    },
+    }
   }
   return new Proxy(obj, handler)
 }
@@ -40,7 +40,7 @@ const makeUpdateProxyImpl = <T extends RecordUnknown, P extends RecordUnknown>(
 function makeDelProxyImpl<T extends RecordUnknown, P extends RecordUnknown>(
   obj: T,
   parent: P,
-  parentProp: string | symbol,
+  parentProp: string | symbol
 ) {
   const handler: ProxyHandler<T> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,14 +49,14 @@ function makeDelProxyImpl<T extends RecordUnknown, P extends RecordUnknown>(
       const newTarget = target[prop]
       if (immer.isDraft(newTarget)) return makeDelProxyImpl(newTarget, target, prop)
       return makeDelProxyImpl(empty, target, prop)
-    },
+    }
   }
   return new Proxy(obj, handler)
 }
 
 const makeUpdateProxy = <T extends RecordUnknown, U>(
   target: T,
-  selector: (r: T) => U,
+  selector: (r: T) => U
 ): ((r: U) => void) => {
   // Pass the proxied target through the selector to generate a
   // setter for the subfield
@@ -68,7 +68,7 @@ const makeUpdateProxy = <T extends RecordUnknown, U>(
 
 const makeDelProxy = <T extends RecordUnknown, U>(
   target: T,
-  selector: (r: T) => U,
+  selector: (r: T) => U
 ): (() => void) => {
   // Pass the proxied target through the selector to generate a
   // deleter for the subfield
@@ -87,7 +87,7 @@ export type Substore<T> = Writable<T> & {
 
 export function subStore<T extends RecordUnknown, U>(
   store: Writable<T>,
-  selector: (r: T) => U,
+  selector: (r: T) => U
 ): Substore<U> {
   const { subscribe, update } = store
   const errors = writable(undefined)
@@ -140,6 +140,6 @@ export function subStore<T extends RecordUnknown, U>(
     set: subSet,
     update: subUpdate,
     errors,
-    delete: subDel,
+    delete: subDel
   }
 }

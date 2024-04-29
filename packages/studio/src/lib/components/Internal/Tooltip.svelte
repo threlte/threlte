@@ -17,12 +17,12 @@
   async function update() {
     const { x, y, placement, middlewareData } = await computePosition(ref, tooltipEl, {
       placement: 'top',
-      middleware: [offset(2), flip(), shift({ padding: 5 }), arrow({ element: arrowEl })],
+      middleware: [offset(2), flip(), shift({ padding: 5 }), arrow({ element: arrowEl })]
     })
 
     Object.assign(tooltipEl.style, {
       left: `${x}px`,
-      top: `${y}px`,
+      top: `${y}px`
     })
 
     const { x: arrowX, y: arrowY } = middlewareData.arrow ?? {}
@@ -31,7 +31,7 @@
       top: 'bottom',
       right: 'left',
       bottom: 'top',
-      left: 'right',
+      left: 'right'
     }[placement.split('-')[0]]
 
     if (!staticSide) return
@@ -41,7 +41,7 @@
       top: arrowY == null ? '' : `${arrowY}px`,
       right: '',
       bottom: '',
-      [staticSide]: '-4px',
+      [staticSide]: '-4px'
     })
   }
 </script>

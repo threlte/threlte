@@ -123,62 +123,62 @@ export const setInternalContext = () => {
     studioObjects: currentWritable(new Set()),
     optionalPanes: persisted('internalContext.optionalPanes', {
       Console: false,
-      Monitor: false,
+      Monitor: false
     }),
     gizmoSettings: persisted('internalContext.gizmoSettings', {
       viewportGizmo: {
-        visible: true,
+        visible: true
       },
       grid: {
         visible: true,
         color: '#5f5f5f',
         units: 1,
-        plane: 'xz',
+        plane: 'xz'
       },
       axes: {
-        visible: true,
+        visible: true
       },
       helpers: {
-        visible: true,
-      },
+        visible: true
+      }
     }),
     toolSettings: persisted('internalContext.toolSettings', {
       transformControls: {
         mode: 'translate',
         enabled: true,
-        inUse: false,
+        inUse: false
       },
       freeCamera: {
-        enabled: true,
+        enabled: true
       },
       snapping: {
         enabled: false,
         translation: {
-          step: 0.1,
+          step: 0.1
         },
         rotation: {
-          step: 15,
+          step: 15
         },
         scale: {
-          step: 0.1,
-        },
+          step: 0.1
+        }
       },
-      space: 'local',
+      space: 'local'
     }),
     viewSettings: persisted('internalContext.viewSettings', {
-      mode: 'rendered',
+      mode: 'rendered'
     }),
     studioSettings: persisted('internalContext.studioSettings', {
       enabled: true,
       keyboard: {
-        enabled: true,
-      },
+        enabled: true
+      }
     }),
     syncSettings: persisted('internalContext.syncSettings', {
       enabled: true,
       mode: 'auto',
       saving: false,
-      transactions: [],
+      transactions: []
     }),
     sync: {
       transactions: persisted('internalContext.sync.transactions', []),
@@ -212,13 +212,13 @@ export const setInternalContext = () => {
           ts.push({
             id: Math.random().toString(36).slice(2, 9),
             time,
-            ...t,
+            ...t
           })
           return ts
         })
       },
-      staleTransactions: currentWritable([]),
-    },
+      staleTransactions: currentWritable([])
+    }
   }
 
   // we don't want to persist this
@@ -233,7 +233,7 @@ export const setInternalContext = () => {
 export const setPublicContext = (options: SetPublicContextOptions) => {
   setContext<PublicContext>(publicKey, {
     position: writable(options.position ?? 'inline'),
-    theme: writable(options.theme ?? 'standard'),
+    theme: writable(options.theme ?? 'standard')
   })
 }
 

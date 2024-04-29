@@ -14,7 +14,7 @@
   }
 
   const firstObjectUserData = $derived(
-    JSON.stringify(objectSelection.selectedObjects[0].userData, null, 2),
+    JSON.stringify(objectSelection.selectedObjects[0].userData, null, 2)
   )
 
   const objects = $derived(objectSelection.selectedObjects)

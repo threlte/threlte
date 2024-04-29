@@ -19,6 +19,6 @@ export const useSpace = () => {
       return extension.state.space
     },
     setSpace,
-    toggleSpace,
+    toggleSpace
   }
 }

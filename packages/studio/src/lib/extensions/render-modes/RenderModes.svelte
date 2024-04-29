@@ -7,7 +7,7 @@
     FrontSide,
     Material,
     MeshBasicMaterial,
-    MeshMatcapMaterial,
+    MeshMatcapMaterial
   } from 'three'
   import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
@@ -20,7 +20,7 @@
   }
 
   const hasOnBeforeRender = (
-    material: Material,
+    material: Material
   ): material is Material & { onBeforeRender: (...args: any[]) => void } => {
     return 'onBeforeRender' in material
   }
@@ -31,7 +31,7 @@
   const { state, run } = createExtension<RenderModesState, RenderModesActions>({
     scope: renderModesScope,
     state: ({ persist }) => ({
-      renderMode: persist<RenderModesState['renderMode']>('rendered'),
+      renderMode: persist<RenderModesState['renderMode']>('rendered')
     }),
     actions: {
       cycleRenderMode({ state }) {
@@ -44,13 +44,13 @@
       },
       setRenderMode({ state }, mode) {
         state.renderMode = mode
-      },
+      }
     },
     keyMap() {
       return {
-        cycleRenderMode: 'v',
+        cycleRenderMode: 'v'
       }
-    },
+    }
   })
 
   // override to exclude objects with `ignoreOverrideMaterial` from being rendered with the override material
@@ -93,14 +93,14 @@
       case 'wireframe': {
         scene.overrideMaterial = new MeshBasicMaterial({
           wireframe: true,
-          color: '#ffffff',
+          color: '#ffffff'
         })
         break
       }
       case 'solid': {
         scene.overrideMaterial = new MeshMatcapMaterial({
           color: '#ffffff',
-          flatShading: true,
+          flatShading: true
         })
         break
       }

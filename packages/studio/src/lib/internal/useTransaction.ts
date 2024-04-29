@@ -10,7 +10,7 @@ export const useTransaction = (object: Object3D) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         fileId: object.userData.inspectorOptions.id as string,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        componentIndex: object.userData.inspectorOptions.index as number,
+        componentIndex: object.userData.inspectorOptions.index as number
       }
     : undefined
 
@@ -21,11 +21,11 @@ export const useTransaction = (object: Object3D) => {
       componentIndex: details.componentIndex,
       attributeName,
       attributeValue,
-      path: object.userData.inspectorOptions.path,
+      path: object.userData.inspectorOptions.path
     })
   }
 
   return {
-    addTransaction,
+    addTransaction
   }
 }

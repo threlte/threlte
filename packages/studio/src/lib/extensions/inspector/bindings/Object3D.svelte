@@ -28,7 +28,7 @@
   label="position"
   autoUpdate
   options={{
-    step: snapping.enabled ? snapping.translate : undefined,
+    step: snapping.enabled ? snapping.translate : undefined
   }}
 />
 
@@ -43,11 +43,11 @@
     },
     write(value) {
       return value.set(value.x * DEG2RAD, value.y * DEG2RAD, value.z * DEG2RAD)
-    },
+    }
   }}
   options={{
     format: (n) => `${n}°`,
-    step: snapping.enabled ? snapping.rotate : undefined,
+    step: snapping.enabled ? snapping.rotate : undefined
   }}
 />
 

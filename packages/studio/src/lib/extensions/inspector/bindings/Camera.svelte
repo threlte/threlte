@@ -38,7 +38,7 @@
   key="zoom"
   label="zoom"
   options={{
-    min: 0,
+    min: 0
   }}
   on:change={() => {
     objects.forEach((object) => {
@@ -57,7 +57,7 @@
       view: 'cameraring',
       min: 0,
       max: 180,
-      format: (n) => `${n}°`,
+      format: (n) => `${n}°`
     }}
     on:change={() => {
       objects.forEach((object) => {

@@ -5,8 +5,8 @@ describe('Transaction System', () => {
   test('commit', () => {
     const obj = {
       foo: {
-        bar: 'baz',
-      },
+        bar: 'baz'
+      }
     }
 
     const transactionQueue = new TransactionQueue()
@@ -14,7 +14,7 @@ describe('Transaction System', () => {
       obj,
       'quo',
       (obj) => obj.foo.bar,
-      (obj, value) => (obj.foo.bar = value),
+      (obj, value) => (obj.foo.bar = value)
     )
 
     expect(obj.foo.bar).toBe('quo')
@@ -22,7 +22,7 @@ describe('Transaction System', () => {
 
   test('undo', () => {
     const obj = {
-      foo: 'bar',
+      foo: 'bar'
     }
 
     const transactionQueue = new TransactionQueue()
@@ -30,7 +30,7 @@ describe('Transaction System', () => {
       obj,
       'baz',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.undo()
 
@@ -39,7 +39,7 @@ describe('Transaction System', () => {
 
   test('undo multiple items', () => {
     const obj = {
-      foo: 'bar',
+      foo: 'bar'
     }
 
     const transactionQueue = new TransactionQueue()
@@ -47,19 +47,19 @@ describe('Transaction System', () => {
       obj,
       'baz',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.commit(
       obj,
       'quo',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.commit(
       obj,
       'qux',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.undo()
     transactionQueue.undo()
@@ -69,7 +69,7 @@ describe('Transaction System', () => {
 
   test('undo and redo multiple items', () => {
     const obj = {
-      foo: 'bar',
+      foo: 'bar'
     }
 
     const transactionQueue = new TransactionQueue()
@@ -77,19 +77,19 @@ describe('Transaction System', () => {
       obj,
       'baz',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.commit(
       obj,
       'quo',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.commit(
       obj,
       'qux',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.undo()
     transactionQueue.undo()
@@ -102,7 +102,7 @@ describe('Transaction System', () => {
 
   test('redo', () => {
     const obj = {
-      foo: 'bar',
+      foo: 'bar'
     }
 
     const transactionQueue = new TransactionQueue()
@@ -110,7 +110,7 @@ describe('Transaction System', () => {
       obj,
       'baz',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     transactionQueue.undo()
     transactionQueue.redo()
@@ -120,14 +120,14 @@ describe('Transaction System', () => {
 
   test('no redo after commit', () => {
     const obj = {
-      foo: 'bar',
+      foo: 'bar'
     }
     const transactionQueue = new TransactionQueue()
     transactionQueue.commit(
       obj,
       'baz',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     expect(obj.foo).toBe('baz')
 
@@ -138,7 +138,7 @@ describe('Transaction System', () => {
       obj,
       'quo',
       (obj) => obj.foo,
-      (obj, value) => (obj.foo = value),
+      (obj, value) => (obj.foo = value)
     )
     expect(obj.foo).toBe('quo')
 

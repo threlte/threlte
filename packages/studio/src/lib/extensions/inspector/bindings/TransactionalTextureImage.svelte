@@ -96,7 +96,7 @@
   {label}
   {plugin}
   options={{
-    view: 'input-image',
+    view: 'input-image'
   }}
   bind:ref
 />

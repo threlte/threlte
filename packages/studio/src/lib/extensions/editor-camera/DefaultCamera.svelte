@@ -7,7 +7,7 @@
     Vector4,
     type Camera,
     type OrthographicCamera,
-    type PerspectiveCamera,
+    type PerspectiveCamera
   } from 'three'
   import Portal from '../../components/Internal/Portal.svelte'
   import { useStudio } from '../../internal/extensions'
@@ -18,7 +18,7 @@
   const { renderer, scene, autoRenderTask, invalidate } = useThrelte()
 
   const editorCameraExtension = useExtension<EditorCameraState, EditorCameraActions, true>(
-    editorCameraScope,
+    editorCameraScope
   )
 
   const studioObjectsRegistry = useStudioObjectsRegistry()
@@ -138,15 +138,15 @@
         0,
         0,
         width * dpr,
-        height * dpr,
+        height * dpr
       )
 
       resetCamera(defaultCamera)
     },
     {
       before: autoRenderTask,
-      autoInvalidate: false,
-    },
+      autoInvalidate: false
+    }
   )
 
   onMount(invalidate)

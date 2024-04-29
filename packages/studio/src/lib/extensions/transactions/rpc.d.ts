@@ -7,12 +7,12 @@ export type ServerFunctions = {
       moduleId: string
       signature: string
       precision?: number
-    }[],
+    }[]
   ) => void
   getColumnAndRow: (
     moduleId: string,
     componentIndex: number,
-    signature: string,
+    signature: string
   ) => { column: number; row: number }
 }
 

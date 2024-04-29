@@ -14,7 +14,7 @@
   import {
     transformControlsScope,
     type TransformControlsActions,
-    type TransformControlsState,
+    type TransformControlsState
   } from './types'
 
   const { useExtension } = useStudio()
@@ -52,7 +52,7 @@
   let initialValue = {
     position: new Vector3(),
     rotation: new Euler(),
-    scale: new Vector3(),
+    scale: new Vector3()
   }
 
   const onMouseDown = () => {
@@ -71,7 +71,7 @@
     const value = {
       position: object.position.clone(),
       rotation: object.rotation.clone(),
-      scale: object.scale.clone(),
+      scale: object.scale.clone()
     }
     const props = Object.keys(value).filter((key) => {
       if (usedModes.has('translate') && key === 'position') return true
@@ -98,10 +98,10 @@
               attributeName: [...(userData.pathItems ?? []), prop].join('.'),
               componentIndex: userData.index,
               moduleId: userData.moduleId,
-              signature: userData.signature,
+              signature: userData.signature
             }
-          : undefined,
-      })),
+          : undefined
+      }))
     )
   }
 </script>

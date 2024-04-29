@@ -40,11 +40,11 @@ export const useSync = () => {
 
     import.meta.hot?.send('threlte-inspector:from-client', {
       id,
-      transactions: currentTransactions,
+      transactions: currentTransactions
     })
   }
 
   return {
-    writeToDisk,
+    writeToDisk
   }
 }

@@ -10,7 +10,7 @@
   import {
     objectSelectionScope,
     type ObjectSelectionActions,
-    type ObjectSelectionState,
+    type ObjectSelectionState
   } from './types'
   import { useObjectSelection } from './useObjectSelection.svelte'
 
@@ -61,7 +61,7 @@
     selectionBox.startPoint.set(
       (event.clientX / window.innerWidth) * 2 - 1,
       -(event.clientY / window.innerHeight) * 2 + 1,
-      0.5,
+      0.5
     )
     run('setInUse', true)
     lastEvent = event
@@ -79,7 +79,7 @@
     selectionBox.endPoint.set(
       (event.clientX / window.innerWidth) * 2 - 1,
       -(event.clientY / window.innerHeight) * 2 + 1,
-      0.5,
+      0.5
     )
     const allSelected = filter(selectionBox.select())
     if (selectionMode === 'add') {
@@ -104,7 +104,7 @@
     selectionBox.endPoint.set(
       (event.clientX / window.innerWidth) * 2 - 1,
       -(event.clientY / window.innerHeight) * 2 + 1,
-      0.5,
+      0.5
     )
     const allSelected = filter(selectionBox.select())
     if (selectionMode === 'add') {

@@ -9,7 +9,7 @@ import type {
   PerspectiveCamera,
   PointLight,
   RectAreaLight,
-  SpotLight,
+  SpotLight
 } from 'three'
 
 export const haveProperty = <T = any>(objects: any[], property: string): objects is T[] => {
@@ -26,7 +26,7 @@ export const readFromFirstObject = (objects: any[], propertyPath: string) => {
 }
 
 export const areCamera = (
-  objects: any[],
+  objects: any[]
 ): objects is (PerspectiveCamera | OrthographicCamera)[] => {
   return (
     areOfType<PerspectiveCamera>(objects, 'isPerspectiveCamera') ||
@@ -44,7 +44,7 @@ export const mutualType = (objects: any[]): `(${string})` | undefined => {
 }
 
 export const areLight = (
-  objects: any[],
+  objects: any[]
 ): objects is (
   | AmbientLight
   | DirectionalLight
@@ -64,7 +64,7 @@ export const areLight = (
 }
 
 export const haveMaterialProperty = (
-  objects: any[],
+  objects: any[]
 ): objects is (Object3D & { material: Material })[] => {
   return haveProperty<Object3D & { material: Material }>(objects, 'material')
 }

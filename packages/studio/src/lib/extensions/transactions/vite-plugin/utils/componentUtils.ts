@@ -47,7 +47,7 @@ export const disassembleComponent = (code: string) => {
     markup,
     scriptModule: hasScriptModule ? scriptModuleMatch![0] : undefined,
     script: hasScript ? scriptMatch![0] : undefined,
-    style: hasStyle ? styleMatch![0] : undefined,
+    style: hasStyle ? styleMatch![0] : undefined
   }
 }
 
@@ -60,7 +60,7 @@ export const assembleComponent = (
   markup: MagicString,
   script: string | undefined,
   scriptModule: string | undefined,
-  style: string | undefined,
+  style: string | undefined
 ) => {
   let component = isMagicString(markup) ? markup.toString() : markup
   if (scriptModule) {

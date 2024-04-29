@@ -18,7 +18,7 @@
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
 
-	const {}: {} = $props()
+  const {}: {} = $props()
 
   const applyToProperties = ['shadow', 'light', 'material', 'camera', 'target']
 
@@ -27,7 +27,7 @@
       if (applyToProperties.includes(key)) {
         const newProps: StudioProps = {
           ...props,
-          pathItems: [...(props.pathItems ?? []), key],
+          pathItems: [...(props.pathItems ?? []), key]
         }
         const hasUserData = 'userData' in object[key]
         const hasInspectorOptions = hasUserData && 'threlteStudio' in object[key].userData
@@ -56,7 +56,7 @@
       insertStudioProps(ref, props.threlteStudio)
     })
     return {
-      pluginProps: ['threlteStudio'],
+      pluginProps: ['threlteStudio']
     }
   })
 
@@ -69,7 +69,7 @@
         enabled: persist<boolean>(true),
         mode: persist<'auto' | 'manual'>('auto'),
         precision: persist<number>(4),
-        queue: new TransactionQueue(),
+        queue: new TransactionQueue()
       }
     },
     actions: {
@@ -107,7 +107,7 @@
         const pos = await clientRpc.getColumnAndRow(
           userData.moduleId,
           userData.index,
-          userData.signature,
+          userData.signature
         )
         const fileLoc = `${userData.moduleId}:${pos.row}:${pos.column + 1}`
         fetch(`/__open-in-editor?file=${encodeURIComponent(fileLoc)}`)
@@ -116,16 +116,16 @@
         const objects = objectSelection.selectedObjects
         if (objects.length !== 1) return
         run('openInEditor', objects[0])
-      },
+      }
     },
     keyMap({ meta, shift }) {
       return {
         undo: meta('z'),
         redo: shift(meta('z')),
         sync: meta('s'),
-        openSelectedInEditor: meta('o'),
+        openSelectedInEditor: meta('o')
       }
-    },
+    }
   })
 
   $effect(() => {

@@ -6,7 +6,7 @@
     HemisphereLight,
     PointLight,
     RectAreaLight,
-    SpotLight,
+    SpotLight
   } from 'three'
   import Shadow from './Shadow.svelte'
   import TransactionalBinding from './TransactionalBinding.svelte'

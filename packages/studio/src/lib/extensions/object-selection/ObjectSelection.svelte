@@ -10,7 +10,7 @@
   import {
     objectSelectionScope,
     type ObjectSelectionActions,
-    type ObjectSelectionState,
+    type ObjectSelectionState
   } from './types'
 
   const { createExtension } = useStudio()
@@ -22,7 +22,7 @@
       selectedObjects: [],
       enabled: persist(false),
       mode: persist('tweak'),
-      inUse: false,
+      inUse: false
     }),
     actions: {
       selectObjects({ state }, objects) {
@@ -54,7 +54,7 @@
         const toRemove = objects.filter((object) => state.selectedObjects.includes(object))
         state.selectedObjects = [
           ...state.selectedObjects.filter((object) => !toRemove.includes(object)),
-          ...toAdd,
+          ...toAdd
         ]
         invalidate()
       },
@@ -80,13 +80,13 @@
       },
       setModeRect({ state }) {
         state.mode = 'rect'
-      },
+      }
     },
     keyMap() {
       return {
-        toggleMode: 'a',
+        toggleMode: 'a'
       }
-    },
+    }
   })
 </script>
 

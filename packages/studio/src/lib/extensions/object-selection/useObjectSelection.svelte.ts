@@ -3,7 +3,7 @@ import { useStudio } from '../../internal/extensions'
 import {
   objectSelectionScope,
   type ObjectSelectionActions,
-  type ObjectSelectionState,
+  type ObjectSelectionState
 } from './types'
 
 export const useObjectSelection = () => {
@@ -43,6 +43,6 @@ export const useObjectSelection = () => {
     clearSelection,
     addToSelection,
     removeFromSelection,
-    toggleSelection,
+    toggleSelection
   }
 }

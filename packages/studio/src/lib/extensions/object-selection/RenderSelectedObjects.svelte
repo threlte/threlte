@@ -12,7 +12,7 @@
     WebGLRenderTarget,
     type Material,
     type OrthographicCamera,
-    type PerspectiveCamera,
+    type PerspectiveCamera
   } from 'three'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import fragmentShader from './_fs.glsl?raw'
@@ -26,7 +26,7 @@
   const { size, renderer, autoRenderTask, scene, camera } = useThrelte()
 
   const renderTarget = new WebGLRenderTarget($size.width, $size.height, {
-    format: RGBAFormat,
+    format: RGBAFormat
   })
 
   watch(size, (size) => {
@@ -54,7 +54,7 @@
     if (overrideMaterialPool.has(mapIndex)) return overrideMaterialPool.get(mapIndex)!
 
     const newOverrideMaterial = new MeshBasicMaterial({
-      color: numberSeedToHexColor(Math.random() * 10000),
+      color: numberSeedToHexColor(Math.random() * 10000)
     })
 
     overrideMaterialPool.set(mapIndex, newOverrideMaterial)
@@ -108,8 +108,8 @@
     },
     {
       before: autoRenderTask,
-      autoInvalidate: false,
-    },
+      autoInvalidate: false
+    }
   )
 
   const isPerspectiveCamera = (object: any): object is PerspectiveCamera => {
@@ -149,8 +149,8 @@
       }
     },
     {
-      autoInvalidate: false,
-    },
+      autoInvalidate: false
+    }
   )
 
   onMount(() => {
@@ -171,17 +171,17 @@
         {vertexShader}
         uniforms={{
           outlinedObjectsTexture: {
-            value: renderTarget.texture,
+            value: renderTarget.texture
           },
           lineWidth: {
-            value: 1.5,
+            value: 1.5
           },
           outlineColor: {
-            value: new Color('#FFFF00'),
+            value: new Color('#FFFF00')
           },
           edgeFactor: {
-            value: 0.0001,
-          },
+            value: 0.0001
+          }
         }}
         depthWrite={false}
         depthTest={false}

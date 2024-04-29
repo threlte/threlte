@@ -37,7 +37,7 @@ export const hotkeyFns = {
   ctrl: makeHotkeyFn('ctrl'),
   alt: makeHotkeyFn('alt'),
   shift: makeHotkeyFn('shift'),
-  meta: makeHotkeyFn('meta'),
+  meta: makeHotkeyFn('meta')
 }
 
 export const formatKeyCombo = (keyCombo: string): string => {
@@ -55,7 +55,7 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
     keyMapItems: Record<
       string,
       string | string[] | undefined | { up?: string | string[]; down?: string | string[] }
-    >,
+    >
   ) => {
     const updateKeyMap = (keyMap: typeof downKeyMap, keyCombos: Map<string, string>) => {
       keyMap.update((k) => {
@@ -64,12 +64,12 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
             const action = k.get(keyCombo)
             const formattedKeyCombo = formatKeyCombo(keyCombo)
             console.warn(
-              `"${formattedKeyCombo}" is already used by action "${action?.scope}:${action?.actionId}", skipping …"`,
+              `"${formattedKeyCombo}" is already used by action "${action?.scope}:${action?.actionId}", skipping …"`
             )
           } else {
             k.set(keyCombo, {
               scope,
-              actionId,
+              actionId
             })
           }
         }
@@ -186,6 +186,6 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
   return {
     removeKeys,
     addKeys,
-    enabled,
+    enabled
   }
 }

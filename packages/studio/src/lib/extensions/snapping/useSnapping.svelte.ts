@@ -43,6 +43,6 @@ export const useSnapping = () => {
     toggleEnabled,
     setTranslate,
     setRotate,
-    setScale,
+    setScale
   }
 }
