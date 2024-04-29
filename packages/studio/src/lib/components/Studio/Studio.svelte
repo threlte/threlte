@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { injectPlugin, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-  import type { DirectionalLight, SpotLight } from 'three'
   import EditorCamera from '../../extensions/editor-camera/EditorCamera.svelte'
   import Grid from '../../extensions/grid/Grid.svelte'
   import Helpers from '../../extensions/helpers/Helpers.svelte'
@@ -23,47 +20,7 @@
 
   let { extensions }: Props = $props()
 
-  const { scene } = useThrelte()
-
   createRootContext()
-
-  const isDirectionalLight = (object: any): object is DirectionalLight => {
-    return object && 'isDirectionalLight' in object
-  }
-
-  const isSpotLight = (object: any): object is SpotLight => {
-    return object && 'isSpotLight' in object
-  }
-
-  const isValidLight = (object: any): object is DirectionalLight | SpotLight => {
-    return isDirectionalLight(object) || isSpotLight(object)
-  }
-
-  injectPlugin<{ manual?: boolean }>('directional-light-target', ({ ref, props }) => {
-    if (props.manual || !isValidLight(ref)) return
-
-    let instance = ref
-    if (instance.target.name === '') {
-      instance.target.name = 'Target'
-    }
-    scene.add(instance.target)
-
-    onDestroy(() => {
-      scene.remove(instance.target)
-    })
-    return {
-      onRefChange(ref) {
-        scene.remove(instance.target)
-        if (isValidLight(ref)) {
-          instance = ref
-          if (instance.target.name === '') {
-            instance.target.name = 'Target'
-          }
-          scene.add(instance.target)
-        }
-      }
-    }
-  })
 </script>
 
 <Toolbar />
