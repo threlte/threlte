@@ -141,6 +141,9 @@ importers:
       '@threlte/rapier':
         specifier: workspace:*
         version: link:../../packages/rapier
+      '@threlte/studio':
+        specifier: workspace:*
+        version: link:../../packages/studio
       '@threlte/theatre':
         specifier: workspace:*
         version: link:../../packages/theatre
