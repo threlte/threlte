@@ -23,7 +23,7 @@ max-height: 50vh;
   style.innerHTML = `
 .tv-container:nth-child(2)::before {
 	top: -2px
-} 
+}
 
 .tv-item-icon:before {
 	width: 12px;
@@ -50,7 +50,7 @@ max-height: 50vh;
     text: 'Scene',
     allowSelect: false,
     allowDrag: false,
-    allowDrop: false,
+    allowDrop: false
   })
   treeview.append(treeroot)
 
@@ -106,7 +106,7 @@ max-height: 50vh;
       isLight: '💡',
       isMesh: '📐',
       isGroup: '⚪️',
-      isObject3D: '📦',
+      isObject3D: '📦'
     }
     const findIcon = (object: THREE.Object3D) => {
       for (const [key, value] of Object.entries(icons)) {
@@ -119,7 +119,7 @@ max-height: 50vh;
     const item = new TreeViewItem({
       text,
       allowDrop: false,
-      icon: findIcon(object).codePointAt(0)?.toString(16),
+      icon: findIcon(object).codePointAt(0)?.toString(16)
     })
     item.open = true
     item.selected = objectSelection.selectedObjects.includes(object)
@@ -215,7 +215,7 @@ max-height: 50vh;
     return {
       destroy() {
         treeview.wc.replaceWith(node)
-      },
+      }
     }
   }
 </script>

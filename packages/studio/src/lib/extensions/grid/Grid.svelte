@@ -5,7 +5,7 @@
     RadioGrid,
     Slider,
     type ColorValue,
-    type RadioGridChangeEvent,
+    type RadioGridChangeEvent
   } from 'svelte-tweakpane-ui'
   import type { Mesh } from 'three'
   import DropDownPane from '../../components/DropDownPane/DropDownPane.svelte'
@@ -28,7 +28,7 @@
         enabled: persist(true),
         color: persist('#5f5f5f'),
         step: persist(1),
-        plane: persist('xz'),
+        plane: persist('xz')
       }
     },
     actions: {
@@ -46,8 +46,8 @@
       },
       setPlane({ state }, plane) {
         state.plane = plane
-      },
-    },
+      }
+    }
   })
 
   const onColorChange = (e: CustomEvent<{ value: ColorValue }>) => {
