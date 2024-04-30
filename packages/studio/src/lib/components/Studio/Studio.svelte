@@ -41,7 +41,6 @@
   ]
 
 	const allExtensions = [...defaultExtensions, ...(extensions ?? [])]
-
 </script>
 
 <Toolbar />

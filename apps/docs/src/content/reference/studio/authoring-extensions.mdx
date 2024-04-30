@@ -1,0 +1,125 @@
+---
+order: 2
+category: '@threlte/studio'
+name: 'Authoring Extensions'
+---
+
+## Extension Directory Structure
+
+```plaintext
+extensions/
+  my-extension/
+    types.ts
+    MyExtension.svelte
+    useMyExtension.svelte.ts
+```
+
+## types.ts
+
+```ts
+export const extensionScope = 'snapping'
+
+export type ExtensionState = {
+  enabled: boolean
+  count: number
+}
+
+export type ExtensionActions = {
+  setEnabled: (enabled: boolean) => void
+  toggleEnabled: () => void
+  incrementCount: () => void
+}
+```
+
+## MyExtension.svelte
+
+```svelte
+<script lang="ts">
+  import { useStudio } from '@threlte/studio'
+  import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
+
+  const { createExtension } = useStudio()
+
+  const { state, run } = createExtension<ExtensionState, ExtensionActions>({
+    scope: extensionScope,
+    state({ persist }) {
+      return {
+        enabled: persist(true),
+        count: 0
+      }
+    },
+    actions: {
+      toggleEnabled({ state }) {
+        state.enabled = !state.enabled
+      },
+      setEnabled({ state }, enabled) {
+        state.enabled = enabled
+      },
+      incrementCount({ state }) {
+        state.count++
+      }
+    },
+    keyMap() {
+      return {
+        incrementCount: '+'
+      }
+    }
+  })
+</script>
+
+<!-- Extensions must include slot -->
+<slot />
+```
+
+## useMyExtension.ts
+
+```ts
+import { useStudio } from '@threlte/studio'
+import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
+
+export const useSnapping = () => {
+  const { useExtension } = useStudio()
+
+  const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
+
+  const setEnabled = (enabled: boolean) => {
+    extension.run('setEnabled', enabled)
+  }
+
+  const toggleEnabled = () => {
+    extension.run('toggleEnabled')
+  }
+
+  const incrementCount = () => {
+    extension.run('incrementCount')
+  }
+
+  return {
+    setEnabled,
+    toggleEnabled,
+    incrementCount,
+    get enabled() {
+      return extension.state.enabled
+    },
+    get count() {
+      return extension.state.count
+    }
+  }
+}
+```
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { Studio } from '@threlte/studio'
+  import MyExtension from './MyExtension.svelte'
+</script>
+
+<Canvas>
+  <Studio extensions={[MyExtension]}>
+    <Scene />
+  </Studio>
+</Canvas>
+```
