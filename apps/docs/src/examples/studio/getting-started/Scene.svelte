@@ -13,21 +13,54 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[10, 10, 10]}
-  on:create={({ ref }) => {
-    ref.lookAt(0, 1, 0)
-  }}
+  position={[0, 1.5, 8.9958]}
+  fov={33.25}
 />
 
-<T.DirectionalLight position={[3, 10, 7]} />
+<T.DirectionalLight
+  intensity={1}
+  position={[-8.8163, 15.0192, 0]}
+  castShadow
+/>
+<T.AmbientLight intensity={0.2} />
 
 <T.Mesh
-  rotation.y={rotation}
-  position.y={1}
-  scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  name="Floor"
+  rotation={[-1.5708, 0, 0]}
+  receiveShadow
 >
-  <T.BoxGeometry args={[1, 2, 1]} />
-  <T.MeshStandardMaterial color="hotpink" />
+  <T.CircleGeometry args={[3, 64]} />
+  <T.MeshBasicMaterial color="#e9e9e9" />
+</T.Mesh>
+
+<T.Mesh
+  name="Box"
+  scale={[1.5, 1.5, 1.5]}
+  position={[0, 0.75, -1.6]}
+  castShadow
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial color="#0059BA" />
+</T.Mesh>
+
+<T.Mesh
+  name="Torus"
+  position={[1.2, 0.8556, 0.75]}
+  castShadow
+>
+  <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
+  <T.MeshStandardMaterial
+    color="#F85122"
+    roughness={0.4348}
+  />
+</T.Mesh>
+
+<T.Mesh
+  name="Icosahedron"
+  position={[-1.4, 0.8494, 0.75]}
+  castShadow
+  visible
+>
+  <T.IcosahedronGeometry />
+  <T.MeshStandardMaterial color="#F8EBCE" />
 </T.Mesh>
