@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import EditorCamera from '../../extensions/editor-camera/EditorCamera.svelte'
   import Grid from '../../extensions/grid/Grid.svelte'
   import Helpers from '../../extensions/helpers/Helpers.svelte'
@@ -8,42 +9,44 @@
   import SceneHierarchy from '../../extensions/scene-hierarchy/SceneHierarchy.svelte'
   import Snapping from '../../extensions/snapping/Snapping.svelte'
   import Space from '../../extensions/space/Space.svelte'
-  import StudioObjectsRegistry from '../../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
   import Transactions from '../../extensions/transactions/Transactions.svelte'
   import TransformControls from '../../extensions/transform-controls/TransformControls.svelte'
   import { createRootContext } from '../../internal/extensions'
   import Toolbar from '../Toolbar/Toolbar.svelte'
+  import NestedComponents from './NestedComponents.svelte'
+  import StudioObjectsRegistry from '../../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
 
   type Props = {
     extensions?: ConstructorOfATypedSvelteComponent[]
+		children: Snippet
   }
 
-  let { extensions }: Props = $props()
+  let { extensions, children }: Props = $props()
 
   createRootContext()
+
+  const defaultExtensions = [
+    Transactions,
+		StudioObjectsRegistry,
+    ObjectSelection,
+    Space,
+    Snapping,
+    TransformControls,
+    EditorCamera,
+    RenderModes,
+    Grid,
+    Helpers,
+    SceneHierarchy,
+    Inspector
+  ]
+
+	const allExtensions = [...defaultExtensions, ...(extensions ?? [])]
+
 </script>
 
 <Toolbar />
 
-<Transactions>
-  <slot />
-</Transactions>
 
-<ObjectSelection />
-<StudioObjectsRegistry />
-
-<Space />
-<Snapping />
-<TransformControls />
-<EditorCamera />
-<RenderModes />
-<Grid />
-<Helpers />
-<SceneHierarchy />
-<Inspector />
-
-{#if extensions}
-  {#each extensions as extension}
-    <svelte:component this={extension} />
-  {/each}
-{/if}
+<NestedComponents extensions={allExtensions}>
+	{@render children()}
+</NestedComponents>

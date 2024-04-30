@@ -113,3 +113,5 @@
     fadeDistance={state.step * 500}
   />
 {/if}
+
+<slot />

@@ -84,3 +84,5 @@
     </DropDownPane>
   </HorizontalButtonGroup>
 </ToolbarItem>
+
+<slot />

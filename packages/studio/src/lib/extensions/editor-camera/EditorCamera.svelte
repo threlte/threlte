@@ -228,3 +228,5 @@
     <DefaultCamera />
   {/if}
 {/if}
+
+<slot />

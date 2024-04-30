@@ -72,3 +72,5 @@
     </Pane>
   </Portal>
 {/if}
+
+<slot />

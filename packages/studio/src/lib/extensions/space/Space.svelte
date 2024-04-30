@@ -52,3 +52,5 @@
     />
   </HorizontalButtonGroup>
 </ToolbarItem>
+
+<slot />

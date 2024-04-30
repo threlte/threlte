@@ -97,3 +97,5 @@
     <Bindings />
   </Pane>
 {/if}
+
+<slot />

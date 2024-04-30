@@ -121,3 +121,5 @@
     />
   </HorizontalButtonGroup>
 </ToolbarItem>
+
+<slot />
