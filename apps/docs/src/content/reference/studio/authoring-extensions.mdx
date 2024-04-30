@@ -14,9 +14,7 @@ extensions/
     useMyExtension.svelte.ts
 ```
 
-## types.ts
-
-```ts
+```ts title="types.ts"
 export const extensionScope = 'snapping'
 
 export type ExtensionState = {
@@ -31,9 +29,7 @@ export type ExtensionActions = {
 }
 ```
 
-## MyExtension.svelte
-
-```svelte
+```svelte title="MyExtension.svelte"
 <script lang="ts">
   import { useStudio } from '@threlte/studio'
   import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
@@ -71,9 +67,7 @@ export type ExtensionActions = {
 <slot />
 ```
 
-## useMyExtension.ts
-
-```ts
+```ts title="useMyExtension.ts"
 import { useStudio } from '@threlte/studio'
 import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
 
