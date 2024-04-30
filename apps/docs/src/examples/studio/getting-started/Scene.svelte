@@ -21,6 +21,10 @@
   intensity={1}
   position={[-8.8163, 15.0192, 0]}
   castShadow
+  shadow.camera.top={2.5}
+  shadow.camera.bottom={-2.5}
+  shadow.camera.left={-2.5}
+  shadow.camera.right={2.5}
 />
 <T.AmbientLight intensity={0.2} />
 
@@ -30,7 +34,7 @@
   receiveShadow
 >
   <T.CircleGeometry args={[3, 64]} />
-  <T.MeshBasicMaterial color="#e9e9e9" />
+  <T.MeshStandardMaterial color="#e9e9e9" />
 </T.Mesh>
 
 <T.Mesh
