@@ -14,10 +14,13 @@
 
   const quaternion = new Quaternion()
 
-  useTask(() => {
-    // Spin mesh to the inverse of the default cameras matrix
-    quaternion.copy(camera.current.quaternion).invert()
-  })
+  useTask(
+    () => {
+      // Spin mesh to the inverse of the default cameras matrix
+      quaternion.copy(camera.current.quaternion).invert()
+    },
+    { autoInvalidate: false }
+  )
 </script>
 
 <HUD>

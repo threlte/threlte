@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { interactivity } from '@threlte/extras'
+  import { interactivity, useCursor } from '@threlte/extras'
   import { Mesh, Quaternion } from 'three'
 
   interface Props {
@@ -12,21 +12,26 @@
 
   const { viewport } = useThrelte()
 
-  let meshes: Mesh[] = []
+  let meshes: [Mesh, Mesh, Mesh] = [null!, null!, null!]
 
-  let highlighted = $state('')
+  const boxCursor = useCursor('pointer')
+  const torusCursor = useCursor('pointer')
+  const torusKnotCursor = useCursor('pointer')
 
   interactivity()
 
-  const highlight = (arg: string) => {
-    highlighted = arg
-  }
+  useTask(
+    () => {
+      for (const mesh of meshes) {
+        mesh.quaternion.copy(quaternion)
+      }
+    },
+    { autoInvalidate: false }
+  )
 
-  useTask(() => {
-    for (const mesh of meshes) {
-      mesh.quaternion.copy(quaternion)
-    }
-  })
+  const boxHovering = boxCursor.hovering
+  const torusHovering = torusCursor.hovering
+  const torusKnotHovering = torusKnotCursor.hovering
 </script>
 
 <T.OrthographicCamera
@@ -45,35 +50,35 @@
 <T.Mesh
   bind:ref={meshes[0]}
   position={[$viewport.width / 2 - 1, $viewport.height / 2 - 1, 0]}
-  on:pointerover={() => highlight('box')}
-  on:pointerleave={() => highlight('')}
+  on:pointerenter={boxCursor.onPointerEnter}
+  on:pointerleave={boxCursor.onPointerLeave}
   on:click={() => onSelect('box')}
-  scale={highlighted === 'box' ? 1.1 : 1}
+  scale={$boxHovering ? 1.1 : 1}
 >
   <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-  <T.MeshToonMaterial color={highlighted === 'box' ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={$boxHovering ? 'hotpink' : 'gray'} />
 </T.Mesh>
 
 <T.Mesh
   bind:ref={meshes[1]}
   position={[$viewport.width / 2 - 2, $viewport.height / 2 - 1, 0]}
-  on:pointerover={() => highlight('torus')}
-  on:pointerleave={() => highlight('')}
+  on:pointerenter={torusCursor.onPointerEnter}
+  on:pointerleave={torusCursor.onPointerLeave}
   on:click={() => onSelect('torus')}
-  scale={highlighted === 'torus' ? 1.1 : 1}
+  scale={$torusHovering ? 1.1 : 1}
 >
   <T.TorusGeometry args={[0.25, 0.1]} />
-  <T.MeshToonMaterial color={highlighted === 'torus' ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={$torusHovering ? 'hotpink' : 'gray'} />
 </T.Mesh>
 
 <T.Mesh
   bind:ref={meshes[2]}
   position={[$viewport.width / 2 - 3, $viewport.height / 2 - 1, 0]}
-  on:pointerover={() => highlight('torusknot')}
-  on:pointerleave={() => highlight('')}
+  on:pointerover={torusKnotCursor.onPointerEnter}
+  on:pointerleave={torusKnotCursor.onPointerLeave}
   on:click={() => onSelect('torusknot')}
-  scale={highlighted === 'torusknot' ? 1.1 : 1}
+  scale={$torusKnotHovering ? 1.1 : 1}
 >
   <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
-  <T.MeshToonMaterial color={highlighted === 'torusknot' ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={$torusKnotHovering ? 'hotpink' : 'gray'} />
 </T.Mesh>

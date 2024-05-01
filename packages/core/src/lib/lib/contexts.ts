@@ -276,7 +276,7 @@ export const createThrelteContext = (options: {
       // we're in here when autoRender is true In Threlte 7 we still have to
       // check for the existence of `useRender` instances
       if (useRenderOrders.length > 0) return
-  
+
       // if there are no useRender instances, we can render the scene
       ctx.renderer.render(ctx.scene, ctx.camera.current)
     }),

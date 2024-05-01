@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Float, OrbitControls } from '@threlte/extras'
   import Hud from './Hud.svelte'
 
   let selected = $state('box')
+
+  let rotation = $state(0)
+
+  // useTask((delta) => {
+  //   rotation += delta
+  // })
 </script>
 
 <T.PerspectiveCamera
@@ -26,34 +32,28 @@
   }}
 />
 
-<Float
-  speed={8}
-  rotationIntensity={2}
-  rotationSpeed={8}
->
-  {#if selected === 'box'}
-    <T.Mesh
-      position.y={0.5}
-      scale={2}
-    >
-      <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-      <T.MeshToonMaterial color="turquoise" />
-    </T.Mesh>
-  {:else if selected === 'torus'}
-    <T.Mesh
-      position.y={0.5}
-      scale={1.8}
-    >
-      <T.TorusGeometry args={[0.25, 0.1]} />
-      <T.MeshToonMaterial color="turquoise" />
-    </T.Mesh>
-  {:else if selected === 'torusknot'}
-    <T.Mesh
-      position.y={0.5}
-      scale={1.8}
-    >
-      <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
-      <T.MeshToonMaterial color="turquoise" />
-    </T.Mesh>
-  {/if}
-</Float>
+{#if selected === 'box'}
+  <T.Mesh
+    position.y={0.8}
+    scale={2}
+  >
+    <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
+    <T.MeshToonMaterial color="turquoise" />
+  </T.Mesh>
+{:else if selected === 'torus'}
+  <T.Mesh
+    position.y={0.8}
+    scale={1.8}
+  >
+    <T.TorusGeometry args={[0.25, 0.1]} />
+    <T.MeshToonMaterial color="turquoise" />
+  </T.Mesh>
+{:else if selected === 'torusknot'}
+  <T.Mesh
+    position.y={0.8}
+    scale={1.8}
+  >
+    <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
+    <T.MeshToonMaterial color="turquoise" />
+  </T.Mesh>
+{/if}

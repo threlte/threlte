@@ -1,31 +1,9 @@
 <script lang="ts">
-  import {
-    useThrelte,
-    T,
-    useTask,
-    createThrelteContext,
-    HierarchicalObject,
-    SceneGraphObject
-  } from '@threlte/core'
+  import { useThrelte, T, useTask, createThrelteContext, HierarchicalObject } from '@threlte/core'
   import { writable } from 'svelte/store'
-  import type { ColorSpace, ToneMapping } from 'three'
+  import type { HUDProps } from './HUD'
 
-  interface Props {
-    /**
-     * @default 'srgb'
-     */
-    colorSpace?: ColorSpace
-    /**
-     * @default ACESFilmicToneMapping
-     */
-    toneMapping?: ToneMapping
-    /**
-     * @default window.devicePixelRatio
-     */
-    dpr?: number
-  }
-
-  let { colorSpace, toneMapping }: Props = $props()
+  let { colorSpace, toneMapping, dpr, stage, ref = $bindable() }: HUDProps = $props()
 
   let context = useThrelte()
   const hudContext = createThrelteContext({
@@ -33,7 +11,7 @@
     useLegacyLights: context.useLegacyLights.current,
     colorSpace: colorSpace ?? context.colorSpace.current,
     toneMapping: context.toneMapping.current,
-    dpr: context.dpr.current,
+    dpr: dpr ?? context.dpr.current,
     parentSize: context.size,
     userSize: writable(),
     renderMode: context.renderMode.current,
@@ -46,25 +24,32 @@
     autoRenderTask: context.autoRenderTask
   })
 
-  const { renderer } = context
+  const { renderer, invalidate } = context
   const { scene, camera } = hudContext
 
   hudContext.renderer = context.renderer
 
-  const stage = context.scheduler.createStage(Symbol('hudStage'), {
-    after: context.renderStage
-  })
-
   $effect.pre(() => {
     if (colorSpace) hudContext.colorSpace.set(colorSpace)
+    invalidate()
   })
 
   $effect.pre(() => {
     if (toneMapping) hudContext.toneMapping.set(toneMapping)
+    invalidate()
+  })
+
+  $effect.pre(() => {
+    if (dpr) hudContext.dpr.set(dpr)
+    invalidate()
   })
 
   useTask(
     () => {
+      if (!context.shouldRender()) {
+        return
+      }
+
       let { autoClear } = renderer
 
       // Disable clearing and set hud settings
@@ -82,12 +67,22 @@
       renderer.toneMapping = context.toneMapping.current
       renderer.setPixelRatio(context.dpr.current)
     },
-    { stage }
+    {
+      autoInvalidate: false,
+      stage:
+        stage ??
+        context.scheduler.createStage(Symbol('hud-render-stage'), {
+          after: context.renderStage
+        })
+    }
   )
 </script>
 
 <HierarchicalObject>
-  <T is={scene}>
+  <T
+    is={scene}
+    bind:ref
+  >
     <slot />
   </T>
 </HierarchicalObject>
