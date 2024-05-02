@@ -7,9 +7,9 @@
 
   let rotation = $state(0)
 
-  // useTask((delta) => {
-  //   rotation += delta
-  // })
+  useTask((delta) => {
+    rotation += delta
+  })
 </script>
 
 <T.PerspectiveCamera
@@ -32,28 +32,33 @@
   }}
 />
 
-{#if selected === 'box'}
-  <T.Mesh
-    position.y={0.8}
-    scale={2}
-  >
-    <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-    <T.MeshToonMaterial color="turquoise" />
-  </T.Mesh>
-{:else if selected === 'torus'}
-  <T.Mesh
-    position.y={0.8}
-    scale={1.8}
-  >
-    <T.TorusGeometry args={[0.25, 0.1]} />
-    <T.MeshToonMaterial color="turquoise" />
-  </T.Mesh>
-{:else if selected === 'torusknot'}
-  <T.Mesh
-    position.y={0.8}
-    scale={1.8}
-  >
-    <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
-    <T.MeshToonMaterial color="turquoise" />
-  </T.Mesh>
-{/if}
+<Float
+  speed={8}
+  rotation.y={rotation}
+>
+  {#if selected === 'box'}
+    <T.Mesh
+      position.y={0.8}
+      scale={2}
+    >
+      <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
+      <T.MeshToonMaterial color="turquoise" />
+    </T.Mesh>
+  {:else if selected === 'torus'}
+    <T.Mesh
+      position.y={0.8}
+      scale={1.8}
+    >
+      <T.TorusGeometry args={[0.25, 0.1]} />
+      <T.MeshToonMaterial color="turquoise" />
+    </T.Mesh>
+  {:else if selected === 'torusknot'}
+    <T.Mesh
+      position.y={0.8}
+      scale={1.8}
+    >
+      <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
+      <T.MeshToonMaterial color="turquoise" />
+    </T.Mesh>
+  {/if}
+</Float>

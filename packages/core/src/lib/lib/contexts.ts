@@ -1,5 +1,5 @@
 import { getContext, setContext, tick } from 'svelte'
-import { derived, type Readable, type Writable } from 'svelte/store'
+import type { Readable, Writable } from 'svelte/store'
 import {
   Scene,
   type Camera,
