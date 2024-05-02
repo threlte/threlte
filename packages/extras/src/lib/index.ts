@@ -7,6 +7,7 @@ export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
 export { useGamepad } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
+export { useViewport } from './hooks/useViewport'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'

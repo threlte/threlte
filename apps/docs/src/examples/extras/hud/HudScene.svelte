@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
-  import { interactivity, useCursor } from '@threlte/extras'
+  import { T, useTask } from '@threlte/core'
+  import { interactivity, useCursor, useViewport } from '@threlte/extras'
   import { Mesh, Quaternion } from 'three'
 
   interface Props {
@@ -10,7 +10,7 @@
 
   let { quaternion, onSelect }: Props = $props()
 
-  const { viewport } = useThrelte()
+  const viewport = useViewport()
 
   let meshes: [Mesh, Mesh, Mesh] = [null!, null!, null!]
 

@@ -1,6 +1,6 @@
 import { OrthographicCamera, PerspectiveCamera, Vector3, type Vector3Tuple } from 'three'
-import type { Size } from '$lib/types'
-import { isOrthographicCamera, isPerspectiveCamera } from './camera'
+import { currentWritable, useThrelte, watch, type Size } from '@threlte/core'
+import type { Readable } from 'svelte/store'
 
 /** Reactive size of the viewport in threejs units */
 export interface Viewport {
@@ -19,7 +19,7 @@ export interface Viewport {
 const tempTarget = new Vector3()
 const position = new Vector3()
 
-export const getCurrentViewport = (
+const getCurrentViewport = (
   camera: PerspectiveCamera | OrthographicCamera,
   target: Vector3 | Vector3Tuple,
   size: Size
@@ -35,8 +35,8 @@ export const getCurrentViewport = (
   }
 
   const distance = camera.getWorldPosition(position).distanceTo(tempTarget)
-  
-  if (isOrthographicCamera(camera)) {
+
+  if ('isOrthographicCamera' in camera) {
     return {
       width: width / camera.zoom,
       height: height / camera.zoom,
@@ -46,7 +46,7 @@ export const getCurrentViewport = (
       distance,
       aspect
     }
-  } else if (isPerspectiveCamera(camera)) {
+  } else if ('isPersepctiveCamera' in camera) {
     const fov = (camera.fov * Math.PI) / 180 // convert vertical fov to radians
     const h = 2 * Math.tan(fov / 2) * distance // visible height
     const w = h * (width / height)
@@ -62,4 +62,15 @@ export const getCurrentViewport = (
   }
 
   throw new Error('Viewport did not recieve a Perspective or Orthographic camera')
+}
+
+export const useViewport = (): Readable<Viewport> & { current: Viewport } => {
+  const viewport = currentWritable<Viewport>(undefined!)
+  const { camera, size } = useThrelte()
+
+  watch([camera, size], ([$camera, $size]) => {
+    viewport.set(getCurrentViewport($camera, [0, 0, 0], $size))
+  })
+
+  return viewport
 }

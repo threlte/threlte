@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useThrelte, T, useTask, createThrelteContext, HierarchicalObject } from '@threlte/core'
   import { writable } from 'svelte/store'
-  import type { HUDProps } from './HUD'
+  import type { HUDProps } from './HUD.svelte'
 
   let { colorSpace, toneMapping, dpr, stage, ref = $bindable() }: HUDProps = $props()
 

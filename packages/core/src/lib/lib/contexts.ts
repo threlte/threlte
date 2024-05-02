@@ -13,7 +13,6 @@ import type { DisposableThreeObject, Size } from '../types'
 import { getDefaultCamera, setDefaultCameraAspectOnSizeChange } from './defaultCamera'
 import { currentWritable, watch, type CurrentWritable } from './storeUtils'
 import { injectLegacyFrameCompatibilityContext } from '../hooks/legacy/utils'
-import { getCurrentViewport, type Viewport } from './viewport'
 
 /**
  * ### `ThrelteContext`
@@ -23,7 +22,6 @@ import { getCurrentViewport, type Viewport } from './viewport'
  */
 export type ThrelteContext = {
   size: Readable<Size> & { current: Size }
-  viewport: Readable<Viewport> & { current: Size }
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
@@ -85,7 +83,7 @@ export type ThrelteInternalContext = {
   advance: boolean
 
   /** If anything is in this set, the frame will be considered invalidated */
-  autoInvalidations: Set<any>
+  autoInvalidations: Set<unknown>
 
   /** A function to be called at the end of the frame loop that resets the invalidation flags */
   resetFrameInvalidation: () => void
@@ -132,7 +130,7 @@ export type ThrelteInternalContext = {
   shouldDispose: boolean
 }
 
-export type ThrelteUserContext = CurrentWritable<Record<string | symbol, any>>
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
 /**
  * This function creates the necessary context objects for a Threlte application.
@@ -154,7 +152,9 @@ export const createThrelteContext = (options: {
   autoRenderTask?: Task
 }): ThrelteContext => {
   // If a parent internal context exists (like in the case of HUD), then reuse.
-  const internalCtx: ThrelteInternalContext = getContext<ThrelteInternalContext>('threlte-internal-context') ?? {
+  const internalCtx: ThrelteInternalContext = getContext<ThrelteInternalContext>(
+    'threlte-internal-context'
+  ) ?? {
     frameInvalidated: true,
     advance: false,
     autoInvalidations: new Set(),
@@ -184,7 +184,7 @@ export const createThrelteContext = (options: {
       Object.entries(object).forEach(([propKey, propValue]) => {
         // we don't want to dispose the parent, we can skip "children"
         if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
-        const value = propValue as any
+        const value = propValue
         if (value?.dispose) {
           internalCtx.collectDisposableObjects(value, disposables)
         }
@@ -219,10 +219,12 @@ export const createThrelteContext = (options: {
   const autoRender = currentWritable(options.autoRender)
 
   const shouldRender = () => {
-    return renderMode.current === 'always' ||
+    return (
+      renderMode.current === 'always' ||
       (renderMode.current === 'on-demand' &&
         (internalCtx.frameInvalidated || internalCtx.autoInvalidations.size > 0)) ||
       (renderMode.current === 'manual' && internalCtx.advance)
+    )
   }
 
   // TODO: Remove in Threlte 7
@@ -230,28 +232,24 @@ export const createThrelteContext = (options: {
 
   const scheduler = options.scheduler ?? new Scheduler()
   const mainStage = options.mainStage ?? scheduler.createStage(Symbol('threlte-main-stage'))
-  const renderStage = options.renderStage ?? scheduler.createStage(Symbol('threlte-render-stage'), {
-    after: mainStage,
-    callback(_, runTasks) {
-      if (shouldRender()) runTasks()
-    }
-  })
+  const renderStage =
+    options.renderStage ??
+    scheduler.createStage(Symbol('threlte-render-stage'), {
+      after: mainStage,
+      callback(_, runTasks) {
+        if (shouldRender()) runTasks()
+      }
+    })
 
   const camera = currentWritable(getDefaultCamera())
   const size = currentWritable<Size>(undefined!)
-  const viewport = currentWritable<Viewport>(undefined!)
 
   watch([options.userSize, options.parentSize], ([$userSize, $parentSize]) => {
     size.set($userSize ? $userSize : $parentSize)
   })
 
-  watch([camera, size], ([$camera, $size]) => {
-    viewport.set(getCurrentViewport($camera, [0, 0, 0], $size))
-  })
-
   const ctx: ThrelteContext = {
     size,
-    viewport,
     camera,
     scene: new Scene(),
     renderer: undefined!,
@@ -272,14 +270,16 @@ export const createThrelteContext = (options: {
     scheduler,
     mainStage,
     renderStage,
-    autoRenderTask: options.autoRenderTask ?? renderStage.createTask(Symbol('threlte-auto-render-task'), (_) => {
-      // we're in here when autoRender is true In Threlte 7 we still have to
-      // check for the existence of `useRender` instances
-      if (useRenderOrders.length > 0) return
+    autoRenderTask:
+      options.autoRenderTask ??
+      renderStage.createTask(Symbol('threlte-auto-render-task'), (_) => {
+        // we're in here when autoRender is true In Threlte 7 we still have to
+        // check for the existence of `useRender` instances
+        if (useRenderOrders.length > 0) return
 
-      // if there are no useRender instances, we can render the scene
-      ctx.renderer.render(ctx.scene, ctx.camera.current)
-    }),
+        // if there are no useRender instances, we can render the scene
+        ctx.renderer.render(ctx.scene, ctx.camera.current)
+      }),
     shouldRender
   }
 
