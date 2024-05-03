@@ -7,7 +7,6 @@
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
   import type { MaskEvents, MaskProps, MaskSlots } from './Mask'
 
-  type $$Props = MaskProps
   type $$Events = MaskEvents
   type $$Slots = MaskSlots
 
@@ -17,12 +16,12 @@
     depthWrite = false,
     ref = $bindable(),
     ...props
-  }: MaskProps & { ref: Mesh } = $props()
+  }: MaskProps = $props()
 
-  ref = new Mesh()
+  const mesh = new Mesh()
 
   $effect(() => {
-    const material = ref.material
+    const { material } = mesh
 
     if (Array.isArray(material)) return
 
@@ -38,9 +37,10 @@
 </script>
 
 <T
-  is={ref}
+  is={mesh}
+  bind:ref
   renderOrder={-id}
   {...props}
 >
-  <slot {ref} />
+  <slot ref={mesh} />
 </T>

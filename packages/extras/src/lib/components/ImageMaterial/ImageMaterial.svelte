@@ -33,9 +33,9 @@
     url,
     ref = $bindable(),
     ...props
-  }: ImageMaterialProps & { ref: ShaderMaterial } = $props()
+  }: ImageMaterialProps = $props()
 
-  ref = new ShaderMaterial()
+  const material = new ShaderMaterial()
 
   const suspend = useSuspense()
 
@@ -172,7 +172,8 @@
 </script>
 
 <T
-  is={ref}
+  is={material}
+  bind:ref
   {uniforms}
   {toneMapped}
   {transparent}
@@ -181,5 +182,5 @@
   {fragmentShader}
   {...props}
 >
-  <slot {ref} />
+  <slot ref={material} />
 </T>

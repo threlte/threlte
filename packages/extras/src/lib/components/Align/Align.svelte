@@ -5,7 +5,6 @@
   import type { AlignEvents, AlignProps, AlignSlots } from './Align.svelte'
   import { injectAlignPlugin } from './alignPlugin'
 
-  type $$Props = AlignProps
   type $$Events = AlignEvents
   type $$Slots = AlignSlots
 
@@ -19,12 +18,11 @@
     calculate = $bindable(),
     align = $bindable(),
     ...props
-  }: AlignProps & { ref: Group } = $props()
+  }: AlignProps = $props()
 
   const { invalidate, renderStage } = useThrelte()
 
-  ref = new Group()
-
+  const group = new Group()
   const innerGroup = new Group()
   const outerGroup = new Group()
 
@@ -67,7 +65,7 @@
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,
-      container: ref,
+      container: group,
       depth,
       depthAlignment: dAlign,
       height,
@@ -120,14 +118,15 @@
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   {...props}
 >
   <T is={outerGroup}>
     <T is={innerGroup}>
       <slot
         align={scheduleAligning}
-        {ref}
+        ref={group}
       />
     </T>
   </T>

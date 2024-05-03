@@ -10,12 +10,10 @@
     TrackballControlsSlots
   } from './TrackballControls.svelte'
 
-  type $$Props = TrackballControlsProps
   type $$Events = TrackballControlsEvents
   type $$Slots = TrackballControlsSlots
 
-  let { ref = $bindable(), ...props }: TrackballControlsProps & { ref: ThreeTrackballControls } =
-    $props()
+  let { ref = $bindable(), ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
 
@@ -29,24 +27,25 @@
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
-  ref = new ThreeTrackballControls($parent, renderer.domElement)
+  const controls = new ThreeTrackballControls($parent, renderer.domElement)
 
-  useTask(ref.update, {
+  useTask(controls.update, {
     autoInvalidate: false
   })
 
   const { trackballControls } = useControlsContext()
-  trackballControls.set(ref)
+  trackballControls.set(controls)
   onDestroy(() => trackballControls.set(undefined))
 </script>
 
 <T
-  is={ref}
+  is={controls}
+  bind:ref
   {...props}
   on:change={(event) => {
     invalidate()
     props.$$events?.change?.(event)
   }}
 >
-  <slot {ref} />
+  <slot ref={controls} />
 </T>

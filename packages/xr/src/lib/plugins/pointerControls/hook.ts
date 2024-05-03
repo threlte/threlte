@@ -1,19 +1,26 @@
-import { createRawEventDispatcher } from '@threlte/core'
 import { getControlsContext, getInternalContext } from './context'
 import type { Object3D } from 'three'
 
 export const usePointerControls = () => {
-  const { dispatchers } = getInternalContext()
   const context = getControlsContext()
-  const eventDispatcher = createRawEventDispatcher()
+  const { dispatchers } = getInternalContext()
 
-  const addInteractiveObject = (object: Object3D) => {
+  if (!context) {
+    throw new Error(
+      'No pointer controls context found. Did you forget to implement pointerControls()?'
+    )
+  }
+
+  const addInteractiveObject = (
+    object: Object3D,
+    events: Record<string, (arg: unknown) => void>
+  ) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(object) > -1) {
       return
     }
 
-    dispatchers.set(object, eventDispatcher)
+    dispatchers.set(object, events)
     context.interactiveObjects.push(object)
   }
 

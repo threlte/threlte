@@ -4,15 +4,19 @@
   import { pointerIntersection, pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
-  export let handedness: 'left' | 'right'
+  interface Props {
+    handedness: 'left' | 'right'
+  }
+
+  let { handedness }: Props = $props()
 
   const ref = new Group()
   const vec3 = new Vector3()
   const normalMatrix = new Matrix3()
   const worldNormal = new Vector3()
 
-  $: hovering = $pointerState[handedness].hovering
-  $: intersection = pointerIntersection[handedness]
+  let hovering = $derived($pointerState[handedness].hovering)
+  let intersection = $derived(pointerIntersection[handedness])
 
   const { start, stop } = useTask(
     () => {
@@ -31,12 +35,14 @@
     }
   )
 
-  $: if (hovering) {
-    ref.position.copy(intersection.current!.point)
-    start()
-  } else {
-    stop()
-  }
+  $effect.pre(() => {
+    if (hovering) {
+      ref.position.copy(intersection.current!.point)
+      start()
+    } else {
+      stop()
+    }
+  })
 </script>
 
 <T

@@ -9,7 +9,6 @@
     PositionalAudioSlots
   } from './PositionalAudio.svelte'
 
-  type $$Props = PositionalAudioProps
   type $$Events = PositionalAudioEvents
   type $$Slots = PositionalAudioSlots
 
@@ -30,8 +29,8 @@
     pause = $bindable(),
     stop = $bindable(),
     ref = $bindable(),
-    ...restProps
-  }: PositionalAudioProps & { ref: ThreePositionalAudio } = $props()
+    ...props
+  }: PositionalAudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -41,15 +40,15 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  ref = new ThreePositionalAudio(listener)
+  const audio = new ThreePositionalAudio(listener)
 
   $effect(() => {
-    if (refDistance !== undefined) ref.setRefDistance(refDistance)
-    if (rolloffFactor !== undefined) ref.setRolloffFactor(rolloffFactor)
-    if (distanceModel !== undefined) ref.setDistanceModel(distanceModel)
-    if (maxDistance !== undefined) ref.setMaxDistance(maxDistance)
+    if (refDistance !== undefined) audio.setRefDistance(refDistance)
+    if (rolloffFactor !== undefined) audio.setRolloffFactor(rolloffFactor)
+    if (distanceModel !== undefined) audio.setDistanceModel(distanceModel)
+    if (maxDistance !== undefined) audio.setMaxDistance(maxDistance)
     if (directionalCone !== undefined) {
-      ref.setDirectionalCone(
+      audio.setDirectionalCone(
         directionalCone.coneInnerAngle,
         directionalCone.coneOuterAngle,
         directionalCone.coneOuterGain
@@ -65,7 +64,7 @@
     setSrc: setSource,
     setVolume,
     ...useAudioProps
-  } = useAudio(ref, restProps.$$events)
+  } = useAudio(audio, props.$$events)
 
   pause = useAudioProps.pause
   play = useAudioProps.play
@@ -80,8 +79,9 @@
 </script>
 
 <T
-  is={ref}
-  {...restProps}
+  is={audio}
+  bind:ref
+  {...props}
 >
-  <slot {ref} />
+  <slot ref={audio} />
 </T>

@@ -2,13 +2,17 @@
   import { useParent, watch } from '@threlte/core'
   import { usePortalContext } from '../usePortalContext'
 
+  interface Props {
+    id?: string
+  }
+
+  let { id = 'default' }: Props = $props()
+
   const parent = useParent()
 
   if (!$parent) {
     throw new Error('<PortalTarget> must be used within a <Canvas> component.')
   }
-
-  export let id = 'default'
 
   const { addPortal, removePortal } = usePortalContext()
 

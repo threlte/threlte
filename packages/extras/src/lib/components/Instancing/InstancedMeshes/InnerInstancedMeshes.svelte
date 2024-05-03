@@ -2,20 +2,27 @@
   import type { Mesh } from 'three'
   import InstancedMesh from '../InstancedMesh.svelte'
 
-  export let meshes: Mesh[]
+  interface Props {
+    meshes: Mesh[]
+    index: number
+  }
 
-  const copiedArray = [...meshes]
-  const mesh = copiedArray.pop()
+  let { meshes, index = meshes.length - 1, ...props }: Props = $props()
+  const mesh = meshes[index]
 </script>
 
-{#if mesh}
+{#if index > -1}
   <InstancedMesh
     geometry={mesh.geometry}
     material={mesh.material}
     id={mesh.uuid}
-    {...$$restProps}
+    {...props}
   >
-    <svelte:self meshes={copiedArray}>
+    <svelte:self
+      {meshes}
+      index={index - 1}
+      {...props}
+    >
       <slot />
     </svelte:self>
   </InstancedMesh>

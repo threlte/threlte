@@ -1,5 +1,30 @@
 # @threlte/extras
 
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
 ## 9.0.0-next.0
 
 ### Major Changes

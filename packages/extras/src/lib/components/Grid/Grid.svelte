@@ -5,7 +5,6 @@
   import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
 
-  type $$Props = Required<GridProps>
   type $$Events = GridEvents
   type $$Slots = GridSlots
 
@@ -32,9 +31,9 @@
     sectionDividers = 2,
     ref = $bindable(),
     ...props
-  }: GridProps & { ref: Mesh } = $props()
+  }: GridProps = $props()
 
-  ref = new Mesh()
+  const mesh = new Mesh()
 
   const { invalidate, camera } = useThrelte()
 
@@ -139,43 +138,56 @@
     uniforms.coord0.value = axisToInt[c0]
     uniforms.coord1.value = axisToInt[c1]
     uniforms.coord2.value = axisToInt[c2]
+    invalidate()
   })
 
   $effect.pre(() => {
     uniforms.cellSize.value = cellSize
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionSize.value = sectionSize
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.cellColor.value.set(cellColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionColor.value.set(sectionColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.backgroundColor.value.set(backgroundColor)
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.backgroundOpacity.value = backgroundOpacity
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.fadeDistance.value = fadeDistance
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.fadeStrength.value = fadeStrength
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.cellThickness.value = cellThickness
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.sectionThickness.value = sectionThickness
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.followCamera.value = followCamera
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.infiniteGrid.value = infiniteGrid
+    invalidate()
   })
 
   $effect.pre(() => {
@@ -205,21 +217,24 @@
     invalidate()
   })
 
-  useTask(() => {
-    gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
+  useTask(
+    () => {
+      gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(mesh.matrixWorld)
 
-    const material = ref.material as ShaderMaterial
-    const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
-    const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
+      const material = mesh.material as ShaderMaterial
+      const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
+      const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
 
-    gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
-    worldPlanePosition.value.set(0, 0, 0).applyMatrix4(ref.matrixWorld)
-    invalidate()
-  })
+      gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
+      worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
+    },
+    { autoInvalidate: false }
+  )
 </script>
 
 <T
-  is={ref}
+  is={mesh}
+  bind:ref
   frustumCulled={false}
   {...props}
 >
@@ -230,7 +245,7 @@
     transparent
     {side}
   />
-  <slot {ref}>
+  <slot ref={mesh}>
     <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
   </slot>
 </T>

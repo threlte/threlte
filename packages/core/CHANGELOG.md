@@ -1,5 +1,23 @@
 # @threlte/core
 
+## 8.0.0-next.3
+
+### Patch Changes
+
+- ccafaaa: Fix renderer resize flickering
+
+## 8.0.0-next.2
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 8.0.0-next.1
+
+### Patch Changes
+
+- 45fae01: Granular updates on T
+
 ## 8.0.0-next.0
 
 ### Major Changes

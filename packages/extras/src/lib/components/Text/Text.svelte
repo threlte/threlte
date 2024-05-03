@@ -3,24 +3,20 @@
   import { tick } from 'svelte'
   import { preloadFont, Text } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextMesh } from './Text.svelte'
-  import type { TextProps } from './Text.svelte'
+  import type { TextProps, TextEvents, TextSlots } from './Text.svelte'
 
-  let {
-    font,
-    characters,
-    sdfGlyphSize,
-    ref = $bindable(),
-    ...props
-  }: TextProps & { ref: TextMesh } = $props()
+  type $$Events = TextEvents
+  type $$Slots = TextSlots
 
-  ref = new Text()
+  let { font, characters, sdfGlyphSize, ref = $bindable(), ...props }: TextProps = $props()
+
+  const text = new Text()
 
   const { invalidate } = useThrelte()
 
   const onUpdate = async () => {
     await tick()
-    ref.sync(() => {
+    text.sync(() => {
       invalidate()
       props.$$events?.sync?.()
     })
@@ -39,11 +35,12 @@
 </script>
 
 <T
-  is={ref}
+  is={text}
+  bind:ref
   {...props}
   {font}
   {characters}
   {sdfGlyphSize}
 >
-  <slot {ref} />
+  <slot ref={text} />
 </T>

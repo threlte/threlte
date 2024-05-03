@@ -1,20 +1,16 @@
 <script lang="ts">
   import { T, useParent } from '@threlte/core'
-  import type { LineSegments, Mesh } from 'three'
+  import { LineSegments, type Mesh } from 'three'
   import type { EdgesEvents, EdgesProps, EdgesSlots } from './Edges.svelte'
 
-  type $$Props = EdgesProps
   type $$Events = EdgesEvents
   type $$Slots = EdgesSlots
 
-  let {
-    thresholdAngle,
-    color,
-    ref = $bindable(),
-    ...props
-  }: EdgesProps & { ref: LineSegments } = $props()
+  let { thresholdAngle, color, ref = $bindable(), ...props }: EdgesProps = $props()
 
   const parent = useParent()
+
+  const lineSegments = new LineSegments()
 
   if (!$parent || $parent.type !== 'Mesh') {
     throw new Error('Edges: component must be a child of a Mesh')
@@ -26,11 +22,12 @@
   })
 </script>
 
-<T.LineSegments
+<T
+  is={lineSegments}
   bind:ref
   {...props}
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  <slot {ref} />
-</T.LineSegments>
+  <slot ref={lineSegments} />
+</T>

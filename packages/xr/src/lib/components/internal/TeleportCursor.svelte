@@ -5,14 +5,18 @@
   import { teleportIntersection } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
 
-  export let handedness: 'left' | 'right'
+  interface Props {
+    handedness: 'left' | 'right'
+  }
+
+  let { handedness }: Props = $props()
 
   const ref = new Group()
   const vec3 = new Vector3()
   const normalMatrix = new Matrix3()
   const worldNormal = new Vector3()
 
-  $: intersection = teleportIntersection[handedness]
+  let intersection = $derived(teleportIntersection[handedness])
 
   const { start, stop } = useTask(
     () => {
@@ -34,14 +38,16 @@
 
   const size = spring(0.1, { stiffness: 0.2 })
 
-  $: if ($intersection === undefined) {
-    size.set(0.1)
-    stop()
-  } else {
-    size.set(1)
-    ref.position.copy($intersection.point)
-    start()
-  }
+  $effect.pre(() => {
+    if ($intersection === undefined) {
+      size.set(0.1)
+      stop()
+    } else {
+      size.set(1)
+      ref.position.copy($intersection.point)
+      start()
+    }
+  })
 </script>
 
 <T

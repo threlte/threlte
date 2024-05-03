@@ -22,7 +22,6 @@
 
   type TShape = $$Generic<Shape>
   type TMassDef = $$Generic<MassDef>
-  type $$Props = ColliderProps<TShape, TMassDef>
 
   let {
     shape,

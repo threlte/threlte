@@ -1,24 +1,22 @@
 ---
-{
-  order: 9.2,
-  category: '@threlte/extras',
-  name: <Edges>,
-  sourcePath: 'packages/extras/src/lib/components/Edges/Edges.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
-        {
-          type: 'LineSegments',
-          url: 'https://threejs.org/docs/index.html#api/en/objects/LineSegments'
-        },
-      'props':
-        [
-          { name: 'thresholdAngle', type: 'number', required: false },
-          { name: 'color', type: 'THREE.ColorRepresentation', required: false }
-        ]
-    }
-}
+order: 9.2
+category: '@threlte/extras'
+name: <Edges>
+sourcePath: 'packages/extras/src/lib/components/Edges/Edges.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'LineSegments',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/LineSegments'
+      },
+    props:
+      [
+        { name: 'thresholdAngle', type: 'number', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', required: false }
+      ]
+  }
 ---
 
 Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.

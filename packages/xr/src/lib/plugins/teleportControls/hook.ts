@@ -1,12 +1,10 @@
 import type { Mesh } from 'three'
-import { createRawEventDispatcher } from '@threlte/core'
 import { getTeleportContext } from './context'
 
 export const useTeleportControls = () => {
   const context = getTeleportContext()
-  const eventDispatcher = createRawEventDispatcher()
 
-  const addSurface = (mesh: Mesh) => {
+  const addSurface = (mesh: Mesh, events: Record<string, (arg: unknown) => void>) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(mesh) > -1) {
       return
@@ -14,7 +12,7 @@ export const useTeleportControls = () => {
 
     context.interactiveObjects.push(mesh)
     context.surfaces.set(mesh.uuid, mesh)
-    context.dispatchers.set(mesh, eventDispatcher)
+    context.dispatchers.set(mesh, events)
   }
 
   const removeSurface = (mesh: Mesh) => {

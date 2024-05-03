@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { type ExtrudeGeometry, Shape } from 'three'
+  import { Shape } from 'three'
   import { T } from '@threlte/core'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+  import type {
+    RoundedBoxGeometryProps,
+    RoundedBoxGeometryEvents,
+    RoundedBoxGeometrySlots
+  } from './RoundedBoxGeometry'
 
-  interface Props {
-    args?: [width?: number, height?: number, depth?: number] | []
-    radius?: number
-    smoothness?: number
-    creaseAngle?: number
-    steps?: number
-    ref?: ExtrudeGeometry
-  }
+  type $$Events = RoundedBoxGeometryEvents
+  type $$Slots = RoundedBoxGeometrySlots
 
   let {
     args = [],
@@ -20,7 +19,7 @@
     steps = 1,
     ref = $bindable(),
     ...props
-  }: Props = $props()
+  }: RoundedBoxGeometryProps = $props()
 
   const eps = 0.00001
 

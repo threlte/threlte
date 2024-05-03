@@ -72,12 +72,13 @@ export const setupPointerControls = (
       ) {
         const { eventObject } = hoveredObj
         handContext.hovered.delete(getIntersectionId(hoveredObj))
-        const eventDispatcher = dispatchers.get(eventObject)
-        if (eventDispatcher) {
+
+        const events = dispatchers.get(eventObject)
+        if (events !== undefined) {
           // Clear out intersects, they are outdated by now
-          const data = { ...hoveredObj, intersections }
-          eventDispatcher('pointerout', data as IntersectionEvent)
-          eventDispatcher('pointerleave', data as IntersectionEvent)
+          const data: IntersectionEvent = { ...hoveredObj, intersections }
+          events.pointerout?.(data)
+          events.pointerleave?.(data)
 
           // Deal with cancelation
           handContext.pointerOverTarget.set(false)
@@ -113,7 +114,7 @@ export const setupPointerControls = (
 
   function pointerMissed(objects: Object3D[], event?: IntersectionEvent | undefined) {
     for (const object of objects) {
-      dispatchers.get(object)?.('pointermissed', event)
+      dispatchers.get(object)?.pointermissed?.(event)
     }
   }
 
@@ -155,28 +156,23 @@ export const setupPointerControls = (
         ray: context.raycaster.ray
       }
 
-      const eventDispatcher = dispatchers.get(hit.eventObject)
+      const events = dispatchers.get(hit.eventObject)
 
-      if (eventDispatcher === undefined) return
+      if (events === undefined) return
 
       if (isPointerMove) {
         // Move event ...
         handContext.pointer.update((value) => value.copy(intersectionEvent.point))
 
-        if (
-          eventDispatcher.hasEventListener('pointerover') ||
-          eventDispatcher.hasEventListener('pointerenter') ||
-          eventDispatcher.hasEventListener('pointerout') ||
-          eventDispatcher.hasEventListener('pointerleave')
-        ) {
+        if (events.pointerover || events.pointerenter || events.pointerout || events.pointerleave) {
           const id = getIntersectionId(intersectionEvent)
           const hoveredItem = handContext.hovered.get(id)
           if (hoveredItem === undefined) {
             // If the object wasn't previously hovered, book it and call its handler
             handContext.hovered.set(id, intersectionEvent)
-            eventDispatcher('pointerover', intersectionEvent)
+            events.pointerover?.(intersectionEvent)
 
-            eventDispatcher('pointerenter', intersectionEvent)
+            events.pointerenter?.(intersectionEvent)
             handContext.pointerOverTarget.set(true)
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
@@ -185,10 +181,10 @@ export const setupPointerControls = (
         }
 
         // Call pointer move
-        eventDispatcher('pointermove', intersectionEvent)
+        events.pointermove?.(intersectionEvent)
       } else if (
         (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) &&
-        eventDispatcher.hasEventListener(name)
+        events[name]
       ) {
         // Missed events have to come first
         pointerMissed(
@@ -197,7 +193,7 @@ export const setupPointerControls = (
         )
 
         // Call the event
-        eventDispatcher(name, intersectionEvent)
+        events[name]?.(intersectionEvent)
       } else if (isClickEvent && handContext.initialHits.includes(hit.eventObject)) {
         pointerMissed(
           context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
@@ -225,7 +221,7 @@ export const setupPointerControls = (
     },
     {
       fixedStep,
-      autostart: false
+      autoStart: false
     }
   )
 

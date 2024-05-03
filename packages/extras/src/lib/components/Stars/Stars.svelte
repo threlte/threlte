@@ -14,7 +14,6 @@
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<StarsProps>
   type $$Events = StarsEvents
   type $$Slots = StarsSlots
 
@@ -30,9 +29,9 @@
     opacity = 1.0,
     ref = $bindable(),
     ...props
-  }: StarsProps & { ref: Points } = $props()
+  }: StarsProps = $props()
 
-  ref = new Points()
+  const points = new Points()
 
   const vec3 = new Vector3()
   const spherical = new Spherical()
@@ -107,7 +106,8 @@
 </script>
 
 <T
-  is={ref}
+  is={points}
+  bind:ref
   {...props}
 >
   <T is={geometry} />
@@ -118,5 +118,5 @@
     transparent
     vertexColors
   />
-  <slot {ref} />
+  <slot ref={points} />
 </T>
