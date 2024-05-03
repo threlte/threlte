@@ -1,75 +1,87 @@
 import { OrthographicCamera, PerspectiveCamera, Vector3, type Vector3Tuple } from 'three'
-import { currentWritable, useThrelte, watch, type Size } from '@threlte/core'
+import { currentWritable, useTask, useThrelte, watch, type Size } from '@threlte/core'
 import type { Readable } from 'svelte/store'
 
-/** Reactive size of the viewport in threejs units */
 export interface Viewport {
+  /** Viewport width in Three.js units */
   width: number
+  /** Viewport height in Three.js units */
   height: number
-  top: number
-  left: number
   /** size.width / viewport.width */
   factor: number
   /** Camera distance */
   distance: number
-  /** Camera aspect ratio: width / height */
-  aspect: number
 }
 
-const tempTarget = new Vector3()
+const origin = new Vector3()
 const position = new Vector3()
+const lastPosition = new Vector3()
 
-const getCurrentViewport = (
-  camera: PerspectiveCamera | OrthographicCamera,
-  target: Vector3 | Vector3Tuple,
-  size: Size
-): Omit<Viewport, 'dpr' | 'initialDpr'> => {
-  const { width, height, top, left } = size
+export const useViewport = (
+  target?: Vector3 | Vector3Tuple
+): Readable<Viewport> & { current: Viewport } => {
+  const viewport = currentWritable<Viewport>({
+    width: 0,
+    height: 0,
+    factor: 0,
+    distance: 0
+  })
 
-  const aspect = width / height
+  const { camera, size, renderStage, scheduler } = useThrelte()
 
-  if (Array.isArray(target)) {
-    tempTarget.fromArray(target)
-  } else {
-    tempTarget.copy(target)
+  const updateViewport = (
+    $size: Size,
+    $camera: PerspectiveCamera | OrthographicCamera,
+    distance: number
+  ) => {
+    viewport.update(($viewport) => {
+      const { width, height } = $size
+
+      if (Array.isArray(target)) {
+        origin.fromArray(target)
+      } else if (target !== undefined) {
+        origin.copy(target)
+      }
+
+      $viewport.distance = distance
+
+      if ('isOrthographicCamera' in $camera) {
+        $viewport.width = width / $camera.zoom
+        $viewport.height = height / $camera.zoom
+        $viewport.factor = 1
+      } else if ('isPerspectiveCamera' in $camera) {
+        const fov = ($camera.fov * Math.PI) / 180 // convert vertical fov to radians
+        const h = 2 * Math.tan(fov / 2) * distance // visible height
+        const w = h * (width / height)
+        $viewport.width = w
+        $viewport.height = h
+        $viewport.factor = width / w
+      }
+
+      return $viewport
+    })
   }
 
-  const distance = camera.getWorldPosition(position).distanceTo(tempTarget)
+  useTask(
+    () => {
+      camera.current.getWorldPosition(position)
 
-  if ('isOrthographicCamera' in camera) {
-    return {
-      width: width / camera.zoom,
-      height: height / camera.zoom,
-      top,
-      left,
-      factor: 1,
-      distance,
-      aspect
+      if (!position.equals(lastPosition)) {
+        const distance = position.distanceTo(origin)
+
+        updateViewport(size.current, camera.current, distance)
+        lastPosition.copy(position)
+      }
+    },
+    {
+      autoInvalidate: false,
+      stage: scheduler.createStage(Symbol('viewport-stage'), { before: renderStage })
     }
-  } else if ('isPersepctiveCamera' in camera) {
-    const fov = (camera.fov * Math.PI) / 180 // convert vertical fov to radians
-    const h = 2 * Math.tan(fov / 2) * distance // visible height
-    const w = h * (width / height)
-    return {
-      width: w,
-      height: h,
-      top,
-      left,
-      factor: width / w,
-      distance,
-      aspect
-    }
-  }
-
-  throw new Error('Viewport did not recieve a Perspective or Orthographic camera')
-}
-
-export const useViewport = (): Readable<Viewport> & { current: Viewport } => {
-  const viewport = currentWritable<Viewport>(undefined!)
-  const { camera, size } = useThrelte()
+  )
 
   watch([camera, size], ([$camera, $size]) => {
-    viewport.set(getCurrentViewport($camera, [0, 0, 0], $size))
+    const distance = $camera.getWorldPosition(position).distanceTo(origin)
+    updateViewport($size, $camera, distance)
   })
 
   return viewport

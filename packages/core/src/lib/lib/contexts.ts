@@ -2,7 +2,8 @@ import { getContext, setContext, tick } from 'svelte'
 import type { Readable, Writable } from 'svelte/store'
 import {
   Scene,
-  type Camera,
+  type OrthographicCamera,
+  type PerspectiveCamera,
   type ColorSpace,
   type ShadowMapType,
   type ToneMapping,
@@ -22,7 +23,7 @@ import { injectLegacyFrameCompatibilityContext } from '../hooks/legacy/utils'
  */
 export type ThrelteContext = {
   size: Readable<Size> & { current: Size }
-  camera: CurrentWritable<Camera>
+  camera: CurrentWritable<PerspectiveCamera | OrthographicCamera>
   scene: Scene
   dpr: CurrentWritable<number>
   useLegacyLights: CurrentWritable<boolean>

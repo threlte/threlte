@@ -4,6 +4,10 @@ import type { Scene, ColorSpace, ToneMapping } from 'three'
 
 export type HUDProps = Props<Scene> & {
   /**
+   * @default true
+   */
+  autoRender?: boolean
+  /**
    * @default 'srgb'
    */
   colorSpace?: ColorSpace
@@ -23,6 +27,6 @@ export type HUDProps = Props<Scene> & {
 
 export type HUDEvents = Events<Scene>
 
-export type HUDSlots = Slots<Scene> 
+export type HUDSlots = Slots<Scene>
 
 export default class HUD extends SvelteComponent<HUDProps, HUDEvents, HUDSlots> {}

@@ -3,9 +3,11 @@
   import { writable } from 'svelte/store'
   import type { HUDProps } from './HUD.svelte'
 
-  let { colorSpace, toneMapping, dpr, stage, ref = $bindable() }: HUDProps = $props()
+  let { autoRender, colorSpace, toneMapping, dpr, stage, ref = $bindable() }: HUDProps = $props()
 
   let context = useThrelte()
+  const { renderer, invalidate } = context
+
   const hudContext = createThrelteContext({
     ...context,
     useLegacyLights: context.useLegacyLights.current,
@@ -15,42 +17,16 @@
     parentSize: context.size,
     userSize: writable(),
     renderMode: context.renderMode.current,
-    autoRender: context.autoRender.current,
+    autoRender: false,
     shadows: context.shadows.current,
-    colorManagementEnabled: context.colorManagementEnabled.current,
-    scheduler: context.scheduler,
-    mainStage: context.mainStage,
-    renderStage: context.renderStage,
-    autoRenderTask: context.autoRenderTask
-  })
-
-  const { renderer, invalidate } = context
-  const { scene, camera } = hudContext
-
-  hudContext.renderer = context.renderer
-
-  $effect.pre(() => {
-    if (colorSpace) hudContext.colorSpace.set(colorSpace)
-    invalidate()
-  })
-
-  $effect.pre(() => {
-    if (toneMapping) hudContext.toneMapping.set(toneMapping)
-    invalidate()
-  })
-
-  $effect.pre(() => {
-    if (dpr) hudContext.dpr.set(dpr)
-    invalidate()
+    colorManagementEnabled: context.colorManagementEnabled.current
   })
 
   useTask(
-    () => {
-      if (!context.shouldRender()) {
-        return
-      }
-
+    (delta) => {
       let { autoClear } = renderer
+
+      console.log(delta)
 
       // Disable clearing and set hud settings
       renderer.autoClear = false
@@ -69,13 +45,33 @@
     },
     {
       autoInvalidate: false,
-      stage:
-        stage ??
-        context.scheduler.createStage(Symbol('hud-render-stage'), {
-          after: context.renderStage
-        })
+      stage: stage ?? context.renderStage
     }
   )
+
+  const { scene, camera } = hudContext
+
+  hudContext.renderer = context.renderer
+
+  $effect.pre(() => {
+    if (autoRender !== undefined) hudContext.autoRender.set(autoRender)
+    invalidate()
+  })
+
+  $effect.pre(() => {
+    if (colorSpace !== undefined) hudContext.colorSpace.set(colorSpace)
+    invalidate()
+  })
+
+  $effect.pre(() => {
+    if (toneMapping !== undefined) hudContext.toneMapping.set(toneMapping)
+    invalidate()
+  })
+
+  $effect.pre(() => {
+    if (dpr !== undefined) hudContext.dpr.set(dpr)
+    invalidate()
+  })
 </script>
 
 <HierarchicalObject>
