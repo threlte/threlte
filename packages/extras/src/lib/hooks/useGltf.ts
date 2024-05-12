@@ -80,9 +80,9 @@ export function useGltf<
       }
 
       if (opts?.ktxTranscoderPath) {
-        ktx2Loader.setTranscoderPath(opts?.ktxTranscoderPath)
-        ktx2Loader.detectSupport(renderer)
-        loader.setKTX2Loader(ktx2Loader)
+        ktx2Loader!.setTranscoderPath(opts?.ktxTranscoderPath)
+        ktx2Loader!.detectSupport(renderer)
+        loader.setKTX2Loader(ktx2Loader!)
       }
     }
   })
