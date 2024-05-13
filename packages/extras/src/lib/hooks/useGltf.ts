@@ -54,7 +54,7 @@ export function useGltf<
     } {
   const { renderer } = useThrelte()
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions
-  const ktx2Loader =  opts?.ktxTranscoderPath ? new KTX2Loader() : null;
+  const ktx2Loader = opts?.ktxTranscoderPath ? new KTX2Loader() : null
   const loader = useLoader(GLTFLoader, {
     extend(loader) {
       if (opts?.useDraco) {
@@ -90,7 +90,7 @@ export function useGltf<
   const load = (url: string) => {
     return loader.load(url, {
       transform(result) {
-        ktx2Loader?.dispose();
+        ktx2Loader?.dispose()
         return {
           ...result,
           ...buildSceneGraph(result.scene)
