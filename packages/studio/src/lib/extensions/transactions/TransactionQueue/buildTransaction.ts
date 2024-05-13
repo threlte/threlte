@@ -1,18 +1,19 @@
 import { resolvePropertyPath } from '@threlte/core'
-import type { Transaction } from '../transactions/TransactionQueue.svelte'
-import { getThrelteStudioUserData } from '../transactions/vite-plugin/runtimeUtils'
+import { getThrelteStudioUserData } from '../vite-plugin/runtimeUtils'
+import type { Transaction } from './TransactionQueue.svelte'
 
 type BuildTransactionOptions<T> = {
   object: any
+  /** The path to a property, e.g. 'position' or 'position.x' */
   propertyPath: string
   /** Must be immutable */
   value: T
-  /** If no historicValue is provided and a history record is requested, the
-   * historic value is read automatically at call time */
+  /** If no historicValue is provided and a history record is requested, the historic value is read automatically at call time */
   historicValue?: T
-  /** Whether a historic entry should be recorded */
-  noHistory?: boolean
-  noSync?: boolean
+  /** Whether a historic entry should be recorded, `true` by default */
+  createHistoryRecord?: boolean
+  /** Whether the value should be synced, `true` by default */
+  sync?: boolean
 }
 
 export const buildTransaction = <T>({
@@ -20,8 +21,8 @@ export const buildTransaction = <T>({
   propertyPath,
   value,
   historicValue,
-  noHistory,
-  noSync
+  createHistoryRecord,
+  sync
 }: BuildTransactionOptions<T>) => {
   const { target, key } = resolvePropertyPath(object, propertyPath)
 
@@ -46,7 +47,7 @@ export const buildTransaction = <T>({
       }
       target[key] = data
     },
-    ...(historicValue
+    ...(historicValue !== undefined
       ? {
           historicValue
         }
@@ -63,16 +64,16 @@ export const buildTransaction = <T>({
             return target[key]
           }
         }),
-    noHistory,
-    noSync,
-    sync: userData
-      ? {
-          attributeName: [...(userData.pathItems ?? []), propertyPath].join('.'),
-          componentIndex: userData.index,
-          moduleId: userData.moduleId,
-          signature: userData.signature
-        }
-      : undefined
+    createHistoryRecord: createHistoryRecord ?? true,
+    sync:
+      (sync ?? true) && userData
+        ? {
+            attributeName: [...(userData.pathItems ?? []), propertyPath].join('.'),
+            componentIndex: userData.index,
+            moduleId: userData.moduleId,
+            signature: userData.signature
+          }
+        : undefined
   }
 
   return transaction

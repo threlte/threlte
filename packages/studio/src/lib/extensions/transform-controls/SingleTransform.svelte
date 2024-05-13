@@ -38,7 +38,7 @@
     transformControlsExtension.run('setInUse', false)
   })
 
-  const { commit } = useTransactions()
+  const { commit, buildTransaction } = useTransactions()
 
   const object = $derived(objectSelection.selectedObjects[0])
 
@@ -83,26 +83,16 @@
     object.position.copy(initialValue.position)
     object.rotation.copy(initialValue.rotation)
     object.scale.copy(initialValue.scale)
-    commit(
-      props.map((prop) => ({
-        object: object,
-        read(root: any) {
-          return root[prop].clone()
-        },
-        write(root: any, data: any) {
-          root[prop].copy(data)
-        },
-        value: value[prop],
-        sync: userData
-          ? {
-              attributeName: [...(userData.pathItems ?? []), prop].join('.'),
-              componentIndex: userData.index,
-              moduleId: userData.moduleId,
-              signature: userData.signature
-            }
-          : undefined
-      }))
-    )
+
+    const transactions = props.map((prop) => {
+      return buildTransaction({
+        object,
+        propertyPath: prop,
+        value: value[prop]
+      })
+    })
+
+    commit(transactions)
   }
 </script>
 

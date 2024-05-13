@@ -1,5 +1,4 @@
 import { onDestroy } from 'svelte'
-import { browser } from './browser'
 
 const unloadHandlers = new Set<() => void>()
 const finalUnloadHandlers = new Set<() => void>()

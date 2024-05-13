@@ -28,9 +28,8 @@
   import { resolvePropertyPath, useTask } from '@threlte/core'
   import { onMount, tick } from 'svelte'
   import { Binding, type BindingRef, type Plugin } from 'svelte-tweakpane-ui'
-  import type { BindingParams } from 'tweakpane'
   import { useTransactions } from '../../transactions/useTransactions'
-  import { buildTransaction } from '../buildTransaction'
+  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction'
 
   const { commit, onTransaction } = useTransactions()
 
@@ -38,7 +37,6 @@
     objects: any[]
     key: string
     label: string
-    options?: BindingParams
     plugin?: Plugin
     autoUpdate?: boolean
     /** Transform values from and to display values, e.g. radians to degrees and vice versa */
@@ -125,9 +123,9 @@
       historicValue = getClonedValue(target, targetKey)
     }
 
-    const value = getClonedValue(carrier, targetKey)
+    let value = getClonedValue(carrier, targetKey)
     if (transform) {
-      transform.write(value)
+      value = transform.write(value)
     }
 
     // we commit the changes made to the object, but we only record history on
@@ -139,9 +137,9 @@
           object,
           propertyPath: key,
           value,
-          noHistory: !e.last,
-          noSync: !e.last,
-          historicValue
+          historicValue,
+          createHistoryRecord: e.last,
+          sync: e.last
         })
       )
     )

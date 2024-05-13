@@ -8,7 +8,7 @@
   import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import Changes from './Changes.svelte'
-  import { TransactionQueue } from './TransactionQueue.svelte'
+  import { TransactionQueue } from './TransactionQueue/TransactionQueue.svelte'
   import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
   import type { StudioProps } from './vite-plugin/types'
   import { clientRpc } from './vite-plugin/clientRpc'

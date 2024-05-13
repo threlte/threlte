@@ -17,7 +17,7 @@
   } from './types'
   import { getThrelteStudioUserData } from '../transactions/vite-plugin/runtimeUtils'
   import { useTransactions } from '../transactions/useTransactions'
-  import type { Transaction } from '../transactions/TransactionQueue.svelte'
+  import type { Transaction } from '../transactions/TransactionQueue/TransactionQueue.svelte'
 
   const objectSelection = useObjectSelection()
   const { useExtension } = useStudio()
@@ -88,7 +88,7 @@
     }
   }
 
-  const { commit } = useTransactions()
+  const { commit, buildTransaction } = useTransactions()
 
   const onMouseUp = () => {
     if (commitObjects.length !== initialValues.length) return
@@ -137,6 +137,7 @@
 <T
   is={centerObject}
   bind:ref={center.ref}
+  position={[-0.8576,3.6623,-0.3747]}
 />
 
 <TransformControls

@@ -1,6 +1,10 @@
 import type { Object3D } from 'three'
 import { useStudio } from '../../internal/extensions'
-import type { TransactionQueue, TransactionQueueCommitArgs } from './TransactionQueue.svelte'
+import type {
+  TransactionQueue,
+  TransactionQueueCommitArgs
+} from './TransactionQueue/TransactionQueue.svelte'
+import { buildTransaction } from './TransactionQueue/buildTransaction'
 import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
 
 export const useTransactions = () => {
@@ -53,6 +57,7 @@ export const useTransactions = () => {
     onUndo,
     onRedo,
     openInEditor,
-    openSelectedInEditor
+    openSelectedInEditor,
+    buildTransaction
   }
 }

@@ -2,7 +2,6 @@
   import { resolvePropertyPath, useLoader } from '@threlte/core'
   import { Binding, Image, List, type BindingRef, type ListOptions } from 'svelte-tweakpane-ui'
   import { useTransactions } from '../../transactions/useTransactions'
-  import { buildTransaction } from '../buildTransaction'
   import * as plugin from '@kitschpatrol/tweakpane-image-plugin'
   import { TextureLoader } from 'three'
 
@@ -100,22 +99,3 @@
   }}
   bind:ref
 />
-
-<!-- <List
-	bind:value={carrier[targetKey]}
-	{options}
-	{label}
-	on:change={(e) => {
-		commit(
-			objects.map((object) =>
-				buildTransaction({
-					object,
-					propertyPath: key,
-					value: e.detail.value,
-				}),
-			),
-		)
-	}}
-	on:change
-	{...rest}
-/> -->

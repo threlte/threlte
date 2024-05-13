@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { Color, Euler, Vector3 } from 'three'
-import { clientRpc } from './vite-plugin/clientRpc'
+import { clientRpc } from '../vite-plugin/clientRpc'
 
 export type SyncRequest = {
   /** The name of the component attribute, e.g. `"position"` or `"position.x"` */
@@ -33,11 +33,9 @@ export type Transaction<T, U> = {
 
   /** Write a value on the object from the format resolved by the read property */
   write: (root: T, data: U) => void
-  /** If true, no history record will be recorded and the value will not be
-   * synced to disk */
-  noHistory?: boolean
-  noSync?: boolean
-  /** The sync configuration */
+  /** Whether a historic entry should be recorded, `true` by default */
+  createHistoryRecord?: boolean
+  /** The sync configuration. If undefined, the change will not be persisted to disk */
   sync?: Omit<SyncRequest, 'attributeValue'>
 } & (
   | {
@@ -150,7 +148,7 @@ export class TransactionQueue {
     const queueItems: TransactionQueueItem[] = []
 
     transactions.forEach((transaction) => {
-      if (!transaction.noHistory) {
+      if (transaction.createHistoryRecord ?? true) {
         const historicValue =
           'historicValue' in transaction
             ? transaction.historicValue
@@ -173,7 +171,7 @@ export class TransactionQueue {
     })
 
     transactions
-      .filter((t) => !t.noHistory || !t.noSync)
+      .filter((t) => (t.createHistoryRecord ?? true) && t.sync)
       .forEach((transaction) => {
         if (transaction.sync) {
           this.addSyncRequest({
@@ -206,7 +204,7 @@ export class TransactionQueue {
     })
 
     transactions.forEach((transaction) => {
-      if (transaction.sync && !transaction.noSync) {
+      if (transaction.sync) {
         this.addSyncRequest({
           ...transaction.sync,
           attributeValue: transaction.historicValue
@@ -238,7 +236,7 @@ export class TransactionQueue {
     })
 
     transactions.forEach((transaction) => {
-      if (transaction.sync && !transaction.noSync) {
+      if (transaction.sync) {
         this.addSyncRequest({
           ...transaction.sync,
           attributeValue: transaction.value

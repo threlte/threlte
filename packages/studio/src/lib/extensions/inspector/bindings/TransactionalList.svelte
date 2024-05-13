@@ -2,7 +2,7 @@
   import { resolvePropertyPath } from '@threlte/core'
   import { List, type ListOptions } from 'svelte-tweakpane-ui'
   import { useTransactions } from '../../transactions/useTransactions'
-  import { buildTransaction } from '../buildTransaction'
+  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction'
 
   const { commit } = useTransactions()
 
