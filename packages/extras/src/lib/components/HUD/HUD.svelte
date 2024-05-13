@@ -3,7 +3,7 @@
   import type { HUDProps } from './HUD.svelte'
   import { createChildThrelteContext } from '../../lib/createChildContext'
 
-  let { autoRender, colorSpace, toneMapping, dpr, stage, ref = $bindable() }: HUDProps = $props()
+  let { autoRender, colorSpace, toneMapping, dpr, ref = $bindable() }: HUDProps = $props()
 
   const hudContext = createChildThrelteContext()
   const { scene, invalidate } = hudContext

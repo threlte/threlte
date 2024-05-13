@@ -39,6 +39,14 @@ export const createChildThrelteContext = () => {
     renderer.setPixelRatio(context.dpr.current)
   })
 
+  watch(childContext.autoRender, ($autoRender) => {
+    if ($autoRender) {
+      childContext.autoRenderTask.start()
+    } else {
+      childContext.autoRenderTask.stop()
+    }
+  })
+
   childContext.renderer = context.renderer
 
   return childContext
