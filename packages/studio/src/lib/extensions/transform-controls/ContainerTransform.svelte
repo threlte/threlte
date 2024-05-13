@@ -130,14 +130,14 @@
   }
 
   onDestroy(() => {
-    transformControlsExtension.run('setInUse', false)
+    transformControlsExtension.setInUse(false)
   })
 </script>
 
 <T
   is={centerObject}
   bind:ref={center.ref}
-  position={[-0.8576,3.6623,-0.3747]}
+  position={[-0.8576, 3.6623, -0.3747]}
 />
 
 <TransformControls
@@ -148,11 +148,11 @@
   scaleSnap={snapping.enabled ? snapping.scale ?? 0 : null}
   on:change={onChange}
   on:mouseDown={() => {
-    transformControlsExtension.run('setInUse', true)
+    transformControlsExtension.setInUse(true)
     onMouseDown()
   }}
   on:mouseUp={() => {
-    transformControlsExtension.run('setInUse', false)
+    transformControlsExtension.setInUse(false)
     onMouseUp()
   }}
   {mode}

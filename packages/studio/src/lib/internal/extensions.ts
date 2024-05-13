@@ -25,16 +25,25 @@ export const createRootContext = () => {
   >(
     scope: string
   ) => {
-    const run = <K extends keyof Actions>(id: K, ...args: Parameters<Actions[K]>) => {
-      actions.runAction(scope, id as string, state.getScopedState<State>(scope).state, ...args)
+    const scopedState = state.getScopedState<State, NonPartial>(scope).state
+
+    const extension = new Proxy(
+      {},
+      {
+        get: (_, prop: string) => {
+          if (prop === 'state') {
+            return scopedState
+          }
+          return (...args: any[]) => {
+            actions.runAction(scope, prop, scopedState, ...args)
+          }
+        }
+      }
+    ) as Actions & {
+      state: ReturnType<typeof state.getScopedState<State, NonPartial>>['state']
     }
 
-    return {
-      get state() {
-        return state.getScopedState<State, NonPartial>(scope).state
-      },
-      run
-    }
+    return extension
   }
 
   const removeExtension = (scope: string) => {

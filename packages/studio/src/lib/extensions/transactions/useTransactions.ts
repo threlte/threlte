@@ -13,15 +13,15 @@ export const useTransactions = () => {
   const ext = useExtension<TransactionsState, TransactionsActions>(transactionsScope)
 
   const commit = (transactions: TransactionQueueCommitArgs) => {
-    ext.run('commit', transactions)
+    ext.commit(transactions)
   }
 
   const undo = () => {
-    ext.run('undo')
+    ext.undo()
   }
 
   const redo = () => {
-    ext.run('redo')
+    ext.redo()
   }
 
   const onTransaction = (...args: Parameters<TransactionQueue['onTransaction']>) => {
@@ -41,11 +41,11 @@ export const useTransactions = () => {
   }
 
   const openInEditor = (object: Object3D) => {
-    ext.run('openInEditor', object)
+    ext.openInEditor(object)
   }
 
   const openSelectedInEditor = () => {
-    ext.run('openSelectedInEditor')
+    ext.openSelectedInEditor()
   }
 
   return {

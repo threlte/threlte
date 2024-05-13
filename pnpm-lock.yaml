@@ -715,7 +715,7 @@ importers:
         version: 7.4.47
       '@tweakpane/plugin-camerakit':
         specifier: ^0.3.0
-        version: 0.3.0(tweakpane@3.1.10)
+        version: 0.3.0(tweakpane@4.0.3)
       camera-controls:
         specifier: ^2.8.3
         version: 2.8.3(three@0.163.0)
@@ -726,8 +726,8 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(svelte@5.0.0-next.117)
       tweakpane:
-        specifier: ^3.1.0
-        version: 3.1.10
+        specifier: 4.0.3
+        version: 4.0.3
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.2.0
@@ -3909,14 +3909,6 @@ packages:
 
   /@tweakpane/core@2.0.3:
     resolution: {integrity: sha512-qHci4XA1Wngpwy8IzsLh5JEdscz8aDti/9YhyOaq01si+cgNDaZfwzTtXdn1+xTxSnCM+pW4Zb2/4eqn+K1ATw==}
-
-  /@tweakpane/plugin-camerakit@0.3.0(tweakpane@3.1.10):
-    resolution: {integrity: sha512-6UwgwDKU+oaAgXJ2D/pOoIpEAZts0RyeLmVzBJGs+VVNqSfkiHzL0i5XD+XnmSL2PaLXBne0dlz0bYOrjmeELw==}
-    peerDependencies:
-      tweakpane: ^4.0.0-beta.2
-    dependencies:
-      tweakpane: 3.1.10
-    dev: false
 
   /@tweakpane/plugin-camerakit@0.3.0(tweakpane@4.0.3):
     resolution: {integrity: sha512-6UwgwDKU+oaAgXJ2D/pOoIpEAZts0RyeLmVzBJGs+VVNqSfkiHzL0i5XD+XnmSL2PaLXBne0dlz0bYOrjmeELw==}

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Element, Pane } from 'svelte-tweakpane-ui'
+  import { type Pane as TpPane } from 'tweakpane'
   import Portal from '../../components/Internal/Portal.svelte'
   import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
   import { useStudio } from '../../internal/extensions'
-  import { type Pane as TpPane } from 'tweakpane'
   import Tree from './Tree.svelte'
   import {
     sceneHierarchyScope,
@@ -39,6 +39,7 @@
   let pane = $state<TpPane>()
   $effect(() => {
     if (!pane) return
+
     const contentEl = pane.element.querySelector('.tp-rotv_c') as HTMLElement
     if (!contentEl) return
     contentEl.style.maxHeight = '50vh'
@@ -50,9 +51,7 @@
   <ToolbarButton
     label="Scene Hierarchy"
     icon="mdiFormatListBulletedSquare"
-    on:click={() => {
-      ext.run('toggleEnabled')
-    }}
+    on:click={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>

@@ -17,7 +17,7 @@
 
   const { createExtension: createExtension } = useStudio()
 
-  const { run, state } = createExtension<TransformControlsState, TransformControlsActions>({
+  const extension = createExtension<TransformControlsState, TransformControlsActions>({
     scope: transformControlsScope,
     state: ({ persist }) => ({
       enabled: persist(true),
@@ -64,8 +64,8 @@
     }
   })
 
-  const mode = $derived(state.mode)
-  const enabled = $derived(state.enabled)
+  const mode = $derived(extension.state.mode)
+  const enabled = $derived(extension.state.enabled)
 
   const objectSelection = useObjectSelection()
 
@@ -88,7 +88,7 @@
   <HorizontalButtonGroup>
     <ToolbarButton
       on:click={() => {
-        run('setMode', 'translate')
+        extension.setMode('translate')
       }}
       active={mode === 'translate'}
       label="Move"
@@ -98,7 +98,7 @@
 
     <ToolbarButton
       on:click={() => {
-        run('setMode', 'rotate')
+        extension.setMode('rotate')
       }}
       active={mode === 'rotate'}
       label="Rotate"
@@ -108,7 +108,7 @@
 
     <ToolbarButton
       on:click={() => {
-        run('setMode', 'scale')
+        extension.setMode('scale')
       }}
       active={mode === 'scale'}
       label="Scale"
@@ -121,9 +121,9 @@
         value={enabled}
         on:change={(e) => {
           if (e.detail.value) {
-            run('enable')
+            extension.enable()
           } else {
-            run('disable')
+            extension.disable()
           }
         }}
         label="Enabled"

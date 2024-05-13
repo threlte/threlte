@@ -16,7 +16,7 @@
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
 
-  const { state, run } = createExtension<ObjectSelectionState, ObjectSelectionActions>({
+  const extension = createExtension<ObjectSelectionState, ObjectSelectionActions>({
     scope: objectSelectionScope,
     state: ({ persist }) => ({
       selectedObjects: [],
@@ -90,9 +90,9 @@
   })
 </script>
 
-{#if state.mode === 'tweak'}
+{#if extension.state.mode === 'tweak'}
   <SelectTweak />
-{:else if state.mode === 'rect'}
+{:else if extension.state.mode === 'rect'}
   <SelectRect />
 {/if}
 
@@ -103,9 +103,9 @@
     <ToolbarButton
       label="Select Tweak"
       on:click={() => {
-        run('setMode', 'tweak')
+        extension.setMode('tweak')
       }}
-      active={state.mode === 'tweak'}
+      active={extension.state.mode === 'tweak'}
       icon="mdiCursorPointer"
       tooltip="Tweak Selection (A)"
     />
@@ -113,9 +113,9 @@
     <ToolbarButton
       label="Select Box"
       on:click={() => {
-        run('setMode', 'rect')
+        extension.setMode('rect')
       }}
-      active={state.mode === 'rect'}
+      active={extension.state.mode === 'rect'}
       icon="mdiSelect"
       tooltip="Box Selection (A)"
     />

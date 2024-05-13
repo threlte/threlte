@@ -35,7 +35,7 @@
   const group = studioObjectRef<Group>()
 
   onDestroy(() => {
-    transformControlsExtension.run('setInUse', false)
+    transformControlsExtension.setInUse(false)
   })
 
   const { commit, buildTransaction } = useTransactions()
@@ -104,11 +104,11 @@
   rotationSnap={snapping.enabled ? (snapping.rotate ?? 0) * DEG2RAD : null}
   scaleSnap={snapping.enabled ? snapping.scale ?? 0 : null}
   on:mouseDown={() => {
-    transformControlsExtension.run('setInUse', true)
+    transformControlsExtension.setInUse(true)
     onMouseDown()
   }}
   on:mouseUp={() => {
-    transformControlsExtension.run('setInUse', false)
+    transformControlsExtension.setInUse(false)
     onMouseUp()
   }}
   bind:controls={controls.ref}

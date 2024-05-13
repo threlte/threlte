@@ -7,11 +7,11 @@ export const useSpace = () => {
   const extension = useExtension<SpaceState, SpaceActions>(spaceScope)
 
   const setSpace = (space: SpaceState['space']) => {
-    extension.run('setSpace', space)
+    extension.setSpace(space)
   }
 
   const toggleSpace = () => {
-    extension.run('toggleSpace')
+    extension.toggleSpace()
   }
 
   return {

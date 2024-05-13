@@ -17,11 +17,11 @@ export const useStudioObjectsRegistry = () => {
   )
 
   const addObject = (object: Object3D) => {
-    extension.run('addObject', object)
+    extension.addObject(object)
   }
 
   const removeObject = (object: Object3D) => {
-    extension.run('removeObject', object)
+    extension.removeObject(object)
   }
 
   const objects = $derived(extension.state.objects ?? new Set<Object3D>())

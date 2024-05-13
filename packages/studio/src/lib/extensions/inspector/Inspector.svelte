@@ -60,9 +60,7 @@
   <ToolbarButton
     label="Inspector"
     icon="mdiPencil"
-    on:click={() => {
-      ext.run('toggleEnabled')
-    }}
+    on:click={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>

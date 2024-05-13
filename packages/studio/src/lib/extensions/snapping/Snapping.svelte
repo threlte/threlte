@@ -9,7 +9,7 @@
 
   const { createExtension } = useStudio()
 
-  const { state, run } = createExtension<SnappingState, SnappingActions>({
+  const extension = createExtension<SnappingState, SnappingActions>({
     scope: snappingScope,
     state({ persist }) {
       return {
@@ -47,38 +47,36 @@
 <ToolbarItem>
   <HorizontalButtonGroup>
     <ToolbarButton
-      active={state.enabled}
+      active={extension.state.enabled}
       icon="mdiMagnet"
       label="Snapping"
       tooltip="Snapping (M)"
-      on:click={() => {
-        run('toggleEnabled')
-      }}
+      on:click={extension.toggleEnabled}
     />
     <DropDownPane title="Snapping Settings">
       <Slider
         label="Move"
         min={0}
-        value={state.translate}
+        value={extension.state.translate}
         on:change={(e) => {
-          run('setTranslate', e.detail.value)
+          extension.setTranslate(e.detail.value)
         }}
       />
       <Slider
         label="Rotate"
         min={0}
-        value={state.rotate}
+        value={extension.state.rotate}
         format={(v) => `${v}°`}
         on:change={(e) => {
-          run('setRotate', e.detail.value)
+          extension.setRotate(e.detail.value)
         }}
       />
       <Slider
         label="Scale"
         min={0}
-        value={state.scale}
+        value={extension.state.scale}
         on:change={(e) => {
-          run('setScale', e.detail.value)
+          extension.setScale(e.detail.value)
         }}
       />
     </DropDownPane>

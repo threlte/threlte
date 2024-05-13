@@ -86,6 +86,6 @@
     "camera-controls": "^2.8.3",
     "flexible-tree": "^0.1.6",
     "svelte-tweakpane-ui": "^1.2.3",
-    "tweakpane": "^3.1.0"
+    "tweakpane": "4.0.3"
   }
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     BackSide,
@@ -28,7 +28,7 @@
   const { createExtension } = useStudio()
   const { scene, invalidate, renderer } = useThrelte()
 
-  const { state, run } = createExtension<RenderModesState, RenderModesActions>({
+  const extension = createExtension<RenderModesState, RenderModesActions>({
     scope: renderModesScope,
     state: ({ persist }) => ({
       renderMode: persist<RenderModesState['renderMode']>('rendered')
@@ -85,7 +85,7 @@
   })
 
   $effect(() => {
-    switch (state.renderMode) {
+    switch (extension.state.renderMode) {
       case 'rendered': {
         scene.overrideMaterial = null
         break
@@ -115,27 +115,27 @@
       label="Wireframe"
       icon="mdiWeb"
       on:click={() => {
-        run('setRenderMode', 'wireframe')
+        extension.setRenderMode('wireframe')
       }}
-      active={state.renderMode === 'wireframe'}
+      active={extension.state.renderMode === 'wireframe'}
       tooltip="Wireframe (V)"
     />
     <ToolbarButton
       label="Solid"
       icon="mdiCircle"
       on:click={() => {
-        run('setRenderMode', 'solid')
+        extension.setRenderMode('solid')
       }}
-      active={state.renderMode === 'solid'}
+      active={extension.state.renderMode === 'solid'}
       tooltip="Solid (V)"
     />
     <ToolbarButton
       label="Rendered"
       icon="mdiCircleOpacity"
       on:click={() => {
-        run('setRenderMode', 'rendered')
+        extension.setRenderMode('rendered')
       }}
-      active={state.renderMode === 'rendered'}
+      active={extension.state.renderMode === 'rendered'}
       tooltip="Rendered (V)"
     />
   </HorizontalButtonGroup>

@@ -37,7 +37,7 @@
 
   const objectSelection = useObjectSelection()
 
-  const { state, run } = createExtension<EditorCameraState, EditorCameraActions>({
+  const extension = createExtension<EditorCameraState, EditorCameraActions>({
     scope: editorCameraScope,
     state({ persist }) {
       return {
@@ -112,19 +112,19 @@
     }
   })
 
-  const editorCameraPosition = $derived(state.position)
-  const editorCameraTarget = $derived(state.target)
-  const defaultCameraEnabled = $derived(state.defaultCamera.enabled)
-  const editorCameraEnabled = $derived(state.enabled)
-  const mode = $derived(state.mode)
+  const editorCameraPosition = $derived(extension.state.position)
+  const editorCameraTarget = $derived(extension.state.target)
+  const defaultCameraEnabled = $derived(extension.state.defaultCamera.enabled)
+  const editorCameraEnabled = $derived(extension.state.enabled)
+  const mode = $derived(extension.state.mode)
   const editorCamera = $derived(
     mode === 'Orthographic' ? editorCameraOrthographic : editorCameraPerspective
   )
-  const defaultCameraObject = $derived(state.defaultCamera.object)
+  const defaultCameraObject = $derived(extension.state.defaultCamera.object)
 
   watch(camera, (camera) => {
     if (camera !== editorCameraPerspective && camera !== editorCameraOrthographic) {
-      run('setDefaultCameraObject', camera)
+      extension.setDefaultCameraObject(camera)
     }
   })
 
@@ -145,17 +145,15 @@
   let modes = ['Perspective', 'Orthographic']
 
   const onModeChange = (mode: string | number | boolean) => {
-    if (mode === 'Perspective') run('setPerspective')
-    if (mode === 'Orthographic') run('setOrthographic')
+    if (mode === 'Perspective') extension.setPerspective()
+    if (mode === 'Orthographic') extension.setOrthographic()
   }
 </script>
 
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={() => {
-        run('toggleEnabled')
-      }}
+      on:click={extension.toggleEnabled}
       active={editorCameraEnabled}
       label="Editor Camera"
       icon="mdiCamera"
@@ -163,9 +161,7 @@
     />
 
     <ToolbarButton
-      on:click={() => {
-        run('focusSelectedObjects')
-      }}
+      on:click={extension.focusSelectedObjects}
       label="Focus Selected"
       icon="mdiImageFilterCenterFocusStrongOutline"
       tooltip="Focus Selected (Shift+F)"
@@ -183,7 +179,7 @@
         value={defaultCameraEnabled}
         label="Default Camera"
         on:change={(e) => {
-          run('setDefaultCameraEnabled', e.detail.value)
+          extension.setDefaultCameraEnabled(e.detail.value)
         }}
       />
     </DropDownPane>
@@ -198,7 +194,7 @@
         initialPosition={new Vector3(...editorCameraPosition)}
         initialTarget={new Vector3(...editorCameraTarget)}
         rest={(payload) => {
-          run('setEditorCameraTransform', payload.position.toArray(), payload.target.toArray())
+          extension.setEditorCameraTransform(payload.position.toArray(), payload.target.toArray())
         }}
         cc={(cc) => {
           cameraControls = cc
@@ -215,7 +211,7 @@
         initialPosition={new Vector3(...editorCameraPosition)}
         initialTarget={new Vector3(...editorCameraTarget)}
         rest={(payload) => {
-          run('setEditorCameraTransform', payload.position.toArray(), payload.target.toArray())
+          extension.setEditorCameraTransform(payload.position.toArray(), payload.target.toArray())
         }}
         cc={(cc) => {
           cameraControls = cc

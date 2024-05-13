@@ -7,13 +7,13 @@
   import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import Changes from './Changes.svelte'
   import { TransactionQueue } from './TransactionQueue/TransactionQueue.svelte'
   import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
-  import type { StudioProps } from './vite-plugin/types'
   import { clientRpc } from './vite-plugin/clientRpc'
   import { getThrelteStudioUserData } from './vite-plugin/runtimeUtils'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
+  import type { StudioProps } from './vite-plugin/types'
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
@@ -62,7 +62,7 @@
 
   const objectSelection = useObjectSelection()
 
-  const { run, state } = createExtension<TransactionsState, TransactionsActions>({
+  const extension = createExtension<TransactionsState, TransactionsActions>({
     scope: transactionsScope,
     state: ({ persist }) => {
       return {
@@ -115,7 +115,7 @@
       openSelectedInEditor() {
         const objects = objectSelection.selectedObjects
         if (objects.length !== 1) return
-        run('openInEditor', objects[0])
+        extension.openInEditor(objects[0])
       }
     },
     keyMap({ meta, shift }) {
@@ -129,16 +129,20 @@
   })
 
   $effect(() => {
-    if (state.enabled && state.mode === 'auto' && state.queue.syncQueue.length) {
-      run('sync')
+    if (
+      extension.state.enabled &&
+      extension.state.mode === 'auto' &&
+      extension.state.queue.syncQueue.length
+    ) {
+      extension.sync()
     }
   })
 
   const tooltip = $derived.by(() => {
-    if (!state.enabled) return 'Sync disabled'
-    if (state.mode === 'manual') {
-      if (!state.queue.syncQueue.length) return 'Up-to-date'
-      return `Sync ${state.queue.syncQueue.length} change${state.queue.syncQueue.length > 1 ? 's' : ''}`
+    if (!extension.state.enabled) return 'Sync disabled'
+    if (extension.state.mode === 'manual') {
+      if (!extension.state.queue.syncQueue.length) return 'Up-to-date'
+      return `Sync ${extension.state.queue.syncQueue.length} change${extension.state.queue.syncQueue.length > 1 ? 's' : ''}`
     }
     return 'Auto-sync'
   })
@@ -147,25 +151,25 @@
 <ToolbarItem position="right">
   <HorizontalButtonGroup>
     <ToolbarButton
-      success={state.enabled && state.mode === 'auto'}
-      warn={state.enabled && state.mode === 'manual' && state.queue.syncQueue.length > 0}
-      disabled={!state.enabled || state.mode === 'auto'}
-      icon={state.mode === 'auto' && state.queue.syncQueue.length > 0
+      success={extension.state.enabled && extension.state.mode === 'auto'}
+      warn={extension.state.enabled &&
+        extension.state.mode === 'manual' &&
+        extension.state.queue.syncQueue.length > 0}
+      disabled={!extension.state.enabled || extension.state.mode === 'auto'}
+      icon={extension.state.mode === 'auto' && extension.state.queue.syncQueue.length > 0
         ? 'mdiLoading'
         : 'mdiContentSave'}
       label="Sync"
       {tooltip}
-      on:click={() => {
-        run('sync')
-      }}
+      on:click={extension.sync}
     />
 
     <DropDownPane title="Sync Settings">
       <Checkbox
         label="Enabled"
-        value={state.enabled}
+        value={extension.state.enabled}
         on:change={(e) => {
-          run('setEnabled', e.detail.value)
+          extension.setEnabled(e.detail.value)
         }}
       />
       <RadioGrid
@@ -173,9 +177,9 @@
         columns={2}
         values={['manual', 'auto']}
         on:change={(e) => {
-					run('setMode', e.detail.value as 'manual' | 'auto')
+					extension.setMode(e.detail.value as 'manual' | 'auto')
 				}}
-        value={state.mode}
+        value={extension.state.mode}
       />
 
       <Element>
@@ -190,20 +194,16 @@
     <ToolbarButton
       icon="mdiUndo"
       label="Undo"
-      disabled={!state.queue.canUndo}
+      disabled={!extension.state.queue.canUndo}
       tooltip="Undo (Cmd+Z)"
-      on:click={() => {
-        run('undo')
-      }}
+      on:click={extension.undo}
     />
     <ToolbarButton
       icon="mdiRedo"
       label="Redo"
-      disabled={!state.queue.canRedo}
+      disabled={!extension.state.queue.canRedo}
       tooltip="Redo (Shift+Cmd+Z)"
-      on:click={() => {
-        run('redo')
-      }}
+      on:click={extension.redo}
     />
   </HorizontalButtonGroup>
 </ToolbarItem>

@@ -7,23 +7,24 @@ export const useSnapping = () => {
   const extension = useExtension<SnappingState, SnappingActions>(snappingScope)
 
   const setEnabled = (enabled: boolean) => {
-    extension.run('setEnabled', enabled)
+    extension.setEnabled(enabled)
   }
 
   const toggleEnabled = () => {
-    extension.run('toggleEnabled')
+    extension.toggleEnabled()
   }
 
   const setTranslate = (translate: number) => {
-    extension.run('setTranslate', translate)
+    extension.setTranslate(translate)
   }
 
   const setRotate = (rotate: number) => {
-    extension.run('setRotate', rotate)
+    extension.setRotate(rotate)
+    extension.setRotate(rotate)
   }
 
   const setScale = (scale: number) => {
-    extension.run('setScale', scale)
+    extension.setScale(scale)
   }
 
   return {

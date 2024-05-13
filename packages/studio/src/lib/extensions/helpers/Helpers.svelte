@@ -86,9 +86,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={() => {
-        ext.run('toggleEnabled')
-      }}
+      on:click={ext.toggleEnabled}
       active={ext.state.enabled}
       label="Helpers"
       icon="mdiFitToScreen"

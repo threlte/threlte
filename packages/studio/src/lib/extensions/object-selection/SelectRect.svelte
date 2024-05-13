@@ -20,7 +20,9 @@
   const { addToSelection, removeFromSelection, selectObjects } = useObjectSelection()
   const transformControls = useTransformControls()
 
-  const { run } = useExtension<ObjectSelectionState, ObjectSelectionActions>(objectSelectionScope)
+  const { setInUse } = useExtension<ObjectSelectionState, ObjectSelectionActions>(
+    objectSelectionScope
+  )
 
   let selectionBox = new SelectionBox(camera.current, scene)
   let selectionHelper = new SelectionHelper(renderer, 'selectBox')
@@ -46,7 +48,7 @@
       // if transform controls are in use, we don't want to select objects and
       // cancel the selection.
       selectionHelper.isDown = false
-      run('setInUse', false)
+      setInUse(false)
       return
     }
     if (event.shiftKey) {
@@ -63,7 +65,7 @@
       -(event.clientY / window.innerHeight) * 2 + 1,
       0.5
     )
-    run('setInUse', true)
+    setInUse(true)
     lastEvent = event
   }
 
@@ -72,7 +74,7 @@
       // if transform controls are in use, we don't want to select objects and
       // cancel the selection.
       selectionHelper.isDown = false
-      run('setInUse', false)
+      setInUse(false)
       return
     }
     if (!selectionHelper.isDown) return
@@ -97,7 +99,7 @@
       // if transform controls are in use, we don't want to select objects and
       // cancel the selection.
       selectionHelper.isDown = false
-      run('setInUse', false)
+      setInUse(false)
       return
     }
     if (!selectionHelper.isDown) return
@@ -114,7 +116,7 @@
     } else {
       selectObjects(allSelected)
     }
-    run('setInUse', false)
+    setInUse(false)
   }
 
   onMount(() => {

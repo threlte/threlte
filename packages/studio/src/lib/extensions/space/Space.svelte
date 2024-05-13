@@ -7,7 +7,7 @@
 
   const { createExtension } = useStudio()
 
-  const { state, run } = createExtension<SpaceState, SpaceActions>({
+  const extension = createExtension<SpaceState, SpaceActions>({
     scope: spaceScope,
     state({ persist }) {
       return {
@@ -33,21 +33,21 @@
 <ToolbarItem>
   <HorizontalButtonGroup>
     <ToolbarButton
-      active={state.space === 'local'}
+      active={extension.state.space === 'local'}
       icon="mdiAxisArrow"
       label="Local"
       tooltip="Local (W)"
       on:click={() => {
-        run('setSpace', 'local')
+        extension.setSpace('local')
       }}
     />
     <ToolbarButton
-      active={state.space === 'world'}
+      active={extension.state.space === 'world'}
       icon="mdiEarth"
       label="World"
       tooltip="World (W)"
       on:click={() => {
-        run('setSpace', 'world')
+        extension.setSpace('world')
       }}
     />
   </HorizontalButtonGroup>

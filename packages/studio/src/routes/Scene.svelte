@@ -37,7 +37,7 @@
 
 <T.Mesh
   name="Torus"
-  position={[1.2, 0.8556, 0.75]}
+  position={[1.2,3.0923,0.75]}
   castShadow
 >
   <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />

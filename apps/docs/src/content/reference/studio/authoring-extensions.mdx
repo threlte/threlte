@@ -6,6 +6,19 @@ name: 'Authoring Extensions'
 
 ## Extension Directory Structure
 
+_All_ Studio functionality is provided by Studio Extensions. To make the Studio
+suit your workflow, you may add your own Studio Extensions which may add toolbar
+items, panes, have access to the scene and may access the state of other
+extensions and run their actions.
+
+<Tip type="warning">
+  While it's technically possible to access and extend the Studio from anywhere within your app,
+  it's highly recommended to follow this pattern to easily remove the Studio **including all
+  extensions** from your app in production.
+</Tip>
+
+## Basic Example
+
 ```plaintext
 extensions/
   my-extension/
@@ -13,6 +26,8 @@ extensions/
     MyExtension.svelte
     useMyExtension.svelte.ts
 ```
+
+This file provides type definitions for the extension state and actions.
 
 ```ts title="types.ts"
 export const extensionScope = 'my-extension'
@@ -29,6 +44,10 @@ export type ExtensionActions = {
 }
 ```
 
+This file implements the extension.
+
+<Tip type="warning">Extensions must include a slot element to render the scene.</Tip>
+
 ```svelte title="MyExtension.svelte"
 <script lang="ts">
   import { useStudio } from '@threlte/studio'
@@ -36,7 +55,7 @@ export type ExtensionActions = {
 
   const { createExtension } = useStudio()
 
-  const { state, run } = createExtension<ExtensionState, ExtensionActions>({
+  createExtension<ExtensionState, ExtensionActions>({
     scope: extensionScope,
     state({ persist }) {
       return {
@@ -67,37 +86,40 @@ export type ExtensionActions = {
 <slot />
 ```
 
+This file exposes a hook to interact with the extension. It should be the only
+way to interact with the extension.
+
 ```ts title="useMyExtension.ts"
 import { useStudio } from '@threlte/studio'
 import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
 
-export const useSnapping = () => {
+export const useMyExtension = () => {
   const { useExtension } = useStudio()
 
   const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
 
   const setEnabled = (enabled: boolean) => {
-    extension.run('setEnabled', enabled)
+    extension.setEnabled(enabled)
   }
 
   const toggleEnabled = () => {
-    extension.run('toggleEnabled')
+    extension.toggleEnabled()
   }
 
   const incrementCount = () => {
-    extension.run('incrementCount')
+    extension.incrementCount()
   }
 
   return {
-    setEnabled,
-    toggleEnabled,
-    incrementCount,
     get enabled() {
       return extension.state.enabled
     },
     get count() {
       return extension.state.count
-    }
+    },
+    setEnabled,
+    toggleEnabled,
+    incrementCount
   }
 }
 ```
