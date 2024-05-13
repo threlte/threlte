@@ -1,5 +1,5 @@
 <script>
-  import { T, useRender, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Spaceship from './models/spaceship.svelte'
   import { Color, Mesh, PMREMGenerator, PlaneGeometry, Raycaster, Vector2, Vector3 } from 'three'
@@ -34,9 +34,9 @@
     composer.addPass(outputPass)
   }
 
-  // takes control of the render loop, unlike useFrame
-  // https://threlte.xyz/docs/reference/core/use-render
-  useRender(({ scene }) => {
+  // Replaces the default render task, which does not execute because autoRender=false
+  // https://threlte.xyz/docs/learn/basics/render-modes#render-modes-and-custom-rendering
+  useTask(({ scene }) => {
     if (intersectionPoint) {
       const targetY = intersectionPoint?.y || 0
       translAccelleration += (targetY - translY) * 0.002 // stiffness

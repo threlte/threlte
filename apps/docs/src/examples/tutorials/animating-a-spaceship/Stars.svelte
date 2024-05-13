@@ -1,5 +1,5 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Instance, InstancedMesh, useTexture } from '@threlte/extras'
   import { Color, DoubleSide, Vector3 } from 'three'
 
@@ -43,7 +43,7 @@
     stars.push(resetStar(star))
   }
 
-  useFrame((_, delta) => {
+  useTask((delta) => {
     stars.forEach((star) => {
       star.pos.x += star.speed * delta
       if (star.pos.x > 40) resetStar(star)
