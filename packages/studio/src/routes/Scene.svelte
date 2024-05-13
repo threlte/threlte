@@ -28,7 +28,7 @@
 <T.Mesh
   name="Box"
   scale={[1.5, 1.5, 1.5]}
-  position={[-1.3577,4.9714,-1.6]}
+  position={[0, 0.75, -1.6]}
   castShadow
 >
   <T.BoxGeometry />
@@ -37,7 +37,7 @@
 
 <T.Mesh
   name="Torus"
-  position={[1.2,3.4947,0.75]}
+  position={[1.2, 0.8556, 0.75]}
   castShadow
 >
   <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
@@ -49,7 +49,7 @@
 
 <T.Mesh
   name="Icosahedron"
-  position={[-0.4581,2.4538,0.75]}
+  position={[-1.4, 0.8494, 0.75]}
   castShadow
   visible
 >
