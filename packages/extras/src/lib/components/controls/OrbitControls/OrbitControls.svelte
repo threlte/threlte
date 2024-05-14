@@ -27,7 +27,7 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  const controls = new ThreeOrbitControls($parent, renderer.domElement)
+  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement)
 
   const { start, stop } = useTask(controls.update, {
     autoStart: false,

@@ -84,6 +84,23 @@
     if (wrapperClass) element.className = wrapperClass
   })
 
+  let oldZIndex = ''
+
+  $effect.pre(() => {
+    const canvas = renderer.domElement
+
+    if (occlude && occlude === 'blending') {
+      oldZIndex = canvas.style.zIndex
+      canvas.style.zIndex = `${Math.floor(zIndexRange[0] / 2)}`
+      canvas.style.position = 'absolute'
+      canvas.style.pointerEvents = 'none'
+    } else {
+      canvas.style.zIndex = oldZIndex
+      canvas.style.removeProperty('position')
+      canvas.style.pointerEvents = null!
+    }
+  })
+
   useTask(() => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
@@ -222,7 +239,7 @@
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement
+    const target = portal ?? renderer.domElement.parentElement?.parentElement
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return
@@ -253,13 +270,16 @@
 
       {#if material}
         <T is={material} />
+      {:else if !transform}
+        <T.ShaderMaterial
+          side={DoubleSide}
+          {vertexShader}
+          fragmentShader={`void main(){ gl_FragColor=vec4(0.0, 0.0, 0.0, 0.0); }`}
+        />
       {:else}
         <T.ShaderMaterial
           side={DoubleSide}
-          vertexShader={transform
-            ? `void main(){gl_Position=projectionMatrix*modelViewMatrix*vec4(0.,0.,0.,1.);}`
-            : vertexShader}
-          fragmentShader={`void main(){gl_FragColor=vec4(0.,0.,0.,0.);}`}
+          fragmentShader={`void main(){ gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0); }`}
         />
       {/if}
     </T>

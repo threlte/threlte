@@ -4,6 +4,7 @@
   import { derived } from 'svelte/store'
   import { type Mesh, MathUtils } from 'three'
   import Geometries from './Geometries.svelte'
+  import { RoundedPlaneGeometry } from './RoundedPlaneGeometry'
 
   const gltf = useGltf<{
     nodes: {
@@ -56,8 +57,12 @@
     position.x={1.2}
     transform
     occlude="blending"
+    geometry={new RoundedPlaneGeometry(10.5, 21.3, 1.6)}
   >
-    <div class="phone-wrapper">
+    <div
+      class="phone-wrapper"
+      style="border-radius:1rem"
+    >
       <iframe
         title=""
         src={url}
