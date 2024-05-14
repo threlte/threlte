@@ -150,7 +150,8 @@
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Powerful Integrations</h3>
                   <p class="text-sm text-white/60">
-                    Threlte comes with integrations for physics, animation and 3D model loading.
+                    Threlte comes with solutions for physics, XR, animation, model loading, and
+                    countless helpers to make creating immersive 3D apps for the web a breeze.
                   </p>
                 </FadeOut>
               </Reveal>
@@ -197,7 +198,7 @@
             end: 4
           }}
         >
-          Threlte 7
+          Threlte 8
         </TextEffect>
       </h2>
     </Trigger>
