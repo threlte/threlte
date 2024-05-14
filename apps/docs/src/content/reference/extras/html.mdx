@@ -16,7 +16,12 @@ componentSignature:
             size: { width: number; height: number }
             ) => [number, number]', required: false },
         { name: 'eps', type: 'number', default: '0.001', required: false },
-        { name: 'occlude', type: 'boolean | THREE.Object3D[] | 'blending', default: 'false', required: false },
+        {
+          name: 'occlude',
+          type: "boolean | THREE.Object3D[] | 'blending'",
+          default: 'false',
+          required: false
+        },
         {
           name: 'zIndexRange',
           type: '[number, number]',
