@@ -37,7 +37,6 @@
     sprite = false,
     transform = false,
     occlude = false,
-    onOcclude,
     castShadow,
     receiveShadow,
     material,
@@ -117,8 +116,11 @@
       }
 
       if (previouslyVisible !== visible) {
-        if (onOcclude) onOcclude(!visible)
-        else element.style.display = visible ? 'block' : 'none'
+        if (props.$$events.visibilitychange) {
+          props.$$events.visibilitychange(visible)
+        } else {
+          element.style.display = visible ? 'block' : 'none'
+        }
       }
 
       const halfRange = Math.floor(zIndexRange[0] / 2)

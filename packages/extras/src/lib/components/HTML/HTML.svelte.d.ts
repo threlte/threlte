@@ -34,7 +34,6 @@ export type HTMLProps = Props<Group> & {
   // https://www.youtube.com/watch?v=ScZcUEDGjJI
   // as well as Joe Pea in CodePen: https://codepen.io/trusktr/pen/RjzKJx
   occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
-  onOcclude?: (hidden: boolean) => void
   castShadow?: boolean // Cast shadow for occlusion plane
   receiveShadow?: boolean // Receive shadow for occlusion plane
 }
