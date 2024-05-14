@@ -68,7 +68,10 @@
 
   const attachGroup = new Group()
 
-  let transformControls = $derived(new TransformControls($camera, renderer.domElement))
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  let transformControls = $derived(
+    new TransformControls($camera, renderer.domElement.parentElement!)
+  )
 
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)

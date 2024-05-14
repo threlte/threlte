@@ -1,5 +1,4 @@
 // From: https://discourse.threejs.org/t/roundedrectangle-squircle/28645/20
-import { T } from '@threlte/core'
 import { BufferGeometry, BufferAttribute } from 'three'
 
 export class RoundedPlaneGeometry extends BufferGeometry {

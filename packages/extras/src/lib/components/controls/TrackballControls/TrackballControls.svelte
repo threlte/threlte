@@ -27,7 +27,8 @@
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
-  const controls = new ThreeTrackballControls($parent, renderer.domElement)
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
 
   useTask(controls.update, {
     autoInvalidate: false

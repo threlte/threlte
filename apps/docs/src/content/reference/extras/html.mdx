@@ -16,7 +16,7 @@ componentSignature:
             size: { width: number; height: number }
             ) => [number, number]', required: false },
         { name: 'eps', type: 'number', default: '0.001', required: false },
-        { name: 'occlude', type: 'boolean | Object3D[]', default: 'false', required: false },
+        { name: 'occlude', type: 'boolean | ', default: 'false', required: false },
         {
           name: 'zIndexRange',
           type: '[number, number]',
@@ -34,7 +34,11 @@ componentSignature:
         { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
         { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
         { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false }
+        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
+        { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
+        { name: 'recieveShadow', type: 'boolean', default: 'undefined', required: false },
+        { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
+        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false }
       ]
   }
 ---
@@ -91,6 +95,14 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
   <h1>Hello World</h1>
 </HTML>
 ```
+
+Setting `occlude` to `"blending"` will allow objects to partially occlude the `<HTML>` component.
+
+<Tip type="warning">
+This occlusion mode requires the `<canvas>` element to have `pointer-events` set to `none`. 
+Therefore, any events like those in `OrbitControls` must be set on the canvas parent. Extras components
+like `<OrbitControls>` do this automatically.
+</Tip>
 
 <Example path="extras/html/phone" />
 
