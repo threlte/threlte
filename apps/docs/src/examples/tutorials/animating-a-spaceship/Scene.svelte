@@ -36,7 +36,7 @@
 
   // Replaces the default render task, which does not execute because autoRender=false
   // https://threlte.xyz/docs/learn/basics/render-modes#render-modes-and-custom-rendering
-  useTask(({ scene }) => {
+  useTask(() => {
     if (intersectionPoint) {
       const targetY = intersectionPoint?.y || 0
       translAccelleration += (targetY - translY) * 0.002 // stiffness
