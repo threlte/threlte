@@ -21,12 +21,6 @@
   const url = window.origin
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-  isBackground
-/>
-
 <T.PerspectiveCamera
   position={[50, -30, 30]}
   fov={20}
