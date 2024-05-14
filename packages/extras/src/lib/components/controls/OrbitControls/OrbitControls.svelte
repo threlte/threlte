@@ -27,7 +27,8 @@
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement)
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
 
   const { start, stop } = useTask(controls.update, {
     autoStart: false,
