@@ -22,6 +22,7 @@
     $env.mapping = EquirectangularReflectionMapping
     $env.colorSpace = SRGBColorSpace
     scene.environment = $env
+    scene.environmentIntensity = 10
   }
 </script>
 
