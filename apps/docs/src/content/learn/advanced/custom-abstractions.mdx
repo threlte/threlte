@@ -150,7 +150,7 @@ Addtionally, let's create a bindable `ref` and pass it to any child components:
   </T.Mesh>
 
   <!-- 2x2 Floor -->
-  <T.Mesh rotation.x={-90 * DEG2RAD}>
+  <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[2, 2]} />
     <T.MeshStandardMaterial />
   </T.Mesh>
