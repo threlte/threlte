@@ -475,7 +475,7 @@ function parse(fileName, gltf, options = {}) {
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
         import { ${[
           'T',
-          options.types && !options.isolated ? 'type Props' : '',
+          options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
@@ -529,6 +529,13 @@ ${
 
     <script${options.types ? ' lang="ts"' : ''}>
 				${!options.preload ? imports : ''}
+
+        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
+        ${
+          options.types && !options.isolated
+            ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
+            : ''
+        }
 
         let {
           ref = $bindable(),
