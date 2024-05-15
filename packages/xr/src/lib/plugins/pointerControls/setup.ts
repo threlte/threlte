@@ -164,12 +164,7 @@ export const setupPointerControls = (
         // Move event ...
         handContext.pointer.update((value) => value.copy(intersectionEvent.point))
 
-        if (
-          events.pointerover ||
-          events.pointerenter ||
-          events.pointerout ||
-          events.pointerleave
-        ) {
+        if (events.pointerover || events.pointerenter || events.pointerout || events.pointerleave) {
           const id = getIntersectionId(intersectionEvent)
           const hoveredItem = handContext.hovered.get(id)
           if (hoveredItem === undefined) {

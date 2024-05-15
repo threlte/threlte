@@ -51,7 +51,7 @@ const id = Astro.props.idOverride ?? 'component-signature';
 
 		{
 			Astro.props.signature.extends && (
-				<p class={c("text-faded", !hasAnySignature && '!mb-0')}>
+				<p class:list={["text-faded", !hasAnySignature && '!mb-0']}>
 					<code>{Astro.props.componentName}</code> extends
 					<!-- prettier-ignore -->
 					<code>{'<'}<a class="!text-white" href="/docs/reference/core/t">{'T'}</a>.<a class="!text-white" target="_blank" rel="noopener noreferrer" href={Astro.props.signature.extends.url}>{Astro.props.signature.extends.type}</a>{'>'}</code>
@@ -62,7 +62,7 @@ const id = Astro.props.idOverride ?? 'component-signature';
 
 		{
 			Astro.props.signature.pretext && (
-				<p class={c("text-faded", !hasAnySignature && '!mb-0')} set:html={Astro.props.signature.pretext}>
+				<p class:list={["text-faded", !hasAnySignature && '!mb-0']} set:html={Astro.props.signature.pretext}>
 				</p>
 			)
 		}
@@ -234,9 +234,7 @@ const id = Astro.props.idOverride ?? 'component-signature';
 							<h3 class="mt-0">Bindings</h3>
 
 							<div
-								class={c(
-									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent grid-cols-[auto_auto]',
-								)}
+								class='grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent grid-cols-[auto_auto]'
 							>
 								<div class="font-bold">name</div>
 

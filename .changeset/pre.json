@@ -13,6 +13,7 @@
     "@threlte/xr": "0.1.3"
   },
   "changesets": [
+    "fair-moons-rule",
     "lucky-news-sleep",
     "many-tips-glow",
     "mighty-singers-glow",
