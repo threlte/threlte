@@ -10,7 +10,7 @@ Title: duck floaty
 <script lang="ts">
   import type * as THREE from 'three'
   import { Group } from 'three'
-  import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
+  import { T, type Props, type Events, type Slots } from '@threlte/core'
   import { useGltf, InstancedMeshes } from '@threlte/extras'
 
   type $$Props = Props<THREE.Group>
@@ -48,7 +48,7 @@ Title: duck floaty
       meshes={gltf.nodes}
       let:components={{ Object_4, Object_6 }}
     >
-      {#each { length: 200 } as _, i}
+      {#each { length: 200 } as _}
         {@const posX = Math.random() * duckSpread - duckSpread / 2}
         {@const posZ = Math.random() * duckSpread - 300}
         <T.Group
