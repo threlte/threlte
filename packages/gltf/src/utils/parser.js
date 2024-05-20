@@ -488,7 +488,7 @@ function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions.draco ? `, { draco: useDraco() }` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { draco: useDraco(${typeof useGltfOptions.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 
