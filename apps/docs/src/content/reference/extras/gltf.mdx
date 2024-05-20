@@ -10,9 +10,9 @@ componentSignature:
     props:
       [
         { name: url, type: 'string', required: true },
-        { name: 'useDraco', type: 'string | boolean', required: false },
-        { name: 'useMeshopt', type: 'boolean', required: false },
-        { name: 'ktxTranscoderPath', type: 'string', required: false }
+        { name: 'draco', type: 'DRACOLoader', required: false },
+        { name: 'meshopt', type: 'MeshoptDecoder', required: false },
+        { name: 'ktx', type: 'KTX2Loader', required: false }
       ],
     events:
       [
@@ -42,8 +42,20 @@ componentSignature:
   }
 ---
 
-To use DRACO compression, provide a path to the DRACO decoder.
-To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
+To use DRACO compression, provide an instance of a `DRACOLoader`.
+To use KTX2 compressed textures, provide an instance of a `KTX2Loader`.
+
+```svelte
+<script>
+  import { GLTF, useDraco, useKtx } from '@threlte/extras'
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  draco={useDraco()}
+  ktx={useKtx()}
+/>
+```
 
 Change the property `url` to load new 3D content. The new content will be swapped as soon as loading is finished.
 
