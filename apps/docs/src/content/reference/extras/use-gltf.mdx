@@ -47,23 +47,25 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 
 ### DRACO decoding
 
-Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO binaries.
+Use the `useDraco` hook for compressed glTF files, defaults to CDN loaded DRACO binaries.
 
 ```ts
-import { useGltf } from '@threlte/extras'
+import { useGltf, useDraco } from '@threlte/extras'
 
+const draco = useDraco()
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: true
+  draco
 })
 ```
 
 You can set a custom path to DRACO decoder binaries.
 
 ```ts
-import { useGltf } from '@threlte/extras'
+import { useGltf, useDraco } from '@threlte/extras'
 
+const draco = useDraco('/custom/draco/decoders/path')
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: '/custom/draco/decoders/path'
+  draco
 })
 ```
 
@@ -73,21 +75,40 @@ You can also provide your own instance of `DRACOLoader`
 import { useGltf } from '@threlte/extras'
 
 const myLoader = new DRACOLoader().setDecoderPath(path)
-
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: myLoader
+  draco: myLoader
 })
 ```
 
 ### Meshopt decoding
 
-Use a meshopt decoder for compressed glTF files, defaults to Three's included decoder.
+Use the `useMeshopt` hook for compressed glTF files, defaults to Three's included decoder.
+
+You can also provide your own instance of MeshoptDecoder.
 
 ```ts
-import { useGltf } from '@threlte/extras'
+import { useGltf, useMeshopt } from '@threlte/extras'
 
+const meshopt = useMeshopt()
 const gltf = useGltf('/path/to/model.glb', {
-  useMeshopt: true
+  meshopt
+})
+```
+
+### KTX2Loader
+
+Use the `useKtx` hook for [KTX 2 texture support](https://threejs.org/docs/#examples/en/loaders/KTX2Loader).
+
+This hook requires a `transcoder` path.
+
+You can also provide your own instance of KTX2Loader.
+
+```ts
+import { useGltf, useKtx } from '@threlte/extras'
+
+const ktx = useKtx('three/examples/jsm/libs/basis/')
+const gltf = useGltf('/path/to/model.glb', {
+  ktx
 })
 ```
 

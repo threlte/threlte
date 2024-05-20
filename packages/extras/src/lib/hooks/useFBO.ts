@@ -1,14 +1,21 @@
 /* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
 import { useThrelte } from '@threlte/core'
 import { onDestroy, onMount } from 'svelte'
-import * as THREE from 'three'
+import {
+  type RenderTargetOptions,
+  WebGLRenderTarget,
+  LinearFilter,
+  HalfFloatType,
+  DepthTexture,
+  FloatType
+} from 'three'
 
-type UseFBOOptions = {
+interface UseFBOOptions extends RenderTargetOptions {
   /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
   samples?: number
   /** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
   depth?: boolean
-} & THREE.WebGLRenderTargetOptions
+}
 
 // 👇 uncomment when TS version supports function overloads
 // export function useFBO(options?: UseFBOOptions)
@@ -19,7 +26,7 @@ export function useFBO(
   height?: number,
   /** Options */
   options?: UseFBOOptions
-): THREE.WebGLRenderTarget {
+): WebGLRenderTarget {
   const { dpr, size } = useThrelte()
 
   const _width = typeof width === 'number' ? width : 1 * (dpr.current ?? 1)
@@ -27,15 +34,15 @@ export function useFBO(
   const _options = (typeof width === 'number' ? options : (width as UseFBOOptions)) || {}
   const { samples = 0, depth, ...targetOptions } = _options
 
-  const target = new THREE.WebGLRenderTarget(_width, _height, {
-    minFilter: THREE.LinearFilter,
-    magFilter: THREE.LinearFilter,
-    type: THREE.HalfFloatType,
+  const target = new WebGLRenderTarget(_width, _height, {
+    minFilter: LinearFilter,
+    magFilter: LinearFilter,
+    type: HalfFloatType,
     ...targetOptions
   })
 
   if (depth) {
-    target.depthTexture = new THREE.DepthTexture(_width, _height, THREE.FloatType)
+    target.depthTexture = new DepthTexture(_width, _height, FloatType)
   }
 
   target.samples = samples
