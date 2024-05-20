@@ -69,7 +69,9 @@ const gltf = useGltf('/path/to/model.glb', {
 })
 ```
 
-You can also provide your own instance of `DRACOLoader`
+You can also provide your own instance of `DRACOLoader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
 
 ```ts
 import { useGltf } from '@threlte/extras'
@@ -101,14 +103,31 @@ Use the `useKtx` hook for [KTX 2 texture support](https://threejs.org/docs/#exam
 
 This hook requires a `transcoder` path.
 
-You can also provide your own instance of KTX2Loader.
-
 ```ts
 import { useGltf, useKtx } from '@threlte/extras'
 
-const ktx = useKtx('three/examples/jsm/libs/basis/')
+const ktx = useKtx('path/to/transcoder/')
 const gltf = useGltf('/path/to/model.glb', {
   ktx
+})
+```
+
+You can also provide your own instance of `KTX2Loader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
+
+```ts
+import { useThrelte } from '@threlte/core'
+import { useGltf } from '@threlte/extras'
+
+const { renderer } = useThrelte()
+
+const ktx2Loader = new KTX2Loader()
+ktx2Loader.setTranscoderPath('path/to/transcoder/')
+ktx2Loader.detectSupport(renderer)
+
+const gltf = useGltf('/path/to/model.glb', {
+  ktx: ktx2Loader
 })
 ```
 
