@@ -10,9 +10,27 @@
       extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
       'props':
         [
-          { name: 'id', type: 'number', required: false,default: '1', 'description': 'Each mask must have an id, you can have compound masks referring to the same id.' },
-					 { name: 'colorWrite', type: 'boolean', required: false,default: 'false', 'description': 'If colors of the masks own material will leak through.' },
-					  { name: 'depthWrite', type: 'boolean', required: false,default: 'false', 'description': 'If depth  of the masks own material will leak through.' }
+          {
+            name: 'id',
+            type: 'number',
+            required: false,
+            default: '1',
+            'description': 'Each mask must have an id, you can have compound masks referring to the same id.'
+          },
+          {
+            name: 'colorWrite',
+            type: 'boolean',
+            required: false,
+            default: 'false',
+            'description': 'If colors of the masks own material will leak through.'
+          },
+          {
+            name: 'depthWrite',
+            type: 'boolean',
+            required: false,
+            default: 'false',
+            'description': 'If depth  of the masks own material will leak through.'
+          }
         ]
     }
 }
@@ -20,6 +38,7 @@
 
 Masks use the stencil buffer to cut out areas of the screen. This component is a port of [drei's `<Mask>` component](https://github.com/pmndrs/drei#mask).
 
+<Tip type="warning">The Mask component requires Three.js to render with a stencil buffer. As of [r163](https://github.com/mrdoob/three.js/releases/tag/r163), stencil is set to `false` by default. To enable the stencil buffer, set it in your canvas's renderer params: `<Canvas rendererParameters={{ stencil: true }}>`. In prior versions the default is `true` already.</Tip>
 
 <Example path="extras/mask" />
 
@@ -36,8 +55,8 @@ Now refer to it with the `useMask` hook and the same id, your content will now b
 
 ```svelte
 <script lang="ts">
-	import { useMask } from '@threlte/extras'
-	const stencil = useMask(1)
+  import { useMask } from '@threlte/extras'
+  const stencil = useMask(1)
 </script>
 
 <T.Mesh>
@@ -49,15 +68,24 @@ Now refer to it with the `useMask` hook and the same id, your content will now b
 You can build compound masks with multiple shapes by re-using an id. You can also use the mask as a normal mesh by providing colorWrite and depthWrite props.
 
 ```svelte
-<Mask position={[-1, 0, 0]} id={1}>
+<Mask
+  position={[-1, 0, 0]}
+  id={1}
+>
   <T.PlaneGeometry />
   <T.MeshBasicMaterial />
 </Mask>
-<Mask colorWrite depthWrite position={[1, 0, 0]} id={1}>
+<Mask
+  colorWrite
+  depthWrite
+  position={[1, 0, 0]}
+  id={1}
+>
   <T.CircleGeometry />
   <T.MeshBasicMaterial />
 </Mask>
 ```
+
 Invert masks individually by providing a 2nd boolean argument to the useMask hook.
 
 ```ts
