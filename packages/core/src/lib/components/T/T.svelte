@@ -1,7 +1,5 @@
-<script
-  lang="ts"
-  generics="Type extends ThreeObject"
->
+<script lang="ts">
+  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
@@ -15,10 +13,11 @@
   import { useProps } from './utils/useProps'
   import type { Props, Events, Slots } from './types'
   import Camera from './Camera.svelte'
-  import type { ThreeObject } from './utils/useIsContext'
+
+  type Type = $$Generic
 
   type AllProps = {
-    is: ThreeObject
+    is: Type
   } & Props<Type>
   type $$Events = Events<Type>
   type $$Slots = Slots<Type>
