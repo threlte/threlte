@@ -2,7 +2,7 @@
 
 ## 3.0.0-next.0
 
-### Patch Changes
+### Major Changes
 
 - e27c1e4: Remove forwardEventHandlers from generated svelte files
 
