@@ -473,11 +473,9 @@ function parse(fileName, gltf, options = {}) {
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
-        import { Group } from 'three'
         import { ${[
           'T',
-          options.types && !options.isolated ? 'type Props, type Events, type Slots' : '',
-          !options.isolated && 'forwardEventHandlers'
+          options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
@@ -530,10 +528,8 @@ ${
 
 
     <script${options.types ? ' lang="ts"' : ''}>
-
 				${!options.preload ? imports : ''}
 
-        ${options.types && !options.isolated ? 'type $$Props = Props<THREE.Group>' : ''}
         ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
         ${
           options.types && !options.isolated
@@ -541,7 +537,10 @@ ${
             : ''
         }
 
-        export const ref = new Group()
+        let {
+          ref = $bindable(),
+          ...props
+        }${options.types && !options.isolated ? ': Props<THREE.Group>' : ''} = $props()
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
@@ -555,11 +554,9 @@ ${
           }(gltf, ref)`
         : ''
     }
-
-			${!options.isolated ? 'const component = forwardEventHandlers()' : ''}
     </script>
 
-		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
+		<T.Group bind:ref dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
 				<slot name="fallback" />
 			{:then gltf}

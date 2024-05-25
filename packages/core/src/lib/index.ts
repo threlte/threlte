@@ -26,11 +26,6 @@ export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 // task scheduling system types
 export type { Key, Stage, Task, Scheduler, Schedule, TaskCallback } from './frame-scheduling'
 
-// legacy hooks
-// TODO: remove in Threlte 7
-export { useFrame, type ThrelteUseFrameOptions } from './hooks/legacy/useFrame'
-export { useRender } from './hooks/legacy/useRender'
-
 // useLoader
 export {
   useLoader,

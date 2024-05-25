@@ -10,7 +10,7 @@ Title: Issum, The town on Capital Isle
 <script lang="ts">
   import type * as THREE from 'three'
   import { Group } from 'three'
-  import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
+  import { T, type Props, type Events, type Slots } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
 
   type $$Props = Props<THREE.Group>
@@ -713,15 +713,12 @@ Title: Issum, The town on Capital Isle
   const gltf = useGltf<GLTFResult>('/models/issum_the_town_on_capital_isle-transformed.glb', {
     useDraco: true
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
   is={ref}
   dispose={false}
   {...$$restProps}
-  bind:this={$component}
 >
   {#await gltf}
     <slot name="fallback" />

@@ -45,7 +45,7 @@
   const { width: computedWidth, height: computedHeight } = createUseDimensionsContext()
 
   /**
-   * Reflowing inside useFrame automatically batches reflows to 1 per frame.
+   * Reflowing inside useTask automatically batches reflows to 1 per frame.
    */
   const { start: reflow, stop } = useTask(
     Symbol('threlte-flex-reflow'),

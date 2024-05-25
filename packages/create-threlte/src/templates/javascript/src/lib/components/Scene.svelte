@@ -1,8 +1,8 @@
 <script>
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
 
   let rotation = 0
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.001
   })
 </script>

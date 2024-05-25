@@ -13,6 +13,9 @@
     "@threlte/xr": "0.1.3"
   },
   "changesets": [
+    "clever-rice-pretend",
+    "eleven-trainers-work",
+    "fair-moons-rule",
     "lucky-news-sleep",
     "many-tips-glow",
     "mighty-singers-glow",
