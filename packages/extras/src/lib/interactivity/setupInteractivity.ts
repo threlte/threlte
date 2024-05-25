@@ -1,6 +1,6 @@
 import { memoize, watch } from '@threlte/core'
 import type * as THREE from 'three'
-import { getHandlerContext, type InteractivityContext } from './context'
+import { type InteractivityContext, useInteractivity } from './context'
 import type { DomEvent, Intersection, IntersectionEvent } from './types'
 
 function getIntersectionId(event: Intersection) {
@@ -23,7 +23,7 @@ const DOM_EVENTS = [
 type DomEventName = (typeof DOM_EVENTS)[number][0]
 
 export const setupInteractivity = (context: InteractivityContext) => {
-  const { dispatchers } = getHandlerContext()
+  const { handlers } = useInteractivity()
 
   const calculateDistance = (event: DomEvent) => {
     const dx = event.offsetX - context.initialClick[0]
@@ -47,7 +47,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
       ) {
         const { eventObject } = hoveredObj
         context.hovered.delete(getIntersectionId(hoveredObj))
-        const events = dispatchers.get(eventObject)
+        const events = handlers.get(eventObject)
         if (events) {
           // Clear out intersects, they are outdated by now
           const data = { ...hoveredObj, intersections }
@@ -72,7 +72,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
       let eventObject: THREE.Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
-        if (dispatchers.has(eventObject)) intersections.push({ ...hit, eventObject })
+        if (handlers.has(eventObject)) intersections.push({ ...hit, eventObject })
         eventObject = eventObject.parent
       }
     }
@@ -82,7 +82,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
   const pointerMissed = (event: MouseEvent, objects: THREE.Object3D[]) => {
     for (const object of objects) {
-      dispatchers.get(object)?.pointermissed?.(event)
+      handlers.get(object)?.pointermissed?.(event)
     }
   }
 
@@ -158,7 +158,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
           ray: context.raycaster.ray
         }
 
-        const events = dispatchers.get(hit.eventObject)
+        const events = handlers.get(hit.eventObject)
 
         if (!events) return
 
