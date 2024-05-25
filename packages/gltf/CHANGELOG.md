@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 2.0.4-next.0
+
+### Patch Changes
+
+- e27c1e4: Remove forwardEventHandlers from generated svelte files
+
 ## 2.0.3
 
 ### Patch Changes

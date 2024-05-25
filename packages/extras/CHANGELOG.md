@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.5
+
+### Patch Changes
+
+- 3883665: Reduce interactivity footprint
+
 ## 9.0.0-next.4
 
 ### Patch Changes
