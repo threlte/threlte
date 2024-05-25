@@ -22,7 +22,7 @@
     objectZIndex,
     getViewportFactor
   } from './utils'
-  import vertexShader from './vertex'
+  import { logVertex, logFragment, spriteVertex } from './shaders'
   import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
 
   type $$Events = HTMLEvents
@@ -273,13 +273,14 @@
       {:else if !transform}
         <T.ShaderMaterial
           side={DoubleSide}
-          {vertexShader}
-          fragmentShader={`void main(){ gl_FragColor=vec4(0.0, 0.0, 0.0, 0.0); }`}
+          vertexShader={spriteVertex}
+          fragmentShader={logFragment}
         />
       {:else}
         <T.ShaderMaterial
           side={DoubleSide}
-          fragmentShader={`void main(){ gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0); }`}
+          vertexShader={logVertex}
+          fragmentShader={logFragment}
         />
       {/if}
     </T>

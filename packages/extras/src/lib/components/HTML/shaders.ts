@@ -1,11 +1,30 @@
+/**
+ * These shaders add support for the logarithmicDepthBuffer.
+ */
+export const logVertex = `
+#include <common>
+#include <logdepthbuf_pars_vertex>
+void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    #include <logdepthbuf_vertex>
+}`
+
+export const logFragment = `
+#include <logdepthbuf_pars_fragment>
+void main() {
+	#include <logdepthbuf_fragment>
+	gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+}`
+
 /*
   This shader is from the THREE's SpriteMaterial.
   We need to turn the backing plane into a Sprite
   (make it always face the camera) if "transfrom" 
   is false. 
 */
-export default `
+export const spriteVertex = `
 #include <common>
+#include <logdepthbuf_pars_vertex>
 
 void main() {
   vec2 center = vec2(0., 1.);
@@ -31,4 +50,5 @@ void main() {
   mvPosition.xy += rotatedPosition;
 
   gl_Position = projectionMatrix * mvPosition;
+  #include <logdepthbuf_vertex>
 }`
