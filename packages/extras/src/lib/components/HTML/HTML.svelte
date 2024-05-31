@@ -1,3 +1,33 @@
+<script
+  lang="ts"
+  context="module"
+>
+  let canvasModified = false
+  let activeOccludeInstances = 0
+
+  let oldZIndex = ''
+  let oldPosition = ''
+  let oldPointerEvents = ''
+
+  const modifyCanvas = (canvas: HTMLCanvasElement, zIndexRange: number) => {
+    if (activeOccludeInstances === 1 && !canvasModified) {
+      oldZIndex = canvas.style.zIndex
+      oldPosition = canvas.style.position
+      oldPointerEvents = canvas.style.pointerEvents
+
+      canvas.style.zIndex = `${Math.floor(zIndexRange / 2)}`
+      canvas.style.position = 'absolute'
+      canvas.style.pointerEvents = 'none'
+      canvasModified = true
+    } else if (activeOccludeInstances === 0 && canvasModified) {
+      canvas.style.zIndex = oldZIndex
+      canvas.style.position = oldPosition
+      canvas.style.pointerEvents = oldPointerEvents
+      canvasModified = false
+    }
+  }
+</script>
+
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import {
@@ -84,20 +114,15 @@
     if (wrapperClass) element.className = wrapperClass
   })
 
-  let oldZIndex = ''
-
   $effect.pre(() => {
-    const canvas = renderer.domElement
+    if (occlude === 'blending') {
+      activeOccludeInstances += 1
+      modifyCanvas(renderer.domElement, zIndexRange[0])
+    }
 
-    if (occlude && occlude === 'blending') {
-      oldZIndex = canvas.style.zIndex
-      canvas.style.zIndex = `${Math.floor(zIndexRange[0] / 2)}`
-      canvas.style.position = 'absolute'
-      canvas.style.pointerEvents = 'none'
-    } else {
-      canvas.style.zIndex = oldZIndex
-      canvas.style.removeProperty('position')
-      canvas.style.pointerEvents = null!
+    return () => {
+      activeOccludeInstances -= 1
+      modifyCanvas(renderer.domElement, zIndexRange[0])
     }
   })
 
@@ -108,7 +133,7 @@
 
     if (
       transform ||
-      Math.abs(oldZoom - camera.current.zoom) > eps ||
+      Math.abs(oldZoom - (camera.current as PerspectiveCamera).zoom) > eps ||
       Math.abs(oldPosition[0] - vec[0]) > eps ||
       Math.abs(oldPosition[1] - vec[1]) > eps
     ) {
@@ -185,7 +210,7 @@
         element.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
       }
       oldPosition = vec
-      oldZoom = camera.current.zoom
+      oldZoom = (camera.current as PerspectiveCamera).zoom
     }
 
     if (!isRayCastOcclusion && !isMeshSizeSet) {
