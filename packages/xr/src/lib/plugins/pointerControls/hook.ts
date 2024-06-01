@@ -6,7 +6,9 @@ export const usePointerControls = () => {
   const { dispatchers } = getInternalContext()
 
   if (!context) {
-    throw new Error('No pointer controls context found. Did you forget to implement pointerControls()?')
+    throw new Error(
+      'No pointer controls context found. Did you forget to implement pointerControls()?'
+    )
   }
 
   const addInteractiveObject = (

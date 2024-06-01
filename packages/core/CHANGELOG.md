@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.4
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
 ## 8.0.0-next.3
 
 ### Patch Changes

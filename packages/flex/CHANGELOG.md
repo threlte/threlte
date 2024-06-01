@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.2
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
 ## 2.0.0-next.1
 
 ### Patch Changes
