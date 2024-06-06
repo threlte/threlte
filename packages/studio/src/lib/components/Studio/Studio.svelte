@@ -17,13 +17,15 @@
   import StudioObjectsRegistry from '../../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
 
   type Props = {
+		namespace?: string
+		transient?: boolean
     extensions?: ConstructorOfATypedSvelteComponent[]
 		children: Snippet
   }
 
-  let { extensions, children }: Props = $props()
+  let { extensions, children, namespace = 'default', transient = false }: Props = $props()
 
-  createRootContext()
+  createRootContext(namespace, transient)
 
   const defaultExtensions = [
     Transactions,

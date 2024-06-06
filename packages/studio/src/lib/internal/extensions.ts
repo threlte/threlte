@@ -11,8 +11,8 @@ type ExtensionAction = <ExtensionState extends Record<string, unknown>>(
 
 type ExtensionActions = Record<string, ExtensionAction>
 
-export const createRootContext = () => {
-  const state = createState()
+export const createRootContext = (namespace: string, transient: boolean) => {
+  const state = createState(namespace, transient)
   const actions = createActions()
   const keyboardControls = createKeyboardControls((scope, actionId) => {
     actions.runAction(scope, actionId, state.getScopedState(scope).state)

@@ -31,7 +31,7 @@ const getPersistedPaths = function (obj: Record<string, unknown>, prefix?: strin
   }, [])
 }
 
-export const createState = () => {
+export const createState = (namespace: string, transient: boolean) => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const state = $state<Record<string, Record<string, unknown>>>({})
 
@@ -43,32 +43,35 @@ export const createState = () => {
     createState: (args: { persist: <U>(value: U) => U }) => T
   ): T => {
     const extensionState = createState({ persist: persist.regular })
-    const persistedState = createState({ persist: persist.dummy })
-    const persistedPaths = getPersistedPaths(persistedState)
 
-    persistedStatePaths[scope] = persistedPaths
+    if (!transient) {
+      const persistedState = createState({ persist: persist.dummy })
+      const persistedPaths = getPersistedPaths(persistedState)
 
-    for (const path of persistedPaths) {
-      const scopedKey = scopeId(scope, path)
-      const stringValue = localStorage[scopedKey] as string | undefined
-      if (stringValue && stringValue !== 'undefined') {
-        const parsedValue = JSON.parse(stringValue) as unknown
-        const pathParts = path.split('.')
-        const lastPart = pathParts.pop()
-        if (!lastPart) {
-          throw new Error(`Path "${path}" is not valid`)
-        }
-        let value: unknown = extensionState
-        for (const pathPart of pathParts) {
+      persistedStatePaths[scope] = persistedPaths
+
+      for (const path of persistedPaths) {
+        const scopedKey = scopeId(namespace, scope, path)
+        const stringValue = localStorage[scopedKey] as string | undefined
+        if (stringValue && stringValue !== 'undefined') {
+          const parsedValue = JSON.parse(stringValue) as unknown
+          const pathParts = path.split('.')
+          const lastPart = pathParts.pop()
+          if (!lastPart) {
+            throw new Error(`Path "${path}" is not valid`)
+          }
+          let value: unknown = extensionState
+          for (const pathPart of pathParts) {
+            if (!isObject(value)) {
+              throw new Error(`Path "${path}" is not valid`)
+            }
+            value = value[pathPart]
+          }
           if (!isObject(value)) {
             throw new Error(`Path "${path}" is not valid`)
           }
-          value = value[pathPart]
+          value[lastPart] = parsedValue
         }
-        if (!isObject(value)) {
-          throw new Error(`Path "${path}" is not valid`)
-        }
-        value[lastPart] = parsedValue
       }
     }
 
@@ -94,11 +97,12 @@ export const createState = () => {
   }
 
   const persistState = (scope?: string) => {
+    if (transient) return
     for (const [currentScope, paths] of Object.entries(persistedStatePaths)) {
       if (scope && currentScope !== scope) continue
       const state = getScopedState(currentScope).state
       for (const path of paths) {
-        const scopedKey = scopeId(currentScope, path)
+        const scopedKey = scopeId(namespace, currentScope, path)
         const pathParts = path.split('.')
         let value: unknown = state
         for (const pathPart of pathParts) {
