@@ -6,7 +6,7 @@
 
 <div>
   <Canvas>
-    <Studio>
+    <Studio transient>
       <Scene />
     </Studio>
   </Canvas>
