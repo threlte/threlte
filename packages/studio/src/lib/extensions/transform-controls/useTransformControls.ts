@@ -11,10 +11,6 @@ export const useTransformControls = () => {
     transformControlsScope
   )
 
-  const setMode = (mode: TransformControlsState['mode']) => {
-    extension.setMode(mode)
-  }
-
   return {
     /** @reactive */
     get inUse() {

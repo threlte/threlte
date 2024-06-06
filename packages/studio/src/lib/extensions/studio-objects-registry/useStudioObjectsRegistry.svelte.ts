@@ -16,14 +16,6 @@ export const useStudioObjectsRegistry = () => {
     studioObjectsRegistryScope
   )
 
-  const addObject = (object: Object3D) => {
-    extension.addObject(object)
-  }
-
-  const removeObject = (object: Object3D) => {
-    extension.removeObject(object)
-  }
-
   const objects = $derived(extension.state.objects ?? new Set<Object3D>())
 
   const isOrIsChildOfStudioObject = (object: Object3D): boolean => {
@@ -75,8 +67,8 @@ export const useStudioObjectsRegistry = () => {
     get objects() {
       return objects
     },
-    addObject,
-    removeObject,
+    addObject: extension.addObject,
+    removeObject: extension.removeObject,
     isOrIsChildOfStudioObject,
     studioObjectRef
   }

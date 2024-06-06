@@ -98,18 +98,6 @@ export const useMyExtension = () => {
 
   const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
 
-  const setEnabled = (enabled: boolean) => {
-    extension.setEnabled(enabled)
-  }
-
-  const toggleEnabled = () => {
-    extension.toggleEnabled()
-  }
-
-  const incrementCount = () => {
-    extension.incrementCount()
-  }
-
   return {
     get enabled() {
       return extension.state.enabled
@@ -117,9 +105,9 @@ export const useMyExtension = () => {
     get count() {
       return extension.state.count
     },
-    setEnabled,
-    toggleEnabled,
-    incrementCount
+    setEnabled: extension.setEnabled,
+    toggleEnabled: extension.toggleEnabled,
+    incrementCount: extension.incrementCount
   }
 }
 ```

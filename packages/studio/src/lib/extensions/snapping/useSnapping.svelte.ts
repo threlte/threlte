@@ -3,29 +3,7 @@ import { snappingScope, type SnappingActions, type SnappingState } from './types
 
 export const useSnapping = () => {
   const { useExtension } = useStudio()
-
   const extension = useExtension<SnappingState, SnappingActions>(snappingScope)
-
-  const setEnabled = (enabled: boolean) => {
-    extension.setEnabled(enabled)
-  }
-
-  const toggleEnabled = () => {
-    extension.toggleEnabled()
-  }
-
-  const setTranslate = (translate: number) => {
-    extension.setTranslate(translate)
-  }
-
-  const setRotate = (rotate: number) => {
-    extension.setRotate(rotate)
-    extension.setRotate(rotate)
-  }
-
-  const setScale = (scale: number) => {
-    extension.setScale(scale)
-  }
 
   return {
     /** @reactive */
@@ -44,10 +22,10 @@ export const useSnapping = () => {
     get scale() {
       return extension.state.scale
     },
-    setEnabled,
-    toggleEnabled,
-    setTranslate,
-    setRotate,
-    setScale
+    setEnabled: extension.setEnabled,
+    toggleEnabled: extension.toggleEnabled,
+    setTranslate: extension.setTranslate,
+    setRotate: extension.setRotate,
+    setScale: extension.setScale
   }
 }
