@@ -21,15 +21,20 @@ Let's create a simple extension that increments and decrements a counter.
 
 ### Extension Directory Structure
 
+In its simplest form, an extension consists of a single Svelte file. If you're
+using TypeScript, you can define the types for the extension state and actions
+in a separate file. Additionally, you can create a hook to interact with the
+extension from outside and define the public API.
+
 ```plaintext
 extensions/
   my-extension/
-    (types.ts)
     MyExtension.svelte
-    useMyExtension.svelte.ts
+    (types.ts)
+    (useMyExtension.ts)
 ```
 
-### (Optional) Types
+### (Optional) Type Definitions
 
 This file provides type definitions for the extension state and actions.
 
