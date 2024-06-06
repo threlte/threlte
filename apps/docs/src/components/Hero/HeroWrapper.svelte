@@ -109,8 +109,8 @@
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">You already know Threlte</h3>
                   <p class="text-sm text-white/60">
-                    Threlte puts the simplicity of Svelte and all of the power of Three.js right at
-                    your fingertips. It's designed to be powerful and flexible while still being
+                    Threlte puts the simplicity of Svelte 5 and all of the power of Three.js right
+                    at your fingertips. It's designed to be powerful and flexible while still being
                     approachable and easy to use.
                   </p>
                 </FadeOut>
@@ -150,7 +150,8 @@
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Powerful Integrations</h3>
                   <p class="text-sm text-white/60">
-                    Threlte comes with integrations for physics, animation and 3D model loading.
+                    Threlte comes with solutions for physics, XR, animation, model loading, and
+                    countless helpers to make creating immersive 3D apps for the web a breeze.
                   </p>
                 </FadeOut>
               </Reveal>
@@ -197,7 +198,7 @@
             end: 4
           }}
         >
-          Threlte 7
+          Threlte 8
         </TextEffect>
       </h2>
     </Trigger>

@@ -12,7 +12,6 @@ import { Scheduler, type Stage, type Task } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
 import { getDefaultCamera, setDefaultCameraAspectOnSizeChange } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
-import { injectLegacyFrameCompatibilityContext } from '../hooks/legacy/utils'
 
 /**
  * ### `ThrelteContext`
@@ -208,9 +207,6 @@ export const createThrelteContext = (options: {
     shouldDispose: false
   }
 
-  // TODO: Remove in Threlte 7
-  const { useRenderOrders } = injectLegacyFrameCompatibilityContext()
-
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
   const renderStage = scheduler.createStage(Symbol('threlte-render-stage'), {
@@ -220,11 +216,6 @@ export const createThrelteContext = (options: {
     }
   })
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), (_) => {
-    // we're in here when autoRender is true In Threlte 7 we still have to
-    // check for the existence of `useRender` instances
-    if (useRenderOrders.length > 0) return
-
-    // if there are no useRender instances, we can render the scene
     ctx.renderer.render(ctx.scene, ctx.camera.current)
   })
 

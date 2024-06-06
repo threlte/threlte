@@ -42,7 +42,6 @@
                 : 'border-white/20 hover:border-white'
             )}
             href={`${category.urlPrefix}/${item.slug}`}
-            data-astro-prefetch
           >
             {item.title}
           </a>
