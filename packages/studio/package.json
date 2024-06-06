@@ -58,6 +58,10 @@
     "./extensions": {
       "types": "./src/lib/extensions.ts",
       "svelte": "./src/lib/extensions.ts"
+    },
+    "./extend": {
+      "types": "./src/lib/extend.ts",
+      "svelte": "./src/lib/extend.ts"
     }
   },
   "types": "./src/lib/index.ts",
@@ -69,15 +73,21 @@
     "svelte": "./dist/index.js",
     "exports": {
       ".": {
+        "import": "./dist/index.js",
         "types": "./dist/index.d.ts",
         "svelte": "./dist/index.js"
       },
       "./extensions": {
+        "import": "./dist/extensions.js",
         "types": "./dist/extensions.d.ts",
         "svelte": "./dist/extensions.js"
+      },
+      "./extend": {
+        "import": "./dist/extend.js",
+        "types": "./dist/extend.d.ts",
+        "svelte": "./dist/extend.js"
       }
-    },
-    "types": "./dist/index.d.ts"
+    }
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.4",
