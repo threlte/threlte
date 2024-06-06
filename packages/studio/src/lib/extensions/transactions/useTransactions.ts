@@ -6,6 +6,7 @@ import type {
 } from './TransactionQueue/TransactionQueue.svelte'
 import { buildTransaction } from './TransactionQueue/buildTransaction'
 import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
+import { vitePluginEnabled } from './vite-plugin/vitePluginEnabled'
 
 export const useTransactions = () => {
   const { useExtension } = useStudio()
@@ -58,6 +59,7 @@ export const useTransactions = () => {
     onRedo,
     openInEditor,
     openSelectedInEditor,
-    buildTransaction
+    buildTransaction,
+    vitePluginEnabled
   }
 }

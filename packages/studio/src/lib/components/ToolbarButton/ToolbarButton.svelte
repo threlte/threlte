@@ -9,10 +9,10 @@
   export let active = false
   export let warn = false
   export let success = false
+  export let error = false
+  export let disabled = false
 
   export let tooltip: string = ''
-
-  export let disabled: boolean = false
 </script>
 
 {#if tooltip.length}
@@ -25,6 +25,7 @@
       {success}
       {icon}
       {label}
+      {error}
     />
     <span slot="tooltip">{tooltip}</span>
   </Tooltip>
@@ -37,5 +38,6 @@
     {success}
     {icon}
     {label}
+    {error}
   />
 {/if}

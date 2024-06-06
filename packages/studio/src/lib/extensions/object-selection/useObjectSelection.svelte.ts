@@ -33,9 +33,11 @@ export const useObjectSelection = () => {
   const selectedObjects = $derived(extension.state.selectedObjects ?? [])
 
   return {
+    /** @reactive */
     get selectedObjects() {
       return selectedObjects
     },
+    /** @reactive */
     get inUse() {
       return extension.state.inUse
     },

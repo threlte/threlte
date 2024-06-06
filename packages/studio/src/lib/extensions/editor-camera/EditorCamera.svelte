@@ -162,6 +162,7 @@
 
     <ToolbarButton
       on:click={extension.focusSelectedObjects}
+      disabled={objectSelection.selectedObjects.length === 0}
       label="Focus Selected"
       icon="mdiImageFilterCenterFocusStrongOutline"
       tooltip="Focus Selected (Shift+F)"

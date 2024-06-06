@@ -28,15 +28,19 @@ export const useSnapping = () => {
   }
 
   return {
+    /** @reactive */
     get enabled() {
       return extension.state.enabled
     },
+    /** @reactive */
     get translate() {
       return extension.state.translate
     },
+    /** @reactive */
     get rotate() {
       return extension.state.rotate
     },
+    /** @reactive */
     get scale() {
       return extension.state.scale
     },

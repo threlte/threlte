@@ -71,11 +71,12 @@ export const useStudioObjectsRegistry = () => {
   }
 
   return {
-    addObject,
-    removeObject,
+    /** @reactive */
     get objects() {
       return objects
     },
+    addObject,
+    removeObject,
     isOrIsChildOfStudioObject,
     studioObjectRef
   }

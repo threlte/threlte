@@ -14,11 +14,10 @@
   import { clientRpc } from './vite-plugin/clientRpc'
   import { getThrelteStudioUserData } from './vite-plugin/runtimeUtils'
   import type { StudioProps } from './vite-plugin/types'
+  import { vitePluginEnabled } from './vite-plugin/vitePluginEnabled'
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
-
-  const {}: {} = $props()
 
   const applyToProperties = ['shadow', 'light', 'material', 'camera', 'target']
 
@@ -139,6 +138,7 @@
   })
 
   const tooltip = $derived.by(() => {
+    if (!vitePluginEnabled) return 'Vite plugin not found'
     if (!extension.state.enabled) return 'Sync disabled'
     if (extension.state.mode === 'manual') {
       if (!extension.state.queue.syncQueue.length) return 'Up-to-date'
@@ -151,6 +151,7 @@
 <ToolbarItem position="right">
   <HorizontalButtonGroup>
     <ToolbarButton
+      error={!vitePluginEnabled}
       success={extension.state.enabled && extension.state.mode === 'auto'}
       warn={extension.state.enabled &&
         extension.state.mode === 'manual' &&

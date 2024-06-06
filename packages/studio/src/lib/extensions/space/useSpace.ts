@@ -15,6 +15,7 @@ export const useSpace = () => {
   }
 
   return {
+    /** @reactive */
     get space() {
       return extension.state.space
     },

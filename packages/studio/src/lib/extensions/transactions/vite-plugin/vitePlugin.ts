@@ -28,7 +28,7 @@ const scheduleModuleHmrAbility = (moduleId: string) => {
 
 export const plugin: () => Plugin = () => {
   return {
-    name: 'Threlte-Inspector',
+    name: 'Threlte Studio',
     enforce: 'pre',
     apply: 'serve',
     transform(code, id) {
@@ -51,6 +51,13 @@ export const plugin: () => Plugin = () => {
       if (HmrIgnoredModuleIds.has(file)) {
         scheduleModuleHmrAbility(file)
         return []
+      }
+    },
+    config() {
+      return {
+        define: {
+          __THRELTE_STUDIO_PLUGIN_ENABLED__: 'true'
+        }
       }
     },
     configureServer(server) {
