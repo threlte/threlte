@@ -137,7 +137,6 @@
 <T
   is={centerObject}
   bind:ref={center.ref}
-  position={[-0.8576, 3.6623, -0.3747]}
 />
 
 <TransformControls

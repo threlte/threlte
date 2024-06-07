@@ -2,14 +2,18 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Studio } from '@threlte/studio'
+  import Tour from './Tour/Tour.svelte'
 </script>
 
 <div>
   <Canvas>
     <Studio transient>
       <Scene />
+      <Tour />
     </Studio>
   </Canvas>
+
+  <div id="tour-target"></div>
 </div>
 
 <style>
