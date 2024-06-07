@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
 ## 9.0.0-next.5
 
 ### Patch Changes
