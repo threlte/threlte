@@ -34,7 +34,7 @@
     "npm": "^9.8.1",
     "preact": "^10.16.0",
     "runed": "^0.10.0",
-    "svelte": "5.0.0-next.117",
+    "svelte": "5.0.0-next.132",
     "svelte-portal": "^2.2.1",
     "tailwindcss": "^3.4.3",
     "three-mesh-bvh": "^0.7.4"
