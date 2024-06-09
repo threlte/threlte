@@ -60,6 +60,7 @@
 
         <rect
           bind:this={tourManager.tourStopMaskManager.highlightRect}
+          bind:this={tourManager.instructionsManager.referenceElement}
           x="0"
           y="0"
           rx="999"
@@ -74,27 +75,38 @@
     </div>
 
     <!-- TOOLTIP INSTRUCTIONS -->
-    <!-- <div class="absolute bottom-2 z-[10000] flex w-full items-center justify-center">
-      {#if tourManager.instructionsManager.currentMessage}
-        <div
-          class="rounded-sm bg-white px-1 text-black"
-          bind:this={tourManager.instructionsManager.wrapper}
-        >
-          {tourManager.instructionsManager.currentMessage}
-        </div>
-      {/if}
-    </div> -->
-
-    <!-- SUBTITLE INSTRUCTIONS -->
-    <div class="absolute bottom-2 z-[10000] flex w-full items-center justify-center">
-      {#if tourManager.instructionsManager.currentMessage}
-        <div
-          class="rounded-sm bg-white px-1 text-black"
-          bind:this={tourManager.instructionsManager.wrapper}
-        >
-          {tourManager.instructionsManager.currentMessage}
-        </div>
-      {/if}
-    </div>
+    {#if tourManager.instructionsManager.isToolTip}
+      <div
+        class="pointer-events-none absolute left-0 top-0 z-[10000] w-max max-w-64 select-none text-sm"
+        bind:this={tourManager.instructionsManager.tooltipElement}
+      >
+        {#if tourManager.instructionsManager.currentInstructions?.message}
+          <div
+            class="rounded-sm bg-white px-3 py-2 text-black"
+            bind:this={tourManager.instructionsManager.wrapper}
+          >
+            {tourManager.instructionsManager.currentInstructions?.message}
+          </div>
+          <div
+            bind:this={tourManager.instructionsManager.tooltipArrowElement}
+            class="absolute h-2 w-2 rotate-45 bg-white"
+          ></div>
+        {/if}
+      </div>
+    {:else}
+      <!-- INSTRUCTIONS -->
+      <div
+        class="pointer-events-none absolute bottom-2 z-[10000] flex w-full select-none items-center justify-center"
+      >
+        {#if tourManager.instructionsManager.currentInstructions?.message}
+          <div
+            class="max-w-[60%] rounded-sm bg-white px-2.5 py-1 text-black"
+            bind:this={tourManager.instructionsManager.wrapper}
+          >
+            {tourManager.instructionsManager.currentInstructions?.message}
+          </div>
+        {/if}
+      </div>
+    {/if}
   </div>
 </Portal>

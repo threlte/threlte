@@ -92,6 +92,9 @@ importers:
       preact:
         specifier: ^10.16.0
         version: 10.16.0
+      runed:
+        specifier: ^0.10.0
+        version: 0.10.0(svelte@5.0.0-next.117)
       svelte:
         specifier: 5.0.0-next.117
         version: 5.0.0-next.117
@@ -108,6 +111,9 @@ importers:
       '@dimforge/rapier3d-compat':
         specifier: ^0.12.0
         version: 0.12.0
+      '@floating-ui/dom':
+        specifier: ^1.6.4
+        version: 1.6.4
       '@inquirer/prompts':
         specifier: ^3.2.0
         version: 3.2.0
@@ -2496,18 +2502,15 @@ packages:
     resolution: {integrity: sha512-42UH54oPZHPdRHdw6BgoBD6cg/eVTmVrFcgeRDM3jbO7uxSoipVcmcIGFcA5jmOHO5apcyvBhkSKES3fQJnu7A==}
     dependencies:
       '@floating-ui/utils': 0.2.2
-    dev: false
 
   /@floating-ui/dom@1.6.4:
     resolution: {integrity: sha512-0G8R+zOvQsAG1pg2Q99P21jiqxqGBW1iRe/iXHsBRBxnpXKFI8QwbB4x5KmYLggNO5m34IQgOIu9SCRfR/WWiQ==}
     dependencies:
       '@floating-ui/core': 1.6.1
       '@floating-ui/utils': 0.2.2
-    dev: false
 
   /@floating-ui/utils@0.2.2:
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
-    dev: false
 
   /@gltf-transform/core@3.2.1:
     resolution: {integrity: sha512-EE4AXJsu1jsSvcTnzk+mCu/VgLldPsb0gGhOV7onRlHM4DYh8m9aCCjGdLJf1uNJi+KUP5hPmOrUteXuopFq2A==}
@@ -11348,6 +11351,15 @@ packages:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
       queue-microtask: 1.2.3
+
+  /runed@0.10.0(svelte@5.0.0-next.117):
+    resolution: {integrity: sha512-9xlCwl1TAei6W/oldj6mshELUQbrKUxQ7fWGMZ/ha4a9DvG3PeKE2+2+94ja+UXmepdnjHVxruyQSoUmOwbPnw==}
+    peerDependencies:
+      svelte: ^5.0.0
+    dependencies:
+      nanoid: 5.0.6
+      svelte: 5.0.0-next.117
+    dev: false
 
   /rxjs@7.8.0:
     resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}

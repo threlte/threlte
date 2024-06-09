@@ -16,6 +16,9 @@ export const useTransformControls = () => {
     get inUse() {
       return extension.state.inUse
     },
+    get mode() {
+      return extension.state.mode
+    },
     setMode: extension.setMode,
     enable: extension.enable,
     disable: extension.disable,

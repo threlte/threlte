@@ -16,8 +16,19 @@ export abstract class TourStop {
 
   stopCompleted() {
     this.isCompleted = true
-    this.onDispose?.()
   }
 
-  onDispose?(): void
+  activate() {
+    this.isActive = true
+    this.onActivate?.()
+  }
+
+  deactivate() {
+    this.isActive = false
+    this.onDeactivate?.()
+  }
+
+  onActivate?(): void | Promise<void>
+
+  onDeactivate?(): void | Promise<void>
 }

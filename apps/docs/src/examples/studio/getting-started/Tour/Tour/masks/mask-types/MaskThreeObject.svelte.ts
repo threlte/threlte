@@ -23,10 +23,11 @@ export class MaskThreeObject implements Mask {
 
   constructor(
     public readonly object: Mesh,
-    public readonly shape: 'circle' | 'rectangle',
-    public readonly padding = 0,
-    public readonly blockPointer = true,
-    public readonly darkenBackground = true
+    public readonly shape: Required<Mask>['spotlight']['shape'],
+    public readonly padding: Required<Mask>['spotlight']['padding'] = 0,
+    public readonly blockPointer: Mask['blockPointer'] = 'mask',
+    public readonly darkenBackground: Mask['darkenBackground'] = true,
+    public readonly spotlightVisible = true
   ) {
     this.ctx = useThrelte()
   }
@@ -143,6 +144,7 @@ export class MaskThreeObject implements Mask {
 
   get spotlight() {
     return {
+      visible: this.spotlightVisible,
       left: this.box2d.min.x,
       top: this.box2d.min.y,
       width: this.box2d.max.x - this.box2d.min.x,

@@ -1,11 +1,15 @@
 import { useEditorCamera } from '@threlte/studio/extensions'
 import { TourStop } from '../TourStop.svelte'
 import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
+import { InstructionsBasic } from '../../instructions/InstructionsBasic'
 
 export class EditorCameraTourStop extends TourStop {
   constructor() {
-    const mask = new MaskDom('[aria-label="Editor Camera"]', 'circle', 2, true)
-    super(mask)
+    const instructions = new InstructionsBasic(
+      "Enable the Editor Camera to freely move around the scene. The scene's default camera will be rendered in an additional pane."
+    )
+    const mask = new MaskDom('[aria-label="Editor Camera"]', 'circle', 2, 'mask')
+    super(mask, instructions)
 
     const editorCamera = useEditorCamera()
 

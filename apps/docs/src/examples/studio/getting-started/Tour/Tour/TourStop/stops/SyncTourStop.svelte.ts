@@ -2,11 +2,11 @@ import { InstructionsBasic } from '../../instructions/InstructionsBasic'
 import { MaskNone } from '../../masks/mask-types/MaskNone'
 import { ClickAnywhereTourStop } from '../ClickAnywhereTourStop'
 
-export class IntroTourStop extends ClickAnywhereTourStop {
+export class SyncTourStop extends ClickAnywhereTourStop {
   constructor() {
-    const mask = new MaskNone(true, false)
+    const mask = new MaskNone(true, true)
     const instructions = new InstructionsBasic(
-      'Welcome to the Threlte Studio Tour! Click anywhere to continue.'
+      'All changes made to your objects are persisted back to your code in real-time (limitations apply).'
     )
     super(mask, instructions)
   }

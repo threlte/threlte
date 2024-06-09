@@ -1,3 +1,14 @@
+import { type Placement } from '@floating-ui/dom'
+
 export interface Instructions {
-  messages: string[]
+  message: string
+
+  style:
+    | {
+        type?: 'subtitle' | 'auto'
+        tooltip?: {
+          placement?: Placement
+        }
+      }
+    | undefined
 }

@@ -10,10 +10,11 @@ export class MaskDom implements Mask {
 
   constructor(
     private readonly selector: string | (() => Element),
-    public readonly shape: 'circle' | 'rectangle' = 'circle',
-    public readonly padding = 0,
-    public readonly blockPointer = true,
-    public readonly darkenBackground = true
+    public readonly shape: Required<Mask>['spotlight']['shape'] = 'circle',
+    public readonly padding: Required<Mask>['spotlight']['padding'] = 0,
+    public readonly blockPointer: Mask['blockPointer'] = 'mask',
+    public readonly darkenBackground: Mask['darkenBackground'] = true,
+    private readonly spotlightVisible = true
   ) {}
 
   public initialize() {
@@ -36,7 +37,8 @@ export class MaskDom implements Mask {
       width: this.rect!.width,
       height: this.rect!.height,
       padding: this.padding,
-      shape: this.shape
+      shape: this.shape,
+      visible: this.spotlightVisible
     }
   }
 }

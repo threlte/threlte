@@ -1,10 +1,17 @@
-import { InstructionsManager } from './InstructionsManager.svelte'
+import { InstructionsManager } from './instructions/InstructionsManager.svelte'
 import { MaskManager } from './masks/MaskManager.svelte'
+import { CameraPositionTourStop } from './TourStop/stops/CameraPositionTourStop.svelte'
 import { EditorCameraTourStop } from './TourStop/stops/EditorCameraTourStop.svelte'
+import { InspectorTourStop } from './TourStop/stops/InspectorTourStop.svelte'
 import { IntroTourStop } from './TourStop/stops/IntroTourStop.svelte'
+import { OutroTourStop } from './TourStop/stops/OutroTourStop.svelte'
+import { RotateTorusTourStop } from './TourStop/stops/RotateTorusTourStop.svelte'
 import { SceneHierarchyTourStop } from './TourStop/stops/SceneHierarchyTourStop.svelte'
 import { SelectTorusTourStop } from './TourStop/stops/SelectTorusTourStop.svelte'
 import { SpaceTourStop } from './TourStop/stops/SpaceTourStop.svelte'
+import { SyncTourStop } from './TourStop/stops/SyncTourStop.svelte'
+import { ToolbarTourStop } from './TourStop/stops/ToolbarTourStop.svelte'
+import { TransformControlsTourStop } from './TourStop/stops/TransformControlsTourStop.svelte'
 import { TourStop } from './TourStop/TourStop.svelte'
 
 export class TourManager {
@@ -15,10 +22,16 @@ export class TourManager {
 
   public tourStops: TourStop[] = [
     new IntroTourStop(),
-    new SelectTorusTourStop(),
+    new ToolbarTourStop(),
     new EditorCameraTourStop(),
     new SceneHierarchyTourStop(),
-    new SpaceTourStop()
+    new InspectorTourStop(),
+    new CameraPositionTourStop(),
+    new SelectTorusTourStop(),
+    new TransformControlsTourStop(),
+    new RotateTorusTourStop(),
+    new SyncTourStop(),
+    new OutroTourStop()
   ]
 
   startTour() {
@@ -43,7 +56,7 @@ export class TourManager {
       this.instructionsManager.clearInstructions()
     }
 
-    tourStop.isActive = true
+    tourStop.activate()
 
     const cleanup = $effect.root(() => {
       $effect(() => {
@@ -57,7 +70,7 @@ export class TourManager {
 
   unloadCurrentTourStop() {
     if (this.currentTourStop) {
-      this.currentTourStop.isActive = false
+      this.currentTourStop.deactivate()
       this.tourStopMaskManager.clearMask()
       this.instructionsManager.clearInstructions()
       this.currentTourStop = undefined
@@ -76,6 +89,7 @@ export class TourManager {
       return
     }
 
+    this.unloadCurrentTourStop()
     this.loadTourStop(this.tourStops[currentTourStopIndex + 1]!)
   }
 
@@ -92,6 +106,7 @@ export class TourManager {
       return
     }
 
+    this.unloadCurrentTourStop()
     this.loadTourStop(this.tourStops[currentTourStopIndex - 1]!)
   }
 }
