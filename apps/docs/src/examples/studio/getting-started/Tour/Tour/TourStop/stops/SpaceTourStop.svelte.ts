@@ -1,7 +1,7 @@
 import { useSpace } from '@threlte/studio/extensions'
 import { TourStop } from '../TourStop.svelte'
 import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
-import { InstructionsBasic } from '../../instructions/InstructionsBasic'
+import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
 
 export class SpaceTourStop extends TourStop {
   constructor() {

@@ -1,4 +1,4 @@
-import { InstructionsBasic } from '../../instructions/InstructionsBasic'
+import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
 import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
 import { ClickAnywhereTourStop } from '../ClickAnywhereTourStop'
 

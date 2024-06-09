@@ -2,7 +2,7 @@ import { useThrelte } from '@threlte/core'
 import { Mesh } from 'three'
 import { MaskThreeObject } from '../../masks/mask-types/MaskThreeObject.svelte'
 import { TourStop } from '../TourStop.svelte'
-import { InstructionsBasic } from '../../instructions/InstructionsBasic'
+import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
 import { useObjectSelection, useTransformControls } from '@threlte/studio/extensions'
 
 export class RotateTorusTourStop extends TourStop {

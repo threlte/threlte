@@ -9,10 +9,6 @@ export class InstructionsManager {
 
   public currentInstructions = $state<Instructions | undefined>()
 
-  public hasMultipleMessages = $derived(
-    this.currentInstructions && this.currentInstructions.message.length > 1
-  )
-
   public referenceElement = $state<SVGRectElement>()
   public tooltipElement = $state<HTMLElement>()
   public tooltipArrowElement = $state<HTMLElement>()

@@ -1,5 +1,5 @@
 import { useTask, useThrelte } from '@threlte/core'
-import { InstructionsBasic } from '../../instructions/InstructionsBasic'
+import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
 import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
 import { TourStop } from '../TourStop.svelte'
 import type { Camera } from 'three'

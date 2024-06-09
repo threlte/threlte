@@ -80,12 +80,15 @@
         class="pointer-events-none absolute left-0 top-0 z-[10000] w-max max-w-64 select-none text-sm"
         bind:this={tourManager.instructionsManager.tooltipElement}
       >
-        {#if tourManager.instructionsManager.currentInstructions?.message}
+        {#if tourManager.instructionsManager.currentInstructions}
           <div
             class="rounded-sm bg-white px-3 py-2 text-black"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            {tourManager.instructionsManager.currentInstructions?.message}
+            <svelte:component
+              this={tourManager.instructionsManager.currentInstructions.content.component}
+              {...tourManager.instructionsManager.currentInstructions.content.props}
+            />
           </div>
           <div
             bind:this={tourManager.instructionsManager.tooltipArrowElement}
@@ -98,12 +101,15 @@
       <div
         class="pointer-events-none absolute bottom-2 z-[10000] flex w-full select-none items-center justify-center"
       >
-        {#if tourManager.instructionsManager.currentInstructions?.message}
+        {#if tourManager.instructionsManager.currentInstructions}
           <div
             class="max-w-[60%] rounded-sm bg-white px-2.5 py-1 text-black"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            {tourManager.instructionsManager.currentInstructions?.message}
+            <svelte:component
+              this={tourManager.instructionsManager.currentInstructions.content.component}
+              {...tourManager.instructionsManager.currentInstructions.content.props}
+            />
           </div>
         {/if}
       </div>
