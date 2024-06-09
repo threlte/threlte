@@ -1,17 +1,17 @@
 import { InstructionsManager } from './instructions/InstructionsManager.svelte'
 import { MaskManager } from './masks/MaskManager.svelte'
-import { CameraPositionTourStop } from './TourStop/stops/CameraPositionTourStop.svelte'
-import { EditorCameraTourStop } from './TourStop/stops/EditorCameraTourStop.svelte'
-import { InspectorTourStop } from './TourStop/stops/InspectorTourStop.svelte'
-import { IntroTourStop } from './TourStop/stops/IntroTourStop.svelte'
-import { OutroTourStop } from './TourStop/stops/OutroTourStop.svelte'
-import { RotateTorusTourStop } from './TourStop/stops/RotateTorusTourStop.svelte'
-import { SceneHierarchyTourStop } from './TourStop/stops/SceneHierarchyTourStop.svelte'
-import { SelectTorusTourStop } from './TourStop/stops/SelectTorusTourStop.svelte'
-import { SpaceTourStop } from './TourStop/stops/SpaceTourStop.svelte'
-import { SyncTourStop } from './TourStop/stops/SyncTourStop.svelte'
-import { ToolbarTourStop } from './TourStop/stops/ToolbarTourStop.svelte'
-import { TransformControlsTourStop } from './TourStop/stops/TransformControlsTourStop.svelte'
+import { CameraPositionTourStop } from './TourStop/stops/CameraPositionTourStop/CameraPositionTourStop.svelte'
+import { EditorCameraTourStop } from './TourStop/stops/EditorCameraTourStop/EditorCameraTourStop.svelte'
+import { InspectorTourStop } from './TourStop/stops/InspectorTourStop/InspectorTourStop.svelte'
+import { IntroTourStop } from './TourStop/stops/IntroTourStop/IntroTourStop.svelte'
+import { JumpToCodeTourStop } from './TourStop/stops/JumpToCodeTourStop/JumpToCodeTourStop.svelte'
+import { OutroTourStop } from './TourStop/stops/OutroTourStop/OutroTourStop.svelte'
+import { RotateTorusTourStop } from './TourStop/stops/RotateTorusTourStop/RotateTorusTourStop.svelte'
+import { SceneHierarchyTourStop } from './TourStop/stops/SceneHierarchyTourStop/SceneHierarchyTourStop.svelte'
+import { SelectTorusTourStop } from './TourStop/stops/SelectTorusTourStop/SelectTorusTourStop.svelte'
+import { SyncTourStop } from './TourStop/stops/SyncTourStop/SyncTourStop.svelte'
+import { ToolbarTourStop } from './TourStop/stops/ToolbarTourStop/ToolbarTourStop.svelte'
+import { TransformControlsTourStop } from './TourStop/stops/TransformControlsTourStop/TransformControlsTourStop.svelte'
 import { TourStop } from './TourStop/TourStop.svelte'
 
 export class TourManager {
@@ -26,6 +26,7 @@ export class TourManager {
     new EditorCameraTourStop(),
     new SceneHierarchyTourStop(),
     new InspectorTourStop(),
+    new JumpToCodeTourStop(),
     new CameraPositionTourStop(),
     new SelectTorusTourStop(),
     new TransformControlsTourStop(),

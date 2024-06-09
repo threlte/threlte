@@ -1,7 +1,7 @@
 import { useTask, useThrelte } from '@threlte/core'
-import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
-import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
-import { TourStop } from '../TourStop.svelte'
+import { InstructionsBasic } from '../../../instructions/instructions-types/basic/InstructionsBasic'
+import { MaskDom } from '../../../masks/mask-types/MaskDom.svelte'
+import { TourStop } from '../../TourStop.svelte'
 import type { Camera } from 'three'
 
 export class CameraPositionTourStop extends TourStop {
@@ -25,9 +25,13 @@ export class CameraPositionTourStop extends TourStop {
       'mask'
     )
 
-    const instructions = new InstructionsBasic('Change the position of the camera to y = 1', {
-      tooltip: {
-        placement: 'left'
+    const instructions = new InstructionsBasic({
+      message: 'Use the Inspector to manually set properties of the selected objects.',
+      cta: "Set the camera's position to 1",
+      style: {
+        tooltip: {
+          placement: 'left'
+        }
       }
     })
 

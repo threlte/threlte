@@ -1,7 +1,7 @@
 import { useObjectSelection } from '@threlte/studio/extensions'
-import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
-import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
-import { TourStop } from '../TourStop.svelte'
+import { InstructionsBasic } from '../../../instructions/instructions-types/basic/InstructionsBasic'
+import { MaskDom } from '../../../masks/mask-types/MaskDom.svelte'
+import { TourStop } from '../../TourStop.svelte'
 
 export class SceneHierarchyTourStop extends TourStop {
   constructor() {
@@ -22,14 +22,15 @@ export class SceneHierarchyTourStop extends TourStop {
       'mask'
     )
 
-    const instructions = new InstructionsBasic(
-      'This is the Scene Hierarchy, it outlines the structure of your scene. Select the camera to continue.',
-      {
+    const instructions = new InstructionsBasic({
+      message: 'This is the Scene Hierarchy, it outlines the structure of your scene.',
+      style: {
         tooltip: {
           placement: 'right'
         }
-      }
-    )
+      },
+      cta: 'Select the camera'
+    })
 
     super(mask, instructions)
 

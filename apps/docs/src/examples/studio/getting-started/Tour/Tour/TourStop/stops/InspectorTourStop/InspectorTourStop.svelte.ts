@@ -1,6 +1,6 @@
-import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
-import { MaskDom } from '../../masks/mask-types/MaskDom.svelte'
-import { ClickAnywhereTourStop } from '../ClickAnywhereTourStop'
+import { InstructionsBasic } from '../../../instructions/instructions-types/basic/InstructionsBasic'
+import { MaskDom } from '../../../masks/mask-types/MaskDom.svelte'
+import { ClickAnywhereTourStop } from '../../ClickAnywhereTourStop'
 
 export class InspectorTourStop extends ClickAnywhereTourStop {
   constructor() {
@@ -21,14 +21,17 @@ export class InspectorTourStop extends ClickAnywhereTourStop {
       true
     )
 
-    const instructions = new InstructionsBasic(
-      'This is the Inspector. It displays the properties of the selected object based on the type of the object.',
-      {
+    const instructions = new InstructionsBasic({
+      message:
+        'This is the Inspector. It displays the properties of the selected object based on the type of the object.',
+      tip: 'Rotation values are automatically converted to degrees for your convenience.',
+      style: {
         tooltip: {
           placement: 'left'
         }
-      }
-    )
+      },
+      clickAnywhere: true
+    })
 
     super(mask, instructions)
   }

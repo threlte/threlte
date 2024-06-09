@@ -1,15 +1,17 @@
 import { type Placement } from '@floating-ui/dom'
-import type { Component, ComponentProps } from 'svelte'
 
-export interface Instructions<T extends Component<any> = Component<any>> {
+export interface Instructions {
   content: {
-    component: T
-    props: ComponentProps<T>
+    component: (...args: any[]) => any
+    props?: Record<string, any>
   }
 
   style:
     | {
         type?: 'subtitle' | 'auto'
+        subtitle?: {
+          placement?: 'bottom' | 'center'
+        }
         tooltip?: {
           placement?: Placement
         }

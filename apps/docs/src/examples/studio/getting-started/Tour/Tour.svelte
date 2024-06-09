@@ -2,6 +2,7 @@
   import { onMount, tick } from 'svelte'
   import Portal from 'svelte-portal'
   import { TourManager } from './Tour/TourManager.svelte'
+  import { c } from '$lib/classes'
 
   const tourManager = new TourManager()
 
@@ -9,6 +10,10 @@
     await tick()
     tourManager.startTour()
   })
+
+  const instructionsPlacement = $derived(
+    tourManager.instructionsManager.currentInstructions?.style?.subtitle?.placement
+  )
 </script>
 
 <svelte:window on:pointermove|capture={tourManager.tourStopMaskManager.onPointerMove} />
@@ -77,12 +82,12 @@
     <!-- TOOLTIP INSTRUCTIONS -->
     {#if tourManager.instructionsManager.isToolTip}
       <div
-        class="pointer-events-none absolute left-0 top-0 z-[10000] w-max max-w-64 select-none text-sm"
+        class="pointer-events-none absolute left-0 top-0 z-[10000] w-max max-w-96 select-none"
         bind:this={tourManager.instructionsManager.tooltipElement}
       >
         {#if tourManager.instructionsManager.currentInstructions}
           <div
-            class="rounded-sm bg-white px-3 py-2 text-black"
+            class="pointer-events-auto rounded-md bg-white px-3 py-2 text-black shadow-2xl"
             bind:this={tourManager.instructionsManager.wrapper}
           >
             <svelte:component
@@ -99,11 +104,16 @@
     {:else}
       <!-- INSTRUCTIONS -->
       <div
-        class="pointer-events-none absolute bottom-2 z-[10000] flex w-full select-none items-center justify-center"
+        class={c(
+          'pointer-events-none absolute z-[10000] flex w-full select-none items-center justify-center',
+          instructionsPlacement === 'bottom' || !instructionsPlacement
+            ? 'bottom-2'
+            : 'top-1/2 -translate-y-1/2'
+        )}
       >
         {#if tourManager.instructionsManager.currentInstructions}
           <div
-            class="max-w-[60%] rounded-sm bg-white px-2.5 py-1 text-black"
+            class="pointer-events-auto max-w-[60%] rounded-md bg-white px-3 py-2 text-black"
             bind:this={tourManager.instructionsManager.wrapper}
           >
             <svelte:component

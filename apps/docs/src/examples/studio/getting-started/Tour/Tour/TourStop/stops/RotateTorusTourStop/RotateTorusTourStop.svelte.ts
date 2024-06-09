@@ -1,8 +1,8 @@
 import { useThrelte } from '@threlte/core'
 import { Mesh } from 'three'
-import { MaskThreeObject } from '../../masks/mask-types/MaskThreeObject.svelte'
-import { TourStop } from '../TourStop.svelte'
-import { InstructionsBasic } from '../../instructions/instructions-types/basic/InstructionsBasic'
+import { MaskThreeObject } from '../../../masks/mask-types/MaskThreeObject.svelte'
+import { TourStop } from '../../TourStop.svelte'
+import { InstructionsBasic } from '../../../instructions/instructions-types/basic/InstructionsBasic'
 import { useObjectSelection, useTransformControls } from '@threlte/studio/extensions'
 
 export class RotateTorusTourStop extends TourStop {
@@ -14,7 +14,10 @@ export class RotateTorusTourStop extends TourStop {
     if (!torus) throw new Error('Torus not found')
     if (!(torus instanceof Mesh)) throw new Error('Torus is not a Mesh')
     const mask = new MaskThreeObject(torus, 'circle', 0, 'mask', false, false)
-    const instructions = new InstructionsBasic('Rotate the Torus object.')
+    const instructions = new InstructionsBasic({
+      message: 'Snapping is enabled, so the object will rotate in 15 degree increments.',
+      cta: 'Rotate the Torus object'
+    })
     super(mask, instructions)
 
     const tc = useTransformControls()

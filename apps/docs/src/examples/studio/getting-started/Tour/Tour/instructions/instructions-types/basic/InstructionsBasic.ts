@@ -1,17 +1,33 @@
 import type { Instructions } from '../../Instructions'
-import IBC from './InstructionsBasic.svelte'
+import InstructionsBasicComponent from './InstructionsBasic.svelte'
 
-export class InstructionsBasic implements Instructions<typeof IBC> {
+export class InstructionsBasic implements Instructions {
   constructor(
-    private readonly message: string,
-    public readonly style: Instructions['style'] = undefined
+    private readonly options: {
+      message?: string
+      headline?: string
+      style?: Instructions['style']
+      clickAnywhere?: boolean
+      centerText?: boolean
+      cta?: string
+      tip?: string
+    }
   ) {}
+
+  get style() {
+    return this.options.style
+  }
 
   get content() {
     return {
-      component: IBC,
+      component: InstructionsBasicComponent,
       props: {
-        message: this.message
+        message: this.options.message,
+        headline: this.options.headline,
+        clickAnywhere: this.options.clickAnywhere,
+        centerText: this.options.centerText,
+        cta: this.options.cta,
+        tip: this.options.tip
       }
     }
   }
