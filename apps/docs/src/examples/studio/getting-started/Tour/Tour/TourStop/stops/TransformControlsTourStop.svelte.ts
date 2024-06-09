@@ -11,7 +11,7 @@ export class TransformControlsTourStop extends TourStop {
     const torus = scene.getObjectByName('Torus')
     if (!torus) throw new Error('Torus not found')
     if (!(torus instanceof Mesh)) throw new Error('Torus is not a Mesh')
-    const mask = new MaskThreeObject(torus, 'circle', 0, 'mask', false, false)
+    const mask = new MaskThreeObject(torus, 'circle', 0, true, false, false)
     const instructions = new InstructionsBasic(
       'Use the transform controls to transform the object. To rotate the Torus object, press R on your keyboard.'
     )
