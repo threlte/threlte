@@ -21,12 +21,6 @@
 
   let grid = studioObjectsRegistry.studioObjectRef<Mesh>()
 
-  $effect(() => {
-    if (grid.ref) {
-      console.log(grid.ref)
-    }
-  })
-
   const extension = createExtension<GridState, GridActions>({
     scope: gridScope,
     state({ persist }) {
