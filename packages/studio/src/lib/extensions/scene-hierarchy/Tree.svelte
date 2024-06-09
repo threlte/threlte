@@ -148,10 +148,12 @@ max-height: 50vh;
 
   let initialized = $state(false)
   onMount(() => {
-    scene.children.forEach((object) => {
-      register(object)
+    tick().then(() => {
+      scene.children.forEach((object) => {
+        register(object)
+      })
+      initialized = true
     })
-    initialized = true
   })
 
   const handleSelect = async (item: TreeViewItem) => {
