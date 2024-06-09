@@ -9,7 +9,12 @@ export class SyncTourStop extends ClickAnywhereTourStop {
       message:
         'All changes made to your objects are persisted back to your code in real-time (limitations apply).',
       tip: 'This is a demo environment. Changes are not persisted.',
-      clickAnywhere: true
+      clickAnywhere: true,
+      style: {
+        subtitle: {
+          placement: 'bottom'
+        }
+      }
     })
     super(mask, instructions)
   }
