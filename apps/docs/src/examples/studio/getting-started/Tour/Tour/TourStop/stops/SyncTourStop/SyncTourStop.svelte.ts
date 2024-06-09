@@ -12,7 +12,7 @@ export class SyncTourStop extends ClickAnywhereTourStop {
       clickAnywhere: true,
       style: {
         subtitle: {
-          placement: 'bottom'
+          placement: 'center'
         }
       }
     })
