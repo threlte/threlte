@@ -8,7 +8,7 @@ export class EditorCameraTourStop extends TourStop {
     const instructions = new InstructionsBasic(
       "Enable the Editor Camera to freely move around the scene. The scene's default camera will be rendered in an additional pane."
     )
-    const mask = new MaskDom('[aria-label="Editor Camera"]', 'circle', 2, 'mask')
+    const mask = new MaskDom('[aria-label="Editor Camera"]', 'rectangle', 4, 'mask')
     super(mask, instructions)
 
     const editorCamera = useEditorCamera()
