@@ -1,21 +1,21 @@
-import { InstructionsBasic } from '../../../instructions/instructions-types/basic/InstructionsBasic'
+import { InstructionsAdvanced } from '../../../instructions/instructions-types/advanced/InstructionsAdvanced'
 import { MaskNone } from '../../../masks/mask-types/MaskNone'
 import { ClickAnywhereTourStop } from '../../ClickAnywhereTourStop'
+import SyncInstructions from './SyncInstructions.svelte'
 
 export class SyncTourStop extends ClickAnywhereTourStop {
   constructor() {
     const mask = new MaskNone(true, true)
-    const instructions = new InstructionsBasic({
-      message:
-        'All changes made to your objects are persisted back to your code in real-time (limitations apply).',
-      tip: 'This is a demo environment. Changes are not persisted.',
-      clickAnywhere: true,
-      style: {
+    const instructions = new InstructionsAdvanced(
+      {
+        component: SyncInstructions
+      },
+      {
         subtitle: {
           placement: 'center'
         }
       }
-    })
+    )
     super(mask, instructions)
   }
 }
