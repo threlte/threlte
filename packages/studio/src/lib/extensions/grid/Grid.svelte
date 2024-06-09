@@ -21,7 +21,13 @@
 
   let grid = studioObjectsRegistry.studioObjectRef<Mesh>()
 
-  const { state, run: runGridAction } = createExtension<GridState, GridActions>({
+  $effect(() => {
+    if (grid.ref) {
+      console.log(grid.ref)
+    }
+  })
+
+  const extension = createExtension<GridState, GridActions>({
     scope: gridScope,
     state({ persist }) {
       return {
@@ -51,15 +57,15 @@
   })
 
   const onColorChange = (e: CustomEvent<{ value: ColorValue }>) => {
-    runGridAction('setColor', e.detail.value as string)
+    extension.setColor(e.detail.value as string)
   }
 
   const onPlaneChange = (e: RadioGridChangeEvent) => {
-    runGridAction('setPlane', e.detail.value as 'xy' | 'xz' | 'zy')
+    extension.setPlane(e.detail.value as 'xy' | 'xz' | 'zy')
   }
 
   const onStepChange = (e: CustomEvent<{ value: number }>) => {
-    runGridAction('setStep', e.detail.value)
+    extension.setStep(e.detail.value)
   }
 </script>
 
@@ -67,9 +73,9 @@
   <HorizontalButtonGroup>
     <ToolbarButton
       on:click={() => {
-        runGridAction('toggleEnabled')
+        extension.toggleEnabled()
       }}
-      active={state.enabled}
+      active={extension.state.enabled}
       label="Grid"
       icon="mdiGrid"
       tooltip="Grid"
@@ -77,19 +83,19 @@
 
     <DropDownPane title="Grid Settings">
       <Color
-        value={state.color}
+        value={extension.state.color}
         label="Color"
         on:change={onColorChange}
       />
 
       <Slider
-        value={state.step}
+        value={extension.state.step}
         label="Step"
         min={0}
         on:change={onStepChange}
       />
       <RadioGrid
-        value={state.plane}
+        value={extension.state.plane}
         values={['xy', 'xz', 'yz']}
         rows={1}
         label="Plane"
@@ -99,18 +105,19 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-{#if state.enabled}
+{#if extension.state.enabled}
   <Grid
+    bind:ref={grid.ref}
+    name="Grid"
     userData={{ ignoreOverrideMaterial: true }}
     infiniteGrid
-    cellSize={state.step}
-    sectionSize={state.step * 10}
-    sectionColor={state.color}
-    cellColor={state.color}
-    plane={state.plane}
+    cellSize={extension.state.step}
+    sectionSize={extension.state.step * 10}
+    sectionColor={extension.state.color}
+    cellColor={extension.state.color}
+    plane={extension.state.plane}
     renderOrder={9999}
-    bind:ref={grid.ref}
-    fadeDistance={state.step * 500}
+    fadeDistance={extension.state.step * 500}
   />
 {/if}
 
