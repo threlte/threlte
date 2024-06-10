@@ -3,16 +3,10 @@
   import { OrbitControls, Grid, Billboard } from '@threlte/extras'
 
   export let follow = true
-  export let lockX = false
-  export let lockY = false
-  export let lockZ = false
 </script>
 
 <Billboard
   {follow}
-  {lockX}
-  {lockY}
-  {lockZ}
   position={[3, 1, 0]}
 >
   <T.Mesh>
@@ -23,9 +17,6 @@
 
 <Billboard
   {follow}
-  {lockX}
-  {lockY}
-  {lockZ}
   position={[-4, 3, 0]}
 >
   <T.Mesh>
@@ -36,9 +27,6 @@
 
 <Billboard
   {follow}
-  {lockX}
-  {lockY}
-  {lockZ}
   position={[-1, 5, 2]}
 >
   <T.Mesh>

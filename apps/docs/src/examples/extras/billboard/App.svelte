@@ -4,9 +4,6 @@
   import Scene from './Scene.svelte'
 
   let follow = true
-  let lockX = false
-  let lockY = false
-  let lockZ = false
 </script>
 
 <Pane
@@ -17,28 +14,11 @@
     label="follow"
     bind:value={follow}
   />
-  <Checkbox
-    label="lockX"
-    bind:value={lockX}
-  />
-  <Checkbox
-    label="lockY"
-    bind:value={lockY}
-  />
-  <Checkbox
-    label="lockZ"
-    bind:value={lockZ}
-  />
 </Pane>
 
 <div>
   <Canvas>
-    <Scene
-      {follow}
-      {lockX}
-      {lockY}
-      {lockZ}
-    />
+    <Scene {follow} />
   </Canvas>
 </div>
 
