@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
 ## 9.0.0-next.6
 
 ### Patch Changes
