@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-  import { Euler, Group, Quaternion } from 'three'
+  import { Group, Quaternion } from 'three'
 
   import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte'
 
@@ -20,8 +20,6 @@
   const { camera, scheduler, renderStage } = useThrelte()
 
   const q = new Quaternion()
-
-  const nullRotation = new Euler()
 
   let followObject = $derived(follow === true ? $camera : follow === false ? undefined : follow)
 
