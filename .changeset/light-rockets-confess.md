@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-Migrate Billboard to runes mode"
+Migrate Billboard to runes mode
