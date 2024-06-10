@@ -12,7 +12,7 @@
   type $$Events = BillboardEvents
   type $$Slots = BillboardSlots
 
-  let { follow = true, ...props }: BillboardProps = $props()
+  let { follow = true, ref = $bindable(), ...props }: BillboardProps = $props()
 
   const inner = new Group()
   const localRef = new Group()
@@ -49,6 +49,7 @@
 
 <T
   is={localRef}
+  bind:ref
   matrixAutoUpdate={false}
   matrixWorldAutoUpdate={false}
   {...props}
