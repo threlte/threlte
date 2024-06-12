@@ -237,7 +237,10 @@ Alternatively, mix declaritive and normal three.js code like so for the same res
 
 <T.Mesh>
   <T.BoxGeometry />
-  <T is={customMaterials} />
+  <T
+    is={customMaterials}
+    attach="material"
+  />
 </T.Mesh>
 ```
 
