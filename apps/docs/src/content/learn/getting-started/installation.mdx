@@ -28,19 +28,6 @@ can be used with `npx`, the resulting Threlte components however require `@threl
 
 ### Configuration
 
-#### Adapt `vite.config.js`
-
-If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent `three` from being externalized for SSR by vites externalization step
-
-```js {3-5}+ title=vite.config.js
-const config = {
-  // …
-  ssr: {
-    noExternal: ['three']
-  }
-}
-```
-
 #### Adapt `tsconfig.json`
 
 If you are using TypeScript, you need to add the following to your `tsconfig.json` to make sure that
