@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
 ## 9.0.0-next.7
 
 ### Patch Changes
