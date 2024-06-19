@@ -124,7 +124,7 @@
 >
   <T is={outerGroup}>
     <T is={innerGroup}>
-			{@render children(group, scheduleAligning)}
+			{@render children({ align: scheduleAligning, ref: group })}
     </T>
   </T>
 </T>
