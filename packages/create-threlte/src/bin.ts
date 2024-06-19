@@ -239,9 +239,6 @@ const create = async () => {
   if (options.types === 'typescript') {
     // handle typescript templates
     await copy(path.join(templatesDir, 'typescript'), cwd)
-    if (options.features.includes('vitest')) {
-      await copy(path.join(templatesDir, 'typescript+vitest'), cwd, { overwrite: true })
-    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+typescript'), cwd, { overwrite: true })
     }
@@ -254,9 +251,6 @@ const create = async () => {
   } else {
     // handle javascript templates
     await copy(path.join(templatesDir, 'javascript'), cwd)
-    if (options.features.includes('vitest')) {
-      await copy(path.join(templatesDir, 'javascript+vitest'), cwd, { overwrite: true })
-    }
     if (options.threltePackages.includes('@threlte/extras')) {
       await copy(path.join(templatesDir, 'extras+javascript'), cwd, { overwrite: true })
     }
