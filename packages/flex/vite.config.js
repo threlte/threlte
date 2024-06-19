@@ -5,10 +5,7 @@ import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
  * @type {import('vite').UserConfig}
  */
 const config = {
-  plugins: [sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
-  ssr: {
-    noExternal: ['three']
-  }
+  plugins: [sveltekit(), { ...threeMinifier(), enforce: 'pre' }]
 }
 
 export default config

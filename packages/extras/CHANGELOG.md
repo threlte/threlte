@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
 ## 9.0.0-next.5
 
 ### Patch Changes
@@ -36,6 +48,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 8.11.3
+
+### Patch Changes
+
+- 943b0bd: imported classes as types not values in Gizmo and MeshRefractionMaterial components
 
 ## 8.11.2
 

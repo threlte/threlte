@@ -28,7 +28,14 @@ export const injectInteractivityPlugin = (): void => {
     const refStore = writable<Object3D>(ref)
 
     watch(refStore, ($refStore) => {
-      if (!props.$$events) return
+      if (props.$$events === undefined) return
+
+      const hasEventHandlers = Object.keys(props.$$events).some((value) =>
+        interactivityEventNames.includes(value as keyof ThrelteEvents)
+      )
+
+      if (!hasEventHandlers) return
+
       context.addInteractiveObject($refStore, props.$$events)
       return () => context.removeInteractiveObject($refStore)
     })
