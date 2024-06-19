@@ -1,5 +1,11 @@
 # create-threlte
 
+## 2.0.2-next.1
+
+### Patch Changes
+
+- 99101b4: Remove default vite configs
+
 ## 2.0.2-next.0
 
 ### Patch Changes
