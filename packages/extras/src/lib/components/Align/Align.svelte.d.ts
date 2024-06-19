@@ -40,6 +40,6 @@ export type AlignEvents = Events<Group> & {
   align: AlignEventData
 }
 
-export type AlignSnippet = Snippet<[ref: Group, align: () => void]>
+export type AlignSnippet = Snippet<[{ align: () => void; ref: Group }]>
 
 export default class Align extends SvelteComponent<AlignProps, AlignEvents> {}
