@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { type Stage, T, useTask, useThrelte } from '@threlte/core'
 
   let stage: Stage | undefined
