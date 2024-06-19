@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.11.3
+
+### Patch Changes
+
+- 943b0bd: imported classes as types not values in Gizmo and MeshRefractionMaterial components
+
 ## 8.11.2
 
 ### Patch Changes
