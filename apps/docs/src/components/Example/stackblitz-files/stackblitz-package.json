@@ -18,6 +18,7 @@
     "@threlte/extras": "latest",
     "@threlte/rapier": "latest",
     "@threlte/theatre": "latest",
+    "@threlte/studio": "latest",
     "svelte-tweakpane-ui": "*",
     "@threlte/xr": "latest",
     "@tsconfig/svelte": "*",
