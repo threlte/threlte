@@ -1,12 +1,11 @@
 <script lang="ts">
   import { T, useParent } from '@threlte/core'
   import { LineSegments, type Mesh } from 'three'
-  import type { EdgesEvents, EdgesProps, EdgesSlots } from './Edges.svelte'
+  import type { EdgesEvents, EdgesProps } from './Edges.svelte'
 
   type $$Events = EdgesEvents
-  type $$Slots = EdgesSlots
 
-  let { thresholdAngle, color, ref = $bindable(), ...props }: EdgesProps = $props()
+  let { thresholdAngle, color, ref = $bindable(), children, ...props }: EdgesProps = $props()
 
   const parent = useParent()
 
@@ -29,5 +28,7 @@
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  <slot ref={lineSegments} />
+	{#if children}
+		{@render children({ref:lineSegments})}
+	{/if}
 </T>

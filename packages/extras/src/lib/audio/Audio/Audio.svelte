@@ -3,10 +3,9 @@
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
+  import type { AudioEvents, AudioProps } from './Audio.svelte'
 
   type $$Events = AudioEvents
-  type $$Slots = AudioSlots
 
   let {
     src,
@@ -20,6 +19,7 @@
     pause = $bindable(),
     play = $bindable(),
     stop = $bindable(),
+		children,
     ...props
   }: AudioProps = $props()
 
@@ -53,5 +53,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={audio} />
+	{@render children({ref:audio})}
 </T>

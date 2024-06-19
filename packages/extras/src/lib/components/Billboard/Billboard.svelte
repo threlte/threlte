@@ -7,12 +7,11 @@
 <script lang="ts">
   import { Group, Quaternion } from 'three'
 
-  import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte'
+  import type { BillboardEvents, BillboardProps } from './Billboard.svelte'
 
   type $$Events = BillboardEvents
-  type $$Slots = BillboardSlots
 
-  let { follow = true, ref = $bindable(), ...props }: BillboardProps = $props()
+  let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
   const inner = new Group()
   const localRef = new Group()
@@ -53,6 +52,6 @@
   {...props}
 >
   <T is={inner}>
-    <slot ref={localRef} />
+		{@render children({ref:localRef})}
   </T>
 </T>

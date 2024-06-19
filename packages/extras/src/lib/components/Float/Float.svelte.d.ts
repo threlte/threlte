@@ -1,5 +1,5 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Events, Props } from '@threlte/core'
+import type { SvelteComponent, Snippet } from 'svelte'
 import type { Group } from 'three'
 
 export type FloatProps = Props<Group> & {
@@ -9,9 +9,10 @@ export type FloatProps = Props<Group> & {
   rotationIntensity?: number | [x: number, y: number, z: number]
   rotationSpeed?: number | [x: number, y: number, z: number]
   seed?: number
+  children: FloatSnippet
 }
 
 export type FloatEvents = Events<Group>
-export type FloatSlots = Slots<Group>
+export type FloatSnippet = Snippet<[{ ref: Group }]>
 
-export default class Float extends SvelteComponent<FloatProps, FloatEvents, FloatSlots> {}
+export default class Float extends SvelteComponent<FloatProps, FloatEvents> {}
