@@ -1,7 +1,7 @@
 import { useThrelte } from '../../../hooks/useThrelte'
 import { resolvePropertyPath } from './resolvePropertyPath'
 
-const ignoredProps = new Set(['$$scope', 'type', 'args', 'attach', 'instance'])
+const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
 const updateProjectionMatrixKeys = new Set([
   'fov',
