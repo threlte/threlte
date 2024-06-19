@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { Color, CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
+  import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { onMount } from 'svelte'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
   import type {

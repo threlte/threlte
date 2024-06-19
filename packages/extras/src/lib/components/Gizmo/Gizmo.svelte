@@ -11,7 +11,7 @@
     Quaternion,
     Raycaster,
     Scene,
-    Sprite,
+    type Sprite,
     Vector2,
     Vector3,
     Vector4,
