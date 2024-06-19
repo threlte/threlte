@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { c } from '$lib/classes'
   import { onMount, tick } from 'svelte'
   import Portal from 'svelte-portal'
   import { TourManager } from './Tour/TourManager.svelte'
-  import { c } from '$lib/classes'
 
   const tourManager = new TourManager()
 
@@ -124,5 +124,17 @@
         {/if}
       </div>
     {/if}
+
+		<div class="bottom-4 right-4 absolute z-[10001] pointer-events-auto px-1 py-0.5 bg-white text-neutral-600 rounded-md text-sm">
+			{#if tourManager.tourStarted}
+				 <button onclick={() => tourManager.stopTour()}>
+					 Skip Tour →
+				 </button>
+			{:else}
+					<button onclick={() => tourManager.startTour()}>
+						Start Tour
+					</button>
+			{/if}
+		</div>
   </div>
 </Portal>

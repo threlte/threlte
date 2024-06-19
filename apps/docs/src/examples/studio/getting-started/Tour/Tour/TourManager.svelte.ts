@@ -78,6 +78,10 @@ export class TourManager {
     }
   }
 
+	get tourStarted() {
+		return this.currentTourStop !== undefined
+	}
+
   nextStop() {
     if (!this.currentTourStop) {
       console.error('Tour not started')
