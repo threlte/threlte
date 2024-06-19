@@ -11,9 +11,6 @@ const config = {
     alias: {
       threlte: resolve('./src/lib')
     }
-  },
-  ssr: {
-    noExternal: ['three']
   }
 }
 
