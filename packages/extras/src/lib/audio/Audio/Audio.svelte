@@ -53,5 +53,5 @@
   bind:ref
   {...props}
 >
-	{@render children({ref:audio})}
+	{@render children?.({ref:audio})}
 </T>
