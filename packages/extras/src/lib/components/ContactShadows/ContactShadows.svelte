@@ -226,8 +226,6 @@
       is={shadowCamera}
       manual
     />
-		{#if children}
-			{@render children({ref:group})}
-		{/if}
+	{@render children?.({ref:group})}
   </T.Group>
 </T>
