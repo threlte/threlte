@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Camera } from 'three'
+  import type { OrthographicCamera, PerspectiveCamera } from 'three'
   import { useCamera } from './utils/useCamera'
 
   interface Props {
-    object: Camera
+    object: PerspectiveCamera | OrthographicCamera
     manual: boolean
     makeDefault: boolean
   }
