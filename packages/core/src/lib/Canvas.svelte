@@ -17,7 +17,6 @@
   import { revision } from './lib/revision'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
-  import type { Size } from './types'
   import { useThrelteInternal } from './hooks/useThrelteInternal'
 
   interface Props {
@@ -61,8 +60,6 @@
      */
     shadows?: boolean | ShadowMapType
 
-    size?: Size | undefined
-
     /**
      * @default ACESFilmicToneMapping
      */
@@ -86,7 +83,6 @@
     renderMode = 'on-demand',
     rendererParameters,
     shadows = PCFSoftShadowMap,
-    size,
     toneMapping = ACESFilmicToneMapping,
     autoRender = true,
     ctx = $bindable()
@@ -95,11 +91,7 @@
   let canvas: HTMLCanvasElement
   let initialized = writable(false)
 
-  // user size as a store
-  const userSize = writable<Size | undefined>(size)
-  $effect.pre(() => userSize.set(size))
-
-  // in case the user didn't define a fixed size, use the parent elements size
+  // The canvas parent element size
   const { parentSize, parentSizeAction } = useParentSize()
 
   const context = createThrelteContext({
@@ -110,8 +102,7 @@
     parentSize,
     autoRender,
     shadows,
-    toneMapping,
-    userSize
+    toneMapping
   })
   const internalCtx = useThrelteInternal()
 
