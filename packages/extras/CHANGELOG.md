@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
 ## 9.0.0-next.8
 
 ### Patch Changes
