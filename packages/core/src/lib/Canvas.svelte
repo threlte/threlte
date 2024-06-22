@@ -69,14 +69,6 @@
     toneMapping?: ToneMapping
 
     /**
-     * This property is not reactive and must be set at initialization.
-     *
-     * @default false if greater than or equal to r155, true if less than 155
-     * @see https://github.com/mrdoob/three.js/pull/26392
-     */
-    useLegacyLights?: boolean
-
-    /**
      * By default, Threlte will automatically render the scene. To implement
      * custom render pipelines, set this to `false`.
      *
@@ -96,7 +88,6 @@
     shadows = PCFSoftShadowMap,
     size,
     toneMapping = ACESFilmicToneMapping,
-    useLegacyLights = revision >= 155 ? false : true,
     autoRender = true,
     ctx = $bindable()
   }: Props = $props()
@@ -120,7 +111,6 @@
     autoRender,
     shadows,
     toneMapping,
-    useLegacyLights,
     userSize
   })
   const internalCtx = useThrelteInternal()
