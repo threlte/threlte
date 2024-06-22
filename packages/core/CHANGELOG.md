@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 8.0.0-next.5
+
+### Patch Changes
+
+- 2ccf508: Remove userSize canvas prop
+- 750550b: Remove useLegacyLights prop
+
 ## 8.0.0-next.4
 
 ### Patch Changes
