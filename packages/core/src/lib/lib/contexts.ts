@@ -82,7 +82,7 @@ export type ThrelteInternalContext = {
   advance: boolean
 
   /** If anything is in this set, the frame will be considered invalidated */
-  autoInvalidations: Set<any>
+  autoInvalidations: Set<unknown>
 
   /** A function to be called at the end of the frame loop that resets the invalidation flags */
   resetFrameInvalidation: () => void
@@ -129,7 +129,7 @@ export type ThrelteInternalContext = {
   shouldDispose: boolean
 }
 
-export type ThrelteUserContext = CurrentWritable<Record<string | symbol, any>>
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
 /**
  * This function creates the necessary context objects for a Threlte application.
@@ -138,7 +138,6 @@ export const createThrelteContext = (options: {
   colorSpace: ColorSpace
   toneMapping: ToneMapping
   dpr: number
-  userSize: Writable<Size | undefined>
   parentSize: Writable<Size>
   renderMode: 'always' | 'on-demand' | 'manual'
   autoRender: boolean
@@ -176,7 +175,7 @@ export const createThrelteContext = (options: {
       Object.entries(object).forEach(([propKey, propValue]) => {
         // we don't want to dispose the parent, we can skip "children"
         if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
-        const value = propValue as any
+        const value = propValue
         if (value?.dispose) {
           internalCtx.collectDisposableObjects(value, disposables)
         }
@@ -220,9 +219,7 @@ export const createThrelteContext = (options: {
   })
 
   const ctx: ThrelteContext = {
-    size: derived([options.userSize, options.parentSize], ([uSize, pSize]) => {
-      return uSize ? uSize : pSize
-    }),
+    size: derived(options.parentSize, (size) => size),
     camera: currentWritable(getDefaultCamera()),
     scene: new Scene(),
     renderer: undefined!,
