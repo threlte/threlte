@@ -47,47 +47,87 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 
 ### DRACO decoding
 
-Use a DRACO decoder for compressed glTF files, defaults to CDN loaded DRACO binaries.
+Use the `useDraco` hook for compressed glTF files, defaults to CDN loaded DRACO binaries.
 
 ```ts
-import { useGltf } from '@threlte/extras'
+import { useGltf, useDraco } from '@threlte/extras'
 
+const draco = useDraco()
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: true
+  draco
 })
 ```
 
 You can set a custom path to DRACO decoder binaries.
 
 ```ts
-import { useGltf } from '@threlte/extras'
+import { useGltf, useDraco } from '@threlte/extras'
 
+const draco = useDraco('/custom/draco/decoders/path')
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: '/custom/draco/decoders/path'
+  draco
 })
 ```
 
-You can also provide your own instance of `DRACOLoader`
+You can also provide your own instance of `DRACOLoader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
 
 ```ts
 import { useGltf } from '@threlte/extras'
 
 const myLoader = new DRACOLoader().setDecoderPath(path)
-
 const gltf = useGltf('/path/to/model.glb', {
-  useDraco: myLoader
+  draco: myLoader
 })
 ```
 
 ### Meshopt decoding
 
-Use a meshopt decoder for compressed glTF files, defaults to Three's included decoder.
+Use the `useMeshopt` hook for compressed glTF files, defaults to Three's included decoder.
+
+You can also provide your own instance of MeshoptDecoder.
 
 ```ts
+import { useGltf, useMeshopt } from '@threlte/extras'
+
+const meshopt = useMeshopt()
+const gltf = useGltf('/path/to/model.glb', {
+  meshopt
+})
+```
+
+### KTX2Loader
+
+Use the `useKtx` hook for [KTX 2 texture support](https://threejs.org/docs/#examples/en/loaders/KTX2Loader).
+
+This hook requires a `transcoder` path.
+
+```ts
+import { useGltf, useKtx } from '@threlte/extras'
+
+const ktx = useKtx('path/to/transcoder/')
+const gltf = useGltf('/path/to/model.glb', {
+  ktx
+})
+```
+
+You can also provide your own instance of `KTX2Loader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
+
+```ts
+import { useThrelte } from '@threlte/core'
 import { useGltf } from '@threlte/extras'
 
+const { renderer } = useThrelte()
+
+const ktx2Loader = new KTX2Loader()
+ktx2Loader.setTranscoderPath('path/to/transcoder/')
+ktx2Loader.detectSupport(renderer)
+
 const gltf = useGltf('/path/to/model.glb', {
-  useMeshopt: true
+  ktx: ktx2Loader
 })
 ```
 

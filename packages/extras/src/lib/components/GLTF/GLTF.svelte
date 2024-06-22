@@ -6,7 +6,6 @@
   import type { ThrelteGltf } from '../../types/types'
   import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
 
-  type $$Props = GltfProps
   type $$Events = GltfEvents
   type $$Slots = GltfSlots
 
@@ -19,9 +18,9 @@
 
   let {
     url,
-    useDraco = false,
-    useMeshopt = false,
-    ktxTranscoderPath,
+    draco,
+    meshopt,
+    ktx,
     gltf = $bindable(),
     scene = $bindable(),
     animations = $bindable(),
@@ -36,13 +35,9 @@
   }: Props = $props()
 
   const loader = useGltf({
-    useDraco: useDraco
-      ? typeof useDraco === 'string'
-        ? useDraco
-        : 'https://www.gstatic.com/draco/v1/decoders/'
-      : undefined,
-    useMeshopt,
-    ktxTranscoderPath
+    draco,
+    meshopt,
+    ktx
   })
 
   const onLoad = (data: AnyThrelteGltf) => {

@@ -460,16 +460,11 @@ function parse(fileName, gltf, options = {}) {
   // 2nd pass to eliminate hard to swat left-overs
   const scene = printThrelte(gltf.scene)
 
-  const useGltfOptions =
-    options.transform && options.draco
-      ? {
-          useDraco: options.draco
-        }
-      : options.transform
-      ? {
-          useDraco: true
-        }
-      : undefined
+  const useGltfOptions = {
+    draco: options.transform && options.draco
+      ? options.draco
+      : true
+  }
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
@@ -482,7 +477,8 @@ function parse(fileName, gltf, options = {}) {
         import { ${[
           'useGltf',
           hasAnimations ? 'useGltfAnimations' : '',
-          options.suspense ? 'useSuspense' : ''
+          options.suspense ? 'useSuspense' : '',
+          useGltfOptions.draco ? 'useDraco' : '',
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/extras'
@@ -490,7 +486,7 @@ function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { draco: useDraco(${typeof useGltfOptions.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 
