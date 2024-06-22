@@ -24,7 +24,6 @@ export type ThrelteContext = {
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
-  useLegacyLights: CurrentWritable<boolean>
   renderer: WebGLRenderer
   /**
    * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
@@ -143,7 +142,6 @@ export const createThrelteContext = (options: {
   autoRender: boolean
   shadows: boolean | ShadowMapType
   colorManagementEnabled: boolean
-  useLegacyLights: boolean
 }): ThrelteContext => {
   const internalCtx: ThrelteInternalContext = {
     frameInvalidated: true,
@@ -232,7 +230,6 @@ export const createThrelteContext = (options: {
     colorSpace: currentWritable(options.colorSpace),
     toneMapping: currentWritable(options.toneMapping),
     dpr: currentWritable(options.dpr),
-    useLegacyLights: currentWritable(options.useLegacyLights),
     shadows: currentWritable(options.shadows),
     colorManagementEnabled: currentWritable(options.colorManagementEnabled),
     renderMode: currentWritable(options.renderMode),

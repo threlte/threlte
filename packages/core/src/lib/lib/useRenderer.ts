@@ -21,7 +21,6 @@ import { currentWritable, memoize, watch } from './storeUtils'
  * - `size`
  * - `shadows`
  * - `toneMapping`
- * - `useLegacyLights`
  */
 export const useRenderer = (ctx: ThrelteContext) => {
   const renderer = currentWritable<WebGLRenderer | undefined>(undefined)
@@ -89,14 +88,6 @@ export const useRenderer = (ctx: ThrelteContext) => {
     if (!renderer) return
 
     renderer.toneMapping = toneMapping
-  })
-
-  watch([renderer, ctx.useLegacyLights], ([renderer, useLegacyLights]) => {
-    if (!renderer) return
-
-    if (useLegacyLights) {
-      renderer.useLegacyLights = useLegacyLights
-    }
   })
 
   return {

@@ -14,7 +14,6 @@
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
   import { createCache } from './lib/cache'
-  import { revision } from './lib/revision'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
   import { useThrelteInternal } from './hooks/useThrelteInternal'
@@ -66,14 +65,6 @@
     toneMapping?: ToneMapping
 
     /**
-     * This property is not reactive and must be set at initialization.
-     *
-     * @default false if greater than or equal to r155, true if less than 155
-     * @see https://github.com/mrdoob/three.js/pull/26392
-     */
-    useLegacyLights?: boolean
-
-    /**
      * By default, Threlte will automatically render the scene. To implement
      * custom render pipelines, set this to `false`.
      *
@@ -92,7 +83,6 @@
     rendererParameters,
     shadows = PCFSoftShadowMap,
     toneMapping = ACESFilmicToneMapping,
-    useLegacyLights = revision >= 155 ? false : true,
     autoRender = true,
     ctx = $bindable()
   }: Props = $props()
@@ -111,8 +101,7 @@
     parentSize,
     autoRender,
     shadows,
-    toneMapping,
-    useLegacyLights
+    toneMapping
   })
   const internalCtx = useThrelteInternal()
 

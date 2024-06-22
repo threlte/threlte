@@ -45,7 +45,7 @@
   },
   "peerDependencies": {
     "svelte": ">=5",
-    "three": ">=0.152"
+    "three": ">=0.155"
   },
   "type": "module",
   "exports": {
