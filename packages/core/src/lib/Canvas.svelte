@@ -13,7 +13,6 @@
   import { useParentSize } from './hooks/useParentSize'
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
-  import { createCache } from './lib/cache'
   import { revision } from './lib/revision'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
@@ -145,9 +144,6 @@
       context.autoRenderTask.stop()
     }
   })
-
-  // create cache context for caching assets
-  createCache()
 
   // the hook useRenderer is managing the renderer.
   const { createRenderer } = useRenderer(ctx)

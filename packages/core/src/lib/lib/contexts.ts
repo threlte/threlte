@@ -12,6 +12,7 @@ import { Scheduler, type Stage, type Task } from '../frame-scheduling'
 import type { DisposableThreeObject, Size } from '../types'
 import { getDefaultCamera, setDefaultCameraAspectOnSizeChange } from './defaultCamera'
 import { currentWritable, type CurrentWritable } from './storeUtils'
+import { createCacheContext } from './contexts/cache'
 
 /**
  * ### `ThrelteContext`
@@ -146,6 +147,8 @@ export const createThrelteContext = (options: {
   colorManagementEnabled: boolean
   useLegacyLights: boolean
 }): ThrelteContext => {
+  createCacheContext()
+
   const internalCtx: ThrelteInternalContext = {
     frameInvalidated: true,
     advance: false,

@@ -49,7 +49,7 @@ export type { Size } from './types'
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { useCache } from './lib/cache'
+export { useCache, createCacheContext } from './lib/contexts/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { revision } from './lib/revision'
 
