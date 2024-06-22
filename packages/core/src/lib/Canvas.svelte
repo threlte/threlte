@@ -14,7 +14,6 @@
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
   import { createCache } from './lib/cache'
-  import { revision } from './lib/revision'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
   import { useThrelteInternal } from './hooks/useThrelteInternal'
