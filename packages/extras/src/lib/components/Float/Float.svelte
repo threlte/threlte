@@ -1,9 +1,7 @@
 <script lang="ts">
   import { MathUtils, Group } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatEvents, FloatProps } from './Float.svelte'
-
-  type $$Events = FloatEvents
+  import type { FloatProps } from './Float.svelte'
 
   let {
     speed = 1,
@@ -65,6 +63,6 @@
     bind:ref
     matrixAutoUpdate={false}
   >
-		{@render children({ref:group})}
+		{@render children?.({ref:group})}
   </T>
 </T.Group>

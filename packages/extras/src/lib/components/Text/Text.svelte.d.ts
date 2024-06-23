@@ -240,7 +240,7 @@ export interface TextMesh extends Mesh {
    */
   colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
 
-  onsync: (cb: () => void) => void
+  onsync?: () => void
 }
 
 export type TextProps = Props<TextMesh>

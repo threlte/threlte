@@ -3,7 +3,7 @@ import { SvelteComponent, type Snippet } from 'svelte'
 import { Sky as ThreeSky } from 'three/examples/jsm/objects/Sky.js'
 import type { RenderTargetOptions, Vector3, WebGLCubeRenderTarget } from 'three'
 
-export type SkyProps = Props<ThreeSky> & {
+export type SkyProps = Omit<Props<ThreeSky>, 'children'> & {
   /** The scale of the cuboid skybox along every axis, default: 1000 */
   scale?: number
   /** Relative clarity of the sky, default: 10 */
@@ -28,6 +28,7 @@ export type SkyProps = Props<ThreeSky> & {
   children?: Snippet<
     [
       {
+        ref: ThreeSky
         sunPosition: Vector3
         renderTarget: WebGLCubeRenderTarget | undefined
       }

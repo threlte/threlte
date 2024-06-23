@@ -3,9 +3,7 @@
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioEvents, AudioProps } from './Audio.svelte'
-
-  type $$Events = AudioEvents
+  import type { AudioProps } from './Audio.svelte'
 
   let {
     src,
@@ -53,5 +51,5 @@
   bind:ref
   {...props}
 >
-	{@render children?.({ref:audio})}
+	{@render children?.({ ref: audio })}
 </T>

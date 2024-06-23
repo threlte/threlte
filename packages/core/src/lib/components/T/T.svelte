@@ -10,7 +10,7 @@
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, } from './types'
+  import type { Props } from './types'
   import Camera from './Camera.svelte'
 
   type Type = $$Generic

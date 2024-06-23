@@ -134,16 +134,16 @@ export type AnimatedSpriteProps = Props<Material> & {
   readonly pause?: () => void
 
   /** Fires when all resources have loaded. */
-  onload: () => void
+  onload?: () => void
 
   /** Fires when an animation starts. */
-  onstart: () => void
+  onstart?: () => void
 
   /** Fires when an animation ends. */
-  onend: () => void
+  onend?: () => void
 
   /** Fires when an animation loop completes. */
-  onloop: () => void
+  onloop?: () => void
 }
 
 export default class AnimatedSprite extends SvelteComponent<AnimatedSpriteProps> {}

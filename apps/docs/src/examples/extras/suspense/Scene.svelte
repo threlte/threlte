@@ -17,14 +17,14 @@
   position={[-40, 25, 40]}
   makeDefault
   {zoom}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, -8)
   }}
 />
 
 <T.DirectionalLight
   position={[5, 10, 3]}
-  intensity={1}
+  intensity={2}
 />
 
 <Suspense final>
@@ -36,7 +36,7 @@
     color="white"
     anchorX="50%"
     anchorY="50%"
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(-40, 25, 40)
     }}
   />
@@ -50,7 +50,7 @@
     color="white"
     anchorX="50%"
     anchorY="50%"
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(-40, 25, 40)
     }}
   />

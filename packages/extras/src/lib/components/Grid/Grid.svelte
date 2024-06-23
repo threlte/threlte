@@ -2,10 +2,8 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
-  import type { GridEvents, GridProps } from './Grid.svelte'
+  import type { GridProps } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
-
-  type $$Events = GridEvents
 
   let {
     cellColor = '#000000',

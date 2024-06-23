@@ -1,16 +1,9 @@
 <script lang="ts">
-  import type {
-    MeshLineMaterialEvents,
-    MeshLineMaterialProps,
-    MeshLineMaterialSlots
-  } from './MeshLineMaterial.svelte'
+  import type { MeshLineMaterialProps } from './MeshLineMaterial.svelte'
   import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
-
-  type $$Events = MeshLineMaterialEvents
-  type $$Slots = MeshLineMaterialSlots
 
   let {
     opacity = 1,
@@ -23,6 +16,7 @@
     scaleDown = 0,
     alphaMap,
     ref = $bindable(),
+    children,
     ...props
   }: MeshLineMaterialProps = $props()
 
@@ -69,5 +63,5 @@
   {fragmentShader}
   {vertexShader}
 >
-  <slot ref={material} />
+  {@render children?.({ ref: material })}
 </T>

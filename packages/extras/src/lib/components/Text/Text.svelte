@@ -3,11 +3,17 @@
   import { tick } from 'svelte'
   import { preloadFont, Text } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextProps, TextSlots } from './Text.svelte'
+  import type { TextProps } from './Text.svelte'
 
-  type $$Slots = TextSlots
-
-  let { font, characters, sdfGlyphSize, ref = $bindable(), onsync, ...props }: TextProps = $props()
+  let {
+    font,
+    characters,
+    sdfGlyphSize,
+    ref = $bindable(),
+    onsync,
+    children,
+    ...props
+  }: TextProps = $props()
 
   const text = new Text()
 
@@ -41,5 +47,5 @@
   {characters}
   {sdfGlyphSize}
 >
-  <slot ref={text} />
+  {@render children?.({ ref: text })}
 </T>

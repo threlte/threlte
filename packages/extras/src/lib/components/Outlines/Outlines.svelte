@@ -13,10 +13,7 @@
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { vertexShader, fragmentShader } from './shaders'
-  import type { OutlinesEvents, OutlinesProps, OutlinesSlots } from './Outlines'
-
-  type $$Events = OutlinesEvents
-  type $$Slots = OutlinesSlots
+  import type { OutlinesProps } from './Outlines.svelte'
 
   let {
     color = 'black',
@@ -29,6 +26,7 @@
     polygonOffset = false,
     polygonOffsetFactor = 0,
     renderOrder = 0,
+    children,
     ref = $bindable(),
     ...props
   }: OutlinesProps = $props()
@@ -129,5 +127,5 @@
   {...props}
 >
   <T is={mesh} />
-  <slot ref={group} />
+  {@render children?.({ ref: group })}
 </T>
