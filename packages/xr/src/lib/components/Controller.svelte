@@ -24,14 +24,14 @@
 
 <script lang="ts">
   type Props = {
-    connected: XRControllerEvent<'connected'>
-    disconnected: XRControllerEvent<'disconnected'>
-    select: XRControllerEvent<'select'>
-    selectstart: XRControllerEvent<'selectstart'>
-    selectend: XRControllerEvent<'selectend'>
-    squeeze: XRControllerEvent<'squeeze'>
-    squeezeend: XRControllerEvent<'squeezeend'>
-    squeezestart: XRControllerEvent<'squeezestart'>
+    onconnected?: XRControllerEvent<'connected'>
+    ondisconnected?: XRControllerEvent<'disconnected'>
+    onselect?: XRControllerEvent<'select'>
+    onselectstart: XRControllerEvent<'selectstart'>
+    onselectend: XRControllerEvent<'selectend'>
+    onsqueeze: XRControllerEvent<'squeeze'>
+    onsqueezeend: XRControllerEvent<'squeezeend'>
+    onsqueezestart: XRControllerEvent<'squeezestart'>
   } & (
     | {
         /** Whether the controller should be matched with the left hand. */

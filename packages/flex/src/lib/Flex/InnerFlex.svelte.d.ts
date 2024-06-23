@@ -1,7 +1,8 @@
 import type { Stage } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Direction, Yoga } from 'yoga-layout'
 import type { ClassParser, FlexPlane, NodeProps } from '../lib/props'
+import type { Group } from 'three'
 
 type InnerFlexProps = NodeProps & {
   yoga: Yoga
@@ -13,16 +14,19 @@ type InnerFlexProps = NodeProps & {
   class?: string
   classParser?: ClassParser
   reflowStage?: Stage
+  ref?: Group
 
-  onreflow: (event: { width: number; height: number }) => void
+  children?: Snippet<
+    [
+      {
+        reflow: () => void
+        width: number
+        height: number
+      }
+    ]
+  >
+
+  onreflow?: (event: { width: number; height: number }) => void
 }
 
-type InnerFlexSlots = {
-  default: {
-    reflow: () => void
-    width: number
-    height: number
-  }
-}
-
-export default class InnerFlex extends SvelteComponent<InnerFlexProps, {}, InnerFlexSlots> {}
+export default class InnerFlex extends SvelteComponent<InnerFlexProps> {}

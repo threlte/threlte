@@ -3,12 +3,7 @@
   import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type {
-    PositionalAudioEvents,
-    PositionalAudioProps
-  } from './PositionalAudio.svelte'
-
-  type $$Events = PositionalAudioEvents
+  import type { PositionalAudioProps } from './PositionalAudio.svelte'
 
   let {
     src,

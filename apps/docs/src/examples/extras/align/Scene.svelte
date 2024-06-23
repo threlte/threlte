@@ -29,23 +29,18 @@
     {z}
     {precise}
     auto={autoAlign}
-    on:align={({ boundingBox: newBoundingBox, center: newCenter }) => {
+    onalign={({ boundingBox: newBoundingBox, center: newCenter }) => {
       center = newCenter
       boundingBox = newBoundingBox
     }}
     let:align
   >
-    <T.Mesh
-      position.x={-1}
-      let:ref
-    >
-      <TransformControls
-        object={ref}
-        on:objectChange={align}
-      />
-      <RoundedBoxGeometry args={[1, 2, 1]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
+    <TransformControls onobjectChange={align}>
+      <T.Mesh position.x={-1}>
+        <RoundedBoxGeometry args={[1, 2, 1]} />
+        <T.MeshStandardMaterial color="white" />
+      </T.Mesh>
+    </TransformControls>
 
     <T.Mesh
       position.x={-4}

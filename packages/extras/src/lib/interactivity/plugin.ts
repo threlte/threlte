@@ -28,11 +28,9 @@ export const injectInteractivityPlugin = (): void => {
     const refStore = writable<Object3D>(ref)
 
     watch(refStore, ($refStore) => {
-      if (props === undefined) return
-
-      const hasEventHandlers = Object.keys(props).some((value) =>
-        interactivityEventNames.includes(value as keyof ThrelteEvents)
-      )
+      const hasEventHandlers = Object.entries(props).some(([key, value]) => {
+        return value !== undefined && interactivityEventNames.includes(key as keyof ThrelteEvents)
+      })
 
       if (!hasEventHandlers) return
 

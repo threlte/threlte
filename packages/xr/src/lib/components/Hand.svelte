@@ -18,10 +18,10 @@
 
 <script lang="ts">
   type Props = {
-    onconnected: XRHandEvent<'connected'>
-    ondisconnected: XRHandEvent<'disconnected'>
-    onpinchstart: XRHandEvent<'pinchstart'>
-    onpinchend: XRHandEvent<'pinchend'>
+    onconnected?: XRHandEvent<'connected'>
+    ondisconnected?: XRHandEvent<'disconnected'>
+    onpinchstart?: XRHandEvent<'pinchstart'>
+    onpinchend?: XRHandEvent<'pinchend'>
   } & (
     | {
         /** Whether the XRHand should be matched with the left hand. */

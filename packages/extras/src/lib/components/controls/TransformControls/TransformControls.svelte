@@ -7,13 +7,11 @@
     watch,
     type Props
   } from '@threlte/core'
-  import { Group, type Event } from 'three'
+  import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { writable } from 'svelte/store'
   import { useControlsContext } from '../useControlsContext'
-  import type { TransformControlsEvents, TransformControlsProps } from './TransformControls.svelte'
-
-  type $$Events = TransformControlsEvents
+  import type { TransformControlsProps } from './TransformControls.svelte'
 
   let {
     autoPauseOrbitControls = true,

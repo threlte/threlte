@@ -6,11 +6,9 @@
   import { createUseDimensionsContext } from '../hooks/useDimensions'
   import type { NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { BoxProps, BoxSlots } from './Box.svelte'
+  import type { BoxProps } from './Box.svelte'
 
-  type $$Slots = BoxSlots
-
-  let { order, class: _class = '', ...props }: BoxProps = $props()
+  let { order, class: _class = '', onreflow, children, ...props }: BoxProps = $props()
 
   /**
    * Create the context for `useDimensions`
@@ -27,7 +25,7 @@
     crossAxis,
     depthAxis,
     classParser,
-    reflow
+    reflow,
   } = useFlex()
 
   const group = new Group()
@@ -74,7 +72,7 @@
     dimensionsContext.width.set(computedWidth)
     dimensionsContext.height.set(computedHeight)
 
-    props.onreflow?.({
+    onreflow?.({
       width: computedWidth,
       height: computedHeight
     })
@@ -101,9 +99,5 @@
     }
   }}
 >
-  <slot
-    {reflow}
-    width={computedWidth}
-    height={computedHeight}
-  />
+  {@render children?.({ reflow, width: computedWidth, height: computedHeight })}
 </HierarchicalObject>

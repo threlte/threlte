@@ -22,8 +22,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
   import { getXRSupportState } from '../lib/getXRSupportState'
   import { toggleXRSession } from '../lib/toggleXRSession'
   import { session, xr } from '../internal/stores'
+  import type { Snippet } from 'svelte'
 
-  interface Props extends HTMLButtonAttributes {
+  type Props = HTMLButtonAttributes & {
     /** The type of `XRSession` to create */
     mode: XRSessionMode
     /**
@@ -35,13 +36,20 @@ display info about your WebXR session. This is aliased by `ARButton` and
     force?: 'enter' | 'exit'
     /** Whether to apply automatic styling to the button. Set false to apply custom styles. Default is true. */
     styled?: boolean
+
+    children?: Snippet<[{ state: SupportState }]>
+
+    onclick?: (event: { state: SupportState; nativeEvent: MouseEvent }) => void
+    onerror?: (error: Error) => void
   }
 
-  let { mode, sessionInit, force, styled = true, ...props }: Props = $props()
+  let { mode, sessionInit, force, styled = true, onclick, onerror, children, ...props }: Props = $props()
+
+  type SupportState = 'unsupported' | 'insecure' | 'blocked' | 'supported'
 
   const handleButtonClick = async (
     nativeEvent: MouseEvent,
-    state: 'unsupported' | 'insecure' | 'blocked' | 'supported'
+    state: SupportState
   ) => {
     if (!$xr) {
       throw new Error(
@@ -49,7 +57,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       )
     }
 
-    props.onclick?.({ state, nativeEvent })
+    onclick?.({ state, nativeEvent })
 
     if (state !== 'supported') return
 
@@ -57,7 +65,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       await toggleXRSession(mode, sessionInit, force)
     } catch (error) {
       /** This callback gets fired if XR initialization fails. */
-      props.onerror?.(error)
+      onerror?.(error as Error)
     }
   }
 
@@ -96,7 +104,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
     {...props}
     {style}
   >
-    {#if state === 'unsupported'}
+    {#if children}
+      {@render children?.({ state })}
+    {:else if state === 'unsupported'}
       {modeText} unsupported
     {:else if state === 'insecure'}
       HTTPS needed
