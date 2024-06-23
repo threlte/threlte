@@ -63,15 +63,12 @@ export type RigidBodyEvents = ColliderEvents & {
   onwake?: () => void
 }
 
-export type RigidBodyEventDispatchers = Map<RigidBodyHandle, Record<string, (arg: unknown) => void>>
-export type ColliderEventDispatchers = Map<ColliderHandle, Record<string, (arg: unknown) => void>>
-
 export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
-  events?: Record<string, (arg: unknown) => void>
+  events?: RigidBodyEvents
 }
 
 export type ThrelteRigidBody = RigidBody & {

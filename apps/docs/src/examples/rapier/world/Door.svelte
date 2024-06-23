@@ -117,8 +117,8 @@
         shape={'cuboid'}
         args={[1, 1.35, 1.5]}
         sensor
-        on:sensorenter={() => (objectsInSensor += 1)}
-        on:sensorexit={() => (objectsInSensor -= 1)}
+        onsensorenter={() => (objectsInSensor += 1)}
+        onsensorexit={() => (objectsInSensor -= 1)}
       />
     </T.Group>
   </CollisionGroups>

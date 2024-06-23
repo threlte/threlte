@@ -1,4 +1,4 @@
-import { Props, type Slots } from '@threlte/core'
+import { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 import type { GravityType } from '../../types/types'
@@ -31,6 +31,4 @@ type AttractorProps = Props<Group> & {
   gravitationalConstant?: number
 }
 
-type AttractorSlots = Slots<Group>
-
-export default class Attractor extends SvelteComponent<AttractorProps, {}, AttractorSlots> {}
+export default class Attractor extends SvelteComponent<AttractorProps> {}

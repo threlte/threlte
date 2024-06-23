@@ -33,14 +33,21 @@
     centerOfMass,
     principalAngularInertia,
     angularInertiaLocalFrame,
-    onrefresh = $bindable(() => create()),
+    refresh = $bindable(() => create()),
     colliders = $bindable(),
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    children,
     ...props
   }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>(props.oncreate)
+  const { updateRef } = useCreateEvent<Collider[]>(oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
@@ -68,7 +75,15 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) => addColliderToContext(c, group, props))
+    colliders.forEach((c) =>
+      addColliderToContext(c, group, {
+        oncollisionenter,
+        oncollisionexit,
+        oncontact,
+        onsensorenter,
+        onsensorexit
+      })
+    )
 
     collisionGroups.registerColliders(colliders)
 
@@ -112,8 +127,5 @@
 </script>
 
 <SceneGraphObject object={group}>
-  <slot
-    {colliders}
-    {refresh}
-  />
+  {@render children?.({ colliders: colliders ?? [], refresh })}
 </SceneGraphObject>

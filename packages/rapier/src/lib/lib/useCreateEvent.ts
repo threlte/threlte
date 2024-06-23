@@ -4,7 +4,7 @@ import { onDestroy } from 'svelte'
 export const useCreateEvent = <T>(oncreate?: ColliderEvents['oncreate']) => {
   const cleanupFunctions: (() => void)[] = []
 
-  let ref: T | undefined = undefined
+  let ref: T
 
   const dispatchCreateEvent = () => {
     // call every cleanup function

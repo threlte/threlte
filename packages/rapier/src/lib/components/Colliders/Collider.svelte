@@ -44,12 +44,19 @@
       collider.setTranslation(getWorldPosition(object))
       collider.setRotation(getWorldQuaternion(object))
     }),
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    children,
     ...props
   }: ColliderProps<TShape, TMassDef> & ColliderEvents = $props()
 
   const object = new Object3D()
 
-  const { updateRef } = useCreateEvent<Collider>(props.oncreate)
+  const { updateRef } = useCreateEvent<Collider>(oncreate)
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
@@ -80,7 +87,13 @@
     /**
      * Add collider to context
      */
-    rapierContext.addColliderToContext(collider, object, props)
+    rapierContext.addColliderToContext(collider, object, {
+      oncollisionenter,
+      oncollisionexit,
+      oncontact,
+      onsensorenter,
+      onsensorexit
+    })
 
     /**
      * For use in conjunction with component <CollisionGroups>
@@ -182,5 +195,5 @@
 </script>
 
 <SceneGraphObject {object}>
-  <slot {collider} />
+  {@render children?.({ collider })}
 </SceneGraphObject>

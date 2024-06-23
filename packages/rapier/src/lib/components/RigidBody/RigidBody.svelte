@@ -30,13 +30,21 @@
     enabled = true,
     userData = {},
     rigidBody = $bindable(),
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake,
     ...props
   }: RigidBodyProps & RigidBodyEvents = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  const { updateRef } = useCreateEvent<RigidBody>(props.oncreate)
+  const { updateRef } = useCreateEvent<RigidBody>(oncreate)
 
   const object = new Object3D()
 
@@ -110,7 +118,15 @@
    */
   $effect.pre(() => {
     rigidBodyInternal.userData = {
-      events: props,
+      events: {
+        oncollisionenter,
+        oncollisionexit,
+        oncontact,
+        onsensorenter,
+        onsensorexit,
+        onsleep,
+        onwake
+      },
       ...userData
     }
   })
@@ -129,7 +145,15 @@
   /**
    * Add the mesh to the context
    */
-  addRigidBodyToContext(rigidBodyInternal, object, props)
+  addRigidBodyToContext(rigidBodyInternal, object, {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake
+  })
 
   /**
    * cleanup

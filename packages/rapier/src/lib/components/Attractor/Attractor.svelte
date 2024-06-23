@@ -3,9 +3,7 @@
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps, AttractorSlots } from './Attractor.svelte'
-
-  type $$Slots = AttractorSlots
+  import type { AttractorProps } from './Attractor.svelte'
 
   let {
     strength = 1,
@@ -13,6 +11,7 @@
     gravityType = 'static',
     gravitationalConstant = 6.673e-11,
     ref = $bindable(),
+    children,
     ...props
   }: AttractorProps = $props()
 
@@ -64,7 +63,7 @@
   bind:ref
   {...props}
 >
-  <slot ref={group} />
+  {@render children?.({ ref: group })}
 
   {#if $debug}
     <T.Mesh>

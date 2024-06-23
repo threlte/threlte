@@ -7,14 +7,16 @@
   interface Props {
     final?: boolean
 
-    children: Snippet
+    children?: Snippet<[{ suspended: boolean; errors: Error[] }]>
+    error?: Snippet<[{ errors: Error[] }]>
+    fallback?: Snippet
 
     onload?: () => void
     onerror?: (error: Error[]) => void
     onsuspend?: () => void
   }
 
-  let { final = false, onload, onsuspend, onerror, children }: Props = $props()
+  let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $effect.pre(() => setFinal(final))
@@ -49,18 +51,12 @@
 <!-- Block the graph from mounting to the parent -->
 <HierarchicalObject>
   <T is={group}>
-    <slot
-      suspended={$suspended}
-      errors={$errors}
-    />
+    {@render children?.({ suspended: $suspended, errors: $errors })}
   </T>
 </HierarchicalObject>
 
 {#if $errors.length}
-  <slot
-    name="error"
-    errors={$errors}
-  />
+  {@render error?.({ errors: $errors })}
 {:else if $suspended}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}
