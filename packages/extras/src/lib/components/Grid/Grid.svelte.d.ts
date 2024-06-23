@@ -1,5 +1,5 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Events, Props } from '@threlte/core'
+import type { Snippet, SvelteComponent } from 'svelte'
 import type { ColorRepresentation, Mesh, Side } from 'three'
 
 export type GridProps = Props<Mesh> & {
@@ -18,6 +18,7 @@ export type GridProps = Props<Mesh> & {
   fadeDistance?: number
   fadeStrength?: number
   side?: Side
+  children?: GridSnippet
 } & (
     | {
         type?: 'grid'
@@ -40,6 +41,6 @@ export type GridProps = Props<Mesh> & {
 
 export type GridEvents = Events<Mesh>
 
-export type GridSlots = Slots<Mesh>
+export type GridSnippet = Snippet<[{ ref: Mesh }]>
 
-export default class Grid extends SvelteComponent<GridProps, GridEvents, GridSlots> {}
+export default class Grid extends SvelteComponent<GridProps, GridEvents> {}

@@ -3,6 +3,7 @@
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
   import { createApi } from './api'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     instancedMesh: InstancedMesh
@@ -10,9 +11,10 @@
     limit: number
     range: number
     update: boolean
+		children?: Snippet
   }
 
-  let { instancedMesh, id, limit, range, update }: Props = $props()
+  let { instancedMesh, id, limit, range, update, children }: Props = $props()
 
   const { instances } = createApi(instancedMesh, id)
 
@@ -96,4 +98,4 @@
   usage={DynamicDrawUsage}
 />
 
-<slot />
+{@render children?.()}
