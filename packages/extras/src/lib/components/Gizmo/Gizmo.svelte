@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HierarchicalObject, T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy, onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import {
     CanvasTexture,
     CapsuleGeometry,
@@ -18,11 +18,9 @@
     type ColorRepresentation,
     type Intersection
   } from 'three'
-  import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
+  import type { GizmoEvents, GizmoProps } from './Gizmo'
 
-  type $$Props = GizmoProps
   type $$Events = GizmoEvents
-  type $$Slots = GizmoSlots
 
   let {
     renderTask,
