@@ -7,9 +7,7 @@
 <script lang="ts">
   import { Group, Quaternion } from 'three'
 
-  import type { BillboardEvents, BillboardProps } from './Billboard.svelte'
-
-  type $$Events = BillboardEvents
+  import type { BillboardProps } from './Billboard.svelte'
 
   let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
@@ -52,6 +50,6 @@
   {...props}
 >
   <T is={inner}>
-		{@render children({ref:localRef})}
+		{@render children?.({ ref:localRef })}
   </T>
 </T>

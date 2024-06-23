@@ -10,7 +10,7 @@
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events } from './types'
+  import type { Props, } from './types'
   import Camera from './Camera.svelte'
 
   type Type = $$Generic
@@ -18,7 +18,6 @@
   type AllProps = {
     is: Type
   } & Props<Type>
-  type $$Events = Events<Type>
 
   let {
     is = useIsContext(),

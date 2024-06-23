@@ -4,10 +4,7 @@
   import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3DGeometry.svelte'
-
-  type $$Events = Text3DEvents
-  type $$Slots = Text3DSlots
+  import type { Text3DProps } from './Text3DGeometry.svelte'
 
   let {
     text,

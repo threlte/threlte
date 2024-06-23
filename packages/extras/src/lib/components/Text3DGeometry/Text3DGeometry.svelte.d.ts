@@ -1,6 +1,5 @@
-import type { Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
-import type { BufferGeometry } from 'three'
 import type { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 
@@ -25,6 +24,4 @@ export type Text3DProps = Props<TextGeometry> & {
   onrendered: (mesh: TextGeometry) => void
 }
 
-export type Text3DSlots = Slots<BufferGeometry>
-
-export default class Text3D extends SvelteComponent<Text3DProps, {}, Text3DSlots> {}
+export default class Text3D extends SvelteComponent<Text3DProps> {}

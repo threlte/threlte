@@ -2,10 +2,8 @@
   import { T, useTask, useStage, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
-  import type { AlignEvents, AlignProps } from './Align.svelte'
+  import type { AlignProps } from './Align.svelte'
   import { injectAlignPlugin } from './alignPlugin'
-
-  type $$Events = AlignEvents
 
   let {
     x = 0,
@@ -16,6 +14,7 @@
     ref = $bindable(),
     calculate = $bindable(),
     align = $bindable(),
+    onalign,
 		children,
     ...props
   }: AlignProps = $props()
@@ -61,7 +60,7 @@
       z === false ? 0 : -align.z + dAlign
     )
 
-    props.onalign?.({
+    onalign?.({
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,
