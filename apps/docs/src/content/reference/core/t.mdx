@@ -375,7 +375,7 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 ```svelte
 <T
   is={OrbitControls}
-  on:change={(e) => console.log('change:', e)}
+  onchange={(e) => console.log('change:', e)}
 />
 ```
 
@@ -386,7 +386,7 @@ that you may invoke with a callback to clean up after the object is destroyed wh
 
 ```svelte
 <T.PerspectiveCamera
-  on:create={({ ref, cleanup }) => {
+  oncreate={({ ref, cleanup }) => {
     // Look at the center
     ref.lookAt(0, 0, 0)
 

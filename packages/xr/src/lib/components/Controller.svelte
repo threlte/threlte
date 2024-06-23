@@ -9,7 +9,7 @@
   import { T } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerEvents } from '../internal/stores'
-  import type { XRControllerEvent } from '../types'
+  import type { XRControllerEvents } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import ScenePortal from './internal/ScenePortal.svelte'
@@ -23,43 +23,57 @@
 </script>
 
 <script lang="ts">
-  type Props = {
-    onconnected?: XRControllerEvent<'connected'>
-    ondisconnected?: XRControllerEvent<'disconnected'>
-    onselect?: XRControllerEvent<'select'>
-    onselectstart: XRControllerEvent<'selectstart'>
-    onselectend: XRControllerEvent<'selectend'>
-    onsqueeze: XRControllerEvent<'squeeze'>
-    onsqueezeend: XRControllerEvent<'squeezeend'>
-    onsqueezestart: XRControllerEvent<'squeezestart'>
-  } & (
-    | {
-        /** Whether the controller should be matched with the left hand. */
-        left: true
-        right?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the controller should be matched with the right hand. */
-        right: true
-        left?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the controller should be matched with the left or right hand. */
-        hand: 'left' | 'right'
-        left?: undefined
-        right?: undefined
-      }
-  )
+  type Props = XRControllerEvents &
+    (
+      | {
+          /** Whether the controller should be matched with the left hand. */
+          left: true
+          right?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the controller should be matched with the right hand. */
+          right: true
+          left?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the controller should be matched with the left or right hand. */
+          hand: 'left' | 'right'
+          left?: undefined
+          right?: undefined
+        }
+    )
 
-  let { left, right, hand, ...props }: Props = $props()
+  let {
+    left,
+    right,
+    hand,
+    onconnected,
+    ondisconnected,
+    onselect,
+    onselectend,
+    onselectstart,
+    onsqueeze,
+    onsqueezeend,
+    onsqueezestart
+  }: Props = $props()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
   $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
 
-  controllerEvents[$handedness].set(props)
-  $effect.pre(() => controllerEvents[$handedness].set(props))
+  $effect.pre(() =>
+    controllerEvents[$handedness].set({
+      onconnected,
+      ondisconnected,
+      onselect,
+      onselectend,
+      onselectstart,
+      onsqueeze,
+      onsqueezeend,
+      onsqueezestart
+    })
+  )
 
   let store = $derived(stores[$handedness])
   let grip = $derived($store?.grip)

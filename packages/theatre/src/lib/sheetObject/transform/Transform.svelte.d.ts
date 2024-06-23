@@ -14,7 +14,5 @@ export default class Transform<Label extends string | undefined> extends SvelteC
       }
     : {
         key?: string
-      }),
-  Record<string, unknown>,
-  Record<string, unknown>
+      })
 > {}

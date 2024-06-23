@@ -22,12 +22,12 @@
 >
   <T.Mesh
     position.z={z}
-    on:click={(e) => {
-      e.stopPropagation()
+    onclick={(event) => {
+      event.stopPropagation()
       onClick()
     }}
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
+    onpointerenter={onPointerEnter}
+    onpointerleave={onPointerLeave}
   >
     <RoundedBoxGeometry
       args={[width, height, 10]}

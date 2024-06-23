@@ -9,10 +9,10 @@ This should be placed within a Threlte `<Canvas />`.
     foveation={1}
     frameRate={90}
     referenceSpace='local-floor'
-    on:sessionstart={(event: XREvent<XRManagerEvent>) => {}}
-    on:sessionend={(event: XREvent<XRManagerEvent>) => {}}
-    on:visibilitychange={(event: XREvent<XRSessionEvent>) => {}}
-    on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
+    onsessionstart={(event: XREvent<XRManagerEvent>) => {}}
+    onsessionend={(event: XREvent<XRManagerEvent>) => {}}
+    onvisibilitychange={(event: XREvent<XRSessionEvent>) => {}}
+    oninputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
   />
 ```
 

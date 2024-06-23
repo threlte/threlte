@@ -49,7 +49,7 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
    *
    * Default: undefined
    * */
-  colorProcessingTexture?: Texture | VideoTexture
+  colorProcessingTexture?: Texture | VideoTexture | undefined
   /** Default: true */
   toneMapped?: boolean
   /** Default: false */

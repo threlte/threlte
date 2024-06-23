@@ -34,8 +34,8 @@
 <XR>
   <Controller
     left
-    on:connected={() => console.log('connect')}
-    on:select={() => console.log('select')}
+    onconnected={() => console.log('connect')}
+    onselect={() => console.log('select')}
   >
     <T.Mesh>
       <T.CylinderGeometry args={[0.01, 0.01, 0.08]} />
@@ -53,8 +53,8 @@
 
   <Controller
     right
-    on:connected={() => console.log('connect')}
-    on:select={() => console.log('select')}
+    onconnected={() => console.log('connect')}
+    onselect={() => console.log('select')}
   />
 
   <Hand left>
@@ -77,7 +77,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Mesh

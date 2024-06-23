@@ -12,7 +12,8 @@
 
   const { state, levelIndex, playerPosition, ballPosition, ballRigidBody } = gameState
 
-  let rigidBody: RapierRigidBody | undefined = undefined
+  let rigidBody: RapierRigidBody
+
   $: if (rigidBody) ballRigidBody.set(rigidBody)
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
@@ -57,7 +58,7 @@
   <RigidBody
     bind:rigidBody
     type={'dynamic'}
-    on:sensorenter={onSensorEnter}
+    onsensorenter={onSensorEnter}
     enabledTranslations={[true, false, true]}
   >
     <AutoColliders

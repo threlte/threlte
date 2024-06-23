@@ -4,8 +4,8 @@
 
 ```svelte
   <VRButton
-    on:error={(event) => {}}
-    on:click={(event) => {}}
+    onerror={(event) => {}}
+    onclick={(event) => {}}
   />
 ```
 -->

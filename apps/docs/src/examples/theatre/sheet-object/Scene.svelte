@@ -39,7 +39,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[5, 5, 5]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
 />
@@ -54,10 +54,10 @@
   <Transform>
     <T.Mesh
       castShadow
-      on:click={select}
-      on:pointerenter={onPointerEnter}
-      on:pointerleave={onPointerLeave}
-      on:pointermissed={deselect}
+      onclick={select}
+      onpointerenter={onPointerEnter}
+      onpointerleave={onPointerLeave}
+      onpointermissed={deselect}
     >
       <RoundedBoxGeometry radius={0.1} />
       <T.MeshStandardMaterial

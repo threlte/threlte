@@ -52,7 +52,7 @@
 
 <T.PerspectiveCamera
   makeDefault={$debug}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.position.set(10, 10, 10)
     ref.lookAt(0, 0, 0)
   }}

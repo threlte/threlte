@@ -18,7 +18,7 @@
     type Intersection,
     type Sprite
   } from 'three'
-  import type { GizmoProps } from './Gizmo'
+  import type { GizmoProps } from './Gizmo.svelte'
 
   let {
     renderTask,

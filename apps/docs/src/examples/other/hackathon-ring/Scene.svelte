@@ -44,7 +44,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[0, 8, 30]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
   fov={20}
@@ -53,7 +53,7 @@
 <GLTF
   url="/models/wave-ring/Pedestal.glb"
   position.y={-16.5}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.children.forEach((child) => {
       child.receiveShadow = true
     })
@@ -139,7 +139,7 @@
 </SheetObject>
 
 <GLTF
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.children.forEach((child) => {
       child.castShadow = true
       child.receiveShadow = true

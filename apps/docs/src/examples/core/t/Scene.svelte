@@ -27,6 +27,6 @@
 >
   <T.OrbitControls
     args={[camera, renderer.domElement]}
-    on:change={invalidate}
+    onchange={invalidate}
   />
 </T.PerspectiveCamera>

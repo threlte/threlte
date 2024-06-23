@@ -14,7 +14,7 @@
 >
   <T.OrbitControls
     args={[ref, el]}
-    on:change={invalidate}
+    onchange={invalidate}
     enableZoom={false}
   />
 </T.OrthographicCamera>

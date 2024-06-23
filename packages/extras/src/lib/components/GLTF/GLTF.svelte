@@ -62,8 +62,7 @@
     onload?.(gltf)
   }
 
-  const onError = (error: any) => {
-    console.error(`Error loading GLTF: ${error.message}`)
+  const onError = (error: Error) => {
     gltf = undefined
     scene = undefined!
     animations = undefined!
@@ -74,7 +73,7 @@
     parser = undefined!
     nodes = undefined
     materials = undefined
-    onerror?.(error.message)
+    onerror?.(error)
   }
 
   const suspend = useSuspense()
@@ -83,8 +82,8 @@
     try {
       const model = await suspend(loader.load(url))
       onLoad(model)
-    } catch (error: any) {
-      onError(error)
+    } catch (error) {
+      onError(error as Error)
     }
   }
 

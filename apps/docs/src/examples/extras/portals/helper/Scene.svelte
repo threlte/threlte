@@ -51,7 +51,7 @@
   {#snippet children({ ref })}
     <TransformControls
       object={ref}
-      on:objectChange={() => {
+      onobjectChange={() => {
         if (!helperB) return
         helperB.update()
       }}

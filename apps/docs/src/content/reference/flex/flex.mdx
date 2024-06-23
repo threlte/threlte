@@ -214,7 +214,7 @@ reflow, you can use the slot prop `reflow`:
   <Box>
     <GLTF
       src="/model.glb"
-      on:load={() => {
+      onload={() => {
         reflow()
       }}
     />
@@ -284,7 +284,7 @@ Although the width and the height of the `<Flex>` component are required, the
 </script>
 
 <Flex
-  on:reflow={({ width, height }) => {
+  onreflow={({ width, height }) => {
     console.log(width, height)
   }}
 >

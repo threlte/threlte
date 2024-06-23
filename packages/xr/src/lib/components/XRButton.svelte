@@ -12,8 +12,8 @@ display info about your WebXR session. This is aliased by `ARButton` and
     }}
     force={'enter' | 'exit' | undefined}
     styled={'true' | 'false'}
-    on:error={(event) => {}}
-    on:click={(event) => {}}
+    onerror={(event) => {}}
+    onclick={(event) => {}}
   />
 ```
 -->

@@ -32,7 +32,7 @@ Provide arguments to determine the cursor style. The defaults are`'pointer'` for
 
 <Mesh
   interactive
-  on:pointerenter={onPointerEnter}
+  onpointerenter={onPointerEnter}
   geometry={new BoxBufferGeometry(1, 1, 1)}
   material={new MeshBasicMaterial()}
 />
@@ -60,8 +60,8 @@ You can rename the event handlers to resolve naming conflicts. Additionally Svel
 
 <Mesh
   interactive
-  on:pointerenter={cursorEnter}
-  on:pointerenter={onPointerEnter}
+  onpointerenter={cursorEnter}
+  onpointerenter={onPointerEnter}
   geometry={new BoxBufferGeometry(1, 1, 1)}
   material={new MeshBasicMaterial()}
 />
@@ -82,8 +82,8 @@ If you want to implement custom logic, you can use the returned svelte store to 
 
 <Mesh
   interactive
-  on:pointerenter={() => ($hovering = true)}
-  on:pointerleave={() => ($hovering = false)}
+  onpointerenter={() => ($hovering = true)}
+  onpointerleave={() => ($hovering = false)}
   geometry={new BoxBufferGeometry(1, 1, 1)}
   material={new MeshBasicMaterial()}
 />
@@ -110,7 +110,7 @@ Provide svelte stores to change the cursor style also while hovering:
 
 <Mesh
   interactive
-  on:pointerenter={onPointerEnter}
+  onpointerenter={onPointerEnter}
   geometry={new BoxBufferGeometry(1, 1, 1)}
   material={new MeshBasicMaterial()}
 />

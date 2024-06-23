@@ -25,7 +25,7 @@
   key="Light"
   let:Transform
   props={{}}
-  on:change={() => {
+  onchange={() => {
     lightHelper?.update()
   }}
   let:selected

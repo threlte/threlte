@@ -11,12 +11,15 @@
 </script>
 
 <T.Group
-  on:pointerenter={pause}
-  on:pointerleave={play}
-  on:pointerdown={(event) => {
+  onpointerenter={pause}
+  onpointerleave={() => {
+    play()
+    baseline = undefined
+  }}
+  onpointerdown={(event) => {
     baseline = event.intersections[0].point.y
   }}
-  on:pointermove={(event) => {
+  onpointermove={(event) => {
     if (baseline) {
       const current = event.intersections[0].point.y
       const progress = (baseline - current) / 2
@@ -24,8 +27,7 @@
       baseline = current
     }
   }}
-  on:pointerup={() => (baseline = undefined)}
-  on:pointerleave={() => (baseline = undefined)}
+  onpointerup={() => (baseline = undefined)}
 >
   <SheetObject
     key="Feather"

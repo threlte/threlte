@@ -13,6 +13,7 @@
   import Declare from './declare/Declare.svelte'
   import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
+  import type { SheetObjectProps } from './SheetObject.svelte'
 
   type Props = $$Generic<UnknownShorthandCompoundProps>
 
@@ -21,13 +22,9 @@
     detach = false,
     props,
     selected = $bindable(false),
-    ...restProps
-  }: {
-    key: string
-    detach: boolean
-    props?: Props | undefined
-    selected?: boolean
-  } = $props()
+    onchange,
+    children
+  }: SheetObjectProps<Props> = $props()
 
   const { invalidate } = useThrelte()
 
@@ -46,7 +43,7 @@
     // values change, we're emitting the initial value here. Doing this in
     // onMount also means that child components which might add props to the
     // sheet object have already been mounted.
-    restProps.onchange?.(sheetObject.current.value)
+    onchange?.(sheetObject.current.value)
   })
 
   // This flag is used to prevent the sheet object from being created after it
@@ -111,7 +108,7 @@
   let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
     return sheetObject.onValuesChange((newValues) => {
-      restProps.onchange?.(newValues)
+      onchange?.(newValues)
       values = newValues
       // this invalidation also invalidates changes catched by slotted
       // components such as <Sync> or <Declare>.
@@ -142,13 +139,13 @@
   }
 </script>
 
-<slot
-  {values}
-  {selected}
-  {select}
-  {deselect}
-  sheetObject={$sheetObject}
-  {Sync}
-  {Transform}
-  {Declare}
-/>
+{@render children?.({
+  values,
+  selected,
+  select,
+  deselect,
+  sheetObject: $sheetObject,
+  Sync,
+  Transform,
+  Declare
+})}

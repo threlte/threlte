@@ -162,9 +162,9 @@
       {mode}
       {space}
       bind:controls
-      on:mouseDown={onMouseDown}
-      on:objectChange={onChange}
-      on:mouseUp={onMouseUp}
+      onmouseDown={onMouseDown}
+      onobjectChange={onChange}
+      onmouseUp={onMouseUp}
     />
   {/if}
 

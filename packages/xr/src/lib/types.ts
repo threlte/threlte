@@ -18,6 +18,17 @@ export type XRControllerEventType =
   | 'disconnected'
   | 'connected'
 
+export type XRControllerEvents = {
+  onconnected?: XRControllerEvent<'connected'>
+  ondisconnected?: XRControllerEvent<'disconnected'>
+  onselect?: XRControllerEvent<'select'>
+  onselectstart?: XRControllerEvent<'selectstart'>
+  onselectend?: XRControllerEvent<'selectend'>
+  onsqueeze?: XRControllerEvent<'squeeze'>
+  onsqueezeend?: XRControllerEvent<'squeezeend'>
+  onsqueezestart?: XRControllerEvent<'squeezestart'>
+}
+
 export type XRHandEventType = 'pinchstart' | 'pinchend' | 'connected' | 'disconnected'
 
 export type XRSessionEvent<Type = XRSessionEventType> = (
@@ -47,6 +58,13 @@ export type XRHand = {
   hand: XRHandSpace
   model?: XRHandModel
   inputSource: globalThis.XRHand
+}
+
+export type XRHandEvents = {
+  onconnected?: XRHandEvent<'connected'>
+  ondisconnected?: XRHandEvent<'disconnected'>
+  onpinchstart?: XRHandEvent<'pinchstart'>
+  onpinchend?: XRHandEvent<'pinchend'>
 }
 
 export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'
