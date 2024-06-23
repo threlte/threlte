@@ -5,12 +5,10 @@
   import { useThrelteAudio } from '../useThrelteAudio'
   import type {
     PositionalAudioEvents,
-    PositionalAudioProps,
-    PositionalAudioSlots
+    PositionalAudioProps
   } from './PositionalAudio.svelte'
 
   type $$Events = PositionalAudioEvents
-  type $$Slots = PositionalAudioSlots
 
   let {
     src,
@@ -29,6 +27,7 @@
     pause = $bindable(),
     stop = $bindable(),
     ref = $bindable(),
+		children,
     ...props
   }: PositionalAudioProps = $props()
 
@@ -83,5 +82,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={audio} />
+	{@render children?.({ref:audio})}
 </T>

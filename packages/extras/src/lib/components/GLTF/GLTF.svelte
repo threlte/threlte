@@ -4,11 +4,9 @@
   import { useGltf } from '../../hooks/useGltf'
   import { useSuspense } from '../../suspense/useSuspense'
   import type { ThrelteGltf } from '../../types/types'
-  import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
+  import type { GltfEvents, GltfProps } from './GLTF.svelte.js'
 
-  type $$Props = GltfProps
   type $$Events = GltfEvents
-  type $$Slots = GltfSlots
 
   type AnyThrelteGltf = ThrelteGltf<{
     nodes: Record<string, any>
@@ -32,6 +30,7 @@
     parser = $bindable(),
     materials = $bindable(),
     nodes = $bindable(),
+		children,
     ...props
   }: Props = $props()
 
@@ -98,6 +97,6 @@
     is={scene}
     {...props}
   >
-    <slot ref={scene} />
+		{@render children?.({ref:scene})}
   </T>
 {/if}

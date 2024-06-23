@@ -6,7 +6,7 @@
 
   type ThrelteDisposeContext = Writable<boolean>
 
-  let { object, dispose }: DisposableObjectProperties = $props()
+  let { object, dispose, children }: DisposableObjectProperties = $props()
 
   const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
     useThrelteInternal()
@@ -38,4 +38,6 @@
   })
 </script>
 
-<slot />
+{#if children}
+	{@render children()}
+{/if}

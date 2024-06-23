@@ -5,12 +5,10 @@
   import { useThrelteAudio } from '../useThrelteAudio'
   import type {
     AudioListenerProps,
-    AudioListenerEvents,
-    AudioListenerSlots
+    AudioListenerEvents
   } from './AudioListener.svelte'
 
   type $$Events = AudioListenerEvents
-  type $$Slots = AudioListenerSlots
 
   let {
     id,
@@ -18,6 +16,7 @@
     ref = $bindable(),
     audioContext = $bindable(),
     resumeContext = $bindable(),
+		children,
     ...props
   }: AudioListenerProps = $props()
 
@@ -46,5 +45,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={listener} />
+	{@render children?.({ref:listener})}
 </T>

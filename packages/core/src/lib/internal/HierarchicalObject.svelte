@@ -34,7 +34,8 @@
     object,
     onChildMount,
     onChildDestroy,
-    parent = $bindable()
+    parent = $bindable(),
+		children
   }: HierarchicalObjectProperties & { parent: Object3D | undefined } = $props()
 
   const onChildMountProxy: HierarchicalObjectProperties['onChildMount'] = (child) => {
@@ -99,4 +100,4 @@
   setParent(objectStore)
 </script>
 
-<slot />
+{@render children()}

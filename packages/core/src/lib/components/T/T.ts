@@ -1,7 +1,7 @@
 import type { SvelteComponent } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Events, Props, Slots } from './types'
+import type { Events, Props } from './types'
 import { setIsContext, type ThreeObject } from './utils/useIsContext'
 
 type Extensions = Record<string, ThreeObject>
@@ -70,7 +70,6 @@ export const T = new Proxy(function () {}, {
 }) as unknown as typeof TComp & {
   [Key in keyof typeof THREE]: typeof SvelteComponent<
     Props<(typeof THREE)[Key]>,
-    Events<(typeof THREE)[Key]>,
-    Slots<(typeof THREE)[Key]>
+    Events<(typeof THREE)[Key]>
   >
 } & Record<string, typeof SvelteComponent>

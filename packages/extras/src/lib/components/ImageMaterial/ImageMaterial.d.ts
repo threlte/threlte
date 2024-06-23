@@ -1,6 +1,6 @@
-import { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
+import type { Events, Props } from '@threlte/core'
+import type { Snippet, SvelteComponent } from 'svelte'
 
 export type ImageMaterialProps = Props<ShaderMaterial> & {
   /** Default: white */
@@ -58,6 +58,7 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
   opacity?: number
   /** Default: FrontSide */
   side?: Side
+  children?: ImageMaterialSnippet
 } & (
     | {
         texture: Texture
@@ -71,10 +72,6 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
 
 export type ImageMaterialEvents = Events<ShaderMaterial>
 
-export type ImageMaterialSlots = Slots<ShaderMaterial>
+export type ImageMaterialSnippet = Snippet<[{ ref: ShaderMaterial }]>
 
-export default class Image extends SvelteComponent<
-  ImageMaterialProps,
-  ImageMaterialEvents,
-  ImageMaterialSlots
-> {}
+export default class Image extends SvelteComponent<ImageMaterialProps, ImageMaterialEvents> {}

@@ -4,14 +4,9 @@
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { writable } from 'svelte/store'
   import { useControlsContext } from '../useControlsContext'
-  import type {
-    TransformControlsEvents,
-    TransformControlsProps,
-    TransformControlsSlots
-  } from './TransformControls.svelte'
+  import type { TransformControlsEvents, TransformControlsProps } from './TransformControls.svelte'
 
   type $$Events = TransformControlsEvents
-  type $$Slots = TransformControlsSlots
 
   let {
     autoPauseOrbitControls = true,
@@ -19,6 +14,7 @@
     object,
     controls = $bindable(),
     group = $bindable(),
+    children,
     ...props
   }: TransformControlsProps = $props()
 
@@ -143,5 +139,7 @@
   bind:ref={group}
   {...objectProps}
 >
-  <slot ref={attachGroup} />
+	{#if children}
+		{@render children({ref:attachGroup})}
+	{/if}
 </T>

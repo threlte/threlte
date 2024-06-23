@@ -22,7 +22,6 @@
   import type {
     AnimatedSpriteProps,
     AnimatedSpriteEvents,
-    AnimatedSpriteSlots,
     SpriteJsonHashData,
     FrameTag,
     Frame
@@ -31,7 +30,6 @@
   import { useTexture } from '../../hooks/useTexture'
 
   type $$Events = AnimatedSpriteEvents
-  type $$Slots = AnimatedSpriteSlots
 
   let {
     textureUrl,

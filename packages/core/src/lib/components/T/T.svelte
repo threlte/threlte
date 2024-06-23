@@ -11,7 +11,7 @@
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots } from './types'
+  import type { Props, Events } from './types'
   import Camera from './Camera.svelte'
 
   type Type = $$Generic
@@ -20,7 +20,6 @@
     is: Type
   } & Props<Type>
   type $$Events = Events<Type>
-  type $$Slots = Slots<Type>
 
   let {
     is = useIsContext(),
@@ -29,7 +28,7 @@
     manual,
     makeDefault,
     dispose,
-    children,
+		children,
     ref = $bindable(),
     ...props
   }: AllProps = $props()
@@ -128,9 +127,9 @@
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-      <slot ref={internalRef} />
+			{@render children(internalRef)}
     {/if}
   </SceneGraphObject>
 {:else if children}
-  <slot ref={internalRef} />
+	{@render children(internalRef)}
 {/if}

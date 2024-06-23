@@ -2,11 +2,10 @@
   import { T, useTask, useStage, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
-  import type { AlignEvents, AlignProps, AlignSlots } from './Align.svelte'
+  import type { AlignEvents, AlignProps } from './Align.svelte'
   import { injectAlignPlugin } from './alignPlugin'
 
   type $$Events = AlignEvents
-  type $$Slots = AlignSlots
 
   let {
     x = 0,
@@ -17,6 +16,7 @@
     ref = $bindable(),
     calculate = $bindable(),
     align = $bindable(),
+		children,
     ...props
   }: AlignProps = $props()
 
@@ -124,10 +124,7 @@
 >
   <T is={outerGroup}>
     <T is={innerGroup}>
-      <slot
-        align={scheduleAligning}
-        ref={group}
-      />
+			{@render children({ align: scheduleAligning, ref: group })}
     </T>
   </T>
 </T>
