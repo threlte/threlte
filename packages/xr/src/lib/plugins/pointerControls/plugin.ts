@@ -12,8 +12,8 @@ export const injectPointerControlsPlugin = (): void => {
     const refStore = writable<Object3D>(ref)
 
     watch(refStore, ($refStore) => {
-      if (props.$$events === undefined) return
-      addInteractiveObject($refStore, props.$$events)
+      if (props === undefined) return
+      addInteractiveObject($refStore, props)
       return () => removeInteractiveObject($refStore)
     })
 

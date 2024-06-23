@@ -23,7 +23,16 @@
 </script>
 
 <script lang="ts">
-  type Props =
+  type Props = {
+    connected: XRControllerEvent<'connected'>
+    disconnected: XRControllerEvent<'disconnected'>
+    select: XRControllerEvent<'select'>
+    selectstart: XRControllerEvent<'selectstart'>
+    selectend: XRControllerEvent<'selectend'>
+    squeeze: XRControllerEvent<'squeeze'>
+    squeezeend: XRControllerEvent<'squeezeend'>
+    squeezestart: XRControllerEvent<'squeezestart'>
+  } & (
     | {
         /** Whether the controller should be matched with the left hand. */
         left: true
@@ -42,25 +51,15 @@
         left?: undefined
         right?: undefined
       }
+  )
 
   let { left, right, hand, ...props }: Props = $props()
-
-  type $$Events = {
-    connected: XRControllerEvent<'connected'>
-    disconnected: XRControllerEvent<'disconnected'>
-    select: XRControllerEvent<'select'>
-    selectstart: XRControllerEvent<'selectstart'>
-    selectend: XRControllerEvent<'selectend'>
-    squeeze: XRControllerEvent<'squeeze'>
-    squeezeend: XRControllerEvent<'squeezeend'>
-    squeezestart: XRControllerEvent<'squeezestart'>
-  }
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
   $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
 
-  controllerEvents[$handedness].set(props.$$events)
-  $effect.pre(() => controllerEvents[$handedness].set(props.$$events))
+  controllerEvents[$handedness].set(props)
+  $effect.pre(() => controllerEvents[$handedness].set(props))
 
   let store = $derived(stores[$handedness])
   let grip = $derived($store?.grip)

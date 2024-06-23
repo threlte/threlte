@@ -50,9 +50,9 @@
 <T
   is={controls}
   bind:ref
-  on:change={(event) => {
+  onchange={(event) => {
     invalidate()
-    props.$$events?.change?.(event)
+    props.onchange?.(event)
   }}
   {...props}
 >

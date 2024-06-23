@@ -55,25 +55,21 @@ This should be placed within a Threlte `<Canvas />`.
 
     /** Type of WebXR reference space to use. Default is `local-floor` */
     referenceSpace?: XRReferenceSpaceType
-  }
 
-  type $$Events = {
     /** Called as an XRSession is requested */
-    sessionstart: (event: XRSessionEvent<'sessionstart'>) => void
+    onsessionstart: (event: XRSessionEvent<'sessionstart'>) => void
+
     /** Called after an XRSession is terminated */
-    sessionend: (event: XRSessionEvent<'sessionend'>) => void
+    onsessionend: (event: XRSessionEvent<'sessionend'>) => void
+
     /** Called when an XRSession is hidden or unfocused. */
-    visibilitychange: (event: globalThis.XRSessionEvent) => void
+    onvisibilitychange: (event: globalThis.XRSessionEvent) => void
+
     /** Called when available inputsources change */
-    inputsourceschange: (event: globalThis.XRSessionEvent) => void
+    oninputsourceschange: (event: globalThis.XRSessionEvent) => void
   }
 
-  let {
-    foveation = 1,
-    frameRate,
-    referenceSpace = 'local-floor',
-    ...props
-  }: Props & { $$events: $$Events } = $props()
+  let { foveation = 1, frameRate, referenceSpace = 'local-floor', ...props }: Props = $props()
 
   const { renderer, renderMode } = useThrelte()
   const { xr } = renderer
@@ -87,26 +83,26 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    props.$$events?.sessionstart?.({ type: 'sessionstart', target: $session! })
+    props.onsessionstart?.({ type: 'sessionstart', target: $session! })
   }
 
   const handleSessionEnd = () => {
-    props.$$events?.sessionend?.({ type: 'sessionend', target: $session! })
+    props.onsessionend?.({ type: 'sessionend', target: $session! })
     isPresenting.set(false)
     session.set(undefined)
   }
 
   const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
-    props.$$events?.visibilitychange?.({ ...event, target: $session! })
+    props.onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
-    props.$$events?.inputsourceschange?.({ ...event, target: $session! })
+    props.oninputsourceschange?.({ ...event, target: $session! })
   }
 
   const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
-    props.$$events?.visibilitychange?.({ ...event, target: $session! })
+    props.onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const updateTargetFrameRate = (frameRate?: number) => {

@@ -17,7 +17,12 @@
 </script>
 
 <script lang="ts">
-  type Props =
+  type Props = {
+    onconnected: XRHandEvent<'connected'>
+    ondisconnected: XRHandEvent<'disconnected'>
+    onpinchstart: XRHandEvent<'pinchstart'>
+    onpinchend: XRHandEvent<'pinchend'>
+  } & (
     | {
         /** Whether the XRHand should be matched with the left hand. */
         left: true
@@ -36,22 +41,16 @@
         left?: undefined
         right?: undefined
       }
+  )
 
-  type $$Events = {
-    connected: XRHandEvent<'connected'>
-    disconnected: XRHandEvent<'disconnected'>
-    pinchstart: XRHandEvent<'pinchstart'>
-    pinchend: XRHandEvent<'pinchend'>
-  }
-
-  let { left, right, hand, ...props }: Props & { $$events: $$Events } = $props()
+  let { left, right, hand, ...props }: Props = $props()
 
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
   $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
-  $effect.pre(() => handEvents[$handedness].set(props.$$events))
+  $effect.pre(() => handEvents[$handedness].set(props))
 
   let children = new Group()
 

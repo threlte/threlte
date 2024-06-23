@@ -64,7 +64,7 @@
     setSrc: setSource,
     setVolume,
     ...useAudioProps
-  } = useAudio(audio, props.$$events)
+  } = useAudio(audio, props)
 
   pause = useAudioProps.pause
   play = useAudioProps.play

@@ -2,25 +2,30 @@
   import { HierarchicalObject, T, useParent, watch } from '@threlte/core'
   import { Group } from 'three'
   import { createSuspenseContext } from './context'
+  import type { Snippet } from 'svelte'
 
-  type $$Events = {
-    load: void
-    suspend: void
-    error: Error[]
+  interface Props {
+    final?: boolean
+
+    children: Snippet
+
+    onload?: () => void
+    onerror?: (error: Error[]) => void
+    onsuspend?: () => void
   }
 
-  let { final = false, children, ...restProps } = $props()
+  let { final = false, onload, onsuspend, onerror, children }: Props = $props()
 
-  const { suspended, errors, setFinal } = createSuspenseContext({ final }, restProps.$$events)
+  const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $effect.pre(() => setFinal(final))
   $effect.pre(() => {
-    if (!$suspended) restProps.$$events?.load?.()
+    if (!$suspended) onload?.()
   })
   $effect.pre(() => {
-    if ($suspended) restProps.$$events?.suspend?.()
+    if ($suspended) onsuspend?.()
   })
   $effect.pre(() => {
-    if ($errors.length > 0) restProps.$$events?.error($errors)
+    if ($errors.length > 0) onerror?.($errors)
   })
 
   const group = new Group()

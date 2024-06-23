@@ -61,7 +61,7 @@
       z === false ? 0 : -align.z + dAlign
     )
 
-    props.$$events?.align?.({
+    props.onalign?.({
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,

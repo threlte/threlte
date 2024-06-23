@@ -2,7 +2,7 @@ import { writable } from 'svelte/store'
 import { watch } from '../../../lib/storeUtils'
 import type { EventDispatcher } from 'three'
 
-type Events = Record<string, (arg: unknown) => void>
+type Props = Record<string, (arg: unknown) => void>
 
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher
@@ -13,26 +13,30 @@ const isEventDispatcher = (value: object): value is EventDispatcher => {
   return 'addEventListener' in value && 'removeEventListener' in value
 }
 
-export const useEvents = (events: Events = {}) => {
+export const useEvents = (props: Props = {}) => {
   const eventHandlerProxy = (
     event?: {
       type?: string
     } & Record<string, any>
   ) => {
     if (event?.type) {
-      events[event.type]?.(event)
+      props[event.type]?.(event)
     }
   }
 
-  const cleanupEventListeners = ($ref: EventDispatcher, events: Events) => {
-    for (const eventName of Object.keys(events)) {
-      $ref.removeEventListener(eventName, eventHandlerProxy)
+  const cleanupEventListeners = ($ref: EventDispatcher, props: Props) => {
+    for (const eventName of Object.keys(props)) {
+      if (eventName.startsWith('on')) {
+        $ref.removeEventListener(eventName, eventHandlerProxy)
+      }
     }
   }
 
-  const addEventListeners = ($ref: EventDispatcher, events: Events) => {
-    for (const eventName of Object.keys(events)) {
-      $ref.addEventListener(eventName, eventHandlerProxy)
+  const addEventListeners = ($ref: EventDispatcher, props: Props) => {
+    for (const eventName of Object.keys(props)) {
+      if (eventName.startsWith('on')) {
+        $ref.addEventListener(eventName, eventHandlerProxy)
+      }
     }
   }
 
@@ -40,8 +44,8 @@ export const useEvents = (events: Events = {}) => {
 
   watch(ref, ($ref) => {
     if (!$ref) return
-    addEventListeners($ref, events)
-    return () => cleanupEventListeners($ref, events)
+    addEventListeners($ref, props)
+    return () => cleanupEventListeners($ref, props)
   })
 
   const updateRef = (newRef: object) => {

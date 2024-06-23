@@ -1,6 +1,13 @@
 <script lang="ts">
-  import { HierarchicalObject, T, useThrelte, watch, type Props } from '@threlte/core'
-  import { Group } from 'three'
+  import {
+    HierarchicalObject,
+    T,
+    currentWritable,
+    useThrelte,
+    watch,
+    type Props
+  } from '@threlte/core'
+  import { Group, type Event } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { writable } from 'svelte/store'
   import { useControlsContext } from '../useControlsContext'
@@ -25,16 +32,12 @@
   const { camera, renderer, invalidate, scene } = useThrelte()
 
   const { orbitControls, trackballControls } = useControlsContext()
-  const isDragging = writable(false)
+  const isDragging = currentWritable(false)
   const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
   $effect.pre(() => useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true))
 
   const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
   $effect.pre(() => useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true))
-
-  const onDraggingChanged = (e: { value: boolean }) => {
-    isDragging.set(e.value)
-  }
 
   watch(
     [orbitControls, isDragging, useAutoPauseOrbitControls],
@@ -89,7 +92,10 @@
     'showX',
     'showY',
     'showZ',
-    'visible'
+    'visible',
+    'onmouseDown',
+    'onmouseUp',
+    'onobjectChange'
   ]
 
   let transformProps: Props<TransformControls> = $state({})
@@ -109,6 +115,16 @@
       })
     })
   })
+
+  const onchange = () => {
+    invalidate()
+    if (transformControls.dragging && !isDragging.current) {
+      isDragging.set(true)
+    } else if (!transformControls.dragging && isDragging.current) {
+      isDragging.set(false)
+    }
+    props.onchange?.()
+  }
 </script>
 
 <!-- TransformControls need to be added to the scene -->
@@ -123,17 +139,7 @@
   <T
     is={transformControls}
     bind:ref={controls}
-    on:dragging-changed={(e) => {
-      onDraggingChanged(e)
-      props.$$events?.['dragging-changed']?.()
-    }}
-    on:change={() => {
-      invalidate()
-      props.$$events?.change?.()
-    }}
-    on:objectChange={props.$$events?.objectChange}
-    on:mouseDown={props.$$events?.mouseDown}
-    on:mouseUp={props.$$events?.mouseUp}
+    {onchange}
     {...transformProps}
   />
 </HierarchicalObject>

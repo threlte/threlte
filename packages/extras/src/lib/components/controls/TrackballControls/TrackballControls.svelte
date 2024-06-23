@@ -42,9 +42,9 @@
   is={controls}
   bind:ref
   {...props}
-  on:change={(event) => {
+  onchange={(event) => {
     invalidate()
-    props.$$events?.change?.(event)
+    props.onchange?.(event)
   }}
 >
   <slot ref={controls} />

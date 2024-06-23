@@ -4,13 +4,8 @@ import type { NodeProps } from '../lib/props'
 type BoxProps = NodeProps & {
   order?: number | undefined
   class?: string
-}
 
-type BoxEvents = {
-  reflow: {
-    width: number
-    height: number
-  }
+  onreflow: (event: { width: number; height: number }) => void
 }
 
 type BoxSlots = {
@@ -21,4 +16,4 @@ type BoxSlots = {
   }
 }
 
-export default class Box extends SvelteComponent<BoxProps, BoxEvents, BoxSlots> {}
+export default class Box extends SvelteComponent<BoxProps, {}, BoxSlots> {}

@@ -13,13 +13,8 @@ type InnerFlexProps = NodeProps & {
   class?: string
   classParser?: ClassParser
   reflowStage?: Stage
-}
 
-type InnerFlexEvents = {
-  reflow: {
-    width: number
-    height: number
-  }
+  onreflow: (event: { width: number; height: number }) => void
 }
 
 type InnerFlexSlots = {
@@ -30,8 +25,4 @@ type InnerFlexSlots = {
   }
 }
 
-export default class InnerFlex extends SvelteComponent<
-  InnerFlexProps,
-  InnerFlexEvents,
-  InnerFlexSlots
-> {}
+export default class InnerFlex extends SvelteComponent<InnerFlexProps, {}, InnerFlexSlots> {}

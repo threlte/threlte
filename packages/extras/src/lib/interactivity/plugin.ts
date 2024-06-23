@@ -5,18 +5,18 @@ import { useInteractivity } from './context'
 import type { ThrelteEvents } from './types'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
-  'click',
-  'contextmenu',
-  'dblclick',
-  'wheel',
-  'pointerup',
-  'pointerdown',
-  'pointerover',
-  'pointerout',
-  'pointerenter',
-  'pointerleave',
-  'pointermove',
-  'pointermissed'
+  'onclick',
+  'oncontextmenu',
+  'ondblclick',
+  'onwheel',
+  'onpointerup',
+  'onpointerdown',
+  'onpointerover',
+  'onpointerout',
+  'onpointerenter',
+  'onpointerleave',
+  'onpointermove',
+  'onpointermissed'
 ]
 
 export const injectInteractivityPlugin = (): void => {
@@ -28,15 +28,15 @@ export const injectInteractivityPlugin = (): void => {
     const refStore = writable<Object3D>(ref)
 
     watch(refStore, ($refStore) => {
-      if (props.$$events === undefined) return
+      if (props === undefined) return
 
-      const hasEventHandlers = Object.keys(props.$$events).some((value) =>
+      const hasEventHandlers = Object.keys(props).some((value) =>
         interactivityEventNames.includes(value as keyof ThrelteEvents)
       )
 
       if (!hasEventHandlers) return
 
-      context.addInteractiveObject($refStore, props.$$events)
+      context.addInteractiveObject($refStore, props)
       return () => context.removeInteractiveObject($refStore)
     })
 

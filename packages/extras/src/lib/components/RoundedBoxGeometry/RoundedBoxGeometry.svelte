@@ -54,7 +54,7 @@
   on:create={({ ref, cleanup }) => {
     ref.center()
     toCreasedNormals(ref, creaseAngle)
-    props.$$events?.create?.({ ref, cleanup })
+    props.oncreate?.({ ref, cleanup })
   }}
   {...props}
 >

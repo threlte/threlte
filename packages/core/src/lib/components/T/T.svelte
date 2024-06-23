@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { isCamera, useCamera } from './utils/useCamera'
+  import { isCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
@@ -41,7 +40,7 @@
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent<Type>(props.$$events)
+  const createEvent = useCreateEvent<Type>(props.oncreate)
 
   // The ref is created, emit the event
   createEvent.updateRef(internalRef)
@@ -91,7 +90,7 @@
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents(props.$$events)
+  const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates

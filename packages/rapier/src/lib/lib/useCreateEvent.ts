@@ -1,6 +1,7 @@
+import type { ColliderEvents } from '../types/types'
 import { onDestroy } from 'svelte'
 
-export const useCreateEvent = <T>(events: Record<string, (arg: unknown) => void>) => {
+export const useCreateEvent = <T>(oncreate?: ColliderEvents['oncreate']) => {
   const cleanupFunctions: (() => void)[] = []
 
   let ref: T | undefined = undefined
@@ -19,7 +20,7 @@ export const useCreateEvent = <T>(events: Record<string, (arg: unknown) => void>
 
     if (ref === undefined) return
 
-    events?.create?.({ ref, cleanup })
+    oncreate?.({ ref, cleanup })
   }
 
   const updateRef = (newRef: T) => {

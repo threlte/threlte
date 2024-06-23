@@ -15,7 +15,7 @@
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import type { ColliderEventMap } from '../../types/types'
+  import type { ColliderEvents } from '../../types/types'
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
   type TMassDef = $$Generic<MassDef>
@@ -33,25 +33,20 @@
     centerOfMass,
     principalAngularInertia,
     angularInertiaLocalFrame,
-    refresh = $bindable(() => create()),
+    onrefresh = $bindable(() => create()),
     colliders = $bindable(),
     ...props
-  }: AutoCollidersProps<TMassDef> = $props()
+  }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>(props.$$events)
+  const { updateRef } = useCreateEvent<Collider[]>(props.oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
   const collisionGroups = useCollisionGroups()
-
-  /**
-   * Events setup
-   */
-  type $$Events = ColliderEventMap
 
   const cleanup = () => {
     if (colliders === undefined) return
@@ -73,12 +68,12 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) => addColliderToContext(c, group, props.$$events))
+    colliders.forEach((c) => addColliderToContext(c, group, props))
 
     collisionGroups.registerColliders(colliders)
 
     colliders.forEach((collider) => {
-      applyColliderActiveEvents(collider, props.$$events, rigidBody?.userData?.events)
+      applyColliderActiveEvents(collider, props, rigidBody?.userData?.events)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)

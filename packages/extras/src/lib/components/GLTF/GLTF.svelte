@@ -46,7 +46,7 @@
   })
 
   const onLoad = (data: AnyThrelteGltf) => {
-    if (gltf) props.$$events?.unload?.()
+    if (gltf) props.onunload?.()
 
     gltf = data
     scene = data.scene
@@ -59,7 +59,7 @@
     materials = data.materials
     nodes = data.nodes
 
-    props.$$events?.load?.(gltf)
+    props.onload?.(gltf)
   }
 
   const onError = (error: any) => {
@@ -74,7 +74,7 @@
     parser = undefined
     nodes = undefined
     materials = undefined
-    props.$$events?.error?.(error.message)
+    props.onerror?.(error.message)
   }
 
   const suspend = useSuspense()

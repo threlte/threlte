@@ -14,7 +14,8 @@ type BaseProps = {
   sensor?: boolean
   colliders?: Collider[]
   contactForceEventThreshold?: number
-  refresh?: () => void
+  onrefresh?: () => void
+  oncreate?: () => void
 }
 
 // ------------------ MASS ------------------

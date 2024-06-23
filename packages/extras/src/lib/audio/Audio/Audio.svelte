@@ -34,7 +34,7 @@
   const audio = new ThreeAudio<GainNode>(listener)
 
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
-    useAudio(audio, props.$$events)
+    useAudio(audio, props)
 
   pause = useAudioProps.pause
   play = useAudioProps.play

@@ -5,8 +5,6 @@
 
   let { ...props } = $props()
 
-  type $$Props = FlexProps
-  type $$Events = FlexEvents
   type $$Slots = FlexSlots
 
   let yoga: Yoga | undefined = $state(undefined)

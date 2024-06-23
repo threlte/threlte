@@ -7,12 +7,7 @@ import type {
 import RAPIER from '@dimforge/rapier3d-compat'
 import { readable, writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import type {
-  ColliderEventDispatcher,
-  ColliderEventDispatchers,
-  RigidBodyEventDispatcher,
-  RigidBodyEventDispatchers
-} from '../types/types'
+import type { ColliderEventDispatchers, RigidBodyEventDispatchers } from '../types/types'
 
 export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
   const world = new RAPIER.World(...args)
@@ -31,10 +26,10 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
   const addColliderToContext = (
     collider: Collider,
     object: Object3D,
-    events: Record<string, (arg: unknown) => void>
+    props: Record<string, (arg: unknown) => void>
   ) => {
     colliderObjects.set(collider.handle, object)
-    colliderEventDispatchers.set(collider.handle, events)
+    colliderEventDispatchers.set(collider.handle, props)
   }
 
   /**

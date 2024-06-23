@@ -49,7 +49,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       )
     }
 
-    props.$$events?.click?.({ state, nativeEvent })
+    props.onclick?.({ state, nativeEvent })
 
     if (state !== 'supported') return
 
@@ -57,7 +57,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
       await toggleXRSession(mode, sessionInit, force)
     } catch (error) {
       /** This callback gets fired if XR initialization fails. */
-      props.$$events?.error?.(error as Error)
+      props.onerror?.(error)
     }
   }
 
@@ -90,7 +90,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
 
 {#await getXRSupportState(mode) then state}
   <button
-    on:click={(event) => {
+    onclick={(event) => {
       handleButtonClick(event, state)
     }}
     {...props}

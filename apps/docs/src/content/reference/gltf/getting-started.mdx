@@ -193,10 +193,6 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
   import { T, type Props, type Events, type Slots } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
 
-  type $$Props = Props<THREE.Group>
-  type $$Events = Events<THREE.Group>
-  type $$Slots = Slots<THREE.Group>
-
   export const ref = new Group()
 
   type ActionName =
@@ -217,14 +213,23 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
     materials: {}
   }
 
+  let {
+    ...props,
+    actions = $bindable()
+    mixer = $bindable()
+  } = $props()
+
+  const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  actions = animations.actions
+  mixer = animations.mixer
 </script>
 
 {#if $gltf}
   <T
     is={ref}
-    {...$$restProps}
+    {...props}
   >
     <T.Group name="Scene">
       <T.Group

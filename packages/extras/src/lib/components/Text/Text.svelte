@@ -3,12 +3,11 @@
   import { tick } from 'svelte'
   import { preloadFont, Text } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextProps, TextEvents, TextSlots } from './Text.svelte'
+  import type { TextProps, TextSlots } from './Text.svelte'
 
-  type $$Events = TextEvents
   type $$Slots = TextSlots
 
-  let { font, characters, sdfGlyphSize, ref = $bindable(), ...props }: TextProps = $props()
+  let { font, characters, sdfGlyphSize, ref = $bindable(), onsync, ...props }: TextProps = $props()
 
   const text = new Text()
 
@@ -18,7 +17,7 @@
     await tick()
     text.sync(() => {
       invalidate()
-      props.$$events?.sync?.()
+      onsync?.()
     })
   }
 

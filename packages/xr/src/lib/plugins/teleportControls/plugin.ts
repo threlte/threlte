@@ -28,7 +28,7 @@ export const injectTeleportControlsPlugin = (): void => {
           removeSurface($refStore)
           return noop
         } else {
-          addSurface($refStore, props.$$events ?? {})
+          addSurface($refStore, props)
           return () => removeSurface($refStore)
         }
       } else if (isBlocker) {

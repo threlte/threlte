@@ -46,7 +46,7 @@
     // values change, we're emitting the initial value here. Doing this in
     // onMount also means that child components which might add props to the
     // sheet object have already been mounted.
-    restProps.$$events?.change?.(sheetObject.current.value)
+    restProps.onchange?.(sheetObject.current.value)
   })
 
   // This flag is used to prevent the sheet object from being created after it
@@ -111,7 +111,7 @@
   let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
     return sheetObject.onValuesChange((newValues) => {
-      restProps.$$events?.change?.(newValues)
+      restProps.onchange?.(newValues)
       values = newValues
       // this invalidation also invalidates changes catched by slotted
       // components such as <Sync> or <Declare>.

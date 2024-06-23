@@ -3,9 +3,8 @@
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
+  import type { AttractorProps, AttractorSlots } from './Attractor.svelte'
 
-  type $$Events = AttractorEvents
   type $$Slots = AttractorSlots
 
   let {

@@ -6,10 +6,8 @@
   import { createUseDimensionsContext } from '../hooks/useDimensions'
   import type { NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { BoxEvents, BoxProps, BoxSlots } from './Box.svelte'
+  import type { BoxProps, BoxSlots } from './Box.svelte'
 
-  type $$Props = BoxProps
-  type $$Events = BoxEvents
   type $$Slots = BoxSlots
 
   let { order, class: _class = '', ...props }: BoxProps = $props()
@@ -76,7 +74,7 @@
     dimensionsContext.width.set(computedWidth)
     dimensionsContext.height.set(computedHeight)
 
-    props.$$events?.reflow?.({
+    props.onreflow?.({
       width: computedWidth,
       height: computedHeight
     })

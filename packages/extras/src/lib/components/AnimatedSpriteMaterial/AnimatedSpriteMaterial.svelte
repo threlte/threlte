@@ -202,7 +202,7 @@
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
-    props.$$events?.start?.()
+    props.onstart?.()
   }
 
   let playQueued = false
@@ -262,10 +262,10 @@
         currentFrame = start
 
         if (loop) {
-          props.$$events?.loop?.()
+          props.onloop?.()
         } else {
           pause()
-          props.$$events?.end?.()
+          props.onend?.()
         }
       }
     },
@@ -292,7 +292,7 @@
 
     setAnimation(animation)
 
-    props.$$events?.load?.()
+    props.onload?.()
 
     if (autoplay) {
       play()

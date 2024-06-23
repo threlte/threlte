@@ -529,8 +529,6 @@ ${
 
     <script${options.types ? ' lang="ts"' : ''}>
 				${!options.preload ? imports : ''}
-
-        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
         ${
           options.types && !options.isolated
             ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
