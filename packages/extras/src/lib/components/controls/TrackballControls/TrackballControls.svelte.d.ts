@@ -1,10 +1,12 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Events, Props } from '@threlte/core'
+import type { SvelteComponent, Snippet } from 'svelte'
 import type { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
-export type TrackballControlsProps = Props<ThreeTrackballControls>
+export type TrackballControlsProps = Props<ThreeTrackballControls> & {
+  children?: TrackballControlsSnippet
+}
 export type TrackballControlsEvents = Events<ThreeTrackballControls>
-export type TrackballControlsSlots = Slots<ThreeTrackballControls>
+export type TrackballControlsSnippet = Snippet<[{ ref: ThreeTrackballControls }]>
 
 /**
  * `<TrackballControls>` allow the camera to orbit freely around a target
@@ -40,6 +42,5 @@ export type TrackballControlsSlots = Slots<ThreeTrackballControls>
  */
 export default class TrackballControls extends SvelteComponent<
   TrackballControlsProps,
-  TrackballControlsEvents,
-  TrackballControlsSlots
+  TrackballControlsEvents
 > {}

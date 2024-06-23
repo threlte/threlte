@@ -6,14 +6,12 @@
   import { useControlsContext } from '../useControlsContext'
   import type {
     OrbitControlsEvents,
-    OrbitControlsProps,
-    OrbitControlsSlots
+    OrbitControlsProps
   } from './OrbitControls.svelte'
 
   type $$Events = OrbitControlsEvents
-  type $$Slots = OrbitControlsSlots
 
-  let { ref = $bindable(), ...props }: OrbitControlsProps = $props()
+  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
 
@@ -56,5 +54,7 @@
   }}
   {...props}
 >
-  <slot ref={controls} />
+	{#if children}
+		{@render children({ref:controls})}
+	{/if}
 </T>

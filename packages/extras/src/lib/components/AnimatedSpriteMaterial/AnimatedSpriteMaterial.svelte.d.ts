@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Events, Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import { Material } from 'three'
 
@@ -148,10 +148,7 @@ export type AnimatedSpriteEvents = Events<Material> & {
   loop: void
 }
 
-export type AnimatedSpriteSlots = Slots<Material>
-
 export default class AnimatedSprite extends SvelteComponent<
   AnimatedSpriteProps,
-  AnimatedSpriteEvents,
-  AnimatedSpriteSlots
+  AnimatedSpriteEvents
 > {}

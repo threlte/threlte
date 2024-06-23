@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, type Snippet } from 'svelte'
   import { writable } from 'svelte/store'
   import {
     ACESFilmicToneMapping,
@@ -73,6 +73,7 @@
     autoRender?: boolean
 
     ctx?: ThrelteContext
+		children: Snippet
   }
 
   let {
@@ -84,7 +85,8 @@
     shadows = PCFSoftShadowMap,
     toneMapping = ACESFilmicToneMapping,
     autoRender = true,
-    ctx = $bindable()
+    ctx = $bindable(),
+		children
   }: Props = $props()
 
   let canvas: HTMLCanvasElement
@@ -160,7 +162,7 @@
 >
   {#if $initialized}
     <SceneGraphObject object={context.scene}>
-      <slot />
+      {@render children()}
     </SceneGraphObject>
   {/if}
 </canvas>

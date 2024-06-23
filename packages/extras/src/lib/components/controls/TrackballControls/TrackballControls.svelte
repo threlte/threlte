@@ -6,14 +6,12 @@
   import { useControlsContext } from '../useControlsContext'
   import type {
     TrackballControlsEvents,
-    TrackballControlsProps,
-    TrackballControlsSlots
+    TrackballControlsProps
   } from './TrackballControls.svelte'
 
   type $$Events = TrackballControlsEvents
-  type $$Slots = TrackballControlsSlots
 
-  let { ref = $bindable(), ...props }: TrackballControlsProps = $props()
+  let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
 
@@ -47,5 +45,7 @@
     props.onchange?.(event)
   }}
 >
-  <slot ref={controls} />
+	{#if children}
+		{@render children({ref:controls})}
+	{/if}
 </T>

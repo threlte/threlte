@@ -14,14 +14,9 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type {
-    ContactShadowsProps,
-    ContactShadowsEvents,
-    ContactShadowsSlots
-  } from './ContactShadows.svelte'
+  import type { ContactShadowsProps, ContactShadowsEvents } from './ContactShadows.svelte'
 
   type $$Events = ContactShadowsEvents
-  type $$Slots = ContactShadowsSlots
 
   let {
     opacity = 1,
@@ -37,6 +32,7 @@
     depthWrite = false,
     refresh = $bindable(),
     ref = $bindable(),
+		children,
     ...props
   }: ContactShadowsProps = $props()
 
@@ -226,12 +222,10 @@
       material={shadowMaterial}
       geometry={planeGeometry}
     />
-
     <T
       is={shadowCamera}
       manual
     />
-
-    <slot ref={group} />
+	{@render children?.({ref:group})}
   </T.Group>
 </T>

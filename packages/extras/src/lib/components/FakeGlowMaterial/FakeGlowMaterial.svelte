@@ -1,16 +1,11 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { Color, AdditiveBlending, ShaderMaterial } from 'three'
-  import type {
-    FakeGlowMaterialEvents,
-    FakeGlowMaterialProps,
-    FakeGlowMaterialSlots
-  } from './FakeGlowMaterial.svelte'
+  import type { FakeGlowMaterialEvents, FakeGlowMaterialProps } from './FakeGlowMaterial.svelte'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
   type $$Events = FakeGlowMaterialEvents
-  type $$Slots = FakeGlowMaterialSlots
 
   let {
     falloff = 0.1,
@@ -18,6 +13,7 @@
     glowColor = 'green',
     glowSharpness = 1.0,
     ref = $bindable(),
+    children,
     ...props
   }: FakeGlowMaterialProps = $props()
 
@@ -62,5 +58,7 @@
   bind:ref
   {...props}
 >
-  <slot ref={material} />
+	{#if children}
+		{@render children({ref:material})}
+	{/if}
 </T>

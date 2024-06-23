@@ -1,4 +1,5 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
+import type { Snippet } from 'svelte'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
@@ -40,6 +41,7 @@ export type AnyProps = Record<string, any>
  */
 export type BaseProps<Type> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
+  children?: TSnippet<Type>
 }
 
 /**
@@ -132,20 +134,15 @@ export type Props<Type> = AnyProps &
   CameraProps<Type> &
   InstanceProps<Type>
 
-// –––––––––––––––––––––––– SLOTS ––––––––––––––––––––––––
+// –––––––––––––––––––––––– SNIPPETS ––––––––––––––––––––––––
 
 /**
- * ### `Slots<Type>`
+ * ### `Snippet<[Type]>`
  *
- * This type is used as the Slot type for the component `<T>`.
- * @example Slots<typeof PerspectiveCamera>
- * // { default: { ref: PerspectiveCamera } }
+ * This type is used as the Snippet type for the component `<T>`.
+ *
  */
-export type Slots<Type> = {
-  default: {
-    ref: MaybeInstance<Type>
-  }
-}
+export type TSnippet<Type> = Snippet<[ref: MaybeInstance<Type>]>
 
 // –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
 
