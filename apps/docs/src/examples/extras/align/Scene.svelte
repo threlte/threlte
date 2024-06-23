@@ -33,32 +33,33 @@
       center = newCenter
       boundingBox = newBoundingBox
     }}
-    let:align
   >
-    <TransformControls onobjectChange={align}>
-      <T.Mesh position.x={-1}>
-        <RoundedBoxGeometry args={[1, 2, 1]} />
-        <T.MeshStandardMaterial color="white" />
-      </T.Mesh>
-    </TransformControls>
+    {#snippet children({ align })}
+      <TransformControls onobjectChange={align}>
+        <T.Mesh position.x={-1}>
+          <RoundedBoxGeometry args={[1, 2, 1]} />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      </TransformControls>
 
-    <T.Mesh
-      position.x={-4}
-      position.y={1}
-    >
-      <RoundedBoxGeometry args={[1, 2, 3]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
-
-    {#if showSphere}
       <T.Mesh
-        position.x={-2}
-        position.y={3}
+        position.x={-4}
+        position.y={1}
       >
-        <T.SphereGeometry />
+        <RoundedBoxGeometry args={[1, 2, 3]} />
         <T.MeshStandardMaterial color="white" />
       </T.Mesh>
-    {/if}
+
+      {#if showSphere}
+        <T.Mesh
+          position.x={-2}
+          position.y={3}
+        >
+          <T.SphereGeometry />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      {/if}
+    {/snippet}
   </Align>
 {/key}
 

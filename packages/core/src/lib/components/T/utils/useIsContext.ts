@@ -11,6 +11,6 @@ export const setIsContext = (is: ThreeObject) => {
   setContext(key, is)
 }
 
-export const useIsContext = (): ThreeObject => {
-  return getContext<ThreeObject>(key)
+export const useIsContext = <T>(): T => {
+  return getContext<T>(key)
 }

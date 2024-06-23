@@ -20,14 +20,15 @@
   } & Props<Type>
 
   let {
-    is = useIsContext(),
+    is = useIsContext<Type>(),
     args,
     attach,
     manual,
     makeDefault,
     dispose,
-		children,
     ref = $bindable(),
+    oncreate,
+    children,
     ...props
   }: AllProps = $props()
 
@@ -38,7 +39,7 @@
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent<Type>(props.oncreate)
+  const createEvent = useCreateEvent<Type>(oncreate)
 
   // The ref is created, emit the event
   createEvent.updateRef(internalRef)
@@ -125,9 +126,9 @@
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-			{@render children(internalRef)}
+			{@render children({ ref: internalRef })}
     {/if}
   </SceneGraphObject>
 {:else if children}
-	{@render children(internalRef)}
+	{@render children({ ref: internalRef })}
 {/if}

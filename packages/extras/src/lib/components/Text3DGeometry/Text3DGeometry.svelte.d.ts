@@ -21,7 +21,7 @@ export type Text3DProps = Props<TextGeometry> & {
    */
   smooth?: number
 
-  onrendered: (mesh: TextGeometry) => void
+  onrendered?: (mesh: TextGeometry) => void
 }
 
 export default class Text3D extends SvelteComponent<Text3DProps> {}

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import { watch } from '../../../lib/storeUtils'
-import type { EventDispatcher } from 'three'
+import type { Event, EventDispatcher } from 'three'
 
 type Props = Record<string, (arg: unknown) => void>
 
@@ -14,20 +14,16 @@ const isEventDispatcher = (value: object): value is EventDispatcher => {
 }
 
 export const useEvents = (props: Props = {}) => {
-  const eventHandlerProxy = (
-    event?: {
-      type?: string
-    } & Record<string, any>
-  ) => {
+  const eventHandlerProxy = (event?: Event) => {
     if (event?.type) {
-      props[event.type]?.(event)
+      props[`on${event.type}`]?.(event)
     }
   }
 
   const cleanupEventListeners = ($ref: EventDispatcher, props: Props) => {
     for (const eventName of Object.keys(props)) {
       if (eventName.startsWith('on')) {
-        $ref.removeEventListener(eventName, eventHandlerProxy)
+        $ref.removeEventListener(eventName.slice(2), eventHandlerProxy)
       }
     }
   }
@@ -35,7 +31,7 @@ export const useEvents = (props: Props = {}) => {
   const addEventListeners = ($ref: EventDispatcher, props: Props) => {
     for (const eventName of Object.keys(props)) {
       if (eventName.startsWith('on')) {
-        $ref.addEventListener(eventName, eventHandlerProxy)
+        $ref.addEventListener(eventName.slice(2), eventHandlerProxy)
       }
     }
   }

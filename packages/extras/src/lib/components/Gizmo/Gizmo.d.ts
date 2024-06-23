@@ -20,6 +20,4 @@ export type GizmoProps = {
   paddingY?: number
 }
 
-export type GizmoEvents = Record<string, never>
-
-export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents> {}
+export default class Gizmo extends SvelteComponent<GizmoProps> {}

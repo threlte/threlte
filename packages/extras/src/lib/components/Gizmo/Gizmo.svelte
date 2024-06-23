@@ -18,9 +18,7 @@
     type Intersection,
     type Sprite
   } from 'three'
-  import type { GizmoEvents, GizmoProps } from './Gizmo'
-
-  type $$Events = GizmoEvents
+  import type { GizmoProps } from './Gizmo'
 
   let {
     renderTask,

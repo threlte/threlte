@@ -18,7 +18,7 @@
 <T.OrthographicCamera
   {zoom}
   position={[5, 5, 5]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
   makeDefault
@@ -33,8 +33,8 @@
 <Text
   text="HOVER"
   interactive
-  on:pointerenter={onPointerEnter}
-  on:pointerleave={onPointerLeave}
+  onpointerenter={onPointerEnter}
+  onpointerleave={onPointerLeave}
   fontSize={0.5}
   anchorY="100%"
   anchorX="50%"
@@ -45,8 +45,8 @@
 />
 
 <T.Mesh
-  on:pointerenter={onPointerEnter}
-  on:pointerleave={onPointerLeave}
+  onpointerenter={onPointerEnter}
+  onpointerleave={onPointerLeave}
 >
   <T.MeshStandardMaterial {color} />
   <T.BoxGeometry args={[2, 2, 2]} />
