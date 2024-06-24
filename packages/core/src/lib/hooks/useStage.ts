@@ -1,5 +1,5 @@
+import { useThrelte } from '../context/compounds/useThrelte'
 import type { CreateStageOptions, Key } from '../frame-scheduling'
-import { useThrelte } from './useThrelte'
 
 /**
  * Creates a stage and returns it. If the stage already exists, it is returned.
