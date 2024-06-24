@@ -8,26 +8,28 @@ Title: Sniper Scope NightForce_V2
 -->
 
 <script lang="ts">
-  import * as THREE from 'three'
-
-  import { T, type Props, type Events, type Slots } from '@threlte/core'
+  import { Group, type Vector3Tuple } from 'three'
+  import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { tweened, type Tweened } from 'svelte/motion'
   import { scoping } from '../Controls.svelte'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import type { Snippet } from 'svelte'
 
-  type $$Props = Props<THREE.Group>
-  type $$Events = Events<THREE.Group>
-  type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any }; inner: any }
+  interface Props {
+    children?: Snippet<[{ ref: Group }]>
+  }
 
-  export const ref = new THREE.Group()
+  let { children }: Props = $props()
+
+  const group = new Group()
 
   const gltf = useGltf('/models/scope.glb')
 
   const rotationX = tweened(-3)
-  const position: Tweened<THREE.Vector3Tuple> = tweened([0.4, -0.15, -1])
+  const position: Tweened<Vector3Tuple> = tweened([0.4, -0.15, -1])
 
-  $: {
+  $effect.pre(() => {
     if ($scoping) {
       rotationX.set(0)
       position.set([0, 0, -0.496])
@@ -35,32 +37,23 @@ Title: Sniper Scope NightForce_V2
       rotationX.set(-3)
       position.set([0.4, -0.15, -1])
     }
-  }
+  })
 </script>
 
 <T
-  is={ref}
+  is={group}
   dispose={false}
-  {...$$restProps}
   scale={0.02}
   position={$position}
   rotation.y={DEG2RAD * $rotationX}
 >
-  {#await gltf}
-    <slot name="fallback" />
-  {:then gltf}
+  {#await gltf then { nodes, materials }}
     <T.Mesh
-      geometry={gltf.nodes.Object_2.geometry}
-      material={gltf.materials.initialShadingGroup}
+      geometry={nodes.Object_2.geometry}
+      material={materials.initialShadingGroup}
       rotation={[-Math.PI / 2, 0, 0]}
-    />
-    <slot name="inner" />
-  {:catch error}
-    <slot
-      name="error"
-      {error}
     />
   {/await}
 
-  <slot {ref} />
+  {@render children?.({ ref: group })}
 </T>

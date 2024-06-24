@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, Group } from 'three'
 
@@ -28,12 +28,4 @@ export type OutlinesProps = Props<Group> & {
   renderOrder?: number
 }
 
-export type OutlinesEvents = Events<Group>
-
-export type OutlinesSlots = Slots<Group>
-
-export default class Outlines extends SvelteComponent<
-  OutlinesProps,
-  OutlinesEvents,
-  OutlinesSlots
-> {}
+export default class Outlines extends SvelteComponent<OutlinesProps> {}

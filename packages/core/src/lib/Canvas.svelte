@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, type Snippet } from 'svelte'
   import { writable } from 'svelte/store'
   import {
     ACESFilmicToneMapping,
@@ -9,15 +9,13 @@
     type ToneMapping,
     type WebGLRendererParameters
   } from 'three'
-  import { createThrelteContext, type ThrelteContext } from './lib/contexts'
   import { useParentSize } from './hooks/useParentSize'
+  import { useThrelteInternal } from './hooks/useThrelteInternal'
   import SceneGraphObject from './internal/SceneGraphObject.svelte'
   import { browser } from './lib/browser'
-  import { revision } from './lib/revision'
+  import { createThrelteContext, type ThrelteContext } from './lib/contexts'
   import { watch } from './lib/storeUtils'
   import { useRenderer } from './lib/useRenderer'
-  import type { Size } from './types'
-  import { useThrelteInternal } from './hooks/useThrelteInternal'
 
   interface Props {
     /**
@@ -60,20 +58,10 @@
      */
     shadows?: boolean | ShadowMapType
 
-    size?: Size | undefined
-
     /**
      * @default ACESFilmicToneMapping
      */
     toneMapping?: ToneMapping
-
-    /**
-     * This property is not reactive and must be set at initialization.
-     *
-     * @default false if greater than or equal to r155, true if less than 155
-     * @see https://github.com/mrdoob/three.js/pull/26392
-     */
-    useLegacyLights?: boolean
 
     /**
      * By default, Threlte will automatically render the scene. To implement
@@ -84,6 +72,7 @@
     autoRender?: boolean
 
     ctx?: ThrelteContext
+		children: Snippet
   }
 
   let {
@@ -93,21 +82,16 @@
     renderMode = 'on-demand',
     rendererParameters,
     shadows = PCFSoftShadowMap,
-    size,
     toneMapping = ACESFilmicToneMapping,
-    useLegacyLights = revision >= 155 ? false : true,
     autoRender = true,
-    ctx = $bindable()
+    ctx = $bindable(),
+		children
   }: Props = $props()
 
   let canvas: HTMLCanvasElement
   let initialized = writable(false)
 
-  // user size as a store
-  const userSize = writable<Size | undefined>(size)
-  $effect.pre(() => userSize.set(size))
-
-  // in case the user didn't define a fixed size, use the parent elements size
+  // The canvas parent element size
   const { parentSize, parentSizeAction } = useParentSize()
 
   const context = createThrelteContext({
@@ -118,9 +102,7 @@
     parentSize,
     autoRender,
     shadows,
-    toneMapping,
-    useLegacyLights,
-    userSize
+    toneMapping
   })
   const internalCtx = useThrelteInternal()
 
@@ -176,7 +158,7 @@
 >
   {#if $initialized}
     <SceneGraphObject object={context.scene}>
-      <slot />
+      {@render children()}
     </SceneGraphObject>
   {/if}
 </canvas>

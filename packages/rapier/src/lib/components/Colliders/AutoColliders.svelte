@@ -15,7 +15,7 @@
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import type { ColliderEventMap } from '../../types/types'
+  import type { ColliderEvents } from '../../types/types'
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
   type TMassDef = $$Generic<MassDef>
@@ -35,23 +35,24 @@
     angularInertiaLocalFrame,
     refresh = $bindable(() => create()),
     colliders = $bindable(),
-    ...props
-  }: AutoCollidersProps<TMassDef> = $props()
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    children,
+  }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>(props.$$events)
+  const { updateRef } = useCreateEvent<Collider[]>(oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
   const collisionGroups = useCollisionGroups()
-
-  /**
-   * Events setup
-   */
-  type $$Events = ColliderEventMap
 
   const cleanup = () => {
     if (colliders === undefined) return
@@ -64,6 +65,14 @@
     colliders.length = 0
   }
 
+  const events = {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  }
+
   const create = () => {
     cleanup()
     colliders = createCollidersFromChildren(
@@ -73,12 +82,14 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) => addColliderToContext(c, group, props.$$events))
+    colliders.forEach((c) =>
+      addColliderToContext(c, group, events)
+    )
 
     collisionGroups.registerColliders(colliders)
 
     colliders.forEach((collider) => {
-      applyColliderActiveEvents(collider, props.$$events, rigidBody?.userData?.events)
+      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
@@ -117,8 +128,5 @@
 </script>
 
 <SceneGraphObject object={group}>
-  <slot
-    {colliders}
-    {refresh}
-  />
+  {@render children?.({ colliders: colliders ?? [], refresh })}
 </SceneGraphObject>

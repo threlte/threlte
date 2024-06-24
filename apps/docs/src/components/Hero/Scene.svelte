@@ -52,7 +52,7 @@
 
 <T.PerspectiveCamera
   makeDefault={$debug}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.position.set(10, 10, 10)
     ref.lookAt(0, 0, 0)
   }}
@@ -67,25 +67,27 @@
   startAtScrollPosition={0}
   endAtScrollPosition={3}
 >
-  <SheetObject
-    key="Camera"
-    let:Transform
-  >
-    <KeyboardControls let:transform>
-      <Transform {...transform}>
-        <T.PerspectiveCamera
-          {fov}
-          makeDefault={!$debug}
-          let:ref={camera}
-        >
-          {#if $debug}
-            <Portal object={scene}>
-              <T.CameraHelper args={[camera]} />
-            </Portal>
-          {/if}
-        </T.PerspectiveCamera>
-      </Transform>
-    </KeyboardControls>
+  <SheetObject key="Camera">
+    {#snippet children({ Transform })}
+      <KeyboardControls>
+        {#snippet children({ transform })}
+          <Transform {...transform}>
+            <T.PerspectiveCamera
+              {fov}
+              makeDefault={!$debug}
+            >
+              {#snippet children({ ref: camera })}
+                {#if $debug}
+                  <Portal object={scene}>
+                    <T.CameraHelper args={[camera]} />
+                  </Portal>
+                {/if}
+              {/snippet}
+            </T.PerspectiveCamera>
+          </Transform>
+        {/snippet}
+      </KeyboardControls>
+    {/snippet}
   </SheetObject>
 </ScrollSheet>
 
@@ -99,113 +101,114 @@
   startAtScrollPosition={3.5}
   endAtScrollPosition={5}
 >
-  <SheetObject
-    key="composite"
-    let:Transform
-  >
-    <Transform>
-      <T.Group
-        position.x={-$mouseCoordsSpring.x * 0.2}
-        position.y={$mouseCoordsSpring.y * 0.1}
-      >
-        <ScrollSheet
-          name="Threlte-Composite"
-          startAtScrollPosition={0}
-          endAtScrollPosition={3}
+  <SheetObject key="composite">
+    {#snippet children({ Transform })}
+      <Transform>
+        <T.Group
+          position.x={-$mouseCoordsSpring.x * 0.2}
+          position.y={$mouseCoordsSpring.y * 0.1}
         >
-          <SheetObject
-            key="Glow"
-            let:Transform
-            let:Sync
+          <ScrollSheet
+            name="Threlte-Composite"
+            startAtScrollPosition={0}
+            endAtScrollPosition={3}
           >
-            <KeyboardControls let:transform>
-              <Transform {...transform}>
-                {#await useTexture('/glow.png') then map}
-                  <T.Mesh>
-                    <T.PlaneGeometry args={[10, 10]} />
-                    <T.MeshBasicMaterial
-                      transparent
-                      {map}
-                    >
-                      <Sync
-                        opacity
-                        color
-                      />
-                    </T.MeshBasicMaterial>
-                  </T.Mesh>
-                {/await}
+            <SheetObject key="Glow">
+              {#snippet children({ Transform, Sync })}
+                <KeyboardControls>
+                  {#snippet children({ transform })}
+                    <Transform {...transform}>
+                      {#await useTexture('/glow.png') then map}
+                        <T.Mesh>
+                          <T.PlaneGeometry args={[10, 10]} />
+                          <T.MeshBasicMaterial
+                            transparent
+                            {map}
+                          >
+                            <Sync
+                              opacity
+                              color
+                            />
+                          </T.MeshBasicMaterial>
+                        </T.Mesh>
+                      {/await}
 
-                {#await useTexture('/glow2.png') then map}
-                  <T.Mesh
-                    position.z={0.1}
-                    scale={0.8}
-                  >
-                    <T.PlaneGeometry args={[10, 10]} />
-                    <T.MeshBasicMaterial
-                      transparent
-                      {map}
-                    >
-                      <Sync
-                        opacity="opacity2"
-                        color="color2"
-                      />
-                    </T.MeshBasicMaterial>
-                  </T.Mesh>
-                {/await}
-              </Transform>
-            </KeyboardControls>
-          </SheetObject>
+                      {#await useTexture('/glow2.png') then map}
+                        <T.Mesh
+                          position.z={0.1}
+                          scale={0.8}
+                        >
+                          <T.PlaneGeometry args={[10, 10]} />
+                          <T.MeshBasicMaterial
+                            transparent
+                            {map}
+                          >
+                            <Sync
+                              opacity="opacity2"
+                              color="color2"
+                            />
+                          </T.MeshBasicMaterial>
+                        </T.Mesh>
+                      {/await}
+                    </Transform>
+                  {/snippet}
+                </KeyboardControls>
+              {/snippet}
+            </SheetObject>
 
-          <SheetObject
-            key="Composite"
-            let:Transform
-            props={{
-              floatIntensity: types.number(1, {
-                range: [0, 10]
-              }),
-              rotationIntensity: types.number(1, {
-                range: [0, 10]
-              }),
-              rotationSpeed: types.number(1, {
-                range: [0, 10]
-              }),
-              floatSpeed: types.number(1, {
-                range: [0, 10]
-              })
-            }}
-            let:values
-          >
-            <Float
-              floatIntensity={values.floatIntensity}
-              rotationIntensity={values.rotationIntensity}
-              rotationSpeed={values.rotationSpeed}
-              speed={values.floatSpeed}
+            <SheetObject
+              key="Composite"
+              props={{
+                floatIntensity: types.number(1, {
+                  range: [0, 10]
+                }),
+                rotationIntensity: types.number(1, {
+                  range: [0, 10]
+                }),
+                rotationSpeed: types.number(1, {
+                  range: [0, 10]
+                }),
+                floatSpeed: types.number(1, {
+                  range: [0, 10]
+                })
+              }}
             >
-              <KeyboardControls let:transform>
-                <Transform {...transform}>
-                  <!-- TOP -->
-                  <AnimatableCube key="Box Top" />
+              {#snippet children({ Transform, values })}
+                <Float
+                  floatIntensity={values.floatIntensity}
+                  rotationIntensity={values.rotationIntensity}
+                  rotationSpeed={values.rotationSpeed}
+                  speed={values.floatSpeed}
+                >
+                  <KeyboardControls>
+                    {#snippet children({ transform })}
+                      <Transform {...transform}>
+                        <!-- TOP -->
+                        <AnimatableCube key="Box Top" />
 
-                  <!-- MIDDLE -->
-                  <AnimatableCube key="Box Middle" />
+                        <!-- MIDDLE -->
+                        <AnimatableCube key="Box Middle" />
 
-                  <!-- BOTTOM X+ -->
-                  <AnimatableCube key="Box Bottom X+" />
+                        <!-- BOTTOM X+ -->
+                        <AnimatableCube key="Box Bottom X+" />
 
-                  <!-- BOTTOM X- -->
-                  <AnimatableCube key="Box Bottom X-" />
+                        <!-- BOTTOM X- -->
+                        <AnimatableCube key="Box Bottom X-" />
 
-                  <!-- BOTTOM Z+ -->
-                  <AnimatableCube key="Box Bottom Z+" />
+                        <!-- BOTTOM Z+ -->
+                        <AnimatableCube key="Box Bottom Z+" />
 
-                  <!-- BOTTOM Z- -->
-                  <AnimatableCube key="Box Bottom Z-" />
-                </Transform>
-              </KeyboardControls>
-            </Float>
-          </SheetObject>
-        </ScrollSheet>
-      </T.Group>
-    </Transform>
+                        <!-- BOTTOM Z- -->
+                        <AnimatableCube key="Box Bottom Z-" />
+                      </Transform>
+                    {/snippet}
+                  </KeyboardControls>
+                </Float>
+              {/snippet}
+            </SheetObject>
+          </ScrollSheet>
+        </T.Group>
+      </Transform>
+    {/snippet}
   </SheetObject>
 </ScrollSheet>

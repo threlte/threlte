@@ -159,7 +159,7 @@ type AlignEventData = {
 
 ```svelte
 <Align
-  on:align={({ width }) => {
+  onalign={({ width }) => {
     console.log('The width of the bounding box is', width)
   }}
 >
@@ -170,20 +170,22 @@ type AlignEventData = {
 </Align>
 ```
 
-### Slot Props
+### Snippet Props
 
-The component `<Align>` provides a slot prop called `align` to schedule
+The component `<Align>` provides a snippet prop called `align` to schedule
 aligning all child objects. Be aware that this will not immediately align the
 objects, but rather schedule the alignment to happen exactly _once per frame_.
 It's a manual alternative to [`auto`](#auto).
 
 ```svelte
-<Align let:align>
-  {#if showOtherCube}
-    <T.Mesh on:create={align}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial />
-    </T.Mesh>
-  {/if}
+<Align>
+  {#snippet children({ align })}
+    {#if showOtherCube}
+      <T.Mesh oncreate={align}>
+        <T.BoxGeometry />
+        <T.MeshBasicMaterial />
+      </T.Mesh>
+    {/if}
+  {/snippet}
 </Align>
 ```

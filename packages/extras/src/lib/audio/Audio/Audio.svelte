@@ -3,10 +3,7 @@
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
-
-  type $$Events = AudioEvents
-  type $$Slots = AudioSlots
+  import type { AudioProps } from './Audio.svelte'
 
   let {
     src,
@@ -20,6 +17,7 @@
     pause = $bindable(),
     play = $bindable(),
     stop = $bindable(),
+		children,
     ...props
   }: AudioProps = $props()
 
@@ -34,7 +32,7 @@
   const audio = new ThreeAudio<GainNode>(listener)
 
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
-    useAudio(audio, props.$$events)
+    useAudio(audio, props)
 
   pause = useAudioProps.pause
   play = useAudioProps.play
@@ -53,5 +51,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={audio} />
+	{@render children?.({ ref: audio })}
 </T>

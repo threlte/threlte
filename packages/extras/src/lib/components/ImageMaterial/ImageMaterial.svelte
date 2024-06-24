@@ -2,13 +2,9 @@
   import { Color, Vector2, type Texture, type Mesh, Vector3, ShaderMaterial } from 'three'
   import { T, asyncWritable, useParent, useTask, useThrelte } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
-  import type { ImageMaterialProps, ImageMaterialEvents, ImageMaterialSlots } from './ImageMaterial'
+  import type { ImageMaterialProps } from './ImageMaterial.svelte'
   import { useSuspense } from '../../suspense/useSuspense'
   import { vertexShader, fragmentShader } from './shaders'
-
-  type $$Props = ImageMaterialProps
-  type $$Events = ImageMaterialEvents
-  type $$Slots = ImageMaterialSlots
 
   let {
     color = 'white',
@@ -32,6 +28,7 @@
     side,
     url,
     ref = $bindable(),
+		children,
     ...props
   }: ImageMaterialProps = $props()
 
@@ -182,5 +179,5 @@
   {fragmentShader}
   {...props}
 >
-  <slot ref={material} />
+	{@render children?.({ ref: material })}
 </T>

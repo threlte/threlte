@@ -16,29 +16,29 @@
 
 <Box
   class={_class}
-  let:width
-  let:height
   {order}
 >
-  <T.Mesh
-    position.z={z}
-    on:click={(e) => {
-      e.stopPropagation()
-      onClick()
-    }}
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
-  >
-    <RoundedBoxGeometry
-      args={[width, height, 10]}
-      radius={5}
-    />
-    <T.MeshBasicMaterial color={$hovering ? '#9D9FA3' : '#404550'} />
+  {#snippet children({ width, height })}
+    <T.Mesh
+      position.z={z}
+      onclick={(event) => {
+        event.stopPropagation()
+        onClick()
+      }}
+      onpointerenter={onPointerEnter}
+      onpointerleave={onPointerLeave}
+    >
+      <RoundedBoxGeometry
+        args={[width, height, 10]}
+        radius={5}
+      />
+      <T.MeshBasicMaterial color={$hovering ? '#9D9FA3' : '#404550'} />
 
-    <Label
-      z={5.1}
-      fontSize="xl"
-      {text}
-    />
-  </T.Mesh>
+      <Label
+        z={5.1}
+        fontSize="xl"
+        {text}
+      />
+    </T.Mesh>
+  {/snippet}
 </Box>

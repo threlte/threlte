@@ -10,7 +10,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
 export { T, extend } from './components/T/T'
-export type { Props, Events, Slots } from './components/T/types'
+export type { Props } from './components/T/types'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'
@@ -63,16 +63,21 @@ export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.sve
 /**
  * @deprecated createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.
  *
- * To send events, you must migrate your component to runes mode and use the rest props $$events object:
+ * To send events, you must migrate your component to runes mode and use callback props instead of events:
  *
  * @example
  * ```html
+ * <!-- MyComponent.svelte -->
  * <script>
- *   let { ...props } = $props()
+ *   let { onchange } = $props()
  *
  *   // at some point...
- *   props.$$events.change?.()
+ *   onchange?.()
  * </script>
+ *
+ * <!-- MyOtherComponent.svelte -->
+ * <MyComponent onchange={() => console.log('changed')} />
+ *
  * ```
  */
 export const createRawEventDispatcher = () => {

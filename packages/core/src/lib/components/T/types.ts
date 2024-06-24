@@ -1,4 +1,5 @@
 import type { ConditionalKeys, Primitive } from 'type-fest'
+import type { Snippet } from 'svelte'
 
 /**
  * We hold a list of prop keys that should be ommited from the object props
@@ -40,6 +41,10 @@ export type AnyProps = Record<string, any>
  */
 export type BaseProps<Type> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
+
+  children?: Snippet<[{ ref: MaybeInstance<Type> }]>
+
+  oncreate?: CreateEvent<Type>
 }
 
 /**
@@ -132,21 +137,6 @@ export type Props<Type> = AnyProps &
   CameraProps<Type> &
   InstanceProps<Type>
 
-// –––––––––––––––––––––––– SLOTS ––––––––––––––––––––––––
-
-/**
- * ### `Slots<Type>`
- *
- * This type is used as the Slot type for the component `<T>`.
- * @example Slots<typeof PerspectiveCamera>
- * // { default: { ref: PerspectiveCamera } }
- */
-export type Slots<Type> = {
-  default: {
-    ref: MaybeInstance<Type>
-  }
-}
-
 // –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
 
 /**
@@ -169,18 +159,7 @@ export type ObjectEvents<Type> =
       }
     : Record<string, unknown>
 
-export type CreateEvent<Type> = {
-  create: {
-    ref: MaybeInstance<Type>
-    cleanup: (callback: () => void) => void
-  }
-}
-
-/**
- * ### `Events<Type>`
- *
- * This type is used as the Events type for the component `<T>`.
- * @example Events<typeof PerspectiveCamera>
- * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
- */
-export type Events<Type> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
+export type CreateEvent<Type> = (event: {
+  ref: MaybeInstance<Type>
+  cleanup: (callback: () => void) => void
+}) => void

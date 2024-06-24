@@ -7,9 +7,9 @@
   import AdvancedScene from './AdvancedScene.svelte'
   import { Pane, Slider, TabGroup, TabPage, Checkbox, Button } from 'svelte-tweakpane-ui'
 
-  let reset: (() => void) | undefined
+  let reset: () => void = () => {}
   let showHelper = false
-  const gravityTypes: GravityType[] = ['static', 'linear', 'newtonian']
+  const gravityTypes = ['static', 'linear', 'newtonian'] as const
   let gravityType: GravityType = gravityTypes[0]
   let strengthLeft = 1
   let strengthCenter = 1

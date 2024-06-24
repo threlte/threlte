@@ -4,7 +4,7 @@
 >
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
-  import type { XRHandEvent } from '../types'
+  import type { XRHandEvents } from '../types'
   import { isHandTracking, handEvents } from '../internal/stores'
   import { left as leftStore, right as rightStore } from '../hooks/useHand'
   import ScenePortal from './internal/ScenePortal.svelte'
@@ -17,41 +17,43 @@
 </script>
 
 <script lang="ts">
-  type Props =
-    | {
-        /** Whether the XRHand should be matched with the left hand. */
-        left: true
-        right?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the XRHand should be matched with the right hand. */
-        right: true
-        left?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the XRHand should be matched with the left or right hand. */
-        hand: 'left' | 'right'
-        left?: undefined
-        right?: undefined
-      }
+  type Props = XRHandEvents &
+    (
+      | {
+          /** Whether the XRHand should be matched with the left hand. */
+          left: true
+          right?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the XRHand should be matched with the right hand. */
+          right: true
+          left?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the XRHand should be matched with the left or right hand. */
+          hand: 'left' | 'right'
+          left?: undefined
+          right?: undefined
+        }
+    )
 
-  type $$Events = {
-    connected: XRHandEvent<'connected'>
-    disconnected: XRHandEvent<'disconnected'>
-    pinchstart: XRHandEvent<'pinchstart'>
-    pinchend: XRHandEvent<'pinchend'>
-  }
-
-  let { left, right, hand, ...props }: Props & { $$events: $$Events } = $props()
+  let { left, right, hand, onconnected, ondisconnected, onpinchend, onpinchstart }: Props = $props()
 
   const { xr } = useThrelte().renderer
   const space = xr.getReferenceSpace()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
   $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
-  $effect.pre(() => handEvents[$handedness].set(props.$$events))
+  $effect.pre(() =>
+    handEvents[$handedness].set({
+      onconnected,
+      ondisconnected,
+      onpinchend,
+      onpinchstart
+    })
+  )
 
   let children = new Group()
 

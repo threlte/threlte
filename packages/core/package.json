@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "8.0.0-next.4",
+  "version": "8.0.0-next.6",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -45,7 +45,7 @@
   },
   "peerDependencies": {
     "svelte": ">=5",
-    "three": ">=0.152"
+    "three": ">=0.155"
   },
   "type": "module",
   "exports": {

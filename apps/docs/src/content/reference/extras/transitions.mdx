@@ -116,10 +116,10 @@ Similar to Svelte transitions, Threlte transitions also emit events:
     {geometry}
     {material}
     transition={fade}
-    on:introstart={() => console.log('intro started')}
-    on:outrostart={() => console.log('outro started')}
-    on:introend={() => console.log('intro ended')}
-    on:outroend={() => console.log('outro ended')}
+    onintrostart={() => console.log('intro started')}
+    onoutrostart={() => console.log('outro started')}
+    onintroend={() => console.log('intro ended')}
+    onoutroend={() => console.log('outro ended')}
   />
 {/if}
 ```

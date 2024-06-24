@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
 ## 9.0.0-next.8
 
 ### Patch Changes

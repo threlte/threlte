@@ -34,23 +34,22 @@
   {#each hands as hand (hand)}
     <Hand
       {hand}
-      on:pinchstart={handlePinchStart}
-      on:connected={handleEvent}
-      on:disconnected={handleEvent}
-      on:pinchstart={handleEvent}
-      on:pinchend={handleEvent}
+      onconnected={handleEvent}
+      ondisconnected={handleEvent}
+      onpinchstart={handleEvent}
+      onpinchend={handleEvent}
     />
 
     <Controller
       {hand}
-      on:connected={handleControllerEvent}
-      on:disconnected={handleControllerEvent}
-      on:select={handleControllerEvent}
-      on:squeeze={handleControllerEvent}
-      on:selectstart={handleControllerEvent}
-      on:selectend={handleControllerEvent}
-      on:squeezestart={handleControllerEvent}
-      on:squeezeend={handleControllerEvent}
+      onconnected={handleControllerEvent}
+      ondisconnected={handleControllerEvent}
+      onselect={handleControllerEvent}
+      onsqueeze={handleControllerEvent}
+      onselectstart={handleControllerEvent}
+      onselectend={handleControllerEvent}
+      onsqueezestart={handleControllerEvent}
+      onsqueezeend={handleControllerEvent}
     />
   {/each}
 </XR>
@@ -63,7 +62,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[0, 1.8, 1]}
-  on:create={({ ref }) => ref.lookAt(0, 1.8, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
 />
 
 <T.AmbientLight />

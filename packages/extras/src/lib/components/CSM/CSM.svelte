@@ -34,7 +34,7 @@
   const enabledStore = writable(enabled)
   $: enabledStore.set(enabled)
 
-  const { camera: defaultCamera, scene, size, useLegacyLights } = useThrelte()
+  const { camera: defaultCamera, scene, size } = useThrelte()
 
   const csm = currentWritable<CSM | undefined>(undefined)
 
@@ -89,19 +89,16 @@
   const lightColorStore = writable<typeof lightColor>(lightColor)
   $: lightColorStore.set(lightColor)
 
-  watch(
-    [csm, lightIntensityStore, lightColorStore, useLegacyLights],
-    ([csm, intensity, color, useLegacyLights]) => {
-      csm?.lights.forEach((light) => {
-        if (intensity !== undefined) {
-          light.intensity = intensity / (useLegacyLights ? 1 : Math.PI)
-        }
-        if (color !== undefined) {
-          light.color.set(color)
-        }
-      })
-    }
-  )
+  watch([csm, lightIntensityStore, lightColorStore], ([csm, intensity, color]) => {
+    csm?.lights.forEach((light) => {
+      if (intensity !== undefined) {
+        light.intensity = intensity / Math.PI
+      }
+      if (color !== undefined) {
+        light.color.set(color)
+      }
+    })
+  })
 
   const lightDirectionStore = writable(lightDirection)
   $: lightDirectionStore.set(lightDirection)

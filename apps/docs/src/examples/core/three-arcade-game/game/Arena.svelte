@@ -96,7 +96,7 @@
 <!-- LEFT COLLIDER -->
 <T.Group position={[(colliderWidth / 2 + arenaWidth / 2) * -1, 0, 0]}>
   <Collider
-    on:collisionenter={onLeftCollision}
+    oncollisionenter={onLeftCollision}
     shape="cuboid"
     args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
   />
@@ -105,7 +105,7 @@
 <!-- RIGHT COLLIDER -->
 <T.Group position={[colliderWidth / 2 + arenaWidth / 2, 0, 0]}>
   <Collider
-    on:collisionenter={onRightCollision}
+    oncollisionenter={onRightCollision}
     shape="cuboid"
     args={[colliderWidth / 2, 1 / 2, arenaHeight / 2]}
   />
@@ -114,7 +114,7 @@
 <!-- TOP COLLIDER -->
 <T.Group position={[0, 0, (colliderWidth / 2 + arenaHeight / 2) * -1]}>
   <Collider
-    on:collisionenter={onTopCollision}
+    oncollisionenter={onTopCollision}
     shape="cuboid"
     args={[(colliderWidth * 2 + arenaWidth) / 2, 1 / 2, colliderWidth / 2]}
   />

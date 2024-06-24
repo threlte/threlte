@@ -1,5 +1,5 @@
 import type { Key, ThrelteUseTaskOptions } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { ColorRepresentation } from 'three'
 
 type TaskOptions = Pick<ThrelteUseTaskOptions, 'after' | 'before' | 'stage'> & { key?: Key }
@@ -20,8 +20,4 @@ export type GizmoProps = {
   paddingY?: number
 }
 
-export type GizmoEvents = Record<string, never>
-
-export type GizmoSlots = Record<string, never>
-
-export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> {}
+export default class Gizmo extends SvelteComponent<GizmoProps> {}

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/theatre",
-  "version": "3.0.0-next.1",
+  "version": "3.0.0-next.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.152",
+    "three": ">=0.155",
     "@threlte/core": ">=8.0.0-next.0",
     "@threlte/extras": ">=9.0.0-next.0",
     "@theatre/core": ">=0.6",

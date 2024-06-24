@@ -18,12 +18,12 @@
 >
   <T.Mesh
     position.y={0.5}
-    on:pointerenter={() => {
+    onpointerenter={() => {
       $scale = 2
       color = '#FE3D00'
       onPointerEnter()
     }}
-    on:pointerleave={() => {
+    onpointerleave={() => {
       $scale = 1
       color = 'white'
       onPointerLeave()

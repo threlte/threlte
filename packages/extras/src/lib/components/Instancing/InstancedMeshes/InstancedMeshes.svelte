@@ -3,19 +3,11 @@
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
-  import type {
-    InstancedMeshesEvents,
-    InstancedMeshesProps,
-    InstancedMeshesSlots,
-    Meshes
-  } from './InstancedMeshes.svelte'
+  import type { InstancedMeshesProps, Meshes } from './InstancedMeshes.svelte'
 
   type T = $$Generic<Meshes>
 
-  type $$Events = InstancedMeshesEvents
-  type $$Slots = InstancedMeshesSlots<T>
-
-  let { meshes, ...props }: InstancedMeshesProps<T> = $props()
+  let { meshes, children, ...props }: InstancedMeshesProps<T> = $props()
 
   const getInstance = (id: string) => {
     return (...args: any) => {
@@ -56,5 +48,5 @@
   meshes={filteredMeshesArray}
   {...props}
 >
-  <slot {components} />
+	{@render children?.({ components })}
 </InnerInstancedMeshes>
