@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store'
 import { watch } from '../../../lib/storeUtils'
 import type { Event, EventDispatcher } from 'three'
+import type { MaybeInstance } from '../types'
 
 type Props = Record<string, (arg: unknown) => void>
 
@@ -9,11 +10,18 @@ type Props = Record<string, (arg: unknown) => void>
  * @param value
  * @returns
  */
-const isEventDispatcher = (value: object): value is EventDispatcher => {
-  return 'addEventListener' in value && 'removeEventListener' in value
+const isEventDispatcher = <T>(
+  value: MaybeInstance<T>
+): value is MaybeInstance<T> & EventDispatcher => {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    'addEventListener' in value &&
+    'removeEventListener' in value
+  )
 }
 
-export const useEvents = (props: Props = {}) => {
+export const useEvents = <T>(props: Props = {}) => {
   const eventHandlerProxy = (event?: Event) => {
     if (event?.type) {
       props[`on${event.type}`]?.(event)
@@ -36,7 +44,7 @@ export const useEvents = (props: Props = {}) => {
     }
   }
 
-  const ref = writable<EventDispatcher>()
+  const ref = writable<MaybeInstance<T> & EventDispatcher>()
 
   watch(ref, ($ref) => {
     if (!$ref) return
@@ -44,7 +52,7 @@ export const useEvents = (props: Props = {}) => {
     return () => cleanupEventListeners($ref, props)
   })
 
-  const updateRef = (newRef: object) => {
+  const updateRef = (newRef: MaybeInstance<T>) => {
     if (isEventDispatcher(newRef)) {
       ref.set(newRef)
     }
