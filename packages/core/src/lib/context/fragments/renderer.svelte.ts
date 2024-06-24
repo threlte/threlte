@@ -176,9 +176,6 @@ export const createRendererContext = <T extends Renderer>(
     }
   })
 
-  $effect(() => {
-    context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)
-  })
 
   $effect(() => {
     context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)
