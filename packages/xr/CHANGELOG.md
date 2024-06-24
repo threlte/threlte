@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- 2107848: Fix xr events and migrate remaining slots to snippets
+
 ## 1.0.0-next.3
 
 ### Patch Changes
