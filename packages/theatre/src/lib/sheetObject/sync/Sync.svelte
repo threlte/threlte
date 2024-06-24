@@ -1,19 +1,19 @@
 <script lang="ts">
   import { resolvePropertyPath, useParent, watch } from '@threlte/core'
-  import { onDestroy, getContext } from 'svelte'
+  import { onDestroy } from 'svelte'
   import type { Transformer } from '../transfomers/types'
-  import type { AnyProp } from './Sync.svelte'
+  import type { AnyProp, SyncProps } from './Sync.svelte'
   import { getInitialValue } from './utils/getInitialValue'
   import { isComplexProp } from './utils/isComplexProp'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
   import { isStringProp } from './utils/isStringProp'
   import { useStudio } from '../../studio/useStudio'
+  import { useSheet } from '../useSheet'
 
-  // used for type hinting auto props
-  export let type: any = undefined
+  let { type, children, ...rest }: SyncProps<any> = $props()
 
-  const { sheetObject, addProps, removeProps } = getContext('threlte-theater-sheet-context')
+  const { sheetObject, addProps, removeProps } = useSheet()
 
   const parent = useParent()
 
@@ -30,7 +30,7 @@
     const props = {} as Record<string, any>
 
     // propertyPath is for example "position.x" or "intensity", so a property path on the parent object
-    Object.entries(<Record<string, AnyProp>>$$restProps).forEach(
+    Object.entries(<Record<string, AnyProp>>rest).forEach(
       ([propertyPath, propertyValue]) => {
         // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
         const customKey = isComplexProp(propertyValue)
@@ -136,4 +136,4 @@
   })
 </script>
 
-<slot {capture} />
+{@render children?.({ capture })}

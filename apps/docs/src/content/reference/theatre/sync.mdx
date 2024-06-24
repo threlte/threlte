@@ -10,14 +10,16 @@ componentSignature: { props: [{ name: type, type: 'any', required: false }] }
 Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop to automatically pick up properties from its parent.
 
 ```svelte
-<SheetObject let:Sync>
-  <T.MeshBasicMaterial>
-    <Sync
-      color
-      roughness
-      rotation
-    />
-  </T.MeshBasicMaterial>
+<SheetObject>
+  {#snippet children({ Sync })}
+    <T.MeshBasicMaterial>
+      <Sync
+        color
+        roughness
+        rotation
+      />
+    </T.MeshBasicMaterial>
+  {/snippet}
 </SheetObject>
 ```
 
@@ -38,17 +40,16 @@ To label an auto prop, just provide a string instead of a boolean value.
   import { SheetObject } from '@threlte/theatre'
 </script>
 
-<SheetObject
-  key="cube"
-  let:Sync
->
-  <T.Mesh>
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial>
-      <!-- labeled prop: rename color to tone in the studio -->
-      <Sync color="tone" />
-    </T.MeshStandardMaterial>
-  </T.Mesh>
+<SheetObject key="cube">
+  {#snippet children({ Sync })}
+    <T.Mesh>
+      <T.BoxGeometry />
+      <T.MeshStandardMaterial>
+        <!-- labeled prop: rename color to tone in the studio -->
+        <Sync color="tone" />
+      </T.MeshStandardMaterial>
+    </T.Mesh>
+  {/snippet}
 </SheetObject>
 ```
 
@@ -62,16 +63,15 @@ Similarly to the pierced props of [`<T>`](/docs/reference/core/t), the props of 
   import { SheetObject } from '@threlte/theatre'
 </script>
 
-<SheetObject
-  key="cube"
-  let:Sync
->
-  <T.Mesh>
-    <!-- pierced prop: edit only x coord. in the studio -->
-    <Sync position.x />
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
+<SheetObject key="cube">
+  {#snippet children({ Sync })}
+    <T.Mesh>
+      <!-- pierced prop: edit only x coord. in the studio -->
+      <Sync position.x />
+      <T.BoxGeometry />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  {/snippet}
 </SheetObject>
 ```
 
@@ -114,30 +114,29 @@ You may also declare transformers directly in the markup:
   import { createTransformer, types } from '@threlte/theatre'
 </script>
 
-<SheetObject
-  key="light"
-  let:Sync
->
-  <T.DirectionalLight>
-    <Sync
-      intensity={{
-        transformer: {
-          transform(value) {
-            // use the initial value and provide a range
-            // slider UI that goes from 0 to 2.
-            return types.number(value, {
-              range: [0, 2]
-            })
-          },
-          apply(target, path, value) {
-            // whenever the value changes, apply it back
-            // to the target.
-            target[path] = value
+<SheetObject key="light">
+  {#snippet children({ Sync })}
+    <T.DirectionalLight>
+      <Sync
+        intensity={{
+          transformer: {
+            transform(value) {
+              // use the initial value and provide a range
+              // slider UI that goes from 0 to 2.
+              return types.number(value, {
+                range: [0, 2]
+              })
+            },
+            apply(target, path, value) {
+              // whenever the value changes, apply it back
+              // to the target.
+              target[path] = value
+            }
           }
-        }
-      }}
-    />
-  </T.DirectionalLight>
+        }}
+      />
+    </T.DirectionalLight>
+  {/snippet}
 </SheetObject>
 ```
 

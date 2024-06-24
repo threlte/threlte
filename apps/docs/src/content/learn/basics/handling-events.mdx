@@ -48,14 +48,13 @@ The following example uses the [`change` event from `OrbitControls`](https://thr
   const { renderer, invalidate } = useThrelte()
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  let:ref
->
-  <T.OrbitControls
-    args={[ref, renderer.domElement]}
-    onchange={invalidate}
-  />
+<T.PerspectiveCamera makeDefault>
+  {#snippet children({ ref })}
+    <T.OrbitControls
+      args={[ref, renderer.domElement]}
+      onchange={invalidate}
+    />
+  {/snippet}
 </T.PerspectiveCamera>
 ```
 

@@ -1,14 +1,12 @@
 import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-import type { SvelteComponent } from 'svelte'
+import type { Snippet, SvelteComponent } from 'svelte'
+
+export type DeclareProps<T extends UnknownShorthandCompoundProps> = {
+  props: T
+
+  children?: Snippet<[{ values: ISheetObject<T>['value'] }]>
+}
 
 export default class Declare<T extends UnknownShorthandCompoundProps> extends SvelteComponent<
-  {
-    props: T
-  },
-  Record<string, unknown>,
-  {
-    default: {
-      values: ISheetObject<T>['value']
-    }
-  }
+  DeclareProps<T>
 > {}

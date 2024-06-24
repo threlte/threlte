@@ -10,11 +10,12 @@
   zoom={80}
   position={[10, 10, 10]}
   makeDefault
-  let:ref
 >
-  <T.OrbitControls
-    args={[ref, el]}
-    onchange={invalidate}
-    enableZoom={false}
-  />
+  {#snippet children({ ref })}
+    <T.OrbitControls
+      args={[ref, el]}
+      onchange={invalidate}
+      enableZoom={false}
+    />
+  {/snippet}
 </T.OrthographicCamera>

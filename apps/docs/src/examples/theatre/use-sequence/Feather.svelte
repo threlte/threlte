@@ -29,12 +29,11 @@
   }}
   onpointerup={() => (baseline = undefined)}
 >
-  <SheetObject
-    key="Feather"
-    let:Transform
-  >
-    <Transform>
-      <GLTF url="/models/feather.glb" />
-    </Transform>
+  <SheetObject key="Feather">
+    {#snippet children({ Transform })}
+      <Transform>
+        <GLTF url="/models/feather.glb" />
+      </Transform>
+    {/snippet}
   </SheetObject>
 </T.Group>

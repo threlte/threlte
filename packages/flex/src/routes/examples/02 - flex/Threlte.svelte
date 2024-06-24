@@ -22,15 +22,13 @@
     />
   </Box>
 
-  <Box
-    flex={1}
-    let:width
-  >
-    <Plane
-      color="blue"
-      {width}
-      height={100}
-      depth={1}
-    />
+  <Box flex={1}>
+    {#snippet children({ width })}
+      <Plane
+        color="blue"
+        height={100}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 </Flex>

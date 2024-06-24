@@ -1,13 +1,15 @@
 <script lang="ts">
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { watch, type CurrentWritable, currentWritable } from '@threlte/core'
-  import { onDestroy, getContext } from 'svelte'
+  import type { UnknownShorthandCompoundProps } from '@theatre/core'
+  import { watch } from '@threlte/core'
+  import { onDestroy } from 'svelte'
+  import type { DeclareProps } from './Declare.svelte'
+  import { useSheet } from '../useSheet'
 
   type P = $$Generic<UnknownShorthandCompoundProps>
 
-  export let props: P
+  let { props, children }: DeclareProps<P> = $props()
 
-  const { sheetObject, addProps, removeProps } = getContext('threlte-theater-sheet-context')
+  const { sheetObject, addProps, removeProps } = useSheet()
 
   let values = $sheetObject?.value
 
@@ -24,4 +26,4 @@
   })
 </script>
 
-<slot {values} />
+{@render children?.({ values })}

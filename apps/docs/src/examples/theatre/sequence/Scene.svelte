@@ -4,25 +4,23 @@
 </script>
 
 <!-- Box -->
-<SheetObject
-  key="Box"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.Mesh
-      receiveShadow
-      castShadow
-    >
-      <T.BoxGeometry args={[1, 1, 1]} />
-      <T.MeshStandardMaterial>
-        <Sync
-          color
-          emissive
-        />
-      </T.MeshStandardMaterial>
-    </T.Mesh>
-  </Transform>
+<SheetObject key="Box">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.Mesh
+        receiveShadow
+        castShadow
+      >
+        <T.BoxGeometry args={[1, 1, 1]} />
+        <T.MeshStandardMaterial>
+          <Sync
+            color
+            emissive
+          />
+        </T.MeshStandardMaterial>
+      </T.Mesh>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <T.DirectionalLight

@@ -35,7 +35,7 @@
 
 <script lang="ts">
   interface CameraControlsProps extends Props<CameraControls> {
-    ref?: CameraControls
+    ref: CameraControls
     autoRotate?: boolean
     autoRotateSpeed?: number
   }

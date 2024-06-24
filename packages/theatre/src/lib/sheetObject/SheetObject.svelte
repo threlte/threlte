@@ -14,6 +14,7 @@
   import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
   import type { SheetObjectProps } from './SheetObject.svelte'
+  import { createSheetContext } from './useSheet'
 
   type Props = $$Generic<UnknownShorthandCompoundProps>
 
@@ -99,7 +100,7 @@
     }
   }
 
-  setContext('threlte-theater-sheet-context', {
+  createSheetContext({
     sheetObject,
     addProps,
     removeProps

@@ -10,7 +10,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
 export { T, extend } from './components/T/T'
-export type { Props, Events } from './components/T/types'
+export type { Props } from './components/T/types'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'

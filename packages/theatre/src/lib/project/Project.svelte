@@ -1,20 +1,28 @@
 <script lang="ts">
   import { globalProjects } from '../consts'
   import { getProject } from '../theatre'
-  import { setContext } from 'svelte'
-  import type { IProjectConfig } from '@theatre/core'
+  import { setContext, type Snippet } from 'svelte'
+  import type { IProject, IProjectConfig } from '@theatre/core'
 
-  // PROPS
+  interface Props {
+    name: string
+    config?: IProjectConfig | undefined
+    project?: IProject
+    isReady?: boolean
+    children?: Snippet<[{ project: IProject }]>
+  }
 
-  export let name = 'default'
-  export let config: IProjectConfig | undefined = undefined
-
-  // BINDINGS
-
-  export const project = globalProjects.get(name) ?? getProject(name, config)
+  let {
+    name = 'default',
+    config,
+    project = $bindable(),
+    isReady = $bindable(),
+    children
+  }: Props = $props()
+  
+  project = globalProjects.get(name) ?? getProject(name, config)
   globalProjects.set(name, project)
 
-  export let isReady = false
   const syncReady = async () => {
     await project.ready
     isReady = true
@@ -27,5 +35,5 @@
 </script>
 
 {#await project.ready then}
-  <slot {project} />
+  {@render children?.({ project })}
 {/await}

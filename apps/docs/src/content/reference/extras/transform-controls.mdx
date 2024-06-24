@@ -61,9 +61,10 @@ The `<TransformControls>` component can also be used to transform an object pass
 <T.Mesh
   geometry={new BoxBufferGeometry(1, 1, 1)}
   material={new MeshStandardMaterial()}
-  let:ref
 >
-  <TransformControls object={ref} />
+  {#snippet children({ ref })}
+    <TransformControls object={ref} />
+  {/snippet}
 </T.Mesh>
 
 <TransformControls object={someObject} />

@@ -114,8 +114,8 @@ To let the parent component decide what to do while the model component is loadi
   In contrast to the React Suspense API, the `<Suspense>` component also acts as an
   error boundary for async requests	made in child components wrapped in `suspend`.
 
-    The slot `"error"` will be mounted as soon as an error is thrown in a child component
-    wrapped in `suspend` and the slot prop `let:errors` can be used to display a meaningful
+    The `"error"` snippet will be mounted as soon as an error is thrown in a child component
+    wrapped in `suspend` and the snippet prop `errors` can be used to display a meaningful
     error message.
 
 </Tip>
@@ -126,8 +126,8 @@ The `<Suspense>` component is a great tool to improve the user experience of you
 
 1. The `<Suspense>` component will only ever show one of the available slots at any time:
 
-- The slot `"error"` will be shown as soon as an error is thrown.
-- The slot `"fallback"` will be shown as long as a child component is suspended.
+- The snippet `"error"` will be shown as soon as an error is thrown.
+- The snippet `"fallback"` will be shown as long as a child component is suspended.
 - The default slot will be shown as long as no child component is suspended and no error has been thrown.
 
 2. Umounting a component that suspends rendering through awaiting a resource or throwing an error will discard its suspend state.

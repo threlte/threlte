@@ -13,20 +13,22 @@ This is an adaption of Three.js [own documentation](https://threejs.org/docs/#ap
 ... which happens 3 times due to the `#each` block
 
 ```svelte
-<T.LOD let:ref={lod}>
-  {#each ['red', 'green', 'blue'] as color, i}
-    <T.Mesh
-      oncreate={({ ref }) => {
-        lod.addLevel(ref, i * 75) // i * 75 = distance
-      }}
-    >
-      <T.IcosahedronGeometry args={[10, 3 - i]} />
-      <T.MeshStandardMaterial
-        {color}
-        wireframe
-      />
-    </T.Mesh>
-  {/each}
+<T.LOD>
+  {#snippet children({ ref: lod })}
+    {#each ['red', 'green', 'blue'] as color, i}
+      <T.Mesh
+        oncreate={({ ref }) => {
+          lod.addLevel(ref, i * 75) // i * 75 = distance
+        }}
+      >
+        <T.IcosahedronGeometry args={[10, 3 - i]} />
+        <T.MeshStandardMaterial
+          {color}
+          wireframe
+        />
+      </T.Mesh>
+    {/each}
+  {/snippet}
 </T.LOD>
 ```
 
