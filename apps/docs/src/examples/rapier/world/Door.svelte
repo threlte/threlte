@@ -6,8 +6,14 @@
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import { blur } from 'svelte/transition'
-  import { BoxGeometry, Euler, type Group, MeshStandardMaterial, Quaternion } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import {
+    BoxGeometry,
+    Euler,
+    type Group,
+    MeshStandardMaterial,
+    Quaternion,
+    MathUtils
+  } from 'three'
 
   let open = false
   let objectsInSensor = 0
@@ -17,7 +23,7 @@
   let doorRigidBody: RapierRigidBody
 
   let doorRotationClosed = 0
-  let doorRotationOpen = -105 * DEG2RAD
+  let doorRotationOpen = -105 * MathUtils.DEG2RAD
   let doorRotation = tweened(doorRotationClosed)
   $: doorRotation.set(open ? doorRotationOpen : doorRotationClosed, {
     easing: open ? cubicOut : cubicIn
