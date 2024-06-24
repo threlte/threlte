@@ -37,7 +37,6 @@ export default defineConfig({
       imports: [
         '$components/Example/Example.astro',
         '$components/Tip/Tip.astro',
-        '$components/ManualInstallGuide/ManualInstallGuide.svelte',
         '$components/Card/Card.astro'
       ]
     }),
