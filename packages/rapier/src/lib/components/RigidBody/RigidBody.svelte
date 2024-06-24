@@ -37,8 +37,7 @@
     onsensorenter,
     onsensorexit,
     onsleep,
-    onwake,
-    ...props
+    onwake
   }: RigidBodyProps & RigidBodyEvents = $props()
 
   /**

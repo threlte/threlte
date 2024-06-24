@@ -2,7 +2,7 @@ import type { Mesh } from 'three'
 import { writable } from 'svelte/store'
 import { watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
-import { useTeleportControls } from './hook'
+import { useTeleportControls } from './context'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.

@@ -51,7 +51,6 @@
     onsensorenter,
     onsensorexit,
     children,
-    ...props
   }: ColliderProps<TShape, TMassDef> & ColliderEvents = $props()
 
   const object = new Object3D()
@@ -65,6 +64,14 @@
   const { world } = rapierContext
 
   const collisionGroups = useCollisionGroups()
+
+  const events = {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  }
 
   /**
    * Actual collider setup happens onMount as only then
@@ -87,13 +94,7 @@
     /**
      * Add collider to context
      */
-    rapierContext.addColliderToContext(collider, object, {
-      oncollisionenter,
-      oncollisionexit,
-      oncontact,
-      onsensorenter,
-      onsensorexit
-    })
+    rapierContext.addColliderToContext(collider, object, events)
 
     /**
      * For use in conjunction with component <CollisionGroups>
@@ -160,7 +161,7 @@
 
   $effect.pre(() => {
     if (collider) {
-      applyColliderActiveEvents(collider, props, rigidBody?.userData?.events)
+      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
     }
   })
 

@@ -42,7 +42,6 @@
     onsensorenter,
     onsensorexit,
     children,
-    ...props
   }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
@@ -66,6 +65,14 @@
     colliders.length = 0
   }
 
+  const events = {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  }
+
   const create = () => {
     cleanup()
     colliders = createCollidersFromChildren(
@@ -76,19 +83,13 @@
       rigidBodyParentObject
     )
     colliders.forEach((c) =>
-      addColliderToContext(c, group, {
-        oncollisionenter,
-        oncollisionexit,
-        oncontact,
-        onsensorenter,
-        onsensorexit
-      })
+      addColliderToContext(c, group, events)
     )
 
     collisionGroups.registerColliders(colliders)
 
     colliders.forEach((collider) => {
-      applyColliderActiveEvents(collider, props, rigidBody?.userData?.events)
+      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)

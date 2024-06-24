@@ -46,11 +46,10 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
       // Update meshes
       ctx.rigidBodyObjects.forEach((mesh, handle) => {
         const rigidBody = world.getRigidBody(handle)
-        if (!rigidBody) return
-
-        const events = ctx.rigidBodyEventDispatchers.get(handle)
 
         if (!rigidBody || !rigidBody.isValid()) return
+
+        const events = ctx.rigidBodyEventDispatchers.get(handle)
 
         if (events) {
           if (rigidBody.isSleeping() && !mesh.userData.isSleeping) {
@@ -62,7 +61,7 @@ export const useFrameHandler = (ctx: RapierContext, stage?: Stage | Key) => {
           mesh.userData.isSleeping = rigidBody.isSleeping()
         }
 
-        if (!rigidBody || rigidBody.isSleeping() || rigidBody.isFixed() || !mesh.parent) {
+        if (rigidBody.isSleeping() || rigidBody.isFixed() || !mesh.parent) {
           return
         }
 
