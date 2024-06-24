@@ -17,7 +17,7 @@
   let {
     label,
     key,
-    mode,
+    mode = 'translate',
     space,
     translationSnap,
     rotationSnap,
@@ -47,7 +47,7 @@
         controls.setScaleSnap(null)
       }
     }
-  }) 
+  })
 
   const group = new Group()
 
