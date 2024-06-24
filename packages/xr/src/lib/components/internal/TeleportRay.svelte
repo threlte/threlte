@@ -5,13 +5,15 @@
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
   import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     handedness: 'left' | 'right'
     targetRay: XRTargetRaySpace
+    children?: Snippet
   }
 
-  let { handedness, targetRay }: Props = $props()
+  let { handedness, targetRay, children }: Props = $props()
 
   let lineGeometry = new LineGeometry()
 
@@ -76,7 +78,9 @@
   })
 </script>
 
-<slot>
+{#if children}
+  {@render children()}
+{:else}
   <T
     is={Line2}
     visible={$intersection !== undefined}
@@ -88,4 +92,4 @@
       linewidth={0.004}
     />
   </T>
-</slot>
+{/if}

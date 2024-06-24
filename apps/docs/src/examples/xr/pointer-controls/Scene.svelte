@@ -84,7 +84,7 @@
 <svelte:window on:keyup={(e) => e.key === 'd' && (debug = !debug)} />
 
 <Controller left>
-  <svelte:fragment slot="target-ray">
+  {#snippet targetRay()}
     <Text
       fontSize={0.05}
       {text}
@@ -93,16 +93,15 @@
     <T.Line visible={debug}>
       <T is={new BufferGeometry().setFromPoints(points)} />
     </T.Line>
-  </svelte:fragment>
+  {/snippet}
 </Controller>
 
 <Controller right>
-  <T.Line
-    slot="target-ray"
-    visible={debug}
-  >
-    <T is={new BufferGeometry().setFromPoints(points)} />
-  </T.Line>
+  {#snippet targetRay()}
+    <T.Line visible={debug}>
+      <T is={new BufferGeometry().setFromPoints(points)} />
+    </T.Line>
+  {/snippet}
 </Controller>
 
 <Hand left />

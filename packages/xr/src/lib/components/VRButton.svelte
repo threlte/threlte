@@ -12,6 +12,7 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
+  import { defaultFeatures } from '../internal/defaultFeatures'
 
   type Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
 
@@ -20,7 +21,7 @@
 
 <XRButton
   sessionInit={{
-    optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
+    ...defaultFeatures
   }}
   {...props}
   mode="immersive-vr"
