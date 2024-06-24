@@ -20,7 +20,7 @@ export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
 // hooks
 export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask'
 export { useStage } from './hooks/useStage'
-export { useThrelte } from './hooks/useThrelte'
+export { useThrelte } from './context/compounds/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 
 // task scheduling system types
@@ -41,7 +41,8 @@ export { useParent } from './hooks/useParent'
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // contexts
-export { type ThrelteContext, createThrelteContext } from './lib/contexts'
+export { type ThrelteContext } from './context/compounds/useThrelte'
+export { createThrelteContext } from './context/createThrelteContext.svelte'
 
 // types
 export type { Size } from './types'
@@ -49,7 +50,7 @@ export type { Size } from './types'
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { useCache } from './lib/cache'
+export { useCache, createCacheContext } from './context/fragments/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { revision } from './lib/revision'
 

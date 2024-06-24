@@ -273,7 +273,7 @@ importers:
         version: 3.2.5
       prettier-plugin-svelte:
         specifier: ^3.2.2
-        version: 3.2.2(prettier@3.2.5)(svelte@5.0.0-next.107)
+        version: 3.2.5(prettier@3.2.5)(svelte@5.0.0-next.107)
       publint:
         specifier: ^0.2.7
         version: 0.2.7
@@ -5894,6 +5894,12 @@ packages:
 
   prettier-plugin-svelte@3.2.2:
     resolution: {integrity: sha512-ZzzE/wMuf48/1+Lf2Ffko0uDa6pyCfgHV6+uAhtg2U0AAXGrhCSW88vEJNAkAxW5qyrFY1y1zZ4J8TgHrjW++Q==}
+    peerDependencies:
+      prettier: ^3.0.0
+      svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
+
+  prettier-plugin-svelte@3.2.5:
+    resolution: {integrity: sha512-vP/M/Goc8z4iVIvrwXwbrYVjJgA0Hf8PO1G4LBh/ocSt6vUP6sLvyu9F3ABEGr+dbKyxZjEKLkeFsWy/yYl0HQ==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
@@ -13602,6 +13608,11 @@ snapshots:
       svelte: 5.0.0-next.164
 
   prettier-plugin-svelte@3.2.2(prettier@3.2.5)(svelte@5.0.0-next.107):
+    dependencies:
+      prettier: 3.2.5
+      svelte: 5.0.0-next.107
+
+  prettier-plugin-svelte@3.2.5(prettier@3.2.5)(svelte@5.0.0-next.107):
     dependencies:
       prettier: 3.2.5
       svelte: 5.0.0-next.107

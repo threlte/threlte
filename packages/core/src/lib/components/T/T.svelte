@@ -109,26 +109,19 @@
 </script>
 
 {#if isDisposableObject(internalRef)}
-  <DisposableObject
-    object={internalRef}
-    {dispose}
-  />
+  <DisposableObject object={internalRef} {dispose} />
 {/if}
 
 {#if isCamera(internalRef)}
-  <Camera
-    object={internalRef}
-    {manual}
-    {makeDefault}
-  />
+  <Camera object={internalRef} {manual} {makeDefault} />
 {/if}
 
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-			{@render children({ ref: internalRef })}
+      {@render children({ ref: internalRef })}
     {/if}
   </SceneGraphObject>
 {:else if children}
-	{@render children({ ref: internalRef })}
+  {@render children({ ref: internalRef })}
 {/if}
