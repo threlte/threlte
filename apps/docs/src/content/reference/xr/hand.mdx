@@ -46,7 +46,7 @@ It will by default load a hand model.
   app, you should download and provide any anticipated models.
 </Tip>
 
-`<Hand>` can accept a slot to replace the default model.
+`<Hand>` can accept a snippet to replace the default model.
 
 ```svelte {2-5}+
 <Hand left>
@@ -57,14 +57,16 @@ It will by default load a hand model.
 </Hand>
 ```
 
-A named slot, `wrist`, will place any children within the wrist space of the hand:
+A snippet, `wrist`, will place any children within the wrist space of the hand:
 
 ```svelte
 <Hand left>
-  <T.Mesh slot="wrist">
-    <T.IcosahedronGeometry args={[0.2]} />
-    <T.MeshStandardMaterial color="hotpink" />
-  </T.Mesh>
+  {#snippet wrist()}
+    <T.Mesh>
+      <T.IcosahedronGeometry args={[0.2]} />
+      <T.MeshStandardMaterial color="hotpink" />
+    </T.Mesh>
+  {/snippet}
 </Hand>
 ```
 

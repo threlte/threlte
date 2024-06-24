@@ -66,9 +66,9 @@ It will by default load a controller model that attempts to match the physical c
   app, you should download and provide any anticipated models.
 </Tip>
 
-`<Controller>` can accept three slots.
+`<Controller>` can accept three snippets.
 
-If a default slot is provided, the default controller model will not be rendered, and will be replaced with the slot content.
+If a children snippet is provided, the default controller model will not be rendered, and will be replaced with the children content.
 
 ```svelte {2-5}+
 <Controller left>
@@ -79,19 +79,23 @@ If a default slot is provided, the default controller model will not be rendered
 </Controller>
 ```
 
-Two additional slots exist to place children in the controller's [grip space](https://developer.mozilla.org/en-US/docs/Web/API/XRInputSource/gripSpace) and the controller's [target ray space](https://developer.mozilla.org/en-US/docs/Web/API/XRInputSource/targetRaySpace).
+Two additional snippets exist to place children in the controller's [grip space](https://developer.mozilla.org/en-US/docs/Web/API/XRInputSource/gripSpace) and the controller's [target ray space](https://developer.mozilla.org/en-US/docs/Web/API/XRInputSource/targetRaySpace).
 
 ```svelte
 <Controller left>
-  <T.Mesh slot="grip">
-    <T.IcosahedronGeometry args={[0.2]} />
-    <T.MeshStandardMaterial color="hotpink" />
-  </T.Mesh>
+  {#snippet grip()}
+    <T.Mesh>
+      <T.IcosahedronGeometry args={[0.2]} />
+      <T.MeshStandardMaterial color="hotpink" />
+    </T.Mesh>
+  {/snippet}
 
-  <T.Mesh slot="target-ray">
-    <T.IcosahedronGeometry args={[0.2]} />
-    <T.MeshStandardMaterial color="orange" />
-  </T.Mesh>
+  {#snippet targetRay()}
+    <T.Mesh>
+      <T.IcosahedronGeometry args={[0.2]} />
+      <T.MeshStandardMaterial color="orange" />
+    </T.Mesh>
+  {/snippet}
 </Controller>
 ```
 

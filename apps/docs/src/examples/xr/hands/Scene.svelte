@@ -1,26 +1,32 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { type Object3D, BoxGeometry, MeshStandardMaterial, Mesh } from 'three'
   import { T } from '@threlte/core'
   import { XR, Hand, Controller, type XRHandEvent, type XRControllerEvent } from '@threlte/xr'
 
-  let boxes: THREE.Object3D[] = []
+  let boxes: Object3D[] = []
 
   const handleEvent = (event: XRHandEvent) => {
     console.log('Hand', event)
+    if (event.type === 'pinchend') {
+      createBox(event)
+    }
   }
 
   const handleControllerEvent = (event: XRControllerEvent) => {
     console.log('Controller', event)
   }
 
-  const handlePinchStart = (event: XRHandEvent) => {
+  const createBox = (event: XRHandEvent) => {
     const controller = event.target
     const size = 0.05
-    const geometry = new THREE.BoxGeometry(size, size, size)
-    const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff })
-    const spawn = new THREE.Mesh(geometry, material)
+    const geometry = new BoxGeometry(size, size, size)
+    const material = new MeshStandardMaterial({ color: Math.random() * 0xffffff })
+    const spawn = new Mesh(geometry, material)
 
-    const indexTip = controller.joints['index-finger-tip']
+    const indexTip = controller?.joints['index-finger-tip']
+
+    if (!indexTip) return
+
     spawn.position.copy(indexTip.position)
     spawn.quaternion.copy(indexTip.quaternion)
     boxes.push(spawn)
