@@ -6,7 +6,7 @@
   import { useRapier } from '../../hooks/useRapier'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
-  import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
+  import type { RigidBodyContext, RigidBodyEvents, ThrelteRigidBody } from '../../types/types'
   import type { RigidBodyProps } from './RigidBody.svelte'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
@@ -30,14 +30,20 @@
     enabled = true,
     userData = {},
     rigidBody = $bindable(),
-    ...props
-  }: RigidBodyProps = $props()
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake
+  }: RigidBodyProps & RigidBodyEvents = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = RigidBodyEventMap
-  const { updateRef } = useCreateEvent<RigidBody>(props.$$events)
+  const { updateRef } = useCreateEvent<RigidBody>(oncreate)
 
   const object = new Object3D()
 
@@ -111,7 +117,15 @@
    */
   $effect.pre(() => {
     rigidBodyInternal.userData = {
-      events: props.$$events,
+      events: {
+        oncollisionenter,
+        oncollisionexit,
+        oncontact,
+        onsensorenter,
+        onsensorexit,
+        onsleep,
+        onwake
+      },
       ...userData
     }
   })
@@ -130,7 +144,15 @@
   /**
    * Add the mesh to the context
    */
-  addRigidBodyToContext(rigidBodyInternal, object, props.$$events)
+  addRigidBodyToContext(rigidBodyInternal, object, {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake
+  })
 
   /**
    * cleanup

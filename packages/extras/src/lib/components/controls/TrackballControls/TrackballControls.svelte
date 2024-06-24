@@ -4,14 +4,9 @@
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { onDestroy } from 'svelte'
   import { useControlsContext } from '../useControlsContext'
-  import type {
-    TrackballControlsEvents,
-    TrackballControlsProps
-  } from './TrackballControls.svelte'
+  import type { TrackballControlsProps } from './TrackballControls.svelte'
 
-  type $$Events = TrackballControlsEvents
-
-  let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let { ref = $bindable(), onchange, children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
 
@@ -40,12 +35,10 @@
   is={controls}
   bind:ref
   {...props}
-  on:change={(event) => {
+  onchange={(event) => {
     invalidate()
-    props.$$events?.change?.(event)
+    onchange?.(event)
   }}
 >
-	{#if children}
-		{@render children({ref:controls})}
-	{/if}
+{@render children?.({ ref: controls })}
 </T>

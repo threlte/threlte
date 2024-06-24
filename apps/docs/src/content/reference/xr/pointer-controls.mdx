@@ -20,7 +20,7 @@ Any mesh **within this component and all child components** will now receive eve
 
 ```svelte
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >
@@ -58,14 +58,14 @@ The following events are available:
 
 ```svelte
 <T.Mesh
-  on:click={(e) => console.log('click')}
-  on:pointerup={(e) => console.log('up')}
-  on:pointerdown={(e) => console.log('down')}
-  on:pointerover={(e) => console.log('over')}
-  on:pointerout={(e) => console.log('out')}
-  on:pointerenter={(e) => console.log('enter')}
-  on:pointerleave={(e) => console.log('leave')}
-  on:pointermove={(e) => console.log('move')}
+  onclick={(e) => console.log('click')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
 />
 ```
 

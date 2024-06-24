@@ -15,28 +15,25 @@
   classParser={tailwindParser}
   class="gap-10 p-10"
 >
-  <Box
-    class="h-44 w-44"
-    let:width
-    let:height
-  >
-    <Plane
-      {width}
-      {height}
-      color="yellow"
-      depth={1}
-    />
+  <Box class="h-44 w-44">
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+        color="yellow"
+        depth={1}
+      />
+    {/snippet}
   </Box>
 
-  <Box
-    class="flex-1"
-    let:width
-  >
-    <Plane
-      color="blue"
-      {width}
-      height={44}
-      depth={1}
-    />
+  <Box class="flex-1">
+    {#snippet children({ width })}
+      <Plane
+        color="blue"
+        {width}
+        height={44}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 </Flex>

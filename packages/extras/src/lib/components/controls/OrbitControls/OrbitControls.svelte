@@ -4,14 +4,9 @@
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { onDestroy } from 'svelte'
   import { useControlsContext } from '../useControlsContext'
-  import type {
-    OrbitControlsEvents,
-    OrbitControlsProps
-  } from './OrbitControls.svelte'
+  import type { OrbitControlsProps } from './OrbitControls.svelte'
 
-  type $$Events = OrbitControlsEvents
-
-  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
+  let { ref = $bindable(), onchange, children, ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
 
@@ -48,13 +43,11 @@
 <T
   is={controls}
   bind:ref
-  on:change={(event) => {
+  onchange={(event) => {
     invalidate()
-    props.$$events?.change?.(event)
+    onchange?.(event)
   }}
   {...props}
 >
-	{#if children}
-		{@render children({ref:controls})}
-	{/if}
+	{@render children?.({ ref: controls })}
 </T>

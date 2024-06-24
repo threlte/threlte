@@ -1,12 +1,8 @@
-import type { Events, Props } from '@threlte/core'
-import type { SvelteComponent, Snippet } from 'svelte'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
 import type { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
-export type TrackballControlsProps = Props<ThreeTrackballControls> & {
-  children?: TrackballControlsSnippet
-}
-export type TrackballControlsEvents = Events<ThreeTrackballControls>
-export type TrackballControlsSnippet = Snippet<[{ ref: ThreeTrackballControls }]>
+export type TrackballControlsProps = Props<ThreeTrackballControls>
 
 /**
  * `<TrackballControls>` allow the camera to orbit freely around a target
@@ -40,7 +36,4 @@ export type TrackballControlsSnippet = Snippet<[{ ref: ThreeTrackballControls }]
  * `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element
  * the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
  */
-export default class TrackballControls extends SvelteComponent<
-  TrackballControlsProps,
-  TrackballControlsEvents
-> {}
+export default class TrackballControls extends SvelteComponent<TrackballControlsProps> {}

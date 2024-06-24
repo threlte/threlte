@@ -3,9 +3,7 @@
   import Api from './Api.svelte'
   import { InstancedMesh } from 'three'
 
-  import type { InstancedMeshProps, InstancedMeshEvents } from './InstancedMesh.svelte'
-
-  type $$Events = InstancedMeshEvents
+  import type { InstancedMeshProps } from './InstancedMesh.svelte'
 
   let {
     id = 'default',

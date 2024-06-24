@@ -18,18 +18,33 @@ export type XRControllerEventType =
   | 'disconnected'
   | 'connected'
 
+export type XRControllerEvents = {
+  onconnected?: XRControllerEvent<'connected'>
+  ondisconnected?: XRControllerEvent<'disconnected'>
+  onselect?: XRControllerEvent<'select'>
+  onselectstart?: XRControllerEvent<'selectstart'>
+  onselectend?: XRControllerEvent<'selectend'>
+  onsqueeze?: XRControllerEvent<'squeeze'>
+  onsqueezeend?: XRControllerEvent<'squeezeend'>
+  onsqueezestart?: XRControllerEvent<'squeezestart'>
+}
+
 export type XRHandEventType = 'pinchstart' | 'pinchend' | 'connected' | 'disconnected'
 
-export type XRSessionEvent<Type = XRSessionEventType> = Event & {
-  type: Type
-  target: XRSession
-}
+export type XRSessionEvent<Type = XRSessionEventType> = (
+  event: Event & {
+    type: Type
+    target: XRSession
+  }
+) => void
 
-export type XRControllerEvent<Type = XRControllerEventType> = Event & {
-  type: Type
-  target: Group
-  data: XRInputSource
-}
+export type XRControllerEvent<Type = XRControllerEventType> = (
+  event: Event & {
+    type: Type
+    target: Group
+    data: XRInputSource
+  }
+) => void
 
 export type XRController = {
   targetRay: XRTargetRaySpace
@@ -45,16 +60,15 @@ export type XRHand = {
   inputSource: globalThis.XRHand
 }
 
+export type XRHandEvents = {
+  onconnected?: XRHandEvent<'connected'>
+  ondisconnected?: XRHandEvent<'disconnected'>
+  onpinchstart?: XRHandEvent<'pinchstart'>
+  onpinchend?: XRHandEvent<'pinchend'>
+}
+
 export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'
-  ? {
-      type: Type
-      target: XRHandSpace
-      data: XRInputSource
-    }
+  ? (event: { type: Type; target: XRHandSpace; data: XRInputSource }) => void
   : Type extends 'pinchstart' | 'pinchend'
-    ? {
-        type: Type
-        handedness: 'left' | 'right'
-        target: null
-      }
+    ? (event: { type: Type; handedness: 'left' | 'right'; target: null }) => void
     : never

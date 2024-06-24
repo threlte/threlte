@@ -1,9 +1,9 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
+import { SvelteComponent, type Snippet } from 'svelte'
 import { Sky as ThreeSky } from 'three/examples/jsm/objects/Sky.js'
 import type { RenderTargetOptions, Vector3, WebGLCubeRenderTarget } from 'three'
 
-export type SkyProps = Props<ThreeSky> & {
+export type SkyProps = Omit<Props<ThreeSky>, 'children'> & {
   /** The scale of the cuboid skybox along every axis, default: 1000 */
   scale?: number
   /** Relative clarity of the sky, default: 10 */
@@ -24,15 +24,16 @@ export type SkyProps = Props<ThreeSky> & {
   cubeMapSize?: number
   /** The options for the WebGLCubeRenderTarget, default: {} */
   webGLRenderTargetOptions?: RenderTargetOptions
+
+  children?: Snippet<
+    [
+      {
+        ref: ThreeSky
+        sunPosition: Vector3
+        renderTarget: WebGLCubeRenderTarget | undefined
+      }
+    ]
+  >
 }
 
-export type SkyEvents = Events<ThreeSky>
-
-export type SkySlots = Slots<ThreeSky> & {
-  default: {
-    sunPosition: Vector3
-    renderTarget: WebGLCubeRenderTarget | undefined
-  }
-}
-
-export default class Sky extends SvelteComponent<SkyProps, SkyEvents, SkySlots> {}
+export default class Sky extends SvelteComponent<SkyProps> {}

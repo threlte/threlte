@@ -1,13 +1,19 @@
 <script lang="ts">
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import type { Snippet } from 'svelte'
+  import { MathUtils } from 'three'
 
-  export let translationSnap = 1
-  export let rotationSnap = 15 * DEG2RAD
-  export let scaleSnap = 0.1
+  interface Props {
+    translationSnap?: number
+    rotationSnap?: number
+    scaleSnap?: number
+    children?: Snippet<[{ transform: Record<string, unknown> }]>
+  }
 
-  let useSnap = false
-  let mode: 'translate' | 'rotate' | 'scale' = 'translate'
-  let space: 'world' | 'local' = 'local'
+  let { translationSnap = 1, rotationSnap = 15 * MathUtils.DEG2RAD, scaleSnap = 0.1, children }: Props = $props()
+
+  let useSnap = $state(false)
+  let mode = $state<'translate' | 'rotate' | 'scale'>('translate')
+  let space = $state<'world' | 'local'>('local')
 
   const onKeyDown = (e: KeyboardEvent) => {
     // toggle snap on Shift
@@ -42,12 +48,13 @@
   on:keypress={onKeyPress}
 />
 
-<slot
-  transform={{
+{@render children?.({ 
+  transform: {
     translationSnap: useSnap ? translationSnap : undefined,
     rotationSnap: useSnap ? rotationSnap : undefined,
     scaleSnap: useSnap ? scaleSnap : undefined,
     mode,
     space
-  }}
-/>
+  }
+})}
+

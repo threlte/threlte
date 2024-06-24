@@ -125,15 +125,17 @@ You can also load the font yourself and pass it to the component, like so:
 You can center a text by using the [`<Align>` component](/docs/reference/extras/align) and calling the align slot prop when the text geometry is created.
 
 ```svelte title="Scene.svelte"
-<Align let:align>
-  <T.Mesh>
-    <Text3DGeometry
-      font={'path-to-your-font'}
-      text={`Hello!`}
-      on:create={align}
-    />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
+<Align>
+  {#snippet children({ align })}
+    <T.Mesh>
+      <Text3DGeometry
+        font={'path-to-your-font'}
+        text={`Hello!`}
+        oncreate={align}
+      />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  {/snippet}
 </Align>
 ```
 

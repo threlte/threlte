@@ -3,13 +3,15 @@
   import type { Object3D } from 'three'
   import { usePortalContext } from '../usePortalContext'
   import { writable } from 'svelte/store'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     id?: string
     object?: Object3D | undefined
+    children?: Snippet
   }
 
-  let { id = 'default', object }: Props = $props()
+  let { id = 'default', object, children: childrenSnippet }: Props = $props()
 
   const { getPortal } = usePortalContext()
 
@@ -50,6 +52,6 @@
         return array
       })}
   >
-    <slot />
+    {@render childrenSnippet?.()}
   </HierarchicalObject>
 {/if}

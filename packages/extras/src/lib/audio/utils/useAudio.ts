@@ -27,7 +27,7 @@ export type AudioEvents = {
  */
 export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
   audio: T,
-  events: Record<string, (arg?: unknown) => void> = {}
+  props: Record<string, (arg?: unknown) => void> = {}
 ) => {
   const loaded = currentWritable(false)
   const autoplay = currentWritable(false)
@@ -42,7 +42,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
       if (typeof source === 'string') {
         const audioBuffer = await loader.load(source, {
           onProgress(event) {
-            events.progress?.(event)
+            props.onprogress?.(event)
           }
         })
         audio.setBuffer(audioBuffer)
@@ -56,9 +56,9 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
         audio.setMediaStreamSource(source)
       }
       loaded.set(true)
-      audio.source?.buffer ? events.load?.(audio.source.buffer) : events.load?.()
+      audio.source?.buffer ? props.onload?.(audio.source.buffer) : props.onload?.()
     } catch (error) {
-      events.error?.(error as ErrorEvent)
+      props.onerror?.(error as ErrorEvent)
     }
   }
 

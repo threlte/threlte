@@ -9,40 +9,35 @@
     {
       props:
         [
-					{
+          {
             name: 'alphaTest',
             type: 'number',
             required: false,
             default: '0.1',
             description: 'Sets the alpha value to be used when running an alpha test.'
           },
-					{
+          {
             name: 'autoUpdate',
             type: 'boolean',
             required: false,
             default: 'true',
             description: 'Update animations automatically every frame'
           },
-					{
+          {
             name: 'baseMaterial',
             type: 'typeof MeshBasicMaterial | typeof MeshStandardMaterial | typeof MeshLambertMaterial | typeof MeshPhongMaterial',
             required: false,
             default: 'typeof MeshBasicMaterial',
             description: 'Base material used to construct the sprite material.'
           },
-					{
+          {
             name: 'billboarding',
             type: 'boolean',
             required: false,
             default: 'typeof MeshBasicMaterial',
             description: 'Sets the default global billboarding state that is used unless the setAt was called on the instance.'
           },
-					{
-            name: 'count',
-            type: 'number',
-            required: true,
-            description: 'Number of instances'
-          },
+          { name: 'count', type: 'number', required: true, description: 'Number of instances' },
           {
             name: 'fps',
             type: 'boolean',
@@ -50,32 +45,29 @@
             default: '10',
             description: 'The desired frames per second of the animation.'
           },
-					{
+          {
             name: 'playmode',
             type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
             required: false,
             default: '"FORWARD"',
             description: 'Sets playmode for all instances'
           },
-					{
+          {
             name: 'transparent',
             type: 'boolean',
             required: false,
             default: 'true',
             description: 'Whether or not the material should be transparent.'
           },
-					{
+          {
             name: 'randomPlaybackOffset',
-						type: 'boolean | number',
+            type: 'boolean | number',
             required: false,
             default: 'true',
             description: 'Offset sprite animation time by a random number of milliseconds.'
-          },
+          }
         ],
-      bindings:
-        [
-          { name: ref, type: 'InstancedSpriteMesh' }
-        ]
+      bindings: [{ name: ref, type: 'InstancedSpriteMesh' }]
     }
 }
 ---
@@ -83,11 +75,12 @@
 import ComponentSignature from '../../../components/ComponentSignature/ComponentSignature.astro'
 
 <Tip type="experimental">
-  This is an early version - features and API might change significantly over time. Please report any issues you encounter on Discord or Github.
+  This is an early version - features and API might change significantly over time. Please report
+  any issues you encounter on Discord or Github.
 </Tip>
 
 The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated
-[sprites](https://en.wikipedia.org/wiki/Sprite_(computer_graphics)) in your scene and update each instance
+[sprites](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>) in your scene and update each instance
 using the `useInstancedSprite` hook, or with a `<Instance>` component available through a slot prop.
 
 You can find an example of a [more complex scene here](/docs/examples/animation/complex-sprite-scene).
@@ -103,7 +96,7 @@ custom solution, provided it meets the component's input requirements.
 Other than it's own props, `<InstanedSprite/>` extends and accepts all properties of
 [Three.js instanced mesh](https://threejs.org/docs/#api/en/objects/InstancedMesh), such as `castShadow`, `frustumCulled` etc.
 
-```svelte
+````svelte
  <InstancedSprite
 	bind:ref
 	{spritesheet}
@@ -183,125 +176,124 @@ You create and update instances in three ways:
   // billboarding
   sprite.billboarding.setAll(true);
   sprite.billboarding.setAt(0, true);
-```
+````
 
 #### Typescript support
 
 The useInstancedSprite hook supports typing for autocompletion of animation names:
 
 ```ts
-	type AnimationNames = 'walk' | 'run' | 'idle' | 'fly'
-  const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
+type AnimationNames = 'walk' | 'run' | 'idle' | 'fly'
+const { updatePosition, count, animationMap, sprite } = useInstancedSprite<AnimationNames>()
 ```
-
 
 ### `<Instance>`
 
-Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with `let:Instance` on `InstancedSprite` component.
+Instance is a slot prop component that is used to update sprite instances properties. You can gain access to it with the `Instance` snippet prop on `InstancedSprite` component.
 Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
 
 Other than this, it as other properties that you can find in the `InstancedSpriteMesh`, so: `animationName`, `playmode`, `billboarding`, `offset`, `loop`,
 `flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](#instancedspritemesh) section
 
 The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
-`InstancedSprite` component. You can access through the `let:Instance` directive.
+`InstancedSprite` component. You can access through the `Instance` snippet prop.
 
+_Example: Set a position, scale and flipX for every instance._
 
-*Example: Set a position, scale and flipX for every instance.*
 ```svelte
 <InstancedSprite
   count={10000}
   {spritesheet}
-  let:Instance
 >
-  {#each { length: 10000 } as _, i}
-	  <Instance
-      position={[Math.random()*100, Math.random()*100, Math.random()*100]}
-      scale={[3, 3]}
-      flipX
-      id={i}
-    />
-  {/each}
+  {#snippet children({ Instance })}
+    {#each { length: 10000 } as _, i}
+      <Instance
+        position={[Math.random() * 100, Math.random() * 100, Math.random() * 100]}
+        scale={[3, 3]}
+        flipX
+        id={i}
+      />
+    {/each}
+  {/snippet}
 </InstancedSprite>
 ```
 
 <ComponentSignature
-	titleOverride={` `}
+  titleOverride={` `}
   idOverride="instance-component-signature"
-	componentName={'<Instance/>'}
-	signature={{
-      props:
-        [
-					{
-            name: 'id',
-            type: 'number',
-            required: true,
-            description: 'Instance id. Ranges between 0 and the `count` value of InstacedSpriteMesh.'
-          },
-					{
-            name: 'animationName',
-            type: 'string',
-            required: false,
-            description: 'Sets an active animation by name.'
-          },
-					{
-            name: 'position',
-            type: 'Vector3Tuple',
-            required: false,
-            description: 'Sets the position of an instance.'
-          },
-					{
-            name: 'scale',
-            type: 'Vector2Tuple',
-            required: false,
-            description: 'Sets the scale of an instance.'
-          },
-					{
-            name: 'playmode',
-            type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
-            required: false,
-            description: 'Sets the playmode of an instance.'
-          },
-					{
-            name: 'billboarding',
-            type: 'boolean',
-            required: false,
-            description: 'Toggles billboarding on/off.'
-          },
-					{
-            name: 'offset',
-            type: 'number',
-            required: false,
-            description: 'Sets the exact time value in ms by which the animation playback is offset.'
-          },
-					{
-            name: 'loop',
-            type: 'boolean',
-            required: false,
-            description: 'Toggles looping of the animation on/off. If off, the last played frame is displayed when the animation completes.'
-          },
-					{
-            name: 'flipX',
-            type: 'boolean',
-            required: false,
-            description: 'Toggles flipping the sprite horizontally.'
-          },
-					{
-            name: 'flipY',
-            type: 'boolean',
-            required: false,
-            description: 'Toggles flipping the sprite vertically.'
-          },
-					{
-            name: 'frameId',
-            type: 'number',
-            required: false,
-            description: `Sets an exact frame to display. If animationName is set, it's the id of the frame in that given animation, otherwise it's a spritesheet frame id.`
-          }
-        ]
-    }}
-	/>
-
+  componentName={'<Instance/>'}
+  signature={{
+    props: [
+      {
+        name: 'id',
+        type: 'number',
+        required: true,
+        description: 'Instance id. Ranges between 0 and the `count` value of InstacedSpriteMesh.'
+      },
+      {
+        name: 'animationName',
+        type: 'string',
+        required: false,
+        description: 'Sets an active animation by name.'
+      },
+      {
+        name: 'position',
+        type: 'Vector3Tuple',
+        required: false,
+        description: 'Sets the position of an instance.'
+      },
+      {
+        name: 'scale',
+        type: 'Vector2Tuple',
+        required: false,
+        description: 'Sets the scale of an instance.'
+      },
+      {
+        name: 'playmode',
+        type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
+        required: false,
+        description: 'Sets the playmode of an instance.'
+      },
+      {
+        name: 'billboarding',
+        type: 'boolean',
+        required: false,
+        description: 'Toggles billboarding on/off.'
+      },
+      {
+        name: 'offset',
+        type: 'number',
+        required: false,
+        description: 'Sets the exact time value in ms by which the animation playback is offset.'
+      },
+      {
+        name: 'loop',
+        type: 'boolean',
+        required: false,
+        description:
+          'Toggles looping of the animation on/off. If off, the last played frame is displayed when the animation completes.'
+      },
+      {
+        name: 'flipX',
+        type: 'boolean',
+        required: false,
+        description: 'Toggles flipping the sprite horizontally.'
+      },
+      {
+        name: 'flipY',
+        type: 'boolean',
+        required: false,
+        description: 'Toggles flipping the sprite vertically.'
+      },
+      {
+        name: 'frameId',
+        type: 'number',
+        required: false,
+        description: `Sets an exact frame to display. If animationName is set, it's the id of the frame in that given animation, otherwise it's a spritesheet frame id.`
+      }
+    ]
+  }}
+/>
 
 ### binding
 
@@ -309,7 +301,6 @@ The `InstancedSpriteMesh` class is the foundation behind the `<InstancedSprite>`
 Three.js environment. The `<InstancedSprite>` component lets you bind to it through `ref`.
 
 The class extends the capabilities of the [troika's InstancedUniformsMesh](https://protectwise.github.io/troika/three-instanced-uniforms-mesh/). For an in-depth exploration of `InstancedSpriteMesh` and its features, refer to the documentation available at [InstancedSpriteMesh docs](https://three-kit.vercel.app/instancedsprite/01-instanced-sprite-mesh/).
-
 
 ## Spritesheets
 
@@ -329,26 +320,24 @@ type SpritesheetMetadata = {
     frameRange: [number, number]
   }[]
 }[]
-
 ```
 
 #### Understanding SpritesheetMetadata
 
 A `SpritesheetMetadata` is an array, with each entry representing metadata fields for one sprite:
 
-	- `url`: Specifies the path or URL to the sprite image file.
-	- `type`: Determines the method of defining the spritesheet dimensions. Type `"rowColumn"` specifies the layout in terms of rows
-	and columns within the image, and type `"frameSize"` instead defines the size of each frame, allowing the utility to calculate the layout.
-	- `width` and `height`: Depending on type, these refer to the number of `columns` and `rows` (`"rowColumn"`) or the dimensions of a single frame (`"frameSize"`).
-	- `animations`: An array detailing the animations, where each animation has a name and a `frameRange`. The `frameRange` is a tuple
-	marking the start and end frames of the animation.
+    - `url`: Specifies the path or URL to the sprite image file.
+    - `type`: Determines the method of defining the spritesheet dimensions. Type `"rowColumn"` specifies the layout in terms of rows
+    and columns within the image, and type `"frameSize"` instead defines the size of each frame, allowing the utility to calculate the layout.
+    - `width` and `height`: Depending on type, these refer to the number of `columns` and `rows` (`"rowColumn"`) or the dimensions of a single frame (`"frameSize"`).
+    - `animations`: An array detailing the animations, where each animation has a name and a `frameRange`. The `frameRange` is a tuple
+    marking the start and end frames of the animation.
 
 #### Typesafety
 
 For improved developer experience when working with TypeScript, it is strongly recommended to use `as const` assertion in
 combination with `satisfies SpritesheetMetadata`. This approach not only ensures compliance with the `SpritesheetMetadata`
 type but also enables autocompletion for animation names within utility functions, which is highly recommended:
-
 
 ### `buildSpritesheet()`
 
@@ -357,27 +346,27 @@ Each `buildSpritesheet` method return an Promise that and has to be awaited. Pro
 ready for use in `<InstancedSprite>`.
 
 #### buildSpritesheet().from(meta: SpritesheetMetadata)
+
 Other than `spritesheet` promise, it also returns a `useInstancedSprite` hook. This hook can be enhanced with
 extra typescript support for autocompletion of animation names as such:
 
-
 ```ts
- const meta = [
-    {
-      url: '/textures/sprites/cacodaemon.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 4,
-      animations: [
-        { name: 'fly', frameRange: [0, 5] },
-        { name: 'attack', frameRange: [8, 13] },
-        { name: 'idle', frameRange: [16, 19] },
-        { name: 'death', frameRange: [24, 31] }
-      ]
-    }
-  ] as const satisfies SpritesheetMetadata
+const meta = [
+  {
+    url: '/textures/sprites/cacodaemon.png',
+    type: 'rowColumn',
+    width: 8,
+    height: 4,
+    animations: [
+      { name: 'fly', frameRange: [0, 5] },
+      { name: 'attack', frameRange: [8, 13] },
+      { name: 'idle', frameRange: [16, 19] },
+      { name: 'death', frameRange: [24, 31] }
+    ]
+  }
+] as const satisfies SpritesheetMetadata
 
-  const result = buildSpritesheet.from<typeof meta>(meta)
+const result = buildSpritesheet.from<typeof meta>(meta)
 ```
 
 ![Tree sprite atlas](/images/docs/extras/instanced-sprite/useInstancedSpriteAutocomplete.png)
@@ -393,47 +382,47 @@ Does not provide any additional utilities.
 
 ```ts
 const demonSpriteMeta = [
-    {
-      url: '/textures/sprites/cacodaemon.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 4,
-      animations: [
-        { name: 'fly', frameRange: [0, 5] },
-        { name: 'attack', frameRange: [8, 13] },
-        { name: 'idle', frameRange: [16, 19] },
-        { name: 'death', frameRange: [24, 31] }
-      ]
-    }
-  ] as const satisfies SpritesheetMetadata
+  {
+    url: '/textures/sprites/cacodaemon.png',
+    type: 'rowColumn',
+    width: 8,
+    height: 4,
+    animations: [
+      { name: 'fly', frameRange: [0, 5] },
+      { name: 'attack', frameRange: [8, 13] },
+      { name: 'idle', frameRange: [16, 19] },
+      { name: 'death', frameRange: [24, 31] }
+    ]
+  }
+] as const satisfies SpritesheetMetadata
 ```
 
 #### Multiple files
 
 ```ts
 const goblinSpriteMeta = [
-    {
-      url: '/textures/sprites/goblin/Attack.png',
-      type: 'rowColumn',
-      width: 8,
-      height: 1,
-      animations: [{ name: 'attack', frameRange: [0, 7] }]
-    },
-    {
-      url: '/textures/sprites/goblin/Death.png',
-      type: 'rowColumn',
-      width: 4,
-      height: 1,
-      animations: [{ name: 'death', frameRange: [0, 3] }]
-    },
-    {
-      url: '/textures/sprites/goblin/Idle.png',
-      type: 'rowColumn',
-      width: 4,
-      height: 1,
-      animations: [{ name: 'idle', frameRange: [0, 3] }]
-    }
-  ] as const satisfies SpritesheetMetadata
+  {
+    url: '/textures/sprites/goblin/Attack.png',
+    type: 'rowColumn',
+    width: 8,
+    height: 1,
+    animations: [{ name: 'attack', frameRange: [0, 7] }]
+  },
+  {
+    url: '/textures/sprites/goblin/Death.png',
+    type: 'rowColumn',
+    width: 4,
+    height: 1,
+    animations: [{ name: 'death', frameRange: [0, 3] }]
+  },
+  {
+    url: '/textures/sprites/goblin/Idle.png',
+    type: 'rowColumn',
+    width: 4,
+    height: 1,
+    animations: [{ name: 'idle', frameRange: [0, 3] }]
+  }
+] as const satisfies SpritesheetMetadata
 ```
 
 ## Static sprites & Atlassing

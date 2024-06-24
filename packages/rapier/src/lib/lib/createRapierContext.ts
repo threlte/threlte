@@ -7,20 +7,15 @@ import type {
 import RAPIER from '@dimforge/rapier3d-compat'
 import { readable, writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import type {
-  ColliderEventDispatcher,
-  ColliderEventDispatchers,
-  RigidBodyEventDispatcher,
-  RigidBodyEventDispatchers
-} from '../types/types'
+import type { ColliderEvents, RigidBodyEvents } from '../types/types'
 
 export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
   const world = new RAPIER.World(...args)
 
   const colliderObjects = new Map<ColliderHandle, Object3D>()
   const rigidBodyObjects = new Map<RigidBodyHandle, Object3D>()
-  const rigidBodyEventDispatchers = new Map() as RigidBodyEventDispatchers
-  const colliderEventDispatchers = new Map() as ColliderEventDispatchers
+  const rigidBodyEventDispatchers = new Map<number, RigidBodyEvents>()
+  const colliderEventDispatchers = new Map<number, ColliderEvents>()
 
   /**
    * Adds a collider to the context
@@ -28,13 +23,9 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
    * @param object
    * @param eventDispatcher
    */
-  const addColliderToContext = (
-    collider: Collider,
-    object: Object3D,
-    events: Record<string, (arg: unknown) => void>
-  ) => {
+  const addColliderToContext = (collider: Collider, object: Object3D, props: ColliderEvents) => {
     colliderObjects.set(collider.handle, object)
-    colliderEventDispatchers.set(collider.handle, events)
+    colliderEventDispatchers.set(collider.handle, props)
   }
 
   /**
@@ -55,7 +46,7 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
   const addRigidBodyToContext = (
     rigidBody: RigidBody,
     object: Object3D,
-    events: Record<string, (arg: unknown) => void>
+    events: RigidBodyEvents
   ) => {
     rigidBodyObjects.set(rigidBody.handle, object)
     rigidBodyEventDispatchers.set(rigidBody.handle, events)

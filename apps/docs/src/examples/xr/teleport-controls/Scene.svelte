@@ -48,18 +48,20 @@
   <Hand left />
   <Hand right />
 
-  <T.PerspectiveCamera
-    slot="fallback"
-    makeDefault
-    position.y={1.8}
-    position.z={1.5}
-  >
-    <OrbitControls
-      target={[0, 1.8, 0]}
-      enablePan={false}
-      enableZoom={false}
-    />
-  </T.PerspectiveCamera>
+  {#snippet fallback()}
+    <T.PerspectiveCamera
+      makeDefault
+      position.y={1.8}
+      position.z={1.5}
+      oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
+    >
+      <OrbitControls
+        target={[0, 1.8, 0]}
+        enablePan={false}
+        enableZoom={false}
+      />
+    </T.PerspectiveCamera>
+  {/snippet}
 </XR>
 
 {#if $gltf}

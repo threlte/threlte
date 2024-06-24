@@ -2,11 +2,9 @@
   import { Color, Vector2, type Texture, type Mesh, Vector3, ShaderMaterial } from 'three'
   import { T, asyncWritable, useParent, useTask, useThrelte } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
-  import type { ImageMaterialProps, ImageMaterialEvents } from './ImageMaterial'
+  import type { ImageMaterialProps } from './ImageMaterial.svelte'
   import { useSuspense } from '../../suspense/useSuspense'
   import { vertexShader, fragmentShader } from './shaders'
-
-  type $$Events = ImageMaterialEvents
 
   let {
     color = 'white',
@@ -181,5 +179,5 @@
   {fragmentShader}
   {...props}
 >
-	{@render children?.({ref:material})}
+	{@render children?.({ ref: material })}
 </T>

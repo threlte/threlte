@@ -5,7 +5,7 @@
 
   interface Props {
     meshes: Mesh[]
-    index: number
+    index?: number
 		children?: Snippet
   }
 

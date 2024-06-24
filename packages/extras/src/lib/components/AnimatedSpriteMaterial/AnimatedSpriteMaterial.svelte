@@ -21,15 +21,12 @@
   } from '@threlte/core'
   import type {
     AnimatedSpriteProps,
-    AnimatedSpriteEvents,
     SpriteJsonHashData,
     FrameTag,
     Frame
   } from './AnimatedSpriteMaterial.svelte'
   import { useSuspense } from '../../suspense/useSuspense'
   import { useTexture } from '../../hooks/useTexture'
-
-  type $$Events = AnimatedSpriteEvents
 
   let {
     textureUrl,
@@ -52,6 +49,12 @@
     ref = $bindable(),
     play = $bindable(),
     pause = $bindable(),
+
+    onload,
+    onstart,
+    onend,
+    onloop,
+
     ...props
   }: AnimatedSpriteProps = $props()
 
@@ -200,7 +203,7 @@
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
-    props.$$events?.start?.()
+    onstart?.()
   }
 
   let playQueued = false
@@ -260,10 +263,10 @@
         currentFrame = start
 
         if (loop) {
-          props.$$events?.loop?.()
+          onloop?.()
         } else {
           pause()
-          props.$$events?.end?.()
+          onend?.()
         }
       }
     },
@@ -290,7 +293,7 @@
 
     setAnimation(animation)
 
-    props.$$events?.load?.()
+    onload?.()
 
     if (autoplay) {
       play()

@@ -14,9 +14,7 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type { ContactShadowsProps, ContactShadowsEvents } from './ContactShadows.svelte'
-
-  type $$Events = ContactShadowsEvents
+  import type { ContactShadowsProps } from './ContactShadows.svelte'
 
   let {
     opacity = 1,
@@ -226,6 +224,6 @@
       is={shadowCamera}
       manual
     />
-	{@render children?.({ref:group})}
+	{@render children?.({ ref: group })}
   </T.Group>
 </T>

@@ -96,14 +96,14 @@
 <Controller
   left={$$props.left}
   right={$$props.right}
-  on:connected={handleEvent}
-  on:disconnected={handleEvent}
-  on:selectstart={handleEvent}
-  on:selectend={handleEvent}
-  on:select={handleEvent}
-  on:squeezestart={handleEvent}
-  on:squeezeend={handleEvent}
-  on:squeeze={handleEvent}
+  onconnected={handleEvent}
+  ondisconnected={handleEvent}
+  onselectstart={handleEvent}
+  onselectend={handleEvent}
+  onselect={handleEvent}
+  onsqueezestart={handleEvent}
+  onsqueezeend={handleEvent}
+  onsqueeze={handleEvent}
 >
   <Text
     slot="target-ray"

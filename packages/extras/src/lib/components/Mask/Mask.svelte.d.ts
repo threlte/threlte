@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Mesh } from 'three'
 
@@ -11,8 +11,4 @@ export type MaskProps = Props<Mesh> & {
   depthWrite?: boolean
 }
 
-export type MaskEvents = Events<Mesh>
-
-export type MaskSlots = Slots<Mesh>
-
-export default class Mask extends SvelteComponent<MeshLineProps, MeshLineEvents, MeshLineSlots> {}
+export default class Mask extends SvelteComponent<MaskProps> {}

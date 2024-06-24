@@ -41,7 +41,10 @@ export type AnyProps = Record<string, any>
  */
 export type BaseProps<Type> = {
   attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
-  children?: TSnippet<Type>
+
+  children?: Snippet<[{ ref: MaybeInstance<Type> }]>
+
+  oncreate?: CreateEvent<Type>
 }
 
 /**
@@ -134,16 +137,6 @@ export type Props<Type> = AnyProps &
   CameraProps<Type> &
   InstanceProps<Type>
 
-// –––––––––––––––––––––––– SNIPPETS ––––––––––––––––––––––––
-
-/**
- * ### `Snippet<[Type]>`
- *
- * This type is used as the Snippet type for the component `<T>`.
- *
- */
-export type TSnippet<Type> = Snippet<[ref: MaybeInstance<Type>]>
-
 // –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
 
 /**
@@ -166,18 +159,7 @@ export type ObjectEvents<Type> =
       }
     : Record<string, unknown>
 
-export type CreateEvent<Type> = {
-  create: {
-    ref: MaybeInstance<Type>
-    cleanup: (callback: () => void) => void
-  }
-}
-
-/**
- * ### `Events<Type>`
- *
- * This type is used as the Events type for the component `<T>`.
- * @example Events<typeof PerspectiveCamera>
- * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
- */
-export type Events<Type> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
+export type CreateEvent<Type> = (event: {
+  ref: MaybeInstance<Type>
+  cleanup: (callback: () => void) => void
+}) => void

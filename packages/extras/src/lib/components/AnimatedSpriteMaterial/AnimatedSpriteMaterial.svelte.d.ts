@@ -1,4 +1,4 @@
-import type { Events, Props } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import { Material } from 'three'
 
@@ -132,23 +132,18 @@ export type AnimatedSpriteProps = Props<Material> & {
 
   readonly play?: () => void
   readonly pause?: () => void
-}
 
-export type AnimatedSpriteEvents = Events<Material> & {
   /** Fires when all resources have loaded. */
-  load: void
+  onload?: () => void
 
   /** Fires when an animation starts. */
-  start: void
+  onstart?: () => void
 
   /** Fires when an animation ends. */
-  end: void
+  onend?: () => void
 
   /** Fires when an animation loop completes. */
-  loop: void
+  onloop?: () => void
 }
 
-export default class AnimatedSprite extends SvelteComponent<
-  AnimatedSpriteProps,
-  AnimatedSpriteEvents
-> {}
+export default class AnimatedSprite extends SvelteComponent<AnimatedSpriteProps> {}
