@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 2.0.0-next.2
 
 ### Patch Changes
