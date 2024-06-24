@@ -86,7 +86,7 @@
   const { start, stop } = useTask(
     () => {
       const frame = xr.getFrame()
-      const joint = inputSource!.get('wrist' as unknown as number)
+      const joint = inputSource?.get('wrist' as unknown as number)
 
       if (joint === undefined || space === null) return
 
