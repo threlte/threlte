@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.6
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 8.0.0-next.5
 
 ### Patch Changes
