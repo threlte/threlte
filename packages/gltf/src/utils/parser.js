@@ -473,9 +473,10 @@ function parse(fileName, gltf, options = {}) {
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
+  ${options.stype && !options.isolated ? `import type { Snippet } from 'svelte'` : ''}
         import { ${[
           'T',
-          options.types && !options.isolated ? 'type Props, type Events, type Slots' : ''
+          options.types && !options.isolated ? 'type Props' : ''
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
@@ -507,7 +508,6 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 ${
   options.preload
     ? `
-
 <script context="module"${options.types ? ' lang="ts"' : ''}>
 	${imports}
 
@@ -529,16 +529,19 @@ ${
 
     <script${options.types ? ' lang="ts"' : ''}>
 				${!options.preload ? imports : ''}
-        ${
-          options.types && !options.isolated
-            ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
-            : ''
-        }
 
         let {
           ref = $bindable(),
+          fallback,
+          error,
+          children,
           ...props
-        }${options.types && !options.isolated ? ': Props<THREE.Group>' : ''} = $props()
+        }${options.types && !options.isolated ? `: Props<THREE.Group> & {
+          ref?: THREE.Group
+          children?: Snippet<[{ ref: THREE.Group }]>
+          fallback?: Snippet
+          error?: Snippet<[{ error: Error }]>
+        }` : ''} = $props()
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
@@ -556,14 +559,14 @@ ${
 
 		<T.Group bind:ref dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
-				<slot name="fallback" />
+        {@render fallback?.()}
 			{:then gltf}
 				${scene}
 			{:catch error}
-				<slot name="error" {error} />
+        {@render error?.({ error })}
 			{/await}
 
-			<slot {ref} />
+      {@render children?.({ ref })}
 		</T>
 	`
 }
