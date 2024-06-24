@@ -39,7 +39,6 @@
     if ($muted) return
     const volume = clamp((event.totalForceMagnitude - 30) / 1100, 0.1, 1)
     const audio = audios.find((a) => a.volume >= volume)
-    console.log('here')
     audio?.stop?.()
     audio?.play?.()
   }
