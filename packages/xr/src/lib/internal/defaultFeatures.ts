@@ -1,6 +1,8 @@
 export const defaultFeatures = {
-  requiredFeatures: ['local-floor'],
+  requiredFeatures: [],
   optionalFeatures: [
+    'local-floor',
+    'bounded-floor',
     'anchors',
     'hand-tracking',
     'plane-detection',
