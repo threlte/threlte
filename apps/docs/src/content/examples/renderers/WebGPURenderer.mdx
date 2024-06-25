@@ -5,3 +5,21 @@ title: WebGPURenderer
 This example shows how to run the experimental Three.js WebGPURenderer renderer with Threlte's `<Canvas>`.
 
 <Example path="renderers/WebGPU" />
+
+### Vite
+
+The WebGPURenderer uses top-level async to determine WebGPU compatibility. Vite will often throw an error when it detects top level await.
+
+To circumvent this issue, the following can be added to your Vite config.
+
+```js
+// vite.config.js
+optimizeDeps: {
+  esbuildOptions: {
+    target: 'esnext'
+  }
+},
+build: {
+  target: 'esnext'
+}
+```
