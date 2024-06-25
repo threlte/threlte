@@ -19,6 +19,9 @@ module.exports = {
     es2017: true,
     node: true
   },
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off'
+  },
   overrides: [
     {
       files: ['*.svelte'],
