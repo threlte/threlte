@@ -90,7 +90,7 @@ export const createRawEventDispatcher = () => {
 /**
  * @deprecated forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.
  *
- * To forward events in Svelte 5, you must migrate your component to runes mode and pass the components rest props
+ * To forward events in Svelte 5, you must migrate your component to runes mode and pass the component's rest props
  * to the component you wish to forward events to:
  *
  * @example
