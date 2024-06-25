@@ -125,7 +125,8 @@ export function useThrelteUserContext<
       if (!options || options.existing === 'skip') return ctx
 
       if (options.existing === 'merge') {
-        Object.assign(ctx[namespace], value)
+        const obj = ctx[namespace] as UserContextEntry
+        Object.assign(obj, value)
         return ctx
       }
     }

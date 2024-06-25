@@ -54,7 +54,7 @@
     createEvent.updateRef(internalRef)
   })
 
-  const parentContext = createParentContext(internalRef)
+  const parentContext = createParentContext<unknown>(internalRef)
   $effect.pre(() => parentContext.set(internalRef))
 
   // Plugins are initialized here so that pluginsProps
@@ -85,11 +85,11 @@
   })
 
   // Attachment
-  const attachment = useAttach()
+  const attachment = useAttach<Type>()
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents(props)
+  const events = useEvents<Type>(props)
   $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates

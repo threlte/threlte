@@ -1,5 +1,5 @@
 import { onDestroy, onMount } from 'svelte'
-import type { CreateEvent } from '../types'
+import type { CreateEvent, MaybeInstance } from '../types'
 
 export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
   const cleanupFunctions: (() => void)[] = []
@@ -8,6 +8,8 @@ export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
   let mounted = false
 
   const dispatchCreateEvent = () => {
+    if (!ref) return
+
     // call every cleanup function
     cleanupFunctions.forEach((cleanup) => cleanup())
 
@@ -19,7 +21,7 @@ export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
       cleanupFunctions.push(callback)
     }
 
-    oncreate?.({ ref, cleanup })
+    oncreate?.({ ref: ref as MaybeInstance<T>, cleanup })
   }
 
   const updateRef = (newRef: T) => {
