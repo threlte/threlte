@@ -43,7 +43,7 @@ importers:
         version: 3.1.2(astro@4.11.1(@types/node@20.12.7)(typescript@5.4.5))
       '@astrojs/preact':
         specifier: ^3.1.0
-        version: 3.1.0(@babel/core@7.22.11)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
+        version: 3.1.0(@babel/core@7.24.7)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
       '@astrojs/svelte':
         specifier: ^5.6.0
         version: 5.6.0(astro@4.11.1(@types/node@20.12.7)(typescript@5.4.5))(svelte@5.0.0-next.133)(typescript@5.4.5)(vite@5.3.1(@types/node@20.12.7))
@@ -110,7 +110,7 @@ importers:
         version: 3.2.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.163.0)(three@0.165.0)
+        version: 0.1.15(@types/three@0.165.0)(three@0.165.0)
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@5.0.0-next.133)
@@ -154,8 +154,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -206,7 +206,7 @@ importers:
         version: 4.0.1
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.22.11)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.133)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.133)(typescript@5.4.5)
       svelte-reduced-motion:
         specifier: ^1.1.1
         version: 1.1.1(svelte@5.0.0-next.133)
@@ -248,8 +248,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
@@ -293,8 +293,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.0-next.107)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -364,16 +364,16 @@ importers:
     dependencies:
       '@threejs-kit/instanced-sprite-mesh':
         specifier: ^2.4.6
-        version: 2.4.6(@types/three@0.163.0)(three-instanced-uniforms-mesh@0.49.1(three@0.163.0))(three@0.163.0)
+        version: 2.4.6(@types/three@0.165.0)(three-instanced-uniforms-mesh@0.49.1(three@0.165.0))(three@0.165.0)
       three-mesh-bvh:
         specifier: ^0.7.4
-        version: 0.7.4(three@0.163.0)
+        version: 0.7.4(three@0.165.0)
       three-perf:
         specifier: ^1.0.10
-        version: 1.0.10(three@0.163.0)
+        version: 1.0.10(three@0.165.0)
       troika-three-text:
         specifier: ^0.49.1
-        version: 0.49.1(three@0.163.0)
+        version: 0.49.1(three@0.165.0)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.2.0
@@ -397,8 +397,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
@@ -442,11 +442,11 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.0-next.107)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       three-instanced-uniforms-mesh:
         specifier: ^0.49.1
-        version: 0.49.1(three@0.163.0)
+        version: 0.49.1(three@0.165.0)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -491,8 +491,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.4.5))(eslint@9.0.0)(typescript@5.4.5)
@@ -536,8 +536,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.0-next.107)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -642,8 +642,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
@@ -687,8 +687,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.0-next.107)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -733,8 +733,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.4.5))(eslint@9.0.0)(typescript@5.4.5)
@@ -778,8 +778,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.0-next.107)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -811,8 +811,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.4.5))(eslint@9.0.0)(typescript@5.4.5)
@@ -841,8 +841,8 @@ importers:
         specifier: ^3.6.9
         version: 3.6.9(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.107)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -2655,8 +2655,8 @@ packages:
   '@types/stats.js@0.17.0':
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
 
-  '@types/three@0.163.0':
-    resolution: {integrity: sha512-uIdDhsXRpQiBUkflBS/i1l3JX14fW6Ot9csed60nfbZNXHDTRsnV2xnTVwXcgbvTiboAR4IW+t+lTL5f1rqIqA==}
+  '@types/three@0.165.0':
+    resolution: {integrity: sha512-AJK8JZAFNBF0kBXiAIl5pggYlzAGGA8geVYQXAcPCEDRbyA+oEjkpUBcJJrtNz6IiALwzGexFJGZG2yV3WsYBw==}
 
   '@types/unist@2.0.6':
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -6949,9 +6949,6 @@ packages:
   three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
 
-  three@0.163.0:
-    resolution: {integrity: sha512-HlMgCb2TF/dTLRtknBnjUTsR8FsDqBY43itYop2+Zg822I+Kd0Ua2vs8CvfBVefXkBdNDrLMoRTGCIIpfCuDew==}
-
   three@0.165.0:
     resolution: {integrity: sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==}
 
@@ -7696,13 +7693,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/preact@3.1.0(@babel/core@7.22.11)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))':
+  '@astrojs/preact@3.1.0(@babel/core@7.24.7)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))':
     dependencies:
-      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.22.11)
-      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.22.11)
-      '@preact/preset-vite': 2.8.1(@babel/core@7.22.11)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
+      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.24.7)
+      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.7)
+      '@preact/preset-vite': 2.8.1(@babel/core@7.24.7)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
       '@preact/signals': 1.2.1(preact@10.16.0)
-      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.22.11)
+      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.7)
       preact: 10.16.0
       preact-render-to-string: 6.3.1(preact@10.16.0)
       preact-ssr-prepass: 1.2.1(preact@10.16.0)
@@ -7972,14 +7969,14 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.7
 
-  '@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.22.11)':
+  '@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.24.7)':
     dependencies:
-      '@babel/core': 7.22.11
+      '@babel/core': 7.24.7
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-jsx@7.23.3(@babel/core@7.22.11)':
+  '@babel/plugin-syntax-jsx@7.23.3(@babel/core@7.24.7)':
     dependencies:
-      '@babel/core': 7.22.11
+      '@babel/core': 7.24.7
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-jsx@7.24.7(@babel/core@7.24.7)':
@@ -7987,27 +7984,27 @@ snapshots:
       '@babel/core': 7.24.7
       '@babel/helper-plugin-utils': 7.24.7
 
-  '@babel/plugin-transform-react-jsx-development@7.22.5(@babel/core@7.22.11)':
+  '@babel/plugin-transform-react-jsx-development@7.22.5(@babel/core@7.24.7)':
     dependencies:
-      '@babel/core': 7.22.11
-      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.22.11)
+      '@babel/core': 7.24.7
+      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.24.7)
 
-  '@babel/plugin-transform-react-jsx@7.22.5(@babel/core@7.22.11)':
+  '@babel/plugin-transform-react-jsx@7.22.5(@babel/core@7.24.7)':
     dependencies:
-      '@babel/core': 7.22.11
+      '@babel/core': 7.24.7
       '@babel/helper-annotate-as-pure': 7.22.5
       '@babel/helper-module-imports': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
-      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.22.11)
+      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.24.7)
       '@babel/types': 7.22.11
 
-  '@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.22.11)':
+  '@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.7)':
     dependencies:
-      '@babel/core': 7.22.11
+      '@babel/core': 7.24.7
       '@babel/helper-annotate-as-pure': 7.22.5
       '@babel/helper-module-imports': 7.22.15
       '@babel/helper-plugin-utils': 7.22.5
-      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.22.11)
+      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.24.7)
       '@babel/types': 7.23.9
 
   '@babel/plugin-transform-react-jsx@7.24.7(@babel/core@7.24.7)':
@@ -8843,9 +8840,9 @@ snapshots:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
-  '@lumaai/luma-web@0.1.15(@types/three@0.163.0)(three@0.165.0)':
+  '@lumaai/luma-web@0.1.15(@types/three@0.165.0)(three@0.165.0)':
     dependencies:
-      '@types/three': 0.163.0
+      '@types/three': 0.165.0
       three: 0.165.0
 
   '@macfja/serializer@1.1.2': {}
@@ -9029,14 +9026,14 @@ snapshots:
 
   '@polka/url@1.0.0-next.24': {}
 
-  '@preact/preset-vite@2.8.1(@babel/core@7.22.11)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))':
+  '@preact/preset-vite@2.8.1(@babel/core@7.24.7)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))':
     dependencies:
-      '@babel/core': 7.22.11
-      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.22.11)
-      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.22.11)
+      '@babel/core': 7.24.7
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.7)
+      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.7)
       '@prefresh/vite': 2.4.1(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
       '@rollup/pluginutils': 4.2.1
-      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.22.11)
+      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.7)
       debug: 4.3.4
       kolorist: 1.8.0
       magic-string: 0.30.5
@@ -9429,13 +9426,13 @@ snapshots:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  '@threejs-kit/instanced-sprite-mesh@2.4.6(@types/three@0.163.0)(three-instanced-uniforms-mesh@0.49.1(three@0.163.0))(three@0.163.0)':
+  '@threejs-kit/instanced-sprite-mesh@2.4.6(@types/three@0.165.0)(three-instanced-uniforms-mesh@0.49.1(three@0.165.0))(three@0.165.0)':
     dependencies:
       diet-sprite: 0.0.1
       earcut: 2.2.4
-      maath: 0.10.7(@types/three@0.163.0)(three@0.163.0)
-      three: 0.163.0
-      three-instanced-uniforms-mesh: 0.49.1(three@0.163.0)
+      maath: 0.10.7(@types/three@0.165.0)(three@0.165.0)
+      three: 0.165.0
+      three-instanced-uniforms-mesh: 0.49.1(three@0.165.0)
     transitivePeerDependencies:
       - '@types/three'
 
@@ -9581,7 +9578,7 @@ snapshots:
 
   '@types/stats.js@0.17.0': {}
 
-  '@types/three@0.163.0':
+  '@types/three@0.165.0':
     dependencies:
       '@tweenjs/tween.js': 23.1.1
       '@types/stats.js': 0.17.0
@@ -9819,6 +9816,10 @@ snapshots:
   acorn-typescript@1.4.13(acorn@8.11.3):
     dependencies:
       acorn: 8.11.3
+
+  acorn-typescript@1.4.13(acorn@8.12.0):
+    dependencies:
+      acorn: 8.12.0
 
   acorn-walk@8.2.0: {}
 
@@ -10083,9 +10084,9 @@ snapshots:
 
   b4a@1.6.4: {}
 
-  babel-plugin-transform-hook-names@1.0.2(@babel/core@7.22.11):
+  babel-plugin-transform-hook-names@1.0.2(@babel/core@7.24.7):
     dependencies:
-      '@babel/core': 7.22.11
+      '@babel/core': 7.24.7
 
   bail@2.0.2: {}
 
@@ -12350,10 +12351,10 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  maath@0.10.7(@types/three@0.163.0)(three@0.163.0):
+  maath@0.10.7(@types/three@0.165.0)(three@0.165.0):
     dependencies:
-      '@types/three': 0.163.0
-      three: 0.163.0
+      '@types/three': 0.165.0
+      three: 0.165.0
 
   magic-string@0.26.7:
     dependencies:
@@ -14764,20 +14765,6 @@ snapshots:
     dependencies:
       svelte: 5.0.0-next.133
 
-  svelte-preprocess@5.1.3(@babel/core@7.22.11)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.133)(typescript@5.4.5):
-    dependencies:
-      '@types/pug': 2.0.6
-      detect-indent: 6.1.0
-      magic-string: 0.30.9
-      sorcery: 0.11.0
-      strip-indent: 3.0.0
-      svelte: 5.0.0-next.133
-    optionalDependencies:
-      '@babel/core': 7.22.11
-      postcss: 8.4.38
-      postcss-load-config: 4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5))
-      typescript: 5.4.5
-
   svelte-preprocess@5.1.3(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.107)(typescript@5.4.5):
     dependencies:
       '@types/pug': 2.0.6
@@ -14786,6 +14773,20 @@ snapshots:
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 5.0.0-next.107
+    optionalDependencies:
+      '@babel/core': 7.24.7
+      postcss: 8.4.38
+      postcss-load-config: 4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5))
+      typescript: 5.4.5
+
+  svelte-preprocess@5.1.3(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(svelte@5.0.0-next.133)(typescript@5.4.5):
+    dependencies:
+      '@types/pug': 2.0.6
+      detect-indent: 6.1.0
+      magic-string: 0.30.9
+      sorcery: 0.11.0
+      strip-indent: 3.0.0
+      svelte: 5.0.0-next.133
     optionalDependencies:
       '@babel/core': 7.24.7
       postcss: 8.4.38
@@ -14867,8 +14868,8 @@ snapshots:
       '@ampproject/remapping': 2.2.1
       '@jridgewell/sourcemap-codec': 1.4.15
       '@types/estree': 1.0.5
-      acorn: 8.11.3
-      acorn-typescript: 1.4.13(acorn@8.11.3)
+      acorn: 8.12.0
+      acorn-typescript: 1.4.13(acorn@8.12.0)
       aria-query: 5.3.0
       axobject-query: 4.0.0
       esm-env: 1.0.0
@@ -14946,23 +14947,23 @@ snapshots:
     dependencies:
       any-promise: 1.3.0
 
-  three-instanced-uniforms-mesh@0.49.1(three@0.163.0):
+  three-instanced-uniforms-mesh@0.49.1(three@0.165.0):
     dependencies:
-      three: 0.163.0
-      troika-three-utils: 0.49.0(three@0.163.0)
+      three: 0.165.0
+      troika-three-utils: 0.49.0(three@0.165.0)
 
-  three-mesh-bvh@0.7.4(three@0.163.0):
+  three-mesh-bvh@0.7.4(three@0.165.0):
     dependencies:
-      three: 0.163.0
+      three: 0.165.0
 
   three-mesh-bvh@0.7.5(three@0.165.0):
     dependencies:
       three: 0.165.0
 
-  three-perf@1.0.10(three@0.163.0):
+  three-perf@1.0.10(three@0.165.0):
     dependencies:
-      three: 0.163.0
-      troika-three-text: 0.47.2(three@0.163.0)
+      three: 0.165.0
+      troika-three-text: 0.47.2(three@0.165.0)
       tweakpane: 3.1.10
 
   three-stdlib@2.21.8(three@0.122.0):
@@ -14981,8 +14982,6 @@ snapshots:
       zstddec: 0.0.2
 
   three@0.122.0: {}
-
-  three@0.163.0: {}
 
   three@0.165.0: {}
 
@@ -15038,14 +15037,6 @@ snapshots:
 
   trim-newlines@4.0.2: {}
 
-  troika-three-text@0.47.2(three@0.163.0):
-    dependencies:
-      bidi-js: 1.0.2
-      three: 0.163.0
-      troika-three-utils: 0.47.2(three@0.163.0)
-      troika-worker-utils: 0.47.2
-      webgl-sdf-generator: 1.1.1
-
   troika-three-text@0.47.2(three@0.165.0):
     dependencies:
       bidi-js: 1.0.2
@@ -15054,25 +15045,21 @@ snapshots:
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.49.1(three@0.163.0):
+  troika-three-text@0.49.1(three@0.165.0):
     dependencies:
       bidi-js: 1.0.2
-      three: 0.163.0
-      troika-three-utils: 0.49.0(three@0.163.0)
+      three: 0.165.0
+      troika-three-utils: 0.49.0(three@0.165.0)
       troika-worker-utils: 0.49.0
       webgl-sdf-generator: 1.1.1
-
-  troika-three-utils@0.47.2(three@0.163.0):
-    dependencies:
-      three: 0.163.0
 
   troika-three-utils@0.47.2(three@0.165.0):
     dependencies:
       three: 0.165.0
 
-  troika-three-utils@0.49.0(three@0.163.0):
+  troika-three-utils@0.49.0(three@0.165.0):
     dependencies:
-      three: 0.163.0
+      three: 0.165.0
 
   troika-worker-utils@0.47.2: {}
 
