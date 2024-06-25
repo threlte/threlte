@@ -6,6 +6,15 @@ This example shows how to run the experimental Three.js WebGPURenderer renderer 
 
 <Example path="renderers/WebGPU" />
 
+<small>
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
+</small>
+
+In a browser that supports WebGPU, such as Chrome, this example will default to the new WebGPURenderer.
+In other browsers, it will fallback to a WebGL Renderer, although performance will be signficantly degraded since this example takes
+advantage of WebGPU-only optimizations.
+
 ### Vite
 
 The WebGPURenderer uses top-level async to determine WebGPU compatibility. Vite will often throw an error when it detects top level await.
