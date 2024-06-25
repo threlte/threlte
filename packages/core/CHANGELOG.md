@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.7
+
+### Patch Changes
+
+- c53d7a9: Split out contexts by domain
+
 ## 8.0.0-next.6
 
 ### Patch Changes
