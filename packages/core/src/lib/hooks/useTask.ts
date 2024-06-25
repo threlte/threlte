@@ -1,9 +1,8 @@
 import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
+import { useScheduler } from '../context/fragments/scheduler.svelte'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
 import { browser } from '../lib/browser'
-import { useThrelte } from '../context/compounds/useThrelte'
-import { useScheduler } from '../context/fragments/scheduler.svelte'
 
 export type ThrelteUseTask = {
   task: Task
@@ -75,6 +74,8 @@ export function useTask(
     }
   }
 
+  const { autoInvalidations, scheduler, mainStage } = useScheduler()
+
   let key: Key
   let fn: (delta: number) => void
   let opts: ThrelteUseTaskOptions | undefined
@@ -88,16 +89,14 @@ export function useTask(
     opts = fnOrOptions as ThrelteUseTaskOptions | undefined
   }
 
-  const ctx = useThrelte()
-
-  let stage: Stage = ctx.mainStage
+  let stage: Stage = mainStage
 
   if (opts) {
     if (opts.stage) {
       if (DAG.isValue(opts.stage)) {
         stage = opts.stage
       } else {
-        const maybeStage = ctx.scheduler.getStage(opts.stage)
+        const maybeStage = scheduler.getStage(opts.stage)
         if (!maybeStage) {
           throw new Error(`No stage found with key ${opts.stage.toString()}`)
         }
@@ -130,8 +129,6 @@ export function useTask(
     }
   }
 
-  const schedulerCtx = useScheduler()
-
   const started = writable(false)
 
   const task = stage.createTask(key, fn, opts)
@@ -139,7 +136,7 @@ export function useTask(
   const start = () => {
     started.set(true)
     if (opts?.autoInvalidate ?? true) {
-      schedulerCtx.autoInvalidations.add(fn)
+      autoInvalidations.add(fn)
     }
     task.start()
   }
@@ -147,7 +144,7 @@ export function useTask(
   const stop = () => {
     started.set(true)
     if (opts?.autoInvalidate ?? true) {
-      schedulerCtx.autoInvalidations.delete(fn)
+      autoInvalidations.delete(fn)
     }
     task.stop()
   }

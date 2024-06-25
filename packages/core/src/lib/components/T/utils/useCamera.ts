@@ -1,7 +1,9 @@
 import { onDestroy } from 'svelte'
 import type { Camera, OrthographicCamera, PerspectiveCamera } from 'three'
+import { useCamera as useCameraContext } from '../../../context/fragments/camera'
+import { useCanvas } from '../../../context/fragments/canvas'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte'
 import type { Size } from '../../../types'
-import { useThrelte } from '../../../context/compounds/useThrelte'
 
 export const isCamera = (value: any): value is Camera => {
   return value && value.isCamera
@@ -22,7 +24,9 @@ const isPerspectiveCameraOrOrthographicCamera = (
 }
 
 export const useCamera = () => {
-  const { invalidate, size, camera } = useThrelte()
+  const { invalidate } = useScheduler()
+  const { size } = useCanvas()
+  const { camera } = useCameraContext()
 
   let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
   let unsubscribe: (() => void) | undefined = undefined

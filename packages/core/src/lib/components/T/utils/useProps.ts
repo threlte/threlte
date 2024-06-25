@@ -1,4 +1,4 @@
-import { useThrelte } from '../../../context/compounds/useThrelte'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte'
 import { resolvePropertyPath } from './resolvePropertyPath'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
@@ -77,7 +77,7 @@ const createSetter = (target: any, key: any, value: any): PropSetter => {
 }
 
 export const useProps = () => {
-  const { invalidate } = useThrelte()
+  const { invalidate } = useScheduler()
 
   const memoizedProps = new Map<
     string,

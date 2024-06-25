@@ -1,12 +1,12 @@
 import { onDestroy } from 'svelte'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte'
 import type { BaseProps, MaybeInstance } from '../types'
 import { resolvePropertyPath } from './resolvePropertyPath'
-import { useThrelte } from '../../../context/compounds/useThrelte'
 
 const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
 
 export const useAttach = <T>() => {
-  const { invalidate } = useThrelte()
+  const { invalidate } = useScheduler()
 
   let isAttached = false
   let valueBeforeAttach: any = initialValueBeforeAttach
