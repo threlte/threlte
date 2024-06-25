@@ -94,42 +94,39 @@ custom solution, provided it meets the component's input requirements.
 Other than it's own props, `<InstanedSprite/>` extends and accepts all properties of
 [Three.js instanced mesh](https://threejs.org/docs/#api/en/objects/InstancedMesh), such as `castShadow`, `frustumCulled` etc.
 
-````svelte
- <InstancedSprite
-	bind:ref
-	{spritesheet}
-	count={500}
-	playmode={'FORWARD'}
-	fps={9}
-	billboarding
-	hueShift={{h:1.5, s:0.9, v:1}}
-	randomPlaybackOffset={2000}
-	castShadow
-  />
-	```
+```svelte
+<InstancedSprite
+  bind:ref
+  {spritesheet}
+  count={500}
+  playmode={'FORWARD'}
+  fps={9}
+  billboarding
+  hueShift={{ h: 1.5, s: 0.9, v: 1 }}
+  randomPlaybackOffset={2000}
+  castShadow
+/>
+```
 
 #### Required props
 
-| Prop| description |
-| ---- | --- |
-| `count` | number of instances |
+| Prop          | description                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------- |
+| `count`       | number of instances                                                                                     |
 | `spritesheet` | Object with `spritesheet` metadata and a `texture` `{spritesheet: SpritesheetFormat, texture: Texture}` |
-
 
 #### Optional props
 
-| Prop| description |
-| ---- | --- |
-| `autoUpdate` | Update animations automatically. It should stay `true` for most usecases. Setting to `false` is most commonly used in case of [static sprites](#static-sprites--atlassing) but it can also be used for advanced manual animation updates. |
-| `billboarding` | Sets the default global billboarding (sprites always facing the camera) state that is used unless the setAt was called on the instance. |
-| `playmode` | Sets playmode for all instances. `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"` |
-| `fps` | The desired frames per second of the animation |
-| `alphaTest` | Sets the alpha value to be used when running an alpha test |
-| `transparent` | Whether or not the material should be transparent |
-| `randomPlaybackOffset` | Offset each sprite's animation timer by a random number of milliseconds. If `true`, randomness is within 0-100ms range. Providing the prop with a number sets the upper range of the offset - `randomPlaybackOffset={2000}` means that the animation will be offset by 0-2000ms  |
-| `hueShift` | Changes sprite look by tweaking the material's output color by a provided hueShift, saturation and vibrance `{h: number, s: number, v:number}`|
-
-
+| Prop                   | description                                                                                                                                                                                                                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `autoUpdate`           | Update animations automatically. It should stay `true` for most usecases. Setting to `false` is most commonly used in case of [static sprites](#static-sprites--atlassing) but it can also be used for advanced manual animation updates.                                       |
+| `billboarding`         | Sets the default global billboarding (sprites always facing the camera) state that is used unless the setAt was called on the instance.                                                                                                                                         |
+| `playmode`             | Sets playmode for all instances. `"FORWARD" \| "REVERSE" \| "PAUSE" \| "PINGPONG"`                                                                                                                                                                                              |
+| `fps`                  | The desired frames per second of the animation                                                                                                                                                                                                                                  |
+| `alphaTest`            | Sets the alpha value to be used when running an alpha test                                                                                                                                                                                                                      |
+| `transparent`          | Whether or not the material should be transparent                                                                                                                                                                                                                               |
+| `randomPlaybackOffset` | Offset each sprite's animation timer by a random number of milliseconds. If `true`, randomness is within 0-100ms range. Providing the prop with a number sets the upper range of the offset - `randomPlaybackOffset={2000}` means that the animation will be offset by 0-2000ms |
+| `hueShift`             | Changes sprite look by tweaking the material's output color by a provided hueShift, saturation and vibrance `{h: number, s: number, v:number}`                                                                                                                                  |
 
 You create and update instances in three ways:
 
@@ -137,44 +134,44 @@ You create and update instances in three ways:
 2. Using the `<Instance>` component offered through a slot prop.
 3. Directly with the underlying class using the `ref` binding.
 
-
 ### `useInstancedSprite`
 
-	The hook has to be used in a child component of `<InstancedSprite>` and returns an object with following properties:
-	- `count`: Total number of instances.
-	- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
-	- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
-	Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
-	- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
+The hook has to be used in a child component of `<InstancedSprite>` and returns an object with following properties:
+
+- `count`: Total number of instances.
+- `updatePosition(id: number, position: Vector3Tuple, scale?: Vector2Tuple)`: A utility function for updating an instance's position and scale.
+- `animationMap`: A writable store (`Writable<Map<string, number>>`) that maps animation names to their corresponding IDs.
+  Animation names are useful to have for setting a random animation from a pool etc. The IDs are reserved for more advanced usecases.
+- `sprite`: Provides direct access to the `InstancedSpriteMesh`, enabling updates to instance properties such as animations, billboarding, and play mode.
 
 ```ts
-	import { useInstancedSprite } from '@threlte/extras'
+import { useInstancedSprite } from '@threlte/extras'
 
-  const hook = useInstancedSprite()
-	// it's useful to immediately destructure it like this
-  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
+const hook = useInstancedSprite()
+// it's useful to immediately destructure it like this
+const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
 
-	// Examples of using the InstancedSpriteMesh API:
+// Examples of using the InstancedSpriteMesh API:
 
-  // play animation on instance id 0 - loops by defualt
-  sprite.play('IdleBackward').at(0)
-  // play animation without looping
-  sprite.play('RunLeft', false).at(1);
-  // play animation backwards with looping
-  sprite.play('RunLeft', true, 'REVERSE').at(2);
+// play animation on instance id 0 - loops by defualt
+sprite.play('IdleBackward').at(0)
+// play animation without looping
+sprite.play('RunLeft', false).at(1)
+// play animation backwards with looping
+sprite.play('RunLeft', true, 'REVERSE').at(2)
 
-  // mesh.play is a utility that combines the use of these functions:
-  // animation by name
-  sprite.animation.setAt(0, 'RunBackward');
-  // looping y/n
-  sprite.loop.setAt(0, false);
-  // animation direction - FORWARD (default) / REVERSE / PAUSE
-  sprite.playmode.setAt(0, 'REVERSE')
+// mesh.play is a utility that combines the use of these functions:
+// animation by name
+sprite.animation.setAt(0, 'RunBackward')
+// looping y/n
+sprite.loop.setAt(0, false)
+// animation direction - FORWARD (default) / REVERSE / PAUSE
+sprite.playmode.setAt(0, 'REVERSE')
 
-  // billboarding
-  sprite.billboarding.setAll(true);
-  sprite.billboarding.setAt(0, true);
-````
+// billboarding
+sprite.billboarding.setAll(true)
+sprite.billboarding.setAt(0, true)
+```
 
 #### Typescript support
 
