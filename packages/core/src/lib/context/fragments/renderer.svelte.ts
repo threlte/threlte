@@ -159,10 +159,8 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   if ('setAnimationLoop' in context.renderer) {
-    const setAnimationLoop = context.renderer.setAnimationLoop as (
-      callback: (time: number) => void
-    ) => void
-    setAnimationLoop((time) => {
+    const renderer = context.renderer as WebGLRenderer
+    renderer.setAnimationLoop((time) => {
       dispose()
       scheduler.run(time)
       resetFrameInvalidation()
@@ -175,7 +173,6 @@ export const createRendererContext = <T extends Renderer>(
       dispose()
     }
   })
-
 
   $effect(() => {
     context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)

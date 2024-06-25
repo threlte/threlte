@@ -6,17 +6,15 @@ order: 2
 
 ## Threlte 8
 
-Threlte 8 marks a large milestone including a number of performance improvements, refactors,
-breaking changes, API simplifications, and removed features.
-Svelte 5 support is added and **support for Svelte 4 is removed**.
+Threlte 8 adds Svelte 5 support and removes Svelte 4 support.
 
-There are
+This upgrade provides better average performance, smaller bundle sizeThere are a breaking changes that were necessary for this upgrade.
 
 ### Events
 
 Events will no longer work, and have been replaced with callback props.
 
-```svelte {1}m
+```svelte {2,3}m
 <T.Mesh
   onclick={onClick}
   onpointerenter={onPointerEnter}
@@ -68,7 +66,7 @@ This will pass the new callback props mentioned in the previous section down the
 ### Snippets
 
 Slot props will no longer work, and must be replaced with snippets.
-For example the following code from Threlte 7 needs to be migrated from this:
+For example, the following components from Threlte 7 would need to be migrated from this:
 
 ```svelte
 <T.PerspectiveCamera let:ref>
@@ -94,9 +92,9 @@ For example the following code from Threlte 7 needs to be migrated from this:
 
 Any component that previously exposed a slot prop using the `let:` directive can follow this new pattern.
 
-### userSize
+### Canvas component `size` prop
 
-The `userSize` property on the `<Canvas>` component and returned from the `useThrelte` hook has been removed.
+The `size` property on the `<Canvas>` component that allowed setting specific pixel dimensions has been removed.
 To set a specific size of your `<Canvas>`, simply wrap it in an HTML element with your desired dimensions.
 
 ```svelte
@@ -106,6 +104,53 @@ To set a specific size of your `<Canvas>`, simply wrap it in an HTML element wit
   </Canvas>
 </div>
 ```
+
+### Canvas component `rendererParameters` prop
+
+The `renderParameters` canvas prop has been replaced with a more powerful `createRenderer` function.
+
+If you need to manually set renderer parameters, call the function and return a renderer.
+
+```svelte
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGLRenderer({
+      canvas,
+      alpha: true,
+      powerPreference: 'high-performance',
+      antialias: false,
+      depth: false,
+      premultipliedAlpha: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+You can find a more in-depth example [here](/docs/examples/renderers/webgpurenderer).
+
+Any Three renderer can be returned when calling `createRenderer`.
+If, for example, you enjoy living life on the edge and would like to use Three's
+(currently) experimental WebGPU Renderer, you could return it from this function:
+
+```svelte
+<script>
+  import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js'
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({ canvas, antialias: true })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+### Transitions
+
+The transitions plugin currently does not work. [@TODO]
 
 ## Threlte 7
 

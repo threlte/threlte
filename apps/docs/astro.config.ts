@@ -78,6 +78,14 @@ export default defineConfig({
       // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
       // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
       proxySsrExternalModules: true
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext'
     }
   },
   markdown: {
