@@ -42,7 +42,7 @@
                 }
               }}
               class="bg-orange absolute bottom-0 left-0 -z-10 h-4 w-full origin-left will-change-transform"
-            />
+            ></div>
             3D apps
           </span> for the web.
         </h1>
