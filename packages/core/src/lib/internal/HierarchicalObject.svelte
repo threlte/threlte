@@ -9,10 +9,10 @@
 <script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Object3D } from 'three'
-  import { useParent, setParent } from '../hooks/useParent'
+  import { useScheduler } from '../context/fragments/scheduler.svelte'
+  import { setParent, useParent } from '../hooks/useParent'
   import { createObjectStore } from '../lib/createObjectStore'
   import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
-  import { useThrelte } from '../context/compounds/useThrelte'
 
   const useHierarchicalObject = () => {
     return {
@@ -45,8 +45,8 @@
     onChildDestroy?.(child)
   }
 
-  const { invalidate } = useThrelte()
-  const parentStore = useParent()
+  const { invalidate } = useScheduler()
+  const parentStore = useParent<Object3D>()
 
   parent = $parentStore
   $effect.pre(() => {
