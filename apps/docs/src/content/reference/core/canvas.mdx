@@ -60,12 +60,11 @@ componentSignature:
           required: false
         },
         {
-          name: 'size',
-          type: '{ width: number, height: number }',
+          name: 'createRenderer',
+          type: '(canvas: HTMLCanvasElement) => THREE.Renderer',
           required: false,
-          description: 'If not provided, the dimensions of the parent element will be used.'
-        },
-        { name: 'rendererParameters', type: 'THREE.WebGLRendererParameters', required: false }
+          description: 'To set up a custom renderer, pass a function that returns a new renderer instance.'
+        }
       ],
     bindings:
       [

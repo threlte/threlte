@@ -15,7 +15,7 @@
     "create:example-page": "tsx ./scripts/createExamplePage"
   },
   "dependencies": {
-    "@astrojs/mdx": "^2.1.0",
+    "@astrojs/mdx": "^3.1.2",
     "@astrojs/preact": "^3.1.0",
     "@astrojs/svelte": "^5.6.0",
     "@astrojs/tailwind": "^5.1.0",
@@ -25,7 +25,7 @@
     "@preact/signals": "^1.1.5",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@vercel/analytics": "^1.0.1",
-    "astro": "^4.2.4",
+    "astro": "^4.11.1",
     "camera-controls": "^2.8.5",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
