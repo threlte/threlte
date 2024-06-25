@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store'
 
+export const VERSION = 8
+
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
