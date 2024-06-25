@@ -90,7 +90,9 @@ rendering until the provided font is loaded:
     <T.MeshStandardMaterial />
   </T.Mesh>
 
-  <Fallback slot="fallback" />
+  {#snippet fallback()}
+    <Fallback />
+  {/snippet}
 </Suspense>
 ```
 

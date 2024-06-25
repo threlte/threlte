@@ -41,14 +41,20 @@
       <T.CylinderGeometry args={[0.01, 0.01, 0.08]} />
       <T.MeshStandardMaterial color="orange" />
     </T.Mesh>
-    <T.Mesh slot="target-ray">
-      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
-      <T.MeshStandardMaterial color="turquoise" />
-    </T.Mesh>
-    <T.Mesh slot="grip">
-      <T.IcosahedronGeometry args={[0.02]} />
-      <T.MeshStandardMaterial color="skyblue" />
-    </T.Mesh>
+
+    {#snippet targetRay()}
+      <T.Mesh>
+        <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+        <T.MeshStandardMaterial color="turquoise" />
+      </T.Mesh>
+    {/snippet}
+
+    {#snippet grip()}
+      <T.Mesh>
+        <T.IcosahedronGeometry args={[0.02]} />
+        <T.MeshStandardMaterial color="skyblue" />
+      </T.Mesh>
+    {/snippet}
   </Controller>
 
   <Controller
@@ -58,10 +64,12 @@
   />
 
   <Hand left>
-    <T.Mesh slot="wrist">
-      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
-      <T.MeshStandardMaterial color="turquoise" />
-    </T.Mesh>
+    {#snippet wrist()}
+      <T.Mesh>
+        <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+        <T.MeshStandardMaterial color="turquoise" />
+      </T.Mesh>
+    {/snippet}
   </Hand>
 
   <Hand right>

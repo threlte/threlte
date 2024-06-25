@@ -1,9 +1,7 @@
 <script lang="ts">
   import { T, useParent } from '@threlte/core'
   import { LineSegments, type Mesh } from 'three'
-  import type { EdgesEvents, EdgesProps } from './Edges.svelte'
-
-  type $$Events = EdgesEvents
+  import type { EdgesProps } from './Edges.svelte'
 
   let { thresholdAngle, color, ref = $bindable(), children, ...props }: EdgesProps = $props()
 
