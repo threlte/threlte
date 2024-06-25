@@ -23,7 +23,7 @@
     <div>
       <slot name="topbar-left" />
     </div>
-    <div class="max-w-[30%]" />
+    <div class="max-w-[30%]"></div>
     <div class="flex flex-row items-center justify-end gap-4">
       <div>
         <slot name="topbar-right" />
@@ -58,4 +58,4 @@
 </div>
 
 <!-- Mobile nav spacer -->
-<div class="h-[70px]" />
+<div class="h-[70px]"></div>

@@ -1,50 +1,48 @@
 ---
-{
-  order: 9.8,
-  category: '@threlte/extras',
-  name: <Outlines>,
-  sourcePath: 'packages/extras/src/lib/components/Outlines/Outlines.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          {
-            name: 'color',
-            type: 'THREE.ColorRepresentation',
-            required: false,
-            default: 'black',
-            description: 'Outline color'
-          },
-          {
-            name: 'screenspace',
-            type: 'boolean',
-            required: false,
-            default: 'false',
-            description: 'Line thickness is independent of zoom'
-          },
-          {
-            name: 'opacity',
-            type: 'boolean',
-            required: false,
-            default: '1',
-            description: 'Outline transparency'
-          },
-          {
-            name: 'thickness',
-            type: 'number',
-            required: false,
-            default: '0.05',
-            description: 'Outline thickness'
-          },
-          { name: 'toneMapped', type: 'boolean', required: false, default: 'true' },
-          { name: 'angle', type: 'number', required: false, default: 'Math.PI' },
-          { name: 'polygonOffset', type: 'boolean', required: false, default: 'false' },
-          { name: 'polygonOffsetFactor', type: 'number', required: false, default: '0' },
-          { name: 'renderOrder', type: 'number', required: false, default: '0' }
-        ]
-    }
-}
+order: 9.8
+category: '@threlte/extras'
+name: <Outlines>
+sourcePath: 'packages/extras/src/lib/components/Outlines/Outlines.svelte'
+type: 'component'
+componentSignature:
+  {
+    'props':
+      [
+        {
+          name: 'color',
+          type: 'THREE.ColorRepresentation',
+          required: false,
+          default: 'black',
+          description: 'Outline color'
+        },
+        {
+          name: 'screenspace',
+          type: 'boolean',
+          required: false,
+          default: 'false',
+          description: 'Line thickness is independent of zoom'
+        },
+        {
+          name: 'opacity',
+          type: 'boolean',
+          required: false,
+          default: '1',
+          description: 'Outline transparency'
+        },
+        {
+          name: 'thickness',
+          type: 'number',
+          required: false,
+          default: '0.05',
+          description: 'Outline thickness'
+        },
+        { name: 'toneMapped', type: 'boolean', required: false, default: 'true' },
+        { name: 'angle', type: 'number', required: false, default: 'Math.PI' },
+        { name: 'polygonOffset', type: 'boolean', required: false, default: 'false' },
+        { name: 'polygonOffsetFactor', type: 'number', required: false, default: '0' },
+        { name: 'renderOrder', type: 'number', required: false, default: '0' }
+      ]
+  }
 ---
 
 A port of the drei [`<Outlines>`](https://github.com/pmndrs/drei?tab=readme-ov-file#outlines) component.
