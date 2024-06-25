@@ -111,6 +111,7 @@
 >
   <OrbitControls
     autoRotate
+    enableZoom={false}
     autoRotateSpeed={1}
     onchange={invalidate}
   />
