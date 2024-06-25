@@ -13,7 +13,7 @@ import type {
   RawRigidBodySet,
   RawSerializationPipeline
 } from '@dimforge/rapier3d-compat/raw'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Vector3 } from 'three'
 import type { Key, Stage } from '@threlte/core'
 
@@ -33,6 +33,9 @@ export type WorldProps = {
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline
   stage?: Key | Stage
+
+  children?: Snippet
+  fallback?: Snippet
 }
 
 export default class World extends SvelteComponent<WorldProps> {}

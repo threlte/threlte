@@ -37,7 +37,10 @@
      * Use this to control when the rapier physics engine is updating the scene.
      * @default undefined
      */
-    stage
+    stage,
+
+    fallback,
+    children
   }: WorldProps = $props()
 
   let error = $state(false)
@@ -73,10 +76,10 @@
     {rawDebugRenderPipeline}
     {stage}
   >
-    <slot />
+    {@render children?.()}
   </InnerWorld>
 {/if}
 
 {#if error}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

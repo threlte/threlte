@@ -105,8 +105,11 @@ To let the parent component decide what to do while the model component is loadi
 </script>
 
 <Suspense>
-  <Fallback slot="fallback" />
   <Model />
+
+  {#snippet fallback()}
+    <Fallback />
+  {/snippet}
 </Suspense>
 ```
 

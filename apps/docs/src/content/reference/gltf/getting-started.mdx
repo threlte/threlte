@@ -301,7 +301,9 @@ If you want to use the component [`<Suspense>`](/docs/reference/extras/suspense)
 </script>
 
 <Suspense>
-  <Fallback slot="fallback" />
+  {#snippet fallback()}
+    <Fallback />
+  {/snippet}
   <Model />
 </Suspense>
 ```
