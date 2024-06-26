@@ -49,6 +49,12 @@
 
 - Experimental Svelte 5 compatibility
 
+## 7.3.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
 ## 7.3.0
 
 ### Minor Changes
