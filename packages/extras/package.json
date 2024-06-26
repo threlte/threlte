@@ -3,6 +3,7 @@
   "version": "8.11.3",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "description": "Utilities, abstractions and plugins for your Threlte apps",
   "scripts": {
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
@@ -48,6 +49,25 @@
     "three": ">=0.152"
   },
   "type": "module",
+  "keywords": [
+    "threlte",
+    "svelte",
+    "three",
+    "three.js",
+    "webgl",
+    "webgpu",
+    "webxr",
+    "3d"
+  ],
+  "homepage": "https://threlte.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte.git",
+    "directory": "packages/extras"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
   "exports": {
     ".": {
       "types": "./src/lib/index.ts",

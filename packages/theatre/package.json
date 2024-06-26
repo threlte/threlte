@@ -3,6 +3,7 @@
   "version": "2.1.7",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "description": "Threlte Components for Theatre, an animation library with a professional motion design toolset",
   "scripts": {
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
@@ -51,6 +52,25 @@
     "@theatre/studio": ">=0.6"
   },
   "type": "module",
+  "keywords": [
+    "theatre",
+    "threlte",
+    "svelte",
+    "three",
+    "three.js",
+    "3d",
+    "animation",
+    "motion"
+  ],
+  "homepage": "https://threlte.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte.git",
+    "directory": "packages/theatre"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
   "exports": {
     ".": {
       "types": "./src/lib/index.ts",
