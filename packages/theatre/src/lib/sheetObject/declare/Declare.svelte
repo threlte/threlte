@@ -11,7 +11,7 @@
 
   const { sheetObject, addProps, removeProps } = useSheet()
 
-  let values = $sheetObject?.value
+  let values = $state($sheetObject?.value)
 
   addProps(props)
 

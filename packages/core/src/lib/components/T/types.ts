@@ -40,7 +40,7 @@ export type AnyProps = Record<string, any>
  * ### Base Props
  */
 export type BaseProps<Type> = {
-  attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
+  attach?: string | ((parent: unknown, self: MaybeInstance<Type>) => (() => void) | void)
 
   children?: Snippet<[{ ref: MaybeInstance<Type> }]>
 
