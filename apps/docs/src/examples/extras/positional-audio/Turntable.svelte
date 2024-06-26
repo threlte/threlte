@@ -118,9 +118,9 @@
         scale={[3, 0.5, 2.2]}
         position.y={0.5}
         position.z={2.2}
-        on:click={() => (coverOpen = !coverOpen)}
-        on:pointerenter={onPointerEnter}
-        on:pointerleave={onPointerLeave}
+        onclick={() => (coverOpen = !coverOpen)}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
       >
         <T.MeshStandardMaterial
           color="#ffffff"

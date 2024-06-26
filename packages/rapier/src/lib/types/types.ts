@@ -31,59 +31,44 @@ export type ColliderShapes =
 
 export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
 
-export type ColliderEventMap = {
-  create: {
-    ref: Collider
-    cleanup: (callback: () => void) => void
-  }
-  collisionenter: {
+export type ColliderEvents = {
+  oncreate?: (event: { ref: Collider; cleanup: (callback: () => void) => void }) => void
+  oncollisionenter?: (event: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
     manifold: TempContactManifold
     flipped: boolean
-  }
-  collisionexit: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  sensorenter: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  sensorexit: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  contact: {
+  }) => void
+  oncollisionexit?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  onsensorenter?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  onsensorexit?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  oncontact?: (event: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
     maxForceDirection: Vector
     maxForceMagnitude: number
     totalForce: Vector
     totalForceMagnitude: number
-  }
+  }) => void
 }
 
-export type CollisionEnterEvent = ColliderEventMap['collisionenter']
-export type CollisionExitEvent = ColliderEventMap['collisionexit']
-export type SensorEnterEvent = ColliderEventMap['sensorenter']
-export type SensorExitEvent = ColliderEventMap['sensorexit']
-export type ContactEvent = ColliderEventMap['contact']
+export type CollisionEnterEvent = ColliderEvents['oncollisionenter']
+export type CollisionExitEvent = ColliderEvents['oncollisionexit']
+export type SensorEnterEvent = ColliderEvents['onsensorenter']
+export type SensorExitEvent = ColliderEvents['onsensorexit']
+export type ContactEvent = ColliderEvents['oncontact']
 
-export type RigidBodyEventMap = ColliderEventMap & {
-  sleep: void
-  wake: void
+export type RigidBodyEvents = ColliderEvents & {
+  onsleep?: () => void
+  onwake?: () => void
 }
-
-export type RigidBodyEventDispatchers = Map<RigidBodyHandle, Record<string, (arg: unknown) => void>>
-export type ColliderEventDispatchers = Map<ColliderHandle, Record<string, (arg: unknown) => void>>
 
 export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
-  events?: Record<string, (arg: unknown) => void>
+  events?: RigidBodyEvents
 }
 
 export type ThrelteRigidBody = RigidBody & {

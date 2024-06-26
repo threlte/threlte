@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { Mesh, Vector3, Quaternion } from 'three'
   import { T, useTask } from '@threlte/core'
   import { Collider, RigidBody } from '@threlte/rapier'
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
@@ -10,14 +10,14 @@
   let rigidBodyLeft: RapierRigidBody
   let rigidBodyRight: RapierRigidBody
 
-  const sabers: { left: THREE.Mesh; right: THREE.Mesh } = { left: undefined!, right: undefined! }
-  const handSabers: { left: THREE.Mesh; right: THREE.Mesh } = {
+  const sabers: { left: Mesh; right: Mesh } = { left: undefined!, right: undefined! }
+  const handSabers: { left: Mesh; right: Mesh } = {
     left: undefined!,
     right: undefined!
   }
 
-  const v3 = new THREE.Vector3()
-  const q = new THREE.Quaternion()
+  const v3 = new Vector3()
+  const q = new Quaternion()
 
   useTask(() => {
     const left = isHandTracking.current ? handSabers.left : sabers.left
@@ -42,7 +42,7 @@
   <T.Mesh
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    on:create={({ ref }) => (sabers.left = ref)}
+    oncreate={({ ref }) => (sabers.left = ref)}
   >
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshPhongMaterial color="red" />
@@ -53,7 +53,7 @@
   <T.Mesh
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    on:create={({ ref }) => (sabers.right = ref)}
+    oncreate={({ ref }) => (sabers.right = ref)}
   >
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshStandardMaterial
@@ -64,30 +64,32 @@
 </Controller>
 
 <Hand left>
-  <T.Mesh
-    slot="wrist"
-    rotation.x={Math.PI / 2}
-    position.z={-saberLength / 2}
-    on:create={({ ref }) => (handSabers.left = ref)}
-  >
-    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshStandardMaterial
-      roughness={0}
-      color="red"
-    />
-  </T.Mesh>
+  {#snippet wrist()}
+    <T.Mesh
+      rotation.x={Math.PI / 2}
+      position.z={-saberLength / 2}
+      oncreate={({ ref }) => (handSabers.left = ref)}
+    >
+      <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
+      <T.MeshStandardMaterial
+        roughness={0}
+        color="red"
+      />
+    </T.Mesh>
+  {/snippet}
 </Hand>
 
 <Hand right>
-  <T.Mesh
-    slot="wrist"
-    rotation.x={Math.PI / 2}
-    position.z={-saberLength / 2}
-    on:create={({ ref }) => (handSabers.right = ref)}
-  >
-    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshPhongMaterial color="red" />
-  </T.Mesh>
+  {#snippet wrist()}
+    <T.Mesh
+      rotation.x={Math.PI / 2}
+      position.z={-saberLength / 2}
+      oncreate={({ ref }) => (handSabers.right = ref)}
+    >
+      <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
+      <T.MeshPhongMaterial color="red" />
+    </T.Mesh>
+  {/snippet}
 </Hand>
 
 <RigidBody

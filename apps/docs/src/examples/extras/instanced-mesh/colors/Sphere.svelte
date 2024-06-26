@@ -40,6 +40,6 @@
   position.y={$scale * 4}
   scale={$scale}
   color={$color}
-  on:pointerenter={() => (hovering = true)}
-  on:pointerleave={() => (hovering = false)}
+  onpointerenter={() => (hovering = true)}
+  onpointerleave={() => (hovering = false)}
 />

@@ -3,14 +3,7 @@
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type {
-    AudioListenerProps,
-    AudioListenerEvents,
-    AudioListenerSlots
-  } from './AudioListener.svelte'
-
-  type $$Events = AudioListenerEvents
-  type $$Slots = AudioListenerSlots
+  import type { AudioListenerProps } from './AudioListener.svelte'
 
   let {
     id,
@@ -18,6 +11,7 @@
     ref = $bindable(),
     audioContext = $bindable(),
     resumeContext = $bindable(),
+		children,
     ...props
   }: AudioListenerProps = $props()
 
@@ -46,5 +40,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={listener} />
+	{@render children?.({ ref: listener })}
 </T>

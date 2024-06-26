@@ -3,7 +3,7 @@ import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerM
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { useHandTrackingState } from './useHandTrackingState'
-import type { XRControllerEvent } from '../types'
+import type { XRControllerEvent, XRControllerEvents } from '../types'
 import { gaze, left, right } from '../hooks/useController'
 import { controllerEvents } from './stores'
 
@@ -27,7 +27,9 @@ export const setupControllers = () => {
     const dispatch = (event: Event) => {
       if (hasHands()) return
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
-      controllerEvents[data.handedness]?.[event.type]?.(event)
+      controllerEvents[data.handedness]?.current?.[`on${event.type}` as keyof XRControllerEvents]?.(
+        event
+      )
     }
 
     function handleConnected(this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {

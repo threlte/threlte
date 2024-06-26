@@ -18,8 +18,6 @@
   const max = new Vector3(maxF, 0, maxF)
 
   useTask(() => {
-    if (!playerMesh || !ballMesh || !rigidBody) return
-
     playerMesh.getWorldPosition(playerPos)
     ballMesh.getWorldPosition(ballPos)
 

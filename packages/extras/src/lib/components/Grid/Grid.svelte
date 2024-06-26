@@ -2,11 +2,8 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
-  import type { GridEvents, GridProps, GridSlots } from './Grid.svelte'
+  import type { GridProps } from './Grid.svelte'
   import { fragmentShader, vertexShader } from './gridShaders'
-
-  type $$Events = GridEvents
-  type $$Slots = GridSlots
 
   let {
     cellColor = '#000000',
@@ -30,6 +27,7 @@
     cellDividers = 6,
     sectionDividers = 2,
     ref = $bindable(),
+		children,
     ...props
   }: GridProps = $props()
 
@@ -245,7 +243,9 @@
     transparent
     {side}
   />
-  <slot ref={mesh}>
-    <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
-  </slot>
+	{#if children}
+		{@render children({ref:mesh})}
+	{:else}
+		<T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+	{/if}
 </T>

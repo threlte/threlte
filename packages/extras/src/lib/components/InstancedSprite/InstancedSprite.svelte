@@ -10,14 +10,8 @@
   } from 'three'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type {
-    InstancedSpriteProps,
-    InstancedSpriteSlots,
-    InstancedSpriteUserCtx
-  } from './InstancedSprite.svelte'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './InstancedSprite.svelte'
   import SpriteInstance from './SpriteInstance.svelte'
-
-  type $$Slots = InstancedSpriteSlots
 
   let {
     autoUpdate = true,
@@ -32,6 +26,7 @@
     randomPlaybackOffset = false,
     spritesheet,
     ref = $bindable(),
+    children,
     ...props
   }: InstancedSpriteProps = $props()
 
@@ -145,5 +140,5 @@
   frustumCulled={false}
   {...props}
 >
-  <slot Instance={SpriteInstance} />
+  {@render children?.({ Instance: SpriteInstance })}
 </T>

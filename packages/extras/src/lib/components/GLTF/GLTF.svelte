@@ -4,11 +4,7 @@
   import { useGltf } from '../../hooks/useGltf'
   import { useSuspense } from '../../suspense/useSuspense'
   import type { ThrelteGltf } from '../../types/types'
-  import type { GltfEvents, GltfProps, GltfSlots } from './GLTF.svelte.js'
-
-  type $$Props = GltfProps
-  type $$Events = GltfEvents
-  type $$Slots = GltfSlots
+  import type { GltfProps } from './GLTF.svelte.js'
 
   type AnyThrelteGltf = ThrelteGltf<{
     nodes: Record<string, any>
@@ -32,6 +28,10 @@
     parser = $bindable(),
     materials = $bindable(),
     nodes = $bindable(),
+    onload,
+    onunload,
+    onerror,
+		children,
     ...props
   }: Props = $props()
 
@@ -46,7 +46,7 @@
   })
 
   const onLoad = (data: AnyThrelteGltf) => {
-    if (gltf) props.$$events?.unload?.()
+    if (gltf) onunload?.()
 
     gltf = data
     scene = data.scene
@@ -59,22 +59,21 @@
     materials = data.materials
     nodes = data.nodes
 
-    props.$$events?.load?.(gltf)
+    onload?.(gltf)
   }
 
-  const onError = (error: any) => {
-    console.error(`Error loading GLTF: ${error.message}`)
+  const onError = (error: Error) => {
     gltf = undefined
-    scene = undefined
-    animations = undefined
-    asset = undefined
-    cameras = undefined
-    scenes = undefined
-    userData = undefined
-    parser = undefined
+    scene = undefined!
+    animations = undefined!
+    asset = undefined!
+    cameras = undefined!
+    scenes = undefined!
+    userData = undefined!
+    parser = undefined!
     nodes = undefined
     materials = undefined
-    props.$$events?.error?.(error.message)
+    onerror?.(error)
   }
 
   const suspend = useSuspense()
@@ -83,8 +82,8 @@
     try {
       const model = await suspend(loader.load(url))
       onLoad(model)
-    } catch (error: any) {
-      onError(error)
+    } catch (error) {
+      onError(error as Error)
     }
   }
 
@@ -98,6 +97,6 @@
     is={scene}
     {...props}
   >
-    <slot ref={scene} />
+		{@render children?.({ ref: scene })}
   </T>
 {/if}

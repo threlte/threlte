@@ -202,7 +202,7 @@ A reflow is triggered automatically when:
 Because the width and height of a flex layout item may be calculated from its
 bounding box, the initial layout may be incorrect, for instance if a model loads
 into view after the initial layout has been computed. To manually request a
-reflow, you can use the slot prop `reflow`:
+reflow, you can use the snippet prop `reflow`:
 
 ```svelte
 <script lang="ts">
@@ -210,20 +210,20 @@ reflow, you can use the slot prop `reflow`:
   import { GLTF } from '@threlte/extras'
 </script>
 
-<Flex let:reflow>
-  <Box>
-    <GLTF
-      src="/model.glb"
-      on:load={() => {
-        reflow()
-      }}
-    />
-  </Box>
+<Flex>
+  {#snippet children({ reflow })}
+    <Box>
+      <GLTF
+        src="/model.glb"
+        onload={() => reflow()}
+      />
+    </Box>
+  {/snippet}
 </Flex>
 ```
 
 <Tip type="tip">
-  The `reflow` slot prop is also available on `<Box>` components to enable
+  The `reflow` snippet prop is also available on `<Box>` components to enable
   encapsulated child components to easily request a reflow.
 </Tip>
 
@@ -261,18 +261,17 @@ Although the width and the height of the `<Flex>` component are required, the
 [layout reflow](#layout-reflow) and can be retrieved using the following methods:
 
 - Using the hook [`useDimensions`](/docs/reference/flex/use-dimensions)
-- Using the slot props `width` and `height`
+- Using the snippet props `width` and `height`
 
 ```svelte
 <script lang="ts">
   import { Flex } from '@threlte/flex'
 </script>
 
-<Flex
-  let:width
-  let:height
->
-  <!-- ... -->
+<Flex>
+  {#snippet children({ width, height })}
+    <!-- ... -->
+  {/snippet}
 </Flex>
 ```
 
@@ -284,7 +283,7 @@ Although the width and the height of the `<Flex>` component are required, the
 </script>
 
 <Flex
-  on:reflow={({ width, height }) => {
+  onreflow={({ width, height }) => {
     console.log(width, height)
   }}
 >

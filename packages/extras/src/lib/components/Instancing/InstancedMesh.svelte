@@ -3,14 +3,7 @@
   import Api from './Api.svelte'
   import { InstancedMesh } from 'three'
 
-  import type {
-    InstancedMeshProps,
-    InstancedMeshEvents,
-    InstancedMeshSlots
-  } from './InstancedMesh.svelte'
-
-  type $$Events = InstancedMeshEvents
-  type $$Slots = InstancedMeshSlots
+  import type { InstancedMeshProps } from './InstancedMesh.svelte'
 
   let {
     id = 'default',
@@ -18,6 +11,7 @@
     range = 1000,
     update = true,
     ref = $bindable(),
+    children,
     ...props
   }: InstancedMeshProps = $props()
 
@@ -41,6 +35,6 @@
     {range}
     {update}
   >
-    <slot ref={mesh} />
+		{@render children?.({ref:mesh})}
   </Api>
 </T>

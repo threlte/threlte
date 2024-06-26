@@ -69,7 +69,7 @@
 <GameSceneRendering />
 
 <T.Scene
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     gameScene.set(ref)
   }}
 >
@@ -82,7 +82,7 @@
   </T.Mesh>
 
   <T.PerspectiveCamera
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       camera = ref
     }}
     manual

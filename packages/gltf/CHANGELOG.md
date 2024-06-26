@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.1
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 3.0.0-next.0
 
 ### Major Changes

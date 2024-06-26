@@ -3,13 +3,10 @@
   import { onDestroy } from 'svelte'
   import { PositionMesh } from './PositionMesh'
   import { useApi } from './api'
-  import type { InstanceProps, InstanceEvents, InstanceSlots } from './Instance.svelte'
+  import type { InstanceProps } from './Instance.svelte'
   import { useInstanceId } from './useInstanceId'
 
-  type $$Events = InstanceEvents
-  type $$Slots = InstanceSlots
-
-  let { id = useInstanceId(), ref = $bindable(), ...props }: InstanceProps = $props()
+  let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()
 
   const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
 
@@ -27,5 +24,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={mesh} />
+	{@render children?.({ ref: mesh })}
 </T>

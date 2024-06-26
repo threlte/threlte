@@ -1,6 +1,6 @@
-import { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
 
 export type ImageMaterialProps = Props<ShaderMaterial> & {
   /** Default: white */
@@ -49,7 +49,7 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
    *
    * Default: undefined
    * */
-  colorProcessingTexture?: Texture | VideoTexture
+  colorProcessingTexture?: Texture | VideoTexture | undefined
   /** Default: true */
   toneMapped?: boolean
   /** Default: false */
@@ -69,12 +69,4 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
       }
   )
 
-export type ImageMaterialEvents = Events<ShaderMaterial>
-
-export type ImageMaterialSlots = Slots<ShaderMaterial>
-
-export default class Image extends SvelteComponent<
-  ImageMaterialProps,
-  ImageMaterialEvents,
-  ImageMaterialSlots
-> {}
+export default class Image extends SvelteComponent<ImageMaterialProps> {}

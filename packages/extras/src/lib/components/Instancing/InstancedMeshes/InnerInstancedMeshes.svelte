@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { Mesh } from 'three'
   import InstancedMesh from '../InstancedMesh.svelte'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     meshes: Mesh[]
-    index: number
+    index?: number
+		children?: Snippet
   }
 
-  let { meshes, index = meshes.length - 1, ...props }: Props = $props()
+  let { meshes, index = meshes.length - 1, children, ...props }: Props = $props()
   const mesh = meshes[index]
 </script>
 
@@ -23,9 +25,9 @@
       index={index - 1}
       {...props}
     >
-      <slot />
+			{@render children?.()}
     </svelte:self>
   </InstancedMesh>
 {:else}
-  <slot />
+	{@render children?.()}
 {/if}

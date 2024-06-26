@@ -3,9 +3,7 @@
   import type { MarkdownHeading } from 'astro'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
-  import type { CollectionEntry } from 'astro:content'
 
-  export let entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
   export let editUrl: string | undefined = undefined
   export let sourceUrl: string | undefined = undefined
   export let headings: MarkdownHeading[]
@@ -86,18 +84,18 @@
               heading.slug === currentHeadingSlug &&
               '!border-orange !text-orange font-bold'
           )}
-          on:keypress={() => {
-            headingClicked(heading.slug)
-          }}
-          on:click={() => {
-            headingClicked(heading.slug)
-          }}
         >
           <a
             data-depth={heading.depth}
             class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
+            on:keypress={() => {
+              headingClicked(heading.slug)
+            }}
+            on:click={() => {
+              headingClicked(heading.slug)
+            }}
           >
             {heading.text}
           </a>

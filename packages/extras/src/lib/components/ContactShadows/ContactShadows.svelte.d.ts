@@ -1,6 +1,6 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
-import type { Group } from 'three'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
+import type { Group, ColorRepresentation } from 'three'
 
 export type ContactShadowsProps = Props<Group> & {
   opacity?: number
@@ -12,16 +12,8 @@ export type ContactShadowsProps = Props<Group> & {
   resolution?: number
   frames?: number
   scale?: number | [x: number, y: number]
-  color?: THREE.ColorRepresentation
+  color?: ColorRepresentation
   depthWrite?: boolean
 }
 
-export type ContactShadowsEvents = Events<Group>
-
-export type ContactShadowsSlots = Slots<Group>
-
-export default class ContactShadows extends SvelteComponent<
-  ContactShadowsProps,
-  ContactShadowsEvents,
-  ContactShadowsSlots
-> {}
+export default class ContactShadows extends SvelteComponent<ContactShadowsProps> {}

@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { isCamera, useCamera } from './utils/useCamera'
+  import { isCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots } from './types'
+  import type { Props } from './types'
   import Camera from './Camera.svelte'
 
   type Type = $$Generic
@@ -19,18 +18,17 @@
   type AllProps = {
     is: Type
   } & Props<Type>
-  type $$Events = Events<Type>
-  type $$Slots = Slots<Type>
 
   let {
-    is = useIsContext(),
+    is = useIsContext<Type>(),
     args,
     attach,
     manual,
     makeDefault,
     dispose,
-    children,
     ref = $bindable(),
+    oncreate,
+    children,
     ...props
   }: AllProps = $props()
 
@@ -41,7 +39,7 @@
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent<Type>(props.$$events)
+  const createEvent = useCreateEvent<Type>(oncreate)
 
   // The ref is created, emit the event
   createEvent.updateRef(internalRef)
@@ -91,7 +89,7 @@
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents(props.$$events)
+  const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates
@@ -111,26 +109,19 @@
 </script>
 
 {#if isDisposableObject(internalRef)}
-  <DisposableObject
-    object={internalRef}
-    {dispose}
-  />
+  <DisposableObject object={internalRef} {dispose} />
 {/if}
 
 {#if isCamera(internalRef)}
-  <Camera
-    object={internalRef}
-    {manual}
-    {makeDefault}
-  />
+  <Camera object={internalRef} {manual} {makeDefault} />
 {/if}
 
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-      <slot ref={internalRef} />
+      {@render children({ ref: internalRef })}
     {/if}
   </SceneGraphObject>
 {:else if children}
-  <slot ref={internalRef} />
+  {@render children({ ref: internalRef })}
 {/if}

@@ -108,11 +108,10 @@ If you want to use a class that is not available at Three.js' main namespace `'t
   const { renderer } = useThrelte()
 </script>
 
-<T.PerspectiveCamera
-  let:ref
-  makeDefault
->
-  <T.OrbitControls args={[ref, renderer.domElement]} />
+<T.PerspectiveCamera makeDefault>
+  {#snippet children({ ref })}
+    <T.OrbitControls args={[ref, renderer.domElement]} />
+  {/snippet}
 </T.PerspectiveCamera>
 ```
 
@@ -375,7 +374,7 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 ```svelte
 <T
   is={OrbitControls}
-  on:change={(e) => console.log('change:', e)}
+  onchange={(e) => console.log('change:', e)}
 />
 ```
 
@@ -386,7 +385,7 @@ that you may invoke with a callback to clean up after the object is destroyed wh
 
 ```svelte
 <T.PerspectiveCamera
-  on:create={({ ref, cleanup }) => {
+  oncreate={({ ref, cleanup }) => {
     // Look at the center
     ref.lookAt(0, 0, 0)
 
@@ -397,20 +396,22 @@ that you may invoke with a callback to clean up after the object is destroyed wh
 />
 ```
 
-## Slot Props
+## Snippet Props
 
-The value infered from the property `is` is available as the slot prop `ref`:
+The value infered from the property `is` is available as the snippet prop `ref`:
 
 ```svelte
-<T.PerspectiveCamera let:ref={camera}>
-  <!--
-    The slot prop "ref" is used to reference the
-    camera and instantiate the OrbitControls
-  -->
-  <T
-    is={OrbitControls}
-    args={[camera, renderer.domElement]}
-  />
+<T.PerspectiveCamera>
+  {#snippet children({ ref: camera })}
+    <!--
+      The prop "ref" is used to reference the
+      camera and instantiate the OrbitControls
+    -->
+    <T
+      is={OrbitControls}
+      args={[camera, renderer.domElement]}
+    />
+  {/snippet}
 </T.PerspectiveCamera>
 ```
 

@@ -7,7 +7,7 @@
 
   type TGroupsDef = $$Generic<GroupsDef>
 
-  let { groups, filter, memberships }: CollisionGroupsProps<TGroupsDef> = $props()
+  let { groups, filter, memberships, children }: CollisionGroupsProps<TGroupsDef> = $props()
 
   const store = writable<number>(
     computeBitMask(
@@ -29,4 +29,4 @@
   setContext<NonNullable<CollisionGroupsContext>>('threlte-rapier-collision-group', store)
 </script>
 
-<slot />
+{@render children?.()}

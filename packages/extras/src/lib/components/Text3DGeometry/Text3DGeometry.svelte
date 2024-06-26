@@ -4,16 +4,13 @@
   import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { Text3DEvents, Text3DProps, Text3DSlots } from './Text3DGeometry.svelte'
-
-  type $$Events = Text3DEvents
-  type $$Slots = Text3DSlots
+  import type { Text3DProps } from './Text3DGeometry.svelte'
 
   let {
     text,
     font = 'https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json',
     size,
-    height,
+    depth,
     curveSegments,
     bevelEnabled,
     bevelThickness,
@@ -21,11 +18,11 @@
     bevelOffset,
     bevelSegments,
     smooth,
-    depth,
     extrudePath,
     steps,
     UVGenerator,
     ref = $bindable(),
+    children,
     ...props
   }: Text3DProps = $props()
 
@@ -45,14 +42,13 @@
     return new TextGeometry(text, {
       font: $loadedFont,
       size,
-      height,
+      depth,
       curveSegments,
       bevelEnabled,
       bevelThickness,
       bevelSize,
       bevelOffset,
       bevelSegments,
-      depth,
       extrudePath,
       steps,
       UVGenerator
@@ -72,6 +68,6 @@
     bind:ref
     {...props}
   >
-    <slot ref={creasedGeometry} />
+    {@render children?.({ ref: creasedGeometry })}
   </T>
 {/if}

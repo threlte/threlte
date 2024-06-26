@@ -1,5 +1,35 @@
 # @threlte/extras
 
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
 ## 9.0.0-next.5
 
 ### Patch Changes
@@ -36,6 +66,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 8.11.3
+
+### Patch Changes
+
+- 943b0bd: imported classes as types not values in Gizmo and MeshRefractionMaterial components
 
 ## 8.11.2
 

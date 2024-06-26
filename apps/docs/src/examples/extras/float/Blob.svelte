@@ -42,7 +42,7 @@
   <T.Mesh
     {geometry}
     {material}
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
+    onpointerenter={onPointerEnter}
+    onpointerleave={onPointerLeave}
   />
 </Float>

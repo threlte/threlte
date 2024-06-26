@@ -18,7 +18,7 @@
     zoom={80}
     position={[0, 5, 10]}
     makeDefault
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(0, 0, 0)
     }}
   />

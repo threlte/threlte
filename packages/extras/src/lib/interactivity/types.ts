@@ -34,16 +34,16 @@ export interface PointerCaptureTarget {
 }
 
 export type ThrelteEvents = {
-  click: IntersectionEvent<MouseEvent>
-  contextmenu: IntersectionEvent<MouseEvent>
-  dblclick: IntersectionEvent<MouseEvent>
-  wheel: IntersectionEvent<WheelEvent>
-  pointerup: IntersectionEvent<PointerEvent>
-  pointerdown: IntersectionEvent<PointerEvent>
-  pointerover: IntersectionEvent<PointerEvent>
-  pointerout: IntersectionEvent<PointerEvent>
-  pointerenter: IntersectionEvent<PointerEvent>
-  pointerleave: IntersectionEvent<PointerEvent>
-  pointermove: IntersectionEvent<PointerEvent>
-  pointermissed: MouseEvent
+  onclick: IntersectionEvent<MouseEvent>
+  oncontextmenu: IntersectionEvent<MouseEvent>
+  ondblclick: IntersectionEvent<MouseEvent>
+  onwheel: IntersectionEvent<WheelEvent>
+  onpointerup: IntersectionEvent<PointerEvent>
+  onpointerdown: IntersectionEvent<PointerEvent>
+  onpointerover: IntersectionEvent<PointerEvent>
+  onpointerout: IntersectionEvent<PointerEvent>
+  onpointerenter: IntersectionEvent<PointerEvent>
+  onpointerleave: IntersectionEvent<PointerEvent>
+  onpointermove: IntersectionEvent<PointerEvent>
+  onpointermissed: MouseEvent
 }

@@ -40,9 +40,8 @@
         toneMapped
       }
     ]}
-    on:create={start}
-    let:ref
+    oncreate={start}
   >
-    <slot {ref} />
+    <slot ref={Splat} />
   </T>
 {/await}

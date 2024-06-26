@@ -1,59 +1,55 @@
+<script context="module" lang="ts">
+  import { type Stage, T, useTask, useThrelte } from '@threlte/core'
+
+  let stage: Stage | undefined
+</script>
+
 <script lang="ts">
-  import { Euler, Group, Quaternion } from 'three'
-  import { T, useTask, useThrelte } from '@threlte/core'
-  import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte'
+  import { Group, Quaternion } from 'three'
 
-  type $$Props = Required<BillboardProps>
-  type $$Events = BillboardEvents
-  type $$Slots = BillboardSlots
+  import type { BillboardProps } from './Billboard.svelte'
 
-  export let follow: $$Props['follow'] = true
-  export let lockX: $$Props['lockX'] = false
-  export let lockY: $$Props['lockY'] = false
-  export let lockZ: $$Props['lockZ'] = false
+  let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
-  let inner: Group
-  let localRef: Group
+  const inner = new Group()
+  const localRef = new Group()
 
-  const { camera } = useThrelte()
+  const { camera, scheduler, renderStage } = useThrelte()
 
   const q = new Quaternion()
 
-  const prevRotation = new Euler()
+  let followObject = $derived(follow === true ? $camera : follow === false ? undefined : follow)
+
+  stage ??= scheduler.createStage(Symbol('billboard-stage'), { before: renderStage })
 
   const { start, stop } = useTask(
     () => {
-      // save previous rotation in case we're locking an axis
-      prevRotation.copy(localRef.rotation)
-
-      // always face the camera
+      // always face the follow object
       localRef.updateMatrix()
       localRef.updateWorldMatrix(false, false)
       localRef.getWorldQuaternion(q)
-      $camera.getWorldQuaternion(inner.quaternion).premultiply(q.invert())
-
-      // readjust any axis that is locked
-      if (lockX) localRef.rotation.x = prevRotation.x
-      if (lockY) localRef.rotation.y = prevRotation.y
-      if (lockZ) localRef.rotation.z = prevRotation.z
+      followObject?.getWorldQuaternion(inner.quaternion).premultiply(q.invert())
     },
-    { autoStart: false }
+    { autoStart: false, stage }
   )
 
-  $: if (follow && localRef) {
-    start()
-  } else {
-    stop()
-  }
+  $effect.pre(() => {
+    if (follow) {
+      start()
+    } else {
+      stop()
+    }
+  })
 </script>
 
-<T.Group
-  bind:ref={localRef}
+<T
+  is={localRef}
+  bind:ref
   matrixAutoUpdate={false}
   matrixWorldAutoUpdate={false}
-  {...$$restProps}
+  {...props}
 >
-  <T.Group bind:ref={inner}>
-    <slot ref={localRef} />
-  </T.Group>
-</T.Group>
+  <T is={inner}>
+		{@render children?.({ ref:localRef })}
+  </T>
+</T>

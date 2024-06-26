@@ -1,6 +1,6 @@
 {
   "name": "@threlte/theatre",
-  "version": "3.0.0-next.1",
+  "version": "3.0.0-next.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -21,7 +21,7 @@
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
     "@types/node": "^20.12.7",
-    "@types/three": "^0.163.0",
+    "@types/three": "^0.165.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
     "@yushijinhun/three-minifier-rollup": "^0.4.0",
@@ -36,7 +36,7 @@
     "svelte-check": "^3.6.9",
     "svelte-preprocess": "^5.1.3",
     "svelte2tsx": "^0.7.6",
-    "three": "^0.163.0",
+    "three": "^0.165.0",
     "tslib": "^2.6.2",
     "type-fest": "^4.15.0",
     "typescript": "^5.4.5",
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "svelte": ">=4",
-    "three": ">=0.152",
+    "three": ">=0.155",
     "@threlte/core": ">=8.0.0-next.0",
     "@threlte/extras": ">=9.0.0-next.0",
     "@theatre/core": ">=0.6",

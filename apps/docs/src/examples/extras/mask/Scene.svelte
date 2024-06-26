@@ -65,24 +65,23 @@
   />
 </T.PerspectiveCamera>
 
-<T.Group
-  position={[0, 1, 2]}
-  let:ref
->
-  <Mask id={target}>
-    <T.CircleGeometry args={[0.65]} />
-    <T.MeshBasicMaterial />
-  </Mask>
-  <T.Mesh>
-    <T.RingGeometry args={[0.6, 0.7, 50]} />
-    <T.MeshBasicMaterial />
-  </T.Mesh>
-  {#if move}
-    <TransformControls
-      object={ref}
-      showZ={false}
-    />
-  {/if}
+<T.Group position={[0, 1, 2]}>
+  {#snippet children({ ref })}
+    <Mask id={target}>
+      <T.CircleGeometry args={[0.65]} />
+      <T.MeshBasicMaterial />
+    </Mask>
+    <T.Mesh>
+      <T.RingGeometry args={[0.6, 0.7, 50]} />
+      <T.MeshBasicMaterial />
+    </T.Mesh>
+    {#if move}
+      <TransformControls
+        object={ref}
+        showZ={false}
+      />
+    {/if}
+  {/snippet}
 </T.Group>
 
 <T.DirectionalLight

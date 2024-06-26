@@ -71,8 +71,8 @@
         scale.y={(height / 100) * $scale}
         scale.z={$scale}
         position.z={20}
-        on:pointerenter={onPointerEnter}
-        on:pointerleave={onPointerLeave}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
       >
         <RoundedBoxGeometry
           args={[100, 100, 20]}
