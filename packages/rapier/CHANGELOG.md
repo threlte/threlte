@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.3
+
+### Patch Changes
+
+- c53d7a9: Replace fallback slots with snippets
+
 ## 3.0.0-next.2
 
 ### Patch Changes
