@@ -25,7 +25,7 @@ All child components now receive events.
 </script>
 
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >
@@ -40,18 +40,18 @@ The following interaction events are available:
 
 ```svelte
 <T.Mesh
-  on:click={(e) => console.log('click')}
-  on:contextmenu={(e) => console.log('context menu')}
-  on:dblclick={(e) => console.log('double click')}
-  on:wheel={(e) => console.log('wheel')}
-  on:pointerup={(e) => console.log('up')}
-  on:pointerdown={(e) => console.log('down')}
-  on:pointerover={(e) => console.log('over')}
-  on:pointerout={(e) => console.log('out')}
-  on:pointerenter={(e) => console.log('enter')}
-  on:pointerleave={(e) => console.log('leave')}
-  on:pointermove={(e) => console.log('move')}
-  on:pointermissed={() => console.log('missed')}
+  onclick={(e) => console.log('click')}
+  oncontextmenu={(e) => console.log('context menu')}
+  ondblclick={(e) => console.log('double click')}
+  onwheel={(e) => console.log('wheel')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
+  onpointermissed={() => console.log('missed')}
 />
 ```
 
@@ -91,7 +91,7 @@ delivered pointerover events, they will immediately be delivered pointerout even
 an object to block pointer events from objects behind it, it needs to have an event handler as follows:
 
 ```svelte
-<T.Mesh on:click={(e) => e.stopPropagation()} />
+<T.Mesh onclick={(e) => e.stopPropagation()} />
 ```
 
 even if you don't want this object to respond to the pointer event. If you do want to handle the

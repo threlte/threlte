@@ -2,22 +2,7 @@
   context="module"
   lang="ts"
 >
-  let installed = false
-</script>
-
-<script lang="ts">
-  import { T, forwardEventHandlers, useTask, useParent, useThrelte } from '@threlte/core'
-  import type {
-    CameraControlsEvents,
-    CameraControlsProps,
-    CameraControlsSlots
-  } from './CameraControls.svelte'
-
-  type $$Props = CameraControlsProps
-  type $$Events = CameraControlsEvents
-  type $$Slots = CameraControlsSlots
-
-  import CameraControls from 'camera-controls'
+  import { T, useTask, useParent, useThrelte, type Props } from '@threlte/core'
   import {
     Box3,
     Matrix4,
@@ -28,26 +13,39 @@
     Vector2,
     Vector3,
     Vector4,
-    type PerspectiveCamera
+    type PerspectiveCamera,
+    MathUtils
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import CameraControls from 'camera-controls'
 
-  const subsetOfTHREE = {
-    Vector2,
-    Vector3,
-    Vector4,
-    Quaternion,
-    Matrix4,
-    Spherical,
-    Box3,
-    Sphere,
-    Raycaster
+  CameraControls.install({
+    THREE: {
+      Vector2,
+      Vector3,
+      Vector4,
+      Quaternion,
+      Matrix4,
+      Spherical,
+      Box3,
+      Sphere,
+      Raycaster
+    }
+  })
+</script>
+
+<script lang="ts">
+  interface CameraControlsProps extends Props<CameraControls> {
+    ref: CameraControls
+    autoRotate?: boolean
+    autoRotateSpeed?: number
   }
 
-  if (!installed) {
-    CameraControls.install({ THREE: subsetOfTHREE })
-    installed = true
-  }
+  let {
+    autoRotate = false,
+    autoRotateSpeed = 1,
+    ref = $bindable(),
+    ...props
+  }: CameraControlsProps = $props()
 
   const parent = useParent()
 
@@ -57,44 +55,37 @@
 
   const { renderer, invalidate } = useThrelte()
 
-  export let autoRotate = false
-  export let autoRotateSpeed = 1
-
-  export const ref = new CameraControls($parent as PerspectiveCamera, renderer?.domElement)
-
-  const getControls = () => ref
+  const controls = new CameraControls($parent as PerspectiveCamera, renderer.domElement)
 
   let disableAutoRotate = false
 
   useTask(
     (delta) => {
       if (autoRotate && !disableAutoRotate) {
-        getControls().azimuthAngle += 4 * delta * DEG2RAD * autoRotateSpeed
+        controls.azimuthAngle += 4 * delta * MathUtils.DEG2RAD * autoRotateSpeed
       }
-      const updated = getControls().update(delta)
+      const updated = controls.update(delta)
       if (updated) invalidate()
     },
     {
       autoInvalidate: false
     }
   )
-
-  const forwardingComponent = forwardEventHandlers()
 </script>
 
 <T
-  is={ref}
-  on:controlstart={(e) => {
+  is={controls}
+  bind:ref
+  oncontrolstart={() => {
     disableAutoRotate = true
   }}
-  on:zoom={(e) => {
-    console.log('zoomstart', e)
+  onzoom={(event) => {
+    console.log('zoomstart', event)
   }}
-  on:controlend={() => {
+  oncontrolend={() => {
     disableAutoRotate = false
   }}
-  {...$$restProps}
-  bind:this={$forwardingComponent}
+  {...props}
 >
   <slot {ref} />
 </T>

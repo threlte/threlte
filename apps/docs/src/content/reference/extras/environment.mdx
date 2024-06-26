@@ -1,48 +1,46 @@
 ---
-{
-  order: 7.15,
-  category: '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/Environment/Environment.svelte',
-  name: <Environment>,
-  type: 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { name: 'path', type: 'string', required: false, 'description': 'Defaults to "/"' },
-          {
-            name: 'files',
-            type: 'string | string[]',
-            required: true,
-            'description': 'Provide a string to use an equirectangular envmap and a string array to use a cubic envmap'
-          },
-          {
-            name: 'isBackground',
-            type: 'boolean',
-            required: false,
-            'description': 'Boolean to toggle whether to use envmap as a scene background.'
-          },
-          {
-            name: 'groundProjection',
-            type: 'Props<GroundProjectedEnv>',
-            required: false,
-            'description': 'Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.'
-          },
-          {
-            name: 'format',
-            type: "'ldr' | 'hdr'",
-            required: false,
-            'description': 'Use `ldr` for .png, .jpg and `hdr` for .hdr file formats'
-          },
-          {
-            name: 'encoding',
-            type: 'TextureEncoding',
-            required: false,
-            'description': 'Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular'
-          }
-        ]
-    }
-}
+order: 7.15
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/Environment/Environment.svelte'
+name: <Environment>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'path', type: 'string', required: false, description: 'Defaults to "/"' },
+        {
+          name: 'files',
+          type: 'string | string[]',
+          required: true,
+          description: 'Provide a string to use an equirectangular envmap and a string array to use a cubic envmap'
+        },
+        {
+          name: 'isBackground',
+          type: 'boolean',
+          required: false,
+          description: 'Boolean to toggle whether to use envmap as a scene background.'
+        },
+        {
+          name: 'groundProjection',
+          type: 'Props<GroundProjectedEnv>',
+          required: false,
+          description: 'Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.'
+        },
+        {
+          name: 'format',
+          type: "'ldr' | 'hdr'",
+          required: false,
+          description: 'Use `ldr` for .png, .jpg and `hdr` for .hdr file formats'
+        },
+        {
+          name: 'encoding',
+          type: 'TextureEncoding',
+          required: false,
+          description: 'Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular'
+        }
+      ]
+  }
 ---
 
 Scene environment map implementation with included loaders and ground projected environment.

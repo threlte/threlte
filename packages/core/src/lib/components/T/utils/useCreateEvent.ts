@@ -1,17 +1,10 @@
 import { onDestroy, onMount } from 'svelte'
-import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
+import type { CreateEvent } from '../types'
 
-export const useCreateEvent = () => {
-  const dispatchRaw = createRawEventDispatcher<{
-    create: {
-      ref: any
-      cleanup: (callback: () => void) => void
-    }
-  }>()
-
+export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
   const cleanupFunctions: (() => void)[] = []
 
-  let ref: any | undefined = undefined
+  let ref: T | undefined = undefined
   let mounted = false
 
   const dispatchCreateEvent = () => {
@@ -26,10 +19,10 @@ export const useCreateEvent = () => {
       cleanupFunctions.push(callback)
     }
 
-    dispatchRaw('create', { ref, cleanup })
+    oncreate?.({ ref, cleanup })
   }
 
-  const updateRef = (newRef: any) => {
+  const updateRef = (newRef: T) => {
     ref = newRef
     if (!mounted) return
     dispatchCreateEvent()

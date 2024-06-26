@@ -118,9 +118,9 @@
         scale={[3, 0.5, 2.2]}
         position.y={0.5}
         position.z={2.2}
-        on:click={() => (coverOpen = !coverOpen)}
-        on:pointerenter={onPointerEnter}
-        on:pointerleave={onPointerLeave}
+        onclick={() => (coverOpen = !coverOpen)}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
       >
         <T.MeshStandardMaterial
           color="#ffffff"
@@ -139,14 +139,14 @@
   <!-- SIDE BUTTON -->
   <Button
     position={[-2.3, 1.01, 0.8]}
-    on:click={changeSide}
+    onClick={changeSide}
     text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
     position={[-2.3, 1.01, 1.7]}
-    on:click={toggle}
+    onClick={toggle}
     text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
 

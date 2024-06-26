@@ -6,7 +6,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
 <RigidBody type="dynamic">

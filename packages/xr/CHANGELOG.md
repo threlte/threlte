@@ -1,5 +1,35 @@
 # @threlte/xr
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- 2107848: Fix xr events and migrate remaining slots to snippets
+
+## 1.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 1.0.0-next.2
+
+### Patch Changes
+
+- 7cc5701: Remove raw event dispatching
+
+## 1.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 1.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 0.1.4
 
 ### Patch Changes

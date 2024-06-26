@@ -1,37 +1,35 @@
 ---
-{
-  'category': '@threlte/core',
-  'name': '<HierarchicalObject>',
-  'sourcePath': 'packages/core/src/lib/internal/HierarchicalObject.svelte',
-  'order': 3,
-  'type': 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          {
-            'name': 'object',
-            'type': 'THREE.Object3D',
-            'required': false,
-            'description': 'If an object is provided, this object is passed to the upstream onChildMount and onChildDestroy methods.'
-          },
-          {
-            'name': 'onChildMount',
-            'type': '(child: Object3D) => void',
-            'required': false,
-            'description': 'Will be invoked when a child is mounted.'
-          },
-          {
-            'name': 'onChildDestroy',
-            'type': '(child: Object3D) => void',
-            'required': false,
-            'description': 'Will be invoked when a child is destroyed.'
-          }
-        ],
-      'bindings': [{ 'name': 'children', 'type': 'Object3D[]' }]
-    },
-  'showInSidebar': false
-}
+category: '@threlte/core'
+name: '<HierarchicalObject>'
+sourcePath: 'packages/core/src/lib/internal/HierarchicalObject.svelte'
+order: 3
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'object',
+          type: 'THREE.Object3D',
+          required: false,
+          description: 'If an object is provided, this object is passed to the upstream onChildMount and onChildDestroy methods.'
+        },
+        {
+          name: 'onChildMount',
+          type: '(child: Object3D) => void',
+          required: false,
+          description: 'Will be invoked when a child is mounted.'
+        },
+        {
+          name: 'onChildDestroy',
+          type: '(child: Object3D) => void',
+          required: false,
+          description: 'Will be invoked when a child is destroyed.'
+        }
+      ],
+    bindings: [{ name: 'children', type: 'Object3D[]' }]
+  }
+showInSidebar: false
 ---
 
 <Tip type="warning">
@@ -77,7 +75,7 @@ Sometimes you need to add a component as a child to another object than its pare
 >
   <T
     is={TransformControls}
-    on:create={({ ref, cleanup }) => {
+    oncreate={({ ref, cleanup }) => {
       ref.attach($otherMesh)
       cleanup(ref.detach)
     }}

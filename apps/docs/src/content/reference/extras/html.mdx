@@ -1,44 +1,42 @@
 ---
-{
-  order: 2.2,
-  category: '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte',
-  name: <HTML>,
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      'props':
-        [
-          { name: 'transform', type: 'boolean', default: 'false', required: false },
-          { name: 'calculatePosition', type: '(
-              obj: Object3D,
-              camera: Camera,
-              size: { width: number; height: number }
-              ) => [number, number]', required: false },
-          { name: 'eps', type: 'number', default: '0.001', required: false },
-          { name: 'occlude', type: 'boolean | Object3D[]', default: 'false', required: false },
-          {
-            name: 'zIndexRange',
-            type: '[number, number]',
-            default: '[16777271, 0]',
-            required: false
-          },
-          { name: 'sprite', type: 'boolean', default: 'false', required: false },
-          {
-            name: 'pointerEvents',
-            type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
-            default: "'auto'",
-            required: false
-          },
-          { name: 'center', type: 'boolean', default: 'false', required: false },
-          { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
-          { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
-          { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-          { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false }
-        ]
-    }
-}
+order: 2.2
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte'
+name: <HTML>
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'transform', type: 'boolean', default: 'false', required: false },
+        { name: 'calculatePosition', type: '(
+            obj: Object3D,
+            camera: Camera,
+            size: { width: number; height: number }
+            ) => [number, number]', required: false },
+        { name: 'eps', type: 'number', default: '0.001', required: false },
+        { name: 'occlude', type: 'boolean | Object3D[]', default: 'false', required: false },
+        {
+          name: 'zIndexRange',
+          type: '[number, number]',
+          default: '[16777271, 0]',
+          required: false
+        },
+        { name: 'sprite', type: 'boolean', default: 'false', required: false },
+        {
+          name: 'pointerEvents',
+          type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
+          default: "'auto'",
+          required: false
+        },
+        { name: 'center', type: 'boolean', default: 'false', required: false },
+        { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
+        { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
+        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
+        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false }
+      ]
+  }
 ---
 
 This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie HTML content to any object of your scene. It will be projected to the objects whereabouts automatically.
@@ -110,7 +108,7 @@ Use the property `occlude` and bind to the event `visibilitychange` to implement
 <HTML
   transform
   occlude
-  on:visibilitychange={onVisibilityChange}
+  onvisibilitychange={onVisibilityChange}
 >
   <h1>Hello World</h1>
 </HTML>

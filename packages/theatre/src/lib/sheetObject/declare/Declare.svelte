@@ -1,18 +1,15 @@
 <script lang="ts">
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { watch, type CurrentWritable } from '@threlte/core'
+  import type { UnknownShorthandCompoundProps } from '@theatre/core'
+  import { watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import type { DeclareProps } from './Declare.svelte'
+  import { useSheet } from '../useSheet'
 
   type P = $$Generic<UnknownShorthandCompoundProps>
 
-  export let props: P
+  let { props, children }: DeclareProps<P> = $props()
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject<P>>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
+  const { sheetObject, addProps, removeProps } = useSheet()
 
   let values = $sheetObject?.value
 
@@ -23,10 +20,10 @@
   })
 
   watch(sheetObject, (sheetObject) => {
-    return sheetObject.onValuesChange((v) => {
+    return sheetObject?.onValuesChange((v) => {
       values = v
     })
   })
 </script>
 
-<slot {values} />
+{@render children?.({ values })}

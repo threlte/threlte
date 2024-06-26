@@ -1,6 +1,8 @@
 import { getContext } from 'svelte'
 import { derived, type Readable } from 'svelte/store'
-import type { ThrelteUserContext } from '../lib/contexts'
+import type { CurrentWritable } from '../lib/storeUtils'
+
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
 type UserContextEntry = Record<string, any>
 type UserContext = Record<string, UserContextEntry>
@@ -96,7 +98,8 @@ export function useThrelteUserContext<
       ? UserContextEntry
       : Readable<UserContextEntry>
 >(namespace?: string, value?: Value, options?: SetThrelteUserContextOptions): Result {
-  const userCtxStore = getContext<ThrelteUserContext>('threlte-user-context')
+  const userCtxStore =
+    getContext<CurrentWritable<Record<string | symbol, unknown>>>('threlte-user-context')
   if (!userCtxStore) {
     throw new Error(
       'No user context store found, did you invoke this function outside of your main <Canvas> component?'

@@ -43,18 +43,16 @@
       <Box class="h-auto w-full flex-1 items-center justify-evenly gap-10">
         {#each new Array(columns) as _, columnIndex}
           {@const index = rowIndex * columns + columnIndex}
-          <Box
-            class="h-full w-full flex-1"
-            let:width
-            let:height
-          >
-            <Matcap
-              {width}
-              {height}
-              matcapIndex={offset + index}
-              gridIndex={index}
-              format={size}
-            />
+          <Box class="h-full w-full flex-1">
+            {#snippet children({ width, height })}
+              <Matcap
+                {width}
+                {height}
+                matcapIndex={offset + index}
+                gridIndex={index}
+                format={size}
+              />
+            {/snippet}
           </Box>
         {/each}
       </Box>
@@ -69,7 +67,7 @@
         z={15}
         text="← PREVIOUS PAGE"
         order={0}
-        on:click={() => {
+        onClick={() => {
           page = Math.max(1, page - 1)
         }}
       />
@@ -90,7 +88,7 @@
         z={15}
         text="NEXT PAGE →"
         order={2}
-        on:click={() => {
+        onClick={() => {
           page = Math.min(10, page + 1)
         }}
       />

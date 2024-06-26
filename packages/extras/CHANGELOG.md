@@ -1,5 +1,72 @@
 # @threlte/extras
 
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
+## 9.0.0-next.5
+
+### Patch Changes
+
+- 3883665: Reduce interactivity footprint
+
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
+## 9.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 8.11.4
 
 ### Patch Changes

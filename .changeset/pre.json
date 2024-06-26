@@ -1,0 +1,38 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@threlte/docs": "0.13.1",
+    "@threlte/core": "7.3.0",
+    "create-threlte": "2.0.1",
+    "@threlte/extras": "8.11.2",
+    "@threlte/flex": "1.0.2",
+    "@threlte/gltf": "2.0.3",
+    "@threlte/rapier": "2.0.0",
+    "@threlte/theatre": "2.1.7",
+    "@threlte/xr": "0.1.3"
+  },
+  "changesets": [
+    "clever-rice-pretend",
+    "eleven-trainers-work",
+    "fair-moons-rule",
+    "fast-buttons-shake",
+    "light-rockets-confess",
+    "lucky-news-sleep",
+    "many-tips-glow",
+    "mighty-singers-glow",
+    "neat-turkeys-lick",
+    "odd-comics-begin",
+    "old-bottles-bathe",
+    "orange-pumpkins-act",
+    "popular-comics-sniff",
+    "short-fans-laugh",
+    "small-ravens-watch",
+    "soft-files-love",
+    "sweet-cows-provide",
+    "swift-dancers-behave",
+    "tall-foxes-taste",
+    "tame-rocks-report",
+    "wet-rules-hope"
+  ]
+}

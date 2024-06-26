@@ -4,11 +4,10 @@
     CoefficientCombineRule,
     type Collider
   } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, SceneGraphObject } from '@threlte/core'
+  import { SceneGraphObject } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
   import { useCreateEvent } from '../../lib/useCreateEvent'
@@ -16,49 +15,48 @@
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import type { ColliderEventMap } from '../../types/types'
+  import type { ColliderEvents } from '../../types/types'
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
   type TMassDef = $$Generic<MassDef>
-  type $$Props = AutoCollidersProps<TMassDef>
 
-  export let shape: $$Props['shape'] = 'convexHull' as $$Props['shape']
-  export let restitution: $$Props['restitution'] = undefined as $$Props['restitution']
-  export let restitutionCombineRule: $$Props['restitutionCombineRule'] =
-    undefined as $$Props['restitutionCombineRule']
-  export let friction: $$Props['friction'] = undefined as $$Props['friction']
-  export let frictionCombineRule: $$Props['frictionCombineRule'] =
-    undefined as $$Props['frictionCombineRule']
-  export let sensor: $$Props['sensor'] = undefined as $$Props['sensor']
-  export let contactForceEventThreshold: $$Props['contactForceEventThreshold'] =
-    undefined as $$Props['contactForceEventThreshold']
-  export let density: $$Props['density'] = undefined
-  export let mass: $$Props['mass'] = undefined
-  export let centerOfMass: $$Props['centerOfMass'] = undefined
-  export let principalAngularInertia: $$Props['principalAngularInertia'] = undefined
-  export let angularInertiaLocalFrame: $$Props['angularInertiaLocalFrame'] = undefined
+  let {
+    shape = 'convexHull',
+    restitution,
+    restitutionCombineRule,
+    friction,
+    frictionCombineRule,
+    sensor,
+    contactForceEventThreshold,
+    density,
+    mass,
+    centerOfMass,
+    principalAngularInertia,
+    angularInertiaLocalFrame,
+    refresh = $bindable(() => create()),
+    colliders = $bindable(),
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    children,
+  }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>()
+  const { updateRef } = useCreateEvent<Collider[]>(oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
-  export let colliders: Collider[] = []
-
   const collisionGroups = useCollisionGroups()
 
-  /**
-   * Events setup
-   */
-  type $$Events = ColliderEventMap
-  const dispatcher = createRawEventDispatcher<$$Events>()
-
-  const { hasEventListeners: colliderHasEventListeners } = useHasEventListeners<typeof dispatcher>()
-
   const cleanup = () => {
+    if (colliders === undefined) return
+
     collisionGroups.removeColliders(colliders)
     colliders.forEach((c) => {
       removeColliderFromContext(c)
@@ -67,7 +65,15 @@
     colliders.length = 0
   }
 
-  export const create = () => {
+  const events = {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  }
+
+  const create = () => {
     cleanup()
     colliders = createCollidersFromChildren(
       group,
@@ -76,16 +82,14 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) => addColliderToContext(c, group, dispatcher))
+    colliders.forEach((c) =>
+      addColliderToContext(c, group, events)
+    )
 
     collisionGroups.registerColliders(colliders)
 
     colliders.forEach((collider) => {
-      applyColliderActiveEvents(
-        collider,
-        colliderHasEventListeners,
-        rigidBody?.userData?.hasEventListeners
-      )
+      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
@@ -117,10 +121,6 @@
     create()
   })
 
-  export const refresh = () => {
-    create()
-  }
-
   /**
    * Cleanup
    */
@@ -128,8 +128,5 @@
 </script>
 
 <SceneGraphObject object={group}>
-  <slot
-    {colliders}
-    {refresh}
-  />
+  {@render children?.({ colliders: colliders ?? [], refresh })}
 </SceneGraphObject>

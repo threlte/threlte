@@ -9,17 +9,17 @@ This should be placed within a Threlte `<Canvas />`.
     foveation={1}
     frameRate={90}
     referenceSpace='local-floor'
-    on:sessionstart={(event: XREvent<XRManagerEvent>) => {}}
-    on:sessionend={(event: XREvent<XRManagerEvent>) => {}}
-    on:visibilitychange={(event: XREvent<XRSessionEvent>) => {}}
-    on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
+    onsessionstart={(event: XREvent<XRManagerEvent>) => {}}
+    onsessionend={(event: XREvent<XRManagerEvent>) => {}}
+    onvisibilitychange={(event: XREvent<XRSessionEvent>) => {}}
+    oninputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
   />
 ```
 
 -->
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { createRawEventDispatcher, useThrelte, watch } from '@threlte/core'
+  import { onMount, type Snippet } from 'svelte'
+  import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
     isHandTracking,
@@ -33,40 +33,57 @@ This should be placed within a Threlte `<Canvas />`.
   import { setupControllers } from '../internal/setupControllers'
   import { setupHands } from '../internal/setupHands'
 
-  /**
-   * Enables foveated rendering. Default is `1`, the three.js default.
-   *
-   * 0 = no foveation, full resolution
-   *
-   * 1 = maximum foveation, the edges render at lower resolution
-   */
-  export let foveation: number = 1
+  interface Props {
+    /**
+     * Enables foveated rendering. Default is `1`, the three.js default.
+     *
+     * 0 = no foveation, full resolution
+     *
+     * 1 = maximum foveation, the edges render at lower resolution
+     */
+    foveation?: number
 
-  /**
-   * The target framerate for the XRSystem. Smaller rates give more CPU headroom at the cost of responsiveness.
-   * Recommended range is `72`-`120`. Default is unset and left to the device.
-   * @note If your experience cannot effectively reach the target framerate, it will be subject to frame reprojection
-   * which will halve the effective framerate. Choose a conservative estimate that balances responsiveness and
-   * headroom based on your experience.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Rendering#refresh_rate_and_frame_rate
-   */
-  export let frameRate: number | undefined = undefined
+    /**
+     * The target framerate for the XRSystem. Smaller rates give more CPU headroom at the cost of responsiveness.
+     * Recommended range is `72`-`120`. Default is unset and left to the device.
+     * @note If your experience cannot effectively reach the target framerate, it will be subject to frame reprojection
+     * which will halve the effective framerate. Choose a conservative estimate that balances responsiveness and
+     * headroom based on your experience.
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Rendering#refresh_rate_and_frame_rate
+     */
+    frameRate?: number | undefined
 
-  /** Type of WebXR reference space to use. Default is `local-floor` */
-  export let referenceSpace: XRReferenceSpaceType = 'local-floor'
+    /** Type of WebXR reference space to use. Default is `local-floor` */
+    referenceSpace?: XRReferenceSpaceType
 
-  type $$Events = {
+    fallback?: Snippet
+    children?: Snippet
+
     /** Called as an XRSession is requested */
-    sessionstart: XRSessionEvent<'sessionstart'>
+    onsessionstart?: (event: XRSessionEvent<'sessionstart'>) => void
+
     /** Called after an XRSession is terminated */
-    sessionend: XRSessionEvent<'sessionend'>
+    onsessionend?: (event: XRSessionEvent<'sessionend'>) => void
+
     /** Called when an XRSession is hidden or unfocused. */
-    visibilitychange: globalThis.XRSessionEvent
+    onvisibilitychange?: (event: globalThis.XRSessionEvent) => void
+
     /** Called when available inputsources change */
-    inputsourceschange: globalThis.XRSessionEvent
+    oninputsourceschange?: (event: globalThis.XRSessionEvent) => void
   }
 
-  const dispatch = createRawEventDispatcher<$$Events>()
+  let {
+    foveation = 1,
+    frameRate,
+    referenceSpace = 'local-floor',
+    onsessionstart,
+    onsessionend,
+    onvisibilitychange,
+    oninputsourceschange,
+    fallback,
+    children
+  }: Props = $props()
+
   const { renderer, renderMode } = useThrelte()
   const { xr } = renderer
 
@@ -79,26 +96,26 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    dispatch('sessionstart', { type: 'sessionstart', target: $session! })
+    onsessionstart?.({ type: 'sessionstart', target: $session! })
   }
 
   const handleSessionEnd = () => {
-    dispatch('sessionend', { type: 'sessionend', target: $session! })
+    onsessionend?.({ type: 'sessionend', target: $session! })
     isPresenting.set(false)
     session.set(undefined)
   }
 
   const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
-    dispatch('visibilitychange', { ...event, target: $session! })
+    onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
-    dispatch('inputsourceschange', { ...event, target: $session! })
+    oninputsourceschange?.({ ...event, target: $session! })
   }
 
   const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
-    dispatch('visibilitychange', { ...event, target: $session! })
+    onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const updateTargetFrameRate = (frameRate?: number) => {
@@ -152,16 +169,16 @@ This should be placed within a Threlte `<Canvas />`.
     }
   })
 
-  $: updateTargetFrameRate(frameRate)
-  $: xr.setFoveation(foveation)
-  $: {
+  $effect.pre(() => updateTargetFrameRate(frameRate))
+  $effect.pre(() => xr.setFoveation(foveation))
+  $effect.pre(() => {
     xr.setReferenceSpaceType(referenceSpace)
     $referenceSpaceType = referenceSpace
-  }
+  })
 </script>
 
 {#if $isPresenting}
-  <slot />
+  {@render children?.()}
 {:else}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

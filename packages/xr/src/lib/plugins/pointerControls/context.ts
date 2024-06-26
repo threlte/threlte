@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte'
-import type { createRawEventDispatcher } from '@threlte/core'
-import type { ControlsContext, HandContext, ThrelteXREvents } from './types'
+import type { Object3D } from 'three'
+import type { ControlsContext, HandContext } from './types'
 
 const handContextKeys = {
   left: Symbol('pointer-controls-context-left'),
@@ -26,7 +26,7 @@ export const setControlsContext = (context: ControlsContext) => {
 }
 
 interface InternalContext {
-  dispatchers: WeakMap<THREE.Object3D, ReturnType<typeof createRawEventDispatcher<ThrelteXREvents>>>
+  dispatchers: WeakMap<Object3D, Record<string, (arg: unknown) => void>>
 }
 
 const internalContextKey = Symbol('pointer-controls-internal-context')

@@ -1,14 +1,19 @@
 <script lang="ts">
   import { useParent, watch } from '@threlte/core'
   import { usePortalContext } from '../usePortalContext'
+  import { Object3D } from 'three'
 
-  const parent = useParent()
+  interface Props {
+    id?: string
+  }
+
+  let { id = 'default' }: Props = $props()
+
+  const parent = useParent<Object3D>()
 
   if (!$parent) {
     throw new Error('<PortalTarget> must be used within a <Canvas> component.')
   }
-
-  export let id = 'default'
 
   const { addPortal, removePortal } = usePortalContext()
 

@@ -1,34 +1,13 @@
 <script lang="ts">
-  import { T, useTask } from '$lib'
-  import type { Mesh } from 'three'
-
-  let ref: Mesh
-
-  useTask(() => {
-    ref.rotation.x += 0.01
-    ref.rotation.y += 0.01
-  })
+  import { T } from '../lib'
+  import Mesh from './mesh.svelte'
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
-/>
+<T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)} />
 
-<T.Mesh
-  castShadow
-  receiveShadow
-  bind:ref
->
-  <T.MeshStandardMaterial color="hotpink" />
-  <T.BoxGeometry />
-</T.Mesh>
+<Mesh />
 
-<T.Mesh
-  receiveShadow
-  position.y={-1}
->
+<T.Mesh receiveShadow position.y={-1}>
   <T.MeshStandardMaterial color="turquoise" />
   <T.CylinderGeometry args={[1, 1, 0.1]} />
 </T.Mesh>

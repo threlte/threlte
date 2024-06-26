@@ -1,24 +1,34 @@
 <script lang="ts">
-  import { HierarchicalObject, T, createRawEventDispatcher, useParent, watch } from '@threlte/core'
+  import { HierarchicalObject, T, useParent, watch } from '@threlte/core'
   import { Group } from 'three'
   import { createSuspenseContext } from './context'
+  import type { Snippet } from 'svelte'
 
-  type $$Events = {
-    load: void
-    suspend: void
-    error: Error[]
+  interface Props {
+    final?: boolean
+
+    children?: Snippet<[{ suspended: boolean; errors: Error[] }]>
+    error?: Snippet<[{ errors: Error[] }]>
+    fallback?: Snippet
+
+    onload?: () => void
+    onerror?: (error: Error[]) => void
+    onsuspend?: () => void
   }
 
-  export let final = false
-
-  const dispatch = createRawEventDispatcher<$$Events>()
+  let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
-  $: setFinal(final)
-
-  $: if (!$suspended) dispatch('load')
-  $: if ($suspended) dispatch('suspend')
-  $: if ($errors.length) dispatch('error', $errors)
+  $effect.pre(() => setFinal(final))
+  $effect.pre(() => {
+    if (!$suspended) onload?.()
+  })
+  $effect.pre(() => {
+    if ($suspended) onsuspend?.()
+  })
+  $effect.pre(() => {
+    if ($errors.length > 0) onerror?.($errors)
+  })
 
   const group = new Group()
   const parent = useParent()
@@ -41,18 +51,12 @@
 <!-- Block the graph from mounting to the parent -->
 <HierarchicalObject>
   <T is={group}>
-    <slot
-      suspended={$suspended}
-      errors={$errors}
-    />
+    {@render children?.({ suspended: $suspended, errors: $errors })}
   </T>
 </HierarchicalObject>
 
 {#if $errors.length}
-  <slot
-    name="error"
-    errors={$errors}
-  />
+  {@render error?.({ errors: $errors })}
 {:else if $suspended}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

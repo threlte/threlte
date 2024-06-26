@@ -1,9 +1,9 @@
-import { getContext, onDestroy } from 'svelte'
+import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
 import { browser } from '../lib/browser'
-import type { ThrelteInternalContext } from '../lib/contexts'
-import { useThrelte } from './useThrelte'
+import { useThrelte } from '../context/compounds/useThrelte'
+import { useScheduler } from '../context/fragments/scheduler.svelte'
 
 export type ThrelteUseTask = {
   task: Task
@@ -48,7 +48,7 @@ export type ThrelteUseTaskOptions = {
  * Use the options `after` and `before` to control the order of execution. Add
  * the task to a specific stage with the option `stage`.
  *
- * @param {(ctx: ThrelteContext, delta: number) => void} fn callback function
+ * @param {(delta: number) => void} fn callback function
  * @param {ThrelteUseTaskOptions} options options
  * @returns {ThrelteUseTask}
  */
@@ -130,7 +130,7 @@ export function useTask(
     }
   }
 
-  const { autoInvalidations } = getContext<ThrelteInternalContext>('threlte-internal-context')
+  const schedulerCtx = useScheduler()
 
   const started = writable(false)
 
@@ -139,7 +139,7 @@ export function useTask(
   const start = () => {
     started.set(true)
     if (opts?.autoInvalidate ?? true) {
-      autoInvalidations.add(fn)
+      schedulerCtx.autoInvalidations.add(fn)
     }
     task.start()
   }
@@ -147,7 +147,7 @@ export function useTask(
   const stop = () => {
     started.set(true)
     if (opts?.autoInvalidate ?? true) {
-      autoInvalidations.delete(fn)
+      schedulerCtx.autoInvalidations.delete(fn)
     }
     task.stop()
   }

@@ -68,7 +68,7 @@
     <div
       transition:fade
       class="absolute left-0 top-0 z-10 h-full w-full bg-gradient-to-t from-blue-900 to-blue-900/50"
-    />
+    ></div>
   {/if}
   {#if !expanded}
     <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">

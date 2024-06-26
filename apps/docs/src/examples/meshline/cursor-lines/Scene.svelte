@@ -24,14 +24,14 @@
   zoom={50}
   makeDefault
   position.y={10}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Mesh
   visible={false}
-  on:pointermove={(e) => {
-    cursorPosition.x = e.point.x
-    cursorPosition.z = e.point.z
+  onpointermove={(event) => {
+    cursorPosition.x = event.point.x
+    cursorPosition.z = event.point.z
   }}
 >
   <T.BoxGeometry args={[20, 0.1, 20]} />

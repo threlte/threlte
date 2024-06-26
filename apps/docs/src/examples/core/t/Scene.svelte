@@ -21,12 +21,13 @@
 
 <T.PerspectiveCamera
   makeDefault
-  let:ref={camera}
   position.y={10}
   position.x={10}
 >
-  <T.OrbitControls
-    args={[camera, renderer.domElement]}
-    on:change={invalidate}
-  />
+  {#snippet children({ ref: camera })}
+    <T.OrbitControls
+      args={[camera, renderer.domElement]}
+      onchange={invalidate}
+    />
+  {/snippet}
 </T.PerspectiveCamera>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HierarchicalObject, T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy, onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import {
     CanvasTexture,
     CapsuleGeometry,
@@ -11,40 +11,49 @@
     Quaternion,
     Raycaster,
     Scene,
-    type Sprite,
     Vector2,
     Vector3,
     Vector4,
     type ColorRepresentation,
-    type Intersection
+    type Intersection,
+    type Sprite
   } from 'three'
-  import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
+  import type { GizmoProps } from './Gizmo.svelte'
 
-  type $$Props = GizmoProps
-  type $$Events = GizmoEvents
-  type $$Slots = GizmoSlots
+  let {
+    renderTask,
+    animationTask,
+    turnRate = 2 * Math.PI,
+    center = [0, 0, 0],
+    verticalPlacement = 'bottom',
+    horizontalPlacement = 'right',
+    size = 128,
+    xColor = 0xff3653,
+    yColor = 0x8adb00,
+    zColor = 0x2c8fff,
+    toneMapped = false,
+    paddingX = 0,
+    paddingY = 0
+  }: GizmoProps = $props()
 
-  export let renderTask: $$Props['renderTask'] = undefined
-  export let animationTask: $$Props['animationTask'] = undefined
+  const centerVec = new Vector3()
 
-  export let turnRate: Required<$$Props>['turnRate'] = 2 * Math.PI
-  export let center: Required<$$Props>['center'] = [0, 0, 0]
-  export let verticalPlacement: Required<$$Props>['verticalPlacement'] = 'bottom'
-  export let horizontalPlacement: Required<$$Props>['horizontalPlacement'] = 'right'
-  export let size: Required<$$Props>['size'] = 128
-  export let xColor: Required<$$Props>['xColor'] = 0xff3653
-  export let yColor: Required<$$Props>['yColor'] = 0x8adb00
-  export let zColor: Required<$$Props>['zColor'] = 0x2c8fff
-  export let toneMapped: Required<$$Props>['toneMapped'] = false
-  export let paddingX: Required<$$Props>['paddingX'] = 0
-  export let paddingY: Required<$$Props>['paddingY'] = 0
-
-  $: centerVec = new Vector3(...center)
+  $effect.pre(() => {
+    centerVec.fromArray(center)
+  })
 
   const { autoRenderTask, renderer, camera, invalidate } = useThrelte()
 
   // invalidate the frame when any of the following values change
-  $: size, horizontalPlacement, verticalPlacement, toneMapped, paddingX, paddingY, invalidate()
+  $effect.pre(() => {
+    size
+    horizontalPlacement
+    verticalPlacement
+    toneMapped
+    paddingX
+    paddingY
+    invalidate()
+  })
 
   const orthoCam = new OrthographicCamera(-1.25, 1.25, 1.25, -1.25, 0, 4)
   orthoCam.position.set(0, 0, 2)
@@ -56,10 +65,9 @@
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
-      const autoClear = renderer.autoClear
+      const { autoClear, toneMapping } = renderer
       renderer.autoClear = false
       renderer.getViewport(viewport)
-      const toneMapping = renderer.toneMapping
       renderer.toneMapping = toneMapped ? renderer.toneMapping : 0
 
       const x =
@@ -93,7 +101,8 @@
   const boundingRect = renderTarget.getBoundingClientRect()
 
   clickTarget.style.position = 'absolute'
-  $: {
+
+  $effect.pre(() => {
     if (horizontalPlacement === 'right') {
       clickTarget.style.right = ''
       clickTarget.style.left = `${boundingRect.right - size - paddingX}px`
@@ -112,7 +121,7 @@
 
     clickTarget.style.height = `${size}px`
     clickTarget.style.width = `${size}px`
-  }
+  })
 
   let posX: Sprite
   let posY: Sprite
@@ -209,11 +218,10 @@
   onMount(() => {
     renderer.domElement.parentElement?.appendChild(clickTarget)
     clickTarget.addEventListener('click', handleClick)
-  })
-
-  onDestroy(() => {
-    renderer.domElement.parentElement?.removeChild(clickTarget)
-    clickTarget.removeEventListener('click', handleClick)
+    return () => {
+      renderer.domElement.parentElement?.removeChild(clickTarget)
+      clickTarget.removeEventListener('click', handleClick)
+    }
   })
 
   // Used to test which axis (pos or neg) are closer to the camera.
@@ -268,7 +276,7 @@
     return pow2
   }
 
-  $: textureSize = findClosestPow2LargerThan(size * 0.3 * renderer.getPixelRatio())
+  let textureSize = $derived(findClosestPow2LargerThan(size * 0.3 * renderer.getPixelRatio()))
 
   /**
    * Keep track of the textures to be able to dispose them when they are no
@@ -277,6 +285,7 @@
   const textures: Record<string, CanvasTexture> = {}
 
   const color = new Color()
+
   const getSpriteTexture = (size: number, colorRepresentation: ColorRepresentation, text = '') => {
     color.set(colorRepresentation)
     const key = `${color.getHexString()}-${text}`
@@ -312,8 +321,8 @@
   stemGeometry.rotateZ(Math.PI / 2)
 
   // Used to decrease atifacts of intersecting axis stems.
-  $: frontMostAxisIndex = p.indexOf(Math.max(...p))
-  $: usePolygonOffset = p.some((v) => v < 0)
+  let frontMostAxisIndex = $derived(p.indexOf(Math.max(...p)))
+  let usePolygonOffset = $derived(p.some((v) => v < 0))
 </script>
 
 <HierarchicalObject>

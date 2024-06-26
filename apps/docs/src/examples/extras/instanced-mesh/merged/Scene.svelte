@@ -30,21 +30,22 @@
   <InstancedMeshes
     castShadow
     meshes={$gltf.nodes}
-    let:components={{ Blossom, Stem }}
   >
-    {#each items as item}
-      <Flower
-        position.x={item.x}
-        position.z={item.z}
-        scale={item.scale}
-        rotation.y={(item.rotation.y * Math.PI) / 180}
-        rotation.x={(item.rotation.x * Math.PI) / 180}
-        rotation.z={(item.rotation.z * Math.PI) / 180}
-      >
-        <Blossom />
-        <Stem />
-      </Flower>
-    {/each}
+    {#snippet children({ components: { Blossom, Stem } })}
+      {#each items as item}
+        <Flower
+          position.x={item.x}
+          position.z={item.z}
+          scale={item.scale}
+          rotation.y={(item.rotation.y * Math.PI) / 180}
+          rotation.x={(item.rotation.x * Math.PI) / 180}
+          rotation.z={(item.rotation.z * Math.PI) / 180}
+        >
+          <Blossom />
+          <Stem />
+        </Flower>
+      {/each}
+    {/snippet}
   </InstancedMeshes>
 {/if}
 

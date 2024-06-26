@@ -6,16 +6,13 @@
   this component and let the parent decide on what to do with it.
 
 -->
-<script
-  lang="ts"
-  context="module"
->
+<script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Object3D } from 'three'
   import { useParent, setParent } from '../hooks/useParent'
-  import { useThrelte } from '../hooks/useThrelte'
   import { createObjectStore } from '../lib/createObjectStore'
   import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
+  import { useThrelte } from '../context/compounds/useThrelte'
 
   const useHierarchicalObject = () => {
     return {
@@ -30,25 +27,31 @@
 </script>
 
 <script lang="ts">
-  export let object: HierarchicalObjectProperties['object'] = undefined
+  let {
+    object,
+    onChildMount,
+    onChildDestroy,
+    parent = $bindable(),
+    children
+  }: HierarchicalObjectProperties & { parent: Object3D | undefined } = $props()
 
-  export let onChildMount: HierarchicalObjectProperties['onChildMount'] = undefined
   const onChildMountProxy: HierarchicalObjectProperties['onChildMount'] = (child) => {
     // maybe call provided method
     onChildMount?.(child)
   }
 
-  export let onChildDestroy: HierarchicalObjectProperties['onChildDestroy'] = undefined
   const onChildDestroyProxy: HierarchicalObjectProperties['onChildDestroy'] = (child) => {
     // maybe call provided method
     onChildDestroy?.(child)
   }
 
   const { invalidate } = useThrelte()
-
   const parentStore = useParent()
-  export let parent: Object3D | undefined = $parentStore
-  $: parent = $parentStore
+
+  parent = $parentStore
+  $effect.pre(() => {
+    parent = $parentStore
+  })
 
   /**
    * Get the parent methods …
@@ -58,6 +61,7 @@
     parentCallbacks.onChildMount?.(object)
     invalidate()
   }
+
   const objectStore = createObjectStore(object, (newObject, oldObject) => {
     if (oldObject) {
       parentCallbacks.onChildDestroy?.(oldObject)
@@ -68,7 +72,8 @@
       invalidate()
     }
   })
-  $: objectStore.set(object)
+  $effect.pre(() => objectStore.set(object))
+
   onDestroy(() => {
     if (object) {
       parentCallbacks.onChildDestroy?.(object)
@@ -92,4 +97,4 @@
   setParent(objectStore)
 </script>
 
-<slot />
+{@render children()}

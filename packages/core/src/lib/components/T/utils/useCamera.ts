@@ -1,9 +1,9 @@
 import { onDestroy } from 'svelte'
 import type { Camera, OrthographicCamera, PerspectiveCamera } from 'three'
-import { useThrelte } from '../../../hooks/useThrelte'
 import type { Size } from '../../../types'
+import { useThrelte } from '../../../context/compounds/useThrelte'
 
-const isCamera = (value: any): value is Camera => {
+export const isCamera = (value: any): value is Camera => {
   return value && value.isCamera
 }
 

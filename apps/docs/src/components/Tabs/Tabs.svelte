@@ -25,7 +25,7 @@
   export { _class as class }
 </script>
 
-<div class={c('flex w-full flex-row justify-center', _class)}>
+<div class="flex w-full flex-row justify-center {_class}">
   {#each tabs as tab}
     <button
       class={c(

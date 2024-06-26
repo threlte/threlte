@@ -5,21 +5,18 @@
     With peformance improvements inspired by:
     https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
 	*/
-  import type {
-    MeshLineGeometryEvents,
-    MeshLineGeometryProps,
-    MeshLineGeometrySlots
-  } from './MeshLineGeometry.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import type { MeshLineGeometryProps } from './MeshLineGeometry.svelte'
+  import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
 
-  type $$Props = Required<MeshLineGeometryProps>
-  type $$Events = MeshLineGeometryEvents
-  type $$Slots = MeshLineGeometrySlots
-
-  export let points: $$Props['points'] = []
-  export let shape: $$Props['none'] = 'none'
-  export let shapeFunction: $$Props['selectFunction'] = (p: number) => 1
+  let {
+    points = [],
+    shape = 'none',
+    shapeFunction = (_p: number) => 1,
+    ref = $bindable(),
+    children,
+    props
+  }: MeshLineGeometryProps = $props()
 
   let pointCount = points.length
 
@@ -46,7 +43,7 @@
     side.setX(i2, 1)
     side.setX(i2 + 1, -1)
 
-    const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
+  const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
     width.setX(i2, w)
     width.setX(i2 + 1, w)
 
@@ -129,15 +126,13 @@
     invalidate()
   }
 
-  $: setPoints(points)
-
-  const component = forwardEventHandlers()
+  $effect.pre(() => setPoints(points))
 </script>
 
 <T
   is={geometry}
-  bind:this={$component}
-  {...$$restProps}
+  bind:ref
+  {...props}
 >
-  <slot ref={geometry} />
+  {@render children?.({ ref: geometry })}
 </T>
