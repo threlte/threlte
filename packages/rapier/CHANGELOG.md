@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 2.0.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 1.0.3
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/rapier",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Components and hooks to use the Rapier physics engine in Threlte",
