@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 0.1.4
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
 ## 0.1.3
 
 ### Patch Changes
