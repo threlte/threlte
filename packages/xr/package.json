@@ -49,8 +49,6 @@
     "svelte",
     "three",
     "three.js",
-    "webgl",
-    "webgpu",
     "3d"
   ],
   "homepage": "https://threlte.xyz",
