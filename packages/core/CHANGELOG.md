@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.7
+
+### Patch Changes
+
+- c53d7a9: Split out contexts by domain
+
 ## 8.0.0-next.6
 
 ### Patch Changes
@@ -42,6 +48,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 7.3.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 7.3.0
 

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.3
+
+### Patch Changes
+
+- c53d7a9: Replace fallback slots with snippets
+
 ## 3.0.0-next.2
 
 ### Patch Changes
@@ -17,6 +23,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 2.0.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 2.0.0
 

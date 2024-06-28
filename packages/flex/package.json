@@ -3,6 +3,7 @@
   "version": "2.0.0-next.3",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "description": "Components to easily use the flexbox spec with Threlte",
   "scripts": {
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
@@ -50,6 +51,23 @@
     "three": ">=0.155"
   },
   "type": "module",
+  "keywords": [
+    "flex",
+    "threlte",
+    "svelte",
+    "three",
+    "three.js",
+    "3d"
+  ],
+  "homepage": "https://threlte.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte.git",
+    "directory": "packages/flex"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
   "exports": {
     ".": {
       "types": "./src/lib/index.ts",
