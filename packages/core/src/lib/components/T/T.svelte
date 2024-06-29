@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="Type">
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
@@ -12,8 +12,6 @@
   import { useProps } from './utils/useProps'
   import type { Props } from './types'
   import Camera from './Camera.svelte'
-
-  type Type = $$Generic
 
   type AllProps = {
     is: Type
@@ -34,7 +32,6 @@
 
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $derived(determineRef<Type>(is, args))
-  ref = internalRef
 
   const parent = useParent()
 
