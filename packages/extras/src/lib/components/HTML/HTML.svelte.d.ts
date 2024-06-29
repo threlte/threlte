@@ -1,5 +1,5 @@
 import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Camera, Group, Object3D } from 'three'
 
 export type HTMLProps = Props<Group> & {
@@ -36,6 +36,7 @@ export type HTMLProps = Props<Group> & {
   occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
   castShadow?: boolean // Cast shadow for occlusion plane
   receiveShadow?: boolean // Receive shadow for occlusion plane
+  children?: Snippet
 }
 
 export type HTMLEvents = Events<Group>
