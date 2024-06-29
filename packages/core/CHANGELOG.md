@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.8
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
 ## 8.0.0-next.7
 
 ### Patch Changes
