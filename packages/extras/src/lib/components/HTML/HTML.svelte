@@ -79,6 +79,7 @@
     ref = $bindable(),
     visible = $bindable(),
     style,
+    children,
     ...props
   }: HTMLProps = $props()
 
@@ -91,8 +92,8 @@
   let element = document.createElement(as)
   let oldZoom = 0
   let oldPosition = [0, 0]
-  let transformOuterRef: HTMLDivElement
-  let transformInnerRef: HTMLDivElement
+  let transformOuterRef: HTMLDivElement | undefined = $state()
+  let transformInnerRef: HTMLDivElement | undefined = $state()
   let isMeshSizeSet = false
 
   const occlusionMesh = new Mesh()
@@ -174,7 +175,7 @@
 
       element.style.zIndex = `${objectZIndex(group, camera.current as OrthographicCamera | PerspectiveCamera, zRange)}`
 
-      if (transform) {
+      if (transform && transformOuterRef && transformInnerRef) {
         const { isOrthographicCamera, top, left, bottom, right } =
           camera.current as OrthographicCamera
         const cameraMatrix = getCameraCSSMatrix(camera.current.matrixWorldInverse)
@@ -214,7 +215,7 @@
     }
 
     if (!isRayCastOcclusion && !isMeshSizeSet) {
-      if (transform) {
+      if (transform && transformOuterRef) {
         const el = transformOuterRef.children[0]
 
         console.log(el.clientWidth, el.clientHeight)
@@ -344,7 +345,9 @@
           class={props.class}
           style={props.style}
         >
-          <slot />
+          {#if children}
+            {@render children()}
+          {/if}
         </div>
       </div>
     </div>
@@ -359,7 +362,9 @@
       style={props.style}
       class={props.class}
     >
-      <slot />
+      {#if children}
+        {@render children()}
+      {/if}
     </div>
   {/if}
 </svelte:element>
