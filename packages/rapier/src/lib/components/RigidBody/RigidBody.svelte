@@ -37,7 +37,8 @@
     onsensorenter,
     onsensorexit,
     onsleep,
-    onwake
+    onwake,
+    children
   }: RigidBodyProps & RigidBodyEvents = $props()
 
   /**
@@ -164,5 +165,5 @@
 </script>
 
 <SceneGraphObject {object}>
-  <slot rigidBody={rigidBodyInternal} />
+  {@render children?.({ rigidBody: rigidBodyInternal })}
 </SceneGraphObject>

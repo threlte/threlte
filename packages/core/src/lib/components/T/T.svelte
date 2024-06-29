@@ -1,4 +1,5 @@
 <script lang="ts" generics="Type">
+  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
@@ -38,9 +39,6 @@
   // Create Event
   const createEvent = useCreateEvent<Type>(oncreate)
 
-  // The ref is created, emit the event
-  createEvent.updateRef(internalRef)
-
   // When "is" or "args" change, we need to create a new ref.
   $effect.pre(() => {
     if (ref === internalRef) return
@@ -51,13 +49,13 @@
     createEvent.updateRef(internalRef)
   })
 
-  const parentContext = createParentContext(internalRef)
-  $effect.pre(() => parentContext.set(internalRef))
+  const parentContext = createParentContext()
+  $effect.pre(() => parentContext.set(internalRef as { uuid: string }))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
   const plugins = usePlugins({
-    ref: internalRef,
+    ref: untrack(() => internalRef),
     props: {
       is,
       args,
@@ -68,7 +66,6 @@
       ...props
     }
   })
-  const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
   const { updateProp } = useProps()
@@ -76,7 +73,7 @@
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
-        pluginsProps
+        pluginsProps: plugins?.pluginsProps ?? []
       })
     })
   })
