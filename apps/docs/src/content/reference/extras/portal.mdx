@@ -14,22 +14,13 @@ componentSignature:
           default: 'default',
           description: 'The id of the portal to render into.',
           required: false
-        },
-        {
-          name: 'object',
-          type:
-            {
-              name: 'THREE.Object3D',
-              url: 'https://threejs.org/docs/index.html#api/en/core/Object3D'
-            },
-          required: false
         }
       ]
   }
 ---
 
 A component that renders its children as children of an object that can exist **anywhere in your Threlte application**.
-You can either provide an object that will be the parent of the children or use the prop `id` to render into a `<PortalTarget>`.
+Using the prop `id` to renders the portal into a `<PortalTarget>` of the corresponding id.
 
 <Tip type="tip">
   Although Portals are extremely helpful in certain situations, it can be hard to reason about them

@@ -34,15 +34,11 @@
 
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $derived(determineRef<Type>(is, args))
-  ref = internalRef
 
   const parent = useParent()
 
   // Create Event
   const createEvent = useCreateEvent<Type>(oncreate)
-
-  // The ref is created, emit the event
-  createEvent.updateRef(internalRef)
 
   // When "is" or "args" change, we need to create a new ref.
   $effect.pre(() => {
@@ -71,7 +67,6 @@
       ...props
     }
   })
-  const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
   const { updateProp } = useProps()
@@ -79,7 +74,7 @@
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
-        pluginsProps
+        pluginsProps: plugins?.pluginsProps ?? []
       })
     })
   })

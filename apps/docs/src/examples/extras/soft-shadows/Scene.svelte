@@ -1,14 +1,10 @@
 <script lang="ts">
   import { types } from '@theatre/core'
-  import { T, useThrelte } from '@threlte/core'
-  import { Environment, OrbitControls, Portal, SoftShadows } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { Environment, OrbitControls, SoftShadows, Helper } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
-  import type { DirectionalLightHelper } from 'three'
+  import { DirectionalLightHelper } from 'three'
   import Suzanne from './Suzanne.svelte'
-
-  const { scene } = useThrelte()
-
-  let lightHelper: DirectionalLightHelper
 </script>
 
 <T.PerspectiveCamera
@@ -24,9 +20,6 @@
 <SheetObject
   key="Light"
   props={{}}
-  onchange={() => {
-    lightHelper?.update()
-  }}
 >
   {#snippet children({ Transform, selected })}
     <Transform>
@@ -39,12 +32,10 @@
       >
         {#snippet children({ ref })}
           {#if selected}
-            <Portal object={scene}>
-              <T.DirectionalLightHelper
-                bind:ref={lightHelper}
-                args={[ref]}
-              />
-            </Portal>
+            <Helper
+              is={DirectionalLightHelper}
+              args={[ref]}
+            />
           {/if}
         {/snippet}
       </T.DirectionalLight>

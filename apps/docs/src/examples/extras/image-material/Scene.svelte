@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Suspense, interactivity } from '@threlte/extras'
+  import { OrbitControls, PortalTarget, Suspense, interactivity } from '@threlte/extras'
   import Card from './Card.svelte'
   import { textureOverrideEnabled } from './props'
   import RgbaTexture from './rgbaProcessingTexture/RgbaTexture.svelte'
@@ -29,6 +29,8 @@
     enableDamping
     enableZoom={false}
   />
+
+  <PortalTarget id="camera" />
 </T.PerspectiveCamera>
 
 {#if $textureOverrideEnabled}

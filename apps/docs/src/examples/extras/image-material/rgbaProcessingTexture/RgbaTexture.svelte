@@ -2,9 +2,9 @@
   import { useTask, useThrelte, T } from '@threlte/core'
   import { useTexture, Portal, HTML } from '@threlte/extras'
 
-  const { renderer, autoRenderTask, camera } = useThrelte()
+  const { renderer, autoRenderTask } = useThrelte()
   import { colorProcessingTexture } from '../props'
-  import { onDestroy, onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import {
     DoubleSide,
     Mesh,
@@ -12,30 +12,33 @@
     PlaneGeometry,
     Scene,
     ShaderMaterial,
-    WebGLMultipleRenderTargets
+    Texture,
+    WebGLRenderTarget
   } from 'three'
 
   import fragmentShader from './fragmentShader.glsl?raw'
   import vertexShader from './vertexShader.glsl?raw'
 
   // Multiple render targets to visualize RGBA channels.
-  const rgbaTextureTarget = new WebGLMultipleRenderTargets(256, 256, 5)
+  const rgbaTextureTarget = new WebGLRenderTarget(256, 256, { count: 5 })
 
   const scene = new Scene()
   const orthoCamera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
 
+  const uniforms = {
+    uTime: { value: 0 },
+    uAlphaTexture: { value: null as Texture | null }
+  }
+
   const shaderMaterial = new ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uAlphaTexture: { value: null }
-    },
+    uniforms,
     vertexShader,
     fragmentShader
   })
 
   const alphaTexture = useTexture('/textures/alpha.jpg')
 
-  $: shaderMaterial.uniforms.uAlphaTexture.value = $alphaTexture
+  $: uniforms.uAlphaTexture.value = $alphaTexture ?? null
 
   const quad = new Mesh(new PlaneGeometry(2, 2), shaderMaterial)
 
@@ -43,7 +46,7 @@
 
   useTask(
     (delta) => {
-      shaderMaterial.uniforms.uTime.value += delta
+      uniforms.uTime.value += delta
       renderer.setRenderTarget(rgbaTextureTarget)
       renderer.render(scene, orthoCamera)
       renderer.setRenderTarget(null)
@@ -54,17 +57,14 @@
   )
 
   onMount(() => {
-    colorProcessingTexture.set(rgbaTextureTarget.texture[0])
-  })
-
-  onDestroy(() => {
-    colorProcessingTexture.set(undefined)
+    colorProcessingTexture.set(rgbaTextureTarget.textures[0])
+    return () => colorProcessingTexture.set(undefined)
   })
 </script>
 
 <!-- VISUALIZATION OF EACH RGBA CHANNEL -->
 
-<Portal object={$camera}>
+<Portal id="camera">
   <T.Group
     position.x={-0.1}
     position.z={-0.5}
@@ -73,7 +73,7 @@
   >
     <T.Mesh>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.texture[1]}
+        map={rgbaTextureTarget.textures[1] ?? null}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -84,7 +84,7 @@
 
     <T.Mesh position.x={1}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.texture[2]}
+        map={rgbaTextureTarget.textures[2] ?? null}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -94,7 +94,7 @@
     </T.Mesh>
     <T.Mesh position.x={2}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.texture[3]}
+        map={rgbaTextureTarget.textures[3] ?? null}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
@@ -104,7 +104,7 @@
     </T.Mesh>
     <T.Mesh position.x={3}>
       <T.MeshBasicMaterial
-        map={rgbaTextureTarget.texture[4]}
+        map={rgbaTextureTarget.textures[4] ?? null}
         side={DoubleSide}
       />
       <T.PlaneGeometry />
