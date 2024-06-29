@@ -73,7 +73,7 @@
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
-        pluginsProps: plugins?.pluginsProps ?? []
+        pluginsProps: plugins?.pluginsProps
       })
     })
   })
