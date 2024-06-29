@@ -10,7 +10,6 @@ export type HTMLProps = Props<Group> & {
     size: { width: number; height: number }
   ) => [number, number]
   eps?: number
-  occlude?: boolean | Object3D[]
   zIndexRange?: [number, number]
   sprite?: boolean
   pointerEvents?:
@@ -30,6 +29,13 @@ export type HTMLProps = Props<Group> & {
   distanceFactor?: number
   as?: keyof HTMLElementTagNameMap
   portal?: HTMLElement
+
+  // Occlusion based off work by Jerome Etienne and James Baicoianu
+  // https://www.youtube.com/watch?v=ScZcUEDGjJI
+  // as well as Joe Pea in CodePen: https://codepen.io/trusktr/pen/RjzKJx
+  occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
+  castShadow?: boolean // Cast shadow for occlusion plane
+  receiveShadow?: boolean // Receive shadow for occlusion plane
 }
 
 export type HTMLEvents = Events<Group>

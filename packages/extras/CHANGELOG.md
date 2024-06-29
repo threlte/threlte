@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.11
+
+### Patch Changes
+
+- 8508b11: Add drei occlusion features to HTML component
+
 ## 9.0.0-next.10
 
 ### Patch Changes
