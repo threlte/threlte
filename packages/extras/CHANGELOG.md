@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.12
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
 ## 9.0.0-next.11
 
 ### Patch Changes
