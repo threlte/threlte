@@ -1,22 +1,21 @@
 import { getContext, setContext } from 'svelte'
 import { type Writable } from 'svelte/store'
 import { createObjectStore } from '../lib/createObjectStore'
-import type { MaybeInstance } from '../components/T/types'
 
-export type ThrelteParentContext<T> = Writable<T | undefined>
+export type ThrelteParentContext = Writable<unknown>
 
 const key = Symbol('threlte-hierarchical-parent-context')
 
-export const useParent = <T>() => {
-  return getContext<ThrelteParentContext<T>>(key)
+export const useParent = () => {
+  return getContext<ThrelteParentContext>(key)
 }
 
-export const setParent = <T>(context: ThrelteParentContext<T>) => {
+export const setParent = (context: ThrelteParentContext) => {
   return setContext(key, context)
 }
 
-export const createParentContext = <T>(ref: MaybeInstance<T> | undefined): Writable<T> => {
-  const context = createObjectStore(ref as MaybeInstance<T> & { uuid: string })
+export const createParentContext = <T extends { uuid: string } | undefined>(): Writable<T> => {
+  const context = createObjectStore<T>()
   setContext(key, context)
   return context
 }

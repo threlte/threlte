@@ -218,7 +218,6 @@
       if (transform && transformOuterRef) {
         const el = transformOuterRef.children[0]
 
-        console.log(el.clientWidth, el.clientHeight)
         if (el?.clientWidth && el?.clientHeight) {
           const { isOrthographicCamera } = camera.current as OrthographicCamera
 

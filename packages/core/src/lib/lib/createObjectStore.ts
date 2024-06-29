@@ -17,7 +17,7 @@ import { writable, type Updater, type Writable } from 'svelte/store'
  * @returns store
  */
 export function createObjectStore<T extends { uuid: string } | undefined>(
-  object: T,
+  object?: T,
   onChange?: (newObject: T, oldObject: T) => void
 ): Writable<T>
 export function createObjectStore<T extends { uuid: string }>(
@@ -28,8 +28,8 @@ export function createObjectStore<T extends { uuid: string } | undefined>(
   object: T,
   onChange?: (newObject: T, oldObject: T) => void
 ): Writable<T> {
-  const objectStore = writable(object)
-  let unwrappedObject = object
+  const objectStore = writable<T>(object)
+  let unwrappedObject: T = object
   const unsubscribeObjectStore = objectStore.subscribe((o) => (unwrappedObject = o))
   onDestroy(unsubscribeObjectStore)
 
