@@ -8,7 +8,6 @@
     SkinnedMesh,
     InstancedMesh,
     Mesh,
-    type BufferGeometry,
     BackSide
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -50,47 +49,30 @@
     fragmentShader
   })
 
-  let oldAngle = 0
-  let oldGeometry: BufferGeometry
+  const parent = useParent<Mesh | InstancedMesh | SkinnedMesh>()
 
-  let mesh: Mesh | SkinnedMesh | InstancedMesh
-
-  const parent = useParent()
-
-  $effect.pre(() => {
-    const parentMesh = $parent as undefined | Mesh | InstancedMesh | SkinnedMesh
-
-    if (parentMesh?.geometry !== undefined) {
-      if (oldAngle !== angle || oldGeometry !== parentMesh.geometry) {
-        oldAngle = angle
-        oldGeometry = parentMesh.geometry
-
-        if (mesh) {
-          if (angle) mesh.geometry.dispose()
-          group.remove(mesh)
-        }
-
-        const geometry = angle ? toCreasedNormals(parentMesh.geometry, angle) : parentMesh.geometry
-
-        if ('skeleton' in parentMesh) {
-          const nextMesh = new SkinnedMesh(geometry, material)
-          nextMesh.bind(parentMesh.skeleton, parentMesh.bindMatrix)
-          mesh = nextMesh
-        } else if ('isInstancedMesh' in parentMesh) {
-          const nextMesh = new InstancedMesh(geometry, material, parentMesh.count)
-          nextMesh.instanceMatrix = parentMesh.instanceMatrix
-          mesh = nextMesh
-        } else {
-          mesh = new Mesh(geometry, material)
-        }
-
-        mesh.renderOrder = renderOrder
-      }
+  let parentMesh = $derived($parent)
+  let geometry = $derived(parentMesh ? toCreasedNormals(parentMesh.geometry, angle) : undefined)
+  let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
+    if (parentMesh === undefined) {
+      return
     }
+
+    if ('skeleton' in parentMesh) {
+      const nextMesh = new SkinnedMesh()
+      nextMesh.bind(parentMesh.skeleton, parentMesh.bindMatrix)
+      return nextMesh
+    } else if ('isInstancedMesh' in parentMesh) {
+      const nextMesh = new InstancedMesh(undefined, undefined, parentMesh.count)
+      nextMesh.instanceMatrix = parentMesh.instanceMatrix
+      return nextMesh
+    }
+
+    return new Mesh()
   })
 
   $effect.pre(() => {
-    mesh.renderOrder = renderOrder
+    if (mesh) mesh.renderOrder = renderOrder
   })
   $effect.pre(() => {
     material.transparent = transparent
@@ -126,6 +108,9 @@
   bind:ref
   {...props}
 >
-  <T is={mesh} />
+  <T is={mesh}>
+    <T is={geometry} />
+    <T is={material} />
+  </T>
   {@render children?.({ ref: group })}
 </T>
