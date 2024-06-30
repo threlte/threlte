@@ -1,10 +1,11 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import { World } from '@threlte/rapier'
+  import { Button, Checkbox, Folder, Pane, Slider, Text, Textarea } from 'svelte-tweakpane-ui'
   import { WebGLRenderer } from 'three'
   import Scene from './Scene.svelte'
-  import { Checkbox, Pane, Slider, Text, Separator } from 'svelte-tweakpane-ui'
 
+  let resets = $state(0)
   let iteration = $state(1)
   let useVaryingFramerate = $state(false)
   let rate = $state(30)
@@ -22,13 +23,11 @@
   const sleeping = () => {
     if (!threlteCanvas || !otherCanvas || !otherCanvasCtx) return
 
-    // Set the canvas dimensions only once
     if (otherCanvas.width !== threlteCanvas.width || otherCanvas.height !== threlteCanvas.height) {
       otherCanvas.width = threlteCanvas.width
       otherCanvas.height = threlteCanvas.height
     }
 
-    // otherCanvasCtx.globalAlpha = 0.1 // Set the transparency level (0.0 to 1.0)
     otherCanvasCtx.globalAlpha = 0.2
     otherCanvasCtx.drawImage(threlteCanvas, 0, 0)
 
@@ -39,37 +38,50 @@
 <Pane
   position="fixed"
   title="Framerate"
+  width={330}
 >
-  <Checkbox
-    bind:value={useVaryingFramerate}
-    label="Use Varying Framerate"
-  />
-  <Slider
-    disabled={useVaryingFramerate}
-    label="Framerate"
-    bind:value={rate}
-    min={5}
-    max={200}
-    step={1}
-  />
+  <Folder title="Settings">
+    <Checkbox
+      bind:value={useVaryingFramerate}
+      label="Use Varying Framerate"
+    />
+    <Slider
+      disabled={useVaryingFramerate}
+      label="Framerate"
+      bind:value={rate}
+      min={5}
+      max={200}
+      step={1}
+    />
 
-  <Separator />
+    <Button
+      label=" "
+      on:click={() => {
+        resets += 1
+        iteration = 1
+      }}
+      title="Reset"
+    />
+  </Folder>
 
-  <Text
-    value={`<World framerate=${framerate === 'varying' ? '"varying"' : `{${framerate}}`}>`}
-    live={false}
-    disabled
-  />
-  <Text
-    label="Iteration"
-    value={iteration.toString()}
-    live={false}
-    disabled
-  />
+  <Folder title="Diagnostics">
+    <Textarea
+      value={`<World framerate=${framerate === 'varying' ? '"varying"' : `{${framerate}}`}>\n  <Scene />\n<World>`}
+      live={false}
+      rows={3}
+      disabled
+    />
+    <Text
+      label="Iteration"
+      value={iteration.toString()}
+      live={false}
+      disabled
+    />
+  </Folder>
 </Pane>
 
 <main>
-  {#key `${iteration}-${framerate}`}
+  {#key `${iteration}-${resets}-${framerate}`}
     <div
       class="threlte"
       use:getThrelteCanvas
@@ -91,7 +103,7 @@
     </div>
   {/key}
 
-  {#key framerate}
+  {#key `${resets}-${framerate}`}
     <canvas bind:this={otherCanvas}></canvas>
   {/key}
 </main>
