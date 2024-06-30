@@ -106,7 +106,8 @@
     removeProps
   })
 
-  let values = $sheetObject?.value
+  let values = $state($sheetObject?.value)
+
   watch(sheetObject, (sheetObject) => {
     return sheetObject.onValuesChange((newValues) => {
       onchange?.(newValues)

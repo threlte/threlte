@@ -22,7 +22,8 @@
     rawSerializationPipeline,
     rawDebugRenderPipeline,
     framerate,
-    autoStart = true
+    autoStart = true,
+    children
   }: WorldProps = $props()
 
   const rapierContext = createRapierContext(
@@ -64,4 +65,4 @@
   })
 </script>
 
-<slot />
+{@render children?.()}
