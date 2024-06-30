@@ -53,10 +53,7 @@
     getViewportFactor
   } from './utils'
   import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
-
-  type $$Events = HTMLEvents
-  type $$Slots = HTMLSlots
+  import type { HTMLProps } from './HTML.svelte'
 
   let {
     eps = 0.001,
@@ -159,8 +156,8 @@
       }
 
       if (previouslyVisible !== visible) {
-        if (props.$$events.visibilitychange) {
-          props.$$events.visibilitychange(visible)
+        if (props.onvisibilitychange) {
+          props.onvisibilitychange(visible)
         } else {
           element.style.display = visible ? 'block' : 'none'
         }
@@ -264,7 +261,7 @@
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement?.parentElement
+    const target = portal ?? renderer.domElement.parentElement
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return

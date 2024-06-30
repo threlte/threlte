@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent, type Snippet } from 'svelte'
 import type { Camera, Group, Object3D } from 'three'
 
@@ -36,15 +36,10 @@ export type HTMLProps = Props<Group> & {
   occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
   castShadow?: boolean // Cast shadow for occlusion plane
   receiveShadow?: boolean // Receive shadow for occlusion plane
+
   children?: Snippet
+
+  onvisibilitychange?: (visible: boolean) => void
 }
 
-export type HTMLEvents = Events<Group>
-
-export type HTMLSlots = {
-  threlte: Slots<Group>['default']
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  default: {}
-}
-
-export default class HTML extends SvelteComponent<HTMLProps, HTMLEvents, HTMLSlots> {}
+export default class HTML extends SvelteComponent<HTMLProps> {}
