@@ -33,12 +33,12 @@ For most cases, this is still the best choice since it doesn't require you to
 think about the aspects of handling different framerates for rendering and
 physics.
 
-Sometimes however, if you're developing a game or if you wish to have more
-controls art directing the outcome, you want a physics simulation to **always
-yield the same result**, e.g. to be **deterministic**. In this case, you can set the
-`framerate` prop to a fixed number. A fixed framerate of `50` for example will
-_step_ the physics simulation 50 times per second with a delta of exactly `1 /
-50 = 0.02` seconds. The following example illustrates the difference:
+Sometimes, however, whether you're developing a game or wish to have more control art
+directing the outcome, you want a physics simulation to **always yield the same
+result**, e.g. to be **deterministic**. In this case, you can set the `framerate`
+prop to a fixed number. A fixed framerate of `50` for example will _step_ the
+physics simulation 50 times per second with a delta of exactly `1 / 50 = 0.02`
+seconds. The following example illustrates the difference:
 
 <Example
   path="rapier/framerate"
