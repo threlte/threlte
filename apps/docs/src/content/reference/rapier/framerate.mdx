@@ -25,19 +25,20 @@ Unlucky for us, the time delta passed to the callback of `requestAnimationFrame`
 is not the same for each frame and varies depending on several factors such as
 the refresh rate of the monitor and the general load of your computer or
 application. When using a `varying` framerate, this time delta is used to
-_advance_ the physics simulation. This implies that realistically no two
+_advance the physics simulation_. This implies that realistically no two
 executions of the same physics simulation will yield the same result. In short:
-it's _not deterministic_.
+it's **not deterministic**.
 
 For most cases, this is still the best choice since it doesn't require you to
 think about the aspects of handling different framerates for rendering and
 physics.
 
-Sometimes however, you want a physics simulation to always yield the same
-result, e.g. to be _deterministic_. In this case, you can set the `framerate`
-prop to a fixed number. A fixed framerate of `50` for example will _step_ the
-physics simulation 50 times per second with a delta of exactly `1 / 50 = 0.02`
-seconds. The following example illustrates the difference:
+Sometimes however, if you're developing a game or if you wish to have more
+controls art directing the outcome, you want a physics simulation to **always
+yield the same result**, e.g. to be **deterministic**. In this case, you can set the
+`framerate` prop to a fixed number. A fixed framerate of `50` for example will
+_step_ the physics simulation 50 times per second with a delta of exactly `1 /
+50 = 0.02` seconds. The following example illustrates the difference:
 
 <Example
   path="rapier/framerate"
