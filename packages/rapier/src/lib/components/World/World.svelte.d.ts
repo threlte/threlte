@@ -18,6 +18,8 @@ import type { Vector3 } from 'three'
 import type { Key, Stage } from '@threlte/core'
 
 export type WorldProps = {
+  framerate?: number | 'varying'
+  autoStart?: boolean
   gravity?: Parameters<Vector3['set']>
   rawIntegrationParameters?: RawIntegrationParameters
   rawIslands?: RawIslandManager
@@ -33,9 +35,8 @@ export type WorldProps = {
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline
   stage?: Key | Stage
-
   children?: Snippet
-  fallback?: Snippet
+  fallback?: Snippet<[error: any]>
 }
 
 export default class World extends SvelteComponent<WorldProps> {}

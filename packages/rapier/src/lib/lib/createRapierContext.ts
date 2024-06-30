@@ -7,10 +7,16 @@ import type {
 import RAPIER from '@dimforge/rapier3d-compat'
 import { readable, writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import type { ColliderEvents, RigidBodyEvents } from '../types/types'
+import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
+import { currentWritable } from '@threlte/core'
 
-export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
-  const world = new RAPIER.World(...args)
+export const createRapierContext = (
+  worldArgs: ConstructorParameters<typeof RAPIER.World>,
+  options: {
+    framerate?: Framerate
+  }
+): RapierContext => {
+  const world = new RAPIER.World(...worldArgs)
 
   const colliderObjects = new Map<ColliderHandle, Object3D>()
   const rigidBodyObjects = new Map<RigidBodyHandle, Object3D>()
@@ -82,6 +88,8 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     debug: writable(false),
     pause,
     resume,
-    paused: readable(false)
+    paused: readable(false),
+    framerate: currentWritable(options.framerate ?? 'varying'),
+    simulationOffset: 1
   }
 }

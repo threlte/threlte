@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { World } from '$lib'
   import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
   import { WebGLRenderer } from 'three'
-  import ReqAnim from './ReqAnim.svelte'
   import Scene from './Scene.svelte'
+  import { Checkbox, Pane, Slider, Text, Separator } from 'svelte-tweakpane-ui'
 
   let iteration = $state(1)
-  let framerate: 30 | 'varying' = $state('varying')
+  let useVaryingFramerate = $state(false)
+  let rate = $state(30)
+  let framerate = $derived<number | 'varying'>(useVaryingFramerate ? 'varying' : rate)
 
   let threlteCanvas = $state<HTMLCanvasElement>()
   let otherCanvas = $state<HTMLCanvasElement>()
@@ -34,23 +36,44 @@
   }
 </script>
 
+<Pane
+  position="fixed"
+  title="Framerate"
+>
+  <Checkbox
+    bind:value={useVaryingFramerate}
+    label="Use Varying Framerate"
+  />
+  <Slider
+    disabled={useVaryingFramerate}
+    label="Framerate"
+    bind:value={rate}
+    min={5}
+    max={200}
+    step={1}
+  />
+
+  <Separator />
+
+  <Text
+    value={`<World framerate=${framerate === 'varying' ? '"varying"' : `{${framerate}}`}>`}
+    live={false}
+    disabled
+  />
+  <Text
+    label="Iteration"
+    value={iteration.toString()}
+    live={false}
+    disabled
+  />
+</Pane>
+
 <main>
-  <!-- <ReqAnim /> -->
-
-  <div class="meta">
-    <button on:click={() => (framerate = framerate === 'varying' ? 30 : 'varying')}>
-      Use {framerate === 'varying' ? 'fixed' : 'varying'} framerate
-    </button>
-    <span>
-      Iteration: {iteration}
-    </span>
-    <span>
-      Framerate: {framerate === 'varying' ? 'varying' : `${framerate} (fixed)`}
-    </span>
-  </div>
-
   {#key `${iteration}-${framerate}`}
-    <div class="threlte" use:getThrelteCanvas>
+    <div
+      class="threlte"
+      use:getThrelteCanvas
+    >
       <Canvas
         createRenderer={(canvas) => {
           return new WebGLRenderer({
@@ -82,15 +105,6 @@
   main {
     height: 100dvh;
     position: relative;
-  }
-
-  div.meta {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 
   div.threlte,
