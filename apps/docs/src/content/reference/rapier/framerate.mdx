@@ -4,28 +4,30 @@ category: '@threlte/rapier'
 name: 'About Framerate'
 ---
 
+import frameRate1 from './framerate-1.svg?url'
+import frameRate2 from './framerate-2.svg?url'
+
 Threlte's `<World>` component has a `framerate` prop that can be used to control
 the framerate of the physics simulation.
 
 ## About JavaScript Timing
 
-By default, the physics framerate is set to vary depending on the time delta
+By default, the physics framerate is set to vary depending on the timestamp
 passed as the argument to the callback of `requestAnimationFrame`. Take this
 trivial example:
 
 ```ts
-const render = (delta: number) => {
-  console.log(delta)
+const render = (time: number) => {
+  console.log(time)
   requestAnimationFrame(render)
 }
 requestAnimationFrame(render)
 ```
 
-Unlucky for us, the time delta passed to the callback of `requestAnimationFrame`
-is not the same for each frame and varies depending on several factors such as
-the refresh rate of the monitor and the general load of your computer or
-application. When using a `varying` framerate, this time delta is used to
-_advance the physics simulation_. This implies that realistically no two
+Unlucky for us, the delta `time` between frames varies depending on several
+factors such as the refresh rate of the monitor and the general load of your
+computer or application. When using a `varying` framerate, this time delta is
+used to _advance the physics simulation_. This means that realistically no two
 executions of the same physics simulation will yield the same result. In short:
 it's **not deterministic**.
 
@@ -45,3 +47,50 @@ seconds. The following example illustrates the difference:
   hideCode
   hideStackblitz
 />
+
+## Using a Fixed Framerate
+
+In order to efficiently use a fixed framerate, it's important to understand how
+Threlte is able to advance the physics simulation in a deterministic fashion
+while keeping the visual output smooth and in sync.
+
+First, let's have a look at the timing of the `requestAnimationFrame` API:
+
+<img
+  src={frameRate1}
+  width="100%"
+  alt="Frame rate 1"
+/>
+
+In this example we're looking at two invokations of `requestAnimationFrame` and
+the advancement of the physics simulation. Invokation `A` receives a delta of
+16.35ms whereas invokation `B` receives a delta of 16.1ms.
+
+In order to use a stable and fixed delta to advance the physics simulation,
+Threlte is making use of [the scheduler's
+ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage)
+to run the tasks of a stage multiple times per frame and with a fixed delta.
+
+With a fixed frame rate the physics simulation runs **ahead of the visual
+output** and visual object state is rolled back linearly to where the object
+should be at the time of the render.
+
+<img
+  src={frameRate2}
+  width="100%"
+  alt="Frame rate 2"
+/>
+
+In this example, the physics simulation is advanced 4 times as part of
+`requestAnimationFrame` **A**. It runs **ahead of the visual output.** After
+advancing the physics simulation, the visual state of the objects is rolled back
+from 20ms to 16.35ms while internally retaining the physics state of after the
+4th simulation step.
+
+The simulation is then advancing 3 times as part of `requestAnimationFrame`
+**B** in order to slightly run ahead of the render time and rolled back
+accordingly.
+
+## `usePhysicsTask` and a Fixed Framerate
+
+Use the hook `usePhysicsTask` to interact with the physics simulation.
