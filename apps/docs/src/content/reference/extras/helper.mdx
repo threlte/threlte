@@ -1,0 +1,33 @@
+---
+order: 9.2
+category: '@threlte/extras'
+name: <Helper>
+sourcePath: 'packages/extras/src/lib/components/Helper/Helper.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      { type: 'Object3D', url: 'https://threejs.org/docs/index.html?q=objec#api/en/core/Object3D' }
+  }
+---
+
+A declarative interface for Three.js helper classes. `<Helper>` provides the following behaviors:
+
+- It will add the helper passed to it directly to the scene.
+- It will call an `update()` method of any helper class passed to it.
+- It will traverse the helper and prevent raycasting to it.
+
+### Example
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Helper } from '@threlte/extras'
+</script>
+
+<T.DirectionalLight>
+  {#snippet children({ ref })}
+    <Helper is={DirectionalLightHelper} args={[ref]}>
+  {/snippet}
+</T.DirectionalLight>
+```
