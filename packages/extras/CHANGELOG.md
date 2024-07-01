@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.0.0-next.13
+
+### Patch Changes
+
+- e4bf75c: Remove $events reference in HTML component
+
+## 9.0.0-next.12
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
 ## 9.0.0-next.11
 
 ### Patch Changes

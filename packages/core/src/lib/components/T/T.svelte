@@ -1,4 +1,5 @@
-<script lang="ts">
+<script lang="ts" generics="Type">
+  import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
@@ -12,8 +13,6 @@
   import { useProps } from './utils/useProps'
   import type { Props } from './types'
   import Camera from './Camera.svelte'
-
-  type Type = $$Generic
 
   type AllProps = {
     is: Type
@@ -50,13 +49,13 @@
     createEvent.updateRef(internalRef)
   })
 
-  const parentContext = createParentContext(internalRef)
-  $effect.pre(() => parentContext.set(internalRef))
+  const parentContext = createParentContext()
+  $effect.pre(() => parentContext.set(internalRef as { uuid: string }))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
   const plugins = usePlugins({
-    ref: internalRef,
+    ref: untrack(() => internalRef),
     props: {
       is,
       args,
@@ -74,7 +73,7 @@
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
-        pluginsProps: plugins?.pluginsProps ?? []
+        pluginsProps: plugins?.pluginsProps
       })
     })
   })

@@ -20,7 +20,8 @@
     rawPhysicsPipeline,
     rawSerializationPipeline,
     rawDebugRenderPipeline,
-    stage
+    stage,
+    children
   }: WorldProps = $props()
 
   const rapierContext = createRapierContext(
@@ -56,4 +57,4 @@
   })
 </script>
 
-<slot />
+{@render children?.()}

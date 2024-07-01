@@ -53,10 +53,7 @@
     getViewportFactor
   } from './utils'
   import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLEvents, HTMLProps, HTMLSlots } from './HTML.svelte'
-
-  type $$Events = HTMLEvents
-  type $$Slots = HTMLSlots
+  import type { HTMLProps } from './HTML.svelte'
 
   let {
     eps = 0.001,
@@ -79,6 +76,7 @@
     ref = $bindable(),
     visible = $bindable(),
     style,
+    children,
     ...props
   }: HTMLProps = $props()
 
@@ -91,8 +89,8 @@
   let element = document.createElement(as)
   let oldZoom = 0
   let oldPosition = [0, 0]
-  let transformOuterRef: HTMLDivElement
-  let transformInnerRef: HTMLDivElement
+  let transformOuterRef: HTMLDivElement | undefined = $state()
+  let transformInnerRef: HTMLDivElement | undefined = $state()
   let isMeshSizeSet = false
 
   const occlusionMesh = new Mesh()
@@ -158,8 +156,8 @@
       }
 
       if (previouslyVisible !== visible) {
-        if (props.$$events.visibilitychange) {
-          props.$$events.visibilitychange(visible)
+        if (props.onvisibilitychange) {
+          props.onvisibilitychange(visible)
         } else {
           element.style.display = visible ? 'block' : 'none'
         }
@@ -174,7 +172,7 @@
 
       element.style.zIndex = `${objectZIndex(group, camera.current as OrthographicCamera | PerspectiveCamera, zRange)}`
 
-      if (transform) {
+      if (transform && transformOuterRef && transformInnerRef) {
         const { isOrthographicCamera, top, left, bottom, right } =
           camera.current as OrthographicCamera
         const cameraMatrix = getCameraCSSMatrix(camera.current.matrixWorldInverse)
@@ -214,10 +212,9 @@
     }
 
     if (!isRayCastOcclusion && !isMeshSizeSet) {
-      if (transform) {
+      if (transform && transformOuterRef) {
         const el = transformOuterRef.children[0]
 
-        console.log(el.clientWidth, el.clientHeight)
         if (el?.clientWidth && el?.clientHeight) {
           const { isOrthographicCamera } = camera.current as OrthographicCamera
 
@@ -264,7 +261,7 @@
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement?.parentElement
+    const target = portal ?? renderer.domElement.parentElement
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return
@@ -344,7 +341,9 @@
           class={props.class}
           style={props.style}
         >
-          <slot />
+          {#if children}
+            {@render children()}
+          {/if}
         </div>
       </div>
     </div>
@@ -359,7 +358,9 @@
       style={props.style}
       class={props.class}
     >
-      <slot />
+      {#if children}
+        {@render children()}
+      {/if}
     </div>
   {/if}
 </svelte:element>
