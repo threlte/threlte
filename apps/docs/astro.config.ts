@@ -6,7 +6,6 @@ import rehypeSlug from 'rehype-slug'
 import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
 
-// https://astro.build/config
 import tailwind from '@astrojs/tailwind'
 
 // https://astro.build/config
@@ -15,11 +14,13 @@ import svelte from '@astrojs/svelte'
 
 // https://astro.build/config
 import mdx from '@astrojs/mdx'
-
+import starlight from '@astrojs/starlight'
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
 }
+
+// https://astro.build/config
 
 // https://astro.build/config
 export default defineConfig({
@@ -46,10 +47,16 @@ export default defineConfig({
         postcss: true
       })
     }),
+    preact({
+      compat: true,
+      include: ['**/*.tsx']
+    }),
+    starlight({
+      title: 'Threlte'
+    }),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    })
   ],
   output: 'static',
   vite: {
