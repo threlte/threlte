@@ -308,18 +308,15 @@ export const useFrameHandler = (ctx: RapierContext, autoStart: boolean) => {
         tempObject.position.copy(userData.currentPosition)
         tempObject.quaternion.copy(userData.currentQuaternion)
       } else {
-        const lerpedPosition = userData.lastPosition
-          .clone()
+        tempObject.position
+          .copy(userData.lastPosition)
           .lerp(userData.currentPosition, ctx.simulationOffset)
-        const lerpedQuaternion = userData.lastQuaternion
-          .clone()
+        tempObject.quaternion
+          .copy(userData.lastQuaternion)
           .slerp(userData.currentQuaternion, ctx.simulationOffset)
-
-        tempObject.position.copy(lerpedPosition)
-        tempObject.quaternion.copy(lerpedQuaternion)
       }
 
-      // Scale
+      // Rapier has no concept of scale, so we use the mesh's scale
       mesh.getWorldScale(tempVector3)
       tempObject.scale.copy(tempVector3)
 
