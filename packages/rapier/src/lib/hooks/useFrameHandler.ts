@@ -65,10 +65,10 @@ export const useFrameHandler = (ctx: RapierContext, autoStart: boolean) => {
 
   const eventQueue = new EventQueue(false)
 
-  usePhysicsTask((delta, { framerate }) => {
+  usePhysicsTask((delta) => {
     // Set timestep to current delta, to allow for variable frame rates
     // We cap the delta at 100, so that the physics simulation doesn't get wild
-    if (framerate.current === 'varying') {
+    if (ctx.framerate.current === 'varying') {
       world.timestep = Math.min(delta, 0.1)
     } else {
       world.timestep = delta
@@ -300,20 +300,20 @@ export const useFrameHandler = (ctx: RapierContext, autoStart: boolean) => {
     })
   })
 
-  usePhysicsRenderTask((_, { simulationOffset, framerate }) => {
+  usePhysicsRenderTask(() => {
     ctx.rigidBodyObjects.forEach((mesh) => {
       if (!objectHasPhysicsUserData(mesh)) return
       const userData = mesh.userData.physics
-      if (framerate.current === 'varying') {
+      if (ctx.framerate.current === 'varying') {
         tempObject.position.copy(userData.currentPosition)
         tempObject.quaternion.copy(userData.currentQuaternion)
       } else {
         const lerpedPosition = userData.lastPosition
           .clone()
-          .lerp(userData.currentPosition, simulationOffset)
+          .lerp(userData.currentPosition, ctx.simulationOffset)
         const lerpedQuaternion = userData.lastQuaternion
           .clone()
-          .slerp(userData.currentQuaternion, simulationOffset)
+          .slerp(userData.currentQuaternion, ctx.simulationOffset)
 
         tempObject.position.copy(lerpedPosition)
         tempObject.quaternion.copy(lerpedQuaternion)

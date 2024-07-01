@@ -10,7 +10,7 @@ import frameRate2 from './framerate-2.svg?url'
 Threlte's `<World>` component has a `framerate` prop that can be used to control
 the framerate of the physics simulation.
 
-## About JavaScript Timing
+## `requestAnimationFrame` Timing
 
 By default, the physics framerate is set to vary depending on the timestamp
 passed as the argument to the callback of `requestAnimationFrame`. Take this
@@ -24,23 +24,28 @@ const render = (time: number) => {
 requestAnimationFrame(render)
 ```
 
-Unlucky for us, the delta `time` between frames varies depending on several
+Unlucky for us, the time delta between frames varies depending on several
 factors such as the refresh rate of the monitor and the general load of your
 computer or application. When using a `varying` framerate, this time delta is
-used to _advance the physics simulation_. This means that realistically no two
-executions of the same physics simulation will yield the same result. In short:
-it's **not deterministic**.
+used to _advance the physics simulation_ and while you would think that this
+wouldn't make much of a difference, computers are really bad at floating point
+arithmetic (`console.log(0.1 + 0.2)`): Realistically no two executions of the
+same physics simulation will yield the same result. In short: it's **not
+deterministic**.
 
-For most cases, this is still the best choice since it doesn't require you to
-think about the aspects of handling different framerates for rendering and
-physics.
+For most applications, this is still the best choice since it doesn't require
+you to think about the aspects of handling different framerates for physics and
+rendering.
 
-Sometimes, however, whether you're developing a game or wish to have more control art
-directing the outcome, you want a physics simulation to **always yield the same
-result**, e.g. to be **deterministic**. In this case, you can set the `framerate`
-prop to a fixed number. A fixed framerate of `50` for example will _step_ the
-physics simulation 50 times per second with a delta of exactly `1 / 50 = 0.02`
-seconds. The following example illustrates the difference:
+Sometimes, however, whether you're developing a game or wish to have more
+control art directing the outcome, you want a physics simulation to **always
+yield the same result**, e.g. to be **deterministic**. In this case, you can set
+the `framerate` prop to a fixed number. A fixed framerate of `50` for example
+will _step_ the physics simulation 50 times per second with a delta of exactly
+`1 / 50 = 0.02` seconds – no matter the timestamp passed to
+`requestAnimationFrame`.
+
+The following example illustrates the difference:
 
 <Example
   path="rapier/framerate"
@@ -48,7 +53,7 @@ seconds. The following example illustrates the difference:
   hideStackblitz
 />
 
-## Using a Fixed Framerate
+## Fixed Framerate
 
 In order to efficiently use a fixed framerate, it's important to understand how
 Threlte is able to advance the physics simulation in a deterministic fashion
@@ -62,18 +67,18 @@ First, let's have a look at the timing of the `requestAnimationFrame` API:
   alt="Frame rate 1"
 />
 
-In this example we're looking at two invokations of `requestAnimationFrame` and
-the advancement of the physics simulation. Invokation `A` receives a delta of
-16.35ms whereas invokation `B` receives a delta of 16.1ms.
+In this example we're looking at two invokations of `requestAnimationFrame`.
 
-In order to use a stable and fixed delta to advance the physics simulation,
-Threlte is making use of [the scheduler's
-ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage)
-to run the tasks of a stage multiple times per frame and with a fixed delta.
+- **A** receives a delta of 16.35ms
+- **B** receives a delta of 16.1ms
 
-With a fixed frame rate the physics simulation runs **ahead of the visual
-output** and visual object state is rolled back linearly to where the object
-should be at the time of the render.
+<Tip type="info">
+  Threlte is making use of [the scheduler's
+  ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the
+  tasks of a stage multiple times per frame and with a fixed delta.
+</Tip>
+
+We'd like to advance the physics simulation 200 times per second, so 5ms per step.
 
 <img
   src={frameRate2}
@@ -82,15 +87,47 @@ should be at the time of the render.
 />
 
 In this example, the physics simulation is advanced 4 times as part of
-`requestAnimationFrame` **A**. It runs **ahead of the visual output.** After
-advancing the physics simulation, the visual state of the objects is rolled back
-from 20ms to 16.35ms while internally retaining the physics state of after the
-4th simulation step.
+`requestAnimationFrame` **A**. The simulation then runs **ahead of the visual
+output.** After advancing the physics simulation, the visual state of the
+objects is rolled back from 20ms to 16.35ms while internally maintaining the
+physics state of after the 4th simulation step.
 
-The simulation is then advancing 3 times as part of `requestAnimationFrame`
-**B** in order to slightly run ahead of the render time and rolled back
-accordingly.
+This cycle repeats in the next frame **B**: The simulation is advanced 3 times
+as part of `requestAnimationFrame` **B** in order to slightly run ahead of the
+render time and subsequently rolled back to match the time of the render.
 
-## `usePhysicsTask` and a Fixed Framerate
+## `usePhysicsTask`
 
-Use the hook `usePhysicsTask` to interact with the physics simulation.
+Use the hook `usePhysicsTask` to interact with the physics simulation. Depending
+on your choice of framerate the provided callback will be called differently:
+
+### Varying Framerate
+
+When you're using a varying framerate for your physics simulation, the hook
+essentially behaves like a regular `useTask` with the benefit that it's added to
+the physics stage automatically.
+
+```svelte
+<World framerate="varying">
+```
+
+```ts
+usePhysicsTask((delta) => {
+  console.log(delta) // ~0.016
+})
+```
+
+### Fixed Framerate
+
+When you're using a fixed framerate for your physics simulation, the callback
+will be called with the fixed delta time between frames.
+
+```svelte
+<World framerate={200}>
+```
+
+```ts
+usePhysicsTask((delta) => {
+  console.log(delta) // 0.005
+})
+```

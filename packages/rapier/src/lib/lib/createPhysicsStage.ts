@@ -88,14 +88,12 @@ export const createPhysicsStages = (
 }
 
 export const usePhysicsRenderTask = (
-  callback: (delta: number, context: RapierContext) => void,
+  callback: (delta: number) => void,
   options?: Omit<ThrelteUseTaskOptions, 'stage'>
 ) => {
-  const context = useRapier()
-
   return useTask(
     (delta) => {
-      callback(delta, context)
+      callback(delta)
     },
     {
       ...options,
@@ -105,14 +103,12 @@ export const usePhysicsRenderTask = (
 }
 
 export const usePhysicsTask = (
-  callback: (delta: number, context: RapierContext) => void,
+  callback: (delta: number) => void,
   options?: Omit<ThrelteUseTaskOptions, 'stage'>
 ) => {
-  const context = useRapier()
-
   return useTask(
     (delta) => {
-      callback(delta, context)
+      callback(delta)
     },
     {
       ...options,
