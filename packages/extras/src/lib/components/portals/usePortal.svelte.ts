@@ -6,6 +6,11 @@ const createPortalContext = () => {
   const portals = new Map<string, Set<Snippet>>()
 
   const addPortal = (id: string) => {
+    if (portals.has(id)) {
+      console.warn(`Portal with id ${id} already exists. Skipping portal creation.`)
+      return
+    }
+
     portals.set(id, new Set<Snippet>())
     return () => {
       portals.delete(id)
