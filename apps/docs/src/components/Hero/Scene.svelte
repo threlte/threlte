@@ -1,8 +1,8 @@
 <script lang="ts">
   import { types } from '@theatre/core'
   import type { ISheet } from '@theatre/core'
-  import { T, useThrelte } from '@threlte/core'
-  import { Float, Grid, OrbitControls, Portal, useTexture } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { Float, Grid, Helper, OrbitControls, useTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import AnimatableCube from './AnimatableCube.svelte'
   import AnimatableStarField from './AnimatableStarField.svelte'
@@ -12,12 +12,11 @@
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
   import { onMount } from 'svelte'
+  import { CameraHelper } from 'three'
 
   let sheet: ISheet | undefined
 
   $: sheet && (sheet.sequence.position = $springScrollPos * 10)
-
-  const { scene } = useThrelte()
 
   let fov = 40
   onMount(() => {
@@ -78,9 +77,10 @@
             >
               {#snippet children({ ref: camera })}
                 {#if $debug}
-                  <Portal object={scene}>
-                    <T.CameraHelper args={[camera]} />
-                  </Portal>
+                  <Helper
+                    is={CameraHelper}
+                    args={[camera]}
+                  />
                 {/if}
               {/snippet}
             </T.PerspectiveCamera>

@@ -12,7 +12,8 @@
     "astro": "astro",
     "cleanup": "rimraf .astro node_modules",
     "create:example": "tsx ./scripts/createExample",
-    "create:example-page": "tsx ./scripts/createExamplePage"
+    "create:example-page": "tsx ./scripts/createExamplePage",
+    "postinstall": "node ./scripts/patchSvelte5Export.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
@@ -33,7 +34,7 @@
     "lucide-react": "^0.263.1",
     "npm": "^9.8.1",
     "preact": "^10.16.0",
-    "svelte": "5.0.0-next.133",
+    "svelte": "5.0.0-next.169",
     "tailwindcss": "^3.4.4",
     "three-mesh-bvh": "^0.7.5"
   },

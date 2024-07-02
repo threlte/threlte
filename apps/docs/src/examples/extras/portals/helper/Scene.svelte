@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
-  import { Grid, OrbitControls, Portal, TransformControls } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { Grid, OrbitControls, Portal, PortalTarget, TransformControls } from '@threlte/extras'
   import type { DirectionalLightHelper } from 'three'
-
-  const { scene } = useThrelte()
 
   let helperA: DirectionalLightHelper
   let helperB: DirectionalLightHelper
 </script>
+
+<PortalTarget id="scene" />
 
 <T.PerspectiveCamera
   position={[10, 10, 10]}
@@ -33,7 +33,7 @@
         helperA.update()
       }}
     />
-    <Portal object={scene}>
+    <Portal id="scene">
       <T.DirectionalLightHelper
         args={[ref]}
         bind:ref={helperA}
@@ -56,7 +56,7 @@
         helperB.update()
       }}
     />
-    <Portal object={scene}>
+    <Portal id="scene">
       <T.DirectionalLightHelper
         args={[ref]}
         bind:ref={helperB}

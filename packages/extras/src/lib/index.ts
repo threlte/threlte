@@ -11,6 +11,7 @@ export { useMask } from './hooks/useMask'
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
+export { default as Helper } from './components/Helper/Helper.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
@@ -48,8 +49,8 @@ export { onReveal } from './suspense/onReveal'
 export { onSuspend } from './suspense/onSuspend'
 
 // portals
-export { default as Portal } from './components/portals/Portal/Portal.svelte'
-export { default as PortalTarget } from './components/portals/PortalTarget/PortalTarget.svelte'
+export { default as Portal } from './components/portals/Portal.svelte'
+export { default as PortalTarget } from './components/portals/PortalTarget.svelte'
 
 // text component
 export { default as Text } from './components/Text/Text.svelte'
