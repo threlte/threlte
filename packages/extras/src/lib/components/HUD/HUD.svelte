@@ -1,29 +1,40 @@
-<script lang='ts' context='module'>
-  const key = Symbol('threlte-hud-render-stage')
-</script>
-
 <script lang="ts">
-  import { T, HierarchicalObject, createSceneContext, createCameraContext, useThrelte } from '@threlte/core'
+  import {
+    T,
+    HierarchicalObject,
+    createSceneContext,
+    createCameraContext,
+    useThrelte
+  } from '@threlte/core'
   import type { HUDProps } from './HUD.svelte'
 
-  let { toneMapping: hudToneMapping, ref = $bindable(), children }: HUDProps = $props()
+  const { scene } = createSceneContext()
+  const { camera } = createCameraContext()
+  const { renderStage, renderer, toneMapping } = useThrelte()
 
-  createSceneContext()
-  createCameraContext()
+  let { autoRender, toneMapping: hudToneMapping, stage = renderStage, ref = $bindable(), children }: HUDProps = $props()
 
-  const { renderStage, renderer, toneMapping, scene, camera } = useThrelte()
+  const key = Symbol('threlte-hud-render-stage')
 
-  const stage = renderStage.getTask(key) ?? renderStage.createTask(key, () => {
-    const { autoClear } = renderer
+  $effect.pre(() => {
+    if (!autoRender) {
+      return
+    }
 
-    renderer.autoClear = false
-    renderer.toneMapping = hudToneMapping ?? toneMapping.current
+    stage.createTask(key, () => {
+      const { autoClear } = renderer
 
-    renderer.clearDepth()
-    renderer.render(scene, camera.current)
+      renderer.autoClear = false
+      renderer.toneMapping = hudToneMapping ?? toneMapping.current
 
-    renderer.autoClear = autoClear
-    renderer.toneMapping = toneMapping.current
+      renderer.clearDepth()
+      renderer.render(scene, camera.current)
+
+      renderer.autoClear = autoClear
+      renderer.toneMapping = toneMapping.current
+    })
+
+    return () => stage.removeTask(key)
   })
 </script>
 
