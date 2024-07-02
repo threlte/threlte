@@ -1,18 +1,11 @@
 <script lang="ts">
   import { T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { Color, CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
+  import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { onMount } from 'svelte'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
-  import type {
-    MeshRefractionMaterialEvents,
-    MeshRefractionMaterialProps,
-    MeshRefractionMaterialSlots
-  } from './MeshRefractionMaterial.svelte'
+  import type { MeshRefractionMaterialProps } from './MeshRefractionMaterial.svelte'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
-
-  type $$Events = MeshRefractionMaterialEvents
-  type $$Slots = MeshRefractionMaterialSlots
 
   let {
     envMap,

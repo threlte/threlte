@@ -36,8 +36,8 @@
       <T.Mesh
         position.y={0.5}
         castShadow
-        on:pointerenter={() => ($scale = 2)}
-        on:pointerleave={() => ($scale = 1)}
+        onpointerenter={() => ($scale = 2)}
+        onpointerleave={() => ($scale = 1)}
       >
         <T.BoxGeometry />
         <T.MeshStandardMaterial color="#333333" />

@@ -17,7 +17,7 @@
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
   import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
   import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
-  import type { ColliderEventMap } from '../../types/types'
+  import type { ColliderEvents } from '../../types/types'
   import type { ColliderProps, MassDef, Shape } from './Collider.svelte'
 
   type TShape = $$Generic<Shape>
@@ -44,12 +44,18 @@
       collider.setTranslation(getWorldPosition(object))
       collider.setRotation(getWorldQuaternion(object))
     }),
-    ...props
-  }: ColliderProps<TShape, TMassDef> = $props()
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    children,
+  }: ColliderProps<TShape, TMassDef> & ColliderEvents = $props()
 
   const object = new Object3D()
 
-  const { updateRef } = useCreateEvent<Collider>(props.$$events)
+  const { updateRef } = useCreateEvent<Collider>(oncreate)
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
@@ -59,10 +65,13 @@
 
   const collisionGroups = useCollisionGroups()
 
-  /**
-   * Events setup
-   */
-  type $$Events = ColliderEventMap
+  const events = {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  }
 
   /**
    * Actual collider setup happens onMount as only then
@@ -85,7 +94,7 @@
     /**
      * Add collider to context
      */
-    rapierContext.addColliderToContext(collider, object, props.$$events)
+    rapierContext.addColliderToContext(collider, object, events)
 
     /**
      * For use in conjunction with component <CollisionGroups>
@@ -152,7 +161,7 @@
 
   $effect.pre(() => {
     if (collider) {
-      applyColliderActiveEvents(collider, props.$$events, rigidBody?.userData?.events)
+      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
     }
   })
 
@@ -187,5 +196,5 @@
 </script>
 
 <SceneGraphObject {object}>
-  <slot {collider} />
+  {@render children?.({ collider })}
 </SceneGraphObject>

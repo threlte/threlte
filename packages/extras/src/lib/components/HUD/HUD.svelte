@@ -1,31 +1,29 @@
+<script lang='ts' context='module'>
+  const key = Symbol('threlte-hud-render-stage')
+</script>
+
 <script lang="ts">
-  import { T, HierarchicalObject } from '@threlte/core'
+  import { T, HierarchicalObject, createSceneContext, createCameraContext, useThrelte } from '@threlte/core'
   import type { HUDProps } from './HUD.svelte'
-  import { createChildThrelteContext } from '../../lib/createChildContext'
 
-  let { autoRender, colorSpace, toneMapping, dpr, ref = $bindable() }: HUDProps = $props()
+  let { toneMapping: hudToneMapping, ref = $bindable(), children }: HUDProps = $props()
 
-  const hudContext = createChildThrelteContext()
-  const { scene, invalidate } = hudContext
+  createSceneContext()
+  createCameraContext()
 
-  $effect.pre(() => {
-    if (autoRender !== undefined) hudContext.autoRender.set(autoRender)
-    invalidate()
-  })
+  const { renderStage, renderer, toneMapping, scene, camera } = useThrelte()
 
-  $effect.pre(() => {
-    if (colorSpace !== undefined) hudContext.colorSpace.set(colorSpace)
-    invalidate()
-  })
+  const stage = renderStage.getTask(key) ?? renderStage.createTask(key, () => {
+    const { autoClear } = renderer
 
-  $effect.pre(() => {
-    if (toneMapping !== undefined) hudContext.toneMapping.set(toneMapping)
-    invalidate()
-  })
+    renderer.autoClear = false
+    renderer.toneMapping = hudToneMapping ?? toneMapping.current
 
-  $effect.pre(() => {
-    if (dpr !== undefined) hudContext.dpr.set(dpr)
-    invalidate()
+    renderer.clearDepth()
+    renderer.render(scene, camera.current)
+
+    renderer.autoClear = autoClear
+    renderer.toneMapping = toneMapping.current
   })
 </script>
 
@@ -34,6 +32,6 @@
     is={scene}
     bind:ref
   >
-    <slot />
+    {@render children?.({ ref: scene })}
   </T>
 </HierarchicalObject>

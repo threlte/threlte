@@ -1,15 +1,8 @@
 <script lang="ts">
-  import { Shape } from 'three'
+  import { ExtrudeGeometry, Shape } from 'three'
   import { T } from '@threlte/core'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import type {
-    RoundedBoxGeometryProps,
-    RoundedBoxGeometryEvents,
-    RoundedBoxGeometrySlots
-  } from './RoundedBoxGeometry'
-
-  type $$Events = RoundedBoxGeometryEvents
-  type $$Slots = RoundedBoxGeometrySlots
+  import type { RoundedBoxGeometryProps } from './RoundedBoxGeometry.svelte'
 
   let {
     args = [],
@@ -18,6 +11,7 @@
     creaseAngle = 0.4,
     steps = 1,
     ref = $bindable(),
+    children,
     ...props
   }: RoundedBoxGeometryProps = $props()
 
@@ -46,17 +40,18 @@
     bevelThickness: radius,
     curveSegments: smoothness
   })
+  
+  let geometry = $derived(new ExtrudeGeometry(shape, params))
+  $effect.pre(() => {
+    geometry.center()
+    toCreasedNormals(geometry, creaseAngle)
+  })
 </script>
 
-<T.ExtrudeGeometry
+<T
+  is={geometry}
   bind:ref
-  args={[shape, params]}
-  on:create={({ ref, cleanup }) => {
-    ref.center()
-    toCreasedNormals(ref, creaseAngle)
-    props.$$events?.create?.({ ref, cleanup })
-  }}
   {...props}
 >
-  <slot {ref} />
-</T.ExtrudeGeometry>
+  {@render children?.({ ref: geometry })}
+</T>

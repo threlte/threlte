@@ -70,7 +70,9 @@ This structure ensures that all components inside the component `<Scene>` have a
 <Canvas>
   <World>
     <Scene />
-    <FallbackScene slot="fallback" />
+    {#snippet fallback()}
+      <FallbackScene />
+    {/snippet}
   </World>
 </Canvas>
 ```

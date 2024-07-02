@@ -17,43 +17,44 @@
   position={[-40, 25, 40]}
   makeDefault
   {zoom}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, -8)
   }}
 />
 
 <T.DirectionalLight
   position={[5, 10, 3]}
-  intensity={1}
+  intensity={2.5}
 />
 
 <Suspense final>
-  <Text
-    position.z={-8}
-    slot="fallback"
-    text="Loading"
-    fontSize={1}
-    color="white"
-    anchorX="50%"
-    anchorY="50%"
-    on:create={({ ref }) => {
-      ref.lookAt(-40, 25, 40)
-    }}
-  />
+  {#snippet fallback()}
+    <Text
+      position.z={-8}
+      text="Loading..."
+      fontSize={1}
+      color="white"
+      anchorX="50%"
+      anchorY="50%"
+      oncreate={({ ref }) => {
+        ref.lookAt(-40, 25, 40)
+      }}
+    />
+  {/snippet}
 
-  <Text
-    slot="error"
-    position.z={-8}
-    let:errors
-    text={errors.map((e) => e).join(', ')}
-    fontSize={1}
-    color="white"
-    anchorX="50%"
-    anchorY="50%"
-    on:create={({ ref }) => {
-      ref.lookAt(-40, 25, 40)
-    }}
-  />
+  {#snippet error({ errors })}
+    <Text
+      position.z={-8}
+      text={errors.map((e) => e).join(', ')}
+      fontSize={1}
+      color="white"
+      anchorX="50%"
+      anchorY="50%"
+      oncreate={({ ref }) => {
+        ref.lookAt(-40, 25, 40)
+      }}
+    />
+  {/snippet}
 
   <StarsEmitter />
 

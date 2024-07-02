@@ -1,5 +1,6 @@
 import type { WebXRManager, Intersection } from 'three'
 import { currentWritable } from '@threlte/core'
+import type { XRControllerEvents, XRHandEvents } from '../types'
 
 export const isPresenting = currentWritable(false)
 export const isHandTracking = currentWritable(false)
@@ -8,13 +9,13 @@ export const referenceSpaceType = currentWritable<XRReferenceSpaceType | undefin
 export const xr = currentWritable<WebXRManager | undefined>(undefined)
 
 export const controllerEvents = {
-  left: currentWritable<undefined | Record<string, (arg: unknown) => void>>(undefined),
-  right: currentWritable<undefined | Record<string, (arg: unknown) => void>>(undefined)
+  left: currentWritable<undefined | XRControllerEvents>(undefined),
+  right: currentWritable<undefined | XRControllerEvents>(undefined)
 }
 
 export const handEvents = {
-  left: currentWritable<undefined | Record<string, (arg: unknown) => void>>(undefined),
-  right: currentWritable<undefined | Record<string, (arg: unknown) => void>>(undefined)
+  left: currentWritable<undefined | XRHandEvents>(undefined),
+  right: currentWritable<undefined | XRHandEvents>(undefined)
 }
 
 export const teleportState = currentWritable({

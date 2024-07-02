@@ -3,14 +3,7 @@
   import { PositionalAudio as ThreePositionalAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type {
-    PositionalAudioEvents,
-    PositionalAudioProps,
-    PositionalAudioSlots
-  } from './PositionalAudio.svelte'
-
-  type $$Events = PositionalAudioEvents
-  type $$Slots = PositionalAudioSlots
+  import type { PositionalAudioProps } from './PositionalAudio.svelte'
 
   let {
     src,
@@ -29,6 +22,7 @@
     pause = $bindable(),
     stop = $bindable(),
     ref = $bindable(),
+		children,
     ...props
   }: PositionalAudioProps = $props()
 
@@ -64,7 +58,7 @@
     setSrc: setSource,
     setVolume,
     ...useAudioProps
-  } = useAudio(audio, props.$$events)
+  } = useAudio(audio, props)
 
   pause = useAudioProps.pause
   play = useAudioProps.play
@@ -83,5 +77,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={audio} />
+	{@render children?.({ref:audio})}
 </T>

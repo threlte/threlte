@@ -3,6 +3,8 @@ category: Getting Started
 title: Installation
 ---
 
+import ManualInstallGuide from '$components/ManualInstallGuide/ManualInstallGuide.svelte'
+
 To start using Threlte, you can either [scaffold a new project using the CLI](#scaffold-a-new-threlte-project) or install the packages [manually in an existing project](#manually-install-threlte-in-an-existing-project).
 
 ## Scaffold a new Threlte project
@@ -25,34 +27,6 @@ can be used with `npx`, the resulting Threlte components however require `@threl
 ### Choose the packages you want to use
 
 <ManualInstallGuide client:load />
-
-### Configuration
-
-#### Adapt `vite.config.js`
-
-If you are using Threlte with SvelteKit, adapt your Vite configuration to prevent `three` from being externalized for SSR by vites externalization step
-
-```js {3-5}+ title=vite.config.js
-const config = {
-  // …
-  ssr: {
-    noExternal: ['three']
-  }
-}
-```
-
-#### Adapt `tsconfig.json`
-
-If you are using TypeScript, you need to add the following to your `tsconfig.json` to make sure that
-the types of the Threlte components are available:
-
-```json title=tsconfig.json {3}+
-{
-  "compilerOptions": {
-    "moduleResolution": "Bundler"
-  }
-}
-```
 
 <Tip type="tip">
   [See this comment](https://github.com/threlte/threlte/issues/8#issuecomment-1024085864) for tips

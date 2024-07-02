@@ -80,7 +80,7 @@ Any children of the `<XR>` component will not mount until the user enters an imm
 
 ## Fallback
 
-XR sessions have to be requested actively and you might want to show contents to the user before they have entered an immersive session. You can use the `fallback` slot to show a fallback scene to the user.
+XR sessions have to be requested actively and you might want to show contents to the user before they have entered an immersive session. You can use the `fallback` snippet to show a fallback scene to the user.
 
 ```svelte
 <script>
@@ -96,10 +96,10 @@ XR sessions have to be requested actively and you might want to show contents to
   <Controller left>
   <Controller right>
 
-  <svelte:fragment slot="fallback">
+  {#snippet fallback()}
     <T.PerspectiveCamera makeDefault position.z={5}>
       <OrbitControls />
     </T.PerspectiveCamera>
-  </svelte:fragment>
+  {/snippet}
 </XR>
 ```

@@ -1,36 +1,41 @@
 import { injectPlugin, watch } from '@threlte/core'
 import { writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import { useInteractivity } from './hook'
+import { useInteractivity } from './context'
 import type { ThrelteEvents } from './types'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
-  'click',
-  'contextmenu',
-  'dblclick',
-  'wheel',
-  'pointerup',
-  'pointerdown',
-  'pointerover',
-  'pointerout',
-  'pointerenter',
-  'pointerleave',
-  'pointermove',
-  'pointermissed'
+  'onclick',
+  'oncontextmenu',
+  'ondblclick',
+  'onwheel',
+  'onpointerup',
+  'onpointerdown',
+  'onpointerover',
+  'onpointerout',
+  'onpointerenter',
+  'onpointerleave',
+  'onpointermove',
+  'onpointermissed'
 ]
 
 export const injectInteractivityPlugin = (): void => {
   injectPlugin('interactivity', ({ ref, props }) => {
     if (!ref.isObject3D) return
 
-    const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
+    const context = useInteractivity()
 
     const refStore = writable<Object3D>(ref)
 
     watch(refStore, ($refStore) => {
-      if (!props.$$events) return
-      addInteractiveObject($refStore, props.$$events)
-      return () => removeInteractiveObject($refStore)
+      const hasEventHandlers = Object.entries(props).some(([key, value]) => {
+        return value !== undefined && interactivityEventNames.includes(key as keyof ThrelteEvents)
+      })
+
+      if (!hasEventHandlers) return
+
+      context.addInteractiveObject($refStore, props)
+      return () => context.removeInteractiveObject($refStore)
     })
 
     return {

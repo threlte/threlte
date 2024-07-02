@@ -4,12 +4,14 @@
   import { T, useTask } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     handedness: 'left' | 'right'
+    children?: Snippet
   }
 
-  let { handedness }: Props = $props()
+  let { handedness, children }: Props = $props()
 
   const ref = new Group()
   const vec3 = new Vector3()
@@ -54,10 +56,12 @@
   is={ref}
   visible={$intersection !== undefined}
 >
-  <slot>
+  {#if children}
+    {@render children()}
+  {:else}
     <Cursor
       size={$size}
       thickness={0.015}
     />
-  </slot>
+  {/if}
 </T>

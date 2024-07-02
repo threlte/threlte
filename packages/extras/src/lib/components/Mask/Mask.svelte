@@ -5,16 +5,14 @@
 		*/
   import { T } from '@threlte/core'
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
-  import type { MaskEvents, MaskProps, MaskSlots } from './Mask'
-
-  type $$Events = MaskEvents
-  type $$Slots = MaskSlots
+  import type { MaskProps } from './Mask.svelte'
 
   let {
     id = 1,
     colorWrite = false,
     depthWrite = false,
     ref = $bindable(),
+    children,
     ...props
   }: MaskProps = $props()
 
@@ -42,5 +40,5 @@
   renderOrder={-id}
   {...props}
 >
-  <slot ref={mesh} />
+  {@render children?.({ ref: mesh })}
 </T>

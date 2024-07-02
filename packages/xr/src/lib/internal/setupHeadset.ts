@@ -5,8 +5,9 @@ import { useXR } from '../hooks/useXR'
 export const headset = new Group()
 
 export const setupHeadset = () => {
-  const { renderer, camera } = useThrelte()
+  const { renderer, camera, scheduler, renderStage } = useThrelte()
   const { xr } = renderer
+  const stage = scheduler.createStage(Symbol('xr-headset-stage'), { before: renderStage })
 
   const immersiveFrame = useTask(
     () => {
@@ -25,7 +26,11 @@ export const setupHeadset = () => {
       headset.position.set(position.x, position.y, position.z)
       headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
     },
-    { autoStart: false, autoInvalidate: false }
+    {
+      autoStart: false,
+      autoInvalidate: false,
+      stage
+    }
   )
 
   const nonImmersiveFrame = useTask(
@@ -33,11 +38,15 @@ export const setupHeadset = () => {
       headset.position.copy(camera.current.position)
       headset.quaternion.copy(camera.current.quaternion)
     },
-    { autoStart: false, autoInvalidate: false }
+    {
+      autoStart: false,
+      autoInvalidate: false,
+      stage
+    }
   )
 
-  watch(useXR().isPresenting, (isPresenting) => {
-    if (isPresenting) {
+  watch(useXR().isPresenting, ($isPresenting) => {
+    if ($isPresenting) {
       immersiveFrame.start()
       nonImmersiveFrame.stop()
     } else {

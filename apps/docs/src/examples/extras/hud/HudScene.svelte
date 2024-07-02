@@ -50,9 +50,9 @@
 <T.Mesh
   bind:ref={meshes[0]}
   position={[$viewport.width / 2 - 1, $viewport.height / 2 - 1, 0]}
-  on:pointerenter={boxCursor.onPointerEnter}
-  on:pointerleave={boxCursor.onPointerLeave}
-  on:click={() => onSelect('box')}
+  onpointerenter={boxCursor.onPointerEnter}
+  onpointerleave={boxCursor.onPointerLeave}
+  onclick={() => onSelect('box')}
   scale={$boxHovering ? 1.1 : 1}
 >
   <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
@@ -62,9 +62,9 @@
 <T.Mesh
   bind:ref={meshes[1]}
   position={[$viewport.width / 2 - 2, $viewport.height / 2 - 1, 0]}
-  on:pointerenter={torusCursor.onPointerEnter}
-  on:pointerleave={torusCursor.onPointerLeave}
-  on:click={() => onSelect('torus')}
+  onpointerenter={torusCursor.onPointerEnter}
+  onpointerleave={torusCursor.onPointerLeave}
+  onclick={() => onSelect('torus')}
   scale={$torusHovering ? 1.1 : 1}
 >
   <T.TorusGeometry args={[0.25, 0.1]} />
@@ -74,9 +74,9 @@
 <T.Mesh
   bind:ref={meshes[2]}
   position={[$viewport.width / 2 - 3, $viewport.height / 2 - 1, 0]}
-  on:pointerover={torusKnotCursor.onPointerEnter}
-  on:pointerleave={torusKnotCursor.onPointerLeave}
-  on:click={() => onSelect('torusknot')}
+  onpointerover={torusKnotCursor.onPointerEnter}
+  onpointerleave={torusKnotCursor.onPointerLeave}
+  onclick={() => onSelect('torusknot')}
   scale={$torusKnotHovering ? 1.1 : 1}
 >
   <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />

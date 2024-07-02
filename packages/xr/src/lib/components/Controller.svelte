@@ -9,12 +9,13 @@
   import { T } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerEvents } from '../internal/stores'
-  import type { XRControllerEvent } from '../types'
+  import type { XRControllerEvents } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import ScenePortal from './internal/ScenePortal.svelte'
   import TeleportCursor from './internal/TeleportCursor.svelte'
   import TeleportRay from './internal/TeleportRay.svelte'
+  import type { Snippet } from 'svelte'
 
   const stores = {
     left: leftStore,
@@ -23,44 +24,75 @@
 </script>
 
 <script lang="ts">
-  type Props =
-    | {
-        /** Whether the controller should be matched with the left hand. */
-        left: true
-        right?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the controller should be matched with the right hand. */
-        right: true
-        left?: undefined
-        hand?: undefined
-      }
-    | {
-        /** Whether the controller should be matched with the left or right hand. */
-        hand: 'left' | 'right'
-        left?: undefined
-        right?: undefined
-      }
+  type Props = {
+    children?: Snippet
+    grip?: Snippet
+    targetRay?: Snippet
+    pointerRay?: Snippet
+    pointerCursor?: Snippet
+    teleportRay?: Snippet
+    teleportCursor?: Snippet
+  } & XRControllerEvents &
+    (
+      | {
+          /** Whether the controller should be matched with the left hand. */
+          left: true
+          right?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the controller should be matched with the right hand. */
+          right: true
+          left?: undefined
+          hand?: undefined
+        }
+      | {
+          /** Whether the controller should be matched with the left or right hand. */
+          hand: 'left' | 'right'
+          left?: undefined
+          right?: undefined
+        }
+    )
 
-  let { left, right, hand, ...props }: Props = $props()
+  let {
+    left,
+    right,
+    hand,
 
-  type $$Events = {
-    connected: XRControllerEvent<'connected'>
-    disconnected: XRControllerEvent<'disconnected'>
-    select: XRControllerEvent<'select'>
-    selectstart: XRControllerEvent<'selectstart'>
-    selectend: XRControllerEvent<'selectend'>
-    squeeze: XRControllerEvent<'squeeze'>
-    squeezeend: XRControllerEvent<'squeezeend'>
-    squeezestart: XRControllerEvent<'squeezestart'>
-  }
+    onconnected,
+    ondisconnected,
+    onselect,
+    onselectend,
+    onselectstart,
+    onsqueeze,
+    onsqueezeend,
+    onsqueezestart,
+
+    children,
+    grip: gripSnippet,
+    targetRay: targetRaySnippet,
+    pointerRay: pointerRaySnippet,
+    pointerCursor: pointerCursorSnippet,
+    teleportRay: teleportRaySnippet,
+    teleportCursor: teleportCursorSnippet,
+
+  }: Props = $props()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
   $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
 
-  controllerEvents[$handedness].set(props.$$events)
-  $effect.pre(() => controllerEvents[$handedness].set(props.$$events))
+  $effect.pre(() =>
+    controllerEvents[$handedness].set({
+      onconnected,
+      ondisconnected,
+      onselect,
+      onselectend,
+      onselectstart,
+      onsqueeze,
+      onsqueezeend,
+      onsqueezestart
+    })
+  )
 
   let store = $derived(stores[$handedness])
   let grip = $derived($store?.grip)
@@ -73,26 +105,25 @@
 {#if !$isHandTracking}
   {#if grip}
     <T is={grip}>
-      <slot>
+      {#if children}
+        {@render children?.()}
+      {:else}
         <T is={model} />
-      </slot>
+      {/if}
 
-      <slot name="grip" />
+      {@render gripSnippet?.()}
     </T>
   {/if}
 
   {#if targetRay}
     <T is={targetRay}>
-      <slot name="target-ray" />
+      {@render targetRaySnippet?.()}
 
       {#if hasPointerControls || hasTeleportControls}
-        {#if $$slots['pointer-ray']}
-          <ShortRay handedness={$handedness}>
-            <slot name="pointer-ray" />
-          </ShortRay>
-        {:else}
-          <ShortRay handedness={$handedness} />
-        {/if}
+        <ShortRay
+          handedness={$handedness}
+          children={pointerRaySnippet}
+        />
       {/if}
     </T>
   {/if}
@@ -100,36 +131,22 @@
 
 <ScenePortal>
   {#if hasPointerControls}
-    {#if $$slots['pointer-cursor']}
-      <PointerCursor handedness={$handedness}>
-        <slot name="pointer-cursor" />
-      </PointerCursor>
-    {:else}
-      <PointerCursor handedness={$handedness} />
-    {/if}
+    <PointerCursor
+      handedness={$handedness}
+      children={pointerCursorSnippet}
+    />
   {/if}
 
   {#if hasTeleportControls && targetRay !== undefined}
-    {#if $$slots['teleport-ray']}
-      <TeleportRay
-        {targetRay}
-        handedness={$handedness}
-      >
-        <slot name="teleport-ray" />
-      </TeleportRay>
-    {:else}
-      <TeleportRay
-        {targetRay}
-        handedness={$handedness}
-      />
-    {/if}
+    <TeleportRay
+      {targetRay}
+      handedness={$handedness}
+      children={teleportRaySnippet}
+    />
 
-    {#if $$slots['teleport-ray']}
-      <TeleportCursor handedness={$handedness}>
-        <slot name="teleport-cursor" />
-      </TeleportCursor>
-    {:else}
-      <TeleportCursor handedness={$handedness} />
-    {/if}
+    <TeleportCursor
+      handedness={$handedness}
+      children={teleportCursorSnippet}
+    />
   {/if}
 </ScenePortal>

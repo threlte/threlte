@@ -30,7 +30,7 @@
     position.y={10}
     position.z={10}
     fov={90}
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(0, 0, 0)
     }}
   />

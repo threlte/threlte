@@ -9,16 +9,16 @@ This should be placed within a Threlte `<Canvas />`.
     foveation={1}
     frameRate={90}
     referenceSpace='local-floor'
-    on:sessionstart={(event: XREvent<XRManagerEvent>) => {}}
-    on:sessionend={(event: XREvent<XRManagerEvent>) => {}}
-    on:visibilitychange={(event: XREvent<XRSessionEvent>) => {}}
-    on:inputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
+    onsessionstart={(event: XREvent<XRManagerEvent>) => {}}
+    onsessionend={(event: XREvent<XRManagerEvent>) => {}}
+    onvisibilitychange={(event: XREvent<XRSessionEvent>) => {}}
+    oninputsourceschange={(event: XREvent<XRSessionEvent>) => {}}
   />
 ```
 
 -->
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onMount, type Snippet } from 'svelte'
   import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
@@ -55,25 +55,34 @@ This should be placed within a Threlte `<Canvas />`.
 
     /** Type of WebXR reference space to use. Default is `local-floor` */
     referenceSpace?: XRReferenceSpaceType
-  }
 
-  type $$Events = {
+    fallback?: Snippet
+    children?: Snippet
+
     /** Called as an XRSession is requested */
-    sessionstart: (event: XRSessionEvent<'sessionstart'>) => void
+    onsessionstart?: (event: XRSessionEvent<'sessionstart'>) => void
+
     /** Called after an XRSession is terminated */
-    sessionend: (event: XRSessionEvent<'sessionend'>) => void
+    onsessionend?: (event: XRSessionEvent<'sessionend'>) => void
+
     /** Called when an XRSession is hidden or unfocused. */
-    visibilitychange: (event: globalThis.XRSessionEvent) => void
+    onvisibilitychange?: (event: globalThis.XRSessionEvent) => void
+
     /** Called when available inputsources change */
-    inputsourceschange: (event: globalThis.XRSessionEvent) => void
+    oninputsourceschange?: (event: globalThis.XRSessionEvent) => void
   }
 
   let {
     foveation = 1,
     frameRate,
     referenceSpace = 'local-floor',
-    ...props
-  }: Props & { $$events: $$Events } = $props()
+    onsessionstart,
+    onsessionend,
+    onvisibilitychange,
+    oninputsourceschange,
+    fallback,
+    children
+  }: Props = $props()
 
   const { renderer, renderMode } = useThrelte()
   const { xr } = renderer
@@ -87,26 +96,26 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    props.$$events?.sessionstart?.({ type: 'sessionstart', target: $session! })
+    onsessionstart?.({ type: 'sessionstart', target: $session! })
   }
 
   const handleSessionEnd = () => {
-    props.$$events?.sessionend?.({ type: 'sessionend', target: $session! })
+    onsessionend?.({ type: 'sessionend', target: $session! })
     isPresenting.set(false)
     session.set(undefined)
   }
 
   const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
-    props.$$events?.visibilitychange?.({ ...event, target: $session! })
+    onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
-    props.$$events?.inputsourceschange?.({ ...event, target: $session! })
+    oninputsourceschange?.({ ...event, target: $session! })
   }
 
   const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
-    props.$$events?.visibilitychange?.({ ...event, target: $session! })
+    onvisibilitychange?.({ ...event, target: $session! })
   }
 
   const updateTargetFrameRate = (frameRate?: number) => {
@@ -169,7 +178,7 @@ This should be placed within a Threlte `<Canvas />`.
 </script>
 
 {#if $isPresenting}
-  <slot />
+  {@render children?.()}
 {:else}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

@@ -1,10 +1,7 @@
 <script lang="ts">
   import { MathUtils, Group } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatEvents, FloatProps, FloatSlots } from './Float.svelte'
-
-  type $$Events = FloatEvents
-  type $$Slots = FloatSlots
+  import type { FloatProps } from './Float.svelte'
 
   let {
     speed = 1,
@@ -14,6 +11,7 @@
     rotationIntensity = 0,
     seed = Math.random() * 10000,
     ref = $bindable(),
+		children,
     ...props
   }: FloatProps = $props()
 
@@ -65,6 +63,6 @@
     bind:ref
     matrixAutoUpdate={false}
   >
-    <slot ref={group} />
+		{@render children?.({ref:group})}
   </T>
 </T.Group>

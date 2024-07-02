@@ -10,13 +10,13 @@ name: 'Getting Started'
 
 As with the rest of Threlte, `@threlte/theatre` provides an idiomatic yet transparent Svelte wrapper. The core concepts of `@threlte/theatre` are:
 
-| @threlte/theatre Component        | Description                                                             | Corresponding Theatre.js Concept(s)                                                                                                                                                  |
-| --------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [\<Project\>](./project)          | Contains your project's animation sheets                                | [Project](https://www.theatrejs.com/docs/latest/manual/projects)                                                                                                                        |
-| [\<Sheet\>](./sheet)              | Binds to an animation _sheet_ that contains animation sequences  | [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets)                                                           |
-| [\<Sequence\>](./sequence)           | Binds to an animation _sequence_ and contains the animated components   | [Sequence](https://www.theatrejs.com/docs/latest/manual/sequences)                                                           |
-| [\<Studio\>](./studio)           | Enables the Theatre.js in-browser studio _interface_ during development | [Studio](https://www.theatrejs.com/docs/latest/manual/Studio)                                                                                                                           |
-| [\<SheetObject\>](./sheet-object) | Enables editing and animating its parent in the studio interface        | [Sheet Object](https://www.theatrejs.com/docs/latest/manual/objects)                                                                                                                    |
+| @threlte/theatre Component        | Description                                                             | Corresponding Theatre.js Concept(s)                                                                                                                                                           |
+| --------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [\<Project\>](./project)          | Contains your project's animation sheets                                | [Project](https://www.theatrejs.com/docs/latest/manual/projects)                                                                                                                              |
+| [\<Sheet\>](./sheet)              | Binds to an animation _sheet_ that contains animation sequences         | [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets)                                                                                                                                  |
+| [\<Sequence\>](./sequence)        | Binds to an animation _sequence_ and contains the animated components   | [Sequence](https://www.theatrejs.com/docs/latest/manual/sequences)                                                                                                                            |
+| [\<Studio\>](./studio)            | Enables the Theatre.js in-browser studio _interface_ during development | [Studio](https://www.theatrejs.com/docs/latest/manual/Studio)                                                                                                                                 |
+| [\<SheetObject\>](./sheet-object) | Enables editing and animating its parent in the studio interface        | [Sheet Object](https://www.theatrejs.com/docs/latest/manual/objects)                                                                                                                          |
 | [\<Theatre\>](./theatre)          | A helper component providing a project with a single sheet and a studio | [Project](https://www.theatrejs.com/docs/latest/manual/projects), [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets), [Studio](https://www.theatrejs.com/docs/latest/manual/Studio) |
 
 The `@threlte/theatre` documentation cross-references [the Theatre.js documentation](https://www.theatrejs.com/docs/latest), allowing you to get a deeper understanding of the underlying concepts.
@@ -81,27 +81,25 @@ In your Scene, add the component `<SheetObject>` as a parent of any component yo
 </T.PerspectiveCamera>
 
 <!-- Box -->
-<SheetObject
-  key="Box"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.Mesh
-      receiveShadow
-      castShadow
-      position.y={0.5}
-    >
-      <T.BoxGeometry args={[1, 1, 1]} />
-      <T.MeshStandardMaterial color="#b00d03">
-        <Sync
-          color
-          roughness
-          metalness
-        />
-      </T.MeshStandardMaterial>
-    </T.Mesh>
-  </Transform>
+<SheetObject key="Box">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.Mesh
+        receiveShadow
+        castShadow
+        position.y={0.5}
+      >
+        <T.BoxGeometry args={[1, 1, 1]} />
+        <T.MeshStandardMaterial color="#b00d03">
+          <Sync
+            color
+            roughness
+            metalness
+          />
+        </T.MeshStandardMaterial>
+      </T.Mesh>
+    </Transform>
+  {/snippet}
 </SheetObject>
 ```
 

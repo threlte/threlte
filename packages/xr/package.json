@@ -1,8 +1,9 @@
 {
   "name": "@threlte/xr",
-  "version": "1.0.0-next.2",
+  "version": "1.0.0-next.4",
   "author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
   "license": "MIT",
+  "description": "Tools to more easily create VR and AR experiences with Threlte",
   "scripts": {
     "dev": "vite dev --host",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
@@ -25,21 +26,40 @@
     "eslint-plugin-svelte": "^2.36.0",
     "svelte-check": "^3.6.9",
     "typescript": "^5.4.5",
-    "@types/three": "^0.163.0",
+    "@types/three": "^0.165.0",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "publint": "^0.2.7",
     "svelte": "^5.0.0-next.107",
-    "three": "^0.163.0",
+    "three": "^0.165.0",
     "tslib": "^2.6.2",
     "vite": "^5.2.8",
     "vite-plugin-mkcert": "^1.17.5"
   },
   "peerDependencies": {
     "svelte": ">=5",
-    "three": ">=0.152"
+    "three": ">=0.155"
   },
   "type": "module",
+  "keywords": [
+    "webxr",
+    "vr",
+    "ar",
+    "threlte",
+    "svelte",
+    "three",
+    "three.js",
+    "3d"
+  ],
+  "homepage": "https://threlte.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte.git",
+    "directory": "packages/xr"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
   "exports": {
     ".": {
       "types": "./src/lib/index.ts",

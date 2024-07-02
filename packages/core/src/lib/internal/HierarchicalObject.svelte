@@ -6,16 +6,13 @@
   this component and let the parent decide on what to do with it.
 
 -->
-<script
-  lang="ts"
-  context="module"
->
+<script lang="ts" context="module">
   import { getContext, onDestroy, setContext } from 'svelte'
   import type { Object3D } from 'three'
   import { useParent, setParent } from '../hooks/useParent'
-  import { useThrelte } from '../hooks/useThrelte'
   import { createObjectStore } from '../lib/createObjectStore'
   import type { HierarchicalObjectProperties } from './HierarchicalObject.svelte'
+  import { useThrelte } from '../context/compounds/useThrelte'
 
   const useHierarchicalObject = () => {
     return {
@@ -34,7 +31,8 @@
     object,
     onChildMount,
     onChildDestroy,
-    parent = $bindable()
+    parent = $bindable(),
+    children
   }: HierarchicalObjectProperties & { parent: Object3D | undefined } = $props()
 
   const onChildMountProxy: HierarchicalObjectProperties['onChildMount'] = (child) => {
@@ -99,4 +97,4 @@
   setParent(objectStore)
 </script>
 
-<slot />
+{@render children()}

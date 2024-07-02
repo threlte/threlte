@@ -201,20 +201,47 @@ We can then spread the textures on a material via Svelte's spread syntax:
 
 ### Applying different textures to different faces
 
-For example, we may want to apply different textures to different faces of a `BoxGeometry` instance. To apply each texture to the corresponding face we can pass a function to the `attach` prop:
+To declaratively apply two different textures to two different faces of a `BoxGeometry`, set the `attach` prop to a function.
 
 ```svelte
 <T.Mesh>
   <T.BoxGeometry />
-  <T.MeshStandardMaterial map={texture1} attach={(parent, self) => {
-    if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
-    else parent.material = [self]
-  }} />
-	<T.MeshStandardMaterial map={texture2} attach={(parent, self) => {
-    if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
-    else parent.material = [self]
-  }} />
-</T>
+  <T.MeshStandardMaterial
+    map={texture1}
+    attach={(parent, self) => {
+      if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
+      else parent.material = [self]
+    }}
+  />
+  <T.MeshStandardMaterial
+    map={texture2}
+    attach={(parent, self) => {
+      if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
+      else parent.material = [self]
+    }}
+  />
+</T.Mesh>
+```
+
+Alternatively, mix declaritive and normal three.js code like so for the same result:
+
+```svelte
+<script>
+  // imports and other code
+  const customMaterials = [
+    new MeshStandardMaterial({ map: texture1 }),
+    new MeshStandardMaterial({ map: texture2 })
+  ]
+  // ...
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T
+    is={customMaterials}
+    attach="material"
+  />
+</T.Mesh>
 ```
 
 ### Convenient: useTexture

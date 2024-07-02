@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BufferGeometry, Vector3 } from 'three'
+  import { BufferGeometry, Vector3, type Mesh } from 'three'
   import { onDestroy } from 'svelte'
   import { T, useTask } from '@threlte/core'
   import { Text } from '@threlte/extras'
@@ -13,7 +13,7 @@
   const points = [new Vector3(0, 0, 0), new Vector3(0, 0, -1000)]
 
   let debug = false
-  let ref: THREE.Mesh
+  let ref: Mesh
   let lookIntervalId: number | undefined
   let happy = false
   let lookAt = new Vector3()
@@ -84,7 +84,7 @@
 <svelte:window on:keyup={(e) => e.key === 'd' && (debug = !debug)} />
 
 <Controller left>
-  <svelte:fragment slot="target-ray">
+  {#snippet targetRay()}
     <Text
       fontSize={0.05}
       {text}
@@ -93,16 +93,15 @@
     <T.Line visible={debug}>
       <T is={new BufferGeometry().setFromPoints(points)} />
     </T.Line>
-  </svelte:fragment>
+  {/snippet}
 </Controller>
 
 <Controller right>
-  <T.Line
-    slot="target-ray"
-    visible={debug}
-  >
-    <T is={new BufferGeometry().setFromPoints(points)} />
-  </T.Line>
+  {#snippet targetRay()}
+    <T.Line visible={debug}>
+      <T is={new BufferGeometry().setFromPoints(points)} />
+    </T.Line>
+  {/snippet}
 </Controller>
 
 <Hand left />
@@ -115,15 +114,15 @@
 >
   <T.Mesh
     bind:ref
-    on:click={handleEvent('click')}
-    on:pointerdown={handleEvent('pointerdown')}
-    on:pointerup={handleEvent('pointerup')}
-    on:pointerover={handleEvent('pointerover')}
-    on:pointerout={handleEvent('pointerout')}
-    on:pointerenter={handleEvent('pointerenter')}
-    on:pointerleave={handleEvent('pointerleave')}
-    on:pointermove={handleEvent('pointermove')}
-    on:pointermissed={handleEvent('pointermissed')}
+    onclick={handleEvent('click')}
+    onpointerdown={handleEvent('pointerdown')}
+    onpointerup={handleEvent('pointerup')}
+    onpointerover={handleEvent('pointerover')}
+    onpointerout={handleEvent('pointerout')}
+    onpointerenter={handleEvent('pointerenter')}
+    onpointerleave={handleEvent('pointerleave')}
+    onpointermove={handleEvent('pointermove')}
+    onpointermissed={handleEvent('pointermissed')}
     scale={$scale}
   >
     <T.MeshStandardMaterial color="hotpink" />

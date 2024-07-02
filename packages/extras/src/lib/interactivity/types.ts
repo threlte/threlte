@@ -1,23 +1,23 @@
-import type { Camera } from 'three'
+import type { Camera, Intersection as ThreeIntersection, Object3D, Vector2, Ray } from 'three'
 
 export type DomEvent = PointerEvent | MouseEvent | WheelEvent
 
-export interface Intersection extends THREE.Intersection {
+export interface Intersection extends ThreeIntersection {
   /** The event source (the object which registered the handler) */
-  eventObject: THREE.Object3D
+  eventObject: Object3D
 }
 
 export interface IntersectionEvent<NativeEvent> extends Intersection {
   /** The event source (the object which registered the handler) */
-  eventObject: THREE.Object3D
+  eventObject: Object3D
   /** An array of intersections */
   intersections: Intersection[]
   /** Normalized event coordinates */
-  pointer: THREE.Vector2
+  pointer: Vector2
   /** Delta between first click and this event */
   delta: number
   /** The ray that pierced it */
-  ray: THREE.Ray
+  ray: Ray
   /** The camera that was used by the raycaster */
   camera: Camera
   /** stopPropagation will stop underlying handlers from firing */
@@ -34,16 +34,16 @@ export interface PointerCaptureTarget {
 }
 
 export type ThrelteEvents = {
-  click: IntersectionEvent<MouseEvent>
-  contextmenu: IntersectionEvent<MouseEvent>
-  dblclick: IntersectionEvent<MouseEvent>
-  wheel: IntersectionEvent<WheelEvent>
-  pointerup: IntersectionEvent<PointerEvent>
-  pointerdown: IntersectionEvent<PointerEvent>
-  pointerover: IntersectionEvent<PointerEvent>
-  pointerout: IntersectionEvent<PointerEvent>
-  pointerenter: IntersectionEvent<PointerEvent>
-  pointerleave: IntersectionEvent<PointerEvent>
-  pointermove: IntersectionEvent<PointerEvent>
-  pointermissed: MouseEvent
+  onclick: IntersectionEvent<MouseEvent>
+  oncontextmenu: IntersectionEvent<MouseEvent>
+  ondblclick: IntersectionEvent<MouseEvent>
+  onwheel: IntersectionEvent<WheelEvent>
+  onpointerup: IntersectionEvent<PointerEvent>
+  onpointerdown: IntersectionEvent<PointerEvent>
+  onpointerover: IntersectionEvent<PointerEvent>
+  onpointerout: IntersectionEvent<PointerEvent>
+  onpointerenter: IntersectionEvent<PointerEvent>
+  onpointerleave: IntersectionEvent<PointerEvent>
+  onpointermove: IntersectionEvent<PointerEvent>
+  onpointermissed: MouseEvent
 }

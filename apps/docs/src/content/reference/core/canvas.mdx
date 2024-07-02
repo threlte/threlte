@@ -41,13 +41,6 @@ componentSignature:
           required: false
         },
         {
-          name: 'useLegacyLights',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          description: 'Whether to use legacy lighting mode or physically correct lighting mode. Physically correct lighting mode is more physically accurate, but legacy lighting mode may be more intuitive.'
-        },
-        {
           name: 'renderMode',
           type: "'always' | 'on-demand' | 'manual'",
           default: "'on-demand'",
@@ -67,12 +60,11 @@ componentSignature:
           required: false
         },
         {
-          name: 'size',
-          type: '{ width: number, height: number }',
+          name: 'createRenderer',
+          type: '(canvas: HTMLCanvasElement) => THREE.Renderer',
           required: false,
-          description: 'If not provided, the dimensions of the parent element will be used.'
-        },
-        { name: 'rendererParameters', type: 'THREE.WebGLRendererParameters', required: false }
+          description: 'To set up a custom renderer, pass a function that returns a new renderer instance.'
+        }
       ],
     bindings:
       [

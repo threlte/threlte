@@ -1,9 +1,11 @@
 <script lang="ts">
-  import App from './App.svelte'
   import { Canvas } from '@threlte/core'
+  import { Sheet, Theatre } from '@threlte/theatre'
   import { onMount } from 'svelte'
-  import { NoToneMapping } from 'three'
+  import { NoToneMapping, WebGLRenderer } from 'three'
+  import App from './App.svelte'
   import FadeOut from './FadeOut.svelte'
+  import Intro from './Intro/Intro.svelte'
   import Reveal from './Reveal.svelte'
   import TextEffect from './TextEffect.svelte'
   import Trigger from './Trigger.svelte'
@@ -15,9 +17,7 @@
     springScrollPos
   } from './scrollPos'
   import { debug } from './state'
-  import { Sheet, Theatre } from '@threlte/theatre'
   import state from './state.json'
-  import Intro from './Intro/Intro.svelte'
 
   const onScroll = () => {
     // get normalized scroll position in document. 0 should equal top of page, 1
@@ -64,12 +64,16 @@
     <div class="fixed left-0 top-0 z-10 h-[100lvh] w-screen">
       <Canvas
         toneMapping={NoToneMapping}
-        rendererParameters={{
-          powerPreference: 'high-performance',
-          antialias: false,
-          stencil: false,
-          depth: false,
-          premultipliedAlpha: false
+        createRenderer={(canvas) => {
+          return new WebGLRenderer({
+            canvas,
+            alpha: true,
+            powerPreference: 'high-performance',
+            antialias: false,
+            stencil: false,
+            depth: false,
+            premultipliedAlpha: false
+          })
         }}
       >
         <App />

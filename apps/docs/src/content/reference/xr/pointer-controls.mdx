@@ -20,7 +20,7 @@ Any mesh **within this component and all child components** will now receive eve
 
 ```svelte
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >
@@ -58,14 +58,14 @@ The following events are available:
 
 ```svelte
 <T.Mesh
-  on:click={(e) => console.log('click')}
-  on:pointerup={(e) => console.log('up')}
-  on:pointerdown={(e) => console.log('down')}
-  on:pointerover={(e) => console.log('over')}
-  on:pointerout={(e) => console.log('out')}
-  on:pointerenter={(e) => console.log('enter')}
-  on:pointerleave={(e) => console.log('leave')}
-  on:pointermove={(e) => console.log('move')}
+  onclick={(e) => console.log('click')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
 />
 ```
 
@@ -76,7 +76,7 @@ While a controller or hand is pointed at this mesh...
 - `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
 - `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.
 
-To replace the default ray and cursor that are created by the plugin, the following slots can be added to a `<Controller>` or a `<Hand>`:
+To replace the default ray and cursor that are created by the plugin, the following snippets can be added to a `<Controller>` or a `<Hand>`:
 
 ```svelte
 <script>
@@ -86,14 +86,14 @@ To replace the default ray and cursor that are created by the plugin, the follow
 </script>
 
 <Controller left>
-  <CustomRay slot='pointer-ray'>
-  <CustomCursor slot='pointer-cursor'>
-</Controller>
+  {#snippet pointerRay()}
+    <CustomRay>
+  {/snippet}
 
-<Hand left>
-  <CustomRay slot='pointer-ray'>
-  <CustomCursor slot='pointer-cursor'>
-</Hand>
+  {#snippet pointerCursor()}
+    <CustomCursor>
+  {/snippet}
+</Controller>
 ```
 
 This plugin can be used with the `teleportControls` plugin to allow both teleporting and interaction.

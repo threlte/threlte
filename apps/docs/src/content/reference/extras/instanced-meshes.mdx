@@ -69,8 +69,10 @@ Load a gltf file with the [`useGltf`](/docs/reference/extras/use-gltf) hook and 
     You can use object destructuring
     to access the component <Cube>
   -->
-  <InstancedMeshes meshes={$gltf.nodes} let:components={{ Cube }}>
-    <Cube position.y={2} position.x={-1}>
+  <InstancedMeshes meshes={$gltf.nodes}>
+    {#snippet children({ components: { Cube } })}
+      <Cube position.y={2} position.x={-1}>
+    {/snippet}
   </InstancedMeshes>
 {/if}
 ```
@@ -104,9 +106,11 @@ If you don't want to use the `useGltf` hook, you can also pass an array of `THRE
     to access the components <MeshA>,
     <MeshB> and <MeshC>
   -->
-<InstancedMeshes meshes={meshes} let:components={[MeshA, MeshB, MeshC]}>
-  <MeshA position.y={2} position.x={-1}>
-  <MeshB position.y={-2}>
-  <MeshC position.y={0} position.x={1}>
+<InstancedMeshes meshes={meshes}>
+  {#snippet children({ components: [MeshA, MeshB, MeshC] })}
+    <MeshA position.y={2} position.x={-1}>
+    <MeshB position.y={-2}>
+    <MeshC position.y={0} position.x={1}>
+  {/snippet}
 </InstancedMeshes>
 ```

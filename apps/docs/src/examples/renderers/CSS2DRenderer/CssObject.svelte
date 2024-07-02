@@ -20,11 +20,10 @@
     {...$$restProps}
     is={CSS2DObject}
     args={[element]}
-    let:ref
   >
     <slot
       name="three"
-      {ref}
+      ref={CSS2DObject}
     />
   </T>
 {/if}
