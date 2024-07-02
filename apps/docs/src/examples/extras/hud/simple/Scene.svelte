@@ -1,15 +1,21 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { Float, OrbitControls } from '@threlte/extras'
-  import Hud from './Hud.svelte'
+  import { T, useTask, useThrelte } from '@threlte/core'
+  import { Float, OrbitControls, HUD } from '@threlte/extras'
+  import { Quaternion } from 'three'
+  import HudScene from './HudScene.svelte'
 
   let selected = $state('box')
-
   let rotation = $state(0)
+
+  const quaternion = new Quaternion()
+  const { camera } = useThrelte()
 
   useTask((delta) => {
     rotation += delta
-  })
+
+    // Spin mesh to the inverse of the default cameras matrix
+    quaternion.copy(camera.current.quaternion).invert()
+  }, { autoInvalidate: false })
 </script>
 
 <T.PerspectiveCamera
@@ -26,11 +32,14 @@
 
 <T.GridHelper args={[5]} />
 
-<Hud
-  onSelect={(arg) => {
-    selected = arg
-  }}
-/>
+<HUD>
+  <HudScene
+    {quaternion}
+    onselect={(arg) => {
+      selected = arg
+    }}
+  />
+</HUD>
 
 <Float
   speed={8}

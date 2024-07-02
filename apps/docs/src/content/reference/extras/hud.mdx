@@ -9,23 +9,22 @@ componentSignature:
     props:
       [
         {
-          name: 'colorSpace',
-          type: 'THREE.Colorspace',
+          name: 'autoRender',
+          type: 'boolean',
           required: false,
-          description: 'Defaults to the main colorSpace'
+          description: 'Whether the HUD should automatically render its contents'
         },
         {
           name: 'toneMapping',
           type: 'THREE.ToneMapping',
           required: false,
-          description: 'Defaults to the main toneMapping'
+          description: 'Defaults to the parent context toneMapping'
         },
-        { name: 'dpr', type: 'number', required: false, description: 'Defaults to the main dpr' },
         {
           name: 'stage',
           type: 'Stage',
           required: false,
-          description: 'Defaults to creating a stage after the main render stage'
+          description: 'Defaults to the render stage'
         }
       ]
   }
@@ -34,11 +33,10 @@ componentSignature:
 Renders a heads-up-display (HUD). Each HUD creates a new scene rendered on top of the main scene with a separate [Threlte context](/docs/reference/core/use-threlte) and camera.
 
 <Tip type="warning">
-  The HUD reuses the renderer, the render mode, the task scheduler, and the [default
-  stages](/docs/learn/basics/scheduling-tasks#default-stages) of the main Threlte context.
+  The HUD component creates a partially new Threlte context, specifically a new scene and camera. Everything else in `useThrelte` is preserved and reused.
 </Tip>
 
-<Example path="extras/hud" />
+<Example path="extras/hud/simple" />
 
 Because creating a `<HUD>` is somewhat similar to creating a `<Canvas>`, it is recommended to use the same best practices and
 place all objects you want in the HUD within a new `Scene` component:
@@ -71,3 +69,7 @@ place all objects you want in the HUD within a new `Scene` component:
   <T.MeshStandardMaterial />
 </T.Mesh>
 ```
+
+## Postprocessing
+
+<Example path="extras/hud/postprocessing" />

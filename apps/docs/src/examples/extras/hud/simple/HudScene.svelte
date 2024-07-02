@@ -5,10 +5,10 @@
 
   interface Props {
     quaternion: Quaternion
-    onSelect: (arg: string) => void
+    onselect: (arg: string) => void
   }
 
-  let { quaternion, onSelect }: Props = $props()
+  let { quaternion, onselect }: Props = $props()
 
   const viewport = useViewport()
 
@@ -52,7 +52,7 @@
   position={[$viewport.width / 2 - 1, $viewport.height / 2 - 1, 0]}
   onpointerenter={boxCursor.onPointerEnter}
   onpointerleave={boxCursor.onPointerLeave}
-  onclick={() => onSelect('box')}
+  onclick={() => onselect('box')}
   scale={$boxHovering ? 1.1 : 1}
 >
   <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
@@ -64,7 +64,7 @@
   position={[$viewport.width / 2 - 2, $viewport.height / 2 - 1, 0]}
   onpointerenter={torusCursor.onPointerEnter}
   onpointerleave={torusCursor.onPointerLeave}
-  onclick={() => onSelect('torus')}
+  onclick={() => onselect('torus')}
   scale={$torusHovering ? 1.1 : 1}
 >
   <T.TorusGeometry args={[0.25, 0.1]} />
@@ -76,7 +76,7 @@
   position={[$viewport.width / 2 - 3, $viewport.height / 2 - 1, 0]}
   onpointerover={torusKnotCursor.onPointerEnter}
   onpointerleave={torusKnotCursor.onPointerLeave}
-  onclick={() => onSelect('torusknot')}
+  onclick={() => onselect('torusknot')}
   scale={$torusKnotHovering ? 1.1 : 1}
 >
   <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
