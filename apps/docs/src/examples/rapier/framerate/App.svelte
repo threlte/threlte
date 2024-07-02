@@ -1,12 +1,15 @@
 <script lang="ts">
-  import { World } from '$lib'
   import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import { Button, Checkbox, Folder, Pane, Slider, Text, Textarea } from 'svelte-tweakpane-ui'
   import { WebGLRenderer } from 'three'
-  import ReqAnim from './ReqAnim.svelte'
   import Scene from './Scene.svelte'
 
+  let resets = $state(0)
   let iteration = $state(1)
-  let framerate: 30 | 'varying' = $state('varying')
+  let useVaryingFramerate = $state(false)
+  let rate = $state(30)
+  let framerate = $derived<number | 'varying'>(useVaryingFramerate ? 'varying' : rate)
 
   let threlteCanvas = $state<HTMLCanvasElement>()
   let otherCanvas = $state<HTMLCanvasElement>()
@@ -20,13 +23,11 @@
   const sleeping = () => {
     if (!threlteCanvas || !otherCanvas || !otherCanvasCtx) return
 
-    // Set the canvas dimensions only once
     if (otherCanvas.width !== threlteCanvas.width || otherCanvas.height !== threlteCanvas.height) {
       otherCanvas.width = threlteCanvas.width
       otherCanvas.height = threlteCanvas.height
     }
 
-    // otherCanvasCtx.globalAlpha = 0.1 // Set the transparency level (0.0 to 1.0)
     otherCanvasCtx.globalAlpha = 0.2
     otherCanvasCtx.drawImage(threlteCanvas, 0, 0)
 
@@ -34,23 +35,57 @@
   }
 </script>
 
+<Pane
+  position="fixed"
+  title="Framerate"
+  width={330}
+>
+  <Folder title="Settings">
+    <Checkbox
+      bind:value={useVaryingFramerate}
+      label="Use Varying Framerate"
+    />
+    <Slider
+      disabled={useVaryingFramerate}
+      label="Framerate"
+      bind:value={rate}
+      min={5}
+      max={200}
+      step={1}
+    />
+
+    <Button
+      label=" "
+      on:click={() => {
+        resets += 1
+        iteration = 1
+      }}
+      title="Reset"
+    />
+  </Folder>
+
+  <Folder title="Diagnostics">
+    <Textarea
+      value={`<World framerate=${framerate === 'varying' ? '"varying"' : `{${framerate}}`}>\n  <Scene />\n<World>`}
+      live={false}
+      rows={3}
+      disabled
+    />
+    <Text
+      label="Iteration"
+      value={iteration.toString()}
+      live={false}
+      disabled
+    />
+  </Folder>
+</Pane>
+
 <main>
-  <!-- <ReqAnim /> -->
-
-  <div class="meta">
-    <button on:click={() => (framerate = framerate === 'varying' ? 30 : 'varying')}>
-      Use {framerate === 'varying' ? 'fixed' : 'varying'} framerate
-    </button>
-    <span>
-      Iteration: {iteration}
-    </span>
-    <span>
-      Framerate: {framerate === 'varying' ? 'varying' : `${framerate} (fixed)`}
-    </span>
-  </div>
-
-  {#key `${iteration}-${framerate}`}
-    <div class="threlte" use:getThrelteCanvas>
+  {#key `${iteration}-${resets}-${framerate}`}
+    <div
+      class="threlte"
+      use:getThrelteCanvas
+    >
       <Canvas
         createRenderer={(canvas) => {
           return new WebGLRenderer({
@@ -68,7 +103,7 @@
     </div>
   {/key}
 
-  {#key framerate}
+  {#key `${resets}-${framerate}`}
     <canvas bind:this={otherCanvas}></canvas>
   {/key}
 </main>
@@ -82,15 +117,6 @@
   main {
     height: 100dvh;
     position: relative;
-  }
-
-  div.meta {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 
   div.threlte,

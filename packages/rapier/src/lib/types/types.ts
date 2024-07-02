@@ -1,13 +1,16 @@
-import type {
-  Collider,
-  ColliderHandle,
-  RigidBody,
-  RigidBodyHandle,
-  TempContactManifold,
-  Vector
+import {
+  World,
+  type Collider,
+  type ColliderHandle,
+  type RigidBody,
+  type RigidBodyHandle,
+  type TempContactManifold,
+  type Vector
 } from '@dimforge/rapier3d-compat'
-import type { Writable } from 'svelte/store'
+import type { Writable, Readable } from 'svelte/store'
 import type { createRapierContext } from '../lib/createRapierContext'
+import type { Object3D, Object3DEventMap } from 'three'
+import type { CurrentWritable } from '@threlte/core'
 
 export type ColliderShapes =
   | 'ball'
@@ -63,8 +66,6 @@ export type RigidBodyEvents = ColliderEvents & {
   onwake?: () => void
 }
 
-export type RapierContext = ReturnType<typeof createRapierContext>
-
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
@@ -100,3 +101,28 @@ export type CollisionGroupsBitMask = (
  * Used in the <Attractor> component
  */
 export type GravityType = 'static' | 'linear' | 'newtonian'
+
+export type Framerate = number | 'varying'
+
+export type RapierContext = {
+  rapier: typeof import('/Users/grischaerbe/Projects/threlte/node_modules/.pnpm/@dimforge+rapier3d-compat@0.12.0/node_modules/@dimforge/rapier3d-compat/exports')
+  world: World
+  colliderObjects: Map<number, Object3D>
+  rigidBodyObjects: Map<number, Object3D>
+  rigidBodyEventDispatchers: Map<number, RigidBodyEvents>
+  colliderEventDispatchers: Map<number, ColliderEvents>
+  addColliderToContext: (collider: Collider, object: Object3D, props: ColliderEvents) => void
+  removeColliderFromContext: (collider: Collider) => void
+  addRigidBodyToContext: (rigidBody: RigidBody, object: Object3D, events: RigidBodyEvents) => void
+  removeRigidBodyFromContext: (rigidBody: RigidBody) => void
+  debug: Writable<boolean>
+  pause: () => void
+  resume: () => void
+  paused: Readable<boolean>
+  framerate: CurrentWritable<Framerate>
+  /**
+   * This number tells us how far we're off in the simulation stage as opposed
+   * to the render stage
+   */
+  simulationOffset: number
+}

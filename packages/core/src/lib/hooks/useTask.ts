@@ -145,7 +145,7 @@ export function useTask(
   }
 
   const stop = () => {
-    started.set(true)
+    started.set(false)
     if (opts?.autoInvalidate ?? true) {
       schedulerCtx.autoInvalidations.delete(fn)
     }

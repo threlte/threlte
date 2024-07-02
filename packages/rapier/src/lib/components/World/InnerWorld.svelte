@@ -4,6 +4,7 @@
   import { createRapierContext } from '../../lib/createRapierContext'
   import type { RapierContext } from '../../types/types'
   import type { WorldProps } from './World.svelte'
+  import { createPhysicsStages } from '../../lib/createPhysicsStage'
 
   let {
     gravity = [0, -9.81, 0],
@@ -20,25 +21,31 @@
     rawPhysicsPipeline,
     rawSerializationPipeline,
     rawDebugRenderPipeline,
-    stage,
+    framerate,
+    autoStart = true,
     children
   }: WorldProps = $props()
 
   const rapierContext = createRapierContext(
-    { x: gravity[0], y: gravity[1], z: gravity[2] },
-    rawIntegrationParameters,
-    rawIslands,
-    rawBroadPhase,
-    rawNarrowPhase,
-    rawBodies,
-    rawColliders,
-    rawImpulseJoints,
-    rawMultibodyJoints,
-    rawCCDSolver,
-    rawQueryPipeline,
-    rawPhysicsPipeline,
-    rawSerializationPipeline,
-    rawDebugRenderPipeline
+    [
+      { x: gravity[0], y: gravity[1], z: gravity[2] },
+      rawIntegrationParameters,
+      rawIslands,
+      rawBroadPhase,
+      rawNarrowPhase,
+      rawBodies,
+      rawColliders,
+      rawImpulseJoints,
+      rawMultibodyJoints,
+      rawCCDSolver,
+      rawQueryPipeline,
+      rawPhysicsPipeline,
+      rawSerializationPipeline,
+      rawDebugRenderPipeline
+    ],
+    {
+      framerate
+    }
   )
 
   setContext<RapierContext>('threlte-rapier-context', rapierContext)
@@ -49,7 +56,8 @@
     }
   })
 
-  useFrameHandler(rapierContext, stage)
+  createPhysicsStages(rapierContext, { autoStart })
+  useFrameHandler(rapierContext, autoStart)
 
   onDestroy(async () => {
     await tick()
