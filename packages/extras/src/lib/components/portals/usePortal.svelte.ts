@@ -1,36 +1,41 @@
-import { Map, Set } from 'svelte/reactivity'
+
 import type { Snippet } from 'svelte'
-import { useThrelteUserContext } from '@threlte/core'
+import { currentWritable, type CurrentWritable } from '@threlte/core'
 
-const createPortalContext = () => {
-  const portals = new Map<string, Set<Snippet>>()
-
-  const addPortal = (id: string) => {
-    if (portals.has(id)) {
-      console.warn(`Portal with id ${id} already exists. Skipping portal creation.`)
-      return
-    }
-
-    portals.set(id, new Set<Snippet>())
-    return () => {
-      portals.delete(id)
-    }
-  }
-
-  const addChild = (id: string, child: Snippet) => {
-    portals.get(id)?.add(child)
-    return () => {
-      portals.get(id)?.delete(child)
-    }
-  }
-
-  return {
-    addChild,
-    addPortal,
-    portals
-  }
-}
+const portals = currentWritable<Map<string, CurrentWritable<Set<Snippet>>>>(new Map())
 
 export const usePortal = () => {
-  return useThrelteUserContext('threlte-portals', createPortalContext())
+	const addPortal = (id: string) => {
+		portals.update(($portals) => {
+			$portals.set(id, currentWritable(new Set()))
+			return $portals
+		})
+
+		return () => {
+			portals.update(($portals) => {
+        $portals.delete(id)
+				return $portals
+			})
+		}
+	}
+
+	const addChild = (id: string, child: Snippet) => {
+		portals.current.get(id)?.update(($children) => {
+			$children.add(child)
+			return $children
+		})
+
+		return () => {
+      portals.current.get(id)?.update(($children) => {
+				$children.delete(child)
+				return $children
+			})
+		}
+	}
+
+	return {
+		addChild,
+		addPortal,
+		portals,
+	}
 }
