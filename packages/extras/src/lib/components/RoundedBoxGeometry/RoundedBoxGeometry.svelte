@@ -40,7 +40,7 @@
     bevelThickness: radius,
     curveSegments: smoothness
   })
-  
+
   let geometry = $derived(new ExtrudeGeometry(shape, params))
   $effect.pre(() => {
     geometry.center()

@@ -19,7 +19,7 @@
     isReady = $bindable(),
     children
   }: Props = $props()
-  
+
   project = globalProjects.get(name) ?? getProject(name, config)
   globalProjects.set(name, project)
 

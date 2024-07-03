@@ -9,7 +9,12 @@
     children?: Snippet<[{ transform: Record<string, unknown> }]>
   }
 
-  let { translationSnap = 1, rotationSnap = 15 * MathUtils.DEG2RAD, scaleSnap = 0.1, children }: Props = $props()
+  let {
+    translationSnap = 1,
+    rotationSnap = 15 * MathUtils.DEG2RAD,
+    scaleSnap = 0.1,
+    children
+  }: Props = $props()
 
   let useSnap = $state(false)
   let mode = $state<'translate' | 'rotate' | 'scale'>('translate')
@@ -48,7 +53,7 @@
   on:keypress={onKeyPress}
 />
 
-{@render children?.({ 
+{@render children?.({
   transform: {
     translationSnap: useSnap ? translationSnap : undefined,
     rotationSnap: useSnap ? rotationSnap : undefined,
@@ -57,4 +62,3 @@
     space
   }
 })}
-

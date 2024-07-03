@@ -68,12 +68,7 @@
                     "id": "CpaIOcSb26",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -81,12 +76,7 @@
                     "id": "IM4gcoDPhQ",
                     "position": 0.5,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 3
                   },
@@ -94,12 +84,7 @@
                     "id": "eNqDQ7mfVb",
                     "position": 1,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -113,12 +98,7 @@
                     "id": "h4weN9vKxi",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 1
                   },
@@ -126,12 +106,7 @@
                     "id": "PiPY6s5HQj",
                     "position": 0.233,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 1.5
                   },
@@ -139,12 +114,7 @@
                     "id": "XuOoDZU4gN",
                     "position": 0.5,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 1
                   },
@@ -152,12 +122,7 @@
                     "id": "foewgZ636r",
                     "position": 1,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 1
                   }
@@ -171,12 +136,7 @@
                     "id": "KWyDKX5oLa",
                     "position": 0.4,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -184,12 +144,7 @@
                     "id": "-LIQQzk5Y6",
                     "position": 0.633,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 90
                   }
@@ -203,12 +158,7 @@
                     "id": "lHxxYY2-SZ",
                     "position": 0.4,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -216,12 +166,7 @@
                     "id": "NbRDJ244kN",
                     "position": 0.633,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 90
                   }
@@ -235,12 +180,7 @@
                     "id": "SDdqaxukkj",
                     "position": 0.4,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -248,12 +188,7 @@
                     "id": "Inin2CTeg0",
                     "position": 0.633,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -290,12 +225,7 @@
                     "id": "B2xSbyvYpP",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -303,12 +233,7 @@
                     "id": "xrp-bpABsN",
                     "position": 0.2,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": -200
                   },
@@ -316,12 +241,7 @@
                     "id": "BsbFH-RJli",
                     "position": 0.6,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 200
                   },
@@ -329,12 +249,7 @@
                     "id": "hZhY9rtW2l",
                     "position": 0.8,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -348,12 +263,7 @@
                     "id": "EZc_TOnB8l",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   },
@@ -361,12 +271,7 @@
                     "id": "k4d5KSMm3S",
                     "position": 0.1,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": -50
                   },
@@ -374,12 +279,7 @@
                     "id": "xQWcr8pHxG",
                     "position": 0.3,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 50
                   },
@@ -387,12 +287,7 @@
                     "id": "g7zdL4auIV",
                     "position": 0.5,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": -50
                   },
@@ -400,12 +295,7 @@
                     "id": "62GD2tlQvM",
                     "position": 0.7,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 50
                   },
@@ -413,12 +303,7 @@
                     "id": "yCTiQlHoj1",
                     "position": 0.9,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -432,12 +317,7 @@
                     "id": "kl7MVNMl-Y",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": false
                   },
@@ -445,12 +325,7 @@
                     "id": "GlgZf6996q",
                     "position": 0.9,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": true
                   },
@@ -458,12 +333,7 @@
                     "id": "xaWNVuJc3B",
                     "position": 1,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": true
                   }
@@ -481,8 +351,5 @@
     }
   },
   "definitionVersion": "0.4.0",
-  "revisionHistory": [
-    "WdqDOLSNW-TCSoDz",
-    "ZxoPi9jfsYCHwP__"
-  ]
+  "revisionHistory": ["WdqDOLSNW-TCSoDz", "ZxoPi9jfsYCHwP__"]
 }

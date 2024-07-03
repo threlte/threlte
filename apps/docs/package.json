@@ -12,7 +12,9 @@
     "astro": "astro",
     "cleanup": "rimraf .astro node_modules",
     "create:example": "tsx ./scripts/createExample",
-    "create:example-page": "tsx ./scripts/createExamplePage"
+    "create:example-page": "tsx ./scripts/createExamplePage",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",

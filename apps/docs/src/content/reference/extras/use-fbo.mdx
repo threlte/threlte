@@ -12,8 +12,8 @@ Framebuffer objects are useful for cases where you want to render a scene but no
 
 <Example path="extras/use-fbo" />
 
-
 ## Options
+
 ```ts
 type UseFBOOptions = {
   /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
@@ -29,5 +29,5 @@ export function useFBO(
   height?: number,
   /**Options */
   options?: UseFBOOptions
-): THREE.WebGLRenderTarget;
+): THREE.WebGLRenderTarget
 ```

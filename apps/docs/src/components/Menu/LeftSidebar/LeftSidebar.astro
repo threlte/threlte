@@ -10,8 +10,8 @@ const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.
 )
   ? 'learn'
   : Astro.url.pathname.startsWith('/docs/examples')
-  ? 'examples'
-  : 'reference'
+    ? 'examples'
+    : 'reference'
 
 const activeUrlPathName = Astro.url.pathname
 
@@ -44,14 +44,14 @@ sidebarMenu.reference.categories = sidebarMenu.reference.categories.filter((cate
 
 <!-- Preserve sidebar scroll across page loads -->
 <script is:inline>
-{
-	const leftSidebar = document.querySelector('#sidebar-scrollwindow')
-	const leftSidebarScroll = localStorage.getItem('sidebar-scroll')
-	if (leftSidebarScroll !== null) {
-		leftSidebar.scrollTop = parseInt(leftSidebarScroll, 10)
-	}
-	window.addEventListener('beforeunload', () => {
-		localStorage.setItem('sidebar-scroll', leftSidebar.scrollTop)
-	})
-}
+  {
+    const leftSidebar = document.querySelector('#sidebar-scrollwindow')
+    const leftSidebarScroll = localStorage.getItem('sidebar-scroll')
+    if (leftSidebarScroll !== null) {
+      leftSidebar.scrollTop = parseInt(leftSidebarScroll, 10)
+    }
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('sidebar-scroll', leftSidebar.scrollTop)
+    })
+  }
 </script>

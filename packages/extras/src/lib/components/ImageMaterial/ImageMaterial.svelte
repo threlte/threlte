@@ -28,7 +28,7 @@
     side,
     url,
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: ImageMaterialProps = $props()
 
@@ -179,5 +179,5 @@
   {fragmentShader}
   {...props}
 >
-	{@render children?.({ ref: material })}
+  {@render children?.({ ref: material })}
 </T>

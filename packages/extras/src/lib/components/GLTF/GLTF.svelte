@@ -31,7 +31,7 @@
     onload,
     onunload,
     onerror,
-		children,
+    children,
     ...props
   }: Props = $props()
 
@@ -97,6 +97,6 @@
     is={scene}
     {...props}
   >
-		{@render children?.({ ref: scene })}
+    {@render children?.({ ref: scene })}
   </T>
 {/if}

@@ -50,5 +50,5 @@
   }}
   {...props}
 >
-	{@render children?.({ ref: controls })}
+  {@render children?.({ ref: controls })}
 </T>
