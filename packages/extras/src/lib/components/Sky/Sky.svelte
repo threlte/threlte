@@ -112,6 +112,10 @@
   })
 </script>
 
-<T is={sky} bind:ref {...props}>
+<T
+  is={sky}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: sky, sunPosition, renderTarget })}
 </T>

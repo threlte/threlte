@@ -16,7 +16,12 @@
   <T.MeshStandardMaterial />
 </T.Mesh> -->
 
-<T.Mesh teleportSurface receiveShadow position.y={-0.01} rotation.x={-90 * (Math.PI / 180)}>
+<T.Mesh
+  teleportSurface
+  receiveShadow
+  position.y={-0.01}
+  rotation.x={-90 * (Math.PI / 180)}
+>
   <T.PlaneGeometry args={[10, 10]} />
   <T.MeshStandardMaterial />
 </T.Mesh>

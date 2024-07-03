@@ -327,5 +327,13 @@
     {alphaTest}
   />
 {:else if texture}
-  <T {is} bind:ref map={texture} toneMapped={false} {transparent} {alphaTest} {...props} />
+  <T
+    {is}
+    bind:ref
+    map={texture}
+    toneMapped={false}
+    {transparent}
+    {alphaTest}
+    {...props}
+  />
 {/if}

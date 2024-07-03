@@ -51,6 +51,10 @@
   })
 </script>
 
-<T is={material} bind:ref {...props}>
+<T
+  is={material}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: material })}
 </T>

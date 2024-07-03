@@ -1,4 +1,7 @@
-<script lang="ts" generics="Type">
+<script
+  lang="ts"
+  generics="Type"
+>
   import { untrack } from 'svelte'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
@@ -103,11 +106,18 @@
 </script>
 
 {#if isDisposableObject(internalRef)}
-  <DisposableObject object={internalRef} {dispose} />
+  <DisposableObject
+    object={internalRef}
+    {dispose}
+  />
 {/if}
 
 {#if isCamera(internalRef)}
-  <Camera object={internalRef} {manual} {makeDefault} />
+  <Camera
+    object={internalRef}
+    {manual}
+    {makeDefault}
+  />
 {/if}
 
 {#if extendsObject3D(internalRef)}

@@ -103,7 +103,11 @@
   })
 </script>
 
-<T is={group} bind:ref {...props}>
+<T
+  is={group}
+  bind:ref
+  {...props}
+>
   <T is={mesh}>
     <T is={geometry} />
     <T is={material} />

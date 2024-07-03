@@ -63,7 +63,11 @@
 </script>
 
 {#if creasedGeometry}
-  <T is={creasedGeometry} bind:ref {...props}>
+  <T
+    is={creasedGeometry}
+    bind:ref
+    {...props}
+  >
     {@render children?.({ ref: creasedGeometry })}
   </T>
 {/if}

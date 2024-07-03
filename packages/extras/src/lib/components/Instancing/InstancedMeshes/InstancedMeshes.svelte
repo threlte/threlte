@@ -44,6 +44,9 @@
   let filteredMeshesArray = $derived(meshesArray.filter((mesh) => mesh.isMesh))
 </script>
 
-<InnerInstancedMeshes meshes={filteredMeshesArray} {...props}>
+<InnerInstancedMeshes
+  meshes={filteredMeshesArray}
+  {...props}
+>
   {@render children?.({ components })}
 </InnerInstancedMeshes>

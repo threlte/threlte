@@ -52,10 +52,16 @@
   })
 </script>
 
-<T is={ref} visible={$intersection !== undefined}>
+<T
+  is={ref}
+  visible={$intersection !== undefined}
+>
   {#if children}
     {@render children()}
   {:else}
-    <Cursor size={$size} thickness={0.015} />
+    <Cursor
+      size={$size}
+      thickness={0.015}
+    />
   {/if}
 </T>

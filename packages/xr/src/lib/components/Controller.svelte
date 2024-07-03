@@ -1,7 +1,10 @@
 <!--
 @component `<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
 -->
-<script lang="ts" context="module">
+<script
+  lang="ts"
+  context="module"
+>
   import { writable } from 'svelte/store'
   import { T } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
@@ -116,7 +119,10 @@
       {@render targetRaySnippet?.()}
 
       {#if hasPointerControls || hasTeleportControls}
-        <ShortRay handedness={$handedness} children={pointerRaySnippet} />
+        <ShortRay
+          handedness={$handedness}
+          children={pointerRaySnippet}
+        />
       {/if}
     </T>
   {/if}
@@ -124,12 +130,22 @@
 
 <ScenePortal>
   {#if hasPointerControls}
-    <PointerCursor handedness={$handedness} children={pointerCursorSnippet} />
+    <PointerCursor
+      handedness={$handedness}
+      children={pointerCursorSnippet}
+    />
   {/if}
 
   {#if hasTeleportControls && targetRay !== undefined}
-    <TeleportRay {targetRay} handedness={$handedness} children={teleportRaySnippet} />
+    <TeleportRay
+      {targetRay}
+      handedness={$handedness}
+      children={teleportRaySnippet}
+    />
 
-    <TeleportCursor handedness={$handedness} children={teleportCursorSnippet} />
+    <TeleportCursor
+      handedness={$handedness}
+      children={teleportCursorSnippet}
+    />
   {/if}
 </ScenePortal>

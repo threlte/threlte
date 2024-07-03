@@ -133,10 +133,19 @@
     scene.remove(child)
   }}
 >
-  <T is={transformControls} bind:ref={controls} {onchange} {...transformProps} />
+  <T
+    is={transformControls}
+    bind:ref={controls}
+    {onchange}
+    {...transformProps}
+  />
 </HierarchicalObject>
 
-<T is={attachGroup} bind:ref={group} {...objectProps}>
+<T
+  is={attachGroup}
+  bind:ref={group}
+  {...objectProps}
+>
   {#if children}
     {@render children({ ref: attachGroup })}
   {/if}

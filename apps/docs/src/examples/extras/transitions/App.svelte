@@ -10,7 +10,7 @@
     class="pointer-events-none absolute left-0 top-0 flex h-[60%] w-full items-center justify-center"
   >
     <button
-      class="border-orange/5 text-orange pointer-events-auto rounded-sm border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
+      class="pointer-events-auto rounded-sm border border-orange/5 bg-orange-800/50 px-2 py-1 text-sm text-orange hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
       on:click={() => {
         showCube = !showCube
       }}

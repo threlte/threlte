@@ -58,7 +58,11 @@
 </script>
 
 <T.Group {...props}>
-  <T is={group} bind:ref matrixAutoUpdate={false}>
+  <T
+    is={group}
+    bind:ref
+    matrixAutoUpdate={false}
+  >
     {@render children?.({ ref: group })}
   </T>
 </T.Group>

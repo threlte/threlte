@@ -349,7 +349,10 @@
       />
     </T.Sprite>
 
-    <T.Mesh position.x={0.39} renderOrder={frontMostAxisIndex === 0 ? -1 : 0}>
+    <T.Mesh
+      position.x={0.39}
+      renderOrder={frontMostAxisIndex === 0 ? -1 : 0}
+    >
       <T is={stemGeometry} />
       <T.MeshBasicMaterial
         transparent
@@ -368,7 +371,10 @@
       userData.targetPosition={[-1, 0, 0]}
       userData.targetEuler={[0, -Math.PI * 0.5, 0]}
     >
-      <T.SpriteMaterial map={getSpriteTexture(textureSize, xColor)} opacity={p[0] >= 0 ? 0.5 : 1} />
+      <T.SpriteMaterial
+        map={getSpriteTexture(textureSize, xColor)}
+        opacity={p[0] >= 0 ? 0.5 : 1}
+      />
     </T.Sprite>
 
     <!-- yAxis -->
@@ -408,7 +414,10 @@
       userData.targetPosition={[0, -1, 0]}
       userData.targetEuler={[Math.PI * 0.5, 0, 0]}
     >
-      <T.SpriteMaterial map={getSpriteTexture(textureSize, yColor)} opacity={p[1] >= 0 ? 0.5 : 1} />
+      <T.SpriteMaterial
+        map={getSpriteTexture(textureSize, yColor)}
+        opacity={p[1] >= 0 ? 0.5 : 1}
+      />
     </T.Sprite>
 
     <!-- zAxis -->
@@ -448,7 +457,10 @@
       userData.targetPosition={[0, 0, -1]}
       userData.targetEuler={[0, Math.PI, 0]}
     >
-      <T.SpriteMaterial map={getSpriteTexture(textureSize, zColor)} opacity={p[2] >= 0 ? 0.5 : 1} />
+      <T.SpriteMaterial
+        map={getSpriteTexture(textureSize, zColor)}
+        opacity={p[2] >= 0 ? 0.5 : 1}
+      />
     </T.Sprite>
   </T>
 </HierarchicalObject>

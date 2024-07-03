@@ -93,7 +93,10 @@
 </script>
 
 {#if scene}
-  <T is={scene} {...props}>
+  <T
+    is={scene}
+    {...props}
+  >
     {@render children?.({ ref: scene })}
   </T>
 {/if}

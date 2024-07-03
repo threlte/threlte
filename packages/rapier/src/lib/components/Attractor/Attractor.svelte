@@ -58,13 +58,21 @@
   })
 </script>
 
-<T is={group} bind:ref {...props}>
+<T
+  is={group}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: group })}
 
   {#if $debug}
     <T.Mesh>
       <T.SphereGeometry args={[range]} />
-      <T.MeshBasicMaterial wireframe transparent opacity={0.25} />
+      <T.MeshBasicMaterial
+        wireframe
+        transparent
+        opacity={0.25}
+      />
     </T.Mesh>
   {/if}
 </T>

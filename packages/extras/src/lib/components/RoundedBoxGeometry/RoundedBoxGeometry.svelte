@@ -48,6 +48,10 @@
   })
 </script>
 
-<T is={geometry} bind:ref {...props}>
+<T
+  is={geometry}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: geometry })}
 </T>

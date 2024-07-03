@@ -46,6 +46,10 @@
   $effect(() => setDetune(detune))
 </script>
 
-<T is={audio} bind:ref {...props}>
+<T
+  is={audio}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: audio })}
 </T>

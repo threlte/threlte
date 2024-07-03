@@ -14,8 +14,17 @@
 </script>
 
 {#if index > -1}
-  <InstancedMesh geometry={mesh.geometry} material={mesh.material} id={mesh.uuid} {...props}>
-    <svelte:self {meshes} index={index - 1} {...props}>
+  <InstancedMesh
+    geometry={mesh.geometry}
+    material={mesh.material}
+    id={mesh.uuid}
+    {...props}
+  >
+    <svelte:self
+      {meshes}
+      index={index - 1}
+      {...props}
+    >
       {@render children?.()}
     </svelte:self>
   </InstancedMesh>

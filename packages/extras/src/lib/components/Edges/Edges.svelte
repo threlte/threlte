@@ -19,7 +19,11 @@
   })
 </script>
 
-<T is={lineSegments} bind:ref {...props}>
+<T
+  is={lineSegments}
+  bind:ref
+  {...props}
+>
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
   {#if children}

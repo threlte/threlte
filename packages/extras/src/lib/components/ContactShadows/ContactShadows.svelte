@@ -208,7 +208,11 @@
   })
 </script>
 
-<T is={group} bind:ref {...props}>
+<T
+  is={group}
+  bind:ref
+  {...props}
+>
   <T.Group rotation.x={Math.PI / 2}>
     <T.Mesh
       scale.y={-1}
@@ -216,7 +220,10 @@
       material={shadowMaterial}
       geometry={planeGeometry}
     />
-    <T is={shadowCamera} manual />
+    <T
+      is={shadowCamera}
+      manual
+    />
     {@render children?.({ ref: group })}
   </T.Group>
 </T>

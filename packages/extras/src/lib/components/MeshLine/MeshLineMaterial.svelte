@@ -56,6 +56,12 @@
   })
 </script>
 
-<T is={material} bind:ref {...props} {fragmentShader} {vertexShader}>
+<T
+  is={material}
+  bind:ref
+  {...props}
+  {fragmentShader}
+  {vertexShader}
+>
   {@render children?.({ ref: material })}
 </T>

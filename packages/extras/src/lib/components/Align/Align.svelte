@@ -116,7 +116,11 @@
   if (auto) injectAlignPlugin(scheduleAligning)
 </script>
 
-<T is={group} bind:ref {...props}>
+<T
+  is={group}
+  bind:ref
+  {...props}
+>
   <T is={outerGroup}>
     <T is={innerGroup}>
       {@render children({ align: scheduleAligning, ref: group })}

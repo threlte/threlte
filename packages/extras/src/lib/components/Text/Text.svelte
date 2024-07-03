@@ -39,6 +39,13 @@
   })
 </script>
 
-<T is={text} bind:ref {...props} {font} {characters} {sdfGlyphSize}>
+<T
+  is={text}
+  bind:ref
+  {...props}
+  {font}
+  {characters}
+  {sdfGlyphSize}
+>
   {@render children?.({ ref: text })}
 </T>

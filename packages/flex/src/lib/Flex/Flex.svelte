@@ -15,7 +15,10 @@
 </script>
 
 {#if yoga}
-  <InnerFlex {yoga} {...props}>
+  <InnerFlex
+    {yoga}
+    {...props}
+  >
     {#snippet children({ reflow, width, height })}
       {@render innerChildren?.({ reflow, width, height })}
     {/snippet}

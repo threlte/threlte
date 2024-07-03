@@ -134,6 +134,11 @@
   mesh.update()
 </script>
 
-<T is={mesh} bind:ref frustumCulled={false} {...props}>
+<T
+  is={mesh}
+  bind:ref
+  frustumCulled={false}
+  {...props}
+>
   {@render children?.({ Instance: SpriteInstance })}
 </T>

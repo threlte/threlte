@@ -35,6 +35,10 @@
   })
 </script>
 
-<T is={listener} bind:ref {...props}>
+<T
+  is={listener}
+  bind:ref
+  {...props}
+>
   {@render children?.({ ref: listener })}
 </T>

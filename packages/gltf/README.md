@@ -116,9 +116,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
 </script>
 
 {#if $gltf}
-  <T is={ref} {...$$restProps}>
+  <T
+    is={ref}
+    {...$$restProps}
+  >
     <T.Group name="Scene">
-      <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <T.Group
+        name="Stacy"
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.01}
+      >
         <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"
@@ -185,7 +192,10 @@ Make contents conditional:
 
 ```svelte
 {#if condition}
-  <T.Mesh geometry={$gltf.nodes.robot.geometry} material={$gltf.materials.metal} />}
+  <T.Mesh
+    geometry={$gltf.nodes.robot.geometry}
+    material={$gltf.materials.metal}
+  />}
 {/if}
 ```
 
@@ -245,9 +255,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 </script>
 
 {#if $gltf}
-  <T is={ref} {...$$restProps}>
+  <T
+    is={ref}
+    {...$$restProps}
+  >
     <T.Group name="Scene">
-      <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <T.Group
+        name="Stacy"
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.01}
+      >
         <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"

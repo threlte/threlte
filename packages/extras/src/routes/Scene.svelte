@@ -29,7 +29,11 @@
   <MountedGamepad />
 {/if}
 
-<T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)}>
+<T.PerspectiveCamera
+  makeDefault
+  position={[3, 3, 3]}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
+>
   <OrbitControls />
 </T.PerspectiveCamera>
 
@@ -38,6 +42,9 @@
 <Grid />
 
 <T.Mesh position.y={1}>
-  <T.MeshStandardMaterial transparent color="white" />
+  <T.MeshStandardMaterial
+    transparent
+    color="white"
+  />
   <T.SphereGeometry />
 </T.Mesh>

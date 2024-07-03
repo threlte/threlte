@@ -230,8 +230,19 @@
   )
 </script>
 
-<T is={mesh} bind:ref frustumCulled={false} {...props}>
-  <T.ShaderMaterial {fragmentShader} {vertexShader} {uniforms} transparent {side} />
+<T
+  is={mesh}
+  bind:ref
+  frustumCulled={false}
+  {...props}
+>
+  <T.ShaderMaterial
+    {fragmentShader}
+    {vertexShader}
+    {uniforms}
+    transparent
+    {side}
+  />
   {#if children}
     {@render children({ ref: mesh })}
   {:else}

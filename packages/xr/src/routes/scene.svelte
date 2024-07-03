@@ -82,9 +82,17 @@
 
 <Teleport />
 
-<T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)} />
+<T.PerspectiveCamera
+  makeDefault
+  position={[3, 3, 3]}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
+/>
 
-<T.Mesh position.y={0.5} castShadow receiveShadow>
+<T.Mesh
+  position.y={0.5}
+  castShadow
+  receiveShadow
+>
   <T.MeshStandardMaterial color="hotpink" />
   <T.BoxGeometry />
 </T.Mesh>

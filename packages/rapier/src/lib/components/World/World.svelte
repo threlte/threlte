@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import RAPIER from '@dimforge/rapier3d-compat'
   import { onMount } from 'svelte'
   import { writable } from 'svelte/store'
