@@ -17,7 +17,7 @@
   const key = Symbol('threlte-hud-render-stage')
 
   $effect.pre(() => {
-    if (!autoRender) {
+    if (autoRender) {
       return
     }
 
