@@ -47,10 +47,7 @@
   })
 </script>
 
-<T
-  is={ref}
-  visible={hovering}
->
+<T is={ref} visible={hovering}>
   {#if children}
     {@render children()}
   {:else}

@@ -166,7 +166,11 @@ You can re-use it, it will re-use geometries and materials out of the box:
 Or make the model dynamic. Change its colors for example:
 
 ```svelte
-<T.Mesh geometry={$gltf.nodes.robot.geometry} material={$gltf.materials.metal} material.color="green" />
+<T.Mesh
+  geometry={$gltf.nodes.robot.geometry}
+  material={$gltf.materials.metal}
+  material.color="green"
+/>
 ```
 
 Or exchange materials:
@@ -193,7 +197,7 @@ You don't need to do anything if your models are draco compressed, since `useGlt
 
 #### ⚡️ Auto-transform (compression, resize)
 
-With the `--transform` flag it creates a binary-packed, draco-compressed, texture-resized (1024x1024), webp compressed, deduped, instanced and pruned *.glb ready to be consumed on a web site. It uses [glTF-Transform](https://github.com/donmccurdy/glTF-Transform). This can reduce the size of an asset by 70%-90%.
+With the `--transform` flag it creates a binary-packed, draco-compressed, texture-resized (1024x1024), webp compressed, deduped, instanced and pruned \*.glb ready to be consumed on a web site. It uses [glTF-Transform](https://github.com/donmccurdy/glTF-Transform). This can reduce the size of an asset by 70%-90%.
 
 It will not alter the original but create a copy and append `[modelname]-transformed.glb`.
 
@@ -218,7 +222,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 
   export const ref = new Group()
 
-  type ActionName = 'pockets' | 'rope' | 'swingdance' | 'jump' | 'react' | 'shrug' | 'wave' | 'golf' | 'idle'
+  type ActionName =
+    | 'pockets'
+    | 'rope'
+    | 'swingdance'
+    | 'jump'
+    | 'react'
+    | 'shrug'
+    | 'wave'
+    | 'golf'
+    | 'idle'
   type GLTFResult = {
     nodes: {
       stacy: THREE.SkinnedMesh
@@ -257,8 +270,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 If your GLTF contains animations it will add [@threlte/extras's `useGltfAnimations`](https://threlte.xyz/extras/use-gltf-animations) hook, which extracts all clips and prepares them as actions:
 
 ```svelte
-const gltf = useGltf('/stacy.glb')
-export const { actions, mixer } = useGltfAnimations(gltf, ref)
+const gltf = useGltf('/stacy.glb') export const {(actions, mixer)} = useGltfAnimations(gltf, ref)
 ```
 
 If you want to play an animation you can do so at any time:
@@ -284,7 +296,6 @@ gltfLoader.load(url, (gltf) => {
   const component = parse(filename, gltf, config)
 })
 ```
-
 
 ## Contributing
 

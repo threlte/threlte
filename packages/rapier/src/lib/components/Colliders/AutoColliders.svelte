@@ -41,7 +41,7 @@
     oncontact,
     onsensorenter,
     onsensorexit,
-    children,
+    children
   }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
 
   const group = new Group()
@@ -82,9 +82,7 @@
       rigidBody,
       rigidBodyParentObject
     )
-    colliders.forEach((c) =>
-      addColliderToContext(c, group, events)
-    )
+    colliders.forEach((c) => addColliderToContext(c, group, events))
 
     collisionGroups.registerColliders(colliders)
 

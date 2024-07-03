@@ -33,23 +33,15 @@
     void main() {
       gl_FragColor = vec4(1.0, 1.0, 1.0, pow(vUv.y - 1.0, 2.0));
     }`
-
 </script>
 
 <T.Group {visible}>
   {#if children}
     {@render children()}
   {:else}
-    <T.Mesh
-      rotation.x={-Math.PI / 2}
-      position.z={-0.1}
-    >
+    <T.Mesh rotation.x={-Math.PI / 2} position.z={-0.1}>
       <T.CylinderGeometry args={[0.002, 0.002, 0.2, 16, 1, false]} />
-      <T.RawShaderMaterial
-        transparent
-        {vertexShader}
-        {fragmentShader}
-      />
+      <T.RawShaderMaterial transparent {vertexShader} {fragmentShader} />
     </T.Mesh>
   {/if}
 </T.Group>

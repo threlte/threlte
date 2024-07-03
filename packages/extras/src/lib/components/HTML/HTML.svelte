@@ -1,7 +1,4 @@
-<script
-  lang="ts"
-  context="module"
->
+<script lang="ts" context="module">
   let canvasModified = false
   let activeOccludeInstances = 0
 
@@ -273,17 +270,9 @@
   }
 </script>
 
-<T
-  is={group}
-  bind:ref
-  {...props}
->
+<T is={group} bind:ref {...props}>
   {#if occlude && !isRayCastOcclusion}
-    <T
-      is={occlusionMesh}
-      {castShadow}
-      {receiveShadow}
-    >
+    <T is={occlusionMesh} {castShadow} {receiveShadow}>
       {#if geometry}
         <T is={geometry} />
       {:else}
@@ -299,11 +288,7 @@
           fragmentShader={logFragment}
         />
       {:else}
-        <T.ShaderMaterial
-          side={DoubleSide}
-          vertexShader={logVertex}
-          fragmentShader={logFragment}
-        />
+        <T.ShaderMaterial side={DoubleSide} vertexShader={logVertex} fragmentShader={logFragment} />
       {/if}
     </T>
   {/if}
@@ -337,10 +322,7 @@
         style:position="absolute"
         style:pointer-events={pointerEvents}
       >
-        <div
-          class={props.class}
-          style={props.style}
-        >
+        <div class={props.class} style={props.style}>
           {#if children}
             {@render children()}
           {/if}

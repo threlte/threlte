@@ -34,11 +34,6 @@
   })
 </script>
 
-<T
-  is={mesh}
-  bind:ref
-  renderOrder={-id}
-  {...props}
->
+<T is={mesh} bind:ref renderOrder={-id} {...props}>
   {@render children?.({ ref: mesh })}
 </T>

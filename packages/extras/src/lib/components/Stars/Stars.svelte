@@ -103,18 +103,8 @@
   geometry.setAttribute('size', sizes)
 </script>
 
-<T
-  is={points}
-  bind:ref
-  {...props}
->
+<T is={points} bind:ref {...props}>
   <T is={geometry} />
-  <T
-    is={material}
-    blending={AdditiveBlending}
-    depthWrite={false}
-    transparent
-    vertexColors
-  />
+  <T is={material} blending={AdditiveBlending} depthWrite={false} transparent vertexColors />
   {@render children?.({ ref: points })}
 </T>

@@ -119,8 +119,5 @@
 </script>
 
 {#if groundProjection}
-  <GroundProjectedSkybox
-    {...groundProjection}
-    envMap={previousEnvMap}
-  />
+  <GroundProjectedSkybox {...groundProjection} envMap={previousEnvMap} />
 {/if}

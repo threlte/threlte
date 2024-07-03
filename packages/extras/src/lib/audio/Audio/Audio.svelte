@@ -17,7 +17,7 @@
     pause = $bindable(),
     play = $bindable(),
     stop = $bindable(),
-		children,
+    children,
     ...props
   }: AudioProps = $props()
 
@@ -46,10 +46,6 @@
   $effect(() => setDetune(detune))
 </script>
 
-<T
-  is={audio}
-  bind:ref
-  {...props}
->
-	{@render children?.({ ref: audio })}
+<T is={audio} bind:ref {...props}>
+  {@render children?.({ ref: audio })}
 </T>

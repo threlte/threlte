@@ -42,14 +42,8 @@
   })
 </script>
 
-<T
-  is={localRef}
-  bind:ref
-  matrixAutoUpdate={false}
-  matrixWorldAutoUpdate={false}
-  {...props}
->
+<T is={localRef} bind:ref matrixAutoUpdate={false} matrixWorldAutoUpdate={false} {...props}>
   <T is={inner}>
-		{@render children?.({ ref:localRef })}
+    {@render children?.({ ref: localRef })}
   </T>
 </T>

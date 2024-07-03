@@ -15,7 +15,7 @@
     calculate = $bindable(),
     align = $bindable(),
     onalign,
-		children,
+    children,
     ...props
   }: AlignProps = $props()
 
@@ -116,14 +116,10 @@
   if (auto) injectAlignPlugin(scheduleAligning)
 </script>
 
-<T
-  is={group}
-  bind:ref
-  {...props}
->
+<T is={group} bind:ref {...props}>
   <T is={outerGroup}>
     <T is={innerGroup}>
-			{@render children({ align: scheduleAligning, ref: group })}
+      {@render children({ align: scheduleAligning, ref: group })}
     </T>
   </T>
 </T>

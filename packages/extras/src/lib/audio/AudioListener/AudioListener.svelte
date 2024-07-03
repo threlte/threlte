@@ -11,7 +11,7 @@
     ref = $bindable(),
     audioContext = $bindable(),
     resumeContext = $bindable(),
-		children,
+    children,
     ...props
   }: AudioListenerProps = $props()
 
@@ -35,10 +35,6 @@
   })
 </script>
 
-<T
-  is={listener}
-  bind:ref
-  {...props}
->
-	{@render children?.({ ref: listener })}
+<T is={listener} bind:ref {...props}>
+  {@render children?.({ ref: listener })}
 </T>

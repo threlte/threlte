@@ -28,12 +28,7 @@
   })
 </script>
 
-<T.LineSegments
-  bind:ref
-  frustumCulled={false}
-  renderOrder={Infinity}
-  {...props}
->
+<T.LineSegments bind:ref frustumCulled={false} renderOrder={Infinity} {...props}>
   <T is={geometry} />
   <T.LineBasicMaterial vertexColors />
 </T.LineSegments>

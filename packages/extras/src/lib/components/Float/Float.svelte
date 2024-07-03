@@ -11,7 +11,7 @@
     rotationIntensity = 0,
     seed = Math.random() * 10000,
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: FloatProps = $props()
 
@@ -58,11 +58,7 @@
 </script>
 
 <T.Group {...props}>
-  <T
-    is={group}
-    bind:ref
-    matrixAutoUpdate={false}
-  >
-		{@render children?.({ref:group})}
+  <T is={group} bind:ref matrixAutoUpdate={false}>
+    {@render children?.({ ref: group })}
   </T>
 </T.Group>

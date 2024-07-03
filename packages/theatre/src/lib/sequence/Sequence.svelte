@@ -114,10 +114,4 @@
   sequences[key] = sequence
 </script>
 
-<slot
-  {sequence}
-  {position}
-  {playing}
-  {play}
-  {pause}
-/>
+<slot {sequence} {position} {playing} {play} {pause} />

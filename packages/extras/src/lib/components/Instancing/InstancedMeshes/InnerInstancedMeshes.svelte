@@ -6,7 +6,7 @@
   interface Props {
     meshes: Mesh[]
     index?: number
-		children?: Snippet
+    children?: Snippet
   }
 
   let { meshes, index = meshes.length - 1, children, ...props }: Props = $props()
@@ -14,20 +14,11 @@
 </script>
 
 {#if index > -1}
-  <InstancedMesh
-    geometry={mesh.geometry}
-    material={mesh.material}
-    id={mesh.uuid}
-    {...props}
-  >
-    <svelte:self
-      {meshes}
-      index={index - 1}
-      {...props}
-    >
-			{@render children?.()}
+  <InstancedMesh geometry={mesh.geometry} material={mesh.material} id={mesh.uuid} {...props}>
+    <svelte:self {meshes} index={index - 1} {...props}>
+      {@render children?.()}
     </svelte:self>
   </InstancedMesh>
 {:else}
-	{@render children?.()}
+  {@render children?.()}
 {/if}

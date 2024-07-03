@@ -112,10 +112,7 @@
   }
 </script>
 
-<svelte:window
-  on:keydown|preventDefault={onKeyDown}
-  on:keyup|preventDefault={onKeyUp}
-/>
+<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup|preventDefault={onKeyUp} />
 
 <T.Group {position}>
   <RigidBody
@@ -125,10 +122,7 @@
     type={'dynamic'}
   >
     <CollisionGroups groups={playerCollisionGroups}>
-      <Collider
-        shape={'capsule'}
-        args={[height / 2 - radius, radius]}
-      />
+      <Collider shape={'capsule'} args={[height / 2 - radius, radius]} />
     </CollisionGroups>
 
     <CollisionGroups groups={groundCollisionGroups}>

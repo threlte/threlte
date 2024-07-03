@@ -81,15 +81,8 @@
 {#if children}
   {@render children()}
 {:else}
-  <T
-    is={Line2}
-    visible={$intersection !== undefined}
-    position.z={-0.01}
-  >
+  <T is={Line2} visible={$intersection !== undefined} position.z={-0.01}>
     <T is={lineGeometry} />
-    <T
-      is={LineMaterial}
-      linewidth={0.004}
-    />
+    <T is={LineMaterial} linewidth={0.004} />
   </T>
 {/if}

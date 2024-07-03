@@ -1,7 +1,4 @@
-<script
-  lang="ts"
-  context="module"
->
+<script lang="ts" context="module">
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
   import type { XRHandEvents } from '../types'

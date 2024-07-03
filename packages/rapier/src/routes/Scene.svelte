@@ -3,18 +3,11 @@
   import { RigidBody, AutoColliders } from '$lib'
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[3, 3, 3]}
-  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
-/>
+<T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)} />
 
 <RigidBody type="dynamic">
   <AutoColliders>
-    <T.Mesh
-      castShadow
-      receiveShadow
-    >
+    <T.Mesh castShadow receiveShadow>
       <T.MeshStandardMaterial color="hotpink" />
       <T.BoxGeometry />
     </T.Mesh>
@@ -22,10 +15,7 @@
 </RigidBody>
 
 <AutoColliders>
-  <T.Mesh
-    receiveShadow
-    position.y={-1}
-  >
+  <T.Mesh receiveShadow position.y={-1}>
     <T.MeshStandardMaterial color="turquoise" />
     <T.CylinderGeometry args={[1, 1, 0.1]} />
   </T.Mesh>

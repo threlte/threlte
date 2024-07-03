@@ -19,10 +19,6 @@
   })
 </script>
 
-<T
-  is={mesh}
-  bind:ref
-  {...props}
->
-	{@render children?.({ ref: mesh })}
+<T is={mesh} bind:ref {...props}>
+  {@render children?.({ ref: mesh })}
 </T>

@@ -27,7 +27,7 @@
     cellDividers = 6,
     sectionDividers = 2,
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: GridProps = $props()
 
@@ -230,22 +230,11 @@
   )
 </script>
 
-<T
-  is={mesh}
-  bind:ref
-  frustumCulled={false}
-  {...props}
->
-  <T.ShaderMaterial
-    {fragmentShader}
-    {vertexShader}
-    {uniforms}
-    transparent
-    {side}
-  />
-	{#if children}
-		{@render children({ref:mesh})}
-	{:else}
-		<T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
-	{/if}
+<T is={mesh} bind:ref frustumCulled={false} {...props}>
+  <T.ShaderMaterial {fragmentShader} {vertexShader} {uniforms} transparent {side} />
+  {#if children}
+    {@render children({ ref: mesh })}
+  {:else}
+    <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+  {/if}
 </T>

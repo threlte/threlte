@@ -20,21 +20,8 @@
   const args = [null as any, null as any, 0]
 </script>
 
-<T
-  is={mesh}
-  bind:ref
-  raycast={() => null}
-  matrixAutoUpdate={false}
-  {args}
-  {...props}
->
-  <Api
-    instancedMesh={mesh}
-    {id}
-    {limit}
-    {range}
-    {update}
-  >
-		{@render children?.({ref:mesh})}
+<T is={mesh} bind:ref raycast={() => null} matrixAutoUpdate={false} {args} {...props}>
+  <Api instancedMesh={mesh} {id} {limit} {range} {update}>
+    {@render children?.({ ref: mesh })}
   </Api>
 </T>
