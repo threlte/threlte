@@ -4,7 +4,7 @@
   "version": "0.13.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev --host",
+    "dev": "astro dev --host --open",
     "dev:https": "astro dev --host --https",
     "start": "astro dev",
     "build": "astro build",

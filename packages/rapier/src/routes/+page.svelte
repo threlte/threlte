@@ -4,9 +4,10 @@
   import { WebGLRenderer } from 'three'
   import ReqAnim from './ReqAnim.svelte'
   import Scene from './Scene.svelte'
+  import Debug from '../lib/components/Debug/Debug.svelte'
 
   let iteration = $state(1)
-  let framerate: 30 | 'varying' = $state('varying')
+  let framerate: number | 'varying' = $state(10)
 
   let threlteCanvas = $state<HTMLCanvasElement>()
   let otherCanvas = $state<HTMLCanvasElement>()
@@ -62,6 +63,7 @@
         }}
       >
         <World {framerate}>
+          <Debug />
           <Scene {sleeping} />
         </World>
       </Canvas>

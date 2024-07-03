@@ -1,16 +1,14 @@
 import {
   World,
   type Collider,
-  type ColliderHandle,
   type RigidBody,
-  type RigidBodyHandle,
   type TempContactManifold,
   type Vector
 } from '@dimforge/rapier3d-compat'
-import type { Writable, Readable } from 'svelte/store'
-import type { createRapierContext } from '../lib/createRapierContext'
-import type { Object3D, Object3DEventMap } from 'three'
-import type { CurrentWritable } from '@threlte/core'
+import RAPIER from '@dimforge/rapier3d-compat'
+import type { CurrentWritable, Stage } from '@threlte/core'
+import type { Readable, Writable } from 'svelte/store'
+import type { Object3D } from 'three'
 
 export type ColliderShapes =
   | 'ball'
@@ -105,7 +103,7 @@ export type GravityType = 'static' | 'linear' | 'newtonian'
 export type Framerate = number | 'varying'
 
 export type RapierContext = {
-  rapier: typeof import('/Users/grischaerbe/Projects/threlte/node_modules/.pnpm/@dimforge+rapier3d-compat@0.12.0/node_modules/@dimforge/rapier3d-compat/exports')
+  rapier: typeof RAPIER
   world: World
   colliderObjects: Map<number, Object3D>
   rigidBodyObjects: Map<number, Object3D>
@@ -120,9 +118,12 @@ export type RapierContext = {
   resume: () => void
   paused: Readable<boolean>
   framerate: CurrentWritable<Framerate>
+  physicsStage: Stage
+  physicsRenderStage: Stage
   /**
    * This number tells us how far we're off in the simulation stage as opposed
    * to the render stage
    */
-  simulationOffset: number
+  simulationOffset: CurrentWritable<number>
+  updateRigidBodySimulationData: CurrentWritable<boolean>
 }

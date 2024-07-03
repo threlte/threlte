@@ -4,6 +4,7 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const { renderer } = useThrelte()
+  const { resume, pause, paused } = useRapier()
 
   let { sleeping }: { sleeping: (context: WebGLRenderingContext) => void } = $props()
 
@@ -15,6 +16,21 @@
     }
   })
 </script>
+
+<svelte:window
+  onkeydown={(e) => {
+    if (e.key === 'p') {
+      if ($paused) {
+        resume()
+        window.requestAnimationFrame(() => {
+          pause()
+        })
+      } else {
+        pause()
+      }
+    }
+  }}
+/>
 
 <T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)} />
 

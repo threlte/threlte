@@ -1,7 +1,7 @@
 ---
 order: 0.2
 category: '@threlte/rapier'
-name: 'About Framerate'
+name: 'Physics Framerate'
 ---
 
 import frameRate1 from './framerate-1.svg?url'
@@ -95,6 +95,15 @@ physics state of after the 4th simulation step.
 This cycle repeats in the next frame **B**: The simulation is advanced 3 times
 as part of `requestAnimationFrame` **B** in order to slightly run ahead of the
 render time and subsequently rolled back to match the time of the render.
+
+The following example visualizes how the framerate correlates with the physics
+simulation running ahead of the visual output.
+
+<Example
+  path="rapier/framerate-debug"
+  hideCode
+  hideStackblitz
+/>
 
 ## `usePhysicsTask`
 

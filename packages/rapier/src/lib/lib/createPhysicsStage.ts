@@ -1,29 +1,21 @@
-import {
-  useStage,
-  useTask,
-  useThrelte,
-  type Key,
-  type Stage,
-  type ThrelteUseTaskOptions
-} from '@threlte/core'
-import { useRapier } from '../hooks/useRapier'
-import type { RapierContext } from '../types/types'
-import { derived, writable } from 'svelte/store'
+import { useStage, useThrelte, type CurrentWritable, type Key, type Stage } from '@threlte/core'
+import type { Framerate, RapierContext } from '../types/types'
 
 const physicsSimulationKey = Symbol('physics-simulation')
 const physicsRenderKey = Symbol('physics-render')
 
 export const createPhysicsStages = (
-  rapierContext: RapierContext,
+  framerate: CurrentWritable<Framerate>,
+  simulationOffset: CurrentWritable<number>,
+  updateRigidBodySimulationData: CurrentWritable<boolean>,
   options?: {
-    autoStart?: boolean
-    simulation?: {
-      after?: Key | Stage | (Key | Stage)[]
-      before?: Key | Stage | (Key | Stage)[]
+    physicsStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
     }
-    render?: {
-      after?: Key | Stage | (Key | Stage)[]
-      before?: Key | Stage | (Key | Stage)[]
+    physicsRenderStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
     }
   }
 ) => {
@@ -33,86 +25,40 @@ export const createPhysicsStages = (
 
   const { renderStage } = useThrelte()
 
-  const { start: startSimulation, stop: stopSimulation } = useStage(physicsSimulationKey, {
-    after: options?.simulation?.after,
-    before: options?.simulation?.before,
+  const physicsStage = useStage(physicsSimulationKey, {
+    after: options?.physicsStageOptions?.after,
+    before: options?.physicsStageOptions?.before,
     callback(delta, runTasks) {
-      if (rapierContext.framerate.current === 'varying') {
+      if (framerate.current === 'varying') {
         runTasks()
       } else {
-        const rate = 1 / rapierContext.framerate.current
+        const rate = 1 / framerate.current
         simulationTime += delta
         fixedStepTimeAccumulator += delta
-        while (fixedStepTimeAccumulator >= 0) {
+        const iterations = Math.ceil(fixedStepTimeAccumulator / rate)
+        for (let iteration = 0; iteration < iterations; iteration++) {
+          updateRigidBodySimulationData.set(iteration >= iterations - 2)
           runTasks(rate)
           fixedStepTimeAccumulator -= rate
           lastSimulationTime += rate
         }
-        rapierContext.simulationOffset = (simulationTime - lastSimulationTime) / rate + 1
+        simulationOffset.set((simulationTime - lastSimulationTime) / rate + 1)
       }
     }
   })
 
-  const { start: startRender, stop: stopRender } = useStage(physicsRenderKey, {
-    after: options?.render?.after
-      ? Array.isArray(options.render.after)
-        ? [...options.render.after, physicsSimulationKey]
-        : [options.render.after, physicsSimulationKey]
+  const physicsRenderStage = useStage(physicsRenderKey, {
+    after: options?.physicsRenderStageOptions?.after
+      ? Array.isArray(options.physicsRenderStageOptions.after)
+        ? [...options.physicsRenderStageOptions.after, physicsSimulationKey]
+        : [options.physicsRenderStageOptions.after, physicsSimulationKey]
       : physicsSimulationKey,
-    before: options?.render?.before
-      ? Array.isArray(options.render.before)
-        ? [...options.render.before, renderStage]
-        : [options.render.before, renderStage]
+    before: options?.physicsRenderStageOptions?.before
+      ? Array.isArray(options.physicsRenderStageOptions.before)
+        ? [...options.physicsRenderStageOptions.before, renderStage]
+        : [options.physicsRenderStageOptions.before, renderStage]
       : renderStage
   })
 
-  const started = writable(options?.autoStart ?? true)
-
-  // replacing the original pause and resume functions as well as the paused property
-  rapierContext.pause = () => {
-    started.set(false)
-    stopSimulation()
-    stopRender()
-  }
-  rapierContext.resume = () => {
-    started.set(true)
-    startSimulation()
-    startRender()
-  }
-
-  if (!(options?.autoStart ?? true)) {
-    rapierContext.pause()
-  }
-
-  rapierContext.paused = derived(started, (a) => !a)
-}
-
-export const usePhysicsRenderTask = (
-  callback: (delta: number) => void,
-  options?: Omit<ThrelteUseTaskOptions, 'stage'>
-) => {
-  return useTask(
-    (delta) => {
-      callback(delta)
-    },
-    {
-      ...options,
-      stage: physicsRenderKey
-    }
-  )
-}
-
-export const usePhysicsTask = (
-  callback: (delta: number) => void,
-  options?: Omit<ThrelteUseTaskOptions, 'stage'>
-) => {
-  return useTask(
-    (delta) => {
-      callback(delta)
-    },
-    {
-      ...options,
-      stage: physicsSimulationKey
-    }
-  )
+  return { physicsStage, physicsRenderStage }
 }

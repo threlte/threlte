@@ -5,15 +5,25 @@ import type {
   RigidBodyHandle
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import { readable, writable } from 'svelte/store'
+import { currentWritable, type Key, type Stage } from '@threlte/core'
+import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
-import { currentWritable } from '@threlte/core'
+import { createPhysicsStages } from './createPhysicsStage'
 
 export const createRapierContext = (
   worldArgs: ConstructorParameters<typeof RAPIER.World>,
   options: {
     framerate?: Framerate
+    autoStart?: boolean
+    physicsStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
+    }
+    physicsRenderStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
+    }
   }
 ): RapierContext => {
   const world = new RAPIER.World(...worldArgs)
@@ -67,12 +77,23 @@ export const createRapierContext = (
     rigidBodyEventDispatchers.delete(rigidBody.handle)
   }
 
-  // Dummy functions, will be replaced by useFrameHandler fn
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const pause = () => {}
+  const framerate = currentWritable(options.framerate ?? 'varying')
+  const simulationOffset = currentWritable(1)
+  const updateRigidBodySimulationData = currentWritable(false)
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const resume = () => {}
+  const { physicsStage, physicsRenderStage } = createPhysicsStages(
+    framerate,
+    simulationOffset,
+    updateRigidBodySimulationData,
+    options
+  )
+
+  const autostart = options.autoStart ?? true
+  const paused = writable(!autostart)
+  if (!autostart) {
+    physicsStage.stop()
+    physicsRenderStage.stop()
+  }
 
   return {
     rapier: RAPIER,
@@ -86,10 +107,21 @@ export const createRapierContext = (
     addRigidBodyToContext,
     removeRigidBodyFromContext,
     debug: writable(false),
-    pause,
-    resume,
-    paused: readable(false),
-    framerate: currentWritable(options.framerate ?? 'varying'),
-    simulationOffset: 1
+    pause: () => {
+      paused.set(true)
+      physicsStage.stop()
+      physicsRenderStage.stop()
+    },
+    resume: () => {
+      paused.set(false)
+      physicsStage.start()
+      physicsRenderStage.start()
+    },
+    paused: derived(paused, (a) => a),
+    framerate,
+    simulationOffset,
+    physicsStage,
+    physicsRenderStage,
+    updateRigidBodySimulationData
   }
 }

@@ -4,7 +4,6 @@
   import { createRapierContext } from '../../lib/createRapierContext'
   import type { RapierContext } from '../../types/types'
   import type { WorldProps } from './World.svelte'
-  import { createPhysicsStages } from '../../lib/createPhysicsStage'
 
   let {
     gravity = [0, -9.81, 0],
@@ -23,6 +22,8 @@
     rawDebugRenderPipeline,
     framerate,
     autoStart = true,
+    physicsStageOptions,
+    physicsRenderStageOptions,
     children
   }: WorldProps = $props()
 
@@ -44,7 +45,10 @@
       rawDebugRenderPipeline
     ],
     {
-      framerate
+      framerate,
+      autoStart,
+      physicsStageOptions,
+      physicsRenderStageOptions
     }
   )
 
@@ -56,8 +60,11 @@
     }
   })
 
-  createPhysicsStages(rapierContext, { autoStart })
-  useFrameHandler(rapierContext, autoStart)
+  $effect.pre(() => {
+    if (framerate !== undefined) rapierContext.framerate.set(framerate)
+  })
+
+  useFrameHandler(rapierContext)
 
   onDestroy(async () => {
     await tick()
