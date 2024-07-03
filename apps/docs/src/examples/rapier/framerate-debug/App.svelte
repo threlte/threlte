@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import { Debug, World } from '@threlte/rapier'
-  import { Pane, Slider } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, Textarea } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
   let minFramerate = 5
@@ -19,6 +19,12 @@
     min={minFramerate}
     max={200}
     step={1}
+  />
+
+  <Textarea
+    disabled
+    rows={1}
+    value={`Physics delta: ${((1 / framerate) * 1000).toFixed(2)}ms`}
   />
 </Pane>
 
