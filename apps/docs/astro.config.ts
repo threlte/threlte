@@ -8,12 +8,8 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
 import mdx from '@astrojs/mdx'
 
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
@@ -47,6 +43,7 @@ export default defineConfig({
       })
     }),
     mdx({
+      syntaxHighlight: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
     preact({ compat: true, include: ['**/*.tsx'] })
@@ -87,9 +84,5 @@ export default defineConfig({
     build: {
       target: 'esnext'
     }
-  },
-  markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
   }
 })

@@ -66,7 +66,6 @@
     "postcss-easing-gradients": "^3.0.1",
     "postprocessing": "^6.35.5",
     "rehype-autolink-headings": "^6.1.1",
-    "rehype-pretty-code": "^0.9.2",
     "rehype-slug": "^5.1.0",
     "rimraf": "^5.0.1",
     "sharp": "^0.31.3",
