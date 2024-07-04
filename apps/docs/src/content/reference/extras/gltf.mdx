@@ -42,12 +42,9 @@ componentSignature:
   }
 ---
 
-To use DRACO compression, provide a path to the DRACO decoder.
-To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
+`<GLTF />` is loads a single model. Changing the property `url` loads new 3D content. The new content will be swapped as soon as loading is finished.
 
-Change the property `url` to load new 3D content. The new content will be swapped as soon as loading is finished.
-
-Use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse a glTF model or to use parts of it.
+To have multiple copies of the same model or to customise parts of your model (i.e. casting shadows), use the [gltf package](docs/reference/gltf/getting-started), or create your own component using the [`useGltf`](/docs/reference/extras/use-gltf) hook.
 
 <Tip type="tip">
   See the hook [`useGltfAnimations`](/docs/reference/extras/use-gltf-animations) on how to use
@@ -71,26 +68,12 @@ The `<GLTF>` component supports interaction events with the use of `interactivit
 </script>
 
 <GLTF
+  position={{ y: 1 }}
+  scale={3}
   url="/models/helmet/DamagedHelmet.gltf"
   onclick={() => {
     console.log('User clicked!')
   }}
-/>
-```
-
-### Example
-
-```svelte
-<script>
-  import { GLTF } from '@threlte/extras'
-</script>
-
-<GLTF
-  castShadow
-  receiveShadow
-  url={'/models/flower.glb'}
-  position={{ y: 1 }}
-  scale={3}
 />
 ```
 
@@ -103,6 +86,10 @@ The `<GLTF>` component supports compressed glTF files.
 You can set `useDraco` to `true` to use DRACO compression and Threlte will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
 
 Or you can set `useDraco` to your own DRACO decoder path as a `string`.
+
+#### KTX2
+
+To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
 
 #### Meshopt
 
