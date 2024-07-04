@@ -8,13 +8,9 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
-import mdx from '@astrojs/mdx'
+import starlight from '@astrojs/starlight'
 
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
@@ -33,23 +29,29 @@ export default defineConfig({
     inlineStylesheets: 'never'
   },
   integrations: [
-    AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
-    }),
     tailwind(),
     svelte({
       preprocess: preprocess({
         postcss: true
       })
     }),
-    mdx({
-      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
+    preact({
+      compat: true,
+      include: ['**/*.tsx']
     }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    starlight({
+      title: 'threlte',
+      expressiveCode: {
+        themes: ['dracula-soft']
+      }
+    }),
+    AutoImport({
+      imports: [
+        '$components/Example/Example.astro',
+        '$components/Tip/Tip.astro',
+        '$components/Card/Card.astro'
+      ]
+    })
   ],
   output: 'static',
   vite: {
@@ -89,7 +91,6 @@ export default defineConfig({
     }
   },
   markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
   }
 })
