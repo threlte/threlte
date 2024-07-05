@@ -46,11 +46,7 @@ export default defineConfig({
       }
     }),
     AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     })
   ],
   output: 'static',
