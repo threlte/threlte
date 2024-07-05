@@ -17,7 +17,6 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^3.1.2",
     "@astrojs/preact": "^3.1.0",
     "@astrojs/starlight": "^0.24.5",
     "@astrojs/svelte": "^5.6.0",

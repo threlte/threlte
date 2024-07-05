@@ -38,9 +38,6 @@ importers:
 
   apps/docs:
     dependencies:
-      '@astrojs/mdx':
-        specifier: ^3.1.2
-        version: 3.1.2(astro@4.11.1(@types/node@20.12.7)(typescript@5.4.5))
       '@astrojs/preact':
         specifier: ^3.1.0
         version: 3.1.0(@babel/core@7.24.7)(preact@10.16.0)(vite@5.3.1(@types/node@20.12.7))
@@ -15447,7 +15444,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
       '@types/node': 20.12.7
-      acorn: 8.8.2
+      acorn: 8.12.0
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
