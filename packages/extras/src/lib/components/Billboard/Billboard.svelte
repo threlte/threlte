@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import { type Stage, T, useTask, useThrelte } from '@threlte/core'
 
   let stage: Stage | undefined
@@ -50,6 +53,6 @@
   {...props}
 >
   <T is={inner}>
-		{@render children?.({ ref:localRef })}
+    {@render children?.({ ref: localRef })}
   </T>
 </T>

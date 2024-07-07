@@ -18,7 +18,11 @@
 <div bind:this={wrapper}>
   <canvas bind:this={canvas}>
     {#if canvas && wrapper}
-      <Context {wrapper} {canvas} {...rest}>
+      <Context
+        {wrapper}
+        {canvas}
+        {...rest}
+      >
         <RootScene>
           {@render children?.()}
         </RootScene>

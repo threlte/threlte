@@ -11,7 +11,12 @@
   })
 </script>
 
-<T.Mesh castShadow receiveShadow {...$$restProps} bind:ref>
+<T.Mesh
+  castShadow
+  receiveShadow
+  {...$$restProps}
+  bind:ref
+>
   <T.MeshStandardMaterial color="hotpink" />
   <T.BoxGeometry />
 </T.Mesh>

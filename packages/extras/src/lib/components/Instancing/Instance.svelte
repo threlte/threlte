@@ -24,5 +24,5 @@
   bind:ref
   {...props}
 >
-	{@render children?.({ ref: mesh })}
+  {@render children?.({ ref: mesh })}
 </T>

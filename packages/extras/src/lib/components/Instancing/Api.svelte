@@ -11,7 +11,7 @@
     limit: number
     range: number
     update: boolean
-		children?: Snippet
+    children?: Snippet
   }
 
   let { instancedMesh, id, limit, range, update, children }: Props = $props()

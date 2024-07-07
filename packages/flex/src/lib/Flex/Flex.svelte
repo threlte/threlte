@@ -19,7 +19,7 @@
     {yoga}
     {...props}
   >
-    {#snippet children({ reflow, width, height})}
+    {#snippet children({ reflow, width, height })}
       {@render innerChildren?.({ reflow, width, height })}
     {/snippet}
   </InnerFlex>

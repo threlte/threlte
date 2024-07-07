@@ -474,10 +474,7 @@ function parse(fileName, gltf, options = {}) {
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
   ${options.stype && !options.isolated ? `import type { Snippet } from 'svelte'` : ''}
-        import { ${[
-          'T',
-          options.types && !options.isolated ? 'type Props' : ''
-        ]
+        import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
         import { ${[
@@ -536,12 +533,16 @@ ${
           error,
           children,
           ...props
-        }${options.types && !options.isolated ? `: Props<THREE.Group> & {
+        }${
+          options.types && !options.isolated
+            ? `: Props<THREE.Group> & {
           ref?: THREE.Group
           children?: Snippet<[{ ref: THREE.Group }]>
           fallback?: Snippet
           error?: Snippet<[{ error: Error }]>
-        }` : ''} = $props()
+        }`
+            : ''
+        } = $props()
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 

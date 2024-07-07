@@ -25,7 +25,7 @@
     crossAxis,
     depthAxis,
     classParser,
-    reflow,
+    reflow
   } = useFlex()
 
   const group = new Group()

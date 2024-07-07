@@ -26,7 +26,7 @@
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-	{#if children}
-		{@render children({ref:lineSegments})}
-	{/if}
+  {#if children}
+    {@render children({ ref: lineSegments })}
+  {/if}
 </T>

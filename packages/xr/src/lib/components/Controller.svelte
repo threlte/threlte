@@ -74,8 +74,7 @@
     pointerRay: pointerRaySnippet,
     pointerCursor: pointerCursorSnippet,
     teleportRay: teleportRaySnippet,
-    teleportCursor: teleportCursorSnippet,
-
+    teleportCursor: teleportCursorSnippet
   }: Props = $props()
 
   const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)

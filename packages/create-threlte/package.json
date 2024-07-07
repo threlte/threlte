@@ -8,8 +8,8 @@
     "dev": "node --loader ts-node/esm src/bin.ts",
     "build": "rimraf dist/ && tsc && cpy ./templates '../dist/' --cwd=src",
     "package": "pnpm build",
-    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
-    "format": "prettier --write --plugin-search-dir=. .",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
     "cleanup": "rimraf dist && rimraf node_modules"
   },
   "devDependencies": {
