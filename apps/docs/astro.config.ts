@@ -29,7 +29,10 @@ export default defineConfig({
     inlineStylesheets: 'never'
   },
   integrations: [
-    tailwind(),
+    tailwind({
+      // Disable the default base styles:
+      applyBaseStyles: false
+    }),
     svelte({
       preprocess: preprocess({
         postcss: true
@@ -41,6 +44,14 @@ export default defineConfig({
     }),
     starlight({
       title: 'threlte',
+      logo: {
+        src: 'public/logo/threlte-logo.png',
+        replacesTitle: true
+      },
+      customCss: ['./src/styles/app.css', './src/styles/theme.css'],
+      components: {
+        Header: '$components/Header/Header.astro'
+      },
       expressiveCode: {
         themes: ['dracula-soft']
       }

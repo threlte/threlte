@@ -1,3 +1,5 @@
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 @layer utilities {
@@ -9,6 +11,10 @@
     @apply font-bold text-white;
   }
 }
+
+/* :root {
+  --sl-nav-height: 7rem;
+} */
 
 .expressive-code {
   @apply mb-6;
