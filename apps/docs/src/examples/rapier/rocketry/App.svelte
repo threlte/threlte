@@ -2,6 +2,7 @@
   import { Canvas } from '@threlte/core'
   import { Debug, World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
+  import BatchedRenderer from './quarks/BatchedRenderer.svelte'
 </script>
 
 <main>
@@ -11,6 +12,7 @@
       framerate={120}
     >
       <Debug />
+      <BatchedRenderer />
       <Scene />
     </World>
   </Canvas>

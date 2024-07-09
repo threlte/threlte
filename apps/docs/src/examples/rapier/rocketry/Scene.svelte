@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { PortalTarget } from '@threlte/extras'
+  import { PortalTarget, Stars } from '@threlte/extras'
   import Level from './Level.svelte'
   import { level1, level2 } from './levels/levels'
+  import { useThrelte } from '@threlte/core'
+  import { Color } from 'three'
 
   const levels = [level1, level2]
   let currentLevelIndex = $state(0)
@@ -13,6 +14,10 @@
       currentLevelIndex += 1
     }
   }
+
+  const { scene } = useThrelte()
+
+  scene.background = new Color('black')
 </script>
 
 <PortalTarget id="scene" />
@@ -26,13 +31,4 @@
   {/if}
 {/key}
 
-<T.AmbientLight />
-<T.DirectionalLight
-  position={[4, 10, 0]}
-  castShadow
-  shadow.mapSize={1024}
-  shadow.camera.left={-10}
-  shadow.camera.right={10}
-  shadow.camera.top={10}
-  shadow.camera.bottom={-10}
-/>
+<Stars />

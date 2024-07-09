@@ -58,3 +58,14 @@
     </AutoColliders>
   </T.Group>
 {/each}
+
+<T.AmbientLight />
+<T.DirectionalLight
+  position={[4, 10, 0]}
+  castShadow
+  shadow.mapSize={1024}
+  shadow.camera.left={-10}
+  shadow.camera.right={10}
+  shadow.camera.top={10}
+  shadow.camera.bottom={-10}
+/>

@@ -1,45 +1,54 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
-  import Player from './Player.svelte'
-  import IsStatic from './IsStatic.svelte'
   import type { Snippet } from 'svelte'
+  import IsStatic from './IsStatic.svelte'
+  import Player from './Player.svelte'
+  import ThrusterQuarks from './ThrusterQuarks.svelte'
 
   let {
     onsleep,
     checkIsStatic,
     children: componentChildren
-  }: { onsleep: () => void; checkIsStatic: boolean; children: Snippet } = $props()
+  }: { onsleep: () => void; checkIsStatic: boolean; children?: Snippet } = $props()
 
   let currentSide = $state<'left' | 'right'>('left')
 
   type Player = {
     side: 'left' | 'right'
     key: string
+		active: boolean
   }
 
-  const hasPlayer = (key: string) => players.some((p) => p.key === key)
+  const getPlayer = (key: string) => players.find((p) => p.key === key)
 
   let players = $state<Player[]>([])
-
 </script>
 
 <svelte:window
   onkeydown={(e) => {
     const pk = e.key
     // check if player is already registered
-    if (hasPlayer(pk)) return
+    if (getPlayer(pk)) return
     // check if key is from a-z
     if (!pk.match(/^[a-z]$/)) return
     // check if it has a modifier
     if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) return
     const player = {
       side: currentSide,
-      key: pk
+      key: pk,
+			active: false,
     }
     players.push(player)
     currentSide = currentSide === 'left' ? 'right' : 'left'
   }}
+
+	onkeyup={(e) => {
+		const pk = e.key
+		const player = getPlayer(pk)
+		if (!player) return
+		player.active = true
+	}}
 />
 
 <RigidBody
@@ -50,7 +59,7 @@
   type="dynamic"
 >
   {#snippet children({ rigidBody })}
-		{@render componentChildren()}
+		{@render componentChildren?.()}
 
     {#if checkIsStatic}
       <IsStatic
@@ -67,7 +76,12 @@
         key={player.key}
         min={player.side === 'left' ? -0.5 : 0.25}
         max={player.side === 'left' ? -0.25 : 0.5}
-      />
+				active={player.active}
+      >
+				{#snippet children(active)}
+					<ThrusterQuarks {active} />
+				{/snippet}
+			</Player>
     {/each}
 
     <AutoColliders>

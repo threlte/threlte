@@ -1,18 +1,22 @@
 <script lang="ts">
   import { type RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { useTask } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Portal, Text } from '@threlte/extras'
   import { useRapier } from '@threlte/rapier'
   import { Quaternion, Vector3 } from 'three'
   import Impulse from './Impulse.svelte'
   import { randomNumberInRange } from './utils'
+  import type { Snippet } from 'svelte'
 
   let {
     rigidBody,
     key,
     min,
-    max
-  }: { rigidBody: RapierRigidBody; key: string; min: number; max: number } = $props()
+    max,
+    active,
+		children
+  }: { rigidBody: RapierRigidBody; key: string; min: number; max: number; active: boolean, children?: Snippet<[ active: boolean ]> } =
+    $props()
 
   const rapier = useRapier()
 
@@ -42,12 +46,15 @@
       impulse.applyQuaternion(quaternion)
 
       if (!pressed) return
+      if (!active) return
       rigidBody.applyImpulseAtPoint(impulse, origin, true)
     },
     {
       stage: rapier.physicsStage
     }
   )
+
+	const thrusterActive = $derived(pressed && active)
 </script>
 
 <svelte:window
@@ -63,18 +70,21 @@
   }}
 />
 
-<Text
-  position.y={-0.6}
-  position.x={playerOffset.x}
-  text={key}
-  renderOrder={1000}
-/>
+<T.Group position.y={-0.5} position.x={playerOffset.x}>
+	<Text
+		position.y={-0.1}
+		text={key}
+		renderOrder={1000}
+	/>
+
+	{@render children?.(thrusterActive)}
+</T.Group>
 
 <Portal id="scene">
   <Impulse
     {origin}
     {impulse}
     afterTask={t.task}
-    multiplier={pressed ? 10 : 1}
+    multiplier={pressed && active ? 10 : 1}
   />
 </Portal>
