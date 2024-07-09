@@ -48,9 +48,14 @@ export default defineConfig({
         src: 'public/logo/threlte-logo.png',
         replacesTitle: true
       },
-      customCss: ['./src/styles/app.css', './src/styles/theme.css'],
+      social: {
+        github: 'https://github.com/threlte/threlte',
+        twitter: 'https://twitter.com/threlte',
+        discord: 'https://discord.gg/EqUBCfCaGm'
+      },
+      customCss: ['$styles/app.css', '$styles/theme.css'],
       components: {
-        Header: '$components/Header/Header.astro'
+        Header: '$components/Header.astro'
       },
       expressiveCode: {
         themes: ['dracula-soft']

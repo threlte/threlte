@@ -7,6 +7,7 @@ import Search from 'virtual:starlight/components/Search'
 import SiteTitle from 'virtual:starlight/components/SiteTitle'
 import SocialIcons from 'virtual:starlight/components/SocialIcons'
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect'
+import PackageNav from './PackageNav.astro'
 
 /**
  * Render the `Search` component if Pagefind is enabled or the default search component has been overridden.
@@ -30,11 +31,8 @@ const shouldRenderSearch =
     <LanguageSelect {...Astro.props} />
   </div>
 </div>
-<!-- This doesn't work as expected because starlight has a predefined height for the top nav -->
-<!-- <div class="flex justify-between">
-  <div>Packages</div>
-  <div>...</div>
-</div> -->
+<!-- The Package-Nav only works because of a lot of css in $styles/app.css -->
+<PackageNav />
 
 <style>
   .header {
