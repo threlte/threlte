@@ -86,12 +86,12 @@ export function useThrelteUserContext<UCT extends UserContextEntry = UserContext
 ): Readable<UCT>
 export function useThrelteUserContext<UCT extends UserContextEntry = UserContextEntry>(
   namespace: string,
-  value: UCT,
+  value: UCT | (() => UCT),
   options?: SetThrelteUserContextOptions
 ): UCT
 export function useThrelteUserContext<
   UCorUCT extends UserContext | UserContextEntry,
-  Value extends UserContextEntry,
+  Value extends UserContextEntry | (() => UserContextEntry),
   Result = UCorUCT extends UserContext
     ? Readable<UCorUCT>
     : Value extends UserContextEntry
@@ -125,13 +125,15 @@ export function useThrelteUserContext<
       if (!options || options.existing === 'skip') return ctx
 
       if (options.existing === 'merge') {
-        Object.assign(ctx[namespace], value)
+        const v = typeof value === 'function' ? value() : value
+        Object.assign(ctx[namespace], v)
         return ctx
       }
     }
 
     // also handles options.existing === 'replace'
-    ctx[namespace] = value
+    const v = typeof value === 'function' ? value() : value
+    ctx[namespace] = v
     return ctx
   })
 
