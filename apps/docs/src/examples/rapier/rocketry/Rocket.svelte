@@ -17,7 +17,7 @@
   type Player = {
     side: 'left' | 'right'
     key: string
-    active: boolean
+		active: boolean
   }
 
   const getPlayer = (key: string) => players.find((p) => p.key === key)
@@ -37,17 +37,18 @@
     const player = {
       side: currentSide,
       key: pk,
-      active: false
+			active: false,
     }
     players.push(player)
     currentSide = currentSide === 'left' ? 'right' : 'left'
   }}
-  onkeyup={(e) => {
-    const pk = e.key
-    const player = getPlayer(pk)
-    if (!player) return
-    player.active = true
-  }}
+
+	onkeyup={(e) => {
+		const pk = e.key
+		const player = getPlayer(pk)
+		if (!player) return
+		player.active = true
+	}}
 />
 
 <RigidBody
@@ -58,7 +59,7 @@
   type="dynamic"
 >
   {#snippet children({ rigidBody })}
-    {@render componentChildren?.()}
+		{@render componentChildren?.()}
 
     {#if checkIsStatic}
       <IsStatic
@@ -78,28 +79,9 @@
 				active={player.active}
       >
 				{#snippet children(active)}
-
-    {#if checkIsStatic}
-      <IsStatic
-        {rigidBody}
-        linearMax={0.00001}
-        angularMax={0.00001}
-        onstatic={onsleep}
-      />
-    {/if}
-
-    {#each players as player}
-      <Player
-        {rigidBody}
-        key={player.key}
-        min={player.side === 'left' ? -0.5 : 0.25}
-        max={player.side === 'left' ? -0.25 : 0.5}
-        active={player.active}
-      >
-        {#snippet children(active)}
-          <Thruster {active} />
-        {/snippet}
-      </Player>
+					<Thruster {active} />
+				{/snippet}
+			</Player>
     {/each}
 
     <AutoColliders>
