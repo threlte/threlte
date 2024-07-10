@@ -45,6 +45,13 @@ export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 // contexts
 export { type ThrelteContext } from './context/compounds/useThrelte'
 export { createThrelteContext } from './context/createThrelteContext.svelte'
+export { createCacheContext, useCache } from './context/fragments/cache'
+export { createCameraContext, useCamera } from './context/fragments/camera'
+export { createCanvasContext, useCanvas } from './context/fragments/canvas'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal'
+export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
+export { createSceneContext, useScene } from './context/fragments/scene'
+export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
 
 // types
 export type { Size } from './types'
@@ -52,7 +59,6 @@ export type { Size } from './types'
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { useCache, createCacheContext } from './context/fragments/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { revision } from './lib/revision'
 
