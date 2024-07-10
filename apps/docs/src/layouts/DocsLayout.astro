@@ -143,6 +143,16 @@ const activeLinkStyles = '!text-orange'
           >
             <Package class="hidden h-[16px] md:block" />flex
           </a>
+          <a
+            href="/docs/reference/studio/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/studio') && activeLinkStyles
+            )}
+            data-astro-prefetch
+          >
+            <Package class="hidden h-[16px] md:block" />studio
+          </a>
         </div>
       </div>
     </div>
