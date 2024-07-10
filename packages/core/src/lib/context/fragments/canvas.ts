@@ -1,6 +1,5 @@
-import { currentWritable } from '../../lib/storeUtils'
 import { getContext, onMount, setContext } from 'svelte'
-import { type Readable } from 'svelte/store'
+import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../lib/storeUtils'
 
 export type Size = {
   width: number
@@ -13,7 +12,7 @@ type CanvasContext = {
   /** The canvas element */
   canvas: HTMLCanvasElement
   /** The canvas size */
-  size: Readable<Size> & { current: Size }
+  size: CurrentReadable<Size>
 }
 
 export type CreateCanvasContextOptions = {
@@ -50,12 +49,7 @@ export const createCanvasContext = (options: CreateCanvasContextOptions) => {
   const context: CanvasContext = {
     wrapper: options.wrapper,
     canvas: options.canvas,
-    size: {
-      subscribe: size.subscribe,
-      get current() {
-        return size.current
-      }
-    }
+    size: toCurrentReadable(size)
   }
 
   setContext<CanvasContext>('threlte-canvas-context', context)
