@@ -10,10 +10,7 @@
     WebGLCubeRenderTarget
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky.js'
-  import type { SkyProps, SkyEvents, SkySlots } from './Sky'
-
-  type $$Events = SkyEvents
-  type $$Slots = SkySlots
+  import type { SkyProps } from './Sky.svelte'
 
   let {
     scale = 1000,
@@ -27,6 +24,7 @@
     cubeMapSize = 128,
     webGLRenderTargetOptions = {},
     ref = $bindable(),
+    children,
     ...props
   }: SkyProps = $props()
 
@@ -119,9 +117,5 @@
   bind:ref
   {...props}
 >
-  <slot
-    ref={sky}
-    {sunPosition}
-    {renderTarget}
-  />
+  {@render children?.({ ref: sky, sunPosition, renderTarget })}
 </T>

@@ -9,36 +9,38 @@
   export let bevelSize: number
   export let bevelThickness: number
   export let curveSegments: number
-  export let height: number
+  export let depth: number
   export let size: number
   export let smooth: number
 </script>
 
-<Align let:align>
-  <T.Mesh>
-    <Text3DGeometry
-      font={'/fonts/Inter-semibold.blob'}
-      {text}
-      {bevelEnabled}
-      {bevelOffset}
-      {bevelSegments}
-      {bevelSize}
-      {bevelThickness}
-      {curveSegments}
-      {height}
-      {size}
-      {smooth}
-      on:create={() => {
-        align()
-      }}
-    />
-    <T.MeshStandardMaterial
-      color="#FD3F00"
-      toneMapped={false}
-      metalness={1.0}
-      roughness={0.1}
-    />
-  </T.Mesh>
+<Align>
+  {#snippet children({ align })}
+    <T.Mesh>
+      <Text3DGeometry
+        font={'/fonts/Inter-semibold.blob'}
+        {text}
+        {bevelEnabled}
+        {bevelOffset}
+        {bevelSegments}
+        {bevelSize}
+        {bevelThickness}
+        {curveSegments}
+        {depth}
+        {size}
+        {smooth}
+        oncreate={() => {
+          align()
+        }}
+      />
+      <T.MeshStandardMaterial
+        color="#FD3F00"
+        toneMapped={false}
+        metalness={1.0}
+        roughness={0.1}
+      />
+    </T.Mesh>
+  {/snippet}
 </Align>
 
 <Environment files="/hdr/shanghai_riverside_1k.hdr" />
@@ -54,9 +56,6 @@
     position.y={0}
     position.z={20}
     fov={90}
-    on:create={({ ref }) => {
-      ref.lookAt(0, 0, 0)
-    }}
   >
     <OrbitControls
       enableDamping

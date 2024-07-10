@@ -38,7 +38,7 @@ const activeLinkStyles = '!text-orange'
 <AppLayout title={title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
+    class="fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b border-b-orange/25 bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
@@ -201,7 +201,7 @@ const activeLinkStyles = '!text-orange'
       class="col-start-2 w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
       <article
-        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
+        class="[&_p]:text-faded [&_li]:text-faded prose prose-invert mx-auto max-w-5xl prose-a:text-orange prose-a:decoration-dotted before:prose-code:content-none after:prose-code:content-none"
       >
         <slot />
       </article>

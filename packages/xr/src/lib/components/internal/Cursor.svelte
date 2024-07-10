@@ -3,9 +3,9 @@
   import { T } from '@threlte/core'
 
   interface Props {
-    color: ColorRepresentation
-    size: number
-    thickness: number
+    color?: ColorRepresentation
+    size?: number
+    thickness?: number
   }
 
   let { color = new Color('white'), size = 0.03, thickness = 0.035 }: Props = $props()

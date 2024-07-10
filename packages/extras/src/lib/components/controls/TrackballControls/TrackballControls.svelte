@@ -4,16 +4,9 @@
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { onDestroy } from 'svelte'
   import { useControlsContext } from '../useControlsContext'
-  import type {
-    TrackballControlsEvents,
-    TrackballControlsProps,
-    TrackballControlsSlots
-  } from './TrackballControls.svelte'
+  import type { TrackballControlsProps } from './TrackballControls.svelte'
 
-  type $$Events = TrackballControlsEvents
-  type $$Slots = TrackballControlsSlots
-
-  let { ref = $bindable(), ...props }: TrackballControlsProps = $props()
+  let { ref = $bindable(), onchange, children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
 
@@ -27,7 +20,8 @@
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
-  const controls = new ThreeTrackballControls($parent, renderer.domElement)
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
 
   useTask(controls.update, {
     autoInvalidate: false
@@ -42,10 +36,10 @@
   is={controls}
   bind:ref
   {...props}
-  on:change={(event) => {
+  onchange={(event) => {
     invalidate()
-    props.$$events?.change?.(event)
+    onchange?.(event)
   }}
 >
-  <slot ref={controls} />
+  {@render children?.({ ref: controls })}
 </T>

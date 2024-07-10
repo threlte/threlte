@@ -8,12 +8,12 @@
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 >
   <CameraControls
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       $cameraControls = ref
     }}
   />
@@ -23,7 +23,7 @@
 
 <T.Mesh
   position.y={1}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     $mesh = ref
   }}
 >

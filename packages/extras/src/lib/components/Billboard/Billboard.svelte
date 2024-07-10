@@ -1,4 +1,7 @@
-<script context="module" lang="ts">
+<script
+  context="module"
+  lang="ts"
+>
   import { type Stage, T, useTask, useThrelte } from '@threlte/core'
 
   let stage: Stage | undefined
@@ -7,12 +10,9 @@
 <script lang="ts">
   import { Group, Quaternion } from 'three'
 
-  import type { BillboardEvents, BillboardProps, BillboardSlots } from './Billboard.svelte'
+  import type { BillboardProps } from './Billboard.svelte'
 
-  type $$Events = BillboardEvents
-  type $$Slots = BillboardSlots
-
-  let { follow = true, ref = $bindable(), ...props }: BillboardProps = $props()
+  let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
   const inner = new Group()
   const localRef = new Group()
@@ -53,6 +53,6 @@
   {...props}
 >
   <T is={inner}>
-    <slot ref={localRef} />
+    {@render children?.({ ref: localRef })}
   </T>
 </T>

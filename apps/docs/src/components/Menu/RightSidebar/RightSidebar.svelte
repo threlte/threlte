@@ -82,7 +82,7 @@
             'nav-list-item text-faded',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
-              '!border-orange !text-orange font-bold'
+              '!border-orange font-bold !text-orange'
           )}
         >
           <a

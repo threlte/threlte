@@ -3,12 +3,14 @@
   import { T, useTask } from '@threlte/core'
   import { pointerIntersection, pointerState } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     handedness: 'left' | 'right'
+    children?: Snippet
   }
 
-  let { handedness }: Props = $props()
+  let { handedness, children }: Props = $props()
 
   const ref = new Group()
   const vec3 = new Vector3()
@@ -49,7 +51,9 @@
   is={ref}
   visible={hovering}
 >
-  <slot>
+  {#if children}
+    {@render children()}
+  {:else}
     <Cursor />
-  </slot>
+  {/if}
 </T>

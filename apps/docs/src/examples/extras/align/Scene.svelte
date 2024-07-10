@@ -29,41 +29,37 @@
     {z}
     {precise}
     auto={autoAlign}
-    on:align={({ boundingBox: newBoundingBox, center: newCenter }) => {
+    onalign={({ boundingBox: newBoundingBox, center: newCenter }) => {
       center = newCenter
       boundingBox = newBoundingBox
     }}
-    let:align
   >
-    <T.Mesh
-      position.x={-1}
-      let:ref
-    >
-      <TransformControls
-        object={ref}
-        on:objectChange={align}
-      />
-      <RoundedBoxGeometry args={[1, 2, 1]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
+    {#snippet children({ align })}
+      <TransformControls onobjectChange={align}>
+        <T.Mesh position.x={-1}>
+          <RoundedBoxGeometry args={[1, 2, 1]} />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      </TransformControls>
 
-    <T.Mesh
-      position.x={-4}
-      position.y={1}
-    >
-      <RoundedBoxGeometry args={[1, 2, 3]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
-
-    {#if showSphere}
       <T.Mesh
-        position.x={-2}
-        position.y={3}
+        position.x={-4}
+        position.y={1}
       >
-        <T.SphereGeometry />
+        <RoundedBoxGeometry args={[1, 2, 3]} />
         <T.MeshStandardMaterial color="white" />
       </T.Mesh>
-    {/if}
+
+      {#if showSphere}
+        <T.Mesh
+          position.x={-2}
+          position.y={3}
+        >
+          <T.SphereGeometry />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      {/if}
+    {/snippet}
   </Align>
 {/key}
 

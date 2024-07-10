@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Color, ColorRepresentation, Material, Mesh } from 'three'
 
@@ -221,8 +221,6 @@ export interface TextMesh extends Mesh {
    */
   fillOpacity: number
 
-  sync: (cb: () => void) => void
-
   /**
    * A string or array of string character sequences for which to pre-generate
    * glyph SDF textures. Note that this will honor ligature substitution, so you
@@ -241,12 +239,10 @@ export interface TextMesh extends Mesh {
    * any of the strings accepted by `THREE.Color`.
    */
   colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
+
+  onsync?: () => void
 }
 
 export type TextProps = Props<TextMesh>
 
-export type TextEvents = Events<TextMesh>
-
-export type TextSlots = Slots<TextMesh>
-
-export default class Text extends SvelteComponent<TextProps, TextEvents, TextSlots> {}
+export default class Text extends SvelteComponent<TextProps> {}

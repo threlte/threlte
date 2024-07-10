@@ -18,25 +18,25 @@
 <T.Group {...$$restProps}>
   <T.Group position.y={0.05 - $buttonOffsetY}>
     <T.Mesh
-      on:click={onClick}
-      on:pointerenter={(e) => {
+      onclick={onClick}
+      onpointerenter={(e) => {
         e.stopPropagation()
         buttonColor = '#eedbcb'
         textColor = '#111111'
         onPointerEnter()
       }}
-      on:pointerleave={(e) => {
+      onpointerleave={(e) => {
         e.stopPropagation()
         buttonColor = '#111111'
         textColor = '#eedbcb'
         buttonOffsetY.set(0)
         onPointerLeave()
       }}
-      on:pointerdown={(e) => {
+      onpointerdown={(e) => {
         e.stopPropagation()
         buttonOffsetY.set(0.05)
       }}
-      on:pointerup={(e) => {
+      onpointerup={(e) => {
         e.stopPropagation()
         buttonOffsetY.set(0)
       }}

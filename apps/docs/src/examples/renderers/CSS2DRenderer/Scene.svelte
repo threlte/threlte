@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useStage, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
   import CounterLabel from './CounterLabel.svelte'

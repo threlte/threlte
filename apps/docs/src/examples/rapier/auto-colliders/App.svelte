@@ -27,16 +27,15 @@
 
       <Scene />
 
-      <HTML
-        slot="fallback"
-        transform
-      >
-        <p class="text-xs">
-          It seems your browser<br />
-          doesn't support WASM.<br />
-          I'm sorry.
-        </p>
-      </HTML>
+      {#snippet fallback()}
+        <HTML transform>
+          <p class="text-xs">
+            It seems your browser<br />
+            doesn't support WASM.<br />
+            I'm sorry.
+          </p>
+        </HTML>
+      {/snippet}
     </World>
   </Canvas>
 </div>

@@ -7,9 +7,9 @@
   import AdvancedScene from './AdvancedScene.svelte'
   import { Pane, Slider, TabGroup, TabPage, Checkbox, Button } from 'svelte-tweakpane-ui'
 
-  let reset: (() => void) | undefined
+  let reset: () => void = () => {}
   let showHelper = false
-  const gravityTypes: GravityType[] = ['static', 'linear', 'newtonian']
+  const gravityTypes = ['static', 'linear', 'newtonian'] as const
   let gravityType: GravityType = gravityTypes[0]
   let strengthLeft = 1
   let strengthCenter = 1
@@ -95,16 +95,16 @@
           {strengthRight}
         />
       {/if}
-      <HTML
-        slot="fallback"
-        transform
-      >
-        <p>
-          It seems your browser<br />
-          doesn't support WASM.<br />
-          I'm sorry.
-        </p>
-      </HTML>
+
+      {#snippet fallback()}
+        <HTML transform>
+          <p>
+            It seems your browser<br />
+            doesn't support WASM.<br />
+            I'm sorry.
+          </p>
+        </HTML>
+      {/snippet}
     </World>
   </Canvas>
 </div>

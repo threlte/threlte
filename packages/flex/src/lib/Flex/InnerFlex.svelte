@@ -10,12 +10,8 @@
   import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
   import { propsChanged } from '../lib/propsChanged'
   import { createNodeContext } from '../nodes/context'
-  import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './InnerFlex.svelte'
+  import type { InnerFlexProps } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
-
-  type $$Props = InnerFlexProps
-  type $$Events = InnerFlexEvents
-  type $$Slots = InnerFlexSlots
 
   let {
     yoga,
@@ -28,8 +24,10 @@
     class: _class = '',
     reflowStage,
     ref = $bindable(),
+    onreflow,
+    children,
     ...props
-  }: InnerFlexProps & { ref: Group } = $props()
+  }: InnerFlexProps = $props()
 
   $inspect(yoga)
 
@@ -106,7 +104,7 @@
       computedWidth.set((maxX - minX) / scaleFactor)
       computedHeight.set((maxY - minY) / scaleFactor)
 
-      props.$$events?.reflow?.({
+      onreflow?.({
         width: computedWidth.current,
         height: computedHeight.current
       })
@@ -203,9 +201,9 @@
 </script>
 
 <T is={ref}>
-  <slot
-    {reflow}
-    width={$computedWidth}
-    height={$computedHeight}
-  />
+  {@render children?.({
+    reflow,
+    width: $computedWidth,
+    height: $computedHeight
+  })}
 </T>

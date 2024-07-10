@@ -40,11 +40,11 @@ export const setupPointerControls = (
     handContext.initialClick = [hit.point.x, hit.point.y, hit.point.z]
     handContext.initialHits = hits.map((hit) => hit.eventObject)
 
-    handleEvent('pointerdown', event)
+    handleEvent('onpointerdown', event)
   }
 
   const handlePointerUp = (event: Event) => {
-    handleEvent('pointerup', event)
+    handleEvent('onpointerup', event)
   }
 
   const handleClick = (event: Event) => {
@@ -54,7 +54,7 @@ export const setupPointerControls = (
       pointerMissed(context.interactiveObjects, event)
     }
 
-    handleEvent('click', event)
+    handleEvent('onclick', event)
   }
 
   function cancelPointer(intersections: Intersection[]) {
@@ -77,8 +77,8 @@ export const setupPointerControls = (
         if (events !== undefined) {
           // Clear out intersects, they are outdated by now
           const data: IntersectionEvent = { ...hoveredObj, intersections }
-          events.pointerout?.(data)
-          events.pointerleave?.(data)
+          events.onpointerout?.(data)
+          events.onpointerleave?.(data)
 
           // Deal with cancelation
           handContext.pointerOverTarget.set(false)
@@ -124,8 +124,8 @@ export const setupPointerControls = (
   }
 
   const handleEvent = (name: PointerEventName, event?: Event | undefined) => {
-    const isPointerMove = name === 'pointermove'
-    const isClickEvent = name === 'click' || name === 'contextmenu'
+    const isPointerMove = name === 'onpointermove'
+    const isClickEvent = name === 'onclick' || name === 'oncontextmenu'
 
     // Take care of unhover
     if (isPointerMove) cancelPointer(hits)
@@ -164,15 +164,20 @@ export const setupPointerControls = (
         // Move event ...
         handContext.pointer.update((value) => value.copy(intersectionEvent.point))
 
-        if (events.pointerover || events.pointerenter || events.pointerout || events.pointerleave) {
+        if (
+          events.onpointerover ||
+          events.onpointerenter ||
+          events.onpointerout ||
+          events.onpointerleave
+        ) {
           const id = getIntersectionId(intersectionEvent)
           const hoveredItem = handContext.hovered.get(id)
           if (hoveredItem === undefined) {
             // If the object wasn't previously hovered, book it and call its handler
             handContext.hovered.set(id, intersectionEvent)
-            events.pointerover?.(intersectionEvent)
+            events.onpointerover?.(intersectionEvent)
 
-            events.pointerenter?.(intersectionEvent)
+            events.onpointerenter?.(intersectionEvent)
             handContext.pointerOverTarget.set(true)
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
@@ -181,10 +186,10 @@ export const setupPointerControls = (
         }
 
         // Call pointer move
-        events.pointermove?.(intersectionEvent)
+        events.onpointermove?.(intersectionEvent)
       } else if (
         (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) &&
-        events[name]
+        events[name] !== undefined
       ) {
         // Missed events have to come first
         pointerMissed(
@@ -214,7 +219,7 @@ export const setupPointerControls = (
       if (targetRay === undefined) return
 
       if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
-        handleEvent('pointermove')
+        handleEvent('onpointermove')
       }
 
       lastPosition.copy(targetRay.position)
@@ -239,17 +244,17 @@ export const setupPointerControls = (
     }
   })
 
-  // watch(hand, (input) => {
-  //   if (input === undefined) return
-  //   input.hand.addEventListener('pinchstart', handlePointerDown)
-  //   input.hand.addEventListener('pinchend', handlePointerUp)
-  //   input.hand.addEventListener('pinchend', handleClick)
-  //   return () => {
-  //     input.hand.removeEventListener('pinchstart', handlePointerDown)
-  //     input.hand.removeEventListener('pinchend', handlePointerUp)
-  //     input.hand.removeEventListener('pinchend', handleClick)
-  //   }
-  // })
+  watch(hand, (input) => {
+    if (input === undefined) return
+    input.hand.addEventListener('pinchstart', handlePointerDown)
+    input.hand.addEventListener('pinchend', handlePointerUp)
+    input.hand.addEventListener('pinchend', handleClick)
+    return () => {
+      input.hand.removeEventListener('pinchstart', handlePointerDown)
+      input.hand.removeEventListener('pinchend', handlePointerUp)
+      input.hand.removeEventListener('pinchend', handleClick)
+    }
+  })
 
   watch([useXR().isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
     if (isPresenting && enabled) {

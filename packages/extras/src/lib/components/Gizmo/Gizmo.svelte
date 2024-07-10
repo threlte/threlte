@@ -16,13 +16,10 @@
     Vector4,
     type ColorRepresentation,
     type Intersection,
+    type Object3DEventMap,
     type Sprite
   } from 'three'
-  import type { GizmoEvents, GizmoProps, GizmoSlots } from './Gizmo'
-
-  type $$Props = GizmoProps
-  type $$Events = GizmoEvents
-  type $$Slots = GizmoSlots
+  import type { GizmoProps } from './Gizmo.svelte'
 
   let {
     renderTask,
@@ -127,12 +124,12 @@
     clickTarget.style.width = `${size}px`
   })
 
-  let posX: Sprite
-  let posY: Sprite
-  let posZ: Sprite
-  let negX: Sprite
-  let negY: Sprite
-  let negZ: Sprite
+  let posX: Sprite<Object3DEventMap> | undefined = $state(undefined)
+  let posY: Sprite<Object3DEventMap> | undefined = $state(undefined)
+  let posZ: Sprite<Object3DEventMap> | undefined = $state(undefined)
+  let negX: Sprite<Object3DEventMap> | undefined = $state(undefined)
+  let negY: Sprite<Object3DEventMap> | undefined = $state(undefined)
+  let negZ: Sprite<Object3DEventMap> | undefined = $state(undefined)
 
   const targetPosition = new Vector3()
   const targetQuaternion = new Quaternion()
@@ -206,6 +203,11 @@
 
     raycaster.setFromCamera(mouse, orthoCam)
 
+    // Gaurd against undefined axis sprites otherwise TS will complain
+    if (!posX || !posY || !posZ || !negX || !negY || !negZ) {
+      return
+    }
+
     const intersects = raycaster.intersectObjects([posX, posY, posZ, negX, negY, negZ])
 
     if (intersects.length > 0) {
@@ -230,7 +232,7 @@
 
   // Used to test which axis (pos or neg) are closer to the camera.
   const point = new Vector3()
-  let p = [0, 0, 0]
+  let p = $state([0, 0, 0])
 
   useTask(
     animationTask?.key ?? Symbol('threlte-extras-gizmo-animation'),

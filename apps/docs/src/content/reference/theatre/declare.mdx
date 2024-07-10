@@ -27,13 +27,14 @@ Use the component `<Declare>` to from the [`<SheetObject>`](./sheet-object) slot
 an object and its properties with manual property declaration.
 
 ```svelte
-<SheetObject let:Declare>
-  <Declare
-    props={{ transparent: false }}
-    let:values
-  >
-    <T.MeshBasicMaterial transparent={values.transparent} />
-  </Declare>
+<SheetObject>
+  {#snippet children({ Declare })}
+    <Declare props={{ transparent: false }}>
+      {#snippet children({ values })}
+        <T.MeshBasicMaterial transparent={values.transparent} />
+      {/snippet}
+    </Declare>
+  {/snippet}
 </SheetObject>
 ```
 

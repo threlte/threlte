@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { T } from '$lib'
+  import { T } from '../lib'
   import Mesh from './mesh.svelte'
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 />
 
 <Mesh />

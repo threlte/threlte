@@ -24,7 +24,7 @@
 <T.DirectionalLight position={[1, 2, 5]} />
 
 <Box
-  on:click={setRandomPos}
+  onclick={setRandomPos}
   position.x={$pos.x}
   position.z={$pos.z}
 />

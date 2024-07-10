@@ -3,13 +3,18 @@
   import { SceneGraphObject } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
+  import {
+    initializeRigidBodyUserData,
+    setInitialRigidBodyState
+  } from '../../lib/createPhysicsTasks'
   import { useRapier } from '../../hooks/useRapier'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
-  import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
-  import type { RigidBodyProps } from './RigidBody.svelte'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
+  import type { RigidBodyContext, RigidBodyEvents, ThrelteRigidBody } from '../../types/types'
+  import { overrideTeleportMethods } from './overrideTeleportMethods'
+  import type { RigidBodyProps } from './RigidBody.svelte'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -30,19 +35,27 @@
     enabled = true,
     userData = {},
     rigidBody = $bindable(),
-    ...props
-  }: RigidBodyProps = $props()
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake,
+    children
+  }: RigidBodyProps & RigidBodyEvents = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = RigidBodyEventMap
-  const { updateRef } = useCreateEvent<RigidBody>(props.$$events)
+  const { updateRef } = useCreateEvent<RigidBody>(oncreate)
 
   const object = new Object3D()
+  initializeRigidBodyUserData(object)
 
   /**
-   * isSleeping used for events "sleep" and "wake" in `useFrameHandler`
+   * isSleeping used for events "sleep" and "wake" in `createPhysicsTasks`
    */
   object.userData.isSleeping = false
 
@@ -55,6 +68,9 @@
    * Temporary RigidBody init
    */
   let rigidBodyInternal = world.createRigidBody(desc) as ThrelteRigidBody
+
+  overrideTeleportMethods(rigidBodyInternal, object)
+
   rigidBody = rigidBodyInternal
 
   /**
@@ -67,6 +83,7 @@
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
     const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
     const worldQuaternion = getWorldQuaternion(object)
+    setInitialRigidBodyState(object, worldPosition, worldQuaternion)
     rigidBodyInternal.setTranslation(worldPosition, true)
     rigidBodyInternal.setRotation(worldQuaternion, true)
     updateRef(rigidBodyInternal)
@@ -111,7 +128,15 @@
    */
   $effect.pre(() => {
     rigidBodyInternal.userData = {
-      events: props.$$events,
+      events: {
+        oncollisionenter,
+        oncollisionexit,
+        oncontact,
+        onsensorenter,
+        onsensorexit,
+        onsleep,
+        onwake
+      },
       ...userData
     }
   })
@@ -130,7 +155,15 @@
   /**
    * Add the mesh to the context
    */
-  addRigidBodyToContext(rigidBodyInternal, object, props.$$events)
+  addRigidBodyToContext(rigidBodyInternal, object, {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake
+  })
 
   /**
    * cleanup
@@ -142,5 +175,5 @@
 </script>
 
 <SceneGraphObject {object}>
-  <slot rigidBody={rigidBodyInternal} />
+  {@render children?.({ rigidBody: rigidBodyInternal })}
 </SceneGraphObject>

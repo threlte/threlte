@@ -49,5 +49,5 @@
 <GLTF
   bind:gltf={$gltf}
   url="https://threejs.org/examples/models/gltf/Xbot.glb"
-  on:load={(gltf) => console.log('load', gltf)}
+  onload={(gltf) => console.log('load', gltf)}
 />

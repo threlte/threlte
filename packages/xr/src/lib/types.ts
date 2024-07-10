@@ -18,18 +18,35 @@ export type XRControllerEventType =
   | 'disconnected'
   | 'connected'
 
+export type XRControllerEvents = {
+  onconnected?: XRControllerEventCallback<'connected'>
+  ondisconnected?: XRControllerEventCallback<'disconnected'>
+  onselect?: XRControllerEventCallback<'select'>
+  onselectstart?: XRControllerEventCallback<'selectstart'>
+  onselectend?: XRControllerEventCallback<'selectend'>
+  onsqueeze?: XRControllerEventCallback<'squeeze'>
+  onsqueezeend?: XRControllerEventCallback<'squeezeend'>
+  onsqueezestart?: XRControllerEventCallback<'squeezestart'>
+}
+
 export type XRHandEventType = 'pinchstart' | 'pinchend' | 'connected' | 'disconnected'
 
-export type XRSessionEvent<Type = XRSessionEventType> = Event & {
-  type: Type
-  target: XRSession
-}
+export type XRSessionEvent<Type = XRSessionEventType> = (
+  event: Event & {
+    type: Type
+    target: XRSession
+  }
+) => void
 
 export type XRControllerEvent<Type = XRControllerEventType> = Event & {
   type: Type
   target: Group
   data: XRInputSource
 }
+
+export type XRControllerEventCallback<Type = XRControllerEventType> = (
+  event: XRControllerEvent<Type>
+) => void
 
 export type XRController = {
   targetRay: XRTargetRaySpace
@@ -46,15 +63,16 @@ export type XRHand = {
 }
 
 export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'
-  ? {
-      type: Type
-      target: XRHandSpace
-      data: XRInputSource
-    }
+  ? { type: Type; target: XRHandSpace; data: XRInputSource }
   : Type extends 'pinchstart' | 'pinchend'
-    ? {
-        type: Type
-        handedness: 'left' | 'right'
-        target: null
-      }
+    ? { type: Type; handedness: 'left' | 'right'; target: null }
     : never
+
+export type XRHandEventCallback<Type> = (event: XRHandEvent<Type>) => void
+
+export type XRHandEvents = {
+  onconnected?: XRHandEventCallback<'connected'>
+  ondisconnected?: XRHandEventCallback<'disconnected'>
+  onpinchstart?: XRHandEventCallback<'pinchstart'>
+  onpinchend?: XRHandEventCallback<'pinchend'>
+}

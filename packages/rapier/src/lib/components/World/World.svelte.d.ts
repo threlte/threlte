@@ -13,11 +13,13 @@ import type {
   RawRigidBodySet,
   RawSerializationPipeline
 } from '@dimforge/rapier3d-compat/raw'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Vector3 } from 'three'
 import type { Key, Stage } from '@threlte/core'
 
 export type WorldProps = {
+  framerate?: number | 'varying'
+  autoStart?: boolean
   gravity?: Parameters<Vector3['set']>
   rawIntegrationParameters?: RawIntegrationParameters
   rawIslands?: RawIslandManager
@@ -32,7 +34,16 @@ export type WorldProps = {
   rawPhysicsPipeline?: RawPhysicsPipeline
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline
-  stage?: Key | Stage
+  simulationStageOptions?: {
+    before?: (Key | Stage) | (Key | Stage)[]
+    after?: (Key | Stage) | (Key | Stage)[]
+  }
+  synchronizationStageOptions?: {
+    before?: (Key | Stage) | (Key | Stage)[]
+    after?: (Key | Stage) | (Key | Stage)[]
+  }
+  children?: Snippet
+  fallback?: Snippet<[error: any]>
 }
 
 export default class World extends SvelteComponent<WorldProps> {}

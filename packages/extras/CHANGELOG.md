@@ -1,5 +1,41 @@
 # @threlte/extras
 
+## 9.0.0-next.13
+
+### Patch Changes
+
+- e4bf75c: Remove $events reference in HTML component
+
+## 9.0.0-next.12
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 9.0.0-next.11
+
+### Patch Changes
+
+- 8508b11: Add drei occlusion features to HTML component
+
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
 ## 9.0.0-next.7
 
 ### Patch Changes
@@ -48,6 +84,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 8.11.4
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 8.11.3
 
@@ -751,10 +793,7 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<
-    "MeshA" | "MeshB" | "Object3DA",
-    "MaterialA" | "MaterialB"
-  >("/some/url");
+  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
   ```
 
   - After:
@@ -762,15 +801,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh;
-      MeshB: THREE.Mesh;
-      Object3DA: THREE.Object3D;
-    };
+      MeshA: THREE.Mesh
+      MeshB: THREE.Mesh
+      Object3DA: THREE.Object3D
+    }
     materials: {
-      MaterialA: THREE.MeshStandardMaterial;
-      MaterialB: THREE.MeshBasicMaterial;
-    };
-  }>("/some/url");
+      MaterialA: THREE.MeshStandardMaterial
+      MaterialB: THREE.MeshBasicMaterial
+    }
+  }>('/some/url')
   ```
 
 ## 4.4.1

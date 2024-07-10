@@ -18,11 +18,11 @@
 <XR>
   <Hand
     left
-    on:pinchend={() => (debug = !debug)}
+    onpinchend={() => (debug = !debug)}
   />
   <Hand
     right
-    on:pinchend={() => (debug = !debug)}
+    onpinchend={() => (debug = !debug)}
   />
 
   {#if $isHandTracking}
@@ -49,7 +49,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[0, 1, 1]}
-  on:create={({ ref }) => ref.lookAt(0, 1.8, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
 />
 
 <T.AmbientLight />
