@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { Mesh } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { OrbitControls, useViewport } from '@threlte/extras'
-  import RoundedBoxGeometry from 'node_modules/@threlte/extras/src/lib/components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
+  import { OrbitControls, useViewport, RoundedBoxGeometry } from '@threlte/extras'
 
   const viewport = useViewport()
   const { renderStage, scheduler } = useThrelte()
