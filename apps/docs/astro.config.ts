@@ -45,7 +45,7 @@ export default defineConfig({
     starlight({
       title: 'threlte',
       logo: {
-        src: './public/logo/threlte-logo.png',
+        src: '$assets/logo/threlte-logo.png',
         replacesTitle: true
       },
       social: {
