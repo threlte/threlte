@@ -81,14 +81,6 @@
   })
 </script>
 
-<!-- <Image
-	value={textureSrc}
-	{label}
-	on:change={(e) => {
-		console.log(e.detail.value)
-	}}
-/> -->
-
 <Binding
   object={obj}
   key="textureSrc"

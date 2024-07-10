@@ -64,7 +64,7 @@
 </script>
 
 <T
-  on:create={onCreate}
+  oncreate={onCreate}
   is={points}
   userData={{ ignoreOverrideMaterial: true }}
 />

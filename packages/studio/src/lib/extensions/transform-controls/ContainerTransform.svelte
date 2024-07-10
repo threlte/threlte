@@ -145,12 +145,12 @@
   translationSnap={snapping.enabled ? snapping.translate ?? 0 : null}
   rotationSnap={snapping.enabled ? (snapping.rotate ?? 0) * DEG2RAD : null}
   scaleSnap={snapping.enabled ? snapping.scale ?? 0 : null}
-  on:change={onChange}
-  on:mouseDown={() => {
+  onchange={onChange}
+  onmouseDown={() => {
     transformControlsExtension.setInUse(true)
     onMouseDown()
   }}
-  on:mouseUp={() => {
+  onmouseUp={() => {
     transformControlsExtension.setInUse(false)
     onMouseUp()
   }}

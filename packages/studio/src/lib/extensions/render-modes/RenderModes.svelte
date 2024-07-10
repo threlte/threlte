@@ -9,9 +9,9 @@
     MeshBasicMaterial,
     MeshMatcapMaterial
   } from 'three'
-  import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
-  import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
+  import ToolbarButton from '../../components/ToolbarButton.svelte'
+  import ToolbarItem from '../../components/ToolbarItem.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { renderModesScope, type RenderModesActions, type RenderModesState } from './types'
 

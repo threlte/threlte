@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Slider } from 'svelte-tweakpane-ui'
-  import DropDownPane from '../../components/DropDownPane/DropDownPane.svelte'
-  import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
-  import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
+  import DropDownPane from '../../components/DropDownPane.svelte'
+  import ToolbarButton from '../../components/ToolbarButton.svelte'
+  import ToolbarItem from '../../components/ToolbarItem.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { snappingScope, type SnappingActions, type SnappingState } from './types'
 

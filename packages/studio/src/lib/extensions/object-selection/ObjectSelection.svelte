@@ -1,8 +1,8 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
-  import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
-  import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
+  import ToolbarButton from '../../components/ToolbarButton.svelte'
+  import ToolbarItem from '../../components/ToolbarItem.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import RenderSelectedObjects from './RenderSelectedObjects.svelte'
   import SelectRect from './SelectRect.svelte'

@@ -1,1 +1,1 @@
-export { default as Studio } from './components/Studio/Studio.svelte'
+export { default as Studio } from './components/Studio.svelte'

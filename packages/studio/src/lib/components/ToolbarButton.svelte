@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Icons } from '../Internal/Icon.svelte'
-  import IconButton from '../Internal/IconButton.svelte'
-  import Tooltip from '../Internal/Tooltip.svelte'
+  import type { Icons } from './Icon.svelte'
+  import IconButton from './IconButton.svelte'
+  import Tooltip from './Tooltip.svelte'
 
   export let icon: Icons
   export let label: string

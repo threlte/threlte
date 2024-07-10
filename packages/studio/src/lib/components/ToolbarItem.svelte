@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Portal from '../Internal/Portal.svelte'
+  import Portal from './Portal.svelte'
 
   export let position: 'left' | 'right' | 'center' = 'left'
 </script>

@@ -727,7 +727,7 @@ importers:
         version: 0.3.0(tweakpane@4.0.3)
       camera-controls:
         specifier: ^2.8.3
-        version: 2.8.5(three@0.163.0)
+        version: 2.8.5(three@0.165.0)
       flexible-tree:
         specifier: ^0.1.6
         version: 0.1.6
@@ -760,8 +760,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.4.5))(eslint@9.0.0)(typescript@5.4.5)
@@ -814,8 +814,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.10(svelte@5.0.0-next.133)(typescript@5.4.5)
       three:
-        specifier: ^0.163.0
-        version: 0.163.0
+        specifier: ^0.165.0
+        version: 0.165.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -2791,9 +2791,6 @@ packages:
 
   '@types/three-nebula@10.0.4':
     resolution: {integrity: sha512-EPecFcF13FP/Ltj9qjRzRh6BCGAzJhTf1OQcA7OBny7lD5rT82lmCSBlEPtqL5TELM5lLPgZEcHRj5Z/3uilFA==}
-
-  '@types/three@0.163.0':
-    resolution: {integrity: sha512-uIdDhsXRpQiBUkflBS/i1l3JX14fW6Ot9csed60nfbZNXHDTRsnV2xnTVwXcgbvTiboAR4IW+t+lTL5f1rqIqA==}
 
   '@types/three@0.165.0':
     resolution: {integrity: sha512-AJK8JZAFNBF0kBXiAIl5pggYlzAGGA8geVYQXAcPCEDRbyA+oEjkpUBcJJrtNz6IiALwzGexFJGZG2yV3WsYBw==}
@@ -7114,9 +7111,6 @@ packages:
   three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
 
-  three@0.163.0:
-    resolution: {integrity: sha512-HlMgCb2TF/dTLRtknBnjUTsR8FsDqBY43itYop2+Zg822I+Kd0Ua2vs8CvfBVefXkBdNDrLMoRTGCIIpfCuDew==}
-
   three@0.165.0:
     resolution: {integrity: sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==}
 
@@ -9791,14 +9785,6 @@ snapshots:
     dependencies:
       '@types/three': 0.165.0
 
-  '@types/three@0.163.0':
-    dependencies:
-      '@tweenjs/tween.js': 23.1.1
-      '@types/stats.js': 0.17.0
-      '@types/webxr': 0.5.5
-      fflate: 0.8.2
-      meshoptimizer: 0.18.1
-
   '@types/three@0.165.0':
     dependencies:
       '@tweenjs/tween.js': 23.1.1
@@ -10440,10 +10426,6 @@ snapshots:
   camelcase@6.3.0: {}
 
   camelcase@7.0.1: {}
-
-  camera-controls@2.8.5(three@0.163.0):
-    dependencies:
-      three: 0.163.0
 
   camera-controls@2.8.5(three@0.165.0):
     dependencies:
@@ -15215,8 +15197,6 @@ snapshots:
       three: 0.165.0
 
   three@0.122.0: {}
-
-  three@0.163.0: {}
 
   three@0.165.0: {}
 

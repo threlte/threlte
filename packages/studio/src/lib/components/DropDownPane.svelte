@@ -1,8 +1,8 @@
 <script lang="ts">
   import { arrow, computePosition, offset, shift, type Placement } from '@floating-ui/dom'
   import { Pane } from 'svelte-tweakpane-ui'
-  import IconButton from '../Internal/IconButton.svelte'
-  import type { Icons } from '../Internal/Icon.svelte'
+  import IconButton from './IconButton.svelte'
+  import type { Icons } from './Icon.svelte'
 
   let ref: HTMLElement
   let tooltipEl: HTMLElement

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ToolbarButton from '../../components/ToolbarButton/ToolbarButton.svelte'
-  import ToolbarItem from '../../components/ToolbarItem/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/Tools/HorizontalButtonGroup.svelte'
+  import ToolbarButton from '../../components/ToolbarButton.svelte'
+  import ToolbarItem from '../../components/ToolbarItem.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { spaceScope, type SpaceActions, type SpaceState } from './types'
 

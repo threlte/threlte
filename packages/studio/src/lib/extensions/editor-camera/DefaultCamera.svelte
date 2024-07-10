@@ -9,7 +9,7 @@
     type OrthographicCamera,
     type PerspectiveCamera
   } from 'three'
-  import Portal from '../../components/Internal/Portal.svelte'
+  import Portal from '../../components/Portal.svelte'
   import { useStudio } from '../../internal/extensions'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
