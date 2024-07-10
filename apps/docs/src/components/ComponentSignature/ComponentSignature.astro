@@ -53,7 +53,7 @@ const id = Astro.props.idOverride ?? 'component-signature';
 			Astro.props.signature.extends && (
 				<p class:list={["text-faded", !hasAnySignature && '!mb-0']}>
 					<code>{Astro.props.componentName}</code> extends
-					<!-- prettier-ignore -->
+
 					<code>{'<'}<a class="!text-white" href="/docs/reference/core/t">{'T'}</a>.<a class="!text-white" target="_blank" rel="noopener noreferrer" href={Astro.props.signature.extends.url}>{Astro.props.signature.extends.type}</a>{'>'}</code>
 					and supports all its props, slot props, bindings and events.
 				</p>
