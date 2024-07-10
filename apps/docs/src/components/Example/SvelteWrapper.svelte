@@ -36,11 +36,13 @@
   )}
 >
   {#if iframe}
-    <iframe
-      src="/examples/{path}"
-      title={path}
-      class="h-full w-full border-none"
-    ></iframe>
+    <div class="flex h-full">
+      <iframe
+        src="/examples/{path}"
+        title={path}
+        class="w-full border-none"
+      ></iframe>
+    </div>
   {:else if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />

@@ -8,13 +8,9 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
-import mdx from '@astrojs/mdx'
+import starlight from '@astrojs/starlight'
 
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
@@ -33,23 +29,105 @@ export default defineConfig({
     inlineStylesheets: 'never'
   },
   integrations: [
-    AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
+    tailwind({
+      // Disable the default base styles:
+      applyBaseStyles: false
     }),
-    tailwind(),
     svelte({
       preprocess: preprocess({
         postcss: true
       })
     }),
-    mdx({
-      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
+    preact({
+      compat: true,
+      include: ['**/*.tsx']
     }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    starlight({
+      title: 'threlte',
+      logo: {
+        src: '$assets/logo/threlte-logo.png',
+        replacesTitle: true
+      },
+      social: {
+        github: 'https://github.com/threlte/threlte',
+        twitter: 'https://twitter.com/threlte',
+        discord: 'https://discord.gg/EqUBCfCaGm'
+      },
+      customCss: ['$styles/app.css', '$styles/theme.css'],
+      components: {
+        Header: '$components/Header.astro',
+        Sidebar: '$components/Sidebar.astro'
+      },
+      sidebar: [
+        {
+          label: 'Learn',
+          autogenerate: {
+            directory: 'learn'
+          }
+        },
+        {
+          label: 'Examples',
+          autogenerate: {
+            directory: 'examples'
+          }
+        },
+        {
+          label: 'Core',
+          autogenerate: {
+            directory: 'reference/core'
+          }
+        },
+        {
+          label: 'Extras',
+          autogenerate: {
+            directory: 'reference/extras'
+          }
+        },
+        {
+          label: 'GLTF',
+          autogenerate: {
+            directory: 'reference/gltf'
+          }
+        },
+        {
+          label: 'Rapier',
+          autogenerate: {
+            directory: 'reference/rapier'
+          }
+        },
+        {
+          label: 'Theatre',
+          autogenerate: {
+            directory: 'reference/theatre'
+          }
+        },
+        {
+          label: 'Flex',
+          autogenerate: {
+            directory: 'reference/flex'
+          }
+        }
+      ],
+      locales: {
+        root: {
+          lang: 'en',
+          label: 'English'
+        },
+        'zh-cn': {
+          label: '简体中文',
+          lang: 'zh-CN'
+        }
+      },
+      editLink: {
+        baseUrl: 'https://github.com/threlte/threlte/edit/main/apps/docs'
+      },
+      expressiveCode: {
+        themes: ['dracula-soft']
+      }
+    }),
+    AutoImport({
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
+    })
   ],
   output: 'static',
   vite: {
@@ -89,7 +167,6 @@ export default defineConfig({
     }
   },
   markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
   }
 })

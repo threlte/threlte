@@ -1,5 +1,6 @@
 // 1. Import utilities from `astro:content`
 import { defineCollection, z } from 'astro:content'
+import { docsSchema } from '@astrojs/starlight/schema'
 
 export const componentSignature = z.object({
   pretext: z.string().optional(),
@@ -130,5 +131,6 @@ export const collections = {
   learn: learnCollection,
   testimonials: testimonialsCollection,
   showcase: showcaseCollection,
-  examples: examplesCollection
+  examples: examplesCollection,
+  docs: defineCollection({ schema: docsSchema() })
 }

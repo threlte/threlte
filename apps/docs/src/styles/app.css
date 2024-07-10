@@ -1,3 +1,5 @@
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 @layer utilities {
@@ -8,6 +10,42 @@
   .text-highlight {
     @apply font-bold text-white;
   }
+}
+
+.main-frame {
+  padding-top: calc(var(--sl-nav-height) * 2 + var(--sl-mobile-toc-height));
+  background-color: #0a0f19;
+}
+
+header.header {
+  border-bottom: none;
+  background-color: #0a0f19;
+}
+
+mobile-starlight-toc > nav {
+  top: calc(var(--sl-nav-height) * 2 - 1px);
+  background-color: #0a0f19;
+}
+
+#starlight__sidebar {
+  position: fixed;
+  top: calc(var(--sl-nav-height) * 2 - 1px);
+  overflow-y: scroll;
+  background-color: #0a0f19;
+}
+
+.right-sidebar {
+  border-inline-start: none;
+}
+
+@media (min-width: 72rem) {
+  .right-sidebar {
+    padding-top: calc(var(--sl-nav-height) * 2);
+  }
+}
+
+.expressive-code {
+  @apply mb-6;
 }
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */

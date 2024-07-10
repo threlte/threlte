@@ -1,7 +1,9 @@
-const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
+import topoPlugin from '@tailwindcss/typography'
+import starlightPlugin from '@astrojs/starlight-tailwind'
+import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
@@ -58,7 +60,8 @@ module.exports = {
     }
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    topoPlugin(),
+    starlightPlugin(),
     function ({ addBase, theme }) {
       function extractColorVars(colorObj, colorGroup = '') {
         return Object.keys(colorObj).reduce((vars, colorKey) => {
