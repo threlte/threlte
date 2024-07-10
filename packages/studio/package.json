@@ -67,24 +67,25 @@
   "types": "./src/lib/index.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
+    "types": "./dist/index.d.ts",
     "files": [
       "dist"
     ],
     "svelte": "./dist/index.js",
     "exports": {
       ".": {
-        "import": "./dist/index.js",
         "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
         "svelte": "./dist/index.js"
       },
       "./extensions": {
-        "import": "./dist/extensions.js",
         "types": "./dist/extensions.d.ts",
+        "import": "./dist/extensions.js",
         "svelte": "./dist/extensions.js"
       },
       "./extend": {
-        "import": "./dist/extend.js",
         "types": "./dist/extend.d.ts",
+        "import": "./dist/extend.js",
         "svelte": "./dist/extend.js"
       }
     }
