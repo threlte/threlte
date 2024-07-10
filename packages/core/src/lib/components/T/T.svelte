@@ -112,11 +112,7 @@
   />
 {/if}
 
-<<<<<<< HEAD
 {#if isPerspectiveOrOrthographicCamera(internalRef)}
-=======
-{#if isCamera(internalRef)}
->>>>>>> next
   <Camera
     object={internalRef}
     {manual}
