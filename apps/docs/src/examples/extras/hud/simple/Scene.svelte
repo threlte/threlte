@@ -10,12 +10,15 @@
   const quaternion = new Quaternion()
   const { camera } = useThrelte()
 
-  useTask((delta) => {
-    rotation += delta
+  useTask(
+    (delta) => {
+      rotation += delta
 
-    // Spin mesh to the inverse of the default cameras matrix
-    quaternion.copy(camera.current.quaternion).invert()
-  }, { autoInvalidate: false })
+      // Spin mesh to the inverse of the default cameras matrix
+      quaternion.copy(camera.current.quaternion).invert()
+    },
+    { autoInvalidate: false }
+  )
 </script>
 
 <T.PerspectiveCamera
