@@ -105,7 +105,7 @@ export const watch = <S extends Stores>(stores: S, callback: CallbackFn<StoresVa
  * @param stores
  * @param transform
  */
-export function memoize<U, S extends Stores>(stores: S): { current: StoresValues<S> }
+export function memoize<S extends Stores>(stores: S): { current: StoresValues<S> }
 export function memoize<U, S extends Stores>(
   stores: S,
   transform: (values: StoresValues<S>) => U
@@ -161,4 +161,15 @@ export const currentWritable = <T>(value: T): CurrentWritable<T> => {
   }
 
   return extendedWritable
+}
+
+export type CurrentReadable<T = unknown> = Readable<T> & { current: T }
+
+export const toCurrentReadable = <T>(store: CurrentWritable<T>): CurrentReadable<T> => {
+  return {
+    subscribe: store.subscribe,
+    get current() {
+      return store.current
+    }
+  }
 }
