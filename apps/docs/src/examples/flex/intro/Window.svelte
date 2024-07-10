@@ -10,7 +10,7 @@
     title: string
     width?: number
     height?: number
-    children?: Snippet<[{ width: number, height: number }]>
+    children?: Snippet<[{ width: number; height: number }]>
   }
 
   let { title, width = 500, height = 400, children: innerChildren }: Props = $props()
@@ -74,9 +74,7 @@
     {/snippet}
   </Box>
 
-  <Box
-    class="h-auto w-auto flex-1"
-  >
+  <Box class="h-auto w-auto flex-1">
     {#snippet children({ width, height })}
       {@render innerChildren?.({ width, height })}
     {/snippet}

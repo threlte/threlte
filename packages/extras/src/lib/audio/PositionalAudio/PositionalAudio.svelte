@@ -22,7 +22,7 @@
     pause = $bindable(),
     stop = $bindable(),
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: PositionalAudioProps = $props()
 
@@ -77,5 +77,5 @@
   bind:ref
   {...props}
 >
-	{@render children?.({ref:audio})}
+  {@render children?.({ ref: audio })}
 </T>

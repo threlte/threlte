@@ -33,7 +33,6 @@
     void main() {
       gl_FragColor = vec4(1.0, 1.0, 1.0, pow(vUv.y - 1.0, 2.0));
     }`
-
 </script>
 
 <T.Group {visible}>

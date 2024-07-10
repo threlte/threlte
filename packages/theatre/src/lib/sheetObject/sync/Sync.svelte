@@ -30,34 +30,32 @@
     const props = {} as Record<string, any>
 
     // propertyPath is for example "position.x" or "intensity", so a property path on the parent object
-    Object.entries(<Record<string, AnyProp>>rest).forEach(
-      ([propertyPath, propertyValue]) => {
-        // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
-        const customKey = isComplexProp(propertyValue)
-          ? propertyValue.key
-          : isStringProp(propertyValue)
-            ? propertyValue
-            : undefined
+    Object.entries(<Record<string, AnyProp>>rest).forEach(([propertyPath, propertyValue]) => {
+      // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
+      const customKey = isComplexProp(propertyValue)
+        ? propertyValue.key
+        : isStringProp(propertyValue)
+          ? propertyValue
+          : undefined
 
-        const key = customKey ?? makeAlphanumeric(propertyPath)
+      const key = customKey ?? makeAlphanumeric(propertyPath)
 
-        // get the initial value as well as the correct transformer for the property
-        const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
-        const label = parsePropLabel(key, propertyValue)
+      // get the initial value as well as the correct transformer for the property
+      const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
+      const label = parsePropLabel(key, propertyValue)
 
-        // apply the label to the value
-        value.label = label
+      // apply the label to the value
+      value.label = label
 
-        // add the prop to the propMappings map
-        propMappings[key] = {
-          propertyPath,
-          transformer
-        }
-
-        // add the prop to the props object
-        props[key] = value
+      // add the prop to the propMappings map
+      propMappings[key] = {
+        propertyPath,
+        transformer
       }
-    )
+
+      // add the prop to the props object
+      props[key] = value
+    })
 
     // add the props to the parent IsheetObject
     addProps(props)

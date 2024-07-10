@@ -1,3 +1,4 @@
+import type { Collider } from '@dimforge/rapier3d-compat'
 import type { ColliderEvents } from '../types/types'
 import { onDestroy } from 'svelte'
 

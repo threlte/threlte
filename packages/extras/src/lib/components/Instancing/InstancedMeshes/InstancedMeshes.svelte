@@ -48,5 +48,5 @@
   meshes={filteredMeshesArray}
   {...props}
 >
-	{@render children?.({ components })}
+  {@render children?.({ components })}
 </InnerInstancedMeshes>
