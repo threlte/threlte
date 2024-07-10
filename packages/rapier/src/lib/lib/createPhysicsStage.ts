@@ -9,11 +9,11 @@ export const createPhysicsStages = (
   simulationOffset: CurrentWritable<number>,
   updateRigidBodySimulationData: CurrentWritable<boolean>,
   options?: {
-    physicsStageOptions?: {
+    simulationStageOptions?: {
       before?: (Key | Stage) | (Key | Stage)[]
       after?: (Key | Stage) | (Key | Stage)[]
     }
-    physicsRenderStageOptions?: {
+    synchronizationStageOptions?: {
       before?: (Key | Stage) | (Key | Stage)[]
       after?: (Key | Stage) | (Key | Stage)[]
     }
@@ -25,9 +25,9 @@ export const createPhysicsStages = (
 
   const { renderStage } = useThrelte()
 
-  const physicsStage = useStage(physicsSimulationKey, {
-    after: options?.physicsStageOptions?.after,
-    before: options?.physicsStageOptions?.before,
+  const simulationStage = useStage(physicsSimulationKey, {
+    after: options?.simulationStageOptions?.after,
+    before: options?.simulationStageOptions?.before,
     callback(delta, runTasks) {
       if (framerate.current === 'varying') {
         runTasks()
@@ -47,18 +47,18 @@ export const createPhysicsStages = (
     }
   })
 
-  const physicsRenderStage = useStage(physicsRenderKey, {
-    after: options?.physicsRenderStageOptions?.after
-      ? Array.isArray(options.physicsRenderStageOptions.after)
-        ? [...options.physicsRenderStageOptions.after, physicsSimulationKey]
-        : [options.physicsRenderStageOptions.after, physicsSimulationKey]
+  const synchronizationStage = useStage(physicsRenderKey, {
+    after: options?.synchronizationStageOptions?.after
+      ? Array.isArray(options.synchronizationStageOptions.after)
+        ? [...options.synchronizationStageOptions.after, physicsSimulationKey]
+        : [options.synchronizationStageOptions.after, physicsSimulationKey]
       : physicsSimulationKey,
-    before: options?.physicsRenderStageOptions?.before
-      ? Array.isArray(options.physicsRenderStageOptions.before)
-        ? [...options.physicsRenderStageOptions.before, renderStage]
-        : [options.physicsRenderStageOptions.before, renderStage]
+    before: options?.synchronizationStageOptions?.before
+      ? Array.isArray(options.synchronizationStageOptions.before)
+        ? [...options.synchronizationStageOptions.before, renderStage]
+        : [options.synchronizationStageOptions.before, renderStage]
       : renderStage
   })
 
-  return { physicsStage, physicsRenderStage }
+  return { simulationStage, synchronizationStage }
 }

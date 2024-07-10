@@ -6,7 +6,7 @@ import {
   type Vector
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import type { CurrentWritable, Stage } from '@threlte/core'
+import type { CurrentWritable, Stage, Task } from '@threlte/core'
 import type { Readable, Writable } from 'svelte/store'
 import type { Object3D } from 'three'
 
@@ -118,8 +118,10 @@ export type RapierContext = {
   resume: () => void
   paused: Readable<boolean>
   framerate: CurrentWritable<Framerate>
-  physicsStage: Stage
-  physicsRenderStage: Stage
+  simulationStage: Stage
+  simulationTask: Task
+  synchronizationStage: Stage
+  synchronizationTask: Task
   /**
    * This number tells us how far we're off in the simulation stage as opposed
    * to the render stage

@@ -34,11 +34,11 @@ export type WorldProps = {
   rawPhysicsPipeline?: RawPhysicsPipeline
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline
-  physicsStageOptions?: {
+  simulationStageOptions?: {
     before?: (Key | Stage) | (Key | Stage)[]
     after?: (Key | Stage) | (Key | Stage)[]
   }
-  physicsRenderStageOptions?: {
+  synchronizationStageOptions?: {
     before?: (Key | Stage) | (Key | Stage)[]
     after?: (Key | Stage) | (Key | Stage)[]
   }

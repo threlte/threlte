@@ -1,26 +1,27 @@
-import { Collider, EventQueue } from '@dimforge/rapier3d-compat'
+import { Collider, EventQueue, type World } from '@dimforge/rapier3d-compat'
 import { derived } from 'svelte/store'
 import { Object3D, Quaternion, Vector3 } from 'three'
-import type { RapierContext } from '../types/types'
-import { useTask } from '@threlte/core'
+import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
+import { useTask, type CurrentWritable, type Stage } from '@threlte/core'
 
 const tempObject = new Object3D()
 const tempVector3 = new Vector3()
 const tempQuaternion = new Quaternion()
 
-const getEventDispatchers = (ctx: RapierContext, collider1: Collider, collider2: Collider) => {
-  const collider1Events = ctx.colliderEventDispatchers.get(collider1.handle)
-  const collider2Events = ctx.colliderEventDispatchers.get(collider2.handle)
+const getEventDispatchers = (
+  collider1: Collider,
+  collider2: Collider,
+  colliderEventDispatchers: Map<number, ColliderEvents>,
+  rigidBodyEventDispatchers: Map<number, RigidBodyEvents>
+) => {
+  const collider1Events = colliderEventDispatchers.get(collider1.handle)
+  const collider2Events = colliderEventDispatchers.get(collider2.handle)
 
   const rigidBody1 = collider1.parent()
   const rigidBody2 = collider2.parent()
 
-  const rigidBody1Events = rigidBody1
-    ? ctx.rigidBodyEventDispatchers.get(rigidBody1.handle)
-    : undefined
-  const rigidBody2Events = rigidBody2
-    ? ctx.rigidBodyEventDispatchers.get(rigidBody2.handle)
-    : undefined
+  const rigidBody1Events = rigidBody1 ? rigidBodyEventDispatchers.get(rigidBody1.handle) : undefined
+  const rigidBody2Events = rigidBody2 ? rigidBodyEventDispatchers.get(rigidBody2.handle) : undefined
 
   return {
     collider1Events,
@@ -75,28 +76,36 @@ export const setInitialRigidBodyState = (
   userData.lastQuaternion.copy(initialQuaternion)
 }
 
-export const useFrameHandler = (ctx: RapierContext) => {
-  const { world } = ctx
-
+export const createPhysicsTasks = (
+  world: World,
+  framerate: CurrentWritable<Framerate>,
+  simulationOffset: CurrentWritable<number>,
+  rigidBodyObjects: Map<number, Object3D>,
+  updateRigidBodySimulationData: CurrentWritable<boolean>,
+  colliderEventDispatchers: Map<number, ColliderEvents>,
+  rigidBodyEventDispatchers: Map<number, RigidBodyEvents>,
+  simulationStage: Stage,
+  synchronizationStage: Stage
+) => {
   const eventQueue = new EventQueue(false)
 
-  useTask(
+  const simulation = useTask(
     (delta) => {
       // Set timestep to current delta, to allow for variable frame rates
       // We cap the delta at 100, so that the physics simulation doesn't get wild
-      if (ctx.framerate.current === 'varying') {
+      if (framerate.current === 'varying') {
         world.timestep = Math.min(delta, 0.1)
       } else {
         world.timestep = delta
       }
       world.step(eventQueue)
 
-      ctx.rigidBodyObjects.forEach((mesh, handle) => {
+      rigidBodyObjects.forEach((mesh, handle) => {
         const rigidBody = world.getRigidBody(handle)
 
         if (!rigidBody || !rigidBody.isValid()) return
 
-        const events = ctx.rigidBodyEventDispatchers.get(handle)
+        const events = rigidBodyEventDispatchers.get(handle)
 
         if (events) {
           if (rigidBody.isSleeping() && !mesh.userData.isSleeping) {
@@ -112,7 +121,7 @@ export const useFrameHandler = (ctx: RapierContext) => {
           return
         }
 
-        if (ctx.updateRigidBodySimulationData.current) {
+        if (updateRigidBodySimulationData.current) {
           const translation = rigidBody.translation()
           const rotation = rigidBody.rotation()
 
@@ -157,7 +166,12 @@ export const useFrameHandler = (ctx: RapierContext) => {
         }
 
         const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
-          getEventDispatchers(ctx, collider1, collider2)
+          getEventDispatchers(
+            collider1,
+            collider2,
+            colliderEventDispatchers,
+            rigidBodyEventDispatchers
+          )
 
         const rigidBody1 = collider1.parent()
         const rigidBody2 = collider2.parent()
@@ -210,7 +224,12 @@ export const useFrameHandler = (ctx: RapierContext) => {
         }
 
         const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
-          getEventDispatchers(ctx, collider1, collider2)
+          getEventDispatchers(
+            collider1,
+            collider2,
+            colliderEventDispatchers,
+            rigidBodyEventDispatchers
+          )
 
         if (!collider1Events && !collider2Events && !rigidBody1Events && !rigidBody2Events) {
           return
@@ -331,25 +350,25 @@ export const useFrameHandler = (ctx: RapierContext) => {
       })
     },
     {
-      stage: ctx.physicsStage
+      stage: simulationStage
     }
   )
 
-  useTask(
+  const synchronization = useTask(
     () => {
-      ctx.rigidBodyObjects.forEach((mesh) => {
+      rigidBodyObjects.forEach((mesh) => {
         if (!objectHasPhysicsUserData(mesh)) return
         const userData = mesh.userData.physics
-        if (ctx.framerate.current === 'varying') {
+        if (framerate.current === 'varying') {
           tempObject.position.copy(userData.currentPosition)
           tempObject.quaternion.copy(userData.currentQuaternion)
         } else {
           tempObject.position
             .copy(userData.lastPosition)
-            .lerp(userData.currentPosition, ctx.simulationOffset.current)
+            .lerp(userData.currentPosition, simulationOffset.current)
           tempObject.quaternion
             .copy(userData.lastQuaternion)
-            .slerp(userData.currentQuaternion, ctx.simulationOffset.current)
+            .slerp(userData.currentQuaternion, simulationOffset.current)
         }
 
         // Rapier has no concept of scale, so we use the mesh's scale
@@ -365,7 +384,12 @@ export const useFrameHandler = (ctx: RapierContext) => {
       })
     },
     {
-      stage: ctx.physicsRenderStage
+      stage: synchronizationStage
     }
   )
+
+  return {
+    simulationTask: simulation.task,
+    synchronizationTask: synchronization.task
+  }
 }

@@ -32,7 +32,7 @@
       }
     },
     {
-      stage: rapier.physicsStage
+      after: rapier.simulationTask
     }
   )
 </script>

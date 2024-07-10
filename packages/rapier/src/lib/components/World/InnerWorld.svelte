@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onDestroy, setContext, tick } from 'svelte'
-  import { useFrameHandler } from '../../hooks/useFrameHandler'
   import { createRapierContext } from '../../lib/createRapierContext'
   import type { RapierContext } from '../../types/types'
   import type { WorldProps } from './World.svelte'
@@ -22,8 +21,8 @@
     rawDebugRenderPipeline,
     framerate,
     autoStart = true,
-    physicsStageOptions,
-    physicsRenderStageOptions,
+    simulationStageOptions,
+    synchronizationStageOptions,
     children
   }: WorldProps = $props()
 
@@ -47,8 +46,8 @@
     {
       framerate,
       autoStart,
-      physicsStageOptions,
-      physicsRenderStageOptions
+      simulationStageOptions,
+      synchronizationStageOptions
     }
   )
 
@@ -63,8 +62,6 @@
   $effect.pre(() => {
     if (framerate !== undefined) rapierContext.framerate.set(framerate)
   })
-
-  useFrameHandler(rapierContext)
 
   onDestroy(async () => {
     await tick()

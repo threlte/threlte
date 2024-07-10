@@ -50,7 +50,7 @@
       rigidBody.applyImpulseAtPoint(impulse, origin, true)
     },
     {
-      stage: rapier.physicsStage
+			before: rapier.simulationTask
     }
   )
 

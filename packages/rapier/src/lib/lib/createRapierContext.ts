@@ -10,17 +10,18 @@ import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
 import { createPhysicsStages } from './createPhysicsStage'
+import { createPhysicsTasks } from './createPhysicsTasks'
 
 export const createRapierContext = (
   worldArgs: ConstructorParameters<typeof RAPIER.World>,
   options: {
     framerate?: Framerate
     autoStart?: boolean
-    physicsStageOptions?: {
+    simulationStageOptions?: {
       before?: (Key | Stage) | (Key | Stage)[]
       after?: (Key | Stage) | (Key | Stage)[]
     }
-    physicsRenderStageOptions?: {
+    synchronizationStageOptions?: {
       before?: (Key | Stage) | (Key | Stage)[]
       after?: (Key | Stage) | (Key | Stage)[]
     }
@@ -81,7 +82,7 @@ export const createRapierContext = (
   const simulationOffset = currentWritable(1)
   const updateRigidBodySimulationData = currentWritable(false)
 
-  const { physicsStage, physicsRenderStage } = createPhysicsStages(
+  const { simulationStage, synchronizationStage } = createPhysicsStages(
     framerate,
     simulationOffset,
     updateRigidBodySimulationData,
@@ -91,9 +92,21 @@ export const createRapierContext = (
   const autostart = options.autoStart ?? true
   const paused = writable(!autostart)
   if (!autostart) {
-    physicsStage.stop()
-    physicsRenderStage.stop()
+    simulationStage.stop()
+    synchronizationStage.stop()
   }
+
+  const { simulationTask, synchronizationTask } = createPhysicsTasks(
+    world,
+    framerate,
+    simulationOffset,
+    rigidBodyObjects,
+    updateRigidBodySimulationData,
+    colliderEventDispatchers,
+    rigidBodyEventDispatchers,
+    simulationStage,
+    synchronizationStage
+  )
 
   return {
     rapier: RAPIER,
@@ -109,19 +122,21 @@ export const createRapierContext = (
     debug: writable(false),
     pause: () => {
       paused.set(true)
-      physicsStage.stop()
-      physicsRenderStage.stop()
+      simulationStage.stop()
+      synchronizationStage.stop()
     },
     resume: () => {
       paused.set(false)
-      physicsStage.start()
-      physicsRenderStage.start()
+      simulationStage.start()
+      synchronizationStage.start()
     },
     paused: derived(paused, (a) => a),
     framerate,
     simulationOffset,
-    physicsStage,
-    physicsRenderStage,
-    updateRigidBodySimulationData
+    simulationStage,
+    synchronizationStage,
+    updateRigidBodySimulationData,
+    simulationTask,
+    synchronizationTask
   }
 }

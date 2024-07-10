@@ -2,9 +2,8 @@
   import { World } from '$lib'
   import { Canvas } from '@threlte/core'
   import { WebGLRenderer } from 'three'
-  import ReqAnim from './ReqAnim.svelte'
-  import Scene from './Scene.svelte'
   import Debug from '../lib/components/Debug/Debug.svelte'
+  import Scene from './Scene.svelte'
 
   let iteration = $state(1)
   let framerate: number | 'varying' = $state(10)

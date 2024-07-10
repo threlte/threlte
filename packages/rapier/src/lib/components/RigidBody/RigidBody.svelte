@@ -6,7 +6,7 @@
   import {
     initializeRigidBodyUserData,
     setInitialRigidBodyState
-  } from '../../hooks/useFrameHandler'
+  } from '../../lib/createPhysicsTasks'
   import { useRapier } from '../../hooks/useRapier'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
@@ -55,7 +55,7 @@
   initializeRigidBodyUserData(object)
 
   /**
-   * isSleeping used for events "sleep" and "wake" in `useFrameHandler`
+   * isSleeping used for events "sleep" and "wake" in `createPhysicsTasks`
    */
   object.userData.isSleeping = false
 
