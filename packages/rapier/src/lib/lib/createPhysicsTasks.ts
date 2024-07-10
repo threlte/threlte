@@ -2,6 +2,7 @@ import { Collider, EventQueue, type World } from '@dimforge/rapier3d-compat'
 import { useTask, type CurrentWritable, type Stage } from '@threlte/core'
 import { Object3D, Quaternion, Vector3 } from 'three'
 import type { ColliderEvents, Framerate, RigidBodyEvents } from '../types/types'
+import { simulationKey, synchronizationKey } from './keys'
 
 const tempObject = new Object3D()
 const tempVector3 = new Vector3()
@@ -89,6 +90,7 @@ export const createPhysicsTasks = (
   const eventQueue = new EventQueue(false)
 
   const simulation = useTask(
+    simulationKey,
     (delta) => {
       // Set timestep to current delta, to allow for variable frame rates
       // We cap the delta at 100, so that the physics simulation doesn't get wild
@@ -354,6 +356,7 @@ export const createPhysicsTasks = (
   )
 
   const synchronization = useTask(
+    synchronizationKey,
     () => {
       rigidBodyObjects.forEach((mesh) => {
         if (!objectHasPhysicsUserData(mesh)) return

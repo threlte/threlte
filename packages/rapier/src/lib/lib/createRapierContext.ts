@@ -9,7 +9,7 @@ import { currentWritable, type Key, type Stage } from '@threlte/core'
 import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
-import { createPhysicsStages } from './createPhysicsStage'
+import { createPhysicsStages } from './createPhysicsStages'
 import { createPhysicsTasks } from './createPhysicsTasks'
 
 export const createRapierContext = (

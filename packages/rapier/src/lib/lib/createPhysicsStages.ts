@@ -1,8 +1,6 @@
 import { useStage, useThrelte, type CurrentWritable, type Key, type Stage } from '@threlte/core'
 import type { Framerate } from '../types/types'
-
-const physicsSimulationKey = Symbol('physics-simulation')
-const physicsRenderKey = Symbol('physics-render')
+import { simulationKey, synchronizationKey } from './keys'
 
 export const createPhysicsStages = (
   framerate: CurrentWritable<Framerate>,
@@ -25,7 +23,7 @@ export const createPhysicsStages = (
 
   const { renderStage } = useThrelte()
 
-  const simulationStage = useStage(physicsSimulationKey, {
+  const simulationStage = useStage(simulationKey, {
     after: options?.simulationStageOptions?.after,
     before: options?.simulationStageOptions?.before,
     callback(delta, runTasks) {
@@ -47,12 +45,12 @@ export const createPhysicsStages = (
     }
   })
 
-  const synchronizationStage = useStage(physicsRenderKey, {
+  const synchronizationStage = useStage(synchronizationKey, {
     after: options?.synchronizationStageOptions?.after
       ? Array.isArray(options.synchronizationStageOptions.after)
-        ? [...options.synchronizationStageOptions.after, physicsSimulationKey]
-        : [options.synchronizationStageOptions.after, physicsSimulationKey]
-      : physicsSimulationKey,
+        ? [...options.synchronizationStageOptions.after, simulationKey]
+        : [options.synchronizationStageOptions.after, simulationKey]
+      : simulationKey,
     before: options?.synchronizationStageOptions?.before
       ? Array.isArray(options.synchronizationStageOptions.before)
         ? [...options.synchronizationStageOptions.before, renderStage]
