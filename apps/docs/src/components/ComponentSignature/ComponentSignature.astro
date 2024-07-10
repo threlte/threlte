@@ -85,7 +85,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
           <p
             class:list={['text-faded', !hasAnySignature && '!mb-0']}
             set:html={Astro.props.signature.pretext}
-          ></p>
+          />
         )}
 
         {(hasEvents || hasProps || hasBindings) && (
