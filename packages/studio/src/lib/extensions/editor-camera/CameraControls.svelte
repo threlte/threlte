@@ -22,7 +22,7 @@
 </script>
 
 <script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
+  import { useCanvas, useTask, useThrelte } from '@threlte/core'
   import { onMount, tick } from 'svelte'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useTransformControls } from '../transform-controls/useTransformControls'
@@ -56,8 +56,9 @@
   const { camera, initialPosition, initialTarget, cc, rest }: Props = $props()
 
   const { renderer, invalidate } = useThrelte()
+  const { wrapper } = useCanvas()
 
-  const cameraControls = new CameraControls(camera, renderer.domElement)
+  const cameraControls = new CameraControls(camera, wrapper)
   cameraControls.smoothTime = 0.05
   cameraControls.draggingSmoothTime = 0.05
   cameraControls.dollyToCursor = true

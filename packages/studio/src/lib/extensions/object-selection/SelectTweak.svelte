@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useThrelte } from '@threlte/core'
+  import { useCanvas, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import * as THREE from 'three'
   import { Raycaster } from 'three'
@@ -11,7 +11,8 @@
   const { clearSelection, selectObjects, toggleSelection } = useObjectSelection()
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  const { renderer, camera, scene } = useThrelte()
+  const { camera, scene } = useThrelte()
+  const { wrapper, size } = useCanvas()
 
   const down = new THREE.Vector2()
   const up = new THREE.Vector2()
@@ -28,8 +29,8 @@
     }
 
     // Calculate pointer position in normalized device coordinates
-    pointer.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
-    pointer.y = -((event.clientY / renderer.domElement.clientHeight) * 2) + 1
+    pointer.x = (event.clientX / $size.width) * 2 - 1
+    pointer.y = -((event.clientY / $size.height) * 2) + 1
 
     // Update the picking ray with the camera and pointer position
     raycaster.setFromCamera(pointer, camera.current)
@@ -64,12 +65,12 @@
   }
 
   onMount(() => {
-    renderer.domElement.addEventListener('pointerdown', recordDown)
-    renderer.domElement.addEventListener('pointerup', raycast)
+    wrapper.addEventListener('pointerdown', recordDown)
+    wrapper.addEventListener('pointerup', raycast)
 
     return () => {
-      renderer.domElement.removeEventListener('pointerdown', recordDown)
-      renderer.domElement.removeEventListener('pointerup', raycast)
+      wrapper.removeEventListener('pointerdown', recordDown)
+      wrapper.removeEventListener('pointerup', raycast)
     }
   })
 </script>
