@@ -1,6 +1,24 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+
+const packages = Astro.props.sidebar.map((entry) => {
+	let href = ''
+	if (entry.label != 'Learn' && entry.label != 'Examples') {
+		href += '/reference'
+	}
+	href += `/${entry.label.toLocaleLowerCase()}/test`
+  return {
+    name: entry.label,
+		href
+  }
+})
+---
+
 <div class="packages-nav flex items-center justify-between border-b-[1px] border-b-orange/25">
-  <div class="px-4">Packages</div>
-  <div class="px-4">...</div>
+  <div class="flex">
+    {packages.map(({ name, href }) => <a href=`${href}` class="px-4">{name}</a>)}
+  </div>
+  <div class="px-4 cursor-pointer">...</div>
 </div>
 
 <style>

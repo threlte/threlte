@@ -45,7 +45,7 @@ export default defineConfig({
     starlight({
       title: 'threlte',
       logo: {
-        src: 'public/logo/threlte-logo.png',
+        src: './public/logo/threlte-logo.png',
         replacesTitle: true
       },
       social: {
@@ -55,7 +55,71 @@ export default defineConfig({
       },
       customCss: ['$styles/app.css', '$styles/theme.css'],
       components: {
-        Header: '$components/Header.astro'
+        Header: '$components/Header.astro',
+        Sidebar: '$components/Sidebar.astro'
+      },
+      sidebar: [
+        {
+          label: 'Learn',
+          autogenerate: {
+            directory: 'learn'
+          }
+        },
+        {
+          label: 'Examples',
+          autogenerate: {
+            directory: 'examples'
+          }
+        },
+        {
+          label: 'Core',
+          autogenerate: {
+            directory: 'reference/core'
+          }
+        },
+        {
+          label: 'Extras',
+          autogenerate: {
+            directory: 'reference/extras'
+          }
+        },
+        {
+          label: 'GLTF',
+          autogenerate: {
+            directory: 'reference/gltf'
+          }
+        },
+        {
+          label: 'Rapier',
+          autogenerate: {
+            directory: 'reference/rapier'
+          }
+        },
+        {
+          label: 'Theatre',
+          autogenerate: {
+            directory: 'reference/theatre'
+          }
+        },
+        {
+          label: 'Flex',
+          autogenerate: {
+            directory: 'reference/flex'
+          }
+        }
+      ],
+      locales: {
+        root: {
+          lang: 'en',
+          label: 'English'
+        },
+        'zh-cn': {
+          label: '简体中文',
+          lang: 'zh-CN'
+        }
+      },
+      editLink: {
+        baseUrl: 'https://github.com/threlte/threlte/edit/main/apps/docs'
       },
       expressiveCode: {
         themes: ['dracula-soft']
