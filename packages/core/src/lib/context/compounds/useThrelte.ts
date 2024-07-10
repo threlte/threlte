@@ -5,7 +5,6 @@ import { useCanvas, type Size } from '../fragments/canvas'
 import { useRenderer } from '../fragments/renderer.svelte'
 import { useScene } from '../fragments/scene'
 import { useScheduler } from '../fragments/scheduler.svelte'
-import { type Readable } from 'svelte/store'
 import {
   Scene,
   type Camera,
