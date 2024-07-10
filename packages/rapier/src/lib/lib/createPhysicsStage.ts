@@ -1,5 +1,5 @@
 import { useStage, useThrelte, type CurrentWritable, type Key, type Stage } from '@threlte/core'
-import type { Framerate, RapierContext } from '../types/types'
+import type { Framerate } from '../types/types'
 
 const physicsSimulationKey = Symbol('physics-simulation')
 const physicsRenderKey = Symbol('physics-render')
