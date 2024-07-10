@@ -50,7 +50,10 @@
   </div>
 
   {#key `${iteration}-${framerate}`}
-    <div class="threlte" use:getThrelteCanvas>
+    <div
+      class="threlte"
+      use:getThrelteCanvas
+    >
       <Canvas
         createRenderer={(canvas) => {
           return new WebGLRenderer({

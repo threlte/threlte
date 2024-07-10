@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Snippet } from "svelte"
+  import type { Snippet } from 'svelte'
 
   type Props = {
     extensions: ConstructorOfATypedSvelteComponent[]
-		children: Snippet
+    children: Snippet
   }
 
   let { extensions, children }: Props = $props()
@@ -18,6 +18,6 @@
       {@render children()}
     </svelte:self>
   {:else}
-		{@render children()}
+    {@render children()}
   {/if}
 </svelte:component>

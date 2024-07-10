@@ -14,9 +14,15 @@
     min,
     max,
     active,
-		children
-  }: { rigidBody: RapierRigidBody; key: string; min: number; max: number; active: boolean, children?: Snippet<[ active: boolean ]> } =
-    $props()
+    children
+  }: {
+    rigidBody: RapierRigidBody
+    key: string
+    min: number
+    max: number
+    active: boolean
+    children?: Snippet<[active: boolean]>
+  } = $props()
 
   const rapier = useRapier()
 
@@ -50,11 +56,11 @@
       rigidBody.applyImpulseAtPoint(impulse, origin, true)
     },
     {
-			before: rapier.simulationTask
+      before: rapier.simulationTask
     }
   )
 
-	const thrusterActive = $derived(pressed && active)
+  const thrusterActive = $derived(pressed && active)
 </script>
 
 <svelte:window
@@ -70,14 +76,17 @@
   }}
 />
 
-<T.Group position.y={-0.5} position.x={playerOffset.x}>
-	<Text
-		position.y={-0.1}
-		text={key}
-		renderOrder={1000}
-	/>
+<T.Group
+  position.y={-0.5}
+  position.x={playerOffset.x}
+>
+  <Text
+    position.y={-0.1}
+    text={key}
+    renderOrder={1000}
+  />
 
-	{@render children?.(thrusterActive)}
+  {@render children?.(thrusterActive)}
 </T.Group>
 
 <Portal id="scene">

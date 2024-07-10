@@ -178,8 +178,8 @@
         columns={2}
         values={['manual', 'auto']}
         on:change={(e) => {
-					extension.setMode(e.detail.value as 'manual' | 'auto')
-				}}
+          extension.setMode(e.detail.value as 'manual' | 'auto')
+        }}
         value={extension.state.mode}
       />
 

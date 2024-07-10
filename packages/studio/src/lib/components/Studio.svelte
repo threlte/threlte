@@ -17,10 +17,10 @@
   import StudioObjectsRegistry from '../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
 
   type Props = {
-		namespace?: string
-		transient?: boolean
+    namespace?: string
+    transient?: boolean
     extensions?: ConstructorOfATypedSvelteComponent[]
-		children: Snippet
+    children: Snippet
   }
 
   let { extensions, children, namespace = 'default', transient = false }: Props = $props()
@@ -29,7 +29,7 @@
 
   const defaultExtensions = [
     Transactions,
-		StudioObjectsRegistry,
+    StudioObjectsRegistry,
     ObjectSelection,
     Space,
     Snapping,
@@ -42,12 +42,11 @@
     Inspector
   ]
 
-	const allExtensions = [...defaultExtensions, ...(extensions ?? [])]
+  const allExtensions = [...defaultExtensions, ...(extensions ?? [])]
 </script>
 
 <Toolbar />
 
-
 <NestedComponents extensions={allExtensions}>
-	{@render children()}
+  {@render children()}
 </NestedComponents>

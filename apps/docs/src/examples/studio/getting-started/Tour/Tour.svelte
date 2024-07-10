@@ -125,16 +125,14 @@
       </div>
     {/if}
 
-		<div class="bottom-4 right-4 absolute z-[10001] pointer-events-auto px-1 py-0.5 bg-white text-neutral-600 rounded-md text-sm">
-			{#if tourManager.tourStarted}
-				 <button onclick={() => tourManager.stopTour()}>
-					 Skip Tour →
-				 </button>
-			{:else}
-					<button onclick={() => tourManager.startTour()}>
-						Start Tour
-					</button>
-			{/if}
-		</div>
+    <div
+      class="pointer-events-auto absolute bottom-4 right-4 z-[10001] rounded-md bg-white px-1 py-0.5 text-sm text-neutral-600"
+    >
+      {#if tourManager.tourStarted}
+        <button onclick={() => tourManager.stopTour()}> Skip Tour → </button>
+      {:else}
+        <button onclick={() => tourManager.startTour()}> Start Tour </button>
+      {/if}
+    </div>
   </div>
 </Portal>

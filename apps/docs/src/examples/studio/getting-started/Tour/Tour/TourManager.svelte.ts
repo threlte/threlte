@@ -78,9 +78,9 @@ export class TourManager {
     }
   }
 
-	get tourStarted() {
-		return this.currentTourStop !== undefined
-	}
+  get tourStarted() {
+    return this.currentTourStop !== undefined
+  }
 
   nextStop() {
     if (!this.currentTourStop) {
