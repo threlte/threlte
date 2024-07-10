@@ -37,7 +37,7 @@ Instead of dispatching events with `createRawEventDispatcher`, invoke callback p
     onchange?: () => void
   }
 
-  let { onchange }: Props = $props() 
+  let { onchange }: Props = $props()
 
   onchange?.()
 </script>
@@ -151,6 +151,57 @@ If, for example, you enjoy living life on the edge and would like to use Three's
 ### Transitions
 
 The transitions plugin currently does not work. [@TODO]
+
+### Rapier
+
+#### Two Stage Physics
+
+In order to enable fixed frame physics, the Rapier package is introducing two
+[scheduler stages](/docs/learn/basics/scheduling-tasks#stages). So in the most simple physics implementation:
+
+```svelte
+<Canvas>
+  <World>
+    <Scene />
+  </World>
+</Canvas>
+```
+
+The scheduler plan will look like this:
+
+```txt
+scheduler
+├─ threlte-main-stage
+├─ simulation
+│  └─ simulation
+├─ synchronization
+│  └─ synchronization
+└─ threlte-render-stage
+```
+
+[Tasks](/docs/learn/basics/scheduling-tasks#tasks) that are added to the
+`simulation` stage will be executed according to the set
+[framerate](/docs/reference/rapier/framerate), i.e. the delta provided in these
+tasks corresponds to the delta time between physics frames. Tasks added to the
+`synchronization` stage will be executed after all tasks of the `simulation`
+stage have been executed, the delta is the regular `requestAnimationFrame` frame
+delta. The stages and tasks are available as part of the `RapierContext` with the `useRapier` hook:
+
+```ts
+import { useTask } from '@threlte/core'
+import { useRapier } from '@threlte/rapier'
+
+const { simulationTask } = useRapier()
+
+useTask(
+  () => {
+    // E.g. interact with the physics world here
+  },
+  {
+    before: simulationStage
+  }
+)
+```
 
 ## Threlte 7
 

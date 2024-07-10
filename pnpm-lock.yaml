@@ -101,6 +101,9 @@ importers:
       three-mesh-bvh:
         specifier: ^0.7.5
         version: 0.7.5(three@0.165.0)
+      three.quarks:
+        specifier: ^0.15.0
+        version: 0.15.0(three@0.165.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.13.1
@@ -153,6 +156,9 @@ importers:
       '@types/three':
         specifier: ^0.165.0
         version: 0.165.0
+      '@types/three-nebula':
+        specifier: ^10.0.4
+        version: 10.0.4
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -615,8 +621,8 @@ importers:
   packages/rapier:
     devDependencies:
       '@dimforge/rapier3d-compat':
-        specifier: ^0.12.0
-        version: 0.12.0
+        specifier: ^0.13.1
+        version: 0.13.1
       '@sveltejs/adapter-auto':
         specifier: ^3.2.0
         version: 3.2.0(@sveltejs/kit@2.5.5(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.0.0-next.107)(vite@5.2.8(@types/node@20.12.7)))(svelte@5.0.0-next.107)(vite@5.2.8(@types/node@20.12.7)))
@@ -1259,9 +1265,6 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
-
-  '@dimforge/rapier3d-compat@0.12.0':
-    resolution: {integrity: sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==}
 
   '@dimforge/rapier3d-compat@0.13.1':
     resolution: {integrity: sha512-SsQ/MTH4Vvs8f62g31iVV1VOmzwNwsJl91rVzafi5B2mCrI2OsQ3VyjJOb4/tvS5VNc6OLjIDgfClcOAkW+O2A==}
@@ -2641,6 +2644,9 @@ packages:
 
   '@types/stats.js@0.17.0':
     resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
+
+  '@types/three-nebula@10.0.4':
+    resolution: {integrity: sha512-EPecFcF13FP/Ltj9qjRzRh6BCGAzJhTf1OQcA7OBny7lD5rT82lmCSBlEPtqL5TELM5lLPgZEcHRj5Z/3uilFA==}
 
   '@types/three@0.165.0':
     resolution: {integrity: sha512-AJK8JZAFNBF0kBXiAIl5pggYlzAGGA8geVYQXAcPCEDRbyA+oEjkpUBcJJrtNz6IiALwzGexFJGZG2yV3WsYBw==}
@@ -6120,6 +6126,9 @@ packages:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
     engines: {node: '>=0.6'}
 
+  quarks.core@0.15.0:
+    resolution: {integrity: sha512-bSxtzWXAzMiJHhTdxRuME/RefVJ7LzBBgSH1WRP/jD5GV7wB1UMt5XNKI1wqcKoPC1U/2K36aQ7prCcTiEUraw==}
+
   querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
 
@@ -6929,6 +6938,11 @@ packages:
     resolution: {integrity: sha512-kqisiKvO4mSy59v5vWqBQSH8famLxp7Z51LxpMJI9GwDxqODaW02rhIwmjYDEzZWNFpjZpoDHVGbdpeHf8h3SA==}
     peerDependencies:
       three: '>=0.122.0'
+
+  three.quarks@0.15.0:
+    resolution: {integrity: sha512-+tJjtW0LnJwFbu+9CxcvEt2C0bcoU25uquai3EGiVPBS8yO3NH69mAZbGRm0nocFt9UvYlIwIm2u3hDfPAH9MQ==}
+    peerDependencies:
+      three: '>=0.165.0'
 
   three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
@@ -8276,8 +8290,6 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@dimforge/rapier3d-compat@0.12.0': {}
-
   '@dimforge/rapier3d-compat@0.13.1': {}
 
   '@emnapi/runtime@1.2.0':
@@ -9554,6 +9566,10 @@ snapshots:
   '@types/semver@7.5.8': {}
 
   '@types/stats.js@0.17.0': {}
+
+  '@types/three-nebula@10.0.4':
+    dependencies:
+      '@types/three': 0.165.0
 
   '@types/three@0.165.0':
     dependencies:
@@ -13850,6 +13866,8 @@ snapshots:
 
   qs@6.5.3: {}
 
+  quarks.core@0.15.0: {}
+
   querystringify@2.2.0: {}
 
   queue-microtask@1.2.3: {}
@@ -14958,6 +14976,11 @@ snapshots:
       three: 0.122.0
       zstddec: 0.0.2
 
+  three.quarks@0.15.0(three@0.165.0):
+    dependencies:
+      quarks.core: 0.15.0
+      three: 0.165.0
+
   three@0.122.0: {}
 
   three@0.165.0: {}
@@ -15058,7 +15081,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
       '@types/node': 20.12.7
-      acorn: 8.8.2
+      acorn: 8.12.0
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1

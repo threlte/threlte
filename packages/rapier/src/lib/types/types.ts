@@ -1,13 +1,14 @@
-import type {
-  Collider,
-  ColliderHandle,
-  RigidBody,
-  RigidBodyHandle,
-  TempContactManifold,
-  Vector
+import {
+  World,
+  type Collider,
+  type RigidBody,
+  type TempContactManifold,
+  type Vector
 } from '@dimforge/rapier3d-compat'
-import type { Writable } from 'svelte/store'
-import type { createRapierContext } from '../lib/createRapierContext'
+import RAPIER from '@dimforge/rapier3d-compat'
+import type { CurrentWritable, Stage, Task } from '@threlte/core'
+import type { Readable, Writable } from 'svelte/store'
+import type { Object3D } from 'three'
 
 export type ColliderShapes =
   | 'ball'
@@ -63,8 +64,6 @@ export type RigidBodyEvents = ColliderEvents & {
   onwake?: () => void
 }
 
-export type RapierContext = ReturnType<typeof createRapierContext>
-
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
@@ -100,3 +99,33 @@ export type CollisionGroupsBitMask = (
  * Used in the <Attractor> component
  */
 export type GravityType = 'static' | 'linear' | 'newtonian'
+
+export type Framerate = number | 'varying'
+
+export type RapierContext = {
+  rapier: typeof RAPIER
+  world: World
+  colliderObjects: Map<number, Object3D>
+  rigidBodyObjects: Map<number, Object3D>
+  rigidBodyEventDispatchers: Map<number, RigidBodyEvents>
+  colliderEventDispatchers: Map<number, ColliderEvents>
+  addColliderToContext: (collider: Collider, object: Object3D, props: ColliderEvents) => void
+  removeColliderFromContext: (collider: Collider) => void
+  addRigidBodyToContext: (rigidBody: RigidBody, object: Object3D, events: RigidBodyEvents) => void
+  removeRigidBodyFromContext: (rigidBody: RigidBody) => void
+  debug: Writable<boolean>
+  pause: () => void
+  resume: () => void
+  paused: Readable<boolean>
+  framerate: CurrentWritable<Framerate>
+  simulationStage: Stage
+  simulationTask: Task
+  synchronizationStage: Stage
+  synchronizationTask: Task
+  /**
+   * This number tells us how far we're off in the simulation stage as opposed
+   * to the render stage
+   */
+  simulationOffset: CurrentWritable<number>
+  updateRigidBodySimulationData: CurrentWritable<boolean>
+}

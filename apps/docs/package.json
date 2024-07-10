@@ -4,7 +4,7 @@
   "version": "0.13.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev --host",
+    "dev": "astro dev --host --open",
     "dev:https": "astro dev --host --https",
     "start": "astro dev",
     "build": "astro build",
@@ -37,7 +37,8 @@
     "preact": "^10.16.0",
     "svelte": "5.0.0-next.133",
     "tailwindcss": "^3.4.4",
-    "three-mesh-bvh": "^0.7.5"
+    "three-mesh-bvh": "^0.7.5",
+    "three.quarks": "^0.15.0"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.13.1",
@@ -57,6 +58,7 @@
     "@threlte/xr": "workspace:*",
     "@types/animejs": "^3.1.7",
     "@types/three": "^0.165.0",
+    "@types/three-nebula": "^10.0.4",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.4.2",
     "camera-controls": "^2.8.5",
