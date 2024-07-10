@@ -35,6 +35,6 @@
     {range}
     {update}
   >
-		{@render children?.({ref:mesh})}
+    {@render children?.({ ref: mesh })}
   </Api>
 </T>

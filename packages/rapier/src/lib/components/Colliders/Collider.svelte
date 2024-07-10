@@ -50,7 +50,7 @@
     oncontact,
     onsensorenter,
     onsensorexit,
-    children,
+    children
   }: ColliderProps<TShape, TMassDef> & ColliderEvents = $props()
 
   const object = new Object3D()

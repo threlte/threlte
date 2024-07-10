@@ -27,7 +27,7 @@
     cellDividers = 6,
     sectionDividers = 2,
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: GridProps = $props()
 
@@ -243,9 +243,9 @@
     transparent
     {side}
   />
-	{#if children}
-		{@render children({ref:mesh})}
-	{:else}
-		<T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
-	{/if}
+  {#if children}
+    {@render children({ ref: mesh })}
+  {:else}
+    <T.PlaneGeometry args={typeof gridSize == 'number' ? [gridSize, gridSize] : gridSize} />
+  {/if}
 </T>

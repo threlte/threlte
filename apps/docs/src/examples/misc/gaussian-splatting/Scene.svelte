@@ -65,11 +65,9 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<!-- TWEAKPANE -->
 <Pane
   position="fixed"
   title="Gaussian Splatting"
-  expanded={false}
 >
   <Folder
     userExpandable={false}

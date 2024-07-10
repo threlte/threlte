@@ -12,7 +12,9 @@
     "astro": "astro",
     "cleanup": "rimraf .astro node_modules",
     "create:example": "tsx ./scripts/createExample",
-    "create:example-page": "tsx ./scripts/createExamplePage"
+    "create:example-page": "tsx ./scripts/createExamplePage",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
@@ -54,7 +56,6 @@
     "@threlte/rapier": "workspace:*",
     "@threlte/theatre": "workspace:*",
     "@threlte/xr": "workspace:*",
-    "@tweakpane/core": "^1.1.0",
     "@types/animejs": "^3.1.7",
     "@types/three": "^0.165.0",
     "@types/three-nebula": "^10.0.4",
@@ -80,7 +81,6 @@
     "svelte-tweakpane-ui": "^1.3.0",
     "three": "^0.165.0",
     "tsx": "^3.13.0",
-    "tweakpane": "^3.1.0",
     "vite-plugin-mkcert": "^1.17.5"
   },
   "overrides": {

@@ -146,7 +146,7 @@
   bind:ref={group}
   {...objectProps}
 >
-	{#if children}
-		{@render children({ref:attachGroup})}
-	{/if}
+  {#if children}
+    {@render children({ ref: attachGroup })}
+  {/if}
 </T>

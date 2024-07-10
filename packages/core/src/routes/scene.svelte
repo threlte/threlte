@@ -3,11 +3,18 @@
   import Mesh from './mesh.svelte'
 </script>
 
-<T.PerspectiveCamera makeDefault position={[3, 3, 3]} oncreate={({ ref }) => ref.lookAt(0, 0, 0)} />
+<T.PerspectiveCamera
+  makeDefault
+  position={[3, 3, 3]}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
+/>
 
 <Mesh />
 
-<T.Mesh receiveShadow position.y={-1}>
+<T.Mesh
+  receiveShadow
+  position.y={-1}
+>
   <T.MeshStandardMaterial color="turquoise" />
   <T.CylinderGeometry args={[1, 1, 0.1]} />
 </T.Mesh>

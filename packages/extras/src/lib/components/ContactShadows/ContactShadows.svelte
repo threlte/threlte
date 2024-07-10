@@ -30,7 +30,7 @@
     depthWrite = false,
     refresh = $bindable(),
     ref = $bindable(),
-		children,
+    children,
     ...props
   }: ContactShadowsProps = $props()
 
@@ -224,6 +224,6 @@
       is={shadowCamera}
       manual
     />
-	{@render children?.({ ref: group })}
+    {@render children?.({ ref: group })}
   </T.Group>
 </T>

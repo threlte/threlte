@@ -43,14 +43,20 @@ display info about your WebXR session. This is aliased by `ARButton` and
     onerror?: (error: Error) => void
   }
 
-  let { mode, sessionInit, force, styled = true, onclick, onerror, children, ...props }: Props = $props()
+  let {
+    mode,
+    sessionInit,
+    force,
+    styled = true,
+    onclick,
+    onerror,
+    children,
+    ...props
+  }: Props = $props()
 
   type SupportState = 'unsupported' | 'insecure' | 'blocked' | 'supported'
 
-  const handleButtonClick = async (
-    nativeEvent: MouseEvent,
-    state: SupportState
-  ) => {
+  const handleButtonClick = async (nativeEvent: MouseEvent, state: SupportState) => {
     if (!$xr) {
       throw new Error(
         'The <XR> component was not created. This is required to start an XR session.'

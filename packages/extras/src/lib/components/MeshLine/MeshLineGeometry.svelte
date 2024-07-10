@@ -43,7 +43,7 @@
     side.setX(i2, 1)
     side.setX(i2 + 1, -1)
 
-  const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
+    const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
     width.setX(i2, w)
     width.setX(i2 + 1, w)
 
