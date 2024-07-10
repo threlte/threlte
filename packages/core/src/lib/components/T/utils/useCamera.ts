@@ -1,30 +1,14 @@
 import { onDestroy } from 'svelte'
-import type { Camera, OrthographicCamera, PerspectiveCamera } from 'three'
+import { isOrthographicCamera, isPerspectiveCamera } from '../../../lib/camera'
+import type { OrthographicCamera, PerspectiveCamera } from 'three'
 import type { Size } from '../../../types'
 import { useThrelte } from '../../../context/compounds/useThrelte'
-
-export const isCamera = (value: any): value is Camera => {
-  return value && value.isCamera
-}
-
-const isOrthographicCamera = (value: any): value is OrthographicCamera => {
-  return value && value.isOrthographicCamera
-}
-
-const isPerspectiveCamera = (value: any): value is PerspectiveCamera => {
-  return value && value.isPerspectiveCamera
-}
-
-const isPerspectiveCameraOrOrthographicCamera = (
-  value: any
-): value is PerspectiveCamera | OrthographicCamera => {
-  return isPerspectiveCamera(value) || isOrthographicCamera(value)
-}
 
 export const useCamera = () => {
   const { invalidate, size, camera } = useThrelte()
 
   let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
+
   let unsubscribe: (() => void) | undefined = undefined
   onDestroy(() => {
     unsubscribe?.()
@@ -49,9 +33,9 @@ export const useCamera = () => {
     }
   }
 
-  const update = <T>(instance: T, manual: boolean) => {
+  const update = (instance: PerspectiveCamera | OrthographicCamera, manual: boolean) => {
     unsubscribe?.()
-    if (manual || !isPerspectiveCameraOrOrthographicCamera(instance)) {
+    if (manual) {
       currentInstance = undefined
       return
     }
@@ -59,8 +43,11 @@ export const useCamera = () => {
     unsubscribe = size.subscribe(subscriber)
   }
 
-  const makeDefaultCamera = <T>(instance: T, makeDefault: boolean) => {
-    if (!isCamera(instance) || !makeDefault) return
+  const makeDefaultCamera = (
+    instance: PerspectiveCamera | OrthographicCamera,
+    makeDefault: boolean
+  ) => {
+    if (!makeDefault) return
     camera.set(instance)
     invalidate()
   }
