@@ -12,7 +12,13 @@
   const { camera } = createCameraContext()
   const { renderStage, renderer, toneMapping } = useThrelte()
 
-  let { autoRender = true, toneMapping: hudToneMapping, stage = renderStage, ref = $bindable(), children }: HUDProps = $props()
+  let {
+    autoRender = true,
+    toneMapping: hudToneMapping,
+    stage = renderStage,
+    ref = $bindable(),
+    children
+  }: HUDProps = $props()
 
   const key = Symbol('threlte-hud-render-stage')
 
