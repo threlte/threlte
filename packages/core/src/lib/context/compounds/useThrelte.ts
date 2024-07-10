@@ -1,5 +1,5 @@
 import type { Scheduler, Stage, Task } from '../../frame-scheduling'
-import type { CurrentWritable } from '../../lib/storeUtils'
+import type { CurrentReadable, CurrentWritable } from '../../lib/storeUtils'
 import { useCamera } from '../fragments/camera'
 import { useCanvas, type Size } from '../fragments/canvas'
 import { useRenderer } from '../fragments/renderer.svelte'
@@ -22,7 +22,7 @@ import {
  * It's exposed to the user via the hook `useThrelte`.
  */
 export type ThrelteContext = {
-  size: Readable<Size> & { current: Size }
+  size: CurrentReadable<Size>
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
