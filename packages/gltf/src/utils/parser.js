@@ -568,7 +568,7 @@ ${
 			{/await}
 
       {@render children?.({ ref })}
-		</T>
+		</T.Group>
 	`
 }
 
