@@ -1,5 +1,14 @@
 # @threlte/core
 
+## 8.0.0-next.9
+
+### Patch Changes
+
+- a8f7cc0: Expose fragment contexts
+- d36f77f: fix: Set `started` store of `useTask` correctly
+- 4154987: Added toCurrentReadable to storeUtils
+- 790794d: Add HUD component and useViewport hook
+
 ## 8.0.0-next.8
 
 ### Patch Changes

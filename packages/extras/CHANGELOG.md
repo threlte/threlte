@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.14
+
+### Patch Changes
+
+- 790794d: Add HUD component and useViewport hook
+
 ## 9.0.0-next.13
 
 ### Patch Changes
@@ -793,7 +799,10 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
+  const { gltf } = useGltf<
+    "MeshA" | "MeshB" | "Object3DA",
+    "MaterialA" | "MaterialB"
+  >("/some/url");
   ```
 
   - After:
@@ -801,15 +810,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh
-      MeshB: THREE.Mesh
-      Object3DA: THREE.Object3D
-    }
+      MeshA: THREE.Mesh;
+      MeshB: THREE.Mesh;
+      Object3DA: THREE.Object3D;
+    };
     materials: {
-      MaterialA: THREE.MeshStandardMaterial
-      MaterialB: THREE.MeshBasicMaterial
-    }
-  }>('/some/url')
+      MaterialA: THREE.MeshStandardMaterial;
+      MaterialB: THREE.MeshBasicMaterial;
+    };
+  }>("/some/url");
   ```
 
 ## 4.4.1
