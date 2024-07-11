@@ -8,7 +8,6 @@ import isVarName from './isVarName.js'
  * @returns {string}
  */
 function parse(fileName, gltf, options = {}) {
-
   const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -473,10 +472,10 @@ function parse(fileName, gltf, options = {}) {
           useDraco: options.draco
         }
       : options.transform
-      ? {
-          useDraco: true
-        }
-      : undefined
+        ? {
+            useDraco: true
+          }
+        : undefined
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
