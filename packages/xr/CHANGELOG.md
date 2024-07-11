@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.5
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 1.0.0-next.4
 
 ### Patch Changes

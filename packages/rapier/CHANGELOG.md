@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.6
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 3.0.0-next.5
 
 ### Major Changes
