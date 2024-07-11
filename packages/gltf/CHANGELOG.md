@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 958c375: Fix T.Group parser error
+
 ## 3.0.0-next.1
 
 ### Patch Changes
