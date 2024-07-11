@@ -541,9 +541,9 @@ ${
           ${options.isolated ? '' : '...props'}
         }${
           options.types
-            ? `: Props<THREE.Group> & {
+            ? `: ${options.isolated ? '' : 'Props<THREE.Group> & '} {
           ${options.isolated ? '' : 'ref?: THREE.Group'}
-          children?: Snippet<[{ ref: THREE.Group }]>
+          children?: ${options.isolated ? 'Snippet' : 'Snippet<[{ ref: THREE.Group }]>'}
           fallback?: Snippet
           error?: Snippet<[{ error: Error }]>
         }`
@@ -569,11 +569,11 @@ ${
         {@render fallback?.()}
 			{:then gltf}
 				${scene}
-			{:catch error}
-        {@render error?.({ error })}
+			{:catch err}
+        {@render error?.({ error: err })}
 			{/await}
 
-      {@render children?.({ ref })}
+      {@render children?.(${options.isolated ? '' : '{ ref }'})}
 		</T.Group>
 	`
 }
