@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.4
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 2.0.0-next.3
 
 ### Patch Changes
