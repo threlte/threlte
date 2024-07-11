@@ -1,5 +1,5 @@
-import { getContext, setContext } from 'svelte'
-import { readable, type Readable } from 'svelte/store'
+import { getContext, onMount, setContext } from 'svelte'
+import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../lib/storeUtils'
 
 export type Size = {
   width: number
@@ -12,7 +12,7 @@ type CanvasContext = {
   /** The canvas element */
   canvas: HTMLCanvasElement
   /** The canvas size */
-  size: Readable<Size>
+  size: CurrentReadable<Size>
 }
 
 export type CreateCanvasContextOptions = {
@@ -26,26 +26,30 @@ export const createCanvasContext = (options: CreateCanvasContextOptions) => {
   let lastWidth = wrapperRect.width
   let lastHeight = wrapperRect.height
 
+  const size = currentWritable({ width: wrapperRect.width, height: wrapperRect.height })
+
+  onMount(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect
+        if (width === lastWidth && height === lastHeight) return
+        lastWidth = width
+        lastHeight = height
+        size.set({ width, height })
+      }
+    })
+
+    resizeObserver.observe(options.wrapper)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  })
+
   const context: CanvasContext = {
     wrapper: options.wrapper,
     canvas: options.canvas,
-    size: readable({ width: wrapperRect.width, height: wrapperRect.height }, (set) => {
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          const { width, height } = entry.contentRect
-          if (width === lastWidth && height === lastHeight) return
-          lastWidth = width
-          lastHeight = height
-          set({ width, height })
-        }
-      })
-
-      resizeObserver.observe(options.wrapper)
-
-      return () => {
-        resizeObserver.disconnect()
-      }
-    })
+    size: toCurrentReadable(size)
   }
 
   setContext<CanvasContext>('threlte-canvas-context', context)

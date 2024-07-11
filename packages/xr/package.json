@@ -30,7 +30,7 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "publint": "^0.2.7",
-    "svelte": "^5.0.0-next.107",
+    "svelte": "^5.0.0-next.133",
     "three": "^0.165.0",
     "tslib": "^2.6.2",
     "vite": "^5.2.8",

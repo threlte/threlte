@@ -1,4 +1,3 @@
-import type { ColliderEvents } from '$lib/types/types'
 import type {
   CoefficientCombineRule,
   Collider as RapierCollider,
@@ -6,6 +5,7 @@ import type {
 } from '@dimforge/rapier3d-compat'
 import { SvelteComponent, type Snippet } from 'svelte'
 import type { Euler, Vector3 } from 'three'
+import type { ColliderEvents } from '../../types/types'
 
 // ------------------ BASE ------------------
 

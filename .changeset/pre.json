@@ -10,14 +10,20 @@
     "@threlte/gltf": "2.0.3",
     "@threlte/rapier": "2.0.0",
     "@threlte/theatre": "2.1.7",
-    "@threlte/xr": "0.1.3"
+    "@threlte/xr": "0.1.3",
+    "@threlte/studio": "0.0.1-next.0"
   },
   "changesets": [
+    "big-deers-confess",
+    "chilled-ligers-switch",
     "clever-rice-pretend",
+    "curly-elephants-switch",
     "cyan-cheetahs-sit",
     "eleven-trainers-work",
     "fair-moons-rule",
     "fast-buttons-shake",
+    "fluffy-roses-argue",
+    "kind-turkeys-grow",
     "light-rockets-confess",
     "lucky-news-sleep",
     "many-tips-glow",
@@ -36,6 +42,7 @@
     "tall-foxes-taste",
     "tame-rocks-report",
     "violet-spies-tie",
-    "wet-rules-hope"
+    "wet-rules-hope",
+    "wild-ligers-flash"
   ]
 }

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.14
+
+### Patch Changes
+
+- 790794d: Add HUD component and useViewport hook
+
 ## 9.0.0-next.13
 
 ### Patch Changes

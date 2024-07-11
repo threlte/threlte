@@ -17,7 +17,7 @@ Hit testing lets you position virtual items in a real-world view.
 
   useHitTest((hitMatrix, hit) => {
     if (!ref) return
-  
+
     if (hit) {
       ref.visible = true
       ref.matrix.copy(hitMatrix)
@@ -36,9 +36,12 @@ Hit testing lets you position virtual items in a real-world view.
 This hook can optionally specify one of three origins from which to cast the hit test ray: `viewer` (the default), `leftInput` or `rightInput`.
 
 ```ts
-useHitTest((hitMatrix, hit) => {
-  // Perform a hit test from the left controller or hand.
-}, { source: 'leftInput' })
+useHitTest(
+  (hitMatrix, hit) => {
+    // Perform a hit test from the left controller or hand.
+  },
+  { source: 'leftInput' }
+)
 ```
 
 In the following example, hit testing is set up from both controllers and hands.

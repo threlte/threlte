@@ -35,7 +35,7 @@ const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-whi
 const activeLinkStyles = '!text-orange'
 ---
 
-<AppLayout title={title}>
+<AppLayout {title}>
   <Markprompt client:only="preact" />
   <header
     class="fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b border-b-orange/25 bg-[#0A0F19] px-6 md:flex"
@@ -143,6 +143,16 @@ const activeLinkStyles = '!text-orange'
           >
             <Package class="hidden h-[16px] md:block" />flex
           </a>
+          <a
+            href="/docs/reference/studio/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/studio') && activeLinkStyles
+            )}
+            data-astro-prefetch
+          >
+            <Package class="hidden h-[16px] md:block" />studio
+          </a>
         </div>
       </div>
     </div>
@@ -156,9 +166,9 @@ const activeLinkStyles = '!text-orange'
 
   <MobileDocsNav
     client:media="(max-width: 768px)"
-    sidebarMenu={sidebarMenu}
-    activeSidebarTab={activeSidebarTab}
-    activeUrlPathName={activeUrlPathName}
+    {sidebarMenu}
+    {activeSidebarTab}
+    {activeUrlPathName}
   >
     <Image
       slot="logo"
