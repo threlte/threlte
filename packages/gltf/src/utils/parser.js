@@ -1,7 +1,14 @@
 import THREE from 'three'
 import isVarName from './isVarName.js'
 
+/**
+ * @param {string} fileName
+ * @param {import('three/examples/jsm/loaders/GLTFLoader').GLTF} gltf
+ * @param {import('./Options.d.ts').Options} options
+ * @returns {string}
+ */
 function parse(fileName, gltf, options = {}) {
+
   const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -558,7 +565,7 @@ ${
     }
     </script>
 
-		<T.Group bind:ref dispose={false} ${!options.isolated ? '{...props}' : ''}>
+		<T.Group ${options.isolated ? '' : 'bind:ref'} dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
         {@render fallback?.()}
 			{:then gltf}
