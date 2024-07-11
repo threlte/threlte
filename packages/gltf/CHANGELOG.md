@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.3
+
+### Patch Changes
+
+- bb726da: fix prettier formatting
+
 ## 3.0.0-next.2
 
 ### Patch Changes
