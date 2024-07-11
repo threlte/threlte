@@ -18,11 +18,11 @@ export type SyncRequest = {
   precision?: number
 }
 
-const parser = {
+const parser: Record<string, (value: any) => any> = {
   isVector3: (value: Vector3) => [value.x, value.y, value.z],
   isEuler: (value: Euler) => [value.x, value.y, value.z],
   isColor: (value: Color) => `#${value.getHexString()}`
-} satisfies Record<string, (value: any) => any>
+}
 
 export type Transaction<T, U> = {
   /** The object to modify */
