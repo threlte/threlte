@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.0.1-next.4
+
+### Patch Changes
+
+- fb5fbcb: Fix shader imports
+
 ## 0.0.1-next.3
 
 ### Patch Changes
