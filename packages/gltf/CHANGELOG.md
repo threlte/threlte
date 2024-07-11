@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.4
+
+### Patch Changes
+
+- 54bdef9: Fix gltf parser template for isolated components
+
 ## 3.0.0-next.3
 
 ### Patch Changes
