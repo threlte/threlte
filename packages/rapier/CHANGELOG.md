@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.5
+
+### Major Changes
+
+- da6742c: Fixed Frame Physics, two-Stage system to manage simulation and synchronization)
+
 ## 3.0.0-next.4
 
 ### Patch Changes
