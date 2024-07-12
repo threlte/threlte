@@ -49,7 +49,7 @@ export type CreateRendererContextOptions<T extends Renderer> = {
    */
   colorSpace?: ColorSpace
   /**
-   * @default ACESFilmicToneMapping
+   * @default AgXToneMapping
    */
   toneMapping?: ToneMapping
   /**
