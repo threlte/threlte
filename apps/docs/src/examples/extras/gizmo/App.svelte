@@ -22,12 +22,14 @@
   let zColor = '#2c8fff'
   let toneMapped = false
   let scale = 1
-  let paddingX = 60
-  let paddingY = 60
+  let paddingX = 50
+  let paddingY = 50
   let up = 'y'
+  let hideAxisHeads = false
+  let hideNegativeAxes = false
 
   let orbitControls: ThreeOrbitControls
-  let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
+  let target: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
 </script>
 
 <Pane
@@ -112,6 +114,16 @@
       step={1}
     />
   </Folder>
+
+  <Checkbox
+    bind:value={hideAxisHeads}
+    label="hideAxisHeads"
+  />
+
+  <Checkbox
+    bind:value={hideNegativeAxes}
+    label="hideNegativeAxes"
+  />
 </Pane>
 
 <div style="position:relative; height:100%; width:100%; background-color: rgb(14,22,37)">
@@ -131,16 +143,16 @@
         <OrbitControls
           bind:ref={orbitControls}
           onchange={() => {
-            center.set([orbitControls.target.x, orbitControls.target.y, orbitControls.target.z])
+            target.set([orbitControls.target.x, orbitControls.target.y, orbitControls.target.z])
           }}
         />
       </T.PerspectiveCamera>
     {/key}
 
-    <Scene center={$center} />
+    <Scene center={$target} />
 
     <Gizmo
-      center={$center}
+      target={$target}
       {turnRate}
       {verticalPlacement}
       {horizontalPlacement}
@@ -148,6 +160,8 @@
       {yColor}
       {zColor}
       {toneMapped}
+      {hideAxisHeads}
+      {hideNegativeAxes}
       {scale}
       {paddingX}
       {paddingY}

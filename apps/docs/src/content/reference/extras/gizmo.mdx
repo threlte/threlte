@@ -9,12 +9,6 @@ componentSignature:
     props:
       [
         {
-          name: 'renderTask',
-          required: false,
-          type: 'TaskOptions',
-          description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
-        },
-        {
           name: 'animationTask',
           required: false,
           type: 'TaskOptions',
@@ -28,11 +22,11 @@ componentSignature:
           description: 'Turn animation rate in angles per second'
         },
         {
-          name: 'center',
+          name: 'target',
           type: '[number, number, number]',
           default: '[0, 0, 0]',
           required: false,
-          description: 'The center or target of the control (such as an orbit controller), if it exists.'
+          description: 'The target of the controls (such as OrbitControls), if it exists.'
         },
         {
           name: 'verticalPlacement',
@@ -60,21 +54,26 @@ componentSignature:
         {
           name: 'paddingX',
           type: 'number',
-          default: '60',
+          default: '50',
           required: false,
           description: 'The padding to the edge defined by `horizontalPlacement`.'
         },
         {
           name: 'paddingY',
           type: 'number',
-          default: '60',
+          default: '50',
           required: false,
           description: 'The padding to the edge defined by `verticalPlacement`.'
-        }
+        },
+        { name: 'hideNegativeAxes', type: 'boolean', default: 'false', required: false },
+        { name: 'hideAxisHeads', type: 'boolean', default: 'false', required: false },
+        { name: 'disabled', type: 'boolean', default: 'false', required: false },
+        { name: 'font', type: 'string', default: 'system-ui', required: false },
+        { name: 'onclick', type: 'function', required: false }
       ]
   }
 ---
 
-A gizmo for snap-to camera controls. The gizmo is rendered on top of the scene using a [`<HUD>`](/docs/reference/extras/hud) and controls the camera when clicked.
+A gizmo for visualizing global axes and to allow snap-to camera controls. The gizmo is rendered on top of the scene using a [`<HUD>`](/docs/reference/extras/hud) and controls the camera when clicked.
 
 <Example path="extras/gizmo" />

@@ -9,12 +9,13 @@
     opacity: number
     color: ColorRepresentation
     label?: string
+    font?: string
   }
 
-  let { opacity, color, label, ...rest }: AxisHeadProps = $props()
+  let { opacity, color, label, font, ...rest }: AxisHeadProps = $props()
 </script>
 
-{#await loader.loadAsync(createTextureUrl(color, label)) then map}
+{#await loader.loadAsync(createTextureUrl(color, label, font)) then map}
   <T.Sprite
     renderOrder={1}
     {...rest}

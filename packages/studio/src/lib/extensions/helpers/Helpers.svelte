@@ -97,11 +97,8 @@
 
 {#if ext.state.enabled}
   <Gizmo
-    paddingX={6}
-    paddingY={6}
-    verticalPlacement="bottom"
-    size={100}
     horizontalPlacement="left"
+    disabled
   />
 
   <AxesHelper

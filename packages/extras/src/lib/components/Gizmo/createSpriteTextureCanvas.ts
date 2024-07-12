@@ -8,7 +8,11 @@ const context = canvas.getContext('2d')!
 canvas.width = size
 canvas.height = size
 
-export const createTextureUrl = (colorRepresentation: ColorRepresentation, label = '') => {
+export const createTextureUrl = (
+  colorRepresentation: ColorRepresentation,
+  label = '',
+  font = 'system-ui'
+) => {
   color.set(colorRepresentation)
 
   context.clearRect(0, 0, size, size)
@@ -20,7 +24,7 @@ export const createTextureUrl = (colorRepresentation: ColorRepresentation, label
 
   if (label) {
     const textSize = Math.abs(size * (24 / 64))
-    context.font = `${textSize}px system-ui`
+    context.font = `${textSize}px ${font}`
     context.textAlign = 'center'
     context.fillStyle = '#000000'
     const textY = size * (41 / 64)

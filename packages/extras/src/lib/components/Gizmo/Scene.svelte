@@ -16,28 +16,32 @@
   let {
     animationTask,
     turnRate = 2 * Math.PI,
-    center = [0, 0, 0],
+    target: targetArray = [0, 0, 0],
     verticalPlacement = 'bottom',
     horizontalPlacement = 'right',
     scale: gizmoScale = 1,
     xColor = 0xff3653,
     yColor = 0x8adb00,
     zColor = 0x2c8fff,
-    paddingX = 60,
-    paddingY = 60,
+    paddingX = 50,
+    paddingY = 50,
+    hideNegativeAxes = false,
+    hideAxisHeads = false,
+    disabled = false,
+    font = 'system-ui',
+    onclick: userOnClick,
     mainCamera
   }: GizmoProps & { mainCamera: PerspectiveCamera | OrthographicCamera } = $props()
 
   const defaultUp = new Vector3()
-  const centerVec = new Vector3()
+  const target = new Vector3()
 
   $effect.pre(() => {
     defaultUp.copy(mainCamera.up)
-    console.log(defaultUp)
   })
 
   $effect.pre(() => {
-    centerVec.fromArray(center)
+    target.fromArray(targetArray)
   })
 
   interactivity()
@@ -66,16 +70,20 @@
    * @returns boolean that indicates if the target and the current rotation are equal.
    */
   const onclick = (event: IntersectionEvent<PointerEvent>) => {
+    if (disabled) return
+
+    userOnClick?.(event)
+
     animating = true
 
     const { object } = event.intersections[0]
 
-    radius = mainCamera.position.distanceTo(centerVec)
+    radius = mainCamera.position.distanceTo(target)
 
     // Rotate from current camera orientation
     currentQuaternion.copy(mainCamera.quaternion)
 
-    targetPosition.copy(object.position).multiplyScalar(radius).add(centerVec)
+    targetPosition.copy(object.position).multiplyScalar(radius).add(target)
 
     dummy.lookAt(targetPosition)
     dummy.up.copy(mainCamera.up)
@@ -111,7 +119,7 @@
           .set(0, 0, 1)
           .applyQuaternion(currentQuaternion)
           .multiplyScalar(radius)
-          .add(centerVec)
+          .add(target)
         mainCamera.up.set(0, 1, 0).applyQuaternion(currentQuaternion).normalize()
         mainCamera.quaternion.rotateTowards(targetQuaternion, step)
 
@@ -152,14 +160,61 @@
   position.y={py}
   scale={30 * gizmoScale}
 >
-  <!-- xAxis -->
-  <AxisHead
-    position.x={1}
-    color={xColor}
-    label="X"
-    opacity={x >= 0 ? 1 : 0.5}
-    {onclick}
-  />
+  {#if !hideAxisHeads}
+    <AxisHead
+      color={xColor}
+      position.x={1}
+      label="X"
+      opacity={x >= 0 ? 1 : 0.5}
+      {font}
+      {onclick}
+    />
+
+    <AxisHead
+      color={yColor}
+      position.y={1}
+      label="Y"
+      opacity={y >= 0 ? 1 : 0.5}
+      {font}
+      {onclick}
+    />
+
+    <AxisHead
+      color={zColor}
+      position.z={1}
+      label="Z"
+      opacity={z >= 0 ? 1 : 0.5}
+      {font}
+      {onclick}
+    />
+  {/if}
+
+  {#if !hideNegativeAxes && !hideAxisHeads}
+    <AxisHead
+      color={xColor}
+      position.x={-1}
+      scale={0.8}
+      opacity={x >= 0 ? 0.5 : 1}
+      {onclick}
+    />
+
+    <AxisHead
+      color={yColor}
+      position.y={-1}
+      scale={0.8}
+      opacity={y >= 0 ? 0.5 : 1}
+      {onclick}
+    />
+
+    <AxisHead
+      color={zColor}
+      position.z={-1}
+      scale={0.8}
+      userData.targetEuler={[0, Math.PI, 0]}
+      opacity={z >= 0 ? 0.5 : 1}
+      {onclick}
+    />
+  {/if}
 
   <Axis
     color={xColor}
@@ -168,62 +223,19 @@
     polygonOffset={usePolygonOffset && frontMostAxisValue === x && x < 0.75}
   />
 
-  <AxisHead
-    position.x={-1}
-    scale={0.8}
-    color={xColor}
-    opacity={x >= 0 ? 0.5 : 1}
-    {onclick}
-  />
-
-  <!-- yAxis -->
-  <AxisHead
-    position.y={1}
-    color={yColor}
-    label="Y"
-    opacity={y >= 0 ? 1 : 0.5}
-    {onclick}
-  />
-
   <Axis
-    rotation.z={Math.PI / 2}
     color={yColor}
+    rotation.z={Math.PI / 2}
     renderOrder={frontMostAxisValue === y ? -1 : 0}
     opacity={y >= 0 ? 1 : 0.5}
     polygonOffset={usePolygonOffset && frontMostAxisValue === y && y < 0.75}
   />
 
-  <AxisHead
-    position.y={-1}
-    scale={0.8}
-    color={yColor}
-    opacity={y >= 0 ? 0.5 : 1}
-    {onclick}
-  />
-
-  <!-- zAxis -->
-  <AxisHead
-    position.z={1}
-    color={zColor}
-    label="Z"
-    opacity={z >= 0 ? 1 : 0.5}
-    {onclick}
-  />
-
   <Axis
-    rotation.y={-Math.PI / 2}
     color={zColor}
+    rotation.y={-Math.PI / 2}
     renderOrder={frontMostAxisValue === z ? -1 : 0}
     opacity={z >= 0 ? 1 : 0.5}
     polygonOffset={usePolygonOffset && frontMostAxisValue === z && z < 0.75}
-  />
-
-  <AxisHead
-    position.z={-1}
-    scale={0.8}
-    userData.targetEuler={[0, Math.PI, 0]}
-    color={zColor}
-    opacity={z >= 0 ? 0.5 : 1}
-    {onclick}
   />
 </T>
