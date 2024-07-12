@@ -15,7 +15,7 @@
     "create:example-page": "tsx ./scripts/createExamplePage",
     "lint": "prettier --check .",
     "format": "prettier --write .",
-		"postinstall": "node ./scripts/patchSvelte5Export.js"
+    "postinstall": "node ./scripts/patchSvelte5Export.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
