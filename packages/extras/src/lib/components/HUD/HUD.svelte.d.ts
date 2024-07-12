@@ -9,7 +9,7 @@ export type HUDProps = Props<Scene> & {
   autoRender?: boolean
 
   /**
-   * @default ACESFilmicToneMapping
+   * @default AgXToneMapping
    */
   toneMapping?: ToneMapping
 
