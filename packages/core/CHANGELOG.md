@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.11
+
+### Major Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
 ## 8.0.0-next.10
 
 ### Patch Changes
