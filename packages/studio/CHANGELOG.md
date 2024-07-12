@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.0.1-next.5
+
+### Patch Changes
+
+- f02bbbf: Use SvelteSet from svelte/reactivity
+
 ## 0.0.1-next.4
 
 ### Patch Changes
