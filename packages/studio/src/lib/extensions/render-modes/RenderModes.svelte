@@ -9,20 +9,14 @@
     MeshBasicMaterial,
     MeshMatcapMaterial
   } from 'three'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { renderModesScope, type RenderModesActions, type RenderModesState } from './types'
 
   const hasMaterial = (object: any): object is { material: Material } => {
     return 'material' in object
-  }
-
-  const hasOnBeforeRender = (
-    material: Material
-  ): material is Material & { onBeforeRender: (...args: any[]) => void } => {
-    return 'onBeforeRender' in material
   }
 
   const { createExtension } = useStudio()
@@ -54,16 +48,13 @@
   })
 
   // override to exclude objects with `ignoreOverrideMaterial` from being rendered with the override material
-  // see https://github.com/mrdoob/three.js/blob/bd33e679a5b634842bb39a377b9a37eb68bc0e2a/src/renderers/WebGLRenderer.js#L1561-L1590
+  // see https://github.com/mrdoob/three.js/blob/45498d0255abe5da8d3ff95c117ccab594c49b8f/src/renderers/WebGLRenderer.js#L1589-L1616
   const ogRenderBufferDirect = renderer.renderBufferDirect.bind(renderer)
   renderer.renderBufferDirect = (...args) => {
     // signature: 0:camera, 1:scene, 2:geometry, 3:material, 4:object, 5:group
     if (args[4].userData.ignoreOverrideMaterial && hasMaterial(args[4])) {
       // we have to mimic what `renderObject` does with the original material
       const material = args[4].material
-      if (hasOnBeforeRender(material)) {
-        material.onBeforeRender(renderer, scene, args[0], args[2], args[4], args[5])
-      }
       if (material.transparent && material.side === DoubleSide && !material.forceSinglePass) {
         material.side = BackSide
         material.needsUpdate = true
