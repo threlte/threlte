@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
 ## 3.0.0-next.6
 
 ### Patch Changes

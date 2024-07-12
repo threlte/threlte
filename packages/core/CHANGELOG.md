@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.12
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
 ## 8.0.0-next.11
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.6
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
 ## 1.0.0-next.5
 
 ### Patch Changes
