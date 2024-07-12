@@ -11,7 +11,7 @@ export type GizmoProps = {
   center?: [number, number, number]
   verticalPlacement?: 'top' | 'bottom'
   horizontalPlacement?: 'left' | 'right'
-  size?: number
+  scale?: number
   xColor?: ColorRepresentation
   yColor?: ColorRepresentation
   zColor?: ColorRepresentation

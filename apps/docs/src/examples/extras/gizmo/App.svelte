@@ -21,9 +21,10 @@
   let yColor = '#8adb00'
   let zColor = '#2c8fff'
   let toneMapped = false
-  let size = 128
-  let paddingX = 20
-  let paddingY = 20
+  let scale = 1
+  let paddingX = 60
+  let paddingY = 60
+  let up = 'y'
 
   let orbitControls: ThreeOrbitControls
   let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
@@ -34,6 +35,15 @@
   position="fixed"
   title="Gizmo"
 >
+  <List
+    label="up"
+    bind:value={up}
+    options={{
+      x: 'x',
+      y: 'y',
+      z: 'z'
+    }}
+  />
   <Folder title="Mechanics">
     <Ring
       label="turnRate"
@@ -81,24 +91,24 @@
       }}
     />
     <Slider
-      label="size"
-      bind:value={size}
-      min={20}
-      max={350}
-      step={1}
+      label="scale"
+      bind:value={scale}
+      min={0.1}
+      max={2}
+      step={0.01}
     />
     <Slider
       label="paddingX"
       bind:value={paddingX}
       min={0}
-      max={50}
+      max={100}
       step={1}
     />
     <Slider
       label="paddingY"
       bind:value={paddingY}
       min={0}
-      max={50}
+      max={100}
       step={1}
     />
   </Folder>
@@ -106,19 +116,26 @@
 
 <div style="position:relative; height:100%; width:100%; background-color: rgb(14,22,37)">
   <Canvas>
-    <T.PerspectiveCamera
-      makeDefault
-      position={[20, 20, 20]}
-      fov={36}
-      target={[0, 0, 0]}
-    >
-      <OrbitControls
-        bind:ref={orbitControls}
-        onchange={() => {
-          center.set([orbitControls.target.x, orbitControls.target.y, orbitControls.target.z])
-        }}
-      />
-    </T.PerspectiveCamera>
+    {#key up}
+      <T.PerspectiveCamera
+        makeDefault
+        position={[20, 20, 20]}
+        fov={36}
+        target={[0, 0, 0]}
+        up={{
+          x: [1, 0, 0],
+          y: [0, 1, 0],
+          z: [0, 0, 1]
+        }[up]}
+      >
+        <OrbitControls
+          bind:ref={orbitControls}
+          onchange={() => {
+            center.set([orbitControls.target.x, orbitControls.target.y, orbitControls.target.z])
+          }}
+        />
+      </T.PerspectiveCamera>
+    {/key}
 
     <Scene center={$center} />
 
@@ -131,7 +148,7 @@
       {yColor}
       {zColor}
       {toneMapped}
-      {size}
+      {scale}
       {paddingX}
       {paddingY}
     />

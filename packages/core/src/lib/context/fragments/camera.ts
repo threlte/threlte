@@ -1,11 +1,11 @@
 import { getContext, setContext } from 'svelte'
-import { PerspectiveCamera, type Camera } from 'three'
+import { type OrthographicCamera, PerspectiveCamera } from 'three'
 import { useCanvas } from './canvas'
 import { useScheduler } from './scheduler.svelte'
 import { currentWritable, watch, type CurrentWritable } from '../../lib/storeUtils'
 
 type CameraContext = {
-  camera: CurrentWritable<Camera>
+  camera: CurrentWritable<PerspectiveCamera | OrthographicCamera>
 }
 
 export const createCameraContext = (): CameraContext => {

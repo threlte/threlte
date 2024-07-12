@@ -6,8 +6,9 @@ import { useRenderer } from '../fragments/renderer.svelte'
 import { useScene } from '../fragments/scene'
 import { useScheduler } from '../fragments/scheduler.svelte'
 import {
+  type OrthographicCamera,
+  type PerspectiveCamera,
   Scene,
-  type Camera,
   type ColorSpace,
   type ShadowMapType,
   type ToneMapping,
@@ -22,7 +23,7 @@ import {
  */
 export type ThrelteContext = {
   size: CurrentReadable<Size>
-  camera: CurrentWritable<Camera>
+  camera: CurrentWritable<PerspectiveCamera | OrthographicCamera>
   scene: Scene
   dpr: CurrentWritable<number>
   renderer: WebGLRenderer

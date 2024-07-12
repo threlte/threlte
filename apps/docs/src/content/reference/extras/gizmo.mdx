@@ -46,7 +46,7 @@ componentSignature:
           default: "'right'",
           required: false
         },
-        { name: 'size', type: 'number', default: '128', required: false },
+        { name: 'scale', type: 'number', default: '1', required: false },
         { name: 'xColor', type: 'number', default: '0xff3653', required: false },
         { name: 'yColor', type: 'number', default: '0x8adb00', required: false },
         { name: 'zColor', type: 'number', default: '0x2c8fff', required: false },
@@ -60,14 +60,14 @@ componentSignature:
         {
           name: 'paddingX',
           type: 'number',
-          default: '0',
+          default: '60',
           required: false,
           description: 'The padding to the edge defined by `horizontalPlacement`.'
         },
         {
           name: 'paddingY',
           type: 'number',
-          default: '0',
+          default: '60',
           required: false,
           description: 'The padding to the edge defined by `verticalPlacement`.'
         }
@@ -75,6 +75,6 @@ componentSignature:
   }
 ---
 
-A gizmo for snap-to camera controls. The gizmo is rendered on top of the scene using an orthographic camera and controls the camera when clicked.
+A gizmo for snap-to camera controls. The gizmo is rendered on top of the scene using a [`<HUD>`](/docs/reference/extras/hud) and controls the camera when clicked.
 
 <Example path="extras/gizmo" />
