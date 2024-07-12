@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.5
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
 ## 2.0.0-next.4
 
 ### Patch Changes

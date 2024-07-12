@@ -1,5 +1,12 @@
 # @threlte/studio
 
+## 0.0.1-next.6
+
+### Patch Changes
+
+- 0e45731: Remove deprecated onBeforeRender callback
+- cc4ccf2: Update Three.js
+
 ## 0.0.1-next.5
 
 ### Patch Changes
