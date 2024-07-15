@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.8
+
+### Patch Changes
+
+- cf0ef7c: Remove object from selection when it's removed from the scene
+
 ## 0.1.0-next.7
 
 ### Minor Changes
