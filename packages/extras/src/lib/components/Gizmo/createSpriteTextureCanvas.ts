@@ -2,17 +2,24 @@ import { Color, type ColorRepresentation } from 'three'
 
 const color = new Color()
 
-const size = 64 * window.devicePixelRatio
-const canvas = document.createElement('canvas')
-const context = canvas.getContext('2d')!
-canvas.width = size
-canvas.height = size
+let canvas: HTMLCanvasElement | undefined
+
+const createCanvas = (size: number) => {
+  const canvas = document.createElement('canvas')
+  canvas.width = size
+  canvas.height = size
+  return canvas
+}
 
 export const createTextureUrl = (
   colorRepresentation: ColorRepresentation,
   label = '',
   font = 'system-ui'
 ) => {
+  const size = 64 * window.devicePixelRatio
+  canvas = canvas ?? createCanvas(size)
+  const context = canvas.getContext('2d')!
+
   color.set(colorRepresentation)
 
   context.clearRect(0, 0, size, size)
