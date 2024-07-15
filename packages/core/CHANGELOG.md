@@ -1,5 +1,24 @@
 # @threlte/core
 
+## 8.0.0-next.12
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 8.0.0-next.11
+
+### Major Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 8.0.0-next.10
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+- 81e354d: Remove deprecated event handling from export
+
 ## 8.0.0-next.9
 
 ### Patch Changes

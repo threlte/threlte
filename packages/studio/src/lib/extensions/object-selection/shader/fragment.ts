@@ -1,4 +1,4 @@
-uniform sampler2D outlinedObjectsTexture;
+export const fragmentShader = `uniform sampler2D outlinedObjectsTexture;
 uniform float lineWidth;
 uniform vec3 outlineColor;
 uniform float edgeFactor;
@@ -26,4 +26,4 @@ void main() {
 
   float smoothAlpha = smoothstep(0.1f, 3.f, edgeDetectValue);
   gl_FragColor = vec4(outlineColor, smoothAlpha);
-}
+}`

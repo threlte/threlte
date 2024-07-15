@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 3.0.0-next.5
 
 ### Major Changes
