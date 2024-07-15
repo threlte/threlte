@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.7
+
+### Minor Changes
+
+- ca5fac6: Add transactions to TransactionQueue events
+
 ## 0.0.1-next.6
 
 ### Patch Changes
