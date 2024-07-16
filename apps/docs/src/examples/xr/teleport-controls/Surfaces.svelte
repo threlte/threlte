@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { teleportControls } from '@threlte/xr'
-  import { useGltf } from '@threlte/extras'
+  import { useDraco, useGltf } from '@threlte/extras'
 
   export let showSurfaces: boolean
   export let showBlockers: boolean
@@ -9,8 +9,9 @@
   teleportControls('left')
   teleportControls('right')
 
+  const dracoLoader = useDraco()
   const gltf = useGltf('/models/xr/ruins.glb', {
-    useDraco: true
+    dracoLoader
   })
 </script>
 

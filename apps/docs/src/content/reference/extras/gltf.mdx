@@ -118,18 +118,18 @@ The `useDraco` hook will load a default DRACO decoder from Google servers, speci
 
 ### KTX 2
 
-To use KTX2 compressed textures, import the `useKtx` hook or provide an instance of a `KTX2Loader`.
+To use KTX2 compressed textures, import the `useKtx2` hook or provide an instance of a `KTX2Loader`.
 
 ```svelte
 <script>
-  import { useKtx } from '@threlte/extras'
+  import { useKtx2 } from '@threlte/extras'
 
-  const ktx = useKtx('path/to/transcoder') // Creates a cached instance of KTX2Loader
+  const ktx2Loader = useKtx2('path/to/transcoder') // Creates a cached instance of KTX2Loader
 </script>
 
 <GLTF
   url="/models/helmet/DamagedHelmet.gltf"
-  {ktx}
+  {ktx2Loader}
 />
 ```
 

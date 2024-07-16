@@ -8,9 +8,9 @@ import type { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
 
 export type GltfProps = Props<Group> & {
   url: string
-  draco?: DRACOLoader
-  meshopt?: typeof MeshoptDecoder
-  ktx?: KTX2Loader
+  dracoLoader?: DRACOLoader
+  meshoptDecoder?: typeof MeshoptDecoder
+  ktx2Loader?: KTX2Loader
 
   onload?: (gltf: ThrelteGltf) => void
   onunload?: () => void

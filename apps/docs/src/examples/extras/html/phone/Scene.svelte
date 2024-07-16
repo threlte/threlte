@@ -24,7 +24,7 @@
 <T.PerspectiveCamera
   position={[50, -30, 30]}
   fov={20}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
   makeDefault
@@ -63,7 +63,7 @@
         width="100%"
         height="100%"
         frameborder="0"
-      />
+      ></iframe>
     </div>
   </HTML>
 

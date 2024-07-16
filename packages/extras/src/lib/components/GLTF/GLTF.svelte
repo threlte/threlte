@@ -15,9 +15,9 @@
 
   let {
     url,
-    draco,
-    meshopt,
-    ktx,
+    dracoLoader,
+    meshoptDecoder,
+    ktx2Loader,
     gltf = $bindable(),
     scene = $bindable(),
     animations = $bindable(),
@@ -36,9 +36,9 @@
   }: Props = $props()
 
   const loader = useGltf({
-    draco,
-    meshopt,
-    ktx
+    dracoLoader,
+    meshoptDecoder,
+    ktx2Loader
   })
 
   const onLoad = (data: AnyThrelteGltf) => {

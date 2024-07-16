@@ -52,9 +52,9 @@ Use the `useDraco` hook for compressed glTF files, defaults to CDN loaded DRACO 
 ```ts
 import { useGltf, useDraco } from '@threlte/extras'
 
-const draco = useDraco()
+const dracoLoader = useDraco()
 const gltf = useGltf('/path/to/model.glb', {
-  draco
+  dracoLoader
 })
 ```
 
@@ -63,9 +63,9 @@ You can set a custom path to DRACO decoder binaries.
 ```ts
 import { useGltf, useDraco } from '@threlte/extras'
 
-const draco = useDraco('/custom/draco/decoders/path')
+const dracoLoader = useDraco('/custom/draco/decoders/path')
 const gltf = useGltf('/path/to/model.glb', {
-  draco
+  dracoLoader
 })
 ```
 
@@ -76,9 +76,9 @@ This is especially useful when you can confidently dispose of the loader, as the
 ```ts
 import { useGltf } from '@threlte/extras'
 
-const myLoader = new DRACOLoader().setDecoderPath(path)
+const dracoLoader = new DRACOLoader().setDecoderPath(path)
 const gltf = useGltf('/path/to/model.glb', {
-  draco: myLoader
+  dracoLoader
 })
 ```
 
@@ -91,24 +91,24 @@ You can also provide your own instance of MeshoptDecoder.
 ```ts
 import { useGltf, useMeshopt } from '@threlte/extras'
 
-const meshopt = useMeshopt()
+const meshoptDecoder = useMeshopt()
 const gltf = useGltf('/path/to/model.glb', {
-  meshopt
+  meshoptDecoder
 })
 ```
 
 ### KTX2Loader
 
-Use the `useKtx` hook for [KTX 2 texture support](https://threejs.org/docs/#examples/en/loaders/KTX2Loader).
+Use the `useKtx2` hook for [KTX 2 texture support](https://threejs.org/docs/#examples/en/loaders/KTX2Loader).
 
 This hook requires a `transcoder` path.
 
 ```ts
-import { useGltf, useKtx } from '@threlte/extras'
+import { useGltf, useKtx2 } from '@threlte/extras'
 
-const ktx = useKtx('path/to/transcoder/')
+const ktx2Loader = useKtx2('path/to/transcoder/')
 const gltf = useGltf('/path/to/model.glb', {
-  ktx
+  ktx2Loader
 })
 ```
 
@@ -127,7 +127,7 @@ ktx2Loader.setTranscoderPath('path/to/transcoder/')
 ktx2Loader.detectSupport(renderer)
 
 const gltf = useGltf('/path/to/model.glb', {
-  ktx: ktx2Loader
+  ktx2Loader
 })
 ```
 
@@ -140,8 +140,9 @@ The hook provides a map of all objects and materials in the loaded glTF.
   import { useGltf } from '@threlte/extras'
 
   const gltf = useGltf('/path/to/model.glb')
-  $: nodes: $gltf?.nodes
-  $: materials: $gltf?.materials
+
+  let nodes = $derived($gltf?.nodes)
+  let materials = $derived($gltf?.materials)
 </script>
 ```
 
@@ -163,10 +164,12 @@ Provide types and you will gain autocompletion for these objects and materials.
     }
   }>('/path/to/model.glb')
 
-  $: if ($gltf) {
-    const objectA = $gltf.nodes['MeshA'] // -> THREE.Mesh
-    const materialA = $gltf.materials['MaterialA'] // -> THREE.MeshStandardMaterial
-  }
+  $effect(() => {
+    if ($gltf) {
+      const objectA = $gltf.nodes['MeshA'] // -> THREE.Mesh
+      const materialA = $gltf.materials['MaterialA'] // -> THREE.MeshStandardMaterial
+    }
+  })
 </script>
 ```
 

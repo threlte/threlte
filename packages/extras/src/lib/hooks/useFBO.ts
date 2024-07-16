@@ -19,14 +19,14 @@ interface UseFBOOptions extends RenderTargetOptions {
 
 // 👇 uncomment when TS version supports function overloads
 // export function useFBO(options?: UseFBOOptions)
-export function useFBO(
+export const useFBO = (
   /** Width in pixels, or options (will render fullscreen by default) */
   width?: number | UseFBOOptions,
   /** Height in pixels */
   height?: number,
   /** Options */
   options?: UseFBOOptions
-): WebGLRenderTarget {
+): WebGLRenderTarget => {
   const { dpr, size } = useThrelte()
 
   const _width = typeof width === 'number' ? width : 1 * (dpr.current ?? 1)
@@ -49,10 +49,7 @@ export function useFBO(
 
   onMount(() => {
     if (samples) target.samples = samples
-  })
-
-  onDestroy(() => {
-    target.dispose()
+    return () => target.dispose()
   })
 
   const unsubscribeSize = size.subscribe((val) => {
