@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.8
+
+### Patch Changes
+
+- 98a9bec: Fix rigidbody syncing for varying framerates
+
 ## 3.0.0-next.7
 
 ### Patch Changes
