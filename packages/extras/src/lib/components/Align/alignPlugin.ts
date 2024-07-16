@@ -2,7 +2,7 @@ import { injectPlugin } from '@threlte/core'
 import { onMount, tick } from 'svelte'
 import type { Object3D } from 'three'
 
-const isObject3D = (object: any): object is Object3D => object.isObject3D
+const isObject3D = (object: object): object is Object3D => 'isObject3D' in object
 
 export const injectAlignPlugin = (align: () => void) => {
   injectPlugin('align-plugin', ({ ref }) => {

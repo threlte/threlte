@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, CubeTexture, ShaderMaterial, Texture } from 'three'
 
@@ -41,11 +41,4 @@ export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
   fastChroma?: boolean
 }
 
-export type MeshRefractionMaterialEvents = Events<ShaderMaterial>
-export type MeshRefractionMaterialSlots = Slots<ShaderMaterial>
-
-export default class MeshRefractionMaterial extends SvelteComponent<
-  MeshRefractionMaterialProps,
-  MeshRefractionMaterialEvents,
-  MeshRefractionMaterialSlots
-> {}
+export default class MeshRefractionMaterial extends SvelteComponent<MeshRefractionMaterialProps> {}

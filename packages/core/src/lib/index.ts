@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+export const VERSION = 8
 
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
@@ -10,7 +10,7 @@ export { default as DisposableObject } from './internal/DisposableObject.svelte'
 
 // components (v6)
 export { T, extend } from './components/T/T'
-export type { Props, Events, Slots } from './components/T/types'
+export type { Props } from './components/T/types'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin'
@@ -20,7 +20,7 @@ export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
 // hooks
 export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask'
 export { useStage } from './hooks/useStage'
-export { useThrelte } from './hooks/useThrelte'
+export { useThrelte } from './context/compounds/useThrelte'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 
 // task scheduling system types
@@ -41,7 +41,15 @@ export { useParent } from './hooks/useParent'
 export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
 
 // contexts
-export { type ThrelteContext, createThrelteContext } from './lib/contexts'
+export { type ThrelteContext } from './context/compounds/useThrelte'
+export { createThrelteContext } from './context/createThrelteContext.svelte'
+export { createCacheContext, useCache } from './context/fragments/cache'
+export { createCameraContext, useCamera } from './context/fragments/camera'
+export { createCanvasContext, useCanvas } from './context/fragments/canvas'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal'
+export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
+export { createSceneContext, useScene } from './context/fragments/scene'
+export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
 
 // types
 export type { Size } from './types'
@@ -49,7 +57,6 @@ export type { Size } from './types'
 // utils
 export { createObjectStore } from './lib/createObjectStore'
 export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { useCache } from './lib/cache'
 export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { revision } from './lib/revision'
 
@@ -59,50 +66,3 @@ export { revision } from './lib/revision'
 export type { DisposableObjectProperties } from './internal/DisposableObject.svelte.d'
 export type { HierarchicalObjectProperties } from './internal/HierarchicalObject.svelte'
 export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.svelte'
-
-/**
- * @deprecated createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.
- *
- * To send events, you must migrate your component to runes mode and use the rest props $$events object:
- *
- * @example
- * ```html
- * <script>
- *   let { ...props } = $props()
- *
- *   // at some point...
- *   props.$$events.change?.()
- * </script>
- * ```
- */
-export const createRawEventDispatcher = () => {
-  console.error(
-    'createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.'
-  )
-  return () => {}
-}
-
-/**
- * @deprecated forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.
- *
- * To forward events in Svelte 5, you must migrate your component to runes mode and pass the components rest props
- * to the component you wish to forward events to:
- *
- * @example
- * ```html
- * <script>
- *   let { ...props } = $props()
- * </script>
- *
- * <T.Mesh {...props}>
- *   <T.BoxGeometry />
- *   <T.MeshBasicMaterial />
- * </T.Mesh>
- * ```
- */
-export const forwardEventHandlers = () => {
-  console.error(
-    'forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.'
-  )
-  return writable()
-}

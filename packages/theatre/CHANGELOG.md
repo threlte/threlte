@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 3.0.0-next.4
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 3.0.0-next.1
 
 ### Patch Changes
@@ -17,6 +35,12 @@
 - Updated dependencies
   - @threlte/extras@9.0.0-next.0
   - @threlte/core@8.0.0-next.0
+
+## 2.1.8
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 2.1.7
 

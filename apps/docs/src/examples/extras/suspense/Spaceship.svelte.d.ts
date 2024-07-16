@@ -17,4 +17,4 @@ export type SpaceshipProps = Props<Group> & {
     | 'Zenith'
 }
 
-export default class Spaceship extends SvelteComponent<SpaceshipProps, {}, {}> {}
+export default class Spaceship extends SvelteComponent<SpaceshipProps> {}

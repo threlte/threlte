@@ -1,5 +1,23 @@
 # @threlte/flex
 
+## 2.0.0-next.5
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 2.0.0-next.4
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 2.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 2.0.0-next.2
 
 ### Patch Changes
@@ -17,6 +35,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 1.0.3
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 1.0.2
 

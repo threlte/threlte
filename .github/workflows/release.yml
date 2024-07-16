@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: pnpm/action-setup@v2.2.2
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8.3.1
+          version: 9.4.0
 
       - name: Install deps
         run: pnpm run install:packages

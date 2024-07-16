@@ -1,5 +1,58 @@
 # @threlte/core
 
+## 8.0.0-next.12
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 8.0.0-next.11
+
+### Major Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 8.0.0-next.10
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+- 81e354d: Remove deprecated event handling from export
+
+## 8.0.0-next.9
+
+### Patch Changes
+
+- a8f7cc0: Expose fragment contexts
+- d36f77f: fix: Set `started` store of `useTask` correctly
+- 4154987: Added toCurrentReadable to storeUtils
+- 790794d: Add HUD component and useViewport hook
+
+## 8.0.0-next.8
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 8.0.0-next.7
+
+### Patch Changes
+
+- c53d7a9: Split out contexts by domain
+
+## 8.0.0-next.6
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 8.0.0-next.5
+
+### Patch Changes
+
+- 2ccf508: Remove userSize canvas prop
+- 750550b: Remove useLegacyLights prop
+
 ## 8.0.0-next.4
 
 ### Patch Changes
@@ -29,6 +82,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 7.3.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 7.3.0
 

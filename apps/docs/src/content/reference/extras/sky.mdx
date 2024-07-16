@@ -104,7 +104,7 @@ This component adds a [Three.js `Sky` object](https://github.com/mrdoob/three.js
     makeDefault
     position={[0, 3, 18]}
     fov={60}
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(0, 0, 0)
     }}
   />

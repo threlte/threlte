@@ -52,13 +52,10 @@ specific props. We can achieve this using _manual prop declaration_. Provide the
 `<SheetObject>` for a manual property declaration.
 
 ```svelte
-<SheetObject
-  props={{
-    x: 0
-  }}
-  let:values
->
-  <T.Mesh position.x={values.x} />
+<SheetObject props={{ x: 0 }}>
+  {#snippet children({ values })}
+    <T.Mesh position.x={values.x} />
+  {/snippet}
 </SheetObject>
 ```
 

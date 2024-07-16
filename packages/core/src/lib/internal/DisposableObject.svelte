@@ -1,15 +1,14 @@
 <script lang="ts">
   import { getContext, onDestroy, setContext } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
-  import { useThrelteInternal } from '../hooks/useThrelteInternal'
+  import { useDisposal } from '../context/fragments/disposal'
   import type { DisposableObjectProperties } from './DisposableObject.svelte'
 
   type ThrelteDisposeContext = Writable<boolean>
 
-  let { object, dispose }: DisposableObjectProperties = $props()
+  let { object, dispose, children }: DisposableObjectProperties = $props()
 
-  const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
-    useThrelteInternal()
+  const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } = useDisposal()
 
   let previousObject = object
 
@@ -38,4 +37,6 @@
   })
 </script>
 
-<slot />
+{#if children}
+  {@render children()}
+{/if}

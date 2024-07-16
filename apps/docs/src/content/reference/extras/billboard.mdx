@@ -7,19 +7,13 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    props:
-      [
-        { name: 'follow', type: 'boolean', default: 'true', required: false },
-        { name: 'lockX', type: 'boolean', default: 'false', required: false },
-        { name: 'lockY', type: 'boolean', default: 'false', required: false },
-        { name: 'lockZ', type: 'boolean', default: 'false', required: false }
-      ]
+    props: [{ name: 'follow', type: 'boolean | THREE.Object3D', default: 'true', required: false }]
   }
 ---
 
 This component is a port of [drei's `<Billboard>`
 component](https://github.com/pmndrs/drei#billboard) which rotates its contents
-to always face the camera.
+to always face the camera or specified object.
 
 <Example path="extras/billboard" />
 
@@ -43,20 +37,3 @@ to always face the camera.
 
 To disable the billboard from rotating its contents to face the camera, you can
 optionally pass in a `follow` prop set to `false`.
-
-You can also optionally pass in a `lockX`, `lockY`, or `lockZ` prop to lock the
-rotation of the billboard on a specific axis.
-
-```svelte title="BillboardLocked.svelte"
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import { Billboard } from '@threlte/extras'
-</script>
-
-<Billboard lockX>
-  <T.Mesh>
-    <T.MeshStandardMaterial />
-    <T.PlaneGeometry args={[2, 2]} />
-  </T.Mesh>
-</Billboard>
-```

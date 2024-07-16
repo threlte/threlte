@@ -12,7 +12,7 @@ type FlexContextEvents = {
 
 type FlexContextNode = {
   node: Node
-  group: THREE.Group
+  group: Group
   props: NodeProps
 }
 

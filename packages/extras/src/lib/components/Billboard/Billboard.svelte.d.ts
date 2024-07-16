@@ -1,19 +1,9 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
-import type { Group } from 'three'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
+import type { Group, Object3D } from 'three'
 
 export type BillboardProps = Props<Group> & {
-  follow?: boolean
-  lockX?: boolean
-  lockY?: boolean
-  lockZ?: boolean
+  follow?: boolean | Object3D
 }
 
-export type BillboardEvents = Events<Group>
-export type BillboardSlots = Slots<Group>
-
-export default class Billboard extends SvelteComponent<
-  BillboardProps,
-  BillboardEvents,
-  BillboardSlots
-> {}
+export default class Billboard extends SvelteComponent<BillboardProps> {}

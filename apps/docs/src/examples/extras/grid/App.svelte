@@ -67,7 +67,6 @@
 <Pane
   title="Grid"
   position="fixed"
-  expanded={false}
 >
   <Folder title="Cells">
     <Slider

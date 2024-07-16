@@ -70,26 +70,26 @@ export interface PointerCaptureTarget {
 }
 
 export type ThrelteXREvents = {
-  click: IntersectionEvent
-  contextmenu: IntersectionEvent
-  pointerup: IntersectionEvent
-  pointerdown: IntersectionEvent
-  pointerover: IntersectionEvent
-  pointerout: IntersectionEvent
-  pointerenter: IntersectionEvent
-  pointerleave: IntersectionEvent
-  pointermove: IntersectionEvent
-  pointermissed: IntersectionEvent
+  onclick: IntersectionEvent
+  oncontextmenu: IntersectionEvent
+  onpointerup: IntersectionEvent
+  onpointerdown: IntersectionEvent
+  onpointerover: IntersectionEvent
+  onpointerout: IntersectionEvent
+  onpointerenter: IntersectionEvent
+  onpointerleave: IntersectionEvent
+  onpointermove: IntersectionEvent
+  onpointermissed: IntersectionEvent
 }
 
 export const events: (keyof ThrelteXREvents)[] = [
-  'click',
-  'contextmenu',
-  'pointerup',
-  'pointerdown',
-  'pointerover',
-  'pointerout',
-  'pointerenter',
-  'pointerleave',
-  'pointermove'
+  'onclick',
+  'oncontextmenu',
+  'onpointerup',
+  'onpointerdown',
+  'onpointerover',
+  'onpointerout',
+  'onpointerenter',
+  'onpointerleave',
+  'onpointermove'
 ]

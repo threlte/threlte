@@ -1,6 +1,6 @@
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
-  import { interactivity, transitions } from '@threlte/extras'
+  import { interactivity } from '@threlte/extras'
   import { Box } from '@threlte/flex'
   import { tick } from 'svelte'
   import Button from './Button.svelte'
@@ -18,7 +18,6 @@
   $: offset = (page - 1) * rows * columns
 
   interactivity()
-  transitions()
 
   const { renderStage, autoRender, renderer, scene, camera } = useThrelte()
 
@@ -43,18 +42,16 @@
       <Box class="h-auto w-full flex-1 items-center justify-evenly gap-10">
         {#each new Array(columns) as _, columnIndex}
           {@const index = rowIndex * columns + columnIndex}
-          <Box
-            class="h-full w-full flex-1"
-            let:width
-            let:height
-          >
-            <Matcap
-              {width}
-              {height}
-              matcapIndex={offset + index}
-              gridIndex={index}
-              format={size}
-            />
+          <Box class="h-full w-full flex-1">
+            {#snippet children({ width, height })}
+              <Matcap
+                {width}
+                {height}
+                matcapIndex={offset + index}
+                gridIndex={index}
+                format={size}
+              />
+            {/snippet}
           </Box>
         {/each}
       </Box>

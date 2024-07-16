@@ -41,5 +41,5 @@
   {anchorY}
   fontSize={fontSizes[fontSize]}
   {color}
-  on:sync={reflow}
+  onsync={reflow}
 />

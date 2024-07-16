@@ -1,50 +1,46 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="Type"
+>
   import { untrack } from 'svelte'
+  import { isPerspectiveOrOrthographicCamera } from '../../lib/camera'
   import { useIsContext } from './utils/useIsContext'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
   import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
   import { useAttach } from './utils/useAttach'
-  import { isCamera, useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props, Events, Slots } from './types'
+  import type { Props } from './types'
   import Camera from './Camera.svelte'
-
-  type Type = $$Generic
 
   type AllProps = {
     is: Type
   } & Props<Type>
-  type $$Events = Events<Type>
-  type $$Slots = Slots<Type>
 
   let {
-    is = useIsContext(),
+    is = useIsContext<Type>(),
     args,
     attach,
     manual,
     makeDefault,
     dispose,
-    children,
     ref = $bindable(),
+    oncreate,
+    children,
     ...props
   }: AllProps = $props()
 
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $derived(determineRef<Type>(is, args))
-  ref = internalRef
 
   const parent = useParent()
 
   // Create Event
-  const createEvent = useCreateEvent<Type>(props.$$events)
-
-  // The ref is created, emit the event
-  createEvent.updateRef(internalRef)
+  const createEvent = useCreateEvent<Type>(oncreate)
 
   // When "is" or "args" change, we need to create a new ref.
   $effect.pre(() => {
@@ -56,13 +52,13 @@
     createEvent.updateRef(internalRef)
   })
 
-  const parentContext = createParentContext(internalRef)
-  $effect.pre(() => parentContext.set(internalRef))
+  const parentContext = createParentContext()
+  $effect.pre(() => parentContext.set(internalRef as { uuid: string }))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
   const plugins = usePlugins({
-    ref: internalRef,
+    ref: untrack(() => internalRef),
     props: {
       is,
       args,
@@ -73,7 +69,6 @@
       ...props
     }
   })
-  const pluginsProps = plugins?.pluginsProps ?? []
 
   // Props
   const { updateProp } = useProps()
@@ -81,7 +76,7 @@
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
-        pluginsProps
+        pluginsProps: plugins?.pluginsProps
       })
     })
   })
@@ -91,7 +86,7 @@
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
   // Events
-  const events = useEvents(props.$$events)
+  const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
 
   // update plugins after all other updates
@@ -117,7 +112,7 @@
   />
 {/if}
 
-{#if isCamera(internalRef)}
+{#if isPerspectiveOrOrthographicCamera(internalRef)}
   <Camera
     object={internalRef}
     {manual}
@@ -128,9 +123,9 @@
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
     {#if children}
-      <slot ref={internalRef} />
+      {@render children({ ref: internalRef })}
     {/if}
   </SceneGraphObject>
 {:else if children}
-  <slot ref={internalRef} />
+  {@render children({ ref: internalRef })}
 {/if}

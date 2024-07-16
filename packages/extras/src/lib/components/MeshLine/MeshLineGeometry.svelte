@@ -5,22 +5,16 @@
     With peformance improvements inspired by:
     https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
 	*/
-  import type {
-    MeshLineGeometryEvents,
-    MeshLineGeometryProps,
-    MeshLineGeometrySlots
-  } from './MeshLineGeometry.svelte'
+  import type { MeshLineGeometryProps } from './MeshLineGeometry.svelte'
   import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
-
-  type $$Events = MeshLineGeometryEvents
-  type $$Slots = MeshLineGeometrySlots
 
   let {
     points = [],
     shape = 'none',
     shapeFunction = (_p: number) => 1,
     ref = $bindable(),
+    children,
     props
   }: MeshLineGeometryProps = $props()
 
@@ -140,5 +134,5 @@
   bind:ref
   {...props}
 >
-  <slot ref={geometry} />
+  {@render children?.({ ref: geometry })}
 </T>

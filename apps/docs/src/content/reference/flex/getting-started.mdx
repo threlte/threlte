@@ -76,26 +76,26 @@ flexbox configuration. To make use of the calculated dimensions of a flex item, 
     width="auto"
     height="auto"
     flex={1}
-    let:width
-    let:height
   >
-    <Plane
-      {width}
-      {height}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+      />
+    {/snippet}
   </Box>
 
   <Box
     width="auto"
     height="auto"
     flex={1}
-    let:width
-    let:height
   >
-    <Plane
-      {width}
-      {height}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+      />
+    {/snippet}
   </Box>
 </Flex>
 ```
@@ -122,56 +122,56 @@ allows you to create complex layouts.
     padding={20}
     margin={20}
     gap={20}
-    let:width
-    let:height
   >
-    <Plane
-      color="orange"
-      {width}
-      {height}
-      depth={1}
-    />
-    <Box
-      height="auto"
-      flex={1}
-      let:width
-      let:height
-    >
+    {#snippet children({ width, height })}
       <Plane
-        color="blue"
+        color="orange"
         {width}
         {height}
-        depth={2}
+        depth={1}
       />
-    </Box>
+      <Box
+        height="auto"
+        flex={1}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="blue"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
 
-    <Box
-      height="auto"
-      flex={1}
-      let:width
-      let:height
-    >
-      <Plane
-        color="red"
-        {width}
-        {height}
-        depth={2}
-      />
-    </Box>
+      <Box
+        height="auto"
+        flex={1}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="red"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+    {/snippet}
   </Box>
 
   <Box
     height="auto"
     width="auto"
     flex={1}
-    let:width
-    let:height
   >
-    <Plane
-      depth={1}
-      {width}
-      {height}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        depth={1}
+        {width}
+        {height}
+      />
+    {/snippet}
   </Box>
 </Flex>
 ```
@@ -187,29 +187,28 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
   import Plane from './Plane.svelte'
 </script>
 
-<Align
-  y={1}
-  let:align
->
-  <Flex
-    width={100}
-    height={100}
-    on:reflow={align}
-  >
-    <Box>
-      <Plane
-        width={20}
-        height={20}
-      />
-    </Box>
+<Align y={1}>
+  {#snippet children({ align })}
+    <Flex
+      width={100}
+      height={100}
+      onreflow={align}
+    >
+      <Box>
+        <Plane
+          width={20}
+          height={20}
+        />
+      </Box>
 
-    <Box>
-      <Plane
-        width={20}
-        height={20}
-      />
-    </Box>
-  </Flex>
+      <Box>
+        <Plane
+          width={20}
+          height={20}
+        />
+      </Box>
+    </Flex>
+  {/snippet}
 </Align>
 ```
 

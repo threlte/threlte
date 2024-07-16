@@ -1,5 +1,41 @@
 # @threlte/gltf
 
+## 3.0.0-next.5
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- 54bdef9: Fix gltf parser template for isolated components
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- bb726da: fix prettier formatting
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 958c375: Fix T.Group parser error
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- e27c1e4: Remove forwardEventHandlers from generated svelte files
+
 ## 2.0.3
 
 ### Patch Changes

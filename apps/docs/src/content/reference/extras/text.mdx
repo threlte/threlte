@@ -85,8 +85,8 @@ The `<Text>` component uses [troika-three-text](https://github.com/protectwise/t
     characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   />
 
-  <svelte:fragment slot="fallback">
+  {#snippet fallback()}
     <!-- show fallback content while font data is loading -->
-  </svelte:fragment>
+  {/snippet}
 </Suspense>
 ```

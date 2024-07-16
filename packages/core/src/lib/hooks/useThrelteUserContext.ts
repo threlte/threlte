@@ -1,6 +1,8 @@
 import { getContext } from 'svelte'
 import { derived, type Readable } from 'svelte/store'
-import type { ThrelteUserContext } from '../lib/contexts'
+import type { CurrentWritable } from '../lib/storeUtils'
+
+export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
 type UserContextEntry = Record<string, any>
 type UserContext = Record<string, UserContextEntry>
@@ -84,19 +86,20 @@ export function useThrelteUserContext<UCT extends UserContextEntry = UserContext
 ): Readable<UCT>
 export function useThrelteUserContext<UCT extends UserContextEntry = UserContextEntry>(
   namespace: string,
-  value: UCT,
+  value: UCT | (() => UCT),
   options?: SetThrelteUserContextOptions
 ): UCT
 export function useThrelteUserContext<
   UCorUCT extends UserContext | UserContextEntry,
-  Value extends UserContextEntry,
+  Value extends UserContextEntry | (() => UserContextEntry),
   Result = UCorUCT extends UserContext
     ? Readable<UCorUCT>
     : Value extends UserContextEntry
       ? UserContextEntry
       : Readable<UserContextEntry>
 >(namespace?: string, value?: Value, options?: SetThrelteUserContextOptions): Result {
-  const userCtxStore = getContext<ThrelteUserContext>('threlte-user-context')
+  const userCtxStore =
+    getContext<CurrentWritable<Record<string | symbol, unknown>>>('threlte-user-context')
   if (!userCtxStore) {
     throw new Error(
       'No user context store found, did you invoke this function outside of your main <Canvas> component?'
@@ -122,13 +125,15 @@ export function useThrelteUserContext<
       if (!options || options.existing === 'skip') return ctx
 
       if (options.existing === 'merge') {
-        Object.assign(ctx[namespace], value)
+        const v = typeof value === 'function' ? value() : value
+        Object.assign(ctx[namespace], v)
         return ctx
       }
     }
 
     // also handles options.existing === 'replace'
-    ctx[namespace] = value
+    const v = typeof value === 'function' ? value() : value
+    ctx[namespace] = v
     return ctx
   })
 

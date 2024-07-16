@@ -1,5 +1,29 @@
 # @threlte/xr
 
+## 1.0.0-next.6
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 1.0.0-next.5
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 1.0.0-next.4
+
+### Patch Changes
+
+- 2107848: Fix xr events and migrate remaining slots to snippets
+
+## 1.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
 ## 1.0.0-next.2
 
 ### Patch Changes
@@ -17,6 +41,12 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 0.1.4
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
 
 ## 0.1.3
 

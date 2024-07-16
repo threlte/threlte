@@ -1,9 +1,8 @@
 import { getContext, setContext } from 'svelte'
 import { type Writable } from 'svelte/store'
-import type { Object3D } from 'three'
 import { createObjectStore } from '../lib/createObjectStore'
 
-export type ThrelteParentContext = Writable<Object3D | undefined>
+export type ThrelteParentContext = Writable<unknown>
 
 const key = Symbol('threlte-hierarchical-parent-context')
 
@@ -15,8 +14,8 @@ export const setParent = (context: ThrelteParentContext) => {
   return setContext(key, context)
 }
 
-export const createParentContext = (ref: Object3D | undefined) => {
-  const context = createObjectStore(ref)
+export const createParentContext = <T extends { uuid: string } | undefined>(): Writable<T> => {
+  const context = createObjectStore<T>()
   setContext(key, context)
   return context
 }

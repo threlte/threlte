@@ -1,26 +1,27 @@
 import { ActiveEvents, type Collider } from '@dimforge/rapier3d-compat'
+import type { ColliderEvents, RigidBodyEvents } from '../types/types'
 
 export const applyColliderActiveEvents = (
   collider: Collider,
-  colliderEvents: Record<string, (arg: unknown) => void> = {},
-  rigidBodyEvents: Record<string, (arg: unknown) => void> = {}
+  colliderEvents: ColliderEvents = {},
+  rigidBodyEvents: RigidBodyEvents = {}
 ): void => {
   let events = 0
 
   if (
-    colliderEvents.collisionenter ||
-    colliderEvents.collisionexit ||
-    rigidBodyEvents.collisionenter ||
-    rigidBodyEvents.collisionexit ||
-    colliderEvents.sensorenter ||
-    colliderEvents.sensorexit ||
-    rigidBodyEvents.sensorenter ||
-    rigidBodyEvents.sensorexit
+    colliderEvents.oncollisionenter ||
+    colliderEvents.oncollisionexit ||
+    rigidBodyEvents.oncollisionenter ||
+    rigidBodyEvents.oncollisionexit ||
+    colliderEvents.onsensorenter ||
+    colliderEvents.onsensorexit ||
+    rigidBodyEvents.onsensorenter ||
+    rigidBodyEvents.onsensorexit
   ) {
     events = events | ActiveEvents.COLLISION_EVENTS
   }
 
-  if (colliderEvents.contact || rigidBodyEvents.contact) {
+  if (colliderEvents.oncontact || rigidBodyEvents.oncontact) {
     events = events | ActiveEvents.CONTACT_FORCE_EVENTS
   }
 

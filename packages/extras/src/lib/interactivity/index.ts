@@ -1,9 +1,8 @@
 import { injectInteractivityPlugin } from './plugin'
 import { setupInteractivity } from './setupInteractivity'
-import { setInteractivityContext, type InteractivityOptions, setHandlerContext } from './context'
+import { setInteractivityContext, type InteractivityOptions } from './context'
 
 const interactivity = (options?: InteractivityOptions) => {
-  setHandlerContext()
   const context = setInteractivityContext(options)
 
   injectInteractivityPlugin()
@@ -13,6 +12,6 @@ const interactivity = (options?: InteractivityOptions) => {
 }
 
 // exports
-export { useInteractivity } from './hook'
+export { useInteractivity } from './context'
 export type { DomEvent, Intersection, IntersectionEvent, ThrelteEvents as EventMap } from './types'
 export { interactivity }

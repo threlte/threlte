@@ -10,12 +10,9 @@
     Vector3
   } from 'three'
   import { T, useTask } from '@threlte/core'
-  import type { StarsEvents, StarsProps, StarsSlots } from './Stars.svelte'
+  import type { StarsProps } from './Stars.svelte'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
-
-  type $$Events = StarsEvents
-  type $$Slots = StarsSlots
 
   let {
     count = 5000,
@@ -28,6 +25,7 @@
     fade = true,
     opacity = 1.0,
     ref = $bindable(),
+    children,
     ...props
   }: StarsProps = $props()
 
@@ -118,5 +116,5 @@
     transparent
     vertexColors
   />
-  <slot ref={points} />
+  {@render children?.({ ref: points })}
 </T>

@@ -1,5 +1,5 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, LineSegments } from 'three'
 
 export type EdgesProps = Props<LineSegments> & {
@@ -7,8 +7,4 @@ export type EdgesProps = Props<LineSegments> & {
   color?: ColorRepresentation
 }
 
-export type EdgesEvents = Events<LineSegments>
-
-export type EdgesSlots = Slots<LineSegments>
-
-export default class Edges extends SvelteComponent<EdgesProps, EdgesEvents, EdgesSlots> {}
+export default class Edges extends SvelteComponent<EdgesProps> {}

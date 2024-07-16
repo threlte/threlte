@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, T, useTask } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Vector2, Vector3 } from 'three'
   import Collider from '../components/Colliders/Collider.svelte'
   import CollisionGroups from '../components/CollisionGroups/CollisionGroups.svelte'
@@ -14,6 +14,9 @@
   export let jumpStrength = 3
   export let playerCollisionGroups: CollisionGroupsBitMask = [0]
   export let groundCollisionGroups: CollisionGroupsBitMask = [15]
+
+  export let ongroundenter: (() => void) | undefined = undefined
+  export let ongroundexit: (() => void) | undefined = undefined
 
   let rigidBody: RapierRigidBody
 
@@ -29,18 +32,13 @@
   const t = new Vector3()
   const t2 = new Vector2()
 
-  const dispatch = createRawEventDispatcher<{
-    groundenter: void
-    groundexit: void
-  }>()
-
   let grounded = false
   let groundsSensored = 0
   $: {
     if (groundsSensored === 0) grounded = false
     else grounded = true
   }
-  $: grounded ? dispatch('groundenter') : dispatch('groundexit')
+  $: grounded ? ongroundenter?.() : ongroundexit?.()
 
   const { start } = useTask(() => {
     t.set(0, 0, 0)
@@ -137,8 +135,8 @@
       <T.Group position={[0, -height / 2 + radius, 0]}>
         <Collider
           sensor
-          on:sensorenter={() => (groundsSensored += 1)}
-          on:sensorexit={() => (groundsSensored -= 1)}
+          onsensorenter={() => (groundsSensored += 1)}
+          onsensorexit={() => (groundsSensored -= 1)}
           shape={'ball'}
           args={[radius * 1.2]}
         />

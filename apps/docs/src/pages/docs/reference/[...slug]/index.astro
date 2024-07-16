@@ -24,7 +24,10 @@ const { name, category, componentSignature } = entry.data
 const { Content } = await entry.render()
 ---
 
-<DocsLayout entry={entry} title={`${name} | ${category}`}>
+<DocsLayout
+  {entry}
+  title={`${name} | ${category}`}
+>
   <h6 class="text-faded text-sm font-bold">
     {category}
   </h6>

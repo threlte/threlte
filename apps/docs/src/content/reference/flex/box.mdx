@@ -93,9 +93,10 @@ create a nested flex layout.
   <Box
     flex={1}
     width="auto"
-    let:width
   >
-    <Model {width} />
+    {#snippet children({ width })}
+      <Model {width} />
+    {/snippet}
   </Box>
 </Flex>
 ```
@@ -108,17 +109,16 @@ manually adapt the content's size. This is because `@threlte/flex` lacks
 knowledge about the inner content's sizing mechanisms. For this purpose,
 `@threlte/flex` offers the _computed dimensions_ in three ways:
 
-- Using the `width` and `height` slot props
+- Using the `width` and `height` snippet props
 
 ```svelte
-<Box
-  let:width
-  let:height
->
-  <T.Mesh
-    scale.x={width}
-    scale.y={height}
-  />
+<Box>
+  {#snippet children({ width, height })}
+    <T.Mesh
+      scale.x={width}
+      scale.y={height}
+    />
+  {/snippet}
 </Box>
 ```
 
@@ -140,7 +140,7 @@ knowledge about the inner content's sizing mechanisms. For this purpose,
 
 ```svelte
 <Box
-  on:reflow={({ width, height }) => {
+  onreflow={({ width, height }) => {
     console.log(width, height)
   }}
 >
@@ -158,8 +158,10 @@ To trigger a [layout reflow](/docs/reference/flex/flex#layout-reflow), you can u
   import { Text } from '@threlte/extras'
 </script>
 
-<Box let:reflow>
-  <Text text="Hello World" on:sync={reflow}>
+<Box>
+  {#snippet children({ reflow })}
+    <Text text="Hello World" onsync={reflow}>
+  {/snippet}
 </Box>
 ```
 

@@ -5,6 +5,7 @@
     "svelte.svelte-vscode",
     "ardenivanov.svelte-intellisense",
     "fivethree.vscode-svelte-snippets",
-    "astro-build.astro-vscode"
+    "astro-build.astro-vscode",
+    "seunlanlege.action-buttons"
   ]
 }
