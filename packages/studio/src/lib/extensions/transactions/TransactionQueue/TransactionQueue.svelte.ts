@@ -18,11 +18,11 @@ export type SyncRequest = {
   precision?: number
 }
 
-const parser = {
+const parser: Record<string, (value: any) => any> = {
   isVector3: (value: Vector3) => [value.x, value.y, value.z],
   isEuler: (value: Euler) => [value.x, value.y, value.z],
   isColor: (value: Color) => `#${value.getHexString()}`
-} satisfies Record<string, (value: any) => any>
+}
 
 export type Transaction<T, U> = {
   /** The object to modify */
@@ -111,24 +111,24 @@ export class TransactionQueue {
   private syncTimeout: ReturnType<typeof setTimeout> | undefined
 
   // Callbacks
-  private onCommitCallbacks = new Set<() => void>()
-  public onCommit(callback: () => void) {
+  private onCommitCallbacks = new Set<(transactions: Transaction<any, any>[]) => void>()
+  public onCommit(callback: (transactions: Transaction<any, any>[]) => void) {
     this.onCommitCallbacks.add(callback)
     return () => {
       this.onCommitCallbacks.delete(callback)
     }
   }
 
-  private onUndoCallbacks = new Set<() => void>()
-  public onUndo(callback: () => void) {
+  private onUndoCallbacks = new Set<(transactions: Transaction<any, any>[]) => void>()
+  public onUndo(callback: (transactions: Transaction<any, any>[]) => void) {
     this.onUndoCallbacks.add(callback)
     return () => {
       this.onUndoCallbacks.delete(callback)
     }
   }
 
-  private onRedoCallbacks = new Set<() => void>()
-  public onRedo(callback: () => void) {
+  private onRedoCallbacks = new Set<(transactions: Transaction<any, any>[]) => void>()
+  public onRedo(callback: (transactions: Transaction<any, any>[]) => void) {
     this.onRedoCallbacks.add(callback)
     return () => {
       this.onRedoCallbacks.delete(callback)
@@ -136,8 +136,8 @@ export class TransactionQueue {
   }
 
   // Fires for every transaction
-  private onTransactionCallbacks = new Set<() => void>()
-  public onTransaction(callback: () => void) {
+  private onTransactionCallbacks = new Set<(transactions: Transaction<any, any>[]) => void>()
+  public onTransaction(callback: (transactions: Transaction<any, any>[]) => void) {
     this.onTransactionCallbacks.add(callback)
     return () => {
       this.onTransactionCallbacks.delete(callback)
@@ -164,10 +164,10 @@ export class TransactionQueue {
     if (queueItems.length > 0) this.commitedQueue.push(queueItems)
     this.undoneQueue = []
     this.onCommitCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
     this.onTransactionCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
 
     transactions
@@ -197,10 +197,10 @@ export class TransactionQueue {
     this.undoneQueue.push(transactions)
 
     this.onUndoCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
     this.onTransactionCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
 
     transactions.forEach((transaction) => {
@@ -229,10 +229,10 @@ export class TransactionQueue {
     this.commitedQueue.push(transactions)
 
     this.onRedoCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
     this.onTransactionCallbacks.forEach((callback) => {
-      callback()
+      callback(transactions)
     })
 
     transactions.forEach((transaction) => {

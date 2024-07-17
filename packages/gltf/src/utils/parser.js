@@ -1,6 +1,12 @@
 import THREE from 'three'
 import isVarName from './isVarName.js'
 
+/**
+ * @param {string} fileName
+ * @param {import('three/examples/jsm/loaders/GLTFLoader').GLTF} gltf
+ * @param {import('./Options.d.ts').Options} options
+ * @returns {string}
+ */
 function parse(fileName, gltf, options = {}) {
   const url = fileName
   const animations = gltf.animations
@@ -466,14 +472,14 @@ function parse(fileName, gltf, options = {}) {
           useDraco: options.draco
         }
       : options.transform
-      ? {
-          useDraco: true
-        }
-      : undefined
+        ? {
+            useDraco: true
+          }
+        : undefined
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
-  ${options.stype && !options.isolated ? `import type { Snippet } from 'svelte'` : ''}
+  ${options.types ? `import type { Snippet } from 'svelte'` : ''}
         import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
@@ -528,16 +534,16 @@ ${
 				${!options.preload ? imports : ''}
 
         let {
-          ref = $bindable(),
-          fallback,
+					fallback,
           error,
           children,
-          ...props
+          ${options.isolated ? '' : 'ref = $bindable(),'}
+          ${options.isolated ? '' : '...props'}
         }${
-          options.types && !options.isolated
-            ? `: Props<THREE.Group> & {
-          ref?: THREE.Group
-          children?: Snippet<[{ ref: THREE.Group }]>
+          options.types
+            ? `: ${options.isolated ? '' : 'Props<THREE.Group> & '} {
+          ${options.isolated ? '' : 'ref?: THREE.Group'}
+          children?: ${options.isolated ? 'Snippet' : 'Snippet<[{ ref: THREE.Group }]>'}
           fallback?: Snippet
           error?: Snippet<[{ error: Error }]>
         }`
@@ -558,17 +564,17 @@ ${
     }
     </script>
 
-		<T.Group bind:ref dispose={false} ${!options.isolated ? '{...props}' : ''}>
+		<T.Group ${options.isolated ? '' : 'bind:ref'} dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
         {@render fallback?.()}
 			{:then gltf}
 				${scene}
-			{:catch error}
-        {@render error?.({ error })}
+			{:catch err}
+        {@render error?.({ error: err })}
 			{/await}
 
-      {@render children?.({ ref })}
-		</T>
+      {@render children?.(${options.isolated ? '' : '{ ref }'})}
+		</T.Group>
 	`
 }
 

@@ -1,5 +1,27 @@
 # @threlte/extras
 
+## 9.0.0-next.17
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 9.0.0-next.16
+
+### Patch Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 9.0.0-next.15
+
+### Major Changes
+
+- 2b699c7: Remove transitions plugin
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 9.0.0-next.14
 
 ### Patch Changes

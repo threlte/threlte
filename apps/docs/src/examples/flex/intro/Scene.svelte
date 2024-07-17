@@ -1,6 +1,6 @@
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
-  import { interactivity, transitions } from '@threlte/extras'
+  import { interactivity } from '@threlte/extras'
   import { Box } from '@threlte/flex'
   import { tick } from 'svelte'
   import Button from './Button.svelte'
@@ -18,7 +18,6 @@
   $: offset = (page - 1) * rows * columns
 
   interactivity()
-  transitions()
 
   const { renderStage, autoRender, renderer, scene, camera } = useThrelte()
 

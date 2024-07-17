@@ -15,9 +15,9 @@
     type PerspectiveCamera
   } from 'three'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import fragmentShader from './_fs.glsl?raw'
-  import vertexShader from './_vs.glsl?raw'
   import { useObjectSelection } from './useObjectSelection.svelte'
+  import { fragmentShader } from './shader/fragment'
+  import { vertexShader } from './shader/vertex'
 
   const { invalidate } = useThrelte()
   const objectSelection = useObjectSelection()

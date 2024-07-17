@@ -51,17 +51,18 @@ export default function (file, output, options) {
         gltfLoader.parse(
           arrayBuffer,
           '',
-          (gltf) => {
+          async (gltf) => {
             const raw = parse(filePath, gltf, options)
             try {
-              const prettiered = prettier.format(raw, {
-                semi: false,
-                bracketSameLine: true,
-                svelteBracketNewLine: false,
-                printWidth: options.printwidth || 120,
-                svelteBracketNewLine: true,
+              const prettiered = await prettier.format(raw, {
                 singleQuote: true,
-                parser: 'svelte'
+                trailingComma: 'none',
+                semi: false,
+                printWidth: 100,
+                parser: 'svelte',
+                plugins: ['prettier-plugin-svelte'],
+                overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
+                singleAttributePerLine: true
               })
               stream.write(prettiered)
               stream.end()

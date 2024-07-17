@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Set } from 'svelte/reactivity'
+  import { SvelteSet } from 'svelte/reactivity'
   import { useStudio } from '../../internal/extensions'
   import {
     studioObjectsRegistryScope,
@@ -13,7 +13,7 @@
     scope: studioObjectsRegistryScope,
     state() {
       return {
-        objects: new Set()
+        objects: new SvelteSet()
       }
     },
     actions: {

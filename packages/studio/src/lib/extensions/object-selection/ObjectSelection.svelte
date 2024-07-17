@@ -12,6 +12,7 @@
     type ObjectSelectionActions,
     type ObjectSelectionState
   } from './types'
+  import { useOnRemove } from '../../internal/useOnRemove'
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
@@ -88,6 +89,10 @@
       }
     }
   })
+
+	useOnRemove((object) => {
+		extension.removeFromSelection([object])
+	})
 </script>
 
 {#if extension.state.mode === 'tweak'}

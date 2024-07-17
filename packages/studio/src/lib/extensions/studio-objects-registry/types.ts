@@ -1,10 +1,10 @@
 import type { Object3D } from 'three'
-import type { Set } from 'svelte/reactivity'
+import type { SvelteSet } from 'svelte/reactivity'
 
 export const studioObjectsRegistryScope = 'studio-objects-registry'
 
 export type StudioObjectsRegistryState = {
-  objects: Set<Object3D>
+  objects: SvelteSet<Object3D>
 }
 
 export type StudioObjectsRegistryActions = {

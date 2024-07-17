@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 3.0.0-next.8
+
+### Patch Changes
+
+- 98a9bec: Fix rigidbody syncing for varying framerates
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
 ## 3.0.0-next.5
 
 ### Major Changes

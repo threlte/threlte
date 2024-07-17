@@ -80,7 +80,7 @@ export const createRapierContext = (
 
   const framerate = currentWritable(options.framerate ?? 'varying')
   const simulationOffset = currentWritable(1)
-  const updateRigidBodySimulationData = currentWritable(false)
+  const updateRigidBodySimulationData = currentWritable(framerate.current === 'varying')
 
   const { simulationStage, synchronizationStage } = createPhysicsStages(
     framerate,

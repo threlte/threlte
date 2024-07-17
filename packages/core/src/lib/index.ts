@@ -1,5 +1,3 @@
-import { writable } from 'svelte/store'
-
 export const VERSION = 8
 
 // canvas component
@@ -68,55 +66,3 @@ export { revision } from './lib/revision'
 export type { DisposableObjectProperties } from './internal/DisposableObject.svelte.d'
 export type { HierarchicalObjectProperties } from './internal/HierarchicalObject.svelte'
 export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.svelte'
-
-/**
- * @deprecated createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.
- *
- * To send events, you must migrate your component to runes mode and use callback props instead of events:
- *
- * @example
- * ```html
- * <!-- MyComponent.svelte -->
- * <script>
- *   let { onchange } = $props()
- *
- *   // at some point...
- *   onchange?.()
- * </script>
- *
- * <!-- MyOtherComponent.svelte -->
- * <MyComponent onchange={() => console.log('changed')} />
- *
- * ```
- */
-export const createRawEventDispatcher = () => {
-  console.error(
-    'createRawEventDispatcher() has been removed from Threlte and is not compatible with Svelte 5.'
-  )
-  return () => {}
-}
-
-/**
- * @deprecated forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.
- *
- * To forward events in Svelte 5, you must migrate your component to runes mode and pass the component's rest props
- * to the component you wish to forward events to:
- *
- * @example
- * ```html
- * <script>
- *   let { ...props } = $props()
- * </script>
- *
- * <T.Mesh {...props}>
- *   <T.BoxGeometry />
- *   <T.MeshBasicMaterial />
- * </T.Mesh>
- * ```
- */
-export const forwardEventHandlers = () => {
-  console.error(
-    'forwardEventHandlers() has been removed from Threlte and is not compatible with Svelte 5.'
-  )
-  return writable()
-}
