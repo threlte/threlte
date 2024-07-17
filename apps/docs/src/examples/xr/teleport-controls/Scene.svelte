@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PointLight } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { OrbitControls, Sky, useGltf } from '@threlte/extras'
+  import { OrbitControls, Sky, useDraco, useGltf } from '@threlte/extras'
   import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
   import { createNoise2D } from 'simplex-noise'
@@ -14,8 +14,9 @@
   const light1 = new PointLight()
   const light2 = new PointLight()
 
+  const dracoLoader = useDraco()
   const gltf = useGltf('/models/xr/ruins.glb', {
-    useDraco: true
+    dracoLoader
   })
 
   $: $gltf?.scene.traverse((node) => {

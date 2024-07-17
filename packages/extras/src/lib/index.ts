@@ -1,11 +1,14 @@
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
+export { useDraco } from './hooks/useDraco'
+export { useMeshopt } from './hooks/useMeshopt'
+export { useKtx2 } from './hooks/useKtx2'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
 export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
-export { useGamepad } from './hooks/useGamepad'
+export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
 export { useViewport } from './hooks/useViewport'
 

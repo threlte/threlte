@@ -1,16 +1,17 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Environment, Float, Grid, interactivity, useGltf } from '@threlte/extras'
+  import { Environment, Float, Grid, interactivity, useGltf, useDraco } from '@threlte/extras'
   import type { Mesh } from 'three'
   import Blob from './Blob.svelte'
 
   type Nodes = 'ball-1' | 'ball-2' | 'ball-3' | 'ball-4' | 'ball-5'
 
+  const dracoLoader = useDraco()
   const gltf = useGltf<{
     nodes: Record<Nodes, Mesh>
     materials: {}
   }>('/models/blobs/blobs.glb', {
-    useDraco: true
+    dracoLoader
   })
 
   interactivity()

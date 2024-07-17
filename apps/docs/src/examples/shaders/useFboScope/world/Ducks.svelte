@@ -10,7 +10,7 @@ Title: duck floaty
 <script lang="ts">
   import type * as THREE from 'three'
   import { T } from '@threlte/core'
-  import { useGltf, InstancedMeshes } from '@threlte/extras'
+  import { useGltf, InstancedMeshes, useDraco } from '@threlte/extras'
 
   type GLTFResult = {
     nodes: {
@@ -23,7 +23,8 @@ Title: duck floaty
     }
   }
 
-  const gltf = useGltf<GLTFResult>('/models/duck_floaty-transformed.glb', { useDraco: true })
+  const dracoLoader = useDraco()
+  const gltf = useGltf<GLTFResult>('/models/duck_floaty-transformed.glb', { dracoLoader })
 
   const duckSpread = 200
 </script>

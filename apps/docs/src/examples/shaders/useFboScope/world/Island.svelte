@@ -11,7 +11,7 @@ Title: Issum, The town on Capital Isle
   import type * as THREE from 'three'
   import { Group } from 'three'
   import { T, type Props } from '@threlte/core'
-  import { useGltf } from '@threlte/extras'
+  import { useGltf, useDraco } from '@threlte/extras'
 
   type $$Props = Props<THREE.Group>
 
@@ -708,8 +708,9 @@ Title: Issum, The town on Capital Isle
     }
   }
 
+  const dracoLoader = useDraco()
   const gltf = useGltf<GLTFResult>('/models/issum_the_town_on_capital_isle-transformed.glb', {
-    useDraco: true
+    dracoLoader
   })
 </script>
 

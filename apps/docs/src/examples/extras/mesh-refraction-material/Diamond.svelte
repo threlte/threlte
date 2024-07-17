@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Mesh } from 'three'
   import { T, useLoader } from '@threlte/core'
-  import { useGltf, MeshRefractionMaterial } from '@threlte/extras'
+  import { useGltf, MeshRefractionMaterial, useDraco } from '@threlte/extras'
 
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -14,7 +14,8 @@
     materials: {}
   }
 
-  const gltf = useGltf<GLTFResult>('/models/diamond/dflat.glb', { useDraco: true })
+  const dracoLoader = useDraco()
+  const gltf = useGltf<GLTFResult>('/models/diamond/dflat.glb', { dracoLoader })
   const env = useLoader(RGBELoader).load('/hdr/aerodynamics_workshop_1k.hdr')
 </script>
 

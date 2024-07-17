@@ -8,7 +8,7 @@
   const { progress } = useProgress()
 
   const tweenedProgress = tweened($progress, {
-    duration: 800
+    duration: 150
   })
   $: tweenedProgress.set($progress)
 </script>
@@ -25,7 +25,7 @@
       <div
         class="bar"
         style="width: {$tweenedProgress * 100}%"
-      />
+      ></div>
     </div>
   </div>
 {/if}

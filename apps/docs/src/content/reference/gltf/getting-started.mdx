@@ -93,8 +93,8 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
 </script>
 
 {#if $gltf}
-  <T
-    is={ref}
+  <T.Group
+    bind:ref
     {...props}
   >
     <T.Group name="Scene">
@@ -116,7 +116,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
     </T.Group>
 
     {@render children?.({ ref })}
-  </T>
+  </T.Group>
 {/if}
 ```
 

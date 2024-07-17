@@ -8,9 +8,9 @@
     DoubleSide,
     Mesh,
     MeshStandardMaterial,
-    PositionalAudio as ThreePositionalAudio
+    PositionalAudio as ThreePositionalAudio,
+    MathUtils
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
 
@@ -110,7 +110,7 @@
   <T.Group
     position.y={1}
     position.z={-2.2}
-    rotation.x={-$coverAngle * DEG2RAD}
+    rotation.x={-$coverAngle * MathUtils.DEG2RAD}
   >
     {#if coverGeometry}
       <T.Mesh
@@ -153,8 +153,8 @@
   <!-- ARM -->
   <T.Group
     position={[2.5, 1.55, -1.8]}
-    rotation.z={DEG2RAD * 90}
-    rotation.y={DEG2RAD * 90 - $armPos * 0.3}
+    rotation.z={MathUtils.DEG2RAD * 90}
+    rotation.y={MathUtils.DEG2RAD * 90 - $armPos * 0.3}
   >
     <T.Mesh
       castShadow
