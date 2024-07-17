@@ -467,7 +467,7 @@ function parse(fileName, gltf, options = {}) {
   const scene = printThrelte(gltf.scene)
 
   const useGltfOptions = {
-    draco: options.transform && options.draco ? options.draco : true
+    draco: options.transform && options.draco ? (options.draco ? options.transform : true) : false
   }
 
   const imports = `
