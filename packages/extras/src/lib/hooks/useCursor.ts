@@ -74,26 +74,26 @@ export const useCursor = (
 
   let onPointerOverValue = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
   if (typeof onPointerOver !== 'string') {
-    watch(onPointerOver, ($onPointerOver) => {
-      onPointerOverValue = $onPointerOver
+    watch(onPointerOver, (cursorStyle) => {
+      onPointerOverValue = cursorStyle
       if (hovering) {
-        el.style.cursor = $onPointerOver
+        el.style.cursor = cursorStyle
       }
     })
   }
 
   let onPointerOutValue = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
   if (typeof onPointerOut !== 'string') {
-    watch(onPointerOut, ($onPointerOut) => {
-      onPointerOutValue = $onPointerOut
+    watch(onPointerOut, (cursorStyle) => {
+      onPointerOutValue = cursorStyle
       if (!hovering) {
-        el.style.cursor = $onPointerOut
+        el.style.cursor = cursorStyle
       }
     })
   }
 
-  watch(hoveringStore, ($hoveringStore) => {
-    hovering = $hoveringStore
+  watch(hoveringStore, (cursorStyle) => {
+    hovering = cursorStyle
     if (hovering) {
       el.style.cursor = onPointerOverValue
     } else {
