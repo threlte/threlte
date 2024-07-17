@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.6
+
+### Patch Changes
+
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+
 ## 3.0.0-next.5
 
 ### Patch Changes
