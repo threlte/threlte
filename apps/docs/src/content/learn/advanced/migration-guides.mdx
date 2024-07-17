@@ -8,7 +8,9 @@ order: 2
 
 Threlte 8 adds Svelte 5 support and removes Svelte 4 support.
 
-This upgrade provides better average performance, smaller bundle sizeThere are a breaking changes that were necessary for this upgrade.
+This upgrade contains bug fixes, better average performance, smaller bundle size, and an improved development experience.
+
+There are a few notable breaking changes listed below.
 
 ### Events
 
@@ -128,8 +130,6 @@ If you need to manually set renderer parameters, call the function and return a 
 </Canvas>
 ```
 
-You can find a more in-depth example [here](/docs/examples/renderers/webgpurenderer).
-
 Any Three renderer can be returned when calling `createRenderer`.
 If, for example, you enjoy living life on the edge and would like to use Three's
 (currently) experimental WebGPU Renderer, you could return it from this function:
@@ -148,10 +148,33 @@ If, for example, you enjoy living life on the edge and would like to use Three's
 </Canvas>
 ```
 
+You can find a more in-depth WebGPU example [here](/docs/examples/renderers/webgpurenderer).
+
 ### Transitions
 
 The transitions plugin currently does not work, we're working towards a new
 transition system.
+
+### `useGltf` and `<GLTF>`
+
+`useGltf` and `<GLTF>` no longer contain a built-in `DracoLoader`, `KTX2Loader`, or `MeshoptDecoder`.
+Instead, separate hooks can be imported and passed to these tools, improving their bundle size and flexibility.
+
+```ts
+import { useGltf, useDraco, useKtx2, useMeshopt } from '@threlte/extras'
+
+const dracoLoader = useDraco()
+const ktx2Loader = useKtx2()
+const meshoptDecoder = useMeshopt()
+
+const gltf = useGltf('./path/to/model.glb', {
+  dracoLoader,
+  ktx2Loader,
+  meshoptDecoder
+})
+```
+
+For more information, see the [`useGltf`](/docs/reference/extras/use-gltf) and [`GLTF`](/docs/reference/extras/gltf) docs.
 
 ### Rapier
 
