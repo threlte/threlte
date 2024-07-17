@@ -92,8 +92,8 @@ export const useCursor = (
     })
   }
 
-  watch(hoveringStore, (cursorStyle) => {
-    hovering = cursorStyle
+  watch(hoveringStore, (isHovering) => {
+    hovering = isHovering
     if (hovering) {
       el.style.cursor = onPointerOverValue
     } else {
