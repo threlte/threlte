@@ -10,9 +10,9 @@ componentSignature:
     props:
       [
         { name: url, type: 'string', required: true },
-        { name: 'useDraco', type: 'string | boolean', required: false },
-        { name: 'useMeshopt', type: 'boolean', required: false },
-        { name: 'ktxTranscoderPath', type: 'string', required: false }
+        { name: 'dracoLoader', type: 'DRACOLoader', required: false },
+        { name: 'meshoptDecoder', type: 'MeshoptDecoder', required: false },
+        { name: 'ktx2Loader', type: 'KTX2Loader', required: false }
       ],
     events:
       [
@@ -42,10 +42,9 @@ componentSignature:
   }
 ---
 
-To use DRACO compression, provide a path to the DRACO decoder.
-To use KTX2 compressed textures, provide a path to the KTX2 transcoder.
+Loads a GLTF file and adds it to the scene.
 
-Change the property `url` to load new 3D content. The new content will be swapped as soon as loading is finished.
+Change the property `url` to load new content, which will be swapped as soon as loading is finished.
 
 Use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse a glTF model or to use parts of it.
 
@@ -100,10 +99,55 @@ The `<GLTF>` component supports compressed glTF files.
 
 #### DRACO
 
-You can set `useDraco` to `true` to use DRACO compression and Threlte will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
+To use DRACO compression, import the `useDraco` hook or provide an instance of a `DRACOLoader`.
 
-Or you can set `useDraco` to your own DRACO decoder path as a `string`.
+```svelte
+<script>
+  import { GLTF, useDraco } from '@threlte/extras'
+
+  const dracoLoader = useDraco() // Creates a cached instance of DracoLoader
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {dracoLoader}
+/>
+```
+
+The `useDraco` hook will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
+
+### KTX 2
+
+To use KTX2 compressed textures, import the `useKtx2` hook or provide an instance of a `KTX2Loader`.
+
+```svelte
+<script>
+  import { useKtx2 } from '@threlte/extras'
+
+  const ktx2Loader = useKtx2('path/to/transcoder') // Creates a cached instance of KTX2Loader
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {ktx2Loader}
+/>
+```
 
 #### Meshopt
 
-You can set `useMeshopt` to `true` to use meshopt compression and Threlte will load a default meshopt decoder from Three, specifically `https://github.com/mrdoob/three.js/blob/dev/examples/jsm/libs/meshopt_decoder.module.js`.
+To use meshopt compression, import the `useMeshopt` hook or provide an instance of a `MeshoptDecoder`.
+
+The `useMeshopt` hook will load a default meshopt decoder from Three, specifically `https://github.com/mrdoob/three.js/blob/dev/examples/jsm/libs/meshopt_decoder.module.js`.
+
+```svelte
+<script>
+  import { GLTF, useMeshopt } from '@threlte/extras'
+
+  const meshoptDecoder = useMeshopt() // Creates a cached instance of MeshoptDecoder
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {meshoptDecoder}
+/>
+```

@@ -286,8 +286,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 
 If your GLTF contains animations it will add [@threlte/extras's `useGltfAnimations`](https://threlte.xyz/extras/use-gltf-animations) hook, which extracts all clips and prepares them as actions:
 
-```svelte
-const gltf = useGltf('/stacy.glb') export const {(actions, mixer)} = useGltfAnimations(gltf, ref)
+```ts
+const gltf = useGltf('/stacy.glb')
+
+export const {(actions, mixer)} = useGltfAnimations(gltf, ref)
 ```
 
 If you want to play an animation you can do so at any time:

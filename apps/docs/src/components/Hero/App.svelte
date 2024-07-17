@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mesh } from 'three'
   import { useThrelte } from '@threlte/core'
   import { useGltf, useTexture } from '@threlte/extras'
   import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
@@ -7,7 +8,7 @@
 
   type CubeGltf = {
     nodes: {
-      Cube: THREE.Mesh
+      Cube: Mesh
     }
     materials: {}
   }
