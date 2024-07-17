@@ -105,12 +105,12 @@ To use DRACO compression, import the `useDraco` hook or provide an instance of a
 <script>
   import { GLTF, useDraco } from '@threlte/extras'
 
-  const draco = useDraco() // Creates a cached instance of DracoLoader
+  const dracoLoader = useDraco() // Creates a cached instance of DracoLoader
 </script>
 
 <GLTF
   url="/models/helmet/DamagedHelmet.gltf"
-  {draco}
+  {dracoLoader}
 />
 ```
 
@@ -143,11 +143,11 @@ The `useMeshopt` hook will load a default meshopt decoder from Three, specifical
 <script>
   import { GLTF, useMeshopt } from '@threlte/extras'
 
-  const meshopt = useMeshopt() // Creates a cached instance of MeshoptDecoder
+  const meshoptDecoder = useMeshopt() // Creates a cached instance of MeshoptDecoder
 </script>
 
 <GLTF
   url="/models/helmet/DamagedHelmet.gltf"
-  {meshopt}
+  {meshoptDecoder}
 />
 ```
