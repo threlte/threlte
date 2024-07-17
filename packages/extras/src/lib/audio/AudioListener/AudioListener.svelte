@@ -1,6 +1,5 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
   import type { AudioListenerProps } from './AudioListener.svelte'
@@ -18,7 +17,7 @@
   const listener = new ThreeAudioListener()
 
   audioContext = listener.context
-  resumeContext = async () => await listener.context.resume()
+  resumeContext = () => listener.context.resume()
 
   $effect.pre(() => {
     if (masterVolume !== undefined) {
@@ -28,10 +27,9 @@
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
-  addAudioListener(listener, id)
-
-  onDestroy(() => {
-    removeAudioListener(id)
+  $effect.pre(() => {
+    addAudioListener(listener, id)
+    return () => removeAudioListener(id)
   })
 </script>
 

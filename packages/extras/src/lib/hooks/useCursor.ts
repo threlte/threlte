@@ -1,3 +1,4 @@
+import { watch } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
@@ -73,35 +74,32 @@ export const useCursor = (
 
   let onPointerOverValue = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
   if (typeof onPointerOver !== 'string') {
-    const unsubscribeOnPointerOver = onPointerOver.subscribe((cursorStyle) => {
-      onPointerOverValue = cursorStyle
+    watch(onPointerOver, ($onPointerOver) => {
+      onPointerOverValue = $onPointerOver
       if (hovering) {
-        el.style.cursor = cursorStyle
+        el.style.cursor = $onPointerOver
       }
     })
-    onDestroy(unsubscribeOnPointerOver)
   }
 
   let onPointerOutValue = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
   if (typeof onPointerOut !== 'string') {
-    const unsubscribeOnPointerOut = onPointerOut.subscribe((cursorStyle) => {
-      onPointerOutValue = cursorStyle
+    watch(onPointerOut, ($onPointerOut) => {
+      onPointerOutValue = $onPointerOut
       if (!hovering) {
-        el.style.cursor = cursorStyle
+        el.style.cursor = $onPointerOut
       }
     })
-    onDestroy(unsubscribeOnPointerOut)
   }
 
-  const unsubscribeHovering = hoveringStore.subscribe((isHovering) => {
-    hovering = isHovering
-    if (isHovering) {
+  watch(hoveringStore, ($hoveringStore) => {
+    hovering = $hoveringStore
+    if (hovering) {
       el.style.cursor = onPointerOverValue
     } else {
       el.style.cursor = onPointerOutValue
     }
   })
-  onDestroy(unsubscribeHovering)
 
   // onDestroy: Reset the cursor style
   onDestroy(() => {
