@@ -1,5 +1,6 @@
-import { currentWritable, type CurrentReadable, toCurrentReadable } from '@threlte/core'
+import { currentWritable } from '@threlte/core'
 import { DefaultLoadingManager } from 'three'
+import { type CurrentReadable, toCurrentReadable } from '../lib/storeUtils'
 
 let previousTotalLoaded = 0
 
