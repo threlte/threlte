@@ -5,6 +5,7 @@ import type { AudioListener as ThreeAudioListener } from 'three'
 export type AudioListenerProps = Props<ThreeAudioListener> & {
   id?: string
   masterVolume?: number
+  audioContext?: AudioContext
 }
 
 export default class AudioListener extends SvelteComponent<AudioListenerProps> {}

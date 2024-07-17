@@ -70,7 +70,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
     audio.setPlaybackRate(playbackRate ?? 1)
   }
 
-  const play = async (delay?: number | any) => {
+  const play = async (delay?: number) => {
     // source is not loaded yet, so we should play it after it's loaded
     if (!loaded.current) {
       shouldPlay.set(true)

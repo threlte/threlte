@@ -18,7 +18,7 @@
   const listener = new ThreeAudioListener()
 
   audioContext = listener.context
-  resumeContext = async () => await listener.context.resume()
+  resumeContext = () => listener.context.resume()
 
   $effect.pre(() => {
     if (masterVolume !== undefined) {
