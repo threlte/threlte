@@ -1,8 +1,9 @@
 <script lang="ts">
   import { HierarchicalObject, T, useParent, watch } from '@threlte/core'
-  import { Group } from 'three'
+  import { Group, type Object3D } from 'three'
   import { createSuspenseContext } from './context'
   import type { Snippet } from 'svelte'
+  import type { Writable } from 'svelte/store'
 
   interface Props {
     final?: boolean
@@ -31,7 +32,7 @@
   })
 
   const group = new Group()
-  const parent = useParent()
+  const parent = useParent() as Writable<Object3D>
 
   watch([parent, suspended, errors], ([parent, suspended, errors]) => {
     // we don't have a parent, so we can't add ourselves to it
