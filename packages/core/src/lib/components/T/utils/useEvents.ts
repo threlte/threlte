@@ -26,27 +26,26 @@ export const useEvents = <T>(props: Props = {}) => {
     }
   }
 
-  const cleanupEventListeners = (ref: EventDispatcher, props: Props) => {
-    for (const eventName of Object.keys(props)) {
-      if (eventName.startsWith('on')) {
-        ref.removeEventListener(eventName.slice(2), eventHandlerProxy)
-      }
-    }
-  }
-
   const addEventListeners = (ref: EventDispatcher, props: Props) => {
+    const eventNames: string[] = []
+
     for (const eventName of Object.keys(props)) {
       if (eventName.startsWith('on')) {
         ref.addEventListener(eventName.slice(2), eventHandlerProxy)
+        eventNames.push(eventName)
+      }
+    }
+
+    return () => {
+      for (let i = 0; i < eventNames.length; i++) {
+        ref.removeEventListener(eventNames[i], eventHandlerProxy)
       }
     }
   }
 
   const updateRef = (ref: MaybeInstance<T>) => {
     if (!isEventDispatcher(ref)) return
-
-    addEventListeners(ref, props)
-    return () => cleanupEventListeners(ref, props)
+    return addEventListeners(ref, props)
   }
 
   return {
