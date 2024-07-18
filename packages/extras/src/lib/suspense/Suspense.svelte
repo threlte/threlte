@@ -20,14 +20,14 @@
   let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
-  $effect.pre(() => setFinal(final))
-  $effect.pre(() => {
+  $effect(() => setFinal(final))
+  $effect(() => {
     if (!$suspended) onload?.()
   })
-  $effect.pre(() => {
+  $effect(() => {
     if ($suspended) onsuspend?.()
   })
-  $effect.pre(() => {
+  $effect(() => {
     if ($errors.length > 0) onerror?.($errors)
   })
 
