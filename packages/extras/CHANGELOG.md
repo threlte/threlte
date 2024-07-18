@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.20
+
+### Patch Changes
+
+- 52926fa: Fix suspense timing & types
+
 ## 9.0.0-next.19
 
 ### Patch Changes
