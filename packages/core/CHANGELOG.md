@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.13
+
+### Patch Changes
+
+- c12ff98: Fix event cleanup of <T>
+
 ## 8.0.0-next.12
 
 ### Patch Changes
