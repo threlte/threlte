@@ -26,18 +26,21 @@ export const useEvents = <T>(props: Props = {}) => {
     }
   }
 
-  const cleanupEventListeners = (ref: EventDispatcher, props: Props) => {
-    for (const eventName of Object.keys(props)) {
-      if (eventName.startsWith('on')) {
-        ref.removeEventListener(eventName.slice(2), eventHandlerProxy)
-      }
+  const addedEventListeners: string[] = []
+
+  const cleanupEventListeners = (ref: EventDispatcher) => {
+    for (let i = 0; i < addedEventListeners.length; i++) {
+      const eventName = addedEventListeners[i]
+      ref.removeEventListener(eventName, eventHandlerProxy)
     }
+    addedEventListeners.length = 0
   }
 
   const addEventListeners = (ref: EventDispatcher, props: Props) => {
     for (const eventName of Object.keys(props)) {
       if (eventName.startsWith('on')) {
         ref.addEventListener(eventName.slice(2), eventHandlerProxy)
+        addedEventListeners.push(eventName)
       }
     }
   }
@@ -46,7 +49,7 @@ export const useEvents = <T>(props: Props = {}) => {
     if (!isEventDispatcher(ref)) return
 
     addEventListeners(ref, props)
-    return () => cleanupEventListeners(ref, props)
+    return () => cleanupEventListeners(ref)
   }
 
   return {
