@@ -33,8 +33,7 @@ export const useSuspense = () => {
     promises.clear()
   })
 
-  return Object.assign(suspend, state) as unknown as {
-    suspend: Suspend
+  return Object.assign(suspend, state) as unknown as Suspend & {
     suspended: Writable<boolean>
   }
 }
