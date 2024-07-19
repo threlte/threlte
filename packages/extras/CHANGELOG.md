@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.21
+
+### Patch Changes
+
+- be301d2: Fix useSuspense types
+
 ## 9.0.0-next.20
 
 ### Patch Changes
