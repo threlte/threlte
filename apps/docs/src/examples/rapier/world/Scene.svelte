@@ -3,7 +3,7 @@
   import { Environment } from '@threlte/extras'
   import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
   import { spring } from 'svelte/motion'
-  import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from 'three'
+  import { BoxGeometry, Group, Mesh, MeshStandardMaterial, Vector3 } from 'three'
   import Door from './Door.svelte'
   import Ground from './Ground.svelte'
   import Player from './Player.svelte'
@@ -28,6 +28,8 @@
 
   const { size } = useThrelte()
   $: zoom = $size.width / 8
+
+  let target: Group
 </script>
 
 <Environment
@@ -41,13 +43,13 @@
 >
   <T.Group
     position.y={0.9}
-    let:ref={target}
+    bind:ref={target}
   >
     <T.OrthographicCamera
       makeDefault
       {zoom}
       position={[50, 50, 30]}
-      on:create={({ ref }) => {
+      oncreate={({ ref }) => {
         ref.lookAt(target.getWorldPosition(new Vector3()))
       }}
     />

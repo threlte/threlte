@@ -6,9 +6,8 @@ order: 5.2
 ---
 
 <Tip type="info">
-  Tasks are part of Threlte's *Task Scheduling System*.
-  For details on how to use stages and tasks, see the [scheduling
-  tasks](/docs/learn/basics/scheduling-tasks) page.
+  Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
+  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useStage` can be used to create or retrieve a stage.
@@ -30,10 +29,9 @@ const afterRenderStage = useStage('after-render', {
 ```
 
 <Tip type="tip">
-  Be aware that `useStage` never removes a stage as that's usually not needed. If a stage
-  is created *once* in your Threlte app, it's available throughout the app's lifetime. If
-  you want to remove a stage, you can do so by calling `removeStage` on the scheduler instance
-  returned by `useThrelte`.
+  Be aware that `useStage` never removes a stage as that's usually not needed. If a stage is created
+  *once* in your Threlte app, it's available throughout the app's lifetime. If you want to remove a
+  stage, you can do so by calling `removeStage` on the scheduler instance returned by `useThrelte`.
 </Tip>
 
 A stage decides **when and how its tasks are executed**. By default, a stage will
@@ -52,15 +50,15 @@ const { renderStage } = useThrelte()
 const conditionalStage = useStage('after-render', {
   after: renderStage,
   callback: (delta, runTasks) => {
-      // This callback will be called every frame. The first argument is the time elapsed
-      // since the last frame. The second argument is a function that will run all the
-      // tasks of the stage. You can use it to run the tasks only when needed (e.g. when
-      // a condition is met) or to run them multiple times. If a number is passed as the
-      // first argument to runTasks, the tasks will receive that as the delta.
-      if (condition) {
-        runTasks()
-      }
+    // This callback will be called every frame. The first argument is the time elapsed
+    // since the last frame. The second argument is a function that will run all the
+    // tasks of the stage. You can use it to run the tasks only when needed (e.g. when
+    // a condition is met) or to run them multiple times. If a number is passed as the
+    // first argument to runTasks, the tasks will receive that as the delta.
+    if (condition) {
+      runTasks()
     }
+  }
 })
 ```
 
@@ -97,16 +95,22 @@ the last stage). We then call `perf.begin()` in a task of the first stage and
     before: mainStage
   })
 
-  useTask(() => {
-    perf.begin()
-  }, { stage: beforeMainStage })
+  useTask(
+    () => {
+      perf.begin()
+    },
+    { stage: beforeMainStage }
+  )
 
   const afterRenderStage = useStage('three-perf-end', {
     after: renderStage
   })
 
-  useTask(() => {
-    perf.end()
-  }, { stage: afterRenderStage })
+  useTask(
+    () => {
+      perf.end()
+    },
+    { stage: afterRenderStage }
+  )
 </script>
 ```

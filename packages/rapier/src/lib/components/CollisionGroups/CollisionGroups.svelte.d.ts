@@ -1,4 +1,4 @@
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 
 type N = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15
 
@@ -11,6 +11,8 @@ type GroupsProps = {
 
   filter?: never
   memberships?: never
+
+  children?: Snippet
 }
 
 type MembershipsAndFilterProps = {
@@ -18,6 +20,8 @@ type MembershipsAndFilterProps = {
   memberships: N[]
 
   groups?: never
+
+  children?: Snippet
 }
 
 type GroupsDef = GroupsProps | MembershipsAndFilterProps

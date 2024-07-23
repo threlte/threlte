@@ -114,7 +114,7 @@
     >
       <OrbitControls
         bind:ref={orbitControls}
-        on:change={() => {
+        onchange={() => {
           center.set([orbitControls.target.x, orbitControls.target.y, orbitControls.target.z])
         }}
       />

@@ -6,7 +6,7 @@ order: -700
 
 Events are a way to listen for changes in the state of the application.
 Listening to events is as easy as adding a regular Svelte event listener to `<T>` components:
-`<T.Mesh on:click={onClick}>`. Threlte supports wheel, click and pointer events through the plugin
+`<T.Mesh onclick={onClick}>`. Threlte supports wheel, click and pointer events through the plugin
 `interactivity` from `'@threlte/extras'` as well as the `create` event and arbitrary `three.js`
 object events on objects that extend `THREE.EventDispatcher` (like `OrbitControls`). Click,
 pointer and wheel events contain the native browser event as well as the raycast event data (object,
@@ -19,7 +19,7 @@ The `create` event is triggered when the underlying three.js object is created i
 ```svelte title="Scene.svelte"
 <T.PerspectiveCamera
   makeDefault
-  on:create={({ ref, cleanup }) => {
+  oncreate={({ ref, cleanup }) => {
     ref.lookAt(0, 0, 0)
 
     // provide a cleanup function that is called
@@ -48,14 +48,13 @@ The following example uses the [`change` event from `OrbitControls`](https://thr
   const { renderer, invalidate } = useThrelte()
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  let:ref
->
-  <T.OrbitControls
-    args={[ref, renderer.domElement]}
-    on:change={invalidate}
-  />
+<T.PerspectiveCamera makeDefault>
+  {#snippet children({ ref })}
+    <T.OrbitControls
+      args={[ref, renderer.domElement]}
+      onchange={invalidate}
+    />
+  {/snippet}
 </T.PerspectiveCamera>
 ```
 
@@ -82,7 +81,7 @@ All child components now receive events.
 </script>
 
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >
@@ -97,18 +96,18 @@ The following interaction events are available:
 
 ```svelte
 <T.Mesh
-  on:click={(e) => console.log('click')}
-  on:contextmenu={(e) => console.log('context menu')}
-  on:dblclick={(e) => console.log('double click')}
-  on:wheel={(e) => console.log('wheel')}
-  on:pointerup={(e) => console.log('up')}
-  on:pointerdown={(e) => console.log('down')}
-  on:pointerover={(e) => console.log('over')}
-  on:pointerout={(e) => console.log('out')}
-  on:pointerenter={(e) => console.log('enter')}
-  on:pointerleave={(e) => console.log('leave')}
-  on:pointermove={(e) => console.log('move')}
-  on:pointermissed={() => console.log('missed')}
+  onclick={(e) => console.log('click')}
+  oncontextmenu={(e) => console.log('context menu')}
+  ondblclick={(e) => console.log('double click')}
+  onwheel={(e) => console.log('wheel')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
+  onpointermissed={() => console.log('missed')}
 />
 ```
 
@@ -148,7 +147,7 @@ delivered pointerover events, they will immediately be delivered pointerout even
 an object to block pointer events from objects behind it, it needs to have an event handler as follows:
 
 ```svelte
-<T.Mesh on:click={(e) => e.stopPropagation()} />
+<T.Mesh onclick={(e) => e.stopPropagation()} />
 ```
 
 even if you don't want this object to respond to the pointer event. If you do want to handle the

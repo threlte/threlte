@@ -35,40 +35,34 @@
     width={300}
     height={150}
   />
-  <Box
-    class="item"
-    let:width
-    let:height
-  >
-    <RoundedPlane
-      color="#EB1688"
-      {width}
-      {height}
-      depth={1}
-    />
+  <Box class="item">
+    {#snippet children({ width, height })}
+      <RoundedPlane
+        color="#EB1688"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
-  <Box
-    class="item"
-    let:width
-    let:height
-  >
-    <RoundedPlane
-      color="#113BFA"
-      {width}
-      {height}
-      depth={1}
-    />
+  <Box class="item">
+    {#snippet children({ width, height })}
+      <RoundedPlane
+        color="#113BFA"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
-  <Box
-    class="item"
-    let:width
-    let:height
-  >
-    <RoundedPlane
-      color="#590C65"
-      {width}
-      {height}
-      depth={1}
-    />
+  <Box class="item">
+    {#snippet children({ width, height })}
+      <RoundedPlane
+        color="#590C65"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 </Flex>

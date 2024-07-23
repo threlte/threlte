@@ -10,7 +10,7 @@ Freeing resources is a [manual chore in three.js](https://threejs.org/docs/index
 
 ```svelte
 <script>
-  import { Mesh } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useTexture } from '@threlte/extras'
 
   const map = useTexture('/some/texture')
@@ -38,7 +38,7 @@ You can switch off automatic disposal by placing `dispose={false}` onto componen
 
 ```svelte
 <script>
-  import { Mesh, useTexture } from '@threlte/core'
+  import { T, useTexture } from '@threlte/core'
   import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
 
   const map = useTexture('/some/texture')

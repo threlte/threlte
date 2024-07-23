@@ -1,29 +1,22 @@
 ---
-{
-  'order': 4.3,
-  'category': '@threlte/theatre',
-  sourcePath: 'packages/theatre/src/lib/sheetObject/transform/Transform.svelte',
-  'name': '<Transform>',
-  'type': 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { 'name': 'label', 'type': 'string', 'required': false },
-          { 'name': 'key', 'type': 'string', 'required': false },
-          {
-            'name': 'mode',
-            'type': 'translate | rotate | scale',
-            'required': false,
-            default: 'translate'
-          },
-          { 'name': 'space', 'type': 'world | local', 'required': false, default: 'world' },
-          { 'name': 'translationSnap', 'type': 'number', 'required': false },
-          { 'name': 'rotationSnap', 'type': 'number', 'required': false },
-          { 'name': 'scaleSnap', 'type': 'number', 'required': false }
-        ]
-    }
-}
+order: 4.3
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/transform/Transform.svelte'
+name: '<Transform>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'label', type: 'string', required: false },
+        { name: 'key', type: 'string', required: false },
+        { name: 'mode', type: 'translate | rotate | scale', required: false, default: 'translate' },
+        { name: 'space', type: 'world | local', required: false, default: 'world' },
+        { name: 'translationSnap', type: 'number', required: false },
+        { name: 'rotationSnap', type: 'number', required: false },
+        { name: 'scaleSnap', type: 'number', required: false }
+      ]
+  }
 ---
 
 One of the most common usecases in the studio is repositioning objects or groups of objects in the canvas.
@@ -31,9 +24,11 @@ One of the most common usecases in the studio is repositioning objects or groups
 Use the component `<Transform>` from the [`<SheetObject>`](./sheet-object) slot props to add the transform properties of an object to the sheet object.
 
 ```svelte
-<SheetObject let:Transform>
-  <Transform>
-    <T.Mesh />
-  </Transform>
+<SheetObject>
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.Mesh />
+    </Transform>
+  {/snippet}
 </SheetObject>
 ```

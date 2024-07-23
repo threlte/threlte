@@ -80,10 +80,7 @@
 	- Loading .png file with multiple animations
 	- uses a typed utility hook for animation name autocomplete etc.
 -->
-  <FlyerSpritesTyped
-    {billboarding}
-    {fps}
-  />
+  <FlyerSpritesTyped {billboarding} />
 
   <!-- Multiple trees in a spritesheet, 1 frame each animation - acting as atlas - not animated -->
   <TreeSpriteAtlas {billboarding} />

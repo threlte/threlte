@@ -1,6 +1,12 @@
 import THREE from 'three'
 import isVarName from './isVarName.js'
 
+/**
+ * @param {string} fileName
+ * @param {import('three/examples/jsm/loaders/GLTFLoader').GLTF} gltf
+ * @param {import('./Options.d.ts').Options} options
+ * @returns {string}
+ */
 function parse(fileName, gltf, options = {}) {
   const url = fileName
   const animations = gltf.animations
@@ -460,31 +466,21 @@ function parse(fileName, gltf, options = {}) {
   // 2nd pass to eliminate hard to swat left-overs
   const scene = printThrelte(gltf.scene)
 
-  const useGltfOptions =
-    options.transform && options.draco
-      ? {
-          useDraco: options.draco
-        }
-      : options.transform
-      ? {
-          useDraco: true
-        }
-      : undefined
+  const useGltfOptions = {
+    draco: options.transform && options.draco ? (options.draco ? options.transform : true) : false
+  }
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
-        import { Group } from 'three'
-        import { ${[
-          'T',
-          options.types && !options.isolated ? 'type Props, type Events, type Slots' : '',
-          !options.isolated && 'forwardEventHandlers'
-        ]
+  ${options.types ? `import type { Snippet } from 'svelte'` : ''}
+        import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
         import { ${[
           'useGltf',
           hasAnimations ? 'useGltfAnimations' : '',
-          options.suspense ? 'useSuspense' : ''
+          options.suspense ? 'useSuspense' : '',
+          useGltfOptions.draco ? 'useDraco' : ''
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/extras'
@@ -492,7 +488,7 @@ function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof useGltfOptions.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 
@@ -509,7 +505,6 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 ${
   options.preload
     ? `
-
 <script context="module"${options.types ? ' lang="ts"' : ''}>
 	${imports}
 
@@ -530,18 +525,24 @@ ${
 
 
     <script${options.types ? ' lang="ts"' : ''}>
-
 				${!options.preload ? imports : ''}
 
-        ${options.types && !options.isolated ? 'type $$Props = Props<THREE.Group>' : ''}
-        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
-        ${
-          options.types && !options.isolated
-            ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
+        let {
+					fallback,
+          error,
+          children,
+          ${options.isolated ? '' : 'ref = $bindable(),'}
+          ${options.isolated ? '' : '...props'}
+        }${
+          options.types
+            ? `: ${options.isolated ? '' : 'Props<THREE.Group> & '} {
+          ${options.isolated ? '' : 'ref?: THREE.Group'}
+          children?: ${options.isolated ? 'Snippet' : 'Snippet<[{ ref: THREE.Group }]>'}
+          fallback?: Snippet
+          error?: Snippet<[{ error: Error }]>
+        }`
             : ''
-        }
-
-        export const ref = new Group()
+        } = $props()
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
@@ -555,21 +556,19 @@ ${
           }(gltf, ref)`
         : ''
     }
-
-			${!options.isolated ? 'const component = forwardEventHandlers()' : ''}
     </script>
 
-		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
+		<T.Group ${options.isolated ? '' : 'bind:ref'} dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
-				<slot name="fallback" />
+        {@render fallback?.()}
 			{:then gltf}
 				${scene}
-			{:catch error}
-				<slot name="error" {error} />
+			{:catch err}
+        {@render error?.({ error: err })}
 			{/await}
 
-			<slot {ref} />
-		</T>
+      {@render children?.(${options.isolated ? '' : '{ ref }'})}
+		</T.Group>
 	`
 }
 

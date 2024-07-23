@@ -35,9 +35,9 @@
     }
   })
 
-  const fireSound = (e: ContactEvent) => {
+  const fireSound: ContactEvent = (event) => {
     if ($muted) return
-    const volume = clamp((e.detail.totalForceMagnitude - 30) / 1100, 0.1, 1)
+    const volume = clamp((event.totalForceMagnitude - 30) / 1100, 0.1, 1)
     const audio = audios.find((a) => a.volume >= volume)
     audio?.stop?.()
     audio?.play?.()
@@ -47,12 +47,14 @@
 </script>
 
 <T.Group
-  position={position?.toArray()}
+  position.x={position?.x}
+  position.y={position?.y}
+  position.z={position?.z}
   rotation={rotationCasted}
 >
   <RigidBody
     type={'dynamic'}
-    on:contact={fireSound}
+    oncontact={fireSound}
   >
     {#each audios as audio}
       <PositionalAudio

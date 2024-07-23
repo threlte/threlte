@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PointLight } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { OrbitControls, Sky, useGltf } from '@threlte/extras'
+  import { OrbitControls, Sky, useDraco, useGltf } from '@threlte/extras'
   import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
   import { createNoise2D } from 'simplex-noise'
@@ -14,8 +14,9 @@
   const light1 = new PointLight()
   const light2 = new PointLight()
 
+  const dracoLoader = useDraco()
   const gltf = useGltf('/models/xr/ruins.glb', {
-    useDraco: true
+    dracoLoader
   })
 
   $: $gltf?.scene.traverse((node) => {
@@ -48,18 +49,20 @@
   <Hand left />
   <Hand right />
 
-  <T.PerspectiveCamera
-    slot="fallback"
-    makeDefault
-    position.y={1.8}
-    position.z={1.5}
-  >
-    <OrbitControls
-      target={[0, 1.8, 0]}
-      enablePan={false}
-      enableZoom={false}
-    />
-  </T.PerspectiveCamera>
+  {#snippet fallback()}
+    <T.PerspectiveCamera
+      makeDefault
+      position.y={1.8}
+      position.z={1.5}
+      oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
+    >
+      <OrbitControls
+        target={[0, 1.8, 0]}
+        enablePan={false}
+        enableZoom={false}
+      />
+    </T.PerspectiveCamera>
+  {/snippet}
 </XR>
 
 {#if $gltf}

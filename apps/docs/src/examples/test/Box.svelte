@@ -1,32 +1,32 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
-  let color = 'white'
+  let { ...props } = $props()
+
+  let color = $state('white')
 
   const scale = spring(1)
-  const component = forwardEventHandlers()
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 </script>
 
 <T.Group
   scale={$scale}
-  {...$$restProps}
-  bind:this={$component}
+  {...props}
 >
   <T.Mesh
     position.y={0.5}
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
-    on:pointerenter={() => {
+    onpointerenter={() => {
       $scale = 2
       color = '#FE3D00'
+      onPointerEnter()
     }}
-    on:pointerleave={() => {
+    onpointerleave={() => {
       $scale = 1
       color = 'white'
+      onPointerLeave()
     }}
   >
     <T.BoxGeometry />

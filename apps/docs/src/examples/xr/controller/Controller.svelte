@@ -1,5 +1,12 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import {
+    Vector3,
+    Matrix4,
+    Color,
+    InstancedMesh,
+    IcosahedronGeometry,
+    MeshPhongMaterial
+  } from 'three'
   import { T, useTask } from '@threlte/core'
   import { Text } from '@threlte/extras'
   import { Controller, type XRControllerEvent, useController } from '@threlte/xr'
@@ -13,15 +20,15 @@
   const count = 100
   const positions = new Float32Array(count * 3)
   const velocities = new Float32Array(count * 3)
-  const vec3 = new THREE.Vector3()
-  const matrix = new THREE.Matrix4()
-  const color = new THREE.Color()
+  const vec3 = new Vector3()
+  const matrix = new Matrix4()
+  const color = new Color()
 
   const controller = useController($$restProps.left ? 'left' : 'right')
 
-  const instancedMesh = new THREE.InstancedMesh(
-    new THREE.IcosahedronGeometry(0.01),
-    new THREE.MeshPhongMaterial(),
+  const instancedMesh = new InstancedMesh(
+    new IcosahedronGeometry(0.01),
+    new MeshPhongMaterial(),
     count
   )
 
@@ -96,21 +103,22 @@
 <Controller
   left={$$props.left}
   right={$$props.right}
-  on:connected={handleEvent}
-  on:disconnected={handleEvent}
-  on:selectstart={handleEvent}
-  on:selectend={handleEvent}
-  on:select={handleEvent}
-  on:squeezestart={handleEvent}
-  on:squeezeend={handleEvent}
-  on:squeeze={handleEvent}
+  onconnected={handleEvent}
+  ondisconnected={handleEvent}
+  onselectstart={handleEvent}
+  onselectend={handleEvent}
+  onselect={handleEvent}
+  onsqueezestart={handleEvent}
+  onsqueezeend={handleEvent}
+  onsqueeze={handleEvent}
 >
-  <Text
-    slot="target-ray"
-    fontSize={0.05}
-    {text}
-    position.x={0.1}
-  />
+  {#snippet targetRay()}
+    <Text
+      fontSize={0.05}
+      {text}
+      position.x={0.1}
+    />
+  {/snippet}
 </Controller>
 
 <T

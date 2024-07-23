@@ -1,5 +1,5 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 
 export type FloatProps = Props<Group> & {
@@ -11,7 +11,4 @@ export type FloatProps = Props<Group> & {
   seed?: number
 }
 
-export type FloatEvents = Events<Group>
-export type FloatSlots = Slots<Group>
-
-export default class Float extends SvelteComponent<FloatProps, FloatEvents, FloatSlots> {}
+export default class Float extends SvelteComponent<FloatProps> {}

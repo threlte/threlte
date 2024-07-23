@@ -1,5 +1,11 @@
 # create-threlte
 
+## 2.0.2-next.0
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
 ## 2.0.2
 
 ### Patch Changes

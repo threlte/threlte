@@ -1,44 +1,51 @@
 ---
-{
-  order: 2.2,
-  category: '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte',
-  name: <HTML>,
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      'props':
-        [
-          { name: 'transform', type: 'boolean', default: 'false', required: false },
-          { name: 'calculatePosition', type: '(
-              obj: Object3D,
-              camera: Camera,
-              size: { width: number; height: number }
-              ) => [number, number]', required: false },
-          { name: 'eps', type: 'number', default: '0.001', required: false },
-          { name: 'occlude', type: 'boolean | Object3D[]', default: 'false', required: false },
-          {
-            name: 'zIndexRange',
-            type: '[number, number]',
-            default: '[16777271, 0]',
-            required: false
-          },
-          { name: 'sprite', type: 'boolean', default: 'false', required: false },
-          {
-            name: 'pointerEvents',
-            type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
-            default: "'auto'",
-            required: false
-          },
-          { name: 'center', type: 'boolean', default: 'false', required: false },
-          { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
-          { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
-          { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-          { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false }
-        ]
-    }
-}
+order: 2.2
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte'
+name: <HTML>
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'transform', type: 'boolean', default: 'false', required: false },
+        { name: 'calculatePosition', type: '(
+            obj: Object3D,
+            camera: Camera,
+            size: { width: number; height: number }
+            ) => [number, number]', required: false },
+        { name: 'eps', type: 'number', default: '0.001', required: false },
+        {
+          name: 'occlude',
+          type: "boolean | THREE.Object3D[] | 'blending'",
+          default: 'false',
+          required: false
+        },
+        {
+          name: 'zIndexRange',
+          type: '[number, number]',
+          default: '[16777271, 0]',
+          required: false
+        },
+        { name: 'sprite', type: 'boolean', default: 'false', required: false },
+        {
+          name: 'pointerEvents',
+          type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
+          default: "'auto'",
+          required: false
+        },
+        { name: 'center', type: 'boolean', default: 'false', required: false },
+        { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
+        { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
+        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
+        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
+        { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
+        { name: 'recieveShadow', type: 'boolean', default: 'undefined', required: false },
+        { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
+        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false }
+      ]
+  }
 ---
 
 This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie HTML content to any object of your scene. It will be projected to the objects whereabouts automatically.
@@ -94,6 +101,16 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 </HTML>
 ```
 
+Setting `occlude` to `"blending"` will allow objects to partially occlude the `<HTML>` component.
+
+<Tip type="warning">
+This occlusion mode requires the `<canvas>` element to have `pointer-events` set to `none`. 
+Therefore, any events like those in `OrbitControls` must be set on the canvas parent. Extras components
+like `<OrbitControls>` do this automatically.
+</Tip>
+
+<Example path="extras/html/phone" />
+
 #### Visibility Change Event
 
 Use the property `occlude` and bind to the event `visibilitychange` to implement a custom hide/show behaviour.
@@ -110,7 +127,7 @@ Use the property `occlude` and bind to the event `visibilitychange` to implement
 <HTML
   transform
   occlude
-  on:visibilitychange={onVisibilityChange}
+  onvisibilitychange={onVisibilityChange}
 >
   <h1>Hello World</h1>
 </HTML>

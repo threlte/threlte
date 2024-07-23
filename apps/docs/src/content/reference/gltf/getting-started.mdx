@@ -78,16 +78,24 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
   import { T } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
 
-  export const ref = new Group()
+  let {
+    ref = $bindable(),
+    actions = $bindable(),
+    mixer = $bindable(),
+    children,
+    ...props
+  } = $props()
 
   const gltf = useGltf('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations(gltf, ref)
+  const animations = useGltfAnimations(gltf, ref)
+  actions = animations.actions
+  mixer = animations.mixer
 </script>
 
 {#if $gltf}
-  <T
-    is={ref}
-    {...$$restProps}
+  <T.Group
+    bind:ref
+    {...props}
   >
     <T.Group name="Scene">
       <T.Group
@@ -107,8 +115,8 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
       </T.Group>
     </T.Group>
 
-    <slot {ref} />
-  </T>
+    {@render children?.({ ref })}
+  </T.Group>
 {/if}
 ```
 
@@ -190,14 +198,26 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 <script lang="ts">
   import type * as THREE from 'three'
   import { Group } from 'three'
-  import { T, type Props, type Events, type Slots } from '@threlte/core'
+  import { T, type Props } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
+  import type { Snippet } from 'svelte'
 
-  type $$Props = Props<THREE.Group>
-  type $$Events = Events<THREE.Group>
-  type $$Slots = Slots<THREE.Group>
+  type Props = {
+    ref?: Group
+    actions?: ReturnType<typeof useGltfAnimations>['actions']
+    mixer?: ReturnType<typeof useGltfAnimations>['mixer']
+    children?: Snippet<[{ ref: Group }]>
+  }
 
-  export const ref = new Group()
+  let {
+    ref = $bindable(),
+    actions = $bindable(),
+    mixer = $bindable(),
+    children,
+    ...props
+  }: Props = $props()
+
+  const group = new Group()
 
   type ActionName =
     | 'pockets'
@@ -217,14 +237,18 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
     materials: {}
   }
 
+  const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  actions = animations.actions
+  mixer = animations.mixer
 </script>
 
 {#if $gltf}
   <T
-    is={ref}
-    {...$$restProps}
+    bind:ref
+    is={group}
+    {...props}
   >
     <T.Group name="Scene">
       <T.Group
@@ -244,7 +268,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
       </T.Group>
     </T.Group>
 
-    <slot {ref} />
+    {@render children?.({ ref })}
   </T>
 {/if}
 ```
@@ -277,7 +301,9 @@ If you want to use the component [`<Suspense>`](/docs/reference/extras/suspense)
 </script>
 
 <Suspense>
-  <Fallback slot="fallback" />
+  {#snippet fallback()}
+    <Fallback />
+  {/snippet}
   <Model />
 </Suspense>
 ```

@@ -1,9 +1,7 @@
 <script lang="ts">
   import { T, asyncWritable, useCache } from '@threlte/core'
-  import { RoundedBoxGeometry, createTransition, useCursor, useTexture } from '@threlte/extras'
-  import { cubicIn, cubicOut } from 'svelte/easing'
+  import { RoundedBoxGeometry, useCursor, useTexture } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-  import type { Object3D } from 'three'
 
   const cache = useCache()
 
@@ -43,18 +41,6 @@
         return ''
     }
   }
-
-  const animDelay = gridIndex * 10
-  const scaleTransition = createTransition<Object3D>((ref, { direction }) => {
-    return {
-      tick(t) {
-        ref.scale.setScalar(t)
-      },
-      delay: animDelay + (direction === 'in' ? 200 : 0),
-      duration: 200,
-      easing: direction === 'in' ? cubicOut : cubicIn
-    }
-  })
 </script>
 
 {#if $matcapsList}
@@ -62,17 +48,14 @@
   {@const url = `${matcapRoot}/${format}/${fileName}`}
 
   {#await useTexture(url) then matcap}
-    <T.Group
-      in={scaleTransition}
-      out={scaleTransition}
-    >
+    <T.Group>
       <T.Mesh
         scale.x={(width / 100) * $scale}
         scale.y={(height / 100) * $scale}
         scale.z={$scale}
         position.z={20}
-        on:pointerenter={onPointerEnter}
-        on:pointerleave={onPointerLeave}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
       >
         <RoundedBoxGeometry
           args={[100, 100, 20]}

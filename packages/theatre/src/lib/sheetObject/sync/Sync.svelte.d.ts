@@ -1,4 +1,4 @@
-import type { SvelteComponent } from 'svelte'
+import type { Snippet, SvelteComponent } from 'svelte'
 import type { Transformer } from '../transfomers/types'
 import type { ConditionalKeys, Primitive } from 'type-fest'
 
@@ -54,18 +54,12 @@ type AnyProps<T> = {
   [P in keyof InstanceProps<T>]?: AnyProp
 }
 
-type AllProps<T> = AnyProps<T> &
+export type SyncProps<T> = AnyProps<T> &
   ObjectProp<T> &
   Record<string, AnyProp | T> & {
     capture?: () => void
+  } & {
+    children?: Snippet<[{ capture: () => void }]>
   }
 
-export default class Sync<T> extends SvelteComponent<
-  AllProps<T>,
-  Record<string, any>,
-  {
-    default: {
-      capture: () => void
-    }
-  }
-> {}
+export default class Sync<T> extends SvelteComponent<SyncProps<T>> {}

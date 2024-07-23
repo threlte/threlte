@@ -23,7 +23,6 @@
   makeDefault
   fov={20}
   position={[2, 2, 10]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls
     autoRotate

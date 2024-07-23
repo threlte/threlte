@@ -9,72 +9,64 @@
   const { onPointerEnter, onPointerLeave } = useCursor()
 </script>
 
-<SheetObject
-  key="Directional Light"
-  let:Sync
-  let:Transform
->
-  <Transform>
-    <T.DirectionalLight castShadow>
+<SheetObject key="Directional Light">
+  {#snippet children({ Sync, Transform })}
+    <Transform>
+      <T.DirectionalLight castShadow>
+        <Sync
+          intensity
+          color
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
+</SheetObject>
+
+<SheetObject key="Ambient Light">
+  {#snippet children({ Sync })}
+    <T.AmbientLight>
       <Sync
         intensity
         color
       />
-    </T.DirectionalLight>
-  </Transform>
-</SheetObject>
-
-<SheetObject
-  key="Ambient Light"
-  let:Sync
->
-  <T.AmbientLight>
-    <Sync
-      intensity
-      color
-    />
-  </T.AmbientLight>
+    </T.AmbientLight>
+  {/snippet}
 </SheetObject>
 
 <T.PerspectiveCamera
   makeDefault
   position={[5, 5, 5]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
 />
 
-<SheetObject
-  key="Box"
-  let:Sync
-  let:Transform
-  let:select
-  let:deselect
->
-  <Transform>
-    <T.Mesh
-      castShadow
-      on:click={select}
-      on:pointerenter={onPointerEnter}
-      on:pointerleave={onPointerLeave}
-      on:pointermissed={deselect}
-    >
-      <RoundedBoxGeometry radius={0.1} />
-      <T.MeshStandardMaterial
-        let:ref
-        transparent
+<SheetObject key="Box">
+  {#snippet children({ Sync, Transform, select, deselect })}
+    <Transform>
+      <T.Mesh
+        castShadow
+        onclick={select}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
+        onpointermissed={deselect}
       >
-        <Sync
-          type={ref}
-          color
-          roughness
-          metalness
-          side
-          opacity
-        />
-      </T.MeshStandardMaterial>
-    </T.Mesh>
-  </Transform>
+        <RoundedBoxGeometry radius={0.1} />
+        <T.MeshStandardMaterial transparent>
+          {#snippet children({ ref })}
+            <Sync
+              type={ref}
+              color
+              roughness
+              metalness
+              side
+              opacity
+            />
+          {/snippet}
+        </T.MeshStandardMaterial>
+      </T.Mesh>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <T.Mesh

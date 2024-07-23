@@ -4,20 +4,20 @@
 </script>
 
 <div>
+  <Canvas>
+    <Scene />
+  </Canvas>
   <ul>
     <li>Press <b>S</b> to toggle scope mode.</li>
     <li><b>Mousewheel</b> or <b>A/D</b> to adjust zoom level.</li>
   </ul>
-  <Canvas>
-    <Scene />
-  </Canvas>
 </div>
 
 <style>
   ul {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 1rem;
+    left: 1rem;
   }
   div {
     height: 100%;

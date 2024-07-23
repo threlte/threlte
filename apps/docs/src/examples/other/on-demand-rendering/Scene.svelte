@@ -11,9 +11,6 @@
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
-    ref.lookAt(0, 0, 0)
-  }}
 >
   <OrbitControls />
 </T.PerspectiveCamera>
@@ -27,8 +24,8 @@
 
 <T.Group
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
 >
   <T.Mesh position.y={1}>
     <T.SphereGeometry args={[1]} />

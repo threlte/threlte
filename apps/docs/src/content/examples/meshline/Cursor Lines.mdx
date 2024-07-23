@@ -13,7 +13,7 @@ We use a BoxGeometry large enough in the X and Z axis to fill the screen.
   zoom={50}
   makeDefault
   position.y={10}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(new Vector3(0, 0, 0))
   }}
 />
@@ -36,7 +36,7 @@ To get the cursor position we use Threlte's <a href="/docs/reference/extras/inte
 
 <T.Mesh
   visible={false}
-  on:pointermove={(e) => {
+  onpointermove={(e) => {
     cursorPosition.x = e.point.x
     cursorPosition.z = e.point.z
   }}

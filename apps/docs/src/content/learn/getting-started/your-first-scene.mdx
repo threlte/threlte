@@ -246,7 +246,7 @@ We're still staring at the side of a cube, let's add a camera and offset it from
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -298,7 +298,7 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -306,8 +306,8 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 <T.Mesh
   position.y={1}
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
@@ -367,7 +367,7 @@ cube rotate around its y-axis.
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -376,8 +376,8 @@ cube rotate around its y-axis.
   rotation.y={rotation}
   position.y={1}
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
@@ -418,7 +418,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -429,8 +429,8 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
   rotation.y={rotation}
   position.y={1}
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshStandardMaterial color="hotpink" />
@@ -468,7 +468,7 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -482,8 +482,8 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
   rotation.y={rotation}
   position.y={1}
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
   castShadow
 >
   <T.BoxGeometry args={[1, 2, 1]} />

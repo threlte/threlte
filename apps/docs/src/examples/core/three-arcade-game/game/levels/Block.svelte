@@ -88,8 +88,8 @@
     <Collider
       shape="cuboid"
       args={[size / 2, 1 / 2, size / 2]}
-      on:contact={onContact}
-      on:collisionexit={() => dispatch('hit')}
+      oncontact={onContact}
+      oncollisionexit={() => dispatch('hit')}
       mass={1}
     >
       <T.Mesh scale={$scale}>

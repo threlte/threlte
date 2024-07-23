@@ -34,7 +34,7 @@
     use:inview
   >
     <Canvas>
-      <Suspense on:load={() => (isRevealed = true)}>
+      <Suspense onload={() => (isRevealed = true)}>
         <Theatre
           studio={{ enabled: false }}
           config={{ state }}

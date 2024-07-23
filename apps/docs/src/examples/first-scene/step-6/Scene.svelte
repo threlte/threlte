@@ -14,7 +14,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -25,8 +25,8 @@
   rotation.y={rotation}
   position.y={1}
   scale={$scale}
-  on:pointerenter={() => scale.set(1.5)}
-  on:pointerleave={() => scale.set(1)}
+  onpointerenter={() => scale.set(1.5)}
+  onpointerleave={() => scale.set(1)}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshStandardMaterial color="hotpink" />

@@ -42,11 +42,11 @@
   {#each hands as hand}
     <Controller
       {hand}
-      on:select={handleSelect(hand)}
+      onselect={handleSelect(hand)}
     />
     <Hand
       {hand}
-      on:pinchend={handleSelect(hand)}
+      onpinchend={handleSelect(hand)}
     />
   {/each}
 </XR>
@@ -57,7 +57,7 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+    oncreate={({ ref }) => ref.rotateX(-Math.PI / 2)}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>
@@ -68,7 +68,7 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    on:create={({ ref }) => ref.rotateX(-Math.PI / 2)}
+    oncreate={({ ref }) => ref.rotateX(-Math.PI / 2)}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>

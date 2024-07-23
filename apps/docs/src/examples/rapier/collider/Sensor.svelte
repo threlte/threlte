@@ -29,8 +29,8 @@
 <!-- SENSOR -->
 <T.Group position={[0, 1, 0]}>
   <Collider
-    on:sensorenter={() => (present = true)}
-    on:sensorexit={() => (present = false)}
+    onsensorenter={() => (present = true)}
+    onsensorexit={() => (present = false)}
     sensor
     shape={'cuboid'}
     args={[1, 1, 1]}

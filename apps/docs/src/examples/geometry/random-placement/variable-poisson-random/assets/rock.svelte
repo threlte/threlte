@@ -3,7 +3,7 @@
   import { T } from '@threlte/core'
   import { useGltf, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: number[][] = []
+  export let transformData: [number, number, number, number][] = []
 
   type GLTFResult = {
     nodes: {
@@ -17,11 +17,9 @@
   const gltf = useGltf<GLTFResult>(
     'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Rock_2.gltf'
   )
-
-  const assets = Promise.all([gltf])
 </script>
 
-{#await assets then _}
+{#if $gltf}
   <InstancedMesh>
     <T is={$gltf.nodes.Rock_2.geometry} />
     <T.MeshStandardMaterial color="grey" />
@@ -38,4 +36,4 @@
       />
     {/each}
   </InstancedMesh>
-{/await}
+{/if}

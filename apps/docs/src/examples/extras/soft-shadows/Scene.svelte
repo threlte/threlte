@@ -23,32 +23,33 @@
 
 <SheetObject
   key="Light"
-  let:Transform
   props={{}}
-  on:change={() => {
+  onchange={() => {
     lightHelper?.update()
   }}
-  let:selected
 >
-  <Transform>
-    <T.DirectionalLight
-      position={[0, 0, 0]}
-      castShadow
-      let:ref
-      shadow.mapSize.width={1024}
-      shadow.mapSize.height={1024}
-      shadow.bias={0.0001}
-    >
-      {#if selected}
-        <Portal object={scene}>
-          <T.DirectionalLightHelper
-            bind:ref={lightHelper}
-            args={[ref]}
-          />
-        </Portal>
-      {/if}
-    </T.DirectionalLight>
-  </Transform>
+  {#snippet children({ Transform, selected })}
+    <Transform>
+      <T.DirectionalLight
+        position={[0, 0, 0]}
+        castShadow
+        shadow.mapSize.width={1024}
+        shadow.mapSize.height={1024}
+        shadow.bias={0.0001}
+      >
+        {#snippet children({ ref })}
+          {#if selected}
+            <Portal object={scene}>
+              <T.DirectionalLightHelper
+                bind:ref={lightHelper}
+                args={[ref]}
+              />
+            </Portal>
+          {/if}
+        {/snippet}
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <SheetObject
@@ -65,15 +66,16 @@
       range: [0, 100]
     })
   }}
-  let:values
 >
-  {#if values.soft}
-    <SoftShadows
-      focus={values.focus}
-      size={values.size}
-      samples={values.samples}
-    />
-  {/if}
+  {#snippet children({ values })}
+    {#if values.soft}
+      <SoftShadows
+        focus={values.focus}
+        size={values.size}
+        samples={values.samples}
+      />
+    {/if}
+  {/snippet}
 </SheetObject>
 
 <Environment

@@ -1,5 +1,142 @@
 # @threlte/extras
 
+## 9.0.0-next.21
+
+### Patch Changes
+
+- be301d2: Fix useSuspense types
+
+## 9.0.0-next.20
+
+### Patch Changes
+
+- 52926fa: Fix suspense timing & types
+
+## 9.0.0-next.19
+
+### Patch Changes
+
+- afc3ffa: Allow multiple useProgress hooks, fixes for useGamepad and audio extras types
+
+## 9.0.0-next.18
+
+### Patch Changes
+
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+
+## 9.0.0-next.17
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 9.0.0-next.16
+
+### Patch Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 9.0.0-next.15
+
+### Major Changes
+
+- 2b699c7: Remove transitions plugin
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 9.0.0-next.14
+
+### Patch Changes
+
+- 790794d: Add HUD component and useViewport hook
+
+## 9.0.0-next.13
+
+### Patch Changes
+
+- e4bf75c: Remove $events reference in HTML component
+
+## 9.0.0-next.12
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 9.0.0-next.11
+
+### Patch Changes
+
+- 8508b11: Add drei occlusion features to HTML component
+
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
+## 9.0.0-next.5
+
+### Patch Changes
+
+- 3883665: Reduce interactivity footprint
+
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
+## 9.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 8.11.4
 
 ### Patch Changes

@@ -6,6 +6,7 @@
   import { gameState } from './game/state'
   import MainScene from './MainScene.svelte'
   import { resumeContext } from './sound'
+  import { WebGLRenderer } from 'three'
 
   const { progress, finishedOnce } = useProgress()
   const { state, muted } = gameState
@@ -21,11 +22,14 @@
     class:opacity-0={!$finishedOnce}
   >
     <Canvas
-      rendererParameters={{
-        powerPreference: 'high-performance',
-        antialias: false,
-        stencil: false,
-        depth: false
+      createRenderer={(canvas) => {
+        return new WebGLRenderer({
+          canvas,
+          powerPreference: 'high-performance',
+          antialias: false,
+          stencil: false,
+          depth: false
+        })
       }}
     >
       <World gravity={[0, 0, 0]}>

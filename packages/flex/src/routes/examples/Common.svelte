@@ -8,7 +8,7 @@
   near={100}
   far={10000}
   position={[0, 0, 5000]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls zoomToCursor />
 </T.OrthographicCamera>

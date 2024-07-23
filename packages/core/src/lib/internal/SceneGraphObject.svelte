@@ -2,7 +2,7 @@
   import HierarchicalObject from './HierarchicalObject.svelte'
   import type { SceneGraphObjectProperties } from './SceneGraphObject.svelte'
 
-  export let object: SceneGraphObjectProperties['object']
+  let { object, children }: SceneGraphObjectProperties = $props()
 </script>
 
 <HierarchicalObject
@@ -10,5 +10,5 @@
   onChildMount={(child) => object.add(child)}
   onChildDestroy={(child) => object.remove(child)}
 >
-  <slot />
+  {@render children()}
 </HierarchicalObject>

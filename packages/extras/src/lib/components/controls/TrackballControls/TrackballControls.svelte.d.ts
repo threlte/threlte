@@ -1,10 +1,8 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent } from 'svelte'
 import type { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
 export type TrackballControlsProps = Props<ThreeTrackballControls>
-export type TrackballControlsEvents = Events<ThreeTrackballControls>
-export type TrackballControlsSlots = Slots<ThreeTrackballControls>
 
 /**
  * `<TrackballControls>` allow the camera to orbit freely around a target
@@ -38,8 +36,4 @@ export type TrackballControlsSlots = Slots<ThreeTrackballControls>
  * `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element
  * the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
  */
-export default class TrackballControls extends SvelteComponent<
-  TrackballControlsProps,
-  TrackballControlsEvents,
-  TrackballControlsSlots
-> {}
+export default class TrackballControls extends SvelteComponent<TrackballControlsProps> {}

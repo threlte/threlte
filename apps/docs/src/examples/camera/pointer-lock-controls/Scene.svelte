@@ -1,30 +1,11 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Environment } from '@threlte/extras'
   import { AutoColliders, CollisionGroups } from '@threlte/rapier'
-  import { spring } from 'svelte/motion'
-  import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from 'three'
+  import { BoxGeometry, MeshStandardMaterial } from 'three'
   import Door from '../../rapier/world/Door.svelte'
   import Player from './Player.svelte'
   import Ground from '../../rapier/world/Ground.svelte'
-
-  let playerMesh: Mesh
-  let positionHasBeenSet = false
-  const smoothPlayerPosX = spring(0)
-  const smoothPlayerPosZ = spring(0)
-  const t3 = new Vector3()
-
-  useTask(() => {
-    if (!playerMesh) return
-    playerMesh.getWorldPosition(t3)
-    smoothPlayerPosX.set(t3.x, {
-      hard: !positionHasBeenSet
-    })
-    smoothPlayerPosZ.set(t3.z, {
-      hard: !positionHasBeenSet
-    })
-    if (!positionHasBeenSet) positionHasBeenSet = true
-  })
 </script>
 
 <Environment
@@ -47,10 +28,7 @@
 </CollisionGroups>
 
 <CollisionGroups groups={[0]}>
-  <Player
-    bind:playerMesh
-    position={[0, 2, 3]}
-  />
+  <Player position={[0, 2, 3]} />
 
   <Door />
 

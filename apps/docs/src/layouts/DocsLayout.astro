@@ -35,29 +35,26 @@ const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-whi
 const activeLinkStyles = '!text-orange'
 ---
 
-<AppLayout title={title}>
+<AppLayout {title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
+    class="fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b border-b-orange/25 bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
-      <a
-        href="/"
-        data-astro-prefetch
-      >
+      <a href="/">
         <Image
           src={Logo}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-auto md:hidden lg:block object-contain"
+          class="h-[37px] w-auto object-contain md:hidden lg:block"
           loading="eager"
         />
         <Image
           src={LogoOnly}
           alt="threlte logo"
           width={200}
-          class="h-[37px] w-[37px] hidden md:block lg:hidden object-contain"
+          class="hidden h-[37px] w-[37px] object-contain md:block lg:hidden"
           loading="lazy"
         />
       </a>
@@ -65,18 +62,19 @@ const activeLinkStyles = '!text-orange'
       <div class="flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6">
         <a
           href="/docs/learn/getting-started/introduction"
-          class={c(linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles)}
-          data-astro-prefetch
+          class:list={[linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles]}
         >
-          <Book class="h-[16px] hidden lg:block" />Learn
+          <Book class="hidden h-[16px] lg:block" />Learn
         </a>
 
         <a
           href="/docs/examples/examples"
-          class={c(linkStyles, activeUrlPathName.includes('/docs/examples') && activeLinkStyles)}
-          data-astro-prefetch
+          class:list={[
+            linkStyles,
+            activeUrlPathName.includes('/docs/examples') && activeLinkStyles
+          ]}
         >
-          <Circles class="h-[16px] hidden lg:block" />Examples
+          <Circles class="hidden h-[16px] lg:block" />Examples
         </a>
 
         <div class="h-full w-px bg-gray-500/70"></div>
@@ -88,9 +86,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />core</a
+            <Package class="hidden h-[16px] md:block" />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
@@ -98,9 +95,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />extras</a
+            <Package class="hidden h-[16px] md:block" />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
@@ -108,9 +104,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />gltf</a
+            <Package class="hidden h-[16px] md:block" />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
@@ -118,9 +113,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />rapier</a
+            <Package class="hidden h-[16px] md:block" />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
@@ -128,9 +122,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />theatre</a
+            <Package class="hidden h-[16px] md:block" />theatre</a
           >
           <a
             href="/docs/reference/xr/getting-started"
@@ -138,9 +131,8 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
             )}
-            data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />xr
+            <Package class="hidden h-[16px] md:block" />xr
           </a>
           <a
             href="/docs/reference/flex/getting-started"
@@ -148,9 +140,18 @@ const activeLinkStyles = '!text-orange'
               linkStyles,
               activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
             )}
+          >
+            <Package class="hidden h-[16px] md:block" />flex
+          </a>
+          <a
+            href="/docs/reference/studio/getting-started"
+            class={c(
+              linkStyles,
+              activeUrlPathName.includes('/docs/reference/studio') && activeLinkStyles
+            )}
             data-astro-prefetch
           >
-            <Package class="h-[16px] hidden md:block" />flex
+            <Package class="hidden h-[16px] md:block" />studio
           </a>
         </div>
       </div>
@@ -165,9 +166,9 @@ const activeLinkStyles = '!text-orange'
 
   <MobileDocsNav
     client:media="(max-width: 768px)"
-    sidebarMenu={sidebarMenu}
-    activeSidebarTab={activeSidebarTab}
-    activeUrlPathName={activeUrlPathName}
+    {sidebarMenu}
+    {activeSidebarTab}
+    {activeUrlPathName}
   >
     <Image
       slot="logo"
@@ -177,7 +178,7 @@ const activeLinkStyles = '!text-orange'
       class="h-[37px] w-auto"
     />
 
-    <Socials slot="after-navigation"/>
+    <Socials slot="after-navigation" />
   </MobileDocsNav>
 
   <main
@@ -187,10 +188,10 @@ const activeLinkStyles = '!text-orange'
       class="fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] min-w-[var(--left-sidebar-width)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block lg:row-span-1"
       transition:name="left_sidebar"
     >
-      <div class="mx-6 mb-6 mt-6 flex flex-1 xl:hidden flex-col gap-3">
-				<div class="lg:hidden">
-					<Socials/>
-				</div>
+      <div class="mx-6 mb-6 mt-6 flex flex-1 flex-col gap-3 xl:hidden">
+        <div class="lg:hidden">
+          <Socials />
+        </div>
         <Search client:media="(min-width: 768px) and (max-width: 1280px)" />
       </div>
       <LeftSidebar />
@@ -200,19 +201,19 @@ const activeLinkStyles = '!text-orange'
       class="col-start-2 w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
       <article
-        class="prose prose-a:text-orange before:prose-code:content-none after:prose-code:content-none prose-invert [&_p]:text-faded [&_li]:text-faded prose-a:decoration-dotted mx-auto max-w-5xl"
+        class="[&_p]:text-faded [&_li]:text-faded prose prose-invert mx-auto max-w-5xl prose-a:text-orange prose-a:decoration-dotted before:prose-code:content-none after:prose-code:content-none"
       >
         <slot />
       </article>
     </div>
 
     <aside
-      class="fixed top-0 right-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] place-self-start justify-self-stretch overflow-hidden lg:top-[var(--docs-navbar-height)] lg:block lg:w-[var(--right-sidebar-width)]"
+      class="fixed right-0 top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] place-self-start justify-self-stretch overflow-hidden lg:top-[var(--docs-navbar-height)] lg:block lg:w-[var(--right-sidebar-width)]"
       transition:name="right_sidebar"
     >
-      <RightSidebar entry={Astro.props.entry} >
-				<Socials/>
-			</RightSidebar>
+      <RightSidebar entry={Astro.props.entry}>
+        <Socials />
+      </RightSidebar>
     </aside>
   </main>
 </AppLayout>

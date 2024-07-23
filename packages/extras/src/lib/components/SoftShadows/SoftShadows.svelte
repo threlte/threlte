@@ -22,17 +22,21 @@
 
   const { renderer, camera, scene } = useThrelte()
 
-  /** Size of the light source (the larger the softer the light), default: 25 */
-  export let size = 25
-  /** Depth focus, use it to shift the focal point (where the shadow is the sharpest), default: 0 (the beginning) */
-  export let focus = 0
-  /** Number of samples (more samples less noise but more expensive), default: 10 */
-  export let samples = 10
+  interface Props {
+    /** Size of the light source (the larger the softer the light), default: 25 */
+    size?: number
+    /** Depth focus, use it to shift the focal point (where the shadow is the sharpest), default: 0 (the beginning) */
+    focus?: number
+    /** Number of samples (more samples less noise but more expensive), default: 10 */
+    samples?: number
+  }
+
+  let { size = 25, focus = 0, samples = 10 }: Props = $props()
 
   // get the original shader chunk
   const original = ShaderChunk.shadowmap_pars_fragment
 
-  $: pcss = `
+  let pcss = $derived(`
 		#define PENUMBRA_FILTER_SIZE float(${size})
 		#define RGB_NOISE_FUNCTION(uv) (randRGB(uv))
 		vec3 randRGB(vec2 uv) {
@@ -132,19 +136,7 @@
 			}
 			float penumbraRatio = penumbraSize(zReceiver, avgBlockerDepth);
 			return vogelFilter(shadowMap, uv, zReceiver, 1.25 * penumbraRatio, angle);
-	}`
-
-  const onUpdate = () => {
-    ShaderChunk.shadowmap_pars_fragment = original
-      .replace('#ifdef USE_SHADOWMAP', '#ifdef USE_SHADOWMAP\n' + pcss)
-      .replace(
-        '#if defined( SHADOWMAP_TYPE_PCF )',
-        '\nreturn PCSS(shadowMap, shadowCoord);\n#if defined( SHADOWMAP_TYPE_PCF )'
-      )
-    recompile()
-  }
-
-  $: pcss, onUpdate()
+	}`)
 
   const recompile = () => {
     scene.traverse((o) => {
@@ -157,6 +149,16 @@
     if (renderer?.info.programs) renderer!.info.programs.length = 0
     renderer?.compile(scene, camera.current)
   }
+
+  $effect.pre(() => {
+    ShaderChunk.shadowmap_pars_fragment = original
+      .replace('#ifdef USE_SHADOWMAP', `#ifdef USE_SHADOWMAP\n${pcss}`)
+      .replace(
+        '#if defined( SHADOWMAP_TYPE_PCF )',
+        '\nreturn PCSS(shadowMap, shadowCoord);\n#if defined( SHADOWMAP_TYPE_PCF )'
+      )
+    recompile()
+  })
 
   onDestroy(() => {
     ShaderChunk.shadowmap_pars_fragment = original

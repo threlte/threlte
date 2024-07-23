@@ -2,9 +2,13 @@
   import { Color, DoubleSide, RawShaderMaterial, type ColorRepresentation } from 'three'
   import { T } from '@threlte/core'
 
-  export let color: ColorRepresentation = new Color('white')
-  export let size = 0.03
-  export let thickness = 0.035
+  interface Props {
+    color?: ColorRepresentation
+    size?: number
+    thickness?: number
+  }
+
+  let { color = new Color('white'), size = 0.03, thickness = 0.035 }: Props = $props()
 
   const vertexShader = `
     uniform mat4 projectionMatrix;
@@ -31,20 +35,26 @@
     }
   `
 
+  const uniforms = {
+    thickness: { value: thickness },
+    color: { value: color }
+  }
+
   const shaderMaterial = new RawShaderMaterial({
     vertexShader,
     fragmentShader,
-    uniforms: {
-      thickness: { value: thickness },
-      color: { value: color }
-    },
+    uniforms,
     side: DoubleSide,
     transparent: true,
     depthTest: false
   })
 
-  $: shaderMaterial.uniforms.thickness!.value = thickness
-  $: shaderMaterial.uniforms.color!.value = color
+  $effect.pre(() => {
+    uniforms.thickness.value = thickness
+  })
+  $effect.pre(() => {
+    uniforms.color.value = color
+  })
 </script>
 
 <T.Mesh scale={size}>

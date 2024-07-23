@@ -1,17 +1,22 @@
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
+export { useDraco } from './hooks/useDraco'
+export { useMeshopt } from './hooks/useMeshopt'
+export { useKtx2 } from './hooks/useKtx2'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
 export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
-export { useGamepad } from './hooks/useGamepad'
+export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
+export { useViewport } from './hooks/useViewport'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
+export { default as HUD } from './components/HUD/HUD.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
 export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
@@ -72,11 +77,6 @@ export {
   type Intersection,
   type IntersectionEvent
 } from './interactivity'
-
-// transitions
-export { transitions } from './transitions/transitions-plugin'
-export type { ThrelteTransition } from './transitions/types'
-export { createTransition } from './transitions/createTransition'
 
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy } from 'svelte'
-  import { Euler, Camera } from 'three'
+  import { onDestroy } from 'svelte'
+  import { Euler, Camera, PerspectiveCamera } from 'three'
   import { useThrelte, useParent } from '@threlte/core'
 
   // Set to constrain the pitch of the camera
@@ -8,21 +8,19 @@
   export let minPolarAngle = 0 // radians
   export let maxPolarAngle = Math.PI // radians
   export let pointerSpeed = 1.0
+  export let onchange: (() => void) | undefined = undefined
+  export let onlock: (() => void) | undefined = undefined
+  export let onunlock: (() => void) | undefined = undefined
 
   let isLocked = false
 
   const { renderer, invalidate } = useThrelte()
 
   const domElement = renderer.domElement
-  const camera = useParent()
-  const dispatch = createEventDispatcher()
+  const camera = useParent<PerspectiveCamera>()
 
   const _euler = new Euler(0, 0, 0, 'YXZ')
   const _PI_2 = Math.PI / 2
-
-  if (!renderer) {
-    throw new Error('Threlte Context missing: Is <PointerLockControls> a child of <Canvas>?')
-  }
 
   const isCamera = (p: any): p is Camera => {
     return p.isCamera
@@ -34,13 +32,10 @@
 
   const onChange = () => {
     invalidate()
-    dispatch('change')
+    onchange?.()
   }
 
-  export const lock = () =>
-    domElement.requestPointerLock({
-      unadjustedMovement: true
-    })
+  export const lock = () => domElement.requestPointerLock()
   export const unlock = () => document.exitPointerLock()
 
   domElement.addEventListener('mousemove', onMouseMove)
@@ -73,10 +68,10 @@
 
   function onPointerlockChange() {
     if (document.pointerLockElement === domElement) {
-      dispatch('lock')
+      onlock?.()
       isLocked = true
     } else {
-      dispatch('unlock')
+      onunlock?.()
       isLocked = false
     }
   }

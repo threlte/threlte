@@ -36,25 +36,24 @@ toneMapping.set(THREE.LinearToneMapping)
 
 ```ts
 const {
-  size,                    // Readable<Size>
-  camera,                  // CurrentWritable<Camera>
-  scene,                   // Scene
-  dpr,                     // CurrentWritable<number>
-  useLegacyLights,         // CurrentWritable<boolean>
-  renderer,                // WebGLRenderer
-  renderMode,              // CurrentWritable<'always' | 'on-demand' | 'manual'>
-  autoRender,              // CurrentWritable<boolean>
-  invalidate,              // () => void
-  advance,                 // () => void
-  scheduler,               // Scheduler
-  mainStage,               // Stage
-  renderStage,             // Stage
-  autoRenderTask,          // Task
-  shouldRender,            // () => boolean
-  colorManagementEnabled,  // CurrentWritable<boolean>
-  colorSpace,              // CurrentWritable<ColorSpace>
-  toneMapping,             // CurrentWritable<ToneMapping>
-  shadows                  // CurrentWritable<boolean | ShadowMapType>
+  size, // Readable<Size>
+  camera, // CurrentWritable<Camera>
+  scene, // Scene
+  dpr, // CurrentWritable<number>
+  renderer, // WebGLRenderer
+  renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
+  autoRender, // CurrentWritable<boolean>
+  invalidate, // () => void
+  advance, // () => void
+  scheduler, // Scheduler
+  mainStage, // Stage
+  renderStage, // Stage
+  autoRenderTask, // Task
+  shouldRender, // () => boolean
+  colorManagementEnabled, // CurrentWritable<boolean>
+  colorSpace, // CurrentWritable<ColorSpace>
+  toneMapping, // CurrentWritable<ToneMapping>
+  shadows // CurrentWritable<boolean | ShadowMapType>
 } = useThrelte()
 ```
 

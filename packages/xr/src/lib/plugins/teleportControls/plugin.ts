@@ -2,7 +2,7 @@ import type { Mesh } from 'three'
 import { writable } from 'svelte/store'
 import { watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
-import { useTeleportControls } from './hook'
+import { useTeleportControls } from './context'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
@@ -22,22 +22,22 @@ export const injectTeleportControlsPlugin = (): void => {
     const refStore = writable<Mesh>(ref)
     const propsStore = writable(props)
 
-    watch([refStore, propsStore], ([nextRef, nextProps]) => {
+    watch([refStore, propsStore], ([$refStore, $propsStore]) => {
       if (isSurface) {
-        if (nextProps.teleportSurface === false) {
-          removeSurface(nextRef)
+        if ($propsStore.teleportSurface === false) {
+          removeSurface($refStore)
           return noop
         } else {
-          addSurface(nextRef)
-          return () => removeSurface(nextRef)
+          addSurface($refStore, props)
+          return () => removeSurface($refStore)
         }
       } else if (isBlocker) {
         if (props.teleportBlocker === false) {
-          removeBlocker(nextRef)
+          removeBlocker($refStore)
           return noop
         } else {
-          addBlocker(nextRef)
-          return () => removeBlocker(nextRef)
+          addBlocker($refStore)
+          return () => removeBlocker($refStore)
         }
       } else {
         return noop

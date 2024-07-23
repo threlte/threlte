@@ -1,4 +1,3 @@
-import type { Writable } from 'svelte/store'
 import {
   Camera,
   Matrix4,
@@ -6,25 +5,21 @@ import {
   OrthographicCamera,
   PerspectiveCamera,
   Raycaster,
+  Vector2,
   Vector3
 } from 'three'
 
 const v1 = new Vector3()
 const v2 = new Vector3()
 const v3 = new Vector3()
+const vec2 = new Vector2()
 
-const isOrthographicCamera = (o: any): o is OrthographicCamera => {
-  return o.isOrthographicCamera
+const isOrthographicCamera = (o: Camera): o is OrthographicCamera => {
+  return 'isOrthographicCamera' in o
 }
 
-const isPerspectiveCamera = (o: any): o is PerspectiveCamera => {
-  return o.isPerspectiveCamera
-}
-
-const isOrthographicCameraOrPerspectiveCamera = (
-  o: any
-): o is OrthographicCamera | PerspectiveCamera => {
-  return isOrthographicCamera(o) || isPerspectiveCamera(o)
+const isPerspectiveCamera = (o: Camera): o is PerspectiveCamera => {
+  return 'isPerspectiveCamera' in o
 }
 
 export const defaultCalculatePosition = (
@@ -52,17 +47,19 @@ export const isObjectVisible = (
   camera: Camera,
   raycaster: Raycaster,
   occlude: Object3D[]
-) => {
+): boolean => {
   const elPos = v1.setFromMatrixPosition(el.matrixWorld)
-  const screenPos = elPos.clone()
+  const screenPos = v2.copy(v1)
   screenPos.project(camera)
-  raycaster.setFromCamera(screenPos, camera)
+  raycaster.setFromCamera(vec2.set(screenPos.x, screenPos.y), camera)
   const intersects = raycaster.intersectObjects(occlude, true)
+
   if (intersects.length) {
     const intersectionDistance = intersects[0].distance
     const pointDistance = elPos.distanceTo(raycaster.ray.origin)
     return pointDistance < intersectionDistance
   }
+
   return true
 }
 
@@ -81,26 +78,33 @@ export const objectScale = (el: Object3D, camera: Camera) => {
   }
 }
 
-export const objectZIndex = (el: Object3D, camera: Camera, zIndexRange: Array<number>) => {
-  if (isOrthographicCameraOrPerspectiveCamera(camera)) {
-    const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
-    const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
-    const dist = objectPos.distanceTo(cameraPos)
-    const A = (zIndexRange[1] - zIndexRange[0]) / (camera.far - camera.near)
-    const B = zIndexRange[1] - A * camera.far
-    return Math.round(A * dist + B)
-  }
-  return undefined
+export const objectZIndex = (
+  el: Object3D,
+  camera: OrthographicCamera | PerspectiveCamera,
+  zIndexRange: Array<number>
+): number | undefined => {
+  const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
+  const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
+  const dist = objectPos.distanceTo(cameraPos)
+  const A = (zIndexRange[1] - zIndexRange[0]) / (camera.far - camera.near)
+  const B = zIndexRange[1] - A * camera.far
+  return Math.round(A * dist + B)
 }
 
 export const epsilon = (value: number) => (Math.abs(value) < 1e-10 ? 0 : value)
 
-export const getCSSMatrix = (matrix: Matrix4, multipliers: number[], prepend = '') => {
-  let matrix3d = 'matrix3d('
-  for (let i = 0; i !== 16; i++) {
-    matrix3d += epsilon(multipliers[i] * matrix.elements[i]) + (i !== 15 ? ',' : ')')
-  }
-  return prepend + matrix3d
+export const getCSSMatrix = (mat4: Matrix4, m: number[], prepend = '') => {
+  const { elements: e } = mat4
+  return `${prepend}matrix3d(
+    ${epsilon(m[0] * e[0])},${epsilon(m[1] * e[1])},${epsilon(m[2] * e[2])},${epsilon(m[3] * e[3])},
+    ${epsilon(m[4] * e[4])},${epsilon(m[5] * e[5])},${epsilon(m[6] * e[6])},${epsilon(m[7] * e[7])},
+    ${epsilon(m[8] * e[8])},${epsilon(m[9] * e[9])},${epsilon(
+      m[10] * e[10]
+    )},${epsilon(m[11] * e[11])},
+    ${epsilon(m[12] * e[12])},${epsilon(m[13] * e[13])},${epsilon(
+      m[14] * e[14]
+    )},${epsilon(m[15] * e[15])}
+  )`
 }
 
 export const getCameraCSSMatrix = ((multipliers: number[]) => {
@@ -129,28 +133,29 @@ export const getObjectCSSMatrix = ((scaleMultipliers: (n: number) => number[]) =
   1
 ])
 
-const styleDeclarationKeyToCssString = (s: string): string => {
-  return s
-    .split(/(?=[A-Z])/)
-    .join('-')
-    .toLowerCase()
-}
+export const getViewportFactor = (
+  camera: Camera,
+  target: Vector3,
+  size: {
+    width: number
+    height: number
+  }
+): number => {
+  if (isOrthographicCamera(camera)) {
+    return 1
+  }
 
-export const compileStyles = (styles: Partial<CSSStyleDeclaration>): string => {
-  return Object.entries(styles)
-    .filter(([_, value]) => !!value)
-    .map(([key, value]) => `${styleDeclarationKeyToCssString(key)}: ${value}`)
-    .join('; ')
-}
+  if (isPerspectiveCamera(camera)) {
+    const { width, height } = size
+    const distance = camera.getWorldPosition(v1).distanceTo(target)
 
-export const updateStyles = (
-  store: Writable<Partial<CSSStyleDeclaration>>,
-  styles: Partial<CSSStyleDeclaration>
-): void => {
-  store.update((values) => {
-    return {
-      ...values,
-      ...styles
-    }
-  })
+    // convert vertical fov to radians
+    const fov = (camera.fov * Math.PI) / 180
+    // visible height
+    const h = 2 * Math.tan(fov / 2) * distance
+    const w = h * (width / height)
+    return width / w
+  }
+
+  throw new Error('getViewportFactor needs a Perspective or Orthographic Camera')
 }

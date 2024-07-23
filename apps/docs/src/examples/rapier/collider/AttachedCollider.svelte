@@ -13,7 +13,6 @@
   const offset = Date.now()
 
   useTask(() => {
-    if (!rigidBody) return
     positionZ = Math.sin(Date.now() / 2000) * 2.5
     positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
     rigidBody.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })

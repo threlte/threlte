@@ -18,10 +18,11 @@
     label="CSM enabled"
     bind:value={enabled}
   />
-  <Point
+  <!-- @TODO: breaks svelte 5 -->
+  <!-- <Point
     bind:value={lightDirection}
     label="lightDirection"
-  />
+  /> -->
   <Slider
     bind:value={lightIntensity}
     label="lightIntensity"

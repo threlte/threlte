@@ -9,7 +9,7 @@
   far={100}
   zoom={150}
   position={[5, 1.5, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls
     enableDamping

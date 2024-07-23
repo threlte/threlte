@@ -1,41 +1,42 @@
 <script lang="ts">
   import { getContext, onDestroy, setContext } from 'svelte'
   import { writable, type Writable } from 'svelte/store'
-  import { useThrelteInternal } from '../hooks/useThrelteInternal'
+  import { useDisposal } from '../context/fragments/disposal'
   import type { DisposableObjectProperties } from './DisposableObject.svelte'
 
   type ThrelteDisposeContext = Writable<boolean>
 
-  const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } =
-    useThrelteInternal()
+  let { object, dispose, children }: DisposableObjectProperties = $props()
 
-  export let object: DisposableObjectProperties['object'] = undefined
+  const { collectDisposableObjects, addDisposableObjects, removeDisposableObjects } = useDisposal()
+
   let previousObject = object
-  export let dispose: DisposableObjectProperties['dispose'] = undefined
 
   const contextName = 'threlte-disposable-object-context'
   const parentDispose = getContext<ThrelteDisposeContext | undefined>(contextName)
 
   const mergedDispose = writable(dispose ?? $parentDispose ?? true)
-  $: mergedDispose.set(dispose ?? $parentDispose ?? true)
+  $effect.pre(() => mergedDispose.set(dispose ?? $parentDispose ?? true))
 
   setContext<ThrelteDisposeContext>(contextName, mergedDispose)
 
   let disposables = $mergedDispose ? collectDisposableObjects(object) : []
   addDisposableObjects(disposables)
 
-  $: {
+  $effect.pre(() => {
     if (object !== previousObject) {
       removeDisposableObjects(disposables)
       disposables = $mergedDispose ? collectDisposableObjects(object) : []
       addDisposableObjects(disposables)
       previousObject = object
     }
-  }
+  })
 
   onDestroy(() => {
     removeDisposableObjects(disposables)
   })
 </script>
 
-<slot />
+{#if children}
+  {@render children()}
+{/if}

@@ -1,5 +1,4 @@
 ---
-import { c } from '$lib/classes'
 import type { Theme, HtmlRendererOptions, Lang } from 'shiki'
 import { getShiki } from '../../lib/highlighter'
 import CopyCodeButton from './CopyCodeButton.svelte'
@@ -24,14 +23,14 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
 {
   Astro.props.title ? (
     <div class="code">
-      <div class="not-prose text-faded z-10 inline-block translate-y-px rounded-t-md border border-x-white/20 border-t-white/20 border-b-white/5 bg-blue-900 px-2 py-1 text-sm">
+      <div class="not-prose text-faded z-10 inline-block translate-y-px rounded-t-md border border-x-white/20 border-b-white/5 border-t-white/20 bg-blue-900 px-2 py-1 text-sm">
         {Astro.props.title}
       </div>
       <div
-        class={c(
+        class:list={[
           'not-prose relative overflow-x-auto rounded-b-md rounded-tr-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
           Astro.props.class ?? ''
-        )}
+        ]}
       >
         <CopyCodeButton
           client:idle
@@ -42,10 +41,10 @@ const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? 
     </div>
   ) : (
     <div
-      class={c(
+      class:list={[
         'code not-prose group relative overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
         Astro.props.class ?? ''
-      )}
+      ]}
     >
       <CopyCodeButton
         client:idle

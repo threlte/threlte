@@ -11,19 +11,9 @@
   let bevelSize = 0.2
   let bevelThickness = 0.1
   let curveSegments = 12
-  let height = 1
+  let depth = 1
   let size = 5
   let smooth = 0.1
-  /*
-	rotation.x={-0.28}
-      size={5}
-      height={1}
-      bevelEnabled={true}
-      bevelThickness={0.1}
-      bevelSize={0.2}
-      bevelSegments={20}
-      smooth={0.1}
-			*/
 </script>
 
 <Pane
@@ -71,8 +61,8 @@
     max={50}
   />
   <Slider
-    label="height"
-    bind:value={height}
+    label="depth"
+    bind:value={depth}
     min={0}
     max={5}
   />
@@ -100,7 +90,7 @@
       {bevelSize}
       {bevelThickness}
       {curveSegments}
-      {height}
+      {depth}
       {size}
       {smooth}
     />

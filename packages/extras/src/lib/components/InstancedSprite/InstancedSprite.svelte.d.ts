@@ -4,7 +4,7 @@ import type {
   SpritesheetFormat
 } from '@threejs-kit/instanced-sprite-mesh'
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Writable } from 'svelte/store'
 import {
   InstancedMesh,
@@ -17,9 +17,9 @@ import {
   type Vector2Tuple,
   type Vector3Tuple
 } from 'three'
-import type SpriteInstance from './SpriteInstance'
+import type SpriteInstance from './SpriteInstance.svelte'
 
-export type InstancedSpriteProps = Props<InstancedMesh> & {
+export type InstancedSpriteProps = Omit<Props<InstancedMesh>, 'children'> & {
   /**
    * update animations automatically
    *
@@ -98,12 +98,8 @@ export type InstancedSpriteProps = Props<InstancedMesh> & {
   }
 
   ref?: InstancedSpriteMesh<Material, unknown>
-}
 
-export type InstancedSpriteSlots = {
-  default: {
-    Instance: typeof SpriteInstance
-  }
+  children?: Snippet<[{ Instance: typeof SpriteInstance }]>
 }
 
 export type InstancedSpriteUserCtx<T> = {
@@ -113,7 +109,4 @@ export type InstancedSpriteUserCtx<T> = {
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void
 }
 
-export default class InstancedSprite extends SvelteComponent<
-  InstancedSpriteProps,
-  InstancedSpriteSlots
-> {}
+export default class InstancedSprite extends SvelteComponent<InstancedSpriteProps> {}

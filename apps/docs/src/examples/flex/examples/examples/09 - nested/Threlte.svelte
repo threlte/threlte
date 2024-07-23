@@ -21,15 +21,15 @@
     width="auto"
     height="auto"
     flex={1}
-    let:width
-    let:height
   >
-    <Plane
-      color="yellow"
-      {width}
-      {height}
-      depth={1}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        color="yellow"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 
   <Box
@@ -38,45 +38,45 @@
     flex={0.5}
     alignItems="Stretch"
     padding={20}
-    let:width
-    let:height
   >
-    <Plane
-      color="blue"
-      {width}
-      {height}
-      depth={1}
-    />
-
-    <Box
-      flex={1}
-      width="auto"
-      height={44}
-      let:width
-      let:height
-    >
+    {#snippet children({ width, height })}
       <Plane
-        color="pink"
+        color="blue"
         {width}
         {height}
-        depth={2}
+        depth={1}
       />
-    </Box>
 
-    <Box
-      flex={1}
-      width="auto"
-      height={44}
-      alignSelf="FlexEnd"
-      let:width
-      let:height
-    >
-      <Plane
-        color="hotpink"
-        {width}
-        {height}
-        depth={2}
-      />
-    </Box>
+      <Box
+        flex={1}
+        width="auto"
+        height={44}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="pink"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+
+      <Box
+        flex={1}
+        width="auto"
+        height={44}
+        alignSelf="FlexEnd"
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="hotpink"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+    {/snippet}
   </Box>
 </Flex>

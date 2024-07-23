@@ -23,7 +23,12 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true
+  },
+  experimental: {
+    clientPrerender: true
+  },
   build: {
     inlineStylesheets: 'never'
   },
@@ -32,7 +37,6 @@ export default defineConfig({
       imports: [
         '$components/Example/Example.astro',
         '$components/Tip/Tip.astro',
-        '$components/ManualInstallGuide/ManualInstallGuide.svelte',
         '$components/Card/Card.astro'
       ]
     }),
@@ -74,6 +78,14 @@ export default defineConfig({
       // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
       // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
       proxySsrExternalModules: true
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext'
     }
   },
   markdown: {

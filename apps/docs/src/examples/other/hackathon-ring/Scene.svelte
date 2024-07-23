@@ -44,7 +44,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[0, 8, 30]}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.lookAt(0, 0, 0)
   }}
   fov={20}
@@ -53,93 +53,83 @@
 <GLTF
   url="/models/wave-ring/Pedestal.glb"
   position.y={-16.5}
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.children.forEach((child) => {
       child.receiveShadow = true
     })
   }}
 />
 
-<SheetObject
-  key="fill-light"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.DirectionalLight
-      target.position={[0]}
-      castShadow
-    >
-      <Sync
-        color
-        intensity
-      />
-    </T.DirectionalLight>
-  </Transform>
+<SheetObject key="fill-light">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.DirectionalLight
+        target.position={[0]}
+        castShadow
+      >
+        <Sync
+          color
+          intensity
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
-<SheetObject
-  key="key-light"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.DirectionalLight target.position={[0]}>
-      <Sync
-        color
-        intensity
-      />
-    </T.DirectionalLight>
-  </Transform>
+<SheetObject key="key-light">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.DirectionalLight target.position={[0]}>
+        <Sync
+          color
+          intensity
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
-<SheetObject
-  key="key-fill-light"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.DirectionalLight target.position={[0]}>
-      <Sync
-        color
-        intensity
-      />
-    </T.DirectionalLight>
-  </Transform>
+<SheetObject key="key-fill-light">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.DirectionalLight target.position={[0]}>
+        <Sync
+          color
+          intensity
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
-<SheetObject
-  key="rim-light"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.DirectionalLight target.position={[0]}>
-      <Sync
-        color
-        intensity
-      />
-    </T.DirectionalLight>
-  </Transform>
+<SheetObject key="rim-light">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.DirectionalLight target.position={[0]}>
+        <Sync
+          color
+          intensity
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
-<SheetObject
-  key="counter-light"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.DirectionalLight target.position={[0]}>
-      <Sync
-        color
-        intensity
-      />
-    </T.DirectionalLight>
-  </Transform>
+<SheetObject key="counter-light">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.DirectionalLight target.position={[0]}>
+        <Sync
+          color
+          intensity
+        />
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <GLTF
-  on:create={({ ref }) => {
+  oncreate={({ ref }) => {
     ref.children.forEach((child) => {
       child.castShadow = true
       child.receiveShadow = true

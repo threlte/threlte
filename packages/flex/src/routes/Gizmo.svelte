@@ -24,7 +24,7 @@
   <T.Mesh position.x={size / 2}>
     <T.CylinderGeometry
       args={[thickness, thickness, size]}
-      on:create={({ ref }) => {
+      oncreate={({ ref }) => {
         ref.rotateZ(90 * DEG2RAD)
       }}
     />
@@ -34,7 +34,7 @@
       <T.Mesh position.x={size / 2 + thickness * 3}>
         <T.ConeGeometry
           args={[thickness * 3, thickness * 6]}
-          on:create={({ ref }) => {
+          oncreate={({ ref }) => {
             ref.rotateZ(-90 * DEG2RAD)
           }}
         />
@@ -64,7 +64,7 @@
   <T.Mesh position.z={size / 2}>
     <T.CylinderGeometry
       args={[thickness, thickness, size]}
-      on:create={({ ref }) => {
+      oncreate={({ ref }) => {
         ref.rotateX(90 * DEG2RAD)
       }}
     />
@@ -74,7 +74,7 @@
       <T.Mesh position.z={size / 2 + thickness * 3}>
         <T.ConeGeometry
           args={[thickness * 3, thickness * 6]}
-          on:create={({ ref }) => {
+          oncreate={({ ref }) => {
             ref.rotateX(90 * DEG2RAD)
           }}
         />

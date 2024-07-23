@@ -8,28 +8,30 @@ This is an adaption of Three.js [own documentation](https://threejs.org/docs/#ap
 
 1. First `<T>` creates the geometry and material
 2. Then it attaches those to the mesh
-3. `on:create` will run later, but we remember to use a reference to the mesh itself `ref` and a reference `lod` to the parent LOD object.
+3. `oncreate` will run later, but we remember to use a reference to the mesh itself `ref` and a reference `lod` to the parent LOD object.
 
 ... which happens 3 times due to the `#each` block
 
 ```svelte
-<T.LOD let:ref={lod}>
-  {#each ['red', 'green', 'blue'] as color, i}
-    <T.Mesh
-      on:create={({ ref }) => {
-        lod.addLevel(ref, i * 75) // i * 75 = distance
-      }}
-    >
-      <T.IcosahedronGeometry args={[10, 3 - i]} />
-      <T.MeshStandardMaterial
-        {color}
-        wireframe
-      />
-    </T.Mesh>
-  {/each}
+<T.LOD>
+  {#snippet children({ ref: lod })}
+    {#each ['red', 'green', 'blue'] as color, i}
+      <T.Mesh
+        oncreate={({ ref }) => {
+          lod.addLevel(ref, i * 75) // i * 75 = distance
+        }}
+      >
+        <T.IcosahedronGeometry args={[10, 3 - i]} />
+        <T.MeshStandardMaterial
+          {color}
+          wireframe
+        />
+      </T.Mesh>
+    {/each}
+  {/snippet}
 </T.LOD>
 ```
 
 5. `<T>` now creates the LOD parent and internally calls the three.js function `lod.add(child)` on each mesh, since they are defined inside the `<T.LOD>` object.
 6. However, in three.js we need the `lod.addLevel(child, distance)` as well to register the children as LOD levels and not just attached children.
-7. This is where our `on:create` function comes in - upon creation of each mesh, we are able to call `lod.addLevel(child, distance)`
+7. This is where our `oncreate` function comes in - upon creation of each mesh, we are able to call `lod.addLevel(child, distance)`

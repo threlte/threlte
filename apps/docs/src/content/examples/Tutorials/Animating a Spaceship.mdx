@@ -25,8 +25,7 @@ This tutorial demonstrates how to load and animate a spaceship model, as well as
 The second part of the tutorial focuses on applying a spring-based animation to the spaceship model by
 leveraging `useFrame`, a Threlte 6 hook used to run a callback on every frame.
 Threlte 7 improved the task scheduling API by introducing [useTask](/docs/reference/core/use-task),
-for newer Threlte projects it's recommended to replace the `useFrame` line shown in the video
-with the updated API.
+as of Threlte 8 `useFrame` has been removed and should be replaced.
 
 ```ts title="Threlte 6"
 useFrame(() => {

@@ -62,6 +62,7 @@ export const referenceCategories = [
   '@threlte/gltf',
   '@threlte/xr',
   '@threlte/flex',
+  '@threlte/studio',
   'Documentation'
 ] as const
 

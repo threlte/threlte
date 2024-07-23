@@ -1,5 +1,94 @@
 # @threlte/core
 
+## 8.0.0-next.13
+
+### Patch Changes
+
+- c12ff98: Fix event cleanup of <T>
+
+## 8.0.0-next.12
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 8.0.0-next.11
+
+### Major Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 8.0.0-next.10
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+- 81e354d: Remove deprecated event handling from export
+
+## 8.0.0-next.9
+
+### Patch Changes
+
+- a8f7cc0: Expose fragment contexts
+- d36f77f: fix: Set `started` store of `useTask` correctly
+- 4154987: Added toCurrentReadable to storeUtils
+- 790794d: Add HUD component and useViewport hook
+
+## 8.0.0-next.8
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 8.0.0-next.7
+
+### Patch Changes
+
+- c53d7a9: Split out contexts by domain
+
+## 8.0.0-next.6
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 8.0.0-next.5
+
+### Patch Changes
+
+- 2ccf508: Remove userSize canvas prop
+- 750550b: Remove useLegacyLights prop
+
+## 8.0.0-next.4
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
+## 8.0.0-next.3
+
+### Patch Changes
+
+- ccafaaa: Fix renderer resize flickering
+
+## 8.0.0-next.2
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 8.0.0-next.1
+
+### Patch Changes
+
+- 45fae01: Granular updates on T
+
+## 8.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 7.3.1
 
 ### Patch Changes

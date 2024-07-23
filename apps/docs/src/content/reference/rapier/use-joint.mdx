@@ -10,19 +10,19 @@ Use this hook to initialize any [Rapier joint](https://rapier.rs/docs/user_guide
 
 <Tip type="tip">
   This example initializes a `RevoluteImpulseJoint` manually. Most of the times you'd want to use a
-  shortcut hook (like ['useRevoluteJoint'](/docs/reference/rapier/use-revolute-joint)) to initialize a joint. This
-  hook is used internally to initialize the currently available joints.
+  shortcut hook (like ['useRevoluteJoint'](/docs/reference/rapier/use-revolute-joint)) to initialize
+  a joint. This hook is used internally to initialize the currently available joints.
 </Tip>
 
 ```svelte
 <script>
-	import { useJoint, RigidBody, Collider } from '@threlte/rapier'
+  import { useJoint, RigidBody, Collider } from '@threlte/rapier'
 
-	const { joint, rigidBodyA, rigidBodyB } = useJoint((rbA, rbB, { world, rapier }) => {
+  const { joint, rigidBodyA, rigidBodyB } = useJoint((rbA, rbB, { world, rapier }) => {
     const params = rapier.JointData.revolute(
       { x: 0, y: 10, z: 1 },
       { x: 0, y: 0, z: 0 },
-      { x: 0 y: 1, z: 0 }
+      { x: 0, y: 1, z: 0 }
     )
     return world.createImpulseJoint(params, rbA, rbB, true)
   })

@@ -8,60 +8,60 @@ import fragmentShader from './noise.glsl?raw'
  */
 
 export class StaticNoiseEffect extends Effect {
-	/**
-	 * Constructs a new noise effect.
-	 *
-	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input colors prior to blending.
-	 */
+  /**
+   * Constructs a new noise effect.
+   *
+   * @param {Object} [options] - The options.
+   * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+   * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input colors prior to blending.
+   */
 
-	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
-		super('NoiseEffect', fragmentShader, { blendFunction })
-		this.premultiply = premultiply
-	}
+  constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
+    super('NoiseEffect', fragmentShader, { blendFunction })
+    this.premultiply = premultiply
+  }
 
-	/**
-	 * Indicates whether noise will be multiplied with the input colors prior to blending.
-	 *
-	 * @type {Boolean}
-	 */
+  /**
+   * Indicates whether noise will be multiplied with the input colors prior to blending.
+   *
+   * @type {Boolean}
+   */
 
-	get premultiply() {
-		return this.defines.has('PREMULTIPLY')
-	}
+  get premultiply() {
+    return this.defines.has('PREMULTIPLY')
+  }
 
-	set premultiply(value) {
-		if (this.premultiply !== value) {
-			if (value) {
-				this.defines.set('PREMULTIPLY', '1')
-			} else {
-				this.defines.delete('PREMULTIPLY')
-			}
+  set premultiply(value) {
+    if (this.premultiply !== value) {
+      if (value) {
+        this.defines.set('PREMULTIPLY', '1')
+      } else {
+        this.defines.delete('PREMULTIPLY')
+      }
 
-			this.setChanged()
-		}
-	}
+      this.setChanged()
+    }
+  }
 
-	/**
-	 * Indicates whether noise will be multiplied with the input colors prior to blending.
-	 *
-	 * @deprecated Use premultiply instead.
-	 * @return {Boolean} Whether noise is premultiplied.
-	 */
+  /**
+   * Indicates whether noise will be multiplied with the input colors prior to blending.
+   *
+   * @deprecated Use premultiply instead.
+   * @return {Boolean} Whether noise is premultiplied.
+   */
 
-	isPremultiplied() {
-		return this.premultiply
-	}
+  isPremultiplied() {
+    return this.premultiply
+  }
 
-	/**
-	 * Controls whether noise should be multiplied with the input colors prior to blending.
-	 *
-	 * @deprecated Use premultiply instead.
-	 * @param {Boolean} value - Whether noise should be premultiplied.
-	 */
+  /**
+   * Controls whether noise should be multiplied with the input colors prior to blending.
+   *
+   * @deprecated Use premultiply instead.
+   * @param {Boolean} value - Whether noise should be premultiplied.
+   */
 
-	setPremultiplied(value) {
-		this.premultiply = value
-	}
+  setPremultiplied(value) {
+    this.premultiply = value
+  }
 }

@@ -1,14 +1,12 @@
-import { Raycaster } from 'three'
 import { currentWritable, watch } from '@threlte/core'
 import {
-  setTeleportContext,
-  getTeleportContext,
+  createTeleportContext,
+  useTeleportControls,
   type ComputeFunction,
   getHandContext,
   type HandContext
 } from './context'
 import { injectTeleportControlsPlugin } from './plugin'
-import { defaultComputeFunction } from './compute'
 import { setHandContext } from './context'
 import { setupTeleportControls } from './setup'
 import { teleportState } from '../../internal/stores'
@@ -35,20 +33,13 @@ export const teleportControls = (
   handedness: 'left' | 'right',
   options?: TeleportControlsOptions
 ) => {
-  if (getTeleportContext() === undefined) {
+  if (useTeleportControls() === undefined) {
     injectTeleportControlsPlugin()
 
-    setTeleportContext({
-      interactiveObjects: [],
-      surfaces: new Map(),
-      blockers: new Map(),
-      dispatchers: new WeakMap(),
-      raycaster: new Raycaster(),
-      compute: options?.compute ?? defaultComputeFunction
-    })
+    createTeleportContext(options?.compute)
   }
 
-  const context = getTeleportContext()
+  const context = useTeleportControls()
 
   if (getHandContext(handedness) === undefined) {
     const enabled = options?.enabled ?? true

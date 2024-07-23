@@ -84,7 +84,7 @@
   <T
     dispose={false}
     is={$splats[0]}
-    on:create={() => {
+    oncreate={() => {
       start()
     }}
     {...$$restProps}

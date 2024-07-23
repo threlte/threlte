@@ -1,5 +1,59 @@
 # @threlte/extras
 
+## 3.0.0-next.8
+
+### Patch Changes
+
+- 98a9bec: Fix rigidbody syncing for varying framerates
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.5
+
+### Major Changes
+
+- da6742c: Fixed Frame Physics, two-Stage system to manage simulation and synchronization)
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- c53d7a9: Replace fallback slots with snippets
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { T, useFrame } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
 
   let rotation = 0
-  useFrame(() => {
+  useTask(() => {
     rotation += 0.001
   })
 </script>
@@ -12,7 +12,7 @@
     makeDefault
     position={[-10, 10, 10]}
     fov={15}
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(0, 1, 0)
     }}
   />

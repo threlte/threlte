@@ -48,6 +48,7 @@
 />
 
 <ContactShadows
+  frames={200}
   scale={10}
   blur={2}
   far={2.5}

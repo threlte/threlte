@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { GLTF } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { MathUtils } from 'three'
 
   let rotation = 0
 
@@ -16,7 +16,7 @@
     zoom={80}
     position={[0, 5, 10]}
     makeDefault
-    on:create={({ ref }) => {
+    oncreate={({ ref }) => {
       ref.lookAt(0, 2, 0)
     }}
   />
@@ -31,7 +31,7 @@
 
 <T.Mesh
   receiveShadow
-  rotation.x={DEG2RAD * -90}
+  rotation.x={MathUtils.DEG2RAD * -90}
 >
   <T.CircleGeometry args={[4, 60]} />
   <T.MeshStandardMaterial />

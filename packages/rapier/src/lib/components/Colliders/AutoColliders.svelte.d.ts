@@ -1,7 +1,7 @@
 import type { CoefficientCombineRule, Collider } from '@dimforge/rapier3d-compat'
-import { SvelteComponent } from 'svelte'
+import { SvelteComponent, type Snippet } from 'svelte'
 import type { Euler, Vector3 } from 'three'
-import type { AutoCollidersShapes, ColliderEventMap } from '../../types/types'
+import type { AutoCollidersShapes, ColliderEvents } from '../../types/types'
 
 // ------------------ BASE ------------------
 
@@ -14,7 +14,10 @@ type BaseProps = {
   sensor?: boolean
   colliders?: Collider[]
   contactForceEventThreshold?: number
+
   refresh?: () => void
+
+  oncreate?: () => void
 }
 
 // ------------------ MASS ------------------
@@ -64,17 +67,18 @@ type MassProps<TMassDef extends MassDef> = TMassDef extends Density
 
 // ------------------ COLLIDER ------------------
 
-export type AutoCollidersProps<TMassDef extends MassDef> = BaseProps & MassProps<TMassDef>
-
-type AutoCollidersSlots = {
-  default: {
-    colliders: Collider[]
-    refresh: () => void
+export type AutoCollidersProps<TMassDef extends MassDef> = BaseProps &
+  MassProps<TMassDef> & {
+    children?: Snippet<
+      [
+        {
+          colliders: Collider[]
+          refresh: () => void
+        }
+      ]
+    >
   }
-}
 
 export default class AutoColliders<TMassDef extends MassDef> extends SvelteComponent<
-  AutoCollidersProps<TMassDef>,
-  ColliderEventMap,
-  AutoCollidersSlots
+  AutoCollidersProps<TMassDef>
 > {}

@@ -1,15 +1,14 @@
 <script lang="ts">
+  import type { Mesh } from 'three'
   import { useThrelte } from '@threlte/core'
-  import { transitions, useGltf, useTexture } from '@threlte/extras'
-  import { Theatre } from '@threlte/theatre'
+  import { useGltf, useTexture } from '@threlte/extras'
   import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
   import Scene from './Scene.svelte'
   import { cubeGeometry } from './state'
-  import state from './state.json'
 
   type CubeGltf = {
     nodes: {
-      Cube: THREE.Mesh
+      Cube: Mesh
     }
     materials: {}
   }
@@ -24,9 +23,8 @@
     $env.mapping = EquirectangularReflectionMapping
     $env.colorSpace = SRGBColorSpace
     scene.environment = $env
+    scene.environmentIntensity = 10
   }
-
-  transitions()
 </script>
 
 {#if $cubeGeometry && $env}

@@ -1,4 +1,4 @@
-import type { Events, Props, Slots } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 import type { Points } from 'three'
 
@@ -14,7 +14,4 @@ export type StarsProps = Props<Points> & {
   opacity?: number
 }
 
-export type StarsEvents = Events<Points>
-export type StarsSlots = Slots<Points>
-
-export default class Stars extends SvelteComponent<StarsProps, StarsEvents, StarsSlots> {}
+export default class Stars extends SvelteComponent<StarsProps> {}

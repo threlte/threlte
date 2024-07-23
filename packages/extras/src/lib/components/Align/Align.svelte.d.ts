@@ -1,8 +1,8 @@
-import type { Events, Props, Slots } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
+import type { SvelteComponent, Snippet } from 'svelte'
 import type { Box3, Group, Object3D, Sphere, Vector3 } from 'three'
 
-export type AlignProps = Props<Group> & {
+export interface AlignProps extends Omit<Props<Group>, 'children'> {
   /** Align the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. */
   x?: false | number
   /** Align the object on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. */
@@ -15,6 +15,11 @@ export type AlignProps = Props<Group> & {
   align?: () => void
   /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
   auto?: boolean
+
+  /** The objects to algin. */
+  children: Snippet<[{ align: () => void; ref: Group }]>
+
+  onalign?: (event: AlignEventData) => void
 }
 
 type AlignEventData = {
@@ -34,14 +39,4 @@ type AlignEventData = {
   depthAlignment: number
 }
 
-export type AlignEvents = Events<Group> & {
-  align: AlignEventData
-}
-
-export type AlignSlots = Slots<Group> & {
-  default: {
-    align: () => void
-  }
-}
-
-export default class Align extends SvelteComponent<AlignProps, AlignEvents, AlignSlots> {}
+export default class Align extends SvelteComponent<AlignProps> {}

@@ -46,7 +46,7 @@
 <T.Mesh
   {geometry}
   rotation.x={DEG2RAD * -90}
-  on:click={({ point }) => {
+  onclick={({ point }) => {
     pulsePosition.set(point.x, point.y, point.z)
     pulseTimer.set(0, {
       duration: 0
