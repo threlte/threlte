@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.11.5
+
+### Patch Changes
+
+- 25f7e6b: Update vertex.ts to fix ERROR: 0:167: 'isPerspectiveMatrix' : no matching overloaded function found
+
 ## 8.11.4
 
 ### Patch Changes
