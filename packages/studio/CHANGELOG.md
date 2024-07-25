@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.9
+
+### Minor Changes
+
+- dc42a73: Fix: Export vite plugin from '@threlte/studio/vite'
+
 ## 0.1.0-next.8
 
 ### Patch Changes
