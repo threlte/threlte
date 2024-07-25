@@ -62,6 +62,10 @@
     "./extend": {
       "types": "./src/lib/extend.ts",
       "svelte": "./src/lib/extend.ts"
+    },
+    "./vite": {
+      "types": "./src/lib/vite.ts",
+      "svelte": "./src/lib/vite.ts"
     }
   },
   "types": "./src/lib/index.ts",
@@ -87,6 +91,11 @@
         "types": "./dist/extend.d.ts",
         "import": "./dist/extend.js",
         "svelte": "./dist/extend.js"
+      },
+      "./vite": {
+        "types": "./dist/vite.d.ts",
+        "import": "./dist/vite.js",
+        "svelte": "./dist/vite.js"
       }
     }
   },
