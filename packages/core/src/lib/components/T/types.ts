@@ -1,5 +1,19 @@
-import type { ConditionalKeys, Primitive } from 'type-fest'
 import type { Snippet } from 'svelte'
+
+/** Inlined from type-fest */
+type ConditionalKeys<Base, Condition> = {
+  // Map through all the keys of the given base type.
+  [Key in keyof Base]-?: Base[Key] extends Condition // Pick only keys with types extending the given `Condition` type.
+    ? // Retain this key since the condition passes.
+      Key
+    : // Discard this key since the condition fails.
+      never
+
+  // Convert the produced object into a union type of the keys which passed the conditional test.
+}[keyof Base]
+
+/** Inlined from type-fest */
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
 
 /**
  * We hold a list of prop keys that should be ommited from the object props

@@ -37,7 +37,6 @@
     "svelte2tsx": "^0.7.6",
     "three": "^0.166.1",
     "tslib": "^2.6.2",
-    "type-fest": "^4.15.0",
     "typescript": "^5.4.5",
     "vite": "^5.2.8"
   },

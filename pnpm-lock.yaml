@@ -310,9 +310,6 @@ importers:
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
-      type-fest:
-        specifier: ^4.15.0
-        version: 4.15.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
