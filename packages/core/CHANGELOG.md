@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.14
+
+### Patch Changes
+
+- 6aced15: Fix types of component exports
+
 ## 8.0.0-next.13
 
 ### Patch Changes
