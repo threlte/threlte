@@ -1,4 +1,4 @@
-import type { Snippet, SvelteComponent } from 'svelte'
+import type { Snippet, Component } from 'svelte'
 import type { Object3D } from 'three'
 
 export type HierarchicalObjectProperties = {
@@ -8,4 +8,5 @@ export type HierarchicalObjectProperties = {
   children: Snippet
 }
 
-export default class HierarchicalObject extends SvelteComponent<HierarchicalObjectProperties> {}
+declare const HierarchicalObject: Component<HierarchicalObjectProperties>
+export default HierarchicalObject

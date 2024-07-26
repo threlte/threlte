@@ -1,4 +1,4 @@
-import type { SvelteComponent } from 'svelte'
+import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
 import type { Props } from './types'
@@ -68,5 +68,5 @@ export const T = new Proxy(function () {}, {
     return TComp
   }
 }) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: typeof SvelteComponent<Props<(typeof THREE)[Key]>>
-} & Record<string, typeof SvelteComponent>
+  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>>
+} & Record<string, Component>

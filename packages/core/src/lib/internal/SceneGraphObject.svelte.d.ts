@@ -1,4 +1,4 @@
-import type { Snippet, SvelteComponent } from 'svelte'
+import type { Snippet, Component } from 'svelte'
 import type { Object3D } from 'three'
 
 export type SceneGraphObjectProperties = {
@@ -6,4 +6,5 @@ export type SceneGraphObjectProperties = {
   children: Snippet
 }
 
-export default class SceneGraphObject extends SvelteComponent<SceneGraphObjectProperties> {}
+declare const SceneGraphObject: Component<SceneGraphObjectProperties>
+export default SceneGraphObject

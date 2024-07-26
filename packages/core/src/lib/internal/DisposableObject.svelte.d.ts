@@ -1,4 +1,4 @@
-import type { SvelteComponent, Snippet } from 'svelte'
+import type { Component, Snippet } from 'svelte'
 import type { DisposableThreeObject } from '../types'
 
 export type DisposableObjectProperties = {
@@ -7,4 +7,5 @@ export type DisposableObjectProperties = {
   children?: Snippet
 }
 
-export default class DisposableObject extends SvelteComponent<DisposableObjectProperties> {}
+declare const DisposableObject: Component<DisposableObjectProperties>
+export default DisposableObject
