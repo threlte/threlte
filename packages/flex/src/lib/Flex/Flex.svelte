@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { loadYoga, type Yoga } from 'yoga-layout'
+  import { loadYoga, type Yoga } from 'yoga-layout/load'
   import type { FlexProps } from './Flex.svelte'
   import InnerFlex from './InnerFlex.svelte'
 
