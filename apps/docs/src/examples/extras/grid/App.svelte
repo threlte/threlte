@@ -210,12 +210,7 @@
 
 <div>
   <Canvas>
-    <Gizmo
-      horizontalPlacement="left"
-      size={70}
-      paddingX={10}
-      paddingY={10}
-    />
+    <Gizmo horizontalPlacement="left" />
     {#if gridGeometry == 'Terrain'}
       <Grid
         position.y={-2}
