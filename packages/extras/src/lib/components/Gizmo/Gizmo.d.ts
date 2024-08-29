@@ -18,6 +18,9 @@ export type GizmoProps = {
   toneMapped?: boolean
   paddingX?: number
   paddingY?: number
+	yLabel?: 'Y'
+	xLabel?: 'X'
+	zLabel?: 'Z'
 }
 
 export type GizmoEvents = Record<string, never>
