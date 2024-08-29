@@ -311,7 +311,7 @@ The following attaches a material to the material property of a mesh and a geome
 </T>
 ```
 
-- `attach` can also be a function which is called on mounting with the parent and the value inferred from the property `is`. It can return a cleanup function which is called `onDestroy`:
+- `attach` can also be a function which is called on mounting with the parent and the value inferred from the property `is`. It can return a function which is called `onDestroy`:
 
 ```svelte
 <T is={DirectionalLight}>
@@ -380,18 +380,18 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 
 All `<T>` components also emit the `create` event when the underlying three.js class instance is created.
 This can be used to access the instance from the parent component or do tasks on the objects upon creation.
-The event handler is called with an object containing a reference to the object as well as a function `cleanup`
-that you may invoke with a callback to clean up after the object is destroyed when the component unmounts or the `args` change.
+The event handler is called with an object containing a reference to the object.
+You may return a callback that will run after the object is destroyed when the component unmounts or the `args` change.
 
 ```svelte
 <T.PerspectiveCamera
-  oncreate={({ ref, cleanup }) => {
+  oncreate={(ref) => {
     // Look at the center
     ref.lookAt(0, 0, 0)
 
-    cleanup(() => {
+    return () => {
       // Do something when the camera is disposed
-    })
+    }
   }}
 />
 ```

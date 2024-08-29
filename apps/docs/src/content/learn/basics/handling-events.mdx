@@ -19,15 +19,15 @@ The `create` event is triggered when the underlying three.js object is created i
 ```svelte title="Scene.svelte"
 <T.PerspectiveCamera
   makeDefault
-  oncreate={({ ref, cleanup }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 0, 0)
 
-    // provide a cleanup function that is called
+    // return a cleanup function that will be called
     // when the component is destroyed or `ref`
     // changes because different `args` are passed.
-    cleanup(() => {
+    return () => {
       console.log('cleanup')
-    })
+    }
   }}
 />
 ```

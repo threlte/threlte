@@ -26,6 +26,22 @@ Events will no longer work, and have been replaced with callback props.
 </T.Mesh>
 ```
 
+The signature of the `oncreate` callback prop has changed. Instead of receiving an object with a cleanup function,
+you may now return a cleanup function that will run when the object is destroyed or its args change. This is more in-line with other apis in svelte 5 and threlte.
+
+```svelte
+<T.Mesh
+  oncreate={(ref) => {
+    return () => {
+      console.log('cleanup')
+    }
+  }}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
 The `createRawEventDispatcher` and `forwardEventHandlers` exports will no longer work.
 
 Instead of dispatching events with `createRawEventDispatcher`, invoke callback props.
