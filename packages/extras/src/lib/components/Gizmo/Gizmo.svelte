@@ -332,7 +332,7 @@
       userData.targetEuler={[0, Math.PI * 0.5, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, xColor, 'X')}
+        map={getSpriteTexture(textureSize, xColor, '${xLabel}')}
         opacity={p[0] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
@@ -374,7 +374,7 @@
       userData.targetEuler={[-Math.PI * 0.5, 0, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, yColor, 'Y')}
+        map={getSpriteTexture(textureSize, yColor, '${yLabel}')}
         opacity={p[1] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
@@ -417,7 +417,7 @@
       userData.targetEuler={[0, 0, 0]}
     >
       <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, zColor, 'Z')}
+        map={getSpriteTexture(textureSize, zColor, '${zLabel})}
         opacity={p[2] >= 0 ? 1 : 0.5}
       />
     </T.Sprite>
