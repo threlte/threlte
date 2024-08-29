@@ -24,6 +24,10 @@
   let size = 128
   let paddingX = 20
   let paddingY = 20
+  let zLabel = 'z'
+  let yLabel = 'y'
+  let xLabel = 'x'
+
 
   let orbitControls: ThreeOrbitControls
   let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
@@ -134,6 +138,9 @@
       {size}
       {paddingX}
       {paddingY}
+      {zLabel}
+      {yLabel}
+      {xLabel}
     />
   </Canvas>
 </div>
