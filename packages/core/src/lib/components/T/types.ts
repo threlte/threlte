@@ -173,7 +173,4 @@ export type ObjectEvents<Type> =
       }
     : Record<string, unknown>
 
-export type CreateEvent<Type> = (event: {
-  ref: MaybeInstance<Type>
-  cleanup: (callback: () => void) => void
-}) => void
+export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void

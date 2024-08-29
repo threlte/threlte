@@ -14,12 +14,10 @@ export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
     // clear the cleanup functions array
     cleanupFunctions.length = 0
 
-    const cleanup = (callback: () => void) => {
-      // add cleanup function to array
-      cleanupFunctions.push(callback)
+    const cleanup = oncreate?.(ref)
+    if (cleanup !== undefined) {
+      cleanupFunctions.push(cleanup)
     }
-
-    oncreate?.({ ref, cleanup })
   }
 
   const updateRef = (newRef: T) => {
