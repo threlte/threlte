@@ -38,6 +38,9 @@
   export let toneMapped: Required<$$Props>['toneMapped'] = false
   export let paddingX: Required<$$Props>['paddingX'] = 0
   export let paddingY: Required<$$Props>['paddingY'] = 0
+  export let xLabel: Required<$$Props>['xLabel'] = 'X'
+  export let yLabel: Required<$$Props>['yLabel'] = 'Y'
+  export let zLabel: Required<$$Props>['zLabel'] = 'Z'
 
   $: centerVec = new Vector3(...center)
 
