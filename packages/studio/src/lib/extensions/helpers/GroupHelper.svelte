@@ -55,16 +55,18 @@
     type Object3D
   } from 'three'
 
-  export let onCreate: (e: {
-    ref: Object3D
-    cleanup: (callback: () => void) => void
-  }) => void = () => {}
+	type Props = {
+		oncreate: (ref: Object3D) => (() => void) | void
+	}
+
+	let { oncreate }: Props = $props()
 
   const points = new Points(geometry, material)
 </script>
 
 <T
-  oncreate={onCreate}
+  oncreate={oncreate}
   is={points}
   userData={{ ignoreOverrideMaterial: true }}
 />
+

@@ -17,7 +17,7 @@
   position={[-40, 25, 40]}
   makeDefault
   {zoom}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 0, -8)
   }}
 />
@@ -36,7 +36,7 @@
       color="white"
       anchorX="50%"
       anchorY="50%"
-      oncreate={({ ref }) => {
+      oncreate={(ref) => {
         ref.lookAt(-40, 25, 40)
       }}
     />
@@ -50,7 +50,7 @@
       color="white"
       anchorX="50%"
       anchorY="50%"
-      oncreate={({ ref }) => {
+      oncreate={(ref) => {
         ref.lookAt(-40, 25, 40)
       }}
     />

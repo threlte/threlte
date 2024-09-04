@@ -57,7 +57,7 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    oncreate={({ ref }) => ref.rotateX(-Math.PI / 2)}
+    oncreate={(ref) => ref.rotateX(-Math.PI / 2)}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>
@@ -68,7 +68,7 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    oncreate={({ ref }) => ref.rotateX(-Math.PI / 2)}
+    oncreate={(ref) => ref.rotateX(-Math.PI / 2)}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>

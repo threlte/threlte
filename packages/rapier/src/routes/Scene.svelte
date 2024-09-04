@@ -35,7 +35,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={(ref) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Group position={[0, 0, -0.2]}>

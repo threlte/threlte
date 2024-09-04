@@ -42,7 +42,7 @@
   <T.Mesh
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    oncreate={({ ref }) => (sabers.left = ref)}
+    oncreate={(ref) => (sabers.left = ref)}
   >
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshPhongMaterial color="red" />
@@ -53,7 +53,7 @@
   <T.Mesh
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    oncreate={({ ref }) => (sabers.right = ref)}
+    oncreate={(ref) => (sabers.right = ref)}
   >
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
     <T.MeshStandardMaterial
@@ -68,7 +68,7 @@
     <T.Mesh
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      oncreate={({ ref }) => (handSabers.left = ref)}
+      oncreate={(ref) => (handSabers.left = ref)}
     >
       <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
       <T.MeshStandardMaterial
@@ -84,7 +84,7 @@
     <T.Mesh
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      oncreate={({ ref }) => (handSabers.right = ref)}
+      oncreate={(ref) => (handSabers.right = ref)}
     >
       <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
       <T.MeshPhongMaterial color="red" />

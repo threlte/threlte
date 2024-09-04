@@ -56,13 +56,13 @@
     }
   )
 
-  const onCreate = (args: { ref: Object3D; cleanup: (callback: () => void) => void }) => {
-    addObject(args.ref)
-    activeHelpers.add(args.ref)
-    args.cleanup(() => {
-      removeObject(args.ref)
-      activeHelpers.delete(args.ref)
-    })
+  const onCreate = (ref: Object3D): () => void => {
+    addObject(ref)
+    activeHelpers.add(ref)
+		return () => {
+			removeObject(ref)
+			activeHelpers.delete(ref)
+		}
   }
 
   const isCamera = (object: any): object is Camera => {
@@ -119,7 +119,7 @@
       />
 
       {#if isGroup(object)}
-        <GroupHelper {onCreate} />
+        <GroupHelper oncreate={onCreate} />
       {/if}
     </Mounter>
 

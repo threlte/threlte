@@ -28,7 +28,7 @@
   position={[10, 5, 10]}
   makeDefault
   fov={30}
-  oncreate={({ ref }) => ref.lookAt(0, 0.75, 0)}
+  oncreate={(ref) => ref.lookAt(0, 0.75, 0)}
 >
   <OrbitControls
     target.y={0.75}

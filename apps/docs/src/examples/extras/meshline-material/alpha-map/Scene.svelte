@@ -51,7 +51,7 @@
 
 <T.PerspectiveCamera
   makeDefault
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.position.set(0, 3, 10)
   }}
 >

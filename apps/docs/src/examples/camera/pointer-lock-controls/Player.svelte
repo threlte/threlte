@@ -101,7 +101,7 @@
     position.x={position[0]}
     position.y={position[1]}
     position.z={position[2]}
-    oncreate={({ ref }) => {
+    oncreate={(ref) => {
       ref.lookAt(new Vector3(0, 2, 0))
     }}
   >
