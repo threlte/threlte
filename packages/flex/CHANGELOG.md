@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.6
+
+### Minor Changes
+
+- 811ce98: bump Yoga 2.0 > Yoga 3.1
+
 ## 2.0.0-next.5
 
 ### Patch Changes

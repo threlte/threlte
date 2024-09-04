@@ -1,5 +1,11 @@
 # create-threlte
 
+## 2.1.0-next.1
+
+### Minor Changes
+
+- 98b9789: Adapt oncreate API design
+
 ## 2.0.2-next.0
 
 ### Patch Changes

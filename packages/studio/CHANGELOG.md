@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.10
+
+### Patch Changes
+
+- 98b9789: Adapt oncreate API design
+
 ## 0.1.0-next.9
 
 ### Minor Changes
