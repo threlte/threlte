@@ -7,16 +7,15 @@
   import { fade } from 'svelte/transition'
   import type { Snippet } from 'svelte'
 
-
   interface Props {
-    filePaths: string[];
-    hidePreview: boolean;
-    showFile: string | null;
-    expanded?: boolean;
-		children: Snippet
+    filePaths: string[]
+    hidePreview: boolean
+    showFile: string | null
+    expanded?: boolean
+    children: Snippet
   }
 
-  let { filePaths, hidePreview, showFile, children, expanded = $bindable(false) }: Props = $props();
+  let { filePaths, hidePreview, showFile, children, expanded = $bindable(false) }: Props = $props()
 
   let childrenElements: HTMLElement[] = $state([])
 

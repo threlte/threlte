@@ -20,7 +20,7 @@ interface Props {
 const allModules = import.meta.glob('../../examples/**/*', {
   query: '?raw',
   eager: true,
-	import: 'default'
+  import: 'default'
 }) as Record<string, string>
 
 for (const path in allModules) {
