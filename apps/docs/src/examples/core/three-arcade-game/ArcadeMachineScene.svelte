@@ -250,7 +250,7 @@
 />
 
 <T.Scene
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     arcadeMachineScene.set(ref)
   }}
   background={new Color(0x020203)}
@@ -261,7 +261,7 @@
   />
 
   <T.Object3D
-    oncreate={({ ref }) => {
+    oncreate={(ref) => {
       cameraTarget = ref
     }}
     position.x={$cameraTargetPos.x}
@@ -286,7 +286,7 @@
       position.z={$cameraPos.z}
       fov={30}
       makeDefault
-      oncreate={({ ref }) => {
+      oncreate={(ref) => {
         camera = ref
       }}
     />

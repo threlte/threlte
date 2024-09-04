@@ -12,7 +12,7 @@
     makeDefault
     position={[-10, 10, 10]}
     fov={15}
-    oncreate={({ ref }) => {
+    oncreate={(ref) => {
       ref.lookAt(0, 1, 0)
     }}
   />

@@ -54,7 +54,7 @@
       makeDefault
       position.y={1.8}
       position.z={1.5}
-      oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
+      oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
     >
       <OrbitControls
         target={[0, 1.8, 0]}

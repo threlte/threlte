@@ -24,7 +24,7 @@
   {#snippet children({ ref: lod })}
     {#each ['red', 'green', 'blue'] as color, i}
       <T.Group
-        oncreate={({ ref }) => {
+        oncreate={(ref) => {
           lod.addLevel(ref, i * 75)
         }}
       >

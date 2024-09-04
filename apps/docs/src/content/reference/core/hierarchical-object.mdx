@@ -75,9 +75,9 @@ Sometimes you need to add a component as a child to another object than its pare
 >
   <T
     is={TransformControls}
-    oncreate={({ ref, cleanup }) => {
+    oncreate={(ref) => {
       ref.attach($otherMesh)
-      cleanup(ref.detach)
+      return ref.detach
     }}
   />
 </HierarchicalObject>

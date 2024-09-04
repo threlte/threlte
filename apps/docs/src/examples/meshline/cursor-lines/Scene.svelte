@@ -24,7 +24,7 @@
   zoom={50}
   makeDefault
   position.y={10}
-  oncreate={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={(ref) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Mesh

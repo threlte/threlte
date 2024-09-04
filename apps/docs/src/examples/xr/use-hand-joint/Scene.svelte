@@ -49,7 +49,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[0, 1, 1]}
-  oncreate={({ ref }) => ref.lookAt(0, 1.8, 0)}
+  oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
 />
 
 <T.AmbientLight />

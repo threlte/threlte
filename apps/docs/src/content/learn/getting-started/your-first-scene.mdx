@@ -246,7 +246,7 @@ We're still staring at the side of a cube, let's add a camera and offset it from
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -298,7 +298,7 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -367,7 +367,7 @@ cube rotate around its y-axis.
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -418,7 +418,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 1, 0)
   }}
 />
@@ -468,7 +468,7 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 10, 10]}
-  oncreate={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 1, 0)
   }}
 />

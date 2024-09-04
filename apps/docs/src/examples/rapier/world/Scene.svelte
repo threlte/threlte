@@ -49,7 +49,7 @@
       makeDefault
       {zoom}
       position={[50, 50, 30]}
-      oncreate={({ ref }) => {
+      oncreate={(ref) => {
         ref.lookAt(target.getWorldPosition(new Vector3()))
       }}
     />

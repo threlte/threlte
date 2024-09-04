@@ -17,7 +17,7 @@ This is an adaption of Three.js [own documentation](https://threejs.org/docs/#ap
   {#snippet children({ ref: lod })}
     {#each ['red', 'green', 'blue'] as color, i}
       <T.Mesh
-        oncreate={({ ref }) => {
+        oncreate={(ref) => {
           lod.addLevel(ref, i * 75) // i * 75 = distance
         }}
       >
