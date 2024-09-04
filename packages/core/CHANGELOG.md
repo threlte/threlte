@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.15
+
+### Patch Changes
+
+- 7051420: Inline type-fest types
+
 ## 8.0.0-next.14
 
 ### Patch Changes

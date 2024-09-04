@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "mitt": "^3.0.1",
-    "yoga-layout": "^2.0.1"
+    "yoga-layout": "^3.1.0"
   },
   "peerDependencies": {
     "svelte": ">=5",
