@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.16
+
+### Major Changes
+
+- 98b9789: Change oncreate API to return a cleanup function instead of passing it to a function argument
+
 ## 8.0.0-next.15
 
 ### Patch Changes
