@@ -31,8 +31,7 @@
 
 <Gizmo
   horizontalPlacement="left"
-  paddingX={20}
-  paddingY={20}
+  disabled
 />
 
 <T.DirectionalLight

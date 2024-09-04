@@ -31,11 +31,7 @@
   />
 </T.PerspectiveCamera>
 
-<Gizmo
-  horizontalPlacement="left"
-  paddingX={20}
-  paddingY={20}
-/>
+<Gizmo horizontalPlacement="left" />
 
 <T.DirectionalLight
   position.y={10}
