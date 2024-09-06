@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    T,
-    HierarchicalObject,
-    createSceneContext,
-    createCameraContext,
-    useThrelte
-  } from '@threlte/core'
+  import { T, createCameraContext, createSceneContext, useThrelte } from '@threlte/core'
   import type { HUDProps } from './HUD.svelte'
 
   const { scene } = createSceneContext()
@@ -44,11 +38,10 @@
   })
 </script>
 
-<HierarchicalObject>
-  <T
-    is={scene}
-    bind:ref
-  >
-    {@render children?.({ ref: scene })}
-  </T>
-</HierarchicalObject>
+<T
+  is={scene}
+  attach={false}
+  bind:ref
+>
+  {@render children?.({ ref: scene })}
+</T>

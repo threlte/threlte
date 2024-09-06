@@ -1,4 +1,5 @@
 import type { Snippet } from 'svelte'
+import type { Object3D } from 'three'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -54,7 +55,11 @@ export type AnyProps = Record<string, any>
  * ### Base Props
  */
 export type BaseProps<Type> = {
-  attach?: string | ((parent: unknown, self: MaybeInstance<Type>) => (() => void) | void)
+  attach?:
+    | string
+    | Object3D
+    | ((args: { ref: Type; parent: unknown }) => void | (() => void))
+    | false
 
   children?: Snippet<[{ ref: MaybeInstance<Type> }]>
 

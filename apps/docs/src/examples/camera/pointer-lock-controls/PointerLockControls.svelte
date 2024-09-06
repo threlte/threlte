@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Euler, Camera, PerspectiveCamera } from 'three'
-  import { useThrelte, useParent } from '@threlte/core'
+  import { Camera, Euler } from 'three'
 
   // Set to constrain the pitch of the camera
   // Range is 0 to Math.PI radians
@@ -17,10 +17,7 @@
   const { renderer, invalidate } = useThrelte()
 
   const domElement = renderer.domElement
-  const camera = useParent<PerspectiveCamera>()
-
-  const _euler = new Euler(0, 0, 0, 'YXZ')
-  const _PI_2 = Math.PI / 2
+  const camera = useParent()
 
   const isCamera = (p: any): p is Camera => {
     return p.isCamera
@@ -29,6 +26,9 @@
   if (!isCamera($camera)) {
     throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
   }
+
+  const _euler = new Euler(0, 0, 0, 'YXZ')
+  const _PI_2 = Math.PI / 2
 
   const onChange = () => {
     invalidate()
@@ -51,6 +51,9 @@
   function onMouseMove(event: MouseEvent) {
     if (!isLocked) return
     if (!$camera) return
+    if (!isCamera($camera)) {
+      throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
+    }
 
     const { movementX, movementY } = event
 

@@ -323,8 +323,8 @@ The following attaches a material to the material property of a mesh and a geome
   <T
     is={OrthographicCamera}
     args={[-1, 1, 1, -1, 0.1, 100]}
-    attach={(parent, self) => {
-      parent.shadow.camera = self
+    attach={({ parent, ref }) => {
+      parent.shadow.camera = ref
       return () => {
         parent.shadow.camera = null
       }

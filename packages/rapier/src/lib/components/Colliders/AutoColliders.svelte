@@ -4,17 +4,17 @@
     CoefficientCombineRule,
     type Collider
   } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
   import { useCollisionGroups } from '../../hooks/useCollisionGroups'
   import { useRapier } from '../../hooks/useRapier'
   import { useRigidBody } from '../../hooks/useRigidBody'
-  import { useCreateEvent } from '../../lib/useCreateEvent'
-  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
   import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
   import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
+  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
+  import { useCreateEvent } from '../../lib/useCreateEvent'
   import type { ColliderEvents } from '../../types/types'
   import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
 
@@ -123,8 +123,15 @@
    * Cleanup
    */
   onDestroy(cleanup)
+
+  const parent3DObject = useParentObject3D()
+  createParentObject3DContext(group)
+  watch(parent3DObject, (parent) => {
+    parent?.add(group)
+    return () => {
+      parent?.remove(group)
+    }
+  })
 </script>
 
-<SceneGraphObject object={group}>
-  {@render children?.({ colliders: colliders ?? [], refresh })}
-</SceneGraphObject>
+{@render children?.({ colliders: colliders ?? [], refresh })}

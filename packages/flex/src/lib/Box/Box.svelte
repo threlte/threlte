@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { HierarchicalObject, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Group } from 'three'
+  import { Group, Object3D } from 'three'
   import { useFlex } from '../Flex/context'
   import { createUseDimensionsContext } from '../hooks/useDimensions'
   import type { NodeProps } from '../lib/props'
@@ -77,27 +77,33 @@
       height: computedHeight
     })
   })
+
+  const proxy = new Object3D()
+  proxy.add = (child) => {
+    if (child.userData.isNode) {
+      group.add(child)
+    } else {
+      contentGroup.add(child)
+    }
+    return child
+  }
+  proxy.remove = (child) => {
+    if (child.userData.isNode) {
+      group.remove(child)
+    } else {
+      contentGroup.remove(child)
+    }
+    return child
+  }
 </script>
 
 <T is={group}>
   <T is={contentGroup} />
 </T>
 
-<HierarchicalObject
-  onChildMount={(child) => {
-    if (child.userData.isNode) {
-      group.add(child)
-    } else {
-      contentGroup.add(child)
-    }
-  }}
-  onChildDestroy={(child) => {
-    if (child.userData.isNode) {
-      group.remove(child)
-    } else {
-      contentGroup.remove(child)
-    }
-  }}
+<T
+  is={proxy}
+  attach={false}
 >
   {@render children?.({ reflow, width: computedWidth, height: computedHeight })}
-</HierarchicalObject>
+</T>

@@ -2,7 +2,6 @@
   import { type Snippet } from 'svelte'
   import type { Renderer } from 'three'
   import Context from './components/Context/Context.svelte'
-  import RootScene from './components/RootScene/RootScene.svelte'
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
 
   type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'wrapper'> & {
@@ -23,9 +22,7 @@
         {canvas}
         {...rest}
       >
-        <RootScene>
-          {@render children?.()}
-        </RootScene>
+        {@render children?.()}
       </Context>
     {/if}
   </canvas>

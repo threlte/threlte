@@ -1,15 +1,8 @@
 <script lang="ts">
-  import {
-    HierarchicalObject,
-    T,
-    currentWritable,
-    useThrelte,
-    watch,
-    type Props
-  } from '@threlte/core'
-  import { Group } from 'three'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
+  import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
+  import { Group, Object3D } from 'three'
+  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { TransformControlsProps } from './TransformControls.svelte'
 
@@ -125,21 +118,13 @@
 </script>
 
 <!-- TransformControls need to be added to the scene -->
-<HierarchicalObject
-  onChildMount={(child) => {
-    scene.add(child)
-  }}
-  onChildDestroy={(child) => {
-    scene.remove(child)
-  }}
->
-  <T
-    is={transformControls}
-    bind:ref={controls}
-    {onchange}
-    {...transformProps}
-  />
-</HierarchicalObject>
+<T
+  is={transformControls}
+  bind:ref={controls}
+  {onchange}
+  {...transformProps}
+  attach={scene}
+/>
 
 <T
   is={attachGroup}

@@ -208,16 +208,16 @@ To declaratively apply two different textures to two different faces of a `BoxGe
   <T.BoxGeometry />
   <T.MeshStandardMaterial
     map={texture1}
-    attach={(parent, self) => {
-      if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
-      else parent.material = [self]
+    attach={({ parent, ref }) => {
+      if (Array.isArray(parent.material)) parent.material = [...parent.material, ref]
+      else parent.material = [ref]
     }}
   />
   <T.MeshStandardMaterial
     map={texture2}
-    attach={(parent, self) => {
-      if (Array.isArray(parent.material)) parent.material = [...parent.material, self]
-      else parent.material = [self]
+    attach={({ parent, ref }) => {
+      if (Array.isArray(parent.material)) parent.material = [...parent.material, ref]
+      else parent.material = [ref]
     }}
   />
 </T.Mesh>

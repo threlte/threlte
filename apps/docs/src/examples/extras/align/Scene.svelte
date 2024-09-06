@@ -36,7 +36,7 @@
   >
     {#snippet children({ align })}
       <TransformControls onobjectChange={align}>
-        <T.Mesh position.x={-1}>
+        <T.Mesh>
           <RoundedBoxGeometry args={[1, 2, 1]} />
           <T.MeshStandardMaterial color="white" />
         </T.Mesh>
