@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Align, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
-  import type { Box3, Vector3 } from 'three'
+  import { Box3, type Vector3 } from 'three'
 
   export let x: number = 0
   export let y: number = 0
@@ -10,7 +10,7 @@
   export let showSphere: boolean = false
   export let autoAlign: boolean = false
 
-  let boundingBox: Box3 | undefined
+  let box = new Box3()
   let center: Vector3 | undefined
 </script>
 
@@ -29,9 +29,9 @@
     {z}
     {precise}
     auto={autoAlign}
-    onalign={({ boundingBox: newBoundingBox, center: newCenter }) => {
+    onalign={({ boundingBox, center: newCenter }) => {
+      box.copy(boundingBox)
       center = newCenter
-      boundingBox = newBoundingBox
     }}
   >
     {#snippet children({ align })}
@@ -63,13 +63,18 @@
   </Align>
 {/key}
 
-{#if boundingBox && center}
+{#if box && center}
   <T.Group
     position.x={center.x}
     position.y={center.y}
     position.z={center.z}
   >
-    <T.Box3Helper args={[boundingBox, 'white']} />
+    <T.Box3Helper
+      args={[box, 'white']}
+      oncreate={() => {
+        console.log('CREATE!')
+      }}
+    />
   </T.Group>
 {/if}
 
