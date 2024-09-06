@@ -6,10 +6,9 @@
   import { createParentContext, useParent } from '../../hooks/useParent'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import { isPerspectiveOrOrthographicCamera } from '../../lib/camera'
-  import Camera from './Camera.svelte'
   import type { Props } from './types'
   import { useAttach } from './utils/useAttach'
+  import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
   import { useIs } from './utils/useIs'
@@ -85,6 +84,12 @@
   const attachment = useAttach()
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
+  // use camera props
+  const { updateMakeDefault, updateRef, updateManual } = useCamera()
+  $effect.pre(() => updateRef(internalRef))
+  $effect.pre(() => updateManual(manual))
+  $effect.pre(() => updateMakeDefault(makeDefault))
+
   // Events
   const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
@@ -109,14 +114,6 @@
   <DisposableObject
     object={internalRef}
     {dispose}
-  />
-{/if}
-
-{#if isPerspectiveOrOrthographicCamera(internalRef)}
-  <Camera
-    object={internalRef}
-    {manual}
-    {makeDefault}
   />
 {/if}
 

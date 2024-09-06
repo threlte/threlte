@@ -1,59 +1,68 @@
-import { onDestroy } from 'svelte'
-import { isOrthographicCamera, isPerspectiveCamera } from '../../../lib/camera'
+import { writable } from 'svelte/store'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
-import type { Size } from '../../../types'
 import { useThrelte } from '../../../context/compounds/useThrelte'
+import { watch } from '../../../lib/storeUtils'
+
+const isOrthographicCamera = (value: unknown): value is OrthographicCamera => {
+  return typeof value === 'object' && value !== null && 'isOrthographicCamera' in value
+}
+
+const isPerspectiveCamera = (value: unknown): value is PerspectiveCamera => {
+  return typeof value === 'object' && value !== null && 'isPerspectiveCamera' in value
+}
+
+const isPerspectiveOrOrthographicCamera = (
+  value: unknown
+): value is PerspectiveCamera | OrthographicCamera => {
+  return isPerspectiveCamera(value) || isOrthographicCamera(value)
+}
 
 export const useCamera = () => {
   const { invalidate, size, camera } = useThrelte()
 
-  let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
+  const currentRef = writable<PerspectiveCamera | OrthographicCamera | undefined>()
+  const manual = writable(true)
+  const makeDefault = writable(false)
 
-  let unsubscribe: (() => void) | undefined = undefined
-  onDestroy(() => {
-    unsubscribe?.()
+  watch([currentRef, manual, makeDefault, size], ([ref, manual, makeDefault, size]) => {
+    if (!ref) return
+    if (makeDefault) {
+      camera.set(ref)
+      invalidate()
+    }
+    if (manual) return
+    if (isOrthographicCamera(ref)) {
+      ref.left = size.width / -2
+      ref.right = size.width / 2
+      ref.top = size.height / 2
+      ref.bottom = size.height / -2
+      ref.updateProjectionMatrix()
+      ref.updateMatrixWorld()
+      invalidate()
+    } else if (isPerspectiveCamera(ref)) {
+      ref.aspect = size.width / size.height
+      ref.updateProjectionMatrix()
+      ref.updateMatrixWorld()
+      invalidate()
+    }
   })
 
-  const subscriber = (size: Size) => {
-    if (!currentInstance) return
-
-    if (isOrthographicCamera(currentInstance)) {
-      currentInstance.left = size.width / -2
-      currentInstance.right = size.width / 2
-      currentInstance.top = size.height / 2
-      currentInstance.bottom = size.height / -2
-      currentInstance.updateProjectionMatrix()
-      currentInstance.updateMatrixWorld()
-      invalidate()
-    } else if (isPerspectiveCamera(currentInstance)) {
-      currentInstance.aspect = size.width / size.height
-      currentInstance.updateProjectionMatrix()
-      currentInstance.updateMatrixWorld()
-      invalidate()
-    }
+  const updateRef = (ref: unknown) => {
+    if (!isPerspectiveOrOrthographicCamera(ref)) return
+    currentRef.set(ref)
   }
 
-  const update = (instance: PerspectiveCamera | OrthographicCamera, manual: boolean) => {
-    unsubscribe?.()
-    if (manual) {
-      currentInstance = undefined
-      return
-    }
-    currentInstance = instance
-    unsubscribe = size.subscribe(subscriber)
+  const updateManual = (m: boolean) => {
+    manual.set(m)
   }
 
-  const makeDefaultCamera = (
-    instance: PerspectiveCamera | OrthographicCamera,
-    makeDefault: boolean
-  ) => {
-    if (!makeDefault) return
-    camera.set(instance)
-    invalidate()
+  const updateMakeDefault = (d: boolean) => {
+    makeDefault.set(d)
   }
 
   return {
-    update,
-    makeDefaultCamera
+    updateRef,
+    updateManual,
+    updateMakeDefault
   }
 }
