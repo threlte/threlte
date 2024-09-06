@@ -4,17 +4,17 @@
 >
   import { untrack } from 'svelte'
   import { createParentContext, useParent } from '../../hooks/useParent'
-  import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
   import type { Props } from './types'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
+  import { useDispose } from './utils/useDispose'
   import { useEvents } from './utils/useEvents'
   import { useIs } from './utils/useIs'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
+  import { determineRef, extendsObject3D } from './utils/utils'
 
   type AllProps = {
     is: Type
@@ -84,17 +84,22 @@
   const attachment = useAttach()
   $effect.pre(() => attachment.update(internalRef, $parent, attach))
 
-  // use camera props
-  const { updateMakeDefault, updateRef, updateManual } = useCamera()
-  $effect.pre(() => updateRef(internalRef))
-  $effect.pre(() => updateManual(manual))
-  $effect.pre(() => updateMakeDefault(makeDefault))
+  // Camera management
+  const camera = useCamera()
+  $effect.pre(() => camera.updateRef(internalRef))
+  $effect.pre(() => camera.updateManual(manual))
+  $effect.pre(() => camera.updateMakeDefault(makeDefault))
+
+  // Sisposal
+  const disposal = useDispose(dispose)
+  $effect.pre(() => disposal.updateRef(internalRef))
+  $effect.pre(() => disposal.updateDispose(dispose))
 
   // Events
   const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
 
-  // update plugins after all other updates
+  // Update plugins after all other updates
   $effect.pre(() => plugins?.updateRef(internalRef))
   $effect.pre(() =>
     plugins?.updateProps({
@@ -109,13 +114,6 @@
   )
   $effect.pre(() => plugins?.updateRestProps(props))
 </script>
-
-{#if isDisposableObject(internalRef)}
-  <DisposableObject
-    object={internalRef}
-    {dispose}
-  />
-{/if}
 
 {#if extendsObject3D(internalRef)}
   <SceneGraphObject object={internalRef}>
