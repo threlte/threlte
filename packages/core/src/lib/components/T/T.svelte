@@ -3,26 +3,26 @@
   generics="Type"
 >
   import { untrack } from 'svelte'
-  import { isPerspectiveOrOrthographicCamera } from '../../lib/camera'
-  import { useIsContext } from './utils/useIsContext'
+  import { createParentContext, useParent } from '../../hooks/useParent'
   import DisposableObject from '../../internal/DisposableObject.svelte'
   import SceneGraphObject from '../../internal/SceneGraphObject.svelte'
-  import { createParentContext, useParent } from '../../hooks/useParent'
-  import { determineRef, isDisposableObject, extendsObject3D } from './utils/utils'
+  import { isPerspectiveOrOrthographicCamera } from '../../lib/camera'
+  import Camera from './Camera.svelte'
+  import type { Props } from './types'
   import { useAttach } from './utils/useAttach'
   import { useCreateEvent } from './utils/useCreateEvent'
   import { useEvents } from './utils/useEvents'
+  import { useIs } from './utils/useIs'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
-  import type { Props } from './types'
-  import Camera from './Camera.svelte'
+  import { determineRef, extendsObject3D, isDisposableObject } from './utils/utils'
 
   type AllProps = {
     is: Type
   } & Props<Type>
 
   let {
-    is = useIsContext<Type>(),
+    is = useIs<Type>(),
     args,
     attach,
     manual,
