@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.9
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
 ## 3.0.0-next.8
 
 ### Patch Changes
