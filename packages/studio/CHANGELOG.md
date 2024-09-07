@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.11
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
 ## 0.1.0-next.10
 
 ### Patch Changes

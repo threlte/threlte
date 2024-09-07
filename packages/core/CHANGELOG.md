@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.17
+
+### Major Changes
+
+- b7e6927: Refactor attachment API
+
 ## 8.0.0-next.16
 
 ### Major Changes
