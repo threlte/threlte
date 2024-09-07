@@ -56,7 +56,7 @@ export const useAttach = <T extends MaybeInstance<any>>() => {
       // Manual attach
       if (attach) {
         if (typeof attach === 'function') {
-          detachFn = attach({ ref: ref as T, parent })
+          detachFn = attach({ ref: ref as T, parent, parentObject3D })
         } else if (isObject3D(attach) && isObject3D(ref)) {
           detachFn = () => attach?.remove(ref)
           // Add to parent Object3D

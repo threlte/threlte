@@ -58,7 +58,7 @@ export type BaseProps<Type> = {
   attach?:
     | string
     | Object3D
-    | ((args: { ref: Type; parent: unknown }) => void | (() => void))
+    | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
     | false
 
   children?: Snippet<[{ ref: MaybeInstance<Type> }]>
