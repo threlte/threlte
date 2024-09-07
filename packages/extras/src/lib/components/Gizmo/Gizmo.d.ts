@@ -18,13 +18,13 @@ export type GizmoProps = {
   toneMapped?: boolean
   paddingX?: number
   paddingY?: number
-	yLabel?: string
-	xLabel?: string
-	zLabel?: string
+  yLabel?: string
+  xLabel?: string
+  zLabel?: string
 }
 
 export type GizmoEvents = Record<string, never>
 
 export type GizmoSlots = Record<string, never>
 
-export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> {}
+export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> { }

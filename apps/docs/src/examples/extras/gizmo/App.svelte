@@ -28,7 +28,6 @@
   let yLabel = 'y'
   let xLabel = 'x'
 
-
   let orbitControls: ThreeOrbitControls
   let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
 </script>
