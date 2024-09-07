@@ -75,5 +75,6 @@
         "command": " pnpm dev"
       }
     ]
-  }
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
 }

@@ -260,7 +260,7 @@ Three.js objects are **class instances**. When Instantiating these objects, they
 
 ### attach
 
-Use `attach` to bind objects to their parent. If you unmount the attached object it will be taken off its parent automatically.
+Use `attach` to _attach_ objects to other objects.
 
 The following attaches a material to the material property of a mesh and a geometry to the geometry property:
 
@@ -272,12 +272,12 @@ The following attaches a material to the material property of a mesh and a geome
 ```
 
 <Tip type="tip">
-  All objects ending with "Material" (such as `MeshStandardMaterial`) receive `attach="material"`,
-  and all objects ending with "Geometry" receive `attach="geometry"` automatically. You do not
-  strictly have to type it out!
+  All materials receive `attach="material"`, and all geometries receive `attach="geometry"`
+  automatically. You do not strictly have to type it out!
 </Tip>
 
-- The value inferred from the property `is` is "attached" to a parent property.
+- The object referenced by the `<T>` component is "attached" to a parent objects
+  property.
 
 ```svelte
 <script>
@@ -297,46 +297,71 @@ The following attaches a material to the material property of a mesh and a geome
 - `attach` can be a dot-notated path to a nested parent property:
 
 ```svelte
-<T is={DirectionalLight}>
+<T.DirectionalLight>
   <!--
     Attaches an instance of a THREE.OrthographicCamera
     to the property camera of the property shadow of the
     parent THREE.DirectionalLight
   -->
-  <T
-    is={OrthographicCamera}
+  <T.OrthographicCamera
     args={[-1, 1, 1, -1, 0.1, 100]}
     attach="shadow.camera"
   />
-</T>
+</T.DirectionalLight>
 ```
 
-- `attach` can also be a function which is called on mounting with the parent and the value inferred from the property `is`. It can return a function which is called `onDestroy`:
+- `attach` can also be a function which is called when the component is created.
+  This function receives the parent, the closest upstream parent
+  `THREE.Object3D` and the value inferred from the property `is` as arguments.
+  It can return a function which is called whenever the component is destroyed
+  or the `args` change and a new `ref` is created:
 
 ```svelte
-<T is={DirectionalLight}>
+<T.DirectionalLight>
   <!--
     Attaches an instance of a THREE.OrthographicCamera
     to the property camera of the property shadow of the
     parent THREE.DirectionalLight
   -->
-  <T
-    is={OrthographicCamera}
+  <T.OrthographicCamera
     args={[-1, 1, 1, -1, 0.1, 100]}
-    attach={(parent, self) => {
-      parent.shadow.camera = self
+    attach={({ ref, parent, parentObject3D }) => {
+      console.log('attaching', ref, parent, parentObject3D)
+      parent.shadow.camera = ref
       return () => {
         parent.shadow.camera = null
       }
     }}
   />
-</T>
+</T.DirectionalLight>
+```
+
+- You may also pass an object3D instance to the `attach` prop. This allows you to
+  attach the object to a specific parent object, essentially acting as a portal.
+
+```svelte
+<T
+  is={Mesh}
+  attach={otherObject}
+/>
+```
+
+- To disable attaching, pass `false`. This is useful if you want to attach the
+  object manually:
+
+```svelte
+<T
+  is={Mesh}
+  attach={false}
+/>
 ```
 
 ### Camera Props
 
-By default Threlte is responsive and will set up cameras properly on resize (aspect ratio etc).
-Cameras can be controlled manually by setting `manual` to `true`. This will opt out of projection matrix recalculation when the drawing area resizes or other camera-related properties change.
+By default Threlte is responsive and will set up cameras properly on resize
+(aspect ratio etc). Cameras can be controlled manually by setting `manual` to
+`true`. This will opt out of projection matrix recalculation when the drawing
+area resizes or other camera-related properties change.
 
 ```svelte
 <T

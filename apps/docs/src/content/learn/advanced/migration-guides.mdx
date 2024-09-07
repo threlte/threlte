@@ -81,6 +81,63 @@ to the component you wish to forward events to.
 
 This will pass the new callback props mentioned in the previous section down the tree of components.
 
+### Attach API & Trait Components
+
+The signature and heuristic of the attach API of the `<T>` component has
+changed. The trait components `<HierarchicalObject>` and `<SceneGraphObject>`
+have been removed.
+
+#### `attach` Function Signature
+
+```svelte
+<!-- Threlte 7 -->
+<T.Mesh
+  attach={(parent, self) => {
+    console.log('attaching', parent, self)
+    return () => {
+      console.log('detaching', parent, self)
+    }
+  }}
+/>
+
+<!-- Threlte 8 -->
+<T.Mesh
+  attach={({ ref, parent, parentObject3D }) => {
+    console.log('attaching', ref, parent, parentObject3D)
+    return () => {
+      console.log('detaching', ref, parent, parentObject3D)
+    }
+  }}
+/>
+```
+
+#### `attach={false}`
+
+If `false` is passed to the `attach` prop, the component will not be automatically attached to
+the parent object. This is useful if you want to attach the component manually.
+
+```svelte
+<!-- "Dangling" component -->
+<T
+  is={mesh}
+  attach={false}
+/>
+```
+
+#### `attach={object3D}`
+
+If an object3D instance is passed to the `attach` prop, the component will be attached to the instance, essentially acting as a portal.
+
+<Tip type="warning">Be aware that the component still acts in the given context of the parent.</Tip>
+
+```svelte
+<!-- Attached to the provided object -->
+<T
+  is={mesh}
+  attach={object3D}
+/>
+```
+
 ### Snippets
 
 Slot props will no longer work, and must be replaced with snippets.

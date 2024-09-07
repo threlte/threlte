@@ -7,9 +7,7 @@ export type SceneContext = {
 
 export const createSceneContext = (scene?: Scene): SceneContext => {
   const context: SceneContext = { scene: scene || new Scene() }
-
   setContext<SceneContext>('threlte-scene-context', context)
-
   return context
 }
 

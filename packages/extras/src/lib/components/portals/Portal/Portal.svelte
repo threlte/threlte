@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { HierarchicalObject, watch } from '@threlte/core'
-  import type { Object3D } from 'three'
-  import { usePortalContext } from '../usePortalContext'
-  import { writable } from 'svelte/store'
+  import { T, watch } from '@threlte/core'
   import type { Snippet } from 'svelte'
+  import { writable } from 'svelte/store'
+  import { Object3D } from 'three'
+  import { usePortalContext } from '../usePortalContext'
 
   interface Props {
     id?: string
@@ -37,21 +37,29 @@
       }
     }
   })
+
+  const proxy = new Object3D()
+  proxy.add = (child: Object3D) => {
+    children.update((array) => {
+      array.push(child)
+      return array
+    })
+    return child
+  }
+  proxy.remove = (child: Object3D) => {
+    children.update((array) => {
+      array.splice(array.indexOf(child), 1)
+      return array
+    })
+    return child
+  }
 </script>
 
 {#if $target}
-  <HierarchicalObject
-    onChildMount={(child) =>
-      children.update((array) => {
-        array.push(child)
-        return array
-      })}
-    onChildDestroy={(child) =>
-      children.update((array) => {
-        array.splice(array.indexOf(child), 1)
-        return array
-      })}
+  <T
+    is={proxy}
+    attach={false}
   >
     {@render childrenSnippet?.()}
-  </HierarchicalObject>
+  </T>
 {/if}

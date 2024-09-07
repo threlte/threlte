@@ -4,13 +4,18 @@
 </script>
 
 <main>
-  <Canvas>
+  <Canvas renderMode="always">
     <Scene />
   </Canvas>
 </main>
 
 <style>
+  :global(body) {
+    margin: 0;
+  }
+
   main {
     height: 100dvh;
+    width: 100dvw;
   }
 </style>

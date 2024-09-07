@@ -2,9 +2,9 @@ import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
 import type { Props } from './types'
-import { setIsContext, type ThreeObject } from './utils/useIsContext'
+import { setIs } from './utils/useIs'
 
-type Extensions = Record<string, ThreeObject>
+type Extensions = Record<string, unknown>
 
 const catalogue: Extensions = {}
 
@@ -63,7 +63,7 @@ export const T = new Proxy(function () {}, {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
-    setIsContext(module)
+    setIs<typeof module>(module)
 
     return TComp
   }

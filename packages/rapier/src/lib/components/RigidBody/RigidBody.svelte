@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { SceneGraphObject } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
+  import { useRapier } from '../../hooks/useRapier'
   import {
     initializeRigidBodyUserData,
     setInitialRigidBodyState
   } from '../../lib/createPhysicsTasks'
-  import { useRapier } from '../../hooks/useRapier'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
@@ -172,8 +172,15 @@
     removeRigidBodyFromContext(rigidBodyInternal)
     world.removeRigidBody(rigidBodyInternal)
   })
+
+  const parent3DObject = useParentObject3D()
+  createParentObject3DContext(object)
+  watch(parent3DObject, (parent) => {
+    parent?.add(object)
+    return () => {
+      parent?.remove(object)
+    }
+  })
 </script>
 
-<SceneGraphObject {object}>
-  {@render children?.({ rigidBody: rigidBodyInternal })}
-</SceneGraphObject>
+{@render children?.({ rigidBody: rigidBodyInternal })}

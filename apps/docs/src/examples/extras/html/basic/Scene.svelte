@@ -12,9 +12,10 @@
   })
 
   const onClick = () => {
+    console.log('CLICK')
     material.color.set(getRandomColor())
-    material = material
   }
+
   let isHovering = false
   let isPointerDown = false
 
@@ -57,18 +58,18 @@
     transform
   >
     <button
-      on:pointerenter={() => (isHovering = true)}
-      on:pointerleave={() => {
+      onclick={onClick}
+      onpointerenter={() => (isHovering = true)}
+      onpointerleave={() => {
         isPointerDown = false
         isHovering = false
       }}
-      on:pointerdown={() => (isPointerDown = true)}
-      on:pointerup={() => (isPointerDown = false)}
-      on:pointercancel={() => {
+      onpointerdown={() => (isPointerDown = true)}
+      onpointerup={() => (isPointerDown = false)}
+      onpointercancel={() => {
         isPointerDown = false
         isHovering = false
       }}
-      on:click={onClick}
       class="rounded-full bg-orange-500 px-3 text-white hover:opacity-90 active:opacity-70"
     >
       I'm a regular HTML button

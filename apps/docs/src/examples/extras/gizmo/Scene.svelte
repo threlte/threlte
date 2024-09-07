@@ -50,8 +50,8 @@
   <T.BoxGeometry>
     <T.BufferAttribute
       args={[colors, 3]}
-      attach={(parent, self) => {
-        parent.setAttribute('color', self)
+      attach={({ parent, ref }) => {
+        parent.setAttribute('color', ref)
       }}
     />
   </T.BoxGeometry>

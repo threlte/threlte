@@ -48,8 +48,6 @@
 <T
   is={localRef}
   bind:ref
-  matrixAutoUpdate={false}
-  matrixWorldAutoUpdate={false}
   {...props}
 >
   <T is={inner}>

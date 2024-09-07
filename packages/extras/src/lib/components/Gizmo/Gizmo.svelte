@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HierarchicalObject, T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import {
     CanvasTexture,
@@ -331,136 +331,137 @@
   let usePolygonOffset = $derived(p.some((v) => v < 0))
 </script>
 
-<HierarchicalObject>
-  <T is={root}>
-    {@const polygonOffsetFactor = -20}
+<T
+  is={root}
+  attach={false}
+>
+  {@const polygonOffsetFactor = -20}
 
-    <!-- xAxis -->
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={posX}
-      position.x={1}
-      userData.targetPosition={[1, 0, 0]}
-      userData.targetEuler={[0, Math.PI * 0.5, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, xColor, 'X')}
-        opacity={p[0] >= 0 ? 1 : 0.5}
-      />
-    </T.Sprite>
+  <!-- xAxis -->
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={posX}
+    position.x={1}
+    userData.targetPosition={[1, 0, 0]}
+    userData.targetEuler={[0, Math.PI * 0.5, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, xColor, 'X')}
+      opacity={p[0] >= 0 ? 1 : 0.5}
+    />
+  </T.Sprite>
 
-    <T.Mesh
-      position.x={0.39}
-      renderOrder={frontMostAxisIndex === 0 ? -1 : 0}
-    >
-      <T is={stemGeometry} />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={p[0] >= 0 ? 1 : 0.5}
-        color={xColor}
-        polygonOffset={usePolygonOffset && frontMostAxisIndex === 0 && p[0] < 0.75}
-        {polygonOffsetFactor}
-      />
-    </T.Mesh>
+  <T.Mesh
+    position.x={0.39}
+    renderOrder={frontMostAxisIndex === 0 ? -1 : 0}
+  >
+    <T is={stemGeometry} />
+    <T.MeshBasicMaterial
+      transparent
+      opacity={p[0] >= 0 ? 1 : 0.5}
+      color={xColor}
+      polygonOffset={usePolygonOffset && frontMostAxisIndex === 0 && p[0] < 0.75}
+      {polygonOffsetFactor}
+    />
+  </T.Mesh>
 
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={negX}
-      position.x={-1}
-      scale={0.8}
-      userData.targetPosition={[-1, 0, 0]}
-      userData.targetEuler={[0, -Math.PI * 0.5, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, xColor)}
-        opacity={p[0] >= 0 ? 0.5 : 1}
-      />
-    </T.Sprite>
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={negX}
+    position.x={-1}
+    scale={0.8}
+    userData.targetPosition={[-1, 0, 0]}
+    userData.targetEuler={[0, -Math.PI * 0.5, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, xColor)}
+      opacity={p[0] >= 0 ? 0.5 : 1}
+    />
+  </T.Sprite>
 
-    <!-- yAxis -->
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={posY}
-      position.y={1}
-      userData.targetPosition={[0, 1, 0]}
-      userData.targetEuler={[-Math.PI * 0.5, 0, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, yColor, 'Y')}
-        opacity={p[1] >= 0 ? 1 : 0.5}
-      />
-    </T.Sprite>
+  <!-- yAxis -->
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={posY}
+    position.y={1}
+    userData.targetPosition={[0, 1, 0]}
+    userData.targetEuler={[-Math.PI * 0.5, 0, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, yColor, 'Y')}
+      opacity={p[1] >= 0 ? 1 : 0.5}
+    />
+  </T.Sprite>
 
-    <T.Mesh
-      position.y={0.39}
-      rotation.z={Math.PI / 2}
-      renderOrder={frontMostAxisIndex === 1 ? -1 : 0}
-    >
-      <T is={stemGeometry} />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={p[1] >= 0 ? 1 : 0.5}
-        color={yColor}
-        polygonOffset={usePolygonOffset && frontMostAxisIndex === 1 && p[1] < 0.75}
-        {polygonOffsetFactor}
-      />
-    </T.Mesh>
+  <T.Mesh
+    position.y={0.39}
+    rotation.z={Math.PI / 2}
+    renderOrder={frontMostAxisIndex === 1 ? -1 : 0}
+  >
+    <T is={stemGeometry} />
+    <T.MeshBasicMaterial
+      transparent
+      opacity={p[1] >= 0 ? 1 : 0.5}
+      color={yColor}
+      polygonOffset={usePolygonOffset && frontMostAxisIndex === 1 && p[1] < 0.75}
+      {polygonOffsetFactor}
+    />
+  </T.Mesh>
 
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={negY}
-      position.y={-1}
-      scale={0.8}
-      userData.targetPosition={[0, -1, 0]}
-      userData.targetEuler={[Math.PI * 0.5, 0, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, yColor)}
-        opacity={p[1] >= 0 ? 0.5 : 1}
-      />
-    </T.Sprite>
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={negY}
+    position.y={-1}
+    scale={0.8}
+    userData.targetPosition={[0, -1, 0]}
+    userData.targetEuler={[Math.PI * 0.5, 0, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, yColor)}
+      opacity={p[1] >= 0 ? 0.5 : 1}
+    />
+  </T.Sprite>
 
-    <!-- zAxis -->
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={posZ}
-      position.z={1}
-      userData.targetPosition={[0, 0, 1]}
-      userData.targetEuler={[0, 0, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, zColor, 'Z')}
-        opacity={p[2] >= 0 ? 1 : 0.5}
-      />
-    </T.Sprite>
+  <!-- zAxis -->
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={posZ}
+    position.z={1}
+    userData.targetPosition={[0, 0, 1]}
+    userData.targetEuler={[0, 0, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, zColor, 'Z')}
+      opacity={p[2] >= 0 ? 1 : 0.5}
+    />
+  </T.Sprite>
 
-    <T.Mesh
-      position.z={0.39}
-      rotation.y={-Math.PI / 2}
-      renderOrder={frontMostAxisIndex === 2 ? -1 : 0}
-    >
-      <T is={stemGeometry} />
-      <T.MeshBasicMaterial
-        transparent
-        opacity={p[2] >= 0 ? 1 : 0.5}
-        color={zColor}
-        polygonOffset={usePolygonOffset && frontMostAxisIndex === 2 && p[2] < 0.75}
-        {polygonOffsetFactor}
-      />
-    </T.Mesh>
+  <T.Mesh
+    position.z={0.39}
+    rotation.y={-Math.PI / 2}
+    renderOrder={frontMostAxisIndex === 2 ? -1 : 0}
+  >
+    <T is={stemGeometry} />
+    <T.MeshBasicMaterial
+      transparent
+      opacity={p[2] >= 0 ? 1 : 0.5}
+      color={zColor}
+      polygonOffset={usePolygonOffset && frontMostAxisIndex === 2 && p[2] < 0.75}
+      {polygonOffsetFactor}
+    />
+  </T.Mesh>
 
-    <T.Sprite
-      renderOrder={1}
-      bind:ref={negZ}
-      position.z={-1}
-      scale={0.8}
-      userData.targetPosition={[0, 0, -1]}
-      userData.targetEuler={[0, Math.PI, 0]}
-    >
-      <T.SpriteMaterial
-        map={getSpriteTexture(textureSize, zColor)}
-        opacity={p[2] >= 0 ? 0.5 : 1}
-      />
-    </T.Sprite>
-  </T>
-</HierarchicalObject>
+  <T.Sprite
+    renderOrder={1}
+    bind:ref={negZ}
+    position.z={-1}
+    scale={0.8}
+    userData.targetPosition={[0, 0, -1]}
+    userData.targetEuler={[0, Math.PI, 0]}
+  >
+    <T.SpriteMaterial
+      map={getSpriteTexture(textureSize, zColor)}
+      opacity={p[2] >= 0 ? 0.5 : 1}
+    />
+  </T.Sprite>
+</T>

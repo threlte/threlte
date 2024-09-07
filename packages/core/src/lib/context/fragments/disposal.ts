@@ -11,8 +11,11 @@ export type DisposalContext = {
     object?: DisposableThreeObject,
     arr?: DisposableThreeObject[]
   ) => DisposableThreeObject[]
+  /** Add objects to the disposal context */
   addDisposableObjects: (objects: DisposableThreeObject[]) => void
-  removeDisposableObjects: (objects: DisposableThreeObject[]) => void
+  /** Potentially dispose objects */
+  maybeDisposeObjects: (objects: DisposableThreeObject[]) => void
+  /** Objects that *can* be disposed */
   disposableObjects: Map<DisposableThreeObject, number>
   shouldDispose: boolean
 }
@@ -48,15 +51,17 @@ export const createDisposalContext = (): DisposalContext => {
         }
       })
     },
-    removeDisposableObjects: (objects) => {
+    maybeDisposeObjects: (objects) => {
       if (objects.length === 0) return
       objects.forEach((obj) => {
         const currentValue = context.disposableObjects.get(obj)
         if (currentValue && currentValue > 0) {
           context.disposableObjects.set(obj, currentValue - 1)
+          if (currentValue - 1 <= 0) {
+            context.shouldDispose = true
+          }
         }
       })
-      context.shouldDispose = true
     },
     disposableObjects: new Map(),
     shouldDispose: false,
