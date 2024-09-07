@@ -146,7 +146,7 @@ max-height: 50vh;
     }
   }
 
-  let initialized = $state(false)
+  let initialized = false
   onMount(() => {
     tick().then(() => {
       scene.children.forEach((object) => {
