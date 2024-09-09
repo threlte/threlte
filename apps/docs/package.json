@@ -38,7 +38,7 @@
     "preact": "^10.16.0"
   },
   "devDependencies": {
-    "@dimforge/rapier3d-compat": "^0.13.1",
+    "@dimforge/rapier3d-compat": "^0.14.0",
     "@floating-ui/dom": "^1.6.4",
     "runed": "^0.10.0",
     "svelte": "5.0.0-next.181",

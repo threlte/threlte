@@ -78,6 +78,10 @@ const create = async () => {
           required: false,
           options: [
             {
+              value: 'next',
+              label: 'Use Svelte 5 & Threlte 8 (@next)'
+            },
+            {
               value: 'eslint',
               label: 'Add ESLint for code linting'
             },
@@ -176,7 +180,8 @@ const create = async () => {
     prettier: options.features.includes('prettier'),
     eslint: options.features.includes('eslint'),
     playwright: options.features.includes('playwright'),
-    vitest: options.features.includes('vitest')
+    vitest: options.features.includes('vitest'),
+    svelte5: options.features.includes('next')
   })
 
   // at this point, a new SvelteKit App is initialized in the `cwd` directory
@@ -188,11 +193,13 @@ const create = async () => {
   const spinner = p.spinner()
   spinner.start('Resolving package versions')
 
+  const threltePackageRange = options.features.includes('next') ? 'next' : undefined
+
   const threltePackageJson = {
     devDependencies: {},
     dependencies: {
-      three: await resolvePackageVersion('three', '^0.159.0'),
-      '@threlte/core': await resolvePackageVersion('@threlte/core')
+      three: await resolvePackageVersion('three', '^0.167.0'),
+      '@threlte/core': await resolvePackageVersion('@threlte/core', threltePackageRange)
     },
     scripts: {}
   }
@@ -200,27 +207,27 @@ const create = async () => {
   // prettier-ignore
   {
 		if (options.types === 'typescript') {
-			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.159.0')
+			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.167.0')
 		}
 		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
-			threltePackageJson.dependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras')
+			threltePackageJson.dependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras', threltePackageRange)
 		}
 		if (options.threltePackages.includes('@threlte/rapier')) {
-			threltePackageJson.dependencies['@threlte/rapier'] = await resolvePackageVersion('@threlte/rapier')
-			threltePackageJson.dependencies['@dimforge/rapier3d-compat'] = await resolvePackageVersion('@dimforge/rapier3d-compat', '^0.11.2')
+			threltePackageJson.dependencies['@threlte/rapier'] = await resolvePackageVersion('@threlte/rapier', threltePackageRange)
+			threltePackageJson.dependencies['@dimforge/rapier3d-compat'] = await resolvePackageVersion('@dimforge/rapier3d-compat', '^0.14.0')
 		}
 		if (options.threltePackages.includes('@threlte/theatre')) {
-			threltePackageJson.dependencies['@threlte/theatre'] = await resolvePackageVersion('@threlte/theatre')
+			threltePackageJson.dependencies['@threlte/theatre'] = await resolvePackageVersion('@threlte/theatre', threltePackageRange)
 			threltePackageJson.dependencies['@theatre/core'] = await resolvePackageVersion('@theatre/core', '^0.7.0')
 			threltePackageJson.devDependencies['@theatre/studio'] = await resolvePackageVersion('@theatre/studio', '^0.7.0')
 		}
 		if (options.threltePackages.includes('@threlte/xr')) {
-			threltePackageJson.dependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr')
+			threltePackageJson.dependencies['@threlte/xr'] = await resolvePackageVersion('@threlte/xr', threltePackageRange)
 			threltePackageJson.devDependencies['vite-plugin-mkcert'] = await resolvePackageVersion('vite-plugin-mkcert', '^1.17.1')
 			threltePackageJson.scripts['dev'] = 'vite dev --host'
 		}
 		if (options.threltePackages.includes('@threlte/flex')) {
-			threltePackageJson.dependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex')
+			threltePackageJson.dependencies['@threlte/flex'] = await resolvePackageVersion('@threlte/flex', threltePackageRange)
 		}
 		if (options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.scripts['model-pipeline:run'] = 'node scripts/model-pipeline.js'

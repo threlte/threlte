@@ -5,7 +5,7 @@
   "license": "MIT",
   "bin": "./dist/bin.js",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/bin.ts",
+    "dev": "tsx src/bin.ts",
     "build": "rimraf dist/ && tsc && cpy ./templates '../dist/' --cwd=src",
     "package": "pnpm build",
     "lint": "prettier --check .",
@@ -18,14 +18,14 @@
     "@types/which-pm-runs": "^1.0.0",
     "cpy-cli": "^4.2.0",
     "rimraf": "^5.0.1",
-    "ts-node": "^10.8.2",
+    "tsx": "^4.19.0",
     "typescript": "^4.6.3"
   },
   "type": "module",
   "dependencies": {
     "@clack/prompts": "^0.6.3",
     "@expo/spawn-async": "^1.7.2",
-    "create-svelte": "^6.0.0",
+    "create-svelte": "^6.3.10",
     "execa": "^7.1.1",
     "fs-extra": "^9.0.1",
     "json-merger": "^1.1.10",
