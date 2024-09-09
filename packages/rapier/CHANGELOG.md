@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.10
+
+### Major Changes
+
+- b476c89: Dependency updates
+
 ## 3.0.0-next.9
 
 ### Patch Changes
