@@ -27,4 +27,4 @@ export type GizmoEvents = Record<string, never>
 
 export type GizmoSlots = Record<string, never>
 
-export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> { }
+export default class Gizmo extends SvelteComponent<GizmoProps, GizmoEvents, GizmoSlots> {}
