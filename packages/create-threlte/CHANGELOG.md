@@ -1,5 +1,11 @@
 # create-threlte
 
+## 3.0.0-next.2
+
+### Major Changes
+
+- b476c89: Dependency updates
+
 ## 2.1.0-next.1
 
 ### Minor Changes
