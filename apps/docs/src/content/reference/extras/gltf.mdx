@@ -42,15 +42,11 @@ componentSignature:
   }
 ---
 
-Loads a GLTF file and adds it to the scene.
-
-Change the property `url` to load new content, which will be swapped as soon as loading is finished.
-
-Use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse a glTF model or to use parts of it.
+`<GLTF />` loads a single model from a url. The `url` property is reactive and will load new 3D content if changed. The new content will be swapped as soon as loading is finished.
 
 <Tip type="tip">
-  See the hook [`useGltfAnimations`](/docs/reference/extras/use-gltf-animations) on how to use
-  animations of glTF Files.
+  Asset loading can sometimes produce surprising results. We've detailed common issues you may run
+  into on our [loading assets](/docs/learn/basics/loading-assets) page.
 </Tip>
 
 <Example path="extras/gltf" />
@@ -70,26 +66,12 @@ The `<GLTF>` component supports interaction events with the use of `interactivit
 </script>
 
 <GLTF
+  position={{ y: 1 }}
+  scale={3}
   url="/models/helmet/DamagedHelmet.gltf"
   onclick={() => {
     console.log('User clicked!')
   }}
-/>
-```
-
-### Example
-
-```svelte
-<script>
-  import { GLTF } from '@threlte/extras'
-</script>
-
-<GLTF
-  castShadow
-  receiveShadow
-  url={'/models/flower.glb'}
-  position={{ y: 1 }}
-  scale={3}
 />
 ```
 
