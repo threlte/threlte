@@ -472,6 +472,7 @@ function parse(fileName, gltf, options = {}) {
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
+	${hasAnimations ? `import { Group } from 'three'` : ''}
   ${options.types ? `import type { Snippet } from 'svelte'` : ''}
         import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
@@ -546,9 +547,12 @@ ${
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
 
+				${hasAnimations && options.isolated ? 'const ref = new Group()' : hasAnimations ? 'ref = new Group()' : ''}
+
         ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
         ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
+
     ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
@@ -558,7 +562,7 @@ ${
     }
     </script>
 
-		<T.Group ${options.isolated ? '' : 'bind:ref'} dispose={false} ${!options.isolated ? '{...props}' : ''}>
+		<${hasAnimations ? 'T is={ref}' : 'T.Group'} ${!hasAnimations && !options.isolated ? 'bind:ref' : ''} dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
         {@render fallback?.()}
 			{:then gltf}
@@ -568,7 +572,7 @@ ${
 			{/await}
 
       {@render children?.(${options.isolated ? '' : '{ ref }'})}
-		</T.Group>
+		</${hasAnimations ? 'T' : 'T.Group'}>
 	`
 }
 
