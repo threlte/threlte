@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.7
+
+### Patch Changes
+
+- 946e7a8: fix parser for animated assets
+
 ## 3.0.0-next.6
 
 ### Patch Changes
