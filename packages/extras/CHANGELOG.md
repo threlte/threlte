@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 8.12.0
+
+### Minor Changes
+
+- 33956e5: <xLabel>, <yLabel> and <zLabel> props have been added to the Gizmo component. This gives you the option to use custom labels ones such as ('N', 'E', 'W'), or ('y','x','z') instead of the default ('X', 'Y','Z')
+
+### Patch Changes
+
+- 0b853d1: fixes OrbitControls and TrackballControls task functions to work with three version 0.168
+
 ## 8.11.5
 
 ### Patch Changes
