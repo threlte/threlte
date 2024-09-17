@@ -33,7 +33,9 @@
 >
   <slot />
   <Fieldset align="right">
-    <Button class="pl-4">
+    <button
+      class="flex w-fit flex-row gap-3 rounded-md bg-orange-400 px-5 py-3 pl-4 text-center text-white"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -48,7 +50,7 @@
         ></path></svg
       >
       {submitButton}
-    </Button>
+    </button>
     <Toast
       bind:open={$open}
       {type}
