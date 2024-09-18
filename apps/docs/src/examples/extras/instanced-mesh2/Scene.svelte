@@ -7,14 +7,8 @@
 </script>
 
 <InstancedMesh2>
-  <T.SphereGeometry
-    args={[0.5]}
-    attach={false}
-  />
-  <T.MeshStandardMaterial
-    color="white"
-    attach={false}
-  />
+  <T.SphereGeometry args={[0.5]} />
+  <T.MeshStandardMaterial color="white" />
 
   <Instance2
     id={0}

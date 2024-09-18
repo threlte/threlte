@@ -18,12 +18,11 @@
   $effect(() => {
     if (mesh.ref) {
       // share temp m4,v3 between instances
-      const tempMatrix = new Matrix4()
-      const tempV3 = new Vector3()
-      tempV3.set(x ?? 0, y ?? 0, z ?? 0)
-      tempMatrix.setPosition(tempV3)
 
-      mesh.ref.setMatrixAt(id ?? 0, tempMatrix)
+      mesh.tempV3.set(x ?? 0, y ?? 0, z ?? 0)
+      mesh.tempM4.setPosition(mesh.tempV3)
+
+      mesh.ref.setMatrixAt(id ?? 0, mesh.tempM4)
     }
   })
 </script>
