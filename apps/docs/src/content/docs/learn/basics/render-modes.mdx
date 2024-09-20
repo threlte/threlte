@@ -84,8 +84,8 @@ current frame.
 import { useTask } from '@threlte/core'
 
 useTask(() => {
-  // useTask will automatically invalidate the current
-  // frame, so you don't have to do it manually.
+	// useTask will automatically invalidate the current
+	// frame, so you don't have to do it manually.
 })
 ```
 
@@ -100,13 +100,13 @@ import { useTask, useThrelte } from '@threlte/core'
 const { invalidate } = useThrelte()
 
 useTask(
-  () => {
-    // Because `autoInvalidate` is set to `false`, the current
-    // frame will not be invalidated automatically and you can
-    // conditionally invalidate the current frame.
-    invalidate()
-  },
-  { autoInvalidate: false }
+	() => {
+		// Because `autoInvalidate` is set to `false`, the current
+		// frame will not be invalidated automatically and you can
+		// conditionally invalidate the current frame.
+		invalidate()
+	},
+	{ autoInvalidate: false }
 )
 ```
 
@@ -150,10 +150,11 @@ const { renderMode } = useThrelte()
 renderMode.set('on-demand')
 ```
 
-<Tip type="tip">
-  The renderMode property can be changed at any time, but it will only take effect on the next
-  frame.
-</Tip>
+:::tip
+The renderMode property can be changed at any time, but it will only take effect on the next
+frame.
+
+:::
 
 ## Render Modes and Custom Rendering
 
@@ -183,10 +184,10 @@ import { useTask, useThrelte } from '@threlte/core'
 const { renderStage } = useThrelte()
 
 useTask(
-  () => {
-    // render here
-  },
-  { stage: renderStage, autoInvalidate: false }
+	() => {
+		// render here
+	},
+	{ stage: renderStage, autoInvalidate: false }
 )
 ```
 
@@ -203,11 +204,11 @@ import { useThrelte, useTask } from '@threlte/core'
 const { shouldRender } = useThrelte()
 
 useTask(
-  () => {
-    if (shouldRender()) {
-      // render here
-    }
-  },
-  { autoInvalidate: false }
+	() => {
+		if (shouldRender()) {
+			// render here
+		}
+	},
+	{ autoInvalidate: false }
 )
 ```

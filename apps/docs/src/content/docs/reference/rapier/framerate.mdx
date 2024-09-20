@@ -18,8 +18,8 @@ trivial example:
 
 ```ts
 const render = (time: number) => {
-  console.log(time)
-  requestAnimationFrame(render)
+	console.log(time)
+	requestAnimationFrame(render)
 }
 requestAnimationFrame(render)
 ```
@@ -47,11 +47,7 @@ will _step_ the physics simulation 50 times per second with a delta of exactly
 
 The following example illustrates the difference:
 
-<Example
-  path="rapier/framerate"
-  hideCode
-  hideStackblitz
-/>
+<Example path="rapier/framerate" hideCode hideStackblitz />
 
 ## Fixed Framerate
 
@@ -61,30 +57,22 @@ while keeping the visual output smooth and in sync.
 
 First, let's have a look at the timing of the `requestAnimationFrame` API:
 
-<img
-  src={frameRate1}
-  width="100%"
-  alt="Frame rate 1"
-/>
+<img src={frameRate1} width="100%" alt="Frame rate 1" />
 
 In this example we're looking at two invokations of `requestAnimationFrame`.
 
 - **A** receives a delta of 16.35ms
 - **B** receives a delta of 16.1ms
 
-<Tip type="info">
-  Threlte is making use of [the scheduler's
-  ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the
-  tasks of a stage multiple times per frame and with a fixed delta.
-</Tip>
+:::
+Threlte is making use of [the scheduler's
+ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the
+tasks of a stage multiple times per frame and with a fixed delta.
+:::
 
 We'd like to advance the physics simulation 200 times per second, so 5ms per step.
 
-<img
-  src={frameRate2}
-  width="100%"
-  alt="Frame rate 2"
-/>
+<img src={frameRate2} width="100%" alt="Frame rate 2" />
 
 In this example, the physics simulation is advanced 4 times as part of
 `requestAnimationFrame` **A**. The simulation then runs **ahead of the visual
@@ -99,11 +87,7 @@ render time and subsequently rolled back to match the time of the render.
 The following example visualizes how the framerate correlates with the physics
 simulation running ahead of the visual output.
 
-<Example
-  path="rapier/framerate-debug"
-  hideCode
-  hideStackblitz
-/>
+<Example path="rapier/framerate-debug" hideCode hideStackblitz />
 
 ## `usePhysicsTask`
 
@@ -122,7 +106,7 @@ the physics stage automatically.
 
 ```ts
 usePhysicsTask((delta) => {
-  console.log(delta) // ~0.016
+	console.log(delta) // ~0.016
 })
 ```
 
@@ -137,6 +121,6 @@ will be called with the fixed delta time between frames.
 
 ```ts
 usePhysicsTask((delta) => {
-  console.log(delta) // 0.005
+	console.log(delta) // 0.005
 })
 ```

@@ -41,9 +41,10 @@ npm install @threlte/theatre @theatre/core @theatre/studio
 
 To get started quickly, encapsulate your whole scene in the component [`<Theatre>`](./theatre).
 
-<Tip type="tip">
-  The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
-</Tip>
+:::tip
+The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
+
+:::
 
 ```svelte title=App.svelte {3,8,10}+
 <script lang="ts">
@@ -61,10 +62,11 @@ To get started quickly, encapsulate your whole scene in the component [`<Theatre
 
 In your Scene, add the component `<SheetObject>` as a parent of any component you'd wish to edit or animate. The component `<SheetObject>` provides the components `<Sync>`, `<Declare>` and `<Transform>` that allow you to manipulate properties in Theatre.js based on your Threlte markup.
 
-<Tip type="tip">
-  The component `<Transform>` is a shortcut to add `position`, `scale` and `rotation` at once as
-  well as mount handy `<TransformControls>` whenever the respective Sheet Object is selected in the studio.
-</Tip>
+:::tip
+The component `<Transform>` is a shortcut to add `position`, `scale` and `rotation` at once as
+well as mount handy `<TransformControls>` whenever the respective Sheet Object is selected in the studio.
+
+:::
 
 ```svelte title=Scene.svelte
 <script lang="ts">

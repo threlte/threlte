@@ -8,11 +8,11 @@ componentSignature: { props: [{ name: 'object', type: 'THREE.Object3D', required
 showInSidebar: false
 ---
 
-<Tip type="warning">
-  This component is mostly used internally. It makes certain aspects of three.js objects accessible
-  and reactive and interact with Threlte systems. It's an advanced feature and you should only use
-  it if you know what you're doing.
-</Tip>
+:::caution
+This component is mostly used internally. It makes certain aspects of three.js objects accessible
+and reactive and interact with Threlte systems. It's an advanced feature and you should only use
+it if you know what you're doing.
+:::
 
 This component is extending the component [`<HierarchicalObject>`](/docs/reference/core/hierarchical-object) and conveniently provides methods to add and remove children to the scene graph.
 

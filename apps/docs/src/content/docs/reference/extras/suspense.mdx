@@ -79,9 +79,9 @@ We can make that component _suspense-ready_ by using the hook `useSuspense` and 
 {/await}
 ```
 
-<Tip type="tip" title="Suspense-ready">
-  *Suspense-ready* means it has the ability to hit a `<Suspense>` boundary if there is any. If there's no `<Suspense>` boundary, the component will behave as usual.
-</Tip>
+:::tip[Suspense-ready]
+_Suspense-ready_ means it has the ability to hit a `<Suspense>` boundary if there is any. If there's no `<Suspense>` boundary, the component will behave as usual.
+:::
 
 ### In a parent component
 
@@ -113,15 +113,14 @@ To let the parent component decide what to do while the model component is loadi
 </Suspense>
 ```
 
-<Tip type="tip" title="Error Boundary">
-  In contrast to the React Suspense API, the `<Suspense>` component also acts as an
-  error boundary for async requests	made in child components wrapped in `suspend`.
+:::tip[Error Boundary]
+In contrast to the React Suspense API, the `<Suspense>` component also acts as an
+error boundary for async requests made in child components wrapped in `suspend`.
 
-    The `"error"` snippet will be mounted as soon as an error is thrown in a child component
-    wrapped in `suspend` and the snippet prop `errors` can be used to display a meaningful
-    error message.
-
-</Tip>
+The `"error"` snippet will be mounted as soon as an error is thrown in a child component
+wrapped in `suspend` and the snippet prop `errors` can be used to display a meaningful
+error message.
+:::
 
 ## UX considerations
 

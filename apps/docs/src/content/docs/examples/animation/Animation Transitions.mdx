@@ -1,3 +1,9 @@
+---
+title: Animation Transitions
+---
+
+import Example from '$components/Example/Example.astro'
+
 Transition seamlessly between GLTF animations.
 
 <Example path="animation/transitions" />
@@ -24,10 +30,10 @@ In this example, we extract the animations from the gltf file, play them, and cr
 
 this causes `actions` to be populated with an array of the available animations in that gltf file
 
-<Tip type="tip">
-  run `console.log(Object.entries($actions))` to see the available action strings, and the shape of
-  the animation object. By doing this, you'll discover that this example is only using 3 of the 7
-  available animations attached to this gltf file.
-</Tip>
+:::tip
+run `console.log(Object.entries($actions))` to see the available action strings, and the shape of
+the animation object. By doing this, you'll discover that this example is only using 3 of the 7
+available animations attached to this gltf file.
+:::
 
 3. selecting a different animation calls `transitionTo` function, which crossfades between the two animations

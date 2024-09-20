@@ -11,10 +11,10 @@ It does this by leveraging the rigid three.js naming and object property structu
 remove objects to and from the scene graph, attach objects to parent object properties or add
 event listeners.
 
-<Tip type="info">
+:::
 `<T>` is the main building block of any Threlte application. Components available in `'@threlte/extras'`
 are built on top of `<T>` and may provide a more convenient API for specific three.js classes.
-</Tip>
+:::
 
 ## Usage Types
 
@@ -26,9 +26,9 @@ are built on top of `<T>` and may provide a more convenient API for specific thr
 ```ts
 // Class definition:
 class Mesh extends THREE.Object3D {
-  constructor(geometry, material) {
-    /* … */
-  }
+	constructor(geometry, material) {
+		/* … */
+	}
 }
 
 // Creating a class instance:
@@ -242,15 +242,12 @@ We only changed the `y` coordinate of the position, so we can use a **pierced pr
 
 This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value. Unfortunately with pierced props we miss out on the type hints and auto-completion.
 
-<Tip
-  type="warning"
-  title="Constant prop types"
->
-  The type of an inferred prop (or "auto prop") must be constant. This means that the type of a prop
-  must not change for the lifetime of the component. For instance you can't use a variable as a prop
-  that is an array of numbers and then later on change the value of that variable to a single
-  number. This is considered a type change and therefore not allowed.
-</Tip>
+:::caution[Constant prop types]
+The type of an inferred prop (or "auto prop") must be constant. This means that the type of a prop
+must not change for the lifetime of the component. For instance you can't use a variable as a prop
+that is an array of numbers and then later on change the value of that variable to a single
+number. This is considered a type change and therefore not allowed.
+:::
 
 ### args
 
@@ -271,10 +268,11 @@ The following attaches a material to the material property of a mesh and a geome
 </T.Mesh>
 ```
 
-<Tip type="tip">
-  All materials receive `attach="material"`, and all geometries receive `attach="geometry"`
-  automatically. You do not strictly have to type it out!
-</Tip>
+:::tip
+All materials receive `attach="material"`, and all geometries receive `attach="geometry"`
+automatically. You do not strictly have to type it out!
+
+:::
 
 - The object referenced by the `<T>` component is "attached" to a parent objects
   property.
@@ -379,20 +377,20 @@ Use the property `makeDefault` to set a camera to the default rendering camera.
 />
 ```
 
-<Tip type="warning">
-  A common mistake is to forget setting `makeDefault`. If you do not set a camera to be the default
-  camera, the scene will not be rendered through this camera but through Threltes default camera.
-</Tip>
+:::caution
+A common mistake is to forget setting `makeDefault`. If you do not set a camera to be the default
+camera, the scene will not be rendered through this camera but through Threltes default camera.
+:::
 
 ## Events
 
 Adding an event listener to a component will also add the corresponding event listener to the three.js class
 instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
 
-<Tip type="info">
-  For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
-  `CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
-</Tip>
+:::
+For easier payload access as well as conforming to Three.js as much as possible, Threlte does _not_ use Svelte's
+`CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
+:::
 
 This will listen to the "change" event on the `THREE.OrbitControls`:
 
@@ -480,8 +478,9 @@ are available elsewhere (like `OrbitControls`), you can extend the default catal
 <T.CustomMesh />
 ```
 
-<Tip type="tip">
-  Be aware that in this case `<T>` can't provide type-safety on properties and events.
-  If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
-  This way, Threlte can infer the type of the object and provide type-safety on properties and events.
-</Tip>
+:::tip
+Be aware that in this case `<T>` can't provide type-safety on properties and events.
+If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
+This way, Threlte can infer the type of the object and provide type-safety on properties and events.
+
+:::

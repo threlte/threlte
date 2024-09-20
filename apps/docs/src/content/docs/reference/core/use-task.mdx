@@ -5,10 +5,10 @@ sourcePath: 'packages/core/src/lib/hooks/useTask.ts'
 order: 5.21
 ---
 
-<Tip type="info">
-  Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
-  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
-</Tip>
+:::
+Tasks are part of Threlte's _Task Scheduling System_. For details on how to use stages and tasks,
+see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
+:::
 
 The hook `useTask` is used to create a
 [task](/docs/learn/basics/scheduling-tasks#tasks) that is used to run code on
@@ -23,7 +23,7 @@ argument. By default, the created task is added to [Threlte's
 
 ```ts
 const { start, stop, started, task } = useTask((delta) => {
-  // This function will be executed on every frame
+	// This function will be executed on every frame
 })
 ```
 
@@ -46,12 +46,12 @@ or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
 const {
-  start,
-  stop,
-  started,
-  task: someTask
+	start,
+	stop,
+	started,
+	task: someTask
 } = useTask('some-task', (delta) => {
-  // This function will be executed on every frame
+	// This function will be executed on every frame
 })
 ```
 
@@ -64,11 +64,11 @@ added to [Threlte's
 
 ```ts
 useTask(
-  (delta) => {
-    // This function will be executed on every frame as a
-    // task in the stage `afterRenderStage`.
-  },
-  { stage: afterRenderStage }
+	(delta) => {
+		// This function will be executed on every frame as a
+		// task in the stage `afterRenderStage`.
+	},
+	{ stage: afterRenderStage }
 )
 ```
 
@@ -90,14 +90,14 @@ This means that you can declare a dependency (with `before` or `after`) on a
 task that is created later in your code. The declared dependencies will be taken
 into account when they are created later on.
 
-<Tip type="warning">
-  {' '}
-  If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
-  will automatically be added to the same stage as the task it depends on. If you pass a key instead
-  and the task you want to reference is **not** in [Threlte's
-  `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will also need to pass the
-  stage, either by value or key.{' '}
-</Tip>
+:::caution
+{' '}
+If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
+will automatically be added to the same stage as the task it depends on. If you pass a key instead
+and the task you want to reference is **not** in [Threlte's
+`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will also need to pass the
+stage, either by value or key.{' '}
+:::
 
 ## Examples
 
@@ -109,10 +109,10 @@ then start and stop the task manually using the `start` and `stop` functions:
 
 ```ts
 const { start, stop, started } = useTask(
-  (delta) => {
-    // do something
-  },
-  { autoStart: false }
+	(delta) => {
+		// do something
+	},
+	{ autoStart: false }
 )
 
 // start the task
@@ -139,14 +139,14 @@ invalidate the frame manually using the `invalidate` function returned by
 const { invalidate } = useThrelte()
 
 const { start, stop, started } = useTask(
-  (delta) => {
-    // do something
-    // invalidate the current frame
-    if (someCondition) {
-      invalidate()
-    }
-  },
-  { autoInvalidate: false }
+	(delta) => {
+		// do something
+		// invalidate the current frame
+		if (someCondition) {
+			invalidate()
+		}
+	},
+	{ autoInvalidate: false }
 )
 ```
 
@@ -299,6 +299,6 @@ effects using the library
 </Canvas>
 ```
 
-<Tip type="warning">
-  When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
-</Tip>
+:::caution
+When using SvelteKit (or more broadly, SSR) be sure to add `ssr: { noExternal: ['postprocessing' ]}` to your `vite.config.js`.
+:::

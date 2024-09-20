@@ -9,11 +9,11 @@ Studio suit your workflow, you may add your own Studio Extensions which may add
 toolbar items, custom panes, have access to the scene and may access the state
 of other extensions and run their actions.
 
-<Tip type="warning">
-  While it's technically possible to access and extend the Studio from anywhere within your app,
-  it's highly recommended to follow this pattern to easily remove the Studio **including all
-  extensions** from your app in production.
-</Tip>
+:::caution
+While it's technically possible to access and extend the Studio from anywhere within your app,
+it's highly recommended to follow this pattern to easily remove the Studio **including all
+extensions** from your app in production.
+:::
 
 ## Example
 
@@ -42,15 +42,15 @@ This file provides type definitions for the extension state and actions.
 export const extensionScope = 'my-extension'
 
 export type ExtensionState = {
-  enabled: boolean
-  count: number
+	enabled: boolean
+	count: number
 }
 
 export type ExtensionActions = {
-  setEnabled: (enabled: boolean) => void
-  toggleEnabled: () => void
-  increment: () => void
-  decrement: () => void
+	setEnabled: (enabled: boolean) => void
+	toggleEnabled: () => void
+	increment: () => void
+	decrement: () => void
 }
 ```
 
@@ -122,7 +122,8 @@ This file implements the extension. Furthermore, it has full access to the Threl
 <slot />
 ```
 
-<Tip type="warning">Extensions must include a slot element to render the scene.</Tip>
+:::caution
+Extensions must include a slot element to render the scene.:::
 
 Let's look at creating the extension step by step:
 
@@ -200,22 +201,22 @@ import { useStudio } from '@threlte/studio/extend'
 import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
 
 export const useMyExtension = () => {
-  const { useExtension } = useStudio()
+	const { useExtension } = useStudio()
 
-  const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
+	const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
 
-  return {
-    get enabled() {
-      return extension.state.enabled
-    },
-    get count() {
-      return extension.state.count
-    },
-    setEnabled: extension.setEnabled,
-    toggleEnabled: extension.toggleEnabled,
-    increment: extension.increment,
-    decrement: extension.decrement
-  }
+	return {
+		get enabled() {
+			return extension.state.enabled
+		},
+		get count() {
+			return extension.state.count
+		},
+		setEnabled: extension.setEnabled,
+		toggleEnabled: extension.toggleEnabled,
+		increment: extension.increment,
+		decrement: extension.decrement
+	}
 }
 ```
 

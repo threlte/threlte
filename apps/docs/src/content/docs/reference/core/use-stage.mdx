@@ -5,10 +5,10 @@ sourcePath: 'packages/core/src/lib/hooks/useStage.ts'
 order: 5.2
 ---
 
-<Tip type="info">
-  Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
-  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
-</Tip>
+:::
+Tasks are part of Threlte's _Task Scheduling System_. For details on how to use stages and tasks,
+see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
+:::
 
 The hook `useStage` can be used to create or retrieve a stage.
 Stages are **groups of tasks**. They are executed in a specific order.
@@ -24,15 +24,16 @@ const { renderStage } = useThrelte()
 // All tasks added to the stage `afterRenderStage`
 // will be executed after the tasks of the stage `renderStage`.
 const afterRenderStage = useStage('after-render', {
-  after: renderStage
+	after: renderStage
 })
 ```
 
-<Tip type="tip">
-  Be aware that `useStage` never removes a stage as that's usually not needed. If a stage is created
-  *once* in your Threlte app, it's available throughout the app's lifetime. If you want to remove a
-  stage, you can do so by calling `removeStage` on the scheduler instance returned by `useThrelte`.
-</Tip>
+:::tip
+Be aware that `useStage` never removes a stage as that's usually not needed. If a stage is created
+_once_ in your Threlte app, it's available throughout the app's lifetime. If you want to remove a
+stage, you can do so by calling `removeStage` on the scheduler instance returned by `useThrelte`.
+
+:::
 
 A stage decides **when and how its tasks are executed**. By default, a stage will
 execute its tasks on every frame. You can change this behavior by passing a
@@ -48,17 +49,17 @@ delta.
 const { renderStage } = useThrelte()
 
 const conditionalStage = useStage('after-render', {
-  after: renderStage,
-  callback: (delta, runTasks) => {
-    // This callback will be called every frame. The first argument is the time elapsed
-    // since the last frame. The second argument is a function that will run all the
-    // tasks of the stage. You can use it to run the tasks only when needed (e.g. when
-    // a condition is met) or to run them multiple times. If a number is passed as the
-    // first argument to runTasks, the tasks will receive that as the delta.
-    if (condition) {
-      runTasks()
-    }
-  }
+	after: renderStage,
+	callback: (delta, runTasks) => {
+		// This callback will be called every frame. The first argument is the time elapsed
+		// since the last frame. The second argument is a function that will run all the
+		// tasks of the stage. You can use it to run the tasks only when needed (e.g. when
+		// a condition is met) or to run them multiple times. If a number is passed as the
+		// first argument to runTasks, the tasks will receive that as the delta.
+		if (condition) {
+			runTasks()
+		}
+	}
 })
 ```
 

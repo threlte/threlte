@@ -30,30 +30,30 @@ toneMapping.set(THREE.LinearToneMapping)
 
 ### Usage
 
-<Tip type="info">
-  This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
-</Tip>
+:::
+This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
+:::
 
 ```ts
 const {
-  size, // Readable<Size>
-  camera, // CurrentWritable<Camera>
-  scene, // Scene
-  dpr, // CurrentWritable<number>
-  renderer, // WebGLRenderer
-  renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
-  autoRender, // CurrentWritable<boolean>
-  invalidate, // () => void
-  advance, // () => void
-  scheduler, // Scheduler
-  mainStage, // Stage
-  renderStage, // Stage
-  autoRenderTask, // Task
-  shouldRender, // () => boolean
-  colorManagementEnabled, // CurrentWritable<boolean>
-  colorSpace, // CurrentWritable<ColorSpace>
-  toneMapping, // CurrentWritable<ToneMapping>
-  shadows // CurrentWritable<boolean | ShadowMapType>
+	size, // Readable<Size>
+	camera, // CurrentWritable<Camera>
+	scene, // Scene
+	dpr, // CurrentWritable<number>
+	renderer, // WebGLRenderer
+	renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
+	autoRender, // CurrentWritable<boolean>
+	invalidate, // () => void
+	advance, // () => void
+	scheduler, // Scheduler
+	mainStage, // Stage
+	renderStage, // Stage
+	autoRenderTask, // Task
+	shouldRender, // () => boolean
+	colorManagementEnabled, // CurrentWritable<boolean>
+	colorSpace, // CurrentWritable<ColorSpace>
+	toneMapping, // CurrentWritable<ToneMapping>
+	shadows // CurrentWritable<boolean | ShadowMapType>
 } = useThrelte()
 ```
 

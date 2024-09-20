@@ -132,9 +132,10 @@ The function `load` of `useLoader` also accepts an array of paths in which case 
 </script>
 ```
 
-<Tip type="tip">
-  Keep in mind that the store will be updated and the promise resolves once all assets are loaded.
-</Tip>
+:::tip
+Keep in mind that the store will be updated and the promise resolves once all assets are loaded.
+
+:::
 
 You can also provide a map of paths to load multiple assets at once. In this case the return value is a map of the loaded assets:
 
@@ -155,12 +156,9 @@ You can also provide a map of paths to load multiple assets at once. In this cas
 
 ### Transforming The Result
 
-<Tip
-  type="warning"
-  title="Caching"
->
-  The result of the transformation is cached and subsequent calls will return the same result.
-</Tip>
+:::caution[Caching]
+The result of the transformation is cached and subsequent calls will return the same result.
+:::
 
 The `load` method accepts an optional second argument to transform the result of the loader:
 

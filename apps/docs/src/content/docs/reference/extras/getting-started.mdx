@@ -14,10 +14,10 @@ npm install @threlte/extras
 
 ## Usage
 
-<Tip type="experimental">
-  The content of this package can be used directly but it's also meant to be a recipe for creating
-  your own abstractions and plugins depending on your use case.
-</Tip>
+:::caution
+The content of this package can be used directly but it's also meant to be a recipe for creating
+your own abstractions and plugins depending on your use case.
+:::
 
 ### Components
 
@@ -109,11 +109,12 @@ registers a global event listener on the `<canvas>` element and forwards all eve
 respective `<T>` components. Check out the [guide on events](/docs/learn/basics/events) for more
 information on how to use events in Threlte.
 
-<Tip type="tip">
-  Plugins are injected via context and therefore need to be implement at the root of your
-  application, this is typically your `Scene.svelte` component. Check out our [recommended app
-  structure](/docs/learn/basics/context).
-</Tip>
+:::tip
+Plugins are injected via context and therefore need to be implement at the root of your
+application, this is typically your `Scene.svelte` component. Check out our [recommended app
+structure](/docs/learn/basics/context).
+
+:::
 
 ### Hooks
 

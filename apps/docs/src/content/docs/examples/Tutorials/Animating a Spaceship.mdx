@@ -1,23 +1,26 @@
+---
+title: Animating a spaceship
+---
+
+import Example from '$components/Example/Example.astro'
+
 This tutorial demonstrates how to load and animate a spaceship model, as well as using Threlte's InstancedMesh to efficiently animate hundreds of stars. We'll also cover raycaster intersections, post-processing effects, and dynamically generated reflection maps.
 
-<Example
-  path="tutorials/animating-a-spaceship"
-  iframe
-/>
+<Example path="tutorials/animating-a-spaceship" />
 
 ## Part I
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
-  <iframe
-    width="560"
-    height="315"
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/soa_KP8QfjM?si=GDsjj8VFm9Zfejtq"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-  ></iframe>
+	<iframe
+		width="560"
+		height="315"
+		style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+		src="https://www.youtube.com/embed/soa_KP8QfjM?si=GDsjj8VFm9Zfejtq"
+		title="YouTube video player"
+		frameborder="0"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		allowfullscreen
+	></iframe>
 </div>
 
 ## Part II
@@ -40,16 +43,16 @@ useTask(() => {
 ```
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
-  <iframe
-    width="560"
-    height="315"
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/wIW9HCHRyRw?si=yy8Qm7LeuGhins6G"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-  ></iframe>
+	<iframe
+		width="560"
+		height="315"
+		style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+		src="https://www.youtube.com/embed/wIW9HCHRyRw?si=yy8Qm7LeuGhins6G"
+		title="YouTube video player"
+		frameborder="0"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		allowfullscreen
+	></iframe>
 </div>
 
 ## Part III
@@ -63,7 +66,7 @@ The equivalent Threlte 7 logic adds a task to [Threlte's default `renderStage`](
 const { scene, camera, renderer } = useThrelte()
 
 useRender(() => {
-  // render here
+	// render here
 })
 ```
 
@@ -71,22 +74,22 @@ useRender(() => {
 const { scene, camera, renderer, renderStage } = useThrelte()
 
 useTask(
-  () => {
-    // render here
-  },
-  { stage: renderStage, autoInvalidate: false }
+	() => {
+		// render here
+	},
+	{ stage: renderStage, autoInvalidate: false }
 )
 ```
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
-  <iframe
-    width="560"
-    height="315"
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/pcKVlKGWov4?si=mInLqfpZqE26RTPi"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-  ></iframe>
+	<iframe
+		width="560"
+		height="315"
+		style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+		src="https://www.youtube.com/embed/pcKVlKGWov4?si=mInLqfpZqE26RTPi"
+		title="YouTube video player"
+		frameborder="0"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		allowfullscreen
+	></iframe>
 </div>

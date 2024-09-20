@@ -23,13 +23,10 @@ In this section, we will learn how to use the easy-to-use tools that the
 **Threlte Task Scheduling System** provides to create and orchestrate stages
 and tasks.
 
+<img class="w-full max-md:hidden" src="/images/docs/learn/frame-handling.svg" />
 <img
-  class="w-full max-md:hidden"
-  src="/images/docs/learn/frame-handling.svg"
-/>
-<img
-  class="mx-auto h-[85vh] w-auto md:hidden"
-  src="/images/docs/learn/frame-handling_portrait.svg"
+	class="mx-auto h-[85vh] w-auto md:hidden"
+	src="/images/docs/learn/frame-handling_portrait.svg"
 />
 
 <small>Figure: A schedule of multiple stages with tasks</small>
@@ -42,10 +39,10 @@ Every Threlte app has a single scheduler. It is accessible via [`useThrelte()`](
 const { scheduler } = useThrelte()
 ```
 
-<Tip type="info">
-  Usually you won't need to interact with the scheduler directly. It is used internally by Threlte.
-  However, you can use it to create stages and run tasks manually for more advanced use cases.
-</Tip>
+:::
+Usually you won't need to interact with the scheduler directly. It is used internally by Threlte.
+However, you can use it to create stages and run tasks manually for more advanced use cases.
+:::
 
 ## Stages
 
@@ -79,14 +76,14 @@ does.
 const { renderStage } = useThrelte()
 
 const afterRenderStage = useStage('after-render', {
-  after: renderStage
+	after: renderStage
 })
 ```
 
 All tasks added to the stage `afterRenderStage` will be executed after the tasks
 of the stage `renderStage`.
 
-<Tip type="tip">Be aware that `useStage` never removes a stage as that's usually not needed.</Tip>
+:::tipBe aware that `useStage` never removes a stage as that's usually not needed.:::
 
 A stage decides **when and how its tasks are executed**. By default, a stage will
 execute its tasks on every frame. You can change this behavior by passing a
@@ -102,17 +99,17 @@ delta.
 const { renderStage } = useThrelte()
 
 const conditionalStage = useStage('after-render', {
-  after: renderStage,
-  callback: (delta, runTasks) => {
-    // This callback will be called every frame. The first argument is the time elapsed
-    // since the last frame. The second argument is a function that will run all the
-    // tasks of the stage. You can use it to run the tasks only when needed (e.g. when
-    // a condition is met) or to run them multiple times. If a number is passed as the
-    // first argument to runTasks, the tasks will receive that as the delta.
-    if (condition) {
-      runTasks()
-    }
-  }
+	after: renderStage,
+	callback: (delta, runTasks) => {
+		// This callback will be called every frame. The first argument is the time elapsed
+		// since the last frame. The second argument is a function that will run all the
+		// tasks of the stage. You can use it to run the tasks only when needed (e.g. when
+		// a condition is met) or to run them multiple times. If a number is passed as the
+		// first argument to runTasks, the tasks will receive that as the delta.
+		if (condition) {
+			runTasks()
+		}
+	}
 })
 ```
 
@@ -127,10 +124,10 @@ const { scheduler } = useThrelte()
 scheduler.removeStage(afterRenderStage)
 ```
 
-<Tip>
-  Be aware that removing a stage will also remove all the tasks in that stage. Usually, you won't
-  need to remove a stage.
-</Tip>
+:::
+Be aware that removing a stage will also remove all the tasks in that stage. Usually, you won't
+need to remove a stage.
+:::
 
 ## Tasks
 
@@ -163,7 +160,7 @@ argument. By default, the created task is added to [Threlte's
 
 ```ts
 const { start, stop, started, task } = useTask((delta) => {
-  // This function will be executed on every frame
+	// This function will be executed on every frame
 })
 ```
 
@@ -186,12 +183,12 @@ or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
 const {
-  start,
-  stop,
-  started,
-  task: someTask
+	start,
+	stop,
+	started,
+	task: someTask
 } = useTask('some-task', (delta) => {
-  // This function will be executed on every frame
+	// This function will be executed on every frame
 })
 ```
 
@@ -202,11 +199,11 @@ You can also pass a stage that the task should be added to as an option to
 
 ```ts
 useTask(
-  (delta) => {
-    // This function will be executed on every frame as a
-    // task in the stage `afterRenderStage`.
-  },
-  { stage: afterRenderStage }
+	(delta) => {
+		// This function will be executed on every frame as a
+		// task in the stage `afterRenderStage`.
+	},
+	{ stage: afterRenderStage }
 )
 ```
 
@@ -232,64 +229,64 @@ on.
 ```ts
 // Execute a task after a single task passed by reference
 useTask(
-  (delta) => {
-    // …
-  },
-  { after: someTask }
+	(delta) => {
+		// …
+	},
+	{ after: someTask }
 )
 ```
 
 ```ts
 // Execute a task after a single task passed by key
 useTask(
-  (delta) => {
-    // …
-  },
-  { after: 'some-task' }
+	(delta) => {
+		// …
+	},
+	{ after: 'some-task' }
 )
 ```
 
 ```ts
 // Execute a task after multiple tasks passed by reference
 useTask(
-  (delta) => {
-    // …
-  },
-  { after: [someTask, someOtherTask] }
+	(delta) => {
+		// …
+	},
+	{ after: [someTask, someOtherTask] }
 )
 ```
 
 ```ts
 // Execute a task after a certain task but before another one
 useTask(
-  (delta) => {
-    // …
-  },
-  { after: someTask, before: someOtherTask }
+	(delta) => {
+		// …
+	},
+	{ after: someTask, before: someOtherTask }
 )
 ```
 
 ```ts
 // Reference a task as a dependency that hasn't been created yet
 useTask(
-  (delta) => {
-    // If a task with the key `some-task` is created later on,
-    // this task will be executed after it.
-  },
-  { before: 'some-task' }
+	(delta) => {
+		// If a task with the key `some-task` is created later on,
+		// this task will be executed after it.
+	},
+	{ before: 'some-task' }
 )
 
 useTask('some-task', (delta) => {
-  // …
+	// …
 })
 ```
 
-<Tip type="warning">
-  If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
-  will automatically be added to the same stage as the task it depends on. If you pass a key instead
-  and the task you want to reference is **not** in [Threlte's `mainStage`](#default-stages), you
-  will also need to pass the stage, either by value or key.
-</Tip>
+:::caution
+	If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
+	will automatically be added to the same stage as the task it depends on. If you pass a key instead
+	and the task you want to reference is **not** in [Threlte's `mainStage`](#default-stages), you
+	will also need to pass the stage, either by value or key.
+:::
 
 ## Reviewing the schedule
 
@@ -300,26 +297,26 @@ time.
 const { scheduler } = useThrelte()
 
 scheduler.getSchedule({
-  tasks: true
+	tasks: true
 })
 ```
 
 ```json title="Result"
 {
-  "stages": [
-    {
-      "key": "physics stage",
-      "tasks": ["physics"]
-    },
-    {
-      "key": "main stage",
-      "tasks": ["move object", "move camera"]
-    },
-    {
-      "key": "render stage",
-      "tasks": ["render"]
-    }
-  ]
+	"stages": [
+		{
+			"key": "physics stage",
+			"tasks": ["physics"]
+		},
+		{
+			"key": "main stage",
+			"tasks": ["move object", "move camera"]
+		},
+		{
+			"key": "render stage",
+			"tasks": ["render"]
+		}
+	]
 }
 ```
 

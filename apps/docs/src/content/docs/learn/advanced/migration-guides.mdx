@@ -128,7 +128,8 @@ the parent object. This is useful if you want to attach the component manually.
 
 If an object3D instance is passed to the `attach` prop, the component will be attached to the instance, essentially acting as a portal.
 
-<Tip type="warning">Be aware that the component still acts in the given context of the parent.</Tip>
+:::caution
+Be aware that the component still acts in the given context of the parent.:::
 
 ```svelte
 <!-- Attached to the provided object -->
@@ -241,9 +242,9 @@ const ktx2Loader = useKtx2()
 const meshoptDecoder = useMeshopt()
 
 const gltf = useGltf('./path/to/model.glb', {
-  dracoLoader,
-  ktx2Loader,
-  meshoptDecoder
+	dracoLoader,
+	ktx2Loader,
+	meshoptDecoder
 })
 ```
 
@@ -292,12 +293,12 @@ import { useRapier } from '@threlte/rapier'
 const { simulationTask } = useRapier()
 
 useTask(
-  () => {
-    // E.g. interact with the physics world here
-  },
-  {
-    before: simulationStage
-  }
+	() => {
+		// E.g. interact with the physics world here
+	},
+	{
+		before: simulationStage
+	}
 )
 ```
 
@@ -412,17 +413,17 @@ of `useFrame` should be retrieved using the hook
 
 ```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
-  // The Threlte context was previously available as the first
-  // argument to the callback, followed by the delta time since the
-  // last frame.
+	// The Threlte context was previously available as the first
+	// argument to the callback, followed by the delta time since the
+	// last frame.
 })
 ```
 
 ```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-  // The delta time since the last frame is the only
-  // argument to the callback.
+	// The delta time since the last frame is the only
+	// argument to the callback.
 })
 ```
 
@@ -438,14 +439,14 @@ Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
 ```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
-  // ...
+	// ...
 })
 ```
 
 ```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-  // ...
+	// ...
 })
 ```
 
@@ -455,32 +456,32 @@ Migrate to `useTask` by referencing the key of the task you want to depend on.
 
 ```ts title="Threlte 6"
 useFrame(
-  (_, delta) => {
-    // This task will be executed first
-  },
-  { order: 0 }
+	(_, delta) => {
+		// This task will be executed first
+	},
+	{ order: 0 }
 )
 
 useFrame(
-  (_, delta) => {
-    // This task will be executed second
-  },
-  { order: 1 }
+	(_, delta) => {
+		// This task will be executed second
+	},
+	{ order: 1 }
 )
 ```
 
 ```ts title="Threlte 7"
 useTask('first', (delta) => {
-  // ...
+	// ...
 })
 
 useTask(
-  'second',
-  (delta) => {
-    // This task will be executed after the task with the
-    // key 'first' has been executed.
-  },
-  { after: 'first' }
+	'second',
+	(delta) => {
+		// This task will be executed after the task with the
+		// key 'first' has been executed.
+	},
+	{ after: 'first' }
 )
 ```
 
@@ -497,18 +498,18 @@ can be used to render your scene. Be sure to set the option `autoInvalidate` to
 
 ```ts title="Threlte 6"
 useRender(() => {
-  // Render your scene here
+	// Render your scene here
 })
 ```
 
 ```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 useTask(
-  'render',
-  () => {
-    // Render your scene here
-  },
-  { stage: renderStage, autoInvalidate: false }
+	'render',
+	() => {
+		// Render your scene here
+	},
+	{ stage: renderStage, autoInvalidate: false }
 )
 ```
 
@@ -521,17 +522,17 @@ of `useRender` should be retrieved using the hook
 
 ```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
-  // The Threlte context was previously available as the first
-  // argument to the callback, followed by the delta time since the
-  // last frame.
+	// The Threlte context was previously available as the first
+	// argument to the callback, followed by the delta time since the
+	// last frame.
 })
 ```
 
 ```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
-  // The delta time since the last frame is the only
-  // argument to the callback.
+	// The delta time since the last frame is the only
+	// argument to the callback.
 })
 ```
 
@@ -548,10 +549,10 @@ useRender((_{ camera, scene }_, delta) => {
 ```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 useTask(
-  (delta) => {
-    // ...
-  },
-  { stage: renderStage, autoInvalidate: false }
+	(delta) => {
+		// ...
+	},
+	{ stage: renderStage, autoInvalidate: false }
 )
 ```
 
@@ -561,17 +562,17 @@ Migrate to `useTask` by referencing the key of the task you want to depend on.
 
 ```ts title="Threlte 6"
 useRender(
-  (_, delta) => {
-    // This task will be executed first
-  },
-  { order: 0 }
+	(_, delta) => {
+		// This task will be executed first
+	},
+	{ order: 0 }
 )
 
 useRender(
-  (_, delta) => {
-    // This task will be executed second
-  },
-  { order: 1 }
+	(_, delta) => {
+		// This task will be executed second
+	},
+	{ order: 1 }
 )
 ```
 
@@ -579,20 +580,20 @@ useRender(
 const { renderStage } = useThrelte()
 
 useTask(
-  'first',
-  (delta) => {
-    // ...
-  },
-  { stage: renderStage, autoInvalidate: false }
+	'first',
+	(delta) => {
+		// ...
+	},
+	{ stage: renderStage, autoInvalidate: false }
 )
 
 useTask(
-  'second',
-  (delta) => {
-    // This task will be executed after the task with the
-    // key 'first' has been executed.
-  },
-  { after: 'first', stage: renderStage, autoInvalidate: false }
+	'second',
+	(delta) => {
+		// This task will be executed after the task with the
+		// key 'first' has been executed.
+	},
+	{ after: 'first', stage: renderStage, autoInvalidate: false }
 )
 ```
 
@@ -667,9 +668,9 @@ to the callback:
 
 ```ts
 useFrame(({ camera, colorSpace }) => {
-  // instead of get(camera) we now can …
-  camera.current // THREE.Camera
-  colorSpace.current // THREE.ColorSpace
+	// instead of get(camera) we now can …
+	camera.current // THREE.Camera
+	colorSpace.current // THREE.ColorSpace
 })
 ```
 

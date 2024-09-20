@@ -62,8 +62,8 @@ componentSignature:
 Creates a positional audio entity.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
-<Tip type="warning">
-You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted *before* any `<Audio>` or `<PositionalAudio>` components:
+:::caution
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted _before_ any `<Audio>` or `<PositionalAudio>` components:
 
 ```svelte
 <T.PerspectiveCamera makeDefault>
@@ -73,7 +73,7 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 <PositionalAudio />
 ```
 
-</Tip>
+:::
 
 <Example path="extras/positional-audio" />
 

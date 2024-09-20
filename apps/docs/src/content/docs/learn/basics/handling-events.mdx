@@ -117,16 +117,16 @@ All interaction events contain the following data:
 
 ```ts
 type Event = THREE.Intersection & {
-  intersections: THREE.Intersection[] // The first intersection of each intersected object
-  object: THREE.Object3D // The object that was actually hit
-  eventObject: THREE.Object3D // The object that registered the event
-  camera: THREE.Camera // The camera used for raycasting
-  delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
-  nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
-  pointer: Vector2 // The pointer position in normalized device coordinates
-  ray: THREE.Ray // The ray used for raycasting
-  stopPropagation: () => void // Function to stop propagation of the event
-  stopped: Boolean // Whether the event propagation has been stopped
+	intersections: THREE.Intersection[] // The first intersection of each intersected object
+	object: THREE.Object3D // The object that was actually hit
+	eventObject: THREE.Object3D // The object that registered the event
+	camera: THREE.Camera // The camera used for raycasting
+	delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
+	nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
+	pointer: Vector2 // The pointer position in normalized device coordinates
+	ray: THREE.Ray // The ray used for raycasting
+	stopPropagation: () => void // Function to stop propagation of the event
+	stopped: Boolean // Whether the event propagation has been stopped
 }
 ```
 
@@ -245,23 +245,24 @@ where this is the type of the interactivity state:
 
 ```ts
 export type State = {
-  enabled: CurrentWritable<boolean>
-  target: CurrentWritable<HTMLElement | undefined>
-  pointer: CurrentWritable<Vector2>
-  pointerOverTarget: CurrentWritable<boolean>
-  lastEvent: MouseEvent | WheelEvent | PointerEvent | undefined
-  raycaster: Raycaster
-  initialClick: [x: number, y: number]
-  initialHits: THREE.Object3D[]
-  hovered: Map<string, IntersectionEvent<MouseEvent | WheelEvent | PointerEvent>>
-  interactiveObjects: THREE.Object3D[]
-  compute: ComputeFunction
-  filter?: FilterFunction
+	enabled: CurrentWritable<boolean>
+	target: CurrentWritable<HTMLElement | undefined>
+	pointer: CurrentWritable<Vector2>
+	pointerOverTarget: CurrentWritable<boolean>
+	lastEvent: MouseEvent | WheelEvent | PointerEvent | undefined
+	raycaster: Raycaster
+	initialClick: [x: number, y: number]
+	initialHits: THREE.Object3D[]
+	hovered: Map<string, IntersectionEvent<MouseEvent | WheelEvent | PointerEvent>>
+	interactiveObjects: THREE.Object3D[]
+	compute: ComputeFunction
+	filter?: FilterFunction
 }
 ```
 
-<Tip type="tip">
-  [`CurrentWritable`](/docs/reference/core/utilities#currentwritable) is a custom Threlte store.
-  It's a regular writable store that also has a `current` property which is the current value of the
-  store. It's useful for accessing the value of a store in a non-reactive context, such as in loops.
-</Tip>
+:::tip
+[`CurrentWritable`](/docs/reference/core/utilities#currentwritable) is a custom Threlte store.
+It's a regular writable store that also has a `current` property which is the current value of the
+store. It's useful for accessing the value of a store in a non-reactive context, such as in loops.
+
+:::

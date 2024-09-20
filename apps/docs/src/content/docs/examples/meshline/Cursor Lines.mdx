@@ -1,3 +1,9 @@
+---
+title: Cursor Lines
+---
+
+import Example from '$components/Example/Example.astro'
+
 Here we use `<MeshLineGeometry>` and `<MeshLineMaterial>` to create a scene where a group of lines follow the cursor. Inspired by the <a href="https://oframe.github.io/ogl/examples/?src=polylines.html" target="_blank">OGL PolyLines example</a>.
 
 <Example path="meshline/cursor-lines" />
@@ -89,11 +95,11 @@ export let damping: number
 // Here we create our new svelte store that will
 // automatically 'spring' any future values we set
 let sprungCursor = spring(
-  { x: 0, z: 0 },
-  {
-    stiffness,
-    damping
-  }
+	{ x: 0, z: 0 },
+	{
+		stiffness,
+		damping
+	}
 )
 
 // We set the sprungCursor value to the
@@ -109,27 +115,27 @@ The lerp function is a method of <a href="https://threejs.org/docs/#api/en/math/
 
 ```ts
 $: {
-  if (points[0]) {
-    // We set the first point in the array to equal
-    // our sprungCursor store whenever it updates
-    points[0].x = $sprungCursor.x
-    points[0].z = $sprungCursor.z
-    points = points
-  }
+	if (points[0]) {
+		// We set the first point in the array to equal
+		// our sprungCursor store whenever it updates
+		points[0].x = $sprungCursor.x
+		points[0].z = $sprungCursor.z
+		points = points
+	}
 }
 
 useTask(() => {
-  let previousPoint = points[0]
-  // Every frame we loop through each point ...
-  points.forEach((point, i) => {
-    if (previousPoint && i > 0) {
-      // ... and for every point (except the first)
-      // we lerp it towards the point before it
-      point.lerp(previousPoint, 0.75)
-      previousPoint = point
-    }
-  })
-  points = points
+	let previousPoint = points[0]
+	// Every frame we loop through each point ...
+	points.forEach((point, i) => {
+		if (previousPoint && i > 0) {
+			// ... and for every point (except the first)
+			// we lerp it towards the point before it
+			point.lerp(previousPoint, 0.75)
+			previousPoint = point
+		}
+	})
+	points = points
 })
 ```
 

@@ -23,48 +23,49 @@ affecting the rest of the scene graph.
 import { injectPlugin } from '@threlte/core'
 
 injectPlugin('plugin-name', ({ ref, props }) => {
-  // We are *inside* a `<T>` component instance
+	// We are *inside* a `<T>` component instance
 
-  // Do something with the ref and props
-  // e.g. return early if the plugin is not applicable
+	// Do something with the ref and props
+	// e.g. return early if the plugin is not applicable
 
-  return {
-    // These props are reserved for this plugin, the
-    // `<T>` component instance will not act on them.
-    pluginProps: ['plugin-prop-a', 'plugin-prop-b'],
+	return {
+		// These props are reserved for this plugin, the
+		// `<T>` component instance will not act on them.
+		pluginProps: ['plugin-prop-a', 'plugin-prop-b'],
 
-    // this function is called whenever the `ref` inside the `<T>`
-    // component changes. You may return a cleanup function that is
-    // called when the ref changes again or the component unmounts.
-    onRefChange: (ref) => {
-      // Do something with the ref
-      return () => {
-        // Cleanup
-      }
-    },
+		// this function is called whenever the `ref` inside the `<T>`
+		// component changes. You may return a cleanup function that is
+		// called when the ref changes again or the component unmounts.
+		onRefChange: (ref) => {
+			// Do something with the ref
+			return () => {
+				// Cleanup
+			}
+		},
 
-    // This function is called whenever the $$props of the `<T>` component
-    // change. These include props like "dispose", "args" and "makeDefault"
-    // that are part of the component itself rather than the props that are
-    // passed to the Three.js object.
-    onPropsChange: (props) => {
-      // Do something with the props
-    },
+		// This function is called whenever the $$props of the `<T>` component
+		// change. These include props like "dispose", "args" and "makeDefault"
+		// that are part of the component itself rather than the props that are
+		// passed to the Three.js object.
+		onPropsChange: (props) => {
+			// Do something with the props
+		},
 
-    // This function is called whenever the $$restProps of the `<T>` component
-    // change. These are the props that are passed to the Three.js object.
-    onRestPropsChange: (restProps) => {
-      // Do something with the restProps
-    }
-  }
+		// This function is called whenever the $$restProps of the `<T>` component
+		// change. These are the props that are passed to the Three.js object.
+		onRestPropsChange: (restProps) => {
+			// Do something with the restProps
+		}
+	}
 })
 ```
 
 You may also override a plugin namespace further down the tree by calling `injectPlugin` again with the same plugin name.
 
-<Tip type="tip">
-	`injectPlugin` is relying on a context provided by your root `<Canvas>` component and can therefore only be used inside a `<Canvas>` component.
-</Tip>
+:::tip
+`injectPlugin` is relying on a context provided by your root `<Canvas>` component and can therefore only be used inside a `<Canvas>` component.
+
+:::
 
 ---
 
@@ -77,7 +78,7 @@ make it available to all `<T>` components. This is useful if you want to create 
 import { createPlugin } from '@threlte/core'
 
 export const plugin = createPlugin('plugin-name', ({ ref, props }) => {
-  // Plugin Code
+	// Plugin Code
 })
 ```
 

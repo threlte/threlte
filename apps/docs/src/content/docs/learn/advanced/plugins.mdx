@@ -14,7 +14,7 @@ Plugins open up the component `<T>` to external code that will be injected via c
 import { injectPlugin } from '@threlte/core'
 
 injectPlugin('plugin-name', ({ ref, props }) => {
-  console.log(ref, props)
+	console.log(ref, props)
 })
 ```
 
@@ -27,7 +27,7 @@ import type { Object3D } from 'three'
 const refIsObject3D = (ref: any): ref is Object3D => ref.isObject3D
 
 injectPlugin('raycast-plugin', ({ ref, props }) => {
-  if (!refIsObject3D(ref) || !props.raycast) return
+	if (!refIsObject3D(ref) || !props.raycast) return
 })
 ```
 
@@ -38,36 +38,36 @@ import { injectPlugin } from '@threlte/core'
 import { onMount } from 'svelte'
 
 injectPlugin('plugin-name', () => {
-  // Use lifecycle hooks as if it would run inside a <T> component.
-  onMount(() => {
-    console.log('onMount')
-  })
+	// Use lifecycle hooks as if it would run inside a <T> component.
+	onMount(() => {
+		console.log('onMount')
+	})
 
-  return {
-    // This is called when the ref changes and on initialization.
-    onRefChange(ref) {
-      console.log(ref)
+	return {
+		// This is called when the ref changes and on initialization.
+		onRefChange(ref) {
+			console.log(ref)
 
-      // You can return a cleanup function that will be called when the ref
-      // changes again or when the component is destroyed.
-      return () => {
-        console.log('cleanup')
-      }
-    },
+			// You can return a cleanup function that will be called when the ref
+			// changes again or when the component is destroyed.
+			return () => {
+				console.log('cleanup')
+			}
+		},
 
-    // This is called when the props change and on initialization. This includes
-    // props like "args", "manual" and other base props of <T> but also
-    // props that are not part of the base props.
-    onPropsChange(props) {
-      console.log(props)
-    },
+		// This is called when the props change and on initialization. This includes
+		// props like "args", "manual" and other base props of <T> but also
+		// props that are not part of the base props.
+		onPropsChange(props) {
+			console.log(props)
+		},
 
-    // This is called when the props change that are not part of the <T>
-    // components base props and on initialization.
-    onRestPropsChange(restProps) {
-      console.log(restProps)
-    }
-  }
+		// This is called when the props change that are not part of the <T>
+		// components base props and on initialization.
+		onRestPropsChange(restProps) {
+			console.log(restProps)
+		}
+	}
 })
 ```
 
@@ -77,11 +77,11 @@ It can also _claim properties_ so that the component `<T>` does not act on it.
 import { injectPlugin } from '@threlte/core'
 
 injectPlugin('ecs', () => {
-  return {
-    // without claiming the property "position", <T> would apply the
-    // property to the object
-    pluginProps: ['entity', 'health', 'velocity', 'position']
-  }
+	return {
+		// without claiming the property "position", <T> would apply the
+		// property to the object
+		pluginProps: ['entity', 'health', 'velocity', 'position']
+	}
 })
 ```
 
@@ -102,7 +102,7 @@ Plugins can also be _created_ for external consumption. This creates a _named pl
 import { createPlugin } from '@threlte/core'
 
 export const layersPlugin = createPlugin('layers', () => {
-  // ... Plugin Code
+	// ... Plugin Code
 })
 ```
 
@@ -269,7 +269,8 @@ Now when applying props like `position.x` or `scale` to any `<T>` component, the
 </T.PerspectiveCamera>
 ```
 
-<Tip type="tip">
-  Notice how this plugin uses TypeScript to augment to possible props this plugin may receive. This
-  is not necessary, but it is a good practice to do so.
-</Tip>
+:::tip
+Notice how this plugin uses TypeScript to augment to possible props this plugin may receive. This
+is not necessary, but it is a good practice to do so.
+
+:::

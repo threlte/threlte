@@ -27,7 +27,8 @@ A small command-line tool that turns GLTF assets into declarative and re-usable 
 npx @threlte/gltf@latest /path/to/Model.glb [options]
 ```
 
-<Tip type="warning">The CLI supports only `npx` at this moment.</Tip>
+:::caution
+The CLI supports only `npx` at this moment.:::
 
 ### Options
 
@@ -55,10 +56,10 @@ npx @threlte/gltf@latest /path/to/Model.glb [options]
 
 ## Example
 
-<Tip type="note">
-  This example assumes you have your model set up and exported from an application like
-  [Blender](https://www.blender.org/) as a GLTF file.
-</Tip>
+:::note
+This example assumes you have your model set up and exported from an application like
+[Blender](https://www.blender.org/) as a GLTF file.
+:::
 
 First you run your model through `@threlte/gltf`. `npx` allows you to use npm packages without installing them.
 
@@ -285,7 +286,7 @@ If you want to play an animation you can do so at any time:
 
 ```ts
 const onEvent = () => {
-  $actions.jump.play()
+	$actions.jump.play()
 }
 ```
 

@@ -23,12 +23,14 @@ Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop 
 </SheetObject>
 ```
 
-<Tip type="info">
-  #### Special Properties Note that some properties are treated differently. The `rotation` prop and
-  other properties with type `THREE.Euler` are automatically converted from radians to degrees.
-  Properties like `color` which have a type of `THREE.Color` receive a color picker in the studio
-  automatically.
-</Tip>
+:::
+
+#### Special Properties Note that some properties are treated differently. The `rotation` prop and
+
+other properties with type `THREE.Euler` are automatically converted from radians to degrees.
+Properties like `color` which have a type of `THREE.Color` receive a color picker in the studio
+automatically.
+:::
 
 ## Labeled Prop
 
@@ -90,14 +92,14 @@ import { createTransformer } from '@threlte/theatre'
 import { types } from '@theatre/core'
 
 const intensity = createTransformer({
-  transform(value) {
-    return types.number(value, {
-      range: [0, 10]
-    })
-  },
-  apply(target, path, value) {
-    target[path] = value
-  }
+	transform(value) {
+		return types.number(value, {
+			range: [0, 10]
+		})
+	},
+	apply(target, path, value) {
+		target[path] = value
+	}
 })
 ```
 
@@ -140,9 +142,9 @@ You may also declare transformers directly in the markup:
 </SheetObject>
 ```
 
-<Tip type="info" title="Built-in components use transformers internally">
+:::note[Built-in components use transformers internally]
 
 `<Sync>` uses transformers to transform arbitrary props that are _discovered_ by a property path to a value that Theatre.js can handle.
 `<Transform>` uses transformers to transform the properties `position`, `rotation` and `scale` of a Three.js object to a value that Theatre.js can handle.
 
-</Tip>
+:::

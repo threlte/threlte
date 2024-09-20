@@ -14,11 +14,12 @@ Watch a single store or multiple stores and call a callback when they change to 
 ```ts
 const store = writable(0)
 watch(store, (value) => {
-  console.log(value) // 0
+	console.log(value) // 0
 })
 ```
 
-<Tip type="info">This utility function needs to be called during component initialization.</Tip>
+:::
+This utility function needs to be called during component initialization.:::
 
 You can also watch multiple stores:
 
@@ -26,7 +27,7 @@ You can also watch multiple stores:
 const store1 = writable(0)
 const store2 = writable(1)
 watch([store1, store2], ([value1, value2]) => {
-  console.log(value1, value2) // 0 1
+	console.log(value1, value2) // 0 1
 })
 ```
 
@@ -35,10 +36,10 @@ The callback can return a cleanup function that will be called when the stores c
 ```ts
 const store = writable(0)
 watch(store, (value) => {
-  console.log(value) // 0
-  return () => {
-    console.log('cleanup')
-  }
+	console.log(value) // 0
+	return () => {
+		console.log('cleanup')
+	}
 })
 ```
 
@@ -54,8 +55,8 @@ const numberStore = writable(0)
 const memoized = memoize(numberStore) // { current: 0 }
 
 useTask(() => {
-  numberStore.update((n) => n + 1)
-  console.log(memoized.current) // 1, 2, 3, ...
+	numberStore.update((n) => n + 1)
+	console.log(memoized.current) // 1, 2, 3, ...
 })
 
 const stringStore = writable('hello')
@@ -63,7 +64,8 @@ const memoized = memoize([numberStore, stringStore])
 console.log(memoized.current) // [0, 'hello']
 ```
 
-<Tip type="info">This utility function needs to be called during component initialization.</Tip>
+:::
+This utility function needs to be called during component initialization.:::
 
 You can also pass a transform function to transform the values:
 
@@ -72,8 +74,8 @@ const store = writable(0)
 const doubled = memoize(store, (n) => n * 2) // { current: 0 }
 
 useTask(() => {
-  store.update((n) => n + 1)
-  console.log(doubled.current) // 2, 4, 6, ...
+	store.update((n) => n + 1)
+	console.log(doubled.current) // 2, 4, 6, ...
 })
 ```
 
@@ -136,7 +138,7 @@ For use in non-reactive contexts e.g. loops where unwrapping a store every frame
 const store = currentWritable(0)
 
 useTask(() => {
-  console.log(store.current) // 0
+	console.log(store.current) // 0
 })
 ```
 

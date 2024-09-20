@@ -1,3 +1,9 @@
+---
+title: Scope with Zoom
+---
+
+import Example from '$components/Example/Example.astro'
+
 This example shows how to utilize useFBO hook to create a sniper scope zoom effect, complete
 with lens distortion and crosshairs.
 
@@ -32,26 +38,26 @@ A `useTask` hook is used to render the scene onto this target:
 
 ```ts
 const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
-  samples: 8
+	samples: 8
 })
 
 let scope: Group
 
 useTask(() => {
-  if (!scope || !$scoping) return
-  const cam = $camera as PerspectiveCamera
+	if (!scope || !$scoping) return
+	const cam = $camera as PerspectiveCamera
 
-  scope.visible = false
-  cam.fov = $zoomedFov
-  cam.updateProjectionMatrix()
-  cam.matrixWorldNeedsUpdate = true
-  renderer.setRenderTarget(renderTarget)
-  renderer.render(scene, cam)
+	scope.visible = false
+	cam.fov = $zoomedFov
+	cam.updateProjectionMatrix()
+	cam.matrixWorldNeedsUpdate = true
+	renderer.setRenderTarget(renderTarget)
+	renderer.render(scene, cam)
 
-  renderer.setRenderTarget(null)
-  cam.fov = baseFov
-  cam.updateProjectionMatrix()
-  scope.visible = true
+	renderer.setRenderTarget(null)
+	cam.fov = baseFov
+	cam.updateProjectionMatrix()
+	scope.visible = true
 })
 ```
 

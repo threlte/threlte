@@ -12,13 +12,14 @@ longer suspended in the context of a
 lifecycle method `onMount`. If there is no `<Suspense>` component, the callback
 will be executed with Svelte's `onMount` as the component will never suspend.
 
-<Tip type="tip">
-	`onReveal` is mimicking Svelte's `onMount` and can be used in
-	its place for triggering animations, etc., within the boundaries of a
-	`<Suspense>` component. If it's used outside of a `<Suspense>` component, it
-	will behave just like Svelte's `onMount`.
-	This means that
-</Tip>
+:::tip
+`onReveal` is mimicking Svelte's `onMount` and can be used in
+its place for triggering animations, etc., within the boundaries of a
+`<Suspense>` component. If it's used outside of a `<Suspense>` component, it
+will behave just like Svelte's `onMount`.
+This means that
+
+:::
 
 ## Example
 
@@ -47,10 +48,10 @@ component is unmounted or the component is suspended again.
 
 ```ts
 onReveal(() => {
-  console.log('The component has been revealed')
+	console.log('The component has been revealed')
 
-  return () => {
-    console.log('The component has been unmounted or suspended again')
-  }
+	return () => {
+		console.log('The component has been unmounted or suspended again')
+	}
 })
 ```

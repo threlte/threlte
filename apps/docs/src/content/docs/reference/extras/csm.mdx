@@ -59,7 +59,8 @@ Then, wrap all of the objects that you wish to use CSM on (typically your entire
 Internally, the `<CSM>` component modifies the shader code of all materials inside the component.
 Currently, support is limited only to `THREE.MeshStandardMaterial` and `THREE.MeshPhongMaterial`.
 
-<Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
+:::caution
+Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.:::
 
 ## CSM Parameters
 
@@ -101,13 +102,14 @@ This callback facilitates advanced configurations, such as enabling the fade fea
 </CSM>
 ```
 
-<Tip type="tip">
-  With fade enabled, shadows subtly diminish close to `maxFar` distance, presenting a more aesthetic
-  transition compared to an abrupt cut-off. It may be more visually pleasing, but it's important to
-  consider potential performance implications. While typically minimal, the computational complexity
-  can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
-  default.
-</Tip>
+:::tip
+With fade enabled, shadows subtly diminish close to `maxFar` distance, presenting a more aesthetic
+transition compared to an abrupt cut-off. It may be more visually pleasing, but it's important to
+consider potential performance implications. While typically minimal, the computational complexity
+can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
+default.
+
+:::
 
 ## Providing a fallback
 

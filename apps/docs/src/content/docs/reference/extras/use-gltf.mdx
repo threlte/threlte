@@ -13,7 +13,7 @@ Use the component [`<GLTF>`](/docs/reference/extras/gltf) if you want to use a m
 <Example path="extras/use-gltf" />
 
 <small>
-  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+	Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
 </small>
 
 ## Examples
@@ -54,7 +54,7 @@ import { useGltf, useDraco } from '@threlte/extras'
 
 const dracoLoader = useDraco()
 const gltf = useGltf('/path/to/model.glb', {
-  dracoLoader
+	dracoLoader
 })
 ```
 
@@ -65,7 +65,7 @@ import { useGltf, useDraco } from '@threlte/extras'
 
 const dracoLoader = useDraco('/custom/draco/decoders/path')
 const gltf = useGltf('/path/to/model.glb', {
-  dracoLoader
+	dracoLoader
 })
 ```
 
@@ -78,7 +78,7 @@ import { useGltf } from '@threlte/extras'
 
 const dracoLoader = new DRACOLoader().setDecoderPath(path)
 const gltf = useGltf('/path/to/model.glb', {
-  dracoLoader
+	dracoLoader
 })
 ```
 
@@ -93,7 +93,7 @@ import { useGltf, useMeshopt } from '@threlte/extras'
 
 const meshoptDecoder = useMeshopt()
 const gltf = useGltf('/path/to/model.glb', {
-  meshoptDecoder
+	meshoptDecoder
 })
 ```
 
@@ -108,7 +108,7 @@ import { useGltf, useKtx2 } from '@threlte/extras'
 
 const ktx2Loader = useKtx2('path/to/transcoder/')
 const gltf = useGltf('/path/to/model.glb', {
-  ktx2Loader
+	ktx2Loader
 })
 ```
 
@@ -127,7 +127,7 @@ ktx2Loader.setTranscoderPath('path/to/transcoder/')
 ktx2Loader.detectSupport(renderer)
 
 const gltf = useGltf('/path/to/model.glb', {
-  ktx2Loader
+	ktx2Loader
 })
 ```
 
@@ -173,23 +173,20 @@ Provide types and you will gain autocompletion for these objects and materials.
 </script>
 ```
 
-<Tip
-  type="tip"
-  title="How to get the types?"
->
-  On the [loading-assets](/docs/learn/basics/loading-assets) page, Threlte provides the
-  `@threlte/gltf` CLI tool that can be used to generate a reusable Svelte component for your gltf as
-  well as its types.
-</Tip>
+:::tip[How to get the types?]
+On the [loading-assets](/docs/learn/basics/loading-assets) page, Threlte provides the
+`@threlte/gltf` CLI tool that can be used to generate a reusable Svelte component for your gltf as
+well as its types.
+:::
 
 Types can be separated into a typescript file and imported like so if you feel the need.
 
 ```ts title=SomeGltf.ts
 export type SomeGltf = {
-  nodes: {
-    Suzanne: THREE.Mesh
-  }
-  materials: {}
+	nodes: {
+		Suzanne: THREE.Mesh
+	}
+	materials: {}
 }
 ```
 

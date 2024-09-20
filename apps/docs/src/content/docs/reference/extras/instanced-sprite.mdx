@@ -72,10 +72,10 @@ componentSignature:
 
 import ComponentSignature from '../../../components/ComponentSignature/ComponentSignature.astro'
 
-<Tip type="experimental">
-  This is an early version - features and API might change significantly over time. Please report
-  any issues you encounter on Discord or Github.
-</Tip>
+:::caution
+This is an early version - features and API might change significantly over time. Please report
+any issues you encounter on Discord or Github.
+:::
 
 The `<InstancedSprite>` component allows you to efficiently spawn large numbers of animated
 [sprites](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>) in your scene and update each instance
@@ -214,80 +214,80 @@ _Example: Set a position, scale and flipX for every instance._
 ```
 
 <ComponentSignature
-  titleOverride={` `}
-  idOverride="instance-component-signature"
-  componentName={'<Instance/>'}
-  signature={{
-    props: [
-      {
-        name: 'id',
-        type: 'number',
-        required: true,
-        description: 'Instance id. Ranges between 0 and the `count` value of InstacedSpriteMesh.'
-      },
-      {
-        name: 'animationName',
-        type: 'string',
-        required: false,
-        description: 'Sets an active animation by name.'
-      },
-      {
-        name: 'position',
-        type: 'Vector3Tuple',
-        required: false,
-        description: 'Sets the position of an instance.'
-      },
-      {
-        name: 'scale',
-        type: 'Vector2Tuple',
-        required: false,
-        description: 'Sets the scale of an instance.'
-      },
-      {
-        name: 'playmode',
-        type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
-        required: false,
-        description: 'Sets the playmode of an instance.'
-      },
-      {
-        name: 'billboarding',
-        type: 'boolean',
-        required: false,
-        description: 'Toggles billboarding on/off.'
-      },
-      {
-        name: 'offset',
-        type: 'number',
-        required: false,
-        description: 'Sets the exact time value in ms by which the animation playback is offset.'
-      },
-      {
-        name: 'loop',
-        type: 'boolean',
-        required: false,
-        description:
-          'Toggles looping of the animation on/off. If off, the last played frame is displayed when the animation completes.'
-      },
-      {
-        name: 'flipX',
-        type: 'boolean',
-        required: false,
-        description: 'Toggles flipping the sprite horizontally.'
-      },
-      {
-        name: 'flipY',
-        type: 'boolean',
-        required: false,
-        description: 'Toggles flipping the sprite vertically.'
-      },
-      {
-        name: 'frameId',
-        type: 'number',
-        required: false,
-        description: `Sets an exact frame to display. If animationName is set, it's the id of the frame in that given animation, otherwise it's a spritesheet frame id.`
-      }
-    ]
-  }}
+	titleOverride={` `}
+	idOverride="instance-component-signature"
+	componentName={'<Instance/>'}
+	signature={{
+		props: [
+			{
+				name: 'id',
+				type: 'number',
+				required: true,
+				description: 'Instance id. Ranges between 0 and the `count` value of InstacedSpriteMesh.'
+			},
+			{
+				name: 'animationName',
+				type: 'string',
+				required: false,
+				description: 'Sets an active animation by name.'
+			},
+			{
+				name: 'position',
+				type: 'Vector3Tuple',
+				required: false,
+				description: 'Sets the position of an instance.'
+			},
+			{
+				name: 'scale',
+				type: 'Vector2Tuple',
+				required: false,
+				description: 'Sets the scale of an instance.'
+			},
+			{
+				name: 'playmode',
+				type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
+				required: false,
+				description: 'Sets the playmode of an instance.'
+			},
+			{
+				name: 'billboarding',
+				type: 'boolean',
+				required: false,
+				description: 'Toggles billboarding on/off.'
+			},
+			{
+				name: 'offset',
+				type: 'number',
+				required: false,
+				description: 'Sets the exact time value in ms by which the animation playback is offset.'
+			},
+			{
+				name: 'loop',
+				type: 'boolean',
+				required: false,
+				description:
+					'Toggles looping of the animation on/off. If off, the last played frame is displayed when the animation completes.'
+			},
+			{
+				name: 'flipX',
+				type: 'boolean',
+				required: false,
+				description: 'Toggles flipping the sprite horizontally.'
+			},
+			{
+				name: 'flipY',
+				type: 'boolean',
+				required: false,
+				description: 'Toggles flipping the sprite vertically.'
+			},
+			{
+				name: 'frameId',
+				type: 'number',
+				required: false,
+				description: `Sets an exact frame to display. If animationName is set, it's the id of the frame in that given animation, otherwise it's a spritesheet frame id.`
+			}
+		]
+	}}
 />
 
 ### binding
@@ -306,14 +306,14 @@ accommodate the metadata for one or multiple sprite files within a single sprite
 
 ```ts
 type SpritesheetMetadata = {
-  url: string
-  type: 'rowColumn' | 'frameSize'
-  width: number
-  height: number
-  animations: {
-    name: string
-    frameRange: [number, number]
-  }[]
+	url: string
+	type: 'rowColumn' | 'frameSize'
+	width: number
+	height: number
+	animations: {
+		name: string
+		frameRange: [number, number]
+	}[]
 }[]
 ```
 
@@ -347,18 +347,18 @@ extra typescript support for autocompletion of animation names as such:
 
 ```ts
 const meta = [
-  {
-    url: '/textures/sprites/cacodaemon.png',
-    type: 'rowColumn',
-    width: 8,
-    height: 4,
-    animations: [
-      { name: 'fly', frameRange: [0, 5] },
-      { name: 'attack', frameRange: [8, 13] },
-      { name: 'idle', frameRange: [16, 19] },
-      { name: 'death', frameRange: [24, 31] }
-    ]
-  }
+	{
+		url: '/textures/sprites/cacodaemon.png',
+		type: 'rowColumn',
+		width: 8,
+		height: 4,
+		animations: [
+			{ name: 'fly', frameRange: [0, 5] },
+			{ name: 'attack', frameRange: [8, 13] },
+			{ name: 'idle', frameRange: [16, 19] },
+			{ name: 'death', frameRange: [24, 31] }
+		]
+	}
 ] as const satisfies SpritesheetMetadata
 
 const result = buildSpritesheet.from<typeof meta>(meta)
@@ -377,18 +377,18 @@ Does not provide any additional utilities.
 
 ```ts
 const demonSpriteMeta = [
-  {
-    url: '/textures/sprites/cacodaemon.png',
-    type: 'rowColumn',
-    width: 8,
-    height: 4,
-    animations: [
-      { name: 'fly', frameRange: [0, 5] },
-      { name: 'attack', frameRange: [8, 13] },
-      { name: 'idle', frameRange: [16, 19] },
-      { name: 'death', frameRange: [24, 31] }
-    ]
-  }
+	{
+		url: '/textures/sprites/cacodaemon.png',
+		type: 'rowColumn',
+		width: 8,
+		height: 4,
+		animations: [
+			{ name: 'fly', frameRange: [0, 5] },
+			{ name: 'attack', frameRange: [8, 13] },
+			{ name: 'idle', frameRange: [16, 19] },
+			{ name: 'death', frameRange: [24, 31] }
+		]
+	}
 ] as const satisfies SpritesheetMetadata
 ```
 
@@ -396,27 +396,27 @@ const demonSpriteMeta = [
 
 ```ts
 const goblinSpriteMeta = [
-  {
-    url: '/textures/sprites/goblin/Attack.png',
-    type: 'rowColumn',
-    width: 8,
-    height: 1,
-    animations: [{ name: 'attack', frameRange: [0, 7] }]
-  },
-  {
-    url: '/textures/sprites/goblin/Death.png',
-    type: 'rowColumn',
-    width: 4,
-    height: 1,
-    animations: [{ name: 'death', frameRange: [0, 3] }]
-  },
-  {
-    url: '/textures/sprites/goblin/Idle.png',
-    type: 'rowColumn',
-    width: 4,
-    height: 1,
-    animations: [{ name: 'idle', frameRange: [0, 3] }]
-  }
+	{
+		url: '/textures/sprites/goblin/Attack.png',
+		type: 'rowColumn',
+		width: 8,
+		height: 1,
+		animations: [{ name: 'attack', frameRange: [0, 7] }]
+	},
+	{
+		url: '/textures/sprites/goblin/Death.png',
+		type: 'rowColumn',
+		width: 4,
+		height: 1,
+		animations: [{ name: 'death', frameRange: [0, 3] }]
+	},
+	{
+		url: '/textures/sprites/goblin/Idle.png',
+		type: 'rowColumn',
+		width: 4,
+		height: 1,
+		animations: [{ name: 'idle', frameRange: [0, 3] }]
+	}
 ] as const satisfies SpritesheetMetadata
 ```
 

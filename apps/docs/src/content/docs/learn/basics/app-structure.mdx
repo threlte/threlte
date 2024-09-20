@@ -66,13 +66,13 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 
 ## Context Not Available
 
-<Tip type="danger">
-	The following app structure is deceiving. It looks like it should work, but **it
-	will not**. The problem is that the `useTask` hook is called *outside* of the
-	`<Canvas>` component, so the main Threlte context is not available. Usually hooks
-	relying on some context will tell you with descriptive error messages when they
-	are used outside of their context.
-</Tip>
+:::danger
+The following app structure is deceiving. It looks like it should work, but **it
+will not**. The problem is that the `useTask` hook is called _outside_ of the
+`<Canvas>` component, so the main Threlte context is not available. Usually hooks
+relying on some context will tell you with descriptive error messages when they
+are used outside of their context.
+:::
 
 ```svelte title="App.svelte"
 <script>

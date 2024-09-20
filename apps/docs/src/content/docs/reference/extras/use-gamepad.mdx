@@ -46,10 +46,10 @@ This prop will be `null` unless a gamepad is connected.
 </script>
 ```
 
-<Tip type="warning">
-  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches
-  `gamepad.raw` will become stale on the next frame.
-</Tip>
+:::caution
+Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches
+`gamepad.raw` will become stale on the next frame.
+:::
 
 ### Connection status
 
