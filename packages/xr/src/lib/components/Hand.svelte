@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'

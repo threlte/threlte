@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+	import NestedComponents from "./NestedComponents.svelte";
 
   type Props = {
     extensions: ConstructorOfATypedSvelteComponent[]
@@ -14,9 +15,9 @@
 
 <svelte:component this={thisExtension}>
   {#if nextExtensions.length > 0}
-    <svelte:self extensions={nextExtensions}>
+    <NestedComponents extensions={nextExtensions}>
       {@render children()}
-    </svelte:self>
+    </NestedComponents>
   {:else}
     {@render children()}
   {/if}

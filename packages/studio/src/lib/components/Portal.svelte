@@ -1,5 +1,5 @@
 <script
-  context="module"
+  module
   lang="ts"
 >
   import { tick } from 'svelte'
