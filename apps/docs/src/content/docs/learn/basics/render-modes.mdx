@@ -1,0 +1,213 @@
+---
+category: Basics
+title: Render Modes
+order: -450
+---
+
+Threlte offers three different render modes to optimize the performance and
+power usage of your Threlte app. Ideally, you only want to render the scene
+when it is necessary, such as when the camera moves or when objects are added or
+removed from the scene. The render mode determines how and when the scene is
+rendered.
+
+In the default [`'on-demand'`](#mode-on-demand) mode, Threlte is able to
+determine when a re-render is necessary by observing components. When setting
+the render mode to [`'manual'`](#mode-manual) you must manually trigger a
+re-render. You can tell Threlte to continuously render the scene in the
+[`'always'`](#mode-always) mode.
+
+## Mode `'on-demand'`
+
+<Example path="other/on-demand-rendering" />
+
+In the mode `'on-demand'`, Threlte renders the scene only when the current frame
+is **invalidated**. This may happen [automatically when changes are
+detected](#automatic-invalidation) or the frame is [manually
+invalidated](#manual-invalidation). This is the default mode and the recommended
+way of working with Threlte.
+
+### Automatic Invalidation
+
+Threlte is able to automatically invalidate the current frame by observing
+component props and the mounting and unmounting of components. This means that
+when you e.g. change the position of a `<T.Mesh>` via component props, Threlte
+will automatically invalidate the current frame and request a new frame.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+
+  let x = 0
+
+  const move = () => {
+    x += 1
+  }
+</script>
+
+<T.Mesh position.x={x} />
+```
+
+### Manual Invalidation
+
+In some cases, you may want to manually invalidate the current frame because
+Threlte is not able to detect changes. To do this, you can use the `invalidate`
+function from the [`useThrelte`](/docs/reference/core/use-threlte) hook.
+
+```svelte
+<script>
+  import { T, useThrelte } from '@threlte/core'
+  import { Mesh } from 'three'
+
+  const { invalidate } = useThrelte()
+
+  const mesh = new Mesh()
+
+  export const moveMesh = () => {
+    // moving the mesh manually
+    mesh.position.x = 1
+    // invalidate the current frame
+    invalidate()
+  }
+</script>
+
+<T is={mesh} />
+```
+
+### `useTask`
+
+The [`useTask`](/docs/reference/core/use-task) hook is by default configured to
+automatically invalidate the current frame **on every frame**. This means that you
+can use it to animate your scene without having to manually invalidate the
+current frame.
+
+```ts
+import { useTask } from '@threlte/core'
+
+useTask(() => {
+  // useTask will automatically invalidate the current
+  // frame, so you don't have to do it manually.
+})
+```
+
+Sometimes you may want to manually invalidate the current frame from within a
+task. To do this, you can use the `invalidate` function from the
+[`useThrelte`](/docs/reference/core/use-threlte) hook and set the `autoInvalidate`
+option to `false`:
+
+```ts
+import { useTask, useThrelte } from '@threlte/core'
+
+const { invalidate } = useThrelte()
+
+useTask(
+  () => {
+    // Because `autoInvalidate` is set to `false`, the current
+    // frame will not be invalidated automatically and you can
+    // conditionally invalidate the current frame.
+    invalidate()
+  },
+  { autoInvalidate: false }
+)
+```
+
+## Mode `'manual'`
+
+In the manual mode, you must manually trigger a re-render:
+
+```ts
+const { advance } = useThrelte()
+advance()
+```
+
+This mode is useful when you want to have full control over when the scene is
+rendered. For example, you may want to render the scene only when the user
+interacts with the scene.
+
+## Mode `'always'`
+
+In the `'always'` mode, Threlte continuously renders the scene. This mode is the
+easiest to use, but it is also the most resource intensive and should only be
+used when necessary.
+
+## Setting the Render Mode
+
+### `<Canvas>` Prop
+
+You can set the render mode by setting the property `renderMode` on the
+[`<Canvas>`](/docs/reference/core/canvas) component:
+
+```svelte
+<Canvas renderMode="on-demand" />
+```
+
+### `useThrelte` Hook
+
+You can also set the render mode from anywhere within your Threlte app using the
+[`useThrelte`](/docs/reference/core/use-threlte) hook:
+
+```ts
+const { renderMode } = useThrelte()
+renderMode.set('on-demand')
+```
+
+<Tip type="tip">
+  The renderMode property can be changed at any time, but it will only take effect on the next
+  frame.
+</Tip>
+
+## Render Modes and Custom Rendering
+
+By default, Threlte will automatically render the scene for you. In some cases,
+you may want to render the scene yourself, for example when using [post
+processing](/docs/examples/postprocessing/outlines).
+
+1. Set `autoRender` to `false` on the [`<Canvas>`](/docs/reference/core/canvas)
+   component. This will prevent Threlte from automatically rendering the scene
+   and you can render the scene yourself.
+
+```svelte
+<Canvas autoRender={false} />
+```
+
+2. Set up a task that renders the scene. There are two ways to do this:
+
+- Add a task to [Threlte's default
+  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages). Tasks in
+  that stage will be executed after tasks in Threlte's `mainStage` and only
+  when a re-render is necessary based on the current render mode. This is the
+  recommended approach.
+
+```ts
+import { useTask, useThrelte } from '@threlte/core'
+
+const { renderStage } = useThrelte()
+
+useTask(
+  () => {
+    // render here
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
+```
+
+- Use `shouldRender` from the hook
+  [`useThrelte`](/docs/reference/core/use-threlte). This function will evaluate
+  to `true` based on the current render mode. This allows for more fine-grained
+  control over when to render and is useful when you want to render in a task
+  that is not in [Threlte's default
+  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages).
+
+```ts
+import { useThrelte, useTask } from '@threlte/core'
+
+const { shouldRender } = useThrelte()
+
+useTask(
+  () => {
+    if (shouldRender()) {
+      // render here
+    }
+  },
+  { autoInvalidate: false }
+)
+```

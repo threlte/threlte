@@ -1,0 +1,275 @@
+---
+title: Plugins
+category: Advanced
+order: 0
+---
+
+## Injecting a Plugin
+
+### What it looks like
+
+Plugins open up the component `<T>` to external code that will be injected via context into every child instance of a `<T>` component.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+injectPlugin('plugin-name', ({ ref, props }) => {
+  console.log(ref, props)
+})
+```
+
+If a plugin decides via `ref` or `props` analysis that it doesn't need to act in the context of a certain `<T>` component, it can return early.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+import type { Object3D } from 'three'
+
+const refIsObject3D = (ref: any): ref is Object3D => ref.isObject3D
+
+injectPlugin('raycast-plugin', ({ ref, props }) => {
+  if (!refIsObject3D(ref) || !props.raycast) return
+})
+```
+
+The code of a plugin acts as if it would be part of the `<T>` component itself and has access to all properties. A plugin is notified about property or `ref` changes and can run code in lifecycle functions such as `onMount` or `onDestroy`.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+import { onMount } from 'svelte'
+
+injectPlugin('plugin-name', () => {
+  // Use lifecycle hooks as if it would run inside a <T> component.
+  onMount(() => {
+    console.log('onMount')
+  })
+
+  return {
+    // This is called when the ref changes and on initialization.
+    onRefChange(ref) {
+      console.log(ref)
+
+      // You can return a cleanup function that will be called when the ref
+      // changes again or when the component is destroyed.
+      return () => {
+        console.log('cleanup')
+      }
+    },
+
+    // This is called when the props change and on initialization. This includes
+    // props like "args", "manual" and other base props of <T> but also
+    // props that are not part of the base props.
+    onPropsChange(props) {
+      console.log(props)
+    },
+
+    // This is called when the props change that are not part of the <T>
+    // components base props and on initialization.
+    onRestPropsChange(restProps) {
+      console.log(restProps)
+    }
+  }
+})
+```
+
+It can also _claim properties_ so that the component `<T>` does not act on it.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+injectPlugin('ecs', () => {
+  return {
+    // without claiming the property "position", <T> would apply the
+    // property to the object
+    pluginProps: ['entity', 'health', 'velocity', 'position']
+  }
+})
+```
+
+Plugins are passed down by context and can be overridden to prevent the effects of a plugin for a certain tree.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+// this overrides the plugin with the name "plugin-name" for all child components.
+injectPlugin('plugin-name', () => {})
+```
+
+### Creating a Plugin
+
+Plugins can also be _created_ for external consumption. This creates a _named plugin_. The name is used to identify the plugin and to override it.
+
+```ts
+import { createPlugin } from '@threlte/core'
+
+export const layersPlugin = createPlugin('layers', () => {
+  // ... Plugin Code
+})
+```
+
+```ts
+// somewhere else, e.g. in a component
+
+import { injectPlugin } from '@threlte/core'
+import { layersPlugin } from '$plugins'
+
+injectPlugin(layersPlugin)
+```
+
+## Examples
+
+### `lookAt`
+
+This is en example implementation that adds the property `lookAt` to all `<T>` components, so that `<T.Mesh lookAt={[0, 10, 0]} />` is possible:
+
+<Example path="plugins/lookAt" />
+
+### BVH Raycast Plugin
+
+A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mesh-bvh) on all child meshes and geometries.
+
+```svelte
+<script lang="ts">
+  import { injectPlugin } from '@threlte/core'
+  import type { BufferGeometry, Mesh } from 'three'
+  import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
+
+  const isBufferGeometry = (ref: any): ref is BufferGeometry => {
+    return ref.isBufferGeometry
+  }
+
+  const isMesh = (ref: any): ref is Mesh => {
+    return ref.isMesh
+  }
+
+  injectPlugin('bvh-raycast', () => {
+    return {
+      onRefChange(ref) {
+        if (isBufferGeometry(ref)) {
+          ;(ref as any).computeBoundsTree = computeBoundsTree
+          ;(ref as any).disposeBoundsTree = disposeBoundsTree
+          ;(ref as any).computeBoundsTree()
+        }
+        if (isMesh(ref)) {
+          ;(ref as any).raycast = acceleratedRaycast
+        }
+        return () => {
+          if (isBufferGeometry(ref)) {
+            ;(ref as any).disposeBoundsTree()
+          }
+        }
+      }
+    }
+  })
+</script>
+
+<slot />
+```
+
+Implementing this plugin in your Scene:
+
+```svelte
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import BvhRaycast from './plugins/BvhRaycast.svelte'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <BvhRaycast>
+    <Scene />
+  </BvhRaycast>
+</Canvas>
+```
+
+### Threlte-managed Matrix Updates
+
+By default, Three.js is automatically updating the `matrix` and `matrixWorld` properties of all objects every frame. This can be a performance problem in large apps, because it is not necessary in certain situations. This plugin listens for changes to certain transform-related properties and updates the `matrix` and `matrixWorld` properties only when necessary.
+
+```svelte
+<script lang="ts">
+  import { Object3D } from 'three'
+  import { injectPlugin, useTask, useThrelte } from '@threlte/core'
+
+  const { invalidate } = useThrelte()
+  const isObject3D = (obj: any): obj is Object3D => {
+    return obj.isObject3D
+  }
+
+  const propKeysRequiringMatrixUpdate = [
+    'position',
+    'position.x',
+    'position.y',
+    'position.z',
+    'rotation',
+    'rotation.x',
+    'rotation.y',
+    'rotation.z',
+    'rotation.order',
+    'quaternion',
+    'quaternion.x',
+    'quaternion.y',
+    'quaternion.z',
+    'quaternion.w',
+    'scale',
+    'scale.x',
+    'scale.y',
+    'scale.z'
+  ]
+
+  const objectsToUpdate: Set<Object3D> = new Set()
+
+  type MatrixPluginProps = {
+    matrixAutoUpdate?: boolean
+  }
+
+  injectPlugin<MatrixPluginProps>('matrix-update', ({ ref, props }) => {
+    if (!isObject3D(ref)) return
+    if (props.matrixAutoUpdate) return
+    ref.matrixAutoUpdate = false
+
+    const checkForMatrixUpdate = (props: Record<string, any>) => {
+      if (Object.keys(props).some((key) => propKeysRequiringMatrixUpdate.includes(key))) {
+        objectsToUpdate.add(ref)
+      }
+    }
+    checkForMatrixUpdate(props)
+
+    return {
+      pluginProps: ['matrixAutoUpdate'],
+      onRestPropsChange(restProps) {
+        checkForMatrixUpdate(restProps)
+      }
+    }
+  })
+
+  useTask(
+    () => {
+      if (!objectsToUpdate.size) return
+      objectsToUpdate.forEach((obj) => obj.updateMatrix())
+      objectsToUpdate.clear()
+      invalidate()
+    },
+    {
+      autoInvalidate: false
+    }
+  )
+</script>
+
+<slot />
+```
+
+Now when applying props like `position.x` or `scale` to any `<T>` component, the matrix of the object will update but doesn't just update every frame as Three.js does by default. If an object is transformed without props (like a camera being transformed by `THREE.OrbitControls`) you can apply the flag `matrixAutoUpdate`:
+
+```svelte
+<T.PerspectiveCamera
+  matrixAutoUpdate
+  makeDefault
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
+```
+
+<Tip type="tip">
+  Notice how this plugin uses TypeScript to augment to possible props this plugin may receive. This
+  is not necessary, but it is a good practice to do so.
+</Tip>
