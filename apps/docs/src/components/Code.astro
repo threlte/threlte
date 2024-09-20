@@ -1,0 +1,43 @@
+---
+import { Code as SLCode } from '@astrojs/starlight/components'
+
+type Props = {
+	/**
+	 * The plaintext contents of the code block.
+	 */
+	code: string
+	title?: string
+	/**
+	 * The code block's language.
+	 *
+	 * Please use a valid [language identifier](https://expressive-code.com/key-features/syntax-highlighting/#supported-languages)
+	 * to ensure proper syntax highlighting.
+	 */
+	lang?: string | undefined
+	/**
+	 * An optional meta string. In markdown or MDX documents, this is the part of the
+	 * code block's opening fence that comes after the language name.
+	 */
+	meta?: string | undefined
+	/**
+	 * The code block's locale (e.g. `en-US` or `de-DE`). This is used by plugins to display
+	 * localized strings depending on the language of the containing page.
+	 *
+	 * If no locale is defined here, most Expressive Code integrations will attempt to auto-detect
+	 * the block locale using the configured
+	 * [`getBlockLocale`](https://expressive-code.com/reference/configuration/#getblocklocale)
+	 * function, and finally fall back to the configured
+	 * [`defaultLocale`](https://expressive-code.com/reference/configuration/#defaultlocale).
+	 */
+	locale?: string | undefined
+	/**
+	 * The CSS class name(s) to apply to the code block's container element.
+	 */
+	class?: string | undefined
+}
+
+// hack because of inconsistent width of tabs between fenced blocks and component blocks
+const code = Astro.props.code.replace(/\t/g, '  ')
+---
+
+<SLCode {...Astro.props} {code} />

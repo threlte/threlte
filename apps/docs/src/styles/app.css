@@ -1,43 +1,230 @@
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .text-faded {
-    @apply text-white/60;
-  }
-
-  .text-highlight {
-    @apply font-bold text-white;
-  }
+:root {
+	--sl-font: 'Inter', sans-serif;
+	--sl-color-accent-low: #421107;
+	--sl-color-accent: #bd2b00;
+	--sl-color-accent-high: #f7b7a7;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #ebeef4;
+	--sl-color-gray-2: #bec2ca;
+	--sl-color-gray-3: #848c9a;
+	--sl-color-gray-4: #525865;
+	--sl-color-gray-5: #323844;
+	--sl-color-gray-6: #212732;
+	--sl-color-black: #15181d;
+	--sl-color-bg-sidebar: #0a0f19;
+	--sl-color-bg-nav: #0a0f19;
+	--sl-color-bg: #0a0f19;
+	--sl-nav-height: 5rem;
+	--sl-color-text-accent: #fe3d00;
+	--sl-color-text: #fff9;
 }
+
+/* This is here because for some reason the deploy wasn't hiding socials text on landing page. Docs was fine tho 🤷 */
+.sr-only {
+	@apply !hidden;
+}
+/* This is maddening. orange is working fine but blue and green are not. hacky fix. */
+.bg-blue {
+	@apply !bg-blue;
+}
+.bg-green {
+	@apply !bg-green;
+}
+.glow-blue {
+	@apply !glow-blue;
+}
+.glow-green {
+	@apply !glow-green;
+}
+
+/* ======= Buttons ========================== */
+.blue-button {
+	@apply flex w-fit flex-row gap-3 rounded-md bg-blue px-7 py-4 text-center text-lg text-white no-underline hover:bg-blue-400;
+}
+.green-button {
+	@apply flex w-fit flex-row gap-3 rounded-md bg-green px-7 py-4 text-center text-lg text-white no-underline hover:bg-green-400;
+}
+.orange-button {
+	@apply flex w-fit flex-row gap-3 rounded-md bg-orange px-7 py-4 text-center text-lg text-white no-underline hover:bg-orange-400;
+}
+
+/* Glows */
+.glow-orange {
+	background-image: radial-gradient(closest-side, rgba(255, 146, 112, 0.1) 0%, transparent 100%);
+}
+.glow-blue {
+	background-image: radial-gradient(closest-side, rgba(123, 175, 224, 0.12) 0%, transparent 100%);
+}
+.glow-green {
+	background-image: radial-gradient(closest-side, rgba(135, 230, 151, 0.12) 0%, transparent 100%);
+}
+
+/* ======= Markdown ========================== */
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+	@apply text-orange;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) > a {
+	color: var(--sl-color-white);
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+/* ======= Top Nav ========================== */
+
+header.header {
+	@apply flex items-center border-b-[1px] border-b-orange/25;
+}
+
+/* Socials */
+div.social-icons > a {
+	color: var(--sl-color-white);
+}
+
+/* ======= Search ========================== */
+
+site-search > dialog {
+	@apply bg-blue-900;
+}
+
+/* ======= Sidebar ========================== */
+
+#starlight__sidebar {
+	background-color: var(--sl-color-bg);
+	position: fixed;
+	overflow-y: scroll;
+	border-inline-end: none;
+}
+
+multi-sidebar ul > li > a[aria-current='page'] {
+	color: var(--sl-color-text-accent);
+	background-color: transparent;
+	&:hover {
+		background-color: transparent;
+		color: var(--sl-color-white);
+	}
+	&:focus {
+		background-color: transparent;
+		color: var(--sl-color-text-accent);
+	}
+}
+
+.right-sidebar {
+	border-inline-start: none;
+}
+
+#starlight__on-this-page--mobile > div {
+	@apply bg-blue-900;
+}
+
+details#starlight__mobile-toc > div.dropdown {
+	@apply bg-blue-900;
+}
+
+div.mobile-preferences {
+	@apply border-none;
+}
+
+/* ======= Code Blocks ========================== */
+
+.expressive-code {
+	@apply mb-6;
+}
+
+.expressive-code .frame pre {
+	@apply rounded-b-md !bg-blue-900;
+}
+
+.expressive-code pre {
+	@apply bg-blue-900;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title::after {
+	@apply !border-none;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header {
+	@apply rounded-t-md !bg-none;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header .title {
+	@apply bg-blue-900;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title {
+	@apply !rounded-t-md;
+}
+
+/* ======= Scrollbar ========================== */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+	width: 6px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  border-radius: 8px;
+	border-radius: 8px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #2f7dc630;
-  border-radius: 10px;
+	background: #2f7dc630;
+	border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #2f7dc6aa;
+	background: #2f7dc6aa;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	border-radius: 8px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #2f7dc630;
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #2f7dc6aa;
 }

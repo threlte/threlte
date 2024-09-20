@@ -1,0 +1,37 @@
+---
+import '../styles/app.css'
+import '@fontsource/inter'
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Threlte | demo</title>
+	</head>
+	<body>
+		<div>
+			<slot />
+		</div>
+	</body>
+	<style>
+		html,
+		body {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			margin: 0;
+			background: #0a0f19;
+			color: #fff9;
+			font-family: inter, sans-serif;
+		}
+
+		div {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
+</html>

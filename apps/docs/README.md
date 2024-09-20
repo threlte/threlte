@@ -1,3 +1,13 @@
-## 👀 Our docs are built using Astro
+# Threlte Starlight Shell
 
-Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm) or check out [their documentation](https://docs.astro.build).
+## TODO
+
+- Landing Page
+  - @Theatre/core type import issue
+  - (dark cube thingy)
+- Content when ready
+
+## Notes
+
+- Public folder is for assets that aren't preprocessed
+  - https://docs.astro.build/en/guides/images/

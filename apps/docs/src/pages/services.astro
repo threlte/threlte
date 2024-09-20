@@ -1,0 +1,199 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+import Layout from '../layouts/LandingPage.astro'
+import FeatureSection from '$components/landing-page/FeatureSection.astro'
+import ContactForm from '$components/ContactForm/ContactForm.svelte'
+import { Image } from 'astro:assets'
+import logoSrc from '$assets/logo/threlte-logo.png'
+import Socials from '@astrojs/starlight/components/SocialIcons.astro'
+import { URLs } from '$components/landing-page/URLs.ts'
+---
+
+<Layout title="Welcome to Threlte.">
+	<header
+		class="fixed left-0 right-0 top-0 z-10 flex h-20 flex-row items-center justify-between bg-[#0a0f19] px-6 [box-shadow:0_25px_50px_12px_rgb(10,15,25)]"
+	>
+		<div class="flex items-center">
+			<a href="/">
+				<Image src={logoSrc} width={222} alt="threlte logo" />
+			</a>
+			<a href={URLs.docs.start} class="pl-12 text-[#fff9] no-underline">Documentation</a>
+			<a href={URLs.services} class="pl-12 text-[#fff9] no-underline">Services</a>
+		</div>
+		<div class="social-icons flex gap-4">
+			<Socials {...Astro.props} />
+		</div>
+	</header>
+	<main class="mt-24">
+		<div class="flex flex-col gap-24 py-12">
+			<div class="flex flex-col items-center gap-4">
+				<h1 class="relative z-10 max-w-[450px] text-center text-4xl font-bold text-white/90">
+					Development & Support<br />by the
+					<span class="relative inline-block">
+						<div class="absolute bottom-0 left-0 -z-10 h-4 w-full bg-orange"></div>
+						Threlte Team</span
+					>.
+				</h1>
+				<a class="orange-button my-6 pl-4" href="#get-in-touch">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						fill="#ffffff"
+						viewBox="0 0 256 256"
+						><path
+							d="M223.69,42.18l-58.22,192a8,8,0,0,1-14.92,1.25L110,149.81a8,8,0,0,0-3.8-3.8L20.58,105.45a8,8,0,0,1,1.25-14.92l192-58.22A8,8,0,0,1,223.69,42.18Z"
+							opacity="0.2"></path><path
+							d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"
+						></path></svg
+					> Get In Touch
+				</a>
+				<div class="text-faded mb-12 flex-1 text-center text-2xl font-light">
+					Your experts<br />
+					for <span class="font-bold text-orange">3D Web Projects</span>.
+				</div>
+			</div>
+		</div>
+
+		<div class="flex justify-center">
+			<div class="max-w-[75ch]">
+				<FeatureSection class="border-t-0">
+					<svg
+						slot="icon"
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						fill="#ffffff"
+						viewBox="0 0 256 256"
+						><path
+							d="M16,152H48v56H16a8,8,0,0,1-8-8V160A8,8,0,0,1,16,152ZM192.54,40A39.12,39.12,0,0,0,156,64a39.12,39.12,0,0,0-36.54-24C97.67,40,80,58.31,80,80c0,14.56,7,27.71,16.73,40H140a20,20,0,0,1,0,40h4l37.78-8.68C203.82,135.07,232,109.23,232,80,232,58.31,214.33,40,192.54,40Z"
+							opacity="0.2"></path><path
+							d="M230.33,141.06a24.34,24.34,0,0,0-18.61-4.77C230.5,117.33,240,98.48,240,80c0-26.47-21.29-48-47.46-48A47.58,47.58,0,0,0,156,48.75,47.58,47.58,0,0,0,119.46,32C93.29,32,72,53.53,72,80c0,11,3.24,21.69,10.06,33a31.87,31.87,0,0,0-14.75,8.4L44.69,144H16A16,16,0,0,0,0,160v40a16,16,0,0,0,16,16H120a7.93,7.93,0,0,0,1.94-.24l64-16a6.94,6.94,0,0,0,1.19-.4L226,182.82l.44-.2a24.6,24.6,0,0,0,3.93-41.56ZM119.46,48A31.15,31.15,0,0,1,148.6,67a8,8,0,0,0,14.8,0,31.15,31.15,0,0,1,29.14-19C209.59,48,224,62.65,224,80c0,19.51-15.79,41.58-45.66,63.9l-11.09,2.55A28,28,0,0,0,140,112H100.68C92.05,100.36,88,90.12,88,80,88,62.65,102.41,48,119.46,48ZM16,160H40v40H16Zm203.43,8.21-38,16.18L119,200H56V155.31l22.63-22.62A15.86,15.86,0,0,1,89.94,128H140a12,12,0,0,1,0,24H112a8,8,0,0,0,0,16h32a8.32,8.32,0,0,0,1.79-.2l67-15.41.31-.08a8.6,8.6,0,0,1,6.3,15.9Z"
+						></path></svg
+					>
+
+					<Fragment slot="subline">Our Services</Fragment>
+
+					<Fragment slot="headline">Development,<br />Training & Support</Fragment>
+
+					<Fragment slot="body-left">
+						<p>
+							3D web development requires expertise. Whether you want to outsource or build in-house
+							capabilities, we can support you on your way:
+						</p>
+						<ul class="ml-4 mt-4">
+							<li>
+								<span class="text-highlight">Development Contracting</span> - outsource 3D app, site
+								or component development to our team.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Team Augmentation</span> - have our domain experts embedded
+								in your team.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Training Programs</span> - master classes in the WebGL and
+								the Threlte framework tailored to your needs.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Support Packages</span> - dedicated support through email,
+								chat and weekly or biweekly consultation calls.
+							</li>
+						</ul>
+						<p class="mt-4">
+							All built on top of an open-source framework with a clean API, excellent docs and a
+							thriving community.
+						</p>
+					</Fragment>
+				</FeatureSection>
+
+				<FeatureSection color="blue">
+					<svg xmlns="http://www.w3.org/2000/svg" slot="icon" fill="#ffffff" viewBox="0 0 256 256"
+						><path
+							d="M72,160l24,24s-8,32-56,32C40,168,72,160,72,160Zm64-88H74.35a8,8,0,0,0-5.65,2.34L34.35,108.69a8,8,0,0,0,4.53,13.57L80,128Zm-8,104,5.74,41.12a8,8,0,0,0,13.57,4.53l34.35-34.35a8,8,0,0,0,2.34-5.65V120Z"
+							opacity="0.2"></path><path
+							d="M103.77,185.94C103.38,187.49,93.63,224,40,224a8,8,0,0,1-8-8c0-53.63,36.51-63.38,38.06-63.77a8,8,0,0,1,3.88,15.53c-.9.25-22.42,6.54-25.56,39.86C81.7,204.48,88,183,88.26,182a8,8,0,0,1,15.51,4Zm93-67.4L192,123.31v58.33A15.91,15.91,0,0,1,187.32,193L153,227.3A15.91,15.91,0,0,1,141.7,232a16.11,16.11,0,0,1-5.1-.83,15.94,15.94,0,0,1-10.78-12.92l-5.37-38.49L76.24,135.55l-38.47-5.37A16,16,0,0,1,28.7,103L63,68.68A15.91,15.91,0,0,1,74.36,64h58.33l4.77-4.77c26.68-26.67,58.83-27.82,71.41-27.07a16,16,0,0,1,15,15C224.6,59.71,223.45,91.86,196.78,118.54ZM40,114.34l37.15,5.18L116.69,80H74.36ZM91.32,128,128,164.68l57.45-57.45a76.46,76.46,0,0,0,22.42-59.16,76.64,76.64,0,0,0-59.11,22.47ZM176,139.31l-39.53,39.53L141.67,216,176,181.64Z"
+						></path></svg
+					>
+
+					<Fragment slot="subline">Development Services</Fragment>
+
+					<Fragment slot="headline">3D Apps, Sites<br />& Components</Fragment>
+
+					<Fragment slot="body-left">
+						<p>
+							Enhance your project with <span class="text-highlight">immersive web experiences</span
+							>. We can ship turnkey 3D apps and sites, or portable web components compatible with
+							any framework.
+						</p>
+						<p>Examples include:</p>
+						<ul class="ml-4 mt-4">
+							<li>
+								<span class="text-highlight">Product Configurators</span> - e-commerce components enabling
+								users to experience different product options.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Storyscrolling Presentations</span> - stunning landing pages
+								that tell a story with awesome animations and effects.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Interactive Visualizations</span> - add new dimensions to
+								your user experience with 3D interfaces.
+							</li>
+						</ul>
+						<p class="mt-4">...or anything else you can imagine!</p>
+					</Fragment>
+				</FeatureSection>
+
+				<FeatureSection class="border-t-0" color="green">
+					<svg xmlns="http://www.w3.org/2000/svg" slot="icon" fill="#ffffff" viewBox="0 0 256 256"
+						><path
+							d="M216,56v58.77c0,84.18-71.31,112.07-85.54,116.8a7.54,7.54,0,0,1-4.92,0C111.31,226.86,40,199,40,114.79V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z"
+							opacity="0.2"></path><path
+							d="M208,40H48A16,16,0,0,0,32,56v58.78c0,89.61,75.82,119.34,91,124.39a15.53,15.53,0,0,0,10,0c15.2-5.05,91-34.78,91-124.39V56A16,16,0,0,0,208,40Zm0,74.79c0,78.42-66.35,104.62-80,109.18-13.53-4.51-80-30.69-80-109.18V56H208ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.68l50.34-50.34a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"
+						></path></svg
+					>
+
+					<Fragment slot="subline">Fullsuite Offering</Fragment>
+
+					<Fragment slot="headline">We Adapt<br />to Your Needs</Fragment>
+
+					<Fragment slot="body-left">
+						<p>
+							While we specialize in 3D web development, we have broad expertise in a variety of
+							disciplines:
+						</p>
+						<ul class="ml-4 mt-4">
+							<li>
+								<span class="text-highlight">Fullstack Development</span> - no app is all 3D, and we
+								aren't either; we can help with the rest of the stack.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Interdisciplinary Design</span> - we has experience in UI/UX
+								design, user research and graphic design.
+							</li>
+							<li class="mt-2">
+								<span class="text-highlight">Quality Writing</span> - we can support copywriting as well
+								as technical documentation efforts.
+							</li>
+						</ul>
+						<p class="mt-4">
+							We believe that <span class="text-highlight">your project comes first</span>. We'll
+							adapt to your workflow, stack and team processes.
+						</p>
+					</Fragment>
+				</FeatureSection>
+				<h1
+					id="get-in-touch"
+					class="relative z-10 mb-12 mt-12 w-full text-center text-4xl font-bold text-white/90"
+				>
+					Let's
+					<span class="relative inline-block">
+						<div class="absolute bottom-0 left-0 -z-10 h-4 w-full bg-orange"></div>
+						Get In Touch</span
+					>.
+				</h1>
+				<ContactForm client:idle />
+			</div>
+		</div>
+	</main>
+</Layout>

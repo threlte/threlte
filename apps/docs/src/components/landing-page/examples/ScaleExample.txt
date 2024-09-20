@@ -1,0 +1,10 @@
+<T.Mesh
+  scale={2}
+  position.x={10}
+  onclick={() => {
+    console.log('click!')
+  }}
+>
+  <T.BoxGeometry args={[1, 1, 2]} />
+  <T.MeshStandardMaterial color="hotpink" />
+</T.Mesh>

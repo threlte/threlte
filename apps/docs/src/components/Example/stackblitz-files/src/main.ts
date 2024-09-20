@@ -1,7 +1,9 @@
 import App from './Layout.svelte'
 
+// @ts-ignore
 const app = new App({
-  target: document.getElementById('app')
+	// @ts-ignore
+	target: document.getElementById('app')
 })
 
 export default app
