@@ -17,8 +17,6 @@
 
   $effect(() => {
     if (mesh.ref) {
-      // share temp m4,v3 between instances
-
       mesh.tempV3.set(x ?? 0, y ?? 0, z ?? 0)
       mesh.tempM4.setPosition(mesh.tempV3)
 

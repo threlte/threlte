@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask, watch } from '@threlte/core'
-  import { InstancedMesh2, OrbitControls, PerfMonitor, useGltf } from '@threlte/extras'
+  import { InstancedMesh, Instance, OrbitControls, PerfMonitor, useGltf } from '@threlte/extras'
 
   let dn = Date.now()
   useTask(() => (dn = Date.now()))
@@ -18,23 +18,23 @@
 </script>
 
 {#await gltf then value}
-  <InstancedMesh2 {count}>
-    {#snippet children({ Instance2 })}
-      <T is={value.scene.children[0].geometry} />
-      <T is={value.scene.children[0].material} />
+  <InstancedMesh
+    limit={count}
+    range={count}
+  >
+    <T is={value.scene.children[0].geometry} />
+    <T is={value.scene.children[0].material} />
 
-      {#each { length: w } as _, x}
-        {#each { length: h } as _, z}
-          <Instance2
-            id={x * w + z}
-            x={(x - w / 2) * 10}
-            y={Math.sin(x * w + z + dn * 0.001)}
-            z={(z - h / 2) * 10}
-          />
-        {/each}
+    {#each { length: w } as _, x}
+      {#each { length: h } as _, z}
+        <Instance
+          position.x={(x - w / 2) * 10}
+          position.y={Math.sin(x * w + z + dn * 0.001)}
+          position.z={(z - h / 2) * 10}
+        />
       {/each}
-    {/snippet}
-  </InstancedMesh2>
+    {/each}
+  </InstancedMesh>
 {/await}
 
 <T.PerspectiveCamera

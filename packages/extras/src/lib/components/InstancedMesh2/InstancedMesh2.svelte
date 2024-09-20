@@ -5,8 +5,12 @@
 
   import { createInstancedMesh2Context } from './InstancedMesh2Context.svelte'
   import { BufferGeometry, Material, Object3D } from 'three'
+  import Instance2 from './Instance2.svelte'
 
-  let { count = 5, children }: { count: number; children: Snippet } = $props()
+  let {
+    count = 5,
+    children
+  }: { count: number; children: Snippet<[{ Instance2: typeof Instance2 }]> } = $props()
 
   let material = $state<any>()
   let geometry = $state<any>()
@@ -16,13 +20,9 @@
     add: (child: Object3D) => {},
     remove: (child: Object3D) => {},
     set material(m: Material) {
-      console.log('setting material')
-      console.log(m)
       material = m
     },
     set geometry(g: BufferGeometry) {
-      console.log('setting geometry')
-      console.log(g)
       geometry = g
     }
   }
@@ -49,5 +49,5 @@
   is={proxy}
   attach={false}
 >
-  {@render children()}
+  {@render children?.({ Instance2 })}
 </T>
