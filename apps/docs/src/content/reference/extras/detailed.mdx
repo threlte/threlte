@@ -1,0 +1,42 @@
+---
+order: 6.6
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/Detailed/Detailed.svelte'
+name: '<Detailed>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'LOD',
+        url: 'https://threejs.org/docs/#api/en/objects/LOD'
+      },
+    props:
+      [
+        {
+					name: 'distances',
+					type: 'number[]',
+					default: '[]',
+					required: false,
+					description: 'distances from the camera at which to show each object. the length of `distances` should match the number of children'},
+        {
+          name: 'hysteresis',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'passed along to the internal LOD object.'
+        },
+      ]
+  }
+---
+
+
+`<Detailed>` is a wrapper around ThreeJS's LOD component. A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
+
+<Example path="extras/detailed" />
+
+Notice how as the mesh's distance from the camera increases, a mesh with less vertices is renderered.
+
+<Tip type="tip">
+It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset creation tools.
+</Tip>
