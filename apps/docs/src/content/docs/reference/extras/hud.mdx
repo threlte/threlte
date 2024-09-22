@@ -2,7 +2,7 @@
 order: 7.15
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/HUD/HUD.svelte'
-name: <HUD>
+title: <HUD>
 type: 'component'
 componentSignature:
   {
@@ -29,6 +29,8 @@ componentSignature:
       ]
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 Renders a heads-up-display (HUD). Each HUD creates a new scene rendered on top of the main scene with a separate [Threlte context](/docs/reference/core/use-threlte) and camera.
 

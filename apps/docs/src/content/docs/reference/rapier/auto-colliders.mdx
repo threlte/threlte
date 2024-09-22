@@ -1,7 +1,7 @@
 ---
 order: 4
 category: '@threlte/rapier'
-name: '<AutoColliders>'
+title: '<AutoColliders>'
 sourcePath: 'packages/rapier/src/lib/components/Colliders/AutoColliders.svelte'
 type: 'component'
 componentSignature:
@@ -67,6 +67,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 The `<AutoColliders>` component generates colliders based on its children. Currently these shapes are available:
 
 1. `cuboid` – uses each child mesh bounding box and generates a cuboid collider
@@ -80,5 +82,5 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 <Example path="rapier/auto-colliders" />
 
 <small>
-  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+	Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
 </small>

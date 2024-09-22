@@ -4,6 +4,8 @@ category: Basics
 order: -700
 ---
 
+import Example from '$components/Example/Example.astro'
+
 Events are a way to listen for changes in the state of the application.
 Listening to events is as easy as adding a regular Svelte event listener to `<T>` components:
 `<T.Mesh onclick={onClick}>`. Threlte supports wheel, click and pointer events through the plugin
@@ -264,5 +266,4 @@ export type State = {
 [`CurrentWritable`](/docs/reference/core/utilities#currentwritable) is a custom Threlte store.
 It's a regular writable store that also has a `current` property which is the current value of the
 store. It's useful for accessing the value of a store in a non-reactive context, such as in loops.
-
 :::

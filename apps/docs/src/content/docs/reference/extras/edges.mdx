@@ -1,7 +1,7 @@
 ---
 order: 9.2
 category: '@threlte/extras'
-name: <Edges>
+title: <Edges>
 sourcePath: 'packages/extras/src/lib/components/Edges/Edges.svelte'
 type: 'component'
 componentSignature:
@@ -19,6 +19,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.
 
 Edges are displayed when the angle between two faces exceeds the angle defined by the property `threshold`.
@@ -26,7 +28,7 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
 <Example path="extras/edges" />
 
 <small>
-  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+	Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
 </small>
 
 ### Example

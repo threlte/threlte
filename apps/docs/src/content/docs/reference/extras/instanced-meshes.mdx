@@ -1,7 +1,7 @@
 ---
 order: 6.3
 category: '@threlte/extras'
-name: '<InstancedMeshes>'
+title: '<InstancedMeshes>'
 sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes'
 type: 'component'
 componentSignature:
@@ -38,6 +38,8 @@ componentSignature:
       ]
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 The component `<InstancedMeshes>` takes existing `THREE.Mesh` instances and creates a `THREE.InstancedMesh` per `THREE.Mesh`. This is especially useful if you want to instantiate a lot of meshes that have been loaded with hooks like [`useGltf`](/docs/reference/extras/use-gltf).
 

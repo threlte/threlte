@@ -1,7 +1,7 @@
 ---
 order: 7.18
 category: '@threlte/extras'
-name: '<Sky>'
+title: '<Sky>'
 sourcePath: 'packages/extras/src/lib/components/Sky/Sky.svelte'
 type: 'component'
 componentSignature:
@@ -82,12 +82,11 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 This component adds a [Three.js `Sky` object](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/objects/Sky.js) to the scene, renders that on-demand to a cubemap which is assigned to the default scene as the environment map.
 
-<Example
-  path="extras/sky"
-  showFile="App.svelte"
-/>
+<Example path="extras/sky" showFile="App.svelte" />
 
 ## Usage
 

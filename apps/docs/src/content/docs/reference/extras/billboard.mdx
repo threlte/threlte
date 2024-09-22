@@ -1,7 +1,7 @@
 ---
 order: 7.12
 category: '@threlte/extras'
-name: '<Billboard>'
+title: '<Billboard>'
 sourcePath: 'packages/extras/src/lib/components/Billboard/Billboard.svelte'
 type: 'component'
 componentSignature:
@@ -10,6 +10,8 @@ componentSignature:
     props: [{ name: 'follow', type: 'boolean | THREE.Object3D', default: 'true', required: false }]
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 This component is a port of [drei's `<Billboard>`
 component](https://github.com/pmndrs/drei#billboard) which rotates its contents

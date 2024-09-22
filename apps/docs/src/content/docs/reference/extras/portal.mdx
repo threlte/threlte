@@ -1,7 +1,7 @@
 ---
 order: 5.1
 category: '@threlte/extras'
-name: '<Portal>'
+title: '<Portal>'
 sourcePath: 'packages/extras/src/lib/components/portals/Portal/Portal.svelte'
 type: 'component'
 componentSignature:
@@ -28,13 +28,14 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 A component that renders its children as children of an object that can exist **anywhere in your Threlte application**.
 You can either provide an object that will be the parent of the children or use the prop `id` to render into a `<PortalTarget>`.
 
 :::tip
 Although Portals are extremely helpful in certain situations, it can be hard to reason about them
 at times. It's recommended to use them sparingly.
-
 :::
 
 ## Examples

@@ -1,8 +1,10 @@
 ---
 order: 0
 category: '@threlte/studio'
-name: 'Getting Started'
+title: 'Getting Started'
 ---
+
+import Example from '$components/Example/Example.astro'
 
 Threlte Studio is a **spatial programming toolset**.
 
@@ -13,10 +15,10 @@ components to interact with your scene and hook into the Threlte Studio API and
 GUI.
 
 <Example
-  path="studio/getting-started"
-  hideStackblitz
-  hideCode
-  previewClass="!aspect-[4/3.2] !h-auto"
+	path="studio/getting-started"
+	hideStackblitz
+	hideCode
+	previewClass="!aspect-[4/3.2] !h-auto"
 />
 
 ### Installation
@@ -51,6 +53,6 @@ import { sveltekit } from '@sveltejs/kit/vite'
 import { studioPlugin } from '@threlte/studio/vite'
 
 export default {
-  plugins: [studioPlugin(), sveltekit()]
+	plugins: [studioPlugin(), sveltekit()]
 }
 ```

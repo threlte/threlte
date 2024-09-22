@@ -2,7 +2,7 @@
 order: 1.3
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/audio/PositionalAudio/PositionalAudio.svelte'
-name: <PositionalAudio>
+title: <PositionalAudio>
 type: 'component'
 componentSignature:
   {
@@ -59,11 +59,14 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 Creates a positional audio entity.
 This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
 
 :::caution
-You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted _before_ any `<Audio>` or `<PositionalAudio>` components:
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted _before_ any `<Audio>` or `<PositionalAudio>` components
+:::
 
 ```svelte
 <T.PerspectiveCamera makeDefault>

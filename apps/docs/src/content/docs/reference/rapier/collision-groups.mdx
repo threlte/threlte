@@ -2,7 +2,7 @@
 order: 5
 category: '@threlte/rapier'
 sourcePath: 'packages/rapier/src/lib/components/CollisionGroups/CollisionGroups.svelte'
-name: '<CollisionGroups>'
+title: '<CollisionGroups>'
 type: 'component'
 componentSignature:
   {
@@ -16,6 +16,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 The most efficient way of preventing some pairs of colliders from interacting with each other is to use a `<CollisionGroups>` component.
 
 Each collider that is a child (direct or indirect) of the component `<CollisionGroups>` is applied a `memberships` and `filters` attribute. The shorthand `groups` sets both properties at once.
@@ -25,13 +27,13 @@ For general usage instructions, see the relevant documentation [here](https://ra
 ### Example
 
 - <span style="color: red">Collider A</span> is affected by <span style="color: limegreen">
-    Collider B
+  	Collider B
   </span> and not by <span style="color: blue">Collider C</span>
 - <span style="color: limegreen">Collider B</span> is affected by <span style="color: red">
-    Collider A
+  	Collider A
   </span> and <span style="color: blue">Collider C</span>
 - <span style="color: blue">Collider C</span> is affected by <span style="color: limegreen">
-    Collider B
+  	Collider B
   </span> and not by <span style="color: red">Collider A</span>
 
 <Example path="rapier/collision-groups" />

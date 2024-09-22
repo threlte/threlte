@@ -1,18 +1,17 @@
 ---
 order: -2
 category: '@threlte/flex'
-name: Getting Started
+title: Getting Started
 ---
+
+import Example from '$components/Example/Example.astro'
 
 Placing content and making layouts in 3D is hard. The flexbox engine
 [`Yoga`](https://yogalayout.com/) is a cross-platform layout engine which
 implements the flexbox spec. The package `@threlte/flex` provides components to
 easily use `Yoga` in Threlte.
 
-<Example
-  path="flex/intro"
-  showFile="Scene.svelte"
-/>
+<Example path="flex/intro" showFile="Scene.svelte" />
 
 <small>MatCap textures from https://github.com/emmelleppi/matcaps</small>
 
@@ -223,17 +222,17 @@ that supports the following class names:
 
 ```css
 .container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
-  gap: 10px;
-  padding: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+	gap: 10px;
+	padding: 10px;
 }
 .item {
-  width: auto;
-  height: auto;
-  flex: 1;
+	width: auto;
+	height: auto;
+	flex: 1;
 }
 ```
 
@@ -243,23 +242,23 @@ You then need to create a `ClassParser` which returns the corresponding props:
 import { createClassParser } from '@threlte/flex'
 
 const classParser = createClassParser((string, props) => {
-  const classNames = string.split(' ')
-  for (const className of classNames) {
-    switch (className) {
-      case 'container':
-        props.flexDirection = 'Row'
-        props.justifyContent = 'Center'
-        props.alignItems = 'Stretch'
-        props.gap = 10
-        props.padding = 10
-        break
-      case 'item':
-        props.width = 'auto'
-        props.height = 'auto'
-        props.flex = 1
-    }
-  }
-  return props
+	const classNames = string.split(' ')
+	for (const className of classNames) {
+		switch (className) {
+			case 'container':
+				props.flexDirection = 'Row'
+				props.justifyContent = 'Center'
+				props.alignItems = 'Stretch'
+				props.gap = 10
+				props.padding = 10
+				break
+			case 'item':
+				props.width = 'auto'
+				props.height = 'auto'
+				props.flex = 1
+		}
+	}
+	return props
 })
 ```
 

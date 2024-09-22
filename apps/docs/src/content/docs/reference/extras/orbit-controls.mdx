@@ -2,7 +2,7 @@
 order: 3.2
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/controls/OrbitControls/OrbitControls.svelte'
-name: '<OrbitControls>'
+title: '<OrbitControls>'
 type: 'component'
 componentSignature:
   {
@@ -10,6 +10,8 @@ componentSignature:
       { type: 'OrbitControls', url: 'https://threejs.org/docs/#examples/controls/OrbitControls' }
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 `<OrbitControls>` allow the camera to orbit around a target while ensuring a
 fixed camera up vector. If the camera orbits over the "north" or "south" poles,

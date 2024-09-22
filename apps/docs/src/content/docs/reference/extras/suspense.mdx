@@ -1,7 +1,7 @@
 ---
 order: 8.1
 category: '@threlte/extras'
-name: '<Suspense>'
+title: '<Suspense>'
 sourcePath: 'packages/extras/src/lib/suspense/Suspense.svelte'
 type: 'component'
 componentSignature:
@@ -32,6 +32,8 @@ componentSignature:
       ]
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 The component `<Suspense>` allows you to orchestrate the loading of resources
 inside (nested) child components. The implementation roughly follows a subset of the concept

@@ -1,7 +1,7 @@
 ---
 order: 7.11
 category: '@threlte/extras'
-name: '<Align>'
+title: '<Align>'
 sourcePath: 'packages/extras/src/lib/components/Align/Align.svelte'
 type: 'component'
 componentSignature:
@@ -57,12 +57,11 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 This component will calculate a boundary box and align its children accordingly.
 
-<Example
-  path="extras/align"
-  showFile="Scene.svelte"
-/>
+<Example path="extras/align" showFile="Scene.svelte" />
 
 The grouped objects will be aligned on the x, y, and z axes by default.
 
@@ -140,20 +139,20 @@ The component `<Align>` provides an event `align` which fires when the child obj
 
 ```ts
 type AlignEventData = {
-  /** The outmost container group of the <Align> component */
-  container: Object3D
-  /** The width of the bounding box */
-  width: number
-  /** The height of the bounding box */
-  height: number
-  /** The depth of the bounding box */
-  depth: number
-  boundingBox: Box3
-  boundingSphere: Sphere
-  center: Vector3
-  verticalAlignment: number
-  horizontalAlignment: number
-  depthAlignment: number
+	/** The outmost container group of the <Align> component */
+	container: Object3D
+	/** The width of the bounding box */
+	width: number
+	/** The height of the bounding box */
+	height: number
+	/** The depth of the bounding box */
+	depth: number
+	boundingBox: Box3
+	boundingSphere: Sphere
+	center: Vector3
+	verticalAlignment: number
+	horizontalAlignment: number
+	depthAlignment: number
 }
 ```
 

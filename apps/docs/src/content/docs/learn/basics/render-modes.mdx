@@ -4,6 +4,8 @@ title: Render Modes
 order: -450
 ---
 
+import Example from '$components/Example/Example.astro'
+
 Threlte offers three different render modes to optimize the performance and
 power usage of your Threlte app. Ideally, you only want to render the scene
 when it is necessary, such as when the camera moves or when objects are added or
@@ -153,7 +155,6 @@ renderMode.set('on-demand')
 :::tip
 The renderMode property can be changed at any time, but it will only take effect on the next
 frame.
-
 :::
 
 ## Render Modes and Custom Rendering

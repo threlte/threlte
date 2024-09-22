@@ -11,7 +11,6 @@ invalidating the frame or providing default values or extra props.
 A common use case for custom abstractions is to create a component that is a fixed entity in your Threlte app which you want to reuse
 in multiple places. As an example, let's create a component that is made up from multiple `<T>` components resembling a floor and a cube on top:
 
-{/* prettier-ignore-start */}
 ```svelte title="Tile.svelte"
 <script>
   import { T } from '@threlte/threlte'
@@ -36,7 +35,6 @@ in multiple places. As an example, let's create a component that is made up from
   {@render children()}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
 
 Let's see what implementing that component looks like:
 
@@ -67,7 +65,6 @@ We can do that by passing a `position` prop to the `<Tile>` component:
 The component `<Tile>` internally needs to use the `position` prop in order to set the position of the `<T>` components. We can do that by
 [spreading `props` on the `<T.Group>`](https://svelte.dev/tutorial/spread-props) component at the root hierarchy of `<Tile>`:
 
-{/* prettier-ignore-start */}
 ```svelte title="Tile.svelte" {5}m
 <script>
   import { T } from '@threlte/threlte'
@@ -92,7 +89,6 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
   {@render children()}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
 
 ## Types
 
@@ -129,7 +125,6 @@ Let's cross check the types inside our `Tile.svelte` file by typing the `$props`
 
 Addtionally, let's create a bindable `ref` and pass it to any child components:
 
-{/* prettier-ignore-start */}
 ```svelte title="Tile.svelte" {10,13,26}m {4,8}+
 <script lang="ts">
   import { T } from '@threlte/threlte'
@@ -159,4 +154,3 @@ Addtionally, let's create a bindable `ref` and pass it to any child components:
   {@render children(ref)}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
