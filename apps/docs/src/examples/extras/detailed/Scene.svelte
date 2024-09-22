@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Detailed, interactivity, OrbitControls } from '@threlte/extras'
+  import { Detailed, OrbitControls } from '@threlte/extras'
   import { IcosahedronGeometry } from 'three'
   import { T } from '@threlte/core'
 
@@ -13,8 +13,6 @@
     { color: 0x00_ff_00, distance: 5 },
     { color: 0x00_00_ff, distance: 10 }
   ]
-
-  interactivity()
 </script>
 
 <T.PerspectiveCamera
