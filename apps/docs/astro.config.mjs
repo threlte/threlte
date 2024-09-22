@@ -49,6 +49,24 @@ export default defineConfig({
 							autogenerate: {
 								directory: 'learn/getting-started'
 							}
+						},
+						{
+							label: 'Basics',
+							autogenerate: {
+								directory: 'learn/basics'
+							}
+						},
+						{
+							label: 'Advanced',
+							autogenerate: {
+								directory: 'learn/advanced'
+							}
+						},
+						{
+							label: 'More',
+							autogenerate: {
+								directory: 'learn/more'
+							}
 						}
 					]
 				},
@@ -69,36 +87,52 @@ export default defineConfig({
 					autogenerate: {
 						directory: 'reference/extras'
 					}
+				},
+				{
+					label: 'GLTF',
+					autogenerate: {
+						directory: 'reference/gltf'
+					}
+				},
+				{
+					label: 'Rapier',
+					autogenerate: {
+						directory: 'reference/rapier'
+					}
+				},
+				{
+					label: 'Theatre',
+					autogenerate: {
+						directory: 'reference/theatre'
+					}
+				},
+				{
+					label: 'Flex',
+					autogenerate: {
+						directory: 'reference/flex'
+					}
+				},
+				{
+					label: 'XR',
+					autogenerate: {
+						directory: 'reference/xr'
+					}
+				},
+				{
+					label: 'Studio',
+					autogenerate: {
+						directory: 'reference/studio'
+					}
 				}
-				// {
-				// 	label: 'GLTF',
-				// 	autogenerate: {
-				// 		directory: 'reference/gltf'
-				// 	}
-				// },
-				// {
-				// 	label: 'Rapier',
-				// 	autogenerate: {
-				// 		directory: 'reference/rapier'
-				// 	}
-				// },
-				// {
-				// 	label: 'Theatre',
-				// 	autogenerate: {
-				// 		directory: 'reference/theatre'
-				// 	}
-				// },
-				// {
-				// 	label: 'Flex',
-				// 	autogenerate: {
-				// 		directory: 'reference/flex'
-				// 	}
-				// }
 			],
 			locales: {
 				root: {
 					lang: 'en',
 					label: 'English'
+				},
+				de: {
+					label: 'German',
+					lang: 'de'
 				},
 				'zh-cn': {
 					label: '简体中文',
