@@ -56,6 +56,9 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.1
         version: 5.1.1(astro@4.15.8(@types/node@20.12.7)(rollup@4.22.0)(sass@1.77.7)(typescript@5.6.2))(tailwindcss@3.4.4(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.2)))(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.2))
+      '@dimforge/rapier3d-compat':
+        specifier: ^0.14.0
+        version: 0.14.0
       '@fontsource/inter':
         specifier: ^5.0.19
         version: 5.1.0
@@ -101,6 +104,9 @@ importers:
       astro-vtbot:
         specifier: ^1.8.2
         version: 1.9.4
+      camera-controls:
+        specifier: ^2.9.0
+        version: 2.9.0(three@0.168.0)
       postprocessing:
         specifier: ^6.36.1
         version: 6.36.2(three@0.168.0)
@@ -3626,6 +3632,11 @@ packages:
 
   camera-controls@2.8.5:
     resolution: {integrity: sha512-7VTwRk7Nu1nRKsY7bEt9HVBfKt8DETvzyYhLN4OW26OByBayMDB5fUaNcPI+z++vG23RH5yqn6ZRhZcgLQy2rA==}
+    peerDependencies:
+      three: '>=0.126.1'
+
+  camera-controls@2.9.0:
+    resolution: {integrity: sha512-TpCujnP0vqPppTXXJRYpvIy0xq9Tro6jQf2iYUxlDpPCNxkvE/XGaTuwIxnhINOkVP/ob2CRYXtY3iVYXeMEzA==}
     peerDependencies:
       three: '>=0.126.1'
 
@@ -11333,6 +11344,10 @@ snapshots:
   camera-controls@2.8.5(three@0.166.1):
     dependencies:
       three: 0.166.1
+
+  camera-controls@2.9.0(three@0.168.0):
+    dependencies:
+      three: 0.168.0
 
   caniuse-lite@1.0.30001606: {}
 
