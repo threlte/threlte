@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import { InstancedMesh2 } from '@three.ez/instanced-mesh'
+  import { createRadixSort, InstancedMesh2 } from '@three.ez/instanced-mesh'
   import { useThrelte, T } from '@threlte/core'
 
   import { createInstancedMesh2Context } from './InstancedMesh2Context.svelte'
@@ -9,8 +9,13 @@
 
   let {
     count = 5,
-    children
-  }: { count: number; children: Snippet<[{ Instance2: typeof Instance2 }]> } = $props()
+    children,
+    sort = false
+  }: {
+    count: number
+    children: Snippet<[{ Instance2: typeof Instance2 }]>
+    sort: boolean
+  } = $props()
 
   let material = $state<any>()
   let geometry = $state<any>()
@@ -27,7 +32,7 @@
     }
   }
 
-  const { renderer, scene } = useThrelte()
+  const { renderer } = useThrelte()
 
   const instancedMesh2 = $derived.by(() => {
     if (geometry && material) return new InstancedMesh2(renderer, count, geometry, material)
@@ -36,8 +41,20 @@
 
   const ctx = createInstancedMesh2Context()
 
-  $effect(() => {
+  $effect.pre(() => {
     ctx.ref = instancedMesh2
+  })
+
+  $effect.pre(() => {
+    if (!ctx.ref) return
+
+    if (sort) {
+      ctx.ref.sortObjects = true
+      // todo add option to use different sorts
+      ctx.ref.customSort = createRadixSort(ctx.ref)
+    } else {
+      ctx.ref.sortObjects = false
+    }
   })
 </script>
 

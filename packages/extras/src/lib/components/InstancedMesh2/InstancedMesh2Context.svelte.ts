@@ -1,15 +1,19 @@
 import type { InstancedMesh2 } from '@three.ez/instanced-mesh'
 import { getContext, setContext } from 'svelte'
-import { Matrix4, Vector3 } from 'three'
+import { Matrix4, Quaternion, Vector3 } from 'three'
 
 export class InstancedMesh2Context {
   ref: InstancedMesh2 | undefined = $state()
   tempM4: Matrix4
-  tempV3: Vector3
+  tempPositionV3: Vector3
+  tempScaleV3: Vector3
+  tempQuat: Quaternion
 
   constructor() {
     this.tempM4 = new Matrix4()
-    this.tempV3 = new Vector3()
+    this.tempPositionV3 = new Vector3()
+    this.tempScaleV3 = new Vector3()
+    this.tempQuat = new Quaternion()
   }
 }
 

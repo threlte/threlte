@@ -5,7 +5,7 @@
   let dn = Date.now()
   useTask(() => (dn = Date.now()))
 
-  const gltf = useGltf('/models/threlte.glb')
+  const gltf = useGltf<any>('/models/threlte.glb')
 
   watch([gltf], (gltf) => {
     console.log(gltf)
@@ -30,6 +30,7 @@
             x={(x - w / 2) * 10}
             y={Math.sin(x * w + z + dn * 0.001)}
             z={(z - h / 2) * 10}
+            visibility={Math.sin(z * w + x + dn * 0.001) > 0}
           />
         {/each}
       {/each}

@@ -1,26 +1,59 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
   import { useInstancedMesh2 } from './InstancedMesh2Context.svelte'
-  import { Matrix4, Vector3, type Vector3Like } from 'three'
 
-  // turn to pierced
+  // todo turn to pierced (measureperf impact)
   type InstanceProps = {
     x?: number
     y?: number
     z?: number
-    id?: number
+    id: number
+    rotation?: [x: number, y: number, z: number, w: number]
+    scale?: [x: number, y: number, z: number]
+    visibility?: boolean
   }
 
-  let { children, x, y, z, id }: InstanceProps & { children?: Snippet } = $props()
+  let {
+    children,
+    x,
+    y,
+    z,
+    id,
+    rotation,
+    scale,
+    visibility
+  }: InstanceProps & { children?: Snippet } = $props()
 
   const mesh = useInstancedMesh2()
 
-  $effect(() => {
-    if (mesh.ref) {
-      mesh.tempV3.set(x ?? 0, y ?? 0, z ?? 0)
-      mesh.tempM4.setPosition(mesh.tempV3)
+  // MATRIX4
+  // todo bench effect performance impact and different ways of updating m4
+  $effect.pre(() => {
+    if (!mesh.ref) return
 
-      mesh.ref.setMatrixAt(id ?? 0, mesh.tempM4)
+    mesh.tempPositionV3.set(x ?? 0, y ?? 0, z ?? 0)
+
+    if (rotation) {
+      mesh.tempQuat.set(rotation[0], rotation[1], rotation[2], rotation[3])
+    } else {
+      mesh.tempQuat.set(0, 0, 0, 0)
+    }
+
+    if (scale) {
+      mesh.tempScaleV3.set(scale[0], scale[1], scale[2])
+    } else {
+      mesh.tempScaleV3.set(1, 1, 1)
+    }
+
+    mesh.tempM4.compose(mesh.tempPositionV3, mesh.tempQuat, mesh.tempScaleV3)
+    mesh.ref.setMatrixAt(id ?? 0, mesh.tempM4)
+  })
+
+  // VISIBILITY
+  $effect.pre(() => {
+    if (!mesh.ref) return
+    if (visibility !== undefined) {
+      mesh.ref.setVisibilityAt(id, visibility)
     }
   })
 </script>
