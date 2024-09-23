@@ -5,10 +5,10 @@
   import { Color, Mesh, PMREMGenerator, PlaneGeometry, Raycaster, Vector2, Vector3 } from 'three'
   import { onMount } from 'svelte'
   import Stars from './Stars.svelte'
-  import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
-  import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
-  import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
-  import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+  import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+  import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+  import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
+  import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 
   const { scene, camera, renderer } = useThrelte()
   let spaceShipRef

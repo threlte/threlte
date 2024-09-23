@@ -7,6 +7,11 @@ import { resolve } from 'path'
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
+const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
+if (process.env.NODE_ENV === 'production') {
+	noExternal.push('@theatre/core')
+}
+
 // https://astro.build/config
 export default defineConfig({
 	markdown: {
@@ -159,6 +164,23 @@ export default defineConfig({
 				$components: resolve('./src/components'),
 				$assets: resolve('./src/assets')
 			}
+		},
+		ssr: {
+			// "@theatre/core" needs to be externalized in development mode but not in production!
+			noExternal: noExternal
+		},
+		// Use https and generate a cert to allow XR debugging.
+		server: {
+			https: process.argv.includes('--https')
+		},
+		plugins: process.argv.includes('--https') ? [mkcert()] : [],
+		optimizeDeps: {
+			esbuildOptions: {
+				target: 'esnext'
+			}
+		},
+		build: {
+			target: 'esnext'
 		}
 	}
 })

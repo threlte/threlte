@@ -2,9 +2,9 @@
   import { T, useTask, useThrelte, watch } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import * as THREE from 'three'
-  import Stats from 'three/addons/libs/stats.module.js'
+  import Stats from 'three/examples/jsm/libs/stats.module.js'
 
-  import { MeshToonNodeMaterial } from 'three/nodes'
+  import { MeshToonNodeMaterial } from 'three/webgpu'
 
   const { scene, size, renderer, invalidate } = useThrelte()
 
