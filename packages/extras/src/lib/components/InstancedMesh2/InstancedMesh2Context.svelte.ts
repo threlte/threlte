@@ -8,12 +8,17 @@ export class InstancedMesh2Context {
   tempPositionV3: Vector3
   tempScaleV3: Vector3
   tempQuat: Quaternion
+  onclick = $state(new Map<number, typeof Function>())
 
   constructor() {
     this.tempM4 = new Matrix4()
     this.tempPositionV3 = new Vector3()
     this.tempScaleV3 = new Vector3()
     this.tempQuat = new Quaternion()
+  }
+
+  registerEvent(instanceId: number, event: 'onclick', fun: typeof Function) {
+    this.onclick.set(instanceId, fun)
   }
 }
 

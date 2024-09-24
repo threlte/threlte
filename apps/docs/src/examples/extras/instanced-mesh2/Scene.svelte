@@ -1,27 +1,33 @@
 <script lang="ts">
   import { T, useTask, watch } from '@threlte/core'
-  import { InstancedMesh2, OrbitControls, PerfMonitor, useGltf } from '@threlte/extras'
+  import {
+    InstancedMesh2,
+    interactivity,
+    OrbitControls,
+    PerfMonitor,
+    useGltf
+  } from '@threlte/extras'
 
   let dn = Date.now()
   useTask(() => (dn = Date.now()))
 
   const gltf = useGltf<any>('/models/threlte.glb')
 
-  watch([gltf], (gltf) => {
-    console.log(gltf)
-  })
-
   const w = 100
   const h = 100
 
   const count = w * h
+
+  interactivity()
 </script>
 
 {#await gltf then value}
   <InstancedMesh2 {count}>
     {#snippet children({ Instance2 })}
-      <T is={value.scene.children[0].geometry} />
-      <T is={value.scene.children[0].material} />
+      <!-- <T is={value.scene.children[0].geometry} /> -->
+      <!-- <T is={value.scene.children[0].material} /> -->
+      <T.SphereGeometry args={[2.5]} />
+      <T.MeshLambertMaterial />
 
       {#each { length: w } as _, x}
         {#each { length: h } as _, z}
@@ -30,7 +36,10 @@
             x={(x - w / 2) * 10}
             y={Math.sin(x * w + z + dn * 0.001)}
             z={(z - h / 2) * 10}
-            visibility={Math.sin(z * w + x + dn * 0.001) > 0}
+            visibility={Math.sin(z * w + x + dn * 0.001)}
+            onclick={() => {
+              console.log(`clicked instance ${x * w + z}`)
+            }}
           />
         {/each}
       {/each}

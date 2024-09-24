@@ -2,6 +2,9 @@
   import type { Snippet } from 'svelte'
   import { useInstancedMesh2 } from './InstancedMesh2Context.svelte'
 
+  // todo
+  import { interactivityEventNames } from '../../interactivity/plugin'
+
   // todo turn to pierced (measureperf impact)
   type InstanceProps = {
     x?: number
@@ -21,10 +24,17 @@
     id,
     rotation,
     scale,
-    visibility
+    visibility,
+    ...rest
   }: InstanceProps & { children?: Snippet } = $props()
 
   const mesh = useInstancedMesh2()
+
+  $effect.pre(() => {
+    if (rest && rest.onclick) {
+      mesh.registerEvent(id, 'onclick', rest.onclick)
+    }
+  })
 
   // MATRIX4
   // todo bench effect performance impact and different ways of updating m4

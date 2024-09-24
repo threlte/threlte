@@ -1,20 +1,24 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
   import { createRadixSort, InstancedMesh2 } from '@three.ez/instanced-mesh'
-  import { useThrelte, T } from '@threlte/core'
+  import { useThrelte, T, useTask } from '@threlte/core'
 
   import { createInstancedMesh2Context } from './InstancedMesh2Context.svelte'
-  import { BufferGeometry, Material, Object3D } from 'three'
+  import { BufferGeometry, Material, Object3D, Raycaster, Vector2 } from 'three'
   import Instance2 from './Instance2.svelte'
+  import { get } from 'svelte/store'
 
   let {
+    bvh = false,
     count = 5,
+    sort = false,
     children,
-    sort = false
+    ...rest
   }: {
+    bvh: boolean
     count: number
-    children: Snippet<[{ Instance2: typeof Instance2 }]>
     sort: boolean
+    children: Snippet<[{ Instance2: typeof Instance2 }]>
   } = $props()
 
   let material = $state<any>()
@@ -32,7 +36,7 @@
     }
   }
 
-  const { renderer } = useThrelte()
+  const { renderer, camera, scene } = useThrelte()
 
   const instancedMesh2 = $derived.by(() => {
     if (geometry && material) return new InstancedMesh2(renderer, count, geometry, material)
@@ -43,6 +47,9 @@
 
   $effect.pre(() => {
     ctx.ref = instancedMesh2
+    if (ctx.ref) {
+      ctx.ref.raycastOnlyFrustum = true
+    }
   })
 
   $effect.pre(() => {
@@ -56,10 +63,28 @@
       ctx.ref.sortObjects = false
     }
   })
+
+  let onclick = $state()
+
+  $effect.pre(() => {
+    if (ctx.ref && ctx.onclick.size > 0) {
+      console.log('has events registered')
+      onclick = (e: any) => {
+        console.log(e.instanceId)
+        ctx.onclick.get(e.instanceId)?.()
+      }
+    } else {
+      onclick = undefined
+    }
+  })
 </script>
 
 {#if instancedMesh2}
-  <T is={instancedMesh2} />
+  <T
+    is={instancedMesh2}
+    {...rest}
+    {onclick}
+  />
 {/if}
 
 <T
