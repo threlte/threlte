@@ -37,8 +37,8 @@
             y={Math.sin(x * w + z + dn * 0.001)}
             z={(z - h / 2) * 10}
             visibility={Math.sin(z * w + x + dn * 0.001)}
-            onclick={() => {
-              console.log(`clicked instance ${x * w + z}`)
+            onclick={(e) => {
+              console.log(`clicked instance ${e.instanceId}`)
             }}
           />
         {/each}

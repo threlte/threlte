@@ -70,8 +70,7 @@
     if (ctx.ref && ctx.onclick.size > 0) {
       console.log('has events registered')
       onclick = (e: any) => {
-        console.log(e.instanceId)
-        ctx.onclick.get(e.instanceId)?.()
+        ctx.onclick.get(e.instanceId)?.(e)
       }
     } else {
       onclick = undefined
