@@ -45,6 +45,7 @@ export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeo
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
 export { default as Outlines } from './components/Outlines/Outlines.svelte'
 export { default as Mask } from './components/Mask/Mask.svelte'
+export { default as BakeShadows } from './components/BakeShadows/BakeShadows.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
