@@ -19,7 +19,7 @@ Notice how as the mesh's distance from the camera increases, a mesh with less ve
   creation tools.
 </Tip>
 
-Children of `<Detailed>` can be passed a `distance` prop which dictates at what distance the child should be visible and others should not. `distance` defaults to 0 if it is not provided.
+Children of <Detailed> accept a distance prop. This prop determines the visibility of each child based on its distance from the camera. If not specified, distance defaults to 0.
 
 ```svelte
 <Detailed>
@@ -32,7 +32,7 @@ Children of `<Detailed>` can be passed a `distance` prop which dictates at what 
 </Detailed>
 ```
 
-Children of `<Detailed>` can be passed a `hysteresis` prop which is used to avoid flickering at LOD boundaries. `hysteresis` defaults to 0 if it is not provided.
+Children of <Detailed> accept a hysteresis prop to prevent flickering at LOD boundaries. If not specified, hysteresis defaults to 0.
 
 ```svelte
 <Detailed>
