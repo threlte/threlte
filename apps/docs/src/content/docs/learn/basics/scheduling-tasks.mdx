@@ -23,17 +23,14 @@ In this section, we will learn how to use the easy-to-use tools that the
 **Threlte Task Scheduling System** provides to create and orchestrate stages
 and tasks.
 
-<img class="w-full max-md:hidden" src="/images/docs/learn/frame-handling.svg" />
-<img
-	class="mx-auto h-[85vh] w-auto md:hidden"
-	src="/images/docs/learn/frame-handling_portrait.svg"
-/>
+<img class="w-full max-md:hidden" src="/images/learn/frame-handling.svg" />
+<img class="mx-auto h-[85vh] w-auto md:hidden" src="/images/learn/frame-handling_portrait.svg" />
 
 <small>Figure: A schedule of multiple stages with tasks</small>
 
 ## Scheduler
 
-Every Threlte app has a single scheduler. It is accessible via [`useThrelte()`](/docs/reference/core/use-threlte):
+Every Threlte app has a single scheduler. It is accessible via [`useThrelte()`](/reference/core/use-threlte):
 
 ```ts
 const { scheduler } = useThrelte()
@@ -59,7 +56,7 @@ By default, Threlte will create two stages for you:
   needed.
 
 These two stages are created automatically and are accessible via
-[`useThrelte()`](/docs/reference/core/use-threlte):
+[`useThrelte()`](/reference/core/use-threlte):
 
 ```ts
 const { mainStage, renderStage } = useThrelte()
@@ -141,10 +138,10 @@ By default, Threlte will create a single task for you:
 
 - **`autoRenderTask`**: This task is part of [Threlte's
   `renderStage`](#default-stages) and will render the scene if
-  [`autoRender`](/docs/reference/core/canvas) is set to `true`.
+  [`autoRender`](/reference/core/canvas) is set to `true`.
 
 This task is created automatically and is accessible via
-[`useThrelte()`](/docs/reference/core/use-threlte):
+[`useThrelte()`](/reference/core/use-threlte):
 
 ```ts
 const { autoRenderTask } = useThrelte()
@@ -282,10 +279,10 @@ useTask('some-task', (delta) => {
 ```
 
 :::caution
-	If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
-	will automatically be added to the same stage as the task it depends on. If you pass a key instead
-	and the task you want to reference is **not** in [Threlte's `mainStage`](#default-stages), you
-	will also need to pass the stage, either by value or key.
+If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
+will automatically be added to the same stage as the task it depends on. If you pass a key instead
+and the task you want to reference is **not** in [Threlte's `mainStage`](#default-stages), you
+will also need to pass the stage, either by value or key.
 :::
 
 ## Reviewing the schedule

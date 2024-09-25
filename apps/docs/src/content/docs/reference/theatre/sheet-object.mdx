@@ -23,6 +23,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 The `<SheetObject>` component allows you to pool the properties of a **logical entity** which can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` and
 make them editable and animatable in the Theatre.js studio. It's a great choice if you are making a reusable Threlte component which
 you want to make editable in the Theatre.js studio.
@@ -42,7 +44,7 @@ quick and easy prop declaration. Meanwhile, [manual props APIs](#manual-prop) al
 
 ## Auto Props
 
-The [`<Sync>`](./sync) component automatically infers and synchronizes props of its parent component. Meanwhile the [`<Transform>`](./transform) component creates position and rotation props for its
+The [`<Sync>`](/reference/theatre/sync) component automatically infers and synchronizes props of its parent component. Meanwhile the [`<Transform>`](/reference/theatre/transform) component creates position and rotation props for its
 child components, and adds transform controls to the them.
 
 ## Manual Props
@@ -59,7 +61,7 @@ specific props. We can achieve this using _manual prop declaration_. Provide the
 </SheetObject>
 ```
 
-You can also use the [`<Declare>`](./declare) prop slot component to colocate your manual declaration with other code.
+You can also use the [`<Declare>`](/reference/theatre/declare) prop slot component to colocate your manual declaration with other code.
 
 ## Selection
 

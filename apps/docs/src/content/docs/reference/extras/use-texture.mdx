@@ -7,15 +7,15 @@ type: 'hook'
 ---
 
 `useTexture` is a convenience hook wrapping
-[`useLoader`](/docs/reference/core/hooks#useloader) that returns an
-[`AsyncWritable`](/docs/reference/core/utilities#asyncwritable) store populated
+[`useLoader`](/reference/core/hooks#useloader) that returns an
+[`AsyncWritable`](/reference/core/utilities#asyncwritable) store populated
 with a `THREE.Texture`. The texture is automatically assigned the
 [`colorSpace`](https://threejs.org/docs/#api/en/textures/Texture.colorSpace)
 that the renderer uses.
 
 ## Usage
 
-The [`AsyncWritable`](/docs/reference/core/utilities#asyncwritable) returned
+The [`AsyncWritable`](/reference/core/utilities#asyncwritable) returned
 from `useTexture` can be used as a store and a promise at the same time. You can
 `await` it or use it as any other store.
 

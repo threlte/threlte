@@ -31,6 +31,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 `<Hands />` instantiates [XRHand](https://developer.mozilla.org/en-US/docs/Web/API/XRHand) inputs for devices that allow hand tracking.
 
 ```svelte
@@ -70,7 +72,7 @@ A snippet, `wrist`, will place any children within the wrist space of the hand:
 </Hand>
 ```
 
-To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](https://localhost:4321/docs/reference/core/utilities#currentwritable) store:
+To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](https://localhost:4321/reference/core/utilities#currentwritable) store:
 
 ```ts
 const { isHandTracking } = useXR()
