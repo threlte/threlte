@@ -105,12 +105,6 @@ export default defineConfig({
 							autogenerate: {
 								directory: 'reference/core/helpers'
 							}
-						},
-						{
-							label: 'Legacy',
-							autogenerate: {
-								directory: 'reference/core/legacy'
-							}
 						}
 					]
 				},
