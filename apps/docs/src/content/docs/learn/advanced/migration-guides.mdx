@@ -651,7 +651,7 @@ a new internal context which is not exposed. All other contexts (which were used
 ### `<Pass>` and the default effects rendering are removed
 
 In the effort of clear separation of concerns, the component `<Pass>` as well as the rendering with Three.js default
-`EffectComposer` have been removed. Threlte 6 now provides a hook called [`useRender`](reference/core/use-task#custom-render-pipeline) which
+`EffectComposer` have been removed. Threlte 6 now provides a hook called [`useRender`](/reference/core/use-task#custom-render-pipeline) which
 allows you to easily set up sophisticated rendering pipelines. As soon as a `useRender` hook is implemented, Threlte's
 default render pipeline is disabled. `useRender` callbacks will be invoked _after_ all callback to `useFrame` have been
 invoked. This means that you can use `useFrame` to update your objects and `useRender` to render it. `useRender` also has the option of

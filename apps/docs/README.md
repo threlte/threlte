@@ -8,6 +8,7 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
 - ComponentSignature
 - Languages sidebar logic
 - Remove "src/examples" from tsconfig
+- Large asset size reduction
 
 ## Notes
 
