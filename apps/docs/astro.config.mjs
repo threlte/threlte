@@ -154,6 +154,7 @@ export default defineConfig({
 			applyBaseStyles: false
 		})
 	],
+	site: 'https://threlte.xyz',
 	vite: {
 		resolve: {
 			alias: {
