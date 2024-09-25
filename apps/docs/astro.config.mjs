@@ -94,37 +94,37 @@ export default defineConfig({
 					}
 				},
 				{
-					label: 'GLTF',
+					label: 'gltf',
 					autogenerate: {
 						directory: 'reference/gltf'
 					}
 				},
 				{
-					label: 'Rapier',
+					label: 'rapier',
 					autogenerate: {
 						directory: 'reference/rapier'
 					}
 				},
 				{
-					label: 'Theatre',
+					label: 'theatre',
 					autogenerate: {
 						directory: 'reference/theatre'
 					}
 				},
 				{
-					label: 'Flex',
+					label: 'flex',
 					autogenerate: {
 						directory: 'reference/flex'
 					}
 				},
 				{
-					label: 'XR',
+					label: 'xr',
 					autogenerate: {
 						directory: 'reference/xr'
 					}
 				},
 				{
-					label: 'Studio',
+					label: 'studio',
 					autogenerate: {
 						directory: 'reference/studio'
 					}
@@ -138,10 +138,6 @@ export default defineConfig({
 				de: {
 					label: 'German',
 					lang: 'de'
-				},
-				'zh-cn': {
-					label: '简体中文',
-					lang: 'zh-CN'
 				}
 			},
 			editLink: {

@@ -1,6 +1,6 @@
 export const packages = [
 	{ label: 'Learn', href: '/learn/getting-started/introduction', path: '/learn' },
-	{ label: 'Examples', href: '/examples/Examples', path: '/examples' },
+	{ label: 'Examples', href: '/examples', path: '/examples' },
 	{ label: 'Core', href: '/reference/core/getting-started', path: '/reference/core' },
 	{ label: 'Extras', href: '/reference/extras/getting-started', path: '/reference/extras' },
 	{ label: 'GLTF', href: '/reference/gltf/getting-started', path: '/reference/gltf' },
