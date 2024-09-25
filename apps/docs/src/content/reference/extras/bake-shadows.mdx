@@ -1,5 +1,5 @@
 ---
-order: 6.6
+order: 6.7
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/BakeShadows/BakeShadows.svelte'
 name: '<BakeShadows>'
@@ -10,7 +10,7 @@ type: 'component'
 
 <Example path="extras/bake-shadows/basic" />
 
-When `<BakeShadows>` is used within a `<Suspense>`, shadows will be frozen after the boundary is no longer in a suspended state.
+When `<BakeShadows>` is used within a `<Suspense>`, shadows will be frozen after the boundary is no longer in a suspended state. It will unfreeze if the boundary is re-suspended.
 
 <Example path="extras/bake-shadows/spaceships" />
 
