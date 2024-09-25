@@ -10,14 +10,14 @@ title: 'Getting Started'
 
 As with the rest of Threlte, `@threlte/theatre` provides an idiomatic yet transparent Svelte wrapper. The core concepts of `@threlte/theatre` are:
 
-| @threlte/theatre Component                        | Description                                                             | Corresponding Theatre.js Concept(s)                                                                                                                                                           |
-| ------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [\<Project\>](/reference/studio/project)          | Contains your project's animation sheets                                | [Project](https://www.theatrejs.com/docs/latest/manual/projects)                                                                                                                              |
-| [\<Sheet\>](/reference/studio/sheet)              | Binds to an animation _sheet_ that contains animation sequences         | [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets)                                                                                                                                  |
-| [\<Sequence\>](/reference/studio/sequence)        | Binds to an animation _sequence_ and contains the animated components   | [Sequence](https://www.theatrejs.com/docs/latest/manual/sequences)                                                                                                                            |
-| [\<Studio\>](/reference/studio/studio)            | Enables the Theatre.js in-browser studio _interface_ during development | [Studio](https://www.theatrejs.com/docs/latest/manual/Studio)                                                                                                                                 |
-| [\<SheetObject\>](/reference/studio/sheet-object) | Enables editing and animating its parent in the studio interface        | [Sheet Object](https://www.theatrejs.com/docs/latest/manual/objects)                                                                                                                          |
-| [\<Theatre\>](/reference/studio/theatre)          | A helper component providing a project with a single sheet and a studio | [Project](https://www.theatrejs.com/docs/latest/manual/projects), [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets), [Studio](https://www.theatrejs.com/docs/latest/manual/Studio) |
+| @threlte/theatre Component                         | Description                                                             | Corresponding Theatre.js Concept(s)                                                                                                                                                           |
+| -------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [\<Project\>](/reference/theatre/project)          | Contains your project's animation sheets                                | [Project](https://www.theatrejs.com/docs/latest/manual/projects)                                                                                                                              |
+| [\<Sheet\>](/reference/theatre/sheet)              | Binds to an animation _sheet_ that contains animation sequences         | [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets)                                                                                                                                  |
+| [\<Sequence\>](/reference/theatre/sequence)        | Binds to an animation _sequence_ and contains the animated components   | [Sequence](https://www.theatrejs.com/docs/latest/manual/sequences)                                                                                                                            |
+| [\<Studio\>](/reference/theatre/studio)            | Enables the Theatre.js in-browser studio _interface_ during development | [Studio](https://www.theatrejs.com/docs/latest/manual/Studio)                                                                                                                                 |
+| [\<SheetObject\>](/reference/theatre/sheet-object) | Enables editing and animating its parent in the studio interface        | [Sheet Object](https://www.theatrejs.com/docs/latest/manual/objects)                                                                                                                          |
+| [\<Theatre\>](/reference/theatre/theatre)          | A helper component providing a project with a single sheet and a studio | [Project](https://www.theatrejs.com/docs/latest/manual/projects), [Sheet](https://www.theatrejs.com/docs/latest/manual/sheets), [Studio](https://www.theatrejs.com/docs/latest/manual/Studio) |
 
 The `@threlte/theatre` documentation cross-references [the Theatre.js documentation](https://www.theatrejs.com/docs/latest), allowing you to get a deeper understanding of the underlying concepts.
 
@@ -42,8 +42,7 @@ npm install @threlte/theatre @theatre/core @theatre/studio
 To get started quickly, encapsulate your whole scene in the component [`<Theatre>`](/reference/theatre/theatre).
 
 :::tip
-The component `<Theatre>` provides a default [`<Project>`](/theatre/project) and [`<Sheet>`](/theatre/sheet) and implements [`<Studio>`](/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
-
+The component `<Theatre>` provides a default [`<Project>`](/reference/theatre/project) and [`<Sheet>`](/reference/theatre/sheet) and implements [`<Studio>`](/reference/theatre/studio). For a more flexible structure please consider using `<Project>`, `<Sheet>` and `<Studio>` on their own.
 :::
 
 ```svelte title=App.svelte {3,8,10}+

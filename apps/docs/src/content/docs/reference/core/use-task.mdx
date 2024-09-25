@@ -19,7 +19,7 @@ every frame.
 In its most basic form, `useTask` takes a callback function as its argument. This
 function will be executed on every frame, starting on the next frame. It receives a `delta`, representing the time since the last frame as its
 argument. By default, the created task is added to [Threlte's
-`mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
+`mainStage`](/learn/basics/scheduling-tasks#default-stages) in an arbitrary order (i.e. without dependencies).
 
 ```ts
 const { start, stop, started, task } = useTask((delta) => {
