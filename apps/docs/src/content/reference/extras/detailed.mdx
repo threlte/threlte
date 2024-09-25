@@ -8,15 +8,14 @@ componentSignature:
   { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }, props: [] }
 ---
 
-`<Detailed>` is a wrapper around ThreeJS's [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
+`<Detailed>` is an abstraction around ThreeJS's [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
 
 <Example path="extras/detailed" />
 
-Notice how as the mesh's distance from the camera increases, a mesh with less vertices is renderered.
+Notice how as the mesh's distance from the camera increases, a geometry with less vertices is shown.
 
-<Tip type="tip">
-  It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
-  creation tools.
+<Tip type="warning">
+The distance between the camera and the `<Detailed>` component itself is what determines which level-of-detail to use. You can set positions for children but they will not be used in the distance calculation.
 </Tip>
 
 Children of `<Detailed>` accept a distance prop. This prop determines the visibility of each child based on its distance from the camera. If not specified, distance defaults to 0.
@@ -32,7 +31,7 @@ Children of `<Detailed>` accept a distance prop. This prop determines the visibi
 </Detailed>
 ```
 
-Children of `<Detailed>` accept a hysteresis prop to prevent flickering at LOD boundaries. If not specified, hysteresis defaults to 0.
+Children of `<Detailed>` accept a hysteresis prop which can be used to prevent flickering at LOD boundaries. If not specified, hysteresis defaults to 0.
 
 ```svelte
 <Detailed>
@@ -41,3 +40,8 @@ Children of `<Detailed>` accept a hysteresis prop to prevent flickering at LOD b
   </T.Mesh>
 </Detailed>
 ```
+
+<Tip type="tip">
+  It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
+  creation tools.
+</Tip>
