@@ -83,15 +83,93 @@ export default defineConfig({
 				},
 				{
 					label: 'core',
-					autogenerate: {
-						directory: 'reference/core'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							link: 'reference/core/getting-started'
+						},
+						{
+							label: 'Components',
+							autogenerate: {
+								directory: 'reference/core/components'
+							}
+						},
+						{
+							label: 'Hooks',
+							autogenerate: {
+								directory: 'reference/core/hooks'
+							}
+						},
+						{
+							label: 'Helpers',
+							autogenerate: {
+								directory: 'reference/core/helpers'
+							}
+						},
+						{
+							label: 'Legacy',
+							autogenerate: {
+								directory: 'reference/core/legacy'
+							}
+						}
+					]
 				},
 				{
 					label: 'extras',
-					autogenerate: {
-						directory: 'reference/extras'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							link: 'reference/extras/getting-started'
+						},
+						{
+							label: 'Audio',
+							autogenerate: {
+								directory: 'reference/extras/audio'
+							}
+						},
+						{
+							label: 'Content',
+							autogenerate: {
+								directory: 'reference/extras/content'
+							}
+						},
+						{
+							label: 'Interaction',
+							autogenerate: {
+								directory: 'reference/extras/interaction'
+							}
+						},
+						{
+							label: 'Loading',
+							autogenerate: {
+								directory: 'reference/extras/loading'
+							}
+						},
+						{
+							label: 'Performance',
+							autogenerate: {
+								directory: 'reference/extras/performance'
+							}
+						},
+						{
+							label: 'Staging',
+							autogenerate: {
+								directory: 'reference/extras/staging'
+							}
+						},
+						{
+							label: 'Visual Effects',
+							autogenerate: {
+								directory: 'reference/extras/VFX'
+							}
+						},
+						{
+							label: 'Misc',
+							autogenerate: {
+								directory: 'reference/extras/misc'
+							}
+						}
+					]
 				},
 				{
 					label: 'gltf',
