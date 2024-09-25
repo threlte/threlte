@@ -4,6 +4,7 @@
 
   // todo
   import { interactivityEventNames } from '../../interactivity/plugin'
+  import type { ColorRepresentation } from 'three'
 
   // todo turn to pierced (measureperf impact)
   type InstanceProps = {
@@ -14,10 +15,12 @@
     rotation?: [x: number, y: number, z: number, w: number]
     scale?: [x: number, y: number, z: number]
     visibility?: boolean
+    color?: ColorRepresentation
   }
 
   let {
     children,
+    color,
     x,
     y,
     z,
@@ -31,9 +34,14 @@
   const mesh = useInstancedMesh2()
 
   $effect.pre(() => {
-    if (rest && rest.onclick) {
-      mesh.registerEvent(id, 'onclick', rest.onclick)
+    if (!rest) return
+    // todo perf
+    for (let i = 0; i < interactivityEventNames.length; i++) {
+      if (rest[interactivityEventNames[i]]) {
+        mesh.registerEvent(id, interactivityEventNames[i], rest[interactivityEventNames[i]])
+      }
     }
+    // todo unregister
   })
 
   // MATRIX4
@@ -65,6 +73,12 @@
     if (visibility !== undefined) {
       mesh.ref.setVisibilityAt(id, visibility)
     }
+  })
+
+  // COLOR
+  $effect.pre(() => {
+    if (!mesh.ref) return
+    if (color) mesh.ref.setColorAt(id, color)
   })
 </script>
 

@@ -1,6 +1,14 @@
 <script lang="ts">
   import { T, useTask, watch } from '@threlte/core'
-  import { InstancedMesh, Instance, OrbitControls, PerfMonitor, useGltf } from '@threlte/extras'
+  import {
+    InstancedMesh,
+    Instance,
+    OrbitControls,
+    PerfMonitor,
+    useGltf,
+    interactivity
+  } from '@threlte/extras'
+  import { COLS, ROWS } from '../im2SceneConfig'
 
   let dn = Date.now()
   useTask(() => (dn = Date.now()))
@@ -11,10 +19,9 @@
     console.log(gltf)
   })
 
-  const w = 100
-  const h = 100
+  const count = ROWS * COLS
 
-  const count = w * h
+  interactivity()
 </script>
 
 {#await gltf then value}
@@ -22,15 +29,22 @@
     limit={count}
     range={count}
   >
-    <T is={value.scene.children[0].geometry} />
-    <T is={value.scene.children[0].material} />
+    <!-- <T is={value.scene.children[0].geometry} />
+    <T is={value.scene.children[0].material} /> -->
 
-    {#each { length: w } as _, x}
-      {#each { length: h } as _, z}
+    <T.SphereGeometry args={[2.5]} />
+    <T.MeshLambertMaterial />
+
+    {#each { length: ROWS } as _, x}
+      {#each { length: COLS } as _, z}
         <Instance
-          position.x={(x - w / 2) * 10}
-          position.y={Math.sin(x * w + z + dn * 0.001)}
-          position.z={(z - h / 2) * 10}
+          position.x={(x - ROWS / 2) * 10}
+          position.y={Math.sin(x * ROWS + z + dn * 0.001)}
+          position.z={(z - COLS / 2) * 10}
+          color={(Math.sin(dn * 0.0001 + (x * ROWS + z) * 1000) + 1) * 0x1000000}
+          onclick={(e) => {
+            console.log(`clicked instance ${e.instanceId}`)
+          }}
         />
       {/each}
     {/each}

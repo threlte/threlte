@@ -1,6 +1,7 @@
 import type { InstancedMesh2 } from '@three.ez/instanced-mesh'
 import { getContext, setContext } from 'svelte'
 import { Matrix4, Quaternion, Vector3 } from 'three'
+import type { interactivityEventNames } from '../../interactivity/plugin'
 
 export class InstancedMesh2Context {
   ref: InstancedMesh2 | undefined = $state()
@@ -8,7 +9,19 @@ export class InstancedMesh2Context {
   tempPositionV3: Vector3
   tempScaleV3: Vector3
   tempQuat: Quaternion
+
   onclick = $state(new Map<number, typeof Function>())
+  oncontextmenu = $state(new Map<number, typeof Function>())
+  ondblclick = $state(new Map<number, typeof Function>())
+  onwheel = $state(new Map<number, typeof Function>())
+  onpointerup = $state(new Map<number, typeof Function>())
+  onpointerdown = $state(new Map<number, typeof Function>())
+  onpointerover = $state(new Map<number, typeof Function>())
+  onpointerout = $state(new Map<number, typeof Function>())
+  onpointerenter = $state(new Map<number, typeof Function>())
+  onpointerleave = $state(new Map<number, typeof Function>())
+  onpointermove = $state(new Map<number, typeof Function>())
+  onpointermissed = $state(new Map<number, typeof Function>())
 
   constructor() {
     this.tempM4 = new Matrix4()
@@ -17,8 +30,12 @@ export class InstancedMesh2Context {
     this.tempQuat = new Quaternion()
   }
 
-  registerEvent(instanceId: number, event: 'onclick', fun: typeof Function) {
-    this.onclick.set(instanceId, fun)
+  registerEvent(
+    instanceId: number,
+    event: (typeof interactivityEventNames)[number],
+    fun: typeof Function
+  ) {
+    this[event].set(instanceId, fun)
   }
 }
 

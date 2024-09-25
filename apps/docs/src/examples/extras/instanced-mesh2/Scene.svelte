@@ -7,16 +7,14 @@
     PerfMonitor,
     useGltf
   } from '@threlte/extras'
+  import { ROWS, COLS } from './im2SceneConfig'
 
   let dn = Date.now()
   useTask(() => (dn = Date.now()))
 
   const gltf = useGltf<any>('/models/threlte.glb')
 
-  const w = 100
-  const h = 100
-
-  const count = w * h
+  const count = ROWS * COLS
 
   interactivity()
 </script>
@@ -29,14 +27,15 @@
       <T.SphereGeometry args={[2.5]} />
       <T.MeshLambertMaterial />
 
-      {#each { length: w } as _, x}
-        {#each { length: h } as _, z}
+      {#each { length: ROWS } as _, x}
+        {#each { length: COLS } as _, z}
           <Instance2
-            id={x * w + z}
-            x={(x - w / 2) * 10}
-            y={Math.sin(x * w + z + dn * 0.001)}
-            z={(z - h / 2) * 10}
-            visibility={Math.sin(z * w + x + dn * 0.001)}
+            id={x * ROWS + z}
+            x={(x - ROWS / 2) * 10}
+            y={Math.sin(x * ROWS + z + dn * 0.001)}
+            z={(z - COLS / 2) * 10}
+            color={(Math.sin(dn * 0.0001 + (x * ROWS + z) * 1000) + 1) * 0x1000000}
+            visibility={Math.sin(z * ROWS + x + dn * 0.001)}
             onclick={(e) => {
               console.log(`clicked instance ${e.instanceId}`)
             }}
