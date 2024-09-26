@@ -297,9 +297,26 @@ export default defineConfig({
 				},
 				{
 					label: 'studio',
-					autogenerate: {
-						directory: 'reference/studio'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							autogenerate: {
+								directory: 'reference/studio/getting-started'
+							}
+						},
+						{
+							label: 'Components',
+							autogenerate: {
+								directory: 'reference/studio/components'
+							}
+						},
+						{
+							label: 'Extensions',
+							autogenerate: {
+								directory: 'reference/studio/extensions'
+							}
+						}
+					]
 				}
 			],
 			locales: {
