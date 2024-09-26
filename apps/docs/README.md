@@ -5,9 +5,11 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
 ## TODO
 
 - Content
+  - ComponentSignature
   - Studio Tutorial initial overlay positioning
   - Audio not working in reference/rapier/components/rigid-body
-- ComponentSignature
+  - examples not working correctly
+    - webgpu, scope with zoom, animating a spaceship, outlines, etc...
 - Languages sidebar logic
 - Remove "src/examples" from tsconfig
 - Large asset size reduction
