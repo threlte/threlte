@@ -14,8 +14,8 @@ componentSignature:
   }
 ---
 
-Theatre.js sheets contain one or more Theatre.js objects and optionally a [`<Sequence>`](/reference/theatre/sequence) component that allows controlling the animation.
-The animated objects can adjusted in the [`<Studio>`](/reference/theatre/studio) component.
+Theatre.js sheets contain one or more Theatre.js objects and optionally a [`<Sequence>`](/reference/theatre/components/sequence) component that allows controlling the animation.
+The animated objects can adjusted in the [`<Studio>`](/reference/theatre/components/studio) component.
 
 #### Theatre.js Docs
 
@@ -25,7 +25,7 @@ The animated objects can adjusted in the [`<Studio>`](/reference/theatre/studio)
 
 ## Creating Sheets
 
-You can create a sheet by placing the component `<Sheet>` as a child of a [`<Project>`](/reference/theatre/project) component. If a sheet with the given name already exists, it will represent the existing sheet instead of creating a new one.
+You can create a sheet by placing the component `<Sheet>` as a child of a [`<Project>`](/reference/theatre/components/project) component. If a sheet with the given name already exists, it will represent the existing sheet instead of creating a new one.
 
 ```svelte
 <script>
@@ -57,7 +57,7 @@ provides and API to play and pause the animation in a variety of ways.
 
 #### Using the `<Sequence>` component
 
-The first way to control the sequence is using a reactive API with the [`<Sequence>`](/reference/theatre/sequence) component.
+The first way to control the sequence is using a reactive API with the [`<Sequence>`](/reference/theatre/components/sequence) component.
 
 #### Using the `useSequence` hook
 

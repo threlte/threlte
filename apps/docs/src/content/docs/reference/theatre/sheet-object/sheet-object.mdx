@@ -37,13 +37,13 @@ you want to make editable in the Theatre.js studio.
 ## Overview
 
 The `<SheetObject>` component offers several distinct ways to declare and syncronize props in the Theatre.js studio. Convenient [auto prop APIs](#auto-props) address common usecases and allow
-quick and easy prop declaration. Meanwhile, [manual props APIs](/reference/theatre/sheet-object#manual-props) allow full customization of prop declaration. Many of these are offered through [slot props](https://svelte.dev/docs/special-elements#slot-slot-key-value).
+quick and easy prop declaration. Meanwhile, [manual props APIs](/reference/theatre/sheet-object/sheet-object#manual-props) allow full customization of prop declaration. Many of these are offered through [slot props](https://svelte.dev/docs/special-elements#slot-slot-key-value).
 
 <Example path="theatre/sheet-object" />
 
 ## Auto Props
 
-The [`<Sync>`](/reference/theatre/sync) component automatically infers and synchronizes props of its parent component. Meanwhile the [`<Transform>`](/reference/theatre/transform) component creates position and rotation props for its
+The [`<Sync>`](/reference/theatre/sheet-object/sync) component automatically infers and synchronizes props of its parent component. Meanwhile the [`<Transform>`](/reference/theatre/sheet-object/transform) component creates position and rotation props for its
 child components, and adds transform controls to the them.
 
 ## Manual Props
@@ -60,7 +60,7 @@ specific props. We can achieve this using _manual prop declaration_. Provide the
 </SheetObject>
 ```
 
-You can also use the [`<Declare>`](/reference/theatre/declare) prop slot component to colocate your manual declaration with other code.
+You can also use the [`<Declare>`](/reference/theatre/sheet-object/declare) prop slot component to colocate your manual declaration with other code.
 
 ## Selection
 
