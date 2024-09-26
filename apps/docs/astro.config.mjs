@@ -185,9 +185,34 @@ export default defineConfig({
 				},
 				{
 					label: 'flex',
-					autogenerate: {
-						directory: 'reference/flex'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							link: 'reference/flex/getting-started'
+						},
+						{
+							label: 'Examples',
+							link: 'reference/flex/examples'
+						},
+						{
+							label: 'Components',
+							autogenerate: {
+								directory: 'reference/flex/components'
+							}
+						},
+						{
+							label: 'Utilities',
+							autogenerate: {
+								directory: 'reference/flex/utilities'
+							}
+						},
+						{
+							label: 'Hooks',
+							autogenerate: {
+								directory: 'reference/flex/hooks'
+							}
+						}
+					]
 				},
 				{
 					label: 'xr',
