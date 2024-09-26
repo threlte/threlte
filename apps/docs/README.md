@@ -5,6 +5,7 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
 ## TODO
 
 - Content
+  - Studio Tutorial initial overlay positioning
 - ComponentSignature
 - Languages sidebar logic
 - Remove "src/examples" from tsconfig

@@ -8,5 +8,5 @@ export const packages = [
 	{ label: 'Theatre', href: '/reference/theatre/getting-started', path: '/reference/theatre' },
 	{ label: 'XR', href: '/reference/xr/getting-started', path: '/reference/xr' },
 	{ label: 'Flex', href: '/reference/flex/getting-started', path: '/reference/flex' },
-	{ label: 'Studio', href: '/reference/studio/getting-started', path: '/reference/studio' }
+	{ label: 'Studio', href: '/reference/studio/getting-started/tutorial', path: '/reference/studio' }
 ]

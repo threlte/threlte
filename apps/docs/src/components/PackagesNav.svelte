@@ -3,7 +3,7 @@
 	import { packages } from './packages'
 
 	let link: HTMLAnchorElement
-	let url = '/learn/getting-started/intro'
+	let url = '/learn'
 
 	onMount(() => {
 		for (let i = 0; i < packages.length; i++) {
