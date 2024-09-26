@@ -270,9 +270,30 @@ export default defineConfig({
 				},
 				{
 					label: 'xr',
-					autogenerate: {
-						directory: 'reference/xr'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							link: 'reference/xr/getting-started'
+						},
+						{
+							label: 'Components',
+							autogenerate: {
+								directory: 'reference/xr/components'
+							}
+						},
+						{
+							label: 'Controls',
+							autogenerate: {
+								directory: 'reference/xr/controls'
+							}
+						},
+						{
+							label: 'Hooks',
+							autogenerate: {
+								directory: 'reference/xr/hooks'
+							}
+						}
+					]
 				},
 				{
 					label: 'studio',
