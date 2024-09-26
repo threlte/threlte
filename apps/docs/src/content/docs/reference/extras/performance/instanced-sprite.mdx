@@ -87,7 +87,7 @@ You can find an example of a [more complex scene here](/examples/animation/compl
 ## `<InstancedSprite>`
 
 To use the `<InstancedSprite>` you must provide it with sprite metadata and a texture. While we recommend utilizing the
-[`buildSpritesheet()`](/reference/extras/instanced-sprite#buildspritesheet) utility for this purpose, you are also free to implement your own
+[`buildSpritesheet()`](/reference/extras/performance/instanced-sprite#buildspritesheet) utility for this purpose, you are also free to implement your own
 custom solution, provided it meets the component's input requirements.
 
 Other than it's own props, `<InstanedSprite/>` extends and accepts all properties of
@@ -187,7 +187,7 @@ Instance is a slot prop component that is used to update sprite instances proper
 Then put it as a child component. The only required property is `id`. It also has `position` of type `Vector3Tuple` prop and `scale` of type `Vector2Tuple`.
 
 Other than this, it as other properties that you can find in the `InstancedSpriteMesh`, so: `animationName`, `playmode`, `billboarding`, `offset`, `loop`,
-`flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](/reference/extras/instanced-mesh) section
+`flipX`, `flipY`, `frameId`. Read more about them in the [InstancedSpriteMesh](/reference/extras/performance/instanced-mesh) section
 
 The `<Instance>` component serves as a declarative alternative to `useInstancedSprite` hook to dynamically update the properties of sprite instances within the
 `InstancedSprite` component. You can access through the `Instance` snippet prop.
@@ -212,7 +212,7 @@ _Example: Set a position, scale and flipX for every instance._
 </InstancedSprite>
 ```
 
-{/* <ComponentSignature
+{/_ <ComponentSignature
 titleOverride={` `}
 idOverride="instance-component-signature"
 componentName={'<Instance/>'}
@@ -287,7 +287,7 @@ signature={{
 			}
 		]
 	}}
-/> */}
+/> _/}
 
 ### binding
 

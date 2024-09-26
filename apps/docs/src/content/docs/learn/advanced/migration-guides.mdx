@@ -249,7 +249,7 @@ const gltf = useGltf('./path/to/model.glb', {
 })
 ```
 
-For more information, see the [`useGltf`](/reference/extras/use-gltf) and [`GLTF`](/reference/extras/gltf) docs.
+For more information, see the [`useGltf`](/reference/extras/loading/use-gltf) and [`GLTF`](/reference/extras/content/gltf) docs.
 
 ### Rapier
 
@@ -281,7 +281,7 @@ scheduler
 
 [Tasks](/learn/basics/scheduling-tasks#tasks) that are added to the
 `simulation` stage will be executed according to the set
-[framerate](/reference/rapier/framerate), i.e. the delta provided in these
+[framerate](/reference/rapier/concepts/framerate), i.e. the delta provided in these
 tasks corresponds to the delta time between physics frames. Tasks added to the
 `synchronization` stage will be executed after all tasks of the `simulation`
 stage have been executed, the delta is the regular `requestAnimationFrame` frame
@@ -391,7 +391,7 @@ Threlte context available via `useThrelte()`.
 
 When `autoRender` is `false`, Threlte will not render your scene automatically
 and will enable you to implement a custom render pipeline using the hook
-[`useTask`](/reference/core/use-task). If adding a task to render the scene
+[`useTask`](/reference/core/hooks/use-task). If adding a task to render the scene
 to Threlte's
 [`renderStage`](/learn/basics/scheduling-tasks#default-stages), the task
 will only be called in respect to the `renderMode` prop. Previously, this
@@ -400,7 +400,7 @@ explicit here is better.
 
 ### `useFrame`
 
-The hook [`useTask`](/reference/core/use-task) replaces `useFrame`. It has
+The hook [`useTask`](/reference/core/hooks/use-task) replaces `useFrame`. It has
 a slightly different signature and allows you to to add a `task` to Threlte's
 _Task Scheduling System_. A task may have dependencies to other tasks, which you
 can think of as the big brother of the `order` option of `useFrame`.
@@ -410,7 +410,7 @@ can think of as the big brother of the `order` option of `useFrame`.
 The callback to `useTask` now only receives the delta time since the last frame.
 The Threlte context previously available as the first argument to the callback
 of `useFrame` should be retrieved using the hook
-[`useThrelte`](/reference/core/use-threlte).
+[`useThrelte`](/reference/core/hooks/use-threlte).
 
 ```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
@@ -488,7 +488,7 @@ useTask(
 
 ### `useRender`
 
-The hook [`useTask`](/reference/core/use-task) also replaces `useRender`.
+The hook [`useTask`](/reference/core/hooks/use-task) also replaces `useRender`.
 Previously, `useRender` allowed you to define a callback that was invoked after
 all `useFrame` callbacks have been invoked to render your scene with a custom
 render pipeline. This is now possible with `useTask` as well. Threlte provides a
@@ -519,7 +519,7 @@ useTask(
 The callback to `useTask` now only receives the delta time since the last frame.
 The Threlte context previously available as the first argument to the callback
 of `useRender` should be retrieved using the hook
-[`useThrelte`](/reference/core/use-threlte).
+[`useThrelte`](/reference/core/hooks/use-threlte).
 
 ```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
@@ -608,7 +608,7 @@ your Threlte 5 project to Threlte v6.
 
 Preprocessing is not needed anymore starting from Threlte 6. This means you
 may remove the preprocessor `@threlte/preprocess` from your project as well as its
-configuration in `svelte.config.js`. You can now use the [component `<T>`](/reference/core/t) directly.
+configuration in `svelte.config.js`. You can now use the [component `<T>`](/reference/core/components/t) directly.
 
 ### `<Three>` is now `<T>`
 
@@ -634,12 +634,12 @@ you with the correct prop types for the components you're using.
 
 Interactivity is now handled by a plugin that's available at `@threlte/extras`. It's much more mature and flexible
 in terms of event handling. For instance – as some of you requested – you may now define on what object the main
-event listener is placed. Check out [its documentation](/reference/extras/interactivity) to learn more.
+event listener is placed. Check out [its documentation](/reference/extras/interaction/interactivity) to learn more.
 
 ### `useLoader` now returns a store
 
-The hook [`useLoader`](/reference/core/use-loader) now returns a custom Svelte store called
-[`AsyncWritable`](/reference/core/utilities#asyncwritable). This store allows you to [await](https://svelte.dev/tutorial/await-blocks)
+The hook [`useLoader`](/reference/core/hooks/use-loader) now returns a custom Svelte store called
+[`AsyncWritable`](/reference/core/helpers/utilities#asyncwritable). This store allows you to [await](https://svelte.dev/tutorial/await-blocks)
 the loading of the resource while also implementing a regular Svelte store. It also now caches the results
 of the loader function so that it's not called multiple times for the same resource. You will most likely
 benefit from quite a performance boost in applications that rely heavily on external resources.
@@ -652,7 +652,7 @@ a new internal context which is not exposed. All other contexts (which were used
 ### `<Pass>` and the default effects rendering are removed
 
 In the effort of clear separation of concerns, the component `<Pass>` as well as the rendering with Three.js default
-`EffectComposer` have been removed. Threlte 6 now provides a hook called [`useRender`](/reference/core/use-task#custom-render-pipeline) which
+`EffectComposer` have been removed. Threlte 6 now provides a hook called [`useRender`](/reference/core/hooks/use-task#custom-render-pipeline) which
 allows you to easily set up sophisticated rendering pipelines. As soon as a `useRender` hook is implemented, Threlte's
 default render pipeline is disabled. `useRender` callbacks will be invoked _after_ all callback to `useFrame` have been
 invoked. This means that you can use `useFrame` to update your objects and `useRender` to render it. `useRender` also has the option of
@@ -661,10 +661,10 @@ ordering callbacks to orchestrate the rendering pipeline across multiple compone
 ### Threlte's main context types
 
 Thelte's main context contains Svelte stores. These stores are now a custom Threlte store called
-[`CurrentWritable`](/reference/core/utilities#currentwritable) which is a store that contains a `current` value with
+[`CurrentWritable`](/reference/core/helpers/utilities#currentwritable) which is a store that contains a `current` value with
 a reference to the current value of the store. This means it does not need to be unwrapped manually (and expensively!) in
 non-reactive places such as loops. For instance, let's have a look at its usage in the hook
-[`useFrame`](/reference/core/use-task) where the context is available as the first argument
+[`useFrame`](/reference/core/hooks/use-task) where the context is available as the first argument
 to the callback:
 
 ```ts
@@ -675,7 +675,7 @@ useFrame(({ camera, colorSpace }) => {
 })
 ```
 
-The full type definition is [currently listed here](/reference/core/use-threlte).
+The full type definition is [currently listed here](/reference/core/hooks/use-threlte).
 
 ### `useGltfAnimations` Signature
 
@@ -692,7 +692,7 @@ const { actions } = useGltfAnimations(gltf)
 $: $actions.Greet?.play()
 ```
 
-Check out the [hooks documentation](/reference/extras/use-gltf-animations) for more information.
+Check out the [hooks documentation](/reference/extras/loading/use-gltf-animations) for more information.
 
 ### `@threlte/rapier`
 

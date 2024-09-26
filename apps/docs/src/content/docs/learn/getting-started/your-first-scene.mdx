@@ -13,7 +13,7 @@ Before rushing into Threlte, familarize yourself with svelte and threejs. Svelte
 
 ## Structuring Your App
 
-As a first step we're creating a new Svelte file called `App.svelte` where we are importing the [`<Canvas>` component](/reference/core/canvas).
+As a first step we're creating a new Svelte file called `App.svelte` where we are importing the [`<Canvas>` component](/reference/core/components/canvas).
 
 {/* prettier-ignore-start */}
 ```svelte title="App.svelte"
@@ -38,7 +38,7 @@ to create a seperate component called `Scene.svelte` and including it in our `Ap
 
 At this point we're looking at a blank screen. Let's add a simple cube to it.
 
-In `Scene.svelte`, we're importing the [`<T>` component](/reference/core/t) which is
+In `Scene.svelte`, we're importing the [`<T>` component](/reference/core/components/t) which is
 the **main building block** of your Threlte application. It's a **generic
 component** that we use to render **any Three.js object**. In this case we're creating a
 [`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
@@ -259,7 +259,7 @@ The renderer now uses this camera to render our scene.
 
 #### Events
 
-Threlte supports listening to certain <a href="/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
+Threlte supports listening to certain <a href="/reference/core/components/t#events">events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
 
 :::
@@ -267,7 +267,7 @@ event to get a reference to the underlying Three.js object as soon as it's creat
 ## Enabling Interactivity
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
-[plugin](/learn/advanced/plugins) [`interactivity`](/reference/extras/interactivity) from
+[plugin](/learn/advanced/plugins) [`interactivity`](/reference/extras/interaction/interactivity) from
 [`@threlte/extras`](/reference/extras/getting-started) and invoke it in our Scene.svelte file;
 We can now add interaction event listeners to our `<T>` components. We will add `pointerenter` and
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a Svelte spring store
@@ -327,7 +327,7 @@ expressions](https://developer.chrome.com/docs/devtools/console/live-expressions
 
 ## Adding Animation
 
-Let's add some motion to our cube. We will use Threlte's [`useTask`](/reference/core/use-task) hook to tap
+Let's add some motion to our cube. We will use Threlte's [`useTask`](/reference/core/hooks/use-task) hook to tap
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 

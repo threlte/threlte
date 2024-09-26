@@ -13,7 +13,7 @@ with lens distortion and crosshairs.
 
 The hook is used to render a scene onto a texture, using
 it in a shader. The [WebGLRenderTarget](https://threejs.org/docs/#api/en/renderers/WebGLRenderTarget) texture
-from [useFBO](/reference/extras/use-fbo) hook is used in the scope where a
+from [useFBO](/reference/extras/misc/use-fbo) hook is used in the scope where a
 vignette and lens distortion effects are applied and a reticle is added.
 
 ### Scene setup
@@ -30,7 +30,7 @@ Control over the scope - activation, movement and pointer-lock toggling — is m
 
 ### Rendering the scene to a texture
 
-The [useFBO](/reference/extras/use-fbo) hook is used to prepare a render target for the scope's view texture.
+The [useFBO](/reference/extras/misc/use-fbo) hook is used to prepare a render target for the scope's view texture.
 Given that the scope's viewport occupies only a fraction of the full screen,
 the texture's resolution is appropriately downscaled to conserve resources.
 
