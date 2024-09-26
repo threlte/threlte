@@ -78,6 +78,11 @@
 	}
 }
 
+/* aside.starlight-aside.starlight-aside--danger[aria-label='Danger'] {
+	@apply rounded-r-lg bg-yellow-800/30;
+} */
+/* border-yellow-500 */
+
 /* ======= Top Nav ========================== */
 
 header.header {
