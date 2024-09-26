@@ -173,9 +173,36 @@ export default defineConfig({
 				},
 				{
 					label: 'rapier',
-					autogenerate: {
-						directory: 'reference/rapier'
-					}
+					items: [
+						{
+							label: 'Getting Started',
+							link: 'reference/rapier/getting-started'
+						},
+						{
+							label: 'Concepts',
+							autogenerate: {
+								directory: 'reference/rapier/concepts'
+							}
+						},
+						{
+							label: 'Components',
+							autogenerate: {
+								directory: 'reference/rapier/components'
+							}
+						},
+						{
+							label: 'Hooks',
+							autogenerate: {
+								directory: 'reference/rapier/hooks'
+							}
+						},
+						{
+							label: 'Joints',
+							autogenerate: {
+								directory: 'reference/rapier/joints'
+							}
+						}
+					]
 				},
 				{
 					label: 'theatre',
