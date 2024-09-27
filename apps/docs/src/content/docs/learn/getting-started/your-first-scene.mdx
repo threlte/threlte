@@ -7,7 +7,7 @@ sidebar: {
 
 import Example from '$components/Example/Example.astro'
 
-:::tip
+:::note
 Before rushing into Threlte, familarize yourself with svelte and threejs. Svelte's [Tutorial](https://svelte.dev/tutorial) is highly recommended as an introduction or revision. Threejs covers a lot of topics and their [fundamentals documentation](https://threejs.org/manual/#en/fundamentals) is a recommended resource for when you get stuck on a concept.
 :::
 
@@ -62,10 +62,7 @@ We should now be looking at a white cube on a transparent background.
 
 <Example path="first-scene/step-1" hideCode />
 
-:::
-
-#### attach
-
+:::note
 Behind the scenes we're using the property `attach` available on `<T>` to **attach an object to a property of
 its parent**. Binding geometries to the property `geometry` and materials to the property `material` is a common
 pattern so Threlte takes care of it for you.
@@ -255,13 +252,9 @@ We're again using the `<T>` component to create a [`THREE.PerspectiveCamera`](ht
 We're also passing a `makeDefault` prop which will make this camera the default camera of our application.
 The renderer now uses this camera to render our scene.
 
-:::
-
-#### Events
-
+:::note
 Threlte supports listening to certain <a href="/reference/core/components/t#events">events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
-
 :::
 
 ## Enabling Interactivity
