@@ -38,7 +38,7 @@ export default defineConfig({
 				twitter: 'https://twitter.com/threlte',
 				discord: 'https://discord.gg/EqUBCfCaGm'
 			},
-			customCss: ['./src/styles/app.css', '@fontsource/inter/400.css'],
+			customCss: ['src/styles/app.css', '@fontsource/inter/400.css'],
 			components: {
 				Head: '$components/Head.astro',
 				Header: '$components/Header.astro',
