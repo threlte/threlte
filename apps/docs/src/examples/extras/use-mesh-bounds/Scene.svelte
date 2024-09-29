@@ -52,7 +52,7 @@
     }}
     {position}
   >
-    <T.BoxGeometry />
+    <T.BoxGeometry args={[size, size, size]} />
     <T.MeshStandardMaterial
       color="hotpink"
       {wireframe}
