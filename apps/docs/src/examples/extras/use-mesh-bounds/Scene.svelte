@@ -3,6 +3,7 @@
   import { OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
   import { interactivity, useMeshBounds } from '@threlte/extras'
+  import type { Vector3Tuple } from 'three'
 
   type Props = {
     showBounds: boolean
@@ -13,7 +14,7 @@
   const meshBounds = useMeshBounds()
   interactivity()
 
-  const positions: [number, number, number][] = [
+  const positions: Vector3Tuple[] = [
     [0, 1, 0],
     [1, -1, 0],
     [-1, -1, 0]
