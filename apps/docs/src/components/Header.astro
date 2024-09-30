@@ -19,7 +19,7 @@ const shouldRenderSearch =
 		<SiteTitle {...Astro.props} />
 	</div>
 	<div class="sl-flex">
-		<PackagesNav client:load />
+		<PackagesNav client:load lang={Astro.props.lang} />
 		<div>{shouldRenderSearch && <Search {...Astro.props} />}</div>
 	</div>
 	<div class="sl-hidden md:sl-flex right-group justify-end">

@@ -2,12 +2,19 @@
 import { onMount } from 'svelte'
 import { packages } from './packages'
 
+const { lang } = $props()
+
 let link: HTMLAnchorElement
 let url = '/learn'
 
 onMount(() => {
+	let pathname = window.location.pathname
+	if (lang != 'en') {
+		pathname = '/' + pathname.split('/').slice(2).join('/')
+	}
+
 	for (let i = 0; i < packages.length; i++) {
-		if (window.location.pathname.startsWith(packages[i].path)) {
+		if (pathname.startsWith(packages[i].path)) {
 			url = packages[i].href
 			break
 		}
@@ -20,8 +27,15 @@ onMount(() => {
 		class="mr-4 flex shrink rounded-md border border-[var(--sl-color-gray-5)] bg-blue-900 px-3 py-2 text-white"
 		aria-label="Packages and Docs Navigation"
 		bind:value={url}
-		on:change={() => {
-			link.click()
+		onchange={() => {
+			if (lang != 'en') {
+				console.log(url);
+				url = `/${lang}${url}`
+				console.log(url);
+				link.click()
+			} else {
+				link.click()
+			}
 		}}
 	>
 		{#each packages as { label, href }}

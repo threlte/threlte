@@ -5,6 +5,7 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
 ## TODO
 
 - Content
+  - Packages Nav for other languages
   - Studio Tutorial initial overlay positioning
   - Audio not working in reference/rapier/components/rigid-body
   - examples not working correctly
