@@ -43,7 +43,8 @@ export default defineConfig({
 				Head: '$components/Head.astro',
 				Header: '$components/Header.astro',
 				Sidebar: '$components/Sidebar.astro',
-				MobileMenuFooter: '$components/MobileMenuFooter.astro'
+				MobileMenuFooter: '$components/MobileMenuFooter.astro',
+				MarkdownContent: '$components/MarkdownContent.astro'
 			},
 			sidebar: [
 				{

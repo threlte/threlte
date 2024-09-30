@@ -43,6 +43,7 @@
 		"rehype-autolink-headings": "^7.1.0",
 		"runed": "^0.15.2",
 		"sharp": "^0.33.4",
+		"shiki": "^1.21.0",
 		"simplex-noise": "^4.0.1",
 		"starlight-links-validator": "^0.9.0",
 		"svelte": "5.0.0-next.257",
