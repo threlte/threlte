@@ -82,16 +82,32 @@ aside.starlight-aside.starlight-aside--danger {
 	@apply rounded-lg border-red-500 bg-red-800/30 text-[--sl-color-text];
 }
 
+aside.starlight-aside.starlight-aside--danger a {
+	@apply text-red-500;
+}
+
 aside.starlight-aside.starlight-aside--caution {
 	@apply rounded-lg bg-yellow-800/30 text-[--sl-color-text];
+}
+
+aside.starlight-aside.starlight-aside--caution a {
+	@apply text-yellow-500;
 }
 
 aside.starlight-aside.starlight-aside--note {
 	@apply rounded-lg border-blue-500 bg-blue-800/30 text-[--sl-color-text];
 }
 
+aside.starlight-aside.starlight-aside--note a {
+	@apply text-blue-500;
+}
+
 aside.starlight-aside.starlight-aside--tip {
 	@apply rounded-lg border-green-500 bg-green-800/30 text-[--sl-color-text];
+}
+
+aside.starlight-aside.starlight-aside--tip a {
+	@apply text-green-500;
 }
 
 aside.starlight-aside.starlight-aside--tip .starlight-aside__title {
