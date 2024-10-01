@@ -67,13 +67,13 @@ importers:
         version: 5.1.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.168.0)(three@0.168.0)
+        version: 0.1.15(@types/three@0.168.0)(three@0.166.1)
       '@pagefind/default-ui':
         specifier: ^1.1.0
         version: 1.1.1
       '@pmndrs/vanilla':
         specifier: ^1.14.1
-        version: 1.14.1(three@0.168.0)
+        version: 1.14.1(three@0.166.1)
       '@stackblitz/sdk':
         specifier: ^1.11.0
         version: 1.11.0
@@ -115,10 +115,10 @@ importers:
         version: 1.9.4
       camera-controls:
         specifier: ^2.9.0
-        version: 2.9.0(three@0.168.0)
+        version: 2.9.0(three@0.166.1)
       postprocessing:
         specifier: ^6.36.2
-        version: 6.36.2(three@0.168.0)
+        version: 6.36.2(three@0.166.1)
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -159,14 +159,14 @@ importers:
         specifier: ^3.4.4
         version: 3.4.4(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.2))
       three:
-        specifier: ^0.168.0
-        version: 0.168.0
+        specifier: ^0.166.1
+        version: 0.166.1
       three-mesh-bvh:
         specifier: ^0.8.0
-        version: 0.8.0(three@0.168.0)
+        version: 0.8.0(three@0.166.1)
       three.quarks:
         specifier: ^0.15.0
-        version: 0.15.0(three@0.168.0)
+        version: 0.15.0(three@0.166.1)
       typescript:
         specifier: ^5.5.2
         version: 5.6.2
@@ -7662,9 +7662,6 @@ packages:
   three@0.166.1:
     resolution: {integrity: sha512-LtuafkKHHzm61AQA1be2MAYIw1IjmhOUxhBa0prrLpEMWbV7ijvxCRHjSgHPGp2493wLBzwKV46tA9nivLEgKg==}
 
-  three@0.168.0:
-    resolution: {integrity: sha512-6m6jXtDwMJEK/GGMbAOTSAmxNdzKvvBzgd7q8bE/7Tr6m7PaBh5kKLrN7faWtlglXbzj7sVba48Idwx+NRsZXw==}
-
   through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
 
@@ -9772,10 +9769,10 @@ snapshots:
       '@types/three': 0.166.0
       three: 0.166.1
 
-  '@lumaai/luma-web@0.1.15(@types/three@0.168.0)(three@0.168.0)':
+  '@lumaai/luma-web@0.1.15(@types/three@0.168.0)(three@0.166.1)':
     dependencies:
       '@types/three': 0.168.0
-      three: 0.168.0
+      three: 0.166.1
 
   '@macfja/serializer@1.1.2': {}
 
@@ -9976,11 +9973,6 @@ snapshots:
     dependencies:
       three: 0.166.1
       troika-three-text: 0.47.2(three@0.166.1)
-
-  '@pmndrs/vanilla@1.14.1(three@0.168.0)':
-    dependencies:
-      three: 0.168.0
-      troika-three-text: 0.47.2(three@0.168.0)
 
   '@polka/url@1.0.0-next.24': {}
 
@@ -11401,9 +11393,9 @@ snapshots:
     dependencies:
       three: 0.166.1
 
-  camera-controls@2.9.0(three@0.168.0):
+  camera-controls@2.9.0(three@0.166.1):
     dependencies:
-      three: 0.168.0
+      three: 0.166.1
 
   caniuse-lite@1.0.30001606: {}
 
@@ -15115,10 +15107,6 @@ snapshots:
     dependencies:
       three: 0.166.1
 
-  postprocessing@6.36.2(three@0.168.0):
-    dependencies:
-      three: 0.168.0
-
   potpack@1.0.2: {}
 
   preact-render-to-string@6.3.1(preact@10.16.0):
@@ -16480,9 +16468,9 @@ snapshots:
     dependencies:
       three: 0.166.1
 
-  three-mesh-bvh@0.8.0(three@0.168.0):
+  three-mesh-bvh@0.8.0(three@0.166.1):
     dependencies:
-      three: 0.168.0
+      three: 0.166.1
 
   three-perf@1.0.10(three@0.166.1):
     dependencies:
@@ -16510,16 +16498,9 @@ snapshots:
       quarks.core: 0.15.0
       three: 0.166.1
 
-  three.quarks@0.15.0(three@0.168.0):
-    dependencies:
-      quarks.core: 0.15.0
-      three: 0.168.0
-
   three@0.122.0: {}
 
   three@0.166.1: {}
-
-  three@0.168.0: {}
 
   through2@0.6.5:
     dependencies:
@@ -16583,14 +16564,6 @@ snapshots:
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.47.2(three@0.168.0):
-    dependencies:
-      bidi-js: 1.0.2
-      three: 0.168.0
-      troika-three-utils: 0.47.2(three@0.168.0)
-      troika-worker-utils: 0.47.2
-      webgl-sdf-generator: 1.1.1
-
   troika-three-text@0.49.1(three@0.166.1):
     dependencies:
       bidi-js: 1.0.2
@@ -16602,10 +16575,6 @@ snapshots:
   troika-three-utils@0.47.2(three@0.166.1):
     dependencies:
       three: 0.166.1
-
-  troika-three-utils@0.47.2(three@0.168.0):
-    dependencies:
-      three: 0.168.0
 
   troika-three-utils@0.49.0(three@0.166.1):
     dependencies:
