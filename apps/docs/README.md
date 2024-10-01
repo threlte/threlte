@@ -8,8 +8,16 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
   - Packages Nav for other languages
   - Studio Tutorial initial overlay positioning
   - Audio not working in reference/rapier/components/rigid-body
-  - examples not working correctly
+  - Revisit types section of custom-abstractions page `import { SvelteComponent } from 'svelte'`
+  - Core/Hierarchy page. needs revision?
+  - Examples and Components not working correctly
     - webgpu, scope with zoom, animating a spaceship, outlines, etc...
+    - <Text> not rendering. error: `Material: onBeforeRender() has been removed.`
+    - <Text3DGeometry> not rendering.
+      - error: `Material: onBeforeRender() has been removed.`
+      - error: `TypeError: Cannot read properties of undefined (reading 'position')`
+    - `useCursor`
+      - error: `Material: onBeforeRender()`
 - Languages sidebar logic
 - Remove "src/examples" from tsconfig
 - Large asset size reduction
