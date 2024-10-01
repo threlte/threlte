@@ -10,7 +10,7 @@ It does this by leveraging the rigid three.js naming and object property structu
 remove objects to and from the scene graph, attach objects to parent object properties or add
 event listeners.
 
-:::
+:::note
 `<T>` is the main building block of any Threlte application. Components available in `'@threlte/extras'`
 are built on top of `<T>` and may provide a more convenient API for specific three.js classes.
 :::
@@ -386,7 +386,7 @@ camera, the scene will not be rendered through this camera but through Threltes 
 Adding an event listener to a component will also add the corresponding event listener to the three.js class
 instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
 
-:::
+:::note
 For easier payload access as well as conforming to Three.js as much as possible, Threlte does _not_ use Svelte's
 `CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
 :::
