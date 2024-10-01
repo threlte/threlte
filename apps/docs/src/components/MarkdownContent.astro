@@ -11,9 +11,7 @@ const { componentSignature, title } = entry.data
 	<slot />
 	{
 		componentSignature && (
-			<div class="mt-12">
-				<ComponentSignature componentName={title} signature={componentSignature} />
-			</div>
+			<ComponentSignature componentName={title} signature={componentSignature} />
 		)
 	}
 </div>
