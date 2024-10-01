@@ -155,7 +155,7 @@ export default defineConfig({
 						{
 							label: 'Visual Effects',
 							autogenerate: {
-								directory: 'reference/extras/VFX'
+								directory: 'reference/extras/vfx'
 							}
 						},
 						{
