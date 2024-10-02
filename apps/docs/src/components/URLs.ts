@@ -5,7 +5,8 @@ export const URLs = {
 		install: '/learn/getting-started/installation',
 		extras: '/reference/extras/getting-started',
 		plugins: '/learn/advanced/plugins',
-		reference: '/reference/core/getting-started'
+		reference: '/reference/core/getting-started',
+		gltf: '/reference/gltf/getting-started'
 	},
 	services: '/services',
 	github: 'https://github.com/threlte/threlte',

@@ -3,7 +3,7 @@ import { Sequence, createSheetObjectAction } from '@threlte/theatre'
 import FadeOut from '../FadeOut.svelte'
 import { springScrollPos } from '../scrollPos'
 import TheatreTextBox from './TheatreTextBox.svelte'
-import { URLs } from '../../URLs'
+import { URLs } from '../../../URLs'
 
 const sheetObject = createSheetObjectAction()
 </script>
