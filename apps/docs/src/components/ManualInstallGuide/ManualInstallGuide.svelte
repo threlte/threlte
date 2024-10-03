@@ -4,13 +4,13 @@ import InstallButton from './InstallButton.svelte'
 import { URLs } from '../URLs'
 import { onMount } from 'svelte'
 
-let useGltf = false
-let installExtras = false
-let installRapier = false
-let installTheatre = false
-let installXR = false
-let installFlex = false
-let installTypes = false
+let useGltf = $state(false)
+let installExtras = $state(false)
+let installRapier = $state(false)
+let installTheatre = $state(false)
+let installXR = $state(false)
+let installFlex = $state(false)
+let installTypes = $state(false)
 
 let divider = ' \\'
 let merger = '\n'
@@ -22,32 +22,40 @@ const useDivider = (...args: boolean[]) => {
 
 let tag = '@next'
 
-$: coreDivider = useDivider(
-	installExtras,
-	useGltf,
-	installRapier,
-	installTheatre,
-	installXR,
-	installFlex,
-	installTypes
+let coreDivider = $derived(
+	useDivider(
+		installExtras,
+		useGltf,
+		installRapier,
+		installTheatre,
+		installXR,
+		installFlex,
+		installTypes
+	)
 )
-$: extrasDivider = useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
-$: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes)
-$: theatreDivider = useDivider(installXR, installFlex, installTypes)
-$: xrDivider = useDivider(installFlex, installTypes)
-$: flexDivider = useDivider(installTypes)
 
-$: installCode = [
-	`npm install three @threlte/core${tag}${coreDivider}`,
-	(installExtras || useGltf || installTheatre) && `${space}@threlte/extras${tag}${extrasDivider}`,
-	installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
-	installTheatre && `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
-	installXR && `${space}@threlte/xr${tag}${xrDivider}`,
-	installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
-	installTypes && `${space}@types/three`
-]
-	.filter(Boolean)
-	.join(merger)
+let extrasDivider = $derived(
+	useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
+)
+let rapierDivider = $derived(useDivider(installTheatre, installXR, installFlex, installTypes))
+let theatreDivider = $derived(useDivider(installXR, installFlex, installTypes))
+let xrDivider = $derived(useDivider(installFlex, installTypes))
+let flexDivider = $derived(useDivider(installTypes))
+
+let installCode = $derived(
+	[
+		`npm install three @threlte/core${tag}${coreDivider}`,
+		(installExtras || useGltf || installTheatre) && `${space}@threlte/extras${tag}${extrasDivider}`,
+		installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
+		installTheatre &&
+			`${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
+		installXR && `${space}@threlte/xr${tag}${xrDivider}`,
+		installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
+		installTypes && `${space}@types/three`
+	]
+		.filter(Boolean)
+		.join(merger)
+)
 
 onMount(() => {
 	if (window.navigator.userAgent.includes('Windows')) {
@@ -59,7 +67,7 @@ onMount(() => {
 </script>
 
 <div
-	class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
+	class="mt-6 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2"
 >
 	<InstallButton disabled active class="cursor-not-allowed">@threlte/core</InstallButton>
 
@@ -72,6 +80,7 @@ onMount(() => {
 
 	<InstallButton
 		onclick={() => {
+			console.log("hello extras");
       installExtras = !installExtras
     }}
 		active={installExtras}

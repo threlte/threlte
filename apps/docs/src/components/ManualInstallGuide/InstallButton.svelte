@@ -1,22 +1,26 @@
 <script lang="ts">
 import type { Snippet } from 'svelte'
+import type { MouseEventHandler } from 'svelte/elements'
 let {
 	active = false,
 	passivelyActive = false,
 	class: _class,
+	onclick,
 	children,
 	...restProps
 }: {
 	active: boolean
 	passivelyActive: boolean
 	class: string
+	onclick: MouseEventHandler<HTMLButtonElement>
 	children: Snippet
 } = $props()
 </script>
 
 <button
 	{...restProps}
-	class="group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4{active ? 'bg-green-500/70 text-white' : passivelyActive ? 'bg-green-500/20 text-white' : 'bg-blue-900 hover:bg-blue-700/30'}{_class}"
+	onclick={onclick}
+	class="group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4 md:[&>button]:my-1 {active ? 'bg-green-500/70 text-white' : passivelyActive ? 'bg-green-500/20 text-white' : 'bg-blue-900 hover:bg-blue-700/30'}{_class}"
 >
 	{#if active || passivelyActive}
 		<svg
@@ -41,9 +45,9 @@ let {
 			/></svg
 		>
 	{/if}
-	<code
+	<span
 		class="mx-0 bg-transparent px-0 {active || passivelyActive ? 'text-white' : 'text-faded group-hover:text-white'}"
 	>
 		{@render children()}
-	</code>
+	</span>
 </button>
