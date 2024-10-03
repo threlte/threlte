@@ -6,7 +6,7 @@ let success = $state(false)
 </script>
 
 <button
-	class="group/copybtn absolute right-0 top-0 flex items-center gap-1 p-1 max-md:hidden {success ? 'text-green-300' : 'text-white/30 hover:text-orange-400'} {copying && 'scale-90'}"
+	class="not-content group/copybtn absolute right-0 top-0 !mt-0 flex items-center gap-1 p-1 max-md:hidden {success ? 'text-green-300' : 'text-white/30 hover:text-orange-400'} {copying && 'scale-90'}"
 	onclick={() => {
     copying = true
     navigator.clipboard.writeText(code)

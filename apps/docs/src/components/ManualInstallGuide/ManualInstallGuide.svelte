@@ -179,7 +179,7 @@ onMount(() => {
 <div
 	class="not-prose group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl [&>*]:!bg-transparent"
 >
-	<code class="p-0 text-[1em]">
+	<code class="mt-6">
 		{installCode}
 	</code>
 

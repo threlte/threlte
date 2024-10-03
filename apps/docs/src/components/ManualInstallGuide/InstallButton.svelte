@@ -9,18 +9,18 @@ let {
 	children,
 	...restProps
 }: {
-	active: boolean
-	passivelyActive: boolean
-	class: string
-	onclick: MouseEventHandler<HTMLButtonElement>
-	children: Snippet
+	active?: boolean
+	passivelyActive?: boolean
+	class?: string
+	onclick?: MouseEventHandler<HTMLButtonElement>
+	children?: Snippet
 } = $props()
 </script>
 
 <button
 	{...restProps}
 	onclick={onclick}
-	class="group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4 md:[&>button]:my-1 {active ? 'bg-green-500/70 text-white' : passivelyActive ? 'bg-green-500/20 text-white' : 'bg-blue-900 hover:bg-blue-700/30'}{_class}"
+	class="not-content group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4 md:[&>button]:my-1 {active ? 'bg-green-500/70 text-white' : passivelyActive ? 'bg-green-500/20 text-white' : 'bg-blue-900 hover:bg-blue-700/30'}{_class}"
 >
 	{#if active || passivelyActive}
 		<svg
