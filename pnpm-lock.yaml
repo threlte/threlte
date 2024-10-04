@@ -67,7 +67,7 @@ importers:
         version: 5.1.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.168.0)(three@0.166.1)
+        version: 0.1.15(@types/three@0.166.0)(three@0.166.1)
       '@pagefind/default-ui':
         specifier: ^1.1.0
         version: 1.1.1
@@ -102,8 +102,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/xr
       '@types/three':
-        specifier: ^0.168.0
-        version: 0.168.0
+        specifier: ^0.166.0
+        version: 0.166.0
       animejs:
         specifier: ^3.2.2
         version: 3.2.2
@@ -9767,11 +9767,6 @@ snapshots:
   '@lumaai/luma-web@0.1.15(@types/three@0.166.0)(three@0.166.1)':
     dependencies:
       '@types/three': 0.166.0
-      three: 0.166.1
-
-  '@lumaai/luma-web@0.1.15(@types/three@0.168.0)(three@0.166.1)':
-    dependencies:
-      '@types/three': 0.168.0
       three: 0.166.1
 
   '@macfja/serializer@1.1.2': {}

@@ -4,7 +4,7 @@
   import * as THREE from 'three'
   import Stats from 'three/examples/jsm/libs/stats.module.js'
 
-  import { MeshToonNodeMaterial } from 'three/webgpu'
+  import { MeshToonNodeMaterial } from 'three/nodes'
 
   const { scene, size, renderer, invalidate } = useThrelte()
 

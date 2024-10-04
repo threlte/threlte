@@ -31,7 +31,7 @@
 		"@threlte/studio": "workspace:*",
 		"@threlte/theatre": "workspace:*",
 		"@threlte/xr": "workspace:*",
-		"@types/three": "^0.168.0",
+		"@types/three": "^0.166.0",
 		"animejs": "^3.2.2",
 		"astro": "^4.15.8",
 		"astro-vtbot": "^1.8.2",

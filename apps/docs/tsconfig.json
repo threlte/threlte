@@ -1,24 +1,25 @@
 {
-	"extends": "astro/tsconfigs/strict",
-	"exclude": [
-		"dist",
-		"node_modules",
-		"src/examples",
-		".astro",
-		"src/components/Example/stackblitz-template"
-	],
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"$lib/*": ["src/lib/*"],
-			"$components/*": ["src/components/*"],
-			"$layouts/*": ["src/layouts/*"],
-			"$pages/*": ["src/pages/*"],
-			"$styles/*": ["src/styles/*"],
-			"$assets/*": ["src/assets/*"],
-			"$examples/*": ["src/examples/*"],
-			"$hooks/*": ["src/hooks/*"]
-		},
-		"jsx": "preserve"
-	}
+  "extends": "astro/tsconfigs/strict",
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/examples",
+    "scripts",
+    ".astro",
+    "src/components/Example/stackblitz-template"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "$lib/*": ["src/lib/*"],
+      "$components/*": ["src/components/*"],
+      "$layouts/*": ["src/layouts/*"],
+      "$pages/*": ["src/pages/*"],
+      "$styles/*": ["src/styles/*"],
+      "$assets/*": ["src/assets/*"],
+      "$examples/*": ["src/examples/*"],
+      "$hooks/*": ["src/hooks/*"]
+    },
+    "jsx": "preserve"
+  }
 }
