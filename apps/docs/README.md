@@ -18,6 +18,7 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
       - error: `TypeError: Cannot read properties of undefined (reading 'position')`
     - `useCursor`
       - error: `Material: onBeforeRender()`
+- Scripts folder may need revision
 - Remove "src/examples" from tsconfig
 - Large asset size reduction
 

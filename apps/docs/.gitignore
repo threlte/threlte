@@ -1,5 +1,14 @@
+# Blender
+.blend1
+
+# Docs don't need it
+.changeset
+CHANGELOG.md
+
 # build output
 dist/
+.output/
+
 # generated types
 .astro/
 
@@ -11,7 +20,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
 
 # environment variables
 .env
