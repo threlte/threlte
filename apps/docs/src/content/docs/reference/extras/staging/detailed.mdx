@@ -2,11 +2,13 @@
 order: 6.6
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/Detailed/Detailed.svelte'
-name: '<Detailed>'
+title: '<Detailed>'
 type: 'component'
 componentSignature:
   { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }, props: [] }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 `<Detailed>` is an abstraction around ThreeJS's [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
 
@@ -14,9 +16,9 @@ componentSignature:
 
 Notice how as the mesh's distance from the camera increases, a geometry with less vertices is shown.
 
-<Tip type="warning">
+:::caution
 The distance between the camera and the `<Detailed>` component itself is what determines which level-of-detail to use. You can set positions for children but they will not be used in the distance calculation.
-</Tip>
+:::
 
 Children of `<Detailed>` accept a distance prop. This prop determines the visibility of each child based on its distance from the camera. If not specified, distance defaults to 0.
 
@@ -41,7 +43,7 @@ Children of `<Detailed>` accept a hysteresis prop which can be used to prevent f
 </Detailed>
 ```
 
-<Tip type="tip">
-  It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
-  creation tools.
-</Tip>
+:::tip
+It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
+creation tools.
+:::
