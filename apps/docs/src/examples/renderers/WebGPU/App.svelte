@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import { WebGPURenderer } from 'three/addons/renderers/webgpu/WebGPURenderer.js'
-  import Scene from './Scene.svelte'
+import { Canvas } from '@threlte/core'
+import { WebGPURenderer } from 'three/webgpu'
+import Scene from './Scene.svelte'
 </script>
 
 <div>
@@ -19,7 +19,7 @@
 </div>
 
 <style>
-  div {
-    height: 100%;
-  }
+div {
+  height: 100%;
+}
 </style>

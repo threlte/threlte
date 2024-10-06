@@ -5,7 +5,6 @@ Feel free to ask questions in our [Discord server](https://discord.gg/EqUBCfCaGm
 ## TODO
 
 - Content
-  - Add support for other languages 😀
   - Studio Tutorial initial overlay positioning
   - Audio not working in reference/rapier/components/rigid-body
   - Revisit types section of custom-abstractions page `import { SvelteComponent } from 'svelte'`
