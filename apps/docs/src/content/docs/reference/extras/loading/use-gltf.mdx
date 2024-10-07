@@ -1,8 +1,9 @@
 ---
-order: 4.1
 sourcePath: 'packages/extras/src/lib/hooks/useGltf.ts'
 title: useGltf
-type: 'hook'
+sidebar: {
+	order: 0
+}
 ---
 
 import Example from '$components/Example/Example.astro'
@@ -14,7 +15,7 @@ Use the component [`<GLTF>`](/reference/extras/content/gltf) if you want to use 
 <Example path="extras/use-gltf" />
 
 <small>
-	Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
 </small>
 
 ## Examples
@@ -55,7 +56,7 @@ import { useGltf, useDraco } from '@threlte/extras'
 
 const dracoLoader = useDraco()
 const gltf = useGltf('/path/to/model.glb', {
-	dracoLoader
+  dracoLoader
 })
 ```
 
@@ -66,7 +67,7 @@ import { useGltf, useDraco } from '@threlte/extras'
 
 const dracoLoader = useDraco('/custom/draco/decoders/path')
 const gltf = useGltf('/path/to/model.glb', {
-	dracoLoader
+  dracoLoader
 })
 ```
 
@@ -79,7 +80,7 @@ import { useGltf } from '@threlte/extras'
 
 const dracoLoader = new DRACOLoader().setDecoderPath(path)
 const gltf = useGltf('/path/to/model.glb', {
-	dracoLoader
+  dracoLoader
 })
 ```
 
@@ -94,7 +95,7 @@ import { useGltf, useMeshopt } from '@threlte/extras'
 
 const meshoptDecoder = useMeshopt()
 const gltf = useGltf('/path/to/model.glb', {
-	meshoptDecoder
+  meshoptDecoder
 })
 ```
 
@@ -109,7 +110,7 @@ import { useGltf, useKtx2 } from '@threlte/extras'
 
 const ktx2Loader = useKtx2('path/to/transcoder/')
 const gltf = useGltf('/path/to/model.glb', {
-	ktx2Loader
+  ktx2Loader
 })
 ```
 
@@ -128,7 +129,7 @@ ktx2Loader.setTranscoderPath('path/to/transcoder/')
 ktx2Loader.detectSupport(renderer)
 
 const gltf = useGltf('/path/to/model.glb', {
-	ktx2Loader
+  ktx2Loader
 })
 ```
 
@@ -184,10 +185,10 @@ Types can be separated into a typescript file and imported like so if you feel t
 
 ```ts title=SomeGltf.ts
 export type SomeGltf = {
-	nodes: {
-		Suzanne: THREE.Mesh
-	}
-	materials: {}
+  nodes: {
+    Suzanne: THREE.Mesh
+  }
+  materials: {}
 }
 ```
 

@@ -1,8 +1,9 @@
 ---
-order: 4.2
 sourcePath: 'packages/extras/src/lib/hooks/useGltfAnimations.ts'
 title: useGltfAnimations
-type: 'hook'
+sidebar: {
+	order: 1
+}
 ---
 
 import Example from '$components/Example/Example.astro'
@@ -12,8 +13,8 @@ Convenience hook to use animations loaded with a `<GLTF>` Threlte component.
 <Example path="extras/use-gltf-animations" />
 
 <small>
-	Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen
-	Fox](https://artstation.com/glenatron), CC Attribution.
+  Model: [Littlest Tokyo](https://artstation.com/artwork/1AGwX) by [Glen
+  Fox](https://artstation.com/glenatron), CC Attribution.
 </small>
 
 ## Examples
@@ -111,9 +112,9 @@ This can also be done after the animations have been loaded. In this case, you c
 
 ```ts
 const {
-	gltf, // Writable<GLTF | undefined>
-	mixer, // AnimationMixer
-	actions, // CurrentWritable<Record<string, AnimationAction>>
-	root // CurrentWritable<Root | undefined>
+  gltf, // Writable<GLTF | undefined>
+  mixer, // AnimationMixer
+  actions, // CurrentWritable<Record<string, AnimationAction>>
+  root // CurrentWritable<Root | undefined>
 } = useGLtfAnimations()
 ```

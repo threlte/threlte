@@ -1,8 +1,9 @@
 ---
-order: 8.2
 title: 'onReveal'
-type: 'hook'
 sourcePath: 'packages/extras/src/lib/suspense/onReveal.ts'
+sidebar: {
+	order: 5
+}
 ---
 
 `onReveal` invokes a callback when the component is revealed (i.e., no
@@ -47,10 +48,10 @@ component is unmounted or the component is suspended again.
 
 ```ts
 onReveal(() => {
-	console.log('The component has been revealed')
+  console.log('The component has been revealed')
 
-	return () => {
-		console.log('The component has been unmounted or suspended again')
-	}
+  return () => {
+    console.log('The component has been unmounted or suspended again')
+  }
 })
 ```
