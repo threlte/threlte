@@ -1,8 +1,9 @@
 ---
-order: 3.5
 sourcePath: 'packages/extras/src/lib/interactivity'
 title: 'interactivity'
-type: 'plugin'
+sidebar: {
+	order: 4
+}
 ---
 
 To add click, pointer and wheel events to your Threlte app, import the plugin `interactivity` from
@@ -60,16 +61,16 @@ All interaction events contain the following data:
 
 ```ts
 type Event = THREE.Intersection & {
-	intersections: THREE.Intersection[] // The first intersection of each intersected object
-	object: THREE.Object3D // The object that was actually hit
-	eventObject: THREE.Object3D // The object that registered the event
-	camera: THREE.Camera // The camera used for raycasting
-	delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
-	nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
-	pointer: Vector2 // The pointer position in normalized device coordinates
-	ray: THREE.Ray // The ray used for raycasting
-	stopPropagation: () => void // Function to stop propagation of the event
-	stopped: Boolean // Whether the event propagation has been stopped
+  intersections: THREE.Intersection[] // The first intersection of each intersected object
+  object: THREE.Object3D // The object that was actually hit
+  eventObject: THREE.Object3D // The object that registered the event
+  camera: THREE.Camera // The camera used for raycasting
+  delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
+  nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
+  pointer: Vector2 // The pointer position in normalized device coordinates
+  ray: THREE.Ray // The ray used for raycasting
+  stopPropagation: () => void // Function to stop propagation of the event
+  stopped: Boolean // Whether the event propagation has been stopped
 }
 ```
 
@@ -188,18 +189,18 @@ where this is the type of the interactivity state:
 
 ```ts
 export type State = {
-	enabled: CurrentWritable<boolean>
-	target: CurrentWritable<HTMLElement | undefined>
-	pointer: CurrentWritable<Vector2>
-	pointerOverTarget: CurrentWritable<boolean>
-	lastEvent: MouseEvent | WheelEvent | PointerEvent | undefined
-	raycaster: Raycaster
-	initialClick: [x: number, y: number]
-	initialHits: THREE.Object3D[]
-	hovered: Map<string, IntersectionEvent<MouseEvent | WheelEvent | PointerEvent>>
-	interactiveObjects: THREE.Object3D[]
-	compute: ComputeFunction
-	filter?: FilterFunction
+  enabled: CurrentWritable<boolean>
+  target: CurrentWritable<HTMLElement | undefined>
+  pointer: CurrentWritable<Vector2>
+  pointerOverTarget: CurrentWritable<boolean>
+  lastEvent: MouseEvent | WheelEvent | PointerEvent | undefined
+  raycaster: Raycaster
+  initialClick: [x: number, y: number]
+  initialHits: THREE.Object3D[]
+  hovered: Map<string, IntersectionEvent<MouseEvent | WheelEvent | PointerEvent>>
+  interactiveObjects: THREE.Object3D[]
+  compute: ComputeFunction
+  filter?: FilterFunction
 }
 ```
 

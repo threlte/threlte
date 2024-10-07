@@ -1,8 +1,9 @@
 ---
-order: 5.5
 sourcePath: 'packages/extras/src/lib/hooks/useFBO.ts'
 title: useFBO
-type: 'hook'
+sidebar: {
+	order: 3
+}
 ---
 
 import Example from '$components/Example/Example.astro'
@@ -17,18 +18,18 @@ Framebuffer objects are useful for cases where you want to render a scene but no
 
 ```ts
 type UseFBOOptions = {
-	/** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
-	samples?: number
-	/** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
-	depth?: boolean
+  /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
+  samples?: number
+  /** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
+  depth?: boolean
 } & THREE.WebGLRenderTargetOptions
 
 export function useFBO(
-	/** Width in pixels, or options (will render fullscreen by default) */
-	width?: number | UseFBOOptions,
-	/** Height in pixels */
-	height?: number,
-	/**Options */
-	options?: UseFBOOptions
+  /** Width in pixels, or options (will render fullscreen by default) */
+  width?: number | UseFBOOptions,
+  /** Height in pixels */
+  height?: number,
+  /**Options */
+  options?: UseFBOOptions
 ): THREE.WebGLRenderTarget
 ```
