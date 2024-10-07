@@ -1,0 +1,17 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+import '../styles/markdown.css'
+import ComponentSignature from '$components/ComponentSignature/ComponentSignature.astro'
+
+const { entry } = Astro.props
+const { componentSignature, title } = entry.data
+---
+
+<div class="sl-markdown-content">
+	<slot />
+	{
+		componentSignature && (
+			<ComponentSignature componentName={title} signature={componentSignature} />
+		)
+	}
+</div>

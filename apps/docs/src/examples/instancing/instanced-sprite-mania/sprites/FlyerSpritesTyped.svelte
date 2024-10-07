@@ -10,7 +10,7 @@
  -->
 
 <script
-  context="module"
+  module
   lang="ts"
 >
   import type { SpritesheetMetadata } from '@threlte/extras'

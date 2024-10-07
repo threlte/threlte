@@ -33,7 +33,7 @@
     "prettier-plugin-svelte": "^3.2.2",
     "publint": "^0.2.7",
     "rimraf": "^5.0.5",
-    "svelte": "5.0.0-next.181",
+    "svelte": "5.0.0-next.257",
     "svelte-check": "^3.6.9",
     "svelte-preprocess": "^5.1.3",
     "svelte2tsx": "^0.7.6",
@@ -90,9 +90,9 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "troika-three-text": "^0.49.1",
     "@threejs-kit/instanced-sprite-mesh": "^2.4.6",
     "three-mesh-bvh": "^0.7.4",
-    "three-perf": "^1.0.10"
+    "three-perf": "^1.0.10",
+    "troika-three-text": "^0.49.1"
   }
 }
