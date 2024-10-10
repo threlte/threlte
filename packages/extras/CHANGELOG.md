@@ -1,5 +1,16 @@
 # @threlte/extras
 
+## 9.0.0-next.24
+
+### Minor Changes
+
+- aba6d5a: adds a <Detailed> component that can be used for displaying different level-of-detail for scene objects
+- bf72ead: adds <MeshDiscardMaterial>` which is a material that completely hides the mesh but doesn't hide its children or shadows
+
+### Patch Changes
+
+- 01c1e3a: Adds a `<BakeShadows>` component that "freezes" shadows for scenes where shadows only need to be calculated once or very infrequently.'
+
 ## 9.0.0-next.23
 
 ### Patch Changes
