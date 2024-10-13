@@ -5,7 +5,10 @@
   import { Color, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
-  const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
+  const getRandomColor = () =>
+    `#${Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, '0')}`
 
   let material = new MeshStandardMaterial({
     color: new Color(getRandomColor())
