@@ -2,7 +2,7 @@ A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example us
 
 <Example path="marching-cubes/lava-lamp" />
 
-The addon is a little too limited to be ported into a component but this example shows how it might be incorported into threlte.
+The addon is a little too limited to be ported into a component but this example shows how it might be incorporated into threlte.
 
 ## Placement
 
@@ -14,7 +14,7 @@ The original example only allows for planes positioned at x = -1, y = -1, and z 
 
 ### MarchingCube
 
-`<MarchingCube>`s can be placed anywhere in the `MarchingCubes` space. If they are placed outside this range they mab be cutoff or not show altogether.
+`<MarchingCube>`s can be placed anywhere in the `MarchingCubes` space. If they are placed outside this range they may be cutoff or not show altogether.
 
 <Tip type="info">
   Even though `MarchingCube` appears as a ball, it is called __Cube__ to be inline with [drei's
@@ -61,7 +61,7 @@ Note that the example above enables both uvs and vertex coloring for demonstrati
 <script>
   // ...
 
-  // don't allocate buffers for vertex colors nor uvs
+  // don't allocate buffer space for vertex colors nor uvs
   const marchingCubes = new MarchingCubes(resolution, material, false, false, 20_000)
 
   // ...
