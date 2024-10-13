@@ -20,7 +20,7 @@
     throw new Error('Parent of <MarchingCube> must be a <MarchingCubes>.')
   }
 
-  type MarchingPlaneProps = {
+  type MarchingCubeProps = {
     strength?: number
     subtract?: number
     color?: Color
@@ -35,7 +35,7 @@
     children,
     ref = $bindable(),
     ...props
-  }: MarchingPlaneProps = $props()
+  }: MarchingCubeProps = $props()
 
   const task = getMarchingCubesContext()
 
