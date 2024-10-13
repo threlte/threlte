@@ -1,44 +1,17 @@
-<script
-  lang="ts"
-  context="module"
->
-  import { getMarchingCubesContext, isMarchingCubes } from './MarchingCubes.svelte'
-
-  export type Axis = 'x' | 'y' | 'z'
-  type addAxisMap = {
-    [Key in Axis]: `addPlane${Uppercase<Key>}`
-  }
-
-  const map: addAxisMap = {
-    x: 'addPlaneX',
-    y: 'addPlaneY',
-    z: 'addPlaneZ'
-  }
-</script>
-
 <script lang="ts">
-  import { useParent, useTask } from '@threlte/core'
+  import type { Props } from '@threlte/core'
+  import { T } from '@threlte/core'
+  import { MarchingPlane } from './MarchingPlane'
 
-  const parent = useParent()
+  type MarchingPlaneProps = Props<MarchingPlane>
 
-  if (!isMarchingCubes($parent)) {
-    throw new Error('Parent of <MarchingPlane> must be a <MarchingCubes>.')
-  }
-
-  type MarchingPlaneProps = {
-    axis?: Axis
-    strength?: number
-    subtract?: number
-  }
-
-  let { axis = 'x', strength = 0.5, subtract = 12 }: MarchingPlaneProps = $props()
-
-  const task = getMarchingCubesContext()
-
-  useTask(
-    () => {
-      parent.current[map[axis]](strength, subtract)
-    },
-    { after: task }
-  )
+  let { ref = $bindable(), children, ...props }: MarchingPlaneProps = $props()
 </script>
+
+<T
+  is={MarchingPlane}
+  bind:ref
+  {...props}
+>
+  {@render children?.({ ref })}
+</T>

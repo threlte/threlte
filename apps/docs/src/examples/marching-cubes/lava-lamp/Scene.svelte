@@ -2,7 +2,7 @@
   import MarchingCube from './MarchingCube.svelte'
   import MarchingCubes from './MarchingCubes.svelte'
   import MarchingPlane from './MarchingPlane.svelte'
-  import type { Axis } from './MarchingPlane.svelte'
+  import type { MarchingPlaneAxis } from './MarchingPlane'
   import { Color, Vector2 } from 'three'
   import { OrbitControls } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
@@ -10,7 +10,7 @@
   type SceneProps = {
     ballCount?: number
     isolation?: number
-    planeAxis: Axis
+    planeAxis: MarchingPlaneAxis
     resolution: number
   }
 
