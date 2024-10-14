@@ -15,7 +15,6 @@
 <Pane
   title="Camera Controls"
   position="fixed"
-  expanded={false}
 >
   <Button
     title="rotate theta 45deg"
