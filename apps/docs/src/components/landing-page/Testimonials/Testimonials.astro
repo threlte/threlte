@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content'
+import Testimonial from './Testimonial.astro'
+
+const testimonials = await getCollection('testimonials')
+---
+
+<section class="relative overflow-clip border-t-[1px] border-t-white/20 pt-10">
+	<div
+		class="absolute left-0 top-40 h-96 w-full -translate-y-full [background-image:radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]"
+	>
+	</div>
+
+	<sup class="my-0 text-base text-blue-400">Start your Journey</sup>
+	<h1 class="my-0 text-5xl text-white">Don't take our word for it.</h1>
+	<div class="mt-12 columns-1 gap-6 md:columns-2 lg:columns-3">
+		{
+			testimonials.map((testimonial) => {
+				return <Testimonial testimonial={testimonial} />
+			})
+		}
+	</div>
+</section>
