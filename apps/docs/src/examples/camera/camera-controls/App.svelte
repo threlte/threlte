@@ -6,6 +6,7 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let camera
+  let paneExpanded = false
 
   $: if ($cameraControls) {
     camera = $cameraControls._camera
@@ -15,7 +16,7 @@
 <Pane
   title="Camera Controls"
   position="fixed"
-  expanded={false}
+  bind:expanded={paneExpanded}
 >
   <Button
     title="rotate theta 45deg"

@@ -51,6 +51,8 @@
   let cellDividers = 6
   let sectionDividers = 2
 
+  let paneExpanded = false
+
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
   const noise = createNoise2D()
@@ -67,7 +69,7 @@
 <Pane
   title="Grid"
   position="fixed"
-  expanded={false}
+  bind:expanded={paneExpanded}
 >
   <Folder title="Cells">
     <Slider

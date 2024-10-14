@@ -21,6 +21,8 @@
   // Car
   let showPorsche = true
 
+  let paneExpanded = false
+
   let gltfMaterials: Record<string, MeshStandardMaterial> | undefined
   $: if (gltfMaterials) {
     Object.values(gltfMaterials).forEach((material) => {
@@ -69,7 +71,7 @@
 <Pane
   position="fixed"
   title="Gaussian Splatting"
-  expanded={false}
+  bind:expanded={paneExpanded}
 >
   <Folder
     userExpandable={false}

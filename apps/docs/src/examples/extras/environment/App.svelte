@@ -48,12 +48,14 @@
   let scale = { x: 100, y: 100, z: 100 }
   let radius = 100
   let height = 5
+
+  let paneExpanded = false
 </script>
 
 <Pane
   title="Environment"
   position="fixed"
-  expanded={false}
+  bind:expanded={paneExpanded}
 >
   <Folder title="core">
     <Checkbox
