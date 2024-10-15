@@ -49,6 +49,7 @@ export { default as Mask } from './components/Mask/Mask.svelte'
 export { default as BakeShadows } from './components/BakeShadows/BakeShadows.svelte'
 export { default as Detailed } from './components/Detailed/Detailed.svelte'
 export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
+export { default as Resize } from './components/Resize/Resize.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
