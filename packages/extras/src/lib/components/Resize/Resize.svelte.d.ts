@@ -2,13 +2,17 @@ import type { Box3, Group } from 'three'
 import type { Props } from '@threlte/core'
 import { SvelteComponent } from 'svelte'
 
-type Dimension = 'width' | 'height' | 'depth'
-
 export type ResizeProps = Props<Group> & {
   /**
-   * dimension to constrain by. if not provided, the max of all 3 dimensions is used
+   * dimension to constrain by. if not provided, the max of all 3 dimensions is used.
+   *
+   * width = x axis
+   *
+   * height = y axis
+   *
+   * depth = z axis
    */
-  dimension?: Dimension
+  dimension?: 'width' | 'height' | 'depth'
   /**
    * optional Box3 to use in bounding box calculation
    */
