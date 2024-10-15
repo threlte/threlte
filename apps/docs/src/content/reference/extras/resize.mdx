@@ -1,0 +1,81 @@
+---
+order: 7.12
+category: '@threlte/extras'
+name: '<Resize>'
+sourcePath: 'packages/extras/src/lib/components/Resize/Resize.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        {
+          description: 'Specifies which dimension to constrain. If not provided, the maximum dimension is used',
+          name: 'dimension',
+          required: false,
+          type: "'width' | 'height' | 'depth'",
+          default: 'undefined'
+        },
+        {
+          description: 'Bring your own box to capture the bounding box.',
+          name: 'box',
+          required: false,
+          default: 'new Box3()',
+          type: 'THREE.Box3'
+        },
+        {
+          description: 'If true, use precise bounding box calculation.',
+          name: 'precise',
+          required: false,
+          default: 'true',
+          type: 'boolean'
+        }
+      ]
+  }
+---
+
+Scales down a group of objects by the maximum dimension of their bounding box. Object proportions are preserved. This is particular useful if you want to "normalize" the dimensions of an object to be in the range 0 to 1.
+
+<Example path="extras/resize/two-boxes" />
+
+In the scene above, one box has been created with the default dimensions of 1, 1, 1. The other was created with width, height, and depth all equal and greater than 1 but it has been resized to match the dimensions of the first box.
+
+## Choosing the Dimension
+
+You can choose the dimension by providing the `dimension` prop, otherwise the maximum dimension is used.
+
+```svelte
+<Resize dimension="height">
+  <T.Mesh />
+</Resize>
+```
+
+<Tip type="warning">
+  If you use the `dimension` prop, the dimensions will not be normalized to the range 0 to 1 unless
+  the maximum dimension is chosen.
+</Tip>
+
+## Bring Your Own Box
+
+Use the `box` prop to provide your own Box3 instance. Doing so allows you to capture the bounding box of the objects prior to any scaling
+
+```svelte
+<script>
+  import { Box3 } from 'three'
+  const box = new Box3()
+</script>
+
+<Resize {box}>
+  <T.Mesh />
+</Resize>
+
+<T.Box3Helper args={[box]} />
+```
+
+## Normalizing Multiple Objects
+
+If you have a bunch of source objects that are all different sizes, a useful technique is to wrap each one in a `<Resize>`. Once they've all been normalized, they can then be scaled accordingly.
+
+<Example path="extras/resize/multiple-objects" />
+
+In the example above, each model is resized to the 0 to 1 range to make it easier to think about relative sizes.
