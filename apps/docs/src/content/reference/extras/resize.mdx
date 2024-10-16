@@ -13,7 +13,7 @@ componentSignature:
           description: 'Specifies which dimension to constrain. If not provided, the maximum dimension is used',
           name: 'dimension',
           required: false,
-          type: "'width' | 'height' | 'depth'",
+          type: "'x' | 'y' | 'z'",
           default: 'undefined'
         },
         {
@@ -34,7 +34,7 @@ componentSignature:
   }
 ---
 
-Scales down a group of objects by the maximum dimension of their bounding box. Object proportions are preserved. This is particularly useful if you want to "normalize" the dimensions of an object to be in the range 0 to 1.
+Scales up or down a group of objects by the maximum dimension of their bounding box. Object proportions are preserved. This is particularly useful if you want to "normalize" the dimensions of an object to be in the range 0 to 1.
 
 <Example path="extras/resize/two-boxes" />
 
@@ -42,10 +42,10 @@ In the scene above, one box has been created with the default dimensions of 1, 1
 
 ## Choosing the Dimension
 
-You can choose the dimension by providing the `dimension` prop, otherwise the maximum dimension is used. The `dimension` prop can be one of three values. A value of `width` corresponds to the x-axis. A value of `height` corresponds to the y-axis. A value of `depth` corresponds to the z-axis.
+You can choose the dimension by providing the `dimension` prop, otherwise the maximum dimension is used.
 
 ```svelte
-<Resize dimension="height">
+<Resize dimension="x">
   <T.Mesh />
 </Resize>
 ```
