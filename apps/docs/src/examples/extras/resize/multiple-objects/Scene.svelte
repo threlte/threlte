@@ -14,6 +14,8 @@
   )
 
   const camera = new PerspectiveCamera()
+
+  let controls: OrbitControls | undefined = $state()
   camera.position.setScalar(5)
 
   let t = 0
@@ -25,6 +27,7 @@
       t += speed * delta
       if (t <= 1) {
         camera.position.lerp(v, t)
+        controls?.update()
       } else {
         stop()
         t = 0
@@ -50,7 +53,10 @@
   is={camera}
   makeDefault
 >
-  <OrbitControls enabled={!$started} />
+  <OrbitControls
+    enabled={!$started}
+    bind:ref={controls}
+  />
 </T>
 
 <T.AmbientLight intensity={0.2} />
