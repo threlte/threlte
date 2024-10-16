@@ -34,13 +34,7 @@
     const d = max.z - min.z
 
     const denominator =
-      dimension === 'width'
-        ? w
-        : dimension === 'height'
-          ? h
-          : dimension === 'depth'
-            ? d
-            : Math.max(w, h, d)
+      dimension === 'x' ? w : dimension === 'y' ? h : dimension === 'z' ? d : Math.max(w, h, d)
 
     outer.scale.setScalar(1 / denominator)
   })
