@@ -8,7 +8,7 @@
 
 <Pane
   position="fixed"
-  title="animals"
+  title="objects"
 >
   <Checkbox
     bind:value={resize}
