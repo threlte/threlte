@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.18
+
+### Patch Changes
+
+- a340d61: Fix setting camera context in useCamera
+
 ## 8.0.0-next.17
 
 ### Major Changes
