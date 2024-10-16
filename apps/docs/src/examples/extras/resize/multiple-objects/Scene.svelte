@@ -14,9 +14,9 @@
   )
 
   const camera = new PerspectiveCamera()
+  camera.position.setScalar(5)
 
   let controls: OrbitControls | undefined = $state()
-  camera.position.setScalar(5)
 
   let t = 0
   const speed = 1
