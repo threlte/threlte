@@ -2,7 +2,7 @@
   import { BoundsMesh } from './BoundsMesh.svelte.ts'
   import { OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
-  import { interactivity, useMeshBounds } from '@threlte/extras'
+  import { interactivity, meshBounds } from '@threlte/extras'
   import type { Vector3Tuple } from 'three'
 
   type Props = {
@@ -11,7 +11,6 @@
 
   let { showBounds }: Props = $props()
 
-  const meshBounds = useMeshBounds()
   interactivity()
 
   const positions: Vector3Tuple[] = [

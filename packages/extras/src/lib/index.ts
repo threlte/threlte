@@ -11,7 +11,7 @@ export { useFBO } from './hooks/useFBO'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
 export { useViewport } from './hooks/useViewport'
-export { useMeshBounds } from './hooks/useMeshBounds'
+export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
