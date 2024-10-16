@@ -24,13 +24,14 @@ export const useCamera = () => {
   const manual = writable(true)
   const makeDefault = writable(false)
 
-  watch([currentRef, manual, makeDefault, size], ([ref, manual, makeDefault, size]) => {
-    if (!ref) return
-    if (makeDefault) {
-      camera.set(ref)
-      invalidate()
-    }
-    if (manual) return
+  watch([currentRef, makeDefault], ([ref, makeDefault]) => {
+    if (!ref || !makeDefault) return
+    camera.set(ref)
+    invalidate()
+  })
+
+  watch([currentRef, manual, size], ([ref, manual, size]) => {
+    if (!ref || manual) return
     if (isOrthographicCamera(ref)) {
       ref.left = size.width / -2
       ref.right = size.width / 2
