@@ -35,27 +35,21 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-{#each meshes as { position, wireframe }, i}
-  {@const mesh = meshes[i]}
-  {@const exists = mesh !== undefined}
+{#each meshes as mesh}
   <T.Mesh
     raycast={meshBounds}
     onpointerenter={() => {
-      if (exists) {
-        mesh.wireframe = false
-      }
+      mesh.wireframe = false
     }}
     onpointerleave={() => {
-      if (exists) {
-        mesh.wireframe = true
-      }
+      mesh.wireframe = true
     }}
-    {position}
+    position={mesh.position}
   >
     <T.BoxGeometry args={[size, size, size]} />
     <T.MeshStandardMaterial
       color="hotpink"
-      {wireframe}
+      wireframe={mesh.wireframe}
     />
   </T.Mesh>
 {/each}
