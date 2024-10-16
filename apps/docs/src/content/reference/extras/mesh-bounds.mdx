@@ -38,17 +38,17 @@ prop.
 
 ### Creating a plugin
 
-You may use [Threlte's plugin system](/docs/learn/advanced/plugins) to
-automatically apply the `meshBounds` raycast function to all or selected meshes
-in your scene.
+Instead of manually applying the `meshBounds` raycast function to each mesh, you
+can use a [Threlte plugin](/docs/learn/advanced/plugins) to automatically
+apply the `meshBounds` raycast function to all meshes in your scene.
 
 ```svelte title="Scene.svelte"
 <script>
-  import { injectPlugin } from '@threlte/core'
+  import { T, injectPlugin } from '@threlte/core'
   import { meshBounds } from '@threlte/extras'
 
-  injectPlugin('mesh-bounds-plugin', ({ ref, props }) => {
-    if ('raycast' in ref && typeof ref.raycast === 'function') {
+  injectPlugin('mesh-bounds-plugin', ({ ref }) => {
+    if (ref.isMesh) {
       ref.raycast = meshBounds
     }
   })
@@ -67,11 +67,11 @@ function.
 
 ```svelte title="Scene.svelte"
 <script>
-  import { injectPlugin } from '@threlte/core'
+  import { T, injectPlugin } from '@threlte/core'
   import { meshBounds } from '@threlte/extras'
 
   injectPlugin('mesh-bounds-plugin', ({ ref, props }) => {
-    if ('raycast' in ref && typeof ref.raycast === 'function' && !!props.raycastMeshBounds) {
+    if (ref.isMesh && !!props.raycastMeshBounds) {
       ref.raycast = meshBounds
     }
     return {
