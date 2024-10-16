@@ -1,11 +1,24 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+
+  let resize = true
 </script>
+
+<Pane
+  position="fixed"
+  title="animals"
+>
+  <Checkbox
+    bind:value={resize}
+    label="resize"
+  />
+</Pane>
 
 <div>
   <Canvas>
-    <Scene />
+    <Scene {resize} />
   </Canvas>
 </div>
 
