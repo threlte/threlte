@@ -10,8 +10,8 @@ componentSignature:
     props:
       [
         {
-          description: 'Specifies which dimension to constrain. If not provided, the maximum dimension is used',
-          name: 'dimension',
+          description: 'Specifies which axis to constrain. If not provided, the maximum axis is used',
+          name: 'axis',
           required: false,
           type: "'x' | 'y' | 'z'",
           default: 'undefined'
@@ -36,23 +36,23 @@ componentSignature:
 
 Scales up or down a group of objects by the maximum dimension of their bounding box. Object proportions are preserved. This is particularly useful if you want to "normalize" the dimensions of an object to be in the range 0 to 1.
 
-<Example path="extras/resize/two-boxes" />
+<Example path="extras/resize/multiple-objects" />
 
-In the scene above, one box has been created with the default dimensions of 1, 1, 1. The other was created with width, height, and depth all equal and greater than 1 but it has been resized to match the dimensions of the first box.
+In the example above, objects of various source sizes are resized so that they're more or less within the same range. If you check off _resize_, you can see that the fox is so large that the camera has to pull back just to see it. Likewise, the flower is so small that it's hard to find it in the scene.
 
-## Choosing the Dimension
+## Choosing the Axis
 
-You can choose the dimension by providing the `dimension` prop, otherwise the maximum dimension is used.
+You can choose the axis by providing the `axis` prop, otherwise the maximum axis is used.
 
 ```svelte
-<Resize dimension="x">
+<Resize axis="x">
   <T.Mesh />
 </Resize>
 ```
 
 <Tip type="warning">
-  If you use the `dimension` prop, the dimensions will not be normalized to the range 0 to 1 unless
-  the maximum dimension is chosen.
+  If you use the `axis` prop, the dimensions will not be normalized to the range 0 to 1 unless the
+  maximum axis is chosen.
 </Tip>
 
 ## Bring Your Own Box
@@ -75,5 +75,3 @@ Use the `box` prop to provide your own Box3 instance. Doing so allows you to cap
 ## Normalizing Multiple Objects
 
 If you have a bunch of source objects that are all different sizes, a useful technique is to wrap each one in a `<Resize>`. Once they've all been normalized, it may be easier to think about their relative sizes.
-
-<Example path="extras/resize/multiple-objects" />

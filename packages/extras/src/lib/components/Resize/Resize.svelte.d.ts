@@ -4,9 +4,9 @@ import { SvelteComponent } from 'svelte'
 
 export type ResizeProps = Props<Group> & {
   /**
-   * dimension to constrain by. if not provided, the max of all 3 dimensions is used.
+   * axis to constrain by. if not provided, the max of all 3 axes is used.
    */
-  dimension?: 'x' | 'y' | 'z'
+  axis?: 'x' | 'y' | 'z'
   /**
    * optional Box3 to use in bounding box calculation
    */

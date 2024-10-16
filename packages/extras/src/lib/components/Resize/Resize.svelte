@@ -14,7 +14,7 @@
   import { T } from '@threlte/core'
 
   let {
-    dimension,
+    axis,
     box = _box,
     precise = true,
     ref = $bindable(),
@@ -29,12 +29,18 @@
   $effect(() => {
     outer.matrixWorld.identity()
     const { max, min } = box.setFromObject(inner, precise)
-    const w = max.x - min.x
-    const h = max.y - min.y
-    const d = max.z - min.z
+    const width = max.x - min.x
+    const height = max.y - min.y
+    const depth = max.z - min.z
 
     const denominator =
-      dimension === 'x' ? w : dimension === 'y' ? h : dimension === 'z' ? d : Math.max(w, h, d)
+      axis === 'x'
+        ? width
+        : axis === 'y'
+          ? height
+          : axis === 'z'
+            ? depth
+            : Math.max(width, height, depth)
 
     outer.scale.setScalar(1 / denominator)
   })
