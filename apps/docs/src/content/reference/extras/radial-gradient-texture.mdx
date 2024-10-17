@@ -58,7 +58,7 @@ A reactive radial gradient texture which attaches to the "map" property of its p
 
 ## Radius Props
 
-The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that inscribes the canvas. As an example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
+The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that inscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
 
 <Tip type="warning">
   It is also not enforced that `innerRadius` and `outerRadius` are both positive.
@@ -66,7 +66,7 @@ The `innerRadius` and `outerRadius` props control the size of the gradient. The 
 
 ## Gradient Stops
 
-`<RadialGradientTexture>` accepts a `stop` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in ThreeJS. Here are a couple examples of valid stops.
+`<RadialGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in ThreeJS. Here are a couple examples of valid stops.
 
 ```svelte
 <RadialGradientTexture
