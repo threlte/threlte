@@ -15,45 +15,31 @@ componentSignature:
       [
         {
           default: '1024',
-          description: "width of the gradient's canvas",
+          description: "width of the texture's canvas",
           name: 'width',
           required: false,
           type: 'number'
         },
         {
           default: '1024',
-          description: "height of the gradient's canvas",
+          description: "height of the texture's canvas",
           name: 'height',
           required: false,
           type: 'number'
         },
         {
-          required: false,
           default: '0',
-          description: x-axis coordinate of the gradient's start point,
-          name: 'startX',
+          description: 'inner radius of the gradient',
+          name: 'innerRadius',
+          required: false,
           type: 'number'
         },
         {
+          default: 'auto',
+          description: "outer radius of the gradient. if set to 'auto', becomes the radius of the circle that inscribes the canvas",
+          name: 'outerRadius',
           required: false,
-          default: '0',
-          description: y-axis coordinate of the gradient's start point,
-          name: 'startY',
-          type: 'number'
-        },
-        {
-          required: false,
-          default: '0',
-          description: x-axis coordinate of the gradient's end point,
-          name: 'endX',
-          type: 'number'
-        },
-        {
-          required: false,
-          default: 'height',
-          description: y-axis coordinate of the gradient's end point,
-          name: 'endY',
-          type: 'number'
+          type: 'RadialGradientOuterRadius'
         },
         {
           default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
