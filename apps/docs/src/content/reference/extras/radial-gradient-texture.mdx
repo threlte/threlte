@@ -1,8 +1,8 @@
 ---
-order: 9.9
+order: 9.10
 category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/GradientTexture/LinearGradientTexture.svelte'
-name: '<LinearGradientTexture>'
+sourcePath: 'packages/extras/src/lib/components/GradientTexture/RadialGradientTexture.svelte'
+name: '<RadialGradientTexture>'
 type: 'component'
 componentSignature:
   {
@@ -66,23 +66,31 @@ componentSignature:
   }
 ---
 
-A reactive linear gradient texture which attaches to the "map" property of its parent.
+A reactive radial gradient texture which attaches to the "map" property of its parent.
 
-<Example path="extras/gradient-texture/linear" />
+<Example path="extras/gradient-texture/radial" />
+
+## Radius Props
+
+The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that inscribes the canvas. As an example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
+
+<Tip type="warning">
+  It is also not enforced that `innerRadius` and `outerRadius` are both positive.
+</Tip>
 
 ## Gradient Stops
 
-`<LinearGradientTexture>` accepts a `stop` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in ThreeJS. Here are a couple examples of valid stops.
+`<RadialGradientTexture>` accepts a `stop` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in ThreeJS. Here are a couple examples of valid stops.
 
 ```svelte
-<LinearGradientTexture
+<RadialGradientTexture
   stops={[
     { color: 'black', offset: 0 },
     { color: 'white', offset: 1 }
   ]}
 />
 
-<LinearGradientTexture
+<RadialGradientTexture
   stops={[
     { color: '#00ffff', offset: 0 },
     { color: '#ff00ff', offset: 0.5 },
@@ -94,7 +102,7 @@ A reactive linear gradient texture which attaches to the "map" property of its p
 You can even mix and match color representations
 
 ```svelte
-<LinearGradientTexture
+<RadialGradientTexture
   stops={[
     { color: 'red', offset: 0 },
     { color: 0xff0000, offset: 0.25 },
@@ -102,21 +110,6 @@ You can even mix and match color representations
     { color: '#ff0000', offset: 0.75 },
     { color: new Color(new Color(new Color())).set(1, 0, 0), offset: 1 }
   ]}
-/>
-```
-
-All of the colors above are valid representations of the color <span style="color: red">red</span>.
-
-## Gradient Start Point and End Point
-
-You can control the gradient start point and end point with the `startX`, `startY`, `endX`, and `endY` props. For example, the props for a gradient that starts at the bottom left corner of the texture and ends at the top right corner would be:
-
-```svelte
-<LinearGradientTexture
-  startX={0}
-  startY={height}
-  endX={width}
-  endY={0}
 />
 ```
 

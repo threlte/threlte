@@ -2,16 +2,15 @@
   import type { ColorRepresentation, ToneMapping, Wrapping } from 'three'
   import type { GradientStop } from '@threlte/extras'
   import { Color, DoubleSide } from 'three'
-  import { LinearGradientTexture, OrbitControls } from '@threlte/extras'
+  import { RadialGradientTexture, OrbitControls } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
   type SceneProps = {
+    canvasSize: number
     gradientEndColor: ColorRepresentation
-    gradientEndX: number
-    gradientEndY: number
+    gradientInnerRadius: number
+    gradientOuterRadius: number
     gradientStartColor: ColorRepresentation
-    gradientStartX: number
-    gradientStartY: number
     sceneBackgroundColor: ColorRepresentation
     sceneToneMapping: ToneMapping
     textureCenterX: number
@@ -26,12 +25,11 @@
   }
 
   let {
+    canvasSize,
+    gradientInnerRadius,
+    gradientOuterRadius,
     gradientEndColor,
-    gradientEndX,
-    gradientEndY,
     gradientStartColor,
-    gradientStartX,
-    gradientStartY,
     sceneBackgroundColor,
     sceneToneMapping,
     textureCenterX,
@@ -76,21 +74,21 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<T.Mesh>
-  <T.PlaneGeometry args={[2, 2]} />
+<T.Mesh scale={2}>
+  <T.PlaneGeometry />
   <T.MeshBasicMaterial side={DoubleSide}>
-    <LinearGradientTexture
+    <RadialGradientTexture
+      width={canvasSize}
+      height={canvasSize}
+      innerRadius={gradientInnerRadius}
+      outerRadius={gradientOuterRadius}
       center.x={textureCenterX}
       center.y={textureCenterY}
-      endX={gradientEndX}
-      endY={gradientEndY}
       offset.x={textureOffsetX}
       offset.y={textureOffsetY}
       repeat.x={textureRepeatX}
       repeat.y={textureRepeatY}
       rotation={textureRotation}
-      startX={gradientStartX}
-      startY={gradientStartY}
       wrapS={textureWrapS}
       wrapT={textureWrapT}
       {stops}

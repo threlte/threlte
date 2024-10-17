@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LinearGradientTextureProps } from './LinearGradientTexture.svelte'
+  import type { RadialGradientTextureProps } from './RadialGradientTexture.svelte'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { applyGradient, applyStops } from '../common'
@@ -9,20 +9,18 @@
   const defaultSize = 1024
 
   let {
-    width = defaultSize,
-    height = defaultSize,
-    startX = 0,
-    startY = 0,
-    endX = 0,
-    endY = height,
+    innerRadius = 0,
+    outerRadius = 'auto',
     stops = [
       { offset: 0, color: 'black' },
       { offset: 1, color: 'white' }
     ],
+    width = defaultSize,
+    height = defaultSize,
     children,
     ref = $bindable(),
     ...props
-  }: LinearGradientTextureProps = $props()
+  }: RadialGradientTextureProps = $props()
 
   const canvas = new OffscreenCanvas(0, 0)
   const context = canvas.getContext('2d')
@@ -43,8 +41,19 @@
     invalidate()
   })
 
+  let canvasCenterX = $derived(0.5 * width)
+  let canvasCenterY = $derived(0.5 * height)
+
   const gradient = $derived.by(() => {
-    const gradient = context?.createLinearGradient(startX, startY, endX, endY)
+    const gradient = context?.createRadialGradient(
+      canvasCenterX,
+      canvasCenterY,
+      innerRadius,
+      canvasCenterX,
+      canvasCenterY,
+
+      outerRadius === 'auto' ? Math.hypot(canvasCenterX, canvasCenterY) : outerRadius
+    )
     if (gradient !== undefined) {
       applyStops(gradient, stops)
     }

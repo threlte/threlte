@@ -32,28 +32,29 @@
     Repeat: RepeatWrapping
   }
 
-  const canvasWidth = 1024
-  const canvasHeight = 1024
+  const canvasSize = 1024
 
-  let degrees = $state(0)
-  let gradientEndColor = $state('#ffff00')
-  let gradientEndX = $state(0)
-  let gradientEndY = $state(canvasHeight)
-  let gradientStartColor = $state('#ff00ff')
-  let gradientStartX = $state(0)
-  let gradientStartY = $state(0)
   let sceneBackgroundColor = $state('#000000')
   let sceneToneMapping = $state(AgXToneMapping)
+
+  let gradientStartColor = $state('#ff00ff')
+  let gradientEndColor = $state('#ffff00')
+  let gradientStartX = $state(0)
+  let gradientStartY = $state(0)
+  let gradientEndX = $state(0)
+  let gradientEndY = $state(canvasSize)
+
   let textureCenterX = $state(0)
   let textureCenterY = $state(0)
   let textureOffsetX = $state(0)
   let textureOffsetY = $state(0)
   let textureRepeatX = $state(1)
   let textureRepeatY = $state(1)
+  let textureRotationDegrees = $state(0)
   let textureWrapS: Wrapping = $state(ClampToEdgeWrapping)
   let textureWrapT: Wrapping = $state(ClampToEdgeWrapping)
 
-  let textureRotation = $derived((Math.PI / 180) * degrees)
+  let textureRotation = $derived((Math.PI / 180) * textureRotationDegrees)
 </script>
 
 <Pane position="fixed">
@@ -79,28 +80,28 @@
       bind:value={gradientStartX}
       label="start x"
       min={0}
-      max={canvasWidth}
+      max={canvasSize}
       step={1}
     />
     <Slider
       bind:value={gradientStartY}
       label="start y"
       min={0}
-      max={canvasHeight}
+      max={canvasSize}
       step={1}
     />
     <Slider
       bind:value={gradientEndX}
       label="end x"
       min={0}
-      max={canvasWidth}
+      max={canvasSize}
       step={1}
     />
     <Slider
       bind:value={gradientEndY}
       label="end y"
       min={0}
-      max={canvasHeight}
+      max={canvasSize}
       step={1}
     />
   </Folder>
@@ -159,7 +160,7 @@
     />
     <Slider
       label="rotation (degrees)"
-      bind:value={degrees}
+      bind:value={textureRotationDegrees}
       min={-360}
       max={360}
       step={1}
@@ -170,9 +171,14 @@
 <div>
   <Canvas>
     <Scene
-      {sceneBackgroundColor}
       {gradientEndColor}
+      {gradientEndX}
+      {gradientEndY}
       {gradientStartColor}
+      {gradientStartX}
+      {gradientStartY}
+      {sceneBackgroundColor}
+      {sceneToneMapping}
       {textureCenterX}
       {textureCenterY}
       {textureOffsetX}
@@ -182,11 +188,7 @@
       {textureRotation}
       {textureWrapS}
       {textureWrapT}
-      {sceneToneMapping}
-      {gradientStartX}
-      {gradientStartY}
-      {gradientEndX}
-      {gradientEndY}
+      {canvasSize}
     />
   </Canvas>
 </div>
