@@ -23,7 +23,7 @@
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
 
-  const { start, stop } = useTask(controls.update, {
+  const { start, stop } = useTask(() => controls.update(), {
     autoStart: false,
     autoInvalidate: false
   })
