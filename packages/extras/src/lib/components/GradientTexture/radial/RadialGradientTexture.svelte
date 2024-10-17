@@ -2,7 +2,7 @@
   import type { RadialGradientTextureProps } from './RadialGradientTexture.svelte'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { applyGradient, applyStops } from '../common'
+  import { applyGradient, addStops } from '../common'
 
   const { colorSpace, invalidate } = useThrelte()
 
@@ -55,7 +55,7 @@
       outerRadius === 'auto' ? Math.hypot(canvasCenterX, canvasCenterY) : outerRadius
     )
     if (gradient !== undefined) {
-      applyStops(gradient, stops)
+      addStops(gradient, stops)
     }
     return gradient
   })
