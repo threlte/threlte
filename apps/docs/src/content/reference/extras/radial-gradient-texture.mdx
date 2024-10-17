@@ -36,7 +36,7 @@ componentSignature:
         },
         {
           default: 'auto',
-          description: "outer radius of the gradient. if set to 'auto', becomes the radius of the circle that inscribes the canvas",
+          description: "outer radius of the gradient. if set to 'auto', becomes the radius of the circle that circumscribes the canvas",
           name: 'outerRadius',
           required: false,
           type: 'RadialGradientOuterRadius'
@@ -58,7 +58,7 @@ A reactive radial gradient texture which attaches to the "map" property of its p
 
 ## Radius Props
 
-The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that inscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
+The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that circumscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
 
 <Tip type="warning">
   It is also not enforced that `innerRadius` and `outerRadius` are both positive.
