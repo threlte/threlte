@@ -29,6 +29,8 @@ export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/R
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
 export { default as TrackballControls } from './components/controls/TrackballControls/TrackballControls.svelte'
+export { default as InstancedMesh2 } from './components/InstancedMesh2/InstancedMesh2.svelte'
+export { default as Instance2 } from './components/InstancedMesh2/Instance2.svelte'
 export { default as InstancedMesh } from './components/Instancing/InstancedMesh.svelte'
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
