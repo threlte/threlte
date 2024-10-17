@@ -48,6 +48,8 @@ export { default as Mask } from './components/Mask/Mask.svelte'
 export { default as BakeShadows } from './components/BakeShadows/BakeShadows.svelte'
 export { default as Detailed } from './components/Detailed/Detailed.svelte'
 export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
+export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
+export type { GradientStop } from './components/GradientTexture/types'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
