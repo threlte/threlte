@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.13
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
 ## 0.1.0-next.12
 
 ### Patch Changes

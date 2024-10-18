@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.9
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
 ## 1.0.0-next.8
 
 ### Patch Changes
