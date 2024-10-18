@@ -1,6 +1,6 @@
 import type { Box3, Group } from 'three'
 import type { Props } from '@threlte/core'
-import { Snippet, SvelteComponent } from 'svelte'
+import { SvelteComponent } from 'svelte'
 
 export type ResizeProps = Props<Group> & {
   /**
