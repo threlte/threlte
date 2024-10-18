@@ -198,7 +198,7 @@ const create = async () => {
   const threltePackageJson = {
     devDependencies: {},
     dependencies: {
-      three: await resolvePackageVersion('three', '^0.167.0'),
+      three: await resolvePackageVersion('three', '^0.169.0'),
       '@threlte/core': await resolvePackageVersion('@threlte/core', threltePackageRange)
     },
     scripts: {}
@@ -207,7 +207,7 @@ const create = async () => {
   // prettier-ignore
   {
 		if (options.types === 'typescript') {
-			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.167.0')
+			threltePackageJson.devDependencies['@types/three'] = await resolvePackageVersion('@types/three', '^0.169.0')
 		}
 		if (options.threltePackages.includes('@threlte/extras') || options.threltePackages.includes('model-pipeline')) {
 			threltePackageJson.dependencies['@threlte/extras'] = await resolvePackageVersion('@threlte/extras', threltePackageRange)
