@@ -28,11 +28,3 @@ export const determineRef = <Type>(is: unknown, args: unknown): MaybeInstance<Ty
 
   return is as MaybeInstance<Type>
 }
-
-export const extendsObject3D = (object: any): object is Object3D => {
-  return 'isObject3D' in object
-}
-
-export const isDisposableObject = (object: any): object is DisposableThreeObject => {
-  return 'dispose' in object
-}

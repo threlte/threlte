@@ -1,22 +1,21 @@
 <script lang="ts">
-  import { useCache, useParent, useThrelte } from '@threlte/core'
+  import { isInstanceOf, useCache, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import type { Scene } from 'three'
   import {
     CubeReflectionMapping,
     CubeTextureLoader,
     EquirectangularReflectionMapping,
     FloatType,
-    Texture,
-    TextureLoader,
+    LinearSRGBColorSpace,
     SRGBColorSpace,
-    LinearSRGBColorSpace
+    Texture,
+    TextureLoader
   } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+  import { useSuspense } from '../../suspense/useSuspense'
   import type { EnvironmentProps } from './Environment.svelte'
   import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
-  import { useSuspense } from '../../suspense/useSuspense'
 
   type Props = EnvironmentProps
 
@@ -27,12 +26,10 @@
   export let format: Props['format'] = undefined
   export let colorSpace: Props['colorSpace'] = undefined
 
-  const isScene = (obj: any): obj is Scene => !!obj.isScene
-
   const { scene: globalScene, invalidate } = useThrelte()
   const parent = useParent()
   let scene = globalScene
-  if (isScene($parent)) scene = $parent
+  if (isInstanceOf($parent, 'Scene')) scene = $parent
 
   let previousSceneEnvironment = scene.environment
   let previousSceneBackground = scene.background

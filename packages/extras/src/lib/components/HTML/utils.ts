@@ -1,3 +1,4 @@
+import { isInstanceOf } from '@threlte/core'
 import {
   Camera,
   Matrix4,
@@ -13,14 +14,6 @@ const v1 = new Vector3()
 const v2 = new Vector3()
 const v3 = new Vector3()
 const vec2 = new Vector2()
-
-const isOrthographicCamera = (o: Camera): o is OrthographicCamera => {
-  return 'isOrthographicCamera' in o
-}
-
-const isPerspectiveCamera = (o: Camera): o is PerspectiveCamera => {
-  return 'isPerspectiveCamera' in o
-}
 
 export const defaultCalculatePosition = (
   obj: Object3D,
@@ -64,9 +57,9 @@ export const isObjectVisible = (
 }
 
 export const objectScale = (el: Object3D, camera: Camera) => {
-  if (isOrthographicCamera(camera)) {
+  if (isInstanceOf(camera, 'OrthographicCamera')) {
     return camera.zoom
-  } else if (isPerspectiveCamera(camera)) {
+  } else if (isInstanceOf(camera, 'PerspectiveCamera')) {
     const objectPos = v1.setFromMatrixPosition(el.matrixWorld)
     const cameraPos = v2.setFromMatrixPosition(camera.matrixWorld)
     const vFOV = (camera.fov * Math.PI) / 180
@@ -141,11 +134,11 @@ export const getViewportFactor = (
     height: number
   }
 ): number => {
-  if (isOrthographicCamera(camera)) {
+  if (isInstanceOf(camera, 'OrthographicCamera')) {
     return 1
   }
 
-  if (isPerspectiveCamera(camera)) {
+  if (isInstanceOf(camera, 'PerspectiveCamera')) {
     const { width, height } = size
     const distance = camera.getWorldPosition(v1).distanceTo(target)
 

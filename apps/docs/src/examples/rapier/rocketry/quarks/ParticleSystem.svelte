@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { useParent, watch } from '@threlte/core'
+  import { isInstanceOf, useParent, watch } from '@threlte/core'
   import { onDestroy, type Snippet } from 'svelte'
-  import { Object3D } from 'three'
   import { ParticleSystem, type ParticleSystemParameters } from 'three.quarks'
   import { useBatchedRenderer } from './useBatchedRenderer'
 
@@ -21,15 +20,13 @@
   system = new ParticleSystem({ ...rest })
 
   const parent = useParent()
-  const isObject3D = (parent: any): parent is Object3D => {
-    return parent.isObject3D
-  }
+
   watch(parent, (parent) => {
-    if (isObject3D(parent)) {
+    if (isInstanceOf(parent, 'Object3D')) {
       parent.add(system.emitter)
     }
     return () => {
-      if (isObject3D(parent)) {
+      if (isInstanceOf(parent, 'Object3D')) {
         parent.remove(system.emitter)
       }
     }
