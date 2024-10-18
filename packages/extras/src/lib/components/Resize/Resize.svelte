@@ -113,7 +113,7 @@
 >
   <T is={outer}>
     <T is={inner}>
-      {@render children?.({ ref: group, resize })}
+      {@render children?.({ ref: group })}
     </T>
   </T>
 </T>
