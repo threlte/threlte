@@ -37,9 +37,8 @@
 </script>
 
 <script lang="ts">
-  import { injectPlugin, T, useStage, useTask, useThrelte } from '@threlte/core'
+  import { injectPlugin, isInstanceOf, T, useStage, useTask, useThrelte } from '@threlte/core'
   import { onMount, tick } from 'svelte'
-  import { Object3D } from 'three'
 
   let {
     axis,
@@ -70,24 +69,10 @@
     { autoStart: false, stage: beforeRenderStage }
   )
 
-  let mounted = $state(false)
-  $effect(() => {
-    mounted = true
-    return () => {
-      mounted = false
-    }
-  })
-
-  $effect(() => {
-    if (mounted) {
-      scheduleResizing()
-    }
-  })
+  onMount(scheduleResizing)
 
   injectPlugin('resize', ({ ref }) => {
-    if (!(ref instanceof Object3D)) {
-      return
-    }
+    if (!isInstanceOf(ref, 'Object3D')) return
 
     onMount(() => {
       if (auto) {
