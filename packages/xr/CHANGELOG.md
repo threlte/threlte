@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.8
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 1.0.0-next.7
 
 ### Patch Changes

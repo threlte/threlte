@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.12
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 0.1.0-next.11
 
 ### Patch Changes
