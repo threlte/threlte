@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.12
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
 ## 3.0.0-next.11
 
 ### Patch Changes
