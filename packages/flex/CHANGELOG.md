@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.8
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 2.0.0-next.7
 
 ### Patch Changes

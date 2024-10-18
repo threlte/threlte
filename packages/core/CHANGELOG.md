@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.19
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 8.0.0-next.18
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.0.0-next.26
+
+### Patch Changes
+
+- 5a08cd1: OrbitControls fix for Three.js R169
+- 2ac3d48: Dependency updates
+
 ## 9.0.0-next.25
 
 ### Patch Changes
