@@ -2,19 +2,12 @@ import { writable } from 'svelte/store'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 import { useThrelte } from '../../../context/compounds/useThrelte'
 import { watch } from '../../../lib/storeUtils'
-
-const isOrthographicCamera = (value: unknown): value is OrthographicCamera => {
-  return typeof value === 'object' && value !== null && 'isOrthographicCamera' in value
-}
-
-const isPerspectiveCamera = (value: unknown): value is PerspectiveCamera => {
-  return typeof value === 'object' && value !== null && 'isPerspectiveCamera' in value
-}
+import { isInstanceOf } from '../../../lib/isInstanceOf'
 
 const isPerspectiveOrOrthographicCamera = (
   value: unknown
 ): value is PerspectiveCamera | OrthographicCamera => {
-  return isPerspectiveCamera(value) || isOrthographicCamera(value)
+  return isInstanceOf(value, 'PerspectiveCamera') || isInstanceOf(value, 'OrthographicCamera')
 }
 
 export const useCamera = () => {
@@ -32,7 +25,7 @@ export const useCamera = () => {
 
   watch([currentRef, manual, size], ([ref, manual, size]) => {
     if (!ref || manual) return
-    if (isOrthographicCamera(ref)) {
+    if (isInstanceOf(ref, 'OrthographicCamera')) {
       ref.left = size.width / -2
       ref.right = size.width / 2
       ref.top = size.height / 2
@@ -40,7 +33,7 @@ export const useCamera = () => {
       ref.updateProjectionMatrix()
       ref.updateMatrixWorld()
       invalidate()
-    } else if (isPerspectiveCamera(ref)) {
+    } else if (isInstanceOf(ref, 'PerspectiveCamera')) {
       ref.aspect = size.width / size.height
       ref.updateProjectionMatrix()
       ref.updateMatrixWorld()
