@@ -8,41 +8,42 @@
   // reuse box for all instances
   const _box = new Box3()
 
-  const createResize =
-    (
-      outer: Group,
-      inner: Group,
-      box: Box3,
-      precise: boolean,
-      axis: ResizeProps['axis'],
-      onresize: ResizeProps['onresize']
-    ) =>
-    () => {
-      outer.matrixWorld.identity()
-      const { max, min } = box.setFromObject(inner, precise)
-      const width = max.x - min.x
-      const height = max.y - min.y
-      const depth = max.z - min.z
+  const resize = (
+    outer: Group,
+    inner: Group,
+    box: Box3,
+    precise: boolean,
+    axis: ResizeProps['axis'],
+    onresize: ResizeProps['onresize']
+  ) => {
+    outer.matrixWorld.identity()
+    const { max, min } = box.setFromObject(inner, precise)
+    const width = max.x - min.x
+    const height = max.y - min.y
+    const depth = max.z - min.z
 
-      const denominator =
-        axis === 'x'
-          ? width
-          : axis === 'y'
-            ? height
-            : axis === 'z'
-              ? depth
-              : Math.max(width, height, depth)
+    const denominator =
+      axis === 'x'
+        ? width
+        : axis === 'y'
+          ? height
+          : axis === 'z'
+            ? depth
+            : Math.max(width, height, depth)
 
-      outer.scale.setScalar(1 / denominator)
-      onresize?.()
-    }
+    outer.scale.setScalar(1 / denominator)
+    onresize?.()
+  }
 </script>
 
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { injectPlugin, T, useStage, useTask, useThrelte } from '@threlte/core'
+  import { onMount, tick } from 'svelte'
+  import { Object3D } from 'three'
 
   let {
     axis,
+    auto,
     box = _box,
     precise = true,
     onresize,
@@ -55,10 +56,53 @@
   const inner = new Group()
   const outer = new Group()
 
-  const resize = $derived(createResize(outer, inner, _box, precise, axis, onresize))
+  const { renderStage } = useThrelte()
+
+  const beforeRenderStage = useStage(Symbol('before-render-resize'), {
+    before: renderStage
+  })
+
+  const { start: scheduleResizing, stop } = useTask(
+    () => {
+      resize(outer, inner, _box, precise, axis, onresize)
+      stop()
+    },
+    { autoStart: false, stage: beforeRenderStage }
+  )
+
+  let mounted = $state(false)
+  $effect(() => {
+    mounted = true
+    return () => {
+      mounted = false
+    }
+  })
 
   $effect(() => {
-    resize()
+    if (mounted) {
+      scheduleResizing()
+    }
+  })
+
+  injectPlugin('resize', ({ ref }) => {
+    if (!(ref instanceof Object3D)) {
+      return
+    }
+
+    onMount(() => {
+      if (auto) {
+        scheduleResizing()
+        return scheduleResizing
+      }
+    })
+
+    return {
+      onRefChange() {
+        if (auto) {
+          tick().then(scheduleResizing)
+        }
+      }
+    }
   })
 </script>
 

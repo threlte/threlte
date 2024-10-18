@@ -4,6 +4,10 @@ import { SvelteComponent } from 'svelte'
 
 export type ResizeProps = Props<Group> & {
   /**
+   * when true, resizes the group when objects are added or removed
+   */
+  auto?: boolean
+  /**
    * axis to constrain by. if not provided, the max of all 3 axes is used.
    */
   axis?: 'x' | 'y' | 'z'
