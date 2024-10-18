@@ -53,6 +53,7 @@ export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
 export { createObjectStore } from './lib/createObjectStore'
 export { revision } from './lib/revision'
 export { currentWritable, memoize, watch, type CurrentWritable } from './lib/storeUtils'
+export { isInstanceOf } from './lib/isInstanceOf'
 
 // internal components
 // NOTE: for some reason TS seems to be confusing the types exposed from the .svelte and .svelte.d.ts files
