@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import { Camera, Vector2, Vector3, Quaternion } from 'three'
-  import { useThrelte, useParent, useTask } from '@threlte/core'
+  import { Quaternion, Vector2, Vector3 } from 'three'
 
   export let object
   export let rotateSpeed = 1.0
@@ -45,11 +45,7 @@
 
   const dispatch = createEventDispatcher()
 
-  const isCamera = (p: any): p is Camera => {
-    return p.isCamera
-  }
-
-  if (!isCamera($camera)) {
+  if (!isInstanceOf($camera, 'Camera')) {
     throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
   }
 
