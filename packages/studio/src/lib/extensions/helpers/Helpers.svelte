@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
   import { Gizmo } from '@threlte/extras'
-  import { Light, Object3D, type Camera, type Group } from 'three'
+  import { Light, Object3D } from 'three'
   import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
@@ -56,25 +56,17 @@
     }
   )
 
-  const onCreate = (ref: Object3D): () => void => {
+  const onCreate = (ref: Object3D): (() => void) => {
     addObject(ref)
     activeHelpers.add(ref)
-		return () => {
-			removeObject(ref)
-			activeHelpers.delete(ref)
-		}
-  }
-
-  const isCamera = (object: any): object is Camera => {
-    return object.isCamera
+    return () => {
+      removeObject(ref)
+      activeHelpers.delete(ref)
+    }
   }
 
   const isLight = (object: any): object is Light => {
     return object.isLight
-  }
-
-  const isGroup = (object: any): object is Group => {
-    return object.isGroup
   }
 
   let invalidations = $state(1)
@@ -118,12 +110,12 @@
         overlay
       />
 
-      {#if isGroup(object)}
+      {#if isInstanceOf(object, 'Group')}
         <GroupHelper oncreate={onCreate} />
       {/if}
     </Mounter>
 
-    {#if isCamera(object)}
+    {#if isInstanceOf(object, 'Camera')}
       <T.CameraHelper
         userData={{ ignoreOverrideMaterial: true }}
         args={[object]}

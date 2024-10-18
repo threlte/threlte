@@ -1,6 +1,6 @@
 import type { Mesh } from 'three'
 import { writable } from 'svelte/store'
-import { watch } from '@threlte/core'
+import { isInstanceOf, watch } from '@threlte/core'
 import { injectPlugin } from '@threlte/core'
 import { useTeleportControls } from './context'
 
@@ -11,7 +11,7 @@ export const injectTeleportControlsPlugin = (): void => {
   const noop = () => {}
 
   injectPlugin('threlte-teleport-controls', ({ ref, props }) => {
-    if (!ref.isMesh) return
+    if (!isInstanceOf(ref, 'Mesh')) return
 
     const isSurface = 'teleportSurface' in props
     const isBlocker = 'teleportBlocker' in props
