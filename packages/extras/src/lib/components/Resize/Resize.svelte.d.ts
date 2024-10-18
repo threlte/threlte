@@ -1,6 +1,6 @@
 import type { Box3, Group } from 'three'
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { Snippet, SvelteComponent } from 'svelte'
 
 export type ResizeProps = Props<Group> & {
   /**
@@ -16,6 +16,15 @@ export type ResizeProps = Props<Group> & {
    * https://threejs.org/docs/index.html#api/en/math/Box3.setFromObject
    */
   precise?: boolean
+
+  /**
+   * called after the group has been scaled
+   */
+  onresize?: () => void
+}
+
+type ResizeEventData = {
+  boundingBox: Box3
 }
 
 export default class Resize extends SvelteComponent<ResizeProps> {}
