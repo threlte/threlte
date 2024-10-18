@@ -1,14 +1,10 @@
-import { injectPlugin, watch } from '@threlte/core'
+import { injectPlugin, isInstanceOf, watch } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
 import type { ThrelteLayers, ThrelteLayersContext } from './types'
 
-const isObject3D = (ref: any): ref is Object3D => {
-  return ref.isObject3D
-}
-
-const propIsThrelteLayers = (prop: any): prop is ThrelteLayers => {
+const propIsThrelteLayers = (prop: unknown): prop is ThrelteLayers => {
   return (
     prop === 'all' ||
     prop === 'none' ||
@@ -19,7 +15,7 @@ const propIsThrelteLayers = (prop: any): prop is ThrelteLayers => {
 
 export const injectLayersPlugin = () => {
   injectPlugin('layers', ({ ref, props }) => {
-    if (!isObject3D(ref)) return
+    if (!isInstanceOf(ref, 'Object3D')) return
 
     // because the value can be an inherited value or a prop value at any time, we need to store it in a store
     const local = writable<ThrelteLayers | undefined>(
@@ -64,7 +60,7 @@ export const injectLayersPlugin = () => {
         )
       },
       onRefChange(ref) {
-        if (!isObject3D(ref)) return
+        if (!isInstanceOf(ref, 'Object3D')) return
         refStore.set(ref)
       },
       pluginProps: ['layers']

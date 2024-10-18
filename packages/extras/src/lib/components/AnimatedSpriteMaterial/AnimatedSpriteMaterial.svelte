@@ -1,6 +1,15 @@
 <script lang="ts">
   import {
-    type Texture,
+    asyncWritable,
+    type AsyncWritable,
+    isInstanceOf,
+    T,
+    useLoader,
+    useParent,
+    useTask,
+    watch
+  } from '@threlte/core'
+  import {
     DoubleSide,
     FileLoader,
     LinearFilter,
@@ -8,25 +17,17 @@
     NearestFilter,
     RepeatWrapping,
     RGBADepthPacking,
-    SpriteMaterial
+    SpriteMaterial,
+    type Texture
   } from 'three'
-  import {
-    T,
-    asyncWritable,
-    type AsyncWritable,
-    useTask,
-    watch,
-    useLoader,
-    useParent
-  } from '@threlte/core'
+  import { useTexture } from '../../hooks/useTexture'
+  import { useSuspense } from '../../suspense/useSuspense'
   import type {
     AnimatedSpriteProps,
-    SpriteJsonHashData,
+    Frame,
     FrameTag,
-    Frame
+    SpriteJsonHashData
   } from './AnimatedSpriteMaterial.svelte'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import { useTexture } from '../../hooks/useTexture'
 
   let {
     textureUrl,
@@ -88,7 +89,7 @@
   let isMesh = $state(false)
 
   $effect.pre(() => {
-    isMesh = $parent !== undefined && 'isMesh' in $parent
+    isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
   })
   $effect.pre(() => {
     fpsInterval = 1000 / fps
