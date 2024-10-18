@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.25
+
+### Patch Changes
+
+- 72a1004: Use regular ts files for shader files in MeshDiscardMaterial
+
 ## 9.0.0-next.24
 
 ### Minor Changes
