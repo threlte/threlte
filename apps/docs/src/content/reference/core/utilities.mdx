@@ -147,7 +147,9 @@ useTask(() => {
 Check if an object is an instance of a given THREE class. This function can be
 used as a type guard and as an alternative to
 [`instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof)
-which is prone to error and [slower](https://jsperf.app/jazula).
+which is prone to error and [slower](https://jsperf.app/jazula). This function
+uses the `isFoo` property that THREE classes have to determine if an object is
+of a particular class.
 
 ```ts
 const obj = new Object3D()
