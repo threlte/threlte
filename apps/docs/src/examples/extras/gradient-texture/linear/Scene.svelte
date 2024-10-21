@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ColorRepresentation, ToneMapping, Wrapping } from 'three'
   import type { GradientStop } from '@threlte/extras'
-  import { Color, DoubleSide } from 'three'
+  import { DoubleSide } from 'three'
   import { LinearGradientTexture, OrbitControls } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
@@ -13,7 +13,7 @@
     gradientStartColor: ColorRepresentation
     gradientStartX: number
     gradientStartY: number
-    sceneBackgroundColor: ColorRepresentation
+    sceneClearColor: ColorRepresentation
     sceneToneMapping: ToneMapping
     textureCenterX: number
     textureCenterY: number
@@ -34,7 +34,7 @@
     gradientStartColor,
     gradientStartX,
     gradientStartY,
-    sceneBackgroundColor,
+    sceneClearColor,
     sceneToneMapping,
     textureCenterX,
     textureCenterY,
@@ -52,24 +52,18 @@
     { color: gradientEndColor, offset: 1 }
   ])
 
-  const { invalidate, toneMapping } = useThrelte()
+  const { invalidate, renderer, toneMapping } = useThrelte()
 
   $effect(() => {
     toneMapping.set(sceneToneMapping)
     invalidate()
   })
 
-  const backgroundColor = new Color()
   $effect(() => {
-    backgroundColor.set(sceneBackgroundColor)
+    renderer.setClearColor(sceneClearColor)
     invalidate()
   })
 </script>
-
-<T
-  is={backgroundColor}
-  attach="background"
-/>
 
 <T.PerspectiveCamera
   makeDefault

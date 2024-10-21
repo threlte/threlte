@@ -38,7 +38,7 @@
   // from center to one of the corners
   const diagonal = Math.floor(Math.hypot(halfCanvasSize, halfCanvasSize))
 
-  let sceneBackgroundColor = $state('#000000')
+  let sceneClearColor = $state('#000000')
   let sceneToneMapping = $state(AgXToneMapping)
 
   let gradientStartColor = $state('#ffff00')
@@ -70,7 +70,7 @@
     label="tone mapping"
   />
   <Color
-    bind:value={sceneBackgroundColor}
+    bind:value={sceneClearColor}
     label="background color"
   />
   <Folder title="gradient props">
@@ -176,7 +176,7 @@
       {gradientInnerRadius}
       {gradientOuterRadius}
       {gradientStartColor}
-      {sceneBackgroundColor}
+      {sceneClearColor}
       {sceneToneMapping}
       {textureCenterX}
       {textureCenterY}
