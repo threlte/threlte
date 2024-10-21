@@ -65,7 +65,7 @@
   />
   <Color
     bind:value={sceneClearColor}
-    label="background color"
+    label="clear color"
   />
   <Folder title="gradient props">
     <Color
