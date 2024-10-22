@@ -1,4 +1,4 @@
-import { injectInteractivityPlugin } from './plugin'
+import { injectInteractivityPlugin } from './plugin.svelte'
 import { setupInteractivity } from './setupInteractivity'
 import { setInteractivityContext, type InteractivityOptions } from './context'
 

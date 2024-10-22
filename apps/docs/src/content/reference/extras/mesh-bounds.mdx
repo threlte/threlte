@@ -49,9 +49,9 @@ apply the `meshBounds` raycast function to all meshes in your scene.
   import { T, injectPlugin, isInstanceOf } from '@threlte/core'
   import { meshBounds } from '@threlte/extras'
 
-  injectPlugin('mesh-bounds-plugin', ({ ref }) => {
-    if (isInstanceOf(ref, 'Mesh')) {
-      ref.raycast = meshBounds
+  injectPlugin('mesh-bounds-plugin', (args) => {
+    if (isInstanceOf(args.ref, 'Mesh')) {
+      args.ref.raycast = meshBounds
     }
   })
 </script>
@@ -71,11 +71,25 @@ function.
 <script>
   import { T, injectPlugin, isInstanceOf } from '@threlte/core'
   import { meshBounds } from '@threlte/extras'
+  import { onDestroy } from 'svelte'
 
-  injectPlugin('mesh-bounds-plugin', ({ ref, props }) => {
-    if (isInstanceOf(ref, 'Mesh') && !!props.raycastMeshBounds) {
-      ref.raycast = meshBounds
-    }
+  injectPlugin('mesh-bounds-plugin', (args) => {
+    if (!isInstanceOf(args.ref, 'Mesh')) return
+
+    const originalRaycast = args.ref.raycast
+
+    $effect(() => {
+      if (!!args.props.raycastMeshBounds) {
+        args.ref.raycast = meshBounds
+      } else {
+        args.ref.raycast = originalRaycast
+      }
+    })
+
+    onDestroy(() => {
+      args.ref.raycast = originalRaycast
+    })
+
     return {
       pluginProps: ['raycastMeshBounds']
     }

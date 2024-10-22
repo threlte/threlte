@@ -90,9 +90,10 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "troika-three-text": "^0.49.1",
     "@threejs-kit/instanced-sprite-mesh": "^2.4.6",
+    "runed": "^0.10.0",
     "three-mesh-bvh": "^0.7.4",
-    "three-perf": "^1.0.10"
+    "three-perf": "^1.0.10",
+    "troika-three-text": "^0.49.1"
   }
 }

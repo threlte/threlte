@@ -56,11 +56,11 @@ export const useMaterials = () => {
    * This plugin extracts materials from meshes and adds them to the materials
    * queue. It will not listen to prop or ref changes.
    */
-  injectPlugin('csm', ({ ref }) => {
+  injectPlugin('csm', (args) => {
     // we need to wait for mounting since otherwise the meshes probably have
     // default materials applied
     onMount(() => {
-      extractMaterials(ref)
+      extractMaterials(args.ref)
     })
   })
 

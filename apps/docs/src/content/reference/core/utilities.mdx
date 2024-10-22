@@ -13,6 +13,7 @@ Watch a single store or multiple stores and call a callback when they change to 
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
 })
@@ -25,6 +26,7 @@ You can also watch multiple stores:
 ```ts
 const store1 = writable(0)
 const store2 = writable(1)
+
 watch([store1, store2], ([value1, value2]) => {
   console.log(value1, value2) // 0 1
 })
@@ -34,6 +36,7 @@ The callback can return a cleanup function that will be called when the stores c
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
   return () => {
@@ -76,6 +79,33 @@ useTask(() => {
   console.log(doubled.current) // 2, 4, 6, ...
 })
 ```
+
+---
+
+## `observe`
+
+Watch a single or multiple reactive values and call a callback when they change.
+This is the runes-equivalent to `watch`.
+
+```ts
+let count = $state(0)
+let name = $state('John')
+
+observe(
+  () => [count],
+  ([count]) => {
+    // This callback is only called when `count` changes
+    // and not when `name` changes.
+    console.log(count, name)
+  }
+)
+```
+
+---
+
+## `observe.pre`
+
+This is the same as `observe` but it uses `$effect.pre` instead of `$effect`.
 
 ---
 
