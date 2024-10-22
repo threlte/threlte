@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.21
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 8.0.0-next.20
 
 ### Minor Changes
