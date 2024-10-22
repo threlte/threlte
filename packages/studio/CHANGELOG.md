@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.14
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 0.1.0-next.13
 
 ### Patch Changes

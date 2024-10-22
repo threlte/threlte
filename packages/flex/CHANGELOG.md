@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.9
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 2.0.0-next.8
 
 ### Patch Changes

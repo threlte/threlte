@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.10
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 1.0.0-next.9
 
 ### Patch Changes

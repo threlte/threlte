@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.13
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 3.0.0-next.12
 
 ### Patch Changes
