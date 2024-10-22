@@ -14,13 +14,12 @@
     "create:example": "tsx ./scripts/createExample",
     "create:example-page": "tsx ./scripts/createExamplePage",
     "lint": "prettier --check .",
-    "format": "prettier --write .",
-    "postinstall": "node ./scripts/patchSvelte5Export.js"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
     "@astrojs/preact": "^3.1.0",
-    "@astrojs/svelte": "^5.6.0",
+    "@astrojs/svelte": "^5.7.2",
     "@astrojs/tailwind": "^5.1.0",
     "@markprompt/css": "^0.10.0",
     "@markprompt/react": "^0.18.0",
@@ -28,7 +27,7 @@
     "@preact/signals": "^1.1.5",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@vercel/analytics": "^1.0.1",
-    "astro": "^4.11.5",
+    "astro": "^4.16.7",
     "camera-controls": "^2.8.5",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
@@ -40,8 +39,8 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.14.0",
     "@floating-ui/dom": "^1.6.4",
-    "runed": "^0.10.0",
-    "svelte": "5.0.0-next.181",
+    "runed": "^0.15.3",
+    "svelte": "^5.0.5",
     "svelte-portal": "^2.2.1",
     "tailwindcss": "^3.4.4",
     "three-mesh-bvh": "^0.7.5",
