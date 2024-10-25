@@ -38,7 +38,6 @@
 <Pane
   title="Image"
   position="fixed"
-  expanded={true}
 >
   <Folder title="Color processing">
     <Slider

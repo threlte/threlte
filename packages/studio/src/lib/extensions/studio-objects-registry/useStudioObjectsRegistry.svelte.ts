@@ -1,3 +1,4 @@
+import { isInstanceOf } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import type { Object3D } from 'three'
 import { useStudio } from '../../internal/extensions'
@@ -7,9 +8,6 @@ import {
   type StudioObjectsRegistryState
 } from './types'
 
-const isObject3D = (object: any): object is Object3D => {
-  return 'isObject3D' in object
-}
 export const useStudioObjectsRegistry = () => {
   const { useExtension } = useStudio()
   const extension = useExtension<Partial<StudioObjectsRegistryState>, StudioObjectsRegistryActions>(
@@ -36,7 +34,7 @@ export const useStudioObjectsRegistry = () => {
       if (!ref) return
       objects.push(ref)
       ref.traverse((node: any) => {
-        if (isObject3D(node)) {
+        if (isInstanceOf(node, 'Object3D')) {
           objects.push(node)
         }
         node.userData.ignoreOverrideMaterial = true

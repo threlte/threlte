@@ -9,16 +9,59 @@ This example shows how to run the experimental Three.js WebGPURenderer renderer 
 <Example path="renderers/WebGPU" />
 
 <small>
-	Adapted from [this Three.js
-	example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
 </small>
 
-In a browser that supports WebGPU, such as Chrome, this example will default to the new WebGPURenderer.
-In other browsers, it will fallback to a WebGL Renderer.
+In a browser that supports WebGPU, such as Chrome, this example will default to
+the new WebGPURenderer. In other browsers, it will fallback to a WebGL Renderer.
+
+:::caution
+WebGPU support in Three.js is still in an early stage and the implementation may change from
+Three.js version to version. This guide is based on Three.js r169.
+:::
+
+### Using the Three.js WebGPU build
+
+Since [Three.js r167](https://github.com/mrdoob/three.js/releases/tag/r167),
+Three.js provides a dedicated WebGPU build, available as `three/webgpu`.
+Whenever you're targeting WebGPU, you must always import the WebGPU build
+instead of the default `three` build:
+
+```ts {1}- {2}+
+import * as THREE from 'three'
+import * as THREE from 'three/webgpu'
+```
+
+You also need to extend the Threlte catalogue with the WebGPU build. This
+enables the `<T>` component to pick up the WebGPU build as well.
+
+```svelte title="App.svelte"
+<script>
+  import { extend } from '@threlte/core'
+  import Scene from './Scene.svelte'
+  import * as THREE from 'three/webgpu'
+
+  extend(THREE)
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new THREE.WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
 
 ### Vite
 
-The WebGPURenderer uses top-level async to determine WebGPU compatibility. Vite will often throw an error when it detects top level await.
+The WebGPURenderer uses top-level async to determine WebGPU compatibility. Vite
+will often throw an error when it detects top level await.
 
 To circumvent this issue, the following can be added to your Vite config.
 
@@ -34,4 +77,6 @@ build: {
 }
 ```
 
-Alternatively, [`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await) can be used, although less success has been reported with this method.
+Alternatively,
+[`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
+can be used, although less success has been reported with this method.

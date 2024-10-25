@@ -2,7 +2,7 @@
   import { Canvas } from '@threlte/core'
   import { Environment } from '@threlte/extras'
   import Scene from './Scene.svelte'
-  import { Pane, Slider, Checkbox, Point, Folder, List } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, Checkbox, Folder, List } from 'svelte-tweakpane-ui'
 
   let isBackground = true
   let path = '/hdr/Bridge2_cube/'
@@ -55,7 +55,6 @@
 <Pane
   title="Environment"
   position="fixed"
-  expanded={true}
 >
   <Folder title="core">
     <Checkbox

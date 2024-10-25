@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { T, useTask, useThrelte, watch } from '@threlte/core'
+  import { isInstanceOf, T, useTask, useThrelte, watch } from '@threlte/core'
   import { Portal } from '@threlte/extras'
   import { onMount } from 'svelte'
   import {
@@ -10,14 +10,12 @@
     MeshBasicMaterial,
     RGBAFormat,
     WebGLRenderTarget,
-    type Material,
-    type OrthographicCamera,
-    type PerspectiveCamera
+    type Material
   } from 'three'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useObjectSelection } from './useObjectSelection.svelte'
   import { fragmentShader } from './shader/fragment'
   import { vertexShader } from './shader/vertex'
+  import { useObjectSelection } from './useObjectSelection.svelte'
 
   const { invalidate } = useThrelte()
   const objectSelection = useObjectSelection()
@@ -112,14 +110,6 @@
     }
   )
 
-  const isPerspectiveCamera = (object: any): object is PerspectiveCamera => {
-    return 'isPerspectiveCamera' in object
-  }
-
-  const isOrthographicCamera = (object: any): object is OrthographicCamera => {
-    return 'isOrthographicCamera' in object
-  }
-
   const selectionMesh = new Mesh()
   selectionMesh.raycast = () => {}
   selectionMesh.position.z = -5
@@ -135,10 +125,10 @@
 
       let scaleX = getMesh().scale.x
       let scaleY = getMesh().scale.y
-      if (isPerspectiveCamera($camera)) {
+      if (isInstanceOf($camera, 'PerspectiveCamera')) {
         scaleY = Math.tan((($camera.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
         scaleX = scaleY * $camera.aspect
-      } else if (isOrthographicCamera($camera)) {
+      } else if (isInstanceOf($camera, 'OrthographicCamera')) {
         scaleY = ($camera.top - $camera.bottom) / $camera.zoom
         scaleX = ($camera.right - $camera.left) / $camera.zoom
       }

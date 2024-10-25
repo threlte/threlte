@@ -1,5 +1,42 @@
 # @threlte/extras
 
+## 9.0.0-next.28
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 9.0.0-next.27
+
+### Patch Changes
+
+- 865515f: Implement type guard utility, clean up
+
+## 9.0.0-next.26
+
+### Patch Changes
+
+- 5a08cd1: OrbitControls fix for Three.js R169
+- 2ac3d48: Dependency updates
+
+## 9.0.0-next.25
+
+### Patch Changes
+
+- 72a1004: Use regular ts files for shader files in MeshDiscardMaterial
+
+## 9.0.0-next.24
+
+### Minor Changes
+
+- 97004c3: adds `useMeshBounds` which is a faster raycast function for the cost of pointer accuracy
+- aba6d5a: adds a <Detailed> component that can be used for displaying different level-of-detail for scene objects
+- bf72ead: adds <MeshDiscardMaterial>` which is a material that completely hides the mesh but doesn't hide its children or shadows
+
+### Patch Changes
+
+- 01c1e3a: Adds a `<BakeShadows>` component that "freezes" shadows for scenes where shadows only need to be calculated once or very infrequently.'
+
 ## 9.0.0-next.23
 
 ### Patch Changes

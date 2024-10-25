@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { useParent, useThrelte } from '@threlte/core'
+  import { isInstanceOf, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Camera, Euler } from 'three'
+  import { Euler } from 'three'
 
   // Set to constrain the pitch of the camera
   // Range is 0 to Math.PI radians
@@ -19,11 +19,7 @@
   const domElement = renderer.domElement
   const camera = useParent()
 
-  const isCamera = (p: any): p is Camera => {
-    return p.isCamera
-  }
-
-  if (!isCamera($camera)) {
+  if (!isInstanceOf($camera, 'Camera')) {
     throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
   }
 

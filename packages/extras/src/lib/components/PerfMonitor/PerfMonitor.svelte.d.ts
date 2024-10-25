@@ -50,7 +50,7 @@ export type PerfMonitorProps = {
    * Scale of the stats block html element.
    * @default 1
    */
-  scale?: 1 // stats block scale [default 1]
+  scale?: number // stats block scale [default 1]
   /**
    * Stats html element horizontal anchor.
    * @default "left"

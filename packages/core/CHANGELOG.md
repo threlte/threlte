@@ -1,5 +1,33 @@
 # @threlte/core
 
+## 8.0.0-next.21
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 8.0.0-next.20
+
+### Minor Changes
+
+- 1c73aa0: Add the isInstanceOf utility function
+
+### Patch Changes
+
+- b8b8214: Implement type guard utility, clean up
+
+## 8.0.0-next.19
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 8.0.0-next.18
+
+### Patch Changes
+
+- a340d61: Fix setting camera context in useCamera
+
 ## 8.0.0-next.17
 
 ### Major Changes

@@ -1,5 +1,23 @@
 # @threlte/studio
 
+## 0.1.0-next.14
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 0.1.0-next.13
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
+## 0.1.0-next.12
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 0.1.0-next.11
 
 ### Patch Changes

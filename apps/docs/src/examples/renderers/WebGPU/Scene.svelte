@@ -1,10 +1,8 @@
 <script lang="ts">
 import { T, useTask, useThrelte, watch } from '@threlte/core'
 import { OrbitControls } from '@threlte/extras'
-import * as THREE from 'three'
-import Stats from 'three/examples/jsm/libs/stats.module.js'
-
-import { MeshToonNodeMaterial } from 'three/webgpu'
+import Stats from 'three/addons/libs/stats.module.js'
+import * as THREE from 'three/webgpu'
 
 const { scene, size, renderer, invalidate } = useThrelte()
 
@@ -62,7 +60,7 @@ const randomizeRotationSpeed = (rotation: THREE.Euler) => {
 }
 
 for (let i = 0; i < count; i++) {
-  const material = new MeshToonNodeMaterial({
+  const material = new THREE.MeshToonNodeMaterial({
     color: new THREE.Color(Math.random() * 0xffffff),
     side: THREE.DoubleSide
   })
@@ -117,7 +115,4 @@ useTask(() => {
   />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight
-  color="0xffffff"
-  intensity={3.4}
-/>
+<T.DirectionalLight intensity={3.4} />

@@ -2,26 +2,22 @@
   import { T } from '@threlte/core'
   import { HTML, OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
-  import { Color, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
-  const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
+  const getRandomColor = () =>
+    `#${Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, '0')}`
 
-  let material = new MeshStandardMaterial({
-    color: new Color(getRandomColor())
-  })
-
-  const onClick = () => {
-    console.log('CLICK')
-    material.color.set(getRandomColor())
-  }
-
-  let isHovering = false
-  let isPointerDown = false
+  let color = $state(getRandomColor())
+  let isHovering = $state(false)
+  let isPointerDown = $state(false)
 
   let htmlPosZ = spring(0)
-  $: htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
-    hard: isPointerDown
+  $effect(() => {
+    htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
+      hard: isPointerDown
+    })
   })
 </script>
 
@@ -47,10 +43,8 @@
 
 <T.GridHelper />
 
-<T.Mesh
-  position.y={0.5}
-  {material}
->
+<T.Mesh position.y={0.5}>
+  <T.MeshStandardMaterial {color} />
   <T.SphereGeometry args={[0.5]} />
   <HTML
     position.y={1.25}
@@ -58,13 +52,15 @@
     transform
   >
     <button
-      onclick={onClick}
       onpointerenter={() => (isHovering = true)}
       onpointerleave={() => {
         isPointerDown = false
         isHovering = false
       }}
-      onpointerdown={() => (isPointerDown = true)}
+      onpointerdown={() => {
+        isPointerDown = true
+        color = getRandomColor()
+      }}
       onpointerup={() => (isPointerDown = false)}
       onpointercancel={() => {
         isPointerDown = false
@@ -83,9 +79,9 @@
   >
     <p
       class="w-auto translate-x-1/2 text-xs drop-shadow-lg"
-      style="color: #{material.color.getHexString()}"
+      style="color: {color}"
     >
-      color: #{material.color.getHexString()}
+      color: {color}
     </p>
   </HTML>
 </T.Mesh>
