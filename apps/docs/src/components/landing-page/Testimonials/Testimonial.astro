@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+	testimonial: CollectionEntry<'testimonials'>
+}
+
+const testimonial = Astro.props.testimonial.data
+---
+
+<a
+	href={testimonial.link}
+	rel="external"
+	class="mb-6 flex break-inside-avoid rounded-md border border-white/10 bg-white/5 p-6 text-[#fff9] no-underline shadow-xl duration-200 hover:bg-white/10 hover:shadow-2xl"
+>
+	<div class="flex flex-col gap-6">
+		<div class="flex gap-6">
+			<img
+				src={testimonial.image}
+				alt={testimonial.name + 'profile photo'}
+				class="h-12 w-12 rounded-full object-cover"
+			/>
+			<div>
+				<p class="m-0 text-lg font-medium">{testimonial.name}</p>
+				<p class="m-0 text-sm">{testimonial.title}</p>
+			</div>
+		</div>
+		<blockquote class="m-0" cite={testimonial.link}>
+			<p class="m-0">{testimonial.contents}</p>
+		</blockquote>
+	</div>
+</a>

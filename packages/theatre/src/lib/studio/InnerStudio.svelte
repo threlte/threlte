@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   import Studio from '@theatre/studio'
   import { studio } from '../consts'

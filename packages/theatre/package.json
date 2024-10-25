@@ -44,12 +44,12 @@
     "vite": "^5.2.8"
   },
   "peerDependencies": {
-    "svelte": ">=4",
-    "three": ">=0.155",
+    "@theatre/core": ">=0.6",
+    "@theatre/studio": ">=0.6",
     "@threlte/core": ">=8.0.0-next.0",
     "@threlte/extras": ">=9.0.0-next.0",
-    "@theatre/core": ">=0.6",
-    "@theatre/studio": ">=0.6"
+    "svelte": ">=4",
+    "three": ">=0.155"
   },
   "type": "module",
   "keywords": [

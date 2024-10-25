@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   let canvasModified = false
   let activeOccludeInstances = 0

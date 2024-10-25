@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new BoxGeometry(0.25, 0.25, 0.25)
   const material = new MeshStandardMaterial()

@@ -1,6 +1,6 @@
 <script
   lanng="ts"
-  context="module"
+  module
 >
   import { writable } from 'svelte/store'
   import { tweened } from 'svelte/motion'

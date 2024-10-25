@@ -1,5 +1,5 @@
 <script
-  context="module"
+  module
   lang="ts"
 >
   import { T, useTask, useParent, useThrelte, type Props } from '@threlte/core'
