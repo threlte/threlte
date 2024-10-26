@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CubeCameraProps } from './CubeCamera.svelte'
-  import { CubeCamera, Group, HalfFloatType, WebGLCubeRenderTarget } from 'three'
+  import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
 
   let {
@@ -8,23 +8,18 @@
     resolution = 256,
     near = 0.1,
     far = 1000,
-    envMap,
+    background = 'auto',
     fog,
     children,
     ref = $bindable(new Group()),
     ...props
   }: CubeCameraProps = $props()
 
-  const fbo = new WebGLCubeRenderTarget(1, { type: HalfFloatType })
-
-  let camera = $derived(new CubeCamera(near, far, fbo))
-
-  $effect.pre(() => {
-    // calls this.dispose
-    fbo.setSize(resolution, resolution)
-  })
+  const fbo = $derived(new WebGLCubeRenderTarget(resolution))
+  const camera = $derived(new CubeCamera(near, far, fbo))
 
   $effect(() => {
+    fbo
     return () => {
       // fbo may reference `this` in dispose
       fbo.dispose()
@@ -41,7 +36,7 @@
       inner.visible = false
       const originalFog = scene.fog
       const originalBackground = scene.background
-      scene.background = envMap ?? originalBackground
+      scene.background = background === 'auto' ? originalBackground : background
       scene.fog = fog ?? originalFog
       camera.update(renderer, scene)
       scene.background = originalBackground
