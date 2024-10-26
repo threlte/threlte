@@ -26,6 +26,7 @@ export type CubeCameraProps = Props<Group> & {
   near?: number
   /**
    * size of the render target. a higher resolution should have more detail
+   * @default 256
    */
   resolution?: number
   /**
@@ -33,7 +34,5 @@ export type CubeCameraProps = Props<Group> & {
    */
   children?: Snippet<[{ renderTarget: WebGLCubeRenderTarget }]>
 }
-
-type T = CubeCameraProps['children']
 
 export declare const CubeCamera: Component<CubeCameraProps>
