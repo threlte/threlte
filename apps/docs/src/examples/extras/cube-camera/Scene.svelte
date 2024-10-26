@@ -4,26 +4,25 @@
   import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
-  const { load } = useLoader(RGBELoader)
-
   type SceneProps = {
     far?: number
+    hdr_path?: string
     metalness?: number
     near?: number
     resolution?: number
     roughness?: number
-    hdr_path?: string
   }
 
   let {
     far = 1000,
+    hdr_path = 'auto',
     metalness = 1,
     near = 0.1,
     resolution = 256,
-    roughness = 0,
-    hdr_path = 'auto'
+    roughness = 0
   }: SceneProps = $props()
 
+  const { load } = useLoader(RGBELoader)
   let hdr = $derived(
     hdr_path === 'auto'
       ? ('auto' as const)
@@ -33,16 +32,16 @@
         })
   )
 
+  const colors = [0xff_00_ff, 0xff_ff_00, 0x00_ff_ff] as const
+  const m = (2 * Math.PI) / colors.length
+  const radius = 3
+
   let time = $state(0)
   let y = $derived(2 * Math.sin(time))
 
   useTask((delta) => {
     time += delta
   })
-
-  const colors = [0xff_00_ff, 0xff_ff_00, 0x00_ff_ff]
-  const m = (2 * Math.PI) / colors.length
-  const radius = 3
 </script>
 
 <T.PerspectiveCamera
@@ -79,14 +78,15 @@
     {resolution}
     position.y={y}
     {background}
+    frames={2}
   >
-    {#snippet children({ fbo })}
+    {#snippet children({ renderTarget })}
       <T.Mesh>
         <T.SphereGeometry />
         <T.MeshStandardMaterial
           {roughness}
           {metalness}
-          envMap={fbo.texture}
+          envMap={renderTarget.texture}
         />
       </T.Mesh>
     {/snippet}

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { CubeCameraProps } from './CubeCamera.svelte'
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
+  import type { CubeCameraProps } from './CubeCamera'
 
   let {
     frames = Infinity,
@@ -9,20 +9,20 @@
     near = 0.1,
     far = 1000,
     background = 'auto',
-    fog,
+    fog = 'auto',
     children,
     ref = $bindable(new Group()),
     ...props
   }: CubeCameraProps = $props()
 
-  const fbo = $derived(new WebGLCubeRenderTarget(resolution))
-  const camera = $derived(new CubeCamera(near, far, fbo))
+  const renderTarget = $derived(new WebGLCubeRenderTarget(resolution))
+  const camera = $derived(new CubeCamera(near, far, renderTarget))
 
   $effect(() => {
-    fbo
+    renderTarget
     return () => {
       // fbo may reference `this` in dispose
-      fbo.dispose()
+      renderTarget.dispose()
     }
   })
 
@@ -37,7 +37,7 @@
       const originalFog = scene.fog
       const originalBackground = scene.background
       scene.background = background === 'auto' ? originalBackground : background
-      scene.fog = fog ?? originalFog
+      scene.fog = fog === 'auto' ? originalFog : fog
       camera.update(renderer, scene)
       scene.background = originalBackground
       scene.fog = originalFog
@@ -56,6 +56,6 @@
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children({ ref, fbo })}
+    {@render children?.({ ref, renderTarget })}
   </T>
 </T>
