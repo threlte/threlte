@@ -2,20 +2,39 @@
   lang="ts"
   context="module"
 >
-  import { Box3, Group } from 'three'
-  import type { ResizeProps } from './Resize.svelte'
+  import { Box3 } from 'three'
 
   // reuse box for all instances
   const _box = new Box3()
+</script>
 
-  const resize = (
-    outer: Group,
-    inner: Group,
-    box: Box3,
-    precise: boolean,
-    axis: ResizeProps['axis'],
-    onresize: ResizeProps['onresize']
-  ) => {
+<script lang="ts">
+  import { Group } from 'three'
+  import type { ResizeProps } from './Resize'
+  import { injectPlugin, isInstanceOf, T, useStage, useTask, useThrelte } from '@threlte/core'
+  import { onMount, tick } from 'svelte'
+
+  let {
+    axis,
+    auto,
+    box = _box,
+    precise = true,
+    onresize,
+    ref = $bindable(new Group()),
+    children,
+    ...props
+  }: ResizeProps = $props()
+
+  const inner = new Group()
+  const outer = new Group()
+
+  const { renderStage } = useThrelte()
+
+  const beforeRenderStage = useStage(Symbol('before-render-resize'), {
+    before: renderStage
+  })
+
+  const resize = () => {
     outer.matrixWorld.identity()
     const { max, min } = box.setFromObject(inner, precise)
     const width = max.x - min.x
@@ -34,36 +53,10 @@
     outer.scale.setScalar(1 / denominator)
     onresize?.()
   }
-</script>
-
-<script lang="ts">
-  import { injectPlugin, isInstanceOf, T, useStage, useTask, useThrelte } from '@threlte/core'
-  import { onMount, tick } from 'svelte'
-
-  let {
-    axis,
-    auto,
-    box = _box,
-    precise = true,
-    onresize,
-    ref = $bindable(),
-    children,
-    ...props
-  }: ResizeProps = $props()
-
-  const group = new Group()
-  const inner = new Group()
-  const outer = new Group()
-
-  const { renderStage } = useThrelte()
-
-  const beforeRenderStage = useStage(Symbol('before-render-resize'), {
-    before: renderStage
-  })
 
   const { start: scheduleResizing, stop } = useTask(
     () => {
-      resize(outer, inner, _box, precise, axis, onresize)
+      resize()
       stop()
     },
     { autoStart: false, stage: beforeRenderStage }
@@ -92,13 +85,12 @@
 </script>
 
 <T
-  is={group}
-  bind:ref
+  is={ref}
   {...props}
 >
   <T is={outer}>
     <T is={inner}>
-      {@render children?.({ ref: group })}
+      {@render children?.({ ref, resize })}
     </T>
   </T>
 </T>

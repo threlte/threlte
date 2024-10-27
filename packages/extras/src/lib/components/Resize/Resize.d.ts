@@ -1,8 +1,8 @@
 import type { Box3, Group } from 'three'
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Component, Snippet } from 'svelte'
 
-export type ResizeProps = Props<Group> & {
+export type ResizeProps = Omit<Props<Group>, 'children'> & {
   /**
    * when true, resizes the group when objects are added or removed
    */
@@ -25,10 +25,12 @@ export type ResizeProps = Props<Group> & {
    * called after the group has been scaled
    */
   onresize?: () => void
+
+  children?: Snippet<[{ ref: Group; resize(): void }]>
 }
 
 type ResizeEventData = {
   boundingBox: Box3
 }
 
-export default class Resize extends SvelteComponent<ResizeProps> {}
+declare const Resize: Component<ResizeProps>
