@@ -9,9 +9,11 @@
 
   let { resize = true }: SceneProps = $props()
 
-  const promises = Promise.all(
-    ['Duck', 'Flower', 'Fox'].map((name) => useGltf(`/models/${name}.glb`))
-  )
+  const objects = ['Duck', 'Flower', 'Fox']
+
+  const promises = Promise.all(objects.map((name) => useGltf(`/models/${name}.glb`)))
+
+  const increment = (2 * Math.PI) / objects.length
 
   const camera = new PerspectiveCamera()
   camera.position.setScalar(5)
@@ -63,12 +65,11 @@
 <T.DirectionalLight position={[1, 5, 3]} />
 
 {#await promises then objects}
-  {@const m = (2 * Math.PI) / objects.length}
   {#each objects as { scene }, i}
-    {@const f = m * i}
+    {@const r = increment * i}
     <T.Group
-      position.x={Math.cos(f)}
-      position.z={Math.sin(f)}
+      position.x={Math.cos(r)}
+      position.z={Math.sin(r)}
     >
       {#if resize}
         <Resize>
