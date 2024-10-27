@@ -88,6 +88,8 @@ The `children` snippet also has access to the cube camera and a `restart` functi
 
 By default, `frames` is set to `Infinity` which means the scene is rendered to the render target every frame. This is sometimes unnecessary especially if you have a static scene. To improve performance, you can use the `frames` prop to control how many times the scene should be rendered.
 
+For moving objects, let frames default to `Infinity`. If you have a static scene, set `frames` equal to the number of `<CubeCameras>` in the scene. This will allow each one to render and then be picked up in the reflections of each other.
+
 ## Scene Props
 
 `<CubeCamera>` accepts a `background` prop that can be used to set the background of the scene when rendering to the render target. By default the current `scene.background` is used. `background` can be any valid [Scene.background](https://threejs.org/docs/index.html#api/en/scenes/Scene.background).
