@@ -73,6 +73,7 @@
   {@const r = increment * i}
   <T.Mesh
     position.x={radius * Math.cos(r)}
+    position.y={i}
     position.z={radius * Math.sin(r)}
   >
     <T.MeshStandardMaterial {color} />
@@ -90,14 +91,14 @@
 {#await textures then textureRecord}
   {@const background = isHdrKey(hdr) ? textureRecord[hdr] : hdr}
   {#each Array(colors.length) as _, i}
-    {@const r = 0.25 * Math.PI + increment * i}
+    {@const r = Math.PI + increment * i}
     <CubeCamera
       {near}
       {far}
       {resolution}
       {background}
       {frames}
-      position.y={y}
+      position.y={y + i}
       position.x={radius * Math.cos(r)}
       position.z={radius * Math.sin(r)}
     >
