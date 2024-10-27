@@ -1,43 +1,51 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import Scene from './Scene.svelte'
-  import { Folder, List, Pane, Slider } from 'svelte-tweakpane-ui'
+  import Scene, { hdrs } from './Scene.svelte'
+  import { Checkbox, Folder, List, Pane, Slider } from 'svelte-tweakpane-ui'
   import type { ListOptions } from 'svelte-tweakpane-ui'
 
   const resolutionOptions: ListOptions<number> = {
-    low: 128,
-    medium: 256,
-    high: 512
+    128: 128,
+    256: 256,
+    512: 512
   } as const
 
-  const environmentOptions: ListOptions<string> = {
+  const environmentOptions: { [Key in keyof typeof hdrs]: Key } & { auto: 'auto' } = {
     auto: 'auto',
-    industrial: 'industrial_sunset_puresky_1k.hdr',
-    workshop: 'aerodynamics_workshop_1k.hdr',
-    veld: 'mpumalanga_veld_puresky_1k.hdr'
+    industrial: 'industrial',
+    puresky: 'puresky',
+    workshop: 'workshop'
   } as const
 
-  let resolution = $state(256)
-  let metalness = $state(1)
-  let roughness = $state(0)
   let hdr = $state('auto')
-  let hdr_path = $derived(hdr === 'auto' ? hdr : `/hdr/${hdr}`)
+  let metalness = $state(1)
+  let resolution = $state(256)
+  let roughness = $state(0)
+
+  let capFrames = $state(false)
+  let frames = $derived(capFrames ? 3 : Infinity)
 </script>
 
 <Pane
   position="fixed"
   title="CubeCamera"
 >
-  <List
-    bind:value={resolution}
-    label="resolution"
-    options={resolutionOptions}
-  />
-  <List
-    bind:value={hdr}
-    label="environment"
-    options={environmentOptions}
-  />
+  <Folder title="render target">
+    <List
+      bind:value={resolution}
+      label="resolution"
+      options={resolutionOptions}
+    />
+    <List
+      bind:value={hdr}
+      label="environment"
+      options={environmentOptions}
+    />
+    <Checkbox
+      bind:value={capFrames}
+      label="cap frames"
+    />
+  </Folder>
   <Folder title="texture">
     <Slider
       bind:value={metalness}
@@ -59,10 +67,11 @@
 <div>
   <Canvas>
     <Scene
-      {resolution}
+      {frames}
+      {hdr}
       {metalness}
+      {resolution}
       {roughness}
-      {hdr_path}
     />
   </Canvas>
 </div>

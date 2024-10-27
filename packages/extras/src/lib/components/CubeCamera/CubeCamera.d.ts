@@ -1,8 +1,8 @@
 import type { Component, Snippet } from 'svelte'
-import type { Group, Scene, WebGLCubeRenderTarget } from 'three'
+import type { CubeCamera as ThreeCubeCamera, Group, Scene, WebGLCubeRenderTarget } from 'three'
 import type { Props } from '@threlte/core'
 
-export type CubeCameraProps = Props<Group> & {
+export type CubeCameraProps = Omit<Props<Group>, 'children'> & {
   /**
    * background that will be set before rendering to the render target. a value of `'auto'` will use the current background
    * @default 'auto'
@@ -30,9 +30,11 @@ export type CubeCameraProps = Props<Group> & {
    */
   resolution?: number
   /**
-   * the children snippet has access to the underlying render target
+   * the children snippet has access to the underlying cube camera, the render target, and the outer group
    */
-  children?: Snippet<[{ renderTarget: WebGLCubeRenderTarget }]>
+  children?: Snippet<
+    [{ camera: ThreeCubeCamera; ref: Group; renderTarget: WebGLCubeRenderTarget; restart(): void }]
+  >
 }
 
 export declare const CubeCamera: Component<CubeCameraProps>

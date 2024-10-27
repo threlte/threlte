@@ -2,14 +2,15 @@
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
   import type { CubeCameraProps } from './CubeCamera'
+  import { untrack } from 'svelte'
 
   let {
-    frames = Infinity,
-    resolution = 256,
-    near = 0.1,
-    far = 1000,
     background = 'auto',
+    far = 1000,
     fog = 'auto',
+    frames = Infinity,
+    near = 0.1,
+    resolution = 256,
     children,
     ref = $bindable(new Group()),
     ...props
@@ -31,22 +32,46 @@
   const inner = new Group()
 
   let count = 0
-  const { stop } = useTask(() => {
-    if (count < frames) {
-      inner.visible = false
-      const originalFog = scene.fog
-      const originalBackground = scene.background
-      scene.background = background === 'auto' ? originalBackground : background
-      scene.fog = fog === 'auto' ? originalFog : fog
-      camera.update(renderer, scene)
-      scene.background = originalBackground
-      scene.fog = originalFog
-      inner.visible = true
-      count += 1
-    } else {
+  const { start, stop, started } = useTask(
+    () => {
+      // if frames === Infinity, the task will run indefinitely
+      if (count < frames) {
+        inner.visible = false
+        const originalFog = scene.fog
+        const originalBackground = scene.background
+        scene.background = background === 'auto' ? originalBackground : background
+        scene.fog = fog === 'auto' ? originalFog : fog
+        camera.update(renderer, scene)
+        scene.background = originalBackground
+        scene.fog = originalFog
+        inner.visible = true
+        // if frames is Infinity, Infinity - 1 === Infinity and the task will continue,
+        // otherwise countdown to 0 and stop
+        count += 1
+      } else {
+        stop()
+      }
+    },
+    { autoStart: false }
+  )
+
+  const restart = () => {
+    if ($started) {
       stop()
-      count = 0
     }
+    count = 0
+    start()
+  }
+
+  // if any of these props update, the task will need to be restarted
+  $effect(() => {
+    background
+    far
+    fog
+    frames
+    near
+    resolution
+    untrack(restart)
   })
 </script>
 
@@ -56,6 +81,6 @@
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children?.({ ref, renderTarget })}
+    {@render children?.({ camera, ref, renderTarget, restart })}
   </T>
 </T>
