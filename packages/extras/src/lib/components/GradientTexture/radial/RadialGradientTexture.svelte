@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { RadialGradientTextureProps } from './RadialGradientTexture.svelte'
+  import type { RadialGradientTextureProps } from './RadialGradientTexture'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
@@ -74,6 +74,7 @@
   attach="map"
   colorSpace={$colorSpace}
   {...props}
+  bind:ref
 >
   {@render children?.({ ref: texture })}
 </T>

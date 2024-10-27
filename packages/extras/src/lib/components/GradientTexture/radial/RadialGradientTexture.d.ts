@@ -1,10 +1,16 @@
 import type { CanvasTexture } from 'three'
 import type { GradientStop, RadialGradientOuterRadius } from '../types'
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { Component } from 'svelte'
 
 export type RadialGradientTextureProps = Props<CanvasTexture> & {
+  /**
+   * inner radius of the gradient
+   */
   innerRadius?: number
+  /**
+   * outer radius of the gradient
+   */
   outerRadius?: RadialGradientOuterRadius
   /**
    * height of the underlying canvas
@@ -20,4 +26,4 @@ export type RadialGradientTextureProps = Props<CanvasTexture> & {
   stops?: GradientStop[]
 }
 
-export default class RadialGradientTexture extends SvelteComponent<RadialGradientTextureProps> {}
+declare const RadialGradientTexture: Component<RadialGradientTextureProps>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LinearGradientTextureProps } from './LinearGradientTexture.svelte'
+  import type { LinearGradientTextureProps } from './LinearGradientTexture'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
@@ -62,6 +62,7 @@
 
 <T
   is={texture}
+  bind:ref
   attach="map"
   colorSpace={$colorSpace}
   {...props}

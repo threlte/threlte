@@ -1,7 +1,7 @@
 import type { CanvasTexture } from 'three'
 import type { GradientStop } from '../types'
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import { Component } from 'svelte'
 
 export type LinearGradientTextureProps = Props<CanvasTexture> & {
   /**
@@ -34,4 +34,4 @@ export type LinearGradientTextureProps = Props<CanvasTexture> & {
   stops?: GradientStop[]
 }
 
-export default class LinearGradientTexture extends SvelteComponent<LinearGradientTextureProps> {}
+declare const LinearGradientTexture: Component<LinearGradientTextureProps>
