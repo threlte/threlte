@@ -1,7 +1,7 @@
 <script lang="ts">
+  import type { CubeCameraProps } from './CubeCamera'
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import type { CubeCameraProps } from './CubeCamera'
   import { untrack } from 'svelte'
 
   let {
@@ -45,8 +45,6 @@
         scene.background = originalBackground
         scene.fog = originalFog
         inner.visible = true
-        // if frames is Infinity, Infinity - 1 === Infinity and the task will continue,
-        // otherwise countdown to 0 and stop
         count += 1
       } else {
         stop()
