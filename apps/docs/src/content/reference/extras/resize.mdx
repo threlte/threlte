@@ -34,17 +34,16 @@ componentSignature:
   }
 ---
 
-<Example path="extras/resize/plugin-test" />
+Scales up or down a group of objects by the maximum dimension of their bounding
+box. Object proportions are preserved. This is particularly useful if you want
+to "normalize" the dimensions of an object to be in the range 0 to 1.
 
-Scales up or down a group of objects by the maximum dimension of their bounding box. Object proportions are preserved. This is particularly useful if you want to "normalize" the dimensions of an object to be in the range 0 to 1.
-
-<Example path="extras/resize/multiple-objects" />
-
-In the example above, objects of various source sizes are resized so that they're more or less within the same range. If you check off _resize_, you can see that the fox is so large that the camera has to pull back just to see it. Likewise, the flower is so small that it's hard to find it in the scene.
+<Example path="extras/resize/plugin" />
 
 ## Choosing the Axis
 
-You can choose the axis by providing the `axis` prop, otherwise the maximum axis is used.
+You can choose the axis by providing the `axis` prop, otherwise the maximum axis
+is used.
 
 ```svelte
 <Resize axis="x">
@@ -59,7 +58,8 @@ You can choose the axis by providing the `axis` prop, otherwise the maximum axis
 
 ## Bring Your Own Box
 
-Use the `box` prop to provide your own Box3 instance. Doing so allows you to capture the bounding box of the objects prior to any scaling
+Use the `box` prop to provide your own Box3 instance. Doing so allows you to
+capture the bounding box of the objects prior to any scaling
 
 ```svelte
 <script>
@@ -76,4 +76,6 @@ Use the `box` prop to provide your own Box3 instance. Doing so allows you to cap
 
 ## Normalizing Multiple Objects
 
-If you have a bunch of source objects that are all different sizes, a useful technique is to wrap each one in a `<Resize>`. Once they've all been normalized, it may be easier to think about their relative sizes.
+If you have a bunch of source objects that are all different sizes, a useful
+technique is to wrap each one in a `<Resize>`. Once they've all been normalized,
+it may be easier to think about their relative sizes.
