@@ -1,4 +1,4 @@
-import type { Props } from '@threlte/core'
+import type { Props, Stage } from '@threlte/core'
 import type { SvelteComponent, Snippet } from 'svelte'
 import type { Box3, Group, Object3D, Sphere, Vector3 } from 'three'
 
@@ -20,6 +20,7 @@ export interface AlignProps extends Omit<Props<Group>, 'children'> {
   children: Snippet<[{ align: () => void; ref: Group }]>
 
   onalign?: (event: AlignEventData) => void
+  stage?: Stage
 }
 
 type AlignEventData = {
