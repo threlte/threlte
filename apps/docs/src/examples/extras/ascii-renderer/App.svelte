@@ -39,7 +39,7 @@
         bind:value={options.scale}
         label="scale"
         min={1}
-        max={10}
+        max={3}
         step={1}
       />
       <Slider
