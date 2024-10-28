@@ -13,5 +13,5 @@
   {vertexShader}
   {...props}
 >
-  {@render children(ref)}
+  {@render children?.(ref)}
 </T.ShaderMaterial>
