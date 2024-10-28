@@ -45,9 +45,9 @@
       <Slider
         bind:value={options.resolution}
         label="resolution"
-        min={0.1}
-        max={0.3}
-        step={0.1}
+        min={0.05}
+        max={0.2}
+        step={0.05}
       />
       <Checkbox
         bind:value={options.invert}
