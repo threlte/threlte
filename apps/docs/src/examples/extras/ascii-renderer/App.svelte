@@ -45,8 +45,8 @@
       <Slider
         bind:value={options.resolution}
         label="resolution"
-        min={0}
-        max={1}
+        min={0.1}
+        max={0.3}
         step={0.1}
       />
       <Slider
@@ -61,13 +61,15 @@
         label="invert"
       />
       <Checkbox
-        bind:value={options.block}
-        label="block"
-      />
-      <Checkbox
         bind:value={options.color}
         label="color"
       />
+      {#if options.color}
+        <Checkbox
+          bind:value={options.block}
+          label="block"
+        />
+      {/if}
     </Folder>
     <Folder title="props">
       <Text

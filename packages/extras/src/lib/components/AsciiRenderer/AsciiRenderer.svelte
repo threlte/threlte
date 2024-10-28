@@ -5,8 +5,8 @@
 
   let {
     characters = ' .:-+*=%@#',
-    bgColor = 'black',
-    fgColor = 'white',
+    bgColor = '#000000',
+    fgColor = '#ffffff',
     options = {}
   }: AsciiEffectProps = $props()
 

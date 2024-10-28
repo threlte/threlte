@@ -1,10 +1,98 @@
 ---
-order: 9.5
+order: 9.10
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/AsciiRenderer/AsciiRenderer.svelte'
 name: <AsciiRenderer>
 type: 'component'
-componentSignature: { 'props': [] }
+componentSignature:
+  {
+    'props':
+      [
+        {
+          'name': 'characters',
+          default: ' .:-+*=%@#',
+          description: 'character set used by the renderer. should be sorted from least to most opaque',
+          required: false,
+          type: 'string'
+        },
+        {
+          'name': 'bgColor',
+          default: "'#000000'",
+          description: 'background color used when `options.color` is set to `false`',
+          required: false,
+          type: 'string'
+        },
+        {
+          'name': 'fgColor',
+          default: "'#ffffff'",
+          description: 'text color used when `options.color` is set to `false`',
+          required: false,
+          type: 'string'
+        },
+        {
+          'name': 'options',
+          type: 'Three.AsciiEffectOptions',
+          required: false,
+          default: '{}',
+          description: "object passed to the effect's constructor. because the effect doesn't support adjusting individual option props, whenever an option prop changes, the effect must be recreated"
+        }
+      ]
+  }
 ---
 
+A wrapper around Three's AsciiRenderer addon. It replaces the main render function with a function that renders the scene to an HTML table and overlays it on top of the canvas. Areas with a higher "brightness" are mapped to characters that appear "fuller".
+
 <Example path="extras/ascii-renderer" />
+
+## Usage
+
+Typically you'd use `<AsciiRenderer>` alongside your main `Scene` component. `<AsciiRenderer>` creates an absolutely postioned table element that is appended to the dom element of the `<Canvas>`. You may need to set the wrapping element's position to `relative`
+
+```svelte
+<div>
+  <Canvas>
+    <AsciiRenderer />
+    <Scene />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    position: relative;
+  }
+</style>
+```
+
+## Characters
+
+The `characters` prop should be sorted by ascending "opaqueness".
+
+```svelte
+<AsciiRenderer characters=" #" />
+```
+
+The example above uses a character set with two characters - ` ` and `#`.
+
+## Colors
+
+By default the renderer sets `options.color` to `false` and will only use the colors given by the `fgColor` and `bgColor` props. `fgColor` and `bgColor` can be any acceptable CSS color string. If your color contains an alpha component, make sure to set `options.alpha` to `true`.
+
+If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and the colors of the scene will be used for each individual colors.
+
+```svelte
+<AsciiRenderer options={{ color: true }} />
+```
+
+<Tip type="info">
+  Setting `options.color` to `true` really slows down performance but it can be used if you have a
+  static scene or only need to render the scene on demand.
+</Tip>
+
+## Other Options Props
+
+Because the renderer doesn't support dynamically updating options, any time an option property changes, a new renderer must be created. For this reason, `options` is passed as an object to `<AsciiRenderer>`
+
+- `options.block` makes the characters into color blocks. It is only applied if `options.color` is `true`.
+- `options.invert` inverts the `fgColor` and `bgColor` colors. `invert` is ignored if `options.colors` is set to `true`.
+- `options.resolution` controls how detailed the render is.
+- `options.scale` controls the scale of the characters. Note that zooming the camera does not control the size of the characters.
