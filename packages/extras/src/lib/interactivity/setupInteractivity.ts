@@ -1,4 +1,4 @@
-import { memoize, watch } from '@threlte/core'
+import { watch } from '@threlte/core'
 import type * as THREE from 'three'
 import { type InteractivityContext, useInteractivity } from './context'
 import type { DomEvent, Intersection, IntersectionEvent } from './types'
@@ -58,10 +58,8 @@ export const setupInteractivity = (context: InteractivityContext) => {
     }
   }
 
-  const enabled = memoize(context.enabled)
-
   const getHits = (): Intersection[] => {
-    if (!enabled.current) return []
+    if (!context.enabled.current) return []
 
     const intersections: Intersection[] = []
     const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)

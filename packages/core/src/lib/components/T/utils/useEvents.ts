@@ -26,7 +26,7 @@ export const useEvents = <T>(props: Props = {}) => {
     }
   }
 
-  const addEventListeners = (ref: EventDispatcher, props: Props) => {
+  const addEventListeners = (ref: EventDispatcher<Record<string, unknown>>, props: Props) => {
     const eventNames: string[] = []
 
     for (const eventName of Object.keys(props)) {

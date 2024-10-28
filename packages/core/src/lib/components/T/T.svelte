@@ -2,7 +2,6 @@
   lang="ts"
   generics="Type"
 >
-  import { untrack } from 'svelte'
   import type { Props } from './types'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
