@@ -93,6 +93,6 @@ If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and
 Because the renderer doesn't support dynamically updating options, any time an option property changes, a new renderer must be created. For this reason, `options` is passed as an object to `<AsciiRenderer>`
 
 - `options.block` makes the characters into color blocks. It is only applied if `options.color` is `true`.
-- `options.invert` inverts the `fgColor` and `bgColor` colors. `invert` is ignored if `options.colors` is set to `true`.
+- `options.invert` inverts the `fgColor` and `bgColor` colors.
 - `options.resolution` controls how detailed the render is.
 - `options.scale` controls the scale of the characters. Note that zooming the camera does not control the size of the characters.
