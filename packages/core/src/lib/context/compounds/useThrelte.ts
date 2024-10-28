@@ -1,10 +1,3 @@
-import type { Scheduler, Stage, Task } from '../../frame-scheduling'
-import type { CurrentReadable, CurrentWritable } from '../../lib/storeUtils'
-import { useCamera } from '../fragments/camera'
-import { useCanvas, type Size } from '../fragments/canvas'
-import { useRenderer } from '../fragments/renderer.svelte'
-import { useScene } from '../fragments/scene'
-import { useScheduler } from '../fragments/scheduler.svelte'
 import {
   Scene,
   type Camera,
@@ -13,6 +6,13 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
+import type { Scheduler, Stage, Task } from '../../frame-scheduling'
+import type { CurrentReadable, CurrentWritable } from '../../utilities'
+import { useCamera } from '../fragments/camera'
+import { useCanvas, type Size } from '../fragments/canvas'
+import { useRenderer } from '../fragments/renderer.svelte'
+import { useScene } from '../fragments/scene'
+import { useScheduler } from '../fragments/scheduler.svelte'
 
 /**
  * ### `ThrelteContext`

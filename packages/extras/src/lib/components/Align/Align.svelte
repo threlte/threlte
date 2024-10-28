@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { T, useTask, useStage, useThrelte } from '@threlte/core'
+  import { T, useTask, useStage, useThrelte, observe } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
   import type { AlignProps } from './Align.svelte'
-  import { injectAlignPlugin } from './alignPlugin'
+  import { injectAlignPlugin } from './alignPlugin.svelte'
 
   let {
     x = 0,

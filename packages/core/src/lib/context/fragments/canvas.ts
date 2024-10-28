@@ -1,5 +1,5 @@
 import { getContext, onMount, setContext } from 'svelte'
-import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../lib/storeUtils'
+import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities'
 
 export type Size = {
   width: number

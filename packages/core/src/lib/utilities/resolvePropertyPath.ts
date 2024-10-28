@@ -1,20 +1,15 @@
 /**
  * ### `resolvePropertyPath`
  *
- * Threlte supports props called "pierced props" that allow you to set
- * properties on nested objects. This function resolves a property path to a
- * target object and the property key. The property path can include dots to indicate
- * nested objects.
+ * This function resolves a property path to a target object and the property
+ * key. The property path can include dots to indicate nested objects.
  *
- * ```svelte
- * <T.PerspectiveCamera position.x={10} />
- * ```
+ *  ```ts
+ * const object = { position: { x: 0 } }
+ * const { target, key } = resolvePropertyPath(object, 'position.x')
  *
- * … resolves to …
- *
- * ```ts
- * const { target, key } = resolvePropertyPath(camera, 'position.x')
- * target[key] = 10
+ * // target is { x: 0 }
+ * // key is 'x'
  * ```
  */
 export const resolvePropertyPath = (target: any, propertyPath: string) => {

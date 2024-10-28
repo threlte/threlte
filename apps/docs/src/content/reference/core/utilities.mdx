@@ -5,14 +5,18 @@ sourcePath: 'packages/core/src/lib/lib/storeUtils.ts'
 order: 6.2
 ---
 
-Threlte comes with a few utilities that are catered towards the use in a Threlte application but can also be used in other projects.
+Threlte comes with a few utilities that are catered towards the use in a Threlte
+application but can also be used in other projects.
 
 ## `watch`
 
-Watch a single store or multiple stores and call a callback when they change to trigger side effects. The callback will be called immediately with the current value of the store.
+Watch a single store or multiple stores and call a callback when they change to
+trigger side effects. The callback will be called immediately with the current
+value of the store.
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
 })
@@ -25,6 +29,7 @@ You can also watch multiple stores:
 ```ts
 const store1 = writable(0)
 const store2 = writable(1)
+
 watch([store1, store2], ([value1, value2]) => {
   console.log(value1, value2) // 0 1
 })
@@ -34,6 +39,7 @@ The callback can return a cleanup function that will be called when the stores c
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
   return () => {
@@ -44,38 +50,37 @@ watch(store, (value) => {
 
 ---
 
-## `memoize`
+## `observe`
 
-Use a single store or multiple stores and return the value(s) as an object.
-This is useful for using stores in a non-reactive way e.g. in loops.
-
-```ts
-const numberStore = writable(0)
-const memoized = memoize(numberStore) // { current: 0 }
-
-useTask(() => {
-  numberStore.update((n) => n + 1)
-  console.log(memoized.current) // 1, 2, 3, ...
-})
-
-const stringStore = writable('hello')
-const memoized = memoize([numberStore, stringStore])
-console.log(memoized.current) // [0, 'hello']
-```
-
-<Tip type="info">This utility function needs to be called during component initialization.</Tip>
-
-You can also pass a transform function to transform the values:
+Watch a single or multiple reactive values or stores and call a callback when
+they change. This is the runes-equivalent to [`watch`](#watch) and supports both
+stores and reactive values. It does however serve a different purpose: As
+opposed to `watch`, the provided callback is not called synchronously when
+stores or reactive values change but in the next microtask. This utility uses
+[Svelte's `$effect`](https://svelte.dev/docs/svelte/$effect) under the hood.
 
 ```ts
-const store = writable(0)
-const doubled = memoize(store, (n) => n * 2) // { current: 0 }
+let count = $state(0)
+let name = $state('John')
+const iteration = writable(0)
 
-useTask(() => {
-  store.update((n) => n + 1)
-  console.log(doubled.current) // 2, 4, 6, ...
-})
+observe(
+  () => [count, iteration],
+  ([count, iteration]) => {
+    // This callback is only called when `count` or `iteration` changes
+    // and not when `name` changes.
+    console.log(count, iteration, name)
+  }
+)
 ```
+
+---
+
+## `observe.pre`
+
+This is the same as [`observe`](#observe) but it uses
+[`$effect.pre`](https://svelte.dev/docs/svelte/$effect#$effect.pre) instead of
+`$effect`.
 
 ---
 

@@ -1,8 +1,8 @@
 import { getContext, setContext } from 'svelte'
 import { PerspectiveCamera, type Camera } from 'three'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities'
 import { useCanvas } from './canvas'
 import { useScheduler } from './scheduler.svelte'
-import { currentWritable, watch, type CurrentWritable } from '../../lib/storeUtils'
 
 type CameraContext = {
   camera: CurrentWritable<Camera>

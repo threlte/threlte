@@ -297,10 +297,10 @@ importers:
         version: 5.0.5
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.0.5)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.0.5)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.0.5)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.0.5)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.5)(typescript@5.4.5)
@@ -443,10 +443,10 @@ importers:
         version: 5.0.5
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.0.5)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.0.5)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.0.5)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.0.5)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.0.5)(typescript@5.4.5)
@@ -8361,7 +8361,7 @@ snapshots:
   '@babel/code-frame@7.25.9':
     dependencies:
       '@babel/highlight': 7.25.9
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.23.5': {}
 
@@ -8549,7 +8549,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.25.9
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/parser@7.23.9':
     dependencies:
@@ -15309,7 +15309,7 @@ snapshots:
     dependencies:
       chokidar: 3.6.0
       immutable: 4.3.6
-      source-map-js: 1.2.0
+      source-map-js: 1.2.1
 
   save-pixels@2.3.6:
     dependencies:
