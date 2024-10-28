@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   import { Box3 } from 'three'
 
@@ -9,10 +9,18 @@
 </script>
 
 <script lang="ts">
+  import {
+    isInstanceOf,
+    observe,
+    T,
+    useStage,
+    useTask,
+    useThrelte,
+    type Plugin
+  } from '@threlte/core'
   import { Group } from 'three'
+  import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { ResizeProps } from './Resize'
-  import { injectPlugin, isInstanceOf, T, useStage, useTask, useThrelte } from '@threlte/core'
-  import { onMount, tick } from 'svelte'
 
   let {
     axis,
@@ -21,7 +29,9 @@
     precise = true,
     onresize,
     ref = $bindable(new Group()),
+    resize = $bindable(),
     children,
+    stage,
     ...props
   }: ResizeProps = $props()
 
@@ -30,11 +40,13 @@
 
   const { renderStage } = useThrelte()
 
-  const beforeRenderStage = useStage(Symbol('before-render-resize'), {
-    before: renderStage
-  })
+  const resizeStage =
+    stage ??
+    useStage(Symbol('<Resize>'), {
+      before: renderStage
+    })
 
-  const resize = () => {
+  const doResize = () => {
     outer.matrixWorld.identity()
     const { max, min } = box.setFromObject(inner, precise)
     const width = max.x - min.x
@@ -56,32 +68,28 @@
 
   const { start: scheduleResizing, stop } = useTask(
     () => {
-      resize()
+      doResize()
       stop()
     },
-    { autoStart: false, stage: beforeRenderStage }
+    { autoStart: false, stage: resizeStage }
   )
 
-  onMount(scheduleResizing)
+  resize = scheduleResizing
 
-  injectPlugin('resize', ({ ref }) => {
-    if (!isInstanceOf(ref, 'Object3D')) return
+  observe(() => [axis, precise], scheduleResizing)
 
-    onMount(() => {
-      if (auto) {
-        scheduleResizing()
-        return scheduleResizing
-      }
-    })
-
-    return {
-      onRefChange() {
-        if (auto) {
-          tick().then(scheduleResizing)
+  const plugin: Plugin = (args) => {
+    if (!isInstanceOf(args.ref, 'Object3D')) return
+    observe.pre(
+      () => [args.ref],
+      () => {
+        if (auto) scheduleResizing()
+        return () => {
+          if (auto) scheduleResizing()
         }
       }
-    }
-  })
+    )
+  }
 </script>
 
 <T
@@ -90,7 +98,12 @@
 >
   <T is={outer}>
     <T is={inner}>
-      {@render children?.({ ref, resize })}
+      <InjectPlugin
+        name="resize"
+        {plugin}
+      >
+        {@render children?.({ ref, resize: scheduleResizing })}
+      </InjectPlugin>
     </T>
   </T>
 </T>
