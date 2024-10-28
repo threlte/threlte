@@ -49,13 +49,6 @@
         max={0.3}
         step={0.1}
       />
-      <Slider
-        bind:value={options.alpha}
-        label="alpha"
-        min={0}
-        max={1}
-        step={0.1}
-      />
       <Checkbox
         bind:value={options.invert}
         label="invert"
