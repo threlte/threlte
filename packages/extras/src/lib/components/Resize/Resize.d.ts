@@ -5,6 +5,8 @@ import type { Component, Snippet } from 'svelte'
 export type ResizeProps = Omit<Props<Group>, 'children'> & {
   /**
    * when true, resizes the group when objects are added or removed
+   *
+   * @default false
    */
   auto?: boolean
   /**
@@ -18,6 +20,8 @@ export type ResizeProps = Omit<Props<Group>, 'children'> & {
   /**
    * whether to use precise bounding box calculation
    * https://threejs.org/docs/index.html#api/en/math/Box3.setFromObject
+   *
+   * @default true
    */
   precise?: boolean
   /**

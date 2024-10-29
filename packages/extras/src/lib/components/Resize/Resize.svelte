@@ -22,29 +22,23 @@
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { ResizeProps } from './Resize'
 
+  const { renderStage } = useThrelte()
+
   let {
     axis,
-    auto,
+    auto = false,
     box = _box,
     precise = true,
     onresize,
-    ref = $bindable(new Group()),
     resize = $bindable(),
+    stage = useStage(Symbol('<Resize>'), { before: renderStage }),
+    ref = $bindable(new Group()),
     children,
-    stage,
     ...props
   }: ResizeProps = $props()
 
   const inner = new Group()
   const outer = new Group()
-
-  const { renderStage } = useThrelte()
-
-  const resizeStage =
-    stage ??
-    useStage(Symbol('<Resize>'), {
-      before: renderStage
-    })
 
   const doResize = () => {
     outer.matrixWorld.identity()
@@ -71,7 +65,7 @@
       doResize()
       stop()
     },
-    { autoStart: false, stage: resizeStage }
+    { autoStart: false, stage }
   )
 
   resize = scheduleResizing

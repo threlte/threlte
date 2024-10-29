@@ -17,6 +17,27 @@ componentSignature:
           default: 'undefined'
         },
         {
+          default: 'false',
+          description: 'when true, will automatically resize when children or added or removed',
+          name: 'auto',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          default: 'useStage(/* ... */)',
+          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
+          name: 'stage',
+          required: false,
+          type: 'Stage'
+        },
+        {
+          default: 'undefined',
+          description: 'a callback function to run whenever resizing is done',
+          name: 'onresize',
+          required: false,
+          type: '() => void'
+        },
+        {
           description: 'Bring your own box to capture the bounding box.',
           name: 'box',
           required: false,
