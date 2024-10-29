@@ -1,9 +1,18 @@
 <script lang="ts">
-  import { T, useTask, useStage, useThrelte, observe } from '@threlte/core'
-  import { onMount } from 'svelte'
+  import {
+    isInstanceOf,
+    observe,
+    T,
+    useStage,
+    useTask,
+    useThrelte,
+    type Plugin
+  } from '@threlte/core'
   import { Box3, Group, Sphere, Vector3 } from 'three'
+  import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { AlignProps } from './Align.svelte'
-  import { injectAlignPlugin } from './alignPlugin.svelte'
+
+  const { renderStage } = useThrelte()
 
   let {
     x = 0,
@@ -13,29 +22,17 @@
     auto = false,
     ref = $bindable(),
     calculate = $bindable(),
-    align = $bindable(),
     onalign,
     children,
+    stage = useStage('<Align>', { before: renderStage }),
     ...props
   }: AlignProps = $props()
-
-  const { invalidate, renderStage } = useThrelte()
 
   const group = new Group()
   const innerGroup = new Group()
   const outerGroup = new Group()
 
-  let mounted = $state(false)
-
-  onMount(() => {
-    mounted = true
-  })
-
   calculate = () => {
-    // we're only aligning when the component mounted, meaning all child
-    // component have been mounted as well.
-    if (!mounted) return
-
     // return early if all axes are false
     if (x === false && y === false && z === false) return
 
@@ -74,10 +71,6 @@
     })
   }
 
-  const beforeRenderStage = useStage(Symbol('before-render'), {
-    before: renderStage
-  })
-
   /**
    * We're only aligning at most *once* per frame, so even if a lot of child
    * components request aligning, it's only done *once*.
@@ -85,35 +78,28 @@
   const { start: scheduleAligning, stop } = useTask(
     () => {
       calculate()
-      invalidate()
       stop()
     },
-    { autoStart: false, autoInvalidate: false, stage: beforeRenderStage }
+    { autoStart: false, stage }
   )
 
-  /** Force a recalculation of the bounding box. */
-  align = () => {
-    scheduleAligning()
+  /** Provide component export */
+  export const align = scheduleAligning
+
+  observe(() => [x, y, z, precise], scheduleAligning)
+
+  const plugin: Plugin = (args) => {
+    if (!isInstanceOf(args.ref, 'Object3D')) return
+    observe.pre(
+      () => [args.ref],
+      () => {
+        if (auto) scheduleAligning()
+        return () => {
+          if (auto) scheduleAligning()
+        }
+      }
+    )
   }
-
-  /**
-   * We're only recalculating when the props change and the component is
-   * mounted.
-   */
-  $effect(() => {
-    if (!mounted) return
-    x
-    y
-    z
-    precise
-    scheduleAligning()
-  })
-
-  /**
-   * Inject the align plugin if autoAlign is true. This will automatically
-   * align the object whenever a child component mounts or unmounts.
-   */
-  if (auto) injectAlignPlugin(scheduleAligning)
 </script>
 
 <T
@@ -123,7 +109,12 @@
 >
   <T is={outerGroup}>
     <T is={innerGroup}>
-      {@render children({ align: scheduleAligning, ref: group })}
+      <InjectPlugin
+        name="align"
+        {plugin}
+      >
+        {@render children({ align: scheduleAligning, ref: group })}
+      </InjectPlugin>
     </T>
   </T>
 </T>

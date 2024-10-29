@@ -43,6 +43,13 @@ componentSignature:
           default: 'false',
           description: 'Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts.',
           required: false
+        },
+        {
+          name: 'stage',
+          type: 'Stage',
+          default: 'useStage("<Align>", { before: renderStage })',
+          description: 'Bring your own stage to control when aligning occurs. If not provided, aligning will occur before the main render stage.',
+          required: false
         }
       ],
     events:
@@ -53,7 +60,7 @@ componentSignature:
           payload: '{ container: Object3D, width: number, height: number, depth: number, boundingBox: Box3, boundingSphere: Sphere, align: Vector3, verticalAlignment: number, horizontalAlignment: number, depthAlignment: number }'
         }
       ],
-    bindings: [{ name: 'align', type: '() => void' }]
+    exports: [{ name: 'align', type: '() => void', description: 'Manually trigger an alignment.' }]
   }
 ---
 
