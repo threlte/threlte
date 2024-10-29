@@ -1,6 +1,6 @@
 import { getContext } from 'svelte'
 import { derived, type Readable } from 'svelte/store'
-import type { CurrentWritable } from '../lib/storeUtils'
+import type { CurrentWritable } from '../utilities'
 
 export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
@@ -126,7 +126,7 @@ export function useThrelteUserContext<
 
       if (options.existing === 'merge') {
         const v = typeof value === 'function' ? value() : value
-        Object.assign(ctx[namespace], v)
+        Object.assign(ctx[namespace] as Record<string, unknown>, v)
         return ctx
       }
     }

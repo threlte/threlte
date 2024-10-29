@@ -44,15 +44,15 @@
 
   injectPlugin<{
     threlteStudio: StudioProps
-  }>('sync', ({ ref, props }) => {
-    if (!props.threlteStudio) return
+  }>('sync', (args) => {
+    if (!args.props.threlteStudio) return
 
-    ref.userData.threlteStudio = props.threlteStudio
+    args.ref.userData.threlteStudio = args.props.threlteStudio
 
     // go through the properties and apply the studio props to the properties
     // that are in the applyToProperties array
     onMount(() => {
-      insertStudioProps(ref, props.threlteStudio)
+      insertStudioProps(args.ref, args.props.threlteStudio)
     })
     return {
       pluginProps: ['threlteStudio']

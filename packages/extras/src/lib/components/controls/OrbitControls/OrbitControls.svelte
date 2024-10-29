@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { T, useTask, useParent, useThrelte } from '@threlte/core'
-  import type { Camera } from 'three'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { OrbitControlsProps } from './OrbitControls.svelte'
 
@@ -10,20 +9,16 @@
 
   const parent = useParent()
 
-  const isCamera = (p: any): p is Camera => {
-    return p.isCamera
-  }
-
   const { renderer, invalidate } = useThrelte()
 
-  if (!isCamera($parent)) {
+  if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
 
-  const { start, stop } = useTask(controls.update, {
+  const { start, stop } = useTask(() => controls.update(), {
     autoStart: false,
     autoInvalidate: false
   })

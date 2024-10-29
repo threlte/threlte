@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.8
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
 ## 3.0.0-next.7
 
 ### Patch Changes

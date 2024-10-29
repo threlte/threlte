@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
+  import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
+  import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
   import type { MeshRefractionMaterialProps } from './MeshRefractionMaterial.svelte'
   import { fragmentShader } from './fragment'
@@ -42,9 +42,6 @@
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
 
-  const isCubeTexture = (def: CubeTexture | Texture | undefined): def is CubeTexture =>
-    def !== undefined && (def as CubeTexture).isCubeTexture
-
   let defines: Record<string, string> = {}
 
   const updateDefines = (
@@ -53,7 +50,7 @@
     fastChroma: boolean
   ) => {
     // Sampler2D and SamplerCube need different defines
-    const isCubeMap = isCubeTexture(envMap)
+    const isCubeMap = isInstanceOf(envMap, 'CubeTexture')
     const w = (isCubeMap ? envMap.image[0]?.width : envMap?.image.width) ?? 1024
     const cubeSize = w / 4
     const lodMax = Math.floor(Math.log2(cubeSize))

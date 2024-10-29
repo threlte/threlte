@@ -1,49 +1,64 @@
 <script lang="ts">
   import { Color } from 'three'
-  import { T, useThrelte } from '../lib'
+  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib'
 
   const { scene, invalidate } = useThrelte()
   scene.background = new Color('black')
 
-  setTimeout(() => {
-    console.log(scene)
-    invalidate()
-  }, 2e3)
-
+  let posY = $state(0)
+  let makeDefault = $state(false)
   let show = $state(false)
-
-  let args = $state([])
+  let height = $state(1)
 
   window.addEventListener('keydown', (e) => {
     if (e.key === ' ') {
-      show = !show
+      posY += 1
     }
     if (e.key === 'Enter') {
-      args = []
+      makeDefault = !makeDefault
     }
+    if (e.key === 's') {
+      show = !show
+    }
+    if (e.key === 'h') {
+      height += 1
+    }
+  })
+
+  injectPlugin('test-plugin', (args) => {
+    $effect(() => {
+      if (isInstanceOf(args.ref, 'PerspectiveCamera')) {
+        console.log(args.makeDefault)
+      }
+    })
   })
 </script>
 
 <T.PerspectiveCamera
-  makeDefault
+  {makeDefault}
   position={[10, 10, 10]}
   oncreate={(ref) => {
     ref.lookAt(0, 0, 0)
   }}
 />
 
-<T.Mesh {args}>
+<T.Mesh>
   <T.MeshBasicMaterial />
   <T.Color
     args={['blue']}
     attach="material.color"
   />
   <T.BoxGeometry>
-    {#if show}
-      <T.Mesh position={[3, 0, 0]}>
-        <T.MeshBasicMaterial color="blue" />
-        <T.SphereGeometry />
-      </T.Mesh>
-    {/if}
+    <T.Mesh position.y={posY}>
+      <T.MeshBasicMaterial color="blue" />
+      <T.SphereGeometry />
+    </T.Mesh>
   </T.BoxGeometry>
 </T.Mesh>
+
+{#if show}
+  <T.Mesh>
+    <T.MeshBasicMaterial />
+    <T.BoxGeometry args={[1, height, 1]} />
+  </T.Mesh>
+{/if}

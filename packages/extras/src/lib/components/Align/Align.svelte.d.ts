@@ -1,5 +1,5 @@
-import type { Props } from '@threlte/core'
-import type { SvelteComponent, Snippet } from 'svelte'
+import type { Props, Stage } from '@threlte/core'
+import type { Component, Snippet } from 'svelte'
 import type { Box3, Group, Object3D, Sphere, Vector3 } from 'three'
 
 export interface AlignProps extends Omit<Props<Group>, 'children'> {
@@ -11,8 +11,6 @@ export interface AlignProps extends Omit<Props<Group>, 'children'> {
   z?: false | number
   /** See https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject */
   precise?: boolean
-  /** Force a recalculation of the bounding box. */
-  align?: () => void
   /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
   auto?: boolean
 
@@ -20,6 +18,7 @@ export interface AlignProps extends Omit<Props<Group>, 'children'> {
   children: Snippet<[{ align: () => void; ref: Group }]>
 
   onalign?: (event: AlignEventData) => void
+  stage?: Stage
 }
 
 type AlignEventData = {
@@ -39,4 +38,10 @@ type AlignEventData = {
   depthAlignment: number
 }
 
-export default class Align extends SvelteComponent<AlignProps> {}
+export type AlignExports = {
+  align: () => void
+}
+
+declare const Align: Component<AlignProps, AlignExports>
+
+export default Align
