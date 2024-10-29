@@ -1,6 +1,6 @@
 {
   "name": "@threlte/xr",
-  "version": "1.0.0-next.10",
+  "version": "1.0.0-next.11",
   "author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
   "license": "MIT",
   "description": "Tools to more easily create VR and AR experiences with Threlte",

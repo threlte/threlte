@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 8.0.0-next.22
+
+### Major Changes
+
+- 6016286: Remove memoize, remove createObjectStore
+- 6016286: Refactored Threlte Plugin API
+
 ## 8.0.0-next.21
 
 ### Patch Changes
