@@ -1,4 +1,5 @@
-import { ActiveEvents, Collider, ColliderDesc, World, RigidBody } from '@dimforge/rapier3d-compat'
+import { ActiveEvents, Collider, ColliderDesc, RigidBody, World } from '@dimforge/rapier3d-compat'
+import { isInstanceOf } from '@threlte/core'
 import { Mesh, Quaternion, Vector3, type Object3D } from 'three'
 import type { AutoCollidersShapes } from '../types/types'
 
@@ -47,7 +48,7 @@ export const createCollidersFromChildren = (
   rigidBodyParentObject?.getWorldQuaternion(rigidBodyWorldQuatInversed).invert()
 
   object.traverse((child: Object3D | Mesh) => {
-    if ('isMesh' in child) {
+    if (isInstanceOf(child, 'Mesh')) {
       const { geometry } = child
       const worldPos = child.getWorldPosition(worldPosition)
       const translation = worldPos.sub(rigidBodyWorldPos)

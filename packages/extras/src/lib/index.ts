@@ -11,6 +11,7 @@ export { useFBO } from './hooks/useFBO'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
 export { useViewport } from './hooks/useViewport'
+export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
@@ -48,6 +49,7 @@ export { default as Mask } from './components/Mask/Mask.svelte'
 export { default as BakeShadows } from './components/BakeShadows/BakeShadows.svelte'
 export { default as Detailed } from './components/Detailed/Detailed.svelte'
 export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
+export { default as Resize } from './components/Resize/Resize.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 
 // suspense

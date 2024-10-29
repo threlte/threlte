@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { DiscardMaterialProps } from './DiscardMaterial.svelte'
-  import fragmentShader from './fragment.glsl?raw'
-  import vertexShader from './vertex.glsl?raw'
+  import type { MeshDiscardMaterialProps } from './MeshDiscardMaterial.svelte'
+  import { fragmentShader } from './fragment'
+  import { vertexShader } from './vertex'
   import { T } from '@threlte/core'
 
-  let { children, ref = $bindable(), ...props }: DiscardMaterialProps = $props()
+  let { children, ref = $bindable(), ...props }: MeshDiscardMaterialProps = $props()
 </script>
 
 <T.ShaderMaterial
@@ -13,5 +13,5 @@
   {vertexShader}
   {...props}
 >
-  {@render children(ref)}
+  {@render children?.(ref)}
 </T.ShaderMaterial>

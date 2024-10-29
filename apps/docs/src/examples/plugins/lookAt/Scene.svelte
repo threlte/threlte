@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { injectLookAtPlugin } from './lookAtPlugin'
+  import { injectLookAtPlugin } from './lookAtPlugin.svelte'
 
-  const cubePos = [0, 0.8, 0] as [number, number, number]
+  const cubePos = $state([0, 0.8, 0]) as [number, number, number]
 
   useTask(() => {
     cubePos[0] = Math.sin(Date.now() / 1000) * 2

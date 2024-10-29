@@ -39,6 +39,15 @@ export const componentSignature = z.object({
       })
     )
     .optional(),
+  exports: z
+    .array(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        type: z.string()
+      })
+    )
+    .optional(),
   bindings: z
     .array(
       z.object({

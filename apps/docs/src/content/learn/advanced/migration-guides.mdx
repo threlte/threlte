@@ -12,6 +12,84 @@ This upgrade contains bug fixes, better average performance, smaller bundle size
 
 There are a few notable breaking changes listed below.
 
+### Plugin API
+
+The plugin API has been changed to allow for greater granularity and a reactivity model that is in-line with Svelte 5.
+
+#### `createPlugin` has been removed
+
+Threlte 7 included a function called `createPlugin` that allowed to separate a
+plugin declaration from its implementation. The recommended way to create
+plugins is to export a function that invokes `injectPlugin`:
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+export const createSomePlugin = (pluginArg: string) => {
+  injectPlugin('some-plugin', () => {
+    // ... Plugin Code
+  })
+}
+```
+
+This plugin can now be implemented like this:
+
+```svelte title="Scene.svelte"
+<script>
+  import { createSomePlugin } from '$plugins'
+
+  createSomePlugin('plugin-arg')
+</script>
+```
+
+#### Plugin callbacks have been removed
+
+In Threlte 7, plugins could return an object with several callback functions
+that were invoked when:
+
+- `ref` changed
+- any prop changed (e.g. `makeDefault`, `dispose`, `attach`, etc.)
+- any "rest" prop changed (e.g. `position`, `color`, etc.)
+
+```ts title="Threlte 7"
+injectPlugin('some-plugin', ({ ref, props }) => {
+  return {
+    onRefChange(newRef) {
+      // ...
+    },
+    onPropsChange(props) {
+      // ...
+    },
+    onRestPropsChange(restProps) {
+      // ...
+    }
+  }
+})
+```
+
+These callbacks have been removed. Instead, you can use the first argument of the plugin
+callback, which is a reactive object containing all properties needed:
+
+```ts title="Threlte 8"
+injectPlugin('some-plugin', (args) => {
+  args.ref
+  args.makeDefault
+  args.args
+  args.attach
+  args.manual
+  args.makeDefault
+  args.dispose
+  args.props // All other props declared on the component
+})
+```
+
+The `args` object is reactive and will update whenever any of the referenced values change.
+
+<Tip type="info">
+  A plugin may still return an object with `pluginProps` to specify which props
+	the `<T>` component should not react to.
+</Tip>
+
 ### Events
 
 Events will no longer work, and have been replaced with callback props.
@@ -204,24 +282,6 @@ If you need to manually set renderer parameters, call the function and return a 
 ```
 
 Any Three renderer can be returned when calling `createRenderer`.
-If, for example, you enjoy living life on the edge and would like to use Three's
-(currently) experimental WebGPU Renderer, you could return it from this function:
-
-```svelte
-<script>
-  import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js'
-</script>
-
-<Canvas
-  createRenderer={(canvas) => {
-    return new WebGPURenderer({ canvas, antialias: true })
-  }}
->
-  <Scene />
-</Canvas>
-```
-
-You can find a more in-depth WebGPU example [here](/docs/examples/renderers/webgpurenderer).
 
 ### Transitions
 

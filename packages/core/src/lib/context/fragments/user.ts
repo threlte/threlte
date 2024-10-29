@@ -1,6 +1,6 @@
 import { setContext } from 'svelte'
 import type { ThrelteUserContext } from '../../hooks/useThrelteUserContext'
-import { currentWritable } from '../../lib/storeUtils'
+import { currentWritable } from '../../utilities'
 
 export const createUserContext = () => {
   const userCtx: ThrelteUserContext = currentWritable({})
