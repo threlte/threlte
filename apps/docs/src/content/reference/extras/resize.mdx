@@ -7,6 +7,13 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+		exports: [
+			{
+				name: 'resize',
+        type: '() => void',
+        description: 'Manually trigger a resize.'
+      }
+    ],
     props:
       [
         {

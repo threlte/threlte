@@ -60,7 +60,7 @@ componentSignature:
           payload: '{ container: Object3D, width: number, height: number, depth: number, boundingBox: Box3, boundingSphere: Sphere, align: Vector3, verticalAlignment: number, horizontalAlignment: number, depthAlignment: number }'
         }
       ],
-    bindings: [{ name: 'align', type: '() => void' }]
+    exports: [{ name: 'align', type: '() => void', description: 'Manually trigger an alignment.' }]
   }
 ---
 
