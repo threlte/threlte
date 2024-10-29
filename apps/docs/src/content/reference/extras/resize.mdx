@@ -111,3 +111,40 @@ it may be easier to reason about their relative sizes.
 <Example path="extras/resize/multiple-objects" />
 
 In the example above, the fox model is much larger than the duck and flower models. It is so much larger that you may have to pull the camera back in order to see it. Using `<Resize>` scales each model so that each one fits inside a unit cube. From there, their relative sizes and positions may be easier to work with.
+
+## Manually Triggering a Resize
+
+### Using the Export
+
+You can manually trigger a resize by calling the `resize` export.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Resize } from '@threlte/extras'
+
+  let resizeRef = $state<ReturnType<typeof useResize>>()
+
+  // ... later
+  resizeRef.resize()
+</script>
+
+<Resize bind:this={resizeRef}>
+  <!-- ... -->
+</Resize>
+```
+
+### Using the Snippet Argument
+
+You can also use the snippet argument to trigger a resize.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Resize } from '@threlte/extras'
+</script>
+
+<Resize>
+  {#snippet children({ resize })}
+    <T.Mesh oncreate={resize} />
+  {/snippet}
+</Resize>
+```
