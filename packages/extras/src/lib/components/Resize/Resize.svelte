@@ -30,7 +30,6 @@
     box = _box,
     precise = true,
     onresize,
-    resize = $bindable(),
     stage = useStage('<Resize>', { before: renderStage }),
     ref = $bindable(new Group()),
     children,
@@ -68,7 +67,8 @@
     { autoStart: false, stage }
   )
 
-  resize = scheduleResizing
+  /** Provide component export */
+  export const resize = scheduleResizing
 
   observe(() => [axis, precise], scheduleResizing)
 

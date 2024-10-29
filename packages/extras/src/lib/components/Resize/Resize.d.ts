@@ -28,9 +28,6 @@ export type ResizeProps = Omit<Props<Group>, 'children'> & {
    * called after the group has been scaled
    */
   onresize?: () => void
-  /**
-   * Manually trigger a resize
-   */
   resize?: () => void
   /**
    * The stage used to resize
@@ -39,8 +36,13 @@ export type ResizeProps = Omit<Props<Group>, 'children'> & {
   children?: Snippet<[{ ref: Group; resize(): void }]>
 }
 
-type ResizeEventData = {
-  boundingBox: Box3
+export type ResizeExports = {
+  /**
+   * Manually trigger a resize
+   */
+  resize: () => void
 }
 
-declare const Resize: Component<ResizeProps>
+declare const Resize: Component<ResizeProps, ResizeExports>
+
+export default Resize

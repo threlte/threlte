@@ -22,7 +22,6 @@
     auto = false,
     ref = $bindable(),
     calculate = $bindable(),
-    align = $bindable(),
     onalign,
     children,
     stage = useStage('<Align>', { before: renderStage }),
@@ -84,8 +83,8 @@
     { autoStart: false, stage }
   )
 
-  /** Force a recalculation of the bounding box. */
-  align = scheduleAligning
+  /** Provide component export */
+  export const align = scheduleAligning
 
   observe(() => [x, y, z, precise], scheduleAligning)
 
