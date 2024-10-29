@@ -12,6 +12,8 @@
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { AlignProps } from './Align.svelte'
 
+  const { renderStage } = useThrelte()
+
   let {
     x = 0,
     y = 0,
@@ -23,11 +25,9 @@
     align = $bindable(),
     onalign,
     children,
-    stage,
+    stage = useStage('<Align>', { before: renderStage }),
     ...props
   }: AlignProps = $props()
-
-  const { renderStage } = useThrelte()
 
   const group = new Group()
   const innerGroup = new Group()
@@ -72,12 +72,6 @@
     })
   }
 
-  const alignStage =
-    stage ??
-    useStage(Symbol('<Align>'), {
-      before: renderStage
-    })
-
   /**
    * We're only aligning at most *once* per frame, so even if a lot of child
    * components request aligning, it's only done *once*.
@@ -87,7 +81,7 @@
       calculate()
       stop()
     },
-    { autoStart: false, stage: alignStage }
+    { autoStart: false, stage }
   )
 
   /** Force a recalculation of the bounding box. */

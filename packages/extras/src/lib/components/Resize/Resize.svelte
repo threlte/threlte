@@ -31,7 +31,7 @@
     precise = true,
     onresize,
     resize = $bindable(),
-    stage = useStage(Symbol('<Resize>'), { before: renderStage }),
+    stage = useStage('<Resize>', { before: renderStage }),
     ref = $bindable(new Group()),
     children,
     ...props
