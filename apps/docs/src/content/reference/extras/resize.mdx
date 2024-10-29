@@ -24,11 +24,11 @@ componentSignature:
           type: 'boolean'
         },
         {
-          default: 'useStage(/* ... */)',
-          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
           name: 'stage',
-          required: false,
-          type: 'Stage'
+          type: 'Stage',
+          default: 'useStage("<Resize>", { before: renderStage })',
+          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
+          required: false
         },
         {
           default: 'undefined',
