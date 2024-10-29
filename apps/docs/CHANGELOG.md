@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.0-next.0
+
+### Minor Changes
+
+- aba6d5a: adds a <Detailed> component that can be used for displaying different level-of-detail for scene objects
+
 ## 0.13.1
 
 ### Patch Changes

@@ -57,7 +57,7 @@ export const T = new Proxy(function () {}, {
       return TComp
     }
 
-    const module = THREE[is] || catalogue[is]
+    const module = catalogue[is] || THREE[is]
 
     if (module === undefined) {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)

@@ -1,7 +1,7 @@
 import { Raycaster, Vector3 } from 'three'
 import { currentWritable, watch } from '@threlte/core'
 import { defaultComputeFunction, type ComputeFunction } from './compute'
-import { injectPointerControlsPlugin } from './plugin'
+import { injectPointerControlsPlugin } from './plugin.svelte'
 import { setupPointerControls } from './setup'
 import {
   getControlsContext,

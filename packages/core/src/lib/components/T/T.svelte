@@ -2,7 +2,6 @@
   lang="ts"
   generics="Type"
 >
-  import { untrack } from 'svelte'
   import type { Props } from './types'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
@@ -47,18 +46,29 @@
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
-  const plugins = usePlugins({
-    ref: untrack(() => internalRef),
-    props: {
-      is,
-      args,
-      attach,
-      manual,
-      makeDefault,
-      dispose,
-      ...props
+  const plugins = usePlugins(() => ({
+    get ref() {
+      return internalRef
+    },
+    get args() {
+      return args
+    },
+    get attach() {
+      return attach
+    },
+    get manual() {
+      return manual
+    },
+    get makeDefault() {
+      return makeDefault
+    },
+    get dispose() {
+      return dispose
+    },
+    get props() {
+      return props
     }
-  })
+  }))
 
   // Props
   const { updateProp } = useProps()
@@ -90,21 +100,6 @@
   // Events
   const events = useEvents(props)
   $effect.pre(() => events.updateRef(internalRef))
-
-  // Update plugins after all other updates
-  $effect.pre(() => plugins?.updateRef(internalRef))
-  $effect.pre(() =>
-    plugins?.updateProps({
-      is,
-      args,
-      attach,
-      manual,
-      makeDefault,
-      dispose,
-      ...props
-    })
-  )
-  $effect.pre(() => plugins?.updateRestProps(props))
 </script>
 
 {@render children?.({ ref: internalRef })}

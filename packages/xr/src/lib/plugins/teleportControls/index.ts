@@ -6,7 +6,7 @@ import {
   getHandContext,
   type HandContext
 } from './context'
-import { injectTeleportControlsPlugin } from './plugin'
+import { injectTeleportControlsPlugin } from './plugin.svelte'
 import { setHandContext } from './context'
 import { setupTeleportControls } from './setup'
 import { teleportState } from '../../internal/stores'

@@ -1,49 +1,29 @@
-import { getContext, onDestroy } from 'svelte'
+import { getContext } from 'svelte'
 import type { Plugin, PluginContext, PluginContextName } from '../../../plugins/types'
 
-export const usePlugins = (params: Parameters<Plugin>[0]) => {
+export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
   const pluginContextName: PluginContextName = 'threlte-plugin-context'
   const plugins = getContext<PluginContext | undefined>(pluginContextName)
 
   if (!plugins) return
 
-  const pluginsReturns = Object.values(plugins)
-    .map((plugin) => plugin(params))
-    .filter(Boolean) as Exclude<ReturnType<Plugin>, void>[]
+  const pluginsProps: string[] = []
+  const pluginsArray = Object.values(plugins)
 
-  const pluginsProps = pluginsReturns.flatMap((callback) => callback.pluginProps ?? [])
-
-  let refCleanupCallbacks: (() => void)[] = []
-  onDestroy(() => {
-    refCleanupCallbacks.forEach((callback) => callback())
-  })
-  const updateRef = (ref: any) => {
-    refCleanupCallbacks.forEach((callback) => callback())
-    refCleanupCallbacks = []
-    pluginsReturns.forEach((callback) => {
-      const cleanupCallback = callback.onRefChange?.(ref)
-      if (cleanupCallback) {
-        refCleanupCallbacks.push(cleanupCallback)
+  if (pluginsArray.length) {
+    const pluginArgs = args()
+    // initalize plugins
+    for (let i = 0; i < pluginsArray.length; i++) {
+      const plugin = pluginsArray[i]
+      // initialize plugin
+      const p = plugin(pluginArgs)
+      if (p && p.pluginProps) {
+        pluginsProps.push(...p.pluginProps)
       }
-    })
-  }
-
-  const updateProps = (props: Record<string, any>) => {
-    pluginsReturns.forEach((callback) => {
-      callback.onPropsChange?.(props)
-    })
-  }
-
-  const updateRestProps = (restProps: Record<string, any>) => {
-    pluginsReturns.forEach((callback) => {
-      callback.onRestPropsChange?.(restProps)
-    })
+    }
   }
 
   return {
-    updateRef,
-    updateProps,
-    updateRestProps,
     pluginsProps
   }
 }

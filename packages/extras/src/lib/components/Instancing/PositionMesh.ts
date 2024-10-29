@@ -1,26 +1,21 @@
-import type { CurrentWritable } from '@threlte/core'
+import { isInstanceOf, type CurrentWritable } from '@threlte/core'
 import {
   BufferGeometry,
   Color,
+  FrontSide,
   Group,
-  Material,
   Matrix4,
   Mesh,
   MeshBasicMaterial,
-  type InstancedMesh,
-  type Intersection,
   Raycaster,
-  FrontSide
+  type InstancedMesh,
+  type Intersection
 } from 'three'
 
 const _instanceLocalMatrix = new Matrix4()
 const _instanceWorldMatrix = new Matrix4()
 const _instanceIntersects: Intersection[] = []
 const _mesh = new Mesh<BufferGeometry, MeshBasicMaterial>()
-
-const isMaterial = (o: object): o is Material => {
-  return 'isMaterial' in o
-}
 
 export class PositionMesh extends Group {
   color: Color
@@ -65,7 +60,7 @@ export class PositionMesh extends Group {
     _mesh.matrixWorld = _instanceWorldMatrix
 
     // raycast side according to instance material
-    if (isMaterial(parent.material)) {
+    if (isInstanceOf(parent.material, 'Material')) {
       _mesh.material.side = parent.material.side
     } else {
       _mesh.material.side = parent.material[0]?.side ?? FrontSide

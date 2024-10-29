@@ -11,7 +11,7 @@ import {
 } from 'three'
 import type { Task } from '../../frame-scheduling'
 import { useTask } from '../../hooks/useTask'
-import { currentWritable, memoize, watch, type CurrentWritable } from '../../lib/storeUtils'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities'
 import { useCamera } from './camera'
 import { useCanvas } from './canvas'
 import { useDisposal } from './disposal'
@@ -113,11 +113,10 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   // Resize the renderer when the size changes
-  const memoized = memoize(size)
   const { start, stop } = useTask(
     () => {
       if (!('xr' in renderer) || renderer.xr?.isPresenting) return
-      renderer.setSize(memoized.current.width, memoized.current.height)
+      renderer.setSize(size.current.width, size.current.height)
       invalidate()
       stop()
     },

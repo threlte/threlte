@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import WebGPURenderer from 'three/addons/renderers/webgpu/WebGPURenderer.js'
+  import { Canvas, extend } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import * as THREE from 'three/webgpu'
+
+  extend(THREE)
 </script>
 
 <div>
   <Canvas
     createRenderer={(canvas) => {
-      return new WebGPURenderer({
+      return new THREE.WebGPURenderer({
         canvas,
         antialias: true,
         forceWebGL: false

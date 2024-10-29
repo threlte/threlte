@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 3.0.0-next.13
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 3.0.0-next.12
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
+## 3.0.0-next.11
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
 ## 3.0.0-next.10
 
 ### Major Changes

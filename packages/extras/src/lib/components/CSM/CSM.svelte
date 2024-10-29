@@ -36,19 +36,19 @@
 
   const { camera: defaultCamera, scene, size } = useThrelte()
 
-  const csm = currentWritable<CSM | undefined>(undefined)
+  const csmStore = currentWritable<CSM | undefined>(undefined)
 
-  useTask(() => $csm?.update(), { autoInvalidate: false })
+  useTask(() => $csmStore?.update(), { autoInvalidate: false })
 
   const { onNewMaterial, allMaterials } = useMaterials()
 
   const disposeCsm = () => {
-    $csm?.remove()
-    $csm?.dispose()
-    $csm = undefined
+    $csmStore?.remove()
+    $csmStore?.dispose()
+    $csmStore = undefined
   }
 
-  watch([size, csm], ([_, csm]) => {
+  watch([size, csmStore], ([_, csm]) => {
     if (!csm) return
     csm.updateFrustums()
   })
@@ -57,7 +57,7 @@
   $: cameraStore.set(camera)
 
   // set any CSM props that require frustum updates
-  watch([defaultCamera, cameraStore, csm], ([defaultCamera, camera, csm]) => {
+  watch([defaultCamera, cameraStore, csmStore], ([defaultCamera, camera, csm]) => {
     if (!csm) return
     csm.camera = camera ?? defaultCamera
     if (args.maxFar !== undefined) csm.maxFar = args.maxFar
@@ -67,16 +67,17 @@
 
   watch(enabledStore, (enabled) => {
     if (enabled) {
-      $csm = new CSM({
+      const csm = new CSM({
         camera: camera ?? $defaultCamera,
         parent: scene,
         ...args
       })
-      configure?.($csm)
+      configure?.(csm)
       for (const material of allMaterials) {
-        $csm.setupMaterial(material)
+        csm.setupMaterial(material)
       }
-      onNewMaterial((material) => $csm?.setupMaterial(material))
+      onNewMaterial((material) => csm.setupMaterial(material))
+      csmStore.set(csm)
     } else {
       onNewMaterial(undefined)
       disposeCsm()
@@ -89,7 +90,7 @@
   const lightColorStore = writable<typeof lightColor>(lightColor)
   $: lightColorStore.set(lightColor)
 
-  watch([csm, lightIntensityStore, lightColorStore], ([csm, intensity, color]) => {
+  watch([csmStore, lightIntensityStore, lightColorStore], ([csm, intensity, color]) => {
     csm?.lights.forEach((light) => {
       if (intensity !== undefined) {
         light.intensity = intensity / Math.PI
@@ -103,7 +104,7 @@
   const lightDirectionStore = writable(lightDirection)
   $: lightDirectionStore.set(lightDirection)
 
-  watch([csm, lightDirectionStore], ([csm, direction]) => {
+  watch([csmStore, lightDirectionStore], ([csm, direction]) => {
     csm?.lightDirection.set(...direction).normalize()
   })
 
