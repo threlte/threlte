@@ -1,6 +1,6 @@
 <script
   lang="ts"
-	module
+  module
 >
   import { type Stage, T, useTask, useThrelte } from '@threlte/core'
 
