@@ -50,6 +50,9 @@ export { default as BakeShadows } from './components/BakeShadows/BakeShadows.sve
 export { default as Detailed } from './components/Detailed/Detailed.svelte'
 export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
 export { default as Resize } from './components/Resize/Resize.svelte'
+export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
+export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
+export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
