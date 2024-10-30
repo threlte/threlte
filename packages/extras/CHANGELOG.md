@@ -1,5 +1,16 @@
 # @threlte/extras
 
+## 9.0.0-next.30
+
+### Minor Changes
+
+- f55c743: Add RadialGradientTexture & LinearGradientTexture components
+- ca7a1f0: Add <CubeCamera>
+
+### Patch Changes
+
+- b5b3e2c: fix module context warnings on the command line
+
 ## 9.0.0-next.29
 
 ### Minor Changes
