@@ -20,11 +20,11 @@ componentSignature:
   }
 ---
 
-A component that copies the current camera position and quaternion values into a group every frame. This is useful if you have objects that are always a fixed distance from the camera and have a static rotation no matter how the camera is positioned or oriented.
+A component that wraps objects in a group and copies the current camera position and quaternion values every frame. This is useful if you have objects that are always a fixed distance from the camera and have a static rotation no matter how the camera is positioned or oriented.
 
 <Example path="extras/screen-space" />
 
-In the scene above, it may look like the middle mesh is placed in world space but it is actually positioned relative to the camera using `<ScreenSpace>`. No matter how you manipulate the camera, its position and rotation are constant relative to the camera.
+In the scene above, it may look like the middle mesh is placed using world space but it is actually positioned relative to the camera using `<ScreenSpace>`. No matter how you manipulate the camera, its position and rotation are constant relative to the camera. Note that `auto rotate` rotates the camera, not the mesh.
 
 ## Bring Your Own Camera
 

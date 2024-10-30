@@ -3,13 +3,20 @@
   import { Group } from 'three'
   import { T, useCamera, useTask } from '@threlte/core'
 
-  let { depth = 1, ref = $bindable(new Group()), children, ...props }: ScreenSpaceProps = $props()
+  const { camera: sceneCamera } = useCamera()
 
-  const { camera } = useCamera()
+  let {
+    depth = 1,
+    camera,
+    ref = $bindable(new Group()),
+    children,
+    ...props
+  }: ScreenSpaceProps = $props()
 
   useTask(() => {
-    ref.position.copy(camera.current.position)
-    ref.quaternion.copy(camera.current.quaternion)
+    const _camera = camera ?? sceneCamera.current
+    ref.position.copy(_camera.position)
+    ref.quaternion.copy(_camera.quaternion)
   })
 </script>
 
