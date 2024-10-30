@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { AsciiEffectProps } from './AsciiRenderer'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
-  import { useTask, useThrelte } from '@threlte/core'
+  import { observe, useTask, useThrelte } from '@threlte/core'
 
   let {
     characters = ' .:-+*=%@#',
@@ -22,7 +22,6 @@
   })
 
   $effect.pre(() => {
-    options.resolution
     asciiEffect.setSize($size.width, $size.height)
   })
 
