@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { CubeCameraProps } from './CubeCamera'
+  import { isInstanceOf, observe, T, useTask, useThrelte } from '@threlte/core'
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
-  import { T, useTask, useThrelte } from '@threlte/core'
-  import { untrack } from 'svelte'
+  import type { CubeCameraProps } from './CubeCamera'
+  import { onDestroy } from 'svelte'
 
   let {
     background = 'auto',
@@ -16,16 +16,31 @@
     ...props
   }: CubeCameraProps = $props()
 
-  const renderTarget = $derived(new WebGLCubeRenderTarget(resolution))
-  const camera = $derived(new CubeCamera(near, far, renderTarget))
-
-  $effect(() => {
-    renderTarget
-    return () => {
-      // fbo may reference `this` in dispose
-      renderTarget.dispose()
+  export const renderTarget = new WebGLCubeRenderTarget(resolution)
+  observe.pre(
+    () => [resolution],
+    () => {
+      renderTarget.setSize(resolution, resolution)
     }
+  )
+
+  onDestroy(() => {
+    renderTarget.dispose()
   })
+
+  export const camera = new CubeCamera(near, far, renderTarget)
+  observe.pre(
+    () => [near, far],
+    () => {
+      camera.children.forEach((child) => {
+        if (isInstanceOf(child, 'PerspectiveCamera')) {
+          child.far = far
+          child.near = near
+          child.updateProjectionMatrix()
+        }
+      })
+    }
+  )
 
   const { renderer, scene } = useThrelte()
 
@@ -53,7 +68,7 @@
     { autoStart: false }
   )
 
-  const restart = () => {
+  export const restart = () => {
     if ($started) {
       stop()
     }
@@ -62,15 +77,7 @@
   }
 
   // if any of these props update, the task will need to be restarted
-  $effect(() => {
-    background
-    far
-    fog
-    frames
-    near
-    resolution
-    untrack(restart)
-  })
+  observe.pre(() => [background, far, near, fog, frames, resolution], restart)
 </script>
 
 <T
@@ -79,6 +86,6 @@
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children?.({ camera, ref, renderTarget, restart })}
+    {@render children?.({ camera: camera, ref, renderTarget: renderTarget, restart })}
   </T>
 </T>

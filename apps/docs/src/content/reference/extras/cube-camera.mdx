@@ -7,6 +7,20 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' },
+		exports: [
+			{
+				type: 'THREE.CubeCamera',
+				name: 'camera'
+      },
+      {
+        type: 'THREE.WebGLCubeRenderTarget',
+        name: 'renderTarget'
+      },
+      {
+        type: '() => void',
+        name: 'restart'
+      }
+    ],
     props:
       [
         {

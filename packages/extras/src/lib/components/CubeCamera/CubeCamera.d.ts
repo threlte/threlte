@@ -1,6 +1,12 @@
-import type { Component, Snippet } from 'svelte'
-import type { CubeCamera as ThreeCubeCamera, Group, Scene, WebGLCubeRenderTarget } from 'three'
 import type { Props } from '@threlte/core'
+import type { Component, Snippet } from 'svelte'
+import type {
+  CubeCamera,
+  Group,
+  Scene,
+  CubeCamera as ThreeCubeCamera,
+  WebGLCubeRenderTarget
+} from 'three'
 
 export type CubeCameraProps = Omit<Props<Group>, 'children'> & {
   /**
@@ -37,4 +43,12 @@ export type CubeCameraProps = Omit<Props<Group>, 'children'> & {
   >
 }
 
-export declare const CubeCamera: Component<CubeCameraProps>
+export type CubeCameraExports = {
+  camera(): CubeCamera
+  renderTarget(): WebGLCubeRenderTarget
+  restart(): void
+}
+
+declare const CubeCameraComponent: Component<CubeCameraProps, CubeCameraExports>
+
+export default CubeCameraComponent
