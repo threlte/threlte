@@ -31,6 +31,7 @@
 <button
   class="rounded-sm border border-orange/5 bg-orange-800/50 px-2 py-1 text-sm text-orange hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-none"
   on:click={onClick}
+  aria-label="open in stackblitz"
 >
   <svg
     class="[&>*]:!fill-current"
