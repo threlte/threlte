@@ -1,16 +1,18 @@
 <script lang="ts">
   import type { AsciiEffectProps } from './AsciiRenderer'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
-  import { observe, useTask, useThrelte } from '@threlte/core'
+  import { observe, T, useTask, useThrelte } from '@threlte/core'
 
   let {
-    characters = ' .:-+*=%@#',
+    autoRender = true,
     bgColor = '#000000',
+    characters = ' .:-+*=%@#',
     fgColor = '#ffffff',
-    options = {}
+    options = {},
+    ref = $bindable()
   }: AsciiEffectProps = $props()
 
-  const { autoRender, camera, renderer, renderStage, scene, size } = useThrelte()
+  const { autoRender: threlteAutoRender, camera, renderer, renderStage, scene, size } = useThrelte()
 
   let asciiEffect = $derived.by(() => {
     const effect = new AsciiEffect(renderer, characters, options)
@@ -43,18 +45,37 @@
     }
   })
 
-  $effect(() => {
-    let before = autoRender.current
-    autoRender.set(false)
-    return () => {
-      autoRender.set(before)
-    }
-  })
-
-  useTask(
+  const { start, stop, started } = useTask(
     () => {
       asciiEffect.render(scene, camera.current)
     },
-    { autoInvalidate: false, stage: renderStage }
+    { autoInvalidate: false, autoStart: false, stage: renderStage }
+  )
+
+  $effect(() => {
+    let before = threlteAutoRender.current
+    threlteAutoRender.set(false)
+    return () => {
+      // be sure to turn off the task if the component is destroyed
+      if ($started) {
+        stop()
+      }
+      threlteAutoRender.set(before)
+    }
+  })
+
+  observe.pre(
+    () => [autoRender],
+    ([autoRender]) => {
+      if (autoRender) {
+        if (!$started) {
+          start()
+        }
+      } else {
+        if ($started) {
+          stop()
+        }
+      }
+    }
   )
 </script>

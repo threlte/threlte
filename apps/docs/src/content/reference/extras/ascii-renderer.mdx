@@ -6,8 +6,15 @@ name: <AsciiRenderer>
 type: 'component'
 componentSignature:
   {
-    'props':
+    props:
       [
+        {
+          default: 'true',
+          description: 'whether to automatically run the render task',
+          name: 'autoRender',
+          required: false,
+          type: 'boolean'
+        },
         {
           'name': 'characters',
           default: "' .:-+*=%@#'",
@@ -42,7 +49,7 @@ componentSignature:
 
 A wrapper around Three's AsciiRenderer addon. It replaces the main render function with a function that renders the scene to an HTML table and overlays it on top of the canvas. Areas with a higher "brightness" are mapped to characters that appear "fuller".
 
-<Example path="extras/ascii-renderer" />
+<Example path="extras/ascii-renderer/basic" />
 
 ## Usage
 
@@ -96,3 +103,11 @@ Because the renderer doesn't support dynamically updating options, any time an o
 - `options.invert` inverts the `fgColor` and `bgColor` colors.
 - `options.resolution` controls how detailed the render is.
 - `options.scale` controls the scale of the characters. Note that zooming the camera does not control the size of the characters.
+
+## Disabling the Render Task
+
+Sometimes you only need to render a single frame. With `options.color` set to false, it isn't much of a problem to have a render task that runs indefinitely. However, setting `options.color` to true and only needing to render one frame or on demand can be too slow. For this reason `<AsciiRenderer>` accepts an `autoRender` prop. If `autoRender` is `true`, the render task will start and run until `autoRender` is set to `false`.
+
+<Example path="extras/ascii-renderer/auto-render" />
+
+In the example above, `autoRender` is set to `true` and rendering occurs as it normally would. `<AsciiRenderer>` is paused when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames if you only want one frame to be captured.
