@@ -3,8 +3,6 @@
   import { Group } from 'three'
   import { T, useCamera, useTask } from '@threlte/core'
 
-  const { camera: sceneCamera } = useCamera()
-
   let {
     depth = 1,
     camera,
@@ -12,6 +10,8 @@
     children,
     ...props
   }: ScreenSpaceProps = $props()
+
+  const { camera: sceneCamera } = useCamera()
 
   useTask(() => {
     const _camera = camera ?? sceneCamera.current
