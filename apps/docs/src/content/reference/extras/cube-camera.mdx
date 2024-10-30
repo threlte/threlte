@@ -58,6 +58,20 @@ componentSignature:
           required: false,
           type: 'number'
         },
+				{
+				name: 'onrenderstart',
+				description: 'a callback prop that is called anytime the render task is started',
+				required: false,
+				default: 'undefined',
+				type: '() => void',
+				},
+				{
+				name: 'onrenderstop',
+				description: 'a callback prop that is called anytime the render task is stopped',
+				required: false,
+				default: 'undefined',
+				type: '() => void',
+				},
         {
           default: '256',
           description: 'size of the render target. more resolution means more detail',
@@ -123,3 +137,39 @@ For moving objects, let `frames` default to `Infinity`. If you have a static sce
 The `fog` prop is used the same way and accepts any valid [scene.fog](https://threejs.org/docs/index.html#api/en/scenes/Scene.fog). By default `scene.fog` is used.
 
 These "scene" props are only used when rendering the scene to the underlying render target. After rendering to the target, the original scene props are restored.
+
+## Callback Props
+
+The `onrenderstart` callback prop is called anytime the underlying render task has been started. This means that it also fires anytime the renderer has been restarted manually through the `restart` component export.
+
+```svelte
+<script>
+  const onrenderstart = () => {
+    console.log('render started')
+  }
+
+  let ref
+  // `onrenderstart` will be fired if `ref.restart` is called
+</script>
+
+<CubeCamera
+  bind:ref
+  onrenderstart
+>
+  <!-- ... -->
+</CubeCamera>
+```
+
+`onrenderstart` also fires if you use the `restart` children snippet prop
+
+```svelte
+<CubeCamera onrenderstart>
+  {#snippet children({ restart })}
+    <T.Mesh oncreate={restart}>
+      <!-- ... -->
+    </T.Mesh>
+  {/snippet}
+</CubeCamera>
+```
+
+The `onrenderstop` callback runs anytime the render task stops running. It is called on restarts and when the internal counter goes over the `frames` limit. This means that if `frames` is set to `Infinity`, `onrenderstop` is never called.

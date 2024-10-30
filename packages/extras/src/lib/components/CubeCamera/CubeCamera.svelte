@@ -10,6 +10,8 @@
     fog = 'auto',
     frames = Infinity,
     near = 0.1,
+    onrenderstart,
+    onrenderstop,
     resolution = 256,
     children,
     ref = $bindable(new Group()),
@@ -63,6 +65,7 @@
         count += 1
       } else {
         stop()
+        onrenderstop?.()
       }
     },
     { autoStart: false }
@@ -71,9 +74,11 @@
   export const restart = () => {
     if ($started) {
       stop()
+      onrenderstop?.()
     }
     count = 0
     start()
+    onrenderstart?.()
   }
 
   // if any of these props update, the task will need to be restarted
@@ -86,6 +91,6 @@
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children?.({ camera: camera, ref, renderTarget: renderTarget, restart })}
+    {@render children?.({ camera, ref, renderTarget, restart })}
   </T>
 </T>
