@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  module
+  context="module"
 >
   import { Box3 } from 'three'
 

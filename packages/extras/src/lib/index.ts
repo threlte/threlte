@@ -50,6 +50,7 @@ export { default as BakeShadows } from './components/BakeShadows/BakeShadows.sve
 export { default as Detailed } from './components/Detailed/Detailed.svelte'
 export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
 export { default as Resize } from './components/Resize/Resize.svelte'
+export { default as ScreenSpace } from './components/ScreenSpace/ScreenSpace.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
