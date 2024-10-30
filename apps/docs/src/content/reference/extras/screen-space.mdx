@@ -5,7 +5,39 @@ sourcePath: 'packages/extras/src/lib/components/ScreenSpace/ScreenSpace.svelte'
 name: '<ScreenSpace>'
 type: 'component'
 componentSignature:
-  { extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' }, props: [] }
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' },
+    props:
+      [
+        {
+          name: 'depth',
+          required: false,
+          default: '1',
+          description: 'distance from the camera. Negative values will place things behind the camera',
+          type: 'number'
+        }
+      ]
+  }
 ---
 
-<Example path="/extras/screen-space" />
+A component that copies the current camera position and quaternion values into a group every frame. This is useful if you have objects that are always a fixed distance from the camera and have a static rotation no matter how the camera is positioned or oriented.
+
+<Example path="extras/screen-space" />
+
+In the scene above, it may look like the middle mesh is placed in world space but it is actually positioned relative to the camera using `<ScreenSpace>`. No matter how you manipulate the camera, its position and rotation are relative to the camera are constant.
+
+## Bring Your Own Camera
+
+By default, the scene's active camera will be used. You may provide a different camera through the `camera` prop. The `camera` prop is reactive so you can position children relative to any camera at any time.
+
+```svelte
+<script>
+  import { PerspectiveCamera } from 'three'
+
+  const otherCamera = new PerspectiveCamera()
+</script>
+
+<ScreenSize camera={otherCamera}>
+  <!-- ... -->
+</ScreenSize>
+```
