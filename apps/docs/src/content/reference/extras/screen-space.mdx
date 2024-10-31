@@ -10,10 +10,17 @@ componentSignature:
     props:
       [
         {
-          name: 'depth',
+					type: 'Three.Camera'
+          default: 'useCamera().camera.current',
+          description: 'the camera to use when copying position and quaternion values'
+          name: 'camera',
           required: false,
+        },
+        {
           default: '1',
           description: 'distance from the camera. Negative values will place things behind the camera',
+          name: 'depth',
+          required: false,
           type: 'number'
         }
       ]
