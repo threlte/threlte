@@ -10,7 +10,7 @@ componentSignature:
     props:
       [
         {
-          type: 'Three.Camera',
+          type: 'THREE.Camera',
           default: 'useCamera().camera.current',
           description: 'the camera to use when copying position and quaternion values',
           name: 'camera',
@@ -27,24 +27,34 @@ componentSignature:
   }
 ---
 
-A component that wraps objects in a group and copies the current camera position and quaternion values every frame. This is useful if you have objects that are always a fixed distance from the camera and have a static rotation no matter how the camera is positioned or oriented.
+A component that wraps objects in a group and copies the current camera position
+and quaternion values every frame. This is useful if you have objects that are
+always a fixed distance from the camera and have a static rotation no matter how
+the camera is positioned or oriented.
 
 <Example path="extras/screen-space" />
 
-In the scene above, it may look like the middle mesh is placed using world space but it is actually positioned relative to the camera using `<ScreenSpace>`. No matter how you manipulate the camera, its position and rotation are constant relative to the camera. Note that `auto rotate` rotates the camera, not the mesh.
+In the scene above, it may look like the middle mesh is placed using world space
+but it is actually positioned relative to the camera using `<ScreenSpace>`. No
+matter how you manipulate the camera, its position and rotation are constant
+relative to the camera. Note that `auto rotate` rotates the camera, not the
+mesh.
 
 ## Bring Your Own Camera
 
-By default, the scene's active camera will be used. You may provide a different camera through the `camera` prop. The `camera` prop is reactive so you can position children relative to any camera at any time.
+By default, the scene's active camera will be used. You may provide a different
+camera through the `camera` prop. The `camera` prop is reactive so you can
+position children relative to any camera at any time.
 
 ```svelte
 <script>
   import { PerspectiveCamera } from 'three'
+  import { ScreenSpace } from '@threlte/extras'
 
   const otherCamera = new PerspectiveCamera()
 </script>
 
-<ScreenSize camera={otherCamera}>
+<ScreenSpace camera={otherCamera}>
   <!-- ... -->
-</ScreenSize>
+</ScreenSpace>
 ```
