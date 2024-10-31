@@ -2,7 +2,7 @@ import type { Camera, Group } from 'three'
 import type { Component } from 'svelte'
 import type { Props } from '@threlte/core'
 
-export type ScreenSpaceProps = Omit<Props<Group>, 'position' | 'quaternion'> & {
+export type ScreenSpaceProps = Props<Group> & {
   /**
    * distance from camera
    * @default 1
@@ -13,6 +13,8 @@ export type ScreenSpaceProps = Omit<Props<Group>, 'position' | 'quaternion'> & {
    * @default useCamera().camera.current
    */
   camera?: Camera
+  position?: never
+  quaternion?: never
 }
 
 declare const ScreenSpace: Component<ScreenSpaceProps>
