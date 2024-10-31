@@ -15,11 +15,11 @@
   ]
 
   let time = $state(0)
-  const z = $derived(5 + 10 * Math.sin(time))
-
   useTask((delta) => {
     time += delta
   })
+
+  const z = $derived(5 + 10 * Math.sin(time))
 </script>
 
 <T.PerspectiveCamera
@@ -33,7 +33,7 @@
     <T.Mesh
       {distance}
       geometry={new IcosahedronGeometry(1, detail)}
-      material.wireframe={true}
+      material.wireframe
       material.color={color}
     />
   {/each}
