@@ -47,7 +47,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
     "sharp": "^0.32.0",
-    "svelte": "^5.0.5",
+    "svelte": "^5.1.6",
     "three": "0.122.0",
     "three-stdlib": "^2.21.8"
   },
