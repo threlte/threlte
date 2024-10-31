@@ -3,7 +3,7 @@
   import { Canvas } from '@threlte/core'
   import { Checkbox, Pane } from 'svelte-tweakpane-ui'
 
-  let bake = $state(false)
+  let bake = $state(true)
 </script>
 
 <Pane

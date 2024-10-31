@@ -1,6 +1,6 @@
-import type { Props } from '@threlte/core'
-import type { SvelteComponent } from 'svelte'
+import type { Component } from 'svelte'
 import type { Group } from 'three'
+import type { Props } from '@threlte/core'
 
 export type SpaceshipProps = Props<Group> & {
   name:
@@ -17,4 +17,4 @@ export type SpaceshipProps = Props<Group> & {
     | 'Zenith'
 }
 
-export default class Spaceship extends SvelteComponent<SpaceshipProps> {}
+declare const Spaceship: Component<SpaceshipProps>

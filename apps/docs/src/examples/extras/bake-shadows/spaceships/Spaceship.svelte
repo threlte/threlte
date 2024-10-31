@@ -1,9 +1,10 @@
 <script lang="ts">
-  import type { SpaceshipProps } from './Spaceship.svelte'
   import { T } from '@threlte/core'
   import { useGltf, useSuspense } from '@threlte/extras'
+  import type { SpaceshipProps } from './Spaceship'
+  import { Group } from 'three'
 
-  let { name, ...props }: SpaceshipProps = $props()
+  let { name, children, ref = $bindable(new Group()), ...props }: SpaceshipProps = $props()
 
   const suspend = useSuspense()
 
@@ -11,15 +12,19 @@
 </script>
 
 {#await gltf then { scene }}
-  <T.Group {...props}>
+  <T
+    is={ref}
+    {...props}
+  >
     <T
       is={scene}
       oncreate={(ref) => {
-        for (const child of ref.children) {
+        ref.traverse((child) => {
           child.castShadow = true
           child.receiveShadow = true
-        }
+        })
       }}
     />
-  </T.Group>
+    {@render children?.({ ref })}
+  </T>
 {/await}
