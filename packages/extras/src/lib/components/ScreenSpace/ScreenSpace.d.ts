@@ -16,3 +16,5 @@ export type ScreenSpaceProps = Omit<Props<Group>, 'position' | 'quaternion'> & {
 }
 
 declare const ScreenSpace: Component<ScreenSpaceProps>
+
+export default ScreenSpace
