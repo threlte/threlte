@@ -15,7 +15,7 @@ varying vec2 vUV;
 varying vec4 vColor;
 varying float vCounters;
 
-vec4 LinearTosRGB( in vec4 value ) {
+vec4 CustomLinearTosRGB( in vec4 value ) {
 	return vec4( mix( pow( value.rgb, vec3( 0.41666 ) ) * 1.055 - vec3( 0.055 ), value.rgb * 12.92, vec3( lessThanEqual( value.rgb, vec3( 0.0031308 ) ) ) ), value.a );
 }
 
@@ -31,6 +31,6 @@ void main()	{
 			c.a *= ceil(mod(vCounters + dashOffset, dashArray) - (dashArray * dashRatio));
 	}
 
-	gl_FragColor = LinearTosRGB(c);
+	gl_FragColor = CustomLinearTosRGB(c);
 }
 `
