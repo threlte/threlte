@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.31
+
+### Patch Changes
+
+- e75748d: Fix issues with MeshLine
+
 ## 9.0.0-next.30
 
 ### Minor Changes
