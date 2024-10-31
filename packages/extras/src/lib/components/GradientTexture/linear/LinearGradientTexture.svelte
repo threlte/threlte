@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { LinearGradientTextureProps } from './LinearGradientTexture'
   import { CanvasTexture } from 'three'
-  import { T, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
+  import { observe, T, useThrelte } from '@threlte/core'
 
   const { colorSpace, invalidate } = useThrelte()
 
   const defaultSize = 1024
+
+  const canvas = new OffscreenCanvas(0, 0)
 
   let {
     width = defaultSize,
@@ -20,13 +22,9 @@
       { offset: 1, color: 'white' }
     ],
     children,
-    ref = $bindable(),
+    ref = $bindable(new CanvasTexture(canvas)),
     ...props
   }: LinearGradientTextureProps = $props()
-
-  const canvas = new OffscreenCanvas(0, 0)
-  const context = canvas.getContext('2d')
-  const texture = new CanvasTexture(canvas)
 
   $effect.pre(() => {
     canvas.width = width
@@ -36,12 +34,15 @@
     canvas.height = height
   })
 
-  $effect(() => {
-    props.wrapS
-    props.wrapT
-    texture.needsUpdate = true
-    invalidate()
-  })
+  observe(
+    () => [props.wrapS, props.wrapT],
+    () => {
+      ref.needsUpdate = true
+      invalidate()
+    }
+  )
+
+  const context = canvas.getContext('2d')
 
   const gradient = $derived.by(() => {
     const gradient = context?.createLinearGradient(startX, startY, endX, endY)
@@ -54,18 +55,17 @@
   $effect(() => {
     if (gradient !== undefined && context !== null) {
       applyGradient(context, gradient)
-      texture.needsUpdate = true
+      ref.needsUpdate = true
       invalidate()
     }
   })
 </script>
 
 <T
-  is={texture}
-  bind:ref
+  is={ref}
   attach="map"
   colorSpace={$colorSpace}
   {...props}
 >
-  {@render children?.({ ref: texture })}
+  {@render children?.({ ref })}
 </T>

@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { RadialGradientTextureProps } from './RadialGradientTexture'
   import { CanvasTexture } from 'three'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, observe, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
 
   const { colorSpace, invalidate } = useThrelte()
 
   const defaultSize = 1024
+
+  const canvas = new OffscreenCanvas(0, 0)
 
   let {
     innerRadius = 0,
@@ -18,13 +20,9 @@
     width = defaultSize,
     height = defaultSize,
     children,
-    ref = $bindable(),
+    ref = $bindable(new CanvasTexture(canvas)),
     ...props
   }: RadialGradientTextureProps = $props()
-
-  const canvas = new OffscreenCanvas(0, 0)
-  const context = canvas.getContext('2d')
-  const texture = new CanvasTexture(canvas)
 
   $effect.pre(() => {
     canvas.width = width
@@ -34,15 +32,18 @@
     canvas.height = height
   })
 
-  $effect(() => {
-    props.wrapS
-    props.wrapT
-    texture.needsUpdate = true
-    invalidate()
-  })
+  observe(
+    () => [props.wrapS, props.wrapT],
+    () => {
+      ref.needsUpdate = true
+      invalidate()
+    }
+  )
 
   let canvasCenterX = $derived(0.5 * width)
   let canvasCenterY = $derived(0.5 * height)
+
+  const context = canvas.getContext('2d')
 
   const gradient = $derived.by(() => {
     const gradient = context?.createRadialGradient(
@@ -63,18 +64,17 @@
   $effect(() => {
     if (gradient !== undefined && context !== null) {
       applyGradient(context, gradient)
-      texture.needsUpdate = true
+      ref.needsUpdate = true
       invalidate()
     }
   })
 </script>
 
 <T
-  is={texture}
+  is={ref}
   attach="map"
   colorSpace={$colorSpace}
   {...props}
-  bind:ref
 >
-  {@render children?.({ ref: texture })}
+  {@render children?.({ ref })}
 </T>
