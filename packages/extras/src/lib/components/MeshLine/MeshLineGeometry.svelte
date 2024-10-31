@@ -47,7 +47,7 @@
     width.setX(i2, w)
     width.setX(i2 + 1, w)
 
-    uv.setXYZW(i3, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
+    uv.setXYZW(i2, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
 
     if (i < pointCount - 1) {
       const n = i * 2
