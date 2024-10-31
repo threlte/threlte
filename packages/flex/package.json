@@ -17,7 +17,7 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.2.0",
     "@sveltejs/kit": "^2.7.2",
-    "@sveltejs/package": "^2.3.1",
+    "@sveltejs/package": "^2.3.7",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
