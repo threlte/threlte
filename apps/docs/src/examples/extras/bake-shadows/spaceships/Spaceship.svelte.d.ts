@@ -18,3 +18,5 @@ export type SpaceshipProps = Props<Group> & {
 }
 
 declare const Spaceship: Component<SpaceshipProps>
+
+export default Spaceship

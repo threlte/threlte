@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useGltf, useSuspense } from '@threlte/extras'
-  import type { SpaceshipProps } from './Spaceship'
+  import type { SpaceshipProps } from './Spaceship.svelte'
   import { Group } from 'three'
 
   let { name, children, ref = $bindable(new Group()), ...props }: SpaceshipProps = $props()
