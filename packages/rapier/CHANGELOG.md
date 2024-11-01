@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.14
+
+### Patch Changes
+
+- cec4b57: update deps
+
 ## 3.0.0-next.13
 
 ### Patch Changes

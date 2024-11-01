@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.12
+
+### Patch Changes
+
+- cec4b57: update deps
+
 ## 1.0.0-next.11
 
 ### Patch Changes
