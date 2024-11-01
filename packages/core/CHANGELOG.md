@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 8.0.0-next.23
+
+### Minor Changes
+
+- cec4b57: Make children snippet arguments a type parameter on type `Props`
+
+### Patch Changes
+
+- cec4b57: update deps
+
 ## 8.0.0-next.22
 
 ### Major Changes

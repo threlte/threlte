@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.10
+
+### Patch Changes
+
+- cec4b57: update deps
+
 ## 2.0.0-next.9
 
 ### Patch Changes

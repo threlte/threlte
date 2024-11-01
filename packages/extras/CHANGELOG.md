@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.0.0-next.32
+
+### Patch Changes
+
+- cec4b57: update deps
+- cec4b57: Remove handwritten type def of `<Resize>`
+
 ## 9.0.0-next.31
 
 ### Patch Changes
