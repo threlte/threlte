@@ -2,8 +2,6 @@
   lang="ts"
   module
 >
-  import { Box3 } from 'three'
-
   // reuse box for all instances
   const _box = new Box3()
 </script>
@@ -18,9 +16,9 @@
     useThrelte,
     type Plugin
   } from '@threlte/core'
-  import { Group } from 'three'
+  import { Box3, Group } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
-  import type { ResizeProps } from './Resize'
+  import type { ResizeProps } from './types'
 
   const { renderStage } = useThrelte()
 
@@ -67,7 +65,7 @@
     { autoStart: false, stage }
   )
 
-  /** Provide component export */
+  /** Manually trigger resizing */
   export const resize = scheduleResizing
 
   observe(() => [axis, precise], scheduleResizing)
