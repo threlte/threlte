@@ -2,8 +2,6 @@
   lang="ts"
   module
 >
-  import { Box3 } from 'three'
-
   // reuse box for all instances
   const _box = new Box3()
 </script>
@@ -16,49 +14,13 @@
     useStage,
     useTask,
     useThrelte,
-    type Plugin,
-    type Props,
-    type Stage
+    type Plugin
   } from '@threlte/core'
-  import type { Snippet } from 'svelte'
-  import { Group } from 'three'
+  import { Box3, Group } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
+  import type { ResizeProps } from './types'
 
   const { renderStage } = useThrelte()
-
-  type ResizeProps = Omit<Props<Group>, 'children'> & {
-    /**
-     * when true, resizes the group when objects are added or removed
-     *
-     * @default false
-     */
-    auto?: boolean
-    /**
-     * axis to constrain by. if not provided, the max of all 3 axes is used.
-     */
-    axis?: 'x' | 'y' | 'z'
-    /**
-     * optional Box3 to use in bounding box calculation
-     */
-    box?: Box3
-    /**
-     * whether to use precise bounding box calculation
-     * https://threejs.org/docs/index.html#api/en/math/Box3.setFromObject
-     *
-     * @default true
-     */
-    precise?: boolean
-    /**
-     * called after the group has been scaled
-     */
-    onresize?: () => void
-    resize?: () => void
-    /**
-     * The stage used to resize
-     */
-    stage?: Stage
-    children?: Snippet<[{ ref: Group; resize(): void }]>
-  }
 
   let {
     axis,
