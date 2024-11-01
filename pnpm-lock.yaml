@@ -251,8 +251,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -297,10 +297,10 @@ importers:
         version: 5.1.6
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.6)(typescript@5.4.5)
@@ -391,8 +391,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -443,10 +443,10 @@ importers:
         version: 5.1.6
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.6)(typescript@5.4.5)
@@ -485,8 +485,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -639,8 +639,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -742,8 +742,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.1.6)(vite@5.3.1(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.3.1(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.1(svelte@5.1.6)(vite@5.3.1(@types/node@20.12.7)(sass@1.77.7))
@@ -842,8 +842,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -926,8 +926,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(@sveltejs/vite-plugin-svelte@3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7)))(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
       '@sveltejs/package':
-        specifier: ^2.3.1
-        version: 2.3.1(svelte@5.1.6)(typescript@5.4.5)
+        specifier: ^2.3.7
+        version: 2.3.7(svelte@5.1.6)(typescript@5.4.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.1.6)(vite@5.2.8(@types/node@20.12.7)(sass@1.77.7))
@@ -2827,8 +2827,8 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       vite: ^5.0.3
 
-  '@sveltejs/package@2.3.1':
-    resolution: {integrity: sha512-JvR2J4ost1oCn1CSdqenYRwGX/1RX+7LN+VZ71aPnz3JAlIFaEKQd1pBxlb+OSQTfeugJO0W39gB9voAbBO5ow==}
+  '@sveltejs/package@2.3.7':
+    resolution: {integrity: sha512-LYgUkde5GUYqOpXbcoCGUpEH4Ctl3Wj4u4CVZBl56dEeLW5fGHE037ZL1qlK0Ky+QD5uUfwONSeGwIOIighFMQ==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     peerDependencies:
@@ -3601,6 +3601,10 @@ packages:
   chokidar@3.6.0:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
+
+  chokidar@4.0.1:
+    resolution: {integrity: sha512-n8enUVCED/KVRQlab1hr3MVpcVMvxtZjmEa956u+4YijlmQED223XMSYj2tLuKvr4jcCTzNNMpQDUer72MMmzA==}
+    engines: {node: '>= 14.16.0'}
 
   chownr@1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
@@ -6727,6 +6731,10 @@ packages:
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
+
+  readdirp@4.0.2:
+    resolution: {integrity: sha512-yDMz9g+VaZkqBYS/ozoBJwaBhTbZo3UNYQHNRw1D3UFQB8oHB4uS/tAODO+ZLjGWmUbKnIlOWO+aaIiAxrUWHA==}
+    engines: {node: '>= 14.16.0'}
 
   redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
@@ -10132,14 +10140,14 @@ snapshots:
       tiny-glob: 0.2.9
       vite: 5.3.1(@types/node@20.12.7)(sass@1.77.7)
 
-  '@sveltejs/package@2.3.1(svelte@5.1.6)(typescript@5.4.5)':
+  '@sveltejs/package@2.3.7(svelte@5.1.6)(typescript@5.4.5)':
     dependencies:
-      chokidar: 3.6.0
+      chokidar: 4.0.1
       kleur: 4.1.5
       sade: 1.8.1
-      semver: 7.6.0
+      semver: 7.6.3
       svelte: 5.1.6
-      svelte2tsx: 0.7.6(svelte@5.1.6)(typescript@5.4.5)
+      svelte2tsx: 0.7.22(svelte@5.1.6)(typescript@5.4.5)
     transitivePeerDependencies:
       - typescript
 
@@ -11109,6 +11117,10 @@ snapshots:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  chokidar@4.0.1:
+    dependencies:
+      readdirp: 4.0.2
 
   chownr@1.1.4: {}
 
@@ -14948,6 +14960,8 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
+
+  readdirp@4.0.2: {}
 
   redent@3.0.0:
     dependencies:
