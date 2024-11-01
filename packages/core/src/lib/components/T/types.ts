@@ -54,14 +54,14 @@ export type AnyProps = Record<string, any>
 /**
  * ### Base Props
  */
-export type BaseProps<Type, ChildrenArgs = { ref: MaybeInstance<Type> }> = {
+export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]> = {
   attach?:
     | string
     | Object3D
     | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
     | false
 
-  children?: Snippet<[ChildrenArgs]>
+  children?: Snippet<ChildrenArgs>
 
   oncreate?: CreateEvent<Type>
 }
@@ -148,7 +148,10 @@ export type InstanceProps<Type> = Partial<
  * @example Props<typeof PerspectiveCamera>
  * // { position: [number, number, number], fov: number, etc… }
  */
-export type Props<Type, ChildrenArgs = { ref: MaybeInstance<Type> }> = AnyProps &
+export type Props<
+  Type,
+  ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]
+> = AnyProps &
   DisposableProps &
   RefProps<Type> &
   BaseProps<Type, ChildrenArgs> &
