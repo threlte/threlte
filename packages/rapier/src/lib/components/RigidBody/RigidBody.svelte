@@ -12,9 +12,9 @@
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { RigidBodyContext, RigidBodyEvents, ThrelteRigidBody } from '../../types/types'
+  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types'
   import { overrideTeleportMethods } from './overrideTeleportMethods'
-  import type { RigidBodyProps } from './RigidBody.svelte'
+  import type { RigidBodyProps } from './types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -44,7 +44,7 @@
     onsleep,
     onwake,
     children
-  }: RigidBodyProps & RigidBodyEvents = $props()
+  }: RigidBodyProps = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events

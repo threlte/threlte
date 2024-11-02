@@ -6,7 +6,7 @@ import type { RigidBodyEvents } from '../../types/types'
 
 export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
-export type RigidBodyProps = {
+export type RigidBodyProps = RigidBodyEvents & {
   rigidBody?: RapierRigidBody | undefined
 
   /**
@@ -98,5 +98,3 @@ export type RigidBodyProps = {
 
   children?: Snippet<[{ rigidBody: RapierRigidBody }]>
 }
-
-export default class RigidBody extends SvelteComponent<RigidBodyProps & RigidBodyEvents> {}
