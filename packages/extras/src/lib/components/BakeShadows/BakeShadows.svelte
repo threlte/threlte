@@ -8,7 +8,7 @@
   const { renderer } = useThrelte()
 
   $effect(() => {
-    if (suspended.current) {
+    if (!suspended.current) {
       renderer.shadowMap.autoUpdate = false
       renderer.shadowMap.needsUpdate = true
     }
