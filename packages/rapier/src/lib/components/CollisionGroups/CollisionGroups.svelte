@@ -6,12 +6,7 @@
   import { writable } from 'svelte/store'
   import { computeBitMask } from '../../lib/computeBitMask'
   import type { CollisionGroupsContext } from '../../types/types'
-  import type {
-    CollisionGroupsProps,
-    Groups,
-    MembershipsAndFilter,
-    GroupsDef
-  } from './CollisionGroups.svelte'
+  import type { CollisionGroupsProps, Groups, GroupsDef, MembershipsAndFilter } from './types'
 
   let { groups, filter, memberships, children }: CollisionGroupsProps<TGroupsDef> = $props()
 
