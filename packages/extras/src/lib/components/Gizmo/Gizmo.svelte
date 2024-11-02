@@ -19,7 +19,7 @@
     type Object3DEventMap,
     type Sprite
   } from 'three'
-  import type { GizmoProps } from './Gizmo.svelte'
+  import type { GizmoProps } from './types'
 
   let {
     renderTask,
