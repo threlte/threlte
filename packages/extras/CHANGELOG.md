@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.33
+
+### Patch Changes
+
+- 1731055: fix `<Resize>` types and default args
+
 ## 9.0.0-next.32
 
 ### Patch Changes
