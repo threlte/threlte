@@ -12,7 +12,7 @@
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { vertexShader, fragmentShader } from './shaders'
-  import type { OutlinesProps } from './Outlines.svelte'
+  import type { OutlinesProps } from './types'
 
   let {
     color = 'black',
@@ -49,7 +49,7 @@
     fragmentShader
   })
 
-  const parent = useParent<Mesh | InstancedMesh | SkinnedMesh>()
+  const parent = useParent()
 
   let parentMesh = $derived($parent)
   let geometry = $derived(parentMesh ? toCreasedNormals(parentMesh.geometry, angle) : undefined)
