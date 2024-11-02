@@ -6,7 +6,7 @@
   import { createUseDimensionsContext } from '../hooks/useDimensions'
   import type { NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { BoxProps } from './Box.svelte'
+  import type { BoxProps } from './types'
 
   let { order, class: _class = '', onreflow, children, ...props }: BoxProps = $props()
 

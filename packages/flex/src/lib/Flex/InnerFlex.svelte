@@ -10,8 +10,8 @@
   import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
   import { propsChanged } from '../lib/propsChanged'
   import { createNodeContext } from '../nodes/context'
-  import type { InnerFlexProps } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
+  import type { InnerFlexProps } from './types'
 
   let {
     yoga,
