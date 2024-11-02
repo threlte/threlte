@@ -10,7 +10,7 @@
 <script lang="ts">
   import { Group, Quaternion } from 'three'
 
-  import type { BillboardProps } from './Billboard.svelte'
+  import type { BillboardProps } from './types'
 
   let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
