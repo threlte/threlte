@@ -3,7 +3,7 @@
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioProps } from './Audio.svelte'
+  import type { AudioProps } from './types'
 
   let {
     src,
