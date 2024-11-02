@@ -3,7 +3,7 @@
   import { onMount } from 'svelte'
   import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
-  import type { MeshRefractionMaterialProps } from './MeshRefractionMaterial.svelte'
+  import type { MeshRefractionMaterialProps } from './types'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
