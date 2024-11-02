@@ -1,7 +1,7 @@
 <script lang="ts">
   import { isInstanceOf, observe, T, useTask, useThrelte } from '@threlte/core'
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
-  import type { CubeCameraProps } from './CubeCamera'
+  import type { CubeCameraProps } from './types'
   import { onDestroy } from 'svelte'
 
   let {
