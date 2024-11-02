@@ -1,10 +1,13 @@
 import type { Props } from '@threlte/core'
-import type { SvelteComponent } from 'svelte'
 import type { ColorRepresentation, LineSegments } from 'three'
 
 export type EdgesProps = Props<LineSegments> & {
+  /**
+   * @default 1
+   */
   thresholdAngle?: number
+  /**
+   * @default '#ffffff'
+   */
   color?: ColorRepresentation
 }
-
-export default class Edges extends SvelteComponent<EdgesProps> {}
