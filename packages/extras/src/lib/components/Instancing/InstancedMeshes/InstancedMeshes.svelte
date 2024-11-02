@@ -3,7 +3,7 @@
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
-  import type { InstancedMeshesProps, Meshes } from './InstancedMeshes.svelte'
+  import type { InstancedMeshesProps, Meshes } from './types'
 
   type T = $$Generic<Meshes>
 
