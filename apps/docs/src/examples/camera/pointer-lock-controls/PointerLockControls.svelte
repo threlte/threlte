@@ -47,7 +47,7 @@
   function onMouseMove(event: MouseEvent) {
     if (!isLocked) return
     if (!$camera) return
-    if (!isCamera($camera)) {
+    if (!isInstanceOf($camera, 'Camera')) {
       throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
     }
 
