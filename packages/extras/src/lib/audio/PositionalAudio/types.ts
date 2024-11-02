@@ -1,5 +1,4 @@
 import type { Props } from '@threlte/core'
-import type { SvelteComponent } from 'svelte'
 import type { Audio, PositionalAudio as ThreePositionalAudio } from 'three'
 import type { AudioProps } from '../utils/useAudio'
 
@@ -20,5 +19,3 @@ export type PositionalAudioProps = Props<ThreePositionalAudio> &
     play?: () => Promise<Audio<GainNode> | ThreePositionalAudio | undefined>
     stop?: () => Audio<GainNode> | ThreePositionalAudio
   }
-
-export default class PositionalAudio extends SvelteComponent<PositionalAudioProps> {}
