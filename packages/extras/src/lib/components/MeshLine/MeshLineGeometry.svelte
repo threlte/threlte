@@ -1,18 +1,22 @@
+<!--
+@component
+A stripped down version of THREE.MeshLine:
+
+https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
+
+With peformance improvements inspired by:
+
+https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
+ -->
 <script lang="ts">
-  /*
-    A stripped down version of THREE.MeshLine:
-    https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
-    With peformance improvements inspired by:
-    https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
-	*/
-  import type { MeshLineGeometryProps } from './MeshLineGeometry.svelte'
+  import type { MeshLineGeometryProps } from './types'
   import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
 
   let {
     points = [],
     shape = 'none',
-    shapeFunction = (_p: number) => 1,
+    shapeFunction = () => 1,
     ref = $bindable(),
     children,
     props
