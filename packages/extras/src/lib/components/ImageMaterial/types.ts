@@ -1,38 +1,82 @@
 import type { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
 import type { Props } from '@threlte/core'
-import type { SvelteComponent } from 'svelte'
 
 export type ImageMaterialProps = Props<ShaderMaterial> & {
-  /** Default: white */
+  /**
+   * @default 'white'
+   */
   color?: ColorRepresentation
-  /** Default: 1 */
+
+  /**
+   * @default 1
+   */
   segments?: number
-  /** Defaut: 1 */
+
+  /**
+   * @defaut 1
+   */
   scale?: [number, number] | number
-  /** Default: 1 */
+
+  /**
+   * @default 1
+   */
   zoom?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   radius?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   alphaThreshold?: number
-  /** Default: 0.1 */
+
+  /**
+   * @default 0.1
+   */
   alphaSmoothing?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   brightness?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   contrast?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   hue?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   saturation?: number
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   lightness?: number
-  /** Default: #535970 */
+
+  /**
+   * @default '#535970'
+   */
   monochromeColor?: string
-  /** Default: 0 */
+
+  /**
+   * @default 0
+   */
   monochromeStrength?: number
-  /** Default: false */
+
+  /**
+   * @default false
+   */
   negative?: boolean
+
   /**
    * Can be used to adjust the strength and the pattern of color processing
    *
@@ -47,16 +91,28 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
    *
    * a - alpha override
    *
-   * Default: undefined
-   * */
+   * @default undefined
+   */
   colorProcessingTexture?: Texture | VideoTexture | undefined
-  /** Default: true */
+
+  /**
+   * @default true
+   */
   toneMapped?: boolean
-  /** Default: false */
+
+  /**
+   * @default false
+   */
   transparent?: boolean
-  /** Default: 1 */
+
+  /**
+   * @default 1
+   */
   opacity?: number
-  /** Default: FrontSide */
+
+  /**
+   * @default Three.FrontSide
+   */
   side?: Side
 } & (
     | {
@@ -68,5 +124,3 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
         url: string
       }
   )
-
-export default class Image extends SvelteComponent<ImageMaterialProps> {}

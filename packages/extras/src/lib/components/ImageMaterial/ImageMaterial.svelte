@@ -2,7 +2,7 @@
   import { Color, Vector2, type Texture, type Mesh, Vector3, ShaderMaterial } from 'three'
   import { T, asyncWritable, useParent, useTask, useThrelte } from '@threlte/core'
   import { useTexture } from '../../hooks/useTexture'
-  import type { ImageMaterialProps } from './ImageMaterial.svelte'
+  import type { ImageMaterialProps } from './types'
   import { useSuspense } from '../../suspense/useSuspense'
   import { vertexShader, fragmentShader } from './shaders'
 
