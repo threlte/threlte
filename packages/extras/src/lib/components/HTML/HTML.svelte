@@ -53,7 +53,7 @@
     getViewportFactor
   } from './utils'
   import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLProps } from './HTML.svelte'
+  import type { HTMLProps } from './types'
 
   let {
     eps = 0.001,
