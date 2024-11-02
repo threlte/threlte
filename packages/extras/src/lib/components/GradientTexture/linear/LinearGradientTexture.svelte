@@ -1,16 +1,14 @@
 <script lang="ts">
-  import type { LinearGradientTextureProps } from './LinearGradientTexture'
+  import type { LinearGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
 
   const { colorSpace, invalidate } = useThrelte()
 
-  const defaultSize = 1024
-
   let {
-    width = defaultSize,
-    height = defaultSize,
+    width = 1024,
+    height = 1024,
     startX = 0,
     startY = 0,
     endX = 0,
