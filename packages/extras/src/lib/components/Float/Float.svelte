@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MathUtils, Group } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatProps } from './Float.svelte'
+  import type { FloatProps } from './types'
 
   let {
     speed = 1,
