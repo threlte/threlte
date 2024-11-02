@@ -10,7 +10,7 @@
   } from '@threlte/core'
   import { Box3, Group, Sphere, Vector3 } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
-  import type { AlignProps } from './Align.svelte'
+  import type { AlignProps } from './types'
 
   const { renderStage } = useThrelte()
 
@@ -83,7 +83,7 @@
     { autoStart: false, stage }
   )
 
-  /** Provide component export */
+  /** Manually trigger aligning */
   export const align = scheduleAligning
 
   observe(() => [x, y, z, precise], scheduleAligning)
@@ -113,7 +113,7 @@
         name="align"
         {plugin}
       >
-        {@render children({ align: scheduleAligning, ref: group })}
+        {@render children?.({ align: scheduleAligning, ref: group })}
       </InjectPlugin>
     </T>
   </T>
