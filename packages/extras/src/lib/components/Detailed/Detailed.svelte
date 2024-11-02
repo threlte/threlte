@@ -3,7 +3,7 @@
   import { onDestroy, untrack } from 'svelte'
   import type { Object3D } from 'three'
   import { LOD } from 'three'
-  import type { DetailedProps } from './Detailed.svelte'
+  import type { DetailedProps } from './types'
 
   let { ref = $bindable(), children, ...props }: DetailedProps = $props()
 
