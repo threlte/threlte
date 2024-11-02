@@ -1,10 +1,10 @@
 <script lang="ts">
   import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
-  import { Group, Object3D } from 'three'
+  import { Group } from 'three'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { useControlsContext } from '../useControlsContext'
-  import type { TransformControlsProps } from './TransformControls.svelte'
+  import type { TransformControlsProps } from './types'
 
   let {
     autoPauseOrbitControls = true,
