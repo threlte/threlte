@@ -3,7 +3,7 @@
   import { onDestroy } from 'svelte'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext'
-  import type { OrbitControlsProps } from './OrbitControls.svelte'
+  import type { OrbitControlsProps } from './types'
 
   let { ref = $bindable(), onchange, children, ...props }: OrbitControlsProps = $props()
 
