@@ -1,5 +1,4 @@
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
 import { Material } from 'three'
 
 export type Frame = {
@@ -145,5 +144,3 @@ export type AnimatedSpriteProps = Props<Material> & {
   /** Fires when an animation loop completes. */
   onloop?: () => void
 }
-
-export default class AnimatedSprite extends SvelteComponent<AnimatedSpriteProps> {}

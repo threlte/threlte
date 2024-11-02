@@ -22,12 +22,7 @@
   } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type {
-    AnimatedSpriteProps,
-    Frame,
-    FrameTag,
-    SpriteJsonHashData
-  } from './AnimatedSpriteMaterial.svelte'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
 
   let {
     textureUrl,
