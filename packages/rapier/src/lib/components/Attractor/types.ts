@@ -1,9 +1,8 @@
-import { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
+import type { Props } from '@threlte/core'
 import type { Group } from 'three'
 import type { GravityType } from '../../types/types'
 
-type AttractorProps = Props<Group> & {
+export type AttractorProps = Props<Group> & {
   /**
    * The strength factor applied to the impulse affecting rigid-bodies within range. For newtonian
    * calculations, strength is treated as m1 mass.
@@ -30,5 +29,3 @@ type AttractorProps = Props<Group> & {
    */
   gravitationalConstant?: number
 }
-
-export default class Attractor extends SvelteComponent<AttractorProps> {}
