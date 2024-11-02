@@ -3,7 +3,7 @@
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioListenerProps } from './AudioListener.svelte'
+  import type { AudioListenerProps } from './types'
 
   let {
     id,
