@@ -1,5 +1,4 @@
 import type { Props, Stage } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
 import type { Scene, ToneMapping } from 'three'
 
 export type HUDProps = Props<Scene> & {
@@ -18,5 +17,3 @@ export type HUDProps = Props<Scene> & {
    */
   stage?: Stage
 }
-
-export default class HUD extends SvelteComponent<HUDProps> {}
