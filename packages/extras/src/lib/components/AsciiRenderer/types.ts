@@ -1,8 +1,6 @@
 import type { AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
-import type { Component } from 'svelte'
-import type { Props, Task } from '@threlte/core'
 
-export type AsciiRendererProps = Props<Task> & {
+export type AsciiRendererProps = {
   /**
    * controls whether the render task will automatically render
    * @default true
@@ -29,5 +27,3 @@ export type AsciiRendererProps = Props<Task> & {
    */
   options?: AsciiEffectOptions
 }
-
-declare const AsciiRenderer: Component<AsciiRendererProps>

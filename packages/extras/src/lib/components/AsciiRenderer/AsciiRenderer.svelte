@@ -1,16 +1,15 @@
 <script lang="ts">
-  import type { AsciiEffectProps } from './AsciiRenderer'
+  import type { AsciiRendererProps } from './types'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
-  import { observe, T, useTask, useThrelte } from '@threlte/core'
+  import { observe, useTask, useThrelte } from '@threlte/core'
 
   let {
     autoRender = true,
     bgColor = '#000000',
     characters = ' .:-+*=%@#',
     fgColor = '#ffffff',
-    options = {},
-    ref = $bindable()
-  }: AsciiEffectProps = $props()
+    options = {}
+  }: AsciiRendererProps = $props()
 
   const { autoRender: threlteAutoRender, camera, renderer, renderStage, scene, size } = useThrelte()
 
