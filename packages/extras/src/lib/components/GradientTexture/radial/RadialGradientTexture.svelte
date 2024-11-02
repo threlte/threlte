@@ -1,12 +1,10 @@
 <script lang="ts">
-  import type { RadialGradientTextureProps } from './RadialGradientTexture'
+  import type { RadialGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
 
   const { colorSpace, invalidate } = useThrelte()
-
-  const defaultSize = 1024
 
   let {
     innerRadius = 0,
@@ -15,8 +13,8 @@
       { offset: 0, color: 'black' },
       { offset: 1, color: 'white' }
     ],
-    width = defaultSize,
-    height = defaultSize,
+    width = 1024,
+    height = 1024,
     children,
     ref = $bindable(),
     ...props
