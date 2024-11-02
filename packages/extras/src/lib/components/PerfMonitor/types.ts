@@ -1,5 +1,3 @@
-import { SvelteComponent } from 'svelte'
-
 export type PerfMonitorProps = {
   /**
    * Dom element to which stats block will be attached to.
@@ -40,7 +38,7 @@ export type PerfMonitorProps = {
    * Toggles Three-perf dev gui visiblity.
    * @default false
    */
-  guiVisible?: boolean // default three-perf dev gui visiblity [falde by default]
+  guiVisible?: boolean // default three-perf dev gui visiblity [false by default]
   /**
    * Stats block background opacity level.
    * @default 0.7
@@ -62,5 +60,3 @@ export type PerfMonitorProps = {
    */
   anchorY?: 'top' | 'bottom' // default is top [stats container vertical anchor]
 }
-
-export default class PerfMonitor extends SvelteComponent<PerfMonitorProps> {}
