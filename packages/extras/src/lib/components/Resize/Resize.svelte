@@ -26,7 +26,7 @@
     axis,
     auto = false,
     box = _box,
-    precise = true,
+    precise,
     onresize,
     stage = useStage('<Resize>', { before: renderStage }),
     ref = $bindable(new Group()),
