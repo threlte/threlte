@@ -1,11 +1,10 @@
-import { SvelteComponent } from 'svelte'
 import type { Props } from '@threlte/core'
-import type { GroundProjectedEnv } from 'three/examples/jsm/objects/GroundProjectedEnv.js'
-import { ColorSpace } from 'three'
+import type { ColorSpace } from 'three'
+import type { GroundedSkybox } from 'three/examples/jsm/Addons.js'
 
 export type EnvironmentProps = {
   /**
-   * Defaults to "/"
+   * @default "/"
    */
   path?: string
   /**
@@ -19,7 +18,7 @@ export type EnvironmentProps = {
   /**
    * Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.
    */
-  groundProjection?: Props<GroundProjectedEnv>
+  groundProjection?: Props<GroundedSkybox>
   /**
    * Use `ldr` for .png, .jpg and `hdr` for .hdr file formats
    */
@@ -29,5 +28,3 @@ export type EnvironmentProps = {
    */
   colorSpace?: ColorSpace
 }
-
-export default class Environment extends SvelteComponent<EnvironmentProps> {}
