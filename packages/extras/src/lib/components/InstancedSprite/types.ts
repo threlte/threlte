@@ -4,7 +4,6 @@ import type {
   SpritesheetFormat
 } from '@threejs-kit/instanced-sprite-mesh'
 import type { Props } from '@threlte/core'
-import { SvelteComponent, type Snippet } from 'svelte'
 import type { Writable } from 'svelte/store'
 import {
   InstancedMesh,
@@ -19,7 +18,12 @@ import {
 } from 'three'
 import type SpriteInstance from './SpriteInstance.svelte'
 
-export type InstancedSpriteProps = Omit<Props<InstancedMesh>, 'children'> & {
+export type InstancedSpriteProps = Omit<
+  Props<InstancedMesh, [{ Instance: typeof SpriteInstance }]>,
+  'ref'
+> & {
+  ref?: InstancedSpriteMesh<Material, unknown>
+
   /**
    * update animations automatically
    *
@@ -27,12 +31,15 @@ export type InstancedSpriteProps = Omit<Props<InstancedMesh>, 'children'> & {
    */
   autoUpdate?: boolean
 
-  /** Number of instances */
+  /**
+   * Number of instances
+   * @default 1000
+   */
   count: number
 
   /**
-   * Base material used to construct the sprite material. MeshBasicMaterial by default.
-   *
+   * Base material used to construct the sprite material.
+   * @default MeshBasicMaterial
    */
   baseMaterial?:
     | typeof MeshBasicMaterial
@@ -60,6 +67,7 @@ export type InstancedSpriteProps = Omit<Props<InstancedMesh>, 'children'> & {
    * The desired frames per second of the animation
    *
    * This will override any frame durations specified in JSON
+   * @default 15
    */
   fps?: number
 
@@ -91,15 +99,14 @@ export type InstancedSpriteProps = Omit<Props<InstancedMesh>, 'children'> & {
       }
     | undefined
 
+  /**
+   * @default false
+   */
   randomPlaybackOffset?: boolean | number
   spritesheet: {
     spritesheet: SpritesheetFormat
     texture: Texture
   }
-
-  ref?: InstancedSpriteMesh<Material, unknown>
-
-  children?: Snippet<[{ Instance: typeof SpriteInstance }]>
 }
 
 export type InstancedSpriteUserCtx<T> = {
@@ -109,4 +116,28 @@ export type InstancedSpriteUserCtx<T> = {
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void
 }
 
-export default class InstancedSprite extends SvelteComponent<InstancedSpriteProps> {}
+export type SpriteInstanceProps = {
+  /**
+   * @default 0
+   */
+  id: number
+
+  animationName?: string
+
+  /**
+   * @default [0, 0, 0]
+   */
+  position?: Vector3Tuple
+
+  /**
+   * @default [1, 1]
+   */
+  scale?: Vector2Tuple
+  playmode?: keyof typeof PLAY_MODE
+  billboarding?: boolean
+  offset?: number
+  loop?: boolean
+  flipX?: boolean
+  flipY?: boolean
+  frameId?: number
+}

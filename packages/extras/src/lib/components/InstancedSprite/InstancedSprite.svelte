@@ -10,7 +10,7 @@
   } from 'three'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './InstancedSprite.svelte'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types'
   import SpriteInstance from './SpriteInstance.svelte'
 
   let {
@@ -62,7 +62,6 @@
     mesh.fps = fps
   })
   $effect.pre(() => mesh.hueShift.setGlobal(hueShift))
-
   // BILLBOARDING
   $effect.pre(() => {
     if (billboarding === undefined) {
