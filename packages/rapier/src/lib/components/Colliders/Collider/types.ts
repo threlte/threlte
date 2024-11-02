@@ -1,11 +1,11 @@
 import type {
   CoefficientCombineRule,
-  Collider as RapierCollider,
-  ColliderDesc
+  ColliderDesc,
+  Collider as RapierCollider
 } from '@dimforge/rapier3d-compat'
-import { SvelteComponent, type Snippet } from 'svelte'
+import { type Snippet } from 'svelte'
 import type { Euler, Vector3 } from 'three'
-import type { ColliderEvents } from '../../types/types'
+import type { ColliderEvents } from '../../../types/types'
 
 // ------------------ BASE ------------------
 
@@ -102,8 +102,3 @@ export type ColliderProps<TShape extends Shape, TMassDef extends MassDef> = Base
   MassProps<TMassDef> & {
     children?: Snippet<[{ collider?: RapierCollider }]>
   }
-
-export default class Collider<
-  TShape extends Shape,
-  TMassDef extends MassDef
-> extends SvelteComponent<ColliderProps<TShape, TMassDef>> {}

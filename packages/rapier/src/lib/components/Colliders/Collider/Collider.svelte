@@ -1,4 +1,7 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="TShape extends Shape, TMassDef extends MassDef"
+>
   import {
     ActiveCollisionTypes,
     CoefficientCombineRule,
@@ -8,20 +11,17 @@
   import { createParentObject3DContext, useParentObject3D, useTask, watch } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
-  import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useRapier } from '../../hooks/useRapier'
-  import { useRigidBody } from '../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
-  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
-  import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
-  import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { ColliderEvents } from '../../types/types'
-  import type { ColliderProps, MassDef, Shape } from './Collider.svelte'
-
-  type TShape = $$Generic<Shape>
-  type TMassDef = $$Generic<MassDef>
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
+  import { useRapier } from '../../../hooks/useRapier'
+  import { useRigidBody } from '../../../hooks/useRigidBody'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
+  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
+  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs'
+  import { useCreateEvent } from '../../../lib/useCreateEvent'
+  import type { ColliderEvents } from '../../../types/types'
+  import type { ColliderProps, MassDef, Shape } from './types'
 
   let {
     shape,
