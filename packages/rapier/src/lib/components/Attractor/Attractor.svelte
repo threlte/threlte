@@ -3,7 +3,7 @@
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps } from './Attractor.svelte'
+  import type { AttractorProps } from './types'
 
   let {
     strength = 1,

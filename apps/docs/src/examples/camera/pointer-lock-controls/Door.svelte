@@ -44,6 +44,7 @@
   $: if (group && doorRigidBody) applyDoorRotation($doorRotation)
 </script>
 
+@@ -1,152 +0,0 @@
 <T.Group bind:ref={group}>
   <!-- FRAME -->
   <AutoColliders shape={'cuboid'}>

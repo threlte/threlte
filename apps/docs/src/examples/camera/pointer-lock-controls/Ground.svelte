@@ -3,6 +3,7 @@
   import { AutoColliders } from '@threlte/rapier'
 </script>
 
+@@ -1,13 +0,0 @@
 <T.Group position={[0, -0.5, 0]}>
   <AutoColliders shape={'cuboid'}>
     <T.Mesh receiveShadow>

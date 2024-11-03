@@ -1,11 +1,11 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { BufferAttribute, BufferGeometry } from 'three'
+  import { BufferAttribute, BufferGeometry, LineSegments } from 'three'
   import { useRapier } from '../../hooks/useRapier'
-  import type { DebugProps } from './Debug.svelte'
+  import type { DebugProps } from './types'
 
-  let { ref = $bindable(), ...props }: DebugProps = $props()
+  let { ref = $bindable(new LineSegments()), ...props }: DebugProps = $props()
 
   const { world, debug } = useRapier()
 
@@ -28,12 +28,12 @@
   })
 </script>
 
-<T.LineSegments
-  bind:ref
+<T
+  is={ref}
   frustumCulled={false}
   renderOrder={Infinity}
   {...props}
 >
   <T is={geometry} />
   <T.LineBasicMaterial vertexColors />
-</T.LineSegments>
+</T>
