@@ -368,6 +368,24 @@ controller, Rapier comes with a pre-made, easy to implement [Character
 Controller](https://rapier.rs/docs/user_guides/javascript/character_controller).
 It's more powerful and flexible than the old component.
 
+#### `oncreate` event signature
+
+The `oncreate` event signature available on `<RigidBody>`, `Collider` and
+`<AutoColliders>` has been adapted to match the `oncreate` prop on `<T>`.
+
+```svelte
+<RigidBody
+  oncreate={(ref) => {
+    // ref is the created RigidBody instance
+    return () => {
+      // cleanup function
+    }
+  }}
+>
+  <!-- ... -->
+</RigidBody>
+```
+
 ## Threlte 7
 
 Threlte 7 introduces a new _Task Scheduling System_ that allows you to easily
