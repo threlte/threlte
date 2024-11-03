@@ -5,20 +5,24 @@
   import { useControlsContext } from '../useControlsContext'
   import type { OrbitControlsProps } from './types'
 
-  let { ref = $bindable(), onchange, children, ...props }: OrbitControlsProps = $props()
-
   const parent = useParent()
-
   const { renderer, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
+  // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  let {
+    ref = $bindable(new ThreeOrbitControls($parent, renderer.domElement.parentElement!)),
+    children,
+    ...props
+  }: OrbitControlsProps = $props()
 
-  const { start, stop } = useTask(() => controls.update(), {
+  props.onchange
+  props.onstart
+
+  const { start, stop } = useTask(() => ref.update(), {
     autoStart: false,
     autoInvalidate: false
   })
@@ -32,18 +36,17 @@
   })
 
   const { orbitControls } = useControlsContext()
-  orbitControls.set(controls)
+  orbitControls.set(ref)
   onDestroy(() => orbitControls.set(undefined))
 </script>
 
 <T
-  is={controls}
-  bind:ref
+  is={ref}
   onchange={(event) => {
     invalidate()
-    onchange?.(event)
+    props.onchange?.(event)
   }}
   {...props}
 >
-  {@render children?.({ ref: controls })}
+  {@render children?.({ ref })}
 </T>
