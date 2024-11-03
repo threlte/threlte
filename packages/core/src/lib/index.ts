@@ -36,7 +36,11 @@ export { createCameraContext, useCamera } from './context/fragments/camera'
 export { createCanvasContext, useCanvas } from './context/fragments/canvas'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal'
 export { createParentContext, useParent } from './context/fragments/parent'
-export { createParentObject3DContext, useParentObject3D } from './context/fragments/parentObject3D'
+export {
+  createRootParentObject3DContext,
+  createParentObject3DContext,
+  useParentObject3D
+} from './context/fragments/parentObject3D'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
 export { createSceneContext, useScene } from './context/fragments/scene'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
