@@ -1,9 +1,9 @@
 import type { Props } from '@threlte/core'
-import type { Audio, PositionalAudio as ThreePositionalAudio } from 'three'
-import type { AudioProps } from '../utils/useAudio'
+import type { PositionalAudio as ThreePositionalAudio } from 'three'
+import type { AudioProps as CommonAudioProps } from '../utils/useAudio'
 
 export type PositionalAudioProps = Props<ThreePositionalAudio> &
-  AudioProps & {
+  CommonAudioProps & {
     id?: string
     refDistance?: number
     rolloffFactor?: number
@@ -14,8 +14,4 @@ export type PositionalAudioProps = Props<ThreePositionalAudio> &
       coneOuterAngle: number
       coneOuterGain: number
     }
-
-    pause?: () => Audio<GainNode> | ThreePositionalAudio
-    play?: () => Promise<Audio<GainNode> | ThreePositionalAudio | undefined>
-    stop?: () => Audio<GainNode> | ThreePositionalAudio
   }

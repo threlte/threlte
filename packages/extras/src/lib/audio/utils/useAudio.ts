@@ -56,7 +56,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
         audio.setMediaStreamSource(source)
       }
       loaded.set(true)
-      audio.source?.buffer ? props.onload?.(audio.source.buffer) : props.onload?.()
+      audio.buffer ? props.onload?.(audio.buffer) : props.onload?.()
     } catch (error) {
       props.onerror?.(error as ErrorEvent)
     }
@@ -100,7 +100,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
   }
 
   const setDetune = (value?: AudioProps['detune']) => {
-    if (audio.source && audio.source.detune) {
+    if (audio.source && audio.detune) {
       audio.setDetune(value ?? 0)
     }
   }

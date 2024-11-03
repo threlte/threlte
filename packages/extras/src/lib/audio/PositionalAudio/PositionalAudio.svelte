@@ -18,9 +18,6 @@
     rolloffFactor,
     distanceModel,
     maxDistance,
-    play = $bindable(),
-    pause = $bindable(),
-    stop = $bindable(),
     ref = $bindable(),
     children,
     ...props
@@ -60,9 +57,9 @@
     ...useAudioProps
   } = useAudio(audio, props)
 
-  pause = useAudioProps.pause
-  play = useAudioProps.play
-  stop = useAudioProps.stop
+  export const pause = useAudioProps.pause
+  export const play = useAudioProps.play
+  export const stop = useAudioProps.stop
 
   $effect(() => setAutoPlay(autoplay))
   $effect(() => void setSource(src))
