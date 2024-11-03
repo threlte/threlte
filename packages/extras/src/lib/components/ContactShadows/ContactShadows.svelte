@@ -28,7 +28,6 @@
     scale = 10,
     color = '#000000',
     depthWrite = false,
-    refresh = $bindable(),
     ref = $bindable(),
     children,
     ...props
@@ -168,7 +167,10 @@
     renderer.setClearAlpha(initialClearAlpha)
   }
 
-  refresh = () => {
+  /**
+   * Renders the shadows.
+   */
+  export const refresh = () => {
     renderShadows()
   }
 
