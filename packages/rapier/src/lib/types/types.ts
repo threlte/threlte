@@ -32,8 +32,11 @@ export type ColliderShapes =
 
 export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
 
+export type CreateEvent<T> = {
+  oncreate: (ref: T) => void | (() => void)
+}
+
 export type ColliderEvents = {
-  oncreate?: (event: { ref: Collider; cleanup: (callback: () => void) => void }) => void
   oncollisionenter?: (event: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null

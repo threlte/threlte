@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
@@ -49,7 +48,7 @@
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  const { updateRef } = useCreateEvent<RigidBody>(oncreate)
+  const { updateRef } = useCreateEvent(oncreate)
 
   const object = new Object3D()
   initializeRigidBodyUserData(object)

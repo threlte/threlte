@@ -1,8 +1,7 @@
-import type { Collider } from '@dimforge/rapier3d-compat'
-import type { ColliderEvents } from '../types/types'
 import { onDestroy } from 'svelte'
+import type { ColliderEvents, CreateEvent } from '../types/types'
 
-export const useCreateEvent = <T>(oncreate?: ColliderEvents['oncreate']) => {
+export const useCreateEvent = <T>(oncreate?: CreateEvent<T>['oncreate']) => {
   const cleanupFunctions: (() => void)[] = []
 
   let ref: T
@@ -14,14 +13,10 @@ export const useCreateEvent = <T>(oncreate?: ColliderEvents['oncreate']) => {
     // clear the cleanup functions array
     cleanupFunctions.length = 0
 
-    const cleanup = (callback: () => void) => {
-      // add cleanup function to array
-      cleanupFunctions.push(callback)
-    }
-
     if (ref === undefined) return
 
-    oncreate?.({ ref, cleanup })
+    const cleanup = oncreate?.(ref)
+    if (cleanup) cleanupFunctions.push(cleanup)
   }
 
   const updateRef = (newRef: T) => {

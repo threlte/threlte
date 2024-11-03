@@ -38,24 +38,30 @@ componentSignature:
         { name: 'angularDamping', type: 'number', default: '0', required: false },
         { name: 'userData', type: 'Record<string, any>', default: '{}', required: false }
       ],
-    events: [{ name: 'create', payload: '{
-            ref: RigidBody,
-            cleanup: (callback: () => void) => void }
-            ' }, { name: 'sleep', payload: 'void' }, { name: 'wake', payload: 'void' }, { name: 'collisionenter', payload: '{
+    events:
+      [
+        { name: 'create', payload: 'ref: RigidBody' },
+        { name: 'sleep', payload: 'void' },
+        { name: 'wake', payload: 'void' },
+        { name: 'collisionenter', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null,
             manifold: TempContactManifold,
             flipped: boolean
-            }' }, { name: 'collisionexit', payload: '{
+            }' },
+        { name: 'collisionexit', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null
-            }' }, { name: 'sensorenter', payload: '{
+            }' },
+        { name: 'sensorenter', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null
-            }' }, { name: 'sensorexit', payload: '{
+            }' },
+        { name: 'sensorexit', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null
-            }' }, { name: 'contact', payload: '{
+            }' },
+        { name: 'contact', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null,
             manifold: TempContactManifold,
@@ -64,7 +70,8 @@ componentSignature:
             maxForceMagnitude: number,
             totalForce: Vector,
             totalForceMagnitude: number
-            }' }],
+            }' }
+      ],
     bindings:
       [
         {

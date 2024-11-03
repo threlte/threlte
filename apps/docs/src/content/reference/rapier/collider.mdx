@@ -1,7 +1,7 @@
 ---
 order: 3
 category: '@threlte/rapier'
-sourcePath: 'packages/rapier/src/lib/components/Colliders/Collider.svelte'
+sourcePath: 'packages/rapier/src/lib/components/Colliders/Collider/Collider.svelte'
 name: '<Collider>'
 type: 'component'
 componentSignature:
@@ -30,10 +30,15 @@ componentSignature:
         { name: 'sensor', required: false, type: 'boolean' },
         { name: 'contactForceEventThreshold', required: false, type: 'number' }
       ],
-    events: [{ name: 'create', payload: '{
-            ref: Collider,
-            cleanup: (callback: () => void) => void }
-            ' }, { name: 'collisionenter', payload: '{
+		exports:
+      [
+        {
+          name: 'refresh',
+          type: '() => void',
+          description: 'Invoke this function to update the colliders transforms.'
+        }
+      ],
+    events: [{ name: 'create', payload: 'ref: Collider' }, { name: 'collisionenter', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null,
             manifold: TempContactManifold,
