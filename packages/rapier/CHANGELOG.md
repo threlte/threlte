@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 3.0.0-next.15
+
+### Major Changes
+
+- 05dc480: Refactor component types
+- d4f0639: Remove BasicPlayerController recipe
+
 ## 3.0.0-next.14
 
 ### Patch Changes
