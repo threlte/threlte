@@ -13,6 +13,7 @@ import { useCanvas, type Size } from '../fragments/canvas'
 import { useRenderer } from '../fragments/renderer.svelte'
 import { useScene } from '../fragments/scene'
 import { useScheduler } from '../fragments/scheduler.svelte'
+import { useRenderTask } from '../fragments/render-task'
 
 /**
  * ### `ThrelteContext`
@@ -89,11 +90,12 @@ export const useThrelte = (): ThrelteContext => {
   const cameraCtx = useCamera()
   const sceneCtx = useScene()
   const canvasCtx = useCanvas()
+  const renderTaskCtx = useRenderTask()
 
   const context: ThrelteContext = {
     advance: schedulerCtx.advance,
     autoRender: schedulerCtx.autoRender,
-    autoRenderTask: rendererCtx.autoRenderTask,
+    autoRenderTask: renderTaskCtx.autoRenderTask,
     camera: cameraCtx.camera,
     colorManagementEnabled: rendererCtx.colorManagementEnabled,
     colorSpace: rendererCtx.colorSpace,

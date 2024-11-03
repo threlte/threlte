@@ -14,7 +14,9 @@ import {
   createSchedulerContext,
   type CreateSchedulerContextOptions
 } from './fragments/scheduler.svelte'
+import { createRenderTaskContext } from './fragments/render-task'
 import { createUserContext } from './fragments/user'
+import { setRendererAnimationLoopWithAutoResize } from './fragments/animation-loop'
 
 export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
   CreateCanvasContextOptions &
@@ -32,5 +34,8 @@ export const createThrelteContext = <T extends Renderer>(
   createSchedulerContext(options)
   createCameraContext()
   createRendererContext(options)
+  createRenderTaskContext()
   createUserContext()
+
+  setRendererAnimationLoopWithAutoResize()
 }
