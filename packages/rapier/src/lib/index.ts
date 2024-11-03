@@ -32,5 +32,7 @@ export type {
   SensorEnterEvent,
   SensorExitEvent,
   ContactEvent,
-  GravityType
+  GravityType,
+  CreateEvent,
+  Framerate
 } from './types/types'
