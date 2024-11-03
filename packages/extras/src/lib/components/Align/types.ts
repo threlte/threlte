@@ -32,8 +32,6 @@ export type AlignProps = Props<Group, [{ align: () => void; ref: Group }]> & {
    */
   auto?: boolean
 
-  calculate?: () => void
-
   onalign?: (event: AlignEventData) => void
 
   /**

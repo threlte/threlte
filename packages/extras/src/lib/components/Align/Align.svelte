@@ -21,7 +21,6 @@
     precise = false,
     auto = false,
     ref = $bindable(),
-    calculate = $bindable(),
     onalign,
     children,
     stage = useStage('<Align>', { before: renderStage }),
@@ -32,7 +31,7 @@
   const innerGroup = new Group()
   const outerGroup = new Group()
 
-  calculate = () => {
+  const calculate = () => {
     // return early if all axes are false
     if (x === false && y === false && z === false) return
 
