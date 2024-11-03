@@ -129,9 +129,6 @@ export type AnimatedSpriteProps = Props<Material> & {
    */
   columns?: number
 
-  readonly play?: () => void
-  readonly pause?: () => void
-
   /** Fires when all resources have loaded. */
   onload?: () => void
 
