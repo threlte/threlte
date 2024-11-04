@@ -4,30 +4,27 @@ title: Custom Abstractions
 order: 1
 ---
 
-A lot of the components you will find in the package [@threlte/extras](/docs/reference/extras/getting-started)
-are abstractions on top of the [`<T>` component](/docs/reference/core/t). These abstractions provide extra functionality like automatically
-invalidating the frame or providing default values or extra props.
+A lot of the components you will find in the package
+[@threlte/extras](/docs/reference/extras/getting-started) are abstractions on
+top of the [`<T>` component](/docs/reference/core/t). These abstractions provide
+extra functionality like automatically invalidating the frame or providing
+default values or extra props.
 
-A common use case for custom abstractions is to create a component that is a fixed entity in your Threlte app which you want to reuse
-in multiple places. As an example, let's create a component that is made up from multiple `<T>` components resembling a floor and a cube on top:
+A common use case for custom abstractions is to create a component that is a
+fixed entity in your Threlte app which you want to reuse in multiple places or
+which exposes a specific behavior. As an example, let's create a component that
+is made up from multiple `<T>` components resembling a tile of some kind:
 
-{/* prettier-ignore-start */}
 ```svelte title="Tile.svelte"
 <script>
   import { T } from '@threlte/threlte'
   import { MathUtils } from 'three'
-  
+
   let { children } = $props()
 </script>
 
 <T.Group>
-  <!-- 1x1x1 Cube -->
-  <T.Mesh position.y={0.5}>
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-
-  <!-- 2x2 Floor -->
+  <!-- 2x2 Tile -->
   <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[2, 2]} />
     <T.MeshStandardMaterial />
@@ -36,7 +33,6 @@ in multiple places. As an example, let's create a component that is made up from
   {@render children()}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
 
 Let's see what implementing that component looks like:
 
@@ -50,9 +46,12 @@ Let's see what implementing that component looks like:
 
 ## Props
 
-The `<Tile>` component is now available in the scene and can be reused as many times as you want.
-Now we'd like to assign a different `position` to the `<Tile>` component in order to move it around.
-We can do that by passing a `position` prop to the `<Tile>` component:
+The `<Tile>` component is now available in the scene and can be reused as many
+times as you want.
+
+Now we'd like to assign a different `position` to every `<Tile>` in order to
+position it in the scene. We can do that by passing a `position` prop to the
+`<Tile>` component:
 
 ```svelte title="Scene.svelte"
 <script>
@@ -64,10 +63,11 @@ We can do that by passing a `position` prop to the `<Tile>` component:
 <Tile position={[4, 0, 0]} />
 ```
 
-The component `<Tile>` internally needs to use the `position` prop in order to set the position of the `<T>` components. We can do that by
-[spreading `props` on the `<T.Group>`](https://svelte.dev/tutorial/spread-props) component at the root hierarchy of `<Tile>`:
+That doesn't work _yet_. The component `<Tile>` internally needs to make use of
+the `position` prop to set the position of its children. We can do that by
+[spreading `props` on the `<T.Group>`](https://svelte.dev/tutorial/spread-props)
+component at the root hierarchy of `<Tile>`:
 
-{/* prettier-ignore-start */}
 ```svelte title="Tile.svelte" {5}m
 <script>
   import { T } from '@threlte/threlte'
@@ -77,12 +77,6 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
 </script>
 
 <T.Group {...props}>
-  <!-- 1x1x1 Cube -->
-  <T.Mesh position.y={0.5}>
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-
   <!-- 2x2 Floor -->
   <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[2, 2]} />
@@ -92,70 +86,78 @@ The component `<Tile>` internally needs to use the `position` prop in order to s
   {@render children()}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
 
 ## Types
 
 <Tip type="info">The following section assumes you use TypeScript.</Tip>
 
-The last thing we need to do is to add types to our custom abstraction so that editors like VSCode can provide us with autocompletion and type checking.
-We will create a `Tile.d.ts` file next to the `Tile.svelte` file and add the following content:
+The last thing we need to do is to add types to our custom abstraction so that
+IDEs like VS Code can provide autocompletion and type checking. We will create a
+`types.ts` file next to the `Tile.svelte` file and add the following content:
 
-```ts title="Tile.d.ts"
+```ts title="types.ts"
 import type { Props } from '@threlte/core'
-import { SvelteComponent } from 'svelte'
 import type { Group } from 'three'
 
-export type TileProps = Props<Group> & {
-  // Define extra props here.
-}
-
-export default class Tile extends SvelteComponent<TileProps> {}
+export type TileProps = Props<Group>
 ```
 
-Now we can use the `<Tile>` component in our scene and get autocompletion and type checking:
+<Tip type="tip">
+  As of now it's necessary to declare the props in a separate file.
+	If you declare them inside the `<script>` block, the Svelte compiler
+	flattens the resulting type, removing JSDoc comments and possibly
+	breaking it.
+</Tip>
 
-```svelte title="Scene.svelte"
-<script>
-  import Tile from './Tile.svelte'
-</script>
+The generic type `Props<Type>` is a utility type that extracts all possible
+props that a `<T>` component accepts – in this case `<T.Group>`. It also creates
+a _bindable `ref` prop_ that can be used to bind to the group created by the
+`<T.Group>` component.
 
-<!-- Autocompletion and type checking works here. -->
-<Tile position={[0, 0, 0]} />
-```
+We need to import the `TileProps` type in our `Tile.svelte` file and make use of
+the `ref` prop. For that we:
 
-Let's cross check the types inside our `Tile.svelte` file by typing the `$props` rune.
+- Add the `lang="ts"` attribute to the `<script>` block
+- Import the `TileProps` type
+- Add the bindable prop `ref` to the props
+- Bind `ref` to the bindable prop `ref` of the root `<T.Group>` component
+- Pass `ref` to the `children()` block
 
-Addtionally, let's create a bindable `ref` and pass it to any child components:
-
-{/* prettier-ignore-start */}
-```svelte title="Tile.svelte" {10,13,26}m {4,8}+
+```svelte title="Tile.svelte" {4,11}+ {1,6,19}m
 <script lang="ts">
   import { T } from '@threlte/threlte'
   import { MathUtils } from 'three'
-  import type { TileProps } from './Tile.svelte'
+  import type { TileProps } from './types'
 
-  let {
-    children,
-    ref = $bindable(),
-    ...props,
-  }: TileProps = $props()
+  let { children, ref = $bindable(), ...props }: TileProps = $props()
 </script>
 
-<T.Group {...props} bind:ref>
-  <!-- 1x1x1 Cube -->
-  <T.Mesh position.y={0.5}>
-    <T.BoxGeometry />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-
+<T.Group
+  {...props}
+  bind:ref
+>
   <!-- 2x2 Floor -->
   <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[2, 2]} />
     <T.MeshStandardMaterial />
   </T.Mesh>
 
-  {@render children(ref)}
+  {@render children({ ref })}
 </T.Group>
 ```
-{/* prettier-ignore-end */}
+
+Now we can use the `<Tile>` component in our scene and get autocompletion and
+type checking.
+
+```svelte title="Scene.svelte"
+<script>
+  import Tile from './Tile.svelte'
+  import { TransformControls } from '@threlte/extras'
+</script>
+
+<Tile position={[2, 0, 2]}>
+  {#snippet children({ ref })}
+    <TransformControls object={ref} />
+  {/snippet}
+</Tile>
+```
