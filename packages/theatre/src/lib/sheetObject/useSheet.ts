@@ -4,8 +4,8 @@ import { getContext, setContext } from 'svelte'
 
 const key = 'threlte-theater-sheet-context'
 
-interface Context {
-  sheetObject: CurrentWritable<ISheetObject<any>>
+type Context<T extends UnknownShorthandCompoundProps = {}> = {
+  sheetObject: CurrentWritable<ISheetObject<T>>
   addProps: (props: UnknownShorthandCompoundProps) => void
   removeProps: (names: string[]) => void
 }
@@ -14,6 +14,6 @@ export const createSheetContext = (context: Context) => {
   setContext<Context>(key, context)
 }
 
-export const useSheet = (): Context => {
-  return getContext<Context>(key)
+export const useSheet = <T extends UnknownShorthandCompoundProps = {}>(): Context<T> => {
+  return getContext<Context<T>>(key)
 }

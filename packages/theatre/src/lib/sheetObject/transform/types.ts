@@ -16,7 +16,3 @@ export type TransformProps<T extends string | undefined> = {
   : {
       key?: string
     })
-
-export default class Transform<Label extends string | undefined> extends SvelteComponent<
-  TransformProps<Label>
-> {}

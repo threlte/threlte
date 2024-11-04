@@ -1,15 +1,16 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="P extends UnknownShorthandCompoundProps"
+>
   import type { UnknownShorthandCompoundProps } from '@theatre/core'
   import { watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import type { DeclareProps } from './Declare.svelte'
   import { useSheet } from '../useSheet'
-
-  type P = $$Generic<UnknownShorthandCompoundProps>
+  import type { DeclareProps } from './types'
 
   let { props, children }: DeclareProps<P> = $props()
 
-  const { sheetObject, addProps, removeProps } = useSheet()
+  const { sheetObject, addProps, removeProps } = useSheet<P>()
 
   let values = $state($sheetObject?.value)
 

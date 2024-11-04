@@ -1,6 +1,6 @@
-import type { Snippet, SvelteComponent } from 'svelte'
-import type { Transformer } from '../transfomers/types'
+import type { Snippet } from 'svelte'
 import type { ConditionalKeys, Primitive } from 'type-fest'
+import type { Transformer } from '../transfomers/types'
 
 /* COPIED FROM @threlte/core START */
 type OmittedPropKeys =
@@ -57,9 +57,5 @@ type AnyProps<T> = {
 export type SyncProps<T> = AnyProps<T> &
   ObjectProp<T> &
   Record<string, AnyProp | T> & {
-    capture?: () => void
-  } & {
     children?: Snippet<[{ capture: () => void }]>
   }
-
-export default class Sync<T> extends SvelteComponent<SyncProps<T>> {}
