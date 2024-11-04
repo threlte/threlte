@@ -1,10 +1,11 @@
 <script lang="ts">
   import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
-  import { Group, Object3D } from 'three'
+  import { Group } from 'three'
+  import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
   import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
   import { useControlsContext } from '../useControlsContext'
-  import type { TransformControlsProps } from './TransformControls.svelte'
+  import type { TransformControlsProps } from './types'
 
   let {
     autoPauseOrbitControls = true,
@@ -106,14 +107,15 @@
     })
   })
 
-  const onchange = () => {
+  const onchange = (event: TransformControlsEventMap['change']) => {
     invalidate()
     if (transformControls.dragging && !isDragging.current) {
       isDragging.set(true)
     } else if (!transformControls.dragging && isDragging.current) {
       isDragging.set(false)
     }
-    props.onchange?.()
+    // TODO: unfortunately the type of the event prop is not correct *yet*
+    props.onchange?.(event as any)
   }
 </script>
 
@@ -123,7 +125,13 @@
   bind:ref={controls}
   {onchange}
   {...transformProps}
-  attach={scene}
+  attach={({ ref }) => {
+    const helper = ref.getHelper()
+    scene.add(helper)
+    return () => {
+      scene.remove(helper)
+    }
+  }}
 />
 
 <T

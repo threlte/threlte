@@ -68,5 +68,5 @@ export const T = new Proxy(function () {}, {
     return TComp
   }
 }) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>>
+  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
 } & Record<string, Component>

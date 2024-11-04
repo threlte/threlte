@@ -1,7 +1,7 @@
 <script lang="ts">
   import { isInstanceOf, observe, T, useTask, useThrelte } from '@threlte/core'
   import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
-  import type { CubeCameraProps } from './CubeCamera'
+  import type { CubeCameraProps } from './types'
   import { onDestroy } from 'svelte'
 
   let {
@@ -14,9 +14,11 @@
     onrenderstop,
     resolution = 256,
     children,
-    ref = $bindable(new Group()),
+    ref = $bindable(),
     ...props
   }: CubeCameraProps = $props()
+
+  ref = new Group()
 
   export const renderTarget = new WebGLCubeRenderTarget(resolution)
   observe.pre(

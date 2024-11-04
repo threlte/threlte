@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MeshDiscardMaterialProps } from './MeshDiscardMaterial.svelte'
+  import type { MeshDiscardMaterialProps } from './types'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
   import { T } from '@threlte/core'

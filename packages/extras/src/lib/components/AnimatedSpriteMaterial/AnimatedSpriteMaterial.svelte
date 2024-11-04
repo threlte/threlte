@@ -22,12 +22,7 @@
   } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type {
-    AnimatedSpriteProps,
-    Frame,
-    FrameTag,
-    SpriteJsonHashData
-  } from './AnimatedSpriteMaterial.svelte'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
 
   let {
     textureUrl,
@@ -48,8 +43,6 @@
     totalFrames = 0,
     is = $bindable(),
     ref = $bindable(),
-    play = $bindable(),
-    pause = $bindable(),
 
     onload,
     onstart,
@@ -209,7 +202,10 @@
 
   let playQueued = false
 
-  play = async () => {
+  /**
+   * Plays the animation.
+   */
+  export const play = async () => {
     playQueued = true
     await Promise.all([textureStore, jsonStore])
     if (!playQueued) return
@@ -217,7 +213,10 @@
     start()
   }
 
-  pause = () => {
+  /**
+   * Pauses the animation.
+   */
+  export const pause = () => {
     playQueued = false
     stop()
   }

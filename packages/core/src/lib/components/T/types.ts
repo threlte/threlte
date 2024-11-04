@@ -140,6 +140,31 @@ export type InstanceProps<Type> = Partial<
   >
 >
 
+// –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
+
+export type EventProps<Type> = Type extends {
+  addEventListener: (type: any, listener: (args: any[]) => void) => any
+}
+  ? {
+      [Key in Parameters<Type['addEventListener']>[0] & string as `on${Key}`]?: (
+        event: ExtractPayload<Key, Type>
+      ) => void
+    }
+  : Record<string, unknown>
+
+type ExtractPayload<
+  Event extends string,
+  Type extends { addEventListener: (type: string, listener: (args: any[]) => void) => any }
+> = Parameters<Extract<Type['addEventListener'], (type: Event, listener: any) => any>>[1] extends (
+  event: infer EventData
+) => any
+  ? EventData
+  : never
+
+export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+
+// –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
+
 /**
  * ### `Props<Type>`
  *
@@ -157,28 +182,14 @@ export type Props<
   BaseProps<Type, ChildrenArgs> &
   ClassProps<Type> &
   CameraProps<Type> &
-  InstanceProps<Type>
-
-// –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
+  InstanceProps<Type> &
+  EventProps<Type>
 
 /**
- * ### `ObjectEvents<Type>`
+ * ### `TProps<Type>`
  *
- * This type can extract the event names and details from the provided type.
- * The event dispatcher currently needs to follow the strict pattern of
- * implementing an event map with the event name as the key and the event
- * payload as the value with a `type` property that matches the key.
+ * This type is internally used as the Prop type for the component `<T>`.
  */
-export type ObjectEvents<Type> =
-  MaybeInstance<Type> extends {
-    addEventListener: (...args: any[]) => any
-  }
-    ? {
-        [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
-          Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
-          { type: Key }
-        >
-      }
-    : Record<string, unknown>
-
-export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+export type TProps<Type> = {
+  is: Type
+} & Props<Type>

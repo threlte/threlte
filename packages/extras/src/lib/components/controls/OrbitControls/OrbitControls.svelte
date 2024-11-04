@@ -3,19 +3,18 @@
   import { onDestroy } from 'svelte'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext'
-  import type { OrbitControlsProps } from './OrbitControls.svelte'
+  import type { OrbitControlsProps } from './types'
 
-  let { ref = $bindable(), onchange, children, ...props }: OrbitControlsProps = $props()
+  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
-
   const { renderer, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
 
   const { start, stop } = useTask(() => controls.update(), {
@@ -41,7 +40,7 @@
   bind:ref
   onchange={(event) => {
     invalidate()
-    onchange?.(event)
+    props.onchange?.(event)
   }}
   {...props}
 >

@@ -29,11 +29,12 @@
     precise,
     onresize,
     stage = useStage('<Resize>', { before: renderStage }),
-    ref = $bindable(new Group()),
+    ref = $bindable(),
     children,
     ...props
   }: ResizeProps = $props()
 
+  ref = new Group()
   const inner = new Group()
   const outer = new Group()
 

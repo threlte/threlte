@@ -10,7 +10,7 @@
     Vector3
   } from 'three'
   import { T, useTask } from '@threlte/core'
-  import type { StarsProps } from './Stars.svelte'
+  import type { StarsProps } from './types'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 

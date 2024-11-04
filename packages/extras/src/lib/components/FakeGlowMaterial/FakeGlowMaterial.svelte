@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { Color, AdditiveBlending, ShaderMaterial } from 'three'
-  import type { FakeGlowMaterialProps } from './FakeGlowMaterial.svelte'
+  import type { FakeGlowMaterialProps } from './types'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 

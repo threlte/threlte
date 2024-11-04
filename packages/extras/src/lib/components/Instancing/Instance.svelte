@@ -3,7 +3,7 @@
   import { onDestroy } from 'svelte'
   import { PositionMesh } from './PositionMesh'
   import { useApi } from './api'
-  import type { InstanceProps } from './Instance.svelte'
+  import type { InstanceProps } from './types'
   import { useInstanceId } from './useInstanceId'
 
   let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()

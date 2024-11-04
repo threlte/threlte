@@ -1,8 +1,8 @@
 import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
+import { useScheduler } from '../context/fragments/scheduler.svelte'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
 import { browser } from '../utilities'
-import { useScheduler } from '../context/fragments/scheduler.svelte'
 
 export type ThrelteUseTask = {
   task: Task
@@ -87,7 +87,7 @@ export function useTask(
     opts = fnOrOptions as ThrelteUseTaskOptions | undefined
   }
 
-	const schedulerCtx = useScheduler()
+  const schedulerCtx = useScheduler()
 
   let stage: Stage = schedulerCtx.mainStage
 
@@ -128,8 +128,6 @@ export function useTask(
       }
     }
   }
-
-
 
   const started = writable(false)
 

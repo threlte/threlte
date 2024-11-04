@@ -3,7 +3,7 @@
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioProps } from './Audio.svelte'
+  import type { AudioProps } from './types'
 
   let {
     src,
@@ -14,9 +14,6 @@
     detune,
     loop,
     ref = $bindable(),
-    pause = $bindable(),
-    play = $bindable(),
-    stop = $bindable(),
     children,
     ...props
   }: AudioProps = $props()
@@ -34,9 +31,9 @@
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
     useAudio(audio, props)
 
-  pause = useAudioProps.pause
-  play = useAudioProps.play
-  stop = useAudioProps.stop
+  export const pause = useAudioProps.pause
+  export const play = useAudioProps.play
+  export const stop = useAudioProps.stop
 
   $effect(() => setAutoPlay(autoplay))
   $effect(() => void setSrc(src))

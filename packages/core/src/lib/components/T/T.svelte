@@ -2,7 +2,7 @@
   lang="ts"
   generics="Type"
 >
-  import type { Props } from './types'
+  import type { TProps } from './types'
   import { useAttach } from './utils/useAttach'
   import { useCamera } from './utils/useCamera'
   import { useCreateEvent } from './utils/useCreateEvent'
@@ -12,10 +12,6 @@
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
   import { determineRef } from './utils/utils'
-
-  type AllProps = {
-    is: Type
-  } & Props<Type>
 
   let {
     is = useIs<Type>(),
@@ -28,7 +24,7 @@
     oncreate,
     children,
     ...props
-  }: AllProps = $props()
+  }: TProps<Type> = $props()
 
   // We can't create the object in a reactive statement due to providing context
   let internalRef = $derived(determineRef<Type>(is, args))
