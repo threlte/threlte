@@ -15,6 +15,7 @@
     ...props
   }: FloatProps = $props()
 
+  const outerGroup = new Group()
   const group = new Group()
 
   let t = seed
@@ -57,7 +58,10 @@
   })
 </script>
 
-<T.Group {...props}>
+<T
+  is={outerGroup}
+  {...props}
+>
   <T
     is={group}
     bind:ref
@@ -65,4 +69,4 @@
   >
     {@render children?.({ ref: group })}
   </T>
-</T.Group>
+</T>
