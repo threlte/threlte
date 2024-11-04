@@ -341,9 +341,7 @@
           class={props.class}
           style={props.style}
         >
-          {#if children}
-            {@render children()}
-          {/if}
+          {@render children?.()}
         </div>
       </div>
     </div>
@@ -358,9 +356,7 @@
       style={props.style}
       class={props.class}
     >
-      {#if children}
-        {@render children()}
-      {/if}
+      {@render children?.()}
     </div>
   {/if}
 </svelte:element>
