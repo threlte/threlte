@@ -1,8 +1,7 @@
 import { writable } from 'svelte/store'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 import { useThrelte } from '../../../context/compounds/useThrelte'
-import { watch } from '../../../lib/storeUtils'
-import { isInstanceOf } from '../../../lib/isInstanceOf'
+import { isInstanceOf, watch } from '../../../utilities'
 
 const isPerspectiveOrOrthographicCamera = (
   value: unknown

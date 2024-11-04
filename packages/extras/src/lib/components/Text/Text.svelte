@@ -3,7 +3,7 @@
   import { tick } from 'svelte'
   import { preloadFont, Text } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextProps } from './Text.svelte'
+  import type { TextProps } from './types'
 
   let {
     font,

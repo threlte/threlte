@@ -1,18 +1,19 @@
-<script lang="ts">
-  import { types } from '../../theatre'
+<script
+  lang="ts"
+  generics="Label extends string | undefined"
+>
   import type { IScrub } from '@theatre/studio'
   import { T, watch } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { onMount, type ComponentProps } from 'svelte'
+  import { onMount } from 'svelte'
   import { Group } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { RAD2DEG } from 'three/src/math/MathUtils.js'
   import { useStudio } from '../../studio/useStudio'
+  import { types } from '../../theatre'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
-  import type { TransformProps } from './Transform.svelte'
   import { useSheet } from '../useSheet'
-
-  type Label = $$Generic<string | undefined>
+  import type { TransformProps } from './types'
 
   let {
     label,
@@ -25,7 +26,7 @@
     children
   }: TransformProps<Label> = $props()
 
-  const { sheetObject, addProps, removeProps } = useSheet()
+  const { sheetObject, addProps, removeProps } = useSheet<any>()
 
   let controls = $state<TC | undefined>(undefined)
 

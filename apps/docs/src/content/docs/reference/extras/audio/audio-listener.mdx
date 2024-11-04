@@ -15,7 +15,7 @@ componentSignature:
         { name: 'id', type: 'string', required: false },
         { name: 'masterVolume', type: 'number', required: false }
       ],
-    bindings:
+    exports:
       [
         { name: 'resumeContext', type: '() => Promise<void>' },
         { name: 'audioContext', type: 'AudioContext' }

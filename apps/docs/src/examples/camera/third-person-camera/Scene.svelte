@@ -2,7 +2,7 @@
   import { T } from '@threlte/core'
   import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import Door from '../../rapier/world/Door.svelte'
+  import Door from './Door.svelte'
   import Player from './Player.svelte'
 </script>
 

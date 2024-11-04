@@ -1,15 +1,14 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { injectLookAtPlugin } from '../../plugins/lookAt/lookAtPlugin'
   import Character from './Character.svelte'
-
-  injectLookAtPlugin()
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[-0.85, 1.75, 2.46]}
-  lookAt={[0, 1, 0]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 1, 0)
+  }}
 />
 
 <T.AmbientLight />

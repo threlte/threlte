@@ -1,5 +1,17 @@
 # @threlte/studio
 
+## 0.1.0-next.16
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 0.1.0-next.15
+
+### Patch Changes
+
+- 6016286: Adapt plugins to new plugin API
+
 ## 0.1.0-next.14
 
 ### Patch Changes

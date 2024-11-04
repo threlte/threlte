@@ -41,7 +41,7 @@ componentSignature:
         },
         { name: 'error', payload: 'ErrorEvent', description: 'Fired when the audio fails to load.' }
       ],
-    bindings:
+    exports:
       [
         { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
         { name: pause, type: '() => THREE.Audio' },

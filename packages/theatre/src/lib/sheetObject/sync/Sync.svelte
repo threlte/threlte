@@ -1,20 +1,22 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="Type"
+>
   import { resolvePropertyPath, useParent, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import { useStudio } from '../../studio/useStudio'
   import type { Transformer } from '../transfomers/types'
-  import type { AnyProp, SyncProps } from './Sync.svelte'
+  import { useSheet } from '../useSheet'
+  import type { AnyProp, SyncProps } from './types'
   import { getInitialValue } from './utils/getInitialValue'
   import { isComplexProp } from './utils/isComplexProp'
+  import { isStringProp } from './utils/isStringProp'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
-  import { isStringProp } from './utils/isStringProp'
-  import { useStudio } from '../../studio/useStudio'
-  import { useSheet } from '../useSheet'
 
-  let { type, children, ...rest }: SyncProps<any> = $props()
+  let { type, children, ...rest }: SyncProps<Type> = $props()
 
   const { sheetObject, addProps, removeProps } = useSheet()
-
   const parent = useParent()
 
   // serves as a map to map (custom) prop names to object target properties
@@ -106,6 +108,9 @@
 
   const studio = useStudio()
 
+  /**
+   * Capture the current values of the props
+   */
   export const capture = () => {
     if (!$studio) return
     const scrub = $studio.scrub()

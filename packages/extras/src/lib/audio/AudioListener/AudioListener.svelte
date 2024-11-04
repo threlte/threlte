@@ -3,22 +3,14 @@
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioListenerProps } from './AudioListener.svelte'
+  import type { AudioListenerProps } from './types'
 
-  let {
-    id,
-    masterVolume,
-    ref = $bindable(),
-    audioContext = $bindable(),
-    resumeContext = $bindable(),
-    children,
-    ...props
-  }: AudioListenerProps = $props()
+  let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
 
   const listener = new ThreeAudioListener()
 
-  audioContext = listener.context
-  resumeContext = () => listener.context.resume()
+  export const audioContext = listener.context
+  export const resumeContext = () => listener.context.resume()
 
   $effect.pre(() => {
     if (masterVolume !== undefined) {

@@ -4,7 +4,7 @@
   import { useGltf } from '../../hooks/useGltf'
   import { useSuspense } from '../../suspense/useSuspense'
   import type { ThrelteGltf } from '../../types/types'
-  import type { GltfProps } from './GLTF.svelte.js'
+  import type { GltfProps } from './types'
 
   type AnyThrelteGltf = ThrelteGltf<{
     nodes: Record<string, any>

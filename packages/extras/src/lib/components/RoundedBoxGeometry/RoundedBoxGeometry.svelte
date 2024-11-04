@@ -2,7 +2,7 @@
   import { ExtrudeGeometry, Shape } from 'three'
   import { T } from '@threlte/core'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import type { RoundedBoxGeometryProps } from './RoundedBoxGeometry.svelte'
+  import type { RoundedBoxGeometryProps } from './types'
 
   let {
     args = [],

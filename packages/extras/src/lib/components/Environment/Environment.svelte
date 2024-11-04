@@ -14,7 +14,7 @@
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { EnvironmentProps } from './Environment.svelte'
+  import type { EnvironmentProps } from './types'
   import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
 
   type Props = EnvironmentProps

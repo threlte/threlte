@@ -53,7 +53,7 @@
     getViewportFactor
   } from './utils'
   import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLProps } from './HTML.svelte'
+  import type { HTMLProps } from './types'
 
   let {
     eps = 0.001,
@@ -341,9 +341,7 @@
           class={props.class}
           style={props.style}
         >
-          {#if children}
-            {@render children()}
-          {/if}
+          {@render children?.()}
         </div>
       </div>
     </div>
@@ -358,9 +356,7 @@
       style={props.style}
       class={props.class}
     >
-      {#if children}
-        {@render children()}
-      {/if}
+      {@render children?.()}
     </div>
   {/if}
 </svelte:element>

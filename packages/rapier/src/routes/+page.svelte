@@ -2,8 +2,8 @@
   import { World } from '$lib'
   import { Canvas } from '@threlte/core'
   import { WebGLRenderer } from 'three'
-  import Debug from '../lib/components/Debug/Debug.svelte'
   import Scene from './Scene.svelte'
+  import Debug from '../lib/components/Debug/Debug.svelte'
 
   let iteration = $state(1)
   let framerate: number | 'varying' = $state(10)
@@ -38,7 +38,7 @@
   <!-- <ReqAnim /> -->
 
   <div class="meta">
-    <button on:click={() => (framerate = framerate === 'varying' ? 30 : 'varying')}>
+    <button onclick={() => (framerate = framerate === 'varying' ? 30 : 'varying')}>
       Use {framerate === 'varying' ? 'fixed' : 'varying'} framerate
     </button>
     <span>

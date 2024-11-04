@@ -10,7 +10,7 @@
   } from 'three'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './InstancedSprite.svelte'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types'
   import SpriteInstance from './SpriteInstance.svelte'
 
   let {
@@ -40,6 +40,7 @@
   const { renderer } = useThrelte()
 
   const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  ref = mesh
 
   const animationMap = writable<Map<string, number>>(new Map())
 
@@ -62,7 +63,6 @@
     mesh.fps = fps
   })
   $effect.pre(() => mesh.hueShift.setGlobal(hueShift))
-
   // BILLBOARDING
   $effect.pre(() => {
     if (billboarding === undefined) {
@@ -136,7 +136,6 @@
 
 <T
   is={mesh}
-  bind:ref
   frustumCulled={false}
   {...props}
 >

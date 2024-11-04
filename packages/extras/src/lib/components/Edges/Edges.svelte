@@ -1,32 +1,34 @@
 <script lang="ts">
-  import { T, useParent } from '@threlte/core'
-  import { LineSegments, type Mesh } from 'three'
-  import type { EdgesProps } from './Edges.svelte'
+  import { T, isInstanceOf, useParent } from '@threlte/core'
+  import { fromStore } from 'svelte/store'
+  import { LineSegments } from 'three'
+  import type { EdgesProps } from './types'
 
-  let { thresholdAngle, color, ref = $bindable(), children, ...props }: EdgesProps = $props()
+  let {
+    thresholdAngle = 1,
+    color = '#ffffff',
+    ref = $bindable(),
+    children,
+    ...props
+  }: EdgesProps = $props()
 
-  const parent = useParent()
+  const parent = fromStore(useParent())
 
-  const lineSegments = new LineSegments()
-
-  if (!$parent || $parent.type !== 'Mesh') {
-    throw new Error('Edges: component must be a child of a Mesh')
-  }
-
-  let geometry = $derived.by(() => {
-    const parentMesh = $parent as Mesh
-    return 'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
+  const geometry = $derived.by(() => {
+    if (!isInstanceOf(parent.current, 'Mesh')) {
+      throw new Error('Edges: component must be a child of a Mesh')
+    }
+    return parent.current.geometry
   })
+
+  ref = new LineSegments()
 </script>
 
 <T
-  is={lineSegments}
-  bind:ref
+  is={ref}
   {...props}
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  {#if children}
-    {@render children({ ref: lineSegments })}
-  {/if}
+  {@render children?.({ ref })}
 </T>

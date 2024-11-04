@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MeshLineMaterialProps } from './MeshLineMaterial.svelte'
+  import type { MeshLineMaterialProps } from './types'
   import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
@@ -59,9 +59,9 @@
 <T
   is={material}
   bind:ref
-  {...props}
   {fragmentShader}
   {vertexShader}
+  {...props}
 >
   {@render children?.({ ref: material })}
 </T>

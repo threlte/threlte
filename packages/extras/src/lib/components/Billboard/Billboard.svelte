@@ -1,29 +1,20 @@
-<script
-  module
-  lang="ts"
->
-  import { type Stage, T, useTask, useThrelte } from '@threlte/core'
-
-  let stage: Stage | undefined
-</script>
-
 <script lang="ts">
+  import { T, useStage, useTask, useThrelte } from '@threlte/core'
   import { Group, Quaternion } from 'three'
-
-  import type { BillboardProps } from './Billboard.svelte'
+  import type { BillboardProps } from './types'
 
   let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 
   const inner = new Group()
   const localRef = new Group()
 
-  const { camera, scheduler, renderStage } = useThrelte()
+  const { camera, renderStage } = useThrelte()
 
   const q = new Quaternion()
 
   let followObject = $derived(follow === true ? $camera : follow === false ? undefined : follow)
 
-  stage ??= scheduler.createStage(Symbol('billboard-stage'), { before: renderStage })
+  const stage = useStage('<Billboard>', { before: renderStage })
 
   const { start, stop } = useTask(
     () => {

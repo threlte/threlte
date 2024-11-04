@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Mesh } from 'three'
   import InstancedMesh from '../InstancedMesh.svelte'
-  import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
+  import Self from './InnerInstancedMeshes.svelte'
+  import type { Mesh } from 'three'
   import type { Snippet } from 'svelte'
 
   interface Props {
@@ -21,13 +21,13 @@
     id={mesh.uuid}
     {...props}
   >
-    <InnerInstancedMeshes
+    <Self
       {meshes}
       index={index - 1}
       {...props}
     >
       {@render children?.()}
-    </InnerInstancedMeshes>
+    </Self>
   </InstancedMesh>
 {:else}
   {@render children?.()}

@@ -23,9 +23,13 @@ const anyPropHasDefault = props.some((prop) => prop.default)
 const events = Astro.props.signature?.events ?? []
 const anyEventHasDescription = events.some((event) => event.description)
 
-const hasEvents = !!Astro.props.signature?.events?.length
-const hasProps = !!Astro.props.signature?.props?.length
-const hasBindings = !!Astro.props.signature?.bindings?.length
+const exports = Astro.props.signature.exports ?? []
+const anyExportHasDescription = exports.some((e) => !!e.description)
+
+const hasEvents = !!Astro.props.signature.events?.length
+const hasExports = !!exports.length
+const hasProps = !!Astro.props.signature.props?.length
+const hasBindings = !!Astro.props.signature.bindings?.length
 
 const hasAnySignature = hasEvents || hasProps || hasBindings
 
@@ -81,11 +85,11 @@ const id = Astro.props.idOverride ?? 'component-signature'
 					/>
 				)}
 
-				{(hasEvents || hasProps || hasBindings) && (
-					<div class="flex flex-col gap-6">
-						{hasProps && (
-							<div>
-								<h3 class="mt-0">Props</h3>
+        {(hasEvents || hasProps || hasBindings || hasExports) && (
+          <div class="flex flex-col gap-6">
+            {hasProps && (
+              <div>
+                <h3 class="mt-0">Props</h3>
 
 								<div
 									class:list={[
@@ -275,16 +279,62 @@ const id = Astro.props.idOverride ?? 'component-signature'
 													</a>
 												)}
 
-												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
-											</>
-										)
-									})}
-								</div>
-							</div>
-						)}
-					</div>
-				)}
-			</div>
-		</>
-	)
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {hasExports && (
+              <div>
+                <h3 class="mt-0">Exports</h3>
+
+                <div
+                  class={c(
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    propsGridCols
+                  )}
+                >
+                  <div class="font-bold">name</div>
+
+                  <div class="font-bold">type</div>
+
+                  {anyExportHasDescription && <div class="font-bold">description</div>}
+
+                  <hr class="col-span-full my-1" />
+
+                  {exports.map((prop, index, arr) => {
+                    return (
+                      <>
+                        <div class="text-faded">{prop.name}</div>
+
+                        <div
+                          class="text-faded"
+                          set:html={shiki
+                            .codeToHtml(prop.type, {
+                              lang: 'typescript',
+                              theme: 'dracula-soft'
+                            })
+                            .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                            .replace('</pre>', '')}
+                        />
+
+                        {anyExportHasDescription && (
+                          <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
+                        )}
+
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  )
 }

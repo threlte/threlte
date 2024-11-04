@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 3.0.0-next.8
+
+### Major Changes
+
+- 1fb46bd: Refactor theatre types to auto generated component type definitions
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cec4b57: update deps
+
 ## 3.0.0-next.6
 
 ### Patch Changes

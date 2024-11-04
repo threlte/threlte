@@ -1,6 +1,4 @@
-import type { Object3D } from 'three'
 import type { AnyClass, MaybeInstance } from '../types'
-import type { DisposableThreeObject } from '../../../types'
 
 const classRegex = /^\s*class\s+/
 

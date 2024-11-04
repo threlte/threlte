@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
@@ -12,9 +11,9 @@
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { RigidBodyContext, RigidBodyEvents, ThrelteRigidBody } from '../../types/types'
+  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types'
   import { overrideTeleportMethods } from './overrideTeleportMethods'
-  import type { RigidBodyProps } from './RigidBody.svelte'
+  import type { RigidBodyProps } from './types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -44,12 +43,12 @@
     onsleep,
     onwake,
     children
-  }: RigidBodyProps & RigidBodyEvents = $props()
+  }: RigidBodyProps = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  const { updateRef } = useCreateEvent<RigidBody>(oncreate)
+  const { updateRef } = useCreateEvent(oncreate)
 
   const object = new Object3D()
   initializeRigidBodyUserData(object)

@@ -1,7 +1,7 @@
 import { getContext, onDestroy, setContext } from 'svelte'
 import { derived, get, writable, type Readable } from 'svelte/store'
 import { useDisposal, type DisposableThreeObject } from '../../../context/fragments/disposal'
-import { watch } from '../../../lib/storeUtils'
+import { watch } from '../../../utilities'
 
 const contextName = Symbol('threlte-disposable-object-context')
 type ThrelteDisposeContext = Readable<boolean>

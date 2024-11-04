@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Color, Vector2, type Texture, type Mesh, Vector3, ShaderMaterial } from 'three'
-  import { T, asyncWritable, useParent, useTask, useThrelte } from '@threlte/core'
+  import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
+  import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
-  import type { ImageMaterialProps } from './ImageMaterial.svelte'
   import { useSuspense } from '../../suspense/useSuspense'
-  import { vertexShader, fragmentShader } from './shaders'
+  import { fragmentShader, vertexShader } from './shaders'
+  import type { ImageMaterialProps } from './types'
 
   let {
     color = 'white',
@@ -151,10 +151,7 @@
 
   useTask(() => {
     const mesh = $parent
-
-    if (mesh === undefined) {
-      return
-    }
+    if (!isInstanceOf(mesh, 'Mesh')) return
 
     uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
 

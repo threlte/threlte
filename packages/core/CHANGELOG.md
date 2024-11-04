@@ -1,5 +1,32 @@
 # @threlte/core
 
+## 8.0.0-next.24
+
+### Minor Changes
+
+- 0f84459: Add preliminary event types on `<T>`
+
+### Patch Changes
+
+- d44a1d3: Replace dependency of useThrelte in useTask hook with useSheduler hook instead
+
+## 8.0.0-next.23
+
+### Minor Changes
+
+- cec4b57: Make children snippet arguments a type parameter on type `Props`
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 8.0.0-next.22
+
+### Major Changes
+
+- 6016286: Remove memoize, remove createObjectStore
+- 6016286: Refactored Threlte Plugin API
+
 ## 8.0.0-next.21
 
 ### Patch Changes

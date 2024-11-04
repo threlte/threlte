@@ -1,5 +1,58 @@
 # @threlte/extras
 
+## 9.0.0-next.35
+
+### Patch Changes
+
+- 1fb46bd: Fix `<TransformControls>`
+
+## 9.0.0-next.34
+
+### Major Changes
+
+- 4d04573: migrate to generated components types
+
+## 9.0.0-next.33
+
+### Patch Changes
+
+- 1731055: fix `<Resize>` types and default args
+
+## 9.0.0-next.32
+
+### Patch Changes
+
+- cec4b57: update deps
+- cec4b57: Remove handwritten type def of `<Resize>`
+
+## 9.0.0-next.31
+
+### Patch Changes
+
+- e75748d: Fix issues with MeshLine
+
+## 9.0.0-next.30
+
+### Minor Changes
+
+- f55c743: Add RadialGradientTexture & LinearGradientTexture components
+- ca7a1f0: Add <CubeCamera>
+
+### Patch Changes
+
+- b5b3e2c: fix module context warnings on the command line
+
+## 9.0.0-next.29
+
+### Minor Changes
+
+- 20a2865: Add Resize component, fix MeshDiscardMaterial
+
+### Patch Changes
+
+- 81da20a: Fixed type of `scale` in `PerfMonitor`
+- 6016286: Adapted Threlte plugins to new plugin API
+
 ## 9.0.0-next.28
 
 ### Patch Changes

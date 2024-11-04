@@ -1,12 +1,12 @@
 import { injectPlugin } from '@threlte/core'
 
-injectPlugin('lookAt-plugin', ({ ref, props }) => {
-  if (!ref.lookAt) return
-  if (props.lookAt) ref.lookAt(props.lookAt)
+injectPlugin('lookAt-plugin', (args) => {
+	$effect(() => {
+		if (!args.ref.lookAt) return
+		args.ref.lookAt(args.props.lookAt)
+	})
 
   return {
-    onPropsChange: ({ props }) => {
-      if (props.lookAt) ref.lookAt(props.lookAt)
-    }
+    pluginProps: ['lookAt']
   }
 })

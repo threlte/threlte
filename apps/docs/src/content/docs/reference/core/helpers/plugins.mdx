@@ -1,7 +1,6 @@
 ---
 title: Plugins
 sourcePath: 'packages/core/src/lib/plugins'
-order: 6.1
 ---
 
 Plugins are one of Threlte's superpowers. Plugins allow you to globally extend Threlte's [`<T>`](/reference/core/components/t) component
@@ -12,6 +11,8 @@ Plugins add code to every `<T>` component instance. That code acts as if it were
 You have full access to props, event listeners and the component instance itself. For an advanced example of what
 a plugin can do, see the [interactivity plugin of `@threlte/extras`](/reference/extras/interaction/interactivity).
 
+If you want to learn more about authoring plugins, see the [plugins section of the learn guide](/learn/advanced/plugins).
+
 ## `injectPlugin`
 
 The function `injectPlugin` adds a plugin to all descendant `<T>` components of the component that
@@ -21,41 +22,29 @@ affecting the rest of the scene graph.
 ```ts
 import { injectPlugin } from '@threlte/core'
 
-injectPlugin('plugin-name', ({ ref, props }) => {
-	// We are *inside* a `<T>` component instance
+injectPlugin('plugin-name', (args) => {
+  // We are *inside* a `<T>` component instance
 
-	// Do something with the ref and props
-	// e.g. return early if the plugin is not applicable
+  // args is reactive and holds a reference to `ref`,
+  // `makeDefault`, `args`, `attach`, `manual`,
+  // `makeDefault`, `dispose` and all other props
+  // declared on the `<T>` component.
 
-	return {
-		// These props are reserved for this plugin, the
-		// `<T>` component instance will not act on them.
-		pluginProps: ['plugin-prop-a', 'plugin-prop-b'],
+  // Use effects to react to changes in args
+  $effect(() => {
+    console.log(args.ref)
+  })
 
-		// this function is called whenever the `ref` inside the `<T>`
-		// component changes. You may return a cleanup function that is
-		// called when the ref changes again or the component unmounts.
-		onRefChange: (ref) => {
-			// Do something with the ref
-			return () => {
-				// Cleanup
-			}
-		},
+  // Use lifecycle functions
+  onMount(() => {
+    console.log('mounted')
+  })
 
-		// This function is called whenever the $$props of the `<T>` component
-		// change. These include props like "dispose", "args" and "makeDefault"
-		// that are part of the component itself rather than the props that are
-		// passed to the Three.js object.
-		onPropsChange: (props) => {
-			// Do something with the props
-		},
-
-		// This function is called whenever the $$restProps of the `<T>` component
-		// change. These are the props that are passed to the Three.js object.
-		onRestPropsChange: (restProps) => {
-			// Do something with the restProps
-		}
-	}
+  return {
+    // These props are reserved for this plugin, the
+    // `<T>` component instance will not act on them.
+    pluginProps: ['plugin-prop-a', 'plugin-prop-b']
+  }
 })
 ```
 
@@ -63,29 +52,4 @@ You may also override a plugin namespace further down the tree by calling `injec
 
 :::tip
 `injectPlugin` is relying on a context provided by your root `<Canvas>` component and can therefore only be used inside a `<Canvas>` component.
-
 :::
-
----
-
-## `createPlugin`
-
-The function `createPlugin` creates a `NamedPlugin` but does not add it to the global plugin list and therefore does not
-make it available to all `<T>` components. This is useful if you want to create a plugin at some place and inject it at another.
-
-```ts title="plugin.ts"
-import { createPlugin } from '@threlte/core'
-
-export const plugin = createPlugin('plugin-name', ({ ref, props }) => {
-	// Plugin Code
-})
-```
-
-```svelte title="Component.svelte"
-<script lang="ts">
-  import { injectPlugin } from '@threlte/core'
-  import { plugin } from './plugin'
-
-  injectPlugin(plugin)
-</script>
-```

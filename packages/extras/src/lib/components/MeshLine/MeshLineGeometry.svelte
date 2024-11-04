@@ -1,18 +1,22 @@
+<!--
+@component
+A stripped down version of THREE.MeshLine:
+
+https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
+
+With peformance improvements inspired by:
+
+https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
+ -->
 <script lang="ts">
-  /*
-    A stripped down version of THREE.MeshLine:
-    https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
-    With peformance improvements inspired by:
-    https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
-	*/
-  import type { MeshLineGeometryProps } from './MeshLineGeometry.svelte'
+  import type { MeshLineGeometryProps } from './types'
   import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
 
   let {
     points = [],
     shape = 'none',
-    shapeFunction = (_p: number) => 1,
+    shapeFunction = () => 1,
     ref = $bindable(),
     children,
     props
@@ -47,7 +51,7 @@
     width.setX(i2, w)
     width.setX(i2 + 1, w)
 
-    uv.setXYZW(i3, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
+    uv.setXYZW(i2, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
 
     if (i < pointCount - 1) {
       const n = i * 2

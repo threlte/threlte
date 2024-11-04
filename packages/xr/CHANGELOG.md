@@ -1,5 +1,17 @@
 # @threlte/xr
 
+## 1.0.0-next.12
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 1.0.0-next.11
+
+### Patch Changes
+
+- 6016286: Adapt plugins to new plugin API
+
 ## 1.0.0-next.10
 
 ### Patch Changes

@@ -14,7 +14,7 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type { ContactShadowsProps } from './ContactShadows.svelte'
+  import type { ContactShadowsProps } from './types'
 
   let {
     opacity = 1,
@@ -28,7 +28,6 @@
     scale = 10,
     color = '#000000',
     depthWrite = false,
-    refresh = $bindable(),
     ref = $bindable(),
     children,
     ...props
@@ -168,7 +167,10 @@
     renderer.setClearAlpha(initialClearAlpha)
   }
 
-  refresh = () => {
+  /**
+   * Renders the shadows.
+   */
+  export const refresh = () => {
     renderShadows()
   }
 
