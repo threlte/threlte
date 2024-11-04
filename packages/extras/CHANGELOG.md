@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.34
+
+### Major Changes
+
+- 4d04573: migrate to generated components types
+
 ## 9.0.0-next.33
 
 ### Patch Changes
