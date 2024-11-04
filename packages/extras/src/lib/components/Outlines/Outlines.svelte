@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { T, useParent, useThrelte } from '@threlte/core'
+  import { isInstanceOf, T, useParent, useThrelte } from '@threlte/core'
   import {
+    BackSide,
     Color,
-    Vector2,
-    ShaderMaterial,
     Group,
-    SkinnedMesh,
     InstancedMesh,
     Mesh,
-    BackSide
+    ShaderMaterial,
+    SkinnedMesh,
+    Vector2
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { vertexShader, fragmentShader } from './shaders'
+  import { fragmentShader, vertexShader } from './shaders'
   import type { OutlinesProps } from './types'
+  import { fromStore } from 'svelte/store'
 
   let {
     color = 'black',
@@ -51,23 +52,24 @@
 
   const parent = useParent()
 
-  let parentMesh = $derived($parent)
-  let geometry = $derived(parentMesh ? toCreasedNormals(parentMesh.geometry, angle) : undefined)
+  let parentMesh = fromStore(parent)
+
+  let geometry = $derived.by(() => {
+    if (!isInstanceOf(parentMesh.current, 'Mesh')) return undefined
+    return toCreasedNormals(parentMesh.current.geometry, angle)
+  })
+
   let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
-    if (parentMesh === undefined) {
-      return
-    }
-
-    if ('skeleton' in parentMesh) {
+    if (!isInstanceOf(parentMesh.current, 'Mesh')) return
+    if (isInstanceOf(parentMesh.current, 'SkinnedMesh')) {
       const nextMesh = new SkinnedMesh()
-      nextMesh.bind(parentMesh.skeleton, parentMesh.bindMatrix)
+      nextMesh.bind(parentMesh.current.skeleton, parentMesh.current.bindMatrix)
       return nextMesh
-    } else if ('isInstancedMesh' in parentMesh) {
-      const nextMesh = new InstancedMesh(undefined, undefined, parentMesh.count)
-      nextMesh.instanceMatrix = parentMesh.instanceMatrix
+    } else if (isInstanceOf(parentMesh.current, 'InstancedMesh')) {
+      const nextMesh = new InstancedMesh(undefined, undefined, parentMesh.current.count)
+      nextMesh.instanceMatrix = parentMesh.current.instanceMatrix
       return nextMesh
     }
-
     return new Mesh()
   })
 
