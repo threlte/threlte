@@ -1,8 +1,8 @@
 <script lang="ts">
   import { T, isInstanceOf, useParent } from '@threlte/core'
-  import { BufferGeometry, LineSegments } from 'three'
-  import type { EdgesProps } from './types'
   import { fromStore } from 'svelte/store'
+  import { LineSegments } from 'three'
+  import type { EdgesProps } from './types'
 
   let {
     thresholdAngle = 1,
@@ -21,15 +21,14 @@
     return parent.current.geometry
   })
 
-  const lineSegments = new LineSegments()
+  ref = new LineSegments()
 </script>
 
 <T
-  is={lineSegments}
-  bind:ref
+  is={ref}
   {...props}
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  {@render children?.({ ref: lineSegments })}
+  {@render children?.({ ref })}
 </T>
