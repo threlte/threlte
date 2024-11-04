@@ -1,9 +1,6 @@
 ---
-order: 9.10
-category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/CubeCamera/CubeCamera.svelte'
-name: '<CubeCamera>'
-type: 'component'
+title: <CubeCamera>
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' },
@@ -82,6 +79,8 @@ componentSignature:
       ]
   }
 ---
+
+import Example from '$components/Example/Example.astro'
 
 A wrapper around three's [CubeCamera](https://threejs.org/docs/index.html#api/en/cameras/CubeCamera) that exposes a `renderTarget` prop. Before rendering to the render target, children are set to invisible to exclude them from the render.
 
