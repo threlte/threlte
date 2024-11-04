@@ -13,9 +13,9 @@ import type {
   RawRigidBodySet,
   RawSerializationPipeline
 } from '@dimforge/rapier3d-compat/raw'
-import { SvelteComponent, type Snippet } from 'svelte'
-import type { Vector3 } from 'three'
 import type { Key, Stage } from '@threlte/core'
+import { type Snippet } from 'svelte'
+import type { Vector3 } from 'three'
 
 export type WorldProps = {
   framerate?: number | 'varying'
@@ -45,5 +45,3 @@ export type WorldProps = {
   children?: Snippet
   fallback?: Snippet<[error: any]>
 }
-
-export default class World extends SvelteComponent<WorldProps> {}

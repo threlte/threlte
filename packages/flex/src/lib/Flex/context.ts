@@ -2,7 +2,8 @@ import type { CurrentWritable } from '@threlte/core'
 import mitt, { type Emitter } from 'mitt'
 import { getContext, onDestroy, setContext } from 'svelte'
 import type { Group } from 'three'
-import type { Node, Yoga } from 'yoga-layout'
+import type { Node } from 'yoga-layout'
+import type Yoga from 'yoga-layout'
 import type { Axis, ClassParser, NodeProps } from '../lib/props'
 
 type FlexContextEvents = {
@@ -17,7 +18,7 @@ type FlexContextNode = {
 }
 
 export type FlexContextData = {
-  yoga: Yoga
+  yoga: typeof Yoga
   nodes: Map<Node, FlexContextNode>
   addNode: (node: Node, group: Group, props: NodeProps) => void
   updateNodeProps: (node: Node, props: NodeProps, force?: boolean) => void

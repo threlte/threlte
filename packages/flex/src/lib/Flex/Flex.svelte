@@ -1,9 +1,9 @@
 <script lang="ts">
   import { loadYoga, type Yoga } from 'yoga-layout/load'
-  import type { FlexProps } from './Flex.svelte'
   import InnerFlex from './InnerFlex.svelte'
+  import type { FlexProps } from './types'
 
-  let { children: innerChildren, ...props }: FlexProps = $props()
+  let { children: innerChildren, ref = $bindable(), ...props }: FlexProps = $props()
 
   let yoga: Yoga | undefined = $state(undefined)
 
@@ -17,6 +17,7 @@
 {#if yoga}
   <InnerFlex
     {yoga}
+    bind:ref
     {...props}
   >
     {#snippet children({ reflow, width, height })}

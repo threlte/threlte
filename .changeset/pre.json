@@ -14,6 +14,7 @@
     "@threlte/studio": "0.0.1-next.0"
   },
   "changesets": [
+    "afraid-donkeys-glow",
     "angry-cats-destroy",
     "big-deers-confess",
     "big-rice-juggle",
@@ -27,6 +28,7 @@
     "cold-news-march",
     "cold-sheep-hide",
     "cool-countries-appear",
+    "cool-poems-cover",
     "cuddly-eggs-listen",
     "curly-elephants-switch",
     "curly-pigs-sip",
@@ -34,6 +36,7 @@
     "cyan-news-swim",
     "dry-guests-wonder",
     "early-pans-collect",
+    "eighty-baboons-sparkle",
     "eleven-trainers-work",
     "fair-moons-rule",
     "fast-buttons-shake",
@@ -74,6 +77,7 @@
     "popular-comics-sniff",
     "popular-pianos-crash",
     "pretty-trees-sneeze",
+    "purple-cobras-fetch",
     "quick-boats-build",
     "serious-ways-warn",
     "short-fans-laugh",

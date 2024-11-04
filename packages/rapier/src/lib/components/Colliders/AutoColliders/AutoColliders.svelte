@@ -1,24 +1,20 @@
-<script lang="ts">
-  import {
-    ActiveCollisionTypes,
-    CoefficientCombineRule,
-    type Collider
-  } from '@dimforge/rapier3d-compat'
+<script
+  lang="ts"
+  generics="TMassDef extends MassDef"
+>
+  import { ActiveCollisionTypes, CoefficientCombineRule } from '@dimforge/rapier3d-compat'
   import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
-  import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useRapier } from '../../hooks/useRapier'
-  import { useRigidBody } from '../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { createCollidersFromChildren } from '../../lib/createCollidersFromChildren'
-  import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
-  import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { ColliderEvents } from '../../types/types'
-  import type { AutoCollidersProps, MassDef } from './AutoColliders.svelte'
-
-  type TMassDef = $$Generic<MassDef>
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
+  import { useRapier } from '../../../hooks/useRapier'
+  import { useRigidBody } from '../../../hooks/useRigidBody'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
+  import { createCollidersFromChildren } from '../../../lib/createCollidersFromChildren'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
+  import { useCreateEvent } from '../../../lib/useCreateEvent'
+  import type { AutoCollidersProps, MassDef } from './types'
 
   let {
     shape = 'convexHull',
@@ -33,7 +29,6 @@
     centerOfMass,
     principalAngularInertia,
     angularInertiaLocalFrame,
-    refresh = $bindable(() => create()),
     colliders = $bindable(),
     oncreate,
     oncollisionenter,
@@ -42,11 +37,11 @@
     onsensorenter,
     onsensorexit,
     children
-  }: AutoCollidersProps<TMassDef> & ColliderEvents = $props()
+  }: AutoCollidersProps<TMassDef> = $props()
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent<Collider[]>(oncreate)
+  const { updateRef } = useCreateEvent(oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
@@ -114,6 +109,11 @@
 
     updateRef(colliders)
   }
+
+  /**
+   * Refresh the colliders.
+   */
+  export const refresh = () => create()
 
   onMount(() => {
     create()

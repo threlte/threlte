@@ -1,27 +1,25 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="TShape extends Shape, TMassDef extends MassDef"
+>
   import {
     ActiveCollisionTypes,
     CoefficientCombineRule,
-    Collider,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
   import { createParentObject3DContext, useParentObject3D, useTask, watch } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
-  import { useCollisionGroups } from '../../hooks/useCollisionGroups'
-  import { useRapier } from '../../hooks/useRapier'
-  import { useRigidBody } from '../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../lib/applyColliderActiveEvents'
-  import { eulerToQuaternion } from '../../lib/eulerToQuaternion'
-  import { getWorldPosition, getWorldQuaternion } from '../../lib/getWorldTransforms'
-  import { useParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
-  import { scaleColliderArgs } from '../../lib/scaleColliderArgs'
-  import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { ColliderEvents } from '../../types/types'
-  import type { ColliderProps, MassDef, Shape } from './Collider.svelte'
-
-  type TShape = $$Generic<Shape>
-  type TMassDef = $$Generic<MassDef>
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
+  import { useRapier } from '../../../hooks/useRapier'
+  import { useRigidBody } from '../../../hooks/useRigidBody'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
+  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
+  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs'
+  import { useCreateEvent } from '../../../lib/useCreateEvent'
+  import type { ColliderProps, MassDef, Shape } from './types'
 
   let {
     shape,
@@ -39,11 +37,6 @@
     principalAngularInertia,
     angularInertiaLocalFrame,
     collider = $bindable(),
-    refresh = $bindable(() => {
-      if (!collider) return
-      collider.setTranslation(getWorldPosition(object))
-      collider.setRotation(getWorldQuaternion(object))
-    }),
     oncreate,
     oncollisionenter,
     oncollisionexit,
@@ -51,11 +44,11 @@
     onsensorenter,
     onsensorexit,
     children
-  }: ColliderProps<TShape, TMassDef> & ColliderEvents = $props()
+  }: ColliderProps<TShape, TMassDef> = $props()
 
   const object = new Object3D()
 
-  const { updateRef } = useCreateEvent<Collider>(oncreate)
+  const { updateRef } = useCreateEvent(oncreate)
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
@@ -164,6 +157,12 @@
       applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
     }
   })
+
+  export const refresh = () => {
+    if (!collider) return
+    collider.setTranslation(getWorldPosition(object))
+    collider.setRotation(getWorldQuaternion(object))
+  }
 
   /**
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the

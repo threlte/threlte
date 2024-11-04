@@ -3,9 +3,9 @@
   import { Environment } from '@threlte/extras'
   import { AutoColliders, CollisionGroups } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import Door from '../../rapier/world/Door.svelte'
+  import Door from './Door.svelte'
   import Player from './Player.svelte'
-  import Ground from '../../rapier/world/Ground.svelte'
+  import Ground from './Ground.svelte'
 </script>
 
 <Environment

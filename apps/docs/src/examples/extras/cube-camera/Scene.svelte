@@ -1,4 +1,7 @@
-<script context="module">
+<script
+  lang="ts"
+  context="module"
+>
   export const hdrs = {
     industrial: '/hdr/industrial_sunset_puresky_1k.hdr',
     workshop: '/hdr/aerodynamics_workshop_1k.hdr',

@@ -1,6 +1,5 @@
 import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
-import { useThrelte } from '../context/compounds/useThrelte'
 import { useScheduler } from '../context/fragments/scheduler.svelte'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
 import { browser } from '../utilities'
@@ -88,16 +87,16 @@ export function useTask(
     opts = fnOrOptions as ThrelteUseTaskOptions | undefined
   }
 
-  const ctx = useThrelte()
+  const schedulerCtx = useScheduler()
 
-  let stage: Stage = ctx.mainStage
+  let stage: Stage = schedulerCtx.mainStage
 
   if (opts) {
     if (opts.stage) {
       if (DAG.isValue(opts.stage)) {
         stage = opts.stage
       } else {
-        const maybeStage = ctx.scheduler.getStage(opts.stage)
+        const maybeStage = schedulerCtx.scheduler.getStage(opts.stage)
         if (!maybeStage) {
           throw new Error(`No stage found with key ${opts.stage.toString()}`)
         }
@@ -129,8 +128,6 @@ export function useTask(
       }
     }
   }
-
-  const schedulerCtx = useScheduler()
 
   const started = writable(false)
 

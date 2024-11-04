@@ -1,7 +1,7 @@
-import { SvelteComponent, type Snippet } from 'svelte'
+import { type Snippet } from 'svelte'
 import type { NodeProps } from '../lib/props'
 
-type BoxProps = NodeProps & {
+export type BoxProps = NodeProps & {
   order?: number | undefined
   class?: string
 
@@ -17,5 +17,3 @@ type BoxProps = NodeProps & {
 
   onreflow?: (event: { width: number; height: number }) => void
 }
-
-export default class Box extends SvelteComponent<BoxProps> {}
