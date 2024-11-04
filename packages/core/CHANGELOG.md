@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 8.0.0-next.24
+
+### Minor Changes
+
+- 0f84459: Add preliminary event types on `<T>`
+
+### Patch Changes
+
+- d44a1d3: Replace dependency of useThrelte in useTask hook with useSheduler hook instead
+
 ## 8.0.0-next.23
 
 ### Minor Changes
