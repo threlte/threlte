@@ -40,6 +40,7 @@
   const { renderer } = useThrelte()
 
   const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  ref = mesh
 
   const animationMap = writable<Map<string, number>>(new Map())
 
@@ -135,7 +136,6 @@
 
 <T
   is={mesh}
-  bind:ref
   frustumCulled={false}
   {...props}
 >
