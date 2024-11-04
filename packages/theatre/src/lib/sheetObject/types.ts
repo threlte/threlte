@@ -1,5 +1,5 @@
 import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-import { SvelteComponent, type Snippet } from 'svelte'
+import { type Snippet } from 'svelte'
 import type Declare from './declare/Declare.svelte'
 import type Sync from './sync/Sync.svelte'
 import type Transform from './transform/Transform.svelte'
