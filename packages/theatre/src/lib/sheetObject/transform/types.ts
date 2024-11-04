@@ -1,4 +1,4 @@
-import type { Snippet, SvelteComponent } from 'svelte'
+import type { Snippet } from 'svelte'
 
 export type TransformProps<T extends string | undefined> = {
   label?: T
@@ -16,7 +16,3 @@ export type TransformProps<T extends string | undefined> = {
   : {
       key?: string
     })
-
-export default class Transform<Label extends string | undefined> extends SvelteComponent<
-  TransformProps<Label>
-> {}

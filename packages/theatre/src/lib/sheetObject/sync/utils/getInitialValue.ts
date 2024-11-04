@@ -1,5 +1,5 @@
 import { resolvePropertyPath } from '@threlte/core'
-import type { AnyProp } from '../Sync.svelte'
+import type { AnyProp } from '../types'
 import { getDefaultTransformer } from '../../transfomers/getDefaultTransformer'
 import { isComplexProp } from './isComplexProp'
 

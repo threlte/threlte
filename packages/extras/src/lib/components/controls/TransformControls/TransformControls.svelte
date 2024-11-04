@@ -132,6 +132,10 @@
       scene.remove(helper)
     }
   }}
+  dispose={false}
+  oncreate={(ref) => {
+    return () => ref.dispose()
+  }}
 />
 
 <T
