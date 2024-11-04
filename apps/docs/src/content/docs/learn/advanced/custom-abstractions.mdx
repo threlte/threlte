@@ -7,7 +7,7 @@ sidebar: {
 
 A lot of the components you will find in the package
 [@threlte/extras](/reference/extras/getting-started) are abstractions on
-top of the [`<T>` component](/reference/core/t). These abstractions provide
+top of the [`<T>` component](/reference/core/components/t). These abstractions provide
 extra functionality like automatically invalidating the frame or providing
 default values or extra props.
 
@@ -105,12 +105,12 @@ import type { Group } from 'three'
 export type TileProps = Props
 ```
 
-<Tip type="tip">
-  As of now it's necessary to declare the props in a separate file.
-	If you declare them inside the `<script>` block, the Svelte compiler
-	flattens the resulting type, removing JSDoc comments and possibly
-	breaking it.
-</Tip>
+:::tip
+As of now it's necessary to declare the props in a separate file.
+If you declare them inside the `<script>` block, the Svelte compiler
+flattens the resulting type, removing JSDoc comments and possibly
+breaking it.
+:::
 
 The generic type `Props<Type>` is a utility type that extracts all possible
 props that a `<T>` component accepts – in this case `<T.Group>`. It also creates

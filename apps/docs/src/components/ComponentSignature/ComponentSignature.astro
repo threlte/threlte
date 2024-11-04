@@ -23,13 +23,13 @@ const anyPropHasDefault = props.some((prop) => prop.default)
 const events = Astro.props.signature?.events ?? []
 const anyEventHasDescription = events.some((event) => event.description)
 
-const exports = Astro.props.signature.exports ?? []
+const exports = Astro.props.signature?.exports ?? []
 const anyExportHasDescription = exports.some((e) => !!e.description)
 
-const hasEvents = !!Astro.props.signature.events?.length
+const hasEvents = !!Astro.props.signature?.events?.length
 const hasExports = !!exports.length
-const hasProps = !!Astro.props.signature.props?.length
-const hasBindings = !!Astro.props.signature.bindings?.length
+const hasProps = !!Astro.props.signature?.props?.length
+const hasBindings = !!Astro.props.signature?.bindings?.length
 
 const hasAnySignature = hasEvents || hasProps || hasBindings
 

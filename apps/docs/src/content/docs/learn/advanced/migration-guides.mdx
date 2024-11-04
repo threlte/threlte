@@ -86,10 +86,10 @@ injectPlugin('some-plugin', (args) => {
 
 The `args` object is reactive and will update whenever any of the referenced values change.
 
-<Tip type="info">
-  A plugin may still return an object with `pluginProps` to specify which props
-	the `<T>` component should not react to.
-</Tip>
+:::note
+A plugin may still return an object with `pluginProps` to specify which props
+the `<T>` component should not react to.
+:::
 
 ### Events
 
@@ -284,7 +284,7 @@ If you need to manually set renderer parameters, call the function and return a 
 </Canvas>
 ```
 
-Any Three renderer can be returned when calling `createRenderer`. You can find a WebGPU example [here](/docs/examples/renderers/webgpurenderer).
+Any Three renderer can be returned when calling `createRenderer`. You can find a WebGPU example [here](/examples/renderers/webgpurenderer).
 
 ### Transitions
 
