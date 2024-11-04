@@ -25,6 +25,3 @@ export type SheetObjectProps<T extends UnknownShorthandCompoundProps> = {
   >
   onchange?: (sheet: ISheetObject<T>['value']) => void
 }
-export default class SheetObject<T extends UnknownShorthandCompoundProps> extends SvelteComponent<
-  SheetObjectProps<T>
-> {}
