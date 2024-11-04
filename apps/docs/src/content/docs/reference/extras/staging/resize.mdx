@@ -1,9 +1,6 @@
 ---
-order: 7.12
-category: '@threlte/extras'
-name: '<Resize>'
+title: <Resize>
 sourcePath: 'packages/extras/src/lib/components/Resize/Resize.svelte'
-type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
@@ -62,6 +59,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 Scales up or down a group of objects by the maximum dimension of their bounding
 box. Object proportions are preserved. This is particularly useful if you want
 to "normalize" the dimensions of an object to be in the range 0 to 1.
@@ -79,10 +78,10 @@ is used.
 </Resize>
 ```
 
-<Tip type="warning">
+:::caution
   If you use the `axis` prop, the dimensions will not be normalized to the range 0 to 1 unless the
   maximum axis is chosen.
-</Tip>
+:::
 
 ## Bring Your Own Box
 
