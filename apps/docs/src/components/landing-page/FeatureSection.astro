@@ -1,0 +1,63 @@
+---
+interface Props {
+	class?: string
+	color?: 'orange' | 'blue' | 'green'
+}
+
+const { color = 'orange' } = Astro.props
+---
+
+<div class:list={['relative border-y border-white/20 pb-8 pt-10', Astro.props.class ?? '']}>
+	<div
+		class="pointer-events-none absolute left-[00%] top-0 h-40 w-[100%] select-none overflow-hidden"
+	>
+		<div class:list={['absolute left-0 top-40 h-96 w-full -translate-y-full', `glow-${color}`]}>
+		</div>
+	</div>
+
+	{
+		Astro.slots.has('icon') && (
+			<div
+				class:list={[
+					'mb-10 flex h-16 w-16 items-center justify-center rounded-full empty:hidden [&>*]:w-[60%]',
+					`bg-${color}`,
+					`glow-${color}`
+				]}
+			>
+				<slot name="icon" />
+			</div>
+		)
+	}
+
+	{
+		Astro.slots.has('subline') && (
+			<sup class:list={['mb-1 text-base empty:hidden', `text-${color}-400`]}>
+				<slot name="subline" />
+			</sup>
+		)
+	}
+
+	<h2 class="mt-0 text-5xl font-bold text-white">
+		<slot name="headline" />
+	</h2>
+
+	<div class="mt-12 flex flex-col gap-8 text-xl text-white/60 md:flex-row">
+		<slot name="body" />
+
+		{
+			Astro.slots.has('body-left') && (
+				<div class="flex-1 empty:hidden">
+					<slot name="body-left" />
+				</div>
+			)
+		}
+
+		{
+			Astro.slots.has('body-right') && (
+				<div class="flex-1 empty:hidden">
+					<slot name="body-right" />
+				</div>
+			)
+		}
+	</div>
+</div>

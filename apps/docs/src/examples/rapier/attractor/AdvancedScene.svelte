@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new SphereGeometry(1)
   const material = new MeshBasicMaterial({ color: 'red' })

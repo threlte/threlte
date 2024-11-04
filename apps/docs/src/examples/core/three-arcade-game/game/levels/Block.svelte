@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'

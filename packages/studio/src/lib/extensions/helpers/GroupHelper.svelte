@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   let texture: Texture | undefined
 

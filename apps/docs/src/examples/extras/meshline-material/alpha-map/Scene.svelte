@@ -9,7 +9,7 @@
   } from '@threlte/extras'
   import { CubicBezierCurve3, DoubleSide, Vector3 } from 'three'
 
-  const texture = useTexture('/brush-texture.png')
+  const texture = useTexture('/textures/brush-texture.png')
 
   // create a smooth bezier curve
   const curve = new CubicBezierCurve3(

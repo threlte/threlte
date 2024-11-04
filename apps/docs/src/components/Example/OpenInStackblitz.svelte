@@ -1,35 +1,35 @@
 <script lang="ts">
-  import { files as projectTemplate } from './stackblitz-template'
-  import sdk from '@stackblitz/sdk'
+import { files as projectTemplate } from './stackblitz-template'
+import sdk from '@stackblitz/sdk'
 
-  export let files: Record<string, string>
+export let files: Record<string, string>
 
-  const projectFiles: Record<string, string> = {}
-  for (const path in files) {
-    const newPath = `src/example/${path}`
-    projectFiles[newPath] = files[path] as string
-  }
+const projectFiles: Record<string, string> = {}
+for (const path in files) {
+  const newPath = `src/example/${path}`
+  projectFiles[newPath] = files[path] as string
+}
 
-  const onClick = () => {
-    sdk.openProject(
-      {
-        title: 'Some title',
-        description: 'Some description',
-        files: {
-          ...projectTemplate,
-          ...projectFiles
-        },
-        template: 'node'
+const onClick = () => {
+  sdk.openProject(
+    {
+      title: 'Some title',
+      description: 'Some description',
+      files: {
+        ...projectTemplate,
+        ...projectFiles
       },
-      {
-        openFile: 'src/example/App.svelte'
-      }
-    )
-  }
+      template: 'node'
+    },
+    {
+      openFile: 'src/example/App.svelte'
+    }
+  )
+}
 </script>
 
 <button
-  class="rounded-sm border border-orange/5 bg-orange-800/50 px-2 py-1 text-sm text-orange hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-none"
+  class="border-orange/5 text-orange rounded-sm border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-none"
   on:click={onClick}
   aria-label="open in stackblitz"
 >
