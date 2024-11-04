@@ -1,9 +1,6 @@
 ---
-order: 9.10
-category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/GradientTexture/RadialGradientTexture.svelte'
-name: '<RadialGradientTexture>'
-type: 'component'
+title: <RadialGradientTexture>
 componentSignature:
   {
     extends:
@@ -52,6 +49,8 @@ componentSignature:
   }
 ---
 
+import Example from '$components/Example/Example.astro'
+
 A reactive radial gradient texture that attaches to the "map" property of its parent. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
 
 <Example path="extras/gradient-texture/radial" />
@@ -60,9 +59,9 @@ A reactive radial gradient texture that attaches to the "map" property of its pa
 
 The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that circumscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
 
-<Tip type="warning">
+:::caution
   It is also not enforced that `innerRadius` and `outerRadius` are both positive.
-</Tip>
+:::
 
 ## Gradient Stops
 
