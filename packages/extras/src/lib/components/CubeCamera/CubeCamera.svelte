@@ -14,9 +14,11 @@
     onrenderstop,
     resolution = 256,
     children,
-    ref = $bindable(new Group()),
+    ref = $bindable(),
     ...props
   }: CubeCameraProps = $props()
+
+  ref = new Group()
 
   export const renderTarget = new WebGLCubeRenderTarget(resolution)
   observe.pre(

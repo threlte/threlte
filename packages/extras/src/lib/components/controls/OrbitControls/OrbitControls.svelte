@@ -5,6 +5,8 @@
   import { useControlsContext } from '../useControlsContext'
   import type { OrbitControlsProps } from './types'
 
+  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
+
   const parent = useParent()
   const { renderer, invalidate } = useThrelte()
 
@@ -13,16 +15,9 @@
   }
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let {
-    ref = $bindable(new ThreeOrbitControls($parent, renderer.domElement.parentElement!)),
-    children,
-    ...props
-  }: OrbitControlsProps = $props()
+  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
 
-  props.onchange
-  props.onstart
-
-  const { start, stop } = useTask(() => ref.update(), {
+  const { start, stop } = useTask(() => controls.update(), {
     autoStart: false,
     autoInvalidate: false
   })
@@ -36,17 +31,18 @@
   })
 
   const { orbitControls } = useControlsContext()
-  orbitControls.set(ref)
+  orbitControls.set(controls)
   onDestroy(() => orbitControls.set(undefined))
 </script>
 
 <T
-  is={ref}
+  is={controls}
+  bind:ref
   onchange={(event) => {
     invalidate()
     props.onchange?.(event)
   }}
   {...props}
 >
-  {@render children?.({ ref })}
+  {@render children?.({ ref: controls })}
 </T>

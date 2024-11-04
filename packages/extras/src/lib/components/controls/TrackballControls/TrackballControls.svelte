@@ -38,6 +38,8 @@ enabled. You can disable this by setting `staticMoving` to true.
   import { useControlsContext } from '../useControlsContext'
   import type { TrackballControlsProps } from './types'
 
+  let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+
   const parent = useParent()
   const { renderer, invalidate } = useThrelte()
 
@@ -46,28 +48,25 @@ enabled. You can disable this by setting `staticMoving` to true.
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let {
-    ref = $bindable(new ThreeTrackballControls($parent, renderer.domElement.parentElement!)),
-    children,
-    ...props
-  }: TrackballControlsProps = $props()
+  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
 
-  useTask(() => ref.update(), {
+  useTask(() => controls.update(), {
     autoInvalidate: false
   })
 
   const { trackballControls } = useControlsContext()
-  trackballControls.set(ref)
+  trackballControls.set(controls)
   onDestroy(() => trackballControls.set(undefined))
 </script>
 
 <T
-  is={ref}
+  is={controls}
+  bind:ref
   {...props}
   onchange={(event) => {
     invalidate()
     props.onchange?.(event)
   }}
 >
-  {@render children?.({ ref })}
+  {@render children?.({ ref: controls })}
 </T>
