@@ -1,4 +1,7 @@
-<script lang="ts">
+<script
+  lang="ts"
+  generics="Type"
+>
   import { resolvePropertyPath, useParent, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { useStudio } from '../../studio/useStudio'
@@ -11,10 +14,9 @@
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
 
-  let { type, children, ...rest }: SyncProps<any> = $props()
+  let { type, children, ...rest }: SyncProps<Type> = $props()
 
   const { sheetObject, addProps, removeProps } = useSheet()
-
   const parent = useParent()
 
   // serves as a map to map (custom) prop names to object target properties
