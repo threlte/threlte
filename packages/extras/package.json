@@ -93,6 +93,6 @@
     "@threejs-kit/instanced-sprite-mesh": "^2.4.6",
     "three-mesh-bvh": "^0.7.4",
     "three-perf": "^1.0.10",
-    "troika-three-text": "^0.49.1"
+    "troika-three-text": "^0.50.3"
   }
 }

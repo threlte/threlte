@@ -26,11 +26,8 @@ export const useDispose = (dispose: boolean | undefined) => {
   const currentRef = writable<DisposableThreeObject | undefined>(undefined)
   const localDispose = writable<boolean | undefined>(dispose)
 
-  // We keep a local collection of objects that can be disposed which are
-  // related to the current ref
-  let disposables: DisposableThreeObject[] = []
-
-  const { collectDisposableObjects, addDisposableObjects, maybeDisposeObjects } = useDisposal()
+  const { disposableObjectMounted, disposableObjectUnmounted, removeObjectFromDisposal } =
+    useDisposal()
 
   const parentDispose = getContext<ThrelteDisposeContext | undefined>(contextName)
 
@@ -44,26 +41,32 @@ export const useDispose = (dispose: boolean | undefined) => {
   setContext<ThrelteDisposeContext>(contextName, mergedDispose)
 
   watch([currentRef, mergedDispose], ([ref, mergedDispose]) => {
-    // If the merged dispose is not set, we don't need to dispose anything
-    if (!mergedDispose) return
-
-    // If the ref is the same as the previous ref, we don't need to dispose anything
-    if (ref === previousRef) return
-
-    // Dispose all objects related to the previous ref
-    maybeDisposeObjects(disposables)
-    // Collect the new disposables
-    disposables = collectDisposableObjects(ref)
-    // Add the new disposables to the disposal system so that
-    // they won't get disposed when any other component tries to dispose them.
-    addDisposableObjects(disposables)
+    if (ref === previousRef) {
+      // dispose changed
+      if (!mergedDispose) {
+        // disposal is no longer enabled, so we need to deregister the previous ref
+        if (previousRef) removeObjectFromDisposal(previousRef)
+      } else {
+        // disposal is enabled, so we need to register the previous ref
+        if (previousRef) disposableObjectMounted(previousRef)
+      }
+    } else {
+      // ref changed
+      if (mergedDispose) {
+        // we're disposing the old ref
+        if (previousRef) disposableObjectUnmounted(previousRef)
+        // and registering the new ref
+        if (ref) disposableObjectMounted(ref)
+      }
+    }
 
     previousRef = ref
   })
 
   onDestroy(() => {
     if (!get(mergedDispose)) return
-    maybeDisposeObjects(disposables)
+    const ref = get(currentRef)
+    if (ref) disposableObjectUnmounted(ref)
   })
 
   const updateRef = (ref: unknown) => {

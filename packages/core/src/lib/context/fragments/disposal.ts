@@ -6,15 +6,17 @@ export type DisposableThreeObject = {
 } & Record<string, unknown>
 
 export type DisposalContext = {
+  /**
+   * Dispose objects, happens automatically as part of a task.
+   * @param force - Force disposal
+   */
   dispose: (force?: boolean) => void
-  collectDisposableObjects: (
-    object?: DisposableThreeObject,
-    arr?: DisposableThreeObject[]
-  ) => DisposableThreeObject[]
-  /** Add objects to the disposal context */
-  addDisposableObjects: (objects: DisposableThreeObject[]) => void
-  /** Potentially dispose objects */
-  maybeDisposeObjects: (objects: DisposableThreeObject[]) => void
+  /** Register an object that will be disposed at the end of its lifecycle. */
+  disposableObjectMounted: (object: DisposableThreeObject) => void
+  /** Deregister an object that will be disposed at the end of its lifecycle. */
+  disposableObjectUnmounted: (object: DisposableThreeObject) => void
+  /** Remove an object from the disposal context */
+  removeObjectFromDisposal: (object: DisposableThreeObject) => void
   /** Objects that *can* be disposed */
   disposableObjects: Map<DisposableThreeObject, number>
   shouldDispose: boolean
@@ -22,46 +24,25 @@ export type DisposalContext = {
 
 export const createDisposalContext = (): DisposalContext => {
   const context: DisposalContext = {
-    collectDisposableObjects: (object, objects) => {
-      const disposables: DisposableThreeObject[] = objects ?? []
-      if (!object) return disposables
-      // Scenes can't be disposed
-      if (object?.dispose && typeof object.dispose === 'function' && object.type !== 'Scene') {
-        disposables.push(object)
+    removeObjectFromDisposal: (object) => {
+      context.disposableObjects.delete(object)
+    },
+    disposableObjectMounted: (object) => {
+      const currentValue = context.disposableObjects.get(object)
+      if (currentValue) {
+        context.disposableObjects.set(object, currentValue + 1)
+      } else {
+        context.disposableObjects.set(object, 1)
       }
-      // iterate over properties of object
-      Object.entries(object).forEach(([propKey, propValue]) => {
-        // we don't want to dispose the parent, we can skip "children"
-        if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const value = propValue as any
-        if (value?.dispose) {
-          context.collectDisposableObjects(value, disposables)
-        }
-      })
-      return disposables
     },
-    addDisposableObjects: (objects) => {
-      objects.forEach((obj) => {
-        const currentValue = context.disposableObjects.get(obj)
-        if (currentValue) {
-          context.disposableObjects.set(obj, currentValue + 1)
-        } else {
-          context.disposableObjects.set(obj, 1)
+    disposableObjectUnmounted: (object) => {
+      const currentValue = context.disposableObjects.get(object)
+      if (currentValue && currentValue > 0) {
+        context.disposableObjects.set(object, currentValue - 1)
+        if (currentValue - 1 <= 0) {
+          context.shouldDispose = true
         }
-      })
-    },
-    maybeDisposeObjects: (objects) => {
-      if (objects.length === 0) return
-      objects.forEach((obj) => {
-        const currentValue = context.disposableObjects.get(obj)
-        if (currentValue && currentValue > 0) {
-          context.disposableObjects.set(obj, currentValue - 1)
-          if (currentValue - 1 <= 0) {
-            context.shouldDispose = true
-          }
-        }
-      })
+      }
     },
     disposableObjects: new Map(),
     shouldDispose: false,
