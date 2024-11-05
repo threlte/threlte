@@ -11,9 +11,11 @@ export type DisposalContext = {
    * @param force - Force disposal
    */
   dispose: (force?: boolean) => void
-  /** Register an object that will be disposed at the end of its lifecycle. */
+  /** Register an object that should be disposed at the end of its lifecycle,
+   * effectivly incrementing the mount count. */
   disposableObjectMounted: (object: DisposableThreeObject) => void
-  /** Deregister an object that will be disposed at the end of its lifecycle. */
+  /** Mark an object as unmounted, effectivly decrementing the mount count. If
+   * the mount count is 0, the object will be disposed. */
   disposableObjectUnmounted: (object: DisposableThreeObject) => void
   /** Remove an object from the disposal context */
   removeObjectFromDisposal: (object: DisposableThreeObject) => void
