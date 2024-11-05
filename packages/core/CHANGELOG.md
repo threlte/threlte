@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.26
+
+### Major Changes
+
+- 6e8bcc2: Stricter types on dispose, args, makeDefault and manual
+
 ## 8.0.0-next.25
 
 ### Major Changes
