@@ -1,5 +1,6 @@
 import type { Snippet } from 'svelte'
 import type { Object3D } from 'three'
+import type { DisposableObject } from '../../context/fragments/disposal'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -69,12 +70,17 @@ export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstan
 /**
  * ### Disposable Props
  */
-export type DisposableProps = {
-  /**
-   * If true, the object will be deeply disposed when the component unmounts.
-   */
-  dispose?: boolean
-}
+export type DisposableProps<Type> =
+  MaybeInstance<Type> extends DisposableObject
+    ? {
+        /**
+         * If true, the object will be deeply disposed when the component unmounts.
+         */
+        dispose?: boolean
+      }
+    : {
+        dispose?: never
+      }
 
 /**
  * ### Class Props
@@ -83,7 +89,9 @@ export type ClassProps<Type> = Type extends AnyClass
   ? {
       args?: any[] | ConstructorParameters<Type>
     }
-  : Record<string, unknown>
+  : {
+      args?: never
+    }
 
 // Ref Props
 export type RefProps<Type> = {
@@ -100,7 +108,7 @@ export type CameraProps<Type> =
          * By default, Threlte will update the cameras aspect ratio or frustum
          * when the canvas is resized. If you want to manually control the
          * camera, set this to true.
-         * @default true
+         * @default false
          */
         manual?: boolean
         /**
@@ -109,7 +117,10 @@ export type CameraProps<Type> =
          */
         makeDefault?: boolean
       }
-    : Record<string, unknown>
+    : {
+        makeDefault?: never
+        manual?: never
+      }
 
 /**
  * ### Instance Props
@@ -177,7 +188,7 @@ export type Props<
   Type,
   ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]
 > = AnyProps &
-  DisposableProps &
+  DisposableProps<Type> &
   RefProps<Type> &
   BaseProps<Type, ChildrenArgs> &
   ClassProps<Type> &

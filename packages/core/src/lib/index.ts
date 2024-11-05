@@ -41,8 +41,5 @@ export { createRendererContext, useRenderer } from './context/fragments/renderer
 export { createSceneContext, useScene } from './context/fragments/scene'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
 
-// types
-export type { Size } from './types'
-
 // utils
 export * from './utilities'
