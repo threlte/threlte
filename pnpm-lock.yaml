@@ -297,10 +297,10 @@ importers:
         version: 5.1.6
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.6)(typescript@5.4.5)
@@ -381,8 +381,8 @@ importers:
         specifier: ^1.0.10
         version: 1.0.10(three@0.170.0)
       troika-three-text:
-        specifier: ^0.49.1
-        version: 0.49.1(three@0.170.0)
+        specifier: ^0.50.3
+        version: 0.50.3(three@0.170.0)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.2.0
@@ -443,10 +443,10 @@ importers:
         version: 5.1.6
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.1.6)(typescript@5.4.5)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.6)(typescript@5.4.5)
@@ -7528,8 +7528,8 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
-  troika-three-text@0.49.1:
-    resolution: {integrity: sha512-lXGWxgjJP9kw4i4Wh+0k0Q/7cRfS6iOME4knKht/KozPu9GcFA9NnNpRvehIhrUawq9B0ZRw+0oiFHgRO+4Wig==}
+  troika-three-text@0.50.3:
+    resolution: {integrity: sha512-UzbIrgV3fOFmFbFfWIBcBEXEyQovs+LLu15E5xGpSQbo1oZH49A+J9bul4H8H0xLtaLkRTO+LqEsmkaeDtZQfg==}
     peerDependencies:
       three: '>=0.125.0'
 
@@ -7543,11 +7543,16 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
+  troika-three-utils@0.50.3:
+    resolution: {integrity: sha512-asQWCESikU58y9cz4OgIjCRlITkDTwf7ds8T9IyWxn7OB2A7XItg2UbHjfexwooTefM+BYbEC4ZKxOUBfbNVLA==}
+    peerDependencies:
+      three: '>=0.125.0'
+
   troika-worker-utils@0.47.2:
     resolution: {integrity: sha512-mzss4MeyzUkYBppn4x5cdAqrhBHFEuVmMMgLMTyFV23x6GvQMyo+/R5E5Lsbrt7WSt5RfvewjcwD1DChRTA9lA==}
 
-  troika-worker-utils@0.49.0:
-    resolution: {integrity: sha512-1xZHoJrG0HFfCvT/iyN41DvI/nRykiBtHqFkGaGgJwq5iXfIZFBiPPEHFpPpgyKM3Oo5ITHXP5wM2TNQszYdVg==}
+  troika-worker-utils@0.50.0:
+    resolution: {integrity: sha512-BxNk0w6+d9NYd7El/3RzlzH/F2vovJI1FX9Zb+D7fArVM1EsUXj6+wVwJSrfucy6/HYhfbZPu/lD6Miiw9Byiw==}
 
   trough@2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
@@ -16057,12 +16062,12 @@ snapshots:
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.49.1(three@0.170.0):
+  troika-three-text@0.50.3(three@0.170.0):
     dependencies:
       bidi-js: 1.0.2
       three: 0.170.0
-      troika-three-utils: 0.49.0(three@0.170.0)
-      troika-worker-utils: 0.49.0
+      troika-three-utils: 0.50.3(three@0.170.0)
+      troika-worker-utils: 0.50.0
       webgl-sdf-generator: 1.1.1
 
   troika-three-utils@0.47.2(three@0.170.0):
@@ -16073,9 +16078,13 @@ snapshots:
     dependencies:
       three: 0.170.0
 
+  troika-three-utils@0.50.3(three@0.170.0):
+    dependencies:
+      three: 0.170.0
+
   troika-worker-utils@0.47.2: {}
 
-  troika-worker-utils@0.49.0: {}
+  troika-worker-utils@0.50.0: {}
 
   trough@2.1.0: {}
 
