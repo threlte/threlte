@@ -55,7 +55,7 @@
     composer.removeAllPasses()
     composer.addPass(new RenderPass(scene, camera.current))
     composer.addPass(new EffectPass(camera.current, fxaaEffect))
-    composer.addPass(new EffectPass(camera.current, noiseEffect, toneMappingEffect, bcEffect))
+    composer.addPass(new EffectPass(camera.current, noiseEffect, bcEffect, toneMappingEffect))
   }
 
   $: $camera && setup()
