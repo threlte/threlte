@@ -12,6 +12,12 @@ This upgrade contains bug fixes, better average performance, smaller bundle size
 
 There are a few notable breaking changes listed below.
 
+### Automatic Disposal
+
+[Automatic disposal](/docs/learn/basics/disposing-objects) has been improved to
+only dispose of objects that are referenced by a `<T>` component. Objects are no
+longer scanned recursively for disposable objects.
+
 ### Plugin API
 
 The plugin API has been changed to allow for greater granularity and a reactivity model that is in-line with Svelte 5.
