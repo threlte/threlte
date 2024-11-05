@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.36
+
+### Patch Changes
+
+- 5d3d231: Bump troika-three-text dependency
+
 ## 9.0.0-next.35
 
 ### Patch Changes
