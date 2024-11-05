@@ -18,6 +18,29 @@ There are a few notable breaking changes listed below.
 only dispose of objects that are referenced by a `<T>` component. Objects are no
 longer scanned recursively for disposable objects.
 
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const map = useTexture('/some/texture.png')
+</script>
+
+{#if $map}
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial map={$map} />
+  </T.Mesh>
+{/if}
+```
+
+In this example, Threlte 7 also disposed of the texture when the material
+unmounted. This is no longer the case in Threlte 8. This change is introduced to
+improve performance and to make the behavior of automatic disposal more
+intuitive. When looking at simple examples like the one above, this might seem
+like a regression, but with scale the previous approach of deeply recursive
+automatic disposal was hard to reason about and a performance bottleneck.
+
 ### Plugin API
 
 The plugin API has been changed to allow for greater granularity and a reactivity model that is in-line with Svelte 5.
