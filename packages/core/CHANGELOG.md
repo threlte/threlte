@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.25
+
+### Major Changes
+
+- 5d3d231: Remove automatic deeply recursive disposal in favor of disposal of objects that are referenced by a `<T>` component.
+
 ## 8.0.0-next.24
 
 ### Minor Changes
