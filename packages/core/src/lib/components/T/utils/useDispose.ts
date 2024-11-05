@@ -1,7 +1,7 @@
 import { getContext, onDestroy, setContext } from 'svelte'
 import { derived, get, writable, type Readable } from 'svelte/store'
-import { useDisposal, type DisposableThreeObject } from '../../../context/fragments/disposal'
-import { watch } from '../../../utilities'
+import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal'
+import { isInstanceOf, watch } from '../../../utilities'
 
 const contextName = Symbol('threlte-disposable-object-context')
 type ThrelteDisposeContext = Readable<boolean>
@@ -11,19 +11,13 @@ type ThrelteDisposeContext = Readable<boolean>
  * @param object - The object to check.
  * @returns True if the object is a disposable object, false otherwise.
  */
-const isDisposableObject = (object: unknown): object is DisposableThreeObject => {
-  return (
-    typeof object === 'object' &&
-    object !== null &&
-    'dispose' in object &&
-    typeof object.dispose === 'function' &&
-    !('isScene' in object)
-  )
+const isDisposableObject = (object: unknown): object is DisposableObject => {
+  return typeof (object as any)?.dispose === 'function' && !isInstanceOf(object, 'Scene')
 }
 
 export const useDispose = (dispose: boolean | undefined) => {
-  let previousRef: DisposableThreeObject | undefined = undefined
-  const currentRef = writable<DisposableThreeObject | undefined>(undefined)
+  let previousRef: DisposableObject | undefined = undefined
+  const currentRef = writable<DisposableObject | undefined>(undefined)
   const localDispose = writable<boolean | undefined>(dispose)
 
   const { disposableObjectMounted, disposableObjectUnmounted, removeObjectFromDisposal } =

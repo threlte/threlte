@@ -1,9 +1,8 @@
 import { getContext, onDestroy, setContext, tick } from 'svelte'
 
-export type DisposableThreeObject = {
-  dispose?: () => void
-  type?: string
-} & Record<string, unknown>
+export type DisposableObject = {
+  dispose: () => void
+}
 
 export type DisposalContext = {
   /**
@@ -13,14 +12,14 @@ export type DisposalContext = {
   dispose: (force?: boolean) => void
   /** Register an object that should be disposed at the end of its lifecycle,
    * effectivly incrementing the mount count. */
-  disposableObjectMounted: (object: DisposableThreeObject) => void
+  disposableObjectMounted: (object: DisposableObject) => void
   /** Mark an object as unmounted, effectivly decrementing the mount count. If
    * the mount count is 0, the object will be disposed. */
-  disposableObjectUnmounted: (object: DisposableThreeObject) => void
+  disposableObjectUnmounted: (object: DisposableObject) => void
   /** Remove an object from the disposal context */
-  removeObjectFromDisposal: (object: DisposableThreeObject) => void
+  removeObjectFromDisposal: (object: DisposableObject) => void
   /** Objects that *can* be disposed */
-  disposableObjects: Map<DisposableThreeObject, number>
+  disposableObjects: Map<DisposableObject, number>
   shouldDispose: boolean
 }
 
