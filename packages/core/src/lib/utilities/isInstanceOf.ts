@@ -45,5 +45,5 @@ export const isInstanceOf = <T extends keyof ThreeClassTypes>(
   obj: any,
   type: T
 ): obj is InstanceType<ThreeClassTypes[T]> => {
-  return typeof obj === 'object' && obj !== null && !!obj[`is${type}`]
+  return obj?.[`is${type}`] === true
 }
