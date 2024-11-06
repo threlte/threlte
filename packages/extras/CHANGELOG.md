@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.37
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 9.0.0-next.36
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.13
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 1.0.0-next.12
 
 ### Patch Changes
