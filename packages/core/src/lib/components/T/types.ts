@@ -195,7 +195,7 @@ export type Props<
   CameraProps<Type> &
   InstanceProps<Type> &
   EventProps<Type> &
-  Threlte.UserProps<Type>
+  Threlte.UserProps
 
 /**
  * ### `TProps<Type>`
