@@ -18,7 +18,7 @@
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/kit": "^2.7.7",
     "@sveltejs/package": "^2.3.7",
-    "@sveltejs/vite-plugin-svelte": "^3.1.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@threlte/core": "workspace:*",
     "@types/three": "^0.169.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
