@@ -6,6 +6,11 @@ name: <AsciiRenderer>
 type: 'component'
 componentSignature:
   {
+    exports:
+      [
+        { name: 'start', type: '() => void', description: 'Manually start the render task' },
+        { name: 'stop', type: '() => void', description: 'Manually stop the render task' }
+      ],
     props:
       [
         {
