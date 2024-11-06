@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.30
+
+### Patch Changes
+
+- eae09cd: Fix `<T>` types
+
 ## 8.0.0-next.29
 
 ### Minor Changes
