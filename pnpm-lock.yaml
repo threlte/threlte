@@ -768,6 +768,9 @@ importers:
       '@yushijinhun/three-minifier-rollup':
         specifier: ^0.4.0
         version: 0.4.0
+      birpc:
+        specifier: ^0.2.19
+        version: 0.2.19
       eslint:
         specifier: ^9.0.0
         version: 9.0.0
@@ -817,7 +820,7 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.4.5
         version: 5.6.3
       vite:
         specifier: ^5.2.8
@@ -3429,8 +3432,8 @@ packages:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
 
-  birpc@0.2.17:
-    resolution: {integrity: sha512-+hkTxhot+dWsLpp3gia5AkVHIsKlZybNT5gIYiDlNzJrmYPcTM9k5/w2uaj3IPpd7LlEYpmCj4Jj1nC41VhDFg==}
+  birpc@0.2.19:
+    resolution: {integrity: sha512-5WeXXAvTmitV1RqJFppT5QtUiz2p1mRSYU000Jkft5ZUCLJIk4uQriYNO50HknxKwM6jd8utNc66K1qGIwwWBQ==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -10921,7 +10924,7 @@ snapshots:
 
   binary-extensions@2.2.0: {}
 
-  birpc@0.2.17: {}
+  birpc@0.2.19: {}
 
   bl@4.1.0:
     dependencies:
@@ -16434,7 +16437,7 @@ snapshots:
 
   vite-dev-rpc@0.1.4(vite@5.3.1(@types/node@20.12.7)(sass@1.77.7)):
     dependencies:
-      birpc: 0.2.17
+      birpc: 0.2.19
       vite: 5.3.1(@types/node@20.12.7)(sass@1.77.7)
       vite-hot-client: 0.2.3(vite@5.3.1(@types/node@20.12.7)(sass@1.77.7))
 
