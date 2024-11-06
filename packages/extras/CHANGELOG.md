@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.38
+
+### Minor Changes
+
+- 076c1f9: Export InteractivityProps type
+
 ## 9.0.0-next.37
 
 ### Patch Changes

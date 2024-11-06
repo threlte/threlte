@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.29
+
+### Minor Changes
+
+- 10ceb5b: Add UserProps
+
 ## 8.0.0-next.28
 
 ### Patch Changes
