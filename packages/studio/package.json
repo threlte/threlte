@@ -42,7 +42,7 @@
     "svelte2tsx": "^0.7.6",
     "three": "^0.170.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.5",
+    "typescript": "5.4.5",
     "vite": "^5.2.8",
     "vite-dev-rpc": "^0.1.4"
   },
