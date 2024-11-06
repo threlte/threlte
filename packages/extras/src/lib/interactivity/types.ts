@@ -1,4 +1,4 @@
-import type { Camera, Intersection as ThreeIntersection, Object3D, Vector2, Ray } from 'three'
+import type { Camera, Object3D, Ray, Intersection as ThreeIntersection, Vector2 } from 'three'
 
 export type DomEvent = PointerEvent | MouseEvent | WheelEvent
 
@@ -46,4 +46,8 @@ export type ThrelteEvents = {
   onpointerleave: IntersectionEvent<PointerEvent>
   onpointermove: IntersectionEvent<PointerEvent>
   onpointermissed: MouseEvent
+}
+
+export type InteractivityProps = {
+  [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }

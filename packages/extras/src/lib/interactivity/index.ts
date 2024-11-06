@@ -13,5 +13,11 @@ const interactivity = (options?: InteractivityOptions) => {
 
 // exports
 export { useInteractivity } from './context'
-export type { DomEvent, Intersection, IntersectionEvent, ThrelteEvents as EventMap } from './types'
+export type {
+  DomEvent,
+  Intersection,
+  IntersectionEvent,
+  ThrelteEvents as EventMap,
+  InteractivityProps
+} from './types'
 export { interactivity }
