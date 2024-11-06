@@ -14,7 +14,7 @@
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^3.2.0",
+    "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/kit": "^2.7.7",
     "@sveltejs/package": "^2.3.7",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
