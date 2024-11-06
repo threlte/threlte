@@ -1,3 +1,5 @@
+import './types.d.ts'
+
 export const VERSION = 8
 
 // canvas component

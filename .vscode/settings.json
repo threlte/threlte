@@ -26,6 +26,13 @@
         "command": " pnpm format"
       },
       {
+        "cwd": "${workspaceFolder}",
+        "name": "$(new-file) Changeset",
+        "color": "green",
+        "singleInstance": true,
+        "command": " npx changeset"
+      },
+      {
         "cwd": "${workspaceFolder}/apps/docs",
         "name": "$(book) Docs",
         "color": "#2F7DC6",

@@ -84,7 +84,8 @@ export {
   type DomEvent,
   type EventMap,
   type Intersection,
-  type IntersectionEvent
+  type IntersectionEvent,
+  type InteractivityProps
 } from './interactivity'
 
 // layers
