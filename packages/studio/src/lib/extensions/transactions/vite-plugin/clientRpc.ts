@@ -1,5 +1,6 @@
 import { createRPCClient } from 'vite-dev-rpc'
 import type { ClientFunctions, ServerFunctions } from '../rpc'
+import type { BirpcReturn } from 'birpc'
 
 const getClientRpc = () => {
   if (import.meta.hot) {
@@ -8,4 +9,4 @@ const getClientRpc = () => {
   return undefined
 }
 
-export const clientRpc = getClientRpc()
+export const clientRpc: BirpcReturn<ServerFunctions, ClientFunctions> | undefined = getClientRpc()
