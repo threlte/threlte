@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.27
+
+### Patch Changes
+
+- 3a1ae36: fix: Include auto-generated d.ts file
+
 ## 8.0.0-next.26
 
 ### Major Changes
