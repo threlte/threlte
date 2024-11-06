@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.28
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 8.0.0-next.27
 
 ### Patch Changes

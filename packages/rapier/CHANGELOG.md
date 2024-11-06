@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.0-next.16
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 3.0.0-next.15
 
 ### Major Changes

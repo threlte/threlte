@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.0-next.10
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 3.0.0-next.9
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @threlte/studio
 
+## 0.1.0-next.17
+
+### Patch Changes
+
+- aa64b9a: fix: Downgrade TS on studio
+- 60fcc29: Bump dev dependencies
+
 ## 0.1.0-next.16
 
 ### Patch Changes

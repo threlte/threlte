@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.12
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
 ## 2.0.0-next.11
 
 ### Major Changes
