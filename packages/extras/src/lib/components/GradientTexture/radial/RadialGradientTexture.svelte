@@ -1,20 +1,19 @@
 <script lang="ts">
   import type { RadialGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, observe, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
 
-  const { colorSpace, invalidate } = useThrelte()
-
   let {
+    width = 1024,
+    height = 1024,
     innerRadius = 0,
     outerRadius = 'auto',
     stops = [
       { offset: 0, color: 'black' },
       { offset: 1, color: 'white' }
     ],
-    width = 1024,
-    height = 1024,
+    attach = 'map',
     children,
     ref = $bindable(),
     ...props
@@ -32,12 +31,13 @@
     canvas.height = height
   })
 
-  $effect(() => {
-    props.wrapS
-    props.wrapT
-    texture.needsUpdate = true
-    invalidate()
-  })
+  observe(
+    () => [props.wrapS, props.wrapT],
+    () => {
+      texture.needsUpdate = true
+      invalidate()
+    }
+  )
 
   let canvasCenterX = $derived(0.5 * width)
   let canvasCenterY = $derived(0.5 * height)
@@ -58,6 +58,7 @@
     return gradient
   })
 
+  const { invalidate } = useThrelte()
   $effect(() => {
     if (gradient !== undefined && context !== null) {
       applyGradient(context, gradient)
@@ -65,13 +66,14 @@
       invalidate()
     }
   })
+
+  $inspect(attach)
 </script>
 
 <T
   is={texture}
-  attach="map"
-  colorSpace={$colorSpace}
   {...props}
+  {attach}
   bind:ref
 >
   {@render children?.({ ref: texture })}

@@ -56,6 +56,23 @@ A reactive radial gradient texture that attaches to the "map" property of its pa
 
 <Example path="extras/gradient-texture/radial" />
 
+## Attaching the Texture
+
+The texture is automatically attached to the `map` property of its parent. You can disable this behaviour by setting the `attach` prop to `false`. This may be useful if you want to create the texture but use it somewhere else.
+
+```svelte
+<script>
+  let texture = null
+</script>
+
+<RadialGradientTexture
+  attach={false}
+  bind:ref={texture}
+/>
+
+<SomeComponent {texture} />
+```
+
 ## Radius Props
 
 The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that circumscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.

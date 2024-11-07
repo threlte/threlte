@@ -1,10 +1,8 @@
 <script lang="ts">
   import type { LinearGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, observe, useThrelte } from '@threlte/core'
   import { applyGradient, addStops } from '../common'
-
-  const { colorSpace, invalidate } = useThrelte()
 
   let {
     width = 1024,
@@ -17,6 +15,7 @@
       { offset: 0, color: 'black' },
       { offset: 1, color: 'white' }
     ],
+    attach = 'map',
     children,
     ref = $bindable(),
     ...props
@@ -34,12 +33,13 @@
     canvas.height = height
   })
 
-  $effect(() => {
-    props.wrapS
-    props.wrapT
-    texture.needsUpdate = true
-    invalidate()
-  })
+  observe(
+    () => [props.wrapS, props.wrapT],
+    () => {
+      texture.needsUpdate = true
+      invalidate()
+    }
+  )
 
   const gradient = $derived.by(() => {
     const gradient = context?.createLinearGradient(startX, startY, endX, endY)
@@ -49,6 +49,7 @@
     return gradient
   })
 
+  const { invalidate } = useThrelte()
   $effect(() => {
     if (gradient !== undefined && context !== null) {
       applyGradient(context, gradient)
@@ -61,8 +62,7 @@
 <T
   is={texture}
   bind:ref
-  attach="map"
-  colorSpace={$colorSpace}
+  {attach}
   {...props}
 >
   {@render children?.({ ref: texture })}
