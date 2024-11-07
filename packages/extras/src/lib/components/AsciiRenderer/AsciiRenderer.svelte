@@ -10,7 +10,9 @@
     bgColor = '#000000',
     characters = defaultCharacters,
     fgColor = '#ffffff',
-    options = {}
+    options = {},
+    onstart,
+    onstop
   }: AsciiRendererProps = $props()
 
   const { autoRender: threlteAutoRender, camera, renderer, renderStage, scene, size } = useThrelte()
@@ -64,12 +66,14 @@
   export const start = () => {
     if (!$started) {
       startRendering()
+      onstart?.()
     }
   }
 
   export const stop = () => {
     if ($started) {
       stopRendering()
+      onstop?.()
     }
   }
 

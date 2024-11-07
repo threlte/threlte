@@ -21,32 +21,44 @@ componentSignature:
           type: 'boolean'
         },
         {
-          'name': 'characters',
+          name: 'characters',
           default: "' .:-+*=%@#'",
           description: 'character set used by the renderer. should be sorted from least to most opaque',
           required: false,
           type: 'string'
         },
         {
-          'name': 'bgColor',
           default: "'#000000'",
           description: 'background color used when `options.color` is set to `false`',
+          name: 'bgColor',
           required: false,
           type: 'string'
         },
         {
-          'name': 'fgColor',
           default: "'#ffffff'",
           description: 'text color used when `options.color` is set to `false`',
+          name: 'fgColor',
           required: false,
           type: 'string'
         },
         {
-          'name': 'options',
-          type: 'Three.AsciiEffectOptions',
-          required: false,
           default: '{}',
-          description: "object passed to the effect's constructor. because the effect doesn't support adjusting individual option props, whenever an option prop changes, the effect must be recreated"
+          description: "object passed to the effect's constructor. because the effect doesn't support adjusting individual option props, whenever an option prop changes, the effect must be recreated",
+          name: 'options',
+          required: false,
+          type: 'Three.AsciiEffectOptions'
+        },
+        {
+          name: 'onstart',
+          required: false,
+          type: '() => void',
+          description: 'function to call anytime the renderer has been started'
+        },
+        {
+          name: 'onstop',
+          required: false,
+          type: '() => void',
+          description: 'function to call anytime the renderer has been stopped'
         }
       ]
   }
