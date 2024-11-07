@@ -66,8 +66,6 @@
       invalidate()
     }
   })
-
-  $inspect(attach)
 </script>
 
 <T
