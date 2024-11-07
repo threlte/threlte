@@ -389,11 +389,6 @@ Use the property `makeDefault` to set a camera to the default rendering camera.
 Adding an event listener to a component will also add the corresponding event listener to the three.js class
 instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
 
-<Tip type="info">
-  For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
-  `CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
-</Tip>
-
 This will listen to the "change" event on the `THREE.OrbitControls`:
 
 ```svelte
