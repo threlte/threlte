@@ -6,10 +6,10 @@ order: 1
 type: component
 ---
 
-The component `<T>` provides the means to use **any three.js export** as a Svelte component.
-It does this by leveraging the rigid three.js naming and object property structure to add and
-remove objects to and from the scene graph, attach objects to parent object properties or add
-event listeners.
+The component `<T>` provides the means to use **any three.js export** as a
+Svelte component. It does this by leveraging the rigid three.js naming and
+object property structure to add and remove objects to and from the scene graph,
+attach objects to parent object properties or add event listeners.
 
 <Tip type="info">
 `<T>` is the main building block of any Threlte application. Components available in `'@threlte/extras'`
@@ -42,7 +42,8 @@ const mesh = new Mesh(geometry, material)
 
 There are two ways to use `<T>`:
 
-- Use dot-notation to use any three.js class available at Three.js' main namespace `'three'`:
+- Use dot-notation to use any three.js class available at Three.js' main
+  namespace `'three'`:
 
 ```svelte
 <script>
@@ -63,17 +64,19 @@ There are two ways to use `<T>`:
 <T is={Mesh} />
 ```
 
-Both ways are **equivalent and can be used interchangeably**. The latter is more explicit and allows
-you to use any class definition (even if it's not exported from Three.js' main namespace
-`'three'`), object instance or virtually any other value.
+Both ways are **equivalent and can be used interchangeably**. The latter is more
+explicit and allows you to use any class definition (even if it's not exported
+from Three.js' main namespace `'three'`), object instance or virtually any other
+value.
 
 The next section will discuss both ways in more detail.
 
 ### Dot-Notation
 
-Any three.js class available at Three.js' main namespace `'three'` can be used as a component with full type-safety.
-The name of the import is the same as the name of the component. For example, the class `THREE.Mesh` can be used with the component `<T.Mesh>`.
-Let's take a look at a simple example:
+Any three.js class available at Three.js' main namespace `'three'` can be used
+as a component with full type-safety. The name of the import is the same as the
+name of the component. For example, the class `THREE.Mesh` can be used with the
+component `<T.Mesh>`. Let's take a look at a simple example:
 
 ```svelte
 <script>
@@ -88,13 +91,22 @@ Let's take a look at a simple example:
 
 Let's break this down:
 
-- The component `<T.Mesh>` creates an instance of [`THREE.Mesh`](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh) which is automatically added to the scene graph.
-- The component `<T.BoxGeometry>` creates an instance of `THREE.BoxGeometry` which is automatically ["attached"](#attach) to the property `geometry` of the parent `THREE.Mesh`.
-- The component `<T.MeshBasicMaterial>` creates an instance of `THREE.MeshBasicMaterial` which is automatically ["attached"](#attach) to the property `material` of the parent `THREE.Mesh`.
+- The component `<T.Mesh>` creates an instance of
+  [`THREE.Mesh`](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh)
+  which is automatically added to the scene graph.
+- The component `<T.BoxGeometry>` creates an instance of `THREE.BoxGeometry`
+  which is automatically ["attached"](#attach) to the property `geometry` of the
+  parent `THREE.Mesh`.
+- The component `<T.MeshBasicMaterial>` creates an instance of
+  `THREE.MeshBasicMaterial` which is automatically ["attached"](#attach) to the
+  property `material` of the parent `THREE.Mesh`.
 
 #### Extend the default component catalogue
 
-If you want to use a class that is not available at Three.js' main namespace `'three'` with dot-notation, you can extend the default component catalogue. Be aware that components used this way do not offer type-safety. Once extended, the updated catalogue is available to all components in your application.
+If you want to use a class that is not available at Three.js' main namespace
+`'three'` with dot-notation, you can extend the default component catalogue. Be
+aware that components used this way do not offer type-safety. Once extended, the
+updated catalogue is available to all components in your application.
 
 ```svelte title="Camera.svelte" {5-7}
 <script>
@@ -117,7 +129,9 @@ If you want to use a class that is not available at Three.js' main namespace `'t
 
 ### Property `is`
 
-To explicitly pass a class definition to the component `<T>`, use the property `is`. Let's take a look at the same example as above but using the property `is`:
+To explicitly pass a class definition to the component `<T>`, use the property
+`is`. Let's take a look at the same example as above but using the property
+`is`:
 
 ```svelte
 <script>
@@ -142,7 +156,8 @@ const mesh = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial
 scene.add(mesh)
 ```
 
-Using the property `is` comes in handy when using classes that are not exported from Three.js' main namespace `'three'`, such as the `OrbitControls` class:
+Using the property `is` comes in handy when using classes that are not exported
+from Three.js' main namespace `'three'`, such as the `OrbitControls` class:
 
 ```svelte
 <script>
@@ -155,13 +170,16 @@ Using the property `is` comes in handy when using classes that are not exported 
 
 #### What's happening under the hood?
 
-If a **class definition** such as `THREE.Mesh` is provided to the property `is`, it creates an instance of that class which we call `ref` – the component's reference to the three.js object:
+If a **class definition** such as `THREE.Mesh` is provided to the property `is`,
+it creates an instance of that class which we call `ref` – the component's
+reference to the three.js object:
 
 ```svelte
 <T is={Mesh} />
 ```
 
-If a **class instance** (such as `new THREE.Mesh()`) or **any other value** is provided, the component uses this value as-is:
+If a **class instance** (such as `new THREE.Mesh()`) or **any other value** is
+provided, the component uses this value as-is:
 
 ```svelte
 <script>
@@ -173,18 +191,26 @@ If a **class instance** (such as `new THREE.Mesh()`) or **any other value** is p
 
 Depending on the `is` property value types, Threlte makes certain assumptions:
 
-- If the value passed to `is` is extending `THREE.Object3D` it's added to the scene graph.
-- If the value passed to `is` is a disposable, it's disposed `onDestroy` or whenever the `args` change and a new `ref` is created.
-- If the value passed to `is` is has a property `addEventListener`, you can add [event callbacks](#events).
-- If the value passed to `is` is extending `THREE.Camera`, certain [camera-related properties](#camera-props) are available.
+- If the value passed to `is` is extending `THREE.Object3D` it's added to the
+  scene graph.
+- If the value passed to `is` is a disposable, it's disposed `onDestroy` or
+  whenever the `args` change and a new `ref` is created.
+- If the value passed to `is` is has a property `addEventListener`, you can add
+  [event callbacks](#events).
+- If the value passed to `is` is extending `THREE.Camera`, certain
+  [camera-related properties](#camera-props) are available.
 
 ## Props
 
-The `<T>` component has a set of fixed props (namely `args`, `is`, `attach`, `manual`, `makeDefault` and `dispose`) that are used to set up the Three.js object. On top of that, you can use arbitrary props to reactively set any property of the underlying Three.js object.
+The `<T>` component has a set of fixed props (namely `args`, `is`, `attach`,
+`manual`, `makeDefault` and `dispose`) that are used to set up the Three.js
+object. On top of that, you can use arbitrary props to reactively set any
+property of the underlying Three.js object.
 
 ### Three.js object props
 
-To understand how it works, let's have a look at a simple example. Let's say we want to render a simple cube. We can do this by using the `<T>` component:
+To understand how it works, let's have a look at a simple example. Let's say we
+want to render a simple cube. We can do this by using the `<T>` component:
 
 ```svelte
 <script>
@@ -197,7 +223,9 @@ To understand how it works, let's have a look at a simple example. Let's say we 
 </T.Mesh>
 ```
 
-Using [**attachments**](/docs/reference/core/t#attach), the geometry as well as the material are assigned to the mesh. What if we want to change the color of the material to `"red"`? We can do this by using the `color` prop:
+Using automatic [**attach**](/docs/reference/core/t#attach), the geometry as
+well as the material are assigned to the mesh. What if we want to change the
+color of the material to `"red"`? We can do this by using the `color` prop:
 
 ```svelte {7}m
 <script>
@@ -210,7 +238,9 @@ Using [**attachments**](/docs/reference/core/t#attach), the geometry as well as 
 </T.Mesh>
 ```
 
-Keep in mind that this property is not _hard-wired_. We can use any property of the underlying Three.js object as a prop on the `<T>` component. For example, we can also set the `position` property of the `THREE.Mesh`:
+Keep in mind that this property is not _hard-wired_. We can use any property of
+the underlying Three.js object as a prop on the `<T>` component. For example, we
+can also set the `position` property of the `THREE.Mesh`:
 
 ```svelte {5}m
 <script>
@@ -223,11 +253,15 @@ Keep in mind that this property is not _hard-wired_. We can use any property of 
 </T.Mesh>
 ```
 
-Because the property `position` of a `THREE.Mesh` is a `THREE.Vector3` the value we have to provide is what is
-passed to the `set` function of the `THREE.Vector3` class. In this case, we pass an array of three numbers (`[x, y, z]`). Using
-an editor like VS Code, you benefit from type hints and auto-completion.
+Because the property `position` of a `THREE.Mesh` is a `THREE.Vector3` the value
+we have to provide is what is passed to the [`set`
+function](https://threejs.org/docs/index.html?q=mesh#api/en/math/Vector3.set) of
+the `THREE.Vector3` class. In this case, we pass an array of three numbers (`[x,
+y, z]`). Using an editor like VS Code, you benefit from type hints and
+auto-completion.
 
-We only changed the `y` coordinate of the position, so we can use a **pierced prop** to only change the `y` coordinate:
+We only changed the `y` coordinate of the position, so we can use a **pierced
+prop** to only change the `y` coordinate:
 
 ```svelte {5}m
 <script>
@@ -240,7 +274,10 @@ We only changed the `y` coordinate of the position, so we can use a **pierced pr
 </T.Mesh>
 ```
 
-This way, we get less updates of the underlying Three.js object because the value of the prop is a primitive value which can easily be compared to the previous value. Unfortunately with pierced props we miss out on the type hints and auto-completion.
+This way, we get less updates of the underlying Three.js object because the
+value of the prop is a primitive value which can easily be compared to the
+previous value. Unfortunately with pierced props we miss out on the type hints
+and auto-completion.
 
 <Tip
   type="warning"
@@ -254,15 +291,22 @@ This way, we get less updates of the underlying Three.js object because the valu
 
 ### args
 
-Three.js objects are **class instances**. When Instantiating these objects, they can receive one-time constructor arguments (`new THREE.SphereGeometry(1, 32)`). In Threlte, constructor arguments are always passed as an array via the property `args`. If `args` change later on, the object must naturally get reconstructed from scratch!
+Three.js objects are **class instances**. When Instantiating these objects, they
+can receive one-time constructor arguments (`new THREE.SphereGeometry(1, 32)`).
+In Threlte, constructor arguments are always passed as an array via the property
+`args`. If `args` change later on, the object must naturally get reconstructed
+from scratch!
 
-- If a **class definition** such as `THREE.BoxGeometry` is provided to the property `is`, the property `args` is used to instantiate the class: `<T is={BoxGeometry} args={[1, 2, 1]}>` equals `new BoxGeometry(1, 2, 1)`.
+- If a **class definition** such as `THREE.BoxGeometry` is provided to the
+  property `is`, the property `args` is used to instantiate the class: `<T
+is={BoxGeometry} args={[1, 2, 1]}>` equals `new BoxGeometry(1, 2, 1)`.
 
 ### attach
 
 Use `attach` to _attach_ objects to other objects.
 
-The following attaches a material to the material property of a mesh and a geometry to the geometry property:
+The following attaches a material to the material property of a mesh and a
+geometry to the geometry property:
 
 ```svelte
 <T.Mesh>
@@ -381,18 +425,16 @@ Use the property `makeDefault` to set a camera to the default rendering camera.
 
 <Tip type="warning">
   A common mistake is to forget setting `makeDefault`. If you do not set a camera to be the default
-  camera, the scene will not be rendered through this camera but through Threltes default camera.
+  camera, the scene will not be rendered through this camera but through Threlte's default camera.
 </Tip>
 
 ## Events
 
-Adding an event listener to a component will also add the corresponding event listener to the three.js class
-instance. The event will be forwarded and the native payload is available as the first argument to the event listener.
+### Object Events
 
-<Tip type="info">
-  For easier payload access as well as conforming to Three.js as much as possible, Threlte does *not* use Svelte's
-  `CustomEvent<Payload>` payload type. Instead, the payload is provided as is.
-</Tip>
+Adding an event listener to a component will also add the corresponding event
+listener to the three.js class instance. The event will be forwarded and the
+native payload is available as the first argument to the event listener.
 
 This will listen to the "change" event on the `THREE.OrbitControls`:
 
@@ -403,10 +445,14 @@ This will listen to the "change" event on the `THREE.OrbitControls`:
 />
 ```
 
-All `<T>` components also emit the `create` event when the underlying three.js class instance is created.
-This can be used to access the instance from the parent component or do tasks on the objects upon creation.
-The event handler is called with an object containing a reference to the object.
-You may return a callback that will run after the object is destroyed when the component unmounts or the `args` change.
+### Create Event
+
+All `<T>` components also emit the `create` event when the underlying three.js
+class instance is created. This can be used to access the instance from the
+parent component or do tasks on the objects upon creation. The event handler is
+called with a reference to the object. You may return a cleanup callback. It
+will be invoked when the component unmounts or when the object is
+re-instantiated.
 
 ```svelte
 <T.PerspectiveCamera
@@ -423,7 +469,7 @@ You may return a callback that will run after the object is destroyed when the c
 
 ## Snippet Props
 
-The value infered from the property `is` is available as the snippet prop `ref`:
+The object referenced by the component is available as the snippet prop `ref`:
 
 ```svelte
 <T.PerspectiveCamera>
@@ -442,29 +488,26 @@ The value infered from the property `is` is available as the snippet prop `ref`:
 
 ## Bindings
 
-The value infered from the property `is` is available as the binding `ref`:
+The object referenced by the component is available as the binding `ref`:
 
 ```svelte
 <script>
-  let camera
-  $: console.log(camera) // THREE.PerspectiveCamera
+  let camera = $state()
+  $effect(() => {
+    console.log(camera) // THREE.PerspectiveCamera
+  })
 </script>
-
-<T
-  is={PerspectiveCamera}
-  bind:ref={camera}
-/>
-
-<!-- or -->
 
 <T.PerspectiveCamera bind:ref={camera} />
 ```
 
 ## Extending the default component catalogue
 
-By default when using the dot-notation to access Three.js objects (e.g. `<T.Mesh>`), Threlte will automatically import
-the corresponding class from the namespance `'three'`. If you want to use a custom class or classes from Three.js that
-are available elsewhere (like `OrbitControls`), you can extend the default catalogue with the `extend` function:
+By default when using the dot-notation to access Three.js objects (e.g.
+`<T.Mesh>`), Threlte will automatically import the corresponding class from the
+namespance `'three'`. If you want to use a custom class or classes from Three.js
+that are available elsewhere (like `OrbitControls`), you can extend the default
+catalogue with the `extend` function:
 
 ```svelte
 <script>
@@ -480,8 +523,12 @@ are available elsewhere (like `OrbitControls`), you can extend the default catal
 <T.CustomMesh />
 ```
 
-<Tip type="tip">
-  Be aware that in this case `<T>` can't provide type-safety on properties and events.
-  If you need type-safety, you can use the `is` property instead: `<T is={CustomMesh} />`.
-  This way, Threlte can infer the type of the object and provide type-safety on properties and events.
-</Tip>
+<Tip type="tip"> Be aware that in this case `<T>` can't provide type-safety on
+  properties and events. If you need type-safety, you can use the `is` property
+  instead: `<T is={CustomMesh} />`. This way, Threlte can infer the type of the
+  object and provide type-safety on properties and events. </Tip>
+
+## Plugins
+
+The component `<T>` can be extended in functionality with [Threlte
+Plugins](/docs/reference/core/plugins).

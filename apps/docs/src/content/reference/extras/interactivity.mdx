@@ -34,7 +34,7 @@ All child components now receive events.
 </T.Mesh>
 ```
 
-### Available Events
+## Available Events
 
 The following interaction events are available:
 
@@ -55,7 +55,7 @@ The following interaction events are available:
 />
 ```
 
-### Event Data
+## Event Data
 
 All interaction events contain the following data:
 
@@ -74,7 +74,7 @@ type Event = THREE.Intersection & {
 }
 ```
 
-### Event Propagation
+## Event Propagation
 
 Propagation works a bit differently to the DOM because objects can occlude each other in 3D.
 The intersections array in the event data includes all objects intersecting the ray, not just the
@@ -98,7 +98,7 @@ even if you don't want this object to respond to the pointer event. If you do wa
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
 
-### Interactivity Event Target
+## Interactivity Event Target
 
 If no event target is specified, all event handlers listen to events on the `domElement` of the
 `renderer` (which is the canvas element by default). You can specify a different target by passing
@@ -126,7 +126,7 @@ It's also possible to change the target at runtime by updating the store `target
 </script>
 ```
 
-### Interactivity Event Compute
+## Interactivity Event Compute
 
 In the event that your event target is not the same size as the canvas, you can pass a `compute` function
 to the `interactivity` plugin. This function receives the DOM event and the interactivity state and should
@@ -155,7 +155,7 @@ as set the raycaster up for raycasting.
 </script>
 ```
 
-### Interactivity Event Filtering
+## Interactivity Event Filtering
 
 You can filter and sort events by passing a `filter` to the `interactivity` plugin. The function receives all hits and the interactivity state and should return the hits that should be delivered to the event handlers in the order they should be delivered.
 
@@ -172,7 +172,7 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
-### Interactivity State
+## Interactivity State
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
 
@@ -209,3 +209,41 @@ export type State = {
   It's a regular writable store that also has a `current` property which is the current value of the
   store. It's useful for accessing the value of a store in a non-reactive context, such as in loops.
 </Tip>
+
+## TypeScript
+
+### Prop Types
+
+By default, the `interactivity` plugin does not add any prop types to the `<T>`
+component. You can however extend the types of the `<T>` component by defining
+the `Threlte.UserProps` type in your ambient type definitions. In a typical
+SvelteKit application, you can find these [in
+`src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts). The interactivity
+plugin exports the `InteractivityProps` type which you can use as shown below:
+
+```ts title="src/app.d.ts"
+import type { InteractivityProps } from '@threlte/extras'
+
+define global {
+  namespace Threlte {
+    interface UserProps extends InteractivityProps {}
+  }
+}
+
+export {}
+```
+
+Now all event handlers on `<T>` components will be type safe.
+
+```svelte title="Scene.svelte"
+<script>
+  import { interactivity } from '@threlte/extras'
+  interactivity()
+</script>
+
+<T.Mesh
+  onclick={(e) => {
+    // e: IntersectionEvent<MouseEvent>
+  }}
+/>
+```
