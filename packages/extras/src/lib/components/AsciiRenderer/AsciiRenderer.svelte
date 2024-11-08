@@ -64,17 +64,13 @@
   )
 
   export const start = () => {
-    if (!$started) {
-      startRendering()
-      onstart?.()
-    }
+    startRendering()
+    onstart?.()
   }
 
   export const stop = () => {
-    if ($started) {
-      stopRendering()
-      onstop?.()
-    }
+    stopRendering()
+    onstop?.()
   }
 
   observe.pre(
