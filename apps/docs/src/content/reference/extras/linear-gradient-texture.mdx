@@ -66,9 +66,26 @@ componentSignature:
   }
 ---
 
-A reactive linear gradient texture that attaches to the "map" property of its parent. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
+A reactive linear gradient texture. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
 
 <Example path="extras/gradient-texture/linear" />
+
+## Attaching the Texture
+
+The texture is automatically attached to the `map` property of its parent. You can disable this behaviour by setting the `attach` prop to `false`. This may be useful if you want to create the texture but use it somewhere else.
+
+```svelte
+<script>
+  let texture = null
+</script>
+
+<LinearGradientTexture
+  attach={false}
+  bind:ref={texture}
+/>
+
+<SomeComponent {texture} />
+```
 
 ## Gradient Stops
 
@@ -97,7 +114,7 @@ You can even mix and match color representations
 <LinearGradientTexture
   stops={[
     { color: 'red', offset: 0 },
-    { color: 0xff0000, offset: 0.25 },
+    { color: 0xff_00_00, offset: 0.25 },
     { color: 'rgb(255, 0, 0)', offset: 0.5 },
     { color: '#ff0000', offset: 0.75 },
     { color: new Color(new Color(new Color())).set(1, 0, 0), offset: 1 }
