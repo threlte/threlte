@@ -1,0 +1,51 @@
+A shake effect inspired by drei's [CameraShake](https://drei.docs.pmnd.rs/cameras/cube-camera) component.
+
+<Example path="shake" />
+
+This example demonstrates how one might make a custom _hook_ for reusability. The `useShake` hook accepts an optional params object that is referenced in it's `shake` task callback function. Because this is a callback function, it doesn't need to be reactive - no need for `$state`.
+
+## Jumping on Parameter Updates
+
+Note that adjusting `intensity` or `frequency` on the fly may cause the object to jump. This is expected since there is no interpolation when the `frequency` or `intensity` changes. Small changes in the noise value generation parameters are also jumps but their magnitude is so much smaller that they appear to be a smoother transition. For example, accumulated time is used as an input to the noise generation function but its value only increases by roughly `1/60` each frame. In other words, jumping from a value of say `0.1` to a value of `1` is a much larger change than a value of `1/60` to a value of `2/60`.
+
+Drei's `CamerShake` is limited in its features. The biggest downside is that it can only be applied to cameras. `useShake` on the other hand is something that can be applied to anything that extends `Object3D` essentially anything that has a `rotation` property - meshes, groups, cameras, even the entire scene can be shaken because `Three.Scene` extends `Object3D`. The other benefit to shaking implementated as a _hook_ is that the effect can be started or stopped at will.
+
+`useShake.shake` returns the task that is responsible for setting the object's rotation each frame. This means you have full control of when you want to shake. `shake`'s second parameter is whether to automatically start shaking. Sometimes you don't want to shake immediately but want to shake later on or the shake be event-driven.
+
+```svelte title="Scene.svelte"
+<script>
+  import { useShake } from './shake'
+
+  const { shake } = useShake()
+
+  const scene = useScene()
+
+  const { task } = shake(scene, false)
+</script>
+
+<T.Mesh
+  onclick={() => {
+    task.start()
+  }}
+>
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+`useShake` also returns the `pitch`, `roll`, and `yaw` objects which can be adjusted at any time and will be read on the next frame of the shake's task. Each object has an `intensity` and a `frequency` property. `intensity` is multiplies the generated noise value so if you want more intense shaking in that axis, increase its `intensity`. `frequency` is how quickly the shaking happens. You can think of `intensity` as the amplitude of a wave, and `frequency` is the analogous to the frequency of a wave - higher frequency means more movement.
+
+```svelte
+<script>
+  const { shake, pitch } = useShake()
+</script>
+
+<T.Mesh
+  oncreate={(ref) => {
+    return shake(ref).stop
+  }}
+  onclick={() => {
+    pitch.intensity *= 2
+    pitch.frequency *= 3
+  }}
+></T.Mesh>
+```
