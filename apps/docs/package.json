@@ -35,7 +35,8 @@
     "install": "^0.13.0",
     "lucide-react": "^0.263.1",
     "npm": "^9.8.1",
-    "preact": "^10.16.0"
+    "preact": "^10.16.0",
+    "three-custom-shader-material": "^6.1.1"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.14.0",

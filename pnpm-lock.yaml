@@ -95,6 +95,9 @@ importers:
       preact:
         specifier: ^10.16.0
         version: 10.16.0
+      three-custom-shader-material:
+        specifier: ^6.1.1
+        version: 6.1.1(react@18.2.0)(three@0.170.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.14.0
@@ -7420,6 +7423,18 @@ packages:
 
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
+
+  three-custom-shader-material@6.1.1:
+    resolution: {integrity: sha512-GUvUpMUghOf1EWKaulqPyGCiOAgYMDWvaFEZMam1umqH5Ga+EfKlO7S2r6a9TGSj0Ay+N3wLObHmGdxXWEWJ+g==}
+    peerDependencies:
+      '@react-three/fiber': '>=8.0'
+      react: '>=18.0'
+      three: '>=0.170'
+    peerDependenciesMeta:
+      '@react-three/fiber':
+        optional: true
+      react:
+        optional: true
 
   three-instanced-uniforms-mesh@0.49.1:
     resolution: {integrity: sha512-qPgPLA6JR2nQau2zAODwiVRknYndXNE6aYmTe5zESiwg9hO8AaNq1xC0hWDYOyyH+NbN2G8278NxX1hpZ+2ZgQ==}
@@ -16131,6 +16146,12 @@ snapshots:
   thenify@3.3.1:
     dependencies:
       any-promise: 1.3.0
+
+  three-custom-shader-material@6.1.1(react@18.2.0)(three@0.170.0):
+    dependencies:
+      three: 0.170.0
+    optionalDependencies:
+      react: 18.2.0
 
   three-instanced-uniforms-mesh@0.49.1(three@0.170.0):
     dependencies:
