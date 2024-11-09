@@ -111,7 +111,7 @@
                   from={outStart}
                   to={outEnd}
                 >
-                  <h3 class="mb-2 text-2xl font-bold text-white/90">You already know Threlte</h3>
+                  <h3 class="mb-2 text-2xl font-bold text-white/90">Easy to Learn</h3>
                   <p class="text-sm text-white/60">
                     Threlte puts the simplicity of Svelte 5 and all of the power of Three.js right
                     at your fingertips. It's designed to be powerful and flexible while still being

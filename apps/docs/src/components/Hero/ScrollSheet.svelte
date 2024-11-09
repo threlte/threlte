@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { ISheet } from '@theatre/core'
   import { Sheet } from '@threlte/theatre'
+  import { mapLinear } from 'three/src/math/MathUtils.js'
   import { scrollPos, springScrollPos } from './scrollPos'
-  import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
   export let useSpring = true
   export let name: string
@@ -10,7 +10,7 @@
   export let startAtScrollPosition = 0
   export let endAtScrollPosition = 1
 
-  let sheet: ISheet | undefined
+  let sheet: ISheet
 
   $: sheetProgress = Math.max(
     mapLinear(

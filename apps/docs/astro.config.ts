@@ -67,7 +67,7 @@ export default defineConfig({
     },
     // Use https and generate a cert to allow XR debugging.
     server: {
-      https: process.argv.includes('--https')
+      ...(process.argv.includes('--https') ? { https: {} } : {})
     },
     plugins: process.argv.includes('--https') ? [mkcert()] : [],
     ssr: {

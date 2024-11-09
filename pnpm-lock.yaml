@@ -74,6 +74,9 @@ importers:
       camera-controls:
         specifier: ^2.8.5
         version: 2.8.5(three@0.170.0)
+      gl-noise:
+        specifier: ^1.6.1
+        version: 1.6.1
       highlight.js:
         specifier: ^11.8.0
         version: 11.8.0
@@ -4616,6 +4619,9 @@ packages:
 
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
+
+  gl-noise@1.6.1:
+    resolution: {integrity: sha512-2rkGehq5bqHCONQ4b8ssvQmbu8VVhzkHa+hR229xz3rdMIzZ1TmR87Gzgrf6bQex3Su8ZLAotp/97JW0hZi1bA==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -12466,6 +12472,8 @@ snapshots:
   github-from-package@0.0.0: {}
 
   github-slugger@2.0.0: {}
+
+  gl-noise@1.6.1: {}
 
   glob-parent@5.1.2:
     dependencies:
