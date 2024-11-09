@@ -37,8 +37,6 @@
   }}
 />
 
-<PostProcessing />
-
 <T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
   <ScrollSheet
     name="Star Fields"
@@ -113,6 +111,27 @@
             startAtScrollPosition={0}
             endAtScrollPosition={3}
           >
+            <SheetObject
+              key="Post Processing"
+              props={{
+                bloomIntensity: types.number(2, { range: [0, 10] }),
+                bloomRadius: types.number(0.6, { range: [0, 1] }),
+                bloomLuminanceSmoothing: types.number(0.025, { range: [0, 1] }),
+                brightness: types.number(0, { range: [-1, 1] }),
+                contrast: types.number(0, { range: [-1, 1] })
+              }}
+            >
+              {#snippet children({ values })}
+                <PostProcessing
+                  bloomIntensity={values.bloomIntensity}
+                  bloomLuminanceSmoothing={values.bloomLuminanceSmoothing}
+                  bloomRadius={values.bloomRadius}
+                  brightness={values.brightness}
+                  contrast={values.contrast}
+                />
+              {/snippet}
+            </SheetObject>
+
             <SheetObject key="Glow">
               {#snippet children({ Transform, Sync })}
                 <KeyboardControls>

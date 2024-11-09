@@ -92,7 +92,7 @@
     >
       <svelte:fragment>
         {@const start = 0.6}
-        {@const stagger = 0.4}
+        {@const stagger = 0.3}
         {@const duration = 0.6}
         {@const outStart = 2.2}
         {@const outEnd = 2.7}
@@ -111,10 +111,10 @@
                   from={outStart}
                   to={outEnd}
                 >
-                  <h3 class="mb-2 text-2xl font-bold text-white/90">You already know Threlte</h3>
+                  <h3 class="mb-2 text-2xl font-bold text-white/90">Learn Threlte</h3>
                   <p class="text-sm text-white/60">
-                    Threlte puts the simplicity of Svelte 5 and all of the power of Three.js right
-                    at your fingertips. It's designed to be powerful and flexible while still being
+                    Threlte puts the simplicity of Svelte 5 and the power of Three.js right at your
+                    fingertips. It's designed to be powerful and flexible while still being
                     approachable and easy to use.
                   </p>
                 </FadeOut>
@@ -132,10 +132,11 @@
                   from={outStart}
                   to={outEnd}
                 >
-                  <h3 class="mb-2 text-2xl font-bold text-white/90">Reimagine the Web</h3>
+                  <h3 class="mb-2 text-2xl font-bold text-white/90">Master Three.js</h3>
                   <p class="text-sm text-white/60">
-                    With AR and VR picking up steam, the web is becoming more and more 3D. Threlte
-                    provides a simple, declarative API for creating 3D content on the web.
+                    The web is becoming more and more 3D. At its core, Threlte provides an
+                    extendable declarative API for creating scalable Three.js applications for the
+                    web.
                   </p>
                 </FadeOut>
               </Reveal>
@@ -152,10 +153,11 @@
                   from={outStart}
                   to={outEnd}
                 >
-                  <h3 class="mb-2 text-2xl font-bold text-white/90">Powerful Integrations</h3>
+                  <h3 class="mb-2 text-2xl font-bold text-white/90">Integrate Anything</h3>
                   <p class="text-sm text-white/60">
-                    Threlte comes with solutions for physics, XR, animation, model loading, and
-                    countless helpers to make creating immersive 3D apps for the web a breeze.
+                    Threlte comes with solutions for physics, XR, animation, layouting, model
+                    loading, and countless helpers to make creating immersive 3D apps for the web a
+                    breeze.
                   </p>
                 </FadeOut>
               </Reveal>

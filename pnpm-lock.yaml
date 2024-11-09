@@ -74,6 +74,9 @@ importers:
       camera-controls:
         specifier: ^2.8.5
         version: 2.8.5(three@0.170.0)
+      gl-noise:
+        specifier: ^1.6.1
+        version: 1.6.1
       highlight.js:
         specifier: ^11.8.0
         version: 11.8.0
@@ -92,6 +95,9 @@ importers:
       preact:
         specifier: ^10.16.0
         version: 10.16.0
+      three-custom-shader-material:
+        specifier: ^6.1.1
+        version: 6.1.1(react@18.2.0)(three@0.170.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.14.0
@@ -4617,6 +4623,9 @@ packages:
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
 
+  gl-noise@1.6.1:
+    resolution: {integrity: sha512-2rkGehq5bqHCONQ4b8ssvQmbu8VVhzkHa+hR229xz3rdMIzZ1TmR87Gzgrf6bQex3Su8ZLAotp/97JW0hZi1bA==}
+
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -7414,6 +7423,18 @@ packages:
 
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
+
+  three-custom-shader-material@6.1.1:
+    resolution: {integrity: sha512-GUvUpMUghOf1EWKaulqPyGCiOAgYMDWvaFEZMam1umqH5Ga+EfKlO7S2r6a9TGSj0Ay+N3wLObHmGdxXWEWJ+g==}
+    peerDependencies:
+      '@react-three/fiber': '>=8.0'
+      react: '>=18.0'
+      three: '>=0.170'
+    peerDependenciesMeta:
+      '@react-three/fiber':
+        optional: true
+      react:
+        optional: true
 
   three-instanced-uniforms-mesh@0.49.1:
     resolution: {integrity: sha512-qPgPLA6JR2nQau2zAODwiVRknYndXNE6aYmTe5zESiwg9hO8AaNq1xC0hWDYOyyH+NbN2G8278NxX1hpZ+2ZgQ==}
@@ -12467,6 +12488,8 @@ snapshots:
 
   github-slugger@2.0.0: {}
 
+  gl-noise@1.6.1: {}
+
   glob-parent@5.1.2:
     dependencies:
       is-glob: 4.0.3
@@ -16123,6 +16146,12 @@ snapshots:
   thenify@3.3.1:
     dependencies:
       any-promise: 1.3.0
+
+  three-custom-shader-material@6.1.1(react@18.2.0)(three@0.170.0):
+    dependencies:
+      three: 0.170.0
+    optionalDependencies:
+      react: 18.2.0
 
   three-instanced-uniforms-mesh@0.49.1(three@0.170.0):
     dependencies:
