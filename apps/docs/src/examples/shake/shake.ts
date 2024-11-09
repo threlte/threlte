@@ -32,7 +32,7 @@ export const useShake = (params: ShakeParams = {}) => {
 
   let time = 0
 
-  const shake = (ref: Object3D, options?: ThrelteUseTaskOptions) => {
+  const shake = (ref: Object3D, options: ThrelteUseTaskOptions = {}) => {
     const { x, y, z } = ref.rotation
     return useTask((delta) => {
       time += delta
