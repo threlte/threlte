@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.39
+
+### Patch Changes
+
+- cfe2286: [next] Restore ability to disable _attaching_ for gradient textures
+
 ## 9.0.0-next.38
 
 ### Minor Changes
