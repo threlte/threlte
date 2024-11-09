@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import type { ISheet } from '@theatre/core'
+  import { types } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
-  import { Float, Grid, OrbitControls, Portal, useTexture } from '@threlte/extras'
+  import { Float, Grid, OrbitControls, Portal, RadialGradientTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
+  import { onMount } from 'svelte'
   import AnimatableCube from './AnimatableCube.svelte'
   import AnimatableStarField from './AnimatableStarField.svelte'
   import KeyboardControls from './KeyboardControls.svelte'
@@ -11,7 +12,6 @@
   import ScrollSheet from './ScrollSheet.svelte'
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
-  import { onMount } from 'svelte'
 
   let sheet: ISheet | undefined
 
@@ -118,7 +118,8 @@
                 bloomRadius: types.number(0.6, { range: [0, 1] }),
                 bloomLuminanceSmoothing: types.number(0.025, { range: [0, 1] }),
                 brightness: types.number(0, { range: [-1, 1] }),
-                contrast: types.number(0, { range: [-1, 1] })
+                contrast: types.number(0, { range: [-1, 1] }),
+                noiseIntensity: types.number(0.03, { range: [0, 0.1] })
               }}
             >
               {#snippet children({ values })}
@@ -128,6 +129,7 @@
                   bloomRadius={values.bloomRadius}
                   brightness={values.brightness}
                   contrast={values.contrast}
+                  noiseIntensity={values.noiseIntensity}
                 />
               {/snippet}
             </SheetObject>
@@ -137,38 +139,45 @@
                 <KeyboardControls>
                   {#snippet children({ transform })}
                     <Transform {...transform}>
-                      {#await useTexture('/glow.png') then map}
-                        <T.Mesh>
-                          <T.PlaneGeometry args={[10, 10]} />
-                          <T.MeshBasicMaterial
-                            transparent
-                            {map}
+                      <RadialGradientTexture
+                        attach={false}
+                        outerRadius={512}
+                        stops={[
+                          { color: '#ffffff', offset: 0 },
+                          { color: '#000000', offset: 1 }
+                        ]}
+                      >
+                        {#snippet children({ ref })}
+                          <T.Mesh
+                            position.z={0.1}
+                            scale={0.8}
                           >
-                            <Sync
-                              opacity
-                              color
-                            />
-                          </T.MeshBasicMaterial>
-                        </T.Mesh>
-                      {/await}
+                            <T.PlaneGeometry args={[10, 10]} />
+                            <T.MeshBasicMaterial
+                              transparent
+                              alphaMap={ref}
+                            >
+                              <Sync
+                                opacity="opacity2"
+                                color="color2"
+                              />
+                            </T.MeshBasicMaterial>
+                          </T.Mesh>
 
-                      {#await useTexture('/glow2.png') then map}
-                        <T.Mesh
-                          position.z={0.1}
-                          scale={0.8}
-                        >
-                          <T.PlaneGeometry args={[10, 10]} />
-                          <T.MeshBasicMaterial
-                            transparent
-                            {map}
-                          >
-                            <Sync
-                              opacity="opacity2"
-                              color="color2"
-                            />
-                          </T.MeshBasicMaterial>
-                        </T.Mesh>
-                      {/await}
+                          <T.Mesh>
+                            <T.PlaneGeometry args={[10, 10]} />
+                            <T.MeshBasicMaterial
+                              transparent
+                              alphaMap={ref}
+                            >
+                              <Sync
+                                opacity
+                                color
+                              />
+                            </T.MeshBasicMaterial>
+                          </T.Mesh>
+                        {/snippet}
+                      </RadialGradientTexture>
                     </Transform>
                   {/snippet}
                 </KeyboardControls>

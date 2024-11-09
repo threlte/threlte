@@ -13,6 +13,7 @@
     ToneMappingMode
   } from 'postprocessing'
   import { onMount } from 'svelte'
+  import { HalfFloatType } from 'three'
   import { StaticNoiseEffect } from './StaticNoise/StaticNoise'
 
   let {
@@ -20,13 +21,15 @@
     bloomRadius = 0.6,
     bloomLuminanceSmoothing = 0.025,
     brightness = 0,
-    contrast = 0
+    contrast = 0,
+    noiseIntensity = 0.03
   }: {
     bloomIntensity: number
     bloomRadius: number
     bloomLuminanceSmoothing: number
     brightness: number
     contrast: number
+    noiseIntensity: number
   } = $props()
 
   /**
@@ -49,7 +52,10 @@
   const noiseEffect = new StaticNoiseEffect({
     blendFunction: BlendFunction.COLOR_DODGE
   })
-  noiseEffect.blendMode.opacity.value = 0.03
+
+  $effect(() => {
+    noiseEffect.blendMode.opacity.value = noiseIntensity
+  })
 
   /**
    * Anti-aliasing
@@ -84,7 +90,10 @@
 
   const { renderer, scene, camera, autoRender, renderStage } = useThrelte()
 
-  const composer = new EffectComposer(renderer)
+  const composer = new EffectComposer(renderer, {
+    alpha: true,
+    frameBufferType: HalfFloatType
+  })
 
   const setup = () => {
     composer.removeAllPasses()

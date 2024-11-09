@@ -72,7 +72,7 @@
             antialias: false,
             stencil: false,
             depth: false,
-            premultipliedAlpha: false
+            premultipliedAlpha: true
           })
         }}
       >
@@ -169,7 +169,7 @@
 
     <Trigger
       in={2.7}
-      out={3.9}
+      out={4}
     >
       <h2
         class="fixed left-0 top-[66svh] top-[66vh] flex w-screen flex-col items-center justify-center"
@@ -178,7 +178,7 @@
           id="intro"
           type="fade-up"
           progress={$springScrollPos}
-          class="inline-block text-xl text-white/60 md:text-3xl"
+          class="inline-block text-xl text-white/70 md:text-3xl"
           in={{
             start: 2.7,
             end: 3.1
@@ -194,7 +194,7 @@
           progress={$springScrollPos}
           id="t6"
           type="fade-up-skew-individual"
-          class="inline-block text-6xl font-bold text-white/90 md:text-7xl"
+          class="inline-block text-6xl font-bold text-white md:text-7xl"
           in={{
             start: 2.8,
             end: 3.5
