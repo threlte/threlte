@@ -1,21 +1,33 @@
-import type { AxisItem, AxisParams, ShakeParams } from './types'
+import type { AxisItem, ShakeParams } from './types'
 import type { Object3D } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 import { useTask } from '@threlte/core'
 
-const createAxis = ({ frequency, intensity }: AxisParams = {}): AxisItem => {
+const createAxis = (frequency: number, intensity: number): AxisItem => {
   const noise = new SimplexNoise()
   return {
-    frequency: frequency ?? 0.1,
-    intensity: intensity ?? 0.1,
+    frequency,
+    intensity,
     noise
   }
 }
 
 export const useShake = (params: ShakeParams = {}) => {
-  const pitch = createAxis(params.pitch)
-  const roll = createAxis(params.roll)
-  const yaw = createAxis(params.yaw)
+  const defaultFrequency = 0.1
+  const defaultIntensity = 0.1
+
+  const pitch = createAxis(
+    params.pitch?.frequency ?? defaultFrequency,
+    params.pitch?.intensity ?? defaultIntensity
+  )
+  const roll = createAxis(
+    params.roll?.frequency ?? defaultFrequency,
+    params.roll?.intensity ?? defaultIntensity
+  )
+  const yaw = createAxis(
+    params.yaw?.frequency ?? defaultFrequency,
+    params.yaw?.frequency ?? defaultIntensity
+  )
 
   let time = 0
 
