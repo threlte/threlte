@@ -3,7 +3,6 @@
   import { T, useThrelte } from '@threlte/core'
   import { Vector3 } from 'three'
   import { useShake } from './shake'
-  import { fromStore } from 'svelte/store'
 
   let {
     pitchFrequency = 0.1,
@@ -60,7 +59,6 @@
   oncreate={(ref) => {
     ref.lookAt(meshPosition)
     return shake(ref).stop
-  }}
   }}
 >
   {#snippet children({ ref })}
