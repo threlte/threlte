@@ -16,11 +16,11 @@
 
   let {
     axis,
-    frequency = $bindable(),
+    frequency = $bindable(1),
     frequencyMax = 2,
     frequencyMin = 0,
     frequencyStep = 0.1,
-    intensity = $bindable(),
+    intensity = $bindable(1),
     intensityMax = 2,
     intensityMin = 0,
     intensityStep = 0.1
