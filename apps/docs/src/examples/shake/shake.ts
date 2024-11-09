@@ -1,5 +1,6 @@
 import type { AxisItem, ShakeParams } from './types'
 import type { Object3D } from 'three'
+import type { ThrelteUseTaskOptions } from '@threlte/core'
 import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 import { useTask } from '@threlte/core'
 
@@ -31,19 +32,16 @@ export const useShake = (params: ShakeParams = {}) => {
 
   let time = 0
 
-  const shake = (ref: Object3D, autoStart = true) => {
+  const shake = (ref: Object3D, options?: ThrelteUseTaskOptions) => {
     const { x, y, z } = ref.rotation
-    return useTask(
-      (delta) => {
-        time += delta
-        ref.rotation.set(
-          x + pitch.intensity * pitch.noise.noise(pitch.frequency * time, 1),
-          y + yaw.intensity * yaw.noise.noise(yaw.frequency * time, 1),
-          z + roll.intensity * roll.noise.noise(roll.frequency * time, 1)
-        )
-      },
-      { autoStart }
-    )
+    return useTask((delta) => {
+      time += delta
+      ref.rotation.set(
+        x + pitch.intensity * pitch.noise.noise(pitch.frequency * time, 1),
+        y + yaw.intensity * yaw.noise.noise(yaw.frequency * time, 1),
+        z + roll.intensity * roll.noise.noise(roll.frequency * time, 1)
+      )
+    }, options)
   }
   return {
     pitch,

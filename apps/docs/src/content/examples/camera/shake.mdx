@@ -12,7 +12,7 @@ Expanding Capabilities
 
 Drei's `CameraShake` is limited in its features. The biggest downside is that it can only be applied to cameras. `useShake` on the other hand is something that can be applied to anything that extends `Object3D` essentially anything that has a `rotation` property - meshes, groups, cameras, even the entire scene can be shaken because `Three.Scene` extends `Object3D`. The other benefit to shaking implementated as a _hook_ is that the effect can be started or stopped at will.
 
-`useShake.shake` returns the task that is responsible for setting the object's rotation each frame. This means you have full control of when you want to shake. `shake`'s second parameter, `autoStart` is passed along to its underlying task. Sometimes you don't want to shake immediately but want to shake later on or the shake be event-driven. To do this you can set `autoStart` to false and call the `start` and `stop` functions when necessary.
+`useShake.shake` returns the task that is responsible for setting the object's rotation each frame. This means you have full control of when you want to shake. `shake`'s second parameter is a a task options object. It has the same type as the options object that you would pass into threlte's `useTask` function. This means you can disable automatically starting the shake task by passing in an object with `autoStart` set to false. This is useful if you want the task to start and stop on some event.
 
 ```svelte title="Scene.svelte"
 <script>
@@ -22,8 +22,8 @@ Drei's `CameraShake` is limited in its features. The biggest downside is that it
 
   const scene = useScene()
 
-  // don't autoStart
-  const { task } = shake(scene, false)
+  // don't autoStart, start shaking scene when the mesh below is clicked
+  const { task } = shake(scene, { autoStart: false })
 </script>
 
 <T.Mesh
