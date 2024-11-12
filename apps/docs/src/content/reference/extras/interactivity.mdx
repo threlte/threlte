@@ -224,7 +224,7 @@ plugin exports the `InteractivityProps` type which you can use as shown below:
 ```ts title="src/app.d.ts"
 import type { InteractivityProps } from '@threlte/extras'
 
-define global {
+declare global {
   namespace Threlte {
     interface UserProps extends InteractivityProps {}
   }
