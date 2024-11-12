@@ -15,8 +15,11 @@
     uIntensity.value = emissiveIntensity
   })
 
+  let positionY = $state(0)
+
   useTask((delta) => {
     uTime.value += delta
+    positionY = 0.1 * Math.sin(uTime.value)
   })
 
   const red = Fn(([time, intensity]: [NodeRepresentation, NodeRepresentation]) => {
@@ -37,7 +40,10 @@
 </T.PerspectiveCamera>
 
 {#await texture then map}
-  <T.Mesh rotation.z={Math.PI}>
+  <T.Mesh
+    rotation.z={Math.PI}
+    position.y={positionY}
+  >
     <T.SphereGeometry />
     <T.MeshStandardNodeMaterial
       {map}
