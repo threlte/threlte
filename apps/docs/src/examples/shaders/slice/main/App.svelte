@@ -1,9 +1,8 @@
 <script lang="ts">
+  import * as THREE from 'three/webgpu'
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
-  import { MathUtils, WebGPURenderer } from 'three/webgpu'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
-  import * as THREE from 'three/webgpu'
 
   extend(THREE)
 
@@ -12,8 +11,8 @@
   let sliceColor = $state('#ff4500')
   let rotate = $state(true)
 
-  const arcAngle = $derived(MathUtils.DEG2RAD * arcAngleDegrees)
-  const startAngle = $derived(MathUtils.DEG2RAD * startAngleDegrees)
+  const arcAngle = $derived(THREE.MathUtils.DEG2RAD * arcAngleDegrees)
+  const startAngle = $derived(THREE.MathUtils.DEG2RAD * startAngleDegrees)
 </script>
 
 <div>
