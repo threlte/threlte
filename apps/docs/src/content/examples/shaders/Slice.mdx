@@ -2,7 +2,7 @@ The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl
 
 <Example path="shaders/slice/main" />
 
-A question thatlways comes up often in ThreeJS development is "How do I extend ThreeJS's materials?". Most libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material) use a find and replace solution. This works well enough but ThreeJS has identified that it's not an ideal solution and recommends using [threejs shading language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language). One of the primary benefits for using TSL is that the language is renderer-agnostic. This means TSL will compile to either glsl or wgsl code depending on what renderer is being used.
+A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?". Most libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material) use a find and replace solution. This works well enough but ThreeJS has identified that it's not an ideal solution and recommends using [threejs shading language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language). One of the primary benefits for using TSL is that the language is renderer-agnostic. This means TSL will compile to either glsl or wgsl code depending on what renderer is being used.
 
 <Tip type="warning">
   At this time webgpu is still a very experimental browser api and is [not widely
