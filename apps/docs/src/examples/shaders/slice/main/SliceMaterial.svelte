@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SliceMaterialProps } from './types'
-  import { color, uniform } from 'three/webgpu'
   import { T } from '@threlte/core'
+  import { color, uniform } from 'three/webgpu'
   import { outputNodeFn, shadowNodeFn } from './tsl'
 
   const defaultStartAngle = 0

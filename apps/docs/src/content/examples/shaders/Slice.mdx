@@ -43,7 +43,9 @@ The extensition makes it possible to use class definitions such as `MeshPhysical
 <T.MeshPhysicalNodeMaterial />
 ```
 
-Node materials give the developer the ability to modify three's builtin materials. In the example above, two nodes are modified; the `outputNode` and the `shadowNode`. The `outputNode` is set up in such a way that it discards any fragments that are outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded and it is not front-facing, it is assigned the color in the `color` uniform. These are the fragments at the edges of the slice. The `shadowNode` is used for shadows. Any fragment that is discarded in the shadowNode will not cast shadows.
+Node materials give the developer the ability to modify three's builtin materials. In the example above, two nodes are modified; the `outputNode` and the `shadowNode`. The `outputNode` is set up in such a way that it discards any fragments that are outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded and it is not front-facing, it is assigned the color in the `color` uniform. This is why the Material needs its `side` set to `Three.DoubleSide` - because these fragments are facing away from the camera and ThreeJS would cull them out otherwise.
+
+The `shadowNode` is used for shadows. Any fragment that is discarded in the shadowNode will not cast shadows.
 
 The nodes can be directly assigned like any other prop on the `<T>` component.
 
