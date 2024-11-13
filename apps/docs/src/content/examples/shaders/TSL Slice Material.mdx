@@ -68,7 +68,7 @@ For example, if your material uses elapsed time in a uniform, you can update the
 
 <Example path="shaders/slice/updatingUniforms" />
 
-The material above oscillates the red channel of its emissive color from 0 to 1. This value is then multiplied by the `emissiveIntensity` to lighten the effect.
+The material demonstrates two ways to update uniforms. The `uTime` uniform is updated in a `useTask` callback. `uIntensity` is modified in a `$effect`. Either way the uniform updates are picked up in the material.
 
 <Tip type="info">
   TSL has an `oscSine` function that oscillates on time that could be used in the example above.
