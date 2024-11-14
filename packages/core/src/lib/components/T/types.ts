@@ -18,8 +18,8 @@ type ConditionalKeys<Base, Condition> = {
 type Primitive = null | undefined | string | number | boolean | symbol | bigint
 
 /**
- * We hold a list of prop keys that should be ommited from the object props
- * that are infered by the provided type.
+ * We hold a list of prop keys that should be omitted from the object props
+ * that are inferred by the provided type.
  */
 export type OmittedPropKeys =
   | 'type'
@@ -125,7 +125,7 @@ export type CameraProps<Type> =
 /**
  * ### Instance Props
  *
- * Enables the use of props that are infered from the provided type.
+ * Enables the use of props that are inferred from the provided type.
  *
  * ```ts
  * type PerspectiveCameraProps = InstanceProps<typeof PerspectiveCamera>
