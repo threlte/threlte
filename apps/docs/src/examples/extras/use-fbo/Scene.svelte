@@ -5,8 +5,8 @@
 
   const { camera, renderer, scene } = useThrelte()
 
-  // render scene at a lower resolution
   const renderTarget = useFBO({
+    depth: true,
     samples: 4
   })
 
@@ -56,7 +56,7 @@
   scale={5}
 >
   <T.PlaneGeometry />
-  <T.MeshBasicMaterial
+  <T.MeshStandardMaterial
     map={renderTarget.texture}
     color="#CCFFCC"
   />

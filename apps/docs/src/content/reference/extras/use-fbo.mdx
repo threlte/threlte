@@ -14,7 +14,7 @@ Framebuffer objects are useful when you want to render a scene but not display i
 
 ## Options
 
-```ts
+```typescript
 type UseFBOOptions = THREE.WebGLRenderTargetOptions & {
   /**
    * If set, the scene depth will be rendered into buffer.depthTexture.
@@ -31,4 +31,46 @@ export function useFBO(
   /**Options */
   options?: UseFBOOptions
 ): THREE.WebGLRenderTarget
+```
+
+`useFBO` can either be called with an options object or a width and height and options object.
+
+In the first case it will set its render target size to be equal to the width and height of the `size` store from `useThrelte`.
+
+In the second case, `useFBO` will set the target's width and height to the width and height that are passed in. Note that height is optional. If width is passed in but not height, height will default to `1`.
+
+In both cases the `size` store is subscribed to but the size of the render target is only updated to match when width is an options object. `size` is unsubscribed from when the component unmounts.
+
+```typescript
+// use width and height from `useThrelte's` size store and the default options for WebGLRenderTarget, update render target size to match when `size` updates
+useFBO()
+
+// use width and height from `useThrelte's` size store. update render target size to match when `size` updates. use options provided.
+useFBO({ samples: 4 })
+
+// use provided width andh height. do not update size at all
+useFBO(512, 512)
+
+// use provided width and a default height of 1
+useFBO(512)
+```
+
+If you want to provide options but you don't care about the width or height, you can pass in `1`.
+
+```typescript
+useFBO(512, 1, { samples: 4 })
+useFBO(1, 512, { samples: 4 })
+useFBO(1, 1, { samples: 4 })
+```
+
+`useFBO`'s options object accepts a `depth` property. If `depth` is set to `true`, a depth texture is created and the scene's depth is rendered into it.
+
+```svelte
+<script>
+  const fbo = useFBO({ depth: true })
+</script>
+
+{#if fbo.depthTexture !== null}
+  <SomethingThatUsesADepthTexture texture={fbo.depthTexture} />
+{/if}
 ```
