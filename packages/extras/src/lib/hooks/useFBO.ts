@@ -11,12 +11,11 @@ export type UseFBOOptions = RenderTargetOptions & {
    */
   depth?: { width?: number; height?: number } | DepthTexture | boolean
   /**
-   * if set, the render target size will be set to the width and height and not use the size of the canvas
-   * width defaults to 1
-   * height defaults to 1
+   * if set, the render target size will be set to the corresponding width and height and not use or follow the size of the canvas
    */
   dimensions?: { width?: number; height?: number }
 }
+
 export function useFBO({
   depth = false,
   dimensions,
