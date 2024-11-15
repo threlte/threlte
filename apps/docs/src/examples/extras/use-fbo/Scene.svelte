@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Mesh } from 'three'
+  import type { AmbientLight, Mesh } from 'three'
   import { OrbitControls, Sky, useFBO } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
 
@@ -44,7 +44,7 @@
   rotation.z={knotRotation}
 >
   <T.TorusKnotGeometry />
-  <T.MeshStandardMaterial />
+  <T.MeshStandardMaterial color="orangered" />
 </T.Mesh>
 
 <T.Mesh
