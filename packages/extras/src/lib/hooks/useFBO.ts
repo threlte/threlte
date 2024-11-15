@@ -1,6 +1,7 @@
 /* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
-import { useThrelte } from '@threlte/core'
-import { onDestroy, onMount } from 'svelte'
+
+import { useThrelte, watch } from '@threlte/core'
+import { onMount } from 'svelte'
 import {
   type RenderTargetOptions,
   WebGLRenderTarget,
@@ -10,34 +11,39 @@ import {
   FloatType
 } from 'three'
 
-interface UseFBOOptions extends RenderTargetOptions {
-  /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
-  samples?: number
-  /** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
+type UseFBOOptions = RenderTargetOptions & {
+  /**
+   * If set, the scene depth will be rendered into buffer.depthTexture.
+   * @default false
+   */
   depth?: boolean
 }
 
-// 👇 uncomment when TS version supports function overloads
-// export function useFBO(options?: UseFBOOptions)
-export const useFBO = (
+export function useFBO(
   /** Width in pixels, or options (will render fullscreen by default) */
-  width?: number | UseFBOOptions,
+  width: number | UseFBOOptions = {},
   /** Height in pixels */
   height?: number,
   /** Options */
   options?: UseFBOOptions
-): WebGLRenderTarget => {
+): WebGLRenderTarget {
   const { dpr, size } = useThrelte()
 
-  const _width = typeof width === 'number' ? width : 1 * (dpr.current ?? 1)
-  const _height = typeof height === 'number' ? height : 1 * (dpr.current ?? 1)
-  const _options = (typeof width === 'number' ? options : (width as UseFBOOptions)) || {}
-  const { samples = 0, depth, ...targetOptions } = _options
+  const _width = typeof width === 'number' ? width : Math.max(dpr.current, 1)
+  const _height = typeof height === 'number' ? height : Math.max(dpr.current, 1)
+  const {
+    samples = 0,
+    depth = false,
+    minFilter = LinearFilter,
+    magFilter = LinearFilter,
+    type = HalfFloatType,
+    ...targetOptions
+  } = typeof width === 'number' ? options ?? {} : width
 
   const target = new WebGLRenderTarget(_width, _height, {
-    minFilter: LinearFilter,
-    magFilter: LinearFilter,
-    type: HalfFloatType,
+    minFilter,
+    magFilter,
+    type,
     ...targetOptions
   })
 
@@ -52,16 +58,14 @@ export const useFBO = (
     return () => target.dispose()
   })
 
-  const unsubscribeSize = size.subscribe((val) => {
+  watch(size, ({ width, height }) => {
     // Update the width and height on size change
-    const _width = typeof width === 'number' ? width : val.width * dpr.current
-    const _height = typeof height === 'number' ? height : val.height * dpr.current
-    if (target.width !== _width && target.height !== _height) {
+    const _width = typeof width === 'number' ? width : width * dpr.current
+    const _height = typeof height === 'number' ? height : height * dpr.current
+    if (target.width !== _width || target.height !== _height) {
       target.setSize(_width, _height)
     }
   })
-
-  onDestroy(unsubscribeSize)
 
   return target
 }
