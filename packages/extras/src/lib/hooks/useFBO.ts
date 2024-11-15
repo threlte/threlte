@@ -1,15 +1,9 @@
 /* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
 
-import { useThrelte, watch } from '@threlte/core'
+import type { RenderTargetOptions } from 'three'
+import { HalfFloatType, DepthTexture, FloatType, WebGLRenderTarget } from 'three'
 import { onMount } from 'svelte'
-import {
-  type RenderTargetOptions,
-  WebGLRenderTarget,
-  LinearFilter,
-  HalfFloatType,
-  DepthTexture,
-  FloatType
-} from 'three'
+import { useThrelte, watch } from '@threlte/core'
 
 type UseFBOOptions = RenderTargetOptions & {
   /**
@@ -24,25 +18,22 @@ export function useFBO(
   width: number | UseFBOOptions = {},
   /** Height in pixels */
   height?: number,
-  /** Options */
+  /** Options that are passed to the  */
   options?: UseFBOOptions
 ): WebGLRenderTarget {
   const { dpr, size } = useThrelte()
 
   const _width = typeof width === 'number' ? width : Math.max(dpr.current, 1)
   const _height = typeof height === 'number' ? height : Math.max(dpr.current, 1)
+
   const {
     samples = 0,
     depth = false,
-    minFilter = LinearFilter,
-    magFilter = LinearFilter,
     type = HalfFloatType,
     ...targetOptions
   } = typeof width === 'number' ? options ?? {} : width
 
   const target = new WebGLRenderTarget(_width, _height, {
-    minFilter,
-    magFilter,
     type,
     ...targetOptions
   })
@@ -54,7 +45,7 @@ export function useFBO(
   target.samples = samples
 
   onMount(() => {
-    if (samples) target.samples = samples
+    if (samples > 0) target.samples = samples
     return () => target.dispose()
   })
 
