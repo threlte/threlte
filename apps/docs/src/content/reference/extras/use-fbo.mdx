@@ -70,7 +70,7 @@ assert(target.height === 1)
 
 ### `depth`
 
-`depth` is used to assign a [DepthTexture](https://threejs.org/docs/#api/en/textures/DepthTexture) to the `depthTexture` property of the render target. It can either be a boolean, "dimensions object", or DepthTexture instance. By default, `depth` is set to `false` and a `depth` texture is **not** created.
+`depth` is used to assign a [DepthTexture](https://threejs.org/docs/#api/en/textures/DepthTexture) to the `depthTexture` property of the render target. It can either be a boolean, "dimensions object", or DepthTexture instance. By default, `depth` is set to `false` and a `depth` texture is **not** created. When depth is used, the scene's depth is rendered to the `depthTexture` of the render target.
 
 If `depth` is set to `true`, a depth texture is created and sized to match the size of the render target, _after_ an appropriate size has been given to the render target.
 
