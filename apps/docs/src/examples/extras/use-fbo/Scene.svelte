@@ -5,7 +5,7 @@
 
   const { camera, renderer, scene } = useThrelte()
 
-  const renderTarget = useFBO({})
+  const renderTarget = useFBO()
 
   let fboPreviewMesh: Mesh
 
@@ -53,8 +53,5 @@
   scale={5}
 >
   <T.PlaneGeometry />
-  <T.MeshStandardMaterial
-    map={renderTarget.texture}
-    color="#CCFFCC"
-  />
+  <T.MeshStandardMaterial map={renderTarget.texture} />
 </T.Mesh>

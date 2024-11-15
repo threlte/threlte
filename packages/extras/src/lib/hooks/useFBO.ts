@@ -7,7 +7,7 @@ import { isInstanceOf, useThrelte, watch } from '@threlte/core'
 
 export type UseFBOOptions = RenderTargetOptions & {
   /**
-   * if set, the scene depth will be rendered into buffer.depthTexture.
+   * if set, the scene depth will be rendered into buffer.depthTexture
    */
   depth?: { width?: number; height?: number } | DepthTexture | boolean
   /**
@@ -16,11 +16,11 @@ export type UseFBOOptions = RenderTargetOptions & {
   dimensions?: { width?: number; height?: number }
 }
 
-export function useFBO({
+export const useFBO = ({
   depth = false,
   dimensions,
   ...targetOptions
-}: UseFBOOptions = {}): WebGLRenderTarget {
+}: UseFBOOptions = {}): WebGLRenderTarget => {
   const target = new WebGLRenderTarget(1, 1, targetOptions)
 
   // first set the width and height because if a depth texture has to be created, it can only have its width and height set in its constructor
@@ -41,8 +41,9 @@ export function useFBO({
   } else if (isInstanceOf(depth, 'DepthTexture')) {
     target.depthTexture = depth
   } else if (depth !== false) {
-    let { width, height } = depth
-    target.depthTexture = new DepthTexture(Math.max(width ?? 1, 1), Math.max(height ?? 1, 1))
+    const width = Math.max(depth.width ?? 1, 1)
+    const height = Math.max(depth.height ?? 1, 1)
+    target.depthTexture = new DepthTexture(width, height)
   }
 
   onDestroy(() => {
