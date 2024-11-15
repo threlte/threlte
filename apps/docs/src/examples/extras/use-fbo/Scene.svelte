@@ -6,7 +6,6 @@
   const { camera, renderer, scene } = useThrelte()
 
   const renderTarget = useFBO({
-    depth: true,
     samples: 4
   })
 
