@@ -5,9 +5,7 @@
 
   const { camera, renderer, scene } = useThrelte()
 
-  const renderTarget = useFBO({
-    samples: 4
-  })
+  const renderTarget = useFBO({})
 
   let fboPreviewMesh: Mesh
 

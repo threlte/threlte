@@ -1,52 +1,53 @@
 /* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
 
 import type { RenderTargetOptions } from 'three'
-import { DepthTexture, FloatType, WebGLRenderTarget } from 'three'
+import { DepthTexture, WebGLRenderTarget } from 'three'
 import { onDestroy } from 'svelte'
-import { useThrelte, watch } from '@threlte/core'
+import { isInstanceOf, useThrelte, watch } from '@threlte/core'
 
-type UseFBOOptions = RenderTargetOptions & {
+export type UseFBOOptions = RenderTargetOptions & {
   /**
-   * If set, the scene depth will be rendered into buffer.depthTexture.
-   * @default false
+   * if set, the scene depth will be rendered into buffer.depthTexture.
    */
-  depth?: boolean
+  depth?: { width?: number; height?: number } | DepthTexture | boolean
+  /**
+   * if set, the render target size will be set to the width and height and not use the size of the canvas
+   * width defaults to 1
+   * height defaults to 1
+   */
+  dimensions?: { width?: number; height?: number }
 }
+export function useFBO({
+  depth = false,
+  dimensions,
+  ...targetOptions
+}: UseFBOOptions = {}): WebGLRenderTarget {
+  const target = new WebGLRenderTarget(1, 1, targetOptions)
 
-export function useFBO(
-  /** Width in pixels, or options (will render fullscreen by default) */
-  width: number | UseFBOOptions = {},
-  /** Height in pixels */
-  height?: number,
-  /** Options that are passed to the  */
-  options?: UseFBOOptions
-): WebGLRenderTarget {
-  const { dpr, size } = useThrelte()
+  // first set the width and height because if a depth texture has to be created, it can only have its width and height set in its constructor
+  if (dimensions === undefined) {
+    const { dpr, size } = useThrelte()
+    watch([dpr, size], ([dpr, { width, height }]) => {
+      target.setSize(dpr * width, dpr * height)
+    })
+  } else {
+    // handle when width and height are undefined or the user set them to negative numbers
+    const width = Math.max(dimensions.width ?? 1, target.width)
+    const height = Math.max(dimensions.height ?? 1, target.height)
+    target.setSize(width, height)
+  }
 
-  const widthIsNumber = typeof width === 'number'
-
-  const _width = widthIsNumber ? width : Math.max(dpr.current, 1)
-  const _height = typeof height === 'number' ? height : Math.max(dpr.current, 1)
-
-  const { depth = false, ...targetOptions } = widthIsNumber ? options ?? {} : width
-
-  const target = new WebGLRenderTarget(_width, _height, targetOptions)
-
-  if (depth) {
-    target.depthTexture = new DepthTexture(_width, _height, FloatType)
+  if (depth === true) {
+    target.depthTexture = new DepthTexture(target.width, target.height)
+  } else if (isInstanceOf(depth, 'DepthTexture')) {
+    target.depthTexture = depth
+  } else if (depth !== false) {
+    let { width, height } = depth
+    target.depthTexture = new DepthTexture(Math.max(width ?? 1, 1), Math.max(height ?? 1, 1))
   }
 
   onDestroy(() => {
     target.dispose()
-  })
-
-  watch(size, (size) => {
-    // Update the width and height on size change
-    const _width = typeof width === 'number' ? width : size.width * dpr.current
-    const _height = typeof height === 'number' ? height : size.height * dpr.current
-    if (target.width !== _width || target.height !== _height) {
-      target.setSize(_width, _height)
-    }
   })
 
   return target
