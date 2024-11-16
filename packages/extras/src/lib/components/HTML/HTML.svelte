@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte, useDOM } from '@threlte/core'
   import {
     Vector3,
     Group,
@@ -83,6 +83,7 @@
   visible = true
 
   const { renderer, camera, scene, size } = useThrelte()
+  const { dom } = useDOM()
 
   const group = new Group()
 
@@ -261,7 +262,7 @@
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement
+    const target = portal ?? dom
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return

@@ -1,4 +1,4 @@
-import { currentWritable, type CurrentWritable, useThrelte } from '@threlte/core'
+import { currentWritable, type CurrentWritable, useDOM } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster, type Object3D, type Intersection } from 'three'
 import type { IntersectionEvent, DomEvent } from './types'
@@ -55,9 +55,7 @@ export const getInteractivityContext = () => {
 }
 
 export const setInteractivityContext = (options?: InteractivityOptions) => {
-  const target = currentWritable(
-    options?.target ?? (useThrelte().renderer.domElement?.parentElement as HTMLElement)
-  )
+  const target = currentWritable(options?.target ?? (useDOM().dom as HTMLElement))
 
   const context: InteractivityContext = {
     enabled: currentWritable(options?.enabled ?? true),

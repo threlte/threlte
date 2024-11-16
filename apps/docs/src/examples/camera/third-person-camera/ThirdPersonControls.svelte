@@ -1,29 +1,25 @@
 <script lang="ts">
-  import { isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
-  import { createEventDispatcher, onDestroy } from 'svelte'
+  import { isInstanceOf, useDOM, useParent, useTask, useThrelte } from '@threlte/core'
+  import { onDestroy } from 'svelte'
+  import type { EventHandler } from 'svelte/elements'
   import { Quaternion, Vector2, Vector3 } from 'three'
 
-  export let object
-  export let rotateSpeed = 1.0
-
-  $: if (object) {
-    // console.log(object)
-    // object.position.y = 10
-    // // Calculate the direction vector towards (0, 0, 0)
-    // const target = new Vector3(0, 0, 0)
-    // const direction = target.clone().sub(object.position).normalize()
-    // // Extract the forward direction from the object's current rotation matrix
-    // const currentDirection = new Vector3(0, 1, 0)
-    // currentDirection.applyQuaternion(object.quaternion)
-    // // Calculate the axis and angle to rotate the object
-    // const rotationAxis = currentDirection.clone().cross(direction).normalize()
-    // const rotationAngle = Math.acos(currentDirection.dot(direction))
-    // // Rotate the object using rotateOnAxis()
+  interface Props {
+    object: any
+    rotateSpeed?: number
     // object.rotateOnAxis(rotationAxis, rotationAngle)
+    idealOffset?: any
+    idealLookAt?: any
+    change: EventHandler
   }
 
-  export let idealOffset = { x: -0.5, y: 2, z: -3 }
-  export let idealLookAt = { x: 0, y: 1, z: 5 }
+  let {
+    object,
+    rotateSpeed = 1.0,
+    idealOffset = { x: -0.5, y: 2, z: -3 },
+    idealLookAt = { x: 0, y: 1, z: 5 },
+    change
+  }: Props = $props()
 
   const currentPosition = new Vector3()
   const currentLookAt = new Vector3()
@@ -38,27 +34,25 @@
   const axis = new Vector3(0, 1, 0)
   const rotationQuat = new Quaternion()
 
-  const { renderer, invalidate } = useThrelte()
+  const { invalidate } = useThrelte()
+  const { dom } = useDOM()
 
-  const domElement = renderer.domElement
   const camera = useParent()
-
-  const dispatch = createEventDispatcher()
 
   if (!isInstanceOf($camera, 'Camera')) {
     throw new Error('Parent missing: <PointerLockControls> need to be a child of a <Camera>')
   }
 
-  domElement.addEventListener('pointerdown', onPointerDown)
-  domElement.addEventListener('pointermove', onPointerMove)
-  domElement.addEventListener('pointerleave', onPointerLeave)
-  domElement.addEventListener('pointerup', onPointerUp)
+  dom.addEventListener('pointerdown', onPointerDown)
+  dom.addEventListener('pointermove', onPointerMove)
+  dom.addEventListener('pointerleave', onPointerLeave)
+  dom.addEventListener('pointerup', onPointerUp)
 
   onDestroy(() => {
-    domElement.removeEventListener('pointerdown', onPointerDown)
-    domElement.removeEventListener('pointermove', onPointerMove)
-    domElement.removeEventListener('pointerleave', onPointerLeave)
-    domElement.removeEventListener('pointerup', onPointerUp)
+    dom.removeEventListener('pointerdown', onPointerDown)
+    dom.removeEventListener('pointermove', onPointerMove)
+    dom.removeEventListener('pointerleave', onPointerLeave)
+    dom.removeEventListener('pointerup', onPointerUp)
   })
 
   // This is basically your update function
@@ -101,7 +95,7 @@
     rotateStart.copy(rotateEnd)
 
     invalidate()
-    dispatch('change')
+    change?.()
   }
 
   function onPointerDown(event: PointerEvent) {
@@ -155,9 +149,23 @@
         break
     }
   }
+  // if (object) {
+  // console.log(object)
+  // object.position.y = 10
+  // // Calculate the direction vector towards (0, 0, 0)
+  // const target = new Vector3(0, 0, 0)
+  // const direction = target.clone().sub(object.position).normalize()
+  // // Extract the forward direction from the object's current rotation matrix
+  // const currentDirection = new Vector3(0, 1, 0)
+  // currentDirection.applyQuaternion(object.quaternion)
+  // // Calculate the axis and angle to rotate the object
+  // const rotationAxis = currentDirection.clone().cross(direction).normalize()
+  // const rotationAngle = Math.acos(currentDirection.dot(direction))
+  // // Rotate the object using rotateOnAxis()
+  // }
 </script>
 
 <svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
+  onkeydown={onKeyDown}
+  onkeyup={onKeyUp}
 />

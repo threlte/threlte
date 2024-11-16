@@ -9,7 +9,7 @@ import {
 import type { Scheduler, Stage, Task } from '../../frame-scheduling'
 import type { CurrentReadable, CurrentWritable } from '../../utilities'
 import { useCamera } from '../fragments/camera'
-import { useCanvas, type Size } from '../fragments/canvas'
+import { useDOM, type Size } from '../fragments/dom'
 import { useRenderer } from '../fragments/renderer.svelte'
 import { useScene } from '../fragments/scene'
 import { useScheduler } from '../fragments/scheduler.svelte'
@@ -88,7 +88,7 @@ export const useThrelte = (): ThrelteContext => {
   const rendererCtx = useRenderer()
   const cameraCtx = useCamera()
   const sceneCtx = useScene()
-  const canvasCtx = useCanvas()
+  const domCtx = useDOM()
 
   const context: ThrelteContext = {
     advance: schedulerCtx.advance,
@@ -106,7 +106,7 @@ export const useThrelte = (): ThrelteContext => {
     scheduler: schedulerCtx.scheduler,
     shadows: rendererCtx.shadows,
     shouldRender: schedulerCtx.shouldRender,
-    size: canvasCtx.size,
+    size: domCtx.size,
     toneMapping: rendererCtx.toneMapping,
     get scene() {
       return sceneCtx.scene

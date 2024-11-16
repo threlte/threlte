@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, useParent, useThrelte } from '@threlte/core'
+  import { isInstanceOf, useParent, useThrelte, useDOM } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Euler } from 'three'
 
@@ -14,9 +14,9 @@
 
   let isLocked = false
 
-  const { renderer, invalidate } = useThrelte()
+  const { invalidate } = useThrelte()
+  const { dom } = useDOM()
 
-  const domElement = renderer.domElement
   const camera = useParent()
 
   if (!isInstanceOf($camera, 'Camera')) {
@@ -31,17 +31,17 @@
     onchange?.()
   }
 
-  export const lock = () => domElement.requestPointerLock()
+  export const lock = () => dom.requestPointerLock()
   export const unlock = () => document.exitPointerLock()
 
-  domElement.addEventListener('mousemove', onMouseMove)
-  domElement.ownerDocument.addEventListener('pointerlockchange', onPointerlockChange)
-  domElement.ownerDocument.addEventListener('pointerlockerror', onPointerlockError)
+  dom.addEventListener('mousemove', onMouseMove)
+  dom.ownerDocument.addEventListener('pointerlockchange', onPointerlockChange)
+  dom.ownerDocument.addEventListener('pointerlockerror', onPointerlockError)
 
   onDestroy(() => {
-    domElement.removeEventListener('mousemove', onMouseMove)
-    domElement.ownerDocument.removeEventListener('pointerlockchange', onPointerlockChange)
-    domElement.ownerDocument.removeEventListener('pointerlockerror', onPointerlockError)
+    dom.removeEventListener('mousemove', onMouseMove)
+    dom.ownerDocument.removeEventListener('pointerlockchange', onPointerlockChange)
+    dom.ownerDocument.removeEventListener('pointerlockerror', onPointerlockError)
   })
 
   function onMouseMove(event: MouseEvent) {
@@ -66,7 +66,7 @@
   }
 
   function onPointerlockChange() {
-    if (document.pointerLockElement === domElement) {
+    if (document.pointerLockElement === dom) {
       onlock?.()
       isLocked = true
     } else {
