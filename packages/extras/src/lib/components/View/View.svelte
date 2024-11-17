@@ -126,4 +126,4 @@
   )
 </script>
 
-{@render children?.({ ref: scene })}
+{@render children?.()}
