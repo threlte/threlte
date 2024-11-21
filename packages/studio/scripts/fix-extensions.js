@@ -8,7 +8,10 @@ const fixExtensions = (dir) => {
       fixExtensions(fullPath)
     } else if (file.endsWith('.js')) {
       let content = fs.readFileSync(fullPath, 'utf8')
-      content = content.replace(/from '(\..*?)'/g, (match, p1) => `from '${p1}.js'`)
+      content = content.replace(
+        /\bfrom\s+["'](\.[^"']*?)(?<!\.\w+)["']/g,
+        (match, p1) => `from '${p1}.js'`
+      )
       fs.writeFileSync(fullPath, content)
     }
   })
