@@ -34,6 +34,7 @@ export const plugin: () => Plugin = () => {
     transform(code, id) {
       if (!id.endsWith('.svelte')) return
       if (!hasTComponent(code)) return
+      if (id.includes('node_modules')) return
       const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
       const magicMarkup = toMagicString(markup)
       addStudioRuntimeProps(magicMarkup, id)
