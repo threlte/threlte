@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.31
+
+### Patch Changes
+
+- e732e58: export `Size` type from contexts/canvas to fix import errors regarding `Size` not being an export. for example in `useViewport`
+
 ## 8.0.0-next.30
 
 ### Patch Changes
