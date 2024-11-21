@@ -96,7 +96,8 @@
       "./vite": {
         "types": "./dist/vite.d.ts",
         "import": "./dist/vite.js",
-        "svelte": "./dist/vite.js"
+        "svelte": "./dist/vite.js",
+        "default": "./dist/vite.js"
       }
     }
   },
