@@ -28,9 +28,12 @@ export const disassembleComponent = (code: string) => {
   const scriptModuleMatch = code.match(scriptModuleRegex)
   const styleMatch = code.match(styleRegex)
   const hasMultipleScripts = scriptMatch && scriptMatch.length > 1
+  if (hasMultipleScripts) {
+    throw new Error('Multiple script blocks found in component')
+  }
   const hasMultipleScriptModules = scriptModuleMatch && scriptModuleMatch.length > 1
-  if (hasMultipleScripts || hasMultipleScriptModules) {
-    throw new Error('Multiple scripts found in component')
+  if (hasMultipleScriptModules) {
+    throw new Error('Multiple script module blocks found in component')
   }
   const hasScript = Boolean(scriptMatch)
   const hasScriptModule = Boolean(scriptModuleMatch)

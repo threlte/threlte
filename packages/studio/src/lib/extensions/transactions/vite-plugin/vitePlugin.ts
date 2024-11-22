@@ -50,7 +50,8 @@ export const plugin: () => Plugin = () => {
           code: finalComponent
         }
       } catch (error) {
-        console.warn(colors.red('message' in (error as any) ? (error as any).message : error))
+        const message = 'message' in (error as any) ? (error as any).message : error
+        console.warn(colors.red(`Error compiling component ${id}: ${message}`))
         return
       }
     },
