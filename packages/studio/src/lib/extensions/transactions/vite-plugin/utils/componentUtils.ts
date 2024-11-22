@@ -21,12 +21,17 @@ const dummyStyle = '<style></style>'
  */
 export const disassembleComponent = (code: string) => {
   // to parse the markup, we first need to remove the script and the style blocks
-  const scriptRegex = /<script(?![^>]*context="module")[^>]*>[\s\S]*?<\/script>/gu
-  const scriptModuleRegex = /<script[^>]*context="module"[^>]*>[\S\s]*?<\/script>/gu
+  const scriptRegex = /<script(?![^>]*module)[^>]*>[\s\S]*?<\/script>/gu
+  const scriptModuleRegex = /<script[^>]*module[^>]*>[\S\s]*?<\/script>/gu
   const styleRegex = /<style[^>]*>[\S\s]*?<\/style>/gu
   const scriptMatch = code.match(scriptRegex)
   const scriptModuleMatch = code.match(scriptModuleRegex)
   const styleMatch = code.match(styleRegex)
+  const hasMultipleScripts = scriptMatch && scriptMatch.length > 1
+  const hasMultipleScriptModules = scriptModuleMatch && scriptModuleMatch.length > 1
+  if (hasMultipleScripts || hasMultipleScriptModules) {
+    throw new Error('Multiple scripts found in component')
+  }
   const hasScript = Boolean(scriptMatch)
   const hasScriptModule = Boolean(scriptModuleMatch)
   const hasStyle = Boolean(styleMatch)
