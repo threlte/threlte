@@ -51,7 +51,7 @@ export const plugin: () => Plugin = () => {
         }
       } catch (error) {
         const message = 'message' in (error as any) ? (error as any).message : error
-        console.warn(colors.red(`Error compiling component ${id}: ${message}`))
+        console.warn(colors.red(`Threlte Studio: Error compiling component ${id}: ${message}`))
         return
       }
     },
