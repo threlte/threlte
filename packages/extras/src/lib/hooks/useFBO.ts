@@ -1,5 +1,3 @@
-/* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
-
 import type { RenderTargetOptions } from 'three'
 import { DepthTexture, WebGLRenderTarget } from 'three'
 import { onDestroy } from 'svelte'
@@ -13,26 +11,26 @@ export type UseFBOOptions = RenderTargetOptions & {
   /**
    * if set, the render target size will be set to the corresponding width and height and not use or follow the size of the canvas
    */
-  dimensions?: { width?: number; height?: number }
+  size?: { width?: number; height?: number }
 }
 
 export const useFBO = ({
   depth = false,
-  dimensions,
+  size,
   ...targetOptions
 }: UseFBOOptions = {}): WebGLRenderTarget => {
   const target = new WebGLRenderTarget(1, 1, targetOptions)
 
   // first set the width and height because if a depth texture has to be created, it can only have its width and height set in its constructor
-  if (dimensions === undefined) {
+  if (size === undefined) {
     const { dpr, size } = useThrelte()
     watch([dpr, size], ([dpr, { width, height }]) => {
       target.setSize(dpr * width, dpr * height)
     })
   } else {
     // handle when width and height are undefined or the user set them to negative numbers
-    const width = Math.max(dimensions.width ?? 1, target.width)
-    const height = Math.max(dimensions.height ?? 1, target.height)
+    const width = Math.max(size.width ?? 1, target.width)
+    const height = Math.max(size.height ?? 1, target.height)
     target.setSize(width, height)
   }
 

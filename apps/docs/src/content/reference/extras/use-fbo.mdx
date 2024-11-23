@@ -16,11 +16,11 @@ Framebuffer objects are useful when you want to render a scene but not display i
 
 `useFBO`'s options object extends `Three.RenderTargetOptions`. The additional properties are listed below.
 
-### `dimensions`
+### `size`
 
-`dimensions` is used to set the `width` and `height` of the render target.
+`size` is used to set the `width` and `height` of the render target.
 
-If `dimensions` is not provided, the target's size is set to the size of the canvas and it will follow any updates to the size.
+If `size` is not provided, the target's size is set to the size of the canvas and it will follow any updates to the size.
 
 ```typescript
 const { size } = useThrelte()
@@ -32,45 +32,45 @@ assert(target.width === size.current.width)
 assert(target.height === size.current.height)
 ```
 
-If `dimensions` is provided, the `width` and `height` of the texture are taken from `dimensions`.
+If `size` is provided, the `width` and `height` of the texture are taken from `size`.
 
 ```typescript
-const dimensions = { width: 512, height: 512 }
+const size = { width: 512, height: 512 }
 
-const target = useFBO({ dimensions })
-assert(target.width === dimensions.width)
-assert(target.height === dimensions.height)
+const target = useFBO({ size })
+assert(target.width === size.width)
+assert(target.height === size.height)
 ```
 
-`width` and `height` both default to `1` if they are not found on the `dimensions` object.
+`width` and `height` both default to `1` if they are not found on the `size` object.
 
 ```typescript
-const dimensions = { width: 512 }
+const size = { width: 512 }
 
-const target = useFBO({ dimensions })
-assert(target.width === dimensions.width)
+const target = useFBO({ size })
+assert(target.width === size.width)
 assert(target.height === 1)
 ```
 
 ```typescript
-const dimensions = { height: 512 }
+const size = { height: 512 }
 
-const target = useFBO({ dimensions })
+const target = useFBO({ size })
 assert(target.width === 1)
-assert(target.height === dimensions.height)
+assert(target.height === size.height)
 ```
 
 ```typescript
-const dimensions = {}
+const size = {}
 
-const target = useFBO({ dimensions })
+const target = useFBO({ size })
 assert(target.width === 1)
 assert(target.height === 1)
 ```
 
 ### `depth`
 
-`depth` is used to assign a [DepthTexture](https://threejs.org/docs/#api/en/textures/DepthTexture) to the `depthTexture` property of the render target. It can either be a boolean, "dimensions object", or DepthTexture instance. By default, `depth` is set to `false` and a `depth` texture is **not** created. When depth is used, the scene's depth is rendered to the `depthTexture` of the render target.
+`depth` is used to assign a [DepthTexture](https://threejs.org/docs/#api/en/textures/DepthTexture) to the `depthTexture` property of the render target. It can either be a boolean, "size" object, or `DepthTexture` instance. By default, `depth` is set to `false` and a depth texture is **not** created. When `depth` is used, the scene's depth is rendered to the `depthTexture` of the render target.
 
 If `depth` is set to `true`, a depth texture is created and sized to match the size of the render target, _after_ an appropriate size has been given to the render target.
 
@@ -93,7 +93,7 @@ const target = useFBO({ depth: depthTexture })
 assert(target.depthTexture === depthTexture)
 ```
 
-If `depth` is set to a dimensions object, the depth texture size is set the `width` and `height` of the object.
+If `depth` is set to a "size" object, the depth texture size is set the `width` and `height` of the object.
 
 ```typescript
 const depth = { width: 512, height: 512 }
