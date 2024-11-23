@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AmbientLight, Mesh } from 'three'
+  import type { Mesh } from 'three'
   import { OrbitControls, Sky, useFBO } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
 
