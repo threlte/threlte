@@ -54,7 +54,7 @@
   <OrbitControls enabled={useControlsCamera} />
 </T.PerspectiveCamera>
 
-<T.AmbientLight intensity={0.5} />
+<T.AmbientLight />
 
 <Sky />
 
