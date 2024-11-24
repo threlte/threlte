@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.0.0-next.40
+
+### Patch Changes
+
+- 69f168c: CubeCamera follows what other components do and binds to the ref at the component instead of assigning in the script tag
+- 8be57ae: use `isInstanceOf` to determine the camera's type in `useViewport`. fixes some type errors.
+
 ## 9.0.0-next.39
 
 ### Patch Changes
