@@ -1,6 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "pipeline": {
+  "tasks": {
+    "test": {
+      "dependsOn": ["^test"]
+    },
     "package": {
       "dependsOn": ["^package"],
       "outputs": ["package/*"],
