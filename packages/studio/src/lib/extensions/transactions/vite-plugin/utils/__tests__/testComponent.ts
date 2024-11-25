@@ -24,7 +24,7 @@ export const markup = `<T.Mesh
 </T.Mesh>`
 
 export const markupWithUpdatedProps = `<T.Mesh
-  position={[1, 1, 1]}
+  position={[1,1,1]}
   {scale}
 >
   <!-- Comment -->
@@ -45,12 +45,12 @@ export const markupWithRemovedProps = `<T.Mesh
 export const markupWithStudioProps = `<T.Mesh
   position={[0, 1, 0]}
   {scale}
-  threlteStudio={{"moduleId":"Test.svelte","index":0,"signature":"051f94d43d58fa73caa0fc4006d0e5f09c745f6e2a17dcaea951765ea50a3840"}}
+  threlteStudio={{"moduleId":"Test.svelte","index":0,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}}
 >
   <!-- Comment -->
-  <T.BoxGeometry args={[1, 1, 1]} threlteStudio={{"moduleId":"Test.svelte","index":1,"signature":"65e59a586b177472fc71dc31ad2725235988cbebe58407222f23f0199c11abe0"}} />
-  <T is={MeshStandardMaterial} color="red" threlteStudio={{"moduleId":"Test.svelte","index":2,"signature":"f6c84eeb0b99307bb78708ac9846f79d43711c5f986de3d7599d849817abcb56"}} />
-  <T.MeshBasicMaterial threlteStudio={{"moduleId":"Test.svelte","index":3,"signature":"829a9ea1270c0fdd8ff2e1d4464d260a9191fb817e9f9c5c597809b70f0f8364"}} />
+  <T.BoxGeometry args={[1, 1, 1]} threlteStudio={{"moduleId":"Test.svelte","index":1,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
+  <T is={MeshStandardMaterial} color="red" threlteStudio={{"moduleId":"Test.svelte","index":2,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
+  <T.MeshBasicMaterial threlteStudio={{"moduleId":"Test.svelte","index":3,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
 </T.Mesh>`
 
 export const markupWithProps = `<T.Mesh
