@@ -11,7 +11,8 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check .",
     "format": "prettier --write .",
-    "cleanup": "rimraf node_modules .svelte-kit dist"
+    "cleanup": "rimraf node_modules .svelte-kit dist",
+    "test": "vitest"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.3.1",
