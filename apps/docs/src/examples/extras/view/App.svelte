@@ -22,7 +22,6 @@
       metalness: 0,
       flatShading: true
     })
-    // @ts-ignore
     items.push({ dom: undefined, geometry, material })
   }
 </script>
@@ -54,10 +53,7 @@
   >
     <Canvas>
       {#each items as item}
-        <View
-          dom={item.dom}
-          background={new THREE.Color(0xe0e0e0)}
-        >
+        <View dom={item.dom}>
           <Scene {...item} />
         </View>
       {/each}

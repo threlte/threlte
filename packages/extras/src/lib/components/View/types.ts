@@ -1,12 +1,12 @@
-import type { Props } from '@threlte/core'
-import type { Scene } from 'three'
+import type { Snippet } from 'svelte'
 
 /**
  * [Scissor cut renders](https://threejs.org/examples/?q=mul#webgl_multiple_elements) its contents to the given dom area. The default threlte scene is used if none provided.
  */
-export type ViewProps = Props<Scene> & {
+export type ViewProps = {
   /**
    * The target dom element.
    */
-  dom: HTMLElement
+  dom: HTMLElement | undefined | null
+  children: Snippet
 }

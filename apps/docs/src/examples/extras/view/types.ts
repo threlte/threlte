@@ -7,7 +7,7 @@ export type geoTypes =
   | THREE.CylinderGeometry
 
 export type itemType = {
-  dom: HTMLElement
+  dom: HTMLElement | undefined
   geometry: geoTypes
   material: THREE.MeshStandardMaterial
 }
