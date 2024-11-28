@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
+  import { T, currentWritable, useDOM, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
   import { Group } from 'three'
   import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
@@ -17,7 +17,8 @@
     ...props
   }: TransformControlsProps = $props()
 
-  const { camera, renderer, invalidate, scene } = useThrelte()
+  const { camera, invalidate, scene } = useThrelte()
+  const { dom } = useDOM()
 
   const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = currentWritable(false)
@@ -60,9 +61,7 @@
   const attachGroup = new Group()
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let transformControls = $derived(
-    new TransformControls($camera, renderer.domElement.parentElement!)
-  )
+  let transformControls = $derived(new TransformControls($camera, dom))
 
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)

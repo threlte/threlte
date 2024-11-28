@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte, useDOM } from '@threlte/core'
   import { onMount } from 'svelte'
   import {
     CanvasTexture,
@@ -44,6 +44,7 @@
   })
 
   const { autoRenderTask, renderer, camera, invalidate } = useThrelte()
+  const { dom } = useDOM()
 
   // invalidate the frame when any of the following values change
   $effect.pre(() => {
@@ -222,10 +223,10 @@
   }
 
   onMount(() => {
-    renderer.domElement.parentElement?.appendChild(clickTarget)
+    dom.appendChild(clickTarget)
     clickTarget.addEventListener('click', handleClick)
     return () => {
-      renderer.domElement.parentElement?.removeChild(clickTarget)
+      dom.removeChild(clickTarget)
       clickTarget.removeEventListener('click', handleClick)
     }
   })

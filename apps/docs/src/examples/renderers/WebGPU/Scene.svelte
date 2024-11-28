@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { T, useTask, useThrelte, watch } from '@threlte/core'
+  import { T, useTask, useThrelte, useDOM, watch } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Stats from 'three/addons/libs/stats.module.js'
   import * as THREE from 'three/webgpu'
 
-  const { scene, size, renderer, invalidate } = useThrelte()
+  const { scene, size, invalidate } = useThrelte()
+  const { dom } = useDOM()
 
   scene.background = new THREE.Color(0xc1c1c1)
 
@@ -78,7 +79,7 @@
   })
 
   const stats = new Stats()
-  renderer.domElement.parentNode?.appendChild(stats.dom)
+  dom.appendChild(stats.dom)
 
   stats.begin()
 

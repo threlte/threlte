@@ -1,55 +1,17 @@
-import { getContext, onMount, setContext } from 'svelte'
-import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities'
-
-export type Size = {
-  width: number
-  height: number
-}
+import { getContext, setContext } from 'svelte'
 
 type CanvasContext = {
-  /** The canvas wrapper element */
-  wrapper: HTMLDivElement
   /** The canvas element */
   canvas: HTMLCanvasElement
-  /** The canvas size */
-  size: CurrentReadable<Size>
 }
 
 export type CreateCanvasContextOptions = {
-  wrapper: HTMLDivElement
   canvas: HTMLCanvasElement
 }
 
 export const createCanvasContext = (options: CreateCanvasContextOptions) => {
-  const wrapperRect = options.wrapper.getBoundingClientRect()
-
-  let lastWidth = wrapperRect.width
-  let lastHeight = wrapperRect.height
-
-  const size = currentWritable({ width: wrapperRect.width, height: wrapperRect.height })
-
-  onMount(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect
-        if (width === lastWidth && height === lastHeight) return
-        lastWidth = width
-        lastHeight = height
-        size.set({ width, height })
-      }
-    })
-
-    resizeObserver.observe(options.wrapper)
-
-    return () => {
-      resizeObserver.disconnect()
-    }
-  })
-
   const context: CanvasContext = {
-    wrapper: options.wrapper,
-    canvas: options.canvas,
-    size: toCurrentReadable(size)
+    canvas: options.canvas
   }
 
   setContext<CanvasContext>('threlte-canvas-context', context)

@@ -32,7 +32,7 @@ enabled. You can disable this by setting `staticMoving` to true.
 `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
 -->
 <script lang="ts">
-  import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
+  import { isInstanceOf, T, useDOM, useParent, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { useControlsContext } from '../useControlsContext'
@@ -41,14 +41,15 @@ enabled. You can disable this by setting `staticMoving` to true.
   let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
-  const { renderer, invalidate } = useThrelte()
+  const { invalidate } = useThrelte()
+  const { dom } = useDOM()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
+  const controls = new ThreeTrackballControls($parent, dom)
 
   useTask(() => controls.update(), {
     autoInvalidate: false
