@@ -4,14 +4,11 @@ category: Advanced
 order: 0
 ---
 
-Plugins are one of Threlte's superpowers. Plugins allow you to globally extend
-Threlte's [`<T>`](/docs/reference/core/t) component functionality. This means
-you can not only add arbitrary props and event handlers to your `<T>` components
-but also override the default behavior of the `<T>` component entirely.
+Plugins allow you to extend Threlte's [`<T>`](/docs/reference/core/t) component. They can be used to add props, event handlers, custom logic and customize the component instance. They are similar to svelte `actions` but differ in that the object referenced by a `<T>` component may be recreated when the plugins `args` change.
 
-Plugins add code to every `<T>` component instance. That code acts as if it were
-part of the `<T>` component itself. You have full access to props, event
-listeners and the component instance itself.
+Threlte's [`oncreate`](/docs/reference/core/t#create-event) event is also similar to svelte `actions`. They are similar tools but a big difference is that plugins are hierarchical. Injecting a plugin will add that code to every child `<T>` component instance whereas a custom `oncreate` event would need to be added to each `<T>` component individually. Plugins can be overridden in child components.
+
+The [interactivity plugin in `@threlte/extras`](/docs/reference/extras/interactivity) is an example of what a plugins can do and there are a couple of other examples below.
 
 ## Injecting a Plugin
 
