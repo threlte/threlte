@@ -378,8 +378,8 @@ importers:
   packages/extras:
     dependencies:
       '@threejs-kit/instanced-sprite-mesh':
-        specifier: ^2.4.6
-        version: 2.4.6(@types/three@0.169.0)(three-instanced-uniforms-mesh@0.49.1(three@0.170.0))(three@0.170.0)
+        specifier: ^2.5.0
+        version: 2.5.0(@types/three@0.169.0)(three@0.170.0)
       three-mesh-bvh:
         specifier: ^0.7.4
         version: 0.7.4(three@0.170.0)
@@ -459,9 +459,6 @@ importers:
       three:
         specifier: ^0.170.0
         version: 0.170.0
-      three-instanced-uniforms-mesh:
-        specifier: ^0.49.1
-        version: 0.49.1(three@0.170.0)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -2885,11 +2882,10 @@ packages:
     peerDependencies:
       '@theatre/core': '*'
 
-  '@threejs-kit/instanced-sprite-mesh@2.4.6':
-    resolution: {integrity: sha512-TIo2mrqVKdziYmu/Hv7rEtJlUlAuzoEK8qkOGM2lkn3RR2+BrWHHNlQYXkp7ccl1TpzYDFi8+fzJBZBTZSqI8A==}
+  '@threejs-kit/instanced-sprite-mesh@2.5.0':
+    resolution: {integrity: sha512-W4cRK7f1o15GtacvLi8h1022ySiMM5218eZJQYWHbVGKqpRezmj8hscdzgp4JFSCkRoAIdyIdLZg5U0Mtmcu/w==}
     peerDependencies:
-      three: '>=0.151.0'
-      three-instanced-uniforms-mesh: ^0.49.0
+      three: '>=0.170.0'
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -7436,8 +7432,8 @@ packages:
       react:
         optional: true
 
-  three-instanced-uniforms-mesh@0.49.1:
-    resolution: {integrity: sha512-qPgPLA6JR2nQau2zAODwiVRknYndXNE6aYmTe5zESiwg9hO8AaNq1xC0hWDYOyyH+NbN2G8278NxX1hpZ+2ZgQ==}
+  three-instanced-uniforms-mesh@0.52.0:
+    resolution: {integrity: sha512-YuJigan74qBmt2X8XX4DCxGl42GQXQZWSyy8jos1kqjPyzR7IVl9Jk4HvOGEzb5pI7phVcaArImhaW2FZH3zpA==}
     peerDependencies:
       three: '>=0.125.0'
 
@@ -7548,13 +7544,13 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
-  troika-three-utils@0.49.0:
-    resolution: {integrity: sha512-umitFL4cT+Fm/uONmaQEq4oZlyRHWwVClaS6ZrdcueRvwc2w+cpNQ47LlJKJswpqtMFWbEhOLy0TekmcPZOdYA==}
+  troika-three-utils@0.50.3:
+    resolution: {integrity: sha512-asQWCESikU58y9cz4OgIjCRlITkDTwf7ds8T9IyWxn7OB2A7XItg2UbHjfexwooTefM+BYbEC4ZKxOUBfbNVLA==}
     peerDependencies:
       three: '>=0.125.0'
 
-  troika-three-utils@0.50.3:
-    resolution: {integrity: sha512-asQWCESikU58y9cz4OgIjCRlITkDTwf7ds8T9IyWxn7OB2A7XItg2UbHjfexwooTefM+BYbEC4ZKxOUBfbNVLA==}
+  troika-three-utils@0.52.0:
+    resolution: {integrity: sha512-00oxqIIehtEKInOTQekgyknBuRUj1POfOUE2q1OmL+Xlpp4gIu+S0oA0schTyXsDS4d9DkR04iqCdD40rF5R6w==}
     peerDependencies:
       three: '>=0.125.0'
 
@@ -10264,13 +10260,14 @@ snapshots:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  '@threejs-kit/instanced-sprite-mesh@2.4.6(@types/three@0.169.0)(three-instanced-uniforms-mesh@0.49.1(three@0.170.0))(three@0.170.0)':
+  '@threejs-kit/instanced-sprite-mesh@2.5.0(@types/three@0.169.0)(three@0.170.0)':
     dependencies:
       diet-sprite: 0.0.1
       earcut: 2.2.4
       maath: 0.10.7(@types/three@0.169.0)(three@0.170.0)
       three: 0.170.0
-      three-instanced-uniforms-mesh: 0.49.1(three@0.170.0)
+      three-instanced-uniforms-mesh: 0.52.0(three@0.170.0)
+      troika-three-utils: 0.52.0(three@0.170.0)
     transitivePeerDependencies:
       - '@types/three'
 
@@ -16153,10 +16150,10 @@ snapshots:
     optionalDependencies:
       react: 18.2.0
 
-  three-instanced-uniforms-mesh@0.49.1(three@0.170.0):
+  three-instanced-uniforms-mesh@0.52.0(three@0.170.0):
     dependencies:
       three: 0.170.0
-      troika-three-utils: 0.49.0(three@0.170.0)
+      troika-three-utils: 0.52.0(three@0.170.0)
 
   three-mesh-bvh@0.7.4(three@0.170.0):
     dependencies:
@@ -16270,11 +16267,11 @@ snapshots:
     dependencies:
       three: 0.170.0
 
-  troika-three-utils@0.49.0(three@0.170.0):
+  troika-three-utils@0.50.3(three@0.170.0):
     dependencies:
       three: 0.170.0
 
-  troika-three-utils@0.50.3(three@0.170.0):
+  troika-three-utils@0.52.0(three@0.170.0):
     dependencies:
       three: 0.170.0
 
