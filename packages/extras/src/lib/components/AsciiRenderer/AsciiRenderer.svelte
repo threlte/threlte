@@ -97,7 +97,7 @@
 
   $effect(() => {
     let lastAutoRender = threlteAutoRender.current
-    threlteAutoRender.set(autoRender)
+    threlteAutoRender.set(!autoRender)
     return () => {
       threlteAutoRender.set(lastAutoRender)
       // be sure to turn off the task if the component is destroyed
