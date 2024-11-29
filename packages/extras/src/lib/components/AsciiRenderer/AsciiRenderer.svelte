@@ -41,8 +41,6 @@
     return effect
   })
 
-  $inspect(asciiEffect)
-
   export const getEffect = () => asciiEffect
 
   const sizeStore = fromStore(size)

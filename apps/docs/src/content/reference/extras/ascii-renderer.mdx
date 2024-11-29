@@ -146,10 +146,10 @@ With `options.color` set to false, it isn't much of a problem to have a render t
 
 <Example path="extras/ascii-renderer/auto-render" />
 
-In the example above, `autoRender` is initially set to `true` and rendering occurs as it normally would. The render task is stopped when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames if you only want one frame to be captured.
+`autoRender` is initially set to `true` in the example above and rendering occurs as it normally would. The render task is stopped when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames.
 
-Lastly, `AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out of the renderering task but still use the effect it creates.
+Lastly, `AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates.
 
 <Example path="extras/ascii-renderer/only-effect" />
 
-The example above sets the `options.color` property to `true` but only when the ascii effect is updated. This avoids running the task unnecessarily especially since using `options.color` is a much slower process.
+The example above demonstrates how to render on demand. The scene is only rendered anytime the `color` checkbox is changed. The update causes the `options` object to update which triggers a new effect to be created. The `<Scene>` component is passed the new effect and a rerender occurs.
