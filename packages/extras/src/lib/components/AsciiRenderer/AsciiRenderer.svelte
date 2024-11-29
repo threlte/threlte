@@ -17,10 +17,10 @@
 
   const { autoRender: threlteAutoRender, camera, renderer, renderStage, scene, size } = useThrelte()
 
-  let asciiEffect = $derived.by(() => {
-    // handle case where characters === ''
-    const charSet = characters || defaultCharacters
+  // handle case where characters === ''
+  const charSet = $derived(characters || defaultCharacters)
 
+  const asciiEffect = $derived.by(() => {
     const effect = new AsciiEffect(renderer, charSet, options)
     effect.domElement.style.position = 'absolute'
     effect.domElement.style.top = '0px'
@@ -29,6 +29,8 @@
 
     return effect
   })
+
+  export const getEffect = () => asciiEffect
 
   $effect.pre(() => {
     asciiEffect.setSize($size.width, $size.height)
@@ -44,19 +46,15 @@
 
   $effect(() => {
     renderer.domElement.style.opacity = '0'
-    renderer.domElement.parentNode?.appendChild(asciiEffect.domElement)
     const last = asciiEffect.domElement
+    renderer.domElement.parentNode?.appendChild(last)
     return () => {
       renderer.domElement.style.opacity = '1'
       renderer.domElement.parentNode?.removeChild(last)
     }
   })
 
-  const {
-    start: startRendering,
-    stop: stopRendering,
-    started
-  } = useTask(
+  const { start: startRendering, stop: stopRendering } = useTask(
     () => {
       asciiEffect.render(scene, camera.current)
     },
@@ -85,14 +83,12 @@
   )
 
   $effect(() => {
-    let before = threlteAutoRender.current
+    let lastAutoRender = threlteAutoRender.current
     threlteAutoRender.set(false)
     return () => {
       // be sure to turn off the task if the component is destroyed
-      if ($started) {
-        stop()
-      }
-      threlteAutoRender.set(before)
+      stop()
+      threlteAutoRender.set(lastAutoRender)
     }
   })
 </script>

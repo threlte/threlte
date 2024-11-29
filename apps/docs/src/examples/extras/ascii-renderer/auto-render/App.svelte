@@ -1,8 +1,8 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { AsciiRenderer } from '@threlte/extras'
-  import { Button, Checkbox, Color, Folder, Pane, Slider, Text } from 'svelte-tweakpane-ui'
-  import { Canvas, observe } from '@threlte/core'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { Canvas } from '@threlte/core'
 
   let autoRender = $state(true)
 </script>
