@@ -1,10 +1,10 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import type { AsciiEffect } from 'three/examples/jsm/Addons.js'
+  import type { AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
   import { AsciiRenderer } from '@threlte/extras'
   import { Canvas } from '@threlte/core'
   import { Checkbox, Pane } from 'svelte-tweakpane-ui'
-  import type { AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
 
   let asciiRenderer: Component | undefined = $state()
 

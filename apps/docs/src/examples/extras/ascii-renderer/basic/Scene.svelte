@@ -3,6 +3,7 @@
   import { T } from '@threlte/core'
 
   type SceneProps = { autoRotate: boolean }
+
   let { autoRotate = true }: SceneProps = $props()
 </script>
 
