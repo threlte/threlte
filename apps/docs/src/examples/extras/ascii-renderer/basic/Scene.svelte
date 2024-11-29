@@ -16,6 +16,6 @@
 </T.PerspectiveCamera>
 
 <T.Mesh>
-  <T.MeshStandardMaterial />
+  <T.MeshNormalMaterial />
   <T.TorusKnotGeometry />
 </T.Mesh>

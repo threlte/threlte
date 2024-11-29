@@ -11,13 +11,20 @@
   const defaultCharacters = ' .:-+*=%@#'
   let characters = $state(defaultCharacters)
 
-  let options: AsciiEffectOptions = $state({
-    alpha: 1,
-    block: false,
-    color: false,
-    invert: true,
-    resolution: 0.1,
-    scale: 1
+  let alpha = $state(1)
+  let block = $state(false)
+  let color = $state(false)
+  let invert = $state(true)
+  let resolution = $state(0.1)
+  let scale = $state(1)
+
+  const options: AsciiEffectOptions = $derived({
+    alpha,
+    block,
+    color,
+    invert,
+    resolution,
+    scale
   })
 
   let autoRotate = $state(true)
@@ -36,30 +43,30 @@
     </Folder>
     <Folder title="options">
       <Slider
-        bind:value={options.scale}
+        bind:value={scale}
         label="scale"
         min={1}
         max={3}
         step={1}
       />
       <Slider
-        bind:value={options.resolution}
+        bind:value={resolution}
         label="resolution"
         min={0.05}
         max={0.2}
         step={0.05}
       />
       <Checkbox
-        bind:value={options.invert}
+        bind:value={invert}
         label="invert"
       />
       <Checkbox
-        bind:value={options.color}
+        bind:value={color}
         label="color"
       />
-      {#if options.color}
+      {#if color}
         <Checkbox
-          bind:value={options.block}
+          bind:value={block}
           label="block"
         />
       {/if}
@@ -75,7 +82,7 @@
         }}
         title="reset characters"
       />
-      {#if !options.color}
+      {#if !color}
         <Color
           bind:value={fgColor}
           label="text color"

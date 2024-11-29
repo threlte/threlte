@@ -2,6 +2,7 @@
   import type { AsciiRendererProps } from './types'
   import { AsciiEffect } from 'three/examples/jsm/Addons.js'
   import { observe, useTask, useThrelte } from '@threlte/core'
+  import { fromStore } from 'svelte/store'
 
   const defaultCharacters = ' .:-+*=%@#'
 
@@ -27,7 +28,7 @@
     size
   } = useThrelte()
 
-  // note || instead of ?? handles the case where characters === ''
+  // note || instead of ?? handles the case where `characters` === ''
   const charSet = $derived(characters || defaultCharacters)
 
   const asciiEffect = $derived.by(() => {
@@ -40,14 +41,15 @@
     return effect
   })
 
+  $inspect(asciiEffect)
+
   export const getEffect = () => asciiEffect
 
-  observe.pre(
-    () => [size],
-    ([size]) => {
-      asciiEffect.setSize(size.width, size.height)
-    }
-  )
+  const sizeStore = fromStore(size)
+
+  $effect.pre(() => {
+    asciiEffect.setSize(sizeStore.current.width, sizeStore.current.height)
+  })
 
   $effect.pre(() => {
     asciiEffect.domElement.style.color = fgColor
@@ -99,9 +101,9 @@
     let lastAutoRender = threlteAutoRender.current
     threlteAutoRender.set(autoRender)
     return () => {
+      threlteAutoRender.set(lastAutoRender)
       // be sure to turn off the task if the component is destroyed
       stop()
-      threlteAutoRender.set(lastAutoRender)
     }
   })
 </script>
