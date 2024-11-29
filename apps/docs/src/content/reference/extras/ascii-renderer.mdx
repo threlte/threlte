@@ -120,7 +120,7 @@ The example above uses a character set with two characters - ` ` and `#`.
 
 By default the renderer sets `options.color` to `false` and will only use the colors given by the `fgColor` and `bgColor` props. `fgColor` and `bgColor` can be any acceptable CSS color string. If your color contains an alpha component, make sure to set `options.alpha` to `true`.
 
-If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and the colors of the scene will be used for each individual colors.
+If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and the corresponding color of the scene will be used for each character.
 
 ```svelte
 <AsciiRenderer options={{ color: true }} />
@@ -142,14 +142,16 @@ Because the renderer doesn't support dynamically updating options, any time an o
 
 ## Disabling the Render Task
 
-With `options.color` set to false, it isn't much of a problem to have a render task that runs indefinitely. However, setting `options.color` to true and only needing to render one frame or on demand can be slow. For this reason `<AsciiRenderer>` accepts an `autoRender` prop. If `autoRender` is `true`, the render task will start and run until `autoRender` is set to `false`.
+If at some point your scene doesn't need to be rendered because it no longer will be updated or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
 
-<Example path="extras/ascii-renderer/auto-render" />
-
-`autoRender` is initially set to `true` in the example above and rendering occurs as it normally would. The render task is stopped when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames.
-
-Lastly, `AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates.
+`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates. This can also be used for on-demand rendering.
 
 <Example path="extras/ascii-renderer/only-effect" />
 
-The example above demonstrates how to render on demand. The scene is only rendered anytime the `color` checkbox is changed. The update causes the `options` object to update which triggers a new effect to be created. The `<Scene>` component is passed the new effect and a rerender occurs.
+The example above demonstrates how to render on demand. The scene is only rendered when the `color` checkbox is changes. The change causes the `options` object to update which triggers a new `AsciiEffect` to be created. The `<Scene>` component is passed the new effect and a rerender occurs.
+
+<Tip type="info">
+  A new `AsciiEffect` instance must be created anytime `options` changes because an effect can not
+  have it options changed after it has been created. This is a limitation of the `AsciiEffect` addon
+  from ThreeJS.
+</Tip>
