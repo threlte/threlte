@@ -1,4 +1,6 @@
-import type { AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
+import type { AsciiEffect, AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
+import type { Camera, Scene } from 'three'
+import type { Snippet } from 'svelte'
 
 export type AsciiRendererProps = {
   /**
@@ -40,4 +42,17 @@ export type AsciiRendererProps = {
    * callback that is ran anytime the renderer is stopped
    */
   onstop?: () => void
+
+  /**
+   * scene for the ascii effect to render
+   * @default useThrelte().scene
+   */
+  scene?: Scene
+
+  /**
+   * camera to use when the ascii effect renderers
+   * @default useThrelte().camera.current
+   */
+  camera?: Camera
+  children: Snippet<[{ asciiEffect: AsciiEffect }]>
 }

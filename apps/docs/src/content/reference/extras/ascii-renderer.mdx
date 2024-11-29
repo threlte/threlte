@@ -9,10 +9,29 @@ componentSignature:
     exports:
       [
         { name: 'start', type: '() => void', description: 'Manually start the render task' },
-        { name: 'stop', type: '() => void', description: 'Manually stop the render task' }
+        { name: 'stop', type: '() => void', description: 'Manually stop the render task' },
+        {
+          name: 'getEffect',
+          type: '() => AsciiEffect',
+          description: 'Getter for the underlying AsciiEffect instance'
+        }
       ],
     props:
       [
+        {
+          default: 'useThrelte().camera.current',
+          description: 'the camera to use when renderering',
+          name: 'camera',
+          required: false,
+          type: THREE.Camera
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene to use when renderering',
+          name: 'scene',
+          required: false,
+          type: THREE.Scene
+        },
         {
           default: 'true',
           description: 'whether to automatically run the render task',
@@ -123,8 +142,14 @@ Because the renderer doesn't support dynamically updating options, any time an o
 
 ## Disabling the Render Task
 
-Sometimes you only need to render a single frame. With `options.color` set to false, it isn't much of a problem to have a render task that runs indefinitely. However, setting `options.color` to true and only needing to render one frame or on demand can be too slow. For this reason `<AsciiRenderer>` accepts an `autoRender` prop. If `autoRender` is `true`, the render task will start and run until `autoRender` is set to `false`.
+With `options.color` set to false, it isn't much of a problem to have a render task that runs indefinitely. However, setting `options.color` to true and only needing to render one frame or on demand can be slow. For this reason `<AsciiRenderer>` accepts an `autoRender` prop. If `autoRender` is `true`, the render task will start and run until `autoRender` is set to `false`.
 
 <Example path="extras/ascii-renderer/auto-render" />
 
-In the example above, `autoRender` is set to `true` and rendering occurs as it normally would. `<AsciiRenderer>` is paused when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames if you only want one frame to be captured.
+In the example above, `autoRender` is initially set to `true` and rendering occurs as it normally would. The render task is stopped when `autoRender` is unchecked. This means that the renderer doesn't need to run expensive frames if you only want one frame to be captured.
+
+Lastly, `AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out of the renderering task but still use the effect it creates.
+
+<Example path="extras/ascii-renderer/only-effect" />
+
+The example above sets the `options.color` property to `true` but only when the ascii effect is updated. This avoids running the task unnecessarily especially since using `options.color` is a much slower process.

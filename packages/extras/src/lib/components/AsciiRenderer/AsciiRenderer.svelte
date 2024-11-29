@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { AsciiRendererProps } from './types'
-  import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
+  import { AsciiEffect } from 'three/examples/jsm/Addons.js'
   import { observe, useTask, useThrelte } from '@threlte/core'
 
   const defaultCharacters = ' .:-+*=%@#'
@@ -8,16 +8,26 @@
   let {
     autoRender = true,
     bgColor = '#000000',
+    camera,
     characters = defaultCharacters,
     fgColor = '#ffffff',
-    options = {},
     onstart,
-    onstop
+    onstop,
+    options = {},
+    scene,
+    children
   }: AsciiRendererProps = $props()
 
-  const { autoRender: threlteAutoRender, camera, renderer, renderStage, scene, size } = useThrelte()
+  const {
+    autoRender: threlteAutoRender,
+    camera: defaultCamera,
+    renderStage,
+    renderer,
+    scene: defaultScene,
+    size
+  } = useThrelte()
 
-  // handle case where characters === ''
+  // note || instead of ?? handles the case where characters === ''
   const charSet = $derived(characters || defaultCharacters)
 
   const asciiEffect = $derived.by(() => {
@@ -32,9 +42,12 @@
 
   export const getEffect = () => asciiEffect
 
-  $effect.pre(() => {
-    asciiEffect.setSize($size.width, $size.height)
-  })
+  observe.pre(
+    () => [size],
+    ([size]) => {
+      asciiEffect.setSize(size.width, size.height)
+    }
+  )
 
   $effect.pre(() => {
     asciiEffect.domElement.style.color = fgColor
@@ -56,7 +69,7 @@
 
   const { start: startRendering, stop: stopRendering } = useTask(
     () => {
-      asciiEffect.render(scene, camera.current)
+      asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
     },
     { autoInvalidate: false, autoStart: false, stage: renderStage }
   )
@@ -73,7 +86,7 @@
 
   observe.pre(
     () => [autoRender],
-    (autoRender) => {
+    ([autoRender]) => {
       if (autoRender) {
         start()
       } else {
@@ -84,7 +97,7 @@
 
   $effect(() => {
     let lastAutoRender = threlteAutoRender.current
-    threlteAutoRender.set(false)
+    threlteAutoRender.set(autoRender)
     return () => {
       // be sure to turn off the task if the component is destroyed
       stop()
@@ -92,3 +105,5 @@
     }
   })
 </script>
+
+{@render children?.({ asciiEffect })}

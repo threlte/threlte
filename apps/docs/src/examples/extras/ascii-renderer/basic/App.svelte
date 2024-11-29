@@ -1,6 +1,6 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import type { AsciiEffectOptions } from 'three/examples/jsm/Addon.js'
+  import type { AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
   import { AsciiRenderer } from '@threlte/extras'
   import { Button, Checkbox, Color, Folder, Pane, Slider, Text } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
