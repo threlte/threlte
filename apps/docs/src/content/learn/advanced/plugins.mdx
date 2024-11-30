@@ -4,7 +4,7 @@ category: Advanced
 order: 0
 ---
 
-Plugins allow you to extend Threlte's [`<T>`](/docs/reference/core/t) component. They can be used to add props, event handlers, custom logic and customize the component instance. They are similar to svelte `actions` but differ in that the object referenced by a `<T>` component may be recreated when the plugins `args` change.
+Plugins allow you to extend Threlte's [`<T>`](/docs/reference/core/t) component. They can be used to add props, event handlers, custom logic and customize the component instance. They are similar to [svelte actions](https://svelte.dev/docs/svelte/use) but differ in that the object referenced by a `<T>` component may be recreated when the plugin's `args` change.
 
 Threlte's [`oncreate`](/docs/reference/core/t#create-event) event is also similar to svelte `actions`. They are similar tools but a big difference is that plugins are hierarchical. Injecting a plugin will add that code to every child `<T>` component instance whereas a custom `oncreate` event would need to be added to each `<T>` component individually. Plugins can be overridden in child components.
 
