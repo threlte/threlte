@@ -1,11 +1,11 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   export const hdrs = {
-    industrial: '/hdr/industrial_sunset_puresky_1k.hdr',
-    workshop: '/hdr/aerodynamics_workshop_1k.hdr',
-    puresky: '/hdr/mpumalanga_veld_puresky_1k.hdr'
+    industrial: 'hdr/industrial_sunset_puresky_1k.hdr',
+    workshop: 'hdr/aerodynamics_workshop_1k.hdr',
+    puresky: 'hdr/mpumalanga_veld_puresky_1k.hdr'
   } as const
 
   const isHdrKey = (u: PropertyKey): u is keyof typeof hdrs => {
@@ -41,6 +41,7 @@
   }: SceneProps = $props()
 
   const loader = useLoader(RGBELoader)
+  loader.loader.setPath('/environment-maps/')
   const textures = loader.load(hdrs, {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping

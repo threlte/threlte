@@ -1,21 +1,30 @@
 <script lang="ts">
-  import type { Scene, Texture } from 'three'
-  import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import type { CubeTexture, Scene } from 'three'
+  import { CubeTextureLoader } from 'three'
+  import { HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
+  import { Previous } from './Previous.svelte'
   import { observe, useThrelte } from '@threlte/core'
   import { untrack } from 'svelte'
   import { useSuspense } from '../../suspense/useSuspense'
-  import { Previous } from './Previous.svelte'
+
+  type CubeFiles = [
+    positiveX: string,
+    negativeX: string,
+    positiveY: string,
+    negativeY: string,
+    positiveZ: string,
+    negativeZ: string
+  ]
 
   type Props = {
-    file: string
+    files: CubeFiles
     isBackground?: boolean
     onprogress?: (event: ProgressEvent) => void
     path?: string
     scene?: Scene
   }
 
-  let { file, isBackground, onprogress, path = '', scene }: Props = $props()
+  let { files, isBackground, onprogress, path = '', scene }: Props = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
@@ -34,23 +43,22 @@
     }
   })
 
-  const isHDR = $derived(file.endsWith('hdr'))
-  const isEXR = $derived(file.endsWith('exr'))
+  const firstFile = $derived(files[0])
 
-  const loaderMap: Partial<{ hdr: RGBELoader; exr: EXRLoader; tex: TextureLoader }> = {}
+  const isHDR = $derived(firstFile.endsWith('hdr'))
+
+  const loaderMap: Partial<{ hdr: HDRCubeTextureLoader; tex: CubeTextureLoader }> = {}
 
   // if its not in the loaderMap, create the loader instance then put it into the map then return it
   const loader = $derived(
     isHDR
-      ? (loaderMap['hdr'] ??= new RGBELoader())
-      : isEXR
-        ? (loaderMap['exr'] ??= new EXRLoader())
-        : (loaderMap['tex'] ??= new TextureLoader())
+      ? (loaderMap['hdr'] ??= new HDRCubeTextureLoader())
+      : (loaderMap['tex'] ??= new CubeTextureLoader())
   )
 
   const suspend = useSuspense()
 
-  let texture: Texture | undefined = $state()
+  let texture: CubeTexture | undefined = $state()
 
   $effect(() => {
     if (texture !== undefined) {
@@ -80,18 +88,18 @@
 
   // anytime path changes, we need to reload because a user could have a file with the same name and extension at `path1/file.ext` and `path2/file.ext`
   observe(
-    () => [path, file],
-    ([path, file]) => {
+    () => [path, files],
+    ([path, files]) => {
       loader.setPath(path)
       // threejs's loaders cache their results
-      suspend(loader.loadAsync(file, onprogress))
-        .then((texture) => {
-          texture.mapping = EquirectangularReflectionMapping
-          return texture
+      suspend(
+        new Promise<CubeTexture>((resolve, reject) => {
+          // cubetexture loaders don't implement `loadAsync` over a files array :(
+          loader.load(files, resolve, onprogress, reject)
         })
-        .then((t) => {
-          texture = t
-        })
+      ).then((t) => {
+        texture = t
+      })
     }
   )
 </script>
