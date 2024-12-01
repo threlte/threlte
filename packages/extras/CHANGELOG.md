@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 9.0.0-next.41
+
+### Minor Changes
+
+- 9eecd88: Add <AsciiRenderer>
+
+### Patch Changes
+
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+
 ## 9.0.0-next.40
 
 ### Patch Changes
