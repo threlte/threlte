@@ -133,7 +133,7 @@ If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and
 
 ## Other Options Props
 
-Because the renderer doesn't support dynamically updating options, any time an `options` property changes, a new `AsciiEffect` is created inside `<AsciiRenderer`. For this reason, `options` is passed as an object to `<AsciiRenderer>`
+Because the effect doesn't support dynamically updating options, any time an `options` property changes, a new `AsciiEffect` is created inside `<AsciiRenderer`. For this reason, `options` is passed as an object to `<AsciiRenderer>`
 
 - `options.block` makes the characters into color blocks. It is only applied if `options.color` is `true`.
 - `options.invert` inverts the `fgColor` and `bgColor` colors.
@@ -148,9 +148,9 @@ Because the renderer doesn't support dynamically updating options, any time an `
 
 ## Disabling the Render Task
 
-If at some point your scene doesn't need to be rendered because it no longer will update or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
+If at some point your scene doesn't need to be rendered because it will no longer update or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
 
-`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates. This can also be used for on-demand rendering.
+`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This allows you to opt out of `AsciiEffect`'s renderering task but still use the effect it creates. It can also be used for on-demand rendering.
 
 <Example path="extras/ascii-renderer/only-effect" />
 
