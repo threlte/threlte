@@ -118,7 +118,7 @@ The example above uses a character set with two characters - ` ` and `#`.
 
 ## Colors
 
-By default the renderer sets `options.color` to `false` and will only use the colors given by the `fgColor` and `bgColor` props. `fgColor` and `bgColor` can be any acceptable CSS color string. If your color contains an alpha component, make sure to set `options.alpha` to `true`.
+By default the renderer sets `options.color` to `false` and will only use the colors given by the `fgColor` and `bgColor` props. `fgColor` and `bgColor` can be any acceptable CSS color string. If your colors contain an alpha component, make sure to set `options.alpha` to `true`.
 
 If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and the corresponding color of the scene will be used for each character.
 
@@ -133,25 +133,25 @@ If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and
 
 ## Other Options Props
 
-Because the renderer doesn't support dynamically updating options, any time an option property changes, a new renderer must be created. For this reason, `options` is passed as an object to `<AsciiRenderer>`
+Because the renderer doesn't support dynamically updating options, any time an `options` property changes, a new `AsciiEffect` is created inside `<AsciiRenderer`. For this reason, `options` is passed as an object to `<AsciiRenderer>`
 
 - `options.block` makes the characters into color blocks. It is only applied if `options.color` is `true`.
 - `options.invert` inverts the `fgColor` and `bgColor` colors.
 - `options.resolution` controls how detailed the render is.
 - `options.scale` controls the scale of the characters. Note that zooming the camera does not control the size of the characters.
 
-## Disabling the Render Task
-
-If at some point your scene doesn't need to be rendered because it no longer will be updated or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
-
-`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates. This can also be used for on-demand rendering.
-
-<Example path="extras/ascii-renderer/only-effect" />
-
-The example above demonstrates how to render on demand. The scene is only rendered when the `color` checkbox is changes. The change causes the `options` object to update which triggers a new `AsciiEffect` to be created. The `<Scene>` component is passed the new effect and a rerender occurs.
-
 <Tip type="info">
   A new `AsciiEffect` instance must be created anytime `options` changes because an effect can not
   have it options changed after it has been created. This is a limitation of the `AsciiEffect` addon
   from ThreeJS.
 </Tip>
+
+## Disabling the Render Task
+
+If at some point your scene doesn't need to be rendered because it no longer will update or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
+
+`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This is useful if you want to opt out `AsciiEffect`'s renderering task but still use the effect it creates. This can also be used for on-demand rendering.
+
+<Example path="extras/ascii-renderer/only-effect" />
+
+The example above demonstrates how to render on demand. The scene is only rendered when the `color` checkbox changes. The change causes the `options` object to update which triggers a new `AsciiEffect` to be created. The effect is passed into the `<Scene>` component and an `$effect` is used to rerender the scene.
