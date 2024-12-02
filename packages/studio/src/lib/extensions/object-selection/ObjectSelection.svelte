@@ -13,9 +13,12 @@
     type ObjectSelectionState
   } from './types'
   import { useOnRemove } from '../../internal/useOnRemove'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  import { tick } from 'svelte'
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
+  const studioObjectRegistry = useStudioObjectsRegistry()
 
   const extension = createExtension<ObjectSelectionState, ObjectSelectionActions>({
     scope: objectSelectionScope,
@@ -90,9 +93,11 @@
     }
   })
 
-	useOnRemove((object) => {
-		extension.removeFromSelection([object])
-	})
+  useOnRemove(async (object) => {
+    await tick()
+    if (studioObjectRegistry.isOrIsChildOfStudioObject(object)) return
+    extension.removeFromSelection([object])
+  })
 </script>
 
 {#if extension.state.mode === 'tweak'}
