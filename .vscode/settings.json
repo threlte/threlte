@@ -30,7 +30,7 @@
         "name": "$(new-file) Changeset",
         "color": "green",
         "singleInstance": true,
-        "command": " npx changeset"
+        "command": " npx @changesets/cli"
       },
       {
         "cwd": "${workspaceFolder}",
