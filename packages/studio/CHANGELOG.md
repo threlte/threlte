@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.20
+
+### Patch Changes
+
+- f619a72: Fix dependencies
+
 ## 0.1.0-next.19
 
 ### Patch Changes
