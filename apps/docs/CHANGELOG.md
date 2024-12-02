@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.0-next.1
+
+### Patch Changes
+
+- 2acb567: [next] AsciiRenderer docs update
+
 ## 0.14.0-next.0
 
 ### Minor Changes
