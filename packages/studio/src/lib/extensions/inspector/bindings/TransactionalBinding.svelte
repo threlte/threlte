@@ -47,6 +47,7 @@
       write: (value: any) => any
     }
     ref?: BindingRef
+    options?: any
   }
 
   let { objects, key, label, autoUpdate, ref = $bindable(), transform, ...rest }: Props = $props()

@@ -69,6 +69,11 @@
       objects={materials}
       key="transparent"
       label="transparent"
+      on:change={() => {
+        materials.forEach((material) => {
+          material.needsUpdate = true
+        })
+      }}
     />
   {/if}
 
