@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   /**
    * If the target is an object,it very likely has a clone method. We use that
