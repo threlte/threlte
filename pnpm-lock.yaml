@@ -728,12 +728,21 @@ importers:
       camera-controls:
         specifier: ^2.8.3
         version: 2.8.5(three@0.170.0)
+      estree-walker:
+        specifier: ^3.0.3
+        version: 3.0.3
       flexible-tree:
         specifier: ^0.1.6
         version: 0.1.6
       index-to-position:
         specifier: ^1.0.0
         version: 1.0.0
+      kleur:
+        specifier: ^4.1.5
+        version: 4.1.5
+      magic-string:
+        specifier: ^0.30.10
+        version: 0.30.10
       svelte-tweakpane-ui:
         specifier: ^1.2.3
         version: 1.3.0(svelte@5.1.10)
@@ -792,15 +801,6 @@ importers:
       eslint-plugin-svelte:
         specifier: ^2.36.0
         version: 2.36.0(eslint@9.0.0)(svelte@5.1.10)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.4.5))
-      estree-walker:
-        specifier: ^3.0.3
-        version: 3.0.3
-      kleur:
-        specifier: ^4.1.5
-        version: 4.1.5
-      magic-string:
-        specifier: ^0.30.10
-        version: 0.30.10
       prettier:
         specifier: ^3.2.5
         version: 3.3.2
