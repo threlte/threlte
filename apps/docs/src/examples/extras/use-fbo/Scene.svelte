@@ -1,68 +1,87 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
+  import { OrbitControls, Sky, useFBO, useGltf } from '@threlte/extras'
+  import {
+    CameraHelper,
+    Group,
+    Mesh,
+    MeshStandardMaterial,
+    PerspectiveCamera,
+    PlaneGeometry
+  } from 'three'
 
-  import { interactivity, OrbitControls, Sky, useFBO } from '@threlte/extras'
+  const gltf = useGltf('/models/Duck.glb')
 
-  import { Mesh, PerspectiveCamera, Vector2 } from 'three'
-
-  interactivity()
-
-  const { camera, renderer, scene, size } = useThrelte()
-
-  // render scene at a lower resolution
-  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
-    samples: 4
+  const { renderer, scene } = useThrelte()
+  const fbo = useFBO({
+    size: {
+      width: 1024,
+      height: 2048
+    }
   })
 
-  // change aspect ratio of the texture because we are putting it on a circle so w and h are the same
-  const aspect = new Vector2($size.height / $size.width, 1).normalize()
-  renderTarget.texture.repeat.set(aspect.x, aspect.y)
-  renderTarget.texture.offset.x = -0.5 * (aspect.x - 1)
-  renderTarget.texture.offset.y = -0.5 * (aspect.y - 1)
+  const group = new Group()
 
-  let fboPreviewMesh: Mesh
+  const cameraMeshHeight = 1
+  const cameraRotationRadius = 5
 
-  let knotRotation = 0
+  // create the plane and other camera in the script tag so that we don't have to bind to the ref and worry about `undefined` cases
+  const rotatingCamera = new PerspectiveCamera(40, 1, 2, 8)
+  const helper = new CameraHelper(rotatingCamera)
 
+  const planeMesh = new Mesh(new PlaneGeometry(), new MeshStandardMaterial({ map: fbo.texture }))
+  planeMesh.position.setZ(-1 * (cameraMeshHeight + cameraRotationRadius))
+  planeMesh.scale.setScalar(10)
+
+  let time = 0
   useTask((delta) => {
-    knotRotation += delta
-    if (!fboPreviewMesh) return
-    const cam = $camera as PerspectiveCamera
+    time += delta * 0.2
+    const c = Math.cos(time)
+    const s = Math.sin(time)
+    rotatingCamera.position.set(cameraRotationRadius * c, 2 * c * s, cameraRotationRadius * s)
+    rotatingCamera.lookAt(group.position)
 
-    fboPreviewMesh.visible = false
-    renderer.setRenderTarget(renderTarget)
-    renderer.render(scene, cam)
+    planeMesh.visible = false
+    helper.visible = false
+    const lastRenderTarget = renderer.getRenderTarget()
 
-    fboPreviewMesh.visible = true
-    renderer.setRenderTarget(null)
+    renderer.setRenderTarget(fbo)
+    renderer.render(scene, rotatingCamera)
+
+    helper.visible = true
+    planeMesh.visible = true
+    renderer.setRenderTarget(lastRenderTarget)
   })
 </script>
 
 <T.PerspectiveCamera
+  position.x={5}
+  position.y={5}
+  position.z={10}
   makeDefault
-  position={[5, 1, 5]}
 >
   <OrbitControls />
 </T.PerspectiveCamera>
 
+<T.AmbientLight />
+
 <Sky />
 
-<T.Mesh
-  rotation.x={knotRotation}
-  rotation.z={knotRotation}
->
-  <T.TorusKnotGeometry />
-  <T.MeshStandardMaterial />
-</T.Mesh>
+<T
+  is={rotatingCamera}
+  manual
+/>
+<T
+  is={helper}
+  attach={scene}
+/>
 
-<T.Mesh
-  position.z={-5}
-  position.x={-0.1}
-  bind:ref={fboPreviewMesh}
->
-  <T.PlaneGeometry args={[5, 5]} />
-  <T.MeshBasicMaterial
-    map={renderTarget.texture}
-    color="#CCFFCC"
-  />
-</T.Mesh>
+<T is={planeMesh} />
+
+<T is={group}>
+  <T.Group position.y={-1}>
+    {#await gltf then { scene }}
+      <T is={scene} />
+    {/await}
+  </T.Group>
+</T>
