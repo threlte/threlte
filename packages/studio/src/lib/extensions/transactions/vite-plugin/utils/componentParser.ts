@@ -1,5 +1,5 @@
-import type { Expression, Node } from 'estree'
-import { walk } from 'estree-walker'
+import type { Expression } from 'estree'
+import { walk, type Node } from 'estree-walker'
 import MagicString from 'magic-string'
 import { createHash } from 'node:crypto'
 import { parse } from 'svelte/compiler'
@@ -355,8 +355,7 @@ export const removeAttribute = (
  */
 export const readAttribute = (markup: MagicString, node: TComponentNode, attributeName: string) => {
   const attribute = node.attributes.find((attr) => attr.name === attributeName)
-  if (!attribute) throw new Error('Attribute not found')
-
+  if (!attribute) throw new Error(`Attribute not found with name ${attributeName}`)
   if (isAttributeWithBooleanValue(attribute)) {
     return true
   } else if (isAttributeWithTextValue(attribute)) {
@@ -365,7 +364,7 @@ export const readAttribute = (markup: MagicString, node: TComponentNode, attribu
     const firstValue = attribute.value[0]
     return JSON.parse(markup.slice(firstValue.start + 1, firstValue.end - 1))
   } else if (isAttributeWithShorthandValue(attribute)) {
-    throw new Error('Shorthand attributes are not supported')
+    throw new Error('Shorthand props are not supported.')
   } else {
     throw new Error('Unknown attribute type')
   }

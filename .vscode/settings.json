@@ -33,6 +33,13 @@
         "command": " npx changeset"
       },
       {
+        "cwd": "${workspaceFolder}",
+        "name": "$(test-view-icon) Test",
+        "color": "orange",
+        "singleInstance": true,
+        "command": " pnpm test"
+      },
+      {
         "cwd": "${workspaceFolder}/apps/docs",
         "name": "$(book) Docs",
         "color": "#2F7DC6",

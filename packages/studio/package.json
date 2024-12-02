@@ -5,13 +5,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite dev",
-    "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
+    "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && node ./scripts/fix-extensions.js && publint",
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check .",
     "format": "prettier --write .",
-    "cleanup": "rimraf node_modules .svelte-kit dist"
+    "cleanup": "rimraf node_modules .svelte-kit dist",
+    "test": "vitest"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.3.1",
@@ -20,6 +21,7 @@
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@threlte/core": "workspace:*",
     "@threlte/extras": "workspace:*",
+    "@types/estree": "^1.0.6",
     "@types/node": "^20.12.7",
     "@types/three": "^0.169.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
@@ -31,6 +33,7 @@
     "eslint-plugin-svelte": "^2.36.0",
     "estree-walker": "^3.0.3",
     "index-to-position": "^1.0.0",
+    "kleur": "^4.1.5",
     "magic-string": "^0.30.10",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
@@ -44,11 +47,13 @@
     "tslib": "^2.6.2",
     "typescript": "5.4.5",
     "vite": "^5.2.8",
-    "vite-dev-rpc": "^0.1.4"
+    "vite-dev-rpc": "^0.1.4",
+    "vitest": "^2.1.5"
   },
   "peerDependencies": {
     "svelte": ">=5",
-    "three": ">=0.152"
+    "three": ">=0.152",
+    "vite": ">=5"
   },
   "type": "module",
   "exports": {
@@ -96,7 +101,8 @@
       "./vite": {
         "types": "./dist/vite.d.ts",
         "import": "./dist/vite.js",
-        "svelte": "./dist/vite.js"
+        "svelte": "./dist/vite.js",
+        "default": "./dist/vite.js"
       }
     }
   },

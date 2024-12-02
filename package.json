@@ -14,7 +14,8 @@
     "format": "pnpm -r --aggregate-output format",
     "prettier": "pnpm -r --aggregate-output lint",
     "release": "changeset publish",
-    "cleanup": "turbo run cleanup && rimraf node_modules"
+    "cleanup": "turbo run cleanup && rimraf node_modules",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
@@ -31,5 +32,6 @@
     "pnpm": "^9.0.0",
     "node": ">=16.0.0"
   },
+  "packageManager": "pnpm@9.4.0",
   "type": "module"
 }
