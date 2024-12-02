@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.21
+
+### Patch Changes
+
+- 92254dd: Do not try to remove studio objects from selection (prevents infinite loop)
+
 ## 0.1.0-next.20
 
 ### Patch Changes
