@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.22
+
+### Patch Changes
+
+- 1b808c5: material recompilation on transparency change
+
 ## 0.1.0-next.21
 
 ### Patch Changes
