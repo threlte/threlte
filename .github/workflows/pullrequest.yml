@@ -7,7 +7,7 @@ on:
       - next
 
 jobs:
-  prettier:
+  validations:
     runs-on: ubuntu-latest
 
     steps:
