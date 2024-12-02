@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 9.0.0-next.42
+
+### Major Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
 ## 9.0.0-next.41
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @threlte/docs-next
 
+## 0.14.0-next.2
+
+### Patch Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
 ## 0.14.0-next.1
 
 ### Patch Changes
