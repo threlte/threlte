@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.19
+
+### Patch Changes
+
+- 1b3bd0e: Several minor fixes, adapt vite plugin export to documentation
+
 ## 0.1.0-next.18
 
 ### Patch Changes
