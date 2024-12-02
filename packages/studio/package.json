@@ -32,7 +32,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.36.0",
     "estree-walker": "^3.0.3",
-    "index-to-position": "^1.0.0",
     "kleur": "^4.1.5",
     "magic-string": "^0.30.10",
     "prettier": "^3.2.5",
@@ -47,7 +46,6 @@
     "tslib": "^2.6.2",
     "typescript": "5.4.5",
     "vite": "^5.2.8",
-    "vite-dev-rpc": "^0.1.4",
     "vitest": "^2.1.5"
   },
   "peerDependencies": {
@@ -113,6 +111,8 @@
     "camera-controls": "^2.8.3",
     "flexible-tree": "^0.1.6",
     "svelte-tweakpane-ui": "^1.2.3",
-    "tweakpane": "4.0.3"
+    "tweakpane": "4.0.3",
+    "vite-dev-rpc": "^0.1.4",
+    "index-to-position": "^1.0.0"
   }
 }
