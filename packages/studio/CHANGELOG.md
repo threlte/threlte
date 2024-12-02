@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.18
+
+### Patch Changes
+
+- 32c76bf: FIx the studio plugin (add extensions to imports)
+
 ## 0.1.0-next.17
 
 ### Patch Changes
