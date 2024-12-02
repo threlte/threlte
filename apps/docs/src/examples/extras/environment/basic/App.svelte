@@ -49,7 +49,7 @@
   position="fixed"
 >
   <Checkbox
-    label="use environment"
+    label="use <Environment>"
     bind:value={useEnvironment}
   />
   <Folder title="camera">

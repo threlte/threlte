@@ -1,97 +1,58 @@
 ---
 order: 7.15
 category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/Environment/Environment.svelte'
+sourcePath: 'packages/extras/src/lib/components/environment/Environment.svelte'
 name: <Environment>
 type: 'component'
 componentSignature:
   {
     props:
       [
-        { name: 'path', type: 'string', required: false, description: 'Defaults to "/"' },
+        { default: "'/'", name: 'path', required: false, type: 'string' },
         {
-          name: 'files',
-          type: 'string | string[]',
+          description: 'the environment file to load',
+          name: 'file',
           required: true,
-          description: 'Provide a string to use an equirectangular envmap and a string array to use a cubic envmap'
+          type: 'string'
         },
         {
+          default: 'false',
+          description: "whether to set `scene`'s background to the loaded environment file",
           name: 'isBackground',
-          type: 'boolean',
           required: false,
-          description: 'Boolean to toggle whether to use envmap as a scene background.'
+          type: 'boolean'
         },
         {
-          name: 'groundProjection',
-          type: 'Props<GroundProjectedEnv>',
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
           required: false,
-          description: 'Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.'
-        },
-        {
-          name: 'format',
-          type: "'ldr' | 'hdr'",
-          required: false,
-          description: 'Use `ldr` for .png, .jpg and `hdr` for .hdr file formats'
-        },
-        {
-          name: 'encoding',
-          type: 'TextureEncoding',
-          required: false,
-          description: 'Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular'
+          type: 'THREE.Scene'
         }
       ]
   }
 ---
 
+Asynchronously loads a single file environment map file and sets the provived scene's `environment` and or `background` to the environment map when loaded.
+
+`<Example path="extras/environment/basic" />`
+
+## Loading Different File Types
+
+`<Environment>` supports loading `.exr`, `.hdr`, and any file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `file` prop to use any of these kinds of files and `<Environment>` will handle the job of disposing of the previous texture and assigning the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+
+<Tip type="info">
+	`<Environment>` only holds onto one texture at any given time. Any time it has to load a new texture file, it disposes of the old one. It also disposes of the texture when it unmounts.
+	</Tip>
+
+## Restoring Environment and Background on Scene Prop Updates
+
+All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the `environment` and `background` properties of the last scene before updating the new one.
+
+The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment map to be applied to either the left or the right side. You can observe that when the side changes, the original `background` and `environment` for that current side are restored.
+
 <Example path="extras/environment/swapping-scenes" />
 
-Scene environment map implementation with included loaders and ground projected environment.
+## Suspended Loading
 
-<Example path="extras/environment/basic" />
-
-### Usage
-
-Pass absolute path to `path`. For example, if you are using sveltekit and you put your files in `static/envmap/hdr` then path will be `/envmap/hdr/`
-
-The component decides whether to use **cubic** or **equirectangular** map based on the `files` prop. Provide a string array for cubic or a string for equirectangular.
-
-Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format is inferred based on file extension but it can be provided in `format` prop.
-
-`isBackground` prop controls if environment is set as the background of `scene`. This is not related to GroundProjection which produces a faux background effect by creating a spherical object textured by the provided environment.
-
-To enable GroundProjection pass a configuration object as a `groundProjection` prop. The most common use case is to pass radius, height and scale (`{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100}`) however, you can pass any props you would pass `THREE.Mesh` since it is built as its extension.
-
-```svelte
-<!-- Cubic jpg envmap -->
-<Environment
-  path="/envmap/bridge_cube/"
-  files={['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']}
-  isBackground={true}
-  format="ldr"
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
-/>
-
-<!-- Equirectangular jpg envmap -->
-<Environment
-  path="/envmap/"
-  files="pisa_1k.jpg"
-  isBackground={true}
-/>
-
-<!-- Cubic hdr envmap -->
-<Environment
-  path="/envmap/pisaHdr/"
-  files={[['px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr']]}
-  isBackground={true}
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
-/>
-
-<!-- Equirectangular hdr envmap -->
-<Environment
-  path="/envmap/"
-  files="shanghai_riverside_1k.hdr"
-  isBackground={true}
-  format="hdr"
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
-/>
-```
+Textures are loaded asynchronously and suspended so they may be used in a suspense context. This means if you're fetching the file over the network, you can show something in the "loading" snippet of a `<Suspense>` component.

@@ -1,97 +1,96 @@
 <script lang="ts">
-  import type { Scene, Texture } from 'three'
+  import type { EnvLoaderMap, EnvProps } from './types'
+  import type { Texture } from 'three'
   import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
-  import { observe, useThrelte } from '@threlte/core'
-  import { untrack } from 'svelte'
-  import { useSuspense } from '../../suspense/useSuspense'
   import { Previous } from './Previous.svelte'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import { useThrelte } from '@threlte/core'
 
-  type Props = {
-    file: string
-    isBackground?: boolean
-    onprogress?: (event: ProgressEvent) => void
-    path?: string
-    scene?: Scene
-  }
-
-  let { file, isBackground, onprogress, path = '', scene }: Props = $props()
+  let { file, isBackground = false, path = '/', scene }: EnvProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
   const _scene = $derived(scene ?? defaultScene)
-  const savedBackground = $derived(_scene.background)
-
-  const savedEnvironment = $derived(_scene.environment)
 
   const lastScene = new Previous(() => _scene)
 
+  // save these to restore them if `_scene` changes and on unmount
+  const lastEnvironment = $derived(_scene.environment)
+  const lastBackground = $derived(_scene.background)
+
   $effect(() => {
     if (lastScene.current !== undefined) {
-      lastScene.current.background = savedBackground
+      lastScene.current.environment = lastEnvironment
+    }
+  })
 
-      lastScene.current.environment = savedEnvironment
+  $effect(() => {
+    if (lastScene.current !== undefined) {
+      lastScene.current.background = lastBackground
+    }
+  })
+
+  let environment: Texture | undefined = $state()
+
+  $effect(() => {
+    if (isBackground) {
+      if (environment !== undefined) {
+        _scene.background = environment
+        invalidate()
+      }
+    }
+    return () => {
+      _scene.background = lastBackground
+      invalidate()
     }
   })
 
   const isHDR = $derived(file.endsWith('hdr'))
   const isEXR = $derived(file.endsWith('exr'))
 
-  const loaderMap: Partial<{ hdr: RGBELoader; exr: EXRLoader; tex: TextureLoader }> = {}
+  const loaderMap: Partial<EnvLoaderMap> = {}
 
-  // if its not in the loaderMap, create the loader instance then put it into the map then return it
-  const loader = $derived(
-    isHDR
+  // get the loader out of the loader map, if its not there yet, make a new one
+  const loader = $derived.by(() => {
+    const loader = isHDR
       ? (loaderMap['hdr'] ??= new RGBELoader())
       : isEXR
         ? (loaderMap['exr'] ??= new EXRLoader())
         : (loaderMap['tex'] ??= new TextureLoader())
-  )
+    loader.setPath(path)
+    return loader
+  })
+
+  $effect(() => {
+    if (environment !== undefined) {
+      _scene.environment = environment
+      invalidate()
+    }
+    return () => {
+      _scene.environment = lastEnvironment
+      invalidate()
+    }
+  })
 
   const suspend = useSuspense()
 
-  let texture: Texture | undefined = $state()
-
+  // anytime path changes, we need to reload because a user could have a file with the same name and extension. for example `path1/file.ext` and `path2/file.ext`
   $effect(() => {
-    if (texture !== undefined) {
-      _scene.environment = texture
-      invalidate()
-    }
+    // threejs's loaders cache their results
+    const suspendedTexture = suspend(loader.loadAsync(file)).then((texture) => {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    })
+    suspendedTexture.then((texture) => {
+      environment = texture
+    })
+    // dispose on unmount and whenever path or file has updated
+    // this is important to do in a `.then` because the component may unmount before the texture has loaded.
     return () => {
-      _scene.environment = untrack(() => savedEnvironment)
-      invalidate()
+      suspendedTexture.then((texture) => {
+        texture.dispose()
+      })
     }
   })
-
-  $effect(() => {
-    if (isBackground) {
-      if (texture !== undefined) {
-        _scene.background = texture
-      }
-    } else {
-      _scene.background = untrack(() => savedBackground)
-    }
-    invalidate()
-    return () => {
-      _scene.background = untrack(() => savedBackground)
-      invalidate()
-    }
-  })
-
-  // anytime path changes, we need to reload because a user could have a file with the same name and extension at `path1/file.ext` and `path2/file.ext`
-  observe(
-    () => [path, file],
-    ([path, file]) => {
-      loader.setPath(path)
-      // threejs's loaders cache their results
-      suspend(loader.loadAsync(file, onprogress))
-        .then((texture) => {
-          texture.mapping = EquirectangularReflectionMapping
-          return texture
-        })
-        .then((t) => {
-          texture = t
-        })
-    }
-  )
 </script>

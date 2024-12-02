@@ -1,6 +1,11 @@
+import type { ColorSpace, CubeTextureLoader, Scene, TextureLoader } from 'three'
+import type {
+  EXRLoader,
+  GroundedSkybox,
+  HDRCubeTextureLoader,
+  RGBELoader
+} from 'three/examples/jsm/Addons.js'
 import type { Props } from '@threlte/core'
-import type { ColorSpace } from 'three'
-import type { GroundedSkybox } from 'three/examples/jsm/Addons.js'
 
 export type EnvironmentProps = {
   /**
@@ -28,3 +33,64 @@ export type EnvironmentProps = {
    */
   colorSpace?: ColorSpace
 }
+
+export type EnvProps = {
+  /**
+   * the enviroment file to load
+   */
+  file: string
+
+  /**
+   * whether to set the `scene`'s background to the loaded environment
+   * @default false
+   */
+  isBackground?: boolean
+
+  /**
+   * passed to the loader's `setPath` function. used to tell the loader where to find files
+   * @default ''
+   */
+  path?: string
+
+  /**
+   * the scene to update when the texture has loaded.
+   * @default useThrelte().scene
+   */
+  scene?: Scene
+}
+
+export type EnvLoaderMap = { exr: EXRLoader; hdr: RGBELoader; tex: TextureLoader }
+
+export type CubeEnvProps = {
+  /**
+   * the files to load for the cube texture
+   */
+  files: [
+    positiveX: string,
+    negativeX: string,
+    positiveY: string,
+    negativeY: string,
+    positiveZ: string,
+    negativeZ: string
+  ]
+
+  /**
+   * whether to set the `scene`'s background to the loaded environment
+   * @default false
+   */
+  isBackground?: boolean
+
+  /**
+   * passed to the loader's `setPath` function. used to tell the loader where to find files
+   * @default ''
+   */
+  path?: string
+
+  /**
+   * the scene to update when the texture has loaded.
+   * @default useThrelte().scene
+   */
+  scene?: Scene
+}
+
+export type CubeEnvLoaderMap = { hdr: HDRCubeTextureLoader; tex: CubeTextureLoader }
