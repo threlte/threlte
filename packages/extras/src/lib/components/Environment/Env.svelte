@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { EnvLoaderMap, EnvProps } from './types'
-  import type { Texture } from 'three'
+  import type { Scene, Texture } from 'three'
   import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
   import { Previous } from './Previous.svelte'
@@ -13,36 +13,57 @@
 
   const _scene = $derived(scene ?? defaultScene)
 
+  let initialBackground: Scene['background'] | undefined
+  let initialEnvironment: Scene['environment'] | undefined
+
   const lastScene = new Previous(() => _scene)
-
-  // save these to restore them if `_scene` changes and on unmount
-  const lastEnvironment = $derived(_scene.environment)
-  const lastBackground = $derived(_scene.background)
-
-  $effect(() => {
-    if (lastScene.current !== undefined) {
-      lastScene.current.environment = lastEnvironment
-    }
-  })
-
-  $effect(() => {
-    if (lastScene.current !== undefined) {
-      lastScene.current.background = lastBackground
-    }
-  })
 
   let environment: Texture | undefined = $state()
 
   $effect(() => {
+    if (lastScene.current !== undefined) {
+      if (initialBackground !== undefined) {
+        lastScene.current.background = initialBackground
+        initialBackground = undefined
+      }
+      if (initialEnvironment !== undefined) {
+        lastScene.current.environment = initialEnvironment
+        initialEnvironment = undefined
+      }
+    }
+  })
+
+  $effect(() => {
     if (isBackground) {
       if (environment !== undefined) {
+        if (initialBackground === undefined) {
+          initialBackground = _scene.background
+        }
         _scene.background = environment
         invalidate()
       }
+      return () => {
+        if (initialBackground !== undefined) {
+          _scene.background = initialBackground
+        }
+        invalidate()
+      }
     }
-    return () => {
-      _scene.background = lastBackground
+  })
+
+  $effect(() => {
+    if (environment !== undefined) {
+      if (initialEnvironment === undefined) {
+        initialEnvironment = _scene.environment
+      }
+      _scene.environment = environment
       invalidate()
+      return () => {
+        if (initialEnvironment !== undefined) {
+          _scene.environment = initialEnvironment
+        }
+        invalidate()
+      }
     }
   })
 
@@ -51,7 +72,7 @@
 
   const loaderMap: Partial<EnvLoaderMap> = {}
 
-  // get the loader out of the loader map, if its not there yet, make a new one
+  // get the loader out of the loader map, if its not there yet, make a new one, add it to the map and return it
   const loader = $derived.by(() => {
     const loader = isHDR
       ? (loaderMap['hdr'] ??= new RGBELoader())
@@ -60,17 +81,6 @@
         : (loaderMap['tex'] ??= new TextureLoader())
     loader.setPath(path)
     return loader
-  })
-
-  $effect(() => {
-    if (environment !== undefined) {
-      _scene.environment = environment
-      invalidate()
-    }
-    return () => {
-      _scene.environment = lastEnvironment
-      invalidate()
-    }
   })
 
   const suspend = useSuspense()
