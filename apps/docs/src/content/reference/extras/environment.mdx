@@ -33,26 +33,62 @@ componentSignature:
   }
 ---
 
-Asynchronously loads a single file environment map file and sets the provived scene's `environment` and or `background` to the environment map when loaded.
+Asynchronously loads a single environment map file and sets the provided scene's `environment` and or `background` to the environment map when loaded. Designed to handle equirectangular environment files. [Here](/environment-maps/jpg/equirect_ruined_room.jpg) is an example of such a texture.
 
-`<Example path="extras/environment/basic" />`
+<Example path="extras/environment/basic" />
 
 ## Loading Different File Types
 
-`<Environment>` supports loading `.exr`, `.hdr`, and any file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `file` prop to use any of these kinds of files and `<Environment>` will handle the job of disposing of the previous texture and assigning the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+`<Environment>` supports loading `.exr`, `.hdr`, and any file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `file` prop at any time and `<Environment>` will handle the job of disposing of the previous texture and assigning the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
 <Tip type="info">
-	`<Environment>` only holds onto one texture at any given time. Any time it has to load a new texture file, it disposes of the old one. It also disposes of the texture when it unmounts.
-	</Tip>
+	`<Environment>` only holds onto one texture at any given time. Any time it has to load a new environment file, it disposes of the old one. The texture is also disposed when `<Environment>` unmounts.
+</Tip>
+
+Internally `<Environment>` creates a loader based on the extension of the `file` prop. Refer to the table below to determine what kind of loader is used for a particular file.
+
+| file extension | loader                                                                                             |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| .exr           | [Three.EXRLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/EXRLoader.js/)  |
+| .hdr           | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
+| all others     | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
+
+As previously mentioned, `file` should at least be something that can be loaded by `Three.TextureLoader`.
+
+## Modifying the Loaded Texture Before Assignment
+
+`<Environment>` has an `ontextureloaded` prop that can be used to modify the texture before it is assigned to `scene.environment`. The default `ontextureloaded` assigns `Three.EquirectangularReflectionMapping` to `texture.mapping` but you can do a variety of things with the texture. Check out the [Textures section](https://threejs.org/manual/#en/textures) in the ThreeJS docs for some examples. Be aware that ThreeJS considers environment maps to be static. This means that after the environment has been assigned, it can not be modified but if you update `ontextureloaded` and a new texture is loaded, it will use the most recent `ontextureloaded`.
+
+<Example path="extras/environment/modifying-the-texture" />
+
+The example above provides a custom `ontextureloaded` prop that flips the texture upside down before it is assigned to the scene's environment and background
 
 ## Restoring Environment and Background on Scene Prop Updates
 
-All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the `environment` and `background` properties of the last scene before updating the new one.
+All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the initial `environment` and `background` properties of the last scene.
 
-The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment map to be applied to either the left or the right side. You can observe that when the side changes, the original `background` and `environment` for that current side are restored.
+The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment map to be applied to either the left or the right side. You can observe that when the side updates, the original `background` and `environment` for that side are restored.
 
 <Example path="extras/environment/swapping-scenes" />
 
 ## Suspended Loading
 
-Textures are loaded asynchronously and suspended so they may be used in a suspense context. This means if you're fetching the file over the network, you can show something in the "loading" snippet of a `<Suspense>` component.
+Textures are loaded asynchronously and suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "loading" snippet of a (`<Suspense>`)['/extras/suspense'] component.
+
+```svelte
+<script>
+  import { Suspense, Text } from '@threlte/extras'
+</script>
+
+<Suspense>
+  {#snippet fallback()}
+    <Text text="loading environment" />
+  {/snippet}
+  <Environment
+    file="https//url-of-your-file.hdr"
+    onloadercreated={() => {
+      // set cors, credentials, etc for the created loader in order to be able to fetch `file`
+    }}
+  />
+</Suspense>
+```

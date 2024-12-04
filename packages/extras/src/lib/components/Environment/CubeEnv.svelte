@@ -1,10 +1,9 @@
 <script lang="ts">
   import type { CubeEnvLoaderMap, CubeEnvProps } from './types'
-  import type { CubeTexture } from 'three'
+  import type { CubeTexture, Scene } from 'three'
   import { CubeTextureLoader } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
   import { Previous } from './Previous.svelte'
-  import { untrack } from 'svelte'
   import { useSuspense } from '../../suspense/useSuspense'
   import { useThrelte } from '@threlte/core'
 
@@ -14,36 +13,57 @@
 
   const _scene = $derived(scene ?? defaultScene)
 
-  // save these to restore them if `_scene` changes and on unmount
-  const lastBackground = $derived(_scene.background)
-  const lastEnvironment = $derived(_scene.environment)
+  let initialBackground: Scene['background'] | undefined
+  let initialEnvironment: Scene['environment'] | undefined
 
   const lastScene = new Previous(() => _scene)
 
-  $effect(() => {
-    if (lastScene.current !== undefined) {
-      lastScene.current.background = lastBackground
-    }
-  })
+  let environment: CubeTexture | undefined = $state()
 
   $effect(() => {
     if (lastScene.current !== undefined) {
-      lastScene.current.environment = lastEnvironment
+      if (initialBackground !== undefined) {
+        lastScene.current.background = initialBackground
+        initialBackground = undefined
+      }
+      if (initialEnvironment !== undefined) {
+        lastScene.current.environment = initialEnvironment
+        initialEnvironment = undefined
+      }
     }
   })
-
-  // scene.environment is allowed to be null
-  let environment: CubeTexture | null = $state(null)
 
   $effect(() => {
     if (isBackground) {
-      _scene.background = environment
-      invalidate()
+      if (environment !== undefined) {
+        if (initialBackground === undefined) {
+          initialBackground = _scene.background
+        }
+        _scene.background = environment
+        invalidate()
+      }
+      return () => {
+        if (initialBackground !== undefined) {
+          _scene.background = initialBackground
+        }
+        invalidate()
+      }
     }
-    invalidate()
-    return () => {
-      _scene.background = lastBackground
+  })
+
+  $effect(() => {
+    if (environment !== undefined) {
+      if (initialEnvironment === undefined) {
+        initialEnvironment = _scene.environment
+      }
+      _scene.environment = environment
       invalidate()
+      return () => {
+        if (initialEnvironment !== undefined) {
+          _scene.environment = initialEnvironment
+        }
+        invalidate()
+      }
     }
   })
 
@@ -64,15 +84,6 @@
 
   const suspend = useSuspense()
 
-  $effect(() => {
-    _scene.environment = environment
-    invalidate()
-    return () => {
-      _scene.environment = lastEnvironment
-      invalidate()
-    }
-  })
-
   // anytime path changes, we need to reload because a user could have a file with the same name and extension. for example `path1/file.ext` and `path2/file.ext`
   $effect(() => {
     // threejs's loaders cache their results
@@ -82,6 +93,9 @@
         loader.load(files, resolve, reject)
       })
     )
+    suspendedTexture.then((texture) => {
+      environment = texture
+    })
     // dispose on unmount and whenever path or file has updated
     // this is important to do in a `.then` because the component may unmount before the texture has loaded.
     return () => {

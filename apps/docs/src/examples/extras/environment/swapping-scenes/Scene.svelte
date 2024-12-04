@@ -73,7 +73,7 @@
   />
 </T.Mesh>
 <T.Mesh attach={scenes.right}>
-  <T.CapsuleGeometry args={[0.5]} />
+  <T.SphereGeometry args={[0.5]} />
   <T.MeshStandardMaterial
     metalness={1}
     roughness={0}
@@ -82,7 +82,7 @@
 
 {#if useEnvironment}
   <Env
-    file="environment-maps/hdr/shanghai_riverside_1k.hdr"
+    file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
     {scene}
     {isBackground}
   />

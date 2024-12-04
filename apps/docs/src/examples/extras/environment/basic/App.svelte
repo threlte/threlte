@@ -8,9 +8,9 @@
   let environmentIsBackground = $state(true)
 
   const environmentFilePaths = {
-    '/exr/': '/environment-maps/exr/',
-    '/hdr/': '/environment-maps/hdr/',
-    '/jpg/': '/environment-maps/jpg/'
+    '/exr/': '/textures/equirectangular/exr/',
+    '/hdr/': '/textures/equirectangular/hdr/',
+    '/jpg/': '/textures/equirectangular/jpg/'
   } as const
 
   const hdrFiles: ListOptions<string> = {
@@ -36,8 +36,8 @@
   let hdrFile = $state('shanghai_riverside_1k.hdr')
   let jpgFile = $state('equirect_ruined_room.jpg')
 
-  const pathIsHDR = $derived(environmentPath === '/environment-maps/hdr/')
-  const pathIsEXR = $derived(environmentPath === '/environment-maps/exr/')
+  const pathIsHDR = $derived(environmentPath === '/textures/equirectangular/hdr/')
+  const pathIsEXR = $derived(environmentPath === '/textures/equirectangular/exr/')
 
   const environmentFile = $derived(pathIsHDR ? hdrFile : pathIsEXR ? exrFile : jpgFile)
 
@@ -52,54 +52,52 @@
     label="use <Environment>"
     bind:value={useEnvironment}
   />
+  {#if useEnvironment}
+    <Checkbox
+      label="isBackground"
+      bind:value={environmentIsBackground}
+    />
+    <List
+      options={environmentFilePaths}
+      bind:value={environmentPath}
+      label="path"
+    />
+    {#if pathIsHDR}
+      <List
+        options={hdrFiles}
+        bind:value={hdrFile}
+        label="file"
+      />
+    {:else if pathIsEXR}
+      <List
+        options={exrFiles}
+        bind:value={exrFile}
+        label="file"
+      />
+    {:else}
+      <List
+        options={jpgFiles}
+        bind:value={jpgFile}
+        label="file"
+      />
+    {/if}
+  {/if}
   <Folder title="camera">
     <Checkbox
-      label="auto rotate"
       bind:value={autoRotateCamera}
+      label="auto rotate"
     />
   </Folder>
-  {#if useEnvironment}
-    <Folder title="props">
-      <Checkbox
-        label="isBackground"
-        bind:value={environmentIsBackground}
-      />
-      <List
-        options={environmentFilePaths}
-        label="path"
-        bind:value={environmentPath}
-      />
-      {#if pathIsHDR}
-        <List
-          options={hdrFiles}
-          label="file"
-          bind:value={hdrFile}
-        />
-      {:else if pathIsEXR}
-        <List
-          options={exrFiles}
-          label="file"
-          bind:value={exrFile}
-        />
-      {:else}
-        <List
-          options={jpgFiles}
-          label="file"
-          bind:value={jpgFile}
-        />
-      {/if}
-    </Folder>
-  {/if}
 </Pane>
 
 <div>
   <Canvas>
     <Scene
-      {useEnvironment}
       {autoRotateCamera}
+      {environmentFile}
       {environmentIsBackground}
       {environmentPath}
-      {environmentFile}
+      {useEnvironment}
     />
   </Canvas>
 </div>
