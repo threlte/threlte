@@ -18,8 +18,6 @@
     ...props
   }: CubeCameraProps = $props()
 
-  ref = new Group()
-
   export const renderTarget = new WebGLCubeRenderTarget(resolution)
   observe.pre(
     () => [resolution],
@@ -33,6 +31,7 @@
   })
 
   export const camera = new CubeCamera(near, far, renderTarget)
+
   observe.pre(
     () => [near, far],
     () => {
@@ -48,6 +47,7 @@
 
   const { renderer, scene } = useThrelte()
 
+  const group = new Group()
   const inner = new Group()
 
   let count = 0
@@ -88,11 +88,12 @@
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   {...props}
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children?.({ camera, ref, renderTarget, restart })}
+    {@render children?.({ camera, ref: group, renderTarget, restart })}
   </T>
 </T>
