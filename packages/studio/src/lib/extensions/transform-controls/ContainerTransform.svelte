@@ -29,8 +29,26 @@
   const space = useSpace()
   const snapping = useSnapping()
 
-  const { studioObjectRef } = useStudioObjectsRegistry()
-  const controls = studioObjectRef<TC>()
+  const { studioObjectRef, addObject, removeObject } = useStudioObjectsRegistry()
+  let controls = $state<TC>()
+  $effect(() => {
+    if (!controls) return
+    const helper = controls.getHelper()
+    if (helper) {
+      const objects: Object3D[] = []
+      helper.traverse((node) => {
+        objects.push(node)
+      })
+      for (const object of objects) {
+        addObject(object)
+      }
+      return () => {
+        for (const object of objects) {
+          removeObject(object)
+        }
+      }
+    }
+  })
   const group = studioObjectRef<Group>()
   const center = studioObjectRef<Object3D>()
 
@@ -155,6 +173,6 @@
     onMouseUp()
   }}
   {mode}
-  bind:controls={controls.ref}
+  bind:controls
   bind:group={group.ref}
 />

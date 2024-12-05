@@ -1,5 +1,5 @@
 <script
-  context="module"
+  module
   lang="ts"
 >
   import type * as AllIcons from '@mdi/js'

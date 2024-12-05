@@ -1,5 +1,32 @@
 # @threlte/extras
 
+## 9.0.0-next.42
+
+### Major Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
+## 9.0.0-next.41
+
+### Minor Changes
+
+- 9eecd88: Add <AsciiRenderer>
+
+### Patch Changes
+
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+
+## 9.0.0-next.40
+
+### Patch Changes
+
+- 69f168c: CubeCamera follows what other components do and binds to the ref at the component instead of assigning in the script tag
+- 8be57ae: use `isInstanceOf` to determine the camera's type in `useViewport`. fixes some type errors.
+
 ## 9.0.0-next.39
 
 ### Patch Changes

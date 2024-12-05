@@ -4,19 +4,50 @@ category: Advanced
 order: 0
 ---
 
-Plugins are one of Threlte's superpowers. Plugins allow you to globally extend
-Threlte's [`<T>`](/docs/reference/core/t) component functionality. This means
-you can not only add arbitrary props and event handlers to your `<T>` components
-but also override the default behavior of the `<T>` component entirely.
+Plugins allow you to extend Threlte's [`<T>`](/docs/reference/core/t)
+component. They can be used to add props, event handlers, custom logic and
+customize the component instance. You can think of a plugin as code that
+is injected into every child `<T>` component.
 
-Plugins add code to every `<T>` component instance. That code acts as if it were
-part of the `<T>` component itself. You have full access to props, event
-listeners and the component instance itself.
+Plugins can be overridden in child components.
+
+The [interactivity plugin in
+`@threlte/extras`](/docs/reference/extras/interactivity) is an example of what a
+plugins can do and there are a couple of other examples below.
+
+## When to use a Plugin
+
+A plugin has access to all props and the lifecycle of the `<T>` component.
+
+Use it to:
+
+- add custom props to the `<T>` component such as [`lookAt`](#lookat).
+
+- add custom logic to the `<T>` component, such as automatically add helpers for
+  certain objects in DEV mode.
+
+- collect object references from child components for app-wide systems such as
+  an ECS.
+
+- build custom integrations for external libraries.
+
+<Tip type="tip" title="When to use oncreate">
+
+[`<T>`'s `oncreate`](/docs/reference/core/t#create-event) shares some
+similarities to a plugin but only has access to the object referenced by the
+`<T>` component. Also, it has to be defined on every `<T>` component
+individually.
+
+You can think of `oncreate` as a [Svelte
+Action](https://svelte.dev/docs/svelte/use) for `<T>` components. Use it for
+one-time setup logic that does not need access to the component's props.
+
+</Tip>
 
 ## Injecting a Plugin
 
-Plugins are _injected_ to a plugin context and are **accessible to all child `<T>`
-components**.
+Plugins are _injected_ to a plugin context and are **accessible to all child
+`<T>` components**.
 
 ```svelte title="Scene.svelte"
 <script>

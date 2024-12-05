@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   let texture: Texture | undefined
 
@@ -55,18 +55,17 @@
     type Object3D
   } from 'three'
 
-	type Props = {
-		oncreate: (ref: Object3D) => (() => void) | void
-	}
+  type Props = {
+    oncreate: (ref: Object3D) => (() => void) | void
+  }
 
-	let { oncreate }: Props = $props()
+  let { oncreate }: Props = $props()
 
   const points = new Points(geometry, material)
 </script>
 
 <T
-  oncreate={oncreate}
+  {oncreate}
   is={points}
   userData={{ ignoreOverrideMaterial: true }}
 />
-

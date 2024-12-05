@@ -30,7 +30,14 @@
         "name": "$(new-file) Changeset",
         "color": "green",
         "singleInstance": true,
-        "command": " npx changeset"
+        "command": " npx @changesets/cli"
+      },
+      {
+        "cwd": "${workspaceFolder}",
+        "name": "$(test-view-icon) Test",
+        "color": "orange",
+        "singleInstance": true,
+        "command": " pnpm test"
       },
       {
         "cwd": "${workspaceFolder}/apps/docs",

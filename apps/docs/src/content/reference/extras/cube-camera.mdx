@@ -23,6 +23,13 @@ componentSignature:
     ],
     props:
       [
+			{
+			name: 'autoStart',
+			required: false,
+			type: 'boolean',
+			default: 'true',
+			description: 'whether to automatically start the render task.',
+			},
         {
           default: 'Infinity',
           description: 'controls how many frames the render task will run for',
