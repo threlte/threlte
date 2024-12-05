@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Env } from '@threlte/extras'
+  import { Environment } from '@threlte/extras'
   import { Color, PerspectiveCamera, Scene } from 'three'
   import { T, observe, useTask, useThrelte } from '@threlte/core'
 
@@ -17,8 +17,8 @@
     left: new Scene(),
     right: new Scene()
   }
-  scenes.left.background = new Color(0x00_ff_00)
-  scenes.right.background = new Color(0xff_00_00)
+  scenes.left.background = new Color('orangered')
+  scenes.right.background = new Color('hotpink')
 
   const scene = $derived(scenes[side])
 
@@ -27,7 +27,7 @@
   // scene is split vertically so the aspect needs to be adjusted
   // we could use `useThrelte().camera` here but then we'd have to narrow its type to know if it's a PerspectiveCamera or OrthographicCamera
   const camera = new PerspectiveCamera()
-  camera.position.setZ(5)
+  camera.position.setZ(10)
 
   // we don't need to run this in the task since we can observe the size store
   observe(
@@ -61,27 +61,30 @@
       renderer.setScissorTest(lastScissorTest)
     }
   })
+
+  const metalness = 1
+  const roughness = 0
 </script>
 
 <T.AmbientLight attach={scenes.right} />
 
 <T.Mesh attach={scenes.left}>
-  <T.SphereGeometry args={[0.5]} />
+  <T.TorusKnotGeometry />
   <T.MeshStandardMaterial
-    metalness={1}
-    roughness={0}
+    {metalness}
+    {roughness}
   />
 </T.Mesh>
 <T.Mesh attach={scenes.right}>
-  <T.SphereGeometry args={[0.5]} />
+  <T.TorusKnotGeometry />
   <T.MeshStandardMaterial
-    metalness={1}
-    roughness={0}
+    {metalness}
+    {roughness}
   />
 </T.Mesh>
 
 {#if useEnvironment}
-  <Env
+  <Environment
     file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
     {scene}
     {isBackground}

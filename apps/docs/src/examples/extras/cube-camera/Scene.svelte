@@ -3,9 +3,9 @@
   module
 >
   export const hdrs = {
-    industrial: 'hdr/industrial_sunset_puresky_1k.hdr',
-    workshop: 'hdr/aerodynamics_workshop_1k.hdr',
-    puresky: 'hdr/mpumalanga_veld_puresky_1k.hdr'
+    industrial: 'industrial_sunset_puresky_1k.hdr',
+    workshop: 'aerodynamics_workshop_1k.hdr',
+    puresky: 'mpumalanga_veld_puresky_1k.hdr'
   } as const
 
   const isHdrKey = (u: PropertyKey): u is keyof typeof hdrs => {
@@ -17,8 +17,8 @@
   import type { Vector3Tuple } from 'three'
   import { CubeCamera, Environment, OrbitControls } from '@threlte/extras'
   import { EquirectangularReflectionMapping } from 'three'
-  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { T, useLoader, useTask } from '@threlte/core'
+  import { RGBELoader } from 'three/examples/jsm/Addons.js'
 
   type SceneProps = {
     frames?: number
@@ -40,28 +40,34 @@
     roughness = 0
   }: SceneProps = $props()
 
-  const loader = useLoader(RGBELoader)
-  loader.loader.setPath('/environment-maps/')
-  const textures = loader.load(hdrs, {
-    transform(texture) {
-      texture.mapping = EquirectangularReflectionMapping
-      return texture
-    }
-  })
-
   const colors = [0xff_00_ff, 0xff_ff_00, 0x00_ff_ff] as const
 
   const increment = (2 * Math.PI) / colors.length
   const radius = 3
 
   let time = $state(0)
-  let y = $derived(2 * Math.sin(time))
+  const y = $derived(2 * Math.sin(time))
 
   useTask((delta) => {
     time += delta
   })
 
-  const cameraPosition: Vector3Tuple = [7, 7, 7]
+  const cameraPosition: Vector3Tuple = [7, 7, 7] as const
+
+  const hdrPath = '/textures/equirectangular/hdr/'
+
+  const loader = useLoader(RGBELoader, {
+    extend(loader) {
+      loader.setPath(hdrPath)
+    }
+  })
+
+  const backgrounds = loader.load(hdrs, {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    }
+  })
 </script>
 
 <T.PerspectiveCamera
@@ -73,27 +79,28 @@
 
 <T.AmbientLight />
 
-{#each colors as color, i}
-  {@const r = increment * i}
-  <T.Mesh
-    position.x={radius * Math.cos(r)}
-    position.y={i}
-    position.z={radius * Math.sin(r)}
-  >
-    <T.MeshStandardMaterial {color} />
-    <T.BoxGeometry />
-  </T.Mesh>
-{/each}
+{#await backgrounds then backgroundMap}
+  {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
+  {#each colors as color, i}
+    {@const r = increment * i}
+    <T.Mesh
+      position.x={radius * Math.cos(r)}
+      position.y={i}
+      position.z={radius * Math.sin(r)}
+    >
+      <T.MeshStandardMaterial {color} />
+      <T.BoxGeometry />
+    </T.Mesh>
+  {/each}
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-  isBackground
-  format="hdr"
-/>
+  <Environment
+    onloadercreated={(loader) => {
+      loader.setPath(hdrPath)
+    }}
+    file={'shanghai_riverside_1k.hdr'}
+    isBackground
+  />
 
-{#await textures then textureRecord}
-  {@const background = isHdrKey(hdr) ? textureRecord[hdr] : hdr}
   {#each Array(colors.length) as _, i}
     {@const r = Math.PI + increment * i}
     <CubeCamera

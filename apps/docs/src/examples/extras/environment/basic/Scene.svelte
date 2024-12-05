@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Env, OrbitControls } from '@threlte/extras'
+  import { Environment, OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
   import { EquirectangularReflectionMapping } from 'three'
 
@@ -29,7 +29,7 @@
 </T.PerspectiveCamera>
 
 <T.Mesh>
-  <T.SphereGeometry />
+  <T.TorusGeometry />
   <T.MeshStandardMaterial
     color="white"
     metalness={0.9}
@@ -39,7 +39,7 @@
 </T.Mesh>
 
 {#if useEnvironment}
-  <Env
+  <Environment
     file={environmentFile}
     isBackground={environmentIsBackground}
     onloadercreated={(loader) => {

@@ -37,10 +37,7 @@
 
 <T.AmbientLight intensity={0.3} />
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <Float
   scale={0.7}

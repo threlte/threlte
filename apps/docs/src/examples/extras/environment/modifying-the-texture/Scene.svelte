@@ -1,7 +1,19 @@
 <script lang="ts">
-  import { Env, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping } from 'three'
+  import { Environment, OrbitControls } from '@threlte/extras'
+  import { EquirectangularReflectionMapping, Texture } from 'three'
   import { T } from '@threlte/core'
+
+  type Props = {
+    flipY?: boolean
+    file: string
+  }
+
+  let { flipY = true, file }: Props = $props()
+
+  const ontextureloaded: (texture: Texture) => void = $derived((texture) => {
+    texture.flipY = flipY
+    texture.mapping = EquirectangularReflectionMapping
+  })
 </script>
 
 <T.Mesh>
@@ -19,12 +31,8 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<Env
-  ontextureloaded={(texture) => {
-    texture.flipY = false
-    texture.mapping = EquirectangularReflectionMapping
-    return texture
-  }}
-  file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
+<Environment
+  {ontextureloaded}
+  {file}
   isBackground
 />

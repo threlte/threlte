@@ -1,5 +1,5 @@
-import type { Props } from '@threlte/core'
 import type { ColorSpace, CubeTextureLoader, Scene, Texture, TextureLoader } from 'three'
+import type { Props } from '@threlte/core'
 import type {
   EXRLoader,
   GroundedSkybox,
@@ -34,18 +34,16 @@ export type EnvironmentProps = {
   colorSpace?: ColorSpace
 }
 
-export type EnvLoaderMap = { exr: EXRLoader; hdr: RGBELoader; tex: TextureLoader }
-
 export type EnvProps = {
   /**
    * callback function that can be used to modify the texture before assigning it to `scene.environment`
    */
-  ontextureloaded?: (texture: Texture) => Texture
+  ontextureloaded?: (texture: Texture) => void
 
   /**
    * callback function that runs when a loader is created
    */
-  onloadercreated?: (loader: EnvLoaderMap[keyof EnvLoaderMap]) => void
+  onloadercreated?: (loader: EXRLoader | RGBELoader | TextureLoader) => void
 
   /**
    * the enviroment file to load

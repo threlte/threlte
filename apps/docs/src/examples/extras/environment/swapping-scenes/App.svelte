@@ -8,32 +8,31 @@
 
   let side = $derived(sides[i])
 
-  let useEnvironment = $state(false)
+  let useEnvironment = $state(true)
   let isBackground = $state(false)
-  let disableSwapButton = $derived(!useEnvironment)
+  let disabled = $derived(!useEnvironment)
 </script>
 
 <Pane
-  title="Environment"
+  title="Environment - Swapping Scenes"
   position="fixed"
 >
   <Checkbox
     bind:value={useEnvironment}
     label="use <Environment>"
   />
+  <Checkbox
+    bind:value={isBackground}
+    {disabled}
+    label="is background"
+  />
   <Button
-    disabled={disableSwapButton}
+    {disabled}
     on:click={() => {
       i = (i + 1) % sides.length
     }}
     title="swap scene"
   />
-  {#if useEnvironment}
-    <Checkbox
-      bind:value={isBackground}
-      label="is background"
-    />
-  {/if}
 </Pane>
 
 <div>

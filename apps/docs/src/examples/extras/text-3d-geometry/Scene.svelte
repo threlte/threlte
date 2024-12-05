@@ -43,7 +43,7 @@
   {/snippet}
 </Align>
 
-<Environment files="/hdr/shanghai_riverside_1k.hdr" />
+<Environment file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <Float
   rotationIntensity={[0, 3, 0]}

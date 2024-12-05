@@ -28,7 +28,7 @@
     equirect_ruined_room: 'equirect_ruined_room.jpg'
   }
 
-  let environmentPath: (typeof environmentFilePaths)[keyof typeof environmentFilePaths] = $state(
+  let environmentPath = $state<(typeof environmentFilePaths)[keyof typeof environmentFilePaths]>(
     environmentFilePaths['/hdr/']
   )
 
@@ -36,8 +36,8 @@
   let hdrFile = $state('shanghai_riverside_1k.hdr')
   let jpgFile = $state('equirect_ruined_room.jpg')
 
-  const pathIsHDR = $derived(environmentPath === '/textures/equirectangular/hdr/')
   const pathIsEXR = $derived(environmentPath === '/textures/equirectangular/exr/')
+  const pathIsHDR = $derived(environmentPath === '/textures/equirectangular/hdr/')
 
   const environmentFile = $derived(pathIsHDR ? hdrFile : pathIsEXR ? exrFile : jpgFile)
 

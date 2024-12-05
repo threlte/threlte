@@ -1,123 +1,118 @@
-<script lang="ts">
-  import { isInstanceOf, useCache, useParent, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-  import {
-    CubeReflectionMapping,
-    CubeTextureLoader,
-    EquirectangularReflectionMapping,
-    FloatType,
-    LinearSRGBColorSpace,
-    SRGBColorSpace,
-    Texture,
-    TextureLoader
-  } from 'three'
-  import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
-  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { EnvironmentProps } from './types'
-  import GroundProjectedSkybox from './GroundProjectedSkybox.svelte'
-
-  type Props = EnvironmentProps
-
-  export let path: NonNullable<Props['path']> = ''
-  export let files: NonNullable<Props['files']>
-  export let isBackground: Props['isBackground'] = undefined
-  export let groundProjection: Props['groundProjection'] = undefined
-  export let format: Props['format'] = undefined
-  export let colorSpace: Props['colorSpace'] = undefined
-
-  const { scene: globalScene, invalidate } = useThrelte()
-  const parent = useParent()
-  let scene = globalScene
-  if (isInstanceOf($parent, 'Scene')) scene = $parent
-
-  let previousSceneEnvironment = scene.environment
-  let previousSceneBackground = scene.background
-
-  $: isCubeMap = Array.isArray(files)
-  $: envPath = `${path}${files}`
-
-  let previousEnvPath: string = envPath
-  let previousEnvMap: Texture
-  let previousFormat: string | undefined
-
-  const pickLoader = (): new () => any => {
-    const inferredFormat =
-      format || (Array.isArray(files) ? files[0] : files).split('.').pop() == 'hdr' ? 'hdr' : 'ldr'
-
-    if (isCubeMap && inferredFormat == 'ldr') return CubeTextureLoader
-    if (!isCubeMap && inferredFormat == 'ldr') return TextureLoader
-    if (isCubeMap && inferredFormat == 'hdr') return HDRCubeTextureLoader
-    if (!isCubeMap && inferredFormat == 'hdr') return RGBELoader
-    return TextureLoader
+<script module>
+  const defaultOnTextureLoaded = (texture: Texture) => {
+    texture.mapping = EquirectangularReflectionMapping
+    return texture
   }
+</script>
 
-  const { remember } = useCache()
+<script lang="ts">
+  import type { EnvProps } from './types'
+  import type { Scene, Texture } from 'three'
+  import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import { Previous } from './Previous.svelte'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import { useLoader, useThrelte } from '@threlte/core'
+
+  let {
+    file,
+    isBackground = false,
+    onloadercreated,
+    ontextureloaded = defaultOnTextureLoaded,
+    scene
+  }: EnvProps = $props()
+
+  const { invalidate, scene: defaultScene } = useThrelte()
+
+  const _scene = $derived(scene ?? defaultScene)
+
+  let initialBackground: Scene['background'] | undefined
+  let initialEnvironment: Scene['environment'] | undefined
+
+  const lastScene = new Previous(() => _scene)
+
+  let texture: Texture | undefined = $state()
+
+  $effect(() => {
+    if (lastScene.current !== undefined) {
+      if (initialBackground !== undefined) {
+        lastScene.current.background = initialBackground
+        initialBackground = undefined
+      }
+      if (initialEnvironment !== undefined) {
+        lastScene.current.environment = initialEnvironment
+        initialEnvironment = undefined
+      }
+    }
+  })
+
+  $effect(() => {
+    if (isBackground) {
+      if (texture !== undefined) {
+        if (initialBackground === undefined) {
+          initialBackground = _scene.background
+        }
+        _scene.background = texture
+        invalidate()
+      }
+      return () => {
+        if (initialBackground !== undefined) {
+          _scene.background = initialBackground
+        }
+        invalidate()
+      }
+    }
+  })
+
+  $effect(() => {
+    if (texture !== undefined) {
+      if (initialEnvironment === undefined) {
+        initialEnvironment = _scene.environment
+      }
+      _scene.environment = texture
+      invalidate()
+      return () => {
+        if (initialEnvironment !== undefined) {
+          _scene.environment = initialEnvironment
+        }
+        invalidate()
+      }
+    }
+  })
+
+  const isEXR = $derived(file.endsWith('exr'))
+  const isHDR = $derived(file.endsWith('hdr'))
+
+  const loader = $derived(
+    useLoader<typeof EXRLoader | typeof RGBELoader | typeof TextureLoader>(
+      isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader,
+      {
+        extend(loader) {
+          onloadercreated?.(loader)
+        }
+      }
+    )
+  )
 
   const suspend = useSuspense()
 
-  const loadEnvironment = async () => {
-    const LoaderType = pickLoader()
-    const loader: any = new LoaderType()
-    loader.setDataType?.(FloatType)
+  // anytime path changes, we need to reload because a user could have a file with the same name and extension. for example `path1/file.ext` and `path2/file.ext`
+  $effect(() => {
+    const suspendedTexture = suspend(loader.load(file)).then((texture) => {
+      ontextureloaded(texture)
+      return texture
+    })
 
-    const filesKey = Array.isArray(files) ? files.join(',') : files
-    const cacheKey = [LoaderType, path, filesKey]
+    suspendedTexture.then((t) => {
+      texture = t
+    })
 
-    const texture = (await remember(async () => {
-      return suspend(
-        new Promise((resolve, reject) => {
-          loader.setPath(path).load(files, (texture: any) => {
-            resolve(texture)
-          })
-        })
-      )
-    }, cacheKey)) as Texture
-
-    texture.mapping = isCubeMap ? CubeReflectionMapping : EquirectangularReflectionMapping
-    texture.colorSpace = colorSpace ?? isCubeMap ? LinearSRGBColorSpace : SRGBColorSpace
-    previousEnvMap = texture
-    scene.environment = previousEnvMap
-    if (isBackground) scene.background = previousEnvMap
-
-    invalidate()
-
-    previousFormat = format || undefined
-    previousEnvPath = envPath
-  }
-
-  $: {
-    if (envPath != previousEnvPath || format != previousFormat) {
-      if (previousEnvMap) {
-        previousEnvMap.dispose()
-      }
-      loadEnvironment()
-      groundProjection = groundProjection
+    // dispose on unmount and whenever path or file has updated
+    // this is important to do in a `.then` because the component may unmount before the texture has loaded.
+    return () => {
+      suspendedTexture.then((texture) => {
+        texture.dispose()
+      })
     }
-
-    if (!isBackground && scene.background) {
-      scene.background = null
-      invalidate()
-    }
-
-    if (isBackground && !scene.background && previousEnvMap) {
-      scene.background = previousEnvMap
-      invalidate()
-    }
-  }
-
-  onDestroy(() => {
-    scene.environment = previousSceneEnvironment
-    scene.background = previousSceneBackground
-    if (previousEnvMap) previousEnvMap.dispose()
-    groundProjection = undefined
-    invalidate()
   })
 </script>
-
-{#if groundProjection}
-  <GroundProjectedSkybox
-    {...groundProjection}
-    envMap={previousEnvMap}
-  />
-{/if}
