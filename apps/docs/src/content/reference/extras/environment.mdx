@@ -49,7 +49,15 @@ Asynchronously loads a single environment texture and sets the provided scene's 
 
 <Example path="extras/environment/basic" />
 
-## Loading Different File Types
+## Bring Your Own Texture Or Load One
+
+`<Environment>` has a `resource` prop that can either be a `Texture`, `DataTexture` or `string`. If `resource` is not a string, the provided resource will be used when setting the scene's environment. If `resource` is a string, `<Environment>` will load the texture using a corresponding `Loader`.
+
+The example below passes a loaded texture to `<Environment>` instead of loading one.
+
+<Example path="extras/environment/bring-your-own-texture" />
+
+### Loading Different File Types
 
 `<Environment>` supports loading `.exr`, `.hdr`, and any file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `file` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
@@ -69,11 +77,11 @@ As previously mentioned, `file` should at least be something that can be loaded 
 
 ## Environment's Loader Props
 
-`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files.
+`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files. The `loadOptions` and `loaderOptions` props are only used when loading a texture. These props are ignored if `resource` is not a string because there's nothing to load in this case.
 
 ### `loadOptions`
 
-The `loadOptions` prop is used to modifying textures after they are loaded but before they are assigned to `scene.environment`. It corresponds to the `load` function of the object returned from `useLoader`. In other words, it is used in the following manner,
+The `loadOptions` prop is used to modifying textures after they are loaded but before they are assigned to `scene.environment`. It corresponds to the `load` function of the object returned from `useLoader`. In other words, it is used in the following manner.
 
 ```svelte title="Environment.svelte"
 <!-- Note this is a simplified version for explanation purposes. -->
@@ -154,7 +162,7 @@ The example below creates a custom render task that draws two scenes to the canv
 
 ## Suspended Loading
 
-Textures are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component.
+Textures are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is loading.
 
 ```svelte
 <script>
@@ -178,4 +186,4 @@ Textures are suspended so they may be used in a suspense context. This means if 
 </Suspense>
 ```
 
-<Example path="extras/environment/bring-your-own-texture" />
+If `resource` is a string, meaning that the texture doesn't need to be loaded, the `suspense` is immediately resolved to the texture.

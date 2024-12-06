@@ -2,7 +2,7 @@
   import { Environment, OrbitControls } from '@threlte/extras'
   import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { T, useLoader, useThrelte } from '@threlte/core'
+  import { T, useLoader } from '@threlte/core'
 
   const { load } = useLoader(RGBELoader)
 
@@ -12,11 +12,14 @@
       return texture
     }
   })
-
-  const { camera } = useThrelte()
 </script>
 
-<OrbitControls attach={camera.current} />
+<T.PerspectiveCamera
+  makeDefault
+  position.z={5}
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
 
 <T.Mesh>
   <T.MeshStandardMaterial
