@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Environment, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping, Texture } from 'three'
+  import { EquirectangularReflectionMapping } from 'three'
   import { T } from '@threlte/core'
 
   type Props = {
@@ -9,11 +9,6 @@
   }
 
   let { flipY = true, file }: Props = $props()
-
-  const ontextureloaded: (texture: Texture) => void = $derived((texture) => {
-    texture.flipY = flipY
-    texture.mapping = EquirectangularReflectionMapping
-  })
 </script>
 
 <T.Mesh>
@@ -32,7 +27,12 @@
 </T.PerspectiveCamera>
 
 <Environment
-  {ontextureloaded}
-  {file}
   isBackground
+  loadOptions={{
+    transform(texture) {
+      texture.flipY = flipY
+      texture.mapping = EquirectangularReflectionMapping
+    }
+  }}
+  resource={file}
 />

@@ -85,8 +85,8 @@
 
 {#if useEnvironment}
   <Environment
-    file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
-    {scene}
+    resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
     {isBackground}
+    {scene}
   />
 {/if}

@@ -1,54 +1,16 @@
-import type { ColorSpace, CubeTextureLoader, Scene, Texture, TextureLoader } from 'three'
-import type { Props } from '@threlte/core'
-import type {
-  EXRLoader,
-  GroundedSkybox,
-  HDRCubeTextureLoader,
-  RGBELoader
-} from 'three/examples/jsm/Addons.js'
+import type { CubeTextureLoader, DataTexture, Scene, Texture, TextureLoader } from 'three'
+import type { UseLoaderLoadOptions, UseLoaderOptions } from '@threlte/core'
+import type { EXRLoader, HDRCubeTextureLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
 
 export type EnvironmentProps = {
-  /**
-   * @default "/"
-   */
-  path?: string
-  /**
-   * Provide a string to use an equirectangular envmap and a string array to use a cubic envmap
-   */
-  files: string | string[]
-  /**
-   * Boolean to toggle whether to use envmap as a scene background.
-   */
-  isBackground?: boolean
-  /**
-   * Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.
-   */
-  groundProjection?: Props<GroundedSkybox>
-  /**
-   * Use `ldr` for .png, .jpg and `hdr` for .hdr file formats
-   */
-  format?: 'ldr' | 'hdr'
-  /**
-   * Envmap color space. If not provided it defaults to `srgb` for cubemap and `srgb-linear` for equirectangular
-   */
-  colorSpace?: ColorSpace
-}
+  loadOptions?: UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader>
 
-export type EnvProps = {
-  /**
-   * callback function that can be used to modify the texture before assigning it to `scene.environment`
-   */
-  ontextureloaded?: (texture: Texture) => void
+  loaderOptions?: UseLoaderOptions<typeof EXRLoader | typeof RGBELoader | typeof TextureLoader>
 
   /**
-   * callback function that runs when a loader is created
+   * the enviroment file to load or the texture to use
    */
-  onloadercreated?: (loader: EXRLoader | RGBELoader | TextureLoader) => void
-
-  /**
-   * the enviroment file to load
-   */
-  file: string
+  resource: string | DataTexture | Texture
 
   /**
    * whether to set the `scene`'s background to the loaded environment
@@ -63,7 +25,7 @@ export type EnvProps = {
   scene?: Scene
 }
 
-export type CubeEnvProps = {
+export type CubeEnvironmentProps = {
   /**
    * the files to load for the cube texture
    */

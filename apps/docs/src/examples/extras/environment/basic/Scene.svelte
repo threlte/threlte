@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Environment, OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
-  import { EquirectangularReflectionMapping } from 'three'
 
   type Props = {
     autoRotateCamera?: boolean
@@ -40,10 +39,12 @@
 
 {#if useEnvironment}
   <Environment
-    file={environmentFile}
     isBackground={environmentIsBackground}
-    onloadercreated={(loader) => {
-      loader.setPath(environmentPath)
+    loaderOptions={{
+      extend(loader) {
+        loader.setPath(environmentPath)
+      }
     }}
+    resource={environmentFile}
   />
 {/if}

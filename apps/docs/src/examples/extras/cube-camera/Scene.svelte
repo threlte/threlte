@@ -77,7 +77,10 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<T.AmbientLight />
+<Environment
+  file={`${hdrPath}shanghai_riverside_1k.hdr`}
+  isBackground
+/>
 
 {#await backgrounds then backgroundMap}
   {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
@@ -93,25 +96,17 @@
     </T.Mesh>
   {/each}
 
-  <Environment
-    onloadercreated={(loader) => {
-      loader.setPath(hdrPath)
-    }}
-    file={'shanghai_riverside_1k.hdr'}
-    isBackground
-  />
-
   {#each Array(colors.length) as _, i}
     {@const r = Math.PI + increment * i}
     <CubeCamera
-      {near}
-      {far}
-      {resolution}
-      {background}
-      {frames}
-      position.y={y + i}
       position.x={radius * Math.cos(r)}
+      position.y={y + i}
       position.z={radius * Math.sin(r)}
+      {background}
+      {far}
+      {frames}
+      {near}
+      {resolution}
     >
       {#snippet children({ renderTarget })}
         <T.Mesh>

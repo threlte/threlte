@@ -24,17 +24,22 @@ componentSignature:
           type: 'THREE.Scene'
         },
         {
-          default: '(texture) => { texture.mapping = Three.EquirectangularReflectionMapping }',
-          description: 'used to modify a texture after it is loaded but before it is assigned to `scene.environment`',
-          name: 'ontextureloaded',
+          description: "options object that is used in the loader's `load` function",
+          name: 'loadOptions',
           required: false,
-          type: '(texture: Three.Texture) => void'
+          type: 'UseLoaderLoadOptions<Three.EXRLoader | Three.RGBELoader | Three.TextureLoader>',
+          default: '{
+            transform(texture) {
+            texture.mapping = Three.EquirectangularReflectionMapping
+            return texture
+            }
+            }'
         },
         {
-          description: 'used to modify a loader after it is created',
-          name: 'onloadercreated',
+          description: 'options object that is used passed to the `useLoader` function',
+          name: 'loaderOptions',
           required: false,
-          type: '(loader: Three.EXRLoader | Three.RGBELoader | Three.TextureLoader) => void'
+          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>'
         }
       ]
   }
@@ -62,17 +67,82 @@ Internally `<Environment>` creates a loader based on the extension of the `file`
 
 As previously mentioned, `file` should at least be something that can be loaded by `Three.TextureLoader`.
 
-## Modifying the Loaded Texture
+## Environment's Loader Props
 
-`<Environment>` has an `ontextureloaded` prop that can be used to modify the texture **after** it has been loaded but **before** it is assigned to `scene.environment`. The default `ontextureloaded` function assigns `Three.EquirectangularReflectionMapping` to `texture.mapping` but you can do a variety of things with the texture. Check out the [textures section of the ThreeJS docs](https://threejs.org/manual/#en/textures) for some examples.
+`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files.
+
+### `loadOptions`
+
+The `loadOptions` prop is used to modifying textures after they are loaded but before they are assigned to `scene.environment`. It corresponds to the `load` function of the object returned from `useLoader`. In other words, it is used in the following manner,
+
+```svelte title="Environment.svelte"
+<!-- Note this is a simplified version for explanation purposes. -->
+<script>
+  import { useLoader } from '@threlte/core'
+
+  let { file, loadOptions } = $props()
+
+  const { load } = useLoader(loader)
+
+  $effect(() => {
+    load(file, loadOptions)
+  })
+</script>
+```
+
+`loadOptions` is only accessed **before** it is applied to `scene.environment`. This means that if you modify the texture via `loadOptions`, it will not be reflected in the environment unless the loader has to load a new texture. The default `loadOptions` sets the `texture.mapping` to `Three.EquirectangularReflectionMapping`.
 
 <Tip type="warning">
-`ontextureloaded` is called in a `.then`. This means that if `ontextureloaded` is updated, it will not run again until the loader inside `<Environment>` must load a new texture. Loading a new texture is triggered by updating the `file` prop.
+  ThreeJS considers environment maps to be static. This means that if you modify the texture somehow
+  after it has been assigned to `scene.environment`, the changes will not be visually present.
 </Tip>
 
-In the example below notice how toggling the checkbox does not cause the texture to flip. If you toggle the checkbox and then select a different file, the newly loaded texture will reflect the checkbox's state.
+The example below uses the `loadOptions` prop to flip the loaded texture over the x-axis. Notice how toggling the checkbox does not cause the texture to flip. If you however toggle the checkbox and then switch the file, the displayed texture will match the state of "flipY".
 
 <Example path="extras/environment/modifying-the-texture" />
+
+### `loaderOptions`
+
+The `loaderOptions` prop is used to modify the loader after it is created and to pass argument's to the loader's constructor.
+
+```svelte title="Environment.svelte"
+<!-- Note this is a simplified version for explanation purposes. -->
+<script>
+  import { useLoader } from '@threlte/core'
+
+  let { loaderOptions } = $props()
+
+  const { load } = useLoader(loader, loaderOptions)
+</script>
+```
+
+A common use for `loaderOptions` is to set the path for the loader to load files from. Assuming all your files live in the same directory, you can simplify loading them like so:
+
+```svelte
+<Environment
+  file="file.hdr"
+  loaderOptions={{
+    extend(loader) {
+      loader.setPath('/path/to/your/files')
+    }
+  }}
+/>
+```
+
+If your files live online somewhere you can set the url of the loader and refer to your files by filename.
+
+```svelte
+<Environment
+  file="file.hdr"
+  loaderOptions={{
+    extend(loader) {
+      loader.setPath('https://my-cool-site.com/')
+    }
+  }}
+/>
+```
+
+The `loaderOptions` prop is where you'd set credentials, headers, etc. for the loader as well. See [ThreeJS's Loader docs](https://threejs.org/docs/index.html#api/en/loaders/Loader) for more information.
 
 ## Restoring Environment and Background When Scene Updates
 
@@ -97,12 +167,15 @@ Textures are suspended so they may be used in a suspense context. This means if 
   {/snippet}
   <Environment
     file="https//url-of-your-file.hdr"
-    onloadercreated={(loader) => {
-      // set cross origin, credentials, etc for the created loader to be able to fetch `file`
-      // loader.setCrossOrigin()
-      // loader.setWithCredentials()
-      // loader.setRequestHeader()
+    loaderOptions={{
+      extend(loader) {
+        loader.setCrossOrigin(/* ... */)
+        loader.setWithCredentials(/* ... */)
+        loader.setRequestHeader(/* ... */)
+      }
     }}
   />
 </Suspense>
 ```
+
+<Example path="extras/environment/bring-your-own-texture" />

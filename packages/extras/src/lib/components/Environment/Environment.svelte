@@ -1,12 +1,14 @@
 <script module>
-  const defaultOnTextureLoaded = (texture: Texture) => {
-    texture.mapping = EquirectangularReflectionMapping
-    return texture
+  const defaultLoadOptions: EnvironmentProps['loadOptions'] = {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    }
   }
 </script>
 
 <script lang="ts">
-  import type { EnvProps } from './types'
+  import type { EnvironmentProps } from './types'
   import type { Scene, Texture } from 'three'
   import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
@@ -15,12 +17,12 @@
   import { useLoader, useThrelte } from '@threlte/core'
 
   let {
-    file,
+    resource,
     isBackground = false,
-    onloadercreated,
-    ontextureloaded = defaultOnTextureLoaded,
+    loadOptions = defaultLoadOptions,
+    loaderOptions,
     scene
-  }: EnvProps = $props()
+  }: EnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
@@ -80,28 +82,22 @@
     }
   })
 
-  const isEXR = $derived(file.endsWith('exr'))
-  const isHDR = $derived(file.endsWith('hdr'))
+  const _file = $derived(typeof resource === 'string' ? resource : '')
 
+  const isEXR = $derived(_file.endsWith('exr'))
+  const isHDR = $derived(_file.endsWith('hdr'))
+
+  // will default to `TextureLoader` if `mapOrFile` is not a string
   const loader = $derived(
-    useLoader<typeof EXRLoader | typeof RGBELoader | typeof TextureLoader>(
-      isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader,
-      {
-        extend(loader) {
-          onloadercreated?.(loader)
-        }
-      }
-    )
+    useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
   )
 
   const suspend = useSuspense()
 
-  // anytime path changes, we need to reload because a user could have a file with the same name and extension. for example `path1/file.ext` and `path2/file.ext`
   $effect(() => {
-    const suspendedTexture = suspend(loader.load(file)).then((texture) => {
-      ontextureloaded(texture)
-      return texture
-    })
+    const suspendedTexture = suspend(
+      typeof resource === 'string' ? loader.load(resource, loadOptions) : Promise.resolve(resource)
+    )
 
     suspendedTexture.then((t) => {
       texture = t
