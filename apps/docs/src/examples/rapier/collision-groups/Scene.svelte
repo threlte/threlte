@@ -13,7 +13,7 @@
   }
 </script>
 
-<Environment file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
+<Environment resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera
   makeDefault

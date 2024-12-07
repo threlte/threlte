@@ -84,7 +84,7 @@ The example below passes an already loaded texture to `<Environment>` instead of
 	`<Environment>` only holds onto one texture. Any time it has to load a new texture, it will dispose of the old one. The texture is also disposed when `<Environment>` unmounts.
 </Tip>
 
-Internally `<Environment>` creates a loader based on the extension of the `file` prop. Refer to the table below to determine what kind of loader is used for a particular file.
+Internally `<Environment>` creates a loader based on the extension of the `file` prop. Refer to the table below to determine what kind of loader is used for a particular file extension.
 
 | file extension | loader                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------- |
@@ -147,7 +147,7 @@ A common use for `loaderOptions` is to set the path for the loader to load files
 
 ```svelte
 <Environment
-  file="file.hdr"
+  resource="file.hdr"
   loaderOptions={{
     extend(loader) {
       loader.setPath('/path/to/your/files')
@@ -160,7 +160,7 @@ If your files live online somewhere you can set the url of the loader and refer 
 
 ```svelte
 <Environment
-  file="file.hdr"
+  resource="file.hdr"
   loaderOptions={{
     extend(loader) {
       loader.setPath('https://my-cool-site.com/')
@@ -193,7 +193,7 @@ Textures are suspended so they may be used in a suspense context. This means if 
     <Text text="loading environment" />
   {/snippet}
   <Environment
-    file="https//url-of-your-file.hdr"
+    resource="https//url-of-your-file.hdr"
     loaderOptions={{
       extend(loader) {
         loader.setCrossOrigin(/* ... */)

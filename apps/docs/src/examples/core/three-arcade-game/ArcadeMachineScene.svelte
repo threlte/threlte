@@ -255,7 +255,7 @@
   }}
   background={new Color(0x020203)}
 >
-  <Environment file="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
+  <Environment resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
   <T.Object3D
     oncreate={(ref) => {
