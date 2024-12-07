@@ -70,3 +70,7 @@ componentSignature:
 | -------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | .hdr           | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
 | all others     | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
+
+## No Default `loadOptions`
+
+`<CubeEnvironment` does not have a default `loadOptions` function because it doesn't need to do anything with the loaded texture. The texture is ready to go once it has been loaded.
