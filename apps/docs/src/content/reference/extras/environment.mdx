@@ -40,6 +40,20 @@ componentSignature:
           name: 'loaderOptions',
           required: false,
           type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>'
+        },
+        {
+          default: 'false',
+          description: 'creates a ground projected skybox',
+          name: 'ground',
+          required: false,
+          type: 'boolean | {height?: number, radius?: number, resolution?: number}'
+        },
+        {
+          description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
+          name: 'skybox',
+          default: 'undefined',
+          required: false,
+          type: undefined | Three.GroundedSkybox
         }
       ]
   }
@@ -187,3 +201,37 @@ Textures are suspended so they may be used in a suspense context. This means if 
 ```
 
 If `resource` is a string, meaning that the texture doesn't need to be loaded, the `suspense` is immediately resolved to the texture.
+
+## Grounded Skyboxes
+
+`<Environment>` also supports ground projected environment mapping through threejs's [GroundedSkybox](https://threejs.org/examples/#webgl_materials_envmaps_groundprojected) addon. To use this feature, set `ground` to `true` or you can pass in a object with optional `height`, `radius` and `resolution` props. `height` defaults to `1`, `radius` to `1`, and `resolution` to `128`
+
+<Example path="extras/environment/ground-projection" />
+
+The bindable prop `skybox` is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
+
+```svelte
+<script>
+  let skybox = $state() // GroundedSkybox | undefined
+
+  const height = 15
+
+  $effect(() => {
+    skybox?.position.setY(height)
+  })
+</script>
+
+<Environment
+  bind:skybox
+  resource="..."
+  ground={{ height }}
+/>
+```
+
+There are a couple of important things to consider when using the `ground` property:
+
+1. `skybox` is set to a `GroundedSkybox` instance **after** the texture is available. It is set to `undefined` when the `<Environmen>` unmounts.
+
+2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
+
+3. `scene.environment` and/or `scene.background` are still set to the environment map. This is done so that the environment map can still affect materials used in the scene.

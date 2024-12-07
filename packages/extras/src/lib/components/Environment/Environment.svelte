@@ -12,16 +12,19 @@
   import type { Scene, Texture } from 'three'
   import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import { GroundedSkybox } from 'three/examples/jsm/Addons.js'
   import { Previous } from './Previous.svelte'
+  import { T, useLoader, useThrelte } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense'
-  import { useLoader, useThrelte } from '@threlte/core'
 
   let {
-    resource,
+    ground = false,
     isBackground = false,
     loadOptions = defaultLoadOptions,
     loaderOptions,
-    scene
+    resource,
+    scene,
+    skybox = $bindable()
   }: EnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
@@ -87,7 +90,7 @@
   const isEXR = $derived(_file.endsWith('exr'))
   const isHDR = $derived(_file.endsWith('hdr'))
 
-  // will default to `TextureLoader` if `mapOrFile` is not a string
+  // will default to `TextureLoader` if `resource` is not a string
   const loader = $derived(
     useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
   )
@@ -112,3 +115,19 @@
     }
   })
 </script>
+
+{#if ground !== false}
+  {@const options = ground === true ? {} : ground}
+  {#if texture !== undefined}
+    <T
+      oncreate={() => {
+        return () => {
+          skybox = undefined
+        }
+      }}
+      is={GroundedSkybox}
+      bind:ref={skybox}
+      args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
+    />
+  {/if}
+{/if}

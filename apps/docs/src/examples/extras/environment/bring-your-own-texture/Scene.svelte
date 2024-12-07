@@ -5,8 +5,7 @@
   import { T, useLoader } from '@threlte/core'
 
   const { load } = useLoader(RGBELoader)
-
-  const map = load('/textures/equirectangular/hdr/shanghai_riverside_1k.hdr', {
+  const map = load('/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr', {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping
       return texture

@@ -1,10 +1,33 @@
 import type { CubeTextureLoader, DataTexture, Scene, Texture, TextureLoader } from 'three'
 import type { UseLoaderLoadOptions, UseLoaderOptions } from '@threlte/core'
-import type { EXRLoader, HDRCubeTextureLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
+import type {
+  EXRLoader,
+  GroundedSkybox,
+  HDRCubeTextureLoader,
+  RGBELoader
+} from 'three/examples/jsm/Addons.js'
 
 export type EnvironmentProps = {
+  /**
+   * bindable skybox ref if a `ground` options are passed in
+   * @default undefined - ground is false by default
+   */
+  skybox?: GroundedSkybox
+
+  /**
+   * used to instantiate a Three.GroundedSkybox instance
+   * @default false
+   */
+  ground?: boolean | Partial<{ height: number; radius: number; resolution: number }>
+
+  /**
+   * options that are used with the loader.load
+   */
   loadOptions?: UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader>
 
+  /**
+   * options that are used when creating the loader
+   */
   loaderOptions?: UseLoaderOptions<typeof EXRLoader | typeof RGBELoader | typeof TextureLoader>
 
   /**
