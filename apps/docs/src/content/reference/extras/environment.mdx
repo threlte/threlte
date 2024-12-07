@@ -92,7 +92,7 @@ Internally `<Environment>` creates a loader based on the extension of the `resou
 | .hdr           | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
 | all others     | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
 
-As previously mentioned, if `resource` is a flepath, it should at least be something that can be loaded by `Three.TextureLoader`.
+As previously mentioned, if `resource` is a filepath, it should at least be something that can be loaded by `Three.TextureLoader`.
 
 ## Environment's Loader Props
 
@@ -117,7 +117,7 @@ The `loadOptions` prop is used to modify textures after they are loaded but befo
 </script>
 ```
 
-`loadOptions` is only accessed **before** the texture is assigned to `scene.environment`. This means that if you update `loadOptions`, you will not see its effects until the loader has to load a new texture.
+`loadOptions` is only accessed **before** the texture is assigned to `scene.environment`. This means that if you update `loadOptions`, you will not see its effect until the loader has to load a new texture.
 
 The default `loadOptions` sets `texture.mapping` to `Three.EquirectangularReflectionMapping`. `loadOptions` is _not_ used if `resource` is a `Texture` or `DataTexture`.
 
