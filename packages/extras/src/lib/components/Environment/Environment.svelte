@@ -119,6 +119,7 @@
 {#if ground !== false}
   {@const options = ground === true ? {} : ground}
   {#if texture !== undefined}
+    {@const args = [texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     <T
       oncreate={() => {
         return () => {
@@ -127,7 +128,7 @@
       }}
       is={GroundedSkybox}
       bind:ref={skybox}
-      args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
+      {args}
     />
   {/if}
 {/if}
