@@ -1,0 +1,72 @@
+---
+order: 7.15
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment.svelte'
+name: <CubeEnvironment>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          description: 'a six-tuple of files to load as a CubeTexture or a `Three.CubeTexture` instance',
+          name: 'resources',
+          required: true,
+          type: '[string, string, string, string, string, string] | Three.CubeTexture'
+        },
+        {
+          default: 'false',
+          description: 'whether to set `scene.background` to the loaded environment texture',
+          name: 'isBackground',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
+          required: false,
+          type: 'THREE.Scene'
+        },
+        {
+          description: 'optional options object that is used when loading the textures',
+          name: 'loadOptions',
+          required: false,
+          type: '{ transform?: (texture: Three.CubeTexture) => Three.CubeTexture, onProgress?: (event: ProgressEvent) => void }'
+        },
+        {
+          description: 'optional options object that is used passed to the `useLoader` function',
+          name: 'loaderOptions',
+          required: false,
+          type: '{ extend?: (loader: Three.CubeTextureLoader | Three.HDRCubeTextureLoader) => void }'
+        },
+        {
+          default: 'false',
+          description: 'creates a ground projected skybox',
+          name: 'ground',
+          required: false,
+          type: 'boolean | { height?: number, radius?: number, resolution?: number }'
+        },
+        {
+          description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
+          name: 'skybox',
+          default: 'undefined',
+          required: false,
+          type: undefined | Three.GroundedSkybox
+        }
+      ]
+  }
+---
+
+`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences. Those differences will be noted here. For all other documentation please refer to the docs for [\<Environment>](/docs/reference/extras/environment).
+
+<Example path="extras/cube-environment/basic" />
+
+## Resources
+
+`<CubeEnvironment>`'s `resources` prop can either be a six-tuple of strings to files or a single `CubeTexture` instance. If it is not an instance, the files will be loaded. The loader is determined by the first file's extension. Refer to the table below to determine which loader is used for a particular file extension.
+
+| file extension | loader                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| .hdr           | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
+| all others     | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |

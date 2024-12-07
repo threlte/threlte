@@ -1,5 +1,5 @@
 <script module>
-  const defaultLoadOptions: EnvironmentProps['loadOptions'] = {
+  const defaultLoadOptions: EquirectangularEnvironmentProps['loadOptions'] = {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping
       return texture
@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import type { EnvironmentProps } from './types'
+  import type { EquirectangularEnvironmentProps } from './types'
   import type { Scene, Texture } from 'three'
   import { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
@@ -21,11 +21,11 @@
     ground = false,
     isBackground = false,
     loadOptions = defaultLoadOptions,
-    loaderOptions,
+    loaderOptions = {},
     resource,
     scene,
     skybox = $bindable()
-  }: EnvironmentProps = $props()
+  }: EquirectangularEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
@@ -90,7 +90,7 @@
   const isEXR = $derived(_file.endsWith('exr'))
   const isHDR = $derived(_file.endsWith('hdr'))
 
-  // will default to `TextureLoader` if `resource` is not a string
+  // will default to `TextureLoader` if `resource` is a `Texture` instance
   const loader = $derived(
     useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
   )

@@ -2,46 +2,50 @@
   import Scene from './Scene.svelte'
   import type { ListOptions } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
-  import { Pane, Checkbox, Folder, List } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, Folder, List, Slider } from 'svelte-tweakpane-ui'
 
   let autoRotateCamera = $state(false)
   let environmentIsBackground = $state(true)
+  let useEnvironment = $state(true)
+  let environmentInputsDisabled = $derived(!useEnvironment)
 
-  const environmentFilePaths = {
-    '/exr/': '/textures/equirectangular/exr/',
-    '/hdr/': '/textures/equirectangular/hdr/',
-    '/jpg/': '/textures/equirectangular/jpg/'
+  type Extension = 'exr' | 'hdr' | 'jpg'
+
+  const extensionOptions: ListOptions<string> = {
+    exr: 'exr',
+    hdr: 'hdr',
+    jpg: 'jpg'
   } as const
 
   const hdrFiles: ListOptions<string> = {
-    aerodynamics_workshop_1k: 'aerodynamics_workshop_1k.hdr',
-    industrial_sunset_puresky_1k: 'industrial_sunset_puresky_1k.hdr',
-    mpumalanga_veld_puresky_1k: 'mpumalanga_veld_puresky_1k.hdr',
-    shanghai_riverside_1k: 'shanghai_riverside_1k.hdr'
-  }
+    aerodynamics_workshop: 'aerodynamics_workshop_1k.hdr',
+    industrial_sunset_puresky: 'industrial_sunset_puresky_1k.hdr',
+    mpumalanga_veld_puresky: 'mpumalanga_veld_puresky_1k.hdr',
+    shanghai_riverside: 'shanghai_riverside_1k.hdr'
+  } as const
 
   const exrFiles: ListOptions<string> = {
     piz_compressed: 'piz_compressed.exr'
-  }
+  } as const
 
   const jpgFiles: ListOptions<string> = {
     equirect_ruined_room: 'equirect_ruined_room.jpg'
-  }
+  } as const
 
-  let environmentPath = $state<(typeof environmentFilePaths)[keyof typeof environmentFilePaths]>(
-    environmentFilePaths['/hdr/']
-  )
+  let extension: keyof extensions = $state(extensionOptions.hdr)
+  const extensionFilePath = $derived(`/textures/equirectangular/${extension}/`)
 
-  let exrFile = $state('piz_compressed.exr')
-  let hdrFile = $state('shanghai_riverside_1k.hdr')
-  let jpgFile = $state('equirect_ruined_room.jpg')
+  let exrFile = $state(exrFiles.piz_compressed)
+  let hdrFile = $state(hdrFiles.shanghai_riverside)
+  let jpgFile = $state(jpgFiles.equirect_ruined_room)
 
-  const pathIsEXR = $derived(environmentPath === '/textures/equirectangular/exr/')
-  const pathIsHDR = $derived(environmentPath === '/textures/equirectangular/hdr/')
+  const extensionIsEXR = $derived(extension === 'exr')
+  const extensionIsHDR = $derived(extension === 'hdr')
 
-  const environmentFile = $derived(pathIsHDR ? hdrFile : pathIsEXR ? exrFile : jpgFile)
+  const environmentFile = $derived(extensionIsHDR ? hdrFile : extensionIsEXR ? exrFile : jpgFile)
 
-  let useEnvironment = $state(true)
+  let materialMetalness = $state(1)
+  let materialRoughness = $state(0)
 </script>
 
 <Pane
@@ -52,36 +56,57 @@
     label="use <Environment>"
     bind:value={useEnvironment}
   />
-  {#if useEnvironment}
-    <Checkbox
-      label="isBackground"
-      bind:value={environmentIsBackground}
-    />
+  <Checkbox
+    disabled={environmentInputsDisabled}
+    label="is background"
+    bind:value={environmentIsBackground}
+  />
+  <List
+    disabled={environmentInputsDisabled}
+    options={extensionOptions}
+    bind:value={extension}
+    label="extension"
+  />
+  {#if extensionIsHDR}
     <List
-      options={environmentFilePaths}
-      bind:value={environmentPath}
-      label="path"
+      disabled={environmentInputsDisabled}
+      options={hdrFiles}
+      bind:value={hdrFile}
+      label="file"
     />
-    {#if pathIsHDR}
-      <List
-        options={hdrFiles}
-        bind:value={hdrFile}
-        label="file"
-      />
-    {:else if pathIsEXR}
-      <List
-        options={exrFiles}
-        bind:value={exrFile}
-        label="file"
-      />
-    {:else}
-      <List
-        options={jpgFiles}
-        bind:value={jpgFile}
-        label="file"
-      />
-    {/if}
+  {:else if extensionIsEXR}
+    <List
+      disabled={environmentInputsDisabled}
+      options={exrFiles}
+      bind:value={exrFile}
+      label="file"
+    />
+  {:else}
+    <List
+      disabled={environmentInputsDisabled}
+      options={jpgFiles}
+      bind:value={jpgFile}
+      label="file"
+    />
   {/if}
+  <Folder title="material props">
+    <Slider
+      disabled={environmentInputsDisabled}
+      bind:value={materialMetalness}
+      label="metalness"
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <Slider
+      disabled={environmentInputsDisabled}
+      bind:value={materialRoughness}
+      label="roughness"
+      min={0}
+      max={1}
+      step={0.1}
+    />
+  </Folder>
   <Folder title="camera">
     <Checkbox
       bind:value={autoRotateCamera}
@@ -94,9 +119,11 @@
   <Canvas>
     <Scene
       {autoRotateCamera}
+      {extensionFilePath}
       {environmentFile}
       {environmentIsBackground}
-      {environmentPath}
+      {materialMetalness}
+      {materialRoughness}
       {useEnvironment}
     />
   </Canvas>

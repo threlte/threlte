@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { Environment, OrbitControls } from '@threlte/extras'
+  import { CubeEnvironment, OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
 
   type Props = {
     autoRotateCamera?: boolean
-    environmentFile: string
-    extensionFilePath: string
+    environmentFiles: [string, string, string, string, string, string]
     environmentIsBackground?: boolean
+    environmentFilesPath: string
     isBackground?: boolean
     materialMetalness?: number
     materialRoughness?: number
@@ -15,15 +15,13 @@
 
   let {
     autoRotateCamera = false,
-    environmentFile,
-    extensionFilePath,
+    environmentFiles,
     environmentIsBackground = true,
+    environmentFilesPath,
     materialMetalness = 1,
     materialRoughness = 0,
     useEnvironment = true
   }: Props = $props()
-
-  $inspect(environmentFile, extensionFilePath)
 </script>
 
 <T.PerspectiveCamera
@@ -42,13 +40,13 @@
 </T.Mesh>
 
 {#if useEnvironment}
-  <Environment
+  <CubeEnvironment
     isBackground={environmentIsBackground}
     loaderOptions={{
       extend(loader) {
-        loader.setPath(extensionFilePath)
+        loader.setPath(environmentFilesPath)
       }
     }}
-    resource={environmentFile}
+    resources={environmentFiles}
   />
 {/if}
