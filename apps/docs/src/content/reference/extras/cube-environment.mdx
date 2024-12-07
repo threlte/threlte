@@ -58,13 +58,13 @@ componentSignature:
   }
 ---
 
-`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences. Those differences will be noted here. For all other documentation please refer to the docs for [\<Environment>](/docs/reference/extras/environment).
+`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences. Those differences will be noted below. For all other information please refer to the [\<Environment>](/docs/reference/extras/environment) documentation.
 
 <Example path="extras/cube-environment/basic" />
 
 ## Resources
 
-`<CubeEnvironment>`'s `resources` prop can either be a six-tuple of strings to files or a single `CubeTexture` instance. If it is not an instance, the files will be loaded. The loader is determined by the first file's extension. Refer to the table below to determine which loader is used for a particular file extension.
+`<CubeEnvironment>`'s `resources` prop can either be a six-tuple of strings or a single `CubeTexture` instance. If `resources` is a tuple, the files will be loaded using an appropriate loader. The loader is determined by the first file's extension. Refer to the table below to determine which loader is used for each extension.
 
 | file extension | loader                                                                                                                  |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -73,4 +73,4 @@ componentSignature:
 
 ## No Default `loadOptions`
 
-`<CubeEnvironment` does not have a default `loadOptions` function because it doesn't need to do anything with the loaded texture. The texture is ready to go once it has been loaded.
+`<CubeEnvironment` does not have a default `loadOptions` function because it doesn't need to do anything with the loaded texture. The texture is ready to go once it has been loaded. However, you can still use `loadOptions` if you want to modify the loaded texture.
