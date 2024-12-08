@@ -59,7 +59,7 @@ componentSignature:
   }
 ---
 
-Asynchronously loads a single environment texture and sets the provided scene's `environment` and or `background` to the texture when loaded. `<Environment>` is esigned to handle only equirectangular-mapped textures. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
+Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
 
 <Example path="extras/environment/basic" />
 
@@ -87,7 +87,7 @@ Internally `<Environment>` creates a loader based on the extension of the `resou
 | .hdr           | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
 | all others     | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
 
-As previously mentioned, if `resource` is a filepath, it should at least be something that can be loaded by `Three.TextureLoader`.
+As previously mentioned, if `resource` is a file path, it should at least be something that can be loaded by `Three.TextureLoader`.
 
 ## Load/Loader Props
 
@@ -114,14 +114,14 @@ The `loadOptions` prop is used to modify textures after they are loaded but befo
 
 `loadOptions` is only accessed **before** the texture is assigned to `scene.environment`. This means that if you update `loadOptions`, you will not see its effect until the loader has to load a new texture.
 
-The default `loadOptions` sets `texture.mapping` to `Three.EquirectangularReflectionMapping`. `loadOptions` is _not_ used if `resource` is a `Texture` or `DataTexture`.
+The default `loadOptions` sets `texture.mapping` to `Three.EquirectangularReflectionMapping`. `loadOptions` is **not** used if `resource` is a `Texture` or `DataTexture`.
 
 <Tip type="warning">
   ThreeJS considers environment maps to be static. This means that if you modify the texture somehow
   after it has been assigned to `scene.environment`, the changes will not be visually present.
 </Tip>
 
-The example below uses the `loadOptions` prop to flip the loaded texture over the x-axis. Notice how toggling the checkbox does not cause the texture to flip. If you however toggle the checkbox and then switch the file, the displayed texture will match the state of "flipY".
+The example below uses the `loadOptions` prop to flip the loaded texture over the x-axis. Notice how toggling the checkbox does not cause the texture to flip. If you however toggle the checkbox and then switch the file, the displayed texture will match the state of `flipY`.
 
 <Example path="extras/environment/modifying-the-texture" />
 
@@ -142,7 +142,7 @@ The `loaderOptions` prop is used to modify the loader after it is created and to
 
 A common use for `loaderOptions` is to set the path for the loader to load files from. Assuming all your files live in the same directory, you can simplify loading.
 
-```svelte
+```svelte title="Scene.svelte"
 <script>
   import { useTask } from '@threlte/core'
 
@@ -176,7 +176,7 @@ A common use for `loaderOptions` is to set the path for the loader to load files
 
 If your files live online somewhere you can set the url of the loader and refer to your files by filename.
 
-```svelte
+```svelte title="Scene.svelte"
 <Environment
   resource="file.hdr"
   loaderOptions={{
@@ -201,7 +201,7 @@ The example below creates a custom render task that draws two scenes to the canv
 
 Textures are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is being fetched and loaded.
 
-```svelte
+```svelte title="Scene.svelte"
 <script>
   import { Suspense, Text } from '@threlte/extras'
 </script>
@@ -233,7 +233,7 @@ If `resource` is an instance of a `Texture` or `DataTexture`, the suspense is im
 
 The bindable prop `skybox` is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
 
-```svelte
+```svelte title="Scene.svelte"
 <script>
   let skybox = $state() // GroundedSkybox | undefined
 
