@@ -22,8 +22,6 @@
     materialRoughness = 0,
     useEnvironment = true
   }: Props = $props()
-
-  $inspect(environmentFile, extensionFilePath)
 </script>
 
 <T.PerspectiveCamera
