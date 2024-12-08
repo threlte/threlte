@@ -1,29 +1,30 @@
-<script
-  lang="ts"
-  module
->
-  const loaderCache: CubeEnvironmentCache = {}
+<script module>
+  const defaultLoadOptions: EquirectangularEnvironmentProps['loadOptions'] = {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    }
+  }
 </script>
 
 <script lang="ts">
-  import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
-  import type { CubeTexture, Scene, Texture } from 'three'
-  import { CubeTextureLoader } from 'three'
-  import { GroundedSkybox } from 'three/examples/jsm/Addons.js'
-  import { HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
-  import { Previous } from './Previous.svelte'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, useLoader, useThrelte } from '@threlte/core'
+  import type { Scene, Texture } from 'three'
+  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { useSuspense } from '../../suspense/useSuspense'
+  import { Previous } from './Previous.svelte'
+  import type { EquirectangularEnvironmentProps } from './types'
 
   let {
     ground = false,
     isBackground = false,
-    loadOptions = {},
+    loadOptions = defaultLoadOptions,
     loaderOptions = {},
-    resources,
+    resource,
     scene,
     skybox = $bindable()
-  }: CubeEnvironmentProps = $props()
+  }: EquirectangularEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
@@ -83,33 +84,21 @@
     }
   })
 
-  const first = $derived(Array.isArray(resources) ? resources[0] : resources)
+  const _file = $derived(typeof resource === 'string' ? resource : '')
 
-  // will default to `CubeTextureLoader` if `resources` is a CubeTexture instance
-  const loader = $derived.by(() => {
-    let loader = (loaderCache.tex ??= new CubeTextureLoader())
-    if (typeof first === 'string' && first.endsWith('hdr')) {
-      loader = loaderCache.hdr ??= new HDRCubeTextureLoader()
-    }
-    return loaderOptions.extend?.(loader) ?? loader
-  })
+  const isEXR = $derived(_file.endsWith('exr'))
+  const isHDR = $derived(_file.endsWith('hdr'))
+
+  // will default to `TextureLoader` if `resource` is a `Texture` instance
+  const loader = $derived(
+    useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
+  )
 
   const suspend = useSuspense()
 
   $effect(() => {
     const suspendedTexture = suspend(
-      Array.isArray(resources)
-        ? new Promise<CubeTexture>((resolve, reject) => {
-            loader.load(
-              resources,
-              (data) => {
-                resolve(loadOptions?.transform?.(data) ?? data)
-              },
-              loadOptions?.onProgress,
-              reject
-            )
-          })
-        : Promise.resolve(resources)
+      typeof resource === 'string' ? loader.load(resource, loadOptions) : Promise.resolve(resource)
     )
 
     suspendedTexture.then((t) => {
