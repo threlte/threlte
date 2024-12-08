@@ -89,7 +89,7 @@ Internally `<Environment>` creates a loader based on the extension of the `resou
 
 As previously mentioned, if `resource` is a filepath, it should at least be something that can be loaded by `Three.TextureLoader`.
 
-## Environment's Loader Props
+## Load/Loader Props
 
 `<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files. The `loadOptions` and `loaderOptions` props are only used when loading a texture. These props are ignored if `resource` is not a string because there's nothing to load in that case.
 
@@ -253,7 +253,7 @@ The bindable prop `skybox` is a reference to the created `GroundedSkybox` instan
 
 There are a couple of important things to consider when using the `ground` property:
 
-1. `skybox` is only set to a `GroundedSkybox` instance if `ground` !== `false` and **after** the texture is available. It is set to `undefined` when the `<Environmen>` unmounts.
+1. `skybox` is only set to a `GroundedSkybox` instance if `ground` !== `false` and **after** the texture is available. It is set to `undefined` when `<Environment>` unmounts.
 
 2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
 
