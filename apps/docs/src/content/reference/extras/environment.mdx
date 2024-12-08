@@ -41,10 +41,11 @@ componentSignature:
             }'
         },
         {
+          default: '{}'
           description: 'optional options object that is passed to the `useLoader` function',
           name: 'loaderOptions',
           required: false,
-          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>'
+          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>',
         },
         {
           default: 'false',
@@ -198,7 +199,7 @@ The `loaderOptions` prop is also where you'd set credentials, headers, etc. for 
 
 All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the initial `environment` and `background` properties of the last scene.
 
-The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment to be applied to either the left or the right side. You can observe that when `side` updates, the original `background` and `environment` for previous side are restored.
+The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment to be applied to either the left or the right side. You can observe that when `side` updates, the original `background` and `environment` for the previous side are restored.
 
 <Example path="extras/environment/swapping-scenes" />
 
