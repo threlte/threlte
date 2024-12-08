@@ -28,24 +28,18 @@ componentSignature:
           required: false,
           type: 'THREE.Scene'
         },
-        {
-          description: "optional options object that is used in the loader's `load` function",
-          name: 'loadOptions',
-          required: false,
-          type: 'UseLoaderLoadOptions<Three.EXRLoader | Three.RGBELoader | Three.TextureLoader>',
-          default: '{
+        { default: '{
             transform(texture) {
             texture.mapping = Three.EquirectangularReflectionMapping
             return texture
             }
-            }'
-        },
+            }', description: "optional options object that is used in the loader's `load` function", name: 'loadOptions', required: false, type: 'UseLoaderLoadOptions<Three.EXRLoader | Three.RGBELoader | Three.TextureLoader>' },
         {
-          default: '{}'
+          default: '{}',
           description: 'optional options object that is passed to the `useLoader` function',
           name: 'loaderOptions',
           required: false,
-          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>',
+          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>'
         },
         {
           default: 'false',
