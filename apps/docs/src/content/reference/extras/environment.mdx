@@ -168,7 +168,7 @@ A common use for `loaderOptions` is to set the path for the loader to load files
   {resource}
   loaderOptions={{
     extend(loader) {
-      loader.setPath('/path/to/your/files')
+      loader.setPath('/path/to/your/files/')
     }
   }}
 />
@@ -223,7 +223,7 @@ Textures are suspended so they may be used in a suspense context. This means if 
 </Suspense>
 ```
 
-If `resource` is a `Texture` or `DataTexture` instance, the suspense is immediately resolved.
+If `resource` is an instance of a `Texture` or `DataTexture`, the suspense is immediately resolved.
 
 ## Grounded Skyboxes
 
