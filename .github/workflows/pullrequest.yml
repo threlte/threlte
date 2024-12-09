@@ -28,5 +28,5 @@ jobs:
       - name: Prettier 💅
         run: pnpm run prettier
 
-			- name: Test
-				run: pnpm run test
+      - name: Test
+        run: pnpm run test
