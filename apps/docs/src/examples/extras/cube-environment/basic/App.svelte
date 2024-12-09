@@ -23,7 +23,7 @@
   } as const
 
   const filesMap: Record<Cube, [string, string, string, string, string, string]> = {
-    bridge: ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'negz.jpg', 'posz.jpg'],
+    bridge: ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg'],
     pisa: ['nx.hdr', 'ny.hdr', 'nz.hdr', 'px.hdr', 'py.hdr', 'pz.hdr']
   } as cons
 
