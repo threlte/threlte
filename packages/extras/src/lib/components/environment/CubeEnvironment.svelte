@@ -7,11 +7,10 @@
 
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import type { CubeTexture, Scene, Texture } from 'three'
+  import type { CubeTexture, Texture } from 'three'
   import { CubeTextureLoader } from 'three'
   import { GroundedSkybox, HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
   import { useSuspense } from '../../suspense/useSuspense'
-  import { Previous } from './Previous.svelte'
   import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
 
   let {
@@ -28,57 +27,40 @@
 
   const _scene = $derived(scene ?? defaultScene)
 
-  let initialBackground: Scene['background'] | undefined
-  let initialEnvironment: Scene['environment'] | undefined
-
-  const lastScene = new Previous(() => _scene)
-
   let texture: Texture | undefined = $state()
 
+  // save lastScene and restore when scene changes.
   $effect(() => {
-    if (lastScene.current !== undefined) {
-      if (initialBackground !== undefined) {
-        lastScene.current.background = initialBackground
-        initialBackground = undefined
-      }
-      if (initialEnvironment !== undefined) {
-        lastScene.current.environment = initialEnvironment
-        initialEnvironment = undefined
-      }
+    const last = _scene
+    const background = last.background
+    const environment = last.environment
+    return () => {
+      last.background = background
+      last.environment = environment
     }
   })
 
-  // can't use ??= in some of these effects since null is valid for scene.environment and background. must explicity check for undefined
-
   $effect(() => {
+    const initialBackground = _scene.background
     if (isBackground) {
       if (texture !== undefined) {
-        if (initialBackground === undefined) {
-          initialBackground = _scene.background
-        }
         _scene.background = texture
         invalidate()
       }
       return () => {
-        if (initialBackground !== undefined) {
-          _scene.background = initialBackground
-        }
+        _scene.background = initialBackground
         invalidate()
       }
     }
   })
 
   $effect(() => {
+    const initialEnvironment = _scene.environment
     if (texture !== undefined) {
-      if (initialEnvironment === undefined) {
-        initialEnvironment = _scene.environment
-      }
       _scene.environment = texture
       invalidate()
       return () => {
-        if (initialEnvironment !== undefined) {
-          _scene.environment = initialEnvironment
-        }
+        _scene.environment = initialEnvironment
         invalidate()
       }
     }
