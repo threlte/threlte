@@ -6,12 +6,12 @@
 
   let flipY = $state(true)
 
-  const fileOptions: ListOptions<string> = {
+  const urlOptions: ListOptions<string> = {
     aerodynamics_workshop_1k: '/textures/equirectangular/hdr/aerodynamics_workshop_1k.hdr',
     shanghai_riverside_1k: '/textures/equirectangular/hdr/shanghai_riverside_1k.hdr'
   } as const
 
-  let file = $state(fileOptions.aerodynamics_workshop_1k)
+  let url = $state(urlOptions.aerodynamics_workshop_1k)
 </script>
 
 <Pane
@@ -23,16 +23,16 @@
     label="flipY"
   />
   <List
-    options={fileOptions}
-    label="file"
-    bind:value={file}
+    options={urlOptions}
+    label="url"
+    bind:value={url}
   />
 </Pane>
 
 <div>
   <Canvas>
     <Scene
-      {file}
+      {url}
       {flipY}
     />
   </Canvas>
