@@ -96,3 +96,34 @@ export type CubeEnvironmentProps = {
     extend?: (loader: CubeTextureLoader | HDRCubeTextureLoader) => void
   }
 } & EnvironmentProps
+
+export type EnvironmentTestProps<U extends string | undefined> = EnvironmentProps &
+  (U extends string
+    ? {
+        /**
+         * the enviroment file to load
+         */
+        url: U
+        texture?: never
+
+        /**
+         * options that are used with loader.load
+         */
+        loadOptions?: UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader>
+
+        /**
+         * options that are used when creating the loader
+         */
+        loaderOptions?: UseLoaderOptions<
+          typeof EXRLoader | typeof RGBELoader | typeof TextureLoader
+        >
+      }
+    : {
+        url?: never
+        loadOptions?: never
+        loaderOptions?: never
+        /**
+         * the texture to use
+         */
+        texture: Texture | DataTexture
+      })
