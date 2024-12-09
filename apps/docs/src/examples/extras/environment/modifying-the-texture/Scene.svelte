@@ -12,12 +12,16 @@
 
   let { flipY = true, url }: Props = $props()
 
-  const loadOptions: UseLoaderLoadOptions<RGBELoader> = $derived({
-    transform(texture) {
-      texture.flipY = flipY
-      texture.mapping = EquirectangularReflectionMapping
+  const createLoadOptions = (flipY: boolean): UseLoaderLoadOptions<RGBELoader> => {
+    return {
+      transform(texture) {
+        texture.flipY = flipY
+        texture.mapping = EquirectangularReflectionMapping
+      }
     }
-  })
+  }
+
+  const loadOptions: UseLoaderLoadOptions<RGBELoader> = $derived(createLoadOptions(flipY))
 </script>
 
 <T.Mesh>
