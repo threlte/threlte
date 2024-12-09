@@ -53,7 +53,9 @@
   $effect(() => {
     if (isBackground) {
       if (texture !== undefined) {
-        initialBackground ??= _scene.background
+        if (initialBackground === undefined) {
+          initialBackground = _scene.background
+        }
         _scene.background = texture
         invalidate()
       }
@@ -68,7 +70,9 @@
 
   $effect(() => {
     if (texture !== undefined) {
-      initialEnvironment ??= _scene.environment
+      if (initialEnvironment === undefined) {
+        initialEnvironment = _scene.environment
+      }
       _scene.environment = texture
       invalidate()
       return () => {
