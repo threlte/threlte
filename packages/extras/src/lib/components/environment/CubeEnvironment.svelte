@@ -51,9 +51,7 @@
   $effect(() => {
     if (isBackground) {
       if (texture !== undefined) {
-        if (initialBackground === undefined) {
-          initialBackground = _scene.background
-        }
+        initialBackground ??= _scene.background
         _scene.background = texture
         invalidate()
       }
@@ -68,9 +66,7 @@
 
   $effect(() => {
     if (texture !== undefined) {
-      if (initialEnvironment === undefined) {
-        initialEnvironment = _scene.environment
-      }
+      initialEnvironment ??= _scene.environment
       _scene.environment = texture
       invalidate()
       return () => {
@@ -96,29 +92,32 @@
   const suspend = useSuspense()
 
   $effect(() => {
-    const suspendedTexture = suspend(
-      Array.isArray(resources)
-        ? new Promise<CubeTexture>((resolve, reject) => {
-            loader.load(
-              resources,
-              (data) => {
-                resolve(loadOptions?.transform?.(data) ?? data)
-              },
-              loadOptions?.onProgress,
-              reject
-            )
-          })
-        : Promise.resolve(resources)
-    )
+    const shouldLoadTexture = Array.isArray(resources)
+    const promise = shouldLoadTexture
+      ? new Promise<CubeTexture>((resolve, reject) => {
+          loader.load(
+            resources,
+            (texture) => {
+              resolve(loadOptions.transform?.(texture) ?? texture)
+            },
+            loadOptions.onProgress,
+            reject
+          )
+        })
+      : Promise.resolve(resources)
+
+    const suspendedTexture = suspend(promise)
 
     suspendedTexture.then((t) => {
       texture = t
     })
 
-    // dispose on unmount and whenever path or file has updated
-    // this is important to do in a `.then` because the component may unmount before the texture has loaded.
+    // dispose on unmount and whenever `resource` or `loadOptions` has updated
+    // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
     return () => {
       suspendedTexture.then((texture) => {
+        if (shouldLoadTexture) {
+        }
         texture.dispose()
       })
     }

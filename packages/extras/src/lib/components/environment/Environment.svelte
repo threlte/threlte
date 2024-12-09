@@ -53,9 +53,7 @@
   $effect(() => {
     if (isBackground) {
       if (texture !== undefined) {
-        if (initialBackground === undefined) {
-          initialBackground = _scene.background
-        }
+        initialBackground ??= _scene.background
         _scene.background = texture
         invalidate()
       }
@@ -70,9 +68,7 @@
 
   $effect(() => {
     if (texture !== undefined) {
-      if (initialEnvironment === undefined) {
-        initialEnvironment = _scene.environment
-      }
+      initialEnvironment ??= _scene.environment
       _scene.environment = texture
       invalidate()
       return () => {
@@ -84,10 +80,10 @@
     }
   })
 
-  const _file = $derived(typeof resource === 'string' ? resource : '')
+  const _url = $derived(typeof resource === 'string' ? resource : '')
 
-  const isEXR = $derived(_file.endsWith('exr'))
-  const isHDR = $derived(_file.endsWith('hdr'))
+  const isEXR = $derived(_url.endsWith('exr'))
+  const isHDR = $derived(_url.endsWith('hdr'))
 
   // will default to `TextureLoader` if `resource` is a `Texture` instance
   const loader = $derived(
@@ -97,18 +93,19 @@
   const suspend = useSuspense()
 
   $effect(() => {
-    const suspendedTexture = suspend(
-      typeof resource === 'string' ? loader.load(resource, loadOptions) : Promise.resolve(resource)
+    const shouldLoadTexture = typeof resource === 'string'
+    const texturePromise = suspend(
+      shouldLoadTexture ? loader.load(resource, loadOptions) : Promise.resolve(resource)
     )
 
-    suspendedTexture.then((t) => {
+    texturePromise.then((t) => {
       texture = t
     })
 
-    // dispose on unmount and whenever path or file has updated
-    // this is important to do in a `.then` because the component may unmount before the texture has loaded.
+    // dispose on unmount and whenever `resource` or `loadOptions` has updated
+    // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
     return () => {
-      suspendedTexture.then((texture) => {
+      texturePromise.then((texture) => {
         texture.dispose()
       })
     }
