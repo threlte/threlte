@@ -17,8 +17,8 @@
     left: new Scene(),
     right: new Scene()
   }
-  scenes.left.background = new Color('orangered')
-  scenes.right.background = new Color('hotpink')
+  scenes.left.background = new Color('red')
+  scenes.right.background = new Color('green')
 
   const scene = $derived(scenes[side])
 

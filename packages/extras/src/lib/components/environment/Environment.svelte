@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { EquirectangularEnvironmentProps } from './types'
   import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
-  import { T, useLoader, useThrelte } from '@threlte/core'
+  import { EquirectangularReflectionMapping, Scene, TextureLoader } from 'three'
+  import { observe, T, useLoader, useThrelte } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense'
 
   let {
@@ -25,33 +25,39 @@
     const background = last.background
     const environment = last.environment
     return () => {
-      console.log(last === _scene)
       last.background = background
       last.environment = environment
     }
   })
 
+  let background: Scene['background'] | undefined = $state()
+  let environment: Scene['environment'] | undefined = $state()
+
+  observe(
+    () => [_scene],
+    ([scene]) => {
+      background = scene.background
+      environment = scene.environment
+    }
+  )
+
   $effect(() => {
-    if (isBackground) {
-      if (texture !== undefined) {
-        const initialBackground = _scene.background
-        _scene.background = texture
+    if (isBackground && texture !== undefined) {
+      _scene.background = texture
+      invalidate()
+      return () => {
+        _scene.background = background ?? _scene.background
         invalidate()
-        return () => {
-          _scene.background = initialBackground
-          invalidate()
-        }
       }
     }
   })
 
   $effect(() => {
     if (texture !== undefined) {
-      const initialEnvironment = _scene.environment
       _scene.environment = texture
       invalidate()
       return () => {
-        _scene.environment = initialEnvironment
+        _scene.environment = environment ?? _scene.environment
         invalidate()
       }
     }
