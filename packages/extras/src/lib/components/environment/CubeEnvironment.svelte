@@ -91,7 +91,7 @@
       texture = t
     })
 
-    // dispose on unmount and whenever `resource` or `loadOptions` has updated
+    // dispose on unmount
     // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
     return () => {
       suspendedTexture.then((texture) => {
