@@ -22,7 +22,7 @@ export type EnvironmentProps = {
    * bindable skybox ref if a `ground` options are passed in
    * @default undefined - ground is false by default
    */
-  skybox?: GroundedSkybox
+  skybox?: GroundedSkybox | undefined
 
   /**
    * used to instantiate a Three.GroundedSkybox instance
@@ -41,6 +41,11 @@ export type EnvironmentProps = {
    * @default useThrelte().scene
    */
   scene?: Scene
+
+  /**
+   * a bindable of the loaded texture
+   */
+  texture?: DataTexture | Texture | undefined
 }
 
 export type EquirectangularEnvironmentProps = {
@@ -48,11 +53,6 @@ export type EquirectangularEnvironmentProps = {
    * the enviroment file to load or the texture to use
    */
   resource: string | DataTexture | Texture
-
-  /**
-   * options that are used with loader.load
-   */
-  loadOptions?: UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader>
 
   /**
    * options that are used when creating the loader
@@ -79,15 +79,6 @@ export type CubeEnvironmentProps = {
         positiveZ: string,
         negativeZ: string
       ]
-
-  /**
-   * options that are used with loader.load
-   * TODO: modify `useLoader` to be able to call load(string[])
-   */
-  loadOptions?: {
-    transform?: (texture: CubeTexture) => CubeTexture
-    onProgress?: (event: ProgressEvent) => void
-  }
 
   /**
    * options that are used when creating the loader

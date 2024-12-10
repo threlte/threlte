@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Environment, OrbitControls, Suspense } from '@threlte/extras'
-  import { GroundedSkybox } from 'three/examples/jsm/Addons'
+  import { GroundedSkybox } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
 
   type Props = {

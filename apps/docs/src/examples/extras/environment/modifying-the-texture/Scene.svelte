@@ -1,8 +1,6 @@
 <script lang="ts">
-  import type { UseLoaderLoadOptions } from '@threlte/core'
-  import type { RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { DataTexture, Texture } from 'three'
   import { Environment, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping } from 'three'
   import { T } from '@threlte/core'
 
   type Props = {
@@ -12,16 +10,13 @@
 
   let { flipY = true, url }: Props = $props()
 
-  const createLoadOptions = (flipY: boolean): UseLoaderLoadOptions<RGBELoader> => {
-    return {
-      transform(texture) {
-        texture.flipY = flipY
-        texture.mapping = EquirectangularReflectionMapping
-      }
-    }
-  }
+  let texture: DataTexture | Texture | undefined = $state()
 
-  const loadOptions: UseLoaderLoadOptions<RGBELoader> = $derived(createLoadOptions(flipY))
+  $effect(() => {
+    if (texture !== undefined) {
+      texture.flipY = flipY
+    }
+  })
 </script>
 
 <T.Mesh>
@@ -41,6 +36,6 @@
 
 <Environment
   isBackground
-  {loadOptions}
   resource={url}
+  bind:texture
 />

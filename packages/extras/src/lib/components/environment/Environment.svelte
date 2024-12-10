@@ -1,37 +1,25 @@
-<script module>
-  const defaultLoadOptions: EquirectangularEnvironmentProps['loadOptions'] = {
-    transform(texture) {
-      texture.mapping = EquirectangularReflectionMapping
-      return texture
-    }
-  }
-</script>
-
 <script lang="ts">
-  import { T, useLoader, useThrelte } from '@threlte/core'
-  import type { Texture } from 'three'
-  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
-  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { useSuspense } from '../../suspense/useSuspense'
   import type { EquirectangularEnvironmentProps } from './types'
+  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import { T, useLoader, useThrelte } from '@threlte/core'
+  import { useSuspense } from '../../suspense/useSuspense'
 
   let {
     ground = false,
     isBackground = false,
-    loadOptions = defaultLoadOptions,
     loaderOptions = {},
     resource,
     scene,
-    skybox = $bindable()
+    skybox = $bindable(),
+    texture = $bindable()
   }: EquirectangularEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
   const _scene = $derived(scene ?? defaultScene)
 
-  let texture: Texture | undefined = $state()
-
-  // save lastScene and restore when scene changes.
+  // save lastScene and restore when scene changes and on unmount
   $effect(() => {
     const last = _scene
     const background = last.background
@@ -41,8 +29,6 @@
       last.environment = environment
     }
   })
-
-  // can't use ??= in some of these effects since null is valid for scene.environment and scene.background. must explicity check for undefined
 
   $effect(() => {
     if (isBackground) {
@@ -84,8 +70,16 @@
 
   $effect(() => {
     const shouldLoadTexture = typeof resource === 'string'
+
     const texturePromise = suspend(
-      shouldLoadTexture ? loader.load(resource, loadOptions) : Promise.resolve(resource)
+      shouldLoadTexture
+        ? loader.load(resource, {
+            transform(texture) {
+              texture.mapping = EquirectangularReflectionMapping
+              return texture
+            }
+          })
+        : Promise.resolve(resource)
     )
 
     texturePromise.then((t) => {

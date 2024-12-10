@@ -6,30 +6,28 @@
 </script>
 
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
-  import type { CubeTexture, Texture } from 'three'
+  import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
+  import type { CubeTexture } from 'three'
   import { CubeTextureLoader } from 'three'
   import { GroundedSkybox, HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
+  import { T, useThrelte } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
 
   let {
     ground = false,
     isBackground = false,
-    loadOptions = {},
     loaderOptions = {},
     resources,
     scene,
-    skybox = $bindable()
+    skybox = $bindable(),
+    texture = $bindable()
   }: CubeEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
 
   const _scene = $derived(scene ?? defaultScene)
 
-  let texture: Texture | undefined = $state()
-
-  // save lastScene and restore when scene changes.
+  // save lastScene and restore when scene changes and on unmount
   $effect(() => {
     const last = _scene
     const background = last.background
@@ -83,14 +81,7 @@
     const shouldLoadTexture = Array.isArray(resources)
     const promise = shouldLoadTexture
       ? new Promise<CubeTexture>((resolve, reject) => {
-          loader.load(
-            resources,
-            (texture) => {
-              resolve(loadOptions.transform?.(texture) ?? texture)
-            },
-            loadOptions.onProgress,
-            reject
-          )
+          loader.load(resources, resolve, undefined, reject)
         })
       : Promise.resolve(resources)
 
@@ -104,8 +95,6 @@
     // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
     return () => {
       suspendedTexture.then((texture) => {
-        if (shouldLoadTexture) {
-        }
         texture.dispose()
       })
     }

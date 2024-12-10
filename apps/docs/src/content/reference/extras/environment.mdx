@@ -28,19 +28,6 @@ componentSignature:
           required: false,
           type: 'THREE.Scene'
         },
-        { default: '{
-            transform(texture) {
-            texture.mapping = Three.EquirectangularReflectionMapping
-            return texture
-            }
-            }', description: "optional options object that is used in the loader's `load` function", name: 'loadOptions', required: false, type: 'UseLoaderLoadOptions<Three.EXRLoader | Three.RGBELoader | Three.TextureLoader>' },
-        {
-          default: '{}',
-          description: 'optional options object that is passed to the `useLoader` function',
-          name: 'loaderOptions',
-          required: false,
-          type: 'UseLoaderOptions<typeof Three.EXRLoader | typeof Three.RGBELoader | typeof Three.TextureLoader>'
-        },
         {
           default: 'false',
           description: 'creates a ground projected skybox',
@@ -89,43 +76,19 @@ Internally `<Environment>` creates a loader based on the extension of the `resou
 
 As previously mentioned, if `resource` is a file path, it should at least be something that can be loaded by `Three.TextureLoader`.
 
-## Load/Loader Props
+## Loader Options
 
-`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files. The `loadOptions` and `loaderOptions` props are only used when loading a texture. These props are ignored if `resource` is not a string because there's nothing to load in that case.
+`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files. `loaderOptions` props are only used when loading a texture. `loaderOptions` is ignored if `resource` is a `Texture` instance.
 
-### `loadOptions`
+## Modifying The Texture
 
-The `loadOptions` prop is used to modify textures after they are loaded but before they are assigned to `scene.environment`. It corresponds to the `load` function of the object returned from `useLoader`. In other words, it is used in the following manner.
+`<Environment>` exposes the loaded texture through its `texture` property if you need to modify the texture. Note that `<Environment>` will set `texture.mapping` to `Three.EquirectangularReflectionMapping` the first time the texture is loaded. Likewise, the scene's environment is only set after a texture is loaded. What this means is even if you update the texture, the environment will not be updated until a new texture has to be loaded or retrieved from the cache.
 
-```svelte title="Environment.svelte"
-<!-- Note this is a simplified version for explanation purposes -->
-<script>
-  import { useLoader } from '@threlte/core'
-
-  let { file, loadOptions } = $props()
-
-  const { load } = useLoader(loader)
-
-  $effect(() => {
-    load(file, loadOptions)
-  })
-</script>
-```
-
-`loadOptions` is only accessed **before** the texture is assigned to `scene.environment`. This means that if you update `loadOptions`, you will not see its effect until the loader has to load a new texture.
-
-The default `loadOptions` sets `texture.mapping` to `Three.EquirectangularReflectionMapping`. `loadOptions` is **not** used if `resource` is a `Texture` or `DataTexture`.
-
-<Tip type="warning">
-  ThreeJS considers environment maps to be static. This means that if you modify the texture somehow
-  after it has been assigned to `scene.environment`, the changes will not be visually present.
-</Tip>
-
-The example below uses the `loadOptions` prop to flip the loaded texture over the x-axis. Notice how toggling the checkbox does not cause the texture to flip. If you however toggle the checkbox and then switch the file, the displayed texture will match the state of `flipY`.
+The example below demonstrates modifying the texture. Toggling the checkbox does not cause the texture to flip but if you toggle the checkbox _and then_ swap the url, the displayed texture will be modified.
 
 <Example path="extras/environment/modifying-the-texture" />
 
-### `loaderOptions`
+## `loaderOptions`
 
 The `loaderOptions` prop is used to modify the loader after it is created and to pass argument's to the loader's constructor.
 
@@ -189,7 +152,7 @@ If your files live online somewhere you can set the url of the loader and refer 
 
 The `loaderOptions` prop is also where you'd set credentials, headers, etc. for the loader. See [ThreeJS's Loader docs](https://threejs.org/docs/index.html#api/en/loaders/Loader) for more information.
 
-## Restoring Environment and Background When Scene Updates
+## Restoring Props When Scene Updates
 
 All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the initial `environment` and `background` properties of the last scene.
 
