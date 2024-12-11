@@ -9,10 +9,10 @@ componentSignature:
     props:
       [
         {
-          description: 'a six-tuple of files to load as a CubeTexture or a `Three.CubeTexture` instance',
-          name: 'resources',
-          required: true,
-          type: '[string, string, string, string, string, string] | Three.CubeTexture'
+          description: 'a six-tuple of urls to load',
+          name: 'urls',
+          required: false,
+          type: '[positiveX: string, negativeX: string, positiveY: string, negativeY: string, positiveZ: string, negativeZ: string]'
         },
         {
           default: 'false',
@@ -30,10 +30,17 @@ componentSignature:
         },
         {
           default: '{}',
-          description: 'optional options object that is used passed to the `useLoader` function',
+          description: 'optional options object that is passed to the `useLoader` function',
           name: 'loaderOptions',
           required: false,
-          type: '{ extend?: (loader: Three.CubeTextureLoader | Three.HDRCubeTextureLoader) => void }'
+          type: '{ extend?: (loader: THREE.CubeTextureLoader | THREE.HDRCubeTextureLoader) => void }'
+        },
+        {
+          default: '{}',
+          description: 'optional options object that is passed to `loader.load`',
+          name: 'loadOptions',
+          required: false,
+          type: '{onProgress?: (event: ProgressEvent) => void, transform?: (texture: THREE.CubeTexture) => void}'
         },
         {
           default: 'false',
@@ -47,21 +54,31 @@ componentSignature:
           name: 'skybox',
           default: 'undefined',
           required: false,
-          type: undefined | Three.GroundedSkybox
+          type: undefined | THREE.GroundedSkybox
+        },
+        {
+          description: 'a bindable of the loaded cube texture.',
+          name: 'texture',
+          required: false,
+          type: 'THREE.CubeTexture'
         }
       ]
   }
 ---
 
-`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences. Those differences will be noted below. For all other information please refer to the [\<Environment>](/docs/reference/extras/environment) documentation.
+`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences, namely that its used to load and assign `THREE.CubeTexture`s to `scene.environment`. Other differences will be listed below. For all other information please refer to the [\<Environment>](/docs/reference/extras/environment) documentation.
 
 <Example path="extras/cube-environment/basic" />
 
-## Resources
+## URLs
 
-`<CubeEnvironment>`'s `resources` prop can either be a six-tuple of strings or a single `CubeTexture` instance. If `resources` is a tuple, the files will be loaded using an appropriate loader. The loader is determined by the first file's extension. Refer to the table below to determine which loader is used for each extension.
+`<CubeEnvironment>`'s `urls` prop is a six-tuple of textures that comprise a cube texture. The first file's extension decides which loader to use to load the files. Refer to the table below to determine which loader is used for each extension. The order of the `urls` is important. The order is `[positiveX, negativeX, positiveY, negativeY, positiveZ, negativeZ]`.
 
-| file extension | loader                                                                                                                  |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| .hdr           | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
-| all others     | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
+| extension  | loader                                                                                                                  |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| .hdr       | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
+| all others | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
+
+## No Default Load Options
+
+`<CubeEnvironment>` does not have a default load options because it doesn't need to do anything with the `CubeTexture` once it has been created. You can still pass in `loadOptions` if you want to modify the texture before it is assigned to `scene.environment`.

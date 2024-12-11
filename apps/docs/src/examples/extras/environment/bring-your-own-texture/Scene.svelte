@@ -28,9 +28,9 @@
   <T.SphereGeometry />
 </T.Mesh>
 
-{#await map then resource}
+{#await map then texture}
   <Environment
     isBackground
-    {resource}
+    {texture}
   />
 {/await}

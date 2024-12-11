@@ -47,6 +47,6 @@
         loader.setPath(environmentFilesPath)
       }
     }}
-    resources={environmentFiles}
+    urls={environmentFiles}
   />
 {/if}

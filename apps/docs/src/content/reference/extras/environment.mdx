@@ -9,10 +9,16 @@ componentSignature:
     props:
       [
         {
-          description: 'a `Three.Texture` instance to use or the path to a texture to load and use',
-          name: 'resource',
-          required: true,
-          type: 'string | Three.Texture'
+          description: 'the url to a texture to load and use',
+          name: 'url',
+          required: false,
+          type: 'string'
+        },
+        {
+          description: 'a bindable of the loaded texture',
+          name: 'texture',
+          required: false,
+          type: 'THREE.DataTexture | THREE.Texture'
         },
         {
           default: 'false',
@@ -36,11 +42,25 @@ componentSignature:
           type: 'boolean | { height?: number, radius?: number, resolution?: number }'
         },
         {
+          default: 'undefined',
           description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
           name: 'skybox',
-          default: 'undefined',
           required: false,
-          type: undefined | Three.GroundedSkybox
+          type: 'undefined | THREE.GroundedSkybox'
+        },
+        {
+          default: '{}',
+          description: 'optional options that are passed to `loader.load`',
+          name: 'loadOptions',
+          required: false,
+          type: 'UseLoaderLoadOptions<THREE.EXRLoader | THREE.RGBELoader | THREE.TextureLoader>'
+        },
+        {
+          description: 'optional options that are used when creating the loader',
+          name: 'loaderOptions',
+          default: '{}',
+          required: false,
+          type: 'UseLoaderOptions<typeof THREE.EXRLoader | typeof THREE.RGBELoader | typeof THREE.TextureLoader>'
         }
       ]
   }
@@ -50,23 +70,13 @@ Asynchronously loads a single equirectangular-mapped texture and sets the provid
 
 <Example path="extras/environment/basic" />
 
-## Bring Your Own Texture Or Load One
+## Fetching, Loading, and Assigning Textures
 
-`<Environment>` has a `resource` prop that can either be a `Texture`, `DataTexture` or `string`. If `resource` is a string, `<Environment>` will load the texture using a corresponding `Loader` before assigning it to `scene.environment`.
+`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
 
-Instead of having `<Environment>` load the texture, the example below passes a preloaded texture to the component.
+`<Environment>` supports loading `.exr`, `.hdr`, and any other file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
-<Example path="extras/environment/bring-your-own-texture" />
-
-### Loading Different File Types
-
-`<Environment>` supports loading `.exr`, `.hdr`, and any file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `.jpg` files. This means you can swap the `resource` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
-
-<Tip type="info">
-	`<Environment>` only holds on to one texture. Any time it has to load a new texture, it will dispose of the old one. The texture is also disposed when `<Environment>` unmounts.
-</Tip>
-
-Internally `<Environment>` creates a loader based on the extension of the `resource` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
+Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
 | file extension | loader                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------- |
@@ -74,23 +84,78 @@ Internally `<Environment>` creates a loader based on the extension of the `resou
 | .hdr           | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
 | all others     | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
 
-As previously mentioned, if `resource` is a file path, it should at least be something that can be loaded by `Three.TextureLoader`.
+<Tip type="info">
+	`<Environment>` only holds on to one texture. Any time it has to load a new texture, it will dispose of the old one. The texture is also disposed when `<Environment>` unmounts.
+</Tip>
 
-## Loader Options
+### Modifying Loaded Textures
 
-`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading environment texture files. `loaderOptions` props are only used when loading a texture. `loaderOptions` is ignored if `resource` is a `Texture` instance.
+The `loadOptions` property can be used to modify a loaded texture before it is assigned to `scene.environment`. `loadOptions` is used inside the loader's `load` function and accessed through a callback. This means that it is only read when **after** a texture is loaded. By default, `loadOptions` will set the loaded texture's `mapping` property to `THREE.EquirectangularReflectionMapping`.
 
-## Modifying The Texture
-
-`<Environment>` exposes the loaded texture through its `texture` property if you need to modify the texture. Note that `<Environment>` will set `texture.mapping` to `Three.EquirectangularReflectionMapping` the first time the texture is loaded. Likewise, the scene's environment is only set after a texture is loaded. What this means is even if you update the texture, the environment will not be updated until a new texture has to be loaded or retrieved from the cache.
-
-The example below demonstrates modifying the texture. Toggling the checkbox does not cause the texture to flip but if you toggle the checkbox _and then_ swap the url, the displayed texture will be modified.
+The example below demonstrates how updating `loadOptions` is only "picked up" when a texture is loaded. Toggling the checkbox will not cause the texture to be updated but flipping it _and then_ triggering a new texture to be loaded will respect the state of the checkbox.
 
 <Example path="extras/environment/modifying-the-texture" />
 
-## `loaderOptions`
+<Tip type="warning">
+	`loadOptions` is only accessed for newly loaded textures. Textures are cached so if a texture has already been loaded, `loadOptions` will not be called upon when updating to that texture. You are able to update the texture through the `bindable` texture property but the changes will not take be visible until the next time `<Environment>` has to assign that texture.
+</Tip>
 
-The `loaderOptions` prop is used to modify the loader after it is created and to pass argument's to the loader's constructor.
+```svelte
+<script>
+  let texture = $state() // undefined | Three.Texture
+
+  let { flipY } = $props() // boolean
+
+  $effect(() => {
+    if (texture !== undefined) {
+      texture.flipY = flipY
+      // next time the texture is assigned, flipY will be respected
+    }
+  })
+</script>
+
+<Environment
+  url="/path/to/file.hdr"
+  bind:texture
+/>
+```
+
+You can use loaded textures for other parts of your scene but be aware that the texture is assigned to `undefined` when `<Environment>` unmounts.
+
+```svelte
+<script>
+  let texture = $state() // undefined | THREE.Texture
+</script>
+
+{#if texture !== undefined}
+  <T.Mesh>
+    <T.MeshStandardMaterial map={texture} />
+  </T.Mesh>
+{/if}
+
+<Environment
+  url="/path/to/file.hdr"
+  bind:texture
+/>
+```
+
+This is not recommended. The preferred way reuse a texture is to load the texture using [useTexture](/docs/reference/extras/use-texture) modify it, and then pass that into `<Environment>` and to any other components or as props as explained in the next section
+
+### Bindable `texture` Prop
+
+`<Environment>` provides a bindable `texture` prop that you can use if you've already loaded the texture somewhere else in your application. The example below provides a preloaded texture to `<Environment>` instead of having it fetch and load one.
+
+<Example path="extras/environment/bring-your-own-texture" />
+
+Be aware that `<Environment>` will set the `texture` bindable prop **after** it has loaded a texture. This means that if you provide both `url` and `texture` properties, the texture at `url` will eventually be assigned to `texture`.
+
+```typescript title="Environment.svelte"
+<Environment {texture} url="/path/to/texture/file" />
+```
+
+## Loader Options
+
+`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading texture files. The `loaderOptions` prop is used to modify the loader after it is created and to pass argument's to the loader's constructor.
 
 ```svelte title="Environment.svelte"
 <!-- Note this is a simplified version for explanation purposes. -->
@@ -110,9 +175,9 @@ A common use for `loaderOptions` is to set the path for the loader to load files
   import { useTask } from '@threlte/core'
 
   // don't have to type out the absolute path for each resource
-  const resources = ['file1.hdr', 'file2.hdr']
+  const urls = ['file1.hdr', 'file2.hdr']
   let index = $state(0)
-  const resource = $derived(resources[index])
+  const resource = $derived(urls[index])
 
   const interval = 5
 
@@ -128,7 +193,7 @@ A common use for `loaderOptions` is to set the path for the loader to load files
 </script>
 
 <Environment
-  {resource}
+  {urls}
   loaderOptions={{
     extend(loader) {
       loader.setPath('/path/to/your/files/')
@@ -150,7 +215,7 @@ If your files live online somewhere you can set the url of the loader and refer 
 />
 ```
 
-The `loaderOptions` prop is also where you'd set credentials, headers, etc. for the loader. See [ThreeJS's Loader docs](https://threejs.org/docs/index.html#api/en/loaders/Loader) for more information.
+The `loaderOptions` prop is where you'd set credentials, headers, etc. for the loader. See [ThreeJS's Loader docs](https://threejs.org/docs/index.html#api/en/loaders/Loader) for more information.
 
 ## Restoring Props When Scene Updates
 
@@ -174,7 +239,7 @@ Textures are suspended so they may be used in a suspense context. This means if 
     <Text text="loading environment" />
   {/snippet}
   <Environment
-    resource="https//url-of-your-file.hdr"
+    url="https//url-of-your-file.hdr"
     loaderOptions={{
       extend(loader) {
         loader.setCrossOrigin(/* ... */)
@@ -186,7 +251,7 @@ Textures are suspended so they may be used in a suspense context. This means if 
 </Suspense>
 ```
 
-If `resource` is an instance of a `Texture` or `DataTexture`, the suspense is immediately resolved.
+Note that suspension only occurs if `url` is provided. When a texture is provided, there is nothing that needs to loaded, so there's nothing that needs to be suspended.
 
 ## Grounded Skyboxes
 
@@ -209,7 +274,7 @@ The bindable prop `skybox` is a reference to the created `GroundedSkybox` instan
 
 <Environment
   bind:skybox
-  resource="file.hdr"
+  url="file.hdr"
   ground={{ height }}
 />
 ```

@@ -85,7 +85,7 @@
 
 {#if useEnvironment}
   <Environment
-    resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
+    url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr"
     {isBackground}
     {scene}
   />

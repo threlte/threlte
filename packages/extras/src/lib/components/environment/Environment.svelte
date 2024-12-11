@@ -1,5 +1,18 @@
+<script
+  lang="ts"
+  module
+>
+  const defaultLoadOptions: UseLoaderLoadOptions<TextureLoader> = {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    }
+  }
+</script>
+
 <script lang="ts">
   import type { EquirectangularEnvironmentProps } from './types'
+  import type { UseLoaderLoadOptions } from '@threlte/core'
   import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { EquirectangularReflectionMapping, Scene, TextureLoader } from 'three'
   import { observe, T, useLoader, useThrelte } from '@threlte/core'
@@ -8,11 +21,12 @@
   let {
     ground = false,
     isBackground = false,
+    loadOptions = defaultLoadOptions,
     loaderOptions = {},
-    resource,
     scene,
     skybox = $bindable(),
-    texture = $bindable()
+    texture = $bindable(),
+    url
   }: EquirectangularEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
@@ -46,8 +60,11 @@
       _scene.background = texture
       invalidate()
       return () => {
-        _scene.background = background ?? _scene.background
-        invalidate()
+        // background is allowed to be `null`
+        if (background !== undefined) {
+          _scene.background = background
+          invalidate()
+        }
       }
     }
   })
@@ -57,18 +74,19 @@
       _scene.environment = texture
       invalidate()
       return () => {
-        _scene.environment = environment ?? _scene.environment
-        invalidate()
+        // environment is allowed to be `null`
+        if (environment !== undefined) {
+          _scene.environment = environment
+          invalidate()
+        }
       }
     }
   })
 
-  const _url = $derived(typeof resource === 'string' ? resource : '')
+  const isEXR = $derived(url?.endsWith('exr') ?? false)
+  const isHDR = $derived(url?.endsWith('hdr') ?? false)
 
-  const isEXR = $derived(_url.endsWith('exr'))
-  const isHDR = $derived(_url.endsWith('hdr'))
-
-  // will default to `TextureLoader` if `resource` is a `Texture` instance
+  // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived(
     useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
   )
@@ -76,29 +94,18 @@
   const suspend = useSuspense()
 
   $effect(() => {
-    const shouldLoadTexture = typeof resource === 'string'
+    if (url !== undefined) {
+      const suspendedTexture = suspend(loader.load(url, loadOptions))
 
-    const texturePromise = suspend(
-      shouldLoadTexture
-        ? loader.load(resource, {
-            transform(texture) {
-              texture.mapping = EquirectangularReflectionMapping
-              return texture
-            }
-          })
-        : Promise.resolve(resource)
-    )
-
-    texturePromise.then((t) => {
-      texture = t
-    })
-
-    // dispose on unmount
-    // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
-    return () => {
-      texturePromise.then((texture) => {
-        texture.dispose()
+      suspendedTexture.then((t) => {
+        texture = t
       })
+
+      return () => {
+        suspendedTexture.then((texture) => {
+          texture.dispose()
+        })
+      }
     }
   })
 </script>

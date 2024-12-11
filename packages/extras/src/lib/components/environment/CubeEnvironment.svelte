@@ -7,20 +7,21 @@
 
 <script lang="ts">
   import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
-  import type { CubeTexture } from 'three'
+  import type { CubeTexture, Scene } from 'three'
   import { CubeTextureLoader } from 'three'
   import { GroundedSkybox, HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
-  import { T, useThrelte } from '@threlte/core'
+  import { observe, T, useThrelte } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense'
 
   let {
     ground = false,
     isBackground = false,
+    loadOptions = {},
     loaderOptions = {},
-    resources,
     scene,
     skybox = $bindable(),
-    texture = $bindable()
+    texture = $bindable(),
+    urls
   }: CubeEnvironmentProps = $props()
 
   const { invalidate, scene: defaultScene } = useThrelte()
@@ -38,38 +39,50 @@
     }
   })
 
+  let background: Scene['background'] | undefined = $state()
+  let environment: Scene['environment'] | undefined = $state()
+
+  observe(
+    () => [_scene],
+    ([scene]) => {
+      background = scene.background
+      environment = scene.environment
+    }
+  )
+
   $effect(() => {
-    const initialBackground = _scene.background
-    if (isBackground) {
-      if (texture !== undefined) {
-        _scene.background = texture
-        invalidate()
-      }
+    if (isBackground && texture !== undefined) {
+      _scene.background = texture
+      invalidate()
       return () => {
-        _scene.background = initialBackground
-        invalidate()
+        if (background !== undefined) {
+          _scene.background = background
+          invalidate()
+        }
       }
     }
   })
 
   $effect(() => {
-    const initialEnvironment = _scene.environment
     if (texture !== undefined) {
       _scene.environment = texture
       invalidate()
       return () => {
-        _scene.environment = initialEnvironment
-        invalidate()
+        if (environment !== undefined) {
+          _scene.environment = environment
+          invalidate()
+        }
       }
     }
   })
 
-  const first = $derived(Array.isArray(resources) ? resources[0] : resources)
+  const first = $derived(urls?.[0])
+  const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)
 
-  // will default to `CubeTextureLoader` if `resources` is a CubeTexture instance
+  // will default to `CubeTextureLoader` if `url`  is undefined
   const loader = $derived.by(() => {
     let loader = (loaderCache.tex ??= new CubeTextureLoader())
-    if (typeof first === 'string' && first.endsWith('hdr')) {
+    if (firstIsHDR) {
       loader = loaderCache.hdr ??= new HDRCubeTextureLoader()
     }
     return loaderOptions.extend?.(loader) ?? loader
@@ -78,25 +91,29 @@
   const suspend = useSuspense()
 
   $effect(() => {
-    const shouldLoadTexture = Array.isArray(resources)
-    const promise = shouldLoadTexture
-      ? new Promise<CubeTexture>((resolve, reject) => {
-          loader.load(resources, resolve, undefined, reject)
+    if (urls !== undefined) {
+      const suspendedTexture = suspend(
+        new Promise<CubeTexture>((resolve, reject) => {
+          loader.load(
+            urls,
+            (texture) => {
+              resolve(loadOptions?.transform?.(texture) ?? texture)
+            },
+            loadOptions?.onProgress,
+            reject
+          )
         })
-      : Promise.resolve(resources)
+      )
 
-    const suspendedTexture = suspend(promise)
-
-    suspendedTexture.then((t) => {
-      texture = t
-    })
-
-    // dispose on unmount
-    // this is important to do in a `.then` because the component may unmount before the texture has loaded or another load may be started while "this" load is ongoing
-    return () => {
-      suspendedTexture.then((texture) => {
-        texture.dispose()
+      suspendedTexture.then((t) => {
+        texture = t
       })
+
+      return () => {
+        suspendedTexture.then((texture) => {
+          texture.dispose()
+        })
+      }
     }
   })
 </script>

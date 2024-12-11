@@ -44,7 +44,7 @@
 
   <Environment
     isBackground
-    resource="/textures/equirectangular/hdr/blouberg_sunrise_2_1k.hdr"
+    url="/textures/equirectangular/hdr/blouberg_sunrise_2_1k.hdr"
     {ground}
     bind:skybox
   />

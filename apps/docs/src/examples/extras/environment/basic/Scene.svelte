@@ -47,6 +47,6 @@
         loader.setPath(extensionFilePath)
       }
     }}
-    resource={environmentFile}
+    url={environmentFile}
   />
 {/if}
