@@ -6,4 +6,119 @@ title: 'Threlte 8'
 subtitle: 'The next major release of Threlte'
 ---
 
-Threlte 8 is a major release of Threlte.
+<div class="text-2xl text-white">Every act of creation is first an act of destruction.</div>
+<span class="text-faded text-xs">— Pablo Picasso</span>
+
+Today we are releasing **Threlte 8**, a complete rewrite
+that marks a leap forward in performance, flexibility, and developer experience.
+
+## Why Rewrite Threlte?
+
+The release of **Svelte 5** introduces a groundbreaking feature:
+[Runes](https://svelte.dev/docs/svelte/what-are-runes). These compiler
+instructions unlock the power of **signals** – a paradigm shift for reactive
+programming in Svelte. Svelte 5 waves goodbye to existing features such as event
+handlers and slots; they're replaced with callbacks and
+[Snippets](https://svelte.dev/docs/svelte/snippet).
+
+Embracing Svelte 5 meant rethinking a lot of the existing Threlte APIs from the
+ground up to fully leverage Svelte's new capabilities.
+
+## What’s New in Threlte 8?
+
+<Tip type="info">
+  If you want to jump straight into the new Threlte, check out the [migration
+  guide](/docs/learn/advanced/migration-guides#threlte-8).
+</Tip>
+
+Threlte 8 is packed with enhancements in `@threlte/core` and other packages.
+Here are the highlights:
+
+### **All-new `<T>` component**
+
+The universal [`<T>` component](/docs/reference/core/t) has been **reduced in
+complexity** all while **adding features and flexibility** that were just not
+possible before. Props are now evaluated individually, [`attach` got a lot more
+powerful](/docs/learn/advanced/migration-guides#attach-api--trait-components),
+[automatic disposal is more
+transparent](docs/learn/advanced/migration-guides#automatic-disposal) and
+[events work entirely
+differently](/docs/learn/advanced/migration-guides#events).
+
+### **A lot of new `@threlte/extras`**
+
+We've added a lot of new things to play around with to `@threlte/extras`, here
+are some highlights to check out:
+[`<AsciiRenderer>`](/docs/reference/extras/ascii-renderer),
+[`<CubeCamera>`](/docs/reference/extras/cube-camera),
+[`<MeshDiscardMaterial>`](/docs/reference/extras/discard-material),
+[`<RadialGradientTexture>`](/docs/reference/extras/radial-gradient-texture),
+[`<LinearGradientTexture>`](/docs/reference/extras/linear-gradient-texture),
+[`useViewport`](/docs/reference/extras/use-viewport),
+[`<HUD>`](/docs/reference/extras/hud),
+[`<Resize>`](/docs/reference/extras/resize),
+[`<meshBounds>`](/docs/reference/extras/mesh-bounds) and
+[`<Detailed>`](/docs/reference/extras/detailed).
+
+### **Threlte Plugin API**
+
+The **Plugin API** got an update to [fully embrace Svelte 5's reactivity
+model](/docs/learn/advanced/migration-guides#plugin-api).
+
+### **Custom Type Support for `<T>`**
+
+Plugins such as
+[`interactivity`](/docs/reference/extras/interactivity#prop-types) now expose
+types which can be added to your ambient type definitions for the `<T>`
+component to pick up. Event handlers and custom `<T>` component objects are now
+type-safe.
+
+### **Fixed Frame Physics**
+
+`@threlte/rapier` now supports [fixed frame
+physics](/docs/reference/rapier/framerate) letting you craft simulations with
+confidence and predictability.
+
+### Under the Hood
+
+Not only `@threlte/core` received major updates. Every other package had to be
+updated to Svelte 5. Svelte now also provides better type support out of the box
+which means we can finally skip hand-writing types for components and rely on
+the Svelte compiler to do its magic.
+
+## A Fresh Start: Migration to Threlte 8
+
+Breaking changes can be daunting. While Threlte 8 is not backward-compatible, we
+provide a comprehensive [migration
+guide](/docs/learn/advanced/migration-guides#threlte-8)
+to help you transition smoothly.
+
+## Built with the Community, for the Community
+
+<img
+  width="200"
+  src="/threlte-8-diff.png"
+  alt="THrelte8Diff"
+/>
+
+This rewrite wasn’t a solo endeavor. It took six months and the contributions of
+a dedicated community of developers to bring Threlte 8 to life. We’re immensely
+grateful for the time, talent, and passion that went into this.
+
+## What’s Next?
+
+```bash
+npm install @threlte/core
+```
+
+Install Threlte 8 today, explore the new documentation, and start building your
+next 3D application.
+
+<div class="mt-12 flex justify-center">
+  <a
+    href="/docs/learn/getting-started/introduction"
+    class="group flex w-fit flex-row gap-3 rounded-md bg-orange px-7 py-4 text-center glow-orange hover:bg-orange-400 hover:no-underline hover:glow-orange-400"
+  >
+    <p class="my-0 text-lg !text-white !no-underline">Start Building →</p>
+  </a>
+</div>

@@ -30,7 +30,7 @@ const { entry, author } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<MainLayout title={`${entry.id}`}>
+<MainLayout title={`${entry.data.title}`}>
   <div class="w-full pb-12 pt-6">
     <div class="mx-auto max-w-5xl">
       <div class="mb-5 block">
