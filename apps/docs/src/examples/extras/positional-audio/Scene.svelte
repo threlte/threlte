@@ -26,7 +26,7 @@
   })
 </script>
 
-<Environment resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.OrthographicCamera
   {zoom}

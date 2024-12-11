@@ -78,4 +78,4 @@
   {/snippet}
 </SheetObject>
 
-<Environment resource="/textures/equirectangular/hdr/mpumalanga_veld_puresky_1k.hdr" />
+<Environment url="/textures/equirectangular/hdr/mpumalanga_veld_puresky_1k.hdr" />

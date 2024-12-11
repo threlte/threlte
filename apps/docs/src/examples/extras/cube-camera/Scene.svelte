@@ -78,7 +78,7 @@
 </T.PerspectiveCamera>
 
 <Environment
-  resource={`${hdrPath}shanghai_riverside_1k.hdr`}
+  url={`${hdrPath}shanghai_riverside_1k.hdr`}
   isBackground
 />
 

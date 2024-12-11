@@ -17,7 +17,7 @@
   interactivity()
 </script>
 
-<Environment resource="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <Float
   rotationIntensity={0.15}
