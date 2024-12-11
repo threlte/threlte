@@ -1,5 +1,35 @@
 # @threlte/studio
 
+## 0.1.0-next.22
+
+### Patch Changes
+
+- 1b808c5: material recompilation on transparency change
+
+## 0.1.0-next.21
+
+### Patch Changes
+
+- 92254dd: Do not try to remove studio objects from selection (prevents infinite loop)
+
+## 0.1.0-next.20
+
+### Patch Changes
+
+- f619a72: Fix dependencies
+
+## 0.1.0-next.19
+
+### Patch Changes
+
+- 1b3bd0e: Several minor fixes, adapt vite plugin export to documentation
+
+## 0.1.0-next.18
+
+### Patch Changes
+
+- 32c76bf: FIx the studio plugin (add extensions to imports)
+
 ## 0.1.0-next.17
 
 ### Patch Changes

@@ -1,5 +1,31 @@
 # @threlte/extras
 
+## 9.0.0-next.43
+
+### Patch Changes
+
+- f9f8444: [next] Temporary three-perf fix with a github fork
+
+## 9.0.0-next.42
+
+### Major Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
+## 9.0.0-next.41
+
+### Minor Changes
+
+- 9eecd88: Add <AsciiRenderer>
+
+### Patch Changes
+
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+
 ## 9.0.0-next.40
 
 ### Patch Changes

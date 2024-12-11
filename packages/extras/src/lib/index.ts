@@ -55,6 +55,7 @@ export { default as LinearGradientTexture } from './components/GradientTexture/l
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
+export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'

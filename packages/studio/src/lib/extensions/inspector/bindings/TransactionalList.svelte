@@ -34,7 +34,7 @@
 </script>
 
 <List
-  bind:value={carrier[targetKey]}
+  value={carrier[targetKey]}
   {options}
   {label}
   on:change={(e) => {

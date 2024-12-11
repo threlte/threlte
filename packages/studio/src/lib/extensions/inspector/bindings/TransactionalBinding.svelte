@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   /**
    * If the target is an object,it very likely has a clone method. We use that
@@ -47,6 +47,7 @@
       write: (value: any) => any
     }
     ref?: BindingRef
+    options?: any
   }
 
   let { objects, key, label, autoUpdate, ref = $bindable(), transform, ...rest }: Props = $props()
