@@ -384,8 +384,8 @@ importers:
         specifier: ^0.7.4
         version: 0.7.4(three@0.170.0)
       three-perf:
-        specifier: ^1.0.10
-        version: 1.0.10(three@0.170.0)
+        specifier: github:jerzakm/three-perf#three-kit-threlte-fork
+        version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.170.0)
       troika-three-text:
         specifier: ^0.50.3
         version: 0.50.3(three@0.170.0)
@@ -7530,10 +7530,11 @@ packages:
     peerDependencies:
       three: '>= 0.151.0'
 
-  three-perf@1.0.10:
-    resolution: {integrity: sha512-lCur/i8U6m0ysWYhQ1yFGWOZB0QA2oVsDsfynYd65HhXxLxJfiAt8OsXmpv9PnTLacfaZclBcZHUOB9QKk3eaw==}
+  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169:
+    resolution: {tarball: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169}
+    version: 1.0.10
     peerDependencies:
-      three: '>=0.151'
+      three: '>=0.170'
 
   three-stdlib@2.21.8:
     resolution: {integrity: sha512-kqisiKvO4mSy59v5vWqBQSH8famLxp7Z51LxpMJI9GwDxqODaW02rhIwmjYDEzZWNFpjZpoDHVGbdpeHf8h3SA==}
@@ -7637,6 +7638,11 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
+  troika-three-text@0.52.2:
+    resolution: {integrity: sha512-UGYwjKnR8RgmyOIpo0/KiSW0wySQ155BQXNLoSWA1liKzXG+RyHM+dvTIDawHGVQcqjqyunFlVY32xm/HDqjpw==}
+    peerDependencies:
+      three: '>=0.125.0'
+
   troika-three-utils@0.47.2:
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
     peerDependencies:
@@ -7657,6 +7663,9 @@ packages:
 
   troika-worker-utils@0.50.0:
     resolution: {integrity: sha512-BxNk0w6+d9NYd7El/3RzlzH/F2vovJI1FX9Zb+D7fArVM1EsUXj6+wVwJSrfucy6/HYhfbZPu/lD6Miiw9Byiw==}
+
+  troika-worker-utils@0.52.0:
+    resolution: {integrity: sha512-W1CpvTHykaPH5brv5VHLfQo9D1OYuo0cSBEUQFFT/nBUzM8iD6Lq2/tgG/f1OelbAS1WtaTPQzE5uM49egnngw==}
 
   trough@2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
@@ -16366,10 +16375,10 @@ snapshots:
     dependencies:
       three: 0.170.0
 
-  three-perf@1.0.10(three@0.170.0):
+  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.170.0):
     dependencies:
       three: 0.170.0
-      troika-three-text: 0.47.2(three@0.170.0)
+      troika-three-text: 0.52.2(three@0.170.0)
       tweakpane: 3.1.10
 
   three-stdlib@2.21.8(three@0.122.0):
@@ -16474,6 +16483,14 @@ snapshots:
       troika-worker-utils: 0.50.0
       webgl-sdf-generator: 1.1.1
 
+  troika-three-text@0.52.2(three@0.170.0):
+    dependencies:
+      bidi-js: 1.0.2
+      three: 0.170.0
+      troika-three-utils: 0.52.0(three@0.170.0)
+      troika-worker-utils: 0.52.0
+      webgl-sdf-generator: 1.1.1
+
   troika-three-utils@0.47.2(three@0.170.0):
     dependencies:
       three: 0.170.0
@@ -16489,6 +16506,8 @@ snapshots:
   troika-worker-utils@0.47.2: {}
 
   troika-worker-utils@0.50.0: {}
+
+  troika-worker-utils@0.52.0: {}
 
   trough@2.1.0: {}
 

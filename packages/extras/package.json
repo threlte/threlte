@@ -91,7 +91,7 @@
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.0",
     "three-mesh-bvh": "^0.7.4",
-    "three-perf": "^1.0.10",
+    "three-perf": "github:jerzakm/three-perf#three-kit-threlte-fork",
     "troika-three-text": "^0.50.3"
   }
 }
