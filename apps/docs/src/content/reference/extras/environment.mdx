@@ -122,7 +122,7 @@ Although `loadOptions.transform` is only called the first time the texture is lo
 />
 ```
 
-You can use loaded textures for other parts of your scene but be aware that the texture is assigned to `undefined` when `<Environment>` unmounts.
+You can use loaded textures for other parts of your scene but this is not the recommended way to reuse textures. The preferred way to reuse a texture is to load the texture using [useTexture](/docs/reference/extras/use-texture), modify it, and then pass that to any components that need it. Passing a loaded texture to `<Environmen>` is explained in the next section.
 
 ```svelte
 <script>
@@ -141,8 +141,6 @@ You can use loaded textures for other parts of your scene but be aware that the 
 />
 ```
 
-This is not recommended. The preferred way to reuse a texture is to load the texture using [useTexture](/docs/reference/extras/use-texture) modify it, and then pass that into `<Environment>` and to any other components or as a prop. Passing a loaded texture is explained below.
-
 ### `texture` Prop for Preloaded Textures
 
 `<Environment>` provides a bindable `texture` prop that you can use if you've already loaded the texture somewhere else in your application. The example below provides a preloaded texture to `<Environment>` instead of having it fetch and load one.
@@ -151,7 +149,7 @@ This is not recommended. The preferred way to reuse a texture is to load the tex
 
 Be aware that if `<Environment>` loads a texture, it will set the `texture` bindable prop **after** it has been loaded. This means that if you provide both `url` and `texture` properties, the texture at `url` will eventually be assigned to `texture`.
 
-```typescript title="Environment.svelte"
+```typescript title="Scene.svelte"
 <Environment {texture} url="/path/to/texture/file" />
 ```
 
@@ -159,7 +157,7 @@ Loading only occurs if `url` is passed to `<Environment>`.
 
 ## Loader Options
 
-`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading texture files. The `loaderOptions` prop is used to modify the loader after it is created and to pass argument's to the loader's constructor.
+`<Environment>` uses [useLoader](/docs/reference/core/use-loader) internally to create a loader for loading texture files. The `loaderOptions` prop is used to modify the loader after it is created and to pass arguments to the loader's constructor.
 
 ```svelte title="Environment.svelte"
 <!-- Note this is a simplified version for explanation purposes. -->
@@ -178,7 +176,7 @@ A common use for `loaderOptions` is to set the path for the loader to load files
 <script>
   import { useTask } from '@threlte/core'
 
-  // don't have to type out the absolute path for each resource
+  // don't have to type out the absolute path for each file
   const urls = ['file1.hdr', 'file2.hdr']
   let index = $state(0)
   const url = $derived(urls[index])
@@ -231,7 +229,7 @@ The example below creates a custom render task that draws two scenes to the canv
 
 ## Suspended Loading
 
-Textures are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is being fetched and loaded.
+Any textures that are loaded by `<Environment>` are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is being fetched and loaded.
 
 ```svelte title="Scene.svelte"
 <script>
@@ -259,11 +257,11 @@ Note that suspension only occurs if `url` is provided. When a texture is provide
 
 ## Grounded Skyboxes
 
-`<Environment>` also supports ground projected environment mapping through threejs's [GroundedSkybox](https://threejs.org/examples/#webgl_materials_envmaps_groundprojected) addon. To use this feature, set `ground` to `true` or an object with optional `height`, `radius` and `resolution` props. `height` defaults to `1`, `radius` to `1`, and `resolution` to `128`
+`<Environment>` also supports ground projected environments through threejs's [GroundedSkybox](https://threejs.org/examples/#webgl_materials_envmaps_groundprojected) addon. To use this feature, set the `ground` prop to `true` or to an object with optional `height`, `radius` and `resolution` props. `height` defaults to `1`, `radius` to `1`, and `resolution` to `128`
 
 <Example path="extras/environment/ground-projection" />
 
-The bindable prop `skybox` is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
+The bindable `skybox` prop is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
 
 ```svelte title="Scene.svelte"
 <script>
@@ -289,4 +287,4 @@ There are a couple of important things to consider when using the `ground` prope
 
 2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
 
-3. `scene.environment` and/or `scene.background` are still set to the environment map. This is done so that the environment map still affects materials used in the scene.
+3. `scene.environment` and/or `scene.background` are still set to the environment texture. This is done so that the environment map still affects materials used in the scene.
