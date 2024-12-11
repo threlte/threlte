@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.32
+
+### Minor Changes
+
+- d7eb71b: Custom user catalogue types
+
 ## 8.0.0-next.31
 
 ### Patch Changes

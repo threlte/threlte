@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.43
+
+### Patch Changes
+
+- f9f8444: [next] Temporary three-perf fix with a github fork
+
 ## 9.0.0-next.42
 
 ### Major Changes
