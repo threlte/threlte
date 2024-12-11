@@ -1,0 +1,31 @@
+---
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+interface Props {
+  author: {
+    url: string
+    name: string
+  }
+  date: string
+}
+
+const { author, date } = Astro.props
+---
+
+<p class="text-faded text-xs uppercase">
+  <a
+    class="text-orange decoration-dashed underline-offset-4 hover:underline"
+    href={author.url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {author.name}
+  </a>
+  {formatDate(date)}
+</p>
