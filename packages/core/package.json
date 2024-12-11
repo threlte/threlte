@@ -68,13 +68,23 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "svelte": "./dist/index.js"
+      "types": "./src/lib/index.ts",
+      "svelte": "./src/lib/index.ts"
     }
   },
-  "types": "./dist/types.d.ts",
-  "svelte": "./dist/index.js",
-  "files": [
-    "dist"
-  ]
+  "types": "./src/lib/index.ts",
+  "svelte": "./src/lib/index.ts",
+  "publishOverrides": {
+    "files": [
+      "dist"
+    ],
+    "svelte": "./dist/index.js",
+    "exports": {
+      ".": {
+        "types": "./dist/types.d.ts",
+        "svelte": "./dist/index.js"
+      }
+    },
+    "types": "./dist/types.d.ts"
+  }
 }
