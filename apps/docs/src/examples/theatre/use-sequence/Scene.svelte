@@ -38,8 +38,6 @@
 <T.AmbientLight intensity={0.2} />
 
 <Environment
-  path="/hdr/"
-  files="industrial_sunset_puresky_1k.hdr"
-  isBackground={true}
-  format="hdr"
+  url="/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr"
+  isBackground
 />

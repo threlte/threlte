@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { ContactShadows, Environment, Float, OrbitControls } from '@threlte/extras'
   import {
     BoxGeometry,
@@ -8,19 +8,9 @@
     MeshStandardMaterial,
     TorusKnotGeometry
   } from 'three'
-
-  let pos = {
-    x: 0
-  }
-  useTask(() => {
-    pos.x = Math.sin(Date.now() / 2000)
-  })
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera
   makeDefault

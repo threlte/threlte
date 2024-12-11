@@ -4,6 +4,8 @@
   import { browser } from '$app/environment'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
+  import EnvironmentTest from '../lib/components/environment/EnvironmentTest.svelte'
+  import { Texture } from 'three'
 
   let listenToGamepad = true
   let mountGamepad = false
@@ -20,6 +22,8 @@
     }
   }}
 />
+
+<EnvironmentTest url="" />
 
 {#if browser && mountGamepad}
   <Gamepad />
