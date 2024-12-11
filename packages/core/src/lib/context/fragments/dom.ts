@@ -1,15 +1,10 @@
 import { getContext, onMount, setContext } from 'svelte'
 import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities'
 
-export type Size = {
-  width: number
-  height: number
-}
-
 type DOMContext = {
   /** The canvas wrapper element */
   dom: HTMLElement
-  size: CurrentReadable<Size>
+  size: CurrentReadable<DOMRect>
 }
 
 export type CreateDOMContextOptions = {
@@ -22,7 +17,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
   let lastWidth = domRect.width
   let lastHeight = domRect.height
 
-  const size = currentWritable({ width: domRect.width, height: domRect.height })
+  const size = currentWritable(domRect)
 
   onMount(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -31,7 +26,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
         if (width === lastWidth && height === lastHeight) return
         lastWidth = width
         lastHeight = height
-        size.set({ width, height })
+        size.set(entry.contentRect)
       }
     })
 
