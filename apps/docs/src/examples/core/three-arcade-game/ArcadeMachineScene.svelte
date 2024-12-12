@@ -2,7 +2,7 @@
   import { T, useTask, useThrelte } from '@threlte/core'
   import {
     Environment,
-    useCursor,
+    Hovering,
     useGltf,
     useInteractivity,
     useTexture,
@@ -206,7 +206,7 @@
     camera.lookAt(cameraTarget.position)
   })
 
-  const { onPointerEnter, onPointerLeave } = useCursor('pointer')
+  const hovering = new Hovering()
 
   const onScreenClick = () => {
     screenFocused = !screenFocused
@@ -366,8 +366,12 @@
         geometry={nodes.Screen.geometry}
         position={[0, 1.3774, 0.1447]}
         scale={1.0055}
-        onpointerenter={onPointerEnter}
-        onpointerleave={onPointerLeave}
+        onpointerenter={() => {
+          hovering.current = true
+        }}
+        onpointerleave={() => {
+          hovering.current = false
+        }}
         onclick={onScreenClick}
       >
         {#await scanLinesTexture then texture}
