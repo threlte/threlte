@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { interactivity, useCursor, useViewport } from '@threlte/extras'
   import { Mesh, Quaternion } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import { Hovering, interactivity, useViewport } from '@threlte/extras'
 
   interface Props {
     quaternion: Quaternion
@@ -12,11 +12,19 @@
 
   const viewport = useViewport()
 
-  let meshes: [Mesh, Mesh, Mesh] = [null!, null!, null!]
+  const meshes: Set<Mesh> = new Set()
 
-  const boxCursor = useCursor('pointer')
-  const torusCursor = useCursor('pointer')
-  const torusKnotCursor = useCursor('pointer')
+  // return a function that will delete the mesh from the set
+  const addMesh = (mesh: Mesh) => {
+    meshes.add(mesh)
+    return () => {
+      meshes.delete(mesh)
+    }
+  }
+
+  const boxHovering = new Hovering()
+  const torusHovering = new Hovering()
+  const torusKnotHovering = new Hovering()
 
   interactivity()
 
@@ -29,9 +37,14 @@
     { autoInvalidate: false }
   )
 
-  const boxHovering = boxCursor.hovering
-  const torusHovering = torusCursor.hovering
-  const torusKnotHovering = torusKnotCursor.hovering
+  const boxScale = $derived(boxHovering.current ? 1.1 : 1)
+  const boxColor = $derived(boxHovering.current ? 'hotpink' : 'grey')
+
+  const torusScale = $derived(torusHovering.current ? 1.1 : 1)
+  const torusColor = $derived(torusHovering.current ? 'hotpink' : 'grey')
+
+  const torusKnotScale = $derived(torusKnotHovering.current ? 1.1 : 1)
+  const torusKnotColor = $derived(torusKnotHovering.current ? 'hotpink' : 'grey')
 </script>
 
 <T.OrthographicCamera
@@ -48,37 +61,49 @@
 />
 
 <T.Mesh
-  bind:ref={meshes[0]}
   position={[$viewport.width / 2 - 1, $viewport.height / 2 - 1, 0]}
-  onpointerenter={boxCursor.onPointerEnter}
-  onpointerleave={boxCursor.onPointerLeave}
+  onpointerenter={() => {
+    boxHovering.current = true
+  }}
+  onpointerleave={() => {
+    boxHovering.current = false
+  }}
   onclick={() => onselect('box')}
-  scale={$boxHovering ? 1.1 : 1}
+  oncreate={addMesh}
+  scale={boxScale}
 >
   <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-  <T.MeshToonMaterial color={$boxHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={boxColor} />
 </T.Mesh>
 
 <T.Mesh
-  bind:ref={meshes[1]}
   position={[$viewport.width / 2 - 2, $viewport.height / 2 - 1, 0]}
-  onpointerenter={torusCursor.onPointerEnter}
-  onpointerleave={torusCursor.onPointerLeave}
+  onpointerenter={() => {
+    torusHovering.current = true
+  }}
+  onpointerleave={() => {
+    torusHovering.current = false
+  }}
   onclick={() => onselect('torus')}
-  scale={$torusHovering ? 1.1 : 1}
+  scale={torusScale}
+  oncreate={addMesh}
 >
   <T.TorusGeometry args={[0.25, 0.1]} />
-  <T.MeshToonMaterial color={$torusHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={torusColor} />
 </T.Mesh>
 
 <T.Mesh
-  bind:ref={meshes[2]}
   position={[$viewport.width / 2 - 3, $viewport.height / 2 - 1, 0]}
-  onpointerover={torusKnotCursor.onPointerEnter}
-  onpointerleave={torusKnotCursor.onPointerLeave}
+  onpointerover={() => {
+    torusKnotHovering.current = true
+  }}
+  onpointerleave={() => {
+    torusKnotHovering.current = false
+  }}
   onclick={() => onselect('torusknot')}
-  scale={$torusKnotHovering ? 1.1 : 1}
+  scale={torusKnotScale}
+  oncreate={addMesh}
 >
   <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
-  <T.MeshToonMaterial color={$torusKnotHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={torusKnotColor} />
 </T.Mesh>

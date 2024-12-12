@@ -12,22 +12,24 @@
     ref = $bindable(),
     onsync,
     children,
+    text,
     ...props
   }: TextProps = $props()
 
-  const text = new Text()
+  const t = new Text()
 
   const { invalidate } = useThrelte()
 
   const onUpdate = async () => {
     await tick()
-    text.sync(() => {
+    t.sync(() => {
       invalidate()
       onsync?.()
     })
   }
 
   $effect.pre(() => {
+    text
     props
     onUpdate()
   })
@@ -40,12 +42,13 @@
 </script>
 
 <T
-  is={text}
+  is={t}
   bind:ref
+  {text}
   {...props}
   {font}
   {characters}
   {sdfGlyphSize}
 >
-  {@render children?.({ ref: text })}
+  {@render children?.({ ref: t })}
 </T>

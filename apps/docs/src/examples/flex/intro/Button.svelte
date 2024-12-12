@@ -1,17 +1,22 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { RoundedBoxGeometry, useCursor } from '@threlte/extras'
+  import { RoundedBoxGeometry, Hovering } from '@threlte/extras'
   import { Box } from '@threlte/flex'
   import Label from './Label.svelte'
 
-  let _class: string
-  export { _class as class }
-  export let z = 0
-  export let text = ''
-  export let order: number | undefined = undefined
-  export let onClick: () => void
+  type Props = {
+    class: string
+    text: string
+    order?: number
+    onclick?: () => void
+    z?: number
+  }
 
-  const { hovering, onPointerEnter, onPointerLeave } = useCursor()
+  const { class: _class, text = '', z = 0, order, onclick }: Props = $props()
+
+  const hovering = new Hovering()
+
+  const color = $derived(hovering.current ? '#9D9FA3' : '#404550')
 </script>
 
 <Box
@@ -23,19 +28,23 @@
       position.z={z}
       onclick={(event) => {
         event.stopPropagation()
-        onClick()
+        onclick?.()
       }}
-      onpointerenter={onPointerEnter}
-      onpointerleave={onPointerLeave}
+      onpointerenter={() => {
+        hovering.current = true
+      }}
+      onpointerleave={() => {
+        hovering.current = false
+      }}
     >
       <RoundedBoxGeometry
         args={[width, height, 10]}
         radius={5}
       />
-      <T.MeshBasicMaterial color={$hovering ? '#9D9FA3' : '#404550'} />
+      <T.MeshBasicMaterial {color} />
 
       <Label
-        z={5.1}
+        {z}
         fontSize="xl"
         {text}
       />
