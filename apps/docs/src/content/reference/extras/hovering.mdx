@@ -1,0 +1,44 @@
+---
+order: 3.6
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/Hovering.svelte.ts'
+name: Hovering
+type: 'hook'
+---
+
+A class with a reactive `current` property. When `current` is `true`, the cursor's style is set to `hoverStyle`. When it is `false`, it is set to `unhoverStyle`.
+
+<Example path="extras/hovering/simple" />
+
+`Hovering`'s constructor's `onPointerOver` and `onPointerOut` parameters can either be any acceptable `style.cursor` string or a function that returns a `style.cursor` string. Acceptable strings can be found [here](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor).
+
+## Examples
+
+### Simple Usage
+
+```svelte
+<script lang="ts">
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+  import { T } from '@threlte/core'
+  import { Hovering } from '@threlte/extras'
+
+  const hovering = new Hovering('grab', 'crosshair')
+</script>
+
+<T.Mesh
+  onpointerenter={() => {
+    hovering.current = true
+  }}
+  onpointerleave={() => {
+    hovering.current = false
+  }}
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+/>
+```
+
+### Using Getters
+
+`hoverStyle` and `unhoverStyle` can be getter functions that return a "hover style". This is useful if you're using runes.
+
+<Example path="extras/hovering/getters" />

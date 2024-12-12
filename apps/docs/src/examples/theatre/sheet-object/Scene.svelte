@@ -1,12 +1,12 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { RoundedBoxGeometry, interactivity, useCursor } from '@threlte/extras'
+  import { RoundedBoxGeometry, interactivity, Hovering } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   interactivity()
 
-  const { onPointerEnter, onPointerLeave } = useCursor()
+  const hovering = new Hovering()
 </script>
 
 <SheetObject key="Directional Light">
@@ -47,8 +47,12 @@
       <T.Mesh
         castShadow
         onclick={select}
-        onpointerenter={onPointerEnter}
-        onpointerleave={onPointerLeave}
+        onpointerenter={() => {
+          hovering.current = true
+        }}
+        onpointerleave={() => {
+          hovering.current = false
+        }}
         onpointermissed={deselect}
       >
         <RoundedBoxGeometry radius={0.1} />

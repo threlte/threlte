@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Edges, Text, useCursor } from '@threlte/extras'
+  import { Edges, Text, Cursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
@@ -12,7 +12,7 @@
   let buttonColor = '#111111'
   let textColor = '#eedbcb'
 
-  const { onPointerEnter, onPointerLeave } = useCursor()
+  const hovering = new Hovering()
 </script>
 
 <T.Group {...$$restProps}>
@@ -23,14 +23,14 @@
         e.stopPropagation()
         buttonColor = '#eedbcb'
         textColor = '#111111'
-        onPointerEnter()
+        hovering.current = true
       }}
       onpointerleave={(e) => {
         e.stopPropagation()
         buttonColor = '#111111'
         textColor = '#eedbcb'
         buttonOffsetY.set(0)
-        onPointerLeave()
+        hovering.current = false
       }}
       onpointerdown={(e) => {
         e.stopPropagation()

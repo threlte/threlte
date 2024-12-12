@@ -66,7 +66,7 @@
         z={15}
         text="← PREVIOUS PAGE"
         order={0}
-        onClick={() => {
+        onclick={() => {
           page = Math.max(1, page - 1)
         }}
       />
@@ -87,7 +87,7 @@
         z={15}
         text="NEXT PAGE →"
         order={2}
-        onClick={() => {
+        onclick={() => {
           page = Math.min(10, page + 1)
         }}
       />

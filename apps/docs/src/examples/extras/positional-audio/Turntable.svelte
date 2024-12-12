@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
+  import { Edges, PositionalAudio, useAudioListener, Hovering, useGltf } from '@threlte/extras'
   import { spring, tweened } from 'svelte/motion'
   import {
     BufferGeometry,
@@ -69,7 +69,7 @@
     else coverAngle.set(0)
   }
 
-  const { onPointerEnter, onPointerLeave } = useCursor()
+  const hovering = new Hovering()
 
   const gltf = useGltf<{
     nodes: {
@@ -119,8 +119,12 @@
         position.y={0.5}
         position.z={2.2}
         onclick={() => (coverOpen = !coverOpen)}
-        onpointerenter={onPointerEnter}
-        onpointerleave={onPointerLeave}
+        onpointerenter={() => {
+          hovering.current = true
+        }}
+        onpointerleave={() => {
+          hovering.current = false
+        }}
       >
         <T.MeshStandardMaterial
           color="#ffffff"

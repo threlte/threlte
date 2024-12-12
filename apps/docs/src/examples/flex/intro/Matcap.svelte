@@ -1,7 +1,16 @@
 <script lang="ts">
   import { T, asyncWritable, useCache } from '@threlte/core'
-  import { RoundedBoxGeometry, useCursor, useTexture } from '@threlte/extras'
+  import { RoundedBoxGeometry, Hovering, useTexture } from '@threlte/extras'
   import { spring } from 'svelte/motion'
+
+  type Props = {
+    format: 64 | 128 | 256 | 512 | 1024
+    height: number
+    matcapIndex: number
+    width: number
+  }
+
+  let { matcapIndex, format = 256, height = 5, width = 5 }: Props = $props()
 
   const cache = useCache()
 
@@ -14,15 +23,11 @@
     }, ['matcaps'])
   )
 
-  export let gridIndex: number
-  export let matcapIndex: number
-  export let format: 64 | 128 | 256 | 512 | 1024 = 256
-  export let width = 5
-  export let height = 5
-
-  const { onPointerEnter, onPointerLeave, hovering } = useCursor()
+  const hovering = new Hovering()
   const scale = spring(0.9)
-  $: scale.set($hovering ? 1 : 0.9)
+  $effect(() => {
+    scale.set(hovering.current ? 1 : 0.9)
+  })
 
   const matcapRoot =
     'https://rawcdn.githack.com/emmelleppi/matcaps/9b36ccaaf0a24881a39062d05566c9e92be4aa0d'
@@ -54,8 +59,12 @@
         scale.y={(height / 100) * $scale}
         scale.z={$scale}
         position.z={20}
-        onpointerenter={onPointerEnter}
-        onpointerleave={onPointerLeave}
+        onpointerenter={() => {
+          hovering.current = true
+        }}
+        onpointerleave={() => {
+          hovering.current = false
+        }}
       >
         <RoundedBoxGeometry
           args={[100, 100, 20]}
