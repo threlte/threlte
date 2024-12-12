@@ -49,7 +49,7 @@
   const { size } = useThrelte()
 
   const s = fromStore(size)
-  const zoom = $derived(s.current.width / 7)
+  const zoom = $derived(s.current.width / 8)
 
   const color = 'orangered'
 
