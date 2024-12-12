@@ -2,28 +2,31 @@
   lang="ts"
   module
 >
-  const loaderCache: CubeEnvironmentCache = {}
+  const loaders: {
+    hdr?: HDRCubeTextureLoader
+    tex?: CubeTextureLoader
+  } = {}
 </script>
 
 <script lang="ts">
-  import type { CubeEnvironmentCache, CubeEnvironmentProps } from './types'
-  import type { CubeTexture, Scene } from 'three'
+  import { observe, T, useCache, useThrelte } from '@threlte/core'
+  import type { Scene } from 'three'
   import { CubeTextureLoader } from 'three'
   import { GroundedSkybox, HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
-  import { observe, T, useThrelte } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense'
+  import type { CubeEnvironmentProps } from './types'
 
   let {
     ground = false,
     isBackground = false,
-    loadOptions = {},
-    loaderOptions = {},
     scene,
     skybox = $bindable(),
     texture = $bindable(),
     urls
   }: CubeEnvironmentProps = $props()
 
+  const cache = useCache()
+  const suspend = useSuspense()
   const { invalidate, scene: defaultScene } = useThrelte()
 
   const _scene = $derived(scene ?? defaultScene)
@@ -79,30 +82,23 @@
   const first = $derived(urls?.[0])
   const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)
 
-  // will default to `CubeTextureLoader` if `url`  is undefined
   const loader = $derived.by(() => {
-    let loader = (loaderCache.tex ??= new CubeTextureLoader())
+    if (!urls) return
     if (firstIsHDR) {
-      loader = loaderCache.hdr ??= new HDRCubeTextureLoader()
+      loaders.hdr ??= new HDRCubeTextureLoader()
+      return loaders.hdr
+    } else {
+      loaders.tex ??= new CubeTextureLoader()
+      return loaders.tex
     }
-    return loaderOptions.extend?.(loader) ?? loader
   })
 
-  const suspend = useSuspense()
-
   $effect(() => {
-    if (urls !== undefined) {
+    if (urls && loader) {
       const suspendedTexture = suspend(
-        new Promise<CubeTexture>((resolve, reject) => {
-          loader.load(
-            urls,
-            (texture) => {
-              resolve(loadOptions?.transform?.(texture) ?? texture)
-            },
-            loadOptions?.onProgress,
-            reject
-          )
-        })
+        cache.remember(() => {
+          return loader.loadAsync(urls)
+        }, urls)
       )
 
       suspendedTexture.then((t) => {

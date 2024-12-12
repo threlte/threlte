@@ -1,11 +1,9 @@
 <script lang="ts">
-  import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
-  import { Checkbox, Pane, Slider } from 'svelte-tweakpane-ui'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import Scene from './Scene.svelte'
 
   let useGround = $state(true)
-
-  const disableInputs = $derived(!useGround)
 </script>
 
 <Pane

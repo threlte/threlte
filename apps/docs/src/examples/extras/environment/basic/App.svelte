@@ -1,38 +1,35 @@
 <script lang="ts">
-  import Scene from './Scene.svelte'
-  import type { ListOptions } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
-  import { Pane, Checkbox, Folder, List, Slider } from 'svelte-tweakpane-ui'
+  import { Checkbox, Folder, List, Pane, Slider } from 'svelte-tweakpane-ui'
+  import Scene from './Scene.svelte'
 
   let autoRotateCamera = $state(false)
   let environmentIsBackground = $state(true)
   let useEnvironment = $state(true)
   let environmentInputsDisabled = $derived(!useEnvironment)
 
-  type Extension = 'exr' | 'hdr' | 'jpg'
-
-  const extensionOptions: ListOptions<string> = {
+  const extensions = {
     exr: 'exr',
     hdr: 'hdr',
     jpg: 'jpg'
-  } as const
+  }
 
-  const hdrFiles: ListOptions<string> = {
+  const hdrFiles = {
     aerodynamics_workshop: 'aerodynamics_workshop_1k.hdr',
     industrial_sunset_puresky: 'industrial_sunset_puresky_1k.hdr',
     mpumalanga_veld_puresky: 'mpumalanga_veld_puresky_1k.hdr',
     shanghai_riverside: 'shanghai_riverside_1k.hdr'
-  } as const
+  }
 
-  const exrFiles: ListOptions<string> = {
+  const exrFiles = {
     piz_compressed: 'piz_compressed.exr'
-  } as const
+  }
 
-  const jpgFiles: ListOptions<string> = {
+  const jpgFiles = {
     equirect_ruined_room: 'equirect_ruined_room.jpg'
-  } as const
+  }
 
-  let extension: keyof extensions = $state(extensionOptions.hdr)
+  let extension = $state(extensions.hdr)
   const extensionFilePath = $derived(`/textures/equirectangular/${extension}/`)
 
   let exrFile = $state(exrFiles.piz_compressed)
@@ -46,6 +43,8 @@
 
   let materialMetalness = $state(1)
   let materialRoughness = $state(0)
+
+  const environmentUrl = $derived(extensionFilePath + environmentFile)
 </script>
 
 <Pane
@@ -63,7 +62,7 @@
   />
   <List
     disabled={environmentInputsDisabled}
-    options={extensionOptions}
+    options={extensions}
     bind:value={extension}
     label="extension"
   />
@@ -119,8 +118,7 @@
   <Canvas>
     <Scene
       {autoRotateCamera}
-      {extensionFilePath}
-      {environmentFile}
+      {environmentUrl}
       {environmentIsBackground}
       {materialMetalness}
       {materialRoughness}

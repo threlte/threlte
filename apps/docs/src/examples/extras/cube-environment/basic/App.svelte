@@ -10,26 +10,28 @@
   let materialRoughness = $state(0)
   let materialMetalness = $state(1)
 
-  type Cube = 'bridge' | 'pisa'
-
-  const cubes: ListOptions<string> = {
+  const cubes = {
     bridge: 'bridge',
     pisa: 'pisa'
-  } as const
+  }
 
-  const pathMap: Record<Cube, string> = {
+  const pathMap = {
     bridge: '/textures/cube/Bridge2_cube/',
     pisa: '/textures/cube/pisaHDR/'
-  } as const
+  }
 
-  const filesMap: Record<Cube, [string, string, string, string, string, string]> = {
+  const filesMap = {
     bridge: ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg'],
     pisa: ['nx.hdr', 'ny.hdr', 'nz.hdr', 'px.hdr', 'py.hdr', 'pz.hdr']
-  } as cons
+  }
 
   let cube = $state(cubes.bridge)
-  const environmentFilesPath = $derived(pathMap[cube])
-  const environmentFiles = $derived(filesMap[cube])
+
+  const environmentFilesPath = $derived(pathMap[cube as keyof typeof pathMap])
+  const environmentFiles = $derived(filesMap[cube as keyof typeof filesMap])
+  const environmentUrls = $derived(
+    environmentFiles.map((file) => `${environmentFilesPath}${file}`)
+  ) as [string, string, string, string, string, string]
 </script>
 
 <Pane
@@ -82,8 +84,7 @@
     <Scene
       {autoRotateCamera}
       {environmentIsBackground}
-      {environmentFilesPath}
-      {environmentFiles}
+      {environmentUrls}
       {materialMetalness}
       {materialRoughness}
       {useEnvironment}

@@ -2,33 +2,27 @@
   lang="ts"
   module
 >
-  const defaultLoadOptions: UseLoaderLoadOptions<TextureLoader> = {
-    transform(texture) {
-      texture.mapping = EquirectangularReflectionMapping
-      return texture
-    }
-  }
+  const loaders: { exr?: EXRLoader; hdr?: RGBELoader; tex?: TextureLoader } = {}
 </script>
 
 <script lang="ts">
-  import type { EquirectangularEnvironmentProps } from './types'
-  import type { UseLoaderLoadOptions } from '@threlte/core'
-  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { observe, T, useCache, useThrelte } from '@threlte/core'
   import { EquirectangularReflectionMapping, Scene, TextureLoader } from 'three'
-  import { observe, T, useLoader, useThrelte } from '@threlte/core'
+  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
   import { useSuspense } from '../../suspense/useSuspense'
+  import type { EquirectangularEnvironmentProps } from './types'
 
   let {
     ground = false,
     isBackground = false,
-    loadOptions = defaultLoadOptions,
-    loaderOptions = {},
     scene,
     skybox = $bindable(),
     texture = $bindable(),
     url
   }: EquirectangularEnvironmentProps = $props()
 
+  const suspend = useSuspense()
+  const cache = useCache()
   const { invalidate, scene: defaultScene } = useThrelte()
 
   const _scene = $derived(scene ?? defaultScene)
@@ -87,17 +81,30 @@
   const isHDR = $derived(url?.endsWith('hdr') ?? false)
 
   // defaults to `TextureLoader` if `url` is not provided
-  const loader = $derived(
-    useLoader(isHDR ? RGBELoader : isEXR ? EXRLoader : TextureLoader, loaderOptions)
-  )
-
-  const suspend = useSuspense()
+  const loader = $derived.by(() => {
+    if (!url) return
+    if (isEXR) {
+      loaders.exr ??= new EXRLoader()
+      return loaders.exr
+    } else if (isHDR) {
+      loaders.hdr ??= new RGBELoader()
+      return loaders.hdr
+    } else {
+      loaders.tex ??= new TextureLoader()
+      return loaders.tex
+    }
+  })
 
   $effect(() => {
-    if (url !== undefined) {
-      const suspendedTexture = suspend(loader.load(url, loadOptions))
+    if (url && loader) {
+      const suspendedTexture = suspend(
+        cache.remember(() => {
+          return loader.loadAsync(url)
+        }, [url])
+      )
 
       suspendedTexture.then((t) => {
+        t.mapping = EquirectangularReflectionMapping
         texture = t
       })
 

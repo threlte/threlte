@@ -1,18 +1,5 @@
-import type {
-  CubeTexture,
-  CubeTextureLoader,
-  DataTexture,
-  Scene,
-  Texture,
-  TextureLoader
-} from 'three'
-import type { UseLoaderLoadOptions, UseLoaderOptions } from '@threlte/core'
-import type {
-  EXRLoader,
-  GroundedSkybox,
-  HDRCubeTextureLoader,
-  RGBELoader
-} from 'three/examples/jsm/Addons.js'
+import type { CubeTexture, CubeTextureLoader, DataTexture, Scene, Texture } from 'three'
+import type { GroundedSkybox, HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
 
 /**
  * props that are common to both EquirectangularEnvironmentProps and CubeEnvironmentProps
@@ -53,17 +40,7 @@ export type EnvironmentProps<TextureType> = {
   url?: string
 }
 
-export type EquirectangularEnvironmentProps = {
-  /**
-   * optional options that are passed to `loader.load`
-   */
-  loadOptions?: UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader>
-
-  /**
-   * optional options that are used when creating the loader
-   */
-  loaderOptions?: UseLoaderOptions<typeof EXRLoader | typeof RGBELoader | typeof TextureLoader>
-} & EnvironmentProps<DataTexture | Texture>
+export type EquirectangularEnvironmentProps = EnvironmentProps<DataTexture | Texture>
 
 export type CubeEnvironmentCache = {
   hdr?: HDRCubeTextureLoader
@@ -82,20 +59,4 @@ export type CubeEnvironmentProps = {
     positiveZ: string,
     negativeZ: string
   ]
-
-  /**
-   * optional options that are passed to `loader.load`
-   */
-  loadOptions?: {
-    onProgress?: (event: ProgressEvent) => void
-    transform?: (texture: CubeTexture) => void
-  }
-  // todo: fix useLoad to work with string[] so that we can put both `loadOptions` into the EnvironmentProps type
-
-  /**
-   * options that are used when creating the loader
-   */
-  loaderOptions?: {
-    extend?: (loader: CubeTextureLoader | HDRCubeTextureLoader) => void
-  }
 } & EnvironmentProps<CubeTexture>

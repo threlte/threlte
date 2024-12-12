@@ -4,8 +4,7 @@
 
   type Props = {
     autoRotateCamera?: boolean
-    environmentFile: string
-    extensionFilePath: string
+    environmentUrl: string
     environmentIsBackground?: boolean
     isBackground?: boolean
     materialMetalness?: number
@@ -15,8 +14,7 @@
 
   let {
     autoRotateCamera = false,
-    environmentFile,
-    extensionFilePath,
+    environmentUrl,
     environmentIsBackground = true,
     materialMetalness = 1,
     materialRoughness = 0,
@@ -42,11 +40,6 @@
 {#if useEnvironment}
   <Environment
     isBackground={environmentIsBackground}
-    loaderOptions={{
-      extend(loader) {
-        loader.setPath(extensionFilePath)
-      }
-    }}
-    url={environmentFile}
+    url={environmentUrl}
   />
 {/if}

@@ -1,27 +1,7 @@
-<script
-  lang="ts"
-  module
->
-  const createLoadOptions = (
-    flipY: boolean
-  ): UseLoaderLoadOptions<EXRLoader | RGBELoader | TextureLoader> => {
-    return {
-      transform(texture) {
-        texture.flipY = flipY
-        texture.mapping = EquirectangularReflectionMapping
-        return texture
-      }
-    }
-  }
-</script>
-
 <script lang="ts">
-  import type { EXRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import type { TextureLoader } from 'three'
-  import type { UseLoaderLoadOptions } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { Environment, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping } from 'three'
-  import { T } from '@threlte/core'
+  import type { DataTexture, Texture } from 'three'
 
   type Props = {
     flipY?: boolean
@@ -30,7 +10,17 @@
 
   let { flipY = true, url }: Props = $props()
 
-  const loadOptions = $derived(createLoadOptions(flipY))
+  const { invalidate } = useThrelte()
+
+  let texture = $state.raw<DataTexture | Texture>()
+
+  $effect(() => {
+    if (texture !== undefined) {
+      texture.flipY = flipY
+      texture.needsUpdate = true
+      invalidate()
+    }
+  })
 </script>
 
 <T.Mesh>
@@ -48,8 +38,10 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-<Environment
-  isBackground
-  {loadOptions}
-  {url}
-/>
+{#key url + flipY}
+  <Environment
+    isBackground
+    {url}
+    bind:texture
+  />
+{/key}
