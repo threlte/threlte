@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { useCursor } from '@threlte/extras'
+  import { Hovering } from '@threlte/extras'
   import { spring } from 'svelte/motion'
 
   let { ...props } = $props()
@@ -9,7 +9,7 @@
 
   const scale = spring(1)
 
-  const { onPointerEnter, onPointerLeave } = useCursor()
+  const hovering = new Hovering()
 </script>
 
 <T.Group
@@ -21,12 +21,12 @@
     onpointerenter={() => {
       $scale = 2
       color = '#FE3D00'
-      onPointerEnter()
+      hovering.current = true
     }}
     onpointerleave={() => {
       $scale = 1
       color = 'white'
-      onPointerLeave()
+      hovering.current = false
     }}
   >
     <T.BoxGeometry />
