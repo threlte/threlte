@@ -29,20 +29,6 @@ componentSignature:
           type: 'THREE.Scene'
         },
         {
-          default: '{}',
-          description: 'optional options object that is passed to the `useLoader` function',
-          name: 'loaderOptions',
-          required: false,
-          type: '{ extend?: (loader: THREE.CubeTextureLoader | THREE.HDRCubeTextureLoader) => void }'
-        },
-        {
-          default: '{}',
-          description: 'optional options object that is passed to `loader.load`',
-          name: 'loadOptions',
-          required: false,
-          type: '{onProgress?: (event: ProgressEvent) => void, transform?: (texture: THREE.CubeTexture) => void}'
-        },
-        {
           default: 'false',
           description: 'creates a ground projected skybox',
           name: 'ground',
@@ -78,7 +64,3 @@ componentSignature:
 | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
 | .hdr       | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
 | all others | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
-
-## No Default Load Options
-
-`<CubeEnvironment>` does not have a default load options because it doesn't need to do anything with the `CubeTexture` once it has been created. You can still pass in `loadOptions` if you want to modify the texture before it is assigned to `scene.environment`.

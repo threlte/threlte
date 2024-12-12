@@ -83,18 +83,17 @@
   const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)
 
   const loader = $derived.by(() => {
-    if (!urls) return
+    if (urls === undefined) return
     if (firstIsHDR) {
       loaders.hdr ??= new HDRCubeTextureLoader()
       return loaders.hdr
-    } else {
-      loaders.tex ??= new CubeTextureLoader()
-      return loaders.tex
     }
+    loaders.tex ??= new CubeTextureLoader()
+    return loaders.tex
   })
 
   $effect(() => {
-    if (urls && loader) {
+    if (urls !== undefined && loader !== undefined) {
       const suspendedTexture = suspend(
         cache.remember(() => {
           return loader.loadAsync(urls)

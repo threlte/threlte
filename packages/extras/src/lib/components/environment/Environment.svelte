@@ -6,11 +6,11 @@
 </script>
 
 <script lang="ts">
-  import { observe, T, useCache, useThrelte } from '@threlte/core'
-  import { EquirectangularReflectionMapping, Scene, TextureLoader } from 'three'
-  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { useSuspense } from '../../suspense/useSuspense'
   import type { EquirectangularEnvironmentProps } from './types'
+  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { EquirectangularReflectionMapping, Scene, TextureLoader } from 'three'
+  import { observe, T, useCache, useThrelte } from '@threlte/core'
+  import { useSuspense } from '../../suspense/useSuspense'
 
   let {
     ground = false,
@@ -82,21 +82,20 @@
 
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
-    if (!url) return
+    if (url === undefined) return
     if (isEXR) {
       loaders.exr ??= new EXRLoader()
       return loaders.exr
     } else if (isHDR) {
       loaders.hdr ??= new RGBELoader()
       return loaders.hdr
-    } else {
-      loaders.tex ??= new TextureLoader()
-      return loaders.tex
     }
+    loaders.tex ??= new TextureLoader()
+    return loaders.tex
   })
 
   $effect(() => {
-    if (url && loader) {
+    if (url !== undefined && loader !== undefined) {
       const suspendedTexture = suspend(
         cache.remember(() => {
           return loader.loadAsync(url)
