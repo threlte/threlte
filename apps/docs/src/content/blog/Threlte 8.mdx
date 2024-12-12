@@ -6,49 +6,40 @@ title: 'Threlte 8'
 subtitle: 'The next major release of Threlte'
 ---
 
-<div class="text-2xl text-white">Every act of creation is first an act of destruction.</div>
-<span class="text-faded text-xs">— Pablo Picasso</span>
-
 Today we are releasing **Threlte 8**, a complete rewrite
 that marks a leap forward in performance, flexibility, and developer experience.
+This release has been cooking for the last 6 months. We're super excited about
+the potential it unlocks for next chapter of 3D graphics on the web.
 
 ## Why Rewrite Threlte?
 
-The release of **Svelte 5** introduces a groundbreaking feature:
-[Runes](https://svelte.dev/docs/svelte/what-are-runes). These compiler
-instructions unlock the power of **signals** – a paradigm shift for reactive
-programming in Svelte. Svelte 5 waves goodbye to existing features such as event
-handlers and slots; they're replaced with callbacks and
-[Snippets](https://svelte.dev/docs/svelte/snippet).
+It's our natural migration to **Svelte 5**. The new features of the language
+are groundbreaking for us as developers and embracing it was an opportunity for us
+to refine a lot of the existing APIs. A lot has also been happening within **three.js**
+and we've used this migration as an opportunity to position threlte to take
+advantage of those developments too.
 
-Embracing Svelte 5 meant rethinking a lot of the existing Threlte APIs from the
-ground up to fully leverage Svelte's new capabilities.
+## What's New in Threlte 8?
 
-## What’s New in Threlte 8?
-
-<Tip type="info">
-  If you want to jump straight into the new Threlte, check out the [migration
-  guide](/docs/learn/advanced/migration-guides#threlte-8).
-</Tip>
-
-Threlte 8 is packed with enhancements in `@threlte/core` and other packages.
+Threlte 8 is packed with enhancements in `@threlte/core` and updates in all our other packages.
 Here are the highlights:
 
-### **All-new `<T>` component**
+### All-new `<T>` component
 
 The universal [`<T>` component](/docs/reference/core/t) has been **reduced in
 complexity** all while **adding features and flexibility** that were just not
-possible before. Props are now evaluated individually, [`attach` got a lot more
-powerful](/docs/learn/advanced/migration-guides#attach-api--trait-components),
-[automatic disposal is more
-transparent](docs/learn/advanced/migration-guides#automatic-disposal) and
-[events work entirely
-differently](/docs/learn/advanced/migration-guides#events).
+possible before.
 
-### **A lot of new `@threlte/extras`**
+- Props are now evaluated individually
+- [`attach` got a lot more
+  powerful](/docs/learn/advanced/migration-guides#attach-api--trait-components)
+- [Automatic disposal is more
+  transparent](docs/learn/advanced/migration-guides#automatic-disposal) and
+- [Events have been reworked inline with svelte 5](/docs/learn/advanced/migration-guides#events)
 
-We've added a lot of new things to play around with to `@threlte/extras`, here
-are some highlights to check out:
+### New `@threlte/extras` components
+
+We've added a lot of new things to play around with in `@threlte/extras` including:
 [`<AsciiRenderer>`](/docs/reference/extras/ascii-renderer),
 [`<CubeCamera>`](/docs/reference/extras/cube-camera),
 [`<MeshDiscardMaterial>`](/docs/reference/extras/discard-material),
@@ -58,14 +49,9 @@ are some highlights to check out:
 [`<HUD>`](/docs/reference/extras/hud),
 [`<Resize>`](/docs/reference/extras/resize),
 [`<meshBounds>`](/docs/reference/extras/mesh-bounds) and
-[`<Detailed>`](/docs/reference/extras/detailed).
+[`<Detailed>`](/docs/reference/extras/detailed); with more to come.
 
-### **Threlte Plugin API**
-
-The **Plugin API** got an update to [fully embrace Svelte 5's reactivity
-model](/docs/learn/advanced/migration-guides#plugin-api).
-
-### **Custom Type Support for `<T>`**
+### Custom Type Support for `<T>`
 
 Plugins such as
 [`interactivity`](/docs/reference/extras/interactivity#prop-types) now expose
@@ -73,25 +59,31 @@ types which can be added to your ambient type definitions for the `<T>`
 component to pick up. Event handlers and custom `<T>` component objects are now
 type-safe.
 
-### **Fixed Frame Physics**
+### Fixed Frame Physics
 
 `@threlte/rapier` now supports [fixed frame
 physics](/docs/reference/rapier/framerate) letting you craft simulations with
-confidence and predictability.
+predictability and consistency.
 
-### Under the Hood
+### Threlte Plugin API
 
-Not only `@threlte/core` received major updates. Every other package had to be
-updated to Svelte 5. Svelte now also provides better type support out of the box
-which means we can finally skip hand-writing types for components and rely on
-the Svelte compiler to do its magic.
+The **Plugin API** got an update to [fully embrace Svelte 5's reactivity
+model](/docs/learn/advanced/migration-guides#plugin-api). The doc page also
+had an update to better introduce the API's capabilities.
 
-## A Fresh Start: Migration to Threlte 8
+### This is the _WebGPU_ Way
 
-Breaking changes can be daunting. While Threlte 8 is not backward-compatible, we
-provide a comprehensive [migration
-guide](/docs/learn/advanced/migration-guides#threlte-8)
-to help you transition smoothly.
+Threlte 8 introduces a clear path for using three.js's new
+[WebGPU renderer](/docs/examples/renderers/webgpurenderer). Additionally, we're looking
+forward to seeing the use of three's new shading language - [TSL](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language).
+It's a significant improvement upon the previous method of tinkering with `.onBeforeCompile()`
+
+## How to Migrate to Threlte 8
+
+There are breaking changes. Threlte 8 is not backward-compatible but we've
+tried our best to cover the details within our [migration
+guide](/docs/learn/advanced/migration-guides#threlte-8). For further help,
+reach out to us on discord.
 
 ## Built with the Community, for the Community
 
@@ -101,17 +93,14 @@ to help you transition smoothly.
   alt="THrelte8Diff"
 />
 
-This rewrite wasn’t a solo endeavor. It took six months and the contributions of
-a dedicated community of developers to bring Threlte 8 to life. We’re immensely
-grateful for the time, talent, and passion that went into this.
+This rewrite was a team effort with great contributions from the communitty.
+Thank you to everyone who tested out any of our `@next` releases. We're immensely
+grateful for the time, talent, and passion of our communitty. You guys rock 😃
 
-## What’s Next?
+## What's Next?
 
-```bash
-npm install @threlte/core
-```
-
-Install Threlte 8 today, explore the new documentation, and start building your
+We'd love for hear about what everyone makes with threlte 8! Take the new
+Threlte for a spin, explore the new documentation, and start building your
 next 3D application.
 
 <div class="mt-12 flex justify-center">
