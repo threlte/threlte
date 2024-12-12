@@ -86,13 +86,15 @@ Loaders used inside `<Environment>` are not extendable. They only fetch and load
     // .. request headers that will be used when fetching the texture
   })
 
-  const texture = loader.loadAsync('texture.jpg').then((texture) => {
+  const promise = loader.loadAsync('texture.jpg').then((texture) => {
     texture.mapping = EquirectangularReflectionMapping
     return texture
   })
 </script>
 
-<Environment {texture} />
+{#await promise then texture}
+	<Environment {texture} />
+{/await}
 ```
 
 ### `texture` Prop for Preloaded Textures
