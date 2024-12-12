@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 9.0.0-next.44
+
+### Major Changes
+
+- 86072ef: separate `<Environment>` into two components
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
 ## 9.0.0-next.43
 
 ### Patch Changes
