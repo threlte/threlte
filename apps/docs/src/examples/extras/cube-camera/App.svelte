@@ -46,7 +46,7 @@
       label="cap frames"
     />
   </Folder>
-  <Folder title="texture">
+  <Folder title="material props">
     <Slider
       bind:value={metalness}
       max={1}

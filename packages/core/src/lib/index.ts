@@ -23,6 +23,7 @@ export type { Key, Schedule, Scheduler, Stage, Task, TaskCallback } from './fram
 // useLoader
 export {
   useLoader,
+  type UseLoaderLoadOptions,
   type UseLoaderLoadInput,
   type UseLoaderLoadResult,
   type UseLoaderOptions
