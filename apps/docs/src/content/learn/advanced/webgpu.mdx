@@ -19,9 +19,10 @@ To use three.js's WebGPU renderer, import it and then initialize it within your 
   fallbacks to webgl when webgpu is not available.
 </Tip>
 
-```svelte title="App.svelte"
+```svelte title="App.svelte" {4}+ {8-14}+
 <script>
   import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
   import * as THREE from 'three/webgpu'
 </script>
 
@@ -63,12 +64,14 @@ import * as THREE from 'three/webgpu'
 
 ### Extend the catalogue
 
-You also should extend the Threlte catalogue with the WebGPU build.
+If the `<T>` component doesn't have the extra WebGPU class definitions, it will
+error when trying to do things like `<T.MeshPhysicalNodeMaterial />`. To sort this out
+use the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue) function.
 
-```svelte title="App.svelte" {2}+ {6}+
+```svelte title="App.svelte" {3}+ {6}+
 <script>
-  import { extend } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import { Canvas, extend } from '@threlte/core'
   import * as THREE from 'three/webgpu'
 
   extend(THREE)
@@ -85,12 +88,6 @@ You also should extend the Threlte catalogue with the WebGPU build.
 >
   <Scene />
 </Canvas>
-```
-
-This gives the `<T>` component the extra class definitions to use things like `MeshPhysicalNodeMaterial` like so:
-
-```svelte
-<T.MeshPhysicalNodeMaterial />
 ```
 
 ### Vite
@@ -118,23 +115,21 @@ can be used, although less success has been reported with this method.
 
 ## TSL
 
-A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?". Most libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material) use a find and replace solution. This works well enough but ThreeJS has identified that it's not an ideal solution and recommends using the threejs shading language, otherwise known as [TSL](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language). One of the primary benefits for using TSL is that the language is renderer-agnostic. This means TSL will compile to either glsl or wgsl code depending on what renderer is being used.
+A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?".
+Previously, libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
+use a find and replace solution. This works but threejs has identified
+that it's not an ideal solution and recommends using the Threejs Shading Language,
+otherwise known as [TSL](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language).
 
-The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing) threejs example.
+The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
+threejs example. There are many more [TSL examples](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
+within three.js that you can use or adapt for your project. This is not a beginner's guide to shaders.
 
 <Example path="shaders/slice/main" />
 
-Node materials give the developer the ability to modify three's builtin materials.
-In the example above, two nodes are modified; the `outputNode` and the `shadowNode`.
-The `outputNode` is set up in such a way that it discards any fragments that are
-outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded
-and it is not front-facing, it is assigned the color in the `color` uniform. The
-material needs its `side` set to `Three.DoubleSide` otherwise as these
-fragments are facing away from the camera, threejs would cull them out.
+### Nodes
 
-Any fragment that is discarded in the shadowNode will not cast shadows.
-
-The nodes can be directly assigned like any other prop on the `<T>` component.
+The [nodes](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#nodematerial) can be directly assigned like any other prop on the `<T>` component.
 
 ```svelte
 <T.MeshPhysicalNodeMaterial
@@ -147,17 +142,27 @@ The nodes can be directly assigned like any other prop on the `<T>` component.
 />
 ```
 
-Various TSL functions such as `If`, `Fn`, and `vec4` can be imported from `three/webgpu`
+Node materials give you the ability to modify three's builtin materials.
+In the sliced gear example, two nodes are modified; the `outputNode` and the `shadowNode`.
+The `outputNode` is set up in such a way that it discards any fragments that are
+outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded and
+it is not front-facing, it is assigned the color in the `color` uniform. The material
+needs its `side` set to `THREE.DoubleSide` otherwise as these fragments are facing away
+from the camera, threejs would cull them out.
 
-If your node depends on uniforms, these can be declared the the `script` tag of the component and updated via `$effect` or a callback.
+Any fragment that is discarded in the shadowNode will not cast shadows.
 
-For example, if your material uses elapsed time in a uniform, you can update the uniform inside a `useTask` callback.
+### Updating Uniforms
+
+If your node depends on uniforms, these can be declared in the `script` tag of
+the component and updated via `$effect` or a callback.
+
+For example, if your material uses elapsed time in a uniform, you can update the
+uniform inside a `useTask` callback.
 
 <Example path="shaders/slice/updatingUniforms" />
 
-The material demonstrates two ways to update uniforms. The `uTime` uniform is updated in a `useTask` callback. `uIntensity` is modified in a `$effect`. Either way the uniform updates are picked up in the material.
+The material above demonstrates two ways to update uniforms. The `uTime` uniform
+is updated in a `useTask` callback. `uIntensity` is modified in a `$effect`. Either way the uniform updates are picked up in the material.
 
-<Tip type="info">
-  TSL has an `oscSine` function that oscillates on time that could be used in the example above.
-  Using a `time` uniform and `useTask` is for demonstration purposes.
-</Tip>
+TSL has an [`oscSine`](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#oscillator) function that oscillates on time that could also be used in the example above.
