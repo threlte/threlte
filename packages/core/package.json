@@ -68,11 +68,11 @@
   },
   "exports": {
     ".": {
-      "types": "./src/lib/index.ts",
+      "types": "./src/lib/types.d.ts",
       "svelte": "./src/lib/index.ts"
     }
   },
-  "types": "./src/lib/index.ts",
+  "types": "./src/lib/types.d.ts",
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
     "files": [
