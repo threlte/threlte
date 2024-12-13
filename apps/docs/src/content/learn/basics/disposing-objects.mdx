@@ -42,7 +42,7 @@ components. This disables disposal for the entire subtree.
 ```svelte
 <script>
   import { T, useTexture } from '@threlte/core'
-  import { BoxBufferGeometry, MeshStandardMaterial } from 'three'
+  import { BoxGeometry, MeshStandardMaterial } from 'three'
 
   const map = useTexture('/some/texture')
   const material = new MeshStandardMaterial({ map })
