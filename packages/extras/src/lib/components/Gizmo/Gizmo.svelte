@@ -18,8 +18,6 @@
 
   const parent = useParent()
 
-  console.log($parent)
-
   let { controls, ref = $bindable<ViewportGizmo>(), ...rest }: GizmoProps = $props()
 
   const { camera, renderer, renderStage, shouldRender, size, invalidate } = useThrelte()
@@ -59,22 +57,28 @@
   $effect(() => {
     if (!_controls) return
 
-    const handleChange = () => ref.cameraUpdate()
-    const handleUpdate = () => {}
     const handleStart = () => (_controls.enabled = false)
     const handleEnd = () => (_controls.enabled = true)
+    const handleChange = () => ref.cameraUpdate()
+    const handleUpdate = () => {
+      if ('getTarget' in _controls && typeof _controls.getTarget == 'function') {
+        _controls.getTarget(ref.target)
+        ref.update()
+      }
+    }
 
     ref.attachControls(_controls)
     ref.addEventListener('start', handleStart)
     ref.addEventListener('end', handleEnd)
     _controls.addEventListener('change', handleChange)
-    _controls.addEventListener('update', handleUpdate)
+    _controls.addEventListener('update' as 'change', handleUpdate)
 
     return () => {
       ref.detachControls()
       ref.removeEventListener('start', handleStart)
       ref.removeEventListener('end', handleEnd)
       _controls.removeEventListener('change', handleChange)
+      _controls.removeEventListener('update' as 'change', handleUpdate)
     }
   })
 

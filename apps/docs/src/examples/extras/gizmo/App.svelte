@@ -17,16 +17,12 @@
   let type = $state('sphere')
   let speed = $state(1)
   let placement: GizmoOptions['placement'] = $state('bottom-left')
-  let xColor = '#ff3653'
-  let yColor = '#8adb00'
-  let zColor = '#2c8fff'
   let size = $state(86)
   let left = $state(0)
   let top = $state(0)
   let right = $state(0)
   let bottom = $state(0)
-
-  let center: CurrentWritable<[number, number, number]> = currentWritable([0, 0, 0])
+  let center: [number, number, number] = $state([0, 0, 0])
 </script>
 
 <Pane
@@ -48,7 +44,6 @@
     min={0.1}
     max={1}
   />
-
   <List
     label="placement"
     bind:value={placement}
@@ -71,7 +66,11 @@
     max={350}
     step={1}
   />
-  <Folder title="offset">
+
+  <Folder
+    title="offset"
+    expanded={false}
+  >
     <Slider
       label="top"
       bind:value={top}
@@ -111,7 +110,11 @@
       fov={36}
       target={[0, 0, 0]}
     >
-      <OrbitControls>
+      <OrbitControls
+        onchange={(event) => {
+          center = event.target.target.toArray()
+        }}
+      >
         <Gizmo
           {type}
           {speed}
@@ -127,6 +130,6 @@
       </OrbitControls>
     </T.PerspectiveCamera>
 
-    <Scene center={$center} />
+    <Scene {center} />
   </Canvas>
 </div>
