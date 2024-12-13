@@ -14,13 +14,9 @@ componentSignature:
           type: 'TaskOptions',
           description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
         },
-        {
-          name: 'controls',
-          type: "OrbitControls | CameraControls",
-          required: false
-        }
+        { name: 'controls', type: 'OrbitControls | CameraControls', required: false }
       ],
-    events: 
+    events:
       [
         {
           name: 'start',
@@ -41,7 +37,7 @@ componentSignature:
   }
 ---
 
-A gizmo for snap-to camera controls. 
+A gizmo for snap-to camera controls.
 
 Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
 
@@ -60,6 +56,4 @@ Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
 
 In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
 
-<Tip type="warning">
-  These props cause the gizmo to rebuild itself, so update them sparingly.
-</Tip>
+<Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>

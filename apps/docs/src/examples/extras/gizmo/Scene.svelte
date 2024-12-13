@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Grid } from '@threlte/extras'
 
   type Props = {
