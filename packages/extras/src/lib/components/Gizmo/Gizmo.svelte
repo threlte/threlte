@@ -6,21 +6,31 @@
 </script>
 
 <script lang="ts">
-  import { useTask, useThrelte, useStage, useParent } from '@threlte/core'
-  import { NoToneMapping, Vector4, type OrthographicCamera, type PerspectiveCamera } from 'three'
-  import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
+  import { useTask, useThrelte, useParent } from '@threlte/core'
+  import {
+    NoToneMapping,
+    Vector4,
+    type OrthographicCamera,
+    type PerspectiveCamera,
+    type Event
+  } from 'three'
+  import type { GizmoProps } from './types'
+  import { ViewportGizmo } from 'three-viewport-gizmo'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
-  type GizmoProps = GizmoOptions & {
-    controls?: OrbitControls
-    ref: ViewportGizmo
-  }
 
   const parent = useParent()
 
-  let { controls, ref = $bindable<ViewportGizmo>(), ...rest }: GizmoProps = $props()
+  let {
+    controls,
+    renderTask,
+    ref = $bindable<ViewportGizmo>(),
+    onstart,
+    onchange,
+    onend,
+    ...rest
+  }: GizmoProps = $props()
 
-  const { camera, renderer, renderStage, shouldRender, size, invalidate } = useThrelte()
+  const { camera, renderer, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
 
   ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer)
 
@@ -29,6 +39,7 @@
   const _controls = $derived($parent instanceof OrbitControls ? $parent : controls)
 
   useTask(
+    renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
       if (shouldRender()) {
         const toneMapping = renderer.toneMapping
@@ -44,9 +55,7 @@
     },
     {
       autoInvalidate: false,
-      stage: useStage(Symbol(), {
-        after: renderStage
-      })
+      ...(renderTask ?? { after: autoRenderTask })
     }
   )
 
@@ -83,8 +92,28 @@
   })
 
   $effect(() => {
-    ref.addEventListener('change', invalidate)
-    return () => ref.removeEventListener('change', invalidate)
+    const handleStart = (event: Event<'start', ViewportGizmo>) => {
+      onstart?.(event)
+    }
+    ref.addEventListener('start', handleStart)
+    return () => ref.removeEventListener('start', handleStart)
+  })
+
+  $effect(() => {
+    const handleChange = (event: Event<'change', ViewportGizmo>) => {
+      invalidate()
+      onchange?.(event)
+    }
+    ref.addEventListener('change', handleChange)
+    return () => ref.removeEventListener('change', handleChange)
+  })
+
+  $effect(() => {
+    const handleEnd = (event: Event<'end', ViewportGizmo>) => {
+      onend?.(event)
+    }
+    ref.addEventListener('end', handleEnd)
+    return () => ref.removeEventListener('end', handleEnd)
   })
 
   $effect.pre(() => {

@@ -15,15 +15,27 @@ componentSignature:
           description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
         },
         {
-          name: 'animationTask',
-          required: false,
-          type: 'TaskOptions',
-          description: 'Options for the task to animate the gizmo when the user clicks one of the handles. By default, this task is added to the `mainStage`.'
-        },
-        {
           name: 'controls',
           type: "OrbitControls | CameraControls",
           required: false
+        }
+      ],
+    events: 
+      [
+        {
+          name: 'start',
+          payload: "Event<'start', ViewportGizmo>",
+          description: 'Triggered when a view change interaction begins.'
+        },
+        {
+          name: 'change',
+          payload: "Event<'change', ViewportGizmo>",
+          description: 'Triggered during view changes.'
+        },
+        {
+          name: 'end',
+          payload: "Event<'end', ViewportGizmo>",
+          description: 'Triggered when a view change interaction ends.'
         }
       ]
   }

@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { Grid } from '@threlte/extras'
+
+  const { camera } = useThrelte()
 
   export let center: [number, number, number]
 
