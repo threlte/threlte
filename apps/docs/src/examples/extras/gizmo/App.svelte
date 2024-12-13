@@ -18,10 +18,10 @@
   let speed = $state(1)
   let placement: GizmoOptions['placement'] = $state('bottom-left')
   let size = $state(86)
-  let left = $state(0)
-  let top = $state(0)
-  let right = $state(0)
-  let bottom = $state(0)
+  let left = $state(10)
+  let top = $state(10)
+  let right = $state(10)
+  let bottom = $state(10)
   let center: [number, number, number] = $state([0, 0, 0])
 </script>
 
