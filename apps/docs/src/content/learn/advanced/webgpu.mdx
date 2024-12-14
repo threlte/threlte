@@ -64,9 +64,10 @@ import * as THREE from 'three/webgpu'
 
 ### Extend the catalogue
 
-If the `<T>` component doesn't have the extra WebGPU class definitions, it will
-error when trying to do things like `<T.MeshPhysicalNodeMaterial />`. To sort this out
-use the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue) function.
+By default `<T>` doesn't know about the extra WebGPU classes and will
+error when trying to use the new materials like `<T.MeshPhysicalNodeMaterial />`. You can give `<T>`
+the new classes using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+function.
 
 ```svelte title="App.svelte" {3}+ {6}+
 <script>
@@ -116,8 +117,8 @@ can be used, although less success has been reported with this method.
 ## TSL
 
 A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?".
-Libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
-use a find and replace solution that gets the job done but ThreeJS has identified
+External libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
+use a find and replace solution to get this job done. ThreeJS has identified
 that it's not an ideal solution and recommends using the [ThreeJS Shading Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or TSL for short.
 
 The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
