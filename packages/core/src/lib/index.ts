@@ -38,6 +38,8 @@ export { createCanvasContext, useCanvas, type Size } from './context/fragments/c
 export { createDisposalContext, useDisposal } from './context/fragments/disposal'
 export { createParentContext, useParent } from './context/fragments/parent'
 export { createParentObject3DContext, useParentObject3D } from './context/fragments/parentObject3D'
+export { createRenderTaskContext, useRenderTask } from './context/fragments/render-task'
+export { setRendererAnimationLoopWithAutoResize } from './context/fragments/animation-loop'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
 export { createSceneContext, useScene } from './context/fragments/scene'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
