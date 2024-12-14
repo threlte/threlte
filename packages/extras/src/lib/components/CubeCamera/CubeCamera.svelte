@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { isInstanceOf, observe, T, useTask, useThrelte } from '@threlte/core'
-  import { CubeCamera, Group, WebGLCubeRenderTarget } from 'three'
   import type { CubeCameraProps } from './types'
-  import { onDestroy } from 'svelte'
+  import { Group } from 'three'
+  import { observe, T, useTask, useThrelte } from '@threlte/core'
+  import { useCubeCamera } from '../../hooks/useCubeCamera.svelte'
 
   let {
     background = 'auto',
@@ -18,27 +18,11 @@
     ...props
   }: CubeCameraProps = $props()
 
-  export const renderTarget = new WebGLCubeRenderTarget(resolution)
-
-  $effect.pre(() => {
-    renderTarget.setSize(resolution, resolution)
-  })
-
-  onDestroy(() => {
-    renderTarget.dispose()
-  })
-
-  export const camera = new CubeCamera(near, far, renderTarget)
-
-  $effect.pre(() => {
-    camera.children.forEach((child) => {
-      if (isInstanceOf(child, 'PerspectiveCamera')) {
-        child.far = far
-        child.near = near
-        child.updateProjectionMatrix()
-      }
-    })
-  })
+  export const { camera, renderTarget } = useCubeCamera(
+    () => near,
+    () => far,
+    () => resolution
+  )
 
   const { renderer, scene } = useThrelte()
 

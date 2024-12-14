@@ -5,6 +5,8 @@
   import type { ListOptions } from 'svelte-tweakpane-ui'
 
   const resolutionOptions: ListOptions<number> = {
+    32: 32,
+    64: 64,
     128: 128,
     256: 256,
     512: 512

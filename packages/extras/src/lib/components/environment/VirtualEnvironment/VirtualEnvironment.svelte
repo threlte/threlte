@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { createSceneContext, isInstanceOf, observe, T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-  import { CubeCamera, WebGLCubeRenderTarget } from 'three'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
   import type { VirtualEnvironmentProps } from './types'
+  import { createSceneContext, observe, T, useTask, useThrelte } from '@threlte/core'
+  import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte'
+  import { useEnvironment } from '../utils/useEnvironment.svelte'
 
   const ctx = useThrelte()
 
@@ -23,9 +22,11 @@
   // Create a parent scene to render the virtual environment into
   const { scene } = createSceneContext()
 
-  // Create a render target to render the virtual environment to
-
-  export const renderTarget = new WebGLCubeRenderTarget(resolution)
+  export const { camera, renderTarget } = useCubeCamera(
+    () => near,
+    () => far,
+    () => resolution
+  )
 
   useEnvironment({
     texture: renderTarget.texture,
@@ -35,26 +36,6 @@
     get isBackground() {
       return isBackground
     }
-  })
-
-  $effect(() => {
-    renderTarget.setSize(resolution, resolution)
-  })
-
-  onDestroy(() => {
-    renderTarget.dispose()
-  })
-
-  export const camera = new CubeCamera(near, far, renderTarget)
-
-  $effect.pre(() => {
-    camera.children.forEach((child) => {
-      if (isInstanceOf(child, 'PerspectiveCamera')) {
-        child.far = far
-        child.near = near
-        child.updateProjectionMatrix()
-      }
-    })
   })
 
   let count = 0
