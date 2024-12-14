@@ -5,19 +5,18 @@ order: 1
 ---
 
 <Tip type="warning">
-  WebGPU support in Three.js is still in an early stage and the implementation may change from
-  Three.js version to version. This guide is based on Three.js r169.
+  WebGPU support in Three.js is still in an early stage and is subject to change from Three.js
+  version to version.
 </Tip>
-
+<Tip type="warning">
+  We highly recommend targeting [version r171](https://github.com/mrdoob/three.js/releases/tag/r171)
+  onwards because of potential [duplication and configuration
+  issues](https://github.com/mrdoob/three.js/pull/29404).
+</Tip>
 ## WebGPU
 
-To use three.js's WebGPU renderer, import it and then initialize it within your `<Canvas>`'s `createRenderer` prop.
-
-<Tip type="note">
-  WebGPU is still an experimental browser api and at the time of writing has 73% global
-  [support](https://caniuse.com/?search=webgpu). For this reason, three.js's webgpu renderer
-  fallbacks to webgl when webgpu is not available.
-</Tip>
+To use Three.js's WebGPU renderer, import it and then initialize it within your
+`<Canvas>`'s `createRenderer` prop.
 
 ```svelte title="App.svelte" {4}+ {8-14}+
 <script>
@@ -39,6 +38,11 @@ To use three.js's WebGPU renderer, import it and then initialize it within your 
 </Canvas>
 ```
 
+<Tip type="note">
+  WebGPU is still an experimental browser api and at the time of writing has 73% global
+  [support](https://caniuse.com/?search=webgpu). For this reason, Three.js's webgpu renderer
+  fallbacks to webgl when webgpu is not available.
+</Tip>
 <Tip type="tip">
   This same approach can be used to swap out the default renderer for any other custom renderer.
 </Tip>
@@ -50,41 +54,28 @@ To use three.js's WebGPU renderer, import it and then initialize it within your 
   example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
 </small>
 
-### Use consistent imports
+The WebGPU renderer doesn't immediately render. If the renderer you provide needs to delay renderering, you
+can defer rendering by initially setting the renderMode to `manual` like so:
 
-Since [Three.js r167](https://github.com/mrdoob/three.js/releases/tag/r167),
-Three.js provides a dedicated WebGPU build, available as `three/webgpu`.
-Whenever you're targeting WebGPU, you should always import the WebGPU build
-instead of the default `three` build:
-
-```ts {1}- {2}+
-import * as THREE from 'three'
-import * as THREE from 'three/webgpu'
-```
-
-### Extend the catalogue
-
-By default `<T>` doesn't know about the extra WebGPU classes and will
-error when trying to use the new materials like `<T.MeshPhysicalNodeMaterial />`. You can give `<T>`
-the new classes using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
-function.
-
-```svelte title="App.svelte" {3}+ {6}+
+```svelte title="App.svelte"
 <script>
-  import Scene from './Scene.svelte'
-  import { Canvas, extend } from '@threlte/core'
+  import { Canvas, T } from '@threlte/core@next'
   import * as THREE from 'three/webgpu'
-
-  extend(THREE)
+  let renderMode = $state('manual')
 </script>
 
 <Canvas
+  {renderMode}
   createRenderer={(canvas) => {
-    return new THREE.WebGPURenderer({
+    const renderer = new THREE.WebGPURenderer({
       canvas,
       antialias: true,
       forceWebGL: false
     })
+    renderer.init().then(() => {
+      renderMode = 'on-demand'
+    })
+    return renderer
   }}
 >
   <Scene />
@@ -93,8 +84,8 @@ function.
 
 ### Vite
 
-The WebGPURenderer uses top-level async to determine WebGPU compatibility. Vite
-will often throw an error when it detects top level await.
+WebGPU uses top-level async to determine WebGPU compatibility. Vite
+will often throw an error when it detects this.
 
 To circumvent this issue, the following can be added to your Vite config.
 
@@ -116,16 +107,45 @@ can be used, although less success has been reported with this method.
 
 ## TSL
 
-A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?".
+A question that comes up often in Three.js development is "How do I extend Three.js's materials?".
 External libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
-use a find and replace solution to get this job done. ThreeJS has identified
-that it's not an ideal solution and recommends using the [ThreeJS Shading Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or TSL for short.
+use a find and replace solution to get this job done. Three.js has identified
+that it's not an ideal solution and recommends using the [Three.js Shading Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or TSL for short.
 
 The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
-ThreeJS example. There are many more [TSL examples](https://threejs.org/examples/?q=tsl)
-within three.js that you can use or adapt for your project.
+Three.js example. There are many more [TSL examples](https://threejs.org/examples/?q=tsl)
+within Three.js that you can use or adapt for your project.
 
 <Example path="shaders/slice/main" />
+
+### Extend the catalogue
+
+By default `<T>` doesn't know about the new material classes and will
+error on `<T.MeshPhysicalNodeMaterial />`. You can give `<T>`
+the new classes in `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+function.
+
+```svelte title="App.svelte" {3-4}+ {6}+
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas, extend } from '@threlte/core'
+  import * as THREE from 'three/webgpu'
+
+  extend(THREE)
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new THREE.WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
 
 ### Nodes
 
