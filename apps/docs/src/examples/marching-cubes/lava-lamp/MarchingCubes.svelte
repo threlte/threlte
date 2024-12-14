@@ -1,19 +1,15 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
-  import type { MarchingPlaneAxis } from './MarchingPlane'
+  import type { AddAxisMap } from './types'
   import { Vector3 } from 'three'
 
-  type addAxisMap = {
-    [Key in MarchingPlaneAxis]: `addPlane${Uppercase<Key>}`
-  }
-
-  const map: addAxisMap = {
+  const map: AddAxisMap = {
     x: 'addPlaneX',
     y: 'addPlaneY',
     z: 'addPlaneZ'
-  }
+  } as const
 
   // reusable for calculating world position of `<MarchingCube>`s
   const position = new Vector3()

@@ -1,17 +1,18 @@
 <script lang="ts">
-  import type { Props } from '@threlte/core'
   import { MarchingCube } from './MarchingCube'
   import { T } from '@threlte/core'
 
-  type MarchingCubeProps = Props<MarchingCube>
+  import type { MarchingCubeProps } from './types'
 
   let { ref = $bindable(), children, ...props }: MarchingCubeProps = $props()
+
+  const cube = new MarchingCube()
 </script>
 
 <T
-  is={MarchingCube}
+  is={cube}
   bind:ref
   {...props}
 >
-  {@render children?.({ ref })}
+  {@render children?.({ ref: cube })}
 </T>
