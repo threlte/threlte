@@ -101,7 +101,6 @@
       position.y={y + i}
       position.z={radius * Math.sin(r)}
       {background}
-      {far}
       {frames}
       {near}
       {resolution}

@@ -26,7 +26,6 @@
   let frames = $derived(capFrames ? 3 : Infinity)
 
   let near = $state(0.1)
-  let far = $state(1000)
 </script>
 
 <Pane
