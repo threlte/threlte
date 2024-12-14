@@ -153,14 +153,14 @@ Any fragment that is discarded in the shadowNode will not cast shadows.
 
 ### Updating Uniforms
 
-If your node depends on uniforms, these can be declared in the `script` tag of
+If your node uses uniforms, they can be declared in the `script` tag of
 the component and updated via `$effect` or a callback.
 
 For example, if your material uses elapsed time in a uniform, you can update the
 uniform inside a `useTask` callback.
 
 The material in the example below demonstrates two ways to update uniforms. The `uTime` uniform
-is updated in a `useTask` callback whereas `uIntensity` is modified in an `$effect`.
+is updated in `useTask` whereas `uIntensity` is updated in an `$effect`.
 
 <Example path="shaders/slice/updatingUniforms" />
 
