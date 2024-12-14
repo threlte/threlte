@@ -11,7 +11,7 @@ order: 1
 
 ## WebGPU
 
-To use three.js's WebGPU renderer, import it and then initialize it within your `<Canvas>`'s `createRenderer` event prop.
+To use three.js's WebGPU renderer, import it and then initialize it within your `<Canvas>`'s `createRenderer` prop.
 
 <Tip type="note">
   WebGPU is still an experimental browser api and at the time of writing has 73% global
@@ -116,10 +116,9 @@ can be used, although less success has been reported with this method.
 ## TSL
 
 A question that comes up often in ThreeJS development is "How do I extend ThreeJS's materials?".
-Previously, libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
+Libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
 use a find and replace solution. This works but threejs has identified
-that it's not an ideal solution and recommends using the Threejs Shading Language,
-otherwise known as [TSL](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language).
+that it's not an ideal solution and recommends using the [Threejs Shading Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or TSL for short.
 
 The example below is an adaptation of [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
 threejs example. There are many more [TSL examples](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing)
@@ -147,8 +146,8 @@ In the sliced gear example, two nodes are modified; the `outputNode` and the `sh
 The `outputNode` is set up in such a way that it discards any fragments that are
 outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded and
 it is not front-facing, it is assigned the color in the `color` uniform. The material
-needs its `side` set to `THREE.DoubleSide` otherwise as these fragments are facing away
-from the camera, threejs would cull them out.
+needs its `side` set to `THREE.DoubleSide` otherwise threejs will cull them out if they are facing away
+from the camera,
 
 Any fragment that is discarded in the shadowNode will not cast shadows.
 
@@ -160,9 +159,13 @@ the component and updated via `$effect` or a callback.
 For example, if your material uses elapsed time in a uniform, you can update the
 uniform inside a `useTask` callback.
 
+The material in the example below demonstrates two ways to update uniforms. The `uTime` uniform
+is updated in a `useTask` callback whereas `uIntensity` is modified in an `$effect`.
+
 <Example path="shaders/slice/updatingUniforms" />
 
-The material above demonstrates two ways to update uniforms. The `uTime` uniform
-is updated in a `useTask` callback. `uIntensity` is modified in a `$effect`. Either way the uniform updates are picked up in the material.
-
-TSL has an [`oscSine`](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#oscillator) function that oscillates on time that could also be used in the example above.
+<Tip type="info">
+  Note that TSL has an
+  [`oscSine`](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#oscillator) function
+  that oscillates on time that could also be used in the example above.
+</Tip>
