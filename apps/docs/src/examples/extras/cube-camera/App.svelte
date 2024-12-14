@@ -17,13 +17,16 @@
     workshop: 'workshop'
   } as const
 
-  let hdr = $state('auto')
+  let hdr: keyof typeof environmentOptions = $state('auto')
   let metalness = $state(1)
   let resolution = $state(256)
   let roughness = $state(0)
 
   let capFrames = $state(false)
   let frames = $derived(capFrames ? 3 : Infinity)
+
+  let near = $state(0.1)
+  let far = $state(1000)
 </script>
 
 <Pane
@@ -44,6 +47,14 @@
     <Checkbox
       bind:value={capFrames}
       label="cap frames"
+    />
+  </Folder>
+  <Folder title="cube camera props">
+    <Slider
+      bind:value={near}
+      label="near"
+      max={100}
+      min={0.1}
     />
   </Folder>
   <Folder title="material props">
@@ -70,6 +81,7 @@
       {frames}
       {hdr}
       {metalness}
+      {near}
       {resolution}
       {roughness}
     />

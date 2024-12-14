@@ -22,7 +22,6 @@
 
   type SceneProps = {
     frames?: number
-    far?: number
     hdr?: 'auto' | keyof typeof hdrs
     metalness?: number
     near?: number
@@ -32,7 +31,6 @@
 
   let {
     frames = Infinity,
-    far = 1000,
     hdr = 'auto',
     metalness = 1,
     near = 0.1,

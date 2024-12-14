@@ -19,12 +19,10 @@
   }: CubeCameraProps = $props()
 
   export const renderTarget = new WebGLCubeRenderTarget(resolution)
-  observe.pre(
-    () => [resolution],
-    () => {
-      renderTarget.setSize(resolution, resolution)
-    }
-  )
+
+  $effect.pre(() => {
+    renderTarget.setSize(resolution, resolution)
+  })
 
   onDestroy(() => {
     renderTarget.dispose()
@@ -32,18 +30,15 @@
 
   export const camera = new CubeCamera(near, far, renderTarget)
 
-  observe.pre(
-    () => [near, far],
-    () => {
-      camera.children.forEach((child) => {
-        if (isInstanceOf(child, 'PerspectiveCamera')) {
-          child.far = far
-          child.near = near
-          child.updateProjectionMatrix()
-        }
-      })
-    }
-  )
+  $effect.pre(() => {
+    camera.children.forEach((child) => {
+      if (isInstanceOf(child, 'PerspectiveCamera')) {
+        child.far = far
+        child.near = near
+        child.updateProjectionMatrix()
+      }
+    })
+  })
 
   const { renderer, scene } = useThrelte()
 

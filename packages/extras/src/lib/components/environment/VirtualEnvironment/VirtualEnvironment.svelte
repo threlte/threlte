@@ -24,6 +24,7 @@
   const { scene } = createSceneContext()
 
   // Create a render target to render the virtual environment to
+
   export const renderTarget = new WebGLCubeRenderTarget(resolution)
 
   useEnvironment({
@@ -36,13 +37,9 @@
     }
   })
 
-  // Update the render target size when the resolution changes
-  observe.pre(
-    () => [resolution],
-    () => {
-      renderTarget.setSize(resolution, resolution)
-    }
-  )
+  $effect(() => {
+    renderTarget.setSize(resolution, resolution)
+  })
 
   onDestroy(() => {
     renderTarget.dispose()
@@ -50,19 +47,15 @@
 
   export const camera = new CubeCamera(near, far, renderTarget)
 
-  // We need to update every camera's properties individually
-  observe.pre(
-    () => [near, far],
-    () => {
-      camera.children.forEach((child) => {
-        if (isInstanceOf(child, 'PerspectiveCamera')) {
-          child.far = far
-          child.near = near
-          child.updateProjectionMatrix()
-        }
-      })
-    }
-  )
+  $effect.pre(() => {
+    camera.children.forEach((child) => {
+      if (isInstanceOf(child, 'PerspectiveCamera')) {
+        child.far = far
+        child.near = near
+        child.updateProjectionMatrix()
+      }
+    })
+  })
 
   let count = 0
   const { start, stop, started } = useTask(
