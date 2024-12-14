@@ -1,7 +1,7 @@
 ---
-order: 7.15
+order: 7.142
 category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment.svelte'
+sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment/CubeEnvironment.svelte'
 name: <CubeEnvironment>
 type: 'component'
 componentSignature:
@@ -29,20 +29,6 @@ componentSignature:
           type: 'THREE.Scene'
         },
         {
-          default: 'false',
-          description: 'creates a ground projected skybox',
-          name: 'ground',
-          required: false,
-          type: 'boolean | { height?: number, radius?: number, resolution?: number }'
-        },
-        {
-          description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
-          name: 'skybox',
-          default: 'undefined',
-          required: false,
-          type: undefined | THREE.GroundedSkybox
-        },
-        {
           description: 'a bindable of the loaded cube texture.',
           name: 'texture',
           required: false,
@@ -52,15 +38,28 @@ componentSignature:
   }
 ---
 
-`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key differences, namely that its used to load and assign `THREE.CubeTexture`s to `scene.environment`. Other differences will be listed below. For all other information please refer to the [\<Environment>](/docs/reference/extras/environment) documentation.
+`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key
+differences, namely that its used to load and assign `THREE.CubeTexture`s to
+`scene.environment`. Other differences will be listed below. For all other
+information please refer to the
+[\<Environment>](/docs/reference/extras/environment) documentation.
 
 <Example path="extras/cube-environment/basic" />
 
 ## URLs
 
-`<CubeEnvironment>`'s `urls` prop is a six-tuple of textures that comprise a cube texture. The first file's extension decides which loader to use to load the files. Refer to the table below to determine which loader is used for each extension. The order of the `urls` is important. The order is `[positiveX, negativeX, positiveY, negativeY, positiveZ, negativeZ]`.
+`<CubeEnvironment>`'s `urls` prop is a six-tuple of textures that comprise a
+cube texture. The first file's extension decides which loader to use to load the
+files. Refer to the table below to determine which loader is used for each
+extension. The order of the `urls` is important. The order is `[positiveX,
+negativeX, positiveY, negativeY, positiveZ, negativeZ]`.
 
 | extension  | loader                                                                                                                  |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
 | .hdr       | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
 | all others | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
+
+## Grounded Skybox
+
+`<CubeEnvironment>` is other than `<Environment>` not able to create a
+`GroundedSkybox` instance.

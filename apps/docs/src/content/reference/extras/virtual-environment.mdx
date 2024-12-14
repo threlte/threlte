@@ -1,0 +1,36 @@
+---
+order: 7.143
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
+name: <VirtualEnvironment>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          default: 'false',
+          description: 'whether to set `scene.background` to the loaded environment texture',
+          name: 'isBackground',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
+          required: false,
+          type: 'THREE.Scene'
+        },
+        {
+          default: 'false',
+          description: 'whether to render the virtual environment into the scene',
+          name: 'visible',
+          required: false,
+          type: 'boolean'
+        }
+      ]
+  }
+---
+
+<Example path="extras/virtual-environment" />
