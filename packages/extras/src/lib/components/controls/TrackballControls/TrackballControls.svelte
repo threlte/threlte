@@ -41,7 +41,7 @@ enabled. You can disable this by setting `staticMoving` to true.
   let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
-  const { renderer, invalidate, shouldRender } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
