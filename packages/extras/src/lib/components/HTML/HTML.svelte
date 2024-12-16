@@ -56,6 +56,7 @@
   import type { HTMLProps } from './types'
 
   let {
+    autoRender = true,
     eps = 0.001,
     center = false,
     fullscreen = false,
@@ -124,7 +125,7 @@
     }
   })
 
-  useTask(() => {
+  export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
     const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
@@ -253,7 +254,9 @@
         occlusionMesh.lookAt(camera.current.position)
       }
     }
-  })
+  }
+
+  export const { start, stop } = useTask(render, { autoStart: false })
 
   let pos = $derived.by(() => {
     scene.updateMatrixWorld()
@@ -271,6 +274,15 @@
       destroy: () => el.remove()
     }
   }
+
+  $effect(() => {
+    if (autoRender) {
+      start()
+      return () => {
+        stop()
+      }
+    }
+  })
 </script>
 
 <T

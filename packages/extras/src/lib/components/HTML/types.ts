@@ -3,6 +3,11 @@ import type { Camera, Group, Object3D } from 'three'
 
 export type HTMLProps = Props<Group, []> & {
   /**
+   * @default true
+   */
+  autoRender?: boolean
+
+  /**
    * @default false
    */
   transform?: boolean

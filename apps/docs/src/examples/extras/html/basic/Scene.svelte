@@ -4,6 +4,12 @@
   import { spring } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
+  type Props = {
+    autoRender?: boolean
+  }
+
+  let { autoRender = true }: Props = $props()
+
   const getRandomColor = () =>
     `#${Math.floor(Math.random() * 16777215)
       .toString(16)
@@ -50,6 +56,7 @@
     position.y={1.25}
     position.z={$htmlPosZ}
     transform
+    {autoRender}
   >
     <button
       onpointerenter={() => (isHovering = true)}
@@ -76,6 +83,7 @@
     position.x={0.75}
     transform
     pointerEvents="none"
+    {autoRender}
   >
     <p
       class="w-auto translate-x-1/2 text-xs drop-shadow-lg"

@@ -84,19 +84,17 @@
     onstop?.()
   }
 
-  observe.pre(
-    () => [autoRender],
-    ([autoRender]) => {
-      if (autoRender) {
-        start()
-      } else {
+  $effect(() => {
+    if (autoRender) {
+      start()
+      return () => {
         stop()
       }
     }
-  )
+  })
 
   $effect(() => {
-    let lastAutoRender = threlteAutoRender.current
+    const lastAutoRender = threlteAutoRender.current
     threlteAutoRender.set(!autoRender)
     return () => {
       threlteAutoRender.set(lastAutoRender)
