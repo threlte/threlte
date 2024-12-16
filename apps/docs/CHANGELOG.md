@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.0-next.3
+
+### Patch Changes
+
+- a76b62a: replace all mentions of `BoxBufferGeometry` with `BoxGeometry`
+
 ## 0.14.0-next.2
 
 ### Patch Changes

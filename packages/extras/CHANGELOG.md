@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.45
+
+### Patch Changes
+
+- 1cd4af6: New Gizmo implementation
+
 ## 9.0.0-next.44
 
 ### Major Changes
