@@ -48,7 +48,7 @@
     "prettier-plugin-svelte": "^3.2.2",
     "sharp": "^0.32.0",
     "svelte": "^5.1.10",
-    "three": "0.122.0",
+    "three": "0.171.0",
     "three-stdlib": "^2.21.8"
   },
   "devDependencies": {
