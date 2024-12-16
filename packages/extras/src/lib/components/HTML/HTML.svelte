@@ -256,7 +256,17 @@
     }
   }
 
-  export const { start, stop } = useTask(render, { autoStart: false })
+  export const { start: startRendering, stop: stopRendering } = useTask(render, {
+    autoStart: false
+  })
+  $effect(() => {
+    if (autoRender) {
+      startRendering()
+      return () => {
+        stopRendering()
+      }
+    }
+  })
 
   let pos = $derived.by(() => {
     scene.updateMatrixWorld()
@@ -274,15 +284,6 @@
       destroy: () => el.remove()
     }
   }
-
-  $effect(() => {
-    if (autoRender) {
-      start()
-      return () => {
-        stop()
-      }
-    }
-  })
 </script>
 
 <T
@@ -353,7 +354,7 @@
           class={props.class}
           style={props.style}
         >
-          {@render children?.()}
+          {@render children?.({ render, startRendering, stopRendering })}
         </div>
       </div>
     </div>
@@ -368,7 +369,7 @@
       style={props.style}
       class={props.class}
     >
-      {@render children?.()}
+      {@render children?.({ render, startRendering, stopRendering })}
     </div>
   {/if}
 </svelte:element>

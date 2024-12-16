@@ -51,7 +51,7 @@ componentSignature:
         { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
         { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
         { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'recieveShadow', type: 'boolean', default: 'undefined', required: false },
+        { name: 'receiveShadow', type: 'boolean', default: 'undefined', required: false },
         { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
         { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false },
         {
@@ -77,9 +77,68 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 <Example path="extras/html/basic" />
 
-`<HTML> also exports it's internal render task and the `start`and`stop` functions so you can either render on demand or start and stop the internal task at your will.
+\<HTML> also exports it's internal render task and the `startRendering`, `stopRendering`, and `render` functions so you can either render on demand or start and stop the internal task at your will.
 
-TODO: add "on-demand" example below
+```svelte title="Render-On-Demand"
+<script>
+  let html = $state()
+
+  $effect(() => {
+    // if (shouldRender) {
+    html?.render()
+    // }
+  })
+</script>
+
+<HTML
+  autoRender={false}
+  bind:this={html}
+>
+  <h1>Hello World</h1>
+</HTML>
+```
+
+```svelte title="Start-And-Stop-Rendering"
+<script>
+  let html = $state()
+
+  // turn this on and off in accordance with your application
+  let renderWhileTrue = $state(false)
+
+  $effect(() => {
+    if (html !== undefined) {
+      if (renderWhileTrue) {
+        html.startRendering()
+        // always stop rendering if it was started
+        return () => {
+          html.stopRendering()
+        }
+      }
+    }
+  })
+</script>
+
+<HTML
+  autoRender={false}
+  bind:this={html}
+>
+  <h1>Hello World</h1>
+</HTML>
+```
+
+In both cases you should set `autonRender` to false so that the render task doesn't automatically begin.
+
+Lastly, you can access these functions from the `<HTML>`'s children snippet.
+
+```svelte
+<HTML>
+  {#snippet children({ render, startRendering, stopRendering })}
+		<button onclick={startRendering}>start rendering</button>
+		<button onclick={stopRendering}>stop rendering</button>
+		<button onclick={render}>render a single frame</button>
+	{/render}
+</HTML>
+```
 
 ### Examples
 
