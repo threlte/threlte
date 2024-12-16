@@ -16,11 +16,17 @@
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
+  const { orbitControls } = useControlsContext()
 
-  const { start, stop } = useTask(() => controls.update(), {
-    autoStart: false,
-    autoInvalidate: false
-  })
+  const { start, stop } = useTask(
+    () => {
+      controls.update()
+    },
+    {
+      autoStart: false,
+      autoInvalidate: false
+    }
+  )
 
   $effect.pre(() => {
     if (props.autoRotate || props.enableDamping) {
@@ -30,9 +36,7 @@
     }
   })
 
-  const { orbitControls } = useControlsContext()
-
-  $effect(() => {
+  $effect.pre(() => {
     const handleChange = (event: Event) => {
       invalidate()
       props.onchange?.(event)

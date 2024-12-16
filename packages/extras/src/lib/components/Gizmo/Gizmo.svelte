@@ -14,11 +14,10 @@
     type PerspectiveCamera,
     type Event
   } from 'three'
-  import type { GizmoProps } from './types'
+  import type { GizmoProps, Controls } from './types'
   import { ViewportGizmo } from 'three-viewport-gizmo'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
-  const parent = useParent()
+  import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
   let {
     controls,
@@ -30,13 +29,14 @@
     ...rest
   }: GizmoProps = $props()
 
+  const parent = useParent()
   const { camera, renderer, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
 
   ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer)
 
   const viewport = new Vector4()
 
-  const _controls = $derived($parent instanceof OrbitControls ? $parent : controls)
+  const cameraControls = $derived(controls ?? ($parent as Controls))
 
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
@@ -64,35 +64,41 @@
   })
 
   $effect(() => {
-    if (!_controls) return
+    if (!cameraControls) return
 
-    const handleStart = () => (_controls.enabled = false)
-    const handleEnd = () => (_controls.enabled = true)
-    const handleChange = () => ref.cameraUpdate()
-    const handleUpdate = () => {
-      if ('getTarget' in _controls && typeof _controls.getTarget == 'function') {
-        _controls.getTarget(ref.target)
-        ref.update()
+    if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
+      ref.target = cameraControls.target
+
+      const handleChange = () => {
+        ref.update(false)
       }
-    }
 
-    ref.attachControls(_controls)
-    ref.addEventListener('start', handleStart)
-    ref.addEventListener('end', handleEnd)
-    _controls.addEventListener('change', handleChange)
-    _controls.addEventListener('update' as 'change', handleUpdate)
+      cameraControls.addEventListener('change', handleChange)
+      return () => cameraControls.removeEventListener('change', handleChange)
+    } else {
+      const handleUpdate = () => {
+        if ('getTarget' in cameraControls && typeof cameraControls.getTarget == 'function') {
+          cameraControls.getTarget(ref.target)
+          ref.update()
+        }
+      }
 
-    return () => {
-      ref.detachControls()
-      ref.removeEventListener('start', handleStart)
-      ref.removeEventListener('end', handleEnd)
-      _controls.removeEventListener('change', handleChange)
-      _controls.removeEventListener('update' as 'change', handleUpdate)
+      const handleChange = () => {
+        cameraControls.setPosition(...camera.current.position.toArray())
+      }
+
+      ref.addEventListener('change', handleChange)
+      cameraControls.addEventListener('update', handleUpdate)
+      return () => {
+        ref.removeEventListener('change', handleChange)
+        cameraControls.removeEventListener('update', handleUpdate)
+      }
     }
   })
 
   $effect(() => {
     const handleStart = (event: Event<'start', ViewportGizmo>) => {
+      cameraControls.enabled = false
       onstart?.(event)
     }
     ref.addEventListener('start', handleStart)
@@ -110,6 +116,7 @@
 
   $effect(() => {
     const handleEnd = (event: Event<'end', ViewportGizmo>) => {
+      cameraControls.enabled = true
       onend?.(event)
     }
     ref.addEventListener('end', handleEnd)
