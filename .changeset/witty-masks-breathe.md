@@ -1,5 +1,5 @@
 ---
-"@threlte/extras": major
+"@threlte/extras": patch
 ---
 
 New Gizmo implementation
