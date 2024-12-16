@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas, T } from '@threlte/core'
-  import { Grid, Gizmo } from '@threlte/extras'
+  import { Grid } from '@threlte/extras'
   import { Pane, Slider, Checkbox, Folder, List, Color } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
   import { PlaneGeometry } from 'three'
@@ -213,12 +213,6 @@
 
 <div>
   <Canvas>
-    <Gizmo
-      horizontalPlacement="left"
-      size={70}
-      paddingX={10}
-      paddingY={10}
-    />
     {#if gridGeometry == 'Terrain'}
       <Grid
         position.y={-2}
