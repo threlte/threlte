@@ -131,12 +131,12 @@ In both cases you should set `autonRender` to false so that the render task does
 Lastly, you can access these functions from the `<HTML>`'s children snippet.
 
 ```svelte
-<HTML>
+<HTML autoRender={false}>
   {#snippet children({ render, startRendering, stopRendering })}
-		<button onclick={startRendering}>start rendering</button>
-		<button onclick={stopRendering}>stop rendering</button>
-		<button onclick={render}>render a single frame</button>
-	{/render}
+    <button onclick={startRendering}>start rendering</button>
+    <button onclick={stopRendering}>stop rendering</button>
+    <button onclick={render}>render a single frame</button>
+  {/snippet}
 </HTML>
 ```
 
