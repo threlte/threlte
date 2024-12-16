@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.24
+
+### Patch Changes
+
+- 6b905b0: New gizmo implementation
+
 ## 0.1.0-next.23
 
 ### Patch Changes
