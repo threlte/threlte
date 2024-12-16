@@ -7,6 +7,16 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    exports:
+      [
+        { name: 'start', type: '() => void', description: 'Manually start the render task' },
+        { name: 'stop', type: '() => void', description: 'Manually stop the render task' },
+        {
+          description: 'renders a single frame of the provided html',
+          name: 'render',
+          type: '() => void'
+        }
+      ],
     props:
       [
         { name: 'transform', type: 'boolean', default: 'false', required: false },
