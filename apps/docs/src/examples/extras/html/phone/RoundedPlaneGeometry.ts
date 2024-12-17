@@ -17,8 +17,6 @@ export class RoundedPlaneGeometry extends BufferGeometry {
       segments
     }
 
-    console.log(width, height)
-
     // helper consts
     const wi = width / 2 - radius // inner width
     const hi = height / 2 - radius // inner height
