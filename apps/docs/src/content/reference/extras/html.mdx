@@ -9,8 +9,12 @@ componentSignature:
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
     exports:
       [
-        { name: 'start', type: '() => void', description: 'Manually start the render task' },
-        { name: 'stop', type: '() => void', description: 'Manually stop the render task' },
+        {
+          name: 'startRendering',
+          type: '() => void',
+          description: 'Manually start the render task'
+        },
+        { name: 'stopRendering', type: '() => void', description: 'Manually stop the render task' },
         {
           description: 'renders a single frame of the provided html',
           name: 'render',
@@ -77,9 +81,9 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 
 <HTML> has an `autoRender` prop that you can use to turn off and on its render task. If at some point in your application, you no longer need to update the hmtl, you can set `autoRender` to `false`. If you need to resume the task, set `autoRender` back to `true`.
 
-\<HTML> also exports it's internal render task and the `startRendering`, `stopRendering`, and `render` functions so you can either render on demand or start and stop the internal task at your will.
+\<HTML> also exports it's internal render task and the `startRendering`, `stopRendering`, and `render` functions so you can either manually render the html or start and stop the internal task at your will.
 
-```svelte title="Render-On-Demand"
+```svelte title="Manually-Rendering"
 <script>
   let html = $state()
 
