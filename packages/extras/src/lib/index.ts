@@ -57,6 +57,13 @@ export { default as RadialGradientTexture } from './components/GradientTexture/r
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 
+// Transitions
+export { transitions } from './transitions/transltions.svelte'
+export { createTransition } from './transitions/createTransition'
+export { global } from './transitions/global'
+export type { TransitionProps } from './transitions/types'
+export { Transition } from './transitions/Transition.svelte'
+
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
 export { useSuspense } from './suspense/useSuspense'
