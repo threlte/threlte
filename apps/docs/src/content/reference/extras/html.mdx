@@ -71,11 +71,11 @@ This component is a port of [drei's `<Html>` component](https://github.com/pmndr
 The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
 </Tip>
 
+<Example path="extras/html/basic" />
+
 ## Stopping and Starting the Task
 
-\<HTML> has an `autoRender` prop that you can use to turn off and on its render task. If at some point in your application, you no longer need to update the hmtl, you can set `autoRender` to `false`. If you need to resume the task, set `autoRender` back to `true`.
-
-<Example path="extras/html/basic" />
+<HTML> has an `autoRender` prop that you can use to turn off and on its render task. If at some point in your application, you no longer need to update the hmtl, you can set `autoRender` to `false`. If you need to resume the task, set `autoRender` back to `true`.
 
 \<HTML> also exports it's internal render task and the `startRendering`, `stopRendering`, and `render` functions so you can either render on demand or start and stop the internal task at your will.
 
