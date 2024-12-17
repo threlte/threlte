@@ -7,28 +7,39 @@ on:
       - next
 
 jobs:
-  release:
-    name: Release
+  setup:
+    name: Setup 🛠️
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout 🛎️
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - uses: pnpm/action-setup@v4
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
         with:
           version: 9.4.0
-
+          run_install: true
+  validations:
+    name: Validations 🧪
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Prettier 💅
+        run: pnpm run prettier
+      - name: Test
+        run: pnpm run test
+  release:
+    name: Release 🎉
+    runs-on: ubuntu-latest
+    needs: [setup, validations]
+    steps:
       - name: Install deps
         run: pnpm run install:packages
-
       - name: Build packages
         run: pnpm run package
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1

@@ -7,26 +7,27 @@ on:
       - next
 
 jobs:
-  validations:
+  setup:
+    name: Setup 🛠️
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install pnpm 🔧
         uses: pnpm/action-setup@v4
         with:
           version: 9.4.0
           run_install: true
-
+  validations:
+    name: Validations 🧪
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
       - name: Prettier 💅
         run: pnpm run prettier
-
-      - name: Test
+      - name: Test 🧪
         run: pnpm run test
