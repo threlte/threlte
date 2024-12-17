@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.46
+
+### Minor Changes
+
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+
 ## 9.0.0-next.45
 
 ### Patch Changes
