@@ -130,7 +130,7 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 </HTML>
 ```
 
-In both cases you should set `autonRender` to false so that the render task doesn't automatically begin.
+In both cases you should set `autoRender` to `false` so that the render task doesn't automatically begin.
 
 Lastly, you can access these functions from the `<HTML>`'s children snippet.
 
@@ -144,9 +144,9 @@ Lastly, you can access these functions from the `<HTML>`'s children snippet.
 </HTML>
 ```
 
-### Examples
+## Examples
 
-#### Basic Example
+### Basic Example
 
 ```svelte
 <script lang="ts">
@@ -158,7 +158,7 @@ Lastly, you can access these functions from the `<HTML>`'s children snippet.
 </HTML>
 ```
 
-#### Transform
+### Transform
 
 `transform` applies matrix3d transformations.
 
@@ -172,7 +172,7 @@ Lastly, you can access these functions from the `<HTML>`'s children snippet.
 </HTML>
 ```
 
-#### Occlude
+### Occlude
 
 `<Html>` can be occluded behind geometry using the occlude `occlude` property.
 
@@ -199,7 +199,7 @@ like `<OrbitControls>` do this automatically.
 
 <Example path="extras/html/phone" />
 
-#### Visibility Change Event
+### Visibility Change Event
 
 Use the property `occlude` and bind to the event `visibilitychange` to implement a custom hide/show behaviour.
 
@@ -225,7 +225,7 @@ Use the property `occlude` and bind to the event `visibilitychange` to implement
 When binding to the event `visibilitychange` the contents of `<HTML>` is _not_ automatically hidden when it's occluded.
 </Tip>
 
-#### Sprite Rendering
+### Sprite Rendering
 
 Use the property `sprite` in `transform` mode to render the contents of `<HTML>` as a sprite.
 
@@ -242,7 +242,7 @@ Use the property `sprite` in `transform` mode to render the contents of `<HTML>`
 </HTML>
 ```
 
-#### Center
+### Center
 
 Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
 
@@ -256,7 +256,7 @@ Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
 </HTML>
 ```
 
-#### Portal
+### Portal
 
 Use the property `portal` to mount the contents of the `<HTML>` component on another `HTMLElement`.
 By default the contents are mounted as a sibling to the rendering `<canvas>`.
