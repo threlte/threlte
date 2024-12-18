@@ -146,8 +146,13 @@ component export and through the `children` snippet.
 ### Manual Updates
 
 For cases where you want full control over when the render target is updated,
-there is an `update` function available as a component export and through the
+use the `update` function available as a component export and through the
 `children` snippet.
+
+<Tip type="warning">
+  If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
+  task from starting automatically.
+</Tip>
 
 #### As a Component Export
 
@@ -155,7 +160,7 @@ there is an `update` function available as a component export and through the
 <script>
   let virtualEnvironment = $state()
   $effect(() => {
-    // yourDependencyHere
+    // …
     virtualEnvironment?.update()
   })
 </script>
@@ -183,11 +188,6 @@ there is an `update` function available as a component export and through the
   {/snippet}
 </VirtualEnvironment>
 ```
-
-<Tip type="warning">
-  If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
-  task from starting automatically.
-</Tip>
 
 The example below is the same as the one above but it only updates the cube
 camera's render target when the light formers are updated instead of every

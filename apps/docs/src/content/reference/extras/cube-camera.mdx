@@ -83,13 +83,18 @@ componentSignature:
   }
 ---
 
-A wrapper around three's [CubeCamera](https://threejs.org/docs/index.html#api/en/cameras/CubeCamera) that exposes a `renderTarget` prop. Before rendering to the render target, children are set to invisible to exclude them from the render.
+A wrapper around three's
+[CubeCamera](https://threejs.org/docs/index.html#api/en/cameras/CubeCamera) that
+exposes a `renderTarget` prop. Before rendering to the render target, children
+are set to invisible to exclude them from the render.
 
 <Example path="extras/cube-camera" />
 
 ## Usage
 
-The entire render target that is used by the underlying cube camera is available through the `renderTarget` snippet prop. Usually you'll only want to use the `renderTarget.texture`.
+The entire render target that is used by the underlying cube camera is available
+through the `renderTarget` snippet prop. Usually you'll only want to use the
+`renderTarget.texture`.
 
 ```svelte
 <CubeCamera>
@@ -104,23 +109,33 @@ The entire render target that is used by the underlying cube camera is available
 
 ## Controlling Updates
 
-By default, `frames` is set to `Infinity` which means the scene is rendered to the render target every frame. This is sometimes unnecessary especially if you have a static scene. To improve performance, you can use the `frames` prop to control how many times the scene should be rendered.
+By default, `frames` is set to `Infinity` which means the scene is rendered to
+the render target every frame. This is sometimes unnecessary especially if you
+have a static scene. To improve performance, you can use the `frames` prop to
+control how many times the scene should be rendered.
 
-For moving objects, let `frames` default to `Infinity`. If you have a static scene, set `frames` equal to the number of `<CubeCamera>`s in the scene. This will allow each one to render and then be picked up in each other's reflection.
+For moving objects, let `frames` default to `Infinity`. If you have a static
+scene, set `frames` equal to the number of `<CubeCamera>`s in the scene. This
+will allow each one to render and then be picked up in each other's reflection.
 
-If you want full control over updates, there is an `update` function that is available as a component export and through the `children` snippet.
+### Manual Updates
+
+If you want full control over updates, use the `update` function available as a
+component export and through the `children` snippet.
 
 <Tip type="warning">
-  Be sure to set `frames` to `0` if you are using the `update` function. This will prevent the
-  internal update task from automatically starting.
+  If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
+  task from starting automatically.
 </Tip>
 
-```svelte title="As-A-Component-Export"
+#### As a Component Export
+
+```svelte title="Scene.svelte"
 <script>
   let cubeCameraComponent = $state()
 
   $effect(() => {
-    // dependencies here
+    // …
     cubeCameraComponent?.update()
   })
 </script>
@@ -129,20 +144,13 @@ If you want full control over updates, there is an `update` function that is ava
   frames={0}
   bind:this={cubeCameraComponent}
 >
-  <!-- -->
+  <!-- … -->
 </CubeCamera>
 ```
 
-```svelte title="Through-The-Children-Snippet"
-<script>
-  let cubeCameraComponent = $state()
+#### Through Children Snippet
 
-  $effect(() => {
-    // dependencies here
-    cubeCameraComponent?.update()
-  })
-</script>
-
+```svelte title="Scene.svelte"
 <CubeCamera frames={0}>
   {#snippet children({ update })}
     <T.Mesh oncreate{update}>
@@ -154,7 +162,8 @@ If you want full control over updates, there is an `update` function that is ava
 
 ### Restarting the Task
 
-If you need to restart the update task, you can do so through the `restart` component export
+If you need to restart the update task, you can do so through the `restart`
+component export
 
 ```svelte
 <script>
@@ -188,7 +197,10 @@ If you need to restart the update task, you can do so through the `restart` comp
 
 ## Scene Props
 
-`<CubeCamera>` accepts a `background` prop that can be used to set the background of the scene when rendering to the render target. By default the current `scene.background` is used. `background` can be any valid [Scene.background](https://threejs.org/docs/index.html#api/en/scenes/Scene.background).
+`<CubeCamera>` accepts a `background` prop that can be used to set the
+background of the scene when rendering to the render target. By default the
+current `scene.background` is used. `background` can be any valid
+[Scene.background](https://threejs.org/docs/index.html#api/en/scenes/Scene.background).
 
 ```svelte
 <script>
@@ -202,13 +214,17 @@ If you need to restart the update task, you can do so through the `restart` comp
 </CubeCamera>
 ```
 
-The `fog` prop is used the same way and accepts any valid [scene.fog](https://threejs.org/docs/index.html#api/en/scenes/Scene.fog). By default `scene.fog` is used.
+The `fog` prop is used the same way and accepts any valid
+[scene.fog](https://threejs.org/docs/index.html#api/en/scenes/Scene.fog). By
+default `scene.fog` is used.
 
-These "scene" props are only used when rendering the scene to the underlying render target.
+These "scene" props are only used when rendering the scene to the underlying
+render target.
 
 ## Callback Props
 
-The `onupdatestart` callback prop is called anytime the underlying update task has been started.
+The `onupdatestart` callback prop is called anytime the underlying update task
+has been started.
 
 ```svelte
 <CubeCamera
@@ -220,4 +236,7 @@ The `onupdatestart` callback prop is called anytime the underlying update task h
 </CubeCamera>
 ```
 
-The `onupdatestop` callback fires anytime the update task has stopped. It is called on restarts and when the internal counter goes over the `frames` limit. This means that if `frames` is set to `Infinity`, as it is by default, `onupdatestop` is never called.
+The `onupdatestop` callback fires anytime the update task has stopped. It is
+called on restarts and when the internal counter goes over the `frames` limit.
+This means that if `frames` is set to `Infinity`, as it is by default,
+`onupdatestop` is never called.
