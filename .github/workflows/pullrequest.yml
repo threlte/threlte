@@ -7,8 +7,7 @@ on:
       - next
 
 jobs:
-  setup:
-    name: Setup 🛠️
+  validations:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -22,11 +21,6 @@ jobs:
         with:
           version: 9.4.0
           run_install: true
-  validations:
-    name: Validations 🧪
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
       - name: Prettier 💅
         run: pnpm run prettier
       - name: Test 🧪
