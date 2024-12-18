@@ -11,8 +11,8 @@
   let sliceColor = $state('#ff4500')
   let rotate = $state(true)
 
-  const arcAngle = $derived(THREE.MathUtils.DEG2RAD * arcAngleDegrees)
-  const startAngle = $derived(THREE.MathUtils.DEG2RAD * startAngleDegrees)
+  const arcAngle = $derived(MathUtils.DEG2RAD * arcAngleDegrees)
+  const startAngle = $derived(MathUtils.DEG2RAD * startAngleDegrees)
 </script>
 
 <div>
