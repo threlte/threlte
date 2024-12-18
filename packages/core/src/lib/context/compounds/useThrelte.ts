@@ -22,6 +22,7 @@ import { useScheduler } from '../fragments/scheduler.svelte'
  */
 export type ThrelteContext = {
   dom: HTMLElement
+  canvas: HTMLCanvasElement
   size: CurrentReadable<DOMRect>
   camera: CurrentWritable<Camera>
   scene: Scene
@@ -108,6 +109,7 @@ export const useThrelte = (): ThrelteContext => {
     shadows: rendererCtx.shadows,
     shouldRender: schedulerCtx.shouldRender,
     dom: domCtx.dom,
+    canvas: domCtx.canvas,
     size: domCtx.size,
     toneMapping: rendererCtx.toneMapping,
     get scene() {

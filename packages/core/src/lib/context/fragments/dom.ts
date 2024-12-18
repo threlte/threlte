@@ -4,11 +4,13 @@ import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../
 type DOMContext = {
   /** The canvas wrapper element */
   dom: HTMLElement
+  canvas: HTMLCanvasElement
   size: CurrentReadable<DOMRect>
 }
 
 export type CreateDOMContextOptions = {
   dom: HTMLElement
+  canvas: HTMLCanvasElement
 }
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
@@ -39,6 +41,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
 
   const context: DOMContext = {
     dom: options.dom,
+    canvas: options.canvas,
     size: toCurrentReadable(size)
   }
 
