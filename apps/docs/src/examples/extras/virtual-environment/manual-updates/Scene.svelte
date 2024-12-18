@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { injectPlugin, isInstanceOf, T, useTask } from '@threlte/core'
+  import { isInstanceOf, T, useTask } from '@threlte/core'
   import {
     Grid,
     interactivity,
@@ -7,28 +7,11 @@
     TransformControls,
     VirtualEnvironment
   } from '@threlte/extras'
-  import { DoubleSide, Mesh } from 'three'
+  import { DoubleSide } from 'three'
 
   let { debug }: { debug: boolean } = $props()
 
   interactivity()
-
-  // lookAt plugin from the plugin examples
-  injectPlugin<{
-    lookAt?: [number, number, number]
-  }>('lookAt', (args) => {
-    if (!isInstanceOf(args.ref, 'Object3D') || !args.props.lookAt) return
-    useTask(
-      () => {
-        if (!args.props.lookAt) return
-        args.ref.lookAt(args.props.lookAt[0], args.props.lookAt[1], args.props.lookAt[2])
-      },
-      {
-        autoInvalidate: false
-      }
-    )
-    return { pluginProps: ['lookAt'] }
-  })
 </script>
 
 <T.PerspectiveCamera
@@ -58,6 +41,7 @@
 </T.Mesh>
 
 {#snippet lightformer(
+  update: () => void,
   color: string,
   shape: 'circle' | 'plane',
   size: number,
@@ -67,7 +51,16 @@
   <T.Group {position}>
     {#snippet children({ ref })}
       {#if visible}
-        <TransformControls object={ref} />
+        <TransformControls
+          object={ref}
+          oncreate={() => {
+            ref.lookAt(0, 0, 0)
+          }}
+          onobjectChange={() => {
+            ref.lookAt(0, 0, 0)
+            update()
+          }}
+        />
       {/if}
 
       <T.Mesh lookAt={[0, 0, 0]}>
@@ -85,8 +78,19 @@
   </T.Group>
 {/snippet}
 
-<VirtualEnvironment visible={debug}>
-  {@render lightformer('#FF4F4F', 'plane', 20, [0, 0, -20], debug)}
-  {@render lightformer('#FFD0CB', 'circle', 5, [0, 5, 0], debug)}
-  {@render lightformer('#2223FF', 'plane', 8, [-3, 0, 4], debug)}
+<VirtualEnvironment
+  frames={0}
+  visible={debug}
+>
+  {#snippet children({ update })}
+    <T.Group
+      oncreate={() => {
+        update()
+      }}
+    >
+      {@render lightformer(update, '#FF4F4F', 'plane', 20, [0, 0, -20], debug)}
+      {@render lightformer(update, '#FFD0CB', 'circle', 5, [0, 5, 0], debug)}
+      {@render lightformer(update, '#2223FF', 'plane', 8, [-3, 0, 4], debug)}
+    </T.Group>
+  {/snippet}
 </VirtualEnvironment>

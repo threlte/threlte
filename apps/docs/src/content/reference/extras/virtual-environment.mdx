@@ -70,7 +70,7 @@ componentSignature:
   }
 ---
 
-<Example path="extras/virtual-environment" />
+<Example path="extras/virtual-environment/basic" />
 
 `<VirtualEnvironment>` allows you to create dynamic environment maps. It uses a cube camera to create a cubemap of the scene and applies the cubemap texture to the scene's environment.
 
@@ -164,3 +164,7 @@ For cases where you want full control over when the render target is updated, th
   If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
   task from starting automatically.
 </Tip>
+
+The example below is the same as the one above but it only updates the cube camera's render target when the light formers are updated instead of every frame.
+
+<Example path="extras/virtual-environment/manual-updates" />
