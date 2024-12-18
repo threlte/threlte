@@ -6,62 +6,74 @@ name: <VirtualEnvironment>
 type: 'component'
 componentSignature:
   {
-		exports: [
-{ name: 'restart', type: '() => void', description: 'restarts the update task' },
-        { name: 'update', type: '() => void', description: 'causes the cube camera to render to its render target' },
-],
+    exports:
+      [
+        { name: 'restart', type: '() => void', description: 'Restarts the update task' },
+        {
+          name: 'update',
+          type: '() => void',
+          description: 'Causes the cube camera to render to its render target'
+        }
+      ],
     props:
       [
         {
+          default: '0.1',
+          description: 'The near plane of the cube camera',
+          name: 'near',
+          required: false,
+          type: 'number'
+        },
+        {
           default: '1000',
-          description: 'the far plane of the cube camera',
+          description: 'The far plane of the cube camera',
           name: 'far',
           required: false,
           type: 'number'
         },
         {
           default: 'Infinity',
-          description: 'determines how many frames the internal task will run for',
+          description: 'Determines how many frames the internal task will run for',
           name: 'frames',
           required: false,
           type: 'number'
         },
         {
-          description: 'callback that is ran when the internal update task is started',
+          description: 'Callback that is ran when the internal update task is started',
           name: 'onupdatestart',
           required: false,
           type: '() => void'
         },
         {
-          description: 'callback that is ran when the internal update task is stopped',
+          description: 'Callback that is ran when the internal update task is stopped',
           name: 'onupdatestop',
           required: false,
           type: '() => void'
         },
         {
           default: '256',
-          description: "the width and height of the cube camera's render target",
+          description: 'The width and height of the cube cameras render target',
           name: 'resolution',
           required: false,
           type: 'number'
         },
         {
           default: 'false',
-          description: 'whether to set `scene.background` to the environment texture',
+          description: 'Whether to set `scene.background` to the environment texture',
           name: 'isBackground',
           required: false,
           type: 'boolean'
         },
         {
           default: 'useThrelte().scene',
-          description: 'the scene that will have its environment and/or background set',
+          description: 'The scene that will have its environment and/or background set',
           name: 'scene',
           required: false,
           type: 'THREE.Scene'
         },
         {
           default: 'false',
-          description: 'whether to render the virtual environment into the scene',
+          description: 'Whether to render the virtual environment into the scene',
           name: 'visible',
           required: false,
           type: 'boolean'
@@ -72,17 +84,29 @@ componentSignature:
 
 <Example path="extras/virtual-environment/basic" />
 
-`<VirtualEnvironment>` allows you to create dynamic environment maps. It uses a cube camera to create a cubemap of the scene and applies the cubemap texture to the scene's environment.
+`<VirtualEnvironment>` allows you to create dynamic environment maps which can
+be used to light your scene and adjust reflections on your scene's objects.
+
+It uses a cube camera to create a cubemap of its contents and applies that
+cubemap texture to the scene's environment. `<VirtualEnvironment>` internally
+creates a new scene to render the virtual environment into. The contents of
+`<VirtualEnvironment>` may be mounted and made visible by setting the `visible`
+prop to `true`.
 
 ## Controlling Updates
 
-By default, the cube camera is updates and renders to its render target every frame. The `frames` prop is used to control the amount of updates that occur. If your virtual scene is static, you may only need the cube camera to update once. You can achieve this by settings `frames` to `1`
+By default, the cube camera updates and renders to its render target every
+frame. The `frames` prop is used to control the amount of updates that occur. If
+your virtual scene is static, you may only need the cube camera to update once.
+You can achieve this by settings `frames` to `1`:
 
 ```svelte
 <VirtualEnvironment frames={1} />
 ```
 
-This will cause the cube camera to update once and then stop its update task. If you ever need to restart the task, a `restart` function is available as a component export and through the `children` snippet.
+This will cause the cube camera to update once and then stop its update task. If
+you ever need to restart the task, a `restart` function is available as a
+component export and through the `children` snippet.
 
 ```svelte title="As-A-Component-Export"
 <script>
@@ -121,9 +145,13 @@ This will cause the cube camera to update once and then stop its update task. If
 
 ### Manual Updates
 
-For cases where you want full control over when the render target is updated, there is an `update` function available as a component export and through the `children` snippet.
+For cases where you want full control over when the render target is updated,
+there is an `update` function available as a component export and through the
+`children` snippet.
 
-```svelte title="As-A-Component-Export"
+#### As a Component Export
+
+```svelte title="Scene.svelte"
 <script>
   let virtualEnvironment = $state()
   $effect(() => {
@@ -135,18 +163,14 @@ For cases where you want full control over when the render target is updated, th
 <VirtualEnvironment
   frames={0}
   bind:this={virtualEnvironment}
-/>
+>
+  <!-- Your scene contents here -->
+</VirtualEnvironment>
 ```
 
-```svelte title="Through-Children-Snippet"
-<script>
-  let virtualEnvironment = $state()
-  $effect(() => {
-    // yourDependencyHere
-    virtualEnvironment?.update()
-  })
-</script>
+#### Through Children Snippet
 
+```svelte title="Scene.svelte"
 <VirtualEnvironment frames={0}>
   {#snippet children({ update })}
     <T.Mesh
@@ -165,6 +189,28 @@ For cases where you want full control over when the render target is updated, th
   task from starting automatically.
 </Tip>
 
-The example below is the same as the one above but it only updates the cube camera's render target when the light formers are updated instead of every frame.
+The example below is the same as the one above but it only updates the cube
+camera's render target when the light formers are updated instead of every
+frame.
 
 <Example path="extras/virtual-environment/manual-updates" />
+
+## Mixing Virtual and Real Environments
+
+You can also mix `<VirtualEnvironment>` with `<Environment>` or
+`<CubeEnvironment>` to create a mix of "real" and virtual environments.
+
+```svelte title="Scene.svelte"
+<VirtualEnvironment>
+  <Environment
+    url="…"
+    isBackground
+  />
+
+  <T.Mesh>
+    <T.PlaneGeometry />
+  </T.Mesh>
+</VirtualEnvironment>
+```
+
+<Example path="extras/virtual-environment/mix" />

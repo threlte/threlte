@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import {
     Grid,
     interactivity,
@@ -7,12 +7,25 @@
     TransformControls,
     VirtualEnvironment
   } from '@threlte/extras'
-  import { DoubleSide, Object3D } from 'three'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { DoubleSide } from 'three'
+  import RenderIndicator from './RenderIndicator.svelte'
 
-  let { debug }: { debug: boolean } = $props()
+  let debug = $state(true)
 
   interactivity()
 </script>
+
+<Pane
+  position="fixed"
+  title="Render Indicator"
+>
+  <Checkbox
+    bind:value={debug}
+    label="debug"
+  />
+  <RenderIndicator />
+</Pane>
 
 <T.PerspectiveCamera
   makeDefault
@@ -25,12 +38,10 @@
   />
 </T.PerspectiveCamera>
 
-<!-- {#if debug} -->
 <Grid
   cellColor="white"
   sectionColor="white"
 />
-<!-- {/if} -->
 
 <T.Mesh position.y={1}>
   <T.SphereGeometry />

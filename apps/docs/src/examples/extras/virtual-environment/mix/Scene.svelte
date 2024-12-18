@@ -1,6 +1,7 @@
 <script lang="ts">
   import { injectPlugin, isInstanceOf, T, useTask } from '@threlte/core'
   import {
+    Environment,
     Grid,
     interactivity,
     OrbitControls,
@@ -9,7 +10,7 @@
   } from '@threlte/extras'
   import { DoubleSide } from 'three'
 
-  let { debug }: { debug: boolean } = $props()
+  let { debug, mixEnvironment }: { debug: boolean; mixEnvironment: boolean } = $props()
 
   interactivity()
 
@@ -47,17 +48,17 @@
   sectionColor="white"
 />
 
-<T.Mesh position.y={1}>
-  <T.SphereGeometry />
+<T.Mesh position.y={2}>
+  <T.TorusGeometry />
   <T.MeshStandardMaterial
     color="white"
-    roughness={0.15}
+    roughness={0.4}
+    metalness={1}
   />
 </T.Mesh>
 
 {#snippet lightformer(
   color: string,
-  shape: 'circle' | 'plane',
   size: number,
   position: [number, number, number],
   visible: boolean
@@ -69,11 +70,7 @@
       {/if}
 
       <T.Mesh lookAt={[0, 0, 0]}>
-        {#if shape === 'circle'}
-          <T.CircleGeometry args={[size / 2]} />
-        {:else}
-          <T.PlaneGeometry args={[size, size]} />
-        {/if}
+        <T.CircleGeometry args={[size / 2]} />
         <T.MeshBasicMaterial
           {color}
           side={DoubleSide}
@@ -84,7 +81,13 @@
 {/snippet}
 
 <VirtualEnvironment visible={debug}>
-  {@render lightformer('#FF4F4F', 'plane', 20, [0, 0, -20], debug)}
-  {@render lightformer('#FFD0CB', 'circle', 5, [0, 5, 0], debug)}
-  {@render lightformer('#2223FF', 'plane', 8, [-3, 0, 4], debug)}
+  {#if mixEnvironment}
+    <Environment
+      url="/textures/equirectangular/hdr/mpumalanga_veld_puresky_1k.hdr"
+      isBackground
+    />
+  {/if}
+
+  {@render lightformer('#FF4F4F', 20, [0, 0, -20], debug)}
+  {@render lightformer('#2223FF', 8, [-3, 0, 4], debug)}
 </VirtualEnvironment>

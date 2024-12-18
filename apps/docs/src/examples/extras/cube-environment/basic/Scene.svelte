@@ -25,11 +25,15 @@
   makeDefault
   position.z={5}
 >
-  <OrbitControls autoRotate={autoRotateCamera} />
+  <OrbitControls
+    autoRotate={autoRotateCamera}
+    autoRotateSpeed={0.15}
+    enableDamping
+  />
 </T.PerspectiveCamera>
 
 <T.Mesh>
-  <T.TorusGeometry />
+  <T.TorusGeometry args={[1, 0.4, 36, 192]} />
   <T.MeshStandardMaterial
     metalness={materialMetalness}
     roughness={materialRoughness}
