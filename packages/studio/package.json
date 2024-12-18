@@ -1,6 +1,6 @@
 {
   "name": "@threlte/studio",
-  "version": "0.1.0-next.22",
+  "version": "0.1.0-next.24",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "scripts": {
@@ -107,7 +107,7 @@
     "@mdi/js": "^7.4.47",
     "estree-walker": "^3.0.3",
     "@tweakpane/plugin-camerakit": "^0.3.0",
-    "camera-controls": "^2.8.3",
+    "camera-controls": "^2.9.0",
     "flexible-tree": "^0.1.6",
     "svelte-tweakpane-ui": "^1.2.3",
     "tweakpane": "4.0.3",

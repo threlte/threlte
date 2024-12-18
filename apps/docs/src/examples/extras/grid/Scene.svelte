@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
+  import { Gizmo, OrbitControls } from '@threlte/extras'
   import { BoxGeometry } from 'three'
 </script>
 
@@ -10,7 +10,9 @@
   fov={36}
   target={[0, 0, 0]}
 >
-  <OrbitControls />
+  <OrbitControls>
+    <Gizmo />
+  </OrbitControls>
 </T.PerspectiveCamera>
 
 <!-- Make a box in every second cell to show aligment -->

@@ -1,5 +1,27 @@
 # @threlte/extras
 
+## 9.0.0-next.46
+
+### Minor Changes
+
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+
+## 9.0.0-next.45
+
+### Patch Changes
+
+- 1cd4af6: New Gizmo implementation
+
+## 9.0.0-next.44
+
+### Major Changes
+
+- 86072ef: separate `<Environment>` into two components
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
 ## 9.0.0-next.43
 
 ### Patch Changes

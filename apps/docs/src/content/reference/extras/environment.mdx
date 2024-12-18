@@ -1,95 +1,173 @@
 ---
 order: 7.15
 category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/Environment/Environment.svelte'
+sourcePath: 'packages/extras/src/lib/components/environment/Environment.svelte'
 name: <Environment>
 type: 'component'
 componentSignature:
   {
     props:
       [
-        { name: 'path', type: 'string', required: false, description: 'Defaults to "/"' },
         {
-          name: 'files',
-          type: 'string | string[]',
-          required: true,
-          description: 'Provide a string to use an equirectangular envmap and a string array to use a cubic envmap'
+          description: 'the url to a texture to load and use',
+          name: 'url',
+          required: false,
+          type: 'string'
         },
         {
+          description: 'a bindable of the loaded texture',
+          name: 'texture',
+          required: false,
+          type: 'THREE.DataTexture | THREE.Texture'
+        },
+        {
+          default: 'false',
+          description: 'whether to set `scene.background` to the loaded environment texture',
           name: 'isBackground',
-          type: 'boolean',
           required: false,
-          description: 'Boolean to toggle whether to use envmap as a scene background.'
+          type: 'boolean'
         },
         {
-          name: 'groundProjection',
-          type: 'Props<GroundProjectedEnv>',
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
           required: false,
-          description: 'Props for ground projection. Scalar recommended to 100. Depending on envmap and project requirements, good starting point is radius: 200, height: 5.'
+          type: 'THREE.Scene'
         },
         {
-          name: 'format',
-          type: "'ldr' | 'hdr'",
+          default: 'false',
+          description: 'creates a ground projected skybox',
+          name: 'ground',
           required: false,
-          description: 'Use `ldr` for .png, .jpg and `hdr` for .hdr file formats'
+          type: 'boolean | { height?: number, radius?: number, resolution?: number }'
         },
         {
-          name: 'encoding',
-          type: 'TextureEncoding',
+          default: 'undefined',
+          description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
+          name: 'skybox',
           required: false,
-          description: 'Envmap `TextureEncoding`. If not provided it defaults to `sRGBEncoding` for cubemap and `LinearEncoding` for equirectangular'
+          type: 'undefined | THREE.GroundedSkybox'
         }
       ]
   }
 ---
 
-Scene environment map implementation with included loaders and ground projected environment.
+Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
 
-<Example path="extras/environment" />
+<Example path="extras/environment/basic" />
 
-### Usage
+## Fetching, Loading, and Assigning Textures
 
-Pass absolute path to `path`. For example, if you are using sveltekit and you put your files in `static/envmap/hdr` then path will be `/envmap/hdr/`
+`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
 
-The component decides whether to use **cubic** or **equirectangular** map based on the `files` prop. Provide a string array for cubic or a string for equirectangular.
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
-Currently supported formats are 'ldr' (.jpg, .png, etc.) and 'hdr' .hdr. Format is inferred based on file extension but it can be provided in `format` prop.
+Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
-`isBackground` prop controls if environment is set as the background of `scene`. This is not related to GroundProjection which produces a faux background effect by creating a spherical object textured by the provided environment.
+| extension  | loader                                                                                             |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| exr        | [Three.EXRLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/EXRLoader.js/)  |
+| hdr        | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
+| all others | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
 
-To enable GroundProjection pass a configuration object as a `groundProjection` prop. The most common use case is to pass radius, height and scale (`{ radius: 200, height: 5, scale: {x: 100,y: 100,z: 100}`) however, you can pass any props you would pass `THREE.Mesh` since it is built as its extension.
+<Tip type="info">
+	Any time `<Environment>` loads a texture, it will dispose of the old one. The texture is also disposed when `<Environment>` unmounts.
+</Tip>
+
+### Loaders Are Simple
+
+Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [ThreeJS loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
 
 ```svelte
-<!-- Cubic jpg envmap -->
-<Environment
-  path="/envmap/bridge_cube/"
-  files={['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']}
-  isBackground={true}
-  format="ldr"
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
-/>
+<script>
+  import { TextureLoader } from 'three'
 
-<!-- Equirectangular jpg envmap -->
-<Environment
-  path="/envmap/"
-  files="pisa_1k.jpg"
-  isBackground={true}
-/>
+  const loader = new TextureLoader().setPath('https://path/to/texture/').setRequestHeader({
+    // .. request headers that will be used when fetching the texture
+  })
 
-<!-- Cubic hdr envmap -->
-<Environment
-  path="/envmap/pisaHdr/"
-  files={[['px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr']]}
-  isBackground={true}
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
-/>
+  const promise = loader.loadAsync('texture.jpg').then((texture) => {
+    texture.mapping = EquirectangularReflectionMapping
+    return texture
+  })
+</script>
 
-<!-- Equirectangular hdr envmap -->
+{#await promise then texture}
+  <Environment {texture} />
+{/await}
+```
+
+### `texture` Prop for Preloaded Textures
+
+`<Environment>` provides a bindable `texture` prop that you can use if you've already loaded the texture somewhere else in your application. The example below provides a preloaded texture to `<Environment>` instead of having it fetch and load one.
+
+<Example path="extras/environment/bring-your-own-texture" />
+
+Be aware that if `<Environment>` loads a texture, it will set the `texture` bindable prop **after** it has been loaded. This means that if you provide both `url` and `texture` properties, the texture at `url` will eventually be assigned to `texture`.
+
+```typescript title="Scene.svelte"
+<Environment {texture} url="/path/to/texture/file" />
+```
+
+Loading only occurs if `url` is passed to `<Environment>`.
+
+## Restoring Props When Scene Updates
+
+All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the initial `environment` and `background` properties of the last scene.
+
+The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment to be applied to either the left or the right side. You can observe that when `side` updates, the original `background` and `environment` for the previous side are restored.
+
+<Example path="extras/environment/swapping-scenes" />
+
+## Suspended Loading
+
+Any textures that are loaded by `<Environment>` are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is being fetched and loaded.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Suspense, Text } from '@threlte/extras'
+</script>
+
+<Suspense>
+  {#snippet fallback()}
+    <Text text="loading environment" />
+  {/snippet}
+  <Environment url="https//url-of-your-file.hdr" />
+</Suspense>
+```
+
+Note that suspension only occurs if `url` is provided. When a texture is provided through the `texture` prop, there is nothing that needs to loaded, so there's nothing that needs to be suspended.
+
+## Grounded Skyboxes
+
+`<Environment>` also supports ground projected environments through ThreeJS's [GroundedSkybox](https://threejs.org/examples/#webgl_materials_envmaps_groundprojected) addon. To use this feature, set the `ground` prop to `true` or to an object with optional `height`, `radius` and `resolution` props. `height` defaults to `1`, `radius` to `1`, and `resolution` to `128`
+
+<Example path="extras/environment/ground-projection" />
+
+The bindable `skybox` prop is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
+
+```svelte title="Scene.svelte"
+<script>
+  let skybox = $state() // GroundedSkybox | undefined
+
+  const height = 15
+
+  $effect(() => {
+    skybox?.position.setY(height)
+  })
+</script>
+
 <Environment
-  path="/envmap/"
-  files="shanghai_riverside_1k.hdr"
-  isBackground={true}
-  format="hdr"
-  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
+  bind:skybox
+  url="file.hdr"
+  ground={{ height }}
 />
 ```
+
+There are a couple of important things to consider when using the `ground` property:
+
+1. `skybox` is only set to a `GroundedSkybox` instance if `ground` !== `false` and **after** the texture is available. It is set to `undefined` when `<Environment>` unmounts.
+
+2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
+
+3. `scene.environment` and/or `scene.background` are still set to the environment texture. This is done so that the environment map still affects materials used in the scene.

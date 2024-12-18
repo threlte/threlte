@@ -26,6 +26,7 @@
   import { onMount, tick } from 'svelte'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { Gizmo } from '@threlte/extras'
 
   if (!installed) {
     CameraControls.install({
@@ -110,3 +111,5 @@
     cameraControls.enabled = !anyInUse
   })
 </script>
+
+<Gizmo controls={cameraControls} />

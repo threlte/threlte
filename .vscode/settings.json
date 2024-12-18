@@ -13,10 +13,10 @@
       },
       {
         "cwd": "${workspaceFolder}",
-        "name": "$(triangle-right) Cleanup & Install",
+        "name": "$(triangle-right) Cleanup",
         "color": "green",
         "singleInstance": true,
-        "command": " pnpm cleanup && pnpm i"
+        "command": " pnpm cleanup"
       },
       {
         "cwd": "${workspaceFolder}",

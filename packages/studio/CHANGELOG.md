@@ -1,5 +1,17 @@
 # @threlte/studio
 
+## 0.1.0-next.24
+
+### Patch Changes
+
+- 6b905b0: New gizmo implementation
+
+## 0.1.0-next.23
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
 ## 0.1.0-next.22
 
 ### Patch Changes

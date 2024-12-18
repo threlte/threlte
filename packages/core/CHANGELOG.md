@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.33
+
+### Patch Changes
+
+- 52d0b9f: fix: remove .d.ts import from dist/index.js
+
 ## 8.0.0-next.32
 
 ### Minor Changes

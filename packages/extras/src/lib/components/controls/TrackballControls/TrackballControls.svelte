@@ -32,42 +32,53 @@ enabled. You can disable this by setting `staticMoving` to true.
 `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
 -->
 <script lang="ts">
-  import { isInstanceOf, T, useDOM, useParent, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { TrackballControlsProps } from './types'
+  import type { Event } from 'three'
 
   let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
-  const { invalidate } = useThrelte()
-  const { dom } = useDOM()
+  const { renderer, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeTrackballControls($parent, dom)
-
-  useTask(() => controls.update(), {
-    autoInvalidate: false
-  })
-
+  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
   const { trackballControls } = useControlsContext()
-  trackballControls.set(controls)
-  onDestroy(() => trackballControls.set(undefined))
+
+  useTask(
+    () => {
+      controls.update()
+    },
+    {
+      autoInvalidate: false
+    }
+  )
+
+  $effect(() => {
+    const handleChange = (event: Event) => {
+      invalidate()
+      props.onchange?.(event)
+    }
+
+    trackballControls.set(controls)
+    controls.addEventListener('change', handleChange)
+    return () => {
+      trackballControls.set(undefined)
+      controls.removeEventListener('change', handleChange)
+    }
+  })
 </script>
 
 <T
   is={controls}
   bind:ref
   {...props}
-  onchange={(event) => {
-    invalidate()
-    props.onchange?.(event)
-  }}
 >
   {@render children?.({ ref: controls })}
 </T>

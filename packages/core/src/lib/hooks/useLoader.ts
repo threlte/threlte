@@ -43,7 +43,7 @@ export type UseLoaderLoadResult<
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
-type UseLoaderLoadOptions<TLoader extends Loader> = {
+export type UseLoaderLoadOptions<TLoader extends Loader> = {
   onProgress?: (event: ProgressEvent) => void
   transform?: UseLoaderLoadTransform<TLoader>
 }

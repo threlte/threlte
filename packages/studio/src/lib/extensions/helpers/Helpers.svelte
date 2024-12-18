@@ -1,6 +1,5 @@
 <script lang="ts">
   import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
-  import { Gizmo } from '@threlte/extras'
   import { Light, Object3D } from 'three'
   import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
@@ -88,14 +87,6 @@
 </ToolbarItem>
 
 {#if ext.state.enabled}
-  <Gizmo
-    paddingX={6}
-    paddingY={6}
-    verticalPlacement="bottom"
-    size={100}
-    horizontalPlacement="left"
-  />
-
   <AxesHelper
     length={999}
     width={0.2}

@@ -56,6 +56,7 @@
   import type { HTMLProps } from './types'
 
   let {
+    autoRender = true,
     eps = 0.001,
     center = false,
     fullscreen = false,
@@ -125,7 +126,7 @@
     }
   })
 
-  useTask(() => {
+  export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
     const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
@@ -254,6 +255,18 @@
         occlusionMesh.lookAt(camera.current.position)
       }
     }
+  }
+
+  export const { start: startRendering, stop: stopRendering } = useTask(render, {
+    autoStart: false
+  })
+  $effect(() => {
+    if (autoRender) {
+      startRendering()
+      return () => {
+        stopRendering()
+      }
+    }
   })
 
   let pos = $derived.by(() => {
@@ -342,7 +355,7 @@
           class={props.class}
           style={props.style}
         >
-          {@render children?.()}
+          {@render children?.({ render, startRendering, stopRendering })}
         </div>
       </div>
     </div>
@@ -357,7 +370,7 @@
       style={props.style}
       class={props.class}
     >
-      {@render children?.()}
+      {@render children?.({ render, startRendering, stopRendering })}
     </div>
   {/if}
 </svelte:element>

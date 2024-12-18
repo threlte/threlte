@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.0.0-next.43",
+  "version": "9.0.0-next.46",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
@@ -90,8 +90,10 @@
   },
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.0",
+    "camera-controls": "^2.9.0",
     "three-mesh-bvh": "^0.7.4",
     "three-perf": "github:jerzakm/three-perf#three-kit-threlte-fork",
+    "three-viewport-gizmo": "^2.0.2",
     "troika-three-text": "^0.50.3"
   }
 }
