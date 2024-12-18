@@ -1,11 +1,10 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
-  import { WebGPURenderer } from 'three/webgpu'
-  import * as THREE from 'three/webgpu'
+  import { WebGPURenderer, MeshStandardNodeMaterial } from 'three/webgpu'
   import { Pane, Slider } from 'svelte-tweakpane-ui'
 
-  extend(THREE)
+  extend({ MeshStandardNodeMaterial })
 
   let emissiveIntensity = $state(0.5)
 </script>
@@ -25,7 +24,7 @@
   </Pane>
   <Canvas
     createRenderer={(canvas) => {
-      return new THREE.WebGPURenderer({
+      return new WebGPURenderer({
         antialias: true,
         canvas,
         forceWebGL: false
