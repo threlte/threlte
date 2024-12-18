@@ -17,7 +17,7 @@
     ...props
   }: TransformControlsProps = $props()
 
-  const { camera, renderer, invalidate, scene } = useThrelte()
+  const { camera, dom, invalidate, scene } = useThrelte()
 
   const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = currentWritable(false)
@@ -60,9 +60,7 @@
   const attachGroup = new Group()
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let transformControls = $derived(
-    new TransformControls($camera, renderer.domElement.parentElement!)
-  )
+  let transformControls = $derived(new TransformControls($camera, dom))
 
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)

@@ -1,7 +1,7 @@
 import { type Renderer } from 'three'
 import { createCacheContext } from './fragments/cache'
 import { createCameraContext } from './fragments/camera'
-import { createCanvasContext, type CreateCanvasContextOptions } from './fragments/canvas'
+import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom'
 import { createDisposalContext } from './fragments/disposal'
 import { createParentContext } from './fragments/parent'
 import { createRootParentObject3DContext } from './fragments/parentObject3D'
@@ -17,13 +17,13 @@ import {
 import { createUserContext } from './fragments/user'
 
 export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
-  CreateCanvasContextOptions &
+  CreateDOMContextOptions &
   CreateSchedulerContextOptions
 
 export const createThrelteContext = <T extends Renderer>(
   options: CreateThrelteContextOptions<T>
 ) => {
-  createCanvasContext(options)
+  createDOMContext(options)
   createCacheContext()
   const { scene } = createSceneContext()
   createParentContext(scene)

@@ -41,14 +41,14 @@ enabled. You can disable this by setting `staticMoving` to true.
   let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
-  const { renderer, invalidate } = useThrelte()
+  const { dom, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
+  const controls = new ThreeTrackballControls($parent, dom)
   const { trackballControls } = useControlsContext()
 
   useTask(

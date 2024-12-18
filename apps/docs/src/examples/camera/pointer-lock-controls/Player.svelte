@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useDOM } from '@threlte/core'
   import { RigidBody, CollisionGroups, Collider } from '@threlte/rapier'
   import { onDestroy } from 'svelte'
   import { PerspectiveCamera, Vector3 } from 'three'
@@ -24,12 +24,12 @@
 
   const lockControls = () => lock()
 
-  const { renderer } = useThrelte()
+  const { dom } = useDOM()
 
-  renderer.domElement.addEventListener('click', lockControls)
+  dom.addEventListener('click', lockControls)
 
   onDestroy(() => {
-    renderer.domElement.removeEventListener('click', lockControls)
+    dom.removeEventListener('click', lockControls)
   })
 
   useTask(() => {

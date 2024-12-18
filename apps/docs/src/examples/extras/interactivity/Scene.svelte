@@ -1,13 +1,10 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, interactivity } from '@threlte/extras'
+  import { Grid, interactivity, OrbitControls } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import Box from './Box.svelte'
-  import Camera from './Camera.svelte'
 
-  const { target } = interactivity()
-
-  target.set(document.getElementById('int-target') ?? undefined)
+  interactivity()
 
   const pos = spring({ x: 0, z: 0 })
   const setRandomPos = () => {
@@ -18,7 +15,13 @@
   }
 </script>
 
-<Camera />
+<T.OrthographicCamera
+  zoom={80}
+  position={[10, 10, 10]}
+  makeDefault
+>
+  <OrbitControls />
+</T.OrthographicCamera>
 
 <T.AmbientLight intensity={0.4} />
 <T.DirectionalLight position={[1, 2, 5]} />

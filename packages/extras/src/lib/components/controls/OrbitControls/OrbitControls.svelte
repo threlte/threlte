@@ -8,14 +8,14 @@
   let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
-  const { renderer, invalidate } = useThrelte()
+  const { dom, invalidate } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
+  const controls = new ThreeOrbitControls($parent, dom)
   const { orbitControls } = useControlsContext()
 
   const { start, stop } = useTask(

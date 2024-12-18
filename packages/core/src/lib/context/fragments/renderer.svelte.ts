@@ -13,7 +13,7 @@ import type { Task } from '../../frame-scheduling'
 import { useTask } from '../../hooks/useTask'
 import { currentWritable, watch, type CurrentWritable } from '../../utilities'
 import { useCamera } from './camera'
-import { useCanvas } from './canvas'
+import { useDOM } from './dom'
 import { useDisposal } from './disposal'
 import { useScene } from './scene'
 import { useScheduler } from './scheduler.svelte'
@@ -69,7 +69,7 @@ export const createRendererContext = <T extends Renderer>(
   const { camera } = useCamera()
   const { scene } = useScene()
   const { invalidate, renderStage, autoRender, scheduler, resetFrameInvalidation } = useScheduler()
-  const { canvas, size } = useCanvas()
+  const { size, canvas } = useDOM()
 
   const renderer = options.createRenderer
     ? options.createRenderer(canvas)

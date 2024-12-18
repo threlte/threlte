@@ -1,7 +1,7 @@
 import { getContext, setContext } from 'svelte'
 import { PerspectiveCamera, type Camera } from 'three'
 import { currentWritable, watch, type CurrentWritable } from '../../utilities'
-import { useCanvas } from './canvas'
+import { useDOM } from './dom'
 import { useScheduler } from './scheduler.svelte'
 
 type CameraContext = {
@@ -9,7 +9,7 @@ type CameraContext = {
 }
 
 export const createCameraContext = (): CameraContext => {
-  const { size } = useCanvas()
+  const { size } = useDOM()
   const { invalidate } = useScheduler()
 
   // Create a default camera to use when no camera is defined by the user
