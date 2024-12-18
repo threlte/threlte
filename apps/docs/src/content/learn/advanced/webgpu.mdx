@@ -166,7 +166,7 @@ In the sliced gear example, two nodes are modified; the `outputNode` and the `sh
 The `outputNode` is set up in such a way that it discards any fragments that are
 outside the permitted `startAngle` and `arcAngle`. If a fragment is not discarded and
 it is not front-facing, it is assigned the color in the `color` uniform. The material
-needs its `side` set to `THREE.DoubleSide` otherwise threejs will cull them out if they are facing away
+needs its `side` set to `THREE.DoubleSide` otherwise three.js will cull them out if they are facing away
 from the camera,
 
 Any fragment that is discarded in the shadowNode will not cast shadows.
