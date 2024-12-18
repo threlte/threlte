@@ -18,12 +18,12 @@ export const useCubeCamera = (
   const renderTarget = new WebGLCubeRenderTarget(resolution())
   const camera = new CubeCamera(DEFAULT_NEAR, DEFAULT_FAR, renderTarget)
 
-  $effect.pre(() => {
+  $effect(() => {
     const _resolution = resolution()
     renderTarget.setSize(_resolution, _resolution)
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     const _near = near()
     for (const child of camera.children) {
       if (isInstanceOf(child, 'PerspectiveCamera')) {
@@ -33,7 +33,7 @@ export const useCubeCamera = (
     }
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     const _far = far()
     for (const child of camera.children) {
       if (isInstanceOf(child, 'PerspectiveCamera')) {

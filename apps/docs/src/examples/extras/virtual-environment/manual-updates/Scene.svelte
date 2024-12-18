@@ -7,11 +7,15 @@
     TransformControls,
     VirtualEnvironment
   } from '@threlte/extras'
-  import { DoubleSide } from 'three'
+  import { DoubleSide, Object3D } from 'three'
 
   let { debug }: { debug: boolean } = $props()
 
   interactivity()
+
+  const lookAt = (o: Object3D, x = 0, y = 0, z = 0) => {
+    o.lookAt(x, y, z)
+  }
 </script>
 
 <T.PerspectiveCamera
@@ -50,20 +54,19 @@
 )}
   <T.Group {position}>
     {#snippet children({ ref })}
+      {@const lookAtCenter = () => ref.lookAt(0, 0, 0)}
       {#if visible}
         <TransformControls
           object={ref}
-          oncreate={() => {
-            ref.lookAt(0, 0, 0)
-          }}
+          oncreate={lookAtCenter}
           onobjectChange={() => {
-            ref.lookAt(0, 0, 0)
+            lookAtCenter()
             update()
           }}
         />
       {/if}
 
-      <T.Mesh lookAt={[0, 0, 0]}>
+      <T.Mesh>
         {#if shape === 'circle'}
           <T.CircleGeometry args={[size / 2]} />
         {:else}

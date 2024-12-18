@@ -24,7 +24,7 @@
     () => resolution
   )
 
-  const { renderer, scene } = useThrelte()
+  const { renderer, renderStage, scene } = useThrelte()
 
   const group = new Group()
   const inner = new Group()
@@ -63,7 +63,7 @@
   }
 
   // if any of these props update, the task will need to be restarted
-  observe.pre(() => [background, far, near, fog, frames, resolution], restart)
+  observe(() => [background, far, near, fog, frames, resolution], restart)
 </script>
 
 <T

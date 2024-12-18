@@ -7,16 +7,16 @@
   const ctx = useThrelte()
 
   let {
+    children,
     far = 1000,
     frames = Infinity,
+    isBackground,
     near = 0.1,
     onupdatestart,
     onupdatestop,
     resolution = 256,
-    children,
-    isBackground,
-    visible,
-    scene: parentScene = ctx.scene
+    scene: parentScene = ctx.scene,
+    visible
   }: VirtualEnvironmentProps = $props()
 
   // Create a parent scene to render the virtual environment into
@@ -68,7 +68,7 @@
   }
 
   // if any of these props update, the task will need to be restarted
-  observe.pre(() => [far, near, frames, resolution], restart)
+  observe(() => [far, near, frames, resolution], restart)
 </script>
 
 <T
