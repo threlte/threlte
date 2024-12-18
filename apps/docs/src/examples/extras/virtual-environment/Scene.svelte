@@ -13,8 +13,6 @@
 
   interactivity()
 
-  const objects = $state<Mesh[]>([])
-
   // lookAt plugin from the plugin examples
   injectPlugin<{
     lookAt?: [number, number, number]
@@ -88,12 +86,6 @@
 {/snippet}
 
 <VirtualEnvironment visible={debug}>
-  {#if debug}
-    {#each objects as object}
-      <TransformControls {object} />
-    {/each}
-  {/if}
-
   {@render lightformer('#FF4F4F', 'plane', 20, [0, 0, -20], debug)}
   {@render lightformer('#FFD0CB', 'circle', 5, [0, 5, 0], debug)}
   {@render lightformer('#2223FF', 'plane', 8, [-3, 0, 4], debug)}
