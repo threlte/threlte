@@ -8,7 +8,7 @@ export const fly = (options: { x?: number; y?: number; z?: number }) => {
     if (!isInstanceOf(ref, 'Object3D')) return
 
     return {
-      duration: 300,
+      duration: 600,
       tick(t) {
         const x = mapLinear(t, 0, 1, options.x ?? 0, 0)
         const y = mapLinear(t, 0, 1, options.y ?? 0, 0)

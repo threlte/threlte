@@ -12,7 +12,7 @@ export const fade = (opacity = 0) => {
     }
 
     return {
-      duration: 300,
+      duration: 600,
       tick: (t: number) => {
         ref.opacity = t * (1 - opacity)
       },

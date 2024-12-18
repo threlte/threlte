@@ -8,7 +8,7 @@ export const scale = (scale: number) => {
     if (!isInstanceOf(ref, 'Object3D')) return
 
     return {
-      duration: 300,
+      duration: 600,
       tick(t) {
         ref.scale.setScalar(mapLinear(t, 0, 1, scale, 1))
       },
