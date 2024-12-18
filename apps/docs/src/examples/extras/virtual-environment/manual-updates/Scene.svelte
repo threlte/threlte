@@ -12,10 +12,6 @@
   let { debug }: { debug: boolean } = $props()
 
   interactivity()
-
-  const lookAt = (o: Object3D, x = 0, y = 0, z = 0) => {
-    o.lookAt(x, y, z)
-  }
 </script>
 
 <T.PerspectiveCamera
