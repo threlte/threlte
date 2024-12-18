@@ -2,14 +2,12 @@
   import {
     currentWritable,
     useTask,
-    useScheduler,
     useThrelte,
     createCameraContext,
     createSceneContext,
     createParentContext,
     createParentObject3DContext,
     createDOMContext,
-    type CurrentWritable,
     type ThrelteContext
   } from '@threlte/core'
   import { onMount, setContext } from 'svelte'
@@ -19,14 +17,14 @@
   let { dom, children }: ViewProps = $props()
 
   const parentContext = useThrelte()
-  const { renderer } = useThrelte()
-  const { renderStage } = useScheduler()
+  const { renderer, canvas, renderStage } = useThrelte()
   const { camera } = createCameraContext()
   const { scene } = createSceneContext()
+  // @ts-ignore The DOM element might not be their on creation. Can be assigned or re-assigned later
   createDOMContext({ dom })
   createParentContext(scene)
   createParentObject3DContext(scene)
-  // we also need to make a state enclave for the user context
+  // we also want to make a new context for the user context
   const userCtx = currentWritable({})
   setContext('threlte-user-context', userCtx)
 
@@ -35,11 +33,9 @@
     camera: camera
   }
 
-  const viewContext: ThrelteContext & {
-    size: CurrentWritable<{ width: number; height: number }>
-  } = {
+  const viewContext: ThrelteContext = {
     ...parentContext,
-    size: currentWritable({ width: 0, height: 0 }),
+    size: currentWritable(new DOMRect()),
     scene: viewContextOverrides.scene,
     camera: viewContextOverrides.camera
   }
@@ -90,10 +86,10 @@
       const {
         position: { left, bottom, width, height },
         isOffscreen
-      } = computeContainerPosition(renderer.domElement, dom)
+      } = computeContainerPosition(canvas, dom)
 
       if (viewContext.size.current.width !== width || viewContext.size.current.height !== height) {
-        viewContext.size.set({ width, height })
+        viewContext.size.current = dom.getBoundingClientRect()
       }
 
       // save original state
