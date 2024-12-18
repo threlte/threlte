@@ -7,29 +7,24 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' },
-		exports: [
-			{
-				type: 'THREE.CubeCamera',
-				name: 'camera'
-      },
-      {
-        type: 'THREE.WebGLCubeRenderTarget',
-        name: 'renderTarget'
-      },
-      {
-        type: '() => void',
-        name: 'restart'
-      }
-    ],
+    exports:
+      [
+        { description: 'restarts the internal update task', name: 'restart', type: '() => void' },
+        {
+          description: 'causes the cube camera to update which renders to the render target',
+          name: 'update',
+          type: '() => void'
+        }
+      ],
     props:
       [
-			{
-			name: 'autoStart',
-			required: false,
-			type: 'boolean',
-			default: 'true',
-			description: 'whether to automatically start the render task.',
-			},
+        {
+          name: 'autoStart',
+          required: false,
+          type: 'boolean',
+          default: 'true',
+          description: 'whether to automatically start the render task.'
+        },
         {
           default: 'Infinity',
           description: 'controls how many frames the render task will run for',
@@ -65,20 +60,18 @@ componentSignature:
           required: false,
           type: 'number'
         },
-				{
-				name: 'onrenderstart',
-				description: 'a callback prop that is called anytime the render task is started',
-				required: false,
-				default: 'undefined',
-				type: '() => void',
-				},
-				{
-				name: 'onrenderstop',
-				description: 'a callback prop that is called anytime the render task is stopped',
-				required: false,
-				default: 'undefined',
-				type: '() => void',
-				},
+        {
+          name: 'onupdatestart',
+          description: 'a callback prop that is called anytime the render task is started',
+          required: false,
+          type: '() => void'
+        },
+        {
+          name: 'onupdatestop',
+          description: 'a callback prop that is called anytime the render task is stopped',
+          required: false,
+          type: '() => void'
+        },
         {
           default: '256',
           description: 'size of the render target. more resolution means more detail',
@@ -90,13 +83,18 @@ componentSignature:
   }
 ---
 
-A wrapper around three's [CubeCamera](https://threejs.org/docs/index.html#api/en/cameras/CubeCamera) that exposes a `renderTarget` prop. Before rendering to the render target, children are set to invisible to exclude them from the render.
+A wrapper around three's
+[CubeCamera](https://threejs.org/docs/index.html#api/en/cameras/CubeCamera) that
+exposes a `renderTarget` prop. Before rendering to the render target, children
+are set to invisible to exclude them from the render.
 
 <Example path="extras/cube-camera" />
 
 ## Usage
 
-The entire render target that is used by the underlying cube camera is available through the `renderTarget` snippet prop. Usually you'll only want to use the `renderTarget.texture`.
+The entire render target that is used by the underlying cube camera is available
+through the `renderTarget` snippet prop. Usually you'll only want to use the
+`renderTarget.texture`.
 
 ```svelte
 <CubeCamera>
@@ -109,25 +107,100 @@ The entire render target that is used by the underlying cube camera is available
 </CubeCamera>
 ```
 
-### Other Snippet Props
+## Controlling Updates
 
-The `children` snippet also has access to the cube camera and a `restart` function. Note that updates to the camera, render target or `ref` inside the snippet block will not be reflected on the render target unless `frames` is set to `Infinity` or you use the `restart` function. Calling `restart` will force the renderer to render to the render target.
+By default, `frames` is set to `Infinity` which means the scene is rendered to
+the render target every frame. This is sometimes unnecessary especially if you
+have a static scene. To improve performance, you can use the `frames` prop to
+control how many times the scene should be rendered.
 
-```svelte
-{#snippet children({ camera, ref, renderTarget, restart })}
-  <!-- may need to call `restart` here if updating any of the props above -->
-{/snippet}
+For moving objects, let `frames` default to `Infinity`. If you have a static
+scene, set `frames` equal to the number of `<CubeCamera>`s in the scene. This
+will allow each one to render and then be picked up in each other's reflection.
+
+### Manual Updates
+
+If you want full control over updates, use the `update` function available as a
+component export and through the `children` snippet.
+
+<Tip type="warning">
+  If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
+  task from starting automatically.
+</Tip>
+
+#### As a Component Export
+
+```svelte title="Scene.svelte"
+<script>
+  let cubeCameraComponent = $state()
+
+  $effect(() => {
+    // …
+    cubeCameraComponent?.update()
+  })
+</script>
+
+<CubeCamera
+  frames={0}
+  bind:this={cubeCameraComponent}
+>
+  <!-- … -->
+</CubeCamera>
 ```
 
-## Controlling Render Count
+#### Through Children Snippet
 
-By default, `frames` is set to `Infinity` which means the scene is rendered to the render target every frame. This is sometimes unnecessary especially if you have a static scene. To improve performance, you can use the `frames` prop to control how many times the scene should be rendered.
+```svelte title="Scene.svelte"
+<CubeCamera frames={0}>
+  {#snippet children({ update })}
+    <T.Mesh oncreate{update}>
+      <T.BoxGeometry />
+    </T.Mesh>
+  {/snippet}
+</CubeCamera>
+```
 
-For moving objects, let `frames` default to `Infinity`. If you have a static scene, set `frames` equal to the number of `<CubeCamera>`s in the scene. This will allow each one to render and then be picked up in each other's reflection.
+### Restarting the Task
+
+If you need to restart the update task, you can do so through the `restart`
+component export
+
+```svelte
+<script>
+  let cubeCameraComponent = $state()
+
+  $effect(() => {
+    // dependencies here
+    cubeCameraComponent?.restart()
+  })
+</script>
+
+<CubeCamera
+  frames={1}
+  bind:this={cubeCameraComponent}
+>
+  <!-- ... -->
+</CubeCamera>
+```
+
+`restart` is also available through the `children` snippet.
+
+```svelte
+<CubeCamerae frames={1}>
+  {#snippet children({ restart })}
+    <T.Mesh oncreate={restart}>
+      <!-- ... -->
+    </T.Mesh>
+  {/snippet}
+</CubeCamera>
+```
 
 ## Scene Props
 
-`<CubeCamera>` accepts a `background` prop that can be used to set the background of the scene when rendering to the render target. By default the current `scene.background` is used. `background` can be any valid [Scene.background](https://threejs.org/docs/index.html#api/en/scenes/Scene.background).
+`<CubeCamera>` accepts a `background` prop that can be used to set the
+background of the scene when rendering to the render target. By default the
+current `scene.background` is used. `background` can be any valid
+[Scene.background](https://threejs.org/docs/index.html#api/en/scenes/Scene.background).
 
 ```svelte
 <script>
@@ -141,42 +214,29 @@ For moving objects, let `frames` default to `Infinity`. If you have a static sce
 </CubeCamera>
 ```
 
-The `fog` prop is used the same way and accepts any valid [scene.fog](https://threejs.org/docs/index.html#api/en/scenes/Scene.fog). By default `scene.fog` is used.
+The `fog` prop is used the same way and accepts any valid
+[scene.fog](https://threejs.org/docs/index.html#api/en/scenes/Scene.fog). By
+default `scene.fog` is used.
 
-These "scene" props are only used when rendering the scene to the underlying render target. After rendering to the target, the original scene props are restored.
+These "scene" props are only used when rendering the scene to the underlying
+render target.
 
 ## Callback Props
 
-The `onrenderstart` callback prop is called anytime the underlying render task has been started. This means that it also fires anytime the renderer has been restarted manually through the `restart` component export.
+The `onupdatestart` callback prop is called anytime the underlying update task
+has been started.
 
 ```svelte
-<script>
-  const onrenderstart = () => {
-    console.log('render started')
-  }
-
-  let ref
-  // `onrenderstart` will be fired if `ref.restart` is called
-</script>
-
 <CubeCamera
-  bind:ref
-  onrenderstart
+  onupdatestart={() => {
+    console.log('update started')
+  }}
 >
   <!-- ... -->
 </CubeCamera>
 ```
 
-`onrenderstart` also fires if you use the `restart` children snippet prop
-
-```svelte
-<CubeCamera onrenderstart>
-  {#snippet children({ restart })}
-    <T.Mesh oncreate={restart}>
-      <!-- ... -->
-    </T.Mesh>
-  {/snippet}
-</CubeCamera>
-```
-
-The `onrenderstop` callback fires anytime the render task stops running. It is called on restarts and when the internal counter goes over the `frames` limit. This means that if `frames` is set to `Infinity`, `onrenderstop` is never called.
+The `onupdatestop` callback fires anytime the update task has stopped. It is
+called on restarts and when the internal counter goes over the `frames` limit.
+This means that if `frames` is set to `Infinity`, as it is by default,
+`onupdatestop` is never called.
