@@ -7,27 +7,24 @@ type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/#api/en/objects/Group' },
-		exports: [
-      {
-				description: 'restarts the internal update task',
-        name: 'restart',
-        type: '() => void'
-      },
-      {
-				description: 'causes the cube camera to update which renders to the render target',
-        name: 'update',
-        type: '() => void'
-			}
-    ],
+    exports:
+      [
+        { description: 'restarts the internal update task', name: 'restart', type: '() => void' },
+        {
+          description: 'causes the cube camera to update which renders to the render target',
+          name: 'update',
+          type: '() => void'
+        }
+      ],
     props:
       [
-			{
-			name: 'autoStart',
-			required: false,
-			type: 'boolean',
-			default: 'true',
-			description: 'whether to automatically start the render task.',
-			},
+        {
+          name: 'autoStart',
+          required: false,
+          type: 'boolean',
+          default: 'true',
+          description: 'whether to automatically start the render task.'
+        },
         {
           default: 'Infinity',
           description: 'controls how many frames the render task will run for',
@@ -63,18 +60,18 @@ componentSignature:
           required: false,
           type: 'number'
         },
-				{
-					name: 'onupdatestart',
-					description: 'a callback prop that is called anytime the render task is started',
-					required: false,
-					type: '() => void',
-				},
-				{
-					name: 'onupdatestop',
-					description: 'a callback prop that is called anytime the render task is stopped',
-					required: false,
-					type: '() => void',
-				},
+        {
+          name: 'onupdatestart',
+          description: 'a callback prop that is called anytime the render task is started',
+          required: false,
+          type: '() => void'
+        },
+        {
+          name: 'onupdatestop',
+          description: 'a callback prop that is called anytime the render task is stopped',
+          required: false,
+          type: '() => void'
+        },
         {
           default: '256',
           description: 'size of the render target. more resolution means more detail',
