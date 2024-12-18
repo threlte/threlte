@@ -6,11 +6,14 @@ name: transitions
 type: 'plugin'
 ---
 
-<Tip type="experimental" title="Experimental">
-	The plugin `transitions` uses Svelte internals. Changes to the runtime
-	of Svelte may break this plugin. If you encounter any issues, please [open an issue on
-	GitHub](https://github.com/threlte/threlte/issues). It's recommended to lock the
-	version of Svelte to a specific version.
+<Tip
+  type="experimental"
+  title="Experimental"
+>
+  The plugin `transitions` uses Svelte internals. Changes to the runtime of Svelte may break this
+  plugin. If you encounter any issues, please [open an issue on
+  GitHub](https://github.com/threlte/threlte/issues). It's recommended to lock the version of Svelte
+  to a specific version.
 </Tip>
 
 The plugin `transitions` enables [Svelte-like
@@ -23,7 +26,10 @@ on Threlte components.
 {/if}
 ```
 
-<Example path="extras/transitions" showFile="Scene.svelte" />
+<Example
+  path="extras/transitions"
+  showFile="Scene.svelte"
+/>
 
 ## Usage
 
@@ -56,7 +62,7 @@ import { cubicOut } from 'svelte/easing'
 
 const fade = createTransition((ref) => {
   // Only apply the transition to materials
-  if (!isInstanceOf(ref, "Material")) return
+  if (!isInstanceOf(ref, 'Material')) return
 
   // Make the material transparent if it's not already
   if (!ref.transparent) {
@@ -128,7 +134,7 @@ import { createTransition } from '@threlte/extras'
 const scale = (duration: number) => {
   return createTransition((ref) => {
     // Only apply the transition to objects
-    if (!isInstanceOf(ref, "Object3D")) return
+    if (!isInstanceOf(ref, 'Object3D')) return
     return {
       tick(t) {
         ref.scale.setScalar(t)
@@ -166,7 +172,7 @@ Similar to Svelte transitions, Threlte transitions also emit events:
 ## Global Transitions
 
 Transitions are [local by
-default]((https://svelte.dev/docs/svelte/transition#Local-vs-global)). Local
+default](<(https://svelte.dev/docs/svelte/transition#Local-vs-global)>). Local
 transitions only play when the block they belong to is created or destroyed, not
 when parent blocks are created or destroyed. Threlte offers a function `global`
 that marks a transition as global.
@@ -177,12 +183,11 @@ that marks a transition as global.
 </script>
 
 {#if x}
-	{#if y}
-		<T.Mesh transition={global(scale(400))} />
-	{/if}
+  {#if y}
+    <T.Mesh transition={global(scale(400))} />
+  {/if}
 {/if}
 ```
-
 
 ## TypeScript
 
