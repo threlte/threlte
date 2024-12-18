@@ -119,9 +119,9 @@ This will cause the cube camera to update once and then stop its update task. If
 </VirtualEnvironment>
 ```
 
-### Manually Updating
+### Manual Updates
 
-For cases where you want full control over when the cube camera updates, there is an `update` function available as a component export and through the `children` snippet. Be sure to set `frames` to `0` if you use this feature.
+For cases where you want full control over when the render target is updated, there is an `update` function available as a component export and through the `children` snippet.
 
 ```svelte title="As-A-Component-Export"
 <script>
@@ -159,3 +159,8 @@ For cases where you want full control over when the cube camera updates, there i
   {/snippet}
 </VirtualEnvironment>
 ```
+
+<Tip type="warning">
+  If you use the `update` function, be sure to set `frames` to `0` to prevent the internal update
+  task from starting automatically.
+</Tip>

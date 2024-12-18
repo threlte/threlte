@@ -1,8 +1,17 @@
 import type { Snippet } from 'svelte'
-import type { Scene } from 'three'
+import type { CubeCamera, Scene, WebGLCubeRenderTarget } from 'three'
 
 export type VirtualEnvironmentProps = {
-  children?: Snippet<[{ restart(): void; update(): void }]>
+  children?: Snippet<
+    [
+      {
+        restart(): void
+        update(): void
+        camera: CubeCamera
+        renderTarget: WebGLCubeRenderTarget
+      }
+    ]
+  >
 
   /**
    * The scene to apply the virtual environment to

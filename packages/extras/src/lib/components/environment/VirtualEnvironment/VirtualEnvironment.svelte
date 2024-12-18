@@ -76,5 +76,5 @@
   attach={visible ? undefined : false}
 >
   <T is={camera} />
-  {@render children?.({ restart, update })}
+  {@render children?.({ camera, renderTarget, restart, update })}
 </T>
