@@ -118,12 +118,14 @@ within Three.js that you can use or adapt for your project.
 
 <Example path="shaders/slice/main" />
 
-### Extend the catalogue
+### Using the new classes
 
-By default `<T>` doesn't know about the new material classes and will
-error on `<T.MeshPhysicalNodeMaterial />`. You can give `<T>`
-the new classes in `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
-function.
+By default `<T>` doesn't know about the new classes and will
+error on things like `<T.MeshPhysicalNodeMaterial />`. You have two options.
+
+1. Give `<T>` all the new classes from `three/webgpu` with the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+   function. Adding all the classes will increase the bundle size of your application
+   but is easy and works.
 
 ```svelte title="App.svelte" {3-4}+ {6}+
 <script>
@@ -146,6 +148,57 @@ function.
   <Scene />
 </Canvas>
 ```
+
+2. Be explicit and import only the classes you need from `three/webgpu`. Then either:
+
+**a)** use `<T>`'s [`is`](/docs/reference/core/t#property-is) prop with the webgpu
+classes you initialize within your `<script></script>` tags
+
+```svelte title="Scene.svelte" {3}+ {5}+ {10}+
+<script>
+  import { T } from '@threlte/core'
+  import { MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+	const material = new MeshPhysicalNodeMaterial()
+</script>
+
+<T.Mesh>
+	<T.BoxGeometry>
+	<T is={material}>
+</T.Mesh>
+```
+
+or **b)** [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+`<T>` with those classes.
+
+```svelte title="App.svelte" {3-4}+ {6}+
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas, extend } from '@threlte/core'
+  import { WebGPURenderer, MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+  extend({ MeshPhysicalNodeMaterial })
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+Bundle size of your application will remain minimal but you'll have to keep things updated as you go.
+
+<Tip type="tip">
+  An easy option for projects is to start with option #1 and then transition to option #2 when
+  bundle size becomes an issue.
+</Tip>
 
 ### Nodes
 
