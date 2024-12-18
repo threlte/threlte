@@ -2,7 +2,11 @@
   lang="ts"
   module
 >
-  const loaders: { exr?: EXRLoader; hdr?: RGBELoader; tex?: TextureLoader } = {}
+  const loaders: {
+    exr?: EXRLoader
+    hdr?: RGBELoader
+    tex?: TextureLoader
+  } = {}
 </script>
 
 <script lang="ts">

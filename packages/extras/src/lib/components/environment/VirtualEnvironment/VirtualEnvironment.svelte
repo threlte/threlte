@@ -10,8 +10,8 @@
     far = 1000,
     frames = Infinity,
     near = 0.1,
-    onrenderstart,
-    onrenderstop,
+    onupdatestart,
+    onupdatestop,
     resolution = 256,
     children,
     isBackground,
@@ -38,16 +38,20 @@
     }
   })
 
+  export const update = () => {
+    camera.update(ctx.renderer, scene)
+  }
+
   let count = 0
   const { start, stop, started } = useTask(
     () => {
       // if frames === Infinity, the task will run indefinitely
       if (count < frames) {
-        camera.update(ctx.renderer, scene)
+        update()
         count += 1
       } else {
         stop()
-        onrenderstop?.()
+        onupdatestop?.()
       }
     },
     { autoStart: false }
@@ -56,11 +60,11 @@
   export const restart = () => {
     if ($started) {
       stop()
-      onrenderstop?.()
+      onupdatestop?.()
     }
     count = 0
     start()
-    onrenderstart?.()
+    onupdatestart?.()
   }
 
   // if any of these props update, the task will need to be restarted
@@ -72,5 +76,5 @@
   attach={visible ? undefined : false}
 >
   <T is={camera} />
-  {@render children?.({ restart })}
+  {@render children?.({ restart, update })}
 </T>

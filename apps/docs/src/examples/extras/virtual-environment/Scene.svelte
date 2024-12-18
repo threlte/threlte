@@ -87,7 +87,10 @@
   </T.Group>
 {/snippet}
 
-<VirtualEnvironment visible={debug}>
+<VirtualEnvironment
+  visible={debug}
+  isBackground
+>
   {#if debug}
     {#each objects as object}
       <TransformControls {object} />

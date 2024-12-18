@@ -6,11 +6,48 @@ name: <VirtualEnvironment>
 type: 'component'
 componentSignature:
   {
+		exports: [
+{ name: 'restart', type: '() => void', description: 'restarts the update task' },
+        { name: 'update', type: '() => void', description: 'causes the cube camera to render to its render target' },
+],
     props:
       [
         {
+          default: '1000',
+          description: 'the far plane of the cube camera',
+          name: 'far',
+          required: false,
+          type: 'number'
+        },
+        {
+          default: 'Infinity',
+          description: 'determines how many frames the internal task will run for',
+          name: 'frames',
+          required: false,
+          type: 'number'
+        },
+        {
+          description: 'callback that is ran when the internal update task is started',
+          name: 'onupdatestart',
+          required: false,
+          type: '() => void'
+        },
+        {
+          description: 'callback that is ran when the internal update task is stopped',
+          name: 'onupdatestop',
+          required: false,
+          type: '() => void'
+        },
+        {
+          default: '256',
+          description: "the width and height of the cube camera's render target",
+          name: 'resolution',
+          required: false,
+          type: 'number'
+        },
+        {
           default: 'false',
-          description: 'whether to set `scene.background` to the loaded environment texture',
+          description: 'whether to set `scene.background` to the environment texture',
           name: 'isBackground',
           required: false,
           type: 'boolean'
@@ -34,3 +71,91 @@ componentSignature:
 ---
 
 <Example path="extras/virtual-environment" />
+
+`<VirtualEnvironment>` allows you to create dynamic environment maps. It uses a cube camera to create a cubemap of the scene and applies the cubemap texture to the scene's environment.
+
+## Controlling Updates
+
+By default, the cube camera is updates and renders to its render target every frame. The `frames` prop is used to control the amount of updates that occur. If your virtual scene is static, you may only need the cube camera to update once. You can achieve this by settings `frames` to `1`
+
+```svelte
+<VirtualEnvironment frames={1} />
+```
+
+This will cause the cube camera to update once and then stop its update task. If you ever need to restart the task, a `restart` function is available as a component export and through the `children` snippet.
+
+```svelte title="As-A-Component-Export"
+<script>
+  let virtualEnvironment = $state()
+
+  $effect(() => {
+    // yourDependencyHere
+    virtualEnvironment?.restart()
+  })
+</script>
+
+<VirtualEnvironment
+  frames={1}
+  bind:this={virtualEnvironment}
+/>
+```
+
+```svelte title="Through-Children-Snippet"
+<script>
+  let meshInScene = $state(true)
+</script>
+
+<VirtualEnvironment
+  frames={1}
+  bind:this={virtualEnvironment}
+>
+  {#snippet children({ restart })}
+    {#if meshInScene}
+      <T.Mesh>
+        <T.PlaneGeometry />
+      </T.Mesh>
+    {/if}
+  {/snippet}
+</VirtualEnvironment>
+```
+
+### Manually Updating
+
+For cases where you want full control over when the cube camera updates, there is an `update` function available as a component export and through the `children` snippet. Be sure to set `frames` to `0` if you use this feature.
+
+```svelte title="As-A-Component-Export"
+<script>
+  let virtualEnvironment = $state()
+  $effect(() => {
+    // yourDependencyHere
+    virtualEnvironment?.update()
+  })
+</script>
+
+<VirtualEnvironment
+  frames={0}
+  bind:this={virtualEnvironment}
+/>
+```
+
+```svelte title="Through-Children-Snippet"
+<script>
+  let virtualEnvironment = $state()
+  $effect(() => {
+    // yourDependencyHere
+    virtualEnvironment?.update()
+  })
+</script>
+
+<VirtualEnvironment frames={0}>
+  {#snippet children({ update })}
+    <T.Mesh
+      oncreate={() => {
+        update()
+      }}
+    >
+      <T.PlaneGeometry />
+    </T.Mesh>
+  {/snippet}
+</VirtualEnvironment>
+```

@@ -2,7 +2,7 @@ import type { Snippet } from 'svelte'
 import type { Scene } from 'three'
 
 export type VirtualEnvironmentProps = {
-  children?: Snippet<[{ restart(): void }]>
+  children?: Snippet<[{ restart(): void; update(): void }]>
 
   /**
    * The scene to apply the virtual environment to
@@ -35,14 +35,14 @@ export type VirtualEnvironmentProps = {
   near?: number
 
   /**
-   * A function that will be called anytime the render task has been started
+   * A function that will be called anytime the update task has been started
    */
-  onrenderstart?: () => void
+  onupdatestart?: () => void
 
   /**
-   * A function that will be called anytime the render task has been stopped
+   * A function that will be called anytime the update task has been stopped
    */
-  onrenderstop?: () => void
+  onupdatestop?: () => void
 
   /**
    * Size of the render target. a higher resolution should have more detail
