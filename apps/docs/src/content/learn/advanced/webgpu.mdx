@@ -66,7 +66,7 @@ can defer rendering by initially setting the renderMode to `manual` like so:
 <Canvas
   {renderMode}
   createRenderer={(canvas) => {
-    const renderer = new THREE.WebGPURenderer({
+    const renderer = new WebGPURenderer({
       canvas,
       antialias: true,
       forceWebGL: false
