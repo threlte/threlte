@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as THREE from 'three/webgpu'
+  import { MathUtils } from 'three/webgpu'
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
