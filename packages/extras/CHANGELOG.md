@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.47
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+
 ## 9.0.0-next.46
 
 ### Minor Changes

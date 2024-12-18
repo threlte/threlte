@@ -14,6 +14,7 @@
     "@threlte/studio": "0.0.1-next.0"
   },
   "changesets": [
+    "afraid-bugs-clap",
     "afraid-donkeys-glow",
     "angry-cats-destroy",
     "big-deers-confess",
