@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.48
+
+### Minor Changes
+
+- d4a366d: Add `<VirtualEnvironment>`
+
 ## 9.0.0-next.47
 
 ### Minor Changes
