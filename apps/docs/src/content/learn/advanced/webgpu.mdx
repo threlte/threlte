@@ -27,7 +27,7 @@ To use Three.js's WebGPU renderer, import it and then initialize it within your
 
 <Canvas
   createRenderer={(canvas) => {
-    return new THREE.WebGPURenderer({
+    return new WebGPURenderer({
       canvas,
       antialias: true,
       forceWebGL: false
