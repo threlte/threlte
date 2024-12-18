@@ -9,7 +9,7 @@ import {
 import type { Scheduler, Stage, Task } from '../../frame-scheduling'
 import type { CurrentReadable, CurrentWritable } from '../../utilities'
 import { useCamera } from '../fragments/camera'
-import { useDOM, type Size } from '../fragments/dom'
+import { useDOM } from '../fragments/dom'
 import { useRenderer } from '../fragments/renderer.svelte'
 import { useScene } from '../fragments/scene'
 import { useScheduler } from '../fragments/scheduler.svelte'
@@ -21,7 +21,8 @@ import { useScheduler } from '../fragments/scheduler.svelte'
  * It's exposed to the user via the hook `useThrelte`.
  */
 export type ThrelteContext = {
-  size: CurrentReadable<Size>
+  dom: HTMLElement
+  size: CurrentReadable<DOMRect>
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
@@ -106,6 +107,7 @@ export const useThrelte = (): ThrelteContext => {
     scheduler: schedulerCtx.scheduler,
     shadows: rendererCtx.shadows,
     shouldRender: schedulerCtx.shouldRender,
+    dom: domCtx.dom,
     size: domCtx.size,
     toneMapping: rendererCtx.toneMapping,
     get scene() {
