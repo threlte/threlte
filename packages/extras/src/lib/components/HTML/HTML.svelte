@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-  import { T, useTask, useThrelte, useDOM } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import {
     Vector3,
     Group,
@@ -83,8 +83,7 @@
 
   visible = true
 
-  const { renderer, camera, scene, size } = useThrelte()
-  const { dom } = useDOM()
+  const { camera, scene, size, dom, canvas } = useThrelte()
 
   const group = new Group()
 
@@ -117,12 +116,12 @@
   $effect.pre(() => {
     if (occlude === 'blending') {
       activeOccludeInstances += 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
 
     return () => {
       activeOccludeInstances -= 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
   })
 

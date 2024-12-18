@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useCanvas, useThrelte, watch } from '@threlte/core'
+  import { useThrelte, watch } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Object3D } from 'three'
   import { SelectionBox } from 'three/examples/jsm/interactive/SelectionBox.js'
@@ -14,8 +14,7 @@
   } from './types'
   import { useObjectSelection } from './useObjectSelection.svelte'
 
-  const { camera, scene, renderer } = useThrelte()
-  const { wrapper } = useCanvas()
+  const { camera, scene, renderer, dom } = useThrelte()
 
   const { useExtension } = useStudio()
   const { addToSelection, removeFromSelection, selectObjects } = useObjectSelection()
@@ -121,15 +120,15 @@
   }
 
   onMount(() => {
-    wrapper.addEventListener('pointerdown', onPointerDown)
-    wrapper.addEventListener('pointermove', onPointerMove)
-    wrapper.addEventListener('pointerup', onPointerUp)
-    wrapper.style.cursor = 'crosshair'
+    dom.addEventListener('pointerdown', onPointerDown)
+    dom.addEventListener('pointermove', onPointerMove)
+    dom.addEventListener('pointerup', onPointerUp)
+    dom.style.cursor = 'crosshair'
     return () => {
       if (lastEvent) onPointerUp(lastEvent)
-      wrapper.removeEventListener('pointerdown', onPointerDown)
-      wrapper.removeEventListener('pointermove', onPointerMove)
-      wrapper.removeEventListener('pointerup', onPointerUp)
+      dom.removeEventListener('pointerdown', onPointerDown)
+      dom.removeEventListener('pointermove', onPointerMove)
+      dom.removeEventListener('pointerup', onPointerUp)
       try {
         // this sometimes throws an error, but we fail silently
         const h = selectionHelper as any
@@ -138,7 +137,7 @@
         console.warn(error)
       }
       selectionHelper.dispose()
-      wrapper.style.cursor = 'auto'
+      dom.style.cursor = 'auto'
     }
   })
 </script>

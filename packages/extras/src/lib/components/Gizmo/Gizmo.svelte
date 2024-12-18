@@ -30,7 +30,7 @@
   }: GizmoProps = $props()
 
   const parent = useParent()
-  const { camera, renderer, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
+  const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
 
   ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer)
 
@@ -124,12 +124,10 @@
   })
 
   $effect.pre(() => {
-    const container = renderer.domElement.parentElement
-
-    if (container) {
+    if (dom) {
       ref.dispose()
       ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
-        container,
+        container: dom,
         placement: 'bottom-left',
         size: 86,
         ...rest

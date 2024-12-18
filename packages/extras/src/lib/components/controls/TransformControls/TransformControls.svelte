@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, currentWritable, useDOM, useThrelte, watch, type Props } from '@threlte/core'
+  import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
   import { Group } from 'three'
   import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
@@ -17,8 +17,7 @@
     ...props
   }: TransformControlsProps = $props()
 
-  const { camera, invalidate, scene } = useThrelte()
-  const { dom } = useDOM()
+  const { camera, dom, invalidate, scene } = useThrelte()
 
   const { orbitControls, trackballControls } = useControlsContext()
   const isDragging = currentWritable(false)
