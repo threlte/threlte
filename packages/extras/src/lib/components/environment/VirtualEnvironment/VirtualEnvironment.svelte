@@ -7,7 +7,6 @@
   const ctx = useThrelte()
 
   let {
-    children,
     far = 1000,
     frames = Infinity,
     isBackground,
@@ -16,7 +15,8 @@
     onupdatestop,
     resolution = 256,
     scene: parentScene = ctx.scene,
-    visible
+    visible,
+    children
   }: VirtualEnvironmentProps = $props()
 
   // Create a parent scene to render the virtual environment into

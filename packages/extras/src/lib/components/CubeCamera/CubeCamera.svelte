@@ -24,7 +24,7 @@
     () => resolution
   )
 
-  const { renderer, renderStage, scene } = useThrelte()
+  const { renderer, scene } = useThrelte()
 
   const group = new Group()
   const inner = new Group()
