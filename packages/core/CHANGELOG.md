@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.34
+
+### Patch Changes
+
+- 89d4fd5: Fix core types entry for dev
+
 ## 8.0.0-next.33
 
 ### Patch Changes
