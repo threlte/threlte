@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.36
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
 ## 8.0.0-next.35
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.0-next.15
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
 ## 2.0.0-next.14
 
 ### Patch Changes
