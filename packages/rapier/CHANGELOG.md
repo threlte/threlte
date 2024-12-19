@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 3.0.0-next.18
+
+### Minor Changes
+
+- b903698: Add usePhysicsTask hook
+- 5331021: Add useRopeJoint hook
+
 ## 3.0.0-next.17
 
 ### Patch Changes

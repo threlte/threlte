@@ -1,7 +1,7 @@
 {
   "name": "@threlte/docs",
   "type": "module",
-  "version": "0.14.0-next.3",
+  "version": "0.14.0-next.4",
   "private": true,
   "scripts": {
     "dev": "astro dev --host --open",
