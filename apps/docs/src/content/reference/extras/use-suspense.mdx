@@ -13,7 +13,7 @@ The hook `useSuspense` is used to mark a resource as being used in a
 
 ## Usage
 
-### Mark as Async Resource
+### Mark Something as Async Resource
 
 The hook returns a function that allows you to mark a resource as being used in
 a `<Suspense>` boundary. To suspend the closest `<Suspense>` boundary, call the
@@ -23,16 +23,24 @@ Because [`useLoader().load()`](/docs/reference/core/use-loader) returns an
 `useLoader().load()` can be passed directly to the function returned by
 `useSuspense()`.
 
-```ts
-const suspend = useSuspense()
-suspend(useTexture('/texture.png'))
+```svelte
+<script>
+  const suspend = useSuspense()
+
+  const promise = suspend(useTexture('/texture.png'))
+</script>
 ```
 
 ### Get Suspended State
 
 The hook can be used to get the `suspended`-state of the closest `<Suspense>` boundary.
 
-```ts
-const { suspended } = useSuspense()
-$: console.log($suspended)
+```svelte
+<script>
+  const { suspended } = useSuspense()
+
+  $effect(() => {
+    $suspended
+  })
+</script>
 ```
