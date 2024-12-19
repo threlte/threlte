@@ -1,9 +1,9 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { OrbitControlsProps } from './types'
+  import type { Event } from 'three'
 
   let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
@@ -16,11 +16,17 @@
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
+  const { orbitControls } = useControlsContext()
 
-  const { start, stop } = useTask(() => controls.update(), {
-    autoStart: false,
-    autoInvalidate: false
-  })
+  const { start, stop } = useTask(
+    () => {
+      controls.update()
+    },
+    {
+      autoStart: false,
+      autoInvalidate: false
+    }
+  )
 
   $effect.pre(() => {
     if (props.autoRotate || props.enableDamping) {
@@ -30,18 +36,24 @@
     }
   })
 
-  const { orbitControls } = useControlsContext()
-  orbitControls.set(controls)
-  onDestroy(() => orbitControls.set(undefined))
+  $effect.pre(() => {
+    const handleChange = (event: Event) => {
+      invalidate()
+      props.onchange?.(event)
+    }
+
+    orbitControls.set(controls)
+    controls.addEventListener('change', handleChange)
+    return () => {
+      orbitControls.set(undefined)
+      controls.removeEventListener('change', handleChange)
+    }
+  })
 </script>
 
 <T
   is={controls}
   bind:ref
-  onchange={(event) => {
-    invalidate()
-    props.onchange?.(event)
-  }}
   {...props}
 >
   {@render children?.({ ref: controls })}

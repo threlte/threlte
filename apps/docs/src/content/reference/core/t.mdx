@@ -501,19 +501,18 @@ The object referenced by the component is available as the binding `ref`:
 <T.PerspectiveCamera bind:ref={camera} />
 ```
 
-## Extending the default component catalogue
+## Extending the Default Component Catalogue
 
 By default when using the dot-notation to access Three.js objects (e.g.
 `<T.Mesh>`), Threlte will automatically import the corresponding class from the
 namespance `'three'`. If you want to use a custom class or classes from Three.js
-that are available elsewhere (like `OrbitControls`), you can extend the default
-catalogue with the `extend` function:
+that are available elsewhere (like `OrbitControls`), you can **extend the default
+catalogue** with the `extend` function:
 
 ```svelte
 <script>
   import { extend, T } from '@threlte/core'
   import { CustomMesh } from './MyCustomMesh.ts'
-  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
   extend({
     CustomMesh
@@ -523,12 +522,73 @@ catalogue with the `extend` function:
 <T.CustomMesh />
 ```
 
-<Tip type="tip"> Be aware that in this case `<T>` can't provide type-safety on
-  properties and events. If you need type-safety, you can use the `is` property
-  instead: `<T is={CustomMesh} />`. This way, Threlte can infer the type of the
-  object and provide type-safety on properties and events. </Tip>
+### Custom Component Catalogue Types
+
+By default, TypeScript will not pick up custom custom items added to the
+catalogue by using the `extend` function.
+
+To extend the default catalogue types, define the `Threlte.UserCatalogue` type
+in your ambient type definitions. In a typical SvelteKit application, you can
+find these [in `src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts).
+
+```ts title="src/app.d.ts"
+import type { UserCatalogue } from '@threlte/core'
+
+declare global {
+  namespace App {
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
+  }
+
+  namespace Threlte {
+    interface UserCatalogue {
+      CustomMesh: typeof CustomMesh
+    }
+  }
+}
+
+export {}
+```
 
 ## Plugins
 
 The component `<T>` can be extended in functionality with [Threlte
 Plugins](/docs/reference/core/plugins).
+
+### Custom Prop Types
+
+Plugins may add custom props to the `<T>` component. By default, these props are
+not picked up by TypeScript.
+
+To extend the types of the `<T>` component and define custom prop types, define
+the `Threlte.UserProps` type in your ambient type definitions. In a typical
+SvelteKit application, you can find these type definitions [in
+`src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts).
+
+```ts title="src/app.d.ts"
+declare global {
+  namespace App {
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
+  }
+
+  namespace Threlte {
+    interface UserProps {
+      myProp?: string
+    }
+  }
+}
+
+export {}
+```
+
+```svelte
+<!-- The prop "myProp" is now available on the <T> component and strongly typed -->
+<T myProp="foo" />
+```

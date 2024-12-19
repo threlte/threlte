@@ -444,7 +444,7 @@ export function useGamepad(options: UseGamepadOptions = {}) {
     const processSnapshot = () => {
       /**
        * getGamepads() will return a snapshot of a gamepad that will never change,
-       * so it must be polled continuously to recieve new values.
+       * so it must be polled continuously to receive new values.
        */
       const pad = navigator.getGamepads()[gamepadIndex]
       gamepad.raw = pad

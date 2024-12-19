@@ -1,5 +1,3 @@
-import './types.d.ts'
-
 export const VERSION = 8
 
 // canvas component
@@ -25,6 +23,7 @@ export type { Key, Schedule, Scheduler, Stage, Task, TaskCallback } from './fram
 // useLoader
 export {
   useLoader,
+  type UseLoaderLoadOptions,
   type UseLoaderLoadInput,
   type UseLoaderLoadResult,
   type UseLoaderOptions
@@ -35,7 +34,7 @@ export { type ThrelteContext } from './context/compounds/useThrelte'
 export { createThrelteContext } from './context/createThrelteContext.svelte'
 export { createCacheContext, useCache } from './context/fragments/cache'
 export { createCameraContext, useCamera } from './context/fragments/camera'
-export { createCanvasContext, useCanvas } from './context/fragments/canvas'
+export { createCanvasContext, useCanvas, type Size } from './context/fragments/canvas'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal'
 export { createParentContext, useParent } from './context/fragments/parent'
 export { createParentObject3DContext, useParentObject3D } from './context/fragments/parentObject3D'

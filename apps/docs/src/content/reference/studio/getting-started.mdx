@@ -48,9 +48,9 @@ To use auto-sync, in your vite config, insert the Threlte Studio vite plugin
 
 ```js title=vite.config.js {2}+ {5}m
 import { sveltekit } from '@sveltejs/kit/vite'
-import { studioPlugin } from '@threlte/studio/vite'
+import { threlteStudio } from '@threlte/studio/vite'
 
 export default {
-  plugins: [studioPlugin(), sveltekit()]
+  plugins: [threlteStudio(), sveltekit()]
 }
 ```

@@ -1,5 +1,29 @@
 # @threlte/core
 
+## 8.0.0-next.34
+
+### Patch Changes
+
+- 89d4fd5: Fix core types entry for dev
+
+## 8.0.0-next.33
+
+### Patch Changes
+
+- 52d0b9f: fix: remove .d.ts import from dist/index.js
+
+## 8.0.0-next.32
+
+### Minor Changes
+
+- d7eb71b: Custom user catalogue types
+
+## 8.0.0-next.31
+
+### Patch Changes
+
+- e732e58: export `Size` type from contexts/canvas to fix import errors regarding `Size` not being an export. for example in `useViewport`
+
 ## 8.0.0-next.30
 
 ### Patch Changes

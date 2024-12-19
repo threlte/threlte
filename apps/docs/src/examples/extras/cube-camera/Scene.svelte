@@ -1,11 +1,11 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   export const hdrs = {
-    industrial: '/hdr/industrial_sunset_puresky_1k.hdr',
-    workshop: '/hdr/aerodynamics_workshop_1k.hdr',
-    puresky: '/hdr/mpumalanga_veld_puresky_1k.hdr'
+    industrial: 'industrial_sunset_puresky_1k.hdr',
+    workshop: 'aerodynamics_workshop_1k.hdr',
+    puresky: 'mpumalanga_veld_puresky_1k.hdr'
   } as const
 
   const isHdrKey = (u: PropertyKey): u is keyof typeof hdrs => {
@@ -14,15 +14,14 @@
 </script>
 
 <script lang="ts">
-  import type { Vector3Tuple } from 'three'
-  import { CubeCamera, Environment, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping } from 'three'
-  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { T, useLoader, useTask } from '@threlte/core'
+  import { CubeCamera, Environment, Grid, OrbitControls } from '@threlte/extras'
+  import type { Vector3Tuple } from 'three'
+  import { EquirectangularReflectionMapping } from 'three'
+  import { RGBELoader } from 'three/examples/jsm/Addons.js'
 
   type SceneProps = {
     frames?: number
-    far?: number
     hdr?: 'auto' | keyof typeof hdrs
     metalness?: number
     near?: number
@@ -32,7 +31,6 @@
 
   let {
     frames = Infinity,
-    far = 1000,
     hdr = 'auto',
     metalness = 1,
     near = 0.1,
@@ -40,70 +38,79 @@
     roughness = 0
   }: SceneProps = $props()
 
-  const loader = useLoader(RGBELoader)
-  const textures = loader.load(hdrs, {
-    transform(texture) {
-      texture.mapping = EquirectangularReflectionMapping
-      return texture
-    }
-  })
-
-  const colors = [0xff_00_ff, 0xff_ff_00, 0x00_ff_ff] as const
+  const colors = ['#ff00ff', '#ffff00', '#00ffff'] as const
 
   const increment = (2 * Math.PI) / colors.length
   const radius = 3
 
   let time = $state(0)
-  let y = $derived(2 * Math.sin(time))
-
   useTask((delta) => {
     time += delta
   })
 
-  const cameraPosition: Vector3Tuple = [7, 7, 7]
+  const hdrPath = '/textures/equirectangular/hdr/'
+
+  const loader = useLoader(RGBELoader, {
+    extend(loader) {
+      loader.setPath(hdrPath)
+    }
+  })
+
+  const backgrounds = loader.load(hdrs, {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      return texture
+    }
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={cameraPosition}
+  position={[10, 5, 10]}
+  fov={30}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enablePan={false}
+    enableZoom={false}
+    target.y={0.5}
+    autoRotate
+    autoRotateSpeed={0.1}
+  />
 </T.PerspectiveCamera>
 
-<T.AmbientLight />
+<Environment url={`${hdrPath}shanghai_riverside_1k.hdr`} />
 
-{#each colors as color, i}
-  {@const r = increment * i}
-  <T.Mesh
-    position.x={radius * Math.cos(r)}
-    position.y={i}
-    position.z={radius * Math.sin(r)}
-  >
-    <T.MeshStandardMaterial {color} />
-    <T.BoxGeometry />
-  </T.Mesh>
-{/each}
-
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-  isBackground
-  format="hdr"
+<Grid
+  position.y={-3}
+  sectionColor="#fff"
+  cellColor="#fff"
 />
 
-{#await textures then textureRecord}
-  {@const background = isHdrKey(hdr) ? textureRecord[hdr] : hdr}
+{#await backgrounds then backgroundMap}
+  {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
+  {#each colors as color, i}
+    {@const r = increment * i}
+    <T.Mesh
+      position.x={radius * Math.cos(r)}
+      position.y={i}
+      position.z={radius * Math.sin(r)}
+    >
+      <T.MeshStandardMaterial {color} />
+      <T.SphereGeometry />
+    </T.Mesh>
+  {/each}
+
   {#each Array(colors.length) as _, i}
     {@const r = Math.PI + increment * i}
     <CubeCamera
-      {near}
-      {far}
-      {resolution}
+      position.x={radius * Math.cos(r)}
+      position.y={2 * Math.sin(time + i)}
+      position.z={radius * Math.sin(r)}
       {background}
       {frames}
-      position.y={y + i}
-      position.x={radius * Math.cos(r)}
-      position.z={radius * Math.sin(r)}
+      {near}
+      {resolution}
     >
       {#snippet children({ renderTarget })}
         <T.Mesh>

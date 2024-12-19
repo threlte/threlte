@@ -1,5 +1,5 @@
-import { OrthographicCamera, PerspectiveCamera, Vector3, type Vector3Tuple } from 'three'
-import { currentWritable, useTask, useThrelte, watch, type Size } from '@threlte/core'
+import { Camera, Vector3, type Vector3Tuple } from 'three'
+import { currentWritable, isInstanceOf, useTask, useThrelte, watch, type Size } from '@threlte/core'
 import type { Readable } from 'svelte/store'
 
 export interface Viewport {
@@ -29,11 +29,7 @@ export const useViewport = (
 
   const { camera, size, renderStage, scheduler } = useThrelte()
 
-  const updateViewport = (
-    $size: Size,
-    $camera: PerspectiveCamera | OrthographicCamera,
-    distance: number
-  ) => {
+  const updateViewport = ($size: Size, $camera: Camera, distance: number) => {
     viewport.update(($viewport) => {
       const { width, height } = $size
 
@@ -45,11 +41,11 @@ export const useViewport = (
 
       $viewport.distance = distance
 
-      if ('isOrthographicCamera' in $camera) {
+      if (isInstanceOf($camera, 'OrthographicCamera')) {
         $viewport.width = width / $camera.zoom
         $viewport.height = height / $camera.zoom
         $viewport.factor = 1
-      } else if ('isPerspectiveCamera' in $camera) {
+      } else if (isInstanceOf($camera, 'PerspectiveCamera')) {
         const fov = ($camera.fov * Math.PI) / 180 // convert vertical fov to radians
         const h = 2 * Math.tan(fov / 2) * distance // visible height
         const w = h * (width / height)

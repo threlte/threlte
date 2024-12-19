@@ -1,15 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
-import studioPlugin from './src/lib/plugin'
+import { defineConfig } from 'vitest/config'
 
-/**
- * @type {import('vite').UserConfig}
- */
-const config = {
-  plugins: [studioPlugin(), sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
-  ssr: {
-    noExternal: ['three']
+const config = defineConfig({
+  plugins: [sveltekit()],
+  test: {
+    include: ['src/**/*.test.ts']
   }
-}
+})
 
 export default config

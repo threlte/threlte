@@ -1,5 +1,72 @@
 # @threlte/extras
 
+## 9.0.0-next.48
+
+### Minor Changes
+
+- d4a366d: Add `<VirtualEnvironment>`
+
+## 9.0.0-next.47
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+
+## 9.0.0-next.46
+
+### Minor Changes
+
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+
+## 9.0.0-next.45
+
+### Patch Changes
+
+- 1cd4af6: New Gizmo implementation
+
+## 9.0.0-next.44
+
+### Major Changes
+
+- 86072ef: separate `<Environment>` into two components
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 9.0.0-next.43
+
+### Patch Changes
+
+- f9f8444: [next] Temporary three-perf fix with a github fork
+
+## 9.0.0-next.42
+
+### Major Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
+## 9.0.0-next.41
+
+### Minor Changes
+
+- 9eecd88: Add <AsciiRenderer>
+
+### Patch Changes
+
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+
+## 9.0.0-next.40
+
+### Patch Changes
+
+- 69f168c: CubeCamera follows what other components do and binds to the ref at the component instead of assigning in the script tag
+- 8be57ae: use `isInstanceOf` to determine the camera's type in `useViewport`. fixes some type errors.
+
 ## 9.0.0-next.39
 
 ### Patch Changes

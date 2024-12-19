@@ -3,7 +3,15 @@ import type { Group, Scene, CubeCamera, WebGLCubeRenderTarget } from 'three'
 
 export type CubeCameraProps = Props<
   Group,
-  [{ camera: CubeCamera; ref: Group; renderTarget: WebGLCubeRenderTarget; restart(): void }]
+  [
+    {
+      camera: CubeCamera
+      ref: Group
+      renderTarget: WebGLCubeRenderTarget
+      restart(): void
+      update(): void
+    }
+  ]
 > & {
   /**
    * background that will be set before rendering to the render target. a value of `'auto'` will use the current background
@@ -36,14 +44,14 @@ export type CubeCameraProps = Props<
   near?: number
 
   /**
-   * a function that will be called anytime the render task has been started
+   * a callback that is ran when the update task has been started
    */
-  onrenderstart?: () => void
+  onupdatestart?: () => void
 
   /**
-   * a function that will be called anytime the render task has been stopped
+   * a callback that is ran when the update task has been stopped
    */
-  onrenderstop?: () => void
+  onupdatestop?: () => void
 
   /**
    * size of the render target. a higher resolution should have more detail

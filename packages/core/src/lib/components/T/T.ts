@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
@@ -68,6 +70,7 @@ export const T = new Proxy(function () {}, {
     return TComp
   }
 }) as unknown as typeof TComp & {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
+} & {
+  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
 } & Record<string, Component>

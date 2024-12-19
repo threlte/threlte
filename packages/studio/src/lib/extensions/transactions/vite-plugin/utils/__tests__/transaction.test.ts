@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { TransactionQueue } from '../../../TransactionQueue.svelte'
+import { TransactionQueue } from '../../../TransactionQueue/TransactionQueue.svelte'
+import { buildTransaction } from '../../../TransactionQueue/buildTransaction'
 
 describe('Transaction System', () => {
   test('commit', () => {
@@ -10,12 +11,14 @@ describe('Transaction System', () => {
     }
 
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'quo',
-      (obj) => obj.foo.bar,
-      (obj, value) => (obj.foo.bar = value)
-    )
+
+    const transaction = buildTransaction({
+      object: obj,
+      propertyPath: 'foo.bar',
+      value: 'quo'
+    })
+
+    transactionQueue.commit([transaction])
 
     expect(obj.foo.bar).toBe('quo')
   })
@@ -24,16 +27,21 @@ describe('Transaction System', () => {
     const obj = {
       foo: 'bar'
     }
-
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'baz',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      {
+        object: obj,
+        read(root) {
+          return root.foo
+        },
+        write(root, data) {
+          root.foo = data
+        },
+        value: 'baz',
+        createHistoryRecord: true
+      }
+    ])
     transactionQueue.undo()
-
     expect(obj.foo).toBe('bar')
   })
 
@@ -43,27 +51,31 @@ describe('Transaction System', () => {
     }
 
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'baz',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
-    transactionQueue.commit(
-      obj,
-      'quo',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
-    transactionQueue.commit(
-      obj,
-      'qux',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'baz'
+      })
+    ])
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'quo'
+      })
+    ])
+    expect(obj.foo).toBe('quo')
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'qux'
+      })
+    ])
+    expect(obj.foo).toBe('qux')
     transactionQueue.undo()
     transactionQueue.undo()
-
     expect(obj.foo).toBe('baz')
   })
 
@@ -73,24 +85,28 @@ describe('Transaction System', () => {
     }
 
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'baz',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
-    transactionQueue.commit(
-      obj,
-      'quo',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
-    transactionQueue.commit(
-      obj,
-      'qux',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'baz'
+      })
+    ])
+
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'quo'
+      })
+    ])
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'qux'
+      })
+    ])
     transactionQueue.undo()
     transactionQueue.undo()
     transactionQueue.undo()
@@ -106,12 +122,13 @@ describe('Transaction System', () => {
     }
 
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'baz',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'baz'
+      })
+    ])
     transactionQueue.undo()
     transactionQueue.redo()
 
@@ -123,26 +140,52 @@ describe('Transaction System', () => {
       foo: 'bar'
     }
     const transactionQueue = new TransactionQueue()
-    transactionQueue.commit(
-      obj,
-      'baz',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'baz'
+      })
+    ])
     expect(obj.foo).toBe('baz')
 
     transactionQueue.undo()
     expect(obj.foo).toBe('bar')
 
-    transactionQueue.commit(
-      obj,
-      'quo',
-      (obj) => obj.foo,
-      (obj, value) => (obj.foo = value)
-    )
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'quo'
+      })
+    ])
     expect(obj.foo).toBe('quo')
 
     transactionQueue.redo()
     expect(obj.foo).toBe('quo')
+  })
+
+  test('grouped undo', () => {
+    const obj = {
+      foo: 'bar',
+      quo: 'qux'
+    }
+
+    const transactionQueue = new TransactionQueue()
+    transactionQueue.commit([
+      buildTransaction({
+        object: obj,
+        propertyPath: 'foo',
+        value: 'baz'
+      }),
+      buildTransaction({
+        object: obj,
+        propertyPath: 'quo',
+        value: 'quux'
+      })
+    ])
+    transactionQueue.undo()
+    expect(obj.foo).toBe('bar')
+    expect(obj.quo).toBe('qux')
   })
 })

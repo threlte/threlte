@@ -7,6 +7,7 @@ import * as componentUtils from './utils/componentUtils'
 import * as fileUtils from './utils/fileUtils'
 import { toMagicString } from './utils/magicStringUtils'
 import indexToPosition from 'index-to-position'
+import colors from 'kleur'
 
 const HmrIgnoredModuleTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 const HmrIgnoredModuleIds = new Set<string>()
@@ -32,19 +33,26 @@ export const plugin: () => Plugin = () => {
     enforce: 'pre',
     apply: 'serve',
     transform(code, id) {
-      if (!id.endsWith('.svelte')) return
-      if (!hasTComponent(code)) return
-      const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
-      const magicMarkup = toMagicString(markup)
-      addStudioRuntimeProps(magicMarkup, id)
-      const finalComponent = componentUtils.assembleComponent(
-        magicMarkup,
-        script,
-        scriptModule,
-        style
-      )
-      return {
-        code: finalComponent
+      try {
+        if (!id.endsWith('.svelte')) return
+        if (!hasTComponent(code)) return
+        if (id.includes('node_modules')) return
+        const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
+        const magicMarkup = toMagicString(markup)
+        addStudioRuntimeProps(magicMarkup, id)
+        const finalComponent = componentUtils.assembleComponent(
+          magicMarkup,
+          script,
+          scriptModule,
+          style
+        )
+        return {
+          code: finalComponent
+        }
+      } catch (error) {
+        const message = 'message' in (error as any) ? (error as any).message : error
+        console.warn(colors.red(`Threlte Studio: Error compiling component ${id}: ${message}`))
+        return
       }
     },
     handleHotUpdate({ file }) {

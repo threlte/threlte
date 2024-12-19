@@ -16,7 +16,9 @@
 
   const dracoLoader = useDraco()
   const gltf = useGltf<GLTFResult>('/models/diamond/dflat.glb', { dracoLoader })
-  const env = useLoader(RGBELoader).load('/hdr/aerodynamics_workshop_1k.hdr')
+  const env = useLoader(RGBELoader).load(
+    '/textures/equirectangular/hdr/aerodynamics_workshop_1k.hdr'
+  )
 </script>
 
 {#await gltf then { nodes }}

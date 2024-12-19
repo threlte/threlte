@@ -1,5 +1,17 @@
 # @threlte/flex
 
+## 2.0.0-next.14
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 2.0.0-next.13
+
+### Patch Changes
+
+- 37d3cdc: Remove inspect
+
 ## 2.0.0-next.12
 
 ### Patch Changes

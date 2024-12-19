@@ -29,8 +29,6 @@
     ...props
   }: InnerFlexProps = $props()
 
-  $inspect(yoga)
-
   ref = new Group()
   ref.userData.isNode = true
 
