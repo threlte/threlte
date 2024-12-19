@@ -61,8 +61,7 @@
 </script>
 
 <Environment
-  path="/hdr/"
-  files="aerodynamics_workshop_1k.hdr"
+  url="/textures/equirectangular/hdr/aerodynamics_workshop_1k.hdr"
   isBackground
 />
 
