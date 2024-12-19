@@ -39,8 +39,6 @@ The hook can be used to get the `suspended`-state of the closest `<Suspense>` bo
 <script>
   const { suspended } = useSuspense()
 
-  $effect(() => {
-    $suspended
-  })
+  $inspect($suspended)
 </script>
 ```
