@@ -54,7 +54,7 @@ To use Three.js's WebGPU renderer, import it and then initialize it within your
   example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
 </small>
 
-The WebGPU renderer doesn't immediately render. If the renderer you provide needs to delay renderering, you
+The WebGPU renderer doesn't immediately render. If the renderer you provide needs to delay rendering, you
 can defer rendering by initially setting the renderMode to `manual` like so:
 
 ```svelte title="App.svelte"
@@ -118,14 +118,12 @@ within Three.js that you can use or adapt for your project.
 
 <Example path="shaders/slice/main" />
 
-### Using the new classes
+### Using The \<T> Catalogue
 
-By default `<T>` doesn't know about the new classes and will
-error on things like `<T.MeshPhysicalNodeMaterial />`. You have two options.
+`<T>` components use classes, constants, functions, etc. from the `three` library. It will error on things like `<T.MeshPhysicalNodeMaterial />` because the `MeshPhysicalNodeMaterial` class is an export of `three/webgpu` instead of `three`.
 
-1. Give `<T>` all the new classes from `three/webgpu` with the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
-   function. Adding all the classes will increase the bundle size of your application
-   but is easy and works.
+1. Extend `<T>` with all the definitions from `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+   function. Adding all these definitions will increase the bundle size of your application but it is an easy solution.
 
 ```svelte title="App.svelte" {3-4}+ {6}+
 <script>
@@ -149,10 +147,9 @@ error on things like `<T.MeshPhysicalNodeMaterial />`. You have two options.
 </Canvas>
 ```
 
-2. Be explicit and import only the classes you need from `three/webgpu`. Then either:
+2. Use explicit imports for the objects, functions, and such that you use from `three/webgpu`.
 
-**a)** use `<T>`'s [`is`](/docs/reference/core/t#property-is) prop with the webgpu
-classes you initialize within your `<script></script>` tags
+You can use `<T>`'s [`is`](/docs/reference/core/t#property-is) prop with entities imported from `three/webgpu`.
 
 ```svelte title="Scene.svelte" {3}+ {5}+ {10}+
 <script>
@@ -168,8 +165,7 @@ classes you initialize within your `<script></script>` tags
 </T.Mesh>
 ```
 
-or **b)** [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
-`<T>` with those classes.
+You can instead use [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue) with just the entities that you use.
 
 ```svelte title="App.svelte" {3-4}+ {6}+
 <script>
@@ -193,11 +189,55 @@ or **b)** [`extend`](/docs/reference/core/t#extending-the-default-component-cata
 </Canvas>
 ```
 
-Bundle size of your application will remain minimal but you'll have to keep things updated as you go.
+Now `<T>` knows about `MeshPhysicalNodeMaterial` and you can use it like you would with anything else.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.Mesh>
+  <T.MeshPhysicalNodeMaterial />
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+With this approach the bundle size of your application will remain minimal but you'll have to keep things updated as you go.
+
+An important thing to be mindful of is that if you may need overwrite things in the `<T>` catalogue if you're using `three/webgpu` entities. For example, if you're using a `MeshPhysicalNodeMaterial`, you may will need to update any lighing components in your scene.
+
+```svelte title="App.svelte"
+<script>
+  import { DirectionalLight, MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+  // tell <T.DirectionalLight> to use the definition from three/webgpu
+  extend({ MeshPhysicalNodeMaterial, DirectionalLight })
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.DirectionalLight />
+
+<T.Mesh>
+  <T.MeshPhysicalNodeMaterial />
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+This is because the definitions from `three/webgpu` are different than those in `three` and make use of the additional features that node materials have.
 
 <Tip type="tip">
   An easy option for projects is to start with option #1 and then transition to option #2 when
-  bundle size becomes an issue.
+  bundle size becomes an issue. If you choose option #1 you also don't need to be sure to use
+  correct lights in your application.
 </Tip>
 
 ### Nodes
