@@ -73,10 +73,6 @@
     group.add(child)
   }
 
-  watch(size, () => {
-    group.needsUpdate = true
-  })
-
   const stats = new Stats()
   renderer.domElement.parentNode?.appendChild(stats.dom)
 
