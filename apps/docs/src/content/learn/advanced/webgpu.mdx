@@ -123,7 +123,7 @@ within Three.js that you can use or adapt for your project.
 `<T>` components use classes, constants, functions, etc. from the `three` library. It will error on things like `<T.MeshPhysicalNodeMaterial />` because the `MeshPhysicalNodeMaterial` class is an export of `three/webgpu` instead of `three`.
 
 1. Extend `<T>` with all the definitions from `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
-   function. Adding all these definitions will increase the bundle size of your application but it is an easy solution.
+   function. Adding all of the definitions will increase the bundle size of your application because both `three` and `three/webgpu` will be imported in a non-tree-shakeable way.
 
 ```svelte title="App.svelte" {3-4}+ {6}+
 <script>
@@ -236,8 +236,8 @@ This is because the definitions from `three/webgpu` are different than those in 
 
 <Tip type="tip">
   An easy option for projects is to start with option #1 and then transition to option #2 when
-  bundle size becomes an issue. If you choose option #1 you also don't need to be sure to use
-  correct lights in your application.
+  bundle size becomes an issue or you need to ship to production. If you choose option #1 you also
+  don't need to be sure to use correct lights in your application.
 </Tip>
 
 ### Nodes
