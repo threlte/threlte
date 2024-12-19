@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.0-next.5
+
+### Patch Changes
+
+- cd41fc5: Test versioning
+
 ## 0.14.0-next.4
 
 ### Patch Changes
