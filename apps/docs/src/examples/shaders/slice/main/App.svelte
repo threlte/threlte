@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { MathUtils, WebGPURenderer, MeshPhysicalNodeMaterial } from 'three/webgpu'
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
+  import { MathUtils } from 'three'
+  import { MeshPhysicalNodeMaterial, WebGPURenderer } from 'three/webgpu'
 
   extend({ MeshPhysicalNodeMaterial })
 

@@ -1,8 +1,8 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
-  import { WebGPURenderer, MeshStandardNodeMaterial } from 'three/webgpu'
   import { Pane, Slider } from 'svelte-tweakpane-ui'
+  import { MeshStandardNodeMaterial, WebGPURenderer } from 'three/webgpu'
 
   extend({ MeshStandardNodeMaterial })
 

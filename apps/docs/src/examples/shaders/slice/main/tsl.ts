@@ -1,6 +1,7 @@
 import type { AngleInputs } from './types'
-import type { Node, NodeRepresentation, ShaderNodeObject } from 'three/webgpu'
-import { Fn, If, PI2, atan2, frontFacing, output, positionLocal, vec4 } from 'three/webgpu'
+import type { Node } from 'three/webgpu'
+import type { NodeRepresentation, ShaderNodeObject } from 'three/tsl'
+import { Fn, If, PI2, atan2, frontFacing, output, positionLocal, vec4 } from 'three/tsl'
 
 const inAngle = Fn(
   ([position, startAngle, endAngle]: [
