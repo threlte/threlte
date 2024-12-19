@@ -3,9 +3,14 @@
   import { Canvas, extend } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
   import { MathUtils } from 'three'
-  import { DirectionalLight, MeshPhysicalNodeMaterial, WebGPURenderer } from 'three/webgpu'
+  import {
+    DirectionalLight,
+    MeshPhysicalNodeMaterial,
+    MeshStandardMaterial,
+    WebGPURenderer
+  } from 'three/webgpu'
 
-  extend({ DirectionalLight, MeshPhysicalNodeMaterial })
+  extend({ DirectionalLight, MeshPhysicalNodeMaterial, MeshStandardMaterial })
 
   let arcAngleDegrees = $state(90)
   let startAngleDegrees = $state(60)
