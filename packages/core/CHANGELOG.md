@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.35
+
+### Patch Changes
+
+- 4ee76e8: JSDocs cleanup
+
 ## 8.0.0-next.34
 
 ### Patch Changes

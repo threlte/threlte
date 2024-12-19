@@ -1,5 +1,13 @@
 # @threlte/docs-next
 
+## 0.14.0-next.4
+
+### Patch Changes
+
+- 4c43bb8: modify useTexture docs. examples use svelte 5 effects, simplify `usage` section and modify headings
+- 617f59f: change code snippets to svelte script since `useSuspence must be called in a script tag
+- 26e5722: update examples to use svelte 5, use typescript as codeblock language for better highlighting. use `boolean` instead of `Boolean`
+
 ## 0.14.0-next.3
 
 ### Patch Changes
