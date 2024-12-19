@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SliceMaterialProps } from './types'
   import { T } from '@threlte/core'
-  import { color, uniform } from 'three/webgpu'
+  import { color, uniform } from 'three/tsl'
   import { outputNodeFn, shadowNodeFn } from './tsl'
 
   const defaultStartAngle = 0
@@ -30,7 +30,7 @@
 
 <T.MeshPhysicalNodeMaterial
   outputNode={outputNodeFn({ startAngle: uStartAngle, arcAngle: uArcAngle, color: uColor })}
-  shadowNode={shadowNodeFn({ startAngle: uStartAngle, arcAngle: uArcAngle })}
+  castShadowNode={shadowNodeFn({ startAngle: uStartAngle, arcAngle: uArcAngle })}
   bind:ref
   {...props}
 >

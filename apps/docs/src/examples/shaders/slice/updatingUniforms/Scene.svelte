@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Fn, cos, float, uniform, vec4 } from 'three/webgpu'
-  import type { NodeRepresentation } from 'three/webgpu'
+  import { Fn, cos, float, uniform, vec4 } from 'three/tsl'
+  import type { NodeRepresentation } from 'three/tsl'
   import { T, useTask } from '@threlte/core'
   import { useTexture, OrbitControls } from '@threlte/extras'
 
@@ -11,7 +11,7 @@
   const uTime = uniform(0)
   const uIntensity = uniform(defaultEmissiveIntensity)
 
-  $effect.pre(() => {
+  $effect(() => {
     uIntensity.value = emissiveIntensity
   })
 

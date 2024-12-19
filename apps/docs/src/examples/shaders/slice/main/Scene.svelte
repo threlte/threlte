@@ -25,8 +25,8 @@
   const { scene, toneMapping } = useThrelte()
 
   $effect(() => {
-    let blurriness = scene.backgroundBlurriness
-    let lastToneMapping = toneMapping.current
+    const blurriness = scene.backgroundBlurriness
+    const lastToneMapping = toneMapping.current
 
     scene.backgroundBlurriness = 0.5
     toneMapping.set(ACESFilmicToneMapping)
