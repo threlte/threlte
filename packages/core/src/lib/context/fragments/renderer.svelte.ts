@@ -1,4 +1,4 @@
-import { getContext, onDestroy, setContext } from 'svelte'
+import { getContext, setContext } from 'svelte'
 import {
   AgXToneMapping,
   ColorManagement,
@@ -9,14 +9,8 @@ import {
   type ShadowMapType,
   type ToneMapping
 } from 'three'
-import type { Task } from '../../frame-scheduling'
-import { useTask } from '../../hooks/useTask'
 import { currentWritable, watch, type CurrentWritable } from '../../utilities'
-import { useCamera } from './camera'
 import { useCanvas } from './canvas'
-import { useDisposal } from './disposal'
-import { useScene } from './scene'
-import { useScheduler } from './scheduler.svelte'
 
 type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 
@@ -27,7 +21,6 @@ type RendererContext = {
   toneMapping: CurrentWritable<ToneMapping>
   shadows: CurrentWritable<boolean | ShadowMapType>
   dpr: CurrentWritable<number>
-  autoRenderTask: Task
 }
 
 export type CreateRendererContextOptions<T extends Renderer> = {
@@ -65,11 +58,7 @@ export type CreateRendererContextOptions<T extends Renderer> = {
 export const createRendererContext = <T extends Renderer>(
   options: CreateRendererContextOptions<T>
 ): RendererContext => {
-  const { dispose } = useDisposal()
-  const { camera } = useCamera()
-  const { scene } = useScene()
-  const { invalidate, renderStage, autoRender, scheduler, resetFrameInvalidation } = useScheduler()
-  const { canvas, size } = useCanvas()
+  const { canvas } = useCanvas()
 
   const renderer = options.createRenderer
     ? options.createRenderer(canvas)
@@ -80,18 +69,13 @@ export const createRendererContext = <T extends Renderer>(
         alpha: true
       })
 
-  const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
-    renderer.render(scene, camera.current)
-  })
-
   const context: RendererContext = {
     renderer: renderer,
     colorManagementEnabled: currentWritable(options.colorManagementEnabled ?? true),
     colorSpace: currentWritable(options.colorSpace ?? 'srgb'),
     dpr: currentWritable(options.dpr ?? window.devicePixelRatio),
     shadows: currentWritable(options.shadows ?? PCFSoftShadowMap),
-    toneMapping: currentWritable(options.toneMapping ?? AgXToneMapping),
-    autoRenderTask
+    toneMapping: currentWritable(options.toneMapping ?? AgXToneMapping)
   }
 
   setContext<RendererContext>('threlte-renderer-context', context)
@@ -112,24 +96,6 @@ export const createRendererContext = <T extends Renderer>(
     }
   })
 
-  // Resize the renderer when the size changes
-  const { start, stop } = useTask(
-    () => {
-      if (!('xr' in renderer) || renderer.xr?.isPresenting) return
-      renderer.setSize(size.current.width, size.current.height)
-      invalidate()
-      stop()
-    },
-    {
-      before: autoRenderTask,
-      autoStart: false,
-      autoInvalidate: false
-    }
-  )
-  watch([size], () => {
-    start()
-  })
-
   watch([context.shadows], ([shadows]) => {
     if (!('shadowMap' in renderer)) return
 
@@ -144,33 +110,6 @@ export const createRendererContext = <T extends Renderer>(
   watch([context.toneMapping], ([toneMapping]) => {
     if (!('toneMapping' in renderer)) return
     renderer.toneMapping = toneMapping
-  })
-
-  watch([autoRender], ([autoRender]) => {
-    if (autoRender) {
-      context.autoRenderTask.start()
-    } else {
-      context.autoRenderTask.stop()
-    }
-    return () => {
-      context.autoRenderTask.stop()
-    }
-  })
-
-  if ('setAnimationLoop' in context.renderer) {
-    const renderer = context.renderer as WebGLRenderer
-    renderer.setAnimationLoop((time) => {
-      dispose()
-      scheduler.run(time)
-      resetFrameInvalidation()
-    })
-  }
-
-  onDestroy(() => {
-    if ('dispose' in context.renderer) {
-      const dispose = context.renderer.dispose as () => void
-      dispose()
-    }
   })
 
   $effect(() => {
