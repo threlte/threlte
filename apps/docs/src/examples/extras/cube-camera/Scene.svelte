@@ -14,15 +14,14 @@
 </script>
 
 <script lang="ts">
-  import type { Vector3Tuple } from 'three'
-  import { CubeCamera, Environment, OrbitControls } from '@threlte/extras'
-  import { EquirectangularReflectionMapping } from 'three'
   import { T, useLoader, useTask } from '@threlte/core'
+  import { CubeCamera, Environment, Grid, OrbitControls } from '@threlte/extras'
+  import type { Vector3Tuple } from 'three'
+  import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
 
   type SceneProps = {
     frames?: number
-    far?: number
     hdr?: 'auto' | keyof typeof hdrs
     metalness?: number
     near?: number
@@ -32,7 +31,6 @@
 
   let {
     frames = Infinity,
-    far = 1000,
     hdr = 'auto',
     metalness = 1,
     near = 0.1,
@@ -40,19 +38,15 @@
     roughness = 0
   }: SceneProps = $props()
 
-  const colors = [0xff_00_ff, 0xff_ff_00, 0x00_ff_ff] as const
+  const colors = ['#ff00ff', '#ffff00', '#00ffff'] as const
 
   const increment = (2 * Math.PI) / colors.length
   const radius = 3
 
   let time = $state(0)
-  const y = $derived(2 * Math.sin(time))
-
   useTask((delta) => {
     time += delta
   })
-
-  const cameraPosition: Vector3Tuple = [7, 7, 7] as const
 
   const hdrPath = '/textures/equirectangular/hdr/'
 
@@ -72,14 +66,25 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={cameraPosition}
+  position={[10, 5, 10]}
+  fov={30}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enablePan={false}
+    enableZoom={false}
+    target.y={0.5}
+    autoRotate
+    autoRotateSpeed={0.1}
+  />
 </T.PerspectiveCamera>
 
-<Environment
-  url={`${hdrPath}shanghai_riverside_1k.hdr`}
-  isBackground
+<Environment url={`${hdrPath}shanghai_riverside_1k.hdr`} />
+
+<Grid
+  position.y={-3}
+  sectionColor="#fff"
+  cellColor="#fff"
 />
 
 {#await backgrounds then backgroundMap}
@@ -92,7 +97,7 @@
       position.z={radius * Math.sin(r)}
     >
       <T.MeshStandardMaterial {color} />
-      <T.BoxGeometry />
+      <T.SphereGeometry />
     </T.Mesh>
   {/each}
 
@@ -100,10 +105,9 @@
     {@const r = Math.PI + increment * i}
     <CubeCamera
       position.x={radius * Math.cos(r)}
-      position.y={y + i}
+      position.y={2 * Math.sin(time + i)}
       position.z={radius * Math.sin(r)}
       {background}
-      {far}
       {frames}
       {near}
       {resolution}

@@ -1,5 +1,24 @@
 # @threlte/extras
 
+## 9.0.0-next.49
+
+### Patch Changes
+
+- 213026c: Fix RoundedBoxGeometry types
+- a257643: Update Svelte + Three.js deps
+
+## 9.0.0-next.48
+
+### Minor Changes
+
+- d4a366d: Add `<VirtualEnvironment>`
+
+## 9.0.0-next.47
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+
 ## 9.0.0-next.46
 
 ### Minor Changes
