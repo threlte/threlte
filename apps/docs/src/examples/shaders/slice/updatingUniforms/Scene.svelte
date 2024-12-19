@@ -2,7 +2,7 @@
   import { Fn, cos, float, uniform, vec4 } from 'three/tsl'
   import type { NodeRepresentation } from 'three/tsl'
   import { T, useTask } from '@threlte/core'
-  import { useTexture, OrbitControls } from '@threlte/extras'
+  import { useTexture, Environment, OrbitControls } from '@threlte/extras'
 
   const defaultEmissiveIntensity = 1
 
@@ -30,7 +30,7 @@
   const texture = useTexture('/textures/sprites/pixel-sky.png')
 </script>
 
-<T.AmbientLight />
+<Environment url="/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr" />
 
 <T.PerspectiveCamera
   makeDefault
