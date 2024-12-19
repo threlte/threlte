@@ -15,7 +15,7 @@
   import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
 
   const { useExtension } = useStudio()
-  const { renderer, scene, autoRenderTask, invalidate } = useThrelte()
+  const { renderer, canvas, scene, autoRenderTask, invalidate } = useThrelte()
 
   const editorCameraExtension = useExtension<EditorCameraState, EditorCameraActions, true>(
     editorCameraScope
@@ -130,7 +130,7 @@
       // draw to canvas
       context.clearRect(0, 0, width * dpr, height * dpr)
       context.drawImage(
-        renderer.domElement,
+        canvas,
         0,
         (size.y - height) * dpr,
         width * dpr,

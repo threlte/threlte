@@ -4,21 +4,21 @@
   import Context from './components/Context/Context.svelte'
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
 
-  type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'wrapper'> & {
+  type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> & {
     children?: Snippet
   }
 
   let { children, ...rest }: Props = $props()
 
   let canvas = $state<HTMLCanvasElement>()
-  let wrapper = $state<HTMLDivElement>()
+  let dom = $state<HTMLDivElement>()
 </script>
 
-<div bind:this={wrapper}>
+<div bind:this={dom}>
   <canvas bind:this={canvas}>
-    {#if canvas && wrapper}
+    {#if canvas && dom}
       <Context
-        {wrapper}
+        {dom}
         {canvas}
         {...rest}
       >

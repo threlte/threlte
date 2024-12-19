@@ -4,7 +4,7 @@
   import Stats from 'three/addons/libs/stats.module.js'
   import * as THREE from 'three/webgpu'
 
-  const { scene, size, renderer, invalidate } = useThrelte()
+  const { scene, size, dom, invalidate } = useThrelte()
 
   scene.background = new THREE.Color(0xc1c1c1)
 
@@ -74,7 +74,7 @@
   }
 
   const stats = new Stats()
-  renderer.domElement.parentNode?.appendChild(stats.dom)
+  dom.appendChild(stats.dom)
 
   stats.begin()
 
