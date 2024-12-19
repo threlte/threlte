@@ -2,8 +2,8 @@
   import { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { observe, T, useTask } from '@threlte/core'
   import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
-  import { Collider, RigidBody, useRapier, useRopeJoint } from '@threlte/rapier'
-  import { Vector3, type Vector3Tuple } from 'three'
+  import { Collider, RigidBody, useRopeJoint } from '@threlte/rapier'
+  import { Vector3, type Object3D, type Vector3Tuple } from 'three'
 
   type Props = {
     segments: number
@@ -16,8 +16,6 @@
 
   let { segments, ropeStart, ropeEnd, length, ballRadius, damping }: Props = $props()
 
-  const { simulationStage, simulationTask } = useRapier()
-
   const lengthBetweenSegments = length / (segments - 1)
 
   let jointsInitialized = $state(false)
@@ -28,6 +26,7 @@
   })
 
   const rigidBodies = $state<RapierRigidBody[]>([])
+  const objects = $state<Object3D[]>([])
 
   const start = new Vector3().fromArray(ropeStart)
   const end = new Vector3().fromArray(ropeEnd)
@@ -38,7 +37,7 @@
   }
 
   $effect(() => {
-    if (rigidBodies.length !== segments) return
+    if (rigidBodies.length !== segments || objects.length !== segments) return
     if (jointsInitialized) return
 
     joints.forEach((joint, index) => {
@@ -55,29 +54,27 @@
     })
   )
 
-  useTask(
-    () => {
-      if (!jointsInitialized) return
-      for (let i = 0; i < segments; i++) {
-        const rb = rigidBodies[i]
-        if (!rb) continue
-        const translation = rb.translation()
-        points[i]!.set(translation.x, translation.y, translation.z)
-      }
-      points = [...points]
-    },
-    {
-      stage: simulationStage,
-      before: simulationTask
+  useTask(() => {
+    if (!jointsInitialized) return
+    for (let i = 0; i < objects.length; i++) {
+      const obj = objects[i]
+      obj?.getWorldPosition(points[i]!)
     }
-  )
+    points = [...points]
+  })
 
   observe(
     () => [jointsInitialized, ropeStart, ropeEnd],
     ([jointsInitialized]) => {
       if (!jointsInitialized) return
-      rigidBodies.at(0)!.setTranslation({ x: ropeStart[0], y: ropeStart[1], z: ropeStart[2] }, true)
-      rigidBodies.at(-1)!.setTranslation({ x: ropeEnd[0], y: ropeEnd[1], z: ropeEnd[2] }, true)
+      const firstRigidBody = rigidBodies.at(0)
+      const lastRigidBody = rigidBodies.at(-1)
+      firstRigidBody!.setNextKinematicTranslation({
+        x: ropeStart[0],
+        y: ropeStart[1],
+        z: ropeStart[2]
+      })
+      lastRigidBody!.setNextKinematicTranslation({ x: ropeEnd[0], y: ropeEnd[1], z: ropeEnd[2] })
     }
   )
 </script>
@@ -91,14 +88,14 @@
     <RigidBody
       linearDamping={damping}
       angularDamping={damping}
-      type={i === 0 || i === segments - 1 ? 'fixed' : 'dynamic'}
+      type={i === 0 || i === segments - 1 ? 'kinematicPosition' : 'dynamic'}
       bind:rigidBody={rigidBodies[i]}
     >
       <Collider
         shape="ball"
         args={[ballRadius]}
       >
-        <T.Object3D />
+        <T.Object3D bind:ref={objects[i]!} />
       </Collider>
     </RigidBody>
   </T.Group>
