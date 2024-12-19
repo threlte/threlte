@@ -9,6 +9,7 @@ export { usePrismaticJoint } from './hooks/usePrismaticJoint'
 export { useFixedJoint } from './hooks/useFixedJoint'
 export { useSphericalJoint } from './hooks/useSphericalJoint'
 export { useJoint } from './hooks/useJoint'
+export { useRopeJoint } from './hooks/useRopeJoint'
 
 // components
 export { default as World } from './components/World/World.svelte'
