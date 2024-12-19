@@ -23,7 +23,7 @@
     "@threlte/extras": "workspace:*",
     "@types/estree": "^1.0.6",
     "@types/node": "^20.12.7",
-    "@types/three": "^0.169.0",
+    "@types/three": "^0.171.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
     "@yushijinhun/three-minifier-rollup": "^0.4.0",

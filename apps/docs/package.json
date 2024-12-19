@@ -57,7 +57,7 @@
     "@threlte/theatre": "workspace:*",
     "@threlte/xr": "workspace:*",
     "@types/animejs": "^3.1.7",
-    "@types/three": "^0.169.0",
+    "@types/three": "^0.171.0",
     "@types/three-nebula": "^10.0.4",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.4.2",
