@@ -1,5 +1,17 @@
 # @threlte/xr
 
+## 1.0.0-next.15
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 1.0.0-next.14
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
 ## 1.0.0-next.13
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { ExtrudeGeometry } from 'three'
 
-export type RoundedBoxGeometryProps = Props<ExtrudeGeometry> & {
+export type RoundedBoxGeometryProps = Omit<Props<ExtrudeGeometry>, 'args'> & {
   /**
    * @default []
    */

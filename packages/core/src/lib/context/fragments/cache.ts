@@ -91,7 +91,7 @@ export const createCacheContext = () => {
  * ```ts
  * const { remember } = useCache()
  *
- * const asnycWritable = remember(async () => {
+ * const asyncWritable = remember(async () => {
  *  const loader = new GLTFLoader()
  *  const { scene } = await loader.loadAsync('/path/to/model.glb')
  *  return scene

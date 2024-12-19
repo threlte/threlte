@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { T, asyncWritable, useCache } from '@threlte/core'
-  import { RoundedBoxGeometry, useCursor, useTexture } from '@threlte/extras'
+  import { asyncWritable, isInstanceOf, T, useCache } from '@threlte/core'
+  import {
+    createTransition,
+    global,
+    RoundedBoxGeometry,
+    useCursor,
+    useTexture
+  } from '@threlte/extras'
+  import { cubicIn, cubicOut } from 'svelte/easing'
   import { spring } from 'svelte/motion'
+  import type { Texture } from 'three'
 
   const cache = useCache()
 
@@ -41,28 +49,55 @@
         return ''
     }
   }
+
+  const animDelay = gridIndex * 10
+  const scaleTransition = (useDelay: boolean) => {
+    return createTransition((ref, { direction }) => {
+      if (!isInstanceOf(ref, 'Object3D')) return
+      return {
+        tick(t) {
+          ref.scale.setScalar(t)
+        },
+        delay: useDelay ? animDelay + (direction === 'in' ? 200 : 0) : 0,
+        duration: 200,
+        easing: direction === 'in' ? cubicOut : cubicIn
+      }
+    })
+  }
+
+  const syncCache: Record<string, Texture> = {}
 </script>
 
 {#if $matcapsList}
   {@const fileName = `${$matcapsList[String(matcapIndex)]}${getFormatString(format)}.png`}
   {@const url = `${matcapRoot}/${format}/${fileName}`}
 
-  {#await useTexture(url) then matcap}
-    <T.Group>
-      <T.Mesh
-        scale.x={(width / 100) * $scale}
-        scale.y={(height / 100) * $scale}
-        scale.z={$scale}
-        position.z={20}
-        onpointerenter={onPointerEnter}
-        onpointerleave={onPointerLeave}
+  {#key url}
+    {#await useTexture(url) then matcap}
+      <T.Group
+        in={global(scaleTransition(true))}
+        out={global(scaleTransition(true))}
       >
-        <RoundedBoxGeometry
-          args={[100, 100, 20]}
-          radius={2}
-        />
-        <T.MeshMatcapMaterial {matcap} />
-      </T.Mesh>
-    </T.Group>
-  {/await}
+        <T.Mesh
+          scale.x={(width / 100) * $scale}
+          scale.y={(height / 100) * $scale}
+          scale.z={$scale}
+          position.z={20}
+          onpointerenter={onPointerEnter}
+          onpointerleave={onPointerLeave}
+        >
+          <RoundedBoxGeometry
+            args={[100, 100, 20]}
+            radius={2}
+          />
+          <T.MeshMatcapMaterial
+            {matcap}
+            oncreate={() => {
+              syncCache[url] = matcap
+            }}
+          />
+        </T.Mesh>
+      </T.Group>
+    {/await}
+  {/key}
 {/if}

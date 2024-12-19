@@ -107,36 +107,7 @@ simulation running ahead of the visual output.
 
 ## `usePhysicsTask`
 
-Use the hook `usePhysicsTask` to interact with the physics simulation. Depending
-on your choice of framerate the provided callback will be called differently:
-
-### Varying Framerate
-
-When you're using a varying framerate for your physics simulation, the hook
-essentially behaves like a regular `useTask` with the benefit that it's added to
-the physics stage automatically.
-
-```svelte
-<World framerate="varying">
-```
-
-```ts
-usePhysicsTask((delta) => {
-  console.log(delta) // ~0.016
-})
-```
-
-### Fixed Framerate
-
-When you're using a fixed framerate for your physics simulation, the callback
-will be called with the fixed delta time between frames.
-
-```svelte
-<World framerate={200}>
-```
-
-```ts
-usePhysicsTask((delta) => {
-  console.log(delta) // 0.005
-})
-```
+Use the hook [`usePhysicsTask`](/docs/reference/rapier/use-physics-task) to
+interact with the physics simulation. It's a wrapper around the [`useTask`
+hook](/docs/reference/core/use-task) that automatically adds the handler to the
+`simulation` stage and always runs _before_ the physics world is stepped.

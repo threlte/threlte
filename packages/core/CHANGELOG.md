@@ -1,5 +1,35 @@
 # @threlte/core
 
+## 8.0.0-next.36
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 8.0.0-next.35
+
+### Patch Changes
+
+- 4ee76e8: JSDocs cleanup
+
+## 8.0.0-next.34
+
+### Patch Changes
+
+- 89d4fd5: Fix core types entry for dev
+
+## 8.0.0-next.33
+
+### Patch Changes
+
+- 52d0b9f: fix: remove .d.ts import from dist/index.js
+
+## 8.0.0-next.32
+
+### Minor Changes
+
+- d7eb71b: Custom user catalogue types
+
 ## 8.0.0-next.31
 
 ### Patch Changes

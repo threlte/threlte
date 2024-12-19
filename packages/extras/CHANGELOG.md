@@ -1,5 +1,52 @@
 # @threlte/extras
 
+## 9.0.0-next.49
+
+### Patch Changes
+
+- 213026c: Fix RoundedBoxGeometry types
+- a257643: Update Svelte + Three.js deps
+
+## 9.0.0-next.48
+
+### Minor Changes
+
+- d4a366d: Add `<VirtualEnvironment>`
+
+## 9.0.0-next.47
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+
+## 9.0.0-next.46
+
+### Minor Changes
+
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+
+## 9.0.0-next.45
+
+### Patch Changes
+
+- 1cd4af6: New Gizmo implementation
+
+## 9.0.0-next.44
+
+### Major Changes
+
+- 86072ef: separate `<Environment>` into two components
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 9.0.0-next.43
+
+### Patch Changes
+
+- f9f8444: [next] Temporary three-perf fix with a github fork
+
 ## 9.0.0-next.42
 
 ### Major Changes

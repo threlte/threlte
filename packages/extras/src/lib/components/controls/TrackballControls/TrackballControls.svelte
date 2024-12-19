@@ -33,10 +33,10 @@ enabled. You can disable this by setting `staticMoving` to true.
 -->
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { TrackballControlsProps } from './types'
+  import type { Event } from 'three'
 
   let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
@@ -49,24 +49,36 @@ enabled. You can disable this by setting `staticMoving` to true.
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
-
-  useTask(() => controls.update(), {
-    autoInvalidate: false
-  })
-
   const { trackballControls } = useControlsContext()
-  trackballControls.set(controls)
-  onDestroy(() => trackballControls.set(undefined))
+
+  useTask(
+    () => {
+      controls.update()
+    },
+    {
+      autoInvalidate: false
+    }
+  )
+
+  $effect(() => {
+    const handleChange = (event: Event) => {
+      invalidate()
+      props.onchange?.(event)
+    }
+
+    trackballControls.set(controls)
+    controls.addEventListener('change', handleChange)
+    return () => {
+      trackballControls.set(undefined)
+      controls.removeEventListener('change', handleChange)
+    }
+  })
 </script>
 
 <T
   is={controls}
   bind:ref
   {...props}
-  onchange={(event) => {
-    invalidate()
-    props.onchange?.(event)
-  }}
 >
   {@render children?.({ ref: controls })}
 </T>

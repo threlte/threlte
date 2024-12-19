@@ -20,9 +20,11 @@ export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as HUD } from './components/HUD/HUD.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
-export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
+export { default as Gizmo, type GizmoOptions } from './components/Gizmo/Gizmo.svelte'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
-export { default as Environment } from './components/Environment/Environment.svelte'
+export { default as CubeEnvironment } from './components/environment/CubeEnvironment/CubeEnvironment.svelte'
+export { default as Environment } from './components/environment/Environment/Environment.svelte'
+export { default as VirtualEnvironment } from './components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 export { default as ImageMaterial } from './components/ImageMaterial/ImageMaterial.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
@@ -55,6 +57,12 @@ export { default as LinearGradientTexture } from './components/GradientTexture/l
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+
+// Transitions
+export { transitions } from './transitions/transltions.svelte'
+export { createTransition } from './transitions/createTransition'
+export { global } from './transitions/global'
+export type { TransitionProps } from './transitions/types'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'

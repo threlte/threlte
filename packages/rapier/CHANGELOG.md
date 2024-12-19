@@ -1,5 +1,24 @@
 # @threlte/extras
 
+## 3.0.0-next.19
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 3.0.0-next.18
+
+### Minor Changes
+
+- b903698: Add usePhysicsTask hook
+- 5331021: Add useRopeJoint hook
+
+## 3.0.0-next.17
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
 ## 3.0.0-next.16
 
 ### Patch Changes

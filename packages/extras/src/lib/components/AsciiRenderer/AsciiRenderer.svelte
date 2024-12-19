@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { AsciiRendererProps } from './types'
   import { AsciiEffect } from 'three/examples/jsm/Addons.js'
-  import { observe, useTask, useThrelte } from '@threlte/core'
   import { fromStore } from 'svelte/store'
+  import { useTask, useThrelte } from '@threlte/core'
 
   const defaultCharacters = ' .:-+*=%@#'
 
@@ -84,24 +84,21 @@
     onstop?.()
   }
 
-  observe.pre(
-    () => [autoRender],
-    ([autoRender]) => {
-      if (autoRender) {
-        start()
-      } else {
+  $effect(() => {
+    if (autoRender) {
+      start()
+      return () => {
+        // this should stop the task on unmount as well
         stop()
       }
     }
-  )
+  })
 
   $effect(() => {
-    let lastAutoRender = threlteAutoRender.current
+    const lastAutoRender = threlteAutoRender.current
     threlteAutoRender.set(!autoRender)
     return () => {
       threlteAutoRender.set(lastAutoRender)
-      // be sure to turn off the task if the component is destroyed
-      stop()
     }
   })
 </script>

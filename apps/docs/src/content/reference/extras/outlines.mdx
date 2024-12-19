@@ -59,13 +59,13 @@ An ornamental component that extracts the geometry from its parent and displays 
 
 ```svelte
 <script lang="ts">
-  import { BoxBufferGeometry, MeshBasicMaterial } from 'three'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
   import { T } from '@threlte/core'
   import { Outlines } from '@threlte/extras'
 </script>
 
 <T.Mesh
-  geometry={new BoxBufferGeometry(1, 1, 1)}
+  geometry={new BoxGeometry()}
   material={new MeshBasicMaterial()}
 >
   <Outlines color="black" />
