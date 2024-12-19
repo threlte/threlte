@@ -59,7 +59,7 @@ The following interaction events are available:
 
 All interaction events contain the following data:
 
-```ts
+```typescript
 type Event = THREE.Intersection & {
   intersections: THREE.Intersection[] // The first intersection of each intersected object
   object: THREE.Object3D // The object that was actually hit
@@ -70,7 +70,7 @@ type Event = THREE.Intersection & {
   pointer: Vector2 // The pointer position in normalized device coordinates
   ray: THREE.Ray // The ray used for raycasting
   stopPropagation: () => void // Function to stop propagation of the event
-  stopped: Boolean // Whether the event propagation has been stopped
+  stopped: boolean // Whether the event propagation has been stopped
 }
 ```
 
@@ -122,7 +122,10 @@ It's also possible to change the target at runtime by updating the store `target
   import { interactivity } from '@threlte/extras'
 
   const { target } = interactivity()
-  $: target.set(document)
+
+  $effect(() => {
+    target.set(document)
+  })
 </script>
 ```
 
@@ -181,7 +184,8 @@ To access the interactivity state, you can use the `useInteractivity` hook in an
   import { useInteractivity } from '@threlte/extras'
 
   const { pointer, pointerOverTarget } = useInteractivity()
-  $: console.log($pointer, $pointerOverTarget)
+
+  $inspect($pointer, $pointerOverTarget)
 </script>
 ```
 
